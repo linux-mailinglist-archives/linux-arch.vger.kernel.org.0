@@ -2,385 +2,219 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8042844DF50
-	for <lists+linux-arch@lfdr.de>; Fri, 12 Nov 2021 01:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 471A744ECE3
+	for <lists+linux-arch@lfdr.de>; Fri, 12 Nov 2021 19:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234589AbhKLAxA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 11 Nov 2021 19:53:00 -0500
-Received: from mail-cusazon11021020.outbound.protection.outlook.com ([52.101.62.20]:46655
-        "EHLO na01-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234546AbhKLAxA (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 11 Nov 2021 19:53:00 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kQPPzn8uJuTmg56zhLvXf9MinUnzMRPNTshFR1pBdsW+ZuA/rsSglJVCarDIj9VFNOk6NCgzsKpGb+r0ggLIG6ipoFG0HkeuVPId2RMQNLTYAdmqLYW2c7z4cBENGqbppJEZKl1IyZSWQ23dguvQqJAEZCnGu1kjGF3p+i20tOaGV+S7QG67J1+TlPear7I1KDxSZq7j0H2ufbxxmmBzywA1wQFhndLU+26+s4LHiJpr9aE2j1t/XPLaDYkvZeoa+TECVgqVjsweEZrq+N7qfaZQjRpmWqR43MD21uC9f0dVNgEwPEPdaVs/d2VuiBsWT5M4Iq0nBZWNuMFiwgbmXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oymulsOOOXSRXjVrU0NJ8J+bTrz44gMVDajrrgtGqXo=;
- b=hKrHsA6nlq3cwwVvULwPObMWORWeoJ/EKGqJ7uqTP1CiLU1PS+c8w6QWIYUVIKkTixRVWm2wAqNLIA14qvYreaY7lvjT5h//bOlXS9/YyB+yJ9dJI/sXCF/dlGhiwmDU7hWpXhKYpe6tAJQGWsS0Zjy+t/Gc9MBmgR9lLMjhy6NOfBjNXMDTJV+w5vKcJprVPocMMLGRbjCk6GH7NaOVTcTlvw8kMlNe95Ed/EoFLAS7iFrZIWUpK+ONPkTtYAKpTc8ILxQEY0oCq9CcobaLH2KQfZGJ5UCByl+JPNq48IssiBSyM5/OQa30FwqDZU/Mtt4CA3TSiFCf2jnikljjIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oymulsOOOXSRXjVrU0NJ8J+bTrz44gMVDajrrgtGqXo=;
- b=U3dEeK1B9DXMNnJmYhmnEBSjs7MXJizWYc6ZfoELK3xlbwnBohsLXJMd0pZyaI5bEcIneUFf0/2XcgG+HTzINEtzNQm2ab2Crw0FChhKLdZ5o+Kuh4D6vDDYj3OuJq8cxVQcbIK/s0gW0ds8q6d5l4ybPVRciLU/1G+aimGP71c=
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
- by MW4PR21MB1969.namprd21.prod.outlook.com (2603:10b6:303:7c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.10; Fri, 12 Nov
- 2021 00:50:07 +0000
-Received: from MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::b01f:ac55:463a:dd91]) by MWHPR21MB1593.namprd21.prod.outlook.com
- ([fe80::b01f:ac55:463a:dd91%4]) with mapi id 15.20.4669.002; Fri, 12 Nov 2021
- 00:50:07 +0000
-From:   Michael Kelley <mikelley@microsoft.com>
-To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "arnd@arndb.de" <arnd@arndb.de>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Sunil Muthuswamy <sunilmut@microsoft.com>
-Subject: RE: [PATCH v5 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
-Thread-Topic: [PATCH v5 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
-Thread-Index: AQHX1muWUKNVFx3PLU2btjDmVCQGjqv/ENuA
-Date:   Fri, 12 Nov 2021 00:50:06 +0000
-Message-ID: <MWHPR21MB1593AF30DB2EC06B057FC283D7959@MWHPR21MB1593.namprd21.prod.outlook.com>
-References: <1636573510-23838-1-git-send-email-sunilmut@linux.microsoft.com>
- <1636573510-23838-3-git-send-email-sunilmut@linux.microsoft.com>
-In-Reply-To: <1636573510-23838-3-git-send-email-sunilmut@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=560e9958-680c-4bf2-a6f6-c49518c89557;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-11-12T00:47:20Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0e72934f-5ce0-42d1-a601-08d9a5765f2b
-x-ms-traffictypediagnostic: MW4PR21MB1969:
-x-microsoft-antispam-prvs: <MW4PR21MB196933D3E6D1261516DC2582D7959@MW4PR21MB1969.namprd21.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7dPikVxEg6siSDP/7aKbV+adSH2wLrj6WIkc2yGORKKVmQBnEvpD/E/+hnOTLCkou2xV1Gs/0APagjOQjDmXjGN7VOC57v5lDd+IOubOftUdMthWtr3onpqRc1yt5NhutJHbs3NOnb81FyuhPXex7tiBOv7Pzp2TndUfij7rfyAaVYeh3d3v9LhLa59BcEBHOCaNuyksCLaEq0Ibf+z2YfbkuGQK4GP9g9CNlr04F29z/G8I6sDchX/fxUU1CwIVpjy9xmyWiXO1Z4uxMMBZxO3vy28GP/Qx77WwqGdbVFP/jduQI4Q0s9RFdgbyK8ePYO3ZMKk9o05IFVw5RGp60gGJnamE77fTfgrwQcHLLRE60kt4c5wejv8gcVv6Xgn2cx5PABfhILtb1wyCkhfs3k8OGNjv2QnifYyM/ri/ZrjwPK/oB1GH/1X0ujgI/4ztHW7J9BtknrGl1hi+CNrnkgnHRYmQN4B1UMsWxJrJHJW0qcXlAT2RVy7U8SAhDFlFW8MPs42oU7Jf4XDmwbtVwLYOvTEAe1VLAA56F5yk5Z+e6nLnoApEzdm+P+C+9w5cV2LyB+/1el+CGJgQLwBbrEYCHM8QTy4J0BddZ+LgiX2Sau2GSW5W5biheafcADWJMJUx8R/cp73Gtsa4PUzUVdVwtq78YxQX6+uDhWkvZpJ5USJXOR9t8TAEWa6QQ44uZwLfy3OsFO+lQGPyUwiRPhaFzAV3fkTXxXrgp8ogHyI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(33656002)(71200400001)(10290500003)(508600001)(52536014)(66946007)(86362001)(9686003)(76116006)(26005)(186003)(7416002)(107886003)(4326008)(7696005)(6506007)(8936002)(8676002)(110136005)(64756008)(66476007)(316002)(54906003)(66446008)(66556008)(5660300002)(82960400001)(82950400001)(83380400001)(2906002)(38070700005)(921005)(38100700002)(122000001)(8990500004);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8u8bEz7avCWRNnaNUPz6FF4mk5ia/orMtBsmJ5+XjNyfh79zAvVYcqLcggXo?=
- =?us-ascii?Q?J4WjVAk6R3JcfZ42Rs34hzgaf1V35dhS1vyxkgyp1RodyJQ+u5LQTlvo3UgA?=
- =?us-ascii?Q?fKGyVCG6vfA8JoI73jlFMp+srFFzXbUMuvhnFe4X9lDnBv09DzmXPa0hVDvW?=
- =?us-ascii?Q?f9ACqHAuOo03hjrI+zHqNlr5IA2uESSWJyvMjlCyOZWc/KOTrlQxmi1lUhJs?=
- =?us-ascii?Q?niD8XUM52yWzxcE25rzeKeRc1Rh6bBFqPH0sRGciFwB50D4pd/IS+Xb8NDF3?=
- =?us-ascii?Q?NV+FrDwiMXBbcIb/UeD+4RaZnuz+r3hC3whzcR+uQbto4nt+3QGS1IMO/uhF?=
- =?us-ascii?Q?gmrdV6QqhGK0Bpq6lNH+/wvXDyXBig9ymvgzkj5hLiNdztryPwtgkaOmTnKP?=
- =?us-ascii?Q?qpnniCTaAAj8dGs1zQuUyqjE1oTsdesPx/SP7ltOBHLeHTJuLkQZZrLyQEye?=
- =?us-ascii?Q?fcUOceXrtiim6gqsn8mAPOIDJv0F3O4MMTe1PVK/im4LwqL2x3MnS796tATS?=
- =?us-ascii?Q?vC9UegxRb8ereFHzrCSEm5IC4eOD1UpYELO667hqGIILJEG7GIgK0cNyydbC?=
- =?us-ascii?Q?z1b2Ptq+ZOh2bxVB3aoPIqGPKDdgswe0dU/HNWGjQosH+rHXhXXr1vR4yum5?=
- =?us-ascii?Q?r0F39hZWYpA6IaEDdZjO8KqG+ph2SP1qYV1Ufmbzn7NRzcMH9agMx+HG2VLT?=
- =?us-ascii?Q?VKbexhJ10Ammgx4mf92GsmYSUGwRoEVJo1U+N8oy4+GbBV8q+/ltLe4PoA1H?=
- =?us-ascii?Q?fs/Gr3EpW8UGHUbHdIi7qsC00fj4yfa68LhQ2Ggbqj8Gg0jRPjuZkNt/IOoP?=
- =?us-ascii?Q?JKad/6urFGiBuBCEkkN4AJ36DAvWNGAOIh250tJ/XlVBwvoBKgMBn7+i1YQv?=
- =?us-ascii?Q?Tr7VqnbXpTryweg4eQXy1DdJlK3KMz5TPGjF5U4nOChoxo3ZQ9EVhlC6gKUd?=
- =?us-ascii?Q?V+halk264Se3THCbyMpaAE4m3jsxuZS1jIyIYVXqORYRP8jAqLvxzntAV55G?=
- =?us-ascii?Q?aMORlTfcJC7tjZjEYQSIA/t8y5QrB8ZthR/bvArSpJIFTG7PlkJZ7eEtbORm?=
- =?us-ascii?Q?BS2m2dScn6jZSHw5anEovXCRQS3WC3UsUCsAYNHj0HTEQWYfHX+lCww5+tr1?=
- =?us-ascii?Q?jOCNzXr77bsHskvVxFKgjzoXJUjA8ZSk0+9eS8/xVK4eWB+8HxlG5PODM0gF?=
- =?us-ascii?Q?ldQzh/Tl/jenHbQ1xwRrwnlT7p4DDomW3tyJkbUuNT/eI5NP7JmAU4e4FsQE?=
- =?us-ascii?Q?PWgMs81Hw2DThCIVBCOVRLwfzV9X6OHNthZjtOo2gtN1Lr1V9nb2p/bnE60R?=
- =?us-ascii?Q?DI87Qpz358Eq5K6fvrsnkB2tMakXNeB+N0CchS0/b6a8Knt4JndwRlzgXSHn?=
- =?us-ascii?Q?V6TRGi06IH6zOZRBtu0Q5DH7S1g+y0nCQaoX2z6oRy3dPUZlRvvNKD6LwdCz?=
- =?us-ascii?Q?PWMfWX0+FYvcKfMmvP6+Ni9Q5abv6uW+2WqNuTiW0Vvpmj1lkohZCHzur2N2?=
- =?us-ascii?Q?/bHYnRDcd9qiodrUJEHDz63BFdsza1egLk3ft19KL7ckRgLQISn22t01OPVc?=
- =?us-ascii?Q?A1UxYVvcGJgJ/de+gHx6pPbleece02YfXOlmHluV+I0tXvf6sWh2VUUNnCaP?=
- =?us-ascii?Q?R2t3a8EHS8I+Q6xHau1rGwF9pSgF36iSCRIraR8rXbTXuOX7l/DdWaNLhOVj?=
- =?us-ascii?Q?jnjZxQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S235625AbhKLSzn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 12 Nov 2021 13:55:43 -0500
+Received: from mail-ed1-f47.google.com ([209.85.208.47]:35504 "EHLO
+        mail-ed1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235656AbhKLSzm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 12 Nov 2021 13:55:42 -0500
+Received: by mail-ed1-f47.google.com with SMTP id g14so41444226edz.2;
+        Fri, 12 Nov 2021 10:52:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:reply-to
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Iawy8hM8eRyCMBEMC4y1moygOWRTeool6h66VnaFg/k=;
+        b=mk6+zpysjmFtbDhz3YmEP43UMP5XlulmrJiguYG+ErK5MzVXRVX53gOnKGI4PB317U
+         uLdPppJpm8GjU29VD4pDhne5ZiO0x0kLx+Y/dow1uxvTROFd+ucTzzDQUy2lH8fr4T/r
+         z5H4iR5qNzNAuLWOx/lV+ZY3gwCwPFFVGKYnaG671Vk3AUnF6usWBlCnoMBMr8tay4Bi
+         Vi2jyQkkzezG5JsT510QqM4MBoUdI6wJ3tGBwW/+SmjKgi/tYCehMwK07Z8hWHbvlD8l
+         1f4gRxcH1/bP3aJg1/dnR1CXnNRw3u63ynOuOjehIYCEkdpT/0HML6Q/2v9UrS3at8tw
+         bN3A==
+X-Gm-Message-State: AOAM531eq3J+cbVMzH722ok6FYiwOemQZ1pT0Qrr8S1wsInsN3HHpAUj
+        vgiTkz0kkEAyCp+MsE3Wexw=
+X-Google-Smtp-Source: ABdhPJwoNfruuYTvSVpxsn9iT2utV+KOqOD0XFVXh8/k9BMPHVsZUaxfTQcSxhRcSsx36Ytc7ut/oA==
+X-Received: by 2002:a50:e608:: with SMTP id y8mr23538543edm.39.1636743169660;
+        Fri, 12 Nov 2021 10:52:49 -0800 (PST)
+Received: from [10.9.0.26] ([46.166.133.199])
+        by smtp.gmail.com with ESMTPSA id cz7sm3348384edb.55.2021.11.12.10.52.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Nov 2021 10:52:49 -0800 (PST)
+Message-ID: <ac989387-3359-f8da-23f9-f5f6deca4db8@linux.com>
+Date:   Fri, 12 Nov 2021 21:52:42 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e72934f-5ce0-42d1-a601-08d9a5765f2b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2021 00:50:06.9756
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kpBa4wsM+oEEm1i7+TNeDzpAYkGnbDKN9d53VPVgd8hL9zV6spyzMYsstXFizferB+BzxVXmQI3u2MXAnRgFTXfa4SX1wc6h3wXNoN3q1SA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR21MB1969
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Reply-To: alex.popov@linux.com
+Subject: Re: [PATCH v2 0/2] Introduce the pkill_on_warn parameter
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Paul McKenney <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Maciej Rozycki <macro@orcam.me.uk>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>, Wei Liu <wl@xen.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jann Horn <jannh@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Laura Abbott <labbott@kernel.org>,
+        David S Miller <davem@davemloft.net>,
+        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Scull <ascull@google.com>,
+        Marc Zyngier <maz@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wang Qing <wangqing@vivo.com>, Mel Gorman <mgorman@suse.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
+        Mathieu Chouquet-Stringer <me@mathieu.digital>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stephen Kitt <steve@sk2.org>, Stephen Boyd <sboyd@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        kernel-hardening@lists.openwall.com,
+        linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Cc:     notify@kernel.org
+References: <20211027233215.306111-1-alex.popov@linux.com>
+From:   Alexander Popov <alex.popov@linux.com>
+In-Reply-To: <20211027233215.306111-1-alex.popov@linux.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Sunil Muthuswamy <sunilmut@linux.microsoft.com> Sent: Wednesday, Nove=
-mber 10, 2021 11:45 AM
->=20
-> Add support for Hyper-V vPCI for arm64 by implementing the arch specific
-> interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI tha=
-t
-> is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domai=
-n
-> for basic vector management.
->=20
-> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
-> ---
-> In v2, v3, v4 & v5:
->  Changes are described in the cover letter.
->=20
->  arch/arm64/include/asm/hyperv-tlfs.h |   9 ++
->  drivers/pci/Kconfig                  |   2 +-
->  drivers/pci/controller/Kconfig       |   2 +-
->  drivers/pci/controller/pci-hyperv.c  | 204 ++++++++++++++++++++++++++-
->  4 files changed, 214 insertions(+), 3 deletions(-)
->=20
+On 28.10.2021 02:32, Alexander Popov wrote:
+> Hello! This is the v2 of pkill_on_warn.
+> Changes from v1 and tricks for testing are described below.
 
-[snip]
+Hello everyone!
+Friendly ping for your feedback.
 
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller=
-/pci-hyperv.c
-> index 03e07a4f0e3f..b13e3ae5a34f 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -47,6 +47,8 @@
->  #include <linux/msi.h>
->  #include <linux/hyperv.h>
->  #include <linux/refcount.h>
-> +#include <linux/irqdomain.h>
-> +#include <linux/acpi.h>
->  #include <asm/mshyperv.h>
->=20
->  /*
-> @@ -614,7 +616,202 @@ static int hv_msi_prepare(struct irq_domain *domain=
-, struct device *dev,
->  {
->  	return pci_msi_prepare(domain, dev, nvec, info);
->  }
-> -#endif // CONFIG_X86
-> +#elif defined(CONFIG_ARM64)
-> +/*
-> + * SPI vectors to use for vPCI; arch SPIs range is [32, 1019], but leavi=
-ng a bit
-> + * of room at the start to allow for SPIs to be specified through ACPI a=
-nd
-> + * starting with a power of two to satisfy power of 2 multi-MSI requirem=
-ent.
-> + */
-> +#define HV_PCI_MSI_SPI_START	64
-> +#define HV_PCI_MSI_SPI_NR	(1020 - HV_PCI_MSI_SPI_START)
-> +#define DELIVERY_MODE		0
-> +#define FLOW_HANDLER		NULL
-> +#define FLOW_NAME		NULL
-> +#define hv_msi_prepare		NULL
-> +
-> +struct hv_pci_chip_data {
-> +	DECLARE_BITMAP(spi_map, HV_PCI_MSI_SPI_NR);
-> +	struct mutex	map_lock;
-> +};
-> +
-> +/* Hyper-V vPCI MSI GIC IRQ domain */
-> +static struct irq_domain *hv_msi_gic_irq_domain;
-> +
-> +/* Hyper-V PCI MSI IRQ chip */
-> +static struct irq_chip hv_arm64_msi_irq_chip =3D {
-> +	.name =3D "MSI",
-> +	.irq_set_affinity =3D irq_chip_set_affinity_parent,
-> +	.irq_eoi =3D irq_chip_eoi_parent,
-> +	.irq_mask =3D irq_chip_mask_parent,
-> +	.irq_unmask =3D irq_chip_unmask_parent
-> +};
-> +
-> +static unsigned int hv_msi_get_int_vector(struct irq_data *irqd)
-> +{
-> +	return irqd->parent_data->hwirq;
-> +}
-> +
-> +static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
-> +				       struct msi_desc *msi_desc)
-> +{
-> +	msi_entry->address =3D ((u64)msi_desc->msg.address_hi << 32) |
-> +			      msi_desc->msg.address_lo;
-> +	msi_entry->data =3D msi_desc->msg.data;
-> +}
-> +
-> +static void hv_pci_vec_irq_domain_free(struct irq_domain *domain,
-> +				       unsigned int virq, unsigned int nr_irqs)
-> +{
-> +	struct hv_pci_chip_data *chip_data =3D domain->host_data;
-> +	struct irq_data *irqd =3D irq_domain_get_irq_data(domain, virq);
-> +	int first =3D irqd->hwirq - HV_PCI_MSI_SPI_START;
-> +
-> +	mutex_lock(&chip_data->map_lock);
-> +	bitmap_release_region(chip_data->spi_map,
-> +			      first,
-> +			      get_count_order(nr_irqs));
-> +	mutex_unlock(&chip_data->map_lock);
-> +	irq_domain_reset_irq_data(irqd);
-> +	irq_domain_free_irqs_parent(domain, virq, nr_irqs);
-> +}
-> +
-> +static int hv_pci_vec_alloc_device_irq(struct irq_domain *domain,
-> +				       unsigned int nr_irqs,
-> +				       irq_hw_number_t *hwirq)
-> +{
-> +	struct hv_pci_chip_data *chip_data =3D domain->host_data;
-> +	unsigned int index;
-> +
-> +	/* Find and allocate region from the SPI bitmap */
-> +	mutex_lock(&chip_data->map_lock);
-> +	index =3D bitmap_find_free_region(chip_data->spi_map,
-> +					HV_PCI_MSI_SPI_NR,
-> +					get_count_order(nr_irqs));
-> +	mutex_unlock(&chip_data->map_lock);
-> +	if (index < 0)
-> +		return -ENOSPC;
-> +
-> +	*hwirq =3D index + HV_PCI_MSI_SPI_START;
-> +
-> +	return 0;
-> +}
-> +
-> +static int hv_pci_vec_irq_gic_domain_alloc(struct irq_domain *domain,
-> +					   unsigned int virq,
-> +					   irq_hw_number_t hwirq)
-> +{
-> +	struct irq_fwspec fwspec;
-> +
-> +	fwspec.fwnode =3D domain->parent->fwnode;
-> +	fwspec.param_count =3D 2;
-> +	fwspec.param[0] =3D hwirq;
-> +	fwspec.param[1] =3D IRQ_TYPE_EDGE_RISING;
-> +
-> +	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
-> +}
-> +
-> +static int hv_pci_vec_irq_domain_alloc(struct irq_domain *domain,
-> +				       unsigned int virq, unsigned int nr_irqs,
-> +				       void *args)
-> +{
-> +	irq_hw_number_t hwirq;
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	ret =3D hv_pci_vec_alloc_device_irq(domain, nr_irqs, &hwirq);
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i =3D 0; i < nr_irqs; i++) {
-> +		ret =3D hv_pci_vec_irq_gic_domain_alloc(domain, virq + i,
-> +						      hwirq + i);
-> +		if (ret)
-> +			goto free_irq;
-> +
-> +		ret =3D irq_domain_set_hwirq_and_chip(domain, virq + i,
-> +						    hwirq + i,
-> +						    &hv_arm64_msi_irq_chip,
-> +						    domain->host_data);
-> +		if (ret)
-> +			goto free_irq;
-> +
-> +		pr_debug("pID:%d vID:%u\n", (int)(hwirq + i), virq + i);
-> +	}
-> +
-> +	return 0;
-> +
-> +free_irq:
-> +	hv_pci_vec_irq_domain_free(domain, virq, nr_irqs);
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Pick the first online cpu as the irq affinity that can be temporarily=
- used
-> + * for composing MSI from the hypervisor. GIC will eventually set the ri=
-ght
-> + * affinity for the irq and the 'unmask' will retarget the interrupt to =
-that
-> + * cpu.
-> + */
-> +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
-> +					  struct irq_data *irqd, bool reserve)
-> +{
-> +	int cpu =3D cpumask_first(cpu_online_mask);
-> +
-> +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct irq_domain_ops hv_pci_domain_ops =3D {
-> +	.alloc	=3D hv_pci_vec_irq_domain_alloc,
-> +	.free	=3D hv_pci_vec_irq_domain_free,
-> +	.activate =3D hv_pci_vec_irq_domain_activate,
-> +};
-> +
-> +static int hv_pci_irqchip_init(void)
-> +{
-> +	static struct hv_pci_chip_data *chip_data;
-> +	struct fwnode_handle *fn =3D NULL;
-> +	int ret =3D -ENOMEM;
-> +
-> +	chip_data =3D kzalloc(sizeof(*chip_data), GFP_KERNEL);
-> +	if (!chip_data)
-> +		return ret;
-> +
-> +	mutex_init(&chip_data->map_lock);
-> +	fn =3D irq_domain_alloc_named_fwnode("Hyper-V ARM64 vPCI");
-> +	if (!fn)
-> +		goto free_chip;
-> +
-> +	/*
-> +	 * IRQ domain once enabled, should not be removed since there is no
-> +	 * way to ensure that all the corresponding devices are also gone and
-> +	 * no interrupts will be generated.
-> +	 */
-> +	hv_msi_gic_irq_domain =3D acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_N=
-R,
-> +							  fn, &hv_pci_domain_ops,
-> +							  chip_data);
-> +
-> +	if (!hv_msi_gic_irq_domain) {
-> +		pr_err("Failed to create Hyper-V ARMV vPCI MSI IRQ domain\n");
+Thanks.
+Alexander
 
-Typo in the above error message:  "ARMV" should be "ARM64".
+> Rationale
+> =========
+> 
+> Currently, the Linux kernel provides two types of reaction to kernel
+> warnings:
+>   1. Do nothing (by default),
+>   2. Call panic() if panic_on_warn is set. That's a very strong reaction,
+>      so panic_on_warn is usually disabled on production systems.
+> 
+>  From a safety point of view, the Linux kernel misses a middle way of
+> handling kernel warnings:
+>   - The kernel should stop the activity that provokes a warning,
+>   - But the kernel should avoid complete denial of service.
+> 
+>  From a security point of view, kernel warning messages provide a lot of
+> useful information for attackers. Many GNU/Linux distributions allow
+> unprivileged users to read the kernel log, so attackers use kernel
+> warning infoleak in vulnerability exploits. See the examples:
+> https://a13xp0p0v.github.io/2021/02/09/CVE-2021-26708.html
+> https://a13xp0p0v.github.io/2020/02/15/CVE-2019-18683.html
+> https://googleprojectzero.blogspot.com/2018/09/a-cache-invalidation-bug-in-linux.html
+> 
+> Let's introduce the pkill_on_warn sysctl.
+> If this parameter is set, the kernel kills all threads in a process that
+> provoked a kernel warning. This behavior is reasonable from a safety point of
+> view described above. It is also useful for kernel security hardening because
+> the system kills an exploit process that hits a kernel warning.
+> 
+> Moreover, bugs usually don't come alone, and a kernel warning may be
+> followed by memory corruption or other bad effects. So pkill_on_warn allows
+> the kernel to stop the process when the first signs of wrong behavior
+> are detected.
+> 
+> 
+> Changes from v1
+> ===============
+> 
+> 1) Introduce do_pkill_on_warn() and call it in all warning handling paths.
+> 
+> 2) Do refactoring without functional changes in a separate patch.
+> 
+> 3) Avoid killing init and kthreads.
+> 
+> 4) Use do_send_sig_info() instead of do_group_exit().
+> 
+> 5) Introduce sysctl instead of using core_param().
+> 
+> 
+> Tricks for testing
+> ==================
+> 
+> 1) This patch series was tested on x86_64 using CONFIG_LKDTM.
+> The kernel kills a process that performs this:
+>    echo WARNING > /sys/kernel/debug/provoke-crash/DIRECT
+> 
+> 2) The warn_slowpath_fmt() path was tested using this trick:
+> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+> index 84b87538a15d..3106c203ebb6 100644
+> --- a/arch/x86/include/asm/bug.h
+> +++ b/arch/x86/include/asm/bug.h
+> @@ -73,7 +73,7 @@ do {                                                          \
+>    * were to trigger, we'd rather wreck the machine in an attempt to get the
+>    * message out than not know about it.
+>    */
+> -#define __WARN_FLAGS(flags)                                    \
+> +#define ___WARN_FLAGS(flags)                                   \
+>   do {                                                           \
+>          instrumentation_begin();                                \
+>          _BUG_FLAGS(ASM_UD2, BUGFLAG_WARNING|(flags));           \
+> 
+> 3) Testing pkill_on_warn with kthreads was done using this trick:
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index bce848e50512..13c56f472681 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2133,6 +2133,8 @@ static int __noreturn rcu_gp_kthread(void *unused)
+>                  WRITE_ONCE(rcu_state.gp_state, RCU_GP_CLEANUP);
+>                  rcu_gp_cleanup();
+>                  WRITE_ONCE(rcu_state.gp_state, RCU_GP_CLEANED);
+> +
+> +               WARN_ONCE(1, "hello from kthread\n");
+>          }
+>   }
+> 
+> 4) Changing drivers/misc/lkdtm/bugs.c:lkdtm_WARNING() allowed me
+> to test all warning flavours:
+>   - WARN_ON()
+>   - WARN()
+>   - WARN_TAINT()
+>   - WARN_ON_ONCE()
+>   - WARN_ONCE()
+>   - WARN_TAINT_ONCE()
+> 
+> Thanks!
+> 
+> Alexander Popov (2):
+>    bug: do refactoring allowing to add a warning handling action
+>    sysctl: introduce kernel.pkill_on_warn
+> 
+>   Documentation/admin-guide/sysctl/kernel.rst | 14 ++++++++
+>   include/asm-generic/bug.h                   | 37 +++++++++++++++------
+>   include/linux/panic.h                       |  3 ++
+>   kernel/panic.c                              | 22 +++++++++++-
+>   kernel/sysctl.c                             |  9 +++++
+>   lib/bug.c                                   | 22 ++++++++----
+>   6 files changed, 90 insertions(+), 17 deletions(-)
+> 
 
-> +		goto free_chip;
-> +	}
-> +
-> +	return 0;
-> +
-> +free_chip:
-> +	kfree(chip_data);
-> +	if (fn)
-> +		irq_domain_free_fwnode(fn);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct irq_domain *hv_pci_get_root_domain(void)
-> +{
-> +	return hv_msi_gic_irq_domain;
-> +}
-> +#endif //CONFIG_ARM64
-
-Use "C" style comments.
-
-Michael
