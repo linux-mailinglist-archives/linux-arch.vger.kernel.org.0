@@ -2,157 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6955045354B
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Nov 2021 16:08:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1460453981
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Nov 2021 19:41:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237986AbhKPPLx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Nov 2021 10:11:53 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:60505 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238030AbhKPPKw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Nov 2021 10:10:52 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4HtqDn6zyFz9sSD;
-        Tue, 16 Nov 2021 16:07:53 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PgI9HqTlkXHf; Tue, 16 Nov 2021 16:07:53 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4HtqDl0Nrmz9sS6;
-        Tue, 16 Nov 2021 16:07:51 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id EBD668B77A;
-        Tue, 16 Nov 2021 16:07:50 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 81iAcOPwdzPt; Tue, 16 Nov 2021 16:07:50 +0100 (CET)
-Received: from [192.168.234.8] (unknown [192.168.234.8])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DA0A08B763;
-        Tue, 16 Nov 2021 16:07:49 +0100 (CET)
-Message-ID: <8ba77500-cb40-0662-f571-6a6f391374b9@csgroup.eu>
-Date:   Tue, 16 Nov 2021 16:07:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 12/13] lkdtm: Fix execute_[user]_location()
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        id S239596AbhKPSou (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Nov 2021 13:44:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239587AbhKPSor (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Nov 2021 13:44:47 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92A0C061746
+        for <linux-arch@vger.kernel.org>; Tue, 16 Nov 2021 10:41:50 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id m15so14526190pgu.11
+        for <linux-arch@vger.kernel.org>; Tue, 16 Nov 2021 10:41:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rpZo5Ukhloxpo3t6te7xJnWQRrow3d4oIhzJ9wNY//s=;
+        b=VSNC43P14WmPSZmUrPilJ+DgGj5eVm+rYneRkINAieo4BCqCLBy5QiE+yxx4dMJHrP
+         ofgb/NWCMtHijcLBbRJZt2srQLA+UEZ3FYMnXTi4zhVU59bazntvLi1ZB9x1FOAMm3MU
+         zC1NqI7P7FvTEoA0kb6E30B9MNDZ7w/u4TNWQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rpZo5Ukhloxpo3t6te7xJnWQRrow3d4oIhzJ9wNY//s=;
+        b=k03VUKHVHDvXAUxd/lZc6CpddTN0ES8KKyZiC0+zsdZdYzLfyBOCxgTEbqEmEiaH+l
+         rbiHaAEkhoUwP8uJpDoRSVcAlDFpDhu7KVKA1tL1qup99HhoUh9Vh8YK93CeS8EIrabA
+         hP4/g0lwNNhX6hYITWrxNs52UMxEx8gjg+ac4fNZqvGPX7HmgP87827EKFYN/Q5LKG4e
+         rKv41md/L5VF7holf0gRDzPMjHRAEIjlp5/wkFJiGdlL7PwQijyZkwq2PVgiOxAO6wrG
+         nHAJoOT5Ia0quAKNXYHizIQi+ROC411J03xEet0T5wzsiJJdc/Jm1wGRjJvPw/xwN2eF
+         +fQQ==
+X-Gm-Message-State: AOAM532pSyzgLFBpjju9kBnEIgEHAAGC0+1YSQvKw+paq7cEu8yyVJfh
+        hVV3r4SsoPRBuaymy9FC3ywGyQ==
+X-Google-Smtp-Source: ABdhPJwwvQRQ7H1L7erOMj0WCwxaWTV8d2CBQFnkm/BoZWo9AQPZdRvAdBwwSZAEqBBMD7kMUEk6Tw==
+X-Received: by 2002:a63:b502:: with SMTP id y2mr798068pge.214.1637088110275;
+        Tue, 16 Nov 2021 10:41:50 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m6sm14550926pgc.17.2021.11.16.10.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Nov 2021 10:41:49 -0800 (PST)
+Date:   Tue, 16 Nov 2021 10:41:49 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Alexander Popov <alex.popov@linux.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul McKenney <paulmck@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Maciej Rozycki <macro@orcam.me.uk>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>, Wei Liu <wl@xen.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jann Horn <jannh@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
- <cbee30c66890994e116a8eae8094fa8c5336f90a.1634190022.git.christophe.leroy@csgroup.eu>
- <202110151428.187B1CF@keescook>
- <9b4c39d4-1322-89af-585c-679a574576a2@csgroup.eu>
-In-Reply-To: <9b4c39d4-1322-89af-585c-679a574576a2@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Laura Abbott <labbott@kernel.org>,
+        David S Miller <davem@davemloft.net>,
+        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Scull <ascull@google.com>,
+        Marc Zyngier <maz@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wang Qing <wangqing@vivo.com>, Mel Gorman <mgorman@suse.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
+        Mathieu Chouquet-Stringer <me@mathieu.digital>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stephen Kitt <steve@sk2.org>, Stephen Boyd <sboyd@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-hardening@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>, notify@kernel.org,
+        main@lists.elisa.tech, safety-architecture@lists.elisa.tech,
+        devel@lists.elisa.tech, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 0/2] Introduce the pkill_on_warn parameter
+Message-ID: <202111161037.7456C981@keescook>
+References: <20211027233215.306111-1-alex.popov@linux.com>
+ <ac989387-3359-f8da-23f9-f5f6deca4db8@linux.com>
+ <CAHk-=wgRmjkP3+32XPULMLTkv24AkA=nNLa7xxvSg-F0G1sJ9g@mail.gmail.com>
+ <77b79f0c-48f2-16dd-1d00-22f3a1b1f5a6@linux.com>
+ <CAKXUXMx5Oi-dNVKB+8E-pdrz+ooELMZf=oT_oGXKFrNWejz=fg@mail.gmail.com>
+ <20211115110649.4f9cb390@gandalf.local.home>
+ <202111151116.933184F716@keescook>
+ <59534db5-b251-c0c8-791f-58aca5c00a2b@linux.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59534db5-b251-c0c8-791f-58aca5c00a2b@linux.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Kees,
+On Tue, Nov 16, 2021 at 12:12:16PM +0300, Alexander Popov wrote:
+> What if the Linux kernel had a LSM module responsible for error handling policy?
+> That would require adding LSM hooks to BUG*(), WARN*(), KERN_EMERG, etc.
+> In such LSM policy we can decide immediately how to react on the kernel error.
+> We can even decide depending on the subsystem and things like that.
 
-Le 16/10/2021 à 08:42, Christophe Leroy a écrit :
-> 
-> 
-> Le 15/10/2021 à 23:31, Kees Cook a écrit :
->> On Thu, Oct 14, 2021 at 07:50:01AM +0200, Christophe Leroy wrote:
->>> execute_location() and execute_user_location() intent
->>> to copy do_nothing() text and execute it at a new location.
->>> However, at the time being it doesn't copy do_nothing() function
->>> but do_nothing() function descriptor which still points to the
->>> original text. So at the end it still executes do_nothing() at
->>> its original location allthough using a copied function descriptor.
->>>
->>> So, fix that by really copying do_nothing() text and build a new
->>> function descriptor by copying do_nothing() function descriptor and
->>> updating the target address with the new location.
->>>
->>> Also fix the displayed addresses by dereferencing do_nothing()
->>> function descriptor.
->>>
->>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
->>> ---
->>>   drivers/misc/lkdtm/perms.c     | 25 +++++++++++++++++++++----
->>>   include/asm-generic/sections.h |  5 +++++
->>>   2 files changed, 26 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
->>> index 5266dc28df6e..96b3ebfcb8ed 100644
->>> --- a/drivers/misc/lkdtm/perms.c
->>> +++ b/drivers/misc/lkdtm/perms.c
->>> @@ -44,19 +44,32 @@ static noinline void do_overwritten(void)
->>>       return;
->>>   }
->>> +static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
->>> +{
->>> +    memcpy(fdesc, do_nothing, sizeof(*fdesc));
->>> +    fdesc->addr = (unsigned long)dst;
->>> +    barrier();
->>> +
->>> +    return fdesc;
->>> +}
->>
->> How about collapsing the "have_function_descriptors()" check into
->> setup_function_descriptor()?
->>
->> static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
->> {
->>     if (__is_defined(HAVE_FUNCTION_DESCRIPTORS)) {
->>         memcpy(fdesc, do_nothing, sizeof(*fdesc));
->>         fdesc->addr = (unsigned long)dst;
->>         barrier();
->>         return fdesc;
->>     } else {
->>         return dst;
->>     }
->> }
-> 
-> Ok
-> 
+That would solve the "atomicity" issue the WARN tracepoint solution has,
+and it would allow for very flexible userspace policy.
 
-...
+I actually wonder if the existing panic_on_* sites should serve as a
+guide for where to put the hooks. The current sysctls could be replaced
+by the hooks and a simple LSM.
 
->>
->>> diff --git a/include/asm-generic/sections.h 
->>> b/include/asm-generic/sections.h
->>> index 76163883c6ff..d225318538bd 100644
->>> --- a/include/asm-generic/sections.h
->>> +++ b/include/asm-generic/sections.h
->>> @@ -70,6 +70,11 @@ typedef struct {
->>>   } func_desc_t;
->>>   #endif
->>> +static inline bool have_function_descriptors(void)
->>> +{
->>> +    return __is_defined(HAVE_FUNCTION_DESCRIPTORS);
->>> +}
->>> +
->>>   /* random extra sections (if any).  Override
->>>    * in asm/sections.h */
->>>   #ifndef arch_is_kernel_text
->>
->> This hunk seems like it should live in a separate patch.
->>
-> 
-> Ok I move it in a previous patch.
-
-
-Do you have any additional feedback or comment on series v3 ?
-
-What's the way forward, should it go via LKDTM tree or via powerpc tree 
-or another tree ? I see there are neither Ack-by nor Reviewed-by for the 
-last 2 patches.
-
-Thanks
-Christophe
+-- 
+Kees Cook
