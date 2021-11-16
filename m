@@ -2,135 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0784532C2
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Nov 2021 14:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6955045354B
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Nov 2021 16:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236611AbhKPNYA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Nov 2021 08:24:00 -0500
-Received: from bedivere.hansenpartnership.com ([96.44.175.130]:46646 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230471AbhKPNYA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Nov 2021 08:24:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1637068863;
-        bh=Sl6WuLnqTU5TtnSO/QxFeyGJuRtLYuKL8EqqmhmDJXE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=MPT0whG2bQpz0Y8+0rTOzk/Lt9c8RRm7MpZUKNOWWeP09PrTuZbxrGsGMCDBVFtIB
-         73aZZDq3UHdFL++Ub3OxRSnL3yZgntpKyZsNEZe8JaDLPYS2yUL+Vf9WsvhhtP0pGY
-         tjqCDNMkJTzaDuHazCXWjzVHrqqtiLkYOTTXFlu0=
+        id S237986AbhKPPLx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Nov 2021 10:11:53 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:60505 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238030AbhKPPKw (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 16 Nov 2021 10:10:52 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4HtqDn6zyFz9sSD;
+        Tue, 16 Nov 2021 16:07:53 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id PgI9HqTlkXHf; Tue, 16 Nov 2021 16:07:53 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4HtqDl0Nrmz9sS6;
+        Tue, 16 Nov 2021 16:07:51 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0286C1280119;
-        Tue, 16 Nov 2021 08:21:03 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dfdi4ZtKv-8E; Tue, 16 Nov 2021 08:21:02 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1637068862;
-        bh=Sl6WuLnqTU5TtnSO/QxFeyGJuRtLYuKL8EqqmhmDJXE=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=Gh53x5MAbxqanSOf9Z+qToC4xT79AG5yx757N80jyZsGwNIA803bfe57ViasAsXQi
-         4z92/voDtClOm88EHF5A+G0dQSjdu5NI1LOynI7X+wrinp8pr0XgpF0ALZd0R3BPPB
-         joY1Qno04GjG9pkA6f892MOy/dAQoO90oGkz0myw=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 2C450128010E;
-        Tue, 16 Nov 2021 08:20:58 -0500 (EST)
-Message-ID: <d751a5dd17550b21f890e3efcf70d5228451767d.camel@HansenPartnership.com>
-Subject: Re: [ELISA Safety Architecture WG] [PATCH v2 0/2] Introduce the
- pkill_on_warn parameter
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Petr Mladek <pmladek@suse.com>,
-        Alexander Popov <alex.popov@linux.com>
-Cc:     Gabriele Paoloni <gpaoloni@redhat.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Robert Krutsch <krutsch@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul McKenney <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Maciej Rozycki <macro@orcam.me.uk>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, Wei Liu <wl@xen.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jann Horn <jannh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Laura Abbott <labbott@kernel.org>,
-        David S Miller <davem@davemloft.net>,
-        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Scull <ascull@google.com>,
-        Marc Zyngier <maz@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Wang Qing <wangqing@vivo.com>, Mel Gorman <mgorman@suse.de>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
-        Mathieu Chouquet-Stringer <me@mathieu.digital>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stephen Kitt <steve@sk2.org>, Stephen Boyd <sboyd@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mike Rapoport <rppt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-hardening@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>, notify@kernel.org,
-        main@lists.elisa.tech, safety-architecture@lists.elisa.tech,
-        devel@lists.elisa.tech, Shuah Khan <shuah@kernel.org>
-Date:   Tue, 16 Nov 2021 08:20:57 -0500
-In-Reply-To: <YZNuyssYsAB0ogUD@alley>
-References: <20211027233215.306111-1-alex.popov@linux.com>
-         <ac989387-3359-f8da-23f9-f5f6deca4db8@linux.com>
-         <CAHk-=wgRmjkP3+32XPULMLTkv24AkA=nNLa7xxvSg-F0G1sJ9g@mail.gmail.com>
-         <77b79f0c-48f2-16dd-1d00-22f3a1b1f5a6@linux.com>
-         <CAKXUXMx5Oi-dNVKB+8E-pdrz+ooELMZf=oT_oGXKFrNWejz=fg@mail.gmail.com>
-         <22828e84-b34f-7132-c9e9-bb42baf9247b@redhat.com>
-         <cf57fb34-460c-3211-840f-8a5e3d88811a@linux.com> <YZNuyssYsAB0ogUD@alley>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id EBD668B77A;
+        Tue, 16 Nov 2021 16:07:50 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 81iAcOPwdzPt; Tue, 16 Nov 2021 16:07:50 +0100 (CET)
+Received: from [192.168.234.8] (unknown [192.168.234.8])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id DA0A08B763;
+        Tue, 16 Nov 2021 16:07:49 +0100 (CET)
+Message-ID: <8ba77500-cb40-0662-f571-6a6f391374b9@csgroup.eu>
+Date:   Tue, 16 Nov 2021 16:07:47 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 12/13] lkdtm: Fix execute_[user]_location()
+Content-Language: fr-FR
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1634190022.git.christophe.leroy@csgroup.eu>
+ <cbee30c66890994e116a8eae8094fa8c5336f90a.1634190022.git.christophe.leroy@csgroup.eu>
+ <202110151428.187B1CF@keescook>
+ <9b4c39d4-1322-89af-585c-679a574576a2@csgroup.eu>
+In-Reply-To: <9b4c39d4-1322-89af-585c-679a574576a2@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2021-11-16 at 09:41 +0100, Petr Mladek wrote:
-[...]
-> If I wanted to implement a super-reliable panic() I would
-> use some external device that would cause power-reset when
-> the watched device is not responding.
+Hi Kees,
 
-They're called watchdog timers.  We have a whole subsystem full of
-them:
+Le 16/10/2021 à 08:42, Christophe Leroy a écrit :
+> 
+> 
+> Le 15/10/2021 à 23:31, Kees Cook a écrit :
+>> On Thu, Oct 14, 2021 at 07:50:01AM +0200, Christophe Leroy wrote:
+>>> execute_location() and execute_user_location() intent
+>>> to copy do_nothing() text and execute it at a new location.
+>>> However, at the time being it doesn't copy do_nothing() function
+>>> but do_nothing() function descriptor which still points to the
+>>> original text. So at the end it still executes do_nothing() at
+>>> its original location allthough using a copied function descriptor.
+>>>
+>>> So, fix that by really copying do_nothing() text and build a new
+>>> function descriptor by copying do_nothing() function descriptor and
+>>> updating the target address with the new location.
+>>>
+>>> Also fix the displayed addresses by dereferencing do_nothing()
+>>> function descriptor.
+>>>
+>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>> ---
+>>>   drivers/misc/lkdtm/perms.c     | 25 +++++++++++++++++++++----
+>>>   include/asm-generic/sections.h |  5 +++++
+>>>   2 files changed, 26 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
+>>> index 5266dc28df6e..96b3ebfcb8ed 100644
+>>> --- a/drivers/misc/lkdtm/perms.c
+>>> +++ b/drivers/misc/lkdtm/perms.c
+>>> @@ -44,19 +44,32 @@ static noinline void do_overwritten(void)
+>>>       return;
+>>>   }
+>>> +static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
+>>> +{
+>>> +    memcpy(fdesc, do_nothing, sizeof(*fdesc));
+>>> +    fdesc->addr = (unsigned long)dst;
+>>> +    barrier();
+>>> +
+>>> +    return fdesc;
+>>> +}
+>>
+>> How about collapsing the "have_function_descriptors()" check into
+>> setup_function_descriptor()?
+>>
+>> static void *setup_function_descriptor(func_desc_t *fdesc, void *dst)
+>> {
+>>     if (__is_defined(HAVE_FUNCTION_DESCRIPTORS)) {
+>>         memcpy(fdesc, do_nothing, sizeof(*fdesc));
+>>         fdesc->addr = (unsigned long)dst;
+>>         barrier();
+>>         return fdesc;
+>>     } else {
+>>         return dst;
+>>     }
+>> }
+> 
+> Ok
+> 
 
-drivers/watchdog
+...
 
-We used them in old cluster HA systems to guarantee successful recovery
-of shared state from contaminated cluster members, but I think they'd
-serve the reliable panic need equally well.  Most server class systems
-today have them built in (on the BMC if they don't have a separate
-mechanism), they're just not usually activated.
+>>
+>>> diff --git a/include/asm-generic/sections.h 
+>>> b/include/asm-generic/sections.h
+>>> index 76163883c6ff..d225318538bd 100644
+>>> --- a/include/asm-generic/sections.h
+>>> +++ b/include/asm-generic/sections.h
+>>> @@ -70,6 +70,11 @@ typedef struct {
+>>>   } func_desc_t;
+>>>   #endif
+>>> +static inline bool have_function_descriptors(void)
+>>> +{
+>>> +    return __is_defined(HAVE_FUNCTION_DESCRIPTORS);
+>>> +}
+>>> +
+>>>   /* random extra sections (if any).  Override
+>>>    * in asm/sections.h */
+>>>   #ifndef arch_is_kernel_text
+>>
+>> This hunk seems like it should live in a separate patch.
+>>
+> 
+> Ok I move it in a previous patch.
 
-James
 
+Do you have any additional feedback or comment on series v3 ?
 
+What's the way forward, should it go via LKDTM tree or via powerpc tree 
+or another tree ? I see there are neither Ack-by nor Reviewed-by for the 
+last 2 patches.
+
+Thanks
+Christophe
