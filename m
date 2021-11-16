@@ -2,148 +2,435 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA674539A9
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Nov 2021 20:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2263A453CA6
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Nov 2021 00:21:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239674AbhKPTDf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Nov 2021 14:03:35 -0500
-Received: from sonic315-27.consmr.mail.ne1.yahoo.com ([66.163.190.153]:37118
-        "EHLO sonic315-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239277AbhKPTDe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 16 Nov 2021 14:03:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1637089236; bh=iKZCNnZA8mKurfY2xcDf1xTfNga+uLdl6MyBXJlz4uc=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=IlCH7UXbsHb3z0KtV0Zi4KsaknBcLvperNnezhGl15qcbrSpimDo2BPd7gXIGNguliYf/M4D0X1AjPtZTJctdwl2U+kd2cp7OZA+hCyrBiLKWjVEBgAAeKgkscCQ4VeaPUaW4OrEFXvVnmBs15uCKVRuErwj1ObCyugITDDdxNZgnOqjmB82Nm/BKF+p60ZCbiChcx7EolKMZ8cbeFI4F0ZHxwdm0zH/ZsIM33XEz2OP68BpuJReaA0apJJaQM7gm+85vO/UpRZlv9XG8aDknpNhP+FzngUfsLzv9byuq1RUPiWVNyMWdaHDQK4i5ZY72A82yaJJngVs2NDDy3OB/A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1637089236; bh=KakOMrcQOYQF6zPpoNGmpyCyNEzOa7vc472gsuuEvx9=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=aeJjUhU40xCYdNvg8nvLqVqSoO0xFZ4rXoxf2hgziY/Krx0JCEXxnQS6XAF1ZvL8fDnWdU3xAyA+0DTJDfGSW74zCDiI0DeRIu5S57lCyO8wlaja64DrQ+kYkcxR+Bdk8Zn/SO3/U/LgI7ZC+u9x6srlnMv+av371HY5b5uqWtvJ2VHEIxQZcAjOq4hnvcE8oUbNRzyYEKuaXadHLEVpYkcSLX50BxHZAltxjpgVRu8gfVe1gs5AzZ+g5wyBqjFm5Smx+PjtcWJ+4L2/PrBguWMKWjxxFbazCk8dFvr8F12wjy7poaQPu2lAFiw0/PMBNdkioOBliCMhaesXQB2qaw==
-X-YMail-OSG: dfV4KL4VM1kt.GaOicztohoLnrgWtyS2u7sPmOPbByL_RitHu.lxaIsY1XJM0Ez
- mdcuj1dEhSXoO9oU1cBoSLUC6Zt27CBqCzkbx4dIimfdMAa2pyu_Tjvma2w6JddoUFXzusdUcOsn
- 0osUUmRf5W0KMjIEocy_SQmW6d37YsgYK0wUHxvH9ie473oa5X0N3AUy8wD6bd.qQAvqfacokBtp
- UVxbyopGr8SdJHn8p.Psog.4FyHKpeli2J9Sa16JwEcN3beeYXiPRMkaYqd9RfMOQ1S4rOBGa_QY
- yFVY_P603FArpIViHnkM3YhVZ6zQL_.UbrKE_qIgTkM.rX3we9jpGhRejh9bEIQkeZUYR8tashVQ
- ewpN2.bC8uEPuycHdbPCzK_54tKszy51Z58lUSp5wsl0pOLNq91sJO9v51.sC21uQkIHOCRA.t3_
- UrCT7wYwGMJoEOBvDxN.6T0GP0ta6oKz8Co2kf78GsZs3H5B5O7LQUxaNs21sYM9WG1Ub5oytsvJ
- tmF.16CyUDwIG99CzudDrzBRVeu0BTGn2J03_smiqE3mBL84HbFEqNjKOoHYXrxGO1yBG4j_FYYn
- ioBwy8KpvFsHLonOWaEW4LYa6IkzqUtLD86YKd9IIt2DDWcKCSsg_Sgo24eYB6M.FWoM8_eCplzr
- 4w1lGJku1G0zJtQZRGMvXfHGpcxTg24CvPQ23j8ZZ7AM_c5gaOL25gpoVsi399.KhybBfUDIuoNP
- fsaeJ1EQCr3Y1qc1mmy9KkQk1En6sca6v9huAOT5MVzHDk67HbvnLaMhfMOmcKbzvE9TKIZ1BofN
- p4erxAni31xY7WQSAf.TZ1vhqkMYsejVBSous_rmKBmBK8wzZ_6O6chyetspDAVi6nfeSRQXxOqF
- Jvas9RcspTI6AwAsN2LKH9ByoMFOHNRxi0K.MgC1r2AQmI20nkDwrM45jyGaV7egh4cyhhQtU.0E
- 8xSgF7J9.KFzrpNgIo8Uy1SgBJkjds8amBCypHUDG0pn6J3aBUJSE5MHR.S0V02oHbuiFiHsS8wH
- C0z7RQ4W9Izz7nJUIRcGMnfAtuC.0ZmGFxu.Qs.dNjKWUd4oZdRCht_QjlO0OKaptnioNkIF_NQh
- T2DIBSFfMKxpmxrDKtJQn25_vnbu1nzAsXJAfPpXVlCuAe.0Cri0JBTgIZ9BomSjre_wM.kfGOOg
- qm4ZVbdqPYj7PkV8FZkhYgGnHI4I25iDyHyMNakkjsM8MIwrdyWstJKoaHA3mYiI.s4HgLGFqE4E
- nn5WT4SQfFunyou.h.HCoq0Lkzzcqnn.gc7MHxYOqGrrUf25lA0JEkVAgvCt_kCiDnnfaC3AxLT1
- OjSqV0r0w6mcbl_USL5fzd28vp4kc0ePGL5OuMVVaFf8a9kA0nDChaSAxFzd64pnqUg_DoKZGKlF
- Yf26tACFNBYFeegkD.BQJdvZMzk__qgQrOlUQNyc_UREopzbfgsqvoE9lJw5wvV8AUjapuj36ffb
- TC8jQq2o9H6M0H.FerhJMNECzowd4oh1y6XdBc2nkLUtQ1SaJh7dIFBxo8IUQ1pH.ges_xMFVyUy
- aB4DEzUGYmwrTxxlu1ERd18Rx6_YNXym7L4OlLD0NwkQoN8YUX.uUzmiBSbCLutyXO3CFxxDHpZQ
- XrG02UD8KN44_5CKT7EzNEjs0vYSxXESNald3nnJpGq_l9rLOY2C8CMcOrlg5RDM6PZX69pk9WYc
- cHYjA4GDLJQRweZmKFXCqEgsIRRcb0OEJ_EqHEbzOXjA4AntlQr6.UFODumf7wVvBX9e.J0icsnF
- Lp7tNKQUMADr3sWwjUyh7fMOBeJN0mPtLp5Gz2qsJwNiiOa0Gj5hUMCrtDmVKsKyy8C7jcxaeiLn
- mt8N2Z4tpkcpeVJXss6qZrcj8Se9nQZY2C0iDtKgVrzP18lP0ipp1UH7jku0kmW6C2.QUv296xD.
- dBKbXREiJfTkrwhNAGU3oOQf7EAH3GXTuPuSFB8C4tgZ1DYcwwTUW230Qs7rUHXEyx.lTa56GJz6
- _hsATdtKFC1sy5xYkmcPtvVrkNJASjY5nU6anyAct_tiu7tJM2kUdpzRnn.XTcRvShzcdq4qot5k
- n9MZrEpAsGAwDBA.RC1tSUq6y6_F9IU9XDIyWdDX07svYEyrsAxr6Jd6bwYLK9sJ2eMBZCtL0M4M
- Lx91ER7ORK0MDTPpQRbdaqt5Do0LeDuRq8q3217c4.JKP.JtlH5BGL909INx6R8O4mga53VWNUCr
- qjyeFOmSqSq067BWooNhEXr3mJ9PH_9WLz20-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Tue, 16 Nov 2021 19:00:36 +0000
-Received: by kubenode523.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID 16992bd20597bf90782469ca1b8ad7d7;
-          Tue, 16 Nov 2021 19:00:31 +0000 (UTC)
-Message-ID: <fd86a05b-feca-c0a9-c6b0-b2e69c650021@schaufler-ca.com>
-Date:   Tue, 16 Nov 2021 11:00:23 -0800
+        id S231470AbhKPXYl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Nov 2021 18:24:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229696AbhKPXYk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Nov 2021 18:24:40 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C144BC061570;
+        Tue, 16 Nov 2021 15:21:42 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id s14so814993ilv.10;
+        Tue, 16 Nov 2021 15:21:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zr4XRTWkj++PMy7FDY5s9w9BuZDTQwwlM/gCwIXxQb4=;
+        b=bMnkobnHM7wSG8NdakeyUAsQ+1YSvi7VN2RCRMetqNSn8pd+bpHtvZaQ9bjBAOAb1+
+         Nv31etULnCzQPmi6VKbg175JvN+UpGeyhmf9snwkIMTg8NxtG4Usm10BNyxOrKml7B7o
+         r/4tR/nWhCUYDUVKeQzodPwtQ3WKTUZtbEloDU6qP8tC9BtJSljZtA1t9r+LVCsLgtVA
+         vGVuKrV3U7aZQrN9BnzOK4hX5WhL8xTOLT+9dNZjcMH54Ak98N91WRhV+0dyixQ6EFNL
+         X4wSNge8rRGZohlujorZWplEB4EIDiJLjDNWS+fhUXE+A/oOxcBQ2FYAzBwvtYSx6WNs
+         Ittw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zr4XRTWkj++PMy7FDY5s9w9BuZDTQwwlM/gCwIXxQb4=;
+        b=Ddnx/4P2FdjUkhThTgGhALGxXw4T8vFfjjdYgjQY5h+FWPn2aIDK06Qy3faup2aEKN
+         +ZX8MvbL+HMy65UxPACld3sFEYLPdkc7L234LTZ8tdS1G6ZeVkwpjJjlAUSB4VZNmD0N
+         AZhK5laVyC2T+h736/7zaVM8nfPT4mMKE3I1KrZB4M/YRZuDGZBZEEce2Cso4ZLe6U+i
+         DDOc7gR9G52IIEHt1duJvNLB1tf06DlyIyKiRus9JjnmgSlImRVQqtqaNPi0ULXbLzWH
+         LlWzPEkGWxS9jYOGcgzoy27OZkv79HLbkQyfKppsh15UkokDVP0Q4wcOMWQOMcwk/F8Q
+         0lHA==
+X-Gm-Message-State: AOAM5301kpuUB/+mos0ToN05RtUFMxY/EntxeUrq3nWS7t0cDRCZ193J
+        dT2lX6SOVRjLWRz/eE5PZkg=
+X-Google-Smtp-Source: ABdhPJzb58kPNJ9JAVz+8lf3NlozcjSIA552P+3lG/B0i+lw0NI8TtwtTne6wbUbTgb1I/44r8de9g==
+X-Received: by 2002:a05:6e02:933:: with SMTP id o19mr7047887ilt.92.1637104902154;
+        Tue, 16 Nov 2021 15:21:42 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id s15sm15192244ilu.16.2021.11.16.15.21.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Nov 2021 15:21:41 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id A5D7227C0054;
+        Tue, 16 Nov 2021 18:21:37 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Tue, 16 Nov 2021 18:21:39 -0500
+X-ME-Sender: <xms:AD2UYUk1RGISfHsE3AK3OKF1hZl-OEpOJ7F1fCYbOBUJlOcnAph8TQ>
+    <xme:AD2UYT1iLNSxaegfzLko1Uundr7x3zHCiJrwZjOhpKpZ4LhrNErOfXBFbh6vKpbVL
+    Vi3NQ3Nxz4JWkY2vQ>
+X-ME-Received: <xmr:AD2UYSr6xKQ5LrUxJFNUNNy8hXpp8mEX767luv6fziRHhX257_OEYpgrj-yGww>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrfeefgddtkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
+    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvg
+X-ME-Proxy: <xmx:AD2UYQmsO3BHlDZzWUwixNcS0TvaavYMTtyQPJ-G7hokW9GACx86qA>
+    <xmx:AD2UYS0aiAgzNMBr-fF4ALpN_qT_im-lPU0goMDZi2X79bOSac9neQ>
+    <xmx:AD2UYXsv2pGG-JG_UkbTHilTF3Ltma8C6LAkglvFh4Jr6OWMYDhFtw>
+    <xmx:AT2UYV_bMWIETFN93Q1vizuKEzlPleJksVQIAKDI-aMvbzjodtLv2RtIs2M>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 16 Nov 2021 18:21:36 -0500 (EST)
+Date:   Wed, 17 Nov 2021 07:21:15 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, maz@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+Subject: Re: [PATCH v5 1/2] PCI: hv: Make the code arch neutral by adding
+ arch specific interfaces
+Message-ID: <YZQ86w4ALFg42Owo@boqun-archlinux>
+References: <1636573510-23838-1-git-send-email-sunilmut@linux.microsoft.com>
+ <1636573510-23838-2-git-send-email-sunilmut@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v2 0/2] Introduce the pkill_on_warn parameter
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Alexander Popov <alex.popov@linux.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul McKenney <paulmck@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Maciej Rozycki <macro@orcam.me.uk>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>, Wei Liu <wl@xen.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Jann Horn <jannh@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Laura Abbott <labbott@kernel.org>,
-        David S Miller <davem@davemloft.net>,
-        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Scull <ascull@google.com>,
-        Marc Zyngier <maz@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Wang Qing <wangqing@vivo.com>, Mel Gorman <mgorman@suse.de>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
-        Mathieu Chouquet-Stringer <me@mathieu.digital>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stephen Kitt <steve@sk2.org>, Stephen Boyd <sboyd@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Mike Rapoport <rppt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>,
-        linux-hardening@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>, notify@kernel.org,
-        main@lists.elisa.tech, safety-architecture@lists.elisa.tech,
-        devel@lists.elisa.tech, Shuah Khan <shuah@kernel.org>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20211027233215.306111-1-alex.popov@linux.com>
- <ac989387-3359-f8da-23f9-f5f6deca4db8@linux.com>
- <CAHk-=wgRmjkP3+32XPULMLTkv24AkA=nNLa7xxvSg-F0G1sJ9g@mail.gmail.com>
- <77b79f0c-48f2-16dd-1d00-22f3a1b1f5a6@linux.com>
- <CAKXUXMx5Oi-dNVKB+8E-pdrz+ooELMZf=oT_oGXKFrNWejz=fg@mail.gmail.com>
- <20211115110649.4f9cb390@gandalf.local.home>
- <202111151116.933184F716@keescook>
- <59534db5-b251-c0c8-791f-58aca5c00a2b@linux.com>
- <202111161037.7456C981@keescook>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <202111161037.7456C981@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.19306 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1636573510-23838-2-git-send-email-sunilmut@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/16/2021 10:41 AM, Kees Cook wrote:
-> On Tue, Nov 16, 2021 at 12:12:16PM +0300, Alexander Popov wrote:
->> What if the Linux kernel had a LSM module responsible for error handling policy?
->> That would require adding LSM hooks to BUG*(), WARN*(), KERN_EMERG, etc.
->> In such LSM policy we can decide immediately how to react on the kernel error.
->> We can even decide depending on the subsystem and things like that.
-> That would solve the "atomicity" issue the WARN tracepoint solution has,
-> and it would allow for very flexible userspace policy.
->
-> I actually wonder if the existing panic_on_* sites should serve as a
-> guide for where to put the hooks. The current sysctls could be replaced
-> by the hooks and a simple LSM.
+On Wed, Nov 10, 2021 at 11:45:09AM -0800, Sunil Muthuswamy wrote:
+> From: Sunil Muthuswamy <sunilmut@microsoft.com>
+> 
+> Encapsulate arch dependencies in Hyper-V vPCI through a set of
+> arch-dependent interfaces. Adding these arch specific interfaces will
+> allow for an implementation for other architectures, such as arm64.
+> 
+> There are no functional changes expected from this patch.
+> 
 
-Do you really want to make error handling a "security" issue?
-If you add security_bug(), security_warn_on() and the like
-you're begging that they be included in SELinux (AppArmor) policy.
-BPF, too, come to think of it. Is that what you want?
+Other than the comment style nit, this patch looks good to me. Feel free
+to add
 
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+
+Regards,
+Boqun
+
+> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> ---
+> In v2, v3, v4 & v5:
+>  Changes are described in the cover letter. No change from v4 -> v5.
+> 
+>  arch/x86/include/asm/hyperv-tlfs.h  | 33 ++++++++++++
+>  arch/x86/include/asm/mshyperv.h     |  7 ---
+>  drivers/pci/controller/pci-hyperv.c | 79 ++++++++++++++++++++---------
+>  include/asm-generic/hyperv-tlfs.h   | 33 ------------
+>  4 files changed, 87 insertions(+), 65 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 2322d6bd5883..fdf3d28fbdd5 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -585,6 +585,39 @@ enum hv_interrupt_type {
+>  	HV_X64_INTERRUPT_TYPE_MAXIMUM           = 0x000A,
+>  };
+>  
+> +union hv_msi_address_register {
+> +	u32 as_uint32;
+> +	struct {
+> +		u32 reserved1:2;
+> +		u32 destination_mode:1;
+> +		u32 redirection_hint:1;
+> +		u32 reserved2:8;
+> +		u32 destination_id:8;
+> +		u32 msi_base:12;
+> +	};
+> +} __packed;
+> +
+> +union hv_msi_data_register {
+> +	u32 as_uint32;
+> +	struct {
+> +		u32 vector:8;
+> +		u32 delivery_mode:3;
+> +		u32 reserved1:3;
+> +		u32 level_assert:1;
+> +		u32 trigger_mode:1;
+> +		u32 reserved2:16;
+> +	};
+> +} __packed;
+> +
+> +/* HvRetargetDeviceInterrupt hypercall */
+> +union hv_msi_entry {
+> +	u64 as_uint64;
+> +	struct {
+> +		union hv_msi_address_register address;
+> +		union hv_msi_data_register data;
+> +	} __packed;
+> +};
+> +
+>  #include <asm-generic/hyperv-tlfs.h>
+>  
+>  #endif
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index adccbc209169..c2b9ab94408e 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -176,13 +176,6 @@ bool hv_vcpu_is_preempted(int vcpu);
+>  static inline void hv_apic_init(void) {}
+>  #endif
+>  
+> -static inline void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+> -					      struct msi_desc *msi_desc)
+> -{
+> -	msi_entry->address.as_uint32 = msi_desc->msg.address_lo;
+> -	msi_entry->data.as_uint32 = msi_desc->msg.data;
+> -}
+> -
+>  struct irq_domain *hv_create_pci_msi_domain(void);
+>  
+>  int hv_map_ioapic_interrupt(int ioapic_id, bool level, int vcpu, int vector,
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index eaec915ffe62..03e07a4f0e3f 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -43,9 +43,6 @@
+>  #include <linux/pci-ecam.h>
+>  #include <linux/delay.h>
+>  #include <linux/semaphore.h>
+> -#include <linux/irqdomain.h>
+> -#include <asm/irqdomain.h>
+> -#include <asm/apic.h>
+>  #include <linux/irq.h>
+>  #include <linux/msi.h>
+>  #include <linux/hyperv.h>
+> @@ -583,6 +580,42 @@ struct hv_pci_compl {
+>  
+>  static void hv_pci_onchannelcallback(void *context);
+>  
+> +#ifdef CONFIG_X86
+> +#define DELIVERY_MODE	APIC_DELIVERY_MODE_FIXED
+> +#define FLOW_HANDLER	handle_edge_irq
+> +#define FLOW_NAME	"edge"
+> +
+> +static int hv_pci_irqchip_init(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +static struct irq_domain *hv_pci_get_root_domain(void)
+> +{
+> +	return x86_vector_domain;
+> +}
+> +
+> +static unsigned int hv_msi_get_int_vector(struct irq_data *data)
+> +{
+> +	struct irq_cfg *cfg = irqd_cfg(data);
+> +
+> +	return cfg->vector;
+> +}
+> +
+> +static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+> +				       struct msi_desc *msi_desc)
+> +{
+> +	msi_entry->address.as_uint32 = msi_desc->msg.address_lo;
+> +	msi_entry->data.as_uint32 = msi_desc->msg.data;
+> +}
+> +
+> +static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
+> +			  int nvec, msi_alloc_info_t *info)
+> +{
+> +	return pci_msi_prepare(domain, dev, nvec, info);
+> +}
+> +#endif // CONFIG_X86
+> +
+>  /**
+>   * hv_pci_generic_compl() - Invoked for a completion packet
+>   * @context:		Set up by the sender of the packet.
+> @@ -1191,14 +1224,6 @@ static void hv_msi_free(struct irq_domain *domain, struct msi_domain_info *info,
+>  	put_pcichild(hpdev);
+>  }
+>  
+> -static int hv_set_affinity(struct irq_data *data, const struct cpumask *dest,
+> -			   bool force)
+> -{
+> -	struct irq_data *parent = data->parent_data;
+> -
+> -	return parent->chip->irq_set_affinity(parent, dest, force);
+> -}
+> -
+>  static void hv_irq_mask(struct irq_data *data)
+>  {
+>  	pci_msi_mask_irq(data);
+> @@ -1217,7 +1242,6 @@ static void hv_irq_mask(struct irq_data *data)
+>  static void hv_irq_unmask(struct irq_data *data)
+>  {
+>  	struct msi_desc *msi_desc = irq_data_get_msi_desc(data);
+> -	struct irq_cfg *cfg = irqd_cfg(data);
+>  	struct hv_retarget_device_interrupt *params;
+>  	struct hv_pcibus_device *hbus;
+>  	struct cpumask *dest;
+> @@ -1246,7 +1270,7 @@ static void hv_irq_unmask(struct irq_data *data)
+>  			   (hbus->hdev->dev_instance.b[7] << 8) |
+>  			   (hbus->hdev->dev_instance.b[6] & 0xf8) |
+>  			   PCI_FUNC(pdev->devfn);
+> -	params->int_target.vector = cfg->vector;
+> +	params->int_target.vector = hv_msi_get_int_vector(data);
+>  
+>  	/*
+>  	 * Honoring apic->delivery_mode set to APIC_DELIVERY_MODE_FIXED by
+> @@ -1347,7 +1371,7 @@ static u32 hv_compose_msi_req_v1(
+>  	int_pkt->wslot.slot = slot;
+>  	int_pkt->int_desc.vector = vector;
+>  	int_pkt->int_desc.vector_count = 1;
+> -	int_pkt->int_desc.delivery_mode = APIC_DELIVERY_MODE_FIXED;
+> +	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
+>  
+>  	/*
+>  	 * Create MSI w/ dummy vCPU set, overwritten by subsequent retarget in
+> @@ -1377,7 +1401,7 @@ static u32 hv_compose_msi_req_v2(
+>  	int_pkt->wslot.slot = slot;
+>  	int_pkt->int_desc.vector = vector;
+>  	int_pkt->int_desc.vector_count = 1;
+> -	int_pkt->int_desc.delivery_mode = APIC_DELIVERY_MODE_FIXED;
+> +	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
+>  	cpu = hv_compose_msi_req_get_cpu(affinity);
+>  	int_pkt->int_desc.processor_array[0] =
+>  		hv_cpu_number_to_vp_number(cpu);
+> @@ -1397,7 +1421,7 @@ static u32 hv_compose_msi_req_v3(
+>  	int_pkt->int_desc.vector = vector;
+>  	int_pkt->int_desc.reserved = 0;
+>  	int_pkt->int_desc.vector_count = 1;
+> -	int_pkt->int_desc.delivery_mode = APIC_DELIVERY_MODE_FIXED;
+> +	int_pkt->int_desc.delivery_mode = DELIVERY_MODE;
+>  	cpu = hv_compose_msi_req_get_cpu(affinity);
+>  	int_pkt->int_desc.processor_array[0] =
+>  		hv_cpu_number_to_vp_number(cpu);
+> @@ -1419,7 +1443,6 @@ static u32 hv_compose_msi_req_v3(
+>   */
+>  static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  {
+> -	struct irq_cfg *cfg = irqd_cfg(data);
+>  	struct hv_pcibus_device *hbus;
+>  	struct vmbus_channel *channel;
+>  	struct hv_pci_dev *hpdev;
+> @@ -1470,7 +1493,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  		size = hv_compose_msi_req_v1(&ctxt.int_pkts.v1,
+>  					dest,
+>  					hpdev->desc.win_slot.slot,
+> -					cfg->vector);
+> +					hv_msi_get_int_vector(data));
+>  		break;
+>  
+>  	case PCI_PROTOCOL_VERSION_1_2:
+> @@ -1478,14 +1501,14 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  		size = hv_compose_msi_req_v2(&ctxt.int_pkts.v2,
+>  					dest,
+>  					hpdev->desc.win_slot.slot,
+> -					cfg->vector);
+> +					hv_msi_get_int_vector(data));
+>  		break;
+>  
+>  	case PCI_PROTOCOL_VERSION_1_4:
+>  		size = hv_compose_msi_req_v3(&ctxt.int_pkts.v3,
+>  					dest,
+>  					hpdev->desc.win_slot.slot,
+> -					cfg->vector);
+> +					hv_msi_get_int_vector(data));
+>  		break;
+>  
+>  	default:
+> @@ -1594,14 +1617,14 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
+>  static struct irq_chip hv_msi_irq_chip = {
+>  	.name			= "Hyper-V PCIe MSI",
+>  	.irq_compose_msi_msg	= hv_compose_msi_msg,
+> -	.irq_set_affinity	= hv_set_affinity,
+> +	.irq_set_affinity	= irq_chip_set_affinity_parent,
+>  	.irq_ack		= irq_chip_ack_parent,
+>  	.irq_mask		= hv_irq_mask,
+>  	.irq_unmask		= hv_irq_unmask,
+>  };
+>  
+>  static struct msi_domain_ops hv_msi_ops = {
+> -	.msi_prepare	= pci_msi_prepare,
+> +	.msi_prepare	= hv_msi_prepare,
+>  	.msi_free	= hv_msi_free,
+>  };
+>  
+> @@ -1625,12 +1648,12 @@ static int hv_pcie_init_irq_domain(struct hv_pcibus_device *hbus)
+>  	hbus->msi_info.flags = (MSI_FLAG_USE_DEF_DOM_OPS |
+>  		MSI_FLAG_USE_DEF_CHIP_OPS | MSI_FLAG_MULTI_PCI_MSI |
+>  		MSI_FLAG_PCI_MSIX);
+> -	hbus->msi_info.handler = handle_edge_irq;
+> -	hbus->msi_info.handler_name = "edge";
+> +	hbus->msi_info.handler = FLOW_HANDLER;
+> +	hbus->msi_info.handler_name = FLOW_NAME;
+>  	hbus->msi_info.data = hbus;
+>  	hbus->irq_domain = pci_msi_create_irq_domain(hbus->fwnode,
+>  						     &hbus->msi_info,
+> -						     x86_vector_domain);
+> +						     hv_pci_get_root_domain());
+>  	if (!hbus->irq_domain) {
+>  		dev_err(&hbus->hdev->device,
+>  			"Failed to build an MSI IRQ domain\n");
+> @@ -3535,9 +3558,15 @@ static void __exit exit_hv_pci_drv(void)
+>  
+>  static int __init init_hv_pci_drv(void)
+>  {
+> +	int ret;
+> +
+>  	if (!hv_is_hyperv_initialized())
+>  		return -ENODEV;
+>  
+> +	ret = hv_pci_irqchip_init();
+> +	if (ret)
+> +		return ret;
+> +
+>  	/* Set the invalid domain number's bit, so it will not be used */
+>  	set_bit(HVPCI_DOM_INVALID, hvpci_dom_map);
+>  
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index 56348a541c50..45cc0c3b8ed7 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -539,39 +539,6 @@ enum hv_interrupt_source {
+>  	HV_INTERRUPT_SOURCE_IOAPIC,
+>  };
+>  
+> -union hv_msi_address_register {
+> -	u32 as_uint32;
+> -	struct {
+> -		u32 reserved1:2;
+> -		u32 destination_mode:1;
+> -		u32 redirection_hint:1;
+> -		u32 reserved2:8;
+> -		u32 destination_id:8;
+> -		u32 msi_base:12;
+> -	};
+> -} __packed;
+> -
+> -union hv_msi_data_register {
+> -	u32 as_uint32;
+> -	struct {
+> -		u32 vector:8;
+> -		u32 delivery_mode:3;
+> -		u32 reserved1:3;
+> -		u32 level_assert:1;
+> -		u32 trigger_mode:1;
+> -		u32 reserved2:16;
+> -	};
+> -} __packed;
+> -
+> -/* HvRetargetDeviceInterrupt hypercall */
+> -union hv_msi_entry {
+> -	u64 as_uint64;
+> -	struct {
+> -		union hv_msi_address_register address;
+> -		union hv_msi_data_register data;
+> -	} __packed;
+> -};
+> -
+>  union hv_ioapic_rte {
+>  	u64 as_uint64;
+>  
+> -- 
+> 2.25.1
+> 
+> 
