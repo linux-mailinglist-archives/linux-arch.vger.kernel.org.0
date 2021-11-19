@@ -2,58 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 727C54577C3
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Nov 2021 21:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E1BF457826
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Nov 2021 22:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235360AbhKSUep (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Nov 2021 15:34:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43003 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235324AbhKSUeo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 19 Nov 2021 15:34:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1637353902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=P2sZkZbNWImGK5CgW7dFwBi8zGA25zK0xwbZ1WxQTIw=;
-        b=a5BVsP7ax71OMAd5sXb8IGikIbDCvilB09m5KWI8ntkxRE3zmRnygJRfCm5SDvj0FRoGbi
-        W/jHP0cQsqyMtmHKG76g0yrGeS4Ip7J1+CVXa5IsxEHwKP7FJC0wUIsdwHQU3Y6hAdqBqx
-        jbg8VhMWfHmzOTO+4Phc3qM2nVI2HVU=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-51-0ojlN1cENyuUzd85nYI-YA-1; Fri, 19 Nov 2021 15:31:40 -0500
-X-MC-Unique: 0ojlN1cENyuUzd85nYI-YA-1
-Received: by mail-qk1-f198.google.com with SMTP id q5-20020a05620a0d8500b0045edb4779dbso8848373qkl.2
-        for <linux-arch@vger.kernel.org>; Fri, 19 Nov 2021 12:31:40 -0800 (PST)
+        id S234622AbhKSVfM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Nov 2021 16:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234547AbhKSVfM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Nov 2021 16:35:12 -0500
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14446C061748
+        for <linux-arch@vger.kernel.org>; Fri, 19 Nov 2021 13:32:10 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id t19so24259572oij.1
+        for <linux-arch@vger.kernel.org>; Fri, 19 Nov 2021 13:32:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0GXHfM1zHpJu5wwWGSWsee6iiyt6MnGHGfBIxpmPLPk=;
+        b=Da5fgDtGaSWg7kBA6Vl+Q0b9xSV4Gr/s+wRD9Ww4yELap/aNMC7gluX3kCAdnxxYeN
+         kAm9K98pzWsJ58l/6xgKwb6HnUlc4hLwODYnaAU5ZbeGd1xUq9tgrmbAbhuTj2zsVV+T
+         vPF4Zx+hH1fqAZ9xmvVvbkW5y6FT/BcFV9Am66hfoZ1UiBVFlhrbPWu0DSm13Zk1G0gn
+         Ql/PXS3MRTJWKbDGwezkLwA9tBLRrS+lJ+2JO7IdMcS/OiyebpH0wKVl54H9qoceriTI
+         MT8WWuE6XaQbcAbK7KdQl4nzGGKYRmdOOsF7vnhtGQOEjdaR+9XJ9Br9HRxzXBOhS3pO
+         u3AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=P2sZkZbNWImGK5CgW7dFwBi8zGA25zK0xwbZ1WxQTIw=;
-        b=MNLXkXuYgjXpu4YZxScFE0rMkRnuWonrq9hAViIsj0Q3utFj+saYuywG6RV/tdls5R
-         46GLRKfUOiSzZCqwJMo1X/1Gghpo8ACDCdUAwFDNIAM6cEGDq/K0lsM8QZmhJM+TmKHr
-         IPOkfKsDOf6bQvmjCP65klfNnst1GQPNJus/AAhTQHyzfHfqTQSJe8lJeaAQYTimsTKd
-         3qgzL7Siqe7y29xrA6S0gtm3/JTMfVW5vWY55RNL+quZDJnATTWti1C1F3FFrBPYN9aH
-         zLN0BspDm3S7XDwoxD7UjakdTYtyzoopz89CWZPOebUoMr1tA1afWrPtuDFarWd2veAS
-         cGRA==
-X-Gm-Message-State: AOAM5331tnHzaa1ri8HxLQ9ZvQgmTCk/ieIhdMMb7ipRR7nWPMWMiNuC
-        HHX0d5nzNnCSn0Mpxq7VtjAUK0r/iBhAUF5TpJhgI59Dd+u1udGqHhtZkX5yv7lEu0qjsIOScmq
-        J7OjEA7J5nSIYLDzLBn1mKg==
-X-Received: by 2002:ac8:7f52:: with SMTP id g18mr9425058qtk.190.1637353900217;
-        Fri, 19 Nov 2021 12:31:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxkAXs81p/9fcPnMbXqzRfyHNHU69K8pzzXpDVQagmkQJ2qJyjzDlmUAcOqpRVDqAvK3rgV/w==
-X-Received: by 2002:ac8:7f52:: with SMTP id g18mr9425020qtk.190.1637353899973;
-        Fri, 19 Nov 2021 12:31:39 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id z13sm374393qkj.1.2021.11.19.12.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Nov 2021 12:31:39 -0800 (PST)
-Date:   Fri, 19 Nov 2021 12:31:35 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Marco Elver <elver@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0GXHfM1zHpJu5wwWGSWsee6iiyt6MnGHGfBIxpmPLPk=;
+        b=qceq5v1f/mRLXHXCKXCMnEh4Yzni8jgRKh8Ebl9UR3+8Mxj5dTv86bSz4fpVhl1Ok4
+         OgB5GB9a29naJjIjzX0fC+g3fJQmBW3LzjkIZQ5DZpGWQxXXn+o1aYk5IIqRr8XMEb0B
+         AGS4X++B20w4su652SNeaqqgTWGuzRx6BgcBAcBSOaSz+VPSN9SsceSefip2HisfLmlr
+         AcUS26UNeyMXRsli4QOGmzaKHDHmvQYRpFE73qyCbGsqOhBDUXgvXOThtIWeeaqxbLNR
+         elHLZj1x585+7/2Fk5CRUbo16BYcVkw0CLQwc6sdAr91V2aNBlrm7WxBT2zwtlk2LPTq
+         2c9Q==
+X-Gm-Message-State: AOAM532AI/XTmm3BBL6gRHXq+ZvGXfd9vxXli0zpQfPyuA/HH8jhnXtz
+        2TBRV3cDvXPidqrsrBosMFwpMH0Pejhup1A1FEPd/g==
+X-Google-Smtp-Source: ABdhPJwXmXhmZIoAJvQyEg5ELH0NOHKM8Z2VTFX+cXoZyPNtSc4glckFT5TqVjn11VDqUStoWJnf1FN/l/YZlXmY86E=
+X-Received: by 2002:a05:6808:118c:: with SMTP id j12mr2759146oil.65.1637357529142;
+ Fri, 19 Nov 2021 13:32:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20211118081027.3175699-1-elver@google.com> <20211118081027.3175699-24-elver@google.com>
+ <20211119203135.clplwzh3hyo5xddg@treble>
+In-Reply-To: <20211119203135.clplwzh3hyo5xddg@treble>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 19 Nov 2021 22:31:57 +0100
+Message-ID: <CANpmjNPG1OdL9i73jiGH3XNmR+q+fRJfCaGrUXefRYu1kqhOGw@mail.gmail.com>
+Subject: Re: [PATCH v2 23/23] objtool, kcsan: Remove memory barrier
+ instrumentation from noinstr
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
 Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Alexander Potapenko <glider@google.com>,
         Boqun Feng <boqun.feng@gmail.com>,
@@ -68,69 +67,66 @@ Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH v2 23/23] objtool, kcsan: Remove memory barrier
- instrumentation from noinstr
-Message-ID: <20211119203135.clplwzh3hyo5xddg@treble>
-References: <20211118081027.3175699-1-elver@google.com>
- <20211118081027.3175699-24-elver@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211118081027.3175699-24-elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 09:10:27AM +0100, Marco Elver wrote:
-> @@ -1071,12 +1071,7 @@ static void annotate_call_site(struct objtool_file *file,
->  		return;
->  	}
->  
-> -	/*
-> -	 * Many compilers cannot disable KCOV with a function attribute
-> -	 * so they need a little help, NOP out any KCOV calls from noinstr
-> -	 * text.
-> -	 */
-> -	if (insn->sec->noinstr && sym->kcov) {
-> +	if (insn->sec->noinstr && sym->removable_instr) {
->  		if (reloc) {
->  			reloc->type = R_NONE;
->  			elf_write_reloc(file->elf, reloc);
+On Fri, 19 Nov 2021 at 21:31, Josh Poimboeuf <jpoimboe@redhat.com> wrote:
 
-I'd love to have a clearer name than 'removable_instr', though I'm
-having trouble coming up with something.
+> > +     if (insn->sec->noinstr && sym->removable_instr) {
+> >               if (reloc) {
+> >                       reloc->type = R_NONE;
+> >                       elf_write_reloc(file->elf, reloc);
+>
+> I'd love to have a clearer name than 'removable_instr', though I'm
+> having trouble coming up with something.
+>
+> 'profiling_func'?
+>
+> Profiling isn't really accurate but maybe it gets the point across.  I'm
+> definitely open to other suggestions.
 
-'profiling_func'?
+Well, this bit is not true for all "profiling functions" either. It's
+only true for instrumentation functions that appear in 'noinstr' and
+that the compiler can't remove on its own, but are valid to remove by
+objtool in noinstr code, hence 'removable_instr'.
 
-Profiling isn't really accurate but maybe it gets the point across.  I'm
-definitely open to other suggestions.
+I'm really quite indifferent what we call it, so I'll leave you to
+pick whatever sounds best:
 
-Also, the above code isn't very self-evident so there still needs to be
-a comment there, like:
+-- profiling_func
+-- nop_profiling_func
+-- optional_profiling_func
+-- noinstr_remove
+-- removable_profiling_func
+-- noinstr_nop_func
+-- noinstr_nop
+-- nop_in_noinstr
+-- invalid_in_noinstr
 
-	/*
-	 * Many compilers cannot disable KCOV or sanitizer calls with a
-	 * function attribute so they need a little help, NOP out any
-	 * such calls from noinstr text.
-	 */
+?
 
-> @@ -1991,6 +1986,32 @@ static int read_intra_function_calls(struct objtool_file *file)
->  	return 0;
->  }
->  
-> +static bool is_removable_instr(const char *name)
+> Also, the above code isn't very self-evident so there still needs to be
+> a comment there, like:
+>
+>         /*
+>          * Many compilers cannot disable KCOV or sanitizer calls with a
+>          * function attribute so they need a little help, NOP out any
+>          * such calls from noinstr text.
+>          */
+>
 
+I'll add it.
 
-> +{
-> +	/*
-> +	 * Many compilers cannot disable KCOV with a function attribute so they
-> +	 * need a little help, NOP out any KCOV calls from noinstr text.
-> +	 */
-> +	if (!strncmp(name, "__sanitizer_cov_", 16))
-> +		return true;
+> > +{
+> > +     /*
+> > +      * Many compilers cannot disable KCOV with a function attribute so they
+> > +      * need a little help, NOP out any KCOV calls from noinstr text.
+> > +      */
+> > +     if (!strncmp(name, "__sanitizer_cov_", 16))
+> > +             return true;
+>
+> A comment is good here, but the NOP-ing bit seems out of place.
 
-A comment is good here, but the NOP-ing bit seems out of place.
-
--- 
-Josh
-
+I'll fix that.
