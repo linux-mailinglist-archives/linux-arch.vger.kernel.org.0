@@ -2,211 +2,381 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C8F456587
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Nov 2021 23:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAAA457203
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Nov 2021 16:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbhKRWWn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Nov 2021 17:22:43 -0500
-Received: from mga04.intel.com ([192.55.52.120]:21077 "EHLO mga04.intel.com"
+        id S232958AbhKSPue (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Nov 2021 10:50:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49692 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229600AbhKRWWm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 18 Nov 2021 17:22:42 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10172"; a="233025769"
-X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
-   d="scan'208";a="233025769"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2021 14:19:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,246,1631602800"; 
-   d="scan'208";a="495595727"
-Received: from orsmsx604.amr.corp.intel.com ([10.22.229.17])
-  by orsmga007.jf.intel.com with ESMTP; 18 Nov 2021 14:19:41 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX604.amr.corp.intel.com (10.22.229.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 18 Nov 2021 14:19:40 -0800
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Thu, 18 Nov 2021 14:19:40 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12 via Frontend Transport; Thu, 18 Nov 2021 14:19:40 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.173)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2242.12; Thu, 18 Nov 2021 14:19:38 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=clu1qEXmrkcVQ3OAkghV5NKxoEEdyS46Mvapc1IcqEz5dAAk+2PaFLXpAkUg0bza04Grp7Qb9IZymyhumBFWoaiN5fNuLEtzCy3L3hRoukPmu3kKV9CiJiBOhqbg15CNkbxaCxGdYT7wJd5xfdk3GapAHEt0WRdPteDc4azuxV/fsxLmuFlF7ow8gLjINKJyi6XIyy63KIyjQjxK93iWOZdUJHjF7UD9YQw6QQ0sUTTuBYieXWZvx5qYT3i7iBCd/I4oBJVoj1U4RooqdWI/FZ60kkMw1AZo6XWDK+OMeswDv90TZbLWEPgZfelCUqOKebgM6Cfa7lUFZER6KuE4ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EalPoB1/q15ZDrRmAdh5hcIhPS6flWR3h14khVLatX0=;
- b=dP9lXGgsTEE3vcbItNa/0c3UnsBBCO/ju5sb9DJtWy8DodyJ7Zjp7DKaI24JDHvez723s2jfMpDnG74WhQCVDE8noBxInWfdN3mHaRg9qJao3iq38GOiJGP0KQqT1DUsiCZw/MjnIkFApGbtGVyiH6BLEefaALPGYWOAOOccbFM8iHUBnnTciNXBCa5CFOTDtfpnVpxe0xYoJgw8y+Du9QbAK/btwguLmn6h1vGDnqZgsnsPURu6smrAyrkJrg48dtfFns1TS0Xq6ajkDpJVExsCKSGCXr73K73E58L6EBKP1XugZi3Qq0TLfAGOisXn4zPtT+oxAEkklxG/7yeWWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EalPoB1/q15ZDrRmAdh5hcIhPS6flWR3h14khVLatX0=;
- b=O9ZUCb2EIrdLlj0hygs+YPmtqb+NMHXhqUWAGWC+6oKLG1JBiktph+DLfFYyB+2FD6Grs0tnWPh19f9bgYuPX4dY+jiSlmUOhhKFSaVZBH3AnBOtJtSY6ll62fDxK8hFg33MzFpLzLjngq7bqOUQwWDrIkEk6Jop5BjbM2lqRA8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by BYAPR11MB3382.namprd11.prod.outlook.com (2603:10b6:a03:7f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4690.16; Thu, 18 Nov
- 2021 22:19:34 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::8c17:ca7:7fd3:ce7d]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::8c17:ca7:7fd3:ce7d%6]) with mapi id 15.20.4690.029; Thu, 18 Nov 2021
- 22:19:34 +0000
-Message-ID: <97b12c99-60e4-e3d9-a728-e7d1a7c09e41@intel.com>
-Date:   Thu, 18 Nov 2021 14:19:31 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.3.1
-Subject: Re: [RFC PATCH 00/13] x86 User Interrupts support
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-CC:     <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Christian Brauner <christian@brauner.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "Gayatri Kammela" <gayatri.kammela@intel.com>,
-        Zeng Guang <guang.zeng@intel.com>,
-        "Dan Williams" <dan.j.williams@intel.com>,
-        Randy E Witt <randy.e.witt@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Ramesh Thomas <ramesh.thomas@intel.com>,
-        <linux-api@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20210913200132.3396598-1-sohil.mehta@intel.com>
- <20211001081903.GA18962@amd>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20211001081903.GA18962@amd>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0014.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::27) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
-MIME-Version: 1.0
-Received: from [192.168.86.37] (73.222.31.188) by BYAPR05CA0014.namprd05.prod.outlook.com (2603:10b6:a03:c0::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.10 via Frontend Transport; Thu, 18 Nov 2021 22:19:33 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a8de9bac-1437-4aea-75f1-08d9aae17ffa
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3382:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr,ExtFwd
-X-Microsoft-Antispam-PRVS: <BYAPR11MB33824FD801BB5920170D4E96E59B9@BYAPR11MB3382.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +EQLiK4WX9BVEHtr1bnE7tJnmZdOijoS3j4QGRk8QVC5hXs3rlpRrfiKDpvS19VIx8a6MtbkObuzZ8B7bYgtt+03b7C5JlZkwG1ojpiqvPQ2JjrHVFhMcUv/k75BE6cMefRlf50aMiUw+iK74/duLq6/0zNH3cLgKD2i0Ah5gnF/5bbM5C07T1LytXIw/DLrfI1W3HBL+2mchk+kc7exBLl7VCXR/LXNBOMcQzQhgbrwEargDND7kYacCyKZ/RDNoBf4//kFvNRGhMv2SrOYVKQI2QvHOydUduLGC//mqjRCnlqVZ3edBu3TxUXfSUnGytttk93IQgn4BVDQZYnaPDmlDNqXIUJbWk6lVAJqGlKWza9K45I+nbeAxKPn7ZCsp5wNVgWv98dGpZW8xn375tPU6go/a7UuGBgMY3MgS3jh1cKWnBR+gjZatNUICbxxrjL1MADovQrhinRTr8RRW33sQjdetmz6LNxRvRIdBbbDjf6+I0ijWMuy0Z3KirDi3rdphIor1yfzSemB8AFMLOK/JwsURq1xGhAYwYhB9d65It7/YvBH7+1WO7tNC6FFRTHNpYiqHzoRF9BMbGU13z2Kre1i770vf01ynHfoMYIZ0PevJmOrrgMeDdHfTpW/uQ79Hmvm/PL4EaOcI3Y9QGZWzaPpbLTkp5c2pgM8BN+XzLgaF/ctkLe9UDL0GbKMP5vdhcF1JWvv2LHANp+CFgu2xP+74U9qx/fyiDos1DLxc7jjUttIeMLsN+bsWOCx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(4326008)(8936002)(508600001)(86362001)(66476007)(186003)(66946007)(54906003)(316002)(956004)(31696002)(7416002)(44832011)(16576012)(31686004)(38100700002)(2616005)(36756003)(8676002)(26005)(5660300002)(6916009)(66556008)(53546011)(82960400001)(2906002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cmh3R2JRZTF6RWY2ajM3aFFhSy90eURsUDR5K2xGNlhSUzRpOGFKclU3RnBM?=
- =?utf-8?B?MEVtVnNCWkhTbjVqeHc2T0R0dnZGY0Nuc0Rybm5pUHF0c0NXdkFOZ1habU03?=
- =?utf-8?B?WUN1dzQ2bWJKVEJEWmtSbUg3S2ZPTHBKYkZ4RVhIZGZ2RGlWaDhrTFFGbGpW?=
- =?utf-8?B?LzgvSHh1UUhUTVNlLzBodXhRZU4rK0N1SlZKUUdrOVUrZUg2ZDkwL0RPdnp1?=
- =?utf-8?B?eFRZR01YQ0dRUkYyUmRkTnpubzFvT2lEd0hobDNQNTdZVFVON1FXUkNSNXRE?=
- =?utf-8?B?OTMwaHFWVHJNWHM5SjhKUG1reHRMQW9icDE4VVZMVXlUSGFNc25JM0dyQnVh?=
- =?utf-8?B?REYzSzlOTGRKSXFCallMUkxUUTBQdER2VVNxbmdmamx5cnp1dUpkSml3ZjM0?=
- =?utf-8?B?UmwyZFdpcWpXcEYzQ0NBNndyVFY2MHlGdk1iQTU3dGhNRHFIY2ptWEpTZXpl?=
- =?utf-8?B?a0x1M3A1VUFnU0Q5UGdZRGdxZ1FKd0dKZDcwQkVCWS95ditqcVh3VWdkejRF?=
- =?utf-8?B?QUNEUkF5MmNIM2FnQmJVOUU5WHI5eFhuVG05VnBDNWQ4U0o0YkprRTBuR2Jv?=
- =?utf-8?B?TGdzNnVIWFQ0ZVc0UFhSM2lPQlJZaVlHSVQwV0UzbXlhRmxXOW9sMHRpSTVX?=
- =?utf-8?B?d2RaMFBTZWl0cHVIR2tkSmVvUlg2OWE3QVRYeEpMbjkyc0FMb1VBbG1DQk81?=
- =?utf-8?B?TE51NStobGk3ZUNOZE4rbWVYcTExZTFtMDdhR2k2Q1Q5YXVrWmw4QjFreWlq?=
- =?utf-8?B?Yy9Xcjgzc01BNEVwWnU2cTBFbzdwaU16MFNXaGw3RkpmRXM4Y2IvdG11RmJk?=
- =?utf-8?B?Vlp1QjBYbFpuUkRtN04xYkg1YkphN2VNZkxzOEdKWHBaaVhKbFNYaGlhZWpG?=
- =?utf-8?B?ekV0Z1NOdUJVdkNpZ29mT0pNUE5wd2ppckY1U0lCbGRjT083c1hScXVvdFBa?=
- =?utf-8?B?Y1JXa0FMbVRZSUNhZ21vbmRzNVEvLzdObFV1UlhmaDNadjdGWm5OZ290WkdO?=
- =?utf-8?B?U0RjV2Fzeit2N2pJQktIaUtNNkx5SEYwcy9ldGhpdnRJSXMyZ3JBNkEvbWFM?=
- =?utf-8?B?VzROM0w2dlhvcjdwTis1OE9FbG9MRzNZSXNoZDB1UU5KdzFOSCtMSXozazFO?=
- =?utf-8?B?KzlrWWFlS2o1cTRGbWJXSC9hZnpkWmoxb1VYcVg3MWw2bUFkT0tUNFp5bXV3?=
- =?utf-8?B?TzdodC83YTFjck1sUEQwc0FBWkFHZ2cycUk2VHgrMW5DWXRwNHNiNWNWeEVO?=
- =?utf-8?B?REwzUDVOQzFYOEoraVhEZHd4UnZCbUx2MzhOdjdNcnZMaG90WnE3OVVvdmFk?=
- =?utf-8?B?c3lrYXBqQlp5TWZYSFlwdXo3QUZTbFNPRE9qOCs2blFacGRrbTQ1bVkxY2FT?=
- =?utf-8?B?WUJqY25ZMWlSekJ3aThGNTE3c0NobEszbGp1N0pKNjlvVlVYRjVaaU82NVd0?=
- =?utf-8?B?NloweWhCQ0F6SkYwOTg4cS96V01Dc01OVWpQaU02cHVNd2dGM2xZMjdkZmds?=
- =?utf-8?B?ZTNHK1VqWHlqNWpFWTgwUHJmaTRYN0VJSmNGKzRxN243L0RFdTZFMnhnVExh?=
- =?utf-8?B?UWlCR3ZMbklqUStyL2NvWVBoL0ttdUpFRHA3MEo4OG9Jb2N6MExRUVpVNFhh?=
- =?utf-8?B?SFVKcXZta21SejBCbjQwMjhWVTRZRW1RYkoxZS9INjA2Qmo1QTNSZVFxZ3BO?=
- =?utf-8?B?VDYxQ0R5UzIwcEhaVGVhY1VzTVhCSWVkYUl4U1dtZ2wrQjRZZVc4ajVKTSsv?=
- =?utf-8?B?MXViL1lNOWd0Q2JMKzRMRlZRNzIvS1Zaa2ZBSm4vVlVtQTgyOGw1VDFobG13?=
- =?utf-8?B?OS82VDFPVTA0NzY2cE43bDc3S0h3MUczR3d6VGlJZnRic29SRFhUOFJINDdK?=
- =?utf-8?B?WnRibTBVTzVBd01sMEdtM3VaVFVkSDZHL1l2clhoZnRGOFhxTUsxSlNHRVhj?=
- =?utf-8?B?TEpIdkhDVEgxaUhWTTN4ckZPV0lQQ3BVNWFzdW55Z3JyY3NMT1RUUGp5ZjI1?=
- =?utf-8?B?a0Qvb3ZBcmg5OS83dUU1SHBoTnhhZTgrK3oxVjVqSE0xRXZ4RjNSckVEVW1o?=
- =?utf-8?B?Zzk2Tzh4cHcrS0dnMWVUQWIrRTBCdE9zT29hcTAyby84Z2YwbXp1aEl5bnRJ?=
- =?utf-8?B?L3VzTVczdW15WWRKbEJoYUNjdmdnU1hiSUREQm1FeUg4bmxhOWdnWUt3RmFY?=
- =?utf-8?Q?XkpxW9Sy8yJvddA1UBRpCOU=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8de9bac-1437-4aea-75f1-08d9aae17ffa
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2021 22:19:34.3818
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V4rfJQ0qjnkbdku8cOnAfFZ6DmQxK6Pbh9ttf8Mjd3RMrbgM37Oh1jTjKgB0q7icY3f3ykSij7M+06A9isGFBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3382
-X-OriginatorOrg: intel.com
+        id S233725AbhKSPue (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 19 Nov 2021 10:50:34 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C57C61246;
+        Fri, 19 Nov 2021 15:47:32 +0000 (UTC)
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mo66s-006Zt2-0k; Fri, 19 Nov 2021 15:47:30 +0000
+Date:   Fri, 19 Nov 2021 15:47:29 +0000
+Message-ID: <875yso6tbi.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+Subject: Re: [PATCH v6 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
+In-Reply-To: <1637225490-2213-3-git-send-email-sunilmut@linux.microsoft.com>
+References: <1637225490-2213-1-git-send-email-sunilmut@linux.microsoft.com>
+        <1637225490-2213-3-git-send-email-sunilmut@linux.microsoft.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sunilmut@linux.microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org, sunilmut@microsoft.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 10/1/2021 1:19 AM, Pavel Machek wrote:
-> Hi!
+On Thu, 18 Nov 2021 08:51:30 +0000,
+Sunil Muthuswamy <sunilmut@linux.microsoft.com> wrote:
 > 
-
-Thank you for reviewing the patches!
-
->> Instructions
->> ------------
->> senduipi <index> - send a user IPI to a target task based on the UITT index.
->>
->> clui - Mask user interrupts by clearing UIF (User Interrupt Flag).
->>
->> stui - Unmask user interrupts by setting UIF.
->>
->> testui - Test current value of UIF.
->>
->> uiret - return from a user interrupt handler.
+> From: Sunil Muthuswamy <sunilmut@microsoft.com>
 > 
-> Are other CPU vendors allowed to implement compatible instructions?
+> Add support for Hyper-V vPCI for arm64 by implementing the arch specific
+> interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI that
+> is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domain
+> for basic vector management.
 > 
-> If not, we should probably have VDSO entries so kernel can abstract
-> differences between CPUs.
+> Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> ---
+> In v2, v3, v4, v5 & v6:
+>  Changes are described in the cover letter.
 > 
-
-Yes, we are evaluating VDSO support for this.
-
->> Untrusted processes
->> -------------------
->> The current implementation expects only trusted and cooperating processes to
->> communicate using user interrupts. Coordination is expected between processes
->> for a connection teardown. In situations where coordination doesn't happen
->> (say, due to abrupt process exit), the kernel would end up keeping shared
->> resources (like UPID) allocated to avoid faults.
+>  arch/arm64/include/asm/hyperv-tlfs.h |   9 ++
+>  drivers/pci/Kconfig                  |   2 +-
+>  drivers/pci/controller/Kconfig       |   2 +-
+>  drivers/pci/controller/pci-hyperv.c  | 204 ++++++++++++++++++++++++++-
+>  4 files changed, 214 insertions(+), 3 deletions(-)
 > 
-> Keeping resources allocated after process exit is a no-no.
-> 
+> diff --git a/arch/arm64/include/asm/hyperv-tlfs.h b/arch/arm64/include/asm/hyperv-tlfs.h
+> index 4d964a7f02ee..bc6c7ac934a1 100644
+> --- a/arch/arm64/include/asm/hyperv-tlfs.h
+> +++ b/arch/arm64/include/asm/hyperv-tlfs.h
+> @@ -64,6 +64,15 @@
+>  #define HV_REGISTER_STIMER0_CONFIG	0x000B0000
+>  #define HV_REGISTER_STIMER0_COUNT	0x000B0001
+>  
+> +union hv_msi_entry {
+> +	u64 as_uint64[2];
+> +	struct {
+> +		u64 address;
+> +		u32 data;
+> +		u32 reserved;
+> +	} __packed;
+> +};
+> +
+>  #include <asm-generic/hyperv-tlfs.h>
+>  
+>  #endif
+> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+> index 43e615aa12ff..d98fafdd0f99 100644
+> --- a/drivers/pci/Kconfig
+> +++ b/drivers/pci/Kconfig
+> @@ -184,7 +184,7 @@ config PCI_LABEL
+>  
+>  config PCI_HYPERV
+>  	tristate "Hyper-V PCI Frontend"
+> -	depends on X86_64 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
+> +	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
+>  	select PCI_HYPERV_INTERFACE
+>  	help
+>  	  The PCI device frontend driver allows the kernel to import arbitrary
+> diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+> index 93b141110537..2536abcc045a 100644
+> --- a/drivers/pci/controller/Kconfig
+> +++ b/drivers/pci/controller/Kconfig
+> @@ -281,7 +281,7 @@ config PCIE_BRCMSTB
+>  
+>  config PCI_HYPERV_INTERFACE
+>  	tristate "Hyper-V PCI Interface"
+> -	depends on X86 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && X86_64
+> +	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN
+>  	help
+>  	  The Hyper-V PCI Interface is a helper driver allows other drivers to
+>  	  have a common interface with the Hyper-V PCI frontend driver.
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index ead7d6cb6bf1..d52e23b1d14b 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -47,6 +47,8 @@
+>  #include <linux/msi.h>
+>  #include <linux/hyperv.h>
+>  #include <linux/refcount.h>
+> +#include <linux/irqdomain.h>
+> +#include <linux/acpi.h>
+>  #include <asm/mshyperv.h>
+>  
+>  /*
+> @@ -614,7 +616,202 @@ static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
+>  {
+>  	return pci_msi_prepare(domain, dev, nvec, info);
+>  }
+> -#endif /* CONFIG_X86 */
+> +#elif defined(CONFIG_ARM64)
+> +/*
+> + * SPI vectors to use for vPCI; arch SPIs range is [32, 1019], but leaving a bit
+> + * of room at the start to allow for SPIs to be specified through ACPI and
+> + * starting with a power of two to satisfy power of 2 multi-MSI requirement.
+> + */
+> +#define HV_PCI_MSI_SPI_START	64
+> +#define HV_PCI_MSI_SPI_NR	(1020 - HV_PCI_MSI_SPI_START)
+> +#define DELIVERY_MODE		0
+> +#define FLOW_HANDLER		NULL
+> +#define FLOW_NAME		NULL
+> +#define hv_msi_prepare		NULL
+> +
+> +struct hv_pci_chip_data {
+> +	DECLARE_BITMAP(spi_map, HV_PCI_MSI_SPI_NR);
+> +	struct mutex	map_lock;
+> +};
+> +
+> +/* Hyper-V vPCI MSI GIC IRQ domain */
+> +static struct irq_domain *hv_msi_gic_irq_domain;
+> +
+> +/* Hyper-V PCI MSI IRQ chip */
+> +static struct irq_chip hv_arm64_msi_irq_chip = {
+> +	.name = "MSI",
+> +	.irq_set_affinity = irq_chip_set_affinity_parent,
+> +	.irq_eoi = irq_chip_eoi_parent,
+> +	.irq_mask = irq_chip_mask_parent,
+> +	.irq_unmask = irq_chip_unmask_parent
+> +};
+> +
+> +static unsigned int hv_msi_get_int_vector(struct irq_data *irqd)
+> +{
+> +	return irqd->parent_data->hwirq;
+> +}
+> +
+> +static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+> +				       struct msi_desc *msi_desc)
+> +{
+> +	msi_entry->address = ((u64)msi_desc->msg.address_hi << 32) |
+> +			      msi_desc->msg.address_lo;
+> +	msi_entry->data = msi_desc->msg.data;
+> +}
+> +
+> +static void hv_pci_vec_irq_domain_free(struct irq_domain *domain,
+> +				       unsigned int virq, unsigned int nr_irqs)
+> +{
+> +	struct hv_pci_chip_data *chip_data = domain->host_data;
+> +	struct irq_data *irqd = irq_domain_get_irq_data(domain, virq);
+> +	int first = irqd->hwirq - HV_PCI_MSI_SPI_START;
+> +
+> +	mutex_lock(&chip_data->map_lock);
+> +	bitmap_release_region(chip_data->spi_map,
+> +			      first,
+> +			      get_count_order(nr_irqs));
+> +	mutex_unlock(&chip_data->map_lock);
+> +	irq_domain_reset_irq_data(irqd);
+> +	irq_domain_free_irqs_parent(domain, virq, nr_irqs);
+> +}
+> +
+> +static int hv_pci_vec_alloc_device_irq(struct irq_domain *domain,
+> +				       unsigned int nr_irqs,
+> +				       irq_hw_number_t *hwirq)
+> +{
+> +	struct hv_pci_chip_data *chip_data = domain->host_data;
+> +	unsigned int index;
+> +
+> +	/* Find and allocate region from the SPI bitmap */
+> +	mutex_lock(&chip_data->map_lock);
+> +	index = bitmap_find_free_region(chip_data->spi_map,
+> +					HV_PCI_MSI_SPI_NR,
+> +					get_count_order(nr_irqs));
+> +	mutex_unlock(&chip_data->map_lock);
+> +	if (index < 0)
+> +		return -ENOSPC;
+> +
+> +	*hwirq = index + HV_PCI_MSI_SPI_START;
+> +
+> +	return 0;
+> +}
+> +
+> +static int hv_pci_vec_irq_gic_domain_alloc(struct irq_domain *domain,
+> +					   unsigned int virq,
+> +					   irq_hw_number_t hwirq)
+> +{
+> +	struct irq_fwspec fwspec;
+> +
+> +	fwspec.fwnode = domain->parent->fwnode;
+> +	fwspec.param_count = 2;
+> +	fwspec.param[0] = hwirq;
+> +	fwspec.param[1] = IRQ_TYPE_EDGE_RISING;
+> +
+> +	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
 
-I meant the resource is still tracked via the shared file descriptor, so 
-it will eventually get freed when the FD release happens. I am planning 
-to include better documentation on lifetime rules of these shared 
-resources next time.
+I think you are missing the actual edge configuration here. Since the
+interrupt specifier doesn't come from either DT or ACPI, nobody will
+set the trigger type, and you have to do it yourself here. At the
+moment, you will get whatever is in the GIC configuration.
 
-Thanks,
-Sohil
+> +}
+> +
+> +static int hv_pci_vec_irq_domain_alloc(struct irq_domain *domain,
+> +				       unsigned int virq, unsigned int nr_irqs,
+> +				       void *args)
+> +{
+> +	irq_hw_number_t hwirq;
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	ret = hv_pci_vec_alloc_device_irq(domain, nr_irqs, &hwirq);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for (i = 0; i < nr_irqs; i++) {
+> +		ret = hv_pci_vec_irq_gic_domain_alloc(domain, virq + i,
+> +						      hwirq + i);
+> +		if (ret)
+> +			goto free_irq;
+> +
+> +		ret = irq_domain_set_hwirq_and_chip(domain, virq + i,
+> +						    hwirq + i,
+> +						    &hv_arm64_msi_irq_chip,
+> +						    domain->host_data);
+> +		if (ret)
+> +			goto free_irq;
+> +
+> +		pr_debug("pID:%d vID:%u\n", (int)(hwirq + i), virq + i);
+> +	}
+> +
+> +	return 0;
+> +
+> +free_irq:
+> +	hv_pci_vec_irq_domain_free(domain, virq, nr_irqs);
+> +
+> +	return ret;
+
+How about the interrupts that have already been allocated?
+
+> +}
+> +
+> +/*
+> + * Pick the first online cpu as the irq affinity that can be temporarily used
+> + * for composing MSI from the hypervisor. GIC will eventually set the right
+> + * affinity for the irq and the 'unmask' will retarget the interrupt to that
+> + * cpu.
+> + */
+> +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
+> +					  struct irq_data *irqd, bool reserve)
+> +{
+> +	int cpu = cpumask_first(cpu_online_mask);
+> +
+> +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops hv_pci_domain_ops = {
+> +	.alloc	= hv_pci_vec_irq_domain_alloc,
+> +	.free	= hv_pci_vec_irq_domain_free,
+> +	.activate = hv_pci_vec_irq_domain_activate,
+> +};
+> +
+> +static int hv_pci_irqchip_init(void)
+> +{
+> +	static struct hv_pci_chip_data *chip_data;
+> +	struct fwnode_handle *fn = NULL;
+> +	int ret = -ENOMEM;
+> +
+> +	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> +	if (!chip_data)
+> +		return ret;
+> +
+> +	mutex_init(&chip_data->map_lock);
+> +	fn = irq_domain_alloc_named_fwnode("Hyper-V ARM64 vPCI");
+
+This will appear in debugfs. I'd rather you keep it short, sweet and
+without spaces. "hv_vpci_arm64" seems better to me.
+
+> +	if (!fn)
+> +		goto free_chip;
+> +
+> +	/*
+> +	 * IRQ domain once enabled, should not be removed since there is no
+> +	 * way to ensure that all the corresponding devices are also gone and
+> +	 * no interrupts will be generated.
+> +	 */
+> +	hv_msi_gic_irq_domain = acpi_irq_create_hierarchy(0, HV_PCI_MSI_SPI_NR,
+> +							  fn, &hv_pci_domain_ops,
+> +							  chip_data);
+> +
+> +	if (!hv_msi_gic_irq_domain) {
+> +		pr_err("Failed to create Hyper-V arm64 vPCI MSI IRQ domain\n");
+> +		goto free_chip;
+> +	}
+> +
+> +	return 0;
+> +
+> +free_chip:
+> +	kfree(chip_data);
+> +	if (fn)
+> +		irq_domain_free_fwnode(fn);
+> +
+> +	return ret;
+> +}
+> +
+> +static struct irq_domain *hv_pci_get_root_domain(void)
+> +{
+> +	return hv_msi_gic_irq_domain;
+> +}
+> +#endif /* CONFIG_ARM64 */
+>  
+>  /**
+>   * hv_pci_generic_compl() - Invoked for a completion packet
+> @@ -1227,6 +1424,8 @@ static void hv_msi_free(struct irq_domain *domain, struct msi_domain_info *info,
+>  static void hv_irq_mask(struct irq_data *data)
+>  {
+>  	pci_msi_mask_irq(data);
+> +	if (data->parent_data->chip->irq_mask)
+> +		irq_chip_mask_parent(data);
+>  }
+>  
+>  /**
+> @@ -1343,6 +1542,8 @@ static void hv_irq_unmask(struct irq_data *data)
+>  		dev_err(&hbus->hdev->device,
+>  			"%s() failed: %#llx", __func__, res);
+>  
+> +	if (data->parent_data->chip->irq_unmask)
+> +		irq_chip_unmask_parent(data);
+>  	pci_msi_unmask_irq(data);
+>  }
+>  
+> @@ -1619,6 +1820,7 @@ static struct irq_chip hv_msi_irq_chip = {
+>  	.irq_compose_msi_msg	= hv_compose_msi_msg,
+>  	.irq_set_affinity	= irq_chip_set_affinity_parent,
+>  	.irq_ack		= irq_chip_ack_parent,
+> +	.irq_eoi		= irq_chip_eoi_parent,
+>  	.irq_mask		= hv_irq_mask,
+>  	.irq_unmask		= hv_irq_unmask,
+
+You probably want to avoid unconditionally setting callbacks that may
+have side effects on another architecture (ack on arm64, eoi on x86).
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
