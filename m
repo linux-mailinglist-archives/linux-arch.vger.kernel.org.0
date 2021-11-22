@@ -2,55 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 555B045938B
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Nov 2021 17:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73444594BE
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Nov 2021 19:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbhKVRC6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Nov 2021 12:02:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58970 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230370AbhKVRC5 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Nov 2021 12:02:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 98DE160F51;
-        Mon, 22 Nov 2021 16:59:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637600391;
-        bh=7rlk0Z/QE97jTJY/pIOkev1o3iWMYQSxn+wWGvx6Ir8=;
-        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
-        b=ntyIr8vSUCKvtJqKkT8NaPBKbB3ufYKPHE6iuMMZNa0yi1ZY9VMd4vywtv8crqZ6b
-         iReDuIkAojGcuZOoWg8dI8Rfv4XVGVkPbAPn9dNv6cN0BNbw+ER1IgZzYTci+GSfSL
-         h6SzuBsZeH2SQyUREfqW21XjzHPSKoaNG1tVs4U3GBpcInNBnWLNX5rzpIkHsDWrlY
-         aFX7p0fBxtZo3caOB+cBFs7aBUqf5kxHl4i2m5Gpd6xRHtJ+cRPRW1T/+7FCt0mBAw
-         KBQBsESZh7M9HZfFSCdMVGYedsoKi/g5aizlox0XGSOmy+xLn46sF1YsE4jmjUDjG3
-         BEvhN0l3+a5lA==
-Content-Type: text/plain; charset="utf-8"
+        id S233133AbhKVSea (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Nov 2021 13:34:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231771AbhKVSe3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Nov 2021 13:34:29 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2542C061574
+        for <linux-arch@vger.kernel.org>; Mon, 22 Nov 2021 10:31:22 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id h12-20020a056830034c00b0055c8458126fso30176934ote.0
+        for <linux-arch@vger.kernel.org>; Mon, 22 Nov 2021 10:31:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=QEz77BKHZFcvCDV+ahJGnKz8aBCTfaqATYJQVwFGiJE=;
+        b=O9z9sjGt/MY+uc9F1OjYjObEjGoUc4iMmjvuB2r3BsKz0w/W1AJhwviVBpP+P6/A9J
+         L1YJfQ+uaCvhb0yHKzaKPUK2aEqIVn2G7go7hZPxt8L/a5yMmqZzDJs3yryA9KaNxMaq
+         vx/QST1MbcfieyJuVBDGVRxjw+XagpWVe4sEnbUIXFKMmuyTYx5AfLI0tM85we5MV1W3
+         iK1XrH7+vYUyvrggVEZRF7ixacv5nqyVhBEGzs9/npJD2gFesK5xlIrBvavP5zYjdy7u
+         PyAP6NzP/BKiOyggG+Agnj3RTy9UgJGCIqB92N/Kc/AoLyo7N1fX6FQaEjE3TXQV2927
+         I1FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=QEz77BKHZFcvCDV+ahJGnKz8aBCTfaqATYJQVwFGiJE=;
+        b=I3LkY1/91UV4kaE69ypmTdzmaeW2I+XI13IqPXgksk3nmlQi38dfbtHGtGTFDn0+zA
+         zWAeW1F4Cp8LnWJw6LZKWYS/jWAKQ2Bb5Iyfk7obiDM6qaMsUXziUccMqBq4mHnYvsHq
+         YM55aqvTzCBxheQWt+Q1flYrksrh7SsjNTuDe4iK5brFBMpi7RfujgjuqofY8L2nvtrr
+         TEcUjDcVrCrbI6p/IDVwps0QZ7RgukuYCRWGD6udyKVvgztDsQwz8OA8efB/pjiEHPkz
+         xnwMfxoM0ZqaXOM3nLWOhbiOnSX41DpqSAO5tQ7xpuiZ9lzBTMYcZZDi5B6ShNZnYECS
+         WNyA==
+X-Gm-Message-State: AOAM5335293ylj2f9tmdcwPIjpcDIq8EhrF8uMmNNYYrqbcSY3r2E19u
+        sGkNhtYlmagEUFvamNUhJNJ2HSffSIMzorH0mFaDflzjhxlFJQ==
+X-Google-Smtp-Source: ABdhPJw7pUgEeeKzwG80/TN5tRLmlcOOXgUHwlwplv8BSvHzORMgq5jEg+fsUU+ShucbJDwg63A7gk+NEU0oi6aIW+4=
+X-Received: by 2002:a05:6830:3486:: with SMTP id c6mr26597976otu.19.1637605882385;
+ Mon, 22 Nov 2021 10:31:22 -0800 (PST)
 MIME-Version: 1.0
+Received: by 2002:a05:6838:7e48:0:0:0:0 with HTTP; Mon, 22 Nov 2021 10:31:21
+ -0800 (PST)
+Reply-To: xiauchanyu@gmail.com
+From:   Mrs Xiau Chan Yu <rw9251392@gmail.com>
+Date:   Mon, 22 Nov 2021 10:31:21 -0800
+Message-ID: <CAHL0NO+0HXQJ1_j0yT1UyedXGC2j7tBV9TyKOyRSubR9QFw+AQ@mail.gmail.com>
+Subject: =?UTF-8?Q?Sch=C3=B6nen_Tag=2E?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAPFHKzcph=MiDWgiZ2TLAZukARsL1wi2FGAfLQ2MX_T+oe4KyQ@mail.gmail.com>
-References: <20211122142456.181724-1-atenart@kernel.org> <CAPFHKzcph=MiDWgiZ2TLAZukARsL1wi2FGAfLQ2MX_T+oe4KyQ@mail.gmail.com>
-To:     Jonathon Reinhart <jonathon.reinhart@gmail.com>
-From:   Antoine Tenart <atenart@kernel.org>
-Subject: Re: [PATCH net-next v2] sections: global data can be in .bss
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, arnd@arndb.de,
-        Linux Netdev List <netdev@vger.kernel.org>,
-        linux-arch@vger.kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, Steven Rostedt <rostedt@goodmis.org>
-Message-ID: <163760038800.3195.16423720862554044024@kwain>
-Date:   Mon, 22 Nov 2021 17:59:48 +0100
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Quoting Jonathon Reinhart (2021-11-22 17:56:55)
-> On Mon, Nov 22, 2021 at 9:24 AM Antoine Tenart <atenart@kernel.org> wrote:
-> >
-> > - @Jonathon: with your analysis and suggestion I think you should be
-> >   listed as a co-developer. If that's fine please say so, and reply
-> >   with both a Co-developed-by and a Signed-off-by tags.
->=20
-> Added, thanks. Although it appears I may have missed the boat.
+--=20
+Sch=C3=B6ner Tag,
 
-Yes, the patch was applied quickly. Anyway, thanks for the investigation!
+Ich bin Xiu Chan Yu, Kredit- und Marketingdirektor von Chong Hin
+Bank, Hongkong, Chong Hing Bank Center, 24 Des Voeux Road Central,
+Hongkong. Ich habe einen Gesch=C3=A4ftsvorschlag f=C3=BCr 13.991.674 DOLLAR=
+S
 
-Antoine
+Alle best=C3=A4tigbaren Dokumente zur Sicherung der Anspr=C3=BCche werden I=
+hnen
+ausgeh=C3=A4ndigt
+vor Ihrer Annahme und sobald ich Ihre R=C3=BCcksendung erhalten habe
+Unter der Voraussetzung.
+
+Gr=C3=BC=C3=9Fe
+Xiau Chan Yu
