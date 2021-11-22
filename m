@@ -2,113 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254F8459029
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Nov 2021 15:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 670EA459058
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Nov 2021 15:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239182AbhKVO23 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Nov 2021 09:28:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34508 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239619AbhKVO2F (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Nov 2021 09:28:05 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CA74360C4B;
-        Mon, 22 Nov 2021 14:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637591099;
-        bh=FGv94gFy4WBdvHEzA6cpyqj2itz57Y1s1entzgLv0lc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T8e+gx08Is9wWwskzcBH2IYiZTinWtXE/7L2pDSTB7+vYfvZWxLjCrIUI5Ofp6Hz1
-         KA3zhy6cfMVSD1kGXtniQI19wFtYSYFwQ+DOv5Ed6HDc7+Dbwlt26qXglVNuMYgdE2
-         T59cCN/yc+viidG1XdNqOwJnNOPnkOFlcel8L2OTSuWuc7nJpkOhWAmNf57sP3CEEc
-         mIAmGEYqI7HjdpwnTer407fYonclDdPtVJhhCPpfSDivtvQg3b9ZlBZTduBvFnx20Z
-         8oqXQwUjJe/+3gqVfYXCKJQyfpKywq1LiY7EtUvBbC+rJWWnxoNq8TH7Rr5JwQ2swq
-         AZ/lX7O//TdUQ==
-From:   Antoine Tenart <atenart@kernel.org>
-To:     davem@davemloft.net, kuba@kernel.org, arnd@arndb.de
-Cc:     Antoine Tenart <atenart@kernel.org>, netdev@vger.kernel.org,
-        linux-arch@vger.kernel.org, jonathon.reinhart@gmail.com,
-        tglx@linutronix.de, peterz@infradead.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH net-next v2] sections: global data can be in .bss
-Date:   Mon, 22 Nov 2021 15:24:56 +0100
-Message-Id: <20211122142456.181724-1-atenart@kernel.org>
-X-Mailer: git-send-email 2.33.1
+        id S239108AbhKVOmn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Nov 2021 09:42:43 -0500
+Received: from mout.kundenserver.de ([217.72.192.74]:57233 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235099AbhKVOmm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Nov 2021 09:42:42 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N33AR-1mesv21QMv-013Q0r; Mon, 22 Nov 2021 15:39:33 +0100
+Received: by mail-wr1-f52.google.com with SMTP id a9so33126234wrr.8;
+        Mon, 22 Nov 2021 06:39:33 -0800 (PST)
+X-Gm-Message-State: AOAM533uP+WPOG114F7zHMXk8WFMQmulxPgjHA3hOA0EGP9prBcu9T2Z
+        1UFvNaZ3hyNdvMsrkJ0o89nhjJ0UHL/okSCjA7Y=
+X-Google-Smtp-Source: ABdhPJygFngHjkn45wpqA3TMfwBcuoS+FF08B+BI5ToUHT7hRt8PVaAua7a/ELfa/nF7nPAMj628E8TQmkkwjEop3/g=
+X-Received: by 2002:adf:df89:: with SMTP id z9mr37896119wrl.336.1637591972963;
+ Mon, 22 Nov 2021 06:39:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211122142456.181724-1-atenart@kernel.org>
+In-Reply-To: <20211122142456.181724-1-atenart@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 22 Nov 2021 15:39:17 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3eKS6vvMmvXm402VGezqyBjbONuLTcXVS2fgJmrP-hOg@mail.gmail.com>
+Message-ID: <CAK8P3a3eKS6vvMmvXm402VGezqyBjbONuLTcXVS2fgJmrP-hOg@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] sections: global data can be in .bss
+To:     Antoine Tenart <atenart@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Networking <netdev@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        jonathon.reinhart@gmail.com, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:OYOXZs7RGba4Z3/8K2c4DzLGqw7VDSdPBzG88Qwl5J2Vy964QIl
+ WC7XNlWMMpAmGByNPz8gAUy/aUzUXrnL4dGZ4LNCBirpxzYXEvcPx6novcqaW9s8AaFJNjh
+ gIGKitL0ZJy4nA7LCakknebAZrHTBKEL1wPQUzHVAdsANKSPVIEXoXc3sqG82LnRQkWOzzk
+ cm9dgG8WxzYfnjbJZ0Bdw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZwQ/vCVrvE8=:K2XjxFY8V5wYvWuh9G9doi
+ 0sEcVC2JRColBuSMuFYL2upPSONEIsc3zQIPF4uXMCscJiFBexOaIdzhkD6+vb6yNjmuEQGJP
+ 8e6UqOw4GxAECeGnV5qKLSG/kRC45UDX3exxZk+CkSsQrwGOgHLpjiqctCZ1WLWqOnba22Tvx
+ 5SVRXhWVEGic4Vn4bjqUsD4qlfjDz+H/CfAykUd3CyvK7AEdTRe/+oIo+UGe7E/gF5TIEWWLU
+ BWZ96QFBOHVA0LIC+p6QUB43Iy6UgUdZeFbSjeGILfkScofTlo9q6iLA2s8vgqJjKDGk/BsFU
+ z0dw7MXYCaGDl3ZEgYDWaP00keiqw3GadBuEebzl4H0P2HO11YTciAFDaIZzLa3uJnzP/poIS
+ cYjxjRbwTBrFIsC0jT9+j8oGK74qSfjTBuTBxW6rczmSqzOIG+1aF8BLkc1m0eLIDiJcxzKWr
+ KV2JITFz32SunynllUbdjGeQ8y49QPgqxY7fXPGIEbMvJsoKK94GgVaeDAem7q9r78zS6FCfk
+ 0iEyIG3D876giZrupawljf8uy/tDyeFpVpYwjou9ATJFXLMYf8DnvP0DewO8PNKEPT9MOsuak
+ kL2rsHO/kPk6UyKlECQUjj4wG4Y8YZ1VIqw5SwueQNqXvRldt5a0xqdSCccbxuV/zA95srgwg
+ AYQ4DvJVhQoXYyKgwvi/BnjX9lyuCuxZiK/7GOtr+O92NjAJTBb0mt7Sn88TuuBkz8zE2r3QK
+ bq5ACpRITCUESsHZHfBrR9oTf0rPFihkoaNK9RD9l1+vTCCFOhh5Ql6qQvcDDJ4O+1OwhSgTp
+ KvVTrH9RF+SmjQjXp41q3Cw+Dpa+YlMc9O/LLWO4ohFpxY+K64=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When checking an address is located in a global data section also check
-for the .bss section as global variables initialized to 0 can be in
-there (-fzero-initialized-in-bss).
+On Mon, Nov 22, 2021 at 3:24 PM Antoine Tenart <atenart@kernel.org> wrote:
+>
+> When checking an address is located in a global data section also check
+> for the .bss section as global variables initialized to 0 can be in
+> there (-fzero-initialized-in-bss).
+>
+> This was found when looking at ensure_safe_net_sysctl which was failing
+> to detect non-init sysctl pointing to a global data section when the
+> data was in the .bss section.
+>
+> Signed-off-by: Antoine Tenart <atenart@kernel.org>
+> Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> ---
+>
+> A few remarks:
+>
+> - This still targets net-next but I added Arnd if he prefers to take it
+>   through the 'asm-generic' tree, now that is_kernel_core_data is in
+>   include/asm-generic/.
 
-This was found when looking at ensure_safe_net_sysctl which was failing
-to detect non-init sysctl pointing to a global data section when the
-data was in the .bss section.
+I have nothing else for asm-generic at the moment, please take
+this through net-next.
 
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
-
-A few remarks:
-
-- This still targets net-next but I added Arnd if he prefers to take it
-  through the 'asm-generic' tree, now that is_kernel_core_data is in
-  include/asm-generic/.
-
-- I kept the Acked-by tag as the change is the same really, the
-  difference is the core_kernel_data function was renamed to
-  is_kernel_core_data and moved since then.
-
-- @Jonathon: with your analysis and suggestion I think you should be
-  listed as a co-developer. If that's fine please say so, and reply
-  with both a Co-developed-by and a Signed-off-by tags.
-
-Since v1:
-  - Grouped the .data and .bss checks in the same function.
-
-v1 was https://lore.kernel.org/all/20211020083854.1101670-1-atenart@kernel.org/T/
-
-Thanks!
-Antoine
-
- include/asm-generic/sections.h | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
-index 1dfadb2e878d..76a0f16e56cf 100644
---- a/include/asm-generic/sections.h
-+++ b/include/asm-generic/sections.h
-@@ -130,18 +130,24 @@ static inline bool init_section_intersects(void *virt, size_t size)
- 
- /**
-  * is_kernel_core_data - checks if the pointer address is located in the
-- *			 .data section
-+ *			 .data or .bss section
-  *
-  * @addr: address to check
-  *
-- * Returns: true if the address is located in .data, false otherwise.
-+ * Returns: true if the address is located in .data or .bss, false otherwise.
-  * Note: On some archs it may return true for core RODATA, and false
-  *       for others. But will always be true for core RW data.
-  */
- static inline bool is_kernel_core_data(unsigned long addr)
- {
--	return addr >= (unsigned long)_sdata &&
--	       addr < (unsigned long)_edata;
-+	if (addr >= (unsigned long)_sdata && addr < (unsigned long)_edata)
-+		return true;
-+
-+	if (addr >= (unsigned long)__bss_start &&
-+	    addr < (unsigned long)__bss_stop)
-+		return true;
-+
-+	return false;
- }
- 
- /**
--- 
-2.33.1
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
