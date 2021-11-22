@@ -2,71 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6634590B3
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Nov 2021 16:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0824592EA
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Nov 2021 17:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239803AbhKVPDR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Nov 2021 10:03:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43166 "EHLO mail.kernel.org"
+        id S239309AbhKVQYW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Nov 2021 11:24:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36370 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239829AbhKVPDQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 22 Nov 2021 10:03:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id CF92860F6B;
-        Mon, 22 Nov 2021 15:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637593209;
-        bh=X+TP5xx7Y15WYAhEcSvBGmOZNrrXPznupKqHmh3DwV0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=cDA4iGK+jX2Ip8UE11Njtl1jWWfVlyc7J/y4+VeCKf/N5g9HUUn8K0yfoDzXUvCm7
-         wxNwHtcCGLqn4Je/Lm2xb+9rsRBPo+/DEw8y6qJU+KN0mVQ1d5qW4ELxYWz7NnepnV
-         X6KStjMIREBmmZ0tJ3X/81NTIkNEYcLiYieqwC9/IdeN3oaVd61EvpAJnke1sbJDsb
-         17Zfl9yVZYYwk/K65HhHpMUARNiiHkBH0nDIGkuPQqF84v+IhGDRlYoa0CdiV0nrNL
-         JzL74rJC7q9hz6B5whE9WZcvXj5i/6EXOpEGq5Mv3kSzKxHzTkffXJ6Wak4tjsVAwr
-         oAhoVH8NGo4mg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id C5B8D609D9;
-        Mon, 22 Nov 2021 15:00:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S233052AbhKVQYU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 22 Nov 2021 11:24:20 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 710B160D42;
+        Mon, 22 Nov 2021 16:21:08 +0000 (UTC)
+Date:   Mon, 22 Nov 2021 11:21:06 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Marco Elver <elver@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Alexander Popov <alex.popov@linux.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul McKenney <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Maciej Rozycki <macro@orcam.me.uk>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>, Wei Liu <wl@xen.org>,
+        John Ogness <john.ogness@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Jann Horn <jannh@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Laura Abbott <labbott@kernel.org>,
+        David S Miller <davem@davemloft.net>,
+        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Scull <ascull@google.com>,
+        Marc Zyngier <maz@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Wang Qing <wangqing@vivo.com>, Mel Gorman <mgorman@suse.de>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
+        Mathieu Chouquet-Stringer <me@mathieu.digital>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stephen Kitt <steve@sk2.org>, Stephen Boyd <sboyd@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Mike Rapoport <rppt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>,
+        linux-hardening@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>, notify@kernel.org,
+        main@lists.elisa.tech, safety-architecture@lists.elisa.tech,
+        devel@lists.elisa.tech, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 0/2] Introduce the pkill_on_warn parameter
+Message-ID: <20211122112106.5fa656bc@gandalf.local.home>
+In-Reply-To: <YZjnREFGhEO9pX6O@elver.google.com>
+References: <20211027233215.306111-1-alex.popov@linux.com>
+        <ac989387-3359-f8da-23f9-f5f6deca4db8@linux.com>
+        <CAHk-=wgRmjkP3+32XPULMLTkv24AkA=nNLa7xxvSg-F0G1sJ9g@mail.gmail.com>
+        <77b79f0c-48f2-16dd-1d00-22f3a1b1f5a6@linux.com>
+        <CAKXUXMx5Oi-dNVKB+8E-pdrz+ooELMZf=oT_oGXKFrNWejz=fg@mail.gmail.com>
+        <20211115110649.4f9cb390@gandalf.local.home>
+        <202111151116.933184F716@keescook>
+        <YZjnREFGhEO9pX6O@elver.google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] sections: global data can be in .bss
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163759320980.11926.9911878483911251876.git-patchwork-notify@kernel.org>
-Date:   Mon, 22 Nov 2021 15:00:09 +0000
-References: <20211122142456.181724-1-atenart@kernel.org>
-In-Reply-To: <20211122142456.181724-1-atenart@kernel.org>
-To:     Antoine Tenart <atenart@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, arnd@arndb.de,
-        netdev@vger.kernel.org, linux-arch@vger.kernel.org,
-        jonathon.reinhart@gmail.com, tglx@linutronix.de,
-        peterz@infradead.org, rostedt@goodmis.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello:
+On Sat, 20 Nov 2021 13:17:08 +0100
+Marco Elver <elver@google.com> wrote:
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
 
-On Mon, 22 Nov 2021 15:24:56 +0100 you wrote:
-> When checking an address is located in a global data section also check
-> for the .bss section as global variables initialized to 0 can be in
-> there (-fzero-initialized-in-bss).
+> I think userspace would want something other than perf tool to handle it
+> of course.  There are several options:
 > 
-> This was found when looking at ensure_safe_net_sysctl which was failing
-> to detect non-init sysctl pointing to a global data section when the
-> data was in the .bss section.
-> 
-> [...]
+> 	1. Open trace pipe to be notified (/sys/kernel/tracing/trace_pipe).
+> 	   This already includes the pid.
 
-Here is the summary with links:
-  - [net-next,v2] sections: global data can be in .bss
-    https://git.kernel.org/netdev/net-next/c/cb902b332f95
+I would suggest using /sys/kernel/tracing/per_cpu/cpu*/trace_pipe_raw
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+and use libtracefs[1] to read it.
 
+-- Steve
 
+[1] https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
