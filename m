@@ -2,109 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5149445A525
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 15:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B7145A936
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 17:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235713AbhKWOWI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Nov 2021 09:22:08 -0500
-Received: from mout.kundenserver.de ([212.227.126.131]:48879 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbhKWOWG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Nov 2021 09:22:06 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M2wCi-1mmDme1RqG-003NAJ; Tue, 23 Nov 2021 15:18:56 +0100
-Received: by mail-wm1-f41.google.com with SMTP id i12so18887463wmq.4;
-        Tue, 23 Nov 2021 06:18:56 -0800 (PST)
-X-Gm-Message-State: AOAM533DbjJmQm6ZctWC9Z6vivsKKJQSC1ixiSVsOZnqMFzcTFxkxc9J
-        JHHJ/EEQ4wR46bz4vsB8Yq2xf8NtnO5VqTTg06Q=
-X-Google-Smtp-Source: ABdhPJy/iu+HUeUW5MAS4aoS4UPs9O0+2rPHcGIO3sxNnrXnPW2hntwc4AmghGSopXx9bjgxeEGyK0ovTBLVT2Rzyac=
-X-Received: by 2002:a1c:770e:: with SMTP id t14mr3353750wmi.173.1637677135896;
- Tue, 23 Nov 2021 06:18:55 -0800 (PST)
-MIME-Version: 1.0
-References: <YZvIlz7J6vOEY+Xu@yuki> <CAK8P3a0x5Bw7=0ng-s+KsUywqJYa0tk9cSWmZhx+cZRBOR87ZA@mail.gmail.com>
- <YZyw56flmdQnBIuh@yuki>
-In-Reply-To: <YZyw56flmdQnBIuh@yuki>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 23 Nov 2021 15:18:39 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2RU8XJp_hS0JkO9mPJctAHHKBobV97gced6pMXcwzWow@mail.gmail.com>
-Message-ID: <CAK8P3a2RU8XJp_hS0JkO9mPJctAHHKBobV97gced6pMXcwzWow@mail.gmail.com>
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
+        id S234942AbhKWQus (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Nov 2021 11:50:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:59230 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234423AbhKWQus (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Nov 2021 11:50:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637686059;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eGWhtGhPtpq/ZiEd6igWpm4/71FIAUKG5LmWLh1yu0w=;
+        b=JykRPLFwPuByq+/c2M3JDK7BWJoWBhGxhkdAz9p3UobOCf9mi0STz+xeHLEQfQfUjCNBaX
+        JZPG8RZOxo+FKRSu0HqZuYH9am5aA0u7le+1hyvn+N0WO6JkMzhjVL/KvQ7PTaojACaFAj
+        Bj+2ata8re0kmvfYFELQm6E+XenvXYY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-258-66xCcqg-MdGoCOG_LgKrhA-1; Tue, 23 Nov 2021 11:47:36 -0500
+X-MC-Unique: 66xCcqg-MdGoCOG_LgKrhA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 500BA80668B;
+        Tue, 23 Nov 2021 16:47:35 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B473360C7F;
+        Tue, 23 Nov 2021 16:47:33 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <YZvIlz7J6vOEY+Xu@yuki>
+References: <YZvIlz7J6vOEY+Xu@yuki>
 To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bW/f+VphpYkHIEZZBN8KslsMylIIeO6hr9nhozV0Rpy1x/6iRJ/
- D5V2hQDN5Iw4Qx5QaI8XAYNRGbOKDpmz4c7XoGqT962Ml9pgIjsqy4KR1/34Qy0Z9KGsSy0
- Kfh97NTo/tptA2fCxjHK/ipOBEIuYXQaY9bBfIWOHpB44OJOwMopw8bbUeDUVXQj+1+AGIv
- b4tuX9DdRXcE+FjxYvsBw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:b1UT8YbWGQo=:zuceAjNY5IVb8nU1C/i4Db
- /kAN4NcdmfV9Tdj5fcnhuwJp5+csQM4jFibACODlF7MHkKptbWPa0o7VkrkHl2Id0IhocCURT
- sEr1tBNvJlVzMoj8kcZCyTfzQXYmag535wcln5X0eNC66qcOh3oFWonpNsp873P6nFXKgtMPP
- n178UljVLBdSbcUKlfJ6YULIvv5wkqQaH9iVu7Pp1ekyNytARJvt0tMOx/hZvGlvIlWkiC1l0
- LOE4QefVE+CDzmGiXfDk6mXeDPruL0En4EkS3tjqBIo0X8b1GuC6JBjF9qJtvOXHEn9lFMQH3
- dEGWRQVkJyHMWLjj5+nQdTrN5pen+Hxf7Tg2ZlOqx9H7j7iIj1b39y8DZ8rv2upryR0rX8fPH
- +bkVe6R8NqnwjQw//DDAZmYHr7voPAY0F06tKhxIcZFwAXOnLWlkYK5di/3gBrsalkcDcJGb7
- fqWIqIyovq/+qBm5Yoge6SAFkNcim2E6eC4QmlM7JGENctpeqOjopK1oSL1ozs/pV/2UYhnD+
- xpWAx27d9ri/NQrzJcMZfncbKYdt8lgAE4ik0pkZlH38CxIACjefea4I4AfsmrrQ6omeu8c7v
- 07d+qthZDKs4+Qh1MdobtSqCPNZ6J61sAACKBcs6pktbha4XXFaLbN/H1EycuA2Ow076Xg90h
- kOuDgFCgXI9Wp+9CMSXGBM+ijvvGhcHQ1pJKAD/CrqrIGdLrumyxdK1jGYIHE1PXIVWCDIv7e
- x7How1t8ioRzMsIGwxtb22l+A6Dw+a5sQ18hsD0FyZXoewYWTy7N7MdAc84Aa6xiOP9Nyl6/E
- kmVUxvOniABpqgcw6j5tT8YdzTXDzushHbWCCJ6A2cElaHZRZs=
+Cc:     dhowells@redhat.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, ltp@lists.linux.it,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        arnd@arndb.de
+Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1618288.1637686052.1@warthog.procyon.org.uk>
+Date:   Tue, 23 Nov 2021 16:47:32 +0000
+Message-ID: <1618289.1637686052@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 10:14 AM Cyril Hrubis <chrubis@suse.cz> wrote:
-> > I don't think this is correct on all 64-bit architectures, as far as I
-> > remember the
-> > definition can use either 'long' or 'long long' depending on the user space
-> > toolchain.
->
-> As far as I can tell the userspace bits/types.h does exactly the same
-> check in order to define uint64_t and int64_t, i.e.:
->
-> #if __WORDSIZE == 64
-> typedef signed long int __int64_t;
-> typedef unsigned long int __uint64_t;
-> #else
-> __extension__ typedef signed long long int __int64_t;
-> __extension__ typedef unsigned long long int __uint64_t;
-> #endif
->
-> The macro __WORDSIZE is defined per architecture, and it looks like the
-> defintions in glibc sources in bits/wordsize.h match the uapi
-> asm/bitsperlong.h. But I may have missed something, the code in glibc is
-> not exactly easy to read.
+Cyril Hrubis <chrubis@suse.cz> wrote:
 
-It's possible that the only difference between the two files was the
-'__u32'/'__s32' definition, which could be either 'int' or 'long'. We used
-to try matching the user space types for these, but not use 'int'
-everywhere in the kernel.
+> This changes the __u64 and __s64 in userspace on 64bit platforms from
+> long long (unsigned) int to just long (unsigned) int in order to match
+> the uint64_t and int64_t size in userspace.
 
-> > Out of the ten supported 64-bit architectures, there are four that already
-> > use asm-generic/int-l64.h conditionally, and six that don't, and I
-> > think at least
-> > some of those are intentional.
-> >
-> > I think it would be safer to do this one architecture at a time to make
-> > sure this doesn't regress on those that require the int-ll64.h version.
->
-> I'm still trying to understand what exactly can go wrong here. As long
-> as __BITS_PER_LONG is correctly defined the __u64 and __s64 will be
-> correctly sized as well. The only visible change is that one 'long' is
-> dropped from the type when it's not needed.
+Can you guarantee this won't break anything in userspace?  Granted the types
+*ought* to be the same size, but anyone who's written code on the basis that
+these are "(unsigned) long long int" may suddenly get a bunch of warnings
+where they didn't before from the C compiler.  Anyone using C++, say, may find
+their code no longer compiles because overloaded function matching no longer
+finds a correct match.
 
-Correct, I'm not worried about getting incorrectly-sized types here,
-but using the wrong type can cause compile-time warnings when
-they are mismatched against format strings or assigning pointers
-to the wrong types. With the kernel types, one would always use
-%d for __u32 and %lld for __u64, while with the user space types,
-one has to resort to using macros.
+Also, whilst your point about PRIu64 and PRId64 modifiers in printf() is a
+good one, it doesn't help someone whose compiler doesn't support that (I don't
+know if anyone's likely to encounter such these days).  At the moment, I think
+a user can assume that %llu will work correctly both on 32-bit and 64-bit on
+all arches, but you're definitely breaking that assumption.
 
-       Arnd
+David
+
