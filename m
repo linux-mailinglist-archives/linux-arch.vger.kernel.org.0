@@ -2,102 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A73C5459F0B
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 10:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2472745A0ED
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 12:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbhKWJRP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Nov 2021 04:17:15 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:44294 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbhKWJRP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Nov 2021 04:17:15 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5A969218B0;
-        Tue, 23 Nov 2021 09:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1637658846; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C0BsCI5au1OhVtEK7irGEN31UeiYvwLKt5QBWIYycWk=;
-        b=ufVVaWkIW15ubVYjVQXkUhru0CmIYw6COyO4RbUHN4g8bO/GDCzv37Oinm/BG7DLIhEa8+
-        iZblCe/qFyl4pRAPrvhAVJFGCNBpMDsXZZF2PZdZz8JpJ57O9OrBx2TZSPISokQ1tw0/3y
-        bHsRMkPI23ILl6I2Bt+E2fcgBytQGgM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1637658846;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C0BsCI5au1OhVtEK7irGEN31UeiYvwLKt5QBWIYycWk=;
-        b=d+9ikYoA/1XAAYQ2wBoAXvFWgv8FR8YhiJGkjXmT4fpLNozLVyDvfrlhXdekUbCHoASI59
-        Tyo0QALogRIS6lBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4874113DA3;
-        Tue, 23 Nov 2021 09:14:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mwvtD96wnGHsDgAAMHmgww
-        (envelope-from <chrubis@suse.cz>); Tue, 23 Nov 2021 09:14:06 +0000
-Date:   Tue, 23 Nov 2021 10:15:12 +0100
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     Zack Weinberg <zack@owlfolio.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
-        ltp@lists.linux.it
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Message-ID: <YZyxIJ9LGiCx2N74@yuki>
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
+        id S234813AbhKWLLM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Nov 2021 06:11:12 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:40328 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234587AbhKWLLK (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Nov 2021 06:11:10 -0500
+Received: from localhost.localdomain (unknown [111.9.175.10])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxltOJy5xh+ZgAAA--.1064S2;
+        Tue, 23 Nov 2021 19:07:59 +0800 (CST)
+From:   Huang Pei <huangpei@loongson.cn>
+To:     netdev@vger.kernel.org, ambrosehua@gmail.com
+Cc:     linux-arch@vger.kernel.org, lkp@intel.com
+Subject: [PATCH 1/2] hamradio: fix macro redefine warning
+Date:   Tue, 23 Nov 2021 19:07:48 +0800
+Message-Id: <20211123110749.15310-1-huangpei@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf9DxltOJy5xh+ZgAAA--.1064S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKryDAr15Jr13GryUXw13urg_yoW3Gwb_Cr
+        1avr93Xr1DGw4jqr429r4rAa45Cw10gwn7uF9ag393Ww12yF47AFWkCrs7Jrs8CFW7ZFnx
+        C34UCF18A3ySgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbw8YjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4
+        A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+        w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMc
+        vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2Iq
+        xVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r
+        106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AK
+        xVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7
+        xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
+        Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jY6wZUUUUU=
+X-CM-SenderInfo: xkxd0whshlqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi!
-> I am all for matching __uN / __sN to uintN_t / intN_t in userspace, but may I suggest the technically simpler and guaranteed-to-be-accurate
-> 
->  /*
-> - * int-ll64 is used everywhere now.
-> + * int-ll64 is used everywhere in kernel now.
-> + * In user space match <stdint.h>.
->   */
-> +#ifdef __KERNEL__
->  # include <asm-generic/int-ll64.h>
-> +#elif __has_include (<bits/types.h>)
-> +# include <bits/types.h>
-> +typedef __int8_t __s8;
-> +typedef __uint8_t __u8;
-> +typedef __int16_t __s16;
-> +typedef __uint16_t __u16;
-> +typedef __int32_t __s32;
-> +typedef __uint32_t __u32;
-> +typedef __int64_t __s64;
-> +typedef __uint64_t __u64;
-> +#else
-> +# include <stdint.h>
-> +typedef int8_t __s8;
-> +typedef uint8_t __u8;
-> +typedef int16_t __s16;
-> +typedef uint16_t __u16;
-> +typedef int32_t __s32;
-> +typedef uint32_t __u32;
-> +typedef int64_t __s64;
-> +typedef uint64_t __u64;
-> +#endif
-> 
-> The middle clause could be dropped if we are okay with all uapi headers potentially exposing the non-implementation-namespace names defined by <stdint.h>.  I do not know what the musl libc equivalent of <bits/types.h> is.
+MIPS/IA64 define END as assembly function ending, which conflict
+with END definition in mkiss.c, just undef it at first
 
-If it's okay to depend on a header defined by a libc this is better
-solution.
+Reported-by: lkp@intel.com
+Signed-off-by: Huang Pei <huangpei@loongson.cn>
+---
+ drivers/net/hamradio/mkiss.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/drivers/net/hamradio/mkiss.c b/drivers/net/hamradio/mkiss.c
+index e2b332b54f06..7da2bb8a443c 100644
+--- a/drivers/net/hamradio/mkiss.c
++++ b/drivers/net/hamradio/mkiss.c
+@@ -31,6 +31,8 @@
+ 
+ #define AX_MTU		236
+ 
++/* some arch define END as assembly function ending, just undef it */
++#undef	END
+ /* SLIP/KISS protocol characters. */
+ #define END             0300		/* indicates end of frame	*/
+ #define ESC             0333		/* indicates byte stuffing	*/
 -- 
-Cyril Hrubis
-chrubis@suse.cz
+2.20.1
+
