@@ -2,18 +2,18 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC342459D17
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 08:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CF7459D1A
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 08:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbhKWHxk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Nov 2021 02:53:40 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:52212 "EHLO loongson.cn"
+        id S234438AbhKWHxl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Nov 2021 02:53:41 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:52226 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234407AbhKWHxk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 23 Nov 2021 02:53:40 -0500
+        id S234430AbhKWHxl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Nov 2021 02:53:41 -0500
 Received: from localhost.localdomain (unknown [111.9.175.10])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxF+genZxh3IgAAA--.1089S7;
-        Tue, 23 Nov 2021 15:50:16 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxF+genZxh3IgAAA--.1089S8;
+        Tue, 23 Nov 2021 15:50:20 +0800 (CST)
 From:   Huang Pei <huangpei@loongson.cn>
 To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         ambrosehua@gmail.com
@@ -27,18 +27,18 @@ Cc:     Bibo Mao <maobibo@loongson.cn>,
         Gao Juxin <gaojuxin@loongson.cn>,
         Fuxin Zhang <zhangfx@lemote.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH 5/6] MIPS: use 3-level pgtable for 64KB page size on MIPS_VA_BITS_48
-Date:   Tue, 23 Nov 2021 15:49:26 +0800
-Message-Id: <20211123074927.12461-6-huangpei@loongson.cn>
+Subject: [PATCH 6/6] MIPS: loongson64: fix FTLB configuration
+Date:   Tue, 23 Nov 2021 15:49:27 +0800
+Message-Id: <20211123074927.12461-7-huangpei@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20211123074927.12461-1-huangpei@loongson.cn>
 References: <20211123074927.12461-1-huangpei@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9AxF+genZxh3IgAAA--.1089S7
-X-Coremail-Antispam: 1UD129KBjvdXoWrZFy7JF4DWryrGF15Ar45trb_yoWfCFb_JF
-        1UtrWfGr1rGrW8u34aqrWrtF1a93WUWryfCr12gr15u3yS9F13ta1UXa1DZr13Cayq9rWf
-        XrWrAry3Cr4ayjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID: AQAAf9AxF+genZxh3IgAAA--.1089S8
+X-Coremail-Antispam: 1UD129KBjvdXoWrtFyrGr4kCrW5Xr13CFW8Crg_yoWkCwc_Jw
+        nF9F4kGr17ZFnF9w1Uu3yrXFWfZw1rZayruFn5W3sIya43Jr15ZayFkFyUG3W3XFsayrWF
+        9a95urykCa1xGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
         9fnUUIcSsGvfJTRUUUbqxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
         6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
         IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
@@ -58,31 +58,38 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-It hangup when booting Loongson 3A1000 with BOTH
-CONFIG_PAGE_SIZE_64KB and CONFIG_MIPS_VA_BITS_48, that it turn
-out to use 2-level pgtable instead of 3-level. 64KB page size
-with 2-level pgtable only cover 42 bits VA, use 3-level pgtable
-to cover all 48 bits VA(55 bits)
+Commit "da1bd29742b1" makes 'set_ftlb_enable' called under
+c->cputype unset, which leaves FTLB disabled on BOTH 3A2000
+and 3A3000
 
-Fixes: 1e321fa917fb ("MIPS64: Support of at least 48 bits of SEGBITS)
+Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
 Signed-off-by: Huang Pei <huangpei@loongson.cn>
 ---
- arch/mips/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/kernel/cpu-probe.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index de60ad190057..0215dc1529e9 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -3097,7 +3097,7 @@ config STACKTRACE_SUPPORT
- config PGTABLE_LEVELS
- 	int
- 	default 4 if PAGE_SIZE_4KB && MIPS_VA_BITS_48
--	default 3 if 64BIT && !PAGE_SIZE_64KB
-+	default 3 if 64BIT && (!PAGE_SIZE_64KB || MIPS_VA_BITS_48)
- 	default 2
+diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
+index ac0e2cfc6d57..24a529c6c4be 100644
+--- a/arch/mips/kernel/cpu-probe.c
++++ b/arch/mips/kernel/cpu-probe.c
+@@ -1734,8 +1734,6 @@ static inline void decode_cpucfg(struct cpuinfo_mips *c)
  
- config MIPS_AUTO_PFN_OFFSET
+ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ {
+-	decode_configs(c);
+-
+ 	/* All Loongson processors covered here define ExcCode 16 as GSExc. */
+ 	c->options |= MIPS_CPU_GSEXCEX;
+ 
+@@ -1796,6 +1794,8 @@ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu)
+ 		panic("Unknown Loongson Processor ID!");
+ 		break;
+ 	}
++
++	decode_configs(c);
+ }
+ #else
+ static inline void cpu_probe_loongson(struct cpuinfo_mips *c, unsigned int cpu) { }
 -- 
 2.20.1
 
