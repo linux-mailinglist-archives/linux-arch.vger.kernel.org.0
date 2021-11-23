@@ -2,85 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A75F45ACD4
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 20:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A2645ACD9
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 20:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238415AbhKWTxF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Nov 2021 14:53:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232735AbhKWTxE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 23 Nov 2021 14:53:04 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E2A3C60F45;
-        Tue, 23 Nov 2021 19:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637696996;
-        bh=ssffmWy9JtYFUpADiyNa7TiRUR5UVxOfPmHgUAdzls4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aCT77HuqUzfHVld/Yd0cAYpR2SD36MlJx4N3z1uMi0wkPk4yzfwtdRos7SImlfk1/
-         sGol0jpKWMYvw+wtyC4a2Y89it7BkAKs1L+zYV82wQQ46olqUsArNgL1sDLHqgk3rJ
-         gAPdBOLrl6w2bAd9IE3wK56drx/GlXXt7ZUFu9XBzNuRiSBrcgmj8OX1jKAGkm07CR
-         nYp1atrG2K8paaDz5T+ApUWS1LiKePBECViLT0VivGZJ21ecMozFQ1rF7ExgMDcu8j
-         Xi/yDnDOBeEdoC4Mdc+JnTzbzA9L3wiNEtfQdLkbgJF5jhcc+qBkXWon9qRaLjvMW0
-         PQAhbIHk82HOQ==
-Date:   Tue, 23 Nov 2021 11:49:54 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Benjamin LaHaise <bcrl@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Ramji Jiyani <ramjiyani@google.com>, arnd@arndb.de, hch@lst.de,
-        kernel-team@android.com, linux-aio@kvack.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, oleg@redhat.com,
-        Jeff Moyer <jmoyer@redhat.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v5] aio: Add support for the POLLFREE
-Message-ID: <YZ1F4qmBJ42VpZp3@gmail.com>
-References: <20211027011834.2497484-1-ramjiyani@google.com>
+        id S240129AbhKWTxw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Nov 2021 14:53:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59909 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240077AbhKWTxr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Nov 2021 14:53:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637697038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4KI1H93I3xG9XwZuvC9rCCKf5tSl7Lx4nyuD6OnlcLQ=;
+        b=SC0Nl56suZd0tKwZ0eNEvk8VsI6u2dmuaZL+JdIDqnz6ygZAYCZTRNUbyeDqvDzvOIwGAj
+        G0drN9wAU+GOFOfinM9iZVec99hr4a69hlC1nacOWCxUBsdDt40MmQ6CvociHx55hEKxUo
+        T4dnZ8QVaj7UOMWNoIrIsmxHWJzFO1U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-263-g8GUzCcIP7q9i3fnOHSj_A-1; Tue, 23 Nov 2021 14:50:37 -0500
+X-MC-Unique: g8GUzCcIP7q9i3fnOHSj_A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7D29818125C1;
+        Tue, 23 Nov 2021 19:50:35 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9DEBB60CC3;
+        Tue, 23 Nov 2021 19:50:33 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Cyril Hrubis <chrubis@suse.cz>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
+References: <YZvIlz7J6vOEY+Xu@yuki>
+        <CAK8P3a0x5Bw7=0ng-s+KsUywqJYa0tk9cSWmZhx+cZRBOR87ZA@mail.gmail.com>
+        <YZyw56flmdQnBIuh@yuki>
+Date:   Tue, 23 Nov 2021 20:50:31 +0100
+In-Reply-To: <YZyw56flmdQnBIuh@yuki> (Cyril Hrubis's message of "Tue, 23 Nov
+        2021 10:14:15 +0100")
+Message-ID: <87a6hups6w.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211027011834.2497484-1-ramjiyani@google.com>
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Oct 27, 2021 at 01:18:34AM +0000, Ramji Jiyani wrote:
-> Add support for the POLLFREE flag to force complete iocb inline in
-> aio_poll_wake(). A thread may use it to signal it's exit and/or request
-> to cleanup while pending poll request. In this case, aio_poll_wake()
-> needs to make sure it doesn't keep any reference to the queue entry
-> before returning from wake to avoid possible use after free via
-> poll_cancel() path.
-> 
-> UAF issue was found during binder and aio interactions in certain
-> sequence of events [1].
-> 
-> The POLLFREE flag is no more exclusive to the epoll and is being
-> shared with the aio. Remove comment from poll.h to avoid confusion.
-> 
-> [1] https://lore.kernel.org/r/CAKUd0B_TCXRY4h1hTztfwWbNSFQqsudDLn2S_28csgWZmZAG3Q@mail.gmail.com/
-> 
-> Fixes: af5c72b1fc7a ("Fix aio_poll() races")
-> Signed-off-by: Ramji Jiyani <ramjiyani@google.com>
-> Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Cc: stable@vger.kernel.org # 4.19+
-> ---
+* Cyril Hrubis:
 
-Looks good, feel free to add:
+> As far as I can tell the userspace bits/types.h does exactly the same
+> check in order to define uint64_t and int64_t, i.e.:
+>
+> #if __WORDSIZE == 64
+> typedef signed long int __int64_t;
+> typedef unsigned long int __uint64_t;
+> #else
+> __extension__ typedef signed long long int __int64_t;
+> __extension__ typedef unsigned long long int __uint64_t;
+> #endif
+>
+> The macro __WORDSIZE is defined per architecture, and it looks like the
+> defintions in glibc sources in bits/wordsize.h match the uapi
+> asm/bitsperlong.h. But I may have missed something, the code in glibc is
+> not exactly easy to read.
 
-	Reviewed-by: Eric Biggers <ebiggers@google.com>
+__WORDSIZE isn't exactly a standard libc macro.
 
-I'm still not 100% happy with the commit message, but it's good enough.
-The actual code looks correct.
+On musl, x86-64 x32 has __WORDSIZE == 64 depending on header-inclusion
+order, but that's probably just a bug.
 
-Who is going to take this patch?  This is an important fix; it shouldn't be
-sitting ignored for months.  get_maintainer.pl shows:
+Thanks,
+Florian
 
-$ ./scripts/get_maintainer.pl fs/aio.c
-Benjamin LaHaise <bcrl@kvack.org> (supporter:AIO)
-Alexander Viro <viro@zeniv.linux.org.uk> (maintainer:FILESYSTEMS (VFS and infrastructure))
-linux-aio@kvack.org (open list:AIO)
-linux-fsdevel@vger.kernel.org (open list:FILESYSTEMS (VFS and infrastructure))
-linux-kernel@vger.kernel.org (open list)
-
-- Eric
