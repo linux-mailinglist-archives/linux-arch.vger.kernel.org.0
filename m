@@ -2,70 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D85045A1DB
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 12:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906C245A224
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 13:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235177AbhKWLxU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 23 Nov 2021 06:53:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40920 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236526AbhKWLxR (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 23 Nov 2021 06:53:17 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9B05261055;
-        Tue, 23 Nov 2021 11:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637668209;
-        bh=bqbpTCjbIX4Z2tnM0b5x2jEWV2GELpO5KylDWv+vv/Y=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QjyKmIhrky4QAcdlQbNaY3QUriNnS9KuVwjrKYJm2QfSxP9ABUSXHRcrQu4W3Wpkl
-         ObYnmkaxmwJPb6Ebz2vwPSfhXSQzwBoUQAlGXn/RW0SP1vggQo+YxIj+X+D0F1mzO9
-         cNhgvBWpWjeDUHxYH4kz+LsSWSiEIe1PeSbVpyTeURncJ29prs6LFVY3C6l0dDAT0j
-         Vkr7vDliFPCT3iJgi0y/i9uiZjrXI412PttvGGR2kiQQAzW7Uu0xFw+DBwv325X09x
-         W0EWDrHaRfqczjdW3RbV6YwJRNPVw46kwOhGw/Bx7dD7XJr1KFX9i7I0p13hyt2km8
-         nUCSJWL81WJVQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8BEBB60A50;
-        Tue, 23 Nov 2021 11:50:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S235923AbhKWMF3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Nov 2021 07:05:29 -0500
+Received: from mxout02.lancloud.ru ([45.84.86.82]:58378 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235898AbhKWMF2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 23 Nov 2021 07:05:28 -0500
+X-Greylist: delayed 409 seconds by postgrey-1.27 at vger.kernel.org; Tue, 23 Nov 2021 07:05:27 EST
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 4DE03233DF2D
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+Message-ID: <f40206d8-2563-f1aa-8494-715406463bbe@omp.ru>
+Date:   Tue, 23 Nov 2021 14:55:19 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/2] hamradio: fix macro redefine warning
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163766820956.27860.5025106023306313439.git-patchwork-notify@kernel.org>
-Date:   Tue, 23 Nov 2021 11:50:09 +0000
-References: <20211123110749.15310-1-huangpei@loongson.cn>
-In-Reply-To: <20211123110749.15310-1-huangpei@loongson.cn>
-To:     Huang Pei <huangpei@loongson.cn>
-Cc:     netdev@vger.kernel.org, ambrosehua@gmail.com,
-        linux-arch@vger.kernel.org, lkp@intel.com
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 6/6] MIPS: loongson64: fix FTLB configuration
+Content-Language: en-US
+To:     Huang Pei <huangpei@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <ambrosehua@gmail.com>
+CC:     Bibo Mao <maobibo@loongson.cn>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mips@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Li Xuefeng <lixuefeng@loongson.cn>,
+        Yang Tiezhu <yangtiezhu@loongson.cn>,
+        Gao Juxin <gaojuxin@loongson.cn>,
+        Fuxin Zhang <zhangfx@lemote.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+References: <20211123074927.12461-1-huangpei@loongson.cn>
+ <20211123074927.12461-7-huangpei@loongson.cn>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20211123074927.12461-7-huangpei@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello:
+Hello!
 
-This series was applied to netdev/net.git (master)
-by David S. Miller <davem@davemloft.net>:
+On 23.11.2021 10:49, Huang Pei wrote:
 
-On Tue, 23 Nov 2021 19:07:48 +0800 you wrote:
-> MIPS/IA64 define END as assembly function ending, which conflict
-> with END definition in mkiss.c, just undef it at first
+> Commit "da1bd29742b1" makes 'set_ftlb_enable' called under
+
+    You should cite the commit the same way as in the Fixes: tag (except you 
+can break up the long lines).
+
+> c->cputype unset, which leaves FTLB disabled on BOTH 3A2000
+> and 3A3000
 > 
-> Reported-by: lkp@intel.com
+> Fixes: da1bd29742b1 ("MIPS: Loongson64: Probe CPU features via CPUCFG")
 > Signed-off-by: Huang Pei <huangpei@loongson.cn>
-> ---
->  drivers/net/hamradio/mkiss.c | 2 ++
->  1 file changed, 2 insertions(+)
+[...]
 
-Here is the summary with links:
-  - [1/2] hamradio: fix macro redefine warning
-    https://git.kernel.org/netdev/net/c/16517829f2e0
-  - [2/2] slip: fix macro redefine warning
-    https://git.kernel.org/netdev/net/c/e5b40668e930
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+MBR, Sergey
