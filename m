@@ -2,104 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A15B45A971
-	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 17:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A75F45ACD4
+	for <lists+linux-arch@lfdr.de>; Tue, 23 Nov 2021 20:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237086AbhKWRCr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 23 Nov 2021 12:02:47 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:53235 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237077AbhKWRCp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 23 Nov 2021 12:02:45 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-8-dyIDGajdPWOdiVq8f9AjNQ-1; Tue, 23 Nov 2021 16:58:31 +0000
-X-MC-Unique: dyIDGajdPWOdiVq8f9AjNQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Tue, 23 Nov 2021 16:58:31 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Tue, 23 Nov 2021 16:58:30 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'David Howells' <dhowells@redhat.com>,
-        Cyril Hrubis <chrubis@suse.cz>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>,
-        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>
-Subject: RE: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Thread-Topic: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Thread-Index: AQHX4InVzhztkrNZME2rQ+mb6OtfjawRUyrg
-Date:   Tue, 23 Nov 2021 16:58:30 +0000
-Message-ID: <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com>
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <1618289.1637686052@warthog.procyon.org.uk>
-In-Reply-To: <1618289.1637686052@warthog.procyon.org.uk>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S238415AbhKWTxF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 23 Nov 2021 14:53:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232735AbhKWTxE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 23 Nov 2021 14:53:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E2A3C60F45;
+        Tue, 23 Nov 2021 19:49:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637696996;
+        bh=ssffmWy9JtYFUpADiyNa7TiRUR5UVxOfPmHgUAdzls4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aCT77HuqUzfHVld/Yd0cAYpR2SD36MlJx4N3z1uMi0wkPk4yzfwtdRos7SImlfk1/
+         sGol0jpKWMYvw+wtyC4a2Y89it7BkAKs1L+zYV82wQQ46olqUsArNgL1sDLHqgk3rJ
+         gAPdBOLrl6w2bAd9IE3wK56drx/GlXXt7ZUFu9XBzNuRiSBrcgmj8OX1jKAGkm07CR
+         nYp1atrG2K8paaDz5T+ApUWS1LiKePBECViLT0VivGZJ21ecMozFQ1rF7ExgMDcu8j
+         Xi/yDnDOBeEdoC4Mdc+JnTzbzA9L3wiNEtfQdLkbgJF5jhcc+qBkXWon9qRaLjvMW0
+         PQAhbIHk82HOQ==
+Date:   Tue, 23 Nov 2021 11:49:54 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Benjamin LaHaise <bcrl@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     Ramji Jiyani <ramjiyani@google.com>, arnd@arndb.de, hch@lst.de,
+        kernel-team@android.com, linux-aio@kvack.org,
+        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, oleg@redhat.com,
+        Jeff Moyer <jmoyer@redhat.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v5] aio: Add support for the POLLFREE
+Message-ID: <YZ1F4qmBJ42VpZp3@gmail.com>
+References: <20211027011834.2497484-1-ramjiyani@google.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211027011834.2497484-1-ramjiyani@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: David Howells
-> Sent: 23 November 2021 16:48
+On Wed, Oct 27, 2021 at 01:18:34AM +0000, Ramji Jiyani wrote:
+> Add support for the POLLFREE flag to force complete iocb inline in
+> aio_poll_wake(). A thread may use it to signal it's exit and/or request
+> to cleanup while pending poll request. In this case, aio_poll_wake()
+> needs to make sure it doesn't keep any reference to the queue entry
+> before returning from wake to avoid possible use after free via
+> poll_cancel() path.
 > 
-> Cyril Hrubis <chrubis@suse.cz> wrote:
+> UAF issue was found during binder and aio interactions in certain
+> sequence of events [1].
 > 
-> > This changes the __u64 and __s64 in userspace on 64bit platforms from
-> > long long (unsigned) int to just long (unsigned) int in order to match
-> > the uint64_t and int64_t size in userspace.
+> The POLLFREE flag is no more exclusive to the epoll and is being
+> shared with the aio. Remove comment from poll.h to avoid confusion.
+> 
+> [1] https://lore.kernel.org/r/CAKUd0B_TCXRY4h1hTztfwWbNSFQqsudDLn2S_28csgWZmZAG3Q@mail.gmail.com/
+> 
+> Fixes: af5c72b1fc7a ("Fix aio_poll() races")
+> Signed-off-by: Ramji Jiyani <ramjiyani@google.com>
+> Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Cc: stable@vger.kernel.org # 4.19+
+> ---
 
-That is a massive UAPI change you can't do.
+Looks good, feel free to add:
 
-> Can you guarantee this won't break anything in userspace?  Granted the types
-> *ought* to be the same size, but anyone who's written code on the basis that
-> these are "(unsigned) long long int" may suddenly get a bunch of warnings
-> where they didn't before from the C compiler.  Anyone using C++, say, may find
-> their code no longer compiles because overloaded function matching no longer
-> finds a correct match.
+	Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-Indeed
+I'm still not 100% happy with the commit message, but it's good enough.
+The actual code looks correct.
 
-> Also, whilst your point about PRIu64 and PRId64 modifiers in printf() is a
-> good one, it doesn't help someone whose compiler doesn't support that (I don't
-> know if anyone's likely to encounter such these days).  At the moment, I think
-> a user can assume that %llu will work correctly both on 32-bit and 64-bit on
-> all arches, but you're definitely breaking that assumption.
+Who is going to take this patch?  This is an important fix; it shouldn't be
+sitting ignored for months.  get_maintainer.pl shows:
 
-PRIu64 (etc) don't require compiler support, just the correct header file.
+$ ./scripts/get_maintainer.pl fs/aio.c
+Benjamin LaHaise <bcrl@kvack.org> (supporter:AIO)
+Alexander Viro <viro@zeniv.linux.org.uk> (maintainer:FILESYSTEMS (VFS and infrastructure))
+linux-aio@kvack.org (open list:AIO)
+linux-fsdevel@vger.kernel.org (open list:FILESYSTEMS (VFS and infrastructure))
+linux-kernel@vger.kernel.org (open list)
 
-I'm pretty sure that portable user code needs to allow for int64_t being
-either 'long' or 'long long' on 64bit architectures.
-(Indeed 'long' may not even be 64bit.)
-
-On 32bit int32_t can definitely be either 'int' of 'long' at whim.
-
-I'm not sure anyone has tried a 64bit long with a 128bit long-long.
-But the C language might lead you to do that.
-
-Of course, fully portable code has to allow for char, short, int and long
-all being the same size!
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+- Eric
