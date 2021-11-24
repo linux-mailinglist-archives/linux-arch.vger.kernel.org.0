@@ -2,106 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71FC45B831
-	for <lists+linux-arch@lfdr.de>; Wed, 24 Nov 2021 11:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A2945CB73
+	for <lists+linux-arch@lfdr.de>; Wed, 24 Nov 2021 18:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240744AbhKXKUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Nov 2021 05:20:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240105AbhKXKUk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Nov 2021 05:20:40 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C41C061574;
-        Wed, 24 Nov 2021 02:17:31 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id r8so3215216wra.7;
-        Wed, 24 Nov 2021 02:17:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=70LFuvA9BwzW8zf1KTQCL6giarK0Nl0WBEKJHk+tQGg=;
-        b=lNcgdtvnOSWnBcldpNHr35YPikZfWlGARERZnGXQJam6dJ5VuAYn81zn2TkK5XVcV3
-         yqIvxkjQ8EU+s+Hw4acAiBGGsJ/77nrR0Q9SbxrGA+upRT3a7gRWOIF/20QDjVw8QnW2
-         /ne0b4ikIg0rXeJWo+VyBmh9PcBn64RGEr5xoiS1OqEoyQFr3F7AJHnC6D30e7r4I1KE
-         fJ0oCb7xsyxiFsIUZVz71NEStgnCPdvbP9WA2OIKflWMvB3qHnD9enJrCJz3SNppTx4I
-         8o38STuhK0/vLPmlo27lgUx1VPAk7JL4HIMU6xTJfsrCBjni+uW/dC5W9nSDezkCwZam
-         m9tQ==
+        id S1349959AbhKXR4V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Nov 2021 12:56:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34511 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349929AbhKXR4U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 24 Nov 2021 12:56:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1637776389;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mASyT0OMl03qWDFFy00mhqeWIkZHCHpjVkFxkJ6erhk=;
+        b=gqtDLTFmO0qgymnX+dm+kwESu4jensgURt4UVaSaw6rNLuzM/MGEnbMaWizNFWTrMMXJ/Y
+        Hud6oaQwHEqv3Q2iol9JDYalR4ly5CoFzjH/EBlOEi5pklRNeLV1+/qJI68EudEOEtBR85
+        g/u1NQdFXLXYrVsUklT4G6pcjzYWE5o=
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com
+ [209.85.167.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-509--8CjyGcoPU6tL1NejzMQzA-1; Wed, 24 Nov 2021 12:53:08 -0500
+X-MC-Unique: -8CjyGcoPU6tL1NejzMQzA-1
+Received: by mail-oi1-f197.google.com with SMTP id m62-20020acabc41000000b002ba7bfb4fbdso2012622oif.0
+        for <linux-arch@vger.kernel.org>; Wed, 24 Nov 2021 09:53:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=70LFuvA9BwzW8zf1KTQCL6giarK0Nl0WBEKJHk+tQGg=;
-        b=DPnFmowZGmDNrgWPQ4SxKMj9Y0Pu8Qv71EKcS0WLVmLgpxQRvbv8muULhs6G3TGu3B
-         qCI+XJBlfsBCF0Fnfzykh6rN8lAK9OgDyu2T1ZF9l50JYoUoa/vy/lDdXeY61+dmEC12
-         88YRaUbdGAgb5uZrPCsrP1p5hhpQsfC894lzVJQ/ZQGUNtFlD8xnI0Bvw5pU0oNqw6oR
-         HQfXvTrFIVBaDp81iw4C8cJ+VvBB6nl3neWqJhOT/liu/HZGronZTuk64Jr+FGRJ36Dn
-         k/mwtq8v4LPE8yQSMPwkZ3t8FqAdnIJ0ajOIedbA1vyF2GUAzEvQyRqzKFb94iAkl9QP
-         nWig==
-X-Gm-Message-State: AOAM5328Z0QWQHHYiiwLPa/koTaBpNq2o5dk2mVlOCQXHqQPgpvcVVlu
-        ZbCUXovtuhnytPL22GFoM/k=
-X-Google-Smtp-Source: ABdhPJw6qAm068rM9uv6H9YayQc+b8C9roADbIZnGBi3P3kdRFDA9zzgTdiUq3RKZXFYZkChf7L40A==
-X-Received: by 2002:a05:6000:15c8:: with SMTP id y8mr17887347wry.101.1637749049690;
-        Wed, 24 Nov 2021 02:17:29 -0800 (PST)
-Received: from [10.168.10.11] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id n15sm4445528wmq.38.2021.11.24.02.17.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Nov 2021 02:17:29 -0800 (PST)
-Sender: Alejandro Colomar <alx.mailinglists@gmail.com>
-Message-ID: <fb57172d-9268-6aaf-1ba1-fa42a2a47c03@gmail.com>
-Date:   Wed, 24 Nov 2021 11:17:28 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mASyT0OMl03qWDFFy00mhqeWIkZHCHpjVkFxkJ6erhk=;
+        b=NoI2niCKQi55YEMED9IlN+ltHMhdPdUN4hrG8TSqreS+sTnjGWlYUbGFgIFZnEgXFg
+         zqClDvQf7j34GXIB9snS3u4h6oJnonyOvcc+tXEo8d0H3yIHU9e1RloXWLEkRX0mDoWJ
+         No48J6U+18lj8rhoc0O1zB4bgq1ay1cvf3c2c/qoMwpCkWR32AaFR+uN8GwPbtrl9V/o
+         dQG8Me4IuVO5Fo/axAqa6cBjwSZwI+qKLWa7TXlHrzeMLajp/++jGpERSBBY4njv4frz
+         q96ASGCQgYQZ2/44lGjG6w7dhY9xg6It5jLw6KK8kvUepr3UVw3pk0eo973L4HZFaPuA
+         L2Fw==
+X-Gm-Message-State: AOAM532X6+TgSkvhtvmNBqw5UjFC5DGxs7uA2lg28GPDuhCOTiTJzchK
+        4Ob4XpF+fdXoPDcSt9VG48h9S4VMun4s0tkdvXbGtHzwnSKrUuGS7P6oioNQaJpEcvJxlOALnRb
+        nRE0TBVwjp9zghQBlPRrsog==
+X-Received: by 2002:a54:4f1d:: with SMTP id e29mr8178817oiy.179.1637776387522;
+        Wed, 24 Nov 2021 09:53:07 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwRWB6L5DthV9JqtypnlgpgoikvWzzaSh5YU1GEzYTaFfOEcTtDdkodALrrMwzR5kHOWImEJg==
+X-Received: by 2002:a54:4f1d:: with SMTP id e29mr8178778oiy.179.1637776387316;
+        Wed, 24 Nov 2021 09:53:07 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id bj8sm123395oib.51.2021.11.24.09.53.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Nov 2021 09:53:06 -0800 (PST)
+Date:   Wed, 24 Nov 2021 09:53:03 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH v2 23/23] objtool, kcsan: Remove memory barrier
+ instrumentation from noinstr
+Message-ID: <20211124175303.nwuk2zlnwkr7fj5f@treble>
+References: <20211118081027.3175699-1-elver@google.com>
+ <20211118081027.3175699-24-elver@google.com>
+ <20211119203135.clplwzh3hyo5xddg@treble>
+ <YZzQoz0e/oiutuq5@elver.google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Language: en-US
-To:     Florian Weimer <fweimer@redhat.com>, Cyril Hrubis <chrubis@suse.cz>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <CAK8P3a0x5Bw7=0ng-s+KsUywqJYa0tk9cSWmZhx+cZRBOR87ZA@mail.gmail.com>
- <YZyw56flmdQnBIuh@yuki> <87a6hups6w.fsf@oldenburg.str.redhat.com>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <87a6hups6w.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YZzQoz0e/oiutuq5@elver.google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 11/23/21 20:50, Florian Weimer via Libc-alpha wrote:
-> * Cyril Hrubis:
+On Tue, Nov 23, 2021 at 12:29:39PM +0100, Marco Elver wrote:
+> On Fri, Nov 19, 2021 at 12:31PM -0800, Josh Poimboeuf wrote:
+> > On Thu, Nov 18, 2021 at 09:10:27AM +0100, Marco Elver wrote:
+> [...]
+> > > +	if (insn->sec->noinstr && sym->removable_instr) {
+> [...]
+> > I'd love to have a clearer name than 'removable_instr', though I'm
+> > having trouble coming up with something.
+> [...]
 > 
->> As far as I can tell the userspace bits/types.h does exactly the same
->> check in order to define uint64_t and int64_t, i.e.:
->>
->> #if __WORDSIZE == 64
->> typedef signed long int __int64_t;
->> typedef unsigned long int __uint64_t;
->> #else
->> __extension__ typedef signed long long int __int64_t;
->> __extension__ typedef unsigned long long int __uint64_t;
->> #endif
->>
->> The macro __WORDSIZE is defined per architecture, and it looks like the
->> defintions in glibc sources in bits/wordsize.h match the uapi
->> asm/bitsperlong.h. But I may have missed something, the code in glibc is
->> not exactly easy to read.
+> I now have the below as v3 of this patch. The naming isn't entirely
+> obvious, but coming up with a short name for this is tricky, but
+> hopefully the comments make it clear. We can of course still pick
+> another name.
 > 
-> __WORDSIZE isn't exactly a standard libc macro.
+> Does that look reasonable?
+> 
+> Note, I'd like this series to sit in -next for a while (probably from
+> some time next week after sending v3 if there are no further
+> complaints). By default everything will be picked up by the -rcu tree,
+> and we're targeting Linux 5.18.
+> 
+> If you feel there might be objtool conflicts coming, this patch could be
+> taken through another tree as there are no hard dependencies, as long as
+> this patch reaches mainline before or with the rest.
+> 
+> Thanks,
+> -- Marco
 
-The (to-be) standard libc macro would be LONG_WIDTH (although it has a 
-slightly different meaning, but it can be used for this, but then the 
-code also needs to expose <limits.h>), rigth?
+Looks good to me.  I don't know of any upcoming conflicts, feel free to
+carry it with your series for now.
 
-Regards,
-Alex
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
 
 -- 
-Alejandro Colomar
-Linux man-pages comaintainer; https://www.kernel.org/doc/man-pages/
+Josh
+
