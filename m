@@ -2,113 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E45845D896
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 12:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5998D45DDF5
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 16:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236759AbhKYLDJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Nov 2021 06:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354693AbhKYLBH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Nov 2021 06:01:07 -0500
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88184C061748;
-        Thu, 25 Nov 2021 02:56:54 -0800 (PST)
-Received: by mail-vk1-xa2f.google.com with SMTP id s17so3592360vka.5;
-        Thu, 25 Nov 2021 02:56:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=19XxhN1cPhuBovF+Xh4gn1b03Gy0GpCCVXwbXEhLi/Y=;
-        b=g4HEKhiSSbHpHj5yFd7PfkOCC7OjRDa51IdTeUlVTfAai66FDIoyoUR79zc+fQdbz8
-         tc19wl9pyY+DEs1Xm1MIoS1J4IdjHoGTNF+3mryBMD6ckQs32XzAN1SqwFz9BcnloFXK
-         tQUXtmCqgQZDGSKbAfvUMhM8RF1byNDRfaALLRJWWSCiGK4n4ishPhzsVn9InWnUBVeK
-         yBatM+MagxOFcS9yfsEcGz7aRivqX2fYTK+L9aHZyHr4H3xhnvnMHBNfruDN1KHILche
-         hZJuQHctID1iokGll0VabYZIhGU5u5KwNIwgOHXrT6M4E9/M3Gf0QoediHeCnYvum+Sh
-         GRqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=19XxhN1cPhuBovF+Xh4gn1b03Gy0GpCCVXwbXEhLi/Y=;
-        b=gJ447K/qg7wkk3r4eW4zW2h2koXGoCUr5dPCLaaYGopmLGQq5/lUsecqXlxIkxNybH
-         pfFhVbBPbltVM/lM0XFhyu3y2M7ARsjUCW7AJiPmY6olhJ8K9JlESGuO5nZK8XkrcHA1
-         ZjU/nwgO7YdCvQZlodjINKNA2ocAQ3V6Cu00PDYqV+zF+MjF/THaD7IE388uFajuDHYZ
-         0vhlZwHAzYa5ExEOeKPrlD5NxSssdrWBs3kc4kbuke2FEaLXXXfxxeQbLI73l5H/9vQ9
-         EAZAY+on/ZHzfjRmPWqBdmzdAdzg2pk7hDWZ1/CU58NNsor6rczWsY0RGZbtCexIf/9M
-         uauA==
-X-Gm-Message-State: AOAM533F9r9ioZ4NMsaVQQgGXFovf+15/Wd207nGc69scT3P0le+Mt7w
-        oP/g09lNaNAazMwOAKDNNXKn1lv2rEvKOGME5qs=
-X-Google-Smtp-Source: ABdhPJw08+vO8xvImD361nCgmPTJ+oAFgtqZIP1QpMejp7pxO+ovFtVtHwaNa0Pb3/X68lyALNXkewo6EsgomvUodzo=
-X-Received: by 2002:a05:6122:8cf:: with SMTP id 15mr9414800vkg.16.1637837813643;
- Thu, 25 Nov 2021 02:56:53 -0800 (PST)
+        id S232996AbhKYPxF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Nov 2021 10:53:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60420 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356149AbhKYPve (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 25 Nov 2021 10:51:34 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85A06610E8;
+        Thu, 25 Nov 2021 15:48:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637855303;
+        bh=U7MnU5/31mywm76pdPoiwNd1pEooMskUeZ3nm7n/GBE=;
+        h=From:Date:Subject:To:Cc:From;
+        b=HbEF+WgTNYB3xPn4IM34ql3drUawHVQYUXgKN8gPbOUU9TArGoYNNmH09EPLFBw8B
+         F4S18r/ti+4uUNSgXWwgpTv0UxREd8lPzajhj0hwfK1N3c6XNb0HgqyVBflMjl+SCf
+         24g/ZKONqVk11QaqIncwuYMr4H0DoIIXo6tjiAM56obPTFTqBVjpcgbGgLfd3/Sc5v
+         tFVWcNgNbp4r3XXswKUOOIKNYNz3SkC1UU6ka9d8/FiYywRmbjrsX8E7jH+J1JCJoS
+         ei8QcReE5rE8Y75kCY1eWvE5/HagT/g437QIP0eHMsvlhBU9eXh/Hb434zrtjGaK4J
+         xvrXsPKNJOa9A==
+Received: by mail-wm1-f51.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so4964842wms.3;
+        Thu, 25 Nov 2021 07:48:23 -0800 (PST)
+X-Gm-Message-State: AOAM530pw0A7Qjn6VMtmyMOJc/Ec/YVzKMUmFlMXNkBCPVLgpdx/dJeQ
+        ud7Zcnip4ao1LSHkbwYfKTJGepgGjjZ+iv62lpk=
+X-Google-Smtp-Source: ABdhPJxbqqGkf5AOVj86Ru2m9pY6KCLxo9YD5MjcXG82yvgpiF9EdnoAXupJRtGrvNIRhAhII9KPjTwE1tLzjXEtikg=
+X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr8588376wmn.98.1637855302022;
+ Thu, 25 Nov 2021 07:48:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20210929172234.31620-1-mcroce@linux.microsoft.com> <20210929172234.31620-4-mcroce@linux.microsoft.com>
-In-Reply-To: <20210929172234.31620-4-mcroce@linux.microsoft.com>
-From:   Ley Foon Tan <lftan.linux@gmail.com>
-Date:   Thu, 25 Nov 2021 18:56:41 +0800
-Message-ID: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] riscv: optimized memset
-To:     Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atish.patra@wdc.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Guo Ren <guoren@kernel.org>, Christoph Hellwig <hch@lst.de>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 25 Nov 2021 16:48:06 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
+Message-ID: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
+Subject: [GIT PULL] asm-generic: syscall table updates
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 30, 2021 at 1:56 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
->
-> From: Matteo Croce <mcroce@microsoft.com>
->
-> The generic memset is defined as a byte at time write. This is always
-> safe, but it's slower than a 4 byte or even 8 byte write.
->
-> Write a generic memset which fills the data one byte at time until the
-> destination is aligned, then fills using the largest size allowed,
-> and finally fills the remaining data one byte at time.
->
-> Signed-off-by: Matteo Croce <mcroce@microsoft.com>
-> ---
->  arch/riscv/include/asm/string.h |  10 +--
->  arch/riscv/kernel/Makefile      |   1 -
->  arch/riscv/kernel/riscv_ksyms.c |  13 ----
->  arch/riscv/lib/Makefile         |   1 -
->  arch/riscv/lib/memset.S         | 113 --------------------------------
->  arch/riscv/lib/string.c         |  41 ++++++++++++
->  6 files changed, 44 insertions(+), 135 deletions(-)
->  delete mode 100644 arch/riscv/kernel/riscv_ksyms.c
->  delete mode 100644 arch/riscv/lib/memset.S
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf=
+:
 
-This patch causes the Linux kernel to hang if compile with LLVM/Clang.
-Tested on Qemu.
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
 
-Steps to compile with Clang:
-make CC=clang  defconfig
-make CC=clang -j
+are available in the Git repository at:
 
-Boot log:
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-5.16-2
 
-[    0.000000] Linux version 5.15.4-01003-g23eeaac40da8 (xxxxx@ubuntu)
-(clang version 14.0.0 (https://github.com/llvm/llvm-project
-6b715e9c4d9cc00f59906d48cd57f4c767229093), GNU ld (GNU Binutils)
-2.36.1) #151 SMP Thu Nov 25 18:41:47 +08 2021
-[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
-[    0.000000] Machine model: riscv-virtio,qemu
-[    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
-[    0.000000] printk: bootconsole [sbi0] enabled
-[    0.000000] efi: UEFI not found.
+for you to fetch changes up to a0eb2da92b715d0c97b96b09979689ea09faefe6:
 
-Regards
-Ley Foon
+  futex: Wireup futex_waitv syscall (2021-11-25 14:26:12 +0100)
+
+----------------------------------------------------------------
+asm-generic: syscall table updates
+
+Andr=C3=A9 Almeida sends an update for the newly added futex_waitv
+syscall that was initially only added to a few architectures.
+
+Some additional ones have since made it through architecture
+maintainer trees, this finishes the remaining ones.
+
+----------------------------------------------------------------
+Andr=C3=A9 Almeida (1):
+      futex: Wireup futex_waitv syscall
+
+ arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+ arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+ arch/sh/kernel/syscalls/syscall.tbl         | 1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+ 8 files changed, 8 insertions(+)
