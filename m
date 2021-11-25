@@ -2,84 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5998D45DDF5
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 16:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9316D45E099
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 19:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232996AbhKYPxF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Nov 2021 10:53:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60420 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356149AbhKYPve (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Nov 2021 10:51:34 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 85A06610E8;
-        Thu, 25 Nov 2021 15:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637855303;
-        bh=U7MnU5/31mywm76pdPoiwNd1pEooMskUeZ3nm7n/GBE=;
-        h=From:Date:Subject:To:Cc:From;
-        b=HbEF+WgTNYB3xPn4IM34ql3drUawHVQYUXgKN8gPbOUU9TArGoYNNmH09EPLFBw8B
-         F4S18r/ti+4uUNSgXWwgpTv0UxREd8lPzajhj0hwfK1N3c6XNb0HgqyVBflMjl+SCf
-         24g/ZKONqVk11QaqIncwuYMr4H0DoIIXo6tjiAM56obPTFTqBVjpcgbGgLfd3/Sc5v
-         tFVWcNgNbp4r3XXswKUOOIKNYNz3SkC1UU6ka9d8/FiYywRmbjrsX8E7jH+J1JCJoS
-         ei8QcReE5rE8Y75kCY1eWvE5/HagT/g437QIP0eHMsvlhBU9eXh/Hb434zrtjGaK4J
-         xvrXsPKNJOa9A==
-Received: by mail-wm1-f51.google.com with SMTP id p27-20020a05600c1d9b00b0033bf8532855so4964842wms.3;
-        Thu, 25 Nov 2021 07:48:23 -0800 (PST)
-X-Gm-Message-State: AOAM530pw0A7Qjn6VMtmyMOJc/Ec/YVzKMUmFlMXNkBCPVLgpdx/dJeQ
-        ud7Zcnip4ao1LSHkbwYfKTJGepgGjjZ+iv62lpk=
-X-Google-Smtp-Source: ABdhPJxbqqGkf5AOVj86Ru2m9pY6KCLxo9YD5MjcXG82yvgpiF9EdnoAXupJRtGrvNIRhAhII9KPjTwE1tLzjXEtikg=
-X-Received: by 2002:a05:600c:6d2:: with SMTP id b18mr8588376wmn.98.1637855302022;
- Thu, 25 Nov 2021 07:48:22 -0800 (PST)
+        id S242026AbhKYSlz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Nov 2021 13:41:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231959AbhKYSjz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Nov 2021 13:39:55 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44F3C061748
+        for <linux-arch@vger.kernel.org>; Thu, 25 Nov 2021 10:36:43 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id b68so6633559pfg.11
+        for <linux-arch@vger.kernel.org>; Thu, 25 Nov 2021 10:36:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=SZlflNwJM/FoSzNidwvG3Q12/AiRGSJaNEWCCSkms7g=;
+        b=LL4EEfE88B6/iG3LLa9Zg6B7xIB2wJnPpK1fRsTiSG8knbHTA12WimeSdb0+nPk0tL
+         dBuIISHMMg6Komm+neIWf9iOiyIBac+YFxGffUC/UFXpKAGRPp1+8sMFSzSxmQw0tDjU
+         /aJQQe4TsNfOUQfxYLPxOROXIeGIFytg9L0a11LIW70u5GyOhaKDfxCaphCeLJyFfp1g
+         C3GCmPm4tcJNilWKuV2BS5XB5bXp/E4kvnOaLo1zCfRFzdwjZAj375lMrg0NEWp23adg
+         CX+FCNvoW7uWvNRhcLoKX55mp/gUtHBuydpRj4aaGOTk6ZnvcEUnEkZbaIZJfS57oRDX
+         SjcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=SZlflNwJM/FoSzNidwvG3Q12/AiRGSJaNEWCCSkms7g=;
+        b=vtI05BlUHl03Ezrz4MhkxMYySliXHbXnl89TtcGkjSyVtEBmEBeyJp6YLOh2t0dnU3
+         n160AXK3KMnehGSrQCd7r5B6A742OXi76Oi2lu2keA8ExQn2BfnX569CkptefP9ahy+X
+         RlaA37WQ01LEnRnci6aIwSyt7q2d60LPivKyBwyr6Bo04T4RlwbA2w98moeDLb4x/nC0
+         NePJa5NctP8/RAeYnV3i/sOxOEy+2ab0HG/QQUUvugBCVGe7FOSmRbk1E0nKitYSC3PG
+         AdLVL3ZZGXoiFljTnPM/iovK2F+NiLUNA4WLC3QhULF5dVQEks04ZkmwPVJodfV3H2Ey
+         ATHA==
+X-Gm-Message-State: AOAM531fWujTrwLP/CsAAIwbcLiPfdC1wmVcelS5z8+ZzFufDEPMXi80
+        QCn/GaeeMsrXfgEG7s5gkN5HjORbbKMnlhfhVOA=
+X-Google-Smtp-Source: ABdhPJwYA6CQPE7Oh9r3ehM806LL5P8Uve0bC8gn+AWN9Z3fP7MLN9mgbGWICfJ3hE7MS1qu2TRGAFDLqhSjL+EN69o=
+X-Received: by 2002:a63:3482:: with SMTP id b124mr3322873pga.569.1637865403328;
+ Thu, 25 Nov 2021 10:36:43 -0800 (PST)
 MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 25 Nov 2021 16:48:06 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
-Message-ID: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
-Subject: [GIT PULL] asm-generic: syscall table updates
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
+Sender: aagbidji@gmail.com
+Received: by 2002:a05:7300:ca0:b0:42:55eb:6819 with HTTP; Thu, 25 Nov 2021
+ 10:36:42 -0800 (PST)
+From:   Hannah Johnson <hannahjohnson8856@gmail.com>
+Date:   Thu, 25 Nov 2021 18:36:42 +0000
+X-Google-Sender-Auth: 9pCwXUaGDbZlVrfheMBtKW6_T_s
+Message-ID: <CA+6YaA5O_SV7GE+4B=PrBKFqtbP3yMH9SgoqDseJaRh4HJjeMg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf=
-:
-
-  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-5.16-2
-
-for you to fetch changes up to a0eb2da92b715d0c97b96b09979689ea09faefe6:
-
-  futex: Wireup futex_waitv syscall (2021-11-25 14:26:12 +0100)
-
-----------------------------------------------------------------
-asm-generic: syscall table updates
-
-Andr=C3=A9 Almeida sends an update for the newly added futex_waitv
-syscall that was initially only added to a few architectures.
-
-Some additional ones have since made it through architecture
-maintainer trees, this finishes the remaining ones.
-
-----------------------------------------------------------------
-Andr=C3=A9 Almeida (1):
-      futex: Wireup futex_waitv syscall
-
- arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
- arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
- arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
- arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
- arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
- arch/sh/kernel/syscalls/syscall.tbl         | 1 +
- arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
- arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
- 8 files changed, 8 insertions(+)
+-- 
+Hello
+Nice to meet you
+my name is Hannah Johnson i will be glad if we get to know each other more
+better and share pictures i am  expecting your reply
+thank you
