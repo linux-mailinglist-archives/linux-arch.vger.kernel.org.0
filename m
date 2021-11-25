@@ -2,129 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7BA45D13A
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 00:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E45845D896
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 12:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352576AbhKXXcq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Nov 2021 18:32:46 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:36412 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345993AbhKXXcq (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 24 Nov 2021 18:32:46 -0500
-Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1mq1ha-0000eP-BH; Thu, 25 Nov 2021 00:29:22 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
+        id S236759AbhKYLDJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Nov 2021 06:03:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354693AbhKYLBH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Nov 2021 06:01:07 -0500
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88184C061748;
+        Thu, 25 Nov 2021 02:56:54 -0800 (PST)
+Received: by mail-vk1-xa2f.google.com with SMTP id s17so3592360vka.5;
+        Thu, 25 Nov 2021 02:56:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=19XxhN1cPhuBovF+Xh4gn1b03Gy0GpCCVXwbXEhLi/Y=;
+        b=g4HEKhiSSbHpHj5yFd7PfkOCC7OjRDa51IdTeUlVTfAai66FDIoyoUR79zc+fQdbz8
+         tc19wl9pyY+DEs1Xm1MIoS1J4IdjHoGTNF+3mryBMD6ckQs32XzAN1SqwFz9BcnloFXK
+         tQUXtmCqgQZDGSKbAfvUMhM8RF1byNDRfaALLRJWWSCiGK4n4ishPhzsVn9InWnUBVeK
+         yBatM+MagxOFcS9yfsEcGz7aRivqX2fYTK+L9aHZyHr4H3xhnvnMHBNfruDN1KHILche
+         hZJuQHctID1iokGll0VabYZIhGU5u5KwNIwgOHXrT6M4E9/M3Gf0QoediHeCnYvum+Sh
+         GRqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=19XxhN1cPhuBovF+Xh4gn1b03Gy0GpCCVXwbXEhLi/Y=;
+        b=gJ447K/qg7wkk3r4eW4zW2h2koXGoCUr5dPCLaaYGopmLGQq5/lUsecqXlxIkxNybH
+         pfFhVbBPbltVM/lM0XFhyu3y2M7ARsjUCW7AJiPmY6olhJ8K9JlESGuO5nZK8XkrcHA1
+         ZjU/nwgO7YdCvQZlodjINKNA2ocAQ3V6Cu00PDYqV+zF+MjF/THaD7IE388uFajuDHYZ
+         0vhlZwHAzYa5ExEOeKPrlD5NxSssdrWBs3kc4kbuke2FEaLXXXfxxeQbLI73l5H/9vQ9
+         EAZAY+on/ZHzfjRmPWqBdmzdAdzg2pk7hDWZ1/CU58NNsor6rczWsY0RGZbtCexIf/9M
+         uauA==
+X-Gm-Message-State: AOAM533F9r9ioZ4NMsaVQQgGXFovf+15/Wd207nGc69scT3P0le+Mt7w
+        oP/g09lNaNAazMwOAKDNNXKn1lv2rEvKOGME5qs=
+X-Google-Smtp-Source: ABdhPJw08+vO8xvImD361nCgmPTJ+oAFgtqZIP1QpMejp7pxO+ovFtVtHwaNa0Pb3/X68lyALNXkewo6EsgomvUodzo=
+X-Received: by 2002:a05:6122:8cf:: with SMTP id 15mr9414800vkg.16.1637837813643;
+ Thu, 25 Nov 2021 02:56:53 -0800 (PST)
+MIME-Version: 1.0
+References: <20210929172234.31620-1-mcroce@linux.microsoft.com> <20210929172234.31620-4-mcroce@linux.microsoft.com>
+In-Reply-To: <20210929172234.31620-4-mcroce@linux.microsoft.com>
+From:   Ley Foon Tan <lftan.linux@gmail.com>
+Date:   Thu, 25 Nov 2021 18:56:41 +0800
+Message-ID: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] riscv: optimized memset
+To:     Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@wdc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: Re: [PATCH v2 00/10] Introduce sv48 support without relocatable kernel
-Date:   Thu, 25 Nov 2021 00:29:20 +0100
-Message-ID: <2700575.YIZvDWadBg@diego>
-In-Reply-To: <20210929145113.1935778-1-alexandre.ghiti@canonical.com>
-References: <20210929145113.1935778-1-alexandre.ghiti@canonical.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        Atish Patra <atish.patra@wdc.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Bin Meng <bmeng.cn@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Guo Ren <guoren@kernel.org>, Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Am Mittwoch, 29. September 2021, 16:51:03 CET schrieb Alexandre Ghiti:
-> This patchset allows to have a single kernel for sv39 and sv48 without           
-> being relocatable.                                                               
->                                                                                  
-> The idea comes from Arnd Bergmann who suggested to do the same as x86,           
-> that is mapping the kernel to the end of the address space, which allows         
-> the kernel to be linked at the same address for both sv39 and sv48 and           
-> then does not require to be relocated at runtime.                                
->                                                                                  
-> This implements sv48 support at runtime. The kernel will try to                  
-> boot with 4-level page table and will fallback to 3-level if the HW does not     
-> support it. Folding the 4th level into a 3-level page table has almost no        
-> cost at runtime.                                                                 
->                                                                                  
-> Tested on:                                                                       
->   - qemu rv64 sv39: OK                                                           
->   - qemu rv64 sv48: OK                                                           
->   - qemu rv64 sv39 + kasan: OK                                                   
->   - qemu rv64 sv48 + kasan: OK                                                   
->   - qemu rv32: OK                                                                
->   - Unmatched: OK
+On Thu, Sep 30, 2021 at 1:56 AM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+>
+> From: Matteo Croce <mcroce@microsoft.com>
+>
+> The generic memset is defined as a byte at time write. This is always
+> safe, but it's slower than a 4 byte or even 8 byte write.
+>
+> Write a generic memset which fills the data one byte at time until the
+> destination is aligned, then fills using the largest size allowed,
+> and finally fills the remaining data one byte at time.
+>
+> Signed-off-by: Matteo Croce <mcroce@microsoft.com>
+> ---
+>  arch/riscv/include/asm/string.h |  10 +--
+>  arch/riscv/kernel/Makefile      |   1 -
+>  arch/riscv/kernel/riscv_ksyms.c |  13 ----
+>  arch/riscv/lib/Makefile         |   1 -
+>  arch/riscv/lib/memset.S         | 113 --------------------------------
+>  arch/riscv/lib/string.c         |  41 ++++++++++++
+>  6 files changed, 44 insertions(+), 135 deletions(-)
+>  delete mode 100644 arch/riscv/kernel/riscv_ksyms.c
+>  delete mode 100644 arch/riscv/lib/memset.S
 
-On a beagleV (which supports only sv39) I've tested both the limit via
-the mmu-type in the devicetree and also that the fallback works when
-I disable the mmu-type in the dt, so
+This patch causes the Linux kernel to hang if compile with LLVM/Clang.
+Tested on Qemu.
 
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+Steps to compile with Clang:
+make CC=clang  defconfig
+make CC=clang -j
 
->   
->                                                                                  
-> Changes in v2:                                                                   
->   - Rebase onto for-next                                                         
->   - Fix KASAN                                                                    
->   - Fix stack canary                                                             
->   - Get completely rid of MAXPHYSMEM configs                                     
->   - Add documentation
-> 
-> Alexandre Ghiti (10):
->   riscv: Allow to dynamically define VA_BITS
->   riscv: Get rid of MAXPHYSMEM configs
->   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
->   riscv: Implement sv48 support
->   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
->   riscv: Explicit comment about user virtual address space size
->   riscv: Improve virtual kernel memory layout dump
->   Documentation: riscv: Add sv48 description to VM layout
->   riscv: Initialize thread pointer before calling C functions
->   riscv: Allow user to downgrade to sv39 when hw supports sv48
-> 
->  Documentation/riscv/vm-layout.rst             |  36 ++
->  arch/riscv/Kconfig                            |  35 +-
->  arch/riscv/configs/nommu_k210_defconfig       |   1 -
->  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
->  arch/riscv/configs/nommu_virt_defconfig       |   1 -
->  arch/riscv/include/asm/csr.h                  |   3 +-
->  arch/riscv/include/asm/fixmap.h               |   1 +
->  arch/riscv/include/asm/kasan.h                |   2 +-
->  arch/riscv/include/asm/page.h                 |  10 +
->  arch/riscv/include/asm/pgalloc.h              |  40 +++
->  arch/riscv/include/asm/pgtable-64.h           | 108 +++++-
->  arch/riscv/include/asm/pgtable.h              |  30 +-
->  arch/riscv/include/asm/sparsemem.h            |   6 +-
->  arch/riscv/kernel/cpu.c                       |  23 +-
->  arch/riscv/kernel/head.S                      |   4 +-
->  arch/riscv/mm/context.c                       |   4 +-
->  arch/riscv/mm/init.c                          | 323 +++++++++++++++---
->  arch/riscv/mm/kasan_init.c                    |  91 +++--
->  drivers/firmware/efi/libstub/efi-stub.c       |   2 +
->  include/asm-generic/pgalloc.h                 |  24 +-
->  include/linux/sizes.h                         |   1 +
->  21 files changed, 615 insertions(+), 131 deletions(-)
-> 
-> 
+Boot log:
 
+[    0.000000] Linux version 5.15.4-01003-g23eeaac40da8 (xxxxx@ubuntu)
+(clang version 14.0.0 (https://github.com/llvm/llvm-project
+6b715e9c4d9cc00f59906d48cd57f4c767229093), GNU ld (GNU Binutils)
+2.36.1) #151 SMP Thu Nov 25 18:41:47 +08 2021
+[    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+[    0.000000] Machine model: riscv-virtio,qemu
+[    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
+[    0.000000] printk: bootconsole [sbi0] enabled
+[    0.000000] efi: UEFI not found.
 
-
-
+Regards
+Ley Foon
