@@ -2,64 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9316D45E099
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 19:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F33C345E0A5
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 19:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242026AbhKYSlz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Nov 2021 13:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbhKYSjz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Nov 2021 13:39:55 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44F3C061748
-        for <linux-arch@vger.kernel.org>; Thu, 25 Nov 2021 10:36:43 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id b68so6633559pfg.11
-        for <linux-arch@vger.kernel.org>; Thu, 25 Nov 2021 10:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=SZlflNwJM/FoSzNidwvG3Q12/AiRGSJaNEWCCSkms7g=;
-        b=LL4EEfE88B6/iG3LLa9Zg6B7xIB2wJnPpK1fRsTiSG8knbHTA12WimeSdb0+nPk0tL
-         dBuIISHMMg6Komm+neIWf9iOiyIBac+YFxGffUC/UFXpKAGRPp1+8sMFSzSxmQw0tDjU
-         /aJQQe4TsNfOUQfxYLPxOROXIeGIFytg9L0a11LIW70u5GyOhaKDfxCaphCeLJyFfp1g
-         C3GCmPm4tcJNilWKuV2BS5XB5bXp/E4kvnOaLo1zCfRFzdwjZAj375lMrg0NEWp23adg
-         CX+FCNvoW7uWvNRhcLoKX55mp/gUtHBuydpRj4aaGOTk6ZnvcEUnEkZbaIZJfS57oRDX
-         SjcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=SZlflNwJM/FoSzNidwvG3Q12/AiRGSJaNEWCCSkms7g=;
-        b=vtI05BlUHl03Ezrz4MhkxMYySliXHbXnl89TtcGkjSyVtEBmEBeyJp6YLOh2t0dnU3
-         n160AXK3KMnehGSrQCd7r5B6A742OXi76Oi2lu2keA8ExQn2BfnX569CkptefP9ahy+X
-         RlaA37WQ01LEnRnci6aIwSyt7q2d60LPivKyBwyr6Bo04T4RlwbA2w98moeDLb4x/nC0
-         NePJa5NctP8/RAeYnV3i/sOxOEy+2ab0HG/QQUUvugBCVGe7FOSmRbk1E0nKitYSC3PG
-         AdLVL3ZZGXoiFljTnPM/iovK2F+NiLUNA4WLC3QhULF5dVQEks04ZkmwPVJodfV3H2Ey
-         ATHA==
-X-Gm-Message-State: AOAM531fWujTrwLP/CsAAIwbcLiPfdC1wmVcelS5z8+ZzFufDEPMXi80
-        QCn/GaeeMsrXfgEG7s5gkN5HjORbbKMnlhfhVOA=
-X-Google-Smtp-Source: ABdhPJwYA6CQPE7Oh9r3ehM806LL5P8Uve0bC8gn+AWN9Z3fP7MLN9mgbGWICfJ3hE7MS1qu2TRGAFDLqhSjL+EN69o=
-X-Received: by 2002:a63:3482:: with SMTP id b124mr3322873pga.569.1637865403328;
- Thu, 25 Nov 2021 10:36:43 -0800 (PST)
-MIME-Version: 1.0
-Sender: aagbidji@gmail.com
-Received: by 2002:a05:7300:ca0:b0:42:55eb:6819 with HTTP; Thu, 25 Nov 2021
- 10:36:42 -0800 (PST)
-From:   Hannah Johnson <hannahjohnson8856@gmail.com>
-Date:   Thu, 25 Nov 2021 18:36:42 +0000
-X-Google-Sender-Auth: 9pCwXUaGDbZlVrfheMBtKW6_T_s
-Message-ID: <CA+6YaA5O_SV7GE+4B=PrBKFqtbP3yMH9SgoqDseJaRh4HJjeMg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S242568AbhKYStP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Nov 2021 13:49:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46258 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242665AbhKYSrN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 25 Nov 2021 13:47:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4C8C0610CA;
+        Thu, 25 Nov 2021 18:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637865842;
+        bh=RMyMRjbvG2n75tpdHny3DubP33sskUbHGgBU5+Ru884=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=HfTJoDxOqf+ctIlgxvzvdeI2+IjzS303cDz5Yu1Afzds6eWrwpTo0xJmfIWxgggA7
+         hvetwER2A0wQkfd6CuQQAPt08vT4ZRnc5P6Bf+veFHNrB0v+E7wckPuTNNTmnJwBMq
+         hzCf39lVBH85EGw0b4KWVoBxejPklByTlrpywmuOKmKyh+x+DLU4AG5X7LItyZM/gR
+         m4AAoOzBclXkDpivXn+IK5Dotikbu4NpInjpppJSYg8yaFfg2PyzA/mBB9JyLQRixd
+         aqNXISJX8NdZ50dfg3HMGMZEBYVOeVO9UZvCDbu9nt8gUUmer7EagPrPRMSv3ICAIY
+         QgQTmcQGEvQPA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 46DAB609D5;
+        Thu, 25 Nov 2021 18:44:02 +0000 (UTC)
+Subject: Re: [GIT PULL] asm-generic: syscall table updates
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
+References: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-5.16-2
+X-PR-Tracked-Commit-Id: a0eb2da92b715d0c97b96b09979689ea09faefe6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b501b85957deb17f1fe0a861fee820255519d526
+Message-Id: <163786584228.16379.1846651949947500762.pr-tracker-bot@kernel.org>
+Date:   Thu, 25 Nov 2021 18:44:02 +0000
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+The pull request you sent on Thu, 25 Nov 2021 16:48:06 +0100:
+
+> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-5.16-2
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b501b85957deb17f1fe0a861fee820255519d526
+
+Thank you!
+
 -- 
-Hello
-Nice to meet you
-my name is Hannah Johnson i will be glad if we get to know each other more
-better and share pictures i am  expecting your reply
-thank you
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
