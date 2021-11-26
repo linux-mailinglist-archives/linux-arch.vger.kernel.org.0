@@ -2,62 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F33C345E0A5
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Nov 2021 19:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452FE45E656
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Nov 2021 04:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242568AbhKYStP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Nov 2021 13:49:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46258 "EHLO mail.kernel.org"
+        id S232011AbhKZCvD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Nov 2021 21:51:03 -0500
+Received: from mga01.intel.com ([192.55.52.88]:7489 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242665AbhKYSrN (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 25 Nov 2021 13:47:13 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4C8C0610CA;
-        Thu, 25 Nov 2021 18:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1637865842;
-        bh=RMyMRjbvG2n75tpdHny3DubP33sskUbHGgBU5+Ru884=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HfTJoDxOqf+ctIlgxvzvdeI2+IjzS303cDz5Yu1Afzds6eWrwpTo0xJmfIWxgggA7
-         hvetwER2A0wQkfd6CuQQAPt08vT4ZRnc5P6Bf+veFHNrB0v+E7wckPuTNNTmnJwBMq
-         hzCf39lVBH85EGw0b4KWVoBxejPklByTlrpywmuOKmKyh+x+DLU4AG5X7LItyZM/gR
-         m4AAoOzBclXkDpivXn+IK5Dotikbu4NpInjpppJSYg8yaFfg2PyzA/mBB9JyLQRixd
-         aqNXISJX8NdZ50dfg3HMGMZEBYVOeVO9UZvCDbu9nt8gUUmer7EagPrPRMSv3ICAIY
-         QgQTmcQGEvQPA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 46DAB609D5;
-        Thu, 25 Nov 2021 18:44:02 +0000 (UTC)
-Subject: Re: [GIT PULL] asm-generic: syscall table updates
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
-References: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAK8P3a1JPS=3Zz3H9ptaAnqonnPUo546BP0rAAWT5KOcZEj55g@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-5.16-2
-X-PR-Tracked-Commit-Id: a0eb2da92b715d0c97b96b09979689ea09faefe6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b501b85957deb17f1fe0a861fee820255519d526
-Message-Id: <163786584228.16379.1846651949947500762.pr-tracker-bot@kernel.org>
-Date:   Thu, 25 Nov 2021 18:44:02 +0000
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>
+        id S1359377AbhKZCtB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 25 Nov 2021 21:49:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10179"; a="259497824"
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="259497824"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2021 18:37:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,263,1631602800"; 
+   d="scan'208";a="457536345"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 25 Nov 2021 18:37:02 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mqR6j-0007Kl-KP; Fri, 26 Nov 2021 02:37:01 +0000
+Date:   Fri, 26 Nov 2021 10:36:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ a0eb2da92b715d0c97b96b09979689ea09faefe6
+Message-ID: <61a0482b.PO+hprI2RskddE0L%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The pull request you sent on Thu, 25 Nov 2021 16:48:06 +0100:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: a0eb2da92b715d0c97b96b09979689ea09faefe6  futex: Wireup futex_waitv syscall
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-5.16-2
+elapsed time: 722m
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b501b85957deb17f1fe0a861fee820255519d526
+configs tested: 54
+configs skipped: 31
 
-Thank you!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211125
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
