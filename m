@@ -2,137 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F8046143E
-	for <lists+linux-arch@lfdr.de>; Mon, 29 Nov 2021 12:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A0E46145A
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Nov 2021 12:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbhK2L4P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 29 Nov 2021 06:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
+        id S237081AbhK2L6B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 29 Nov 2021 06:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237759AbhK2LyP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Nov 2021 06:54:15 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74256C08ED86
-        for <linux-arch@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id v203so41037243ybe.6
-        for <linux-arch@vger.kernel.org>; Mon, 29 Nov 2021 02:57:21 -0800 (PST)
+        with ESMTP id S231970AbhK2L4B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 29 Nov 2021 06:56:01 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678DEC0698E0
+        for <linux-arch@vger.kernel.org>; Mon, 29 Nov 2021 02:57:38 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id v11so35794795wrw.10
+        for <linux-arch@vger.kernel.org>; Mon, 29 Nov 2021 02:57:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
-        b=ErhOpdgigBGRX0iOA2ci/LrupvuM6+6c+q9rD2B6x1di+sFL9PVYGmzafYCayO999B
-         Ex51N+if313WKcW+gK1lj/OWtPvwfLDnTT20+eAv8YxxrR4g7rLnHIdzsTIvVAz0SrpQ
-         Ch6axdbEwb+a/M3Dt2tKAFVIFy0Y8iZuOwtZqXl1J60xk4GO/CqIzkuCM++XjDrDX06p
-         089vT34nfrhei7WTrhyk/M1T035mB+FNPNQ5Hd3oBtsviAPMtLS5mvE7ZDcnz+92hK94
-         07sMoak/mgTSYg0TcRsMzWsKiITVk9cvja0ME+E02kwQTfYZNPVDhNnY35dNNYcmygLp
-         iGDg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7vafQL9VRNu9gFf/4mCpAetbH+x6q7yQT0LZFBgrIEY=;
+        b=FpAGCEzpMCHDlrye0BEfBwWwvSDdjJvOXWO1p1/HTeFUBw51K/pUg7ZN8+2hhZV2HV
+         22JTf8MK/JHZYUDXEZbC+03TcrFop82Q+qtsYPzjpgh0a2kz2Tyj31pCNAlSo0pVU0EN
+         1s2wOz2tBmMVxpJwr8CJDRVHdSqJ9GcDNjGn9KsDQYIjSjL3pOQzcOX38J8iZtCO7cVf
+         1VsNFoQ43N5HhmH8x/M4In50SZ0JugEpRq/2UnLc5Mhi5/l/XYzd/9rvORCsTXUtfH9K
+         hKbSLcZgq5l3o1EzWNRfQzE9J6l1tKsCqXva0OANeH17ADW9gxG5Ur3Js5eQVOUl0wJ0
+         lk7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=/N2AzXdmQhj8cnrxf6yxwa23/wIatZRqd4goM9Q+IO8=;
-        b=pRsJ7ky7Hcw9Hr/rQHXrmRB6tkMP+Y4RerlNVT6KMoVDYWQAZVhQckwYsYIPbyg+Ur
-         vct8IJNZJLSgUNGCcylNB6uram92BTy00rfS+aroccbs21d0Rzzil5Y+e2q15D7VBX6g
-         rHwWRPmW5W6htZ0ZViZ2GV+s8aiSomy8LOz9U6uPRXyBtCS94+bRBSTp7ZVR4J4r3WWT
-         aU0QBZaXm57bG909oju0fNGFbOcOsiOczHSvPOHEcFrYjepL2Uyw/SdVXq51PKh4JjA8
-         qJM8PNcssMe35skaOWplh9mMOA+oMjzjBisqg7wyDEyeB7sBuBkplK+4XR3FZnSvSmpR
-         29Yw==
-X-Gm-Message-State: AOAM533SCMohSW070Qta5T3aSuDLeUZnD2qn0BPUnAG8AQ9WfAKj31fv
-        7I9i/2qM6lOvnn8L6LBc+dSqBATH1h1l5ATQ8Pw=
-X-Google-Smtp-Source: ABdhPJwDXAO1KxnCKDkkwiudCJqJuhpArYKiJQTg+eIzhjAbEBRvY4HWTqik/oBHDS4epB1bybFjcLt6vUq4kag2XME=
-X-Received: by 2002:a25:8052:: with SMTP id a18mr5454865ybn.634.1638183440729;
- Mon, 29 Nov 2021 02:57:20 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7vafQL9VRNu9gFf/4mCpAetbH+x6q7yQT0LZFBgrIEY=;
+        b=ac+DZ2/g2iHC18svlJMTbyxPRO3cFOCCNQHnlSrHnQe5JOwSKJLM7BibV5hOQGAUvX
+         PniI1AMJcb2VlXyccxIom7qV1qGwunx5hKebgPV/vL4QcVk0M6MDEk23nDg0o6yTzlKb
+         LrbybVAEKCsM0oJDZOYE3fC8pKAp/Yef9EVHDq2495Z6n6hbhbg0GC9VuIYqz+3Ypy9f
+         npjGaWHDPnWSwHJiF5DX11w5ngmJ65aLpOYNfvoy3/dCMoinZziUXwbF58wL4DOx0IXo
+         0TK4MMdwrmx7tJju8B64i1MaxfqAQHhDf6r3o84PiTy3zczYMe36KSCVh3sUOGub5e/E
+         Tslg==
+X-Gm-Message-State: AOAM533Z2aGKjAmXCkC6cKFkVRBF1kSTG28vdJodThoYVp097n6/4Lj0
+        U0OGe2hzUFoJrOSL0YZzDyznWg==
+X-Google-Smtp-Source: ABdhPJwAU8YPWeu2RrOY2XQ41C34yLkIywEO8EJrMwhVry4Q5OSTPeXL1PW8RxfOB2Xl3zforekjfA==
+X-Received: by 2002:adf:d082:: with SMTP id y2mr32476986wrh.214.1638183456845;
+        Mon, 29 Nov 2021 02:57:36 -0800 (PST)
+Received: from elver.google.com ([2a00:79e0:15:13:aaf:77c4:3d2:af75])
+        by smtp.gmail.com with ESMTPSA id n1sm16528943wmq.6.2021.11.29.02.57.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 02:57:36 -0800 (PST)
+Date:   Mon, 29 Nov 2021 11:57:30 +0100
+From:   Marco Elver <elver@google.com>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH v2 03/23] kcsan: Avoid checking scoped accesses from
+ nested contexts
+Message-ID: <YaSyGr4vW3yifWWC@elver.google.com>
+References: <20211118081027.3175699-1-elver@google.com>
+ <20211118081027.3175699-4-elver@google.com>
+ <YaSTn3JbkHsiV5Tm@boqun-archlinux>
 MIME-Version: 1.0
-Received: by 2002:a05:7010:178c:b0:1df:8029:4655 with HTTP; Mon, 29 Nov 2021
- 02:57:20 -0800 (PST)
-Reply-To: koffiaya202100@gmail.com
-From:   Koffi Aya <jindaratdaosornprasat2014@gmail.com>
-Date:   Mon, 29 Nov 2021 10:57:20 +0000
-Message-ID: <CAEU+xUtwV2_ndBWAkwUyRuwpTUmaYNsko=VW5FhYtsUrob4E3g@mail.gmail.com>
-Subject: Von Koffi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaSTn3JbkHsiV5Tm@boqun-archlinux>
+User-Agent: Mutt/2.0.5 (2021-01-21)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Von: Koffi Aya
-Liebste,
-Guten Tag und vielen Dank f=C3=BCr Ihre Aufmerksamkeit. Bitte, ich m=C3=B6c=
-hte, dass
-Sie meine E-Mail sorgf=C3=A4ltig lesen und mir helfen, dieses Projekt zu
-bearbeiten. Ich bin Miss Koffi Aya und m=C3=B6chte Sie in aller Bescheidenh=
-eit
-um Ihre Partnerschaft und Unterst=C3=BCtzung bei der =C3=9Cbertragung und A=
-nlage
-meiner Erbschaftsgelder in H=C3=B6he von 6.500.000,00 US-Dollar (sechs Mill=
-ionen
-f=C3=BCnfhunderttausend US-Dollar) bitten, die mein verstorbener geliebter =
-Vater
-vor seinem Tod bei einer Bank hinterlegt hat.
+On Mon, Nov 29, 2021 at 04:47PM +0800, Boqun Feng wrote:
+> Hi Marco,
+> 
+> On Thu, Nov 18, 2021 at 09:10:07AM +0100, Marco Elver wrote:
+> > Avoid checking scoped accesses from nested contexts (such as nested
+> > interrupts or in scheduler code) which share the same kcsan_ctx.
+> > 
+> > This is to avoid detecting false positive races of accesses in the same
+> 
+> Could you provide an example for a false positive?
+> 
+> I think we do want to detect the following race:
+> 
+> 	static int v = SOME_VALUE; // a percpu variable.
+> 	static int other_v = ... ;
+> 
+> 	void foo(..)
+> 	{
+> 		int tmp;
+> 		int other_tmp;
+> 
+> 		preempt_disable();
+> 		{
+> 			ASSERT_EXCLUSIVE_ACCESSS_SCOPED(v);
+> 			tmp = v;
+> 			
+> 			other_tmp = other_v; // int_handler() may run here
+> 			
+> 			v = tmp + 2;
+> 		}
+> 		preempt_enabled();
+> 	}
+> 
+> 	void int_handler() // an interrupt handler
+> 	{
+> 		v++;
+> 	}
+> 
+> , if I understand correctly, we can detect this currently, but with this
+> patch, we cannot detect this if the interrupt happens while we're doing
+> the check for "other_tmp = other_v;", right? Of course, running tests
+> multiple times may eventually catch this, but I just want to understand
+> what's this patch for, thanks!
 
-Ich m=C3=B6chte Ihnen versichern, dass dieser Fonds legal von meinem
-verstorbenen Vater erworben wurde und keinen kriminellen Hintergrund hat.
-Mein Vater hat diesen Fonds legal durch ein legitimes Gesch=C3=A4ft erworbe=
-n,
-bevor er w=C3=A4hrend seiner Gesch=C3=A4ftsreise zu Tode vergiftet wurde. D=
-er Tod
-meines Vaters wurde von seinen Verwandten, die ihn w=C3=A4hrend seiner
-Dienstreise begleiteten, vermutet. Denn nach 3 Monaten nach dem Tod meines
-Vaters begannen Seine Verwandten, alle Besitzt=C3=BCmer meines verstorbenen
-Vaters zu beanspruchen und zu verkaufen.
+The above will still be detected. Task and interrupt contexts in this
+case are distinct, i.e. kcsan_ctx differ (see get_ctx()).
 
-Die Verwandten meines verstorbenen Vaters wissen nichts von den
-6.500.000,00 US-Dollar (sechs Millionen f=C3=BCnfhunderttausend US-Dollar),=
- die
-mein verstorbener Vater auf die Bank eingezahlt hat und mein verstorbener
-Vater sagte mir heimlich, bevor er starb, dass ich in jedem Land nach einem
-ausl=C3=A4ndischen Partner suchen sollte meiner Wahl, wohin ich diese Gelde=
-r f=C3=BCr
-meine eigenen Zwecke =C3=BCberweise.
+But there are rare cases where kcsan_ctx is shared, such as nested
+interrupts (NMI?), or when entering scheduler code -- which currently
+has a KCSAN_SANITIZE := n, but I occasionally test it, which is how I
+found this problem. The problem occurs frequently when enabling KCSAN in
+kernel/sched and placing a random ASSERT_EXCLUSIVE_ACCESS_SCOPED() in
+task context, or just enable "weak memory modeling" without this fix.
+You also need CONFIG_PREEMPT=y + CONFIG_KCSAN_INTERRUPT_WATCHER=y.
 
-Bitte helfen Sie mir, dieses Geld f=C3=BCr gesch=C3=A4ftliche Zwecke in Ihr=
-em Land
-auf Ihr Konto zu =C3=BCberweisen. Ich habe diese Entscheidung getroffen, we=
-il
-ich viele Dem=C3=BCtigungen von den Verwandten meines verstorbenen Vaters
-erlitten habe. Zur Zeit habe ich Kommunikation mit dem Direktor der Bank,
-bei der mein verstorbener Vater dieses Geld hinterlegt hat. Ich habe dem
-Direktor der Bank die Dringlichkeit erkl=C3=A4rt, sicherzustellen, dass das=
- Geld
-ins Ausland =C3=BCberwiesen wird, damit ich dieses Land zu meiner Sicherhei=
-t
-verlassen kann. Der Direktor der Bank hat mir zugesichert, dass das Geld
-=C3=BCberwiesen wird, sobald ich jemanden vorlege, der den Geldbetrag in me=
-inem
-Namen f=C3=BCr diesen Zweck ehrlich entgegennimmt.
+The emphasis here really is on _shared kcsan_ctx_, which is not too
+common. As noted in the commit description, we need to "[...] setting up
+a watchpoint for a non-scoped (normal) access that also "conflicts" with
+a current scoped access."
 
-Seien Sie versichert, dass die Bank den Betrag auf Ihr Konto =C3=BCberweist=
- und
-es keine Probleme geben wird. Diese Transaktion ist 100% risikofrei und
-legitim. Ich bin bereit, Ihnen nach erfolgreicher =C3=9Cberweisung dieses G=
-eldes
-auf Ihr Konto 30% der Gesamtsumme als Entsch=C3=A4digung f=C3=BCr Ihren Auf=
-wand
-anzubieten. Sie werden mir auch helfen, 10% an Wohlt=C3=A4tigkeitsorganisat=
-ionen
-und Heime f=C3=BCr mutterlose Babys in Ihrem Land zu spenden.
+Consider this:
 
-Bitte alles, was ich m=C3=B6chte, ist, dass Sie f=C3=BCr mich als mein ausl=
-=C3=A4ndischer
-Partner auftreten, damit die Bank dieses Geld auf Ihr Konto =C3=BCberweist,
-damit ich in diesem Land leben kann. Bitte, ich brauche Ihre dringende
-Hilfe wegen meines jetzigen Zustands. Mit Ihrer vollen Zustimmung, mit mir
-zu diesem Zweck zusammenzuarbeiten, bekunden Sie bitte Ihr Interesse durch
-eine R=C3=BCckantwort an mich, damit ich Ihnen die notwendigen Informatione=
-n und
-die Details zum weiteren Vorgehen gebe. Ich werde Ihnen 30% des Geldes f=C3=
-=BCr
-Ihre Hilfe anbieten und Hilfestellung, damit umzugehen.
+	static int v;
+	int foo(..)
+	{
+		ASSERT_EXCLUSIVE_ACCESS_SCOPED(v);
+		v++; // preempted during watchpoint for 'v++'
+	}
 
-Ihre dringende Antwort wird gesch=C3=A4tzt.
-Mit freundlichen Gr=C3=BC=C3=9Fen
-Koffi Aya
+Here we set up a scoped_access to be checked for v. Then on v++, a
+watchpoint is set up for the normal access. While the watchpoint is set
+up, the task is preempted and upon entering scheduler code, we're still
+in_task() and 'current' is still the same, thus get_ctx() returns a
+kcsan_ctx where the scoped_accesses list is non-empty containing the
+scoped access for foo()'s ASSERT_EXCLUSIVE.
+
+That means, when instrumenting scheduler code or any other code called
+by scheduler code or nested interrupts (anything where get_ctx() still
+returns the same as parent context), it'd now perform checks based on
+the parent context's scoped access, and because the parent context also
+has a watchpoint set up on the variable that conflicts with the scoped
+access we'd report a nonsensical race.
+
+This case is also possible:
+
+	static int v;
+	static int x;
+	int foo(..)
+	{
+		ASSERT_EXCLUSIVE_ACCESS_SCOPED(v);
+		x++; // preempted during watchpoint for 'v' after checking x++
+	}
+
+Here, all we need is for the scoped access to be checked after x++, end
+up with a watchpoint for it, then enter scheduler code, which then
+checked 'v', sees the conflicting watchpoint, and reports a nonsensical
+race again.
+
+By disallowing scoped access checking for a kcsan_ctx, we simply make
+sure that in such nested contexts where kcsan_ctx is shared, none of
+these nonsensical races would be detected nor reported.
+
+Hopefully that clarifies what this is about.
+
+Thanks,
+-- Marco
