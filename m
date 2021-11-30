@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C6BA46332E
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Nov 2021 12:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5232A463321
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Nov 2021 12:47:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241242AbhK3LuX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 Nov 2021 06:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
+        id S236916AbhK3LuP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Nov 2021 06:50:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241127AbhK3Lte (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Nov 2021 06:49:34 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04114C06175C
-        for <linux-arch@vger.kernel.org>; Tue, 30 Nov 2021 03:45:51 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id z138-20020a1c7e90000000b003319c5f9164so13605426wmc.7
-        for <linux-arch@vger.kernel.org>; Tue, 30 Nov 2021 03:45:50 -0800 (PST)
+        with ESMTP id S241145AbhK3Ltj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Nov 2021 06:49:39 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A90C06174A
+        for <linux-arch@vger.kernel.org>; Tue, 30 Nov 2021 03:45:52 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id ke1-20020a056214300100b003b5a227e98dso29052196qvb.14
+        for <linux-arch@vger.kernel.org>; Tue, 30 Nov 2021 03:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=TQFyZU0v42DaaTkISoD0OFzde9Hlzhfr9CYPS/61CiQ=;
-        b=UzkPOK44rKyoX0ydzg9d6O+jrGkdKn2U4Uh9I6GaB3gkQKhjEvJW6OswApZ/DpFhIs
-         MjWkd+FkuLnMui5ECel20ebBFkuRLa1f1neQ6VVz1S7yCh0IvJGlwo8aeF9bhgAZqyug
-         l2zCEvskzXpYTMvQpQGB0z4ARki5+15v+PWKTCRoN0cGTSZ65LPhGkDFa7K5dBSQtt1+
-         LiZoJY4ePdc7NQgpEjukKVvNVBinKAvWLDa3Mfnn9KnFectfd/m0Z+qn/ceEmQlEYCrQ
-         OGNEtLuGhqXgJgSt12TdFVVE+Mz8qn5rbzRLOK/zD3ItiiBRgqjdDcz7tWKq+w3BIhpz
-         +2gg==
+        bh=rzdCErYR7QVJMqQ7C8iOEn+pKBOJL+BpLP2uqDT2sRI=;
+        b=iiJU/NFxnkO4QpNuEziwm44ZddXcfbqTjJ27RND0XQcNYVVoxyYjAqEozptVgUXNwN
+         tUotgFLhO6hTdCXy/8o38iy2aym7FJT+LW4h57+kXk+ITZwaPtmf/ukrKduYHtwrNNVy
+         u6zRnFErKVJc5tA07nIb20yQJs/rjFgBkkJfiMGCJ0+/frkqjjvq7sB5Qlsbun/G1B3v
+         mpVqufLXr0RiWnvRXu2PZPDLndJRxYoHPg3pEXSdStYWib1eEQIROpsu8lv6/UvQvgN4
+         KcSqzQSZ9rtkXbOEAqLYcx/YblyNiiImRh54NndbnYSq+4cJ1Y/85RKTI5bPUsrRqqxr
+         ZZsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=TQFyZU0v42DaaTkISoD0OFzde9Hlzhfr9CYPS/61CiQ=;
-        b=a0L6vgwQdpKoh2fmmsvxT3XHQCIiSsvcjhx1Mat8HZg6XHnyE8o2E8ByZC/2Cn2n75
-         f2vUFLi33aIXwoIttvEMCszChqmhvZXNLfvqMGzwkGqJNkp86NaLyq2IVuReErpvlNht
-         A3Yroe7fXfUyQ16n6HF26zoDcEyjeCSb5sbDRkTy8nZfG+oohbhPcPxlgHJbCrazgn6T
-         nsGBbD9BggW96LauOfPwkbLPlUXbTPGiCflJUh/fAVOYxD7KNGy/mxT8tCgQ+cEKyl0s
-         8IOB+abyRGSudjXIypmqz+fWHIZxT7DSHlIIQxf+MoaZw+bbTSLpBCL494CI4BcM2nnw
-         o37g==
-X-Gm-Message-State: AOAM532MY20wwZ9dVDfrz1JLo2v0zptLGqh36bim4ziDxLV88F0XOrBz
-        TYpTsaN7Q5AIodSSdVlPcWvDseanPw==
-X-Google-Smtp-Source: ABdhPJxb0DkHs7VvMvArdCvCQrK9MrDdf3hAA2QD7Q29GE02b72kjglRFvit2CdEhNhUNiK6zoXiTRV6/Q==
+        bh=rzdCErYR7QVJMqQ7C8iOEn+pKBOJL+BpLP2uqDT2sRI=;
+        b=LLwNu/37zIkd4EBSa/09WVL2YsNQsZ9cmZDrbSlBkxfrstsN7LuUMd1UX8VwRZQAfO
+         pQohOcrb+tGllVT7X/J7VPUPqr1+bpVdClcZJD5VKn3SpXmzz2v+GSg8NVg4aDbtaMbY
+         UeAeBb/sRLO86+f+DHP28Zw0yD1UJ5+0p5jd2vgSNKcI11FQcHk04X2ywkYkr/38fo6/
+         w1IcZY9LlJv4F2ReC5CRBuXb8SnUjQYyaVtAxUlNGxFKoAwG7lpnrQGJRZQO8tlTZqlv
+         eCPOCMJQfvvdsO50M/arHL2tnSjXOvwI6GLGXk2M3NmZS6zqdnqoMBBtrgMz+I1pzOo9
+         Gjww==
+X-Gm-Message-State: AOAM530xzA0Rua4d5nF/xroebsBkBP24/N3MGVwikedvQuiigkpi9dmA
+        8gHqHVXnMunQUAhdeZ+A55+rRYektg==
+X-Google-Smtp-Source: ABdhPJxS2DvHFjm5rRAa2Cv18Mr86xucn8I+904NmrEkNJGoQhVDVa+JTgno3MDa7PBFHMKHIzeyW8Gdjg==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:86b7:11e9:7797:99f0])
- (user=elver job=sendgmr) by 2002:a05:600c:19c8:: with SMTP id
- u8mr4203223wmq.155.1638272749477; Tue, 30 Nov 2021 03:45:49 -0800 (PST)
-Date:   Tue, 30 Nov 2021 12:44:27 +0100
+ (user=elver job=sendgmr) by 2002:ac8:5c45:: with SMTP id j5mr51253786qtj.58.1638272751779;
+ Tue, 30 Nov 2021 03:45:51 -0800 (PST)
+Date:   Tue, 30 Nov 2021 12:44:28 +0100
 In-Reply-To: <20211130114433.2580590-1-elver@google.com>
-Message-Id: <20211130114433.2580590-20-elver@google.com>
+Message-Id: <20211130114433.2580590-21-elver@google.com>
 Mime-Version: 1.0
 References: <20211130114433.2580590-1-elver@google.com>
 X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v3 19/25] x86/qspinlock, kcsan: Instrument barrier of pv_queued_spin_unlock()
+Subject: [PATCH v3 20/25] mm, kcsan: Enable barrier instrumentation
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Alexander Potapenko <glider@google.com>,
@@ -71,31 +71,40 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-If CONFIG_PARAVIRT_SPINLOCKS=y, queued_spin_unlock() is implemented
-using pv_queued_spin_unlock() which is entirely inline asm based. As
-such, we do not receive any KCSAN barrier instrumentation via regular
-atomic operations.
+Some memory management calls imply memory barriers that are required to
+avoid false positives. For example, without the correct instrumentation,
+we could observe data races of the following variant:
 
-Add the missing KCSAN barrier instrumentation for the
-CONFIG_PARAVIRT_SPINLOCKS case.
+                   T0           |           T1
+        ------------------------+------------------------
+                                |
+         *a = 42;    ---+       |
+         kfree(a);      |       |
+                        |       | b = kmalloc(..); // b == a
+          <reordered> <-+       | *b = 42;         // not a data race!
+                                |
+
+Therefore, instrument memory barriers in all allocator code currently
+not being instrumented in a default build.
 
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- arch/x86/include/asm/qspinlock.h | 1 +
- 1 file changed, 1 insertion(+)
+ mm/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/include/asm/qspinlock.h b/arch/x86/include/asm/qspinlock.h
-index d86ab942219c..d87451df480b 100644
---- a/arch/x86/include/asm/qspinlock.h
-+++ b/arch/x86/include/asm/qspinlock.h
-@@ -53,6 +53,7 @@ static inline void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
+diff --git a/mm/Makefile b/mm/Makefile
+index d6c0042e3aa0..7919cd7f13f2 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -15,6 +15,8 @@ KCSAN_SANITIZE_slab_common.o := n
+ KCSAN_SANITIZE_slab.o := n
+ KCSAN_SANITIZE_slub.o := n
+ KCSAN_SANITIZE_page_alloc.o := n
++# But enable explicit instrumentation for memory barriers.
++KCSAN_INSTRUMENT_BARRIERS := y
  
- static inline void queued_spin_unlock(struct qspinlock *lock)
- {
-+	kcsan_release();
- 	pv_queued_spin_unlock(lock);
- }
- 
+ # These files are disabled because they produce non-interesting and/or
+ # flaky coverage that is not a function of syscall inputs. E.g. slab is out of
 -- 
 2.34.0.rc2.393.gf8c9666880-goog
 
