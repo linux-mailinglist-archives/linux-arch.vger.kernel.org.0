@@ -2,107 +2,107 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB0C466CED
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Dec 2021 23:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A505466DC4
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 00:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377548AbhLBWhS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Dec 2021 17:37:18 -0500
-Received: from mga17.intel.com ([192.55.52.151]:46501 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349757AbhLBWgr (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:36:47 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="217546806"
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="217546806"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 14:33:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="748394126"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga005.fm.intel.com with ESMTP; 02 Dec 2021 14:33:17 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B2MWmYf028552;
-        Thu, 2 Dec 2021 22:33:14 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     linux-hardening@vger.kernel.org, x86@kernel.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH v8 14/14] maintainers: add MAINTAINERS entry for FG-KASLR
-Date:   Thu,  2 Dec 2021 23:32:14 +0100
-Message-Id: <20211202223214.72888-15-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211202223214.72888-1-alexandr.lobakin@intel.com>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+        id S1356582AbhLBXdS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Dec 2021 18:33:18 -0500
+Received: from brightrain.aerifal.cx ([216.12.86.13]:42150 "EHLO
+        brightrain.aerifal.cx" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353903AbhLBXdS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Dec 2021 18:33:18 -0500
+Date:   Thu, 2 Dec 2021 18:29:54 -0500
+From:   Rich Felker <dalias@libc.org>
+To:     Zack Weinberg <zack@owlfolio.org>
+Cc:     linux-arch@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ltp@lists.linux.it
+Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
+Message-ID: <20211202232954.GI7074@brightrain.aerifal.cx>
+References: <YZvIlz7J6vOEY+Xu@yuki>
+ <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
+ <20211202153422.GH7074@brightrain.aerifal.cx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202153422.GH7074@brightrain.aerifal.cx>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add an entry for FG-KASLR containing the maintainers, reviewers,
-public mailing lists, files and so on.
+On Thu, Dec 02, 2021 at 10:34:23AM -0500, Rich Felker wrote:
+> On Mon, Nov 22, 2021 at 10:19:59PM +0000, Zack Weinberg via Libc-alpha wrote:
+> > On Mon, Nov 22, 2021, at 4:43 PM, Cyril Hrubis wrote:
+> > > This changes the __u64 and __s64 in userspace on 64bit platforms from
+> > > long long (unsigned) int to just long (unsigned) int in order to match
+> > > the uint64_t and int64_t size in userspace.
+> > ....
+> > > +
+> > > +#include <asm/bitsperlong.h>
+> > > +
+> > >  /*
+> > > - * int-ll64 is used everywhere now.
+> > > + * int-ll64 is used everywhere in kernel now.
+> > >   */
+> > > -#include <asm-generic/int-ll64.h>
+> > > +#if __BITS_PER_LONG == 64 && !defined(__KERNEL__)
+> > > +# include <asm-generic/int-l64.h>
+> > > +#else
+> > > +# include <asm-generic/int-ll64.h>
+> > > +#endif
+> > 
+> > I am all for matching __uN / __sN to uintN_t / intN_t in userspace, but may I suggest the technically simpler and guaranteed-to-be-accurate
+> > 
+> >  /*
+> > - * int-ll64 is used everywhere now.
+> > + * int-ll64 is used everywhere in kernel now.
+> > + * In user space match <stdint.h>.
+> >   */
+> > +#ifdef __KERNEL__
+> >  # include <asm-generic/int-ll64.h>
+> > +#elif __has_include (<bits/types.h>)
+> > +# include <bits/types.h>
+> > +typedef __int8_t __s8;
+> > +typedef __uint8_t __u8;
+> > +typedef __int16_t __s16;
+> > +typedef __uint16_t __u16;
+> > +typedef __int32_t __s32;
+> > +typedef __uint32_t __u32;
+> > +typedef __int64_t __s64;
+> > +typedef __uint64_t __u64;
+> > +#else
+> > +# include <stdint.h>
+> > +typedef int8_t __s8;
+> > +typedef uint8_t __u8;
+> > +typedef int16_t __s16;
+> > +typedef uint16_t __u16;
+> > +typedef int32_t __s32;
+> > +typedef uint32_t __u32;
+> > +typedef int64_t __s64;
+> > +typedef uint64_t __u64;
+> > +#endif
+> > 
+> > The middle clause could be dropped if we are okay with all uapi
+> > headers potentially exposing the non-implementation-namespace names
+> > defined by <stdint.h>. I do not know what the musl libc equivalent
+> > of <bits/types.h> is.
+> 
+> We (musl) don't have an equivalent header or __-prefixed versions of
+> these types.
+> 
+> FWIW I don't think stdint.h exposes anything that would be problematic
+> alongside arbitrary use of kernel headers.
 
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
----
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Also, per glibc's bits/types.h:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 360e9aa0205d..336cae4c08b4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7853,6 +7853,18 @@ L:	platform-driver-x86@vger.kernel.org
- S:	Maintained
- F:	drivers/platform/x86/fujitsu-tablet.c
- 
-+FUNCTION-GRAINED KASLR (FG-KASLR)
-+M:	Alexander Lobakin <alexandr.lobakin@intel.com>
-+R:	Kristen Carlson Accardi <kristen@linux.intel.com>
-+R:	Kees Cook <keescook@chromium.org>
-+L:	linux-hardening@vger.kernel.org
-+S:	Supported
-+F:	Documentation/security/fgkaslr.rst
-+F:	arch/x86/boot/compressed/fgkaslr.c
-+F:	arch/x86/boot/compressed/utils.c
-+F:	arch/x86/boot/compressed/vmlinux.symbols
-+F:	scripts/generate_text_sections.pl
-+
- FUSE: FILESYSTEM IN USERSPACE
- M:	Miklos Szeredi <miklos@szeredi.hu>
- L:	linux-fsdevel@vger.kernel.org
--- 
-2.33.1
+/*
+ * Never include this file directly; use <sys/types.h> instead.
+ */
 
+it's not permitted (not supported usage) to #include <bits/types.h>.
+So I think the above patch is wrong for glibc too. As I understand it,
+this is general policy for bits/* -- they're only intended to work as
+included by the libc system headers, not directly by something else.
+
+Rich
