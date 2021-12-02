@@ -2,102 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BCCC4665E3
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Dec 2021 15:55:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDCC466614
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Dec 2021 16:02:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358824AbhLBO7J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Dec 2021 09:59:09 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:44077 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358808AbhLBO7H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Dec 2021 09:59:07 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 526943201E78;
-        Thu,  2 Dec 2021 09:55:42 -0500 (EST)
-Received: from imap45 ([10.202.2.95])
-  by compute5.internal (MEProxy); Thu, 02 Dec 2021 09:55:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=owlfolio.org; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=+NUeMvGno9VoUYgWj62BzbUCTMF03jM
-        8iOcYMnHe6Jo=; b=fXW8aaVpmBW0/bI+IK7QhkiXw/PwfyVTQvdrQUgpwb8rtxt
-        Bhj3LCCwa7h7WivXSanhF7lS3+yEHhQAPfAkkYHgounXWqC9/jjsYzyFbt6OkHXJ
-        MY+6HDtAplln7oTeDwS3Z5nnSpBXGTH/1I1ki1LKkcLHdFJ7oMNy+O1QkntaqCVu
-        I0e0wY0KtziawAx2fVgJnOfiPnawqPdhhg9A+EXR82D56bI5YQ5qwd2zjpeQAxgf
-        azmL84TDqhKIa6oCbgDc3jWKUOB+KvQx2Upd9UfjxdwU6xaQgakjg754Ckqky/lc
-        GnswU5ksKRovwMGoC28I22pNdNvhQdMJdG3v0uQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=+NUeMv
-        Gno9VoUYgWj62BzbUCTMF03jM8iOcYMnHe6Jo=; b=N1vMm3qGdST4hCH7kL3RNl
-        /GCF4UHXQUizEdUMjbVZhouOWFOooNfpT+sKg34sGMAm+npWbXBcnYpjEVmp11rZ
-        MXsCs5vmcvCpEdzqm2VbENyZwVCamSbugXGI+ujFR75dSnaRJCrqrwDwyjgb0+FC
-        OZXtbVcVRvqKngu/s5xe5plh6YHbXgqU16mumDwUmYCwHJnneMszqEsP2I/zFGLL
-        WDURx63NSU4j9w7GlDUZZSZNlAufvNqH7OKHPPvvLKAyvFfnTOy9gEY43s6x4hmr
-        +n5OKiWAUOS4N/uIh8tFV8cfSUEXoMUsu+A6gLHmp9lmRloVh7Hopr8ic3HXbSPA
-        ==
-X-ME-Sender: <xms:bd6oYTJIRs7SIavIDblVThWXtpVtILcxZaWGLjtG4V1ShjldXreNqw>
-    <xme:bd6oYXLF1yriDEudSSU78SL6SmCNDjygbBHIezocgYR1D3yII4Vma4wksrQYngoI_
-    Y7q2Gxr8Ua54ouaM1E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieehgdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfkggrtghk
-    ucghvghinhgsvghrghdfuceoiigrtghksehofihlfhholhhiohdrohhrgheqnecuggftrf
-    grthhtvghrnhephfeuhfevueffteffgfejtefgkeekheeftdeflefgheffffevheekleef
-    gfehffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epiigrtghksehofihlfhholhhiohdrohhrgh
-X-ME-Proxy: <xmx:bd6oYbvVu_Et3kkzuONhU23glxmXwesHDbn4RiGBk-QOAcNMIVMuvQ>
-    <xmx:bd6oYcZuRyYC_eXeJJMCbIL7JTc2-aBPFynrjafJO5y_IcIvtyZ95A>
-    <xmx:bd6oYabSu4i0RvdCrUTgNhJH4SeS9WZzBTty8aVM1k6OXFfG1ya-qQ>
-    <xmx:bd6oYfMdfg56CVuu2VY762Pef75SJbhFPFwUpW4anNknuL3vF7OiAQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 13EC024A0074; Thu,  2 Dec 2021 09:55:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
-Mime-Version: 1.0
-Message-Id: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
-In-Reply-To: <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <1618289.1637686052@warthog.procyon.org.uk>
- <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com> <YaTAffbvzxGGsVIv@yuki>
- <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
-Date:   Thu, 02 Dec 2021 09:55:20 -0500
-From:   "Zack Weinberg" <zack@owlfolio.org>
-To:     "Arnd Bergmann" <arnd@arndb.de>, "Cyril Hrubis" <chrubis@suse.cz>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        id S1358166AbhLBPFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Dec 2021 10:05:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:46548 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358245AbhLBPFW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Dec 2021 10:05:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638457319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/3xlIYEWyvboPKd2VFHttveDDWJjCPblrUV213W3J78=;
+        b=FpMoLsxVC4o96Z0B/G8rxZyW0UOs9PAsH6pIoU8eVdXCx0SmrD3rXlQUP4VdD6MbMc7E8H
+        5toimUcIB3NHLYUo45C8S4HacR5syfzPQe1YgJT/cNPCGPAMVEatdZ/5ilDXYJL9I2JEkH
+        DVseYmg/Oi8sTF/IC08ngJhnivqOs4Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-538-Z6f8F3GTO3ux06V1OWFmmg-1; Thu, 02 Dec 2021 10:01:58 -0500
+X-MC-Unique: Z6f8F3GTO3ux06V1OWFmmg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6D97294EE3;
+        Thu,  2 Dec 2021 15:01:56 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 256E85F4ED;
+        Thu,  2 Dec 2021 15:01:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
+References: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com> <YZvIlz7J6vOEY+Xu@yuki> <1618289.1637686052@warthog.procyon.org.uk> <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com> <YaTAffbvzxGGsVIv@yuki> <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
+To:     "Zack Weinberg" <zack@owlfolio.org>
+Cc:     dhowells@redhat.com, "Arnd Bergmann" <arnd@arndb.de>,
+        "Cyril Hrubis" <chrubis@suse.cz>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         libc-alpha@sourceware.org,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David Howells" <dhowells@redhat.com>,
         "David Laight" <David.Laight@aculab.com>,
         "ltp@lists.linux.it" <ltp@lists.linux.it>
 Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Type: text/plain
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <913508.1638457313.1@warthog.procyon.org.uk>
+Date:   Thu, 02 Dec 2021 15:01:53 +0000
+Message-ID: <913509.1638457313@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 29, 2021, at 9:34 AM, Arnd Bergmann wrote:
-> On Mon, Nov 29, 2021 at 12:58 PM Cyril Hrubis <chrubis@suse.cz> wrote:
->>
->> What about guarding the change with __STDINT_COMPATIBLE_TYPES__
+Zack Weinberg <zack@owlfolio.org> wrote:
 
-In user space, I don't see a compelling need for backward compatibility?  User space's expectation is that the types are *already* the same and we (glibc) regularly get bug reports because they aren't.
+> I could be persuaded otherwise with an example of a program for which
+> changing __s64 from 'long long' to 'long' would break *binary* backward
+> compatibility, or similarly for __u64.
 
-I could be persuaded otherwise with an example of a program for which changing
-__s64 from 'long long' to 'long' would break *binary* backward compatibility, or
-similarly for __u64.
+C++ could break.
 
-> I don't think we can include stdint.h here, the entire point of the custom
-> kernel types is to ensure the other kernel headers can use these types
-> without relying on libc headers.
+David
 
-If __KERNEL__ is not defined, though, there should be no issue, right?
-
-From user space's perspective, it's an ongoing source of problems whenever __uN isn't exactly the same "underlying type" as uintN_t, same for __sN and intN_t.  We would really like it if the uapi headers, when included from user space, deferred to the C library for the definitions of these types.
-
-<stdint.h> does define a lot of things beyond just the fixed-width types, and it defines names in the application namespace (i.e. with no __ prefix).  Perhaps we could come to some agreement on a private header, provided by libcs, that *only* defined __{u,}int{8,16,32,64}_t.  glibc already has <bits/types.h> which promises
-to define only __-prefix names, but it defines a lot of other types as well (__dev_t, __uid_t, __pid_t, __time_t, etc etc etc).
-
-zw
