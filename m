@@ -2,93 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D628B465C0A
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Dec 2021 03:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E1546619C
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Dec 2021 11:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352292AbhLBCQv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Dec 2021 21:16:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S241409AbhLBKpS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Dec 2021 05:45:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234798AbhLBCQu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Dec 2021 21:16:50 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F47C061748
-        for <linux-arch@vger.kernel.org>; Wed,  1 Dec 2021 18:13:28 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id nn15-20020a17090b38cf00b001ac7dd5d40cso3360542pjb.3
-        for <linux-arch@vger.kernel.org>; Wed, 01 Dec 2021 18:13:28 -0800 (PST)
+        with ESMTP id S237400AbhLBKpR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Dec 2021 05:45:17 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6045CC06174A;
+        Thu,  2 Dec 2021 02:41:55 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id v203so72082212ybe.6;
+        Thu, 02 Dec 2021 02:41:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xqdq69bklkVGPaiuC/hhcniUDsb69a5Tsomp+eMdT8Y=;
-        b=kLe2Jr2E6gqbImzVXFbWuWelxOvMTjUr3eE3r6UXGeXlSFHQJujz3lKGG1L8GrT/jA
-         tZc+qlJVZ58JjH0g5XNMGk6jNl01J+5YdmbMgSs4RYG+rZnunYfoVS5CVwrghZldDJyO
-         QsL/vfDrNDDfrswvVpKh4G3/Rp546pliFVtuK/l3YPREcTeI5wXswL8GsLhOo8t+L3zO
-         eEWvcu/xAKtGB5MCBINyHO9v189tvqdZBzA343XYcBSiMvbmvZ5h5HhvMN1neTO3sFuf
-         4KjN5JhpI1gvBnhZ1ekaA2hzk6QsMmK5uzhPhUAXOQETZO338FaIlVCWBJjU9Mdq9WON
-         fmYQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=m5JL04vDvVP0L5N5migMb6NSCXdPubj2/VKuNaq+XiI=;
+        b=eBi3Q4kCb6syXTo3iEwFbwriGPp6GE4eLe85/a3zx0SHECuMRF1m6ce/TvbbrZnma5
+         JVfeRXe/Yvo9iFiSdKVd7wClvXppaYYEQIY5+LK0k9bBIWGCzyYm8P5tAPApmk6iHBv8
+         c8Px+soczlUiZVsQbHAI7YV/tmcxj5ZWeNonhKpmwi22ICYkpc7mYV13Laestet3Bch8
+         z+IKgzyOy3OjcHFAAOAkpqv6E+sK/ZIWLKrdCoOgRaUMWqiVF3CIGXlmzStEYJ1QEUwb
+         84GEuNiUuQOx+kSC4oOtSSmuujvvlBGYuWaO/GBMKEyDFB2/IxxMgE/GC+wnIGe7egQx
+         Gfeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xqdq69bklkVGPaiuC/hhcniUDsb69a5Tsomp+eMdT8Y=;
-        b=F/Jz+QVlca2VS1CoC0HkSL3RtOZdBSUdwtX4bDa1Kcy9exxzJukV8oa4OhMof6f7d7
-         ObMovHAFQKft2d4riwaw5iej4yt/oCieGvaso8v7/8DzkovceERmtUVVFgay+swrzWM6
-         HF28wD/dacKJ7Yc0ZdEcgOPq7D6PN5UtUQdFo6bfDVCWmn+eV4zjZ2Y27/6vqn4xHy93
-         12N2zMKcVJtKApvI1IGJFlkmuG0LsDpQwBLX8bgk9nt7pJp3V9Sf+FGG9qAd0V90wC9l
-         6v35SGIoM0sgSYhKNI+wo7QgPMxaf1ubGUa/m3TlbnfxoPdMWl1MmztZ/B38hjwszcAw
-         7JHQ==
-X-Gm-Message-State: AOAM530WvnTaut26NgF3Xrhf5f9zBd3dUN4dIFoX4jGp2+BlmfhioHCA
-        GCfZjmA436vplW8cxI/haP9RbQ==
-X-Google-Smtp-Source: ABdhPJwI9/kW+841BCq3bJVjpyet3MmhhrawiCLnHAmmZ9PuYqso3ZTZlCgmtcoT/lCxdVVnUZYA0g==
-X-Received: by 2002:a17:90b:92:: with SMTP id bb18mr2454366pjb.133.1638411208204;
-        Wed, 01 Dec 2021 18:13:28 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j7sm1152501pfc.74.2021.12.01.18.13.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 18:13:27 -0800 (PST)
-Date:   Thu, 2 Dec 2021 02:13:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2 8/8] KVM: x86: Add checks for reserved-to-zero Hyper-V
- hypercall fields
-Message-ID: <YagrxIknF9DX8l8L@google.com>
-References: <20211030000800.3065132-1-seanjc@google.com>
- <20211030000800.3065132-9-seanjc@google.com>
- <87v91cjhch.fsf@vitty.brq.redhat.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=m5JL04vDvVP0L5N5migMb6NSCXdPubj2/VKuNaq+XiI=;
+        b=a64p4xSPtQZfz9mLiqe3PWsaA948x0/CQki9GEtXSb32TDCtO1HuEWvWbc3rdUaHBz
+         uEADUrSMLJwx3ccjBXXeCiOkhoN/oh/zpWUD9RsH7+6FpHgZ9yQQGDNtBfghGvrrVlEl
+         xy7acU3KzSauZ0PPnxFRuyoQfd6cSowGdfvDRDO6QSOWKDHtEE1XMu6AaSjLgjObyk2V
+         fvS9z989PPSdcl8QGW9rCzB7zHUNLkjbeRochKEkUK19AdiM/fE5YSPP8F/FWiM4+zMi
+         9K3KJknqBPOyqDXqJN5eHXrqfHY/oP8sVQTFHgXZZ1EngjEA7HESKQEhSy5NLIZT5Wov
+         FDsA==
+X-Gm-Message-State: AOAM5332L1/BGVK5ir2eNdbKvcOJo02WnQGNoppFGyD0cykm/Wgg5awQ
+        Lw9D+1cZxPjNrCnuWkKsLmvQMcRzzoEqKrscGpc=
+X-Google-Smtp-Source: ABdhPJzzC3vpDaSSH8LjbvDWfHzCLmqqlhNKYuUrNvmFM70E+LI/IDssiDqwWYnKRhibt+SgvKEE46XrD4VVyWuzFgk=
+X-Received: by 2002:a25:fc24:: with SMTP id v36mr15056218ybd.588.1638441714603;
+ Thu, 02 Dec 2021 02:41:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v91cjhch.fsf@vitty.brq.redhat.com>
+From:   fei luo <morphyluo@gmail.com>
+Date:   Thu, 2 Dec 2021 18:41:43 +0800
+Message-ID: <CAMgLiBvwiuG8Awezes8DoBrqP-tk4zHpTdB+gYbBrqkWDmdnEQ@mail.gmail.com>
+Subject: [RFD] Clear virtual machine memory when virtual machine is turned off
+To:     mike.kravetz@oracle.com, akpm@linux-foundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Nov 01, 2021, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > Add checks for the three fields in Hyper-V's hypercall params that must
-> > be zero.  Per the TLFS, HV_STATUS_INVALID_HYPERCALL_INPUT is returned if
-> > "A reserved bit in the specified hypercall input value is non-zero."
-> >
-> > Note, the TLFS has an off-by-one bug for the last reserved field, which
-> > it defines as being bits 64:60.  The same section states "The input field
-> > 64-bit value called a hypercall input value.", i.e. bit 64 doesn't
-> > exist.
-> 
-> This version are you looking at? I can't see this issue in 6.0b
+Hi,
 
-It's the web-based documentation, the 6.0b PDF indeed does not have the same bug.
+When running the kvm virtual machine in Linux, because the virtual
+machine may contain sensitive data, the user may not want this
+data to remain in the memory after the virtual machine is turned off.
 
-https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/hypercall-interface#hypercall-inputs
+Although this part of memory will be cleared before being reused by
+user-mode programs , But the sensitive data staying in the memory
+for a long time will undoubtedly increase the risk of information leakage,
+So I wonder whether it is possible to add a flag (like MAP_UNMAPZERO)
+to the mmap(2) system call to indicate that the mapped memory needs
+to be cleared zero when munmap(2) called or when the program exits.
+
+Of course, the page clear operation not only occurs when munmap(2)
+called or program exits, but also needs to consider scenes such as
+page migration, swap, balloon etc.
+
+When reusing the page that has been cleared, there is no need to clear it
+again, which also speeds up the memory allocation of user-mode programs.
+
+Is this feature feasible?
