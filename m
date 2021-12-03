@@ -2,136 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34845467BD3
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 17:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B40467D22
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 19:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382212AbhLCQzJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 11:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382228AbhLCQzF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 11:55:05 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB0CC061751;
-        Fri,  3 Dec 2021 08:51:41 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id x131so3413112pfc.12;
-        Fri, 03 Dec 2021 08:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gwi5v9qtUWNkWjS5o3WH11GAvDMXz6rWxjTjENaT30s=;
-        b=LZeUpNxTPd0EXcLHcrWRi/2ayZQyrQjvM+/qr0rP8vFQqb4dFzLJtXIAS8fhWqfz9f
-         u1oWDEobPzQQtl4sAxYhAzVcUlTaSIdS/RN3TsMo2tPjWsg6/O5irwdrxi/yr89yu50E
-         6zskiZouyvljrobD5PWLduCSy0zTsly404ZX7IJBw2DNkxnYqZeUyRBRrsWpTcMd+ZOe
-         u1/GkzbymXp1qYCuYPt3RFusJEn7GGYcymFLp6jRYiwZj4ZIHFEnMEUeMVwsO29ud72z
-         rJ/Dqy8ky6YIag0E1te+Aq274vMY7wxxiQdKiWqUxQ3ikCW0Z7IXRKTPyUha8nqjTSIW
-         8OeA==
+        id S1343509AbhLCSXl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Dec 2021 13:23:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:20645 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241557AbhLCSXk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 13:23:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638555616;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qp4pzqcovXo9/75a+fOVBz8sXHQU3hxHlnuUjFxWvy0=;
+        b=OwJEAOoFVlyuIZ0j7BJTvWgX/92f61CWsURsDuSZGHo8HG5332ZA4Ad1s4pQS5yVDjKGXC
+        LLbEZJcGWy7RkQSyJT2npCUNg7k+QzxS0W1YFB2AGGZ2jkG4ymEA1ch0PTQKsYQD4lD4lF
+        7tPHHIvgLP4rFMkG9o1XS/CjOCysDpM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-E3SZtoCOPC6c5FlvWZW_uw-1; Fri, 03 Dec 2021 13:20:15 -0500
+X-MC-Unique: E3SZtoCOPC6c5FlvWZW_uw-1
+Received: by mail-wm1-f71.google.com with SMTP id g80-20020a1c2053000000b003331a764709so3818057wmg.2
+        for <linux-arch@vger.kernel.org>; Fri, 03 Dec 2021 10:20:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gwi5v9qtUWNkWjS5o3WH11GAvDMXz6rWxjTjENaT30s=;
-        b=gzbjgFArWs1Qxj1waaoepUjE2bz2mfzgwQS6rhQNdBCnqSdpm0L1BcV1ekefod3QFe
-         zDmo7KRfLzebPTpOGKU6J5+OVsj8GvGnE6dd5E9DNaIAXTOkN3Rt3lI9YDTcNhoc8eEr
-         oFRdsEUy1NvY2uQd/HgsJCS6fbYmi5KUPDA2dmkm/Bt83b8v84tVp6tCUgwXzOD5Wf2u
-         2Zvy9cKJHTlxVf00+ZMYfgxq6NWfypTNfKSLP9QYUxZ6GTG7opDVB4F7cix+drVYe3zn
-         RUh438/1mE9/1CupBKFt8iA+jfp9kUk+B7lE/Cs6sDUPh8lQrHaJaUf6U0Z7+Wx713fU
-         grEQ==
-X-Gm-Message-State: AOAM533bO6UQAOHPsujvF3g1/o8CT6x00IE1C1dlG6setguDhW2OH/2T
-        B+c3Qk2l6rd9fX0fjL7Aic9fzYCcSqabKCwxI38=
-X-Google-Smtp-Source: ABdhPJzpOHOaaZjZjKrJWMwkfziEkarJeedQt9d36XOYqS8Ki8b+NdSRElS4KnL2lchHl3m6MaWEIlKOo0gdxOnjdrc=
-X-Received: by 2002:a63:4f42:: with SMTP id p2mr5374964pgl.381.1638550300680;
- Fri, 03 Dec 2021 08:51:40 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Qp4pzqcovXo9/75a+fOVBz8sXHQU3hxHlnuUjFxWvy0=;
+        b=HD5Ndp3Oh5ABnaQtX6oII6zTT4JrgH4HYEsPGodwjGtn5WApDoCDR5r6JT8jzANnVo
+         fgq9o+YhmWotIwjpy9Rt+eRmxuj0VHIF3fQSE7LMXjCaoAe+OlzAoD9buUezHs/Yfh6x
+         t6ylYIQDLRAd1IcNPd/wB1q7owZPFyZYxUyMycVOShEAY+qUMbwO9fPwJcabE17kXfHs
+         /365szOzJY+t+Gt8YX9DLnMV8eZbFiHukUDF5HP/Qb1KOilfQORLNxQKppW8zIaBwwDO
+         3Op3lTCoJvO19Hpvn+wcHYQA08rWhqiuYnfkvCQtt6xdaGRoH4FMl/W6NBy/CyVwJ6R8
+         L53Q==
+X-Gm-Message-State: AOAM531AWnARdSryUpyLIAXDHEMEoSsIfMCB+rQxlVxceu0e0NlPIRFg
+        PCC+mxKZD+PtiN3B+QMuz4UzXjXpu3kLQSa9813n+QDTDK9YzAq13Ivk3PxrgR8Cf5ywEGgo2rZ
+        IgiX+kcSRiw50b0qwlGWEHw==
+X-Received: by 2002:a7b:c76e:: with SMTP id x14mr17069255wmk.27.1638555614158;
+        Fri, 03 Dec 2021 10:20:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx8xAEiGFx9TsgLW9UA2xjJDvafWSl28XDQ3r53p/Xb3u9csBM68fI+lfU+MsaZKJ/z3RYnlg==
+X-Received: by 2002:a7b:c76e:: with SMTP id x14mr17069223wmk.27.1638555613996;
+        Fri, 03 Dec 2021 10:20:13 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f44:9200:3344:447e:353c:bf0b? (p200300d82f4492003344447e353cbf0b.dip0.t-ipconnect.de. [2003:d8:2f44:9200:3344:447e:353c:bf0b])
+        by smtp.gmail.com with ESMTPSA id a1sm4522257wri.89.2021.12.03.10.20.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 10:20:13 -0800 (PST)
+Message-ID: <d5d854de-d59d-47d5-35ce-fe3a924a5a93@redhat.com>
+Date:   Fri, 3 Dec 2021 19:20:12 +0100
 MIME-Version: 1.0
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
- <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
- <20211203141051.82467-1-alexandr.lobakin@intel.com> <20211203163424.GK16608@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211203163424.GK16608@worktop.programming.kicks-ass.net>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Fri, 3 Dec 2021 08:51:04 -0800
-Message-ID: <CAMe9rOrVnb3oVRn5igjwimBbE6QH-v0tuHk-kjRz7osbJMQd1w@mail.gmail.com>
-Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
- into separate sections
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        live-patching@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFD] clear virtual machine memory when virtual machine is turned
+ off
+Content-Language: en-US
+To:     fei luo <morphyluo@gmail.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, xiaofeng.yan2012@gmail.com
+References: <CAMgLiBskDz7XW9-0=azOgVJ00t8zFOXjdGaH7NLpKDfNH9wsGQ@mail.gmail.com>
+ <673c5628-da97-83d3-028f-46219f203caf@redhat.com>
+ <CAMgLiBsGcTq8yoa1Rud0-qiRk11uChyS=CU8+5KTw35c2YmyBw@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAMgLiBsGcTq8yoa1Rud0-qiRk11uChyS=CU8+5KTw35c2YmyBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 3, 2021 at 8:34 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Fri, Dec 03, 2021 at 03:10:51PM +0100, Alexander Lobakin wrote:
-> > From: Peter Zijlstra <peterz@infradead.org>
-> > Date: Fri, 3 Dec 2021 10:44:10 +0100
-> >
-> > > On Thu, Dec 02, 2021 at 11:32:05PM +0100, Alexander Lobakin wrote:
-> > > > Use the newly introduces macros to create unique separate sections
-> > > > for (almost) every "regular" ASM function (i.e. for those which
-> > > > aren't explicitly put into a specific one).
-> > > > There should be no leftovers as input .text will be size-asserted
-> > > > in the LD script generated for FG-KASLR.
-> > >
-> > > *groan*...
-> > >
-> > > Please, can't we do something like:
-> > >
-> > > #define SYM_PUSH_SECTION(name)      \
-> > > .if section == .text                \
-> > > .push_section .text.##name  \
-> > > .else                               \
-> > > .push_section .text         \
-> > > .endif
-> > >
-> > > #define SYM_POP_SECTION()   \
-> > > .pop_section
-> > >
-> > > and wrap that inside the existing SYM_FUNC_START*() SYM_FUNC_END()
-> > > macros.
-> >
-> > Ah I see. I asked about this in my previous mail and you replied
-> > already (: Cool stuff, I'll use it, it simplifies things a lot.
->
-> Note, I've no idea if it works. GAS and me aren't really on speaking
-> terms. It would be my luck for that to be totally impossible, hjl?
+> Yes, this feature needs to consider when page migration, the content
+> of the old page needs to be cleared, and the swap space needs to
+> be cleared before swap. Of course, for security reasons, swap can be
+> prohibited. Here I just listed some of the changes involved, not all
+> aspects. This feature is mainly aimed at clearing the memory of
+> the virtual machine after shutdown, so it is more aimed at anonymous
+> mapping and huge page mapping
+> 
+>>>
+>>>
+>>> When reusing the page that has been cleared, there is no need to clear it
+>>>
+>>> again, which also speeds up the memory allocation of user-mode programs.
+>>>
+>>>
+>>> Is this feature feasible?
+>>
+>> "init_on_free=1" for the system as a whole, which might sounds like what
+>> might tackle part of your use case.
+>>
+> 
+> This feature is mainly to prevent the used memory information from leaking,
+> not to clear the memory before use.
 
-What exactly do you want assembler to do?
+That's the whole purpose of init_on_free -- maybe you should give that a
+second look.
+
+I don't think MAP_UNMAPZERO is what we want.
 
 -- 
-H.J.
+Thanks,
+
+David / dhildenb
+
