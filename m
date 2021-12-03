@@ -2,133 +2,212 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 095AD4677B1
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 13:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A690E4678F1
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 14:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380963AbhLCM5q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 07:57:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380953AbhLCM5p (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 07:57:45 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80832C06173E;
-        Fri,  3 Dec 2021 04:54:21 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id d9so5555984wrw.4;
-        Fri, 03 Dec 2021 04:54:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=M29EUicDRNc21LwZ/GYwswFr7ylJnq6+9wpg0/9AZO8=;
-        b=FoBKm5BewmXcIyykMn+POmO0ZC5EFzD8XchEJpxKnVGZ2xez9VQE5HVYHmiSZ4emck
-         HSYQjT6j5IDy6Yn+HqwIUneNe/yO77iK/NDreBPXZ9Gyiy9+KIYc1j5cEz/eI1oqLM/N
-         AlmPWLOjkuQYu2X166a/6/ogEOKOmVr3/Kx22zyvZ3g/8U4I/8ogDilbSmmI1sxXdXuC
-         0+C9X4hLcowYS6GjBu8AC3Dm6sFjAcgA5ldagKmfHccg1nICX092yI5gJ2ArXSbCRL4L
-         GD6u09FdZ9fYGrM1pkqLRqRG7SrQ6L6biQTJ1Lf5evjeKSfTEBcp2fZmyddLINY2JF7X
-         FIEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=M29EUicDRNc21LwZ/GYwswFr7ylJnq6+9wpg0/9AZO8=;
-        b=zvNwhmuAOaNTXUo5XuwALeQmCDz4t/AfeVcSjWGleTpAAnv8Ord8hIHewybNdSzJYq
-         qsXqWsohnECDRJ8CSeXhH4LjHyF0y5Dluo2l5cfc6yEX/UN1ixjnLed/RitDIgbZzmQa
-         G+w1tjfOFVZGgedXIslVNtNa3U+q/NJk4mZBJwf7UyRNYD9BpnkiluRX5diJgniV3Dxa
-         BGetptiWI16am/ME/6pNBXEBUsRMw80SPikKMZ6DruInIjGoGIzCT0QbjRwdeIra0gxH
-         lPENuNqZwr1xgZrJb+DHAL3iPr1MR+SzMQ3n1q+VqNq7tCSuoqvGbr8/N2iulIzZitUw
-         CEBw==
-X-Gm-Message-State: AOAM530KPJOXui0AAfbHFEtYA24O/59C/iCXUIWo3N26LkR/zE6BsO6E
-        E5dZM0SVBi6+sxVeBguC4ZDVJblBxi6ZVA==
-X-Google-Smtp-Source: ABdhPJxCcHfpP6/ls4pjRE3J3PBUm2yjHM3aCu1AlP68mHE7HmJUXTBzqWbgL9wMas377UObF7VxlQ==
-X-Received: by 2002:a05:6000:cd:: with SMTP id q13mr21507618wrx.488.1638536059799;
-        Fri, 03 Dec 2021 04:54:19 -0800 (PST)
-Received: from [10.168.10.170] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id m7sm2472292wml.38.2021.12.03.04.54.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Dec 2021 04:54:19 -0800 (PST)
-Message-ID: <7d3c34ab-41c1-f9b7-43cc-21a18fa61c27@gmail.com>
-Date:   Fri, 3 Dec 2021 13:54:17 +0100
+        id S1381280AbhLCODQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Dec 2021 09:03:16 -0500
+Received: from mga09.intel.com ([134.134.136.24]:35042 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1352843AbhLCODQ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 3 Dec 2021 09:03:16 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="236787135"
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="236787135"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2021 05:59:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,284,1631602800"; 
+   d="scan'208";a="478332089"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 03 Dec 2021 05:59:43 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B3DxfX7005810;
+        Fri, 3 Dec 2021 13:59:41 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 03/14] x86: Add support for function granular KASLR
+Date:   Fri,  3 Dec 2021 14:57:25 +0100
+Message-Id: <20211203135725.82097-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <Yang97SFfwuqTNzK@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-4-alexandr.lobakin@intel.com> <Yang97SFfwuqTNzK@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Language: en-US
-To:     Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-        Zack Weinberg <zack@owlfolio.org>,
-        Rich Felker <dalias@libc.org>
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-kernel@vger.kernel.org,
-        ltp@lists.linux.it
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <c5993ee9-1b5d-4469-9c0e-8d4e0fbd575a@www.fastmail.com>
- <20211202153422.GH7074@brightrain.aerifal.cx>
- <20211202232954.GI7074@brightrain.aerifal.cx>
- <855a47d1-a89c-bbc8-7ddd-b89104c6138a@linaro.org>
- <9d24f699-386a-4881-b09a-ebd747310187@www.fastmail.com>
- <0864bd62-7a93-106d-8a36-23dd72a7ab58@linaro.org>
-From:   "Alejandro Colomar (man-pages)" <alx.manpages@gmail.com>
-In-Reply-To: <0864bd62-7a93-106d-8a36-23dd72a7ab58@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/3/21 13:32, Adhemerval Zanella via Libc-alpha wrote:
->>>>> We (musl) don't have an equivalent header or __-prefixed versions of
->>>>> these types.
->>>>>
->>>>> FWIW I don't think stdint.h exposes anything that would be problematic
->>>>> alongside arbitrary use of kernel headers.
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Fri, 3 Dec 2021 10:18:47 +0100
 
->>>>
->>>> Also, per glibc's bits/types.h:
->>>>
->>>> /*
->>>>   * Never include this file directly; use <sys/types.h> instead.
->>>>   */
->>>>
->>>> it's not permitted (not supported usage) to #include <bits/types.h>.
->>>> So I think the above patch is wrong for glibc too. As I understand it,
->>>> this is general policy for bits/* -- they're only intended to work as
->>>> included by the libc system headers, not directly by something else.
->>>
->>> You are right, the idea is to allow glibc to create and remove internal headers.
->>
->> As a general rule yes, but we could make a deal that some specific bits headers are permanent API for use by things like this. They probably should be less of a dumping ground than bits/types.h though.
+> On Thu, Dec 02, 2021 at 11:32:03PM +0100, Alexander Lobakin wrote:
+> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > 
+> > This commit contains the changes required to re-layout the kernel text
+> > sections generated by -ffunction-sections shortly after decompression.
+> > Documentation of the feature is also added.
+> > 
+> > After decompression, the decompressed image's elf headers are parsed.
+> > In order to manually update certain data structures that are built with
+> > relative offsets during the kernel build process, certain symbols are
+> > not stripped by objdump and their location is retained in the elf symbol
+> > tables. These addresses are saved.
+> > 
+> > If the image was built with -ffunction-sections, there will be ELF section
+> > headers present which contain information about the address range of each
+> > section. Anything that is not broken out into function sections (i.e. is
+> > consolidated into .text) is left in it's original location, but any other
+> > executable section which begins with ".text." is located and shuffled
+> > randomly within the remaining text segment address range.
+> > 
+> > After the sections have been copied to their new locations, but before
+> > relocations have been applied, the kallsyms tables must be updated to
+> > reflect the new symbol locations. Because it is expected that these tables
+> > will be sorted by address, the kallsyms tables will need to be sorted
+> > after the update.
+> > 
+> > When applying relocations, the address of the relocation needs to be
+> > adjusted by the offset from the original location of the section that was
+> > randomized to it's new location. In addition, if a value at that relocation
+> > was a location in the text segment that was randomized, it's value will be
+> > adjusted to a new location.
+> > 
+> > After relocations have been applied, the exception table must be updated
+> > with new symbol locations, and then re-sorted by the new address. The
+> > orc table will have been updated as part of applying relocations, but since
+> > it is expected to be sorted by address, it will need to be resorted.
 > 
-> I really don't think adding such constraints really would improve the project
-> in long term, we already have issues about the need to support some internal
-> symbols that were exported by accident.
 > 
+> > +static long addr_kallsyms_names;
+> > +static long addr_kallsyms_offsets;
+> > +static long addr_kallsyms_num_syms;
+> > +static long addr_kallsyms_relative_base;
+> > +static long addr_kallsyms_markers;
+> > +static long addr___start___ex_table;
+> > +static long addr___stop___ex_table;
+> > +static long addr___altinstr_replacement;
+> > +static long addr___altinstr_replacement_end;
+> > +static long addr__stext;
+> > +static long addr__etext;
+> > +static long addr__sinittext;
+> > +static long addr__einittext;
+> > +static long addr___start_orc_unwind_ip;
+> > +static long addr___stop_orc_unwind_ip;
+> > +static long addr___start_orc_unwind;
+> 
+> > +void post_relocations_cleanup(unsigned long map)
+> > +{
+> > +	if (!nofgkaslr) {
+> > +		update_ex_table(map);
+> > +		sort_ex_table(map);
+> > +		update_orc_table(map);
+> > +		sort_orc_table(map);
+> > +	}
+> > +
+> > +	/*
+> > +	 * maybe one day free will do something. So, we "free" this memory
+> > +	 * in either case
+> > +	 */
+> > +	free(sections);
+> > +	free(sechdrs);
+> > +}
+> > +
+> > +void pre_relocations_cleanup(unsigned long map)
+> > +{
+> > +	if (nofgkaslr)
+> > +		return;
+> > +
+> > +	sort_kallsyms(map);
+> > +}
+> 
+> > diff --git a/arch/x86/boot/compressed/vmlinux.symbols b/arch/x86/boot/compressed/vmlinux.symbols
+> > new file mode 100644
+> > index 000000000000..da41f3ee153c
+> > --- /dev/null
+> > +++ b/arch/x86/boot/compressed/vmlinux.symbols
+> > @@ -0,0 +1,19 @@
+> > +kallsyms_offsets
+> > +kallsyms_addresses
+> > +kallsyms_num_syms
+> > +kallsyms_relative_base
+> > +kallsyms_names
+> > +kallsyms_token_table
+> > +kallsyms_token_index
+> > +kallsyms_markers
+> > +__start___ex_table
+> > +__stop___ex_table
+> > +__altinstr_replacement
+> > +__altinstr_replacement_end
+> > +_sinittext
+> > +_einittext
+> > +_stext
+> > +_etext
+> > +__start_orc_unwind_ip
+> > +__stop_orc_unwind_ip
+> > +__start_orc_unwind
+> 
+> So please don't make it hard to add sections; the above has far too much
+> duplication. For example you can trivially generate the addr_ symbol and
+> the .symbol file from a common include file and a bit of macro wrappery,
+> ideally that macro wrappery would also specify the sort location and
+> function such that you can also generate those pre_ and post_ functions.
 
-I think there are a few headers that should be safe to include from the 
-kernel.
+Re automatical generation using some wrappery -- sounds nice.
+I mostly was only doing makeup for Kristen's commits so didn't pay
+attention to that duplication.
 
-Could anyone foresee any problem that could arise by including any of 
-the following headers in kernel code?:
+> And this is only for sections that need to be sorted right? There's
+> currently a patch in flight to also pre-sort the ftrace table.
 
-<stdint.h>
-<stddef.h>
+Kallsyms, ORC tables and extable are getting sorted. text, inittext
+and altinstr_replacement related symbols are needed to perform
+shuffling (text) and relocation fixups (altinsr, inittext).
 
-They are the intended interface, and they only provide macros and types 
-but not functions, and there should be no need to require libcs to 
-define another identical stable interface.  If there's an existing 
-program that would break by including any of those in uapi headers, I'm 
-curious to see that program.
+> All unsorted or runtime sorted sections are fine since they're fixed up
+> by the relocations?
 
-Of course, the kernel already defined some of the macros defined there, 
-but the solution would be easy:  remove the redefinitions, since they 
-should be defined to equivalent code (e.g., offsetof(), NULL; although 
-these are from <stddef.h>, which for this change would be unnecessary, 
-but if <stdint.h> can be used within the kernel, a next step could be to 
-rely on libc <stddef.h>)
+Right.
+
+> Is it at all feasible to share the comparison functions between the
+> various sorters?
+
+They look very similar, I think it'd be fine to merge them (seems
+like not only cmp, but adjust functions as well).
 
 Thanks,
-Alex
-
--- 
-Alejandro Colomar
-Linux man-pages comaintainer; http://www.kernel.org/doc/man-pages/
+Al
