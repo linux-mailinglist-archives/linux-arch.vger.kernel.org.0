@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B9F4673D9
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 10:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70231467418
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 10:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351351AbhLCJWs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 04:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
+        id S1347953AbhLCJfO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Dec 2021 04:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351316AbhLCJWr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 04:22:47 -0500
+        with ESMTP id S237826AbhLCJfO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 04:35:14 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D83C06173E;
-        Fri,  3 Dec 2021 01:19:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D69C06173E;
+        Fri,  3 Dec 2021 01:31:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hLPFdIqBYpspMlwIAo7jkm6f1I6lI75Wr7yBFCGECog=; b=dlLwOKJiwBv02wti0blm0rr6CF
-        L0ZFM5qwxblWVSbBC4msE5YdoO7xva5p6Y5N2vU5zvUdcVoI2DpVvtcfMxt6umFaszPUHVkDp4dkP
-        XgiJIDS0lrEhp2DyOihYCETjTJ8kljja5mnwowi2BygcSEQsjHXElKyy6LH6P+e/HH9Gum0cT+HoN
-        OUgAOy70n7gACzwta1Qq20rT2ta/8KpCkXJ7l0iAwexXzet1HMdY3Vs6IMUUjm5z87vHjZbz9yqot
-        4W1kTFE5WO5MDqLcwUxIY7ZbiFANYg33gG1eF6MZZ4ns1Oxaa+q0KS6r0cf9OOCgNptZKgiEOIKpp
-        iblFSLWA==;
+        bh=+F+jn348o8c0+qkMFF271zNvg0ImzfMnYeCjnhYAoLQ=; b=muH0znyR10BD3npxHrYXsKEwzs
+        GyQkCrO8EFZ0wkALDDoo+iVtexP20q1O1LlTVxr+ktg+Q8kfrPl+0c5szhG2OE/Fm1yAikUoMHq+v
+        GxY3jyStH0ykuomRP+jNm1YcicCzif8hfv6aiTrtfwPXeSNjnmGpQj1QOobYuinhNEbW6lymcNzTr
+        5X6FM6AzzDIJOubFGy9z6hjf2+6mmKfaZhkLLxmlI3IzsqjlAZjNtF6XELXFU0yq1eQT38q4yU9EK
+        AykHR64nIOaeOyO6MS8sK0WvpgtZ+JJWZ3OCSQyTb0xAvjMEcze0bHAjPaAZ0PU9HpJNxU6Xbrhx9
+        rjDl4lsw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mt4iP-007yPM-Ua; Fri, 03 Dec 2021 09:18:50 +0000
+        id 1mt4uh-00815V-6J; Fri, 03 Dec 2021 09:31:32 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A78433002C5;
-        Fri,  3 Dec 2021 10:18:47 +0100 (CET)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 75BAD300243;
+        Fri,  3 Dec 2021 10:31:30 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8F62D2B35A5A4; Fri,  3 Dec 2021 10:18:47 +0100 (CET)
-Date:   Fri, 3 Dec 2021 10:18:47 +0100
+        id 5F8E62B36B3A8; Fri,  3 Dec 2021 10:31:30 +0100 (CET)
+Date:   Fri, 3 Dec 2021 10:31:30 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Alexander Lobakin <alexandr.lobakin@intel.com>
 Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
@@ -71,135 +71,117 @@ Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: Re: [PATCH v8 03/14] x86: Add support for function granular KASLR
-Message-ID: <Yang97SFfwuqTNzK@hirez.programming.kicks-ass.net>
+Subject: Re: [PATCH v8 04/14] linkage: add macros for putting ASM functions
+ into own sections
+Message-ID: <Yanj8qvo3Wj4ePyV@hirez.programming.kicks-ass.net>
 References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
- <20211202223214.72888-4-alexandr.lobakin@intel.com>
+ <20211202223214.72888-5-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211202223214.72888-4-alexandr.lobakin@intel.com>
+In-Reply-To: <20211202223214.72888-5-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 11:32:03PM +0100, Alexander Lobakin wrote:
-> From: Kristen Carlson Accardi <kristen@linux.intel.com>
-> 
-> This commit contains the changes required to re-layout the kernel text
-> sections generated by -ffunction-sections shortly after decompression.
-> Documentation of the feature is also added.
-> 
-> After decompression, the decompressed image's elf headers are parsed.
-> In order to manually update certain data structures that are built with
-> relative offsets during the kernel build process, certain symbols are
-> not stripped by objdump and their location is retained in the elf symbol
-> tables. These addresses are saved.
-> 
-> If the image was built with -ffunction-sections, there will be ELF section
-> headers present which contain information about the address range of each
-> section. Anything that is not broken out into function sections (i.e. is
-> consolidated into .text) is left in it's original location, but any other
-> executable section which begins with ".text." is located and shuffled
-> randomly within the remaining text segment address range.
-> 
-> After the sections have been copied to their new locations, but before
-> relocations have been applied, the kallsyms tables must be updated to
-> reflect the new symbol locations. Because it is expected that these tables
-> will be sorted by address, the kallsyms tables will need to be sorted
-> after the update.
-> 
-> When applying relocations, the address of the relocation needs to be
-> adjusted by the offset from the original location of the section that was
-> randomized to it's new location. In addition, if a value at that relocation
-> was a location in the text segment that was randomized, it's value will be
-> adjusted to a new location.
-> 
-> After relocations have been applied, the exception table must be updated
-> with new symbol locations, and then re-sorted by the new address. The
-> orc table will have been updated as part of applying relocations, but since
-> it is expected to be sorted by address, it will need to be resorted.
+On Thu, Dec 02, 2021 at 11:32:04PM +0100, Alexander Lobakin wrote:
 
-
-> +static long addr_kallsyms_names;
-> +static long addr_kallsyms_offsets;
-> +static long addr_kallsyms_num_syms;
-> +static long addr_kallsyms_relative_base;
-> +static long addr_kallsyms_markers;
-> +static long addr___start___ex_table;
-> +static long addr___stop___ex_table;
-> +static long addr___altinstr_replacement;
-> +static long addr___altinstr_replacement_end;
-> +static long addr__stext;
-> +static long addr__etext;
-> +static long addr__sinittext;
-> +static long addr__einittext;
-> +static long addr___start_orc_unwind_ip;
-> +static long addr___stop_orc_unwind_ip;
-> +static long addr___start_orc_unwind;
-
-> +void post_relocations_cleanup(unsigned long map)
-> +{
-> +	if (!nofgkaslr) {
-> +		update_ex_table(map);
-> +		sort_ex_table(map);
-> +		update_orc_table(map);
-> +		sort_orc_table(map);
-> +	}
+> diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+> index dbf8506decca..baaab7dece08 100644
+> --- a/include/linux/linkage.h
+> +++ b/include/linux/linkage.h
+> @@ -355,4 +355,86 @@
+>  
+>  #endif /* __ASSEMBLY__ */
+>  
+> +/*
+> + * Allow ASM symbols to have their own unique sections if they are being
+> + * generated by the compiler for C functions (DCE, FG-KASLR, LTO).
+> + */
+> +#if (defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
+> +    (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
+> +    (defined(CONFIG_MODULE_FG_KASLR) && defined(MODULE)) || \
+> +    (defined(CONFIG_LTO_CLANG))
 > +
-> +	/*
-> +	 * maybe one day free will do something. So, we "free" this memory
-> +	 * in either case
-> +	 */
-> +	free(sections);
-> +	free(sechdrs);
-> +}
+> +#define SYM_TEXT_SECTION(name)				\
+> +	.pushsection .text.##name, "ax"
 > +
-> +void pre_relocations_cleanup(unsigned long map)
-> +{
-> +	if (nofgkaslr)
-> +		return;
+> +#define ASM_TEXT_SECTION(name)				\
+> +	".text." #name
 > +
-> +	sort_kallsyms(map);
-> +}
+> +#define ASM_PUSH_SECTION(name)				\
+> +	".pushsection .text." #name ", \"ax\""
+> +
+> +#else /* just .text */
+> +
+> +#define SYM_TEXT_SECTION(name)				\
+> +	.pushsection .text, "ax"
+> +
+> +#define ASM_TEXT_SECTION(name)				\
+> +	".text"
+> +
+> +#define ASM_PUSH_SECTION(name)				\
+> +	".pushsection .text, \"ax\""
+> +
+> +#endif /* just .text */
 
-> diff --git a/arch/x86/boot/compressed/vmlinux.symbols b/arch/x86/boot/compressed/vmlinux.symbols
-> new file mode 100644
-> index 000000000000..da41f3ee153c
-> --- /dev/null
-> +++ b/arch/x86/boot/compressed/vmlinux.symbols
-> @@ -0,0 +1,19 @@
-> +kallsyms_offsets
-> +kallsyms_addresses
-> +kallsyms_num_syms
-> +kallsyms_relative_base
-> +kallsyms_names
-> +kallsyms_token_table
-> +kallsyms_token_index
-> +kallsyms_markers
-> +__start___ex_table
-> +__stop___ex_table
-> +__altinstr_replacement
-> +__altinstr_replacement_end
-> +_sinittext
-> +_einittext
-> +_stext
-> +_etext
-> +__start_orc_unwind_ip
-> +__stop_orc_unwind_ip
-> +__start_orc_unwind
+That's terribly inconsistent, SYM_TEXT_SECTION is in fact
+PUSH_TEXT_SECTION, ASM_PUSH_SECTION is in fact ASM_PUSH_TEXT_SECTION and
+should be stringify(PUSH_TEXT_SECTION()) or something, and they're all
+repeating that ASM_TEXT_SECTION thing :/
 
-So please don't make it hard to add sections; the above has far too much
-duplication. For example you can trivially generate the addr_ symbol and
-the .symbol file from a common include file and a bit of macro wrappery,
-ideally that macro wrappery would also specify the sort location and
-function such that you can also generate those pre_ and post_ functions.
 
-And this is only for sections that need to be sorted right? There's
-currently a patch in flight to also pre-sort the ftrace table.
+> +
+> +#ifdef __ASSEMBLY__
+> +
+> +#define SYM_TEXT_END_SECTION				\
+> +	.popsection
+> +
+> +#define SYM_FUNC_START_LOCAL_ALIAS_SECTION(name)	\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_FUNC_START_LOCAL_ALIAS(name)
+> +
+> +#define SYM_FUNC_START_LOCAL_SECTION(name)		\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_FUNC_START_LOCAL(name)
+> +
+> +#define SYM_FUNC_START_NOALIGN_SECTION(name)		\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_FUNC_START_NOALIGN(name)
+> +
+> +#define SYM_FUNC_START_WEAK_SECTION(name)		\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_FUNC_START_WEAK(name)
+> +
+> +#define SYM_FUNC_START_SECTION(name)			\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_FUNC_START(name)
+> +
+> +#define SYM_CODE_START_LOCAL_NOALIGN_SECTION(name)	\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_CODE_START_LOCAL_NOALIGN(name)
+> +
+> +#define SYM_CODE_START_NOALIGN_SECTION(name)		\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_CODE_START_NOALIGN(name)
+> +
+> +#define SYM_CODE_START_SECTION(name)			\
+> +	SYM_TEXT_SECTION(name) ASM_NL			\
+> +	SYM_CODE_START(name)
+> +
+> +#define SYM_FUNC_END_ALIAS_SECTION(name)		\
+> +	SYM_FUNC_END_ALIAS(name) ASM_NL			\
+> +	SYM_TEXT_END_SECTION
+> +
+> +#define SYM_FUNC_END_SECTION(name)			\
+> +	SYM_FUNC_END(name) ASM_NL			\
+> +	SYM_TEXT_END_SECTION
+> +
+> +#define SYM_CODE_END_SECTION(name)			\
+> +	SYM_CODE_END(name) ASM_NL			\
+> +	SYM_TEXT_END_SECTION
+> +
+> +#endif /* __ASSEMBLY__ */
 
-All unsorted or runtime sorted sections are fine since they're fixed up
-by the relocations?
-
-Is it at all feasible to share the comparison functions between the
-various sorters?
+*URGH* why do we have to have new macros for this? SYM_FUNC_START*()
+already takes the name as argument.
