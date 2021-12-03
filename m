@@ -2,95 +2,280 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44613467536
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 11:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A272C46761A
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 12:20:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243937AbhLCKmQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 05:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S1380343AbhLCLXn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Dec 2021 06:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243912AbhLCKmQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 05:42:16 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4889BC06173E;
-        Fri,  3 Dec 2021 02:38:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=vD4L77VHgLvDmRbeZaWlspxy3NbaUIb+bwMSWEqT/lw=; b=FtTFaIjd/WBYIJvTtPhJo44DrX
-        RcYmE57KZwuXeuzlu7Kdkx2xflj3o+rzM3kF4sQiGjDpUKtXbp7oudu7R/EH2Tab5GanjeJdbw6eO
-        GnMUQglTXZrpXUb6PqxBeqjkNPpoUjPaKxwwvHhh1HWok+iaQlCwNA2nh/Ji9od2jPr7IDgTI6h+s
-        6wTTjnPgmcndc9NEzp4lrwziWOrrhbEYll78jJR7rNpVmVFBYNExHxA7qa4w7SzUbdB53/tRQAKZg
-        lxNb/IKuJhLaZerPAOzxQBjzD64fZAp4KO4F2mRmatNFp0P5CS0fr1r14sr5agu+oxu7/6EI349BO
-        UH2M68Pg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mt5xX-001yqZ-HY; Fri, 03 Dec 2021 10:38:31 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4DD530001C;
-        Fri,  3 Dec 2021 11:38:30 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8976D2B36B3C0; Fri,  3 Dec 2021 11:38:30 +0100 (CET)
-Date:   Fri, 3 Dec 2021 11:38:30 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v8 00/14] Function Granular KASLR
-Message-ID: <YanzpvmaX1JWYf9t@hirez.programming.kicks-ass.net>
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+        with ESMTP id S1380358AbhLCLXm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 06:23:42 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEEAC06173E;
+        Fri,  3 Dec 2021 03:20:18 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id k4so1866770plx.8;
+        Fri, 03 Dec 2021 03:20:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=7XsAJ2cZU1lppUyPBmVsEbXy/GKDAj/Ht+i8uHD7lok=;
+        b=fQI0WyY3dvLwdv22bT+tWb115e4Q95jD6vrbYcmPVcwOyogr9umcIO0a/KZzkZF0rU
+         qjv+YjbgPRKUi57eJSOspJ/nc9Xx0y6B+ShA6u79dQDpjAliXRhyzyFFhlcxT7Mkch1K
+         q1Htr6xBNQmACCzFHpqEJQ4IFR5KLc5Up09f0yDbrMAL2dGNIoDCk2kVY9vf7H/OqfTF
+         vj7WVjaYIRG9InmQYKKZoLEcnyr9fnCfLZMJ00mCUyXKJGM6wmAKtV6BkqeDbPJtqzHZ
+         wVggDDSxJtPp+HclUV3H9xLVWitco7xUeWkf/kzzWR666KG5ZxHBXQifzIXarMd5G5hy
+         YahQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7XsAJ2cZU1lppUyPBmVsEbXy/GKDAj/Ht+i8uHD7lok=;
+        b=MoY2sjpAMgyYkYKSyl3yTrmDha4s9ftXhU1G3vwTsPLx5CqephRZGkTxOeBcMa00Hw
+         x/7TjGxpLH/vsUpAClAgDG0VbYb1ToTO+7yQ1+/0ykGNSOxPaEJXywKMnNZ9gkHWgNGB
+         2c769oup5WeP09lET6ayHH6o6pPJvzN6S4qyGv8/wRy2v0B0PPk9s2MKXUTC8WFbBZzQ
+         YHwGCeT+gmmIJZLI4AuuOpY8bdCmQX1j6LZYgBPdaCWC864oAQlc+bok2q8wofXduq3+
+         +OJ7CLGfdD6kN9anQqdSzLPDfOp9rJyeo0XLpJnXYXcfaO8SR2br2fRuoGeqoHw6to7N
+         oyVQ==
+X-Gm-Message-State: AOAM53378jPICPHynxcaCHHo5EK8+5kH1DdhVZwJ9daWFoAXaTzAf4AR
+        VFbSbOrUAin+FhaeabDvAq8Erol6TmpDvw==
+X-Google-Smtp-Source: ABdhPJwyiDbpHGaLzHTehq+eMK96rnMASx0J/gnS2CYK1pGpGeM2FntwySwLQ6ehw5HLLx+8am9Xvw==
+X-Received: by 2002:a17:90b:3447:: with SMTP id lj7mr13390043pjb.112.1638530418013;
+        Fri, 03 Dec 2021 03:20:18 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id q32sm2126609pja.4.2021.12.03.03.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 03:20:17 -0800 (PST)
+Message-ID: <e78ba239-2dad-d48f-671e-f76a943052f1@gmail.com>
+Date:   Fri, 3 Dec 2021 19:20:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V3 1/5] Swiotlb: Add Swiotlb bounce buffer remap function
+ for HV IVM
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, jgross@suse.com, sstabellini@kernel.org,
+        boris.ostrovsky@oracle.com, joro@8bytes.org, will@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, arnd@arndb.de, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
+        michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, parri.andrea@gmail.com, dave.hansen@intel.com
+References: <20211201160257.1003912-1-ltykernel@gmail.com>
+ <20211201160257.1003912-2-ltykernel@gmail.com>
+ <41bb0a87-9fdb-4c67-a903-9e87d092993a@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <41bb0a87-9fdb-4c67-a903-9e87d092993a@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 11:32:00PM +0100, Alexander Lobakin wrote:
 
-> feat        make -j65 boot    vmlinux.o vmlinux  bzImage  bogoops/s
-> Relocatable 4m38.478s 24.440s 72014208  58579520  9396192 57640.39
-> KASLR       4m39.344s 24.204s 72020624  87805776  9740352 57393.80
-> FG-K 16 fps 6m16.493s 25.429s 83759856  87194160 10885632 57784.76
-> FG-K 8 fps  6m20.190s 25.094s 83759856  88741328 10985248 56625.84
-> FG-K 1 fps  7m09.611s 25.922s 83759856  95681128 11352192 56953.99
 
-:sadface: so at best it makes my kernel compiles ~50% slower. Who would
-ever consider doing that? It's like retpolines weren't bad enough; lets
-heap on the fail?
+On 12/2/2021 10:42 PM, Tom Lendacky wrote:
+> On 12/1/21 10:02 AM, Tianyu Lan wrote:
+>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
+>>
+>> In Isolation VM with AMD SEV, bounce buffer needs to be accessed via
+>> extra address space which is above shared_gpa_boundary (E.G 39 bit
+>> address line) reported by Hyper-V CPUID ISOLATION_CONFIG. The access
+>> physical address will be original physical address + shared_gpa_boundary.
+>> The shared_gpa_boundary in the AMD SEV SNP spec is called virtual top of
+>> memory(vTOM). Memory addresses below vTOM are automatically treated as
+>> private while memory above vTOM is treated as shared.
+>>
+>> Expose swiotlb_unencrypted_base for platforms to set unencrypted
+>> memory base offset and platform calls swiotlb_update_mem_attributes()
+>> to remap swiotlb mem to unencrypted address space. memremap() can
+>> not be called in the early stage and so put remapping code into
+>> swiotlb_update_mem_attributes(). Store remap address and use it to copy
+>> data from/to swiotlb bounce buffer.
+>>
+>> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> 
+> This patch results in the following stack trace during a bare-metal boot
+> on my EPYC system with SME active (e.g. mem_encrypt=on):
+> 
+> [    0.123932] BUG: Bad page state in process swapper  pfn:108001
+> [    0.123942] page:(____ptrval____) refcount:0 mapcount:-128 
+> mapping:0000000000000000 index:0x0 pfn:0x108001
+> [    0.123946] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
+> [    0.123952] raw: 0017ffffc0000000 ffff88904f2d5e80 ffff88904f2d5e80 
+> 0000000000000000
+> [    0.123954] raw: 0000000000000000 0000000000000000 00000000ffffff7f 
+> 0000000000000000
+> [    0.123955] page dumped because: nonzero mapcount
+> [    0.123957] Modules linked in:
+> [    0.123961] CPU: 0 PID: 0 Comm: swapper Not tainted 
+> 5.16.0-rc3-sos-custom #2
+> [    0.123964] Hardware name: AMD Corporation
+> [    0.123967] Call Trace:
+> [    0.123971]  <TASK>
+> [    0.123975]  dump_stack_lvl+0x48/0x5e
+> [    0.123985]  bad_page.cold+0x65/0x96
+> [    0.123990]  __free_pages_ok+0x3a8/0x410
+> [    0.123996]  memblock_free_all+0x171/0x1dc
+> [    0.124005]  mem_init+0x1f/0x14b
+> [    0.124011]  start_kernel+0x3b5/0x6a1
+> [    0.124016]  secondary_startup_64_no_verify+0xb0/0xbb
+> [    0.124022]  </TASK>
+> 
+> I see ~40 of these traces, each for different pfns.
+> 
+> Thanks,
+> Tom
+
+Hi Tom:
+       Thanks for your test. Could you help to test the following patch 
+and check whether it can fix the issue.
+
+
+diff --git a/include/linux/swiotlb.h b/include/linux/swiotlb.h
+index 569272871375..f6c3638255d5 100644
+--- a/include/linux/swiotlb.h
++++ b/include/linux/swiotlb.h
+@@ -73,6 +73,9 @@ extern enum swiotlb_force swiotlb_force;
+   * @end:       The end address of the swiotlb memory pool. Used to do 
+a quick
+   *             range check to see if the memory was in fact allocated 
+by this
+   *             API.
++ * @vaddr:     The vaddr of the swiotlb memory pool. The swiotlb memory 
+pool
++ *             may be remapped in the memory encrypted case and store 
+virtual
++ *             address for bounce buffer operation.
+   * @nslabs:    The number of IO TLB blocks (in groups of 64) between 
+@start and
+   *             @end. For default swiotlb, this is command line 
+adjustable via
+   *             setup_io_tlb_npages.
+@@ -92,6 +95,7 @@ extern enum swiotlb_force swiotlb_force;
+  struct io_tlb_mem {
+         phys_addr_t start;
+         phys_addr_t end;
++       void *vaddr;
+         unsigned long nslabs;
+         unsigned long used;
+         unsigned int index;
+@@ -186,4 +190,6 @@ static inline bool is_swiotlb_for_alloc(struct 
+device *dev)
+  }
+  #endif /* CONFIG_DMA_RESTRICTED_POOL */
+
++extern phys_addr_t swiotlb_unencrypted_base;
++
+  #endif /* __LINUX_SWIOTLB_H */
+diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
+index 8e840fbbed7c..34e6ade4f73c 100644
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -50,6 +50,7 @@
+  #include <asm/io.h>
+  #include <asm/dma.h>
+
++#include <linux/io.h>
+  #include <linux/init.h>
+  #include <linux/memblock.h>
+  #include <linux/iommu-helper.h>
+@@ -72,6 +73,8 @@ enum swiotlb_force swiotlb_force;
+
+  struct io_tlb_mem io_tlb_default_mem;
+
++phys_addr_t swiotlb_unencrypted_base;
++
+  /*
+   * Max segment that we can provide which (if pages are contingous) will
+   * not be bounced (unless SWIOTLB_FORCE is set).
+@@ -155,6 +158,27 @@ static inline unsigned long nr_slots(u64 val)
+         return DIV_ROUND_UP(val, IO_TLB_SIZE);
+  }
+
++/*
++ * Remap swioltb memory in the unencrypted physical address space
++ * when swiotlb_unencrypted_base is set. (e.g. for Hyper-V AMD SEV-SNP
++ * Isolation VMs).
++ */
++void *swiotlb_mem_remap(struct io_tlb_mem *mem, unsigned long bytes)
++{
++       void *vaddr = NULL;
++
++       if (swiotlb_unencrypted_base) {
++               phys_addr_t paddr = mem->start + swiotlb_unencrypted_base;
++
++               vaddr = memremap(paddr, bytes, MEMREMAP_WB);
++               if (!vaddr)
++                       pr_err("Failed to map the unencrypted memory 
+%llx size %lx.\n",
++                              paddr, bytes);
++       }
++
++       return vaddr;
++}
++
+  /*
+   * Early SWIOTLB allocation may be too early to allow an architecture to
+   * perform the desired operations.  This function allows the 
+architecture to
+@@ -172,7 +196,12 @@ void __init swiotlb_update_mem_attributes(void)
+         vaddr = phys_to_virt(mem->start);
+         bytes = PAGE_ALIGN(mem->nslabs << IO_TLB_SHIFT);
+         set_memory_decrypted((unsigned long)vaddr, bytes >> PAGE_SHIFT);
+-       memset(vaddr, 0, bytes);
++
++       mem->vaddr = swiotlb_mem_remap(mem, bytes);
++       if (!mem->vaddr)
++               mem->vaddr = vaddr;
++
++       memset(mem->vaddr, 0, bytes);
+  }
+
+  static void swiotlb_init_io_tlb_mem(struct io_tlb_mem *mem, 
+phys_addr_t start,
+@@ -196,7 +225,17 @@ static void swiotlb_init_io_tlb_mem(struct 
+io_tlb_mem *mem, phys_addr_t start,
+                 mem->slots[i].orig_addr = INVALID_PHYS_ADDR;
+                 mem->slots[i].alloc_size = 0;
+         }
++
++       /*
++        * If swiotlb_unencrypted_base is set, the bounce buffer memory will
++        * be remapped and cleared in swiotlb_update_mem_attributes.
++        */
++       if (swiotlb_unencrypted_base)
++               return;
++
+         memset(vaddr, 0, bytes);
++       mem->vaddr = vaddr;
++       return;
+  }
+
+  int __init swiotlb_init_with_tbl(char *tlb, unsigned long nslabs, int 
+verbose)
+@@ -371,7 +410,7 @@ static void swiotlb_bounce(struct device *dev, 
+phys_addr_t tlb_addr, size_t size
+         phys_addr_t orig_addr = mem->slots[index].orig_addr;
+         size_t alloc_size = mem->slots[index].alloc_size;
+         unsigned long pfn = PFN_DOWN(orig_addr);
+-       unsigned char *vaddr = phys_to_virt(tlb_addr);
++       unsigned char *vaddr = mem->vaddr + tlb_addr - mem->start;
+         unsigned int tlb_offset, orig_addr_offset;
+
+         if (orig_addr == INVALID_PHYS_ADDR)
+
+
+Thanks.
+
