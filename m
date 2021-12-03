@@ -2,58 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0460D46747B
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 11:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B34467484
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 11:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379467AbhLCKHM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 05:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S1379762AbhLCKJk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Dec 2021 05:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350895AbhLCKHM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 05:07:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762CBC06173E;
-        Fri,  3 Dec 2021 02:03:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2685629F4;
-        Fri,  3 Dec 2021 10:03:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 634E2C5831C;
-        Fri,  3 Dec 2021 10:03:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638525827;
-        bh=HcsQFI/ghrlsmuk/HhzFJHGCOxuy3yHFeobr2h17U9s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IU5qXULyvMhg+VH4MemWiUQcN/UbSB/494YFo1EmGcJi5VmeeC4phaBSxcAuTQ9xm
-         GzoZWX2pDdRYv5Ch1OzTgdbIwB7Z8ZJBG4DVQcFSQwvdwQarIynF8xY8spbo1m+t85
-         dZXkePHw9BRbabIAmhC2rp9rzoz1vHQE78+Gd5yFscnR5wuoSoAAI9REg3MRkNxqsS
-         nTh3q+dJQ3mubqu+yPtUT0MiEhKmVcS/Owr6vNIpXglHfEKFaC0t4cdZKmADFQtSiq
-         okEMoWcekcimXP3J1Z56FDqKGSBQn/7XFSTgVNKH4fk4QIqGfpolYb+29ZZpaptSmP
-         SPTS7fMcsBzjA==
-Received: by mail-ot1-f47.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso2543219otj.1;
-        Fri, 03 Dec 2021 02:03:47 -0800 (PST)
-X-Gm-Message-State: AOAM533pjaTCcqKqCMT/dYZbX0cic9Q2t2/kSdQc3C9uXkZdM3iL3cNG
-        RcKXoFpJJNkxrREnfEB6PQVhUIxxy0Be1SfkciU=
-X-Google-Smtp-Source: ABdhPJxR9VEqm0AT4UQPc+72aVvXsObFDjS9txhyoFYIN9Rbgb5Ua9D/d7h3dSeJFtgJ9r+Pt7HZC+DraWfxddQ0EHk=
-X-Received: by 2002:a05:6830:1445:: with SMTP id w5mr15871334otp.112.1638525826380;
- Fri, 03 Dec 2021 02:03:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
- <20211202223214.72888-8-alexandr.lobakin@intel.com> <Yanqz7o4IH5MkDp8@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yanqz7o4IH5MkDp8@hirez.programming.kicks-ass.net>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 3 Dec 2021 11:03:35 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
-Message-ID: <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
-Subject: Re: [PATCH v8 07/14] kallsyms: Hide layout
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        with ESMTP id S1351346AbhLCKJk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 05:09:40 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F849C06173E;
+        Fri,  3 Dec 2021 02:06:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=a/ys6cskAlNWsULashfoqrEixGaH4KiNUxE+1OiguW0=; b=J0VIv2PGI2YMODNat75+3pt+oG
+        /murTVznnyShQpHUdjfI7fVlowa5qhKNmHF1NCj283L/0bVE9Nd1trwDldCbTlwcaznPlMfdIKTSe
+        8sHNMAMEhlMLgA4Q0kgaEbFp5exVv813ND6187LX9qdsSu/YIq93W7lExi80GQ/Lf9uyjWLusP1lS
+        zwrATFYnDJRV7SN9B+EES34aX7F3M41Mnqm5Z+DkcpdAZJxEJw9N72oAZRzqt7DwneDuKoiPtbrFG
+        LQbccx5+9SZgqeSkh891Jn9Ekcwwcb/2ImzdLtwGsGdUy4E3wjQCwnHTMbhszn42EiXpV3tPMyQ8g
+        b7Mc3oIg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mt5Rz-00884w-4M; Fri, 03 Dec 2021 10:05:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AF99230001C;
+        Fri,  3 Dec 2021 11:05:54 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 98C2B2B36B3B2; Fri,  3 Dec 2021 11:05:54 +0100 (CET)
+Date:   Fri, 3 Dec 2021 11:05:54 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Kristen Carlson Accardi <kristen@linux.intel.com>,
         Kees Cook <keescook@chromium.org>,
         Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Tony Luck <tony.luck@intel.com>,
         Bruce Schlobohm <bruce.schlobohm@intel.com>,
         Jessica Yu <jeyu@kernel.org>,
@@ -78,28 +68,29 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Marios Pomonis <pomonis@google.com>,
         Sami Tolvanen <samitolvanen@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        live-patching@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 08/14] livepatch: only match unique symbols when using
+ FG-KASLR
+Message-ID: <YansAlTr0/MfNxWc@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-9-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211202223214.72888-9-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 3 Dec 2021 at 11:01, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Dec 02, 2021 at 11:32:07PM +0100, Alexander Lobakin wrote:
-> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
-> >
-> > This patch makes /proc/kallsyms display in a random order, rather
-> > than sorted by address in order to hide the newly randomized address
-> > layout.
->
-> Is there a reason to not always do this? That is, why are we keeping two
-> copies of this code around? Less code is more better etc..
+On Thu, Dec 02, 2021 at 11:32:08PM +0100, Alexander Lobakin wrote:
+> If any type of function granular randomization is enabled, the sympos
+> algorithm will fail, as it will be impossible to resolve symbols when
+> there are duplicates using the previous symbol position.
+> 
+> We could override sympos to 0, but make it more clear to the user
+> and bail out if the symbol is not unique.
 
-+1.
-
-IIRC I made the exact same point when this patch was sent out by
-Kristen a while ago.
+Since we're going lots of horrendous things already, why can't we fix
+this duplicate nonsense too?
