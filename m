@@ -2,58 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E380B4680CB
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Dec 2021 00:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AD04680D0
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Dec 2021 00:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383552AbhLCXpl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 18:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383515AbhLCXpj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 18:45:39 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B38C0611F7
-        for <linux-arch@vger.kernel.org>; Fri,  3 Dec 2021 15:42:15 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso5420938ota.5
-        for <linux-arch@vger.kernel.org>; Fri, 03 Dec 2021 15:42:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4JwQlDJ0eW7f9hYvr2thOhENg/qO/ZaZzGs6+sDFshM=;
-        b=AJ/TTnwyVYSX6l2dbIpeBUSjXxXc1p865vm+D2RhGu04FOd1dojH/S075xAjkHvREE
-         CX63gNQpg8eFmDqxN/+1Qwah0kEZdrJU5IZLuEmukgMBSbGT8ZVsX87ACdVvxTvnXDBK
-         mZYWElg8rD4PTchWPB7nykjdZkyxRmpHBGGNR8kqpq8vCZXDfxbqez7uIQ5NdV7hMoCV
-         Lf3SWZgqQW1MzTH/UOTBSje7705REt9thTaNdYmeUjFBEC9AlYqm2gHhrWgfoy3hsGkp
-         iLaT99dRzBy0QEyguUM6y79ZuC6inrGFlSDfBARE+En7rgXRrfkwyxOXfrRn2Ukcdd0x
-         ZlTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4JwQlDJ0eW7f9hYvr2thOhENg/qO/ZaZzGs6+sDFshM=;
-        b=MlAn++s7L3Ta9clwoUw/YMTwbMAtCsAf13DQLA1orjgESiuUpaLaor7FsH7HafjUXz
-         pFmrfukpP/tLEqXd1yjzhMIuct9dS4874ktmNNlh268HDWwo0feyEuShmXPHWtQ5r3vF
-         DA0ADujVOUAK37prGGkYiupzZt2qmjVir243L/8NcZCr/iEx/R18brdRiMigX0ypH90w
-         XE/i/L9gbz7X1gvHyErq4lg7z75Z3PB7CRCZTwFjxM5FXMBkocY020dSdZzIN8xkpy6S
-         zJ/efJrkXJ+Yag89/SjV/8xKmnpGLzgWAPuhxvbYv1jrSqWc+/9BP3+6jVmUnIPN5/tR
-         KUMg==
-X-Gm-Message-State: AOAM532mfdXHWUUagc2TeaoXfqJ7Bi1OY6dBlWO1GyiXevticER0AfHJ
-        PubiK01DetwKSJ9D9V4KO92SY1rEWFTW2B/kx+g71w==
-X-Google-Smtp-Source: ABdhPJzmeHxYPCJX3eYijPp8C1oQT6JTRLMS+qeYs0OAMS77tBDynJpAjMPOmqpeKVSmDxkzBYLKtTfkIQWBc6uaOn0=
-X-Received: by 2002:a9d:7548:: with SMTP id b8mr18387018otl.92.1638574934196;
- Fri, 03 Dec 2021 15:42:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130114433.2580590-1-elver@google.com> <20211130114433.2580590-5-elver@google.com>
- <YanbzWyhR0LwdinE@elver.google.com> <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
- <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
-From:   Marco Elver <elver@google.com>
-Date:   Sat, 4 Dec 2021 00:42:02 +0100
-Message-ID: <CANpmjNM0X1iAgz4vHTH4FSzdWdr1PiQQnoyFt-zoT2_VonFvVA@mail.gmail.com>
-Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
- memory modeling
-To:     paulmck@kernel.org
+        id S1383523AbhLCXps (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Dec 2021 18:45:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:39204 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354321AbhLCXpq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 18:45:46 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53A94B82985;
+        Fri,  3 Dec 2021 23:42:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 044B1C53FAD;
+        Fri,  3 Dec 2021 23:42:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638574939;
+        bh=X59XCqCBopk7dCtQ+gdex8i2KSU1dPvRmxvFimD4F7s=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=d2lVgutRr8P/vsl6vNGyb8wMZA3bm5z9NtROKgeeMfe84jaLy31SiAQLTELYwnkZJ
+         Dcpvpo8JfPhDCWbazfV8hFNWiodPJI8mtFT+HBxtateS/1cXkaDnKbhIggvZsdHTB2
+         vHHApN3HYnReuuf0ZgwAwY3IJAy6DBdramh9rgrOTUCLEJU2ag28mP3GT3go0n6zQw
+         f8pK+jwsIiyXsuMl1m0nAFk27yq0P4DWaJl/XspqX+8USPoSPcyjhb2Sn3a4lWzD8G
+         IY7UYJ+yDlPkn/YeckBZDDAiEQay0tep7sFYCf9e6D6gR9zzuie7x6tote9FumtSMD
+         zMm3XxuJozpNA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9BA865C1010; Fri,  3 Dec 2021 15:42:18 -0800 (PST)
+Date:   Fri, 3 Dec 2021 15:42:18 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Marco Elver <elver@google.com>
 Cc:     Alexander Potapenko <glider@google.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -67,38 +46,204 @@ Cc:     Alexander Potapenko <glider@google.com>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
+ memory modeling
+Message-ID: <20211203234218.GA3308268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-5-elver@google.com>
+ <YanbzWyhR0LwdinE@elver.google.com>
+ <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+ <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 3 Dec 2021 at 22:09, Paul E. McKenney <paulmck@kernel.org> wrote:
-[...]
+On Fri, Dec 03, 2021 at 01:08:56PM -0800, Paul E. McKenney wrote:
+> On Fri, Dec 03, 2021 at 08:50:20AM -0800, Paul E. McKenney wrote:
+> > On Fri, Dec 03, 2021 at 09:56:45AM +0100, Marco Elver wrote:
+> > > On Tue, Nov 30, 2021 at 12:44PM +0100, Marco Elver wrote:
+> > > [...]
+> > > > v3:
+> > > > * Remove kcsan_noinstr hackery, since we now try to avoid adding any
+> > > >   instrumentation to .noinstr.text in the first place.
+> > > [...]
+> > > 
+> > > I missed some cleanups after changes from v2 to v3 -- the below cleanup
+> > > is missing.
+> > > 
+> > > Full replacement patch attached.
+> > 
+> > I pulled this into -rcu with the other patches from your v3 post, thank
+> > you all!
+> 
 > A few quick tests located the following:
->
+> 
 > [    0.635383] INFO: trying to register non-static key.
 > [    0.635804] The code is fine but needs lockdep annotation, or maybe
 > [    0.636194] you didn't initialize this object before use?
 > [    0.636194] turning off the locking correctness validator.
 > [    0.636194] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
-[...]
+> [    0.636194] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> [    0.636194] Call Trace:
+> [    0.636194]  <TASK>
+> [    0.636194]  dump_stack_lvl+0x88/0xd8
+> [    0.636194]  dump_stack+0x15/0x1b
+> [    0.636194]  register_lock_class+0x6b3/0x840
+> [    0.636194]  ? __this_cpu_preempt_check+0x1d/0x30
+> [    0.636194]  __lock_acquire+0x81/0xee0
+> [    0.636194]  ? lock_is_held_type+0xf1/0x160
+> [    0.636194]  lock_acquire+0xce/0x230
+> [    0.636194]  ? test_barrier+0x490/0x14c7
+> [    0.636194]  ? lock_is_held_type+0xf1/0x160
+> [    0.636194]  ? test_barrier+0x490/0x14c7
+> [    0.636194]  _raw_spin_lock+0x36/0x50
+> [    0.636194]  ? test_barrier+0x490/0x14c7
+> [    0.636194]  ? kcsan_init+0xf/0x80
+> [    0.636194]  test_barrier+0x490/0x14c7
+> [    0.636194]  ? kcsan_debugfs_init+0x1f/0x1f
+> [    0.636194]  kcsan_selftest+0x47/0xa0
+> [    0.636194]  do_one_initcall+0x104/0x230
+> [    0.636194]  ? rcu_read_lock_sched_held+0x5b/0xc0
+> [    0.636194]  ? kernel_init+0x1c/0x200
+> [    0.636194]  do_initcall_level+0xa5/0xb6
+> [    0.636194]  do_initcalls+0x66/0x95
+> [    0.636194]  do_basic_setup+0x1d/0x23
+> [    0.636194]  kernel_init_freeable+0x254/0x2ed
+> [    0.636194]  ? rest_init+0x290/0x290
+> [    0.636194]  kernel_init+0x1c/0x200
+> [    0.636194]  ? rest_init+0x290/0x290
+> [    0.636194]  ret_from_fork+0x22/0x30
+> [    0.636194]  </TASK>
+> 
 > When running without the new patch series, this splat does not appear.
->
+> 
 > Do I need a toolchain upgrade?  I see the Clang 14.0 in the cover letter,
 > but that seems to apply only to non-x86 architectures.
->
+> 
 > $ clang-11 -v
 > Ubuntu clang version 11.1.0-++20210805102428+1fdec59bffc1-1~exp1~20210805203044.169
 
-Good catch! That would be lockdep telling me off for putting test
-locks on the stack. :-/
+And to further extend this bug report, the following patch suppresses
+the error.
 
-I thought I had tested this with lockdep, but it seems the set of
-semi-automated tests I run didn't (yet) generate a config with
-KCSAN_WEAK_MEMORY + LOCKDEP.
+							Thanx, Paul
 
-This should be fixed by:
-https://lkml.kernel.org/r/20211203233817.2815340-1-elver@google.com
+------------------------------------------------------------------------
 
-Thanks,
--- Marco
+commit d157b802f05bd12cf40bef7a73ca6914b85c865e
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Fri Dec 3 15:35:29 2021 -0800
+
+    kcsan: selftest: Move test spinlock to static global
+    
+    Running the TREE01 or TREE02 rcutorture scenarios results in the
+    following splat:
+    
+    ------------------------------------------------------------------------
+    
+     INFO: trying to register non-static key.
+     The code is fine but needs lockdep annotation, or maybe
+     you didn't initialize this object before use?
+     turning off the locking correctness validator.
+     CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
+     Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+     Call Trace:
+      <TASK>
+      dump_stack_lvl+0x88/0xd8
+      dump_stack+0x15/0x1b
+      register_lock_class+0x6b3/0x840
+      ? __this_cpu_preempt_check+0x1d/0x30
+      __lock_acquire+0x81/0xee0
+      ? lock_is_held_type+0xf1/0x160
+      lock_acquire+0xce/0x230
+      ? test_barrier+0x490/0x14c7
+      ? lock_is_held_type+0xf1/0x160
+      ? test_barrier+0x490/0x14c7
+      _raw_spin_lock+0x36/0x50
+      ? test_barrier+0x490/0x14c7
+      ? kcsan_init+0xf/0x80
+      test_barrier+0x490/0x14c7
+      ? kcsan_debugfs_init+0x1f/0x1f
+      kcsan_selftest+0x47/0xa0
+      do_one_initcall+0x104/0x230
+      ? rcu_read_lock_sched_held+0x5b/0xc0
+      ? kernel_init+0x1c/0x200
+      do_initcall_level+0xa5/0xb6
+      do_initcalls+0x66/0x95
+      do_basic_setup+0x1d/0x23
+      kernel_init_freeable+0x254/0x2ed
+      ? rest_init+0x290/0x290
+      kernel_init+0x1c/0x200
+      ? rest_init+0x290/0x290
+      ret_from_fork+0x22/0x30
+      </TASK>
+    
+    ------------------------------------------------------------------------
+    
+    This appears to be due to this line of code in kernel/kcsan/selftest.c:
+    KCSAN_CHECK_READ_BARRIER(spin_unlock(&spinlock)), which operates on a
+    spinlock allocated on the stack.  This shot-in-the-dark patch makes the
+    spinlock instead be a static global, which suppresses the above splat.
+    
+    Fixes: 510b49b8d4c9 ("kcsan: selftest: Add test case to check memory barrier instrumentation")
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/kcsan/selftest.c b/kernel/kcsan/selftest.c
+index 08c6b84b9ebed..05d772c9fe933 100644
+--- a/kernel/kcsan/selftest.c
++++ b/kernel/kcsan/selftest.c
+@@ -108,6 +108,8 @@ static bool __init test_matching_access(void)
+ 	return true;
+ }
+ 
++static DEFINE_SPINLOCK(test_barrier_spinlock);
++
+ /*
+  * Correct memory barrier instrumentation is critical to avoiding false
+  * positives: simple test to check at boot certain barriers are always properly
+@@ -122,7 +124,6 @@ static bool __init test_barrier(void)
+ #endif
+ 	bool ret = true;
+ 	arch_spinlock_t arch_spinlock = __ARCH_SPIN_LOCK_UNLOCKED;
+-	DEFINE_SPINLOCK(spinlock);
+ 	atomic_t dummy;
+ 	long test_var;
+ 
+@@ -172,8 +173,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_READ_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_READ_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_READ_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_barrier_spinlock);
++	KCSAN_CHECK_READ_BARRIER(spin_unlock(&test_barrier_spinlock));
+ 
+ 	KCSAN_CHECK_WRITE_BARRIER(mb());
+ 	KCSAN_CHECK_WRITE_BARRIER(wmb());
+@@ -202,8 +203,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_WRITE_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_WRITE_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_WRITE_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_barrier_spinlock);
++	KCSAN_CHECK_WRITE_BARRIER(spin_unlock(&test_barrier_spinlock));
+ 
+ 	KCSAN_CHECK_RW_BARRIER(mb());
+ 	KCSAN_CHECK_RW_BARRIER(wmb());
+@@ -235,8 +236,8 @@ static bool __init test_barrier(void)
+ 	KCSAN_CHECK_RW_BARRIER(clear_bit_unlock_is_negative_byte(0, &test_var));
+ 	arch_spin_lock(&arch_spinlock);
+ 	KCSAN_CHECK_RW_BARRIER(arch_spin_unlock(&arch_spinlock));
+-	spin_lock(&spinlock);
+-	KCSAN_CHECK_RW_BARRIER(spin_unlock(&spinlock));
++	spin_lock(&test_barrier_spinlock);
++	KCSAN_CHECK_RW_BARRIER(spin_unlock(&test_barrier_spinlock));
+ 
+ 	kcsan_nestable_atomic_end();
+ 
