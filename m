@@ -2,37 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5437467F1D
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Dec 2021 22:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E380B4680CB
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Dec 2021 00:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350807AbhLCVMW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 16:12:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:59064 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbhLCVMW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 16:12:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C461662B8E;
-        Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D79AC53FCB;
-        Fri,  3 Dec 2021 21:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638565737;
-        bh=BlTRvCdOzdAHgLT03YhsdUB2IyQJNEwbQ4P+5iYkKTE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=ur99wvPABOPqzeGjz2Doyg7rgvFw/Y7v7zGc+pOIb5dCTfLBIKMG0NTijfXG0V6Pv
-         img0MSBLke7jIIoZ9NfWc1wv2YbS06NtG0GmVnFrf0qOpSiHzbD7X7rKqMl+KE+lLV
-         yvwwOLGZ1f4Qs9hDWGjPED4ENdi2F+OaBDLrVey8bEmIAqg3W/OfiLnVPfaVjh/hP9
-         CN5vgcKaQ7gBWfBkdtS4UeP8QYTNxelHnpeP2kG1mrnN9qMlxe2hATX7gqJG8ukELp
-         m+NSTPZgnM/Fe+j8k+Yn7R81z5iWSg/gaDp07URVsMck0vqao25NzhtSuwnazBW+lM
-         6UYR5q7ShG9nA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DB1665C1108; Fri,  3 Dec 2021 13:08:56 -0800 (PST)
-Date:   Fri, 3 Dec 2021 13:08:56 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
+        id S1383552AbhLCXpl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Dec 2021 18:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1383515AbhLCXpj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 18:45:39 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B38C0611F7
+        for <linux-arch@vger.kernel.org>; Fri,  3 Dec 2021 15:42:15 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso5420938ota.5
+        for <linux-arch@vger.kernel.org>; Fri, 03 Dec 2021 15:42:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4JwQlDJ0eW7f9hYvr2thOhENg/qO/ZaZzGs6+sDFshM=;
+        b=AJ/TTnwyVYSX6l2dbIpeBUSjXxXc1p865vm+D2RhGu04FOd1dojH/S075xAjkHvREE
+         CX63gNQpg8eFmDqxN/+1Qwah0kEZdrJU5IZLuEmukgMBSbGT8ZVsX87ACdVvxTvnXDBK
+         mZYWElg8rD4PTchWPB7nykjdZkyxRmpHBGGNR8kqpq8vCZXDfxbqez7uIQ5NdV7hMoCV
+         Lf3SWZgqQW1MzTH/UOTBSje7705REt9thTaNdYmeUjFBEC9AlYqm2gHhrWgfoy3hsGkp
+         iLaT99dRzBy0QEyguUM6y79ZuC6inrGFlSDfBARE+En7rgXRrfkwyxOXfrRn2Ukcdd0x
+         ZlTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4JwQlDJ0eW7f9hYvr2thOhENg/qO/ZaZzGs6+sDFshM=;
+        b=MlAn++s7L3Ta9clwoUw/YMTwbMAtCsAf13DQLA1orjgESiuUpaLaor7FsH7HafjUXz
+         pFmrfukpP/tLEqXd1yjzhMIuct9dS4874ktmNNlh268HDWwo0feyEuShmXPHWtQ5r3vF
+         DA0ADujVOUAK37prGGkYiupzZt2qmjVir243L/8NcZCr/iEx/R18brdRiMigX0ypH90w
+         XE/i/L9gbz7X1gvHyErq4lg7z75Z3PB7CRCZTwFjxM5FXMBkocY020dSdZzIN8xkpy6S
+         zJ/efJrkXJ+Yag89/SjV/8xKmnpGLzgWAPuhxvbYv1jrSqWc+/9BP3+6jVmUnIPN5/tR
+         KUMg==
+X-Gm-Message-State: AOAM532mfdXHWUUagc2TeaoXfqJ7Bi1OY6dBlWO1GyiXevticER0AfHJ
+        PubiK01DetwKSJ9D9V4KO92SY1rEWFTW2B/kx+g71w==
+X-Google-Smtp-Source: ABdhPJzmeHxYPCJX3eYijPp8C1oQT6JTRLMS+qeYs0OAMS77tBDynJpAjMPOmqpeKVSmDxkzBYLKtTfkIQWBc6uaOn0=
+X-Received: by 2002:a9d:7548:: with SMTP id b8mr18387018otl.92.1638574934196;
+ Fri, 03 Dec 2021 15:42:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20211130114433.2580590-1-elver@google.com> <20211130114433.2580590-5-elver@google.com>
+ <YanbzWyhR0LwdinE@elver.google.com> <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+ <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
+From:   Marco Elver <elver@google.com>
+Date:   Sat, 4 Dec 2021 00:42:02 +0100
+Message-ID: <CANpmjNM0X1iAgz4vHTH4FSzdWdr1PiQQnoyFt-zoT2_VonFvVA@mail.gmail.com>
+Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
+ memory modeling
+To:     paulmck@kernel.org
 Cc:     Alexander Potapenko <glider@google.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
@@ -46,84 +67,38 @@ Cc:     Alexander Potapenko <glider@google.com>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
- memory modeling
-Message-ID: <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-5-elver@google.com>
- <YanbzWyhR0LwdinE@elver.google.com>
- <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 03, 2021 at 08:50:20AM -0800, Paul E. McKenney wrote:
-> On Fri, Dec 03, 2021 at 09:56:45AM +0100, Marco Elver wrote:
-> > On Tue, Nov 30, 2021 at 12:44PM +0100, Marco Elver wrote:
-> > [...]
-> > > v3:
-> > > * Remove kcsan_noinstr hackery, since we now try to avoid adding any
-> > >   instrumentation to .noinstr.text in the first place.
-> > [...]
-> > 
-> > I missed some cleanups after changes from v2 to v3 -- the below cleanup
-> > is missing.
-> > 
-> > Full replacement patch attached.
-> 
-> I pulled this into -rcu with the other patches from your v3 post, thank
-> you all!
+On Fri, 3 Dec 2021 at 22:09, Paul E. McKenney <paulmck@kernel.org> wrote:
+[...]
+> A few quick tests located the following:
+>
+> [    0.635383] INFO: trying to register non-static key.
+> [    0.635804] The code is fine but needs lockdep annotation, or maybe
+> [    0.636194] you didn't initialize this object before use?
+> [    0.636194] turning off the locking correctness validator.
+> [    0.636194] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
+[...]
+> When running without the new patch series, this splat does not appear.
+>
+> Do I need a toolchain upgrade?  I see the Clang 14.0 in the cover letter,
+> but that seems to apply only to non-x86 architectures.
+>
+> $ clang-11 -v
+> Ubuntu clang version 11.1.0-++20210805102428+1fdec59bffc1-1~exp1~20210805203044.169
 
-A few quick tests located the following:
+Good catch! That would be lockdep telling me off for putting test
+locks on the stack. :-/
 
-[    0.635383] INFO: trying to register non-static key.
-[    0.635804] The code is fine but needs lockdep annotation, or maybe
-[    0.636194] you didn't initialize this object before use?
-[    0.636194] turning off the locking correctness validator.
-[    0.636194] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.16.0-rc1+ #3208
-[    0.636194] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[    0.636194] Call Trace:
-[    0.636194]  <TASK>
-[    0.636194]  dump_stack_lvl+0x88/0xd8
-[    0.636194]  dump_stack+0x15/0x1b
-[    0.636194]  register_lock_class+0x6b3/0x840
-[    0.636194]  ? __this_cpu_preempt_check+0x1d/0x30
-[    0.636194]  __lock_acquire+0x81/0xee0
-[    0.636194]  ? lock_is_held_type+0xf1/0x160
-[    0.636194]  lock_acquire+0xce/0x230
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  ? lock_is_held_type+0xf1/0x160
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  _raw_spin_lock+0x36/0x50
-[    0.636194]  ? test_barrier+0x490/0x14c7
-[    0.636194]  ? kcsan_init+0xf/0x80
-[    0.636194]  test_barrier+0x490/0x14c7
-[    0.636194]  ? kcsan_debugfs_init+0x1f/0x1f
-[    0.636194]  kcsan_selftest+0x47/0xa0
-[    0.636194]  do_one_initcall+0x104/0x230
-[    0.636194]  ? rcu_read_lock_sched_held+0x5b/0xc0
-[    0.636194]  ? kernel_init+0x1c/0x200
-[    0.636194]  do_initcall_level+0xa5/0xb6
-[    0.636194]  do_initcalls+0x66/0x95
-[    0.636194]  do_basic_setup+0x1d/0x23
-[    0.636194]  kernel_init_freeable+0x254/0x2ed
-[    0.636194]  ? rest_init+0x290/0x290
-[    0.636194]  kernel_init+0x1c/0x200
-[    0.636194]  ? rest_init+0x290/0x290
-[    0.636194]  ret_from_fork+0x22/0x30
-[    0.636194]  </TASK>
+I thought I had tested this with lockdep, but it seems the set of
+semi-automated tests I run didn't (yet) generate a config with
+KCSAN_WEAK_MEMORY + LOCKDEP.
 
-When running without the new patch series, this splat does not appear.
+This should be fixed by:
+https://lkml.kernel.org/r/20211203233817.2815340-1-elver@google.com
 
-Do I need a toolchain upgrade?  I see the Clang 14.0 in the cover letter,
-but that seems to apply only to non-x86 architectures.
-
-$ clang-11 -v
-Ubuntu clang version 11.1.0-++20210805102428+1fdec59bffc1-1~exp1~20210805203044.169
-
-							Thanx, Paul
+Thanks,
+-- Marco
