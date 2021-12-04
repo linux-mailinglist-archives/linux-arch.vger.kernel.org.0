@@ -2,92 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1624681BA
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Dec 2021 02:14:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBD346831B
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Dec 2021 08:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354451AbhLDBRd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Dec 2021 20:17:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40288 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233023AbhLDBRc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Dec 2021 20:17:32 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD7D962C49;
-        Sat,  4 Dec 2021 01:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5BBC341C0;
-        Sat,  4 Dec 2021 01:14:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638580447;
-        bh=kRPrcbb3nkeObkhB2Ul95O5vYzXbYXpVb4wpEsKiNVc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=asnsLpkfGW5B54GACNHa2REYpExvXo3jNQ4EzyiqY9fIDmXOokZp/AMwEF7YcYXGW
-         J8rcFwR136OkR1mDFfI5tK1iF2VnKrRg67c7Fkhhhq+PAAWrDRuDzePKnaqzeJaFwx
-         D31IIJZsGAwGModqVdPAu/5OeU/FQhees9dpw+cd+mqaAkEToGBzas+PeGXavv55Es
-         gdkbRgbN7w7ofg7j2MrXsphLHSFuXHSbGuVaFiOylZMEbKYKnwpA11NiAdRE4ks55Q
-         lGMpvyoV0WhI0w44MpU1Up2oDzSSzN8F34t5VEqJCarJ/wJ+AbIeOMyGOGhk1vFQDx
-         +mgF/49mE0sgg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F26E45C0F91; Fri,  3 Dec 2021 17:14:06 -0800 (PST)
-Date:   Fri, 3 Dec 2021 17:14:06 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 04/25] kcsan: Add core support for a subset of weak
- memory modeling
-Message-ID: <20211204011406.GU641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211130114433.2580590-1-elver@google.com>
- <20211130114433.2580590-5-elver@google.com>
- <YanbzWyhR0LwdinE@elver.google.com>
- <20211203165020.GR641268@paulmck-ThinkPad-P17-Gen-1>
- <20211203210856.GA712591@paulmck-ThinkPad-P17-Gen-1>
- <20211203234218.GA3308268@paulmck-ThinkPad-P17-Gen-1>
- <CANpmjNNUinNdBBOVbAgQQYCJVftgUfQQZyPSchWhyVRyjWpedA@mail.gmail.com>
+        id S1344339AbhLDHZa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 4 Dec 2021 02:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232185AbhLDHZ3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Dec 2021 02:25:29 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87C1C061751;
+        Fri,  3 Dec 2021 23:22:04 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso6951352pji.0;
+        Fri, 03 Dec 2021 23:22:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZkQEYozmB0wgYJcxDO/m983AAdy8n14FhucCaGoUzA4=;
+        b=blREAYP23qBjIahcqczEuNSUq6MRbQ5UXgW1oG4ZGSSpOed90dbanN+LHvJF7N6ME0
+         Y9LKoSwodHr9BOd//+DW6OvBPSh6Rf4BdMb2EzDvtQ+sVoes1f6+7VWyUKFWqiaSHHqU
+         Am+FtOCVPnOAgj6oTP0k0IWgh4dooTt7QX7KQKbCT+o69WR7nP4hJQspPwFm25qXtPCW
+         kBdkmADgMPc7HTKvYOavrblwjUfXQ3wlSxkW6E/shgs8QAhLWvPBZ3tVRmEVD7CWY44S
+         t8LTdIFpatSjby01xMjLjf42MSd1m5DtLtC+1uS3bLpAx3vREm/i+1aUCO81LPZgXzuP
+         nkWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZkQEYozmB0wgYJcxDO/m983AAdy8n14FhucCaGoUzA4=;
+        b=y2p/lvt374wlKRsJOW+X3FJTKJeg5JQ5PGHiHtuMWq8vjHK8kNwOx2cXg7kFIDt6GZ
+         GWpTXROfQaQGc4Sqcwf7un19o6tzvq8gTC40TkOzJgdJvrOQATV78k9J6sK0ymLtzmC6
+         iyLfZDt1xtt4pCF+o3xM/8r80ZD7DFlRAKkX19MUxh2ZPm6hSzVm09ns226Fs86OwwxI
+         s1csl3Ix8jApBmjaCkVXFEbLW9ASwBbPlFRWE3V8pRWaWhW8iLr6+cubVa/1Ylo+zNuG
+         PTjCL7swYrzNvCV7WEWCAit5nq5UxEvKDbxc0SaemDhJMIYNAgUu3Y6qBdg/XyUfHR5O
+         20LQ==
+X-Gm-Message-State: AOAM533wEHgVJox09V37PvdH3GuZhMAvzI4CXCG4Eumk/NbEYzH5NMz4
+        MZ/jzbFv3zbXgsgVPu/5e2k=
+X-Google-Smtp-Source: ABdhPJzcZuwuxSGpXoC+LpAfScg+HY+PAZl5x85Fy3cmkRF8TnHHjxYQIiUVC9++sZKTL0nxBihlXA==
+X-Received: by 2002:a17:903:1105:b0:143:a593:dc6e with SMTP id n5-20020a170903110500b00143a593dc6emr28523850plh.6.1638602524291;
+        Fri, 03 Dec 2021 23:22:04 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
+        by smtp.gmail.com with ESMTPSA id t10sm4331860pga.6.2021.12.03.23.21.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Dec 2021 23:22:03 -0800 (PST)
+Message-ID: <59e41c28-260f-876d-c7cf-a13669ad8984@gmail.com>
+Date:   Sat, 4 Dec 2021 15:21:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNNUinNdBBOVbAgQQYCJVftgUfQQZyPSchWhyVRyjWpedA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH V3 1/5] Swiotlb: Add Swiotlb bounce buffer remap function
+ for HV IVM
+Content-Language: en-US
+To:     Tom Lendacky <thomas.lendacky@amd.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, jgross@suse.com, sstabellini@kernel.org,
+        boris.ostrovsky@oracle.com, joro@8bytes.org, will@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, arnd@arndb.de, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
+        michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, parri.andrea@gmail.com, dave.hansen@intel.com
+References: <20211201160257.1003912-1-ltykernel@gmail.com>
+ <20211201160257.1003912-2-ltykernel@gmail.com>
+ <41bb0a87-9fdb-4c67-a903-9e87d092993a@amd.com>
+ <e78ba239-2dad-d48f-671e-f76a943052f1@gmail.com>
+ <06faf04c-dc4a-69fd-0be9-04f57f779ffe@amd.com>
+ <1b7b8e20-a861-ab26-26a1-dad1eb80a461@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1b7b8e20-a861-ab26-26a1-dad1eb80a461@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Dec 04, 2021 at 12:45:30AM +0100, Marco Elver wrote:
-> On Sat, 4 Dec 2021 at 00:42, Paul E. McKenney <paulmck@kernel.org> wrote:
-> [...]
-> > And to further extend this bug report, the following patch suppresses
-> > the error.
-> >
-> >                                                         Thanx, Paul
-> >
-> > ------------------------------------------------------------------------
-> >
-> > commit d157b802f05bd12cf40bef7a73ca6914b85c865e
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Fri Dec 3 15:35:29 2021 -0800
-> >
-> >     kcsan: selftest: Move test spinlock to static global
+On 12/4/2021 4:06 AM, Tom Lendacky wrote:
+>>> Hi Tom:
+>>>        Thanks for your test. Could you help to test the following 
+>>> patch and check whether it can fix the issue.
+>>
+>> The patch is mangled. Is the only difference where 
+>> set_memory_decrypted() is called?
 > 
-> Indeed, that will fix the selftest. The kcsan_test has the same
-> problem (+1 extra problem).
+> I de-mangled the patch. No more stack traces with SME active.
 > 
-> We raced sending the fix. :-)
-> I hope this patch works for you:
-> https://lkml.kernel.org/r/20211203233817.2815340-1-elver@google.com
+> Thanks,
+> Tom
 
-I replaced my patch with yours and am starting up testing, thank you!
+Hi Tom:
+	Thanks a lot for your rework and test. I will update in the next version.
 
-							Thanx, Paul
+Thanks.
