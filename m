@@ -2,197 +2,327 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A53D246A152
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 17:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E40C346A298
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 18:17:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343736AbhLFQaZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Dec 2021 11:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
+        id S234566AbhLFRVR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Dec 2021 12:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385471AbhLFQaD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 11:30:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD289C0613F8;
-        Mon,  6 Dec 2021 08:26:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 24060CE16C7;
-        Mon,  6 Dec 2021 16:26:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1EF4C341C2;
-        Mon,  6 Dec 2021 16:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638807991;
-        bh=Wz98IlyL9Yn420RHC9S01jFGy4sD8P9IQ4KMEc4hBnE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sckZAMuU60EwH/eL09QBh97evFipQvaEK2vdD+cy3Lc6rdQAIVOVWWzQDEDKZgP8v
-         4X7Ns9yeBid7mgmKpBT5K4Q3DSkTcD5knRd7qzUN0nRmhJ6EkrkGipxhj7htcOZnEF
-         Ga4Kavqt3K8yQqgpA2o8x6NwS2P8ZHZ9WWNgLe23sIPvF6dt3jvy1RcfG8uIwq90K1
-         cE7aPNgS6bkn28zD9csV6o1ASEmKwfuTNetYxcQ68VAjOKvb4Rpyf3Ia1Q2vLLD2P+
-         f/f7mz/19NF333JJ2TnSSRXOawk9AjaDQz+Yq14eSA607a48o/A2WaAnbp4RVDX+jo
-         VF51jKfuPHJjQ==
-Date:   Tue, 7 Dec 2021 00:18:54 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@rivosinc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        with ESMTP id S234757AbhLFRVQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 12:21:16 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C5C061746;
+        Mon,  6 Dec 2021 09:17:48 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id x6so13684611iol.13;
+        Mon, 06 Dec 2021 09:17:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=aNz3Q2mlKF711FA8wRX14koPJl39WuNweWYokTQs3qU=;
+        b=AwTjbe4JskmjdVEHzHOR1FdY/bm5eSzHzio26QFOYCc4QTlRRzGcpZNWTOmwvHCWUv
+         DiqrMq/laf0baqEnExZnhGWJKVAglgQlB5NsUUWLKUwqb2iV/QKTGcmMGoD9vU/9feFA
+         quH5Q1HK3vDzFEBvRHE/9Eivv+9WOGhA8iHL3DvHJ9lDL8Jos11pIxhEIxw6WdgW0Yqg
+         QkFnXjVRfF7DHU4l7BLLaLBGCLmt4SfnIAXjFGMxZaXGDMH3CWALYiBYrk5Z64efPGYB
+         vFzg5dlqju1UrQ0pHToAb5NTDBE+tw9NU3sswbWCeRDeiQYpFCJz7YLYwDCnqA+0uVyA
+         xu8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aNz3Q2mlKF711FA8wRX14koPJl39WuNweWYokTQs3qU=;
+        b=PxA9jgZkpAOfz9/NCAXAmWxjwx2AYyVifF3vHUJZowrtqGgEneSDortWD1VHaAeiF7
+         NhKhuyRm+kmrkn1EpUAeryKueArtAedEM6M59SPB6Nrqu1q9RZ2B9Znk51DL20Fk2BZO
+         dmFwW3NmR4tc4iN4E8vsdY0xLK2sadQpyJpwzJXj0tM0o+3f6VLfIpZck9fot6WB6l4L
+         fCK1u/jNIOqe7k4EHcE26/pVinnQV9jpwuQoq1Ezha/ueZQ12Jl2Fw4fJASj6sqynMGy
+         3Tflvt8Nc71vdbOdkIPFL6/bFYxhxBoT4eGCz4A+y2OgtXPqGs084ONdeVuP0wfwT21J
+         /miQ==
+X-Gm-Message-State: AOAM530Ql49uDBeNvq1W8KflA/axEW2akoo1SxKooavuacUXAO3N0dKx
+        mFmIoXJwWHA90XWmXwBlDEg=
+X-Google-Smtp-Source: ABdhPJyv3jGlqSSJnIRJD424hIOvjpgEoXREUM7M0+VcqmqFV24bQgbl0uhMJAoKJXaUpVwvcHznpA==
+X-Received: by 2002:a05:6602:1609:: with SMTP id x9mr34726304iow.6.1638811067376;
+        Mon, 06 Dec 2021 09:17:47 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id r3sm7030982iob.0.2021.12.06.09.17.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 09:17:46 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 25CDA27C0064;
+        Mon,  6 Dec 2021 12:17:45 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 06 Dec 2021 12:17:45 -0500
+X-ME-Sender: <xms:uEWuYRL6RqCVh9V3LkBudn5KYREbsDRCjuiN-cl8F70X7lyS0mr_rg>
+    <xme:uEWuYdLBcm8HMsTIZHEtW3eC5SLqY5ZixKc0iNd6yNf7oDRyfKBxpvc6_IQmuznM9
+    lK2wG3c54QHTKjPPg>
+X-ME-Received: <xmr:uEWuYZuK907atpfMNOGoJQhb2DJdLvggEQr5O0xJcD-wP4az-iZ1jntpGAg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgdellecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
+    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvg
+X-ME-Proxy: <xmx:uEWuYSaytHv6obCwpvVYsaka6TAVJfASY-_U-6UHW7fT8npY7zLJgw>
+    <xmx:uEWuYYbCSW8fc1jNaUS3QD9CpdcyfsjkGo05j9PrYu_W-wiiEgY8VQ>
+    <xmx:uEWuYWDTmq8SilnEKWAlXn5qYibumEtJumw0ZCN9X2wrVA_EuUkn5w>
+    <xmx:uEWuYVRqeVwd13UKriZ4Y4jbXM16FeexZmySUNfPq7czO1EXmpb6_uWshfo>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Dec 2021 12:17:44 -0500 (EST)
+Date:   Tue, 7 Dec 2021 01:16:25 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
         Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
         Dmitry Vyukov <dvyukov@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 01/13] riscv: Move KASAN mapping next to the kernel
- mapping
-In-Reply-To: <20211206104657.433304-2-alexandre.ghiti@canonical.com>
-References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
-        <20211206104657.433304-2-alexandre.ghiti@canonical.com>
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
+Message-ID: <Ya5FaU9e6XY8vHJR@boqun-archlinux>
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-9-elver@google.com>
+ <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
+ <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
+ <Ya4evHE7uQ9eXpax@boqun-archlinux>
+ <Ya40hEQv5SEu7ZeL@elver.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Message-Id: <20211206162624.F1EF4C341C2@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ya40hEQv5SEu7ZeL@elver.google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon,  6 Dec 2021 11:46:45 +0100
-Alexandre Ghiti <alexandre.ghiti@canonical.com> wrote:
-
-> Now that KASAN_SHADOW_OFFSET is defined at compile time as a config,
-> this value must remain constant whatever the size of the virtual address
-> space, which is only possible by pushing this region at the end of the
-> address space next to the kernel mapping.
+On Mon, Dec 06, 2021 at 05:04:20PM +0100, Marco Elver wrote:
+> On Mon, Dec 06, 2021 at 10:31PM +0800, Boqun Feng wrote:
+> [...]
+> > Thanks for the explanation, I was missing the swap here. However...
+> > 
+> > > So in your above example you need to swap "reordered to" and the top
+> > > frame of the stack trace.
+> > > 
 > 
-> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+> Apologies, I wasn't entirely precise ... what you say below is correct.
+> 
+> > IIUC, the report for my above example will be:
+> > 
+> >          | write (reordered) to 0xaaaa of ...:
+> >          | foo+0x... // address of the write to A
+> >          | ...
+> >          |  |
+> >          |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
+> > 
+> > , right? Because in replace_stack_entry(), it's not the top frame where
+> > the race occurred that gets swapped, it's the frame which belongs to the
+> > same function as the original access that gets swapped. In other words,
+> > when KCSAN finds the problem, top entries of the calling stack are:
+> > 
+> > 	[0] bar+0x.. // address of the write to B
+> > 	[1] foo+0x.. // address of the callsite to bar() in foo()
+> > 
+> > after replace_stack_entry(), they changes to:
+> > 
+> > 	[0] bar+0x.. // address of the write to B
+> > skip  ->[1] foo+0x.. // address of the write to A
+> > 
+> > , as a result the report won't mention bar() at all.
+> 
+> Correct.
+> 
+> > And I think a better report will be:
+> > 
+> >          | write (reordered) to 0xaaaa of ...:
+> >          | foo+0x... // address of the write to A
+> >          | ...
+> >          |  |
+> >          |  +-> reordered to: bar+0x... // address of the write to B in bar()
+> > 
+> > because it tells users the exact place the accesses get reordered. That
+> > means maybe we want something as below? Not completely tested, but I
+> > play with scope checking a bit, seems it gives what I want. Thoughts?
+> 
+> This is problematic because it makes it much harder to actually figure
+> out what's going on, given "reordered to" isn't a full stack trace. So
+> if you're deep in some call hierarchy, seeing a random "reordered to"
+> line is quite useless. What I want to see, at the very least, is the ip
+> to the same function where the original access happened.
+> 
+> We could of course try and generate a full stack trace at "reordered
+> to", but this would entail
+> 
+> 	a) allocating 2x unsigned long[64] on the stack (or moving to
+> 	   static storage),
+> 	b) further increasing the report length,
+> 	c) an even larger number of possibly distinct reports for the
+> 	   same issue; this makes deduplication even harder.
+> 
+> The reason I couldn't justify all that is that when I looked through
+> several dozen "reordered to" reports, I never found anything other than
+> the ip in the function frame of the original access useful. That, and in
+> most cases the "reordered to" location was in the same function or in an
+> inlined function.
+> 
+> The below patch would do what you'd want I think.
+> 
+> My opinion is to err on the side of simplicity until there is evidence
+> we need it. Of course, if you have a compelling reason that we need it
+> from the beginning, happy to send it as a separate patch on top.
+> 
+> What do you think?
+> 
+
+Totally agreed. It's better to keep it simple until people report that
+they want to see more information to resolve the issues. And thanks for
+looking into the "double stack traces", that looks good to me too.
+
+For the original patch, feel free to add:
+
+Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+
+Regards,
+Boqun
+
+> Thanks,
+> -- Marco
+> 
+> ------ >8 ------
+> 
+> From: Marco Elver <elver@google.com>
+> Date: Mon, 6 Dec 2021 16:35:02 +0100
+> Subject: [PATCH] kcsan: Show full stack trace of reordered-to accesses
+> 
+> Change reports involving reordered accesses to show the full stack trace
+> of "reordered to" accesses. For example:
+> 
+>  | ==================================================================
+>  | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
+>  |
+>  | read-write to 0xffffffffc02d01e8 of 8 bytes by task 2481 on cpu 2:
+>  |  test_kernel_wrong_memorder+0x57/0x90
+>  |  access_thread+0xb7/0x100
+>  |  kthread+0x2ed/0x320
+>  |  ret_from_fork+0x22/0x30
+>  |
+>  | read-write (reordered) to 0xffffffffc02d01e8 of 8 bytes by task 2480 on cpu 0:
+>  |  test_kernel_wrong_memorder+0x57/0x90
+>  |  access_thread+0xb7/0x100
+>  |  kthread+0x2ed/0x320
+>  |  ret_from_fork+0x22/0x30
+>  |   |
+>  |   +-> reordered to: test_delay+0x31/0x110
+>  |                     test_kernel_wrong_memorder+0x80/0x90
+>  |
+>  | Reported by Kernel Concurrency Sanitizer on:
+>  | CPU: 0 PID: 2480 Comm: access_thread Not tainted 5.16.0-rc1+ #2
+>  | Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>  | ==================================================================
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
 > ---
->  Documentation/riscv/vm-layout.rst | 12 ++++++------
->  arch/riscv/Kconfig                |  4 ++--
->  arch/riscv/include/asm/kasan.h    |  4 ++--
->  arch/riscv/include/asm/page.h     |  6 +++++-
->  arch/riscv/include/asm/pgtable.h  |  6 ++++--
->  arch/riscv/mm/init.c              | 25 +++++++++++++------------
->  6 files changed, 32 insertions(+), 25 deletions(-)
+>  kernel/kcsan/report.c | 33 +++++++++++++++++++++++----------
+>  1 file changed, 23 insertions(+), 10 deletions(-)
 > 
-> diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
-> index b7f98930d38d..1bd687b97104 100644
-> --- a/Documentation/riscv/vm-layout.rst
-> +++ b/Documentation/riscv/vm-layout.rst
-> @@ -47,12 +47,12 @@ RISC-V Linux Kernel SV39
->                                                                | Kernel-space virtual memory, shared between all processes:
->    ____________________________________________________________|___________________________________________________________
->                      |            |                  |         |
-> -   ffffffc000000000 | -256    GB | ffffffc7ffffffff |   32 GB | kasan
-> -   ffffffcefee00000 | -196    GB | ffffffcefeffffff |    2 MB | fixmap
-> -   ffffffceff000000 | -196    GB | ffffffceffffffff |   16 MB | PCI io
-> -   ffffffcf00000000 | -196    GB | ffffffcfffffffff |    4 GB | vmemmap
-> -   ffffffd000000000 | -192    GB | ffffffdfffffffff |   64 GB | vmalloc/ioremap space
-> -   ffffffe000000000 | -128    GB | ffffffff7fffffff |  124 GB | direct mapping of all physical memory
-> +   ffffffc6fee00000 | -228    GB | ffffffc6feffffff |    2 MB | fixmap
-> +   ffffffc6ff000000 | -228    GB | ffffffc6ffffffff |   16 MB | PCI io
-> +   ffffffc700000000 | -228    GB | ffffffc7ffffffff |    4 GB | vmemmap
-> +   ffffffc800000000 | -224    GB | ffffffd7ffffffff |   64 GB | vmalloc/ioremap space
-> +   ffffffd800000000 | -160    GB | fffffff6ffffffff |  124 GB | direct mapping of all physical memory
-> +   fffffff700000000 |  -36    GB | fffffffeffffffff |   32 GB | kasan
->    __________________|____________|__________________|_________|____________________________________________________________
->                                                                |
->                                                                |
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 6d5b63bd4bd9..6cd98ade5ebc 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -161,12 +161,12 @@ config PAGE_OFFSET
->  	default 0xC0000000 if 32BIT && MAXPHYSMEM_1GB
->  	default 0x80000000 if 64BIT && !MMU
->  	default 0xffffffff80000000 if 64BIT && MAXPHYSMEM_2GB
-> -	default 0xffffffe000000000 if 64BIT && MAXPHYSMEM_128GB
-> +	default 0xffffffd800000000 if 64BIT && MAXPHYSMEM_128GB
+> diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
+> index 67794404042a..a8317d5f5123 100644
+> --- a/kernel/kcsan/report.c
+> +++ b/kernel/kcsan/report.c
+> @@ -317,22 +317,29 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+>  {
+>  	unsigned long symbolsize, offset;
+>  	unsigned long target_func;
+> -	int skip;
+> +	int skip, i;
 >  
->  config KASAN_SHADOW_OFFSET
->  	hex
->  	depends on KASAN_GENERIC
-> -	default 0xdfffffc800000000 if 64BIT
-> +	default 0xdfffffff00000000 if 64BIT
->  	default 0xffffffff if 32BIT
+>  	if (kallsyms_lookup_size_offset(ip, &symbolsize, &offset))
+>  		target_func = ip - offset;
+>  	else
+>  		goto fallback;
 >  
->  config ARCH_FLATMEM_ENABLE
-> diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
-> index b00f503ec124..257a2495145a 100644
-> --- a/arch/riscv/include/asm/kasan.h
-> +++ b/arch/riscv/include/asm/kasan.h
-> @@ -28,8 +28,8 @@
->  #define KASAN_SHADOW_SCALE_SHIFT	3
+> -	for (skip = 0; skip < num_entries; ++skip) {
+> +	skip = get_stack_skipnr(stack_entries, num_entries);
+> +	for (i = 0; skip < num_entries; ++skip, ++i) {
+>  		unsigned long func = stack_entries[skip];
 >  
->  #define KASAN_SHADOW_SIZE	(UL(1) << ((CONFIG_VA_BITS - 1) - KASAN_SHADOW_SCALE_SHIFT))
-> -#define KASAN_SHADOW_START	KERN_VIRT_START
-> -#define KASAN_SHADOW_END	(KASAN_SHADOW_START + KASAN_SHADOW_SIZE)
-> +#define KASAN_SHADOW_START	(KASAN_SHADOW_END - KASAN_SHADOW_SIZE)
-> +#define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
->  #define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
+>  		if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
+>  			goto fallback;
+>  		func -= offset;
 >  
->  void kasan_init(void);
-> diff --git a/arch/riscv/include/asm/page.h b/arch/riscv/include/asm/page.h
-> index 109c97e991a6..e03559f9b35e 100644
-> --- a/arch/riscv/include/asm/page.h
-> +++ b/arch/riscv/include/asm/page.h
-> @@ -33,7 +33,11 @@
->   */
->  #define PAGE_OFFSET		_AC(CONFIG_PAGE_OFFSET, UL)
+> +		replaced[i] = stack_entries[skip];
+>  		if (func == target_func) {
+> -			*replaced = stack_entries[skip];
+> +			/*
+> +			 * There must be at least 1 entry left in the original
+> +			 * @stack_entries, so we know that we will never occupy
+> +			 * more than @num_entries - 1 of @replaced.
+> +			 */
+> +			replaced[i + 1] = 0;
+>  			stack_entries[skip] = ip;
+>  			return skip;
+>  		}
+> @@ -341,6 +348,7 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+>  fallback:
+>  	/* Should not happen; the resulting stack trace is likely misleading. */
+>  	WARN_ONCE(1, "Cannot find frame for %pS in stack trace", (void *)ip);
+> +	replaced[0] = 0;
+>  	return get_stack_skipnr(stack_entries, num_entries);
+>  }
 >  
-> -#define KERN_VIRT_SIZE (-PAGE_OFFSET)
-> +/*
-> + * Half of the kernel address space (half of the entries of the page global
-> + * directory) is for the direct mapping.
-> + */
-> +#define KERN_VIRT_SIZE		((PTRS_PER_PGD / 2 * PGDIR_SIZE) / 2)
+> @@ -365,11 +373,16 @@ static int sym_strcmp(void *addr1, void *addr2)
+>  }
 >  
->  #ifndef __ASSEMBLY__
+>  static void
+> -print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long reordered_to)
+> +print_stack_trace(unsigned long stack_entries[], int num_entries, unsigned long *reordered_to)
+>  {
+>  	stack_trace_print(stack_entries, num_entries, 0);
+> -	if (reordered_to)
+> -		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to);
+> +	if (reordered_to[0]) {
+> +		int i;
+> +
+> +		pr_err("  |\n  +-> reordered to: %pS\n", (void *)reordered_to[0]);
+> +		for (i = 1; i < NUM_STACK_ENTRIES && reordered_to[i]; ++i)
+> +			pr_err("                    %pS\n", (void *)reordered_to[i]);
+> +	}
+>  }
 >  
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> index 39b550310ec6..d34f3a7a9701 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -39,8 +39,10 @@
+>  static void print_verbose_info(struct task_struct *task)
+> @@ -390,12 +403,12 @@ static void print_report(enum kcsan_value_change value_change,
+>  			 struct other_info *other_info,
+>  			 u64 old, u64 new, u64 mask)
+>  {
+> -	unsigned long reordered_to = 0;
+> +	unsigned long reordered_to[NUM_STACK_ENTRIES] = { 0 };
+>  	unsigned long stack_entries[NUM_STACK_ENTRIES] = { 0 };
+>  	int num_stack_entries = stack_trace_save(stack_entries, NUM_STACK_ENTRIES, 1);
+> -	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, &reordered_to);
+> +	int skipnr = sanitize_stack_entries(stack_entries, num_stack_entries, ai->ip, reordered_to);
+>  	unsigned long this_frame = stack_entries[skipnr];
+> -	unsigned long other_reordered_to = 0;
+> +	unsigned long other_reordered_to[NUM_STACK_ENTRIES] = { 0 };
+>  	unsigned long other_frame = 0;
+>  	int other_skipnr = 0; /* silence uninit warnings */
 >  
->  /* Modules always live before the kernel */
->  #ifdef CONFIG_64BIT
-> -#define MODULES_VADDR	(PFN_ALIGN((unsigned long)&_end) - SZ_2G)
-> -#define MODULES_END	(PFN_ALIGN((unsigned long)&_start))
-> +/* This is used to define the end of the KASAN shadow region */
-> +#define MODULES_LOWEST_VADDR	(KERNEL_LINK_ADDR - SZ_2G)
-> +#define MODULES_VADDR		(PFN_ALIGN((unsigned long)&_end) - SZ_2G)
-> +#define MODULES_END		(PFN_ALIGN((unsigned long)&_start))
->  #endif
+> @@ -408,7 +421,7 @@ static void print_report(enum kcsan_value_change value_change,
+>  	if (other_info) {
+>  		other_skipnr = sanitize_stack_entries(other_info->stack_entries,
+>  						      other_info->num_stack_entries,
+> -						      other_info->ai.ip, &other_reordered_to);
+> +						      other_info->ai.ip, other_reordered_to);
+>  		other_frame = other_info->stack_entries[other_skipnr];
 >  
->  /*
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index c0cddf0fc22d..4224e9d0ecf5 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -103,6 +103,9 @@ static void __init print_vm_layout(void)
->  	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
->  		  (unsigned long)high_memory);
->  #ifdef CONFIG_64BIT
-> +#ifdef CONFIG_KASAN
-> +	print_mlm("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
-> +#endif
-
-I think we'd better avoid #ifdef usage as much as possible.
-For this KASAN case, we can make both KASAN_SHADOW_START and KASAN_SHADOW_END
-always visible as x86 does, then above code can be
-if (IS_ENABLED(CONFIG_KASAN))
-	print_mlm("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
-
-Thanks
+>  		/* @value_change is only known for the other thread */
+> -- 
+> 2.34.1.400.ga245620fadb-goog
+> 
