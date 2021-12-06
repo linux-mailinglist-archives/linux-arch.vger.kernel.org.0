@@ -2,150 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 121574694E0
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 12:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830A646961A
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 13:59:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242146AbhLFLU7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 6 Dec 2021 06:20:59 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:53836 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234845AbhLFLU6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 6 Dec 2021 06:20:58 -0500
-Received: from [77.23.162.171] (helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1muBzU-0003Gp-KA; Mon, 06 Dec 2021 12:17:04 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@wdc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc:     Alexandre ghiti <alex@ghiti.fr>
-Subject: Re: [PATCH v2 00/10] Introduce sv48 support without relocatable kernel
-Date:   Mon, 06 Dec 2021 12:17:02 +0100
-Message-ID: <16228030.BXmPpbjjvJ@diego>
-In-Reply-To: <3283761f-0506-464b-d351-af8ddecafa9b@ghiti.fr>
-References: <20210929145113.1935778-1-alexandre.ghiti@canonical.com> <2700575.YIZvDWadBg@diego> <3283761f-0506-464b-d351-af8ddecafa9b@ghiti.fr>
+        id S243365AbhLFNCl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Dec 2021 08:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243274AbhLFNCl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 08:02:41 -0500
+Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9ACC061746
+        for <linux-arch@vger.kernel.org>; Mon,  6 Dec 2021 04:59:12 -0800 (PST)
+Received: by mail-vk1-xa43.google.com with SMTP id u68so6678094vke.11
+        for <linux-arch@vger.kernel.org>; Mon, 06 Dec 2021 04:59:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
+        b=Y1e8Rp4ch5nwIhMTKqVQ9+VYWwgRHwJV5bBY8UJMNEx0UDWekNxF6J6EBtaV6WvieW
+         Ys8J+OGeIgNv+JL4vDD7QZw5TtdUS94G+q322UWbpnvOMbkjuV+HtcoLj1oV2PhXunQY
+         0WQAwpAYqfWkKo225IJmgr8JDnFo9qnwIid3oMCZLXvxAeG0wwWFqxX8rWSB19Y92Kh0
+         13mK0YTygwC6U78bt2TiluSqu+9h0hEPT3ORY4ukUd/n7x0vYj8pN8rKw5tHQcw8Gla6
+         ntyXPjasZJUSeNgxVkIkYGoxQAdjxWj3JD8WdTtgGv+4lumIul1PCnAvoX0WwXgfjwNo
+         LjXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
+        b=hLeMO0X5Y/jAsK3LC5jjaI9qFpOvqjotJ34f5d17djGw/7lFnKFo+cvF94O82FHHU3
+         CLzrA+oaYseC6gaoQxVkSdBFnW5VnbD+gonNFbe5LCc0NW2m3JFehrUs0N/+6Uxom0Ai
+         IacndcfZqgs8FQj7EnqU4/l7Hc5+4Ows1yT0yCzqfBqDBQqgtXiBeTzpoYqi0Amgw7as
+         xahrnSQHZCKvnrizUdkVdXtfB0Yk9kSSPaRsY1cYYXFuw3RE1kKpNiiIfYzZ0TlRIznC
+         sqbk1FrnTXPkcb2/W8wRwdi1SECYmt3EbMEIUd95GaL47Mse9cpCzI+fOBYg33AmuSZ9
+         PRzA==
+X-Gm-Message-State: AOAM532rh5+OmUiQUPz6hc32qHI1cjmBgoQuEPExh9FfN9qHXH1rmwbu
+        uiK/VsLVhFOPRoi4vwLAx/8k3iHO81yffzojqdc=
+X-Google-Smtp-Source: ABdhPJwFdfFuZClQn9NR0fF5j0R/SN6LRo3FCLvvvB1K9IheaFkYehtN2dQaHT4LvmyEZSxlAHbw0x3ciRbl3VKtqvQ=
+X-Received: by 2002:a05:6122:130d:: with SMTP id e13mr40882176vkp.6.1638795551612;
+ Mon, 06 Dec 2021 04:59:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
+Received: by 2002:a9f:3601:0:0:0:0:0 with HTTP; Mon, 6 Dec 2021 04:59:11 -0800 (PST)
+Reply-To: jp2888322@gmail.com
+From:   Maria-Elisabeth_Schaeffler <kiruijoan993@gmail.com>
+Date:   Mon, 6 Dec 2021 15:59:11 +0300
+Message-ID: <CAJs2jC4LKwRAUA5scDcoznoiMF=rRkC7gyPH5qqmeQQsUDr33Q@mail.gmail.com>
+Subject: Spende
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Am Montag, 6. Dezember 2021, 11:49:55 CET schrieb Alexandre ghiti:
-> On 11/25/21 00:29, Heiko Stübner wrote:
-> > Am Mittwoch, 29. September 2021, 16:51:03 CET schrieb Alexandre Ghiti:
-> >> This patchset allows to have a single kernel for sv39 and sv48 without
-> >> being relocatable.
-> >>                                                                                   
-> >> The idea comes from Arnd Bergmann who suggested to do the same as x86,
-> >> that is mapping the kernel to the end of the address space, which allows
-> >> the kernel to be linked at the same address for both sv39 and sv48 and
-> >> then does not require to be relocated at runtime.
-> >>                                                                                   
-> >> This implements sv48 support at runtime. The kernel will try to
-> >> boot with 4-level page table and will fallback to 3-level if the HW does not
-> >> support it. Folding the 4th level into a 3-level page table has almost no
-> >> cost at runtime.
-> >>                                                                                   
-> >> Tested on:
-> >>    - qemu rv64 sv39: OK
-> >>    - qemu rv64 sv48: OK
-> >>    - qemu rv64 sv39 + kasan: OK
-> >>    - qemu rv64 sv48 + kasan: OK
-> >>    - qemu rv32: OK
-> >>    - Unmatched: OK
-> > On a beagleV (which supports only sv39) I've tested both the limit via
-> > the mmu-type in the devicetree and also that the fallback works when
-> > I disable the mmu-type in the dt, so
-> >
-> > Tested-by: Heiko Stuebner <heiko@sntech.de>
-> >
-> 
-> Thanks Heiko for testing this, unfortunately I could not add this tag to 
-> the latest version as significant changes came up.
-> 
-> Thanks again for taking the time to test this,
+--=20
+Ich bin Maria Elisabeth Schaeffler, ich habe eine Spende f=C3=BCr Sie,
+E-Mail f=C3=BCr weitere Informationen.
 
-No worries, I can repeat that with your new version :-)
-
-Heiko
-
-
-> >>    
-> >>                                                                                   
-> >> Changes in v2:
-> >>    - Rebase onto for-next
-> >>    - Fix KASAN
-> >>    - Fix stack canary
-> >>    - Get completely rid of MAXPHYSMEM configs
-> >>    - Add documentation
-> >>
-> >> Alexandre Ghiti (10):
-> >>    riscv: Allow to dynamically define VA_BITS
-> >>    riscv: Get rid of MAXPHYSMEM configs
-> >>    asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
-> >>    riscv: Implement sv48 support
-> >>    riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
-> >>    riscv: Explicit comment about user virtual address space size
-> >>    riscv: Improve virtual kernel memory layout dump
-> >>    Documentation: riscv: Add sv48 description to VM layout
-> >>    riscv: Initialize thread pointer before calling C functions
-> >>    riscv: Allow user to downgrade to sv39 when hw supports sv48
-> >>
-> >>   Documentation/riscv/vm-layout.rst             |  36 ++
-> >>   arch/riscv/Kconfig                            |  35 +-
-> >>   arch/riscv/configs/nommu_k210_defconfig       |   1 -
-> >>   .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
-> >>   arch/riscv/configs/nommu_virt_defconfig       |   1 -
-> >>   arch/riscv/include/asm/csr.h                  |   3 +-
-> >>   arch/riscv/include/asm/fixmap.h               |   1 +
-> >>   arch/riscv/include/asm/kasan.h                |   2 +-
-> >>   arch/riscv/include/asm/page.h                 |  10 +
-> >>   arch/riscv/include/asm/pgalloc.h              |  40 +++
-> >>   arch/riscv/include/asm/pgtable-64.h           | 108 +++++-
-> >>   arch/riscv/include/asm/pgtable.h              |  30 +-
-> >>   arch/riscv/include/asm/sparsemem.h            |   6 +-
-> >>   arch/riscv/kernel/cpu.c                       |  23 +-
-> >>   arch/riscv/kernel/head.S                      |   4 +-
-> >>   arch/riscv/mm/context.c                       |   4 +-
-> >>   arch/riscv/mm/init.c                          | 323 +++++++++++++++---
-> >>   arch/riscv/mm/kasan_init.c                    |  91 +++--
-> >>   drivers/firmware/efi/libstub/efi-stub.c       |   2 +
-> >>   include/asm-generic/pgalloc.h                 |  24 +-
-> >>   include/linux/sizes.h                         |   1 +
-> >>   21 files changed, 615 insertions(+), 131 deletions(-)
-> >>
-> >>
-> >
-> >
-> >
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
-
-
-
-
+Gr=C3=BC=C3=9Fe
+Maria-Elisabeth_Schaeffler
