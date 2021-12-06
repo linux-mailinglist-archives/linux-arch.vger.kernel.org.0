@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4EB469486
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 11:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FBB469494
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 11:58:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242166AbhLFLA7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Dec 2021 06:00:59 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:46394
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241980AbhLFLA7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 06:00:59 -0500
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        id S242019AbhLFLCB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Dec 2021 06:02:01 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:48414
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242008AbhLFLCA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 06:02:00 -0500
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DBA6B3F1EE
-        for <linux-arch@vger.kernel.org>; Mon,  6 Dec 2021 10:57:29 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 201A63F1BC
+        for <linux-arch@vger.kernel.org>; Mon,  6 Dec 2021 10:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638788249;
-        bh=fuCo6GlipVLANouxdlUj9UPk8z3xqJtBdYt3yi5vrR4=;
+        s=20210705; t=1638788311;
+        bh=vaFAezChlajkTZ7fI5kVmIBThbHyfEUEZ5Atc7Q1k0c=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=wBw9FtbqvyqVf2NzmckQeefs2A0DIhe/Gak4VsGochxzEDRjdmF9w4WO9WFVgMPWh
-         1acZ1G6UWtrQZN0UciSWRUkEh7NNQyWFnyqbQfH3bSrv/KMbBabmhj1Q+vTdh02qCd
-         zkmWT5alUAojuIbGWniC1RFS5s4PcN/mnR+5fMkpwuzTyojx2oPICLK9d+vc6PFqHa
-         aewAs4dm6PlO5/c4DM1jR2p0brUvanUoMMm20HZyCbWKvontg9nachw9G3+RLR10nf
-         CTR3WTRmKjBIl5mICM5N5upIvN9lRxWq6SUkGGUjp4V+hqwton3o+OZhkCMKnIreQW
-         VJSC9/z72DfGg==
-Received: by mail-wm1-f72.google.com with SMTP id g11-20020a1c200b000000b003320d092d08so5915205wmg.9
-        for <linux-arch@vger.kernel.org>; Mon, 06 Dec 2021 02:57:29 -0800 (PST)
+        b=Jj3xp2pW1fRZUx8KDqhW4jW2QZA+5uRtR7dSuwpcPTTohZJMjHKBgIiIHRB67GUCY
+         Jxej48s/iZHFIW2LUke5xPC9m2ugMLKWHIBk6B9DJoYjHR6Q7YV3FGRiq6dnXA4jj5
+         ikaEFj9fO/PZgeShQQpHVk+POvt/z99tExSPwSeNmUOetPed4ay0wyDha8RdsqXU09
+         ExrQYjR8dH2zM4Vb/4Yh684+HP1bCX74PEKAUaoC89gLRqeerQU69c9BuOU79mlxru
+         DqOVDnRfC5frcPYeXtqEmVHHuScj3oTOqTpMP46jjhwcDgisxFAfm2u5vU9s5YTguR
+         iU2ZCoRls3gUA==
+Received: by mail-wr1-f70.google.com with SMTP id p3-20020a056000018300b00186b195d4ddso1891973wrx.15
+        for <linux-arch@vger.kernel.org>; Mon, 06 Dec 2021 02:58:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fuCo6GlipVLANouxdlUj9UPk8z3xqJtBdYt3yi5vrR4=;
-        b=4Qh3MeEuhxrZMxwpO5H/FBkTD8iancf7izl2b/Zj2+yJ//QbWvPa/+Wm31Zyvvo+0D
-         lg+LgBiwIaoNgEsCc5xRntCwzcvPW5hx5UmovtU6DgPyex/WEnbg+FmjvhzJBIICvGCh
-         LTboiWKUngOZAzVPiEXBegSh33TZqmQ3x4XHqtSxuWYyBrQYLVS4l35sMO+6bK5pC8k9
-         nwWvAnk06HF8wxcf23fGanyze4uofvJQaNOAh4xrdsBVGRUOAXZmv5K2bJfPmWYdkET1
-         RZ1OGV8beJ6sM7fieoSb8bNB+iXNpP889t+0idz8dIXWYjp7/yPOZjksMlKorQKzvAqz
-         iPZg==
-X-Gm-Message-State: AOAM530YoDqjnE8Eap3zAqXc4hQvB6cz0fERzqzvKrDZp5RfFX3uNa3S
-        36KZhY/Za81L2bclAiOsm+xWXe4Q8y426sKKrYVoKQuT96BnuVIPkmWkUZD0cdhxaCJD7Em5kbJ
-        v8t26ueFjkRsh88B7zNvfwoO10OIJod0wYv/k+0w=
-X-Received: by 2002:a1c:96:: with SMTP id 144mr38540571wma.126.1638788249419;
-        Mon, 06 Dec 2021 02:57:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyruZG1A7uk22DjSFP29x9S3ZyEpMrCehgY/M0vUhz34HCzD1YET1HlEdm0KEK8SVJs3K6xfw==
-X-Received: by 2002:a1c:96:: with SMTP id 144mr38540542wma.126.1638788249196;
-        Mon, 06 Dec 2021 02:57:29 -0800 (PST)
+        bh=vaFAezChlajkTZ7fI5kVmIBThbHyfEUEZ5Atc7Q1k0c=;
+        b=C5PWHBW5IrmtVkoqjPgSJbdHgnvC/qZm8meWa4sPS48cmG8VZ6wP16x/3TeXHgzZGC
+         KE44JPIEpcwpBzCP2E+KxQo7HouJoQ0lELJ3rvCH4QbCh67IxWd6e9C/OcMXoRzkGEa7
+         VlxptlknxWBui+6l2O1h0wN2WPq54tiiZIkNL8xgXI9rlVbLcSY7NPNYluTPd0sFIK9z
+         9wXVqiBfd46+PNLyztFVw7BMpSqT3nZHJXP4D99mNGVACBeRwqyi44xUiqBm32wwNBIR
+         sVJwCxjSqrMovVTka15Bt+Y/jof1pt/ZU5GUANNAucot4y2EV5ulZlSWivIg4u7RaEmo
+         helw==
+X-Gm-Message-State: AOAM532PwMSUiquIBMcl9GHX/pQyKZywmf+rHW16uD4lKVBGPfPjYhSf
+        p7rQ3rCRD+MDiz8SKOUkgnBhamudBQebPmnz/31cBZn+jqi6Q8e6sVWkur5abLfcmVITF5h8877
+        LCbN/+TP7A84NpjSkfNeFKxU0Ksd5uq9iDNI9iAQ=
+X-Received: by 2002:a5d:4c87:: with SMTP id z7mr42470496wrs.108.1638788310553;
+        Mon, 06 Dec 2021 02:58:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxTo58Hg1PMnpuTdwL1M+XagtJxq1YdEIKgI5MBOpZMxGV21fm3kTBfxG4m0nNb6mKYd2DewQ==
+X-Received: by 2002:a5d:4c87:: with SMTP id z7mr42470463wrs.108.1638788310400;
+        Mon, 06 Dec 2021 02:58:30 -0800 (PST)
 Received: from localhost.localdomain (lfbn-lyo-1-470-249.w2-7.abo.wanadoo.fr. [2.7.60.249])
-        by smtp.gmail.com with ESMTPSA id t127sm13430498wma.9.2021.12.06.02.57.28
+        by smtp.gmail.com with ESMTPSA id p27sm10378487wmi.28.2021.12.06.02.58.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 02:57:28 -0800 (PST)
+        Mon, 06 Dec 2021 02:58:30 -0800 (PST)
 From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -76,9 +76,9 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
         linux-arch@vger.kernel.org
 Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: [PATCH v3 10/13] riscv: Improve virtual kernel memory layout dump
-Date:   Mon,  6 Dec 2021 11:46:54 +0100
-Message-Id: <20211206104657.433304-11-alexandre.ghiti@canonical.com>
+Subject: [PATCH v3 11/13] Documentation: riscv: Add sv48 description to VM layout
+Date:   Mon,  6 Dec 2021 11:46:55 +0100
+Message-Id: <20211206104657.433304-12-alexandre.ghiti@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
 References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
@@ -88,143 +88,58 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-With the arrival of sv48 and its large address space, it would be
-cumbersome to statically define the unit size to use to print the different
-portions of the virtual memory layout: instead, determine it dynamically.
+sv48 was just introduced, so add its virtual memory layout to the
+documentation.
 
 Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 ---
- arch/riscv/mm/init.c               | 67 +++++++++++++++++++++++-------
- drivers/pci/controller/pci-xgene.c |  2 +-
- include/linux/sizes.h              |  1 +
- 3 files changed, 54 insertions(+), 16 deletions(-)
+ Documentation/riscv/vm-layout.rst | 36 +++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 6a19a1b1caf8..28de6ea0a720 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -79,37 +79,74 @@ static void __init zone_sizes_init(void)
- }
- 
- #if defined(CONFIG_MMU) && defined(CONFIG_DEBUG_VM)
+diff --git a/Documentation/riscv/vm-layout.rst b/Documentation/riscv/vm-layout.rst
+index 1bd687b97104..5b36e45fef60 100644
+--- a/Documentation/riscv/vm-layout.rst
++++ b/Documentation/riscv/vm-layout.rst
+@@ -61,3 +61,39 @@ RISC-V Linux Kernel SV39
+    ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | modules, BPF
+    ffffffff80000000 |   -2    GB | ffffffffffffffff |    2 GB | kernel
+   __________________|____________|__________________|_________|____________________________________________________________
 +
-+#define LOG2_SZ_1K  ilog2(SZ_1K)
-+#define LOG2_SZ_1M  ilog2(SZ_1M)
-+#define LOG2_SZ_1G  ilog2(SZ_1G)
-+#define LOG2_SZ_1T  ilog2(SZ_1T)
 +
- static inline void print_mlk(char *name, unsigned long b, unsigned long t)
- {
- 	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld kB)\n", name, b, t,
--		  (((t) - (b)) >> 10));
-+		  (((t) - (b)) >> LOG2_SZ_1K));
- }
- 
- static inline void print_mlm(char *name, unsigned long b, unsigned long t)
- {
- 	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld MB)\n", name, b, t,
--		  (((t) - (b)) >> 20));
-+		  (((t) - (b)) >> LOG2_SZ_1M));
-+}
++RISC-V Linux Kernel SV48
++------------------------
 +
-+static inline void print_mlg(char *name, unsigned long b, unsigned long t)
-+{
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld GB)\n", name, b, t,
-+		  (((t) - (b)) >> LOG2_SZ_1G));
-+}
++::
 +
-+#ifdef CONFIG_64BIT
-+static inline void print_mlt(char *name, unsigned long b, unsigned long t)
-+{
-+	pr_notice("%12s : 0x%08lx - 0x%08lx   (%4ld TB)\n", name, b, t,
-+		  (((t) - (b)) >> LOG2_SZ_1T));
-+}
-+#endif
-+
-+static inline void print_ml(char *name, unsigned long b, unsigned long t)
-+{
-+	unsigned long diff = t - b;
-+
-+#ifdef CONFIG_64BIT
-+	if ((diff >> LOG2_SZ_1T) >= 10)
-+		print_mlt(name, b, t);
-+	else
-+#endif
-+	if ((diff >> LOG2_SZ_1G) >= 10)
-+		print_mlg(name, b, t);
-+	else if ((diff >> LOG2_SZ_1M) >= 10)
-+		print_mlm(name, b, t);
-+	else
-+		print_mlk(name, b, t);
- }
- 
- static void __init print_vm_layout(void)
- {
- 	pr_notice("Virtual kernel memory layout:\n");
--	print_mlk("fixmap", (unsigned long)FIXADDR_START,
--		  (unsigned long)FIXADDR_TOP);
--	print_mlm("pci io", (unsigned long)PCI_IO_START,
--		  (unsigned long)PCI_IO_END);
--	print_mlm("vmemmap", (unsigned long)VMEMMAP_START,
--		  (unsigned long)VMEMMAP_END);
--	print_mlm("vmalloc", (unsigned long)VMALLOC_START,
--		  (unsigned long)VMALLOC_END);
--	print_mlm("lowmem", (unsigned long)PAGE_OFFSET,
--		  (unsigned long)high_memory);
-+	print_ml("fixmap", (unsigned long)FIXADDR_START,
-+		 (unsigned long)FIXADDR_TOP);
-+	print_ml("pci io", (unsigned long)PCI_IO_START,
-+		 (unsigned long)PCI_IO_END);
-+	print_ml("vmemmap", (unsigned long)VMEMMAP_START,
-+		 (unsigned long)VMEMMAP_END);
-+	print_ml("vmalloc", (unsigned long)VMALLOC_START,
-+		 (unsigned long)VMALLOC_END);
-+	print_ml("lowmem", (unsigned long)PAGE_OFFSET,
-+		 (unsigned long)high_memory);
- #ifdef CONFIG_64BIT
- #ifdef CONFIG_KASAN
--	print_mlm("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
-+	print_ml("kasan", KASAN_SHADOW_START, KASAN_SHADOW_END);
- #endif
--	print_mlm("kernel", (unsigned long)KERNEL_LINK_ADDR,
--		  (unsigned long)ADDRESS_SPACE_END);
-+	print_ml("kernel", (unsigned long)KERNEL_LINK_ADDR,
-+		 (unsigned long)ADDRESS_SPACE_END);
- #endif
- }
- #else
-diff --git a/drivers/pci/controller/pci-xgene.c b/drivers/pci/controller/pci-xgene.c
-index e64536047b65..187dcf8a9694 100644
---- a/drivers/pci/controller/pci-xgene.c
-+++ b/drivers/pci/controller/pci-xgene.c
-@@ -21,6 +21,7 @@
- #include <linux/pci-ecam.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
-+#include <linux/sizes.h>
- 
- #include "../pci.h"
- 
-@@ -50,7 +51,6 @@
- #define OB_LO_IO			0x00000002
- #define XGENE_PCIE_VENDORID		0x10E8
- #define XGENE_PCIE_DEVICEID		0xE004
--#define SZ_1T				(SZ_1G*1024ULL)
- #define PIPE_PHY_RATE_RD(src)		((0xc000 & (u32)(src)) >> 0xe)
- 
- #define XGENE_V1_PCI_EXP_CAP		0x40
-diff --git a/include/linux/sizes.h b/include/linux/sizes.h
-index 1ac79bcee2bb..0bc6cf394b08 100644
---- a/include/linux/sizes.h
-+++ b/include/linux/sizes.h
-@@ -47,6 +47,7 @@
- #define SZ_8G				_AC(0x200000000, ULL)
- #define SZ_16G				_AC(0x400000000, ULL)
- #define SZ_32G				_AC(0x800000000, ULL)
-+#define SZ_1T				_AC(0x10000000000, ULL)
- #define SZ_64T				_AC(0x400000000000, ULL)
- 
- #endif /* __LINUX_SIZES_H__ */
++ ========================================================================================================================
++      Start addr    |   Offset   |     End addr     |  Size   | VM area description
++ ========================================================================================================================
++                    |            |                  |         |
++   0000000000000000 |    0       | 00007fffffffffff |  128 TB | user-space virtual memory, different per mm
++  __________________|____________|__________________|_________|___________________________________________________________
++                    |            |                  |         |
++   0000800000000000 | +128    TB | ffff7fffffffffff | ~16M TB | ... huge, almost 64 bits wide hole of non-canonical
++                    |            |                  |         | virtual memory addresses up to the -128 TB
++                    |            |                  |         | starting offset of kernel mappings.
++  __________________|____________|__________________|_________|___________________________________________________________
++                                                              |
++                                                              | Kernel-space virtual memory, shared between all processes:
++  ____________________________________________________________|___________________________________________________________
++                    |            |                  |         |
++   ffff8d7ffee00000 |  -114.5 TB | ffff8d7ffeffffff |    2 MB | fixmap
++   ffff8d7fff000000 |  -114.5 TB | ffff8d7fffffffff |   16 MB | PCI io
++   ffff8d8000000000 |  -114.5 TB | ffff8f7fffffffff |    2 TB | vmemmap
++   ffff8f8000000000 |  -112.5 TB | ffffaf7fffffffff |   32 TB | vmalloc/ioremap space
++   ffffaf8000000000 |  -80.5  TB | ffffef7fffffffff |   64 TB | direct mapping of all physical memory
++   ffffef8000000000 |  -16.5  TB | fffffffeffffffff | 16.5 TB | kasan
++  __________________|____________|__________________|_________|____________________________________________________________
++                                                              |
++                                                              | Identical layout to the 39-bit one from here on:
++  ____________________________________________________________|____________________________________________________________
++                    |            |                  |         |
++   ffffffff00000000 |   -4    GB | ffffffff7fffffff |    2 GB | modules, BPF
++   ffffffff80000000 |   -2    GB | ffffffffffffffff |    2 GB | kernel
++  __________________|____________|__________________|_________|____________________________________________________________
 -- 
 2.32.0
 
