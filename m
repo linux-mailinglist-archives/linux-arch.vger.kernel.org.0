@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B6146945A
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 11:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C57746945F
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 11:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241852AbhLFKzx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Dec 2021 05:55:53 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:45768
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241789AbhLFKzw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 05:55:52 -0500
+        id S241871AbhLFK4y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Dec 2021 05:56:54 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:47944
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241793AbhLFK4x (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 05:56:53 -0500
 Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 1DDCF3F1F1
-        for <linux-arch@vger.kernel.org>; Mon,  6 Dec 2021 10:52:23 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8F57D3F1FA
+        for <linux-arch@vger.kernel.org>; Mon,  6 Dec 2021 10:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638787943;
-        bh=9ySCV26avDqOMq3ybehcXkQhwvvZ5wxe1+MhhnplIPU=;
+        s=20210705; t=1638788004;
+        bh=gG/WhBjtCMK9Juy/cpLoUS+Fz+e97sYPeCnLmIYCPu8=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=UYaXq9O6pwsUGZwb6iKUO+bpEpV7o9GD0YvP/WvzYl8m0qzZEq6oEkpc+oiKjZG8L
-         Cz2ZAf3PublRNK9RnbvG3h1P9mB5J1Kkt38N9iSSzj7noH8hhko0AXq54BTK5+DQx6
-         MiFZkiSGnqgsMzBh9PE6baSvp4ESY/KYjUqMVugYcoh8hEDJjB5tRxhHfGGjtLOlL1
-         Z77STNKnYYf7IXIrBLoGOPkUEgietTQzAs3J2QZFlowQZDt1aGJfH/gTMSm1HpE3Bx
-         BZAHNVacTqI94BYcijuPA7SoZUxFVKmkwwjgZulQKo/aAnXu3+3HJKKf32ZS4iojgW
-         nJk4dOfu3nqZQ==
-Received: by mail-wr1-f72.google.com with SMTP id c4-20020adfed84000000b00185ca4eba36so1880902wro.21
-        for <linux-arch@vger.kernel.org>; Mon, 06 Dec 2021 02:52:23 -0800 (PST)
+        b=asObokCf90fsDpuNacvxsmD3GYtI4o5fXM55ZEVyMDeuG/xOqyVthKEWW5zjckipm
+         VYJDqA6wvXGUzJK+dGgGIbTOpaDdAvokMp/6BKUi/k9ZvIxgYVUoH4x+LdADG6RGRy
+         H2+irsG6iFi/NBB6pEKrq7Yw3JO5GplVLMOL9Zs9z28LYSCyB9epzyYnfTQ07KFzWP
+         KyIN6Av+rZJvXhSFao8PAKM3HLOz2mPGXvBjh+rMOzemWfrK91e71SKu7ZgpI/oHjB
+         0OhFb2QvayQi8vbsGoUCh+7MTOW4et3CGzKEqmKWMpmZkoZpg91c2szktNZoDv87IY
+         edHfF20/x6rKA==
+Received: by mail-wr1-f72.google.com with SMTP id x17-20020a5d6511000000b0019838caab88so1900552wru.6
+        for <linux-arch@vger.kernel.org>; Mon, 06 Dec 2021 02:53:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9ySCV26avDqOMq3ybehcXkQhwvvZ5wxe1+MhhnplIPU=;
-        b=bUwGEZY06vi/e+j5EdO0/4gqdtfqO1k4nnNZuiNrN5VwmsbE/H6anlIkw5hsQrFblZ
-         orORpApl78SOq/uvFrLKu6i8JWM6uAlmWiexTaFAicgnp42+WKNVnIInRXe2LxmM4upY
-         r8u+kYhuLeK45XGf3PWThhJJNqj65i+zjaOhWy59NJeXo/T8ByM/l+v6F7LwqEaHHhyE
-         L4zfX3ztMUahqaYan+y8fwb/uboDwOuzhL4vJ3/FT4Rmcm4DwAdiWCGUaKhvon9OQId+
-         eOsxRLjtLhtPQLydKKZUgVV52HqeOJ2maluYuU1nvtE7Shhg6h8Ro4HnpgNV/r67l5+6
-         m4Zw==
-X-Gm-Message-State: AOAM532INZHOBq/4P8Oe710LNsQROcg561RxyfNHkLnu9T8a0bm8tQBR
-        +lb9NRmbfrADnKaGnX7SQ2NIL9CzNqEKw/4Y9bVLpCdjMoe6bClwS52wH1nJ3+tsBBLw5prel3U
-        RCsVqps5swKC9X4HKoojaMMLWl3FcyEijHMSY2UE=
-X-Received: by 2002:a5d:6acc:: with SMTP id u12mr41541817wrw.628.1638787942761;
-        Mon, 06 Dec 2021 02:52:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyG45T87x/hgkvmCoRGy/akWlcOnI21JXsfnjT5Dkr0Aq51ptEmkRfn19MELBpl7ATpCMOj8g==
-X-Received: by 2002:a5d:6acc:: with SMTP id u12mr41541802wrw.628.1638787942625;
-        Mon, 06 Dec 2021 02:52:22 -0800 (PST)
+        bh=gG/WhBjtCMK9Juy/cpLoUS+Fz+e97sYPeCnLmIYCPu8=;
+        b=Ahgxmp65IQOlmh2K1Kca3KkP/32IOUFL9eRuutzZkaWLQk410OAAdikPSBU4EgAm8o
+         A2/BjD1/dKYmMyzkPAjDrvvct2x6tzhSEpZq3SxZ5Ogskddq4Kk1n18PBRu9E+0qARcE
+         VWXgtZH9oMkqflrsbn/4wJnMqcLQwghVvaE/khUPIL6ynmrnoFtzFVSP4w4T5jGKkV/e
+         f4QD22WXAfauhL2Pw1bAMZrPnc1A6t9OfSIOzA3+GNYHo8aFMHDeikm75H/Q3pi5r0Jn
+         A8Sqc6eevgl5UJTatag/JUTwuc9ukqhHroaU+r//Y+GW48xyDu/uNA6ChiXZGzDwBuNf
+         NhFQ==
+X-Gm-Message-State: AOAM531Kn8CyUst1CWFpkyYc8a4MEb1zOoFXC0Xnf6zTN3H5vtUORVnn
+        oFQAj/h45DYuv4sxp/GW6RmlPpqakfcd2/plsmGUpYn9PzFpxITb+PSefsunDniQh7o0ZFcVyjJ
+        8zAA1iYwGkhbzGM5RiARBe3KgFKryStUERAhKvhs=
+X-Received: by 2002:a7b:c102:: with SMTP id w2mr37750666wmi.151.1638788003995;
+        Mon, 06 Dec 2021 02:53:23 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxopdWj9u1iMI/f8aQI95EBYjbHFU9+o6qbVXkckCCLscAAHiW0VAZVryb3dDIQkey6IRVgJg==
+X-Received: by 2002:a7b:c102:: with SMTP id w2mr37750632wmi.151.1638788003798;
+        Mon, 06 Dec 2021 02:53:23 -0800 (PST)
 Received: from localhost.localdomain (lfbn-lyo-1-470-249.w2-7.abo.wanadoo.fr. [2.7.60.249])
-        by smtp.gmail.com with ESMTPSA id l2sm13828074wmq.42.2021.12.06.02.52.21
+        by smtp.gmail.com with ESMTPSA id p5sm11021231wrd.13.2021.12.06.02.53.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 02:52:22 -0800 (PST)
+        Mon, 06 Dec 2021 02:53:23 -0800 (PST)
 From:   Alexandre Ghiti <alexandre.ghiti@canonical.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -76,9 +76,9 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
         linux-arch@vger.kernel.org
 Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Subject: [PATCH v3 05/13] riscv: Get rid of MAXPHYSMEM configs
-Date:   Mon,  6 Dec 2021 11:46:49 +0100
-Message-Id: <20211206104657.433304-6-alexandre.ghiti@canonical.com>
+Subject: [PATCH v3 06/13] asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
+Date:   Mon,  6 Dec 2021 11:46:50 +0100
+Message-Id: <20211206104657.433304-7-alexandre.ghiti@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
 References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
@@ -88,101 +88,69 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-CONFIG_MAXPHYSMEM_* were actually never used, even the nommu defconfigs
-selecting the MAXPHYSMEM_2GB had no effects on PAGE_OFFSET since it was
-preempted by !MMU case right before.
+In the following commits, riscv will almost use the generic versions of
+pud_alloc_one and pud_free but an additional check is required since those
+functions are only relevant when using at least a 4-level page table, which
+will be determined at runtime on riscv.
 
-In addition, I suspect that commit 2bfc6cd81bd1 ("riscv: Move kernel
-mapping outside of linear mapping") which moved the kernel to
-0xffffffff80000000 broke the MAXPHYSMEM_2GB config which defined
-PAGE_OFFSET at the same address.
+So move the content of those functions into other functions that riscv
+can use without duplicating code.
 
 Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 ---
- arch/riscv/Kconfig                            | 23 ++-----------------
- arch/riscv/configs/nommu_k210_defconfig       |  1 -
- .../riscv/configs/nommu_k210_sdcard_defconfig |  1 -
- arch/riscv/configs/nommu_virt_defconfig       |  1 -
- 4 files changed, 2 insertions(+), 24 deletions(-)
+ include/asm-generic/pgalloc.h | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c3a167eea011..ac6c0cd9bc29 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -148,10 +148,9 @@ config MMU
+diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
+index 02932efad3ab..977bea16cf1b 100644
+--- a/include/asm-generic/pgalloc.h
++++ b/include/asm-generic/pgalloc.h
+@@ -147,6 +147,15 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
  
- config PAGE_OFFSET
- 	hex
--	default 0xC0000000 if 32BIT && MAXPHYSMEM_1GB
-+	default 0xC0000000 if 32BIT
- 	default 0x80000000 if 64BIT && !MMU
--	default 0xffffffff80000000 if 64BIT && MAXPHYSMEM_2GB
--	default 0xffffffd800000000 if 64BIT && MAXPHYSMEM_128GB
-+	default 0xffffffd800000000 if 64BIT
+ #if CONFIG_PGTABLE_LEVELS > 3
  
- config KASAN_SHADOW_OFFSET
- 	hex
-@@ -260,24 +259,6 @@ config MODULE_SECTIONS
- 	bool
- 	select HAVE_MOD_ARCH_SPECIFIC
++static inline pud_t *__pud_alloc_one(struct mm_struct *mm, unsigned long addr)
++{
++	gfp_t gfp = GFP_PGTABLE_USER;
++
++	if (mm == &init_mm)
++		gfp = GFP_PGTABLE_KERNEL;
++	return (pud_t *)get_zeroed_page(gfp);
++}
++
+ #ifndef __HAVE_ARCH_PUD_ALLOC_ONE
+ /**
+  * pud_alloc_one - allocate a page for PUD-level page table
+@@ -159,20 +168,23 @@ static inline void pmd_free(struct mm_struct *mm, pmd_t *pmd)
+  */
+ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long addr)
+ {
+-	gfp_t gfp = GFP_PGTABLE_USER;
+-
+-	if (mm == &init_mm)
+-		gfp = GFP_PGTABLE_KERNEL;
+-	return (pud_t *)get_zeroed_page(gfp);
++	return __pud_alloc_one(mm, addr);
+ }
+ #endif
  
--choice
--	prompt "Maximum Physical Memory"
--	default MAXPHYSMEM_1GB if 32BIT
--	default MAXPHYSMEM_2GB if 64BIT && CMODEL_MEDLOW
--	default MAXPHYSMEM_128GB if 64BIT && CMODEL_MEDANY
--
--	config MAXPHYSMEM_1GB
--		depends on 32BIT
--		bool "1GiB"
--	config MAXPHYSMEM_2GB
--		depends on 64BIT && CMODEL_MEDLOW
--		bool "2GiB"
--	config MAXPHYSMEM_128GB
--		depends on 64BIT && CMODEL_MEDANY
--		bool "128GiB"
--endchoice
--
--
- config SMP
- 	bool "Symmetric Multi-Processing"
- 	help
-diff --git a/arch/riscv/configs/nommu_k210_defconfig b/arch/riscv/configs/nommu_k210_defconfig
-index b16a2a12c82a..dae9179984cc 100644
---- a/arch/riscv/configs/nommu_k210_defconfig
-+++ b/arch/riscv/configs/nommu_k210_defconfig
-@@ -30,7 +30,6 @@ CONFIG_SLOB=y
- # CONFIG_MMU is not set
- CONFIG_SOC_CANAAN=y
- CONFIG_SOC_CANAAN_K210_DTB_SOURCE="k210_generic"
--CONFIG_MAXPHYSMEM_2GB=y
- CONFIG_SMP=y
- CONFIG_NR_CPUS=2
- CONFIG_CMDLINE="earlycon console=ttySIF0"
-diff --git a/arch/riscv/configs/nommu_k210_sdcard_defconfig b/arch/riscv/configs/nommu_k210_sdcard_defconfig
-index 61f887f65419..03f91525a059 100644
---- a/arch/riscv/configs/nommu_k210_sdcard_defconfig
-+++ b/arch/riscv/configs/nommu_k210_sdcard_defconfig
-@@ -22,7 +22,6 @@ CONFIG_SLOB=y
- # CONFIG_MMU is not set
- CONFIG_SOC_CANAAN=y
- CONFIG_SOC_CANAAN_K210_DTB_SOURCE="k210_generic"
--CONFIG_MAXPHYSMEM_2GB=y
- CONFIG_SMP=y
- CONFIG_NR_CPUS=2
- CONFIG_CMDLINE="earlycon console=ttySIF0 rootdelay=2 root=/dev/mmcblk0p1 ro"
-diff --git a/arch/riscv/configs/nommu_virt_defconfig b/arch/riscv/configs/nommu_virt_defconfig
-index e046a0babde4..f224be697785 100644
---- a/arch/riscv/configs/nommu_virt_defconfig
-+++ b/arch/riscv/configs/nommu_virt_defconfig
-@@ -27,7 +27,6 @@ CONFIG_SLOB=y
- # CONFIG_SLAB_MERGE_DEFAULT is not set
- # CONFIG_MMU is not set
- CONFIG_SOC_VIRT=y
--CONFIG_MAXPHYSMEM_2GB=y
- CONFIG_SMP=y
- CONFIG_CMDLINE="root=/dev/vda rw earlycon=uart8250,mmio,0x10000000,115200n8 console=ttyS0"
- CONFIG_CMDLINE_FORCE=y
+-static inline void pud_free(struct mm_struct *mm, pud_t *pud)
++static inline void __pud_free(struct mm_struct *mm, pud_t *pud)
+ {
+ 	BUG_ON((unsigned long)pud & (PAGE_SIZE-1));
+ 	free_page((unsigned long)pud);
+ }
+ 
++#ifndef __HAVE_ARCH_PUD_FREE
++static inline void pud_free(struct mm_struct *mm, pud_t *pud)
++{
++	__pud_free(mm, pud);
++}
++#endif
++
+ #endif /* CONFIG_PGTABLE_LEVELS > 3 */
+ 
+ #ifndef __HAVE_ARCH_PGD_FREE
 -- 
 2.32.0
 
