@@ -2,134 +2,245 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6495469887
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 15:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B4446990A
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 15:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343903AbhLFOXC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Dec 2021 09:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S1344515AbhLFOgR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Dec 2021 09:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343892AbhLFOXB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 09:23:01 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FE7C061354;
-        Mon,  6 Dec 2021 06:19:33 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id np3so7866857pjb.4;
-        Mon, 06 Dec 2021 06:19:33 -0800 (PST)
+        with ESMTP id S1343717AbhLFOgR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 09:36:17 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE61C061746;
+        Mon,  6 Dec 2021 06:32:48 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id c3so13146168iob.6;
+        Mon, 06 Dec 2021 06:32:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7+TjBg26qYjN6N7+9VcAF9zyslm2ABiWax4bLutA+tA=;
-        b=f9M5JLJRG6hZFPCcZ1VGBj6dk4h92i9GiiVgKsNNUQFiDTSIXmaER9IaQWziUfrQ/0
-         qa3GNaf/njTkL1uJ81a318oppGqxeZ4BbcT9GGYMjs1cw8PHMlBEDdFp5Gu7W2ZYhqeP
-         DQ0dE5SsoRhc/sIPqjG5IRHWnrHc+0w5hEjT3ppnETiBZyKvJyuh5hygqrwyVBhoEnmJ
-         IwRmbyJ5sNomLrxjpRo1y9wtWt2MJXEM2X247X8t1UvJ2rV20IbyXdb2S1lE9i34MGPO
-         C7yQKcwPzpoDJz5kk+NMg8L4gzvSsI27nnr11s1xyG3B7cafIHH1YyJFJ5x78gBD3amG
-         bCXA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
+        b=GXfZLWErwVXNUIWTHzJ3JSvvaZ1ekUxwLx/RO6eG2oqG8RKwA83QEHyf6Lgu2pvH2e
+         6EAZXpfRzfvbjY71KDHAzWFUD1D5xnfkxDwd1DAzcCl83aTQm6Ne32mTBtwoQgT1CHUV
+         2W8cDfYJZTbjYPvaVlm+oBaInxz7hnYHaJtrKCW3ZUfFjBzMZQu8pSL7cZgSKpwByPwK
+         gdOYhET5KSaY7yVXH/pmeLnQFr/R51Qxn+A8CxvMJ/5bQhb/CoYCURhE7gJQplzFUgS0
+         HnBwT1uFanfIiFq2JoHW276Mrtt8WTSgmVf7U/BsIzKfQ9A9GkpI3mSaOpkBHdDcbQTZ
+         Mhyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7+TjBg26qYjN6N7+9VcAF9zyslm2ABiWax4bLutA+tA=;
-        b=UvlXzEXsd3R7DYnp24g12FIxKHRqf3uACVzaNWIxuF/Rm1HM9VYnvDYSkum0zbjTfH
-         bvfDK9J+RbDP3fccdPb4DqZU0m+H4ee2CG+RYQw9SZqQuebuv71BPRnb+dnCvamYg0t3
-         kSHWnxIpfIqGCDbCOWK0rrGFNXqz8Sq0tzZ9l4bSNuIz+YzbJ+MvYtXR5u97dCj5oAV4
-         wxSDrNGtgSBnAqDxetZjh732Qnnae5H6/RHYZGH7oWcHiocovqvmfsLXdAaI6/hQhQtg
-         HEs8tFOATeg7vTzEb+W9AFQaEBhZKjQtX+/xd7mbV/7RdnUojGn65JCEbO+MuJy3/Iqp
-         4rJA==
-X-Gm-Message-State: AOAM533wUm/y5Fvsmg7Hn4FuUXY9kAUcngliIFhkx08PzWCqic65Y5bb
-        ZkWdTPzgZOKDyg7I5VW0IWg=
-X-Google-Smtp-Source: ABdhPJw5eBcqMnlmCu3VP7SDK7JlPHBF3sS/6sU5CfZhorAn8F+Tm/Z37W+b1RJF7S8Gmv/jOQFzmw==
-X-Received: by 2002:a17:90b:4b51:: with SMTP id mi17mr37838716pjb.48.1638800372941;
-        Mon, 06 Dec 2021 06:19:32 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:1a:efea::50b])
-        by smtp.gmail.com with ESMTPSA id h1sm3517800pfh.219.2021.12.06.06.19.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Dec 2021 06:19:32 -0800 (PST)
-Message-ID: <581569ce-b166-1cad-2624-66de319cc2b9@gmail.com>
-Date:   Mon, 6 Dec 2021 22:19:21 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FHezbGrYlKxA1aTrkxNXSkuk1RduKCiWsmFP87kNHNY=;
+        b=ENhmfjl4NnLq3ESXjO7YkZN38/qBXQO/ZCKTaOckHdABTUan9C4DUmbSOZ6y0pPCZy
+         +Rqtxbn8WTvmzvqhJS9YR9e+AM65ewGFZNClcISC6I7xyVO/06tJOs2kQeiqTxozH52M
+         XKU4HyFBfUt19IT78u2wGiK8g++kgrft1fPXmU+Nf/wREBHRES3HGg3ITWlZyGvhTUFv
+         SlUpFUBHHREI1KyCA6oXjS3UzNs2SrfuH5aEss9hq6oRXhRiVTFtY4MASdM//7OheSpw
+         e63o1tOScnlHAL08DjdN1arbCoKc9VGdoccx1zv3iKhzOrPvaSQGiHkk6fHCOZ6YaDBF
+         i/4A==
+X-Gm-Message-State: AOAM533ppt6gZ0q2zFOHb9iKHPxfXwZmvgYTEmVbP8l+5d58zJrGqvX2
+        oOlsQbnkrZSCNoIiy/2hPF8=
+X-Google-Smtp-Source: ABdhPJx2s79y4UV6UfCELoWwjsBXrn2U9Tro1XMfsLGc7m27xn/DOl5d0HW/E8jg1uMWElErsFJE7A==
+X-Received: by 2002:a02:a708:: with SMTP id k8mr42965751jam.26.1638801167426;
+        Mon, 06 Dec 2021 06:32:47 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id y8sm6337176iox.32.2021.12.06.06.32.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Dec 2021 06:32:46 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 8E52D27C0054;
+        Mon,  6 Dec 2021 09:32:44 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 06 Dec 2021 09:32:44 -0500
+X-ME-Sender: <xms:Cx-uYQs85A1MMXJYGuWqEJ7Z5H0fYWyIBMsroi5ZcJYhDA_0sXEVKw>
+    <xme:Cx-uYdeOOSQTLomCC91P6fvNfLUaBzynTvS8S1IJqe42v_kaQOsPATPLrlpxDh5K-
+    VsJpX9OMQqwUGTEww>
+X-ME-Received: <xmr:Cx-uYbxTazrQNhAmwOJDGcwBcZKt0G6ftpVDE7070sHyD2fzk1MP_1dE6sw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrjeefgdeihecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpeevieejtdfhieejfeduheehvdevgedugeethefggfdtvdeutdevgeetvddvfeeg
+    tdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhhphgv
+    rhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunhdrfh
+    gvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:Cx-uYTP7IMvllYtCuW-96zpzDKmquPq_Oc0AMq8B6-3JLGB89W1FVQ>
+    <xmx:Cx-uYQ-LAihlYOGwm6Zoiy1lOqxm_kftsSxg_LPN5by606Y0o4ftaA>
+    <xmx:Cx-uYbVLvwYrqkFwFZoM7PbDfKREKDylKP9K-SP5OD6QDsGQMr7wcg>
+    <xmx:DB-uYT3XFpOMXfNRE9xfxrXZdDXokmbhrddzAfQotajWX2sPWXYz3F-Xqns>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 6 Dec 2021 09:32:43 -0500 (EST)
+Date:   Mon, 6 Dec 2021 22:31:24 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
+Subject: Re: [PATCH v3 08/25] kcsan: Show location access was reordered to
+Message-ID: <Ya4evHE7uQ9eXpax@boqun-archlinux>
+References: <20211130114433.2580590-1-elver@google.com>
+ <20211130114433.2580590-9-elver@google.com>
+ <Ya2Zpf8qpgDYiGqM@boqun-archlinux>
+ <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V4 3/5] hyperv/IOMMU: Enable swiotlb bounce buffer for
- Isolation VM
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, sstabellini@kernel.org, boris.ostrovsky@oracle.com,
-        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, thomas.lendacky@amd.com,
-        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
-        michael.h.kelley@microsoft.com
-Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, parri.andrea@gmail.com, dave.hansen@intel.com
-References: <20211205081815.129276-1-ltykernel@gmail.com>
- <20211205081815.129276-4-ltykernel@gmail.com>
- <a5943893-510a-3fc8-cbb7-8742369bf36b@suse.com>
- <125ffb7d-958c-e77a-243b-4cf38f690396@gmail.com>
- <ed9aa3d5-9ac8-2195-e617-85599ffd7864@suse.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <ed9aa3d5-9ac8-2195-e617-85599ffd7864@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNMirKGSBW2m+bWRM9_FnjK3_HjnJC=dhyMktx50mwh1GQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 12/5/2021 6:31 PM, Juergen Gross wrote:
-> On 05.12.21 09:48, Tianyu Lan wrote:
->>
->>
->> On 12/5/2021 4:34 PM, Juergen Gross wrote:
->>> On 05.12.21 09:18, Tianyu Lan wrote:
->>>> From: Tianyu Lan <Tianyu.Lan@microsoft.com>
->>>>
->>>> hyperv Isolation VM requires bounce buffer support to copy
->>>> data from/to encrypted memory and so enable swiotlb force
->>>> mode to use swiotlb bounce buffer for DMA transaction.
->>>>
->>>> In Isolation VM with AMD SEV, the bounce buffer needs to be
->>>> accessed via extra address space which is above shared_gpa_boundary
->>>> (E.G 39 bit address line) reported by Hyper-V CPUID ISOLATION_CONFIG.
->>>> The access physical address will be original physical address +
->>>> shared_gpa_boundary. The shared_gpa_boundary in the AMD SEV SNP
->>>> spec is called virtual top of memory(vTOM). Memory addresses below
->>>> vTOM are automatically treated as private while memory above
->>>> vTOM is treated as shared.
->>>>
->>>> Hyper-V initalizes swiotlb bounce buffer and default swiotlb
->>>> needs to be disabled. pci_swiotlb_detect_override() and
->>>> pci_swiotlb_detect_4gb() enable the default one. To override
->>>> the setting, hyperv_swiotlb_detect() needs to run before
->>>> these detect functions which depends on the pci_xen_swiotlb_
->>>> init(). Make pci_xen_swiotlb_init() depends on the hyperv_swiotlb
->>>> _detect() to keep the order.
->>>
->>> Why? Does Hyper-V plan to support Xen PV guests? If not, I don't see
->>> the need for adding this change.
->>>
->>
->> This is to keep detect function calling order that Hyper-V detect 
->> callback needs to call before pci_swiotlb_detect_override() and 
->> pci_swiotlb_detect_4gb(). This is the same for why
->> pci_swiotlb_detect_override() needs to depend on the 
->> pci_xen_swiotlb_detect(). Hyper-V also has such request and so make 
->> xen detect callback depends on Hyper-V one.
+On Mon, Dec 06, 2021 at 08:16:11AM +0100, Marco Elver wrote:
+> On Mon, 6 Dec 2021 at 06:04, Boqun Feng <boqun.feng@gmail.com> wrote:
+> >
+> > Hi,
+> >
+> > On Tue, Nov 30, 2021 at 12:44:16PM +0100, Marco Elver wrote:
+> > > Also show the location the access was reordered to. An example report:
+> > >
+> > > | ==================================================================
+> > > | BUG: KCSAN: data-race in test_kernel_wrong_memorder / test_kernel_wrong_memorder
+> > > |
+> > > | read-write to 0xffffffffc01e61a8 of 8 bytes by task 2311 on cpu 5:
+> > > |  test_kernel_wrong_memorder+0x57/0x90
+> > > |  access_thread+0x99/0xe0
+> > > |  kthread+0x2ba/0x2f0
+> > > |  ret_from_fork+0x22/0x30
+> > > |
+> > > | read-write (reordered) to 0xffffffffc01e61a8 of 8 bytes by task 2310 on cpu 7:
+> > > |  test_kernel_wrong_memorder+0x57/0x90
+> > > |  access_thread+0x99/0xe0
+> > > |  kthread+0x2ba/0x2f0
+> > > |  ret_from_fork+0x22/0x30
+> > > |   |
+> > > |   +-> reordered to: test_kernel_wrong_memorder+0x80/0x90
+> > > |
+> >
+> > Should this be "reordered from" instead of "reordered to"? For example,
+> > if the following case needs a smp_mb() between write to A and write to
+> > B, I think currently it will report as follow:
+> >
+> >         foo() {
+> >                 WRITE_ONCE(A, 1); // let's say A's address is 0xaaaa
+> >                 bar() {
+> >                         WRITE_ONCE(B, 1); // Assume B's address is 0xbbbb
+> >                                           // KCSAN find the problem here
+> >                 }
+> >         }
+> >
+> >         <report>
+> >         | write (reordered) to 0xaaaa of ...:
+> >         | bar+0x... // address of the write to B
+> >         | foo+0x... // address of the callsite to bar()
+> >         | ...
+> >         |  |
+> >         |  +-> reordered to: foo+0x... // address of the write to A
+> >
+> > But since the access reported here is the write to A, so it's a
+> > "reordered from" instead of "reordered to"?
 > 
-> And does this even work without CONFIG_SWIOTLB_XEN, i.e. without
-> pci_xen_swiotlb_detect() being in the system?
+> Perhaps I could have commented on this in the commit message to avoid
+> the confusion, but per its updated comment replace_stack_entry()
+> "skips to the first entry that matches the function of @ip, and then
+> replaces that entry with @ip, returning the entries to skip with
+> @replaced containing the replaced entry."
 > 
-Hi Juergen:
-	Thanks for your review. This is a issue and I just sent out a v5 which 
-decouples the dependency between xen and hyperv.
+> When a reorder_access is set up, the ip to it is stored, which is
+> what's passed to @ip of replace_stack_entry(). It effectively swaps
+> the top frame where the race occurred with where the original access
+> happened. This all works because the runtime is careful to only keep
+> reorder_accesses valid until the original function where it occurred
+> is left.
+> 
+
+Thanks for the explanation, I was missing the swap here. However...
+
+> So in your above example you need to swap "reordered to" and the top
+> frame of the stack trace.
+> 
+
+IIUC, the report for my above example will be:
+
+         | write (reordered) to 0xaaaa of ...:
+         | foo+0x... // address of the write to A
+         | ...
+         |  |
+         |  +-> reordered to: foo+0x... // address of the callsite to bar() in foo()
+
+, right? Because in replace_stack_entry(), it's not the top frame where
+the race occurred that gets swapped, it's the frame which belongs to the
+same function as the original access that gets swapped. In other words,
+when KCSAN finds the problem, top entries of the calling stack are:
+
+	[0] bar+0x.. // address of the write to B
+	[1] foo+0x.. // address of the callsite to bar() in foo()
+
+after replace_stack_entry(), they changes to:
+
+	[0] bar+0x.. // address of the write to B
+skip  ->[1] foo+0x.. // address of the write to A
+
+, as a result the report won't mention bar() at all.
+
+And I think a better report will be:
+
+         | write (reordered) to 0xaaaa of ...:
+         | foo+0x... // address of the write to A
+         | ...
+         |  |
+         |  +-> reordered to: bar+0x... // address of the write to B in bar()
+
+because it tells users the exact place the accesses get reordered. That
+means maybe we want something as below? Not completely tested, but I
+play with scope checking a bit, seems it gives what I want. Thoughts?
+
+Regards,
+Boqun
+
+diff --git a/kernel/kcsan/report.c b/kernel/kcsan/report.c
+index 67794404042a..b495ed3aa637 100644
+--- a/kernel/kcsan/report.c
++++ b/kernel/kcsan/report.c
+@@ -324,7 +324,10 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+        else
+                goto fallback;
+
+-       for (skip = 0; skip < num_entries; ++skip) {
++       skip = get_stack_skipnr(stack_entries, num_entries);
++       *replaced = stack_entries[skip];
++
++       for (;skip < num_entries; ++skip) {
+                unsigned long func = stack_entries[skip];
+
+                if (!kallsyms_lookup_size_offset(func, &symbolsize, &offset))
+@@ -332,7 +335,6 @@ replace_stack_entry(unsigned long stack_entries[], int num_entries, unsigned lon
+                func -= offset;
+
+                if (func == target_func) {
+-                       *replaced = stack_entries[skip];
+                        stack_entries[skip] = ip;
+                        return skip;
+                }
+
+> The implementation is a little trickier of course, but I really wanted
+> the main stack trace to look like any other non-reordered access,
+> which starts from the original access, and only have the "reordered
+> to" location be secondary information.
+> 
+> The foundation for doing this this was put in place here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6c65eb75686f
+> 
+> Thanks,
+> -- Marco
