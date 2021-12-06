@@ -2,64 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 830A646961A
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 13:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 758FD469805
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 15:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243365AbhLFNCl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Dec 2021 08:02:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243274AbhLFNCl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 08:02:41 -0500
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9ACC061746
-        for <linux-arch@vger.kernel.org>; Mon,  6 Dec 2021 04:59:12 -0800 (PST)
-Received: by mail-vk1-xa43.google.com with SMTP id u68so6678094vke.11
-        for <linux-arch@vger.kernel.org>; Mon, 06 Dec 2021 04:59:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
-        b=Y1e8Rp4ch5nwIhMTKqVQ9+VYWwgRHwJV5bBY8UJMNEx0UDWekNxF6J6EBtaV6WvieW
-         Ys8J+OGeIgNv+JL4vDD7QZw5TtdUS94G+q322UWbpnvOMbkjuV+HtcoLj1oV2PhXunQY
-         0WQAwpAYqfWkKo225IJmgr8JDnFo9qnwIid3oMCZLXvxAeG0wwWFqxX8rWSB19Y92Kh0
-         13mK0YTygwC6U78bt2TiluSqu+9h0hEPT3ORY4ukUd/n7x0vYj8pN8rKw5tHQcw8Gla6
-         ntyXPjasZJUSeNgxVkIkYGoxQAdjxWj3JD8WdTtgGv+4lumIul1PCnAvoX0WwXgfjwNo
-         LjXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=esxAadU3+UzyTWgJKT1bUwFTK6KpmX9nIkgAaCqEFJ8=;
-        b=hLeMO0X5Y/jAsK3LC5jjaI9qFpOvqjotJ34f5d17djGw/7lFnKFo+cvF94O82FHHU3
-         CLzrA+oaYseC6gaoQxVkSdBFnW5VnbD+gonNFbe5LCc0NW2m3JFehrUs0N/+6Uxom0Ai
-         IacndcfZqgs8FQj7EnqU4/l7Hc5+4Ows1yT0yCzqfBqDBQqgtXiBeTzpoYqi0Amgw7as
-         xahrnSQHZCKvnrizUdkVdXtfB0Yk9kSSPaRsY1cYYXFuw3RE1kKpNiiIfYzZ0TlRIznC
-         sqbk1FrnTXPkcb2/W8wRwdi1SECYmt3EbMEIUd95GaL47Mse9cpCzI+fOBYg33AmuSZ9
-         PRzA==
-X-Gm-Message-State: AOAM532rh5+OmUiQUPz6hc32qHI1cjmBgoQuEPExh9FfN9qHXH1rmwbu
-        uiK/VsLVhFOPRoi4vwLAx/8k3iHO81yffzojqdc=
-X-Google-Smtp-Source: ABdhPJwFdfFuZClQn9NR0fF5j0R/SN6LRo3FCLvvvB1K9IheaFkYehtN2dQaHT4LvmyEZSxlAHbw0x3ciRbl3VKtqvQ=
-X-Received: by 2002:a05:6122:130d:: with SMTP id e13mr40882176vkp.6.1638795551612;
- Mon, 06 Dec 2021 04:59:11 -0800 (PST)
+        id S245576AbhLFOLD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Dec 2021 09:11:03 -0500
+Received: from verein.lst.de ([213.95.11.211]:50654 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245648AbhLFOKa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 6 Dec 2021 09:10:30 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1077C68B05; Mon,  6 Dec 2021 15:06:52 +0100 (CET)
+Date:   Mon, 6 Dec 2021 15:06:51 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, jgross@suse.com,
+        sstabellini@kernel.org, boris.ostrovsky@oracle.com,
+        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, thomas.lendacky@amd.com,
+        Tianyu.Lan@microsoft.com, xen-devel@lists.xenproject.org,
+        michael.h.kelley@microsoft.com, iommu@lists.linux-foundation.org,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, vkuznets@redhat.com, brijesh.singh@amd.com,
+        konrad.wilk@oracle.com, hch@lst.de, parri.andrea@gmail.com,
+        dave.hansen@intel.com
+Subject: Re: [PATCH V4 2/5] x86/hyper-v: Add hyperv Isolation VM check in
+ the cc_platform_has()
+Message-ID: <20211206140651.GA5100@lst.de>
+References: <20211205081815.129276-1-ltykernel@gmail.com> <20211205081815.129276-3-ltykernel@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a9f:3601:0:0:0:0:0 with HTTP; Mon, 6 Dec 2021 04:59:11 -0800 (PST)
-Reply-To: jp2888322@gmail.com
-From:   Maria-Elisabeth_Schaeffler <kiruijoan993@gmail.com>
-Date:   Mon, 6 Dec 2021 15:59:11 +0300
-Message-ID: <CAJs2jC4LKwRAUA5scDcoznoiMF=rRkC7gyPH5qqmeQQsUDr33Q@mail.gmail.com>
-Subject: Spende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211205081815.129276-3-ltykernel@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Ich bin Maria Elisabeth Schaeffler, ich habe eine Spende f=C3=BCr Sie,
-E-Mail f=C3=BCr weitere Informationen.
+On Sun, Dec 05, 2021 at 03:18:10AM -0500, Tianyu Lan wrote:
+> +static bool hyperv_cc_platform_has(enum cc_attr attr)
+> +{
+> +#ifdef CONFIG_HYPERV
+> +	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
+> +#else
+> +	return false;
+> +#endif
+> +}
 
-Gr=C3=BC=C3=9Fe
-Maria-Elisabeth_Schaeffler
+Can we even end up here without CONFIG_HYPERV?
