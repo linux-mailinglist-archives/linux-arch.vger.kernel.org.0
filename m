@@ -2,107 +2,126 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B3646A88E
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Dec 2021 21:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED15A46B267
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Dec 2021 06:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349484AbhLFUlF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Dec 2021 15:41:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245082AbhLFUlF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Dec 2021 15:41:05 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5CDC061746;
-        Mon,  6 Dec 2021 12:37:36 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id v1so48107038edx.2;
-        Mon, 06 Dec 2021 12:37:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zBLblKeg8CrULqFWVj7RAzFZmXmOvswPlK8gAVXpGvQ=;
-        b=j4VEo5eVw1TtR0YsSabgZhAtbGEv6dWXafQlQs99qr1BPHoPLjjZ1fdWfnPVndnpii
-         ebdq0ugWlyjmCQ4o27jqzmg/n5UUixZsG/vb4lH6DsoQoZXkAESKIwBiNjSLnAdeRtuc
-         NvemIycmd820mZDlWH6BYGMkNj4KMVa78s+SbEyK/f8TVFuLi5G6WK1G9lTzPk0ZUt4U
-         4fpbHdGd7AaqHwgOIa/NsNydocrNsPaVByELqK8k71S7/mVwZK/hzVfe1zyA76WQ2DMQ
-         X1Hds3ZACRDogFxy6vi3gNA3YPjFJ+dA7UzfSyGgSumgCPdexmsKJjcZhlEvxkSvCeop
-         YBFQ==
+        id S234508AbhLGFfV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Dec 2021 00:35:21 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44742 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234574AbhLGFfU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Dec 2021 00:35:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638855110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e4ghYP9B13gGvmZuLKDuOchy2naysfKvbuf3lUvYkHc=;
+        b=ILiCplrXUFLPc9DWwvemnd0a7H8UajIsai+WDTBPSFqVOugb7C9EGBpKD6/g293lrKu3db
+        0+AS4lCMlDed30cFg8udqjK6CY2qt7tOggyaYKTypCVVaMHk3kWEdgS06mbFkVF2vegMZI
+        RNXhAIDla1xuLJWGGXx04X13+BUA4hM=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-153-RYkwXT1BP6yyrWFmgsR-0w-1; Tue, 07 Dec 2021 00:31:48 -0500
+X-MC-Unique: RYkwXT1BP6yyrWFmgsR-0w-1
+Received: by mail-qt1-f200.google.com with SMTP id v17-20020a05622a131100b002aea167e24aso15480819qtk.5
+        for <linux-arch@vger.kernel.org>; Mon, 06 Dec 2021 21:31:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=zBLblKeg8CrULqFWVj7RAzFZmXmOvswPlK8gAVXpGvQ=;
-        b=hGG1raoYIyt3bURn6KOBnLqU/HouNyWV3tnHlPtt/VK87vyiHkradG4D6kFeJXOj/F
-         keyoirBk7scGF/mFWH3BvV4MpeZLFYULxoMhPVk4e5BWSR5UPev8HV1CCT6di1yFSpW9
-         mIWv6XGshyn8azbkpYDRXr5RNTY2jQcH1UL7AypxR/xUhZ0jOQjKeA0lWIrBrXj+PPyy
-         /iEWJiCGVwo7KveIZhsmht1NXUmLB8WyEqiK+Vz6/ASnaz7QQm9JxNHIOgiKDx7pC3J1
-         e5/0XJwGnH4BpVnkFpLlxUUEebsEJnI3/QZCLM1sFkHAHAaOEyeVy1cSBFVBSCKXWrXF
-         lYEA==
-X-Gm-Message-State: AOAM533GtCr2ddDZrAC5Qz3o4i7qvQO2kd3ybJBlt1t+ofMRrE3K4xWL
-        /oriFa0oipPZ/FyMrn45VUw=
-X-Google-Smtp-Source: ABdhPJzrgo0Xi3nmEuzmb1ho2OIxbrUIKWnzhLf3x7/W+hp+MPI/n3GrzxQc508pMJcPgQlhyuhEbg==
-X-Received: by 2002:a17:906:1396:: with SMTP id f22mr48685989ejc.228.1638823054885;
-        Mon, 06 Dec 2021 12:37:34 -0800 (PST)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id x22sm7091350ejc.97.2021.12.06.12.37.33
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=e4ghYP9B13gGvmZuLKDuOchy2naysfKvbuf3lUvYkHc=;
+        b=pTeoNeXrZO/hDwUbtYXAmI979bsf7WDBxW6/77Dxb//ddhh6v5hA2rALRn0xv0/pYV
+         o0u2zVokOm+J2ZYcUuNumU0xqQO/VGAhDbcgmFb2r1BJ13BBhF9ygW0N/Lhy8prGvMtl
+         +M0Ca/pbt508iqWrluOlW8r9wb8+0ecdvqcH3IbIQCX7YW0iSsjzwQOV1kgwO6j7fk/7
+         FOHHJtOhaP2EflXU17hnRRHHwPoCDIkI967nuUIOUvkxbqx31uhS9BMJwod53sHR08LO
+         h3McpsZ50ALFNTXlHq9RTCdkJJnJHm2KAD6erTgQs50JzQ9SH41eh5uQuudBmWvEPEau
+         PJTw==
+X-Gm-Message-State: AOAM530mnmy6LYxqdiK3RV6Rb6epaKLGeV8aK1zQbm0mPB5A7jGdycRS
+        wLocQnrcV5k3YcigsYJILeuYy981GUguxwIDOS6eUZKUFCj+mI9R9TvUGzEcC89x7JnYvQyaex1
+        VtTrWr/jTUa6HZINe2AN78g==
+X-Received: by 2002:ac8:5b51:: with SMTP id n17mr19545793qtw.182.1638855108538;
+        Mon, 06 Dec 2021 21:31:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz454uO8EitNs/c6PtV9eniUKNKiTCgR5+N8W4WMPq1f0ryP+2pFiwPH4C3lFPQ4hkn9zJMiQ==
+X-Received: by 2002:ac8:5b51:: with SMTP id n17mr19545750qtw.182.1638855108304;
+        Mon, 06 Dec 2021 21:31:48 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id s12sm8814877qtk.61.2021.12.06.21.31.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Dec 2021 12:37:34 -0800 (PST)
-Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-To:     Ley Foon Tan <lftan.linux@gmail.com>,
-        Matteo Croce <mcroce@linux.microsoft.com>
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Akira Tsukamoto <akira.tsukamoto@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Bin Meng <bmeng.cn@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Guo Ren <guoren@kernel.org>, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v5 3/3] riscv: optimized memset
-Date:   Mon,  6 Dec 2021 21:37:03 +0100
-Message-Id: <20211206203703.67597-1-kernel@esmil.dk>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
-References: <CAFiDJ5-OJzWWR0hSZDsuAmxzxTE7cRR9Bsetpfh5vvrTxzkKPw@mail.gmail.com>
+        Mon, 06 Dec 2021 21:31:47 -0800 (PST)
+Date:   Mon, 6 Dec 2021 21:31:42 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v8 07/14] kallsyms: Hide layout
+Message-ID: <20211207053142.d4xvkqs57zob2v2i@treble>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com>
+ <20211202223214.72888-8-alexandr.lobakin@intel.com>
+ <Yanqz7o4IH5MkDp8@hirez.programming.kicks-ass.net>
+ <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFLJcfUqEoz0NAb49=XJG=5LAwEPSwCQ-y7sN31C1U6AQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Ley Foon,
+On Fri, Dec 03, 2021 at 11:03:35AM +0100, Ard Biesheuvel wrote:
+> On Fri, 3 Dec 2021 at 11:01, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, Dec 02, 2021 at 11:32:07PM +0100, Alexander Lobakin wrote:
+> > > From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > >
+> > > This patch makes /proc/kallsyms display in a random order, rather
+> > > than sorted by address in order to hide the newly randomized address
+> > > layout.
+> >
+> > Is there a reason to not always do this? That is, why are we keeping two
+> > copies of this code around? Less code is more better etc..
+> 
+> +1.
+> 
+> IIRC I made the exact same point when this patch was sent out by
+> Kristen a while ago.
 
-You're right it doesn't boot for me either when building with
+Yes.  Alexander, I'd recommend going back to the review comments from
+Kristen's last posting, they may have been missed.
 
-  make ARCH=riscv LLVM=1
-
-The following patch fixes it for me though. In hindsigt it's perhaps a
-bit surprising it works without -ffreestanding in GCC.
-
-/Emil
-
----
- arch/riscv/lib/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/arch/riscv/lib/Makefile b/arch/riscv/lib/Makefile
-index e33263cc622a..6dfa919d4cd6 100644
---- a/arch/riscv/lib/Makefile
-+++ b/arch/riscv/lib/Makefile
-@@ -4,4 +4,9 @@ lib-$(CONFIG_MMU)	+= uaccess.o
- lib-$(CONFIG_64BIT)	+= tishift.o
- lib-$(CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE) += string.o
- 
-+# string.o implements standard library functions like memset/memcpy etc.
-+# Use -ffreestanding to ensure that the compiler does not try to "optimize"
-+# them into calls to themselves.
-+CFLAGS_string.o := -ffreestanding
-+
- obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
 -- 
-2.34.1
+Josh
 
