@@ -2,122 +2,108 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6C446BF63
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Dec 2021 16:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34ADA46C71D
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Dec 2021 23:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbhLGPgU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Dec 2021 10:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S237656AbhLGWNI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Dec 2021 17:13:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbhLGPgT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Dec 2021 10:36:19 -0500
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6128BC061574
-        for <linux-arch@vger.kernel.org>; Tue,  7 Dec 2021 07:32:49 -0800 (PST)
-Received: by mail-qk1-x72a.google.com with SMTP id 132so14963784qkj.11
-        for <linux-arch@vger.kernel.org>; Tue, 07 Dec 2021 07:32:49 -0800 (PST)
+        with ESMTP id S233088AbhLGWNI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Dec 2021 17:13:08 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D2AC061746
+        for <linux-arch@vger.kernel.org>; Tue,  7 Dec 2021 14:09:37 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id v18-20020a170902e8d200b00141df2da949so92653plg.10
+        for <linux-arch@vger.kernel.org>; Tue, 07 Dec 2021 14:09:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7KKbsx+fekxbJQEYS7IDY6/wX2W0AYYctW9/fDegbBU=;
-        b=ejE5KmUHzgiGItc8WcqsYAakphTPiQs+nOl/Yhsj4d5UpfykX2GmGjQOyqV7ecVaL4
-         Mgwd5O95CbUbOylEgoZeex0nPZHNAQaK2v7wV/4DJQ8R2yDDZzsbEB6ehsZkZXM/lZod
-         3o1wi0Hd9ur/a0Sg02SqXvLCZvcH24/soIDoVYUSIpPfWKeJEgiIYR1XuWF0mefdbmPX
-         zZ4WZfDIJH1Myn9jTWTNdFRm/Yj5QOWvzZzWFpCluFFHsvUR6PUN1qDNWcSLoZJo++LH
-         g05rWN0w1YPaLU+2dSY+jjgPPPC6V+9roQzm6IByzCkOrR8Hx7z4GsDC1qIJAJxY6mYU
-         UxeA==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=H9d3b7ySfPUUkyj8WwGO7YINvSuZ61NMD+2fSI/NRIQ=;
+        b=kavNo4w//awmdXO5HpD/p+k8j6D9sG5ed5rnhy6iRwkpibbidw6pxcuAlSF08ANNHS
+         AuzRlasPHS5c+2qkBbl5iC6XWKTL0VtiGFM5Y9jNipsSu8Mt+rVitZBMQ/C3fdD0W9no
+         Gd7C9tHsD6AdQ40xfJlyUtRCxUb240E1fWiSd3/AFwMrxRZf1GTcv21jiPBDjdKx8EGV
+         KcwMnMhh205HO6lvj5rdnxQA/wEvoQYWKnoJjlQ3J8fRr9WYhaGxfBBulxET05qUcXTi
+         KL+VA8Iu0l+JerJE1K4vUqVNe66UTgxBGsyfCm0HJDihzF2XKvzmMO3k3OgspObBZ+VL
+         p8+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7KKbsx+fekxbJQEYS7IDY6/wX2W0AYYctW9/fDegbBU=;
-        b=hz8S0hGaSa7sbJTzqVcf0fUdt0Nhvv5OxAoUmlYT0PrhgyNurCwuUZZ1Irp/z3rTMB
-         1TaNtxHFXl2raFjPH50R1X3kkteXDilx+dgYpb2S1HSk38rQJ9L5mCw8azWoIatUSrTN
-         CyaULPG1VBBdo38Cs/vjZBN0FPlWs+LOMWPFESXWngZlbGGzP0vj/ujwucl/XpzciisL
-         3t8k0PPqicjsLzB9LVqznVl0273Cuw1H7AFQHDjSvE+UvO8u3EdB2oL9EFZJ2xV2ypbJ
-         B6RnctPhoMG2kW2X8HZYTtBWfwSJB3ZpHCBMZDckk6BhB5WRgflX8eoH+RFLqwkk2gkv
-         K/mg==
-X-Gm-Message-State: AOAM530nOdrQSRkggHSPiZrCuRgeNqyrxi2LBUx401UseAqvzI6DcBwp
-        lYfoA10eONox/CoaR1yBf/beD6s5p4NdkWYDRLg=
-X-Google-Smtp-Source: ABdhPJxAxCqGB9vMuZCwsKaKkXm6TFjzO+wj7Jp4VVkOC+Hj15xvg1uO6XDr0zn1dmuXG/RY+4R3K0rq9ay8R/NSRy8=
-X-Received: by 2002:a05:620a:6d3:: with SMTP id 19mr41771929qky.781.1638891168293;
- Tue, 07 Dec 2021 07:32:48 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac8:764a:0:0:0:0:0 with HTTP; Tue, 7 Dec 2021 07:32:47 -0800 (PST)
-Reply-To: lzbplc@outlook.com
-From:   Federal Bureau Investigation <johanneshickley787@gmail.com>
-Date:   Tue, 7 Dec 2021 16:32:47 +0100
-Message-ID: <CA+nZrK9aUfyfP5sWD3R67Vy351EAATpURWETHCYC_i1QR5H5iw@mail.gmail.com>
-Subject: WORLD BANK/IMF- COVID-19, DELTA VARIANT AND OMICRON PANDEMIC RELIEF FUND.
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=H9d3b7ySfPUUkyj8WwGO7YINvSuZ61NMD+2fSI/NRIQ=;
+        b=ajtJxduQKsm9v3sb/TolJ5Qj26+/nrtu0PYV8WQMvdYOuLEJEqrVEeRPErjAx7wKZe
+         cMTvq05BLE3jvB1L/3whQWD+kFVtqja1iUd1hjzu2l3KFDqZ1lXuxpkZDBuYPm4R1m9p
+         aP0pw59slc6JpYg+soVbs27P06Lh/zZbn2jiD6la/r5RA0FGqMv3moL+tMWkdX6dZmro
+         qy/z/fpN8c/qsQrrtQSGDKr0aWV3UvMfS6sUhINYg+kxRWZ1rCAOrHef719NZ/IKwkqj
+         HWEtxLZdmKzxzz7iWcm7a1SBUBIx4ECeJeUaO4bnMty8rQr3FH+SPrzXoAtuS3/445uB
+         UMSw==
+X-Gm-Message-State: AOAM530I5Gg69rHq5OOdbW++Z2+N8LKIfNq5i96qbkZ7jFqU1SXZ8wrl
+        +PmvhSJJCXKnJqFodh3QiOeQsdLqDTc=
+X-Google-Smtp-Source: ABdhPJzYigwKgXuf4QjKrxXjkaHgzzD+/k5Wx9tZeXK3ngvuCH9gJt9PRu0YFmMirUBJBLh3UP201FwOiaY=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:4a0e:: with SMTP id
+ kk14mr2401871pjb.42.1638914976806; Tue, 07 Dec 2021 14:09:36 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue,  7 Dec 2021 22:09:18 +0000
+Message-Id: <20211207220926.718794-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.1.400.ga245620fadb-goog
+Subject: [PATCH v3 0/8] KVM: x86: Hyper-V hypercall fix and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Greeting From Ambassador Mary Beth Leonard.
-Ambassador of the United States to Nigeria
-2 Walter Carrington Cres, Victoria Island 106104, Lagos.
-Registration officer private Email: officiallyusedaddress@gmail.com
+Fix a bug where KVM incorrectly skips an "all_cpus" IPI request, and misc
+cleanups and enhancements for KVM handling of Hyper-V hypercalls.
 
-Attn:Shortlisted Scam Victim,
+Based on kvm/queue, commit 1cf84614b04a ("KVM: x86: Exit to ...").
 
+v3:
+  - Collect reviews. [Vitaly]
+  - Add BUILD_BUG_ON() to protect KVM_HV_MAX_SPARSE_VCPU_SET_BITS. [Vitaly]
+  - Fix misc typos. [Vitaly]
+  - Opportunistically rename "cnt" to "rep_cnt" in tracepoint. [Vitaly]
+  - Drop var_cnt checks for debug hypercalls due to lack of documentation
+    as to their expected behavior. [Vitaly]
+  - Tweak the changelog regarding the TLFS spec issue to reference the
+    bug filed by Vitaly.
 
-I am Mary Beth Leonard, the the U.S. Ambassador to Nigeria.
+v2: https://lore.kernel.org/all/20211030000800.3065132-1-seanjc@google.com/
 
-This is to inform you that We have received series of fraud cases
-around the continenmt  of which your case was reported by a concerned
-citizen regarding all that you have passed through in the hands of
-fraudsters who have used different means to deceive and extort from
-you in the past .
+Sean Christopherson (8):
+  KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI
+    req
+  KVM: x86: Get the number of Hyper-V sparse banks from the VARHEAD
+    field
+  KVM: x86: Refactor kvm_hv_flush_tlb() to reduce indentation
+  KVM: x86: Add a helper to get the sparse VP_SET for IPIs and TLB
+    flushes
+  KVM: x86: Don't bother reading sparse banks that end up being ignored
+  KVM: x86: Shove vp_bitmap handling down into sparse_set_to_vcpu_mask()
+  KVM: x86: Reject fixeds-size Hyper-V hypercalls with non-zero
+    "var_cnt"
+  KVM: x86: Add checks for reserved-to-zero Hyper-V hypercall fields
 
-This is to bring to your notice that I have been delegated by the
-International Monetary Fund (IMF), United Nations (UN) in-conjunction
-with Nigerian Financial Unit (NFU) to inform you that the Nigerian
-government has been mandated to pay out to only 500 scam victims the
-sum USD $170,000.00 USD EACH ( One hundred and Seventy Thousand United
-States Dollars ) each for damages as decided by the world leaders, and
-leaders of thought during the meeting.
+ arch/x86/kvm/hyperv.c             | 175 ++++++++++++++++++------------
+ arch/x86/kvm/trace.h              |  14 ++-
+ include/asm-generic/hyperv-tlfs.h |   7 ++
+ 3 files changed, 123 insertions(+), 73 deletions(-)
 
-Your email address as randomly selected was  shortlisted, and approved
-for this payment as one of the Scam victims to be paid  this
-amount.Your email address was selected among others during the random
-selection, so get back to me as soon as possible for more details on
-the immediate payments of your USD $170,000.00 USD EACH ( One hundred
-and Seventy Thousand United States Dollars )
-On this faithful recommendation, we want you to know that during the
-last climate Change summit it was alarmed so much by rest of the world
-leaders during the meeting on the loss of funds by various foreigners
-to the scams artists operating in Nigeria all over Africa and other
-parts of the world today.
+-- 
+2.34.1.400.ga245620fadb-goog
 
-In other to retain the good image of their country which we have
-removed from the security watch list recently,But proscribed the BOKO
-HARAM AND THE KILLER FULANI HERDSMEN AND BANDITS as world terrorist
-groupS,the government of the country is now paying 500 victims the
-total sum of USD $170,000.00 USD EACH ( One hundred and Seventy
-Thousand United States Dollars ) each in accordance with the UN and
-WORLD BANK  Recommendations. This payment will now serve of your
-WORLD BANK/IMF- COVID-19, DELTA VARIANT AND OMICRON PANDEMIC RELIEF
-FUND.
-
-The payments are to be made through the NIGERIA POLICE FORCE just to
-get this payment work effectively, an  A.S.P Mr.Olufemi Adebola,Police
-Public Relation Officer was appointed to work temporally in that
-section in Nigeria for this year 2021 fiscal year.
-You are advised to contact A.S.P Mr.Olufemi Adebola,Police Public
-Relation Officer  :
-
-Email: NPFPUR@hotmail.com
-
-According to the numbers of beneficiaries recorded so far, 188
-beneficiaries has been fully paid,half of the victims are from the
-united states, while 312 is left to be paid. Kindly contact him
-immediately and he will get back to you with the requirements on how
-to be paid.
-
-Thank You
-Mary Beth Leonard
-Ambassador of the United States to Nigeria
-2 Walter Carrington Cres, Victoria Island 106104, Lagos.
-Registration officer private Email: officiallyusedaddress@gmail.com
