@@ -2,137 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 025D646E774
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Dec 2021 12:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0126646F45A
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Dec 2021 20:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236503AbhLILXC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Dec 2021 06:23:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235449AbhLILXB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Dec 2021 06:23:01 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874DBC061746;
-        Thu,  9 Dec 2021 03:19:28 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id l25so18337477eda.11;
-        Thu, 09 Dec 2021 03:19:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RnU+rP4uCTr6P8oEgOcRXDBdIESpkJPuoCfcVUUK34M=;
-        b=Xh992WFzH4MhJUZLBr9tcGDh23qfJikwz/IvzskW76tt72Ifblid2wurAorqOC8hvv
-         vzKun4NdrEVvHrONF1fdgvVsy83GtFacqrrs1Yj3VAH/5upd1OV2ES9hbBOzoCqwxXcE
-         yXZX5tnjkQ0qaFlRgzMKECE16T4llhZdykODllsq9/ar+p9janqaL5E/M0QE2SjyRy1s
-         2EETUWO9cnYHxLMHv6z5wvpYGVNMnVBJ5UPTBi6KF4PZrrlONeThqpJkq0LVlIvBEBFw
-         HhBsE04QcjYHAAxt5NFSlljMXYaKh4mzBZONmaWCM2H/IQJ60ipdVK8Jfk78I1Mo/BmG
-         P86Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=RnU+rP4uCTr6P8oEgOcRXDBdIESpkJPuoCfcVUUK34M=;
-        b=KbzlRG96Kct5PcosvbMyaHWP/FxqedcLi20N5a68Pe5Oj8+HQBal+WjL+KXP/yX/fx
-         GoN3UzZZghuYolnjCY0hPo8ygRHmC0l5NJXYNBS/EAfvCvp5Uvyg2hmspKxh7LyPigHU
-         o3zh8Ly8/aOJqwAnCQXE7v6EdhZSMD413jxnTWwRDas3PxegGeVFQP8Ct47Di3iSVoWi
-         b1xbu44vLoU10Ilf9aYxtpXIp3jycghtzIOMCkGFar14TE3vud8ReJlV0VNECax6HzwB
-         WfnqNSesCOfjQ0SzDN+iBUz7FT8JFFrxKcl4d09g/AFTUaeC/RY6TWGdz7NZDWBu5aK0
-         OWuQ==
-X-Gm-Message-State: AOAM530JfWfARHadoF5O14SYo3WHaxN5ecxnYrUXhp2tDXuQqetS7Fdl
-        WDei1GtA71PC16tXYneQ8cc=
-X-Google-Smtp-Source: ABdhPJwEU1ngcnTsLg9XxUFDRE+jTY35YTNAHUK30/3k2A7n01CrW1W7VVc4cid86TEx4q65U66VcQ==
-X-Received: by 2002:a17:906:1599:: with SMTP id k25mr14866135ejd.298.1639048766964;
-        Thu, 09 Dec 2021 03:19:26 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id h7sm3629139edb.89.2021.12.09.03.19.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 03:19:26 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <d1a40c83-0120-7fc7-0e9c-7e445751520c@redhat.com>
-Date:   Thu, 9 Dec 2021 12:19:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v3 1/8] KVM: x86: Ignore sparse banks size for an "all
- CPUs", non-sparse IPI req
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
+        id S229455AbhLIT6G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Dec 2021 14:58:06 -0500
+Received: from mail-oln040093013011.outbound.protection.outlook.com ([40.93.13.11]:38548
+        "EHLO na01-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229446AbhLIT6F (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 9 Dec 2021 14:58:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CQT/oLfbabZdIccOx98hX3xh0o5qE+pBELkP+OOkGilVe6Mo9XK2WVZdMG+9pEvoXUVBMHvKtzHr3R2FE4R++UlauYLlMNKFQz6s7Qik7k9O4hFhvRAXocSd5mTaDfiigKfQb0B1vFYh4am1OB/SozPeLsyk/BxG7Jq11hHKIedgSGAQ0+ROU25HMIdtscZyCvu3T8UHEBNT+BesmttJBsleS0XfLvTBFzYr7UR4h4gNN0F/mdv6j2r/04fF/ef/mMkUQWltOhvBBlLQDzWyLEV9vCAvYFe0cRXj6UAe67oFfD8aTm7Ozy+VBwrrtuBX1KEVmJggtrZp6DlJJLxgEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=X0L0Ehq5i1LLTscdsN9CDciqSiV+8JC+QlPIwMcRVvs=;
+ b=GFHydvdy6GGwEniLCejX61uQ3o4Vm4JD9Tw9LuSOwNx30znCXFT1jzHfIBn8axwQ5FDVm8hiS9rtw5mlGjtOdyyHME71ZNimESKKhoIs+NITTzwQ98gpkIGtZnM0Iw3KN44lKZrYG8XGxDcOaZATj55RpUIk2gf3r7QYJQsEqBo6ms4EqRsevQNMMTXIAqqxSyt8FxMzpY5U6vL/YKTu3GLn6XSJ7E5vC+/+seoNJ6ePFfm49/V9TwHJNAWt0Ln6w/3Xzx4GnXna/mXvqOhd1KNY3MbRb6kDOw3aqiATQfJ53MJRw5LWdTuGdMpwdaLRJJYH3zCza3lRTlNitMumlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=X0L0Ehq5i1LLTscdsN9CDciqSiV+8JC+QlPIwMcRVvs=;
+ b=h2y5lJl1SM2LSuMqP3w2LP6USGSOeShzPf8h4y/SmVp3eWLWGQdbv5N5HzfLFq3uX3v4VQCT4/d6RnGqYYjdQ2fdXp/a1COq6HjjMBrUqCIGt1JeWa95ACwL8CWXlfgT9uxB2sm2qVY5Hiqk4FcSKCCeexrrWb/zZzn39R1lPbw=
+Received: from MWHPR21MB1593.namprd21.prod.outlook.com (2603:10b6:301:7c::11)
+ by SN6PR2101MB1855.namprd21.prod.outlook.com (2603:10b6:805:10::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4801.6; Thu, 9 Dec
+ 2021 19:54:26 +0000
+Received: from MWHPR21MB1593.namprd21.prod.outlook.com
+ ([fe80::e9ea:fc3b:df77:af3e]) by MWHPR21MB1593.namprd21.prod.outlook.com
+ ([fe80::e9ea:fc3b:df77:af3e%8]) with mapi id 15.20.4801.007; Thu, 9 Dec 2021
+ 19:54:26 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Haiyang Zhang <haiyangz@microsoft.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>
-References: <20211207220926.718794-1-seanjc@google.com>
- <20211207220926.718794-2-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20211207220926.718794-2-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>
+CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        vkuznets <vkuznets@redhat.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "hch@lst.de" <hch@lst.de>, "joro@8bytes.org" <joro@8bytes.org>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "dave.hansen@intel.com" <dave.hansen@intel.com>
+Subject: RE: [PATCH V6 5/5] net: netvsc: Add Isolation VM support for netvsc
+ driver
+Thread-Topic: [PATCH V6 5/5] net: netvsc: Add Isolation VM support for netvsc
+ driver
+Thread-Index: AQHX6z/p4N8f/0zLXkWT82yvkJZgZ6wpCdOAgAGKX2A=
+Date:   Thu, 9 Dec 2021 19:54:25 +0000
+Message-ID: <MWHPR21MB1593AF3BB6CBCA14B3805D35D7709@MWHPR21MB1593.namprd21.prod.outlook.com>
+References: <20211207075602.2452-1-ltykernel@gmail.com>
+ <20211207075602.2452-6-ltykernel@gmail.com>
+ <BN8PR21MB128401EEDE6B8C8553CC8009CA6F9@BN8PR21MB1284.namprd21.prod.outlook.com>
+In-Reply-To: <BN8PR21MB128401EEDE6B8C8553CC8009CA6F9@BN8PR21MB1284.namprd21.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8f2b756c-5454-4ec4-ac2e-44d9b23f1862;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-12-08T20:06:08Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3532b909-8c81-40c9-37db-08d9bb4db440
+x-ms-traffictypediagnostic: SN6PR2101MB1855:EE_
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-microsoft-antispam-prvs: <SN6PR2101MB185583DB943F6F7B7FA4C86BD7709@SN6PR2101MB1855.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: a12OiXrXBuq2z78iDNctTXpwb6SYusTzIYEXIzF9bh6qUJr+LPsUGLxrcWOtnKejH/jA71Vn3/hRhrkr30zyxbxYnbikKr32YMKpzQHx6t10ImzIyCjFkBP3AFFQmZmCJe3aTn8FhHKRXcC9q1xaAlrVHK8C43bpiiUc4FLI58GspvRZwQbeYL2ZeAXWMPoFbnGH7BwQMYNBjv8PKHpCG3nPNaIUNTe9mqVrJatLTEFNmfUTLKE6ZW1p+BDNc+ww0ISpOSUZBDpTY5bBTtlXrYJaeXquWHEAs9qHKYfJOhgmz0Wpg4TFLieZa/6eTNy6xE+sBKIovZd7Jal6emeOPAmU/X+4V1WmiGLueIJaIFdlnOVPEppFuWcKEm7plrmH6IG8LwNLBNV9ov77Wmef2EYwxgDv82NW+tpgjB5lLSjRAQwl2UNEKjtdf11IJku3YH5wKpabLHSCzenKsW9O5i3hyDMOXu5riqrVjxA3fayZY0ifMe5vQHPnhmxD6oEK8TYq10/95B0w94naU2Ob6tb9nKvQeUfYGLGuzgAiH4xrLR4xT7N83jsZGDZosC+GUk5q/yj1hGHgXm+KlLy8H8ua94WqcCJFJsNYnKk5W8wBYnaM/hLCZLUieea4ej/sfZ7O1H0UtSR0K8d9cWU+ZPRp4mv7WWddMaeut/ASmaF287FHT4sdI0Q+Ic2/Jvrn
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR21MB1593.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(83380400001)(6506007)(8936002)(921005)(7696005)(508600001)(82950400001)(82960400001)(10290500003)(71200400001)(7416002)(33656002)(38100700002)(5660300002)(9686003)(38070700005)(52536014)(2906002)(54906003)(64756008)(316002)(4326008)(186003)(76116006)(8990500004)(110136005)(66946007)(66446008)(26005)(66556008)(7406005)(55016003)(122000001)(8676002)(66476007)(20210929001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 4IpGc1OhfBdKKqxnSdVHZ28drWU2IzchduNAjcc/J5wUvTz48FgxnjzlMJVzb6KtIcYWPxwyl6Ok9N00/DAK8/TCfjjbQkgarowUex+wgYMEktEAlXMffnBbO20XPTz+LbKbqobIV1uK5JWQgzHUj5PkXCJ1vEnGJG3iBgx1+YmsbkgaCxa27EUrKnRpPn+xH75dVKll5XOWwaIycRHyPAp5SkbE8fdTbXoHJB5NeYXk5olNfFiRtYKgCu+KMmDVuZyhJXresCOI8fSqNsHe3CIQO/ni+HWa9Xku5+AxfMZMDkrrwEbtpPt0b5XaiBDN0Zn4yojPCCkMzThhMi/YZ+VjC8q9puc7YG4UgA4fITsDBigauNxGIStXqOL625y9/c072MUAXxkw4bOhj3N2HYLO08i5wp+CGBGK2jVtmupDycl5637/MdZM9RAWl6qrIhxCX89BKME7+nkA+qcMT5IvSbz4EL5z2c1I/zQ3lR0xJhBX2q59axe1t/CBKPgP
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR21MB1593.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3532b909-8c81-40c9-37db-08d9bb4db440
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2021 19:54:25.8519
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GIMQ+6UyJhE6eyTFBlqtGCgXVSWCbcshMc4F2DixgP0wOOkGjwIQBIz4e+87S+CsF/bpsOV1zqmlk83x+Ao0u6krNJQbWt0BBtVdKGfxm4o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR2101MB1855
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/7/21 23:09, Sean Christopherson wrote:
-> Do not bail early if there are no bits set in the sparse banks for a
-> non-sparse, a.k.a. "all CPUs", IPI request.  Per the Hyper-V spec, it is
-> legal to have a variable length of '0', e.g. VP_SET's BankContents in
-> this case, if the request can be serviced without the extra info.
-> 
->    It is possible that for a given invocation of a hypercall that does
->    accept variable sized input headers that all the header input fits
->    entirely within the fixed size header. In such cases the variable sized
->    input header is zero-sized and the corresponding bits in the hypercall
->    input should be set to zero.
-> 
-> Bailing early results in KVM failing to send IPIs to all CPUs as expected
-> by the guest.
-> 
-> Fixes: 214ff83d4473 ("KVM: x86: hyperv: implement PV IPI send hypercalls")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> ---
->   arch/x86/kvm/hyperv.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index 7179fa645eda..58f35498578f 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -1923,11 +1923,13 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->   
->   		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
->   
-> +		if (all_cpus)
-> +			goto check_and_send_ipi;
-> +
->   		if (!sparse_banks_len)
->   			goto ret_success;
->   
-> -		if (!all_cpus &&
-> -		    kvm_read_guest(kvm,
-> +		if (kvm_read_guest(kvm,
->   				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
->   							vp_set.bank_contents),
->   				   sparse_banks,
-> @@ -1935,6 +1937,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
->   			return HV_STATUS_INVALID_HYPERCALL_INPUT;
->   	}
->   
-> +check_and_send_ipi:
->   	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
->   		return HV_STATUS_INVALID_HYPERCALL_INPUT;
->   
-> 
+From: Haiyang Zhang <haiyangz@microsoft.com> Sent: Wednesday, December 8, 2=
+021 12:14 PM
+> > From: Tianyu Lan <ltykernel@gmail.com>
+> > Sent: Tuesday, December 7, 2021 2:56 AM
 
-Queued this one for stable, thanks.
+[snip]
 
-Paolo
+> >  static inline int netvsc_send_pkt(
+> >  	struct hv_device *device,
+> >  	struct hv_netvsc_packet *packet,
+> > @@ -986,14 +1105,24 @@ static inline int netvsc_send_pkt(
+> >
+> >  	trace_nvsp_send_pkt(ndev, out_channel, rpkt);
+> >
+> > +	packet->dma_range =3D NULL;
+> >  	if (packet->page_buf_cnt) {
+> >  		if (packet->cp_partial)
+> >  			pb +=3D packet->rmsg_pgcnt;
+> >
+> > +		ret =3D netvsc_dma_map(ndev_ctx->device_ctx, packet, pb);
+> > +		if (ret) {
+> > +			ret =3D -EAGAIN;
+> > +			goto exit;
+> > +		}
+>=20
+> Returning EAGAIN will let the upper network layer busy retry,
+> which may make things worse.
+> I suggest to return ENOSPC here like another place in this
+> function, which will just drop the packet, and let the network
+> protocol/app layer decide how to recover.
+>=20
+> Thanks,
+> - Haiyang
+
+I made the original suggestion to return -EAGAIN here.   A
+DMA mapping failure should occur only if swiotlb bounce
+buffer space is unavailable, which is a transient condition.
+The existing code already stops the queue and returns
+-EAGAIN when the ring buffer is full, which is also a transient
+condition.  My sense is that the two conditions should be
+handled the same way.  Or is there a reason why a ring
+buffer full condition should stop the queue and retry, while
+a mapping failure should drop the packet?
+
+Michael
