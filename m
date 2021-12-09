@@ -2,127 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E850D46E76B
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Dec 2021 12:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 025D646E774
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Dec 2021 12:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236539AbhLILUv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Dec 2021 06:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S236503AbhLILXC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Dec 2021 06:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235365AbhLILUu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Dec 2021 06:20:50 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C13C061746;
-        Thu,  9 Dec 2021 03:17:17 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so5918397pjb.1;
-        Thu, 09 Dec 2021 03:17:17 -0800 (PST)
+        with ESMTP id S235449AbhLILXB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Dec 2021 06:23:01 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874DBC061746;
+        Thu,  9 Dec 2021 03:19:28 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id l25so18337477eda.11;
+        Thu, 09 Dec 2021 03:19:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7++LgR6CHSvNByLY82LW9yKqPrn0areIcNLzqPnbuDs=;
-        b=devInOcspgU9jMzUkwQ4cW9HzrPs8Huk68CilnEkO0UWTbHyLicW6H5aVikM64Gmnx
-         WFs4Sp2hpBcuLpVmLGIsvEPCFunl7OLPuW8wpVIoJMvHPR4Y45nM/4sWIbLncBsa3Tps
-         UCW7DSv0OKimSsiFG+nqvvCNykGnbOPOTWRktixpuBhEC7IcYt5V7AbFgEQKYZS5V8Nk
-         pmC3XjlowIpRQL3uAPUUJXhKBDet1SCbmvvKnsJTSDwAU9fnFWxmbNzL8p1bq1OEnEl8
-         /bcYeIiCEkI8oSLGwK1p0KxtDFemGjK9t+BFw0jb/uD2AVAmRJLTnu/+fy92lNKJGZJF
-         R1Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+        h=sender:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=7++LgR6CHSvNByLY82LW9yKqPrn0areIcNLzqPnbuDs=;
-        b=AEQSXzBXIEA6z5+mfgjnvnZyawK+2i5lQNFX97/1GjIpD127rOTLAZ8Z7BHEnE/LQh
-         1OgSvmur5qtaGk7x7wNi+JT1W4vFmZfnlq/BU1A+L/BTeu9OT0I4RwAR0yHR2lM9HglY
-         N6nmVNnyyLhMw5n5EGoN4Ww+LFSQeIjGgfiCgj/zgxGAk3yW6ASdgMPBEXKe59iZSKKi
-         74QYIVpmI3aPv0+HyvyrCBx3QR81vh1O5De859Pd43EK1YPHnphY4t3vPFBqiP8YqpTY
-         KsHLE2+Fbcgoni/qpKJznb6+bh5dkVRDs1d3GoSqsUScF+j4WEgsWWKiW6xPx9MGbj2M
-         vIHA==
-X-Gm-Message-State: AOAM5330A67IZdTlmpG1UUe05BEiS/3rPUAAe/7+DrMUITkXF+DX71o7
-        PlIyA1lEhEPDcGKpIkvmVRY=
-X-Google-Smtp-Source: ABdhPJw6mFG+w4KDhuIF/LkOsGARjWx+5UEh9URRd9WM7jkBUtu2M0tOhMtumtGVnqqsw5jUCAd09g==
-X-Received: by 2002:a17:90b:3850:: with SMTP id nl16mr14999898pjb.10.1639048637182;
-        Thu, 09 Dec 2021 03:17:17 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:18:efec::50b])
-        by smtp.gmail.com with ESMTPSA id d10sm6777113pfl.139.2021.12.09.03.17.08
+        bh=RnU+rP4uCTr6P8oEgOcRXDBdIESpkJPuoCfcVUUK34M=;
+        b=Xh992WFzH4MhJUZLBr9tcGDh23qfJikwz/IvzskW76tt72Ifblid2wurAorqOC8hvv
+         vzKun4NdrEVvHrONF1fdgvVsy83GtFacqrrs1Yj3VAH/5upd1OV2ES9hbBOzoCqwxXcE
+         yXZX5tnjkQ0qaFlRgzMKECE16T4llhZdykODllsq9/ar+p9janqaL5E/M0QE2SjyRy1s
+         2EETUWO9cnYHxLMHv6z5wvpYGVNMnVBJ5UPTBi6KF4PZrrlONeThqpJkq0LVlIvBEBFw
+         HhBsE04QcjYHAAxt5NFSlljMXYaKh4mzBZONmaWCM2H/IQJ60ipdVK8Jfk78I1Mo/BmG
+         P86Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RnU+rP4uCTr6P8oEgOcRXDBdIESpkJPuoCfcVUUK34M=;
+        b=KbzlRG96Kct5PcosvbMyaHWP/FxqedcLi20N5a68Pe5Oj8+HQBal+WjL+KXP/yX/fx
+         GoN3UzZZghuYolnjCY0hPo8ygRHmC0l5NJXYNBS/EAfvCvp5Uvyg2hmspKxh7LyPigHU
+         o3zh8Ly8/aOJqwAnCQXE7v6EdhZSMD413jxnTWwRDas3PxegGeVFQP8Ct47Di3iSVoWi
+         b1xbu44vLoU10Ilf9aYxtpXIp3jycghtzIOMCkGFar14TE3vud8ReJlV0VNECax6HzwB
+         WfnqNSesCOfjQ0SzDN+iBUz7FT8JFFrxKcl4d09g/AFTUaeC/RY6TWGdz7NZDWBu5aK0
+         OWuQ==
+X-Gm-Message-State: AOAM530JfWfARHadoF5O14SYo3WHaxN5ecxnYrUXhp2tDXuQqetS7Fdl
+        WDei1GtA71PC16tXYneQ8cc=
+X-Google-Smtp-Source: ABdhPJwEU1ngcnTsLg9XxUFDRE+jTY35YTNAHUK30/3k2A7n01CrW1W7VVc4cid86TEx4q65U66VcQ==
+X-Received: by 2002:a17:906:1599:: with SMTP id k25mr14866135ejd.298.1639048766964;
+        Thu, 09 Dec 2021 03:19:26 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.googlemail.com with ESMTPSA id h7sm3629139edb.89.2021.12.09.03.19.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Dec 2021 03:17:16 -0800 (PST)
-Message-ID: <ff4497cc-741a-113c-c6eb-dd5966716863@gmail.com>
-Date:   Thu, 9 Dec 2021 19:17:08 +0800
+        Thu, 09 Dec 2021 03:19:26 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <d1a40c83-0120-7fc7-0e9c-7e445751520c@redhat.com>
+Date:   Thu, 9 Dec 2021 12:19:18 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH V6 4/5] scsi: storvsc: Add Isolation VM support for
- storvsc driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v3 1/8] KVM: x86: Ignore sparse banks size for an "all
+ CPUs", non-sparse IPI req
 Content-Language: en-US
-To:     Long Li <longli@microsoft.com>, KY Srinivasan <kys@microsoft.com>,
+To:     Sean Christopherson <seanjc@google.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "hch@lst.de" <hch@lst.de>, "joro@8bytes.org" <joro@8bytes.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-References: <20211207075602.2452-1-ltykernel@gmail.com>
- <20211207075602.2452-5-ltykernel@gmail.com>
- <BY5PR21MB1506535EF9222ED4300C38BBCE709@BY5PR21MB1506.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BY5PR21MB1506535EF9222ED4300C38BBCE709@BY5PR21MB1506.namprd21.prod.outlook.com>
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ajay Garg <ajaygargnsit@gmail.com>
+References: <20211207220926.718794-1-seanjc@google.com>
+ <20211207220926.718794-2-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211207220926.718794-2-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On 12/9/2021 4:00 PM, Long Li wrote:
->> @@ -1848,21 +1851,22 @@ static int storvsc_queuecommand(struct Scsi_Host
->> *host, struct scsi_cmnd *scmnd)
->>   		payload->range.len = length;
->>   		payload->range.offset = offset_in_hvpg;
->>
->> +		sg_count = scsi_dma_map(scmnd);
->> +		if (sg_count < 0)
->> +			return SCSI_MLQUEUE_DEVICE_BUSY;
-> Hi Tianyu,
+On 12/7/21 23:09, Sean Christopherson wrote:
+> Do not bail early if there are no bits set in the sparse banks for a
+> non-sparse, a.k.a. "all CPUs", IPI request.  Per the Hyper-V spec, it is
+> legal to have a variable length of '0', e.g. VP_SET's BankContents in
+> this case, if the request can be serviced without the extra info.
 > 
-> This patch (and this patch series) unconditionally adds code for dealing with DMA addresses for all VMs, including non-isolation VMs.
+>    It is possible that for a given invocation of a hypercall that does
+>    accept variable sized input headers that all the header input fits
+>    entirely within the fixed size header. In such cases the variable sized
+>    input header is zero-sized and the corresponding bits in the hypercall
+>    input should be set to zero.
 > 
-> Does this add performance penalty for VMs that don't require isolation?
+> Bailing early results in KVM failing to send IPIs to all CPUs as expected
+> by the guest.
+> 
+> Fixes: 214ff83d4473 ("KVM: x86: hyperv: implement PV IPI send hypercalls")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> ---
+>   arch/x86/kvm/hyperv.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+> index 7179fa645eda..58f35498578f 100644
+> --- a/arch/x86/kvm/hyperv.c
+> +++ b/arch/x86/kvm/hyperv.c
+> @@ -1923,11 +1923,13 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>   
+>   		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
+>   
+> +		if (all_cpus)
+> +			goto check_and_send_ipi;
+> +
+>   		if (!sparse_banks_len)
+>   			goto ret_success;
+>   
+> -		if (!all_cpus &&
+> -		    kvm_read_guest(kvm,
+> +		if (kvm_read_guest(kvm,
+>   				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
+>   							vp_set.bank_contents),
+>   				   sparse_banks,
+> @@ -1935,6 +1937,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool
+>   			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>   	}
+>   
+> +check_and_send_ipi:
+>   	if ((vector < HV_IPI_LOW_VECTOR) || (vector > HV_IPI_HIGH_VECTOR))
+>   		return HV_STATUS_INVALID_HYPERCALL_INPUT;
+>   
 > 
 
-Hi Long:
-	scsi_dma_map() in the traditional VM just save sg->offset to
-sg->dma_address and no data copy because swiotlb bounce buffer code
-doesn't work. The data copy only takes place in the Isolation VM and
-swiotlb_force is set. So there is no additional overhead in the 
-traditional VM.
+Queued this one for stable, thanks.
 
-Thanks.
+Paolo
