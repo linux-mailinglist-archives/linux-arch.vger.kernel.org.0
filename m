@@ -2,84 +2,157 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E357246FF02
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Dec 2021 11:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7106146FF48
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Dec 2021 12:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233090AbhLJKxi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Dec 2021 05:53:38 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:36390 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236819AbhLJKxi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Dec 2021 05:53:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B19A8CE2A78;
-        Fri, 10 Dec 2021 10:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04D47C341CA;
-        Fri, 10 Dec 2021 10:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639133400;
-        bh=UihNu6COUMxpwtIho6XydfuI5rt6RIkfKQZSbPH2tXM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VwJVFAMM08SEUuV2rTSpBu3T+tMM9x5PDHZH5SdQ0vo+BWGZZWdEYgwmRtZZsPOAN
-         tnOYgBG8/kmmKEEHc6At7xbpuWqP5l4Wgu5uUbCYW808nxnEyRUeYxzoKoqftoXSCG
-         Alc8dLWGTAuNWdakOCLs8zqiDrAb8kD0Sb6/B1DBODVE2n6CTDf1xQKMw6+LWdJIp7
-         lPiSQLbzevIhI3QoqURapxvt8QYb+5feKEMdJr2lgjw7TyxtLY9q/I8RyqjqIvFCIS
-         khVD+PAa721uQ4xjqV6ey31NNM8tdT0l9bCmt7fNINKHuH1qNVGnySt0VbfC976fBh
-         VTNL+pRUxn1fg==
-Received: by mail-wr1-f41.google.com with SMTP id u1so14133369wru.13;
-        Fri, 10 Dec 2021 02:49:59 -0800 (PST)
-X-Gm-Message-State: AOAM532Hfo6c8YBEAqwPNgjKVQDMer1SE4oCDtWSAIYy8Ytp7xPGGSih
-        o1BWDq2MYLIm9o+DapxV5fQqFef+SoswvdqzHok=
-X-Google-Smtp-Source: ABdhPJyZGgQtOe+9a3VMoC6FsmMk7PBQfc6X6IcZo5cHZZyqsyM1wdwTH5ecyFajtYl/RdstFR1ZxOxYvw6Q53aMxF8=
-X-Received: by 2002:adf:d091:: with SMTP id y17mr13756102wrh.418.1639133398302;
- Fri, 10 Dec 2021 02:49:58 -0800 (PST)
-MIME-Version: 1.0
-References: <20211126095852.455492-1-arnd@kernel.org> <YbMuYlTwaedpI6iz@gmail.com>
-In-Reply-To: <YbMuYlTwaedpI6iz@gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Fri, 10 Dec 2021 11:49:42 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3tqg2eewMA1jvg==hV-XfK4kMGimx9-oD8A1P69-K6ew@mail.gmail.com>
-Message-ID: <CAK8P3a3tqg2eewMA1jvg==hV-XfK4kMGimx9-oD8A1P69-K6ew@mail.gmail.com>
-Subject: Re: [PATCH] futex: Fix sparc32/m68k/nds32 build regression
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        id S237071AbhLJLFS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Dec 2021 06:05:18 -0500
+Received: from mga04.intel.com ([192.55.52.120]:62189 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234606AbhLJLFS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 10 Dec 2021 06:05:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639134103; x=1670670103;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=EBain5rvAuM0ab2ClY+MBBH0nuRkV+7ToR7QQbmwcnQ=;
+  b=fyHnR0rV98IWI7DyUobpD6PzwYJuPoaXLM34NsO2K4bhRGCwI8ZrZDL+
+   AVZRNWffcZ7H9Hpu4PubFDBc6+dM2CK7IYcJtJuCHvGydHpuQz8wfcquu
+   1ZevKgTxVG7tkFS4RKFGk7r0hEEO8MwMSMTRY4VI5N1JCDWsUy6TSGZIH
+   fHmPZHGCKN2DejZ74m6L+GYHOZtp4b31ChYM7lo/9iyNKXzv9rNoiumtj
+   2kK959X7QxKOdz5FyfnfmwnD5CPFC+5Zk/H3yYIXuLeyErKhNgYpN7dWo
+   Nj8AjzDuYIvV80WfEIK7FeLaL3OIdU/2IyfCki6XtxeZmy03JLMZ8EJjJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10193"; a="237062193"
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="237062193"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2021 03:01:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,195,1635231600"; 
+   d="scan'208";a="612893140"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga004.jf.intel.com with ESMTP; 10 Dec 2021 03:01:34 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BAB1WjI016878;
+        Fri, 10 Dec 2021 11:01:32 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Nicolas Pitre <nico@fluxnic.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Rich Felker <dalias@libc.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions into separate sections
+Date:   Fri, 10 Dec 2021 12:01:02 +0100
+Message-Id: <20211210110102.707759-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 10, 2021 at 11:39 AM Ingo Molnar <mingo@kernel.org> wrote:
-> * Arnd Bergmann <arnd@kernel.org> wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Fri, 3 Dec 2021 10:44:10 +0100
 
-> Doesn't solve the regression on MIPS defconfig:
-> ./arch/mips/include/asm/futex.h: In function 'arch_futex_atomic_op_inuser':
-> ./arch/mips/include/asm/futex.h:89:23: error: implicit declaration of function 'arch_futex_atomic_op_inuser_local'; did you mean 'futex_atomic_op_inuser_local'? [-Werror=implicit-function-declaration]
->    89 |                 ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
+> On Thu, Dec 02, 2021 at 11:32:05PM +0100, Alexander Lobakin wrote:
+> > Use the newly introduces macros to create unique separate sections
+> > for (almost) every "regular" ASM function (i.e. for those which
+> > aren't explicitly put into a specific one).
+> > There should be no leftovers as input .text will be size-asserted
+> > in the LD script generated for FG-KASLR.
+> 
+> *groan*...
+> 
+> Please, can't we do something like:
+> 
+> #define SYM_PUSH_SECTION(name)	\
+> .if section == .text		\
+> .push_section .text.##name	\
+> .else				\
+> .push_section .text		\
+> .endif
 
-Right, mips and xtensa still have the same problem that I fixed for
-the others, I posted
-another fix after the 0day bot reported it. I think
+This condition
 
-https://lore.kernel.org/lkml/20211203080823.2938839-1-arnd@kernel.org/
+.pushsection .text
+.if section == .text
+# do something
+.endif
+.popsection
 
-should address the remaining regression.
+doesn't really works. `do something` doesn't happen.
+This works only when
 
-       Arnd
+.pushsection .text
+.equ section, .text
+
+but it's not really okayish I'd say to find all .{,push}section
+occurences and replace them with a macro (which would also do .equ).
+
+I don't really know how %S with --sectname-subst should help me as
+
+.if %S == .text
+# do something
+.endif
+
+doesn't work at all (syntax error) -- and it shouldn't, %S is
+supposed to work only inside .{,push}section directives.
+
+I could do unconditional
+
+.pushsection %S.##name
+                ^^^^^^ function name
+
+but this would involve changing LDS scripts (and vmlinux.lds.h) to
+let's say replace *(.noinstr.text) with *(.noinstr.text*).
+
+So I hope there is a way to get current section name? If not, then
+the last option is the least harmful I suppose.
+At least not as harmful as current approach with alternative macros,
+far from it lol.
+
+> 
+> #define SYM_POP_SECTION()	\
+> .pop_section
+> 
+> and wrap that inside the existing SYM_FUNC_START*() SYM_FUNC_END()
+> macros.
+
+Thanks,
+Al
