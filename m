@@ -2,55 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E7646FED8
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Dec 2021 11:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E357246FF02
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Dec 2021 11:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbhLJKnL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Dec 2021 05:43:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237845AbhLJKnL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Dec 2021 05:43:11 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6C0C061746;
-        Fri, 10 Dec 2021 02:39:36 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id e3so28899406edu.4;
-        Fri, 10 Dec 2021 02:39:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=JHe7vBh/4+X252aKIDIz4ef+vheyjuqk+KuJhJVZHao=;
-        b=J3X6RW6y7qXI1bGRVlBZvUwsgI9Tnn9gedkSCxKZulMV3j3Bt7O/gwwQ4oqIvsRq9Q
-         XK8UhqXLRWNA3kNEI/3nP4+p4Zg7KZ8id1UOGfgMV6O26USB8ely0d8CQy4vMYkfzpth
-         aL4ped7g72nQWxCRcEnV4x5TXfRfyv7IeLSuI0EA8tHC5bLVNZ2wbUlBDm0K2n24U1H4
-         z5ioud4aH+UmLI7an0Fukc6oHZlhKgMLJ1YdUUND55Th1OO4T9rkqi2LH0iSsOqzuwXy
-         eyOwe25IFFtpJ969inWZ0zhe5K29B9FSkkg0Aap8751XSBLPfkwbAffYsqmKba5HvAct
-         Y5kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=JHe7vBh/4+X252aKIDIz4ef+vheyjuqk+KuJhJVZHao=;
-        b=pbFgyeXvFjulhldB6OBnlxSsp/waU+v9WthkFVxHm5Mx2KpF1NEAvmOQ9cyQGIT4qD
-         tRnt/LEWmzLm0twLh6ha8xJpzJbATBWo5rGiqnYGzHc7i6RLqeW1pu3SAVEdUPVDMi2e
-         +XCPrl6VmlShT23ENon1YYooN8oyZW6zMZHRTiEbDFmLr/hXxeCw0LPOAUFUgSLMH54q
-         hfemje1TVkHaGICKH5eEPUqnORDOmvI6ESJ/VDGn+UHWY8gY2bmCEGxTz0+ZHfIZkPsM
-         zPxEc1E1cYP4v6r6VbA5nODU3cWXBQ8op1pYP9TlxF83Fj/xbVzcZBIjwd0XeJYxjuv8
-         YnMQ==
-X-Gm-Message-State: AOAM531UKa8LwcLwZlOVsJA7Y2s2IF8xrwMXI2bJbQc9Zy36R3LcU/Rq
-        /HzBe5g+SO9Jpgi+Y9Mg79M=
-X-Google-Smtp-Source: ABdhPJyLQUaQ2hNX4CxG0irGqzhgvYGoOjfhZ8BHnmcbbhDaPjnTQI/G8VAVAIxxvsz8/gcc602t1g==
-X-Received: by 2002:a05:6402:4312:: with SMTP id m18mr36853255edc.273.1639132774038;
-        Fri, 10 Dec 2021 02:39:34 -0800 (PST)
-Received: from gmail.com (563BA250.dsl.pool.telekom.hu. [86.59.162.80])
-        by smtp.gmail.com with ESMTPSA id m25sm1189113edj.80.2021.12.10.02.39.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Dec 2021 02:39:33 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Fri, 10 Dec 2021 11:39:30 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
+        id S233090AbhLJKxi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Dec 2021 05:53:38 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:36390 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236819AbhLJKxi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Dec 2021 05:53:38 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B19A8CE2A78;
+        Fri, 10 Dec 2021 10:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04D47C341CA;
+        Fri, 10 Dec 2021 10:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639133400;
+        bh=UihNu6COUMxpwtIho6XydfuI5rt6RIkfKQZSbPH2tXM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VwJVFAMM08SEUuV2rTSpBu3T+tMM9x5PDHZH5SdQ0vo+BWGZZWdEYgwmRtZZsPOAN
+         tnOYgBG8/kmmKEEHc6At7xbpuWqP5l4Wgu5uUbCYW808nxnEyRUeYxzoKoqftoXSCG
+         Alc8dLWGTAuNWdakOCLs8zqiDrAb8kD0Sb6/B1DBODVE2n6CTDf1xQKMw6+LWdJIp7
+         lPiSQLbzevIhI3QoqURapxvt8QYb+5feKEMdJr2lgjw7TyxtLY9q/I8RyqjqIvFCIS
+         khVD+PAa721uQ4xjqV6ey31NNM8tdT0l9bCmt7fNINKHuH1qNVGnySt0VbfC976fBh
+         VTNL+pRUxn1fg==
+Received: by mail-wr1-f41.google.com with SMTP id u1so14133369wru.13;
+        Fri, 10 Dec 2021 02:49:59 -0800 (PST)
+X-Gm-Message-State: AOAM532Hfo6c8YBEAqwPNgjKVQDMer1SE4oCDtWSAIYy8Ytp7xPGGSih
+        o1BWDq2MYLIm9o+DapxV5fQqFef+SoswvdqzHok=
+X-Google-Smtp-Source: ABdhPJyZGgQtOe+9a3VMoC6FsmMk7PBQfc6X6IcZo5cHZZyqsyM1wdwTH5ecyFajtYl/RdstFR1ZxOxYvw6Q53aMxF8=
+X-Received: by 2002:adf:d091:: with SMTP id y17mr13756102wrh.418.1639133398302;
+ Fri, 10 Dec 2021 02:49:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20211126095852.455492-1-arnd@kernel.org> <YbMuYlTwaedpI6iz@gmail.com>
+In-Reply-To: <YbMuYlTwaedpI6iz@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 10 Dec 2021 11:49:42 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3tqg2eewMA1jvg==hV-XfK4kMGimx9-oD8A1P69-K6ew@mail.gmail.com>
+Message-ID: <CAK8P3a3tqg2eewMA1jvg==hV-XfK4kMGimx9-oD8A1P69-K6ew@mail.gmail.com>
+Subject: Re: [PATCH] futex: Fix sparc32/m68k/nds32 build regression
+To:     Ingo Molnar <mingo@kernel.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Arnd Bergmann <arnd@arndb.de>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
@@ -58,73 +51,35 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Darren Hart <dvhart@infradead.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@collabora.com>,
         Nick Hu <nickhu@andestech.com>,
         Greentime Hu <green.hu@gmail.com>,
         Vincent Chen <deanbo422@gmail.com>,
         Rich Felker <dalias@libc.org>,
         Max Filippov <jcmvbkbc@gmail.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] futex: Fix sparc32/m68k/nds32 build regression
-Message-ID: <YbMuYlTwaedpI6iz@gmail.com>
-References: <20211126095852.455492-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126095852.455492-1-arnd@kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, Dec 10, 2021 at 11:39 AM Ingo Molnar <mingo@kernel.org> wrote:
+> * Arnd Bergmann <arnd@kernel.org> wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
 
-* Arnd Bergmann <arnd@kernel.org> wrote:
+> Doesn't solve the regression on MIPS defconfig:
+> ./arch/mips/include/asm/futex.h: In function 'arch_futex_atomic_op_inuser':
+> ./arch/mips/include/asm/futex.h:89:23: error: implicit declaration of function 'arch_futex_atomic_op_inuser_local'; did you mean 'futex_atomic_op_inuser_local'? [-Werror=implicit-function-declaration]
+>    89 |                 ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> In one of the revisions of my futex cleanup series, I botched
-> up a rename of some function names, breaking sparc32, m68k
-> and nds32:
-> 
-> include/asm-generic/futex.h:17:2: error: implicit declaration of function 'futex_atomic_cmpxchg_inatomic_local_generic'; did you mean 'futex_atomic_cmpxchg_inatomic_local'? [-Werror=implicit-function-declaration]
-> 
-> Fix the macros to point to the correct functions.
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Fixes: 3f2bedabb62c ("futex: Ensure futex_atomic_cmpxchg_inatomic() is present")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  include/asm-generic/futex.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/asm-generic/futex.h b/include/asm-generic/futex.h
-> index 30e7fa63b5df..66d6843bfd02 100644
-> --- a/include/asm-generic/futex.h
-> +++ b/include/asm-generic/futex.h
-> @@ -14,9 +14,9 @@
->   *
->   */
->  #define futex_atomic_cmpxchg_inatomic(uval, uaddr, oldval, newval) \
-> -	futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newval)
-> +	futex_atomic_cmpxchg_inatomic_local(uval, uaddr, oldval, newval)
->  #define arch_futex_atomic_op_inuser(op, oparg, oval, uaddr) \
-> -	arch_futex_atomic_op_inuser_local_generic(op, oparg, oval, uaddr)
-> +	futex_atomic_op_inuser_local(op, oparg, oval, uaddr)
->  #endif /* CONFIG_SMP */
->  #endif
+Right, mips and xtensa still have the same problem that I fixed for
+the others, I posted
+another fix after the 0day bot reported it. I think
 
-Doesn't solve the regression on MIPS defconfig:
+https://lore.kernel.org/lkml/20211203080823.2938839-1-arnd@kernel.org/
 
-# nice -n 5 make -j76 CROSS_COMPILE=/home/mingo/gcc/cross/bin/mips64-linux- ARCH=mips kernel/futex/syscalls.o
-  CALL    scripts/atomic/check-atomics.sh
-  CALL    scripts/checksyscalls.sh
-  CC      kernel/futex/syscalls.o
-In file included from kernel/futex/futex.h:12,
-                 from kernel/futex/syscalls.c:7:
-./arch/mips/include/asm/futex.h: In function 'arch_futex_atomic_op_inuser':
-./arch/mips/include/asm/futex.h:89:23: error: implicit declaration of function 'arch_futex_atomic_op_inuser_local'; did you mean 'futex_atomic_op_inuser_local'? [-Werror=implicit-function-declaration]
-   89 |                 ret = arch_futex_atomic_op_inuser_local(op, oparg, oval,\
+should address the remaining regression.
 
-Thanks,
-
-	Ingo
+       Arnd
