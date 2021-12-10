@@ -2,165 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1E9046FFC2
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Dec 2021 12:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFA0470171
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Dec 2021 14:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240295AbhLJLa2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 10 Dec 2021 06:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234694AbhLJLa1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Dec 2021 06:30:27 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04985C061746;
-        Fri, 10 Dec 2021 03:26:53 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id r5so7806846pgi.6;
-        Fri, 10 Dec 2021 03:26:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=oNMML2GUfpRe4KuxNkgjDIBCEtPq+5IBWg/SvCiB1ac=;
-        b=R6WJg/vOJke+Pss70tPbsPfFF/c3xP//0lNWb4hUhYl4MWKxQP2AhRoJk4Y5bJnZp1
-         KlS/DCpvqpFeiAygTjN3XgOkI4wsSUC3pOrCoqxfXll66oNqjjEsxdBGCU8QLOGpiVFR
-         LWobxq8LFE1rEMc9YMoXunbOVZdz+3AjoVc8Kg1y1K0br5h1EYdR+RZpCv+3N4AQ+bZY
-         pcM/MyWJuqJ15I3uei6a2bY9gaYAbKfpGIxypgOKVezQsvr67voKcAS9cTyw+4bd89zI
-         U6kMYbLLJuqyUsx1sojCQ4Giu6rXvLiH2AL0GvH1cco0m27EzFRtcTcBh4LPEZ09Zf0b
-         hZFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oNMML2GUfpRe4KuxNkgjDIBCEtPq+5IBWg/SvCiB1ac=;
-        b=oe7DT9hup1Ybt4K9Aw9x06z2lhJGiSASd1LxlOnE2k9YU4hB0jN/LiknrD8f2M/6AK
-         7iS8Sm46A5/1wVwUtFD6107X5ucOVPCXTy/FiU6uaVQdd4zXZ9UTVUI7WV8uNCPIzGzp
-         mrpLvHAkEs+yS09Y91czkXNubyyZ1f/tuFAfhmCLS984zYwU4EGkkLHjvK/BVgDmnZVm
-         6wtpJz4QBmrvtiTOGQDfgoAzkX+0o1lnP23vXGKmY6qYuhvKVH2xm9JIuvwXWrkouDT6
-         1ZwrP+NQoCCdy9KqByzC3tyZDdv6e8Jo+Up+/HJFFk80TZC3gyxADcKlaKkPBjDZzJuG
-         ngXw==
-X-Gm-Message-State: AOAM530xXfVP52+SZ3J9blf3A0aqSjz4GJiqQOovt0Bzr+SVXxnEvPW6
-        9sTbn5ljHkE46HgFsdLAIOw=
-X-Google-Smtp-Source: ABdhPJwHRIt+DqTuxKr3Ov92YpyxCIqQ63650YjNIjSjqT5l4iFIeahNGLj6YxvmmYkMJGFzIrL5ng==
-X-Received: by 2002:a63:d753:: with SMTP id w19mr5091188pgi.174.1639135612496;
-        Fri, 10 Dec 2021 03:26:52 -0800 (PST)
-Received: from ?IPV6:2404:f801:0:5:8000::50b? ([2404:f801:9000:1a:efea::50b])
-        by smtp.gmail.com with ESMTPSA id on6sm16041313pjb.47.2021.12.10.03.26.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Dec 2021 03:26:52 -0800 (PST)
-Message-ID: <e4125f7b-fdd9-dc0d-63d0-93d841dbb3c3@gmail.com>
-Date:   Fri, 10 Dec 2021 19:26:40 +0800
+        id S241627AbhLJNYb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Dec 2021 08:24:31 -0500
+Received: from pb-sasl-trial3.pobox.com ([64.147.108.87]:61129 "EHLO
+        pb-sasl-trial3.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241521AbhLJNYa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Dec 2021 08:24:30 -0500
+Received: from pb-sasl-trial3.pobox.com (localhost.local [127.0.0.1])
+        by pb-sasl-trial3.pobox.com (Postfix) with ESMTP id A2E342E1EC;
+        Fri, 10 Dec 2021 08:20:49 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=E68Man9i8uGbUzpPImAfkcG0qQQ=; b=M3i/hG
+        +azN6LUuLTqwmsHeWkGG7FXoUTNLjKlcghu0jP1JL7tMcr1g3DLKr0EwVhjeBZ/L
+        y8icsjLdxH0UvesHgER6DOoFGERVbG5wJCPvby524NWd/jljcQFS250sFKI/vS4w
+        tPkXHLp5Tqj+0NTd4s++EeeXGODc+op0P7iZ8=
+Received: from pb-smtp1.nyi.icgroup.com (pb-smtp1.pobox.com [10.90.30.53])
+        by pb-sasl-trial3.pobox.com (Postfix) with ESMTP id 7B5532E1E9;
+        Fri, 10 Dec 2021 08:20:49 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=t/i4EcgilqHL2J/A6MZhr8Rb0kiWWXpYExUCO+guzKc=; b=wl6ECYHXf3DMmbJe3rjaV3PHwRQeyftEtMeaXX/tLxVUyMNdWluOEpCkL6gCK68AGUCs3Qpr5a/bOUni3SRDm7odrxxtfU+++aqtjURc2s+DqWbqYpQ+/IlgADslc0PIS+iauEYxKrzGgFVDccc1X5aVWjPyjohZIr9jY6hiZmc=
+Received: from yoda.home (unknown [96.21.170.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id D48B2101024;
+        Fri, 10 Dec 2021 08:20:48 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 5172A2DA003C;
+        Fri, 10 Dec 2021 08:20:47 -0500 (EST)
+Date:   Fri, 10 Dec 2021 08:20:47 -0500 (EST)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v8 05/14] x86: conditionally place regular ASM functions
+ into separate sections
+In-Reply-To: <20211210110102.707759-1-alexandr.lobakin@intel.com>
+Message-ID: <2onsnq80-p1s8-00-roo9-n02q74319ro@syhkavp.arg>
+References: <20211202223214.72888-1-alexandr.lobakin@intel.com> <20211202223214.72888-6-alexandr.lobakin@intel.com> <Yanm6tJ2obi1aKv6@hirez.programming.kicks-ass.net> <20211210110102.707759-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH V6 2/5] x86/hyper-v: Add hyperv Isolation VM check in the
- cc_platform_has()
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>
-Cc:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        vkuznets <vkuznets@redhat.com>,
-        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "hch@lst.de" <hch@lst.de>, "joro@8bytes.org" <joro@8bytes.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "dave.hansen@intel.com" <dave.hansen@intel.com>
-References: <20211207075602.2452-1-ltykernel@gmail.com>
- <20211207075602.2452-3-ltykernel@gmail.com>
- <MWHPR21MB1593F014EC440F5DEDCFDDFFD7709@MWHPR21MB1593.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <MWHPR21MB1593F014EC440F5DEDCFDDFFD7709@MWHPR21MB1593.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: FD891D6C-59BB-11EC-A1FA-E10CCAD8090B-78420484!pb-smtp1.pobox.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/10/2021 4:38 AM, Michael Kelley (LINUX) wrote:
-> From: Tianyu Lan <ltykernel@gmail.com> Sent: Monday, December 6, 2021 11:56 PM
->>
->> Hyper-V provides Isolation VM which has memory encrypt support. Add
->> hyperv_cc_platform_has() and return true for check of GUEST_MEM_ENCRYPT
->> attribute.
->>
->> Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
->> ---
->> Change since v3:
->> 	* Change code style of checking GUEST_MEM attribute in the
->> 	  hyperv_cc_platform_has().
->> ---
->>   arch/x86/kernel/cc_platform.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/arch/x86/kernel/cc_platform.c b/arch/x86/kernel/cc_platform.c
->> index 03bb2f343ddb..47db88c275d5 100644
->> --- a/arch/x86/kernel/cc_platform.c
->> +++ b/arch/x86/kernel/cc_platform.c
->> @@ -11,6 +11,7 @@
->>   #include <linux/cc_platform.h>
->>   #include <linux/mem_encrypt.h>
->>
->> +#include <asm/mshyperv.h>
->>   #include <asm/processor.h>
->>
->>   static bool __maybe_unused intel_cc_platform_has(enum cc_attr attr)
->> @@ -58,9 +59,16 @@ static bool amd_cc_platform_has(enum cc_attr attr)
->>   #endif
->>   }
->>
->> +static bool hyperv_cc_platform_has(enum cc_attr attr)
->> +{
->> +	return attr == CC_ATTR_GUEST_MEM_ENCRYPT;
->> +}
->>
->>   bool cc_platform_has(enum cc_attr attr)
->>   {
->> +	if (hv_is_isolation_supported())
->> +		return hyperv_cc_platform_has(attr);
->> +
->>   	if (sme_me_mask)
->>   		return amd_cc_platform_has(attr);
->>
+On Fri, 10 Dec 2021, Alexander Lobakin wrote:
+
+> I could do unconditional
 > 
-> Throughout Linux kernel code, there are about 20 calls to cc_platform_has()
-> with CC_ATTR_GUEST_MEM_ENCRYPT as the argument.  The original code
-> (from v1 of this patch set) only dealt with the call in sev_setup_arch().   But
-> with this patch, all the other calls that previously returned "false" will now
-> return "true" in a Hyper-V Isolated VM.  I didn't try to analyze all these other
-> calls, so I think there's an open question about whether this is the behavior
-> we want.
+> .pushsection %S.##name
+>                 ^^^^^^ function name
 > 
+> but this would involve changing LDS scripts (and vmlinux.lds.h) to
+> let's say replace *(.noinstr.text) with *(.noinstr.text*).
 
-CC_ATTR_GUEST_MEM_ENCRYPT is for SEV support so far. Hyper-V Isolation
-VM is based on SEV or software memory encrypt. Most checks can be 
-reused. The difference is that SEV code use encrypt bit in the page
-table to encrypt and decrypt memory while Hyper-V uses vTOM. But the sev
-memory encrypt mask "sme_me_mask" is unset in the Hyper-V Isolation VM
-where claims sev and sme are unsupported. The rest of checks for mem enc
-bit are still safe. So reuse CC_ATTR_GUEST_MEM_ENCRYPT for Hyper-V.
+Yes, this is meant to be used with a linker script that expects the new 
+name.
 
 
+Nicolas
