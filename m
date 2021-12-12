@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFB0471CBF
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Dec 2021 20:39:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A46DE471CBB
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Dec 2021 20:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbhLLTjp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 12 Dec 2021 14:39:45 -0500
-Received: from condef-05.nifty.com ([202.248.20.70]:60255 "EHLO
-        condef-05.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbhLLTjp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 Dec 2021 14:39:45 -0500
-Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-05.nifty.com with ESMTP id 1BCJV20O011775
-        for <linux-arch@vger.kernel.org>; Mon, 13 Dec 2021 04:31:02 +0900
+        id S230005AbhLLTje (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 12 Dec 2021 14:39:34 -0500
+Received: from condef-08.nifty.com ([202.248.20.73]:53786 "EHLO
+        condef-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229595AbhLLTjd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 Dec 2021 14:39:33 -0500
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-08.nifty.com with ESMTP id 1BCJV3TL007500
+        for <linux-arch@vger.kernel.org>; Mon, 13 Dec 2021 04:31:03 +0900
 Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 1BCJTqAk000552;
-        Mon, 13 Dec 2021 04:29:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1BCJTqAk000552
+        by conuserg-08.nifty.com with ESMTP id 1BCJTqAl000552;
+        Mon, 13 Dec 2021 04:29:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1BCJTqAl000552
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639337393;
-        bh=FXw958wyo8ETkKfX7PUkbCcYnUmIcy1cqQ//+4bN/Sg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ohvtGUFWSUwc68OTx4V2VSL2Wv0mzlcaItMXt9jwLUaF37y0y5w++Hdivpi6k8cgz
-         96UrTLG0976RF4BOZrskI2YFO7GJcwbVMIOsHgqei7Ikn2o774YMePwh7y5izqUokg
-         CM7vSOxLPHo1LhvsfCOImQlYbnRzAirsTYvDqDKMXfzrlVhrkH3IyGiTW7fyjG9xbG
-         YaGLO2pExbYrar9c6TQUHzJBdUcz1e4kQyoJySslYGnzo0WkOiYsNnKxxv9L+rsN9w
-         tWYebiiak+JP/IvuNV2UB/8Zh2bcuwiqEESoUaLYux/i/xNJTvwaoHv/R27ZerMBBS
-         TaXme7Ke5Dxuw==
+        s=dec2015msa; t=1639337394;
+        bh=sqXOYwkFablz41E0oWMVhTZpxyt50WK1mBZfVI4Zx3w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=H205vjUCdYO6xAa7AFuA6ENjwwIOzFL+Gy1a1mP8wKMOfFtNWIZZryXg+wyNaw7OA
+         IbKTWhQfZxQAS5If5CCA9FFh52sabHUa830/BZElnjhRK85oG47czr0t5h2e7wuHEF
+         30gJNIaW8WjXihtwxDZpp8fxp8/s73Os/PWoXEVe4g8c0nmJffHHamdsFP4eMQ8FiI
+         OJnhsaY8wDwV/HABFtHvDFxGmkYXr1nf8sEUe36r5AUkMIIprKKdubTgJUox6RMH/A
+         6r/+9b2p4qPI6ICJsDFk1PfI+vFtonVtd11TRGAHUack5exrLUidPuguKzkXa2dCx9
+         cK+pWYUZAqV5Q==
 X-Nifty-SrcIP: [133.32.232.101]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -35,68 +35,40 @@ Cc:     Michal Simek <michal.simek@xilinx.com>, linux-arch@vger.kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 00/10] kbuild: do not quote string values in Makefile
-Date:   Mon, 13 Dec 2021 04:29:31 +0900
-Message-Id: <20211212192941.1149247-1-masahiroy@kernel.org>
+Subject: [PATCH 01/10] certs: use $@ to simplify the key generation rule
+Date:   Mon, 13 Dec 2021 04:29:32 +0900
+Message-Id: <20211212192941.1149247-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211212192941.1149247-1-masahiroy@kernel.org>
+References: <20211212192941.1149247-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Do not repeat $(obj)/signing_key.pem
 
-This patch refactors the code as outlined in:
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-  https://lore.kernel.org/linux-kbuild/CAK7LNAR-VXwHFEJqCcrFDZj+_4+Xd6oynbj_0eS8N504_ydmyw@mail.gmail.com/
+ certs/Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-First some patches refactor certs/Makefile. This Makefile is written
-in a too complicated way.
-
-I will revert cd8c917a56f20f48748dd43d9ae3caff51d5b987
-after this lands in the upstream.
-
-
-
-Masahiro Yamada (10):
-  certs: use $@ to simplify the key generation rule
-  certs: unify duplicated cmd_extract_certs and improve the log
-  certs: remove unneeded -I$(srctree) option for system_certificates.o
-  certs: refactor file cleaning
-  certs: remove misleading comments about GCC PR
-  kbuild: stop using config_filename in scripts/Makefile.modsign
-  certs: simplify $(srctree)/ handling and remove config_filename macro
-  kbuild: do not include include/config/auto.conf from shell scripts
-  kbuild: do not quote string values in include/config/auto.conf
-  microblaze: use built-in function to get CPU_{MAJOR,MINOR,REV}
-
- Makefile                                      |  6 +--
- arch/arc/Makefile                             |  4 +-
- arch/arc/boot/dts/Makefile                    |  4 +-
- arch/h8300/boot/dts/Makefile                  |  6 +--
- arch/microblaze/Makefile                      |  8 ++--
- arch/nds32/boot/dts/Makefile                  |  7 +--
- arch/nios2/boot/dts/Makefile                  |  2 +-
- arch/openrisc/boot/dts/Makefile               |  7 +--
- arch/powerpc/boot/Makefile                    |  2 +-
- arch/riscv/boot/dts/canaan/Makefile           |  4 +-
- arch/sh/boot/dts/Makefile                     |  4 +-
- arch/xtensa/Makefile                          |  2 +-
- arch/xtensa/boot/dts/Makefile                 |  5 +-
- certs/Makefile                                | 48 ++++++-------------
- drivers/acpi/Makefile                         |  2 +-
- drivers/base/firmware_loader/builtin/Makefile |  4 +-
- init/Makefile                                 |  2 +-
- net/wireless/Makefile                         |  4 +-
- scripts/Kbuild.include                        | 47 ------------------
- scripts/Makefile.modinst                      |  4 +-
- scripts/gen_autoksyms.sh                      |  6 +--
- scripts/kconfig/confdata.c                    |  2 +-
- scripts/link-vmlinux.sh                       | 47 +++++++++---------
- scripts/setlocalversion                       |  9 ++--
- usr/Makefile                                  |  2 +-
- 25 files changed, 74 insertions(+), 164 deletions(-)
-
+diff --git a/certs/Makefile b/certs/Makefile
+index a702b70f3cb9..97fd6cc02972 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -61,8 +61,7 @@ keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) := -newkey ec -pkeyopt ec_paramgen_c
+ quiet_cmd_gen_key = GENKEY  $@
+       cmd_gen_key = openssl req -new -nodes -utf8 -$(CONFIG_MODULE_SIG_HASH) -days 36500 \
+ 		-batch -x509 -config $(obj)/x509.genkey \
+-		-outform PEM -out $(obj)/signing_key.pem \
+-		-keyout $(obj)/signing_key.pem $(keytype-y) 2>&1
++		-outform PEM -out $@ -keyout $@ $(keytype-y) 2>&1
+ 
+ $(obj)/signing_key.pem: $(obj)/x509.genkey FORCE
+ 	$(call if_changed,gen_key)
 -- 
 2.32.0
 
