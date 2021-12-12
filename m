@@ -2,68 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6084717CE
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Dec 2021 03:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53408471B5E
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Dec 2021 16:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232527AbhLLCSF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Dec 2021 21:18:05 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:45112 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbhLLCSF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Dec 2021 21:18:05 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EF08CCE0B01;
-        Sun, 12 Dec 2021 02:18:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12138C004DD;
-        Sun, 12 Dec 2021 02:17:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1639275480;
-        bh=iJL/6mEne38AzSXVcb8m6/VlwgWeUH9E66rradqeky8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ADivHlcaEKPtZ4Aawh/RUI1NxLo9PVFjqAMSeZ0FRZ8IMv5EZ9X9+bwuDKsTNGNUt
-         lM5aPk86acgFXpnzFPdBd5FUelnLrqtkhm9gJMoqDF84/cuIcm1WqYBHvfKY3dGlKK
-         2LIWxKNpnUT1t2Gv53p5X1fjG8e1LqCbVs86ek6v8ztqmbcu8ewPn7xMEjRBgQ6Q7p
-         HFx/hb7qD6Z2+DfZzHpnkk+L+cettler6BU7ewrxd8JK2LFjMFouat0ITbAqCsPlM/
-         z1urAwW3bJmEajrK6s4ljo4rjLR13mR9gYEt2/8Fa3jMWvv/+RYKIgCvAABBmdF12z
-         9s2I3negR563Q==
-From:   guoren@kernel.org
-To:     torvalds@linux-foundation.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-        guoren@kernel.org
-Subject: [GIT PULL] csky fixes for v5.16-rc5
-Date:   Sun, 12 Dec 2021 10:17:53 +0800
-Message-Id: <20211212021753.3541366-1-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        id S231349AbhLLPjI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 12 Dec 2021 10:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231288AbhLLPjH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 Dec 2021 10:39:07 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F5CC0617A1
+        for <linux-arch@vger.kernel.org>; Sun, 12 Dec 2021 07:39:07 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id q17so9492017plr.11
+        for <linux-arch@vger.kernel.org>; Sun, 12 Dec 2021 07:39:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
+        b=nW34jVsv56Ss5jLoooIeVciA93Clw83n+wCeADNfCEpcC+rdzdpKO/LYgFQaULd1OH
+         U8TXUuQSIh4yHtn8e56U2OR9tvVaBrIbZqVXXTO9qyu2ymRftWSklBAq1tsUV/ZwQyli
+         OQNIJmsnRTWXVSmhooYoNI3mrca0uQe4Qvw2po2hRHk49IphRRBl7/cc79IWCwq/knSD
+         jAnxigACSUDasTs+EUStoKgNQ9kt9Efz64Sltjg2RvPSjES1dEb3Rnabml57kHg8BYan
+         0xGZn+cZ+L22txoY5kcj47AS69tJiBQ/eAoB9E7bJT52uVrJV5T2gB+PKNcvh9Cn0hK0
+         5YnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=CScZ3wgwAoNcP2hDnqXlix5UDGrDiarDd6PNIGLyspo=;
+        b=5dKdfcrG2Z30ZhQ2vmMDrIETMKK0t0JQohskKhlG0MAEbXmBawv5gwEuuysdHqvgD/
+         kWyqL+57ajkw06trymMsqZzmFurggDVguJ+PPcQRV0samEnWkBs8LjwPIcDBNN2VhZQZ
+         xEaiLOebv88C7QS9PjCIEgXsfB2fn070i87YbdcUqt/k6ag4YMZ/JVARpUaG7Bju/jBa
+         9dsCCJ9tpDAVOByaAx2K1ZT1jC0gfqMjBGT2LZ0SspeKE8cAEEkcJgzkWiQKV8dask8w
+         AgnTM3+rEaVhPtNYJFQMGHKNTLaEiflC7qcgP1e1cBxdHyek2Wkc32XkFqarAVD9UfrJ
+         XqOQ==
+X-Gm-Message-State: AOAM532mjkkVEmHgj+vMsVyrsMtxZ3U3WHbuzoePiVO5u4qa+duxcPBx
+        yc4On4RYjCy7gPNGULqldkyrSDL476sGONMXbjY=
+X-Google-Smtp-Source: ABdhPJxsBJYooaMgLjqzimk0hrl//BEpZRFhZTgaDxYyJHLKhaJGvTFjIF0TvE7MIczQ9k5dw4plILBX5bRdp3Gs0bY=
+X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr38626959pjb.7.1639323545943;
+ Sun, 12 Dec 2021 07:39:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:90b:4c51:0:0:0:0 with HTTP; Sun, 12 Dec 2021 07:39:05
+ -0800 (PST)
+Reply-To: mrsisabelladz@gmail.com
+From:   Mrs Isabella <zaidn8225@gmail.com>
+Date:   Sun, 12 Dec 2021 16:39:05 +0100
+Message-ID: <CAMU20GMeochfDfA+tFFMDmQu2qHHMSRkoPHpA3GKtw8UP0dvgw@mail.gmail.com>
+Subject: From Mrs. Isabella Dzsesszika
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit 0fcfb00b28c0b7884635dacf38e46d60bf3d4eb1:
-
-  Linux 5.16-rc4 (2021-12-05 14:08:22 -0800)
-
-are available in the Git repository at:
-
-  https://github.com/c-sky/csky-linux.git tags/csky-for-linus-5.16-rc5
-
-for you to fetch changes up to a0793fdad9a11a32bc6d21317c93c83f4aa82ebc:
-
-  csky: fix typo of fpu config macro (2021-12-08 14:15:54 +0800)
-
-----------------------------------------------------------------
-csky updates for 5.16-rc5
-
-Only 1 fixup for csky:
- - fpu config macro
-
-----------------------------------------------------------------
-Kelly Devilliv (1):
-      csky: fix typo of fpu config macro
-
- arch/csky/kernel/traps.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+GOOD MORNING DEAR. MY NAME IS Isabella Dzsesszika. I AM CONTACTING YOU
+FOR IMPORTANT ISSUE I WILL LIKE TO DISCUS WITH YOU. PLEASE GET BACK TO
+ME IF YOU READ THIS MAIL.  YOURS, Isabella Dzsesszika
