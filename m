@@ -2,31 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C56471CBA
-	for <lists+linux-arch@lfdr.de>; Sun, 12 Dec 2021 20:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F40A471CB8
+	for <lists+linux-arch@lfdr.de>; Sun, 12 Dec 2021 20:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbhLLTib (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 12 Dec 2021 14:38:31 -0500
-Received: from condef-10.nifty.com ([202.248.20.75]:35061 "EHLO
-        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbhLLTib (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 Dec 2021 14:38:31 -0500
-Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-10.nifty.com with ESMTP id 1BCJV3kx029716
-        for <linux-arch@vger.kernel.org>; Mon, 13 Dec 2021 04:31:03 +0900
+        id S229464AbhLLTiN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 12 Dec 2021 14:38:13 -0500
+Received: from condef-02.nifty.com ([202.248.20.67]:46088 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229595AbhLLTiN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 12 Dec 2021 14:38:13 -0500
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-02.nifty.com with ESMTP id 1BCJV3ou007581
+        for <linux-arch@vger.kernel.org>; Mon, 13 Dec 2021 04:31:04 +0900
 Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 1BCJTqAs000552;
-        Mon, 13 Dec 2021 04:29:59 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1BCJTqAs000552
+        by conuserg-08.nifty.com with ESMTP id 1BCJTqAt000552;
+        Mon, 13 Dec 2021 04:30:00 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 1BCJTqAt000552
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1639337399;
-        bh=vl4/vU5Yj4FhnAYq6MYmNSIymglt2Z7uN4joqdbcY0M=;
+        s=dec2015msa; t=1639337400;
+        bh=lH2O63pQ7LgfONy7rwWOwKMV9IrUP1S4imM8gKTvSug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VqMpPBowsXc6uZFHeFfTgf0gH7Knv8BBD3xHU4dNSMFR8AINlGkZtWADyqUG1QOIJ
-         bCiOv9tLytWab7HowBTsxXK5w/yeC/OPZhpAN7OGT/e8ceCgTo+g3kjB5TpPv8PTUR
-         MObNjkZKeZ3CconEs9w2R60dhAnMIvCOSlAQCZWR4Ads113uDWrG0fEJKlhDY2abek
-         E2CBSDZUptstnb/47nirgR7DUdHGPvA7fMDyHhAQ2DAhm5ij6u4msP0k2f1VTKpc+9
-         O8V1kNYUD0+WOZdrNfuYWh/8MJcw0rlgUgZcNpUylwgOhRTeCXYKkQhZdkAu/OwfEs
-         oQele+BT5FHWw==
+        b=jqemXAB83UPiaEG2lqQq/Ak1cbtoB3jl0mcTZGrjIiTSjAvm5TPm0r1Y1Yh0lAyQI
+         NxaYCTLTeqsfpv4OccwIue4BXRxNc0XxYE70IjrmfJgvotqqNGQmycCXWGe3YH8jvl
+         /ZC6KqtsWEsp+GL01XpHPChydJrZbzNS3UgNYTPrcKCCD0zvyU2WZ9XFdPm6e3ROjG
+         soTuluTt1CMxQJ4NBD2olyYQMeRRitV5syl/4fLYosu01pDGTOhiAu1E8AcCAji3PO
+         WX0eeulZ+AhfTQ2YR/2/jsjlxD4QZfGJcZrVa618+5K1TtFQe04XYJ/qCmPsCFUMQY
+         FgNU1NeFk+Pgg==
 X-Nifty-SrcIP: [133.32.232.101]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
@@ -35,9 +35,9 @@ Cc:     Michal Simek <michal.simek@xilinx.com>, linux-arch@vger.kernel.org,
         David Woodhouse <dwmw2@infradead.org>,
         keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 08/10] kbuild: do not include include/config/auto.conf from shell scripts
-Date:   Mon, 13 Dec 2021 04:29:39 +0900
-Message-Id: <20211212192941.1149247-9-masahiroy@kernel.org>
+Subject: [PATCH 09/10] kbuild: do not quote string values in include/config/auto.conf
+Date:   Mon, 13 Dec 2021 04:29:40 +0900
+Message-Id: <20211212192941.1149247-10-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211212192941.1149247-1-masahiroy@kernel.org>
 References: <20211212192941.1149247-1-masahiroy@kernel.org>
@@ -47,283 +47,451 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Richard Weinberger pointed out the risk of sourcing the kernel config
-from shell scripts [1], and proposed some patches [2], [3]. It is a good
-point, but it took a long time because I was wondering how to fix this.
+The previous commit fixed up all shell scripts to not include
+include/config/auto.conf.
 
-This commit goes with simple grep approach because there are only a few
-scripts including the kernel configuration.
+Now that include/config/auto.conf is only included by Makefiles,
+we can change it into a more Make-friendly form.
 
-scripts/link_vmlinux.sh has references to a bunch of CONFIG options,
-all of which are boolean. I added is_enabled() helper as
-scripts/package/{mkdebian,builddeb} do.
+Previously, Kconfig output string values enclosed with double-quotes
+(both in the .config and include/config/auto.conf):
 
-scripts/gen_autoksyms.sh uses 'eval', stating "to expand the whitelist
-path". I removed it since it is the issue we are trying to fix.
+    CONFIG_X="foo bar"
 
-I was a bit worried about the cost of invoking the grep command over
-again. I extracted the grep parts from it, and measured the cost. It
-was approximately 0.03 sec, which I hope is acceptable.
+Unlike shell, Make handles double-quotes (and single-quotes as well)
+verbatim. We must rip them off when used.
 
-[test code]
+There are some patterns:
 
-  $ cat test-grep.sh
-  #!/bin/sh
+  [1] $(patsubst "%",%,$(CONFIG_X))
+  [2] $(CONFIG_X:"%"=%)
+  [3] $(subst ",,$(CONFIG_X))
+  [4] $(shell echo $(CONFIG_X))
 
-  is_enabled() {
-          grep -q "^$1=y" include/config/auto.conf
-  }
+These are not only ugly, but also fragile.
 
-  is_enabled CONFIG_LTO_CLANG
-  is_enabled CONFIG_LTO_CLANG
-  is_enabled CONFIG_STACK_VALIDATION
-  is_enabled CONFIG_UNWINDER_ORC
-  is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL
-  is_enabled CONFIG_VMLINUX_VALIDATION
-  is_enabled CONFIG_FRAME_POINTER
-  is_enabled CONFIG_GCOV_KERNEL
-  is_enabled CONFIG_LTO_CLANG
-  is_enabled CONFIG_RETPOLINE
-  is_enabled CONFIG_X86_SMAP
-  is_enabled CONFIG_LTO_CLANG
-  is_enabled CONFIG_VMLINUX_MAP
-  is_enabled CONFIG_KALLSYMS_ALL
-  is_enabled CONFIG_KALLSYMS_ABSOLUTE_PERCPU
-  is_enabled CONFIG_KALLSYMS_BASE_RELATIVE
-  is_enabled CONFIG_DEBUG_INFO_BTF
-  is_enabled CONFIG_KALLSYMS
-  is_enabled CONFIG_DEBUG_INFO_BTF
-  is_enabled CONFIG_BPF
-  is_enabled CONFIG_BUILDTIME_TABLE_SORT
-  is_enabled CONFIG_KALLSYMS
+[1] and [2] do not work if the value contains spaces, like
+   CONFIG_X=" foo bar "
 
-  $ time ./test-grep.sh
-  real    0m0.036s
-  user    0m0.027s
-  sys     m0.009s
+[3] does not work correctly if the value contains double-quotes like
+   CONFIG_X="foo\"bar"
 
-[1]: https://lore.kernel.org/all/1919455.eZKeABUfgV@blindfold/
-[2]: https://lore.kernel.org/all/20180219092245.26404-1-richard@nod.at/
-[3]: https://lore.kernel.org/all/20210920213957.1064-2-richard@nod.at/
+[4] seems to work better, but has a cost of forking a process.
+
+Anyway, quoted strings were always PITA for our Makefiles.
+
+This commit changes Kconfig to stop quoting in include/config/auto.conf.
+
+These are the string type symbols referenced in Makefiles or scripts:
+
+    ACPI_CUSTOM_DSDT_FILE
+    ARC_BUILTIN_DTB_NAME
+    ARC_TUNE_MCPU
+    BUILTIN_DTB_SOURCE
+    CC_IMPLICIT_FALLTHROUGH
+    CC_VERSION_TEXT
+    CFG80211_EXTRA_REGDB_KEYDIR
+    EXTRA_FIRMWARE
+    EXTRA_FIRMWARE_DIR
+    EXTRA_TARGETS
+    H8300_BUILTIN_DTB
+    INITRAMFS_SOURCE
+    LOCALVERSION
+    MODULE_SIG_HASH
+    MODULE_SIG_KEY
+    NDS32_BUILTIN_DTB
+    NIOS2_DTB_SOURCE
+    OPENRISC_BUILTIN_DTB
+    SOC_CANAAN_K210_DTB_SOURCE
+    SYSTEM_BLACKLIST_HASH_LIST
+    SYSTEM_REVOCATION_KEYS
+    SYSTEM_TRUSTED_KEYS
+    TARGET_CPU
+    UNUSED_KSYMS_WHITELIST
+    XILINX_MICROBLAZE0_FAMILY
+    XILINX_MICROBLAZE0_HW_VER
+    XTENSA_VARIANT_NAME
+
+I checked them one by one, and fixed up the code where necessary.
+
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/gen_autoksyms.sh |  6 ++---
- scripts/link-vmlinux.sh  | 47 ++++++++++++++++++++--------------------
- scripts/setlocalversion  |  9 ++++----
- 3 files changed, 30 insertions(+), 32 deletions(-)
+ Makefile                                      |  4 ++--
+ arch/arc/Makefile                             |  4 ++--
+ arch/arc/boot/dts/Makefile                    |  4 ++--
+ arch/h8300/boot/dts/Makefile                  |  6 +-----
+ arch/microblaze/Makefile                      |  2 +-
+ arch/nds32/boot/dts/Makefile                  |  7 +------
+ arch/nios2/boot/dts/Makefile                  |  2 +-
+ arch/openrisc/boot/dts/Makefile               |  7 +------
+ arch/powerpc/boot/Makefile                    |  2 +-
+ arch/riscv/boot/dts/canaan/Makefile           |  4 +---
+ arch/sh/boot/dts/Makefile                     |  4 +---
+ arch/xtensa/Makefile                          |  2 +-
+ arch/xtensa/boot/dts/Makefile                 |  5 +----
+ certs/Makefile                                | 10 ++--------
+ drivers/acpi/Makefile                         |  2 +-
+ drivers/base/firmware_loader/builtin/Makefile |  4 ++--
+ init/Makefile                                 |  2 +-
+ net/wireless/Makefile                         |  4 ++--
+ scripts/Makefile.modinst                      |  1 -
+ scripts/gen_autoksyms.sh                      |  2 +-
+ scripts/kconfig/confdata.c                    |  2 +-
+ scripts/setlocalversion                       |  2 +-
+ usr/Makefile                                  |  2 +-
+ 23 files changed, 28 insertions(+), 56 deletions(-)
 
+diff --git a/Makefile b/Makefile
+index 4e8ac0730f51..aa4e5dc12049 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1729,9 +1729,9 @@ PHONY += prepare
+ # now expand this into a simple variable to reduce the cost of shell evaluations
+ prepare: CC_VERSION_TEXT := $(CC_VERSION_TEXT)
+ prepare:
+-	@if [ "$(CC_VERSION_TEXT)" != $(CONFIG_CC_VERSION_TEXT) ]; then \
++	@if [ "$(CC_VERSION_TEXT)" != "$(CONFIG_CC_VERSION_TEXT)" ]; then \
+ 		echo >&2 "warning: the compiler differs from the one used to build the kernel"; \
+-		echo >&2 "  The kernel was built by: "$(CONFIG_CC_VERSION_TEXT); \
++		echo >&2 "  The kernel was built by: $(CONFIG_CC_VERSION_TEXT)"; \
+ 		echo >&2 "  You are using:           $(CC_VERSION_TEXT)"; \
+ 	fi
+ 
+diff --git a/arch/arc/Makefile b/arch/arc/Makefile
+index f252e7b924e9..efc54f3e35e0 100644
+--- a/arch/arc/Makefile
++++ b/arch/arc/Makefile
+@@ -14,10 +14,10 @@ cflags-y	+= -fno-common -pipe -fno-builtin -mmedium-calls -D__linux__
+ tune-mcpu-def-$(CONFIG_ISA_ARCOMPACT)	:= -mcpu=arc700
+ tune-mcpu-def-$(CONFIG_ISA_ARCV2)	:= -mcpu=hs38
+ 
+-ifeq ($(CONFIG_ARC_TUNE_MCPU),"")
++ifeq ($(CONFIG_ARC_TUNE_MCPU),)
+ cflags-y				+= $(tune-mcpu-def-y)
+ else
+-tune-mcpu				:= $(shell echo $(CONFIG_ARC_TUNE_MCPU))
++tune-mcpu				:= $(CONFIG_ARC_TUNE_MCPU)
+ ifneq ($(call cc-option,$(tune-mcpu)),)
+ cflags-y				+= $(tune-mcpu)
+ else
+diff --git a/arch/arc/boot/dts/Makefile b/arch/arc/boot/dts/Makefile
+index 8483a86c743d..4237aa5de3a3 100644
+--- a/arch/arc/boot/dts/Makefile
++++ b/arch/arc/boot/dts/Makefile
+@@ -2,8 +2,8 @@
+ # Built-in dtb
+ builtindtb-y		:= nsim_700
+ 
+-ifneq ($(CONFIG_ARC_BUILTIN_DTB_NAME),"")
+-	builtindtb-y	:= $(patsubst "%",%,$(CONFIG_ARC_BUILTIN_DTB_NAME))
++ifneq ($(CONFIG_ARC_BUILTIN_DTB_NAME),)
++	builtindtb-y	:= $(CONFIG_ARC_BUILTIN_DTB_NAME)
+ endif
+ 
+ obj-y   += $(builtindtb-y).dtb.o
+diff --git a/arch/h8300/boot/dts/Makefile b/arch/h8300/boot/dts/Makefile
+index 69fcd817892c..c36bbd1f2592 100644
+--- a/arch/h8300/boot/dts/Makefile
++++ b/arch/h8300/boot/dts/Makefile
+@@ -1,9 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-ifneq '$(CONFIG_H8300_BUILTIN_DTB)' '""'
+-BUILTIN_DTB := $(patsubst "%",%,$(CONFIG_H8300_BUILTIN_DTB)).dtb.o
+-endif
+-
+-obj-y += $(BUILTIN_DTB)
++obj-y += $(addsuffix .dtb.o, $(CONFIG_H8300_BUILTIN_DTB))
+ 
+ dtb-$(CONFIG_H8300H_SIM) := h8300h_sim.dtb
+ dtb-$(CONFIG_H8S_SIM) := h8s_sim.dtb
+diff --git a/arch/microblaze/Makefile b/arch/microblaze/Makefile
+index e775a696aa6f..a25e76d89e86 100644
+--- a/arch/microblaze/Makefile
++++ b/arch/microblaze/Makefile
+@@ -5,7 +5,7 @@ UTS_SYSNAME = -DUTS_SYSNAME=\"Linux\"
+ 
+ # What CPU version are we building for, and crack it open
+ # as major.minor.rev
+-CPU_VER   := $(shell echo $(CONFIG_XILINX_MICROBLAZE0_HW_VER))
++CPU_VER   := $(CONFIG_XILINX_MICROBLAZE0_HW_VER)
+ CPU_MAJOR := $(shell echo $(CPU_VER) | cut -d '.' -f 1)
+ CPU_MINOR := $(shell echo $(CPU_VER) | cut -d '.' -f 2)
+ CPU_REV   := $(shell echo $(CPU_VER) | cut -d '.' -f 3)
+diff --git a/arch/nds32/boot/dts/Makefile b/arch/nds32/boot/dts/Makefile
+index f84bd529b6fd..4fc69562eae8 100644
+--- a/arch/nds32/boot/dts/Makefile
++++ b/arch/nds32/boot/dts/Makefile
+@@ -1,7 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-ifneq '$(CONFIG_NDS32_BUILTIN_DTB)' '""'
+-BUILTIN_DTB := $(patsubst "%",%,$(CONFIG_NDS32_BUILTIN_DTB)).dtb.o
+-else
+-BUILTIN_DTB :=
+-endif
+-obj-$(CONFIG_OF) += $(BUILTIN_DTB)
++obj-$(CONFIG_OF) += $(addsuffix .dtb.o, $(CONFIG_NDS32_BUILTIN_DTB))
+diff --git a/arch/nios2/boot/dts/Makefile b/arch/nios2/boot/dts/Makefile
+index a91a0b09be63..e9e31bb40df8 100644
+--- a/arch/nios2/boot/dts/Makefile
++++ b/arch/nios2/boot/dts/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-obj-y := $(patsubst "%.dts",%.dtb.o,$(CONFIG_NIOS2_DTB_SOURCE))
++obj-y := $(patsubst %.dts,%.dtb.o,$(CONFIG_NIOS2_DTB_SOURCE))
+ 
+ dtstree		:= $(srctree)/$(src)
+ dtb-$(CONFIG_OF_ALL_DTBS) := $(patsubst $(dtstree)/%.dts,%.dtb, $(wildcard $(dtstree)/*.dts))
+diff --git a/arch/openrisc/boot/dts/Makefile b/arch/openrisc/boot/dts/Makefile
+index 17dd791a833f..13db5a2aab52 100644
+--- a/arch/openrisc/boot/dts/Makefile
++++ b/arch/openrisc/boot/dts/Makefile
+@@ -1,9 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+-ifneq '$(CONFIG_OPENRISC_BUILTIN_DTB)' '""'
+-BUILTIN_DTB := $(patsubst "%",%,$(CONFIG_OPENRISC_BUILTIN_DTB)).dtb.o
+-else
+-BUILTIN_DTB :=
+-endif
+-obj-y += $(BUILTIN_DTB)
++obj-y += $(addsuffix .dtb.o, $(CONFIG_OPENRISC_BUILTIN_DTB))
+ 
+ #DTC_FLAGS ?= -p 1024
+diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+index 9993c6256ad2..4b4827c475c6 100644
+--- a/arch/powerpc/boot/Makefile
++++ b/arch/powerpc/boot/Makefile
+@@ -365,7 +365,7 @@ image-$(CONFIG_PPC_PMAC)	+= zImage.coff zImage.miboot
+ endif
+ 
+ # Allow extra targets to be added to the defconfig
+-image-y	+= $(subst ",,$(CONFIG_EXTRA_TARGETS))
++image-y	+= $(CONFIG_EXTRA_TARGETS)
+ 
+ initrd-  := $(patsubst zImage%, zImage.initrd%, $(image-))
+ initrd-y := $(patsubst zImage%, zImage.initrd%, \
+diff --git a/arch/riscv/boot/dts/canaan/Makefile b/arch/riscv/boot/dts/canaan/Makefile
+index 9ee7156c0c31..c61b08ac8554 100644
+--- a/arch/riscv/boot/dts/canaan/Makefile
++++ b/arch/riscv/boot/dts/canaan/Makefile
+@@ -1,5 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+-ifneq ($(CONFIG_SOC_CANAAN_K210_DTB_SOURCE),"")
+-dtb-y += $(strip $(shell echo $(CONFIG_SOC_CANAAN_K210_DTB_SOURCE))).dtb
++dtb-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += $(addsuffix .dtb, $(CONFIG_SOC_CANAAN_K210_DTB_SOURCE))
+ obj-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += $(addsuffix .o, $(dtb-y))
+-endif
+diff --git a/arch/sh/boot/dts/Makefile b/arch/sh/boot/dts/Makefile
+index c17d65b82abe..4a6dec9714a9 100644
+--- a/arch/sh/boot/dts/Makefile
++++ b/arch/sh/boot/dts/Makefile
+@@ -1,4 +1,2 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-ifneq ($(CONFIG_BUILTIN_DTB_SOURCE),"")
+-obj-$(CONFIG_USE_BUILTIN_DTB) += $(patsubst "%",%,$(CONFIG_BUILTIN_DTB_SOURCE)).dtb.o
+-endif
++obj-$(CONFIG_USE_BUILTIN_DTB) += $(addsuffix .dtb.o, $(CONFIG_BUILTIN_DTB_SOURCE))
+diff --git a/arch/xtensa/Makefile b/arch/xtensa/Makefile
+index 9778216d6e09..ee2769519eaf 100644
+--- a/arch/xtensa/Makefile
++++ b/arch/xtensa/Makefile
+@@ -12,7 +12,7 @@
+ # Core configuration.
+ # (Use VAR=<xtensa_config> to use another default compiler.)
+ 
+-variant-y := $(patsubst "%",%,$(CONFIG_XTENSA_VARIANT_NAME))
++variant-y := $(CONFIG_XTENSA_VARIANT_NAME)
+ 
+ VARIANT = $(variant-y)
+ 
+diff --git a/arch/xtensa/boot/dts/Makefile b/arch/xtensa/boot/dts/Makefile
+index 0b8d00cdae7c..720628c0d8b9 100644
+--- a/arch/xtensa/boot/dts/Makefile
++++ b/arch/xtensa/boot/dts/Makefile
+@@ -7,10 +7,7 @@
+ #
+ #
+ 
+-BUILTIN_DTB_SOURCE := $(patsubst "%",%,$(CONFIG_BUILTIN_DTB_SOURCE)).dtb.o
+-ifneq ($(CONFIG_BUILTIN_DTB_SOURCE),"")
+-obj-$(CONFIG_OF) += $(BUILTIN_DTB_SOURCE)
+-endif
++obj-$(CONFIG_OF) += $(addsuffix .dtb.o, $(CONFIG_BUILTIN_DTB_SOURCE))
+ 
+ # for CONFIG_OF_ALL_DTBS test
+ dtstree	:= $(srctree)/$(src)
+diff --git a/certs/Makefile b/certs/Makefile
+index 4bdff8fe8ee1..fb44ca509ebe 100644
+--- a/certs/Makefile
++++ b/certs/Makefile
+@@ -6,7 +6,7 @@
+ obj-$(CONFIG_SYSTEM_TRUSTED_KEYRING) += system_keyring.o system_certificates.o common.o
+ obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist.o common.o
+ obj-$(CONFIG_SYSTEM_REVOCATION_LIST) += revocation_certificates.o
+-ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),"")
++ifneq ($(CONFIG_SYSTEM_BLACKLIST_HASH_LIST),)
+ obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_hashes.o
+ else
+ obj-$(CONFIG_SYSTEM_BLACKLIST_KEYRING) += blacklist_nohashes.o
+@@ -17,8 +17,6 @@ quiet_cmd_extract_certs  = CERT    $@
+ 
+ $(obj)/system_certificates.o: $(obj)/x509_certificate_list
+ 
+-CONFIG_SYSTEM_TRUSTED_KEYS := $(CONFIG_SYSTEM_TRUSTED_KEYS:"%"=%)
+-
+ $(obj)/x509_certificate_list: $(CONFIG_SYSTEM_TRUSTED_KEYS) scripts/extract-cert FORCE
+ 	$(call if_changed,extract_certs,$(if $(CONFIG_SYSTEM_TRUSTED_KEYS),$<,""))
+ 
+@@ -46,7 +44,7 @@ ifdef SIGN_KEY
+ # We do it this way rather than having a boolean option for enabling an
+ # external private key, because 'make randconfig' might enable such a
+ # boolean option and we unfortunately can't make it depend on !RANDCONFIG.
+-ifeq ($(CONFIG_MODULE_SIG_KEY),"certs/signing_key.pem")
++ifeq ($(CONFIG_MODULE_SIG_KEY),certs/signing_key.pem)
+ 
+ keytype-$(CONFIG_MODULE_SIG_KEY_TYPE_ECDSA) := -newkey ec -pkeyopt ec_paramgen_curve:secp384r1
+ 
+@@ -69,8 +67,6 @@ $(obj)/x509.genkey:
+ 
+ endif # CONFIG_MODULE_SIG_KEY
+ 
+-CONFIG_MODULE_SIG_KEY := $(CONFIG_MODULE_SIG_KEY:"%"=%)
+-
+ # If CONFIG_MODULE_SIG_KEY isn't a PKCS#11 URI, depend on it
+ ifneq ($(filter-out pkcs11:%, %(CONFIG_MODULE_SIG_KEY)),)
+ X509_DEP := $(CONFIG_MODULE_SIG_KEY)
+@@ -86,8 +82,6 @@ targets += signing_key.x509
+ 
+ $(obj)/revocation_certificates.o: $(obj)/x509_revocation_list
+ 
+-CONFIG_SYSTEM_REVOCATION_KEYS := $(CONFIG_SYSTEM_REVOCATION_KEYS:"%"=%)
+-
+ $(obj)/x509_revocation_list: $(CONFIG_SYSTEM_REVOCATION_KEYS) scripts/extract-cert FORCE
+ 	$(call if_changed,extract_certs,$(if $(CONFIG_SYSTEM_REVOCATION_KEYS),$<,""))
+ 
+diff --git a/drivers/acpi/Makefile b/drivers/acpi/Makefile
+index 3018714e87d9..da0cdd1e9380 100644
+--- a/drivers/acpi/Makefile
++++ b/drivers/acpi/Makefile
+@@ -9,7 +9,7 @@ ccflags-$(CONFIG_ACPI_DEBUG)	+= -DACPI_DEBUG_OUTPUT
+ # ACPI Boot-Time Table Parsing
+ #
+ ifeq ($(CONFIG_ACPI_CUSTOM_DSDT),y)
+-tables.o: $(src)/../../include/$(subst $\",,$(CONFIG_ACPI_CUSTOM_DSDT_FILE)) ;
++tables.o: $(src)/../../include/$(CONFIG_ACPI_CUSTOM_DSDT_FILE) ;
+ 
+ endif
+ 
+diff --git a/drivers/base/firmware_loader/builtin/Makefile b/drivers/base/firmware_loader/builtin/Makefile
+index eb4be452062a..6c067dedc01e 100644
+--- a/drivers/base/firmware_loader/builtin/Makefile
++++ b/drivers/base/firmware_loader/builtin/Makefile
+@@ -3,10 +3,10 @@ obj-y  += main.o
+ 
+ # Create $(fwdir) from $(CONFIG_EXTRA_FIRMWARE_DIR) -- if it doesn't have a
+ # leading /, it's relative to $(srctree).
+-fwdir := $(subst $(quote),,$(CONFIG_EXTRA_FIRMWARE_DIR))
++fwdir := $(CONFIG_EXTRA_FIRMWARE_DIR)
+ fwdir := $(addprefix $(srctree)/,$(filter-out /%,$(fwdir)))$(filter /%,$(fwdir))
+ 
+-firmware  := $(addsuffix .gen.o, $(subst $(quote),,$(CONFIG_EXTRA_FIRMWARE)))
++firmware  := $(addsuffix .gen.o, $(CONFIG_EXTRA_FIRMWARE))
+ obj-y += $(firmware)
+ 
+ FWNAME    = $(patsubst $(obj)/%.gen.S,%,$@)
+diff --git a/init/Makefile b/init/Makefile
+index 04eeee12c076..06326e304384 100644
+--- a/init/Makefile
++++ b/init/Makefile
+@@ -31,7 +31,7 @@ quiet_cmd_compile.h = CHK     $@
+       cmd_compile.h = \
+ 	$(CONFIG_SHELL) $(srctree)/scripts/mkcompile_h $@	\
+ 	"$(UTS_MACHINE)" "$(CONFIG_SMP)" "$(CONFIG_PREEMPT_BUILD)"	\
+-	"$(CONFIG_PREEMPT_RT)" $(CONFIG_CC_VERSION_TEXT) "$(LD)"
++	"$(CONFIG_PREEMPT_RT)" "$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
+ 
+ include/generated/compile.h: FORCE
+ 	$(call cmd,compile.h)
+diff --git a/net/wireless/Makefile b/net/wireless/Makefile
+index 756e7de7e33f..1e9be50469ce 100644
+--- a/net/wireless/Makefile
++++ b/net/wireless/Makefile
+@@ -33,8 +33,8 @@ $(obj)/shipped-certs.c: $(wildcard $(srctree)/$(src)/certs/*.hex)
+ 	  echo 'unsigned int shipped_regdb_certs_len = sizeof(shipped_regdb_certs);'; \
+ 	 ) > $@
+ 
+-$(obj)/extra-certs.c: $(CONFIG_CFG80211_EXTRA_REGDB_KEYDIR:"%"=%) \
+-		      $(wildcard $(CONFIG_CFG80211_EXTRA_REGDB_KEYDIR:"%"=%)/*.x509)
++$(obj)/extra-certs.c: $(CONFIG_CFG80211_EXTRA_REGDB_KEYDI) \
++		      $(wildcard $(CONFIG_CFG80211_EXTRA_REGDB_KEYDIR)/*.x509)
+ 	@$(kecho) "  GEN     $@"
+ 	$(Q)(set -e; \
+ 	  allf=""; \
+diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
+index df7e3d578ef5..c2c43a0ecfe0 100644
+--- a/scripts/Makefile.modinst
++++ b/scripts/Makefile.modinst
+@@ -66,7 +66,6 @@ endif
+ # Don't stop modules_install even if we can't sign external modules.
+ #
+ ifeq ($(CONFIG_MODULE_SIG_ALL),y)
+-CONFIG_MODULE_SIG_KEY := $(CONFIG_MODULE_SIG_KEY:"%"=%)
+ sig-key := $(if $(wildcard $(CONFIG_MODULE_SIG_KEY)),,$(srctree)/)$(CONFIG_MODULE_SIG_KEY)
+ quiet_cmd_sign = SIGN    $@
+       cmd_sign = scripts/sign-file $(CONFIG_MODULE_SIG_HASH) $(sig-key) certs/signing_key.x509 $@ \
 diff --git a/scripts/gen_autoksyms.sh b/scripts/gen_autoksyms.sh
-index 6ed0d225c8b1..12ffb01f13cb 100755
+index 12ffb01f13cb..31872d95468b 100755
 --- a/scripts/gen_autoksyms.sh
 +++ b/scripts/gen_autoksyms.sh
-@@ -26,10 +26,8 @@ if [ -n "$CONFIG_MODVERSIONS" ]; then
+@@ -26,7 +26,7 @@ if [ -n "$CONFIG_MODVERSIONS" ]; then
  	needed_symbols="$needed_symbols module_layout"
  fi
  
--ksym_wl=
--if [ -n "$CONFIG_UNUSED_KSYMS_WHITELIST" ]; then
--	# Use 'eval' to expand the whitelist path and check if it is relative
--	eval ksym_wl="$CONFIG_UNUSED_KSYMS_WHITELIST"
-+ksym_wl=$(sed -n 's/^CONFIG_UNUSED_KSYMS_WHITELIST="\(.*\)"$/\1/p' include/config/auto.conf)
-+if [ -n "$ksym_wl" ]; then
+-ksym_wl=$(sed -n 's/^CONFIG_UNUSED_KSYMS_WHITELIST="\(.*\)"$/\1/p' include/config/auto.conf)
++ksym_wl=$(sed -n 's/^CONFIG_UNUSED_KSYMS_WHITELIST=\(.*\)$/\1/p' include/config/auto.conf)
+ if [ -n "$ksym_wl" ]; then
  	[ "${ksym_wl}" != "${ksym_wl#/}" ] || ksym_wl="$abs_srctree/$ksym_wl"
  	if [ ! -f "$ksym_wl" ] || [ ! -r "$ksym_wl" ]; then
- 		echo "ERROR: '$ksym_wl' whitelist file not found" >&2
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 5cdd9bc5c385..a4b61a2f65db 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -34,6 +34,10 @@ LD="$1"
- KBUILD_LDFLAGS="$2"
- LDFLAGS_vmlinux="$3"
+diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+index 42bc56ee238c..35a723a2a4c2 100644
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@ -700,7 +700,7 @@ static void print_symbol_for_dotconfig(FILE *fp, struct symbol *sym)
  
-+is_enabled() {
-+	grep -q "^$1=y" include/config/auto.conf
-+}
-+
- # Nice output in kbuild format
- # Will be supressed by "make -s"
- info()
-@@ -80,11 +84,11 @@ modpost_link()
- 		${KBUILD_VMLINUX_LIBS}				\
- 		--end-group"
- 
--	if [ -n "${CONFIG_LTO_CLANG}" ]; then
-+	if is_enabled CONFIG_LTO_CLANG; then
- 		gen_initcalls
- 		lds="-T .tmp_initcalls.lds"
- 
--		if [ -n "${CONFIG_MODVERSIONS}" ]; then
-+		if is_enabled CONFIG_MODVERSIONS; then
- 			gen_symversions
- 			lds="${lds} -T .tmp_symversions.lds"
- 		fi
-@@ -104,21 +108,21 @@ objtool_link()
- 	local objtoolcmd;
- 	local objtoolopt;
- 
--	if [ "${CONFIG_LTO_CLANG} ${CONFIG_STACK_VALIDATION}" = "y y" ]; then
-+	if is_enabled CONFIG_LTO_CLANG && is_enabled CONFIG_STACK_VALIDATION; then
- 		# Don't perform vmlinux validation unless explicitly requested,
- 		# but run objtool on vmlinux.o now that we have an object file.
--		if [ -n "${CONFIG_UNWINDER_ORC}" ]; then
-+		if is_enabled CONFIG_UNWINDER_ORC; then
- 			objtoolcmd="orc generate"
- 		fi
- 
- 		objtoolopt="${objtoolopt} --duplicate"
- 
--		if [ -n "${CONFIG_FTRACE_MCOUNT_USE_OBJTOOL}" ]; then
-+		if is_enabled CONFIG_FTRACE_MCOUNT_USE_OBJTOOL; then
- 			objtoolopt="${objtoolopt} --mcount"
- 		fi
- 	fi
- 
--	if [ -n "${CONFIG_VMLINUX_VALIDATION}" ]; then
-+	if is_enabled CONFIG_VMLINUX_VALIDATION; then
- 		objtoolopt="${objtoolopt} --noinstr"
- 	fi
- 
-@@ -127,16 +131,16 @@ objtool_link()
- 			objtoolcmd="check"
- 		fi
- 		objtoolopt="${objtoolopt} --vmlinux"
--		if [ -z "${CONFIG_FRAME_POINTER}" ]; then
-+		if ! is_enabled CONFIG_FRAME_POINTER; then
- 			objtoolopt="${objtoolopt} --no-fp"
- 		fi
--		if [ -n "${CONFIG_GCOV_KERNEL}" ] || [ -n "${CONFIG_LTO_CLANG}" ]; then
-+		if is_enabled CONFIG_GCOV_KERNEL || is_enabled CONFIG_LTO_CLANG; then
- 			objtoolopt="${objtoolopt} --no-unreachable"
- 		fi
--		if [ -n "${CONFIG_RETPOLINE}" ]; then
-+		if is_enabled CONFIG_RETPOLINE; then
- 			objtoolopt="${objtoolopt} --retpoline"
- 		fi
--		if [ -n "${CONFIG_X86_SMAP}" ]; then
-+		if is_enabled CONFIG_X86_SMAP; then
- 			objtoolopt="${objtoolopt} --uaccess"
- 		fi
- 		info OBJTOOL ${1}
-@@ -161,7 +165,7 @@ vmlinux_link()
- 	# skip output file argument
- 	shift
- 
--	if [ -n "${CONFIG_LTO_CLANG}" ]; then
-+	if is_enabled CONFIG_LTO_CLANG; then
- 		# Use vmlinux.o instead of performing the slow LTO link again.
- 		objs=vmlinux.o
- 		libs=
-@@ -189,7 +193,7 @@ vmlinux_link()
- 		ldflags="${ldflags} ${wl}--strip-debug"
- 	fi
- 
--	if [ -n "${CONFIG_VMLINUX_MAP}" ]; then
-+	if is_enabled CONFIG_VMLINUX_MAP; then
- 		ldflags="${ldflags} ${wl}-Map=${output}.map"
- 	fi
- 
-@@ -239,15 +243,15 @@ kallsyms()
+ static void print_symbol_for_autoconf(FILE *fp, struct symbol *sym)
  {
- 	local kallsymopt;
+-	__print_symbol(fp, sym, OUTPUT_N_NONE, true);
++	__print_symbol(fp, sym, OUTPUT_N_NONE, false);
+ }
  
--	if [ -n "${CONFIG_KALLSYMS_ALL}" ]; then
-+	if is_enabled CONFIG_KALLSYMS_ALL; then
- 		kallsymopt="${kallsymopt} --all-symbols"
- 	fi
- 
--	if [ -n "${CONFIG_KALLSYMS_ABSOLUTE_PERCPU}" ]; then
-+	if is_enabled CONFIG_KALLSYMS_ABSOLUTE_PERCPU; then
- 		kallsymopt="${kallsymopt} --absolute-percpu"
- 	fi
- 
--	if [ -n "${CONFIG_KALLSYMS_BASE_RELATIVE}" ]; then
-+	if is_enabled CONFIG_KALLSYMS_BASE_RELATIVE; then
- 		kallsymopt="${kallsymopt} --base-relative"
- 	fi
- 
-@@ -312,9 +316,6 @@ if [ "$1" = "clean" ]; then
- 	exit 0
- fi
- 
--# We need access to CONFIG_ symbols
--. include/config/auto.conf
--
- # Update version
- info GEN .version
- if [ -r .version ]; then
-@@ -343,7 +344,7 @@ tr '\0' '\n' < modules.builtin.modinfo | sed -n 's/^[[:alnum:]:_]*\.file=//p' |
- 	tr ' ' '\n' | uniq | sed -e 's:^:kernel/:' -e 's/$/.ko/' > modules.builtin
- 
- btf_vmlinux_bin_o=""
--if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
-+if is_enabled CONFIG_DEBUG_INFO_BTF; then
- 	btf_vmlinux_bin_o=.btf.vmlinux.bin.o
- 	if ! gen_btf .tmp_vmlinux.btf $btf_vmlinux_bin_o ; then
- 		echo >&2 "Failed to generate BTF for vmlinux"
-@@ -355,7 +356,7 @@ fi
- kallsymso=""
- kallsymso_prev=""
- kallsyms_vmlinux=""
--if [ -n "${CONFIG_KALLSYMS}" ]; then
-+if is_enabled CONFIG_KALLSYMS; then
- 
- 	# kallsyms support
- 	# Generate section listing all symbols and add it into vmlinux
-@@ -395,12 +396,12 @@ fi
- vmlinux_link vmlinux "${kallsymso}" ${btf_vmlinux_bin_o}
- 
- # fill in BTF IDs
--if [ -n "${CONFIG_DEBUG_INFO_BTF}" -a -n "${CONFIG_BPF}" ]; then
-+if is_enabled CONFIG_DEBUG_INFO_BTF && is_enabled CONFIG_BPF; then
- 	info BTFIDS vmlinux
- 	${RESOLVE_BTFIDS} vmlinux
- fi
- 
--if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
-+if is_enabled CONFIG_BUILDTIME_TABLE_SORT; then
- 	info SORTTAB vmlinux
- 	if ! sorttable vmlinux; then
- 		echo >&2 Failed to sort kernel tables
-@@ -412,7 +413,7 @@ info SYSMAP System.map
- mksysmap vmlinux System.map
- 
- # step a (see comment above)
--if [ -n "${CONFIG_KALLSYMS}" ]; then
-+if is_enabled CONFIG_KALLSYMS; then
- 	mksysmap ${kallsyms_vmlinux} .tmp_System.map
- 
- 	if ! cmp -s System.map .tmp_System.map; then
+ void print_symbol_for_listconfig(struct symbol *sym)
 diff --git a/scripts/setlocalversion b/scripts/setlocalversion
-index 6b54e46a0f12..d06137405190 100755
+index d06137405190..af4754a35e66 100755
 --- a/scripts/setlocalversion
 +++ b/scripts/setlocalversion
-@@ -111,9 +111,7 @@ if $scm_only; then
- 	exit
- fi
- 
--if test -e include/config/auto.conf; then
--	. include/config/auto.conf
--else
-+if ! test -e include/config/auto.conf; then
- 	echo "Error: kernelrelease not valid - run 'make prepare' to update it" >&2
- 	exit 1
- fi
-@@ -125,10 +123,11 @@ if test ! "$srctree" -ef .; then
+@@ -123,7 +123,7 @@ if test ! "$srctree" -ef .; then
  fi
  
  # CONFIG_LOCALVERSION and LOCALVERSION (if set)
--res="${res}${CONFIG_LOCALVERSION}${LOCALVERSION}"
-+config_localversion=$(sed -n 's/^CONFIG_LOCALVERSION="\(.*\)"$/\1/p' include/config/auto.conf)
-+res="${res}${config_localversion}${LOCALVERSION}"
+-config_localversion=$(sed -n 's/^CONFIG_LOCALVERSION="\(.*\)"$/\1/p' include/config/auto.conf)
++config_localversion=$(sed -n 's/^CONFIG_LOCALVERSION=\(.*\)$/\1/p' include/config/auto.conf)
+ res="${res}${config_localversion}${LOCALVERSION}"
  
  # scm version string if not at a tagged commit
--if test "$CONFIG_LOCALVERSION_AUTO" = "y"; then
-+if grep -q "^CONFIG_LOCALVERSION_AUTO=y$" include/config/auto.conf; then
- 	# full scm version string
- 	res="$res$(scm_version)"
- elif [ "${LOCALVERSION+set}" != "set" ]; then
+diff --git a/usr/Makefile b/usr/Makefile
+index b1a81a40eab1..7374873a539f 100644
+--- a/usr/Makefile
++++ b/usr/Makefile
+@@ -21,7 +21,7 @@ obj-$(CONFIG_BLK_DEV_INITRD) := initramfs_data.o
+ 
+ $(obj)/initramfs_data.o: $(obj)/initramfs_inc_data
+ 
+-ramfs-input := $(strip $(shell echo $(CONFIG_INITRAMFS_SOURCE)))
++ramfs-input := $(CONFIG_INITRAMFS_SOURCE)
+ cpio-data :=
+ 
+ # If CONFIG_INITRAMFS_SOURCE is empty, generate a small initramfs with the
 -- 
 2.32.0
 
