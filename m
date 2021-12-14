@@ -2,52 +2,257 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE74473E7B
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 09:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4099C47419E
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 12:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbhLNIk6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 03:40:58 -0500
-Received: from mail.thebizzie.pl ([192.236.147.111]:41884 "EHLO
-        mail.thebizzie.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbhLNIk5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 03:40:57 -0500
-X-Greylist: delayed 456 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 Dec 2021 03:40:57 EST
-Received: by mail.thebizzie.pl (Postfix, from userid 1002)
-        id A4DB8181357; Tue, 14 Dec 2021 08:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=thebizzie.pl; s=mail;
-        t=1639470800; bh=kU+//Lu71IqgcFfjayWXuIc0mZtoyrYJc2YuqyU8eS8=;
-        h=Date:From:To:Subject:From;
-        b=VHf2PmekkUMW2qdfCaSYTPiLtrN7X0929DP8SH5hkReWzOx9ogVFf7u9Gbu1kd/u/
-         GB+vd0vJTxAG8MucOzrKEo8OJTKTphviujRMSL5sTuSTGl6KevCOSD6ijDPyW5Ay6H
-         vomCXsNFyGlV+230zKfVS7a6Lo+wCXstxSW5dordb6UPlTe10n3voCi6l5YZYj+EVd
-         IHQMByYFy0kKxlLU0bQGDkbO+vVXjHch5n6SF87gbrA0NHYyGCmgEovAcj+dJN/cXR
-         Kywr7b1fwvVHiJgdiii3BLjoiDw8BF6QRTVFMYyVPDfVILS72/U3Mc2qZJVR0T5CEJ
-         O+lAM2PtKMYEg==
-Received: by mail.thebizzie.pl for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:32:04 GMT
-Message-ID: <20211214074500-0.1.7.2zn.0.ibgtlh27kb@thebizzie.pl>
-Date:   Tue, 14 Dec 2021 08:32:04 GMT
-From:   "Mateusz Adamczyk" <mateusz.adamczyk@thebizzie.pl>
-To:     <linux-arch@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.thebizzie.pl
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S233613AbhLNLlD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 06:41:03 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58130 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229554AbhLNLlC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 06:41:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C472EB818A0;
+        Tue, 14 Dec 2021 11:41:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607E7C34605;
+        Tue, 14 Dec 2021 11:40:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639482059;
+        bh=Y9cU4Rjmw8f1R7hT/PwYwvdBTVfEZRq/z2i+vhoiIkU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lvmwOe/fvHGCs0jnEH6qfpLn+9h0LVYxfzDbIsNaHPQoR8FMrseXXi4g3ARhxOKOS
+         uNQbXqM5OG5iMsJKrqa9iSPzK1Idi7P59bGaEchraKfIZNiBwn5nuUyx/BoEDOw/Lb
+         n71GDBVD9vO2F82tGIHqeEgAayDxylDjr1A9ip+YNc7qCreW2+zvx6UnBpAtrFE8Yv
+         Zflp3EATMqJ6Z1TYbegado4fwsWzZ06ni8dcCoMZO1tw4q5z8g2YJ6ZmzAP9fTDwxD
+         WTEr13dVTgr9xtyZtyX2C7X66J95VaJ3fwYqqYRpHWMBFCnqKOtvPJzrlKOGsph2wu
+         oi+XFENesCw3Q==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mx6Az-00C21t-HU; Tue, 14 Dec 2021 11:40:57 +0000
+Date:   Tue, 14 Dec 2021 11:40:57 +0000
+Message-ID: <875yrrjtx2.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sunil Muthuswamy <sunilmut@microsoft.com>
+Cc:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: Re: [EXTERNAL] Re: [PATCH v6 2/2] arm64: PCI: hv: Add support for Hyper-V vPCI
+In-Reply-To: <BN8PR21MB114040F48FB7F3988BA95032C0759@BN8PR21MB1140.namprd21.prod.outlook.com>
+References: <1637225490-2213-1-git-send-email-sunilmut@linux.microsoft.com>
+        <1637225490-2213-3-git-send-email-sunilmut@linux.microsoft.com>
+        <875yso6tbi.wl-maz@kernel.org>
+        <BN8PR21MB114040F48FB7F3988BA95032C0759@BN8PR21MB1140.namprd21.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sunilmut@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On Tue, 14 Dec 2021 00:46:59 +0000,
+Sunil Muthuswamy <sunilmut@microsoft.com> wrote:
+> 
+> On Friday, November 19, 2021 7:47 AM,
+> Marc Zyngier <maz@kernel.org> wrote:
+> 
+> [nip..]
+> 
+> > > +static int hv_pci_vec_alloc_device_irq(struct irq_domain *domain,
+> > > +				       unsigned int nr_irqs,
+> > > +				       irq_hw_number_t *hwirq)
+> > > +{
+> > > +	struct hv_pci_chip_data *chip_data = domain->host_data;
+> > > +	unsigned int index;
+> > > +
+> > > +	/* Find and allocate region from the SPI bitmap */
+> > > +	mutex_lock(&chip_data->map_lock);
+> > > +	index = bitmap_find_free_region(chip_data->spi_map,
+> > > +					HV_PCI_MSI_SPI_NR,
+> > > +					get_count_order(nr_irqs));
+> > > +	mutex_unlock(&chip_data->map_lock);
+> > > +	if (index < 0)
+> > > +		return -ENOSPC;
+> > > +
+> > > +	*hwirq = index + HV_PCI_MSI_SPI_START;
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int hv_pci_vec_irq_gic_domain_alloc(struct irq_domain *domain,
+> > > +					   unsigned int virq,
+> > > +					   irq_hw_number_t hwirq)
+> > > +{
+> > > +	struct irq_fwspec fwspec;
+> > > +
+> > > +	fwspec.fwnode = domain->parent->fwnode;
+> > > +	fwspec.param_count = 2;
+> > > +	fwspec.param[0] = hwirq;
+> > > +	fwspec.param[1] = IRQ_TYPE_EDGE_RISING;
+> > > +
+> > > +	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
+> > 
+> > I think you are missing the actual edge configuration here. Since the
+> > interrupt specifier doesn't come from either DT or ACPI, nobody will
+> > set the trigger type, and you have to do it yourself here. At the
+> > moment, you will get whatever is in the GIC configuration.
+> > 
+> 
+> I see, thanks. So, just a call of irq_set_irq_type(IRQ_TYPE_EDGE_RISING)?
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+You are already deep in the irq stack, and calling a high level
+function here is a pretty bad idea. You'll need something like:
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+	struct irq_data *d;
+	d = irq_domain_get_irq_data(domain->parent, virq);
+	d->chip->irq_set_type(d, IRQ_TYPE_EDGE_RISING);
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+on the return from the parent allocation.
 
+> > > +}
+> > > +
+> > > +static int hv_pci_vec_irq_domain_alloc(struct irq_domain *domain,
+> > > +				       unsigned int virq, unsigned int nr_irqs,
+> > > +				       void *args)
+> > > +{
+> > > +	irq_hw_number_t hwirq;
+> > > +	unsigned int i;
+> > > +	int ret;
+> > > +
+> > > +	ret = hv_pci_vec_alloc_device_irq(domain, nr_irqs, &hwirq);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	for (i = 0; i < nr_irqs; i++) {
+> > > +		ret = hv_pci_vec_irq_gic_domain_alloc(domain, virq + i,
+> > > +						      hwirq + i);
+> > > +		if (ret)
+> > > +			goto free_irq;
+> > > +
+> > > +		ret = irq_domain_set_hwirq_and_chip(domain, virq + i,
+> > > +						    hwirq + i,
+> > > +						    &hv_arm64_msi_irq_chip,
+> > > +						    domain->host_data);
+> > > +		if (ret)
+> > > +			goto free_irq;
+> > > +
+> > > +		pr_debug("pID:%d vID:%u\n", (int)(hwirq + i), virq + i);
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +
+> > > +free_irq:
+> > > +	hv_pci_vec_irq_domain_free(domain, virq, nr_irqs);
+> > > +
+> > > +	return ret;
+> > 
+> > How about the interrupts that have already been allocated?
+> 
+> Not sure I am fully following. If you are referring to the failure
+> path and the interrupts that were allocated, then I am calling '
+> hv_pci_vec_irq_domain_free' which should free the interrupts from
+> the bitmap and the parent irq domain.  Can you please clarify?
 
-Pozdrawiam,
-Mateusz Adamczyk
+I see several problems on the failure path:
+
+- You are freeing more than you actually configured. Not necessary a
+  big deal, but still (it is a common issue, and the core deals with
+  it)
+
+- hv_pci_vec_irq_domain_free() calls irq_domain_reset_irq_data() on a
+  single pointer. Why? Either you wipe them all, or you don't.
+
+>  
+> > 
+> > > +}
+> > > +
+> > > +/*
+> > > + * Pick the first online cpu as the irq affinity that can be temporarily used
+> > > + * for composing MSI from the hypervisor. GIC will eventually set the right
+> > > + * affinity for the irq and the 'unmask' will retarget the interrupt to that
+> > > + * cpu.
+> > > + */
+> > > +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
+> > > +					  struct irq_data *irqd, bool reserve)
+> > > +{
+> > > +	int cpu = cpumask_first(cpu_online_mask);
+> > > +
+> > > +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static const struct irq_domain_ops hv_pci_domain_ops = {
+> > > +	.alloc	= hv_pci_vec_irq_domain_alloc,
+> > > +	.free	= hv_pci_vec_irq_domain_free,
+> > > +	.activate = hv_pci_vec_irq_domain_activate,
+> > > +};
+> > > +
+> > > +static int hv_pci_irqchip_init(void)
+> > > +{
+> > > +	static struct hv_pci_chip_data *chip_data;
+> > > +	struct fwnode_handle *fn = NULL;
+> > > +	int ret = -ENOMEM;
+> > > +
+> > > +	chip_data = kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> > > +	if (!chip_data)
+> > > +		return ret;
+> > > +
+> > > +	mutex_init(&chip_data->map_lock);
+> > > +	fn = irq_domain_alloc_named_fwnode("Hyper-V ARM64 vPCI");
+> > 
+> > This will appear in debugfs. I'd rather you keep it short, sweet and
+> > without spaces. "hv_vpci_arm64" seems better to me.
+> 
+> Sure, will fix in next version.
+> 
+> > >
+> > > @@ -1619,6 +1820,7 @@ static struct irq_chip hv_msi_irq_chip = {
+> > >  	.irq_compose_msi_msg	= hv_compose_msi_msg,
+> > >  	.irq_set_affinity	= irq_chip_set_affinity_parent,
+> > >  	.irq_ack		= irq_chip_ack_parent,
+> > > +	.irq_eoi		= irq_chip_eoi_parent,
+> > >  	.irq_mask		= hv_irq_mask,
+> > >  	.irq_unmask		= hv_irq_unmask,
+> > 
+> > You probably want to avoid unconditionally setting callbacks that may
+> > have side effects on another architecture (ack on arm64, eoi on x86).
+> 
+> Thanks. Will fix in next version.
+> 
+> Is there some other feedback that would like to see get addressed in the
+> current patch? Trying to close down on all remaining feedback items here.
+
+Not at the moment, as I have paged this out a long time ago.
+Addressing feedback more often than once a month would definitely
+help. I usually complain about patches being sent too often, but
+you're squarely in the opposite camp.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
