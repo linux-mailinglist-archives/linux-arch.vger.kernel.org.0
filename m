@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F36474797
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7AE47479A
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235740AbhLNQWT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S235722AbhLNQWV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 11:22:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbhLNQWM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:12 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F66C061574
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:11 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id f5-20020a5d4dc5000000b001a0b1481734so2039062wru.23
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:11 -0800 (PST)
+        with ESMTP id S233664AbhLNQWP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:15 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2267FC061401
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:14 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id k25-20020a05600c1c9900b00332f798ba1dso13395161wms.4
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=vk27iv2F635cQnWQcbshAPEqVufkv6t3HZGPDzS+hy0=;
-        b=N97xBrvZKeDEcFlNpkWBrtn7zEvb3Izxfed8tgccGP3KbP0JyoVvarwspHaE+pun9W
-         hC8L+YfbQaFfkyLe8bnD8MYV+/Sdom3ZohAx+8SJYVoaN9+FGkeigUf/5Enx9Duw10M3
-         I4GX5ncfr5sThlpIWYcUp2zJ4xXqkR3lFRPU4wJafzGrnYz7IvMJbp4PHnk9NdLpwQWA
-         DYtFY+DFULdtU0LkVrKqqlVyi91CCthRiiScHr0/FyR6/4X94fi1/MO9Bm/l/XHO6CaY
-         2R8KiVRheRSeJZYwjF3N1AftioY6J7C1jct6LWF2rPySvAGDOk7uvQD3ZoD6roS8/d5p
-         BrFg==
+        bh=cymMxq8X/aG1qXHBjowqDi5l9Htb+dr7152LeU2UVMg=;
+        b=WncnmFGwOheZzwj3lQVcaMmEmmbs5r8KC0pxfY3vrRTBhm0vWTPYKdVu6SuZ/lDOBN
+         oo427lD+CO6vG97uePW3RveiP+oSrjPgOcLUHNljqIMlZPHOKZe7Wj7tBoNAQPMrJnw9
+         KqsuI9B2HZpdTFGR3B2S/hdL6j5LLLVSPvTeuYQUCkYfd+NAADNU+fpr+TNZrqrtAlV7
+         QDZ46XIqfqYP04Vuo8iPBydPbj1h6rshvISKhDAfitvyrcjxJn9MZ3oJv/1vX4zzE4EC
+         u3rDgbQW+Ttcm2Fx7+ojv/HG7vMx3ZVQtjNbFbOEeX3tMT77CgmULH5SI48+r9l6CPCB
+         GRzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=vk27iv2F635cQnWQcbshAPEqVufkv6t3HZGPDzS+hy0=;
-        b=OMX0lJun9qETmirvVfuiYTe/fo/1FZP3cUa7WjhJoKrsrINnAUbcirG1KwCrrM6olr
-         jtUoBW9l0SGLnOLqIBhC1Byk8dKy72AJgHdSZHL4rFtxZBLlubtxFvTiSXuNTDycwX4B
-         QSSOnaNrLqHTnBkk4uKQDTXtM8Ij/l9J+jz1wNdqbkUUUcWtqQpfe5VyyxfxyHm8wfNz
-         iQSyBk473YH3sYnlovLR2THKjz6w1lG0G2UQ9FFs3qjdqUY3DKaH4Wx63Bb4kv30Nr9w
-         iDLBWQy16kEwuCu6lIEvuOfW77n7pKgOm3GQyOH270MUQepBTsrFlItod6YOKumZ7sYA
-         jKhw==
-X-Gm-Message-State: AOAM5325JwaQXjCmNMFRHh83ENUVTgHjZ0/4yqJDL/3LJD6Li4b1pS0S
-        r1VkAKIAYnYP1CE1nmJWp97pujXqxj0=
-X-Google-Smtp-Source: ABdhPJx9Wj6Cyb1ZV5OC7nThpuMZJU+2OnpAgbvGjNqZyuKNa8hLFTbdISamGeA0K/FUYpEbmCyQ0RRf9nc=
+        bh=cymMxq8X/aG1qXHBjowqDi5l9Htb+dr7152LeU2UVMg=;
+        b=A7Nht3ItpPP965Ir50WnbPdXv3feb9lYiU/d+n2pjcD0bkJFtq3Md9M+fD2pzvcthf
+         Euny7IzWf3PO6Ux6yAkb6lIOOo7caNm/cMvSncFY6wOw2AxqtkgX7Ba4x77YPpxvPD71
+         F4VNsRTPNIPc2ySREdhlySVayYDnYSTeT+k312OefGdECTooK1QsILl9f5h/Ti21sUZ+
+         fTcWw86jBoMomoRQnjMRzee2ZP9uutcJdLinbWrsnRK5TbOxXJr0q0yn32MFLCNhFyzt
+         4pvJ/dXccdGpx+jucRkUqWzq5+gVgFGXyQRWV9xFV33KsEBtTO+BCvv4v0pj0/RU+fzh
+         3dDg==
+X-Gm-Message-State: AOAM531h9ERqhBl24OaXqzaLHr1L8IvxjuGmEyKqSFXXGSMmjXYBvjnU
+        nhcE/R5KqUURFwco6e8CLgstjvEiQMU=
+X-Google-Smtp-Source: ABdhPJw7rnlyWmyiG+/6/FPFfhBexKn+2IQc1y0wrMK33WZwdvgtnE0Ywc99AkwQL+Q5SKgG2g6TjGgsUOs=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:adf:f206:: with SMTP id p6mr6600814wro.509.1639498930071;
- Tue, 14 Dec 2021 08:22:10 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:13 +0100
+ (user=glider job=sendgmr) by 2002:a5d:522b:: with SMTP id i11mr14310wra.2.1639498932629;
+ Tue, 14 Dec 2021 08:22:12 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:14 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-7-glider@google.com>
+Message-Id: <20211214162050.660953-8-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 06/43] asm-generic: instrument usercopy in cacheflush.h
+Subject: [PATCH 07/43] compiler_attributes.h: add __disable_sanitizer_instrumentation
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,50 +87,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Notify memory tools about usercopy events in copy_to_user_page() and
-copy_from_user_page().
+The new attribute maps to
+__attribute__((disable_sanitizer_instrumentation)), which will be
+supported by Clang >= 14.0. Future support in GCC is also possible.
+
+This attribute disables compiler instrumentation for kernel sanitizer
+tools, making it easier to implement noinstr. It is different from the
+existing __no_sanitize* attributes, which may still allow certain types
+of instrumentation to prevent false positives.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/Ic1ee8da1886325f46ad67f52176f48c2c836c48f
+Link: https://linux-review.googlesource.com/id/Ic0123ce99b33ab7d5ed1ae90593425be8d3d774a
 ---
- include/asm-generic/cacheflush.h | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ include/linux/compiler_attributes.h | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
-index 4f07afacbc239..0f63eb325025f 100644
---- a/include/asm-generic/cacheflush.h
-+++ b/include/asm-generic/cacheflush.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_GENERIC_CACHEFLUSH_H
- #define _ASM_GENERIC_CACHEFLUSH_H
- 
-+#include <linux/instrumented.h>
-+
- struct mm_struct;
- struct vm_area_struct;
- struct page;
-@@ -105,6 +107,7 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
- #ifndef copy_to_user_page
- #define copy_to_user_page(vma, page, vaddr, dst, src, len)	\
- 	do { \
-+		instrument_copy_to_user(dst, src, len); \
- 		memcpy(dst, src, len); \
- 		flush_icache_user_page(vma, page, vaddr, len); \
- 	} while (0)
-@@ -112,7 +115,11 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
- 
- #ifndef copy_from_user_page
- #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
--	memcpy(dst, src, len)
-+	do { \
-+		instrument_copy_from_user_before(dst, src, len); \
-+		memcpy(dst, src, len); \
-+		instrument_copy_from_user_after(dst, src, len, 0); \
-+	} while (0)
+diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+index b9121afd87331..37e2600202216 100644
+--- a/include/linux/compiler_attributes.h
++++ b/include/linux/compiler_attributes.h
+@@ -308,6 +308,24 @@
+ # define __compiletime_warning(msg)
  #endif
  
- #endif /* _ASM_GENERIC_CACHEFLUSH_H */
++/*
++ * Optional: only supported since clang >= 14.0
++ *
++ * clang: https://clang.llvm.org/docs/AttributeReference.html#disable-sanitizer-instrumentation
++ *
++ * disable_sanitizer_instrumentation is not always similar to
++ * no_sanitize((<sanitizer-name>)): the latter may still let specific sanitizers
++ * insert code into functions to prevent false positives. Unlike that,
++ * disable_sanitizer_instrumentation prevents all kinds of instrumentation to
++ * functions with the attribute.
++ */
++#if __has_attribute(disable_sanitizer_instrumentation)
++# define __disable_sanitizer_instrumentation \
++	 __attribute__((disable_sanitizer_instrumentation))
++#else
++# define __disable_sanitizer_instrumentation
++#endif
++
+ /*
+  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-weak-function-attribute
+  *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-weak-variable-attribute
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
