@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B46D4747A0
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 160154747A6
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235819AbhLNQW3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:22:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
+        id S235794AbhLNQWd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 11:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235771AbhLNQWW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:22 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4478BC061401
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:22 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id 205-20020a1c00d6000000b003335d1384f1so13420099wma.3
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:22 -0800 (PST)
+        with ESMTP id S235804AbhLNQWZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:25 -0500
+Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D2DC061748
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:25 -0800 (PST)
+Received: by mail-ed1-x54a.google.com with SMTP id q17-20020aa7da91000000b003e7c0641b9cso17456919eds.12
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ITyhCHO1UiX2DPCFkkqWNUvg7KfOdfMNTQoZ+QNE7bU=;
-        b=VBMgNGVHDe18Og0TwNncVl3ew6zMtrxStb1uB6st2XRmRBQ3tEQXjuXrYuoSm0prGY
-         K20SlkDHnXzsSFK83A1uOoPf7s8MoCjkMO60Pz4Bsrw5Zv3EFffTyroafyTpApie3f5m
-         nG6BxjJm7YHC0e0oJK8lMT2uRqxC1uWTQHEppiGgKAXQKqpaYr/YGuy4I6cjhoRPfjGj
-         aJvrRtPNJ75tOy8zCBClXxAQIrWbUSjbUhHVVIs8uDdSTyy0Rb+tOXzVFasYYZt5TqIc
-         i0ARL88+0gAlT2wgHGVsXU2gLTSMd4ju6zO7fLp36fAYYiZyasvP1IysAaRLHtGTDfz/
-         h1sA==
+        bh=eUjwzrCoKbUh6R4rs1WIx34anW4MjQQumSQfrOhNX/M=;
+        b=A+mk+fmu1YbqofexadpLTYy3cf/NtdeJeyWT6xHGBf9oiljC4Sn+IROP4d2ppCx8c+
+         KFpuvuJ6otYQZ4VP0KeILi504/gfqUhG9yg8vqhWullvaKggE7IHyx+rAZWaicoeV+oc
+         L33wkJWvTbKwNbw/qiUrh6n4BMMGbz0sW1vJlDBy2QRt1+wG4/+RQoRIXAGtBN1m49x5
+         vdnHPrDaGi86YfsJ8RISvJcoAFwbSMZ0jM2I1xxcraggn+SuSJ6K29uQIzzUy2pnTCrz
+         5yNiGmVqiImv547jU5KnPombPq8Oh4FN8J64WuratTrkPgZkCl22mUeIeOymjZYY88/J
+         S5BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ITyhCHO1UiX2DPCFkkqWNUvg7KfOdfMNTQoZ+QNE7bU=;
-        b=osTJH0mCqlHZWWesVNhDhnooJM96h4N3aXLCl5azbIPutruzOTWI+9+PbUA4kc1M8I
-         A+WLXTzRNMqFoGRcudnyyp9HTSxnsRdd8JnkzJlYrdD6vv7mS4RHt2VLaUl7Z09gGmI+
-         B3twW6F9RQVXJkPLcvfIjl/ZC6g3dYTlWONZDJgJ+1DqFly7dYXfALCzziShXkMrX68u
-         9qdH7+7MI22I7nlRYCFxSuPJWkkLF1mv4aeqgY6GDo+lCG0MTndWbi8VHnDHGC8buUbU
-         rHFL6C7QD+OYohNNqcCauoHMGff2zqwdVXE6qPMixlnqaFm/F5GduLMHiDPd9XznBZwg
-         UgBA==
-X-Gm-Message-State: AOAM530uF5h8uQAdag2e0iVzeV6Jbt+QvlegVAuAzoTEnGFAdZXw2irF
-        siatV9zGSEYbR+dgIeJUmJy87BsNwKc=
-X-Google-Smtp-Source: ABdhPJynp7SO7nkkbS3IYqSUnN1vnEfdIZ95PUH2Mr7X6JqBGNbKrX/KoqtS/NjRGYPpNTG+FE367wmyggw=
+        bh=eUjwzrCoKbUh6R4rs1WIx34anW4MjQQumSQfrOhNX/M=;
+        b=3nvTrVfYSba1GJCI/61PA36ofiPXEuCE1v05ENuLrVIFtNNtd1DQS30f5xTqAjiC61
+         93S4cf+bcIWO0aIT2mbqIIDejYGVrHKqk3fFvEyCjU2XqE1WOFers0OfNgOLNsGxGhmz
+         CyA9KB+kl3kC8Pvppy4RduBASrrCmH6nbDQiLX+T6sYzY8WPyP91KXWmgR8wB4nQM2Ja
+         /2H6/rQfk4+8eeLD0bQFQAnvGbjcUOvt/MbBMcfO0Rv+cPeZrRDMFkbSkt6vpRCzqy4H
+         dpqbeY0xMvt+H+q6TBgLjmmArfu+H2Roz019bbkpjwuyjdjllEgYXTgFVpGHc+gBgfEI
+         LJqQ==
+X-Gm-Message-State: AOAM533WWlNUnPXiGxwCKdr0MCJTcE1kEmshcsPOgUGTacOSRxmH9Dxn
+        16FPeTUraNkKvsyO3lj1aiDh4tJ07ME=
+X-Google-Smtp-Source: ABdhPJzLaORHTQ4qmDAWFyBr9kup6IJB7Qe+p4FZHaadADZeiQuoAqGrx6VJ6ldvWuPpnMogRhonYMzcup0=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:a5d:6ac2:: with SMTP id u2mr6665311wrw.486.1639498940724;
- Tue, 14 Dec 2021 08:22:20 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:17 +0100
+ (user=glider job=sendgmr) by 2002:a17:907:7e8e:: with SMTP id
+ qb14mr6877453ejc.562.1639498943380; Tue, 14 Dec 2021 08:22:23 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:18 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-11-glider@google.com>
+Message-Id: <20211214162050.660953-12-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 10/43] kmsan: pgtable: reduce vmalloc space
+Subject: [PATCH 11/43] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,83 +87,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-KMSAN is going to use 3/4 of existing vmalloc space to hold the
-metadata, therefore we lower VMALLOC_END to make sure vmalloc() doesn't
-allocate past the first 1/4.
+KMSAN adds extra metadata fields to struct page, so it does not fit into
+64 bytes anymore.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I9d8b7f0a88a639f1263bc693cbd5c136626f7efd
+Link: https://linux-review.googlesource.com/id/I353796acc6a850bfd7bb342aa1b63e616fc614f1
 ---
- arch/x86/include/asm/pgtable_64_types.h | 41 ++++++++++++++++++++++++-
- arch/x86/mm/init_64.c                   |  2 +-
- 2 files changed, 41 insertions(+), 2 deletions(-)
+ drivers/nvdimm/nd.h       | 2 +-
+ drivers/nvdimm/pfn_devs.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/pgtable_64_types.h b/arch/x86/include/asm/pgtable_64_types.h
-index 91ac106545703..7f15d43754a34 100644
---- a/arch/x86/include/asm/pgtable_64_types.h
-+++ b/arch/x86/include/asm/pgtable_64_types.h
-@@ -139,7 +139,46 @@ extern unsigned int ptrs_per_p4d;
- # define VMEMMAP_START		__VMEMMAP_BASE_L4
- #endif /* CONFIG_DYNAMIC_MEMORY_LAYOUT */
- 
--#define VMALLOC_END		(VMALLOC_START + (VMALLOC_SIZE_TB << 40) - 1)
-+#define VMEMORY_END		(VMALLOC_START + (VMALLOC_SIZE_TB << 40) - 1)
-+
-+#ifndef CONFIG_KMSAN
-+#define VMALLOC_END		VMEMORY_END
-+#else
-+/*
-+ * In KMSAN builds vmalloc area is four times smaller, and the remaining 3/4
-+ * are used to keep the metadata for virtual pages. The memory formerly
-+ * belonging to vmalloc area is now laid out as follows:
-+ *
-+ * 1st quarter: VMALLOC_START to VMALLOC_END - new vmalloc area
-+ * 2nd quarter: KMSAN_VMALLOC_SHADOW_START to
-+ *              VMALLOC_END+KMSAN_VMALLOC_SHADOW_OFFSET - vmalloc area shadow
-+ * 3rd quarter: KMSAN_VMALLOC_ORIGIN_START to
-+ *              VMALLOC_END+KMSAN_VMALLOC_ORIGIN_OFFSET - vmalloc area origins
-+ * 4th quarter: KMSAN_MODULES_SHADOW_START to KMSAN_MODULES_ORIGIN_START
-+ *              - shadow for modules,
-+ *              KMSAN_MODULES_ORIGIN_START to
-+ *              KMSAN_MODULES_ORIGIN_START + MODULES_LEN - origins for modules.
-+ */
-+#define VMALLOC_QUARTER_SIZE	((VMALLOC_SIZE_TB << 40) >> 2)
-+#define VMALLOC_END		(VMALLOC_START + VMALLOC_QUARTER_SIZE - 1)
-+
-+/*
-+ * vmalloc metadata addresses are calculated by adding shadow/origin offsets
-+ * to vmalloc address.
-+ */
-+#define KMSAN_VMALLOC_SHADOW_OFFSET	VMALLOC_QUARTER_SIZE
-+#define KMSAN_VMALLOC_ORIGIN_OFFSET	(VMALLOC_QUARTER_SIZE << 1)
-+
-+#define KMSAN_VMALLOC_SHADOW_START	(VMALLOC_START + KMSAN_VMALLOC_SHADOW_OFFSET)
-+#define KMSAN_VMALLOC_ORIGIN_START	(VMALLOC_START + KMSAN_VMALLOC_ORIGIN_OFFSET)
-+
-+/*
-+ * The shadow/origin for modules are placed one by one in the last 1/4 of
-+ * vmalloc space.
-+ */
-+#define KMSAN_MODULES_SHADOW_START	(VMALLOC_END + KMSAN_VMALLOC_ORIGIN_OFFSET + 1)
-+#define KMSAN_MODULES_ORIGIN_START	(KMSAN_MODULES_SHADOW_START + MODULES_LEN)
-+#endif /* CONFIG_KMSAN */
- 
- #define MODULES_VADDR		(__START_KERNEL_map + KERNEL_IMAGE_SIZE)
- /* The module sections ends with the start of the fixmap */
-diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
-index 36098226a9573..8e884e44a8d1e 100644
---- a/arch/x86/mm/init_64.c
-+++ b/arch/x86/mm/init_64.c
-@@ -1287,7 +1287,7 @@ static void __init preallocate_vmalloc_pages(void)
- 	unsigned long addr;
- 	const char *lvl;
- 
--	for (addr = VMALLOC_START; addr <= VMALLOC_END; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
-+	for (addr = VMALLOC_START; addr <= VMEMORY_END; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
- 		pgd_t *pgd = pgd_offset_k(addr);
- 		p4d_t *p4d;
- 		pud_t *pud;
+diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
+index 6f8ce114032d0..b50aecd1dd423 100644
+--- a/drivers/nvdimm/nd.h
++++ b/drivers/nvdimm/nd.h
+@@ -663,7 +663,7 @@ void devm_namespace_disable(struct device *dev,
+ 		struct nd_namespace_common *ndns);
+ #if IS_ENABLED(CONFIG_ND_CLAIM)
+ /* max struct page size independent of kernel config */
+-#define MAX_STRUCT_PAGE_SIZE 64
++#define MAX_STRUCT_PAGE_SIZE 128
+ int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap);
+ #else
+ static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
+diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
+index 58eda16f5c534..07a539195cc8b 100644
+--- a/drivers/nvdimm/pfn_devs.c
++++ b/drivers/nvdimm/pfn_devs.c
+@@ -785,7 +785,7 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
+ 		 * when populating the vmemmap. This *should* be equal to
+ 		 * PMD_SIZE for most architectures.
+ 		 *
+-		 * Also make sure size of struct page is less than 64. We
++		 * Also make sure size of struct page is less than 128. We
+ 		 * want to make sure we use large enough size here so that
+ 		 * we don't have a dynamic reserve space depending on
+ 		 * struct page size. But we also want to make sure we notice
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
