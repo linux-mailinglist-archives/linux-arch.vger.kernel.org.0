@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCA24747B0
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA864747B3
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:24:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbhLNQWr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
+        id S235823AbhLNQWw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 11:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235863AbhLNQWm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:42 -0500
-Received: from mail-lf1-x149.google.com (mail-lf1-x149.google.com [IPv6:2a00:1450:4864:20::149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09E3C061574
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:41 -0800 (PST)
-Received: by mail-lf1-x149.google.com with SMTP id u20-20020ac24c34000000b0041fcb2ca86eso6751262lfq.0
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:41 -0800 (PST)
+        with ESMTP id S235840AbhLNQWp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:45 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B77C061748
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:44 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id 69-20020a1c0148000000b0033214e5b021so11493368wmb.3
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=ue972WbBd9grr+IhEpVqeTCdlW/8PMCymIUxIIoyED4=;
-        b=Vr7vmjXO/ZQNUilyHT6HA/4buGSLSIYLl/qRHTXk31zD+EY7VC067MV2GQ1gcTKpSL
-         34PYjt2oZaAHuR1Fn95QkJiDKtzO0ehg1sLaVJ3mV9Y/Q8LNlPIsbFpa/FZvil+9C22s
-         RghE2q3Ejxg6cCW4gIHjwKLyaeOXsYQgRcgWD67OGB4gKUL2V1URRinmICyKUNyEpVoH
-         YKwBGln2CVKOxUWHj7Mi81ouKRz2wk5IcSIbyOVRKabXX5rqPMETegoTJdq7sPCtpPmD
-         xJeoztIdPUYuXWvmGaaEgBf6cjVJ0hyqY+1sd85pw7pOleo8UCuNLkXCZnmUeWgy27o7
-         ZsKw==
+        bh=e8wDcDLgqLYcyyBsUvkh60ghxris53AouQaXxm5r3VY=;
+        b=bwbWTEarveUVX+itJ0fuWYEkY+Ic1ruhFCrxUeHNnxH5C8YooQA7cUsnyl8QWo37I6
+         qTSM1De/qqc5mhyJtWkyChUpcc1nvO5H+mOj9FiHjcds3GvwduBveBltJ+MOJP/LyV7c
+         K/DQVpI3lfpjDdqbPpWHBynUKrxIhmcfVj1tonRgeT8hXBQQWaaChDGRY91NmnLmrBd8
+         qK7LRFOohNDU/Dbk3RB2WOgoN4+ftz4obf+oEFc+u9s1lPaqCHjHqdN5zv3+L7i8La57
+         4WiPTF5fv5H95tgHlFg9ybWEeaQttWWACxX/wPbwtcvTtH5Nq8FL5fccCq06rND3IElh
+         TzAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=ue972WbBd9grr+IhEpVqeTCdlW/8PMCymIUxIIoyED4=;
-        b=1Msv10flPB9FDyS/Q0HkNL9cVFV/8Bm9qqpo3a7xKb+T0C59P+upLeXoIenUUCTZN6
-         gYvABF7xNIqO3lK2lX4WUzyZYdld8w1r8QHeWoJdaGFaLRWratapMUYQ3jY2QqNkFiTM
-         FNyCWJeaCC/exPLxTYUietQDiWjitB1G6QEh3s+Mf3Jy1uiGSfbkd1EqGtvwdV5+l7EY
-         rkls8lg9vf/xfCZ5VeMKh6dBaqDG3ROhINUFhEDSbETyAykoSKYnkxr5GQyMI+2ESG2d
-         3dUzwXuLbhwD67Ed3Bdf21o5z1G3fCF5tNtt5zOikPHf67xgrSWNtjgFfTXA20pJ2Vrk
-         F+DA==
-X-Gm-Message-State: AOAM5326Kx+Yp2ylnVttnoQboP3FMzqZdfxF+9uyI9h1QlBI53Ttasrs
-        D49a6kHy4oR8fsnaZ9PPZUBV1lnmnFE=
-X-Google-Smtp-Source: ABdhPJwof4yAzLY6jvFwcb35lrlAFHi9TWhnsoYR/pbbpZnrib18G9NF9LFXSvNYzy5cHEt+ggjwBFIkk8g=
+        bh=e8wDcDLgqLYcyyBsUvkh60ghxris53AouQaXxm5r3VY=;
+        b=09brc7LEHyiHyr3cEdStV0QVydDfIXPv/gtaaTu2tDq3cukHHqQs2zFOl9Uj3n4wLs
+         4NMt0xPHVqZrtew8v7R4jqT9W8TE3DG3lKyeV1KibscN/arW5jMiNDkqpEA9HJmkgcZw
+         H4DuMW3OJpnbSUQ9kD7febhLJ2RNl1dewxUMk5FSp8+1sTJ2Osxez2rd2RUOa7KNzAwe
+         OqmRL6QZJQSZaX1MZabZWSxDxV7TAvsdeJP2roj7WTqT29Qt8EdI0ajraIrt9gOE4jDb
+         Fe7xjKa6uPDsBzLgaUwgbxS/uqqXEz7zKEnbSkGaxlYMX/4VBhbXWNrQ55kMVZalGq8q
+         BH9w==
+X-Gm-Message-State: AOAM532rzGXPK+aArCLETpfxWmhWgC9WfmOWfh9Zf0U2JLG8D3CZEGPu
+        59czuREOWcjVx2utwio9zpAkhd73AFk=
+X-Google-Smtp-Source: ABdhPJzoy7nwddl4O5eQjXMqW0hLllhbb9+Sf9gHpEsPLwPy4hBpBZLzkiU1SPitQ3yLHKKXprNAepEWH4s=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:ac2:5110:: with SMTP id q16mr5605822lfb.56.1639498959625;
- Tue, 14 Dec 2021 08:22:39 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:24 +0100
+ (user=glider job=sendgmr) by 2002:a5d:4646:: with SMTP id j6mr1679288wrs.485.1639498962614;
+ Tue, 14 Dec 2021 08:22:42 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:25 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-18-glider@google.com>
+Message-Id: <20211214162050.660953-19-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 17/43] kmsan: handle task creation and exiting
+Subject: [PATCH 18/43] kmsan: unpoison @tlb in arch_tlb_gather_mmu()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,57 +87,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Tell KMSAN that a new task is created, so the tool creates a backing
-metadata structure for that task.
+This is a hack to reduce stackdepot pressure.
+
+struct mmu_gather contains 7 1-bit fields packed into a 32-bit unsigned
+int value. The remaining 25 bits remain uninitialized and are never used,
+but KMSAN updates the origin for them in zap_pXX_range() in mm/memory.c,
+thus creating very long origin chains. This is technically correct, but
+consumes too much memory.
+
+Unpoisoning the whole structure will prevent creating such chains.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I0f41c3a1c7d66f7e14aabcfdfc7c69addb945805
+Link: https://linux-review.googlesource.com/id/I76abee411b8323acfdbc29bc3a60dca8cff2de77
 ---
- kernel/exit.c | 2 ++
- kernel/fork.c | 2 ++
- 2 files changed, 4 insertions(+)
+ mm/mmu_gather.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index f702a6a63686e..a276f6716dcd5 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -59,6 +59,7 @@
- #include <linux/writeback.h>
- #include <linux/shm.h>
- #include <linux/kcov.h>
-+#include <linux/kmsan.h>
- #include <linux/random.h>
- #include <linux/rcuwait.h>
- #include <linux/compat.h>
-@@ -767,6 +768,7 @@ void __noreturn do_exit(long code)
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index 1b9837419bf9c..72e4c4ca01d27 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -1,6 +1,7 @@
+ #include <linux/gfp.h>
+ #include <linux/highmem.h>
+ #include <linux/kernel.h>
++#include <linux/kmsan-checks.h>
+ #include <linux/mmdebug.h>
+ #include <linux/mm_types.h>
+ #include <linux/pagemap.h>
+@@ -252,6 +253,15 @@ void tlb_flush_mmu(struct mmu_gather *tlb)
+ static void __tlb_gather_mmu(struct mmu_gather *tlb, struct mm_struct *mm,
+ 			     bool fullmm)
+ {
++	/*
++	 * struct mmu_gather contains 7 1-bit fields packed into a 32-bit
++	 * unsigned int value. The remaining 25 bits remain uninitialized
++	 * and are never used, but KMSAN updates the origin for them in
++	 * zap_pXX_range() in mm/memory.c, thus creating very long origin
++	 * chains. This is technically correct, but consumes too much memory.
++	 * Unpoisoning the whole structure will prevent creating such chains.
++	 */
++	kmsan_unpoison_memory(tlb, sizeof(*tlb));
+ 	tlb->mm = mm;
+ 	tlb->fullmm = fullmm;
  
- 	profile_task_exit(tsk);
- 	kcov_task_exit(tsk);
-+	kmsan_task_exit(tsk);
- 
- 	coredump_task_exit(tsk);
- 	ptrace_event(PTRACE_EVENT_EXIT, code);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 3244cc56b697d..5d53ffab2cda7 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -37,6 +37,7 @@
- #include <linux/fdtable.h>
- #include <linux/iocontext.h>
- #include <linux/key.h>
-+#include <linux/kmsan.h>
- #include <linux/binfmts.h>
- #include <linux/mman.h>
- #include <linux/mmu_notifier.h>
-@@ -955,6 +956,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 	account_kernel_stack(tsk, 1);
- 
- 	kcov_task_init(tsk);
-+	kmsan_task_create(tsk);
- 	kmap_local_fork(tsk);
- 
- #ifdef CONFIG_FAULT_INJECTION
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
