@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FE24747D8
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833D14747DB
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236248AbhLNQYC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S235921AbhLNQYJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 11:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235999AbhLNQXm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:23:42 -0500
-Received: from mail-lj1-x24a.google.com (mail-lj1-x24a.google.com [IPv6:2a00:1450:4864:20::24a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FBEC061396
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:28 -0800 (PST)
-Received: by mail-lj1-x24a.google.com with SMTP id t25-20020a2e8e79000000b0021b5c659213so5659008ljk.10
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:28 -0800 (PST)
+        with ESMTP id S230129AbhLNQXo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:23:44 -0500
+Received: from mail-lf1-x14a.google.com (mail-lf1-x14a.google.com [IPv6:2a00:1450:4864:20::14a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF5FC06139C
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:30 -0800 (PST)
+Received: by mail-lf1-x14a.google.com with SMTP id bi30-20020a0565120e9e00b00415d0e471e0so8951071lfb.19
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=hJREyaJODzN59ymWNpAGAfGc3N4tvevP8UF37PAE+J8=;
-        b=oTH1LhNHOLMxItxiNi4P80arf3V90zcZ2D7XaYrMWD5zhzjnQGBBNtzXBtP3OTeZbR
-         tREgkLUiMUgnBhnlpBEcb9spfWY/cnsLiVkZ4gM7i0ckihbSR9YkmKCgOjV9S1v24RC6
-         rcCk1732bioSUmVR0kALhf4VayHC/sBhWGQ0rYLrqC8INyjm10g/NTh+VCKjt5Ba9t+O
-         Hb8n1v7nq8PZW0tTa5I8gF39PqqrSQOKemQDGVLB0z3T64pOPjyD2JlTfUJ0Bbh2pRjR
-         2uBonmx/fZ6h/wKPOVGIAJrZhtWwZfkkFYy/2mpCLi/sxNccIF40o59aaOuAx9Kf03c9
-         v5Zw==
+        bh=uWmJ4cna30hge0JfJUa8tpBQzN6nH+qPm9bB+RIZvh4=;
+        b=gnRo03X1rHbrBeUgP8SbekXfNxzT/s/gLZOQMVuQ98Mcrl1/W3OksXN1PcCbasxeAO
+         UcbkG3ew4b8Be17NziHFV8PQdo/AVLvnN1uvzNE+/RCF8Yeo5nZcp8/4xUdImU0Nmub7
+         pUp8xOiBFqGYmE6XPUQwL+6h+P0/ZO9EIsfw8OtvYKyScA9IZPLC73pXdRqRDIlAz8Ac
+         68riDzHGh1lY5Kf42SDi08qLtAlbv7TaUPzDjvXTJ+J+g1Gk1S+wssewAKw3Q+7ruZI2
+         K9XseeVybm7Rc624Ez0X/JuNj+l4qFERRpZ+uevwUrAZ2RpTPmImVr4tiJ3KbMiF/MUH
+         F4Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=hJREyaJODzN59ymWNpAGAfGc3N4tvevP8UF37PAE+J8=;
-        b=WZkHZxp2Ja+cjypopt9aCh+W5uOgU1sb8jdSzER8tEqt14SQ1F1GzJ9IZ7w3YheEqq
-         6jMYYydhvSwtxxr955rKJQPSsK2r3wgk+ZKjnnHxzrJNcKtDpo3+2wjjdSPKr5YRxmgE
-         mCJVNv5jEZvU5U+cKgaQ/KuWgoLhuPp0AkB+tMRkWfy7sDz4w+WmU15mJ49JpN6dY9Q9
-         Yq3Ho/sMe6SaMP4jF2vyTJhMNVeOEU522A1CLNw/Q3RlEagb9YN6PQ0E/gERMyWi0eP8
-         XSLRHlHhlZTdqLZ+dlirtfQL+wbseQpiLPXpMTCdzFjpZ+KpRXsA5Rldr7ujD4du3zCw
-         2Drg==
-X-Gm-Message-State: AOAM530gewItwp9DEW4lGZ9jOY708NYfqrE7QRgDpBbNvzuDsoJzCCiV
-        ln8vSb872SBfukI+nGMiab0dFyz7AAQ=
-X-Google-Smtp-Source: ABdhPJxXRu645cHJwsRfEAXihfv0Go5u7KwQ4UTJ1n3lO79v1JEfsX0lC2OS7GVAzadP34TGcewWINvNhMI=
+        bh=uWmJ4cna30hge0JfJUa8tpBQzN6nH+qPm9bB+RIZvh4=;
+        b=tMwO54aCHYFW8R9MVWbqbyhirNioXAZXeyQHWynuvlf1VcpE0ANKviehr9ChYgat2O
+         8jB1l3sQOroVREhfGENZUe1KRPpaJwPPNgpgYQ4p5iftOvUpbMIXSWckJKEcquLIxmmS
+         SOFKYqqqQ3lGzzys4QqBok7R+F1OcMYxLPNikdUKozKX9YrofElIPzl2xY6kb0N2YZ+g
+         AaFBqzr5kR1qp8juinP1zK6yzjEnKzwAoEWCXVnn7THeWC/Lh742ByMsPGk4lZHe5eyl
+         Gyqz5TZEBInvzk2R1O+9TeXxCpBYZyD1trnT0r62q54drVqwAwco7n3bng78owq+xIJC
+         aexw==
+X-Gm-Message-State: AOAM5301CMG9lDSM+I6sCCWA/rDbP3Jgj8MrJr5RSUl0rYDjw+hS3RK/
+        qXLMwpgpEyOud1RXe66EdRZonYhhCTg=
+X-Google-Smtp-Source: ABdhPJxVRSRgL2C45JzlUfnk64Umy5VS7QXVkbIUWGYNVfQ53/NEIAiExfqrIiGa5vb43rmr7CHrDJLiI0s=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:a05:6512:3991:: with SMTP id
- j17mr5582774lfu.545.1639499006493; Tue, 14 Dec 2021 08:23:26 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:41 +0100
+ (user=glider job=sendgmr) by 2002:a05:6512:3993:: with SMTP id
+ j19mr5680886lfu.581.1639499009067; Tue, 14 Dec 2021 08:23:29 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:42 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-35-glider@google.com>
+Message-Id: <20211214162050.660953-36-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 34/43] kmsan: block: skip bio block merging logic for KMSAN
+Subject: [PATCH 35/43] x86: kmsan: use __msan_ string functions where possible.
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -81,42 +81,110 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Biggers <ebiggers@google.com>
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-KMSAN doesn't allow treating adjacent memory pages as such, if they were
-allocated by different alloc_pages() calls.
-The block layer however does so: adjacent pages end up being used
-together. To prevent this, make page_is_mergeable() return false under
-KMSAN.
+Unless stated otherwise (by explicitly calling __memcpy(), __memset() or
+__memmove()) we want all string functions to call their __msan_ versions
+(e.g. __msan_memcpy() instead of memcpy()), so that shadow and origin
+values are updated accordingly.
 
-Suggested-by: Eric Biggers <ebiggers@google.com>
+Bootloader must still use the default string functions to avoid crashes.
+
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
 
-Link: https://linux-review.googlesource.com/id/Ie29cc2464c70032347c32ab2a22e1e7a0b37b905
+Link: https://linux-review.googlesource.com/id/I7ca9bd6b4f5c9b9816404862ae87ca7984395f33
 ---
- block/bio.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/include/asm/string_64.h | 23 +++++++++++++++++++++--
+ include/linux/fortify-string.h   |  2 ++
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/block/bio.c b/block/bio.c
-index 15ab0d6d1c06e..b94283463196d 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -805,6 +805,8 @@ static inline bool page_is_mergeable(const struct bio_vec *bv,
- 		return false;
+diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
+index 6e450827f677a..3b87d889b6e16 100644
+--- a/arch/x86/include/asm/string_64.h
++++ b/arch/x86/include/asm/string_64.h
+@@ -11,11 +11,23 @@
+    function. */
  
- 	*same_page = ((vec_end_addr & PAGE_MASK) == page_addr);
-+	if (!*same_page && IS_ENABLED(CONFIG_KMSAN))
-+		return false;
- 	if (*same_page)
- 		return true;
- 	return (bv->bv_page + bv_end / PAGE_SIZE) == (page + off / PAGE_SIZE);
+ #define __HAVE_ARCH_MEMCPY 1
++#if defined(__SANITIZE_MEMORY__)
++#undef memcpy
++void *__msan_memcpy(void *dst, const void *src, size_t size);
++#define memcpy __msan_memcpy
++#else
+ extern void *memcpy(void *to, const void *from, size_t len);
++#endif
+ extern void *__memcpy(void *to, const void *from, size_t len);
+ 
+ #define __HAVE_ARCH_MEMSET
++#if defined(__SANITIZE_MEMORY__)
++extern void *__msan_memset(void *s, int c, size_t n);
++#undef memset
++#define memset __msan_memset
++#else
+ void *memset(void *s, int c, size_t n);
++#endif
+ void *__memset(void *s, int c, size_t n);
+ 
+ #define __HAVE_ARCH_MEMSET16
+@@ -55,7 +67,13 @@ static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
+ }
+ 
+ #define __HAVE_ARCH_MEMMOVE
++#if defined(__SANITIZE_MEMORY__)
++#undef memmove
++void *__msan_memmove(void *dest, const void *src, size_t len);
++#define memmove __msan_memmove
++#else
+ void *memmove(void *dest, const void *src, size_t count);
++#endif
+ void *__memmove(void *dest, const void *src, size_t count);
+ 
+ int memcmp(const void *cs, const void *ct, size_t count);
+@@ -64,8 +82,7 @@ char *strcpy(char *dest, const char *src);
+ char *strcat(char *dest, const char *src);
+ int strcmp(const char *cs, const char *ct);
+ 
+-#if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
+-
++#if (defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__))
+ /*
+  * For files that not instrumented (e.g. mm/slub.c) we
+  * should use not instrumented version of mem* functions.
+@@ -73,7 +90,9 @@ int strcmp(const char *cs, const char *ct);
+ 
+ #undef memcpy
+ #define memcpy(dst, src, len) __memcpy(dst, src, len)
++#undef memmove
+ #define memmove(dst, src, len) __memmove(dst, src, len)
++#undef memset
+ #define memset(s, c, n) __memset(s, c, n)
+ 
+ #ifndef __NO_FORTIFY
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index a6cd6815f2490..b2c74cb85e20e 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -198,6 +198,7 @@ __FORTIFY_INLINE char *strncat(char *p, const char *q, __kernel_size_t count)
+ 	return p;
+ }
+ 
++#ifndef CONFIG_KMSAN
+ __FORTIFY_INLINE void *memset(void *p, int c, __kernel_size_t size)
+ {
+ 	size_t p_size = __builtin_object_size(p, 0);
+@@ -240,6 +241,7 @@ __FORTIFY_INLINE void *memmove(void *p, const void *q, __kernel_size_t size)
+ 		fortify_panic(__func__);
+ 	return __underlying_memmove(p, q, size);
+ }
++#endif
+ 
+ extern void *__real_memscan(void *, int, __kernel_size_t) __RENAME(memscan);
+ __FORTIFY_INLINE void *memscan(void *p, int c, __kernel_size_t size)
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
