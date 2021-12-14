@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 859CC4747E7
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F18E4747EC
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236549AbhLNQYl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:24:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S235565AbhLNQZL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 11:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236103AbhLNQXt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:23:49 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A30EC06175F
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:43 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id j25-20020a05600c1c1900b00332372c252dso8130180wms.1
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:43 -0800 (PST)
+        with ESMTP id S236197AbhLNQX6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:23:58 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FF3C061190
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:45 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id p7-20020a05622a00c700b002b2f6944e7dso27117765qtw.10
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=U+qm7d/TRHtCZVnNcOhiGaVBA5CqP9KjwHQr2QaBZAQ=;
-        b=pEM4RdPSzm/510AmsumYiHSDTA2WOU3NZ8sZhhdvwWgVTHPJc7Bdlah4MCZ32atX3G
-         jGo/raNtb4LQI8I4r1YFjxd2ggdk5XJT0ob764gqF9JvZZCy42c/S2H0f040ScrApf57
-         gqIbh2Fc5O7kzVK2vUnbOkdFc1yq4EhbCmjUdgO0DasR2T5NyKPtdENN0LclCZG691Mt
-         jOsBshdRwd+qj3IuZFNYMMsTlZzXepIRKPzicER+gtxYt9YdqeLXcIRg38AD7gTceUhp
-         zYaKpHAFuXnw+voswqHRX1JELRSYcJyCHZvdEy65ACsMvgcqOGXpdF4F9wp7EfuQJXz5
-         4ySQ==
+        bh=nqri0SqMC1etYNLgNBuMYaMAJIzMiZ/6wkGd9gYSOPg=;
+        b=G18riu4JI7JtKkKPqFFA5idjWjGGTTZqHBAvDJQauVQAe0CwMxRshD5JmWlf7E37ks
+         mwlaBVMnwHTHaPRmvc8izjTpFo/K6aQ60g2MJRtQD09Zi0kt6r+SwE63fluG5YCffcX3
+         ETmVIHrvmAmCsts/1Hn+sDZuXNhfiqY6oYEZO/SgyuHGBaFJFcj5R/RMsB2+P8KmbIqF
+         LpJ2h0xhFl1+ofZ0d2h/MvnuO8XyFMt5eh/vq7b4V7CqBSjK/yRE6qI8rKVbn9Fylk4v
+         FR6UfMNdjUdR8Mf9ICzS9FCWjbZML+EhSd4wW5x7J+ixaHc7MssuLWzv9rurbjT+dAZR
+         9RTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=U+qm7d/TRHtCZVnNcOhiGaVBA5CqP9KjwHQr2QaBZAQ=;
-        b=xVN1ZI0R0O/oW5hEpGSeTkVDh4dlGGm5iYrwGGeq7i3PjQOfsBDPakJuLGTQPM2ofb
-         Etb+wzs/5Jzt9YXkAHCZXPPF9kTRoEEo5imLbMmTBnpbyE4vk2NrSwUJi7VquFdomPiU
-         DicWHXCdk3eCeBcz0AyNSDZsGQ5fyh1lBWMvns6nsloDu3pztG/FOzsM9eIMK3FjH1CP
-         cFeqskoj0/oMqzy/U7dG0rzceJ0mPaQ6v3VmcQutbYEbbagBCi9WI42g7jR0n/GAfGNI
-         PrdX0I4QtkLwsUi04+X+Aevab8wbz6xjKRzl/oKTj5OQmI0mBFxsiA5RX1kSP6WAHsdb
-         RgdA==
-X-Gm-Message-State: AOAM531BI/leqkc9fd47imRCniU6xPYkfQHZpVIcvjOGEZbzNrCb/GfP
-        nDEnAs1O53EHT6GkyGPOlti+aupO8ko=
-X-Google-Smtp-Source: ABdhPJzrl2gcQ/iPrl04EH5ZpIOzMTprjVo1ITZdjtHUSdKKRp22IBfVvKgCgO2cFELLY6fChdDG+6nJUr0=
+        bh=nqri0SqMC1etYNLgNBuMYaMAJIzMiZ/6wkGd9gYSOPg=;
+        b=EXB72pNgmzd0PEpszsjNEUnZ/UR26X/Mzxq6EJikoor/zfrYDhKUFUEZHJBdJJv3JW
+         5g/0lZs6spJC3tnvkp5x8BXutsECDZSGkcKaYUcvuwB9GlKJwXSCtMaUkxrUUmzMb+mA
+         M7MARlrBD9z8rB/7zKxXMjH7APhJ1X4o1hoclY6ZqPeRBv8/XsbJjncY5FFNFVStSKQw
+         5pstFUyLlufm1nNYM1m3NNTPOyRt1XROM0EO7IUs417A6sO/HgWJ/Fosy1dsa+/o3mc3
+         ITN5yyWHeqDWBoAkiL4zrOG2OiNkQ/X6TG4e2WL+gmdP6Erag/MRAX3CT2R5kT9BR5aw
+         V+Ew==
+X-Gm-Message-State: AOAM532AvPwhagCUjwOQRPNBYA5YW9x5LESEGMhYgK4aauimmifSywLq
+        lAMIQg+NeSUxau9kKsclT/2lYhzHFgA=
+X-Google-Smtp-Source: ABdhPJxdzjFsV5SurqsBYzpnQqwewId1DkZ5ulNTElSjNHN2aEHjpBIN3oypc4pwNeZ7UyA+RJRV8P/AS1U=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:a5d:452b:: with SMTP id j11mr6749890wra.432.1639499022128;
- Tue, 14 Dec 2021 08:23:42 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:47 +0100
+ (user=glider job=sendgmr) by 2002:a05:622a:18c:: with SMTP id
+ s12mr6962473qtw.556.1639499024661; Tue, 14 Dec 2021 08:23:44 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:48 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-41-glider@google.com>
+Message-Id: <20211214162050.660953-42-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 40/43] kmsan: kcov: unpoison area->list in kcov_remote_area_put()
+Subject: [PATCH 41/43] security: kmsan: fix interoperability with auto-initialization
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,50 +87,80 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-KMSAN does not instrument kernel/kcov.c for performance reasons (with
-CONFIG_KCOV=y virtually every place in the kernel invokes kcov
-instrumentation). Therefore the tool may miss writes from kcov.c that
-initialize memory.
+Heap and stack initialization is great, but not when we are trying
+uses of uninitialized memory. When the kernel is built with KMSAN,
+having kernel memory initialization enabled may introduce false
+negatives.
 
-When CONFIG_DEBUG_LIST is enabled, list pointers from kernel/kcov.c are
-passed to instrumented helpers in lib/list_debug.c, resulting in false
-positives.
+We disable CONFIG_INIT_STACK_ALL_PATTERN and CONFIG_INIT_STACK_ALL_ZERO
+under CONFIG_KMSAN, making it impossible to auto-initialize stack
+variables in KMSAN builds. We also disable CONFIG_INIT_ON_ALLOC_DEFAULT_ON
+and CONFIG_INIT_ON_FREE_DEFAULT_ON to prevent accidental use of heap
+auto-initialization.
 
-To work around these reports, we unpoison the contents of area->list after
-initializing it.
+We however still let the users enable heap auto-initialization at
+boot-time (by setting init_on_alloc=1 or init_on_free=1), in which case
+a warning is printed.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/Ie17f2ee47a7af58f5cdf716d585ebf0769348a5a
+Link: https://linux-review.googlesource.com/id/I86608dd867018683a14ae1870f1928ad925f42e9
 ---
- kernel/kcov.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ mm/page_alloc.c            | 4 ++++
+ security/Kconfig.hardening | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/kernel/kcov.c b/kernel/kcov.c
-index 36ca640c4f8e7..88ffdddc99ba1 100644
---- a/kernel/kcov.c
-+++ b/kernel/kcov.c
-@@ -11,6 +11,7 @@
- #include <linux/fs.h>
- #include <linux/hashtable.h>
- #include <linux/init.h>
-+#include <linux/kmsan-checks.h>
- #include <linux/mm.h>
- #include <linux/preempt.h>
- #include <linux/printk.h>
-@@ -152,6 +153,12 @@ static void kcov_remote_area_put(struct kcov_remote_area *area,
- 	INIT_LIST_HEAD(&area->list);
- 	area->size = size;
- 	list_add(&area->list, &kcov_remote_areas);
-+	/*
-+	 * KMSAN doesn't instrument this file, so it may not know area->list
-+	 * is initialized. Unpoison it explicitly to avoid reports in
-+	 * kcov_remote_area_get().
-+	 */
-+	kmsan_unpoison_memory(&area->list, sizeof(struct list_head));
- }
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index fa8029b714a81..4218dea0c76a2 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -855,6 +855,10 @@ void init_mem_debugging_and_hardening(void)
+ 	else
+ 		static_branch_disable(&init_on_free);
  
- static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_struct *t)
++	if (IS_ENABLED(CONFIG_KMSAN) &&
++	    (_init_on_alloc_enabled_early || _init_on_free_enabled_early))
++		pr_info("mem auto-init: please make sure init_on_alloc and init_on_free are disabled when running KMSAN\n");
++
+ #ifdef CONFIG_DEBUG_PAGEALLOC
+ 	if (!debug_pagealloc_enabled())
+ 		return;
+diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
+index d051f8ceefddd..bd13a46024457 100644
+--- a/security/Kconfig.hardening
++++ b/security/Kconfig.hardening
+@@ -106,6 +106,7 @@ choice
+ 	config INIT_STACK_ALL_PATTERN
+ 		bool "pattern-init everything (strongest)"
+ 		depends on CC_HAS_AUTO_VAR_INIT_PATTERN
++		depends on !KMSAN
+ 		help
+ 		  Initializes everything on the stack (including padding)
+ 		  with a specific debug value. This is intended to eliminate
+@@ -124,6 +125,7 @@ choice
+ 	config INIT_STACK_ALL_ZERO
+ 		bool "zero-init everything (strongest and safest)"
+ 		depends on CC_HAS_AUTO_VAR_INIT_ZERO
++		depends on !KMSAN
+ 		help
+ 		  Initializes everything on the stack (including padding)
+ 		  with a zero value. This is intended to eliminate all
+@@ -208,6 +210,7 @@ config STACKLEAK_RUNTIME_DISABLE
+ 
+ config INIT_ON_ALLOC_DEFAULT_ON
+ 	bool "Enable heap memory zeroing on allocation by default"
++	depends on !KMSAN
+ 	help
+ 	  This has the effect of setting "init_on_alloc=1" on the kernel
+ 	  command line. This can be disabled with "init_on_alloc=0".
+@@ -220,6 +223,7 @@ config INIT_ON_ALLOC_DEFAULT_ON
+ 
+ config INIT_ON_FREE_DEFAULT_ON
+ 	bool "Enable heap memory zeroing on free by default"
++	depends on !KMSAN
+ 	help
+ 	  This has the effect of setting "init_on_free=1" on the kernel
+ 	  command line. This can be disabled with "init_on_free=0".
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
