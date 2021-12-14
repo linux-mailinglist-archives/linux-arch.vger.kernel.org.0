@@ -2,35 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA4D47484B
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B174748B3
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 18:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbhLNQiK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S233613AbhLNRBT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 12:01:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbhLNQiJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:38:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F4EC061574;
-        Tue, 14 Dec 2021 08:38:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1865D612FF;
-        Tue, 14 Dec 2021 16:38:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD433C34601;
-        Tue, 14 Dec 2021 16:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639499888;
-        bh=BiOMJrBttOea17b5tIemSIlhVRlcynMIgkPFw/EBLG0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dpl6WsS8qRHuu0xvc94JKoBsVUJ/sRhEXhvI9ommwHFg5ZE+JUxmCsFoHeriM9935
-         bH7nngLxCbp4L5npi5XlQ4X4JriozG2I9tkMbv9OCEmmh+Ve0dO81T9g3vmvG4VPUW
-         XLOIv18Lg5j3RfsoRPecTywT66FEUkKAW9gUbTPw=
-Date:   Tue, 14 Dec 2021 17:38:06 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Potapenko <glider@google.com>
+        with ESMTP id S233499AbhLNRBT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 12:01:19 -0500
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F14C061574
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 09:01:19 -0800 (PST)
+Received: by mail-qk1-x72a.google.com with SMTP id d21so10025374qkl.3
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 09:01:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K6SwQ7kN/dDw+w0mSseLUAWkx7P46fy2j21+TDwHRGQ=;
+        b=geSylfNXtOBB5MFpassheNNfvCZZL8x1Ti8xIAp8L7G+Cs8a5Uj4HqJbNfYU6qm2jq
+         5vCr00Av2R22T5+ybKQMT2+DZIxGWKFkQPujityyd2ZcHjzGLSmZXGo4csyMxvAC31tt
+         r19YWVeLJAE3LtK3E10d3I8Cg6I3F0OUiBXC2p2qtLaNq01HQDDzS0q1Yc8J+hXL6ntJ
+         ldppbrkbhz0x/CRAZ4Wpn8ilCgchJTxl31qpycWOVvObIakvDqz6ykJdTPnAGp23M80v
+         P98OetMrefut5qXrSfttToSSXdlZ5LSl/frMmQG7fnFg82aloqsDJaVG5IB3hfAIiM71
+         8Bpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K6SwQ7kN/dDw+w0mSseLUAWkx7P46fy2j21+TDwHRGQ=;
+        b=thYxpcb0ExqqkeXsTwoc2ImSmCY77flSvgoGa/9/9RQcVAzWV0ZGblG2Iw0GA7vZyq
+         Bn3LhUoK/q/2KW6vLzXzlZFp9KJr/N/xScIZLtE5+BbSeKTw5kRhaq2OhbnC7t/8WK6w
+         7mFFU0NtxF2YgfWMfT0bdX766TyEdfMKOgtG7DnlA8Du+e+c2c6GbHWj/zcg8zGCDzHW
+         mDGBt0bKJcVK2Hbr6G6GRTb67MBAMoqFa4TQQdv58qM4ZSbtpzMGaP5W+VFd29+4X6Cd
+         yGdmaxs5pvUWGkQYw7cUtpCxdeKhPJ1ZR3UpigPR3lLLS9kBYS8Q+6JMqSwA7ubaFNJK
+         /vWw==
+X-Gm-Message-State: AOAM532IW2rZPrs9T0D3kPTsU3rKqew7amL1iQ+rL0eGZvc/niwIDIke
+        hHx7HXY/rK9ZCZuC1Pmm0XCG31NN3HQg0wly+L2qbg==
+X-Google-Smtp-Source: ABdhPJxFv9ZFHoPXaaC/osRtc8a0bS2qHEXsr2DcKiYvm2pnK++TLb5sKoemfjwrn9CS2MWsFW6/45fBFq2DIZSvFzI=
+X-Received: by 2002:a05:620a:2848:: with SMTP id h8mr5214238qkp.610.1639501277945;
+ Tue, 14 Dec 2021 09:01:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-42-glider@google.com>
+ <YbjIbpFRqMac/X8s@kroah.com>
+In-Reply-To: <YbjIbpFRqMac/X8s@kroah.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 14 Dec 2021 18:00:41 +0100
+Message-ID: <CAG_fn=XSMbgyJZnivZCh30M3JYQsJZZ0yL+5z074B_WrEBkRDQ@mail.gmail.com>
+Subject: Re: [PATCH 41/43] security: kmsan: fix interoperability with auto-initialization
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrey Konovalov <andreyknvl@google.com>,
@@ -59,79 +80,24 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 41/43] security: kmsan: fix interoperability with
- auto-initialization
-Message-ID: <YbjIbpFRqMac/X8s@kroah.com>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-42-glider@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214162050.660953-42-glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:20:48PM +0100, Alexander Potapenko wrote:
-> Heap and stack initialization is great, but not when we are trying
-> uses of uninitialized memory. When the kernel is built with KMSAN,
-> having kernel memory initialization enabled may introduce false
-> negatives.
-> 
-> We disable CONFIG_INIT_STACK_ALL_PATTERN and CONFIG_INIT_STACK_ALL_ZERO
-> under CONFIG_KMSAN, making it impossible to auto-initialize stack
-> variables in KMSAN builds. We also disable CONFIG_INIT_ON_ALLOC_DEFAULT_ON
-> and CONFIG_INIT_ON_FREE_DEFAULT_ON to prevent accidental use of heap
-> auto-initialization.
-> 
-> We however still let the users enable heap auto-initialization at
-> boot-time (by setting init_on_alloc=1 or init_on_free=1), in which case
-> a warning is printed.
-> 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-> ---
-> Link: https://linux-review.googlesource.com/id/I86608dd867018683a14ae1870f1928ad925f42e9
-> ---
->  mm/page_alloc.c            | 4 ++++
->  security/Kconfig.hardening | 4 ++++
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index fa8029b714a81..4218dea0c76a2 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -855,6 +855,10 @@ void init_mem_debugging_and_hardening(void)
->  	else
->  		static_branch_disable(&init_on_free);
->  
-> +	if (IS_ENABLED(CONFIG_KMSAN) &&
-> +	    (_init_on_alloc_enabled_early || _init_on_free_enabled_early))
-> +		pr_info("mem auto-init: please make sure init_on_alloc and init_on_free are disabled when running KMSAN\n");
-> +
->  #ifdef CONFIG_DEBUG_PAGEALLOC
->  	if (!debug_pagealloc_enabled())
->  		return;
-> diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-> index d051f8ceefddd..bd13a46024457 100644
-> --- a/security/Kconfig.hardening
-> +++ b/security/Kconfig.hardening
-> @@ -106,6 +106,7 @@ choice
->  	config INIT_STACK_ALL_PATTERN
->  		bool "pattern-init everything (strongest)"
->  		depends on CC_HAS_AUTO_VAR_INIT_PATTERN
-> +		depends on !KMSAN
->  		help
->  		  Initializes everything on the stack (including padding)
->  		  with a specific debug value. This is intended to eliminate
-> @@ -124,6 +125,7 @@ choice
->  	config INIT_STACK_ALL_ZERO
->  		bool "zero-init everything (strongest and safest)"
->  		depends on CC_HAS_AUTO_VAR_INIT_ZERO
-> +		depends on !KMSAN
+On Tue, Dec 14, 2021 at 5:38 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> > @@ -124,6 +125,7 @@ choice
+> >       config INIT_STACK_ALL_ZERO
+> >               bool "zero-init everything (strongest and safest)"
+> >               depends on CC_HAS_AUTO_VAR_INIT_ZERO
+> > +             depends on !KMSAN
+>
+> So this means KMSAN is a developer debugging feature only and should
+> never be turned on on a real device/server that has users?
 
-So this means KMSAN is a developer debugging feature only and should
-never be turned on on a real device/server that has users?
-
-thanks,
-
-greg k-h
+100% correct. KMSAN is way slower than KASAN, it also eats 2/3 of your
+memory to store the metadata.
+I thought it was sort of self-evident, but I can surely mention this
+explicitly in the cover letter.
