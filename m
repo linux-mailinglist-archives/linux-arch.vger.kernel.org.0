@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F18E4747EC
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 437074747EE
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235565AbhLNQZL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
+        id S236217AbhLNQZV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 11:25:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236197AbhLNQX6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:23:58 -0500
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FF3C061190
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:45 -0800 (PST)
-Received: by mail-qt1-x84a.google.com with SMTP id p7-20020a05622a00c700b002b2f6944e7dso27117765qtw.10
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:45 -0800 (PST)
+        with ESMTP id S236335AbhLNQYH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:24:07 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DA1C061792
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:48 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id f13-20020adfe90d000000b001a15c110077so92640wrm.8
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:23:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=nqri0SqMC1etYNLgNBuMYaMAJIzMiZ/6wkGd9gYSOPg=;
-        b=G18riu4JI7JtKkKPqFFA5idjWjGGTTZqHBAvDJQauVQAe0CwMxRshD5JmWlf7E37ks
-         mwlaBVMnwHTHaPRmvc8izjTpFo/K6aQ60g2MJRtQD09Zi0kt6r+SwE63fluG5YCffcX3
-         ETmVIHrvmAmCsts/1Hn+sDZuXNhfiqY6oYEZO/SgyuHGBaFJFcj5R/RMsB2+P8KmbIqF
-         LpJ2h0xhFl1+ofZ0d2h/MvnuO8XyFMt5eh/vq7b4V7CqBSjK/yRE6qI8rKVbn9Fylk4v
-         FR6UfMNdjUdR8Mf9ICzS9FCWjbZML+EhSd4wW5x7J+ixaHc7MssuLWzv9rurbjT+dAZR
-         9RTg==
+        bh=DRsUBze0TCq/8OPjxRo856aiOc30zNOBN3bl6uBcnGs=;
+        b=pb+BQoZ+20k4jQn45XqB5EEUKM9VUAj9iuAHLbPgyXtF8+YsW/fWdE2vL6sFEFEoyK
+         tWCv5yjZsXSeiLNcRp7Ukw9zJKfdtRTRck34pTDgR3eAKHXUMHwrxvmjrt0vnrCi9Ntj
+         VcSfevLftX/8QebdbsT2/yyELtFYLs0K5L5GeCrGFcj/LwYUDawmOOwWa5lI+UYiUV6d
+         aDd+xSGh3C+3mSWHyY145Tmd8x8T+UjCaGtCtAdmAUcJGTsJ04N7Px5YHgXcZ0IIbHVR
+         KHuCXm+v9/dfHaUfRJl4TuJQOxWAjETiKDDAkBqZM45Aiw8oYXWucw0t068DlQk8Wo5C
+         zofw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=nqri0SqMC1etYNLgNBuMYaMAJIzMiZ/6wkGd9gYSOPg=;
-        b=EXB72pNgmzd0PEpszsjNEUnZ/UR26X/Mzxq6EJikoor/zfrYDhKUFUEZHJBdJJv3JW
-         5g/0lZs6spJC3tnvkp5x8BXutsECDZSGkcKaYUcvuwB9GlKJwXSCtMaUkxrUUmzMb+mA
-         M7MARlrBD9z8rB/7zKxXMjH7APhJ1X4o1hoclY6ZqPeRBv8/XsbJjncY5FFNFVStSKQw
-         5pstFUyLlufm1nNYM1m3NNTPOyRt1XROM0EO7IUs417A6sO/HgWJ/Fosy1dsa+/o3mc3
-         ITN5yyWHeqDWBoAkiL4zrOG2OiNkQ/X6TG4e2WL+gmdP6Erag/MRAX3CT2R5kT9BR5aw
-         V+Ew==
-X-Gm-Message-State: AOAM532AvPwhagCUjwOQRPNBYA5YW9x5LESEGMhYgK4aauimmifSywLq
-        lAMIQg+NeSUxau9kKsclT/2lYhzHFgA=
-X-Google-Smtp-Source: ABdhPJxdzjFsV5SurqsBYzpnQqwewId1DkZ5ulNTElSjNHN2aEHjpBIN3oypc4pwNeZ7UyA+RJRV8P/AS1U=
+        bh=DRsUBze0TCq/8OPjxRo856aiOc30zNOBN3bl6uBcnGs=;
+        b=t3aDBibhTAA/yKqxKY0ILDkPs19bBoDXnUNTzDkFflQw2s4HfBdfXvlumCUiayX3bH
+         8lRTN9MmFMj/Y91CZkLgAY2Y6F8johTq/z1oLXPuG1plvq3dZOKUNysZTVvguYp6d0ei
+         U5+BxRJFnrHRFOBVjccscFa+K32E5nG1383FJWhfMW+YPWvoHcJBQDuCVbyXxyv44ex4
+         ItMLXnGw4QDhxXpui+nj+ct0vf4fjTmLGxM9dFFk7x5BcDJ5iV4DM1BgqiX0E5nsf7Hz
+         Om3I7xvqKIixDWSz/MBhWBDV0SOWCQ6OX6aKizPZ7Thciu6AREjBdSdZR6I77xUHATQU
+         Tkdg==
+X-Gm-Message-State: AOAM532tdKkprHg/12eeIesTyq/EMWzPnAvz8lRYkGy4YYRykHAOFwOi
+        R6R1qbJdeNWh5Gsi9PfFE//XbNrWhi0=
+X-Google-Smtp-Source: ABdhPJzbEf5lWlF6RWfh8Re9EBCpxKO3TumG/VSHFoE+dz+wF3Gg0ijQABT1lDRRxNcQr8YrfKX8rhC5/wo=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:a05:622a:18c:: with SMTP id
- s12mr6962473qtw.556.1639499024661; Tue, 14 Dec 2021 08:23:44 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:48 +0100
+ (user=glider job=sendgmr) by 2002:a5d:644f:: with SMTP id d15mr6736523wrw.662.1639499027200;
+ Tue, 14 Dec 2021 08:23:47 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:49 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-42-glider@google.com>
+Message-Id: <20211214162050.660953-43-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 41/43] security: kmsan: fix interoperability with auto-initialization
+Subject: [PATCH 42/43] objtool: kmsan: list KMSAN API functions as uaccess-safe
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,80 +87,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Heap and stack initialization is great, but not when we are trying
-uses of uninitialized memory. When the kernel is built with KMSAN,
-having kernel memory initialization enabled may introduce false
-negatives.
-
-We disable CONFIG_INIT_STACK_ALL_PATTERN and CONFIG_INIT_STACK_ALL_ZERO
-under CONFIG_KMSAN, making it impossible to auto-initialize stack
-variables in KMSAN builds. We also disable CONFIG_INIT_ON_ALLOC_DEFAULT_ON
-and CONFIG_INIT_ON_FREE_DEFAULT_ON to prevent accidental use of heap
-auto-initialization.
-
-We however still let the users enable heap auto-initialization at
-boot-time (by setting init_on_alloc=1 or init_on_free=1), in which case
-a warning is printed.
+KMSAN inserts API function calls in a lot of places (function entries
+and exits, local variables, memory accesses), so they may get called
+from the uaccess regions as well.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I86608dd867018683a14ae1870f1928ad925f42e9
+Link: https://linux-review.googlesource.com/id/I242bc9816273fecad4ea3d977393784396bb3c35
 ---
- mm/page_alloc.c            | 4 ++++
- security/Kconfig.hardening | 4 ++++
- 2 files changed, 8 insertions(+)
+ tools/objtool/check.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index fa8029b714a81..4218dea0c76a2 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -855,6 +855,10 @@ void init_mem_debugging_and_hardening(void)
- 	else
- 		static_branch_disable(&init_on_free);
- 
-+	if (IS_ENABLED(CONFIG_KMSAN) &&
-+	    (_init_on_alloc_enabled_early || _init_on_free_enabled_early))
-+		pr_info("mem auto-init: please make sure init_on_alloc and init_on_free are disabled when running KMSAN\n");
-+
- #ifdef CONFIG_DEBUG_PAGEALLOC
- 	if (!debug_pagealloc_enabled())
- 		return;
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index d051f8ceefddd..bd13a46024457 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -106,6 +106,7 @@ choice
- 	config INIT_STACK_ALL_PATTERN
- 		bool "pattern-init everything (strongest)"
- 		depends on CC_HAS_AUTO_VAR_INIT_PATTERN
-+		depends on !KMSAN
- 		help
- 		  Initializes everything on the stack (including padding)
- 		  with a specific debug value. This is intended to eliminate
-@@ -124,6 +125,7 @@ choice
- 	config INIT_STACK_ALL_ZERO
- 		bool "zero-init everything (strongest and safest)"
- 		depends on CC_HAS_AUTO_VAR_INIT_ZERO
-+		depends on !KMSAN
- 		help
- 		  Initializes everything on the stack (including padding)
- 		  with a zero value. This is intended to eliminate all
-@@ -208,6 +210,7 @@ config STACKLEAK_RUNTIME_DISABLE
- 
- config INIT_ON_ALLOC_DEFAULT_ON
- 	bool "Enable heap memory zeroing on allocation by default"
-+	depends on !KMSAN
- 	help
- 	  This has the effect of setting "init_on_alloc=1" on the kernel
- 	  command line. This can be disabled with "init_on_alloc=0".
-@@ -220,6 +223,7 @@ config INIT_ON_ALLOC_DEFAULT_ON
- 
- config INIT_ON_FREE_DEFAULT_ON
- 	bool "Enable heap memory zeroing on free by default"
-+	depends on !KMSAN
- 	help
- 	  This has the effect of setting "init_on_free=1" on the kernel
- 	  command line. This can be disabled with "init_on_free=0".
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 21735829b860c..9620b5224754e 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -937,6 +937,25 @@ static const char *uaccess_safe_builtin[] = {
+ 	"__sanitizer_cov_trace_cmp4",
+ 	"__sanitizer_cov_trace_cmp8",
+ 	"__sanitizer_cov_trace_switch",
++	/* KMSAN */
++	"kmsan_copy_to_user",
++	"kmsan_report",
++	"kmsan_unpoison_memory",
++	"__msan_chain_origin",
++	"__msan_get_context_state",
++	"__msan_instrument_asm_store",
++	"__msan_metadata_ptr_for_load_1",
++	"__msan_metadata_ptr_for_load_2",
++	"__msan_metadata_ptr_for_load_4",
++	"__msan_metadata_ptr_for_load_8",
++	"__msan_metadata_ptr_for_load_n",
++	"__msan_metadata_ptr_for_store_1",
++	"__msan_metadata_ptr_for_store_2",
++	"__msan_metadata_ptr_for_store_4",
++	"__msan_metadata_ptr_for_store_8",
++	"__msan_metadata_ptr_for_store_n",
++	"__msan_poison_alloca",
++	"__msan_warning",
+ 	/* UBSAN */
+ 	"ubsan_type_mismatch_common",
+ 	"__ubsan_handle_type_mismatch",
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
