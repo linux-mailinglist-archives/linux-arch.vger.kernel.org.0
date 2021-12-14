@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 530DB474791
-	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C9C474793
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 17:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235637AbhLNQWJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 14 Dec 2021 11:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S235611AbhLNQWK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 14 Dec 2021 11:22:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235630AbhLNQWE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:04 -0500
-Received: from mail-lf1-x14a.google.com (mail-lf1-x14a.google.com [IPv6:2a00:1450:4864:20::14a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A375DC06173F
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:03 -0800 (PST)
-Received: by mail-lf1-x14a.google.com with SMTP id o11-20020a056512230b00b0041ca68ddf35so9007747lfu.22
-        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:03 -0800 (PST)
+        with ESMTP id S235671AbhLNQWH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 14 Dec 2021 11:22:07 -0500
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31885C061756
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:07 -0800 (PST)
+Received: by mail-wr1-x449.google.com with SMTP id f5-20020a5d4dc5000000b001a0b1481734so2038994wru.23
+        for <linux-arch@vger.kernel.org>; Tue, 14 Dec 2021 08:22:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=T+mYYL6aSbEG/4iKq3fuhN/0C7rIH3abijCddrO3Btg=;
-        b=DCe7tBgES2hvR4caFxy5bljYM1IT44WZzYzikcnqZUOJYlBBpJqB6nRuLLyzsaMupI
-         +zXKLFJ7f3UI79Rmtw28+xRXo8HNv+qUnzkeyIO7L+5D3boqrr2FNBogjt5YON2BTV1u
-         AFx1rnPzU6vEU1A6/jgSC9hZLl05kZuxP3s0cd1WgWE7jYEl1d8Mvo0h6VTze1GPd9qP
-         u0gcVOi9sYfqx+0A/Hd2f3NIBmpk1jfJD9n/izeZtsvQEeb0tr4plLmMtbjfmWKKRwmf
-         pnlj7ZnCniw0y7nFqrzGkFg44r4tZcbmetehf9NjhTG7/aFMSy/ubcrZ5v5wlj0BqfdP
-         ahZg==
+        bh=CQyambTSmP5kC58BDOZ38NkSus/ix4gF7HsyVWQKWXc=;
+        b=RE3Ne1BeyAaL9++X1sCY7W6HxZFmsx3WE7bIxrpwlErXaOtGOfyERSJ5er3nl4ZCpY
+         zmAzhk03fbH3MJBmjIftslQUgrs8buJ/7AMueg53qeMYueUQlTzpKz7cHQ/9UUrSNWxa
+         5Q5AaP2Tfoy2xyi3yDx/1yESKxT4BNyhXGlX2I0kRZ3z3SiZwhdsTzcPGlF/D0Jdeu5t
+         PdY0JYCa8VbVCQxB2i1OtWjEZyLGgvMc0UvOuRLDIK2PS6jiAyEPXnpmIzANy2bhQnXQ
+         FLg3tJRU2/w81RXVJWYgfl6HuKYVgTqZOrjBUgfZu4hvco/0MV0VJnM1KAFOmShvQpfR
+         EHFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=T+mYYL6aSbEG/4iKq3fuhN/0C7rIH3abijCddrO3Btg=;
-        b=WbRNDwQcbyNnNpwAwndEt1e37dUEeMmZMf7OwufE0u+XJe+ESboWingW1pCE26lIR+
-         O63gCxrCeeG6hjx32gQq1B2K0UbG+80cxJEDTsDgpY9APYv4TQUWsFRCI2RF40bjzeLc
-         V/KCYW8aAUnlHFlw6o1ZwtEDF2L5eyOtCVJcAFIQgJhkBmeKgIbL649h/dB+f0GZbLQY
-         Ypx9lmZetnBzIoB3ucAyhCnYISFAKG3lW5qsVtubvlizpVgyDc/l9N0LhfQH+ycD7i53
-         gIh1NSdr4c5x8JE9XFVqn10AfAFCmJD8qqGbClebpuBjC7pmHbF38aBaCBKJDLbzoJwn
-         x+sw==
-X-Gm-Message-State: AOAM531AR3jViGmbOZbsIyAAOfPTEyYx4IoJdG4tjJKNC215P21ZjlOJ
-        8KYmPcUEGfDfmLIt9yUznGKGcKlfDzc=
-X-Google-Smtp-Source: ABdhPJzSecVDmOS9zjdfpZRUjT0HViIDEGkgFckmlsJrOrsrpGbbAJowPx7hwdmUVKVKoxwpUINCdecE840=
+        bh=CQyambTSmP5kC58BDOZ38NkSus/ix4gF7HsyVWQKWXc=;
+        b=rZgLU6ayyzO+CvLlrPc1yZBlA/myfVmNwKWcOSvl8eLg5V9l56KrUIz79cNITV7h//
+         TkcREJSqLDT8vmXqXGca/IjDGr4eCHwCXzpRndhy2wKPvLYLozD8X5o59NmWsa9jjMa8
+         JRLImLK0BH2zXJtcN1KpNXgD1QAqCfvRi5wTEmmhN41Xeay1D4FQxlFJuJG2/OWgXpdy
+         xGptQFjqy/rpbv1iPy+L3FaC+rVtJcA5CD6MEnMyTR61Uy2HTx3B3HPD7Bo69/ox5Ow9
+         uhgHsyVayr/LeVtOcAtRrdUZMxeSQvoNA6uOAhM3grrGp4IjfVScnN193j8JzgW3DKpF
+         hQ2Q==
+X-Gm-Message-State: AOAM5302UUadBLCPpru7WLhoiD9sdSPx2MRPoPbd3Y/EPRPCahIvOflB
+        BvXjXCw1Xwf9rU+5hymgBjMTFiUjh9c=
+X-Google-Smtp-Source: ABdhPJyj4nXTOH98QEuMjM8LdPyxWb8TjdCYI8xbjpieTOD1vLMhRc6PwL5s5uZRNEINQF/xeJdedBJ48NU=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:357e:2b9d:5b13:a652])
- (user=glider job=sendgmr) by 2002:ac2:44c5:: with SMTP id d5mr5598346lfm.275.1639498921745;
- Tue, 14 Dec 2021 08:22:01 -0800 (PST)
-Date:   Tue, 14 Dec 2021 17:20:10 +0100
+ (user=glider job=sendgmr) by 2002:a05:600c:1d1b:: with SMTP id
+ l27mr5818449wms.1.1639498924568; Tue, 14 Dec 2021 08:22:04 -0800 (PST)
+Date:   Tue, 14 Dec 2021 17:20:11 +0100
 In-Reply-To: <20211214162050.660953-1-glider@google.com>
-Message-Id: <20211214162050.660953-4-glider@google.com>
+Message-Id: <20211214162050.660953-5-glider@google.com>
 Mime-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com>
 X-Mailer: git-send-email 2.34.1.173.g76aa8bc2d0-goog
-Subject: [PATCH 03/43] kasan: common: adapt to the new prototype of __stack_depot_save()
+Subject: [PATCH 04/43] instrumented.h: allow instrumenting both sides of copy_from_user()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,29 +87,152 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Pass extra_bits=0, as KASAN does not intend to store additional
-information in the stack handle. No functional change.
+Introduce instrument_copy_from_user_before() and
+instrument_copy_from_user_after() hooks to be invoked before and after
+the call to copy_from_user().
+
+KASAN and KCSAN will be only using instrument_copy_from_user_before(),
+but for KMSAN we'll need to insert code after copy_from_user().
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I932d8f4f11a41b7483e0d57078744cc94697607a
+Link: https://linux-review.googlesource.com/id/I855034578f0b0f126734cbd734fb4ae1d3a6af99
 ---
- mm/kasan/common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/instrumented.h | 21 +++++++++++++++++++--
+ include/linux/uaccess.h      | 19 ++++++++++++++-----
+ lib/iov_iter.c               |  9 ++++++---
+ lib/usercopy.c               |  3 ++-
+ 4 files changed, 41 insertions(+), 11 deletions(-)
 
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 8428da2aaf173..6c690ca0ee41a 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -37,7 +37,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
- 
- 	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
- 	nr_entries = filter_irq_stacks(entries, nr_entries);
--	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
-+	return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
+diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+index 42faebbaa202a..ee8f7d17d34f5 100644
+--- a/include/linux/instrumented.h
++++ b/include/linux/instrumented.h
+@@ -120,7 +120,7 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
  }
  
- void kasan_set_track(struct kasan_track *track, gfp_t flags)
+ /**
+- * instrument_copy_from_user - instrument writes of copy_from_user
++ * instrument_copy_from_user_before - add instrumentation before copy_from_user
+  *
+  * Instrument writes to kernel memory, that are due to copy_from_user (and
+  * variants). The instrumentation should be inserted before the accesses.
+@@ -130,10 +130,27 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+  * @n number of bytes to copy
+  */
+ static __always_inline void
+-instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
++instrument_copy_from_user_before(const void *to, const void __user *from, unsigned long n)
+ {
+ 	kasan_check_write(to, n);
+ 	kcsan_check_write(to, n);
+ }
+ 
++/**
++ * instrument_copy_from_user_after - add instrumentation after copy_from_user
++ *
++ * Instrument writes to kernel memory, that are due to copy_from_user (and
++ * variants). The instrumentation should be inserted after the accesses.
++ *
++ * @to destination address
++ * @from source address
++ * @n number of bytes to copy
++ * @left number of bytes not copied (as returned by copy_from_user)
++ */
++static __always_inline void
++instrument_copy_from_user_after(const void *to, const void __user *from,
++				unsigned long n, unsigned long left)
++{
++}
++
+ #endif /* _LINUX_INSTRUMENTED_H */
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index ac0394087f7d4..8dadd8642afbb 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -98,20 +98,28 @@ static inline void force_uaccess_end(mm_segment_t oldfs)
+ static __always_inline __must_check unsigned long
+ __copy_from_user_inatomic(void *to, const void __user *from, unsigned long n)
+ {
+-	instrument_copy_from_user(to, from, n);
++	unsigned long res;
++
++	instrument_copy_from_user_before(to, from, n);
+ 	check_object_size(to, n, false);
+-	return raw_copy_from_user(to, from, n);
++	res = raw_copy_from_user(to, from, n);
++	instrument_copy_from_user_after(to, from, n, res);
++	return res;
+ }
+ 
+ static __always_inline __must_check unsigned long
+ __copy_from_user(void *to, const void __user *from, unsigned long n)
+ {
++	unsigned long res;
++
+ 	might_fault();
++	instrument_copy_from_user_before(to, from, n);
+ 	if (should_fail_usercopy())
+ 		return n;
+-	instrument_copy_from_user(to, from, n);
+ 	check_object_size(to, n, false);
+-	return raw_copy_from_user(to, from, n);
++	res = raw_copy_from_user(to, from, n);
++	instrument_copy_from_user_after(to, from, n, res);
++	return res;
+ }
+ 
+ /**
+@@ -155,8 +163,9 @@ _copy_from_user(void *to, const void __user *from, unsigned long n)
+ 	unsigned long res = n;
+ 	might_fault();
+ 	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
+-		instrument_copy_from_user(to, from, n);
++		instrument_copy_from_user_before(to, from, n);
+ 		res = raw_copy_from_user(to, from, n);
++		instrument_copy_from_user_after(to, from, n, res);
+ 	}
+ 	if (unlikely(res))
+ 		memset(to + (n - res), 0, res);
+diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+index 66a740e6e153c..28c033cb9e803 100644
+--- a/lib/iov_iter.c
++++ b/lib/iov_iter.c
+@@ -161,13 +161,16 @@ static int copyout(void __user *to, const void *from, size_t n)
+ 
+ static int copyin(void *to, const void __user *from, size_t n)
+ {
++	size_t res = n;
++
+ 	if (should_fail_usercopy())
+ 		return n;
+ 	if (access_ok(from, n)) {
+-		instrument_copy_from_user(to, from, n);
+-		n = raw_copy_from_user(to, from, n);
++		instrument_copy_from_user_before(to, from, n);
++		res = raw_copy_from_user(to, from, n);
++		instrument_copy_from_user_after(to, from, n, res);
+ 	}
+-	return n;
++	return res;
+ }
+ 
+ static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t bytes,
+diff --git a/lib/usercopy.c b/lib/usercopy.c
+index 7413dd300516e..1505a52f23a01 100644
+--- a/lib/usercopy.c
++++ b/lib/usercopy.c
+@@ -12,8 +12,9 @@ unsigned long _copy_from_user(void *to, const void __user *from, unsigned long n
+ 	unsigned long res = n;
+ 	might_fault();
+ 	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
+-		instrument_copy_from_user(to, from, n);
++		instrument_copy_from_user_before(to, from, n);
+ 		res = raw_copy_from_user(to, from, n);
++		instrument_copy_from_user_after(to, from, n, res);
+ 	}
+ 	if (unlikely(res))
+ 		memset(to + (n - res), 0, res);
 -- 
 2.34.1.173.g76aa8bc2d0-goog
 
