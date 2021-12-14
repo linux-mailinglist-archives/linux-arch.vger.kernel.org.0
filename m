@@ -2,218 +2,293 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8363647381B
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Dec 2021 23:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05054739BE
+	for <lists+linux-arch@lfdr.de>; Tue, 14 Dec 2021 01:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244073AbhLMWy7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Dec 2021 17:54:59 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:41916 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244059AbhLMWy4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Dec 2021 17:54:56 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:51374)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwuDf-0081Y4-Rt; Mon, 13 Dec 2021 15:54:55 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95]:60446 helo=localhost.localdomain)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1mwuDe-007pqT-Gh; Mon, 13 Dec 2021 15:54:55 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Mon, 13 Dec 2021 16:53:50 -0600
-Message-Id: <20211213225350.27481-8-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        id S244511AbhLNArD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Dec 2021 19:47:03 -0500
+Received: from mail-co1nam11lp2170.outbound.protection.outlook.com ([104.47.56.170]:9383
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233802AbhLNArD (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 13 Dec 2021 19:47:03 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JC8jvn5T5D5Q6XabL4ULekJ/3X+BVpTW2yIZiaR2Gc58XB7Bhfxrmsf4GRRzBrxL/3Uq3U+siCi6hjGlXa5r/DyDNxrWjGLsuFTUErTJZZLxD7i8gAUR6VJ/erND6rUq3Dv7J/B2jBtbUsF/1NtqbvJiDC+4HRnDBmrXo5gtlD0ZjHxWCG000V0MR7pDjjZXJ/XwxCxDqqQmV8HTx0aeeRzQt5E0SmFRY3/vDvv2H7CW5V1TKmFVuLSL+QZB2dcKWiUUTrDv1bSyyVzLCtywX9ruW1j7WIp7fus/4PukjttI+PGfrRqdGBTY4BrTzxWvmv3Hpq9PdCfgHdEzDi/OJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g1T9Z/x99VfOQnRWyEaPpcOLzuGRvEgRoL3IbK2og7o=;
+ b=NdMmTRQTpPP5onD+HmQ+txvPKkwYmA8//gcA55xHiqmAc0EAb5Ou9oh495x7MDNRiJpjBD5GbzOIvAYY/CeFZKuOoW0MtwHSjx4iB1RPteSjtUijsVQJA1oZKv2Ij5AfooJOcd+HgQkkfaLlLQ5AxoGGUk2GvxHMi3fbGrgxGdFdT24BVkRK9ZHSexwXlv4yBX5+QE+Xi4jKx1oNpJVgKtG+LtK92LmF1eYeGmASrdcmWkFSieK5xaD8Ju45oljpZLXdjbBldQQtD0Px8vM7uPUkw7rd9nH+MOcxvIwkuQWBt4MDjuDSAq8+kEJjVchXl+6a6sssAmEKDuHNCc8uTA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g1T9Z/x99VfOQnRWyEaPpcOLzuGRvEgRoL3IbK2og7o=;
+ b=Ub0WJvFgImPYdZiN+cktFCfDMls/0l4g2vHJrA9HK2mFQSnj8V/Rp1vlT62PKqHKyMI83mxFH7dG+Qsf90HVdHHquctsu4+8QWyuDDIx9cb9g/wfFyyuZpHyVy4NqAJzHCOUMuZWpM1DuJYhR8CaJwiPE/Ep2O6aGCAk58iCQrI=
+Received: from BN8PR21MB1140.namprd21.prod.outlook.com (2603:10b6:408:72::11)
+ by DM5PR21MB1851.namprd21.prod.outlook.com (2603:10b6:3:87::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.5; Tue, 14 Dec
+ 2021 00:46:59 +0000
+Received: from BN8PR21MB1140.namprd21.prod.outlook.com
+ ([fe80::b5b2:afd4:68e0:cade]) by BN8PR21MB1140.namprd21.prod.outlook.com
+ ([fe80::b5b2:afd4:68e0:cade%7]) with mapi id 15.20.4823.005; Tue, 14 Dec 2021
+ 00:46:59 +0000
+From:   Sunil Muthuswamy <sunilmut@microsoft.com>
+To:     Marc Zyngier <maz@kernel.org>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: [PATCH v6 2/2] arm64: PCI: hv: Add support for
+ Hyper-V vPCI
+Thread-Topic: [EXTERNAL] Re: [PATCH v6 2/2] arm64: PCI: hv: Add support for
+ Hyper-V vPCI
+Thread-Index: AQHX3FmOZOjXOoUUfkSC0w1opVcY7awLANCAgCZKjcA=
+Date:   Tue, 14 Dec 2021 00:46:59 +0000
+Message-ID: <BN8PR21MB114040F48FB7F3988BA95032C0759@BN8PR21MB1140.namprd21.prod.outlook.com>
+References: <1637225490-2213-1-git-send-email-sunilmut@linux.microsoft.com>
+        <1637225490-2213-3-git-send-email-sunilmut@linux.microsoft.com>
+ <875yso6tbi.wl-maz@kernel.org>
+In-Reply-To: <875yso6tbi.wl-maz@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fee5e140-dd0f-45bb-83a7-6e329258b4ed;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-12-14T00:32:10Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a9991329-9e52-4f50-7a29-08d9be9b3cd2
+x-ms-traffictypediagnostic: DM5PR21MB1851:EE_
+x-microsoft-antispam-prvs: <DM5PR21MB1851848F91E7AA20D72A7387C0759@DM5PR21MB1851.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /9ecqgErj1RPMzxO60/kG+umLIxqbEJlLg5K6XTWBFR9Cocmx2sqdngwLCwpsGTu2YbaXohres+JHt9jMiaVw7D8NlLVvTS1WhzZp5bcmM1XZp2N6tTG3w253a2gX85mdyjL4+jh7kpqjZ8Tkm7xke+obe1zGZokyzL8UemLtbuRhpbktH3LQeVfyHI5r5eUiaCLWsfYiUAO3m/tDBUYOA2zH1GhZCn3Rce9XUpcLYlGqB9kKRHC1/5CT+yDnYVtN0A01bHz5PnS7KOUJ3R9RXLZYUTyVB6L+BkIEeK75k1jchWoeTwRFMoQoCP/bPHVFGgNdopoOJrcXogsbeCMI63PQcsZ3mc+RikF0V+teg/YfVNekE6NdKzZqtSDtf367k3QpUln+Gr2FchUJlc4HkwJmhAzQ2827QcmabGvblRH1SSQogouYQQdh0bc5Ter+TrBdJZe2bRgkwjTAudhoaXPojgwflsqAaONXRkAiNFs/aGv3fik4rJLWKjEX+PEjsJwXEh0UYCFin1Kf0gQsUuazSHBJO+gF2EQvC4mwR9a5gthQEA4tGSO36wfsN0fDI1n+r10CFyggRhFUP6R6MyLk3szqHizX62UtZmuaEVgU+3n6e+2q+42OTQ+z8WwyDepp4Sy+bDvhtIMpXXZD269F7iAHfu4AMUFzuDptkzzS5DYLg0O9bLYEDRCp4V/6gvnPSh4NYl9Sf0108HrDCWBV/xCXquR8YhylAsNfIwGFsT7VTPUIQy2sdjTrcNW
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR21MB1140.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38070700005)(122000001)(76116006)(64756008)(38100700002)(4326008)(66476007)(66556008)(8676002)(7696005)(5660300002)(7416002)(54906003)(53546011)(66446008)(110136005)(316002)(8936002)(508600001)(71200400001)(66946007)(86362001)(10290500003)(82950400001)(186003)(55016003)(52536014)(33656002)(9686003)(8990500004)(83380400001)(6506007)(2906002)(82960400001)(20210929001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?n6SSDuRmMj1TDQgr39zvgyS3Pqb07SkjIBSAd29923Lq8OZul818ISQSgZuF?=
+ =?us-ascii?Q?5zDWfNjWUbU6xDKsy40b2ctliF0LJ351y5wstRvPbBd8GZDI70YWlwysB252?=
+ =?us-ascii?Q?juHFsgsxeED5hRksClDABQISdsOAmq4ZjDKmIqN+dQ5Dhq4DdmS2w/Bls0Xp?=
+ =?us-ascii?Q?vIDsPMHv5j0ukNL1aidBCo4F01Cfl+qDFIWIyY55ROskQSAyv8IV3oQR7hp/?=
+ =?us-ascii?Q?NVI9jcodSTtPzZDdl62g7PSi84X20RZDuZQED9GOgvg0qD0LA8zvQiZTmBPM?=
+ =?us-ascii?Q?mfIgefN/xIcwqqGQ9id6Jr+Mu5kULsVveJnl+VofiZFzc9anRJywLIdFnHdy?=
+ =?us-ascii?Q?t/U9mdeBhEjFnmPxmw6KT/w+4l3ov50HxWV4EwcytKnfwAohOv1cVds18ETl?=
+ =?us-ascii?Q?aXzZjBbSOpVvIbHXZc0sl8C+tl9P8L7uRuBWnMBypcT5Umf+rwfSXRmXi03k?=
+ =?us-ascii?Q?gsXbz2CQDnipAjCs86zfCf8dmrIOYJP3GElzGBTCVxILUMwk44GnodYd6FG8?=
+ =?us-ascii?Q?wYCzVryk6BCkkDXbK89gAsTo83W8naM/WsVcy6FMh2oytHt9cfIZ7wq1QbEW?=
+ =?us-ascii?Q?7jjI0X/FgJHn0eztj8tRh2aOOOpRBkQflaiLQebH38+mFQNr7WXmEMc2A9Lk?=
+ =?us-ascii?Q?ogrFEacWWyhZD3yMOJ6D6AlP0KuQbly7mGWSmSOQ0xzxKl+ka/NyQG+8CHOj?=
+ =?us-ascii?Q?Wlzxy0s4RZ+MVLHvbQMbxqauETne9nmbnirxYt69iZ5LmZe/VWhx7IzdaioR?=
+ =?us-ascii?Q?RY8frsjDPW9mL0oo82fJS6f6e5l46r0VXN5lWTFUrf9p7wfh71KbJaJEB5Cd?=
+ =?us-ascii?Q?eR/B4PbMlcjx1X544xJ2MbVYXA7WMNGr5zZSD5ZmdN1S2kyT3WB/35dn8RhN?=
+ =?us-ascii?Q?Gl5u15T1+L7q2HLrCYMotkZ8zOXasBPtAn3hk/EDWzKo7Ima9b99cUkz7k3p?=
+ =?us-ascii?Q?CGOTe+9kA913Ei7/pOq4fEYD9kd97ugZpXWIbVezYes1vdKI/ZnRa7sjddvo?=
+ =?us-ascii?Q?eQm4eezlzIqj0Kw5abPgk5SYuAUu+Lv8JfSAChzQSZ6f6WeezbtyYL8FbT3w?=
+ =?us-ascii?Q?0n6Nxl7S7d5EesazB5/Js0Kb/dbqENKm0RS+wS6aUrBOYNLMP5V1bhlmFhmB?=
+ =?us-ascii?Q?hDNpmovuFlPStzOgQdvfPMhWlTIAXuvAByoVM5mQyp5xUXzWfwOEXac6NsBS?=
+ =?us-ascii?Q?8KdWSE6HT6Kd/8PyinjNr4s+I28qPnOcD384nX/vDwf4g9hSa1/JSdaWOziC?=
+ =?us-ascii?Q?eue51cYl7albB2wrHYlgDjVCnsUygQRP2wYvsQkEmfVKG1y39Xlv3cFUbezR?=
+ =?us-ascii?Q?hdjdii9mqxoc8wjCOnQTGZUuHvcnX61rwtv6vNP6qaCaXWU2yPrZ3SPpT4st?=
+ =?us-ascii?Q?WWzFKOpXv45xOlUiHYCAo1eV+11B12Kv6Jmjw6SZd1pfpBz9ZZYfpWOthn9O?=
+ =?us-ascii?Q?AUtNFQXairG1sfK46w6XUbQ90g7NqZVI6lq0oR7yALMyO/ZgplDNbZSYub2V?=
+ =?us-ascii?Q?fpP5tH0olLw58+NVe9IjPb/cA5Y7KVMXlcBjy7sMkwB0Th59mfG7Vbce0HxO?=
+ =?us-ascii?Q?StYGIL5mdnry1bkXo+PtZxVff/crImLRKEhxPrLP9DTRPxh7t0efropdkWaG?=
+ =?us-ascii?Q?5Wa1jChRQUuh6pOEG8qemqEp7QR93ubJnGfC51IvgWmGBv929o6YtquEx8hb?=
+ =?us-ascii?Q?hgWeTHJd8AxdL67TCY0iqc/blzKgKH9sGmdoteEfypFRH4YRMovLuoASzOTG?=
+ =?us-ascii?Q?BGkFHh1Y8Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1mwuDe-007pqT-Gh;;;mid=<20211213225350.27481-8-ebiederm@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/Lbs+tHYdygWWUhu2vBsg3lNOGTPj2TtE=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TooManySym_01,XMNoVowels,XM_Body_Dirty_Words
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  1.0 XM_Body_Dirty_Words Contains a dirty word
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 496 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 12 (2.5%), b_tie_ro: 11 (2.1%), parse: 0.99
-        (0.2%), extract_message_metadata: 11 (2.3%), get_uri_detail_list: 2.2
-        (0.4%), tests_pri_-1000: 13 (2.7%), tests_pri_-950: 1.38 (0.3%),
-        tests_pri_-900: 1.25 (0.3%), tests_pri_-90: 56 (11.3%), check_bayes:
-        55 (11.0%), b_tokenize: 9 (1.9%), b_tok_get_all: 9 (1.9%),
-        b_comp_prob: 2.4 (0.5%), b_tok_touch_all: 30 (6.0%), b_finish: 1.00
-        (0.2%), tests_pri_0: 383 (77.1%), check_dkim_signature: 0.55 (0.1%),
-        check_dkim_adsp: 2.9 (0.6%), poll_dns_idle: 1.24 (0.2%), tests_pri_10:
-        3.4 (0.7%), tests_pri_500: 10 (2.0%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 8/8] signal: Remove the helper signal_group_exit
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR21MB1140.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9991329-9e52-4f50-7a29-08d9be9b3cd2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Dec 2021 00:46:59.7471
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: vihonr5MSLRlOc0CED3HVXhGUOehxrjmYf2y6FZ+U7MigWcrO2x+5gZ5mn9WF4uKZ1bqFtJpNX5zjoGAJtf1dNA0Ck5M3u5dF35ae2uu2Ls=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR21MB1851
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This helper is misleading.  It tests for an ongoing exec as well as
-the process having received a fatal signal.
+On Friday, November 19, 2021 7:47 AM,
+Marc Zyngier <maz@kernel.org> wrote:
 
-Sometimes it is appropriate to treat an on-going exec differently than
-a process that is shutting down due to a fatal signal.  In particular
-taking the fast path out of exit_signals instead of retargeting
-signals is not appropriate during exec, and not changing the the exit
-code in do_group_exit during exec.
+[nip..]
 
-Removing the helper so that both cases must be coded for explicitly
-makes it more obvious what is going on as both cases must be coded for
-explicitly.
+> > +static int hv_pci_vec_alloc_device_irq(struct irq_domain *domain,
+> > +				       unsigned int nr_irqs,
+> > +				       irq_hw_number_t *hwirq)
+> > +{
+> > +	struct hv_pci_chip_data *chip_data =3D domain->host_data;
+> > +	unsigned int index;
+> > +
+> > +	/* Find and allocate region from the SPI bitmap */
+> > +	mutex_lock(&chip_data->map_lock);
+> > +	index =3D bitmap_find_free_region(chip_data->spi_map,
+> > +					HV_PCI_MSI_SPI_NR,
+> > +					get_count_order(nr_irqs));
+> > +	mutex_unlock(&chip_data->map_lock);
+> > +	if (index < 0)
+> > +		return -ENOSPC;
+> > +
+> > +	*hwirq =3D index + HV_PCI_MSI_SPI_START;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int hv_pci_vec_irq_gic_domain_alloc(struct irq_domain *domain,
+> > +					   unsigned int virq,
+> > +					   irq_hw_number_t hwirq)
+> > +{
+> > +	struct irq_fwspec fwspec;
+> > +
+> > +	fwspec.fwnode =3D domain->parent->fwnode;
+> > +	fwspec.param_count =3D 2;
+> > +	fwspec.param[0] =3D hwirq;
+> > +	fwspec.param[1] =3D IRQ_TYPE_EDGE_RISING;
+> > +
+> > +	return irq_domain_alloc_irqs_parent(domain, virq, 1, &fwspec);
+>=20
+> I think you are missing the actual edge configuration here. Since the
+> interrupt specifier doesn't come from either DT or ACPI, nobody will
+> set the trigger type, and you have to do it yourself here. At the
+> moment, you will get whatever is in the GIC configuration.
+>=20
 
-While removing the helper fix the two cases where I have observed
-using signal_group_helper resulted in the wrong result.
+I see, thanks. So, just a call of irq_set_irq_type(IRQ_TYPE_EDGE_RISING)?
 
-For the unset exit_code in do_group_exit during an exec I use 0 as I
-think that is what group_exit_code has been set to most of the time.
-During a thread group stop group_exit_code is set to the stop signal
-and when the thread group receives SIGCONT group_exit_code is reset to
-0.
+> > +}
+> > +
+> > +static int hv_pci_vec_irq_domain_alloc(struct irq_domain *domain,
+> > +				       unsigned int virq, unsigned int nr_irqs,
+> > +				       void *args)
+> > +{
+> > +	irq_hw_number_t hwirq;
+> > +	unsigned int i;
+> > +	int ret;
+> > +
+> > +	ret =3D hv_pci_vec_alloc_device_irq(domain, nr_irqs, &hwirq);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	for (i =3D 0; i < nr_irqs; i++) {
+> > +		ret =3D hv_pci_vec_irq_gic_domain_alloc(domain, virq + i,
+> > +						      hwirq + i);
+> > +		if (ret)
+> > +			goto free_irq;
+> > +
+> > +		ret =3D irq_domain_set_hwirq_and_chip(domain, virq + i,
+> > +						    hwirq + i,
+> > +						    &hv_arm64_msi_irq_chip,
+> > +						    domain->host_data);
+> > +		if (ret)
+> > +			goto free_irq;
+> > +
+> > +		pr_debug("pID:%d vID:%u\n", (int)(hwirq + i), virq + i);
+> > +	}
+> > +
+> > +	return 0;
+> > +
+> > +free_irq:
+> > +	hv_pci_vec_irq_domain_free(domain, virq, nr_irqs);
+> > +
+> > +	return ret;
+>=20
+> How about the interrupts that have already been allocated?
 
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- fs/coredump.c                | 5 +++--
- fs/exec.c                    | 2 +-
- include/linux/sched/signal.h | 7 -------
- kernel/exit.c                | 8 ++++++--
- kernel/signal.c              | 8 +++++---
- 5 files changed, 15 insertions(+), 15 deletions(-)
+Not sure I am fully following. If you are referring to the failure path and=
+ the
+interrupts that were allocated, then I am calling ' hv_pci_vec_irq_domain_f=
+ree'
+which should free the interrupts from the bitmap and the parent irq domain.
+Can you please clarify?
+=20
+>=20
+> > +}
+> > +
+> > +/*
+> > + * Pick the first online cpu as the irq affinity that can be temporari=
+ly used
+> > + * for composing MSI from the hypervisor. GIC will eventually set the =
+right
+> > + * affinity for the irq and the 'unmask' will retarget the interrupt t=
+o that
+> > + * cpu.
+> > + */
+> > +static int hv_pci_vec_irq_domain_activate(struct irq_domain *domain,
+> > +					  struct irq_data *irqd, bool reserve)
+> > +{
+> > +	int cpu =3D cpumask_first(cpu_online_mask);
+> > +
+> > +	irq_data_update_effective_affinity(irqd, cpumask_of(cpu));
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static const struct irq_domain_ops hv_pci_domain_ops =3D {
+> > +	.alloc	=3D hv_pci_vec_irq_domain_alloc,
+> > +	.free	=3D hv_pci_vec_irq_domain_free,
+> > +	.activate =3D hv_pci_vec_irq_domain_activate,
+> > +};
+> > +
+> > +static int hv_pci_irqchip_init(void)
+> > +{
+> > +	static struct hv_pci_chip_data *chip_data;
+> > +	struct fwnode_handle *fn =3D NULL;
+> > +	int ret =3D -ENOMEM;
+> > +
+> > +	chip_data =3D kzalloc(sizeof(*chip_data), GFP_KERNEL);
+> > +	if (!chip_data)
+> > +		return ret;
+> > +
+> > +	mutex_init(&chip_data->map_lock);
+> > +	fn =3D irq_domain_alloc_named_fwnode("Hyper-V ARM64 vPCI");
+>=20
+> This will appear in debugfs. I'd rather you keep it short, sweet and
+> without spaces. "hv_vpci_arm64" seems better to me.
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index ef56595a0d87..09302a6a0d80 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -372,11 +372,12 @@ static int zap_process(struct task_struct *start, int exit_code)
- static int zap_threads(struct task_struct *tsk,
- 			struct core_state *core_state, int exit_code)
- {
-+	struct signal_struct *signal = tsk->signal;
- 	int nr = -EAGAIN;
- 
- 	spin_lock_irq(&tsk->sighand->siglock);
--	if (!signal_group_exit(tsk->signal)) {
--		tsk->signal->core_state = core_state;
-+	if (!(signal->flags & SIGNAL_GROUP_EXIT) && !signal->group_exec_task) {
-+		signal->core_state = core_state;
- 		nr = zap_process(tsk, exit_code);
- 		clear_tsk_thread_flag(tsk, TIF_SIGPENDING);
- 		tsk->flags |= PF_DUMPCORE;
-diff --git a/fs/exec.c b/fs/exec.c
-index 9d2925811011..82db656ca709 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1045,7 +1045,7 @@ static int de_thread(struct task_struct *tsk)
- 	 * Kill all other threads in the thread group.
- 	 */
- 	spin_lock_irq(lock);
--	if (signal_group_exit(sig)) {
-+	if ((sig->flags & SIGNAL_GROUP_EXIT) || sig->group_exec_task) {
- 		/*
- 		 * Another group action in progress, just
- 		 * return so that the signal is processed.
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index d3248aba5183..b6ecb9fc4cd2 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -271,13 +271,6 @@ static inline void signal_set_stop_flags(struct signal_struct *sig,
- 	sig->flags = (sig->flags & ~SIGNAL_STOP_MASK) | flags;
- }
- 
--/* If true, all threads except ->group_exec_task have pending SIGKILL */
--static inline int signal_group_exit(const struct signal_struct *sig)
--{
--	return	(sig->flags & SIGNAL_GROUP_EXIT) ||
--		(sig->group_exec_task != NULL);
--}
--
- extern void flush_signals(struct task_struct *);
- extern void ignore_signals(struct task_struct *);
- extern void flush_signal_handlers(struct task_struct *, int force_default);
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 527c5e4430ae..e7104f803be0 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -907,15 +907,19 @@ do_group_exit(int exit_code)
- 
- 	BUG_ON(exit_code & 0x80); /* core dumps don't get here */
- 
--	if (signal_group_exit(sig))
-+	if (sig->flags & SIGNAL_GROUP_EXIT)
- 		exit_code = sig->group_exit_code;
-+	else if (sig->group_exec_task)
-+		exit_code = 0;
- 	else if (!thread_group_empty(current)) {
- 		struct sighand_struct *const sighand = current->sighand;
- 
- 		spin_lock_irq(&sighand->siglock);
--		if (signal_group_exit(sig))
-+		if (sig->flags & SIGNAL_GROUP_EXIT)
- 			/* Another thread got here before we took the lock.  */
- 			exit_code = sig->group_exit_code;
-+		else if (sig->group_exec_task)
-+			exit_code = 0;
- 		else {
- 			sig->group_exit_code = exit_code;
- 			sig->flags = SIGNAL_GROUP_EXIT;
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 9eb3e2c1f9f7..860d844542b2 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2392,7 +2392,8 @@ static bool do_signal_stop(int signr)
- 		WARN_ON_ONCE(signr & ~JOBCTL_STOP_SIGMASK);
- 
- 		if (!likely(current->jobctl & JOBCTL_STOP_DEQUEUED) ||
--		    unlikely(signal_group_exit(sig)))
-+		    unlikely(sig->flags & SIGNAL_GROUP_EXIT) ||
-+		    unlikely(sig->group_exec_task))
- 			return false;
- 		/*
- 		 * There is no group stop already in progress.  We must
-@@ -2699,7 +2700,8 @@ bool get_signal(struct ksignal *ksig)
- 		enum pid_type type;
- 
- 		/* Has this task already been marked for death? */
--		if (signal_group_exit(signal)) {
-+		if ((signal->flags & SIGNAL_GROUP_EXIT) ||
-+		     signal->group_exec_task) {
- 			ksig->info.si_signo = signr = SIGKILL;
- 			sigdelset(&current->pending.signal, SIGKILL);
- 			trace_signal_deliver(SIGKILL, SEND_SIG_NOINFO,
-@@ -2955,7 +2957,7 @@ void exit_signals(struct task_struct *tsk)
- 	 */
- 	cgroup_threadgroup_change_begin(tsk);
- 
--	if (thread_group_empty(tsk) || signal_group_exit(tsk->signal)) {
-+	if (thread_group_empty(tsk) || (tsk->signal->flags & SIGNAL_GROUP_EXIT)) {
- 		tsk->flags |= PF_EXITING;
- 		cgroup_threadgroup_change_end(tsk);
- 		return;
--- 
-2.29.2
+Sure, will fix in next version.
+
+> >
+> > @@ -1619,6 +1820,7 @@ static struct irq_chip hv_msi_irq_chip =3D {
+> >  	.irq_compose_msi_msg	=3D hv_compose_msi_msg,
+> >  	.irq_set_affinity	=3D irq_chip_set_affinity_parent,
+> >  	.irq_ack		=3D irq_chip_ack_parent,
+> > +	.irq_eoi		=3D irq_chip_eoi_parent,
+> >  	.irq_mask		=3D hv_irq_mask,
+> >  	.irq_unmask		=3D hv_irq_unmask,
+>=20
+> You probably want to avoid unconditionally setting callbacks that may
+> have side effects on another architecture (ack on arm64, eoi on x86).
+
+Thanks. Will fix in next version.
+
+Is there some other feedback that would like to see get addressed in the
+current patch? Trying to close down on all remaining feedback items here.
+
+- Sunil
+
+
 
