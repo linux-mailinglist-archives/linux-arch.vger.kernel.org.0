@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FCF475D63
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 17:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04A1D475D73
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 17:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244786AbhLOQ27 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Dec 2021 11:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S238332AbhLOQaz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Dec 2021 11:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244776AbhLOQ27 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Dec 2021 11:28:59 -0500
+        with ESMTP id S232992AbhLOQay (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Dec 2021 11:30:54 -0500
 Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B32C06173E
-        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 08:28:58 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id v22so22338809qtx.8
-        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 08:28:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EABC061574
+        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 08:30:54 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id j17so22380088qtx.2
+        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 08:30:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qcP01/b9cBNlxBc/sDfkZgSKlphIrcjvX4JKV4TqS64=;
-        b=sV8QbRxgoANmSNSGI0aYUKfO0q1jF/TCKDrGYTsSoT725dNGZRJ6Y4+Y6u3NlgNqGi
-         DES/osX7c856H4zuQ7HkFveyRa1UItoQoC5eryCtl47qkP/L/y0D0+60BiQ1fIzHtuIj
-         H9D+u0GM6+mJyswvExYAeIiKNkrZg4gyu3Cc7kTol7eEjV3vC4prJSoi1+RojXRa2UFy
-         XlORyhY6TIOkoo9sU7znKuU3MShaxLJ6lyQYdl8G4hcyZpr6L97oLr95thnG/62cgr1c
-         GnM7SwwMWMj3b1YC69uIBfyw57jaJ+I3Xow6jLB49fyCCrkXrFj/P0bhBzMitLTlRJtY
-         EowQ==
+        bh=wa3MSwzDAVEHbCGfosICE8v1Pk9jdslFTtIGuGG4a6I=;
+        b=c1PTqBMF2SXFw5lVk084Vcgcek2Ddjlpi2a/hQ6JzoM4R8cD0nIQ8k9FoYV4Lu14fi
+         M8tFTAORWv7YALou+JE8nu5AZc14AcvyjMOUQ9yqxRGPnwMzWiqJI85Z/mRF2fadacuC
+         KXb0zyqGpCLO+Mqo0kSbjkv3VwDAsletVkn36MxSRx2Jk4xgL3VeZ6U3JTPRlMZ3Hg4S
+         oA3Pw45p4nQ7aubQ1wlqtUyljRMPJVfj+SEQ0cq9LyJ4fm3f5BpeC8JKvLzhgfeYxZOj
+         x9D770IdLdjIxhZh/wAY1OnYTQbB95wNIfiJWE3UpR/BPIAL979uwnD3S0AUn6x23lTA
+         aO6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qcP01/b9cBNlxBc/sDfkZgSKlphIrcjvX4JKV4TqS64=;
-        b=xNYHCNnIqT6R0dpD0m1BGfPRNK3UfX89i7qUpn5mnSi8xzlEX1aLxufw5o0wIrbuHw
-         SeycpNnXJ0VqEQvdJZ7QgSrgJECG2CWJQyxlmpbHGQ0P3a9ZlBbbDDINAwMwGLYaAyHx
-         yEFeaED4DD+FVy40RR1nXyx9Pf0L2QSnrufj9aHW/MkCjRfrPkLZvDNqKQ1ZK+8PXnF0
-         zr71QRmktkSEh4IeNF7Xgjym901+4103+ESpGhvhu23WCtqlCJGw10g94vNNEE33KpYc
-         XAx3Jnqyz7aGKJd8oFWT1bCyxg2hLvMYRZ8jFVrs8O9g2Lt//i7egcKBEhUErp22n2Mg
-         HU1A==
-X-Gm-Message-State: AOAM532mmeszhaf1AkDUl4iw20E8MWvASTd02SXWkhUGJkPO/WC05Y0q
-        Pit0C/yatNo/D2p+PLASRLRs7J5hB6JNrjV2ZcWE7w==
-X-Google-Smtp-Source: ABdhPJy7M0jihSRz6oU87lAajvH4Pb+IxBTZVxkdRp+wYdU4GaQRaMhYcrjUkzXa+GnU9D7a8BF9WhM5llb3k31ruW0=
-X-Received: by 2002:ac8:4e56:: with SMTP id e22mr12971191qtw.72.1639585737678;
- Wed, 15 Dec 2021 08:28:57 -0800 (PST)
+        bh=wa3MSwzDAVEHbCGfosICE8v1Pk9jdslFTtIGuGG4a6I=;
+        b=Li2jkjfIunsWiBkWr1Sdw/bOcy12Dp6rjciflpuzLUWqt9GDsy1Osrb69MVIe1p+5H
+         TRDIlC5toilQUjyu/ZN1dmqnqUutrPhRTQu2oElpyGXq0H57Lqup/lkwg8CRaYq/Yd8t
+         7XU/S5TfPTvhLg4PgjpGCguRNGFE8Rm/27YVOUGOBP4hl9rpbjzDbdag0CsdXCafgpOe
+         k8UuhLuIeV9B/GYUHJZX8ORT5t14L94TWtxJodlA2RQcIIWAU8WyyOhrz30KFza5m9gL
+         on+6nrbWBzqnBKoennv8556yUYM2U7+snRQbmU5M2uMCJS/lJn82WC8FAVcQYLpPMpQa
+         zWrA==
+X-Gm-Message-State: AOAM531JXbRF8O6vbaV6DzUXB7oM1zURQ8/E9twLGhhhdrbrJoccmFh7
+        ddHe/+szn5NMb0xnSiUBLBJtY2n8ijIdD7M7N/D98w==
+X-Google-Smtp-Source: ABdhPJznT9ryyPhejtvqmNNv2J7uP1C2hCS3T5NZLL6AV5TLtXI9JAXkKTeGlkeEWt81/Q2IglZMECltJD/vANZdg+c=
+X-Received: by 2002:a05:622a:2d5:: with SMTP id a21mr12781053qtx.56.1639585853171;
+ Wed, 15 Dec 2021 08:30:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-26-glider@google.com>
- <Ybn39Z5dwcbrbs0O@FVFF77S0Q05N>
-In-Reply-To: <Ybn39Z5dwcbrbs0O@FVFF77S0Q05N>
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-34-glider@google.com>
+ <Ybn45VpVhjeSqt/S@FVFF77S0Q05N>
+In-Reply-To: <Ybn45VpVhjeSqt/S@FVFF77S0Q05N>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 15 Dec 2021 17:28:21 +0100
-Message-ID: <CAG_fn=XOOoCQhEkN1oeOXUX99P+AQ+ApPiUQXPFxR6yeT-Tf=w@mail.gmail.com>
-Subject: Re: [PATCH 25/43] kmsan: skip shadow checks in files doing context switches
+Date:   Wed, 15 Dec 2021 17:30:14 +0100
+Message-ID: <CAG_fn=UZSVGLLm-O0o8bW1P=AzwF+wvGbDEq1PVB+HHf8wdU+g@mail.gmail.com>
+Subject: Re: [PATCH 33/43] kmsan: disable physical page merging in biovec
 To:     Mark Rutland <mark.rutland@arm.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -86,114 +86,18 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 3:13 PM Mark Rutland <mark.rutland@arm.com> wrote:
+On Wed, Dec 15, 2021 at 3:17 PM Mark Rutland <mark.rutland@arm.com> wrote:
 >
-> On Tue, Dec 14, 2021 at 05:20:32PM +0100, Alexander Potapenko wrote:
-> > When instrumenting functions, KMSAN obtains the per-task state (mostly
-> > pointers to metadata for function arguments and return values) once per
-> > function at its beginning.
+> On Tue, Dec 14, 2021 at 05:20:40PM +0100, Alexander Potapenko wrote:
+> > KMSAN metadata for consequent physical pages may be inconsequent,
 >
-> How does KMSAN instrumentation acquire the per-task state? What's used as the
-> base for that?
+> I think you mean 'adjacent'/ rather than 'consequent' here, i.e.
+Correct, thank you!
+
+> > +     /*
+> > +      * Merging consequent physical pages may not work correctly under KMSAN
+> > +      * if their metadata pages aren't consequent. Just disable merging.
+> > +      */
 >
-
-To preserve kernel ABI (so that instrumented functions can call
-non-instrumented ones and vice versa) KMSAN uses a per-task struct
-that keeps shadow values of function call parameters and return
-values:
-
-struct kmsan_context_state {
-  char param_tls[...];
-  char retval_tls[...];
-  char va_arg_tls[...];
-  char va_arg_origin_tls[...];
-  u64 va_arg_overflow_size_tls;
-  depot_stack_handle_t param_origin_tls[...];
-  depot_stack_handle_t retval_origin_tls;
-};
-
-It is mostly dealt with by the compiler, so its layout isn't really important.
-The compiler inserts a call to __msan_get_context_state() at the
-beginning of every instrumented function to obtain a pointer to that
-struct.
-Then, every time a function pointer is used, a value is returned, or
-another function is called, the compiler adds code that updates the
-shadow values in this struct.
-
-E.g. the following function:
-
-int sum(int a, int b) {
-...
-  result = a + b;
-  return result;
-}
-
-will now look as follows:
-
-int sum(int a, int b) {
-  struct kmsan_context_state *kcs = __msan_get_context_state();
-  int s_a = ((int)kcs->param_tls)[0];  // shadow of a
-  int s_b = ((int)kcs->param_tls)[1];  // shadow of b
-...
-  result = a + b;
-  s_result = s_a | s_b;
-  ((int)kcs->retval_tls)[0] = s_result;  // returned shadow
-  return result;
-}
-
-> >
-> > To deal with that, we need to apply __no_kmsan_checks to the functions
-> > performing context switching - this will result in skipping all KMSAN
-> > shadow checks and marking newly created values as initialized,
-> > preventing all false positive reports in those functions. False negatives
-> > are still possible, but we expect them to be rare and impersistent.
-> >
-> > To improve maintainability, we choose to apply __no_kmsan_checks not
-> > just to a handful of functions, but to the whole files that may perform
-> > context switching - this is done via KMSAN_ENABLE_CHECKS:=n.
-> > This decision can be reconsidered in the future, when KMSAN won't need
-> > so much attention.
->
-> I worry this might be the wrong approach (and I've given some rationale below),
-> but it's not clear to me exactly how this goes wrong. Could you give an example
-> flow where stale data gets used?
-
-The scheme I described above works well until a context switch occurs.
-Then, IIUC, at some point `current` changes, so that the previously
-fetched KMSAN context state becomes stale:
-
-void foo(...) {
-baz(...);
-// context switch here changes `current`
-baz(...);
-}
-
-In this case we'll have foo() setting up kmsan_context_state for the
-old task when calling bar(), but bar() taking shadow for its arguments
-from the new task's kmsan_context_state.
-
-Does this make sense?
-
-> As above, the actual context-switch occurs in arch code --I assume the
-> out-of-line call *must* act as a clobber from the instrumentation's PoV or we'd
-> have many more problems.
-
-Treating a function call as a clobber of kmsan_context_state() is
-actually an interesting idea.
-Adding yet another call to __msan_get_context_state() after every
-function call may sound harsh, but we already instrument every memory
-access anyway.
-What remains unclear is handling the return value of the innermost
-function that performed the switch: it will be saved to the old task's
-state, but taken from that of the new task.
-
-> I also didn't spot any *explciit* state switching
-> being added there that would seem to affect KMSAN.
->
-> ... so I don't understand why checks need to be inhibited for the core sched code.
-
-In fact for a long time there were only three functions annotated with
-__no_kmsan_checks right in arch/x86/kernel/process_64.c and
-kernel/sched/core.c
-We decided to apply this attribute to every function in both files,
-just to make sure nothing breaks too early while upstreaming KMSAN.
+> Likewise here.
+Ack.
