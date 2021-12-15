@@ -2,59 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DD34759B7
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 14:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC6A4759B9
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 14:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237423AbhLONdt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Dec 2021 08:33:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242899AbhLONds (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Dec 2021 08:33:48 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6421BC061574
-        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 05:33:48 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id bj13so31673540oib.4
-        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 05:33:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+UPZ8+IiM8moYke3aTaWDfXyTBb8QigFqjdfGzKzRHI=;
-        b=PaPRw7IBxZHKc5ILCJ29MsY7mY986DE2gwQY8C3fRUR+MaYQQkXCggtY5Lh2Y5M0AL
-         R7j/A5oBHl8jikEzl5nda+ERST+L5Pu2gI4rODC3JETMEf11N59UdfwaQ4NOJpm7Z0nU
-         Zl5HZxFumLn9fN6nX7eak8f9s+l5tbgng4JkbO2sXzVRvCSHip68N1nJt2gK5nSNJHLu
-         5sWmyyhbV6nzN52T2/a9YQZeRTuyc3174FC/AS0aCGx9J6rkMtNpgXKQQ8Rmd1r2EJlY
-         ZkeneAaXms3GBifMdXWQLIu7jFzQ/w+tZ6stLtJ9DXkrszofMhMvWP4Zp4eJE3qbM/50
-         TEhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+UPZ8+IiM8moYke3aTaWDfXyTBb8QigFqjdfGzKzRHI=;
-        b=HThBbUQEIrg+v0o0Xkbm3j7MEkbrQoars6lbqTChys0DvyzYPC62dbS4iZJHyxzxuw
-         gDqurTWjmugjOp+TDNH98McFD8Uvg11xD33vs/rZfrsLxsCnheTEvxCUWddgb7zyohOS
-         q5A2aEPg74SOk4Hq2a2c6/BunNqWxb6B7j8ZjpuY8ivpbA2chierNWh5WVLtXvasuhPx
-         B5Y1c8Gb6R06TZXgRuH3zQ+WahRnUgNm+UKqBP+kRMEc0h0RFjVzyHFfDvgYCAdAMwvH
-         rNp0FXsODLSWNBZjISP+1dkjLOlZ3svM7CX9RlCY3hv8jB3lreg6lV1j/Ux4NSgZTMIV
-         tasA==
-X-Gm-Message-State: AOAM5325nF8BZrRHtZo+52ZIki+KPeESeA6AbMJ4AkokD2IFP51b0rtp
-        3gHnzimNfzLUVKNP3UBIi9Hjf6kkJBDD6hWn61ls8g==
-X-Google-Smtp-Source: ABdhPJwls0NdSP7Nakul5Uh/+/AETU5z3undj37BDbMiS8w/mD1/nppX+S6J6Jr9AmyO2qoNBZij6JO0uWm8eoPZFN0=
-X-Received: by 2002:aca:af50:: with SMTP id y77mr8591431oie.134.1639575227493;
- Wed, 15 Dec 2021 05:33:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-8-glider@google.com>
- <YbnsdDUCwX+Mem0s@FVFF77S0Q05N>
-In-Reply-To: <YbnsdDUCwX+Mem0s@FVFF77S0Q05N>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 15 Dec 2021 14:33:34 +0100
-Message-ID: <CANpmjNPbEw_c2KduwkXwT5+iZVRQa1n5vWX2F_bjGdPynraC6g@mail.gmail.com>
-Subject: Re: [PATCH 07/43] compiler_attributes.h: add __disable_sanitizer_instrumentation
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
+        id S242898AbhLONdz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Dec 2021 08:33:55 -0500
+Received: from foss.arm.com ([217.140.110.172]:52094 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242909AbhLONdy (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Dec 2021 08:33:54 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4B9D106F;
+        Wed, 15 Dec 2021 05:33:53 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.67.176])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 28D833F774;
+        Wed, 15 Dec 2021 05:33:49 -0800 (PST)
+Date:   Wed, 15 Dec 2021 13:33:46 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrey Konovalov <andreyknvl@google.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -71,9 +37,11 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
         Matthew Wilcox <willy@infradead.org>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Petr Mladek <pmladek@suse.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -81,56 +49,66 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 12/43] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
+Message-ID: <Ybnuup0eMnhrwp8e@FVFF77S0Q05N>
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-13-glider@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211214162050.660953-13-glider@google.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-A
+On Tue, Dec 14, 2021 at 05:20:19PM +0100, Alexander Potapenko wrote:
+> kcov used to be broken prior to Clang 11, but right now that version is
+> already the minimum required to build with KCSAN, that is why we don't
+> need KCSAN_KCOV_BROKEN anymore.
 
-On Wed, 15 Dec 2021 at 14:24, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Tue, Dec 14, 2021 at 05:20:14PM +0100, Alexander Potapenko wrote:
-> > The new attribute maps to
-> > __attribute__((disable_sanitizer_instrumentation)), which will be
-> > supported by Clang >= 14.0. Future support in GCC is also possible.
-> >
-> > This attribute disables compiler instrumentation for kernel sanitizer
-> > tools, making it easier to implement noinstr. It is different from the
-> > existing __no_sanitize* attributes, which may still allow certain types
-> > of instrumentation to prevent false positives.
->
-> When you say the __no_sanitize* attributes allow some instrumentation, does
-> that apply to any of the existing KASAN/KCSAN/KCOV support, or just for KMSAN?
->
-> The documentation just says the same as the commit message:
->
-> | This is not the same as __attribute__((no_sanitize(...))), which depending on
-> | the tool may still insert instrumentation to prevent false positive reports.
->
-> ... which implies the other instrumentation might not be suprressed.
->
-> I ask because architectures which select ARCH_WANTS_NO_INSTR *need* to be able
-> to suppress all instrumentation. It's fine if that means they need a new
-> version of clang for KMSAN, but if there's latent instrumentation we have more
-> bugs to fix first...
+Just to check, how is that requirement enforced?
 
-Thus far, none of the existing K*SANs added other instrumentation.
-Apart from KMSAN here, this will change with KCSAN's barrier
-instrumentation, which is why this patch is also part of KCSAN's
-upcoming changes -- recall I said I fixed barrier instrumentation for
-arm64 as well, this is how :-)
+I see the core Makefiles enforce 10.0.1+, but I couldn't spot an explicit
+version dependency in Kconfig.kcsan.
 
-See https://lore.kernel.org/all/20211130114433.2580590-26-elver@google.com/
-how I resolved it for KCSAN on architectures that don't have objtool.
+Otherwise, this looks good to me!
 
-I expect this patch will be dropped from the KMSAN series once it
-reaches mainline through the KCSAN changes.
+Mark.
 
-Also note, this applies only for bug-detection tools, that may want to
-avoid false positives. So by definition, it is irrelevant for KCOV
-(which had its own attribute woes a while back though). Yeah, it's
-been a long road to get the compilers to play along ... :-/
-
-Thanks,
--- Marco
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+> Link: https://linux-review.googlesource.com/id/Ida287421577f37de337139b5b5b9e977e4a6fee2
+> ---
+>  lib/Kconfig.kcsan | 11 -----------
+>  1 file changed, 11 deletions(-)
+> 
+> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+> index e0a93ffdef30e..b81454b2a0d09 100644
+> --- a/lib/Kconfig.kcsan
+> +++ b/lib/Kconfig.kcsan
+> @@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
+>  	  For the list of compilers that support KCSAN, please see
+>  	  <file:Documentation/dev-tools/kcsan.rst>.
+>  
+> -config KCSAN_KCOV_BROKEN
+> -	def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+> -	depends on CC_IS_CLANG
+> -	depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
+> -	help
+> -	  Some versions of clang support either KCSAN and KCOV but not the
+> -	  combination of the two.
+> -	  See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+> -	  in newer releases.
+> -
+>  menuconfig KCSAN
+>  	bool "KCSAN: dynamic data race detector"
+>  	depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+>  	depends on DEBUG_KERNEL && !KASAN
+> -	depends on !KCSAN_KCOV_BROKEN
+>  	select STACKTRACE
+>  	help
+>  	  The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
+> -- 
+> 2.34.1.173.g76aa8bc2d0-goog
+> 
