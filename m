@@ -2,102 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A1D475D73
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 17:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D77F1475D99
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 17:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238332AbhLOQaz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Dec 2021 11:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbhLOQay (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Dec 2021 11:30:54 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65EABC061574
-        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 08:30:54 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id j17so22380088qtx.2
-        for <linux-arch@vger.kernel.org>; Wed, 15 Dec 2021 08:30:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wa3MSwzDAVEHbCGfosICE8v1Pk9jdslFTtIGuGG4a6I=;
-        b=c1PTqBMF2SXFw5lVk084Vcgcek2Ddjlpi2a/hQ6JzoM4R8cD0nIQ8k9FoYV4Lu14fi
-         M8tFTAORWv7YALou+JE8nu5AZc14AcvyjMOUQ9yqxRGPnwMzWiqJI85Z/mRF2fadacuC
-         KXb0zyqGpCLO+Mqo0kSbjkv3VwDAsletVkn36MxSRx2Jk4xgL3VeZ6U3JTPRlMZ3Hg4S
-         oA3Pw45p4nQ7aubQ1wlqtUyljRMPJVfj+SEQ0cq9LyJ4fm3f5BpeC8JKvLzhgfeYxZOj
-         x9D770IdLdjIxhZh/wAY1OnYTQbB95wNIfiJWE3UpR/BPIAL979uwnD3S0AUn6x23lTA
-         aO6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wa3MSwzDAVEHbCGfosICE8v1Pk9jdslFTtIGuGG4a6I=;
-        b=Li2jkjfIunsWiBkWr1Sdw/bOcy12Dp6rjciflpuzLUWqt9GDsy1Osrb69MVIe1p+5H
-         TRDIlC5toilQUjyu/ZN1dmqnqUutrPhRTQu2oElpyGXq0H57Lqup/lkwg8CRaYq/Yd8t
-         7XU/S5TfPTvhLg4PgjpGCguRNGFE8Rm/27YVOUGOBP4hl9rpbjzDbdag0CsdXCafgpOe
-         k8UuhLuIeV9B/GYUHJZX8ORT5t14L94TWtxJodlA2RQcIIWAU8WyyOhrz30KFza5m9gL
-         on+6nrbWBzqnBKoennv8556yUYM2U7+snRQbmU5M2uMCJS/lJn82WC8FAVcQYLpPMpQa
-         zWrA==
-X-Gm-Message-State: AOAM531JXbRF8O6vbaV6DzUXB7oM1zURQ8/E9twLGhhhdrbrJoccmFh7
-        ddHe/+szn5NMb0xnSiUBLBJtY2n8ijIdD7M7N/D98w==
-X-Google-Smtp-Source: ABdhPJznT9ryyPhejtvqmNNv2J7uP1C2hCS3T5NZLL6AV5TLtXI9JAXkKTeGlkeEWt81/Q2IglZMECltJD/vANZdg+c=
-X-Received: by 2002:a05:622a:2d5:: with SMTP id a21mr12781053qtx.56.1639585853171;
- Wed, 15 Dec 2021 08:30:53 -0800 (PST)
+        id S234870AbhLOQfI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Dec 2021 11:35:08 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50462 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235104AbhLOQfG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Dec 2021 11:35:06 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F147F619C9;
+        Wed, 15 Dec 2021 16:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F169C36AE2;
+        Wed, 15 Dec 2021 16:35:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639586105;
+        bh=+ZgCupjax4AhWP60VaWy3uMq6uc07rZ6Bxyiq5RqgUA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=gPdDrSUcrBSvD8DLkN55ecG3pz7nToYJpdJg7SkDkQ5MKPp+SlsPYBEfrsM1dXJ8A
+         xil6sOsGMmM3687zy+O+7lRT4n9EpERJZwKKjo26KS40LHSgzxh6mDI8CafQwsOpiL
+         dKDww9swrZim8z9JJ9x6SjznjtbHyfOj7PiBoI2IsTZgpzbD4HRAqvVPXKd43AHHiH
+         ssUr+dpyIwMyLRqvGutprX8nBd77dhlCoxw72Oeux6lf4fEpEJhMxK7udCM76aDWux
+         Hx3ENHfmh2pQyne/F4mPwQAE9jU7VrYkl9jJWSiIIH3s23EK/fkSKw0BikwdcKYwgn
+         0+Zq8Ygvqq4YA==
+Date:   Wed, 15 Dec 2021 10:35:03 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, maz@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+Subject: Re: [PATCH v6 0/2] PCI: hv: Hyper-V vPCI for arm64
+Message-ID: <20211215163503.GA698547@bhelgaas>
 MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-34-glider@google.com>
- <Ybn45VpVhjeSqt/S@FVFF77S0Q05N>
-In-Reply-To: <Ybn45VpVhjeSqt/S@FVFF77S0Q05N>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 15 Dec 2021 17:30:14 +0100
-Message-ID: <CAG_fn=UZSVGLLm-O0o8bW1P=AzwF+wvGbDEq1PVB+HHf8wdU+g@mail.gmail.com>
-Subject: Re: [PATCH 33/43] kmsan: disable physical page merging in biovec
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1637225490-2213-1-git-send-email-sunilmut@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 3:17 PM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Tue, Dec 14, 2021 at 05:20:40PM +0100, Alexander Potapenko wrote:
-> > KMSAN metadata for consequent physical pages may be inconsequent,
->
-> I think you mean 'adjacent'/ rather than 'consequent' here, i.e.
-Correct, thank you!
+On Thu, Nov 18, 2021 at 12:51:28AM -0800, Sunil Muthuswamy wrote:
 
-> > +     /*
-> > +      * Merging consequent physical pages may not work correctly under KMSAN
-> > +      * if their metadata pages aren't consequent. Just disable merging.
-> > +      */
->
-> Likewise here.
-Ack.
+> Sunil Muthuswamy (2):
+>   PCI: hv: Make the code arch neutral by adding arch specific interfaces
+>   arm64: PCI: hv: Add support for Hyper-V vPCI
+
+Both patches are primarily to drivers/pci/controller/pci-hyperv.c, so
+why do the subject lines look so different?
+
+Instead of making up a new format from scratch, look at the previous
+history and copy it:
+
+  $ git log --oneline drivers/pci/controller/pci-hyperv.c
+  f18312084300 ("PCI: hv: Remove unnecessary use of %hx")
+  41608b64b10b ("PCI: hv: Fix sleep while in non-sleep context when removing child devices from the bus")
+  88f94c7f8f40 ("PCI: hv: Turn on the host bridge probing on ARM64")
+  9e7f9178ab49 ("PCI: hv: Set up MSI domain at bridge probing time")
+  38c0d266dc80 ("PCI: hv: Set ->domain_nr of pci_host_bridge at probing time")
+  418cb6c8e051 ("PCI: hv: Generify PCI probing")
+  8f6a6b3c50ce ("PCI: hv: Support for create interrupt v3")
+  7d815f4afa87 ("PCI: hv: Add check for hyperv_initialized in init_hv_pci_drv()")
+  326dc2e1e59a ("PCI: hv: Remove bus device removal unused refcount/functions")
+  ...
+
+The second patch adds arm64 support, so it *should* mention arm64, but
+it can be something like this:
+
+  PCI: hv: Add arm64 Hyper-V vPCI support
+
+>  arch/arm64/include/asm/hyperv-tlfs.h |   9 +
+>  arch/x86/include/asm/hyperv-tlfs.h   |  33 ++++
+>  arch/x86/include/asm/mshyperv.h      |   7 -
+>  drivers/pci/Kconfig                  |   2 +-
+>  drivers/pci/controller/Kconfig       |   2 +-
+>  drivers/pci/controller/pci-hyperv.c  | 281 ++++++++++++++++++++++++---
+>  include/asm-generic/hyperv-tlfs.h    |  33 ----
+>  7 files changed, 300 insertions(+), 67 deletions(-)
