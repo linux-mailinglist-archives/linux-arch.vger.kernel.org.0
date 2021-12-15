@@ -2,25 +2,26 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8ED475A75
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 15:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B023475AEB
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Dec 2021 15:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243282AbhLOORS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Dec 2021 09:17:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:53282 "EHLO foss.arm.com"
+        id S243473AbhLOOnp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Dec 2021 09:43:45 -0500
+Received: from foss.arm.com ([217.140.110.172]:53888 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243269AbhLOORS (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 15 Dec 2021 09:17:18 -0500
+        id S243531AbhLOOnd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 15 Dec 2021 09:43:33 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 981E4143B;
-        Wed, 15 Dec 2021 06:17:17 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E3D61FB;
+        Wed, 15 Dec 2021 06:43:33 -0800 (PST)
 Received: from FVFF77S0Q05N (unknown [10.57.67.176])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D52853F774;
-        Wed, 15 Dec 2021 06:17:12 -0800 (PST)
-Date:   Wed, 15 Dec 2021 14:17:09 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 648A33F774;
+        Wed, 15 Dec 2021 06:43:28 -0800 (PST)
+Date:   Wed, 15 Dec 2021 14:43:25 +0000
 From:   Mark Rutland <mark.rutland@arm.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrey Konovalov <andreyknvl@google.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -37,7 +38,6 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
         Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
         Matthew Wilcox <willy@infradead.org>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Pekka Enberg <penberg@kernel.org>,
@@ -49,60 +49,47 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 33/43] kmsan: disable physical page merging in biovec
-Message-ID: <Ybn45VpVhjeSqt/S@FVFF77S0Q05N>
+Subject: Re: [PATCH 12/43] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
+Message-ID: <Ybn/DZb32ujokTnJ@FVFF77S0Q05N>
 References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-34-glider@google.com>
+ <20211214162050.660953-13-glider@google.com>
+ <Ybnuup0eMnhrwp8e@FVFF77S0Q05N>
+ <CANpmjNNLG0F9WzNnQkJX+QEqdxnhWstuag_9jrid7zdJgivHyw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211214162050.660953-34-glider@google.com>
+In-Reply-To: <CANpmjNNLG0F9WzNnQkJX+QEqdxnhWstuag_9jrid7zdJgivHyw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:20:40PM +0100, Alexander Potapenko wrote:
-> KMSAN metadata for consequent physical pages may be inconsequent,
-
-I think you mean 'adjacent'/ rather than 'consequent' here, i.e.
-
-| KMSAN metadata for adjacent physical pages may not be adjacent
-
-> therefore accessing such pages together may lead to metadata
-> corruption.
-> We disable merging pages in biovec to prevent such corruptions.
+On Wed, Dec 15, 2021 at 02:39:43PM +0100, Marco Elver wrote:
+> On Wed, 15 Dec 2021 at 14:33, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Tue, Dec 14, 2021 at 05:20:19PM +0100, Alexander Potapenko wrote:
+> > > kcov used to be broken prior to Clang 11, but right now that version is
+> > > already the minimum required to build with KCSAN, that is why we don't
+> > > need KCSAN_KCOV_BROKEN anymore.
+> >
+> > Just to check, how is that requirement enforced?
 > 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-> ---
-> 
-> Link: https://linux-review.googlesource.com/id/Iece16041be5ee47904fbc98121b105e5be5fea5c
-> ---
->  block/blk.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/block/blk.h b/block/blk.h
-> index ccde6e6f17360..e0c62a5d5639e 100644
-> --- a/block/blk.h
-> +++ b/block/blk.h
-> @@ -103,6 +103,13 @@ static inline bool biovec_phys_mergeable(struct request_queue *q,
->  	phys_addr_t addr1 = page_to_phys(vec1->bv_page) + vec1->bv_offset;
->  	phys_addr_t addr2 = page_to_phys(vec2->bv_page) + vec2->bv_offset;
->  
-> +	/*
-> +	 * Merging consequent physical pages may not work correctly under KMSAN
-> +	 * if their metadata pages aren't consequent. Just disable merging.
-> +	 */
+> HAVE_KCSAN_COMPILER will only be true with Clang 11 or later, due to
+> no prior compiler having "-tsan-distinguish-volatile=1".
 
-Likewise here.
+I see -- could we add wording to that effect into the commit messge?
 
+> > I see the core Makefiles enforce 10.0.1+, but I couldn't spot an explicit
+> > version dependency in Kconfig.kcsan.
+> >
+> > Otherwise, this looks good to me!
+> 
+> I think 5.17 will be Clang 11 only, so we could actually revert
+> ea91a1d45d19469001a4955583187b0d75915759:
+> https://lkml.kernel.org/r/Yao86FeC2ybOobLO@archlinux-ax161
+> 
+> I should resend that to be added to the -kbuild tree.
+
+FWIW, that also works for me.
+
+Thanks,
 Mark.
-
-> +	if (IS_ENABLED(CONFIG_KMSAN))
-> +		return false;
-> +
->  	if (addr1 + vec1->bv_len != addr2)
->  		return false;
->  	if (xen_domain() && !xen_biovec_phys_mergeable(vec1, vec2->bv_page))
-> -- 
-> 2.34.1.173.g76aa8bc2d0-goog
-> 
