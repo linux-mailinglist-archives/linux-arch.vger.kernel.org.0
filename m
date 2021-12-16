@@ -2,141 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 869A6477ACC
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 18:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1020477AFD
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 18:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240114AbhLPRnD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Dec 2021 12:43:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239988AbhLPRnC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Dec 2021 12:43:02 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B56C061574
-        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 09:43:01 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id y12so88860825eda.12
-        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 09:43:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ms/wuM8WAzRPY4WykXwi0/YehvvfoHEwDko5JETWgyY=;
-        b=Yt6iQrPRR02VnMfhyQFLe4lPoyYi1LLJZh1EAgoFFL5odLJNrpYEgdV1gCmEQ/8Ebm
-         vqyvFiXql5+DLQ9/AE42zzsnV8GD+7jyfxwfcG0fq/qlAeVI5VhSB0SiPNjhiYS6tgxi
-         kvXLQUaOrvL+UE8xSz2YpOdT/AUCe9TuJhNKQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ms/wuM8WAzRPY4WykXwi0/YehvvfoHEwDko5JETWgyY=;
-        b=H45wiKQlIRA2zbhtKTUiLYd5v8y3mODPPzb+VpZGc7wFCiHA/Xx2PMVsD6Ymc1IeFq
-         oKXMmwChnHAwKCTp+ruSsaVvREXoP8jOATx0Bo7iLzntzCtfhtPmzBW4IY7+wZozpKPF
-         hk8Xg/EBIcwp9Myrxku8AHpuOzEgQPcewFaYu1Jcrd8V1iarZDqbpC8zm5iQG0B+gwRW
-         NoBoZkbXGkRG466w/MP7s9xvI1JkEnutKNNHJKNUqbLhaqchAk5h3JT0V7p5YwdeSeaX
-         nCWlMlB2w7kLIfJ76Rq76ysnFmj0IKXbkhyvr0xgCNZL7dWPL5/GjTcDw+wNJP2JhWCK
-         N+Mw==
-X-Gm-Message-State: AOAM531MHW/Q6TPiY0f8B3PvF3r1NRsLc+3FXNoFPC5gL5cJASN6Q5ST
-        mnHk24ukOeWWAmL1ShK44lb2kaOou4mutc99Ecw=
-X-Google-Smtp-Source: ABdhPJwgX6N6OioES522vakD8oLE2wd++DlXFTzaIzRW82fencIVKdXWowMKHVOJQb0UxvegYhfk+w==
-X-Received: by 2002:a50:e0c4:: with SMTP id j4mr22219051edl.239.1639676579834;
-        Thu, 16 Dec 2021 09:42:59 -0800 (PST)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id sh30sm2057930ejc.117.2021.12.16.09.42.57
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Dec 2021 09:42:59 -0800 (PST)
-Received: by mail-wr1-f51.google.com with SMTP id v11so45529358wrw.10
-        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 09:42:57 -0800 (PST)
-X-Received: by 2002:adf:8b0e:: with SMTP id n14mr9660488wra.281.1639676577218;
- Thu, 16 Dec 2021 09:42:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20210514100106.3404011-1-arnd@kernel.org> <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
-In-Reply-To: <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 16 Dec 2021 09:42:41 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiKkdYLY0bv+nXrcJz3NH9mAqPAafX7PpW5EwVtxsEu7Q@mail.gmail.com>
-Message-ID: <CAHk-=wiKkdYLY0bv+nXrcJz3NH9mAqPAafX7PpW5EwVtxsEu7Q@mail.gmail.com>
-Subject: Re: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
+        id S240417AbhLPRtc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Dec 2021 12:49:32 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:39813 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240474AbhLPRtb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 16 Dec 2021 12:49:31 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-82-kIcKgVwCMVG34NOJowHCJQ-1; Thu, 16 Dec 2021 17:49:29 +0000
+X-MC-Unique: kIcKgVwCMVG34NOJowHCJQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Thu, 16 Dec 2021 17:49:27 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Thu, 16 Dec 2021 17:49:27 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Ard Biesheuvel' <ardb@kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
         Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        "Nick Desaulniers" <ndesaulniers@google.com>
+CC:     Rich Felker <dalias@libc.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
         Amitkumar Karwar <amitkarwar@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>,
+        "Russell King" <linux@armlinux.org.uk>,
         Eric Dumazet <edumazet@google.com>,
+        "Paul Mackerras" <paulus@samba.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        James Morris <jmorris@namei.org>, Jens Axboe <axboe@kernel.dk>,
-        John Johansen <john.johansen@canonical.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Rich Felker <dalias@libc.org>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, "James Morris" <jmorris@namei.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        openrisc@lists.librecores.org,
+        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jonas Bonn <jonas@southpole.se>, Arnd Bergmann <arnd@arndb.de>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
         "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
         <linuxppc-dev@lists.ozlabs.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>, linux-ntfs-dev@lists.sourceforge.net,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
+        "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Stafford Horne" <shorne@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        John Johansen <john.johansen@canonical.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "linux-ntfs-dev@lists.sourceforge.net" 
+        <linux-ntfs-dev@lists.sourceforge.net>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
         "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
         <netdev@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>
+Subject: RE: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
+Thread-Topic: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
+Thread-Index: AQHX8qKmJnIWdY3H8E+V3sMdrqJgg6w1YkAg
+Date:   Thu, 16 Dec 2021 17:49:27 +0000
+Message-ID: <5a46959bfe654ae9a8a4e1b1adf0db95@AcuMS.aculab.com>
+References: <20210514100106.3404011-1-arnd@kernel.org>
+ <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
+In-Reply-To: <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 9:29 AM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS is used in many places to
-> conditionally emit code that violates C alignment rules. E.g., there
-> is this example in Documentation/core-api/unaligned-memory-access.rst:
->
-> bool ether_addr_equal(const u8 *addr1, const u8 *addr2)
-> {
-> #ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
->   u32 fold = ((*(const u32 *)addr1) ^ (*(const u32 *)addr2)) |
->              ((*(const u16 *)(addr1 + 4)) ^ (*(const u16 *)(addr2 + 4)));
->   return fold == 0;
-> #else
+RnJvbTogQXJkIEJpZXNoZXV2ZWwNCj4gU2VudDogMTYgRGVjZW1iZXIgMjAyMSAxNzozMA0KPiAN
+Cj4gSGkgQXJuZCwNCj4gDQo+IChyZXBseWluZyB0byBhbiBvbGQgdGhyZWFkIGFzIHRoaXMgY2Ft
+ZSB1cCBpbiB0aGUgZGlzY3Vzc2lvbiByZWdhcmRpbmcNCj4gbWlzYWxpZ25lZCBsb2FkcyBhbmQg
+c3RvcmVkIGluIHNpcGhhc2goKSB3aGVuIGNvbXBpbGVkIGZvciBBUk0NCj4gW2Y3ZTViOWJmYTZj
+ODgyMDQwN2I2NGVhYmMxZjI5YzlhODdlODk5M2RdKQ0KPiANCj4gT24gRnJpLCAxNCBNYXkgMjAy
+MSBhdCAxMjowMiwgQXJuZCBCZXJnbWFubiA8YXJuZEBrZXJuZWwub3JnPiB3cm90ZToNCj4gPg0K
+PiA+IEZyb206IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQo+ID4NCj4gPiBUaGUgZ2V0
+X3VuYWxpZ25lZCgpL3B1dF91bmFsaWduZWQoKSBoZWxwZXJzIGFyZSB0cmFkaXRpb25hbGx5IGFy
+Y2hpdGVjdHVyZQ0KPiA+IHNwZWNpZmljLCB3aXRoIHRoZSB0d28gbWFpbiB2YXJpYW50cyBiZWlu
+ZyB0aGUgImFjY2Vzcy1vay5oIiB2ZXJzaW9uDQo+ID4gdGhhdCBhc3N1bWVzIHVuYWxpZ25lZCBw
+b2ludGVyIGFjY2Vzc2VzIGFsd2F5cyB3b3JrIG9uIGEgcGFydGljdWxhcg0KPiA+IGFyY2hpdGVj
+dHVyZSwgYW5kIHRoZSAibGUtc3RydWN0LmgiIHZlcnNpb24gdGhhdCBjYXN0cyB0aGUgZGF0YSB0
+byBhDQo+ID4gYnl0ZSBhbGlnbmVkIHR5cGUgYmVmb3JlIGRlcmVmZXJlbmNpbmcsIGZvciBhcmNo
+aXRlY3R1cmVzIHRoYXQgY2Fubm90DQo+ID4gYWx3YXlzIGRvIHVuYWxpZ25lZCBhY2Nlc3NlcyBp
+biBoYXJkd2FyZS4NCg0KSSdtIHByZXR0eSBzdXJlIHRoZSBjb21waWxlciBpcyBhbGxvd2VkIHRv
+ICdyZWFkIHRocm91Z2gnIHRoYXQgY2FzdA0KYW5kIHN0aWxsIGRvIGFuIGFsaWduZWQgYWNjZXNz
+Lg0KSXQgaGFzIGFsd2F5cyBiZWVuIGhhcmQgdG8gZ2V0IHRoZSBjb21waWxlciB0byAnZm9yZ2V0
+JyBhYm91dCBrbm93bi9leHBlY3RlZA0KYWxpZ25tZW50IC0gdHlwaWNhbGx5IHRyeWluZyB0byBz
+dG9wIG1lbWNweSgpIGZhdWx0aW5nIG9uIHNwYXJjLg0KUmVhbCBmdW5jdGlvbiBjYWxscyBhcmUg
+dXN1YWxseSByZXF1aXJlZCAtIGJ1dCBMVE8gbWF5IHNjdXBwZXIgdGhhdC4NCg0KPiA+DQo+ID4g
+QmFzZWQgb24gdGhlIGRpc2N1c3Npb24gbGlua2VkIGJlbG93LCBpdCBhcHBlYXJzIHRoYXQgdGhl
+IGFjY2Vzcy1vaw0KPiA+IHZlcnNpb24gaXMgbm90IHJlYWxpYWJsZSBvbiBhbnkgYXJjaGl0ZWN0
+dXJlLCBidXQgdGhlIHN0cnVjdCB2ZXJzaW9uDQo+ID4gcHJvYmFibHkgaGFzIG5vIGRvd25zaWRl
+cy4gVGhpcyBzZXJpZXMgY2hhbmdlcyB0aGUgY29kZSB0byB1c2UgdGhlDQo+ID4gc2FtZSBpbXBs
+ZW1lbnRhdGlvbiBvbiBhbGwgYXJjaGl0ZWN0dXJlcywgYWRkcmVzc2luZyB0aGUgZmV3IGV4Y2Vw
+dGlvbnMNCj4gPiBzZXBhcmF0ZWx5Lg0KPiA+DQo+ID4gSSd2ZSBpbmNsdWRlZCB0aGlzIHZlcnNp
+b24gaW4gdGhlIGFzbS1nZW5lcmljIHRyZWUgZm9yIDUuMTQgYWxyZWFkeSwNCj4gPiBhZGRyZXNz
+aW5nIHRoZSBmZXcgaXNzdWVzIHRoYXQgd2VyZSBwb2ludGVkIG91dCBpbiB0aGUgUkZDLiBJZiB0
+aGVyZQ0KPiA+IGFyZSBhbnkgcmVtYWluaW5nIHByb2JsZW1zLCBJIGhvcGUgdGhvc2UgY2FuIGJl
+IGFkZHJlc3NlZCBhcyBmb2xsb3ctdXANCj4gPiBwYXRjaGVzLg0KPiA+DQo+IA0KPiBJIHRoaW5r
+IHRoaXMgc2VyaWVzIGlzIGEgaHVnZSBpbXByb3ZlbWVudCwgYnV0IGl0IGRvZXMgbm90IHNvbHZl
+IHRoZQ0KPiBVQiBwcm9ibGVtIGNvbXBsZXRlbHkuIEFzIHdlIGZvdW5kLCB0aGVyZSBhcmUgb3Bl
+biBpc3N1ZXMgaW4gdGhlIEdDQw0KPiBidWd6aWxsYSByZWdhcmRpbmcgYXNzdW1wdGlvbnMgaW4g
+dGhlIGNvbXBpbGVyIHRoYXQgYWxpZ25lZCBxdWFudGl0aWVzDQo+IGVpdGhlciBvdmVybGFwIGVu
+dGlyZWx5IG9yIG5vdCBhdCBhbGwuIChlLmcuLA0KPiBodHRwczovL2djYy5nbnUub3JnL2J1Z3pp
+bGxhL3Nob3dfYnVnLmNnaT9pZD0xMDAzNjMpDQoNCkkgdGhpbmsgd2UgY2FuIHN0b3AgdGhlIGNv
+bXBpbGVyIG1lcmdpbmcgdW5hbGlnbmVkIHJlcXVlc3RzIGJ5IGFkZGluZyBhIGJ5dGUtc2l6ZWQN
+Cm1lbW9yeSBiYXJyaWVyIGZvciB0aGUgYmFzZSBhZGRyZXNzIGJlZm9yZSBhbmQgYWZ0ZXIgdGhl
+IGFjY2Vzcy4NClRoYXQgc2hvdWxkIHN0aWxsIHN1cHBvcnQgY29tcGxleCBhZGRyZXNzaW5nIG1v
+ZGVzIChlc3Agb24geDg2KS4NCg0KQW5vdGhlciBvcHRpb24gaXMgdG8gZG8gdGhlIG1pc2FsaWdu
+ZWQgYWNjZXNzIGZyb20gd2l0aGluIGFuIGFzbSBzdGF0ZW1lbnQuDQpXaGlsZSBhcmNoaXRlY3R1
+cmUgZGVwZW5kYW50LCBpdCBvbmx5IHJlYWxseSBkZXBlbmRzIG9uIHRoZSBzeW50YXggb2YgdGhl
+IGxkL3N0DQppbnN0cnVjdGlvbi4NClRoZSBjb21waWxlciBjYW4ndCBtZXJnZSB0aG9zZSBiZWNh
+dXNlIGl0IGRvZXNuJ3Qga25vdyB3aGV0aGVyIHRoZSBkYXRhIGlzDQonZnJvYmJlZCcgYmVmb3Jl
+L2FmdGVyIHRoZSBtZW1vcnkgYWNjZXNzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
+ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
+MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-It probably works fine in practice - the one case we had was really
-pretty special, and about the vectorizer doing odd things.
-
-But I think we should strive to convert these to use
-"get_unaligned()", since code generation is fine. It still often makes
-sense to have that test for the config variable, simply because the
-approach might be different if we know unaligned accesses are slow.
-
-So I'll happily take patches that do obvious conversions to
-get_unaligned() where they make sense, but I don't think we should
-consider this some huge hard requirement.
-
-                 Linus
