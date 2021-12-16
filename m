@@ -2,150 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1020477AFD
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 18:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C142477B89
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 19:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240417AbhLPRtc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Dec 2021 12:49:32 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:39813 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240474AbhLPRtb (ORCPT
+        id S236122AbhLPSbb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Dec 2021 13:31:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:34651 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231243AbhLPSba (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 16 Dec 2021 12:49:31 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-82-kIcKgVwCMVG34NOJowHCJQ-1; Thu, 16 Dec 2021 17:49:29 +0000
-X-MC-Unique: kIcKgVwCMVG34NOJowHCJQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Thu, 16 Dec 2021 17:49:27 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Thu, 16 Dec 2021 17:49:27 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Ard Biesheuvel' <ardb@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>
-CC:     Rich Felker <dalias@libc.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paul Mackerras" <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        X86 ML <x86@kernel.org>, "James Morris" <jmorris@namei.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jonas Bonn <jonas@southpole.se>, Arnd Bergmann <arnd@arndb.de>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "Stafford Horne" <shorne@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        John Johansen <john.johansen@canonical.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Thu, 16 Dec 2021 13:31:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1639679489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=n1bFBT5IB/gpnuuiEdK1jZq3mJoWjFnaUGhMpk4YpP0=;
+        b=hvRZRBQn7vNF5TuFtEIVaTeygl09sHfIlhtrsR2G6vK04OxIc2JTduR7ha6JuE9Gk+Q+ta
+        0zK1PZss1p1bsbWb7Vn8dbOH4iaoUxk2gvq3pvOZHfmq0Zgl8wjE78SNGzvLVFaEBscdJ+
+        ABQH7U5F/K923TP8XFad+1bugGvD+yI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-80-EqnyuIOYP4Ku2VG9jSpmOA-1; Thu, 16 Dec 2021 13:31:26 -0500
+X-MC-Unique: EqnyuIOYP4Ku2VG9jSpmOA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B26D4801B0C;
+        Thu, 16 Dec 2021 18:31:24 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.17.223])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 509D7E2C6;
+        Thu, 16 Dec 2021 18:31:21 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "Andy Lutomirski" <luto@kernel.org>
+Cc:     linux-arch@vger.kernel.org,
+        "Linux API" <linux-api@vger.kernel.org>,
+        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
+        linux-mm@kvack.org, "the arch/x86 maintainers" <x86@kernel.org>,
+        musl@lists.openwall.com,
+        "Dave Hansen via Libc-alpha" <libc-alpha@sourceware.org>,
         "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        "linux-ntfs-dev@lists.sourceforge.net" 
-        <linux-ntfs-dev@lists.sourceforge.net>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>
-Subject: RE: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
-Thread-Topic: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
-Thread-Index: AQHX8qKmJnIWdY3H8E+V3sMdrqJgg6w1YkAg
-Date:   Thu, 16 Dec 2021 17:49:27 +0000
-Message-ID: <5a46959bfe654ae9a8a4e1b1adf0db95@AcuMS.aculab.com>
-References: <20210514100106.3404011-1-arnd@kernel.org>
- <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
-In-Reply-To: <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Kees Cook" <keescook@chromium.org>
+Subject: Re: [PATCH] x86: Implement arch_prctl(ARCH_VSYSCALL_LOCKOUT) to
+ disable vsyscall
+References: <87h7bzjaer.fsf@oldenburg.str.redhat.com>
+        <4728eeae-8f1b-4541-b05a-4a0f35a459f7@www.fastmail.com>
+        <87lf1ais27.fsf@oldenburg.str.redhat.com>
+        <9641b76e-9ae0-4c26-97b6-76ecde34f0ef@www.fastmail.com>
+        <878rxaik09.fsf@oldenburg.str.redhat.com>
+        <3b5fb404-7228-48d6-a290-9dd1d6095325@www.fastmail.com>
+Date:   Thu, 16 Dec 2021 19:31:19 +0100
+In-Reply-To: <3b5fb404-7228-48d6-a290-9dd1d6095325@www.fastmail.com> (Andy
+        Lutomirski's message of "Sat, 27 Nov 2021 20:45:23 -0800")
+Message-ID: <87czlwieq0.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJkIEJpZXNoZXV2ZWwNCj4gU2VudDogMTYgRGVjZW1iZXIgMjAyMSAxNzozMA0KPiAN
-Cj4gSGkgQXJuZCwNCj4gDQo+IChyZXBseWluZyB0byBhbiBvbGQgdGhyZWFkIGFzIHRoaXMgY2Ft
-ZSB1cCBpbiB0aGUgZGlzY3Vzc2lvbiByZWdhcmRpbmcNCj4gbWlzYWxpZ25lZCBsb2FkcyBhbmQg
-c3RvcmVkIGluIHNpcGhhc2goKSB3aGVuIGNvbXBpbGVkIGZvciBBUk0NCj4gW2Y3ZTViOWJmYTZj
-ODgyMDQwN2I2NGVhYmMxZjI5YzlhODdlODk5M2RdKQ0KPiANCj4gT24gRnJpLCAxNCBNYXkgMjAy
-MSBhdCAxMjowMiwgQXJuZCBCZXJnbWFubiA8YXJuZEBrZXJuZWwub3JnPiB3cm90ZToNCj4gPg0K
-PiA+IEZyb206IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQo+ID4NCj4gPiBUaGUgZ2V0
-X3VuYWxpZ25lZCgpL3B1dF91bmFsaWduZWQoKSBoZWxwZXJzIGFyZSB0cmFkaXRpb25hbGx5IGFy
-Y2hpdGVjdHVyZQ0KPiA+IHNwZWNpZmljLCB3aXRoIHRoZSB0d28gbWFpbiB2YXJpYW50cyBiZWlu
-ZyB0aGUgImFjY2Vzcy1vay5oIiB2ZXJzaW9uDQo+ID4gdGhhdCBhc3N1bWVzIHVuYWxpZ25lZCBw
-b2ludGVyIGFjY2Vzc2VzIGFsd2F5cyB3b3JrIG9uIGEgcGFydGljdWxhcg0KPiA+IGFyY2hpdGVj
-dHVyZSwgYW5kIHRoZSAibGUtc3RydWN0LmgiIHZlcnNpb24gdGhhdCBjYXN0cyB0aGUgZGF0YSB0
-byBhDQo+ID4gYnl0ZSBhbGlnbmVkIHR5cGUgYmVmb3JlIGRlcmVmZXJlbmNpbmcsIGZvciBhcmNo
-aXRlY3R1cmVzIHRoYXQgY2Fubm90DQo+ID4gYWx3YXlzIGRvIHVuYWxpZ25lZCBhY2Nlc3NlcyBp
-biBoYXJkd2FyZS4NCg0KSSdtIHByZXR0eSBzdXJlIHRoZSBjb21waWxlciBpcyBhbGxvd2VkIHRv
-ICdyZWFkIHRocm91Z2gnIHRoYXQgY2FzdA0KYW5kIHN0aWxsIGRvIGFuIGFsaWduZWQgYWNjZXNz
-Lg0KSXQgaGFzIGFsd2F5cyBiZWVuIGhhcmQgdG8gZ2V0IHRoZSBjb21waWxlciB0byAnZm9yZ2V0
-JyBhYm91dCBrbm93bi9leHBlY3RlZA0KYWxpZ25tZW50IC0gdHlwaWNhbGx5IHRyeWluZyB0byBz
-dG9wIG1lbWNweSgpIGZhdWx0aW5nIG9uIHNwYXJjLg0KUmVhbCBmdW5jdGlvbiBjYWxscyBhcmUg
-dXN1YWxseSByZXF1aXJlZCAtIGJ1dCBMVE8gbWF5IHNjdXBwZXIgdGhhdC4NCg0KPiA+DQo+ID4g
-QmFzZWQgb24gdGhlIGRpc2N1c3Npb24gbGlua2VkIGJlbG93LCBpdCBhcHBlYXJzIHRoYXQgdGhl
-IGFjY2Vzcy1vaw0KPiA+IHZlcnNpb24gaXMgbm90IHJlYWxpYWJsZSBvbiBhbnkgYXJjaGl0ZWN0
-dXJlLCBidXQgdGhlIHN0cnVjdCB2ZXJzaW9uDQo+ID4gcHJvYmFibHkgaGFzIG5vIGRvd25zaWRl
-cy4gVGhpcyBzZXJpZXMgY2hhbmdlcyB0aGUgY29kZSB0byB1c2UgdGhlDQo+ID4gc2FtZSBpbXBs
-ZW1lbnRhdGlvbiBvbiBhbGwgYXJjaGl0ZWN0dXJlcywgYWRkcmVzc2luZyB0aGUgZmV3IGV4Y2Vw
-dGlvbnMNCj4gPiBzZXBhcmF0ZWx5Lg0KPiA+DQo+ID4gSSd2ZSBpbmNsdWRlZCB0aGlzIHZlcnNp
-b24gaW4gdGhlIGFzbS1nZW5lcmljIHRyZWUgZm9yIDUuMTQgYWxyZWFkeSwNCj4gPiBhZGRyZXNz
-aW5nIHRoZSBmZXcgaXNzdWVzIHRoYXQgd2VyZSBwb2ludGVkIG91dCBpbiB0aGUgUkZDLiBJZiB0
-aGVyZQ0KPiA+IGFyZSBhbnkgcmVtYWluaW5nIHByb2JsZW1zLCBJIGhvcGUgdGhvc2UgY2FuIGJl
-IGFkZHJlc3NlZCBhcyBmb2xsb3ctdXANCj4gPiBwYXRjaGVzLg0KPiA+DQo+IA0KPiBJIHRoaW5r
-IHRoaXMgc2VyaWVzIGlzIGEgaHVnZSBpbXByb3ZlbWVudCwgYnV0IGl0IGRvZXMgbm90IHNvbHZl
-IHRoZQ0KPiBVQiBwcm9ibGVtIGNvbXBsZXRlbHkuIEFzIHdlIGZvdW5kLCB0aGVyZSBhcmUgb3Bl
-biBpc3N1ZXMgaW4gdGhlIEdDQw0KPiBidWd6aWxsYSByZWdhcmRpbmcgYXNzdW1wdGlvbnMgaW4g
-dGhlIGNvbXBpbGVyIHRoYXQgYWxpZ25lZCBxdWFudGl0aWVzDQo+IGVpdGhlciBvdmVybGFwIGVu
-dGlyZWx5IG9yIG5vdCBhdCBhbGwuIChlLmcuLA0KPiBodHRwczovL2djYy5nbnUub3JnL2J1Z3pp
-bGxhL3Nob3dfYnVnLmNnaT9pZD0xMDAzNjMpDQoNCkkgdGhpbmsgd2UgY2FuIHN0b3AgdGhlIGNv
-bXBpbGVyIG1lcmdpbmcgdW5hbGlnbmVkIHJlcXVlc3RzIGJ5IGFkZGluZyBhIGJ5dGUtc2l6ZWQN
-Cm1lbW9yeSBiYXJyaWVyIGZvciB0aGUgYmFzZSBhZGRyZXNzIGJlZm9yZSBhbmQgYWZ0ZXIgdGhl
-IGFjY2Vzcy4NClRoYXQgc2hvdWxkIHN0aWxsIHN1cHBvcnQgY29tcGxleCBhZGRyZXNzaW5nIG1v
-ZGVzIChlc3Agb24geDg2KS4NCg0KQW5vdGhlciBvcHRpb24gaXMgdG8gZG8gdGhlIG1pc2FsaWdu
-ZWQgYWNjZXNzIGZyb20gd2l0aGluIGFuIGFzbSBzdGF0ZW1lbnQuDQpXaGlsZSBhcmNoaXRlY3R1
-cmUgZGVwZW5kYW50LCBpdCBvbmx5IHJlYWxseSBkZXBlbmRzIG9uIHRoZSBzeW50YXggb2YgdGhl
-IGxkL3N0DQppbnN0cnVjdGlvbi4NClRoZSBjb21waWxlciBjYW4ndCBtZXJnZSB0aG9zZSBiZWNh
-dXNlIGl0IGRvZXNuJ3Qga25vdyB3aGV0aGVyIHRoZSBkYXRhIGlzDQonZnJvYmJlZCcgYmVmb3Jl
-L2FmdGVyIHRoZSBtZW1vcnkgYWNjZXNzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
-ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
-MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+* Andy Lutomirski:
+
+> This could possibly be much more generic: have a mask of legacy
+> features to disable and a separate mask of lock bits.
+
+Is that really necessary?  Adding additional ARCH_* constants does not
+seem to be particularly onerous and helps with detection of kernel
+support.
+
+>> I can turn this into a toggle, and we could probably default our builds
+>> to vsyscalls=xonly.  Given the userspace ABI impact, we'd still have to
+>> upstream the toggle.  Do you see a chance of a patch a long these lines
+>> going in at all, given that it's an incomplete solution for
+>> vsyscall=emulate?
+>
+> There is basically no reason for anyone to use vsyscall=emulate any
+> more.  I'm aware of exactly one use case, and it's quite bizarre and
+> involves instrumenting an outdated binary with an outdated
+> instrumentation tool.  If either one is recent (last few years),
+> vsyscall=xonly is fine.
+
+Yeah, we plan to stick to vsyscall=xonly.  This means that the toggle is
+easier to implement, of course.
+
+>> Hmm.  But only for vsyscall=xonly, right?  With vsyscall=emulate,
+>> reading at those addresses will still succeed.
+>
+> IMO if vsyscall is disabled for a process, reads and executes should
+> both fail.  This is trivial in xonly mode.
+
+Right, I'll document this as a glitch for now.
+
+I've got a v2 (with the toggle rather than pure lockout) and will sent
+it out shortly.
+
+Thanks,
+Florian
 
