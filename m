@@ -2,54 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73059476E98
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 11:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A16D4476EF3
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 11:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbhLPKNa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Dec 2021 05:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39214 "EHLO
+        id S236115AbhLPKeh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Dec 2021 05:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235757AbhLPKN3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Dec 2021 05:13:29 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED58C061574
-        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 02:13:29 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id a1so4024070qtx.11
-        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 02:13:29 -0800 (PST)
+        with ESMTP id S236114AbhLPKee (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Dec 2021 05:34:34 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7147C061574
+        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 02:34:33 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id z9so24922080qtj.9
+        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 02:34:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=YRNyvvMx0D6cmoATqQzVllabSh/sAVBFjHpHuEs3K98=;
-        b=QP5fMqjj2HERTi9+wi+qJlnEfdulm9t0JMh0e3fxdFg1Eptn92K/EJRkxC+dymhP1k
-         rDgAGl9zjJiJy9Z2CLiM1aizonlBf8p4dYx8YPJOsMLDa2CtFG0KgjcUo/D/MpmW/Lfu
-         E+y0YzFu6MrvdOrCWw1M+DOOVTvuWp2IKjjkf/hmk4SVjZuBczcjSDavSFfIJtyfp35V
-         Gk4GCY/9fc4684sjRRdi1uVL3BVTL7yPcVOqrC5Fz/rzT/vBsyErQfuaCdNAfmtKskb9
-         WF1IZa6maksSZ1RTQ16ie08YUAXwm3MzxFerPjTDYyrDPC/lZsZGY7ZL//NangtkxY0A
-         raMg==
+        bh=M+0sYl7w0EFJ72TMaAFHyV1NVwE2EB6FQgQgq+6hP5E=;
+        b=R5rs8mLKc9+IweLlPGugdIqRbsaQ+ykrd4Qw0rYiqKo7CBJEMc01G0mkilYP1nCpNr
+         EbfrdFpMNXVrsUCp3Dbq6y+5yK8eGjHDc+5Hdja4rIqou0bGFzJhmnGm39HpAlIYAAOG
+         yxoIVOyRBWaG/a/pCsSOaWPqJLWFaE3H+Yh9ocZKGVjzpg3U0VqYZpAUAre1X8YUrUO9
+         vEccsaCzWolMC8UYG3MdqFP/YAR7aMSdYrF3R9Fu3ieKV7HGs0qxMUThIQxbt52UOxFX
+         xIB3YRLsjGT09GBoJNNY25C3dd9pHQkrVZit2MRrI2zII4Jw6CrAXvnTmui+4982C1hM
+         t7Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YRNyvvMx0D6cmoATqQzVllabSh/sAVBFjHpHuEs3K98=;
-        b=dD1+pTnUFOGOYB9EZjHeZiMWGrN0CUUh2KllImBnc4XJMeQmOONkqrG4LBQI1ngoHW
-         /kLXaboqaCfLukqMFfiC/e7ngR15CyRTlQfH1rqNukajlGFMfUZNlhXX/PfPKCSvwSlD
-         TK9DiXITGS68rp+J/r/dvuRZ6i93aBMtNUekqy+B9b02+ErgduHSKHZQIbOaVnYsnWz+
-         M0nB8lv693X+KUlvcCpuKEW2o0QN3IvXmFet5nkMv7iuWhKq8XAW5UTenT3m1yHsLL3V
-         +ewAcNyq6EmVWNSl1dmjPSph0KGc0j6gda9jkRaKdorxVykxRMV8FRIYWBMKzyIXmy+W
-         YoLg==
-X-Gm-Message-State: AOAM533O5YStUrPP4CPflnDbixOM+tjk/ePSSlpVZNRojL5felujLimz
-        3TjLfXLC7OGRM1ScDIG9aoCb0OHb1fRDvOhwSIrOqA==
-X-Google-Smtp-Source: ABdhPJxFhNQBI4hw6cIRpJ3Bn2gy/Dy3Dn3EXkPsiZJ6PPFBQxKOA/co/dhObm1iQVeZPt6w2zfFhE/oIx5W4j8ixtU=
-X-Received: by 2002:ac8:4e56:: with SMTP id e22mr16491312qtw.72.1639649608437;
- Thu, 16 Dec 2021 02:13:28 -0800 (PST)
+        bh=M+0sYl7w0EFJ72TMaAFHyV1NVwE2EB6FQgQgq+6hP5E=;
+        b=tXIN5DsPetzsKjyi0WhcAkchkkV2HaMT+NCeo3ShAkR8zqHFB3dZugoSC8V0NH3bsQ
+         zh9oirdPdD6GK1iNW31XLkndxU4ssMJjeuP4byhqTFbHgJ0ZgkI12rcUDJBhWZ+wNrgb
+         pH2IkGFx0NN168Khq7timWrObqxgSf68NozdHEo73rWtMRIvULoQPeZaCGfBS/XS3S5x
+         L38P9TF/O4Ccuuf4sb5FiLiFNz8o1io/eGyx3diAMpCIIEjzGawmFiT8MGeQh4OZAjzt
+         Je2eQLcUfK7Hns5ecm0KAZjWjiY6mkjPCBemox/R429ntDoV6ayoX7SLiwD++kBNLLrm
+         Z89w==
+X-Gm-Message-State: AOAM533ASC/5tuaDfY4j5ERn1It9otOWkYaP1bULP0hLejKn7e6Ry6bz
+        oDUzM5buu1urM3ASH0q5qcxNlNMXLZgwL1u/SXxgcQ==
+X-Google-Smtp-Source: ABdhPJw0jeWo1ZwgFv58HwTnkU4NU69fnNqT/q0owhKeEurY9FKnfrFrKyeNZuGGVxZtljFxx/Gn0tS3qUqy4vwQFZ8=
+X-Received: by 2002:a05:622a:2d5:: with SMTP id a21mr16301315qtx.56.1639650872812;
+ Thu, 16 Dec 2021 02:34:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <YbjIHa/1Qr/v8Q8J@kroah.com>
-In-Reply-To: <YbjIHa/1Qr/v8Q8J@kroah.com>
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-14-glider@google.com>
+ <YbjHerrHit/ZqXYs@kroah.com>
+In-Reply-To: <YbjHerrHit/ZqXYs@kroah.com>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 16 Dec 2021 11:12:52 +0100
-Message-ID: <CAG_fn=Ub57GfJwUuuKqfc0rhFOdRF9e=vgb4fwm_bXYziraFMA@mail.gmail.com>
-Subject: Re: [PATCH 00/43] Add KernelMemorySanitizer infrastructure
+Date:   Thu, 16 Dec 2021 11:33:56 +0100
+Message-ID: <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
+Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -84,40 +85,60 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 5:36 PM Greg Kroah-Hartman
+On Tue, Dec 14, 2021 at 5:34 PM Greg Kroah-Hartman
 <gregkh@linuxfoundation.org> wrote:
 >
-> On Tue, Dec 14, 2021 at 05:20:07PM +0100, Alexander Potapenko wrote:
-> > KernelMemorySanitizer (KMSAN) is a detector of errors related to uses o=
-f
-> > uninitialized memory. It relies on compile-time Clang instrumentation
-> > (similar to MSan in the userspace [1]) and tracks the state of every bi=
-t
-> > of kernel memory, being able to report an error if uninitialized value =
-is
-> > used in a condition, dereferenced, or escapes to userspace, USB or DMA.
+> On Tue, Dec 14, 2021 at 05:20:20PM +0100, Alexander Potapenko wrote:
+> > This patch adds the core parts of KMSAN runtime and associated files:
+> >
+> >   - include/linux/kmsan-checks.h: user API to poison/unpoison/check
+> >     the kernel memory;
+> >   - include/linux/kmsan.h: declarations of KMSAN hooks to be referenced
+> >     outside of KMSAN runtime;
+> >   - lib/Kconfig.kmsan: CONFIG_KMSAN and related declarations;
+> >   - Makefile, mm/Makefile, mm/kmsan/Makefile: boilerplate Makefile code=
+;
+> >   - mm/kmsan/annotations.c: non-inlineable implementation of KMSAN_INIT=
+();
+> >   - mm/kmsan/core.c: core functions that operate with shadow and origin
+> >     memory and perform checks, utility functions;
+> >   - mm/kmsan/hooks.c: KMSAN hooks for kernel subsystems;
+> >   - mm/kmsan/init.c: KMSAN initialization routines;
+> >   - mm/kmsan/instrumentation.c: functions called by KMSAN instrumentati=
+on;
+> >   - mm/kmsan/kmsan.h: internal KMSAN declarations;
+> >   - mm/kmsan/shadow.c: routines that encapsulate metadata creation and
+> >     addressing;
+> >   - scripts/Makefile.kmsan: CFLAGS_KMSAN
+> >   - scripts/Makefile.lib: KMSAN_SANITIZE and KMSAN_ENABLE_CHECKS macros
 >
-> Why is USB unique here?
-
-syzkaller just happens to be good at fuzzing USB drivers, so it was
-fairly easy to implement and test USB support for KMSAN.
-This should give the maintainers of other buses an idea of how this
-could be done :)
-
- What about serial data?  i2c?  spi?  w1?  We
-> have a lot of different I/O bus types :)
-
-We hope to cover those after KMSAN hits upstream.
-
 >
-> And how is DMA checked given that the kernel shouldn't be seeing dma
-> memory?
+> That's an odd way to write a changelog, don't you think?
 
-Before writing a buffer to DMA, that buffer's contents are checked by
-KMSAN. If there are uninitialized bytes, those will be reported.
-After reading a buffer from DMA, it is marked as initialized to avoid
-false positives.
-We do not track DMA memory itself.
+Agreed. I'll try to concentrate on the functionality instead. Sorry about t=
+hat.
+
+> You need to describe what you are doing here and why you are doing it.
+> Not a list of file names, we can see that in the diffstat.
+>
+> Also, you don't mention you are doing USB stuff here at all.  And why
+> are you doing it here?  That should be added in a later patch.
+
+You are right, USB is a good example of a stand-alone feature that can
+be moved to a separate patch.
+
+> Break this up into smaller, logical, pieces that add the infrastructure
+> and build on it.  Don't just chop your patches up on a logical-file
+> boundry, as you are adding stuff in this patch that you do not need for
+> many more later on, which means it was not needed here.
+
+Just to make sure I don't misunderstand - for example for "kmsan: mm:
+call KMSAN hooks from SLUB code", would it be better to pull the code
+in mm/kmsan/core.c implementing kmsan_slab_alloc() and
+kmsan_slab_free() into that patch?
+I thought maintainers would prefer to have patches to their code
+separated from KMSAN code, but if it's not true, I can surely fix
+that.
 
 > thanks,
 >
