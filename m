@@ -2,146 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8A1476F72
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 12:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F5F47709E
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 12:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236404AbhLPLFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Dec 2021 06:05:06 -0500
-Received: from mail-wm1-f44.google.com ([209.85.128.44]:33494 "EHLO
-        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbhLPLFF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Dec 2021 06:05:05 -0500
-Received: by mail-wm1-f44.google.com with SMTP id n14-20020a7bcbce000000b00332f4abf43fso1216100wmi.0;
-        Thu, 16 Dec 2021 03:05:04 -0800 (PST)
+        id S233519AbhLPLml (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Dec 2021 06:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233333AbhLPLmb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Dec 2021 06:42:31 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D4FC061401
+        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id m25so25064817qtq.13
+        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
+        b=XAiY5JQCbKhUV3kfV68NxknTY8076aQ+jZiIG+NNSnrj8SbWsLA5ZyVis9Hv7MDsX5
+         Wp1aJ8rEmDfQ1U3vhA+W5Q6fUW0sQxhqwaHiosPbQFbyYijHt4Icvm/T0vEK5/kKmBc+
+         QqELCOAj0es+5TzRQyWwGBhwQGehjbOewfhMN3/S4hQw7QoR6Y3+tDzh1TbUcqm1TT9t
+         NYT2/qpfB6ahTcpnyVYoBu/0br0EmuZ66fyA68h0ieuZcBkGcxPgfheRqd2GHCJMPyzP
+         6QgpFUXd/uCVTtz1/hZUUGudKd9Q0ZImcSJeB1tjd8lIsCPvJkt1eKVnbTcB60Kk9v0/
+         CoRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ia0s2pfedLLV2rKQx/9pdjpwFu99hZ9OuUlgB2e9yo0=;
-        b=QD1MWjI3cV8s6jVSqVs1as2VGFrfr3uQ7QEgUzny9ZeFl4huygcaWzECHILPpjtjfm
-         gxQWHj3z36xZww5UHis+C3N+KxS36IJomsIXHvS4reElrCWAldyt8204oTMmCkMwI1LT
-         6+0kGo7wdt5ItXqqrffpNvPm+UYwLBgB5O5mXJ3narZC/tdS32J6HWCt1vxjiFkZBMsQ
-         AK/408VXXwe8bXjRYEs82t4JTHa9QMSuxh+0TQCyLd1VwJ+7rfSSlXuRX6zpo6lt19nD
-         hBUyDgoqdJ3B9BQp4xu1nbINouljoa0TBhQvRALqHk+4M1iYWFTPFjjDQR7YpiQ6celB
-         /rQw==
-X-Gm-Message-State: AOAM532HZfn/CSh8UtHKdvTJkLDC8SAtcYPfqHYi8UWdzXepYwptICzV
-        Jcp1NqjCVZXTfnJdZTKITu0=
-X-Google-Smtp-Source: ABdhPJz9k2azLHdE9YVUF2mYlnC5nG4eLgboSYl5jYHIGX/6zclpudEz7h2L6IJ5hM2Wce25bH6xTw==
-X-Received: by 2002:a05:600c:296:: with SMTP id 22mr4493492wmk.11.1639652703518;
-        Thu, 16 Dec 2021 03:05:03 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id w15sm4376365wrk.77.2021.12.16.03.05.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Dec 2021 03:05:02 -0800 (PST)
-Date:   Thu, 16 Dec 2021 11:05:01 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Tianyu Lan <ltykernel@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, davem@davemloft.net, kuba@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
-        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
-        Tianyu.Lan@microsoft.com, michael.h.kelley@microsoft.com,
-        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
-        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
-        hch@lst.de, joro@8bytes.org, parri.andrea@gmail.com
-Subject: Re: [PATCH V7 1/5] swiotlb: Add swiotlb bounce buffer remap function
- for HV IVM
-Message-ID: <20211216110501.y2i7adl3ilkrodaq@liuwe-devbox-debian-v2>
-References: <20211213071407.314309-1-ltykernel@gmail.com>
- <20211213071407.314309-2-ltykernel@gmail.com>
- <198e9243-abca-b23e-0e8e-8581a7329ede@intel.com>
- <3243ff22-f6c8-b7cd-26b7-6e917e274a7c@gmail.com>
- <c25ff1e8-4d1e-cf1c-a9f6-c189307f92fd@intel.com>
- <a1c8f26f-fbf2-29b6-e734-e6d6151c39f8@amd.com>
- <7afc23c3-22e7-9bbf-7770-c683bf84a7cc@intel.com>
- <fb2ff8b7-ab8c-7c4b-0850-222cd2cf7c4a@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
+        b=yUnYpQI15/mtSvM082T6W2WSZEuoy6iLgJ8p1AuhrwGi1kzJhEZgFdsEWh2P/9HIKQ
+         TDx5526SbrnQzGlE/1GjiYPSg0wd+g/cnLKRmM/aRRCERsKmQqtJHaRNlvnX0rQkuQ2Q
+         Ya2Q8Png8m+XzS/fSTsDnmHSLFDvyfulEszl0xzWpFMkkYaqSBDjDYSx1gfOHIRzvyeP
+         dGSCihCxhTQ75uBpunTgKxii1xc8T+HnNj+JtluwFTQj3AcSY9FJAzY+A60LiiwwSrPC
+         yQG5Z9IxCdq0uIur97i70XBRGwP0EnOV3o/ERu7FavlRYv55mm+gi5UHfITuzQTmXa/H
+         oumw==
+X-Gm-Message-State: AOAM531JwtaSLOS03Z6VAv9jqDcAAaLAgAxVkOKzHfELy3ZPBA6kAAEx
+        x0JjN/nlDFfz3/glCT/YJ2R9Hx9VYLH7ToDmbXI=
+X-Google-Smtp-Source: ABdhPJxzAaV5DauAecsJzqBWmheSvDxk3ghiLfb6YRovClVg4kL4yUlGwYUFAnV+1q8jYrfo3AT6l8iJutzsg/2jTPA=
+X-Received: by 2002:a05:622a:1d4:: with SMTP id t20mr16497208qtw.84.1639654948506;
+ Thu, 16 Dec 2021 03:42:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fb2ff8b7-ab8c-7c4b-0850-222cd2cf7c4a@gmail.com>
+Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:28
+ -0800 (PST)
+Reply-To: selviasantiago1@gmail.com
+From:   Selvia Santiago <mariamatinez119@gmail.com>
+Date:   Thu, 16 Dec 2021 11:42:28 +0000
+Message-ID: <CAONDhKOtxcgjB1YEPd0RXNOVbbQ8k-9k32v_cdFxEKFzk62kJg@mail.gmail.com>
+Subject: Urgent
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 15, 2021 at 01:00:38PM +0800, Tianyu Lan wrote:
-> 
-> 
-> On 12/15/2021 6:40 AM, Dave Hansen wrote:
-> > On 12/14/21 2:23 PM, Tom Lendacky wrote:
-> > > > I don't really understand how this can be more general any *not* get
-> > > > utilized by the existing SEV support.
-> > > 
-> > > The Virtual Top-of-Memory (VTOM) support is an SEV-SNP feature that is
-> > > meant to be used with a (relatively) un-enlightened guest. The idea is
-> > > that the C-bit in the guest page tables must be 0 for all accesses. It
-> > > is only the physical address relative to VTOM that determines if the
-> > > access is encrypted or not. So setting sme_me_mask will actually cause
-> > > issues when running with this feature. Since all DMA for an SEV-SNP
-> > > guest must still be to shared (unencrypted) memory, some enlightenment
-> > > is needed. In this case, memory mapped above VTOM will provide that via
-> > > the SWIOTLB update. For SEV-SNP guests running with VTOM, they are
-> > > likely to also be running with the Reflect #VC feature, allowing a
-> > > "paravisor" to handle any #VCs generated by the guest.
-> > > 
-> > > See sections 15.36.8 "Virtual Top-of-Memory" and 15.36.9 "Reflect #VC"
-> > > in volume 2 of the AMD APM [1].
-> > 
-> > Thanks, Tom, that's pretty much what I was looking for.
-> > 
-> > The C-bit normally comes from the page tables.  But, the hardware also
-> > provides an alternative way to effectively get C-bit behavior without
-> > actually setting the bit in the page tables: Virtual Top-of-Memory
-> > (VTOM).  Right?
-> > 
-> > It sounds like Hyper-V has chosen to use VTOM instead of requiring the
-> > guest to do the C-bit in its page tables.
-> > 
-> > But, the thing that confuses me is when you said: "it (VTOM) is meant to
-> > be used with a (relatively) un-enlightened guest".  We don't have an
-> > unenlightened guest here.  We have Linux, which is quite enlightened.
-> > 
-> > > Is VTOM being used because there's something that completely rules out
-> > > using the C-bit in the page tables?  What's that "something"?
-> 
-> 
-> For "un-enlightened" guest, there is an another system running insider
-> the VM to emulate some functions(tsc, timer, interrupt and so on) and
-> this helps not to modify OS(Linux/Windows) a lot. In Hyper-V Isolation
-> VM, we called the new system as HCL/paravisor. HCL runs in the VMPL0 and
-> Linux runs in VMPL2. This is similar with nested virtualization. HCL
-> plays similar role as L1 hypervisor to emulate some general functions
-> (e.g, rdmsr/wrmsr accessing and interrupt injection) which needs to be
-> enlightened in the enlightened guest. Linux kernel needs to handle
-> #vc/#ve exception directly in the enlightened guest. HCL handles such
-> exception in un-enlightened guest and emulate interrupt injection which
-> helps not to modify OS core part code. Using vTOM also is same purpose.
-> Hyper-V uses vTOM avoid changing page table related code in OS(include
-> Windows and Linux)and just needs to map memory into decrypted address
-> space above vTOM in the driver code.
-> 
-> Linux has generic swiotlb bounce buffer implementation and so introduce
-> swiotlb_unencrypted_base here to set shared memory boundary or vTOM.
-> Hyper-V Isolation VM is un-enlightened guest. Hyper-V doesn't expose sev/sme
-> capability to guest and so SEV code actually doesn't work.
-> So we also can't interact current existing SEV code and these code is
-> for enlightened guest support without HCL/paravisor. If other platforms
-> or SEV want to use similar vTOM feature, swiotlb_unencrypted_base can
-> be reused. So swiotlb_unencrypted_base is a general solution for all
-> platforms besides SEV and Hyper-V.
-> 
+-- 
+Urgent
 
-Thanks for the detailed explanation.
+I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
+suffering from long time illness (Cancer), there is funds I inherited
+from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
+Million Dollars) which he deposited in bank before his death, I need a
+honest and Faithful person that can use these funds for humanity work.
 
-Dave, are you happy with this?
+I took this decision because I don't have any child that will inherit
+this money and I don't want a situation where this money will be used
+in an ungodly way. That is why I am taking this decision, and my
+doctor has confirmed to me that I have less than two weeks to live,
+having known my condition I decided to donate this fund to a charity
+or individual that will utilize this money to assist the poor and the
+needy in accordance to my instructions.
 
-The code looks pretty solid to my untrained eyes. And the series has
-collected necessary acks from stakeholders. If I don't hear objection by
-EOD Friday I will apply this series to hyperv-next.
+I want you to use 70% of this funds for orphanages, school, church,
+widows, propagating the word and other humanity works,The remaining
+30% should be yours for your efforts as the new beneficiary.
 
-Wei.
+Please if you would be able to use these funds for humanity work
+kindly reply me. As soon as I have received your response, I will give
+you further directives on how you are to go about the claims of the
+said funds.
+
+Remain blessed.
+Mrs Selvia Santiago.
