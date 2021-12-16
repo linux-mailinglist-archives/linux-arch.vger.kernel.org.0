@@ -2,158 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A16D4476EF3
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 11:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8A1476F72
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 12:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236115AbhLPKeh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Dec 2021 05:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236114AbhLPKee (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Dec 2021 05:34:34 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7147C061574
-        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 02:34:33 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id z9so24922080qtj.9
-        for <linux-arch@vger.kernel.org>; Thu, 16 Dec 2021 02:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=M+0sYl7w0EFJ72TMaAFHyV1NVwE2EB6FQgQgq+6hP5E=;
-        b=R5rs8mLKc9+IweLlPGugdIqRbsaQ+ykrd4Qw0rYiqKo7CBJEMc01G0mkilYP1nCpNr
-         EbfrdFpMNXVrsUCp3Dbq6y+5yK8eGjHDc+5Hdja4rIqou0bGFzJhmnGm39HpAlIYAAOG
-         yxoIVOyRBWaG/a/pCsSOaWPqJLWFaE3H+Yh9ocZKGVjzpg3U0VqYZpAUAre1X8YUrUO9
-         vEccsaCzWolMC8UYG3MdqFP/YAR7aMSdYrF3R9Fu3ieKV7HGs0qxMUThIQxbt52UOxFX
-         xIB3YRLsjGT09GBoJNNY25C3dd9pHQkrVZit2MRrI2zII4Jw6CrAXvnTmui+4982C1hM
-         t7Dw==
+        id S236404AbhLPLFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Dec 2021 06:05:06 -0500
+Received: from mail-wm1-f44.google.com ([209.85.128.44]:33494 "EHLO
+        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236400AbhLPLFF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Dec 2021 06:05:05 -0500
+Received: by mail-wm1-f44.google.com with SMTP id n14-20020a7bcbce000000b00332f4abf43fso1216100wmi.0;
+        Thu, 16 Dec 2021 03:05:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=M+0sYl7w0EFJ72TMaAFHyV1NVwE2EB6FQgQgq+6hP5E=;
-        b=tXIN5DsPetzsKjyi0WhcAkchkkV2HaMT+NCeo3ShAkR8zqHFB3dZugoSC8V0NH3bsQ
-         zh9oirdPdD6GK1iNW31XLkndxU4ssMJjeuP4byhqTFbHgJ0ZgkI12rcUDJBhWZ+wNrgb
-         pH2IkGFx0NN168Khq7timWrObqxgSf68NozdHEo73rWtMRIvULoQPeZaCGfBS/XS3S5x
-         L38P9TF/O4Ccuuf4sb5FiLiFNz8o1io/eGyx3diAMpCIIEjzGawmFiT8MGeQh4OZAjzt
-         Je2eQLcUfK7Hns5ecm0KAZjWjiY6mkjPCBemox/R429ntDoV6ayoX7SLiwD++kBNLLrm
-         Z89w==
-X-Gm-Message-State: AOAM533ASC/5tuaDfY4j5ERn1It9otOWkYaP1bULP0hLejKn7e6Ry6bz
-        oDUzM5buu1urM3ASH0q5qcxNlNMXLZgwL1u/SXxgcQ==
-X-Google-Smtp-Source: ABdhPJw0jeWo1ZwgFv58HwTnkU4NU69fnNqT/q0owhKeEurY9FKnfrFrKyeNZuGGVxZtljFxx/Gn0tS3qUqy4vwQFZ8=
-X-Received: by 2002:a05:622a:2d5:: with SMTP id a21mr16301315qtx.56.1639650872812;
- Thu, 16 Dec 2021 02:34:32 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ia0s2pfedLLV2rKQx/9pdjpwFu99hZ9OuUlgB2e9yo0=;
+        b=QD1MWjI3cV8s6jVSqVs1as2VGFrfr3uQ7QEgUzny9ZeFl4huygcaWzECHILPpjtjfm
+         gxQWHj3z36xZww5UHis+C3N+KxS36IJomsIXHvS4reElrCWAldyt8204oTMmCkMwI1LT
+         6+0kGo7wdt5ItXqqrffpNvPm+UYwLBgB5O5mXJ3narZC/tdS32J6HWCt1vxjiFkZBMsQ
+         AK/408VXXwe8bXjRYEs82t4JTHa9QMSuxh+0TQCyLd1VwJ+7rfSSlXuRX6zpo6lt19nD
+         hBUyDgoqdJ3B9BQp4xu1nbINouljoa0TBhQvRALqHk+4M1iYWFTPFjjDQR7YpiQ6celB
+         /rQw==
+X-Gm-Message-State: AOAM532HZfn/CSh8UtHKdvTJkLDC8SAtcYPfqHYi8UWdzXepYwptICzV
+        Jcp1NqjCVZXTfnJdZTKITu0=
+X-Google-Smtp-Source: ABdhPJz9k2azLHdE9YVUF2mYlnC5nG4eLgboSYl5jYHIGX/6zclpudEz7h2L6IJ5hM2Wce25bH6xTw==
+X-Received: by 2002:a05:600c:296:: with SMTP id 22mr4493492wmk.11.1639652703518;
+        Thu, 16 Dec 2021 03:05:03 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id w15sm4376365wrk.77.2021.12.16.03.05.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Dec 2021 03:05:02 -0800 (PST)
+Date:   Thu, 16 Dec 2021 11:05:01 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Tianyu Lan <ltykernel@gmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, davem@davemloft.net, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        Tianyu.Lan@microsoft.com, michael.h.kelley@microsoft.com,
+        iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, joro@8bytes.org, parri.andrea@gmail.com
+Subject: Re: [PATCH V7 1/5] swiotlb: Add swiotlb bounce buffer remap function
+ for HV IVM
+Message-ID: <20211216110501.y2i7adl3ilkrodaq@liuwe-devbox-debian-v2>
+References: <20211213071407.314309-1-ltykernel@gmail.com>
+ <20211213071407.314309-2-ltykernel@gmail.com>
+ <198e9243-abca-b23e-0e8e-8581a7329ede@intel.com>
+ <3243ff22-f6c8-b7cd-26b7-6e917e274a7c@gmail.com>
+ <c25ff1e8-4d1e-cf1c-a9f6-c189307f92fd@intel.com>
+ <a1c8f26f-fbf2-29b6-e734-e6d6151c39f8@amd.com>
+ <7afc23c3-22e7-9bbf-7770-c683bf84a7cc@intel.com>
+ <fb2ff8b7-ab8c-7c4b-0850-222cd2cf7c4a@gmail.com>
 MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-14-glider@google.com>
- <YbjHerrHit/ZqXYs@kroah.com>
-In-Reply-To: <YbjHerrHit/ZqXYs@kroah.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 16 Dec 2021 11:33:56 +0100
-Message-ID: <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
-Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fb2ff8b7-ab8c-7c4b-0850-222cd2cf7c4a@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 5:34 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Dec 14, 2021 at 05:20:20PM +0100, Alexander Potapenko wrote:
-> > This patch adds the core parts of KMSAN runtime and associated files:
-> >
-> >   - include/linux/kmsan-checks.h: user API to poison/unpoison/check
-> >     the kernel memory;
-> >   - include/linux/kmsan.h: declarations of KMSAN hooks to be referenced
-> >     outside of KMSAN runtime;
-> >   - lib/Kconfig.kmsan: CONFIG_KMSAN and related declarations;
-> >   - Makefile, mm/Makefile, mm/kmsan/Makefile: boilerplate Makefile code=
-;
-> >   - mm/kmsan/annotations.c: non-inlineable implementation of KMSAN_INIT=
-();
-> >   - mm/kmsan/core.c: core functions that operate with shadow and origin
-> >     memory and perform checks, utility functions;
-> >   - mm/kmsan/hooks.c: KMSAN hooks for kernel subsystems;
-> >   - mm/kmsan/init.c: KMSAN initialization routines;
-> >   - mm/kmsan/instrumentation.c: functions called by KMSAN instrumentati=
-on;
-> >   - mm/kmsan/kmsan.h: internal KMSAN declarations;
-> >   - mm/kmsan/shadow.c: routines that encapsulate metadata creation and
-> >     addressing;
-> >   - scripts/Makefile.kmsan: CFLAGS_KMSAN
-> >   - scripts/Makefile.lib: KMSAN_SANITIZE and KMSAN_ENABLE_CHECKS macros
->
->
-> That's an odd way to write a changelog, don't you think?
+On Wed, Dec 15, 2021 at 01:00:38PM +0800, Tianyu Lan wrote:
+> 
+> 
+> On 12/15/2021 6:40 AM, Dave Hansen wrote:
+> > On 12/14/21 2:23 PM, Tom Lendacky wrote:
+> > > > I don't really understand how this can be more general any *not* get
+> > > > utilized by the existing SEV support.
+> > > 
+> > > The Virtual Top-of-Memory (VTOM) support is an SEV-SNP feature that is
+> > > meant to be used with a (relatively) un-enlightened guest. The idea is
+> > > that the C-bit in the guest page tables must be 0 for all accesses. It
+> > > is only the physical address relative to VTOM that determines if the
+> > > access is encrypted or not. So setting sme_me_mask will actually cause
+> > > issues when running with this feature. Since all DMA for an SEV-SNP
+> > > guest must still be to shared (unencrypted) memory, some enlightenment
+> > > is needed. In this case, memory mapped above VTOM will provide that via
+> > > the SWIOTLB update. For SEV-SNP guests running with VTOM, they are
+> > > likely to also be running with the Reflect #VC feature, allowing a
+> > > "paravisor" to handle any #VCs generated by the guest.
+> > > 
+> > > See sections 15.36.8 "Virtual Top-of-Memory" and 15.36.9 "Reflect #VC"
+> > > in volume 2 of the AMD APM [1].
+> > 
+> > Thanks, Tom, that's pretty much what I was looking for.
+> > 
+> > The C-bit normally comes from the page tables.  But, the hardware also
+> > provides an alternative way to effectively get C-bit behavior without
+> > actually setting the bit in the page tables: Virtual Top-of-Memory
+> > (VTOM).  Right?
+> > 
+> > It sounds like Hyper-V has chosen to use VTOM instead of requiring the
+> > guest to do the C-bit in its page tables.
+> > 
+> > But, the thing that confuses me is when you said: "it (VTOM) is meant to
+> > be used with a (relatively) un-enlightened guest".  We don't have an
+> > unenlightened guest here.  We have Linux, which is quite enlightened.
+> > 
+> > > Is VTOM being used because there's something that completely rules out
+> > > using the C-bit in the page tables?  What's that "something"?
+> 
+> 
+> For "un-enlightened" guest, there is an another system running insider
+> the VM to emulate some functions(tsc, timer, interrupt and so on) and
+> this helps not to modify OS(Linux/Windows) a lot. In Hyper-V Isolation
+> VM, we called the new system as HCL/paravisor. HCL runs in the VMPL0 and
+> Linux runs in VMPL2. This is similar with nested virtualization. HCL
+> plays similar role as L1 hypervisor to emulate some general functions
+> (e.g, rdmsr/wrmsr accessing and interrupt injection) which needs to be
+> enlightened in the enlightened guest. Linux kernel needs to handle
+> #vc/#ve exception directly in the enlightened guest. HCL handles such
+> exception in un-enlightened guest and emulate interrupt injection which
+> helps not to modify OS core part code. Using vTOM also is same purpose.
+> Hyper-V uses vTOM avoid changing page table related code in OS(include
+> Windows and Linux)and just needs to map memory into decrypted address
+> space above vTOM in the driver code.
+> 
+> Linux has generic swiotlb bounce buffer implementation and so introduce
+> swiotlb_unencrypted_base here to set shared memory boundary or vTOM.
+> Hyper-V Isolation VM is un-enlightened guest. Hyper-V doesn't expose sev/sme
+> capability to guest and so SEV code actually doesn't work.
+> So we also can't interact current existing SEV code and these code is
+> for enlightened guest support without HCL/paravisor. If other platforms
+> or SEV want to use similar vTOM feature, swiotlb_unencrypted_base can
+> be reused. So swiotlb_unencrypted_base is a general solution for all
+> platforms besides SEV and Hyper-V.
+> 
 
-Agreed. I'll try to concentrate on the functionality instead. Sorry about t=
-hat.
+Thanks for the detailed explanation.
 
-> You need to describe what you are doing here and why you are doing it.
-> Not a list of file names, we can see that in the diffstat.
->
-> Also, you don't mention you are doing USB stuff here at all.  And why
-> are you doing it here?  That should be added in a later patch.
+Dave, are you happy with this?
 
-You are right, USB is a good example of a stand-alone feature that can
-be moved to a separate patch.
+The code looks pretty solid to my untrained eyes. And the series has
+collected necessary acks from stakeholders. If I don't hear objection by
+EOD Friday I will apply this series to hyperv-next.
 
-> Break this up into smaller, logical, pieces that add the infrastructure
-> and build on it.  Don't just chop your patches up on a logical-file
-> boundry, as you are adding stuff in this patch that you do not need for
-> many more later on, which means it was not needed here.
-
-Just to make sure I don't misunderstand - for example for "kmsan: mm:
-call KMSAN hooks from SLUB code", would it be better to pull the code
-in mm/kmsan/core.c implementing kmsan_slab_alloc() and
-kmsan_slab_free() into that patch?
-I thought maintainers would prefer to have patches to their code
-separated from KMSAN code, but if it's not true, I can surely fix
-that.
-
-> thanks,
->
-> greg k-h
-
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Wei.
