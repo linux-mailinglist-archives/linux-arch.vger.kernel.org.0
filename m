@@ -2,228 +2,185 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4024A479413
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Dec 2021 19:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0ED147944A
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Dec 2021 19:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240217AbhLQS0n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Dec 2021 13:26:43 -0500
-Received: from mga06.intel.com ([134.134.136.31]:22510 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231609AbhLQS0m (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 17 Dec 2021 13:26:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639765602; x=1671301602;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=YH3sM3fKUYX2l1CxZa0lsGrLu2lfb36D5H5JhDFnQAI=;
-  b=L3PN1H3M/bNJzN62PNXnr/fCeY0SDdFFA9HKPQdtcERrk2MgQh2VxYR3
-   wWYGB7ASeCmhOf5lh7Z5lf4abSC6N9bFxsy0VPCBQ9Upjh7NYspr4aEn2
-   fbZMKfdQvBGhduI5VY9hBSGklM5KF0lnOzbcWfBG33ssS0+8hqp6+FCxp
-   9hYoRm/bIlmQmrw9cWOuQtuFcGzBd2f8vNTlqNF9Gk1NzhJkxae4DEjLz
-   TTo79K2RQ5CYEhhDwWcfzO2oXpZGon0gh5dVy+satjGx3jj9ZsIbX3NEI
-   Q2ZTb4vUxbOw94QTqU8/NApWGlkwo3jDqGD1T5CjqOhbOY75OF5tzwtJe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="300582268"
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="300582268"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 10:26:41 -0800
-X-IronPort-AV: E=Sophos;i="5.88,214,1635231600"; 
-   d="scan'208";a="683475968"
-Received: from mkundu-mobl1.amr.corp.intel.com (HELO [10.212.216.75]) ([10.212.216.75])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 10:26:40 -0800
-Subject: Re: [PATCH/RFC] mm: add and use batched version of
- __tlb_remove_table()
-To:     Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, kernel@openvz.org
-References: <20211217081909.596413-1-nikita.yushchenko@virtuozzo.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <fcbb726d-fe6a-8fe4-20fd-6a10cdef007a@intel.com>
-Date:   Fri, 17 Dec 2021 10:26:38 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20211217081909.596413-1-nikita.yushchenko@virtuozzo.com>
-Content-Type: text/plain; charset=utf-8
+        id S240457AbhLQStW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Dec 2021 13:49:22 -0500
+Received: from mail-eus2azlp17011010.outbound.protection.outlook.com ([40.93.12.10]:39677
+        "EHLO na01-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240446AbhLQStT (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Dec 2021 13:49:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bDkjFHmeWvIRimg9rJ+CiZLn0MHaf8s0gOn0T2RCMYsm9WNUYy5xD5hvPUWZdsaU7xp9lrJd30olFjUr+eVlYeD8NCHhzPnf7ZwhIGDA03r17SmPeSckn6EF1D7VrMkh3mIFtgIvOmsO9LW82UhAV0M8DC/QibtB8zKufTAoDxOjIx4lH9/CWeBgcL2as3FJU6H/nx7gAXq/GLeHUjGtjsGBIAKmshj+6fXUOV8hJyJc6AGduacUogAZTDGF4/E8aydioCqPE8efh5bsAHAz9FJR72ioLKs8eCyxJbdpkd6difhMREIWiyMt4x3/hN4vNRFhfRy/hzTMr5mu7ZR5sQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sSSdo//AEn+gfAaFL5OTWXxtTzLzTi/vMZne3dVq42g=;
+ b=nPkxLFAd7F5Q2X4674kQn8dNOHnAi08rSl83i/iqM7EU05emKf6gyaBO8SAvgQW226BuzYksMpuhbLzVPYILv76/l8qtvMD50//5bcd2S7VRmBzL72XcQcrTObvV9QzcYB3wp0uxsLi8YJaRjy87M+VU62nBWOUjshNnVfDG3UgTxGXLCIQuF8Q6qgCnNp2glH6HX5QyPhzXD6Cf3m0CpE7+04IVvjt8Zk6xI8JsYyN3V9/LMaRPlyq8sEY6EJj2X1ORpxvigm4R/bWPpru7OsNjBpg4Swmpbi/c9a5+tA3nDSgXDCppxu3ofpcUXv+wrXA3kVKhkURFtg7MpdGDbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sSSdo//AEn+gfAaFL5OTWXxtTzLzTi/vMZne3dVq42g=;
+ b=i5xn1kNowRY9xKvm0YMC95xT3q9/pm99HdZJNQQmOxjv9FaHPN4x4LDK6n1U9tF12DvWDDxEDZYon/tiAHzg16QagV6Bj/QlW2Kn6OWZFMHoqTzBTdiKA8YwkGn3jNLbksYYwhOEyCBpWPCVuZKPa/LBB02imn8Z8WyqfLGdAR4=
+Received: from BN8PR21MB1140.namprd21.prod.outlook.com (2603:10b6:408:72::11)
+ by BL0PR2101MB1108.namprd21.prod.outlook.com (2603:10b6:207:37::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4823.10; Fri, 17 Dec
+ 2021 18:49:11 +0000
+Received: from BN8PR21MB1140.namprd21.prod.outlook.com
+ ([fe80::b5b2:afd4:68e0:cade]) by BN8PR21MB1140.namprd21.prod.outlook.com
+ ([fe80::b5b2:afd4:68e0:cade%7]) with mapi id 15.20.4823.006; Fri, 17 Dec 2021
+ 18:49:11 +0000
+From:   Sunil Muthuswamy <sunilmut@microsoft.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Sunil Muthuswamy <sunilmut@linux.microsoft.com>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: [PATCH v6 0/2] PCI: hv: Hyper-V vPCI for arm64
+Thread-Topic: [EXTERNAL] Re: [PATCH v6 0/2] PCI: hv: Hyper-V vPCI for arm64
+Thread-Index: AQHX3FmIBElJZrU8a0ijKx1N/lXuJqwz6riAgANIluA=
+Date:   Fri, 17 Dec 2021 18:49:11 +0000
+Message-ID: <BN8PR21MB1140A6EFABF87C0FBAA0606AC0789@BN8PR21MB1140.namprd21.prod.outlook.com>
+References: <1637225490-2213-1-git-send-email-sunilmut@linux.microsoft.com>
+ <20211215163503.GA698547@bhelgaas>
+In-Reply-To: <20211215163503.GA698547@bhelgaas>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=24b6de6f-3825-483d-b948-947bb6bbbdfb;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2021-12-17T18:43:37Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2d4d9dc6-cf22-48b1-339c-08d9c18dea5d
+x-ms-traffictypediagnostic: BL0PR2101MB1108:EE_
+x-microsoft-antispam-prvs: <BL0PR2101MB1108A05898ED87584B07FFC4C0789@BL0PR2101MB1108.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tgIgHFpnQCViIrp1h2QIS84c9jpOJyTdcZs3xLNW3HNKs2DrYzfBD3vTytCb1E+kIEK1SRGVv7llyb2BxdK/+neiugNltXfZAtN9gDq/X/v+zjfv6wZvoc/VnL3xPMZhxYMcAXWNPKwQJGPSHj1YyjTaHRasHYdN3hre5nf5dbPEn1d8wBncxLm5aMj36fjq+Q/itJobPX9pU0dobwyHOQdo3O236+NHysMAPBLF8gFYVy7V4PO3vbKPBN1GFzTzwHgWs5m7QzYamPd4UbM0ydX8h70mCwjIbHeKVhE4PMTELE7h06m2/FSkH7ZIfs9hIWS6+3cUO/+pw8oIuNcNtvy3rupKEDObQTSlUhwUbvax0QBLtyLVl7XruIkJPYod1tM/1CixPVZE2yshnA/84XJr3Ib0wmQEMR9BNqqR1QvK/TrrChz4WENkL1A+IVqq2zgJ1K9codJAIBnGhETW93HQHs4W0iQ7u5rH8X0RsnzhrCNED0Vi+CWGfFS2OcwmPKr9wjyGjCBzgK45Lvoj7Dkate10Ih5pxs7HZI+UNmzyg/YGXtY01xyPWi1P4sTTkfpXPhm0ffdsMb8Qahrncp6Hvzqt4Q7UtkGtUuhOWnwMDgkXrYggQl4H+8fRiM3Dh89RSCDU9yv7CwhfpF6VxaxzXR+fHLCejr36xN/3DmVvgRCXJenwx6d4tSbyDilf6Tv7v2bzDKES135cfsOfcEMWmqzYouDMGUAAB8UyQdTJxGa9ynY5wGCh7xPhoAic
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR21MB1140.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(54906003)(9686003)(86362001)(7696005)(110136005)(71200400001)(52536014)(82960400001)(5660300002)(38100700002)(66946007)(2906002)(316002)(8936002)(186003)(76116006)(7416002)(8676002)(122000001)(6506007)(4326008)(508600001)(8990500004)(10290500003)(66556008)(33656002)(53546011)(83380400001)(64756008)(55016003)(66476007)(38070700005)(66446008)(82950400001)(20210929001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3gsp/+3av7XGNlw1mmr7gbSWBaBVUQU9X170bb/W60vbZ6jGUzZP+cNgwAVb?=
+ =?us-ascii?Q?v73FAntZu+6YRQgQC7/QzDXXWJnqNNgOJVoz7nPSyphXLngdLjHsC1PEe89I?=
+ =?us-ascii?Q?nPH0DnL5FsCKaEIjQ26pANA/LwPfLlN2GpiHPCFzEjfWkGqIkDMR4/vy27Y5?=
+ =?us-ascii?Q?PEvpnJnF/AodKNQ7TZSlgfC+OV9dbScr6jco97I095mI401fGsroSbjJifdh?=
+ =?us-ascii?Q?+yU1A4kc8eBOYqCTaAzpTGmhh+c1GU/0DBC1F25u4nQ69xJLjfadpV0uSMyY?=
+ =?us-ascii?Q?aTB3fU4a6cIgywuVZzSScRwWUNZhOHh1CAmf/+PlOI+iIpZgVHGJoEosZoHc?=
+ =?us-ascii?Q?vfDcSiIKe7sMrLnbEcGTS/6i4Q7CO+1LerRHgU5aIc2BKBxQSzvaSBl2rsJ7?=
+ =?us-ascii?Q?m5Rr77mXWIgMKJiyNoPPsGhyNnPhJAn8vj3XjhmOJuydbX8IueO0/I8JIQYR?=
+ =?us-ascii?Q?XrX1vr5bCiNBbusTllHx9xidRZRB5eyHVcxFe5FOywZhVKN2qGn6f+X69+hW?=
+ =?us-ascii?Q?nBA5e6K8HW/H2jR4dyldf7KcX7auukT8JspLuIEHZwFzCc3CYpPTZ+L6y9bA?=
+ =?us-ascii?Q?7KSrvOHG7jNAm4Axxq3AhL+uNT1i/yFRWVBMxj1wczMRyD1DGBa/3/CyU2TE?=
+ =?us-ascii?Q?UZwsrEX7WBjx4uNpvUm9VhuwRlfREde1rTMpZUzZDXdGRdDvdK2ZBJGjdYUR?=
+ =?us-ascii?Q?lmWPIISHLLv3TM87ArYHv5VMoiQZi219mfOlktMpruTjtS55jfZp8H4lX2I3?=
+ =?us-ascii?Q?aynftp7RQeesNKP2j1Rx3zQ+LoLKyYtoJs4uDYSKC6Bo8akz1HisyWaHpSZz?=
+ =?us-ascii?Q?qsH5hO6Z/pEFxBUL5mLDYAnBEwUikAr6+axeVXhC1FsfUrrMSPsoxDwnQCMi?=
+ =?us-ascii?Q?I8FHJ/ATv/F2SY4dXE1nRTWWF99GtNXHDARMCkI83FjwxhWawZE6grefhjxY?=
+ =?us-ascii?Q?vxCFKKNuWQjmrDKlKMOfHURtLbZ+/iA+dEtSto/QtHSWZaUgeUbwzveAW3kc?=
+ =?us-ascii?Q?LNu1W5Mk4dokdhFq03jeVkAvS1d5Xj3ajcMbzFzixqeCeF5J26Vnzaf1AYqR?=
+ =?us-ascii?Q?n3UQVXQLqthieyaYmJKxFPx+xCWC2T9M4tqkPdu+myKQ34MKGEINr1Vuf2Rq?=
+ =?us-ascii?Q?Q0eNtZZ9IUtAS6J1F97KlZKitJu9KzNZJhFQrUJsblMVV1XjpTcorD5C812C?=
+ =?us-ascii?Q?d+1LCmhfFJJxgjb88JFWEqlPKL41NiWTnI/nXwSmPF/L0kYLEiazY6Fv5hb2?=
+ =?us-ascii?Q?Ss0ajZyQQw9lMeJOl/HVNs4qcLQYEfKDtfBk79YAcHCjkw+hZmfYAkE+viNQ?=
+ =?us-ascii?Q?hHs39CYZ2/jHedNvuRlT8JuV0o96ye4jjipvAojRejXVw4tODvjq4LEqZWGj?=
+ =?us-ascii?Q?Btfap8G3+RH1paWUs0duDl8hOdlZutmAqNKgfStmmi3AwhxWdlAy1Jj6LFGt?=
+ =?us-ascii?Q?E51QnHT8SUxEtU41GkTfXF4Uro1wj2F8WytMl5/yb8jOSnBgq8v9FwKEsVmZ?=
+ =?us-ascii?Q?3QlBuSemukuMaLmNzQy8aUidvqAJkrmHHzykksdgT3SFzv0W1tYYKQ/4dLBc?=
+ =?us-ascii?Q?Yvt60bodr26v8Tg2fy9kKlOL6vJ8fb51v/6zbJCvCIrVkIlatX5vnOS0NBGc?=
+ =?us-ascii?Q?eMNYXCd9Y0vE7OvFsSdLkIVSYiqFN5qZBO/IDawBOWIpJoVgSE8b4xFCgE57?=
+ =?us-ascii?Q?WwVMkYoWo0TiT+hznXqjAa7sw3K46tXhx97Zgz3ZOWkSC8uJOW1xGaTR67iQ?=
+ =?us-ascii?Q?iTekjvZyZg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR21MB1140.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d4d9dc6-cf22-48b1-339c-08d9c18dea5d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2021 18:49:11.4262
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6h82tc0B5uh1Qpq+ihz+iMwPJU9VxzZeKvcV3G7yB1cKJhfV5nekEnFxgl/JVudIzjspdd7S47vK5g9pPQyHfWrw+i9+QwZJCHew3Fmz66I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB1108
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/17/21 12:19 AM, Nikita Yushchenko wrote:
-> When batched page table freeing via struct mmu_table_batch is used, the
-> final freeing in __tlb_remove_table_free() executes a loop, calling
-> arch hook __tlb_remove_table() to free each table individually.
-> 
-> Shift that loop down to archs. This allows archs to optimize it, by
-> freeing multiple tables in a single release_pages() call. This is
-> faster than individual put_page() calls, especially with memcg
-> accounting enabled.
+On Wednesday, December 15, 2021 8:35 AM,
+Bjorn Helgaas <helgaas@kernel.org> wrote:
 
-Could we quantify "faster"?  There's a non-trivial amount of code being
-added here and it would be nice to back it up with some cold-hard numbers.
+>
+> On Thu, Nov 18, 2021 at 12:51:28AM -0800, Sunil Muthuswamy wrote:
+>=20
+> > Sunil Muthuswamy (2):
+> >   PCI: hv: Make the code arch neutral by adding arch specific interface=
+s
+> >   arm64: PCI: hv: Add support for Hyper-V vPCI
+>=20
+> Both patches are primarily to drivers/pci/controller/pci-hyperv.c, so
+> why do the subject lines look so different?
+>=20
+> Instead of making up a new format from scratch, look at the previous
+> history and copy it:
+>=20
+>   $ git log --oneline drivers/pci/controller/pci-hyperv.c
+>   f18312084300 ("PCI: hv: Remove unnecessary use of %hx")
+>   41608b64b10b ("PCI: hv: Fix sleep while in non-sleep context when remov=
+ing
+> child devices from the bus")
+>   88f94c7f8f40 ("PCI: hv: Turn on the host bridge probing on ARM64")
+>   9e7f9178ab49 ("PCI: hv: Set up MSI domain at bridge probing time")
+>   38c0d266dc80 ("PCI: hv: Set ->domain_nr of pci_host_bridge at probing t=
+ime")
+>   418cb6c8e051 ("PCI: hv: Generify PCI probing")
+>   8f6a6b3c50ce ("PCI: hv: Support for create interrupt v3")
+>   7d815f4afa87 ("PCI: hv: Add check for hyperv_initialized in init_hv_pci=
+_drv()")
+>   326dc2e1e59a ("PCI: hv: Remove bus device removal unused
+> refcount/functions")
+>   ...
+>=20
+> The second patch adds arm64 support, so it *should* mention arm64, but
+> it can be something like this:
+>=20
+>   PCI: hv: Add arm64 Hyper-V vPCI support
+>=20
+> >  arch/arm64/include/asm/hyperv-tlfs.h |   9 +
+> >  arch/x86/include/asm/hyperv-tlfs.h   |  33 ++++
+> >  arch/x86/include/asm/mshyperv.h      |   7 -
+> >  drivers/pci/Kconfig                  |   2 +-
+> >  drivers/pci/controller/Kconfig       |   2 +-
+> >  drivers/pci/controller/pci-hyperv.c  | 281 ++++++++++++++++++++++++---
+> >  include/asm-generic/hyperv-tlfs.h    |  33 ----
+> >  7 files changed, 300 insertions(+), 67 deletions(-)
 
-> --- a/mm/mmu_gather.c
-> +++ b/mm/mmu_gather.c
-> @@ -95,11 +95,7 @@ bool __tlb_remove_page_size(struct mmu_gather *tlb, struct page *page, int page_
->  
->  static void __tlb_remove_table_free(struct mmu_table_batch *batch)
->  {
-> -	int i;
-> -
-> -	for (i = 0; i < batch->nr; i++)
-> -		__tlb_remove_table(batch->tables[i]);
-> -
-> +	__tlb_remove_tables(batch->tables, batch->nr);
->  	free_page((unsigned long)batch);
->  }
+Thanks. If I am reading your feedback above correctly, the only correction
+you are suggesting is to rename the subject line of the second patch to fix
+the format. Otherwise, the subject lines of the patches describe what they
+do. I will address this in v7.
 
-This leaves a single call-site for __tlb_remove_table():
-
-> static void tlb_remove_table_one(void *table)
-> {
->         tlb_remove_table_sync_one();
->         __tlb_remove_table(table);
-> }
-
-Is that worth it, or could it just be:
-
-	__tlb_remove_tables(&table, 1);
-
-?
-
-> -void free_pages_and_swap_cache(struct page **pages, int nr)
-> +static void __free_pages_and_swap_cache(struct page **pages, int nr,
-> +		bool do_lru)
->  {
-> -	struct page **pagep = pages;
->  	int i;
->  
-> -	lru_add_drain();
-> +	if (do_lru)
-> +		lru_add_drain();
->  	for (i = 0; i < nr; i++)
-> -		free_swap_cache(pagep[i]);
-> -	release_pages(pagep, nr);
-> +		free_swap_cache(pages[i]);
-> +	release_pages(pages, nr);
-> +}
-> +
-> +void free_pages_and_swap_cache(struct page **pages, int nr)
-> +{
-> +	__free_pages_and_swap_cache(pages, nr, true);
-> +}
-> +
-> +void free_pages_and_swap_cache_nolru(struct page **pages, int nr)
-> +{
-> +	__free_pages_and_swap_cache(pages, nr, false);
->  }
-
-This went unmentioned in the changelog.  But, it seems like there's a
-specific optimization here.  In the exiting code,
-free_pages_and_swap_cache() is wasteful if no page in pages[] is on the
-LRU.  It doesn't need the lru_add_drain().
-
-Any code that knows it is freeing all non-LRU pages can call
-free_pages_and_swap_cache_nolru() which should perform better than
-free_pages_and_swap_cache().
-
-Should we add this to the for loop in __free_pages_and_swap_cache()?
-
-	for (i = 0; i < nr; i++) {
-		if (!do_lru)
-			VM_WARN_ON_ONCE_PAGE(PageLRU(pagep[i]),
-					     pagep[i]);
-		free_swap_cache(...);
-	}
-
-But, even more than that, do all the architectures even need the
-free_swap_cache()?  PageSwapCache() will always be false on x86, which
-makes the loop kinda silly.  x86 could, for instance, just do:
-
-static inline void __tlb_remove_tables(void **tables, int nr)
-{
-	release_pages((struct page **)tables, nr);
-}
-
-I _think_ this will work everywhere that has whole pages as page tables.
- Taking that one step further, what if we only had one generic:
-
-static inline void tlb_remove_tables(void **tables, int nr)
-{
-	int i;
-
-#ifdef ARCH_PAGE_TABLES_ARE_FULL_PAGE
-	release_pages((struct page **)tables, nr);
-#else
-	arch_tlb_remove_tables(tables, i);
-#endif
-}
-
-Architectures that set ARCH_PAGE_TABLES_ARE_FULL_PAGE (or whatever)
-don't need to implement __tlb_remove_table() at all *and* can do
-release_pages() directly.
-
-This avoids all the  confusion with the swap cache and LRU naming.
+- Sunil
