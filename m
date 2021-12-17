@@ -2,129 +2,196 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDE4477C3F
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Dec 2021 20:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF39478308
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Dec 2021 03:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236486AbhLPTPk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Dec 2021 14:15:40 -0500
-Received: from gate.crashing.org ([63.228.1.57]:55698 "EHLO gate.crashing.org"
+        id S230224AbhLQCQf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Dec 2021 21:16:35 -0500
+Received: from mga06.intel.com ([134.134.136.31]:35746 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231803AbhLPTPk (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 16 Dec 2021 14:15:40 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1BGIuSL3021510;
-        Thu, 16 Dec 2021 12:56:28 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 1BGIuLq7021509;
-        Thu, 16 Dec 2021 12:56:21 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 16 Dec 2021 12:56:20 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, johannes@sipsolutions.net,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eric Dumazet <edumazet@google.com>,
-        Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Yoshinori Sato <ysato@users.osdn.me>, X86 ML <x86@kernel.org>,
-        James Morris <jmorris@namei.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jonas Bonn <jonas@southpole.se>, Arnd Bergmann <arnd@arndb.de>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        linux-block@vger.kernel.org,
-        linux-m68k <linux-m68k@vger.kernel.org>,
-        openrisc@lists.librecores.org, Borislav Petkov <bp@alien8.de>,
-        Stafford Horne <shorne@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        John Johansen <john.johansen@canonical.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        linux-wireless@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        linux-ntfs-dev@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>
-Subject: Re: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
-Message-ID: <20211216185620.GP614@gate.crashing.org>
-References: <20210514100106.3404011-1-arnd@kernel.org> <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
-Mime-Version: 1.0
+        id S229982AbhLQCQf (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 16 Dec 2021 21:16:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1639707395; x=1671243395;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YDoEEqVzsgvY6SGAdJNnPzkJ2+8xeucn+7C/QKTWSEs=;
+  b=McD7KlSd9PHG+xqVn2CHsFAZVxwZWpEkk9gtFdcffCWDP4zF4OYzUCnI
+   XcsH8ntuSvOz846UhwY6RtmyeRP/8zq1Mh5hYNaOQnONMg81G1Pg59BvY
+   SsRUzMETGdI6ZLxCAxV6QkvN1HBIJeGkymQ/3KwzmJUtqQXtyC71+J0tS
+   1IselojnrVZgkrEg31raSLhrfzQCuWDl3Spe5DtS1iDn/OuSjVzmsVCih
+   yQn0LKE7AJhNDhBA3W3BVZntAyXV5vvgg68MutcCbF4iki/Ql2tSv3udY
+   AwMBdA2amQYNfEjeRH0NLAPsqjbHSxQ90aScOVn5FLhUZ1gmM7+cZvCq3
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10200"; a="300435112"
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="300435112"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2021 18:16:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,213,1635231600"; 
+   d="scan'208";a="615399859"
+Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Dec 2021 18:16:34 -0800
+Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1my2nR-00045x-A8; Fri, 17 Dec 2021 02:16:33 +0000
+Date:   Fri, 17 Dec 2021 10:16:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 49501fb98653158cf7ba2473c6ee3fbc8bff047c
+Message-ID: <61bbf2f9.oEBNJ0oDpHOY463H%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 06:29:40PM +0100, Ard Biesheuvel wrote:
-> I think this series is a huge improvement, but it does not solve the
-> UB problem completely. As we found, there are open issues in the GCC
-> bugzilla regarding assumptions in the compiler that aligned quantities
-> either overlap entirely or not at all. (e.g.,
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=100363)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 49501fb98653158cf7ba2473c6ee3fbc8bff047c  asm-generic/error-injection.h: fix a spelling mistake, and a coding style issue
 
-That isn't open, it was closed as INVALID back in May.
+elapsed time: 728m
 
-(Naturally) aligned quantities only overlap if they are the same datum.
-This follows directly from the definition of (naturally) aligned.  There
-is no mystery here.
+configs tested: 125
+configs skipped: 3
 
-All unaligned data need to be marked up properly.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS is used in many places to
-> conditionally emit code that violates C alignment rules.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211216
+m68k                       m5475evb_defconfig
+sh                           se7712_defconfig
+arm                         lubbock_defconfig
+arm                        magician_defconfig
+arm                         s3c2410_defconfig
+ia64                            zx1_defconfig
+sh                           se7724_defconfig
+m68k                       m5208evb_defconfig
+sparc                               defconfig
+mips                        vocore2_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                            pleb_defconfig
+mips                         mpc30x_defconfig
+powerpc                   currituck_defconfig
+m68k                          atari_defconfig
+h8300                    h8300h-sim_defconfig
+sh                        dreamcast_defconfig
+arm                           sunxi_defconfig
+mips                     loongson1b_defconfig
+sh                           se7722_defconfig
+mips                           mtx1_defconfig
+csky                                defconfig
+arm                        mvebu_v7_defconfig
+sparc                       sparc32_defconfig
+powerpc                 mpc836x_mds_defconfig
+arm                       omap2plus_defconfig
+arm                           u8500_defconfig
+m68k                         amcore_defconfig
+arm                      integrator_defconfig
+arm                     davinci_all_defconfig
+powerpc                       ebony_defconfig
+sh                  sh7785lcr_32bit_defconfig
+sh                        edosk7705_defconfig
+powerpc                    adder875_defconfig
+parisc                generic-32bit_defconfig
+arm                  randconfig-c002-20211216
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20211216
+x86_64               randconfig-a005-20211216
+x86_64               randconfig-a001-20211216
+x86_64               randconfig-a002-20211216
+x86_64               randconfig-a003-20211216
+x86_64               randconfig-a004-20211216
+i386                 randconfig-a001-20211216
+i386                 randconfig-a002-20211216
+i386                 randconfig-a005-20211216
+i386                 randconfig-a003-20211216
+i386                 randconfig-a006-20211216
+i386                 randconfig-a004-20211216
+i386                 randconfig-a013-20211217
+i386                 randconfig-a011-20211217
+i386                 randconfig-a016-20211217
+i386                 randconfig-a014-20211217
+i386                 randconfig-a015-20211217
+i386                 randconfig-a012-20211217
+arc                  randconfig-r043-20211216
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-Most of this is ABI, not C.  It is the ABI that requires certain
-alignments.  Ignoring that plain does not work, but even if it would
-you will end up with much slower generated code.
+clang tested configs:
+x86_64               randconfig-a011-20211214
+x86_64               randconfig-a014-20211214
+x86_64               randconfig-a012-20211214
+x86_64               randconfig-a013-20211214
+x86_64               randconfig-a016-20211214
+x86_64               randconfig-a015-20211214
+x86_64               randconfig-a011-20211216
+x86_64               randconfig-a014-20211216
+x86_64               randconfig-a012-20211216
+x86_64               randconfig-a013-20211216
+x86_64               randconfig-a015-20211216
+x86_64               randconfig-a016-20211216
+hexagon              randconfig-r045-20211216
+s390                 randconfig-r044-20211216
+riscv                randconfig-r042-20211216
+hexagon              randconfig-r041-20211216
 
-> whereas the following pattern makes more sense, I think, and does not
-> violate any C rules in the common case:
-> 
-> #ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
->   // use unaligned accessors, which are cheap or even entirely free
-> #else
->   // avoid unaligned accessors, as they are expensive; instead, reorganize
->   // the data so we don't need them (similar to setting NET_IP_ALIGN to 2)
-> #endif
-
-Yes, this looks more reasonable.
-
-> The only remaining problem here is reinterpreting a char* pointer to a
-> u32*, e.g., for accessing the IP address in an Ethernet frame when
-> NET_IP_ALIGN == 2, which could suffer from the same UB problem again,
-> as I understand it.
-
-The problem is never casting a pointer to pointer to character type, and
-then later back to an appriopriate pointer type.  These things are both
-required to work.  The problem always is accessing something as if it
-was something of another type, which is not valid C.  This however is
-exactly what -fno-strict-aliasing allows, so that works as well.
-
-But this does not have much to do with alignment.
-
-
-Segher
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
