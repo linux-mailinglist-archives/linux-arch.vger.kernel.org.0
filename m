@@ -2,153 +2,145 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C262478AB0
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Dec 2021 12:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F4B478B74
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Dec 2021 13:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbhLQL7W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Dec 2021 06:59:22 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:53704 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbhLQL7W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Dec 2021 06:59:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 070BC62153;
-        Fri, 17 Dec 2021 11:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19FE9C36AE5;
-        Fri, 17 Dec 2021 11:59:19 +0000 (UTC)
-Date:   Fri, 17 Dec 2021 11:59:16 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     will@kernel.org, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        moyufeng@huawei.com, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: introduce io_stop_wc() and add
- implementation for ARM64
-Message-ID: <Ybx7lEF4srH4vBmh@arm.com>
-References: <20211217085611.111999-1-wangxiongfeng2@huawei.com>
+        id S236352AbhLQMe6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Fri, 17 Dec 2021 07:34:58 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:56570 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233913AbhLQMe6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Fri, 17 Dec 2021 07:34:58 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-157-DNhCqrEmMiq0pBhWJMMNWw-1; Fri, 17 Dec 2021 12:34:55 +0000
+X-MC-Unique: DNhCqrEmMiq0pBhWJMMNWw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Fri, 17 Dec 2021 12:34:53 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Fri, 17 Dec 2021 12:34:53 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Segher Boessenkool' <segher@kernel.crashing.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Rich Felker <dalias@libc.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
+        X86 ML <x86@kernel.org>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linux-m68k <linux-m68k@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>, Stafford Horne <shorne@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Yoshinori Sato <ysato@users.osdn.me>,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jonas Bonn <jonas@southpole.se>,
+        "Kees Cook" <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-ntfs-dev@lists.sourceforge.net" 
+        <linux-ntfs-dev@lists.sourceforge.net>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>
+Subject: RE: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
+Thread-Topic: [PATCH v2 00/13] Unify asm/unaligned.h around struct helper
+Thread-Index: AQHX8q6cJnIWdY3H8E+V3sMdrqJgg6w2m38Q
+Date:   Fri, 17 Dec 2021 12:34:53 +0000
+Message-ID: <698cfc52a0d441f7b9f29424be82b2e8@AcuMS.aculab.com>
+References: <20210514100106.3404011-1-arnd@kernel.org>
+ <CAMj1kXG0CNomZ0aXxh_4094fT+g4bVWFCkrd7QwgTQgiqoxMWA@mail.gmail.com>
+ <20211216185620.GP614@gate.crashing.org>
+In-Reply-To: <20211216185620.GP614@gate.crashing.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211217085611.111999-1-wangxiongfeng2@huawei.com>
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 04:56:11PM +0800, Xiongfeng Wang wrote:
-> For memory accesses with Normal-Non Cacheable attributes, the CPU may do
-
-You may want to mention "arm64 Normal Non-Cacheable" as other
-architectures have a different meaning of NC.
-
-> write combining. But in some situation, this is bad for the performance
-> because the prior access may wait too long just to be merged.
+From: Segher Boessenkool
+> Sent: 16 December 2021 18:56
+...
+> > The only remaining problem here is reinterpreting a char* pointer to a
+> > u32*, e.g., for accessing the IP address in an Ethernet frame when
+> > NET_IP_ALIGN == 2, which could suffer from the same UB problem again,
+> > as I understand it.
 > 
-> We introduce io_stop_wc() to prevent the Normal-NC memory accesses before
-> this instruction to be merged with memory accesses after this
-> instruction.
-> 
-> We add implementation for ARM64 using DGH instruction and provide NOP
-> implementation for other architectures.
-> 
-> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> ---
->  Documentation/memory-barriers.txt |  9 +++++++++
->  arch/arm64/include/asm/barrier.h  |  9 +++++++++
->  include/asm-generic/barrier.h     | 11 +++++++++++
->  3 files changed, 29 insertions(+)
-> 
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index 7367ada13208..b868b51b1801 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -1950,6 +1950,15 @@ There are some more advanced barrier functions:
->       For load from persistent memory, existing read memory barriers are sufficient
->       to ensure read ordering.
->  
-> + (*) io_stop_wc();
-> +
-> +     For memory accesses with Normal-Non Cacheable attributes (e.g. those
-> +     returned by ioremap_wc()), the CPU may do write combining. But in some
-> +     situation, this is bad for the performance because the prior access may
-> +     wait too long just to be merged. io_stop_wc() can be used to prevent
-> +     merging memory accesses with Normal-Non Cacheable attributes before this
-> +     instruction with any memory accesses appearing after this instruction.
+> The problem is never casting a pointer to pointer to character type, and
+> then later back to an appriopriate pointer type.
+> These things are both required to work.
 
-I'm fine with the patch in general but the comment here and in
-asm-generic/barrier.h should avoid Normal Non-Cacheable as that's an
-arm-specific term. Looking at Documentation/driver-api/device-io.rst, we
-could simply say "write-combining". Something like:
+I think that is true of 'void *', not 'char *'.
+'char' is special in that 'strict aliasing' doesn't apply to it.
+(Which is actually a pain sometimes.)
 
-     For memory accesses with write-combining attributes (e.g. those
-     returned by ioremap_wc()), the CPU may wait for prior accesses to
-     be merged with subsequent ones. io_stop_wc() can be used to prevent
-     the merging of write-combining memory accesses before this macro
-     with those after it when such wait has performance implications.
+> The problem always is accessing something as if it
+> was something of another type, which is not valid C.  This however is
+> exactly what -fno-strict-aliasing allows, so that works as well.
 
-(feel free to rephrase it but avoid Normal NC here)
+IIRC the C language only allows you to have pointers to valid data items.
+(Since they can only be generated by the & operator on a valid item.)
+Indirecting any other pointer is probably UB!
 
-> +
->  ===============================
->  IMPLICIT KERNEL MEMORY BARRIERS
->  ===============================
-> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
-> index 1c5a00598458..62217be36217 100644
-> --- a/arch/arm64/include/asm/barrier.h
-> +++ b/arch/arm64/include/asm/barrier.h
-> @@ -26,6 +26,14 @@
->  #define __tsb_csync()	asm volatile("hint #18" : : : "memory")
->  #define csdb()		asm volatile("hint #20" : : : "memory")
->  
-> +/*
-> + * Data Gathering Hint:
-> + * This instruction prevents merging memory accesses with Normal-NC or
-> + * Device-GRE attributes before the hint instruction with any memory accesses
-> + * appearing after the hint instruction.
-> + */
-> +#define dgh()		asm volatile("hint #6" : : : "memory")
+This (sort of) allows the compiler to 'look through' casts to find
+what the actual type is (or might be).
+It can then use that information to make optimisation choices.
+This has caused grief with memcpy() calls that are trying to copy
+a structure that the coder knows is misaligned to an aligned buffer.
 
-This is fine, arm-specific code.
+So while *(unaligned_ptr *)char_ptr probably has to work.
+If the compiler can see *(unaligned_ptr *)(char *)int_ptr it can
+assume the alignment of the 'int_ptr' and do a single aligned access.
 
-> +
->  #ifdef CONFIG_ARM64_PSEUDO_NMI
->  #define pmr_sync()						\
->  	do {							\
-> @@ -46,6 +54,7 @@
->  #define dma_rmb()	dmb(oshld)
->  #define dma_wmb()	dmb(oshst)
->  
-> +#define io_stop_wc()	dgh()
->  
->  #define tsb_csync()								\
->  	do {									\
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index 640f09479bdf..083be6d34cb9 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -251,5 +251,16 @@ do {									\
->  #define pmem_wmb()	wmb()
->  #endif
->  
-> +/*
-> + * ioremap_wc() maps I/O memory as memory with Normal-Non Cacheable attributes.
-> + * The CPU may do write combining for this kind of memory access. io_stop_wc()
-> + * prevents merging memory accesses with Normal-Non Cacheable attributes
-> + * before this instruction with any memory accesses appearing after this
-> + * instruction.
+	David
 
-Please change this as well along the lines of my comment above.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-> + */
-> +#ifndef io_stop_wc
-> +#define io_stop_wc do { } while (0)
-> +#endif
-> +
->  #endif /* !__ASSEMBLY__ */
->  #endif /* __ASM_GENERIC_BARRIER_H */
-
-Thanks.
-
--- 
-Catalin
