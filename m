@@ -2,141 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B93E47915B
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Dec 2021 17:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B0E479180
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Dec 2021 17:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238238AbhLQQWf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Dec 2021 11:22:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57834 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239062AbhLQQWf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Dec 2021 11:22:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0910622DD;
-        Fri, 17 Dec 2021 16:22:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1454C36AE1;
-        Fri, 17 Dec 2021 16:22:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1639758154;
-        bh=zDKOA3xfyePxWIFvNh9DTwQIsyV3ekI3atL+Efr3sEk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rpMCbsdnqmVNs33nSCHT7BnZGqnYxG0QzS5ylgnKs3RkL3A7og9bvmkmUs6t+HMBs
-         ztZlziMazw/I305rYW8L/nT8Zm+ERrJu8HSMlpXdfIjqpVj5ieo1yygVrPkskxG276
-         +qMxK8UT+iLLcmoc4K8+OEWboDQL0LaOGwGP3Rq0=
-Date:   Fri, 17 Dec 2021 17:22:31 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
-Message-ID: <Yby5Rwr0jgAcK4th@kroah.com>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-14-glider@google.com>
- <YbjHerrHit/ZqXYs@kroah.com>
- <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
+        id S239134AbhLQQan (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Dec 2021 11:30:43 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4305 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231193AbhLQQam (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Dec 2021 11:30:42 -0500
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JFvVs4yb0z67gb0;
+        Sat, 18 Dec 2021 00:26:13 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Fri, 17 Dec 2021 17:30:40 +0100
+Received: from [10.47.26.158] (10.47.26.158) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 17 Dec
+ 2021 16:30:39 +0000
+Subject: Re: [GIT PULL 1/2] asm-generic: rework PCI I/O space access
+To:     Arnd Bergmann <arnd@kernel.org>
+CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAK8P3a2oZ-+qd3Nhpy9VVXCJB3DU5N-y-ta2JpP0t6NHh=GVXw@mail.gmail.com>
+ <db043b76-880d-5fad-69cf-96abcd9cd34f@huawei.com>
+ <CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com>
+ <a74dfb1f-befd-92ce-4c30-233cb08e04d3@huawei.com>
+ <CAK8P3a3B4FCaPPHhzBdpkv0fsjE0jREwGFCdPeHEDHxxRBEjng@mail.gmail.com>
+ <5e8dfbd2-a6c0-6d02-53e9-1f29aebcc44e@huawei.com>
+ <CAK8P3a08Zcyx0J4_LGAfU_AtUyEK+XtQJxYBQ52VXfWu8-o8_w@mail.gmail.com>
+ <dd2d49ef-3154-3c87-67b9-c134567ba947@huawei.com>
+ <CAK8P3a3KTaa-AwCOjhaASMx63B3DUBZCZe6RKWk-=Qu7xr_ijQ@mail.gmail.com>
+ <47744c7bce7b7bb37edee7f249d61dc57ac1fbc5.camel@linux.ibm.com>
+ <CAK8P3a2eZ25PLSqEf_wmGs912WK8xRMuQHik2yAKj-WRQnDuRg@mail.gmail.com>
+ <849d70bddde1cfcb3ab1163970a148ff447ee94b.camel@linux.ibm.com>
+ <53746e42-23a2-049d-9b38-dcfbaaae728f@huawei.com>
+ <CAK8P3a0dnXX7Cx_kJ_yLAoQFCxoM488Ze-L+5v1m0YeyjF4zqw@mail.gmail.com>
+ <cd9310ab-6012-a410-2bfc-a2f8dd8d62f9@huawei.com>
+ <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <d45ee18a-1faa-9c56-071d-18f5737d225c@huawei.com>
+Date:   Fri, 17 Dec 2021 16:30:15 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
+In-Reply-To: <CAK8P3a23jsT-=v8QDxSZYcj=ujhtBFXjACNLKxQybaThiBsFig@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.26.158]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 11:33:56AM +0100, Alexander Potapenko wrote:
-> On Tue, Dec 14, 2021 at 5:34 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, Dec 14, 2021 at 05:20:20PM +0100, Alexander Potapenko wrote:
-> > > This patch adds the core parts of KMSAN runtime and associated files:
-> > >
-> > >   - include/linux/kmsan-checks.h: user API to poison/unpoison/check
-> > >     the kernel memory;
-> > >   - include/linux/kmsan.h: declarations of KMSAN hooks to be referenced
-> > >     outside of KMSAN runtime;
-> > >   - lib/Kconfig.kmsan: CONFIG_KMSAN and related declarations;
-> > >   - Makefile, mm/Makefile, mm/kmsan/Makefile: boilerplate Makefile code;
-> > >   - mm/kmsan/annotations.c: non-inlineable implementation of KMSAN_INIT();
-> > >   - mm/kmsan/core.c: core functions that operate with shadow and origin
-> > >     memory and perform checks, utility functions;
-> > >   - mm/kmsan/hooks.c: KMSAN hooks for kernel subsystems;
-> > >   - mm/kmsan/init.c: KMSAN initialization routines;
-> > >   - mm/kmsan/instrumentation.c: functions called by KMSAN instrumentation;
-> > >   - mm/kmsan/kmsan.h: internal KMSAN declarations;
-> > >   - mm/kmsan/shadow.c: routines that encapsulate metadata creation and
-> > >     addressing;
-> > >   - scripts/Makefile.kmsan: CFLAGS_KMSAN
-> > >   - scripts/Makefile.lib: KMSAN_SANITIZE and KMSAN_ENABLE_CHECKS macros
-> >
-> >
-> > That's an odd way to write a changelog, don't you think?
-> 
-> Agreed. I'll try to concentrate on the functionality instead. Sorry about that.
-> 
-> > You need to describe what you are doing here and why you are doing it.
-> > Not a list of file names, we can see that in the diffstat.
-> >
-> > Also, you don't mention you are doing USB stuff here at all.  And why
-> > are you doing it here?  That should be added in a later patch.
-> 
-> You are right, USB is a good example of a stand-alone feature that can
-> be moved to a separate patch.
-> 
-> > Break this up into smaller, logical, pieces that add the infrastructure
-> > and build on it.  Don't just chop your patches up on a logical-file
-> > boundry, as you are adding stuff in this patch that you do not need for
-> > many more later on, which means it was not needed here.
-> 
-> Just to make sure I don't misunderstand - for example for "kmsan: mm:
-> call KMSAN hooks from SLUB code", would it be better to pull the code
-> in mm/kmsan/core.c implementing kmsan_slab_alloc() and
-> kmsan_slab_free() into that patch?
+On 17/12/2021 15:55, Arnd Bergmann wrote:
+>> > If you have a better way of finding the affected drivers,
+>>   > that would be great.
+>>
+>> Assuming arm64 should select HAS_IOPORT, I am talking about f71805f as
+>> an example. According to that patch, this driver additionally depends on
+>> HAS_IOPORT; however I would rather arm64, like powerpc, should not allow
+>> that driver to be built at all.
+> Agreed, I missed these when I looked through the HAS_IOPORT users,
+> that's why I suggested to split up that part of the patch per subsystem
+> so they can be inspected more carefully.
 
-Yes.
+ok
 
-> I thought maintainers would prefer to have patches to their code
-> separated from KMSAN code, but if it's not true, I can surely fix
-> that.
+ >
+ > My feeling is that in this case we want some other dependency, e.g. a
+ > new CONFIG_LPC. It should actually be possible to use this driver on
+ > any machine with an LPC bus, which would by definition be the primary
+ > I/O space, so it should be possible to load it on Arm64.
 
-As a maintainer, I want to know what the function call that you just
-added to my subsystem to call does.  Wouldn't you?  Put it all in the
-same patch.
+You did suggest HARDCODED_IOPORT earlier in this thread, and the 
+definition/premise there seemed sensible to me.
 
-Think about submitting a patch series as telling a story.  You need to
-show the progression forward of the feature so that everyone can
-understand what is going on.  To just throw tiny snippets at us is
-impossible to follow along with what your goal is.
+Anyway it seems practical to make all these changes in a single series, 
+so need a way forward as Niklas has no such changes for this additional 
+kconfig option.
 
-You want reviewers to be able to easily see if the things you describe
-being done in the changelog actually are implemented in the diff.
-Dividing stuff up by files does not show that at all.
+As a start, may I suggest we at least have Niklas' patch committed to a 
+dev branch based on -next or latest mainline release for further analysis?
 
-thanks,
+Thanks,
+John
 
-greg k-h
+
