@@ -2,226 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE76479828
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Dec 2021 03:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B227C479AE0
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Dec 2021 14:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbhLRCXa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Dec 2021 21:23:30 -0500
-Received: from mga14.intel.com ([192.55.52.115]:59957 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229709AbhLRCXa (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Fri, 17 Dec 2021 21:23:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1639794210; x=1671330210;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dKw20jv00gQWhyt/fjWsMpmSonV/WwLpj8c4DFcTWps=;
-  b=cUANbxZg46mRcyErgLioD34qzyklcTEj6i4a27otTG/DJZKJBAjtMvvW
-   EbYL4IRuPjNCR1uKygPXDQsoeIYzGv39EVrRxr9pd60WAHi6dBS3EzFup
-   C6bANTlHr7DRUNBoXcyCBF2rwnwHOOOqrPRKjXqkCHEV351SktYuParL7
-   CwAviYf5ZTRcXIBhs9QXqJpd7iLKqsno3Hbv8wsi23GVqZhxhmsCfazt0
-   GV9khPw4HS9c73lTnKZnSaiJOSmHr3mzuw+lU5T2Mu9g/1Idp6idSQZTN
-   Xawp9vVXTZpT3QlA2B0LLV0B7gqR9g6qxGNCATZNkhIK8P50xgSSjswG3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10201"; a="240098324"
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="240098324"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2021 18:23:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,215,1635231600"; 
-   d="scan'208";a="520012468"
-Received: from lkp-server02.sh.intel.com (HELO 9f38c0981d9f) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Dec 2021 18:23:28 -0800
-Received: from kbuild by 9f38c0981d9f with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1myPNf-0005SP-NT; Sat, 18 Dec 2021 02:23:27 +0000
-Date:   Sat, 18 Dec 2021 10:22:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 733e417518a69b71061c3bafc2bf106109565eee
-Message-ID: <61bd45e2.6Gf+ttQRYKCrHMfN%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231898AbhLRNAe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Dec 2021 08:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233141AbhLRNAe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Dec 2021 08:00:34 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5E3C061746
+        for <linux-arch@vger.kernel.org>; Sat, 18 Dec 2021 05:00:33 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id b73so3457947wmd.0
+        for <linux-arch@vger.kernel.org>; Sat, 18 Dec 2021 05:00:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JCbNL7RiUna5qq8DaSMW/coH4epXCMjSWD6ZnOXRFI0=;
+        b=u4gwbRii2rQYALroefHK1y6OAg/PaB5d8cxYkVOxNfQfP/GSpkOTw4lM0b9sykdRGn
+         I5+TfxMLFW4Yz9DjXmmwADnnilA4jAI3OuH+2kj279neBPdyczuIvIKan+BZxt1abCOC
+         PYvHZoojRGkGcKQVmwOZVt1XScnzpH93n3cT0kdV+KDJ4QLvkVW8g+u48CO+9sCgVbi+
+         IM8GXnnDHqRZPDHHNChAWlGub8OWoFq1V1IwRCwrtEzywv2SqESfkq3jDHxS/vHMIzCq
+         Y/6l37BlHAuffQ5iGLgabgk+gX6l3IXwpC+2N3WfHvO+x+p5njBf0nTvVHjxH/2oigQn
+         0Nrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JCbNL7RiUna5qq8DaSMW/coH4epXCMjSWD6ZnOXRFI0=;
+        b=LvmBVRiKfAwxgxTZZhHv5RoNkzZEQD3BIlTfKZoOhC0sCuJzSyMHJ3wUELQCjZjgd9
+         YCg2foen+NstYA9RoZAQPdXlqMVxC8L5cd813nSVZxDP1XrKtl/DyL4zJ1tA8cw+2zC/
+         Z6AzS079bWAa5SBRCMxqlU94bbyAs8A4ijiBjYYfclmZyqLW0DWg1A2xUX1LwcHGBBOE
+         kGNQLp6ioR6Su6P6jTdkse4YHBMA7TQiEQXZp4Inhet01QcBeHhOa24KsUNQad/CAppn
+         NVZ5LaBAm33umrnEHZiqnPMr5azbPFFfGd70oA77Onb7OKTuPgtHWZISf33q45Mtsfs6
+         B3Xw==
+X-Gm-Message-State: AOAM531llBUSh+wXhY5A9uV1b0uuH9uFVpUZZOWN8t3aStPHYcP7C8ZA
+        sD09apHbBxmWgKBLSSCCjg3b5g==
+X-Google-Smtp-Source: ABdhPJxXBs2crqxznWfWrplA3JeMlkC5cBhIFjXjof2wb1mGSFgRnncc6sy5NXR1PO3YD3c6rLebKQ==
+X-Received: by 2002:a05:600c:a4c:: with SMTP id c12mr6702096wmq.60.1639832431971;
+        Sat, 18 Dec 2021 05:00:31 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:1f0f:c9b8:ee5c:5c2f])
+        by smtp.gmail.com with ESMTPSA id j16sm1465785wms.12.2021.12.18.05.00.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Dec 2021 05:00:31 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
+Cc:     lukasz.luba@arm.com, robh@kernel.org, heiko@sntech.de,
+        arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ulf.hansson@linaro.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init to data section
+Date:   Sat, 18 Dec 2021 14:00:09 +0100
+Message-Id: <20211218130014.4037640-2-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
+References: <20211218130014.4037640-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 733e417518a69b71061c3bafc2bf106109565eee  asm-generic/error-injection.h: fix a spelling mistake, and a coding style issue
+The dtpm table is used to let the different dtpm backends to register
+their setup callbacks in a single place and preventing to export
+multiple functions all around the kernel. That allows the dtpm code to
+be self-encapsulated.
 
-elapsed time: 728m
+The dtpm hierarchy will be passed as a parameter by a platform
+specific code and that will lead to the creation of the different dtpm
+nodes.
 
-configs tested: 155
-configs skipped: 3
+The function creating the hierarchy could be called from a module at
+init time or when it is loaded. However, at this moment the table is
+already freed as it belongs to the init section and the creation will
+lead to a invalid memory access.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Fix this by moving the table to the data section.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211216
-mips                         rt305x_defconfig
-sh                      rts7751r2d1_defconfig
-powerpc                    ge_imp3a_defconfig
-powerpc                      bamboo_defconfig
-powerpc                     ppa8548_defconfig
-sh                           se7780_defconfig
-sh                          rsk7203_defconfig
-powerpc                    amigaone_defconfig
-arm                            lart_defconfig
-arc                         haps_hs_defconfig
-sh                            titan_defconfig
-mips                            ar7_defconfig
-powerpc                 mpc8560_ads_defconfig
-m68k                       bvme6000_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                              alldefconfig
-sparc                               defconfig
-arm                       imx_v6_v7_defconfig
-powerpc                      cm5200_defconfig
-arm                   milbeaut_m10v_defconfig
-arm                        multi_v7_defconfig
-sh                           se7750_defconfig
-arm                            pleb_defconfig
-mips                       bmips_be_defconfig
-arm                       multi_v4t_defconfig
-arm                         orion5x_defconfig
-powerpc                      tqm8xx_defconfig
-mips                         tb0219_defconfig
-mips                           rs90_defconfig
-arc                           tb10x_defconfig
-h8300                       h8s-sim_defconfig
-powerpc                       ebony_defconfig
-m68k                            mac_defconfig
-arm                          pxa168_defconfig
-mips                  cavium_octeon_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                    maltaup_xpa_defconfig
-riscv                          rv32_defconfig
-m68k                        stmark2_defconfig
-powerpc                      makalu_defconfig
-arc                        vdk_hs38_defconfig
-arm                           stm32_defconfig
-arm                        neponset_defconfig
-powerpc               mpc834x_itxgp_defconfig
-powerpc                      walnut_defconfig
-mips                        omega2p_defconfig
-arm                         lubbock_defconfig
-arm                        magician_defconfig
-sh                           se7721_defconfig
-arc                     haps_hs_smp_defconfig
-sh                           se7724_defconfig
-powerpc                 linkstation_defconfig
-powerpc                        fsp2_defconfig
-powerpc                        cell_defconfig
-arm                         s3c6400_defconfig
-mips                      pic32mzda_defconfig
-powerpc                    mvme5100_defconfig
-arm                          iop32x_defconfig
-arm                         vf610m4_defconfig
-arm                         assabet_defconfig
-arm                  randconfig-c002-20211216
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a001-20211216
-x86_64               randconfig-a002-20211216
-x86_64               randconfig-a003-20211216
-x86_64               randconfig-a006-20211216
-x86_64               randconfig-a005-20211216
-x86_64               randconfig-a004-20211216
-i386                 randconfig-a001-20211216
-i386                 randconfig-a002-20211216
-i386                 randconfig-a005-20211216
-i386                 randconfig-a003-20211216
-i386                 randconfig-a006-20211216
-i386                 randconfig-a004-20211216
-x86_64               randconfig-a011-20211217
-x86_64               randconfig-a014-20211217
-x86_64               randconfig-a012-20211217
-x86_64               randconfig-a013-20211217
-x86_64               randconfig-a016-20211217
-x86_64               randconfig-a015-20211217
-i386                 randconfig-a013-20211217
-i386                 randconfig-a011-20211217
-i386                 randconfig-a016-20211217
-i386                 randconfig-a014-20211217
-i386                 randconfig-a015-20211217
-i386                 randconfig-a012-20211217
-arc                  randconfig-r043-20211216
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a006-20211217
-x86_64               randconfig-a005-20211217
-x86_64               randconfig-a001-20211217
-x86_64               randconfig-a002-20211217
-x86_64               randconfig-a003-20211217
-x86_64               randconfig-a004-20211217
-x86_64               randconfig-a011-20211216
-x86_64               randconfig-a014-20211216
-x86_64               randconfig-a012-20211216
-x86_64               randconfig-a013-20211216
-x86_64               randconfig-a016-20211216
-x86_64               randconfig-a015-20211216
-hexagon              randconfig-r045-20211216
-s390                 randconfig-r044-20211216
-riscv                randconfig-r042-20211216
-hexagon              randconfig-r041-20211216
-
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ include/asm-generic/vmlinux.lds.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 42f3866bca69..50d494d94d6c 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -362,7 +362,8 @@
+ 	BRANCH_PROFILE()						\
+ 	TRACE_PRINTKS()							\
+ 	BPF_RAW_TP()							\
+-	TRACEPOINT_STR()
++	TRACEPOINT_STR()						\
++	DTPM_TABLE()
+ 
+ /*
+  * Data section helpers
+@@ -723,7 +724,6 @@
+ 	ACPI_PROBE_TABLE(irqchip)					\
+ 	ACPI_PROBE_TABLE(timer)						\
+ 	THERMAL_TABLE(governor)						\
+-	DTPM_TABLE()							\
+ 	EARLYCON_TABLE()						\
+ 	LSM_TABLE()							\
+ 	EARLY_LSM_TABLE()						\
+-- 
+2.25.1
+
