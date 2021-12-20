@@ -2,144 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DD047AA7B
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Dec 2021 14:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1897747AB53
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Dec 2021 15:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbhLTNlH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Dec 2021 08:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S232777AbhLTOfv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Dec 2021 09:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbhLTNlG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Dec 2021 08:41:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B80C061574;
-        Mon, 20 Dec 2021 05:41:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E6C9B80EA2;
-        Mon, 20 Dec 2021 13:41:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B994C36AE9;
-        Mon, 20 Dec 2021 13:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640007663;
-        bh=sEhqYPxM4z19kGZYE2peDh+u0pT/5DH5Q0sa/WgLz2s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oT13uPmkAxGD5Bshuprq6DF7tVZgmsbYCW7m81SlEheTzmKYwN9cteS2Qm0f+yzG6
-         FxEZ90zHRkBUkkldie3P2GUorJw1P9OF2hEnTx8f/v+ToJqdVDYWB/RZ1XHjnjfRxL
-         fLVSWyLXsF5rXhpcI2KLW7oGXDoL1S/kUska8UuCqrAnXLgCH77Juo+nSxz7bV+YX3
-         3WfuXF6l3rrDlcVq5dlYauRBATyJZitLDYYQCif2MaHz6a5dvEw228kOuvYnysWwa9
-         APhZ9+umMMMIfdZxyvdYYy+6SLkJwLHrNpa2baLRP4StlCKGzXgQu+j2Qe1Fq0Q/Z8
-         2W1x/QxmwJyOQ==
-Received: by mail-ua1-f54.google.com with SMTP id o1so17725858uap.4;
-        Mon, 20 Dec 2021 05:41:02 -0800 (PST)
-X-Gm-Message-State: AOAM533SMp5A/u+oBrZeD2y/zBD71doYSiFNpX9Sa1mxW40hpKMaRaJr
-        PpTwsONAqV+SNvyXUEDHCIMmWPpjSyzD5j+ow4k=
-X-Google-Smtp-Source: ABdhPJwGr/+MFfoW7ipUpJBlTl+ZN+AB5Gr6EIJrZEEcp5Ttg/AYr9iCWiGr8Ukebm4uIUfe9nTB/0FRTqyMvS0jIYU=
-X-Received: by 2002:a05:6102:316e:: with SMTP id l14mr233250vsm.8.1640007662059;
- Mon, 20 Dec 2021 05:41:02 -0800 (PST)
+        with ESMTP id S233661AbhLTOfu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Dec 2021 09:35:50 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED32C06173E
+        for <linux-arch@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id kk22so9529979qvb.0
+        for <linux-arch@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
+        b=DiEjH6My8Ez1IQhVc6pvDrx8DdYBf5P9Q+clTviqtdAcGoyrz8O3Mm0QM1wUFrNkY0
+         erUGHvnkQdBzOobPRhQhMUs2tWFe8BqPjTGLGO7iDNYJjnvifWvJK0CZAwohnr/jSIgz
+         QpKt+Ew79In897TuLR2zRLivKaLe3tEQEONG8JVkG6PU0InE460sA5jq4dymMlHT8XSX
+         zg2DC/LWEyYpH62+sfMqlCvUH8ljGrMJB9GT5NpPjnlC3IZ7ST16PWtT0L8tFOZmLFjb
+         TIGp0qdZPmp5QBN5QRqIC1GTcIzUBcUI8b5RNxMVY+8vGRJeuba9qlq6VNmEPxlzglI1
+         v4Rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
+        b=DqKAE0Kv8niPVdiKMg2M2Ny8eU6az1Or5QjuX1fVPexX24bAhpsG/fq6PK59W+UFX9
+         oM11JODVfMpkbHEvxyTA9dyaKF5/qhj565uOqXrPqvx+4CMVKQCmbZGehMg7PIkN4nI/
+         qCvN/XQl5tsLwqRkQjbpgQM1MRv00y8ard80Oj8pXgFzTMY8jUd2K/XeBORO4xBgDW+p
+         tL1MXceDjh0b6Ya3ldenO9wlNm6hVko2w8F+0LlMQAJ9WnpBP2YDWYYvwPpAHBYuKGDw
+         lmqGRQHJE27OgWULY1mIo0oxgHl1Nrwk04JnZpHU410CEYRX4RFA4O1x/hQTvwdQrOr1
+         9jGw==
+X-Gm-Message-State: AOAM532VBtnNJjTQtdaWp/d+6HEEKJZPY1YaLV2V8iUhWmcmZyS67g4p
+        fJi5lD8mwDLqf3FetiquKtlvVRe2rVQUfZC8MQP9Xg==
+X-Google-Smtp-Source: ABdhPJzaFRZE2AdeTnoG9pfGf1WQwZj1GmAFj8sa8rSd0l4vITphwUpgRq+6SCv0VHaU8fAW9eiqASykEX99MrCy/vM=
+X-Received: by 2002:a0c:8031:: with SMTP id 46mr13207207qva.126.1640010949396;
+ Mon, 20 Dec 2021 06:35:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
- <20211206104657.433304-13-alexandre.ghiti@canonical.com> <CAJF2gTQEHv1dVzv=JNCYSzD8oh6UxYOFRTdBOp-FFeeeOhSJrQ@mail.gmail.com>
- <CAMj1kXHmdDKFozkoAfM-mxsxxfanhVq5HcA1qKTrkp=vAt=Umg@mail.gmail.com>
-In-Reply-To: <CAMj1kXHmdDKFozkoAfM-mxsxxfanhVq5HcA1qKTrkp=vAt=Umg@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 20 Dec 2021 21:40:51 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTR2pDN8vvknmE2s1nj2WSuCfTkXYkU074rCck+CCwQv7Q@mail.gmail.com>
-Message-ID: <CAJF2gTR2pDN8vvknmE2s1nj2WSuCfTkXYkU074rCck+CCwQv7Q@mail.gmail.com>
-Subject: Re: [PATCH v3 12/13] riscv: Initialize thread pointer before calling
- C functions
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@rivosinc.com>,
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-40-glider@google.com>
+ <87bl1ec32a.ffs@tglx>
+In-Reply-To: <87bl1ec32a.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 20 Dec 2021 15:35:13 +0100
+Message-ID: <CAG_fn=VTow8S-H8SQbDNmB8gj+QpBm3RFKeiYhH=CRo0yd_CKg@mail.gmail.com>
+Subject: Re: [PATCH 39/43] x86: kmsan: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
         Dmitry Vyukov <dvyukov@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        panqinglin2020@iscas.ac.cn,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 20, 2021 at 5:17 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+On Fri, Dec 17, 2021 at 10:51 PM Thomas Gleixner <tglx@linutronix.de> wrote=
+:
 >
-> On Mon, 20 Dec 2021 at 10:11, Guo Ren <guoren@kernel.org> wrote:
+> Alexander,
+>
+> On Tue, Dec 14 2021 at 17:20, Alexander Potapenko wrote:
+> > When calling KMSAN-instrumented functions from non-instrumented
+> > functions, function parameters may not be initialized properly, leading
+> > to false positive reports. In particular, this happens all the time whe=
+n
+> > calling interrupt handlers from `noinstr` IDT entries.
 > >
-> > On Tue, Dec 7, 2021 at 11:55 AM Alexandre Ghiti
-> > <alexandre.ghiti@canonical.com> wrote:
-> > >
-> > > Because of the stack canary feature that reads from the current task
-> > > structure the stack canary value, the thread pointer register "tp" must
-> > > be set before calling any C function from head.S: by chance, setup_vm
-> > Shall we disable -fstack-protector for setup_vm() with __attribute__?
+> > Fortunately, x86 code has instrumentation_begin() and
 >
-> Don't use __attribute__((optimize())) for that: it is known to be
-> broken, and documented as debug purposes only in the GCC info pages:
->
-> https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html
-Oh, thx for the link.
+> It's not only x86 code:
+> >  kernel/entry/common.c           | 3 +++
 
+Shall this bit go into a separate patch?
+
+> > @@ -76,6 +77,7 @@ __visible noinstr void do_syscall_64(struct pt_regs *=
+regs, int nr)
+> >       nr =3D syscall_enter_from_user_mode(regs, nr);
+> >
+> >       instrumentation_begin();
+> > +     kmsan_instrumentation_begin(regs);
+>
+> Can we please make this something like:
+>
+>        instrumentation_begin_at_entry(regs);
+
+Fine, will do.
+Do you think it would make sense to hide it inside
+instrumentation_begin(), or is it ok to have both macros follow each
+other?
+
+> or some other sensible name which hides that kmsan gunk and avoids to
+> touch all of this again when KFOOSAN comes around?
+>
+> Thanks,
+>
+>         tglx
 >
 >
 >
->
-> > Actually, we've already init tp later.
-> >
-> > > and all the functions that it calls does not seem to be part of the
-> > > functions where the canary check is done, but in the following commits,
-> > > some functions will.
-> > >
-> > > Fixes: f2c9699f65557a31 ("riscv: Add STACKPROTECTOR supported")
-> > > Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-> > > ---
-> > >  arch/riscv/kernel/head.S | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-> > > index c3c0ed559770..86f7ee3d210d 100644
-> > > --- a/arch/riscv/kernel/head.S
-> > > +++ b/arch/riscv/kernel/head.S
-> > > @@ -302,6 +302,7 @@ clear_bss_done:
-> > >         REG_S a0, (a2)
-> > >
-> > >         /* Initialize page tables and relocate to virtual addresses */
-> > > +       la tp, init_task
-> > >         la sp, init_thread_union + THREAD_SIZE
-> > >         XIP_FIXUP_OFFSET sp
-> > >  #ifdef CONFIG_BUILTIN_DTB
-> > > --
-> > > 2.32.0
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
-> >
-> > ML: https://lore.kernel.org/linux-csky/
 
 
+--=20
+Alexander Potapenko
+Software Engineer
 
--- 
-Best Regards
- Guo Ren
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-ML: https://lore.kernel.org/linux-csky/
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
