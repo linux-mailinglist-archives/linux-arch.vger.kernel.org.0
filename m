@@ -2,147 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1897747AB53
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Dec 2021 15:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6DE47B917
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Dec 2021 04:46:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbhLTOfv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Dec 2021 09:35:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbhLTOfu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Dec 2021 09:35:50 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED32C06173E
-        for <linux-arch@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id kk22so9529979qvb.0
-        for <linux-arch@vger.kernel.org>; Mon, 20 Dec 2021 06:35:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
-        b=DiEjH6My8Ez1IQhVc6pvDrx8DdYBf5P9Q+clTviqtdAcGoyrz8O3Mm0QM1wUFrNkY0
-         erUGHvnkQdBzOobPRhQhMUs2tWFe8BqPjTGLGO7iDNYJjnvifWvJK0CZAwohnr/jSIgz
-         QpKt+Ew79In897TuLR2zRLivKaLe3tEQEONG8JVkG6PU0InE460sA5jq4dymMlHT8XSX
-         zg2DC/LWEyYpH62+sfMqlCvUH8ljGrMJB9GT5NpPjnlC3IZ7ST16PWtT0L8tFOZmLFjb
-         TIGp0qdZPmp5QBN5QRqIC1GTcIzUBcUI8b5RNxMVY+8vGRJeuba9qlq6VNmEPxlzglI1
-         v4Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KIUzswcAUaRAOTc8qof1lu1zKeUeUmXtr9MrXGORaeI=;
-        b=DqKAE0Kv8niPVdiKMg2M2Ny8eU6az1Or5QjuX1fVPexX24bAhpsG/fq6PK59W+UFX9
-         oM11JODVfMpkbHEvxyTA9dyaKF5/qhj565uOqXrPqvx+4CMVKQCmbZGehMg7PIkN4nI/
-         qCvN/XQl5tsLwqRkQjbpgQM1MRv00y8ard80Oj8pXgFzTMY8jUd2K/XeBORO4xBgDW+p
-         tL1MXceDjh0b6Ya3ldenO9wlNm6hVko2w8F+0LlMQAJ9WnpBP2YDWYYvwPpAHBYuKGDw
-         lmqGRQHJE27OgWULY1mIo0oxgHl1Nrwk04JnZpHU410CEYRX4RFA4O1x/hQTvwdQrOr1
-         9jGw==
-X-Gm-Message-State: AOAM532VBtnNJjTQtdaWp/d+6HEEKJZPY1YaLV2V8iUhWmcmZyS67g4p
-        fJi5lD8mwDLqf3FetiquKtlvVRe2rVQUfZC8MQP9Xg==
-X-Google-Smtp-Source: ABdhPJzaFRZE2AdeTnoG9pfGf1WQwZj1GmAFj8sa8rSd0l4vITphwUpgRq+6SCv0VHaU8fAW9eiqASykEX99MrCy/vM=
-X-Received: by 2002:a0c:8031:: with SMTP id 46mr13207207qva.126.1640010949396;
- Mon, 20 Dec 2021 06:35:49 -0800 (PST)
+        id S230018AbhLUDqS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Dec 2021 22:46:18 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:30083 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230090AbhLUDqS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Dec 2021 22:46:18 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4JJ2NX6d3bz1DJrQ;
+        Tue, 21 Dec 2021 11:43:08 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 11:46:16 +0800
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 21 Dec 2021 11:46:15 +0800
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+To:     <will@kernel.org>, <catalin.marinas@arm.com>,
+        <mark.rutland@arm.com>, <peterz@infradead.org>, <corbet@lwn.net>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <moyufeng@huawei.com>, <wangxiongfeng2@huawei.com>,
+        <linux-arch@vger.kernel.org>
+Subject: [PATCH v2] asm-generic: introduce io_stop_wc() and add implementation for ARM64
+Date:   Tue, 21 Dec 2021 11:55:56 +0800
+Message-ID: <20211221035556.60346-1-wangxiongfeng2@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-40-glider@google.com>
- <87bl1ec32a.ffs@tglx>
-In-Reply-To: <87bl1ec32a.ffs@tglx>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 20 Dec 2021 15:35:13 +0100
-Message-ID: <CAG_fn=VTow8S-H8SQbDNmB8gj+QpBm3RFKeiYhH=CRo0yd_CKg@mail.gmail.com>
-Subject: Re: [PATCH 39/43] x86: kmsan: handle register passing from
- uninstrumented code
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Dec 17, 2021 at 10:51 PM Thomas Gleixner <tglx@linutronix.de> wrote=
-:
->
-> Alexander,
->
-> On Tue, Dec 14 2021 at 17:20, Alexander Potapenko wrote:
-> > When calling KMSAN-instrumented functions from non-instrumented
-> > functions, function parameters may not be initialized properly, leading
-> > to false positive reports. In particular, this happens all the time whe=
-n
-> > calling interrupt handlers from `noinstr` IDT entries.
-> >
-> > Fortunately, x86 code has instrumentation_begin() and
->
-> It's not only x86 code:
-> >  kernel/entry/common.c           | 3 +++
+For memory accesses with write-combining attributes (e.g. those returned
+by ioremap_wc()), the CPU may wait for prior accesses to be merged with
+subsequent ones. But in some situation, such wait is bad for the
+performance.
 
-Shall this bit go into a separate patch?
+We introduce io_stop_wc() to prevent the merging of write-combining
+memory accesses before this macro with those after it.
 
-> > @@ -76,6 +77,7 @@ __visible noinstr void do_syscall_64(struct pt_regs *=
-regs, int nr)
-> >       nr =3D syscall_enter_from_user_mode(regs, nr);
-> >
-> >       instrumentation_begin();
-> > +     kmsan_instrumentation_begin(regs);
->
-> Can we please make this something like:
->
->        instrumentation_begin_at_entry(regs);
+We add implementation for ARM64 using DGH instruction and provide NOP
+implementation for other architectures.
 
-Fine, will do.
-Do you think it would make sense to hide it inside
-instrumentation_begin(), or is it ok to have both macros follow each
-other?
+Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Suggested-by: Will Deacon <will@kernel.org>
+Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
+---
+v1->v2: change 'Normal-Non Cacheable' to 'write-combining'
+---
+ Documentation/memory-barriers.txt |  8 ++++++++
+ arch/arm64/include/asm/barrier.h  |  9 +++++++++
+ include/asm-generic/barrier.h     | 11 +++++++++++
+ 3 files changed, 28 insertions(+)
 
-> or some other sensible name which hides that kmsan gunk and avoids to
-> touch all of this again when KFOOSAN comes around?
->
-> Thanks,
->
->         tglx
->
->
->
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index 7367ada13208..b12df9137e1c 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -1950,6 +1950,14 @@ There are some more advanced barrier functions:
+      For load from persistent memory, existing read memory barriers are sufficient
+      to ensure read ordering.
+ 
++ (*) io_stop_wc();
++
++     For memory accesses with write-combining attributes (e.g. those returned
++     by ioremap_wc(), the CPU may wait for prior accesses to be merged with
++     subsequent ones. io_stop_wc() can be used to prevent the merging of
++     write-combining memory accesses before this macro with those after it when
++     such wait has performance implications.
++
+ ===============================
+ IMPLICIT KERNEL MEMORY BARRIERS
+ ===============================
+diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+index 1c5a00598458..62217be36217 100644
+--- a/arch/arm64/include/asm/barrier.h
++++ b/arch/arm64/include/asm/barrier.h
+@@ -26,6 +26,14 @@
+ #define __tsb_csync()	asm volatile("hint #18" : : : "memory")
+ #define csdb()		asm volatile("hint #20" : : : "memory")
+ 
++/*
++ * Data Gathering Hint:
++ * This instruction prevents merging memory accesses with Normal-NC or
++ * Device-GRE attributes before the hint instruction with any memory accesses
++ * appearing after the hint instruction.
++ */
++#define dgh()		asm volatile("hint #6" : : : "memory")
++
+ #ifdef CONFIG_ARM64_PSEUDO_NMI
+ #define pmr_sync()						\
+ 	do {							\
+@@ -46,6 +54,7 @@
+ #define dma_rmb()	dmb(oshld)
+ #define dma_wmb()	dmb(oshst)
+ 
++#define io_stop_wc()	dgh()
+ 
+ #define tsb_csync()								\
+ 	do {									\
+diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+index 640f09479bdf..4c2c1b830344 100644
+--- a/include/asm-generic/barrier.h
++++ b/include/asm-generic/barrier.h
+@@ -251,5 +251,16 @@ do {									\
+ #define pmem_wmb()	wmb()
+ #endif
+ 
++/*
++ * ioremap_wc() maps I/O memory as memory with write-combining attributes. For
++ * this kind of memory accesses, the CPU may wait for prior accesses to be
++ * merged with subsequent ones. In some situation, such wait is bad for the
++ * performance. io_stop_wc() can be used to prevent the merging of
++ * write-combining memory accesses before this macro with those after it.
++ */
++#ifndef io_stop_wc
++#define io_stop_wc do { } while (0)
++#endif
++
+ #endif /* !__ASSEMBLY__ */
+ #endif /* __ASM_GENERIC_BARRIER_H */
+-- 
+2.20.1
 
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
