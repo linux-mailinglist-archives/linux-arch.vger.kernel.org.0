@@ -2,80 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DD6947BEFC
-	for <lists+linux-arch@lfdr.de>; Tue, 21 Dec 2021 12:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 517B847C0B3
+	for <lists+linux-arch@lfdr.de>; Tue, 21 Dec 2021 14:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237148AbhLULcs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Dec 2021 06:32:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33086 "EHLO
+        id S235312AbhLUNVo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Dec 2021 08:21:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbhLULcs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Dec 2021 06:32:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033C0C061574;
-        Tue, 21 Dec 2021 03:32:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AB3861532;
-        Tue, 21 Dec 2021 11:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B23C36AE8;
-        Tue, 21 Dec 2021 11:32:44 +0000 (UTC)
-Date:   Tue, 21 Dec 2021 11:32:41 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yufeng Mo <moyufeng@huawei.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2] asm-generic: introduce io_stop_wc() and add
- implementation for ARM64
-Message-ID: <YcG7WRvrWiSxcBZt@arm.com>
-References: <20211221035556.60346-1-wangxiongfeng2@huawei.com>
- <CAK8P3a2fBdh2kPDo8UGHBD0MhF5k_DoomqUaW+=ZOgksKmGg5A@mail.gmail.com>
+        with ESMTP id S234517AbhLUNVo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Dec 2021 08:21:44 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20AAC061574;
+        Tue, 21 Dec 2021 05:21:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B/oDToJjF+9MzhiotE5SBO6bEHgGlfnze/KNPpAHsCg=; b=SfQyc19jT/JZHSai2UnntFDszE
+        dHXubqLDm2OtdY+7lByHgwHoqZv5IkGbAbEqeONpa6hu5tS8N2Fk/5x1B+aB4TlkCHoY7FQ4fKb5d
+        fCmrRWtxPOcJVp2OyTmyMq5mxuavxsyrcrhutLwB0905JlF6NwGi1Eq8qOC0SQqV+23s3ezCVK8GQ
+        qdAaPpEM23eAPsR/2hqZI7bJ32V+qYe5eixsRzCGEviLjVtEvoBkHH2Lp+uXWD0AZpVxY4hjl2bhR
+        cqojP2dzXmKesKtM+SNwap1S7kIA7njOKiAiDTI2Aa3THkrBARxKYFudRpw4uZMgZ/3TADlJBvQo6
+        TbsMRdmA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mzf55-002jwx-KO; Tue, 21 Dec 2021 13:21:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D41533002AE;
+        Tue, 21 Dec 2021 14:21:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BE30C206E66FD; Tue, 21 Dec 2021 14:21:26 +0100 (CET)
+Date:   Tue, 21 Dec 2021 14:21:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+Cc:     Will Deacon <will@kernel.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sam Ravnborg <sam@ravnborg.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org, kernel@openvz.org
+Subject: Re: [PATCH/RFC v2 1/3] tlb: mmu_gather: introduce
+ CONFIG_MMU_GATHER_TABLE_FREE_COMMON
+Message-ID: <YcHU1maQkp4VXZvS@hirez.programming.kicks-ass.net>
+References: <20211218185205.1744125-1-nikita.yushchenko@virtuozzo.com>
+ <20211218185205.1744125-2-nikita.yushchenko@virtuozzo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a2fBdh2kPDo8UGHBD0MhF5k_DoomqUaW+=ZOgksKmGg5A@mail.gmail.com>
+In-Reply-To: <20211218185205.1744125-2-nikita.yushchenko@virtuozzo.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 21, 2021 at 10:17:27AM +0100, Arnd Bergmann wrote:
-> On Tue, Dec 21, 2021 at 4:55 AM Xiongfeng Wang
-> <wangxiongfeng2@huawei.com> wrote:
-> >
-> > For memory accesses with write-combining attributes (e.g. those returned
-> > by ioremap_wc()), the CPU may wait for prior accesses to be merged with
-> > subsequent ones. But in some situation, such wait is bad for the
-> > performance.
-> >
-> > We introduce io_stop_wc() to prevent the merging of write-combining
-> > memory accesses before this macro with those after it.
-> >
-> > We add implementation for ARM64 using DGH instruction and provide NOP
-> > implementation for other architectures.
-> >
-> > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> > Suggested-by: Will Deacon <will@kernel.org>
-> > Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-> > ---
-> > v1->v2: change 'Normal-Non Cacheable' to 'write-combining'
+On Sat, Dec 18, 2021 at 09:52:04PM +0300, Nikita Yushchenko wrote:
+> For architectures that use free_page_and_swap_cache() as their
+> __tlb_remove_table(), place that common implementation into
+> mm/mmu_gather.c, ifdef'ed by CONFIG_MMU_GATHER_TABLE_FREE_COMMON.
 > 
-> For asm-generic:
+> Signed-off-by: Nikita Yushchenko <nikita.yushchenko@virtuozzo.com>
+> ---
+>  arch/Kconfig                 |  3 +++
+>  arch/arm/Kconfig             |  1 +
+>  arch/arm/include/asm/tlb.h   |  5 -----
+>  arch/arm64/Kconfig           |  1 +
+>  arch/arm64/include/asm/tlb.h |  5 -----
+>  arch/x86/Kconfig             |  1 +
+>  arch/x86/include/asm/tlb.h   | 14 --------------
+>  include/asm-generic/tlb.h    |  5 +++++
+>  mm/mmu_gather.c              | 10 ++++++++++
+>  9 files changed, 21 insertions(+), 24 deletions(-)
 > 
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Will, Catalin: if you are happy with this version, please merge it through the
-> arm64 tree.
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index d3c4ab249e9c..9eba553cd86f 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -415,6 +415,9 @@ config HAVE_ARCH_JUMP_LABEL_RELATIVE
+>  config MMU_GATHER_TABLE_FREE
+>  	bool
+>  
+> +config MMU_GATHER_TABLE_FREE_COMMON
+> +	bool
 
-Thanks for the ack Arnd. I'll queue this through the arm64 tree.
-
--- 
-Catalin
+I don't like that name... The point isn't that it's common, the point is
+that the page-table's are backed by pages.
