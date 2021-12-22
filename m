@@ -2,54 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDD047D02A
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Dec 2021 11:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C442A47D0F6
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Dec 2021 12:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234734AbhLVKnS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Dec 2021 05:43:18 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:42824 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236501AbhLVKnS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Dec 2021 05:43:18 -0500
+        id S244637AbhLVL0i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Dec 2021 06:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244647AbhLVL0g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Dec 2021 06:26:36 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC8EC061574;
+        Wed, 22 Dec 2021 03:26:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A655861968;
-        Wed, 22 Dec 2021 10:43:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99192C36AE8;
-        Wed, 22 Dec 2021 10:43:15 +0000 (UTC)
-Date:   Wed, 22 Dec 2021 10:43:12 +0000
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F421B81A4F;
+        Wed, 22 Dec 2021 11:26:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2738C36AE5;
+        Wed, 22 Dec 2021 11:26:30 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, will@kernel.org,
-        mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, moyufeng@huawei.com,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: introduce io_stop_wc() and add
- implementation for ARM64
-Message-ID: <YcMBQEQ4e1zU3pJv@arm.com>
-References: <20211217085611.111999-1-wangxiongfeng2@huawei.com>
- <YcLq//2odC3GrGvH@infradead.org>
+To:     will@kernel.org, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        corbet@lwn.net, mark.rutland@arm.com, peterz@infradead.org
+Cc:     moyufeng@huawei.com, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] asm-generic: introduce io_stop_wc() and add implementation for ARM64
+Date:   Wed, 22 Dec 2021 11:26:28 +0000
+Message-Id: <164017237365.157899.5054701495946891448.b4-ty@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211221035556.60346-1-wangxiongfeng2@huawei.com>
+References: <20211221035556.60346-1-wangxiongfeng2@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YcLq//2odC3GrGvH@infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Dec 22, 2021 at 01:08:15AM -0800, Christoph Hellwig wrote:
-> So what is going to use this?
+On Tue, 21 Dec 2021 11:55:56 +0800, Xiongfeng Wang wrote:
+> For memory accesses with write-combining attributes (e.g. those returned
+> by ioremap_wc()), the CPU may wait for prior accesses to be merged with
+> subsequent ones. But in some situation, such wait is bad for the
+> performance.
+> 
+> We introduce io_stop_wc() to prevent the merging of write-combining
+> memory accesses before this macro with those after it.
+> 
+> [...]
 
-There was a series about 6 months ago making use of the new DGH arm64
-instruction in a network driver:
+Applied to arm64 (for-next/misc), thanks!
 
-https://lore.kernel.org/r/1627614864-50824-1-git-send-email-huangguangbin2@huawei.com
-
-We bike-shedded on the name of the macro since (now settled on
-io_stop_wc()) and there wasn't much point in carrying the rest of the
-patches. I assume the driver changes will go in via their normal route
-once the macro above is merged.
+[1/1] asm-generic: introduce io_stop_wc() and add implementation for ARM64
+      https://git.kernel.org/arm64/c/d5624bb29f49
 
 -- 
 Catalin
+
