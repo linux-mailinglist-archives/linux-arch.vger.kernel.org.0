@@ -2,47 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB2647CED5
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Dec 2021 10:08:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDD047D02A
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Dec 2021 11:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239867AbhLVJIV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Dec 2021 04:08:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbhLVJIU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Dec 2021 04:08:20 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F77BC061574;
-        Wed, 22 Dec 2021 01:08:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=MFvE6YOOba0aemsOm0zG3CJGZiNw67vjwzqYsZ7WtJ4=; b=vgDsPBclfCZ3QPgUtaW5/sJ+cg
-        YXanpyoCXeQLF9bOWsUk8Yy8qupG2Cbz1dd/uC9VmnX9NZrfl7LOL9WFgEihpWkrK/ug3lqUlh7cO
-        87WL6xNlVgD2AkVyHXV6YUI5Jji9ztt5cq/DSB09NbbPzKTuWPanhoT+fnT3UsyyseaW8ZIbUzA4Z
-        dEFIW7LYU9W3l4wwIPqbwZbS2fl0u35tDJsZ/J1mQdiZxEtUKSeY17wJZcCnzFlF48HfJe9skaBDt
-        3q0JkijTpCP0P5cy4mpIt2YWj4uzXu6Yy6IztRczpWSsKSV/SeE/AZOmbHWMe4JZ/C+dCuXAg8/LU
-        zcsZUl0A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mzxbb-009ped-Lg; Wed, 22 Dec 2021 09:08:15 +0000
-Date:   Wed, 22 Dec 2021 01:08:15 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        moyufeng@huawei.com, linux-arch@vger.kernel.org
+        id S234734AbhLVKnS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Dec 2021 05:43:18 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:42824 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236501AbhLVKnS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Dec 2021 05:43:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A655861968;
+        Wed, 22 Dec 2021 10:43:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99192C36AE8;
+        Wed, 22 Dec 2021 10:43:15 +0000 (UTC)
+Date:   Wed, 22 Dec 2021 10:43:12 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, will@kernel.org,
+        mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, moyufeng@huawei.com,
+        linux-arch@vger.kernel.org
 Subject: Re: [PATCH] asm-generic: introduce io_stop_wc() and add
  implementation for ARM64
-Message-ID: <YcLq//2odC3GrGvH@infradead.org>
+Message-ID: <YcMBQEQ4e1zU3pJv@arm.com>
 References: <20211217085611.111999-1-wangxiongfeng2@huawei.com>
+ <YcLq//2odC3GrGvH@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211217085611.111999-1-wangxiongfeng2@huawei.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <YcLq//2odC3GrGvH@infradead.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-So what is going to use this?
+On Wed, Dec 22, 2021 at 01:08:15AM -0800, Christoph Hellwig wrote:
+> So what is going to use this?
+
+There was a series about 6 months ago making use of the new DGH arm64
+instruction in a network driver:
+
+https://lore.kernel.org/r/1627614864-50824-1-git-send-email-huangguangbin2@huawei.com
+
+We bike-shedded on the name of the macro since (now settled on
+io_stop_wc()) and there wasn't much point in carrying the rest of the
+patches. I assume the driver changes will go in via their normal route
+once the macro above is merged.
+
+-- 
+Catalin
