@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 519C747DBE7
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 01:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9582447DBED
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 01:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345823AbhLWAYH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Dec 2021 19:24:07 -0500
-Received: from mga17.intel.com ([192.55.52.151]:59144 "EHLO mga17.intel.com"
+        id S1345674AbhLWAYR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Dec 2021 19:24:17 -0500
+Received: from mga17.intel.com ([192.55.52.151]:59161 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345655AbhLWAXm (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:23:42 -0500
+        id S238271AbhLWAXp (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Dec 2021 19:23:45 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640219022; x=1671755022;
+  t=1640219024; x=1671755024;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=cJt4EQ6UCbCx+1z2FmP05zLBMZ/f/ExXF1JWdLFGisg=;
-  b=SE+7DKFmwSRdr25NK5yt11XUFQoVl4z1QD0SwtWFHPgPv4ME2UZHvu9h
-   E2NgChM9o3Hd9QibE9VuHGdNx9iL9SIOLi8Cec+eIdyxDS2+Xyc7RPlp+
-   vwR9+mEZKxq1nI2i5eJCjRYLCd1zzZTvjlzm9q8Va1Jc92iMC7gP2cdhY
-   ZCcqRx6cPnEfXiaZCWalYpzQS4o+PnWZube9VzCxpl8dz475EtPOvj+0R
-   +el4qLjnXTv2tvGESmrmhk7IROUAk7yapAULfumAmOzTItuujsWSqeRTK
-   lYjsD8TqmPqzDt4Yo4EPjt8nKMOwF8TniV6jqvj+9K9UV9/03sTZjbzbW
+  bh=M+ClnG2JXQETKhE6oHghASQqo8EvKsdBr8Mky4esG5A=;
+  b=YQtfOAzuZunz/vi5oU0+bmmMPF9YjuAEopOJWBy8hrjRfohBb6Jv38hp
+   ki9200VjIQ7/yPrabo3AtozpbuXTJMZLeM9ppRhp9i1a27K4KRrVm0+aH
+   973ZTPPuiqTYJ41XFq4ObtxXHLdk7GJfr5GzbMp85b6pMG2ti3wcSB9la
+   QPbz9pX1AbPcXQcEXgdtW8I/1Lk0Nm3JWUk+w0bPXf/4JKVXgJ/D1I5KT
+   yest3Y1/KtxrP+aiN91n7NkzCSH9Yd+GSsIOQ1m1bSaPedglQeE7BnqsB
+   2ATbxMUTBHl5zP4fcDs1itTRJjPq25F/UsmQFxHOxQ4UJJVOhxJI4Hu2c
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="221405030"
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="221405044"
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="221405030"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:23 -0800
+   d="scan'208";a="221405044"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,227,1635231600"; 
-   d="scan'208";a="587169695"
+   d="scan'208";a="466831979"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Dec 2021 16:23:16 -0800
+  by orsmga003.jf.intel.com with ESMTP; 22 Dec 2021 16:23:18 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N798032467;
-        Thu, 23 Dec 2021 00:23:13 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N799032467;
+        Thu, 23 Dec 2021 00:23:15 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -74,9 +74,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v9 03/15] kallsyms: Hide layout
-Date:   Thu, 23 Dec 2021 01:21:57 +0100
-Message-Id: <20211223002209.1092165-4-alexandr.lobakin@intel.com>
+Subject: [PATCH v9 04/15] arch: introduce ASM function sections
+Date:   Thu, 23 Dec 2021 01:21:58 +0100
+Message-Id: <20211223002209.1092165-5-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
 References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
@@ -86,235 +86,411 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Kristen Carlson Accardi <kristen@linux.intel.com>
+Sometimes it is useful to create a separate section for every
+function (symbol in general) to be able then to selectively merge
+them back into on or several others. This is how DCE and a part of
+LTO work.
+Currently, only C functions are in scope and the compilers are able
+to do this automatically when `-ffunction-section` is specified.
 
-This patch makes /proc/kallsyms display in a random order, rather
-than sorted by address in order to hide the newly randomized address
-layout.
+Add a basic infra for supporting ASM function sections. If any of
+the required build options (DCE, LTO, FG-KASLR later) is on and
+the target architecture claims it supports them, all ASM functions
+and "code" will be placed into separate named sections by default.
+This is achieved using --sectname-subst GAS flag which will then
+substitute "%S" in a .pushsection or .section directive with the
+name of the current section. So,
 
-alobakin:
-Don't depend FG-KASLR and always do that for unpriviledged accesses
-as suggested by several folks.
-Also, introduce and use a shuffle_array() macro which shuffles an
-array using Fisher-Yates. We'll make use of it several more times
-later on.
+.section .entry.text      # current section is .entry.text
+SYM_FUNC_START(foo)
+ -> .pushsection %S.foo   # now the section is .entry.text.foo
+do_something
+SYM_FUNC_END(foo)
+ -> .popsection           # back to .entry.text
 
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Tested-by: Tony Luck <tony.luck@intel.com>
-Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
-Suggested-by: Ard Biesheuvel <ardb@kernel.org> # always do that
-Suggested-by: Josh Poimboeuf <jpoimboe@redhat.com> # always do that
-Suggested-by: Peter Zijlstra <peterz@infradead.org> # always do that, macro
-Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Now the function "foo" is placed into .entry.text.foo and can be
+garbage-collected if there are no consumers for it.
+Otherwise, the linker script will merge it back into .entry.text.
+
+Since modpost is being run on vmlinux.o, i.e. before the final
+linking, expand its okay-list to cover new potential sections
+(which will get processed afterwards).
+
+Suggested-by: Peter Zijlstra <peterz@infradead.org> # always do, then merge
+Suggested-by: Nicolas Pitre <nico@fluxnic.net> # --sectname-subst flag
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- include/linux/random.h | 16 ++++++++
- kernel/kallsyms.c      | 93 ++++++++++++++++++++++++++++++++++--------
- 2 files changed, 93 insertions(+), 16 deletions(-)
+ Makefile                          |  18 +++++
+ arch/Kconfig                      |   6 ++
+ include/asm-generic/vmlinux.lds.h |  21 +++---
+ include/linux/linkage.h           | 118 +++++++++++++++++++++++++++++-
+ init/Kconfig                      |  11 +++
+ scripts/mod/modpost.c             |   6 +-
+ 6 files changed, 167 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/random.h b/include/linux/random.h
-index f45b8be3e3c4..c859a698089c 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -110,6 +110,22 @@ declare_get_random_var_wait(long)
+diff --git a/Makefile b/Makefile
+index 9dc15c67d132..b921b1fabf70 100644
+--- a/Makefile
++++ b/Makefile
+@@ -888,6 +888,24 @@ ifeq ($(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)$(CONFIG_LIVEPATCH),yy)
+ KBUILD_LDFLAGS += -z unique-symbol
+ endif
  
- unsigned long randomize_page(unsigned long start, unsigned long range);
++# Allow ASM code to generate separate sections for each function. See
++# `include/linux/linkage.h` for explanation. This flag is to enable GAS to
++# insert the name of the previous section instead of `%S` inside .pushsection
++ifdef CONFIG_HAVE_ASM_FUNCTION_SECTIONS
++ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_LTO_CLANG),)
++SECSUBST_AFLAGS := -Wa,--sectname-subst
++KBUILD_AFLAGS_KERNEL += $(SECSUBST_AFLAGS)
++KBUILD_CFLAGS_KERNEL += $(SECSUBST_AFLAGS)
++export SECSUBST_AFLAGS
++endif
++
++# Same for modules. LD DCE doesn't work for them, thus not checking for it
++ifneq ($(CONFIG_LTO_CLANG),)
++KBUILD_AFLAGS_MODULE += -Wa,--sectname-subst
++KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
++endif
++endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
++
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
+ LDFLAGS_vmlinux += --gc-sections
+diff --git a/arch/Kconfig b/arch/Kconfig
+index d3c4ab249e9c..b31a836bc252 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -1312,6 +1312,12 @@ config ARCH_HAS_PARANOID_L1D_FLUSH
+ config DYNAMIC_SIGFRAME
+ 	bool
  
-+/**
-+ * shuffle_array - use a Fisher Yates algorithm to shuffle an array.
-+ * @arr: pointer to the array
-+ * @nents: the number of elements in the array
-+ */
-+#define shuffle_array(arr, nents) ({				\
-+	typeof(&(arr)[0]) __arr = &(arr)[0];			\
-+	size_t __i;						\
-+								\
-+	for (__i = (nents) - 1; __i > 0; __i--) {		\
-+		size_t __j = get_random_long() % (__i + 1);	\
-+								\
-+		swap(__arr[__i], __arr[__j]);			\
-+	}							\
-+})
++config ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
++	bool
++	help
++	  An arch should select this if it can be built and run with its
++	  ASM functions placed into separate sections to improve DCE and LTO.
++
+ source "kernel/gcov/Kconfig"
+ 
+ source "scripts/gcc-plugins/Kconfig"
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 42f3866bca69..e7b8a84e0e64 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -84,6 +84,9 @@
+ /* Align . to a 8 byte boundary equals to maximum function alignment. */
+ #define ALIGN_FUNCTION()  . = ALIGN(8)
+ 
++/* This is useful for collecting individual sections back into one main */
++#define SECT_WILDCARD(sect)	sect sect.[0-9a-zA-Z_]*
 +
  /*
-  * This is designed to be standalone for just prandom
-  * users, but for now we include it from <linux/random.h>
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 3011bc33a5ba..5d41b993113f 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -574,13 +574,15 @@ struct kallsym_iter {
- 	loff_t pos_mod_end;
- 	loff_t pos_ftrace_mod_end;
- 	loff_t pos_bpf_end;
-+	loff_t pos_end;
- 	unsigned long value;
- 	unsigned int nameoff; /* If iterating in core kernel symbols. */
- 	char type;
- 	char name[KSYM_NAME_LEN];
- 	char module_name[MODULE_NAME_LEN];
- 	int exported;
--	int show_value;
-+	bool show_layout;
-+	loff_t shuffled_pos[];
- };
- 
- int __weak arch_get_kallsym(unsigned int symnum, unsigned long *value,
-@@ -660,11 +662,19 @@ static int get_ksymbol_bpf(struct kallsym_iter *iter)
+  * LD_DEAD_CODE_DATA_ELIMINATION option enables -fdata-sections, which
+  * generates .data.identifier sections, which need to be pulled in with
+@@ -97,12 +100,12 @@
+  * sections to be brought in with rodata.
   */
- static int get_ksymbol_kprobe(struct kallsym_iter *iter)
- {
-+	int ret;
-+
- 	strlcpy(iter->module_name, "__builtin__kprobes", MODULE_NAME_LEN);
- 	iter->exported = 0;
--	return kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
--				  &iter->value, &iter->type,
--				  iter->name) < 0 ? 0 : 1;
-+	ret = kprobe_get_kallsym(iter->pos - iter->pos_bpf_end,
-+				 &iter->value, &iter->type,
-+				 iter->name);
-+	if (ret < 0) {
-+		iter->pos_end = iter->pos;
-+		return 0;
-+	}
-+
-+	return 1;
- }
- 
- /* Returns space to next name. */
-@@ -687,11 +697,12 @@ static void reset_iter(struct kallsym_iter *iter, loff_t new_pos)
- 	iter->name[0] = '\0';
- 	iter->nameoff = get_symbol_offset(new_pos);
- 	iter->pos = new_pos;
--	if (new_pos == 0) {
-+	if (iter->show_layout && new_pos == 0) {
- 		iter->pos_arch_end = 0;
- 		iter->pos_mod_end = 0;
- 		iter->pos_ftrace_mod_end = 0;
- 		iter->pos_bpf_end = 0;
-+		iter->pos_end = 0;
- 	}
- }
- 
-@@ -720,13 +731,23 @@ static int update_iter_mod(struct kallsym_iter *iter, loff_t pos)
- 	    get_ksymbol_bpf(iter))
- 		return 1;
- 
--	return get_ksymbol_kprobe(iter);
-+	if ((!iter->pos_end || iter->pos_end > pos) &&
-+	    get_ksymbol_kprobe(iter))
-+		return 1;
-+
-+	return 0;
- }
- 
- /* Returns false if pos at or past end of file. */
- static int update_iter(struct kallsym_iter *iter, loff_t pos)
- {
--	/* Module symbols can be accessed randomly. */
-+	if (!iter->show_layout) {
-+		if (pos > iter->pos_end)
-+			return 0;
-+
-+		pos = iter->shuffled_pos[pos];
-+	}
-+
- 	if (pos >= kallsyms_num_syms)
- 		return update_iter_mod(iter, pos);
- 
-@@ -769,7 +790,7 @@ static int s_show(struct seq_file *m, void *p)
- 	if (!iter->name[0])
- 		return 0;
- 
--	value = iter->show_value ? (void *)iter->value : NULL;
-+	value = iter->show_layout ? (void *)iter->value : NULL;
- 
- 	if (iter->module_name[0]) {
- 		char type;
-@@ -806,9 +827,10 @@ static inline int kallsyms_for_perf(void)
- }
+ #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CLANG)
+-#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
+-#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
+-#define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
+-#define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
+-#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
+-#define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
++#define TEXT_MAIN SECT_WILDCARD(.text)
++#define DATA_MAIN SECT_WILDCARD(.data) .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
++#define SDATA_MAIN SECT_WILDCARD(.sdata)
++#define RODATA_MAIN SECT_WILDCARD(.rodata) .rodata..L*
++#define BSS_MAIN SECT_WILDCARD(.bss) .bss..compoundliteral*
++#define SBSS_MAIN SECT_WILDCARD(.sbss)
+ #else
+ #define TEXT_MAIN .text
+ #define DATA_MAIN .data
+@@ -564,7 +567,7 @@
+ #define NOINSTR_TEXT							\
+ 		ALIGN_FUNCTION();					\
+ 		__noinstr_text_start = .;				\
+-		*(.noinstr.text)					\
++		*(SECT_WILDCARD(.noinstr.text))				\
+ 		__noinstr_text_end = .;
  
  /*
-- * We show kallsyms information even to normal users if we've enabled
-- * kernel profiling and are explicitly not paranoid (so kptr_restrict
-- * is clear, and sysctl_perf_event_paranoid isn't set).
-+ * We show kallsyms information and display them sorted by address even
-+ * to normal users if we've enabled kernel profiling and are explicitly
-+ * not paranoid (so kptr_restrict is clear, and sysctl_perf_event_paranoid
-+ * isn't set).
-  *
-  * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
-  * block even that).
-@@ -838,16 +860,54 @@ static int kallsyms_open(struct inode *inode, struct file *file)
- 	 * using get_symbol_offset for every symbol.
- 	 */
- 	struct kallsym_iter *iter;
--	iter = __seq_open_private(file, &kallsyms_op, sizeof(*iter));
--	if (!iter)
--		return -ENOMEM;
--	reset_iter(iter, 0);
-+	/*
-+	 * This fake iter is needed for the cases with unprivileged
-+	 * access. We need to know the exact number of symbols to
-+	 * randomize the display layout.
-+	 */
-+	struct kallsym_iter fake;
-+	size_t size = sizeof(*iter);
-+	loff_t pos;
-+
-+	fake.show_layout = true;
-+	reset_iter(&fake, 0);
+@@ -621,7 +624,7 @@
+ #define ENTRY_TEXT							\
+ 		ALIGN_FUNCTION();					\
+ 		__entry_text_start = .;					\
+-		*(.entry.text)						\
++		*(SECT_WILDCARD(.entry.text))				\
+ 		__entry_text_end = .;
  
- 	/*
- 	 * Instead of checking this on every s_show() call, cache
- 	 * the result here at open time.
- 	 */
--	iter->show_value = kallsyms_show_value(file->f_cred);
-+	fake.show_layout = kallsyms_show_value(file->f_cred);
-+	if (fake.show_layout)
-+		goto open;
-+
-+	for (pos = kallsyms_num_syms; update_iter_mod(&fake, pos); pos++)
-+		;
-+
-+	size = struct_size(iter, shuffled_pos, fake.pos_end + 1);
-+
-+open:
-+	iter = __seq_open_private(file, &kallsyms_op, size);
-+	if (!iter)
-+		return -ENOMEM;
-+
-+	iter->show_layout = fake.show_layout;
-+	reset_iter(iter, 0);
-+
-+	if (iter->show_layout)
-+		return 0;
-+
-+	/* Copy the bounds since they were already discovered above */
-+	iter->pos_arch_end = fake.pos_arch_end;
-+	iter->pos_mod_end = fake.pos_mod_end;
-+	iter->pos_ftrace_mod_end = fake.pos_ftrace_mod_end;
-+	iter->pos_bpf_end = fake.pos_bpf_end;
-+	iter->pos_end = fake.pos_end;
-+
-+	for (pos = 0; pos <= iter->pos_end; pos++)
-+		iter->shuffled_pos[pos] = pos;
-+
-+	shuffle_array(iter->shuffled_pos, iter->pos_end + 1);
-+
- 	return 0;
- }
+ #define IRQENTRY_TEXT							\
+@@ -643,7 +646,7 @@
+ 		__static_call_text_end = .;
  
-@@ -858,6 +918,7 @@ const char *kdb_walk_kallsyms(loff_t *pos)
- 	if (*pos == 0) {
- 		memset(&kdb_walk_kallsyms_iter, 0,
- 		       sizeof(kdb_walk_kallsyms_iter));
-+		kdb_walk_kallsyms_iter.show_layout = true;
- 		reset_iter(&kdb_walk_kallsyms_iter, 0);
- 	}
- 	while (1) {
+ /* Section used for early init (in .S files) */
+-#define HEAD_TEXT  KEEP(*(.head.text))
++#define HEAD_TEXT  KEEP(*(SECT_WILDCARD(.head.text)))
+ 
+ #define HEAD_TEXT_SECTION							\
+ 	.head.text : AT(ADDR(.head.text) - LOAD_OFFSET) {		\
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index dbf8506decca..0c0ddf4429dc 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -73,6 +73,37 @@
+ #define __ALIGN_STR	".align 4,0x90"
+ #endif
+ 
++/*
++ * Allow ASM symbols to have their own unique sections if they are being
++ * generated by the compiler for C functions (DCE, LTO).
++ */
++#if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
++    ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
++     (defined(CONFIG_LTO_CLANG)))
++
++#define SYM_PUSH_SECTION(name)				\
++	.pushsection %S.name, "ax"
++
++#define SYM_POP_SECTION()				\
++	.popsection
++
++#define __ASM_PUSH_SECTION(name)			\
++	".pushsection %S." name ", \"ax\""
++
++#else /* Just .text */
++
++#define SYM_PUSH_SECTION(name)
++#define SYM_POP_SECTION()
++#define __ASM_PUSH_SECTION(name)
++
++#endif /* Just .text */
++
++#define ASM_PUSH_SECTION(name)				\
++	__ASM_PUSH_SECTION(__stringify(name))
++
++#define ASM_POP_SECTION()				\
++	__stringify(SYM_POP_SECTION())
++
+ #ifdef __ASSEMBLY__
+ 
+ /* SYM_T_FUNC -- type used by assembler to mark functions */
+@@ -209,6 +240,15 @@
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ #endif
+ 
++/*
++ * SYM_FUNC_START_WEAK -- use where there are two global names for one
++ * function, and one of them is weak
++ */
++#ifndef SYM_FUNC_START_WEAK_ALIAS
++#define SYM_FUNC_START_WEAK_ALIAS(name)			\
++	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
++#endif
++
+ /*
+  * SYM_FUNC_START_ALIAS -- use where there are two global names for one
+  * function
+@@ -225,12 +265,24 @@
+  * later.
+  */
+ #define SYM_FUNC_START(name)				\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_FUNC_START_SECT -- use for global functions, will be conditionally
++ * placed into a section specified in the second argument
++ */
++#ifndef SYM_FUNC_START_SECT
++#define SYM_FUNC_START_SECT(name, to)			\
++	SYM_PUSH_SECTION(to) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
+ #ifndef SYM_FUNC_START_NOALIGN
+ #define SYM_FUNC_START_NOALIGN(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
+ #endif
+ 
+@@ -238,24 +290,38 @@
+ #ifndef SYM_FUNC_START_LOCAL
+ /* the same as SYM_FUNC_START_LOCAL_ALIAS, see comment near SYM_FUNC_START */
+ #define SYM_FUNC_START_LOCAL(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
+ #ifndef SYM_FUNC_START_LOCAL_NOALIGN
+ #define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
++#endif
++
++/*
++ * SYM_FUNC_START_LOCAL_NOALIGN_SECT -- use for local functions, w/o alignment,
++ * will be conditionally placed into a section specified in the second argument
++ */
++#ifndef SYM_FUNC_START_LOCAL_NOALIGN_SECT
++#define SYM_FUNC_START_LOCAL_NOALIGN_SECT(name, to)	\
++	SYM_PUSH_SECTION(to) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
+ #endif
+ 
+ /* SYM_FUNC_START_WEAK -- use for weak functions */
+ #ifndef SYM_FUNC_START_WEAK
+ #define SYM_FUNC_START_WEAK(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_FUNC_START_WEAK_NOALIGN -- use for weak functions, w/o alignment */
+ #ifndef SYM_FUNC_START_WEAK_NOALIGN
+ #define SYM_FUNC_START_WEAK_NOALIGN(name)		\
++	SYM_PUSH_SECTION(name) ASM_NL			\
+ 	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)
+ #endif
+ 
+@@ -272,24 +338,59 @@
+ #ifndef SYM_FUNC_END
+ /* the same as SYM_FUNC_END_ALIAS, see comment near SYM_FUNC_START */
+ #define SYM_FUNC_END(name)				\
+-	SYM_END(name, SYM_T_FUNC)
++	SYM_END(name, SYM_T_FUNC) ASM_NL		\
++	SYM_POP_SECTION()
+ #endif
+ 
+ /* SYM_CODE_START -- use for non-C (special) functions */
+ #ifndef SYM_CODE_START
+ #define SYM_CODE_START(name)				\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_CODE_START_SECT -- use for non-C (special) functions, will be
++ * conditionally placed into a section specified in the second argument
++ */
++#ifndef SYM_CODE_START_SECT
++#define SYM_CODE_START_SECT(name, to)			\
++	SYM_PUSH_SECTION(to) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+ #endif
+ 
+ /* SYM_CODE_START_NOALIGN -- use for non-C (special) functions, w/o alignment */
+ #ifndef SYM_CODE_START_NOALIGN
+ #define SYM_CODE_START_NOALIGN(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
++#endif
++
++/*
++ * SYM_CODE_START_NOALIGN_SECT -- use for non-C (special) functions,
++ * w/o alignment, will be conditionally placed into a section specified
++ * in the second argument
++ */
++#ifndef SYM_CODE_START_NOALIGN_SECT
++#define SYM_CODE_START_NOALIGN_SECT(name, to)		\
++	SYM_PUSH_SECTION(to) ASM_NL			\
+ 	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
+ #endif
+ 
+ /* SYM_CODE_START_LOCAL -- use for local non-C (special) functions */
+ #ifndef SYM_CODE_START_LOCAL
+ #define SYM_CODE_START_LOCAL(name)			\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
++#endif
++
++/*
++ * SYM_CODE_START_LOCAL -- use for local non-C (special) functions, will
++ * be conditionally placing into a section specified in the second argument
++ */
++#ifndef SYM_CODE_START_LOCAL_SECT
++#define SYM_CODE_START_LOCAL_SECT(name, to)		\
++	SYM_PUSH_SECTION(to) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ #endif
+ 
+@@ -299,13 +400,26 @@
+  */
+ #ifndef SYM_CODE_START_LOCAL_NOALIGN
+ #define SYM_CODE_START_LOCAL_NOALIGN(name)		\
++	SYM_PUSH_SECTION(name) ASM_NL			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
++#endif
++
++/*
++ * SYM_CODE_START_LOCAL_NOALIGN_SECT -- use for local non-C (special)
++ * functions, w/o alignment, will be conditionally placed into a section
++ * specified in the second argument
++ */
++#ifndef SYM_CODE_START_LOCAL_NOALIGN_SECT
++#define SYM_CODE_START_LOCAL_NOALIGN_SECT(name, to)	\
++	SYM_PUSH_SECTION(to) ASM_NL			\
+ 	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
+ #endif
+ 
+ /* SYM_CODE_END -- the end of SYM_CODE_START_LOCAL, SYM_CODE_START, ... */
+ #ifndef SYM_CODE_END
+ #define SYM_CODE_END(name)				\
+-	SYM_END(name, SYM_T_NONE)
++	SYM_END(name, SYM_T_NONE) ASM_NL		\
++	SYM_POP_SECTION()
+ #endif
+ 
+ /* === data annotations === */
+diff --git a/init/Kconfig b/init/Kconfig
+index 37926d19a74a..3babc0aeac61 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1386,6 +1386,17 @@ config CC_OPTIMIZE_FOR_SIZE
+ 
+ endchoice
+ 
++config HAVE_ASM_FUNCTION_SECTIONS
++	depends on ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
++	depends on $(cc-option,-Wa$(comma)--sectname-subst)
++	def_bool y
++	help
++	  This enables ASM function sections if both architecture
++	  and toolchain supports that. It allows creating a separate
++	  .text section for each ASM function in order to improve
++	  DCE and LTO (works the same way as -ffunction-sections for
++	  C code).
++
+ config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+ 	bool
+ 	help
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index f39cc73a082c..a6e9e75ff3e5 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -960,7 +960,9 @@ static void check_section(const char *modname, struct elf_info *elf,
+ 		".kprobes.text", ".cpuidle.text", ".noinstr.text"
+ #define OTHER_TEXT_SECTIONS ".ref.text", ".head.text", ".spinlock.text", \
+ 		".fixup", ".entry.text", ".exception.text", ".text.*", \
+-		".coldtext", ".softirqentry.text"
++		".coldtext", ".softirqentry.text", ".text.unlikely.*", \
++		".noinstr.text.*", ".head.text.*", ".fixup.*", \
++		".entry.text.*"
+ 
+ #define INIT_SECTIONS      ".init.*"
+ #define MEM_INIT_SECTIONS  ".meminit.*"
+@@ -1041,7 +1043,7 @@ enum mismatch {
+ struct sectioncheck {
+ 	const char *fromsec[20];
+ 	const char *bad_tosec[20];
+-	const char *good_tosec[20];
++	const char *good_tosec[25];
+ 	enum mismatch mismatch;
+ 	const char *symbol_white_list[20];
+ 	void (*handler)(const char *modname, struct elf_info *elf,
 -- 
 2.33.1
 
