@@ -2,33 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA5A47E017
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 08:57:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D9747E07D
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 09:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242717AbhLWH5T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Dec 2021 02:57:19 -0500
-Received: from mail.BETTERBIZ.PL ([45.86.209.138]:59220 "EHLO
-        mail.betterbiz.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242693AbhLWH5S (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Dec 2021 02:57:18 -0500
-Received: by mail.betterbiz.pl (Postfix, from userid 1001)
-        id 5222D82A75; Thu, 23 Dec 2021 02:45:47 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=betterbiz.pl; s=mail;
-        t=1640245644; bh=07NAgW1e0WiNB9zqagiM2BnwZfWBCpNa2E4+ccxBPgw=;
+        id S1347238AbhLWIiP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Dec 2021 03:38:15 -0500
+Received: from mail.tomediacase.pl ([151.236.18.187]:60080 "EHLO
+        mail.tomediacase.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229785AbhLWIiO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Dec 2021 03:38:14 -0500
+Received: by mail.tomediacase.pl (Postfix, from userid 1001)
+        id CD45A40B7A; Thu, 23 Dec 2021 09:31:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tomediacase.pl;
+        s=mail; t=1640248277;
+        bh=1KDTsB3nJcWAjbNGIw57IBVNLXBfvIhwZJ5safZoOHQ=;
         h=Date:From:To:Subject:From;
-        b=YY0nK91nC8d9FzIxxgyr7bap3c418MhLK6SJ+0J9trBDR2mX4fyXu9D6GvhfrX3j4
-         Kyc3QQE0eqVy7yMeHuo2jFisHt52l7T3qX553Vf/Gogz4DhbG7wd+rYzgD9eok6PXm
-         it7n5TQV9TcrjS96pf4F9ACex+9oX2zn6q/TpR7B7rg4vPZZQywMdawecrvlD2+DKP
-         F/vEiwmhrTakmVWA9HUPwQBSHC3TcHZ7USKmB+/rtx0BT06aJa5IjkcH2oyIJRRc7Q
-         g1BzWA9aJCuOReCvAeXNzS2UeIOjw3ZZiCL+uD11yCzdFQGVtEarbh7gtNT5rS159S
-         Do9nprZ3EuXJA==
-Received: by mail.betterbiz.pl for <linux-arch@vger.kernel.org>; Thu, 23 Dec 2021 07:45:46 GMT
-Message-ID: <20211223024500-0.1.f.zma.0.exm0er0hnp@betterbiz.pl>
-Date:   Thu, 23 Dec 2021 07:45:46 GMT
-From:   "Jakub Daroch" <jakub.daroch@betterbiz.pl>
+        b=G1tDFJZzOEo5etbQ1fS4bqtK53noIdTcdDsrnwmH3voe6emBvZRB+XdB/9YbStQ9x
+         249Ep0PyCatDhtagK8N6FLtBKLKrftkGFI6eIOxkMMZLQzgIwYuvcmJXH1XV6X2C2z
+         N0+fJ4aOwbKdPjcwsky97M6/xE2BMBgzOoIxBV+NSqBu7TVecbfJMuqHQ31fMXhZNp
+         UHb7tu+i5xbxJsbtjr0i2Y+cBG/IzKst/W0hwjPOhwVceV4IWM/hBihBzbxrHH4YlN
+         zJsncqY2c47WZ4h99450CaXaKB0kx6199Ocl3JXEXSxbw7nj24oGqBsTXckv+lnhbM
+         Imrt1HurgDvXg==
+Received: by mail.tomediacase.pl for <linux-arch@vger.kernel.org>; Thu, 23 Dec 2021 08:30:47 GMT
+Message-ID: <20211223084500-0.1.u.2hs4.0.ocp7a3f6ms@tomediacase.pl>
+Date:   Thu, 23 Dec 2021 08:30:47 GMT
+From:   "Adam Charachuta" <adam.charachuta@tomediacase.pl>
 To:     <linux-arch@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.betterbiz.pl
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.tomediacase.pl
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -38,15 +39,17 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Dzie=C5=84 dobry,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
 
 Pozdrawiam,
-Jakub Daroch
+Adam Charachuta
