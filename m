@@ -2,102 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B24347E255
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 12:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59BD47E563
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 16:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbhLWLde (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Dec 2021 06:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347908AbhLWLdd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Dec 2021 06:33:33 -0500
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A01C061401
-        for <linux-arch@vger.kernel.org>; Thu, 23 Dec 2021 03:33:32 -0800 (PST)
-Received: by mail-vk1-xa31.google.com with SMTP id s1so3041867vks.9
-        for <linux-arch@vger.kernel.org>; Thu, 23 Dec 2021 03:33:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=0ySAhVv4krtAiyoHQ7bBNqEp9i/GqhDCc9yIrmbfHK8=;
-        b=geccjBUD/e4lO5etzMpV0tQ3/4jiHZuWlv88nr/SXP+Gp6mufE+sRYKyH65QxmmOOD
-         B5O2dMgpYnyxnEbXKRsdHvAFVekDycHD5G43NmMGrpUr2QkYgdHyeEAO8Cg9SpNggidD
-         4p2SaKSgF2Z5Fb2CtH4IzkV813aC0azBX9ZEUJI0jwbLpKwc55JEm1tYdv4STnaaqP3F
-         +cq7MUrFVDFmHaEQZRfagzzdHLs3tnzXKQJXQD2SAvwEPIInqHn/5gqDM/6xZteX17en
-         HxfYAhWi3srhq2CaYGiJaA0L7iJQq72cWL6Dq0bhFrDtn3j+jtc5bfKjnQDjCVZq7uga
-         ikeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=0ySAhVv4krtAiyoHQ7bBNqEp9i/GqhDCc9yIrmbfHK8=;
-        b=LSgkMAGidHDrp2ACnRCewO7mC5/vWuqn4qI1wfss5Mrdwk+tdcX8UwBcmfGbMEgt2p
-         DZ4YgPiH1zhHMFS2kkORpWk/Zo6w2uVlcDckvEPCLsbH7l2I7xpCJmd9U06DiBbvgjKK
-         9cxkblhRyOurCjPMOULGGIElUM6X96gI0OQfXq4zOVonLIDlixVXjGCCycdu7nk43+tg
-         rSDejkOhEXp5PrZSOfZicqrk7aP8lqvc1LVab7QQFJ+nN9F09C1jgwF/CXdiipRaGFVV
-         AuhXO/hLsPXJigdwbQQHoQTX+rFvZIGEKNwRfpxv015NDOBFLU7gJH04zDJGkMXwfPVS
-         BW0g==
-X-Gm-Message-State: AOAM533+X5ezaFzVxL4enkPMdqjFA1tLTULNZPryByGxtUYN3PAT3uCq
-        W98jSjIFgHC4zawiA1XLqOPPJm5rAhz5ZmOHmoY=
-X-Google-Smtp-Source: ABdhPJwSyklkgOYabkw41SgsUsQE+V4OfJvkMjKGqqrA78/E9QH/b6AZBCuvSAKRoMHgu+KTB8Uz9QwTNVVF9EoQzi0=
-X-Received: by 2002:a05:6122:1309:: with SMTP id e9mr522879vkp.5.1640259211978;
- Thu, 23 Dec 2021 03:33:31 -0800 (PST)
+        id S1348871AbhLWPQR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Dec 2021 10:16:17 -0500
+Received: from mga05.intel.com ([192.55.52.43]:44626 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1348870AbhLWPQP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 23 Dec 2021 10:16:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640272575; x=1671808575;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ulq2OafBgJ5WWCya4qBGGzVaxV3Xslda9NQaS+urvvE=;
+  b=WPgH4hFJlAzgUrogJTYL7hxkMX8lWKtjighH/K6yXRkJ8nPDxpB4gyGi
+   JpmXQwe2aaamMJt/P8ha2uq8AwdZR31+38cQLgeuXbOErsDjLdvVeKGYf
+   yPqH1vq9mOHAqVB5/4eyraNnhiMBMwL/L/tZ1wQ+tzQjRrLq2hME2Sai3
+   EQ3f60jTqKlRogPyO4Q7n5u9dIQKCqg1hOLXfNa2r92w4hEwF4MLELqm1
+   tkhpu3BJEXrzE3QXwYA0AYYGfpHF+ukoVnLaN/Z7XcElcHuwBLLR9zTNP
+   rz0u6akYe660rRc0LbkLHwXRmHsXx0kJB293L2OYt1ZrERq3lzAdeItVi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327152536"
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="327152536"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 07:16:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
+   d="scan'208";a="485119426"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 23 Dec 2021 07:16:05 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BNFG2Jp021426;
+        Thu, 23 Dec 2021 15:16:02 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     linux-hardening@vger.kernel.org, x86@kernel.org
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Andy Lavr <andy.lavr@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v9 00/15] Function Granular KASLR
+Date:   Thu, 23 Dec 2021 16:15:04 +0100
+Message-Id: <20211223151504.1409203-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:612c:60f:b0:271:96b5:a77f with HTTP; Thu, 23 Dec 2021
- 03:33:31 -0800 (PST)
-Reply-To: barr.christiankossi10@gmail.com
-From:   Christian Kossi <barr.christiankossi1@gmail.com>
-Date:   Thu, 23 Dec 2021 03:33:31 -0800
-Message-ID: <CANQ8WERv-9YB4rp=B1JK5X+9My0ypDPf=SjQWFhDUBtfZ0HcLw@mail.gmail.com>
-Subject: Please i look forward to your reply..
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello good day
-I've sent you an unanswered email twice. It is with confidence and
-sincerity that I am contacting you, please accept my apologies if my email
-violates your personal ethics. My name is Christian Kossi, I am a servant
-lawyer based in Lom=C3=A9, Togo.
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+Date: Thu, 23 Dec 2021 01:21:54 +0100
 
-I am contacting you because of a surname similarity
-to share with my deceased client, a citizen of your country who performed a
-$ 9,600,000.00 bank deposit here in the Togolese Republic. Mans
-The deceased customer died in a car accident on April 21, 2011, with
-no close relatives are registered. Various efforts were made to find him
-extended family through its embassy without results.
+> This is a massive rework and a respin of Kristen Accardi's marvellous
+> FG-KASLR series (v5).
 
-I received an official letter from the bank recommending the option
-procedure for declaring the account unusable and confiscating within the Fu=
-nd
-according to the laws in force, the bank where my client deposited the mone=
-y
-The amount is 9.6 million USD. According to government law here, after
-At the end of the 10-year period, the fund will return to the
-company's ownership
-Togolese Government. The 10-year deadline just passed in April last year
-2021, and no one has acted on your account or requested it
-fund.
+[ snip ]
 
-My suggestion to you is to present you to the bank as the nearest
-a relative of my deceased client for the bank to pay these $ 9.6
-millions to you as their recipient. Upon completion of the transfer,
-I propose to divide the fund into a mutually agreed percentage, which will =
-be
-satisfactory to both parties and also to donate to charities.
+> The series is also available here: [3]
 
-I will provide all legal documents in support of your claim. All
-I need your honest cooperation so that we can do that
-transaction. I also guarantee that this will be done in accordance with a
-a legal agreement that will protect you from any breach
-law here or in your country.
+As per request, I've published a version rebased ontop of
+linux-next-20211223 here: [4].
 
-Please contact me so that I can provide you with all the information.
+During the rebasing, I saw that some ASM code conflicts with, I
+guess, Peter's "execute past ret" mitigation.
+So I would also like to ask you to give me a branch which I should
+pick to base my series on top of. There's a bunch of different x86
+branches, like several in peterz-queue, x86/core etc., so I got lost
+a little.
+The one posted yesterday was based on the mainline 5.16-rc6.
 
-Greetings
-Christian Kossi, lawyer,
-General Counsel: Kossi & Co Associates
+> [0] https://lore.kernel.org/kernel-hardening/20200923173905.11219-1-kristen@linux.intel.com
+> [1] https://lore.kernel.org/kernel-hardening/20211202223214.72888-1-alexandr.lobakin@intel.com
+> [2] https://lore.kernel.org/kernel-hardening/20210831144114.154-1-alexandr.lobakin@intel.com
+> [3] https://github.com/alobakin/linux/pull/3
+
+[4] https://github.com/alobakin/linux/commits/next-fgkaslr
+
+[ snip ]
+
+Thanks,
+Al
