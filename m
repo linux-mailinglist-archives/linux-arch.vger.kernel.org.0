@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4575647DBD4
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 01:24:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECCF47DBCE
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 01:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345703AbhLWAXw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Dec 2021 19:23:52 -0500
-Received: from mga02.intel.com ([134.134.136.20]:60206 "EHLO mga02.intel.com"
+        id S1345666AbhLWAXn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Dec 2021 19:23:43 -0500
+Received: from mga11.intel.com ([192.55.52.93]:24287 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345525AbhLWAXc (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 22 Dec 2021 19:23:32 -0500
+        id S1345503AbhLWAXd (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 22 Dec 2021 19:23:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640219012; x=1671755012;
+  t=1640219013; x=1671755013;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PcmPXXtTCDjMYFYDkqCZO8NUx5fwEmoyK1vh/YR8N/8=;
-  b=HgNXFmHiNd9bx3LPtNU63JkRGBOOwWcn2zmcXB2C4PSlsFkJ+BWyJyZa
-   FX3IhGZOgIAJ0tON6eKT1T6V+35G3scezecySCYFJS8GFVhy5hJS/6ldT
-   9CIUvubPQRXahZ4VObkGLRse80S8cPnwLvQg2VQORio0D+zBBVAavwHwk
-   tlXB24j8jIHZarupax+cUabfY+Zy+7lSBnHpic9IF4buMei6DnDKS9mTs
-   XygHXQhtk7dFhImmzf8/JrHQfT0DfEbylXr/mOZ0odzHrj7eZX25gIXGk
-   hPtnGXWPjtIXs3s4kn8QDaq5MdRGdd5OKAkM/lmdvOfNUhkrm2KG3Ffd7
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="228027814"
+  bh=d4waWPSOn2iXftgNDJfpbm8+6fkn7TwbPenUwqBmKBg=;
+  b=bF2o32PFWOb2+s+7HKbGL7wKxi3/wvf5recV9AnSjyIwdyvHKPNFkjEv
+   DR+vUkMPKivP89Fls/3GLHsIS2WYr8/5h1hcoyvY3ublNqFfWyAJ92WE9
+   e6DdsXewHjKXXX1e+KEqKaAcUy3oVZstvSZzxQu5ChDArRQ8FHoOjaXr5
+   t/Fc8yiS45fq8puR0XSzK664AS2q6fQRliXCm2Pjcm9hGUvOt646p1wI2
+   4MoEBbRJ+d0L+fYnOzYm4Molq/hWXjLU6anD2QAXowLUOatArRiKsmDAX
+   0Qd5J70YDqWWAwLEquhXtsu0f7eGSgbxlptG6u76h9WO2EafAZXHpfSNZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="238264212"
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="228027814"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:31 -0800
+   d="scan'208";a="238264212"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2021 16:23:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,228,1635231600"; 
-   d="scan'208";a="522294917"
+   d="scan'208";a="570733414"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Dec 2021 16:23:23 -0800
+  by fmsmga008.fm.intel.com with ESMTP; 22 Dec 2021 16:23:25 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N79C032467;
-        Thu, 23 Dec 2021 00:23:21 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BN0N79D032467;
+        Thu, 23 Dec 2021 00:23:23 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -74,9 +74,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v9 07/15] Makefile: Add build and config option for CONFIG_FG_KASLR
-Date:   Thu, 23 Dec 2021 01:22:01 +0100
-Message-Id: <20211223002209.1092165-8-alexandr.lobakin@intel.com>
+Subject: [PATCH v9 08/15] x86/tools: Add relative relocs for randomized functions
+Date:   Thu, 23 Dec 2021 01:22:02 +0100
+Message-Id: <20211223002209.1092165-9-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
 References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
@@ -88,207 +88,187 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
-Allow user to select CONFIG_FG_KASLR if dependencies are met. Change
-the make file to build with -ffunction-sections if CONFIG_FG_KASLR.
-
-While the only architecture that supports CONFIG_FG_KASLR does not
-currently enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION, make sure these
-2 features play nicely together for the future by ensuring that if
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is selected when used with
-CONFIG_FG_KASLR the function sections will not be consolidated back
-into .text. Thanks to Kees Cook for the dead code elimination changes.
-
-alobakin:
-Improve cflags management in the top Makefile: don't turn on
--f{data,function}-sections with ClangLTO as this is a no-op
-provoking a full rebuild.
-Add ".symtab_shndx" to the list of known sections since we are going
-to support it. Otherwise LD will emit a warning when there are more
-than 64k sections and CONFIG_LD_ORPHAN_WARN=y.
-Turn ".text" LD script wildcard into ".text.__unused__" to make sure
-all kernel code will land into our special sections.
-Make FG-KASLR depend on `-z unique-symbol`. With every function being
-in a separate section (randomly ordered each boot), position-based
-search is impossible. This flag is likely to be widely available.
+When reordering functions, the relative offsets for relocs that
+are either in the randomized sections, or refer to the randomized
+sections will need to be adjusted. Add code to detect whether a
+reloc satisfies these cases, and if so, add them to the appropriate
+reloc list.
 
 Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
 Tested-by: Tony Luck <tony.luck@intel.com>
-Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+[ alobakin: don't split relocs' usage string across lines ]
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- Makefile                          | 17 ++++++++++++++---
- arch/Kconfig                      |  6 +++++-
- include/asm-generic/vmlinux.lds.h | 20 ++++++++++++++++++--
- include/linux/linkage.h           |  3 ++-
- init/Kconfig                      | 18 ++++++++++++++++--
- 5 files changed, 55 insertions(+), 9 deletions(-)
+ arch/x86/boot/compressed/Makefile |  7 ++++++-
+ arch/x86/tools/relocs.c           | 32 +++++++++++++++++++++++++++----
+ arch/x86/tools/relocs.h           |  4 ++--
+ arch/x86/tools/relocs_common.c    | 14 +++++++++-----
+ 4 files changed, 45 insertions(+), 12 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index b921b1fabf70..3346269341d4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -883,7 +883,7 @@ KBUILD_CFLAGS += -fno-inline-functions-called-once
- endif
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 4bf32db56010..2cf809f5c642 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -107,6 +107,11 @@ $(obj)/vmlinux: $(vmlinux-objs-y) $(efi-obj-y) FORCE
+ 	$(call if_changed,ld)
  
- # Prefer linking with the `-z unique-symbol` if available, this eliminates
--# position-based search
-+# position-based search. Also is a requirement for FG-KASLR
- ifeq ($(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)$(CONFIG_LIVEPATCH),yy)
- KBUILD_LDFLAGS += -z unique-symbol
- endif
-@@ -892,7 +892,7 @@ endif
- # `include/linux/linkage.h` for explanation. This flag is to enable GAS to
- # insert the name of the previous section instead of `%S` inside .pushsection
- ifdef CONFIG_HAVE_ASM_FUNCTION_SECTIONS
--ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_LTO_CLANG),)
-+ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_LTO_CLANG)$(CONFIG_FG_KASLR),)
- SECSUBST_AFLAGS := -Wa,--sectname-subst
- KBUILD_AFLAGS_KERNEL += $(SECSUBST_AFLAGS)
- KBUILD_CFLAGS_KERNEL += $(SECSUBST_AFLAGS)
-@@ -906,8 +906,19 @@ KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
- endif
- endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
- 
-+# ClangLTO implies `-ffunction-sections -fdata-sections`, no need
-+# to specify them manually and trigger a pointless full rebuild
-+ifndef CONFIG_LTO_CLANG
-+ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
-+KBUILD_CFLAGS_KERNEL += -ffunction-sections
+ OBJCOPYFLAGS_vmlinux.bin :=  -R .comment -S
++
++ifdef CONFIG_FG_KASLR
++RELOCS_ARGS += --fg-kaslr
 +endif
 +
-+ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
-+KBUILD_CFLAGS_KERNEL += -fdata-sections
-+endif
-+endif # CONFIG_LTO_CLANG
+ $(obj)/vmlinux.bin: vmlinux FORCE
+ 	$(call if_changed,objcopy)
+ 
+@@ -114,7 +119,7 @@ targets += $(patsubst $(obj)/%,%,$(vmlinux-objs-y)) vmlinux.bin.all vmlinux.relo
+ 
+ CMD_RELOCS = arch/x86/tools/relocs
+ quiet_cmd_relocs = RELOCS  $@
+-      cmd_relocs = $(CMD_RELOCS) $< > $@;$(CMD_RELOCS) --abs-relocs $<
++      cmd_relocs = $(CMD_RELOCS) $(RELOCS_ARGS) $< > $@;$(CMD_RELOCS) $(RELOCS_ARGS) --abs-relocs $<
+ $(obj)/vmlinux.relocs: vmlinux FORCE
+ 	$(call if_changed,relocs)
+ 
+diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
+index c736cf2ac76b..8aa1f39be561 100644
+--- a/arch/x86/tools/relocs.c
++++ b/arch/x86/tools/relocs.c
+@@ -45,6 +45,8 @@ struct section {
+ };
+ static struct section *secs;
+ 
++static int fgkaslr_mode;
 +
- ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
--KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
- LDFLAGS_vmlinux += --gc-sections
- endif
- 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index b31a836bc252..01c026d090d4 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1316,7 +1316,11 @@ config ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
- 	bool
- 	help
- 	  An arch should select this if it can be built and run with its
--	  ASM functions placed into separate sections to improve DCE and LTO.
-+	  ASM functions placed into separate sections to improve DCE, LTO
-+	  and FG-KASLR.
-+
-+config ARCH_SUPPORTS_FG_KASLR
-+	bool
- 
- source "kernel/gcov/Kconfig"
- 
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index e7b8a84e0e64..586465b2abb2 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -100,14 +100,12 @@
-  * sections to be brought in with rodata.
-  */
- #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CLANG)
--#define TEXT_MAIN SECT_WILDCARD(.text)
- #define DATA_MAIN SECT_WILDCARD(.data) .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
- #define SDATA_MAIN SECT_WILDCARD(.sdata)
- #define RODATA_MAIN SECT_WILDCARD(.rodata) .rodata..L*
- #define BSS_MAIN SECT_WILDCARD(.bss) .bss..compoundliteral*
- #define SBSS_MAIN SECT_WILDCARD(.sbss)
- #else
--#define TEXT_MAIN .text
- #define DATA_MAIN .data
- #define SDATA_MAIN .sdata
- #define RODATA_MAIN .rodata
-@@ -115,6 +113,23 @@
- #define SBSS_MAIN .sbss
- #endif
- 
-+/*
-+ * LTO_CLANG, LD_DEAD_CODE_DATA_ELIMINATION and FG_KASLR options enable
-+ * -ffunction-sections, which produces separately named .text sections. In
-+ * the case of CONFIG_FG_KASLR, they need to stay distict so they can be
-+ * separately randomized. Without CONFIG_FG_KASLR, the separate .text
-+ * sections can be collected back into a common section, which makes the
-+ * resulting image slightly smaller
-+ */
-+#if (defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || \
-+     defined(CONFIG_LTO_CLANG)) && !defined(CONFIG_FG_KASLR)
-+#define TEXT_MAIN		SECT_WILDCARD(.text)
-+#elif defined(CONFIG_FG_KASLR)
-+#define TEXT_MAIN		.text.__unused__
-+#else
-+#define TEXT_MAIN		.text
-+#endif
-+
+ static const char * const sym_regex_kernel[S_NSYMTYPES] = {
  /*
-  * GCC 4.5 and later have a 32 bytes section alignment for structures.
-  * Except GCC 4.9, that feels the need to align on 64 bytes.
-@@ -843,6 +858,7 @@
- #define ELF_DETAILS							\
- 		.comment 0 : { *(.comment) }				\
- 		.symtab 0 : { *(.symtab) }				\
-+		.symtab_shndx 0 : { *(.symtab_shndx) }			\
- 		.strtab 0 : { *(.strtab) }				\
- 		.shstrtab 0 : { *(.shstrtab) }
+  * Following symbols have been audited. There values are constant and do
+@@ -823,6 +825,24 @@ static int is_percpu_sym(ElfW(Sym) *sym, const char *symname)
+ 		strncmp(symname, "init_per_cpu_", 13);
+ }
  
-diff --git a/include/linux/linkage.h b/include/linux/linkage.h
-index 0c0ddf4429dc..f3c96fb6a534 100644
---- a/include/linux/linkage.h
-+++ b/include/linux/linkage.h
-@@ -75,10 +75,11 @@
- 
- /*
-  * Allow ASM symbols to have their own unique sections if they are being
-- * generated by the compiler for C functions (DCE, LTO).
-+ * generated by the compiler for C functions (DCE, FG-KASLR, LTO).
-  */
- #if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
-     ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
-+     (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
-      (defined(CONFIG_LTO_CLANG)))
- 
- #define SYM_PUSH_SECTION(name)				\
-diff --git a/init/Kconfig b/init/Kconfig
-index 3babc0aeac61..a74b3c3acb49 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1394,8 +1394,8 @@ config HAVE_ASM_FUNCTION_SECTIONS
- 	  This enables ASM function sections if both architecture
- 	  and toolchain supports that. It allows creating a separate
- 	  .text section for each ASM function in order to improve
--	  DCE and LTO (works the same way as -ffunction-sections for
--	  C code).
-+	  DCE, LTO and FG-KASLR (works the same way as -ffunction-sections
-+	  for C code).
- 
- config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
- 	bool
-@@ -2065,6 +2065,20 @@ config PROFILING
- config TRACEPOINTS
- 	bool
- 
-+config FG_KASLR
-+	bool "Function Granular Kernel Address Space Layout Randomization"
-+	depends on ARCH_SUPPORTS_FG_KASLR
-+	depends on $(cc-option,-ffunction-sections)
-+	depends on LD_HAS_Z_UNIQUE_SYMBOL || !LIVEPATCH
-+	help
-+	  This option improves the randomness of the kernel text
-+	  over basic Kernel Address Space Layout Randomization (KASLR)
-+	  by reordering the kernel text at boot time. This feature
-+	  uses information generated at compile time to re-layout the
-+	  kernel text section at boot time at function level granularity.
++static int is_function_section(struct section *sec)
++{
++	if (!fgkaslr_mode)
++		return 0;
 +
-+	  If unsure, say N.
++	return !strncmp(sec_name(sec->shdr.sh_info), ".text.", 6);
++}
 +
- endmenu		# General setup
++static int is_randomized_sym(ElfW(Sym) *sym)
++{
++	if (!fgkaslr_mode)
++		return 0;
++
++	if (sym->st_shndx > shnum)
++		return 0;
++
++	return !strncmp(sec_name(sym_index(sym)), ".text.", 6);
++}
  
- source "arch/Kconfig"
+ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
+ 		      const char *symname)
+@@ -848,12 +868,15 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
+ 	case R_X86_64_PC32:
+ 	case R_X86_64_PLT32:
+ 		/*
+-		 * PC relative relocations don't need to be adjusted unless
+-		 * referencing a percpu symbol.
++		 * we need to keep pc relative relocations for sections which
++		 * might be randomized, and for the percpu section.
++		 * We also need to keep relocations for any offset which might
++		 * reference an address in a section which has been randomized.
+ 		 *
+ 		 * NB: R_X86_64_PLT32 can be treated as R_X86_64_PC32.
+ 		 */
+-		if (is_percpu_sym(sym, symname))
++		if (is_function_section(sec) || is_randomized_sym(sym) ||
++		    is_percpu_sym(sym, symname))
+ 			add_reloc(&relocs32neg, offset);
+ 		break;
+ 
+@@ -1168,8 +1191,9 @@ static void print_reloc_info(void)
+ 
+ void process(FILE *fp, int use_real_mode, int as_text,
+ 	     int show_absolute_syms, int show_absolute_relocs,
+-	     int show_reloc_info)
++	     int show_reloc_info, int fgkaslr)
+ {
++	fgkaslr_mode = fgkaslr;
+ 	regex_init(use_real_mode);
+ 	read_ehdr(fp);
+ 	read_shdrs(fp);
+diff --git a/arch/x86/tools/relocs.h b/arch/x86/tools/relocs.h
+index 4c49c82446eb..269db511b243 100644
+--- a/arch/x86/tools/relocs.h
++++ b/arch/x86/tools/relocs.h
+@@ -32,8 +32,8 @@ enum symtype {
+ 
+ void process_32(FILE *fp, int use_real_mode, int as_text,
+ 		int show_absolute_syms, int show_absolute_relocs,
+-		int show_reloc_info);
++		int show_reloc_info, int fgkaslr);
+ void process_64(FILE *fp, int use_real_mode, int as_text,
+ 		int show_absolute_syms, int show_absolute_relocs,
+-		int show_reloc_info);
++		int show_reloc_info, int fgkaslr);
+ #endif /* RELOCS_H */
+diff --git a/arch/x86/tools/relocs_common.c b/arch/x86/tools/relocs_common.c
+index 6634352a20bc..d6acda36575a 100644
+--- a/arch/x86/tools/relocs_common.c
++++ b/arch/x86/tools/relocs_common.c
+@@ -12,14 +12,13 @@ void die(char *fmt, ...)
+ 
+ static void usage(void)
+ {
+-	die("relocs [--abs-syms|--abs-relocs|--reloc-info|--text|--realmode]" \
+-	    " vmlinux\n");
++	die("relocs [--abs-syms|--abs-relocs|--reloc-info|--text|--realmode|--fg-kaslr] vmlinux\n");
+ }
+ 
+ int main(int argc, char **argv)
+ {
+ 	int show_absolute_syms, show_absolute_relocs, show_reloc_info;
+-	int as_text, use_real_mode;
++	int as_text, use_real_mode, fgkaslr_opt;
+ 	const char *fname;
+ 	FILE *fp;
+ 	int i;
+@@ -30,6 +29,7 @@ int main(int argc, char **argv)
+ 	show_reloc_info = 0;
+ 	as_text = 0;
+ 	use_real_mode = 0;
++	fgkaslr_opt = 0;
+ 	fname = NULL;
+ 	for (i = 1; i < argc; i++) {
+ 		char *arg = argv[i];
+@@ -54,6 +54,10 @@ int main(int argc, char **argv)
+ 				use_real_mode = 1;
+ 				continue;
+ 			}
++			if (strcmp(arg, "--fg-kaslr") == 0) {
++				fgkaslr_opt = 1;
++				continue;
++			}
+ 		}
+ 		else if (!fname) {
+ 			fname = arg;
+@@ -75,11 +79,11 @@ int main(int argc, char **argv)
+ 	if (e_ident[EI_CLASS] == ELFCLASS64)
+ 		process_64(fp, use_real_mode, as_text,
+ 			   show_absolute_syms, show_absolute_relocs,
+-			   show_reloc_info);
++			   show_reloc_info, fgkaslr_opt);
+ 	else
+ 		process_32(fp, use_real_mode, as_text,
+ 			   show_absolute_syms, show_absolute_relocs,
+-			   show_reloc_info);
++			   show_reloc_info, fgkaslr_opt);
+ 	fclose(fp);
+ 	return 0;
+ }
 -- 
 2.33.1
 
