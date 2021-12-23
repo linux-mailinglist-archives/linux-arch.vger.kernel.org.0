@@ -2,44 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A59BD47E563
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 16:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 633AD47E5D7
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Dec 2021 16:43:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348871AbhLWPQR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Dec 2021 10:16:17 -0500
-Received: from mga05.intel.com ([192.55.52.43]:44626 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348870AbhLWPQP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 23 Dec 2021 10:16:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640272575; x=1671808575;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ulq2OafBgJ5WWCya4qBGGzVaxV3Xslda9NQaS+urvvE=;
-  b=WPgH4hFJlAzgUrogJTYL7hxkMX8lWKtjighH/K6yXRkJ8nPDxpB4gyGi
-   JpmXQwe2aaamMJt/P8ha2uq8AwdZR31+38cQLgeuXbOErsDjLdvVeKGYf
-   yPqH1vq9mOHAqVB5/4eyraNnhiMBMwL/L/tZ1wQ+tzQjRrLq2hME2Sai3
-   EQ3f60jTqKlRogPyO4Q7n5u9dIQKCqg1hOLXfNa2r92w4hEwF4MLELqm1
-   tkhpu3BJEXrzE3QXwYA0AYYGfpHF+ukoVnLaN/Z7XcElcHuwBLLR9zTNP
-   rz0u6akYe660rRc0LbkLHwXRmHsXx0kJB293L2OYt1ZrERq3lzAdeItVi
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10206"; a="327152536"
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="327152536"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2021 07:16:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,229,1635231600"; 
-   d="scan'208";a="485119426"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 23 Dec 2021 07:16:05 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BNFG2Jp021426;
-        Thu, 23 Dec 2021 15:16:02 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     linux-hardening@vger.kernel.org, x86@kernel.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        id S1349348AbhLWPnK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Dec 2021 10:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349212AbhLWPlx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Dec 2021 10:41:53 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EC1C061394;
+        Thu, 23 Dec 2021 07:41:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/tyAvhoyg1hQEH2SYEuGFD0l8CiSoOd6tqxbhV2JRnI=; b=NNjVio1DVMhWyDn6xUSgP1zglG
+        O0tafy2qc3LdNtt2vLhXe2B37ILp2eEVlum7DfDn2MdHLawS9OrfX/hPtEVtLOY1XnI3zRemoNgEw
+        iI/vMYlqImaqdaYTLQ3xDM/q3Hb/CIz8NfD8azxF72VmmF9HnCiMEnwjIWDa0zgYLEwAx/RkjoA/v
+        B4jqEA73t7b3c2xz/uOY6Wm5fxnsCjLe/NqVXxLzB7JM3iNhdexvJGa5bQGTTtiZsTE4JE0TVoyYV
+        BVEtz7jYhobveE92sgyPApjjdjbxIm+j0bBAs9qnf5iA2EHVzTWaZf7Sbhzyy/eKhI9/DXD0A7pdj
+        p+sINhPA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1n0QCs-0038Ey-VT; Thu, 23 Dec 2021 15:40:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 812A5300347;
+        Thu, 23 Dec 2021 16:40:36 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 54C0E20CF2F9E; Thu, 23 Dec 2021 16:40:36 +0100 (CET)
+Date:   Thu, 23 Dec 2021 16:40:36 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Kristen Carlson Accardi <kristen@linux.intel.com>,
         Kees Cook <keescook@chromium.org>,
@@ -63,7 +62,6 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Nathan Chancellor <nathan@kernel.org>,
@@ -75,46 +73,41 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
         live-patching@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH v9 00/15] Function Granular KASLR
-Date:   Thu, 23 Dec 2021 16:15:04 +0100
-Message-Id: <20211223151504.1409203-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+Message-ID: <YcSYdJowLyutM/7m@hirez.programming.kicks-ass.net>
 References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223151504.1409203-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211223151504.1409203-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Thu, 23 Dec 2021 01:21:54 +0100
+On Thu, Dec 23, 2021 at 04:15:04PM +0100, Alexander Lobakin wrote:
+> From: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Date: Thu, 23 Dec 2021 01:21:54 +0100
+> 
+> > This is a massive rework and a respin of Kristen Accardi's marvellous
+> > FG-KASLR series (v5).
+> 
+> [ snip ]
+> 
+> > The series is also available here: [3]
+> 
+> As per request, I've published a version rebased ontop of
+> linux-next-20211223 here: [4].
+> 
+> During the rebasing, I saw that some ASM code conflicts with, I
+> guess, Peter's "execute past ret" mitigation.
+> So I would also like to ask you to give me a branch which I should
+> pick to base my series on top of. There's a bunch of different x86
+> branches, like several in peterz-queue, x86/core etc., so I got lost
+> a little.
+> The one posted yesterday was based on the mainline 5.16-rc6.
 
-> This is a massive rework and a respin of Kristen Accardi's marvellous
-> FG-KASLR series (v5).
+For anything tip related, tip/master isn't a bad target. I did two asm
+related x86 series, both are in tip/x86/core I think (/me checks, yep).
 
-[ snip ]
-
-> The series is also available here: [3]
-
-As per request, I've published a version rebased ontop of
-linux-next-20211223 here: [4].
-
-During the rebasing, I saw that some ASM code conflicts with, I
-guess, Peter's "execute past ret" mitigation.
-So I would also like to ask you to give me a branch which I should
-pick to base my series on top of. There's a bunch of different x86
-branches, like several in peterz-queue, x86/core etc., so I got lost
-a little.
-The one posted yesterday was based on the mainline 5.16-rc6.
-
-> [0] https://lore.kernel.org/kernel-hardening/20200923173905.11219-1-kristen@linux.intel.com
-> [1] https://lore.kernel.org/kernel-hardening/20211202223214.72888-1-alexandr.lobakin@intel.com
-> [2] https://lore.kernel.org/kernel-hardening/20210831144114.154-1-alexandr.lobakin@intel.com
-> [3] https://github.com/alobakin/linux/pull/3
-
-[4] https://github.com/alobakin/linux/commits/next-fgkaslr
-
-[ snip ]
-
-Thanks,
-Al
+Never base anything of my queue.git, that's all throw-away/staging
+stuff. Either it lives and goes on into tip or not :-)
