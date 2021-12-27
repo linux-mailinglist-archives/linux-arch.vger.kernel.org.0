@@ -2,261 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E60F8480271
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 17:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982A148028D
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 18:02:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbhL0Qtu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Dec 2021 11:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbhL0Qtu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Dec 2021 11:49:50 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3351BC06173E;
-        Mon, 27 Dec 2021 08:49:50 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id r16-20020a17090a0ad000b001b276aa3aabso5830143pje.0;
-        Mon, 27 Dec 2021 08:49:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UJvw3kqO9RHMu+IzeG917wcb7IDDdBROQHd6PdvJoHk=;
-        b=nBEYqr7HSlw1lIl+5TxmVYNW7mxah8cpvnuOKZDV+kGPRL9VVY/AFiWcYVxVJuMRds
-         WsirjfSQwT8p0BX0zVR8JEPUN4IBxFihfWAaMgzO7ghsOY9qt/BUj5ddqKl9d3ytT6dY
-         ReC/rBS/XZ4rgxj1BI3fejOdRb/RYG5NekVjA0huu1b6kba4FDJK4RqzkgMOfSn+jLWF
-         gAQf/hJStSjUBxEFAx33mcLEPOZS4V9+MgqvXYj+QGrZC3u3pSUGqDJjBmeb1htQNUbi
-         b3DCal7z9pk/xsup+Mu7WjEY6ecQJdc9fdeozcOpnc42IHhNg3Eh0P2eDxX7EJOgZydp
-         lmzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UJvw3kqO9RHMu+IzeG917wcb7IDDdBROQHd6PdvJoHk=;
-        b=VwVUgxu54Vk7ze4LghHZEkgqcEfOIaJp81reDAESqYiQx/dynklOZj2t3su41g62th
-         LrG1kYleUtwLzrtZwZMzOhZw7x1wDFRBczRnioiCFrnUefwzQJuXc2Dit+Q9cMGfEaC4
-         aohtURQlhB0SXmc+q4/Uo5H3u189pGcu8bqdc7e+UOUPnKPEccaCSrm9+e/V3/Xu4eTz
-         YH76VZBFjwdmmRroT3oYVdofx3YK6tsiHU3Gd7EOFXdQII1RHZrlsYueraD6Tpj2/dgm
-         9ARx2nH8F5eZATNcIwP9HL5xM0J7Z81b962dcjwTyy0W/YqmYfa1YL7WpIA0kK/yYqCb
-         dR3g==
-X-Gm-Message-State: AOAM530/sp+5Au439qzcIdFoNftVdszxwDs6a9PkCDFB8HNzHjdYFv8R
-        pgZH1cu4CnG/1vsh9KQdLO7t/Xw3PcbFB6N1jgU=
-X-Google-Smtp-Source: ABdhPJxW28PKTl0opGRyheMuzOj/4x0DDq5/Vg8+Lo3uUJEc0kNW2uU7E1ZuvmOVeJOFrkydWwHAC08meGvgYaoqAqQ=
-X-Received: by 2002:a17:90a:e7cc:: with SMTP id kb12mr21805028pjb.189.1640623789476;
- Mon, 27 Dec 2021 08:49:49 -0800 (PST)
-MIME-Version: 1.0
-References: <878rwkidtf.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <878rwkidtf.fsf@oldenburg.str.redhat.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Mon, 27 Dec 2021 08:49:38 -0800
-Message-ID: <CANaxB-xpQr1mUUvWK5a53q49VK_HvR4Pws_NGKGa8-jihxkc_A@mail.gmail.com>
-Subject: Re: [PATCH v2] x86: Implement arch_prctl(ARCH_VSYSCALL_CONTROL) to
- disable vsyscall
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Andy Lutomirski <luto@kernel.org>, linux-arch@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
-        linux-mm@kvack.org, "the arch/x86 maintainers" <x86@kernel.org>,
-        musl@lists.openwall.com, libc-alpha@sourceware.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Kees Cook <keescook@chromium.org>
+        id S229565AbhL0RCh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Dec 2021 12:02:37 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64976 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229563AbhL0RCg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Dec 2021 12:02:36 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRDkCmV013610;
+        Mon, 27 Dec 2021 17:02:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=gnFH4a78JuCPO99u0gbsqygVxKsV0Rfm/xKnd2A7AAM=;
+ b=WU2nN411vgkD8yrhODS180VCF0tdlnHAmV5kjuO26KMUS2WcUemvCshhid9xOfSJyV4L
+ cyye6Y8w7LDHlip73buwzfFJZqE6DM/PYd5bZ9K+KLzAaWTiF+wHbFD+hLfYLbRG9TRA
+ 1PP6jtNRJ/zr9EIExFC7v6IpAzS/BhQ/gUx2RCUXA+yoOsz2RLNLR/esfIB5CodtsKsC
+ hnSTthyrfhJqd6SJSxItBwMVEuLo4T/buD7frGmy+wc9kJAxleyuUx34hr3VuqSeXiCA
+ emj2Hwt6lIXYgtb1rLLI3RgENjuwDO3X1iLMpyEdmfSK9cE54zEcK/23bYgnL5upV6dw tA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7cd8nqth-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 17:02:09 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRH22B6022486;
+        Mon, 27 Dec 2021 17:02:08 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7cd8nqsm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 17:02:08 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGx5Sb008338;
+        Mon, 27 Dec 2021 17:02:06 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 3d5tx92vj5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 17:02:05 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRH23gk42336736
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Dec 2021 17:02:03 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7DA1A11C052;
+        Mon, 27 Dec 2021 17:02:03 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 54D4611C04C;
+        Mon, 27 Dec 2021 17:02:02 +0000 (GMT)
+Received: from sig-9-145-11-194.uk.ibm.com (unknown [9.145.11.194])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 27 Dec 2021 17:02:02 +0000 (GMT)
+Message-ID: <f9f698b44173c6906e49e17aa33a98e12da7f60b.camel@linux.ibm.com>
+Subject: Re: [RFC 03/32] ACPI: Kconfig: add HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Date:   Mon, 27 Dec 2021 18:02:01 +0100
+In-Reply-To: <CAJZ5v0iBJ8NtQautnWnp_pXMfLy_rxys8j4+ugSTbNBb=wzy6A@mail.gmail.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+         <20211227164317.4146918-4-schnelle@linux.ibm.com>
+         <CAJZ5v0iBJ8NtQautnWnp_pXMfLy_rxys8j4+ugSTbNBb=wzy6A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FJpMJrV3UNNOX-5p57exbTrV9Nk_Fiz7
+X-Proofpoint-ORIG-GUID: g8rSFgsEfCHWMq45Bd3ScoCUunJ-yQoD
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-27_09,2021-12-24_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 adultscore=0
+ suspectscore=0 priorityscore=1501 phishscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112270083
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 16, 2021 at 4:00 PM Florian Weimer <fweimer@redhat.com> wrote:
->
-> Distributions struggle with changing the default for vsyscall
-> emulation because it is a clear break of userspace ABI, something
-> that should not happen.
->
-> The legacy vsyscall interface is supposed to be used by libcs only,
-> not by applications.  This commit adds a new arch_prctl request,
-> ARCH_VSYSCALL_CONTROL, with one argument.  If the argument is 0,
-> executing vsyscalls will cause the process to terminate.  Argument 1
-> turns vsyscall back on (this is mostly for a largely theoretical
-> CRIU use case).
->
-> Newer libcs can use a zero ARCH_VSYSCALL_CONTROL at startup to disable
-> vsyscall for the process.  Legacy libcs do not perform this call, so
-> vsyscall remains enabled for them.  This approach should achieves
-> backwards compatibility (perfect compatibility if the assumption that
-> only libcs use vsyscall is accurate), and it provides full hardening
-> for new binaries.
->
-> The chosen value of ARCH_VSYSCALL_CONTROL should avoid conflicts
-> with other x86-64 arch_prctl requests.  The fact that with
-> vsyscall=emulate, reading the vsyscall region is still possible
-> even after a zero ARCH_VSYSCALL_CONTROL is considered limitation
-> in the current implementation and may change in a future kernel
-> version.
->
-> Future arch_prctls requests commonly used at process startup can imply
-> ARCH_VSYSCALL_CONTROL with a zero argument, so that a separate system
-> call for disabling vsyscall is avoided.
->
-> Signed-off-by: Florian Weimer <fweimer@redhat.com>
+On Mon, 2021-12-27 at 17:47 +0100, Rafael J. Wysocki wrote:
+> On Mon, Dec 27, 2021 at 5:44 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > not being declared. As ACPI always uses I/O port access
+> 
+> The ARM64 people may not agree with this.
 
-Acked-by: Andrei Vagin <avagin@gmail.com>
+Maybe my wording is bad. This is my rewording of what Arnd had in his
+original mail: "The ACPI subsystem needs access to I/O ports, so that
+also gets a dependency."(
+https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
+).
 
-pls read inline comments.
+> 
+> > we depend on HAS_IOPORT unconditionally.
+> > 
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > ---
+> >  drivers/acpi/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> > index cdbdf68bd98f..b57f15817ede 100644
+> > --- a/drivers/acpi/Kconfig
+> > +++ b/drivers/acpi/Kconfig
+> > @@ -9,6 +9,7 @@ config ARCH_SUPPORTS_ACPI
+> >  menuconfig ACPI
+> >         bool "ACPI (Advanced Configuration and Power Interface) Support"
+> >         depends on ARCH_SUPPORTS_ACPI
+> > +       depends on HAS_IOPORT
+> >         select PNP
+> >         select NLS
+> >         default y if X86
+> > --
+> > 2.32.0
+> > 
 
->
-> ---
-> v2: ARCH_VSYSCALL_CONTROL instead of ARCH_VSYSCALL_LOCKOUT.  New tests
->     for the toggle behavior.  Implement hiding [vsyscall] in
->     /proc/PID/maps and test it.  Various other test fixes cleanups
->     (e.g., fixed missing second argument to gettimeofday).
->
->  arch/x86/entry/vsyscall/vsyscall_64.c          |  10 +-
->  arch/x86/include/asm/mmu.h                     |   6 +
->  arch/x86/include/uapi/asm/prctl.h              |   2 +
->  arch/x86/kernel/process_64.c                   |   7 +
->  tools/arch/x86/include/uapi/asm/prctl.h        |   2 +
->  tools/testing/selftests/x86/Makefile           |  13 +-
->  tools/testing/selftests/x86/vsyscall_control.c | 891 +++++++++++++++++++++++++
->  7 files changed, 927 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
-> index fd2ee9408e91..8eb3bcf2cedf 100644
-> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
-> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-> @@ -174,6 +174,12 @@ bool emulate_vsyscall(unsigned long error_code,
->
->         tsk = current;
->
-> +       if (tsk->mm->context.vsyscall_disabled) {
-> +               warn_bad_vsyscall(KERN_WARNING, regs,
-> +                                 "vsyscall after lockout (exploit attempt?)");
-
-I don't think that we need this warning message. If we disable
-vsyscall, its address range is
-not differ from other addresses around and has to be handled the same
-way. For example,
-gVisor or any other sandbox engines may want to emulate vsyscall, but
-the kernel log will
-be full of such messages.
-
-> +               goto sigsegv;
-> +       }
-> +
->         /*
->          * Check for access_ok violations and find the syscall nr.
->          *
-> @@ -316,8 +322,10 @@ static struct vm_area_struct gate_vma __ro_after_init = {
->
->  struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
->  {
-> +       if (!mm || mm->context.vsyscall_disabled)
-> +               return NULL;
->  #ifdef CONFIG_COMPAT
-> -       if (!mm || !(mm->context.flags & MM_CONTEXT_HAS_VSYSCALL))
-> +       if (!(mm->context.flags & MM_CONTEXT_HAS_VSYSCALL))
->                 return NULL;
->  #endif
->         if (vsyscall_mode == NONE)
-> diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
-> index 5d7494631ea9..3934d6907910 100644
-> --- a/arch/x86/include/asm/mmu.h
-> +++ b/arch/x86/include/asm/mmu.h
-> @@ -41,6 +41,12 @@ typedef struct {
->  #ifdef CONFIG_X86_64
->         unsigned short flags;
->  #endif
-> +#ifdef CONFIG_X86_VSYSCALL_EMULATION
-> +       /*
-> +        * Changed by arch_prctl(ARCH_VSYSCALL_CONTROL).
-> +        */
-> +       bool vsyscall_disabled;
-> +#endif
->
->         struct mutex lock;
->         void __user *vdso;                      /* vdso base address */
-> diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
-> index 754a07856817..aad0bcfbf49f 100644
-> --- a/arch/x86/include/uapi/asm/prctl.h
-> +++ b/arch/x86/include/uapi/asm/prctl.h
-> @@ -18,4 +18,6 @@
->  #define ARCH_MAP_VDSO_32       0x2002
->  #define ARCH_MAP_VDSO_64       0x2003
->
-> +#define ARCH_VSYSCALL_CONTROL  0x5001
-> +
->  #endif /* _ASM_X86_PRCTL_H */
-> diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-> index 3402edec236c..834bad068211 100644
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -816,6 +816,13 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
->                 ret = put_user(base, (unsigned long __user *)arg2);
->                 break;
->         }
-> +#ifdef CONFIG_X86_VSYSCALL_EMULATION
-> +       case ARCH_VSYSCALL_CONTROL:
-> +               if (unlikely(arg2 > 1))
-> +                       return -EINVAL;
-> +               current->mm->context.vsyscall_disabled = !arg2;
-> +               break;
-> +#endif
->
->  #ifdef CONFIG_CHECKPOINT_RESTORE
->  # ifdef CONFIG_X86_X32_ABI
-> diff --git a/tools/arch/x86/include/uapi/asm/prctl.h b/tools/arch/x86/include/uapi/asm/prctl.h
-> index 754a07856817..aad0bcfbf49f 100644
-> --- a/tools/arch/x86/include/uapi/asm/prctl.h
-> +++ b/tools/arch/x86/include/uapi/asm/prctl.h
-> @@ -18,4 +18,6 @@
->  #define ARCH_MAP_VDSO_32       0x2002
->  #define ARCH_MAP_VDSO_64       0x2003
->
-> +#define ARCH_VSYSCALL_CONTROL  0x5001
-> +
->  #endif /* _ASM_X86_PRCTL_H */
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index 8a1f62ab3c8e..2a7c91ee68e0 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -18,7 +18,7 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
->                         test_FCMOV test_FCOMI test_FISTTP \
->                         vdso_restorer
->  TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
-> -                       corrupt_xstate_header amx
-> +                       corrupt_xstate_header amx vsyscall_control
->  # Some selftests require 32bit support enabled also on 64bit systems
->  TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
->
-> @@ -72,10 +72,12 @@ all_64: $(BINARIES_64)
->  EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
->
->  $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
-> -       $(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
-> +       $(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ \
-> +               $(or $(LIBS), -lrt -ldl -lm)
->
->  $(BINARIES_64): $(OUTPUT)/%_64: %.c helpers.h
-> -       $(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl
-> +       $(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ \
-> +               $(or $(LIBS), -lrt -ldl -lm)
->
->  # x86_64 users should be encouraged to install 32-bit libraries
->  ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
-> @@ -105,3 +107,8 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
->  # state.
->  $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
->  $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
-> +
-> +# This test does not link against anything (neither libc nor libgcc).
-> +$(OUTPUT)/vsyscall_control_64: \
-> +       LIBS := -Wl,-no-pie -static -nostdlib -nostartfiles
-> +       CFLAGS += -fno-pie -fno-stack-protector -fno-builtin -ffreestanding
-> diff --git a/tools/testing/selftests/x86/vsyscall_control.c b/tools/testing/selftests/x86/vsyscall_control.c
-> new file mode 100644
-> index 000000000000..ee966f936c89
-> --- /dev/null
-> +++ b/tools/testing/selftests/x86/vsyscall_control.c
-
-I would move the test in a separate patch...
-
-Thanks,
-Andrei
