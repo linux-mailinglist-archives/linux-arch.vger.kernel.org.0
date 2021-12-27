@@ -2,106 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7962248036F
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 19:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB93480451
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 20:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbhL0SfD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Dec 2021 13:35:03 -0500
-Received: from mga06.intel.com ([134.134.136.31]:24128 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229652AbhL0SfC (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Dec 2021 13:35:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640630102; x=1672166102;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=y8OxMzk4LmZIvd9hWJt6fgsujXh98jLKyXLBMPu5pD0=;
-  b=YeUkk1+5JFIXFWkCYQVWynwUBIa4NLuUavxnn2KULuahYWO/Eckq6Fox
-   qB2xbUMXe3UdDQ9UwlMX6pZKRxbR+g4NUQxlSyzlS+u0tL1AnzEKNxM6z
-   X3aJgZ+9Pe1NXZ3pVjZhi7I44IR7KxFaqLUMqLBPmG7yS+Tk07MUPMeRM
-   JH+lA03hk/Z20Tsvqn9yo1JO8kEY4f6R6glywGzHA1PTGUGjdGXDg0yGE
-   fB+SAmuBGkQ9kdf8Ftig49NSzgPliKFi4x8/EDhMtXlGrA1JBtjVJZfYm
-   6cbf+hH+KabKFy0RP2tlnXMjz0GUuwkTBlDGg4+f+BkbP8TVHETLAKvRA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="302010952"
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="302010952"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 10:35:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
-   d="scan'208";a="615417656"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga002.fm.intel.com with ESMTP; 27 Dec 2021 10:34:53 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BRIYpRQ004547;
-        Mon, 27 Dec 2021 18:34:51 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 00/15] Function Granular KASLR
-Date:   Mon, 27 Dec 2021 19:33:18 +0100
-Message-Id: <20211227183318.1447690-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YcVq1pMHWvPFHH5g@infradead.org>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <YcVq1pMHWvPFHH5g@infradead.org>
+        id S229940AbhL0TK3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Dec 2021 14:10:29 -0500
+Received: from isilmar-4.linta.de ([136.243.71.142]:52646 "EHLO
+        isilmar-4.linta.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229499AbhL0TK2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Dec 2021 14:10:28 -0500
+X-Greylist: delayed 537 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 Dec 2021 14:10:27 EST
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id 7083B2013F8;
+        Mon, 27 Dec 2021 19:01:29 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 83A9C80E7C; Mon, 27 Dec 2021 19:41:15 +0100 (CET)
+Date:   Mon, 27 Dec 2021 19:41:15 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org
+Subject: Re: [RFC 18/32] pcmcia: Kconfig: add HAS_IOPORT dependencies
+Message-ID: <YcoIyy7uQakUp4sd@owl.dominikbrodowski.net>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-19-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227164317.4146918-19-schnelle@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Christoph Hellwig <hch@infradead.org>
-Date: Thu, 23 Dec 2021 22:38:14 -0800
-
-> On Thu, Dec 23, 2021 at 01:21:54AM +0100, Alexander Lobakin wrote:
-> > This is a massive rework and a respin of Kristen Accardi's marvellous
-> > FG-KASLR series (v5).
+Am Mon, Dec 27, 2021 at 05:43:03PM +0100 schrieb Niklas Schnelle:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. PCMCIA devices are either LEGACY_PCI devices
+> which implies HAS_IOPORT or require HAS_IOPORT.
 > 
-> Here would be the place to explain what this series actually does and
-> why it is marvellous.
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-As I took this project over from another developer/team, I decided
-to preserve the original cover letter and append it to the end of
-mine, as well as to keep most of the original code in the separate
-commits from mine.
-For sure I could redo this if needed, is it really so?
+Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
 
 Thanks,
-Al
+	Dominik
+
+> ---
+>  drivers/pcmcia/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+> index d13b8d1a780a..3d05bdf1f9cb 100644
+> --- a/drivers/pcmcia/Kconfig
+> +++ b/drivers/pcmcia/Kconfig
+> @@ -5,7 +5,7 @@
+>  
+>  menuconfig PCCARD
+>  	tristate "PCCard (PCMCIA/CardBus) support"
+> -	depends on !UML
+> +	depends on LEGACY_PCI || HAS_IOPORT
+>  	help
+>  	  Say Y here if you want to attach PCMCIA- or PC-cards to your Linux
+>  	  computer.  These are credit-card size devices such as network cards,
+> -- 
+> 2.32.0
+> 
