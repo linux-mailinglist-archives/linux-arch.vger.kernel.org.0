@@ -2,59 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A804801EB
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 17:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 498A34801E6
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 17:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbhL0QoX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Dec 2021 11:44:23 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37332 "EHLO
+        id S230416AbhL0QoV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Dec 2021 11:44:21 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30570 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230012AbhL0QoJ (ORCPT
+        by vger.kernel.org with ESMTP id S230034AbhL0QoK (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Dec 2021 11:44:09 -0500
+        Mon, 27 Dec 2021 11:44:10 -0500
 Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRDkjok013776;
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BRDkhJY013626;
         Mon, 27 Dec 2021 16:43:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=Do4j+YRi0Oi+mpvirhey9m/azIhjcgGp3vs3dT8+99Y=;
- b=n90CBGq1fSw5dhGKgbOCuHVa1UVfb4O2Zw3x0T94bW8S7/IrP1J6dHU5GYOSIGowu7JV
- PJbQY482x7EiOvQBJB+dFozuxXVapp4Xuwc5+g+/KlsCqso9iLAs5bGYL17MfOX+xs6f
- PuiLqNnhCnX5XyVP37Ij/HBmEqzf9Y8BTGUNgjwbyxiFyOI8mbXX3aE8HT8lpcDBNEWs
- uiu4FQplA1tDogPKTRZd/UX9EsqNetYdL8kzKpX8tVzD1kZpbmxrcvqqfSRpUxdv7a9w
- bxAi41Hi3pg7qbtQQLi/WVT9Kn4g6PyGwB4mOYhX8fjvm2DR0NH4B8Z1HKFa6gqqJajO kw== 
+ bh=ERcUJteZsNreGOz3PDmx+1ro7hNiY6/3tOFyPlArr3I=;
+ b=ifiM5VFYxkoyx85YfakLYHqEgZKFZZPS3VWk0fX70Fzo3t/1mmL5JSGbVfW5YSZmPsJS
+ rSeOsIwH3gMytZIImGpvylMV+X/Vkrsb3PGHMtGchYkqEm3+hcv3rgFEJG2vBSZBCvBG
+ PHIpvQVreFIufWkOwgrGjIclUjcUzbj6aNIdmtxz1QhaBbC7x8log31oFxf0ruVnq/1b
+ D0p6pyk+kc45rFdmBqNeArZf8tGpf0IKtmqJueVNRvJDGvXhPKvE0tghal5qEosS/7/R
+ t/7E4ydFcIrrZd0mK2hgcMAsDu2+I88P/vGsLVunV2lFGNBkNZQAlbN3jZDi1USvwEYM VA== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7dqem18f-1
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7dqem18q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Dec 2021 16:43:56 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRGhdR7003257;
+        Mon, 27 Dec 2021 16:43:55 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7dqem188-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 27 Dec 2021 16:43:55 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BRGGIdL019202;
-        Mon, 27 Dec 2021 16:43:55 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7dqem184-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Dec 2021 16:43:54 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGbjD2001786;
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BRGgtcQ003120;
         Mon, 27 Dec 2021 16:43:53 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3d5tx9as3x-1
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3d5tx9bf59-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Mon, 27 Dec 2021 16:43:53 +0000
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGZN7T42140008
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BRGhpO623986498
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Dec 2021 16:35:23 GMT
+        Mon, 27 Dec 2021 16:43:51 GMT
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 81A29A405F;
-        Mon, 27 Dec 2021 16:43:50 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 3F3AAA405C;
+        Mon, 27 Dec 2021 16:43:51 +0000 (GMT)
 Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0BCE7A405B;
+        by IMSVA (Postfix) with ESMTP id C80AAA405F;
         Mon, 27 Dec 2021 16:43:50 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Dec 2021 16:43:49 +0000 (GMT)
+        Mon, 27 Dec 2021 16:43:50 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Arnd Bergmann <arnd@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -68,17 +68,17 @@ To:     Arnd Bergmann <arnd@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-csky@vger.kernel.org
-Subject: [RFC 28/32] PCI: make quirk using inw() depend on HAS_IOPORT
-Date:   Mon, 27 Dec 2021 17:43:13 +0100
-Message-Id: <20211227164317.4146918-29-schnelle@linux.ibm.com>
+Subject: [RFC 29/32] firmware: dmi-sysfs: handle HAS_IOPORT dependencies
+Date:   Mon, 27 Dec 2021 17:43:14 +0100
+Message-Id: <20211227164317.4146918-30-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211227164317.4146918-1-schnelle@linux.ibm.com>
 References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: SSc4l-0V4DU95xGviYouoqGFyi2u2u9m
-X-Proofpoint-ORIG-GUID: PbU9nfMAY0z6-kjzPypm5CaqN_rBhUOV
+X-Proofpoint-GUID: ZSgLEagPaQH4dLRWMqz_bTsJCLpCOICM
+X-Proofpoint-ORIG-GUID: twOFDxSMbdAM-CgSQj3S1pXc1FmvBr4J
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2021-12-27_08,2021-12-24_01,2021-12-02_01
@@ -91,36 +91,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In the future inw()/outw() and friends will not be compiled on
-architectures without I/O port support.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to guard sections of code calling them
+as alternative access methods.
 
 Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/pci/quirks.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/firmware/dmi-sysfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 003950c738d2..8624c98c57b2 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -265,6 +265,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_1,	quirk_isa_d
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_2,	quirk_isa_dma_hangs);
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_3,	quirk_isa_dma_hangs);
+diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+index 8b8127fa8955..cc7380b3c670 100644
+--- a/drivers/firmware/dmi-sysfs.c
++++ b/drivers/firmware/dmi-sysfs.c
+@@ -310,6 +310,7 @@ static struct kobj_type dmi_system_event_log_ktype = {
+ 	.default_attrs = dmi_sysfs_sel_attrs,
+ };
  
 +#ifdef CONFIG_HAS_IOPORT
- /*
-  * Intel NM10 "TigerPoint" LPC PM1a_STS.BM_STS must be clear
-  * for some HT machines to use C4 w/o hanging.
-@@ -284,6 +285,7 @@ static void quirk_tigerpoint_bm_sts(struct pci_dev *dev)
- 	}
+ typedef u8 (*sel_io_reader)(const struct dmi_system_event_log *sel,
+ 			    loff_t offset);
+ 
+@@ -374,6 +375,7 @@ static ssize_t dmi_sel_raw_read_io(struct dmi_sysfs_entry *entry,
+ 
+ 	return wrote;
  }
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TGP_LPC, quirk_tigerpoint_bm_sts);
 +#endif
  
- /* Chipsets where PCI->PCI transfers vanish or hang */
- static void quirk_nopcipci(struct pci_dev *dev)
+ static ssize_t dmi_sel_raw_read_phys32(struct dmi_sysfs_entry *entry,
+ 				       const struct dmi_system_event_log *sel,
+@@ -409,11 +411,13 @@ static ssize_t dmi_sel_raw_read_helper(struct dmi_sysfs_entry *entry,
+ 	memcpy(&sel, dh, sizeof(sel));
+ 
+ 	switch (sel.access_method) {
++#ifdef CONFIG_HAS_IOPORT
+ 	case DMI_SEL_ACCESS_METHOD_IO8:
+ 	case DMI_SEL_ACCESS_METHOD_IO2x8:
+ 	case DMI_SEL_ACCESS_METHOD_IO16:
+ 		return dmi_sel_raw_read_io(entry, &sel, state->buf,
+ 					   state->pos, state->count);
++#endif
+ 	case DMI_SEL_ACCESS_METHOD_PHYS32:
+ 		return dmi_sel_raw_read_phys32(entry, &sel, state->buf,
+ 					       state->pos, state->count);
 -- 
 2.32.0
 
