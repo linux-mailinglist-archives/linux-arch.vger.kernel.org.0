@@ -2,116 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6738E4804E3
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 22:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C73D480508
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 23:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbhL0V0G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Dec 2021 16:26:06 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:51518 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229728AbhL0V0F (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Dec 2021 16:26:05 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S231638AbhL0WEr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Dec 2021 17:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229626AbhL0WEr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Dec 2021 17:04:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D117C06173E;
+        Mon, 27 Dec 2021 14:04:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A8EAD1EC0136;
-        Mon, 27 Dec 2021 22:25:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1640640359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3Cy1PdT8ee7b18BUpAQeCkPJPidVgoTXUgpiQywVRN4=;
-        b=m6LiU/XltNjPORveRWWGZ/X44V1K+ujkDgCpPAWQMC9V+qzDBp+9Bn0nbrALtQ/VwgFbm3
-        IbJ0tL4dk5QJKecJUiN2UQuD5Fgac8/LCQbbXD+eVIXLd3gF3AkY750J3xp8zJf4uhz59o
-        ti+zSCpcL9CI9POJ+ZDF+aTNsMTb5WE=
-Date:   Mon, 27 Dec 2021 22:26:02 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
-Message-ID: <YcovajZkEd0WY8p4@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-2-alexandr.lobakin@intel.com>
- <YcShenJgaOeOdbIj@zn.tnic>
- <20211227182246.1447062-1-alexandr.lobakin@intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61D21B80D8E;
+        Mon, 27 Dec 2021 22:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF63FC36AEA;
+        Mon, 27 Dec 2021 22:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640642684;
+        bh=WJL+K0hI3nwJke136i/0N4gSC4MX2UG4T24o5kI2ZCo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=LPLcrpwmwEpR6GXtmPDQxAS5U0HsQLi/CB9P+gregE+DcfQwu7ErElWcKXTZbMdU6
+         XsCtsWEk0WBE+mdjM1tKbunFxcFQikU/+TA0D89rcFi86Y85WxzRdoIY86PRvjVdtG
+         diIwKaiI3YvY4kYq43BX3PuQVbuHlqLoF3LUbX+n+6aL1J9DGg4HhKBvQx2P0XfAy7
+         WusCUz7/Y5id3h1FfcJgYrgH5um91lNX8uL0nwr0Tpepdou9dSJJIXZ6GCtfCdLfBD
+         LIlhhqwlkP3AiKo8eLFOy/k3gO8zizcoVOTtD8CF1BbmHHWy/myCg1kQ1We1WzE6Nq
+         9m7bdLO4V7+kA==
+Date:   Mon, 27 Dec 2021 16:04:42 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org
+Subject: Re: [RFC 27/32] PCI/sysfs: make I/O resource depend on HAS_IOPORT
+Message-ID: <20211227220442.GA1544995@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211227182246.1447062-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20211227164317.4146918-28-schnelle@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
-> It's just a couple lines below. I trigger this using `-z uniq-symbol`
-> which uses numeric suffixes for globals as well.
+Make the subject match historical convention (capitalize "Make").
 
-Aha, so that's for the fgkaslr purposes now.
+On Mon, Dec 27, 2021 at 05:43:12PM +0100, Niklas Schnelle wrote:
+> Exporting I/O resources only makes sense if legacy I/O spaces are
+> supported so conditionally add them only if HAS_IOPORT is set.
 
-> It fixes a commit dated 2014, thus Cc:stable. Although the
-> remove_dot() might've been introduced for neverlanded GCC LTO, but
-> in fact numeric suffixes are used a lot by the toolchains in regular
-> builds as well. Just not for globals, that's why it's "well hidden".
+IIUC, the effect of this is that the "resource%d" file for an I/O BAR
+still appears in /sys, but reads or writes will fail with ENXIO.
+Worth mentioning that in the commit log, since one could interpret the
+above as meaning that the "resource%d" file exists only if HAS_IOPORT
+is set.  I think I will *exist* but not be very useful.
 
-Does "well hidden" warrant a stable backport then? Because if no
-toolchain is using numeric suffixes for globals, then no need for the
-stable tag, I'd say.
+I also wonder what this looks like in the sysfs "resource" file and
+via lspci.  I suppose it's useful if lspci shows the fact that the BAR
+exists and is an I/O BAR, even if the arch doesn't set HAS_IOPORT.
 
-> I thought it's a common saying in commit messages, isn't it?
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/pci/pci-sysfs.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index cfe2f85af09e..a59a85593972 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -1099,6 +1099,7 @@ static int pci_mmap_resource_wc(struct file *filp, struct kobject *kobj,
+>  	return pci_mmap_resource(kobj, attr, vma, 1);
+>  }
+>  
+> +#ifdef CONFIG_HAS_IOPORT
+>  static ssize_t pci_resource_io(struct file *filp, struct kobject *kobj,
+>  			       struct bin_attribute *attr, char *buf,
+>  			       loff_t off, size_t count, bool write)
+> @@ -1157,6 +1158,21 @@ static ssize_t pci_write_resource_io(struct file *filp, struct kobject *kobj,
+>  
+>  	return pci_resource_io(filp, kobj, attr, buf, off, count, true);
+>  }
+> +#else
+> +static ssize_t pci_read_resource_io(struct file *filp, struct kobject *kobj,
+> +				    struct bin_attribute *attr, char *buf,
+> +				    loff_t off, size_t count)
+> +{
+> +	return -ENXIO;
+> +}
 
-Lemme give you my canned and a lot more eloquent explanation for that:
+I assume the sysfs infrastructure prevents or fails reads/write if
+res_attr->read and res_attr->write are not set at all, so maybe we
+wouldn't need the stubs if we did something like this?
 
-"Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
+    if (pci_resource_flags(pdev, num) & IORESOURCE_IO) {
+  #ifdef CONFIG_HAS_IOPORT
+      res_attr->read = pci_read_resource_io;
+      res_attr->write = pci_write_resource_io;
+      ...
+  #endif
+    } else {
 
-Also, pls read section "2) Describe your changes" in
-Documentation/process/submitting-patches.rst for more details.
-
-Also, see section "Changelog" in
-Documentation/process/maintainer-tip.rst
-
-Bottom line is: personal pronouns are ambiguous in text, especially with
-so many parties/companies/etc developing the kernel so let's avoid them
-please."
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> +static ssize_t pci_write_resource_io(struct file *filp, struct kobject *kobj,
+> +				     struct bin_attribute *attr, char *buf,
+> +				     loff_t off, size_t count)
+> +{
+> +	return -ENXIO;
+> +}
+> +#endif
+>  
+>  /**
+>   * pci_remove_resource_files - cleanup resource files
+> -- 
+> 2.32.0
+> 
