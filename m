@@ -2,225 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C53548032D
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 19:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7BA48033A
+	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 19:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbhL0SHz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Dec 2021 13:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbhL0SHy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Dec 2021 13:07:54 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95600C06173E;
-        Mon, 27 Dec 2021 10:07:54 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id t23so26412986oiw.3;
-        Mon, 27 Dec 2021 10:07:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Audc9/8veHwTnYa6n859XP13Kx3/NHMhaJHptez5b5U=;
-        b=UKT/P2ganrdFmPsTRxvMHXnv9t5wT2kTA7SsNzwG9G1SjX9dgMh6w2cquS+QckffYr
-         e1Yzr767mNh/2b5CqHqfEiP2xGIqxmCNSb948yi6wckpkfJeXtWm7fmnvb3Ov9jC97W+
-         55abkiDeLtG2VzHPT4Yril/1U1T84EG4OBvvOhffu3DgBDCQ9xHAEQnjpeXzn6u5CCil
-         kUBxFyTzrGzsUiODxlLxg8becaMZAKmTQzteMmZWhicLZrLR+1SUcS9lx3hhBBNLMkGD
-         N8+ZNZ+nWVcvlFMqH4UMhd2+A4X64jAGgpGSM56lm4ozvVfNE5SfrlEiFmm6roY8ShRj
-         EhTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Audc9/8veHwTnYa6n859XP13Kx3/NHMhaJHptez5b5U=;
-        b=d9Go6GMnnbniD+dlLpjC6hVIEOsukgNYoISFm5y4IKO2PHLHckbd4nQsCttK6n9ykm
-         ZrcTNHTfK4EL1wz3OFjZk5WeT71ZSq14cW6eNkzglR9XvGLDpJKVjLWZMOD/71UA++TF
-         8UnhqYeyj2B40Z7HvvEejvC2a8902BoFY4g4LTX3r3U0OwOJhUT+qLjTVHhrQSWEf6z1
-         Mtk1IorpTAUMHvYH55+fu8oIf8cNVWuG5tpqGRvqcenXmP5bPVI18n7lhZpNwy42l9BK
-         jm1PHUovClHe5p6xeoJEwJvCE7Qfw6OOBkX6wyCg3NT4YbmYT/9eFTZkGd3c4Jw1h6bP
-         J0cg==
-X-Gm-Message-State: AOAM533lH5XYIPSsSrH9Hxzky/HKqV9vtSzwMKS9/6yUl9J951RoiQer
-        EhQfIBqOZydi9SwZ746aGzmnv9gsQaY=
-X-Google-Smtp-Source: ABdhPJyyvxX7VmsV15kxuxZ4I9wlhGyu+6oljhtpDZK5o0QafREMZXuc9FYqPpLqiVi0Ce6stDhHDQ==
-X-Received: by 2002:a54:4613:: with SMTP id p19mr13541470oip.162.1640628473685;
-        Mon, 27 Dec 2021 10:07:53 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r13sm2683591oth.21.2021.12.27.10.07.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Dec 2021 10:07:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [RFC 13/32] hwmon: Kconfig: add HAS_IOPORT dependencies
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-14-schnelle@linux.ibm.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <838dd1ad-e77d-98d1-de04-46ff79c9575e@roeck-us.net>
-Date:   Mon, 27 Dec 2021 10:07:50 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S231553AbhL0SYg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Dec 2021 13:24:36 -0500
+Received: from mga09.intel.com ([134.134.136.24]:17765 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229499AbhL0SYe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Dec 2021 13:24:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1640629474; x=1672165474;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=C+oHdzLPkEGQP3y/+XFIUPLmI6lwlv3Q34bwmNyrap0=;
+  b=Bti2dIM159+jnGedGs39yvdLHWV85qLfm6BV69C9e7Nw8ryFL4VhHSUT
+   YmN0Ncq73CHMQpxBJretjFurRm6V49Asw3FDfv8pCLWb/Dm1e3z5w44W6
+   lcE+oeftX/HDXNd47XN8G9pEqXKA8bnwYQokKSziNIWCXYwCCHFriQPL0
+   HJMCnYNp4HKrs540WWiNRPjCyLmd9r2RsKGUv1S/MqeBO2xNqQVuqbg0C
+   LtmAgW6p391IKgasn2/rMmycvI+ZTRRfXnF9f2ikcH/SPqa9PYey0tuGp
+   3ZgpzbAL3dahxA74x9wd5RqMFimNk0sQiAPiniS9r0iBRRDZcoFt+zdm7
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10210"; a="241058128"
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="241058128"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2021 10:24:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,240,1635231600"; 
+   d="scan'208";a="609115399"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by FMSMGA003.fm.intel.com with ESMTP; 27 Dec 2021 10:24:25 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BRIONTP032398;
+        Mon, 27 Dec 2021 18:24:23 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
+Date:   Mon, 27 Dec 2021 19:22:46 +0100
+Message-Id: <20211227182246.1447062-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <YcShenJgaOeOdbIj@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com> <YcShenJgaOeOdbIj@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <20211227164317.4146918-14-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/27/21 8:42 AM, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
+From: Borislav Petkov <bp@alien8.de>
+Date: Thu, 23 Dec 2021 17:19:06 +0100
+
+> On Thu, Dec 23, 2021 at 01:21:55AM +0100, Alexander Lobakin wrote:
+> > For now, that condition from remove_dot():
+> > 
+> > if (m && (s[n + m] == '.' || s[n + m] == 0))
+> > 
+> > which was designed to test if it's a dot or a \0 after the suffix
+> > is never satisfied.
+> > This is due to that s[n + m] always points to the last digit of a
+> > numeric suffix, not on the symbol next to it:
+> > 
+> > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+> > 
+> > So it's off by one and was like that since 2014.
 > 
-
-Similar to watchdog, I don't understand when HAS_IOPORT is needed and when not,
-as there are more hwmon drivers using IO ports than the ones listed below.
-
-Guenter
-
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->   drivers/hwmon/Kconfig | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
+> What's the relevance of this? Looking at
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 09397562c396..c1a2d8ac96fd 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -547,6 +547,7 @@ config SENSORS_SPARX5
->   
->   config SENSORS_F71805F
->   	tristate "Fintek F71805F/FG, F71806F/FG and F71872F/FG"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	help
->   	  If you say yes here you get support for hardware monitoring
-> @@ -558,6 +559,7 @@ config SENSORS_F71805F
->   
->   config SENSORS_F71882FG
->   	tristate "Fintek F71882FG and compatibles"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	help
->   	  If you say yes here you get support for hardware monitoring
-> @@ -761,6 +763,7 @@ config SENSORS_CORETEMP
->   
->   config SENSORS_IT87
->   	tristate "ITE IT87xx and compatibles"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	select HWMON_VID
->   	help
-> @@ -1387,6 +1390,7 @@ config SENSORS_LM95245
->   
->   config SENSORS_PC87360
->   	tristate "National Semiconductor PC87360 family"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	select HWMON_VID
->   	help
-> @@ -1401,6 +1405,7 @@ config SENSORS_PC87360
->   
->   config SENSORS_PC87427
->   	tristate "National Semiconductor PC87427"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	help
->   	  If you say yes here you get access to the hardware monitoring
-> @@ -1432,6 +1437,7 @@ config SENSORS_NTC_THERMISTOR
->   
->   config SENSORS_NCT6683
->   	tristate "Nuvoton NCT6683D"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	help
->   	  If you say yes here you get support for the hardware monitoring
-> @@ -1442,6 +1448,7 @@ config SENSORS_NCT6683
->   
->   config SENSORS_NCT6775
->   	tristate "Nuvoton NCT6775F and compatibles"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	depends on ACPI_WMI || ACPI_WMI=n
->   	select HWMON_VID
-> @@ -1664,6 +1671,7 @@ config SENSORS_SIS5595
->   
->   config SENSORS_DME1737
->   	tristate "SMSC DME1737, SCH311x and compatibles"
-> +	depends on HAS_IOPORT
->   	depends on I2C && !PPC
->   	select HWMON_VID
->   	help
-> @@ -1707,6 +1715,7 @@ config SENSORS_EMC6W201
->   
->   config SENSORS_SMSC47M1
->   	tristate "SMSC LPC47M10x and compatibles"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	help
->   	  If you say yes here you get support for the integrated fan
-> @@ -1741,6 +1750,7 @@ config SENSORS_SMSC47M192
->   
->   config SENSORS_SMSC47B397
->   	tristate "SMSC LPC47B397-NC"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	help
->   	  If you say yes here you get support for the SMSC LPC47B397-NC
-> @@ -1754,6 +1764,7 @@ config SENSORS_SCH56XX_COMMON
->   
->   config SENSORS_SCH5627
->   	tristate "SMSC SCH5627"
-> +	depends on HAS_IOPORT
->   	depends on !PPC && WATCHDOG
->   	select SENSORS_SCH56XX_COMMON
->   	select WATCHDOG_CORE
-> @@ -1767,6 +1778,7 @@ config SENSORS_SCH5627
->   
->   config SENSORS_SCH5636
->   	tristate "SMSC SCH5636"
-> +	depends on HAS_IOPORT
->   	depends on !PPC && WATCHDOG
->   	select SENSORS_SCH56XX_COMMON
->   	select WATCHDOG_CORE
-> @@ -1995,6 +2007,7 @@ config SENSORS_VIA686A
->   
->   config SENSORS_VT1211
->   	tristate "VIA VT1211"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	select HWMON_VID
->   	help
-> @@ -2114,6 +2127,7 @@ config SENSORS_W83L786NG
->   
->   config SENSORS_W83627HF
->   	tristate "Winbond W83627HF, W83627THF, W83637HF, W83687THF, W83697HF"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	select HWMON_VID
->   	help
-> @@ -2126,6 +2140,7 @@ config SENSORS_W83627HF
->   
->   config SENSORS_W83627EHF
->   	tristate "Winbond W83627EHF/EHG/DHG/UHG, W83667HG"
-> +	depends on HAS_IOPORT
->   	depends on !PPC
->   	select HWMON_VID
->   	help
+>   7d02b490e93c ("Kbuild, lto: Drop .number postfixes in modpost")
 > 
+> what you're fixing here is something LTO-related. How do you trigger
+> this?
 
+It's just a couple lines below. I trigger this using `-z uniq-symbol`
+which uses numeric suffixes for globals as well.
+
+> 
+> For a Cc:stable patch, I'm missing a lot of context.
+
+It fixes a commit dated 2014, thus Cc:stable. Although the
+remove_dot() might've been introduced for neverlanded GCC LTO, but
+in fact numeric suffixes are used a lot by the toolchains in regular
+builds as well. Just not for globals, that's why it's "well hidden".
+
+> 
+> > `-z uniq-symbol` linker flag which we are planning to use to
+> 				     ^^
+> 
+> Who's "we"?
+
+I thought it's a common saying in commit messages, isn't it?
+
+> 
+> > simplify livepatching brings numeric suffixes back, fix this.
+> > Otherwise:
+> > 
+> > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
+> > 
+> > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+> > Cc: stable@vger.kernel.org # 3.17+
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> 
+> ...
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+Thanks,
+Al
