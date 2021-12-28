@@ -2,64 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85888480937
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 13:51:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5C9480946
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 13:54:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbhL1MvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Dec 2021 07:51:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:56376 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231132AbhL1MvT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Dec 2021 07:51:19 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BSBBFLU006881;
-        Tue, 28 Dec 2021 12:50:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=S9D+u4Ip4I3DBjLjBk+LwCkB9PjbH3pelWSRQrEW8/w=;
- b=NbZ04K3xdwOzDfMzPj/q6c59N2Tlbqq/XImIKWVeeEFE6p5jBCNwPm21PTxi8O7rHGiS
- WAyQVRG6KPXvEU1LwGswvlz7/cq68yu/iqMHS+dbrhcy1BFMPAaeTC/BDF7bzxS2FQm+
- 4ZXne+e3M9KL9Ei0Ifghtamm6RfxHnSDECkOf4M7wj497iKQj9bMqHdLpq9V9bzeDBnn
- k2iDbyLnNKXxVj3mYQ3imzSZBOitKs8EaXUqD7BO0jf89Bx8ft9qd9ekzvq6JUT/mnRN
- NW4hdpHp/mqHuK//8cGusOOIi7d29eCiUlHYjKimkDrKTPK6xy8MvGoN9Q/om0z7BOJM Jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7tfbtcdy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 12:50:27 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BSCmAqP015526;
-        Tue, 28 Dec 2021 12:50:26 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3d7tfbtcdb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 12:50:26 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BSCn5hw018678;
-        Tue, 28 Dec 2021 12:50:24 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03ams.nl.ibm.com with ESMTP id 3d5tx9ge3v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 12:50:24 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BSCoLL238207920
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Dec 2021 12:50:22 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DDD19AE058;
-        Tue, 28 Dec 2021 12:50:21 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B7D04AE057;
-        Tue, 28 Dec 2021 12:50:20 +0000 (GMT)
-Received: from sig-9-145-12-118.uk.ibm.com (unknown [9.145.12.118])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Dec 2021 12:50:20 +0000 (GMT)
-Message-ID: <b21410ee32857b4913e4ba4595f9e8da299c501f.camel@linux.ibm.com>
-Subject: Re: [RFC 12/32] iio: adc: Kconfig: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
+        id S231807AbhL1Mys (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Dec 2021 07:54:48 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:45878 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231695AbhL1Myr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Dec 2021 07:54:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55AA6B811D9;
+        Tue, 28 Dec 2021 12:54:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4546BC36AE8;
+        Tue, 28 Dec 2021 12:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640696083;
+        bh=Gap0GwZ7QhskHCBuxCWJ0ehIbXdcDMw/3DRBfuFroAo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uT1Bi526RdiqCovjK+BsZ0LQ21O6eAGdLfperJgxt/T4KZXCQHLowjI+U/BnL+30l
+         HJRegFW6ceEx7gRTUzAnY/lOi8+345syFMoVZJg23IyMTVv8lxOmatGJsejunnysTY
+         b7cgtAhK1rV1ciaHNDicksS8OtcQVVqsJ8fTaLs35K3JpOGyDL1M7tu/pQlaK0TC5o
+         847l3oZwcFMOo4LfbX6OTisn674FFeznktD1n6AMeVW9VoFWIsJndv9O02I/tcIR5D
+         xfPFEZmvAPeSdi4V+6+pSCDV5v0lZDnuzytqnQmuAjGw0iIL513WDap3bYMORE0U6k
+         6wPKV3GCt3SBA==
+Date:   Tue, 28 Dec 2021 13:54:25 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         John Garry <john.garry@huawei.com>,
         Nick Hu <nickhu@andestech.com>,
@@ -68,88 +41,209 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, linux-iio@vger.kernel.org
-Date:   Tue, 28 Dec 2021 13:50:20 +0100
-In-Reply-To: <CAMuHMdXDL6XXfohzJFTTV6tR=gg=bcCQq935eKUbNaNLHp9xiw@mail.gmail.com>
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <20211228135425.0a69168c@coco.lan>
+In-Reply-To: <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
 References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-         <20211227164317.4146918-13-schnelle@linux.ibm.com>
-         <CAMuHMdXDL6XXfohzJFTTV6tR=gg=bcCQq935eKUbNaNLHp9xiw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        <20211227164317.4146918-2-schnelle@linux.ibm.com>
+        <YcrJAwsKIxxX18pW@kroah.com>
+        <20211228101435.3a55b983@coco.lan>
+        <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: adgjiWn0pQwLjbiOSK9NgIxPJZGoB2MQ
-X-Proofpoint-GUID: VxcM2A5_A0B3RoIYwgqkHPDjJ1ThPxCG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-28_07,2021-12-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- impostorscore=0 malwarescore=0 mlxscore=0 suspectscore=0 mlxlogscore=999
- adultscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112280057
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2021-12-28 at 11:32 +0100, Geert Uytterhoeven wrote:
-> Hi Niklas,
-> 
-> On Mon, Dec 27, 2021 at 5:53 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > those drivers using them.
+Em Tue, 28 Dec 2021 11:58:55 +0100
+Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
+
+> On Tue, 2021-12-28 at 10:15 +0100, Mauro Carvalho Chehab wrote:
+> > Em Tue, 28 Dec 2021 09:21:23 +0100
+> > Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
+> >   
+> > > On Mon, Dec 27, 2021 at 05:42:46PM +0100, Niklas Schnelle wrote:  
+> > > > --- a/drivers/pci/Kconfig
+> > > > +++ b/drivers/pci/Kconfig
+> > > > @@ -23,6 +23,17 @@ menuconfig PCI
+> > > >  
+> > > >  if PCI
+> > > >  
+> > > > +config LEGACY_PCI
+> > > > +	bool "Enable support for legacy PCI devices"
+> > > > +	depends on HAVE_PCI
+> > > > +	help
+> > > > +	   This option enables support for legacy PCI devices. This includes
+> > > > +	   PCI devices attached directly or via a bridge on a PCI Express bus.
+> > > > +	   It also includes compatibility features on PCI Express devices which
+> > > > +	   make use of legacy I/O spaces.    
 > > 
-> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> 
-> Thanks for your patch!
-> 
-> > --- a/drivers/iio/adc/Kconfig
-> > +++ b/drivers/iio/adc/Kconfig
-> > @@ -119,7 +119,7 @@ config AD7606
+> > This Kconfig doesn't seem what it is needed there, as this should be an 
+> > arch-dependent feature, and not something that the poor user should be
+> > aware if a given architecture supports it or not. Also, the above will keep
+> > causing warnings or errors with randconfigs.
 > > 
-> >  config AD7606_IFACE_PARALLEL
-> >         tristate "Analog Devices AD7606 ADC driver with parallel interface support"
-> > -       depends on HAS_IOMEM
-> > +       depends on HAS_IOPORT
+> > Also, the "depends on HAVE_CPI" is bogus, as PCI already depends on 
+> > HAVE_PCI:  
 > 
-> While this driver uses ins[bw](), this seems unrelated to legacy
-> I/O space, as the driver maps a MMIO region.  Probably different
-> accessors should be used instead.
+> Ah yes you're right.
+> 
+> > 
+> > 	menuconfig PCI
+> > 	bool "PCI support"
+> > 	depends on HAVE_PCI
+> > 	help
+> > 	  This option enables support for the PCI local bus, including
+> > 	  support for PCI-X and the foundations for PCI Express support.
+> > 	  Say 'Y' here unless you know what you are doing.
+> > 
+> > So, instead, I would expect that a new HAVE_xxx option would be
+> > added at arch/*/Kconfig, like:
+> > 
+> > 	config X86
+> > 		...
+> > 		select HAVE_PCI_DIRECT_IO
+> > 
+> > It would also make sense to document it at Documentation/features/.  
+> 
+> I'll look into that, thanks.
+> 
+> >   
+> > > All you really care about is the "legacy" I/O spaces here, this isn't
+> > > tied to PCI specifically at all, right?
+> > > 
+> > > So why not just have a OLD_STYLE_IO config option or something like
+> > > that, to show that it's the i/o functions we care about here, not PCI at
+> > > all?
+> > > 
+> > > And maybe not call it "old" or "legacy" as time constantly goes forward,
+> > > just describe it as it is, "DIRECT_IO"?  
+> > 
+> > Agreed. HAVE_PCI_DIRECT_IO (or something similar) seems a more appropriate
+> > name for it.
+> > 
+> > Thanks,
+> > Mauro  
+> 
+> Hmm, I might be missing something here but that sounds a lot like the
+> HAS_IOPORT option added in patch 02.
+> 
+> We add both LEGACY_PCI and HAS_IOPORT to differentiate between two
+> cases. HAS_IOPORT is for PC-style devices that are not on a PCI card
+> while LEGACY_PCI is for PCI drivers that require port I/O. 
 
-You're right on first glance it looks like a misuse of the ins[bw]()
-accessors. I do wonder how that even works, if PCI_IOBASE is 0 it would
-result in readsw()/readsb() with presumably the correct address but no
-idea how this interacts witth x86's special I/O instructions.
+I didn't look at the other patches on this series, but why it is needed
+to deal with them on a separate way? Won't "PCI" and "HAS_IOPORT" be enough? 
 
-> 
-> Note that this driver has no in-tree users. Same for the SPI variant,
-> but at least that one has modern json-schema DT bindings ;-)
+I mean, are there any architecture where HAVE_PCI=y and HAS_IOPORT=y
+where LEGACY_PCI shall be "n"?
 
-Can't find any mention in the MAINTAINERS file either.
+> This
+> includes pre-PCIe devices as well as PCIe devices which require
+> features like I/O spaces. The "legacy" naming is comes from the PCIe
+> spec which in section 2.1.1.2 says "PCI Express supports I/O Space for
+> compatibility with legacy devices which require their use. Future
+> revisions of this specification may deprecate the use of I/O Space."
 
-> 
-> >         select AD7606
-> >         help
-> >           Say yes here to build parallel interface support for Analog Devices:
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+I would still avoid calling it LEGACY_PCI, as this sounds too generic.
 
+I didn't read the PCI/PCIe specs, but I suspect that are a lot more
+features that were/will be deprecated on PCI specs as time goes by.
+
+So, I would, instead, use something like PCI_LEGACY_IO_SPACE or 
+HAVE_PCI_LEGACY_IO_SPACE, in order to let it clear what "legacy"
+means.
+
+> These two separate config options allow us to compile without support
+> for these legacy PCI devices even on a system where inb()/outb() and
+> friends are required for some PC style devices and for example ACPI.
+
+Hmm... why this patch make SND_BT87X dependent on LEGACY_PCI?
+
+> @@ -172,6 +177,7 @@ config SND_AZT3328
+>  
+>  config SND_BT87X
+>  	tristate "Bt87x Audio Capture"
+> +	depends on LEGACY_PCI
+>  	select SND_PCM
+>  	help
+>  	  If you want to record audio from TV cards based on
+
+I couldn't find any usage of inb/outb & friends on it:
+
+	$ grep -E '(inb|outb|inw|outw|inl|outl)\b' ./sound/pci/bt87x.c
+
+It uses, instead, readl/writel:
+
+	static inline u32 snd_bt87x_readl(struct snd_bt87x *chip, u32 reg)
+	{
+	        return readl(chip->mmio + reg);
+	}
+
+	static inline void snd_bt87x_writel(struct snd_bt87x *chip, u32 reg, u32 value)
+	{
+	        writel(value, chip->mmio + reg);
+	}
+
+I failed to see what makes it different from VIDEO_BT848 and
+DVB_BT8XX drivers. They all support exactly the same chipset:
+Brooktree/Conexant BT8xx. On those devices, depending on the exact
+model, up to three separate interfaces are provided, each one with
+its own Kconfig var:
+
+	- audio I/O (SND_BT87X);
+	- video I/O (VIDEO_BT848);
+	- MPEG-TS I/O (DVB_BT8XX).
+
+Thanks,
+Mauro
