@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2070480519
-	for <lists+linux-arch@lfdr.de>; Mon, 27 Dec 2021 23:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B34904805A5
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 03:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbhL0Wdw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Dec 2021 17:33:52 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57282 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231671AbhL0Wdv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Dec 2021 17:33:51 -0500
+        id S234554AbhL1CKJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Dec 2021 21:10:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43708 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232504AbhL1CKJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Dec 2021 21:10:09 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 333A86117B;
-        Mon, 27 Dec 2021 22:33:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B58DC36AE7;
-        Mon, 27 Dec 2021 22:33:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B799B8117D;
+        Tue, 28 Dec 2021 02:10:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C19A8C36AEA;
+        Tue, 28 Dec 2021 02:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1640644430;
-        bh=/sJY7Kisz1PSOFfZV+hFs5yhBktmtLqFb2f5YxJeypg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qwgGSPvatgMe1CpNXXSX+vv/ERMiU7z545ZfOCpO+f1+4P8hhpXjl+Wdgtyyc9ufd
-         eD7w2TB3tYdV6BYtgGkzURzDTm/j3KniZsvqSyNieblnbr1y6Nx1wyJe+l3GqeKXv3
-         o+6TyuA9rfBpIzNRhulx//qhQDoQlej1bluDv9OUWVVb/EYOyMeAESrlR2uFi9Bmqo
-         fLjgW5tmyq6w3LTfgb8n0DPvlOp2bmTBChMh9OmDnr7ipigWHnLCauzsvWBjlhMiTt
-         nJ5NRRTogGH5opz9tvGIIdHy6e6Eux9NyWRjGhXlzV0GuBtCCUx4oP0SdLRUjCsiIO
-         /L9526LATEFLQ==
-Date:   Mon, 27 Dec 2021 16:33:48 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
+        s=k20201202; t=1640657404;
+        bh=SWYw07zmaaDNu+bU6UjWMUGttSEKl48ssAwYr917Irk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AP7PTZtlYcp1DDFFD9oOox44rlGILxnZhjrWGoppO9nx889cG994Anev93Fi8avnE
+         QKDjPgXQd+0j5ryyJUZRF2fBwkLwO80XrnSF/7Fx+x50yneeRCMv+6NTewDTm+M3mY
+         UmjlUI3lKpBa+eY+azArRNs2im3Ff4KiJ7Zi2yf5dhhdWeFi5sankCfKs3hH/NkcWY
+         C3nDae4xyYfSY866Hl7iueZkbXg7sQjQFFHeioueEr+2zR+wkgXwGDiPuaIoio9xml
+         rwSFGRLZ2Ry45efsPcHYEzY5Wj/FdpgdsOlVeG8/L54LBpew0o0F/pJgWb5CCAbMPX
+         5d9alQgd1Ngqw==
+Date:   Tue, 28 Dec 2021 03:09:46 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Niklas Schnelle <schnelle@linux.ibm.com>
 Cc:     Arnd Bergmann <arnd@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -40,74 +40,125 @@ Cc:     Arnd Bergmann <arnd@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org
-Subject: Re: [RFC 28/32] PCI: make quirk using inw() depend on HAS_IOPORT
-Message-ID: <20211227223348.GA1545446@bhelgaas>
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <20211228030946.65932d2e@coco.lan>
+In-Reply-To: <20211227164317.4146918-2-schnelle@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        <20211227164317.4146918-2-schnelle@linux.ibm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211227164317.4146918-29-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Dec 27, 2021 at 05:43:13PM +0100, Niklas Schnelle wrote:
-> In the future inw()/outw() and friends will not be compiled on
-> architectures without I/O port support.
+Em Mon, 27 Dec 2021 17:42:46 +0100
+Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
 
-This commit log actually doesn't say what the patch does.
-
-I'm pretty sure this particular quirk is x86 specific and could
-probably be moved to arch/x86/pci/fixup.c, where the #ifdef probably
-wouldn't be needed.
-
-If we keep it in drivers/pci, please update the subject line to make
-it more specific and match the convention, e.g.,
-
-  PCI: Compile quirk_tigerpoint_bm_sts() only when HAS_IOPORT set
-
-BTW, git complains about some whitespace errors in other patches:
-
-  Applying: char: impi, tpm: depend on HAS_IOPORT
-  .git/rebase-apply/patch:92: trailing whitespace.
-	    If you have a TPM security chip from Atmel say Yes and it
-  .git/rebase-apply/patch:93: trailing whitespace.
-	    will be accessible from within Linux.  To compile this driver
-  warning: 2 lines add whitespace errors.
-  Applying: video: handle HAS_IOPORT dependencies
-  .git/rebase-apply/patch:23: trailing whitespace.
-
-  warning: 1 line adds whitespace errors.
-
+> Introduce a new LEGACY_PCI Kconfig option which gates support for legacy
+> PCI devices including those attached to a PCI-to-PCI Express bridge and
+> PCI Express devices using legacy I/O spaces. Note that this is different
+> from non PCI uses of I/O ports such as by ACPI.
+> 
+> Add dependencies on LEGACY_PCI for all PCI drivers which only target
+> legacy PCI devices and ifdef legacy PCI specific functions in ata
+> handling.
+> 
 > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
 > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > ---
->  drivers/pci/quirks.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 003950c738d2..8624c98c57b2 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -265,6 +265,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_1,	quirk_isa_d
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_2,	quirk_isa_dma_hangs);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_3,	quirk_isa_dma_hangs);
+>  drivers/ata/Kconfig                          | 34 ++++++++--------
+>  drivers/ata/ata_generic.c                    |  3 +-
+>  drivers/ata/libata-sff.c                     |  2 +
+>  drivers/comedi/Kconfig                       | 42 +++++++++++++++++++
+>  drivers/gpio/Kconfig                         |  2 +-
+>  drivers/hwmon/Kconfig                        |  6 +--
+>  drivers/i2c/busses/Kconfig                   | 24 +++++------
+>  drivers/input/gameport/Kconfig               |  4 +-
+>  drivers/isdn/hardware/mISDN/Kconfig          | 14 +++----
+
+>  drivers/media/cec/platform/Kconfig           |  2 +-
+>  drivers/media/pci/dm1105/Kconfig             |  2 +-
+>  drivers/media/radio/Kconfig                  |  2 +-
+
+Not sure what you meant by "legacy I/O spaces" on this patch. 
+I mean, I would expect non-PCIe devices - like bttv and other
+devices developed at the past millennium or so to be "legacy",
+but at least on media, it is touching some drivers that aren't
+that old, while keeping the really old ones untouched. Instead,
+it is touching a driver developed in 2017 plus two other ones
+that are a way newer than other drivers.
+
+The support for the Bt8xx chipset, in particular, is really 
+weird, as a sound driver for such chipset:
+
+> @@ -172,6 +177,7 @@ config SND_AZT3328
 >  
-> +#ifdef CONFIG_HAS_IOPORT
->  /*
->   * Intel NM10 "TigerPoint" LPC PM1a_STS.BM_STS must be clear
->   * for some HT machines to use C4 w/o hanging.
-> @@ -284,6 +285,7 @@ static void quirk_tigerpoint_bm_sts(struct pci_dev *dev)
->  	}
->  }
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TGP_LPC, quirk_tigerpoint_bm_sts);
-> +#endif
->  
->  /* Chipsets where PCI->PCI transfers vanish or hang */
->  static void quirk_nopcipci(struct pci_dev *dev)
-> -- 
-> 2.32.0
-> 
+>  config SND_BT87X
+>  	tristate "Bt87x Audio Capture"
+> +	depends on LEGACY_PCI
+>  	select SND_PCM
+>  	help
+>  	  If you want to record audio from TV cards based on
+
+was marked as dependent of LEGACY_PCI, while the DVB and V4L2 ones 
+weren't.
+
+Sounds confusing to me, as the PCI bridge used by a Bt87x device 
+should be the same for all three subdevices.
+
+I'm confused...
+
+Regards,
+Mauro
