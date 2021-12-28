@@ -2,160 +2,229 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AA54808FE
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 13:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF87480916
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 13:23:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbhL1MN6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Dec 2021 07:13:58 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:21716 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229941AbhL1MN5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Dec 2021 07:13:57 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1BS9BuTQ011359;
-        Tue, 28 Dec 2021 12:13:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=6YiJWbyPo3eml2lb6VdyBxDoM31BEH4Zr65ZmbYOztQ=;
- b=XLsSJfsKrasgEGvNZTMx76zFIckeVdVz6UvUDVOjVH3FW1w0Lu+Sd/E+qKHStLzjQ5cP
- 1LKipEK/Xv0PrEYUrJU7CvvalZslMjK6r6RovxltjO/G5cXOJADPZP4rGcp7eK2hW0ju
- Xv2mQizgO0loIcwUuUubQnqqRCY55vA8v7zQ7iWbE45AAcE4k/zBbRgOUllAuwmGliXI
- V35qyLSlT1vZ7QumYwPPC59Zth9btULTw59m3AKjymQSrZM81jsSpBXQdTVK6++QNTnm
- h8r5IhwnewMOcsFIETw/ROb6GYeWAlZwR3Z9XalIfnQ2J1td5h3Y7ZgummNyPKUrT6Og zA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7yqykd21-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 12:13:24 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1BSC2c6s019738;
-        Tue, 28 Dec 2021 12:13:24 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3d7yqykd0x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 12:13:23 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1BSCD9c9007392;
-        Tue, 28 Dec 2021 12:13:21 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3d5tx9g852-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Dec 2021 12:13:21 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1BSCDITf40108312
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Dec 2021 12:13:18 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A7B9A4065;
-        Tue, 28 Dec 2021 12:13:18 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D9CDA405B;
-        Tue, 28 Dec 2021 12:13:17 +0000 (GMT)
-Received: from sig-9-145-12-118.uk.ibm.com (unknown [9.145.12.118])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Dec 2021 12:13:17 +0000 (GMT)
-Message-ID: <fcb7c5e1f6dec7906fa29908a7478fa67c5bb255.camel@linux.ibm.com>
-Subject: Re: [RFC 10/32] i2c: Kconfig: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org, Linux I2C <linux-i2c@vger.kernel.org>
-Date:   Tue, 28 Dec 2021 13:13:17 +0100
-In-Reply-To: <CAMuHMdXcfGhVjB2pNB=ct8dExLeh-cY+Vmb0NWpZ2T0bfa8VdA@mail.gmail.com>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
-         <20211227164317.4146918-11-schnelle@linux.ibm.com>
-         <CAMuHMdXcfGhVjB2pNB=ct8dExLeh-cY+Vmb0NWpZ2T0bfa8VdA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: X7kMOSP-gmAj1d7v00_W4PIe2kQ4Mzri
-X-Proofpoint-ORIG-GUID: vIJKj4Y2dO77NX5hMsgCHl6NPC6on-Bj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-28_07,2021-12-28_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- priorityscore=1501 phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999
- suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112280055
+        id S231158AbhL1MXS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Dec 2021 07:23:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33498 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230290AbhL1MXS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Dec 2021 07:23:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADFBFB811BD;
+        Tue, 28 Dec 2021 12:23:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA1EC36AE8;
+        Tue, 28 Dec 2021 12:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640694195;
+        bh=ctzCAJML9qMvzhn8zf3X+uHDG/LU7mhRfvDCv/DU5+c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hsfy1FCV6/kLsTWdRLKKONenuyoAGROPdbP4BiXY3md0f0fAHSml4MZyk5eeTiZAH
+         WtM62Xt0aIc5SnGUDyv62QwtCMFhCfuWKfqLHvudKSV4SvnuVx9gAMXPew7+UQxoVX
+         E+6Uh/qqqgW+1OgG8lfrfv2VvTOc/dhSOSjmTP5L9OuJLS4TnlKuWmZi+lOGny4QGf
+         97iyywzeeW9wr1YxBLaOHMd1djkQOSE43hWX9kEsXt7QFt4qN7iyyfBB2j5+GEDIZL
+         6ct1aQ0h5FMRqsCC8OC0w3PNlgWmc6oZ7gKO2c7PttC6f7QByamDpT5LGxHMfK6Gl1
+         JuvHHWcyM/BbQ==
+Received: from cfbb000407.r.cam.camfibre.uk ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1n2BVZ-00EiPi-8y; Tue, 28 Dec 2021 12:23:13 +0000
+Date:   Tue, 28 Dec 2021 12:23:12 +0000
+Message-ID: <87ilv8zznz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Sunil Muthuswamy <sunilmut@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Sunil Muthuswamy <sunilmut@microsoft.com>
+Subject: Re: [PATCH v7 2/2] PCI: hv: Add arm64 Hyper-V vPCI support
+In-Reply-To: <MWHPR21MB1593272A454D568311C3B254D7429@MWHPR21MB1593.namprd21.prod.outlook.com>
+References: <1639767121-22007-1-git-send-email-sunilmut@linux.microsoft.com>
+        <1639767121-22007-3-git-send-email-sunilmut@linux.microsoft.com>
+        <MWHPR21MB1593272A454D568311C3B254D7429@MWHPR21MB1593.namprd21.prod.outlook.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mikelley@microsoft.com, sunilmut@linux.microsoft.com, kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de, x86@kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, linux-arch@vger.kernel.org, sunilmut@microsoft.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2021-12-28 at 11:21 +0100, Geert Uytterhoeven wrote:
-> Hi Niklas,
+On Mon, 27 Dec 2021 17:38:07 +0000,
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> wrote:
 > 
-> On Mon, Dec 27, 2021 at 5:49 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > those drivers using them.
+> From: Sunil Muthuswamy <sunilmut@linux.microsoft.com> Sent: Friday, December 17, 2021 10:52 AM
 > > 
-> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> 
-> Thanks for your patch!
-> 
-> > --- a/drivers/i2c/busses/Kconfig
-> > +++ b/drivers/i2c/busses/Kconfig
-> > @@ -828,6 +828,7 @@ config I2C_NPCM7XX
+> > Add arm64 Hyper-V vPCI support by implementing the arch specific
+> > interfaces. Introduce an IRQ domain and chip specific to Hyper-v vPCI that
+> > is based on SPIs. The IRQ domain parents itself to the arch GIC IRQ domain
+> > for basic vector management.
 > > 
-> >  config I2C_OCORES
-> >         tristate "OpenCores I2C Controller"
-> > +       depends on HAS_IOPORT
+> > Signed-off-by: Sunil Muthuswamy <sunilmut@microsoft.com>
+> > ---
+> > In v2, v3, v4, v5, v6 & v7:
+> >  Changes are described in the cover letter.
+> > 
+> >  arch/arm64/include/asm/hyperv-tlfs.h |   9 +
+> >  drivers/pci/Kconfig                  |   2 +-
+> >  drivers/pci/controller/Kconfig       |   2 +-
+> >  drivers/pci/controller/pci-hyperv.c  | 241 ++++++++++++++++++++++++++-
+> >  4 files changed, 251 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/arm64/include/asm/hyperv-tlfs.h b/arch/arm64/include/asm/hyperv-tlfs.h
+> > index 4d964a7f02ee..bc6c7ac934a1 100644
+> > --- a/arch/arm64/include/asm/hyperv-tlfs.h
+> > +++ b/arch/arm64/include/asm/hyperv-tlfs.h
+> > @@ -64,6 +64,15 @@
+> >  #define HV_REGISTER_STIMER0_CONFIG	0x000B0000
+> >  #define HV_REGISTER_STIMER0_COUNT	0x000B0001
+> > 
+> > +union hv_msi_entry {
+> > +	u64 as_uint64[2];
+> > +	struct {
+> > +		u64 address;
+> > +		u32 data;
+> > +		u32 reserved;
+> > +	} __packed;
+> > +};
+> > +
+> >  #include <asm-generic/hyperv-tlfs.h>
+> > 
+> >  #endif
+> > diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+> > index 43e615aa12ff..d98fafdd0f99 100644
+> > --- a/drivers/pci/Kconfig
+> > +++ b/drivers/pci/Kconfig
+> > @@ -184,7 +184,7 @@ config PCI_LABEL
+> > 
+> >  config PCI_HYPERV
+> >  	tristate "Hyper-V PCI Frontend"
+> > -	depends on X86_64 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
+> > +	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && SYSFS
+> >  	select PCI_HYPERV_INTERFACE
+> >  	help
+> >  	  The PCI device frontend driver allows the kernel to import arbitrary
+> > diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
+> > index 93b141110537..2536abcc045a 100644
+> > --- a/drivers/pci/controller/Kconfig
+> > +++ b/drivers/pci/controller/Kconfig
+> > @@ -281,7 +281,7 @@ config PCIE_BRCMSTB
+> > 
+> >  config PCI_HYPERV_INTERFACE
+> >  	tristate "Hyper-V PCI Interface"
+> > -	depends on X86 && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN && X86_64
+> > +	depends on ((X86 && X86_64) || ARM64) && HYPERV && PCI_MSI && PCI_MSI_IRQ_DOMAIN
+> >  	help
+> >  	  The Hyper-V PCI Interface is a helper driver allows other drivers to
+> >  	  have a common interface with the Hyper-V PCI frontend driver.
+> > diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> > index ead7d6cb6bf1..02ba2e7e2618 100644
+> > --- a/drivers/pci/controller/pci-hyperv.c
+> > +++ b/drivers/pci/controller/pci-hyperv.c
+> > @@ -47,6 +47,8 @@
+> >  #include <linux/msi.h>
+> >  #include <linux/hyperv.h>
+> >  #include <linux/refcount.h>
+> > +#include <linux/irqdomain.h>
+> > +#include <linux/acpi.h>
+> >  #include <asm/mshyperv.h>
+> > 
+> >  /*
+> > @@ -614,7 +616,236 @@ static int hv_msi_prepare(struct irq_domain *domain, struct device *dev,
+> >  {
+> >  	return pci_msi_prepare(domain, dev, nvec, info);
+> >  }
+> > -#endif /* CONFIG_X86 */
+> > +#elif defined(CONFIG_ARM64)
+> > +/*
+> > + * SPI vectors to use for vPCI; arch SPIs range is [32, 1019], but leaving a bit
+> > + * of room at the start to allow for SPIs to be specified through ACPI and
+> > + * starting with a power of two to satisfy power of 2 multi-MSI requirement.
+> > + */
+> > +#define HV_PCI_MSI_SPI_START	64
+> > +#define HV_PCI_MSI_SPI_NR	(1020 - HV_PCI_MSI_SPI_START)
+> > +#define DELIVERY_MODE		0
+> > +#define FLOW_HANDLER		NULL
+> > +#define FLOW_NAME		NULL
+> > +#define hv_msi_prepare		NULL
+> > +
+> > +struct hv_pci_chip_data {
+> > +	DECLARE_BITMAP(spi_map, HV_PCI_MSI_SPI_NR);
+> > +	struct mutex	map_lock;
+> > +};
+> > +
+> > +/* Hyper-V vPCI MSI GIC IRQ domain */
+> > +static struct irq_domain *hv_msi_gic_irq_domain;
+> > +
+> > +/* Hyper-V PCI MSI IRQ chip */
+> > +static struct irq_chip hv_arm64_msi_irq_chip = {
+> > +	.name = "MSI",
+> > +	.irq_set_affinity = irq_chip_set_affinity_parent,
+> > +	.irq_eoi = irq_chip_eoi_parent,
+> > +	.irq_mask = irq_chip_mask_parent,
+> > +	.irq_unmask = irq_chip_unmask_parent
+> > +};
+> > +
+> > +static unsigned int hv_msi_get_int_vector(struct irq_data *irqd)
+> > +{
+> > +	return irqd->parent_data->hwirq;
+> > +}
+> > +
+> > +static void hv_set_msi_entry_from_desc(union hv_msi_entry *msi_entry,
+> > +				       struct msi_desc *msi_desc)
+> > +{
+> > +	msi_entry->address = ((u64)msi_desc->msg.address_hi << 32) |
+> > +			      msi_desc->msg.address_lo;
+> > +	msi_entry->data = msi_desc->msg.data;
+> > +}
+> > +
+> > +/*
+> > + * @nr_bm_irqs:		Indicates the number of IRQs that were allocated from
+> > + *			the bitmap.
+> > + * @nr_dom_irqs:	Indicates the number of IRQs that were allocated from
+> > + *			the parent domain.
+> > + */
+> > +static void hv_pci_vec_irq_free(struct irq_domain *domain,
+> > +				unsigned int virq,
+> > +				unsigned int nr_bm_irqs,
+> > +				unsigned int nr_dom_irqs)
+> > +{
+> > +	struct hv_pci_chip_data *chip_data = domain->host_data;
+> > +	struct irq_data *d = irq_domain_get_irq_data(domain, virq);
 > 
-> While drivers/i2c/busses/i2c-ocores.c does use {in,out}(), I doubt this
-> is used to access legacy I/O space.
+> FWIW, irq_domain_get_irq_data() can return NULL.   Maybe that's an
+> error in the "should never happen" category.   Throughout kernel code,
+> some callers check for a NULL result, but a lot do not.
 
-Hmm, it does use i2c->iobase for inb()/outb() but i2c->base for
-ioreadXY()/iowriteXY(). And as it gets i2c->iobase from
-platform_get_resource(pdev, IORESOURCE_IO, 0) I'd think that is an I/O
-resource/space. It does look like some kind of fallback path though,
-the IORESOURCE_IO is only looked at if accessing an IORESOURCE_MEM
-fails so maybe that should instead be ifdeffed.
+irq_domain_get_irq_data() returns NULL when there is no mapping. If
+this happens here, then the allocation tracking has gone horribly
+wrong, and I certainly want to see the resulting Oops rather than
+papering over it.
 
-> 
-> >         help
-> >           If you say yes to this option, support will be included for the
-> >           OpenCores I2C controller. For details see
-> > @@ -1227,6 +1228,7 @@ config I2C_CP2615
-> >  config I2C_PARPORT
-> >         tristate "Parallel port adapter"
-> >         depends on PARPORT
-> > +       depends on HAS_IOPORT
-> 
-> Same as PRINTER: shouldn't this work with all parport drivers?
+	M.
 
-Agree, will drop.
-
-> 
-> >         select I2C_ALGOBIT
-> >         select I2C_SMBUS
-> >         help
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
+-- 
+Without deviation from the norm, progress is not possible.
