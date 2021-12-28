@@ -2,148 +2,234 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5E6480BC3
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 18:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A47480BF0
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 18:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235844AbhL1RFG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Dec 2021 12:05:06 -0500
-Received: from mga09.intel.com ([134.134.136.24]:23840 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233280AbhL1RFF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Tue, 28 Dec 2021 12:05:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640711105; x=1672247105;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=KHhXdEfIwTp7IIrrW70KmlJrU5+AcMwf8sgzb0u1BTQ=;
-  b=BQDV12zufIn3y7kViZ5Jpt3ulVBzf1xgHYmdvpui4sYL++yBRhMLLgZl
-   +In54oVBpemChMdhPSSao9SBGGuQnw129cutz7Qf/nNUzRCAFu7YWz9R2
-   GxD3zZn3E64NTF62bjny9/LAO6irwQAZcUtaMYwEa2FUmSNP83yXJQxHU
-   0Z9wgDM+bnvLBFseQ3FQ4ne1jZh4VKaDmMBeEuEKGlgQCkglp0egUZOAw
-   Uc7z7Dlj7IfP9sX+k+2BvvismjYilXtXFrvVgBSma1hHoodEN3fhtyl1j
-   cgprRmSQTooX90qS62YE/hsf/m7imZoI75H3rmwRsPJBt8R2BRSmon1qS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10211"; a="241195850"
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="241195850"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2021 09:05:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,242,1635231600"; 
-   d="scan'208";a="572369723"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Dec 2021 09:04:56 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1BSH4sNa000463;
-        Tue, 28 Dec 2021 17:04:54 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        id S236083AbhL1RNV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Dec 2021 12:13:21 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:55424 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233056AbhL1RNU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Dec 2021 12:13:20 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B9F3B8168C;
+        Tue, 28 Dec 2021 17:13:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC36C36AF0;
+        Tue, 28 Dec 2021 17:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640711595;
+        bh=T3HUEllg1Pw7vYBFjSPgjWTc0i5UwlDCIB5VYMi9zQk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aC2AgnEYsVn8ajMr8WXjrdgvYdxaICxzBEIqsQvRNJDdSNTmgYKxxE13ldY57jvt6
+         wtSnEDHwfFeP7WPa1v2BXHsL164j0gjjc1waprQ7FxnadoJwpFcS8YPlJ1fRUUEgNG
+         1n8B6ybs2qiYbmmANluzHzAR+HA2JhBdfnB5r0OInhaGxnhy9LnnhUQ0kSAmYqyjvt
+         U8WA12Q8XWC6B4+2O+Uw+3c+bVIkQEInrB+E4lsE9bM/HIbStWglKd4TfiZn9oNjTC
+         71qzDaDkiqAQz8JEolGNowQ5U8m10M955+gDpfmp1KuoHVnN/ysNieqn8T0FB5YrhX
+         IQJmZwEC33MlQ==
+Date:   Tue, 28 Dec 2021 18:12:58 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v9 01/15] modpost: fix removing numeric suffixes
-Date:   Tue, 28 Dec 2021 18:03:08 +0100
-Message-Id: <20211228170308.1454063-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YcovajZkEd0WY8p4@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-2-alexandr.lobakin@intel.com> <YcShenJgaOeOdbIj@zn.tnic> <20211227182246.1447062-1-alexandr.lobakin@intel.com> <YcovajZkEd0WY8p4@zn.tnic>
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-input@vger.kernel.org, netdev@vger.kernel.org,
+        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+Message-ID: <20211228181107.2d476028@coco.lan>
+In-Reply-To: <4b630b7b87bd983291f628c42a1394fc0d2d86bd.camel@linux.ibm.com>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+        <20211227164317.4146918-2-schnelle@linux.ibm.com>
+        <YcrJAwsKIxxX18pW@kroah.com>
+        <20211228101435.3a55b983@coco.lan>
+        <b1475f6aecb752a858941f44a957b2183cd68405.camel@linux.ibm.com>
+        <20211228135425.0a69168c@coco.lan>
+        <4b630b7b87bd983291f628c42a1394fc0d2d86bd.camel@linux.ibm.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de>
-Date: Mon, 27 Dec 2021 22:26:02 +0100
+Em Tue, 28 Dec 2021 16:06:44 +0100
+Niklas Schnelle <schnelle@linux.ibm.com> escreveu:
 
-> On Mon, Dec 27, 2021 at 07:22:46PM +0100, Alexander Lobakin wrote:
-> > It's just a couple lines below. I trigger this using `-z uniq-symbol`
-> > which uses numeric suffixes for globals as well.
-> 
-> Aha, so that's for the fgkaslr purposes now.
+(on a side note: the c/c list of this patch is too long. I would try to
+avoid using a too long list, as otherwise this e-mail may end being rejected
+by mail servers)
 
-Well, linking using unique names is meant to be used always
-when available and livepatching is enabled, at least I hope so.
+> On Tue, 2021-12-28 at 13:54 +0100, Mauro Carvalho Chehab wrote:
+> >  
+> ---8<---
+> >     
+> > > > > All you really care about is the "legacy" I/O spaces here, this isn't
+> > > > > tied to PCI specifically at all, right?
+> > > > > 
+> > > > > So why not just have a OLD_STYLE_IO config option or something like
+> > > > > that, to show that it's the i/o functions we care about here, not PCI at
+> > > > > all?
+> > > > > 
+> > > > > And maybe not call it "old" or "legacy" as time constantly goes forward,
+> > > > > just describe it as it is, "DIRECT_IO"?    
+> > > > 
+> > > > Agreed. HAVE_PCI_DIRECT_IO (or something similar) seems a more appropriate
+> > > > name for it.
+> > > > 
+> > > > Thanks,
+> > > > Mauro    
+> > > 
+> > > Hmm, I might be missing something here but that sounds a lot like the
+> > > HAS_IOPORT option added in patch 02.
+> > > 
+> > > We add both LEGACY_PCI and HAS_IOPORT to differentiate between two
+> > > cases. HAS_IOPORT is for PC-style devices that are not on a PCI card
+> > > while LEGACY_PCI is for PCI drivers that require port I/O.   
+> > 
+> > I didn't look at the other patches on this series, but why it is needed
+> > to deal with them on a separate way? Won't "PCI" and "HAS_IOPORT" be enough? 
+> > 
+> > I mean, are there any architecture where HAVE_PCI=y and HAS_IOPORT=y
+> > where LEGACY_PCI shall be "n"?  
+> 
+> In the current patch set LEGACY_PCI is not currently selected by
+> architectures, though of course it could be if we know that an
+> architecture requires it. We should probably also set it in any
+> defconfig that has devices depending on it so as not to break these.
+> 
+> Other than that it would be set during kernel configuration if one
+> wants/needs support for legacy PCI devices. For testing I ran with
+> HAVE_PCI=y, HAS_IOPORT=y and LEGACY_PCI=n on both my local Ryzen 3990X
+> based workstation and Raspberry Pi 4 (DT). I guess at the moment it
+> would make most sense for special configs such as those tailored for
+> vitualization guets but in the end that would be something for
+> distributions to decide.
+
+IMO, it makes sense to have a "default y" there, as on systems that
+support I/O space, disabling it will just randomly disable some drivers
+that could be required by some hardware. I won't doubt that some of 
+those could be ported from using inb/outb to use, instead, readb/writeb.
 
 > 
-> > It fixes a commit dated 2014, thus Cc:stable. Although the
-> > remove_dot() might've been introduced for neverlanded GCC LTO, but
-> > in fact numeric suffixes are used a lot by the toolchains in regular
-> > builds as well. Just not for globals, that's why it's "well hidden".
-> 
-> Does "well hidden" warrant a stable backport then? Because if no
-> toolchain is using numeric suffixes for globals, then no need for the
-> stable tag, I'd say.
+> Arnd described the options here:
+> https://lore.kernel.org/lkml/CAK8P3a3HHeP+Gw_k2P7Qtig0OmErf0HN30G22+qHic_uZTh11Q@mail.gmail.com/
 
-Hmm, makes sense. The fact that I haven't seen any similar reports
-or issues (even on LTO builds) sorta says there are no benefits from
-backporting this.
-Ok, I'll drop the tag. It's never too late anyway to port this in
-case someone will face it.
+Based on Arnd's description, LEGACY_PCI should depend on HAS_IOPORT.
+This is missing on patch 1. You should probably reorder your patch
+series to first create HAS_IOPORT and then add LEGACY_PCI with
+depends on, as otherwise it may cause randconfig build issues
+at robots and/or git bisect.
+
+I would also suggest to first introduce such change and then send
+a per-subsystem LEGACY_PCI patch, as it would be a lot easier for
+maintainers to review.
 
 > 
-> > I thought it's a common saying in commit messages, isn't it?
+> >   
+> > > This
+> > > includes pre-PCIe devices as well as PCIe devices which require
+> > > features like I/O spaces. The "legacy" naming is comes from the PCIe
+> > > spec which in section 2.1.1.2 says "PCI Express supports I/O Space for
+> > > compatibility with legacy devices which require their use. Future
+> > > revisions of this specification may deprecate the use of I/O Space."  
+> > 
+> > I would still avoid calling it LEGACY_PCI, as this sounds too generic.
+> > 
+> > I didn't read the PCI/PCIe specs, but I suspect that are a lot more
+> > features that were/will be deprecated on PCI specs as time goes by.
+> > 
+> > So, I would, instead, use something like PCI_LEGACY_IO_SPACE or 
+> > HAVE_PCI_LEGACY_IO_SPACE, in order to let it clear what "legacy"
+> > means.  
 > 
-> Lemme give you my canned and a lot more eloquent explanation for that:
-> 
-> "Please use passive voice in your commit message: no "we" or "I", etc,
-> and describe your changes in imperative mood.
-> 
-> Also, pls read section "2) Describe your changes" in
-> Documentation/process/submitting-patches.rst for more details.
-> 
-> Also, see section "Changelog" in
-> Documentation/process/maintainer-tip.rst
-> 
-> Bottom line is: personal pronouns are ambiguous in text, especially with
-> so many parties/companies/etc developing the kernel so let's avoid them
-> please."
-> 
-> Thx.
+> Hmm, I'd like to hear Bjorn's opinion on this. Personally I feel like
+> LEGACY_PCI is pretty clear since most devices are either pre-PCIe
+> devices or a compatibility feature allowing drivers for a pre-PCIe
+> device to work with a PCIe device.
 
-Ah, you're right. "Common used" doesn't mean "correct". I'll fix it
-in the next spin being published after accumulating a bunch more
-comments.
-Thanks!
+That's the main point: it is *not* disabling pre-PCIe devices or
+even legacy PCI drivers. It just disables a random set of drivers just
+because they use inb/outb instead of readb/writeb. It keeps several pure 
+PCI drivers selected, and disables some PCIe for no real reason.
 
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+Just to give one example, this symbol:
 
-Al
+> diff --git a/drivers/media/cec/platform/Kconfig b/drivers/media/cec/platform/Kconfig
+> index b672d3142eb7..5e92ece5b104 100644
+> --- a/drivers/media/cec/platform/Kconfig
+> +++ b/drivers/media/cec/platform/Kconfig
+> @@ -100,7 +100,7 @@ config CEC_TEGRA
+>  config CEC_SECO
+>  	tristate "SECO Boards HDMI CEC driver"
+>  	depends on (X86 || IA64) || COMPILE_TEST
+> -	depends on PCI && DMI
+> +	depends on LEGACY_PCI && DMI
+>  	select CEC_CORE
+>  	select CEC_NOTIFIER
+>  	help
+
+Disables HDMI CEC support on some Intel motherboards.
+Any distro meant to run on generic hardware should keep it selected.
+
+I can see some value of a "PCI_LEGACY" option to disable all
+non-PCIe drivers, but this is not the case here.
+
+Thanks,
+Mauro
