@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30474805E2
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 04:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62784805E4
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Dec 2021 04:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234720AbhL1DdG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Dec 2021 22:33:06 -0500
+        id S234729AbhL1DdH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Dec 2021 22:33:07 -0500
 Received: from mail-centralusazon11021015.outbound.protection.outlook.com ([52.101.62.15]:54485
         "EHLO na01-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234715AbhL1DdF (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 27 Dec 2021 22:33:05 -0500
+        id S234716AbhL1DdG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 27 Dec 2021 22:33:06 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iMft7cvFeEGrW4Lj55OR4Kb2WceKiXME/W+omUh/8cKh4wRmF9u4yRtRK0oIZaqY3cX6mmE2LDYsS6iYu8Igh0EWDEizRminsm6m5YByNg1pK+spaREe2jacU6hU0+hLAQbkDHMe1J0gMdap41z34+rHI5RbcF8auEA2M9w+p9MrE2Ihq2RF0MURKAYG660e421jtBjUFFv2vofvvQ5yAtbTa3bo/JQAmO6OhQ2EITN1+oZkIXiQH1Y0RDI/qnif/ZCpANLZ9tjMHSY+jn8fic5gGMxZye3SbTVepglXhhVSSGCJrvO6iTauLfmAoGCoBPAm1jc65Q/rfgihdU0dBg==
+ b=euSUZsdD8Aba+pTgEX7+WqW1po7Aw9SUUfeSvGd11u+02DEp0djb5tMADzORwFAKKpKwiZJcxGpYbdADFvVLzBHav9J/mQeib8BSqa1AsYGHN0cT+vFDnr8hfGfKArazgacixxCxuj3x7rWKTmf4b1OQ2uH7O0f343buB5Hx3JC76TVcwH/cr7SjUFh8A5ELGfUcx23nxJlmSJF+HrQqrIixmPhdGnrkCNeiFp3c1f2E6U70WUA206jQwSZrNBLgbgid6jbJpEUmE4lcASpaeTbQuxHwoQAOLNKUOwaudE3qGhlfmVrnnB4Coo5qEGErl/ryf//czBUaQfwoZUWluw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zqqbI4GcI6TC1MzwgiDGpGcXNoYXn0Wcos26jiCyinE=;
- b=b3KW/KVbCeGBTnyApyAGWqV+HOPkWQIEZcIxkMWksg1lPN7ysMAI39Gy9j04ReSyNLxpPcMRFYZkOoCYERnbVL1T6XfikwxPGWwxP4WLuSFcGFrN9ZZPyHcDPW81Rgqi+zE6RVcrP3+kVBXDLzcd4TobNBfQ7xUXZbBO1PqOfIIrwYS9lFqwIi/ea18+MfJNxZj7IjWUHfLbSMoObRE5bvDSb3eYRhyMwxu6I3/ZlmDW8JQ7A8KDBvOQgE7f7m+k7XsVvDNPtvEKGgP/Hj9tSynftKGQw4S9PztC47scMdxpv1SK0ufJ38KB7kKSNNWRkmg8HkmqtT1VbOeEeMYJNw==
+ bh=DZm2e7r2jSKfToR3pCci7F5GeR8cAIItQwTUOunAJxo=;
+ b=R6wpd+DYniJzgyNgKMywHw8FXEWnPYW3PATKjRUcYWPDvTqtgLNl/MTrGkCKjO8QIbVm5OKzGJABlEf4X+g9Z3LIqcyBziVfsmriB015yBbzUVN2nqUSmtgRQrQggm6NWI2njioLrdmb0laUNrhe+1aDthO8JY7M1hQBJ3oy554DtvZxx2dCJ2RGs2Y+RxjGfChdNL+cSRrNBQ+1FaPC9+pDCHGfxNqwlUB8hg9mLMmCNgXygmwAAaO3x27zhQjrKnHrNr3gaY9yBC/ROgwDOciHI6wF7ZZ5flmBNrQdLVm5gL8RDcEEO/vxkvqm4lOyR9D7RCmd+Puxh/4KuFgt6Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=microsoft.com; dmarc=pass action=none
  header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zqqbI4GcI6TC1MzwgiDGpGcXNoYXn0Wcos26jiCyinE=;
- b=YYq1F7L5LU7BH2E0bzGxTJ/thx3aQLEJ1Zz+NPnhD8jZJUaB+tini1kZR2bdoUAz9E6leazfLs/rzrM7FNws4E+iJ6KRpYBRZv4gNJZZZqdYsPdMpoARJVfO0ONdw7qwyWCNnx+VyGQYWpGKo2/r7Jez/O0WQy+JZuj+V/8SzH4=
+ bh=DZm2e7r2jSKfToR3pCci7F5GeR8cAIItQwTUOunAJxo=;
+ b=iWKX+Qo86/ANBM61iEUsT+bChTElWzDEJEH0HtAW+oy5A5vAyl2TObTgxp//dORBaLjMvf1s6sW++dnRVxRS+d5Qga8H9XFPaQS16C+3tFf1IJRq8V48XLI5+7DSomorxek7HJL/LyIz628mzAoXlOGfdTeK5lhQenG340IJTSg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=microsoft.com;
 Received: from DM6PR21MB1514.namprd21.prod.outlook.com (2603:10b6:5:22d::11)
  by MWHPR21MB0477.namprd21.prod.outlook.com (2603:10b6:300:ec::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4867.3; Tue, 28 Dec
- 2021 03:32:54 +0000
+ 2021 03:32:56 +0000
 Received: from DM6PR21MB1514.namprd21.prod.outlook.com
  ([fe80::4c2:54c4:85bc:dd62]) by DM6PR21MB1514.namprd21.prod.outlook.com
  ([fe80::4c2:54c4:85bc:dd62%6]) with mapi id 15.20.4867.003; Tue, 28 Dec 2021
- 03:32:54 +0000
+ 03:32:56 +0000
 From:   Michael Kelley <mikelley@microsoft.com>
 To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
@@ -45,10 +45,12 @@ To:     sthemmin@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
         hpa@zytor.com, arnd@arndb.de, tianyu.lan@microsoft.com,
         linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
 Cc:     mikelley@microsoft.com, linux-arch@vger.kernel.org
-Subject: [PATCH 1/2] Drivers: hv: Fix definition of hypercall input & output arg variables
-Date:   Mon, 27 Dec 2021 19:31:54 -0800
-Message-Id: <1640662315-22260-1-git-send-email-mikelley@microsoft.com>
+Subject: [PATCH 2/2] x86/hyperv: Fix definition of hv_ghcb_pg variable
+Date:   Mon, 27 Dec 2021 19:31:55 -0800
+Message-Id: <1640662315-22260-2-git-send-email-mikelley@microsoft.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1640662315-22260-1-git-send-email-mikelley@microsoft.com>
+References: <1640662315-22260-1-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain
 X-ClientProxiedBy: MW4PR03CA0266.namprd03.prod.outlook.com
  (2603:10b6:303:b4::31) To DM6PR21MB1514.namprd21.prod.outlook.com
@@ -56,109 +58,103 @@ X-ClientProxiedBy: MW4PR03CA0266.namprd03.prod.outlook.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5994a4c1-b818-4ea1-e870-08d9c9b2bbfa
+X-MS-Office365-Filtering-Correlation-Id: 4e06747f-8842-40f0-1bc4-08d9c9b2bd36
 X-MS-TrafficTypeDiagnostic: MWHPR21MB0477:EE_
 X-MS-Exchange-AtpMessageProperties: SA|SL
-X-Microsoft-Antispam-PRVS: <MWHPR21MB0477A82054B44DF9CFCA80D7D7439@MWHPR21MB0477.namprd21.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Microsoft-Antispam-PRVS: <MWHPR21MB047735CC1FAF94ED7B729FE4D7439@MWHPR21MB0477.namprd21.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NZDNbg2iHoy801j1dqBe8PrJDxEDosjfdvFs/IYVDw6wqqhWbRBalXPnr6wLUKkWTQsEnD40NUrRreg7FsZhkeEIGLnzxLBB8Ln8clfmAM39gLDtZdHsxCn8vcRuy6SlXY8ipAzd7HYakhYgB2g8PcaI8CawLg0oTErnLn7LpAySsLUWq9L3iBavrBmSKCeamge++aYCJW1+S7V5sKiNylYd9uL+9OagSrsRYItJpIEEQT2EmjqM4MLXn/lM72oRrbXa1CsHQ9D/wZfKqptHt1Hm9ANIVH5CL0Bq9C2DRHO3Z9eAdV8emN7T1pZDcffnY1ZN+ltQv9AKpmq6QB6kMgrkmMSZZPP+CPH1U8m7EZOITlfyqRn+pDKFsZSnffnr/ygeYakbw0OyVoJO53DfXdvMCv7A4vocJ3b6DlPT14IMZbmYpKdo99V1pAGmbzOF1GAG5MRD4DmisX3p+tphP7ixpTerU9VLj1MfnOu3LSwWFoHFC3s6G8f8NtlDiFHyyPAjaZSH6weSYHRpwfoKoIaJQsmQfOGm9WKARqRb3rJdSePdwEPx8EzBBbrSW6GjCA1S2AT6x0E4Q1Yi1TmfcztB5j6bgv6a+AAhq9Rk5xrqnOdP5+z99HmEsI+7dZ1AdKgd1029Gnedw+Jj4Lo6ioywShfExgwVz5uzZqbGuLr3HtUP+TFs2yMF+sFuew8PxTb3NV4a9QohpyM1QSlWJTm4FUSKkzrcoe+rwZCbcTGJsdmIVqs84eo6ZKrmlwSyDJsogzxO67FB19cZYSAbGQ==
+X-Microsoft-Antispam-Message-Info: gmw60Yz1Buhe+yrLtqD/jytrjS3h6ltp2ZL6N4GNo89RxQRq4E3mlL6Lq+btU4po3AKIxiWi8killOgBedG5oo29BSScnzPHMaKlf6efLQ6va0Rqc1CD7MDLI1iaeWzLzu6Do6tYw8xQJmbLcPYozGwDI1uGmV7ogUnXH4lu7wPAuDzWUb0WaFoxHhqbGV4Saup/A06c4kW/3WtIabstbeI6TCYO3NUVF0qMJAyAbRhQjgjOYjOzuGbsxW36Y3h0iuOqoRfwxX/Y6jlF842ezcuUuuXiUIbQZLnTRxBmfFNuhFwBWFDRDWjzmq+SEEigz3hvs6Cl5x1ZiZNmj5fM5MpwamHkeq5CMjpw+5ohHFyXtmvK7S+ci76/P5ulmVdftfLUEaJlRc1BceIpEPVKYSbqvzxArGNZ9vXL8ZVUKWK60hKm3RcRafJrfay+USVNq0ykKK2vmqmiHvTwnMJRreWhaE5Q7HH0h8+57VNfup6ZxUEmuWwkpQvMt1AWlSGmYD8ieTwF2oXAEkQT9mGHVTYsxOTa6DLbFcowk37Gx0KZOzNgcyWlGMgjGcFi6RiKfIrxMvxBwdo5X4U8eLM3f3qm3kPaPCkNXGknLfL3WlFNA5CUZzuovH4RMHkQHCR03WDTvZ0h0kW648oyHa7IimWkjEHwzFHBQKUu+hiSNz4buUGVZcajp0VYj049qHQ2koTgsXic7hnhQObzCKw43AxbbvJnglxBOVgW8j7QumrYgLBd/gxib/WiWEEVEPP79ldEDCc3UqJg2GcN/774Tw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1514.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6512007)(66946007)(921005)(52116002)(6486002)(82950400001)(82960400001)(86362001)(316002)(36756003)(2906002)(38100700002)(6506007)(38350700002)(66476007)(66556008)(5660300002)(2616005)(4326008)(7416002)(508600001)(8936002)(10290500003)(83380400001)(8676002)(26005)(186003)(20210929001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RbpZsxqLxGyTYyX8MS2apDl7ieMWTpohFXYgkI/DAkPMh1yCh722ZEQmyeUw?=
- =?us-ascii?Q?/Tx8mtskookqQfM8Zj1bEUj4Gx4cGwvOhKm1qWLdbalR3yyxVPBr1efOHAPB?=
- =?us-ascii?Q?Qyzb3a+uIzDRgvbC1Hllbu0N53a3sbzfsdu1+ZdsVPy0/jeLPOKtc23Jz0uZ?=
- =?us-ascii?Q?R0z8XLK7CN8PAITY6kjImdwTkTBehEGo4D61FzFyfmcKks7jeqlUlnxSuxkL?=
- =?us-ascii?Q?TI9AdbT4e664Iy7WM74Zn9e2S34kmS/SUM9aQpU/qceDlV05388Rq+TZnGz+?=
- =?us-ascii?Q?E5drIl3c7N6MuK5FzY3bu3RtNrWbxrtLXV36DZ9BivPUpGIJjXqgEftoGHzS?=
- =?us-ascii?Q?LMNkwuvwh7IsILlfUzq4exjdohtfCSwwPDBfbGtTIeVKkhMTvMWKPVZq1SFG?=
- =?us-ascii?Q?I9S2LTHNfK44Y7V3VJ/PGekeD+AglrolQk13Zgl74KhkbiXh5OYf8IBqainw?=
- =?us-ascii?Q?zHXu2bndse4tAuoZd4WDnBQOt28U8Btw3g4ma2d28CYpgldRUYF8r6L/EpGV?=
- =?us-ascii?Q?gEnuxGUlknMFsze77HDyGfOLgvzEf2C0An+gOh3dx9ncwTkOMx5pZzXCBAx4?=
- =?us-ascii?Q?vx3T7aU0GyGrBRUlLjIOu2p+rbaCSF0kDOGmtA/thlk2eMY6U15SKa97y0Vy?=
- =?us-ascii?Q?HrFUYYFW3DcvLin3MRfjQzUXkEVXmogDzU9BYf4ibPBzHxdF/TrzFQvreyht?=
- =?us-ascii?Q?uBVYGuQk2tKsUM0ohaIhzoikQMeek0AAgawfw+c773gFFxkBX8TZ/dIFhHNE?=
- =?us-ascii?Q?jebRCWCZn63y27kGP7fU0WpUj4fiJc/OTXqIkLm1lXYJk7BH7BVwuJBWFV3V?=
- =?us-ascii?Q?yPmkhMEvmfBq945TE+0kDYsDC8oBR1dIUqOvi+zGYo/OAXtkv9h5mhQiaTa4?=
- =?us-ascii?Q?5qpLPD/0+suIOJinMDNAw2iWALr0wYpcJR1LtXOOj4VBp8OkmmqTiWsPnvAV?=
- =?us-ascii?Q?mY5BxFYbv/JgewNTk6RShIj6FUK3Pl5VAITKCWljk8oEkHQpYaJyNWiswovm?=
- =?us-ascii?Q?2GtKPtfQB4WIvdicaaT2QHQ1nimILE2iwOgG8gGzrc34VGvrTF0dxvIgKlIs?=
- =?us-ascii?Q?+Czf5MjX8aih7rK7bUWrTEe8djMuuLAbDJYpFV3VQ9yzqKgKI6NHLSFmgbNA?=
- =?us-ascii?Q?b0j5w52bexWNOJSAf45eYMrAbqnSf6C9tMQ3yQ+tnh6TdGLS9yMsVZutQkTG?=
- =?us-ascii?Q?m8UwibHS6Acw7mjHWohxoLsyXnae5d/jS8R0nMj2+Y4N5rA4adB3B1w/OT33?=
- =?us-ascii?Q?31cKYk80lrkCzQ+34CEUFBQ0jsOwmX8XF6bhA+OwLp9dJ/BIBbTErrlvFjZM?=
- =?us-ascii?Q?i45osSwx9m6yYIoSrvWMURKqYeZzWu9Njw35VbdSermCH1rzuCD4w70XYAH7?=
- =?us-ascii?Q?iec0LiyA7qCxoMAiokfRVJmiUuJQCjG1/NnRKMzlNekvwO9rHh1KAZEEwFAR?=
- =?us-ascii?Q?q0k+AR7P4UrD1Kd2+576+StBqYaGh0A5PuVNjKNeriI9BYMUUgh/KwKWuKEY?=
- =?us-ascii?Q?+VscMddrZJdpritmkrmKwzqISxFzvA6tYeYqnVkgW65QQxs+wlf8Ex+Rqy2y?=
- =?us-ascii?Q?ftzFVfxwm3ZRTrC9+d2A3iDh3NwWFXN/9ebGDIv07vGjLmRGUf1SjBJYS40l?=
- =?us-ascii?Q?Et2AXOv7psXAay9DNUMybZA=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v0hP93clAjtdTpyeT2ZHjYPHpS4x9QYDABLSrernMpu9p1C3amw+X0g3raEn?=
+ =?us-ascii?Q?s5V5t1syoSFg03FlpDOwsO5jevtKWDVXWViJKFmnTU9foZeyFFz/cmcLCH1t?=
+ =?us-ascii?Q?iLWxjwJWOM4gWfCw47spqAsMrD20WyCKOCy3ofxBYNHd5vi0Dv0vBIbKX30d?=
+ =?us-ascii?Q?gnPFBJiSfzW+0J4XGPvXAn2U+x6ILvlfMVmHIcffGe5g6/oOPzWggTk3OsQ7?=
+ =?us-ascii?Q?g3qU/SVUzkJf3BrFedNpBSJzdbcNaLIrweMoEI0KCji6k6xkVq87OFfzMx0X?=
+ =?us-ascii?Q?T7nxfpAgS5bI76gcsaQylAjR5goirnW0DPW8ssqcrP7Il6Dmt3nAKRbvgQWC?=
+ =?us-ascii?Q?24Yy+UpaIoqiluSkHpBhd7C4p/Yqmy0UE4NNLBj22RIDh2DarRzjoYj9lgbg?=
+ =?us-ascii?Q?EN6ztKO8gKq+xS0is9QtEhLrjhRmReq7sXXtDLo23qO2VaMYqMOSeTxvEbcC?=
+ =?us-ascii?Q?mUMmQNzwIklPjs66enZxBt6PxIp/hceqT6Cockjsu10DrDh1jkAFl7rg0woN?=
+ =?us-ascii?Q?KmMaX5bxplKTzKJqGhbnKBbfUAqF96Bkyqh9CYvGq/dNeCyUCFCrO5ostSMX?=
+ =?us-ascii?Q?WW4Vs+yL9KoGQLGw9q4YEPOmzREPuK/Gslwb9Oy3+dmqWjGYbwUN1tt+xeMV?=
+ =?us-ascii?Q?1ckDI5jLMJWBSxTyAlB0tos2FLOGlB7Kbju95EZeX0eU2BCVNr37bY1S2Ni5?=
+ =?us-ascii?Q?nVg7WQQbweuTGWjqOnVr5GTonbfhlX+NW61SxMRnuuQYeqWTJ4fm/QReO96I?=
+ =?us-ascii?Q?63AESB+3hU/AlTLwUEe0ArvOZHZZ7r7AjfQF6ezwDf/DtWEbIAtSTbMF8IAp?=
+ =?us-ascii?Q?VICjbLbPSRzqPMgWDKoyrVft/Yq9PbKT7W6fKa0KvsL8/TuLKDuOwB9Ux0Be?=
+ =?us-ascii?Q?OhwDOLbi97KF2A0IHGasyHRsae/j1kXJQkkZX3ruZfxVQLCdMufiyUznUVY4?=
+ =?us-ascii?Q?Miky30KmgDNCFcWEBSeD+RaCkkVuN7ZzzftbDZ5L+/V4G71wRbagby7Jz3PJ?=
+ =?us-ascii?Q?dQoB6BJ4GwoOXvqW3VRatyfBnmIO1WTzFEXxYZjQSm8FSOespn+zxdTmj7mp?=
+ =?us-ascii?Q?Kx8hrPXOKOWTqRTN94hwdzGjDTCZoWvMxsRlNGoASkDzfFtiQ0IP/Z2WlRTA?=
+ =?us-ascii?Q?dugHo7UWRtV2jOiiRNATvV9vZCFCoM5oFR+Q8rtuejJUqcgEQzcyY+49sEdz?=
+ =?us-ascii?Q?9Dc5FMzUNb/MNNM4c7Wlj+Dmvmmsl/Xj3Qu4RcRtwVhumP4zg9SFKvhTSMZR?=
+ =?us-ascii?Q?09JHd8USYRxkG7PVDlxeUlmnK9xlqtu0TGSjw6RLE7B4CUDq51RGAElPHVgO?=
+ =?us-ascii?Q?4F0COf4PEpXWxu0oj/nkkqUVRryG2bPoROTRZGc2VsxM/bUVkxq/0BY/qdGW?=
+ =?us-ascii?Q?H9gyoGWsyf6R7CTuZRTEH4wI70MiG9y5mzvU3NciQKbmhG0oh3T9Mt8oHI9t?=
+ =?us-ascii?Q?dNIveDzMp/dvlEwYoRDQrSv1bPTiqLUUY1kL5/rIUdPFA20jtOYrXAIIeEos?=
+ =?us-ascii?Q?6Sx1U0/9Ihh1kD/YP1GCrmLAies0+W+j+cA1hiJUQTCz/A5xdm15fxOvrgXS?=
+ =?us-ascii?Q?NHOhDSwjjQ5CVrAp/YjaRbjQ7XGuqo0cSe36UY7w2lv6ESPTwK5RFj0qRgQc?=
+ =?us-ascii?Q?CGx11PFq/SfK+sEu9le/PN8=3D?=
 X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5994a4c1-b818-4ea1-e870-08d9c9b2bbfa
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e06747f-8842-40f0-1bc4-08d9c9b2bd36
 X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1514.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2021 03:32:54.6329
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Dec 2021 03:32:56.6687
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0I/2WwnWPGR4x+wU7OLe0tW1xf35c7S87AkvVhgHN/oM7LZN5qk9TWSqUtg5sZTQFYvr9PgV1SW2hwvdYTSkEw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: oyOHddo70wRiBPSbzFDLjP0nOlnaz+kP+ayb8eVbWBsC/8hX//35YMgHxEUexxIoaJdxPrryAf1q8Ios69jJ5g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR21MB0477
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The percpu variables hyperv_pcpu_input_arg and hyperv_pcpu_output_arg
-have been incorrectly defined since their inception.  The __percpu
-qualifier should be associated with the void * (i.e., a pointer), not
-with the target of the pointer. This distinction makes no difference
-to gcc and the generated code, but sparse correctly complains.  Fix
-the definitions in the interest of general correctness in addition
-to making sparse happy.
+The percpu variable hv_ghcb_pg is incorrectly defined.  The __percpu
+qualifier should be associated with the union hv_ghcb * (i.e.,
+a pointer), not with the target of the pointer. This distinction
+makes no difference to gcc and the generated code, but sparse
+correctly complains.  Fix the definition in the interest of
+general correctness in addition to making sparse happy.
 
 No functional change.
 
+Fixes: 0cc4f6d9f0b9 ("x86/hyperv: Initialize GHCB page in Isolation VM")
 Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 ---
- drivers/hv/hv_common.c         | 4 ++--
- include/asm-generic/mshyperv.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/hyperv/hv_init.c       | 2 +-
+ arch/x86/include/asm/mshyperv.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 7be173a..7477e5a 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -44,10 +44,10 @@
- u32 hv_max_vp_index;
- EXPORT_SYMBOL_GPL(hv_max_vp_index);
+diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+index 96eb7db..99afe77 100644
+--- a/arch/x86/hyperv/hv_init.c
++++ b/arch/x86/hyperv/hv_init.c
+@@ -36,7 +36,7 @@
+ void *hv_hypercall_pg;
+ EXPORT_SYMBOL_GPL(hv_hypercall_pg);
  
--void  __percpu **hyperv_pcpu_input_arg;
-+void * __percpu *hyperv_pcpu_input_arg;
- EXPORT_SYMBOL_GPL(hyperv_pcpu_input_arg);
+-union hv_ghcb __percpu **hv_ghcb_pg;
++union hv_ghcb * __percpu *hv_ghcb_pg;
  
--void  __percpu **hyperv_pcpu_output_arg;
-+void * __percpu *hyperv_pcpu_output_arg;
- EXPORT_SYMBOL_GPL(hyperv_pcpu_output_arg);
+ /* Storage to save the hypercall page temporarily for hibernation */
+ static void *hv_hypercall_pg_saved;
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index da3972f..498317d 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -30,7 +30,7 @@ typedef int (*hyperv_fill_flush_list_func)(
  
- /*
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 3e2248ac..95b7888 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -49,8 +49,8 @@ struct ms_hyperv_info {
- };
- extern struct ms_hyperv_info ms_hyperv;
+ extern u64 hv_current_partition_id;
  
--extern void  __percpu  **hyperv_pcpu_input_arg;
--extern void  __percpu  **hyperv_pcpu_output_arg;
-+extern void * __percpu *hyperv_pcpu_input_arg;
-+extern void * __percpu *hyperv_pcpu_output_arg;
+-extern union hv_ghcb  __percpu **hv_ghcb_pg;
++extern union hv_ghcb * __percpu *hv_ghcb_pg;
  
- extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
- extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
+ int hv_call_deposit_pages(int node, u64 partition_id, u32 num_pages);
+ int hv_call_add_logical_proc(int node, u32 lp_index, u32 acpi_id);
 -- 
 1.8.3.1
 
