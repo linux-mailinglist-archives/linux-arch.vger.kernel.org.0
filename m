@@ -2,132 +2,191 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B5C482434
-	for <lists+linux-arch@lfdr.de>; Fri, 31 Dec 2021 14:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92284824B7
+	for <lists+linux-arch@lfdr.de>; Fri, 31 Dec 2021 17:04:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbhLaNeU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 31 Dec 2021 08:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        id S231219AbhLaQEp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 31 Dec 2021 11:04:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbhLaNeU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Dec 2021 08:34:20 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9767FC061574
-        for <linux-arch@vger.kernel.org>; Fri, 31 Dec 2021 05:34:19 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id j11so58553792lfg.3
-        for <linux-arch@vger.kernel.org>; Fri, 31 Dec 2021 05:34:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wp/ltEVoPdzx2pRrEQ4BgyolvgNnR0QMjtwXZXnrtlw=;
-        b=iJgVB5rwvhuY7YqV1NkNfAfGGzf3TsdX+4Yvwz+pt4/gquZhGZvP6eouNx6pVtQmQx
-         Y4/cKGy4OMIlCsWlgJMlmX7nXH0J7tkezAKvB70haBI7YFAQXX1VWNAxVLB9GSt/x7zL
-         oj70jZ5FUcOIw5KhZIBQrrZkC5kOT4qLtbmw0fXa6/7cSSmg+VFZjVCarnNUem/Vw/l6
-         3/fMA3eyE/dgMBlhJqkwakQCLWnqmTIYsnzR/Q8w1tHguBwB+c9cPGWV/NXMt03vgf9h
-         RGOemVhzhGdPcStcVEdgzYZGRdXmLMtuEygLD+Q3LljaF4c+tYjJ0OF5YEKAlHfplTMj
-         VfnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wp/ltEVoPdzx2pRrEQ4BgyolvgNnR0QMjtwXZXnrtlw=;
-        b=Q8Oqae3CCeJfuTIKal3k5AIP48TIC/vnlLZKksih+Qir6jkkmtX7sWdRJuH7jT5O3L
-         OPiTbEKsdZUXtss43Hm+M+WW37JfLU/PcTEzve3oMzzTLMaQ6pnQzAZXdQybm/jTzbpb
-         g9+cflNqQ4xsi090oRzXB6Cbig4fZZJSzvdyu2YsGKfUq0cXLYfZIjxFEMokj+sFdrRj
-         H0xGmYV1uDbxrP9kii40tjqMZ6uVGYwepU/oy05ZJShFmCAM6FiFAqJ/5bD4bPBISKbb
-         fsizfjiRJlpxMbSqTNNKone4aQB11GljX3gsBQ8rhK2xxhBqhvHdu5dhfba2XxmrhjVb
-         Uxig==
-X-Gm-Message-State: AOAM530qp3J8QeTsVCpYGhQk15w7lDkZZdRvu6jJ39naeQTVLoiCZVbe
-        brH3h9T2NR696LkleME7yi8VqxGbPmwVo+vzYtZLAmz8OKw7hA==
-X-Google-Smtp-Source: ABdhPJyRGhHv/2JtqLwUHFfFhC+MlVhOY4g6rwByr1LJ1qx2O3WBLs8LcdIWIt/sNquPovNd06q+x9OHrETHj/cwPtw=
-X-Received: by 2002:a05:6512:3d9e:: with SMTP id k30mr31899208lfv.184.1640957657751;
- Fri, 31 Dec 2021 05:34:17 -0800 (PST)
+        with ESMTP id S229503AbhLaQEo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 31 Dec 2021 11:04:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2807DC061574;
+        Fri, 31 Dec 2021 08:04:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E78B2B81D9B;
+        Fri, 31 Dec 2021 16:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56E0C36AF4;
+        Fri, 31 Dec 2021 16:04:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1640966681;
+        bh=pu3EOtLhubDoxaVwiYbh4e/NfH+lhjOkYe7VbmME5Z0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=raXMVpPTRAf3vF8B62lkOgsA/cVfsPOPEGtrByVh26tgU6FewLliwwvE5oVSxTfvJ
+         1isY+reYV6wkTVj9kZeXXITYA4ZLSnegTHP2FPOPl+zVGpV7aOvkSmkBLyhNAOgHR1
+         2sxK+Ewu9K8opb6D6pVml2o8615MS9DLn+olxHqwVzvT8Xh5P7+RRwmCSJfOODKM51
+         uCDoa4le3AzkzvHOK55tCCwn96EKQBOHpr853njIbdmLrUqgvOFCO+ErxSuQhW1ZUE
+         /E5E7A34ZTJ7Vtr7fXqJFcLl8V4bz4PcNAUhmkNNyPOu/FhFcut4rQ7dYvKY+75A6Q
+         F+kxB9VuFSY/g==
+Received: by mail-lf1-f50.google.com with SMTP id h2so50380521lfv.9;
+        Fri, 31 Dec 2021 08:04:41 -0800 (PST)
+X-Gm-Message-State: AOAM532KKP2lW9+vigWtiFAVx+ScumiyAxB4mgB6XqwFtA2NIAGwSqYP
+        /MOKLXDGej5zOzL+XyY78CNLeGxPzFIzBbu32fc=
+X-Google-Smtp-Source: ABdhPJzApDVGjcuVEHw18tz1R9gDPlbk/Ui+m3pYQWhrQTDSy0tEhDoMzOEccUFjcDO7rPU48bSeyrks7IEcpaugXLU=
+X-Received: by 2002:adf:f051:: with SMTP id t17mr29442418wro.192.1640966669503;
+ Fri, 31 Dec 2021 08:04:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20211218130014.4037640-1-daniel.lezcano@linaro.org> <20211218130014.4037640-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20211218130014.4037640-2-daniel.lezcano@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 31 Dec 2021 14:33:41 +0100
-Message-ID: <CAPDyKFpY4i0Mtb==8zknsuG0HdhPW2fXFvEN+AJScVmT65A-ow@mail.gmail.com>
-Subject: Re: [PATCH v5 1/6] powercap/drivers/dtpm: Move dtpm table from init
- to data section
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rjw@rjwysocki.net, lukasz.luba@arm.com, robh@kernel.org,
-        heiko@sntech.de, arnd@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-3-schnelle@linux.ibm.com> <CAMuHMdXk6VcDryekkMJ3aGFnw4LLWOWMi8M2PwjT81PsOsOBMQ@mail.gmail.com>
+ <d406b93a-0f76-d056-3380-65d459d05ea9@gmail.com> <CAK8P3a2j-OFUUp+haHoV4PyL-On4EASZ9+59SDqNqmL8Gv_k7Q@mail.gmail.com>
+ <1f90f145-219e-1cad-6162-9959d43a27ad@gmail.com> <CAK8P3a3NqU-3nUZ9ve=QyPPB5Uep3eK+_hicjjSiP8VuL4FYfA@mail.gmail.com>
+ <0211719b-8402-9865-8e5d-5c0a35715816@gmail.com>
+In-Reply-To: <0211719b-8402-9865-8e5d-5c0a35715816@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 31 Dec 2021 11:04:12 -0500
+X-Gmail-Original-Message-ID: <CAK8P3a2GGGuP0miLRy8w2+8vdSsGRNioBHEZ-ervSBrYbuZ+5w@mail.gmail.com>
+Message-ID: <CAK8P3a2GGGuP0miLRy8w2+8vdSsGRNioBHEZ-ervSBrYbuZ+5w@mail.gmail.com>
+Subject: Re: [RFC 02/32] Kconfig: introduce HAS_IOPORT option and select it as necessary
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Chris Zankel <chris@zankel.net>,
+        Karol Gugala <kgugala@antmicro.com>,
+        Jeff Dike <jdike@addtoit.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Brian Cain <bcain@codeaurora.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:SYNOPSYS ARC ARCHITECTURE" 
+        <linux-snps-arc@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 18 Dec 2021 at 14:00, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Wed, Dec 29, 2021 at 10:44 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> Am 30.12.2021 um 14:48 schrieb Arnd Bergmann:
+> > On Tue, Dec 28, 2021 at 11:15 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> > What some other architectures do is to rely on inb()/outb() to have a
+> > zero-based offset, and use an io_offset in PCI buses to ensure that a
+> > low port number on the bus gets translated into a pointer value for the
+> > virtual mapping in the kernel, which is then represented as an unsigned
+> > int.
 >
-> The dtpm table is used to let the different dtpm backends to register
-> their setup callbacks in a single place and preventing to export
-> multiple functions all around the kernel. That allows the dtpm code to
-> be self-encapsulated.
-
-Well, that's not entirely true. The dtpm code and its backends (or
-ops, whatever we call them) are already maintained from a single
-place, the /drivers/powercap/* directory. I assume we intend to keep
-it like this going forward too, right?
-
-That is also what patch4 with the devfreq backend continues to conform to.
-
+> M54xx does just that for Coldfire:
 >
-> The dtpm hierarchy will be passed as a parameter by a platform
-> specific code and that will lead to the creation of the different dtpm
-> nodes.
+> arch/m68k/include/asm/io_no.h:
+> #define PCI_IO_PA       0xf8000000              /* Host physical address */
 >
-> The function creating the hierarchy could be called from a module at
-> init time or when it is loaded. However, at this moment the table is
-> already freed as it belongs to the init section and the creation will
-> lead to a invalid memory access.
->
-> Fix this by moving the table to the data section.
+> (used to set PCI BAR mappings, so matches your definition above).
 
-With the above said, I find it a bit odd to put a table in the data
-section like this. Especially, since the only remaining argument for
-why, is to avoid exporting functions, which isn't needed anyway.
+I think coldfire gets it right here, using PCI_IOBASE to find the start of
+the window and a zero io_offset:
 
-I mean, it would be silly if we should continue to put subsystem
-specific tables in here, to just let them contain a set of subsystem
-specific callbacks.
+#define PCI_IOBASE ((void __iomem *) PCI_IO_PA)
 
+> All other (MMU) m68k users of inb()/outb() apply an io_offset in the
+> platform specific address translation:
 >
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> arch/m68k/include/asm/io_mm.h:
+>
+> #define q40_isa_io_base  0xff400000
+> #define enec_isa_read_base  0xfffa0000
+> #define enec_isa_write_base 0xfffb0000
+>
+> arch/m68k/include/asm/amigayle.h:
+>
+> #define GAYLE_IO                (0xa20000+zTwoBase)     /* 16bit and
+> even 8bit registers */
+> #define GAYLE_IO_8BITODD        (0xa30000+zTwoBase)     /* odd 8bit
+> registers */
+>
+> (all constants used in address translation inlines that are used by the
+> m68k inb()/outb() macros - you can call that the poor man's version of
+> PCI BAR mappings ...).
 
-Kind regards
-Uffe
+This still looks like the same thing to me, where you have inb() take a
+zero-based port number, not a pointer. The effect is the same as the
+coldfire version, it just uses a custom inline function instead of the
+version from asm-generic/io.h.
 
-> ---
->  include/asm-generic/vmlinux.lds.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> So as long as support for any of the m68k PCI or ISA bridges is selected
+> in the kernel config, the appropriate IO space mapping is applied. If no
+> support for PCI or ISA bridges is selected, we already fall back to zero
+> offset mapping (but as far as I can tell, it shouldn't be possible to
+> build a kernel without bridge support but drivers that require it).
+
+Right.
+
+> > As this is indistinguishable from architectures that just don't have
+> > a base address for I/O ports (we unfortunately picked 0 as the default
+> > PCI_IOBASE value), my suggestion was to start marking architectures
+> > that may have this problem as using HAS_IOPORT in order to keep
+> > the existing behavior unchanged. If m68k does not suffer from this,
+> > making HAS_IOPORT conditional on those config options that actually
+> > need it would of course be best.
 >
-> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-> index 42f3866bca69..50d494d94d6c 100644
-> --- a/include/asm-generic/vmlinux.lds.h
-> +++ b/include/asm-generic/vmlinux.lds.h
-> @@ -362,7 +362,8 @@
->         BRANCH_PROFILE()                                                \
->         TRACE_PRINTKS()                                                 \
->         BPF_RAW_TP()                                                    \
-> -       TRACEPOINT_STR()
-> +       TRACEPOINT_STR()                                                \
-> +       DTPM_TABLE()
->
->  /*
->   * Data section helpers
-> @@ -723,7 +724,6 @@
->         ACPI_PROBE_TABLE(irqchip)                                       \
->         ACPI_PROBE_TABLE(timer)                                         \
->         THERMAL_TABLE(governor)                                         \
-> -       DTPM_TABLE()                                                    \
->         EARLYCON_TABLE()                                                \
->         LSM_TABLE()                                                     \
->         EARLY_LSM_TABLE()                                               \
-> --
-> 2.25.1
->
+> Following your description, HAS_IOPORT would be required for neither of
+> PCI, ISA or ATARI_ROM_ISA ??
+
+For these three options, we definitely need HAS_IOPORT, which would
+imply that some version of inb()/outb() is provided. The difference between
+using a custom PCI_IOBASE (or an open-coded equivalent) and using
+a zero PCI_IOBASE in combination with registering PCI using a custom
+io_offset is whether we can use drivers with hardcoded port numbers.
+These should depend on a different Kconfig symbol to be introduced
+(CONFIG_HARDCODED_IOPORT or similar) once we introduce them,
+and you could decide for m68k whether to allow those or not, I would
+assume you do want them in order to use certain legacy ISA drivers.
+
+       Arnd
