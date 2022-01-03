@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D715D48319E
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 14:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBF348345C
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 16:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbiACNzq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jan 2022 08:55:46 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:35014 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiACNzp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 08:55:45 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EDE5E2113D;
-        Mon,  3 Jan 2022 13:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641218144; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bp7Ls3jIW7OioFy5buHPAXWHWAQcKF9WssyJmKxPbcg=;
-        b=ceCleNSEp/E5buzpPY3bEceRgi7vPX6LyXo9jAQXAaWU5s21DTY9xp4z8cl2wm9fVzILtM
-        q/8hOLECrn9dX1HxtE+Bapekrx5Yhsrxd+YNutzZwYuooC0KwhAJKjz+mxK5dQ+X0m/KQe
-        Wxk/79WuOZu7qvROwMjALGXZabC/bNI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641218144;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bp7Ls3jIW7OioFy5buHPAXWHWAQcKF9WssyJmKxPbcg=;
-        b=zIL7Pnzdd/6fJg54rccwAz40rGXhxdEhihowTu7q3ad6bgpciI8rB5JWx8sbGxN/4/XCGN
-        CPbCrCrb0B9KjJDA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 07708A3B81;
-        Mon,  3 Jan 2022 13:55:43 +0000 (UTC)
-Date:   Mon, 3 Jan 2022 14:55:42 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>
-cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
+        id S231809AbiACPlt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jan 2022 10:41:49 -0500
+Received: from mga14.intel.com ([192.55.52.115]:20979 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230160AbiACPls (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 3 Jan 2022 10:41:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641224508; x=1672760508;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=g5C1DLmzAjmvh8fBdfrCcd+FGlrkD8urpR90vXZoFjU=;
+  b=QPK6Jse77vI5nv3kD20JUr8OHSP1W60/h8WoFBVcRIomUbFrS+SieCwW
+   7IXjhdnqnyTj4RJkJsS1w63fqHOuE+rvMc42oTexVXQKzoUBLcbx1+O3S
+   9F6/yzfTCegdD++Arh1AZOBQ4Wejj3q5ld0BB9XuKgXbjDmxJpLWwNQ+r
+   lmW61Ew1g5rFhIRLGV90qhURoc+r5GgfVM0tUyQmPHNKPcMqEhFjBlT4g
+   fndaCISAY97gT9dwLY6dsuNWX9vqxsOE6oy2fH2rXAW9BoQmg9dECnoy7
+   2KtokdkR/uasbC6ST7G9OjjsBLwP5zctnX+xm4N6Ayh0dnaajGnGmILSL
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="242283703"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="242283703"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 07:41:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="688243455"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga005.jf.intel.com with ESMTP; 03 Jan 2022 07:41:39 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203Ffa79022803;
+        Mon, 3 Jan 2022 15:41:36 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-hardening@vger.kernel.org, x86@kernel.org,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Kristen Carlson Accardi <kristen@linux.intel.com>,
@@ -50,6 +50,7 @@ cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Bruce Schlobohm <bruce.schlobohm@intel.com>,
         Jessica Yu <jeyu@kernel.org>,
         kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
         Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Masahiro Yamada <masahiroy@kernel.org>,
@@ -73,57 +74,110 @@ cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
- to nuke pos-based search
-In-Reply-To: <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
-Message-ID: <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic> <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+Date:   Mon,  3 Jan 2022 16:40:23 +0100
+Message-Id: <20220103154023.7326-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <Yc40UKmylVh38vl5@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-4-alexandr.lobakin@intel.com> <Yc40UKmylVh38vl5@zn.tnic>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1678380546-1741337215-1641218143=:15051"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Borislav Petkov <bp@alien8.de>
+Date: Thu, 30 Dec 2021 23:36:00 +0100
 
---1678380546-1741337215-1641218143=:15051
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
-
-> On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
-> >
-> > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
-> > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
-
-...
-
-> Apologies since I haven't read the patch series.
+> On Thu, Dec 23, 2021 at 01:21:57AM +0100, Alexander Lobakin wrote:
+> > Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
 > 
-> The option does not exist in ld.lld and I am a bit concerning about
-> its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> That title is kinda laconic...
+
+"kallsyms: randomize /proc/kallsyms output order"?
+
 > 
-> I thought that someone forwarded my comments (originally posted months
-> on a feature request ago) here but seems not.
-> (I am a ld.lld maintainer.)
+> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > 
+> > This patch makes /proc/kallsyms display in a random order, rather
+> 
+> Avoid having "This patch" or "This commit" in the commit message. It is
+> tautologically useless.
+> 
+> Also, do
+> 
+> $ git grep 'This patch' Documentation/process
+> 
+> for more details.
 
-Do you mean 
-https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u 
-?
+Goes straight from the original series. Worth changing anyways.
 
-Unfortunately, it did not lead anywhere. I think that '-z unique-symbol' 
-option should work fine as long as the live patching is concerned. Maybe I 
-misunderstood but your concerns mentioned at the blog do not apply. The 
-stability is not an issue for us since we (KLP) always work with already 
-built and fixed kernel. And(at least) GCC already uses number suffices for 
-IPA clones and it has not been a problem anywhere.
+> 
+> > than sorted by address in order to hide the newly randomized address
+> > layout.
+> 
+> Sorted by address?
+> 
+> My /proc/kallsyms says
+> 
+> $ awk '{ print $1 }' /proc/kallsyms | uniq -c
+>  119086 0000000000000000
+> 
+> so all the addresses are 0. Aha, and when I list them as root, only then
+> I see non-null addresses.
+> 
+> So why do we that patch at all?
 
-Am I wrong?
+It displays zeros for non-roots, but the symbols are still sorted by
+their addresses. As a result, if you leak one address, you could
+determine some others.
+This is especially critical with FG-KASLR as its text layout is
+random each time and sorted /proc/kallsyms would make the entire
+feature useless.
 
-Thanks
+> 
+> > alobakin:
+> > Don't depend FG-KASLR and always do that for unpriviledged accesses
+> 
+> Unknown word [unpriviledged] in commit message, suggestions:
+>         ['unprivileged', 'underprivileged', 'privileged']
 
-Miroslav 
---1678380546-1741337215-1641218143=:15051--
+I either have some problems with checkpatch + codespell, or they
+missed all that typos you're noticing. Thanks, and apologies =\
+
+> 
+> > as suggested by several folks.
+> > Also, introduce and use a shuffle_array() macro which shuffles an
+> > array using Fisher-Yates.
+> 
+> Fisher-Yates what?
+> 
+> /me goes and looks at the wikipedia article.
+> 
+> Aha, a Fisher-Yates shuffle algoithm.
+> 
+> Don't be afraid to explain more in your commit messages and make them
+> more reader-friendly.
+
+Sure.
+This patch initially was at the tail of the set, after the commits
+where this algo is mentioned several times in a more detailed
+manner, but I moved it to the head then as the requests for doing
+this unconditionally converted it to a pre-requisite.
+
+> 
+> > We'll make use of it several more times
+> > later on.
+> 
+> Not important for this commit.
+> 
+> ...
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
+
+Thanks!
+Al
