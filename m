@@ -2,209 +2,232 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8773248303C
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 12:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3045C48309E
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 12:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231562AbiACLM6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jan 2022 06:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231558AbiACLM5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 06:12:57 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734DAC061761;
-        Mon,  3 Jan 2022 03:12:57 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id j21so134402806edt.9;
-        Mon, 03 Jan 2022 03:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=sv0FFb+AVNSUt+0NEBQaAbNOgvs2uAKbwzLwFgJVapI=;
-        b=Cs+jquebwSEc/nCVzPpod6sOSUu0W5bOckbTVXl/1x2GII2solaXor+QTxcjUYNkBp
-         IvzteUQSNeiY0fjo9WpjAjwVHJyedylczE58C8vbeR4AfxmiafczqzyafpFcVhrwJTWn
-         +qDVTjeYE8KXI5nN2yiLMlF7Ma8pQdNMCj2nRVDgxy4fSS8LYRPJ3CWJSmM0zdIvUVj6
-         IkRUFHlk34oTVc4erMQH98LJdtP4gbdLJanQIzzSkxe9sCxF/I5kJjj/SgUEXY1TrZLK
-         GVNqvnA9KrcoLTWgPnKqtiyPekcLetOJ04Dchf8usuSm3pfg8PTw3UqKESpfWePG+tqd
-         r/cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=sv0FFb+AVNSUt+0NEBQaAbNOgvs2uAKbwzLwFgJVapI=;
-        b=wJHwbiivvZussSqrO2CKvJ19ch8efqQFGDJQofVr5zGX9THEsJRE0UKyzfwUVnVf85
-         GgI4K4ZJ8ji1MdeO3X1sHdpLQTlapbCxAI8q8CpLetpVx5TSSaPp5CNUiVwQJotRr62x
-         HlV9Gj9Hb3pWA7pnzr0e88arfRj4MljeaoKdtPckoMm03uuP9CFzfk5/4ea6DuxAoDIj
-         eahhVLeam0wuYiWMVd8mm7qKWqSd04LeJ3ziz4HgVif2tdmLSDYS/4uHZ1mDScUoAsFF
-         fyMBnz5SolcGVnnL1Xbh9klf+yWQjiyjk/CHgioT7mqUj2cifjANqrKylCRs9hTDttUC
-         VwCw==
-X-Gm-Message-State: AOAM531oFGsTm9De7jjHblQaqPjNHPZkqPG/CRXF1s/SjCjCbZflClQD
-        BH9lbHplhkF4rlEZifpvjEk=
-X-Google-Smtp-Source: ABdhPJyuhWTsVtfHF7R2xFKDCV1x1aL9h1LleR4iKtn4nPFsXSF/T7U4pvj91u8ghZlucSHi392fOA==
-X-Received: by 2002:a17:906:1c05:: with SMTP id k5mr25043791ejg.664.1641208375866;
-        Mon, 03 Jan 2022 03:12:55 -0800 (PST)
-Received: from gmail.com (0526F103.dsl.pool.telekom.hu. [5.38.241.3])
-        by smtp.gmail.com with ESMTPSA id zh8sm10476857ejb.21.2022.01.03.03.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 03:12:55 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 3 Jan 2022 12:12:50 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S233044AbiACLgh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jan 2022 06:36:37 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47602 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230417AbiACLgg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 06:36:36 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 203A0o71029810;
+        Mon, 3 Jan 2022 11:35:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=ufpavbPzye5iN5lSyr7+fUSKFKCjhh0g0AU+dxcxb3c=;
+ b=A2xXU2hyLLk1AgKWY6pxZ630TcoWds27eIt1Rin7V5OjbLAqsYFiloY4Usja1nvhkh2F
+ UUeuoBoZ8LpiWfH5MA/pagi8s9AkrESyRrw0oL4v+6Yd7rqucz/1Fji1t3z2ZyVbr2f0
+ acybJBJmungBlwHyoMI5FHGYr3iKc7/zOm8RJjPv+fp931iPs3ZcMaWr9tkpWh9q2qQI
+ Fmh0LNqxUzfyDswy708AfuLz/ZqibLDmSMbhqJgZs6PDHC3Rt6Hym8SFGUdeIwYGaMhV
+ KhYxT7+JEMhozui5xbw8jHd8uwzPBnuvLoEBWYK5nRIOU7hFFmexbKUjEMJswupxE3po yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dburw575m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jan 2022 11:35:53 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 203BPuqO021269;
+        Mon, 3 Jan 2022 11:35:52 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3dburw5754-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jan 2022 11:35:52 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 203BRxcF011535;
+        Mon, 3 Jan 2022 11:35:50 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3dae7jj7u0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jan 2022 11:35:50 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 203BR5vh35848610
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 3 Jan 2022 11:27:05 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 834CEA405B;
+        Mon,  3 Jan 2022 11:35:47 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 41503A4060;
+        Mon,  3 Jan 2022 11:35:46 +0000 (GMT)
+Received: from sig-9-145-76-151.uk.ibm.com (unknown [9.145.76.151])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  3 Jan 2022 11:35:46 +0000 (GMT)
+Message-ID: <5a271c9e80ee394ecb41297e66d687e035a823ce.camel@linux.ibm.com>
+Subject: Re: [RFC 31/32] usb: handle HAS_IOPORT dependencies
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdLaMvaM9vq4W6f1@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdLL0kaFhm6rp9NS@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdLL0kaFhm6rp9NS@kroah.com>
+        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Mon, 03 Jan 2022 12:35:45 +0100
+In-Reply-To: <Yc86mvCUe2mHCa57@rowland.harvard.edu>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+         <20211227164317.4146918-32-schnelle@linux.ibm.com>
+         <YcojyRhALdm40gfk@rowland.harvard.edu>
+         <8bda347ea30b60f1edb55693ff7509e7f7b1f979.camel@linux.ibm.com>
+         <Yc86mvCUe2mHCa57@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N2-PFTq6n9ARg6TLDEy1ybSsJR7I5_iF
+X-Proofpoint-GUID: 3vxwt5eQUgZM-hiixHGby9Mzv2OlZGvJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-01-03_04,2022-01-01_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ mlxlogscore=574 priorityscore=1501 impostorscore=0 phishscore=0
+ adultscore=0 malwarescore=0 clxscore=1015 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2201030078
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-
-> > Before going into details about how this tree solves 'dependency hell' 
-> > exactly, here's the current kernel build performance gain with 
-> > CONFIG_FAST_HEADERS=y enabled, (and with CONFIG_KALLSYMS_FAST=y enabled as 
-> > well - see below), using a stock x86 Linux distribution's .config with all 
-> > modules built into the vmlinux:
+On Fri, 2021-12-31 at 12:15 -0500, Alan Stern wrote:
+> On Fri, Dec 31, 2021 at 12:06:24PM +0100, Niklas Schnelle wrote:
+> > On Mon, 2021-12-27 at 15:36 -0500, Alan Stern wrote:
+> > > On Mon, Dec 27, 2021 at 05:43:16PM +0100, Niklas Schnelle wrote:
+> > > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > > > not being declared. We thus need to guard sections of code calling them
+> > > > as alternative access methods with CONFIG_HAS_IOPORT checks. Similarly
+> > > > drivers requiring these functions need to depend on HAS_IOPORT.
+> > > 
+> > > A few things in here can be improved.
+> > > 
+> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > > > ---
+> > > > diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+> > > > index ef08d68b9714..bba320194027 100644
+> > > > --- a/drivers/usb/host/pci-quirks.c
+> > > > +++ b/drivers/usb/host/pci-quirks.c
+> > > > +#ifdef CONFIG_USB_PCI_AMD
+> > > > +#if IS_ENABLED(CONFIG_USB_UHCI_HCD) && defined(CONFIG_HAS_IOPORT)
+> > > 
+> > > In the original, the following code will be compiled even if
+> > > CONFIG_USB_UHCI_HCD is not enabled.  You shouldn't change that.
 > > 
-> >   #
-> >   # Performance counter stats for 'make -j96 vmlinux' (3 runs):
-> >   #
-> >   # (Elapsed time in seconds):
-> >   #
-> > 
-> >   v5.16-rc7:            231.34 +- 0.60 secs, 15.5 builds/hour    # [ vanilla baseline ]
-> >   -fast-headers-v1:     129.97 +- 0.51 secs, 27.7 builds/hour    # +78.0% improvement
-> > 
-> > Or in terms of CPU time utilized:
-> > 
-> >   v5.16-rc7:            11,474,982.05 msec cpu-clock   # 49.601 CPUs utilized
-> >   -fast-headers-v1:      7,100,730.37 msec cpu-clock   # 54.635 CPUs utilized   # +61.6% improvement
+> > If this was only '#ifdef CONFIG_HAS_IOPORT' we would leave
+> > uhci_reset_hc() undeclared in the case where CONFIG_HAS_IOPORT is
+> > unset. This function however is also called from uhci-pci.c. That on
+> > the other hand is built only if CONFIG_USB_UHCI_HCD is set so if we
+> > depend on both config options we can get rid of all calls and have the
+> > functions undeclared.
 > 
-> Speed up is very impressive, nice job!
+> But you changed the guard around the '#include "uhci-pci.c"' line in 
+> uhci-hcd.c, so uhci-pci.c won't be built if CONFIG_HAS_IOPORT is unset.  
+> Thus there won't be an undefined function call regardless.
 
-Thanks! :-)
+Ah thanks yes that makes sense. I seem to have gotten confused by the
+uhci-hcd.c vs uhci-pci.c dependency.
 
-> > Techniques used by the fast-headers tree to reduce header size & dependencies:
-> > 
-> >  - Aggressive decoupling of high level headers from each other, starting
-> >    with <linux/sched.h>. Since 'struct task_struct' is a union of many
-> >    subsystems, there's a new "per_task" infrastructure modeled after the
-> >    per_cpu framework, which creates fields in task_struct without having
-> >    to modify sched.h or the 'struct task_struct' type:
-> > 
-> >             DECLARE_PER_TASK(type, name);
-> >             ...
-> >             per_task(current, name) = val;
-> > 
-> >    The per_task() facility then seamlessly creates an offset into the
-> >    task_struct->per_task_area[] array, and uses the asm-offsets.h
-> >    mechanism to create offsets into it early in the build.
-> > 
-> >    There's no runtime overhead disadvantage from using per_task() framework,
-> >    the generated code is functionally equivalent to types embedded in
-> >    task_struct.
 > 
-> This is "interesting", but how are you going to keep the 
-> kernel/sched/per_task_area_struct_defs.h and struct task_struct_per_task 
-> definition in sync?
+> You see, even if the kernel isn't configured to include a UHCI driver, 
+> it's still important to hand off and disable any PCI UHCI hardware when 
+> the system starts up.  Otherwise you can get all sorts of crazy 
+> interrupts and DMA from the BIOS.
 
-I have plans to clean this up further - see below - but in general I'd 
-*discourage* the embedding of new complex types to task_struct.
+Thanks for the explanation, this is very helpful to understand the
+context.
 
-In practice, most new task_struct fields are either simple types or 
-pointers to structs, which can be added to task_struct without having to 
-define a complex type for <linux/sched.h>.
+> 
+> > > >  /*
+> > > >   * Make sure the controller is completely inactive, unable to
+> > > >   * generate interrupts or do DMA.
+> > > > @@ -1273,7 +1277,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
+> > > >  			 "Can't enable PCI device, BIOS handoff failed.\n");
+> > > >  		return;
+> > > >  	}
+> > > > -	if (pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
+> > > > +	if (IS_ENABLED(CONFIG_USB_UHCI_HCD) &&
+> > > > +	    pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
+> > > >  		quirk_usb_handoff_uhci(pdev);
+> > > 
+> > > Same idea here.
+> > 
+> > Hmm, I'm not 100% sure if the IS_ENABLED(CONFIG_USB_UHCI_HCD) depends
+> > on some compiler optimizations for it to be ok that
+> > uhci_check_and_reset_hc() is not declared in the case where both
+> > CONFIG_HAS_IOPORT and CONFIG_USB_UHCI_HCD are unset. Maybe that should
+> > be a plain ifdef.
+> 
+> The reasoning should be exactly the same as in the previous case.
 
-For example here's the list of the last 5 extensions of task_struct, since 
-November 2020 - I copy & pasted them out of git log -p include/linux/sched.h:
+Yeah with your above explanation it makes sense that we need to keep
+the calls even if CONFIG_USB_UHCI_HCD is not enabled. We're also
+handling the CONFIG_HAS_IOPORT=n case in quirk_usb_handoff_uhci()
+anyway.
 
-+       unsigned                        in_eventfd_signal:1;
+> 
+> > > > diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
+> > > > index 8ae5ccd26753..8e30116b6fd2 100644
+> > > > --- a/drivers/usb/host/uhci-hcd.h
+> > > > +++ b/drivers/usb/host/uhci-hcd.h
+> > > > @@ -586,12 +586,14 @@ static inline int uhci_aspeed_reg(unsigned int reg)
+> > > >  
+> > > >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+> > > >  {
+> > > > +#ifdef CONFIG_HAS_IOPORT
+> > > >  	if (uhci_has_pci_registers(uhci))
+> > > >  		return inl(uhci->io_addr + reg);
+> > > > -	else if (uhci_is_aspeed(uhci))
+> > > > +#endif
+> > > 
+> > > Instead of making all these changes (here and in the hunks below), you
+> > > can simply modify the definition of uhci_has_pci_registers() so that it
+> > > always gives 0 when CONFIG_HAS_IOPORT is N.
+> > > 
+> > > Alan Stern
+> > 
+> > I don't think that works, for example in the hunk you quoted returning
+> > 0 from uhci_has_pci_registers() only skips over the inl() at run-time.
+> > We're aiming to have inl() undeclared if HAS_IOPORT is unset though.
+> 
+> I see.  Do you think the following would be acceptable?  Add:
+> 
+> #ifdef CONFIG_HAS_IOPORT
+> #define UHCI_IN(x)	x
+> #define UHCI_OUT(x)	x
+> #else
+> #define UHCI_IN(x)	0
+> #define UHCI_OUT(x)
+> #endif
+> 
+> and then replace for example inl(uhci->io_addr + reg) with 
+> UHCI_IN(inl(uhci->io_addr + reg)).
 
-+       cpumask_t                       *user_cpus_ptr;
+In principle that looks like a valid approach. Not sure this is better
+than explicit ifdefs though. With this approach one could add
+UHCI_IN()/UHCI_OUT() calls which end up as nops without realizing it as
+it would disable any compile time warning for using them without
+guarding against CONFIG_HAS_IOPORT being undefined.
 
-+       unsigned int                    saved_state;
+> 
+> The definition of uhci_has_pci_registers() should be updated in any 
+> case; there's no reason for it to do a runtime check of uhci->io_addr 
+> when HAS_IOPORT is disabled.
 
-+       unsigned long                   saved_state_change;
+Agree. Interestingly same as with the "if
+(IS_ENABLED(CONFIG_HAS_IOPORT))" it seems having
+uhci_has_pci_registers() compile-time defined to 0 (I added a
+defined(CONFIG_HAS_IOPORT) to it) makes the compiler ignore the missing
+inl() decleration already. But I'm not sure if we should rely on that.
 
-+       struct bpf_run_ctx              *bpf_ctx;
 
-All of those new fields are either simple C types or struct pointers - none 
-of those extensions need per_task() handling per se.
 
-The overall policy to extend task_struct, going forward, would be to:
-
- - Either make simple-type or struct-pointer additions to task_struct, that 
-   don't couple <linux/sched.h> to other subsystems.
-
- - Or, if you absolutely must - and we don't want to forbid this - use the 
-   per_task() machinery to create a simple accessor to a complex embedded 
-   type.
-
-> [...]  It seems that you manually created this (which is great for 
-> testing), but over the long-term, trying to manually determine what needs 
-> to be done here to keep everything lined up properly is going to be a 
-> major pain.
-
-Note that under the policy above - and even according to the practice of 
-the last ~1.5 years - it should be exceedingly rare having to extend the 
-per_task() facility.
-
-There's one thing ugly about it, the fixed PER_TASK_BYTES limit, I plan to 
-make ->per_task_array[] the last field of task_struct, i.e. change it to:
-
-        u8                              per_task_area[];
-
-This actually became possible through the fixing of the x86 FPU code in the 
-following fast-headers commit:
-
-   4ae0f28bc1c8 headers/deps: x86/fpu: Make task_struct::thread constant size
-
-In the last ~1 year existence of the per_task() facility I didn't have any 
-maintenance troubles with these fields getting out of sync, but we could 
-also auto-generate kernel/sched/per_task_area_struct_defs.h from 
-kernel/sched/per_task_area_struct.h via a build-time script, and make 
-kernel/sched/per_task_area_struct.h the only method to define such fields.
-
-> That issue aside, I took a glance at the tree, and overall it looks like 
-> a lot of nice cleanups.  Most of these can probably go through the 
-> various subsystem trees, after you split them out, for the "major" .h 
-> cleanups.  Is that something you are going to be planning on doing?
-
-Yeah, I absolutely plan on doing that too:
-
-- About ~70% of the commits can be split up & parallelized through 
-  maintainer trees.
-
-- With the exception of the untangling of sched.h, per_task and the 
-  "Optimize Headers" series, where a lot of patches are dependent on each 
-  other. These are actually needed to get any measurable benefits from this 
-  tree (!). We can do these through the scheduler tree, or through the 
-  dedicated headers tree I posted.
-
-The latter monolithic series is pretty much unavoidable, it's the result of 
-30 years of coupling a lot of kernel subsystems to task_struct via embedded 
-structs & other complex types, that needed quite a bit of effort to 
-untangle, and that untangling needed to happen in-order.
-
-Do these plans this sound good to you?
-
-Thanks,
-
-	Ingo
