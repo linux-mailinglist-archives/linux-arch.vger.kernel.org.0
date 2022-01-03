@@ -2,121 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCAF48349B
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 17:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B19BB4834C3
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 17:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiACQPS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jan 2022 11:15:18 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:41187 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233046AbiACQPR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 11:15:17 -0500
-Received: (qmail 1188656 invoked by uid 1000); 3 Jan 2022 11:15:16 -0500
-Date:   Mon, 3 Jan 2022 11:15:16 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        John Garry <john.garry@huawei.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S233905AbiACQ3H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jan 2022 11:29:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231657AbiACQ3H (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 11:29:07 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1142C061761;
+        Mon,  3 Jan 2022 08:29:06 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id z29so137850803edl.7;
+        Mon, 03 Jan 2022 08:29:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+15VyunbMlyaslrB+G8c1bgxGtdlzGF50WLMZAMqweY=;
+        b=oZwRZaQk/icUv7eZEupXNnwVaJDyU/RA48r+Lbll1AXDx9l6ZP15EXDvrn7A8nfbre
+         HwkpqMtO6Xltq9G55Y+6BCKql23SXPZTu8AK385cU73SLsSstHko51voGu/lbmxtnpSh
+         jV7qtr/bRDnz3SQWkzZjBN+FkuD9xZqOjbTTunal7hKIb2pBEJYlBPcnk04dPAWCV5/t
+         a8Mkn1yjIuMdSMLyJer8rmLaGkYcip5N5JXXNFvNQMIgu4tFDzVqNT3hbTxSfkU1NbLm
+         i/VxTsMpa2ogxEteE+jED/+fgv+KbGBQWU2wJn5EPOQoUYyxIIUWrFKb+s04cw6T7P9t
+         2lAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=+15VyunbMlyaslrB+G8c1bgxGtdlzGF50WLMZAMqweY=;
+        b=Ku5IICJXSw4YVeDWmsW4F3Kzb5Nk3x2hbRnZPFJ5j6BwqFnmbWoENZg4lCf08uoD5E
+         AjWVBNNZyrm/qGL4j7fjxMCyoIa5RWWsBjPKkBrVhQGiCDWXH9qmyiO3UoWtp/Oot0+y
+         cZMMoO5LRkkWAkAg1wyzTCI685HqO0nrJxYToAtzYjDD2htGpJnezsIFDjyx94d16Y8/
+         kCV//l3GDV1eDohjxaaooZ2kacFjLELEwNnwz7lz04vLauaCZZsUvAOF4dybskxiEfcu
+         G36j9EbaxLR6ZPCQonKMPa+34hI4wcAn1UFMQrTEzp1niEOHlHtF29ZPG+QqJ7N+OhhA
+         +p5g==
+X-Gm-Message-State: AOAM531fgQA4baxopRsBU5En0Lw64nugO1Huv1jOe+uyw75zi0IBCW2G
+        7SxRAw4WeEutg2UhrI0hkqZIgUAYLGM=
+X-Google-Smtp-Source: ABdhPJyenq5OezECrB1ZC6EXStvbObATBBKVMKDSQJyVgbT+MDwJ3wTARhSoB3AS96p1ml4ZUk6YlQ==
+X-Received: by 2002:a17:907:3f14:: with SMTP id hq20mr38809900ejc.314.1641227344436;
+        Mon, 03 Jan 2022 08:29:04 -0800 (PST)
+Received: from gmail.com (0526F103.dsl.pool.telekom.hu. [5.38.241.3])
+        by smtp.gmail.com with ESMTPSA id hq29sm10982893ejc.141.2022.01.03.08.29.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jan 2022 08:29:04 -0800 (PST)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Mon, 3 Jan 2022 17:29:02 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC 31/32] usb: handle HAS_IOPORT dependencies
-Message-ID: <YdMhFKOdBsDvFStt@rowland.harvard.edu>
-References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
- <20211227164317.4146918-32-schnelle@linux.ibm.com>
- <YcojyRhALdm40gfk@rowland.harvard.edu>
- <8bda347ea30b60f1edb55693ff7509e7f7b1f979.camel@linux.ibm.com>
- <Yc86mvCUe2mHCa57@rowland.harvard.edu>
- <5a271c9e80ee394ecb41297e66d687e035a823ce.camel@linux.ibm.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdMkTjGSQFLEV5VB@gmail.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdLL0kaFhm6rp9NS@kroah.com>
+ <YdLaMvaM9vq4W6f1@gmail.com>
+ <YdL+IwQGTLFQyVz2@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5a271c9e80ee394ecb41297e66d687e035a823ce.camel@linux.ibm.com>
+In-Reply-To: <YdL+IwQGTLFQyVz2@kroah.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 03, 2022 at 12:35:45PM +0100, Niklas Schnelle wrote:
-> On Fri, 2021-12-31 at 12:15 -0500, Alan Stern wrote:
-> > On Fri, Dec 31, 2021 at 12:06:24PM +0100, Niklas Schnelle wrote:
-> > > On Mon, 2021-12-27 at 15:36 -0500, Alan Stern wrote:
-> > > > On Mon, Dec 27, 2021 at 05:43:16PM +0100, Niklas Schnelle wrote:
 
-> > > > > diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-> > > > > index 8ae5ccd26753..8e30116b6fd2 100644
-> > > > > --- a/drivers/usb/host/uhci-hcd.h
-> > > > > +++ b/drivers/usb/host/uhci-hcd.h
-> > > > > @@ -586,12 +586,14 @@ static inline int uhci_aspeed_reg(unsigned int reg)
-> > > > >  
-> > > > >  static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
-> > > > >  {
-> > > > > +#ifdef CONFIG_HAS_IOPORT
-> > > > >  	if (uhci_has_pci_registers(uhci))
-> > > > >  		return inl(uhci->io_addr + reg);
-> > > > > -	else if (uhci_is_aspeed(uhci))
-> > > > > +#endif
-> > > > 
-> > > > Instead of making all these changes (here and in the hunks below), you
-> > > > can simply modify the definition of uhci_has_pci_registers() so that it
-> > > > always gives 0 when CONFIG_HAS_IOPORT is N.
-> > > > 
-> > > > Alan Stern
-> > > 
-> > > I don't think that works, for example in the hunk you quoted returning
-> > > 0 from uhci_has_pci_registers() only skips over the inl() at run-time.
-> > > We're aiming to have inl() undeclared if HAS_IOPORT is unset though.
+* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+
+> > The overall policy to extend task_struct, going forward, would be to:
 > > 
-> > I see.  Do you think the following would be acceptable?  Add:
+> >  - Either make simple-type or struct-pointer additions to task_struct, that 
+> >    don't couple <linux/sched.h> to other subsystems.
 > > 
-> > #ifdef CONFIG_HAS_IOPORT
-> > #define UHCI_IN(x)	x
-> > #define UHCI_OUT(x)	x
-> > #else
-> > #define UHCI_IN(x)	0
-> > #define UHCI_OUT(x)
-> > #endif
-> > 
-> > and then replace for example inl(uhci->io_addr + reg) with 
-> > UHCI_IN(inl(uhci->io_addr + reg)).
+> >  - Or, if you absolutely must - and we don't want to forbid this - use the 
+> >    per_task() machinery to create a simple accessor to a complex embedded 
+> >    type.
 > 
-> In principle that looks like a valid approach. Not sure this is better
-> than explicit ifdefs though.
+> I'll leave all of this up to the scheduler developers, but it still looks 
+> odd to me.  The mess we create trying to work around issues in C :)
 
-The general preference in the kernel is to avoid sprinkling #ifdef's 
-throughout function definitions, and instead encapsulate their effects 
-with macros or inline functions -- like this.
+Yeah, so I *did* find this somewhat suboptimal too, and developed an 
+earlier version that used linker section tricks to gain the field offsets 
+more automatically.
 
->  With this approach one could add
-> UHCI_IN()/UHCI_OUT() calls which end up as nops without realizing it as
-> it would disable any compile time warning for using them without
-> guarding against CONFIG_HAS_IOPORT being undefined.
+It was an unmitigated disaster: was fragile on x86 already (which has a zoo 
+of linking quirks with no precedent of doing this before bounds.c 
+processing), but on ARM64 and probably on most of the other RISC-ish 
+architectures there was also a real runtime code generation cost of using 
+linker tricks: 2-3 extra instructions per per_task() use - clearly 
+unacceptable.
 
-To help prevent that, we can add
+Found this out the hard way after making it boot & work on ARM64 and 
+looking at the assembly output, trying to figure out why the generated code 
+size increased. :-/
 
-#undef UHCI_IN
-#undef UHCI_OUT
+Anyway, the current method has the big advantage of being obviously 
+invariant wrt. code generation compared to the previous code, on every 
+architecture.
 
-at the end of this section.
-
-> > The definition of uhci_has_pci_registers() should be updated in any 
-> > case; there's no reason for it to do a runtime check of uhci->io_addr 
-> > when HAS_IOPORT is disabled.
+> > Do these plans sound good to you?
 > 
-> Agree. Interestingly same as with the "if
-> (IS_ENABLED(CONFIG_HAS_IOPORT))" it seems having
-> uhci_has_pci_registers() compile-time defined to 0 (I added a
-> defined(CONFIG_HAS_IOPORT) to it) makes the compiler ignore the missing
-> inl() decleration already. But I'm not sure if we should rely on that.
+> Yes, taking the majority through the maintainer trees and then doing the 
+> remaining bits in a single tree seems sane, that one tree will be easier 
+> to review as well.
 
-I definitely would not rely on it.
+Ok. Will definitely offer it up piecemail-wise, in reviewable chunks, via 
+existing processes & flows.
 
-Alan Stern
+Thanks,
+
+	Ingo
