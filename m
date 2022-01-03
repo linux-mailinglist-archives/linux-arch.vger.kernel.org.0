@@ -2,123 +2,199 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B19BB4834C3
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 17:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578964834CB
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 17:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbiACQ3H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jan 2022 11:29:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiACQ3H (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 11:29:07 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1142C061761;
-        Mon,  3 Jan 2022 08:29:06 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id z29so137850803edl.7;
-        Mon, 03 Jan 2022 08:29:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+15VyunbMlyaslrB+G8c1bgxGtdlzGF50WLMZAMqweY=;
-        b=oZwRZaQk/icUv7eZEupXNnwVaJDyU/RA48r+Lbll1AXDx9l6ZP15EXDvrn7A8nfbre
-         HwkpqMtO6Xltq9G55Y+6BCKql23SXPZTu8AK385cU73SLsSstHko51voGu/lbmxtnpSh
-         jV7qtr/bRDnz3SQWkzZjBN+FkuD9xZqOjbTTunal7hKIb2pBEJYlBPcnk04dPAWCV5/t
-         a8Mkn1yjIuMdSMLyJer8rmLaGkYcip5N5JXXNFvNQMIgu4tFDzVqNT3hbTxSfkU1NbLm
-         i/VxTsMpa2ogxEteE+jED/+fgv+KbGBQWU2wJn5EPOQoUYyxIIUWrFKb+s04cw6T7P9t
-         2lAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=+15VyunbMlyaslrB+G8c1bgxGtdlzGF50WLMZAMqweY=;
-        b=Ku5IICJXSw4YVeDWmsW4F3Kzb5Nk3x2hbRnZPFJ5j6BwqFnmbWoENZg4lCf08uoD5E
-         AjWVBNNZyrm/qGL4j7fjxMCyoIa5RWWsBjPKkBrVhQGiCDWXH9qmyiO3UoWtp/Oot0+y
-         cZMMoO5LRkkWAkAg1wyzTCI685HqO0nrJxYToAtzYjDD2htGpJnezsIFDjyx94d16Y8/
-         kCV//l3GDV1eDohjxaaooZ2kacFjLELEwNnwz7lz04vLauaCZZsUvAOF4dybskxiEfcu
-         G36j9EbaxLR6ZPCQonKMPa+34hI4wcAn1UFMQrTEzp1niEOHlHtF29ZPG+QqJ7N+OhhA
-         +p5g==
-X-Gm-Message-State: AOAM531fgQA4baxopRsBU5En0Lw64nugO1Huv1jOe+uyw75zi0IBCW2G
-        7SxRAw4WeEutg2UhrI0hkqZIgUAYLGM=
-X-Google-Smtp-Source: ABdhPJyenq5OezECrB1ZC6EXStvbObATBBKVMKDSQJyVgbT+MDwJ3wTARhSoB3AS96p1ml4ZUk6YlQ==
-X-Received: by 2002:a17:907:3f14:: with SMTP id hq20mr38809900ejc.314.1641227344436;
-        Mon, 03 Jan 2022 08:29:04 -0800 (PST)
-Received: from gmail.com (0526F103.dsl.pool.telekom.hu. [5.38.241.3])
-        by smtp.gmail.com with ESMTPSA id hq29sm10982893ejc.141.2022.01.03.08.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jan 2022 08:29:04 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Mon, 3 Jan 2022 17:29:02 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S234518AbiACQa7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jan 2022 11:30:59 -0500
+Received: from mga04.intel.com ([192.55.52.120]:61989 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234503AbiACQa6 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 3 Jan 2022 11:30:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641227458; x=1672763458;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=lDHyxnzBp52EBgn9DCV6gYjH1wlIV3ajsqPWDXcfpvI=;
+  b=daquIahH8MXuFl9OrWG9Ihfk79Pv866hfOL5aX8XLylAGS8SJ6LPPKq/
+   zeHFj9XkYKGCMS5NqSxHpUJzHl5gz9wpV9xBirbL9UFcqDyTF7asL6+85
+   HLoSJs5Z5MTEY9WpSH6P+qDPVrR4AlNVBkYUlaMn/DRZZQR3HJKx57+wC
+   iNWq+DJZgz2k9fz+GBelPN4pOIcoA1F+lE+vhJ3TOSDtUvheqx+nPNu6M
+   2v44oM1yKAlOUeZHqpya7wnUn4kai2iF9s3F7/fIIqyEf6GfVptRP4kJa
+   mB9lRoJNjacWNKgl/1RnH4v0nLVG/uL59eNsmCZNRnlhWYUb9/MiyasHZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="240908622"
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="240908622"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 08:30:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
+   d="scan'208";a="762578003"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga005.fm.intel.com with ESMTP; 03 Jan 2022 08:30:48 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203GUjIa003559;
+        Mon, 3 Jan 2022 16:30:45 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
         Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdMkTjGSQFLEV5VB@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdLL0kaFhm6rp9NS@kroah.com>
- <YdLaMvaM9vq4W6f1@gmail.com>
- <YdL+IwQGTLFQyVz2@kroah.com>
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
+Date:   Mon,  3 Jan 2022 17:29:31 +0100
+Message-Id: <20220103162931.8132-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <Yc2Tqc69W9ukKDI1@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdL+IwQGTLFQyVz2@kroah.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+From: Borislav Petkov <bp@alien8.de>
+Date: Thu, 30 Dec 2021 12:10:33 +0100
 
-* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-
-> > The overall policy to extend task_struct, going forward, would be to:
-> > 
-> >  - Either make simple-type or struct-pointer additions to task_struct, that 
-> >    don't couple <linux/sched.h> to other subsystems.
-> > 
-> >  - Or, if you absolutely must - and we don't want to forbid this - use the 
-> >    per_task() machinery to create a simple accessor to a complex embedded 
-> >    type.
+> On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+> > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
 > 
-> I'll leave all of this up to the scheduler developers, but it still looks 
-> odd to me.  The mess we create trying to work around issues in C :)
-
-Yeah, so I *did* find this somewhat suboptimal too, and developed an 
-earlier version that used linker section tricks to gain the field offsets 
-more automatically.
-
-It was an unmitigated disaster: was fragile on x86 already (which has a zoo 
-of linking quirks with no precedent of doing this before bounds.c 
-processing), but on ARM64 and probably on most of the other RISC-ish 
-architectures there was also a real runtime code generation cost of using 
-linker tricks: 2-3 extra instructions per per_task() use - clearly 
-unacceptable.
-
-Found this out the hard way after making it boot & work on ARM64 and 
-looking at the assembly output, trying to figure out why the generated code 
-size increased. :-/
-
-Anyway, the current method has the big advantage of being obviously 
-invariant wrt. code generation compared to the previous code, on every 
-architecture.
-
-> > Do these plans sound good to you?
+> nuke?
 > 
-> Yes, taking the majority through the maintainer trees and then doing the 
-> remaining bits in a single tree seems sane, that one tree will be easier 
-> to review as well.
+> I think you wanna say something about avoiding position-based search if
+> toolchain supports -z ...
 
-Ok. Will definitely offer it up piecemail-wise, in reviewable chunks, via 
-existing processes & flows.
+Correct. A "vocabulary fail" moment.
+
+> 
+> > Position-based search, which means that if we have several symbols
+> > with the same name, we additionally need to provide an "index" of
+> > the desired symbol, is fragile. Par exemple, it breaks when two
+> 				  ^^^^^^^^^^^^
+> 
+> We already have hard time with the English in commit messages, let's
+> avoid the French pls.
+> 
+> > symbols with the same name are located in different sections.
+> > 
+> > Since a while, LD has a flag `-z unique-symbol` which appends
+> > numeric suffixes to the functions with the same name (in symtab
+> > and strtab).
+> > Check for its availability and always prefer when the livepatching
+> > is on.
+> 
+> Why only then?
+> 
+> It looks to me like we want this unconditionally, no?
+
+To be as least invasive as possible for now. We can turn it on
+unconditionally after a while. LLD doesn't support it and this
+and there are some different opinions about unique-symbol in
+general.
+Maybe FG-KASLR builds will reveal that some of the concerns are
+true, who knows. It wouldn't need to get turned off back again
+then.
+
+> 
+> > This needs a little adjustment to the modpost to make it
+> > strip suffixes before adding exports.
+> > 
+> > depmod needs some treatment as well, tho its false-positibe warnings
+> 
+> Unknown word [false-positibe] in commit message, suggestions:
+>         ['false-positive', 'false-positioned', 'prepositional']
+> 
+> Please introduce a spellchecker into your patch creation workflow.
+
+It's here, but refused to work this time or so <O> I have definitely
+run checkpatch with codespell against the series I can't recall any
+reported typos.
+
+> 
+> > about unknown symbols are harmless and don't alter the return code.
+> > And there is a bunch more livepatch code to optimize-out after
+> > introducing this, but let's leave it for later.
+> 
+> ...
+> 
+> > @@ -171,17 +173,21 @@ static int klp_find_object_symbol(const char *objname, const char *name,
+> >  
+> >  	/*
+> >  	 * Ensure an address was found. If sympos is 0, ensure symbol is unique;
+> > -	 * otherwise ensure the symbol position count matches sympos.
+> > +	 * otherwise ensure the symbol position count matches sympos. If the LD
+> > +	 * `-z unique` flag is enabled, sympos checks are not relevant.
+> 	   ^^^^^^^^^^^
+> 
+> -z unique-symbol
+> 
+> >  	 */
+> > -	if (args.addr == 0)
+> > +	if (args.addr == 0) {
+> >  		pr_err("symbol '%s' not found in symbol table\n", name);
+> > -	else if (args.count > 1 && sympos == 0) {
+> > +	} else if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)) {
+> > +		goto out_ok;
+> 
+> This is silly - just do it all here.
+
+Yeah, a "big brain" moment from me. Or even reset sympos to 0 when
+unique-symbol is enabled, like Mirek suggests.
+
+> 
+> > +	} else if (args.count > 1 && sympos == 0) {
+> >  		pr_err("unresolvable ambiguity for symbol '%s' in object '%s'\n",
+> >  		       name, objname);
+> >  	} else if (sympos != args.count && sympos > 0) {
+> >  		pr_err("symbol position %lu for symbol '%s' in object '%s' not found\n",
+> >  		       sympos, name, objname ? objname : "vmlinux");
+> >  	} else {
+> > +out_ok:
+> >  		*addr = args.addr;
+> >  		return 0;
+> >  	}
+> 
+> Looks straight-forward otherwise but I'm no livepatcher so I'd prefer if
+> they have a look too.
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
 
 Thanks,
-
-	Ingo
+Al
