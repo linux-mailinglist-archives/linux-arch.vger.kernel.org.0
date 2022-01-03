@@ -2,44 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBF348345C
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 16:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F15E483491
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 17:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbiACPlt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jan 2022 10:41:49 -0500
-Received: from mga14.intel.com ([192.55.52.115]:20979 "EHLO mga14.intel.com"
+        id S232959AbiACQHe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jan 2022 11:07:34 -0500
+Received: from mga02.intel.com ([134.134.136.20]:29872 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230160AbiACPls (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 3 Jan 2022 10:41:48 -0500
+        id S231648AbiACQHe (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 3 Jan 2022 11:07:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1641224508; x=1672760508;
+  t=1641226054; x=1672762054;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=g5C1DLmzAjmvh8fBdfrCcd+FGlrkD8urpR90vXZoFjU=;
-  b=QPK6Jse77vI5nv3kD20JUr8OHSP1W60/h8WoFBVcRIomUbFrS+SieCwW
-   7IXjhdnqnyTj4RJkJsS1w63fqHOuE+rvMc42oTexVXQKzoUBLcbx1+O3S
-   9F6/yzfTCegdD++Arh1AZOBQ4Wejj3q5ld0BB9XuKgXbjDmxJpLWwNQ+r
-   lmW61Ew1g5rFhIRLGV90qhURoc+r5GgfVM0tUyQmPHNKPcMqEhFjBlT4g
-   fndaCISAY97gT9dwLY6dsuNWX9vqxsOE6oy2fH2rXAW9BoQmg9dECnoy7
-   2KtokdkR/uasbC6ST7G9OjjsBLwP5zctnX+xm4N6Ayh0dnaajGnGmILSL
+  bh=rVVwDAkcOxhvyeGTJ9bFMrtt0ZWlk8cQj8m6qKDK0tg=;
+  b=Bqjjn6mwGSRgG9KY0aWfbooRTW2ZyS7SPHPhIA/OHX8sjyJZKx5SH3Di
+   srJ9m0KDbjNfkyP5pKpK7bIEScg5a/+HtqIAvxVIfrtCrkxSYhsVm98oc
+   FxI6hWF1sVYF/H1Zf524xtpZs4PmEivyqp2lmAJAbxihTAu4D6Phu0OX3
+   WC2f17pPCDsMRCDr+O68L6NIDfzRE5b2vTLBvtQ0/57gMPwKsToqto6gS
+   zOlJdmx5b2lXiGdsZp83mz8p3SJIMQPEBQCNSwxVHaV7Tgj+5H66dR+hI
+   EzT1ZPXCLa9TybRZDVF+RzT63n/IAUqeg2vy6TSZ7/xeYPvavonI5fC6D
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="242283703"
+X-IronPort-AV: E=McAfee;i="6200,9189,10215"; a="229392993"
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="242283703"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 07:41:47 -0800
+   d="scan'208";a="229392993"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2022 08:07:33 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,258,1635231600"; 
-   d="scan'208";a="688243455"
+   d="scan'208";a="760128765"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 03 Jan 2022 07:41:39 -0800
+  by fmsmga006.fm.intel.com with ESMTP; 03 Jan 2022 08:07:25 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203Ffa79022803;
-        Mon, 3 Jan 2022 15:41:36 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 203G7Mbb027955;
+        Mon, 3 Jan 2022 16:07:22 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
+To:     Miroslav Benes <mbenes@suse.cz>
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>,
+        Borislav Petkov <bp@alien8.de>,
         linux-hardening@vger.kernel.org, x86@kernel.org,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Kristen Carlson Accardi <kristen@linux.intel.com>,
@@ -50,7 +52,6 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         Bruce Schlobohm <bruce.schlobohm@intel.com>,
         Jessica Yu <jeyu@kernel.org>,
         kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
         Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Masahiro Yamada <masahiroy@kernel.org>,
@@ -74,110 +75,68 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
-Date:   Mon,  3 Jan 2022 16:40:23 +0100
-Message-Id: <20220103154023.7326-1-alexandr.lobakin@intel.com>
+Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
+Date:   Mon,  3 Jan 2022 17:06:15 +0100
+Message-Id: <20220103160615.7904-1-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <Yc40UKmylVh38vl5@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-4-alexandr.lobakin@intel.com> <Yc40UKmylVh38vl5@zn.tnic>
+In-Reply-To: <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-3-alexandr.lobakin@intel.com> <Yc2Tqc69W9ukKDI1@zn.tnic> <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com> <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de>
-Date: Thu, 30 Dec 2021 23:36:00 +0100
+From: Miroslav Benes <mbenes@suse.cz>
+Date: Mon, 3 Jan 2022 14:55:42 +0100 (CET)
 
-> On Thu, Dec 23, 2021 at 01:21:57AM +0100, Alexander Lobakin wrote:
-> > Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+> On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
 > 
-> That title is kinda laconic...
-
-"kallsyms: randomize /proc/kallsyms output order"?
-
-> 
-> > From: Kristen Carlson Accardi <kristen@linux.intel.com>
-> > 
-> > This patch makes /proc/kallsyms display in a random order, rather
-> 
-> Avoid having "This patch" or "This commit" in the commit message. It is
-> tautologically useless.
-> 
-> Also, do
-> 
-> $ git grep 'This patch' Documentation/process
-> 
-> for more details.
-
-Goes straight from the original series. Worth changing anyways.
-
-> 
-> > than sorted by address in order to hide the newly randomized address
-> > layout.
-> 
-> Sorted by address?
-> 
-> My /proc/kallsyms says
-> 
-> $ awk '{ print $1 }' /proc/kallsyms | uniq -c
->  119086 0000000000000000
-> 
-> so all the addresses are 0. Aha, and when I list them as root, only then
-> I see non-null addresses.
-> 
-> So why do we that patch at all?
-
-It displays zeros for non-roots, but the symbols are still sorted by
-their addresses. As a result, if you leak one address, you could
-determine some others.
-This is especially critical with FG-KASLR as its text layout is
-random each time and sorted /proc/kallsyms would make the entire
-feature useless.
-
-> 
-> > alobakin:
-> > Don't depend FG-KASLR and always do that for unpriviledged accesses
-> 
-> Unknown word [unpriviledged] in commit message, suggestions:
->         ['unprivileged', 'underprivileged', 'privileged']
-
-I either have some problems with checkpatch + codespell, or they
-missed all that typos you're noticing. Thanks, and apologies =\
-
-> 
-> > as suggested by several folks.
-> > Also, introduce and use a shuffle_array() macro which shuffles an
-> > array using Fisher-Yates.
-> 
-> Fisher-Yates what?
-> 
-> /me goes and looks at the wikipedia article.
-> 
-> Aha, a Fisher-Yates shuffle algoithm.
-> 
-> Don't be afraid to explain more in your commit messages and make them
-> more reader-friendly.
-
-Sure.
-This patch initially was at the tail of the set, after the commits
-where this algo is mentioned several times in a more detailed
-manner, but I moved it to the head then as the requests for doing
-this unconditionally converted it to a pre-requisite.
-
-> 
-> > We'll make use of it several more times
-> > later on.
-> 
-> Not important for this commit.
+> > On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
+> > >
+> > > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+> > > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
 > 
 > ...
 > 
-> -- 
-> Regards/Gruss,
->     Boris.
+> > Apologies since I haven't read the patch series.
+> > 
+> > The option does not exist in ld.lld and I am a bit concerning about
+> > its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> > 
+> > I thought that someone forwarded my comments (originally posted months
+> > on a feature request ago) here but seems not.
+> > (I am a ld.lld maintainer.)
 > 
-> https://people.kernel.org/tglx/notes-about-netiquette
+> Do you mean 
+> https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u 
+> ?
+> 
+> Unfortunately, it did not lead anywhere. I think that '-z unique-symbol' 
+> option should work fine as long as the live patching is concerned. Maybe I 
+> misunderstood but your concerns mentioned at the blog do not apply. The 
+> stability is not an issue for us since we (KLP) always work with already 
+> built and fixed kernel. And(at least) GCC already uses number suffices for 
+> IPA clones and it has not been a problem anywhere.
 
-Thanks!
+LLD doesn't have such an option, so FG-KASLR + livepatching builds
+wouldn't be available for LLVM with the current approach (or we'd
+still need a stub that prints "FG-KASLR is not compatible with
+sympos != 0").
+Unfortunately, I discovered this a bit late, just after sending this
+revision.
+
+OTOH, there's no easy alternative. <file + function> pair looks
+appealing, but is it even possible for now to implement in the
+kernel without much refactoring?
+
+>
+> Am I wrong?
+> 
+> Thanks
+> 
+> Miroslav 
+
+Thanks,
 Al
