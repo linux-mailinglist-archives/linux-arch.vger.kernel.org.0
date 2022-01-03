@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C7548387B
-	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 22:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D0548387E
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 22:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiACVeE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 3 Jan 2022 16:34:04 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:45908 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbiACVd4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 16:33:56 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52]:56668)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        id S230013AbiACVeO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jan 2022 16:34:14 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:55714 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230109AbiACVd6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 16:33:58 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:54168)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1n4Uxn-00ET1a-AZ; Mon, 03 Jan 2022 14:33:55 -0700
+        id 1n4Uxp-008wC2-R7; Mon, 03 Jan 2022 14:33:57 -0700
 Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:54408 helo=localhost.localdomain)
         by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1n4Uxl-006zvm-W6; Mon, 03 Jan 2022 14:33:54 -0700
+        id 1n4Uxo-006zvm-Gp; Mon, 03 Jan 2022 14:33:57 -0700
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arch@vger.kernel.org,
@@ -29,22 +29,22 @@ Cc:     linux-arch@vger.kernel.org,
         Al Viro <viro@ZenIV.linux.org.uk>,
         Kees Cook <keescook@chromium.org>, linux-api@vger.kernel.org,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Mon,  3 Jan 2022 15:33:05 -0600
-Message-Id: <20220103213312.9144-10-ebiederm@xmission.com>
+Date:   Mon,  3 Jan 2022 15:33:06 -0600
+Message-Id: <20220103213312.9144-11-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
 References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1n4Uxl-006zvm-W6;;;mid=<20220103213312.9144-10-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/CoLSF+5aKtgflxHOhPtbt/lqg7uqig4s=
+X-XM-SPF: eid=1n4Uxo-006zvm-Gp;;;mid=<20220103213312.9144-11-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX190mElOvs4SYiKuQHnfeTivnEFRnZqD7i0=
 X-SA-Exim-Connect-IP: 68.110.24.146
 X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa04.xmission.com
 X-Spam-Level: **
-X-Spam-Status: No, score=2.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TooManySym_01,XMNoVowels,XMSubLong,
-        XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Status: No, score=2.4 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TooManySym_01,T_TooManySym_02,T_TooManySym_03,
+        XMBrknScrpt_02,XMNoVowels,XMSubLong autolearn=disabled version=3.4.2
 X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
         *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
         *      [score: 0.5006]
@@ -52,198 +52,209 @@ X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
         *  0.7 XMSubLong Long Subject
         * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
         *      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_02 5+ unique symbols in subject
+        *  0.0 T_TooManySym_03 6+ unique symbols in subject
         *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  0.4 XMBrknScrpt_02 Possible Broken Spam Script
 X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
 X-Spam-Combo: **;linux-kernel@vger.kernel.org
 X-Spam-Relay-Country: 
-X-Spam-Timing: total 723 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 13 (1.8%), b_tie_ro: 11 (1.5%), parse: 1.83
-        (0.3%), extract_message_metadata: 20 (2.8%), get_uri_detail_list: 5
-        (0.7%), tests_pri_-1000: 6 (0.9%), tests_pri_-950: 1.82 (0.3%),
-        tests_pri_-900: 1.44 (0.2%), tests_pri_-90: 222 (30.8%), check_bayes:
-        203 (28.2%), b_tokenize: 16 (2.2%), b_tok_get_all: 11 (1.5%),
-        b_comp_prob: 3.4 (0.5%), b_tok_touch_all: 169 (23.3%), b_finish: 1.32
-        (0.2%), tests_pri_0: 436 (60.4%), check_dkim_signature: 0.81 (0.1%),
-        check_dkim_adsp: 4.1 (0.6%), poll_dns_idle: 1.93 (0.3%), tests_pri_10:
-        4.0 (0.6%), tests_pri_500: 11 (1.5%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH 10/17] ptrace: Return the signal to continue with from ptrace_stop
+X-Spam-Timing: total 581 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 9 (1.6%), b_tie_ro: 8 (1.4%), parse: 1.13 (0.2%),
+        extract_message_metadata: 13 (2.2%), get_uri_detail_list: 3.4 (0.6%),
+        tests_pri_-1000: 14 (2.3%), tests_pri_-950: 1.22 (0.2%),
+        tests_pri_-900: 1.00 (0.2%), tests_pri_-90: 85 (14.7%), check_bayes:
+        84 (14.4%), b_tokenize: 13 (2.2%), b_tok_get_all: 8 (1.4%),
+        b_comp_prob: 2.9 (0.5%), b_tok_touch_all: 57 (9.8%), b_finish: 0.71
+        (0.1%), tests_pri_0: 440 (75.6%), check_dkim_signature: 0.69 (0.1%),
+        check_dkim_adsp: 3.0 (0.5%), poll_dns_idle: 1.12 (0.2%), tests_pri_10:
+        2.0 (0.3%), tests_pri_500: 12 (2.1%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 11/17] ptrace: Separate task->ptrace_code out from task->exit_code
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
 X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The signal a task should continue with after a ptrace stop is
-inconsistently read, cleared, and sent.  Solve this by reading and
-clearing the signal to be sent in ptrace_stop.
+A process can be marked for death by setting SIGNAL_GROUP_EXIT and
+group_exit_code, long before do_exit is called.  Unfortunately because
+of PTRACE_EVENT_EXIT residing in do_exit this same tactic can not be
+used for task death.
 
-In an ideal world everything except ptrace_signal would share a common
-implementation of continuing with the signal, so ptracers could count
-on the signal they ask to continue with actually being delivered.  For
-now retain bug compatibility and just return with the signal number
-the ptracer requested the code continue with.
+Correct this by adding a new task field task->ptrace_code that holds
+the code for ptrace stops.  This allows task->exit_code to be set to
+the exit code long before the PTRACE_EVENT_EXIT ptrace stop.
 
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- include/linux/ptrace.h    |  2 +-
- include/linux/tracehook.h | 10 +++++-----
- kernel/signal.c           | 31 ++++++++++++++++++-------------
- 3 files changed, 24 insertions(+), 19 deletions(-)
+ fs/proc/array.c       |  3 +++
+ include/linux/sched.h |  1 +
+ kernel/exit.c         |  2 +-
+ kernel/ptrace.c       | 12 ++++++------
+ kernel/signal.c       | 18 +++++++++---------
+ 5 files changed, 20 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
-index 06f27736c6f8..323c9950e705 100644
---- a/include/linux/ptrace.h
-+++ b/include/linux/ptrace.h
-@@ -60,7 +60,7 @@ extern int ptrace_writedata(struct task_struct *tsk, char __user *src, unsigned
- extern void ptrace_disable(struct task_struct *);
- extern int ptrace_request(struct task_struct *child, long request,
- 			  unsigned long addr, unsigned long data);
--extern void ptrace_notify(int exit_code, unsigned long message);
-+extern int ptrace_notify(int exit_code, unsigned long message);
- extern void __ptrace_link(struct task_struct *child,
- 			  struct task_struct *new_parent,
- 			  const struct cred *ptracer_cred);
-diff --git a/include/linux/tracehook.h b/include/linux/tracehook.h
-index 5e60af8a11fc..2fd0bfe866c0 100644
---- a/include/linux/tracehook.h
-+++ b/include/linux/tracehook.h
-@@ -57,21 +57,21 @@ struct linux_binprm;
- static inline int ptrace_report_syscall(unsigned long message)
+diff --git a/fs/proc/array.c b/fs/proc/array.c
+index 43a7abde9e42..3042015c11ad 100644
+--- a/fs/proc/array.c
++++ b/fs/proc/array.c
+@@ -519,6 +519,9 @@ static int do_task_stat(struct seq_file *m, struct pid_namespace *ns,
+ 		cgtime = sig->cgtime;
+ 		rsslim = READ_ONCE(sig->rlim[RLIMIT_RSS].rlim_cur);
+ 
++		if (task_is_traced(task) && !(task->jobctl & JOBCTL_LISTENING))
++			exit_code = task->ptrace_code;
++
+ 		/* add up live thread stats at the group level */
+ 		if (whole) {
+ 			struct task_struct *t = task;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 52f2fdffa3ab..c3d732bf7833 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1174,6 +1174,7 @@ struct task_struct {
+ 	/* Ptrace state: */
+ 	unsigned long			ptrace_message;
+ 	kernel_siginfo_t		*last_siginfo;
++	int				ptrace_code;
+ 
+ 	struct task_io_accounting	ioac;
+ #ifdef CONFIG_PSI
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 7121db37c411..aedefe5eb0eb 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -1134,7 +1134,7 @@ static int *task_stopped_code(struct task_struct *p, bool ptrace)
  {
- 	int ptrace = current->ptrace;
-+	int signr;
+ 	if (ptrace) {
+ 		if (task_is_traced(p) && !(p->jobctl & JOBCTL_LISTENING))
+-			return &p->exit_code;
++			return &p->ptrace_code;
+ 	} else {
+ 		if (p->signal->flags & SIGNAL_STOP_STOPPED)
+ 			return &p->signal->group_exit_code;
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index eea265082e97..8bbd73ab9a34 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -172,7 +172,7 @@ void __ptrace_unlink(struct task_struct *child)
  
- 	if (!(ptrace & PT_PTRACED))
- 		return 0;
+ static bool looks_like_a_spurious_pid(struct task_struct *task)
+ {
+-	if (task->exit_code != ((PTRACE_EVENT_EXEC << 8) | SIGTRAP))
++	if (task->ptrace_code != ((PTRACE_EVENT_EXEC << 8) | SIGTRAP))
+ 		return false;
  
--	ptrace_notify(SIGTRAP | ((ptrace & PT_TRACESYSGOOD) ? 0x80 : 0), message);
-+	signr = ptrace_notify(SIGTRAP | ((ptrace & PT_TRACESYSGOOD) ? 0x80 : 0),
-+			      message);
+ 	if (task_pid_vnr(task) == task->ptrace_message)
+@@ -573,7 +573,7 @@ static int ptrace_detach(struct task_struct *child, unsigned int data)
+ 	 * tasklist_lock avoids the race with wait_task_stopped(), see
+ 	 * the comment in ptrace_resume().
+ 	 */
+-	child->exit_code = data;
++	child->ptrace_code = data;
+ 	__ptrace_detach(current, child);
+ 	write_unlock_irq(&tasklist_lock);
+ 
+@@ -863,11 +863,11 @@ static int ptrace_resume(struct task_struct *child, long request,
+ 	}
  
  	/*
- 	 * this isn't the same as continuing with a signal, but it will do
- 	 * for normal use.  strace only continues with a signal if the
- 	 * stopping signal is not SIGTRAP.  -brl
- 	 */
--	if (current->exit_code) {
--		send_sig(current->exit_code, current, 1);
--		current->exit_code = 0;
--	}
-+	if (signr)
-+		send_sig(signr, current, 1);
- 
- 	return fatal_signal_pending(current);
- }
+-	 * Change ->exit_code and ->state under siglock to avoid the race
+-	 * with wait_task_stopped() in between; a non-zero ->exit_code will
++	 * Change ->ptrace_code and ->state under siglock to avoid the race
++	 * with wait_task_stopped() in between; a non-zero ->ptrace_code will
+ 	 * wrongly look like another report from tracee.
+ 	 *
+-	 * Note that we need siglock even if ->exit_code == data and/or this
++	 * Note that we need siglock even if ->ptrace_code == data and/or this
+ 	 * status was not reported yet, the new status must not be cleared by
+ 	 * wait_task_stopped() after resume.
+ 	 *
+@@ -878,7 +878,7 @@ static int ptrace_resume(struct task_struct *child, long request,
+ 	need_siglock = data && !thread_group_empty(current);
+ 	if (need_siglock)
+ 		spin_lock_irq(&child->sighand->siglock);
+-	child->exit_code = data;
++	child->ptrace_code = data;
+ 	wake_up_state(child, __TASK_TRACED);
+ 	if (need_siglock)
+ 		spin_unlock_irq(&child->sighand->siglock);
 diff --git a/kernel/signal.c b/kernel/signal.c
-index 75bb062d8534..9903ff12e581 100644
+index 9903ff12e581..fd3c404de8b6 100644
 --- a/kernel/signal.c
 +++ b/kernel/signal.c
-@@ -2194,15 +2194,17 @@ static void do_notify_parent_cldstop(struct task_struct *tsk,
-  * That makes it a way to test a stopped process for
-  * being ptrace-stopped vs being job-control-stopped.
-  *
-- * If we actually decide not to stop at all because the tracer
-- * is gone, we keep current->exit_code unless clear_code.
-+ * Returns the signal the ptracer requested the code resume
-+ * with.  If the code did not stop because the tracer is gone,
-+ * the stop signal remains unchanged unless clear_code.
+@@ -2168,7 +2168,7 @@ static void do_notify_parent_cldstop(struct task_struct *tsk,
+  		info.si_status = tsk->signal->group_exit_code & 0x7f;
+  		break;
+  	case CLD_TRAPPED:
+- 		info.si_status = tsk->exit_code & 0x7f;
++		info.si_status = tsk->ptrace_code & 0x7f;
+  		break;
+  	default:
+  		BUG();
+@@ -2198,7 +2198,7 @@ static void do_notify_parent_cldstop(struct task_struct *tsk,
+  * with.  If the code did not stop because the tracer is gone,
+  * the stop signal remains unchanged unless clear_code.
   */
--static void ptrace_stop(int exit_code, int why, int clear_code,
-+static int ptrace_stop(int exit_code, int why, int clear_code,
+-static int ptrace_stop(int exit_code, int why, int clear_code,
++static int ptrace_stop(int code, int why, int clear_code,
  			unsigned long message, kernel_siginfo_t *info)
  	__releases(&current->sighand->siglock)
  	__acquires(&current->sighand->siglock)
- {
- 	bool gstop_done = false;
-+	bool read_code = true;
+@@ -2248,7 +2248,7 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
  
- 	if (arch_ptrace_stop_needed()) {
- 		/*
-@@ -2311,8 +2313,9 @@ static void ptrace_stop(int exit_code, int why, int clear_code,
+ 	current->ptrace_message = message;
+ 	current->last_siginfo = info;
+-	current->exit_code = exit_code;
++	current->ptrace_code = code;
  
- 		/* tasklist protects us from ptrace_freeze_traced() */
+ 	/*
+ 	 * If @why is CLD_STOPPED, we're trapping to participate in a group
+@@ -2315,7 +2315,7 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
  		__set_current_state(TASK_RUNNING);
-+		read_code = false;
+ 		read_code = false;
  		if (clear_code)
--			current->exit_code = 0;
-+			exit_code = 0;
+-			exit_code = 0;
++			code = 0;
  		read_unlock(&tasklist_lock);
  	}
  
-@@ -2322,8 +2325,10 @@ static void ptrace_stop(int exit_code, int why, int clear_code,
+@@ -2325,10 +2325,10 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
  	 * any signal-sending on another CPU that wants to examine it.
  	 */
  	spin_lock_irq(&current->sighand->siglock);
-+	if (read_code) exit_code = current->exit_code;
+-	if (read_code) exit_code = current->exit_code;
++	if (read_code) code = current->ptrace_code;
  	current->last_siginfo = NULL;
  	current->ptrace_message = 0;
-+	current->exit_code = 0;
+-	current->exit_code = 0;
++	current->ptrace_code = 0;
  
  	/* LISTENING can be set only during STOP traps, clear it */
  	current->jobctl &= ~JOBCTL_LISTENING;
-@@ -2334,9 +2339,10 @@ static void ptrace_stop(int exit_code, int why, int clear_code,
+@@ -2339,7 +2339,7 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
  	 * This sets TIF_SIGPENDING, but never clears it.
  	 */
  	recalc_sigpending_tsk(current);
-+	return exit_code;
+-	return exit_code;
++	return code;
  }
  
--static void ptrace_do_notify(int signr, int exit_code, int why, unsigned long message)
-+static int ptrace_do_notify(int signr, int exit_code, int why, unsigned long message)
- {
- 	kernel_siginfo_t info;
- 
-@@ -2347,18 +2353,21 @@ static void ptrace_do_notify(int signr, int exit_code, int why, unsigned long me
- 	info.si_uid = from_kuid_munged(current_user_ns(), current_uid());
- 
- 	/* Let the debugger run.  */
--	ptrace_stop(exit_code, why, 1, message, &info);
-+	return ptrace_stop(exit_code, why, 1, message, &info);
- }
- 
--void ptrace_notify(int exit_code, unsigned long message)
-+int ptrace_notify(int exit_code, unsigned long message)
- {
-+	int signr;
-+
- 	BUG_ON((exit_code & (0x7f | ~0xffff)) != SIGTRAP);
- 	if (unlikely(current->task_works))
- 		task_work_run();
- 
- 	spin_lock_irq(&current->sighand->siglock);
--	ptrace_do_notify(SIGTRAP, exit_code, CLD_TRAPPED, message);
-+	signr = ptrace_do_notify(SIGTRAP, exit_code, CLD_TRAPPED, message);
- 	spin_unlock_irq(&current->sighand->siglock);
-+	return signr;
- }
- 
- /**
-@@ -2517,7 +2526,6 @@ static void do_jobctl_trap(void)
- 	} else {
- 		WARN_ON_ONCE(!signr);
- 		ptrace_stop(signr, CLD_STOPPED, 0, 0, NULL);
--		current->exit_code = 0;
- 	}
- }
- 
-@@ -2570,15 +2578,12 @@ static int ptrace_signal(int signr, kernel_siginfo_t *info, enum pid_type type)
- 	 * comment in dequeue_signal().
- 	 */
- 	current->jobctl |= JOBCTL_STOP_DEQUEUED;
--	ptrace_stop(signr, CLD_TRAPPED, 0, 0, info);
-+	signr = ptrace_stop(signr, CLD_TRAPPED, 0, 0, info);
- 
- 	/* We're back.  Did the debugger cancel the sig?  */
--	signr = current->exit_code;
- 	if (signr == 0)
- 		return signr;
- 
--	current->exit_code = 0;
--
- 	/*
- 	 * Update the siginfo structure if the signal has
- 	 * changed.  If the debugger wanted something
+ static int ptrace_do_notify(int signr, int exit_code, int why, unsigned long message)
+@@ -2501,11 +2501,11 @@ static bool do_signal_stop(int signr)
+  *
+  * When PT_SEIZED, it's used for both group stop and explicit
+  * SEIZE/INTERRUPT traps.  Both generate PTRACE_EVENT_STOP trap with
+- * accompanying siginfo.  If stopped, lower eight bits of exit_code contain
++ * accompanying siginfo.  If stopped, lower eight bits of ptrace_code contain
+  * the stop signal; otherwise, %SIGTRAP.
+  *
+  * When !PT_SEIZED, it's used only for group stop trap with stop signal
+- * number as exit_code and no siginfo.
++ * number as ptrace_code and no siginfo.
+  *
+  * CONTEXT:
+  * Must be called with @current->sighand->siglock held, which may be
 -- 
 2.29.2
 
