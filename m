@@ -2,94 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C044548277E
-	for <lists+linux-arch@lfdr.de>; Sat,  1 Jan 2022 13:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 481CD482E66
+	for <lists+linux-arch@lfdr.de>; Mon,  3 Jan 2022 07:11:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbiAAMGA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 1 Jan 2022 07:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232361AbiAAMF7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 1 Jan 2022 07:05:59 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4503BC061574;
-        Sat,  1 Jan 2022 04:05:59 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id i8so17389646pgt.13;
-        Sat, 01 Jan 2022 04:05:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=EXvZL00u6uXG+OIxvAv86ri/WYc0aaA4/LPVPh7UF9DDvULTSfWQLt0bY2ngHeLgQI
-         syRNBHFq2czJY9wWKXlsvLz/xoz0LuMcZlEVm8B/ofiYGc6h3+ADtcIl1Rv1i8h6bBX2
-         nRAmM262IPWkA+NDNIHFUR7JAunGAUPMrYR7dwioDCei2RDFUkTo+A4I4GqRyfOXNqh8
-         dViDwTAduGaf9teR+8HuM5wArnrLIoXtkfICPiZKaCM3YxwlkJNcsj5rFajUOdEwBYwZ
-         k+mFdXOpzE9LDMkzM217i21BSh2MEkQAjpXtol0UWtUNClAG6xh5JLW87onMNsLZ0mfW
-         foew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
-        b=7vnxCcHPbNrXmTKQLty4g+LyInsods4m6pJNpf6PuKAKDyyI1CM66Qyc/puZVGoa+u
-         sz/YizXysmu1nnoAUzsxSGV7j4KY/IclVaXzdZkz0uwQVyPOkbL658vRgXDQ4U39zCx1
-         DSdy2gS65AfLpDWCoKsb9XtRvEPsMs1aanwxf4hQarp/C1R4DewlIDq2ydnCn8QJPhN9
-         +eyNsh+RgczvqoEnlw7vMqhYWOzo1Vll1MprFx6Y2koSiWIsYDshK7Ek+ZRVqc9VNPXv
-         5sOEa9FIEzlguvrpJlWZJmLy6qKO02Yl4dau8oIbJaW//+5eG8AD2KNHb8Eb20yfnvk2
-         NIig==
-X-Gm-Message-State: AOAM533RFZ8NklDcF01V01fJ/iuFcyMLaZRbEacc+LhrLUeQEU1Z3qhC
-        xdAwF5SU0xnMnvAYCJk51o0=
-X-Google-Smtp-Source: ABdhPJxGyB/wzvHc15hgzEfTxxuQJvHNBVHUoJzvH7VIsP/0hZIwPwDWjfY9v+tAreYWIWVNQovS2Q==
-X-Received: by 2002:aa7:928e:0:b0:4ba:fa67:d87 with SMTP id j14-20020aa7928e000000b004bafa670d87mr39045352pfa.41.1641038758868;
-        Sat, 01 Jan 2022 04:05:58 -0800 (PST)
-Received: from [192.168.0.153] ([143.244.48.136])
-        by smtp.gmail.com with ESMTPSA id a21sm32528954pfg.204.2022.01.01.04.05.51
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 01 Jan 2022 04:05:58 -0800 (PST)
-Message-ID: <61d043a6.1c69fb81.a0875.98f7@mx.google.com>
-From:   yalaiibrahim818@gmail.com
-X-Google-Original-From: suport.prilend@gmail.com
-Content-Type: text/plain; charset="iso-8859-1"
+        id S231819AbiACGLn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 3 Jan 2022 01:11:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:35175 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229505AbiACGLm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 3 Jan 2022 01:11:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1641190302;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eZWdqglEJRBMyWOswue91QGGug+foo23E07h4yycLxk=;
+        b=HRL5YnHa1yulGnOA1JzB549mXs0VZGS41FPJu/odPYeDh13i5tKe7lVZVXRCSXAAEcpO16
+        OGQAyDzIk3KHK71nS6xhHEVIlvfzZ/l0ceAi/wgS/MSiCWNBCE7qYMkvpmdtEbdxZI8GFR
+        mCvbtmJ9JoC0rEXOU7GhWHzAeFLBWO0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-607-jznnFRq4Ox2x6SNXuNadWw-1; Mon, 03 Jan 2022 01:11:36 -0500
+X-MC-Unique: jznnFRq4Ox2x6SNXuNadWw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DB1321006AA9;
+        Mon,  3 Jan 2022 06:11:33 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.193.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 76F497B9DB;
+        Mon,  3 Jan 2022 06:11:30 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id C52A6180039F; Mon,  3 Jan 2022 07:11:27 +0100 (CET)
+Date:   Mon, 3 Jan 2022 07:11:27 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        Dave Airlie <airlied@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        spice-devel@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: Re: [RFC 26/32] drm: handle HAS_IOPORT dependencies
+Message-ID: <20220103061127.jrnsfuxbxk2ywmtg@sirius.home.kraxel.org>
+References: <20211227164317.4146918-1-schnelle@linux.ibm.com>
+ <20211227164317.4146918-27-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: RE:
-To:     Recipients <suport.prilend@gmail.com>
-Date:   Sat, 01 Jan 2022 14:05:41 +0200
-Reply-To: andres.stemmet1@gmail.com
-X-Mailer: TurboMailer 2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211227164317.4146918-27-schnelle@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I want to confide in you to finalize this transaction of mutual benefits. I=
-t may seem strange to you, but it is real. This is a transaction that has n=
-o risk at all, due process shall be followed and it shall be carried out un=
-der the ambit of the financial laws. Being the Chief Financial Officer, BP =
-Plc. I want to trust and put in your care Eighteen Million British Pounds S=
-terling, The funds were acquired from an over-invoiced payment from a past =
-contract executed in one of my departments. I can't successfully achieve th=
-is transaction without presenting you as foreign contractor who will provid=
-e a bank account to receive the funds.
+On Mon, Dec 27, 2021 at 05:43:11PM +0100, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them. There is also a direct and hard coded use in
+> cirrus.c which according to the comment is only necessary during resume.
+> Let's just skip this as for example s390 which doesn't have I/O port
+> support also doesen't support suspend/resume.
 
-Documentation for the claim of the funds will be legally processed and docu=
-mented, so I will need your full cooperation on this matter for our mutual =
-benefits. We will discuss details if you are interested to work with me to =
-secure this funds. I will appreciate your prompt response in every bit of o=
-ur communication. Stay Blessed and Stay Safe.
+>  config DRM_BOCHS
+>  	tristate "DRM Support for bochs dispi vga interface (qemu stdvga)"
+>  	depends on DRM && PCI && MMU
+> +	depends on HAS_IOPORT
+>  	select DRM_KMS_HELPER
+>  	select DRM_VRAM_HELPER
+>  	select DRM_TTM
 
-Best Regards
+On devices with an mmio bar the driver works just fine without inb/outb,
+see bochs->mmio checks in bochs.c
 
-
-Tel: +44 7537 185910
-Andres  Stemmet
-Email: andres.stemmet1@gmail.com  =
-
-Chief financial officer
-BP Petroleum p.l.c.
-
-                                                                           =
-                        Copyright =A9 1996-2021
+take care,
+  Gerd
 
