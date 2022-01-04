@@ -2,36 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFDB484448
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 16:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFAA484464
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 16:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234722AbiADPKJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jan 2022 10:10:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234711AbiADPKD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 10:10:03 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56D0C061785;
-        Tue,  4 Jan 2022 07:10:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF0FBB8160D;
-        Tue,  4 Jan 2022 15:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2ECCC36AE9;
-        Tue,  4 Jan 2022 15:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1641309000;
-        bh=FwGNfUpg9MLkTnhbMFPLJ49cLIB2jzBLxN/4GGjWnOY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rcltBGCdyfRfLT+IIZTXqTS3zagADK6ZBsTMcVQyUdv4NN8kjRsGULOzE5DU/X2xy
-         bZEu2Yba/l9SCF6Lo+6gv1qAIhRp0XuikLCZu9Mo1P40icdAB1XXYXFikltZapH1Gm
-         l+Od1iX+Mwn8JIhqMsyLLRkWNdVVbflggg4L/CZE=
-Date:   Tue, 4 Jan 2022 16:09:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S229543AbiADPPp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jan 2022 10:15:45 -0500
+Received: from mga09.intel.com ([134.134.136.24]:35254 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234807AbiADPPl (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Tue, 4 Jan 2022 10:15:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1641309341; x=1672845341;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U0jCFR04AFZ0j9Ko4wwHqZ7VbTHp+abDpEOURhl/QVc=;
+  b=e9btkWtSmG/QtvdmSi02c3m2IzRD3/oi+sWvXDkS3r2cpbm0SyeLFsq3
+   VvADP6hCFNe4CAKlUqiiIgyvbBIYraVB/MAt7QthDHF3SSXaR8Gjp7Gnf
+   IFLaDShDbOIqDh3ubEDV+j0kzZeypjhmWadFW/ycxJc7ntBAn5folxudc
+   ZzsglK+/QKfleVaLBcBlajpSdX00DPhVl8TKP11Pp2g1e3doStwGI7qHD
+   aeM0eIjB5VfMFQ4bLblUBcvktbROmUwP1gG1PhGnwPdbiYiiplQPThkm5
+   b5dWuKlLhRvy2/wKtzvuePF+m4ucXJ0fU8KRaUsp6QAc2W/2urGnB1E+6
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10216"; a="242036232"
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="242036232"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:15:41 -0800
+X-IronPort-AV: E=Sophos;i="5.88,261,1635231600"; 
+   d="scan'208";a="590702321"
+Received: from smile.fi.intel.com ([10.237.72.61])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2022 07:15:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1n4lW0-006Fpy-6I;
+        Tue, 04 Jan 2022 17:14:20 +0200
+Date:   Tue, 4 Jan 2022 17:14:19 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
 To:     Ingo Molnar <mingo@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -42,47 +51,32 @@ Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] headers/uninline: Uninline single-use function:
- kobject_has_children()
-Message-ID: <YdRjRWHgvnqVe8UZ@kroah.com>
+Subject: Re: [PATCH] per_task: Remove the PER_TASK_BYTES hard-coded constant
+Message-ID: <YdRkS1iq6wtgbI3b@smile.fi.intel.com>
 References: <YdIfz+LMewetSaEB@gmail.com>
- <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
- <YdQnfyD0JzkGIzEN@gmail.com>
- <YdRM7I9E2WGU4GRg@kroah.com>
- <YdRRl+jeAm/xfU8D@gmail.com>
+ <YdLL0kaFhm6rp9NS@kroah.com>
+ <YdLaMvaM9vq4W6f1@gmail.com>
+ <YdRVawyDbHvI01uV@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdRRl+jeAm/xfU8D@gmail.com>
+In-Reply-To: <YdRVawyDbHvI01uV@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 02:54:31PM +0100, Ingo Molnar wrote:
-> 
-> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> 
-> > On Tue, Jan 04, 2022 at 11:54:55AM +0100, Ingo Molnar wrote:
-> > > There's one happy exception though, all the uninlining patches that 
-> > > uninline a single-call function are probably fine as-is:
-> > 
-> > <snip>
-> > 
-> > >  3443e75fd1f8 headers/uninline: Uninline single-use function: kobject_has_children()
-> > 
-> > Let me go take this right now, no need for this to wait, it should be
-> > out of kobject.h as you rightfully show there is only one user.
-> 
-> Sure - here you go!
+On Tue, Jan 04, 2022 at 03:10:51PM +0100, Ingo Molnar wrote:
+> * Ingo Molnar <mingo@kernel.org> wrote:
 
-I just picked it out of your git tree already :)
+> +++ b/kernel/sched/core.c
 
-Along those lines, any objection to me taking at least one other one?
-3f8757078d27 ("headers/prep: usb: gadget: Fix namespace collision") and
-6fb993fa3832 ("headers/deps: USB: Optimize <linux/usb/ch9.h>
-dependencies, remove <linux/device.h>") look like I can take now into my
-USB tree with no problems.
+> +#include "../../../kernel/sched/per_task_area_struct.h"
 
-thanks,
+#include "per_task_area_struct.h" ?
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
