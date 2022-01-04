@@ -2,148 +2,118 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D83484754
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 19:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63794484804
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 19:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236033AbiADSBE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 4 Jan 2022 13:01:04 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:48840 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234971AbiADSBD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 13:01:03 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:57206)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n4o7C-00Fz0d-Et; Tue, 04 Jan 2022 11:00:55 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:33276 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n4o73-006IOp-EO; Tue, 04 Jan 2022 11:00:50 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Walt Drummond <walt@drummond.us>
-Cc:     aacraid@microsemi.com, viro@zeniv.linux.org.uk,
-        anna.schumaker@netapp.com, arnd@arndb.de, bsegall@google.com,
-        bp@alien8.de, chuck.lever@oracle.com, bristot@redhat.com,
-        dave.hansen@linux.intel.com, dwmw2@infradead.org,
-        dietmar.eggemann@arm.com, dinguyen@kernel.org,
-        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
-        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
-        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
-        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
-        john.johansen@canonical.com, juri.lelli@redhat.com,
-        keescook@chromium.org, mcgrof@kernel.org,
-        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
-        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
-        rostedt@goodmis.org, tglx@linutronix.de,
-        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20220103181956.983342-1-walt@drummond.us>
-Date:   Tue, 04 Jan 2022 12:00:34 -0600
-In-Reply-To: <20220103181956.983342-1-walt@drummond.us> (Walt Drummond's
-        message of "Mon, 3 Jan 2022 10:19:48 -0800")
-Message-ID: <87iluzidod.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S229543AbiADSpV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jan 2022 13:45:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235760AbiADSpU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 13:45:20 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBBCC061761
+        for <linux-arch@vger.kernel.org>; Tue,  4 Jan 2022 10:45:20 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id n30so39880689eda.13
+        for <linux-arch@vger.kernel.org>; Tue, 04 Jan 2022 10:45:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kI7lvNJiYPzLyL1Je0qvpRBcO19V08nghbpJc6sg03Q=;
+        b=O0l9LFOhe0v3r9xfQXVq7v4rwX3xK7UVbh17OAJbou3mDbSswePNdZq99CXPQ5vIbQ
+         oDK6mHyvhN+fMCZYW134EsLULbvrAGYOKLuxUb7c4HjdN6JyBCmbvSofoCrh26sjcQVP
+         Sv3wocV4KjjJ9qTWC0/NqJ1QLM6rKPr9OZG4g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kI7lvNJiYPzLyL1Je0qvpRBcO19V08nghbpJc6sg03Q=;
+        b=zDxgc/vXqcSSy/0uAv5Qmk/w3Q3BAcHf2IT2zARwFf7lptmQl4SgvduCgH6uHe74O7
+         gFrWXMHAq4mjCXpytR+tEyXT/VolxI/4Tkq2bFLfVxfFnZSufuGO1PntJ/aghyU8WvN2
+         b+KA5xkp8g2F8soU0XF+WLTOJkjNh9glNu0UfTzywmkh0g0Eq2fbASH7vmtmu86TwIwO
+         5SbfUUGwf9WY1u7La8kPFH1OTvy5eYPdroYAJdvxtIH00h0WfCnQe3Wo1/mNtJn/qkpI
+         YJgB8UNQ8/nNrVX5ezUUuGLfubtWMjidMVsZIE2BkS2/OND8Aai3A03AykXFlX5Wluk+
+         RUtg==
+X-Gm-Message-State: AOAM533qNvaGCvSKZMwQxhP8OL0Nk1SMfyJyaVIZl+MJ4xghv8mNiKJf
+        64CrEZqA1euYmzgNYo1XU+nWXlB3yUSRh1KH
+X-Google-Smtp-Source: ABdhPJxhtZ5eutMoZT3KGYRl8Jcd4TQcG/O7ggRbqT9wkG6mER5hNLSH/xkLLShIFhQYS/YhRSN9BQ==
+X-Received: by 2002:a05:6402:1908:: with SMTP id e8mr49765104edz.22.1641321918308;
+        Tue, 04 Jan 2022 10:45:18 -0800 (PST)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id g9sm8358372edz.23.2022.01.04.10.45.16
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jan 2022 10:45:16 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id v10-20020a05600c214a00b00345e59928eeso241600wml.0
+        for <linux-arch@vger.kernel.org>; Tue, 04 Jan 2022 10:45:16 -0800 (PST)
+X-Received: by 2002:a7b:c305:: with SMTP id k5mr13487467wmj.144.1641321915993;
+ Tue, 04 Jan 2022 10:45:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1n4o73-006IOp-EO;;;mid=<87iluzidod.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/0+Xd8qpWrAnE4XcvYwEAmBpc7eG84nVw=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
-X-Spam-Level: *
-X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels,XM_B_Unicode
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        *  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;Walt Drummond <walt@drummond.us>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1444 ms - load_scoreonly_sql: 0.72 (0.0%),
-        signal_user_changed: 19 (1.3%), b_tie_ro: 14 (1.0%), parse: 2.1 (0.1%),
-         extract_message_metadata: 104 (7.2%), get_uri_detail_list: 8 (0.6%),
-        tests_pri_-1000: 15 (1.0%), tests_pri_-950: 2.1 (0.1%),
-        tests_pri_-900: 1.95 (0.1%), tests_pri_-90: 164 (11.4%), check_bayes:
-        122 (8.5%), b_tokenize: 19 (1.3%), b_tok_get_all: 16 (1.1%),
-        b_comp_prob: 18 (1.2%), b_tok_touch_all: 65 (4.5%), b_finish: 1.09
-        (0.1%), tests_pri_0: 1116 (77.3%), check_dkim_signature: 1.07 (0.1%),
-        check_dkim_adsp: 3.2 (0.2%), poll_dns_idle: 0.75 (0.1%), tests_pri_10:
-        2.3 (0.2%), tests_pri_500: 11 (0.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org> <20211213225350.27481-1-ebiederm@xmission.com>
+In-Reply-To: <20211213225350.27481-1-ebiederm@xmission.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Jan 2022 10:44:59 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+Message-ID: <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
+ special case
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Walt Drummond <walt@drummond.us> writes:
+On Mon, Dec 13, 2021 at 2:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+>
+>         if (signal->flags & (SIGNAL_GROUP_EXIT | SIGNAL_GROUP_COREDUMP)) {
+> -               if (!(signal->flags & SIGNAL_GROUP_EXIT))
+> -                       return sig == SIGKILL;
+> +               struct core_state *core_state = signal->core_state;
+> +               if (core_state) {
 
-> This patch set expands the number of signals in Linux beyond the
-> current cap of 64.  It sets a new cap at the somewhat arbitrary limit
-> of 1024 signals, both because it’s what GLibc and MUSL support and
-> because many architectures pad sigset_t or ucontext_t in the kernel to
-> this cap.  This limit is not fixed and can be further expanded within
-> reason.
+This change is very confusing.
 
-Ahhhh!!
+Also, why does it do that 'signal->core_state->dumper.task', when we
+already know that it's the same as 'signal->group_exit_task'?
 
-Please let's not expand the number of signals supported if there is any
-alternative.  Signals only really make sense for supporting existing
-interfaces.  For new applications there is almost always something
-better.
+The only thing that sets 'signal->core_state' also sets
+'signal->group_exit_task', and the call chain has set both to the same
+task.
 
-In the last discussion of adding SIGINFO
-https://lore.kernel.org/lkml/20190625161153.29811-1-ar@cs.msu.ru/ the
-approach examined was to fix SIGPWR to be ignored by default and to
-define SIGINFO as SIGPWR.
+So the code is odd and makes little sense.
 
-I dug through the previous conversations and there is a little debate
-about what makes sense for SIGPWR to do by default.  Alan Cox remembered
-SIGPWR was sent when the power was restored, so ignoring SIGPWR by
-default made sense.  Ted Tso pointed out a different scenario where it
-was reasonable for SIGPWR to be a terminating signal.
+But what's even more odd is how it
 
-So far no one has actually found any applications that will regress if
-SIGPWR becomes ignored by default.  Furthermore on linux SIGPWR is only
-defined to be sent to init, and init ignores all signals by default so
-in practice SIGPWR is ignored by the only process that receives it
-currently.
+ (a) sends the SIGKILL to somebody else
 
-I am persuaded at least enough that I could see adding a patch to
-linux-next and them sending to Linus that could be reverted if anything
-broke.
+ (b) does *NOT* send SIGKILL to itself
 
-Where I saw the last conversation falter was in making a persuasive
-case of why SIGINFO was interesting to add.  Given a world of ssh
-connections I expect a persuasive case can be made.  Especially if there
-are a handful of utilities where it is already implemented that just
-need to be built with SIGINFO defined.
+Now, (a) is explained in the commit message. The intent is to signal
+the core dumper.
 
->  - Add BSD SIGINFO (and VSTATUS) as a test.
+But (b) looks like a fundamental change in semantics. The target of
+the SIGKILL is still running, might be in some loop in the kernel that
+wants to be interrupted by a fatal signal, and you expressly disabled
+the code that would send that fatal signal.
 
-If your actual point is not to implement SIGINFO and you really have
-another use case for expanding sigset_t please make it clear.
+If I send SIGKILL to thread A, then that SIGKILL had *better* be
+delivered. To thread A, which may be in a "mutex_lock_killable()" or
+whatever else.
 
-Without seeing the persuasive case for more signals I have to say that
-adding more signals to the kernel sounds like a bad idea.
+The fact that thread B may be in the process of trying to dump core
+doesn't change that at all, as far as I can see.
 
-Eric
+So I think this patch is fundamentally buggy and wrong. Or at least
+needs much more explanation of why you'd not send SIGKILL to the
+target thread.
 
-
-
-
+               Linus
