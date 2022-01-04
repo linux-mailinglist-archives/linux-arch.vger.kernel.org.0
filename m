@@ -2,27 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31087484982
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 21:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EC64849ED
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 22:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233599AbiADUzC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jan 2022 15:55:02 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:49271 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233562AbiADUzB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 15:55:01 -0500
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 204KqTfp016358
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Jan 2022 15:52:30 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id EDA7015C00E1; Tue,  4 Jan 2022 15:52:28 -0500 (EST)
-Date:   Tue, 4 Jan 2022 15:52:28 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Walt Drummond <walt@drummond.us>, aacraid@microsemi.com,
+        id S234244AbiADVdc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jan 2022 16:33:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234143AbiADVda (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 16:33:30 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C869EC06179B
+        for <linux-arch@vger.kernel.org>; Tue,  4 Jan 2022 13:33:29 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id g11so84732768lfu.2
+        for <linux-arch@vger.kernel.org>; Tue, 04 Jan 2022 13:33:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=drummond.us; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TNEHR3Z7xVYize0mN8B03PgruOrGHLeNm9z/WBZRA5s=;
+        b=LSyr4sBMVZkpPhkZtPK2JisrQnhbBz7QjSfd4KNOcFM4AU0qKdk0UJpGZb+0jCOp3+
+         0be2y+YCjX3RXXSmjxSyg/dpUkwk8g9tR8tFlfpCoOl6gkjkt+fMq0PjjxyyJNTFYt8c
+         FZ11XeMeClhzKwY1EEXw6Drw6bXTNBrvYYXipPSLk1+G8bt34GEm94U8/3NBUpQmgo+I
+         6vFq6ItJdEYDUqsby/7d+eoSK1bjO+/oetaZ8Iew/taVDbU7iIgFSoXhe3hb0Ldw03MT
+         R+bmOKg8bmymIWyhHMZmRW+3LFsecnJ0FzU9ADVVLGkhSvwBro4JKi84WWqvGtFZApC4
+         FWMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TNEHR3Z7xVYize0mN8B03PgruOrGHLeNm9z/WBZRA5s=;
+        b=pQAgypRTTP4mGB5Arb0zBUCAupa/ia8aX3FUQywXq5cfUGCBhEVHaSzW7eNcC0fzrx
+         fxlZPgaunPySonGMldbdo9ATkejQy0zIuyaCKCYwIMXowFs8xSausBbfosIA9AwKa+je
+         2LSMMGyLV+u1f662fXgXgg8bXnDqCelJTCUAYLlp94BCRgPVXuipkqHgunXYLfkT1rgk
+         NxsAPVunzJXqoaZijHKLIDQbSvOGr19RFTQCIPpiZpWmyYmWEg2WS8RzgkE+GLQJTMvu
+         ivMgXEsU0KkBvhDx9HClvs+f3Nz1lWZEJVT+h/L2Ih8D/hG8lMWXCgY3dzcRikUdg0ai
+         sfdQ==
+X-Gm-Message-State: AOAM531Zc/mtNhqMriwNGSBRuHSk5YGbjWcWM93oVv55UALg08qrLAav
+        n5wZHA3qSZT/0uHD8kM8q4UKPZ3Qh7A535th04T+cw==
+X-Google-Smtp-Source: ABdhPJyRA2K3TMJ6jSnxBuWi5MuQ4iKJxLMI138ugfOpXQ7kPFHXRpFMZUcCtjTEsQxbN1KSwsm/r+TWYRcUIccdplg=
+X-Received: by 2002:a05:6512:2083:: with SMTP id t3mr44658689lfr.595.1641332007792;
+ Tue, 04 Jan 2022 13:33:27 -0800 (PST)
+MIME-Version: 1.0
+References: <20220103181956.983342-1-walt@drummond.us> <87iluzidod.fsf@email.froward.int.ebiederm.org>
+ <YdSzjPbVDVGKT4km@mit.edu>
+In-Reply-To: <YdSzjPbVDVGKT4km@mit.edu>
+From:   Walt Drummond <walt@drummond.us>
+Date:   Tue, 4 Jan 2022 13:33:16 -0800
+Message-ID: <CADCN6nz0ih2k7-LB9D3qJjQ9Dv5QAkn7KC9Ci-qcbMHTG7_F+A@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, aacraid@microsemi.com,
         viro@zeniv.linux.org.uk, anna.schumaker@netapp.com, arnd@arndb.de,
         bsegall@google.com, bp@alien8.de, chuck.lever@oracle.com,
         bristot@redhat.com, dave.hansen@linux.intel.com,
@@ -44,134 +74,134 @@ Cc:     Walt Drummond <walt@drummond.us>, aacraid@microsemi.com,
         linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
         linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
         linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
-Message-ID: <YdSzjPbVDVGKT4km@mit.edu>
-References: <20220103181956.983342-1-walt@drummond.us>
- <87iluzidod.fsf@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87iluzidod.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 12:00:34PM -0600, Eric W. Biederman wrote:
-> I dug through the previous conversations and there is a little debate
-> about what makes sense for SIGPWR to do by default.  Alan Cox remembered
-> SIGPWR was sent when the power was restored, so ignoring SIGPWR by
-> default made sense.  Ted Tso pointed out a different scenario where it
-> was reasonable for SIGPWR to be a terminating signal.
-> 
-> So far no one has actually found any applications that will regress if
-> SIGPWR becomes ignored by default.  Furthermore on linux SIGPWR is only
-> defined to be sent to init, and init ignores all signals by default so
-> in practice SIGPWR is ignored by the only process that receives it
-> currently.
+Fair enough.  I'll abandon the signals part of this and just send out
+the VSTATUS/Control-T part, after I address some comments from Greg.
 
-As it turns out, systemd does *not* ignore SIGPWR.  Instead, it will
-initiate the sigpwr target.  From the systemd.special man page:
+Thanks.
 
-       sigpwr.target
-           A special target that is started when systemd receives the
-           SIGPWR process signal, which is normally sent by the kernel
-           or UPS daemons when power fails.
-
-And child processes of systemd are not ignoring SIGPWR.  Instead, they
-are getting terminated.
-
-<tytso@cwcc>
-41% /bin/sleep 50 &
-[1] 180671
-<tytso@cwcc>
-42% kill -PWR 180671
-[1]+  Power failure           /bin/sleep 50
-
-> Where I saw the last conversation falter was in making a persuasive
-> case of why SIGINFO was interesting to add.  Given a world of ssh
-> connections I expect a persuasive case can be made.  Especially if there
-> are a handful of utilities where it is already implemented that just
-> need to be built with SIGINFO defined.
-
-One thing that's perhaps worth disentangling is the value of
-supporting VSTATUS --- which is a control character much like VINTR
-(^C) or VQUIT (control backslash) which is set via the c_cc[] array in
-termios structure.  Quoting from the termios man page:
-
-       VSTATUS
-              (not in POSIX; not supported under Linux; status
-              request: 024, DC4, Ctrl-T).  Status character (STATUS).
-              Display status information at terminal, including state
-              of foreground process and amount of CPU time it has
-              consumed.  Also sends a SIGINFO signal (not supported on
-              Linux) to the foreground process group.
-
-The basic idea is that when you type C-t, you can find out information
-about the currently running process.  This is a feature that
-originally comes from TOPS-10's TENEX operating system, and it is
-supported today on FreeBSD and Mac OS.  For example, it might display
-something like this:
-
-load: 2.39  cmd: ping 5374 running 0.00u 0.00s
-
-The reason why SIGINFO is sent to the foreground process group is that
-it gives the process an opportunity print application specific
-information about currently running process.  For example, maybe the C
-compiler could print something like "parsing 2042 of 5000 header
-files", or some such.  :-)
-
-There are people who wish that Linux supported Control-T / VSTATUS,
-for example, just last week, on TUHS, the Unix greybeards list, there
-were two such heartfelt wishes for Control-T support from two such
-greybeards:
-
-    "It's my biggest annoyance with Linux that it doesn't [support
-    control-t]
-    - https://minnie.tuhs.org/pipermail/tuhs/2021-December/024849.html
-
-    "I personally can't stand using Linux, even casually for a very
-     short sys-admin task, because of this missing feature"
-    - https://minnie.tuhs.org/pipermail/tuhs/2021-December/024898.html
-
-I claim, though, that we could implement VSTATUS without implenting
-the SIGINFO part of the feature.  Previous few applications *ever*
-implemented SIGINFO signal handlers so they could give status
-information, it's the hard one, since we don't have any spare signals
-left.  If we were to repurpose some lesser used signal, whether it be
-SIGPWR, SIGLOST, or SIGSTKFLT, the danger is that there might be some
-userspace program (such as a UPS monitoring program which wants to
-trigger power fail handling, or a userspace NFSv4 process that wants
-to signal that it was unable to recover a file's file lock after a
-server reboot), and if we try to take over the signal assignment, it's
-possible that we might get surprised.  Furthermore, all of the
-possibly unused signals that we might try to reclaim terminate the
-process by default, and SIGINFO *has* to have a default signal
-handling action of Ignore, since otherwise typing Control-T will end
-up killing the current foreground application.
-
-Personally, I don't care all that much about VSTATUS support --- I
-used it when I was in university, but honestly, I've never missed it.
-But if there is someone who wants to try to implement VSTATUS, and
-make some Unix greybeards happy, and maybe even switch from FreeBSD to
-Linux as a result, go wild.  I'm not convinced, though, that adding
-the SIGINFO part of the support is worth the effort.
-
-Not only do almost no programs implement SIGINFO support, a lot of CPU
-bound programs where this might be actually useful, end up running a
-large number of processes in parallel.  Take the "parsing 2042 of 5000
-header files" example I gave above.  Consider what would happen if gcc
-implemented support for SIGINFO, but the user was running a "make -j
-16" and typed Control-T.   The result would be chaos!
-
-So if you really miss Control-T, and it's the only thing holding back
-a few FreeBSD users from Linux, I don't see the problem with
-implementing that part of the feature.  Why not just do the easy part
-of the feature which is perhaps 5% of the work, and might provide 99%
-of the benefit (at least for those people who care).
-
-> Without seeing the persuasive case for more signals I have to say that
-> adding more signals to the kernel sounds like a bad idea.
-
-Concur, 100%.
-
-						- Ted
+On Tue, Jan 4, 2022 at 12:52 PM Theodore Ts'o <tytso@mit.edu> wrote:
+>
+> On Tue, Jan 04, 2022 at 12:00:34PM -0600, Eric W. Biederman wrote:
+> > I dug through the previous conversations and there is a little debate
+> > about what makes sense for SIGPWR to do by default.  Alan Cox remembered
+> > SIGPWR was sent when the power was restored, so ignoring SIGPWR by
+> > default made sense.  Ted Tso pointed out a different scenario where it
+> > was reasonable for SIGPWR to be a terminating signal.
+> >
+> > So far no one has actually found any applications that will regress if
+> > SIGPWR becomes ignored by default.  Furthermore on linux SIGPWR is only
+> > defined to be sent to init, and init ignores all signals by default so
+> > in practice SIGPWR is ignored by the only process that receives it
+> > currently.
+>
+> As it turns out, systemd does *not* ignore SIGPWR.  Instead, it will
+> initiate the sigpwr target.  From the systemd.special man page:
+>
+>        sigpwr.target
+>            A special target that is started when systemd receives the
+>            SIGPWR process signal, which is normally sent by the kernel
+>            or UPS daemons when power fails.
+>
+> And child processes of systemd are not ignoring SIGPWR.  Instead, they
+> are getting terminated.
+>
+> <tytso@cwcc>
+> 41% /bin/sleep 50 &
+> [1] 180671
+> <tytso@cwcc>
+> 42% kill -PWR 180671
+> [1]+  Power failure           /bin/sleep 50
+>
+> > Where I saw the last conversation falter was in making a persuasive
+> > case of why SIGINFO was interesting to add.  Given a world of ssh
+> > connections I expect a persuasive case can be made.  Especially if there
+> > are a handful of utilities where it is already implemented that just
+> > need to be built with SIGINFO defined.
+>
+> One thing that's perhaps worth disentangling is the value of
+> supporting VSTATUS --- which is a control character much like VINTR
+> (^C) or VQUIT (control backslash) which is set via the c_cc[] array in
+> termios structure.  Quoting from the termios man page:
+>
+>        VSTATUS
+>               (not in POSIX; not supported under Linux; status
+>               request: 024, DC4, Ctrl-T).  Status character (STATUS).
+>               Display status information at terminal, including state
+>               of foreground process and amount of CPU time it has
+>               consumed.  Also sends a SIGINFO signal (not supported on
+>               Linux) to the foreground process group.
+>
+> The basic idea is that when you type C-t, you can find out information
+> about the currently running process.  This is a feature that
+> originally comes from TOPS-10's TENEX operating system, and it is
+> supported today on FreeBSD and Mac OS.  For example, it might display
+> something like this:
+>
+> load: 2.39  cmd: ping 5374 running 0.00u 0.00s
+>
+> The reason why SIGINFO is sent to the foreground process group is that
+> it gives the process an opportunity print application specific
+> information about currently running process.  For example, maybe the C
+> compiler could print something like "parsing 2042 of 5000 header
+> files", or some such.  :-)
+>
+> There are people who wish that Linux supported Control-T / VSTATUS,
+> for example, just last week, on TUHS, the Unix greybeards list, there
+> were two such heartfelt wishes for Control-T support from two such
+> greybeards:
+>
+>     "It's my biggest annoyance with Linux that it doesn't [support
+>     control-t]
+>     - https://minnie.tuhs.org/pipermail/tuhs/2021-December/024849.html
+>
+>     "I personally can't stand using Linux, even casually for a very
+>      short sys-admin task, because of this missing feature"
+>     - https://minnie.tuhs.org/pipermail/tuhs/2021-December/024898.html
+>
+> I claim, though, that we could implement VSTATUS without implenting
+> the SIGINFO part of the feature.  Previous few applications *ever*
+> implemented SIGINFO signal handlers so they could give status
+> information, it's the hard one, since we don't have any spare signals
+> left.  If we were to repurpose some lesser used signal, whether it be
+> SIGPWR, SIGLOST, or SIGSTKFLT, the danger is that there might be some
+> userspace program (such as a UPS monitoring program which wants to
+> trigger power fail handling, or a userspace NFSv4 process that wants
+> to signal that it was unable to recover a file's file lock after a
+> server reboot), and if we try to take over the signal assignment, it's
+> possible that we might get surprised.  Furthermore, all of the
+> possibly unused signals that we might try to reclaim terminate the
+> process by default, and SIGINFO *has* to have a default signal
+> handling action of Ignore, since otherwise typing Control-T will end
+> up killing the current foreground application.
+>
+> Personally, I don't care all that much about VSTATUS support --- I
+> used it when I was in university, but honestly, I've never missed it.
+> But if there is someone who wants to try to implement VSTATUS, and
+> make some Unix greybeards happy, and maybe even switch from FreeBSD to
+> Linux as a result, go wild.  I'm not convinced, though, that adding
+> the SIGINFO part of the support is worth the effort.
+>
+> Not only do almost no programs implement SIGINFO support, a lot of CPU
+> bound programs where this might be actually useful, end up running a
+> large number of processes in parallel.  Take the "parsing 2042 of 5000
+> header files" example I gave above.  Consider what would happen if gcc
+> implemented support for SIGINFO, but the user was running a "make -j
+> 16" and typed Control-T.   The result would be chaos!
+>
+> So if you really miss Control-T, and it's the only thing holding back
+> a few FreeBSD users from Linux, I don't see the problem with
+> implementing that part of the feature.  Why not just do the easy part
+> of the feature which is perhaps 5% of the work, and might provide 99%
+> of the benefit (at least for those people who care).
+>
+> > Without seeing the persuasive case for more signals I have to say that
+> > adding more signals to the kernel sounds like a bad idea.
+>
+> Concur, 100%.
+>
+>                                                 - Ted
