@@ -2,154 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A070948473C
-	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 18:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D83484754
+	for <lists+linux-arch@lfdr.de>; Tue,  4 Jan 2022 19:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235902AbiADRwO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jan 2022 12:52:14 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:45375 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiADRwM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 12:52:12 -0500
-Received: from mail-wr1-f47.google.com ([209.85.221.47]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mo7if-1mcwHx3A6t-00pbYT; Tue, 04 Jan 2022 18:52:10 +0100
-Received: by mail-wr1-f47.google.com with SMTP id i22so77719258wrb.13;
-        Tue, 04 Jan 2022 09:52:10 -0800 (PST)
-X-Gm-Message-State: AOAM533Xaq/dN5RspR7u4blMmt+syCRcqS7vtF7oXBenV3dJuD59ZkIP
-        tLKjaD5hrU8EQeCJC9JCb4AyQ0bW3az82AJ4Vb8=
-X-Google-Smtp-Source: ABdhPJygcoXdlSo0oycRivZs0eEBsO9AOv959rN79bo0Wm/YZAp96RFkt5Mdy0ey7wu8b3j99e/n9n66hIx1SDBwIQ4=
-X-Received: by 2002:a5d:6d0e:: with SMTP id e14mr45146863wrq.407.1641318730354;
- Tue, 04 Jan 2022 09:52:10 -0800 (PST)
+        id S236033AbiADSBE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 4 Jan 2022 13:01:04 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:48840 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234971AbiADSBD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 13:01:03 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:57206)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n4o7C-00Fz0d-Et; Tue, 04 Jan 2022 11:00:55 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:33276 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n4o73-006IOp-EO; Tue, 04 Jan 2022 11:00:50 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Walt Drummond <walt@drummond.us>
+Cc:     aacraid@microsemi.com, viro@zeniv.linux.org.uk,
+        anna.schumaker@netapp.com, arnd@arndb.de, bsegall@google.com,
+        bp@alien8.de, chuck.lever@oracle.com, bristot@redhat.com,
+        dave.hansen@linux.intel.com, dwmw2@infradead.org,
+        dietmar.eggemann@arm.com, dinguyen@kernel.org,
+        geert@linux-m68k.org, gregkh@linuxfoundation.org, hpa@zytor.com,
+        idryomov@gmail.com, mingo@redhat.com, yzaikin@google.com,
+        ink@jurassic.park.msu.ru, jejb@linux.ibm.com, jmorris@namei.org,
+        bfields@fieldses.org, jlayton@kernel.org, jirislaby@kernel.org,
+        john.johansen@canonical.com, juri.lelli@redhat.com,
+        keescook@chromium.org, mcgrof@kernel.org,
+        martin.petersen@oracle.com, mattst88@gmail.com, mgorman@suse.de,
+        oleg@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        rth@twiddle.net, richard@nod.at, serge@hallyn.com,
+        rostedt@goodmis.org, tglx@linutronix.de,
+        trond.myklebust@hammerspace.com, vincent.guittot@linaro.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-m68k@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20220103181956.983342-1-walt@drummond.us>
+Date:   Tue, 04 Jan 2022 12:00:34 -0600
+In-Reply-To: <20220103181956.983342-1-walt@drummond.us> (Walt Drummond's
+        message of "Mon, 3 Jan 2022 10:19:48 -0800")
+Message-ID: <87iluzidod.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <YdIfz+LMewetSaEB@gmail.com> <YdLL0kaFhm6rp9NS@kroah.com> <YdLaMvaM9vq4W6f1@gmail.com>
-In-Reply-To: <YdLaMvaM9vq4W6f1@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 4 Jan 2022 12:51:56 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a3Q4faZvgVXoCALXiEn9WTunwZy__TjkiHGRQgtK9Uocw@mail.gmail.com>
-Message-ID: <CAK8P3a3Q4faZvgVXoCALXiEn9WTunwZy__TjkiHGRQgtK9Uocw@mail.gmail.com>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree -v1:
- Eliminate the Linux kernel's "Dependency Hell"
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:qRTzS+/kEBhbTFyZMvrFIWz9fWjSV6QXwddBZvvw0dnDNZcYuAe
- cv5fjH3elkHdFzwOcAkwatEm+oA0HtPZ4f8Rftf4O4olDKY7z8sKuLl/znIDh2dvl6w7iIh
- JwdEd5gMh3EynUBDwR0ziJL8FqwQsn2Rcc608Eq9rT1OByPXhy9NosHV8hkucq21f3m3D+Q
- bXfL1fkU9HsYyOagcD3aQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3U68u6PHqCM=:dPKRX8LVcPTjJdPheCWELg
- gOiFDst0opVaPZlLrE6WOBzXVCTf9UfdIA0p9S3NQKxuppA3P2IKiDWfHEmmSNk4sFyK3K1/w
- i0lCq+kmGCQnzT/swXWr+psDyZMWlk0QrYCFq37Rf/AYClLpbFQnmXEhY7AjszxPZhl2C301H
- vIMuuAIcG+MZN2MNZDCHctQnuh5n8FUcp2kRQswvEf8KOf9baIIZq/tw0+F6RhjsUof2DJjVa
- 9JeYdHT7RUwlh2UkCjA6E88yeQqTj96RS/Y8RWWtzqZw2s9270HcqZpuAle4Hn/4ZrxpIHrvG
- MftCV+NgyWETUhWRUj433xQBJKU334kYuS1nT0tLVRLotYbykQsWcnfIdrqR6KSxUdJnZEYm6
- 8N/zbFWsgz4xtJOXUiSXjN27KYfV7SvSgYCP/DrZhTQfG9QHQs90GNm16YAFHRPVatFpJ7J7T
- G8wqCdOrBPsDycWKAdn5yWwVTb2HU/Bdzcz+BIbIFZVctlY5ewIbBRY7k6oB6877Y1azlYbCb
- plqtP/A52qbIF6/GXihf3LNYFf6hSvQRLCJcgn6qIU6en/ydmx+8USyxhHzCV8n/TPaMNhAsX
- oS3JkDpBN+HvkuB1oTlnzrpczI31d2WRpoYUD7Gzhcz1jXcyxQMvparTHpuVhXykDoNK9PQq0
- VXQQ8gTiw7GW3GrWOQ0OmOZBa+3SEgXxIokevpdA8DxcKXUW5tSZdv9LMeNsYAwVZitrVE65W
- 6c/hBQZ2AOnQGKLGWG5TO7rP/XcpFzi5YpYSWh1lyIPURgjXoKXU9BW+cV5uvWPGD8CgHXAdf
- dhS3urLAXtF7qOgcW6X5YwOeNr2o6tY+WNOfb8/O9nnHOsH1hM=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1n4o73-006IOp-EO;;;mid=<87iluzidod.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/0+Xd8qpWrAnE4XcvYwEAmBpc7eG84nVw=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,XMNoVowels,XM_B_Unicode
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        *  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Walt Drummond <walt@drummond.us>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1444 ms - load_scoreonly_sql: 0.72 (0.0%),
+        signal_user_changed: 19 (1.3%), b_tie_ro: 14 (1.0%), parse: 2.1 (0.1%),
+         extract_message_metadata: 104 (7.2%), get_uri_detail_list: 8 (0.6%),
+        tests_pri_-1000: 15 (1.0%), tests_pri_-950: 2.1 (0.1%),
+        tests_pri_-900: 1.95 (0.1%), tests_pri_-90: 164 (11.4%), check_bayes:
+        122 (8.5%), b_tokenize: 19 (1.3%), b_tok_get_all: 16 (1.1%),
+        b_comp_prob: 18 (1.2%), b_tok_touch_all: 65 (4.5%), b_finish: 1.09
+        (0.1%), tests_pri_0: 1116 (77.3%), check_dkim_signature: 1.07 (0.1%),
+        check_dkim_adsp: 3.2 (0.2%), poll_dns_idle: 0.75 (0.1%), tests_pri_10:
+        2.3 (0.2%), tests_pri_500: 11 (0.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [RFC PATCH 0/8] signals: Support more than 64 signals
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 3, 2022 at 6:12 AM Ingo Molnar <mingo@kernel.org> wrote:
-> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > > Before going into details about how this tree solves 'dependency hell'
-> > > exactly, here's the current kernel build performance gain with
-> > > CONFIG_FAST_HEADERS=y enabled, (and with CONFIG_KALLSYMS_FAST=y enabled as
-> > > well - see below), using a stock x86 Linux distribution's .config with all
-> > > modules built into the vmlinux:
-> > >
-> > >   #
-> > >   # Performance counter stats for 'make -j96 vmlinux' (3 runs):
-> > >   #
-> > >   # (Elapsed time in seconds):
-> > >   #
-> > >
-> > >   v5.16-rc7:            231.34 +- 0.60 secs, 15.5 builds/hour    # [ vanilla baseline ]
-> > >   -fast-headers-v1:     129.97 +- 0.51 secs, 27.7 builds/hour    # +78.0% improvement
-> > >
-> > > Or in terms of CPU time utilized:
-> > >
-> > >   v5.16-rc7:            11,474,982.05 msec cpu-clock   # 49.601 CPUs utilized
-> > >   -fast-headers-v1:      7,100,730.37 msec cpu-clock   # 54.635 CPUs utilized   # +61.6% improvement
-> >
-> > Speed up is very impressive, nice job!
->
-> Thanks! :-)
+Walt Drummond <walt@drummond.us> writes:
 
-I've done some work in this area in the past, didn't quite take it enough of the
-way to get this far. The best I saw was 30% improvement with clang, which
-tends to be more sensitive than gcc towards header file bloat, as it does more
-detailed syntax checking before eliminating dead code.
+> This patch set expands the number of signals in Linux beyond the
+> current cap of 64.  It sets a new cap at the somewhat arbitrary limit
+> of 1024 signals, both because it’s what GLibc and MUSL support and
+> because many architectures pad sigset_t or ucontext_t in the kernel to
+> this cap.  This limit is not fixed and can be further expanded within
+> reason.
 
-Did you try both gcc and clang for this?
+Ahhhh!!
 
-> > That issue aside, I took a glance at the tree, and overall it looks like
-> > a lot of nice cleanups.  Most of these can probably go through the
-> > various subsystem trees, after you split them out, for the "major" .h
-> > cleanups.  Is that something you are going to be planning on doing?
->
-> Yeah, I absolutely plan on doing that too:
->
-> - About ~70% of the commits can be split up & parallelized through
->   maintainer trees.
->
-> - With the exception of the untangling of sched.h, per_task and the
->   "Optimize Headers" series, where a lot of patches are dependent on each
->   other. These are actually needed to get any measurable benefits from this
->   tree (!). We can do these through the scheduler tree, or through the
->   dedicated headers tree I posted.
->
-> The latter monolithic series is pretty much unavoidable, it's the result of
-> 30 years of coupling a lot of kernel subsystems to task_struct via embedded
-> structs & other complex types, that needed quite a bit of effort to
-> untangle, and that untangling needed to happen in-order.
->
-> Do these plans this sound good to you?
+Please let's not expand the number of signals supported if there is any
+alternative.  Signals only really make sense for supporting existing
+interfaces.  For new applications there is almost always something
+better.
 
-I haven't had a chance to look at your tree yet, I'm still on vacation
-without access to my normal workstation. I would like to run my own
-scripts for analyzing the header dependencies on it after I get back
-next week.
+In the last discussion of adding SIGINFO
+https://lore.kernel.org/lkml/20190625161153.29811-1-ar@cs.msu.ru/ the
+approach examined was to fix SIGPWR to be ignored by default and to
+define SIGINFO as SIGPWR.
 
-From what I could tell, linux/sched.h was not the only such problem,
-but I saw similarly bad issues with linux/fs.h (which is what I posted
-about in November/December), linux/mm.h and linux/netdevice.h
-on the high level, in low-level headers there are huge issues with
-linux/atomic.h, linux/mutex.h, linux/pgtable.h etc. I expect that you
-have addressed these as well, but I'd like to make sure that your
-changes are reasonably complete on arm32 and arm64 to avoid
-having to do the big cleanup more than once.
+I dug through the previous conversations and there is a little debate
+about what makes sense for SIGPWR to do by default.  Alan Cox remembered
+SIGPWR was sent when the power was restored, so ignoring SIGPWR by
+default made sense.  Ted Tso pointed out a different scenario where it
+was reasonable for SIGPWR to be a terminating signal.
 
-My approach to the large mid-level headers is somewhat different:
-rather than completely avoiding them from getting included, I would
-like to split up the structure definitions from the inline functions.
-Linus didn't really like my approach, but I suspect he'll have similar
-concerns about your solution for linux/sched.h, especially if we end
-up applying the same hack to other commonly used structures
-(sk_buff, mm_struct, super_block) in the end. I should be able to
-come up with a less handwavy reply after I've actually studied your
-approach better.
+So far no one has actually found any applications that will regress if
+SIGPWR becomes ignored by default.  Furthermore on linux SIGPWR is only
+defined to be sent to init, and init ignores all signals by default so
+in practice SIGPWR is ignored by the only process that receives it
+currently.
 
-Most of the patches should be the same either way (adding back
-missing includes to drivers, and doing cleanups to commonly
-included headers to avoid the deep nesting), the interesting bit
-will be how to properly define the larger structures without pulling
-in the rest of the world.
+I am persuaded at least enough that I could see adding a patch to
+linux-next and them sending to Linus that could be reverted if anything
+broke.
 
-         Arnd
+Where I saw the last conversation falter was in making a persuasive
+case of why SIGINFO was interesting to add.  Given a world of ssh
+connections I expect a persuasive case can be made.  Especially if there
+are a handful of utilities where it is already implemented that just
+need to be built with SIGINFO defined.
+
+>  - Add BSD SIGINFO (and VSTATUS) as a test.
+
+If your actual point is not to implement SIGINFO and you really have
+another use case for expanding sigset_t please make it clear.
+
+Without seeing the persuasive case for more signals I have to say that
+adding more signals to the kernel sounds like a bad idea.
+
+Eric
+
+
+
+
