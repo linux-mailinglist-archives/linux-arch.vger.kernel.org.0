@@ -2,95 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 275AE484B25
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 00:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CDD484B58
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 00:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiADX1n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jan 2022 18:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234152AbiADX1m (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 18:27:42 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE90C061761;
-        Tue,  4 Jan 2022 15:27:42 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id j6so154479264edw.12;
-        Tue, 04 Jan 2022 15:27:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2Cv5WeOv7Tkjfvs0p7bNFLZQbOHjCEbvTG2WwZ+PJtE=;
-        b=PZHDaNYG74eVQ9et4VXd8d/3UwzfH8cmtITrfpQmpyDu6Goc4ENYNhH0DUtd4/67WX
-         2jsEEEPKqh3jF0E/0Nrkek3i75ca7Q3PpOIVlbA5bvoUBmMu7lmnDNulJT4y4JhAQbjj
-         gutduxC+9yRGxHCoRpiIfsCFRxHa+9rOPas/JsHulNW1ivo1bps+H2Mmfe4NG7OEcrud
-         FCbP0mbdyXcRr7lZDJEhdVhJeL42B7jgAdot3UYgghV8YHYof4YmvffRozcp/o+ILm9o
-         0VMZSj5hy25IknttuNbhM8BcWtMLPyBgMGyVQ2UQFAne4tEbgdfMvTbdfWaVVaxKgIGJ
-         tMJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=2Cv5WeOv7Tkjfvs0p7bNFLZQbOHjCEbvTG2WwZ+PJtE=;
-        b=4lYjegzwdQb/gXYb1ZXQ8zqp6syvhFBoT9+uJjDMs6DCsoFDs9eMg2xBAXfB2/NLdn
-         Ex3dSUbkqrHBT1gQ5VB2uCaQy/KzLmPx03+h1drrYni/3ehWBuaOgOGoNR4coihV1ZM/
-         00AavYa+Q8qeQigFdtVNaXxbEeo4cAelL4cD0Pnpth4xC1qvWvYKfF3gnow69KP80sIN
-         iKBWRbgKHgi3aEbYBluCtKDsjNTedzxXL91H4rIgdoX68cPGGMwgf8euI3GAar/z+3x8
-         TtbnOt3qFQBiqH7XYd8OKbZOv8Aqgayv+3zZGFKwOw38VtNQiDBMGRXvgWl76uHOKq+j
-         vkNg==
-X-Gm-Message-State: AOAM532lbOKBhF/cBP83kpNw/DuYtOQs5mR9g8EF1Ijvfvh/oUQiiLeA
-        r4EFC3hlJoIPGehy1XMQISg=
-X-Google-Smtp-Source: ABdhPJxl9tdpWTHh5kromFvL3xd6HsedGO3y5SpmPIKgfg199U+Ewr19JV/Kv7f3tnBe6Pgj0XEcAQ==
-X-Received: by 2002:a17:906:6d95:: with SMTP id h21mr34285853ejt.190.1641338860742;
-        Tue, 04 Jan 2022 15:27:40 -0800 (PST)
-Received: from gmail.com ([5.38.241.27])
-        by smtp.gmail.com with ESMTPSA id u21sm15267600eds.8.2022.01.04.15.27.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jan 2022 15:27:40 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Wed, 5 Jan 2022 00:27:36 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] per_task: Remove the PER_TASK_BYTES hard-coded constant
-Message-ID: <YdTX6Mg/GgGvfi7j@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdLL0kaFhm6rp9NS@kroah.com>
- <YdLaMvaM9vq4W6f1@gmail.com>
- <YdRVawyDbHvI01uV@gmail.com>
- <YdRkS1iq6wtgbI3b@smile.fi.intel.com>
+        id S236594AbiADXs7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jan 2022 18:48:59 -0500
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:30195 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234238AbiADXs6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 18:48:58 -0500
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 204NmcIT030502;
+        Wed, 5 Jan 2022 08:48:38 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 204NmcIT030502
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1641340119;
+        bh=n/Pj0GuzGOQz52d0M2ySHYPW8PnjPW/MC0KNt6VisQU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WNyXe+TNpD+5PhYmJl/5PzFyxxou0Gl28BaS9COblPxjUDBR6TbjkF02wKfbqJOe4
+         KQSI+cDKcTkBo2o4ZnJgkJDEJe5laVDVEBMOAkAhHvz0q4/pIDfFGtJ/6vFPoZUAtf
+         rpBSCStylfIchiziCNptVJlKsjT+uHV5Cz7uXAZrV8qwM1I5qxtSNmfaQshmh9Aru4
+         XauiZuwvYIjgoMJgyKwnqzt0h2ixDCx9d1nBA9TaSAWnR/AGOA5gcF/lSuOYXJbQHX
+         2oeWMitgvKnev1/NtAs1UsVQxP9Th8k/A37YNHq80egjyIN9r/Bngg26ay8VH8eszE
+         Hf4HoCHsK91vA==
+X-Nifty-SrcIP: [209.85.210.170]
+Received: by mail-pf1-f170.google.com with SMTP id 196so33569911pfw.10;
+        Tue, 04 Jan 2022 15:48:38 -0800 (PST)
+X-Gm-Message-State: AOAM530rldZX5KL0DzN1ShVV871i0KAXp1xrkoqNTQWwzvfg5mtT0aVP
+        7n5Jftln7ooJzs5kgIwDzpT3Dpi/NMNHZtXvepM=
+X-Google-Smtp-Source: ABdhPJy1ElIOgaDmwcYlNYCKdVORotcnknHA9hhyGHQzzGq2dcvsZQ4k61/RlcmBwmUA89kzriKYSp+QP7PuwVN5vSo=
+X-Received: by 2002:a63:7148:: with SMTP id b8mr23513297pgn.616.1641340117654;
+ Tue, 04 Jan 2022 15:48:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdRkS1iq6wtgbI3b@smile.fi.intel.com>
+References: <20211214025355.1267796-1-masahiroy@kernel.org>
+In-Reply-To: <20211214025355.1267796-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 5 Jan 2022 08:48:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ98p=UbtdgdTkdO1djA--Ch7QwmR=0Q11QL6aKKZYC2w@mail.gmail.com>
+Message-ID: <CAK7LNAQ98p=UbtdgdTkdO1djA--Ch7QwmR=0Q11QL6aKKZYC2w@mail.gmail.com>
+Subject: Re: [PATCH v2 00/11] kbuild: do not quote string values in Makefile
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Nicolas Schier <n.schier@avm.de>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Dec 14, 2021 at 11:55 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+>
+> This patch refactors the code as outlined in:
+>
+>   https://lore.kernel.org/linux-kbuild/CAK7LNAR-VXwHFEJqCcrFDZj+_4+Xd6oynbj_0eS8N504_ydmyw@mail.gmail.com/
+>
+> First some patches refactor certs/Makefile. This Makefile is written
+> in a too complicated way.
+>
+> I will revert cd8c917a56f20f48748dd43d9ae3caff51d5b987
+> after this lands in the upstream.
+>
+>
 
-* Andy Shevchenko <andriy.shevchenko@intel.com> wrote:
 
-> On Tue, Jan 04, 2022 at 03:10:51PM +0100, Ingo Molnar wrote:
-> > * Ingo Molnar <mingo@kernel.org> wrote:
-> 
-> > +++ b/kernel/sched/core.c
-> 
-> > +#include "../../../kernel/sched/per_task_area_struct.h"
-> 
-> #include "per_task_area_struct.h" ?
 
-Indeed - fixed.
+Applied to linux-kbuild.
 
-Thanks,
 
-	Ingo
+
+> Masahiro Yamada (11):
+>   certs: use $< and $@ to simplify the key generation rule
+>   certs: unify duplicated cmd_extract_certs and improve the log
+>   certs: remove unneeded -I$(srctree) option for system_certificates.o
+>   certs: refactor file cleaning
+>   certs: remove misleading comments about GCC PR
+>   kbuild: stop using config_filename in scripts/Makefile.modsign
+>   certs: simplify $(srctree)/ handling and remove config_filename macro
+>   kbuild: do not include include/config/auto.conf from shell scripts
+>   kbuild: do not quote string values in include/config/auto.conf
+>   certs: move scripts/extract-cert to certs/
+>   microblaze: use built-in function to get CPU_{MAJOR,MINOR,REV}
+>
+>  MAINTAINERS                                   |  1 -
+>  Makefile                                      |  6 +-
+>  arch/arc/Makefile                             |  4 +-
+>  arch/arc/boot/dts/Makefile                    |  4 +-
+>  arch/h8300/boot/dts/Makefile                  |  6 +-
+>  arch/microblaze/Makefile                      |  8 +--
+>  arch/nds32/boot/dts/Makefile                  |  7 +--
+>  arch/nios2/boot/dts/Makefile                  |  2 +-
+>  arch/openrisc/boot/dts/Makefile               |  7 +--
+>  arch/powerpc/boot/Makefile                    |  2 +-
+>  arch/riscv/boot/dts/canaan/Makefile           |  4 +-
+>  arch/sh/boot/dts/Makefile                     |  4 +-
+>  arch/xtensa/Makefile                          |  2 +-
+>  arch/xtensa/boot/dts/Makefile                 |  5 +-
+>  certs/.gitignore                              |  1 +
+>  certs/Makefile                                | 55 +++++++------------
+>  {scripts => certs}/extract-cert.c             |  2 +-
+>  drivers/acpi/Makefile                         |  2 +-
+>  drivers/base/firmware_loader/builtin/Makefile |  4 +-
+>  init/Makefile                                 |  2 +-
+>  net/wireless/Makefile                         |  4 +-
+>  scripts/.gitignore                            |  1 -
+>  scripts/Kbuild.include                        | 47 ----------------
+>  scripts/Makefile                              | 11 +---
+>  scripts/Makefile.modinst                      |  4 +-
+>  scripts/gen_autoksyms.sh                      | 11 +---
+>  scripts/kconfig/confdata.c                    |  2 +-
+>  scripts/link-vmlinux.sh                       | 47 ++++++++--------
+>  scripts/remove-stale-files                    |  2 +
+>  scripts/setlocalversion                       |  9 ++-
+>  usr/Makefile                                  |  2 +-
+>  31 files changed, 87 insertions(+), 181 deletions(-)
+>  rename {scripts => certs}/extract-cert.c (98%)
+>
+> --
+> 2.32.0
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
