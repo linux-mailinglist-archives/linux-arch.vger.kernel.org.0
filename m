@@ -2,82 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5461E485202
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 12:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F174855C4
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 16:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239794AbiAELvX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Jan 2022 06:51:23 -0500
-Received: from mengyan1223.wang ([89.208.246.23]:37506 "EHLO mengyan1223.wang"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239785AbiAELvX (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 5 Jan 2022 06:51:23 -0500
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id 64BB76591B;
-        Wed,  5 Jan 2022 06:51:16 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1641383479;
-        bh=Fn7zHOmdeG4QcUKhnX1J7PW2F5GNpl1BqvGNa7CyV7c=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=1ho3+7RhzEeOwU8RUFJlu2+cV483V+bfN7wsB/Cjd85KcaEr+7wlaspHDFcmUrEG0
-         SQf7urJlf7pp5qXRbl7HgdCeRpRnXtEZ09Qz//8dOu0svR2XRIFN+w4v+ucPfHUnFH
-         jUWiZf5DT3923i9WhRmGjRybvb3saO+iogZBJHaw+RKnJl0ECtvTexicaKMcpDk0C4
-         B+PFPa+Pcc4vR6pG1qXmfoQfNcI/fVK0+6FOdbWbf2FCoQH0Zh2L3Rwsrc5PBrmMBA
-         Y8y3vdyhLz+Ima2D5Qc+jD99qAmb8Hod7XakpSUnZJ6T/wmGo3mrHlRMJiC+krAS+x
-         JZgqSW1XxjDIg==
-Message-ID: <6d0169ca8c9e417308d3b9f96cd0ef446ee36fe7.camel@mengyan1223.wang>
-Subject: Re: [PATCH V5 00/22] arch: Add basic LoongArch support
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S241413AbiAEPXM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Jan 2022 10:23:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55974 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241424AbiAEPXM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jan 2022 10:23:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C7F8617C9;
+        Wed,  5 Jan 2022 15:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31A7C36AE0;
+        Wed,  5 Jan 2022 15:23:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1641396191;
+        bh=ee5Owo3zU5vxkUxfJCeUQuvv8yMKNI4iRfO6jmetJQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m579DXS9iq/ymOI4ZYUnx7B941if1nNEh9yl45zNk3rugpq+87IPVeo2rjyAAov87
+         EC8zXM51rU4ItLwIGU+yIgBgEJnPsWmWTAlaOT5aLj9O0zt8mF/U7DSr2UClcL9Jzd
+         MpvNjt9QyFcTtQH1nnFyr2juOBZjQMWd82WYYsmw=
+Date:   Wed, 5 Jan 2022 16:23:08 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Wed, 05 Jan 2022 19:51:14 +0800
-In-Reply-To: <CAAhV-H6R=xWL18AH7HzeXHOVD_d-5m7RvdQCLkOR1NeDZ_0HMw@mail.gmail.com>
-References: <20211013063656.3084555-1-chenhuacai@loongson.cn>
-         <722477bcc461238f96c3b038b2e3379ee49efdac.camel@mengyan1223.wang>
-         <CAAhV-H40oWqkD+tQ3=XA8ijQGukkeG5O1M1JL3v5i402dFLK+Q@mail.gmail.com>
-         <587ab54d77af2fb4cdbe0530cdd5e550c3e968db.camel@mengyan1223.wang>
-         <CAAhV-H6R=xWL18AH7HzeXHOVD_d-5m7RvdQCLkOR1NeDZ_0HMw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.2 
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] headers/uninline: Uninline single-use function:
+ kobject_has_children()
+Message-ID: <YdW33ITu4Hz3+kid@kroah.com>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <20220103135400.4p5ezn3ntgpefuan@box.shutemov.name>
+ <YdQnfyD0JzkGIzEN@gmail.com>
+ <YdRM7I9E2WGU4GRg@kroah.com>
+ <YdRRl+jeAm/xfU8D@gmail.com>
+ <YdRjRWHgvnqVe8UZ@kroah.com>
+ <YdRkZqGuKCZcRbov@kroah.com>
+ <YdTiF5dVeizYtIDS@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdTiF5dVeizYtIDS@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2022-01-05 at 17:40 +0800, Huacai Chen wrote:
-> Hi, Ruoyao,
+On Wed, Jan 05, 2022 at 01:11:03AM +0100, Ingo Molnar wrote:
 > 
-> The problem still exists in 5.16-rc8, can you try to change
-> cpu_relax() definition to smp_mb()? It seems can fix the problem.
+> * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> 
+> > On Tue, Jan 04, 2022 at 04:09:57PM +0100, Greg Kroah-Hartman wrote:
+> > > On Tue, Jan 04, 2022 at 02:54:31PM +0100, Ingo Molnar wrote:
+> > > > 
+> > > > * Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > > > 
+> > > > > On Tue, Jan 04, 2022 at 11:54:55AM +0100, Ingo Molnar wrote:
+> > > > > > There's one happy exception though, all the uninlining patches that 
+> > > > > > uninline a single-call function are probably fine as-is:
+> > > > > 
+> > > > > <snip>
+> > > > > 
+> > > > > >  3443e75fd1f8 headers/uninline: Uninline single-use function: kobject_has_children()
+> > > > > 
+> > > > > Let me go take this right now, no need for this to wait, it should be
+> > > > > out of kobject.h as you rightfully show there is only one user.
+> > > > 
+> > > > Sure - here you go!
+> > > 
+> > > I just picked it out of your git tree already :)
+> > > 
+> > > Along those lines, any objection to me taking at least one other one?
+> > > 3f8757078d27 ("headers/prep: usb: gadget: Fix namespace collision") and
+> 
+> Ack.
+> 
+> > > 6fb993fa3832 ("headers/deps: USB: Optimize <linux/usb/ch9.h>
+> 
+> Ack.
 
-Is there any workload which can triggers the panic?  I can't trigger it
-by building and testing GCC, or building the kernel anymore.
+This one required me to fix up a usb core file that was only including
+this .h file and not kernel.h which it also needed.  Now resolved in my
+tree.
 
-And is your "stable" issue the same one I'd encountered?  To me changing
-barrier() to smp_mb() may fix some deadlock, but not a panic.  (I'm not
-an expert on CPU architecture or kernel programming, so maybe I'm wrong
-here.)
+> > > dependencies, remove <linux/device.h>") look like I can take now into my
+> > > USB tree with no problems.
+> > 
+> > Also these look good to go now:
+> > 	bae9ddd98195 ("headers/prep: Fix non-standard header section: drivers/usb/cdns3/core.h")
+> 
+> Ack.
+> 
+> > 	c027175b37e5 ("headers/prep: Fix non-standard header section: drivers/usb/host/ohci-tmio.c")
+> 
+> Ack.
+> 
+> Note that these latter two patches just simplified the task of my 
+> (simplistic) tooling, which is basically a shell script that inserts
+> header dependencies to the head of .c and .h files, right in front of
+> the first #include line it encounters.
+> 
+> These two patches do have some marginal clean-up value too, so I'm not 
+> opposed to merging them - just wanted to declare their true role. :-)
 
-I'll put my 3A5000 machine into a loop building kernel and see if I can
-trigger the panic again...
--- 
-Xi Ruoyao <xry111@mengyan1223.wang>
-School of Aerospace Science and Technology, Xidian University
+They all are sane cleanups, so I've taken them in my tree now.  Make
+your patchset a bit smaller against 5.17-rc1 when that comes around :)
+
+thanks,
+
+greg k-h
