@@ -2,121 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D69C485BB8
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 23:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA76A485BC1
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 23:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245094AbiAEWdh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Jan 2022 17:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245080AbiAEWde (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jan 2022 17:33:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68371C061245;
-        Wed,  5 Jan 2022 14:33:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2590EB81E3D;
-        Wed,  5 Jan 2022 22:33:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4498FC36AF4;
-        Wed,  5 Jan 2022 22:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641422011;
-        bh=V+pJxEa7+aavL4U6A2VgxzbbvSp1DeQ4c/dXqTqcxLY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fWnEb653GKPS44yyddsJLus2Hz7kMix9+5exfDPx8qbDMjRFZoxDwe0+XDZgiG/+J
-         HMlSxytT9mfEQfDkJLx6rdlxTToo962BGRW/EonZc2xxGeplYd3NIC2W4rQrnOTur7
-         yF6SMSmYB6HIKVWhgmNAhzc7/jiaGBUGdJd4J+hLvutYzseoZZKztt9znepRfWsJs6
-         ooLjoXCYg9ZODkwL6oZtfdfZJ7/94auTuroAU1QTlWWZ0rYyLb5rO8AaPMuM8ZEpmG
-         9M1fN/0TPdKACh5cZE2h6ppduarqWtSXTzU6FDQtNVjkOffe6dxuVY+sOQ0LAf/5wX
-         8ZUlLkjRmilvA==
-Date:   Wed, 5 Jan 2022 15:33:26 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdYctmnM6kdN5R5s@archlinux-ax161>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
- <YdTpAJxgI+s9Wwgi@gmail.com>
+        id S245105AbiAEWgV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Jan 2022 17:36:21 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:51080 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245111AbiAEWgR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jan 2022 17:36:17 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:39210)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n5EtB-00DgC5-GK; Wed, 05 Jan 2022 15:36:13 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:50620 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n5EtA-00ExSX-Hd; Wed, 05 Jan 2022 15:36:13 -0700
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Christoph Hellwig <hch@infradead.org>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211208202532.16409-5-ebiederm@xmission.com>
+        <YdU0bzBuHCokPgCM@zeniv-ca.linux.org.uk>
+Date:   Wed, 05 Jan 2022 16:36:04 -0600
+In-Reply-To: <YdU0bzBuHCokPgCM@zeniv-ca.linux.org.uk> (Al Viro's message of
+        "Wed, 5 Jan 2022 06:02:23 +0000")
+Message-ID: <87zgo94xpn.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdTpAJxgI+s9Wwgi@gmail.com>
+Content-Type: text/plain
+X-XM-SPF: eid=1n5EtA-00ExSX-Hd;;;mid=<87zgo94xpn.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18ZYm4a4a0sQT3RXN8pv1gnZRFbvkQ/ui0=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.3 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 410 ms - load_scoreonly_sql: 0.15 (0.0%),
+        signal_user_changed: 12 (2.9%), b_tie_ro: 10 (2.4%), parse: 0.88
+        (0.2%), extract_message_metadata: 20 (4.9%), get_uri_detail_list: 1.13
+        (0.3%), tests_pri_-1000: 30 (7.3%), tests_pri_-950: 1.33 (0.3%),
+        tests_pri_-900: 1.09 (0.3%), tests_pri_-90: 123 (30.1%), check_bayes:
+        120 (29.3%), b_tokenize: 7 (1.6%), b_tok_get_all: 7 (1.6%),
+        b_comp_prob: 1.99 (0.5%), b_tok_touch_all: 101 (24.7%), b_finish: 1.06
+        (0.3%), tests_pri_0: 207 (50.4%), check_dkim_signature: 0.56 (0.1%),
+        check_dkim_adsp: 2.6 (0.6%), poll_dns_idle: 0.33 (0.1%), tests_pri_10:
+        2.9 (0.7%), tests_pri_500: 8 (2.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 05/10] exit: Stop exporting do_exit
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jan 05, 2022 at 01:40:32AM +0100, Ingo Molnar wrote:
-> 
-> * Nathan Chancellor <nathan@kernel.org> wrote:
-> 
-> > Unfortunately, while the kernel now builds, it does not boot in QEMU. I 
-> > tried to checkout at 9006a48618cc0cacd3f59ff053e6509a9af5cc18 to see if I 
-> > could reproduce that breakage there but the build errors out at that 
-> > change (I do see notes of bisection breakage in some of the commits) so I 
-> > assume that is expected.
-> 
-> Yeah, there's a breakage window on ARM64, I'll track down that 
-> bisectability bug.
-> 
-> Decoupling thread_info and task_struct incrementally, so that it bisects 
-> cleanly on all architectures, was always a big challenge. :-/
-> 
-> > There is no output, even with earlycon, so it seems like something is 
-> > going wrong in early boot code. I am not very familiar with the SCS code 
-> > so I will see if I can debug this with gdb later (I'll try to see if it 
-> > is reproducible with GCC as well; as Nick mentions, there is support 
-> > being added to it and I don't mind building from source).
-> 
-> Just to make sure: with SCS disabled the same kernel boots fine?
+Al Viro <viro@zeniv.linux.org.uk> writes:
 
-Correct (thank you for making sure, I have definitely not tested that
-before...).
+> On Wed, Dec 08, 2021 at 02:25:27PM -0600, Eric W. Biederman wrote:
+>> Now that there are no more modular uses of do_exit remove the EXPORT_SYMBOL.
+>> 
+>> Suggested-by: Christoph Hellwig <hch@infradead.org>
+>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> ---
+>>  kernel/exit.c | 1 -
+>>  1 file changed, 1 deletion(-)
+>> 
+>> diff --git a/kernel/exit.c b/kernel/exit.c
+>> index f975cd8a2ed8..57afac845a0a 100644
+>> --- a/kernel/exit.c
+>> +++ b/kernel/exit.c
+>> @@ -843,7 +843,6 @@ void __noreturn do_exit(long code)
+>>  	lockdep_free_task(tsk);
+>>  	do_task_dead();
+>>  }
+>> -EXPORT_SYMBOL_GPL(do_exit);
+>
+> "Now" in the commit message is misleading, AFAICS - there's no such users
+> in the mainline right now (and yes, that one could be moved all the way
+> up).
 
-$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64 defconfig Image.gz
+Yes.  I should have said.  Now there are few enough users of do_exit
+that I can inspect the code and see there are no more modular users.
 
-$ boot-qemu.sh -a arm64 -k .build/arm64 -t 30s
-...
-[    0.000000] Linux version 5.16.0-rc8-798083-g1755441e323b (nathan@archlinux-ax161) (ClangBuiltLinux clang version 14.0.0 (https://github.com/llvm/llvm-project 4602f4169a21e75b82261ba1599046b157d1d021), LLD 14.0.0) #1 SMP PREEMPT Wed Jan 5 21:51:29 UTC 2022
-...
+Or words to that effect.
 
-$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64.scs defconfig
+Because honestly my make_task_dead change got rid of most of the callers
+of do_exit.
 
-$ scripts/config --file .build/arm64.scs/.config -e SHADOW_CALL_STACK
+Eric
 
-$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64.scs olddefconfig Image.gz
-...
-qemu-system-aarch64: terminating on signal 15 from pid 690472 (timeout)
-+ RET=124
-+ set +x
-
-Going back to v5.16-rc8, everything works fine.
-
-$ boot-qemu.sh -a arm64 -k .build/arm64 -t 30s
-...
-[    0.000000] Linux version 5.16.0-rc8-795784-gc9e6606c7fe9 (nathan@archlinux-ax161) (ClangBuiltLinux clang version 14.0.0 (https://github.com/llvm/llvm-project 4602f4169a21e75b82261ba1599046b157d1d021), LLD 14.0.0) #1 SMP PREEMPT Wed Jan 5 22:27:39 UTC 2022
-...
-
-I don't think I will have time to look at this today but I will try
-tomorrow. Having the bisectability bug fixed would help narrow things
-down but I am almost certain it is something up with the new per_task
-infrastructure but I'll have to dig around and see if I can understand
-that first.
-
-Cheers,
-Nathan
