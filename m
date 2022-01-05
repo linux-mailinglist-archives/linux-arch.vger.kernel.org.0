@@ -2,294 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E192484C28
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 02:37:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140E5484CD9
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 04:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235921AbiAEBhf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 4 Jan 2022 20:37:35 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:47387 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234314AbiAEBhe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 20:37:34 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M1HqM-1n7g870vwQ-002pCN; Wed, 05 Jan 2022 02:37:33 +0100
-Received: by mail-wm1-f41.google.com with SMTP id l4so24387755wmq.3;
-        Tue, 04 Jan 2022 17:37:33 -0800 (PST)
-X-Gm-Message-State: AOAM533m75NWqMI6HgX/0YaSqq6cTZp/MyX2XVXahyqxE3yAvN76aqhg
-        KNq8vfF3DjVmW6K79t6d9+4srbk2RuYDxo3OYPI=
-X-Google-Smtp-Source: ABdhPJxHTEy2C+bjGue39V0EgopuIsgVVGg7KiulqUkwYFCgU2aaR/LD9VtLI0gNzrpuPz9FYmrcnYVs7/LRDERhHMU=
-X-Received: by 2002:a1c:7418:: with SMTP id p24mr822472wmc.82.1641346652798;
- Tue, 04 Jan 2022 17:37:32 -0800 (PST)
-MIME-Version: 1.0
-References: <YdIfz+LMewetSaEB@gmail.com> <YdLL0kaFhm6rp9NS@kroah.com>
- <YdLaMvaM9vq4W6f1@gmail.com> <CAK8P3a3Q4faZvgVXoCALXiEn9WTunwZy__TjkiHGRQgtK9Uocw@mail.gmail.com>
- <YdTg3bO6qs0frHVk@gmail.com>
-In-Reply-To: <YdTg3bO6qs0frHVk@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 4 Jan 2022 20:37:28 -0500
-X-Gmail-Original-Message-ID: <CAK8P3a3eFumM0dHkbdqL_1BwEZNRn9x3WxKbWKyapErd3SEEcw@mail.gmail.com>
-Message-ID: <CAK8P3a3eFumM0dHkbdqL_1BwEZNRn9x3WxKbWKyapErd3SEEcw@mail.gmail.com>
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree -v1:
- Eliminate the Linux kernel's "Dependency Hell"
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S229809AbiAEDZE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 4 Jan 2022 22:25:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230257AbiAEDZE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 4 Jan 2022 22:25:04 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C14C061761
+        for <linux-arch@vger.kernel.org>; Tue,  4 Jan 2022 19:25:03 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id g2so34347736pgo.9
+        for <linux-arch@vger.kernel.org>; Tue, 04 Jan 2022 19:25:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=wkuN5scY3yiYZRl2fRuA4WGrOv7r3w+Jln9UFNacBQM=;
+        b=sMREvPRxGZUwa08eFtR2hiuXSNQvK2z3b4UkIDQKPgoibmig3YKSC5pe3mtAttY7h4
+         XwK6GVkzJlAQFD2wxzX0eBRmZPIqCLwyrJwVVyBuYbzzF8v1N7MwQVj3P7PuIuTVvo0A
+         rEP82aGHqFCbL7ltVQA9rwNIlRiurCUsJqIQJ75u9fKPGEUjWr+Bd51S25yKt9bNwyWq
+         rcSVy1OCjWXA6fj3PLmN+GdKcNL6LzYc5Ao8OxtZok7AYQCkWdnX56ev9cPw3c3+UGgs
+         dVVe/F8gBmvEA8sYC1WCJBKNz2MM65RNUa7GnJFiSHqVSKWr0g4rG/r7YmFBeeHCDHyO
+         Sfog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=wkuN5scY3yiYZRl2fRuA4WGrOv7r3w+Jln9UFNacBQM=;
+        b=TquRahiXnG4WUY3B32YFumT2+NQEJQ75BLt2VJTk5t8v5GYSQaVxjZhb6bCUTOxHPR
+         68U/1h75zPqztBh8Bgw7+ucqkKJ6X9yXD0HidhXUoTyOQcTze6dY3cEr5cuGB539cT8V
+         HnzRKDdyPn+YCstO4hTOzQK2a/F1S2rFYileOWYZuAKi8/3b4OBBvr2uEuCL9QX+jyku
+         gdiiovn9xTq7AMidaqtH1bxLqpOOQpgGm7VxGh+XHCovmQZUFX+WEJiENvJT3f+wMJWN
+         o6q1a3pKSgXHXNTxkgxcAspRe+9GciDErG/43Rk89zCw8rzOcF9VgVdRY70WMOtoxqqG
+         GiZQ==
+X-Gm-Message-State: AOAM5302GJfnBbnTX3KvDUK+reomYMalMOdYgXIfMsqrQfBFLJtWbdsK
+        mj7TKoX3A6BNsZSku5XSr1Oslw==
+X-Google-Smtp-Source: ABdhPJwILBGPaWIQmEOPR6iQ9ZbM+KK4UsIg1jEugYbcKOG7KIm+OYdMXveHNWvOBlsyyUCtrfOdgA==
+X-Received: by 2002:a63:8149:: with SMTP id t70mr46472429pgd.71.1641353102364;
+        Tue, 04 Jan 2022 19:25:02 -0800 (PST)
+Received: from google.com ([2620:15c:2ce:200:b78:5a0b:6f2e:23e9])
+        by smtp.gmail.com with ESMTPSA id a15sm663138pjo.49.2022.01.04.19.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jan 2022 19:25:02 -0800 (PST)
+Date:   Tue, 4 Jan 2022 19:24:56 -0800
+From:   =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Miroslav Benes <mbenes@suse.cz>, Borislav Petkov <bp@alien8.de>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
         Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:L5CftMAmJz9G1t/eT4THSm4tZDfJSL+6QX3cdze+mFGobaS9Nn2
- cBULP20MnY6QhJ/DYEfMHvWyFxmhd4BCjQwXOTqneXKMIG6v3QV/hzRd7p5QUSNDXPPSEwN
- QaGA1LCkclmq88bjAaRxe+xodNG06Yqk6lbkpFPQv7d/XCYA2dk1bo83ETfS1Uv6dRsXGxD
- 13G0MIoYsa4f0k3qw9iPg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:76PQ4h2Jvjo=:afnx2XBKtAF66ZdSil76LK
- L2AIIQsOCSfhR2Qr8+U0UHIVHxgGx/SI3u05unQLOf3GYQbkFU3ao1xsjYgLT8P63d+NrPxFZ
- KOtMrHcd1bp+rnWrxIHFmnjKuE5Qafcn7+mc16ZimVPONYM8s+ZF6KpH2hcW6lcG+A3m8p0gu
- glEOKJ8U4qVdleSuRs/G9jzKa3R629kUuQm2GyLWMON4YZ47j304BKvYfOLQTKSpGhH5X9Mak
- S9Du8wfcZQPLI7jTjdZ0U1uKMCgS7kQVaPLiZ1xALyJkuBhNS9MWj2L5gcz8mhKCF82+k33Dr
- aDjBj/u/UaCx0t6qbdOsluClAbuyWrAuIkcNEZk0EP7lj0bNRz8CWLoizLvYedwTa0GizLLoD
- KQdsUbgg6L201G/ihFVdYXSfkOI7u4YISp6VMjvELS6sYnghWBfQOVX3FgL1eC/CHKQRZozPx
- QlzxzBvi4l5KceI/pYE0jtvs9Y7cGM4xAtpdtK59i9//K/v0z+CWno5hBD/UKWdhhN9gr2S/b
- kPt5ldG7aEGtEwsSA6dYiJ2mLV48NrxCe6YTmXhBmrC/4CKtEj6oMpV4V6a/D2bdqxahlRKE2
- wP+12/YgTwKM4N6ZodiTzQJYquP7mpzTFvvg7sDWDeFbQcemnsUPeDbjIAjjJBWInNSZWJKfV
- LHkTEQiZSg90Cj2vCH9pBks8qQXEqhxku9uBNEr6A8JVh1NztU5kqJZnF/sct6RHS+u0=
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available
+ to nuke pos-based search
+Message-ID: <20220105032456.hs3od326sdl4zjv4@google.com>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-3-alexandr.lobakin@intel.com>
+ <Yc2Tqc69W9ukKDI1@zn.tnic>
+ <CAFP8O3K1mkiCGMTEeuSifZtr2piHsKTjP5TOA25nqpv2SrbzYQ@mail.gmail.com>
+ <alpine.LSU.2.21.2201031447140.15051@pobox.suse.cz>
+ <20220103160615.7904-1-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220103160615.7904-1-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 4, 2022 at 7:05 PM Ingo Molnar <mingo@kernel.org> wrote:
-> * Arnd Bergmann <arnd@arndb.de> wrote:
+On 2022-01-03, Alexander Lobakin wrote:
+>From: Miroslav Benes <mbenes@suse.cz>
+>Date: Mon, 3 Jan 2022 14:55:42 +0100 (CET)
 >
-> > From what I could tell, linux/sched.h was not the only such problem, but
-> > I saw similarly bad issues with linux/fs.h (which is what I posted about
-> > in November/December), linux/mm.h and linux/netdevice.h on the high
-> > level, in low-level headers there are huge issues with linux/atomic.h,
-> > linux/mutex.h, linux/pgtable.h etc. I expect that you have addressed
-> > these as well,
->
-> Correct, each of these was a problem - and a *lot* of other headers in
-> addition to those:
->
->   kepler:~/mingo.tip.git> git diff --stat v5.16-rc8.. include/linux/ arch/*/include/asm/ | grep changed
->
->     1335 files changed, 59677 insertions(+), 56582 deletions(-)
->
-> and I reduced all the kernels that showed up in the bloat-profile to a
-> fraction of their orignal size:
->
->     ------------------------------------------------------------------------------------------
->     | Combined, preprocessed C code size of header, without line markers,
->     | with comments stripped:
->     ------------------------------.-----------------------------.-----------------------------
->                                   | v5.16-rc7                   |  -fast-headers-v1
->                                   |-----------------------------|-----------------------------
->      #include <linux/sched.h>     | LOC: 13,292 | headers:  324 |  LOC:    769 | headers:   64
->      #include <linux/wait.h>      | LOC:  9,369 | headers:  235 |  LOC:    483 | headers:   46
->      #include <linux/rcupdate.h>  | LOC:  8,975 | headers:  224 |  LOC:  1,385 | headers:   86
->      #include <linux/hrtimer.h>   | LOC: 10,861 | headers:  265 |  LOC:    229 | headers:   37
->      #include <linux/fs.h>        | LOC: 22,497 | headers:  427 |  LOC:  1,993 | headers:  120
->      #include <linux/cred.h>      | LOC: 17,257 | headers:  368 |  LOC:  4,830 | headers:  129
->      #include <linux/dcache.h>    | LOC: 10,545 | headers:  253 |  LOC:    858 | headers:   65
->      #include <linux/cgroup.h>    | LOC: 33,518 | headers:  522 |  LOC:  2,477 | headers:  111
->      #include <linux/module.h>    | LOC: 16,948 | headers:  339 |  LOC:  2,239 | headers:  122
->      #include <linux/kobject.h>   | LOC: 15,210 | headers:  318 |  LOC:    799 | headers:   59
->      #include <linux/device.h>    | LOC: 20,505 | headers:  408 |  LOC:  2,131 | headers:  123
->      #include <linux/gfp.h>       | LOC: 13,543 | headers:  303 |  LOC:    181 | headers:   26
->      #include <linux/slab.h>      | LOC: 14,037 | headers:  307 |  LOC:    999 | headers:   74
->      #include <linux/mm.h>        | LOC: 26,727 | headers:  453 |  LOC:  1,855 | headers:  133
->      #include <linux/mmzone.h>    | LOC: 12,755 | headers:  293 |  LOC:    832 | headers:   64
->      #include <linux/swap.h>      | LOC: 38,292 | headers:  559 |  LOC: 11,085 | headers:  294
->      #include <linux/writeback.h> | LOC: 36,481 | headers:  550 |  LOC:  1,566 | headers:   92
->      #include <linux/gfp.h>       | LOC: 13,543 | headers:  303 |  LOC:    181 | headers:   26
->      #include <linux/skbuff.h>    | LOC: 36,130 | headers:  558 |  LOC:  1,209 | headers:   89
->      #include <linux/tcp.h>       | LOC: 60,133 | headers:  725 |  LOC:  3,829 | headers:  153
->      #include <linux/udp.h>       | LOC: 59,411 | headers:  721 |  LOC:  3,236 | headers:  146
->      #include <linux/filter.h>    | LOC: 54,172 | headers:  689 |  LOC:  4,087 | headers:   73
->      #include <linux/interrupt.h> | LOC: 14,085 | headers:  340 |  LOC:  2,629 | headers:  124
->
->      #include <net/sock.h>        | LOC: 58,880 | headers:  715 |  LOC:  1,543 | headers:   98
->
->      #include <asm/processor.h>   | LOC:  7,821 | headers:  204 |  LOC:    618 | headers:   41
->      #include <asm/page.h>        | LOC:  1,540 | headers:   97 |  LOC:  1,193 | headers:   82
->      #include <asm/pgtable.h>     | LOC: 12,949 | headers:  297 |  LOC:  5,742 | headers:  217
+>> On Thu, 30 Dec 2021, Fāng-ruì Sòng wrote:
+>>
+>> > On Thu, Dec 30, 2021 at 3:11 AM Borislav Petkov <bp@alien8.de> wrote:
+>> > >
+>> > > On Thu, Dec 23, 2021 at 01:21:56AM +0100, Alexander Lobakin wrote:
+>> > > > [PATCH v9 02/15] livepatch: use `-z unique-symbol` if available to nuke pos-based search
+>>
+>> ...
+>>
+>> > Apologies since I haven't read the patch series.
+>> >
+>> > The option does not exist in ld.lld and I am a bit concerning about
+>> > its semantics: https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+>> >
+>> > I thought that someone forwarded my comments (originally posted months
+>> > on a feature request ago) here but seems not.
+>> > (I am a ld.lld maintainer.)
+>>
+>> Do you mean
+>> https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
+>> ?
+>>
+>> Unfortunately, it did not lead anywhere. I think that '-z unique-symbol'
+>> option should work fine as long as the live patching is concerned. Maybe I
+>> misunderstood but your concerns mentioned at the blog do not apply. The
+>> stability is not an issue for us since we (KLP) always work with already
+>> built and fixed kernel. And(at least) GCC already uses number suffices for
+>> IPA clones and it has not been a problem anywhere.
 
-Ok, this is roughly the list of headers that I had looked at previously.
+The stability problem may not happen frequently but is possible if the
+compiler performs some IPA with new code.
 
-> <linux/atomic.h> wasn't a particularly big problem - but it does get
-> included everywhere, so I moved the most common atomic_t definition into
-> <linux/types.h> (on 64-bit kernels), which allowed a big reduction for the
-> majority of cases that don't use the atomic APIs:
+Such disturbence is probably more likely with LTO or PGO.
+For Clang LTO, Makefile currently specifies -mllvm -import-instr-limit=5.
+If a function close to the boundary happens to cross the boundary,
+if inlined into other translation units, the stability issue may affect
+many translation units.
 
-Good, I have a patch for the same thing, including moving atomic64_t
-and atomic_long_t to linux/types.h there -- I don't think it would be good to
-have it in different places on 32-bit architectures.
+>LLD doesn't have such an option, so FG-KASLR + livepatching builds
+>wouldn't be available for LLVM with the current approach (or we'd
+>still need a stub that prints "FG-KASLR is not compatible with
+>sympos != 0").
+>Unfortunately, I discovered this a bit late, just after sending this
+>revision.
+>
+>OTOH, there's no easy alternative. <file + function> pair looks
+>appealing, but is it even possible for now to implement in the
+>kernel without much refactoring?
 
-On arm machines, I found atomic.h to be problematic because it is a large
-generated header that depends on the barriers which in turn require other
-stuff.
-
->  #include <linux/atomic.h>               | LOC:    176 | headers:   26
->  #include <linux/atomic_api.h>           | LOC:  2,785 | headers:   52
->
-> But <linux/atomic_api.h> is still included in ~75% of .c files, mostly for
-> good reasons, because it's a very popular low level API.
-
-These are the x86 numbers, right?
-
-> > but I'd like to make sure that your changes are reasonably complete on
-> > arm32 and arm64 to avoid having to do the big cleanup more than once.
->
-> I did test ARM64 extensively in terms of build coverage - but not in terms
-> of header bloat, and I'm sure more could be done there!
-
-My guess is that each architecture has a couple of dark corners that
-require cleaning up before we actually see the benefit of the series.
-I'm personally most interested in arm32 and arm64 because that's what
-I do my testing on, and I'll try to find those corners. One thing I remember
-for arm32 is that there is a nasty dependency for get_current() - >
-PAGE_SIZE -> asm/pgtable.h, with pgtable including the world again.
-You probably got this one, but any such missing thing can can lead to the
-other cleanups not helping that much.
-
-> > My approach to the large mid-level headers is somewhat different: rather
-> > than completely avoiding them from getting included, I would like to
-> > split up the structure definitions from the inline functions.
->
-> That's a big chunk of what the -fast-headers tree does: I've split over 85
-> headers into <linux/header_types.h> and <linux/header_api.h>...
->
-> I've also split up headers further where needed, in particular mm.h
-> required multiple levels of splitting to get the dependencies of the most
-> commonly used <linux/mm_types.h> and <linux/mm_api.h> headers under
-> control:
->
->   kepler:~/mingo.tip.git> ls -ldt include/linux/mm*api*.h
->   -rw-rw-r-- 1 mingo mingo 77130 Jan  4 13:32 include/linux/mm_api.h
->   -rw-rw-r-- 1 mingo mingo 22227 Jan  4 13:32 include/linux/mmzone_api.h
->   -rw-rw-r-- 1 mingo mingo  6759 Jan  4 13:32 include/linux/mm_api_extra.h
->   -rw-rw-r-- 1 mingo mingo   479 Jan  4 13:31 include/linux/mm_api_exe_file.h
->   -rw-rw-r-- 1 mingo mingo   960 Jan  4 13:31 include/linux/mm_api_truncate.h
->   -rw-rw-r-- 1 mingo mingo  1262 Jan  4 13:31 include/linux/mm_api_kvmalloc.h
->   -rw-rw-r-- 1 mingo mingo   719 Jan  4 13:31 include/linux/mm_api_gate_area.h
->   -rw-rw-r-- 1 mingo mingo  1342 Jan  4 13:31 include/linux/mm_api_kasan.h
->   -rw-rw-r-- 1 mingo mingo  3007 Jan  4 13:31 include/linux/mm_api_tlb_flush.h
-
-Ah, good. That is pretty close to what I had in mind as well, so maybe
-we can convince Linus after all. ;-)
-
-> The results are pretty nice:
->
->  # vanilla:
->
->    #include <linux/mm.h>                   | LOC: 26,728 | headers:  453
->
->  # -fast-headers:
->
->    #include <linux/mm.h>                   | LOC:  1,855 | headers:  132  # == mm_types.h
->    #include <linux/mm_types.h>             | LOC:  1,855 | headers:  131
->    #include <linux/mm_api.h>               | LOC:  8,587 | headers:  229
->
-> And <linux/mm_api.h> is now included only in about 25% of the .c files - in
-> the vanilla kernel the use percentage is over ~90%.
->
-> But despite all those reductions, <linux/mm_api.h> is still a header with
-> one of the largest cumulative footprints within a (distro) kernel build:
->
->                                                               | stripped lines of code
->                                                               |              _____________________________
->                                                               |             | headers included recursively
->                                                               |             |                _______________________________
->                                                               |             |               | usage in a distro kernel build
->  ____________                                                 |             |               |         _________________________________________
-> | header name                                                 |             |               |        | million lines of comment-stripped C code
-> |                                                             |             |               |        |
->   #include <linux/spinlock_api.h>                             | LOC:  5,142 | headers:  123 | 10,168 | MLOC:   52.2 | #############
->   #include <linux/device/driver.h>                            | LOC:  4,132 | headers:  169 | 12,306 | MLOC:   50.8 | ############
->   #include <linux/mm_api.h>                                   | LOC:  8,584 | headers:  230 |  5,135 | MLOC:   44.0 | ###########
->   #include <linux/skbuff_api.h>                               | LOC:  8,404 | headers:  190 |  5,065 | MLOC:   42.5 | ##########
->   #include <linux/atomic_api.h>                               | LOC:  2,785 | headers:   52 | 15,282 | MLOC:   42.5 | ##########
->   #include <asm/spinlock.h>                                   | LOC:  4,039 | headers:   83 | 10,168 | MLOC:   41.0 | ##########
->   #include <asm/qrwlock.h>                                    | LOC:  4,039 | headers:   82 | 10,168 | MLOC:   41.0 | ##########
->   #include <asm-generic/qrwlock.h>                            | LOC:  4,039 | headers:   81 | 10,168 | MLOC:   41.0 | ##########
->   #include <linux/page_ref.h>                                 | LOC:  5,397 | headers:  168 |  7,578 | MLOC:   40.8 | ##########
->   #include <asm/qspinlock.h>                                  | LOC:  3,990 | headers:   80 | 10,169 | MLOC:   40.5 | ##########
->   #include <linux/device_types.h>                             | LOC:  2,131 | headers:  122 | 17,424 | MLOC:   37.1 | #########
->   #include <linux/module.h>                                   | LOC:  2,239 | headers:  122 | 16,472 | MLOC:   36.8 | #########
->   #include <net/cfg80211.h>                                   | LOC: 29,004 | headers:  423 |  1,205 | MLOC:   34.9 | ########
->   #include <linux/pci.h>                                      | LOC:  7,092 | headers:  232 |  4,849 | MLOC:   34.3 | ########
->   #include <linux/netdevice_api.h>                            | LOC:  8,434 | headers:  225 |  4,065 | MLOC:   34.2 | ########
->   #include <linux/refcount_api.h>                             | LOC:  3,421 | headers:   87 |  9,776 | MLOC:   33.4 | ########
->
-> ( The 'MLOC' footprint estimate is number of usages times
->   preprocessed-stripped-header size. )
-
-This is also the metric that I used in my scripts, except I measured
-the preprocessed
-size in bytes instead of lines, which should make little difference.
-
-> I've reduced header bloat through three primary angles of attack:
->
->   - reducing number of inclusions
->
->   - reducing header size itself, by type/API splitting & by segmenting
->     headers along API usage frequency
->
->   - decoupling headers from each other
->
-> As you can see, fast-headers -v1 is much improved (on x86), but there's
-> plenty of work left, such as <net/cfg80211.h>. :-)
-
-Right. I mainly focused on splitting types from the rest, which I think
-brings most of the benefits, but taking it further as you did here
-helps more.
-
-> > Linus didn't really like my approach,
->
-> Yeah, so without having a significant build time speedup I didn't like my
-> approach(es) either, which is why I didn't post this tree for a long time. :-)
->
-> But the results speak for themselves IMO, and we cannot ignore this: my
-> project actually accelerated as I progressed, because the kernel rebuilds,
-> especially incremental ones, became faster and faster...
->
-> Linux kernel header dependencies need to be simplified.
-
-Agreed. In my 2020 experiments, I managed to get from the point of cleaning
-up ~100 headers with very little effect (when everything was still included
-through some other header) to cleaning up the next 100 and seeing huge
-improvements but also getting discouraged because it started breaking
-every driver due to missing indirect includes.
-
-> > but I suspect he'll have similar
-> > concerns about your solution for linux/sched.h, especially if we end up
-> > applying the same hack to other commonly used structures (sk_buff,
-> > mm_struct, super_block) in the end.
->
-> So the per_task approach is pretty much unavoidable under the constraint of
-> having no runtime overhead, given that task_struct is a historic union of a
-> zillion types, where 99% of the users don't actually need to know about
-> those types.
->
-> ( We could eventually get rid of per_task() as well, by turning complex
->   embedded structs into pointers - but that has runtime overhead due to the
->   indirections, and I tried hard to make this approach runtime-invariant,
->   at least conceptually. )
-
-Would it be possible to have one common task_struct definition that has
-all the frequently-accessed fields, plus another larger structure that
-embeds the smaller structure plus all the other stuff? I suppose that
-would require even larger scale reworks, but it may be a nicer end
-result. (again, I have yet to read your patches, so there is probably
-an obvious answer why you didn't do this).
-
-          Arnd
+<file + symbol> pair looks good to me and will solve the stability problem.
