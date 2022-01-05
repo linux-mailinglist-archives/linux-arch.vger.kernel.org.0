@@ -2,135 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC7C485BB6
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 23:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D69C485BB8
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 23:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245082AbiAEWdc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Jan 2022 17:33:32 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:58600 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245076AbiAEWda (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jan 2022 17:33:30 -0500
-Received: from in01.mta.xmission.com ([166.70.13.51]:37110)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n5EqW-00Dgtr-Im; Wed, 05 Jan 2022 15:33:28 -0700
-Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:50552 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1n5EqV-00Bkwt-J2; Wed, 05 Jan 2022 15:33:28 -0700
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
-        <20211208202532.16409-4-ebiederm@xmission.com>
-        <YdUzjrLAlRiNLQp2@zeniv-ca.linux.org.uk>
-Date:   Wed, 05 Jan 2022 16:33:19 -0600
-In-Reply-To: <YdUzjrLAlRiNLQp2@zeniv-ca.linux.org.uk> (Al Viro's message of
-        "Wed, 5 Jan 2022 05:58:38 +0000")
-Message-ID: <87czl56ceo.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S245094AbiAEWdh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Jan 2022 17:33:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245080AbiAEWde (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jan 2022 17:33:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68371C061245;
+        Wed,  5 Jan 2022 14:33:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2590EB81E3D;
+        Wed,  5 Jan 2022 22:33:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4498FC36AF4;
+        Wed,  5 Jan 2022 22:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641422011;
+        bh=V+pJxEa7+aavL4U6A2VgxzbbvSp1DeQ4c/dXqTqcxLY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fWnEb653GKPS44yyddsJLus2Hz7kMix9+5exfDPx8qbDMjRFZoxDwe0+XDZgiG/+J
+         HMlSxytT9mfEQfDkJLx6rdlxTToo962BGRW/EonZc2xxGeplYd3NIC2W4rQrnOTur7
+         yF6SMSmYB6HIKVWhgmNAhzc7/jiaGBUGdJd4J+hLvutYzseoZZKztt9znepRfWsJs6
+         ooLjoXCYg9ZODkwL6oZtfdfZJ7/94auTuroAU1QTlWWZ0rYyLb5rO8AaPMuM8ZEpmG
+         9M1fN/0TPdKACh5cZE2h6ppduarqWtSXTzU6FDQtNVjkOffe6dxuVY+sOQ0LAf/5wX
+         8ZUlLkjRmilvA==
+Date:   Wed, 5 Jan 2022 15:33:26 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdYctmnM6kdN5R5s@archlinux-ax161>
+References: <YdIfz+LMewetSaEB@gmail.com>
+ <YdM4Z5a+SWV53yol@archlinux-ax161>
+ <YdQlwnDs2N9a5Reh@gmail.com>
+ <YdSI9LmZE+FZAi1K@archlinux-ax161>
+ <YdTpAJxgI+s9Wwgi@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1n5EqV-00Bkwt-J2;;;mid=<87czl56ceo.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/Yfmn+oTCiK18n1oxnyRtCXguQm/Nklvg=
-X-SA-Exim-Connect-IP: 68.110.24.146
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa03.xmission.com
-X-Spam-Level: ***
-X-Spam-Status: No, score=3.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
-        XMSubLong,XM_B_SpammyWords,XM_Body_Dirty_Words autolearn=disabled
-        version=3.4.2
-X-Spam-Virus: No
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.5 XMNoVowels Alpha-numberic number with no vowels
-        *  0.7 XMSubLong Long Subject
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa03 1397; Body=1 Fuz1=1 Fuz2=1]
-        *  1.0 XM_Body_Dirty_Words Contains a dirty word
-        *  0.0 T_TooManySym_01 4+ unique symbols in subject
-        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Al Viro <viro@zeniv.linux.org.uk>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 429 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.8 (1.1%), b_tie_ro: 3.3 (0.8%), parse: 1.07
-        (0.2%), extract_message_metadata: 11 (2.6%), get_uri_detail_list: 1.74
-        (0.4%), tests_pri_-1000: 8 (1.9%), tests_pri_-950: 1.02 (0.2%),
-        tests_pri_-900: 0.82 (0.2%), tests_pri_-90: 94 (21.9%), check_bayes:
-        92 (21.5%), b_tokenize: 5 (1.2%), b_tok_get_all: 7 (1.7%),
-        b_comp_prob: 1.72 (0.4%), b_tok_touch_all: 75 (17.4%), b_finish: 0.79
-        (0.2%), tests_pri_0: 295 (68.7%), check_dkim_signature: 0.38 (0.1%),
-        check_dkim_adsp: 1.72 (0.4%), poll_dns_idle: 0.37 (0.1%),
-        tests_pri_10: 2.7 (0.6%), tests_pri_500: 7 (1.7%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: [PATCH 04/10] exit: Stop poorly open coding do_task_dead in make_task_dead
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YdTpAJxgI+s9Wwgi@gmail.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Al Viro <viro@zeniv.linux.org.uk> writes:
+On Wed, Jan 05, 2022 at 01:40:32AM +0100, Ingo Molnar wrote:
+> 
+> * Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > Unfortunately, while the kernel now builds, it does not boot in QEMU. I 
+> > tried to checkout at 9006a48618cc0cacd3f59ff053e6509a9af5cc18 to see if I 
+> > could reproduce that breakage there but the build errors out at that 
+> > change (I do see notes of bisection breakage in some of the commits) so I 
+> > assume that is expected.
+> 
+> Yeah, there's a breakage window on ARM64, I'll track down that 
+> bisectability bug.
+> 
+> Decoupling thread_info and task_struct incrementally, so that it bisects 
+> cleanly on all architectures, was always a big challenge. :-/
+> 
+> > There is no output, even with earlycon, so it seems like something is 
+> > going wrong in early boot code. I am not very familiar with the SCS code 
+> > so I will see if I can debug this with gdb later (I'll try to see if it 
+> > is reproducible with GCC as well; as Nick mentions, there is support 
+> > being added to it and I don't mind building from source).
+> 
+> Just to make sure: with SCS disabled the same kernel boots fine?
 
-> On Wed, Dec 08, 2021 at 02:25:26PM -0600, Eric W. Biederman wrote:
->> When the kernel detects it is oops or otherwise force killing a task
->> while it exits the code poorly attempts to permanently stop the task
->> from scheduling.
->> 
->> I say poorly because it is possible for a task in TASK_UINTERRUPTIBLE
->> to be woken up.
->> 
->> As it makes no sense for the task to continue call do_task_dead
->> instead which actually does the work and permanently removes the task
->> from the scheduler.  Guaranteeing the task will never be woken
->> up again.
->
-> NAK.  This is not all do_task_dead() leads to - see what finish_task_switch()
-> does upon seeing TASK_DEAD:
->                 /* Task is done with its stack. */
-> 		put_task_stack(prev);
-> 		put_task_struct_rcu_user(prev);
->
->
-> Now take a look at the comment just before that check for PF_EXITING -
-> the point is to leave the task leaked, rather than proceeding with
-> freeing the sucker.
->
-> We are not going through the normal "turn zombie" motions, including
-> waking wait(2) callers up, etc.  Going ahead and freeing it could
-> fuck the things up quite badly.
+Correct (thank you for making sure, I have definitely not tested that
+before...).
 
-I believe I was thinking this task won't be reaped because release_task
-can never be called.  Which I admit depending on where we oops in
-do_exit is not strictly true.
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64 defconfig Image.gz
 
-We can guarantee the leak with:
-	
-	tsk->exit_state = EXIT_DEAD;
-        refcount_inc(&tsk->rcu_users);
+$ boot-qemu.sh -a arm64 -k .build/arm64 -t 30s
+...
+[    0.000000] Linux version 5.16.0-rc8-798083-g1755441e323b (nathan@archlinux-ax161) (ClangBuiltLinux clang version 14.0.0 (https://github.com/llvm/llvm-project 4602f4169a21e75b82261ba1599046b157d1d021), LLD 14.0.0) #1 SMP PREEMPT Wed Jan 5 21:51:29 UTC 2022
+...
 
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64.scs defconfig
 
-It just feels wrong to me to have something dead and broken sticking around
-the scheduler queue.  Especially as something could come along and wake
-it up and then what do we do.
+$ scripts/config --file .build/arm64.scs/.config -e SHADOW_CALL_STACK
 
-Hmm.  I think we want that tsk->exit_state = EXIT_DEAD regardless to
-prevent it from being reaped and possibly causing more harm.
+$ make -skj"$(nproc)" ARCH=arm64 LLVM=1 O=.build/arm64.scs olddefconfig Image.gz
+...
+qemu-system-aarch64: terminating on signal 15 from pid 690472 (timeout)
++ RET=124
++ set +x
 
-Eric
+Going back to v5.16-rc8, everything works fine.
+
+$ boot-qemu.sh -a arm64 -k .build/arm64 -t 30s
+...
+[    0.000000] Linux version 5.16.0-rc8-795784-gc9e6606c7fe9 (nathan@archlinux-ax161) (ClangBuiltLinux clang version 14.0.0 (https://github.com/llvm/llvm-project 4602f4169a21e75b82261ba1599046b157d1d021), LLD 14.0.0) #1 SMP PREEMPT Wed Jan 5 22:27:39 UTC 2022
+...
+
+I don't think I will have time to look at this today but I will try
+tomorrow. Having the bisectability bug fixed would help narrow things
+down but I am almost certain it is something up with the new per_task
+infrastructure but I'll have to dig around and see if I can understand
+that first.
+
+Cheers,
+Nathan
