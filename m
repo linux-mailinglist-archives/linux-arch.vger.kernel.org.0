@@ -2,158 +2,174 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99363485775
-	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 18:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B964858A5
+	for <lists+linux-arch@lfdr.de>; Wed,  5 Jan 2022 19:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242422AbiAERmj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 5 Jan 2022 12:42:39 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4352 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242412AbiAERmi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 5 Jan 2022 12:42:38 -0500
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JTcDP1FRwz67w73;
-        Thu,  6 Jan 2022 01:39:17 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 5 Jan 2022 18:42:31 +0100
-Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 5 Jan
- 2022 17:42:28 +0000
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>
-CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Ian Abbott" <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Karsten Keil" <isdn@linux-pingi.de>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
+        id S243164AbiAESqG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 5 Jan 2022 13:46:06 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:37122 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238501AbiAESqG (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Wed, 5 Jan 2022 13:46:06 -0500
+Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AA3301EC0409;
+        Wed,  5 Jan 2022 19:45:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1641408359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=fEZIiIW8f9y+YhRxy3dl8vhei2PQdN236Vujn7RBTdY=;
+        b=pSCYqwvRR+jUpjU5YwAa8zN64Y5dn0sO3OHpyZf1+yxRZ18xu5tPEhOKWwUz+wGg1ynCeV
+        srFP8tI2NsIn+W3JysHUBTIqtFvLXC3aA5kU9TejCQRlI7MqcHt/QI0jlXIK7G6/i2VYZj
+        H3B6FMt0oByYncE3nPCCef6orbqe1Vo=
+Date:   Wed, 5 Jan 2022 19:46:01 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "Teddy Wang" <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
-        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
-        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20211229160317.GA1681139@bhelgaas>
- <e0877e91d7d50299ea5a3ffcee2cf1016458ce10.camel@linux.ibm.com>
-Message-ID: <3f39d8a2-2e57-a671-2926-eb4f2bf20c76@huawei.com>
-Date:   Wed, 5 Jan 2022 17:42:16 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v9 03/15] kallsyms: Hide layout
+Message-ID: <YdXnaYM9P3Grwz/C@zn.tnic>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
+ <20211223002209.1092165-4-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <e0877e91d7d50299ea5a3ffcee2cf1016458ce10.camel@linux.ibm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.27.56]
-X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211223002209.1092165-4-alexandr.lobakin@intel.com>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 29/12/2021 16:55, Niklas Schnelle wrote:
-> On Wed, 2021-12-29 at 10:03 -0600, Bjorn Helgaas wrote:
->> On Wed, Dec 29, 2021 at 01:12:07PM +0100, Mauro Carvalho Chehab wrote:
->>> Em Wed, 29 Dec 2021 12:45:38 +0100
->>> Niklas Schnelle<schnelle@linux.ibm.com>  escreveu:
->>>> ...
->>>> I do think we agree that once done correctly there is value in
->>>> such an option independent of HAS_IOPORT only gating inb() etc uses.
->> I'm not sure I'm convinced about this.  For s390, you could do this
->> patch series, where you don't define inb() at all, and you add new
->> dependencies to prevent compile errors.  Or you could define inb() to
->> return ~0, which is what happens on other platforms when the device is
->> not present.
->>
->>> Personally, I don't see much value on a Kconfig var for legacy PCI I/O
->>> space. From maintenance PoV, bots won't be triggered if someone use
->>> HAS_IOPORT instead of the PCI specific one - or vice-versa. So, we
->>> could end having a mix of both at the wrong places, in long term.
->>>
->>> Also, assuming that PCIe hardware will some day abandon support for
->>> "legacy" PCI I/O space, I guess some runtime logic would be needed,
->>> in order to work with both kinds of PCIe controllers. So, having a
->>> Kconfig option won't help much, IMO.
->>>
->>> So, my personal preference would be to have just one Kconfig var, but
->>> I'm ok if the PCI maintainers decide otherwise.
->> I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
->> means something old and out of favor; it doesn't say*what*  that
->> something is.
->>
->> I think you're specifically interested in I/O port space usage, and it
->> seems that you want all PCI drivers that*only*  use I/O port space to
->> depend on LEGACY_PCI?  Drivers that can use either I/O or memory
->> space or both would not depend on LEGACY_PCI?  This seems a little
->> murky and error-prone.
-> I'd like to hear Arnd's opinion on this but you're the PCI maintainer
-> so of course your buy-in would be quite important for such an option.
-> 
+On Thu, Dec 23, 2021 at 01:21:57AM +0100, Alexander Lobakin wrote:
+> @@ -687,11 +697,12 @@ static void reset_iter(struct kallsym_iter *iter, loff_t new_pos)
+>  	iter->name[0] = '\0';
+>  	iter->nameoff = get_symbol_offset(new_pos);
+>  	iter->pos = new_pos;
+> -	if (new_pos == 0) {
 
-Hi Niklas,
+	if (!iter->show_layout)
+		return;
 
-I can't see the value in the LEGACY_PCI config - however I don't really 
-understand Arnd's original intention.
+> +	if (iter->show_layout && new_pos == 0) {
+>  		iter->pos_arch_end = 0;
+>  		iter->pos_mod_end = 0;
+>  		iter->pos_ftrace_mod_end = 0;
+>  		iter->pos_bpf_end = 0;
+> +		iter->pos_end = 0;
+>  	}
+>  }
 
-It was written that it would allow us to control "whether we have any 
-pre-PCIe devices or those PCIe drivers that need PIO accessors other 
-than ioport_map()/pci_iomap()".
+...
 
-However I just don't see why CONFIG_PCI=y and CONFIG_HAS_IOPORT=y aren't 
-always the gating factor here. Arnd?
+> @@ -838,16 +860,54 @@ static int kallsyms_open(struct inode *inode, struct file *file)
+>  	 * using get_symbol_offset for every symbol.
+>  	 */
+>  	struct kallsym_iter *iter;
+> -	iter = __seq_open_private(file, &kallsyms_op, sizeof(*iter));
+> -	if (!iter)
+> -		return -ENOMEM;
+> -	reset_iter(iter, 0);
+> +	/*
+> +	 * This fake iter is needed for the cases with unprivileged
+> +	 * access. We need to know the exact number of symbols to
+> +	 * randomize the display layout.
+> +	 */
+> +	struct kallsym_iter fake;
+> +	size_t size = sizeof(*iter);
+> +	loff_t pos;
+> +
+> +	fake.show_layout = true;
+> +	reset_iter(&fake, 0);
+>  
+>  	/*
+>  	 * Instead of checking this on every s_show() call, cache
+>  	 * the result here at open time.
+>  	 */
+> -	iter->show_value = kallsyms_show_value(file->f_cred);
+> +	fake.show_layout = kallsyms_show_value(file->f_cred);
+> +	if (fake.show_layout)
+> +		goto open;
 
-Thanks,
-John
+There are those silly labels again:
+
+	if (!fake.show_layout) {
+		for (... )
+			;
+		size = ...
+	}
+
+	iter = __seq_open_private(...
+
+> +
+> +	for (pos = kallsyms_num_syms; update_iter_mod(&fake, pos); pos++)
+> +		;
+> +
+> +	size = struct_size(iter, shuffled_pos, fake.pos_end + 1);
+> +
+> +open:
+> +	iter = __seq_open_private(file, &kallsyms_op, size);
+> +	if (!iter)
+> +		return -ENOMEM;
+> +
+> +	iter->show_layout = fake.show_layout;
+> +	reset_iter(iter, 0);
+> +
+> +	if (iter->show_layout)
+> +		return 0;
+> +
+> +	/* Copy the bounds since they were already discovered above */
+> +	iter->pos_arch_end = fake.pos_arch_end;
+> +	iter->pos_mod_end = fake.pos_mod_end;
+> +	iter->pos_ftrace_mod_end = fake.pos_ftrace_mod_end;
+> +	iter->pos_bpf_end = fake.pos_bpf_end;
+> +	iter->pos_end = fake.pos_end;
+> +
+> +	for (pos = 0; pos <= iter->pos_end; pos++)
+> +		iter->shuffled_pos[pos] = pos;
+> +
+> +	shuffle_array(iter->shuffled_pos, iter->pos_end + 1);
+> +
+>  	return 0;
+>  }
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
