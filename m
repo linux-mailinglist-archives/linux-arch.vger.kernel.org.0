@@ -2,166 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 722CB486760
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jan 2022 17:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9ED4868CE
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jan 2022 18:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240991AbiAFQJi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jan 2022 11:09:38 -0500
-Received: from foss.arm.com ([217.140.110.172]:56010 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240960AbiAFQJi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 6 Jan 2022 11:09:38 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C1BBD1042;
-        Thu,  6 Jan 2022 08:09:37 -0800 (PST)
-Received: from [192.168.122.166] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C090E3F5A1;
-        Thu,  6 Jan 2022 08:09:36 -0800 (PST)
-Message-ID: <8550afd2-268d-a25f-88fd-0dd0b184ca23@arm.com>
-Date:   Thu, 6 Jan 2022 10:09:35 -0600
+        id S242106AbiAFRlY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jan 2022 12:41:24 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4360 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241966AbiAFRlY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jan 2022 12:41:24 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVD6c3dG6z67wb3;
+        Fri,  7 Jan 2022 01:36:24 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 6 Jan 2022 18:41:19 +0100
+Received: from [10.47.27.56] (10.47.27.56) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Thu, 6 Jan
+ 2022 17:41:15 +0000
+Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ettore Chimenti <ek5.chimenti@gmail.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
+        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        "Sathya Prakash" <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "Teddy Wang" <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
+        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
+        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-watchdog@vger.kernel.org>
+References: <20220105194748.GA215560@bhelgaas>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+Date:   Thu, 6 Jan 2022 17:41:00 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v7 0/4] arm64: Enable BTI for the executable as well as
- the interpreter
+In-Reply-To: <20220105194748.GA215560@bhelgaas>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org, Mark Rutland <mark.rutland@arm.com>
-References: <20211115152714.3205552-1-broonie@kernel.org>
- <YbD4LKiaxG2R0XxN@arm.com> <20211209111048.GM3294453@arm.com>
- <YdSEkt72V1oeVx5E@sirena.org.uk>
- <101d8e84-7429-bbf1-0271-5436eca0eea2@arm.com> <YdbL5kIzi0xqVTVd@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <YdbL5kIzi0xqVTVd@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.27.56]
+X-ClientProxiedBy: lhreml736-chm.china.huawei.com (10.201.108.87) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On 1/6/22 05:00, Catalin Marinas wrote:
-> Hi Jeremy,
-> 
-> On Wed, Jan 05, 2022 at 04:42:01PM -0600, Jeremy Linton wrote:
->> On 1/4/22 11:32, Mark Brown wrote:
->>> On Thu, Dec 09, 2021 at 11:10:48AM +0000, Szabolcs Nagy wrote:
->>>> The 12/08/2021 18:23, Catalin Marinas wrote:
->>>>> On Mon, Nov 15, 2021 at 03:27:10PM +0000, Mark Brown wrote:
->>>>>> memory is already mapped with PROT_EXEC.  This series resolves this by
->>>>>> handling the BTI property for both the interpreter and the main
->>>>>> executable.
->>>>>
->>>>> Given the silence on this series over the past months, I propose we drop
->>>>> it. It's a bit unfortunate that systemd's MemoryDenyWriteExecute cannot
->>>>> work with BTI but I also think the former is a pretty blunt hardening
->>>>> mechanism (rejecting any mprotect(PROT_EXEC) regardless of the previous
->>>>> attributes).
+On 05/01/2022 19:47, Bjorn Helgaas wrote:
+>>>>>   ok if the PCI maintainers decide otherwise.
+>>>> I don't really like the "LEGACY_PCI" Kconfig option.  "Legacy" just
+>>>> means something old and out of favor; it doesn't say*what*  that
+>>>> something is.
 >>>>
->>>> i still think it would be better if the kernel dealt with
->>>> PROT_BTI for the exe loaded by the kernel.
->>>
->>> The above message from Catalin isn't quite the full story here - my
->>> understanding from backchannel is that there's concern from others that
->>> we might be creating future issues by enabling PROT_BTI, especially in
->>> the case where the same permissions issue prevents the dynamic linker
->>> disabling PROT_BTI.  They'd therefore rather stick with the status quo
->>> and not create any new ABI.  Unfortunately that's not something people
->>> have been willing to say on the list, hopefully the above captures the
->>> thinking well enough.
->>>
->>> Personally I'm a bit ambivalent on this, I do see the potential issue
->>> but I'm having trouble constructing an actual scenario and my instinct
->>> is that since we handle PROT_EXEC we should also handle PROT_BTI for
->>> consistency.
->>
->> I'm hardly a security expert, but it seems to me that BTI hardens against a
->> wider set of possible exploits than MDWE.
+>>>> I think you're specifically interested in I/O port space usage, and it
+>>>> seems that you want all PCI drivers that*only*  use I/O port space to
+>>>> depend on LEGACY_PCI?  Drivers that can use either I/O or memory
+>>>> space or both would not depend on LEGACY_PCI?  This seems a little
+>>>> murky and error-prone.
+>>> I'd like to hear Arnd's opinion on this but you're the PCI maintainer
+>>> so of course your buy-in would be quite important for such an option.
+> I'd like to hear Arnd's opinion, too.  If we do add LEGACY_PCI, I
+> think we need a clear guide for when to use it, e.g., "a PCI driver
+> that uses inb() must depend on LEGACY_PCI" or whatever it is.
 > 
-> They are complementary features.
+> I must be missing something because I don't see what we gain from
+> this.  We have PCI drivers, e.g., megaraid [1], for devices that have
+> either MEM or I/O BARs.  I think we want to build drivers like that on
+> any arch that supports PCI.
 > 
->> Yet, we are silently turning it
->> off for systemd services which are considered some of the most security
->> critical things in the machine right now (ex:logind, etc). So despite
->> 'systemd-analyze secuirty` flagging those services as the most secure ones
->> on a system, they might actually be less secure.
+> If the arch doesn't support I/O port space, devices that only have I/O
+> BARs won't work, of course, and hopefully the PCI core and driver can
+> figure that out and gracefully fail the probe.
 > 
-> Well, that's a distro decision. MDWE/MDWX is not something imposed by
-> the kernel but rather a seccomp bpf filter set up by systemd.
-> 
->> It also seems that getting BTI turned on earlier, as this patch is doing is
->> itself a win.
->>
->> So, mentally i'm having a hard time balancing the hypothetical problem laid
->> out, as it should only really exist in an environment similar to the MDWE
->> one, since AFAIK, its possible today to just flip it back off unless MDWE
->> stops that from happening.
-> 
-> That's a user ABI change and given that the first attempt was shown to
-> break with some combination of old loader and new main executable (or
-> the other way around), I'd rather keep things as they are.
+> But that same driver should still work with devices that have MEM
+> BARs.  If inb() isn't always present, I guess we could litter these
+> drivers with #ifdefs, but that would be pretty ugly. 
 
-This should only change the behavior for for binaries which conform to 
-the new ABI containing the BTI note. So outside of the tiny window of 
-things built with BTI, but run on !BTI hardware or older kernel+glibc, 
-this shouldn't be a problem. (Unless i'm missing something) Put another 
-way, now is the time to make a change, before there is a legacy BTI 
-ecosystem we have to deal with.
+There were some ifdefs added to the 8250 drivers in Arnd's original 
+patch [0], but it does not seem included here.
 
+Niklas, what happened to the 8250 and the other driver changes?
 
-> 
->> What are the the remaining alternatives? A new syscall? But that is by
->> definition a new ABI,
-> 
-> A new ABI is better than changing the current ABI.
-> 
->> and wouldn't benefit from having BTI turned on as early as this patch
->> is doing.
-> 
-> In the absence of MDWX, it's not relevant how early the kernel turns BTI
-> on for the main executable. The dynamic loader would do this with an
-> mprotect() before actually executing any of the main code. Of course, we
-> assume there are no security bugs in the dynamic loader.
-> 
->> Should we disable MDWE on a BTI machine? I'm
->> not sure that is a good look, particularly if MDWE happens to successfully
->> stop some exploit. AFAIK, MDWE+BTI are a good strong combination, it seems a
->> shame if we can't get them both working together.
-> 
-> AFAICT MDWX wants (one of the filters) to prevent a previously writable
-> mapping from becoming executable through mprotect(PROT_EXEC). How common
-> is mprotect(PROT_EXEC|PROT_BTI) outside of the dynamic loader? I doubt
-> it is, especially in an MDWX environment. So can we not change the
-> filter to allow PROT_EXEC|PROT_BTI? If your code is already exploitable
-> to allow random syscalls, all bets are off anyway.
+[0] 
+https://lore.kernel.org/lkml/CAK8P3a0MNbx-iuzW_-=0ab6-TTZzwV-PT_6gAC1Gp5PgYyHcrA@mail.gmail.com/
 
-I would expect JITs to be twittling EXEC|BTI but, those wouldn't be able 
-to trivially run under MDWE anyway. So rarely?
-
-Changing the filter to allow PROT_EXEC|PROT_BTI defeats the purpose 
-because the hypothetical exploit would just add the BTI tags and turn 
-BTI on as well. The filter, as is, also provides additional BTI 
-protections because it makes it more difficult to disable BTI. Without 
-that filter it seems likely someone could come up with a way to use an 
-existing PROT_EXEC as a gadget to disable BTI anywhere they choose.
-
-So, to your point before, BTI+MDWE are complementary, the combination 
-seems considerably more robust than either by itself.
-
+> IMO inb() should
+> be present but do something innocuous like return ~0, as it would if
+> I/O port space is supported but there's no device at that address.
 > 
->> I hesitate to suggest it, but maybe this patch should be conditional
->> somehow, that way !systemd/MDWE machines can behave as they do today, and
->> systemd/MDWE machines can request BTI be turned on by the kernel
->> automatically?
-> 
-> That would be some big knob sysctl but I'm still not keen on toggling
-> the ABI like this.
+> [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
 > 
 
+That driver would prob not be used on systems which does not support 
+PIO, and so could have a HAS_IOPORT dependency. But it is not strictly 
+necessary.
+
+Anyway, it would be good to have an idea of how much ifdeffery is 
+required in drivers.
+
+Thanks,
+John
