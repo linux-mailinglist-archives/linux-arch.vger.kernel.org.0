@@ -2,127 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FA7486975
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jan 2022 19:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70F6486A51
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jan 2022 20:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242404AbiAFSOP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jan 2022 13:14:15 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:57816 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241192AbiAFSOM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jan 2022 13:14:12 -0500
+        id S232414AbiAFTHx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jan 2022 14:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243176AbiAFTHw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jan 2022 14:07:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E9AC061245
+        for <linux-arch@vger.kernel.org>; Thu,  6 Jan 2022 11:07:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4870561D17;
-        Thu,  6 Jan 2022 18:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A780C36AEB;
-        Thu,  6 Jan 2022 18:14:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D50961DC2
+        for <linux-arch@vger.kernel.org>; Thu,  6 Jan 2022 19:07:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2E8C36AEB;
+        Thu,  6 Jan 2022 19:07:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641492850;
-        bh=pk9c3vFsS24A9H9YRNmuoLU04tTgveyiSfxz/RguLrg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tWL9ah320xPJ7ZLvQrLFkjIeV1LTlPrJ2qSY/t0fKFbU+5MxnpWBBUesVfIjO0xOO
-         l+Yvi8TANgRjNK2vReZYRlLqehfzP4qE2oNJarfvWixIS0OfQkuKWpI6rrQEfWGn25
-         oroVHI/IQA8JEpMkHqxWMkHxAKg+IVXn/Zqji7RoVtpWyymeRt5WcM4qay0A7EFOWe
-         jnI4JpbaAmAttF9a/Yhl/wWUUgx6A1s8zF9Wpc8ft5Y9hFSMLv91rRujQQ/od6scnA
-         LsHiF+8iYMGoQ6RcvIn/+ZU8WqHN0Y3LnsXMJdYHRbXi/+K/WGfnGi+pM9zExj10bs
-         +smYL/+iBYHZg==
-Date:   Thu, 6 Jan 2022 12:14:09 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Teddy Wang <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-input@vger.kernel.org, netdev@vger.kernel.org,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-wireless@vger.kernel.org, megaraidlinux.pdl@broadcom.com,
-        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-Message-ID: <20220106181409.GA297735@bhelgaas>
+        s=k20201202; t=1641496071;
+        bh=R2EJTo2qy+ImjdQAtgw+uzG2kOS8IHG6q1pOq5Wwfc0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OuVNCyX80gCStNPMw0jzAA/lM0BBUv9OhkU/u7WU3a+gB1EjiCiZ34qOl2rn5sZld
+         XXf+mn7FXYezXsez8RPXsycjiAwNpdlnQiD6FcQ7hw9A1FdM0KpXI9PMFLDroVRBiv
+         aaPrStTtDpF5vp1DnBS1UGZVDPkJHKZFTBlEJTlEpDNqZ2H/qMnyjvYwiF+8XNKW03
+         sphg+0l+hLLeFDZw9m0YZDL7HyH8YSlRPDcv/twA7wq8FRyiV409+AfAwMzystXm4C
+         gUUiOosQzmYbLF/d7IXnrvm9KRUf/abNQKNP15an4nMKFIu0PYAVOPCKv5VIS0O0pS
+         ccBEwvCWHytsQ==
+Date:   Thu, 6 Jan 2022 19:07:46 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org, Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v7 0/4] arm64: Enable BTI for the executable as well as
+ the interpreter
+Message-ID: <Ydc+AuagOD9GSooP@sirena.org.uk>
+References: <20211115152714.3205552-1-broonie@kernel.org>
+ <YbD4LKiaxG2R0XxN@arm.com>
+ <20211209111048.GM3294453@arm.com>
+ <YdSEkt72V1oeVx5E@sirena.org.uk>
+ <101d8e84-7429-bbf1-0271-5436eca0eea2@arm.com>
+ <YdbL5kIzi0xqVTVd@arm.com>
+ <8550afd2-268d-a25f-88fd-0dd0b184ca23@arm.com>
+ <YdcxUZ06f60UQMKM@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l2QZb2k3HSz7cwiU"
 Content-Disposition: inline
-In-Reply-To: <74bf4fde-3972-1c36-ca04-58089da0d82b@huawei.com>
+In-Reply-To: <YdcxUZ06f60UQMKM@arm.com>
+X-Cookie: I think we're in trouble.
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 05:41:00PM +0000, John Garry wrote:
-> On 05/01/2022 19:47, Bjorn Helgaas wrote:
 
-> > IMO inb() should
-> > be present but do something innocuous like return ~0, as it would if
-> > I/O port space is supported but there's no device at that address.
-> > 
-> > [1]https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.15#n4210
-> > 
-> 
-> That driver would prob not be used on systems which does not support PIO,
-> and so could have a HAS_IOPORT dependency. But it is not strictly necessary.
+--l2QZb2k3HSz7cwiU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I don't want the path of "this driver isn't needed because the device
-is unlikely to be used on this arch."
+On Thu, Jan 06, 2022 at 06:13:37PM +0000, Catalin Marinas wrote:
+> On Thu, Jan 06, 2022 at 10:09:35AM -0600, Jeremy Linton wrote:
 
-Maybe it's not _always_ possible, but if the device can be plugged
-into the platform, I think we should be able to build the driver for
-it.
+> > This should only change the behavior for for binaries which conform to the
+> > new ABI containing the BTI note. So outside of the tiny window of things
+> > built with BTI, but run on !BTI hardware or older kernel+glibc, this
+> > shouldn't be a problem. (Unless i'm missing something) Put another way, now
+> > is the time to make a change, before there is a legacy BTI ecosystem we have
+> > to deal with.
 
-If the device requires I/O port space and the platform doesn't support
-it, the PCI core or the driver should detect that and give a useful
-diagnostic.
+> The concern is that the loader may decide in the future to not enable
+> (or turn off) BTI for some reason (e.g. mixed libraries, old glibc on
+> BTI hardware). If we force BTI on the main executable, we'd take this
+> option away. Note also that it's not only glibc here, there are other
+> loaders.
 
-Bjorn
+Neither of those examples should be concerns - BTI is per page so you
+can mix BTI and non-BTI freely in a process (as will happen now for the
+case where the dynamic loader is built for BTI but the main executable
+is not, and the dynamic loader should do if there's a mix of BTI and
+non-BTI libraries).  The main case where there might be a change would
+be the case where there's individual excutables with incorrect BTI
+annotations which are run under this seccomp MWDE, then the dynamic
+loader might have support for disabling BTI based on some configuration
+but wouldn't be able to due to the MWDE.
+
+Note also that we're only taking the option of disabiling BTI away in
+the case where there's something like this seccomp filter disabling
+permission changes.
+
+--l2QZb2k3HSz7cwiU
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHXPgEACgkQJNaLcl1U
+h9BnZwf8DjoXbcOhQVC2ociT04WJ+fR7GYQLHGkX92IGTyo2qFUd99hIzIuHiYbp
+zFWG/wqqtnuzBEQGK/MMsTNzWqLnpXtlF2NxFEdJTtFl6bYnTkShYr71UHnDlW6H
+9vbA46Jb9G+EyO7DYnLlCva5VwZ7GwRrOaD3DdllLpe99BQevwM9g+lHj3wRuOXK
+gLO+TdaUxe8kdAMqcDy1xHMF/j2XnYLkwVr4Jq+R5iotZ5LmwtSYcd/MYv2x+o2E
+nNAZJJT6yIF9VCVEWVRKK2WgxaI5HVtLPtbi/XGEh942rG8pPC+GAKFV2KDDy4pX
+4eg1OMGWz8lJm5TW2ZFmBkiCGT5zYw==
+=Lecu
+-----END PGP SIGNATURE-----
+
+--l2QZb2k3HSz7cwiU--
