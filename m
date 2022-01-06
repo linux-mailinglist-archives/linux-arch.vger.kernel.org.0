@@ -2,147 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF8648648D
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jan 2022 13:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 722CB486760
+	for <lists+linux-arch@lfdr.de>; Thu,  6 Jan 2022 17:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238901AbiAFMqs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jan 2022 07:46:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45023 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239013AbiAFMqr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jan 2022 07:46:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1641473206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QIcy/hKgWsl8HLsYFT8VKTJz9iU+YZ837pHBIwXvv1Q=;
-        b=IhKCWiVxKmma4hx7vqrpgPZKqQEgMlj0ozvKJe1VJnjX1UKqK4Vo1Eb3Q3VBdB29U53/dL
-        guRtLa6WXqXbsn/BhSr2Xi+y3+B+TMzJ8pd95v797/h0PURVRwYIPEfxMbxrvE9GLMM1o4
-        MmLb/c1sb9eBxA1lvZm9atUNeX5H+Bo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-vjeIq7nnPu24gaxjE7ePSw-1; Thu, 06 Jan 2022 07:46:45 -0500
-X-MC-Unique: vjeIq7nnPu24gaxjE7ePSw-1
-Received: by mail-wm1-f70.google.com with SMTP id c188-20020a1c35c5000000b00346a2160ea8so180724wma.9
-        for <linux-arch@vger.kernel.org>; Thu, 06 Jan 2022 04:46:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QIcy/hKgWsl8HLsYFT8VKTJz9iU+YZ837pHBIwXvv1Q=;
-        b=ZtmZaLWo7gkdxj1unhoWe9FpCQIjgH36E10Z6zvfnv6KYCZTTP7/QKpsiX1wc6t2in
-         gL+cgTWGjTOIzbP086/nbRctiDXUFr1qL4pYxqvxggDUJia7YcG68bEBoFy1bJ5LD4yX
-         06K2ncwYnvAyAtlRUNOiNsRGumBdoGHJR3/WwEPP1M6PBJ9zGApVE9/HNlnFQY01IVSa
-         KtsbCSIiZ7GqEchn4godngEafAne38pWxjbomNUNfSNRyMhXsmwyMY5to68Exvrmj6PA
-         NMVL/NPV5hVgvxZ+FeMaNj6w3NqMd3zBkIfbBClbyDH7NTzF/qc0d7DVFebGiNaHxihe
-         IDdA==
-X-Gm-Message-State: AOAM530emiWMfJMPKL00kwXdQiqpkcuQSklLjV63xvzPM7aQ8OH14XN6
-        bBKiQkSaKkk79NyYRfGG2DI5cH4yEDNuh54jQ5Aj1tZOIYNNitsDGSKXTUFbljkzcJ9DAOL6JvN
-        t+HYaNLntYkRr5EbwgMmFrw==
-X-Received: by 2002:a05:600c:1e05:: with SMTP id ay5mr6993321wmb.131.1641473204125;
-        Thu, 06 Jan 2022 04:46:44 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxIetGTra+THB/8z93McN+42aVUsQxDpvJa2rz7fYmmyJpcjeJUiqxg8dTKkWQkvBsgXuZRAA==
-X-Received: by 2002:a05:600c:1e05:: with SMTP id ay5mr6993312wmb.131.1641473203945;
-        Thu, 06 Jan 2022 04:46:43 -0800 (PST)
-Received: from redhat.com ([2a03:c5c0:207e:991b:6857:5652:b903:a63b])
-        by smtp.gmail.com with ESMTPSA id g12sm2308053wrd.71.2022.01.06.04.46.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Jan 2022 04:46:43 -0800 (PST)
-Date:   Thu, 6 Jan 2022 07:46:37 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 26/43] kmsan: virtio: check/unpoison scatterlist in
- vring_map_one_sg()
-Message-ID: <20220106074032-mutt-send-email-mst@kernel.org>
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-27-glider@google.com>
+        id S240991AbiAFQJi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jan 2022 11:09:38 -0500
+Received: from foss.arm.com ([217.140.110.172]:56010 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240960AbiAFQJi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jan 2022 11:09:38 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C1BBD1042;
+        Thu,  6 Jan 2022 08:09:37 -0800 (PST)
+Received: from [192.168.122.166] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C090E3F5A1;
+        Thu,  6 Jan 2022 08:09:36 -0800 (PST)
+Message-ID: <8550afd2-268d-a25f-88fd-0dd0b184ca23@arm.com>
+Date:   Thu, 6 Jan 2022 10:09:35 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211214162050.660953-27-glider@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v7 0/4] arm64: Enable BTI for the executable as well as
+ the interpreter
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org, Mark Rutland <mark.rutland@arm.com>
+References: <20211115152714.3205552-1-broonie@kernel.org>
+ <YbD4LKiaxG2R0XxN@arm.com> <20211209111048.GM3294453@arm.com>
+ <YdSEkt72V1oeVx5E@sirena.org.uk>
+ <101d8e84-7429-bbf1-0271-5436eca0eea2@arm.com> <YdbL5kIzi0xqVTVd@arm.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <YdbL5kIzi0xqVTVd@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Dec 14, 2021 at 05:20:33PM +0100, Alexander Potapenko wrote:
-> If vring doesn't use the DMA API, KMSAN is unable to tell whether the
-> memory is initialized by hardware. Explicitly call kmsan_handle_dma()
-> from vring_map_one_sg() in this case to prevent false positives.
+Hi,
+
+On 1/6/22 05:00, Catalin Marinas wrote:
+> Hi Jeremy,
 > 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-
-OK I guess
-
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-
-IIUC this depends on the rest of the patchset, so feel free to
-merge.
-
-> ---
-> Link: https://linux-review.googlesource.com/id/I211533ecb86a66624e151551f83ddd749536b3af
-> ---
->  drivers/virtio/virtio_ring.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+> On Wed, Jan 05, 2022 at 04:42:01PM -0600, Jeremy Linton wrote:
+>> On 1/4/22 11:32, Mark Brown wrote:
+>>> On Thu, Dec 09, 2021 at 11:10:48AM +0000, Szabolcs Nagy wrote:
+>>>> The 12/08/2021 18:23, Catalin Marinas wrote:
+>>>>> On Mon, Nov 15, 2021 at 03:27:10PM +0000, Mark Brown wrote:
+>>>>>> memory is already mapped with PROT_EXEC.  This series resolves this by
+>>>>>> handling the BTI property for both the interpreter and the main
+>>>>>> executable.
+>>>>>
+>>>>> Given the silence on this series over the past months, I propose we drop
+>>>>> it. It's a bit unfortunate that systemd's MemoryDenyWriteExecute cannot
+>>>>> work with BTI but I also think the former is a pretty blunt hardening
+>>>>> mechanism (rejecting any mprotect(PROT_EXEC) regardless of the previous
+>>>>> attributes).
+>>>>
+>>>> i still think it would be better if the kernel dealt with
+>>>> PROT_BTI for the exe loaded by the kernel.
+>>>
+>>> The above message from Catalin isn't quite the full story here - my
+>>> understanding from backchannel is that there's concern from others that
+>>> we might be creating future issues by enabling PROT_BTI, especially in
+>>> the case where the same permissions issue prevents the dynamic linker
+>>> disabling PROT_BTI.  They'd therefore rather stick with the status quo
+>>> and not create any new ABI.  Unfortunately that's not something people
+>>> have been willing to say on the list, hopefully the above captures the
+>>> thinking well enough.
+>>>
+>>> Personally I'm a bit ambivalent on this, I do see the potential issue
+>>> but I'm having trouble constructing an actual scenario and my instinct
+>>> is that since we handle PROT_EXEC we should also handle PROT_BTI for
+>>> consistency.
+>>
+>> I'm hardly a security expert, but it seems to me that BTI hardens against a
+>> wider set of possible exploits than MDWE.
 > 
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 6d2614e34470f..bf4d5b331e99d 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -11,6 +11,7 @@
->  #include <linux/module.h>
->  #include <linux/hrtimer.h>
->  #include <linux/dma-mapping.h>
-> +#include <linux/kmsan-checks.h>
->  #include <linux/spinlock.h>
->  #include <xen/xen.h>
->  
-> @@ -331,8 +332,15 @@ static dma_addr_t vring_map_one_sg(const struct vring_virtqueue *vq,
->  				   struct scatterlist *sg,
->  				   enum dma_data_direction direction)
->  {
-> -	if (!vq->use_dma_api)
-> +	if (!vq->use_dma_api) {
-> +		/*
-> +		 * If DMA is not used, KMSAN doesn't know that the scatterlist
-> +		 * is initialized by the hardware. Explicitly check/unpoison it
-> +		 * depending on the direction.
-> +		 */
-> +		kmsan_handle_dma(sg_page(sg), sg->offset, sg->length, direction);
->  		return (dma_addr_t)sg_phys(sg);
-> +	}
->  
->  	/*
->  	 * We can't use dma_map_sg, because we don't use scatterlists in
-> -- 
-> 2.34.1.173.g76aa8bc2d0-goog
+> They are complementary features.
+> 
+>> Yet, we are silently turning it
+>> off for systemd services which are considered some of the most security
+>> critical things in the machine right now (ex:logind, etc). So despite
+>> 'systemd-analyze secuirty` flagging those services as the most secure ones
+>> on a system, they might actually be less secure.
+> 
+> Well, that's a distro decision. MDWE/MDWX is not something imposed by
+> the kernel but rather a seccomp bpf filter set up by systemd.
+> 
+>> It also seems that getting BTI turned on earlier, as this patch is doing is
+>> itself a win.
+>>
+>> So, mentally i'm having a hard time balancing the hypothetical problem laid
+>> out, as it should only really exist in an environment similar to the MDWE
+>> one, since AFAIK, its possible today to just flip it back off unless MDWE
+>> stops that from happening.
+> 
+> That's a user ABI change and given that the first attempt was shown to
+> break with some combination of old loader and new main executable (or
+> the other way around), I'd rather keep things as they are.
+
+This should only change the behavior for for binaries which conform to 
+the new ABI containing the BTI note. So outside of the tiny window of 
+things built with BTI, but run on !BTI hardware or older kernel+glibc, 
+this shouldn't be a problem. (Unless i'm missing something) Put another 
+way, now is the time to make a change, before there is a legacy BTI 
+ecosystem we have to deal with.
+
+
+> 
+>> What are the the remaining alternatives? A new syscall? But that is by
+>> definition a new ABI,
+> 
+> A new ABI is better than changing the current ABI.
+> 
+>> and wouldn't benefit from having BTI turned on as early as this patch
+>> is doing.
+> 
+> In the absence of MDWX, it's not relevant how early the kernel turns BTI
+> on for the main executable. The dynamic loader would do this with an
+> mprotect() before actually executing any of the main code. Of course, we
+> assume there are no security bugs in the dynamic loader.
+> 
+>> Should we disable MDWE on a BTI machine? I'm
+>> not sure that is a good look, particularly if MDWE happens to successfully
+>> stop some exploit. AFAIK, MDWE+BTI are a good strong combination, it seems a
+>> shame if we can't get them both working together.
+> 
+> AFAICT MDWX wants (one of the filters) to prevent a previously writable
+> mapping from becoming executable through mprotect(PROT_EXEC). How common
+> is mprotect(PROT_EXEC|PROT_BTI) outside of the dynamic loader? I doubt
+> it is, especially in an MDWX environment. So can we not change the
+> filter to allow PROT_EXEC|PROT_BTI? If your code is already exploitable
+> to allow random syscalls, all bets are off anyway.
+
+I would expect JITs to be twittling EXEC|BTI but, those wouldn't be able 
+to trivially run under MDWE anyway. So rarely?
+
+Changing the filter to allow PROT_EXEC|PROT_BTI defeats the purpose 
+because the hypothetical exploit would just add the BTI tags and turn 
+BTI on as well. The filter, as is, also provides additional BTI 
+protections because it makes it more difficult to disable BTI. Without 
+that filter it seems likely someone could come up with a way to use an 
+existing PROT_EXEC as a gadget to disable BTI anywhere they choose.
+
+So, to your point before, BTI+MDWE are complementary, the combination 
+seems considerably more robust than either by itself.
+
+> 
+>> I hesitate to suggest it, but maybe this patch should be conditional
+>> somehow, that way !systemd/MDWE machines can behave as they do today, and
+>> systemd/MDWE machines can request BTI be turned on by the kernel
+>> automatically?
+> 
+> That would be some big knob sysctl but I'm still not keen on toggling
+> the ABI like this.
+> 
 
