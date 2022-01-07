@@ -2,28 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E06C487745
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jan 2022 13:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8881C4877FD
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jan 2022 14:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237436AbiAGMBY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jan 2022 07:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiAGMBX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jan 2022 07:01:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E1BC061245
-        for <linux-arch@vger.kernel.org>; Fri,  7 Jan 2022 04:01:23 -0800 (PST)
+        id S1347460AbiAGNLC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Jan 2022 08:11:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:43784 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347437AbiAGNLB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jan 2022 08:11:01 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 586DE60AB2
-        for <linux-arch@vger.kernel.org>; Fri,  7 Jan 2022 12:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6DACC36AE0;
-        Fri,  7 Jan 2022 12:01:20 +0000 (UTC)
-Date:   Fri, 7 Jan 2022 12:01:17 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1922960F03
+        for <linux-arch@vger.kernel.org>; Fri,  7 Jan 2022 13:11:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59FD1C36AE0;
+        Fri,  7 Jan 2022 13:10:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641561060;
+        bh=kQ/XQsIVFM09dBWMbcQlqnLVpvy+lmUI1+24//AEJnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TGZs6nuz1HGPPxLCOQ+RFHfX/VpizrwqFJyPh1vsTteCD+nFuG0BjJTCPQL4pNAg1
+         i3+nvEJheHvnZK15tUOjddBiRB55B2EznhItywR9el1E0JPP0brA/Nw37a8TGbdJZa
+         D2ULeK538X31iHVN1rFkQ8Ply1aK07KCkAgU/KhnuEmShklqD6T/vrRZwslrgHk3qW
+         7+BwBheMg0AAoaHPtnBjFgmw+8nyb1KuvNFxv7UNumS6pk6E87oL/sk2APl7f8vZUI
+         wnoKH3aWYDp+16QjpPb0N+3mcyfo226YlpmGWDRTp8FW9hYoAkK4ovmvWKU+b+L7U0
+         WnZsw6Q3SUqPQ==
+Date:   Fri, 7 Jan 2022 13:10:55 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Jeremy Linton <jeremy.linton@arm.com>,
         Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -33,7 +40,7 @@ Cc:     Jeremy Linton <jeremy.linton@arm.com>,
         libc-alpha@sourceware.org, Mark Rutland <mark.rutland@arm.com>
 Subject: Re: [PATCH v7 0/4] arm64: Enable BTI for the executable as well as
  the interpreter
-Message-ID: <YdgrjWVxRGRtnf5b@arm.com>
+Message-ID: <Ydg733vPQqwhCwtV@sirena.org.uk>
 References: <20211115152714.3205552-1-broonie@kernel.org>
  <YbD4LKiaxG2R0XxN@arm.com>
  <20211209111048.GM3294453@arm.com>
@@ -43,87 +50,50 @@ References: <20211115152714.3205552-1-broonie@kernel.org>
  <8550afd2-268d-a25f-88fd-0dd0b184ca23@arm.com>
  <YdcxUZ06f60UQMKM@arm.com>
  <Ydc+AuagOD9GSooP@sirena.org.uk>
+ <YdgrjWVxRGRtnf5b@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WUnyaILR2EzduwUB"
 Content-Disposition: inline
-In-Reply-To: <Ydc+AuagOD9GSooP@sirena.org.uk>
+In-Reply-To: <YdgrjWVxRGRtnf5b@arm.com>
+X-Cookie: teamwork, n.:
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 06, 2022 at 07:07:46PM +0000, Mark Brown wrote:
-> On Thu, Jan 06, 2022 at 06:13:37PM +0000, Catalin Marinas wrote:
-> > On Thu, Jan 06, 2022 at 10:09:35AM -0600, Jeremy Linton wrote:
-> > > This should only change the behavior for for binaries which conform to the
-> > > new ABI containing the BTI note. So outside of the tiny window of things
-> > > built with BTI, but run on !BTI hardware or older kernel+glibc, this
-> > > shouldn't be a problem. (Unless i'm missing something) Put another way, now
-> > > is the time to make a change, before there is a legacy BTI ecosystem we have
-> > > to deal with.
-> 
-> > The concern is that the loader may decide in the future to not enable
-> > (or turn off) BTI for some reason (e.g. mixed libraries, old glibc on
-> > BTI hardware). If we force BTI on the main executable, we'd take this
-> > option away. Note also that it's not only glibc here, there are other
-> > loaders.
-> 
-> Neither of those examples should be concerns - BTI is per page so you
-> can mix BTI and non-BTI freely in a process (as will happen now for the
-> case where the dynamic loader is built for BTI but the main executable
-> is not, and the dynamic loader should do if there's a mix of BTI and
-> non-BTI libraries).  The main case where there might be a change would
-> be the case where there's individual excutables with incorrect BTI
-> annotations which are run under this seccomp MWDE, then the dynamic
-> loader might have support for disabling BTI based on some configuration
-> but wouldn't be able to due to the MWDE.
-> 
-> Note also that we're only taking the option of disabiling BTI away in
-> the case where there's something like this seccomp filter disabling
-> permission changes.
 
-Thanks for the clarification. I think we can look at this from two
-angles:
+--WUnyaILR2EzduwUB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-1. Ignoring MDWE, should whoever does the original mmap() also honour
-   PROT_BTI? We do this for static binaries but, for consistency, should
-   we extend it to dynamic executable?
+On Fri, Jan 07, 2022 at 12:01:17PM +0000, Catalin Marinas wrote:
 
-2. A 'simple' fix to allow MDWE together with BTI.
+> Regarding (1), I don't remember whether we decided to do it this way
+> because it was more complicated to handle it in the kernel (like the 4
+> more patches in this series) or because we wanted to leave the option to
+> the dynamic loader. It would be good to clarify this and we may have a
+> small window, as Jeremy said, where changing the ABI won't cause
+> problems (well, hopefully, there's still a risk).
 
-Regarding (1), I don't remember whether we decided to do it this way
-because it was more complicated to handle it in the kernel (like the 4
-more patches in this series) or because we wanted to leave the option to
-the dynamic loader. It would be good to clarify this and we may have a
-small window, as Jeremy said, where changing the ABI won't cause
-problems (well, hopefully, there's still a risk).
+My understanding is that it was basically just a "let's defer everything
+to userspace" thing.  It means that userspace is responsible for turning
+on BTI and is therefore responsible for any workarounds which are needed
+for problematic binaries, it's the absolute minimum the kernel can be
+responsible for.  This all predates my involvement though.
 
-If we only want (2), I just think we are approaching it wrongly. Looking
-at mprotect(), this systemd feature is not even MDWE but rather "deny
-mprotect execute" disregarding the previous attributes. If we want this,
-something like below would do (conditional on some personality flag or a
-prctl):
+--WUnyaILR2EzduwUB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index e552f5e0ccbd..4262e6f1c14e 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -616,6 +616,11 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
- 			goto out;
- 		}
+-----BEGIN PGP SIGNATURE-----
 
-+		if ((newflags & VM_EXEC) && !(vma->vm_flags & VM_EXEC)) {
-+			error = -EACCES;
-+			goto out;
-+		}
-+
- 		/* Allow architectures to sanity-check the new flags */
- 		if (!arch_validate_flags(newflags)) {
- 			error = -EINVAL;
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHYO94ACgkQJNaLcl1U
+h9Ce4gf9HW2dbZA6hQxBtat8BUQXOT3EeumgfxSkto+pcuzocpfOp/jbtrm0+SPz
+2cmGCfZAZP9z4WiAYaMaSmnLysybYOkgOpvxUJeAsn1684BarvRcCaXs0Lt/poAN
+EiIeZG+dtIwqZNUbmImQ4cPAwiJ9y7gAE+Wlb4wRFR6UvQsBUbsi6L5pDOYlaFUf
+pms4C2qpfxlk4+sFJ9f2AdKL8ik3lSVn3NoFHbgpjzQOeDxaM8lfnYmFTkt48AvP
+AL2+akkI4LcefXg/fT/8GQYrdVv4FTIjQA63IsG/kyV2/zcTl2hoAJl83euM1ht6
+2opcJwqh5xIZP9YyWtcpTozuZHdpbQ==
+=Yp3G
+-----END PGP SIGNATURE-----
 
-But we could also do a proper MDWE covering both mmap() and mprotect()
-and keep track on whether a vma was previously writable. A personality
-flag seems like a better option as we have READ_IMPLIES_EXEC, we could
-add a DENY_WRITE_EXEC.
-
--- 
-Catalin
+--WUnyaILR2EzduwUB--
