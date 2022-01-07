@@ -2,114 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E70F6486A51
-	for <lists+linux-arch@lfdr.de>; Thu,  6 Jan 2022 20:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B95486E67
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jan 2022 01:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbiAFTHx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 6 Jan 2022 14:07:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243176AbiAFTHw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 6 Jan 2022 14:07:52 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E9AC061245
-        for <linux-arch@vger.kernel.org>; Thu,  6 Jan 2022 11:07:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D50961DC2
-        for <linux-arch@vger.kernel.org>; Thu,  6 Jan 2022 19:07:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2E8C36AEB;
-        Thu,  6 Jan 2022 19:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641496071;
-        bh=R2EJTo2qy+ImjdQAtgw+uzG2kOS8IHG6q1pOq5Wwfc0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OuVNCyX80gCStNPMw0jzAA/lM0BBUv9OhkU/u7WU3a+gB1EjiCiZ34qOl2rn5sZld
-         XXf+mn7FXYezXsez8RPXsycjiAwNpdlnQiD6FcQ7hw9A1FdM0KpXI9PMFLDroVRBiv
-         aaPrStTtDpF5vp1DnBS1UGZVDPkJHKZFTBlEJTlEpDNqZ2H/qMnyjvYwiF+8XNKW03
-         sphg+0l+hLLeFDZw9m0YZDL7HyH8YSlRPDcv/twA7wq8FRyiV409+AfAwMzystXm4C
-         gUUiOosQzmYbLF/d7IXnrvm9KRUf/abNQKNP15an4nMKFIu0PYAVOPCKv5VIS0O0pS
-         ccBEwvCWHytsQ==
-Date:   Thu, 6 Jan 2022 19:07:46 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Jeremy Linton <jeremy.linton@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org, Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v7 0/4] arm64: Enable BTI for the executable as well as
- the interpreter
-Message-ID: <Ydc+AuagOD9GSooP@sirena.org.uk>
-References: <20211115152714.3205552-1-broonie@kernel.org>
- <YbD4LKiaxG2R0XxN@arm.com>
- <20211209111048.GM3294453@arm.com>
- <YdSEkt72V1oeVx5E@sirena.org.uk>
- <101d8e84-7429-bbf1-0271-5436eca0eea2@arm.com>
- <YdbL5kIzi0xqVTVd@arm.com>
- <8550afd2-268d-a25f-88fd-0dd0b184ca23@arm.com>
- <YdcxUZ06f60UQMKM@arm.com>
+        id S1343868AbiAGAOI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 6 Jan 2022 19:14:08 -0500
+Received: from mout.gmx.net ([212.227.17.20]:46757 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343788AbiAGAOE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 6 Jan 2022 19:14:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1641514442;
+        bh=GXWM4/EezVw90Q1yq7MNbtsLpD/+cAlg3y+cQMfbSB8=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=KBQqBfx+qMimh6e1iBpYxrQK3KIejIMEpuVSvP+Z2Y6lEmYcHo+Zf3E4+R4jicWX5
+         aqzKA7IClNDYPyf3xIO+lt5GayiGfq8AFNwt+0ImV7ptOUK5vwIPpJGq07VrBEa+di
+         dGmBp/WzP/JqCUhqQjZtA3cYYPvbqQy4XNPGiv2M=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from ls3530 ([92.116.152.191]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5mKJ-1mKb1V0ist-017CsJ; Fri, 07
+ Jan 2022 01:14:02 +0100
+Date:   Fri, 7 Jan 2022 01:13:02 +0100
+From:   Helge Deller <deller@gmx.de>
+To:     Linux Kernel <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
+Cc:     linux-parisc@vger.kernel.org
+Subject: [PATCH] sections: Fix __is_kernel() to include init ranges
+Message-ID: <YdeFjo1OyhAD3/+K@ls3530>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="l2QZb2k3HSz7cwiU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdcxUZ06f60UQMKM@arm.com>
-X-Cookie: I think we're in trouble.
+X-Provags-ID: V03:K1:l2V/NFTYg4pHP7N2VuiFMzJsYgHSpjx30pzLTEnEda3F8gvjLKL
+ sG+UTVajAWFLn1IBdDBF6nGOZ/lyt5DgZVfzMCaUd9G0Y+6V0zgFirWSfZE1ctmHszUFHor
+ l6YYr8ywKFnMlJ5AFG9f4noleezH9C2fEjEecLWso2msGTl7WVA9y1vYNZUglxD5TQR5FxK
+ +dCCLVu8H5dG2acMZfzow==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:z21eSQYKMPY=:47dF8xUytUfpRYmsQ81rzW
+ ACNWxPFTYMe2o0CuQaNtnyjtYvgI37yQs6TTgZv3y4b3N2x59B3NHqfeFkJQWNI4yxxpOrVp5
+ zkvp9fzL+wTiaVpxpMzoBxTpqCop1AinDfDXDXhkfVtwY01JdUXXnTR1lSAehThrkKnLtSSaw
+ /8krTi1Yf7KfC6zMdJ2BpJ7Sx/9Nrdr5MUlLBBWHicNYk3Emv6IVcpoJK5L0UxqD6PjSIjIyH
+ auvatjpwsxwuf5gvPWrG6obMwn7Q5UDO2/j9BkKynSda3wLqnCn4ZaxM2rckstgaAkPSaUaNO
+ 1uwapGPnHxvI77CncwS/1sMzNb/boOwiQ4v/5v81GZrcgSyxv2sKpF14sCzEbylO4aoVlJefL
+ yyhYhIWrCvgDu/P68qEPTOao8tSHTOI2jD/oPuh2S8RuiSf7r28AUoocK/cJi+KHgAljXdAWA
+ oM58TmLeti+cIOYUCl3Jr88Exxf2bqVB/TPSzBntchPiX9VvI/9zGiGzbBukIlmGOTYBp3D4x
+ nfvi8tpPADDJV8mMt5vXHnsVQC/3i6rBUWVvASnxBHIGIXj6DBLXW92adUkrgpt/Z1AlJfSym
+ LRgQmgYcw0YCgeA1sVuiVlclifSg/I11EzLw15whB1OFJBdataz/AZdvlwhUGc7OV6+lkIGEP
+ q+l4UV4ymGaZNcQEJr6U7PPwOi7QwggvK4kj74slVgcrOWk+fVFQ4e1t7mB6lIrV0Cgy2Jn9d
+ cpTYOY1sxU65KMf3meHIrnNrsJIyKnVcvz1E1M8yaMODjUfoKZF3b96OGyPPC+0XnoV72+vS2
+ kt94w3evJC61duBiQdHJlf7AU9B6rf0lRoLjV8gk/VGWTByRhKb3I5kzFQBFZAgmmsBRMhSAy
+ eG6nfe+3bGNOE/TugYY0AMHJk0OM1OXGT8O7kX3Zzzm9H9ZLu0n6hKj4vGzb2m4oPbTbqrAl8
+ 1Fz/Ec4AF3gmqa3TKmerX4hfMFK9s+dH76+tsUuUk04qH7dRIh3ronkEJbnlZiJi2av/6IUvI
+ Mx12zqXlF9DuqVse1EZwRj81VqT0eyrZRlZdwO5VM1Szq5TwiNFmUWL4NhWsm9Mbpc9ekovhm
+ Xo9pxNRoKtfIt4=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+With CONFIG_KALLSYMS_ALL=3Dy, the function is_ksym_addr() is used to
+determine if a symbol is from inside the kernel range. For that the
+given symbol address is checked if it's inside the _stext to _end range.
 
---l2QZb2k3HSz7cwiU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Although this is correct, some architectures (e.g. parisc) may have the
+init area before the _stext address and as such the check in
+is_ksym_addr() fails.  By extending the range check to include the init
+section, __is_kernel() will now detect symbols in this range as well.
 
-On Thu, Jan 06, 2022 at 06:13:37PM +0000, Catalin Marinas wrote:
-> On Thu, Jan 06, 2022 at 10:09:35AM -0600, Jeremy Linton wrote:
+This fixes an issue on parisc where addresses of kernel functions in
+init sections aren't resolved to their symbol names.
 
-> > This should only change the behavior for for binaries which conform to the
-> > new ABI containing the BTI note. So outside of the tiny window of things
-> > built with BTI, but run on !BTI hardware or older kernel+glibc, this
-> > shouldn't be a problem. (Unless i'm missing something) Put another way, now
-> > is the time to make a change, before there is a legacy BTI ecosystem we have
-> > to deal with.
+Signed-off-by: Helge Deller <deller@gmx.de>
 
-> The concern is that the loader may decide in the future to not enable
-> (or turn off) BTI for some reason (e.g. mixed libraries, old glibc on
-> BTI hardware). If we force BTI on the main executable, we'd take this
-> option away. Note also that it's not only glibc here, there are other
-> loaders.
+diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections=
+.h
+index 1dfadb2e878d..00566b1fd699 100644
+=2D-- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -193,12 +193,16 @@ static inline bool __is_kernel_text(unsigned long ad=
+dr)
+  * @addr: address to check
+  *
+  * Returns: true if the address is located in the kernel range, false oth=
+erwise.
+- * Note: an internal helper, only check the range of _stext to _end.
++ * Note: an internal helper, check the range of _stext to _end,
++ *       and range from __init_begin to __init_end, which can be outside
++ *       of the _stext to _end range.
+  */
+ static inline bool __is_kernel(unsigned long addr)
+ {
+-	return addr >=3D (unsigned long)_stext &&
+-	       addr < (unsigned long)_end;
++	return ((addr >=3D (unsigned long)_stext &&
++	         addr < (unsigned long)_end) ||
++		(addr >=3D (unsigned long)__init_begin &&
++		 addr < (unsigned long)__init_end));
+ }
 
-Neither of those examples should be concerns - BTI is per page so you
-can mix BTI and non-BTI freely in a process (as will happen now for the
-case where the dynamic loader is built for BTI but the main executable
-is not, and the dynamic loader should do if there's a mix of BTI and
-non-BTI libraries).  The main case where there might be a change would
-be the case where there's individual excutables with incorrect BTI
-annotations which are run under this seccomp MWDE, then the dynamic
-loader might have support for disabling BTI based on some configuration
-but wouldn't be able to due to the MWDE.
-
-Note also that we're only taking the option of disabiling BTI away in
-the case where there's something like this seccomp filter disabling
-permission changes.
-
---l2QZb2k3HSz7cwiU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmHXPgEACgkQJNaLcl1U
-h9BnZwf8DjoXbcOhQVC2ociT04WJ+fR7GYQLHGkX92IGTyo2qFUd99hIzIuHiYbp
-zFWG/wqqtnuzBEQGK/MMsTNzWqLnpXtlF2NxFEdJTtFl6bYnTkShYr71UHnDlW6H
-9vbA46Jb9G+EyO7DYnLlCva5VwZ7GwRrOaD3DdllLpe99BQevwM9g+lHj3wRuOXK
-gLO+TdaUxe8kdAMqcDy1xHMF/j2XnYLkwVr4Jq+R5iotZ5LmwtSYcd/MYv2x+o2E
-nNAZJJT6yIF9VCVEWVRKK2WgxaI5HVtLPtbi/XGEh942rG8pPC+GAKFV2KDDy4pX
-4eg1OMGWz8lJm5TW2ZFmBkiCGT5zYw==
-=Lecu
------END PGP SIGNATURE-----
-
---l2QZb2k3HSz7cwiU--
+ #endif /* _ASM_GENERIC_SECTIONS_H_ */
