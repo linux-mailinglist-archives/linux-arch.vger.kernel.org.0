@@ -2,186 +2,131 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D71E5487B4B
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jan 2022 18:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE02487CB3
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jan 2022 20:01:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348533AbiAGRWM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jan 2022 12:22:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:43874 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiAGRWM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jan 2022 12:22:12 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 08565210EB;
-        Fri,  7 Jan 2022 17:22:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1641576131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UI+Qu+ntgMHu9DPaL+mEKxd+gHSWitvbHxpVywBZ1V4=;
-        b=Mi4bJf/og/2zbr6waXD5G8AkMgEwGRLT+vXVlwBJjZLnPwi/ZKzW57EM5ugVnCb2u7clRd
-        7ZI+blAa737FdZzwD4+u3N0xtFeyswqJJhDoK9ZN8I1GMaQ15fhGbsl1DAimjYJGeAhpAK
-        7X39KdrWAKyAF/9yYUvJtMlBi1BQlmg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1641576131;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UI+Qu+ntgMHu9DPaL+mEKxd+gHSWitvbHxpVywBZ1V4=;
-        b=IuOIC538emYqTz4YdjduIVikz+dOrQXeD31mk0m5oXYH5skO0o8959jcJpx3+86UKPEZ+k
-        mgO72vYi6bqEQHDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 866A913D17;
-        Fri,  7 Jan 2022 17:22:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T0ILIMJ22GH1RAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 07 Jan 2022 17:22:10 +0000
-Message-ID: <82de6739-a070-695b-bbc8-dfa931aa5e00@suse.cz>
-Date:   Fri, 7 Jan 2022 18:22:10 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH 16/43] kmsan: mm: call KMSAN hooks from SLUB code
-Content-Language: en-US
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        id S231697AbiAGTBl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Jan 2022 14:01:41 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:40118 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230439AbiAGTBk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jan 2022 14:01:40 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:58856)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n5uUc-00HEXO-Sv; Fri, 07 Jan 2022 12:01:38 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:48588 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n5uUb-002BFF-JJ; Fri, 07 Jan 2022 12:01:38 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
         Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211214162050.660953-1-glider@google.com>
- <20211214162050.660953-17-glider@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20211214162050.660953-17-glider@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Christoph Hellwig <hch@infradead.org>
+In-Reply-To: <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk> (Al Viro's message of
+        "Wed, 5 Jan 2022 05:48:08 +0000")
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211208202532.16409-3-ebiederm@xmission.com>
+        <YdUxGKRcSiDy8jGg@zeniv-ca.linux.org.uk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+Date:   Fri, 07 Jan 2022 12:59:33 -0600
+Message-ID: <87tuefwewa.fsf@email.froward.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1n5uUb-002BFF-JJ;;;mid=<87tuefwewa.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/ylOQ812OzYa8pP/ypTCEqNmeufvP4Onc=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XMSubLong,XM_B_SpammyWords autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.2 XM_B_SpammyWords One or more commonly used spammy words
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 560 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (1.9%), b_tie_ro: 9 (1.7%), parse: 0.87 (0.2%),
+         extract_message_metadata: 12 (2.2%), get_uri_detail_list: 1.47 (0.3%),
+         tests_pri_-1000: 11 (2.0%), tests_pri_-950: 1.58 (0.3%),
+        tests_pri_-900: 1.16 (0.2%), tests_pri_-90: 94 (16.9%), check_bayes:
+        91 (16.3%), b_tokenize: 14 (2.5%), b_tok_get_all: 10 (1.8%),
+        b_comp_prob: 4.8 (0.9%), b_tok_touch_all: 58 (10.4%), b_finish: 1.04
+        (0.2%), tests_pri_0: 414 (73.9%), check_dkim_signature: 0.57 (0.1%),
+        check_dkim_adsp: 3.2 (0.6%), poll_dns_idle: 1.21 (0.2%), tests_pri_10:
+        2.2 (0.4%), tests_pri_500: 8 (1.4%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 03/10] exit: Move oops specific logic from do_exit into
+ make_task_dead
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 12/14/21 17:20, Alexander Potapenko wrote:
-> In order to report uninitialized memory coming from heap allocations
-> KMSAN has to poison them unless they're created with __GFP_ZERO.
-> 
-> It's handy that we need KMSAN hooks in the places where
-> init_on_alloc/init_on_free initialization is performed.
-> 
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-> ---
-> Link: https://linux-review.googlesource.com/id/I6954b386c5c5d7f99f48bb6cbcc74b75136ce86e
-> ---
->  mm/slab.h |  1 +
->  mm/slub.c | 26 +++++++++++++++++++++++---
->  2 files changed, 24 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/slab.h b/mm/slab.h
-> index 56ad7eea3ddfb..6175a74047b47 100644
-> --- a/mm/slab.h
-> +++ b/mm/slab.h
-> @@ -521,6 +521,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
->  			memset(p[i], 0, s->object_size);
->  		kmemleak_alloc_recursive(p[i], s->object_size, 1,
->  					 s->flags, flags);
-> +		kmsan_slab_alloc(s, p[i], flags);
->  	}
->  
->  	memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
-> diff --git a/mm/slub.c b/mm/slub.c
-> index abe7db581d686..5a63486e52531 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -22,6 +22,7 @@
->  #include <linux/proc_fs.h>
->  #include <linux/seq_file.h>
->  #include <linux/kasan.h>
-> +#include <linux/kmsan.h>
->  #include <linux/cpu.h>
->  #include <linux/cpuset.h>
->  #include <linux/mempolicy.h>
-> @@ -346,10 +347,13 @@ static inline void *freelist_dereference(const struct kmem_cache *s,
->  			    (unsigned long)ptr_addr);
->  }
->  
-> +/*
-> + * See the comment to get_freepointer_safe().
-> + */
+Al Viro <viro@zeniv.linux.org.uk> writes:
 
-I did...
+> On Wed, Dec 08, 2021 at 02:25:25PM -0600, Eric W. Biederman wrote:
+>> -	/*
+>> -	 * If do_exit is called because this processes oopsed, it's possible
+>> -	 * that get_fs() was left as KERNEL_DS, so reset it to USER_DS before
+>> -	 * continuing. Amongst other possible reasons, this is to prevent
+>> -	 * mm_release()->clear_child_tid() from writing to a user-controlled
+>> -	 * kernel address.
+>> -	 */
+>> -	force_uaccess_begin();
+>
+> Are you sure about that one?  It shouldn't matter, but... it's a potential
+> change for do_exit() from a kernel thread.  As it is, we have that
+> force_uaccess_begin() for exiting threads and for kernel ones it's not
+> a no-op.  I'm not concerned about attempted userland access after that
+> point for those, obviously, but I'm not sure you won't step into something
+> subtle here.
+>
+> I would prefer to split that particular change off into a separate commit...
 
->  static inline void *get_freepointer(struct kmem_cache *s, void *object)
->  {
->  	object = kasan_reset_tag(object);
-> -	return freelist_dereference(s, object + s->offset);
-> +	return kmsan_init(freelist_dereference(s, object + s->offset));
+Thank you for catching that.  I was leaning too much on the description
+in the comment of why force_uaccess_begin is there.
 
-... but I don't see why it applies to get_freepointer() too? What am I missing?
+Catching up on the state of set_fs/get_fs removal it appears like a lot
+of progress has been made and on a lot of architectures set_fs/get_fs is
+just gone, and force_uaccess_begin is a noop.
 
->  }
->  
->  static void prefetch_freepointer(const struct kmem_cache *s, void *object)
-> @@ -357,18 +361,28 @@ static void prefetch_freepointer(const struct kmem_cache *s, void *object)
->  	prefetchw(object + s->offset);
->  }
->  
-> +/*
-> + * When running under KMSAN, get_freepointer_safe() may return an uninitialized
-> + * pointer value in the case the current thread loses the race for the next
-> + * memory chunk in the freelist. In that case this_cpu_cmpxchg_double() in
-> + * slab_alloc_node() will fail, so the uninitialized value won't be used, but
-> + * KMSAN will still check all arguments of cmpxchg because of imperfect
-> + * handling of inline assembly.
-> + * To work around this problem, use kmsan_init() to force initialize the
-> + * return value of get_freepointer_safe().
-> + */
->  static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
->  {
->  	unsigned long freepointer_addr;
->  	void *p;
->  
->  	if (!debug_pagealloc_enabled_static())
-> -		return get_freepointer(s, object);
-> +		return kmsan_init(get_freepointer(s, object));
+On architectures that still have set_fs/get_fs it appears all of the old
+warts are present and kernel threads still run with set_fs(KERNEL_DS).
 
-So here kmsan_init() is done twice?
+Assuming it won't be too much longer before the rest of the arches have
+set_fs/get_fs removed it looks like it makes sense to leave the
+force_uaccess_begin where it is, and just let force_uaccess_begin be
+removed when set_fs/get_fs are removed from the tree.
 
->  
->  	object = kasan_reset_tag(object);
->  	freepointer_addr = (unsigned long)object + s->offset;
->  	copy_from_kernel_nofault(&p, (void **)freepointer_addr, sizeof(p));
-> -	return freelist_ptr(s, p, freepointer_addr);
-> +	return kmsan_init(freelist_ptr(s, p, freepointer_addr));
->  }
->  
->  static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
+Christoph does it look like the set_fs/get_fs removal work is going
+to stall indefinitely on some architectures?  If so I think we want to
+find a way to get kernel threads to run with set_fs(USER_DS) on the
+stalled architectures.  Otherwise I think we have a real hazard of
+introducing bugs that will only show up on the stalled architectures.
+
+I finally understand now why when I updated set_child_tid in the kthread
+code early in fork why x86 was fine another architecture was not.
+
+Eric
