@@ -2,134 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8EF487B2D
-	for <lists+linux-arch@lfdr.de>; Fri,  7 Jan 2022 18:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71E5487B4B
+	for <lists+linux-arch@lfdr.de>; Fri,  7 Jan 2022 18:22:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240527AbiAGRQq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 7 Jan 2022 12:16:46 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4373 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348501AbiAGRQp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jan 2022 12:16:45 -0500
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4JVqWg6H9Pz67ZhV;
-        Sat,  8 Jan 2022 01:11:43 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Fri, 7 Jan 2022 18:16:40 +0100
-Received: from [10.47.89.210] (10.47.89.210) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Fri, 7 Jan
- 2022 17:16:37 +0000
-Subject: Re: [RFC 01/32] Kconfig: introduce and depend on LEGACY_PCI
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Guo Ren <guoren@kernel.org>,
-        "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
-        "H Hartley Sweeten" <hsweeten@visionengravers.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Jouni Malinen <j@w1.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        <GR-QLogic-Storage-Upstream@marvell.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "Teddy Wang" <teddy.wang@siliconmotion.com>,
-        Forest Bond <forest@alittletooquiet.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Wim Van Sebroeck" <wim@linux-watchdog.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        "Takashi Iwai" <tiwai@suse.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-hwmon@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <MPT-FusionLinux.pdl@broadcom.com>,
-        <linux-scsi@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-        <linux-wireless@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>,
-        <linux-spi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-watchdog@vger.kernel.org>
-References: <20220106181409.GA297735@bhelgaas>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <b0e772ed-4c21-3d5a-d890-aba05c41904c@huawei.com>
-Date:   Fri, 7 Jan 2022 17:16:23 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        id S1348533AbiAGRWM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 7 Jan 2022 12:22:12 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:43874 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232691AbiAGRWM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 7 Jan 2022 12:22:12 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 08565210EB;
+        Fri,  7 Jan 2022 17:22:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1641576131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UI+Qu+ntgMHu9DPaL+mEKxd+gHSWitvbHxpVywBZ1V4=;
+        b=Mi4bJf/og/2zbr6waXD5G8AkMgEwGRLT+vXVlwBJjZLnPwi/ZKzW57EM5ugVnCb2u7clRd
+        7ZI+blAa737FdZzwD4+u3N0xtFeyswqJJhDoK9ZN8I1GMaQ15fhGbsl1DAimjYJGeAhpAK
+        7X39KdrWAKyAF/9yYUvJtMlBi1BQlmg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1641576131;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UI+Qu+ntgMHu9DPaL+mEKxd+gHSWitvbHxpVywBZ1V4=;
+        b=IuOIC538emYqTz4YdjduIVikz+dOrQXeD31mk0m5oXYH5skO0o8959jcJpx3+86UKPEZ+k
+        mgO72vYi6bqEQHDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 866A913D17;
+        Fri,  7 Jan 2022 17:22:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id T0ILIMJ22GH1RAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 07 Jan 2022 17:22:10 +0000
+Message-ID: <82de6739-a070-695b-bbc8-dfa931aa5e00@suse.cz>
+Date:   Fri, 7 Jan 2022 18:22:10 +0100
 MIME-Version: 1.0
-In-Reply-To: <20220106181409.GA297735@bhelgaas>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.1
+Subject: Re: [PATCH 16/43] kmsan: mm: call KMSAN hooks from SLUB code
 Content-Language: en-US
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211214162050.660953-1-glider@google.com>
+ <20211214162050.660953-17-glider@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211214162050.660953-17-glider@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.89.210]
-X-ClientProxiedBy: lhreml745-chm.china.huawei.com (10.201.108.195) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06/01/2022 18:14, Bjorn Helgaas wrote:
->> That driver would prob not be used on systems which does not support PIO,
->> and so could have a HAS_IOPORT dependency. But it is not strictly necessary.
-> I don't want the path of "this driver isn't needed because the device
-> is unlikely to be used on this arch."
-
-Sure, that was just a one off example. As I mentioned before, I think 
-that Arnd already did most of the ifdeffery work, but it was not 
-included in this series.
-
+On 12/14/21 17:20, Alexander Potapenko wrote:
+> In order to report uninitialized memory coming from heap allocations
+> KMSAN has to poison them unless they're created with __GFP_ZERO.
 > 
-> Maybe it's not_always_  possible, but if the device can be plugged
-> into the platform, I think we should be able to build the driver for
-> it.
+> It's handy that we need KMSAN hooks in the places where
+> init_on_alloc/init_on_free initialization is performed.
 > 
-> If the device requires I/O port space and the platform doesn't support
-> it, the PCI core or the driver should detect that and give a useful
-> diagnostic.
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+> Link: https://linux-review.googlesource.com/id/I6954b386c5c5d7f99f48bb6cbcc74b75136ce86e
+> ---
+>  mm/slab.h |  1 +
+>  mm/slub.c | 26 +++++++++++++++++++++++---
+>  2 files changed, 24 insertions(+), 3 deletions(-)
 > 
+> diff --git a/mm/slab.h b/mm/slab.h
+> index 56ad7eea3ddfb..6175a74047b47 100644
+> --- a/mm/slab.h
+> +++ b/mm/slab.h
+> @@ -521,6 +521,7 @@ static inline void slab_post_alloc_hook(struct kmem_cache *s,
+>  			memset(p[i], 0, s->object_size);
+>  		kmemleak_alloc_recursive(p[i], s->object_size, 1,
+>  					 s->flags, flags);
+> +		kmsan_slab_alloc(s, p[i], flags);
+>  	}
+>  
+>  	memcg_slab_post_alloc_hook(s, objcg, flags, size, p);
+> diff --git a/mm/slub.c b/mm/slub.c
+> index abe7db581d686..5a63486e52531 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/proc_fs.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/kasan.h>
+> +#include <linux/kmsan.h>
+>  #include <linux/cpu.h>
+>  #include <linux/cpuset.h>
+>  #include <linux/mempolicy.h>
+> @@ -346,10 +347,13 @@ static inline void *freelist_dereference(const struct kmem_cache *s,
+>  			    (unsigned long)ptr_addr);
+>  }
+>  
+> +/*
+> + * See the comment to get_freepointer_safe().
+> + */
 
-I'm not sure what the driver can say apart from -ENODEV. Or IO port 
-management in resource.c could warn for requesting IO port region when 
-it's unsupported.
+I did...
 
-Anyway, this same conversion was had with Linus before I got involved. 
-If you think it is worth discussing again then I suppose the authors 
-here need to gain consensus.
+>  static inline void *get_freepointer(struct kmem_cache *s, void *object)
+>  {
+>  	object = kasan_reset_tag(object);
+> -	return freelist_dereference(s, object + s->offset);
+> +	return kmsan_init(freelist_dereference(s, object + s->offset));
 
-Thanks,
-John
+... but I don't see why it applies to get_freepointer() too? What am I missing?
+
+>  }
+>  
+>  static void prefetch_freepointer(const struct kmem_cache *s, void *object)
+> @@ -357,18 +361,28 @@ static void prefetch_freepointer(const struct kmem_cache *s, void *object)
+>  	prefetchw(object + s->offset);
+>  }
+>  
+> +/*
+> + * When running under KMSAN, get_freepointer_safe() may return an uninitialized
+> + * pointer value in the case the current thread loses the race for the next
+> + * memory chunk in the freelist. In that case this_cpu_cmpxchg_double() in
+> + * slab_alloc_node() will fail, so the uninitialized value won't be used, but
+> + * KMSAN will still check all arguments of cmpxchg because of imperfect
+> + * handling of inline assembly.
+> + * To work around this problem, use kmsan_init() to force initialize the
+> + * return value of get_freepointer_safe().
+> + */
+>  static inline void *get_freepointer_safe(struct kmem_cache *s, void *object)
+>  {
+>  	unsigned long freepointer_addr;
+>  	void *p;
+>  
+>  	if (!debug_pagealloc_enabled_static())
+> -		return get_freepointer(s, object);
+> +		return kmsan_init(get_freepointer(s, object));
+
+So here kmsan_init() is done twice?
+
+>  
+>  	object = kasan_reset_tag(object);
+>  	freepointer_addr = (unsigned long)object + s->offset;
+>  	copy_from_kernel_nofault(&p, (void **)freepointer_addr, sizeof(p));
+> -	return freelist_ptr(s, p, freepointer_addr);
+> +	return kmsan_init(freelist_ptr(s, p, freepointer_addr));
+>  }
+>  
+>  static inline void set_freepointer(struct kmem_cache *s, void *object, void *fp)
