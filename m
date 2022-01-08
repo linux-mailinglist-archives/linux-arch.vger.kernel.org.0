@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6A8488347
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 12:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23078488361
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 12:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiAHLtI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 06:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S234184AbiAHLyd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 06:54:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiAHLtI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 06:49:08 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45478C061574;
-        Sat,  8 Jan 2022 03:49:08 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o7-20020a05600c510700b00347e10f66d1so403499wms.0;
-        Sat, 08 Jan 2022 03:49:08 -0800 (PST)
+        with ESMTP id S234182AbiAHLya (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 06:54:30 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0EAC061574;
+        Sat,  8 Jan 2022 03:54:30 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id w20so16328689wra.9;
+        Sat, 08 Jan 2022 03:54:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=TIQPStEwHsYCQix6ClSHzAfuLTp+Laib4nyBu+e0kwM=;
-        b=LSeS14TMVX4vfr4DuRUTZEycyI9rRYiH46AnKHYBgHQqEbdLU00IMiSMoBNwEsSg+C
-         SGzLOLMFRbEsGV4jCQow2e31qtbVlDLf27GP+uBERq/wNFbx4LJPWvfKlcy8iiHunbMZ
-         u4qIzoWsACdjGvpCXtcWsdymXZFnQZvy+g5U616PxD9aujqHl1/YSXlx0kEA6HHp30I2
-         LabgIZs2/5SfsRP0PodzOwFGdOyeQ7uqV48HX+xmSusij0Gb5Nbi/92u1ncKQFcCOxMS
-         8Qxsrch0kXzSSY/KUyJeQ19yRlT5zAQxoulnEY0blpv8C/CSf4Zcm9uJktLhOfJ3+LPm
-         EZuQ==
+        bh=LRHExVyfqWb+CjlvuZOFy5IY4pp0xV737GyYU0gQJqY=;
+        b=dhR4qC1zWBI/BYofjo0JBp6GSuRVM4PtMqn3wpYt+OfRYZA3hu6GjQhgd6Qng1xcuj
+         VSvBddIy5gV5KuhbrGoO5t2Z8fZ3gOHSv1Fwh8pd3QHvSiyp2AT+C1xr0aAQYQ69uWND
+         Rsm67RworqPvMm1UAVUSXzftKO7FhkiyqSM3UpRW3LBo0CPXKEK577vqVHvp3S0M44xG
+         MQG6JNmtmJl33mruzUXQxRMgyR8jH1P42Bsnzyg4JoERzs7ooFoD8KdQdZpEANmvX+XA
+         QLoehmgEt7GTCMTSuriEricCRns63iSlH6CT6CiVOAidj3NWkER394eXR0/vaTJwwD0U
+         Bm9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=TIQPStEwHsYCQix6ClSHzAfuLTp+Laib4nyBu+e0kwM=;
-        b=z8cI2TFpcWOp41cRYDiWj6phgfkjTa1j0FaH/HaHlSw8udbH+AV+vWiYZ15ambVSA0
-         T91A+fISuSIRfEmRo5Nw6aDvxbtEruREtZZD3GsyyfnPSCe0/QUij7b+1jMZuiSGClGA
-         Cr0uLq2tNOIJ8siHL2zrhXHGZxUl9zjMeadrDQFRBrQYeqimW6hh6dp7RchjV2sfyOr1
-         oZPxuEB/f+RQrxb3YSoJYJ0++GuM9DvnCTj4+TbkUj14h7tDVoSZzUgGxT4R0yidXdlL
-         n5MoBO7A3DZ3H7lvCZQZzMwtCDIopy7llG+fxNUfWPWsGuYTTrgO/zQffhYx+LVCGSrx
-         bKUA==
-X-Gm-Message-State: AOAM5337m6anBT0dmEMTq6eN3NKg2nNkUTucohVUBnV5QOXMcVumsO2x
-        JW8tFwDmK5eYLJsOpl1Mlts=
-X-Google-Smtp-Source: ABdhPJxUlMOsDAYXYEahBIXZcX6MtCXb4bcH54TkG8AmFEtTZQ37zGFOVW5YumZ4MBcke35vZiVx6w==
-X-Received: by 2002:a1c:740c:: with SMTP id p12mr14392156wmc.140.1641642546676;
-        Sat, 08 Jan 2022 03:49:06 -0800 (PST)
+        bh=LRHExVyfqWb+CjlvuZOFy5IY4pp0xV737GyYU0gQJqY=;
+        b=XCsI9cntt4JNRBMm8ezUU+X2Qa8hCSJIo/rMmR5Aa2c3tPv6w/nq9o0OGFIsOR3BcR
+         EFW+Dr7xoNWQhejdvTLnQoVKFYLs62Tc8DM4U45I3NXYrNOD7agcHP2B5fiEZNL6TC39
+         bhk+HKFpoRcmqQCYzU2YD0xQi/EQQBoXY4meeH+F1a27Ngpj5xvR+8XZRuSsszvrbcS4
+         jSQfqve/jSm+7za42hfIo/3EujQh7msxyReqYnvCpCn9yjPjQC5xSuqrOMnUrgBOdxgx
+         nRkHf5TrnKNvVDx062nmoUEl6NKhUcVGj3Yfy49dhi58o620viydlMziljr/8COl6lZh
+         b+Aw==
+X-Gm-Message-State: AOAM531lWDVuRoc6WO/eAWmK9GJFQ0Lc4Coe8tJn68wZ85y8z0xKZHbE
+        fdgKus0WkjerH43TMkbir3yMdAj5zDs=
+X-Google-Smtp-Source: ABdhPJwgBlb6v6JR6QP7yO5yqdQZRJJ9sLZO2j0NeN+fBYL1HYkmvkAe2VDjKBPC0aTOTceZHbfPHQ==
+X-Received: by 2002:a05:6000:24b:: with SMTP id m11mr12586202wrz.122.1641642868870;
+        Sat, 08 Jan 2022 03:54:28 -0800 (PST)
 Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id r19sm532925wmh.42.2022.01.08.03.49.05
+        by smtp.gmail.com with ESMTPSA id bd21sm1433232wmb.8.2022.01.08.03.54.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 03:49:06 -0800 (PST)
+        Sat, 08 Jan 2022 03:54:28 -0800 (PST)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 12:49:04 +0100
+Date:   Sat, 8 Jan 2022 12:54:26 +0100
 From:   Ingo Molnar <mingo@kernel.org>
 To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -64,18 +64,15 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
 Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
  -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <Ydl6MATrfA1GA0G+@gmail.com>
+Message-ID: <Ydl7ch/up7qJqByj@gmail.com>
 References: <YdIfz+LMewetSaEB@gmail.com>
  <YdM4Z5a+SWV53yol@archlinux-ax161>
  <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
- <YdTpAJxgI+s9Wwgi@gmail.com>
- <YdTvXkKFzA0pOjFf@gmail.com>
- <YdYQu9YxNw0CxJRn@archlinux-ax161>
+ <YdeJgJFRRsIb9pah@archlinux-ax161>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YdYQu9YxNw0CxJRn@archlinux-ax161>
+In-Reply-To: <YdeJgJFRRsIb9pah@archlinux-ax161>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
@@ -83,97 +80,87 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 * Nathan Chancellor <nathan@kernel.org> wrote:
 
-> 5. Build error in arch/arm64/kvm/hyp/nvhe with LTO
+> On Tue, Jan 04, 2022 at 11:47:30AM +0100, Ingo Molnar wrote:
+> > > > With the fast-headers kernel that's down to ~36,000 lines of code, 
+> > > > almost a factor of 3 reduction:
+> > > > 
+> > > >   # fast-headers-v1:
+> > > >   kepler:~/mingo.tip.git> wc -l kernel/pid.i
+> > > >   35941 kernel/pid.i
+> > > 
+> > > Coming from someone who often has to reduce a preprocessed kernel source 
+> > > file with creduce/cvise to report compiler bugs, this will be a very 
+> > > welcomed change, as those tools will have to do less work, and I can get 
+> > > my reports done faster.
+> > 
+> > That's nice, didn't think of that side effect.
+> > 
+> > Could you perhaps measure this too, to see how much of a benefit it is?
 > 
-> With arm64 + CONFIG_LTO_CLANG_THIN=y, I see:
+> As it turns out, I got an opportunity to measure this sooner rather than
+> later [1]. Using cvise [2] with an identical set of toolchains and
+> interestingness test [3], reducing net/core/skbuff.c took significantly
+> less time with the version from the fast-headers tree.
 > 
-> $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
+> v5.16-rc8:
 > 
-> $ scripts/config -e LTO_CLANG_THIN
+> $ wc -l skbuff.i
+> 105135 skbuff.i
 > 
-> $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/nvhe/
-> ld.lld: error: arch/arm64/kvm/hyp/nvhe/hyp.lds:2: unknown directive: .macro
-> >>> .macro __put, val, name
-> >>> ^
-> make[5]: *** [arch/arm64/kvm/hyp/nvhe/Makefile:51: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o] Error 1
+> $ time cvise test.fish skbuff.i
+> ...
+> ________________________________________________________
+> Executed in  114.02 mins    fish           external
+>    usr time  1180.43 mins   69.29 millis  1180.43 mins
+>    sys time  229.80 mins  248.11 millis  229.79 mins
 > 
-> I was not able to figure out the exact include chain but CONFIG_LTO
-> causes asm/alternative-macros.h to be included in asm/rwonce.h, which
-> eventually gets included in either asm/cache.h or asm/memory.h.
+> fast-headers:
 > 
-> I managed to solve this with the following diff but I am not sure if
-> there is a better or cleaner way to do that.
+> $ wc -l skbuff.i
+> 78765 skbuff.i
 > 
-> diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> index 1bce62fa908a..e19572a205d0 100644
-> --- a/arch/arm64/include/asm/rwonce.h
-> +++ b/arch/arm64/include/asm/rwonce.h
-> @@ -5,7 +5,7 @@
->  #ifndef __ASM_RWONCE_H
->  #define __ASM_RWONCE_H
->  
-> -#ifdef CONFIG_LTO
-> +#if defined(CONFIG_LTO) && !defined(LINKER_SCRIPT)
->  
->  #include <linux/compiler_types.h>
->  #include <asm/alternative-macros.h>
-> @@ -66,7 +66,7 @@
->  })
->  
->  #endif	/* !BUILD_VDSO */
-> -#endif	/* CONFIG_LTO */
-> +#endif	/* CONFIG_LTO && !LINKER_SCRIPT */
+> $ time cvise test.fish skbuff.i
+> ...
+> ________________________________________________________
+> Executed in   47.38 mins    fish           external
+>    usr time  620.17 mins   32.78 millis  620.17 mins
+>    sys time  123.70 mins  122.38 millis  123.70 mins
+> 
+> I was not expecting that much of a difference but it somewhat makes 
+> sense, as the tool spends less time eliminated unused code and the 
+> compiler invocations will be incrementally quicker as the input becomes 
+> smaller.
 
-So the error message suggests that the linker script somehow ends up 
-including asm-generic/export.h:
+Indeed, that's a +140% speedup in build performance, not bad. :-)
 
-  kepler:~/mingo.tip.git> git grep 'macro __put'
-  include/asm-generic/export.h:.macro __put, val, name
+I also got around testing Clang (12) myself, and with my 'reference distro 
+config' I got these results:
 
-?
+ #
+ # v5.16-rc8
+ #
+ Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
 
-But I'd guess that similar to the __ASSEMBLY__ patterns we have in headers, 
-not including the rwonce.h bits if LINKER_SCRIPT is defined is probably 
-close to the right solution - but it would also know how such a low level 
-header ended up in a linker script. Might have been to pick up some offset 
-or size definition somewhere?
+ 55,638,543,274,254      instructions              #    0.77  insn per cycle           ( +-  0.01% )
+ 72,074,911,968,393      cycles                    #    3.901 GHz                      ( +-  0.04% )
+      18,490,451.51 msec cpu-clock                 #   54.740 CPUs utilized            ( +-  0.04% )
 
-I.e. how did the build end up including asm/rwonce.h?
+                 337.788 +- 0.834 seconds time elapsed  ( +-  0.25% )
 
-You can generally debug such weird dependency chains by putting a
-debug #warning into the affected header - such as the patch below.
+ #
+ # -fast-headers-v2-rc3
+ #
+ Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
 
-This prints a stack of the header dependencies:
+ 30,904,130,243,855      instructions              #    0.76  insn per cycle           ( +-  0.02% )
+ 40,703,482,733,690      cycles                    #    3.898 GHz                      ( +-  0.00% )
+      10,443,670.86 msec cpu-clock                 #   58.093 CPUs utilized            ( +-  0.00% )
 
-    CC      kernel/sched/core.o
-  In file included from ./include/linux/compiler.h:263,
-                 from ./include/linux/static_call_types.h:7,
-                 from ./include/linux/kernel.h:6,
-                 from ./include/linux/highmem.h:5,
-                 from kernel/sched/core.c:9:
-  ./arch/arm64/include/asm/rwonce.h:8:2: warning: #warning debug [-Wcpp]
-      8 | #warning debug
+                 179.773 +- 0.829 seconds time elapsed  ( +-  0.46% )
 
-... and should in principle also work in the linker script context.
+That's a +88% build speedup on Clang - even better than the +78% speedup on 
+GCC(-10).
 
 Thanks,
 
 	Ingo
-
-===============>
- arch/arm64/include/asm/rwonce.h | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-index 1bce62fa908a..5b3305381481 100644
---- a/arch/arm64/include/asm/rwonce.h
-+++ b/arch/arm64/include/asm/rwonce.h
-@@ -5,6 +5,8 @@
- #ifndef __ASM_RWONCE_H
- #define __ASM_RWONCE_H
- 
-+#warning debug
-+
- #ifdef CONFIG_LTO
- 
- #include <linux/compiler_types.h>
