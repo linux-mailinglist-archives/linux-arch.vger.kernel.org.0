@@ -2,32 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F74A48849C
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 17:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA99B48849D
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 17:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234593AbiAHQof (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 11:44:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50354 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234712AbiAHQo3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 11:44:29 -0500
+        id S234655AbiAHQog (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 11:44:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234715AbiAHQoc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 11:44:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1111C06173F
+        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 08:44:31 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E021060DEC
-        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 16:44:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2958AC36AED;
-        Sat,  8 Jan 2022 16:44:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99261B80B4A
+        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 16:44:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3914AC36AED;
+        Sat,  8 Jan 2022 16:44:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641660268;
-        bh=VqXWDLIfda9ix4PWEeLYbN3dci4eLEKG08Nxx9ltxEQ=;
+        s=k20201202; t=1641660269;
+        bh=6qfndroNSvS0PIjgZS5xp09UQvoV+Yf5NN9ZzmIhrIQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V06V1fGQjBCtMex/IKqEz4AHKdynLFyK3aQUjFL0aKgqnf1YsnJ1zg2qxfMeCD8ug
-         0JPMCzf64J/EySSFm6y+aFNu7gDoWMJchLOwmCYqRoNo3aHS0KvE4lp3+kCLKvScl7
-         9bH6pg+3W/7DM458zXR4DeDoYsnMrmy5BqAxl5Js80ikuPr52CTsxL9522fwgpupws
-         0f2kEsr8yvkLXVFi0xkE2KF+X7ASPKnrk04DnPaZTObMEI8pzPa3b87vvn93oosNSI
-         /evFyjTSD3kaPNgHHtReWbZze8AejSQJ0m7GmeOnmIT/LwfvwYQ0DeGbS6Iwbt34A4
-         dhWglnickt2dw==
+        b=LMeO/k5pF7lBmYkpUKME1r7Y5oNUYFq/iwsij2I8eVxJi2tdPS2zI9IGMIU0GE0oU
+         Kp7yLce8Y8unoowsw8vYLycwt5QPkQbUsU/pJC2zVt7G0e7/0ej+MjGXXyAA+As8T2
+         /eQIgeEcTkClLIINypGIvv3g8UyKQOGSbIVtosrPGbq66FUsx1pfb6vmQD03IdCc+H
+         e8eGvUz+8Eah4ApSmNIO4TYL3M08jd8NBw0r7xP3/knCaFOnTVadFP93khGD+GhXaD
+         8qDMF4ZFAz2/FK7pl7iB1h6sJ9g8HqrJztV0RgSKf/WcwAhbRfzDcKyCslUESX9xvl
+         wDEj07Lyuq/OQ==
 From:   Andy Lutomirski <luto@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>
@@ -43,11 +46,12 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Andy Lutomirski <luto@kernel.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH 10/23] x86/events, x86/insn-eval: Remove incorrect active_mm references
-Date:   Sat,  8 Jan 2022 08:43:55 -0800
-Message-Id: <d456e7da9dbd271aacd14812d4b9b74e7d7edd52.1641659630.git.luto@kernel.org>
+        Woody Lin <woodylin@google.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: [PATCH 11/23] sched/scs: Initialize shadow stack on idle thread bringup, not shutdown
+Date:   Sat,  8 Jan 2022 08:43:56 -0800
+Message-Id: <233d81a0a1e7b8eca1907998152ee848159b8774.1641659630.git.luto@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1641659630.git.luto@kernel.org>
 References: <cover.1641659630.git.luto@kernel.org>
@@ -57,73 +61,75 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When decoding an instruction or handling a perf event that references an
-LDT segment, if we don't have a valid user context, trying to access the
-LDT by any means other than SLDT is racy.  Certainly, using
-current->active_mm is wrong, as active_mm can point to a real user mm when
-CR3 and LDTR no longer reference that mm.
+Starting with commit 63acd42c0d49 ("sched/scs: Reset the shadow stack when
+idle_task_exit"), the idle thread's shadow stack was reset from the idle
+task's context during CPU hot-unplug.  This was fragile: between resetting
+the shadow stack and actually stopping the idle task, the shadow stack
+did not match the actual call stack.
 
-Clean up the code.  If nmi_uaccess_okay() says we don't have a valid
-context, just fail.  Otherwise use current->mm.
+Clean this up by resetting the idle task's SCS in bringup_cpu().
 
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
+init_idle() still does scs_task_reset() -- see the comments there.  I
+leave this to an SCS maintainer to untangle further.
+
+Cc: Woody Lin <woodylin@google.com>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
 Signed-off-by: Andy Lutomirski <luto@kernel.org>
 ---
- arch/x86/events/core.c   |  9 ++++++++-
- arch/x86/lib/insn-eval.c | 13 ++++++++++---
- 2 files changed, 18 insertions(+), 4 deletions(-)
+ kernel/cpu.c        | 3 +++
+ kernel/sched/core.c | 9 ++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index 6dfa8ddaa60f..930082f0eba5 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -2800,8 +2800,15 @@ static unsigned long get_segment_base(unsigned int segment)
- #ifdef CONFIG_MODIFY_LDT_SYSCALL
- 		struct ldt_struct *ldt;
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 192e43a87407..be16816bb87c 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -33,6 +33,7 @@
+ #include <linux/slab.h>
+ #include <linux/percpu-rwsem.h>
+ #include <linux/cpuset.h>
++#include <linux/scs.h>
  
-+		/*
-+		 * If we're not in a valid context with a real (not just lazy)
-+		 * user mm, then don't even try.
-+		 */
-+		if (!nmi_uaccess_okay())
-+			return 0;
+ #include <trace/events/power.h>
+ #define CREATE_TRACE_POINTS
+@@ -587,6 +588,8 @@ static int bringup_cpu(unsigned int cpu)
+ 	struct task_struct *idle = idle_thread_get(cpu);
+ 	int ret;
+ 
++	scs_task_reset(idle);
 +
- 		/* IRQs are off, so this synchronizes with smp_store_release */
--		ldt = READ_ONCE(current->active_mm->context.ldt);
-+		ldt = smp_load_acquire(&current->mm->context.ldt);
- 		if (!ldt || idx >= ldt->nr_entries)
- 			return 0;
+ 	/*
+ 	 * Some architectures have to walk the irq descriptors to
+ 	 * setup the vector space for the cpu which comes online.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 917068b0a145..acd52a7d1349 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8621,7 +8621,15 @@ void __init init_idle(struct task_struct *idle, int cpu)
+ 	idle->flags |= PF_IDLE | PF_KTHREAD | PF_NO_SETAFFINITY;
+ 	kthread_set_per_cpu(idle, cpu);
  
-diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
-index a1d24fdc07cf..87a85a9dcdc4 100644
---- a/arch/x86/lib/insn-eval.c
-+++ b/arch/x86/lib/insn-eval.c
-@@ -609,14 +609,21 @@ static bool get_desc(struct desc_struct *out, unsigned short sel)
- 		/* Bits [15:3] contain the index of the desired entry. */
- 		sel >>= 3;
- 
--		mutex_lock(&current->active_mm->context.lock);
--		ldt = current->active_mm->context.ldt;
-+		/*
-+		 * If we're not in a valid context with a real (not just lazy)
-+		 * user mm, then don't even try.
-+		 */
-+		if (!nmi_uaccess_okay())
-+			return false;
++	/*
++	 * NB: This is called from sched_init() on the *current* idle thread.
++	 * This seems fragile if not actively incorrect.
++	 *
++	 * Initializing SCS for about-to-be-brought-up CPU idle threads
++	 * is in bringup_cpu(), but that does not cover the boot CPU.
++	 */
+ 	scs_task_reset(idle);
 +
-+		mutex_lock(&current->mm->context.lock);
-+		ldt = current->mm->context.ldt;
- 		if (ldt && sel < ldt->nr_entries) {
- 			*out = ldt->entries[sel];
- 			success = true;
- 		}
+ 	kasan_unpoison_task_stack(idle);
  
--		mutex_unlock(&current->active_mm->context.lock);
-+		mutex_unlock(&current->mm->context.lock);
- 
- 		return success;
+ #ifdef CONFIG_SMP
+@@ -8779,7 +8787,6 @@ void idle_task_exit(void)
+ 		finish_arch_post_lock_switch();
  	}
+ 
+-	scs_task_reset(current);
+ 	/* finish_cpu(), as ran on the BP, will clean up the active_mm state */
+ }
+ 
 -- 
 2.33.1
 
