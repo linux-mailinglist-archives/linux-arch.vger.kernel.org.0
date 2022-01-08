@@ -2,132 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70F61488589
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 20:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F39D488592
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 20:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiAHTNY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 14:13:24 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33690 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230409AbiAHTNX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 14:13:23 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 208J1dSM028622;
-        Sat, 8 Jan 2022 19:13:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=ZtrEmj7RpLT0D2CRHKuWX77vx/C+jmz39Z1GFmH3mLs=;
- b=tHqU1llKYcXRmyJ2hPlZPcDrCzMthnMjQ6FHBCKK/+d2tuoN5POvef0cikqmXgKGkqu8
- gxo3qWCqEWGyizloBiONrA/qTFUYqRqU/Ihxd+iSN1negkudiRNvbw7Sqod3CieychtI
- 2LlMdVm+tU0q4Lp3WaLL4k+9DaOpmQkaQbQOfay8tGtvFB/kMPG+266ctHesN8njk6QT
- lbclNazsdI/GTT/7LvlkHLcgnEJF/xxgPOFUZdJHfQA1z9UM7OXf73BqcKZr+I5CqFNl
- NE+I/NrgIJvrAALOxz9nz3zgDWioqKrYIJMpyvyVJsGVeXfAr1jYadDDHBXZXFA3Rnwe DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3df37w1e36-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 19:13:13 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 208J4kFu006144;
-        Sat, 8 Jan 2022 19:13:13 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3df37w1e2w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 19:13:13 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 208J7cox001250;
-        Sat, 8 Jan 2022 19:13:11 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3df1vhb012-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 08 Jan 2022 19:13:11 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 208JD8Ae32506164
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 8 Jan 2022 19:13:08 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C87AD11C04A;
-        Sat,  8 Jan 2022 19:13:08 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 646E911C04C;
-        Sat,  8 Jan 2022 19:13:08 +0000 (GMT)
-Received: from osiris (unknown [9.145.35.196])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Sat,  8 Jan 2022 19:13:08 +0000 (GMT)
-Date:   Sat, 8 Jan 2022 20:13:06 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
- special case
-Message-ID: <YdniQob7w5hTwB1v@osiris>
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211213225350.27481-1-ebiederm@xmission.com>
- <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
- <87sfu3b7wm.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sfu3b7wm.fsf@email.froward.int.ebiederm.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iK6vptB3IxazjPD9tBOXzl9b-opgXk7z
-X-Proofpoint-ORIG-GUID: 7N4-cUVmsiUdvBVeWxNSY1UpZbWLMSIk
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S232202AbiAHTXI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 14:23:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230345AbiAHTXI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 14:23:08 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFEEC06173F
+        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 11:23:07 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id z9so35946572edm.10
+        for <linux-arch@vger.kernel.org>; Sat, 08 Jan 2022 11:23:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HAp9U7GC794so0DPwUoyAc6XCFDGP/6ZZKph1pyeqFk=;
+        b=NRMT/9P1QQzMSkdfnte3DU53C3Y1PSFTN+V+KqzGbKXoKK2OAv2RLtbwuzMrPxLoBG
+         tlvVMUV9Qa8v4n8Tv8abXCecPdYAwmxJiiGHGnEhAEDmj8AzzeB5VIU5Z+E4ACqTBBe4
+         JooZU0paUl/jNDEl0WaRTfAUMwgcf1UIoxgl0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HAp9U7GC794so0DPwUoyAc6XCFDGP/6ZZKph1pyeqFk=;
+        b=BM6UGKgGLgLQw8QwIicu1/6X0la6Hxjl2G482AAq/x0Vrm5vNQWcuntIY7nl0HYhrF
+         jJmatVFz0lqntNbefNYQw+iFJkfJs8WpG4yWA6VU2HqAjQMHsbOspCwqUCHqaV0OmfNY
+         PLDZwfyPCqzGIxkHJ/gvS7k6E/WdwnoOu15YCJwQ7HRd38WVCs/JRqhkjNH6Zukz3T3Y
+         9IIFlMMny6xPFQv0/DfwCh17FOtYFDpyzDCFVLaDN7T7eA0/ESOJZ73s4Owj3AyDT8Ga
+         nQV9UxFetHxTqjN8/NQ4QJzuyMdR7u/g1rhI7F4HGDxGxW2xETBZxWdc5py11KlV4Ejt
+         yaLg==
+X-Gm-Message-State: AOAM530ghJlJ6kRrT7aD/AXxOthlyyCAokhGfU5J38Frk+3BJ3w+TyXE
+        FNyzxfH1NL2+bv/WF0cVJhVzbX+eXK7fXWk8
+X-Google-Smtp-Source: ABdhPJwM9oNWAAFdNt6j3Mt+QuFuZu4r/5WRWyAvbiTW71LOc2CUuhoo5hRw1Fg9ytrSAWnfqXG8rw==
+X-Received: by 2002:aa7:cb08:: with SMTP id s8mr27697850edt.57.1641669785270;
+        Sat, 08 Jan 2022 11:23:05 -0800 (PST)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id d1sm742289ejo.176.2022.01.08.11.23.04
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Jan 2022 11:23:04 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id o7-20020a05600c510700b00347e10f66d1so570466wms.0
+        for <linux-arch@vger.kernel.org>; Sat, 08 Jan 2022 11:23:04 -0800 (PST)
+X-Received: by 2002:a1c:19c6:: with SMTP id 189mr12513195wmz.155.1641669784282;
+ Sat, 08 Jan 2022 11:23:04 -0800 (PST)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2022-01-08_07,2022-01-07_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=693
- priorityscore=1501 suspectscore=0 clxscore=1011 spamscore=0 phishscore=0
- mlxscore=0 impostorscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2201080145
+References: <cover.1641659630.git.luto@kernel.org> <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
+In-Reply-To: <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 8 Jan 2022 11:22:48 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj4LZaFB5HjZmzf7xLFSCcQri-WWqOEJHwQg0QmPRSdQA@mail.gmail.com>
+Message-ID: <CAHk-=wj4LZaFB5HjZmzf7xLFSCcQri-WWqOEJHwQg0QmPRSdQA@mail.gmail.com>
+Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy mms
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 04, 2022 at 01:47:05PM -0600, Eric W. Biederman wrote:
-> Currently I suspect changing wait_event_uninterruptible to
-> wait_event_killable, is causing problems.
-> 
-> Or perhaps there is some reason tasks that have already entered do_exit
-> need to have fatal_signal_pending set. (The will have
-> fatal_signal_pending set up until they enter get_signal which calls
-> do_group_exit which calls do_exit).
-> 
-> Which is why I am trying to reproduce the reported failure so I can get
-> the kernel to tell me what is going on.  If this is not resolved quickly
-> I won't send you this change, and I will pull it out of linux-next.
+On Sat, Jan 8, 2022 at 8:44 AM Andy Lutomirski <luto@kernel.org> wrote:
+>
+> To improve scalability, this patch adds a percpu hazard pointer scheme to
+> keep lazily-used mms alive.  Each CPU has a single pointer to an mm that
+> must not be freed, and __mmput() checks the pointers belonging to all CPUs
+> that might be lazily using the mm in question.
 
-It would have been good if you would have removed this from linux-next
-already.
+Ugh. This feels horribly fragile to me, and also looks like it makes
+some common cases potentially quite expensive for machines with large
+CPU counts if they don't do that mm_cpumask optimization - which in
+turn feels quite fragile as well.
 
-Anyway, now I also had to spend quite some time to bisect why several test
-suites just hang with linux-next. It's probably because of holidays that
-you didn't get more bug reports.
+IOW, this just feels *complicated*.
 
-On s390
+And I think it's overly so. I get the strong feeling that we could
+make the rules much simpler and more straightforward.
 
-- ltp
-- elfutils selftests
-- seccomp kernel selftests
+For example, how about we make the rules be
 
-hang with linux-next.
+ - a lazy TLB mm reference requires that there's an actual active user
+of that mm (ie "mm_users > 0")
 
-I bisected the problem to this patch using elfutils selftests:
+ - the last mm_users decrement (ie __mmput) forces a TLB flush, and
+that TLB flush must make sure that no lazy users exist (which I think
+it does already anyway).
 
-git clone git://sourceware.org/git/elfutils.git
-cd elfutils
-autoreconf -fi
-./configure --enable-maintainer-mode --disable-debuginfod
-make -j $(nproc) > /dev/null
-cd tests
-make -j $(nproc) check
+Doesn't that seem like a really simple set of rules?
 
-Note: I actually didn't verify if this also causes ltp+seccomp selftests
-      to hang. I just assume it is the case.
+And the nice thing about it is that we *already* do that required TLB
+flush in all normal circumstances. __mmput() already calls
+exit_mmap(), and exit_mm() already forces that TLB flush in every
+normal situation.
+
+So we might have to make sure that every architecture really does that
+"drop lazy mms on TLB flush", and maybe add a flag to the existing
+'struct mmu_gather tlb' to make sure that flush actually always
+happens (even if the process somehow managed to unmap all vma's even
+before exiting).
+
+Is there something silly I'm missing? Somebody pat me on the head, and
+say "There, there, Linus, don't try to get involved with things you
+don't understand.." and explain to me in small words.
+
+                  Linus
