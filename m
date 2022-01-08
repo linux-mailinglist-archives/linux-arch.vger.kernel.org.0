@@ -2,153 +2,200 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1B5488486
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 17:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2E5488490
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 17:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbiAHQ0t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 11:26:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S229868AbiAHQoT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 11:44:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiAHQ0t (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 11:26:49 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64A6C06173F;
-        Sat,  8 Jan 2022 08:26:48 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id c126-20020a1c9a84000000b00346f9ebee43so4606534wme.4;
-        Sat, 08 Jan 2022 08:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=u1H+4M8YW/2Pf02D9Owq7XFEu0//KRJ4dZR9M7ZqmXM=;
-        b=lbVUVnGHfcTzJBF2F548kPdl9MhJVD6uLhE7qCGEUhQNDeRx5WTGn1nVPEFO9KvAbC
-         gXSGDWF9BB76AMshlf8OB+C9S14M39+Li9rUSxfhTaQ7hY0MWFwI9lM5qBnSnIZ1QaIX
-         62uBFYE2NopfBbgsnJTMWiw38/FtKfcqz6kv2mRa6akyggaKbpvhasE+/Abl4izU1NBc
-         chqgfMyZByAAdMjPq50JGBpaHB6hCLHepMW0IV1nYOwrE7yMFa4xLSYxKJVTA3N5XPQE
-         7tVaM331Y5Vhgsl8T31q7c+asit+oYoO4sPO6yLkmAgAS45bop160hs+2CQdWiHFQrmS
-         759A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=u1H+4M8YW/2Pf02D9Owq7XFEu0//KRJ4dZR9M7ZqmXM=;
-        b=4LqTtCUuuDNlLVzw6rHScJTKAIanx4ABkEOuD4wvp1YShuqLE8NlGuYU1PjMMVsRBT
-         bdKj946A2qA5yp2ZQqWNkjgR2gBlGwuXQdP9hiuKWEa5IO6ufVDgPEtuMV4GmoQjxgY3
-         zYfTbXEi/XrlNVJvehXQ2cG+A5gaieOSjpQiuRlqZqqe/tmTG0xIIR2KeUT7dt5rI/a3
-         8pX17Dde4iMmQJNd0R7gzt4jLovTXJPJynsmkn/ypJ3chTs9E/G17uPR2r+JPtCOxSPg
-         nYQIhQDVOjb0JHdxae2XlYKaK8M3wmAcX/gqxUaDYzdjjK8e8Zmkm8V4CuvkKuhKZ4sw
-         NW+Q==
-X-Gm-Message-State: AOAM5309cyVxYPqBaIT8kka+MbdLnJdHNcCeGVFMovrKO+pDqs/P79Lf
-        bCJi0Zv3BAN11caIWOuMzjdDNNItogg=
-X-Google-Smtp-Source: ABdhPJzRjZ2b9JHMj0IW5N3QTRZ/Stk2xBRhG48hW6YwIExuDVyO2N7PkihIu9GmMRiiP2RasfynxQ==
-X-Received: by 2002:a05:600c:198f:: with SMTP id t15mr14978271wmq.154.1641659207291;
-        Sat, 08 Jan 2022 08:26:47 -0800 (PST)
-Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id m17sm1984931wmq.31.2022.01.08.08.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 08:26:46 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 17:26:45 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        with ESMTP id S229553AbiAHQoT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 11:44:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA71EC06173F
+        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 08:44:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EED0B60C33
+        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 16:44:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33981C36AE0;
+        Sat,  8 Jan 2022 16:44:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641660257;
+        bh=FcO7EcnRgQppJrQtVRCzUZV2lgnwvJHnM2p8OenS9kg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eqdSx/HffFr6QDgFrKwXqR1bWkDrWKxJxF6N0O4d8zrWgE2DY0I8I+etDxA9XFkRm
+         V6egOsq56trx1RDi5zzDMTHjVy0sPEYai10KkKWVXAvU5J9UjhEPZ7p72xEtXtFaUD
+         Pduya0kFNA0XhKSOAF8vZ1QrjViD1dUjzqu1uBmTB44vUDyJZCwKIl8Jvt7V0BQ3A8
+         VHyTLhGuXC36FR8DG/mgP5v6YoToH8sKs9gig0GR90Iq7735Q6KfU37bNOi1t7mT9i
+         TP/7jXtQyNRZ9gLhgJdIgtLNy01kzji4ftVVFZ1D3MXJYyH5QqmPT6bdi/I4AK5qeP
+         z2nNVIJQT676Q==
+From:   Andy Lutomirski <luto@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>, x86@kernel.org,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [ANNOUNCE] "Fast Kernel Headers" Tree -v2
-Message-ID: <Ydm7ReZWQPrbIugn@gmail.com>
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Andy Lutomirski <luto@kernel.org>
+Subject: [PATCH 00/23] mm, sched: Rework lazy mm handling
+Date:   Sat,  8 Jan 2022 08:43:45 -0800
+Message-Id: <cover.1641659630.git.luto@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi all-
 
-I'm pleased to announce -v2 of the "Fast Kernel Headers" tree, which is a 
-comprehensive rework of the Linux kernel's header hierarchy & header 
-dependencies, with the dual goals of:
+Sorry I've been sitting on this so long.  I think it's in decent shape, it
+has no *known* bugs, and I think it's time to get the show on the road.
+This series needs more eyeballs, too.
 
- - speeding up the kernel build (both absolute and incremental build times)
+The overall point of this series is to get rid of the scalability
+problems with mm_count, and my goal is to solve it once and for all,
+for all architectures, in a way that doesn't have any gotchas for
+unwary users of ->active_mm.
 
- - decoupling subsystem type & API definitions from each other
+Most of this series is just cleanup, though.  mmgrab(), mmdrop(), and
+->active_mm are a mess.  A number of ->active_mm users are simply
+wrong.  kthread lazy mm handling is inconsistent with user thread lazy
+mm handling (by accident, as far as I can tell).  And membarrier()
+relies on the barrier semantics of mmdrop() and mmgrab(), such that
+anything that gets rid of those barriers risks breaking membarrier().
+x86 is sometimes non-lazy when the core thinks it's lazy because the
+core mm code didn't offer any mechanism by which x86 could tell the core
+that it's exiting lazy mode.
 
-The fast-headers tree consists of over 25 sub-trees internally, spanning 
-over 2,300 commits, which can be found at:
+So most of this series is just cleanup.  Bogus users of ->active_mm
+are fixed, and membarrier() is reworked so that its barriers are
+explicit instead of depending on mmdrop() and mmgrab().  x86 lazy
+handling is extensively tidied up, and x86's EFI mm code gets tidied
+up a bit too.  I think I've done this all in a way that introduces
+little or no overhead.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
 
-   # HEAD: 391ce485ced0 headers/deps: Introduce the CONFIG_FAST_HEADERS=y config option
+Additionally, all the code paths that change current->mm are consolidated
+so that there is only one path to start using an mm and only one path
+to stop using it.
 
-Changes in -v2:
+Once that's done, the actual meat (the hazard pointers) isn't so bad, and
+the x86 optimization on top that should eliminate scanning of remote CPUs
+in __mmput() is about two lines of code.  Other architectures with
+sufficiently accurate mm_cpumask() tracking should be able to do the same
+thing.
 
- - Port to v5.16-rc8
+akpm, this is intended to mostly replace Nick Piggin's lazy shootdown
+series.  This series implements lazy shootdown on x86 implicitly, and
+powerpc should be able to do the same thing in just a couple lines
+of code if it wants to.  The result is IMO much cleaner and more
+maintainable.
 
- - Clang/LLVM support (with the help of Nathan Chancellor):
+Once this is all reviewed, I'm hoping it can go in -tip (and -next) after
+the merge window or go in -mm.  This is not intended for v5.16.  I suspect
+-tip is easier in case other arch maintainers want to optimize their
+code in the same release.
 
-   On my 'reference distro config' the build speedup under Clang is around +88%
-   in elapsed time and +77% in CPU time used:
+Andy Lutomirski (23):
+  membarrier: Document why membarrier() works
+  x86/mm: Handle unlazying membarrier core sync in the arch code
+  membarrier: Remove membarrier_arch_switch_mm() prototype in core code
+  membarrier: Make the post-switch-mm barrier explicit
+  membarrier, kthread: Use _ONCE accessors for task->mm
+  powerpc/membarrier: Remove special barrier on mm switch
+  membarrier: Rewrite sync_core_before_usermode() and improve
+    documentation
+  membarrier: Remove redundant clear of mm->membarrier_state in
+    exec_mmap()
+  membarrier: Fix incorrect barrier positions during exec and
+    kthread_use_mm()
+  x86/events, x86/insn-eval: Remove incorrect active_mm references
+  sched/scs: Initialize shadow stack on idle thread bringup, not
+    shutdown
+  Rework "sched/core: Fix illegal RCU from offline CPUs"
+  exec: Remove unnecessary vmacache_seqnum clear in exec_mmap()
+  sched, exec: Factor current mm changes out from exec
+  kthread: Switch to __change_current_mm()
+  sched: Use lightweight hazard pointers to grab lazy mms
+  x86/mm: Make use/unuse_temporary_mm() non-static
+  x86/mm: Allow temporary mms when IRQs are on
+  x86/efi: Make efi_enter/leave_mm use the temporary_mm machinery
+  x86/mm: Remove leave_mm() in favor of unlazy_mm_irqs_off()
+  x86/mm: Use unlazy_mm_irqs_off() in TLB flush IPIs
+  x86/mm: Optimize for_each_possible_lazymm_cpu()
+  x86/mm: Opt in to IRQs-off activate_mm()
 
-     #
-     # v5.16-rc8
-     #
-     Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
+ .../membarrier-sync-core/arch-support.txt     |  69 +--
+ arch/arm/include/asm/membarrier.h             |  21 +
+ arch/arm/kernel/smp.c                         |   2 -
+ arch/arm64/include/asm/membarrier.h           |  19 +
+ arch/arm64/kernel/smp.c                       |   2 -
+ arch/csky/kernel/smp.c                        |   2 -
+ arch/ia64/kernel/process.c                    |   1 -
+ arch/mips/cavium-octeon/smp.c                 |   1 -
+ arch/mips/kernel/smp-bmips.c                  |   2 -
+ arch/mips/kernel/smp-cps.c                    |   1 -
+ arch/mips/loongson64/smp.c                    |   2 -
+ arch/powerpc/include/asm/membarrier.h         |  28 +-
+ arch/powerpc/mm/mmu_context.c                 |   1 -
+ arch/powerpc/platforms/85xx/smp.c             |   2 -
+ arch/powerpc/platforms/powermac/smp.c         |   2 -
+ arch/powerpc/platforms/powernv/smp.c          |   1 -
+ arch/powerpc/platforms/pseries/hotplug-cpu.c  |   2 -
+ arch/powerpc/platforms/pseries/pmem.c         |   1 -
+ arch/riscv/kernel/cpu-hotplug.c               |   2 -
+ arch/s390/kernel/smp.c                        |   1 -
+ arch/sh/kernel/smp.c                          |   1 -
+ arch/sparc/kernel/smp_64.c                    |   2 -
+ arch/x86/Kconfig                              |   2 +-
+ arch/x86/events/core.c                        |   9 +-
+ arch/x86/include/asm/membarrier.h             |  25 ++
+ arch/x86/include/asm/mmu.h                    |   6 +-
+ arch/x86/include/asm/mmu_context.h            |  15 +-
+ arch/x86/include/asm/sync_core.h              |  20 -
+ arch/x86/kernel/alternative.c                 |  67 +--
+ arch/x86/kernel/cpu/mce/core.c                |   2 +-
+ arch/x86/kernel/smpboot.c                     |   2 -
+ arch/x86/lib/insn-eval.c                      |  13 +-
+ arch/x86/mm/tlb.c                             | 155 +++++--
+ arch/x86/platform/efi/efi_64.c                |   9 +-
+ arch/x86/xen/mmu_pv.c                         |   2 +-
+ arch/xtensa/kernel/smp.c                      |   1 -
+ drivers/cpuidle/cpuidle.c                     |   2 +-
+ drivers/idle/intel_idle.c                     |   4 +-
+ drivers/misc/sgi-gru/grufault.c               |   2 +-
+ drivers/misc/sgi-gru/gruhandles.c             |   2 +-
+ drivers/misc/sgi-gru/grukservices.c           |   2 +-
+ fs/exec.c                                     |  28 +-
+ include/linux/mmu_context.h                   |   4 +-
+ include/linux/sched/hotplug.h                 |   6 -
+ include/linux/sched/mm.h                      |  58 ++-
+ include/linux/sync_core.h                     |  21 -
+ init/Kconfig                                  |   3 -
+ kernel/cpu.c                                  |  21 +-
+ kernel/exit.c                                 |   2 +-
+ kernel/fork.c                                 |  11 +
+ kernel/kthread.c                              |  50 +--
+ kernel/sched/core.c                           | 409 +++++++++++++++---
+ kernel/sched/idle.c                           |   1 +
+ kernel/sched/membarrier.c                     |  97 ++++-
+ kernel/sched/sched.h                          |  11 +-
+ 55 files changed, 745 insertions(+), 482 deletions(-)
+ create mode 100644 arch/arm/include/asm/membarrier.h
+ create mode 100644 arch/arm64/include/asm/membarrier.h
+ create mode 100644 arch/x86/include/asm/membarrier.h
+ delete mode 100644 include/linux/sync_core.h
 
-      18,490,451.51 msec cpu-clock          # 54.740 CPUs utilized   ( +-  0.04% )
+-- 
+2.33.1
 
-      337.788 +- 0.834 seconds time elapsed  ( +-  0.25% )
-
-     #
-     # -fast-headers-v2
-     #
-     Performance counter stats for 'make -j96 vmlinux LLVM=1' (3 runs):
-
-      10,443,670.86 msec cpu-clock          # 58.093 CPUs utilized   ( +-  0.00% )
-
-      179.773 +- 0.829 seconds time elapsed  ( +-  0.46% )
-
- - Unify the duplicated 'struct task_struct_per_task' into a single definition,
-   which should address the definition ugliness reported by Greg Kroah-Hartman.
-
- - Fix bugs reported by Nathan Chancellor:
-
-    - cacheline attribute definition bug
-    - build bug with GCC plugins
-    - fix off-tree build
-
- - Header optimizations that speed up the RDMA (infiniband) subsystem build 
-   by about +9% over -v1 and +41% over the vanilla kernel:
-
-     $ perf stat --repeat 3 -e instructions,cycles,cpu-clock --sync --pre "find . -name '*.o' | xargs rm" m-rdma >/dev/null
-     ...
-
-     # v5.16-rc8:
-
-          643,570.38 msec cpu-clock                 #   52.253 CPUs utilized            ( +-  0.06% )
-
-               12.316 +- 0.183 seconds time elapsed  ( +-  1.49% )
-
-     # -fast-headers-v1:
-          446,243.49 msec cpu-clock                 #   47.106 CPUs utilized            ( +-  0.06% )
-
-                9.4731 +- 0.0666 seconds time elapsed  ( +-  0.70% )
-
-     # -fast-headers-v2:
-          400,650.32 msec cpu-clock                 #   45.888 CPUs utilized            ( +-  0.02% )
-
-                8.7310 +- 0.0162 seconds time elapsed  ( +-  0.19% )
-
-  - Another round of <linux/sched.h> header footprint reductions: the 
-    header is now used in only ~36% of .c files, down from 99% in the 
-    mainline kernel and 68% in -v1.
-
-  - Various bisectability improvements & other fixes & optimizations.
-
-Thanks,
-
-	Ingo
