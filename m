@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 389BC488321
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 12:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9DF48832D
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 12:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbiAHLIa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 06:08:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S231587AbiAHLTE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 06:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiAHLIa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 06:08:30 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716D0C061574;
-        Sat,  8 Jan 2022 03:08:29 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id s1so16201674wra.6;
-        Sat, 08 Jan 2022 03:08:29 -0800 (PST)
+        with ESMTP id S231586AbiAHLTE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 06:19:04 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B16CFC061574;
+        Sat,  8 Jan 2022 03:19:03 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id v6so16166770wra.8;
+        Sat, 08 Jan 2022 03:19:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=QEd7jShQk1ml/OyAi/kpMudTLo3rO1TWVpy7f9K8afc=;
-        b=bMgpN08rni6AurnSOUKC9hTpgCbtphQymgTmu+WqvnMnSiD88yJYICu51fRcP6Q5LU
-         ZeLmWdmsQcj71iv//LrobynxxsVgN88HwmnvHu9ZuK744sikFEKVvoCpGe/gESYJflAg
-         3kZK/W9LumTPVAgLJ9xK40y4MoYEZuepKrzS9SYbfuwk+JKIY8LeoRPDiuIdD6p7y4i/
-         MFnsXgM9McX3pHsHZ0TcRLdQOuSD8GYoq+1zsVGNifB7vkpvKdMHIPApQ5MkGuiNnh6v
-         L+9lOoTJi4+15cvANwgqCloJQPRUwY5iE3oq3tBfdZmKZN/O5iYZ1EvXWtEpX7bzQ3A7
-         3IwA==
+        bh=clUYj/+nXtJpn7jgCQvOAByqmG1PbwtEaRATW5ebUhM=;
+        b=QPsQlTMnsAiwcnPHzxQDtG40F0KjKrgGUxljCrvJBe/jzJ/PJnkTf6osbAbk9ADXoY
+         GSMFOErQiLRUXXMcEmMuMAPTi/oluzdei4gLnAsjGfR+LO+vMbrFGrQfEJsvLudHtg01
+         TUDt2Q1TpqZh+PT+24RmggJK61nOfSmxJXUZrLEP+LtHW3AZ5b0z7fHSzPmA7YPScerE
+         xenrwLyq2j06qmF11HFk4k+4Y+tNH1mELTta615QkekfHA6lkt4lV1NxwG7u6O9gQFtJ
+         V7HjtOj1jB6tj4PpbFJ9+CipA2HSdbk71XEDV/91Lf7lmBtt0vb2v+/28gTSZ5IEqWp1
+         VMLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=QEd7jShQk1ml/OyAi/kpMudTLo3rO1TWVpy7f9K8afc=;
-        b=HXlhIc7jiozBk6DWJsr+ZKCywKYvEv3UZn32CrI4tKJ0WRx4dsaaCDij6r2VWzrbKE
-         B3wfSoQ/rGI16vdDB3NOt59oK+yizsvH/QEHe+ZqNSYVofBXhWpbGYrYwmHLIKq0RWtb
-         jgkLk1aTweWzvG6wXywotHJAQUS2Pl7+rfBmBiOv33nxq8yuVyENHX/KXdgiLPzjK64F
-         xI34gOAL7Ocg8kfrX1tShbgVURmNPzvutXv3ku3/1gcaLrX0zWmEX0ng8rPuqAiPcO5V
-         JslPS5Gky14HPc3K4H4ig5JFA7g1CT7VuCcnECRsxZr8mi5Pqp39tLia1hInPzL2X6Ly
-         u8+A==
-X-Gm-Message-State: AOAM530Xew8H9Lxg2xtT43A9RTipWxkrlfkTjkp4sMz9i4UrtjpZ4iQH
-        3Tk5jCX+at/LutKsFtEbtNs=
-X-Google-Smtp-Source: ABdhPJwnsz6GcODYiRzSMmaPUkZdoCsUYOGKtkSZsehdoKS7bUE4455GcXP3luYqUcXtqbLpkH0DPA==
-X-Received: by 2002:a5d:53c2:: with SMTP id a2mr13050516wrw.154.1641640107930;
-        Sat, 08 Jan 2022 03:08:27 -0800 (PST)
+        bh=clUYj/+nXtJpn7jgCQvOAByqmG1PbwtEaRATW5ebUhM=;
+        b=JpQmnEFBNnjBqNzAn3VJZnMH55Q1yXH3MUZ4NUQKtrpRJ1uoEYSJXOO3yilD287zqK
+         L4KKpmBOYwFd8w6djhDI2dcsovlMLcBomdRnfKiECJIlx3cxKIfi+WYdEMc4tVtp/PY6
+         5zFouJwrL1dQ/fRmooc471yfmWoTmPPX1cfPLzqi9BsOu75bD7MnN9/HQYy6gvXABkq4
+         Ci9QyVY5sG4k/WQFknKqTK1D0JoUArEKyFpfhmFeSdF7FuNPBHRDBU+g1pNaap44Lh91
+         jowAgJFQJLCGF8OcbPHzFjfAANZQJfvdINkYsFEBUrypTT25qGR25nhLWIYlEeK++mpO
+         mXUA==
+X-Gm-Message-State: AOAM533rRJPFEopgw8dEWGCN5dJhg8nELeKqM9v5VPD6n+ni1vZRr0ww
+        ftFbmaRJJTMr2Z/9gMqVDvE=
+X-Google-Smtp-Source: ABdhPJypqzTRkXw/SIFymnr7smoGdQ4sKRQgx6t/yDH6FFJKqUZjTl468/Ok6Kk/UqltZAV90Gn7ew==
+X-Received: by 2002:adf:e40f:: with SMTP id g15mr282573wrm.600.1641640742275;
+        Sat, 08 Jan 2022 03:19:02 -0800 (PST)
 Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id m6sm1535455wrx.36.2022.01.08.03.08.26
+        by smtp.gmail.com with ESMTPSA id g6sm1389563wri.67.2022.01.08.03.19.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 03:08:27 -0800 (PST)
+        Sat, 08 Jan 2022 03:19:01 -0800 (PST)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 12:08:24 +0100
+Date:   Sat, 8 Jan 2022 12:18:59 +0100
 From:   Ingo Molnar <mingo@kernel.org>
 To:     Nathan Chancellor <nathan@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -62,9 +62,9 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Jonathan Corbet <corbet@lwn.net>,
         Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: [PATCH] FIX: headers/deps: uapi/headers: Create usr/include/uapi
- symbolic link
-Message-ID: <YdlwqFQCJpYiDfRR@gmail.com>
+Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
+ -v1: Eliminate the Linux kernel's "Dependency Hell"
+Message-ID: <YdlzI9P7tBMODxal@gmail.com>
 References: <YdIfz+LMewetSaEB@gmail.com>
  <YdM4Z5a+SWV53yol@archlinux-ax161>
  <YdQlwnDs2N9a5Reh@gmail.com>
@@ -83,87 +83,23 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 * Nathan Chancellor <nathan@kernel.org> wrote:
 
-> 2. Build failures with CONFIG_UAPI_HEADER_TEST=y and O=...
+> 3. Build failure with CONFIG_SAMPLE_CONNECTOR=m and O=...
 > 
-> This was originally reproduced with allmodconfig but this is a simpler
-> reproducer I think.
+> I am guessing this has a similar root cause as above, since that commit
+> mentions an error similar to this.
 > 
-> $ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 defconfig
-> 
-> $ scripts/config --file .build/x86_64/.config -e HEADERS_INSTALL -e UAPI_HEADER_TEST
-> 
-> $ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 olddefconfig usr/
-
-The simplified & scripted reproducer is very useful, thanks a ton!
-
-> In file included from <command-line>:
-> ./usr/include/linux/rds.h:38:10: fatal error: uapi/linux/sockios.h: No such file or directory
->    38 | #include <uapi/linux/sockios.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~~
+> $ make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 allmodconfig samples/connector/
+> In file included from /home/nathan/cbl/src/linux-fast-headers/samples/connector/ucon.c:14:
+> usr/include/linux/netlink.h:5:10: fatal error: uapi/linux/types.h: No such file or directory
+>     5 | #include <uapi/linux/types.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~
 > compilation terminated.
-> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/rds.hdrtest] Error 1
-> In file included from ./usr/include/linux/qrtr.h:5,
->                  from <command-line>:
-> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
->     5 | #include <uapi/linux/socket_types.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> In file included from ./usr/include/linux/in.h:24,
->                  from ./usr/include/linux/nfs_mount.h:12,
->                  from <command-line>:
-> ./usr/include/linux/socket.h:5:10: fatal error: uapi/linux/socket_types.h: No such file or directory
->     5 | #include <uapi/linux/socket_types.h>
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/qrtr.hdrtest] Error 1
-> make[4]: *** [/home/nathan/cbl/src/linux-fast-headers/usr/include/Makefile:106: usr/include/linux/nfs_mount.hdrtest] Error 1
-> ...
-> 
-> I don't see this when just building in the tree. I am guessing that
-> commit f989e243f1f4 ("headers/deps: uapi/headers: Create
-> usr/include/uapi symbolic link") needs to account for this?
 
-Yeah. Here's my second attempt that creates the symlink as the 
-header-install make process, as it should - also pushed out into 
-sched/headers.
+Correct - this test now passes with the UAPI symlink fix applied:
 
-(My Makefile-fu isn't overly powerful though, so this is just an attempt.)
-
-This fix will be backmerged into f989e243f1f4 in -v2.
+  kepler:~/mingo.tip.git> make -skj"$(nproc)" ARCH=x86_64 O=.build/x86_64 allmodconfig samples/connector/
+  kepler:~/mingo.tip.git> 
 
 Thanks,
 
 	Ingo
-
-=========================>
-From: Ingo Molnar <mingo@kernel.org>
-Date: Sat, 8 Jan 2022 12:05:57 +0100
-Subject: [PATCH] FIX: f989e243f1f4 headers/deps: uapi/headers: Create usr/include/uapi symbolic link
-
----
- scripts/Makefile.headersinst | 3 +++
- usr/include/uapi             | 1 -
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/Makefile.headersinst b/scripts/Makefile.headersinst
-index 029d85bb0b23..8ac831458143 100644
---- a/scripts/Makefile.headersinst
-+++ b/scripts/Makefile.headersinst
-@@ -78,6 +78,9 @@ existing-headers := $(filter $(old-headers), $(all-headers))
- 
- -include $(foreach f,$(existing-headers),$(dir $(f)).$(notdir $(f)).cmd)
- 
-+# link the <uapi/*> namespace:
-+LINK := $(shell ln -sf ../include $(objtree)/$(dst)/uapi)
-+
- PHONY += FORCE
- FORCE:
- 
-diff --git a/usr/include/uapi b/usr/include/uapi
-deleted file mode 120000
-index f5030fe88998..000000000000
---- a/usr/include/uapi
-+++ /dev/null
-@@ -1 +0,0 @@
--../include
-\ No newline at end of file
