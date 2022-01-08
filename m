@@ -2,126 +2,203 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C8B488429
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 16:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 015AB488469
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 17:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiAHPQK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 10:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiAHPQK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 10:16:10 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED92C06173F;
-        Sat,  8 Jan 2022 07:16:09 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id k18so17123543wrg.11;
-        Sat, 08 Jan 2022 07:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uucTvtg1YQMjIP0qoj4ZoGgmtYYbV+cou28W1zzliws=;
-        b=A1k4VDrvuCebTVmunqofPKMOGmzg8ckI4u3okugvYNraxLKTbhFLXWZtX7al2ZBWel
-         C2IDdncztk9+bTxGS2CMcIEC90FjXYHJsK57rvHjnmtL7dZ4ni+XGGQZqRKMDVbXwA+I
-         A/qubHWE6yhjNFLpJ1nYxOZQN6lv9ZSARxmH6lAQmEFGA//nsrVdt/ZBjTWCbbpcIyiF
-         AiINtrv/KEXVOYUvxi0YePELa1aR+mjbX+MyRUeN2iWv5v7zHY00adHqWoMZ1w6AIwYG
-         yAdo/e6WAPwgaCMemGqmu4n6agyA3tzb2nfcWhD/PWFk808VK5QR8afc0hN0nFBbsGrl
-         B0Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=uucTvtg1YQMjIP0qoj4ZoGgmtYYbV+cou28W1zzliws=;
-        b=T5DoO3DMvaqyNN8zkuJHEiNJyimtWFn1w1AvDki8HkanFtu5FKbo81j7e4sI19dOd9
-         BKH1YUAU7KPJMtSbGojc8SwDR7xX6KjN2pb5E/KfakF7FbVI1WI8hgTWHoxXlf7P49xS
-         3BY2H9nvAbc7RluWdluMR8jLch0E6sqpx+nHB22GgjJQrpNFDsUXDjq30pwW+hbJwxOT
-         keuTV1uzN2DCg423aqWCHbSAOEiFAiIobrK81BzgS4Ec21Drd3hBXdHUAkerwi8AwMI7
-         2MGsWQZGRGyqa8xNOw9OSCCqfxd14DtaoM/GbP/x+mBm27Y/oDVwpsv4GVmwLP8qd+yS
-         GxCg==
-X-Gm-Message-State: AOAM532/T/E+hOk2oXp0xFFrYhHQAsxAXPEj+GMtlDxVrLd6TGQ/yU2R
-        xRXX/6BZuUuxBzGw11+E2E3SIl0mlXM=
-X-Google-Smtp-Source: ABdhPJwLiHYa3upjIY0klY4+zWxYl5EZgcOkEErx4i8nnXRKMGzyDpAok+0VJvZ5yqbi98eRiZYTTQ==
-X-Received: by 2002:a5d:6d0a:: with SMTP id e10mr58254890wrq.65.1641654967930;
-        Sat, 08 Jan 2022 07:16:07 -0800 (PST)
-Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id o29sm3109607wms.3.2022.01.08.07.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 07:16:07 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 16:16:05 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdmqtdqQ9Wq36tQ+@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
+        id S234640AbiAHQLZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 11:11:25 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:41062 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231570AbiAHQLY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 11:11:24 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52]:38896)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n6EJP-006Z0x-Dw; Sat, 08 Jan 2022 09:11:23 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:56388 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n6EJN-005O1Q-9H; Sat, 08 Jan 2022 09:11:23 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>, linux-api@vger.kernel.org
+References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+        <20220103213312.9144-1-ebiederm@xmission.com>
+        <Yde4AcAxTziaVies@zeniv-ca.linux.org.uk>
+Date:   Sat, 08 Jan 2022 10:10:47 -0600
+In-Reply-To: <Yde4AcAxTziaVies@zeniv-ca.linux.org.uk> (Al Viro's message of
+        "Fri, 7 Jan 2022 03:48:17 +0000")
+Message-ID: <87fspyw6m0.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YdSI9LmZE+FZAi1K@archlinux-ax161>
+Content-Type: text/plain
+X-XM-SPF: eid=1n6EJN-005O1Q-9H;;;mid=<87fspyw6m0.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX182nURwXFuPeTjj8mAvBySwd2YvfiPV/Q4=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa05.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4997]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1575 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 13 (0.8%), b_tie_ro: 11 (0.7%), parse: 1.74
+        (0.1%), extract_message_metadata: 24 (1.5%), get_uri_detail_list: 3.8
+        (0.2%), tests_pri_-1000: 23 (1.4%), tests_pri_-950: 1.62 (0.1%),
+        tests_pri_-900: 1.26 (0.1%), tests_pri_-90: 152 (9.7%), check_bayes:
+        150 (9.5%), b_tokenize: 16 (1.0%), b_tok_get_all: 9 (0.6%),
+        b_comp_prob: 4.1 (0.3%), b_tok_touch_all: 44 (2.8%), b_finish: 1.20
+        (0.1%), tests_pri_0: 1338 (85.0%), check_dkim_signature: 0.86 (0.1%),
+        check_dkim_adsp: 5 (0.3%), poll_dns_idle: 0.50 (0.0%), tests_pri_10:
+        4.0 (0.3%), tests_pri_500: 11 (0.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 01/17] exit: Remove profile_task_exit & profile_munmap
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Al Viro <viro@zeniv.linux.org.uk> writes:
 
-* Nathan Chancellor <nathan@kernel.org> wrote:
+> On Mon, Jan 03, 2022 at 03:32:56PM -0600, Eric W. Biederman wrote:
+>> When I say remove I mean remove.  All profile_task_exit and
+>> profile_munmap do is call a blocking notifier chain.  The helpers
+>> profile_task_register and profile_task_unregister are not called
+>> anywhere in the tree.  Which means this is all dead code.
+>> 
+>> So remove the dead code and make it easier to read do_exit.
+>
+> How about doing the same to profile_handoff_task() and
+> task_handoff_register()/task_handoff_unregister(),
+> while we are at it?  Combined diff would be this:
 
-> I tried to checkout at 9006a48618cc0cacd3f59ff053e6509a9af5cc18 to see if 
-> I could reproduce that breakage there but the build errors out at that 
-> change (I do see notes of bisection breakage in some of the commits) so I 
-> assume that is expected.
+A very good idea.  I have added this incremental patch to my queue.
 
-Yeah, so the underlying problem is that these two commits want to be a 
-single commit:
+Eric
 
-  # Commit #117
-  headers/deps: Move task->thread_info to per_task()
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+Date: Sat, 8 Jan 2022 10:03:24 -0600
+Subject: [PATCH] exit: Remove profile_handoff_task
 
-  # Commit #106
-  headers/deps: Move thread_info APIs to <linux/sched/thread_info_api.h>
+All profile_handoff_task does is notify the task_free_notifier chain.
+The helpers task_handoff_register and task_handoff_unregister are used
+to add and delete entries from that chain and are never called.
 
-As we can only switch ARM64's <asm/preempt.h> to use per_task() - which 
-requires <linux/sched.h> - if we first fix & simplify <linux/sched.h>'s 
-header dependencies, which is done to a sufficient level by:
+So remove the dead code and make it much easier to read and reason
+about __put_task_struct.
 
-  # Commit #556
-  headers/deps: Optimize <linux/sched.h> dependencies, remove <linux/sched/thread_info_api_lowlevel.h> inclusion
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ include/linux/profile.h | 19 -------------------
+ kernel/fork.c           |  4 +---
+ kernel/profile.c        | 23 -----------------------
+ 3 files changed, 1 insertion(+), 45 deletions(-)
+
+diff --git a/include/linux/profile.h b/include/linux/profile.h
+index f7eb2b57d890..11db1ec516e2 100644
+--- a/include/linux/profile.h
++++ b/include/linux/profile.h
+@@ -61,14 +61,6 @@ static inline void profile_hit(int type, void *ip)
+ struct task_struct;
+ struct mm_struct;
+ 
+-/* task is dead, free task struct ? Returns 1 if
+- * the task was taken, 0 if the task should be freed.
+- */
+-int profile_handoff_task(struct task_struct * task);
+-
+-int task_handoff_register(struct notifier_block * n);
+-int task_handoff_unregister(struct notifier_block * n);
+-
+ #else
+ 
+ #define prof_on 0
+@@ -93,17 +85,6 @@ static inline void profile_hit(int type, void *ip)
+ 	return;
+ }
+ 
+-static inline int task_handoff_register(struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-static inline int task_handoff_unregister(struct notifier_block * n)
+-{
+-	return -ENOSYS;
+-}
+-
+-#define profile_handoff_task(a) (0)
+ 
+ #endif /* CONFIG_PROFILING */
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 6f0293cb29c9..494539ecb6d3 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -754,9 +754,7 @@ void __put_task_struct(struct task_struct *tsk)
+ 	delayacct_tsk_free(tsk);
+ 	put_signal_struct(tsk->signal);
+ 	sched_core_free(tsk);
+-
+-	if (!profile_handoff_task(tsk))
+-		free_task(tsk);
++	free_task(tsk);
+ }
+ EXPORT_SYMBOL_GPL(__put_task_struct);
+ 
+diff --git a/kernel/profile.c b/kernel/profile.c
+index 9355cc934a96..37640a0bd8a3 100644
+--- a/kernel/profile.c
++++ b/kernel/profile.c
+@@ -133,29 +133,6 @@ int __ref profile_init(void)
+ 	return -ENOMEM;
+ }
+ 
+-/* Profile event notifications */
+-
+-static ATOMIC_NOTIFIER_HEAD(task_free_notifier);
+-
+-int profile_handoff_task(struct task_struct *task)
+-{
+-	int ret;
+-	ret = atomic_notifier_call_chain(&task_free_notifier, 0, task);
+-	return (ret == NOTIFY_OK) ? 1 : 0;
+-}
+-
+-int task_handoff_register(struct notifier_block *n)
+-{
+-	return atomic_notifier_chain_register(&task_free_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(task_handoff_register);
+-
+-int task_handoff_unregister(struct notifier_block *n)
+-{
+-	return atomic_notifier_chain_unregister(&task_free_notifier, n);
+-}
+-EXPORT_SYMBOL_GPL(task_handoff_unregister);
+-
+ #if defined(CONFIG_SMP) && defined(CONFIG_PROC_FS)
+ /*
+  * Each cpu has a pair of open-addressed hashtables for pending
+-- 
+2.29.2
 
 
-So it's a catch-22, and quite a complication, and a bisection breakage 
-distance of ~450 commits, with a lot of ordering assumptions & conflicts 
-along the way, should we attempt to move the first two to later stages. :-/
-
-But today I've restructured the tree, and the -v2-to-be tree is now fully 
-bisectable on ARM64 too. :-)
-
-There's a single, late per_cpu() conversion commit, after the first phase 
-of <linux/sched.h> simplifications:
-
-   headers/deps: Move task->thread_info to per_task()
-
-I'd guess that either this one is that breaks SCS for you, or the ::thread 
-conversion:
-
-   headers/deps: per_task, arm64, x86: Convert task_struct::thread to a per_task() field
-
-I've pushed out these fixes to the sched/headers branch a couple of minutes 
-ago, and this will be part of the -v2 release as well.
-
-Thanks,
-
-	Ingo
