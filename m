@@ -2,35 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C784884A6
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 17:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 930844884A5
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 17:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234700AbiAHQon (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 11:44:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbiAHQoi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 11:44:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1F7C061746
-        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 08:44:38 -0800 (PST)
+        id S234686AbiAHQom (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 11:44:42 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:50682 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234713AbiAHQoj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 11:44:39 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C027C60DD0
-        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 16:44:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E5CDC36AE0;
-        Sat,  8 Jan 2022 16:44:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E43F860DD7
+        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 16:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C9E7C36AE3;
+        Sat,  8 Jan 2022 16:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641660277;
-        bh=4/phD45ccBwKpoEpuFHVuaC4/6+F9ASvK+hhO/SU8Fo=;
+        s=k20201202; t=1641660278;
+        bh=9J/1QKkNyuJOe05xU7vGzx3mhn6KDpei2w55Hnz/oT0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fXxmmXTBkFoFc6QR/NgokKjHl/kD2AA7EmiuQeyFtV6de+D5/klMZnZR18SFCwNat
-         nlYbn+f/Tj+XDTl9Kc/6FfiMbDc0dBF52mcyPFq0Y+WWUDSHsabaUQAlKtbjXoc7yK
-         xsNL10IiLydVRUmGKmf7kx6c7EOS7Sgrenl5SStfYcVnvAxxBUcI91U0xxjRgFJitT
-         DsBmXeKzpJVHu/fSNV+EV4FM2LYmnjvFRJDhm+ly7uXb5284aUJdaXoalZOMVpE8ER
-         jSwt8bkjFo1QGts8nHMiMNpb3hb4t3eOkaCRIAFVqVEColWw53avbh4E7vzularl3k
-         hGh9mVafpDgIA==
+        b=UuXs+Y6u3LWdS8m9HaS3ErgC6rn96YsFIWADrWq0raX8asAen+3bktbjqpqKONCiR
+         B7W82gDbT0uZ090lAVwVhIVT9464iiazwOXTfAvs0tiIvL4QYr5G7FgwEQwCO03kDa
+         cmHRsIlwrqIH5GaNrp6J3sX6gjKiU3mvA21NKNPW6KELcsdtJb/C+1Zer4ZDFtuB33
+         H5gx1/gRGV+FQdnaVoWdjbMEjcD0/MN4sdcznzXTAVwK11055fWS0b2Yv3YUPbS2lO
+         5+u0OWrOhBnfT1axklI1TvLdlxrjXkZ2Mus4954aj0Pcm/yG7bm8bnSyHdhk8I9ovJ
+         CuFDP2/cXQ7jg==
 From:   Andy Lutomirski <luto@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>
@@ -45,10 +42,11 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Nadav Amit <nadav.amit@gmail.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: [PATCH 18/23] x86/mm: Allow temporary mms when IRQs are on
-Date:   Sat,  8 Jan 2022 08:44:03 -0800
-Message-Id: <a8a92ce490b57447ef56898c55133473e481896e.1641659630.git.luto@kernel.org>
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 19/23] x86/efi: Make efi_enter/leave_mm use the temporary_mm machinery
+Date:   Sat,  8 Jan 2022 08:44:04 -0800
+Message-Id: <3efc4cfd1d7c45a32752ced389d6666be15cde56.1641659630.git.luto@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1641659630.git.luto@kernel.org>
 References: <cover.1641659630.git.luto@kernel.org>
@@ -58,60 +56,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-EFI runtime services should use temporary mms, but EFI runtime services
-want IRQs on.  Preemption must still be disabled in a temporary mm context.
+This should be considerably more robust.  It's also necessary for optimized
+for_each_possible_lazymm_cpu() on x86 -- without this patch, EFI calls in
+lazy context would remove the lazy mm from mm_cpumask().
 
-At some point, the entirely temporary mm mechanism should be moved out of
-arch code.
-
+Cc: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Andy Lutomirski <luto@kernel.org>
 ---
- arch/x86/mm/tlb.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ arch/x86/platform/efi/efi_64.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 4e371f30e2ab..36ce9dffb963 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -708,18 +708,23 @@ void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
-  * that override the kernel memory protections (e.g., W^X), without exposing the
-  * temporary page-table mappings that are required for these write operations to
-  * other CPUs. Using a temporary mm also allows to avoid TLB shootdowns when the
-- * mapping is torn down.
-+ * mapping is torn down.  Temporary mms can also be used for EFI runtime service
-+ * calls or similar functionality.
-  *
-- * Context: The temporary mm needs to be used exclusively by a single core. To
-- *          harden security IRQs must be disabled while the temporary mm is
-- *          loaded, thereby preventing interrupt handler bugs from overriding
-- *          the kernel memory protection.
-+ * It is illegal to schedule while using a temporary mm -- the context switch
-+ * code is unaware of the temporary mm and does not know how to context switch.
-+ * Use a real (non-temporary) mm in a kernel thread if you need to sleep.
-+ *
-+ * Note: For sensitive memory writes, the temporary mm needs to be used
-+ *       exclusively by a single core, and IRQs should be disabled while the
-+ *       temporary mm is loaded, thereby preventing interrupt handler bugs from
-+ *       overriding the kernel memory protection.
+diff --git a/arch/x86/platform/efi/efi_64.c b/arch/x86/platform/efi/efi_64.c
+index 7515e78ef898..b9a571904363 100644
+--- a/arch/x86/platform/efi/efi_64.c
++++ b/arch/x86/platform/efi/efi_64.c
+@@ -54,7 +54,7 @@
+  * 0xffff_ffff_0000_0000 and limit EFI VA mapping space to 64G.
   */
- temp_mm_state_t use_temporary_mm(struct mm_struct *mm)
+ static u64 efi_va = EFI_VA_START;
+-static struct mm_struct *efi_prev_mm;
++static temp_mm_state_t efi_temp_mm_state;
+ 
+ /*
+  * We need our own copy of the higher levels of the page tables
+@@ -461,15 +461,12 @@ void __init efi_dump_pagetable(void)
+  */
+ void efi_enter_mm(void)
  {
- 	temp_mm_state_t temp_state;
+-	efi_prev_mm = current->active_mm;
+-	current->active_mm = &efi_mm;
+-	switch_mm(efi_prev_mm, &efi_mm, NULL);
++	efi_temp_mm_state = use_temporary_mm(&efi_mm);
+ }
  
--	lockdep_assert_irqs_disabled();
-+	lockdep_assert_preemption_disabled();
- 
- 	/*
- 	 * Make sure not to be in TLB lazy mode, as otherwise we'll end up
-@@ -751,7 +756,7 @@ temp_mm_state_t use_temporary_mm(struct mm_struct *mm)
- 
- void unuse_temporary_mm(temp_mm_state_t prev_state)
+ void efi_leave_mm(void)
  {
--	lockdep_assert_irqs_disabled();
-+	lockdep_assert_preemption_disabled();
- 	switch_mm_irqs_off(NULL, prev_state.mm, current);
+-	current->active_mm = efi_prev_mm;
+-	switch_mm(&efi_mm, efi_prev_mm, NULL);
++	unuse_temporary_mm(efi_temp_mm_state);
+ }
  
- 	/*
+ static DEFINE_SPINLOCK(efi_runtime_lock);
 -- 
 2.33.1
 
