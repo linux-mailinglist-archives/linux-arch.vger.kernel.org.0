@@ -2,134 +2,296 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FB248838F
-	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 13:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978EA4883FC
+	for <lists+linux-arch@lfdr.de>; Sat,  8 Jan 2022 15:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiAHMRg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 8 Jan 2022 07:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbiAHMRg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 8 Jan 2022 07:17:36 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A164C061574;
-        Sat,  8 Jan 2022 04:17:35 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id o3so16407671wrh.10;
-        Sat, 08 Jan 2022 04:17:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ohcfovccatjc30lDRcB2IuIrGBvRWfvjPU9QBrd0eXE=;
-        b=V9c8dDmXSfsabiD2MId/xdQkhc1ypm2tNSgpNroSiTuvYZW7U0dsWTyMIa6VL4QJ1F
-         O6GRDav6qCi+i8OSKsQ0jmxN5EbpY9uNnqR8f0IKwpU9uaLbxCYm4AJWVoT3hHa05fKk
-         4nPOtZqigrHY1mYoB7dt143fFsnf86znEcxoDlmFc5UNocVCF+zAzp501U1sPVA5mmww
-         Be6jNLeRq2aOjZ9zLEVtqLUN4Zc0jQlww+aFa/9Ds+HSwWp6mC5Dz1SwgqoIcVTjfYnK
-         2ciGkMqXxnI4C/WJLSQs+zfnlRSP1N5gL9zzYbroiQqAOSIylcboQPyJ1rw16hQAYfHx
-         7MPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=Ohcfovccatjc30lDRcB2IuIrGBvRWfvjPU9QBrd0eXE=;
-        b=T2Ikbhay9o8iFoSLg5HSg8c33C0s4Gg4IRw7EZ0ZNeQjppFgB5IWw8Y+3RqwCndM59
-         LSF35/EUI23en8lvcccKEEFxVWgML529GjFRZt0bfdmPesvJedyFodCUMC7tEtjCMhoN
-         sEMoj6I7nQ0EoTWuFhosml0WsY0XzjaPwQS+XtDFD92tYKHfAeeO2WAh0yu5/uhwDpuF
-         J2/oyKynPw8t7nuZ8SHAPVyk7w46KInf6NanKI8cg7Qdo2EHfr5UQ6rbbynczloFjwHh
-         fNQWeXZXiOzQHwAPPKD9gFGjUAZJqPdg4Ooe/RJoPI0gnQM6Vu4clZ4JA1ClW4uETzJo
-         4Mqw==
-X-Gm-Message-State: AOAM5324dhRGbeyE5mChDrNIZNdqSmyC4V/nU+Ejg6mCryYQbcgT1GGB
-        g+JP7gCEPCKZwp7VhXaBqUuWLWNlcEU=
-X-Google-Smtp-Source: ABdhPJwFDk2SLOyQmmgllC7CCS/eqLk9g3liE0EfOLpUi0/bBgkUryOYqauZ+Sh2FV7K6fL/YJREkQ==
-X-Received: by 2002:a5d:424c:: with SMTP id s12mr56773031wrr.465.1641644254049;
-        Sat, 08 Jan 2022 04:17:34 -0800 (PST)
-Received: from gmail.com (84-236-113-171.pool.digikabel.hu. [84.236.113.171])
-        by smtp.gmail.com with ESMTPSA id o8sm1637297wry.20.2022.01.08.04.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Jan 2022 04:17:33 -0800 (PST)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 8 Jan 2022 13:17:31 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        id S231189AbiAHOjQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 8 Jan 2022 09:39:16 -0500
+Received: from mx.cs.msu.ru ([188.44.42.42]:49729 "EHLO mail.cs.msu.ru"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229712AbiAHOjP (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sat, 8 Jan 2022 09:39:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cs.msu.ru;
+        s=dkim; h=Subject:In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=JXGuWor50f9l1ttv/JgH6pHlEePJgE3HyqFcNY6k+A4=; b=hOsllfbDpG6S1euyNJ38aCJ5cf
+        8ui9u9w2GJTr3n9BBHOE/KiQki0sHMuomc7+XGVGnsjD2gpEqizc79qU6CjaxFTZwxaYCgzbMA/PL
+        xh5BKfHr+H32z48lIg64M/v5b0T0QIYtGQyLIl3sRqUDPa31t9vI90zm0fud+zhui26exuYics563
+        lkiuaeoMQS+i1VR/7iLSTVLj8vyycYhF25QHaQJCQqfC0un8hyIK9c/m9aPvpBvG3OLr9bS6oeGg0
+        OwkSdurIIPrP46GOTvoViiBT5ddXSpajPLEW/uUMj11AnZRJn94quchrc5Q08fzaijJgAMdLGtOVA
+        CFW6Gb2w==;
+Received: from [37.204.119.143] (port=58130 helo=cello)
+        by mail.cs.msu.ru with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2 (FreeBSD))
+        (envelope-from <ar@cs.msu.ru>)
+        id 1n6Crc-000PsA-N5; Sat, 08 Jan 2022 17:38:38 +0300
+Date:   Sat, 8 Jan 2022 17:38:33 +0300
+From:   Arseny Maslennikov <ar@cs.msu.ru>
+To:     Walt Drummond <walt@drummond.us>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@zeniv.linux.org.uk>, llvm@lists.linux.dev
-Subject: Re: [PATCH 0000/2297] [ANNOUNCE, RFC] "Fast Kernel Headers" Tree
- -v1: Eliminate the Linux kernel's "Dependency Hell"
-Message-ID: <YdmA2/BJPK7m3d7d@gmail.com>
-References: <YdIfz+LMewetSaEB@gmail.com>
- <YdM4Z5a+SWV53yol@archlinux-ax161>
- <YdQlwnDs2N9a5Reh@gmail.com>
- <YdSI9LmZE+FZAi1K@archlinux-ax161>
- <YdTpAJxgI+s9Wwgi@gmail.com>
- <YdTvXkKFzA0pOjFf@gmail.com>
- <YdYQu9YxNw0CxJRn@archlinux-ax161>
- <Ydl6MATrfA1GA0G+@gmail.com>
+        Jiri Slaby <jirislaby@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Message-ID: <Ydmh6aYogzJq2Ab4@cello>
+References: <20220103181956.983342-1-walt@drummond.us>
+ <20220103181956.983342-9-walt@drummond.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G2OjEObSrXwMKUEk"
 Content-Disposition: inline
-In-Reply-To: <Ydl6MATrfA1GA0G+@gmail.com>
+In-Reply-To: <20220103181956.983342-9-walt@drummond.us>
+OpenPGP: url=http://grep.cs.msu.ru/~ar/pgp-key.asc
+X-SA-Exim-Connect-IP: 37.204.119.143
+X-SA-Exim-Mail-From: ar@cs.msu.ru
+Subject: Re: [RFC PATCH 8/8] signals: Support BSD VSTATUS, KERNINFO and
+ SIGINFO
+X-SA-Exim-Version: 4.2.1
+X-SA-Exim-Scanned: No (on mail.cs.msu.ru); Unknown failure
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-* Ingo Molnar <mingo@kernel.org> wrote:
+--G2OjEObSrXwMKUEk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> * Nathan Chancellor <nathan@kernel.org> wrote:
-> 
-> > 5. Build error in arch/arm64/kvm/hyp/nvhe with LTO
-> > 
-> > With arm64 + CONFIG_LTO_CLANG_THIN=y, I see:
-> > 
-> > $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 defconfig
-> > 
-> > $ scripts/config -e LTO_CLANG_THIN
-> > 
-> > $ make -skj"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig arch/arm64/kvm/hyp/nvhe/
-> > ld.lld: error: arch/arm64/kvm/hyp/nvhe/hyp.lds:2: unknown directive: .macro
-> > >>> .macro __put, val, name
-> > >>> ^
-> > make[5]: *** [arch/arm64/kvm/hyp/nvhe/Makefile:51: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.tmp.o] Error 1
-> > 
-> > I was not able to figure out the exact include chain but CONFIG_LTO
-> > causes asm/alternative-macros.h to be included in asm/rwonce.h, which
-> > eventually gets included in either asm/cache.h or asm/memory.h.
-> > 
-> > I managed to solve this with the following diff but I am not sure if
-> > there is a better or cleaner way to do that.
-> > 
-> > diff --git a/arch/arm64/include/asm/rwonce.h b/arch/arm64/include/asm/rwonce.h
-> > index 1bce62fa908a..e19572a205d0 100644
-> > --- a/arch/arm64/include/asm/rwonce.h
-> > +++ b/arch/arm64/include/asm/rwonce.h
-> > @@ -5,7 +5,7 @@
-> >  #ifndef __ASM_RWONCE_H
-> >  #define __ASM_RWONCE_H
-> >  
-> > -#ifdef CONFIG_LTO
-> > +#if defined(CONFIG_LTO) && !defined(LINKER_SCRIPT)
-> >  
-> >  #include <linux/compiler_types.h>
-> >  #include <asm/alternative-macros.h>
-> > @@ -66,7 +66,7 @@
-> >  })
-> >  
-> >  #endif	/* !BUILD_VDSO */
-> > -#endif	/* CONFIG_LTO */
-> > +#endif	/* CONFIG_LTO && !LINKER_SCRIPT */
+On Mon, Jan 03, 2022 at 10:19:56AM -0800, Walt Drummond wrote:
+> Support TTY VSTATUS character, NOKERNINFO local control bit and the
+> signal SIGINFO, all as in 4.3BSD.
+>=20
+> Signed-off-by: Walt Drummond <walt@drummond.us>
+> ---
+>  arch/x86/include/asm/signal.h       |   2 +-
+>  arch/x86/include/uapi/asm/signal.h  |   4 +-
+>  drivers/tty/Makefile                |   2 +-
+>  drivers/tty/n_tty.c                 |  21 +++++
+>  drivers/tty/tty_io.c                |  10 ++-
+>  drivers/tty/tty_ioctl.c             |   4 +
+>  drivers/tty/tty_status.c            | 135 ++++++++++++++++++++++++++++
+>  fs/proc/array.c                     |  29 +-----
+>  include/asm-generic/termios.h       |   4 +-
+>  include/linux/sched.h               |  52 ++++++++++-
+>  include/linux/signal.h              |   4 +
+>  include/linux/tty.h                 |   8 ++
+>  include/uapi/asm-generic/ioctls.h   |   2 +
+>  include/uapi/asm-generic/signal.h   |   6 +-
+>  include/uapi/asm-generic/termbits.h |  34 +++----
+>  15 files changed, 264 insertions(+), 53 deletions(-)
+>  create mode 100644 drivers/tty/tty_status.c
+>=20
+> <...>
+>=20
+> diff --git a/drivers/tty/tty_status.c b/drivers/tty/tty_status.c
+> new file mode 100644
+> index 000000000000..a9600f5bd48c
+> --- /dev/null
+> +++ b/drivers/tty/tty_status.c
+> @@ -0,0 +1,135 @@
+> +// SPDX-License-Identifier: GPL-1.0+
+> +/*
+> + * tty_status.c --- implements VSTATUS and TIOCSTAT from BSD4.3/4.4
+> + *
+> + */
+> +
+> +#include <linux/sched.h>
+> +#include <linux/mm.h>
+> +#include <linux/tty.h>
+> +#include <linux/sched/cputime.h>
+> +#include <linux/sched/loadavg.h>
+> +#include <linux/pid.h>
+> +#include <linux/slab.h>
+> +#include <linux/math64.h>
+> +
+> +#define MSGLEN (160 + TASK_COMM_LEN)
+> +
+> +inline unsigned long getRSSk(struct mm_struct *mm)
+> +{
+> +	if (mm =3D=3D NULL)
+> +		return 0;
+> +	return get_mm_rss(mm) * PAGE_SIZE / 1024;
+> +}
+> +
+> +inline long nstoms(long l)
+> +{
+> +	l /=3D NSEC_PER_MSEC * 10;
+> +	if (l < 10)
+> +		l *=3D 10;
+> +	return l;
+> +}
+> +
+> +inline struct task_struct *compare(struct task_struct *new,
+> +				   struct task_struct *old)
+> +{
+> +	unsigned int ostate, nstate;
+> +
+> +	if (old =3D=3D NULL)
+> +		return new;
+> +
+> +	ostate =3D task_state_index(old);
+> +	nstate =3D task_state_index(new);
+> +
+> +	if (ostate =3D=3D nstate) {
+> +		if (old->start_time > new->start_time)
+> +			return old;
+> +		return new;
+> +	}
+> +
+> +	if (ostate < nstate)
+> +		return old;
+> +
+> +	return new;
+> +}
+> +
+> +struct task_struct *pick_process(struct pid *pgrp)
+> +{
+> +	struct task_struct *p, *winner =3D NULL;
+> +
+> +	read_lock(&tasklist_lock);
+> +	do_each_pid_task(pgrp, PIDTYPE_PGID, p) {
+> +		winner =3D compare(p, winner);
+> +	} while_each_pid_task(pgrp, PIDTYPE_PGID, p);
+> +	read_unlock(&tasklist_lock);
+> +
+> +	return winner;
+> +}
+> +
+> +int tty_status(struct tty_struct *tty)
+> +{
+> +	char tname[TASK_COMM_LEN];
+> +	unsigned long loadavg[3];
+> +	uint64_t pcpu, cputime, wallclock;
+> +	struct task_struct *p;
+> +	struct rusage rusage;
+> +	struct timespec64 utime, stime, rtime;
+> +	char msg[MSGLEN] =3D {0};
+> +	int len =3D 0;
+> +
+> +	if (tty =3D=3D NULL)
+> +		return -ENOTTY;
+> +
+> +	get_avenrun(loadavg, FIXED_1/200, 0);
+> +	len +=3D scnprintf((char *)&msg[len], MSGLEN - len, "load: %lu.%02lu  ",
+> +		       LOAD_INT(loadavg[0]), LOAD_FRAC(loadavg[0]));
+> +
+> +	if (tty->ctrl.session =3D=3D NULL) {
+> +		len +=3D scnprintf((char *)&msg[len], MSGLEN - len,
+> +				 "not a controlling terminal");
+> +		goto print;
+> +	}
+> +
+> +	if (tty->ctrl.pgrp =3D=3D NULL) {
+> +		len +=3D scnprintf((char *)&msg[len], MSGLEN - len,
+> +				 "no foreground process group");
+> +		goto print;
+> +	}
+> +
+> +	p =3D pick_process(tty->ctrl.pgrp);
+> +	if (p =3D=3D NULL) {
+> +		len +=3D scnprintf((char *)&msg[len], MSGLEN - len,
+> +				 "empty foreground process group");
+> +		goto print;
+> +	}
+> +
+> +	get_task_comm(tname, p);
+> +	getrusage(p, RUSAGE_BOTH, &rusage);
+> +	wallclock =3D ktime_get_ns() - p->start_time;
+> +
+> +	utime.tv_sec =3D rusage.ru_utime.tv_sec;
+> +	utime.tv_nsec =3D rusage.ru_utime.tv_usec * NSEC_PER_USEC;
+> +	stime.tv_sec =3D rusage.ru_stime.tv_sec;
+> +	stime.tv_nsec =3D rusage.ru_stime.tv_usec * NSEC_PER_USEC;
+> +	rtime =3D ns_to_timespec64(wallclock);
+> +
+> +	cputime =3D timespec64_to_ns(&utime) + timespec64_to_ns(&stime);
+> +	pcpu =3D div64_u64(cputime * 100, wallclock);
+> +
+> +	len +=3D scnprintf((char *)&msg[len], MSGLEN - len,
+> +			 /* task, PID, task state */
+> +			 "cmd: %s %d [%s] "
+> +			 /* rtime,    utime,      stime,      %cpu,  rss */
+> +			 "%llu.%02lur %llu.%02luu %llu.%02lus %llu%% %luk",
+> +			 tname,	task_pid_vnr(p), (char *)get_task_state_name(p),
 
-In any case I've added your fix to the fast-headers tree, with a comment 
-that this might just be a workaround.
+task_pid_vnr(p) returns the PID of p in the PID namespace of current:
 
-Thanks,
+  pid_t __task_pid_nr_ns(struct task_struct *task, enum pid_type type,
+                          struct pid_namespace *ns)
+  {
+          pid_t nr =3D 0;
+ =20
+          rcu_read_lock();
+          if (!ns)
+                  ns =3D task_active_pid_ns(current);
+          nr =3D pid_nr_ns(rcu_dereference(*task_pid_ptr(task, type)), ns);
+          rcu_read_unlock();
+ =20
+          return nr;
+  }
+  struct pid_namespace *task_active_pid_ns(struct task_struct *tsk)
+  {
+          return ns_of_pid(task_pid(tsk));
+  }
+  static inline pid_t task_pid_vnr(struct task_struct *tsk)
+  {
+          return __task_pid_nr_ns(tsk, PIDTYPE_PID, NULL);=20
+  }
 
-	Ingo
+At this point current is an arbitrary kernel worker thread, not p. Most
+likely we need another helper function in <linux/sched.h>.
+
+> +			 rtime.tv_sec, nstoms(rtime.tv_nsec),
+> +			 utime.tv_sec, nstoms(utime.tv_nsec),
+> +			 stime.tv_sec, nstoms(stime.tv_nsec),
+> +			 pcpu, getRSSk(p->mm));
+> +
+> +print:
+> +	len +=3D scnprintf((char *)&msg[len], MSGLEN - len, "\r\n");
+> +	tty_write_message(tty, msg);
+> +
+> +	return 0;
+> +}
+>=20
+> <...>
+>=20
+> --=20
+> 2.30.2
+>=20
+
+--G2OjEObSrXwMKUEk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE56JD3UKTLEu/ddrm9dQjyAYL01AFAmHZoeQACgkQ9dQjyAYL
+01DFXRAAqtQ3pUMr1CyVc1L4sGYw+AUbWxmOErcknQ9qe4y8z899etA1UHHdhs04
+GrEC9m4algClk2x4pYeZZFZu2SeoTtJMFeIp2cklLz4TQvtW/VOaGl1UR9bcZC/q
+EW8+p5HTB7rpKQXy8M9ALN1A93qpcKXmV6kfQ0O26eznbnJPcTBNLA/2KK9BMkL9
+F19zukFZ7eihul5Cl5no8BLidYWtgmi4gkCi4SKhQjp4YPrOB3jTomrj0D9DxbwF
+YLyVuRYk8Ut61OIblsZ8mLZwvhgCzrVdAbGQh4rCPnOleqZOfpa7q+SkX4QIYOp6
+Lke+nUj70GHsqH/3qzDURa87aRBusDmZPQeqeB+2ZN15mXmSQVvzIr3cUyAtLlcR
+bkv0gNP+cZQp1YTmK20Mf3ylJjPDNsoHRGTjlTy/9E9OD6ZyEtdsPTbQBjGMp9hS
+VwfNl3spm0UUZF1PlqSo5HqAUUZ7M5EPL9dSQYYUr11LfzJp+U8oxCRhGKg2j4Uu
+TkOWn+w1WUng8YCbAXf945dgvKEOtHoKdE16S+dMf7r2PfUXMy5+rauTFjDlHZvc
+7MOnAil+syoiqi4DLFGGSAlS+JTDbAxfRuRoowLqRlzPXwE9ieaAvEq3RbJRgDLF
+7Wcrp3ZoTTdPvjGhgtKbWsggcT89LOdOUlgYKcynZFnDNiVjXis=
+=58pc
+-----END PGP SIGNATURE-----
+
+--G2OjEObSrXwMKUEk--
