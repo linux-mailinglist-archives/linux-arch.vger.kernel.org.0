@@ -2,66 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D20488BF1
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jan 2022 20:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016D2488C0B
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jan 2022 20:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiAITLR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 9 Jan 2022 14:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbiAITLQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jan 2022 14:11:16 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC63C06173F
-        for <linux-arch@vger.kernel.org>; Sun,  9 Jan 2022 11:11:15 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id b36so364250edf.12
-        for <linux-arch@vger.kernel.org>; Sun, 09 Jan 2022 11:11:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YPOuTFQ/EFRlwfSEA3ipij++Ulf3u+5g+8CZYfsItBk=;
-        b=AWGxyD2i+0VTrdb8KlRqAQ5n6fHAko3chHEhczjSNVua/1NPfcI4nbx0hg+4qt6xiX
-         sS/zBrw6wnKvw92Ksmt5nmllSDLmc3J8Ra1HcjYvjIUoJZ8AzFA72hfzrOyU1vpJJ1ex
-         IcvSo8dXW4uOAiE4lOmNhJmQ68qhxiDj69vU8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YPOuTFQ/EFRlwfSEA3ipij++Ulf3u+5g+8CZYfsItBk=;
-        b=ldy2LL9E6LghZZmmG4BrM/SbkN1sWZnbJp+nOM2zEq2mzXVH/21FxYKe9fjbPPKF/x
-         sFSNR+zFWg3sziuyGWfULmv9+HuDZpOMFd2mtOcQfuyWyrmcnKY5f4c5eZg61vhHyCju
-         PHCvUrk29sjv5lIOqA5kcjqJ0i1Tp3mosmZW3zkBveNbANYBO9aPfSduKp5cTa+tjPqU
-         CR+YVmeNkHyGWXSTlDK45gFzUKnnbOCf7oiLMM7KJOKODutqGTIHXgnOxAa35xMB94Mv
-         jUlzgYJinX3OQNbTwuZdK9CJNXoWNnK8/2SdEbp4PG+qG7MQHhskb+6Dse52v2nAg46T
-         yOhw==
-X-Gm-Message-State: AOAM531UMzXnGIfPRja46szh+8+RZj0aN55H0rf2ZSTuU7jL5M4mWrxi
-        4Pag/qrvtrZEb81WBDQSgl2jL8M1sBA0PqWgpas=
-X-Google-Smtp-Source: ABdhPJwLSjwvnzwnmodaAG8ro56d/2uPFEygcCa36ZFm6U2z/YPRD7R4+xPLWurFm1uDnDfT46e7zw==
-X-Received: by 2002:a17:906:d8a3:: with SMTP id qc3mr8065634ejb.231.1641755473626;
-        Sun, 09 Jan 2022 11:11:13 -0800 (PST)
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com. [209.85.128.52])
-        by smtp.gmail.com with ESMTPSA id sa6sm1632827ejc.6.2022.01.09.11.11.11
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jan 2022 11:11:12 -0800 (PST)
-Received: by mail-wm1-f52.google.com with SMTP id v123so7430533wme.2
-        for <linux-arch@vger.kernel.org>; Sun, 09 Jan 2022 11:11:11 -0800 (PST)
-X-Received: by 2002:a05:600c:4f13:: with SMTP id l19mr19329898wmq.152.1641755471150;
- Sun, 09 Jan 2022 11:11:11 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1641659630.git.luto@kernel.org> <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
- <739A3109-04DD-4BA5-A02B-52EE30E820AE@gmail.com> <CAHk-=wiEZO-uyFELSZgYmxF7eOLHrvh-kMWY5qTKjckOdNQxpA@mail.gmail.com>
- <B728EEE2-1EB9-4ACD-9F4E-423276380C0C@gmail.com>
-In-Reply-To: <B728EEE2-1EB9-4ACD-9F4E-423276380C0C@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 9 Jan 2022 11:10:55 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgtS7aNL=bxuwVFKiUzijc1EFiFXWTNLH-CHEgxciUVdg@mail.gmail.com>
-Message-ID: <CAHk-=wgtS7aNL=bxuwVFKiUzijc1EFiFXWTNLH-CHEgxciUVdg@mail.gmail.com>
-Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy mms
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        id S234592AbiAIT3u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Jan 2022 14:29:50 -0500
+Received: from shelob.surriel.com ([96.67.55.147]:50904 "EHLO
+        shelob.surriel.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232020AbiAIT3t (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jan 2022 14:29:49 -0500
+X-Greylist: delayed 448 seconds by postgrey-1.27 at vger.kernel.org; Sun, 09 Jan 2022 14:29:49 EST
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1n6dlb-0007k0-8a; Sun, 09 Jan 2022 14:22:11 -0500
+Message-ID: <ba2522fbabc8a81befd27ef20588f9356f7b885b.camel@surriel.com>
+Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab
+ lazy mms
+From:   Rik van Riel <riel@surriel.com>
+To:     Nadav Amit <nadav.amit@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Anton Blanchard <anton@ozlabs.org>,
@@ -69,55 +32,63 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Paul Mackerras <paulus@ozlabs.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
         Dave Hansen <dave.hansen@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Sun, 09 Jan 2022 14:22:10 -0500
+In-Reply-To: <B728EEE2-1EB9-4ACD-9F4E-423276380C0C@gmail.com>
+References: <cover.1641659630.git.luto@kernel.org>
+         <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
+         <739A3109-04DD-4BA5-A02B-52EE30E820AE@gmail.com>
+         <CAHk-=wiEZO-uyFELSZgYmxF7eOLHrvh-kMWY5qTKjckOdNQxpA@mail.gmail.com>
+         <B728EEE2-1EB9-4ACD-9F4E-423276380C0C@gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-3bYF5AhkVoIli31LXQXk"
+User-Agent: Evolution 3.40.3 (3.40.3-1.fc34) 
+MIME-Version: 1.0
+Sender: riel@shelob.surriel.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jan 9, 2022 at 12:49 AM Nadav Amit <nadav.amit@gmail.com> wrote:
->
+
+--=-3bYF5AhkVoIli31LXQXk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sun, 2022-01-09 at 00:49 -0800, Nadav Amit wrote:
+>=20
+> It is possible for instance to get rid of is_lazy, keep the CPU
+> on mm_cpumask when switching to kernel thread, and then if/when
+> an IPI is received remove it from cpumask to avoid further
+> unnecessary TLB shootdown IPIs.
+>=20
 > I do not know whether it is a pure win, but there is a tradeoff.
 
-Hmm. I guess only some serious testing would tell.
+That's not a win at all. It is what we used to have before
+the lazy mm stuff was re-introduced, and it led to quite a
+few unnecessary IPIs, which are especially slow on virtual
+machines, where the target CPU may not be running.
 
-On x86, I'd be a bit worried about removing lazy TLB simply because
-even with ASID support there (called PCIDs by Intel for NIH reasons),
-the actual ASID space on x86 was at least originally very very
-limited.
+--=20
+All Rights Reversed.
 
-Architecturally, x86 may expose 12 bits of ASID space, but iirc at
-least the first few implementations actually only internally had one
-or two bits, and hashed the 12 bits down to that internal very limited
-hardware TLB ID space.
+--=-3bYF5AhkVoIli31LXQXk
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-We only use a handful of ASIDs per CPU on x86 partly for this reason
-(but also since there's no remote hardware TLB shootdown, there's no
-reason to have a bigger global ASID space, so ASIDs aren't _that_
-common).
+-----BEGIN PGP SIGNATURE-----
 
-And I don't know how many non-PCID x86 systems (perhaps virtualized?)
-there might be out there.
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmHbNeIACgkQznnekoTE
+3oO3dAgAnFIAWZSgHJZ3+KDjfwPiBN0+9hgcTu2bwk1/RcslCWYksrooQ8MPI8Sl
+NQmy31fqVLA5x0bmynjpS30u4hDl7qywvazXv8Z+CGh3IDoilsbF83Gf/ZkH6NCa
+bQKj5/ujChp33NHLyVCHq5hHNP6iLm0V2DVb/tSInTsVcR4C3CiCzO2dDKt306DG
+spuz5xx8i4WeU4mQs6+3aSD6UQobhVozIKaYyaD5RAFLf4yVMgrhfxcojOtU0F4B
+Ot2LmnTn2cKPZJldGPsnLkGmH4NiaXfvsetBaOXH91TR7DWsbLtNOso59qzvra6+
+WFjZVTZ3AMx8EK3a1AOeIBUZiJ/GRg==
+=lb9o
+-----END PGP SIGNATURE-----
 
-But it would be very interesting to test some "disable lazy tlb"
-patch. The main problem workloads tend to be IO, and I'm not sure how
-many of the automated performance tests would catch issues. I guess
-some threaded pipe ping-pong test (with each thread pinned to
-different cores) would show it.
+--=-3bYF5AhkVoIli31LXQXk--
 
-And I guess there is some load that triggered the original powerpc
-patch by Nick&co, and that Andy has been using..
-
-Anybody willing to cook up a patch and run some benchmarks? Perhaps
-one that basically just replaces "set ->mm to NULL" with "set ->mm to
-&init_mm" - so that the lazy TLB code is still *there*, but it never
-triggers..
-
-I think it's mainly 'copy_thread()' in kernel/fork.c and the 'init_mm'
-initializer in mm/init-mm.c, but there's probably other things too
-that have that knowledge of the special "tsk->mm = NULL" situation.
-
-                  Linus
