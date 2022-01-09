@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBED488B86
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jan 2022 19:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53898488B8B
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jan 2022 19:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236389AbiAISQN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 9 Jan 2022 13:16:13 -0500
-Received: from conuserg-09.nifty.com ([210.131.2.76]:31198 "EHLO
+        id S235844AbiAISQQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Jan 2022 13:16:16 -0500
+Received: from conuserg-09.nifty.com ([210.131.2.76]:31210 "EHLO
         conuserg-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235844AbiAISQK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jan 2022 13:16:10 -0500
+        with ESMTP id S236377AbiAISQL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jan 2022 13:16:11 -0500
 Received: from grover.. (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 209IFWa2030890;
+        by conuserg-09.nifty.com with ESMTP id 209IFWa3030890;
         Mon, 10 Jan 2022 03:15:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 209IFWa2030890
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 209IFWa3030890
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1641752134;
-        bh=MAkh9/MBoZ6KGeV+2jOjzmtdPFvtRU9xzW4nfvzR4Bo=;
+        s=dec2015msa; t=1641752135;
+        bh=Cu3YE2A7ALH4pSGxfiHg4KjbUfWBLKzo5JgyS2XgMEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q78n4ix4XkpD/+sK8/sZP+mcoheGXFqUjWCT5wUz5qFDcKro4BPIWPfwGDZzphIHI
-         iWl9/CjjL2PVsakUut3w4eALo2ps8JSMLE7Jwsq+xE44JK8SYzbuh/rTorL4ZjqG2G
-         L8gTLgxUZbm+m8/CHzI6sWUSSFAChs5q+fuwI5mxDQa32c9UI2wIiA9NJdnXqqwCSJ
-         hya52arRb4cNPc1EUfA2I/fnk4Vf5nwXHNZqowAxH/d/68I7hLo0FrA9kfPTuw7x2z
-         pPpsV64BBzENXCMmIQLrw748kkVmwZkqjmtVEHraZgiPfoxAXlzLTcwB9DgXtAFJSP
-         mWOpYwrrlveqw==
+        b=ZqoPYuzkXzJa4Zt/6B7uxrVshmqnK0KwATcdFFXsvlEMc0BmnIpk0cNK5klHUxuLG
+         yKiMbz1oVSxNzty2zc1RAY1sBBVxlU5CPtKZsFw8cTYMMO4D8Wk+xcnLpIIJZM34by
+         iCrylWkBNHd59pgrGU2umnVpKMTBHxH7o4eAcxPfTXWxnvabfbQDLahBEIoIkIecyM
+         v2rkhFPWjg/V9gHkYf8QUL2fKm4IsPDlqHGSgNhK1V6JeMZy02zFIEDJyysTPLrhxj
+         HMkeloFcTmy/+UOH26p0dG4H7OKOsEJLMo0wp15VEj8W2jU/rRDrkb07SrAVboPa8j
+         xz4BFWe4oqvEQ==
 X-Nifty-SrcIP: [133.32.232.101]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 4/5] arch: decompressor: remove useless vmlinux.bin.all-y
-Date:   Mon, 10 Jan 2022 03:15:28 +0900
-Message-Id: <20220109181529.351420-4-masahiroy@kernel.org>
+Subject: [PATCH 5/5] kbuild: add cmd_file_size
+Date:   Mon, 10 Jan 2022 03:15:29 +0900
+Message-Id: <20220109181529.351420-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220109181529.351420-1-masahiroy@kernel.org>
 References: <20220109181529.351420-1-masahiroy@kernel.org>
@@ -42,122 +42,53 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Presumably, arch/{parisc,s390,sh}/boot/compressed/Makefile copied
-arch/x86/boot/compressed/Makefile, but vmlinux.bin.all-y is useless
-here because it is the same as $(obj)/vmlinux.bin.
+Some architectures support self-extracting kernel, which embeds the
+compressed vmlinux.
+
+It has 4 byte data at the end so the decompressor can know the vmlinux
+size beforehand.
+
+GZIP natively has it in the trailer, but for the other compression
+algorithms, the hand-crafted trailer is added.
+
+It is unneeded to generate such _corrupted_ compressed files because
+it is possible to pass the size data separately.
+
+For example, the assembly code:
+
+     .incbin "compressed-vmlinux-with-size-data-appended"
+
+can be transformed to:
+
+     .incbin "compressed-vmlinux"
+     .incbin "size-data"
+
+My hope is, after some reworks of the decompressors, the macros
+cmd_{bzip2,lzma,lzo,lz4,xzkern,zstd22} will go away.
+
+This new macro, cmd_file_size, will be useful to generate a separate
+size-data file.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- arch/parisc/boot/compressed/Makefile | 14 ++++++--------
- arch/s390/boot/compressed/Makefile   | 16 +++++++---------
- arch/sh/boot/compressed/Makefile     | 12 +++++-------
- 3 files changed, 18 insertions(+), 24 deletions(-)
+ scripts/Makefile.lib | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/parisc/boot/compressed/Makefile b/arch/parisc/boot/compressed/Makefile
-index 2640f72d69ce..877a7099b5e1 100644
---- a/arch/parisc/boot/compressed/Makefile
-+++ b/arch/parisc/boot/compressed/Makefile
-@@ -58,8 +58,6 @@ OBJCOPYFLAGS_vmlinux.bin := -R .comment -R .note -S
- $(obj)/vmlinux.bin: vmlinux FORCE
- 	$(call if_changed,objcopy)
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 4207a72d429f..05ca77706f6b 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -394,6 +394,9 @@ printf "%08x\n" $$dec_size |						\
+ 	}								\
+ )
  
--vmlinux.bin.all-y := $(obj)/vmlinux.bin
--
- suffix-$(CONFIG_KERNEL_GZIP)  := gz
- suffix-$(CONFIG_KERNEL_BZIP2) := bz2
- suffix-$(CONFIG_KERNEL_LZ4)  := lz4
-@@ -67,17 +65,17 @@ suffix-$(CONFIG_KERNEL_LZMA)  := lzma
- suffix-$(CONFIG_KERNEL_LZO)  := lzo
- suffix-$(CONFIG_KERNEL_XZ)  := xz
++quiet_cmd_file_size = GEN     $@
++      cmd_file_size = $(size_append) > $@
++
+ quiet_cmd_bzip2 = BZIP2   $@
+       cmd_bzip2 = cat $(real-prereqs) | $(KBZIP2) -9 > $@
  
--$(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.gz: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,gzip)
--$(obj)/vmlinux.bin.bz2: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.bz2: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,bzip2_with_size)
--$(obj)/vmlinux.bin.lz4: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lz4: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lz4_with_size)
--$(obj)/vmlinux.bin.lzma: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lzma: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lzma_with_size)
--$(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lzo: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lzo_with_size)
--$(obj)/vmlinux.bin.xz: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.xz: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,xzkern_with_size)
- 
- LDFLAGS_piggy.o := -r --format binary --oformat $(LD_BFD) -T
-diff --git a/arch/s390/boot/compressed/Makefile b/arch/s390/boot/compressed/Makefile
-index 8ea880b7c3ec..d04e0e7de0b3 100644
---- a/arch/s390/boot/compressed/Makefile
-+++ b/arch/s390/boot/compressed/Makefile
-@@ -58,8 +58,6 @@ OBJCOPYFLAGS_vmlinux.bin := -O binary --remove-section=.comment --remove-section
- $(obj)/vmlinux.bin: vmlinux FORCE
- 	$(call if_changed,objcopy)
- 
--vmlinux.bin.all-y := $(obj)/vmlinux.bin
--
- suffix-$(CONFIG_KERNEL_GZIP)  := .gz
- suffix-$(CONFIG_KERNEL_BZIP2) := .bz2
- suffix-$(CONFIG_KERNEL_LZ4)  := .lz4
-@@ -68,19 +66,19 @@ suffix-$(CONFIG_KERNEL_LZO)  := .lzo
- suffix-$(CONFIG_KERNEL_XZ)  := .xz
- suffix-$(CONFIG_KERNEL_ZSTD)  := .zst
- 
--$(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.gz: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,gzip)
--$(obj)/vmlinux.bin.bz2: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.bz2: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,bzip2_with_size)
--$(obj)/vmlinux.bin.lz4: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lz4: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lz4_with_size)
--$(obj)/vmlinux.bin.lzma: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lzma: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lzma_with_size)
--$(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lzo: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lzo_with_size)
--$(obj)/vmlinux.bin.xz: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.xz: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,xzkern_with_size)
--$(obj)/vmlinux.bin.zst: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.zst: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,zstd22_with_size)
- 
- OBJCOPYFLAGS_piggy.o := -I binary -O elf64-s390 -B s390:64-bit --rename-section .data=.vmlinux.bin.compressed
-diff --git a/arch/sh/boot/compressed/Makefile b/arch/sh/boot/compressed/Makefile
-index a6808a403f4b..591125c42d49 100644
---- a/arch/sh/boot/compressed/Makefile
-+++ b/arch/sh/boot/compressed/Makefile
-@@ -47,17 +47,15 @@ $(obj)/vmlinux: $(addprefix $(obj)/, $(OBJECTS)) FORCE
- $(obj)/vmlinux.bin: vmlinux FORCE
- 	$(call if_changed,objcopy)
- 
--vmlinux.bin.all-y := $(obj)/vmlinux.bin
--
--$(obj)/vmlinux.bin.gz: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.gz: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,gzip)
--$(obj)/vmlinux.bin.bz2: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.bz2: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,bzip2_with_size)
--$(obj)/vmlinux.bin.lzma: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lzma: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lzma_with_size)
--$(obj)/vmlinux.bin.xz: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.xz: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,xzkern_with_size)
--$(obj)/vmlinux.bin.lzo: $(vmlinux.bin.all-y) FORCE
-+$(obj)/vmlinux.bin.lzo: $(obj)/vmlinux.bin FORCE
- 	$(call if_changed,lzo_with_size)
- 
- OBJCOPYFLAGS += -R .empty_zero_page
 -- 
 2.32.0
 
