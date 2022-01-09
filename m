@@ -2,65 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3456488845
-	for <lists+linux-arch@lfdr.de>; Sun,  9 Jan 2022 07:49:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A04A488863
+	for <lists+linux-arch@lfdr.de>; Sun,  9 Jan 2022 09:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235242AbiAIGtS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 9 Jan 2022 01:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S233371AbiAIItK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 9 Jan 2022 03:49:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235233AbiAIGtS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jan 2022 01:49:18 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAED5C06173F
-        for <linux-arch@vger.kernel.org>; Sat,  8 Jan 2022 22:49:17 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id c71so28682703edf.6
-        for <linux-arch@vger.kernel.org>; Sat, 08 Jan 2022 22:49:17 -0800 (PST)
+        with ESMTP id S229867AbiAIItJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 9 Jan 2022 03:49:09 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C95AC06173F
+        for <linux-arch@vger.kernel.org>; Sun,  9 Jan 2022 00:49:09 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id s1so8648852pga.5
+        for <linux-arch@vger.kernel.org>; Sun, 09 Jan 2022 00:49:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=5Qe5bfEPRSa8qK/jSdSjDeCU764BYhwj22IPnPyW9vs=;
-        b=EZcm14tvQ2pTgwy34oZJOq2kJpxpBRDXnT7iNCcdccnLhGzBufgAhtztl1veAhf1go
-         P/NRzFVUIHGptU0ISVbmnPiWEi1qkQqspVHDeITa/jsG8J/fyaHLKADfvZEVhW5AMExn
-         cL6kENpOhF/Tm82ClxhGN+zQfHiX1OPVYCcT0=
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=o9EmHZcSICKN316fHMY91MizRyPQShQCNbAS0hB713c=;
+        b=XYpfUt383JWJwGaKWZpAKdo+YiAFBQ5m/K4QI6Tne9Whlr0hkgZwS9tvANsRb4ENTK
+         jqvkZCoyQRExqElL0pgO2DleCTZSlnnSXQmS057zcjyB4kw7w3ARhRZm1fiBg7jH9GtL
+         zCJuzLANVVdTJ5pFBLn0d62zhCCUj80qr1QlwnNxiiJ/HtKz8soDFznLgZ5UMiVAsu33
+         pdRL0eImc8vQlH3I6U96B+8mD0nSeyA23HgCDOCyXNqzdHLlOMXXcNr2MlFkSflf7y5Z
+         G584l0qyC8KYW+kJZDfa69zndj+MqgtypqUHo9pmUonJ/9/st8mCX14r5ooGHskfg/WC
+         vs3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5Qe5bfEPRSa8qK/jSdSjDeCU764BYhwj22IPnPyW9vs=;
-        b=6WRloOSwe1cSx1kGLPEQwEPERXHH/HlRIPPbmyKQ3ZX7zuRXvWWb/SL29Vhv3U4rTH
-         bGA9pWNaLj3ZdcKSJ4nx210uK+sf8hcJVaepJkAGMXWpcYhRdSe2mv6W7WvFOHUtX1LO
-         GKLCK2C3aHTi7ewxHsf4zv/DBq/26jlPkhUD9A9ny43uowayGgsXTzz5Qg8hrKocyxef
-         fXVXnXLGyqfBijKfIvvjYy4mD98WNtoPRRdt6R0kbfieffrea/p5yxtHvWKPwez4jzQm
-         yh7zfwqCcGEPESSz6raDkmaYXBX8aP7V5f4ZCcN9a6eaagdiIX3Q+VR5bP7vaIVUP1eC
-         p/xw==
-X-Gm-Message-State: AOAM532meqGhBIbFPsWbqH7BYnLXDtQ3uxE4WExIhI0/+6+i+CKzpuUM
-        lH1y9W51DWsBqB2EuIfbo2bZysglfCbY+cLXyvI=
-X-Google-Smtp-Source: ABdhPJwefsI+JMi1QlYtzzK4/o0m893d3MySKGAz954P1DwfB+mVz186bR+yUs8wLGM2t/3SX9dP9g==
-X-Received: by 2002:a05:6402:1d4b:: with SMTP id dz11mr68183348edb.15.1641710956142;
-        Sat, 08 Jan 2022 22:49:16 -0800 (PST)
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
-        by smtp.gmail.com with ESMTPSA id kz20sm1129439ejc.74.2022.01.08.22.49.15
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 08 Jan 2022 22:49:15 -0800 (PST)
-Received: by mail-wm1-f44.google.com with SMTP id e5so6735961wmq.1
-        for <linux-arch@vger.kernel.org>; Sat, 08 Jan 2022 22:49:15 -0800 (PST)
-X-Received: by 2002:a05:600c:4f49:: with SMTP id m9mr17141316wmq.8.1641710954863;
- Sat, 08 Jan 2022 22:49:14 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1641659630.git.luto@kernel.org> <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
- <739A3109-04DD-4BA5-A02B-52EE30E820AE@gmail.com>
-In-Reply-To: <739A3109-04DD-4BA5-A02B-52EE30E820AE@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 8 Jan 2022 22:48:58 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiEZO-uyFELSZgYmxF7eOLHrvh-kMWY5qTKjckOdNQxpA@mail.gmail.com>
-Message-ID: <CAHk-=wiEZO-uyFELSZgYmxF7eOLHrvh-kMWY5qTKjckOdNQxpA@mail.gmail.com>
-Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy mms
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=o9EmHZcSICKN316fHMY91MizRyPQShQCNbAS0hB713c=;
+        b=IRxtdG8YSwviNN3U8Fz0+l2LnWbxPgASjSAV36Y3JWdMPVEieBmlMpHGNfJJIviRES
+         iebvzkvKbxcAcw8ewldGVvSaQSDzUNCJppKb3oQd0ODY4cNFB2ng3plApNbAYBJR3lx/
+         vGbp6fm04pwCLmlixHK1cZxT4yo6qvhGWyMFPE3YXGc+LNmWgQ+gzqelfwsVSfbEGB2V
+         K5wUH2/bCFKrPS8DNrbVEcMe/pnayCyKRnq/HiCujoyYoSXW8nK0AdhjTsgH9/fg06cH
+         VjMPzm8+U+V+ukJN3p56bPRKTmfmiwgIGIPJb+zhgTtb/wAE2U6VriZrCmwPjnMK55pJ
+         jrEA==
+X-Gm-Message-State: AOAM533+Jd6j8TBpyrseHAgsUXXFWNwZUKR264OTdp2eJ1J1cKxlpBck
+        rV4BLUg4bJweKGy2UJua48dtrNz4pN8=
+X-Google-Smtp-Source: ABdhPJw54hlsdqK5QlC8xHoSFSJbx4qK6uGUtHw76Ab4RaLHRTPSSAtuWGbuy+FRrO+Ni/5OI8XHmw==
+X-Received: by 2002:a63:9544:: with SMTP id t4mr4391363pgn.175.1641718148228;
+        Sun, 09 Jan 2022 00:49:08 -0800 (PST)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id x19sm2545676pgi.19.2022.01.09.00.49.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 09 Jan 2022 00:49:07 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy
+ mms
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <CAHk-=wiEZO-uyFELSZgYmxF7eOLHrvh-kMWY5qTKjckOdNQxpA@mail.gmail.com>
+Date:   Sun, 9 Jan 2022 00:49:06 -0800
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux-MM <linux-mm@kvack.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Anton Blanchard <anton@ozlabs.org>,
@@ -72,37 +67,58 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Dave Hansen <dave.hansen@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <B728EEE2-1EB9-4ACD-9F4E-423276380C0C@gmail.com>
+References: <cover.1641659630.git.luto@kernel.org>
+ <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
+ <739A3109-04DD-4BA5-A02B-52EE30E820AE@gmail.com>
+ <CAHk-=wiEZO-uyFELSZgYmxF7eOLHrvh-kMWY5qTKjckOdNQxpA@mail.gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 9:56 PM Nadav Amit <nadav.amit@gmail.com> wrote:
->
-> Just wondering: In a world of ASID/PCID - does the =E2=80=9Clazy TLB=E2=
-=80=9D really
-> have a worthy advantage?
->
-> Considering the fact that with PTI anyhow address spaces are switched
-> all the time, can=E2=80=99t we just get rid of it?
 
-Hmm.. That may indeed be the right thing to do.
 
-I think arm64 already hardcodes ASID 0 to init_mm, and that kernel
-threads (and the idle threads in particular) might as well just use
-that. In that kind of situation, there's likely little advantage to
-reusing a user address space ID, and quite possibly any potential
-advantage is overshadowed by the costs.
+> On Jan 8, 2022, at 10:48 PM, Linus Torvalds =
+<torvalds@linux-foundation.org> wrote:
+>=20
+> On Sat, Jan 8, 2022 at 9:56 PM Nadav Amit <nadav.amit@gmail.com> =
+wrote:
+>>=20
+>> Just wondering: In a world of ASID/PCID - does the =E2=80=9Clazy =
+TLB=E2=80=9D really
+>> have a worthy advantage?
+>>=20
+>> Considering the fact that with PTI anyhow address spaces are switched
+>> all the time, can=E2=80=99t we just get rid of it?
+>=20
 
-The lazy tlb thing goes back a *looong* way, and lots of things have
-changed since. Maybe it's not worth it any more.
+[snip]
 
-Or maybe it's only worth it on platforms where it's free (UP, possibly
-other situations - like if you have IPI and it's "free").
+>=20
+> Or maybe it's only worth it on platforms where it's free (UP, possibly
+> other situations - like if you have IPI and it's "free").
 
-If I read the history correctly, it looks like PF_LAZY_TLB was
-introduced in 2.3.11-pre4 or something. Back in summer of 1999. The
-"active_mm" vs "mm" model came later.
+On UP it might be free, but on x86+IPIs there is a tradeoff.
 
-                  Linus
+When you decide which CPUs you want to send the IPI to, in the
+common flow (no tables freed) you check whether they use
+=E2=80=9Clazy TLB=E2=80=9D or not in order to filter out the lazy ones. =
+In the
+past this was on a cacheline with other frequently-dirtied data so
+many times the cacheline bounced from cache to cache. Worse, the
+test used an indirect branch so was expensive with Spectre v2
+mitigations. I fixed it some time ago, so things are better and
+today the cacheline of is_lazy should bounce less between caches,
+but there is a tradeoff in maintaining and checking both cpumask
+and then is_lazy for each CPU in cpumask.
+
+It is possible for instance to get rid of is_lazy, keep the CPU
+on mm_cpumask when switching to kernel thread, and then if/when
+an IPI is received remove it from cpumask to avoid further
+unnecessary TLB shootdown IPIs.
+
+I do not know whether it is a pure win, but there is a tradeoff.=
