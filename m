@@ -2,154 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8679248A245
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jan 2022 23:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338DF48A26E
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jan 2022 23:07:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241262AbiAJWEQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jan 2022 17:04:16 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:42581 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbiAJWEP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jan 2022 17:04:15 -0500
-Received: from mail-wm1-f42.google.com ([209.85.128.42]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MXXdn-1mrPQv1A5f-00Z2sF; Mon, 10 Jan 2022 23:04:14 +0100
-Received: by mail-wm1-f42.google.com with SMTP id n19-20020a7bc5d3000000b003466ef16375so308944wmk.1;
-        Mon, 10 Jan 2022 14:04:14 -0800 (PST)
-X-Gm-Message-State: AOAM5308Px2BSL92C/badE9AqS39ltRNxQ17XquJPIjyLlWuoibzJuuV
-        c4Ni4navSaTvhc2ajGRjBcWIT1DIPRDtsMcCJHk=
-X-Google-Smtp-Source: ABdhPJyciqcg2uvXeIfuwE7UNZzHXNuNt1HQPy9AJQg0ko57Ij4iRi/iwrgrOSmmVXTt1zVT/mtee43J2O0Y7jwucVI=
-X-Received: by 2002:a7b:ce96:: with SMTP id q22mr3334217wmj.82.1641852253858;
- Mon, 10 Jan 2022 14:04:13 -0800 (PST)
+        id S241148AbiAJWHG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jan 2022 17:07:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240960AbiAJWHF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jan 2022 17:07:05 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD14FC06173F
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jan 2022 14:07:05 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id d1so42005943ybh.6
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jan 2022 14:07:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OLoSFmV+IY05QKb0dS8wO8UVqMpy7ASVbT1uYBBSlVk=;
+        b=IxQB2TPmTUhakP4Y4I6pmrmn98v/DAm6vwbvYZyvTHDkJAVNk6OhngUc6IRUJFiHu2
+         BSiMshSd/ISmmbFRNUuuA8MD0nYAwd5GwN6rbgWkNOaioMBnSt9aV60pbTjdP3ml0O5X
+         h4e7+0/DpdPRxqnCe2HR/mvdRsJW8/f9eRjgqgXy+87Ek4PH5NnRwLLTLWppR1ppGAjm
+         0/ZwnY8LeEs0c00hXL/70SpAcF1O2JRCq0HkVMtX5K6SlZqozKmWH4VI7nS3wtQlYuC6
+         DMHPRAL2ec0Abox7w+nlLjciBrwB9Yw0HMH/73oDXAnuyr3KNTkRxGnQkDZ1yXLNGJMM
+         Vy4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OLoSFmV+IY05QKb0dS8wO8UVqMpy7ASVbT1uYBBSlVk=;
+        b=Lnm3mLlxt/fJ9/kNOdXdGDtrW4gVB1sRCStm3TB4VV35+Eho93PvgxmemHLGORcdir
+         7mydF9FluUn5zODgXgdHAT3tJSX2/L4fuirqN6OHoDC6xTFg/A1G9vzWyfIL59tM7IJE
+         6CaNBfAsf2M2Stge/jmvVHEoIGIGT5lD9iNsM7gOna0gnueplLDJk98FTmnk9mvWi+hy
+         mn6HMWEdSBJ5jpyOiH3Vz7mg4HdCTdchRz5CScgHe950Sm9UrK2j9qqDQC45cM+Ir0Xn
+         Wfj+F5b5NjxcKv66A1HlxXbWE5NWz7f4kiDSZjVUmPHvkMGH7ZymveKTpADaOCWzPQK1
+         EnZg==
+X-Gm-Message-State: AOAM532/8dCgaeoyHucEkN8tmO6bO3JVukkpze9oCJhi6RbXTX8ci0gG
+        YimblyDYQtfcpUOHYVmMgdq3PGjrHpFT5KnL2i4/5efmlsWoEQ==
+X-Google-Smtp-Source: ABdhPJzryT/NjsVOi5SARPjPlviemKlUVT+U6gViPtgl/7bBvxfByaT33kw2rB4BLSc7HSihyH8Ow17sPMRTfMkN5RA=
+X-Received: by 2002:a25:b9d2:: with SMTP id y18mr843069ybj.615.1641852424421;
+ Mon, 10 Jan 2022 14:07:04 -0800 (PST)
 MIME-Version: 1.0
-References: <Ydm7ReZWQPrbIugn@gmail.com>
-In-Reply-To: <Ydm7ReZWQPrbIugn@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 10 Jan 2022 23:03:57 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1emGYHPcjTfLqd-yyU8_9w88=2g_B_vfhbKeDtDHMM-w@mail.gmail.com>
-Message-ID: <CAK8P3a1emGYHPcjTfLqd-yyU8_9w88=2g_B_vfhbKeDtDHMM-w@mail.gmail.com>
-Subject: Re: [ANNOUNCE] "Fast Kernel Headers" Tree -v2
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
+References: <cover.1641659630.git.luto@kernel.org> <233d81a0a1e7b8eca1907998152ee848159b8774.1641659630.git.luto@kernel.org>
+In-Reply-To: <233d81a0a1e7b8eca1907998152ee848159b8774.1641659630.git.luto@kernel.org>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 10 Jan 2022 14:06:53 -0800
+Message-ID: <CABCJKucptXNUfweVOLD==E2TNavGKCQ-Z=YsKF2Kdq60Tp+A3A@mail.gmail.com>
+Subject: Re: [PATCH 11/23] sched/scs: Initialize shadow stack on idle thread
+ bringup, not shutdown
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Woody Lin <woodylin@google.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:u9nyXwUNAqT1urpk/aR3aX4MZpsrEVsSfnNR162ErlLN5OMdeFp
- Mo9UH4FJ3mm9UjuET6GuRcEDavhf2cEP4hHEUHbWT+xiVy4JinEbDoA4nIZFahhPoNV5FS9
- tftdo0fDxRbXzcBOKLyMCWxosJ+EEB7kckDdnk/uhRRbYoA9Bc1zpUKp+wYw3EemxDUuprX
- 1yZix46Nfl1WmffSFc2Qg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:djMmaCRJkno=:KHysov6eQzTRBkXpYHNGEE
- isp9TGYS7fK0s5XW2+y20cM28Z7Gc6999vkXssNN5nouE1d1WlVwvyst9sBozGaQGIEmEbRMa
- Oebg/pVQPbOyvTYWWi1S2PfY3zrCbn0tOSTp5cDSfW8rA3Ti2C+/QmKtwNgnbqoxfWgTE+KvY
- i0/l321GHMaEzb8b+YCP8uXlr5qcpDZhbpIjs2IPfeT/MszxUbx8g5cV6IrYQrJKQoqWCcjrr
- tThg6vYycM19E74MfKR8v80vfkr9BTcgDp8VNDGVJ2fGpJT96eJJyE4vMaRJfgMnTjriq+eLW
- fr0CApSrL6cA+aBGSL2lsvVwt0A+6Su9YRg+uDpLrcnAUbeFldZCyyaI3b51chvlDVZnghg5D
- Y8kLHCkn137SmHK8zb++5qFrwpmU4HHAK6D/7FJ5He97PjC+ZyQtVBcoN/xvCiuWG48LCKCIN
- 3QO1NsJ1NzW5FHJ8uVW6MH7kfaNCdyXl2CKZkjQ8KruRX6Y472oMWkVqvvrHaHUdmS2UY51+O
- JPWh+jGqbbWwB/KbuVcXNqBRACSuS7plf9Z9p0K7waMi8ErMz57MTAgrxOClK2cHNf/9iT+8m
- c7Tn8Upmat3/XkKX5Dx9J5D14f7GJPQKiVQniQ3gOdUBhnyttHe9Am/sxKVftIyPHJx00u1dx
- gQbMPrQo/doaldsFR1H0QpzBT34huIcxQRhmTc3M3SgFnBB7rV0ePDeUxtD05Jb3lwaU=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jan 8, 2022 at 5:26 PM Ingo Molnar <mingo@kernel.org> wrote:
+Hi Andy,
+
+On Sat, Jan 8, 2022 at 8:44 AM Andy Lutomirski <luto@kernel.org> wrote:
 >
+> Starting with commit 63acd42c0d49 ("sched/scs: Reset the shadow stack when
+> idle_task_exit"), the idle thread's shadow stack was reset from the idle
+> task's context during CPU hot-unplug.  This was fragile: between resetting
+> the shadow stack and actually stopping the idle task, the shadow stack
+> did not match the actual call stack.
 >
-> I'm pleased to announce -v2 of the "Fast Kernel Headers" tree, which is a
-> comprehensive rework of the Linux kernel's header hierarchy & header
-> dependencies, with the dual goals of:
+> Clean this up by resetting the idle task's SCS in bringup_cpu().
 >
->  - speeding up the kernel build (both absolute and incremental build times)
+> init_idle() still does scs_task_reset() -- see the comments there.  I
+> leave this to an SCS maintainer to untangle further.
 >
->  - decoupling subsystem type & API definitions from each other
+> Cc: Woody Lin <woodylin@google.com>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Andy Lutomirski <luto@kernel.org>
+> ---
+>  kernel/cpu.c        | 3 +++
+>  kernel/sched/core.c | 9 ++++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
 >
-> The fast-headers tree consists of over 25 sub-trees internally, spanning
-> over 2,300 commits, which can be found at:
+> diff --git a/kernel/cpu.c b/kernel/cpu.c
+> index 192e43a87407..be16816bb87c 100644
+> --- a/kernel/cpu.c
+> +++ b/kernel/cpu.c
+> @@ -33,6 +33,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/percpu-rwsem.h>
+>  #include <linux/cpuset.h>
+> +#include <linux/scs.h>
 >
->    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+>  #include <trace/events/power.h>
+>  #define CREATE_TRACE_POINTS
+> @@ -587,6 +588,8 @@ static int bringup_cpu(unsigned int cpu)
+>         struct task_struct *idle = idle_thread_get(cpu);
+>         int ret;
 >
->    # HEAD: 391ce485ced0 headers/deps: Introduce the CONFIG_FAST_HEADERS=y config option
+> +       scs_task_reset(idle);
+> +
+>         /*
+>          * Some architectures have to walk the irq descriptors to
+>          * setup the vector space for the cpu which comes online.
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 917068b0a145..acd52a7d1349 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -8621,7 +8621,15 @@ void __init init_idle(struct task_struct *idle, int cpu)
+>         idle->flags |= PF_IDLE | PF_KTHREAD | PF_NO_SETAFFINITY;
+>         kthread_set_per_cpu(idle, cpu);
+>
+> +       /*
+> +        * NB: This is called from sched_init() on the *current* idle thread.
+> +        * This seems fragile if not actively incorrect.
+> +        *
+> +        * Initializing SCS for about-to-be-brought-up CPU idle threads
+> +        * is in bringup_cpu(), but that does not cover the boot CPU.
+> +        */
+>         scs_task_reset(idle);
+> +
+>         kasan_unpoison_task_stack(idle);
+>
+>  #ifdef CONFIG_SMP
+> @@ -8779,7 +8787,6 @@ void idle_task_exit(void)
+>                 finish_arch_post_lock_switch();
+>         }
+>
+> -       scs_task_reset(current);
+>         /* finish_cpu(), as ran on the BP, will clean up the active_mm state */
+>  }
 
-I've started reading through it at last. I can't say that I'm
-reviewing every patch, but
-at least (almost all) the things I've looked at so far all seem really
-nice to me, mostly
-this is the same that I was planning to do as well, some things I
-would have done
-differently but I'm not complaining as you did the work, and some things seem
-unnecessary but might not be.
+I believe Mark already fixed this one here:
 
-I've started building randconfig kernels for arm64 and x86, and fixing
-up things that come up,
-a few things I have noticed out so far:
+https://lore.kernel.org/lkml/20211123114047.45918-1-mark.rutland@arm.com/
 
-* 2e98ec93d465 ("headers/prep: Rename constants: SOCK_DESTROY =>
-SOCK_DIAG_SOCK_DESTROY")
-
-  This one looks wrong, as you are changing a uapi header, possibly
-breaking applications
-  at compile time. I think the other one should be renamed instead.
-
-* 04293522a8cb ("headers/deps: ipc/shm: Move the 'struct shmid_ds'
-definition to ipc/shm.c")
-  and related patches
-
-  Similarly, the IPC structures are uapi headers that I would not
-change here for the same reasons.
-  Even if nothing uses those any more with modern libc
-implementations, the structures belong into
-  uapi, unless we can prove that the old-style sysvipc interface is
-completely unused and we
-  remove the implementation from the kernel as well (I don't think we
-want that, but I have not
-  looked in depth at when it was last used by a libc)
-
-* changing any include/uapi headers to use "#include <uapi/linux/*.h>"
-is broken because
-  that makes the headers unusable from userspace, including any of
-tools/*/. I think we
-  can work around this in the headers_install.sh postprocessing step
-though, where we already
-  do unifdef etc.
-
-* For all the header additions to .c files, I assume you are using a
-set of script, so these could
-  probably be changed without much trouble. I would suggest applying
-them in sequence so
-   the headers remain sorted alphabetically in the end. It would
-probably make sense to
-   squash those all together to avoid patching certain files many
-times over, for the sake
-   of keeping a slightly saner git history.
-
-* The per-task stuff sounded a bit scary from your descriptions but
-looking at the actual
-   implementation I now get it, this looks like a really nice way of doing it.
-
-* I think it would be good to keep the include/linux/syscalls_api.h declarations
-   in the same header as the SYSCALL_DEFINE*() macros, to ensure that the
-   prototypes remain synchronized. Splitting them out will likely also
-cause sparse
-   warnings for missing prototypes (or maybe it should but doesn't at
-the moment).
-
-* include/linux/time64_types.h is not a good name, as these are now
-the default types
-   after we removed the time32 versions. I'd either rename it to
-linux/time_types.h
-   or split it up between linux/types.h and linux/ktime_types.h
-
-* arm64 needs  a couple of minor fixups, see
-https://pastebin.com/eSKhz4CL for what
-  I have so far, feel free to integrate any things that directly make sense.
-
-         Arnd
+Sami
