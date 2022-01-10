@@ -2,45 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC8948977B
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jan 2022 12:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF4248978C
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jan 2022 12:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244759AbiAJLcP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jan 2022 06:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244737AbiAJLbv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jan 2022 06:31:51 -0500
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3440DC06173F;
-        Mon, 10 Jan 2022 03:31:51 -0800 (PST)
+        id S244788AbiAJLeZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jan 2022 06:34:25 -0500
+Received: from mail.avm.de ([212.42.244.120]:52558 "EHLO mail.avm.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244792AbiAJLdL (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 10 Jan 2022 06:33:11 -0500
 Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
         by mail.avm.de (Postfix) with ESMTPS;
-        Mon, 10 Jan 2022 12:31:49 +0100 (CET)
+        Mon, 10 Jan 2022 12:32:56 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1641814309; bh=+3+XudVZJVlSF4hofBLXncn1knHit7hhlLwg5tcx9vE=;
+        t=1641814376; bh=S/wl00Xao0HVzJ52aNpht4KYTslyk0FTwR5JzlsZwy8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E/k8e89+sCIX3aQ0iNCG3Pv2AvcHnHHe1kto/10wnFFkObLqwkmG5UqCMWq21o25Z
-         G/dJhs9B+2UaJMDL6RHQS9OoIAJIfm42P/ZBldUjsEqKing+VVnBFnEDch2uBPbYYJ
-         2T67DnuPXcNunSXonHWi41dvqQ0zjYBFsdjrrI5k=
+        b=hIqnbQ4ihVbFXBy3q7sLNtB2QcQvhkD4KpMHcY7xAPw1u7KAMBDfFv6vb4uk+ShPk
+         DBYnVgIutjPKzElJO2ragMF0cxqOjZI+MjS35mHSL+RkqwznctSrrtUqw3Spddd1j/
+         NA3AfcV9nge1k5yTqHeX9pmSYIgYxphZJHOZLUAQ=
 Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id 3962D80514;
-        Mon, 10 Jan 2022 12:31:49 +0100 (CET)
-Date:   Mon, 10 Jan 2022 12:31:48 +0100
+        by mail-auth.avm.de (Postfix) with ESMTPSA id B8DF480514;
+        Mon, 10 Jan 2022 12:32:56 +0100 (CET)
+Date:   Mon, 10 Jan 2022 12:32:55 +0100
 From:   Nicolas Schier <n.schier@avm.de>
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/5] sh: rename suffix-y to suffix_y
-Message-ID: <YdwZJO/ar+GHuBd1@buildd.core.avm.de>
+Subject: Re: [PATCH 2/5] kbuild: drop $(size_append) from cmd_zstd
+Message-ID: <YdwZZ+1RQ5tcQZrt@buildd.core.avm.de>
 References: <20220109181529.351420-1-masahiroy@kernel.org>
+ <20220109181529.351420-2-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220109181529.351420-1-masahiroy@kernel.org>
-X-purgate-ID: 149429::1641814309-0000056E-303CD523/0/0
+In-Reply-To: <20220109181529.351420-2-masahiroy@kernel.org>
+X-purgate-ID: 149429::1641814376-00000568-3793358D/0/0
 X-purgate-type: clean
-X-purgate-size: 3575
+X-purgate-size: 1645
 X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
 X-purgate: clean
@@ -48,91 +46,48 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 10, 2022 at 03:15:25AM +0900, Masahiro Yamada wrote:
-> 'export suffix-y' does not work reliably because hyphens are disallowed
-> in shell variables.
+On Mon, Jan 10, 2022 at 03:15:26AM +0900, Masahiro Yamada wrote:
+> The appended file size is only used by the decompressors, which some
+> architectures support.
 > 
-> A similar issue was fixed by commit 2bfbe7881ee0 ("kbuild: Do not use
-> hyphen in exported variable name").
+> As the comment "zstd22 is used for kernel compression" says, cmd_zstd22
+> is used in arch/{mips,s390,x86}/boot/compressed/Makefile.
 > 
-> If I do similar in dash, ARCH=sh fails to build.
+> On the other hand, there is no good reason to append the file size to
+> cmd_zstd since it is used for other purposes.
 > 
->   $ mv linux linux~
->   $ cd linux~
->   $ dash
->   $ make O=foo/bar ARCH=sh CROSS_COMPILE=sh4-linux-gnu- defconfig all
->   make[1]: Entering directory '/home/masahiro/linux~/foo/bar'
->     [ snip ]
->   make[4]: *** No rule to make target 'arch/sh/boot/compressed/vmlinux.bin.', needed by 'arch/sh/boot/compressed/piggy.o'.  Stop.
->   make[3]: *** [/home/masahiro/linux~/arch/sh/boot/Makefile:40: arch/sh/boot/compressed/vmlinux] Error 2
->   make[2]: *** [/home/masahiro/linux~/arch/sh/Makefile:194: zImage] Error 2
->   make[1]: *** [/home/masahiro/linux~/Makefile:350: __build_one_by_one] Error 2
->   make[1]: Leaving directory '/home/masahiro/linux~/foo/bar'
->   make: *** [Makefile:219: __sub-make] Error 2
+> Actually cmd_zstd is only used in usr/Makefile, where the appended file
+> size is rather harmful.
 > 
-> The maintainer of GNU Make stated that there is no consistent way to
-> export variables that do not meet the shell's naming criteria.
-> (https://savannah.gnu.org/bugs/?55719)
+> The initramfs with its file size appended is considered as corrupted
+> data, so commit 65e00e04e5ae ("initramfs: refactor the initramfs build
+> rules") added 'override size_append := :' to make it no-op.
 > 
-> Consequently, you cannot use hyphens in exported variables.
+> As a conclusion, this $(size_append) should not exist here.
 > 
 > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
 
 Reviewed-by: Nicolas Schier <n.schier@avm.de>
 
+
 > 
->  arch/sh/boot/Makefile            | 16 ++++++++--------
->  arch/sh/boot/compressed/Makefile |  2 +-
->  2 files changed, 9 insertions(+), 9 deletions(-)
+>  scripts/Makefile.lib | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/sh/boot/Makefile b/arch/sh/boot/Makefile
-> index 5c123f5b2797..1f5d2df3c7e0 100644
-> --- a/arch/sh/boot/Makefile
-> +++ b/arch/sh/boot/Makefile
-> @@ -19,12 +19,12 @@ CONFIG_ZERO_PAGE_OFFSET	?= 0x00001000
->  CONFIG_ENTRY_OFFSET	?= 0x00001000
->  CONFIG_PHYSICAL_START	?= $(CONFIG_MEMORY_START)
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index d1f865b8c0cb..5366466ea0e4 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -473,7 +473,7 @@ quiet_cmd_xzmisc = XZMISC  $@
+>  # be used because it would require zstd to allocate a 128 MB buffer.
 >  
-> -suffix-y := bin
-> -suffix-$(CONFIG_KERNEL_GZIP)	:= gz
-> -suffix-$(CONFIG_KERNEL_BZIP2)	:= bz2
-> -suffix-$(CONFIG_KERNEL_LZMA)	:= lzma
-> -suffix-$(CONFIG_KERNEL_XZ)	:= xz
-> -suffix-$(CONFIG_KERNEL_LZO)	:= lzo
-> +suffix_y := bin
-> +suffix_$(CONFIG_KERNEL_GZIP)	:= gz
-> +suffix_$(CONFIG_KERNEL_BZIP2)	:= bz2
-> +suffix_$(CONFIG_KERNEL_LZMA)	:= lzma
-> +suffix_$(CONFIG_KERNEL_XZ)	:= xz
-> +suffix_$(CONFIG_KERNEL_LZO)	:= lzo
+>  quiet_cmd_zstd = ZSTD    $@
+> -      cmd_zstd = { cat $(real-prereqs) | $(ZSTD) -19; $(size_append); } > $@
+> +      cmd_zstd = cat $(real-prereqs) | $(ZSTD) -19 > $@
 >  
->  targets := zImage vmlinux.srec romImage uImage uImage.srec uImage.gz \
->  	   uImage.bz2 uImage.lzma uImage.xz uImage.lzo uImage.bin \
-> @@ -106,10 +106,10 @@ OBJCOPYFLAGS_uImage.srec := -I binary -O srec
->  $(obj)/uImage.srec: $(obj)/uImage FORCE
->  	$(call if_changed,objcopy)
->  
-> -$(obj)/uImage: $(obj)/uImage.$(suffix-y)
-> +$(obj)/uImage: $(obj)/uImage.$(suffix_y)
->  	@ln -sf $(notdir $<) $@
->  	@echo '  Image $@ is ready'
->  
->  export CONFIG_PAGE_OFFSET CONFIG_MEMORY_START CONFIG_BOOT_LINK_OFFSET \
->         CONFIG_PHYSICAL_START CONFIG_ZERO_PAGE_OFFSET CONFIG_ENTRY_OFFSET \
-> -       KERNEL_MEMORY suffix-y
-> +       KERNEL_MEMORY suffix_y
-> diff --git a/arch/sh/boot/compressed/Makefile b/arch/sh/boot/compressed/Makefile
-> index cf3174df7859..c1eb9a62de55 100644
-> --- a/arch/sh/boot/compressed/Makefile
-> +++ b/arch/sh/boot/compressed/Makefile
-> @@ -64,5 +64,5 @@ OBJCOPYFLAGS += -R .empty_zero_page
->  
->  LDFLAGS_piggy.o := -r --format binary --oformat $(ld-bfd) -T
->  
-> -$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix-y) FORCE
-> +$(obj)/piggy.o: $(obj)/vmlinux.scr $(obj)/vmlinux.bin.$(suffix_y) FORCE
->  	$(call if_changed,ld)
+>  quiet_cmd_zstd22 = ZSTD22  $@
+>        cmd_zstd22 = { cat $(real-prereqs) | $(ZSTD) -22 --ultra; $(size_append); } > $@
 > -- 
 > 2.32.0
 > 
