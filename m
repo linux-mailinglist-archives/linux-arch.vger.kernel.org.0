@@ -2,191 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C79148A125
-	for <lists+linux-arch@lfdr.de>; Mon, 10 Jan 2022 21:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA87848A1AE
+	for <lists+linux-arch@lfdr.de>; Mon, 10 Jan 2022 22:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243824AbiAJUxZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jan 2022 15:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241028AbiAJUxY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jan 2022 15:53:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E28FC06173F
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jan 2022 12:53:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDC1A6144E
-        for <linux-arch@vger.kernel.org>; Mon, 10 Jan 2022 20:53:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2EB3C36AE3;
-        Mon, 10 Jan 2022 20:53:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641848003;
-        bh=0PW5r2nP460ugTGZVLLTEhHzGNNGpRMC9O/OqvQe9os=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=pCmSKdi+bgYvC07R1azklpA2Fy2qqBRuFn2xNiw0cwTHQCzZHlDNuar0TCQDuHY2m
-         H8eUUSkX0QprEZELN7hLsN4hJG6bobmfYhaywHGde0PhVbQBXA8qQdZxWx02W53dPH
-         B6eICKx5HvMCNt0ku7ffCPS/BIit3JjMN/fzO2pfQbJNjuZZr2dOsgMbeTGgxRBUqy
-         OhFSfvBkjR2P/3ZHOlNE83mx9xxiIIxAr/cE9kgP+IFB7kjMxq71Y+J5UvFLO5NId+
-         U+LahHw7uV6cPwc98WdodXl7HTsk2mFAZmLOP/tAuimoQ7W85xJcWRoqEd1oEpC0iJ
-         bm+yfuc7J6I+w==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 657B627C0054;
-        Mon, 10 Jan 2022 15:53:21 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute6.internal (MEProxy); Mon, 10 Jan 2022 15:53:21 -0500
-X-ME-Sender: <xms:wJzcYeEMKQuZ2hAxwn_b-1YXx7-aa2-wLZGUchJq3C9caYzgBAt0OA>
-    <xme:wJzcYfW9budBt33y2jYkQvdOZXXQzpdw4sB1Wf9WFeOXW0YnXCZ08lX6J7AGPmeF-
-    zO1naVNL9PNBxYP5yI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrudehuddgudduiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedvleehjeejvefhuddtgeegffdtjedtffegveethedvgfejieev
-    ieeufeevuedvteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:wJzcYYJXDZQFVb43hTaH5UAI4qv5NIHc2iuNZCnQLygZbPohBn5amA>
-    <xmx:wJzcYYF6CLPut9z6nftt0cyFWo8cI-IuKemOX8wnGKbnSrn7a8LE5w>
-    <xmx:wJzcYUXT2-HPjRH6WQnEK6XNTvWPNSFVHUKQgfDBBLxgjWdfhNtiLQ>
-    <xmx:wZzcYVu-QpiBSn1CuSvH1ELkaRi7ks7o_SU-7aKwlBG_bVfaPcnMKiNmEGue96V7>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id A744D21E0073; Mon, 10 Jan 2022 15:53:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4527-g032417b6d6-fm-20220109.002-g032417b6
-Mime-Version: 1.0
-Message-Id: <0d905aef-f53c-4102-931f-a22edd084fae@www.fastmail.com>
-In-Reply-To: <1641790309.2vqc26hwm3.astroid@bobo.none>
-References: <cover.1641659630.git.luto@kernel.org>
- <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
- <CAHk-=wj4LZaFB5HjZmzf7xLFSCcQri-WWqOEJHwQg0QmPRSdQA@mail.gmail.com>
- <3586aa63-2dd2-4569-b9b9-f51080962ff2@www.fastmail.com>
- <CAHk-=wi2MtYYTs08RKHtj9Vtm0dri-saWwYh0tj=QUUUDSJFRQ@mail.gmail.com>
- <430e3db1-693f-4d46-bebf-0a953fe6c2fc@www.fastmail.com>
- <CAHk-=wjkbFFvgnUqgO8omHgTJx0GDwhxP9Cw0g6E03zOVbC7HQ@mail.gmail.com>
- <484a7f37-ceed-44f6-8629-0e67a0860dc8@www.fastmail.com>
- <CAHk-=whJYoKgAAtb6pYQVSPnyLQsnS6+rU=0jBUqrZU76LyDqg@mail.gmail.com>
- <CAHk-=wgnTWk2zeOO1YQ_8S-xPf4Pr0vXBs7DnhOPdKQFHXOnxw@mail.gmail.com>
- <1641790309.2vqc26hwm3.astroid@bobo.none>
-Date:   Mon, 10 Jan 2022 12:52:49 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Nicholas Piggin" <npiggin@gmail.com>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Anton Blanchard" <anton@ozlabs.org>,
-        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Dave Hansen" <dave.hansen@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
-        "Nadav Amit" <nadav.amit@gmail.com>,
-        "Paul Mackerras" <paulus@ozlabs.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Rik van Riel" <riel@surriel.com>, "Will Deacon" <will@kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy mms
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S1343865AbiAJVSa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jan 2022 16:18:30 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:57638 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240782AbiAJVS2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jan 2022 16:18:28 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:50624)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n723e-004JIM-N4; Mon, 10 Jan 2022 14:18:26 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:55924 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n723d-006ley-N9; Mon, 10 Jan 2022 14:18:26 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
+        <20220103213312.9144-8-ebiederm@xmission.com>
+        <CAMuHMdWsNBjOJh0QEx9sppA9x3WoL8H2icqukNqECFhOPremjw@mail.gmail.com>
+        <YdxcszwEslyQJSuF@zeniv-ca.linux.org.uk>
+        <CAMuHMdX9nhUQe_jeQCUtXeQgcQ5MBiHpPiRexh86EssoHNtJ3Q@mail.gmail.com>
+        <YdyZEAWKVTVnq2ef@zeniv-ca.linux.org.uk>
+Date:   Mon, 10 Jan 2022 15:18:18 -0600
+In-Reply-To: <YdyZEAWKVTVnq2ef@zeniv-ca.linux.org.uk> (Al Viro's message of
+        "Mon, 10 Jan 2022 20:37:36 +0000")
+Message-ID: <87zgo3thlx.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1n723d-006ley-N9;;;mid=<87zgo3thlx.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX185tqCdbMXD+YaCSV+3dCINElFLxfX3dJs=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,T_TM2_M_HEADER_IN_MSG,T_TooManySym_01,XMNoVowels,
+        XMSubLong autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4947]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 XMNoVowels Alpha-numberic number with no vowels
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+        *  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Al Viro <viro@zeniv.linux.org.uk>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 412 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 9 (2.2%), b_tie_ro: 8 (1.8%), parse: 1.03 (0.2%),
+        extract_message_metadata: 13 (3.1%), get_uri_detail_list: 1.34 (0.3%),
+        tests_pri_-1000: 11 (2.6%), tests_pri_-950: 1.31 (0.3%),
+        tests_pri_-900: 1.10 (0.3%), tests_pri_-90: 145 (35.3%), check_bayes:
+        143 (34.7%), b_tokenize: 7 (1.7%), b_tok_get_all: 7 (1.7%),
+        b_comp_prob: 2.5 (0.6%), b_tok_touch_all: 123 (29.8%), b_finish: 0.97
+        (0.2%), tests_pri_0: 214 (52.0%), check_dkim_signature: 0.62 (0.1%),
+        check_dkim_adsp: 3.0 (0.7%), poll_dns_idle: 1.09 (0.3%), tests_pri_10:
+        2.2 (0.5%), tests_pri_500: 11 (2.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 08/17] ptrace/m68k: Stop open coding ptrace_report_syscall
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Al Viro <viro@zeniv.linux.org.uk> writes:
 
-
-On Sun, Jan 9, 2022, at 8:56 PM, Nicholas Piggin wrote:
-> Excerpts from Linus Torvalds's message of January 10, 2022 7:51 am:
->> [ Ugh, I actually went back and looked at Nick's patches again, to
->> just verify my memory, and they weren't as pretty as I thought they
->> were ]
->>=20
->> On Sun, Jan 9, 2022 at 12:48 PM Linus Torvalds
->> <torvalds@linux-foundation.org> wrote:
->>>
->>> I'd much rather have a *much* smaller patch that says "on x86 and
->>> powerpc, we don't need this overhead at all".
->>=20
->> For some reason I thought Nick's patch worked at "last mmput" time and
->> the TLB flush IPIs that happen at that point anyway would then make
->> sure any lazy TLB is cleaned up.
->>=20
->> But that's not actually what it does. It ties the
->> MMU_LAZY_TLB_REFCOUNT to an explicit TLB shootdown triggered by the
->> last mmdrop() instead. Because it really tied the whole logic to the
->> mm_count logic (and made lazy tlb to not do mm_count) rather than the
->> mm_users thing I mis-remembered it doing.
+> On Mon, Jan 10, 2022 at 06:54:57PM +0100, Geert Uytterhoeven wrote:
 >
-> It does this because on powerpc with hash MMU, we can't use IPIs for
-> TLB shootdowns.
-
-I know nothing about powerpc=E2=80=99s mmu. If you can=E2=80=99t do IPI =
-shootdowns, it sounds like the hazard pointer scheme might actually be p=
-retty good.
-
+>> In fact Michael did so in "[PATCH v7 1/2] m68k/kernel - wire up
+>> syscall_trace_enter/leave for m68k"[1], but that's still stuck...
+>> 
+>> [1] https://lore.kernel.org/r/1624924520-17567-2-git-send-email-schmitzmic@gmail.com/
 >
->> So at least some of my arguments were based on me just mis-remembering
->> what Nick's patch actually did (mainly because I mentally recreated
->> the patch from "Nick did something like this" and what I thought would
->> be the way to do it on x86).
+> Looks sane, but I'd split it in two - switch to calling syscall_trace_{enter,leave}
+> and then handling the return values...
 >
-> With powerpc with the radix MMU using IPI based shootdowns, we can=20
-> actually do the switch-away-from-lazy on the final TLB flush and the
-> final broadcast shootdown thing becomes a no-op. I didn't post that
-> additional patch because it's powerpc-specific and I didn't want to
-> post more code so widely.
+> The former would keep the current behaviour (modulo reporting enter vs. leave
+> via PTRACE_GETEVENTMSG), the latter would allow syscall number change by tracer
+> and/or handling of seccomp/audit/whatnot.
 >
->> So I guess I have to recant my arguments.
->>=20
->> I still think my "get rid of lazy at last mmput" model should work,
->> and would be a perfect match for x86, but I can't really point to Nick
->> having done that.
->>=20
->> So I was full of BS.
->>=20
->> Hmm. I'd love to try to actually create a patch that does that "Nick
->> thing", but on last mmput() (ie when __mmput triggers). Because I
->> think this is interesting. But then I look at my schedule for the
->> upcoming week, and I go "I don't have a leg to stand on in this
->> discussion, and I'm just all hot air".
+> For exit+signal work the former would suffice, and IMO it would be a good idea
+> to put that one into a shared branch to be pulled both by seccomp and by signal
+> series.  Would reduce the conflicts...
 >
-> I agree Andy's approach is very complicated and adds more overhead than
-> necessary for powerpc, which is why I don't want to use it. I'm still
-> not entirely sure what the big problem would be to convert x86 to use
-> it, I admit I haven't kept up with the exact details of its lazy tlb
-> mm handling recently though.
+> Objections?
 
-The big problem is the entire remainder of this series!  If x86 is going=
- to do shootdowns without mm_count, I want the result to work and be mai=
-ntainable. A few of the issues that needed solving:
+I have the version that Geert ack'ed queued up for v5.17 in my
+signal-for-v5.17 branch, along with a couple others prior fixes in this
+series of changes where it was clear they were just obviously correct
+bug fixes.  No need to delay the removal of profiling bits for example.
 
-- x86 tracks usage of the lazy mm on CPUs that have it loaded into the M=
-MU, not CPUs that have it in active_mm.  Getting this in sync needed cor=
-e changes.
+I would love to see the m68k perform syscall_trace_{enter,leave} but
+just getting as far as ptrace_report_syscall will be enough to avoid any
+dependencies on my side.
 
-- mmgrab and mmdrop are barriers, and core code relies on that. If we ge=
-t rid of a bunch of calls (conditionally), we need to stop depending on =
-the barriers. I fixed this.
-
-- There were too many mmgrab and mmdrop calls, and the call sites had di=
-fferent semantics and different refcounting rules (thanks, kthread).  I =
-cleaned this up.
-
-- If we do a shootdown instead of a refcount, then, when exit() tears do=
-wn its mm, we are lazily using *that* mm when we do the shootdowns. If a=
-ctive_mm continues to point to the being-freed mm and an NMI tries to de=
-reference it, we=E2=80=99re toast. I fixed those issues.
-
-- If we do a UEFI runtime service call while lazy or a text_poke while l=
-azy and the mm goes away while this is happening, we would blow up. Refc=
-ounting prevents this but, in current kernels, a shootdown IPI on x86 wo=
-uld not prevent this.  I fixed these issues (and removed duplicate code).
-
-My point here is that the current lazy mm code is a huge mess. 90% of th=
-e complexity in this series is cleaning up core messiness and x86 messin=
-ess. I would still like to get rid of ->active_mm entirely (it appears t=
-o serve no good purpose on any architecture),  it that can be saved for =
-later, I think.
+Eric
