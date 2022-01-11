@@ -2,165 +2,112 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F4F048A51B
-	for <lists+linux-arch@lfdr.de>; Tue, 11 Jan 2022 02:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 371D348A594
+	for <lists+linux-arch@lfdr.de>; Tue, 11 Jan 2022 03:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243715AbiAKBeA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 10 Jan 2022 20:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
+        id S1346587AbiAKCZC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 10 Jan 2022 21:25:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiAKBd7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jan 2022 20:33:59 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82738C06173F;
-        Mon, 10 Jan 2022 17:33:59 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id rj2-20020a17090b3e8200b001b1944bad25so2957100pjb.5;
-        Mon, 10 Jan 2022 17:33:59 -0800 (PST)
+        with ESMTP id S1346579AbiAKCZB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 10 Jan 2022 21:25:01 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735D5C06173F
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jan 2022 18:25:01 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id w7so14928833plp.13
+        for <linux-arch@vger.kernel.org>; Mon, 10 Jan 2022 18:25:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=F2ZMsidULY/UwIx/Ch3Zop5xXT7D40iAokDW8asVY/g=;
-        b=njivyDZgo4ribC/UGiFHXUlbr3SoZTWCgeLro8eP65+y63P9MWd9771AimCjlaNK1K
-         8N7QQejTNmi6I2/NQil8uOPoKaMTgApEEdrlCinEzACR47hX5M6VRP73L9/NPr8JANXh
-         NOuIga20wQ7vDZ2r+mxIDZuYDCua50NSVYnW+hxS1OEyFhYVy6cDgaj+mg77P85bMYh6
-         bNs5YGTDzWw8eFDm+Zv6mU8bkFu3GlmNcdAWxzF2abav6dedP9v61xmT0JYVadKiTJbX
-         VeiCelnnvA/ul2p+2KAZF0GPwnud33/xrwVBTbwnm6gCFY6db/bl7aniq3UwlOPm554j
-         nHNQ==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=1nSGYhHp6awGMeT+4Vew5HuXwiw2XBFjZuDQom4mnVc=;
+        b=kDFEy8ysPKyieBoDc7io/9sZ0SbCerAYh7rc9yDQ7cmqNe6xIbCsAUcheBXpdFEhx8
+         RlAYYVDZmDT7GUNEPmdw6Tz2mSbDrZSPnBiV0OcwIvXPJ9dI//jxFzobdq1aNoS241IK
+         BLXjipehxEmQeSGCu5UcGArLzUcw7utkyaFdfzOobGSWPPtWvOUgQcx5vV76DFQdjyT2
+         TRXXGPlQY7FY1QfmbfyytMIQN15whWKUknzV1/oRNJa9+FpGgBpHG4qdezG8Rv3ifnlZ
+         AxjydkZJxGY5pekNzpTurt6qZyem3NLL9LLmlR/yY0fBRWhXt3F3ym2Tjf5RPX08VQaE
+         v9OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=F2ZMsidULY/UwIx/Ch3Zop5xXT7D40iAokDW8asVY/g=;
-        b=FuBDrpHgt60Cgpalby2lZUsAkD3JvfiZY7S41lJ94IGsAHJKoTkmZU171q3YEgxE4p
-         NtjVwHnYZ86oUVbx0HJQ+FeQSaruBAUjlztoQ6mbVcsSsr/DxRnSzoobdKMd+DV/llha
-         h3PHpuujZ2bJTR5U9iQG6YvScYjJ3ovjrB5+rhVw4C6SaUMxh+vkbSS563bJUkfBWYup
-         YbC1EL6qrM0lTs7dFdixiA9Lb/9vfHLwlsanZ13PsUosyp+rWdOPnHsD0Wkwa+MiruXP
-         S+0/1WX3oMYwvQHCGyqTWrcYTyOsoLn0Twkr53rkxrB3Wz2oVDsTJCkuDZ0F8TSxFTrD
-         QZEA==
-X-Gm-Message-State: AOAM532dVClF6CYJGPgwUA6QhPOSLWcC3PVJCs+55KMcToxPX0MsPhq1
-        R7e5soIaTEQKG0+w/xo5r34=
-X-Google-Smtp-Source: ABdhPJzpY3sW1zsiJEXNIF+/rpB6tJbNyFAD8FoSPYbO+0hn3cWA/3OG783Mtr9NOyz4hiHj82UhQw==
-X-Received: by 2002:a63:b407:: with SMTP id s7mr2119523pgf.202.1641864839097;
-        Mon, 10 Jan 2022 17:33:59 -0800 (PST)
-Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
-        by smtp.gmail.com with ESMTPSA id a1sm253057pjs.20.2022.01.10.17.33.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Jan 2022 17:33:58 -0800 (PST)
-Subject: Re: [PATCH 08/17] ptrace/m68k: Stop open coding ptrace_report_syscall
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <20220103213312.9144-8-ebiederm@xmission.com>
- <CAMuHMdWsNBjOJh0QEx9sppA9x3WoL8H2icqukNqECFhOPremjw@mail.gmail.com>
- <YdxcszwEslyQJSuF@zeniv-ca.linux.org.uk>
- <CAMuHMdX9nhUQe_jeQCUtXeQgcQ5MBiHpPiRexh86EssoHNtJ3Q@mail.gmail.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <acf7b627-2dec-c76c-2aa0-6b4c6addd793@gmail.com>
-Date:   Tue, 11 Jan 2022 14:33:50 +1300
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=1nSGYhHp6awGMeT+4Vew5HuXwiw2XBFjZuDQom4mnVc=;
+        b=qCMmHccHealyciJyWZZk28eX2wviVu52cYyXvZw959uUsnMNJ2UxM7o+XZ7sxxi60m
+         7llplIYWhbHYxXMqe6KLYNo5ywHqYhXvpFcyI8DOkpzEWdxGOdWQQCOqC5giJOj2IEOw
+         ZOU1uEChGLH2UaykAZ53jaTMVs3B858riI45H+F/H9bwvnvdAxqO/oqhmMe3WVv02D3C
+         OMRXUtXT7WzB0PFnGduYYNvPj0ewlO248V6n8ryqq4wFg3jvBtZDqjZjCPwSfeKqjgIz
+         Td3szfsxN/sSk5gJDkAqjVUE5PYcfyhTlvTt87HRJa98FCbcruNwAhyN9rwQGqdDedAt
+         PSDw==
+X-Gm-Message-State: AOAM531CzMx0YYvO1M73x/6hBmX4B8NaDABg8j2jpbWrjZWO11K02mVF
+        JXt9dW47QI4IxwmXcrqNTdk=
+X-Google-Smtp-Source: ABdhPJyRpojrUNiFPVD5I45rygGKiOTmajqSsgVpMyce095UmYc7P4v0rn9U8PDDl607h9zaAvQ4uQ==
+X-Received: by 2002:a17:902:6906:b0:149:7087:355c with SMTP id j6-20020a170902690600b001497087355cmr2189351plk.153.1641867901044;
+        Mon, 10 Jan 2022 18:25:01 -0800 (PST)
+Received: from localhost (124-171-74-95.tpgi.com.au. [124.171.74.95])
+        by smtp.gmail.com with ESMTPSA id kb1sm318355pjb.56.2022.01.10.18.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 18:25:00 -0800 (PST)
+Date:   Tue, 11 Jan 2022 12:24:55 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy
+ mms
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Andy Lutomirski <luto@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <cover.1641659630.git.luto@kernel.org>
+        <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
+        <CAHk-=wj4LZaFB5HjZmzf7xLFSCcQri-WWqOEJHwQg0QmPRSdQA@mail.gmail.com>
+        <3586aa63-2dd2-4569-b9b9-f51080962ff2@www.fastmail.com>
+        <CAHk-=wi2MtYYTs08RKHtj9Vtm0dri-saWwYh0tj=QUUUDSJFRQ@mail.gmail.com>
+        <430e3db1-693f-4d46-bebf-0a953fe6c2fc@www.fastmail.com>
+        <CAHk-=wjkbFFvgnUqgO8omHgTJx0GDwhxP9Cw0g6E03zOVbC7HQ@mail.gmail.com>
+        <484a7f37-ceed-44f6-8629-0e67a0860dc8@www.fastmail.com>
+        <CAHk-=whJYoKgAAtb6pYQVSPnyLQsnS6+rU=0jBUqrZU76LyDqg@mail.gmail.com>
+        <CAHk-=wgnTWk2zeOO1YQ_8S-xPf4Pr0vXBs7DnhOPdKQFHXOnxw@mail.gmail.com>
+        <1641790309.2vqc26hwm3.astroid@bobo.none>
+        <1641791321.kvkq0n8kbq.astroid@bobo.none>
+        <CAHk-=whX3cMJ30ZwX+BUJm8Eov3Ae3C76Ba51FAzX4nJz24Kmg@mail.gmail.com>
+In-Reply-To: <CAHk-=whX3cMJ30ZwX+BUJm8Eov3Ae3C76Ba51FAzX4nJz24Kmg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdX9nhUQe_jeQCUtXeQgcQ5MBiHpPiRexh86EssoHNtJ3Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <1641867685.59h0j3zwhw.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Geert,
-
-Am 11.01.2022 um 06:54 schrieb Geert Uytterhoeven:
-> Hi Al,
->
-> CC Michael/m68k,
->
-> On Mon, Jan 10, 2022 at 5:20 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->> On Mon, Jan 10, 2022 at 04:26:57PM +0100, Geert Uytterhoeven wrote:
->>> On Mon, Jan 3, 2022 at 10:33 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->>>> The generic function ptrace_report_syscall does a little more
->>>> than syscall_trace on m68k.  The function ptrace_report_syscall
->>>> stops early if PT_TRACED is not set, it sets ptrace_message,
->>>> and returns the result of fatal_signal_pending.
->>>>
->>>> Setting ptrace_message to a passed in value of 0 is effectively not
->>>> setting ptrace_message, making that additional work a noop.
->>>>
->>>> Returning the result of fatal_signal_pending and letting the caller
->>>> ignore the result becomes a noop in this change.
->>>>
->>>> When a process is ptraced, the flag PT_PTRACED is always set in
->>>> current->ptrace.  Testing for PT_PTRACED in ptrace_report_syscall is
->>>> just an optimization to fail early if the process is not ptraced.
->>>> Later on in ptrace_notify, ptrace_stop will test current->ptrace under
->>>> tasklist_lock and skip performing any work if the task is not ptraced.
->>>>
->>>> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
->>>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->>>
->>> As this depends on the removal of a parameter from
->>> ptrace_report_syscall() earlier in this series:
->>> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Excerpts from Linus Torvalds's message of January 11, 2022 3:19 am:
+> On Sun, Jan 9, 2022 at 9:18 PM Nicholas Piggin <npiggin@gmail.com> wrote:
 >>
->> FWIW, I would suggest taking it a bit further: make syscall_trace_enter()
->> and syscall_trace_leave() in m68k ptrace.c unconditional, replace the
->> calls of syscall_trace() in entry.S with syscall_trace_enter() and
->> syscall_trace_leave() resp. and remove syscall_trace().
->>
->> Geert, do you see any problems with that?  The only difference is that
->> current->ptrace_message would be set to 1 for ptrace stop on entry and
->> 2 - on leave.  Currently m68k just has it 0 all along.
->>
->> It is user-visible (the whole point is to let the tracer see which
->> stop it is - entry or exit one), so somebody using PTRACE_GETEVENTMSG
->> on syscall stops would start seeing 1 or 2 instead of "0 all along".
->> That's how it works on all other architectures (including m68k-nommu),
->> and I doubt that anything in userland will get broken.
->>
->> Behaviour of PTRACE_GETEVENTMSG for other stops (fork, etc.) remains
->> as-is, of course.
->
-> In fact Michael did so in "[PATCH v7 1/2] m68k/kernel - wire up
-> syscall_trace_enter/leave for m68k"[1], but that's still stuck...
->
-> [1] https://lore.kernel.org/r/1624924520-17567-2-git-send-email-schmitzmic@gmail.com/
+>> This is the patch that goes on top of the series I posted. It's not
+>> very clean at the moment it was just a proof of concept.
+>=20
+> Yeah, this looks like what x86 basically already effectively does.
+>=20
+> x86 obviously doesn't have that TLBIE option, and already has that
+> "exit lazy mode" logic (although it does so differently, using
+> switch_mm_irqs_off(), and guards it with the 'info->freed_tables'
+> check).
+>=20
+> But there are so many different possible ways to flush TLB's (the
+> whole "paravirt vs native") that it would still require some
+> double-checking that there isn't some case that does it differently..
 
-That patch (for reasons I never found out) did interact badly with 
-Christoph Hellwig's 'remove set_fs' patches (and Al's signal fixes which 
-Christoph's patches are based upon). Caused format errors under memory 
-stress tests quite reliably, on my 030 hardware.
+Oh yeah x86 needs a little porting to be able to use this for sure,
+but there's no reason it couldn't do it.
 
-Probably needs a fresh look - the signal return path got changed by Al's 
-patches IIRC, and I might have relied on offsets to data on the stack 
-that are no longer correct with these patches. Or there's a race between 
-the syscall trap and signal handling when returning from interrupt 
-context ...
-
-Still school hols over here so I won't have much peace and quiet until 
-February.
-
-Cheers,
-
-	Michael
-
-
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
->
+Thanks,
+Nick
