@@ -2,136 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E4F48BBC0
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 01:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8764448BBFB
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 01:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbiALAUk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jan 2022 19:20:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S1343968AbiALAmu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jan 2022 19:42:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiALAUj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jan 2022 19:20:39 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6DEC06173F;
-        Tue, 11 Jan 2022 16:20:39 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id l15so1426720pls.7;
-        Tue, 11 Jan 2022 16:20:39 -0800 (PST)
+        with ESMTP id S1343866AbiALAmu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jan 2022 19:42:50 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017FFC06173F
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jan 2022 16:42:50 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id x15so1568047plg.1
+        for <linux-arch@vger.kernel.org>; Tue, 11 Jan 2022 16:42:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=OLIwB5BHLC3yAD2ZzXqCsAZKNHH6hfK1FSSG8NbarnE=;
-        b=VxpKJF/YSyWacV7Rg5PK/7SjOxS0/V85OJKrODkd1WxXxjGZJk0xznqcbmTVccQFka
-         v9GgsYzJRZ9Ma146A+oCV7VgOhvu3TaJWQGdR+Q5CVZQg4u5ioDXUmHNjhnI0vnUJaVw
-         LnOncS7ILpiX45fg3coj8QxdLh3CterH8ejY5besGQC4dpn6cAGTKmjfn+XO5cB7nii6
-         OD1+trOyy2Z+85tgc5EC1fZjKmWWHxE/syuRJmHoGCAJpOuepDs13D7rY+kfsmKLVE6+
-         WgKeI/21jJsSTXWVoTjs67NASWspnbKkXTBgdp+VZuORZxvx5cQLKn8oyoTP5JI731VN
-         wmzw==
+        h=date:from:subject:to:cc:references:in-reply-to:mime-version
+         :message-id:content-transfer-encoding;
+        bh=nPA/d9GpVAzZlRMdpQ0UK1uHKNH4tM81MZUNkRzDgiQ=;
+        b=UESrMGVEIjHiAAuGVWaBatN7/caiK0qTuvYSfayFaTpOQj1aGJT1tk6mlU3bMSTEd+
+         KJ7FUFf/Wt5H+Cl9uZwTZPbYbVhst8fco0ylvCpkprofj3Yjyq7/3/FhEPhMi81OMtOl
+         vhEERYI0q2qz4QFxiNr72YrBfUloXrXDX14s8P3c2v9SzxaPs1GFNXdcJCWFwQNblgqU
+         KNJ17NGZsGV6Y4WGamllapmKiWnMRmCOOGGfaZD5LvTeCAr+YLZ1xJTHBXtnaSJ9nilj
+         /GZkfhTcPoajKlf12nk7ySnPcZX5wuNsMj+ZSGNPKyMjM5bn7x3agxN0SOR/zXateqJL
+         8elQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=OLIwB5BHLC3yAD2ZzXqCsAZKNHH6hfK1FSSG8NbarnE=;
-        b=TWrjX5Fu8ut6bTeoBoRt/Ya5rEQWALnT+OALdLjr5ZT6fDbrNDu0QSoEoQp1Wt1gYM
-         RA80qCV0DBAGwSfcse/vshPBRyv/rX9Y76N3WPnDyVu0gPDZtwlL0cSmClwvJn7uL25y
-         7K3KKVqE8pmPc0Qhf9C9NkSZal43CTecsRFEYQV7E+GRqrD0zndeFnvLeJp4jNTxzIYK
-         AN4C+2Nr9X4xp3dVaFng+DIMZUIO5YMRPH13+67ItTOQUI6EZsHTFZwpV1gqWRiHbj6k
-         MWfyyf3QB75zcbVk45WBucSPves3zz3yBQWN6oloJCSMnhhj8hxBIg+MMI5xyLge/x2i
-         yd0w==
-X-Gm-Message-State: AOAM530zkpwWWw2wVensI5UEM+A98PSjLXZRD4/AlRu8DU20dfkjLQIy
-        qwPclEM/jcjYG1FkwPfU8eo=
-X-Google-Smtp-Source: ABdhPJwWIHZ5gvsxZEoBrIRUqAVZ7nbupSccTZkUnmCtOdQFIb0LoZWqT+fwN6FxcnxNZJSIRv2ofw==
-X-Received: by 2002:a17:90b:3a89:: with SMTP id om9mr5906345pjb.120.1641946839187;
-        Tue, 11 Jan 2022 16:20:39 -0800 (PST)
-Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
-        by smtp.gmail.com with ESMTPSA id p37sm12805225pfh.97.2022.01.11.16.20.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jan 2022 16:20:38 -0800 (PST)
-Subject: Re: [PATCH 08/17] ptrace/m68k: Stop open coding ptrace_report_syscall
-To:     Finn Thain <fthain@linux-m68k.org>
-References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <20220103213312.9144-8-ebiederm@xmission.com>
- <CAMuHMdWsNBjOJh0QEx9sppA9x3WoL8H2icqukNqECFhOPremjw@mail.gmail.com>
- <YdxcszwEslyQJSuF@zeniv-ca.linux.org.uk>
- <CAMuHMdX9nhUQe_jeQCUtXeQgcQ5MBiHpPiRexh86EssoHNtJ3Q@mail.gmail.com>
- <acf7b627-2dec-c76c-2aa0-6b4c6addd793@gmail.com>
- <d660267-ce4f-e598-9b40-5cdbb4566c7@linux-m68k.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <6060f799-d0c5-e4c2-a81c-2bd872ce3d5a@gmail.com>
-Date:   Wed, 12 Jan 2022 13:20:31 +1300
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
+         :mime-version:message-id:content-transfer-encoding;
+        bh=nPA/d9GpVAzZlRMdpQ0UK1uHKNH4tM81MZUNkRzDgiQ=;
+        b=HWysfXXs7bVvWNZuI0KBVfj6HcRUHqZrwR+wqgyF30AMl0DZq0nqrVHpI6tC3zFekb
+         ohLedp6M+kKCW5Q2EYSwtQFPmnI8UM+B509X9qgWeknAdWlZ5DsdoVDuzSU71roJt/GR
+         pdiMcF6k2HVwiZfd8VtpoYGI0R+gQ+Ar1CQKNsrrSAOVJn6AdX3aRM9wWae4ru41B63Y
+         8u+cTYxgjbwfbT51A5JkJbgAtwAAIUn9Wr0QH8guQ8UPpHtNA31Ch6GAC63yHLHCJAhc
+         I3USxfSBVHPUH5AsXwOaQST/ig27Eg6GBlVtBFB8xiS0YqL5X/5UOG0daAu0WCyZKg4n
+         73GQ==
+X-Gm-Message-State: AOAM5306WPB71io0y4bljOpD+Tx6MOgTbPjQkAbmBUv5KyQT5s7F2tgL
+        kTW73VfkFxA/0rFCwjI2Aqo=
+X-Google-Smtp-Source: ABdhPJxQqkIW1AimBLkPfmP6lPZ1FBO91GZeJ8nhYStZe8weK5PPHBxLDYb6JWLtsuKp9CU5jB8IVw==
+X-Received: by 2002:a63:ae45:: with SMTP id e5mr6295310pgp.476.1641948169473;
+        Tue, 11 Jan 2022 16:42:49 -0800 (PST)
+Received: from localhost (124-171-74-95.tpgi.com.au. [124.171.74.95])
+        by smtp.gmail.com with ESMTPSA id z31sm461361pgl.10.2022.01.11.16.42.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jan 2022 16:42:49 -0800 (PST)
+Date:   Wed, 12 Jan 2022 10:42:43 +1000
+From:   Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy
+ mms
+To:     Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rik van Riel <riel@surriel.com>,
+        Will Deacon <will@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <cover.1641659630.git.luto@kernel.org>
+        <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
+        <CAHk-=wj4LZaFB5HjZmzf7xLFSCcQri-WWqOEJHwQg0QmPRSdQA@mail.gmail.com>
+        <3586aa63-2dd2-4569-b9b9-f51080962ff2@www.fastmail.com>
+        <CAHk-=wi2MtYYTs08RKHtj9Vtm0dri-saWwYh0tj=QUUUDSJFRQ@mail.gmail.com>
+        <430e3db1-693f-4d46-bebf-0a953fe6c2fc@www.fastmail.com>
+        <CAHk-=wjkbFFvgnUqgO8omHgTJx0GDwhxP9Cw0g6E03zOVbC7HQ@mail.gmail.com>
+        <484a7f37-ceed-44f6-8629-0e67a0860dc8@www.fastmail.com>
+        <CAHk-=whJYoKgAAtb6pYQVSPnyLQsnS6+rU=0jBUqrZU76LyDqg@mail.gmail.com>
+        <CAHk-=wgnTWk2zeOO1YQ_8S-xPf4Pr0vXBs7DnhOPdKQFHXOnxw@mail.gmail.com>
+        <1641790309.2vqc26hwm3.astroid@bobo.none>
+        <0d905aef-f53c-4102-931f-a22edd084fae@www.fastmail.com>
+        <1641867901.xve7qy78q6.astroid@bobo.none>
+        <c35e696f-7463-49f6-ab89-793ba2dba6bf@www.fastmail.com>
+        <1641939251.s7ciy8cys4.astroid@bobo.none>
+In-Reply-To: <1641939251.s7ciy8cys4.astroid@bobo.none>
 MIME-Version: 1.0
-In-Reply-To: <d660267-ce4f-e598-9b40-5cdbb4566c7@linux-m68k.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <1641946506.hgz759d78c.astroid@bobo.none>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Finn,
+Excerpts from Nicholas Piggin's message of January 12, 2022 8:48 am:
+> Anyway I will try to take a look over and review bits I can before the
+> 5.18 merge window. For 5.17 my series has been ready to go for a year or
+> so and very small so let's merge that first since Linus wants to try go
+> with that approach rather than the refcount one.
 
-Am 12.01.2022 um 11:42 schrieb Finn Thain:
-> On Tue, 11 Jan 2022, Michael Schmitz wrote:
->>> In fact Michael did so in "[PATCH v7 1/2] m68k/kernel - wire up
->>> syscall_trace_enter/leave for m68k"[1], but that's still stuck...
->>>
->>> [1]
->>> https://lore.kernel.org/r/1624924520-17567-2-git-send-email-schmitzmic@gmail.com/
->>
->> That patch (for reasons I never found out) did interact badly with
->> Christoph Hellwig's 'remove set_fs' patches (and Al's signal fixes which
->> Christoph's patches are based upon). Caused format errors under memory
->> stress tests quite reliably, on my 030 hardware.
->>
->
-> Those patches have since been merged, BTW.
+5.19 and 5.18 respectively.
 
-Yes, that's why I advised caution with mine.
-
->
->> Probably needs a fresh look - the signal return path got changed by Al's
->> patches IIRC, and I might have relied on offsets to data on the stack
->> that are no longer correct with these patches. Or there's a race between
->> the syscall trap and signal handling when returning from interrupt
->> context ...
->>
->> Still school hols over here so I won't have much peace and quiet until
->> February.
->>
->
-> So the patch works okay with Aranym 68040 but not Motorola 68030? Since
-
-Correct - I seem to recall we also tested those on your 040 and there 
-was no regression there, but I may be misremembering that.
-
-> there is at least one known issue affecting both Motorola 68030 and Hatari
-> 68030, perhaps this patch is not the problem. In anycase, Al's suggestion
-
-I hadn't ever made that connection, but it might be another explanation, 
-yes.
-
-> to split the patch into two may help in that testing two smaller patches
-> might narrow down the root cause.
-
-That's certainly true.
-
-What's the other reason these patches are still stuck, Geert? Did we 
-ever settle the dispute about what return code ought to abort a syscall 
-(in the seccomp context)?
-
-Cheers,
-
-	Michael
-
-
+Thanks,
+Nick
