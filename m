@@ -2,119 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1187E48BF75
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 09:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE98C48BFDF
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 09:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349306AbiALIFm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jan 2022 03:05:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbiALIFl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 03:05:41 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55244C06173F;
-        Wed, 12 Jan 2022 00:05:41 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id b1-20020a17090a990100b001b14bd47532so3298599pjp.0;
-        Wed, 12 Jan 2022 00:05:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding;
-        bh=auwyob08IbwW94XZ4f2/DsmTnLD3tEUnrhYCGAW4mV0=;
-        b=E7CZjNp8ew/pIigi8/9fGrQIVAoLQrh14ruflwowcQicZ4GkxWA8SdA/yuUPMnlaJM
-         pXIe/8A62KQUNV7ITwg0TmIuUG6SBpjyQs4cmWgKVNZHcIGjtWG9G7I4slFXoLpGLLa0
-         1ueDK/pm6PgGWpLoNoPngyoxdih2T8odceBi6oXniuUoAbB5V2OApVtgiWI/T1WOVxhc
-         Tep/DfP9PlB8NC71xSYYizghYjBi+arCrSc84egFVvnTUMb95p+5Zy1YTI5Nm/Anm38o
-         MJ1/qBmyHdou3lQjUnV17Xrv6X9mDFPGJf7KfLwhvXo1S9glIsaasLQ1oc1Ek4UZ6HWH
-         CTLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
-        bh=auwyob08IbwW94XZ4f2/DsmTnLD3tEUnrhYCGAW4mV0=;
-        b=xn/OEoBFUuuzwMm2/f2TB3ZG1g/cNsE6ZnccBwBP0i4WoYu5xSFkY2UNqtFvA1hnyF
-         9m69pjc35t4iiBL5Ii/GYoN6RAAmEeFfNNJUf4ZE/BKDN76MjBfErELRFZbfIBMvjyk7
-         cG6rBUc/mos6pszbn+Ae6f2UL73l1RUyZiYGOO64EpB2zy2i7UjpG+ujUFl0zc/1uIpU
-         G450lZZ9sHGKDaxYBHIsNjZxaKR3D/dWAGW4r9y2XVdkoX3vRrdHUn9fZ9Lxr/XD375e
-         gxBoznPMa90mMHC53JSkPPXw29xpRIA2FbRBpxoDKCop2/QQHrp3yRzO450qJcm7CBl0
-         G+tg==
-X-Gm-Message-State: AOAM5320a8nbsLw81LxU/KaVB+un8MZuQmGv2xMavMaqllL67/xpfwEm
-        YHTMPaBnq084tQXcbMWwluFgZBa6lczdCA==
-X-Google-Smtp-Source: ABdhPJzD7+K8uKCTMJoKLJqSdgcxNQz56yyK1twt2mzjiP2zQ/JTpowXz/ezrXCHOxcVLhActIDfuQ==
-X-Received: by 2002:a17:902:dac5:b0:14a:5f50:ed0f with SMTP id q5-20020a170902dac500b0014a5f50ed0fmr4286228plx.58.1641974740890;
-        Wed, 12 Jan 2022 00:05:40 -0800 (PST)
-Received: from [10.1.1.24] (222-155-5-102-adsl.sparkbb.co.nz. [222.155.5.102])
-        by smtp.gmail.com with ESMTPSA id x2sm1666008pgo.2.2022.01.12.00.05.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 12 Jan 2022 00:05:40 -0800 (PST)
-Subject: Re: [PATCH 08/17] ptrace/m68k: Stop open coding ptrace_report_syscall
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-References: <87r19opkx1.fsf_-_@email.froward.int.ebiederm.org>
- <20220103213312.9144-8-ebiederm@xmission.com>
- <CAMuHMdWsNBjOJh0QEx9sppA9x3WoL8H2icqukNqECFhOPremjw@mail.gmail.com>
- <YdxcszwEslyQJSuF@zeniv-ca.linux.org.uk>
- <CAMuHMdX9nhUQe_jeQCUtXeQgcQ5MBiHpPiRexh86EssoHNtJ3Q@mail.gmail.com>
- <acf7b627-2dec-c76c-2aa0-6b4c6addd793@gmail.com>
- <d660267-ce4f-e598-9b40-5cdbb4566c7@linux-m68k.org>
- <6060f799-d0c5-e4c2-a81c-2bd872ce3d5a@gmail.com>
- <CAMuHMdXJLfOKk-+gMbzVvG50vn8RBVsCdJAaysYWph01Ef-WrA@mail.gmail.com>
-Cc:     Finn Thain <fthain@linux-m68k.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <98e43c68-0a4b-004a-bb1b-015fc80a1724@gmail.com>
-Date:   Wed, 12 Jan 2022 21:05:32 +1300
-User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
- Icedove/45.4.0
+        id S1351616AbiALI2q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jan 2022 03:28:46 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:57099 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351621AbiALI2q (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 03:28:46 -0500
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MOAmt-1mjhPp0ATh-00OTvi; Wed, 12 Jan 2022 09:28:44 +0100
+Received: by mail-wr1-f49.google.com with SMTP id e9so2773286wra.2;
+        Wed, 12 Jan 2022 00:28:43 -0800 (PST)
+X-Gm-Message-State: AOAM532WPRCdfBOA6lx0jSM2auWD4YvIb6sNEYEjCRnPciRNY2RlRucS
+        LGN61U51nHvP8VdAeEsVM9jAVdu8r3Q4e0vOF4Q=
+X-Google-Smtp-Source: ABdhPJzCQAXjKL7v7gwqeNOizFH7EmO4xK5MJG/Z0khXPuJErSXk+hZMQMifsbbqaAU9IP9YduLhizzW87q9+u/zsmI=
+X-Received: by 2002:a05:6000:16c7:: with SMTP id h7mr6863134wrf.317.1641976123587;
+ Wed, 12 Jan 2022 00:28:43 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXJLfOKk-+gMbzVvG50vn8RBVsCdJAaysYWph01Ef-WrA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220111083515.502308-1-hch@lst.de> <20220111083515.502308-5-hch@lst.de>
+ <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com> <20220112075609.GA4854@lst.de>
+In-Reply-To: <20220112075609.GA4854@lst.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 12 Jan 2022 09:28:26 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1ONn=FiPU3669MjBMntS-1K5bgX4pHforUsYJ7yhwZ-g@mail.gmail.com>
+Message-ID: <CAK8P3a1ONn=FiPU3669MjBMntS-1K5bgX4pHforUsYJ7yhwZ-g@mail.gmail.com>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:ojcfELcF0YhMWzD8LtY6EPxZUyJuORY5IzRKjV/HhlgohnKtGQC
+ JYo7XAz+MKsQSQ3TLKX8hri/6/1LRTr9TE+jgWvumLMvIVrSagHY8afKFXVyaM+gwTtA5L7
+ K2hR7zo5U76QjJrILF4+3yVBZkjyGp/9ilUvCcE8mrEytVC6oCeBL57t7sMPxGm19ojw2lq
+ WvHgi92ARXqenTHycu6mg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4WpxcbWvK9k=:cmU54THCfxUt1DIjRLEBmK
+ ntIBIIIf40mn7QF4658v9FvbNc5y6Z83xf7+TgrpNnglg2cCc1vlLzEgYO8oJ5YBmdgs1WD/h
+ uErrUSxPnLVluANaztVmx065Zxse75GKIOfdI8IJC5kq6yJ/UIoukxJOQnF2urHAwLDlFcqPA
+ SraFMF3IvQWcBZB2cYRpi2khAb932HFH64eG9GaosPaND0b1VdfDZEE2cdxSk56Uj+emIqm4a
+ RkJryuUJlUeDq8yAPK0t2cHOeYUm8pVX7semLTpTvl7wBQBdp+tnFNajO8LRsPrn5rKP3UEor
+ m4nbd8lBrkgRYzH9Vv/N9rJVtrGs//0PVjEpXq36oLOBO5UDFt4t37Vibv330SB2AWAu/Kc1d
+ P7LfP6Wi10FW05lilDquVoXxJJJFe+VDR8Il6wuFUraA1oozdE6Gbq3xvaYW6pTvUVAq/gAgv
+ iroaVGYYt/YBidzZOxzmZQpLAxmpJgGG/1JynWbsUP6oe5bZ+CphzUUkpd1V9Z/mjwyFgR7Zf
+ Skl4z6LCwhaJuksvSHFP9ZrDdP5XtjtNW1Actx+/iBwo2VvGh7eME/f8vAVPqQxfw0DDe/pgm
+ kMluiZXKMFxte8IAVB/ApTl8gupGr0M90OQjEFpiTiydctm3uCfPEctDytkg9fkBhe9Z02RLC
+ MDfEwEKWqki/Y7mEwlu2J7fsIRfhp6RfxhIzBfmEYg5f6tFqqfpsJIc1oN8w8twkpcm8=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Geert,
-
-Am 12.01.2022 um 20:55 schrieb Geert Uytterhoeven:
-> Hi Michael,
+On Wed, Jan 12, 2022 at 8:56 AM Christoph Hellwig <hch@lst.de> wrote:
 >
->> What's the other reason these patches are still stuck, Geert? Did we
->> ever settle the dispute about what return code ought to abort a syscall
->> (in the seccomp context)?
+> On Tue, Jan 11, 2022 at 04:33:30PM +0100, Arnd Bergmann wrote:
+> > This is a very subtle change to the exported UAPI header contents:
+> > On 64-bit architectures, the three unusable numbers are now always
+> > shown, rather than depending on a user-controlled symbol.
 >
-> IIRC, some (self)tests were still failing?
+> Well, the change is bigger and less subtle.  Before this change the
+> constants were never visible to userspace at all (except on mips),
+> because the #ifdef CONFIG_64BIT it never set for userspace builds.
 
-Too true - but I don't think my way of building the testsuite was 
-entirely according to the book. And I'm not sure I ran the testsuite 
-with more than one of the return code options. In all honesty, I had 
-been waiting for Adrian Glaubitz to test the patches with his seccomp 
-library port instead of relying on the testsuite.
+I suppose you mean /always/ visible here, with that ifndef.
 
-Still, reason enough to split off the removal of syscall_trace() from 
-the seccomp stuff if it helps with Eric's patch series.
-
-Cheers,
-
-	Michael
-
-
+> > This is probably what we want here for compatibility reasons, but I think
+> > it should be explained in the changelog text, and I'd like Jeff or Bruce
+> > to comment on it as well: the alternative here would be to make the
+> > uapi definition depend on __BITS_PER_LONG==32, which is
+> > technically the right thing to do but more a of a change.
 >
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
->
+> I can change this to #if __BITS_PER_LONG==32 || defined(__KERNEL__),
+> but it will still be change in what userspace sees.
+
+Exactly, that is the tradeoff, which is why I'd like the flock maintainers
+to say which way they prefer. We can either do it more correctly (hiding
+the constants from user space when they are not usable), or with less
+change (removing the incorrect #ifdef). Either way sounds reasonable
+to me, I mainly care that this is explained in the changelog and that the
+maintainers are aware of the two options.
+
+        Arnd
