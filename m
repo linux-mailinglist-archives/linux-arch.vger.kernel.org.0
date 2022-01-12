@@ -2,211 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A89548C917
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 18:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7598248C962
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 18:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355482AbiALRI3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jan 2022 12:08:29 -0500
-Received: from mail.efficios.com ([167.114.26.124]:49754 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355456AbiALRI2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 12:08:28 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 3E521257EA3;
-        Wed, 12 Jan 2022 12:08:28 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id yacp3HuskVJ8; Wed, 12 Jan 2022 12:08:27 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id BCE19257EA1;
-        Wed, 12 Jan 2022 12:08:27 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com BCE19257EA1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1642007307;
-        bh=q/NxvMK0ISAZ5ecyEbgSchfPS0aCq4m/pPedhguSeEk=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=XIuh702OCHY2iCYw878e2bA3sXpyq3u/Hkg/VXBo1oqcbNjQkQJnpJAaAHSkuShN6
-         9Q/wh6vuGCUusnqbyGbvZhS7WO3ZVDBYpeCAaAI2bB8LYCC7To4g38TmDvi0lw3x38
-         y5lIok+SLkZ+H+EIZhWVUiujJ4DfjDOHWDvzdhYtqHpm/KBIyxP1cWXaph9iwncPL0
-         aLoH9tDBIzU/XAtIYzi4jW2TB/3O62cgORmERxZJrAkAkZOtVodiiVUNMxI5OyzVrX
-         XiG867chd722qCb0zpv1RKN8/LY41xjLTMoW0jjBJwTYQCPhzcJa0dS2pcaL8ZgaiA
-         FfAPGlD09S31w==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id FveHWTdu5DXT; Wed, 12 Jan 2022 12:08:27 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id A6569257D26;
-        Wed, 12 Jan 2022 12:08:27 -0500 (EST)
-Date:   Wed, 12 Jan 2022 12:08:27 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>, x86 <x86@kernel.org>,
-        riel <riel@surriel.com>, Dave Hansen <dave.hansen@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nadav Amit <nadav.amit@gmail.com>
-Message-ID: <883836409.24887.1642007307554.JavaMail.zimbra@efficios.com>
-In-Reply-To: <762743530.24791.1642005040611.JavaMail.zimbra@efficios.com>
-References: <cover.1641659630.git.luto@kernel.org> <21273aa5349827de22507ef445fbde1a12ac2f8f.1641659630.git.luto@kernel.org> <762743530.24791.1642005040611.JavaMail.zimbra@efficios.com>
-Subject: Re: [PATCH 09/23] membarrier: Fix incorrect barrier positions
- during exec and kthread_use_mm()
+        id S1355597AbiALRaD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jan 2022 12:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355608AbiALR3S (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 12:29:18 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF9AC0611FF
+        for <linux-arch@vger.kernel.org>; Wed, 12 Jan 2022 09:29:07 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id t28so5558916wrb.4
+        for <linux-arch@vger.kernel.org>; Wed, 12 Jan 2022 09:29:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=N9bf45Vsnql2DAZRfvEJqoNSxZBMQPHwxVGSKSDQy60=;
+        b=LZMJCz6XYFs2xNd0usdav4SY44jSwMDhV+wZi48FWWDR8PNdi35ImXXLXkzfPoKdjR
+         yTMTdllA5DXz4axM1bpqdZOpeTR3QqYyWbbHhGW06sDJaQKM0PSOSVuzAW5IdhWO1SB7
+         4Xnv7ZYzgw2M4cTa/RLrfgZeeUcX7XGifNDk/naRH2OGYgKszQPgc3Q54giuavbhQ3nW
+         s03lH2lPYuBrjcfDg8ac3vtU7VUJQbnCGh61PYxAqDwM8pF7VIn6QBs3DGQaTZ09L9WZ
+         Ptnq5hQ0f869WYnN5iFQWx2+rEk2pQHdsGR6cWYpfPlImyRJ/o+NJDsulJEUrP7/Zl0W
+         m3xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=N9bf45Vsnql2DAZRfvEJqoNSxZBMQPHwxVGSKSDQy60=;
+        b=RBRuQRa2ndPZtQ4cNw2MU3hyrFAPbmFNZa+odfMicnCOJRK7rlTrUhfU03nBciRgCU
+         nRUZEIHT6BZHnvVz/LfHrdi+wAFr/6/LZgnJO4BbZC+mNsId+zqiuXnzRifBjL78kjaU
+         ZOq8DMGq9+mY1DOI1gcudukt1Fa1dIxRTQgMh6+lheV4Zyy+AzA5KvRNuFFXXsQXzgyg
+         K36zwXiwvUhN2blN/1VDKMQHePdRVMViHg1uSSwWF3Wx0vrYAQg41ja1GVoH6lasKJfJ
+         hd7aJr4r2PJu59r+urNCGXZwcseAjFc3tZ7LfmvW+lkh0JS/BqYDNVpDPufvvlfC3W4k
+         m+vw==
+X-Gm-Message-State: AOAM530niqy6wb5gb9atssdqqrBJ067Wu0chT9bI2WWAlHQH4gBe69qv
+        s19cMUaJm4vyLGWk10sIitXjhA==
+X-Google-Smtp-Source: ABdhPJyQ/XgEL7OqgBoSz4nyTl7HYSjbzplU/zIan0zUP3gSgEajSCNS8/OXImpkmE2kocFJlgBxkw==
+X-Received: by 2002:a5d:638c:: with SMTP id p12mr714359wru.80.1642008546166;
+        Wed, 12 Jan 2022 09:29:06 -0800 (PST)
+Received: from wychelm (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id h2sm340446wmb.12.2022.01.12.09.29.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jan 2022 09:29:05 -0800 (PST)
+Date:   Wed, 12 Jan 2022 17:29:03 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
+Message-ID: <Yd8P37V/N9EkwmYq@wychelm>
+References: <20210726141141.2839385-1-arnd@kernel.org>
+ <20210726141141.2839385-9-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4180 (zclient/8.8.15_GA_4180)
-Thread-Topic: membarrier: Fix incorrect barrier positions during exec and kthread_use_mm()
-Thread-Index: PnXhJUPulweB+SlKA6xf2NbA2X24KT4YIoP3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210726141141.2839385-9-arnd@kernel.org>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Mon, Jul 26, 2021 at 04:11:39PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> These mimic the behavior of get_user and put_user, except
+> for domain switching, address limit checking and handling
+> of mismatched sizes, none of which are relevant here.
+> 
+> To work with pre-Armv6 kernels, this has to avoid TUSER()
+> inside of the new macros, the new approach passes the "t"
+> string along with the opcode, which is a bit uglier but
+> avoids duplicating more code.
+> 
+> As there is no __get_user_asm_dword(), I work around it
+> by copying 32 bit at a time, which is possible because
+> the output size is known.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
------ Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-> ----- On Jan 8, 2022, at 11:43 AM, Andy Lutomirski luto@kernel.org wrote:
-> 
-> > membarrier() requires a barrier before changes to rq->curr->mm, not just
-> > before writes to rq->membarrier_state.  Move the barrier in exec_mmap() to
-> > the right place.
-> 
-> I don't see anything that was technically wrong with membarrier_exec_mmap
-> before this patchset. membarrier_exec-mmap issued a smp_mb just after
-> the task_lock(), and proceeded to clear the mm->membarrier_state and
-> runqueue membarrier state. And then the tsk->mm is set *after* the smp_mb().
-> 
-> So from this commit message we could be led to think there was something
-> wrong before, but I do not think it's true. This first part of the proposed
-> change is merely a performance optimization that removes a useless memory
-> barrier on architectures where smp_mb__after_spinlock() is a no-op, and
-> removes a useless store to mm->membarrier_state because it is already
-> zero-initialized. This is all very nice, but does not belong in a "Fix" patch.
-> 
-> > Add the barrier in kthread_use_mm() -- it was entirely
-> > missing before.
-> 
-> This is correct. This second part of the patch is indeed a relevant fix.
+I've just been bisecting some regressions running the kgdbts tests on
+arm and this patch came up.
 
-However this adds a useless barrier for CONFIG_MEMBARRIER=n.
+It looks like once this patch applies then copy_from_kernel_nofault()
+starts faulting when it called from kgdb. I've put an example stack
+trace at the bottom of this mail and the most simplified reproduction
+I currently have is:
+~~~
+make multi_v7_defconfig
+../scripts/config --enable KGDB --enable KGDB_TESTS
+make olddefconfig
+make -j `nproc`
+qemu-system-arm -M virt -m 1G -nographic \
+                -kernel arch/arm/boot/zImage -initrd rootfs.cpio.gz
+# Boot and login
+echo V1 > /sys/module/kgdbts/parameters/kgdbts
+~~~
 
-Thanks,
-
-Mathieu
+I suspect this will reproduce on any arm system with CONFIG_KGDB and
+CONFIG_KGDB_TESTS enabled simply by running that last echo command...
+but I have only tested on QEMU for now.
 
 
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> > 
-> > This patch makes exec_mmap() and kthread_use_mm() use the same membarrier
-> > hooks, which results in some code deletion.
-> > 
-> > As an added bonus, this will eliminate a redundant barrier in execve() on
-> > arches for which spinlock acquisition is a barrier.
-> > 
-> > Signed-off-by: Andy Lutomirski <luto@kernel.org>
-> > ---
-> > fs/exec.c                 |  6 +++++-
-> > include/linux/sched/mm.h  |  2 --
-> > kernel/kthread.c          |  5 +++++
-> > kernel/sched/membarrier.c | 15 ---------------
-> > 4 files changed, 10 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/fs/exec.c b/fs/exec.c
-> > index 38b05e01c5bd..325dab98bc51 100644
-> > --- a/fs/exec.c
-> > +++ b/fs/exec.c
-> > @@ -1001,12 +1001,16 @@ static int exec_mmap(struct mm_struct *mm)
-> > 	}
-> > 
-> > 	task_lock(tsk);
-> > -	membarrier_exec_mmap(mm);
-> > +	/*
-> > +	 * membarrier() requires a full barrier before switching mm.
-> > +	 */
-> > +	smp_mb__after_spinlock();
-> > 
-> > 	local_irq_disable();
-> > 	active_mm = tsk->active_mm;
-> > 	tsk->active_mm = mm;
-> > 	WRITE_ONCE(tsk->mm, mm);  /* membarrier reads this without locks */
-> > +	membarrier_update_current_mm(mm);
-> > 	/*
-> > 	 * This prevents preemption while active_mm is being loaded and
-> > 	 * it and mm are being updated, which could cause problems for
-> > diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
-> > index e107f292fc42..f1d2beac464c 100644
-> > --- a/include/linux/sched/mm.h
-> > +++ b/include/linux/sched/mm.h
-> > @@ -344,8 +344,6 @@ enum {
-> > #include <asm/membarrier.h>
-> > #endif
-> > 
-> > -extern void membarrier_exec_mmap(struct mm_struct *mm);
-> > -
-> > extern void membarrier_update_current_mm(struct mm_struct *next_mm);
-> > 
-> > /*
-> > diff --git a/kernel/kthread.c b/kernel/kthread.c
-> > index 3b18329f885c..18b0a2e0e3b2 100644
-> > --- a/kernel/kthread.c
-> > +++ b/kernel/kthread.c
-> > @@ -1351,6 +1351,11 @@ void kthread_use_mm(struct mm_struct *mm)
-> > 	WARN_ON_ONCE(tsk->mm);
-> > 
-> > 	task_lock(tsk);
-> > +	/*
-> > +	 * membarrier() requires a full barrier before switching mm.
-> > +	 */
-> > +	smp_mb__after_spinlock();
-> > +
-> > 	/* Hold off tlb flush IPIs while switching mm's */
-> > 	local_irq_disable();
-> > 	active_mm = tsk->active_mm;
-> > diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
-> > index c38014c2ed66..44fafa6e1efd 100644
-> > --- a/kernel/sched/membarrier.c
-> > +++ b/kernel/sched/membarrier.c
-> > @@ -277,21 +277,6 @@ static void ipi_sync_rq_state(void *info)
-> > 	smp_mb();
-> > }
-> > 
-> > -void membarrier_exec_mmap(struct mm_struct *mm)
-> > -{
-> > -	/*
-> > -	 * Issue a memory barrier before clearing membarrier_state to
-> > -	 * guarantee that no memory access prior to exec is reordered after
-> > -	 * clearing this state.
-> > -	 */
-> > -	smp_mb();
-> > -	/*
-> > -	 * Keep the runqueue membarrier_state in sync with this mm
-> > -	 * membarrier_state.
-> > -	 */
-> > -	this_cpu_write(runqueues.membarrier_state, 0);
-> > -}
-> > -
-> > void membarrier_update_current_mm(struct mm_struct *next_mm)
-> > {
-> > 	struct rq *rq = this_rq();
-> > --
-> > 2.33.1
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
+Daniel.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+
+Stack trace:
+~~~
+# echo kgdbts=V1F1000 > /sys/module/kgdbts/parameters/kgdbts
+[   34.995507] KGDB: Registered I/O driver kgdbts
+[   35.038102] kgdbts:RUN plant and detach test
+
+Entering kdb (current=0xd4264380, pid 134) on processor 0 due to Keyboard Entry
+[0]kdb> [   35.056005] kgdbts:RUN sw breakpoint test
+[   35.062309] kgdbts:RUN bad memory access test
+[   35.063619] 8<--- cut here ---
+[   35.064022] Unhandled fault: page domain fault (0x01b) at 0x00000000
+[   35.064212] pgd = (ptrval)
+[   35.064459] [00000000] *pgd=942dc835, *pte=00000000, *ppte=00000000
+[   35.065071] Internal error: : 1b [#1] SMP ARM
+[   35.065381] KGDB: re-enter exception: ALL breakpoints killed
+[   35.065850] ---[ end trace 909d8c43057666be ]---
+[   35.066088] 8<--- cut here ---
+[   35.066189] Unhandled fault: page domain fault (0x01b) at 0x00000000
+[   35.066332] pgd = (ptrval)
+[   35.066406] [00000000] *pgd=942dc835, *pte=00000000, *ppte=00000000
+[   35.066597] Internal error: : 1b [#2] SMP ARM
+[   35.066906] CPU: 0 PID: 134 Comm: sh Tainted: G      D           5.14.0-rc1-00013-g2df4c9a741a0 #60
+[   35.067152] Hardware name: ARM-Versatile Express
+[   35.067432] [<c0311bdc>] (unwind_backtrace) from [<c030bdc0>] (show_stack+0x10/0x14)
+[   35.067880] [<c030bdc0>] (show_stack) from [<c114b9c8>] (dump_stack_lvl+0x58/0x70)
+[   35.068054] [<c114b9c8>] (dump_stack_lvl) from [<c0430cdc>] (kgdb_reenter_check+0x104/0x150)
+[   35.068213] [<c0430cdc>] (kgdb_reenter_check) from [<c0430dcc>] (kgdb_handle_exception+0xa4/0x114)
+[   35.068395] [<c0430dcc>] (kgdb_handle_exception) from [<c0311268>] (kgdb_notify+0x30/0x74)
+[   35.068563] [<c0311268>] (kgdb_notify) from [<c037422c>] (atomic_notifier_call_chain+0xac/0x194)
+[   35.068745] [<c037422c>] (atomic_notifier_call_chain) from [<c0374370>] (notify_die+0x5c/0xbc)
+[   35.068933] [<c0374370>] (notify_die) from [<c030bf04>] (die+0x140/0x544)
+[   35.069079] [<c030bf04>] (die) from [<c03164d4>] (do_DataAbort+0xb8/0xbc)
+[   35.069220] [<c03164d4>] (do_DataAbort) from [<c0300afc>] (__dabt_svc+0x5c/0xa0)
+[   35.069434] Exception stack(0xd4249c10 to 0xd4249c58)
+[   35.069616] 9c00:                                     ???????? ???????? ???????? ????????
+[   35.069776] 9c20: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
+[   35.069943] 9c40: ???????? ???????? ???????? ???????? ???????? ????????
+[   35.070107] [<c0300afc>] (__dabt_svc) from [<c049c8c4>] (copy_from_kernel_nofault+0x114/0x13c)
+[   35.070291] [<c049c8c4>] (copy_from_kernel_nofault) from [<c0431688>] (kgdb_mem2hex+0x1c/0x88)
+[   35.070463] [<c0431688>] (kgdb_mem2hex) from [<c04322b0>] (gdb_serial_stub+0x8c4/0x1088)
+[   35.070640] [<c04322b0>] (gdb_serial_stub) from [<c04302e8>] (kgdb_cpu_enter+0x4f4/0x988)
+[   35.070796] [<c04302e8>] (kgdb_cpu_enter) from [<c0430e08>] (kgdb_handle_exception+0xe0/0x114)
+[   35.070982] [<c0430e08>] (kgdb_handle_exception) from [<c0311210>] (kgdb_compiled_brk_fn+0x24/0x2c)
+[   35.071166] [<c0311210>] (kgdb_compiled_brk_fn) from [<c030c40c>] (do_undefinstr+0x104/0x230)
+[   35.071342] [<c030c40c>] (do_undefinstr) from [<c0300c6c>] (__und_svc_finish+0x0/0x54)
+[   35.071502] Exception stack(0xd4249dc8 to 0xd4249e10)
+[   35.071614] 9dc0:                   ???????? ???????? ???????? ???????? ???????? ????????
+[   35.071778] 9de0: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
+[   35.071944] 9e00: ???????? ???????? ???????? ????????
+[   35.072054] [<c0300c6c>] (__und_svc_finish) from [<c042fd20>] (kgdb_breakpoint+0x30/0x58)
+[   35.072211] [<c042fd20>] (kgdb_breakpoint) from [<c0b14b08>] (configure_kgdbts+0x228/0x68c)
+[   35.072395] [<c0b14b08>] (configure_kgdbts) from [<c036fdcc>] (param_attr_store+0x60/0xb8)
+[   35.072560] [<c036fdcc>] (param_attr_store) from [<c05bcf14>] (kernfs_fop_write_iter+0x110/0x1d4)
+[   35.072745] [<c05bcf14>] (kernfs_fop_write_iter) from [<c050f074>] (vfs_write+0x350/0x508)
+[   35.072920] [<c050f074>] (vfs_write) from [<c050f370>] (ksys_write+0x64/0xdc)
+[   35.073075] [<c050f370>] (ksys_write) from [<c03000c0>] (ret_fast_syscall+0x0/0x2c)
+[   35.073259] Exception stack(0xd4249fa8 to 0xd4249ff0)
+[   35.073372] 9fa0:                   ???????? ???????? ???????? ???????? ???????? ????????
+[   35.073527] 9fc0: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
+[   35.073679] 9fe0: ???????? ???????? ???????? ????????
+[   35.073960] Kernel panic - not syncing: Recursive entry to debugger
+[   36.286118] SMP: failed to stop secondary CPUs
+[   36.286568] ---[ end Kernel panic - not syncing: Recursive entry to debugger ]---
+~~~
