@@ -2,103 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8764448BBFB
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 01:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FE448BCEB
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 03:09:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343968AbiALAmu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 11 Jan 2022 19:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343866AbiALAmu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jan 2022 19:42:50 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017FFC06173F
-        for <linux-arch@vger.kernel.org>; Tue, 11 Jan 2022 16:42:50 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id x15so1568047plg.1
-        for <linux-arch@vger.kernel.org>; Tue, 11 Jan 2022 16:42:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=nPA/d9GpVAzZlRMdpQ0UK1uHKNH4tM81MZUNkRzDgiQ=;
-        b=UESrMGVEIjHiAAuGVWaBatN7/caiK0qTuvYSfayFaTpOQj1aGJT1tk6mlU3bMSTEd+
-         KJ7FUFf/Wt5H+Cl9uZwTZPbYbVhst8fco0ylvCpkprofj3Yjyq7/3/FhEPhMi81OMtOl
-         vhEERYI0q2qz4QFxiNr72YrBfUloXrXDX14s8P3c2v9SzxaPs1GFNXdcJCWFwQNblgqU
-         KNJ17NGZsGV6Y4WGamllapmKiWnMRmCOOGGfaZD5LvTeCAr+YLZ1xJTHBXtnaSJ9nilj
-         /GZkfhTcPoajKlf12nk7ySnPcZX5wuNsMj+ZSGNPKyMjM5bn7x3agxN0SOR/zXateqJL
-         8elQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=nPA/d9GpVAzZlRMdpQ0UK1uHKNH4tM81MZUNkRzDgiQ=;
-        b=HWysfXXs7bVvWNZuI0KBVfj6HcRUHqZrwR+wqgyF30AMl0DZq0nqrVHpI6tC3zFekb
-         ohLedp6M+kKCW5Q2EYSwtQFPmnI8UM+B509X9qgWeknAdWlZ5DsdoVDuzSU71roJt/GR
-         pdiMcF6k2HVwiZfd8VtpoYGI0R+gQ+Ar1CQKNsrrSAOVJn6AdX3aRM9wWae4ru41B63Y
-         8u+cTYxgjbwfbT51A5JkJbgAtwAAIUn9Wr0QH8guQ8UPpHtNA31Ch6GAC63yHLHCJAhc
-         I3USxfSBVHPUH5AsXwOaQST/ig27Eg6GBlVtBFB8xiS0YqL5X/5UOG0daAu0WCyZKg4n
-         73GQ==
-X-Gm-Message-State: AOAM5306WPB71io0y4bljOpD+Tx6MOgTbPjQkAbmBUv5KyQT5s7F2tgL
-        kTW73VfkFxA/0rFCwjI2Aqo=
-X-Google-Smtp-Source: ABdhPJxQqkIW1AimBLkPfmP6lPZ1FBO91GZeJ8nhYStZe8weK5PPHBxLDYb6JWLtsuKp9CU5jB8IVw==
-X-Received: by 2002:a63:ae45:: with SMTP id e5mr6295310pgp.476.1641948169473;
-        Tue, 11 Jan 2022 16:42:49 -0800 (PST)
-Received: from localhost (124-171-74-95.tpgi.com.au. [124.171.74.95])
-        by smtp.gmail.com with ESMTPSA id z31sm461361pgl.10.2022.01.11.16.42.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jan 2022 16:42:49 -0800 (PST)
-Date:   Wed, 12 Jan 2022 10:42:43 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH 16/23] sched: Use lightweight hazard pointers to grab lazy
- mms
-To:     Andy Lutomirski <luto@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rik van Riel <riel@surriel.com>,
-        Will Deacon <will@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-References: <cover.1641659630.git.luto@kernel.org>
-        <7c9c388c388df8e88bb5d14828053ac0cb11cf69.1641659630.git.luto@kernel.org>
-        <CAHk-=wj4LZaFB5HjZmzf7xLFSCcQri-WWqOEJHwQg0QmPRSdQA@mail.gmail.com>
-        <3586aa63-2dd2-4569-b9b9-f51080962ff2@www.fastmail.com>
-        <CAHk-=wi2MtYYTs08RKHtj9Vtm0dri-saWwYh0tj=QUUUDSJFRQ@mail.gmail.com>
-        <430e3db1-693f-4d46-bebf-0a953fe6c2fc@www.fastmail.com>
-        <CAHk-=wjkbFFvgnUqgO8omHgTJx0GDwhxP9Cw0g6E03zOVbC7HQ@mail.gmail.com>
-        <484a7f37-ceed-44f6-8629-0e67a0860dc8@www.fastmail.com>
-        <CAHk-=whJYoKgAAtb6pYQVSPnyLQsnS6+rU=0jBUqrZU76LyDqg@mail.gmail.com>
-        <CAHk-=wgnTWk2zeOO1YQ_8S-xPf4Pr0vXBs7DnhOPdKQFHXOnxw@mail.gmail.com>
-        <1641790309.2vqc26hwm3.astroid@bobo.none>
-        <0d905aef-f53c-4102-931f-a22edd084fae@www.fastmail.com>
-        <1641867901.xve7qy78q6.astroid@bobo.none>
-        <c35e696f-7463-49f6-ab89-793ba2dba6bf@www.fastmail.com>
-        <1641939251.s7ciy8cys4.astroid@bobo.none>
-In-Reply-To: <1641939251.s7ciy8cys4.astroid@bobo.none>
+        id S1348253AbiALCI7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 11 Jan 2022 21:08:59 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37244 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348241AbiALCI6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 11 Jan 2022 21:08:58 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E72CFB81DAC;
+        Wed, 12 Jan 2022 02:08:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4960C36AF7;
+        Wed, 12 Jan 2022 02:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1641953335;
+        bh=00jqOo/HIGe5aQsScbRyEcP5fhzEdEEb5a/Ce7t3cpo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Dr+fOp8wi/DQiF30YWSyDTO/X/gY2KuY68uhH1bbSr9L4LCWtzdsmA1/2FVgH6Yui
+         JAWtdZN3+qVuyTH8g7AWcIBoPboWqU5NEOBJY3Qi2lQYpTEjvY17r0McmIXxiQGXjy
+         vMb/2FSp+DWz/rMXSgh25TUrsAEIDTZ/nrgIfBaLqltrBBD10mPo/jp96cQ+uhKTVZ
+         t/CRg13JBexnPXx/8lXSOSAHOwES426B7kTOWti7Bnc9HE8lsIaWa7rd+tvu1aEfg1
+         xp9S5v0O07CBLJ8tI8dJHISW+bnA5ZRD+Ol48fLpo9kJtTe3dTBYie/PALeVEuaDAh
+         NJnD0tFre3L5A==
+Received: by mail-ua1-f53.google.com with SMTP id p37so2079833uae.8;
+        Tue, 11 Jan 2022 18:08:55 -0800 (PST)
+X-Gm-Message-State: AOAM533Opp9zIVvjJvrCfV1tuThm/QSh3Qw6TB1NDwGtqr4KjtW3Orua
+        FxNU4CMZS4MtUeRvMA53FtR5PXMJItklfSsdFzE=
+X-Google-Smtp-Source: ABdhPJwDjcWqNqYbbEwXXTZv6pYv1AFZouP6oGIFcDRCp67/dn6q+IWJLxLbMTSk+FCyEJgyv6a7C0pY5YW8GYdxT6U=
+X-Received: by 2002:a67:fd64:: with SMTP id h4mr3438011vsa.8.1641953334235;
+ Tue, 11 Jan 2022 18:08:54 -0800 (PST)
 MIME-Version: 1.0
-Message-Id: <1641946506.hgz759d78c.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220111083515.502308-1-hch@lst.de> <20220111083515.502308-5-hch@lst.de>
+ <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+In-Reply-To: <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Wed, 12 Jan 2022 10:08:42 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS81o1bsAGj=016F=Nw7MszhsYa95cw6JLThjwW50YRpw@mail.gmail.com>
+Message-ID: <CAJF2gTS81o1bsAGj=016F=Nw7MszhsYa95cw6JLThjwW50YRpw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Excerpts from Nicholas Piggin's message of January 12, 2022 8:48 am:
-> Anyway I will try to take a look over and review bits I can before the
-> 5.18 merge window. For 5.17 my series has been ready to go for a year or
-> so and very small so let's merge that first since Linus wants to try go
-> with that approach rather than the refcount one.
+On Tue, Jan 11, 2022 at 11:33 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Tue, Jan 11, 2022 at 9:35 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > The fcntl F_GETLK64/F_SETLK64/F_SETLKW64 are only implemented for the
+> > 32-bit syscall APIs, but we also need them for compat handling on 64-bit
+> > builds.  Redefining them is error prone (as shown by the example that
+> > parisc gets it wrong currently), so we should use the same defines for
+> > both case.  In theory we could try to hide them from userspace, but
+> > given that only MIPS actually gets that right, while the asm-generic
+> > version used by most architectures relies on a Kconfig symbol that can't
+> > be relied on to be set properly by userspace is a clear indicator to not
+> > bother.
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > ---
+>
+> > diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> > index 98f4ff165b776..43d7c44031be0 100644
+> > --- a/include/uapi/asm-generic/fcntl.h
+> > +++ b/include/uapi/asm-generic/fcntl.h
+> > @@ -116,13 +116,11 @@
+> >  #define F_GETSIG       11      /* for sockets. */
+> >  #endif
+> >
+> > -#ifndef CONFIG_64BIT
+> >  #ifndef F_GETLK64
+> >  #define F_GETLK64      12      /*  using 'struct flock64' */
+> >  #define F_SETLK64      13
+> >  #define F_SETLKW64     14
+> >  #endif
+> > -#endif
+> >
+> >  #ifndef F_SETOWN_EX
+> >  #define F_SETOWN_EX    15
+>
+> This is a very subtle change to the exported UAPI header contents:
+> On 64-bit architectures, the three unusable numbers are now always
+> shown, rather than depending on a user-controlled symbol.
+>
+> This is probably what we want here for compatibility reasons, but I think
+> it should be explained in the changelog text, and I'd like Jeff or Bruce
+> to comment on it as well: the alternative here would be to make the
+> uapi definition depend on __BITS_PER_LONG==32, which is
 
-5.19 and 5.18 respectively.
+__BITS_PER_LONG==32 || __KERNEL__  just for kernel use in compat.
 
-Thanks,
-Nick
+> technically the right thing to do but more a of a change.
+>
+>        Arnd
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
