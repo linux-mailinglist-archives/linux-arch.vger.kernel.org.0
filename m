@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E758048C73B
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 16:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360CB48C76A
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 16:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240342AbiALPaO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jan 2022 10:30:14 -0500
-Received: from mail.efficios.com ([167.114.26.124]:45310 "EHLO
+        id S1354715AbiALPko (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jan 2022 10:40:44 -0500
+Received: from mail.efficios.com ([167.114.26.124]:48672 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240181AbiALPaN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 10:30:13 -0500
+        with ESMTP id S1354732AbiALPkk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 10:40:40 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 22C2E256BDD;
-        Wed, 12 Jan 2022 10:30:13 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id 54D1A257123;
+        Wed, 12 Jan 2022 10:40:40 -0500 (EST)
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id FgnNHSu8dnr9; Wed, 12 Jan 2022 10:30:12 -0500 (EST)
+        with ESMTP id kXwR4HKYG3yH; Wed, 12 Jan 2022 10:40:39 -0500 (EST)
 Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 8F892256AEB;
-        Wed, 12 Jan 2022 10:30:12 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 8F892256AEB
+        by mail.efficios.com (Postfix) with ESMTP id 82E89256DD2;
+        Wed, 12 Jan 2022 10:40:39 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 82E89256DD2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1642001412;
-        bh=FnjYGuW0I6zePvbFToYHzlP8DS7O3w/YZ1ZXt1qnQKA=;
+        s=default; t=1642002039;
+        bh=FQdsZ7HE+pKL5cQg3cg3GQ/Q3tAXADsGertBSqdls2g=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=jKjykU50H5eae74ibaB/cAXnFSuAa2E6occ7fIGzxQO+ndWwh+uEaey2TnkDtA6Nz
-         Pe39DyN7AFCcfaIgkwxRaINkIJgtELyt/vi68ho2S1IQDc3TDy5xzcC0tV8szL9Y2G
-         cHDmrqUfah9kKYQ53KMfmXxvVW0vdl4BfN4908RAQqJus47TmNjDSqs/e34PFxbZJF
-         Oahhe0jOOvPsOIgeu+3o4MZllwxPGrckJqHXFq8zzCjktVdeL17a5CKGbQK3KeLhzg
-         8sW8R0OeYFbdAcfGJIX/ImDdfnTaBBihYdNEm4W2Z1z4ES8AraCOIpIHU74Po/2ASR
-         EN9qJXFwtzuqg==
+        b=lWKmW8z1OKng25lAZKeYFPYYG9rb5y4Vtm5zVPcg4+eSLvQcrCLnLQ6PJVHXbF+7t
+         sSM88a76vMJYZ6EUszp/sHTx//cpjZJ2xkOX+28/OrAzvxFIKdvaLhwQ28wtgXeCWO
+         UczUsxY612vX3ByFhHrvAU1UlBbBlJGHAjf6JIFyf10+102kGJNvcmk1/bfFYRbO/e
+         RyeGIQGcxJFb1aiWohgvCNT7sFaAwUp3NHgCnrKO+vjrOSulzZUwNIYhRzVpxFzpsf
+         Ucrul0PC18hnG3hd97qxzGWZ+yaDgtelFCcSgqX15Jv4TOIBPc8QiK1Y9ATFGBpuEV
+         scAfPr33N2xSw==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([127.0.0.1])
         by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 705R5bQp08E7; Wed, 12 Jan 2022 10:30:12 -0500 (EST)
+        with ESMTP id Gh25b7Iv8Ahi; Wed, 12 Jan 2022 10:40:39 -0500 (EST)
 Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 76716256AE7;
-        Wed, 12 Jan 2022 10:30:12 -0500 (EST)
-Date:   Wed, 12 Jan 2022 10:30:12 -0500 (EST)
+        by mail.efficios.com (Postfix) with ESMTP id 63560256DD0;
+        Wed, 12 Jan 2022 10:40:39 -0500 (EST)
+Date:   Wed, 12 Jan 2022 10:40:39 -0500 (EST)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Andy Lutomirski <luto@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -52,120 +52,233 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         riel <riel@surriel.com>, Dave Hansen <dave.hansen@intel.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Nadav Amit <nadav.amit@gmail.com>
-Message-ID: <1540361433.24669.1642001412433.JavaMail.zimbra@efficios.com>
-In-Reply-To: <d64b6651fe8799481c6204e43b17f81010018345.1641659630.git.luto@kernel.org>
-References: <cover.1641659630.git.luto@kernel.org> <d64b6651fe8799481c6204e43b17f81010018345.1641659630.git.luto@kernel.org>
-Subject: Re: [PATCH 01/23] membarrier: Document why membarrier() works
+Message-ID: <996622244.24690.1642002039268.JavaMail.zimbra@efficios.com>
+In-Reply-To: <b622be287d8148e017742ecf29a966aa4c6de664.1641659630.git.luto@kernel.org>
+References: <cover.1641659630.git.luto@kernel.org> <b622be287d8148e017742ecf29a966aa4c6de664.1641659630.git.luto@kernel.org>
+Subject: Re: [PATCH 02/23] x86/mm: Handle unlazying membarrier core sync in
+ the arch code
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [167.114.26.124]
 X-Mailer: Zimbra 8.8.15_GA_4180 (ZimbraWebClient - FF96 (Linux)/8.8.15_GA_4177)
-Thread-Topic: membarrier: Document why membarrier() works
-Thread-Index: D+wnsFtNq5E2V/nPUcM/w4t9b/BIaA==
+Thread-Topic: x86/mm: Handle unlazying membarrier core sync in the arch code
+Thread-Index: 4L1mEyLCO7I1HF0UD1fS5LuOQ67Zmg==
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 ----- On Jan 8, 2022, at 11:43 AM, Andy Lutomirski luto@kernel.org wrote:
 
-> We had a nice comment at the top of membarrier.c explaining why membarrier
-> worked in a handful of scenarios, but that consisted more of a list of
-> things not to forget than an actual description of the algorithm and why it
-> should be expected to work.
+> The core scheduler isn't a great place for
+> membarrier_mm_sync_core_before_usermode() -- the core scheduler
+> doesn't actually know whether we are lazy.  With the old code, if a
+> CPU is running a membarrier-registered task, goes idle, gets unlazied
+> via a TLB shootdown IPI, and switches back to the
+> membarrier-registered task, it will do an unnecessary core sync.
 > 
-> Add a comment explaining my understanding of the algorithm.  This exposes a
-> couple of implementation issues that I will hopefully fix up in subsequent
-> patches.
+> Conveniently, x86 is the only architecture that does anything in this
+> sync_core_before_usermode(), so membarrier_mm_sync_core_before_usermode()
+> is a no-op on all other architectures and we can just move the code.
+> 
+> (I am not claiming that the SYNC_CORE code was correct before or after this
+> change on any non-x86 architecture.  I merely claim that this change
+> improves readability, is correct on x86, and makes no change on any other
+> architecture.)
+> 
 
-Given that no explanation about the specific implementation issues is provided
-here, I would be tempted to remove the last sentence above, and keep that for
-the commit messages of the subsequent patches.
-
-The explanation you add here is clear and very much fits my mental model, thanks!
+Looks good to me! Thanks!
 
 Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-> 
 > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 > Cc: Nicholas Piggin <npiggin@gmail.com>
 > Cc: Peter Zijlstra <peterz@infradead.org>
 > Signed-off-by: Andy Lutomirski <luto@kernel.org>
 > ---
-> kernel/sched/membarrier.c | 60 +++++++++++++++++++++++++++++++++++++--
-> 1 file changed, 58 insertions(+), 2 deletions(-)
+> arch/x86/mm/tlb.c        | 58 +++++++++++++++++++++++++++++++---------
+> include/linux/sched/mm.h | 13 ---------
+> kernel/sched/core.c      | 14 +++++-----
+> 3 files changed, 53 insertions(+), 32 deletions(-)
 > 
-> diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
-> index b5add64d9698..30e964b9689d 100644
-> --- a/kernel/sched/membarrier.c
-> +++ b/kernel/sched/membarrier.c
-> @@ -7,8 +7,64 @@
-> #include "sched.h"
+> diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
+> index 59ba2968af1b..1ae15172885e 100644
+> --- a/arch/x86/mm/tlb.c
+> +++ b/arch/x86/mm/tlb.c
+> @@ -9,6 +9,7 @@
+> #include <linux/cpu.h>
+> #include <linux/debugfs.h>
+> #include <linux/sched/smt.h>
+> +#include <linux/sched/mm.h>
 > 
-> /*
-> - * For documentation purposes, here are some membarrier ordering
-> - * scenarios to keep in mind:
-> + * The basic principle behind the regular memory barrier mode of
-> + * membarrier() is as follows.  membarrier() is called in one thread.  Tt
-> + * iterates over all CPUs, and, for each CPU, it either sends an IPI to
-> + * that CPU or it does not. If it sends an IPI, then we have the
-> + * following sequence of events:
-> + *
-> + * 1. membarrier() does smp_mb().
-> + * 2. membarrier() does a store (the IPI request payload) that is observed by
-> + *    the target CPU.
-> + * 3. The target CPU does smp_mb().
-> + * 4. The target CPU does a store (the completion indication) that is observed
-> + *    by membarrier()'s wait-for-IPIs-to-finish request.
-> + * 5. membarrier() does smp_mb().
-> + *
-> + * So all pre-membarrier() local accesses are visible after the IPI on the
-> + * target CPU and all pre-IPI remote accesses are visible after
-> + * membarrier(). IOW membarrier() has synchronized both ways with the target
-> + * CPU.
-> + *
-> + * (This has the caveat that membarrier() does not interrupt the CPU that it's
-> + * running on at the time it sends the IPIs. However, if that is the CPU on
-> + * which membarrier() starts and/or finishes, membarrier() does smp_mb() and,
-> + * if not, then the scheduler's migration of membarrier() is a full barrier.)
-> + *
-> + * membarrier() skips sending an IPI only if membarrier() sees
-> + * cpu_rq(cpu)->curr->mm != target mm.  The sequence of events is:
-> + *
-> + *           membarrier()            |          target CPU
-> + * ---------------------------------------------------------------------
-> + *                                   | 1. smp_mb()
-> + *                                   | 2. set rq->curr->mm = other_mm
-> + *                                   |    (by writing to ->curr or to ->mm)
-> + * 3. smp_mb()                       |
-> + * 4. read rq->curr->mm == other_mm  |
-> + * 5. smp_mb()                       |
-> + *                                   | 6. rq->curr->mm = target_mm
-> + *                                   |    (by writing to ->curr or to ->mm)
-> + *                                   | 7. smp_mb()
-> + *                                   |
-> + *
-> + * All memory accesses on the target CPU prior to scheduling are visible
-> + * to membarrier()'s caller after membarrier() returns due to steps 1, 2, 4
-> + * and 5.
-> + *
-> + * All memory accesses by membarrier()'s caller prior to membarrier() are
-> + * visible to the target CPU after scheduling due to steps 3, 4, 6, and 7.
-> + *
-> + * Note that, tasks can change their ->mm, e.g. via kthread_use_mm().  So
-> + * tasks that switch their ->mm must follow the same rules as the scheduler
-> + * changing rq->curr, and the membarrier() code needs to do both dereferences
-> + * carefully.
-> + *
-> + * GLOBAL_EXPEDITED support works the same way except that all references
-> + * to rq->curr->mm are replaced with references to rq->membarrier_state.
-> + *
-> + *
-> + * Specific examples of how this produces the documented properties of
-> + * membarrier():
->  *
->  * A) Userspace thread execution after IPI vs membarrier's memory
->  *    barrier before sending the IPI
+> #include <asm/tlbflush.h>
+> #include <asm/mmu_context.h>
+> @@ -485,6 +486,15 @@ void cr4_update_pce(void *ignored)
+> static inline void cr4_update_pce_mm(struct mm_struct *mm) { }
+> #endif
+> 
+> +static void sync_core_if_membarrier_enabled(struct mm_struct *next)
+> +{
+> +#ifdef CONFIG_MEMBARRIER
+> +	if (unlikely(atomic_read(&next->membarrier_state) &
+> +		     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE))
+> +		sync_core_before_usermode();
+> +#endif
+> +}
+> +
+> void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
+> 			struct task_struct *tsk)
+> {
+> @@ -539,16 +549,24 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct
+> mm_struct *next,
+> 		this_cpu_write(cpu_tlbstate_shared.is_lazy, false);
+> 
+> 	/*
+> -	 * The membarrier system call requires a full memory barrier and
+> -	 * core serialization before returning to user-space, after
+> -	 * storing to rq->curr, when changing mm.  This is because
+> -	 * membarrier() sends IPIs to all CPUs that are in the target mm
+> -	 * to make them issue memory barriers.  However, if another CPU
+> -	 * switches to/from the target mm concurrently with
+> -	 * membarrier(), it can cause that CPU not to receive an IPI
+> -	 * when it really should issue a memory barrier.  Writing to CR3
+> -	 * provides that full memory barrier and core serializing
+> -	 * instruction.
+> +	 * membarrier() support requires that, when we change rq->curr->mm:
+> +	 *
+> +	 *  - If next->mm has membarrier registered, a full memory barrier
+> +	 *    after writing rq->curr (or rq->curr->mm if we switched the mm
+> +	 *    without switching tasks) and before returning to user mode.
+> +	 *
+> +	 *  - If next->mm has SYNC_CORE registered, then we sync core before
+> +	 *    returning to user mode.
+> +	 *
+> +	 * In the case where prev->mm == next->mm, membarrier() uses an IPI
+> +	 * instead, and no particular barriers are needed while context
+> +	 * switching.
+> +	 *
+> +	 * x86 gets all of this as a side-effect of writing to CR3 except
+> +	 * in the case where we unlazy without flushing.
+> +	 *
+> +	 * All other architectures are civilized and do all of this implicitly
+> +	 * when transitioning from kernel to user mode.
+> 	 */
+> 	if (real_prev == next) {
+> 		VM_WARN_ON(this_cpu_read(cpu_tlbstate.ctxs[prev_asid].ctx_id) !=
+> @@ -566,7 +584,8 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct
+> mm_struct *next,
+> 		/*
+> 		 * If the CPU is not in lazy TLB mode, we are just switching
+> 		 * from one thread in a process to another thread in the same
+> -		 * process. No TLB flush required.
+> +		 * process. No TLB flush or membarrier() synchronization
+> +		 * is required.
+> 		 */
+> 		if (!was_lazy)
+> 			return;
+> @@ -576,16 +595,31 @@ void switch_mm_irqs_off(struct mm_struct *prev, struct
+> mm_struct *next,
+> 		 * If the TLB is up to date, just use it.
+> 		 * The barrier synchronizes with the tlb_gen increment in
+> 		 * the TLB shootdown code.
+> +		 *
+> +		 * As a future optimization opportunity, it's plausible
+> +		 * that the x86 memory model is strong enough that this
+> +		 * smp_mb() isn't needed.
+> 		 */
+> 		smp_mb();
+> 		next_tlb_gen = atomic64_read(&next->context.tlb_gen);
+> 		if (this_cpu_read(cpu_tlbstate.ctxs[prev_asid].tlb_gen) ==
+> -				next_tlb_gen)
+> +		    next_tlb_gen) {
+> +			/*
+> +			 * We switched logical mm but we're not going to
+> +			 * write to CR3.  We already did smp_mb() above,
+> +			 * but membarrier() might require a sync_core()
+> +			 * as well.
+> +			 */
+> +			sync_core_if_membarrier_enabled(next);
+> +
+> 			return;
+> +		}
+> 
+> 		/*
+> 		 * TLB contents went out of date while we were in lazy
+> 		 * mode. Fall through to the TLB switching code below.
+> +		 * No need for an explicit membarrier invocation -- the CR3
+> +		 * write will serialize.
+> 		 */
+> 		new_asid = prev_asid;
+> 		need_flush = true;
+> diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+> index 5561486fddef..c256a7fc0423 100644
+> --- a/include/linux/sched/mm.h
+> +++ b/include/linux/sched/mm.h
+> @@ -345,16 +345,6 @@ enum {
+> #include <asm/membarrier.h>
+> #endif
+> 
+> -static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct
+> *mm)
+> -{
+> -	if (current->mm != mm)
+> -		return;
+> -	if (likely(!(atomic_read(&mm->membarrier_state) &
+> -		     MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE)))
+> -		return;
+> -	sync_core_before_usermode();
+> -}
+> -
+> extern void membarrier_exec_mmap(struct mm_struct *mm);
+> 
+> extern void membarrier_update_current_mm(struct mm_struct *next_mm);
+> @@ -370,9 +360,6 @@ static inline void membarrier_arch_switch_mm(struct
+> mm_struct *prev,
+> static inline void membarrier_exec_mmap(struct mm_struct *mm)
+> {
+> }
+> -static inline void membarrier_mm_sync_core_before_usermode(struct mm_struct
+> *mm)
+> -{
+> -}
+> static inline void membarrier_update_current_mm(struct mm_struct *next_mm)
+> {
+> }
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index f21714ea3db8..6a1db8264c7b 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4822,22 +4822,22 @@ static struct rq *finish_task_switch(struct task_struct
+> *prev)
+> 	kmap_local_sched_in();
+> 
+> 	fire_sched_in_preempt_notifiers(current);
+> +
+> 	/*
+> 	 * When switching through a kernel thread, the loop in
+> 	 * membarrier_{private,global}_expedited() may have observed that
+> 	 * kernel thread and not issued an IPI. It is therefore possible to
+> 	 * schedule between user->kernel->user threads without passing though
+> 	 * switch_mm(). Membarrier requires a barrier after storing to
+> -	 * rq->curr, before returning to userspace, so provide them here:
+> +	 * rq->curr, before returning to userspace, and mmdrop() provides
+> +	 * this barrier.
+> 	 *
+> -	 * - a full memory barrier for {PRIVATE,GLOBAL}_EXPEDITED, implicitly
+> -	 *   provided by mmdrop(),
+> -	 * - a sync_core for SYNC_CORE.
+> +	 * If an architecture needs to take a specific action for
+> +	 * SYNC_CORE, it can do so in switch_mm_irqs_off().
+> 	 */
+> -	if (mm) {
+> -		membarrier_mm_sync_core_before_usermode(mm);
+> +	if (mm)
+> 		mmdrop(mm);
+> -	}
+> +
+> 	if (unlikely(prev_state == TASK_DEAD)) {
+> 		if (prev->sched_class->task_dead)
+> 			prev->sched_class->task_dead(prev);
 > --
 > 2.33.1
 
