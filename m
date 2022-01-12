@@ -2,42 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A2048C2ED
-	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 12:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DD648C3BC
+	for <lists+linux-arch@lfdr.de>; Wed, 12 Jan 2022 13:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352791AbiALLPk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 12 Jan 2022 06:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237932AbiALLPj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 06:15:39 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B46C06173F;
-        Wed, 12 Jan 2022 03:15:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C09EB81DC0;
-        Wed, 12 Jan 2022 11:15:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B19C36AEA;
-        Wed, 12 Jan 2022 11:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1641986136;
-        bh=RTTu6nWijk2G34RQ8PR1ea0narp9zXHqxMjZSrcL0co=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Hq5LE8KaLV3xNlfl8hONGT11QmqFJgF5ZZ53zgnsdO9DYAJ3B8+wjU1jSIWeFQ3/D
-         CaFHUcDIXoppDdArCINBydMDN3XpiApt2gXzo3WfUQ9EosZsIz+fETbj6cGaJgODcQ
-         RZjbF9LA/EWCKAuGks8VTqUhgG/KYGeeO094JHFcgGFdZ+k6BgYzvYRyQgp0IWuabE
-         6Amw158NYWiJ4GIMYCwvGg+6cm48+dwbs/dP2cMG/t24qKzlZsJcARwnFtoH8cDJjI
-         ORDJ0PD0+aoOGK4FPG7XBpY4YizNUp6zImN53U/p5QaZfcKlKu0EVwLvcYWDLCGCVV
-         ObzsbCCfB0d5Q==
-Message-ID: <f86483fca8b0dc68ce243ba47998ff3296a3b6f8.camel@kernel.org>
-Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64
- in fcntl.h
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
-Cc:     Guo Ren <guoren@kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        id S240529AbiALMJC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 12 Jan 2022 07:09:02 -0500
+Received: from mout.kundenserver.de ([212.227.17.10]:56117 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240542AbiALMIo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 12 Jan 2022 07:08:44 -0500
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MkIAB-1mfCZU14Ez-00kk8u; Wed, 12 Jan 2022 13:08:41 +0100
+Received: by mail-wr1-f45.google.com with SMTP id a5so3831115wrh.5;
+        Wed, 12 Jan 2022 04:08:40 -0800 (PST)
+X-Gm-Message-State: AOAM533ZGm3cRekLXjcMkTt3kd79hTYQqO/O+VRMRfE1xWRbCfRjQg4P
+        RUg1ZFX1oAJWrabX/rccC9bU6GEQxiIMMBRMisA=
+X-Google-Smtp-Source: ABdhPJyNUKzidEWwkYa+wfOUEohIKCR5feZK5S3WXkq+SYeCBRFZTq1mqc61Ubm+2cYuonDIFIyFwZ5WRZ3fGi7ACRI=
+X-Received: by 2002:adf:fd46:: with SMTP id h6mr7767440wrs.192.1641989320742;
+ Wed, 12 Jan 2022 04:08:40 -0800 (PST)
+MIME-Version: 1.0
+References: <20220111083515.502308-1-hch@lst.de> <20220111083515.502308-5-hch@lst.de>
+ <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
+ <20220112075609.GA4854@lst.de> <CAK8P3a1ONn=FiPU3669MjBMntS-1K5bgX4pHforUsYJ7yhwZ-g@mail.gmail.com>
+ <f86483fca8b0dc68ce243ba47998ff3296a3b6f8.camel@kernel.org>
+In-Reply-To: <f86483fca8b0dc68ce243ba47998ff3296a3b6f8.camel@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 12 Jan 2022 13:08:24 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3FgHQ+w+Sj00yOERRLWfVhx7NYsGJ1NBAXQ0=is3G=Kg@mail.gmail.com>
+Message-ID: <CAK8P3a3FgHQ+w+Sj00yOERRLWfVhx7NYsGJ1NBAXQ0=is3G=Kg@mail.gmail.com>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
+        Guo Ren <guoren@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
@@ -47,62 +45,63 @@ Cc:     Guo Ren <guoren@kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>
-Date:   Wed, 12 Jan 2022 06:15:33 -0500
-In-Reply-To: <CAK8P3a1ONn=FiPU3669MjBMntS-1K5bgX4pHforUsYJ7yhwZ-g@mail.gmail.com>
-References: <20220111083515.502308-1-hch@lst.de>
-         <20220111083515.502308-5-hch@lst.de>
-         <CAK8P3a0mHC5=OOGV=sGnC9JqZWxzsJyZbTefnCtryQU3o3PY_g@mail.gmail.com>
-         <20220112075609.GA4854@lst.de>
-         <CAK8P3a1ONn=FiPU3669MjBMntS-1K5bgX4pHforUsYJ7yhwZ-g@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.2 (3.42.2-1.fc35) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:FxPxwUrWV4XP7ogjVSXFtyLQ/37PlsmMmUro1QU4xiHMbn0HF84
+ G8In2DCCe6NgV9Dn1VApj2AHduGRQcXwBnEEmCXxvbdDdUtTN55Im7sax+K9wu38i/0THSt
+ qwS61rSk6GqdhzFFLBwpooyB0yjUSYE4pe42qAX6VnGYLAIhan1CNvWQ1cG0QiBaOzsQWfz
+ o2XQo87qWwB2sSNPGQvwA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BtxbLJaYFLs=:XysORES34srxkFt4ots9C8
+ qAYJ006SFkwIPnIkshHXoJ1BgxSd/2XSnwtBKCqhTNr+O2WRJdSnXJCjl19Sd0pPrt3E5KxR/
+ Jey7f+WpuXB7yq3xok4V0KMQPPgepNx8BYfhogiX7IURcJYF3S5UIs74ppyqOrdevXk6UGF+Q
+ zK9qS+Lkd5tk1zKvNRKvKam2kXkDXg9/ZpYRMrc246SEp2aWNuylQyt64t+pnk3AFOhHG2Gu4
+ /ZPhWIaifVS5QE5MC5G+odlnYblVp+Yc1W3gX/gGZFuf0hPUULb7/xZayvu9ReVwzNr0SyWQW
+ bRVNskdvJBBobymu2iB+DkIhw+daP34dHhR6NbcGoR6A4fTGmaoQj5GbxnSPE0ImU5e1+NK8T
+ pdFk2ZxibwNiehBhu2umOFlsjlXmgrVcwufZnQRgjDeXjZLBtlfxJr9Bv2sYQBxFx7F/9r3jP
+ oWypQf1zICYTc8xsqd8xz5z3CYT2tSZaKyHH4a/agXWUxRwCJhycoTjk7VpQJlmvWnTkCQmc2
+ sBLSiEJ0yHn2a4e4kabwKDUzO1VWgpB3nYrF/Vdy5KutC4m2TXlsNpN7FdJMqMAsuTc3mqSTB
+ MIipeeA9qUOqFHjTJChWhs1hd5f9dXAXab5LKgBWUg1fRw+geqTaRztHSh+M6SsktD1vB9RD/
+ 5k+UdCH3MLk3Oqblmlc1njfSCnMgQygiM6+Gh8sWXQUIy540MEZcRUtbrNy4THYzBMdk=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2022-01-12 at 09:28 +0100, Arnd Bergmann wrote:
-> On Wed, Jan 12, 2022 at 8:56 AM Christoph Hellwig <hch@lst.de> wrote:
-> > 
-> > On Tue, Jan 11, 2022 at 04:33:30PM +0100, Arnd Bergmann wrote:
-> > > This is a very subtle change to the exported UAPI header contents:
-> > > On 64-bit architectures, the three unusable numbers are now always
-> > > shown, rather than depending on a user-controlled symbol.
-> > 
-> > Well, the change is bigger and less subtle.  Before this change the
-> > constants were never visible to userspace at all (except on mips),
-> > because the #ifdef CONFIG_64BIT it never set for userspace builds.
-> 
-> I suppose you mean /always/ visible here, with that ifndef.
-> 
-> > > This is probably what we want here for compatibility reasons, but I think
-> > > it should be explained in the changelog text, and I'd like Jeff or Bruce
-> > > to comment on it as well: the alternative here would be to make the
-> > > uapi definition depend on __BITS_PER_LONG==32, which is
-> > > technically the right thing to do but more a of a change.
-> > 
-> > I can change this to #if __BITS_PER_LONG==32 || defined(__KERNEL__),
-> > but it will still be change in what userspace sees.
-> 
-> Exactly, that is the tradeoff, which is why I'd like the flock maintainers
-> to say which way they prefer. We can either do it more correctly (hiding
-> the constants from user space when they are not usable), or with less
-> change (removing the incorrect #ifdef). Either way sounds reasonable
-> to me, I mainly care that this is explained in the changelog and that the
-> maintainers are aware of the two options.
-> 
+On Wed, Jan 12, 2022 at 12:15 PM Jeff Layton <jlayton@kernel.org> wrote:
+> On Wed, 2022-01-12 at 09:28 +0100, Arnd Bergmann wrote:
+> > On Wed, Jan 12, 2022 at 8:56 AM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > Exactly, that is the tradeoff, which is why I'd like the flock maintainers
+> > to say which way they prefer. We can either do it more correctly (hiding
+> > the constants from user space when they are not usable), or with less
+> > change (removing the incorrect #ifdef). Either way sounds reasonable
+> > to me, I mainly care that this is explained in the changelog and that the
+> > maintainers are aware of the two options.
+> >
+>
+> I don't have a strong opinion here. If we were taking symbols away that
+> were previously visible to userland it would be one thing, but since
+> we're just adding symbols that may not have been there before, this
+> seems less likely to break anything.
 
-I don't have a strong opinion here. If we were taking symbols away that
-were previously visible to userland it would be one thing, but since
-we're just adding symbols that may not have been there before, this
-seems less likely to break anything.
+Changing
 
-I probably lean toward Christoph's original solution instead of keeping
-the conditional definitions. It's hard to imagine there are many
-programs that care whether these other symbols are defined or not.
+#ifndef CONFIG_64BIT
 
-You can add this to the original patch:
+to
 
-Acked-by: Jeff Layton <jlayton@kernel.org>
+#if __BITS_PER_LONG==32 || defined(__KERNEL__),
 
+would take symbols away, since the CONFIG_64BIT macro is never
+set in user space.
+
+> I probably lean toward Christoph's original solution instead of keeping
+> the conditional definitions. It's hard to imagine there are many
+> programs that care whether these other symbols are defined or not.
+>
+> You can add this to the original patch:
+>
+> Acked-by: Jeff Layton <jlayton@kernel.org>
+
+Sounds good, thanks
+
+         Arnd
