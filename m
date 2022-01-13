@@ -2,44 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF4E48DFD9
-	for <lists+linux-arch@lfdr.de>; Thu, 13 Jan 2022 22:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DBC48DFFA
+	for <lists+linux-arch@lfdr.de>; Thu, 13 Jan 2022 22:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235334AbiAMVrg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 13 Jan 2022 16:47:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbiAMVrf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 13 Jan 2022 16:47:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C14C061574;
-        Thu, 13 Jan 2022 13:47:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S230472AbiAMV5b (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 13 Jan 2022 16:57:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47259 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229534AbiAMV5a (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 13 Jan 2022 16:57:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1642111050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TMX/kWIlUA1AE1kmxxn6oC9JgTpebsg3ohbjH9GEsvI=;
+        b=Pzzp/ruRU7iKZbOx1eaGwMakGi+EswA1NlTeCsjrEnAjJErFmfUCdH8QrkkUF4MOM0nsFk
+        5rVikFRoswC++s8on2sDD3ioJZRpY3lfXVdu5XwL9CUAtmIBAD0n3l6ZQaHpNh+UGhDvai
+        AEGaNk8F6hScToBj9/7ODWtqEHHv8pI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-49-L8FNEgkdMraDDmpSMaBG_A-1; Thu, 13 Jan 2022 16:57:28 -0500
+X-MC-Unique: L8FNEgkdMraDDmpSMaBG_A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BA6F6124E;
-        Thu, 13 Jan 2022 21:47:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3D4C36AE3;
-        Thu, 13 Jan 2022 21:47:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642110453;
-        bh=mhvc/TtRX/W/HwVS0Gz9WmgUd95cMfFsAeoEdm3+0Wk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BAHULMDLmD4Nx4jsI5NkR4AD2iFGCDjTfWig0XgJI7/nWbgANiqssXhckQ+23Dpu/
-         Zp/U9LxjrukdI9+Ng4SkQYMC2Jx2VKBAWIq0U3a+AKHUoSDYU7tDFqU7XWv/mUXg0g
-         KYeCXjPDKWkYdR8StFj/t6OeCxh1Lsr7ccp2woIzJ00SQ1dpzqMgfVCIYnhnbFLlYz
-         w+joMc5+scnyKTZOl2MRFZ2QFt3J6MjP1DldHs8+Xzu3I719TUjectap2k1MchtZHs
-         XWVJV36e6o8v9nhOKbHDw4NK/OE4TuqtB4KezT+m/gn3jlB2j2xGlx6mo+TCIfFYUK
-         UmrM3oRqgQLAw==
-Message-ID: <e431fa42-26ec-8ac6-f954-e681b1e0e9a6@kernel.org>
-Date:   Thu, 13 Jan 2022 13:47:26 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH v3 1/3] x86: Implement arch_prctl(ARCH_VSYSCALL_CONTROL)
- to disable vsyscall
-Content-Language: en-US
-To:     Florian Weimer <fweimer@redhat.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 62A1F1853028;
+        Thu, 13 Jan 2022 21:57:26 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.49])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 013154698C;
+        Thu, 13 Jan 2022 21:57:22 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andy Lutomirski <luto@kernel.org>
 Cc:     linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
         linux-x86_64@vger.kernel.org, kernel-hardening@lists.openwall.com,
         linux-mm@kvack.org, the arch/x86 maintainers <x86@kernel.org>,
@@ -47,85 +43,44 @@ Cc:     linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
         linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
         Kees Cook <keescook@chromium.org>,
         Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v3 3/3] x86: Add test for arch_prctl(ARCH_VSYSCALL_CONTROL)
 References: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <3a1c8280967b491bf6917a18fbff6c9b52e8df24.1641398395.git.fweimer@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        <54ae0e1f8928160c1c4120263ea21c8133aa3ec4.1641398395.git.fweimer@redhat.com>
+        <564ba9d6b8f88d139be556d039aadb4b8e078eba.1641398395.git.fweimer@redhat.com>
+        <4db8cff9-8bf8-0c45-6956-4b1b19b53b2f@kernel.org>
+Date:   Thu, 13 Jan 2022 22:57:20 +0100
+In-Reply-To: <4db8cff9-8bf8-0c45-6956-4b1b19b53b2f@kernel.org> (Andy
+        Lutomirski's message of "Thu, 13 Jan 2022 13:31:04 -0800")
+Message-ID: <87pmovxprz.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/5/22 08:02, Florian Weimer wrote:
-> Distributions struggle with changing the default for vsyscall
-> emulation because it is a clear break of userspace ABI, something
-> that should not happen.
-> 
-> The legacy vsyscall interface is supposed to be used by libcs only,
-> not by applications.  This commit adds a new arch_prctl request,
-> ARCH_VSYSCALL_CONTROL, with one argument.  If the argument is 0,
-> executing vsyscalls will cause the process to terminate.  Argument 1
-> turns vsyscall back on (this is mostly for a largely theoretical
-> CRIU use case).
-> 
-> Newer libcs can use a zero ARCH_VSYSCALL_CONTROL at startup to disable
-> vsyscall for the process.  Legacy libcs do not perform this call, so
-> vsyscall remains enabled for them.  This approach should achieves
-> backwards compatibility (perfect compatibility if the assumption that
-> only libcs use vsyscall is accurate), and it provides full hardening
-> for new binaries.
-> 
-> The chosen value of ARCH_VSYSCALL_CONTROL should avoid conflicts
-> with other x86-64 arch_prctl requests.  The fact that with
-> vsyscall=emulate, reading the vsyscall region is still possible
-> even after a zero ARCH_VSYSCALL_CONTROL is considered limitation
-> in the current implementation and may change in a future kernel
-> version.
-> 
-> Future arch_prctls requests commonly used at process startup can imply
-> ARCH_VSYSCALL_CONTROL with a zero argument, so that a separate system
-> call for disabling vsyscall is avoided.
-> 
-> Signed-off-by: Florian Weimer <fweimer@redhat.com>
-> Acked-by: Andrei Vagin <avagin@gmail.com>
-> ---
-> v3: Remove warning log message.  Split out test.
-> v2: ARCH_VSYSCALL_CONTROL instead of ARCH_VSYSCALL_LOCKOUT.  New tests
->      for the toggle behavior.  Implement hiding [vsyscall] in
->      /proc/PID/maps and test it.  Various other test fixes cleanups
->      (e.g., fixed missing second argument to gettimeofday).
-> 
-> arch/x86/entry/vsyscall/vsyscall_64.c | 7 ++++++-
->   arch/x86/include/asm/mmu.h            | 6 ++++++
->   arch/x86/include/uapi/asm/prctl.h     | 2 ++
->   arch/x86/kernel/process_64.c          | 7 +++++++
->   4 files changed, 21 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
-> index fd2ee9408e91..6fc524b9f232 100644
-> --- a/arch/x86/entry/vsyscall/vsyscall_64.c
-> +++ b/arch/x86/entry/vsyscall/vsyscall_64.c
-> @@ -174,6 +174,9 @@ bool emulate_vsyscall(unsigned long error_code,
->   
->   	tsk = current;
->   
-> +	if (tsk->mm->context.vsyscall_disabled)
-> +		goto sigsegv;
-> +
+* Andy Lutomirski:
 
-Is there a reason you didn't just change the check earlier in the 
-function to:
+> On 1/5/22 08:03, Florian Weimer wrote:
+>> Signed-off-by: Florian Weimer <fweimer@redhat.com>
+>
+> This seems like a respectable test case, but why does it work so hard
+> to avoid using libc?
 
-if (vsyscall_mode == NONE || current->mm->context.vsyscall_disabled)
+Back when this was still a true lockout and not a toggle, it was
+necessary to bypass the startup code, so that the test still works once
+the (g)libc startup starts activating the lockout.  The /proc mounting
+is there to support running as init in a VM (which makes development so
+much easier).
 
-Also, I still think the prctl should not be available if 
-vsyscall=emulate.  Either we should fully implement it or we should not 
-implement.  We could even do:
+I could ditch the /proc mounting, perform some limited data gathering in
+a pre-_start routine, undo a potential lockout before the tests, and
+then use libc functions for the actual test.  It would probably be a bit
+less code (printf is nice), but I'd probably have to use direct system
+calls for the early data gathering anyway, so those parts would still be
+there.
 
-pr_warn_once("userspace vsyscall hardening request ignored because you 
-have vsyscall=emulate.  Unless you absolutely need vsyscall=emulate, 
-update your system to use vsyscall=xonly.\n");
+Thanks,
+Florian
 
-and thus encourage good behavior.
-
---Andy
