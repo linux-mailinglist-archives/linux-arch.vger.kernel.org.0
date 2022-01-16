@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA09648FA97
-	for <lists+linux-arch@lfdr.de>; Sun, 16 Jan 2022 04:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB5F48FFCA
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jan 2022 01:48:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234166AbiAPD64 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sat, 15 Jan 2022 22:58:56 -0500
-Received: from ec2-13-115-114-132.ap-northeast-1.compute.amazonaws.com ([13.115.114.132]:43910
+        id S236425AbiAQAsw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Sun, 16 Jan 2022 19:48:52 -0500
+Received: from ec2-13-115-114-132.ap-northeast-1.compute.amazonaws.com ([13.115.114.132]:53014
         "EHLO mail.gunma-suigai-risk.jp" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231501AbiAPD64 (ORCPT
+        by vger.kernel.org with ESMTP id S232724AbiAQAsv (ORCPT
         <rfc822;linux-arch@vger.kernel.org>);
-        Sat, 15 Jan 2022 22:58:56 -0500
-Received: from Unknown (unknown [103.124.137.27])
-        by mail.gunma-suigai-risk.jp (Postfix) with ESMTPA id 4AC6125628A3;
-        Sat, 15 Jan 2022 23:05:10 +0000 (UTC)
-Message-ID: <484DFBA8A377599A46430AB6B2746A6E@wcqhgd>
+        Sun, 16 Jan 2022 19:48:51 -0500
+Received: from Unknown (unknown [103.107.94.82])
+        by mail.gunma-suigai-risk.jp (Postfix) with ESMTPA id D983926AC215;
+        Sun, 16 Jan 2022 08:04:36 +0000 (UTC)
+Message-ID: <FBFE481B10C4EA29F5F0B90501E84B88@pdyy>
 Reply-To: "Fredrik Elvebakk" <fcresswell9@gmail.com>
 From:   "Fredrik Elvebakk" <investment@dnb.no>
 Subject: Re:
-Date:   Sat, 15 Jan 2022 15:05:07 -0800
+Date:   Sun, 16 Jan 2022 00:04:32 -0800
 MIME-Version: 1.0
 Content-Type: text/plain;
         format=flowed;
