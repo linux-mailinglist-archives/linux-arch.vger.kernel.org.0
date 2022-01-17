@@ -2,33 +2,46 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A87491140
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jan 2022 22:08:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B40349116A
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jan 2022 22:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243235AbiAQVIE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Jan 2022 16:08:04 -0500
-Received: from mail.skyhub.de ([5.9.137.197]:39160 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229641AbiAQVID (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Mon, 17 Jan 2022 16:08:03 -0500
-Received: from zn.tnic (dslb-088-067-202-008.088.067.pools.vodafone-ip.de [88.67.202.8])
+        id S235812AbiAQVtg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Jan 2022 16:49:36 -0500
+Received: from pb-sasl-trial21.pobox.com ([173.228.157.51]:54843 "EHLO
+        pb-sasl-trial21.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233431AbiAQVtg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jan 2022 16:49:36 -0500
+X-Greylist: delayed 656 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jan 2022 16:49:35 EST
+Received: from pb-sasl-trial21.pobox.com (localhost.local [127.0.0.1])
+        by pb-sasl-trial21.pobox.com (Postfix) with ESMTP id 574E91F98F;
+        Mon, 17 Jan 2022 16:38:39 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=pobox.com; h=date:from:to
+        :cc:subject:in-reply-to:message-id:references:mime-version
+        :content-type; s=sasl; bh=zHTCsXhUflqG5NDTDETust6K8wY=; b=l3aqFz
+        fcswXCeUZAknRJXQfFykkxtIqxRVp6V0lwKzhODdF5qUUAmqBx3ry8Sbr4HCSXc7
+        02Low6RVnJGWn3rhYnDMkvGdNCY3UyBx3ssiQZonv2Alr+VU1/5c8NDYOq7O41Re
+        U0vEEf+WJlphqJc0Jv3odUeJYB146gB8F/4Hk=
+Received: from pb-smtp20.sea.icgroup.com (pb-smtp20.pobox.com [10.110.30.20])
+        by pb-sasl-trial21.pobox.com (Postfix) with ESMTP id 38CE11F98C;
+        Mon, 17 Jan 2022 16:38:39 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=97k/YWCIM2xZt1fXcNpvHo0/q7gN6rGe/OBE09sgPW0=; b=tGjceoNgnUQowKwZBQcMObZYxb0XkZetLIAKdSEDPkirP5BZKs01nVYlbqUJFKnnjLnjmDdaYC/dR1wmwGbZAWgxzx+b64cU+JqFgxKUYKT7fi2x+qluy+wlPpXzsdOAH10spiimWmr8h8YXgPGuIhVnuRup2CrBCkA7znTINms=
+Received: from yoda.home (unknown [96.21.170.108])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8A55D1EC02DD;
-        Mon, 17 Jan 2022 22:07:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1642453677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=x9mhOj3OPp7/NgS1SucK0b8bM2kZIWpEaBWAuEEfK7Q=;
-        b=OX/VTbG+FiU93UTSILFiausMlqvvqzxTUgh0Kj76IqmgR/Wy6aYQcr0wD46a1hc5INwd5V
-        4eg/6JP4DWLADsHqp4CoaG38ua8jQ/Jeq2Bju6aML1420SCC2A5w8uPfG2aUq9zTV2eSj3
-        QqqJKJ3A5ygnp2E3zCvzN+GKaLD23N8=
-Date:   Mon, 17 Jan 2022 22:08:00 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
+        by pb-smtp20.pobox.com (Postfix) with ESMTPSA id 10961178028;
+        Mon, 17 Jan 2022 16:38:36 -0500 (EST)
+        (envelope-from nico@fluxnic.net)
+Received: from xanadu.home (xanadu.home [192.168.2.2])
+        by yoda.home (Postfix) with ESMTPSA id 0B3022DA0040;
+        Mon, 17 Jan 2022 16:38:34 -0500 (EST)
+Date:   Mon, 17 Jan 2022 16:38:33 -0500 (EST)
+From:   Nicolas Pitre <nico@fluxnic.net>
+To:     Borislav Petkov <bp@alien8.de>
+cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Kristen Carlson Accardi <kristen@linux.intel.com>,
         Kees Cook <keescook@chromium.org>,
@@ -58,227 +71,26 @@ Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Marios Pomonis <pomonis@google.com>,
         Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
+        "H.J. Lu" <hjl.tools@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        live-patching@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH v9 04/15] arch: introduce ASM function sections
-Message-ID: <YeXasIO5ArXxtw1J@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com>
- <20211223002209.1092165-5-alexandr.lobakin@intel.com>
+In-Reply-To: <YeXasIO5ArXxtw1J@zn.tnic>
+Message-ID: <8n284257-9665-s3q1-6833-rn966p87qoqs@syhkavp.arg>
+References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-5-alexandr.lobakin@intel.com> <YeXasIO5ArXxtw1J@zn.tnic>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211223002209.1092165-5-alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID: D377A396-77DD-11EC-BE07-C85A9F429DF0-78420484!pb-smtp20.pobox.com
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Dec 23, 2021 at 01:21:58AM +0100, Alexander Lobakin wrote:
-> Sometimes it is useful to create a separate section for every
-> function (symbol in general) to be able then to selectively merge
-> them back into on or several others. This is how DCE and a part of
-		 ^^
+On Mon, 17 Jan 2022, Borislav Petkov wrote:
 
-"one"
+> Thanks for explaining this. The gas manpage is very, hm, verbose
+> <sarcarstic eyeroll> ;-\:
 
-DCE == Dead Code Elimination?
-
-In any case, write it out first please and then use the abbreviation.
-
-> LTO work.
-
-I would've said that too but that one at least has a Kconfig entry which
-explains what it is so no need.
-
-/me looks further
-
-Aha there is LD_DEAD_CODE_DATA_ELIMINATION. So connect the two pls.
-
-> Currently, only C functions are in scope
-
-You mean, currently this is done only for C functions? The "in scope"
-formulation sounds weird.
-
-> and the compilers are able to do this automatically when
-> `-ffunction-section` is specified.
-
--ffunction-sections, plural.
-
-> Add a basic infra for supporting ASM function sections. If any of
-
-yah s/ASM/asm/g. It's not like it is an acronym or so.
-
-and also, you should explain that "asm function sections" means "put a
-function symbol defined in asm, into a separate section".
-
-> the required build options (DCE, LTO, FG-KASLR later) is on and
-> the target architecture claims it supports them, all ASM functions
-> and "code" will be placed into separate named sections by default.
-> This is achieved using --sectname-subst GAS flag which will then
-> substitute "%S" in a .pushsection or .section directive with the
-
-Thanks for explaining this. The gas manpage is very, hm, verbose
-<sarcarstic eyeroll> ;-\:
-
-"       --sectname-subst
-           Honor substitution sequences in section names.
-"
+GNU tools tend to be far better documented in their info pages.
 
 
-...
-
-> diff --git a/include/linux/linkage.h b/include/linux/linkage.h
-> index dbf8506decca..0c0ddf4429dc 100644
-> --- a/include/linux/linkage.h
-> +++ b/include/linux/linkage.h
-> @@ -73,6 +73,37 @@
->  #define __ALIGN_STR	".align 4,0x90"
->  #endif
->  
-> +/*
-> + * Allow ASM symbols to have their own unique sections if they are being
-> + * generated by the compiler for C functions (DCE, LTO).
-> + */
-> +#if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
-> +    ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
-> +     (defined(CONFIG_LTO_CLANG)))
-> +
-> +#define SYM_PUSH_SECTION(name)				\
-> +	.pushsection %S.name, "ax"
-> +
-> +#define SYM_POP_SECTION()				\
-> +	.popsection
-> +
-> +#define __ASM_PUSH_SECTION(name)			\
-> +	".pushsection %S." name ", \"ax\""
-> +
-> +#else /* Just .text */
-
-Just .text?
-
-> +
-> +#define SYM_PUSH_SECTION(name)
-> +#define SYM_POP_SECTION()
-> +#define __ASM_PUSH_SECTION(name)
-> +
-> +#endif /* Just .text */
-> +
-> +#define ASM_PUSH_SECTION(name)				\
-> +	__ASM_PUSH_SECTION(__stringify(name))
-> +
-> +#define ASM_POP_SECTION()				\
-> +	__stringify(SYM_POP_SECTION())
-> +
->  #ifdef __ASSEMBLY__
->  
->  /* SYM_T_FUNC -- type used by assembler to mark functions */
-> @@ -209,6 +240,15 @@
->  	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
->  #endif
->  
-> +/*
-> + * SYM_FUNC_START_WEAK -- use where there are two global names for one
-
-SYM_FUNC_START_WEAK_ALIAS
-
-> + * function, and one of them is weak
-> + */
-> +#ifndef SYM_FUNC_START_WEAK_ALIAS
-> +#define SYM_FUNC_START_WEAK_ALIAS(name)			\
-> +	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
-> +#endif
-> +
->  /*
->   * SYM_FUNC_START_ALIAS -- use where there are two global names for one
->   * function
-> @@ -225,12 +265,24 @@
->   * later.
->   */
->  #define SYM_FUNC_START(name)				\
-> +	SYM_PUSH_SECTION(name) ASM_NL			\
-> +	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
-> +#endif
-> +
-> +/*
-> + * SYM_FUNC_START_SECT -- use for global functions, will be conditionally
-> + * placed into a section specified in the second argument
-> + */
-> +#ifndef SYM_FUNC_START_SECT
-> +#define SYM_FUNC_START_SECT(name, to)			\
-
-			      (name, sect)
-
-"to" reads kinda unclear what it is supposed to mean.
-
-
-> +	SYM_PUSH_SECTION(to) ASM_NL			\
->  	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
->  #endif
->  
->  /* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
->  #ifndef SYM_FUNC_START_NOALIGN
->  #define SYM_FUNC_START_NOALIGN(name)			\
-> +	SYM_PUSH_SECTION(name) ASM_NL			\
->  	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
->  #endif
->  
-> @@ -238,24 +290,38 @@
->  #ifndef SYM_FUNC_START_LOCAL
->  /* the same as SYM_FUNC_START_LOCAL_ALIAS, see comment near SYM_FUNC_START */
->  #define SYM_FUNC_START_LOCAL(name)			\
-> +	SYM_PUSH_SECTION(name) ASM_NL			\
->  	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
->  #endif
->  
->  /* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
->  #ifndef SYM_FUNC_START_LOCAL_NOALIGN
->  #define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
-> +	SYM_PUSH_SECTION(name) ASM_NL			\
-> +	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
-> +#endif
-> +
-> +/*
-> + * SYM_FUNC_START_LOCAL_NOALIGN_SECT -- use for local functions, w/o alignment,
-> + * will be conditionally placed into a section specified in the second argument
-> + */
-> +#ifndef SYM_FUNC_START_LOCAL_NOALIGN_SECT
-> +#define SYM_FUNC_START_LOCAL_NOALIGN_SECT(name, to)	\
-
-Ditto. And so on below.
-
-...
-
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 37926d19a74a..3babc0aeac61 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1386,6 +1386,17 @@ config CC_OPTIMIZE_FOR_SIZE
->  
->  endchoice
->  
-> +config HAVE_ASM_FUNCTION_SECTIONS
-> +	depends on ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
-> +	depends on $(cc-option,-Wa$(comma)--sectname-subst)
-> +	def_bool y
-> +	help
-> +	  This enables ASM function sections if both architecture
-> +	  and toolchain supports that. It allows creating a separate
-
-"... support it."
-
-> +	  .text section for each ASM function in order to improve
-
-s/.text // - the section name is specified by the macro arg.
-
-> +	  DCE and LTO (works the same way as -ffunction-sections for
-> +	  C code).
-> +
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Nicolas
