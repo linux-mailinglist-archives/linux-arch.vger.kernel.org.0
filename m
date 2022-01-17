@@ -2,105 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2F3491029
-	for <lists+linux-arch@lfdr.de>; Mon, 17 Jan 2022 19:17:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB211491071
+	for <lists+linux-arch@lfdr.de>; Mon, 17 Jan 2022 19:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238242AbiAQSQo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Jan 2022 13:16:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiAQSQo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jan 2022 13:16:44 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EB9C061574
-        for <linux-arch@vger.kernel.org>; Mon, 17 Jan 2022 10:16:43 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id g205so24723335oif.5
-        for <linux-arch@vger.kernel.org>; Mon, 17 Jan 2022 10:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YbSXZb6U5/gBXtPoXH1tBfKbCD50u97JOowOL8+wMp0=;
-        b=g7v8l7VLPOZ7rbh5X9eYoioWExIvOtdSPCty+mbNu/TstD7fO79GhxKxO7WRR2j4ba
-         ajYg/M3lcbDeiVy0ex8nrzYt5gXMweZTDEaQe9Nv6h86U8xCPfUQcBOMiZp+hwqYfv1T
-         fc1J1QOvSkqO38XB0REmnTHBb2nUVZa9VS4sWIHWrqxRR1xeNYR00sSWB6HPyE3IMEPO
-         YTX2B/D1DFYKdUJYl23K6fAqtgjPs2ZmdcPCTRmO7ASr7sUGlzgyJaTiuL6tWndInY6Z
-         6gt3XYmJKZp5CqMcBdA1bcw4UekrwemZXjQFMpttxnR/z3fCCHx11UPsnkvOrJOfCnwk
-         jnFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YbSXZb6U5/gBXtPoXH1tBfKbCD50u97JOowOL8+wMp0=;
-        b=19DDJLXGDAxCUtucnsVe5HI80znetc1Y7S1GWSE5+XcQt001iXCVdOVJegWi0crF9Y
-         mfWRS2WTEnJpiH1qyvJtkH64wjYGdPVa1c5cwjsunw7zI58SOIiKcsXXd9MggK3wZVGL
-         SPs/IcOwZVsSX4dzxKya5Hu/uEbp+NGfL88T222uZJMb9Vd7WJAJDLm0JMLD5M23oKXj
-         XMFJwGZR3fs8A6BSorgZHoYk+vyoZlC5/ycWElQ22OsYTma21uqbdb0o//4srqoc4Ya3
-         UjBMa+Ldh3+4yVnsCaj5mwx6Zq0+/vdApyJt9hNV/RQM1U5X0/PF8sfljiHzFiQZ6AE/
-         3NsA==
-X-Gm-Message-State: AOAM531W22BmsXI7gHiGhVXYOOfa+aNCWe39B/u4Tupayvdxzzs3d2uS
-        T5O5qj6IrvMkeF8PyL0uHUSDbA==
-X-Google-Smtp-Source: ABdhPJx/1pyfb2/mB3ClEs+wAsLxuwIRXyTg2ZnbXc8jRPznydhuHYr65iv181eA7VFjivvgzmjXBQ==
-X-Received: by 2002:a05:6808:189b:: with SMTP id bi27mr4283972oib.140.1642443402953;
-        Mon, 17 Jan 2022 10:16:42 -0800 (PST)
-Received: from ?IPV6:2804:431:c7cb:989a:152:78c4:5eab:b8b5? ([2804:431:c7cb:989a:152:78c4:5eab:b8b5])
-        by smtp.gmail.com with ESMTPSA id k24sm5946389otl.31.2022.01.17.10.16.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 10:16:42 -0800 (PST)
-Message-ID: <20ae043b-a013-068d-2d83-16e63f5b4989@linaro.org>
-Date:   Mon, 17 Jan 2022 15:16:39 -0300
+        id S233593AbiAQSq7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Jan 2022 13:46:59 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:59742 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230519AbiAQSq6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jan 2022 13:46:58 -0500
+Received: from in01.mta.xmission.com ([166.70.13.51]:45246)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n9X1s-005F9h-PW; Mon, 17 Jan 2022 11:46:57 -0700
+Received: from ip68-110-24-146.om.om.cox.net ([68.110.24.146]:49256 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1n9X1r-003jNu-BN; Mon, 17 Jan 2022 11:46:56 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Olivier Langlois <olivier@trillion01.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+        <20211213225350.27481-1-ebiederm@xmission.com>
+        <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+        <87sfu3b7wm.fsf@email.froward.int.ebiederm.org>
+        <YdniQob7w5hTwB1v@osiris>
+        <87ilurwjju.fsf@email.froward.int.ebiederm.org>
+        <87o84juwhg.fsf@email.froward.int.ebiederm.org>
+        <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
+        <87lezmrxlq.fsf@email.froward.int.ebiederm.org>
+        <87mtk2qf5s.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wjZ=aFzFb0BkxVEbN3o6a53R8Gq4hHnEZVCmpDKs3_FCw@mail.gmail.com>
+        <87h7a5kgan.fsf@email.froward.int.ebiederm.org>
+        <991211d94c6dc0ad3501cd9f830cdee916b982b3.camel@trillion01.com>
+        <87ee56e43r.fsf@email.froward.int.ebiederm.org>
+Date:   Mon, 17 Jan 2022 12:46:48 -0600
+In-Reply-To: <87ee56e43r.fsf@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Mon, 17 Jan 2022 10:09:28 -0600")
+Message-ID: <87v8yi8ajr.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v7 0/4] arm64: Enable BTI for the executable as well as
- the interpreter
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-arch@vger.kernel.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        libc-alpha@sourceware.org, Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20211115152714.3205552-1-broonie@kernel.org>
- <YbD4LKiaxG2R0XxN@arm.com> <20211209111048.GM3294453@arm.com>
- <YdSEkt72V1oeVx5E@sirena.org.uk>
- <101d8e84-7429-bbf1-0271-5436eca0eea2@arm.com> <YdbL5kIzi0xqVTVd@arm.com>
- <8550afd2-268d-a25f-88fd-0dd0b184ca23@arm.com> <YdcxUZ06f60UQMKM@arm.com>
- <Ydc+AuagOD9GSooP@sirena.org.uk> <YdgrjWVxRGRtnf5b@arm.com>
- <YeWtRk0H30q38eM8@arm.com>
-From:   Adhemerval Zanella <adhemerval.zanella@linaro.org>
-In-Reply-To: <YeWtRk0H30q38eM8@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-XM-SPF: eid=1n9X1r-003jNu-BN;;;mid=<87v8yi8ajr.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.110.24.146;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/YV6/Vvn8jXg8frZWqyokYAqL1kRlGwVk=
+X-SA-Exim-Connect-IP: 68.110.24.146
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa08.xmission.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.2 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa08 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Olivier Langlois <olivier@trillion01.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 466 ms - load_scoreonly_sql: 0.05 (0.0%),
+        signal_user_changed: 15 (3.2%), b_tie_ro: 13 (2.7%), parse: 1.27
+        (0.3%), extract_message_metadata: 13 (2.9%), get_uri_detail_list: 1.36
+        (0.3%), tests_pri_-1000: 6 (1.2%), tests_pri_-950: 1.41 (0.3%),
+        tests_pri_-900: 1.22 (0.3%), tests_pri_-90: 81 (17.4%), check_bayes:
+        79 (16.9%), b_tokenize: 6 (1.4%), b_tok_get_all: 9 (1.9%),
+        b_comp_prob: 2.8 (0.6%), b_tok_touch_all: 55 (11.9%), b_finish: 1.29
+        (0.3%), tests_pri_0: 333 (71.4%), check_dkim_signature: 0.51 (0.1%),
+        check_dkim_adsp: 2.8 (0.6%), poll_dns_idle: 1.31 (0.3%), tests_pri_10:
+        2.5 (0.5%), tests_pri_500: 8 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: io_uring truncating coredumps
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
+Subject updated to reflect the current discussion.
 
-On 17/01/2022 14:54, Catalin Marinas via Libc-alpha wrote:
-> On Fri, Jan 07, 2022 at 12:01:17PM +0000, Catalin Marinas wrote:
->> I think we can look at this from two angles:
->>
->> 1. Ignoring MDWE, should whoever does the original mmap() also honour
->>    PROT_BTI? We do this for static binaries but, for consistency, should
->>    we extend it to dynamic executable?
->>
->> 2. A 'simple' fix to allow MDWE together with BTI.
-> 
-> Thinking about it, (1) is not that different from the kernel setting
-> PROT_EXEC on the main executable when the dynamic loader could've done
-> it as well. There is a case for making this more consistent: whoever
-> does the mmap() should use the full attributes.
-> 
-> Question for the toolchain people: would the compiler ever generate
-> relocations in the main executable that the linker needs to resolve via
-> an mprotect(READ|WRITE) followed by mprotect(READ|EXEC)? If yes, we'd
-> better go for a proper MDWE implementation in the kernel.
-> 
+> Linus Torvalds <torvalds@linux-foundation.org> writes:
 
-Yes, text relocations.  However these are deprecated (some libcs even do
-not support it) and have a lot of drawbacks.
+> But I really think it's wrong.
+> 
+> You're trying to work around a problem the wrong way around. If a task
+> is dead, and is dumping core, then signals just shouldn't matter in
+> the first place, and thus the whole "TASK_INTERRUPTIBLE vs
+> TASK_UNINTERRUPTIBLE" really shouldn't be an issue. The fact that it
+> is an issue means there's something wrong in signaling, not in the
+> pipe code.
+> 
+> So I really think that's where the fix should be - on the signal delivery side.
+
+Thinking about it from the perspective of not delivering the wake-ups
+fixing io_uring and coredumps in a non-hacky way looks comparatively
+simple.  The function task_work_add just needs to not wake anything up
+after a process has started dying.
+
+Something like the patch below.
+
+The only tricky part I can see is making certain there are not any races
+between task_work_add and do_coredump depending on task_work_add not
+causing signal_pending to return true.
+
+diff --git a/kernel/task_work.c b/kernel/task_work.c
+index fad745c59234..5f941e377268 100644
+--- a/kernel/task_work.c
++++ b/kernel/task_work.c
+@@ -44,6 +44,9 @@ int task_work_add(struct task_struct *task, struct callback_head *work,
+ 		work->next = head;
+ 	} while (cmpxchg(&task->task_works, head, work) != head);
+ 
++	if (notify && (task->signal->flags & SIGNAL_GROUP_EXIT))
++		return 0;
++
+ 	switch (notify) {
+ 	case TWA_NONE:
+ 		break;
+
+Eric
