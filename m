@@ -2,122 +2,119 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 771CC491E7A
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Jan 2022 05:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7694B491E9C
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Jan 2022 05:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiAREYM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 17 Jan 2022 23:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiAREYL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 17 Jan 2022 23:24:11 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E724C06161C
-        for <linux-arch@vger.kernel.org>; Mon, 17 Jan 2022 20:24:11 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id z22so74145251edd.12
-        for <linux-arch@vger.kernel.org>; Mon, 17 Jan 2022 20:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/zF5YGbP0nEkT+Uha6r3jtWZKXjZYuO+eTPXU/yYfOc=;
-        b=XlkT9EJX4wkAEbbjts/SRs/Oca3s7hNnc/YxVUdn5XXezzzfWLPOgcdIg2Eih08gC6
-         iyP5Xy26dc+EWHtnjXbLEbLbvuWerIEEl8qJ3kEwiW5OjDVPByTmajKydrPBjcTLLzF6
-         EJIKzzZfM0pAGb4rz0nfHJ7VtKgcCae7zrXTw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/zF5YGbP0nEkT+Uha6r3jtWZKXjZYuO+eTPXU/yYfOc=;
-        b=6qPcYf16litvRdbyO6th2WkMvHbQHDobNdhuQk5L8jU3gKSnNqaXBLfJftPt/hitG+
-         uuRVme7g+b0I4J+r3UYIbzBoAPGuAOYu+32jwLSBV+03CIyuTaCMAFsXFF9ijTYeQtur
-         0m2s75Z0HA9P4PsZEocpR1sVOC+YPKbrkBmbf8htCJLImveA4z+3lMZFNh7h7kM7UC+1
-         rydGQzQ2eYocvj7UEkvpx+sAVHnfxifnkuj30AKkN36LQeRQ11x9PiWpGGbO+VPVX3uz
-         22ycDVr6gAWfDZ9A9tj3WimZ7cyz1cgwv8zFOd45wVbtgeHigro2fCFgDIYQ/v1mp8zW
-         /C9g==
-X-Gm-Message-State: AOAM530l3jzFK1sOTgFF3QydzPTMiaqk9Qd4Cds1Jt8PAsHo8DvuUdqQ
-        ZfGJSkr0oHJxatTkO2/TgWhd9Ly3rMJqsqhv
-X-Google-Smtp-Source: ABdhPJyl2ApE6hF6dWKoH6cQQxDw7HWD9xOFIdk3dhyIBKRX0zzY/6Xf/gGcX+mv65rk/foeuQCw6Q==
-X-Received: by 2002:a17:907:2da1:: with SMTP id gt33mr19143631ejc.590.1642479849478;
-        Mon, 17 Jan 2022 20:24:09 -0800 (PST)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id jg3sm4944227ejc.37.2022.01.17.20.24.07
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jan 2022 20:24:08 -0800 (PST)
-Received: by mail-wm1-f42.google.com with SMTP id ay4-20020a05600c1e0400b0034a81a94607so4075783wmb.1
-        for <linux-arch@vger.kernel.org>; Mon, 17 Jan 2022 20:24:07 -0800 (PST)
-X-Received: by 2002:a05:6000:1787:: with SMTP id e7mr8150004wrg.281.1642479847518;
- Mon, 17 Jan 2022 20:24:07 -0800 (PST)
+        id S235895AbiAREpK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 17 Jan 2022 23:45:10 -0500
+Received: from drummond.us ([74.95.14.229]:59983 "EHLO
+        talisker.home.drummond.us" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235790AbiAREpJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 17 Jan 2022 23:45:09 -0500
+Received: from talisker.home.drummond.us (localhost [127.0.0.1])
+        by talisker.home.drummond.us (8.15.2/8.15.2/Debian-20) with ESMTP id 20I4hKxA765034;
+        Mon, 17 Jan 2022 20:43:20 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=home.drummond.us;
+        s=default; t=1642481000;
+        bh=JFi+HKlyMuoco5DMezAYc0cpMIkALY2NRgqxQb8XaVQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HrfroqxJrad3DzZ6FT4waFIt4MeHoVb4BxDueoszUUfOdgocQu4B3/GEGCbfH7j+4
+         bCnukvS8DMk0QncCM+4cnd67oBI11AUaZSfyA1jy6TaXA3X5Kcb8WqFT1lOO/G4bU0
+         sE937UadIfrwnyajiN2sClndEDW/LSMvKjwv+nnxvNZNZDwNa20sogsmB1xI0fuutp
+         TyP5IwYKNFjesXLYErOM4Z88Ci8VqrvFMwxoLr+OAwdySfNxgdpWQg9mNN1heppfgk
+         /c+IM2lyAghg9dy8t50eqPnrKRsXzAsmMkXQhyUwc1ZmqI7/AHP52rv9ZYELVdXPsV
+         F6MVEFQaeeKrg==
+Received: (from walt@localhost)
+        by talisker.home.drummond.us (8.15.2/8.15.2/Submit) id 20I4hDNe765026;
+        Mon, 17 Jan 2022 20:43:13 -0800
+From:   Walt Drummond <walt@drummond.us>
+To:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
+        borntraeger@linux.ibm.com, chris@zankel.net, davem@davemloft.net,
+        gregkh@linuxfoundation.org, hca@linux.ibm.com, deller@gmx.de,
+        ink@jurassic.park.msu.ru, James.Bottomley@HansenPartnership.com,
+        jirislaby@kernel.org, mattst88@gmail.com, jcmvbkbc@gmail.com,
+        mpe@ellerman.id.au, paulus@samba.org, rth@twiddle.net,
+        dalias@libc.org, tsbogend@alpha.franken.de, gor@linux.ibm.com,
+        ysato@users.osdn.me
+Cc:     linux-kernel@vger.kernel.org, ar@cs.msu.ru, walt@drummond.us,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: [PATCH 0/3] status: TTY status message request
+Date:   Mon, 17 Jan 2022 20:42:57 -0800
+Message-Id: <20220118044259.764945-1-walt@drummond.us>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
- <20211213225350.27481-1-ebiederm@xmission.com> <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
- <87sfu3b7wm.fsf@email.froward.int.ebiederm.org> <YdniQob7w5hTwB1v@osiris>
- <87ilurwjju.fsf@email.froward.int.ebiederm.org> <87o84juwhg.fsf@email.froward.int.ebiederm.org>
- <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
- <87lezmrxlq.fsf@email.froward.int.ebiederm.org> <87mtk2qf5s.fsf@email.froward.int.ebiederm.org>
- <CAHk-=wjZ=aFzFb0BkxVEbN3o6a53R8Gq4hHnEZVCmpDKs3_FCw@mail.gmail.com>
- <87h7a5kgan.fsf@email.froward.int.ebiederm.org> <991211d94c6dc0ad3501cd9f830cdee916b982b3.camel@trillion01.com>
- <87ee56e43r.fsf@email.froward.int.ebiederm.org> <87v8yi8ajr.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <87v8yi8ajr.fsf_-_@email.froward.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 18 Jan 2022 06:23:51 +0200
-X-Gmail-Original-Message-ID: <CAHk-=wjCs7XPtNHwzVHK=0D=tZgtdyMGLtoomZB5JeUm7D3JEg@mail.gmail.com>
-Message-ID: <CAHk-=wjCs7XPtNHwzVHK=0D=tZgtdyMGLtoomZB5JeUm7D3JEg@mail.gmail.com>
-Subject: Re: io_uring truncating coredumps
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Olivier Langlois <olivier@trillion01.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Alexey Gladkov <legion@kernel.org>,
-        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 17, 2022 at 8:47 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Thinking about it from the perspective of not delivering the wake-ups
-> fixing io_uring and coredumps in a non-hacky way looks comparatively
-> simple.  The function task_work_add just needs to not wake anything up
-> after a process has started dying.
->
-> Something like the patch below.
+This patchset adds TTY status message request feature to the n_tty
+line dicipline.  This feature prints a brief message containing basic
+system and process group information to a user's TTY in response to a
+new control character in the line dicipline (default Ctrl-T) or the
+TIOCSTAT ioctl.  The message contains the current system load, the
+name and PID of an interesting process in the forground process group,
+it's run time, percent CPU usage and RSS.  An example of this message
+is:
 
-Hmm. Yes, I think this is the right direction.
+  load: 0.31  cmd: sleep 3616843 [sleeping] 0.36r 0.00u 0.00s 0% 696k
 
-That said, I think it should not add the work at all, and return
--ESRCH, the exact same way that it does for that work_exited
-condition.
+User API visible changes are limited to:
+ - The addition of VSTATUS in termios.c_cc[]
+ - The addition of NOKERNINFO bit in termios.l_cflags
+ - The addition of the TIOCSTAT ioctl number
 
-Because it's basically the same thing: the task is dead and shouldn't
-do more work. In fact, task_work_run() is the thing that sets it to
-&work_exited as it sees PF_EXITING, so it feels to me that THAT is
-actually the issue here - we react to PF_EXITING too late. We react to
-it *after* we've already added the work, and then we do that "no more
-work" logic only after we've accepted those late work entries?
+None of these changes break the existing kernel api as the termios
+structure on all architectures has enough space in the control
+character array (.c_cc) for the new character, and the other changes
+are space agnostic.
 
-So my gut feel is that task_work_add() should just also test PF_EXITING.
+This feature is in many other Unix-like systems, both current and
+historical.  In other implementations, this feature would also send
+SIGINFO to the process group; this implementation does not.
 
-And in fact, my gut feel is that PF_EXITING is too late anyway (it
-happens after core-dumping, no?)
+Walt Drummond (3):
+  vstatus: Allow the n_tty line dicipline to write to a user tty
+  vstatus: Add user space API definitions for VSTATUS, NOKERNINFO and
+    TIOCSTAT
+  status: Display an informational message when the VSTATUS character is
+    pressed or TIOCSTAT ioctl is called.
 
-But I guess that thing may be on purpose, and maybe the act of dumping
-core itself wants to do more work, and so that isn't an option?
+ arch/alpha/include/asm/termios.h         |   4 +-
+ arch/alpha/include/uapi/asm/ioctls.h     |   1 +
+ arch/alpha/include/uapi/asm/termbits.h   |  34 ++---
+ arch/ia64/include/asm/termios.h          |   4 +-
+ arch/ia64/include/uapi/asm/termbits.h    |  34 ++---
+ arch/mips/include/asm/termios.h          |   4 +-
+ arch/mips/include/uapi/asm/ioctls.h      |   1 +
+ arch/mips/include/uapi/asm/termbits.h    |  36 ++---
+ arch/parisc/include/asm/termios.h        |   4 +-
+ arch/parisc/include/uapi/asm/ioctls.h    |   1 +
+ arch/parisc/include/uapi/asm/termbits.h  |  34 ++---
+ arch/powerpc/include/asm/termios.h       |   4 +-
+ arch/powerpc/include/uapi/asm/ioctls.h   |   2 +
+ arch/powerpc/include/uapi/asm/termbits.h |  34 ++---
+ arch/s390/include/asm/termios.h          |   4 +-
+ arch/sh/include/uapi/asm/ioctls.h        |   1 +
+ arch/sparc/include/uapi/asm/ioctls.h     |   1 +
+ arch/sparc/include/uapi/asm/termbits.h   |  38 +++---
+ arch/xtensa/include/uapi/asm/ioctls.h    |   1 +
+ drivers/tty/Makefile                     |   2 +-
+ drivers/tty/n_tty.c                      | 113 +++++++++++-----
+ drivers/tty/n_tty_status.c               | 162 +++++++++++++++++++++++
+ drivers/tty/tty_io.c                     |   2 +-
+ include/asm-generic/termios.h            |   4 +-
+ include/linux/tty.h                      | 123 ++++++++---------
+ include/uapi/asm-generic/ioctls.h        |   1 +
+ include/uapi/asm-generic/termbits.h      |  34 ++---
+ 27 files changed, 461 insertions(+), 222 deletions(-)
+ create mode 100644 drivers/tty/n_tty_status.c
 
-So I don't think your patch is "right" as-is, and it all worries me,
-but yes, I think this area is very much the questionable one.
+-- 
+2.30.2
 
-I think that work stopping and the io_uring shutdown should probably
-move earlier in the exit queue, but as mentioned above, maybe the work
-addition boundary in particular really wants to be late because the
-exit process itself still uses task works? ;(
-
-              Linus
