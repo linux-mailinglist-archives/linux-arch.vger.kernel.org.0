@@ -2,105 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F234920F5
-	for <lists+linux-arch@lfdr.de>; Tue, 18 Jan 2022 09:09:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117104921EF
+	for <lists+linux-arch@lfdr.de>; Tue, 18 Jan 2022 10:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343918AbiARIJD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 18 Jan 2022 03:09:03 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:49457 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236238AbiARIJC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Jan 2022 03:09:02 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MnJQq-1mQjd93nCG-00jLy4; Tue, 18 Jan 2022 09:09:00 +0100
-Received: by mail-ot1-f45.google.com with SMTP id c3-20020a9d6c83000000b00590b9c8819aso23176086otr.6;
-        Tue, 18 Jan 2022 00:08:58 -0800 (PST)
-X-Gm-Message-State: AOAM532fK7b9r2MQpFYeHxUhEZWuwrAtssHkw2podjFcPSr4466Mo9BB
-        ODCbufzb+b+yNetPHpg0G/w9K3nUrghvsNYorWk=
-X-Google-Smtp-Source: ABdhPJydwgmux0eMV8HI8b9BdklNP+7LV2ch1rDgfPNeEtqq30DY58YS5CzATVJf7L4CaVG1qsRotI3Rplk0R7Z1cCo=
-X-Received: by 2002:a05:6830:2095:: with SMTP id y21mr17140172otq.368.1642493337643;
- Tue, 18 Jan 2022 00:08:57 -0800 (PST)
+        id S1345194AbiARJEQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 18 Jan 2022 04:04:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345162AbiARJEF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 18 Jan 2022 04:04:05 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A94C06175B
+        for <linux-arch@vger.kernel.org>; Tue, 18 Jan 2022 01:03:59 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id e195so23599692ybb.7
+        for <linux-arch@vger.kernel.org>; Tue, 18 Jan 2022 01:03:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=IAamEH5Xu1dJ3X0trVcFTPIrL7aTtcDGn5mUS4vw1a8=;
+        b=NHprezroMsvNvJXQj44poYAHm3bYOXBJZX5Wg8cW9F++sdGchhDxOadiHN0N74BqVo
+         LLsuxLOWO8eNb9Df+WO3omzRkxx9CES4mNA3Io5+oAgtUVpSbYHogg87+gCtw68c4I2t
+         jU5NFjjkmYDNDUVEzOuCjT2//b/zcZNUhM8rDEil4EjAKikZAouVCPfFT1ek6iBkNaWB
+         bcv0AUKVrFCVpxHEBYPBv8KSS3FHlu8eykSeEYJmKwrS5qbSbzeHmao2+zqXdm7uNchU
+         Rqamo/TlsQaFmHXGfCx8STX0aSjqEkHcratuhlypnT20IcvCVcqt6eV72JWjrAN3qvU0
+         7wEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=IAamEH5Xu1dJ3X0trVcFTPIrL7aTtcDGn5mUS4vw1a8=;
+        b=J+Hkc4OS661VLrLyKFN1kh0JyyDiVvNRmKC+uHu+hzSKkK5Lw0VwoBVdRgOVKWYdp3
+         ZUUOn7t5atbyAKePpBZ2BWa1rylQieybd6PxCnsIaNRTsFdFx8LyehS7+3oTPbaLUR8d
+         Ka6xdhjWKsYz6TStuZomenOD3qRgBeAEKGjBUqyuvQdyLsQBt6D1QV218qZ5H7FwiltG
+         pcUkl4n+ROdgVntvoVovuw3aaJJgQsaL9UEf4sNB1u4Whfs5auvcWg8EUQGnZSxYFT2b
+         skrjR0W/nVQHKiopEL2xPXxmegIKYF2p06eJ7KK9HOEsEaNdaeiS91yPv63AoubFyFe1
+         VHnw==
+X-Gm-Message-State: AOAM530a27N0eAGNmqBEtkTgq9J/g2b0KzyXMKLkU4eaL3BeLrObkqOd
+        D727X6eLcb5Gl6pak0Ar08MHssIzgFBIjyLAevs=
+X-Google-Smtp-Source: ABdhPJykqN6yybQfaT0kT/1JcofcZUp4wlVhtJ/gATn7SS5XA0pfx+GW8LgTxWINZerrn1yMSBF81skqvw8cEBrK9Sg=
+X-Received: by 2002:a25:e549:: with SMTP id c70mr10839900ybh.339.1642496638937;
+ Tue, 18 Jan 2022 01:03:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20220118044323.765038-1-walt@drummond.us> <20220118044323.765038-2-walt@drummond.us>
-In-Reply-To: <20220118044323.765038-2-walt@drummond.us>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 18 Jan 2022 09:08:41 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0ohW+w8_A8qMNqxpTmFcvxQr+z9YR96RAu5-wtdG_5+g@mail.gmail.com>
-Message-ID: <CAK8P3a0ohW+w8_A8qMNqxpTmFcvxQr+z9YR96RAu5-wtdG_5+g@mail.gmail.com>
-Subject: Re: [PATCH 2/3] vstatus: Add user space API definitions for VSTATUS,
- NOKERNINFO and TIOCSTAT
-To:     Walt Drummond <walt@drummond.us>
-Cc:     Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.osdn.me>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, ar@cs.msu.ru,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>, linux-ia64@vger.kernel.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-arch <linux-arch@vger.kernel.org>
+Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:03:58
+ -0800 (PST)
+Reply-To: asil.ajwad@gmail.com
+From:   Asil Ajwad <graceyaogokamboule@gmail.com>
+Date:   Mon, 17 Jan 2022 21:03:58 -1200
+Message-ID: <CA+Yy_gCoV9jOYW1qG-5psBKMTZyzWOj2x6Pu5iusfy4TEMaBwQ@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:jroLeFEX00jpZO68/IoXmOXHzWxP7+RGfe7zZU/LWVRAmJVnGNv
- gfoJ7rRgSe65YOQp/O3YEeGDAfFcsSjHHsUjkcqrszvHWg5gBHfk3A3YFhGq/FHJpavxKjU
- roGZKdTzpl8vLd/uu2J1imMm3MThe3zqsntL/I34IuX5wJpdmQaX9h4PjCqbe58qz7w1Fkf
- 7f/exEH7NfiMcGfZ1sIcw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wB2+zO+N3vY=:/xxomx9nt6MxOycubjZZYy
- xJGx9bTbvBhoDW38MMyjlL1FygVKIiNX15B07KZWwWYDLLJz5Qku+J61UsgVvA+NZ2ybs0GTy
- ZThv/7qJhh1Vo6vVUeLE8qwK7QH7nwP+SBbe43yzNoQTwN3N8h8UYUxFBjFCWb0LFypjiGskc
- 39NNBA/L6Cz+Ch+Kv1bGxsBLTIW7DpcqdijUrHfO3A8J9eTXT2MizvislYR3E4y2HF7kgBLDz
- wUz7d5vMGdv//PxHcmbDb69S1gpg32Ztb/INYb5oKX3vdo/xe5ynUS6QCFDDQuWw3JMgGl6IN
- GyICh17QWiGK/CU10BoUnaW9B7RXdZrlQZ4WrNPR5uGj1J62hRhk28AGveSizBc/tsOfjSFiN
- j++m5AIktQRGC+4mdSYmKzkcb3/zOpuYyygnk901obnlGL/eJ58/svq1M1oRu5sPVqj2RW+46
- qjNYKZs0TWBWBGIMcqjYhKGufFKxKkktY+7FKDVBB+I3lFTANKXbAQE6BJEiqDm1AWzFwoGRP
- 9oiyqtz8/3RlWgmHFlnI/gDVMQN4dXCkzuZD2kYsbvljhXqNrk7JPpOd3NWdNlGEQsTMvW+ll
- ovhpX0MuYPTEH0ZtZHoH4XloLH7cKpCTNPod40yg8aU55seCw2dAOv0K8/reVbpYyH5qxBQdW
- a23XMaPEBbU95U38zuZOC4N70hkYFlj0a+ViEb3T/N/WUSxHE6GtWsiGkaqeSZnZgxSHWJ6Dd
- 6HcU+2t0DTvSOTzpVKcEKtgtPYyOPizbAv8lWFtKKwYyHhzUMEO2yEX/Kb3AjoAUIbzr6ecKV
- T6BJ/0OKJ+D9Hlbef17QLHHCP5aDTXghnUzlddHSLWeuiHhpJQ=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jan 18, 2022 at 5:43 AM Walt Drummond <walt@drummond.us> wrote:
+-- 
+Greetings,
 
-> diff --git a/include/uapi/asm-generic/ioctls.h b/include/uapi/asm-generic/ioctls.h
-> index cdc9f4ca8c27..eafb662d6a0e 100644
-> --- a/include/uapi/asm-generic/ioctls.h
-> +++ b/include/uapi/asm-generic/ioctls.h
-> @@ -97,6 +97,7 @@
->
->  #define TIOCMIWAIT     0x545C  /* wait for a change on serial input line(s) */
->  #define TIOCGICOUNT    0x545D  /* read serial port inline interrupt counts */
-> +#define TIOCSTAT        0x545E /* display process group stats on tty */
->
->  /*
->   * Some arches already define FIOQSIZE due to a historical
+I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
+an ATM Visa Card to withdraw money at, ATM Cash Machine in your
+country, if yes I want to transfer abounded fund the sum of $10.5million
+US-Dollars, to you from my country, this is part of the money that was
+abounded by our late old client a politician who unfortunately lost
+his life and was forced out of power Du to greedy act, the bank will
 
-I don't see any advantage in using the old-style ioctl command definitions
-here, and looking through the history of this file, all recent additions used
-the now normal _IOWR() style macros, so please use those as well.
+change the account details to your name, and apply for a Visa Card
+with your details, the Visa Card will be send to you, and you can be
+withdrawing money with it always, whatever any amount you withdraw
+daily, you will send 60% to me and you will take 40%, the Visa Card
+and the bank account will be on your name, I will be waiting for your
+response for more details, thanks to you a lot for giving me your time.
 
-       Arnd
+regards,
+Mr.Asil Ajwad.
