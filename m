@@ -2,138 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D4E49CCBE
-	for <lists+linux-arch@lfdr.de>; Wed, 26 Jan 2022 15:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DF649CD4D
+	for <lists+linux-arch@lfdr.de>; Wed, 26 Jan 2022 16:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242373AbiAZOwG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 26 Jan 2022 09:52:06 -0500
-Received: from mga18.intel.com ([134.134.136.126]:52046 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242393AbiAZOwB (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 26 Jan 2022 09:52:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643208721; x=1674744721;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+C7GbNvdhhupsiddx9nyBA2kLdGmDvK2B+OFoSsBS2A=;
-  b=lBIehyv5ZcqCNTcVcY22vJnTvHWgmJhgKUujnC1GIaH5SoRnbzTj5ECX
-   UPyopMkTIeJ84XSizZkQ4/OmV9v5rIL0Y2MwdqqZcfaA4/9Ypehvmk8If
-   0/cGAHSarb+yAok6fS9FROEo6pneH1z3T8ynRr2vySe4ydiEThmfw1Y7s
-   cgEiG0d6hF2+SKXFhT6nlB+Fk5XJCw7JEbV4Jq4EfmbNRb1ObZ/zz2LDR
-   3N7ckSQ7nuMngowD9Wjs+MY1WcCkdWa7PM5FzfTBf66nGMyh4TRDKng/m
-   f7VduCIYkmssF0157ydMaQBoq+zITh9c5Gz/crUAomOeDA1PcZtc/IPRB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10238"; a="230137337"
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="230137337"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2022 06:52:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,318,1635231600"; 
-   d="scan'208";a="617981478"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Jan 2022 06:51:52 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 20QEpn8P004691;
-        Wed, 26 Jan 2022 14:51:49 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        id S242560AbiAZPG1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 26 Jan 2022 10:06:27 -0500
+Received: from cloud48395.mywhc.ca ([173.209.37.211]:60350 "EHLO
+        cloud48395.mywhc.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235639AbiAZPG1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 26 Jan 2022 10:06:27 -0500
+Received: from [45.44.224.220] (port=43668 helo=[192.168.1.179])
+        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <olivier@trillion01.com>)
+        id 1nCjsO-0004Xu-Ld; Wed, 26 Jan 2022 10:06:24 -0500
+Message-ID: <719907481ee811fb7556deec1469a20edf0b5cdd.camel@trillion01.com>
+Subject: Re: [PATCH 1/8] signal: Make SIGKILL during coredumps an explicit
+ special case
+From:   Olivier Langlois <olivier@trillion01.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "<linux-arch@vger.kernel.org>" <linux-arch@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Alexey Gladkov <legion@kernel.org>,
+        Kyle Huey <me@kylehuey.com>, Oleg Nesterov <oleg@redhat.com>,
         Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v9 05/15] x86: support ASM function sections
-Date:   Wed, 26 Jan 2022 15:49:52 +0100
-Message-Id: <20220126144952.851066-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <YerMYcin4woehiL9@zn.tnic>
-References: <20211223002209.1092165-1-alexandr.lobakin@intel.com> <20211223002209.1092165-6-alexandr.lobakin@intel.com> <YerMYcin4woehiL9@zn.tnic>
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Date:   Wed, 26 Jan 2022 10:06:23 -0500
+In-Reply-To: <87ee56e43r.fsf@email.froward.int.ebiederm.org>
+References: <87a6ha4zsd.fsf@email.froward.int.ebiederm.org>
+         <20211213225350.27481-1-ebiederm@xmission.com>
+         <CAHk-=wiS2P+p9VJXV_fWd5ntashbA0QVzJx15rTnWOCAAVJU_Q@mail.gmail.com>
+         <87sfu3b7wm.fsf@email.froward.int.ebiederm.org> <YdniQob7w5hTwB1v@osiris>
+         <87ilurwjju.fsf@email.froward.int.ebiederm.org>
+         <87o84juwhg.fsf@email.froward.int.ebiederm.org>
+         <57dfc87c7dd5a2f9f9841bba1185336016595ef7.camel@trillion01.com>
+         <87lezmrxlq.fsf@email.froward.int.ebiederm.org>
+         <87mtk2qf5s.fsf@email.froward.int.ebiederm.org>
+         <CAHk-=wjZ=aFzFb0BkxVEbN3o6a53R8Gq4hHnEZVCmpDKs3_FCw@mail.gmail.com>
+         <87h7a5kgan.fsf@email.froward.int.ebiederm.org>
+         <991211d94c6dc0ad3501cd9f830cdee916b982b3.camel@trillion01.com>
+         <87ee56e43r.fsf@email.froward.int.ebiederm.org>
+Organization: Trillion01 Inc
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.42.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Borislav Petkov <bp@alien8.de>
-Date: Fri, 21 Jan 2022 16:08:17 +0100
+On Mon, 2022-01-17 at 10:09 -0600, Eric W. Biederman wrote:
+> Olivier Langlois <olivier@trillion01.com> writes:
+> From my perspective I am not at all convinced that io_uring is the
+> only
+> culprit.
+> 
+> Beyond that the purpose of a coredump is to snapshot the process as
+> it
+> is, before anything is shutdown so that someone can examine the
+> coredump
+> and figure out what failed.  Running around changing the state of the
+> process has a very real chance of hiding what is going wrong.
+> 
+> Further your change requires that there be a place for io_uring to
+> clean
+> things up.  Given that fundamentally that seems like the wrong thing
+> to
+> me I am not interested in making it easy to what looks like the wrong
+> thing.
+> 
+> All of this may be perfection being the enemy of the good (especially
+> as
+> your io_uring magic happens as a special case in do_coredump).  My
+> work
+> in this area is to remove hacks so I can be convinced the code works
+> 100% of the time so unfortunately I am not interested in pick up a
+> change that is only good enough.  Someone else like Andrew Morton
+> might
+> be.
+> 
+> 
+Fair enough.
 
-> On Thu, Dec 23, 2021 at 01:21:59AM +0100, Alexander Lobakin wrote:
-> > Address places which need special care and enable
-> > CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
-> > 
-> > Notably:
-> >  - propagate --sectname-subst to aflags in x86/boot/Makefile and
-> >    x86/boot/compressed/Makefile as both override aflags;
-> 
-> s/aflags/KBUILD_AFLAGS/
-> 
-> Let's be more precise pls.
-> 
-> >  - symbols starting with a dot (like ".Lbad_gs") should be handled
-> >    manually with SYM_*_START_SECT(.Lbad_gs, bad_gs) as "two dots"
-> >    is a special (and CPP doesn't want to concatenate two dots in
-> >    general);
-> >  - some symbols explicitly need to reside in one section (like
-> >    kexec control code, hibernation page etc.);
-> >  - macros creating aliases for functions (like __memcpy() for
-> >    memcpy() etc.) should go after the main declaration (as
-> >    aliases should be declared in the same section and they
-> >    don't have SYM_PUSH_SECTION() inside);
-> >  - things like ".org", ".align" should be manually pushed to
-> >    the same section the next symbol goes to;
-> >  - expand indirect_thunk and .fixup wildcards in vmlinux.lds.S
-> 
-> $ git grep -E "\.fixup" arch/x86/*.S
-> $
-> 
-> I guess I'll continue with your new version since a bunch of stuff
-> has changed in arch/x86/ in the meantime so that that set would need
-> refreshing.
+You do bring good points but I am not so sure about the second one
+considering that the coredump is meant to be a snapshot and if io_uring
+still runs, the state may change as the dump is generated anyway.
 
-Yeah, sure. .fixup usage was removed in particular.
-I'll queue v10 soon.
+I'll follow with interest what you finally come up with but my mindset
+when I wrote the patch was that there does not seem to be any benefit
+keeping io_uring active while coredumping and it has the potential to
+create nasty issues.
 
-> 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
+I did stumble into core file truncation problem.
 
-Thanks for the reviews,
-Al
+Pavel got that when modifying io_uring code:
+https://lore.kernel.org/all/1b519092-2ebf-3800-306d-c354c24a9ad1@gmail.com/
 
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+and I find very likely that keeping io_uring active while coredumping
+might create new nasty but subtle issues down the road...
+
+Greetings,
+Olivier
+
