@@ -2,89 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A05EE49ECD9
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jan 2022 21:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2816A49ED0E
+	for <lists+linux-arch@lfdr.de>; Thu, 27 Jan 2022 22:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240181AbiA0UtQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Jan 2022 15:49:16 -0500
-Received: from mail-out2.in.tum.de ([131.159.0.36]:49089 "EHLO
-        mail-out2.informatik.tu-muenchen.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235860AbiA0UtQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>);
-        Thu, 27 Jan 2022 15:49:16 -0500
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mail-out2.informatik.tu-muenchen.de (Postfix) with ESMTP id 2FDFC240086;
-        Thu, 27 Jan 2022 21:49:14 +0100 (CET)
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 2D1AAFDD; Thu, 27 Jan 2022 21:49:14 +0100 (CET)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 0A005FDC;
-        Thu, 27 Jan 2022 21:49:14 +0100 (CET)
-Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 0502F592;
-        Thu, 27 Jan 2022 21:49:14 +0100 (CET)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id F2C494A040E; Thu, 27 Jan 2022 21:49:13 +0100 (CET)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 0AE414A0238;
-        Thu, 27 Jan 2022 21:49:12 +0100 (CET)
-        (Extended-Queue-bit xtech_em@fff.in.tum.de)
-Date:   Thu, 27 Jan 2022 21:49:07 +0100
-From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: [PATCH] tools/memory-model: Clarify syntactic and semantic
- dependencies
-Message-ID: <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
- <YfBk265vVo4FL4MJ@rowland.harvard.edu>
- <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
- <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
+        id S230477AbiA0VKu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 27 Jan 2022 16:10:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244573AbiA0VKu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Jan 2022 16:10:50 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B474C06174A
+        for <linux-arch@vger.kernel.org>; Thu, 27 Jan 2022 13:10:49 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id e16so3577242qtq.6
+        for <linux-arch@vger.kernel.org>; Thu, 27 Jan 2022 13:10:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=m0D8ivz9PDCDCKh/arptMpR3/ao+LhFd+WDbL0Ndw6mZAYZf1UgxGLzVj40s+AmZjb
+         DuEwjd7NT9LFwA9OjKx7vr7puLYpS6zkJNbh+1BfuQgx4db+dU06Jgc7C75K093Hwjn/
+         9mCc5rYI5j3y1VvMx9vpxL5dad+OafMT9QhIQgFRN9dvv+QgByQ7o1yzKGSP02L54Znm
+         q7FBXWGkelfiR3xpWnnkdKDqg2UlG70uCnsM1s4SP7cRlEb+IJNQAjeVKHpZy42mZonq
+         RnHAdJAaDrxUHvlQWr6CsD5rnkBvpJUkcJOYzRgUFr/Bb7DCHALpPY9Ux9K4Rjywr0lt
+         YgYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=wXM0hly6tyNlZq07rMipvtfpnu3wRqtV0B2JSV05g3E=;
+        b=Kk3ysi+g2nZih5bghs6Jr7wEWhHlrw4EthH2jw/xH707qhmjGO+XCL+U/oJl7cxEi3
+         DN35084+NH2jnGkfhZsO68HyZUOgD4oQWUXVzGpeG7J9po0X78AN4v6l0BkIiByzqRhU
+         ZGTCB5tbn61ag83NPU8ggMl7+EtDEsOjpKFOxMYPd+Y40HYyRp15ULP7d74iy9vSyGdH
+         XGCrPPlQ6uknyz3djIU19QiDFVg7m80/G/k5RFzXMojxGPK/JLCSo8HIoCcd/ceTg1bK
+         ABwKvPfVgNBolTvOIsb6Zl48L5dZwRm4hjOBmhYxlwMjJzpUmE7HzFX5wIUv2ikTrK3U
+         TVPw==
+X-Gm-Message-State: AOAM533zzQY1jBkCCkJj6s+Jcl/32RICGxsO3DBI1JO1C63RMw8b1Hca
+        +qCbYvopbAZ2dHS3S+z+1xpGvfPODCuBz0+kVu0=
+X-Google-Smtp-Source: ABdhPJxjfwa8g49rNfb5xQ4Dtq316EM5E6QepnaR+uvM+BcTaI+qmB/caHz8VslukXXXqzp0798ys0wp0mZ+YQ4gMH8=
+X-Received: by 2002:ac8:4e48:: with SMTP id e8mr4202203qtw.64.1643317847801;
+ Thu, 27 Jan 2022 13:10:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
+Received: by 2002:a05:6214:e4b:0:0:0:0 with HTTP; Thu, 27 Jan 2022 13:10:46
+ -0800 (PST)
+Reply-To: eanna00111@gmail.com
+From:   Mrs Anna Edward <mussaaliooooo7@gmail.com>
+Date:   Thu, 27 Jan 2022 13:10:46 -0800
+Message-ID: <CAFbf-n2dj0f-EXo2OhZA4D_6QXVYoysuMB5_+AOQv9Sb_nGe0w@mail.gmail.com>
+Subject: Urgent Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 12:04:26PM -0500, Alan Stern wrote:
-> On Thu, Jan 27, 2022 at 12:00:22PM +0100, Paul Heidekrüger wrote:
-> > On Tue, Jan 25, 2022 at 04:00:11PM -0500, Alan Stern wrote:
-> > > That's a very abstract way of describing the situation; it doesn't do a 
-> > > good job of getting the real idea across.  It also mixes up two separate 
-> > > ideas: behaviors being unaffected by a syntactic dependency and 
-> > > behaviors being undefined.  They should be described separately. 
-> > 
-> > Many thanks for the feedback! I agree, the explanation works a lot
-> > better once readers have been introduced to data, addr and ctrl
-> > relations. 
-> > 
-> > > I would prefer something along these lines...
-> > 
-> > Shall I resubmit the patch with you as co-developer, or, given that it's
-> > arguably your work now, would you like to submit the patch yourself?
-> 
-> I'll submit it myself, with Suggested-by: you.  How does that sound?
+Greeting to you,
+Please forgive me for stressing you with my predicaments and I sorry
+to approach you through this media because it serves the fastest means
+of communication. I came across your E-mail from my personal search
+and I decided to contact you believing you will be honest to fulfill
+my final wish before I die.
 
-Sounds good! 
+I am Mrs Anna Edward, 63 years, from USA, I am childless and I am
+suffering from a pro-long critical cancer, my doctors confirmed I may
+not live beyond two months from now as my ill health has defiled all
+forms of medical treatment. Since my days are numbered, I have decided
+willingly to fulfill my long-time promise to donate you the sum
+($5.000.000.00) million dollars I inherited from my late husband Mr.
+Edward Herbart, foreign bank account over years. I need a very honest
+person who can assist in transfer of this money to his or her account
+and use the funds for charity work of God while you use 50% for
+yourself. I want you to know there is no risk involved; it is 100%
+hitch free & safe.
 
-Many thanks,
-Paul
+If you are interested in assisting in getting this fund into your
+account for a charity project to fulfill my promise before I die
+please let me know immediately.
+
+I will appreciate your utmost confidentiality as I wait for your reply.
+Best Regards,
+Mrs Anna Edward
