@@ -2,129 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04C649ED39
-	for <lists+linux-arch@lfdr.de>; Thu, 27 Jan 2022 22:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 579CD49FB59
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Jan 2022 15:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344220AbiA0VLw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 27 Jan 2022 16:11:52 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:40407 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1344170AbiA0VLu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 27 Jan 2022 16:11:50 -0500
-Received: (qmail 185924 invoked by uid 1000); 27 Jan 2022 16:11:48 -0500
-Date:   Thu, 27 Jan 2022 16:11:48 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: [PATCH] tools/memory-model: Explain syntactic and semantic
- dependencies
-Message-ID: <YfMKlLInsK0Qr77f@rowland.harvard.edu>
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
- <YfBk265vVo4FL4MJ@rowland.harvard.edu>
- <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
- <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
- <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
+        id S1347022AbiA1OJw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Jan 2022 09:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244803AbiA1OJw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Jan 2022 09:09:52 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9627C06173B
+        for <linux-arch@vger.kernel.org>; Fri, 28 Jan 2022 06:09:51 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id s9so11112749wrb.6
+        for <linux-arch@vger.kernel.org>; Fri, 28 Jan 2022 06:09:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=c0MbAYZn48s/2sw8+6sJEGK9DVzD/LP2yU/tzes0Wew=;
+        b=KnoYpCROJNJ4KeVjiMHVRjI3Nw6MBdLiVMYBKyWi5SjTGkUNhmLXnrLxkxBTE/uvzm
+         1i7z3jyz9HYmoZNAG5Loy00qH2mtg+iFqBgPPlltZlvuAUpVQzHJC/Zh5YvuO8bbiuKV
+         EhY0GkfgFO0pVCtVfHeoBwIMjXpF7AfmFwBBlSPZrfauweTohE5pmPCqYrkC4s7Xusfz
+         4HPmI5qzz1+q+sdmUh4Ity1hlHsWh5wpsKT4x8GRkQTfDY1KyAL6lGRKpMiXEM/O84+/
+         bEb7k6+NG5FdGoGanjw1rOia/TgJAtC6p47O0pODeUAm6OEJWTT+h5i60wvVX+nLYbKo
+         twmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=c0MbAYZn48s/2sw8+6sJEGK9DVzD/LP2yU/tzes0Wew=;
+        b=NR5Dv4tYun2IxMR5vQLakZULdc4OI5CIok/wJaK/wUtdp7YipnQB8oKE31ogcaXPif
+         D7XrHv+q8TwyfKCaOYc7emsVx7rTOkxLG58P2e5WH/Y+9CdFvPB2xbwDEhF/Q1YH5seU
+         KeLY9bulLCzdW3xCYGCwxle/i1RE/HEA/5VWNMjCUiYiS/xaImCtpAt79pVAj2ACEqrf
+         x2icxUnviNUrddjHqyWTH/YXflODCvQSzxUrVKxC+h44yc/sy3aSaiTATiaYcmBnu83h
+         utp78IU1mVoKeoCJHPcbJ2dzUbVvlvUvuDgIhqGMD3UQwD8+i+1yFFQKOiXjb1SsFb08
+         pLEw==
+X-Gm-Message-State: AOAM531JxNY1TOXknq6BSK5SwwUANshiPSxY9NmM6aIN16hg0vHlPCk7
+        HasXrTHKYNIOVlh6f1XPMgVBq2bYsxMJ58sw
+X-Google-Smtp-Source: ABdhPJwcwaW5k4PCVMl0xIx5mubfMQwAXKgrPRB+Y2ibDaLBwjoVmYeQufxi/ZaCrtP5AiArmXZMSw==
+X-Received: by 2002:adf:d1ed:: with SMTP id g13mr7395000wrd.477.1643378989779;
+        Fri, 28 Jan 2022 06:09:49 -0800 (PST)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id w22sm4811774wra.59.2022.01.28.06.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jan 2022 06:09:49 -0800 (PST)
+Date:   Fri, 28 Jan 2022 14:09:47 +0000
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH v2 4/5] modules: Add
+ CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+Message-ID: <20220128140947.n2xea77txqohfbfj@maple.lan>
+References: <cover.1643282353.git.christophe.leroy@csgroup.eu>
+ <af8519537d2a5c36b71a2f48ba9b81c07c93a5c4.1643282353.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
+In-Reply-To: <af8519537d2a5c36b71a2f48ba9b81c07c93a5c4.1643282353.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Paul Heidekrüger pointed out that the Linux Kernel Memory Model
-documentation doesn't mention the distinction between syntactic and
-semantic dependencies.  This is an important difference, because the
-compiler can easily break dependencies that are only syntactic, not
-semantic.
+On Thu, Jan 27, 2022 at 11:28:09AM +0000, Christophe Leroy wrote:
+> Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC to allow architectures
+> to request having modules data in vmalloc area instead of module area.
+> 
+> This is required on powerpc book3s/32 in order to set data non
+> executable, because it is not possible to set executability on page
+> basis, this is done per 256 Mbytes segments. The module area has exec
+> right, vmalloc area has noexec.
+> 
+> This can also be useful on other powerpc/32 in order to maximize the
+> chance of code being close enough to kernel core to avoid branch
+> trampolines.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Jason Wessel <jason.wessel@windriver.com>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: Douglas Anderson <dianders@chromium.org>
 
-This patch adds a few paragraphs to the LKMM documentation explaining
-these issues and illustrating how they can matter.
+Thanks for diligence in making sure kdb is up to date!
 
-Suggested-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-
----
+Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
-[as1970]
-
-
- tools/memory-model/Documentation/explanation.txt |   47 +++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-===================================================================
---- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-+++ usb-devel/tools/memory-model/Documentation/explanation.txt
-@@ -485,6 +485,53 @@ have R ->po X.  It wouldn't make sense f
- somehow on a value that doesn't get loaded from shared memory until
- later in the code!
- 
-+Here's a trick question: When is a dependency not a dependency?  Answer:
-+When it is purely syntactic rather than semantic.  We say a dependency
-+between two accesses is purely syntactic if the second access doesn't
-+actually depend on the result of the first.  Here is a trivial example:
-+
-+	r1 = READ_ONCE(x);
-+	WRITE_ONCE(y, r1 * 0);
-+
-+There appears to be a data dependency from the load of x to the store of
-+y, since the value to be stored is computed from the value that was
-+loaded.  But in fact, the value stored does not really depend on
-+anything since it will always be 0.  Thus the data dependency is only
-+syntactic (it appears to exist in the code) but not semantic (the second
-+access will always be the same, regardless of the value of the first
-+access).  Given code like this, a compiler could simply eliminate the
-+load from x, which would certainly destroy any dependency.
-+
-+(It's natural to object that no one in their right mind would write code
-+like the above.  However, macro expansions can easily give rise to this
-+sort of thing, in ways that generally are not apparent to the
-+programmer.)
-+
-+Another mechanism that can give rise to purely syntactic dependencies is
-+related to the notion of "undefined behavior".  Certain program behaviors
-+are called "undefined" in the C language specification, which means that
-+when they occur there are no guarantees at all about the outcome.
-+Consider the following example:
-+
-+	int a[1];
-+	int i;
-+
-+	r1 = READ_ONCE(i);
-+	r2 = READ_ONCE(a[r1]);
-+
-+Access beyond the end or before the beginning of an array is one kind of
-+undefined behavior.  Therefore the compiler doesn't have to worry about
-+what will happen if r1 is nonzero, and it can assume that r1 will always
-+be zero without actually loading anything from i.  (If the assumption
-+turns out to be wrong, the resulting behavior will be undefined anyway
-+so the compiler doesn't care!)  Thus the load from i can be eliminated,
-+breaking the address dependency.
-+
-+The LKMM is unaware that purely syntactic dependencies are different
-+from semantic dependencies and therefore mistakenly predicts that the
-+accesses in the two examples above will be ordered.  This is another
-+example of how the compiler can undermine the memory model.  Be warned.
-+
- 
- THE READS-FROM RELATION: rf, rfi, and rfe
- -----------------------------------------
+Daniel.
