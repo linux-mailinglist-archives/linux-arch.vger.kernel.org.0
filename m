@@ -2,97 +2,211 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 579CD49FB59
-	for <lists+linux-arch@lfdr.de>; Fri, 28 Jan 2022 15:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1229449FE22
+	for <lists+linux-arch@lfdr.de>; Fri, 28 Jan 2022 17:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347022AbiA1OJw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 28 Jan 2022 09:09:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
+        id S1350137AbiA1QgJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 28 Jan 2022 11:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244803AbiA1OJw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Jan 2022 09:09:52 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9627C06173B
-        for <linux-arch@vger.kernel.org>; Fri, 28 Jan 2022 06:09:51 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id s9so11112749wrb.6
-        for <linux-arch@vger.kernel.org>; Fri, 28 Jan 2022 06:09:51 -0800 (PST)
+        with ESMTP id S1350117AbiA1QgI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 28 Jan 2022 11:36:08 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8B5C06173B
+        for <linux-arch@vger.kernel.org>; Fri, 28 Jan 2022 08:36:07 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id u15so11956039wrt.3
+        for <linux-arch@vger.kernel.org>; Fri, 28 Jan 2022 08:36:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=c0MbAYZn48s/2sw8+6sJEGK9DVzD/LP2yU/tzes0Wew=;
-        b=KnoYpCROJNJ4KeVjiMHVRjI3Nw6MBdLiVMYBKyWi5SjTGkUNhmLXnrLxkxBTE/uvzm
-         1i7z3jyz9HYmoZNAG5Loy00qH2mtg+iFqBgPPlltZlvuAUpVQzHJC/Zh5YvuO8bbiuKV
-         EhY0GkfgFO0pVCtVfHeoBwIMjXpF7AfmFwBBlSPZrfauweTohE5pmPCqYrkC4s7Xusfz
-         4HPmI5qzz1+q+sdmUh4Ity1hlHsWh5wpsKT4x8GRkQTfDY1KyAL6lGRKpMiXEM/O84+/
-         bEb7k6+NG5FdGoGanjw1rOia/TgJAtC6p47O0pODeUAm6OEJWTT+h5i60wvVX+nLYbKo
-         twmw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=qh9ZukSBrcmzrIqovMOzTJ9hbhpz7rlhT3FvWLuMjno=;
+        b=iXbzw95Y1DQRW+hjAI8IYGj5KLHaChdb2BKM1Ql3yXLewljYBMWZEMQtbYK0W58h7X
+         qLuRbE750QpId6mVndzHhbzGAxV8GoucgoEuctffCF1sbCc4qCBbIIZqHBNV7dJzIFgd
+         wMnFHdzft2GDCyfO78zvXdK9CM+nZ40BQMc1hAs++jtetAYfYSjQ54ghtomCDKWWQYiO
+         Vfbmvbvjj2kGTN269t5V19mvcKin4WIbnoqw+1b/BPz/GDYfT1IipPMJuEVLsFzrE2Ad
+         gjFRdLapEWNnjoIm+Z81bfetOHDnaMqAankUSYpPN9nJGtx5hPcXAQjKkD9TPvYRQZKt
+         0n6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c0MbAYZn48s/2sw8+6sJEGK9DVzD/LP2yU/tzes0Wew=;
-        b=NR5Dv4tYun2IxMR5vQLakZULdc4OI5CIok/wJaK/wUtdp7YipnQB8oKE31ogcaXPif
-         D7XrHv+q8TwyfKCaOYc7emsVx7rTOkxLG58P2e5WH/Y+9CdFvPB2xbwDEhF/Q1YH5seU
-         KeLY9bulLCzdW3xCYGCwxle/i1RE/HEA/5VWNMjCUiYiS/xaImCtpAt79pVAj2ACEqrf
-         x2icxUnviNUrddjHqyWTH/YXflODCvQSzxUrVKxC+h44yc/sy3aSaiTATiaYcmBnu83h
-         utp78IU1mVoKeoCJHPcbJ2dzUbVvlvUvuDgIhqGMD3UQwD8+i+1yFFQKOiXjb1SsFb08
-         pLEw==
-X-Gm-Message-State: AOAM531JxNY1TOXknq6BSK5SwwUANshiPSxY9NmM6aIN16hg0vHlPCk7
-        HasXrTHKYNIOVlh6f1XPMgVBq2bYsxMJ58sw
-X-Google-Smtp-Source: ABdhPJwcwaW5k4PCVMl0xIx5mubfMQwAXKgrPRB+Y2ibDaLBwjoVmYeQufxi/ZaCrtP5AiArmXZMSw==
-X-Received: by 2002:adf:d1ed:: with SMTP id g13mr7395000wrd.477.1643378989779;
-        Fri, 28 Jan 2022 06:09:49 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id w22sm4811774wra.59.2022.01.28.06.09.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=qh9ZukSBrcmzrIqovMOzTJ9hbhpz7rlhT3FvWLuMjno=;
+        b=uG05uSsbSLeQDvptnQ6o95gMGtWiDm3duBfTFWe8BTglKVFEhkM7x+DmIU2rQ0SXbR
+         sp/JADkkOrvDLnjbeoL6m3WQhj9c26TIH63lSKxblYEGoYhZ4+M30PhNKpJOTt95JMXb
+         NWxhIm74x+RaUAYu6Vft1vFJ4qAMmdog2muBbUYdFKt/y4Z6bgeqXOxuF8QBcGx236IS
+         URNRKjG0UGoyQuPU8Nb9tanJh2jegOClaqD7c0wLqEpdJJHpiSHyuc0V0dYEJiqmBrPR
+         o5zwuQAqKGN06LYVS5JX4UvGT+9DNJhuxaQc+uvl9y/epi8GzvR3X1OuQs+20rfkG0X6
+         PMNA==
+X-Gm-Message-State: AOAM530o7sONAd1r7xG18J3jTki6qNkbE30K77s/yAmDNPiaaCvDMMy8
+        OsRyqpFrITlfT99e08eUEo8NBA==
+X-Google-Smtp-Source: ABdhPJwMZoA7mdRtx2e6Wt/qHVleYsrCePnVZ4AsVaXByy1PPO0iDI0HZlWi4bC7mCGyE4SK2z8WsQ==
+X-Received: by 2002:a5d:48c5:: with SMTP id p5mr7778841wrs.566.1643387766198;
+        Fri, 28 Jan 2022 08:36:06 -0800 (PST)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:f39:b962:8b8e:9851])
+        by smtp.gmail.com with ESMTPSA id m6sm5734745wrw.54.2022.01.28.08.36.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jan 2022 06:09:49 -0800 (PST)
-Date:   Fri, 28 Jan 2022 14:09:47 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH v2 4/5] modules: Add
- CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
-Message-ID: <20220128140947.n2xea77txqohfbfj@maple.lan>
-References: <cover.1643282353.git.christophe.leroy@csgroup.eu>
- <af8519537d2a5c36b71a2f48ba9b81c07c93a5c4.1643282353.git.christophe.leroy@csgroup.eu>
+        Fri, 28 Jan 2022 08:36:05 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rjw@rjwysocki.net
+Cc:     heiko@sntech.de, robh@kernel.org, lukasz.luba@arm.com,
+        arnd@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [PATCH v8 1/5] powercap/drivers/dtpm: Convert the init table section to a simple array
+Date:   Fri, 28 Jan 2022 17:35:33 +0100
+Message-Id: <20220128163537.212248-2-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220128163537.212248-1-daniel.lezcano@linaro.org>
+References: <20220128163537.212248-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <af8519537d2a5c36b71a2f48ba9b81c07c93a5c4.1643282353.git.christophe.leroy@csgroup.eu>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 27, 2022 at 11:28:09AM +0000, Christophe Leroy wrote:
-> Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC to allow architectures
-> to request having modules data in vmalloc area instead of module area.
-> 
-> This is required on powerpc book3s/32 in order to set data non
-> executable, because it is not possible to set executability on page
-> basis, this is done per 256 Mbytes segments. The module area has exec
-> right, vmalloc area has noexec.
-> 
-> This can also be useful on other powerpc/32 in order to maximize the
-> chance of code being close enough to kernel core to avoid branch
-> trampolines.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Jason Wessel <jason.wessel@windriver.com>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Douglas Anderson <dianders@chromium.org>
+The init table section is freed after the system booted. However the
+next changes will make per module the DTPM description, so the table
+won't be accessible when the module is loaded.
 
-Thanks for diligence in making sure kdb is up to date!
+In order to fix that, we should move the table to the data section
+where there are very few entries and that makes strange to add it
+there.
 
-Acked-by: Daniel Thompson <daniel.thompson@linaro.org>
+The main goal of the table was to keep self-encapsulated code and we
+can keep it almost as it by using an array instead.
 
+Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/powercap/dtpm.c           |  2 ++
+ drivers/powercap/dtpm_cpu.c       |  5 ++++-
+ drivers/powercap/dtpm_subsys.h    | 18 ++++++++++++++++++
+ include/asm-generic/vmlinux.lds.h | 11 -----------
+ include/linux/dtpm.h              | 24 +++---------------------
+ 5 files changed, 27 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/powercap/dtpm_subsys.h
 
-Daniel.
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 8cb45f2d3d78..0e5c93443c70 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -24,6 +24,8 @@
+ #include <linux/slab.h>
+ #include <linux/mutex.h>
+ 
++#include "dtpm_subsys.h"
++
+ #define DTPM_POWER_LIMIT_FLAG 0
+ 
+ static const char *constraint_name[] = {
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index b740866b228d..5763e0ce2af5 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -269,4 +269,7 @@ static int __init dtpm_cpu_init(void)
+ 	return 0;
+ }
+ 
+-DTPM_DECLARE(dtpm_cpu, dtpm_cpu_init);
++struct dtpm_subsys_ops dtpm_cpu_ops = {
++	.name = KBUILD_MODNAME,
++	.init = dtpm_cpu_init,
++};
+diff --git a/drivers/powercap/dtpm_subsys.h b/drivers/powercap/dtpm_subsys.h
+new file mode 100644
+index 000000000000..2a3a2055f60e
+--- /dev/null
++++ b/drivers/powercap/dtpm_subsys.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2022 Linaro Ltd
++ *
++ * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
++ */
++#ifndef ___DTPM_SUBSYS_H__
++#define ___DTPM_SUBSYS_H__
++
++extern struct dtpm_subsys_ops dtpm_cpu_ops;
++
++struct dtpm_subsys_ops *dtpm_subsys[] = {
++#ifdef CONFIG_DTPM_CPU
++	&dtpm_cpu_ops,
++#endif
++};
++
++#endif
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 42f3866bca69..2a10db2f0bc5 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -321,16 +321,6 @@
+ #define THERMAL_TABLE(name)
+ #endif
+ 
+-#ifdef CONFIG_DTPM
+-#define DTPM_TABLE()							\
+-	. = ALIGN(8);							\
+-	__dtpm_table = .;						\
+-	KEEP(*(__dtpm_table))						\
+-	__dtpm_table_end = .;
+-#else
+-#define DTPM_TABLE()
+-#endif
+-
+ #define KERNEL_DTB()							\
+ 	STRUCT_ALIGN();							\
+ 	__dtb_start = .;						\
+@@ -723,7 +713,6 @@
+ 	ACPI_PROBE_TABLE(irqchip)					\
+ 	ACPI_PROBE_TABLE(timer)						\
+ 	THERMAL_TABLE(governor)						\
+-	DTPM_TABLE()							\
+ 	EARLYCON_TABLE()						\
+ 	LSM_TABLE()							\
+ 	EARLY_LSM_TABLE()						\
+diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
+index d37e5d06a357..506048158a50 100644
+--- a/include/linux/dtpm.h
++++ b/include/linux/dtpm.h
+@@ -32,29 +32,11 @@ struct dtpm_ops {
+ 	void (*release)(struct dtpm *);
+ };
+ 
+-typedef int (*dtpm_init_t)(void);
+-
+-struct dtpm_descr {
+-	dtpm_init_t init;
++struct dtpm_subsys_ops {
++	const char *name;
++	int (*init)(void);
+ };
+ 
+-/* Init section thermal table */
+-extern struct dtpm_descr __dtpm_table[];
+-extern struct dtpm_descr __dtpm_table_end[];
+-
+-#define DTPM_TABLE_ENTRY(name, __init)				\
+-	static struct dtpm_descr __dtpm_table_entry_##name	\
+-	__used __section("__dtpm_table") = {			\
+-		.init = __init,					\
+-	}
+-
+-#define DTPM_DECLARE(name, init)	DTPM_TABLE_ENTRY(name, init)
+-
+-#define for_each_dtpm_table(__dtpm)	\
+-	for (__dtpm = __dtpm_table;	\
+-	     __dtpm < __dtpm_table_end;	\
+-	     __dtpm++)
+-
+ static inline struct dtpm *to_dtpm(struct powercap_zone *zone)
+ {
+ 	return container_of(zone, struct dtpm, zone);
+-- 
+2.25.1
+
