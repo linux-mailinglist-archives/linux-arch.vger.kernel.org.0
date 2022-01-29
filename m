@@ -2,80 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7746D4A2F3A
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Jan 2022 13:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 089BA4A3042
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Jan 2022 16:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbiA2MUr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Jan 2022 07:20:47 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48558 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346889AbiA2MTi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jan 2022 07:19:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0017B8234E;
-        Sat, 29 Jan 2022 12:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA85DC36AE3;
-        Sat, 29 Jan 2022 12:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643458775;
-        bh=J65VF607Au+lXQP+8mKXArK6fDS/9hBK5qV8mWwi4fM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hNexS/zfRcpJQb9tKy9uq83XaLRwvXw8cgOzwvW9WGM8zvfpjFXUMmOHV7wpYFjBp
-         R4zZeyMkYScimS69R0rmPSDQiLeoyC4tNXnoZopSCmrKnJ8CXAdNqsBzb1ez7gi6HN
-         0Tyxrhtp5Mi9AKTv9oQEZpKazjfoFIi00SyeBHUBliq5cJENB09Lf+Pi7mLjn7YNBT
-         aPsDFmioeyhcJlUMm3AZSlSK9ucd2doig8+iZU2Wyg6rU0gRs5rtmxtw+5HhoIUawl
-         66/hvRTiAyCZ/rB8cQbfhby7/PO6/fXx4w8NqSqdB00+lX+6mDb6AecdxvXlTOakZB
-         Pa6OVe+KOUrow==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org,
-        liush@allwinnertech.com, wefu@redhat.com, drew@beagleboard.org,
-        wangjunqiang@iscas.ac.cn, hch@lst.de, hch@infradead.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 17/17] KVM: compat: riscv: Prevent KVM_COMPAT from being selected
-Date:   Sat, 29 Jan 2022 20:17:28 +0800
-Message-Id: <20220129121728.1079364-18-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220129121728.1079364-1-guoren@kernel.org>
-References: <20220129121728.1079364-1-guoren@kernel.org>
+        id S1351322AbiA2PXm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Jan 2022 10:23:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349623AbiA2PXk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jan 2022 10:23:40 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED113C061748
+        for <linux-arch@vger.kernel.org>; Sat, 29 Jan 2022 07:23:39 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id q127so13257251ljq.2
+        for <linux-arch@vger.kernel.org>; Sat, 29 Jan 2022 07:23:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=drummond.us; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0mCWH6Tux8tcx0O8BuZbvK36ydxh3XeFUHA8Flrblcc=;
+        b=cmvGYiFpo2ar6tVj5q2BCQVYb9k8BBD0XwhyxqAVItAmy2DCdgiftAuj8oc7BBE49Q
+         LjK1fzbe0hOX97nInIogSNxADc9w4GpCfyauU6NFtNktDIG03u61lrQy9hqdUvd6EUft
+         C6I/tHY4kzyBauIRoXYOzo9LGSe929OK0jEzQ59wjAL3By0a+QjA0M9X3G7I1kcoxcb7
+         Q0AdPG8TS8c6yTTOUze5l0qFpdoVitgV/p2s3UNbwqPC0EG+SKAZieLlLnSPMO8rnFD5
+         +FIv54+PLtXCBluE0vkOLnAVfI1OEciJIeE6mtAgIHH1+Z3qSeTB6dFp5Kah63auycAx
+         k05w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0mCWH6Tux8tcx0O8BuZbvK36ydxh3XeFUHA8Flrblcc=;
+        b=WFww0AEWmdwHIy7T9DtHipWweYbTauoXrPeeicODpXwtJ/Z6rSUg30Vi+SRnqhlyK/
+         04EVNDHAMcIH9UpK3t0wc91pS3j79veua68XrlVEhYLVaezUpUzzAllX7QRhyfa2k8+u
+         M7BCjh4jioydSjjTirXlr3XyFkBIcRlctOr+Q9zm2XRL9A97CV15JjZwRitkJHtuo7gF
+         CMHPOZyino93fQBD8pXKln2YMx+pDl7xq297Dm+ULuGryF5nOwN/u9NkSBws/mKozgBr
+         +CqNJwxzTITgTCoB1BQ/3WyWlsGqH7oK7kdKkSSPKO8Oxu044KhsQIB6MOK2+Tcp5p/A
+         WsDQ==
+X-Gm-Message-State: AOAM530kNxqfYb0ilAtJBSC/wUda6PP1dkGOK1c5NBCBrekVeLBMG8of
+        nxiV51WkehA0peCmOVFsubLSxbUBTdigmoU9zE2CvA==
+X-Google-Smtp-Source: ABdhPJzK4pFoabd9NoIBHHNS2OQ2X0frUhiKWXvHsU/uBjqxnLeu+8dmN2me2gLqvfH4JEfcPiamxCIYMad5ipU8E2c=
+X-Received: by 2002:a2e:994a:: with SMTP id r10mr8482884ljj.254.1643469817879;
+ Sat, 29 Jan 2022 07:23:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220118044259.764945-1-walt@drummond.us> <YfFQeC1cUVFmISMK@kroah.com>
+In-Reply-To: <YfFQeC1cUVFmISMK@kroah.com>
+From:   Walt Drummond <walt@drummond.us>
+Date:   Sat, 29 Jan 2022 07:23:26 -0800
+Message-ID: <CADCN6nyyChM=jb9nmc2jDg2UdHUoXp3E05=ifxRpcs=8k8t09Q@mail.gmail.com>
+Subject: Re: [PATCH 0/3] status: TTY status message request
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     agordeev@linux.ibm.com, arnd@arndb.de, benh@kernel.crashing.org,
+        borntraeger@linux.ibm.com, chris@zankel.net, davem@davemloft.net,
+        hca@linux.ibm.com, deller@gmx.de, ink@jurassic.park.msu.ru,
+        James.Bottomley@hansenpartnership.com, jirislaby@kernel.org,
+        mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au,
+        paulus@samba.org, rth@twiddle.net, dalias@libc.org,
+        tsbogend@alpha.franken.de, gor@linux.ibm.com, ysato@users.osdn.me,
+        linux-kernel@vger.kernel.org, ar@cs.msu.ru,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+ACK, will do.
 
-Current riscv doesn't support the 32bit KVM API. Let's make it
-clear by not selecting KVM_COMPAT.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
----
- virt/kvm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
-index f4834c20e4a6..a8c5c9f06b3c 100644
---- a/virt/kvm/Kconfig
-+++ b/virt/kvm/Kconfig
-@@ -53,7 +53,7 @@ config KVM_GENERIC_DIRTYLOG_READ_PROTECT
- 
- config KVM_COMPAT
-        def_bool y
--       depends on KVM && COMPAT && !(S390 || ARM64)
-+       depends on KVM && COMPAT && !(S390 || ARM64 || RISCV)
- 
- config HAVE_KVM_IRQ_BYPASS
-        bool
--- 
-2.25.1
-
+On Wed, Jan 26, 2022 at 5:45 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Jan 17, 2022 at 08:42:57PM -0800, Walt Drummond wrote:
+> > This patchset adds TTY status message request feature to the n_tty
+> > line dicipline.  This feature prints a brief message containing basic
+> > system and process group information to a user's TTY in response to a
+> > new control character in the line dicipline (default Ctrl-T) or the
+> > TIOCSTAT ioctl.  The message contains the current system load, the
+> > name and PID of an interesting process in the forground process group,
+> > it's run time, percent CPU usage and RSS.  An example of this message
+> > is:
+> >
+> >   load: 0.31  cmd: sleep 3616843 [sleeping] 0.36r 0.00u 0.00s 0% 696k
+> >
+> > User API visible changes are limited to:
+> >  - The addition of VSTATUS in termios.c_cc[]
+> >  - The addition of NOKERNINFO bit in termios.l_cflags
+> >  - The addition of the TIOCSTAT ioctl number
+> >
+> > None of these changes break the existing kernel api as the termios
+> > structure on all architectures has enough space in the control
+> > character array (.c_cc) for the new character, and the other changes
+> > are space agnostic.
+> >
+> > This feature is in many other Unix-like systems, both current and
+> > historical.  In other implementations, this feature would also send
+> > SIGINFO to the process group; this implementation does not.
+> >
+> > Walt Drummond (3):
+> >   vstatus: Allow the n_tty line dicipline to write to a user tty
+> >   vstatus: Add user space API definitions for VSTATUS, NOKERNINFO and
+> >     TIOCSTAT
+> >   status: Display an informational message when the VSTATUS character is
+> >     pressed or TIOCSTAT ioctl is called.
+> >
+> >  arch/alpha/include/asm/termios.h         |   4 +-
+> >  arch/alpha/include/uapi/asm/ioctls.h     |   1 +
+> >  arch/alpha/include/uapi/asm/termbits.h   |  34 ++---
+> >  arch/ia64/include/asm/termios.h          |   4 +-
+> >  arch/ia64/include/uapi/asm/termbits.h    |  34 ++---
+> >  arch/mips/include/asm/termios.h          |   4 +-
+> >  arch/mips/include/uapi/asm/ioctls.h      |   1 +
+> >  arch/mips/include/uapi/asm/termbits.h    |  36 ++---
+> >  arch/parisc/include/asm/termios.h        |   4 +-
+> >  arch/parisc/include/uapi/asm/ioctls.h    |   1 +
+> >  arch/parisc/include/uapi/asm/termbits.h  |  34 ++---
+> >  arch/powerpc/include/asm/termios.h       |   4 +-
+> >  arch/powerpc/include/uapi/asm/ioctls.h   |   2 +
+> >  arch/powerpc/include/uapi/asm/termbits.h |  34 ++---
+> >  arch/s390/include/asm/termios.h          |   4 +-
+> >  arch/sh/include/uapi/asm/ioctls.h        |   1 +
+> >  arch/sparc/include/uapi/asm/ioctls.h     |   1 +
+> >  arch/sparc/include/uapi/asm/termbits.h   |  38 +++---
+> >  arch/xtensa/include/uapi/asm/ioctls.h    |   1 +
+> >  drivers/tty/Makefile                     |   2 +-
+> >  drivers/tty/n_tty.c                      | 113 +++++++++++-----
+> >  drivers/tty/n_tty_status.c               | 162 +++++++++++++++++++++++
+> >  drivers/tty/tty_io.c                     |   2 +-
+> >  include/asm-generic/termios.h            |   4 +-
+> >  include/linux/tty.h                      | 123 ++++++++---------
+> >  include/uapi/asm-generic/ioctls.h        |   1 +
+> >  include/uapi/asm-generic/termbits.h      |  34 ++---
+> >  27 files changed, 461 insertions(+), 222 deletions(-)
+> >  create mode 100644 drivers/tty/n_tty_status.c
+> >
+> > --
+> > 2.30.2
+> >
+>
+> You forgot to cc: me on patch 2/3, which would be needed if I was to
+> take them all.
+>
+> Please fix up patch 2 and resend the whole series.
+>
+> thanks,
+>
+> greg k-h
