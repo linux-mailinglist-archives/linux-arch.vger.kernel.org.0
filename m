@@ -2,35 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F274A2F2D
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Jan 2022 13:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54EB4A2F40
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Jan 2022 13:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239328AbiA2MUc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Jan 2022 07:20:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348065AbiA2MUF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jan 2022 07:20:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1B3C061714;
-        Sat, 29 Jan 2022 04:19:17 -0800 (PST)
+        id S1345563AbiA2MUt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Jan 2022 07:20:49 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48480 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345915AbiA2MT1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jan 2022 07:19:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DDA760B74;
-        Sat, 29 Jan 2022 12:19:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0CD9C340EB;
-        Sat, 29 Jan 2022 12:19:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C09860BAA;
+        Sat, 29 Jan 2022 12:19:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2A0C340E5;
+        Sat, 29 Jan 2022 12:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643458756;
-        bh=c5b0OtGYsiLuv8HExBqo/wHQpxjCxbIXMomdAS0MufI=;
+        s=k20201202; t=1643458762;
+        bh=qWtb6+cgEOxIhx/CvZddYYzDKOlMelvnzAQMykw6uB0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cXpa23LuJUVLckgNH5XFHO6/aD2baI55jZ2h3Aswy4pCvKPMClaSeoiS/S8EejOHf
-         zaGH47LtY+rm8c6LjnNbPF2zZOuV7EfRlKFhqazunbGa+HUwKe/CFwab/3PlSEgX2u
-         6PibsrrLzNtbU4f4PNJq9rrMDqeQVRSZyOuMKOJobR35dXkQtG2sXm3/jsZy9E2Szv
-         euGawEp7yo/OBrfJAao2o5kf25dy79WpOWL3c8tExvR9mtH+OSAy4qTtMm9nljbW1q
-         E18gBLWfYG14pYzUU86k8nEyGVP3EsPas+WAaMiJzm4DygZhbScB6v3v1QmJI/yw8N
-         FIrGADPiT7aEA==
+        b=m5J//ohlceAdks3ZShiqFPnKC4d/Xg1X/uzZV83pQaEZfMlwqoDk92/wlReoKkpA4
+         8TM3aionMNLtK78fMczZsndv/z1yDzu0EoGEHtbFxMeZXUosyPFCVzmre2KkVlAG9i
+         SzXTlIV1KSsf2yAJuF7UO04+o+Zi0skPJNAkpYF4oDM4OWSBh3pYBMYLmfgCBqS3Ea
+         gtFrWs6wAqO6bJmDBWnwBtyE7EN3rUMWQ6V3KF+JaqVx3uxjgpMVr/TozHhXHL0RoZ
+         27ySINuK/vDPPkasYxg9obfnDgBLg1OpNlt54BMGZEFQJa+1913Tb5NAwdvu98uTeE
+         mBnDl7j/LzrXw==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         anup@brainfault.org, gregkh@linuxfoundation.org,
@@ -42,9 +39,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 14/17] riscv: compat: signal: Add rt_frame implementation
-Date:   Sat, 29 Jan 2022 20:17:25 +0800
-Message-Id: <20220129121728.1079364-15-guoren@kernel.org>
+Subject: [PATCH V4 15/17] riscv: compat: ptrace: Add compat_arch_ptrace implement
+Date:   Sat, 29 Jan 2022 20:17:26 +0800
+Message-Id: <20220129121728.1079364-16-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220129121728.1079364-1-guoren@kernel.org>
 References: <20220129121728.1079364-1-guoren@kernel.org>
@@ -56,319 +53,200 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Implement compat_setup_rt_frame for sigcontext save & restore. The
-main process is the same with signal, but the rv32 pt_regs' size
-is different from rv64's, so we needs convert them.
+Now, you can use native gdb on riscv64 for rv32 app debugging.
+
+$ uname -a
+Linux buildroot 5.16.0-rc4-00036-gbef6b82fdf23-dirty #53 SMP Mon Dec 20 23:06:53 CST 2021 riscv64 GNU/Linux
+$ cat /proc/cpuinfo
+processor       : 0
+hart            : 0
+isa             : rv64imafdcsuh
+mmu             : sv48
+
+$ file /bin/busybox
+/bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+$ file /usr/bin/gdb
+/usr/bin/gdb: ELF 32-bit LSB shared object, UCB RISC-V, version 1 (GNU/Linux), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+$ /usr/bin/gdb /bin/busybox
+GNU gdb (GDB) 10.2
+Copyright (C) 2021 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+...
+Reading symbols from /bin/busybox...
+(No debugging symbols found in /bin/busybox)
+(gdb) b main
+Breakpoint 1 at 0x8ddc
+(gdb) r
+Starting program: /bin/busybox
+Failed to read a valid object file image from memory.
+
+Breakpoint 1, 0x555a8ddc in main ()
+(gdb) i r
+ra             0x77df0b74       0x77df0b74
+sp             0x7fdd3d10       0x7fdd3d10
+gp             0x5567e800       0x5567e800 <bb_common_bufsiz1+160>
+tp             0x77f64280       0x77f64280
+t0             0x0      0
+t1             0x555a6fac       1431990188
+t2             0x77dd8db4       2011008436
+fp             0x7fdd3e34       0x7fdd3e34
+s1             0x7fdd3e34       2145205812
+a0             0xffffffff       -1
+a1             0x2000   8192
+a2             0x7fdd3e3c       2145205820
+a3             0x0      0
+a4             0x7fdd3d30       2145205552
+a5             0x555a8dc0       1431997888
+a6             0x77f2c170       2012397936
+a7             0x6a7c7a2f       1786542639
+s2             0x0      0
+s3             0x0      0
+s4             0x555a8dc0       1431997888
+s5             0x77f8a3a8       2012783528
+s6             0x7fdd3e3c       2145205820
+s7             0x5567cecc       1432866508
+--Type <RET> for more, q to quit, c to continue without paging--
+s8             0x1      1
+s9             0x0      0
+s10            0x55634448       1432568904
+s11            0x0      0
+t3             0x77df0bb8       2011106232
+t4             0x42fc   17148
+t5             0x0      0
+t6             0x40     64
+pc             0x555a8ddc       0x555a8ddc <main+28>
+(gdb) si
+0x555a78f0 in mallopt@plt ()
+(gdb) c
+Continuing.
+BusyBox v1.34.1 (2021-12-19 22:39:48 CST) multi-call binary.
+BusyBox is copyrighted by many authors between 1998-2015.
+Licensed under GPLv2. See source distribution for detailed
+copyright notices.
+
+Usage: busybox [function [arguments]...]
+   or: busybox --list[-full]
+...
+[Inferior 1 (process 107) exited normally]
+(gdb) q
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>
 ---
- arch/riscv/kernel/Makefile        |   1 +
- arch/riscv/kernel/compat_signal.c | 243 ++++++++++++++++++++++++++++++
- arch/riscv/kernel/signal.c        |  13 +-
- 3 files changed, 256 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/kernel/compat_signal.c
+ arch/riscv/kernel/ptrace.c | 87 +++++++++++++++++++++++++++++++++++---
+ 1 file changed, 82 insertions(+), 5 deletions(-)
 
-diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-index 88e79f481c21..a46f9807c59e 100644
---- a/arch/riscv/kernel/Makefile
-+++ b/arch/riscv/kernel/Makefile
-@@ -67,4 +67,5 @@ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
- 
- obj-$(CONFIG_EFI)		+= efi.o
- obj-$(CONFIG_COMPAT)		+= compat_syscall_table.o
-+obj-$(CONFIG_COMPAT)		+= compat_signal.o
- obj-$(CONFIG_COMPAT)		+= compat_vdso/
-diff --git a/arch/riscv/kernel/compat_signal.c b/arch/riscv/kernel/compat_signal.c
-new file mode 100644
-index 000000000000..7041742ded08
---- /dev/null
-+++ b/arch/riscv/kernel/compat_signal.c
-@@ -0,0 +1,243 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
+diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+index a89243730153..bb387593a121 100644
+--- a/arch/riscv/kernel/ptrace.c
++++ b/arch/riscv/kernel/ptrace.c
+@@ -12,6 +12,7 @@
+ #include <asm/thread_info.h>
+ #include <asm/switch_to.h>
+ #include <linux/audit.h>
 +#include <linux/compat.h>
-+#include <linux/signal.h>
-+#include <linux/uaccess.h>
-+#include <linux/syscalls.h>
-+#include <linux/tracehook.h>
-+#include <linux/linkage.h>
-+
-+#include <asm/ucontext.h>
-+#include <asm/vdso.h>
-+#include <asm/switch_to.h>
-+#include <asm/csr.h>
-+
-+#define COMPAT_DEBUG_SIG 0
-+
-+struct compat_sigcontext {
-+	struct compat_user_regs_struct sc_regs;
-+	union __riscv_fp_state sc_fpregs;
-+};
-+
-+struct compat_ucontext {
-+	compat_ulong_t		uc_flags;
-+	struct compat_ucontext	*uc_link;
-+	compat_stack_t		uc_stack;
-+	sigset_t		uc_sigmask;
-+	/* There's some padding here to allow sigset_t to be expanded in the
-+	 * future.  Though this is unlikely, other architectures put uc_sigmask
-+	 * at the end of this structure and explicitly state it can be
-+	 * expanded, so we didn't want to box ourselves in here. */
-+	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
-+	/* We can't put uc_sigmask at the end of this structure because we need
-+	 * to be able to expand sigcontext in the future.  For example, the
-+	 * vector ISA extension will almost certainly add ISA state.  We want
-+	 * to ensure all user-visible ISA state can be saved and restored via a
-+	 * ucontext, so we're putting this at the end in order to allow for
-+	 * infinite extensibility.  Since we know this will be extended and we
-+	 * assume sigset_t won't be extended an extreme amount, we're
-+	 * prioritizing this. */
-+	struct compat_sigcontext uc_mcontext;
-+};
-+
-+struct compat_rt_sigframe {
-+	struct compat_siginfo info;
-+	struct compat_ucontext uc;
-+};
-+
-+#ifdef CONFIG_FPU
-+static long compat_restore_fp_state(struct pt_regs *regs,
-+	union __riscv_fp_state __user *sc_fpregs)
-+{
-+	long err;
-+	struct __riscv_d_ext_state __user *state = &sc_fpregs->d;
-+	size_t i;
-+
-+	err = __copy_from_user(&current->thread.fstate, state, sizeof(*state));
-+	if (unlikely(err))
-+		return err;
-+
-+	fstate_restore(current, regs);
-+
-+	/* We support no other extension state at this time. */
-+	for (i = 0; i < ARRAY_SIZE(sc_fpregs->q.reserved); i++) {
-+		u32 value;
-+
-+		err = __get_user(value, &sc_fpregs->q.reserved[i]);
-+		if (unlikely(err))
-+			break;
-+		if (value != 0)
-+			return -EINVAL;
-+	}
-+
-+	return err;
-+}
-+
-+static long compat_save_fp_state(struct pt_regs *regs,
-+			  union __riscv_fp_state __user *sc_fpregs)
-+{
-+	long err;
-+	struct __riscv_d_ext_state __user *state = &sc_fpregs->d;
-+	size_t i;
-+
-+	fstate_save(current, regs);
-+	err = __copy_to_user(state, &current->thread.fstate, sizeof(*state));
-+	if (unlikely(err))
-+		return err;
-+
-+	/* We support no other extension state at this time. */
-+	for (i = 0; i < ARRAY_SIZE(sc_fpregs->q.reserved); i++) {
-+		err = __put_user(0, &sc_fpregs->q.reserved[i]);
-+		if (unlikely(err))
-+			break;
-+	}
-+
-+	return err;
-+}
-+#else
-+#define compat_save_fp_state(task, regs) (0)
-+#define compat_restore_fp_state(task, regs) (0)
-+#endif
-+
-+static long compat_restore_sigcontext(struct pt_regs *regs,
-+	struct compat_sigcontext __user *sc)
-+{
-+	long err;
-+	struct compat_user_regs_struct cregs;
-+
-+	/* sc_regs is structured the same as the start of pt_regs */
-+	err = __copy_from_user(&cregs, &sc->sc_regs, sizeof(sc->sc_regs));
-+
-+	cregs_to_regs(&cregs, regs);
-+
-+	/* Restore the floating-point state. */
-+	if (has_fpu())
-+		err |= compat_restore_fp_state(regs, &sc->sc_fpregs);
-+	return err;
-+}
-+
-+COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
-+{
-+	struct pt_regs *regs = current_pt_regs();
-+	struct compat_rt_sigframe __user *frame;
-+	struct task_struct *task;
-+	sigset_t set;
-+
-+	/* Always make any pending restarted system calls return -EINTR */
-+	current->restart_block.fn = do_no_restart_syscall;
-+
-+	frame = (struct compat_rt_sigframe __user *)regs->sp;
-+
-+	if (!access_ok(frame, sizeof(*frame)))
-+		goto badframe;
-+
-+	if (__copy_from_user(&set, &frame->uc.uc_sigmask, sizeof(set)))
-+		goto badframe;
-+
-+	set_current_blocked(&set);
-+
-+	if (compat_restore_sigcontext(regs, &frame->uc.uc_mcontext))
-+		goto badframe;
-+
-+	if (compat_restore_altstack(&frame->uc.uc_stack))
-+		goto badframe;
-+
-+	return regs->a0;
-+
-+badframe:
-+	task = current;
-+	if (show_unhandled_signals) {
-+		pr_info_ratelimited(
-+			"%s[%d]: bad frame in %s: frame=%p pc=%p sp=%p\n",
-+			task->comm, task_pid_nr(task), __func__,
-+			frame, (void *)regs->epc, (void *)regs->sp);
-+	}
-+	force_sig(SIGSEGV);
-+	return 0;
-+}
-+
-+static long compat_setup_sigcontext(struct compat_rt_sigframe __user *frame,
-+	struct pt_regs *regs)
-+{
-+	struct compat_sigcontext __user *sc = &frame->uc.uc_mcontext;
-+	struct compat_user_regs_struct cregs;
-+	long err;
-+
-+	regs_to_cregs(&cregs, regs);
-+
-+	/* sc_regs is structured the same as the start of pt_regs */
-+	err = __copy_to_user(&sc->sc_regs, &cregs, sizeof(sc->sc_regs));
-+	/* Save the floating-point state. */
-+	if (has_fpu())
-+		err |= compat_save_fp_state(regs, &sc->sc_fpregs);
-+	return err;
-+}
-+
-+static inline void __user *compat_get_sigframe(struct ksignal *ksig,
-+	struct pt_regs *regs, size_t framesize)
-+{
-+	unsigned long sp;
-+	/* Default to using normal stack */
-+	sp = regs->sp;
-+
-+	/*
-+	 * If we are on the alternate signal stack and would overflow it, don't.
-+	 * Return an always-bogus address instead so we will die with SIGSEGV.
-+	 */
-+	if (on_sig_stack(sp) && !likely(on_sig_stack(sp - framesize)))
-+		return (void __user __force *)(-1UL);
-+
-+	/* This is the X/Open sanctioned signal stack switching. */
-+	sp = sigsp(sp, ksig) - framesize;
-+
-+	/* Align the stack frame. */
-+	sp &= ~0xfUL;
-+
-+	return (void __user *)sp;
-+}
-+
-+int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-+	struct pt_regs *regs)
-+{
-+	struct compat_rt_sigframe __user *frame;
-+	long err = 0;
-+
-+	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
-+	if (!access_ok(frame, sizeof(*frame)))
-+		return -EFAULT;
-+
-+	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
-+
-+	/* Create the ucontext. */
-+	err |= __put_user(0, &frame->uc.uc_flags);
-+	err |= __put_user(NULL, &frame->uc.uc_link);
-+	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
-+	err |= compat_setup_sigcontext(frame, regs);
-+	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
-+	if (err)
-+		return -EFAULT;
-+
-+	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
-+			current->mm->context.vdso, rt_sigreturn);
-+
-+	/*
-+	 * Set up registers for signal handler.
-+	 * Registers that we don't modify keep the value they had from
-+	 * user-space at the time we took the signal.
-+	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
-+	 * since some things rely on this (e.g. glibc's debug/segfault.c).
-+	 */
-+	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
-+	regs->sp = (unsigned long)frame;
-+	regs->a0 = ksig->sig;                     /* a0: signal number */
-+	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
-+	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
-+
-+#if COMPAT_DEBUG_SIG
-+	pr_info("SIG deliver (%s:%d): sig=%d pc=%p ra=%p sp=%p\n",
-+		current->comm, task_pid_nr(current), ksig->sig,
-+		(void *)regs->epc, (void *)regs->ra, frame);
-+#endif
-+
-+	return 0;
-+}
-diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-index c2d5ecbe5526..27d8f39228c4 100644
---- a/arch/riscv/kernel/signal.c
-+++ b/arch/riscv/kernel/signal.c
-@@ -6,6 +6,7 @@
-  * Copyright (C) 2012 Regents of the University of California
-  */
+ #include <linux/ptrace.h>
+ #include <linux/elf.h>
+ #include <linux/regset.h>
+@@ -111,11 +112,6 @@ static const struct user_regset_view riscv_user_native_view = {
+ 	.n = ARRAY_SIZE(riscv_user_regset),
+ };
  
-+#include <linux/compat.h>
- #include <linux/signal.h>
- #include <linux/uaccess.h>
- #include <linux/syscalls.h>
-@@ -229,6 +230,11 @@ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
- 	return 0;
+-const struct user_regset_view *task_user_regset_view(struct task_struct *task)
+-{
+-	return &riscv_user_native_view;
+-}
+-
+ struct pt_regs_offset {
+ 	const char *name;
+ 	int offset;
+@@ -273,3 +269,84 @@ __visible void do_syscall_trace_exit(struct pt_regs *regs)
+ 		trace_sys_exit(regs, regs_return_value(regs));
+ #endif
  }
- 
-+#ifdef CONFIG_COMPAT
-+extern int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
-+				 struct pt_regs *regs);
-+#endif
 +
- static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
- {
- 	sigset_t *oldset = sigmask_to_save();
-@@ -258,8 +264,13 @@ static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
- 		}
- 	}
- 
 +#ifdef CONFIG_COMPAT
- 	/* Set up the stack frame */
--	ret = setup_rt_frame(ksig, oldset, regs);
-+	if (is_compat_task())
-+		ret = compat_setup_rt_frame(ksig, oldset, regs);
++static int compat_riscv_gpr_get(struct task_struct *target,
++				const struct user_regset *regset,
++				struct membuf to)
++{
++	struct compat_user_regs_struct cregs;
++
++	regs_to_cregs(&cregs, task_pt_regs(target));
++
++	return membuf_write(&to, &cregs,
++			    sizeof(struct compat_user_regs_struct));
++}
++
++static int compat_riscv_gpr_set(struct task_struct *target,
++				const struct user_regset *regset,
++				unsigned int pos, unsigned int count,
++				const void *kbuf, const void __user *ubuf)
++{
++	int ret;
++	struct compat_user_regs_struct cregs;
++
++	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &cregs, 0, -1);
++
++	cregs_to_regs(&cregs, task_pt_regs(target));
++
++	return ret;
++}
++
++static const struct user_regset compat_riscv_user_regset[] = {
++	[REGSET_X] = {
++		.core_note_type = NT_PRSTATUS,
++		.n = ELF_NGREG,
++		.size = sizeof(compat_elf_greg_t),
++		.align = sizeof(compat_elf_greg_t),
++		.regset_get = compat_riscv_gpr_get,
++		.set = compat_riscv_gpr_set,
++	},
++#ifdef CONFIG_FPU
++	[REGSET_F] = {
++		.core_note_type = NT_PRFPREG,
++		.n = ELF_NFPREG,
++		.size = sizeof(elf_fpreg_t),
++		.align = sizeof(elf_fpreg_t),
++		.regset_get = riscv_fpr_get,
++		.set = riscv_fpr_set,
++	},
++#endif
++};
++
++static const struct user_regset_view compat_riscv_user_native_view = {
++	.name = "riscv",
++	.e_machine = EM_RISCV,
++	.regsets = compat_riscv_user_regset,
++	.n = ARRAY_SIZE(compat_riscv_user_regset),
++};
++
++long compat_arch_ptrace(struct task_struct *child, compat_long_t request,
++			compat_ulong_t caddr, compat_ulong_t cdata)
++{
++	long ret = -EIO;
++
++	switch (request) {
++	default:
++		ret = compat_ptrace_request(child, request, caddr, cdata);
++		break;
++	}
++
++	return ret;
++}
++#endif /* CONFIG_COMPAT */
++
++const struct user_regset_view *task_user_regset_view(struct task_struct *task)
++{
++#ifdef CONFIG_COMPAT
++	if (test_tsk_thread_flag(task, TIF_32BIT))
++		return &compat_riscv_user_native_view;
 +	else
 +#endif
-+		ret = setup_rt_frame(ksig, oldset, regs);
- 
- 	signal_setup_done(ret, ksig, 0);
- }
++		return &riscv_user_native_view;
++}
 -- 
 2.25.1
 
