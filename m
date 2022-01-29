@@ -2,33 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A944A321C
-	for <lists+linux-arch@lfdr.de>; Sat, 29 Jan 2022 22:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299834A3262
+	for <lists+linux-arch@lfdr.de>; Sat, 29 Jan 2022 23:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353236AbiA2V4p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 29 Jan 2022 16:56:45 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:34565 "EHLO
+        id S1353261AbiA2Wm2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 29 Jan 2022 17:42:28 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:36377 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243871AbiA2V4p (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jan 2022 16:56:45 -0500
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MdeSn-1meJyd47Qv-00ZjUy; Sat, 29 Jan 2022 22:56:43 +0100
-Received: by mail-wr1-f52.google.com with SMTP id k18so17797697wrg.11;
-        Sat, 29 Jan 2022 13:56:42 -0800 (PST)
-X-Gm-Message-State: AOAM533H7Jxfe5UxlVwj2iHtD1jMaph+hp2F3Aqb4LQG3TJvmjoNbX00
-        AtP/OSLlo5qkmsGfse3WdmGyID9FXTvyZiV/BOs=
-X-Google-Smtp-Source: ABdhPJwc5Xijmfuq1knxS/SFbXOQYffcGfosuG5ZO2lbKDIA+jheKOcNNo8uA5Z4TCV2skF+ogyeNdBrzcg4f0zq/zU=
-X-Received: by 2002:a05:6000:144f:: with SMTP id v15mr12082870wrx.407.1643493402481;
- Sat, 29 Jan 2022 13:56:42 -0800 (PST)
+        with ESMTP id S243417AbiA2Wm1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 29 Jan 2022 17:42:27 -0500
+Received: from mail-lf1-f41.google.com ([209.85.167.41]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MUXh8-1mnVab0iZs-00QVLS; Sat, 29 Jan 2022 23:42:25 +0100
+Received: by mail-lf1-f41.google.com with SMTP id x11so19043465lfa.2;
+        Sat, 29 Jan 2022 14:42:24 -0800 (PST)
+X-Gm-Message-State: AOAM531LPENl6+KXxvfJsA9tqS18HNo2D2KpIbD6R5kD8gHnUNXXe7de
+        vOZK5fCmxmvo+UsqeygBjhn1hKpGAJ88W4PTRMc=
+X-Google-Smtp-Source: ABdhPJzI0D41s8yrwHglCZkVEr0x+bK1CMwYgZgaz1NErnnr1PsIuPoCJo0tLrBweMwgRCKK6bnEP4/locNb0Mfr0Gg=
+X-Received: by 2002:a05:6000:3c6:: with SMTP id b6mr11705793wrg.12.1643494389446;
+ Sat, 29 Jan 2022 14:13:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-7-guoren@kernel.org>
-In-Reply-To: <20220129121728.1079364-7-guoren@kernel.org>
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-9-guoren@kernel.org>
+In-Reply-To: <20220129121728.1079364-9-guoren@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 29 Jan 2022 22:56:25 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3_kVB78-26sxdsEjb3MMcco6U55tc7siCBFZbJjyH6Sw@mail.gmail.com>
-Message-ID: <CAK8P3a3_kVB78-26sxdsEjb3MMcco6U55tc7siCBFZbJjyH6Sw@mail.gmail.com>
-Subject: Re: [PATCH V4 06/17] riscv: compat: Add basic compat date type implementation
+Date:   Sat, 29 Jan 2022 23:12:53 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com>
+Message-ID: <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com>
+Subject: Re: [PATCH V4 08/17] riscv: compat: syscall: Add compat_sys_call_table
+ implementation
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup@brainfault.org>,
@@ -51,39 +52,50 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:YYSBXlLtAbFyQzNW0wf6OKbJ3b0YrJASgN40CoU0LDTqWouiYSP
- dcaljw+E8B7o/HiUdsnzMTldpqNn86rqxd7ccsbXKXpIHE4WvuZwWj7I8VekzmVj3sUmLfr
- 5C40QYJABtwN/MK6gHwQtaXlraboLkAkCSN7rRnF5FeMq4KjreePjgiTncwzFVoa0GYFANb
- YkVdSl0FxaLysUVMukjfg==
+X-Provags-ID: V03:K1:0Yzxyzy2LWbvcWRmp6MeESLeJNu4HiYS0v+nd8H1Q5aXbPkaH3h
+ mmZ+2CBXPSpeBCHtzPy5un72C3Yx1seV3vXVkpHT+PrN/YcMbemmvbgD0jHrvhFjno+Tg0Y
+ fvqULPUJqNJz+T/rMGy3qgjmCSeLRmCbzt/mIBDRXs4LkxVEYtw0btA1HB91O2De7iHcXyM
+ MWdMgVoQ1PPCsUPLhdUVA==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ViFM62Dmg0U=:5XUB1CnQMnTrsqpl1wC/1G
- 6+8oLZKBA3nLNphrmN14wBXtE1fcCH4m/8raZKAsX/9oU1iw36TOhuxctP5R/k+jIVHBPX3i6
- 4yWCStL6djtGZYm3O4q43n8g8yRC+/aP9ogtStm2H8Faa2/H+AnwPl3PkmRtjE6yPOg8XW8y7
- O4G6+9kwbMnydboeY0VjICaWtyYEX6m919qQztmV9cZUSK98PRAbTtt2Z34Oi/7CSdx3FvB3r
- KjwQimU6C5Oy4Rq6h/bxd2vsJTsNyu8t0SdClVM4OI38ucZANa1RwumyxxvCzdjyusjBL3kY3
- fu9qTLGVvRw9JlspF/DKbuROcdehiSigDBOt4KB+fllKnfajqGSZBh0lDFcO5nZbfgDoCohuf
- Ka61kNd2cVzOgSgzNJe5UWr5hcCCsIiDk+rK68SI1kznpeOM28tzqmgF5BGqRB9iKUaFhGQcz
- NafqowVZvRP8bCWz+DRVYSKa7m4mjRsrTMLMjLR47WCXa/tqjsk+TT0eWtTZPcy/NXLeOhqpj
- ZuS0AyE/BpW4buXcdKxphIsk1cv+zG5UOAQgV2wN8Lf8WHXV2I5nyFUqvV8YiCrSv6135Gu71
- oLyoj9TXEpGlVHZ8JuTieh15Wt20HNjmAfD8CvN/5icxAET7uqN8EL5hpzFu02OmrJEGM604Q
- pI7/NZ3+fIt5sVCVtnpJ+NTBLsbNTWcRyaeVUvbaDqgIe+0RBbN0l9a2l0U0QX7hTFJoHRHjq
- pXjIVm/YwpGKLXnkayl1jXKIMpOJFmk/7geLww0nQdN8S5vNGlEpeVoxAoRpbqB7i09KcmtGJ
- S7FdlsZ0cwY1ake3JHv0vvYxY8/wZpyuOEhNwZf2zUYfni44eg=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dWjG/ko0EdY=:+zw7v6BvhXjWByWelgdfw6
+ Q3AejGC3+HE8YYQOMcY+giFrl8yPSdiPa7+0ivr3Ipj1oiYMIStsvLVVvOY8ckTDM8oYnur8d
+ pCR0f8xgp/UegOdYGfHTcYO1rm8N8sph8OxobFJFfrpIY0lW5cjCqOiNafseRDkhQxea28LWR
+ fdb1R5Eg7T0rz8rq08gAxO01DFdaRkMoZXaD5K7Bb747a6m4JjuBfNrJkseFZJm2+W7mcByxw
+ nk4ZYr9oPkHqtFRo3zVrt7E8Tk/2Var7bMvnGyk6GvuP8CzOYyUEmuKFFc/7hE5k8xpN/nywi
+ I+6jt2iCtD8EV0DSW4pBvAUPYib8iuLvcRS1edR+G305Zao6WGB5+a7FmA6Uw3603dpIlOgB2
+ F2y8megL4+vWzqKyv6eSeu8ZxR7/f4nOxveFRfDFpEtGwjvDNGl7cHj+ix2PH1mRfCfbmOkni
+ q/w2/Kq50c4OAKOWhJ9rFHymKfb1kKJ1MpHy1rrG21kXl37KVdnm7u3XnSOg4DD0J/vlO0THX
+ Enhjc8wH/8kr1DNcJLIog/ku3oTnUL2PUeTF9o8tJiAahGBk++9aEueAQUrZdu+uiY3ik85CZ
+ PzVkPJ3bPZzaEEJn0XakE7dWgQ/PCdY7QGhdEVIcnw5rh4U8BIehof++NqNgeaSAZU/Spe5HT
+ 0cGKu6qKg1XZUOjQPt7nihz+Gz7+b3pPTGlhvpYUnGJbUj8XSV5mveQs8u/f/80JOTHO9jWAG
+ cE0wn/RVJklRA8VjUu2Oj7gXevld3Ox9fPQHMkkCVF1KzvVZ/TTSDT3zglwFcM3ZZPoopchfH
+ d7OYU5Bhv76HpKNGmuP6lksZRTpQap8HmTAdW84KRODDXqchCk=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jan 29, 2022 at 1:17 PM <guoren@kernel.org> wrote:
-> +
-> +#define COMPAT_RLIM_INFINITY   0x7fffffff
+> Implement compat sys_call_table and some system call functions:
+> truncate64, ftruncate64, fallocate, pread64, pwrite64,
+> sync_file_range, readahead, fadvise64_64 which need argument
+> translation.
 >
-> +#define F_GETLK64      12
-> +#define F_SETLK64      13
-> +#define F_SETLKW64     14
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
 
-These now come from the generic definitions I think. The flock definitions
-are just the normal ones, and AFAICT the RLIM_INIFINITY definition here
-is actually wrong and should be the default 0xffffffffu to match the
-native (~0UL) definition.
+This all looks really good, but I would change one detail:
 
-            Arnd
+> +#ifndef compat_arg_u64
+> +#define compat_arg_u64(name)           u32  name##_lo, u32  name##_hi
+> +#define compat_arg_u64_dual(name)      u32, name##_lo, u32, name##_hi
+> +#define compat_arg_u64_glue(name)      (((u64)name##_hi << 32) | \
+> +                                        ((u64)name##_lo & 0xffffffffUL))
+> +#endif
+
+I would make these endian-specific, and reverse them on big-endian
+architectures. That way it
+should be possible to share them across all compat architectures
+without needing the override
+option.
+
+        Arnd
