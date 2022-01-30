@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 327F24A3A35
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64B64A3A56
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356645AbiA3VZe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Jan 2022 16:25:34 -0500
-Received: from mga06.intel.com ([134.134.136.31]:52047 "EHLO mga06.intel.com"
+        id S1356934AbiA3V0I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Jan 2022 16:26:08 -0500
+Received: from mga06.intel.com ([134.134.136.31]:52048 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356648AbiA3VYU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:24:20 -0500
+        id S1356933AbiA3VYV (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 30 Jan 2022 16:24:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643577860; x=1675113860;
+  t=1643577861; x=1675113861;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=t3JrZFhF1CwcBiNV2/x8DFu6hUw9NbjzQecxrm091YQ=;
-  b=aZ6GdfkmrrEBFzN0fsQtrz+PE4+2ua0PdNKWVXZ9Q5MUU/oZBLWIxbgC
-   s7DFK1ubikxeyjh2HTqmxZMioH+23kQczKa0x55LOl/v+c35LqkndSlxJ
-   qjoEb5Drqr86FkZkedhNPFjDHCEAQoJFTyS/ZwnAXwcRrSV+xCCdpDv9w
-   hqOXzHThWPRZdm+nXoNH+e4LMp14S5zfioiul05KHdvI3/tCv7fZhRFbk
-   cXoOPwT/L1tgxK/O0+qhxeE4TYGPA3juuL+PZdUSx7Ujqjmbv4/ZgswMK
-   Bbd6ZNcUm1nPgl3MZ+rmTT/HHVvLMpElXHCYVopazM3pL2Pn6wWuBnp/D
+  bh=IJv3bcwNym+ue5ES2C0XMwMTBK04UF1ldHp0VsVFE1E=;
+  b=oEesWLWTvf1NRortqptmF869smrGW3s7xRGRs/R3/6goKAl4lEvk7tE0
+   B4z9qeXr3okAs2CasejlCWl00c0YrO2CTK3L7u90sfZQ4S7tTZfEwBG0f
+   jJRjhyLkUpVBuUhIiQRi+6RH/BozGgiQltL3IFvSf+oi1h6whmw9HU4hJ
+   WSnUUKU6xlA8SO+1qs4bCgnaJUrkd0+vXBryYKVZhGCBpsb9YO35iOY4j
+   s32Go/Lu/PYFdcszKp9AqPdRKPoD/z/cuhH2XQZirRcVH9o44vkg5En7u
+   A+UJ+Ix3KvIeLllFsZxV0KcshVCTaInSz6Kk8fN9N2dIwmSbmg4supjvL
    g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308104961"
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308104965"
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="308104961"
+   d="scan'208";a="308104965"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:04 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:05 -0800
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="536856868"
+   d="scan'208";a="536856881"
 Received: from avmallar-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.123.171])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:03 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:04 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -61,10 +61,11 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com
-Cc:     rick.p.edgecombe@intel.com
-Subject: [PATCH 23/35] x86/fpu: Add helpers for modifying supervisor xstate
-Date:   Sun, 30 Jan 2022 13:18:26 -0800
-Message-Id: <20220130211838.8382-24-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 24/35] mm: Re-introduce vm_flags to do_mmap()
+Date:   Sun, 30 Jan 2022 13:18:27 -0800
+Message-Id: <20220130211838.8382-25-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
@@ -72,205 +73,152 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add helpers that can be used to modify supervisor xstate safely for the
-current task.
+From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-State for supervisors xstate based features can be live and
-accesses via MSR's, or saved in memory in an xsave buffer. When the
-kernel needs to modify this state it needs to be sure to operate on it
-in the right place, so the modifications don't get clobbered.
+There was no more caller passing vm_flags to do_mmap(), and vm_flags was
+removed from the function's input by:
 
-In the past supervisor xstate features have used get_xsave_addr()
-directly, and performed open coded logic handle operating on the saved
-state correctly. This has posed two problems:
- 1. It has logic that has been gotten wrong more than once.
- 2. To reduce code, less common path's are not optimized. Determination
-    of which path's are less common is based on assumptions about far away
-    code that could change.
+    commit 45e55300f114 ("mm: remove unnecessary wrapper function do_mmap_pgoff()").
 
-In addition, now that get_xsave_addr() is not available outside of the
-core fpu code, there isn't even a way for these supervisor features to
-modify the in memory state.
+There is a new user now.  Shadow stack allocation passes VM_SHADOW_STACK to
+do_mmap().  Thus, re-introduce vm_flags to do_mmap().
 
-To resolve these problems, add some helpers that encapsulate the correct
-logic to operate on the correct copy of the state. Map the MSR's to the
-struct field location in a case statements in __get_xsave_member().
-
-Use the helpers like this, to write to either the MSR or saved state:
-void *xstate;
-
-xstate = start_update_xsave_msrs(XFEATURE_FOO);
-r = xsave_rdmsrl(state, MSR_IA32_FOO_1, &val)
-if (r)
-	xsave_wrmsrl(state, MSR_IA32_FOO_2, FOO_ENABLE);
-end_update_xsave_msrs();
-
+Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Reviewed-by: Peter Collingbourne <pcc@google.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: linux-mm@kvack.org
 ---
+ fs/aio.c           |  2 +-
+ include/linux/mm.h |  3 ++-
+ ipc/shm.c          |  2 +-
+ mm/mmap.c          | 10 +++++-----
+ mm/nommu.c         |  4 ++--
+ mm/util.c          |  2 +-
+ 6 files changed, 12 insertions(+), 11 deletions(-)
 
-v1:
- - New patch.
-
- arch/x86/include/asm/fpu/api.h |   5 ++
- arch/x86/kernel/fpu/xstate.c   | 134 +++++++++++++++++++++++++++++++++
- 2 files changed, 139 insertions(+)
-
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index c83b3020350a..6aec27984b62 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -165,4 +165,9 @@ static inline bool fpstate_is_confidential(struct fpu_guest *gfpu)
- struct task_struct;
- extern long fpu_xstate_prctl(struct task_struct *tsk, int option, unsigned long arg2);
+diff --git a/fs/aio.c b/fs/aio.c
+index 4ceba13a7db0..a24618e0e3fc 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -554,7 +554,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
  
-+void *start_update_xsave_msrs(int xfeature_nr);
-+void end_update_xsave_msrs(void);
-+int xsave_rdmsrl(void *state, unsigned int msr, unsigned long long *p);
-+int xsave_wrmsrl(void *state, u32 msr, u64 val);
-+int xsave_set_clear_bits_msrl(void *state, u32 msr, u64 set, u64 clear);
- #endif /* _ASM_X86_FPU_API_H */
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index 44397202762b..c5e20e0d0725 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1867,3 +1867,137 @@ int proc_pid_arch_status(struct seq_file *m, struct pid_namespace *ns,
- 	return 0;
- }
- #endif /* CONFIG_PROC_PID_ARCH_STATUS */
-+
-+static u64 *__get_xsave_member(void *xstate, u32 msr)
-+{
-+	switch (msr) {
-+	/* Currently there are no MSR's supported */
-+	default:
-+		WARN_ONCE(1, "x86/fpu: unsupported xstate msr (%u)\n", msr);
-+		return NULL;
-+	}
-+}
-+
-+/*
-+ * Return a pointer to the xstate for the feature if it should be used, or NULL
-+ * if the MSRs should be written to directly. To do this safely, using the
-+ * associated read/write helpers is required.
-+ */
-+void *start_update_xsave_msrs(int xfeature_nr)
-+{
-+	void *xstate;
-+
-+	/*
-+	 * fpregs_lock() only disables preemption (mostly). So modifing state
-+	 * in an interrupt could screw up some in progress fpregs operation,
-+	 * but appear to work. Warn about it.
-+	 */
-+	WARN_ON_ONCE(!in_task());
-+	WARN_ON_ONCE(current->flags & PF_KTHREAD);
-+
-+	fpregs_lock();
-+
-+	fpregs_assert_state_consistent();
-+
-+	/*
-+	 * If the registers don't need to be reloaded. Go ahead and operate on the
-+	 * registers.
-+	 */
-+	if (!test_thread_flag(TIF_NEED_FPU_LOAD))
-+		return NULL;
-+
-+	xstate = get_xsave_addr(&current->thread.fpu.fpstate->regs.xsave, xfeature_nr);
-+
-+	/*
-+	 * If regs are in the init state, they can't be retrieved from
-+	 * init_fpstate due to the init optimization, but are not nessarily
-+	 * zero. The only option is to restore to make everything live and
-+	 * operate on registers. This will clear TIF_NEED_FPU_LOAD.
-+	 *
-+	 * Otherwise, if not in the init state but TIF_NEED_FPU_LOAD is set,
-+	 * operate on the buffer. The registers will be restored before going
-+	 * to userspace in any case, but the task might get preempted before
-+	 * then, so this possibly saves an xsave.
-+	 */
-+	if (!xstate)
-+		fpregs_restore_userregs();
-+	return xstate;
-+}
-+
-+void end_update_xsave_msrs(void)
-+{
-+	fpregs_unlock();
-+}
-+
-+/*
-+ * When TIF_NEED_FPU_LOAD is set and fpregs_state_valid() is true, the saved
-+ * state and fp state match. In this case, the kernel has some good options -
-+ * it can skip the restore before returning to userspace or it could skip
-+ * an xsave if preempted before then.
-+ *
-+ * But if this correspondence is broken by either a write to the in-memory
-+ * buffer or the registers, the kernel needs to be notified so it doesn't miss
-+ * an xsave or restore. __xsave_msrl_prepare_write() peforms this check and
-+ * notifies the kernel if needed. Use before writes only, to not take away
-+ * the kernel's options when not required.
-+ *
-+ * If TIF_NEED_FPU_LOAD is set, then the logic in start_update_xsave_msrs()
-+ * must have resulted in targeting the in-memory state, so invaliding the
-+ * registers is the right thing to do.
-+ */
-+static void __xsave_msrl_prepare_write(void)
-+{
-+	if (test_thread_flag(TIF_NEED_FPU_LOAD) &&
-+	    fpregs_state_valid(&current->thread.fpu, smp_processor_id()))
-+		__fpu_invalidate_fpregs_state(&current->thread.fpu);
-+}
-+
-+int xsave_rdmsrl(void *xstate, unsigned int msr, unsigned long long *p)
-+{
-+	u64 *member_ptr;
-+
-+	if (!xstate)
-+		return rdmsrl_safe(msr, p);
-+
-+	member_ptr = __get_xsave_member(xstate, msr);
-+	if (!member_ptr)
-+		return 1;
-+
-+	*p = *member_ptr;
-+
-+	return 0;
-+}
-+
-+int xsave_wrmsrl(void *xstate, u32 msr, u64 val)
-+{
-+	u64 *member_ptr;
-+
-+	__xsave_msrl_prepare_write();
-+	if (!xstate)
-+		return wrmsrl_safe(msr, val);
-+
-+	member_ptr = __get_xsave_member(xstate, msr);
-+	if (!member_ptr)
-+		return 1;
-+
-+	*member_ptr = val;
-+
-+	return 0;
-+}
-+
-+int xsave_set_clear_bits_msrl(void *xstate, u32 msr, u64 set, u64 clear)
-+{
-+	u64 val, new_val;
-+	int ret;
-+
-+	ret = xsave_rdmsrl(xstate, msr, &val);
-+	if (ret)
-+		return ret;
-+
-+	new_val = (val & ~clear) | set;
-+
-+	if (new_val != val)
-+		return xsave_wrmsrl(xstate, msr, new_val);
-+
-+	return 0;
-+}
+ 	ctx->mmap_base = do_mmap(ctx->aio_ring_file, 0, ctx->mmap_size,
+ 				 PROT_READ | PROT_WRITE,
+-				 MAP_SHARED, 0, &unused, NULL);
++				 MAP_SHARED, 0, 0, &unused, NULL);
+ 	mmap_write_unlock(mm);
+ 	if (IS_ERR((void *)ctx->mmap_base)) {
+ 		ctx->mmap_size = 0;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index e125358d7f75..481e1271409f 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2689,7 +2689,8 @@ extern unsigned long mmap_region(struct file *file, unsigned long addr,
+ 	struct list_head *uf);
+ extern unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	unsigned long len, unsigned long prot, unsigned long flags,
+-	unsigned long pgoff, unsigned long *populate, struct list_head *uf);
++	vm_flags_t vm_flags, unsigned long pgoff, unsigned long *populate,
++	struct list_head *uf);
+ extern int __do_munmap(struct mm_struct *, unsigned long, size_t,
+ 		       struct list_head *uf, bool downgrade);
+ extern int do_munmap(struct mm_struct *, unsigned long, size_t,
+diff --git a/ipc/shm.c b/ipc/shm.c
+index b3048ebd5c31..f236b3e14ec4 100644
+--- a/ipc/shm.c
++++ b/ipc/shm.c
+@@ -1646,7 +1646,7 @@ long do_shmat(int shmid, char __user *shmaddr, int shmflg,
+ 			goto invalid;
+ 	}
+ 
+-	addr = do_mmap(file, addr, size, prot, flags, 0, &populate, NULL);
++	addr = do_mmap(file, addr, size, prot, flags, 0, 0, &populate, NULL);
+ 	*raddr = addr;
+ 	err = 0;
+ 	if (IS_ERR_VALUE(addr))
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 9bab326332af..9c82a1b02cfc 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1410,11 +1410,11 @@ static inline bool file_mmap_ok(struct file *file, struct inode *inode,
+  */
+ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 			unsigned long len, unsigned long prot,
+-			unsigned long flags, unsigned long pgoff,
+-			unsigned long *populate, struct list_head *uf)
++			unsigned long flags, vm_flags_t vm_flags,
++			unsigned long pgoff, unsigned long *populate,
++			struct list_head *uf)
+ {
+ 	struct mm_struct *mm = current->mm;
+-	vm_flags_t vm_flags;
+ 	int pkey = 0;
+ 
+ 	*populate = 0;
+@@ -1474,7 +1474,7 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	 * to. we assume access permissions have been handled by the open
+ 	 * of the memory object, so we don't do any here.
+ 	 */
+-	vm_flags = calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
++	vm_flags |= calc_vm_prot_bits(prot, pkey) | calc_vm_flag_bits(flags) |
+ 			mm->def_flags | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
+ 
+ 	if (flags & MAP_LOCKED)
+@@ -3011,7 +3011,7 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+ 
+ 	file = get_file(vma->vm_file);
+ 	ret = do_mmap(vma->vm_file, start, size,
+-			prot, flags, pgoff, &populate, NULL);
++			prot, flags, 0, pgoff, &populate, NULL);
+ 	fput(file);
+ out:
+ 	mmap_write_unlock(mm);
+diff --git a/mm/nommu.c b/mm/nommu.c
+index 55a9e48a7a02..a6e0243cd69b 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -1057,6 +1057,7 @@ unsigned long do_mmap(struct file *file,
+ 			unsigned long len,
+ 			unsigned long prot,
+ 			unsigned long flags,
++			vm_flags_t vm_flags,
+ 			unsigned long pgoff,
+ 			unsigned long *populate,
+ 			struct list_head *uf)
+@@ -1064,7 +1065,6 @@ unsigned long do_mmap(struct file *file,
+ 	struct vm_area_struct *vma;
+ 	struct vm_region *region;
+ 	struct rb_node *rb;
+-	vm_flags_t vm_flags;
+ 	unsigned long capabilities, result;
+ 	int ret;
+ 
+@@ -1083,7 +1083,7 @@ unsigned long do_mmap(struct file *file,
+ 
+ 	/* we've determined that we can make the mapping, now translate what we
+ 	 * now know into VMA flags */
+-	vm_flags = determine_vm_flags(file, prot, flags, capabilities);
++	vm_flags |= determine_vm_flags(file, prot, flags, capabilities);
+ 
+ 	/* we're going to need to record the mapping */
+ 	region = kmem_cache_zalloc(vm_region_jar, GFP_KERNEL);
+diff --git a/mm/util.c b/mm/util.c
+index 7e43369064c8..d419821364cc 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -516,7 +516,7 @@ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
+ 	if (!ret) {
+ 		if (mmap_write_lock_killable(mm))
+ 			return -EINTR;
+-		ret = do_mmap(file, addr, len, prot, flag, pgoff, &populate,
++		ret = do_mmap(file, addr, len, prot, flag, 0, pgoff, &populate,
+ 			      &uf);
+ 		mmap_write_unlock(mm);
+ 		userfaultfd_unmap_complete(mm, &uf);
 -- 
 2.17.1
 
