@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E73A4A3A3F
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A269C4A3A46
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356714AbiA3VZn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Jan 2022 16:25:43 -0500
-Received: from mga07.intel.com ([134.134.136.100]:9047 "EHLO mga07.intel.com"
+        id S1356743AbiA3VZw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Jan 2022 16:25:52 -0500
+Received: from mga07.intel.com ([134.134.136.100]:9102 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356486AbiA3VYz (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:24:55 -0500
+        id S1356634AbiA3VZJ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 30 Jan 2022 16:25:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643577895; x=1675113895;
+  t=1643577909; x=1675113909;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=G4fVgUiNuZ57ki/aV9t4t6lONJ9wFjRKKu+IxwPcJt0=;
-  b=ZOSIUoV2It2xfNWtpmAFFWKirdDjHIYy1YSLPTBe2PUU4E8ugaDHJsnc
-   X2hwgoorJwzXBaNk26KbSNHybSb/1HuxJ71O5b898sDESEUR398UYdMKa
-   W9Z33AgJA0jd8u5b5gRf5suIaxa1Nbc1xdhGpYpTXPMx7upevrIjyz9wZ
-   ukk54NTvY2/G/ShC5HHHszLQ+ybbeXbPgxQcClceaNoME4E0LOGAn8Kux
-   6Dwtu6nCyxEivqsfovNdhJy4r8QbR1SMRkFgLoig86paesvcFd+BpqgpS
-   bZzRtzGcWLEHZoe0yVLqwVHmY9syKkMN4WPcfQb+owB0ZW46c7dCSRakI
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="310685834"
+  bh=s08st2zzx9YvkrATdX2s27PCtQcWcePp2JHFEXn/D9c=;
+  b=NtEouAonbUUIr1DCQByPk5TB25Ord/NwRE36BnwXhzRYjHgYivTg7/fX
+   rKF7MKN2XQ1OvjOUs35NtcxvBaZXhS9MEMIcZPDY2aOJmK/qfZ1Rl6T0W
+   gXVjq0TXHpU9zK5QDy5P8ScAaUArWGuoLsXRGttcZVMW5Ayl5csOHoYKM
+   8lOoUuCwwRVqRagJl6DBxHeEGOpzKHDPrNEfkcwoCMSRT2D+LW0xgHUYX
+   vN6uwtJQmQGO0IJ6epEyPv5HDdhqOQtxJSCaKkak2w9BCVYKIrktQ3FDr
+   jFEVhPfU9gpaiPirUcPxZ/L3Kb7AdKxfYdc61oRRSDeOP5e2SFEP51TH2
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="310685836"
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="310685834"
+   d="scan'208";a="310685836"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:13 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:14 -0800
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="536857008"
+   d="scan'208";a="536857021"
 Received: from avmallar-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.123.171])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:12 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:13 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -61,11 +61,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com
-Cc:     rick.p.edgecombe@intel.com, Yu@vger.kernel.org,
-        Yu-cheng <yu-cheng.yu@intel.com>
-Subject: [PATCH 33/35] selftests/x86: Add map_shadow_stack syscall test
-Date:   Sun, 30 Jan 2022 13:18:36 -0800
-Message-Id: <20220130211838.8382-34-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com
+Subject: [PATCH 34/35] x86/cet/shstk: Support wrss for userspace
+Date:   Sun, 30 Jan 2022 13:18:37 -0800
+Message-Id: <20220130211838.8382-35-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
@@ -73,131 +72,188 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add a simple selftest for exercising the new map_shadow_stack syscall.
+For the current shadow stack implementation, shadow stacks contents cannot
+be arbitrarily provisioned with data. This property helps apps protect
+themselves better, but also restricts any potential apps that may want to
+do exotic things at the expense of a little security.
 
-Co-developed-by: Yu, Yu-cheng <yu-cheng.yu@intel.com>
-Signed-off-by: Yu, Yu-cheng <yu-cheng.yu@intel.com>
+The x86 shadow stack feature introduces a new instruction, wrss, which
+can be enabled to write directly to shadow stack permissioned memory from
+userspace. Allow it to get enabled via the prctl interface.
+
+Only enable the userspace wrss instruction, which allows writes to
+userspace shadow stacks from userspace. Do not allow it to be enabled
+independently of shadow stack, as HW does not support using WRSS when
+shadow stack is disabled.
+
+Prevent shadow stack's from becoming executable to assist apps who want
+W^X enforced. Add an arch_validate_flags() implementation to handle the
+check. Rename the uapi/asm/mman.h header guard to be able to use it for
+arch/x86/include/asm/mman.h where the arch_validate_flags() will be.
+
+From a fault handler perspective, WRSS will behave very similar to WRUSS,
+which is treated like a user access from a PF err code perspective.
+
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 ---
 
 v1:
  - New patch.
 
- tools/testing/selftests/x86/Makefile          |  9 ++-
- .../selftests/x86/test_map_shadow_stack.c     | 75 +++++++++++++++++++
- 2 files changed, 83 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/test_map_shadow_stack.c
+ arch/x86/include/asm/cet.h          |  3 +++
+ arch/x86/include/asm/mman.h         |  5 ++++-
+ arch/x86/include/uapi/asm/prctl.h   |  2 +-
+ arch/x86/kernel/elf_feature_prctl.c |  6 +++++
+ arch/x86/kernel/shstk.c             | 35 ++++++++++++++++++++++++++++-
+ 5 files changed, 48 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 8a1f62ab3c8e..9114943336f9 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -9,11 +9,13 @@ UNAME_M := $(shell uname -m)
- CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
- CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
- CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
-+CAN_BUILD_WITH_SHSTK := $(shell ./check_cc.sh $(CC) trivial_program.c -mshstk -fcf-protection)
+diff --git a/arch/x86/include/asm/cet.h b/arch/x86/include/asm/cet.h
+index cbc7cfcba5dc..c8ff0bd5f5bc 100644
+--- a/arch/x86/include/asm/cet.h
++++ b/arch/x86/include/asm/cet.h
+@@ -10,6 +10,7 @@ struct task_struct;
+ struct thread_shstk {
+ 	u64	base;
+ 	u64	size;
++	bool	wrss;
+ };
  
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore sigaltstack
-+			syscall_arg_fault fsgsbase_restore sigaltstack \
-+			test_map_shadow_stack
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-@@ -105,3 +107,8 @@ $(OUTPUT)/test_syscall_vdso_32: thunks_32.S
- # state.
- $(OUTPUT)/check_initial_reg_state_32: CFLAGS += -Wl,-ereal_start -static
- $(OUTPUT)/check_initial_reg_state_64: CFLAGS += -Wl,-ereal_start -static
-+
-+ifeq ($(CAN_BUILD_WITH_SHSTK),1)
-+$(OUTPUT)/test_map_shadow_stack_64: CFLAGS += -mshstk -fcf-protection
-+$(OUTPUT)/test_map_shadow_stack_32: CFLAGS += -mshstk -fcf-protection
-+endif
-\ No newline at end of file
-diff --git a/tools/testing/selftests/x86/test_map_shadow_stack.c b/tools/testing/selftests/x86/test_map_shadow_stack.c
-new file mode 100644
-index 000000000000..dfd94ef0176d
---- /dev/null
-+++ b/tools/testing/selftests/x86/test_map_shadow_stack.c
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <sys/syscall.h>
-+#include <sys/mman.h>
-+#include <sys/stat.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <x86intrin.h>
-+
-+#define SS_SIZE 0x200000
-+
-+void *create_shstk(void)
+ #ifdef CONFIG_X86_SHADOW_STACK
+@@ -19,6 +20,7 @@ int shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
+ void shstk_free(struct task_struct *p);
+ int shstk_disable(void);
+ void reset_thread_shstk(void);
++int wrss_control(bool enable);
+ int shstk_setup_rstor_token(bool proc32, unsigned long restorer,
+ 			    unsigned long *new_ssp);
+ int shstk_check_rstor_token(bool proc32, unsigned long *new_ssp);
+@@ -32,6 +34,7 @@ static inline int shstk_alloc_thread_stack(struct task_struct *p,
+ static inline void shstk_free(struct task_struct *p) {}
+ static inline void shstk_disable(void) {}
+ static inline void reset_thread_shstk(void) {}
++static inline void wrss_control(bool enable) {}
+ static inline int shstk_setup_rstor_token(bool proc32, unsigned long restorer,
+ 					  unsigned long *new_ssp) { return 0; }
+ static inline int shstk_check_rstor_token(bool proc32,
+diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
+index b44fe31deb3a..c05951a36d93 100644
+--- a/arch/x86/include/asm/mman.h
++++ b/arch/x86/include/asm/mman.h
+@@ -8,7 +8,10 @@
+ #ifdef CONFIG_X86_SHADOW_STACK
+ static inline bool arch_validate_flags(unsigned long vm_flags)
+ {
+-	if ((vm_flags & VM_SHADOW_STACK) && (vm_flags & VM_WRITE))
++	/*
++	 * Shadow stack must not be executable, to help with W^X due to wrss.
++	 */
++	if ((vm_flags & VM_SHADOW_STACK) && (vm_flags & (VM_WRITE | VM_EXEC)))
+ 		return false;
+ 
+ 	return true;
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index aa294c7bcf41..210976925325 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -28,6 +28,6 @@
+ /* x86 feature bits to be used with ARCH_X86_FEATURE arch_prctl()s */
+ #define LINUX_X86_FEATURE_IBT		0x00000001
+ #define LINUX_X86_FEATURE_SHSTK		0x00000002
+-
++#define LINUX_X86_FEATURE_WRSS		0x00000010
+ 
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/elf_feature_prctl.c b/arch/x86/kernel/elf_feature_prctl.c
+index 47de201db3f7..ecad6ebeb4dd 100644
+--- a/arch/x86/kernel/elf_feature_prctl.c
++++ b/arch/x86/kernel/elf_feature_prctl.c
+@@ -21,6 +21,8 @@ static int elf_feat_copy_status_to_user(struct thread_shstk *shstk, u64 __user *
+ 		buf[1] = shstk->base;
+ 		buf[2] = shstk->size;
+ 	}
++	if (shstk->wrss)
++		buf[0] |= LINUX_X86_FEATURE_WRSS;
+ 
+ 	return copy_to_user(ubuf, buf, sizeof(buf));
+ }
+@@ -40,6 +42,8 @@ int prctl_elf_feature(int option, u64 arg2)
+ 		if (arg2 & thread->feat_prctl_locked)
+ 			return -EPERM;
+ 
++		if (arg2 & LINUX_X86_FEATURE_WRSS && !wrss_control(false))
++			feat_succ |= LINUX_X86_FEATURE_WRSS;
+ 		if (arg2 & LINUX_X86_FEATURE_SHSTK && !shstk_disable())
+ 			feat_succ |= LINUX_X86_FEATURE_SHSTK;
+ 
+@@ -52,6 +56,8 @@ int prctl_elf_feature(int option, u64 arg2)
+ 
+ 		if (arg2 & LINUX_X86_FEATURE_SHSTK && !shstk_setup())
+ 			feat_succ |= LINUX_X86_FEATURE_SHSTK;
++		if (arg2 & LINUX_X86_FEATURE_WRSS && !wrss_control(true))
++			feat_succ |= LINUX_X86_FEATURE_WRSS;
+ 
+ 		if (feat_succ != arg2)
+ 			return -ECANCELED;
+diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+index 53be5d5539d4..92612236b4ef 100644
+--- a/arch/x86/kernel/shstk.c
++++ b/arch/x86/kernel/shstk.c
+@@ -230,6 +230,36 @@ void shstk_free(struct task_struct *tsk)
+ 	shstk->size = 0;
+ }
+ 
++int wrss_control(bool enable)
 +{
-+	return (void *)syscall(__NR_map_shadow_stack, SS_SIZE, SHADOW_STACK_SET_TOKEN);
-+}
++	struct thread_shstk *shstk = &current->thread.shstk;
++	void *xstate;
++	int err;
 +
-+#if (__GNUC__ < 8) || (__GNUC__ == 8 && __GNUC_MINOR__ < 5)
-+int main(int argc, char *argv[])
-+{
-+	printf("SKIP: compiler does not support CET.");
-+	return 0;
-+}
-+#else
-+void try_shstk(unsigned long new_ssp)
-+{
-+	unsigned long ssp0, ssp1;
-+
-+	printf("pid=%d\n", getpid());
-+	printf("new_ssp = %lx, *new_ssp = %lx\n",
-+		new_ssp, *((unsigned long *)new_ssp));
-+
-+	ssp0 = _get_ssp();
-+	printf("changing ssp from %lx to %lx\n", ssp0, new_ssp);
-+
-+	/* Make sure is aligned to 8 bytes */
-+	if ((ssp0 & 0xf) != 0)
-+		ssp0 &= -8;
-+
-+	asm volatile("rstorssp (%0)\n":: "r" (new_ssp));
-+	asm volatile("saveprevssp");
-+	ssp1 = _get_ssp();
-+	printf("ssp is now %lx\n", ssp1);
-+
-+	ssp0 -= 8;
-+	asm volatile("rstorssp (%0)\n":: "r" (ssp0));
-+	asm volatile("saveprevssp");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	void *shstk;
-+
-+	if (!_get_ssp()) {
-+		printf("SKIP: shadow stack disabled.");
-+		return 0;
-+	}
-+
-+	shstk = create_shstk();
-+	if (shstk == MAP_FAILED) {
-+		printf("FAIL: Error creating shadow stack: %d\n", errno);
++	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
 +		return 1;
-+	}
-+	try_shstk((unsigned long)shstk + SS_SIZE - 8);
++	/*
++	 * Only enable wrss if shadow stack is enabled. If shadow stack is not
++	 * enabled, wrss will already be disabled, so don't bother clearing it
++	 * when disabling.
++	 */
++	if (!shstk->size || shstk->wrss == enable)
++		return 1;
 +
-+	printf("PASS.\n");
++	xstate = start_update_xsave_msrs(XFEATURE_CET_USER);
++	if (enable)
++		err = xsave_set_clear_bits_msrl(xstate, MSR_IA32_U_CET, CET_WRSS_EN, 0);
++	else
++		err = xsave_set_clear_bits_msrl(xstate, MSR_IA32_U_CET, 0, CET_WRSS_EN);
++	end_update_xsave_msrs();
++
++	if (err)
++		return 1;
++
++	shstk->wrss = enable;
 +	return 0;
 +}
-+#endif
++
+ int shstk_disable(void)
+ {
+ 	struct thread_shstk *shstk = &current->thread.shstk;
+@@ -242,7 +272,9 @@ int shstk_disable(void)
+ 		return 1;
+ 
+ 	xstate = start_update_xsave_msrs(XFEATURE_CET_USER);
+-	err = xsave_set_clear_bits_msrl(xstate, MSR_IA32_U_CET, 0, CET_SHSTK_EN);
++	/* Disable WRSS too when disabling shadow stack */
++	err = xsave_set_clear_bits_msrl(xstate, MSR_IA32_U_CET, 0,
++					CET_SHSTK_EN | CET_WRSS_EN);
+ 	if (!err)
+ 		err = xsave_wrmsrl(xstate, MSR_IA32_PL3_SSP, 0);
+ 	end_update_xsave_msrs();
+@@ -251,6 +283,7 @@ int shstk_disable(void)
+ 		return 1;
+ 
+ 	shstk_free(current);
++	shstk->wrss = 0;
+ 	return 0;
+ }
+ 
 -- 
 2.17.1
 
