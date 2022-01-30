@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EB64A3A00
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989784A39E2
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356460AbiA3VWL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Jan 2022 16:22:11 -0500
-Received: from mga06.intel.com ([134.134.136.31]:52015 "EHLO mga06.intel.com"
+        id S1356512AbiA3VV7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Jan 2022 16:21:59 -0500
+Received: from mga06.intel.com ([134.134.136.31]:52019 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356315AbiA3VV4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        id S1356475AbiA3VV4 (ORCPT <rfc822;linux-arch@vger.kernel.org>);
         Sun, 30 Jan 2022 16:21:56 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1643577716; x=1675113716;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Nk1tOIdLVz+bQkgFftn6rPnhzAu43sdXIuQHcD9KXX4=;
-  b=jxUGu5v3y9fzcw1Wafx2EhM5Mp175INZLv2HMckcmunOspbWnPx1nsOI
-   K3JNeBMDqTj+glIY6IPrIjtsZR1Z/bXSMztaSn6Z8UBTqjjnlgSQhgkPq
-   oh9JRFIb7pjuLCE/ni8bBYtK0/7Y9mPV/nR2hOsmXYbOfvZNQrcYdoy4S
-   noFvfWW77QLWUOtippgDAOhYfQ3rVzvVwlE60hJOXiVvwKOilfsveEQDO
-   N/4ysTOoZa8RUWm8ZU1bk+5oaHdtdKuWN0UFj8CZ3L4/+YxnrQujZ054Q
-   xs93poI9gj3OlGyygzjBKq545RnzYe0yykB+yFTNpAR92rj6DwWTZWfGu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308104900"
+  bh=HlWo8OKNThkqHwQn3Dphtl6Opo3L/i/03JpsJVaIZ2A=;
+  b=g23OBzhbAjNLI4HpENBuTWPqnMFujE1MB7oDuq9Zlk6Y5e2V83S29uLt
+   QXbMH7fOyFPTQScz4sK+4nfvptHt/VuCpl2PqIHJg2Y6ph3+UkWnsxya8
+   FulV1DrtkeFYtP/XZep21myGdudorw3ckLLlAzoRX/UdTE5O6ojcvix8+
+   H9/W/nT44d+2mK+Dx5gJrLe0wDaM3x7MUW3adU5QMdhAAFbP1LvaM0WlF
+   5Z1PnCevP4UPvuFjm3a9BI7pB3jP5NXczYomjB2op1QlxSsRDT6o0c4Rq
+   9EOgELM9ohx2Fwqbl6L8zz4HH7/xlNZoyKpSY77OJH0H6rN8YX9J/FJi3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308104904"
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="308104900"
+   d="scan'208";a="308104904"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:21:51 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:21:52 -0800
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="536856701"
+   d="scan'208";a="536856715"
 Received: from avmallar-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.123.171])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:21:50 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:21:51 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -62,10 +62,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com
 Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
-Subject: [PATCH 06/35] x86/cet: Add control-protection fault handler
-Date:   Sun, 30 Jan 2022 13:18:09 -0800
-Message-Id: <20220130211838.8382-7-rick.p.edgecombe@intel.com>
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 07/35] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
+Date:   Sun, 30 Jan 2022 13:18:10 -0800
+Message-Id: <20220130211838.8382-8-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
@@ -75,247 +75,63 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Yu-cheng Yu <yu-cheng.yu@intel.com>
 
-A control-protection fault is triggered when a control-flow transfer
-attempt violates Shadow Stack or Indirect Branch Tracking constraints.
-For example, the return address for a RET instruction differs from the copy
-on the shadow stack; or an indirect JMP instruction, without the NOTRACK
-prefix, arrives at a non-ENDBR opcode.
+The x86 family of processors do not directly create read-only and Dirty
+PTEs.  These PTEs are created by software.  One such case is that kernel
+read-only pages are historically setup as Dirty.
 
-The control-protection fault handler works in a similar way as the general
-protection fault handler.  It provides the si_code SEGV_CPERR to the signal
-handler.
+New processors that support Shadow Stack regard read-only and Dirty PTEs as
+shadow stack pages.  This results in ambiguity between shadow stack and
+kernel read-only pages.  To resolve this, removed Dirty from kernel read-
+only pages.
 
 Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 Cc: Kees Cook <keescook@chromium.org>
-Cc: Michael Kerrisk <mtk.manpages@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
+ arch/x86/include/asm/pgtable_types.h | 6 +++---
+ arch/x86/mm/pat/set_memory.c         | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-v1:
- - Update static asserts for NSIGSEGV
-
-Yu-cheng v29:
- - Remove pr_emerg() since it is followed by die().
- - Change boot_cpu_has() to cpu_feature_enabled().
-
-Yu-cheng v25:
- - Change CONFIG_X86_CET to CONFIG_X86_SHADOW_STACK.
- - Change X86_FEATURE_CET to X86_FEATURE_SHSTK.
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index 40497a9020c6..3781a79b6388 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -190,10 +190,10 @@ enum page_cache_mode {
+ #define _KERNPG_TABLE		 (__PP|__RW|   0|___A|   0|___D|   0|   0| _ENC)
+ #define _PAGE_TABLE_NOENC	 (__PP|__RW|_USR|___A|   0|___D|   0|   0)
+ #define _PAGE_TABLE		 (__PP|__RW|_USR|___A|   0|___D|   0|   0| _ENC)
+-#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|___D|   0|___G)
+-#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|___D|   0|___G)
++#define __PAGE_KERNEL_RO	 (__PP|   0|   0|___A|__NX|   0|   0|___G)
++#define __PAGE_KERNEL_ROX	 (__PP|   0|   0|___A|   0|   0|   0|___G)
+ #define __PAGE_KERNEL_NOCACHE	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __NC)
+-#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|___D|   0|___G)
++#define __PAGE_KERNEL_VVAR	 (__PP|   0|_USR|___A|__NX|   0|   0|___G)
+ #define __PAGE_KERNEL_LARGE	 (__PP|__RW|   0|___A|__NX|___D|_PSE|___G)
+ #define __PAGE_KERNEL_LARGE_EXEC (__PP|__RW|   0|___A|   0|___D|_PSE|___G)
+ #define __PAGE_KERNEL_WP	 (__PP|__RW|   0|___A|__NX|___D|   0|___G| __WP)
+diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+index b4072115c8ef..844bb30280b7 100644
+--- a/arch/x86/mm/pat/set_memory.c
++++ b/arch/x86/mm/pat/set_memory.c
+@@ -1943,7 +1943,7 @@ int set_memory_nx(unsigned long addr, int numpages)
  
- arch/arm/kernel/signal.c           |  2 +-
- arch/arm64/kernel/signal.c         |  2 +-
- arch/arm64/kernel/signal32.c       |  2 +-
- arch/sparc/kernel/signal32.c       |  2 +-
- arch/sparc/kernel/signal_64.c      |  2 +-
- arch/x86/include/asm/idtentry.h    |  4 ++
- arch/x86/kernel/idt.c              |  4 ++
- arch/x86/kernel/signal_compat.c    |  2 +-
- arch/x86/kernel/traps.c            | 62 ++++++++++++++++++++++++++++++
- include/uapi/asm-generic/siginfo.h |  3 +-
- 10 files changed, 78 insertions(+), 7 deletions(-)
-
-diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
-index c532a6041066..59aaadce9d52 100644
---- a/arch/arm/kernel/signal.c
-+++ b/arch/arm/kernel/signal.c
-@@ -681,7 +681,7 @@ asmlinkage void do_rseq_syscall(struct pt_regs *regs)
-  */
- static_assert(NSIGILL	== 11);
- static_assert(NSIGFPE	== 15);
--static_assert(NSIGSEGV	== 9);
-+static_assert(NSIGSEGV	== 10);
- static_assert(NSIGBUS	== 5);
- static_assert(NSIGTRAP	== 6);
- static_assert(NSIGCHLD	== 6);
-diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-index d8aaf4b6f432..d2da57c415b8 100644
---- a/arch/arm64/kernel/signal.c
-+++ b/arch/arm64/kernel/signal.c
-@@ -983,7 +983,7 @@ void __init minsigstksz_setup(void)
-  */
- static_assert(NSIGILL	== 11);
- static_assert(NSIGFPE	== 15);
--static_assert(NSIGSEGV	== 9);
-+static_assert(NSIGSEGV	== 10);
- static_assert(NSIGBUS	== 5);
- static_assert(NSIGTRAP	== 6);
- static_assert(NSIGCHLD	== 6);
-diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
-index d984282b979f..8776a34c6444 100644
---- a/arch/arm64/kernel/signal32.c
-+++ b/arch/arm64/kernel/signal32.c
-@@ -460,7 +460,7 @@ void compat_setup_restart_syscall(struct pt_regs *regs)
-  */
- static_assert(NSIGILL	== 11);
- static_assert(NSIGFPE	== 15);
--static_assert(NSIGSEGV	== 9);
-+static_assert(NSIGSEGV	== 10);
- static_assert(NSIGBUS	== 5);
- static_assert(NSIGTRAP	== 6);
- static_assert(NSIGCHLD	== 6);
-diff --git a/arch/sparc/kernel/signal32.c b/arch/sparc/kernel/signal32.c
-index 6cc124a3bb98..dc50b2a78692 100644
---- a/arch/sparc/kernel/signal32.c
-+++ b/arch/sparc/kernel/signal32.c
-@@ -752,7 +752,7 @@ asmlinkage int do_sys32_sigstack(u32 u_ssptr, u32 u_ossptr, unsigned long sp)
-  */
- static_assert(NSIGILL	== 11);
- static_assert(NSIGFPE	== 15);
--static_assert(NSIGSEGV	== 9);
-+static_assert(NSIGSEGV	== 10);
- static_assert(NSIGBUS	== 5);
- static_assert(NSIGTRAP	== 6);
- static_assert(NSIGCHLD	== 6);
-diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
-index 2a78d2af1265..7fe2bd37bd1a 100644
---- a/arch/sparc/kernel/signal_64.c
-+++ b/arch/sparc/kernel/signal_64.c
-@@ -562,7 +562,7 @@ void do_notify_resume(struct pt_regs *regs, unsigned long orig_i0, unsigned long
-  */
- static_assert(NSIGILL	== 11);
- static_assert(NSIGFPE	== 15);
--static_assert(NSIGSEGV	== 9);
-+static_assert(NSIGSEGV	== 10);
- static_assert(NSIGBUS	== 5);
- static_assert(NSIGTRAP	== 6);
- static_assert(NSIGCHLD	== 6);
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 1345088e9902..a90791433152 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -562,6 +562,10 @@ DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_SS,	exc_stack_segment);
- DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP,	exc_general_protection);
- DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_AC,	exc_alignment_check);
- 
-+#ifdef CONFIG_X86_SHADOW_STACK
-+DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP, exc_control_protection);
-+#endif
-+
- /* Raw exception entries which need extra work */
- DECLARE_IDTENTRY_RAW(X86_TRAP_UD,		exc_invalid_op);
- DECLARE_IDTENTRY_RAW(X86_TRAP_BP,		exc_int3);
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index df0fa695bb09..9f1bdaabc246 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -113,6 +113,10 @@ static const __initconst struct idt_data def_idts[] = {
- #elif defined(CONFIG_X86_32)
- 	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_32),
- #endif
-+
-+#ifdef CONFIG_X86_SHADOW_STACK
-+	INTG(X86_TRAP_CP,		asm_exc_control_protection),
-+#endif
- };
- 
- /*
-diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-index b52407c56000..ff50cd978ea5 100644
---- a/arch/x86/kernel/signal_compat.c
-+++ b/arch/x86/kernel/signal_compat.c
-@@ -27,7 +27,7 @@ static inline void signal_compat_build_tests(void)
- 	 */
- 	BUILD_BUG_ON(NSIGILL  != 11);
- 	BUILD_BUG_ON(NSIGFPE  != 15);
--	BUILD_BUG_ON(NSIGSEGV != 9);
-+	BUILD_BUG_ON(NSIGSEGV != 10);
- 	BUILD_BUG_ON(NSIGBUS  != 5);
- 	BUILD_BUG_ON(NSIGTRAP != 6);
- 	BUILD_BUG_ON(NSIGCHLD != 6);
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index c9d566dcf89a..54b7a146fd5e 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -39,6 +39,7 @@
- #include <linux/io.h>
- #include <linux/hardirq.h>
- #include <linux/atomic.h>
-+#include <linux/nospec.h>
- 
- #include <asm/stacktrace.h>
- #include <asm/processor.h>
-@@ -641,6 +642,67 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
- 	cond_local_irq_disable(regs);
+ int set_memory_ro(unsigned long addr, int numpages)
+ {
+-	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW), 0);
++	return change_page_attr_clear(&addr, numpages, __pgprot(_PAGE_RW | _PAGE_DIRTY), 0);
  }
  
-+#ifdef CONFIG_X86_SHADOW_STACK
-+static const char * const control_protection_err[] = {
-+	"unknown",
-+	"near-ret",
-+	"far-ret/iret",
-+	"endbranch",
-+	"rstorssp",
-+	"setssbsy",
-+	"unknown",
-+};
-+
-+static DEFINE_RATELIMIT_STATE(cpf_rate, DEFAULT_RATELIMIT_INTERVAL,
-+			      DEFAULT_RATELIMIT_BURST);
-+
-+/*
-+ * When a control protection exception occurs, send a signal to the responsible
-+ * application.  Currently, control protection is only enabled for user mode.
-+ * This exception should not come from kernel mode.
-+ */
-+DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-+{
-+	struct task_struct *tsk;
-+
-+	if (!user_mode(regs)) {
-+		die("kernel control protection fault", regs, error_code);
-+		panic("Unexpected kernel control protection fault.  Machine halted.");
-+	}
-+
-+	cond_local_irq_enable(regs);
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-+		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
-+
-+	tsk = current;
-+	tsk->thread.error_code = error_code;
-+	tsk->thread.trap_nr = X86_TRAP_CP;
-+
-+	/*
-+	 * Ratelimit to prevent log spamming.
-+	 */
-+	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
-+	    __ratelimit(&cpf_rate)) {
-+		unsigned long ssp;
-+		int cpf_type;
-+
-+		cpf_type = array_index_nospec(error_code, ARRAY_SIZE(control_protection_err));
-+
-+		rdmsrl(MSR_IA32_PL3_SSP, ssp);
-+		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
-+			 tsk->comm, task_pid_nr(tsk),
-+			 regs->ip, regs->sp, ssp, error_code,
-+			 control_protection_err[cpf_type]);
-+		print_vma_addr(KERN_CONT " in ", regs->ip);
-+		pr_cont("\n");
-+	}
-+
-+	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
-+	cond_local_irq_disable(regs);
-+}
-+#endif
-+
- static bool do_int3(struct pt_regs *regs)
- {
- 	int res;
-diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-index 3ba180f550d7..081f4b37d22c 100644
---- a/include/uapi/asm-generic/siginfo.h
-+++ b/include/uapi/asm-generic/siginfo.h
-@@ -240,7 +240,8 @@ typedef struct siginfo {
- #define SEGV_ADIPERR	7	/* Precise MCD exception */
- #define SEGV_MTEAERR	8	/* Asynchronous ARM MTE error */
- #define SEGV_MTESERR	9	/* Synchronous ARM MTE exception */
--#define NSIGSEGV	9
-+#define SEGV_CPERR	10	/* Control protection fault */
-+#define NSIGSEGV	10
- 
- /*
-  * SIGBUS si_codes
+ int set_memory_rw(unsigned long addr, int numpages)
 -- 
 2.17.1
 
