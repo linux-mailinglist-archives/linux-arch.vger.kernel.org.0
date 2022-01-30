@@ -2,35 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30824A35EE
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 12:32:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98134A35FC
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 12:36:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354640AbiA3Lcy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Jan 2022 06:32:54 -0500
-Received: from mout.kundenserver.de ([212.227.17.13]:58971 "EHLO
+        id S1345859AbiA3Lgp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Jan 2022 06:36:45 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:41545 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344102AbiA3Lcu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Jan 2022 06:32:50 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MCayD-1n51Vk460h-009cnm; Sun, 30 Jan 2022 12:32:48 +0100
-Received: by mail-ot1-f49.google.com with SMTP id o9-20020a9d7189000000b0059ee49b4f0fso10267743otj.2;
-        Sun, 30 Jan 2022 03:32:47 -0800 (PST)
-X-Gm-Message-State: AOAM532cCbxEelwRHlt25HUiGSKF8InPnYi6gUnC3N0/EyVNse6eycj+
-        uxkeTKq8fqFIxlBHl5EH7e1nAU80CZOsusUscHU=
-X-Google-Smtp-Source: ABdhPJwfE8JwIPR39kNR+t9u+MXKrX+M/IvR4BevQAZ6Ex6kYRsjbH69gpBCBcpvwPyYexj/E8Z2vleiIWqqwcDE0P4=
-X-Received: by 2002:a05:6830:33c2:: with SMTP id q2mr8818491ott.368.1643542365934;
- Sun, 30 Jan 2022 03:32:45 -0800 (PST)
+        with ESMTP id S1354655AbiA3Lgo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 30 Jan 2022 06:36:44 -0500
+Received: from mail-oi1-f182.google.com ([209.85.167.182]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MkpjD-1mX4CN3OxT-00mKSp; Sun, 30 Jan 2022 12:36:41 +0100
+Received: by mail-oi1-f182.google.com with SMTP id t199so4771640oie.10;
+        Sun, 30 Jan 2022 03:36:39 -0800 (PST)
+X-Gm-Message-State: AOAM5314Ox/BEinCAcq0fPV8cd3GKJu05gn1BFnwkD48soO66bExzH/x
+        8G4HgiWAuS46vCuxnRu+Kuk18wAjT0tMlFKJAdM=
+X-Google-Smtp-Source: ABdhPJx02/VRPT+lHqxP4cUEJpaptHk8IWYJlq+IlqFxgivaG7fXilNMey5++lAxG71rgAwjbfrXcV/NpMPlqrdhT2Y=
+X-Received: by 2002:aca:f03:: with SMTP id 3mr10491465oip.102.1643542598876;
+ Sun, 30 Jan 2022 03:36:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-9-guoren@kernel.org>
- <CAK8P3a3JGP6fLVOyLgdNw2YpRSmArbEX8orUhRrN=GHmcdk=1g@mail.gmail.com> <CAJF2gTQQnrUFNQ85vvoMkpxnCWuMw8iXtPZOJwWGaEA9f+rTwA@mail.gmail.com>
-In-Reply-To: <CAJF2gTQQnrUFNQ85vvoMkpxnCWuMw8iXtPZOJwWGaEA9f+rTwA@mail.gmail.com>
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-7-guoren@kernel.org>
+ <CAK8P3a3_kVB78-26sxdsEjb3MMcco6U55tc7siCBFZbJjyH6Sw@mail.gmail.com> <CAJF2gTThb8_-T0iOFVZoJrvZqeFvjfWB+AdFyOwtGhN9aG-MQQ@mail.gmail.com>
+In-Reply-To: <CAJF2gTThb8_-T0iOFVZoJrvZqeFvjfWB+AdFyOwtGhN9aG-MQQ@mail.gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 30 Jan 2022 12:32:29 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a12CygLFT7qoQ9K=sowvTgNpeRej6Zh6Pv2PL_e2zMhMQ@mail.gmail.com>
-Message-ID: <CAK8P3a12CygLFT7qoQ9K=sowvTgNpeRej6Zh6Pv2PL_e2zMhMQ@mail.gmail.com>
-Subject: Re: [PATCH V4 08/17] riscv: compat: syscall: Add compat_sys_call_table
- implementation
+Date:   Sun, 30 Jan 2022 12:36:22 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3A9AMyv7ABRpUgrTo3sg+SogoDSG5cudR87iK+PifU4g@mail.gmail.com>
+Message-ID: <CAK8P3a3A9AMyv7ABRpUgrTo3sg+SogoDSG5cudR87iK+PifU4g@mail.gmail.com>
+Subject: Re: [PATCH V4 06/17] riscv: compat: Add basic compat date type implementation
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         Anup Patel <anup@brainfault.org>,
@@ -53,50 +52,57 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:s+QB4RyZjKJhrb5eRJs6jI0hTwFihOqehJSH7HnwKR1Mql0VAi5
- u21yO7l5oALaUX9DERN/QeXkP7eAmS8jZkHjs92PN+IZeirfgR7Ql/uPJCei9wC4ZRIypm5
- r02VfVWq/0hbyNZz07lCwmHnZCErMtNQopjlguoZ1YQJG1n2sNki3rK3oZ5qldawNE2phqf
- D8fgClrXLWJy3LNJnloBw==
+X-Provags-ID: V03:K1:qz/9sgDzB4qJJ3+Q/QIzZPuO+2NXM74KRntuyUyYRQ6Q82LLX8q
+ 5m29nqq7hI8NgdOZpUSJcmmhtHRIaNk2664vaZqMavt08hkwW5EB1iMikbNA0WaUy2hhFZW
+ igASxu07SEzkAuRIeHvw81hHl/RErbhtZDDstsb1vbS0ZVogd98vpQsePnLahyxNWuQp2bZ
+ fycIk65CN+YPTIDl0XsEg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZWoipqB24Tg=:ye1vFxvIQLsaCuYBZZ9XbO
- a5hEFioB7YtytOQdB2A9Lr4tONnTXpusBSARti+KoGWyMNuvruKoWQMH0ETnu05bdc/HKjPT7
- huwalokfHNDc63FEXrFXpwh9ahn77VTnh1vr0fixjqcvGIi8P9Q3OHJamxg9DMV0cabwBpt2u
- iZW77e6dvvwoyG0zry9bzPvql7k49w0KWcZwEUypw3vMu5L7qV4im1FDBFvC7zL9TjGvwkzld
- aRoVMl9OYf82TvxFFYLIa5kr8VBC33aTO6CdGQ5lTqrxl/8ZWSzYUOZP53uYLyq6D0jc9t3ZE
- om4QFNiUVrTKrr0kEyBdE5cKpx6OBQ6Qw5YGNpl0hAsHRXIy20WUKGC41EaiM1zqHLinnuQ/s
- biOTzn4ON0IoD3kMeWj6LRIqzbLZQjmTuWmfzdpVrru/IruZGZ2AFBJ1sHDZ9HuGWfyhXJbO1
- 5I99qzRD//Z2BKgJD9oYJJhJDBlQTbcloJHLeit7kqBd/xPgsJETjJFYuvdvKN55BDc3M0TQk
- yf1rO1MQRBrugPYU+ZyvOHbNJdhqwLFeqMJxMm7pWfWiOKZUg5MH1XaZOOjmna3xnTXtnXAMi
- QNJRFKlNeXdTK3/dg75Vw2FJXqecEEby2sqiAH/pmjI33vnPUI8WTkst7/p0dV+Nplx1khLAo
- X+mvB2RkfYfj+YaHgeMAoHNE40AmA1FODQLiH5L1VXv8rqVWjZURt8jvAIN2bSFAtFcgZlfeP
- jCcgozgUX9axmoFCawmynVSNTbvPIwlP6+MYjGgAs43coiyEX0yO4jpf1sfgBCbhKoRQrjzdj
- 9JC9xQcao/vy/Pp9rZkYbkjp60JeOvJd6qRTungoei5L6umgwY=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:t6t6eCcbCi0=:Ildz/xss/+/vz9314TtGHP
+ p5xqRwsnhPF3BEgXuo72mHm3SouliMJOMjEvy06dYOOOxKhBk7kIJ0NVWx12x28p4hTxr6nBJ
+ am7cCa2hw3wgUy/feRRX3NWojL9VDQ5Fw6NCmV3r/YusXy22pT47+k5M6r5aUhfXEYqeqGSsw
+ Y9v7pDKL2ALNfeLqHVGjT4xzKZ0WkLPJrDrK4A8GTNm6f3S1GOIhQ+BKj64VZHIf7i0mW5oT5
+ TJO0Cj/t9V4yPslgS/NIlpkP47wHVodUff0PF11I1MEr2cq+bAWdt7qAnNxdiTW3F8Dffwk4R
+ FFNyz+pPAAceRtzIU5QcvEuE0zp3WuI+fK6Wu5OG7NOBozw81m5nRGjvyZZX++JKM1ci+hQ3S
+ /JfLmJB5sfe+mAneuIluhOlS7o2CuXVtM/P0wyK5v12Z6Uexb8RDLS60CA7x6Vo9iKW50d2OG
+ B1KuYUEbfT9nB92Pgpv2ozKCKfBB7Vo0szwOZ3jRRTYXVKeH8Q/us0q3fki7ugaTe0y0FdV2G
+ m3gdHN6Y0kJAuzIJttE3nKkrV3CevGA4sbuPZqCJz6J6LXS0RD9wqDM/HyaBgb0rqPUQAzkqV
+ htNDhdQuRIYl+kgf6GTl/e8rjsAa1Dj7QMwrjq1MFCIQsNC80wG05KAdWIumyb8uz2e5Z3l/D
+ 6XGRsL33Gd0/9s/3IQbzaOnMmwRlLOE09sqaD3njZZ1Yd5eEwbgqcKke7tAM8iRlx+EridEVX
+ eYpBI/r5xhKQh9yl+dcvKf5UrxnVn1xOXlztxuXdcpXaJ4jdnIG21kYM4naOoPbo/60N6dMvP
+ 8dcM6MZQKj3xzQ4TEqXkBGxkqXUBxDLeBRXF+tmuq6oFu4Dyn0=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 6:54 AM Guo Ren <guoren@kernel.org> wrote:
-> On Sun, Jan 30, 2022 at 6:41 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Sun, Jan 30, 2022 at 6:47 AM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Sun, Jan 30, 2022 at 5:56 AM Arnd Bergmann <arnd@arndb.de> wrote:
 > >
-> > I would make these endian-specific, and reverse them on big-endian
-> > architectures. That way it
-> > should be possible to share them across all compat architectures
-> > without needing the override
-> > option.
-> I hope it could be another patch. Because it's not clear to
-> _LITTLE_ENDIAN definition in archs.
->
-> eg: Names could be __ORDER_LITTLE_ENDIAN__ CPU_LITTLE_ENDIAN
-> SYS_SUPPORTS_LITTLE_ENDIAN __LITTLE_ENDIAN
->
-> riscv is little-endian, but no any LITTLE_ENDIAN definition.
->
-> So let's keep them in the patch, first, Thx
+> > On Sat, Jan 29, 2022 at 1:17 PM <guoren@kernel.org> wrote:
+> > > +
+> > > +#define COMPAT_RLIM_INFINITY   0x7fffffff
+> > >
+> > > +#define F_GETLK64      12
+> > > +#define F_SETLK64      13
+> > > +#define F_SETLKW64     14
+> >
+> > These now come from the generic definitions I think. The flock definitions
+> > are just the normal ones,
+> Yes, it could be removed after Christoph Hellwig's patch merged.
 
-The correct way to do it is to check for CONFIG_CPU_BIG_ENDIAN,
-which works on all architectures. Since nothing else selects the
-__ARCH_WANT_COMPAT_* symbols, there is also no risk for
-regressions, so just use this and leave the #ifndef compat_arg_u64
-check in place.
+Rgiht, I keep forgetting that this is a separate series, so this is fine.
 
-      Arnd
+> > and AFAICT the RLIM_INIFINITY definition here
+> > is actually wrong and should be the default 0xffffffffu to match the
+> > native (~0UL) definition.
+> Yes, native rv32 used ~0UL, although its task_size is only 2.4GB.
+
+The rlimit range has very little to do with the virtual memory address
+limits, it is used for a number of other things that are typically more
+limited in practice.
+
+> I would remove #define COMPAT_RLIM_INFINITY   0x7fffffff
+
+Ok.
+
+       Arnd
