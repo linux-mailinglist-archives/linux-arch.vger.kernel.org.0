@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A74574A3A26
-	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4E84A3A1F
+	for <lists+linux-arch@lfdr.de>; Sun, 30 Jan 2022 22:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356688AbiA3VYt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 30 Jan 2022 16:24:49 -0500
-Received: from mga06.intel.com ([134.134.136.31]:52048 "EHLO mga06.intel.com"
+        id S1356544AbiA3VYm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 30 Jan 2022 16:24:42 -0500
+Received: from mga06.intel.com ([134.134.136.31]:52029 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356664AbiA3VWU (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Sun, 30 Jan 2022 16:22:20 -0500
+        id S1356694AbiA3VWZ (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Sun, 30 Jan 2022 16:22:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1643577740; x=1675113740;
+  t=1643577745; x=1675113745;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Swb/A+mwAZL7amzdZG31LHVm/8xpjESoIsbIiYe+fFo=;
-  b=LrrSajmxvxfHBx2P0/AoXjkO3MGajkhEh3/7D9nYFuXSH+xjrArgaXmB
-   awIA9qE31uIbvkVmeZfI41ifrjJY1Vf55br+sp0NpY19ZWRSiVVgVeFiV
-   mSgHQIrz2UvdfpaladJcHuFDxbl8FQzg6YaCC1T0xKF1sUDQE4rmLhhIx
-   7Qd67KBsXQTs2e3QtJJCjErfNsqWw4I1HvjZ+Y7uPcx+2wyDw4OThHnfx
-   h14PxFwIWK3rRkRataU7OZgZg+NvqdDOl8BIV+BVftAZPh/0vumkY7QTt
-   rt3KjslQz3RoOhRj1yOHy0PaOOBvvQBKCtAr+bGJQkDZEfnl00BSBA77i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308104951"
+  bh=hiUiL5XEyP01F3eBPpddRbZ/NlSqoVCcrqhafbq6fac=;
+  b=gJ3i3vXxNPNDw6kI4OOHUmrOBSJ+VxasyqLtSL356cz0pH1vSba5fW4u
+   m9CTx8MqHw0yz6DwY2ME32kaQIT2INjEx29xMOMPt/hHfNsENJFiERvUa
+   D5gky980ohw/zm85jlhNh+1CQe5/Ade7k4bJHC5MuC5Xfn7UnfhFdCx1l
+   0eFGJrtSKbc/ZNskCK519R8RrMei63ZAamY1WYHKNw0eX/bEYVegoz+WG
+   JWNNoept4vjzAWUTVRLUpgRfVTRqbL1WF1qbMpaQVFMM4reZYdGjUpwKk
+   WvzqgmDyd3WokT7t21f1vJ7GUl5BfISsR/3tuXQuDphLUGbVtqrg0Ro2z
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10243"; a="308104955"
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="308104951"
+   d="scan'208";a="308104955"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:02 -0800
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:03 -0800
 X-IronPort-AV: E=Sophos;i="5.88,329,1635231600"; 
-   d="scan'208";a="536856845"
+   d="scan'208";a="536856855"
 Received: from avmallar-mobl1.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.123.171])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:01 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2022 13:22:02 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -61,10 +61,10 @@ To:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com
-Cc:     rick.p.edgecombe@intel.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: [PATCH 21/35] mm/mprotect: Exclude shadow stack from preserve_write
-Date:   Sun, 30 Jan 2022 13:18:24 -0800
-Message-Id: <20220130211838.8382-22-rick.p.edgecombe@intel.com>
+Cc:     rick.p.edgecombe@intel.com
+Subject: [PATCH 22/35] x86/mm: Prevent VM_WRITE shadow stacks
+Date:   Sun, 30 Jan 2022 13:18:25 -0800
+Message-Id: <20220130211838.8382-23-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
@@ -72,68 +72,82 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+Shadow stack accesses are writes from handle_mm_fault() perspective. So to
+generate the correct PTE, maybe_mkwrite() will rely on the presence of
+VM_SHADOW_STACK or VM_WRITE in the vma.
 
-In change_pte_range(), when a PTE is changed for prot_numa, _PAGE_RW is
-preserved to avoid the additional write fault after the NUMA hinting fault.
-However, pte_write() now includes both normal writable and shadow stack
-(RW=0, Dirty=1) PTEs, but the latter does not have _PAGE_RW and has no need
-to preserve it.
+In future patches, when VM_SHADOW_STACK is actually creatable by
+userspace, a problem could happen if a user calls
+mprotect( , , PROT_WRITE) on VM_SHADOW_STACK shadow stack memory. The code
+would then be confused in the event of shadow stack accesses, and create a
+writable PTE for a shadow stack access. Then the process would fault in a
+loop.
 
-Exclude shadow stack from preserve_write test, and apply the same change to
-change_huge_pmd().
+Prevent this from happening by blocking this kind of memory (VM_WRITE and
+VM_SHADOW_STACK) from being created, instead of complicating the fault
+handler logic to handle it.
 
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Add an x86 arch_validate_flags() implementation to handle the check.
+Rename the uapi/asm/mman.h header guard to be able to use it for
+arch/x86/include/asm/mman.h where the arch_validate_flags() will be.
+
 Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
 ---
 
-v25:
- - Move is_shadow_stack_mapping() to a separate line.
+v1:
+ - New patch.
 
-v24:
- - Change arch_shadow_stack_mapping() to is_shadow_stack_mapping().
+ arch/x86/include/asm/mman.h      | 21 +++++++++++++++++++++
+ arch/x86/include/uapi/asm/mman.h |  6 +++---
+ 2 files changed, 24 insertions(+), 3 deletions(-)
+ create mode 100644 arch/x86/include/asm/mman.h
 
- mm/huge_memory.c | 7 +++++++
- mm/mprotect.c    | 7 +++++++
- 2 files changed, 14 insertions(+)
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 1c7167e6f223..01375e39b52b 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1750,6 +1750,13 @@ int change_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
- 		return 0;
- 
- 	preserve_write = prot_numa && pmd_write(*pmd);
+diff --git a/arch/x86/include/asm/mman.h b/arch/x86/include/asm/mman.h
+new file mode 100644
+index 000000000000..b44fe31deb3a
+--- /dev/null
++++ b/arch/x86/include/asm/mman.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _ASM_X86_MMAN_H
++#define _ASM_X86_MMAN_H
 +
-+	/*
-+	 * Preserve only normal writable huge PMD, but not shadow
-+	 * stack (RW=0, Dirty=1).
-+	 */
-+	if (is_shadow_stack_mapping(vma->vm_flags))
-+		preserve_write = false;
- 	ret = 1;
- 
- #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index b0012c13a00e..faac710f0891 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -77,6 +77,13 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 			pte_t ptent;
- 			bool preserve_write = prot_numa && pte_write(oldpte);
- 
-+			/*
-+			 * Preserve only normal writable PTE, but not shadow
-+			 * stack (RW=0, Dirty=1).
-+			 */
-+			if (is_shadow_stack_mapping(vma->vm_flags))
-+				preserve_write = false;
++#include <linux/mm.h>
++#include <uapi/asm/mman.h>
 +
- 			/*
- 			 * Avoid trapping faults against the zero or KSM
- 			 * pages. See similar comment in change_huge_pmd.
++#ifdef CONFIG_X86_SHADOW_STACK
++static inline bool arch_validate_flags(unsigned long vm_flags)
++{
++	if ((vm_flags & VM_SHADOW_STACK) && (vm_flags & VM_WRITE))
++		return false;
++
++	return true;
++}
++
++#define arch_validate_flags(vm_flags) arch_validate_flags(vm_flags)
++
++#endif /* CONFIG_X86_SHADOW_STACK */
++
++#endif /* _ASM_X86_MMAN_H */
+diff --git a/arch/x86/include/uapi/asm/mman.h b/arch/x86/include/uapi/asm/mman.h
+index d4a8d0424bfb..9704e27c4d24 100644
+--- a/arch/x86/include/uapi/asm/mman.h
++++ b/arch/x86/include/uapi/asm/mman.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _ASM_X86_MMAN_H
+-#define _ASM_X86_MMAN_H
++#ifndef _UAPI_ASM_X86_MMAN_H
++#define _UAPI_ASM_X86_MMAN_H
+ 
+ #define MAP_32BIT	0x40		/* only give out 32bit addresses */
+ 
+@@ -28,4 +28,4 @@
+ 
+ #include <asm-generic/mman.h>
+ 
+-#endif /* _ASM_X86_MMAN_H */
++#endif /* _UAPI_ASM_X86_MMAN_H */
 -- 
 2.17.1
 
