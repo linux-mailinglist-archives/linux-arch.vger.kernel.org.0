@@ -2,48 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5EB4A48AA
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jan 2022 14:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFB64A48BC
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jan 2022 14:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359684AbiAaNvL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jan 2022 08:51:11 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:40002 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234242AbiAaNvL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 08:51:11 -0500
+        id S241452AbiAaNxN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jan 2022 08:53:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232774AbiAaNxM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 08:53:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A4FC061714;
+        Mon, 31 Jan 2022 05:53:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C11612D4;
-        Mon, 31 Jan 2022 13:51:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 644FCC340EE;
-        Mon, 31 Jan 2022 13:51:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DA31B82B2E;
+        Mon, 31 Jan 2022 13:53:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25FBEC340F9;
+        Mon, 31 Jan 2022 13:53:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643637070;
-        bh=Zm6bqi0OhyogvNh7aVMw7s3EunV9nSGhxKYNcbdO5KQ=;
+        s=k20201202; t=1643637190;
+        bh=ubnmPmWzE8WZHK6ZDIgiYDZ8V5Auo9sjXu6gY0DackM=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VB1HtyLzdS8WyvTpKJiOpoPPxcoguxNbLzYv4abyqilCHSyogINouv1glvQJZFH4Q
-         klN9Wf3wTM0XCcb+sbaTp/p8xQ3BGlv3yDFVAn7mISzfv+RJ6uwysKLrZqcIeuZsV0
-         BafaHReeaiYXGCqOvoDbXH50/QdF/KmcOkwUxcC6z5s7S+ynuf4rtQHXbffR8BjGLb
-         OitbrZLld31AnRz+oX2yFY1TO1RrEA5ZhTTBsfnzjWQo8vsm9Slf91RTtqGsq68Oz9
-         hbWbewIN8h4nsorfwtz6FBkTHNk15L724FloIzYmecGANavOB6kIoQwYSRDlSCKONR
-         zPKyniu/L1/aw==
-Received: by mail-vs1-f44.google.com with SMTP id a19so11839475vsi.2;
-        Mon, 31 Jan 2022 05:51:10 -0800 (PST)
-X-Gm-Message-State: AOAM5330A0mXBUdcy4Y3G+5BgP2ej2DwUNFPV+d3Qv289jE2pfndtfD2
-        PfSBnVOuYMiutKOz5WJYyxyt+FItoI2qMeWNa+0=
-X-Google-Smtp-Source: ABdhPJz6ty+HfMaRNZhEmkeOc11XYS0No2YCxA7dV1DvlPk1ApPFjUS4E1RUl7Xx1jtPl3XXvKrXpTneiT3oAugpR68=
-X-Received: by 2002:a67:e947:: with SMTP id p7mr7921986vso.59.1643637069468;
- Mon, 31 Jan 2022 05:51:09 -0800 (PST)
+        b=tE6Azk07ef7p3PyY9nPWsvB4UG0ym7aIa7c0/Aq4ps9A01ne0MZvdOrWsFqal0AiU
+         0P7V4TI/ZhF33PhVXme354y8saJj86gikF7RnUZvdvua8uDRQHsud7M0acourjCUn9
+         zdR16D1WrF68aNJlsNa9P3qBuqWtesfv8rw5IF2hNE5wWlmhVz2+xC6JL/7OFxTrUu
+         iYRe6d4g7Gbq/Qos37N0Q1pmKEbdxburfCFLWH+4ZWaTzMUR00B3+zFQtir0xTCFaf
+         b1l+X6y8wEge0g7mMXhya3HjmyH2u/XnQNDpSggCfTYPXq4wmSCGpISV7WE9u1iTrZ
+         WZsj7ejW6v9Gw==
+Received: by mail-vs1-f47.google.com with SMTP id t20so11856012vsq.12;
+        Mon, 31 Jan 2022 05:53:10 -0800 (PST)
+X-Gm-Message-State: AOAM533xM7vLzjc1c+Jr/9SLC4MLJIS9l/ZE3ZEtR+Zx6Svsl29tEbKy
+        cS7j7wNW7cKzT6P29gHs4G13w0D1UG6pIl3/EPw=
+X-Google-Smtp-Source: ABdhPJwJr063nx9nXXC4e7XbyWpioW1G/tD5r4ayyBqg50Z49dU59MzIv8eNccq661nAVS/wEBLJ08MiD/T+S+t5NT0=
+X-Received: by 2002:a67:e947:: with SMTP id p7mr7925194vso.59.1643637189058;
+ Mon, 31 Jan 2022 05:53:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-17-guoren@kernel.org>
- <YffVZZg9GNcjgVdm@infradead.org>
-In-Reply-To: <YffVZZg9GNcjgVdm@infradead.org>
+References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-4-guoren@kernel.org>
+ <YffURrqD0pfXnEkV@infradead.org>
+In-Reply-To: <YffURrqD0pfXnEkV@infradead.org>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 31 Jan 2022 21:50:58 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
-Message-ID: <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
-Subject: Re: [PATCH V4 16/17] riscv: compat: Add COMPAT Kbuild skeletal support
+Date:   Mon, 31 Jan 2022 21:52:58 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSQafQxzAyaD90n-O6pPo22RCDXdsrOn=csUJBur0u-Ew@mail.gmail.com>
+Message-ID: <CAJF2gTSQafQxzAyaD90n-O6pPo22RCDXdsrOn=csUJBur0u-Ew@mail.gmail.com>
+Subject: Re: [PATCH V4 03/17] asm-generic: compat: Cleanup duplicate definitions
 To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup@brainfault.org>,
@@ -51,7 +54,6 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
         Drew Fustini <drew@beagleboard.org>,
         Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-riscv <linux-riscv@lists.infradead.org>,
@@ -69,16 +71,32 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 8:26 PM Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, Jan 31, 2022 at 8:21 PM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> Given that most rv64 implementations can't run in rv32 mode, what is the
-> failure mode if someone tries it with the compat mode enabled?
-A static linked simple hello_world could still run on a non-compat
-support hardware. But most rv32 apps would meet different userspace
-segment faults.
+> On Sat, Jan 29, 2022 at 08:17:14PM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > There are 7 64bit architectures that support Linux COMPAT mode to
+> > run 32bit applications. A lot of definitions are duplicate:
+> >  - COMPAT_USER_HZ
+> >  - COMPAT_RLIM_INFINITY
+> >  - COMPAT_OFF_T_MAX
+> >  - __compat_uid_t, __compat_uid_t
+> >  - compat_dev_t
+> >  - compat_ipc_pid_t
+> >  - struct compat_flock
+> >  - struct compat_flock64
+> >  - struct compat_statfs
+> >  - struct compat_ipc64_perm, compat_semid64_ds,
+> >         compat_msqid64_ds, compat_shmid64_ds
+> >
+> > Cleanup duplicate definitions and merge them into asm-generic.
+>
+> The flock part seems to clash with the general compat_flock
+> consolidation.  Otherwise this looks like a good idea.
+Okay, In the next version, I would rebase on general compat_flock
+consolidation v4.
 
-Current code would let the machine try the rv32 apps without detecting
-whether hw support or not.
 
 
 -- 
