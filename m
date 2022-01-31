@@ -2,56 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1A84A4E39
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jan 2022 19:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FE94A4EB9
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jan 2022 19:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240613AbiAaS10 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jan 2022 13:27:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350686AbiAaS1Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 13:27:25 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403B2C06173B;
-        Mon, 31 Jan 2022 10:27:25 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id d18so13219575plg.2;
-        Mon, 31 Jan 2022 10:27:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r4xwJBi8q1FRa6SCCAyqdRaLBggch8TnlaM4QVC5L6s=;
-        b=qE9n/zRiSBommfNv+Ylzgyl4CHXyFBAjKvVHTQ792Gi4mzAtyJFsUes4Iz130ZUigW
-         mhlzucT9wN07qCC60leuIX7WsKtl2ubbqHHcgny8hGXpPYTjk/UzuNfmdMPnUpyDCPzl
-         +NmEdOUvimEtOUQ0qV++b0NEQdzPFbUZXbg2YaS5u2u/Tn29oOLv0c21gGugpgGWqvb5
-         SEyXRORSWstaGohz48PdB2o5gcCNbO9CTp9lkJEoFm3cGM0UbLfUjK92tESxnI/YAdRN
-         w8dU0sI6ubF5nsNTQjI5D91UmNRmYGPjo0K/gU3LI8oQ+k76wgyWRknu/MCR1dRtES7F
-         gk1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r4xwJBi8q1FRa6SCCAyqdRaLBggch8TnlaM4QVC5L6s=;
-        b=43grz6Mm9pGfYfgJsRzvXFMowyh8JwyvJ/C0dtJt5SYxVAMRuEISjwc1Lxbc+iB4dI
-         09Z0ghzfzCqJ8tZtqb07EAJ5U4HHCgKDiiOFV4fetIBcrtrIwAseCwiUUjGrQsdA2uyX
-         r+UUTVCGZzeJduE3uCY3f+R5iVBaI0GbRBLc3ll/WPJ8UmEtziOhZrYv2Yi0r36rVAK3
-         zzVUDpqgbOCwGjuP8yES9p7bXFZO/b2DscEZAreso5y6ywUt+aHB8dFfdngJZP/aZftx
-         uvnkdJqSAPeB4Yj7HKiNkNea76kwH4RqcIVAaOOsBtmyRS9xe6dCndBPvOjG8kuR+fE3
-         leKw==
-X-Gm-Message-State: AOAM5308wAyQCOFC/ffH+JhdpfieNwiocd1jozAXxvayW4PrF9waZEhi
-        86OlOOWl5BAIjUo9Sx8MR9sx1asagYkMD6qYK7E=
-X-Google-Smtp-Source: ABdhPJw+fHsfw5UduK45wmBxPkeMk2UrZFl5cMQOPBj0yL+xKr7ja/LjgHWM13r4g3FwaPfZ+egF5l23vsHygbdb++o=
-X-Received: by 2002:a17:90b:4f83:: with SMTP id qe3mr35727324pjb.120.1643653644745;
- Mon, 31 Jan 2022 10:27:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-35-rick.p.edgecombe@intel.com> <87wnig8hj6.fsf@oldenburg.str.redhat.com>
-In-Reply-To: <87wnig8hj6.fsf@oldenburg.str.redhat.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Mon, 31 Jan 2022 10:26:49 -0800
-Message-ID: <CAMe9rOrVvjL1F3UgOWL-gAGRyyiG6r20TWUusEUFhZMEEAjH7w@mail.gmail.com>
-Subject: Re: [PATCH 34/35] x86/cet/shstk: Support wrss for userspace
-To:     Florian Weimer <fweimer@redhat.com>
+        id S1357324AbiAaSp2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jan 2022 13:45:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58442 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1355479AbiAaSp1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>);
+        Mon, 31 Jan 2022 13:45:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1643654726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vtLdnydhSAxPSqAH4Eff+DcCHxcUpx4pphU3ycHuRAA=;
+        b=F8RHP4PDheT8vRCH7jAa9+p7kRmYpHs+8gYXnCfcbOznv89LMGpFm8CPdEKs5FtDBMPxzF
+        p+ungUpoSZcVzy4JytulTDg5lk+IgctmUDHY/Ig5+AwYYVQdil/6CXiCGxVb1IQqCtaZzD
+        xGeoKwAYNlExlVK5zfFNgVyEw8BicNQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-145-gIdbnm9XMoie-uVd8V9g0g-1; Mon, 31 Jan 2022 13:45:25 -0500
+X-MC-Unique: gIdbnm9XMoie-uVd8V9g0g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 011FF1923B8D;
+        Mon, 31 Jan 2022 18:45:21 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 42C7B7D526;
+        Mon, 31 Jan 2022 18:45:12 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
 Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
         "the arch/x86 maintainers" <x86@kernel.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
@@ -83,32 +67,50 @@ Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         Kostya Serebryany <kcc@google.com>,
         Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 34/35] x86/cet/shstk: Support wrss for userspace
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+        <20220130211838.8382-35-rick.p.edgecombe@intel.com>
+        <87wnig8hj6.fsf@oldenburg.str.redhat.com>
+        <CAMe9rOrVvjL1F3UgOWL-gAGRyyiG6r20TWUusEUFhZMEEAjH7w@mail.gmail.com>
+Date:   Mon, 31 Jan 2022 19:45:10 +0100
+In-Reply-To: <CAMe9rOrVvjL1F3UgOWL-gAGRyyiG6r20TWUusEUFhZMEEAjH7w@mail.gmail.com>
+        (H. J. Lu's message of "Mon, 31 Jan 2022 10:26:49 -0800")
+Message-ID: <87a6fb7nih.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jan 30, 2022 at 11:57 PM Florian Weimer <fweimer@redhat.com> wrote:
->
-> * Rick Edgecombe:
->
-> > For the current shadow stack implementation, shadow stacks contents cannot
-> > be arbitrarily provisioned with data. This property helps apps protect
-> > themselves better, but also restricts any potential apps that may want to
-> > do exotic things at the expense of a little security.
-> >
-> > The x86 shadow stack feature introduces a new instruction, wrss, which
-> > can be enabled to write directly to shadow stack permissioned memory from
-> > userspace. Allow it to get enabled via the prctl interface.
->
-> Why can't this be turned on unconditionally?
+* H. J. Lu:
 
-WRSS can be a security risk since it defeats the whole purpose of
-Shadow Stack.  If an application needs to write to shadow stack,
-it can make a syscall to enable it.  After the CET patches are checked
-in Linux kernel, I will make a proposal to allow applications or shared
-libraries to opt-in WRSS through a linker option, a compiler option or
-a function attribute.
+> On Sun, Jan 30, 2022 at 11:57 PM Florian Weimer <fweimer@redhat.com> wrote:
+>>
+>> * Rick Edgecombe:
+>>
+>> > For the current shadow stack implementation, shadow stacks contents cannot
+>> > be arbitrarily provisioned with data. This property helps apps protect
+>> > themselves better, but also restricts any potential apps that may want to
+>> > do exotic things at the expense of a little security.
+>> >
+>> > The x86 shadow stack feature introduces a new instruction, wrss, which
+>> > can be enabled to write directly to shadow stack permissioned memory from
+>> > userspace. Allow it to get enabled via the prctl interface.
+>>
+>> Why can't this be turned on unconditionally?
+>
+> WRSS can be a security risk since it defeats the whole purpose of
+> Shadow Stack.  If an application needs to write to shadow stack,
+> it can make a syscall to enable it.  After the CET patches are checked
+> in Linux kernel, I will make a proposal to allow applications or shared
+> libraries to opt-in WRSS through a linker option, a compiler option or
+> a function attribute.
 
--- 
-H.J.
+Ahh, that makes sense.  I assumed that without WRSS, the default was to
+allow plain writes. 8-)
+
+Thanks,
+Florian
+
