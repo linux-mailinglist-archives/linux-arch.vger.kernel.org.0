@@ -2,93 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D604A47E9
-	for <lists+linux-arch@lfdr.de>; Mon, 31 Jan 2022 14:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8E54A4841
+	for <lists+linux-arch@lfdr.de>; Mon, 31 Jan 2022 14:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348950AbiAaNTz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jan 2022 08:19:55 -0500
-Received: from mout.kundenserver.de ([212.227.126.133]:39237 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiAaNTy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 08:19:54 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MtwQm-1mOdMa1Vca-00uIbx; Mon, 31 Jan 2022 14:19:53 +0100
-Received: by mail-oi1-f179.google.com with SMTP id e81so26570484oia.6;
-        Mon, 31 Jan 2022 05:19:51 -0800 (PST)
-X-Gm-Message-State: AOAM531TMJcHq3ZMBa7gZw9OiN9iytCABMsc/ciOfYqpXGY0FwHPxVb1
-        PFfg4OQA9Ec/xbsBLR0GUy0ys/ZE4TfuOfLgqAs=
-X-Google-Smtp-Source: ABdhPJxqzdad29yoPfVQVqkeuINyquIZpxlEvxSx06sdTnz4rryvUZKfSJUaDKGmBUmu6Be3uaLlJuvMhrTHZxz8Zkc=
-X-Received: by 2002:aca:f03:: with SMTP id 3mr13235991oip.102.1643635190773;
- Mon, 31 Jan 2022 05:19:50 -0800 (PST)
+        id S239690AbiAaNfr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jan 2022 08:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235633AbiAaNfq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 08:35:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F56C061714;
+        Mon, 31 Jan 2022 05:35:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 78701B82ADB;
+        Mon, 31 Jan 2022 13:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E68C340E8;
+        Mon, 31 Jan 2022 13:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643636143;
+        bh=QrkimEX74xj+Tvz3rNeNpKEQmjz6JrJN7PGpRIyz3b0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f0rRPazR/9+C94SxiifNdocl3SGFxenxe07xtZaYXDxyaby+hohZ350sabvBU03W/
+         bv6wpF7eOjV+0O/OEM3dir4bt0AfcWOMdlY5hvQUnMt740xEXr9hzKGpx2+ZtOaTRg
+         0+jrwmQe5I9JXq0nwyFJ3Xxujmb8ZWlSZyROcnd0WFNSLyEZpbZLESZrq5dbge+ymj
+         NKBixHPDf3WXLMWKSibCG0hX9kHUoAoosS5Jj64qJ9l5wch1b0u1iMhlO9jB2qq7v+
+         K/EwmpwM/cZ3wx0LaYkR7mSy5o/48YZNaZA0EVFXmhh6FG7GIWbvJbd/kLixuXOISL
+         tAWrsbLlN432w==
+Received: by mail-vk1-f172.google.com with SMTP id b77so8231311vka.11;
+        Mon, 31 Jan 2022 05:35:42 -0800 (PST)
+X-Gm-Message-State: AOAM532Xm3DyzUvIrGxalQdMFqjRyRSaEGUXWNlhO9VbVnpuHnJxzIgk
+        S8Al5oIw92nMjOpzRCfJtdeRuFxpsTLIdKPmYFI=
+X-Google-Smtp-Source: ABdhPJxZNMeC16XdmOigVkjvMRdj8icFIyGyUX0uDul1X33dvN0Ph1ZLc80xzQSa/ftMMNKUf+Q3pGt5DpewCG2Ojxw=
+X-Received: by 2002:a05:6122:d07:: with SMTP id az7mr8146058vkb.35.1643636142047;
+ Mon, 31 Jan 2022 05:35:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-6-guoren@kernel.org>
- <YffUqErSVDgbGLTu@infradead.org> <CAK8P3a1jZyVBW70K6_u3mvXYNowV4DTBxivKc2L=HbRK8SgRXg@mail.gmail.com>
- <YffdbErmAjAWYuD9@infradead.org>
-In-Reply-To: <YffdbErmAjAWYuD9@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 31 Jan 2022 14:19:34 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0VZt8PF1C4W0X4+SNhP=NbHAigq3N6fEawNpPd-RZDjw@mail.gmail.com>
-Message-ID: <CAK8P3a0VZt8PF1C4W0X4+SNhP=NbHAigq3N6fEawNpPd-RZDjw@mail.gmail.com>
-Subject: Re: [PATCH V4 05/17] riscv: Fixup difference with defconfig
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
+References: <20220131064933.3780271-1-hch@lst.de> <20220131064933.3780271-3-hch@lst.de>
+In-Reply-To: <20220131064933.3780271-3-hch@lst.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 31 Jan 2022 21:35:31 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRU=0KS5r=Q9tAcVz8aXbaYL7jGyxfxPCYkxWc4rEBG2g@mail.gmail.com>
+Message-ID: <CAJF2gTRU=0KS5r=Q9tAcVz8aXbaYL7jGyxfxPCYkxWc4rEBG2g@mail.gmail.com>
+Subject: Re: [PATCH 2/5] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
         linux-s390 <linux-s390@vger.kernel.org>,
         sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Anup Patel <anup.patel@wdc.com>
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/teNtPv3Zma4puWXNydHU77NSq0sZXheT0NtF2H3rBDI56fUqI0
- H33ZJhLCPLPPkel5kWc1gvUWSYwj7wXTLlXmXElUga3IRqancvA+7hyFs7qQd7Pwbs77Iin
- BXK4DsuWRNIwWg5+WRjR6msMHJlk8NkJwmpjBc6MIvm19M4pa6zVZvOSspBbiUU+B2nXv1V
- EHAkxtn/6k7z43W8Z7Rhg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LLetFV+FXxQ=:tXmru9TQIjnt1fw4mW3KTD
- 12BYjw5OHwWwVoNG05xJGTKZBsmisxgg+oE6tsuows2j49RBbmeMVslu8zIk6gqz4886GTvMQ
- eZN6XZL+l3CC4HedEV0pNbBNMcWWHo3WpOWeBekadn/bE3T1WbgmzWXNV4cxMbr6+6tZGjWV7
- VbX6dbR2tKqsMW5Xju5690MQB2JYK8PNwZCnYs0Lp1HU7Gv//9Urq7/YgawbGrYWksPa1YuUQ
- ZhPp2bY+d5gZ1iyuTXfaKlsiAjC2LRh17L4/v99TJFDQdjd5euu2i/PRvX0dI817e4vxg2ySh
- 0gII/NcedhDSJl8ZWXHtCnA6gAUrO6t6isSIvTG8ehm6GoVkXYQlSjwbvj3MHchWOZ0tnpDHp
- RYxaEvA+v2aOBIqdSOSCi04aEXuo2OzE4IBYv7OvaRsLWXP0qdM+R9prMuHRQYHDTHoF7N0sQ
- X+hXKrec5zTqJ6OiNVewh6N9TJMXFeK4o+z675jKZXC3+DBRGv+Q9Rs73URuKujK4H6rrd5nf
- Xi+Uc8aMk9JdoezKxeKN6E1WAn3iWbQre+mj6yVKNOoyaH9xUaF0B5+xfSc+gYe3wO79Q2pSD
- 5MmdkMkVZjkOJeXwDpYZ3qVoiZitaBn5Ed22H4ZeylHahI+uuNrTgOqwiGjLMC5aGjrnXLm5U
- F3tpaTtsmETMOHX8RpMPpgz9GIR+qgu6AskKa2b9sgmPe9/l5nYj1gPLlck8Qgs5rLBVMBF4q
- aEsEAr54VvUYD2qfse0WSqFOtAP4NuVpf/gTfqVy9HBXafAQKT6liIHDU2+9WTAkeAk7LdfCx
- akWJ9ywZiGeJ4TXFGeiKfXiJsAgwlWXVCvtyZe6cxOaRCY/294=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jan 31, 2022 at 2:00 PM Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, Jan 31, 2022 at 2:49 PM Christoph Hellwig <hch@lst.de> wrote:
 >
-> On Mon, Jan 31, 2022 at 01:48:58PM +0100, Arnd Bergmann wrote:
-> > I thought that is what the patch does, there is already the normal 64-bit
-> > defconfig, and the new makefile target makes this shared with 32-bit
-> > to prevent them from diverging again.
+> Don't bother to define the symbols empty, just don't use them.  That
+> makes the intent a little more clear.
 >
-> I ment using a common fragment and the deriving both 32-bit and 64-bit
-> configs from it. The 64-bit specific fragment will be empty for now,
-> but we will sooner or later have an option that can only go into the
-> 64-bit defconfig.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  include/uapi/asm-generic/fcntl.h       | 12 ++++--------
+>  tools/include/uapi/asm-generic/fcntl.h | 12 ++++--------
+>  2 files changed, 8 insertions(+), 16 deletions(-)
+>
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> index caa482e3b01af..c53897ca5d402 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -193,22 +193,16 @@ struct f_owner_ex {
+>  #define F_LINUX_SPECIFIC_BASE  1024
+>
+>  #ifndef HAVE_ARCH_STRUCT_FLOCK
+> -#ifndef __ARCH_FLOCK_PAD
+> -#define __ARCH_FLOCK_PAD
+> -#endif
+> -
+>  struct flock {
+>         short   l_type;
+>         short   l_whence;
+>         __kernel_off_t  l_start;
+>         __kernel_off_t  l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK_PAD
+>         __ARCH_FLOCK_PAD
+> -};
+>  #endif
+> -
+> -#ifndef __ARCH_FLOCK64_PAD
+> -#define __ARCH_FLOCK64_PAD
+> +};
+>  #endif
+>
+>  struct flock64 {
+> @@ -217,7 +211,9 @@ struct flock64 {
+>         __kernel_loff_t l_start;
+>         __kernel_loff_t l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK64_PAD
+>         __ARCH_FLOCK64_PAD
+> +#endif
+>  };
+>
+>  #endif /* _ASM_GENERIC_FCNTL_H */
+> diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+> index 4a49d33ca4d55..82054502b9748 100644
+> --- a/tools/include/uapi/asm-generic/fcntl.h
+> +++ b/tools/include/uapi/asm-generic/fcntl.h
+> @@ -188,22 +188,16 @@ struct f_owner_ex {
+>  #define F_LINUX_SPECIFIC_BASE  1024
+>
+>  #ifndef HAVE_ARCH_STRUCT_FLOCK
+> -#ifndef __ARCH_FLOCK_PAD
+> -#define __ARCH_FLOCK_PAD
+> -#endif
+> -
+>  struct flock {
+>         short   l_type;
+>         short   l_whence;
+>         __kernel_off_t  l_start;
+>         __kernel_off_t  l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK_PAD
+>         __ARCH_FLOCK_PAD
+> -};
+>  #endif
+> -
+> -#ifndef __ARCH_FLOCK64_PAD
+> -#define __ARCH_FLOCK64_PAD
+> +};
+>  #endif
+>
+>  struct flock64 {
+> @@ -212,7 +206,9 @@ struct flock64 {
+>         __kernel_loff_t l_start;
+>         __kernel_loff_t l_len;
+>         __kernel_pid_t  l_pid;
+> +#ifdef __ARCH_FLOCK64_PAD
+>         __ARCH_FLOCK64_PAD
+> +#endif
+>  };
+>
+>  #endif /* _ASM_GENERIC_FCNTL_H */
+> --
+> 2.30.2
+>
+Reviewed-by: Guo Ren <guoren@kernel.org>
 
-Ah right, that should work as well, not sure if it makes much of a difference.
+-- 
+Best Regards
+ Guo Ren
 
-I suggested this method because it is the same thing we do on powerpc.
-
-        Arnd
+ML: https://lore.kernel.org/linux-csky/
