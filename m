@@ -2,127 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 106154A5B7C
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 12:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E14FA4A5C90
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 13:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237491AbiBALsi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Feb 2022 06:48:38 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:37357 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237466AbiBALsh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 06:48:37 -0500
-Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MDhpZ-1n7T8P3yYJ-00AlK4; Tue, 01 Feb 2022 12:48:35 +0100
-Received: by mail-wr1-f48.google.com with SMTP id l25so31377552wrb.13;
-        Tue, 01 Feb 2022 03:48:34 -0800 (PST)
-X-Gm-Message-State: AOAM5337alSkHOso8ztb04LTIOhfOC1iQM7mobRii/cqdBpOli0/c8A3
-        GaGePdroAOl43B6NTbk4+LBSmelS/noDGQCsHWo=
-X-Google-Smtp-Source: ABdhPJxO+OGO5lnSmsts+k8ffbEmh9/UtuFXn1dLVr5xpmsd+BH7cbCu5DpyTRvWDXlXMwgE6rWgsvPUd5Lt6roAGEM=
-X-Received: by 2002:a05:6000:178d:: with SMTP id e13mr20737860wrg.317.1643716114442;
- Tue, 01 Feb 2022 03:48:34 -0800 (PST)
+        id S235978AbiBAMsY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Feb 2022 07:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231538AbiBAMsX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 07:48:23 -0500
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD73C061714
+        for <linux-arch@vger.kernel.org>; Tue,  1 Feb 2022 04:48:23 -0800 (PST)
+Received: by mail-il1-x134.google.com with SMTP id i1so14178692ils.5
+        for <linux-arch@vger.kernel.org>; Tue, 01 Feb 2022 04:48:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=r2Ws6xRbNpqlKYkUgkX1lPpc6GjEar8sa1UbtAiXfsw=;
+        b=Jeyve1X+wO7Xra+/5J7beaeCnXf6jk98467rCryHyNjLLAY2188UdLiBVUiWXvy+LA
+         N2uPmUNqfxYwBYv1JsIjMx15Ntd738FqOX3GTxDdDMt5OdDSVeQFjzFc6xEv2IftJFj6
+         xfWd8+d8lftzIvVyZSKjCvrm8kBAF6NkmlRb1FdfZPeatLhv+qVqYnF6LwNgC+vxZlH0
+         UMfwETNCMTGZ1vAfToLnaThnluIL8LxEDJZgRpUPXEAXS+S1eLIC7IvMNhf8b3+yksCC
+         70GEpkxoYDy6QnCEiHKZjxG9dg+TBtsdefFgm4lXLtc6ewVTZVJWp0J3boE64hMkRdMu
+         mapA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=r2Ws6xRbNpqlKYkUgkX1lPpc6GjEar8sa1UbtAiXfsw=;
+        b=A0endEWz6UxBGfdmD8y5mkT4qS44U5u1BQXGVq6eL3wlj9wScoN7ASpnDkqL5tyu22
+         G+cVdwzhxTqjJjwgSIN/PE4CanBBbbLQrRFNYafgHW995phVmdDRHoqYGlS1CLlnwLBq
+         FYkc+wfydU/necKRFu5faEJI0T9priGNMprim9tgZlRQMmHmQ1P8+nthimSUTXM/LnVY
+         OcTjhBX9XFBliTZsrh36rM/oaorDSCcT7zJlCO4kqguSliuKblfIfhIyeug/MYw6gIkU
+         5vr5m+9M2FUNRNJHnGcroxcQrJHiT6Qb473HMGzi0vMZlo9tU7NXPSWn8iGCn19CCmsi
+         quKg==
+X-Gm-Message-State: AOAM532G143QUBkpe0QI+loIKKyQVJkbQRtx6lid2CdIYWxLXFQSFi6F
+        EItEy0vWmIlEVHsMIiWV9sEWGlousqc7Mz1kwvE=
+X-Google-Smtp-Source: ABdhPJzls1gPt851Jg1VAvf6Ta+ZV+/sGRRQ7oLb57pgV5OR8K/denAvXa4Sy0Tu49BiybyjLCYLIIlkB/gGpxMOeHA=
+X-Received: by 2002:a05:6e02:1686:: with SMTP id f6mr14474186ila.300.1643719703145;
+ Tue, 01 Feb 2022 04:48:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20220129121728.1079364-1-guoren@kernel.org> <20220129121728.1079364-17-guoren@kernel.org>
- <YffVZZg9GNcjgVdm@infradead.org> <CAJF2gTRXDotO1L1FMojQs6msrqvCzA782Pux8rg3AfZgA=y0ew@mail.gmail.com>
- <20220201074457.GC29119@lst.de> <CAJF2gTTc=zwD__zXwYbO8vmup5evWJtzyiAF9Pm-UVHLJRc5hQ@mail.gmail.com>
- <CAK8P3a2C7nDGQvopYzi1fe_LWyosp8t9dcBsduYK5k_s_OrCaA@mail.gmail.com> <CAJF2gTTgTzvGfa3nGzVo4C=fe+ZCGBWp=VhTMRt1vF1O1bnS5g@mail.gmail.com>
-In-Reply-To: <CAJF2gTTgTzvGfa3nGzVo4C=fe+ZCGBWp=VhTMRt1vF1O1bnS5g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 1 Feb 2022 12:48:18 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3u8zo+MOOpDXaX8PY2ukN3J2VHnV8uDXQwc=0WgV6qFw@mail.gmail.com>
-Message-ID: <CAK8P3a3u8zo+MOOpDXaX8PY2ukN3J2VHnV8uDXQwc=0WgV6qFw@mail.gmail.com>
-Subject: Re: [PATCH V4 16/17] riscv: compat: Add COMPAT Kbuild skeletal support
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+Received: by 2002:a6b:7845:0:0:0:0:0 with HTTP; Tue, 1 Feb 2022 04:48:22 -0800 (PST)
+Reply-To: interpolnig@yahoo.com
+From:   Emmanuel Maduka <saeedabubakarchindo@gmail.com>
+Date:   Tue, 1 Feb 2022 13:48:22 +0100
+Message-ID: <CAP-2kWUb=n9QNFBMXiqAxKPopkHNX-6seFmRPWKwk3xnz7Fcrw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:UHJ91nYLgPvR3a1MTHODyCBRwHF+deKXorwP1xEbisGwDO0n+Qb
- iTyqI5iseg8msHay8+QxiRnmyagqpN7ZkkkKtvPxw1rCw0HADq0vjhWZ+bP2DoYqTgL/MUH
- 0HCSWDUn+UqcdaZUCBURIhhkeSyTorJ0HyNtf15/sTfSovq76hlantcKsoDKuSYI6U1vQ0O
- OkRAIr8H0kFsGUBy15Psg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2q7iO32AAxM=:pbXre7T28QFWAizJwLyszf
- 7xM+xQFpAnph5GWOxrBqbA9OKjamzUbluXgESzxds1fXOf5TcPRaTis2jiiR86DAt5FONkho2
- xfTUfD+dkWxbvHUUsnu1jaGEWVx9pGLnl57V+Qz6DraHtSfZR4hv7ij5tF4HoFe2DHvYLYtqs
- 3kI26JDNoRHqHJdVJGcBjDjUPmRtv9jMcTu3E9JgyJiFd+ROWziGO7S62cNOKPYxWycUGdTGt
- +b9Stszi6ArRQNohK8TURusOBGJusX8gFlF+lUUG6fdokLgGdGAYy8oba3pIO/32+dTygTWDL
- yppQ6lyHaNRv8p/51O8ZIVIOSh4XALNa+15Og7cOd5042c1j1mBjdnaMfg7l9yceBGb1kqJ/M
- zl2NkQWCpmINIdLaZVpR0GckoH0+MFbwg3vyB59YMGZFc5gndtMFsVF4dnkeX2e5Nr1I83uzq
- 8DNrEjICPzyQSgppxJTnNQF17QOmXWlW976mNYc53GVz3aETC2riMTGHtP4RU6RRc59g1sTJN
- LeGGDL+bV6jlkrlmqPRGOxqn+YTRr7Vrb4SGuR3nevIIb3Ro/bGCauoGGJ59N4DF6hUaKRbR8
- 1+T03MZ6hdekdbvMmMRiieaFyo29JLy9yjV79VeYrqJgWAW3YI9/g2RXr5e99POm+VP/jxxUD
- iN7VTKPFuH44OG1BeY3GRRbTJFBaO38nVcZD3pKrC77jF1ymZfxsPRV0wQv5OozO5fa+wONje
- xESluvKC2E4jyrV4Hom6cp57FmkUbjdVI1wszq5z4XK7fdYPdsgjN9aOaOYJ8ma2hyX/OhLYG
- wE0heEFMTKjA6ml6NZeQnAFs9byV9eUs/iqrw8Gd9J1sk2Bsvg=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 11:26 AM Guo Ren <guoren@kernel.org> wrote:
->
-> Hi Arnd & Christoph,
->
-> The UXL field controls the value of XLEN for U-mode, termed UXLEN,
-> which may differ from the
-> value of XLEN for S-mode, termed SXLEN. The encoding of UXL is the
-> same as that of the MXL
-> field of misa, shown in Table 3.1.
->
-> Here is the patch. (We needn't exception helper, because we are in
-> S-mode and UXL wouldn't affect.)
+--=20
+INTERPOL WESTAFRIKA, UNTERREGION, ABUJA NIGERIA
+Antworten Sie an unsere direkte E-Mail-Adresse: interpolnig@yahoo.com
 
-Looks good to me, just a few details that could be improved
+Achtung Beg=C3=BCnstigter,
 
-> -#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
-> +#ifdef CONFIG_COMPAT
-> +#define compat_elf_check_arch compat_elf_check_arch
-> +extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
-> +#endif
+Wir machen Sie auf die Verhaftung von zwei Betr=C3=BCgern aufmerksam, die
+Ausl=C3=A4nder mit der Absicht betrogen haben, ihnen Spendenzusch=C3=BCsse,
+Darlehen, Liebesbetrug, gef=C3=A4lschte Lotteriegewinne,
+Investitionsvorschl=C3=A4ge, Geldautomatenkarten, Bankschecks,
+Geld=C3=BCberweisungen, Angeh=C3=B6rige usw. Wir verhafteten sie aufgrund d=
+er
+Berichte, die wir von verschiedenen Personen aus Afrika, Europa, Asien
+und Amerika erhielten.
 
-No need for the #ifdef
-> +}
+W=C3=A4hrend des Verh=C3=B6rs haben sie ein Gest=C3=A4ndnis abgegeben, dass=
+ es ihnen
+gelungen ist, so viele Menschen mit ihren L=C3=BCgen und anderen
+Vorschl=C3=A4gen zu betr=C3=BCgen, und wir haben herausgefunden, dass Sie e=
+ines
+ihrer Opfer waren. Wir beschlagnahmten ihre Besitzt=C3=BCmer und verkauften
+sie, und die nigerianische Regierung sagte, wir sollten ihre zwanzig
+Opfer mit dem Geld entsch=C3=A4digen, das aus ihren beschlagnahmten
+Besitzt=C3=BCmern stammt, und auch mit dem Geld, das wir von ihren
+Bankkonten zur=C3=BCckerhalten haben.
 
-> +void compat_mode_detect(void)
+Wir haben 250.000,00 US-Dollar f=C3=BCr jeden von Ihnen vorgesehen, der
+zuf=C3=A4llig ihr Opfer ist. Sie m=C3=BCssen uns Ihren vollst=C3=A4ndigen N=
+amen, Ihr
+Geschlecht, Ihr Alter, Ihren Familienstand, eine Kopie Ihres g=C3=BCltigen
+Personalausweises, Ihre Telefonnummer, Ihre Privatadresse, Ihr Land,
+Ihren Beruf und Ihre Bankkontodaten mitteilen, die Sie verwenden
+werden, um Ihre zur=C3=BCckgeforderte Entsch=C3=A4digung zu erhalten Mittel=
+.
 
-__init
+Es tut uns leid, was Sie in den H=C3=A4nden dieser Betr=C3=BCger durchgemac=
+ht
+haben m=C3=BCssen. Hoffe bald von dir zu h=C3=B6ren.
 
-> +{
-> + unsigned long tmp = csr_read(CSR_STATUS);
-> + csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
-> +
-> + if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
-> + csr_write(CSR_STATUS, tmp);
-> + return;
-> + }
-> +
-> + csr_write(CSR_STATUS, tmp);
-> + compat_mode_support = true;
-> +
-> + pr_info("riscv: compat: 32bit U-mode applications support\n");
-> +}
+BEACHTEN SIE, DASS SIE IHRE ANTWORT AN UNSERE DIREKTE E-MAIL-ADRESSE
+SENDEN M=C3=9CSSEN: interpolnig@yahoo.com
 
-I think an entry in /proc/cpuinfo would be more helpful than the pr_info at
-boot time. Maybe a follow-up patch though, as there is no obvious place
-to put it. On other architectures, you typically have a set of space
-separated feature names, but riscv has a single string that describes
-the ISA, and this feature is technically the support for a second ISA.
-
-         Arnd
+Gr=C3=BC=C3=9Fe,
+Inspektor Emmanuel Maduka
+Antworten Sie an unsere direkte E-Mail-Adresse: interpolnig@yahoo.com
