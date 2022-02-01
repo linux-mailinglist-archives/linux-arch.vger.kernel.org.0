@@ -2,262 +2,97 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9F54A5577
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 04:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECDD4A57E3
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 08:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiBADHQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jan 2022 22:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiBADHQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 22:07:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED23C061714;
-        Mon, 31 Jan 2022 19:07:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24D20B82C45;
-        Tue,  1 Feb 2022 03:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBFDC340E8;
-        Tue,  1 Feb 2022 03:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643684832;
-        bh=RWGziZvAcSIC9lUYmms3EZhw2d4HrnjQmDEh+l0erd0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nRKJAEGl2qxCqQhvDxA4ZerW+APO5/FLlhafvP9scG8v2Y5CkLbLJBqcSsExHqVrB
-         OX3evy0z35wsv6qKv8mZoLVMa9qhZ1JkGvn3/V5K+Ya8eJn5j5/QKrGZBzURxRUn2Q
-         YrwUm3dBk4pdrkxsVuT2Zw0kpPdbNeI3lRto/qWn/AwYDThqnNgPdgQO6+xgbPlVK8
-         J2wExTTQsRWHgs9YwMash9dOsKTFXvNWShyPq2ydx536GMBm456Ot1Yqeod+Qn7cgU
-         rA83rDdC4gyCEOxoxw81Zd0o6CbjHFppo0ZVE6yH7x2guN6pA/Sn5hTf9qKA32tLYG
-         QHimT44JTmTSg==
-Received: by mail-vs1-f50.google.com with SMTP id f6so14433718vsa.5;
-        Mon, 31 Jan 2022 19:07:12 -0800 (PST)
-X-Gm-Message-State: AOAM532gwB1Jql5Z5nUXVSwaGfyJiykepuRxBOwu++rwnYXsNEfDQrgF
-        SoPpGuN/FU5mRoN3d1pb+W6q4O809HQunrnMr0o=
-X-Google-Smtp-Source: ABdhPJzr8oODyGThDZRWf00Gu124HUnNsdtS2vrpuLxr9Y8ThaVajON5m3RaTZJVL7lWmE7wHYjPKw8pKHhLgKGL2D4=
-X-Received: by 2002:a67:e947:: with SMTP id p7mr9249674vso.59.1643684831581;
- Mon, 31 Jan 2022 19:07:11 -0800 (PST)
+        id S235061AbiBAHiK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Feb 2022 02:38:10 -0500
+Received: from mout.kundenserver.de ([212.227.126.135]:43801 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235003AbiBAHiJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 02:38:09 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mk0a0-1mURRH1SY4-00kRXu; Tue, 01 Feb 2022 08:38:07 +0100
+Received: by mail-oi1-f169.google.com with SMTP id v67so31649622oie.9;
+        Mon, 31 Jan 2022 23:38:06 -0800 (PST)
+X-Gm-Message-State: AOAM532N9ip1dCa9ckyzxDsUhmIm9KBYNMWYqmjOas1B3C5kzDKGHmlg
+        wZ+HI7LjqzoRur71jfwoBAlpDLF4c46yYImO2W4=
+X-Google-Smtp-Source: ABdhPJwoAJXauxOlZ1TxRJZjpbgTXhT/BjZ6VY3RAg/96c46TCKIEYOphf3tKWPRy+ZIq5Ssv3EeqyOOpFvjD7WxsWE=
+X-Received: by 2002:aca:2b16:: with SMTP id i22mr389475oik.128.1643701085749;
+ Mon, 31 Jan 2022 23:38:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20220131064933.3780271-1-hch@lst.de> <20220131064933.3780271-5-hch@lst.de>
- <CAJF2gTRj3DN4YJCM2VXqpyJNY7G-PCG4APcLkMk0CKzg-+SsdA@mail.gmail.com>
-In-Reply-To: <CAJF2gTRj3DN4YJCM2VXqpyJNY7G-PCG4APcLkMk0CKzg-+SsdA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 1 Feb 2022 11:07:00 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSvV5PKVkyHZ1jixQYAPDZHwwfG+2=PH_VAQD6Y0XdQVg@mail.gmail.com>
-Message-ID: <CAJF2gTSvV5PKVkyHZ1jixQYAPDZHwwfG+2=PH_VAQD6Y0XdQVg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+References: <20220131225250.409564-1-ndesaulniers@google.com> <202201311550.31EF589B2@keescook>
+In-Reply-To: <202201311550.31EF589B2@keescook>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 1 Feb 2022 08:37:49 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3-WqWUCps131vS1W9T6sN8yQ3GAaja8JP0GYCQjP68Qg@mail.gmail.com>
+Message-ID: <CAK8P3a3-WqWUCps131vS1W9T6sN8yQ3GAaja8JP0GYCQjP68Qg@mail.gmail.com>
+Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Len Baker <len.baker@gmx.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Gmy/OLhhRhW8zXgYaS+K13GMv7b02GK61cdOOM+6a0V9RpMTBRD
+ 9AZf23HLzhtQNorolU+10ZvdPFllQLfhoASYc+LIDhid4oeCN8ZtIlX/Y/sDVK1ntnzBVOB
+ DklZH71DY5yvshzSPsPgmh6p9SsaBupSLM52BdsClj6SFiuFYJWAIGgdh6vaAsr91guMuxK
+ gPCJ6vD1ntRemqEbfnLFA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DLjwZiIMbCI=:o7mkkKsFobMnUtaepxHD+S
+ gaPs5kUQoIw4JQR7okiaEspEjxPX38TflIee5BdHC7wA0yP5ys131QpZJ4vX93uFP8ZAzDWah
+ N03ZNmUpv4mewOe7vAr+ClRbmalcgK99hY5tf4M31dJkjmsD2MUq79r6TySUQnHkrOU1ZeZWu
+ gzNSGVj2RBc66X8VkbjRNYAAmWsrUjzSZtUywWprwz0fxgeYowt6YyKct4rD/29Pu3Vnyb7ws
+ sz3TYaCBtRMGictyhP9+BSsSJlJSdVU4xsOpT9WnHgWYABaTeoqXFG4+bLNbN7RUS25JuvTrb
+ Dazubzl/dWUTJzNhL5uyy0thxc6Zs8Il2GrSGKe3F52pGViEE3duJj9UARByGWCpQe5plcZcS
+ SN4ruQlGeT62iBvIMI8K6lK5BzgBmMqoo40Ms3v44X/1bnPOJ9W6QkQ97jSM0kkKqlpU3xMPY
+ aqSzZ1Oqw2rd68Oev01F3A6mKndzwWGC0oJ/ve6wT09nsmuxku68s4/as/QWOGO1hHvGGEBln
+ tz5kPQX0bCn6DPkWc4QLUZ7OMlaMHkWVGZwXvVP5SEnMk2bFgJLehlQC35zqUXEwn9+BQs4FR
+ 6XNaOW/AAAz3IyYCBQbPsmjaRtm6PZDb5wYDeKL/E6vNOBw7S9pg1gNdmTPJhIdjjNCeL9g+n
+ qGgzu0vzN1PkFUlLksoeCnlmnkq8+6OgRYGqD0rSMZYlH99vJZCcHDgM0yASH2njET1/BHSRJ
+ QQjdm1f5dpbptxjUkwKHOaA9B58tJRPJ22xqjC38NhgcWPWOFCWhmqP30pBuVXNQ7ySaQtHdZ
+ LZvN2iF9OUTbb9yIHNUpcf6LfQwZACUQrpOVj1WYoo0mjArkfA=
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 11:02 AM Guo Ren <guoren@kernel.org> wrote:
+On Tue, Feb 1, 2022 at 12:53 AM Kees Cook <keescook@chromium.org> wrote:
+
+> > +
+> > +According to `the GCC docs on inline asm
+> > +https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile`_:
+> > +
+> > +  asm statements that have no output operands and asm goto statements,
+> > +  are implicitly volatile.
 >
-> On Mon, Jan 31, 2022 at 2:49 PM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > The F_GETLK64/F_SETLK64/F_SETLKW64 fcntl opcodes are only implemented
-> > for the 32-bit syscall APIs, but are also needed for compat handling
-> > on 64-bit kernels.
-> >
-> > Consolidate them in unistd.h instead of definining the internal compat
-> > definitions in compat.h, which is rather errror prone (e.g. parisc
-> > gets the values wrong currently).
-> >
-> > Note that before this change they were never visible to userspace due
-> > to the fact that CONFIG_64BIT is only set for kernel builds.
-> >
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > ---
-> >  arch/arm64/include/asm/compat.h        | 4 ----
-> >  arch/mips/include/asm/compat.h         | 4 ----
-> >  arch/mips/include/uapi/asm/fcntl.h     | 4 ++--
-> >  arch/powerpc/include/asm/compat.h      | 4 ----
-> >  arch/s390/include/asm/compat.h         | 4 ----
-> >  arch/sparc/include/asm/compat.h        | 4 ----
-> >  arch/x86/include/asm/compat.h          | 4 ----
-> >  include/uapi/asm-generic/fcntl.h       | 4 ++--
-> >  tools/include/uapi/asm-generic/fcntl.h | 2 --
-> >  9 files changed, 4 insertions(+), 30 deletions(-)
-> >
-> > diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
-> > index eaa6ca062d89b..2763287654081 100644
-> > --- a/arch/arm64/include/asm/compat.h
-> > +++ b/arch/arm64/include/asm/compat.h
-> > @@ -73,10 +73,6 @@ struct compat_flock {
-> >         compat_pid_t    l_pid;
-> >  };
-> >
-> > -#define F_GETLK64      12      /*  using 'struct flock64' */
-> > -#define F_SETLK64      13
-> > -#define F_SETLKW64     14
-> > -
-> >  struct compat_flock64 {
-> >         short           l_type;
-> >         short           l_whence;
-> > diff --git a/arch/mips/include/asm/compat.h b/arch/mips/include/asm/compat.h
-> > index bbb3bc5a42fd8..6a350c1f70d7e 100644
-> > --- a/arch/mips/include/asm/compat.h
-> > +++ b/arch/mips/include/asm/compat.h
-> > @@ -65,10 +65,6 @@ struct compat_flock {
-> >         s32             pad[4];
-> >  };
-> >
-> > -#define F_GETLK64      33
-> > -#define F_SETLK64      34
-> > -#define F_SETLKW64     35
-> Oops we can't remove above, right?
-No problem, I missing, it's okay.
+> Does this mean "volatile" _is_ needed when there are operands, etc?
 
-All come from arch/mips/include/uapi/asm/fcntl.h
+It depends on what you want to express. The idea here is to give a way to
+gcc for optimizing out anything with an output, like x86 rdtsc() when the
+result is not used, which is sensible. If there is no output, such as in
+writel(), you don't need 'volatile' because gcc can assume that an
+inline asm without outputs has side-effects already.
 
->
-> > -
-> >  struct compat_flock64 {
-> >         short           l_type;
-> >         short           l_whence;
-> > diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
-> > index 9e44ac810db94..0369a38e3d4f2 100644
-> > --- a/arch/mips/include/uapi/asm/fcntl.h
-> > +++ b/arch/mips/include/uapi/asm/fcntl.h
-> > @@ -44,11 +44,11 @@
-> >  #define F_SETOWN       24      /*  for sockets. */
-> >  #define F_GETOWN       23      /*  for sockets. */
-> >
-> > -#ifndef __mips64
-> > +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
-> >  #define F_GETLK64      33      /*  using 'struct flock64' */
-> >  #define F_SETLK64      34
-> >  #define F_SETLKW64     35
-> > -#endif
-> > +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
-> >
-> >  #if _MIPS_SIM != _MIPS_SIM_ABI64
-> >  #define __ARCH_FLOCK_EXTRA_SYSID       long l_sysid;
-> > diff --git a/arch/powerpc/include/asm/compat.h b/arch/powerpc/include/asm/compat.h
-> > index 7afc96fb6524b..83d8f70779cbc 100644
-> > --- a/arch/powerpc/include/asm/compat.h
-> > +++ b/arch/powerpc/include/asm/compat.h
-> > @@ -52,10 +52,6 @@ struct compat_flock {
-> >         compat_pid_t    l_pid;
-> >  };
-> >
-> > -#define F_GETLK64      12      /*  using 'struct flock64' */
-> > -#define F_SETLK64      13
-> > -#define F_SETLKW64     14
-> > -
-> >  struct compat_flock64 {
-> >         short           l_type;
-> >         short           l_whence;
-> > diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
-> > index cdc7ae72529d8..0f14b3188b1bb 100644
-> > --- a/arch/s390/include/asm/compat.h
-> > +++ b/arch/s390/include/asm/compat.h
-> > @@ -110,10 +110,6 @@ struct compat_flock {
-> >         compat_pid_t    l_pid;
-> >  };
-> >
-> > -#define F_GETLK64       12
-> > -#define F_SETLK64       13
-> > -#define F_SETLKW64      14
-> > -
-> >  struct compat_flock64 {
-> >         short           l_type;
-> >         short           l_whence;
-> > diff --git a/arch/sparc/include/asm/compat.h b/arch/sparc/include/asm/compat.h
-> > index bd949fcf9d63b..108078751bb5a 100644
-> > --- a/arch/sparc/include/asm/compat.h
-> > +++ b/arch/sparc/include/asm/compat.h
-> > @@ -84,10 +84,6 @@ struct compat_flock {
-> >         short           __unused;
-> >  };
-> >
-> > -#define F_GETLK64      12
-> > -#define F_SETLK64      13
-> > -#define F_SETLKW64     14
-> > -
-> >  struct compat_flock64 {
-> >         short           l_type;
-> >         short           l_whence;
-> > diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
-> > index 7516e4199b3c6..8d19a212f4f26 100644
-> > --- a/arch/x86/include/asm/compat.h
-> > +++ b/arch/x86/include/asm/compat.h
-> > @@ -58,10 +58,6 @@ struct compat_flock {
-> >         compat_pid_t    l_pid;
-> >  };
-> >
-> > -#define F_GETLK64      12      /*  using 'struct flock64' */
-> > -#define F_SETLK64      13
-> > -#define F_SETLKW64     14
-> > -
-> >  /*
-> >   * IA32 uses 4 byte alignment for 64 bit quantities,
-> >   * so we need to pack this structure.
-> > diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
-> > index 98f4ff165b776..8c05d3d89ff18 100644
-> > --- a/include/uapi/asm-generic/fcntl.h
-> > +++ b/include/uapi/asm-generic/fcntl.h
-> > @@ -116,13 +116,13 @@
-> >  #define F_GETSIG       11      /* for sockets. */
-> >  #endif
-> >
-> > -#ifndef CONFIG_64BIT
-> > +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
-> >  #ifndef F_GETLK64
-> >  #define F_GETLK64      12      /*  using 'struct flock64' */
-> >  #define F_SETLK64      13
-> >  #define F_SETLKW64     14
-> >  #endif
-> > -#endif
-> > +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
-> >
-> >  #ifndef F_SETOWN_EX
-> >  #define F_SETOWN_EX    15
-> > diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
-> > index bf961a71802e0..6e16722026f39 100644
-> > --- a/tools/include/uapi/asm-generic/fcntl.h
-> > +++ b/tools/include/uapi/asm-generic/fcntl.h
-> > @@ -115,13 +115,11 @@
-> >  #define F_GETSIG       11      /* for sockets. */
-> >  #endif
-> >
-> > -#ifndef CONFIG_64BIT
-> >  #ifndef F_GETLK64
-> >  #define F_GETLK64      12      /*  using 'struct flock64' */
-> >  #define F_SETLK64      13
-> >  #define F_SETLKW64     14
-> >  #endif
-> > -#endif
-> >
-> >  #ifndef F_SETOWN_EX
-> >  #define F_SETOWN_EX    15
-> > --
-> > 2.30.2
-> >
->
->
-> --
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
+A case where you need to add volatile is for (void)readl(ADDR),
+which is an operation that has an output as well as a side-effect.
 
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+          Arnd
