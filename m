@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9C04A5F51
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 16:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9FC4A5F5A
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 16:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239946AbiBAPHY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Feb 2022 10:07:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59376 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239929AbiBAPHR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 10:07:17 -0500
+        id S240006AbiBAPH0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Feb 2022 10:07:26 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:34350 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239968AbiBAPHU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 10:07:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84F55B82E40;
-        Tue,  1 Feb 2022 15:07:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56523C340EB;
-        Tue,  1 Feb 2022 15:07:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C4AC61646;
+        Tue,  1 Feb 2022 15:07:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDA7C340F2;
+        Tue,  1 Feb 2022 15:07:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643728034;
-        bh=1OBxWZHG831M1SPbV5jBb3+7JNwP6F1nuWQ1Actjs/I=;
+        s=k20201202; t=1643728039;
+        bh=yfEc7zgR3yCBk8Yfn7aWFLEsFQj0j+xfa9v6cbpF6Vc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vEF+6PbTK4CgyskQVbXgAKAXFPuraXewLZTXYlM+Z5DgpaGFBcLuczyKz5+zjLbp3
-         amtv+YcofWhUs+oz8EeHVzqbBZnGJ2dCSNYcV14G8ruL7Tujvj1PNo3pzYdbJ3qzXu
-         i4j+lI4e61pTb/lKJG7x86Lumvf8IQf/gT2u49mNi2kHlaxD5580PPPUTStFr+JuYA
-         0eWMAwSYgP+E/8dPhx/N4xZiVRLNsl+C1Tqx2lDXTmJpA/wVFDcmtv+RpLc9Av/OI7
-         c9BI1AyleRQGsEbC7SPUn88WD2I6p/+qfLlS2a1GbkW3rjeL2V1Rh25RVLOBWG7C63
-         gSTHWP7WFi9ow==
+        b=XijAuT9bnUGuYuCUmoALNBnEHlhZtDhCRON0RFO4F+1ePEy+7up2ymK2Ee3ugl35d
+         Yaj4xeZMW1Asnh8eo46/EAvXu1I0vZizvuVgx83fqUzo8RsmbK6A0q/tKOhnA0InKi
+         07WJFqfZsdSh5B1iKRzKqYFRDDFUKI41b/wd93Vpr0zWE29Vemj8+KymSC4bYkkMlK
+         JB4JE4rW7JwmWjGG1DiEeSWyBj2hf6gCDG2iHi5SRLLhWJ8QP9q8kXMniqKjs6zzoA
+         8r9gJx1Nsox9ck34CBiPhkdvtWJWJEwJ5CP7vktOGRnnlpclGdvMSGvdk6RShWn2ie
+         QD1vkrdlU+wZQ==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         anup@brainfault.org, gregkh@linuxfoundation.org,
@@ -39,9 +39,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         x86@kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V5 12/21] riscv: compat: syscall: Add entry.S implementation
-Date:   Tue,  1 Feb 2022 23:05:36 +0800
-Message-Id: <20220201150545.1512822-13-guoren@kernel.org>
+Subject: [PATCH V5 13/21] riscv: compat: process: Add UXL_32 support in start_thread
+Date:   Tue,  1 Feb 2022 23:05:37 +0800
+Message-Id: <20220201150545.1512822-14-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220201150545.1512822-1-guoren@kernel.org>
 References: <20220201150545.1512822-1-guoren@kernel.org>
@@ -53,75 +53,34 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Implement the entry of compat_sys_call_table[] in asm. Ref to
-riscv-privileged spec 4.1.1 Supervisor Status Register (sstatus):
-
- BIT[32:33] = UXL[1:0]:
- - 1:32
- - 2:64
- - 3:128
+If the current task is in COMPAT mode, set SR_UXL_32 in status for
+returning userspace. We need CONFIG _COMPAT to prevent compiling
+errors with rv32 defconfig.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>
 ---
- arch/riscv/include/asm/csr.h |  7 +++++++
- arch/riscv/kernel/entry.S    | 18 ++++++++++++++++--
- 2 files changed, 23 insertions(+), 2 deletions(-)
+ arch/riscv/kernel/process.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
-index ae711692eec9..eed96fa62d66 100644
---- a/arch/riscv/include/asm/csr.h
-+++ b/arch/riscv/include/asm/csr.h
-@@ -36,6 +36,13 @@
- #define SR_SD		_AC(0x8000000000000000, UL) /* FS/XS dirty */
- #endif
- 
-+#ifdef CONFIG_COMPAT
-+#define SR_UXL		_AC(0x300000000, UL) /* XLEN mask for U-mode */
-+#define SR_UXL_32	_AC(0x100000000, UL) /* XLEN = 32 for U-mode */
-+#define SR_UXL_64	_AC(0x200000000, UL) /* XLEN = 64 for U-mode */
-+#define SR_UXL_SHIFT	32
-+#endif
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 03ac3aa611f5..1a666ad299b4 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
+ 	}
+ 	regs->epc = pc;
+ 	regs->sp = sp;
 +
- /* SATP flags */
- #ifndef CONFIG_64BIT
- #define SATP_PPN	_AC(0x003FFFFF, UL)
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index ed29e9c8f660..1951743f09b3 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -207,13 +207,27 @@ check_syscall_nr:
- 	 * Syscall number held in a7.
- 	 * If syscall number is above allowed value, redirect to ni_syscall.
- 	 */
--	bgeu a7, t0, 1f
-+	bgeu a7, t0, 3f
 +#ifdef CONFIG_COMPAT
-+	REG_L s0, PT_STATUS(sp)
-+	srli s0, s0, SR_UXL_SHIFT
-+	andi s0, s0, (SR_UXL >> SR_UXL_SHIFT)
-+	li t0, (SR_UXL_32 >> SR_UXL_SHIFT)
-+	sub t0, s0, t0
-+	bnez t0, 1f
-+
-+	/* Call compat_syscall */
-+	la s0, compat_sys_call_table
-+	j 2f
-+1:
++	if (is_compat_task())
++		regs->status |= SR_UXL_32;
 +#endif
- 	/* Call syscall */
- 	la s0, sys_call_table
-+2:
- 	slli t0, a7, RISCV_LGPTR
- 	add s0, s0, t0
- 	REG_L s0, 0(s0)
--1:
-+3:
- 	jalr s0
+ }
  
- ret_from_syscall:
+ void flush_thread(void)
 -- 
 2.25.1
 
