@@ -2,198 +2,244 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A76EB4A54BE
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 02:42:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A144A5565
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 04:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiBABml (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 31 Jan 2022 20:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiBABmk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 20:42:40 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9089AC061714;
-        Mon, 31 Jan 2022 17:42:40 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id c9so14088677plg.11;
-        Mon, 31 Jan 2022 17:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x+LYH2iPIeKKje/ufsIUVXC3BxeZP1r+kt3hjcgKoLs=;
-        b=CkTnfAHyY5FJHvtNOJa+0L/alYm0p/MA+Dx7a+8pqGgSJO6/41qdDJ8ACb13gVw7qX
-         whdkAg3YT/f1JReraTCvz3BVoiZhfSTLJGbTJMF7v8hNIOHrmPW5q+gKe4YmzEHqt1H2
-         PmjNVAkRAVxD2YfCk1EogJ4AO0iwhfJll0jmQkqcWIl10TzM2V3KJzgqvgTW5CbuZyhN
-         DgfI2TAEVB6ScYpaf39JexI6lqb96XeGpd3qJqHRMjMjmeXVHiaUlHiJNWH8hkfROZ6P
-         8qglNJ4BD88JtAIKbD26UzsgrPKe9I54ww00oSunKHjWeSfW6N30acoZKDkbgLej9gVF
-         Xz9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x+LYH2iPIeKKje/ufsIUVXC3BxeZP1r+kt3hjcgKoLs=;
-        b=EwQJJQvOK15OL8dJw0ImcxZarhjVlOKxDHf6E7mw/UeeZ1SfG/XIZ2tNyckuE1wx07
-         LCbSFCNT06b5yOcrhQxbNzc13wp7gIgANQSRWj5MoSOKxALN2X21k2OCS2or0Lk9b+9r
-         h9EraJPS2i0QwQR+0V0On/jTvKb4AUbhXCKBgUU4kx3sulm8WZGq09zkAPsbqWZa/dDH
-         ze+bP/Y1YoW4cNj5bSmDv3XmnwGsfcAkdbhUNUu4V3ANy1CkGWwrVCj1C/92qtE4Jms/
-         574ef8x4Q6YOKQ/A4chSNA+5fWZDj5PzK6Q6dWCtw/fQxTYFyNikxY6yA2xKn1eA5GUJ
-         IYAg==
-X-Gm-Message-State: AOAM530PuvdkY328RI8Jq+c9VeOZylG8T0KcT8GXvcoizJdCz3pbzIzJ
-        WVVVexiGuYg5tD0OjbK8dokxcP4ty47Pow==
-X-Google-Smtp-Source: ABdhPJxeGAwbuj7OSEeOuIpCOS6L43io94K5qy/Qyb0sbU4tquiDPcXv2J3SmI05AnhXKaffXg+Ziw==
-X-Received: by 2002:a17:903:41c8:: with SMTP id u8mr3550265ple.81.1643679759981;
-        Mon, 31 Jan 2022 17:42:39 -0800 (PST)
-Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id ga21sm1071682pjb.2.2022.01.31.17.42.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jan 2022 17:42:39 -0800 (PST)
-Message-ID: <fbfc338c-e35e-17c4-b97c-87838dfa4bf2@gmail.com>
-Date:   Tue, 1 Feb 2022 10:42:33 +0900
+        id S232562AbiBADDM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 31 Jan 2022 22:03:12 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:55230 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229519AbiBADDM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 31 Jan 2022 22:03:12 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B24F6137A;
+        Tue,  1 Feb 2022 03:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0256BC36AE2;
+        Tue,  1 Feb 2022 03:03:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643684591;
+        bh=XVG1nkFm0M1TCidUznP2TjJ4k7rtxluAMuLqFYECopI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZQzE690KnsPNVYlRelHHw4EeFA4Jh/r5vKcvtuiOydieiU8Liq2oqgCNk7gtUcHV4
+         EilIbP1NDsAjYPZGEFwo/FmmGbNq/GujzXKx4pPCZdj7FDTccE1/8SrT4/BX+oSV+Z
+         vm5X+RlBGs/dXhEliSU20eYIh4CgbHKLXjuX6FiHaW6GrG80PDOHU9XpO1i1jmAvQ9
+         LptLGGrVzo2TsFbzuPH6Y+9iql+3HsAO/6AIZa2qeUW2iO+CST1ze0OCiRP9iV7dMc
+         Ml0Xt6aCQpcPnot6fpI+lu4SestIj4cUA6n68/KfrC+JgKMTPuRh24dFzsAq+hMG6z
+         gXhJhGK+x+wVg==
+Received: by mail-vk1-f174.google.com with SMTP id b77so9581189vka.11;
+        Mon, 31 Jan 2022 19:03:10 -0800 (PST)
+X-Gm-Message-State: AOAM533yqYbLPDRCKyx50McByivSeYKBpG//ZS/tRMf+8mpEttXFXvjH
+        8ou9qnTUv222yJmVZs2qBInlBAVxSRTlpMvBQfE=
+X-Google-Smtp-Source: ABdhPJyTwJmAqC5mahTByendT7OWLMOo9DeE/UbaKoq5G8/wz8pyIXc4EKka2k1cOl+QuJDHOAJtlYKIILY9yL9r3E4=
+X-Received: by 2002:a1f:640e:: with SMTP id y14mr9686384vkb.2.1643684589884;
+ Mon, 31 Jan 2022 19:03:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] tools/memory-model: Explain syntactic and semantic
- dependencies
-Content-Language: en-US
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
- <YfBk265vVo4FL4MJ@rowland.harvard.edu>
- <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
- <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
- <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
- <YfMKlLInsK0Qr77f@rowland.harvard.edu>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <YfMKlLInsK0Qr77f@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20220131064933.3780271-1-hch@lst.de> <20220131064933.3780271-5-hch@lst.de>
+In-Reply-To: <20220131064933.3780271-5-hch@lst.de>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 1 Feb 2022 11:02:59 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRj3DN4YJCM2VXqpyJNY7G-PCG4APcLkMk0CKzg-+SsdA@mail.gmail.com>
+Message-ID: <CAJF2gTRj3DN4YJCM2VXqpyJNY7G-PCG4APcLkMk0CKzg-+SsdA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On Thu, 27 Jan 2022 16:11:48 -0500,
-Alan Stern wrote:
-> Paul Heidekr=C3=BCger pointed out that the Linux Kernel Memory Model
-> documentation doesn't mention the distinction between syntactic and
-> semantic dependencies.  This is an important difference, because the
-> compiler can easily break dependencies that are only syntactic, not
-> semantic.
->=20
-> This patch adds a few paragraphs to the LKMM documentation explaining
-> these issues and illustrating how they can matter.
->=20
-> Suggested-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->=20
+On Mon, Jan 31, 2022 at 2:49 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> The F_GETLK64/F_SETLK64/F_SETLKW64 fcntl opcodes are only implemented
+> for the 32-bit syscall APIs, but are also needed for compat handling
+> on 64-bit kernels.
+>
+> Consolidate them in unistd.h instead of definining the internal compat
+> definitions in compat.h, which is rather errror prone (e.g. parisc
+> gets the values wrong currently).
+>
+> Note that before this change they were never visible to userspace due
+> to the fact that CONFIG_64BIT is only set for kernel builds.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->=20
->=20
-> [as1970]
->=20
->=20
->  tools/memory-model/Documentation/explanation.txt |   47 ++++++++++++++=
-+++++++++
->  1 file changed, 47 insertions(+)
->=20
-> Index: usb-devel/tools/memory-model/Documentation/explanation.txt
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
-> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
-> @@ -485,6 +485,53 @@ have R ->po X.  It wouldn't make sense f
->  somehow on a value that doesn't get loaded from shared memory until
->  later in the code!
-> =20
-> +Here's a trick question: When is a dependency not a dependency?  Answe=
-r:
-> +When it is purely syntactic rather than semantic.  We say a dependency=
+>  arch/arm64/include/asm/compat.h        | 4 ----
+>  arch/mips/include/asm/compat.h         | 4 ----
+>  arch/mips/include/uapi/asm/fcntl.h     | 4 ++--
+>  arch/powerpc/include/asm/compat.h      | 4 ----
+>  arch/s390/include/asm/compat.h         | 4 ----
+>  arch/sparc/include/asm/compat.h        | 4 ----
+>  arch/x86/include/asm/compat.h          | 4 ----
+>  include/uapi/asm-generic/fcntl.h       | 4 ++--
+>  tools/include/uapi/asm-generic/fcntl.h | 2 --
+>  9 files changed, 4 insertions(+), 30 deletions(-)
+>
+> diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
+> index eaa6ca062d89b..2763287654081 100644
+> --- a/arch/arm64/include/asm/compat.h
+> +++ b/arch/arm64/include/asm/compat.h
+> @@ -73,10 +73,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64      12      /*  using 'struct flock64' */
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/mips/include/asm/compat.h b/arch/mips/include/asm/compat.h
+> index bbb3bc5a42fd8..6a350c1f70d7e 100644
+> --- a/arch/mips/include/asm/compat.h
+> +++ b/arch/mips/include/asm/compat.h
+> @@ -65,10 +65,6 @@ struct compat_flock {
+>         s32             pad[4];
+>  };
+>
+> -#define F_GETLK64      33
+> -#define F_SETLK64      34
+> -#define F_SETLKW64     35
+Oops we can't remove above, right?
 
-> +between two accesses is purely syntactic if the second access doesn't
-> +actually depend on the result of the first.  Here is a trivial example=
-:
-> +
-> +	r1 =3D READ_ONCE(x);
-> +	WRITE_ONCE(y, r1 * 0);
-> +
-> +There appears to be a data dependency from the load of x to the store =
-of
-> +y, since the value to be stored is computed from the value that was
-> +loaded.  But in fact, the value stored does not really depend on
-> +anything since it will always be 0.  Thus the data dependency is only
-> +syntactic (it appears to exist in the code) but not semantic (the seco=
-nd
-> +access will always be the same, regardless of the value of the first
-> +access).  Given code like this, a compiler could simply eliminate the
-> +load from x, which would certainly destroy any dependency.
-> +
-> +(It's natural to object that no one in their right mind would write co=
-de
-> +like the above.  However, macro expansions can easily give rise to thi=
-s
-> +sort of thing, in ways that generally are not apparent to the
-> +programmer.)
-> +
-> +Another mechanism that can give rise to purely syntactic dependencies =
-is
-> +related to the notion of "undefined behavior".  Certain program behavi=
-ors
-> +are called "undefined" in the C language specification, which means th=
-at
-> +when they occur there are no guarantees at all about the outcome.
-> +Consider the following example:
-> +
-> +	int a[1];
-> +	int i;
-> +
-> +	r1 =3D READ_ONCE(i);
-> +	r2 =3D READ_ONCE(a[r1]);
-> +
-> +Access beyond the end or before the beginning of an array is one kind =
-of
-> +undefined behavior.  Therefore the compiler doesn't have to worry abou=
-t
-> +what will happen if r1 is nonzero, and it can assume that r1 will alwa=
-ys
-> +be zero without actually loading anything from i.  (If the assumption
-> +turns out to be wrong, the resulting behavior will be undefined anyway=
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
+> index 9e44ac810db94..0369a38e3d4f2 100644
+> --- a/arch/mips/include/uapi/asm/fcntl.h
+> +++ b/arch/mips/include/uapi/asm/fcntl.h
+> @@ -44,11 +44,11 @@
+>  #define F_SETOWN       24      /*  for sockets. */
+>  #define F_GETOWN       23      /*  for sockets. */
+>
+> -#ifndef __mips64
+> +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+>  #define F_GETLK64      33      /*  using 'struct flock64' */
+>  #define F_SETLK64      34
+>  #define F_SETLKW64     35
+> -#endif
+> +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
+>
+>  #if _MIPS_SIM != _MIPS_SIM_ABI64
+>  #define __ARCH_FLOCK_EXTRA_SYSID       long l_sysid;
+> diff --git a/arch/powerpc/include/asm/compat.h b/arch/powerpc/include/asm/compat.h
+> index 7afc96fb6524b..83d8f70779cbc 100644
+> --- a/arch/powerpc/include/asm/compat.h
+> +++ b/arch/powerpc/include/asm/compat.h
+> @@ -52,10 +52,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64      12      /*  using 'struct flock64' */
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
+> index cdc7ae72529d8..0f14b3188b1bb 100644
+> --- a/arch/s390/include/asm/compat.h
+> +++ b/arch/s390/include/asm/compat.h
+> @@ -110,10 +110,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64       12
+> -#define F_SETLK64       13
+> -#define F_SETLKW64      14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/sparc/include/asm/compat.h b/arch/sparc/include/asm/compat.h
+> index bd949fcf9d63b..108078751bb5a 100644
+> --- a/arch/sparc/include/asm/compat.h
+> +++ b/arch/sparc/include/asm/compat.h
+> @@ -84,10 +84,6 @@ struct compat_flock {
+>         short           __unused;
+>  };
+>
+> -#define F_GETLK64      12
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  struct compat_flock64 {
+>         short           l_type;
+>         short           l_whence;
+> diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
+> index 7516e4199b3c6..8d19a212f4f26 100644
+> --- a/arch/x86/include/asm/compat.h
+> +++ b/arch/x86/include/asm/compat.h
+> @@ -58,10 +58,6 @@ struct compat_flock {
+>         compat_pid_t    l_pid;
+>  };
+>
+> -#define F_GETLK64      12      /*  using 'struct flock64' */
+> -#define F_SETLK64      13
+> -#define F_SETLKW64     14
+> -
+>  /*
+>   * IA32 uses 4 byte alignment for 64 bit quantities,
+>   * so we need to pack this structure.
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> index 98f4ff165b776..8c05d3d89ff18 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -116,13 +116,13 @@
+>  #define F_GETSIG       11      /* for sockets. */
+>  #endif
+>
+> -#ifndef CONFIG_64BIT
+> +#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+>  #ifndef F_GETLK64
+>  #define F_GETLK64      12      /*  using 'struct flock64' */
+>  #define F_SETLK64      13
+>  #define F_SETLKW64     14
+>  #endif
+> -#endif
+> +#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
+>
+>  #ifndef F_SETOWN_EX
+>  #define F_SETOWN_EX    15
+> diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+> index bf961a71802e0..6e16722026f39 100644
+> --- a/tools/include/uapi/asm-generic/fcntl.h
+> +++ b/tools/include/uapi/asm-generic/fcntl.h
+> @@ -115,13 +115,11 @@
+>  #define F_GETSIG       11      /* for sockets. */
+>  #endif
+>
+> -#ifndef CONFIG_64BIT
+>  #ifndef F_GETLK64
+>  #define F_GETLK64      12      /*  using 'struct flock64' */
+>  #define F_SETLK64      13
+>  #define F_SETLKW64     14
+>  #endif
+> -#endif
+>
+>  #ifndef F_SETOWN_EX
+>  #define F_SETOWN_EX    15
+> --
+> 2.30.2
+>
 
-> +so the compiler doesn't care!)  Thus the load from i can be eliminated=
-,
-> +breaking the address dependency.
-> +
-> +The LKMM is unaware that purely syntactic dependencies are different
-> +from semantic dependencies and therefore mistakenly predicts that the
-> +accesses in the two examples above will be ordered.  This is another
-> +example of how the compiler can undermine the memory model.  Be warned=
-=2E
-> +
-> =20
->  THE READS-FROM RELATION: rf, rfi, and rfe
->  -----------------------------------------
 
-FWIW,
+-- 
+Best Regards
+ Guo Ren
 
-Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
-
-        Thanks, Akira
-
+ML: https://lore.kernel.org/linux-csky/
