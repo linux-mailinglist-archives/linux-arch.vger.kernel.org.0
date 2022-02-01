@@ -2,74 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA224A6C7F
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Feb 2022 08:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3504A6F65
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Feb 2022 12:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiBBHwF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Feb 2022 02:52:05 -0500
-Received: from verein.lst.de ([213.95.11.211]:33222 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231368AbiBBHwE (ORCPT <rfc822;linux-arch@vger.kernel.org>);
-        Wed, 2 Feb 2022 02:52:04 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id D45AE67373; Wed,  2 Feb 2022 08:51:59 +0100 (CET)
-Date:   Wed, 2 Feb 2022 08:51:59 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     guoren@kernel.org
-Cc:     palmer@dabbelt.com, arnd@arndb.de, anup@brainfault.org,
-        gregkh@linuxfoundation.org, liush@allwinnertech.com,
-        wefu@redhat.com, drew@beagleboard.org, wangjunqiang@iscas.ac.cn,
-        hch@lst.de, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V5 15/21] riscv: compat: Add hw capability check for elf
-Message-ID: <20220202075159.GB18398@lst.de>
-References: <20220201150545.1512822-1-guoren@kernel.org> <20220201150545.1512822-16-guoren@kernel.org>
+        id S1343670AbiBBLCR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Feb 2022 06:02:17 -0500
+Received: from mail.profitfirm24.com.pl ([212.237.10.110]:59444 "EHLO
+        mail.profitfirm24.com.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343663AbiBBLCP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Feb 2022 06:02:15 -0500
+Received: by mail.profitfirm24.com.pl (Postfix, from userid 1001)
+        id B3C91AAECE; Tue,  1 Feb 2022 09:17:26 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=profitfirm24.com.pl;
+        s=mail; t=1643707499;
+        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
+        h=Date:From:To:Subject:From;
+        b=eoKp3r9gTSc911Q8DTRkgPO5T1GnwR44oMhKsJL/HeDIJOJSSV3kijlLM4a+swzhQ
+         p0gLV4FJ9xUdvj7e3t99wh9yO68BtyUG9wntJQr81AtfIrYeecBNH5lVVMZmWeSSRk
+         bbhbQHF4WSZnHgudla8qm7RnkVI4nzF2s4sg0Vrva0MVlnKc2DirV9IJiyBDHJ0Ohp
+         6FuTAHmt9/x8XOMUXoOIja7bN+++EVhLgn6MFVv53nJYjvB4mWZMKDG/opkkLIygf/
+         I26IMCcdzRJ4XVVfWJ8ofm3Ig1nnl/HCNvZRSNBLduzidapXVo4RAB3FHXStUB4VBO
+         JZMdaNcQCjC1g==
+Received: by profitfirm24.com.pl for <linux-arch@vger.kernel.org>; Tue,  1 Feb 2022 09:17:20 GMT
+Message-ID: <20220201074652-0.1.b.2ygy.0.eqgjqthnhv@profitfirm24.com.pl>
+Date:   Tue,  1 Feb 2022 09:17:20 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@profitfirm24.com.pl>
+To:     <linux-arch@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.profitfirm24.com.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220201150545.1512822-16-guoren@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 01, 2022 at 11:05:39PM +0800, guoren@kernel.org wrote:
-> +bool compat_elf_check_arch(Elf32_Ehdr *hdr)
-> +{
-> +	if (compat_mode_support && (hdr->e_machine == EM_RISCV))
-> +		return true;
-> +	else
-> +		return false;
-> +}
+Dzie=C5=84 dobry,
 
-This can be simplified to:
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
 
-	return compat_mode_support && hdr->e_machine == EM_RISCV;
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-I'd also rename compat_mode_support to compat_mode_supported
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
 
-> +
-> +static int compat_mode_detect(void)
-> +{
-> +	unsigned long tmp = csr_read(CSR_STATUS);
-> +
-> +	csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
-> +
-> +	if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
-> +		pr_info("riscv: 32bit compat mode detect failed\n");
-> +		compat_mode_support = false;
-> +	} else {
-> +		compat_mode_support = true;
-> +		pr_info("riscv: 32bit compat mode detected\n");
-> +	}
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
-I don't think we need these printks here.
 
-Also this could be simplified to:
-
-	compat_mode_supported = (csr_read(CSR_STATUS) & SR_UXL) == SR_UXL_32;
+Pozdrawiam
+Arkadiusz Soko=C5=82owski
