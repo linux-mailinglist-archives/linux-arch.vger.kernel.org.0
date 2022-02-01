@@ -2,138 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8BA4A6275
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 18:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1BF4A6320
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Feb 2022 19:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241526AbiBAR3s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Feb 2022 12:29:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239884AbiBAR3r (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 12:29:47 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2C7C06173B
-        for <linux-arch@vger.kernel.org>; Tue,  1 Feb 2022 09:29:46 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l12-20020a7bc34c000000b003467c58cbdfso2563488wmj.2
-        for <linux-arch@vger.kernel.org>; Tue, 01 Feb 2022 09:29:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1up9Iuvtlk/iyAkaowMrPN9aJld0zeiBLUkLL04DY6A=;
-        b=QWs0wLi0831HmP/LvqHWVwVANAT7rANQll4UtSe0l1qRMJfkYwUAlKC3MvzM9LY59m
-         jmirGQcKXR2hKtxGaZX6Az0HBlznNCAt81xhDClcfIpnqSk13VYqNycCy0XzFjBCU8y+
-         9+lem5hhoqyNL3tQXojrP7IHE2wBlqnqwYaFh9k63vA91VEWklbrE2Do21974PHp3HPL
-         r1uDWYNx165mRiOBob23AYLyRCknUOLHWb/R//K6lz4j+1aU/xNrgpfEx0Qs2nGmuKGl
-         yqRWPDr3oPvupXdGUcXBR1+8kd3f2tUAhIzklDg7pSJuKT6T45EHtBwQEq15U83al5Tf
-         5pwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1up9Iuvtlk/iyAkaowMrPN9aJld0zeiBLUkLL04DY6A=;
-        b=mUGETRQRnOK5xkHGkks2fgCP4C2xC/EWdEY0GWFff+UoB0XIyJv1SZ13tW1M9GCEOf
-         GbE4nWDS1TxhznLfj3dV8mzDOyUe1CuYwAZZkuqmCvIJkxzqImRLroYPNMRlPdI1mR2P
-         AZ01E4AdCF+Zzzk7grOo7x15/HDyInZN1Pyzfrm9xJBENYKcw9IhIWG58YCxMPdy+eWP
-         vI7kG3M9i3K5yarXNun5HL2Fwt/JAaUvIaN0nbuZtsg6gPIWEAW0u5I+KN+DDmH0NOqx
-         Q2M2YBKP6BhDjGG3ilGOnZG9ryDX8v84b9a/YCjCTbW920tF1T1rUT3L3l30eS1qE3Fr
-         PZAA==
-X-Gm-Message-State: AOAM531UsO2Dpq1rZYdNHU8mM1B0y29gbFAtNZ6Mt0rNtpzTy8anZKRo
-        mSmKJ050FzVJeMNMY7uBwcMniQ==
-X-Google-Smtp-Source: ABdhPJy5hC8TD6/VJePvsLep/Uc4MjPl96ghWdUNl7PHJFXrPu8m3WGr6PFKiyFJDLT/ez1xu4zycQ==
-X-Received: by 2002:a05:600c:5c1:: with SMTP id p1mr2710329wmd.31.1643736585242;
-        Tue, 01 Feb 2022 09:29:45 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id l29sm3800651wms.1.2022.02.01.09.29.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Feb 2022 09:29:44 -0800 (PST)
-Date:   Tue, 1 Feb 2022 17:29:42 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 08/10] ARM: uaccess: add __{get,put}_kernel_nofault
-Message-ID: <20220201172942.nxop6cjr3xfa4237@maple.lan>
-References: <20210726141141.2839385-1-arnd@kernel.org>
- <20210726141141.2839385-9-arnd@kernel.org>
- <Yd8P37V/N9EkwmYq@wychelm>
- <Yd8ZEbywqjXkAx9k@shell.armlinux.org.uk>
- <20220113094754.6ei6ssiqbuw7tfj7@maple.lan>
- <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
+        id S241685AbiBASCm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Feb 2022 13:02:42 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47722 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238942AbiBASCm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 13:02:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C51DB82F45;
+        Tue,  1 Feb 2022 18:02:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABB62C340EC;
+        Tue,  1 Feb 2022 18:02:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643738559;
+        bh=RgTrOkLtWsYqhbH1QGUsruLsxp4i3lng0IFmNIyILIA=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WbvjgAOKq1FdAloutmsFJGq4lawYZwKp9qs9UBoOXLsZ9mbNVJMw7xtakNCb/q9cU
+         0reqDdMiq1UO/sByG9insFKBqd2aJuhKlzD8PNPscX96G4AHYKpEKO5BekRnVnkBnk
+         ExjxkhLJRyg/vmDIJxzxIkvzMJTChHl2PbYAnWumNRTURGlurTZ2NPbY8RAGE0UwZC
+         E3A283h+eWrrtTk3oiav2Gg3E5mBIKmEk+BhvlXqeISWIQMrKyOyzGTimOBdMkcbu2
+         m88r2HNwDpsT+lH6h+yoEn/q9yzPV1yA5QHCHRBHhNtLpUKC67GFK/u0dtz9uhYOIA
+         /etjLJZCiNj/w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 7505B5C0326; Tue,  1 Feb 2022 10:02:39 -0800 (PST)
+Date:   Tue, 1 Feb 2022 10:02:39 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: [PATCH] tools/memory-model: Explain syntactic and semantic
+ dependencies
+Message-ID: <20220201180239.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220125172819.3087760-1-paul.heidekrueger@in.tum.de>
+ <YfBk265vVo4FL4MJ@rowland.harvard.edu>
+ <YfJ7Rr9Kdk4u78lt@Pauls-MacBook-Pro.local>
+ <YfLQmgsXp6pg0XIy@rowland.harvard.edu>
+ <YfMFQ5IZiGBRw7SH@Pauls-MacBook-Pro.local>
+ <YfMKlLInsK0Qr77f@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a0=OkFcKbL+utDPTPf+RskFNdR8Vt-3BEWkO9g_FqSj5w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfMKlLInsK0Qr77f@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jan 13, 2022 at 12:14:50PM +0100, Arnd Bergmann wrote:
-> On Thu, Jan 13, 2022 at 10:47 AM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> > On Wed, Jan 12, 2022 at 06:08:17PM +0000, Russell King (Oracle) wrote:
-> >
-> > > The kernel attempted to access an address that is in the userspace
-> > > domain (NULL pointer) and took an exception.
-> > >
-> > > I suppose we should handle a domain fault more gracefully - what are
-> > > the required semantics if the kernel attempts a userspace access
-> > > using one of the _nofault() accessors?
-> >
-> > I think the best answer might well be that, if the arch provides
-> > implementations of hooks such as copy_from_kernel_nofault_allowed()
-> > then the kernel should never attempt a userspace access using the
-> > _nofault() accessors. That means they can do whatever they like!
-> >
-> > In other words something like the patch below looks like a promising
-> > approach.
+On Thu, Jan 27, 2022 at 04:11:48PM -0500, Alan Stern wrote:
+> Paul Heidekrüger pointed out that the Linux Kernel Memory Model
+> documentation doesn't mention the distinction between syntactic and
+> semantic dependencies.  This is an important difference, because the
+> compiler can easily break dependencies that are only syntactic, not
+> semantic.
 > 
-> Right, it seems this is the same as on x86.
-
-Hmnn...
-
-Looking a bit deeper into copy_from_kernel_nofault() there is an odd
-asymmetry between copy_to_kernel_nofault(). Basically there is
-copy_from_kernel_nofault_allowed() but no corresponding
-copy_to_kernel_nofault_allowed() which means we cannot defend memory
-pokes using a helper function.
-
-I checked the behaviour of copy_to_kernel_nofault() on arm, arm64, mips,
-powerpc, riscv, x86 kernels (which is pretty much everything where I
-know how to fire up qemu). All except arm gracefully handle an
-attempt to write to userspace (well, NULL actually) with
-copy_to_kernel_nofault() so I think there still a few more changes
-to fully fix this.
-
-Looks like we would need a slightly more assertive change, either adding
-a copy_to_kernel_nofault_allowed() or modifying the arm dabt handlers to
-avoid faults on userspace access.
-
-Any views on which is better?
-
-
-Daniel.
-
+> This patch adds a few paragraphs to the LKMM documentation explaining
+> these issues and illustrating how they can matter.
 > 
-> > From f66a63b504ff582f261a506c54ceab8c0e77a98c Mon Sep 17 00:00:00 2001
-> > From: Daniel Thompson <daniel.thompson@linaro.org>
-> > Date: Thu, 13 Jan 2022 09:34:45 +0000
-> > Subject: [PATCH] arm: mm: Implement copy_from_kernel_nofault_allowed()
-> >
-> > Currently copy_from_kernel_nofault() can actually fault (due to software
-> > PAN) if we attempt userspace access. In any case, the documented
-> > behaviour for this function is to return -ERANGE if we attempt an access
-> > outside of kernel space.
-> >
-> > Implementing copy_from_kernel_nofault_allowed() solves both these
-> > problems.
-> >
-> > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+> Suggested-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 > 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> 
+> 
+> [as1970]
+> 
+> 
+>  tools/memory-model/Documentation/explanation.txt |   47 +++++++++++++++++++++++
+>  1 file changed, 47 insertions(+)
+> 
+> Index: usb-devel/tools/memory-model/Documentation/explanation.txt
+> ===================================================================
+> --- usb-devel.orig/tools/memory-model/Documentation/explanation.txt
+> +++ usb-devel/tools/memory-model/Documentation/explanation.txt
+> @@ -485,6 +485,53 @@ have R ->po X.  It wouldn't make sense f
+>  somehow on a value that doesn't get loaded from shared memory until
+>  later in the code!
+>  
+> +Here's a trick question: When is a dependency not a dependency?  Answer:
+> +When it is purely syntactic rather than semantic.  We say a dependency
+> +between two accesses is purely syntactic if the second access doesn't
+> +actually depend on the result of the first.  Here is a trivial example:
+> +
+> +	r1 = READ_ONCE(x);
+> +	WRITE_ONCE(y, r1 * 0);
+> +
+> +There appears to be a data dependency from the load of x to the store of
+> +y, since the value to be stored is computed from the value that was
+> +loaded.  But in fact, the value stored does not really depend on
+> +anything since it will always be 0.  Thus the data dependency is only
+> +syntactic (it appears to exist in the code) but not semantic (the second
+> +access will always be the same, regardless of the value of the first
+> +access).  Given code like this, a compiler could simply eliminate the
+> +load from x, which would certainly destroy any dependency.
+
+Are you OK with that last sentence reading as follows?
+
+	Given code like this, a compiler could simply discard the value
+	return by the load from x, which would certainly destroy any
+	dependency.
+
+My concern with the original is that it might mislead people into thinking
+that compilers can omit volatile loads.
+
+> +
+> +(It's natural to object that no one in their right mind would write code
+> +like the above.  However, macro expansions can easily give rise to this
+> +sort of thing, in ways that generally are not apparent to the
+> +programmer.)
+> +
+> +Another mechanism that can give rise to purely syntactic dependencies is
+> +related to the notion of "undefined behavior".  Certain program behaviors
+> +are called "undefined" in the C language specification, which means that
+> +when they occur there are no guarantees at all about the outcome.
+> +Consider the following example:
+> +
+> +	int a[1];
+> +	int i;
+> +
+> +	r1 = READ_ONCE(i);
+> +	r2 = READ_ONCE(a[r1]);
+> +
+> +Access beyond the end or before the beginning of an array is one kind of
+> +undefined behavior.  Therefore the compiler doesn't have to worry about
+> +what will happen if r1 is nonzero, and it can assume that r1 will always
+> +be zero without actually loading anything from i.
+
+And similarly here:
+
+	... and it can assume that r1 will always be zero regardless of
+	the value actually loaded from i.
+
+> +                                                   (If the assumption
+> +turns out to be wrong, the resulting behavior will be undefined anyway
+> +so the compiler doesn't care!)  Thus the load from i can be eliminated,
+> +breaking the address dependency.
+> +
+> +The LKMM is unaware that purely syntactic dependencies are different
+> +from semantic dependencies and therefore mistakenly predicts that the
+> +accesses in the two examples above will be ordered.  This is another
+> +example of how the compiler can undermine the memory model.  Be warned.
+> +
+>  
+>  THE READS-FROM RELATION: rf, rfi, and rfe
+>  -----------------------------------------
+
+Looks great otherwise, and thank you all for your work on this!
+
+Alan, would you like me to pull this in making those two changes and
+applying Akira's Reviewed-by, or would you prefer to send another version?
+
+For that matter, am I off base in my suggested changes.
+
+							Thanx, Paul
