@@ -2,155 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B25944A69CC
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Feb 2022 03:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0FF4A6A85
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Feb 2022 04:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243757AbiBBCC2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 1 Feb 2022 21:02:28 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46182 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242899AbiBBCC2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 21:02:28 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE2A0B82FE6;
-        Wed,  2 Feb 2022 02:02:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 588E1C340FA;
-        Wed,  2 Feb 2022 02:02:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643767344;
-        bh=Lu17CtWHMQyIMd+r/gZ3QnCD3blDyX01IGU77gYzPwo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rVuAgKNepQhlXkSgJ4nOfKqdZ1m2QgRk9ZkvH8SvfvWkeorNEQdY83E2n5eXKfc79
-         VCuJEViT4M9HIVIMPr3BsvqjoERHgklnIISy31sSuU4uK2OLJWs1IQstgOysSW8fQ3
-         A4+TDqM4i+9dG2f1hGh94TQRtV9FMnT0rwP8iPWmKTMSzCFTVSM/jumBKMQgjTroNE
-         +jwQ76K54dK8UrZ95Lj5eu9y4l1FTA2KToTqrC9gowaW+jPXRuZTVpoBs8+clZOz6I
-         Yl2FZr99TUgkOSak2L7h6irEIbDEWdhFCcdReiCBHO2TFXtVzEQRwjOz0Twz2ZkMOl
-         aMu8vburo8Amg==
-Received: by mail-ua1-f43.google.com with SMTP id c36so16481553uae.13;
-        Tue, 01 Feb 2022 18:02:24 -0800 (PST)
-X-Gm-Message-State: AOAM533gOtoCWxjkxw3H551eW3dWJnj2JZR1x01so7aWkCrxNCCP8d8W
-        g9ZTJWEKPD1ZzUgYkQXEwUpfci/uF2ujM3xPrps=
-X-Google-Smtp-Source: ABdhPJzjbMxJZrbhxn6pmM0yG+DXrY57H4w+bp7CFApaAn/IyFQRMevzGEcLPsnqGd8f9H2BAFJtp6v6SwrSYMY64Dg=
-X-Received: by 2002:a67:e0d9:: with SMTP id m25mr10551317vsl.51.1643767343232;
- Tue, 01 Feb 2022 18:02:23 -0800 (PST)
+        id S232869AbiBBD0l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 1 Feb 2022 22:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232403AbiBBD0k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 1 Feb 2022 22:26:40 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEAFC061714
+        for <linux-arch@vger.kernel.org>; Tue,  1 Feb 2022 19:26:40 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id bu18so37903740lfb.5
+        for <linux-arch@vger.kernel.org>; Tue, 01 Feb 2022 19:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+SKILI7HGRrVf/hkaIAvXfAqMW5LQDJ9EGnfwOuZpgw=;
+        b=pEwd8f9PeaSBB8Zj1gTlGnPqR8mR45BFmL4xqnUTWk0C7A+YFsMiFY1TLnv62qpG9/
+         NY5q5Bwmix8tnK7IjShuSaoj6T37K45bZanxgdjfH3To44VbI2I9dQidVmqiEwFHKY2C
+         Uy8DFo+waX+fzxKt4XOoAhq8WzeT5o9HbsvqdVUasRjXOUgLbzVEv+l74IGCxSOnYYnv
+         27OpZa0is284mKbWKXE+3YqLjBHQmC1kdrq1a+lDr91hqd5wABJPcMG0q881pHlPQ+bd
+         k0yEmxZTrYaJh/tDhPRd6iamiuT9bq5v2ED+TUCYqujERZ7KT+KNKzDxsPM9/G3Uadxy
+         57QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+SKILI7HGRrVf/hkaIAvXfAqMW5LQDJ9EGnfwOuZpgw=;
+        b=hb7EqM5fsTN/25NR03xKoU5d4JKU/gddP6RUemGsxCmoPeLTxwieqKqFayUV483Bd0
+         7jBMhIjRNxNHvbJJJIdB5b8LBDvV0s6M+rUOXOOBWTc8neK1rdRm+JYzpjqyp27ZanKf
+         EsHv68aw4Zv7PfU3Lwn6MGjWKxoA8IiNCPyNBdzbG5mjBfRGzYigaDKSbLZmhDE1q2t5
+         jHkGSd4jU5szlfxvgwMeB9MhtvJXQV9xs4SRo6kPEN5NjLQS1zYKPDAEDFpcumWToFVh
+         usta2QoyEyrVWdBJyoExIm1bPaCeDut+X2iSvpy/U1rAvJt5/ywL4RJvqHF/wOjkekPj
+         gWoQ==
+X-Gm-Message-State: AOAM531Q3XQqknUj10lppG/lUV0U94vkYwqSlnK5NpvmtmuBGLGkmzmb
+        0zAf429WL8cV2qdoO0L1ZTYcZyNdy2IYl9nhHDbclg==
+X-Google-Smtp-Source: ABdhPJzGCzxLyCiuASMGhG1nk+TgDdnzDKTuBGX5bUzbsZYiFbOtvOzGpw/xfC6/TIPrTSSNiEARR0XQqyI8sOvsKc0=
+X-Received: by 2002:ac2:4e10:: with SMTP id e16mr22367013lfr.444.1643772398308;
+ Tue, 01 Feb 2022 19:26:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20220201150545.1512822-1-guoren@kernel.org> <20220201150545.1512822-16-guoren@kernel.org>
-In-Reply-To: <20220201150545.1512822-16-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 2 Feb 2022 10:02:12 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSpz94OBM_Ob92MdGOHt7p2akPS0Jco9B0rC0XJToh0eg@mail.gmail.com>
-Message-ID: <CAJF2gTSpz94OBM_Ob92MdGOHt7p2akPS0Jco9B0rC0XJToh0eg@mail.gmail.com>
-Subject: Re: [PATCH V5 15/21] riscv: compat: Add hw capability check for elf
-To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
+References: <20220131225250.409564-1-ndesaulniers@google.com>
+ <CAMj1kXHz9psgjP7qQpusLOOL5Nm7TO+LauD_-mK=Fxe_g7mmsQ@mail.gmail.com>
+ <CAKwvOdnkGfeBBE2NW_FKSzmZSjCJXc2801qvvOuyu+JL+m+VZQ@mail.gmail.com> <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com>
+In-Reply-To: <CAMj1kXFnUuWLyy5q-fAV1jwZobTCNHqhKSN3mF98frsJ4ai4Ow@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 1 Feb 2022 19:26:25 -0800
+Message-ID: <CAKwvOdn0C4Mt=Nb-HjLQtrsJ=X6zqgMssVHT_2QeZpnjb=-HhA@mail.gmail.com>
+Subject: Re: [PATCH] docs/memory-barriers.txt: volatile is not a barrier() substitute
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>, llvm@lists.linux.dev,
+        Kees Cook <keescook@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Len Baker <len.baker@gmx.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 1, 2022 at 11:07 PM <guoren@kernel.org> wrote:
+On Tue, Feb 1, 2022 at 2:15 PM Ard Biesheuvel <ardb@kernel.org> wrote:
 >
-> From: Guo Ren <guoren@linux.alibaba.com>
+> On Tue, 1 Feb 2022 at 20:40, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > On Tue, Feb 1, 2022 at 1:32 AM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > >
+> > > On Mon, 31 Jan 2022 at 23:53, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > > >
+> > > > +     around an asm statement so long as clobbers are not violated. For example,
+> > > > +
+> > > > +       asm volatile ("");
+> > > > +       flag = true;
+> > > > +
+> > > > +     May be modified by the compiler to:
+> > > > +
+> > > > +       flag = true;
+> > > > +       asm volatile ("");
+> > > > +
+> > > > +     Marking an asm statement as volatile is not a substitute for barrier(),
+> > > > +     and is implicit for asm goto statements and asm statements that do not
+> > > > +     have outputs (like the above example). Prefer either:
+> > > > +
+> > > > +       asm ("":::"memory");
+> > > > +       flag = true;
+> > > > +
+> > > > +     Or:
+> > > > +
+> > > > +       asm ("");
+> > > > +       barrier();
+> > > > +       flag = true;
+> > > > +
+> > >
+> > > I would expect the memory clobber to only hazard against the
+> > > assignment of flag if it results in a store, but looking at your
+> > > Godbolt example, this appears to apply even if flag is kept in a
+> > > register.
+> > >
+> > > Is that behavior documented/codified anywhere? Or are we relying on
+> > > compiler implementation details here?
+> >
+> > https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Volatile
+> > "Note that the compiler can move even volatile asm instructions
+> > relative to other code, including across jump instructions."
+> >
 >
-> Detect hardware COMPAT (32bit U-mode) capability in rv64. If not
-> support COMPAT mode in hw, compat_elf_check_arch would return
-> false by compat_binfmt_elf.c
+> That doesn't really answer my question. We are documenting here that
+> asm volatile does not prevent reordering but non-volatile asm with a
+> "memory" clobber does, and even prevents reordering of instructions
+> that do not modify memory to begin with.
 >
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/riscv/include/asm/elf.h |  3 ++-
->  arch/riscv/kernel/process.c  | 32 ++++++++++++++++++++++++++++++++
->  2 files changed, 34 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-> index aee40040917b..3a4293dc7229 100644
-> --- a/arch/riscv/include/asm/elf.h
-> +++ b/arch/riscv/include/asm/elf.h
-> @@ -40,7 +40,8 @@
->   * elf64_hdr e_machine's offset are different. The checker is
->   * a little bit simple compare to other architectures.
->   */
-> -#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
-> +extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
-> +#define compat_elf_check_arch  compat_elf_check_arch
->
->  #define CORE_DUMP_USE_REGSET
->  #define ELF_EXEC_PAGESIZE      (PAGE_SIZE)
-> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> index 1a666ad299b4..758847cba391 100644
-> --- a/arch/riscv/kernel/process.c
-> +++ b/arch/riscv/kernel/process.c
-> @@ -83,6 +83,38 @@ void show_regs(struct pt_regs *regs)
->                 dump_backtrace(regs, NULL, KERN_DEFAULT);
->  }
->
-> +#ifdef CONFIG_COMPAT
-> +static bool compat_mode_support __read_mostly;
-> +
-> +bool compat_elf_check_arch(Elf32_Ehdr *hdr)
-> +{
-> +       if (compat_mode_support && (hdr->e_machine == EM_RISCV))
-> +               return true;
-> +       else
-> +               return false;
-> +}
-> +
-> +static int compat_mode_detect(void)
-Forgot __init, here
+> Why is it justified to rely on this undocumented behavior?
 
-> +{
-> +       unsigned long tmp = csr_read(CSR_STATUS);
-> +
-> +       csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
-> +
-> +       if ((csr_read(CSR_STATUS) & SR_UXL) != SR_UXL_32) {
-> +               pr_info("riscv: 32bit compat mode detect failed\n");
-> +               compat_mode_support = false;
-> +       } else {
-> +               compat_mode_support = true;
-> +               pr_info("riscv: 32bit compat mode detected\n");
-> +       }
-> +
-> +       csr_write(CSR_STATUS, tmp);
-> +
-> +       return 0;
-> +}
-> +arch_initcall(compat_mode_detect);
-> +#endif
-> +
->  void start_thread(struct pt_regs *regs, unsigned long pc,
->         unsigned long sp)
->  {
-> --
-> 2.25.1
->
+I see your point.  You're right, I couldn't find anywhere where such
+behavior was specified.  So the suggestion to use barrier() would rely
+on unspecified behavior and should not be suggested.
 
-
+Probably worth still mentioning that `volatile` qualifying an asm
+statement doesn't prevent such reordering in this document somehow,
+and perhaps that it's (currently) unspecified whether a barrier() can
+prevent re-ordering with regards to non-memory-modifying instructions.
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Thanks,
+~Nick Desaulniers
