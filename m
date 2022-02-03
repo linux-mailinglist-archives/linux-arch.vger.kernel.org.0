@@ -2,66 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C03F4A90A2
-	for <lists+linux-arch@lfdr.de>; Thu,  3 Feb 2022 23:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE734A90C2
+	for <lists+linux-arch@lfdr.de>; Thu,  3 Feb 2022 23:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355801AbiBCWYV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 3 Feb 2022 17:24:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiBCWYV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 3 Feb 2022 17:24:21 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728ADC061714;
-        Thu,  3 Feb 2022 14:24:20 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id u13so6345413oie.5;
-        Thu, 03 Feb 2022 14:24:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PlIDP1o24LdMRWZjnewjhrwwRT0kaZCiZatY+bUHhaE=;
-        b=Pa/zmtlEee6Bkck7BMVEfXmMkzXP7n3Zhw3ZwUFdHgIL06epfTuIRhs4L5f2erOEv6
-         /CSfNsvyXtX4OQ1s9KNuwxEBa/qJnLh1Ge66zdYYJ721V6+XtZhzbma5yb3YWhAySLpO
-         H0ah0BjAz1rrJGsnye3ObO+TY6qHSGQijiMCZdIt+nZ6qRGbfB5YpP/dzN+hq+YELDyD
-         N50HGOsgS8Wlm8RvKWigiNb0k4VWtS5FF8Ll9SRXU2rPD0AU4sAd63KiX5N4AlqvD5ZX
-         /Ul8gq4dI1BoIhfu6q46m+cmamckrA25fKM3V1Q4jgQq17TVecEoOQT21aGzRqwxevJ2
-         L7lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PlIDP1o24LdMRWZjnewjhrwwRT0kaZCiZatY+bUHhaE=;
-        b=Zq/vNshbTfyq5r+Ys9kul9q0S1EHYA7iRnE/2eynaSBwSbMGIz35NwkIJtrfmF6G/1
-         gO1N0TuxN6zBCAV8FyNqIBvXq4ls8zAkS/ykSnQJdGS+z9KDK9c09lRdJ4wF/QwW2MHq
-         YeNRc42Yd7t1BV2/DF/4GWnzhfYNDYTT9xKGL7cYomDGr227QfZLnwUOfmkDvbo8IunJ
-         kTzzDwih18+PSCeSA18f5tkp9MmFSPpYqMLWq5V0o6WFT/5gv0xhcFo0xyxm2cdnWOOn
-         jsQNd4ScE/FjO1ZXrK/hR+38Sz0yTBMd1UEsFiHAAqxQc5saNHbxeX7IpO6XOzIBlCgb
-         kLyQ==
-X-Gm-Message-State: AOAM532OVbYp0Rd2loauIpXarKeJNUioVIRJt2MH9zryeq1RJzdnns8/
-        Z2W7snjJ5veH38Xbn3uclH7LnFXhE1aGttKPSvI=
-X-Google-Smtp-Source: ABdhPJxQMlUvdTyiQLXOpNnctVTARflweiNDaSMIW0AFhqFvwNhPdZo0t9yaOB/Az2gV2bKgrg4Dh4u4r8V8CstSTVQ=
-X-Received: by 2002:a05:6808:159e:: with SMTP id t30mr27686oiw.132.1643927059755;
- Thu, 03 Feb 2022 14:24:19 -0800 (PST)
+        id S235644AbiBCWmj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 3 Feb 2022 17:42:39 -0500
+Received: from mga07.intel.com ([134.134.136.100]:43030 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233162AbiBCWmi (ORCPT <rfc822;linux-arch@vger.kernel.org>);
+        Thu, 3 Feb 2022 17:42:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1643928158; x=1675464158;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=hy/RLCWe0cRSgQ/BO6pCCoutmThN1jchwoR0BruyloE=;
+  b=leB0RL3GfKNKebEDBDo29GGL0HfgCF+KPiBZjDwfRijzdSsnExH+sW5/
+   T0lQe1FQfoqR6xZWySe56wulk2Ej5SaH2ctEvdk/N4B1lAdBknL/MB87P
+   0gvzYwLMZ786pAqLNbxx1Xf+lVt9faIkOCIYLfCf/By3JFxB5D96eT/ot
+   4SBI70Lu1vCOTmbafdV1furIdMZxDIRok6AbPwXvlGukayHUO/1OM6je4
+   rr2j6SGih/61dQB1fEglwU+q4PQ9vAwX5qboxM0acwMNQ0/W2Rm4oFjOR
+   fCpIe3HSgCIBkb0UukhKR4CLZut8+4K35KujLqsIl0Hi8AfmET91MXWNI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10247"; a="311573272"
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="311573272"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 14:42:37 -0800
+X-IronPort-AV: E=Sophos;i="5.88,340,1635231600"; 
+   d="scan'208";a="498307414"
+Received: from oshoron-mobl.amr.corp.intel.com (HELO [10.209.125.125]) ([10.209.125.125])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2022 14:42:35 -0800
+Message-ID: <e8e1501a-fdb4-0b8b-21a6-3bea1c6d9016@intel.com>
+Date:   Thu, 3 Feb 2022 14:42:33 -0800
 MIME-Version: 1.0
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-36-rick.p.edgecombe@intel.com> <YfxQGRV6axGQ8bBC@dell9853host>
-In-Reply-To: <YfxQGRV6axGQ8bBC@dell9853host>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Thu, 3 Feb 2022 14:23:43 -0800
-Message-ID: <CAMe9rOqwby=p3w7L7kgDUhZPzLksYEZcyKLbWOafEYaazWgyBg@mail.gmail.com>
-Subject: Re: [PATCH 35/35] x86/cpufeatures: Limit shadow stack to Intel CPUs
-To:     John Allen <john.allen@amd.com>
-Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
@@ -70,7 +53,8 @@ Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Eugene Syromiatnikov <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
         Kees Cook <keescook@chromium.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Nadav Amit <nadav.amit@gmail.com>,
@@ -81,35 +65,35 @@ Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, Kostya Serebryany <kcc@google.com>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com
+Cc:     Yu@linux.intel.com, Yu-cheng <yu-cheng.yu@intel.com>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-34-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 33/35] selftests/x86: Add map_shadow_stack syscall test
+In-Reply-To: <20220130211838.8382-34-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 3, 2022 at 1:58 PM John Allen <john.allen@amd.com> wrote:
->
-> On Sun, Jan 30, 2022 at 01:18:38PM -0800, Rick Edgecombe wrote:
-> > Shadow stack is supported on newer AMD processors, but the kernel
-> > implementation has not been tested on them. Prevent basic issues from
-> > showing up for normal users by disabling shadow stack on all CPUs except
-> > Intel until it has been tested. At which point the limitation should be
-> > removed.
->
-> Hi Rick,
->
-> I have been testing Yu-Cheng's patchsets on AMD hardware and I am
-> working on testing this version now. How are you testing this new
-> series? I can partially test by calling the prctl enable for shadow
-> stack directly from a program, but I'm not sure how useful that's going
-> to be without the glibc support. Do you have a public repo with the
-> necessary glibc changes to enable shadow stack early?
->
+On 1/30/22 13:18, Rick Edgecombe wrote:
+> Add a simple selftest for exercising the new map_shadow_stack syscall.
 
-The glibc CET branch is at
+This is a good start for the selftest.  But, it would be really nice to
+see a few additional smoke tests in here that are independent of the
+library support.
 
-https://gitlab.com/x86-glibc/glibc/-/commits/users/hjl/cet/master
+For instance, it would be nice to have tests that:
 
--- 
-H.J.
+1. Write to the shadow stack with normal instructions (and recover from
+   the inevitable SEGV).  Make sure the siginfo looks like we expect.
+2. Corrupt the regular stack, or maybe just use a retpoline
+   do induce a shadow stack exception.  Ditto on checking the siginfo
+3. Do enough CALLs that will likely trigger a fault and an on-demand
+   shadow stack page allocation.
+
+That will test the *basics* and should be pretty simple to write.
+
