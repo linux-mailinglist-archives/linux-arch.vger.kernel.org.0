@@ -2,144 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A224A9353
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Feb 2022 06:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8344A98F6
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Feb 2022 13:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbiBDFUe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Feb 2022 00:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S1348709AbiBDMKK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Feb 2022 07:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235223AbiBDFUd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Feb 2022 00:20:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4528C061714;
-        Thu,  3 Feb 2022 21:20:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 50EE6B83686;
-        Fri,  4 Feb 2022 05:20:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EBAC004E1;
-        Fri,  4 Feb 2022 05:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643952030;
-        bh=YyMGbf0ZqsvTYLYfTUApEeUhPl/FcV973WctliE1Z1o=;
-        h=In-Reply-To:References:Date:From:To:Subject:From;
-        b=buPrFU01CDWVER/ma7HTnZDh7CghXByYF3YXoGL+umOx8QYZ4RlIyIGdjEbYBhZfS
-         H+gFtOcVzQ8zLMhtb4xkd2N72QVwnBbts/XFuNmR9zcTk+sKhXxqOls2+aY/8k71Zw
-         0NaMBEcFMX1dWKQ52IP7ra3tUzVN6K201fnXQNoDXS+/hcLzh+XrcRUa4xJIwwqojJ
-         eMblXiA1zoYA4YgCHlQGxYJc0kPdMcRt05JAXeS96mzKctLpBpIJncT9lRo49floaL
-         d4g8BWOB16tblCO6IgKY5cg3OWSPxlzKrWClrXrLlEwXB1bhWE8D+cKnqq1+jg8DZ3
-         VMjOCarg8VLCw==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 2CDBC27C0054;
-        Fri,  4 Feb 2022 00:20:27 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute5.internal (MEProxy); Fri, 04 Feb 2022 00:20:27 -0500
-X-ME-Sender: <xms:mrf8YVbTm8_pmK_MvOR8hk6Aju6RFy_Zj2fpvrrrGl4r1R_8RiQFEg>
-    <xme:mrf8YcZbdhS0VJHuEqEWUHviIs4UmPJUOJQRbiqSyuzrGO_ewyz1EN-GvBW0g0qen
-    e7OFM3xJLVYuv-4f0U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrgeekgdekvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehnugih
-    ucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecuggftrf
-    grthhtvghrnheptdfhheettddvtedvtedugfeuuefhtddugedvleevleefvdetleffgfef
-    vdekgeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudekheei
-    fedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrd
-    hluhhtohdruhhs
-X-ME-Proxy: <xmx:mrf8YX9PwVICYj5qH6i_Q6FA_NJFrHD25Sm76qBdsm30PwiVUV2N0A>
-    <xmx:mrf8YTpfspnCSqmjVQRKLp3C1gc9XD4BK3b06eKjb7IB1T8hpAGkiw>
-    <xmx:mrf8YQpsPATUCd9qUrXZL34GvGc5O0GY9VC-OihFIJCdFDlVUEVn4A>
-    <xmx:m7f8YUDtAIoRWtGvTdv_-mow5CBI5EaFKojcYhLnXiq5zCDqiR8h_R2RVx4>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EDE8721E006E; Fri,  4 Feb 2022 00:20:25 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4586-g104bd556f9-fm-20220203.002-g104bd556
-Mime-Version: 1.0
-Message-Id: <6b04d8cb-844e-42a5-9ea2-db0e8eafaa19@www.fastmail.com>
-In-Reply-To: <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
-References: <87fsozek0j.ffs@tglx>
- <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
-Date:   Thu, 03 Feb 2022 21:20:05 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Balbir Singh" <bsingharora@gmail.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Eugene Syromiatnikov" <esyr@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Florian Weimer" <fweimer@redhat.com>,
-        "Nadav Amit" <nadav.amit@gmail.com>,
-        "Jann Horn" <jannh@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Oleg Nesterov" <oleg@redhat.com>, "H.J. Lu" <hjl.tools@gmail.com>,
-        "Weijiang Yang" <weijiang.yang@intel.com>,
-        "Pavel Machek" <pavel@ucw.cz>, "Arnd Bergmann" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Mike Kravetz" <mike.kravetz@oracle.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Dave Martin" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Linux API" <linux-api@vger.kernel.org>,
-        "Cyrill Gorcunov" <gorcunov@gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Content-Type: text/plain
+        with ESMTP id S1347976AbiBDMKJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Feb 2022 07:10:09 -0500
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70946C061714
+        for <linux-arch@vger.kernel.org>; Fri,  4 Feb 2022 04:10:09 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id a8so18720931ejc.8
+        for <linux-arch@vger.kernel.org>; Fri, 04 Feb 2022 04:10:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=r2Ws6xRbNpqlKYkUgkX1lPpc6GjEar8sa1UbtAiXfsw=;
+        b=N5e0Vrgh2WJXkybvKOhQsPRdobz3o2UIAkmTfkNq6PFiJPJ1FDhK//DliHwn+YvtXi
+         fQm5WDzaAEXL4GZ8lZtdQig8/SCp/1JRURM9Z6SV9e3SnQGHXm2Fo5Mcuj01419HXSxP
+         DkDTOzOB7wLXF1lkopzz13s8ljk8Bqd2A5fmUzrwZ3my3UnINAEX17hJ9bfEj5sfoyJy
+         hrenhiLP0Y4FGcHV/3aue0lq9OpQjsQMKeZjAi5KhFcLYc0FIx6CZRNSHF135F88j4du
+         IfiI0MT5RjxOifRCLFv9uahlO7B0Ho86kw2iy656zbmIDFP+8YUjIw8SWUkidjs8VU6X
+         4qUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=r2Ws6xRbNpqlKYkUgkX1lPpc6GjEar8sa1UbtAiXfsw=;
+        b=LMHbReyI2d5bCaayJT5Myx+olEnlavCfEtdhhqlAJ1vwyUjVPhH+ARPv6hD1GyTzZ1
+         hxwk/sup2UAy8CTO6yj9dUphc6M4UNVvRyI8iNed8abpKD25PsxoShB6uhu3hFqZckvh
+         +rWsbyZ4c0eEqAEcehg3vP7wuEuoiSDi8eQN9P1IlanNwhpAC+Xl2uGj1zKBnyC4qG2g
+         4Ip8hjEI0mkFA8BRphctMDKErOKNxudOZTm/WFvjzabbHo1LOa40a0pEcH+lueWTVRSs
+         94puhJdfWAPcRF+w9jGbbLgS6PGktJXgmvu9fzMnnyxiXFXwTlBIAGVDDubIZYoV5mAR
+         3NAw==
+X-Gm-Message-State: AOAM530DKvLPDZ7cq30lJkrFk4fxg5BuFoZnrmxCU7Dkty8TEEs0waFm
+        tR9e24BW3OJNlfiHRV3fRV0wf7H6ItklcRCUGC8=
+X-Google-Smtp-Source: ABdhPJzg3skp0FMzD6l3jdmJJBZsj6Xhr3cDfIje3E/NbxeMY7jmlbmIkdsd6NjVjehisL6wY04yYjpZSaJwy8xswsw=
+X-Received: by 2002:a17:906:99c6:: with SMTP id s6mr2407936ejn.522.1643976607729;
+ Fri, 04 Feb 2022 04:10:07 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a55:8f0d:0:b0:141:fd83:3c65 with HTTP; Fri, 4 Feb 2022
+ 04:10:07 -0800 (PST)
+Reply-To: interpolnig@yahoo.com
+From:   Emmanel Maduka <adelabupatrick00@gmail.com>
+Date:   Fri, 4 Feb 2022 13:10:07 +0100
+Message-ID: <CAGEqQ8H3cSsH+2ancO--h_7pAmQGpu2ZvpcVObuzg9u3a7XR8w@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+--=20
+INTERPOL WESTAFRIKA, UNTERREGION, ABUJA NIGERIA
+Antworten Sie an unsere direkte E-Mail-Adresse: interpolnig@yahoo.com
 
+Achtung Beg=C3=BCnstigter,
 
-On Thu, Feb 3, 2022, at 5:08 PM, Edgecombe, Rick P wrote:
-> Hi Thomas,
+Wir machen Sie auf die Verhaftung von zwei Betr=C3=BCgern aufmerksam, die
+Ausl=C3=A4nder mit der Absicht betrogen haben, ihnen Spendenzusch=C3=BCsse,
+Darlehen, Liebesbetrug, gef=C3=A4lschte Lotteriegewinne,
+Investitionsvorschl=C3=A4ge, Geldautomatenkarten, Bankschecks,
+Geld=C3=BCberweisungen, Angeh=C3=B6rige usw. Wir verhafteten sie aufgrund d=
+er
+Berichte, die wir von verschiedenen Personen aus Afrika, Europa, Asien
+und Amerika erhielten.
 
->> >        Signals
->> >        -------
->> >        Originally signals placed the location of the shadow stack
->> > restore 
->> >        token inside the saved state on the stack. This was
->> > problematic from a 
->> >        past ABI promises perspective.
+W=C3=A4hrend des Verh=C3=B6rs haben sie ein Gest=C3=A4ndnis abgegeben, dass=
+ es ihnen
+gelungen ist, so viele Menschen mit ihren L=C3=BCgen und anderen
+Vorschl=C3=A4gen zu betr=C3=BCgen, und wir haben herausgefunden, dass Sie e=
+ines
+ihrer Opfer waren. Wir beschlagnahmten ihre Besitzt=C3=BCmer und verkauften
+sie, und die nigerianische Regierung sagte, wir sollten ihre zwanzig
+Opfer mit dem Geld entsch=C3=A4digen, das aus ihren beschlagnahmten
+Besitzt=C3=BCmern stammt, und auch mit dem Geld, das wir von ihren
+Bankkonten zur=C3=BCckerhalten haben.
 
-What was the actual problem?
+Wir haben 250.000,00 US-Dollar f=C3=BCr jeden von Ihnen vorgesehen, der
+zuf=C3=A4llig ihr Opfer ist. Sie m=C3=BCssen uns Ihren vollst=C3=A4ndigen N=
+amen, Ihr
+Geschlecht, Ihr Alter, Ihren Familienstand, eine Kopie Ihres g=C3=BCltigen
+Personalausweises, Ihre Telefonnummer, Ihre Privatadresse, Ihr Land,
+Ihren Beruf und Ihre Bankkontodaten mitteilen, die Sie verwenden
+werden, um Ihre zur=C3=BCckgeforderte Entsch=C3=A4digung zu erhalten Mittel=
+.
 
->> > So the restore location was
->> > instead just 
->> >        assumed from the shadow stack pointer. This works because in
->> > normal 
->> >        allowed cases of calling sigreturn, the shadow stack pointer
->> > should be 
->> >        right at the restore token at that time. There is no
->> > alternate shadow 
->> >        stack support. If an alt shadow stack is added later we
->> > would
->> >        need to
->> 
->> So how is that going to work? altstack is not an esoteric corner
->> case.
->
-> My understanding is that the main usages for the signal stack were
-> handling stack overflows and corruption. Since the shadow stack only
-> contains return addresses rather than large stack allocations, and is
-> not generally writable or pivotable, I thought there was a good
-> possibility an alt shadow stack would not end up being especially
-> useful. Does it seem like reasonable guesswork?
+Es tut uns leid, was Sie in den H=C3=A4nden dieser Betr=C3=BCger durchgemac=
+ht
+haben m=C3=BCssen. Hoffe bald von dir zu h=C3=B6ren.
 
-It's also used for things like DOSEMU that execute in a weird context and then trap back out to the outer program using a signal handler and an altstack.  Also, imagine someone writing a SIGSEGV handler specifically intended to handle shadow stack overflow.
+BEACHTEN SIE, DASS SIE IHRE ANTWORT AN UNSERE DIREKTE E-MAIL-ADRESSE
+SENDEN M=C3=9CSSEN: interpolnig@yahoo.com
 
-The shadow stack can be pivoted using RSTORSSP.
+Gr=C3=BC=C3=9Fe,
+Inspektor Emmanuel Maduka
+Antworten Sie an unsere direkte E-Mail-Adresse: interpolnig@yahoo.com
