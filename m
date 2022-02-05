@@ -2,28 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20424AA91D
-	for <lists+linux-arch@lfdr.de>; Sat,  5 Feb 2022 14:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 442A34AA925
+	for <lists+linux-arch@lfdr.de>; Sat,  5 Feb 2022 14:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379971AbiBEN1Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 5 Feb 2022 08:27:16 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:49408 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240644AbiBEN1Q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Feb 2022 08:27:16 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-123-BRt4ukDkO9O74xW5paCCLg-1; Sat, 05 Feb 2022 13:27:02 +0000
-X-MC-Unique: BRt4ukDkO9O74xW5paCCLg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Sat, 5 Feb 2022 13:27:00 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Sat, 5 Feb 2022 13:27:00 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Edgecombe, Rick P'" <rick.p.edgecombe@intel.com>,
+        id S1379978AbiBENad (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 5 Feb 2022 08:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379977AbiBENad (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 5 Feb 2022 08:30:33 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514FEC061346;
+        Sat,  5 Feb 2022 05:30:32 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id i65so7562540pfc.9;
+        Sat, 05 Feb 2022 05:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kydsOHNHODshkDxPY7KvU0T0IWce/j+hWlmL4kU26hI=;
+        b=RKaNDuRkyI2bk8AGGSwckT9GYuOeNpXNRbewTWqagxKeEQQCi+l7Ec9Qj/N1DNO7md
+         VFz2Plibf/8/YpjBb5V7C1g+xCf+UaNYZdw6ivLxmQSMWJ3QyZynQjR2G/dHkkIAbce8
+         R3+Cwa4/UHYWr/iiRQXbTeiQpMJ1l8fT9cBYPDIaCzToTFeL3xP/1bUNMnOn9sOc7013
+         tnyo4DnivzwYVatgawIoo5IgFry9EOQRXHtMniidsmmzittuV2ldYObiu9EuX6Ih2Z2w
+         YsMCG6UvfVv/J2ZKkR7fRppR12p90ArFdzB+fMMOSqdVnTtxUtH1gQeVmAUJe8oRp3c/
+         X7zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kydsOHNHODshkDxPY7KvU0T0IWce/j+hWlmL4kU26hI=;
+        b=Xv0gYqogiF3uc2nBSI6KRahRVRlQRxiiXsCckNl3cy8zzJse1GiPOPakkQNbY8Yzbz
+         b9/3TIc6qcCQDbepLbJIBWZq7xnXOV1WfhF9R4mBICgK+rAxqavX8KHfA04vpYMb6mLK
+         bDjbg+iNkjVlXpSV3LxCuhp+fgBG3+9dXfAdjNvxQU3/XA0PxKaGAxaZ3VCd/LcdCzlL
+         YPYuLT4CMui8w9BIGYtjngG02+z6uTf9g0xGNbdiEHpGw8tJ2Fav/pOEdE2U6RMC2vam
+         fYWU/Uzl367PCML+LIxaoIYocSMVuGtlrJtVDIR//HMAxTtYxIK2HestF1TX85a5ql31
+         ExAA==
+X-Gm-Message-State: AOAM533r9UN6e9FkSqNUYr2xGqU4noEj+VKtDmRiQa7kslZvX4q1XBEg
+        ZHdB7K/Entju8eQsznMQ6WmGyGwr09gpOaYwntQ=
+X-Google-Smtp-Source: ABdhPJyUTAk4OgpIaaZWXAtlcw4ZBvWQBeU1t9V5Qf8CMIAguE7Ql+OB2GPB1vX3j9em0xP40euVrtxAZQCOIjfRI1s=
+X-Received: by 2002:aa7:888b:: with SMTP id z11mr7863984pfe.76.1644067831456;
+ Sat, 05 Feb 2022 05:30:31 -0800 (PST)
+MIME-Version: 1.0
+References: <87fsozek0j.ffs@tglx> <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
+ <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com>
+In-Reply-To: <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Sat, 5 Feb 2022 05:29:55 -0800
+Message-ID: <CAMe9rOonepEiRyoAyTGkDMQQhuyuoP4iTZJJhKGxgnq9vv=dLQ@mail.gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
         "bsingharora@gmail.com" <bsingharora@gmail.com>,
         "hpa@zytor.com" <hpa@zytor.com>,
         "Syromiatnikov, Eugene" <esyr@redhat.com>,
@@ -40,7 +69,6 @@ To:     "'Edgecombe, Rick P'" <rick.p.edgecombe@intel.com>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
         "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
         "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
         "Yang, Weijiang" <weijiang.yang@intel.com>,
         "Lutomirski, Andy" <luto@kernel.org>,
         "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
@@ -57,73 +85,77 @@ To:     "'Edgecombe, Rick P'" <rick.p.edgecombe@intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: RE: [PATCH 00/35] Shadow stacks for userspace
-Thread-Topic: [PATCH 00/35] Shadow stacks for userspace
-Thread-Index: AQHYFh9orVaVUe6rNECZu4edjJzhZqyCV/wAgABDLwCAAl19kA==
-Date:   Sat, 5 Feb 2022 13:26:59 +0000
-Message-ID: <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com>
-References: <87fsozek0j.ffs@tglx>
- <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
-In-Reply-To: <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogRWRnZWNvbWJlLCBSaWNrIFANCj4gU2VudDogMDQgRmVicnVhcnkgMjAyMiAwMTowOA0K
-PiBIaSBUaG9tYXMsDQo+IA0KPiBUaGFua3MgZm9yIGZlZWRiYWNrIG9uIHRoZSBwbGFuLg0KPiAN
-Cj4gT24gVGh1LCAyMDIyLTAyLTAzIGF0IDIyOjA3ICswMTAwLCBUaG9tYXMgR2xlaXhuZXIgd3Jv
-dGU6DQo+ID4gPiBVbnRpbCBub3csIHRoZSBlbmFibGluZyBlZmZvcnQgd2FzIHRyeWluZyB0byBz
-dXBwb3J0IGJvdGggU2hhZG93DQo+ID4gPiBTdGFjayBhbmQgSUJULg0KPiA+ID4gVGhpcyBoaXN0
-b3J5IHdpbGwgZm9jdXMgb24gYSBmZXcgYXJlYXMgb2YgdGhlIHNoYWRvdyBzdGFjaw0KPiA+ID4g
-ZGV2ZWxvcG1lbnQgaGlzdG9yeQ0KPiA+ID4gdGhhdCBJIHRob3VnaHQgc3Rvb2Qgb3V0Lg0KPiA+
-ID4NCj4gPiA+ICAgICAgICBTaWduYWxzDQo+ID4gPiAgICAgICAgLS0tLS0tLQ0KPiA+ID4gICAg
-ICAgIE9yaWdpbmFsbHkgc2lnbmFscyBwbGFjZWQgdGhlIGxvY2F0aW9uIG9mIHRoZSBzaGFkb3cg
-c3RhY2sNCj4gPiA+IHJlc3RvcmUNCj4gPiA+ICAgICAgICB0b2tlbiBpbnNpZGUgdGhlIHNhdmVk
-IHN0YXRlIG9uIHRoZSBzdGFjay4gVGhpcyB3YXMNCj4gPiA+IHByb2JsZW1hdGljIGZyb20gYQ0K
-PiA+ID4gICAgICAgIHBhc3QgQUJJIHByb21pc2VzIHBlcnNwZWN0aXZlLiBTbyB0aGUgcmVzdG9y
-ZSBsb2NhdGlvbiB3YXMNCj4gPiA+IGluc3RlYWQganVzdA0KPiA+ID4gICAgICAgIGFzc3VtZWQg
-ZnJvbSB0aGUgc2hhZG93IHN0YWNrIHBvaW50ZXIuIFRoaXMgd29ya3MgYmVjYXVzZSBpbg0KPiA+
-ID4gbm9ybWFsDQo+ID4gPiAgICAgICAgYWxsb3dlZCBjYXNlcyBvZiBjYWxsaW5nIHNpZ3JldHVy
-biwgdGhlIHNoYWRvdyBzdGFjayBwb2ludGVyDQo+ID4gPiBzaG91bGQgYmUNCj4gPiA+ICAgICAg
-ICByaWdodCBhdCB0aGUgcmVzdG9yZSB0b2tlbiBhdCB0aGF0IHRpbWUuIFRoZXJlIGlzIG5vDQo+
-ID4gPiBhbHRlcm5hdGUgc2hhZG93DQo+ID4gPiAgICAgICAgc3RhY2sgc3VwcG9ydC4gSWYgYW4g
-YWx0IHNoYWRvdyBzdGFjayBpcyBhZGRlZCBsYXRlciB3ZQ0KPiA+ID4gd291bGQNCj4gPiA+ICAg
-ICAgICBuZWVkIHRvDQo+ID4NCj4gPiBTbyBob3cgaXMgdGhhdCBnb2luZyB0byB3b3JrPyBhbHRz
-dGFjayBpcyBub3QgYW4gZXNvdGVyaWMgY29ybmVyDQo+ID4gY2FzZS4NCj4gDQo+IE15IHVuZGVy
-c3RhbmRpbmcgaXMgdGhhdCB0aGUgbWFpbiB1c2FnZXMgZm9yIHRoZSBzaWduYWwgc3RhY2sgd2Vy
-ZQ0KPiBoYW5kbGluZyBzdGFjayBvdmVyZmxvd3MgYW5kIGNvcnJ1cHRpb24uIFNpbmNlIHRoZSBz
-aGFkb3cgc3RhY2sgb25seQ0KPiBjb250YWlucyByZXR1cm4gYWRkcmVzc2VzIHJhdGhlciB0aGFu
-IGxhcmdlIHN0YWNrIGFsbG9jYXRpb25zLCBhbmQgaXMNCj4gbm90IGdlbmVyYWxseSB3cml0YWJs
-ZSBvciBwaXZvdGFibGUsIEkgdGhvdWdodCB0aGVyZSB3YXMgYSBnb29kDQo+IHBvc3NpYmlsaXR5
-IGFuIGFsdCBzaGFkb3cgc3RhY2sgd291bGQgbm90IGVuZCB1cCBiZWluZyBlc3BlY2lhbGx5DQo+
-IHVzZWZ1bC4gRG9lcyBpdCBzZWVtIGxpa2UgcmVhc29uYWJsZSBndWVzc3dvcms/DQoNClRoZSBv
-dGhlciAncHJvYmxlbScgaXMgdGhhdCBpdCBpcyB2YWxpZCB0byBsb25nanVtcCBvdXQgb2YgYSBz
-aWduYWwgaGFuZGxlci4NClRoZXNlIGRheXMgeW91IGhhdmUgdG8gdXNlIHNpZ2xvbmdqbXAoKSBu
-b3QgbG9uZ2ptcCgpIGJ1dCBpdCBpcyBzdGlsbCB1c2VkLg0KDQpJdCBpcyBwcm9iYWJseSBhbHNv
-IHZhbGlkIHRvIHVzZSBzaWdsb25nam1wKCkgdG8ganVtcCBmcm9tIGEgbmVzdGVkDQpzaWduYWwg
-aGFuZGxlciBpbnRvIHRoZSBvdXRlciBoYW5kbGVyLg0KR2l2ZW4gYm90aCBzaWduYWwgaGFuZGxl
-cnMgY2FuIGhhdmUgdGhlaXIgb3duIHN0YWNrLCB0aGVyZSBjYW4gYmUgdGhyZWUNCnN0YWNrcyBp
-bnZvbHZlZC4NCg0KSSB0aGluayB0aGUgc2hhZG93IHN0YWNrIHBvaW50ZXIgaGFzIHRvIGJlIGlu
-IHVjb250ZXh0IC0gd2hpY2ggYWxzbw0KbWVhbnMgdGhlIGFwcGxpY2F0aW9uIGNhbiBjaGFuZ2Ug
-aXQgYmVmb3JlIHJldHVybmluZyBmcm9tIGEgc2lnbmFsLg0KSW4gbXVjaCB0aGUgc2FtZSB3YXkg
-YXMgYWxsIHRoZSBzZWdtZW50IHJlZ2lzdGVycyBjYW4gYmUgY2hhbmdlZA0KbGVhZGluZyB0byBh
-bGwgdGhlIG5hc3R5IGJ1Z3Mgd2hlbiB0aGUgZmluYWwgJ3JldHVybiB0byB1c2VyJyBjb2RlDQp0
-cmFwcyBpbiBrZXJuZWwgd2hlbiBsb2FkaW5nIGludmFsaWQgc2VnbWVudCByZWdpc3RlcnMgb3Ig
-ZXhlY3V0aW5nIGlyZXQuDQoNCkhtbW0uLi4gZG8gc2hhZG93IHN0YWNrcyBtZWFuIHRoYXQgbG9u
-Z2ptcCgpIGhhcyB0byBiZSBhIHN5c3RlbSBjYWxsPw0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Sat, Feb 5, 2022 at 5:27 AM David Laight <David.Laight@aculab.com> wrote:
+>
+> From: Edgecombe, Rick P
+> > Sent: 04 February 2022 01:08
+> > Hi Thomas,
+> >
+> > Thanks for feedback on the plan.
+> >
+> > On Thu, 2022-02-03 at 22:07 +0100, Thomas Gleixner wrote:
+> > > > Until now, the enabling effort was trying to support both Shadow
+> > > > Stack and IBT.
+> > > > This history will focus on a few areas of the shadow stack
+> > > > development history
+> > > > that I thought stood out.
+> > > >
+> > > >        Signals
+> > > >        -------
+> > > >        Originally signals placed the location of the shadow stack
+> > > > restore
+> > > >        token inside the saved state on the stack. This was
+> > > > problematic from a
+> > > >        past ABI promises perspective. So the restore location was
+> > > > instead just
+> > > >        assumed from the shadow stack pointer. This works because in
+> > > > normal
+> > > >        allowed cases of calling sigreturn, the shadow stack pointer
+> > > > should be
+> > > >        right at the restore token at that time. There is no
+> > > > alternate shadow
+> > > >        stack support. If an alt shadow stack is added later we
+> > > > would
+> > > >        need to
+> > >
+> > > So how is that going to work? altstack is not an esoteric corner
+> > > case.
+> >
+> > My understanding is that the main usages for the signal stack were
+> > handling stack overflows and corruption. Since the shadow stack only
+> > contains return addresses rather than large stack allocations, and is
+> > not generally writable or pivotable, I thought there was a good
+> > possibility an alt shadow stack would not end up being especially
+> > useful. Does it seem like reasonable guesswork?
+>
+> The other 'problem' is that it is valid to longjump out of a signal handler.
+> These days you have to use siglongjmp() not longjmp() but it is still used.
+>
+> It is probably also valid to use siglongjmp() to jump from a nested
+> signal handler into the outer handler.
+> Given both signal handlers can have their own stack, there can be three
+> stacks involved.
+>
+> I think the shadow stack pointer has to be in ucontext - which also
+> means the application can change it before returning from a signal.
+> In much the same way as all the segment registers can be changed
+> leading to all the nasty bugs when the final 'return to user' code
+> traps in kernel when loading invalid segment registers or executing iret.
+>
+> Hmmm... do shadow stacks mean that longjmp() has to be a system call?
 
+No.  setjmp/longjmp save and restore shadow stack pointer.
+
+--
+H.J.
