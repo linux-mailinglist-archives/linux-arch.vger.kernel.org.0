@@ -2,108 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E92C4AC2CE
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Feb 2022 16:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D44394AC630
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Feb 2022 17:43:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiBGPSa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Feb 2022 10:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57516 "EHLO
+        id S233173AbiBGQma (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Feb 2022 11:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392315AbiBGOyJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 09:54:09 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB39C0401C2
-        for <linux-arch@vger.kernel.org>; Mon,  7 Feb 2022 06:54:07 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id m6so40645907ybc.9
-        for <linux-arch@vger.kernel.org>; Mon, 07 Feb 2022 06:54:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=esQoHIXBUKeWlBb18gKIHyQyGBz/GVasu56Sd80B2ng=;
-        b=NXZLADXqUp0MUL87f2/h9T5AZFn36uTfKE/g+cxCA/fcXOh0GtD/tqns5X6ZG5vBb2
-         ZFlf1AsXdmKlgPriNORNLH50yMtdqxQ6hOZ197PBUqQruCcnS0RXL+xF+dnQwr6lJ3ZD
-         R2jDsfICg+kT736d/znyp3riLsc45Ib1eqFSLy1h1rLhqXWV/1JieCvFNfJSlrWPsjgG
-         vjn05pUXzgr+udhHRunJLyBJE8L4BjBueVbGbtvk+PBK9+XgPffkhqPSFdzuy9z1WJT0
-         /RTZ+PNheQlpq+zevsjsA7Xdo5VzoeAwLdbtqPjfjF6bp57dF9M1StDfcG+TVYAuu1Ys
-         JsZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=esQoHIXBUKeWlBb18gKIHyQyGBz/GVasu56Sd80B2ng=;
-        b=VOY2VFPwz9wAkQsVXQ3TO9efEuC0njqpBjCwjsegTrIfZmqFutXMJusdJwMwtU8J6E
-         R7vXrGqN6EhMLlqIMsgEQ/raaoMQhyqKT317WXzdwo/Sc649A5qmc+6FHjJJGLetG2x+
-         CUjXaxW7v4zgjs7A5qW5ppElQ1OtoQoWyBJdxJ747IJRAK3FnuOqwyIzA9vtRSe+iP2Y
-         NUw8y24fB4GvPBzb2MyqzGdfzel73qWUdF6OMTwndDNKOVRH4KEEiNfEkGkOdH00eSDe
-         fxZJ7je9ZomLgco5vFauiBq3KslmwZBp+yPsdNLZEknbdDUz1oR62mhsKh76YT99wr9d
-         HcJw==
-X-Gm-Message-State: AOAM5313QLh8PDkHX6d0XuK71/5kCi2iImUWttKT4LyjvAFx5GRrPu5E
-        NWMolpVIbWGk5sDW4sSHoCre9zdIZoMSr42d6p1dQIeq66BhuQ==
-X-Google-Smtp-Source: ABdhPJwyjojZbZLSz96+eLILLBrCNDMpkVn/7RMLww9UP1UOQ8KZY6aRUXRmVeU553jV0E9WbViIzv9in2lugkd7GDc=
-X-Received: by 2002:a25:e0d5:: with SMTP id x204mr44368ybg.224.1644245493370;
- Mon, 07 Feb 2022 06:51:33 -0800 (PST)
+        with ESMTP id S1382083AbiBGQcD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 11:32:03 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 08:31:57 PST
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28577C0401E8;
+        Mon,  7 Feb 2022 08:31:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644251517; x=1675787517;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=/KVSVa7sgjsVxefcYGnYLwrI2Vchw9qvwnAjpTnywCY=;
+  b=nfGJGU/w8RPiJAUoDgIgE5GRiayqDpC0pLvhcOQBB17LOJ17VbcuNbnS
+   4kMZfObRf/qt9UtmrhIxohADZ0tWvv69NIu7vFI7X7XTNXy2grYiXCUQY
+   gv1a5KxeeN3g+WOULH6ecpE8SEZUZOk2XN3zqWObjSO+vQt4B8Otq9MuZ
+   vSmYr2sTwQVv8FWp4hLb83YFdw8p0o08HcW167NyCaXmgC5PWxyF27on1
+   v9KeNsXoWg7zyk97kJ05mavsxuCwpDJzmfD9PDeI672B/AJkjsi99T5D7
+   WFZ2lXWkVOuCm4eKi7IBtr08lOBREN5Jbn1fK6SSe21wod1afTwmle8K2
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10250"; a="232315628"
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="232315628"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 08:30:54 -0800
+X-IronPort-AV: E=Sophos;i="5.88,350,1635231600"; 
+   d="scan'208";a="525193372"
+Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 08:30:53 -0800
+Message-ID: <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
+Date:   Mon, 7 Feb 2022 08:30:50 -0800
 MIME-Version: 1.0
-Received: by 2002:a05:7010:6713:b0:208:f944:4664 with HTTP; Mon, 7 Feb 2022
- 06:51:32 -0800 (PST)
-Reply-To: lindajonathan993@gmail.com
-From:   Miss Linda <ikennaubochi9@gmail.com>
-Date:   Mon, 7 Feb 2022 14:51:32 +0000
-Message-ID: <CACFJyUCmF8Lu2XX=2f-sAXrHE5Y2rKTnvyTLfs2o8JeNfO_owg@mail.gmail.com>
-Subject: Hi my love
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Adrian Reber <adrian@lisas.de>, Mike Rapoport <rppt@kernel.org>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org> <YgDIIpCm3UITk896@lisas.de>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+In-Reply-To: <YgDIIpCm3UITk896@lisas.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b29 listed in]
-        [list.dnswl.org]
-        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
-        *      [score: 0.2947]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ikennaubochi9[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ikennaubochi9[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lindajonathan993[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  3.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hey dear
+On 2/6/22 23:20, Adrian Reber wrote:
+>>> 	CRIU Support
+>>> 	------------
+>>> 	In the past there was some speculation on the mailing list about 
+>>> 	whether CRIU would need to be taught about CET. It turns out, it does. 
+>>> 	The first issue hit is that CRIU calls sigreturn directly from its 
+>>> 	“parasite code” that it injects into the dumper process. This violates
+>>> 	this shadow stack implementation’s protection that intends to prevent
+>>> 	attackers from doing this.
+...
+>>From the CRIU side I can say that I would definitely like to see this
+> resolved. CRIU just went through a similar exercise with rseq() being
+> enabled in glibc and CI broke all around for us and other projects
+> relying on CRIU. Although rseq() was around for a long time we were not
+> aware of it but luckily 5.13 introduced a way to handle it for CRIU with
+> ptrace. An environment variable existed but did not really help when
+> CRIU is called somewhere in the middle of the container software stack.
+> 
+>>From my point of view a solution not involving an environment variable
+> would definitely be preferred.
 
-Nice to meet you, Am Miss Linda I found your email here in google
-search and I picked
-interest to contact you. I've something very important which I would like
-to discuss with you and I would appreciate if you respond back to me
-through my email address as to
+Have there been things like this for CRIU in the past?  Something where
+CRIU needs control but that's also security-sensitive?
 
-tell you more about me with my
-photos, my private email as fellows??   lindajonathan993@gmail.com
-
-From, Linda
+Any thoughts on how you would _like_ to see this resolved?
