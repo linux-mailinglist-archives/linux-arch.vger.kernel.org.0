@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085F04ACD0D
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 02:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D784ACCE7
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 02:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbiBHBF1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Feb 2022 20:05:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41412 "EHLO
+        id S236856AbiBHBFb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Feb 2022 20:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245717AbiBGX2Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 18:28:25 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17393C0612A4;
-        Mon,  7 Feb 2022 15:28:24 -0800 (PST)
+        with ESMTP id S238287AbiBGX4m (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 18:56:42 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD2CC061355;
+        Mon,  7 Feb 2022 15:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644276504; x=1675812504;
+  t=1644278201; x=1675814201;
   h=message-id:date:mime-version:to:cc:references:from:
    subject:in-reply-to:content-transfer-encoding;
-  bh=HOtSxOsxsg3P8RM3tbFgDc9I3beqaq6pdDO0U9LNiiQ=;
-  b=lWU/SvhkCVjNdveIr1NuCqmwF/eSttiPX952/qx5g4JhipzxopX0JKO3
-   90v4g9LL3kGkvVZo9jNiPzZkmHVar2OI0W8TwhfbhU50QxLwNB6wlaOnS
-   7+9TO/rqVFBYkJxBDq1IneeA6XJ/eFVTPjn4DEc7CG+tVPQOZRv1746Bx
-   W2GgAndlFCVSVr8eCMwzGsWcNapjpwDigkxM3vS6SNkBulUynW2Mj3NJw
-   HDX4WPz79+sXYxlMB3Oygu/gfSJoOhmNw8gNs1J4hHIjP4zjC2wjVpP7E
-   +k3dDnHy9eF1w69x9m+aycGGgpWuOG9nZnRs4Xqp4eSvACqvH4yQKCIvw
+  bh=G21F/4cXJmHG0nsJDWqQXo5LlOADSXHZqRfEJ0bXMWM=;
+  b=QfkWiI2gNVdth79qWFs7rAzYk/tZ1npCLgirAp2FIeiAcHAVxfsOQWU7
+   0q4VyKkrFJG/O0BNXKcOFOrE+FB8+6L8dsTOlJzVksEW2UXr6qP+JB75p
+   0W1O3/8cfjd1XAwrv0PP9kgIE/j+Vk0kBVQ+Cc+w6TDpx9sLUFRZTQLQU
+   5BS7y3c5ine1IYfYFPjeWEgM8UlmMz9V7n14oO5frMbMM4zKX1ARhO4mD
+   H8574XsspmhT0OtGV0qchbCqd1NI5dwhUIFZs23MGljJOkuG+5qejAXvT
+   C+CsQgWq8anypKrRhfwbtuddm/KpQ1YfMIUhUM+6efbnhQRdqPBd8GcAG
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="247665155"
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="335234965"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="247665155"
+   d="scan'208";a="335234965"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:28:23 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:56:41 -0800
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="525319051"
+   d="scan'208";a="525325995"
 Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:28:22 -0800
-Message-ID: <9ad0f7f7-e034-eb6d-eee4-1e977123efe7@intel.com>
-Date:   Mon, 7 Feb 2022 15:28:19 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:56:39 -0800
+Message-ID: <40453c9d-f08c-e419-3d04-22605e219594@intel.com>
+Date:   Mon, 7 Feb 2022 15:56:38 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -70,13 +70,13 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-6-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-7-rick.p.edgecombe@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 05/35] x86/fpu/xstate: Introduce CET MSR and XSAVES
- supervisor states
-In-Reply-To: <20220130211838.8382-6-rick.p.edgecombe@intel.com>
+Subject: Re: [PATCH 06/35] x86/cet: Add control-protection fault handler
+In-Reply-To: <20220130211838.8382-7-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -90,200 +90,252 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 1/30/22 13:18, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> A control-protection fault is triggered when a control-flow transfer
+> attempt violates Shadow Stack or Indirect Branch Tracking constraints.
+> For example, the return address for a RET instruction differs from the copy
+> on the shadow stack; or an indirect JMP instruction, without the NOTRACK
+> prefix, arrives at a non-ENDBR opcode.
 > 
-> Control-flow Enforcement Technology (CET) introduces these MSRs:
+> The control-protection fault handler works in a similar way as the general
+> protection fault handler.  It provides the si_code SEGV_CPERR to the signal
+> handler.
+
+It's not a big deal, but we should probably just remove IBT from the
+changelogs for now.
+
+>  arch/arm/kernel/signal.c           |  2 +-
+>  arch/arm64/kernel/signal.c         |  2 +-
+>  arch/arm64/kernel/signal32.c       |  2 +-
+>  arch/sparc/kernel/signal32.c       |  2 +-
+>  arch/sparc/kernel/signal_64.c      |  2 +-
+>  arch/x86/include/asm/idtentry.h    |  4 ++
+>  arch/x86/kernel/idt.c              |  4 ++
+>  arch/x86/kernel/signal_compat.c    |  2 +-
+>  arch/x86/kernel/traps.c            | 62 ++++++++++++++++++++++++++++++
+>  include/uapi/asm-generic/siginfo.h |  3 +-
+>  10 files changed, 78 insertions(+), 7 deletions(-)
 > 
->     MSR_IA32_U_CET (user-mode CET settings),
->     MSR_IA32_PL3_SSP (user-mode shadow stack pointer),
-> 
->     MSR_IA32_PL0_SSP (kernel-mode shadow stack pointer),
->     MSR_IA32_PL1_SSP (Privilege Level 1 shadow stack pointer),
->     MSR_IA32_PL2_SSP (Privilege Level 2 shadow stack pointer),
->     MSR_IA32_S_CET (kernel-mode CET settings),
->     MSR_IA32_INT_SSP_TAB (exception shadow stack table).
-
-To be honest, I'm not sure this is very valuable.  It's *VERY* close to
-the exact information in the structure definitions.  It's also not
-obviously related to XSAVE.  It's more of the "what" this patch does
-than the "why".  Good changelogs talk about "why".
-
-> The two user-mode MSRs belong to XFEATURE_CET_USER.  The first three of
-> kernel-mode MSRs belong to XFEATURE_CET_KERNEL.  Both XSAVES states are
-> supervisor states.  This means that there is no direct, unprivileged access
-> to these states, making it harder for an attacker to subvert CET.
-
-Forgive me while I go into changelog lecture mode for a moment.
-
-I was constantly looking up at the list of MSRs and trying to reconcile
-them with this paragraph.  Imagine if you had started out this changelog
-by saying:
-
-	Shadow stack register state can be managed with XSAVE.  The
-	registers can logically be separated into two groups:
-
-		* Registers controlling user-mode operation
-		* Registers controlling kernel-mode operation
-
-	The architecture has two new XSAVE state components: one for
-	each group of registers.  This _lets_ an OS manage them
-	separately if it chooses.  Linux chooses to ... <explain the
-	design choice here, or why we don't care yet>.
-
-	Both XSAVE state components are supervisor states, even the
-	state controlling user-mode operation.  This is a departure from
-	earlier features like protection keys where the PKRU state is
-	a normal user (non-supervisor) state.  Having the user state be	
-	supervisor-managed ensures there is no direct, unprivileged
-	access to it, making it harder for an attacker to subvert CET.
-
-Also, IBT gunk is in here too, right?  Let's at least *mention* that in
-the changelog.
-
-...
->  /* All supervisor states including supported and unsupported states. */
->  #define XFEATURE_MASK_SUPERVISOR_ALL (XFEATURE_MASK_SUPERVISOR_SUPPORTED | \
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 3faf0f97edb1..0ee77ce4c753 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -362,6 +362,26 @@
+> diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
+> index c532a6041066..59aaadce9d52 100644
+> --- a/arch/arm/kernel/signal.c
+> +++ b/arch/arm/kernel/signal.c
+> @@ -681,7 +681,7 @@ asmlinkage void do_rseq_syscall(struct pt_regs *regs)
+>   */
+>  static_assert(NSIGILL	== 11);
+>  static_assert(NSIGFPE	== 15);
+> -static_assert(NSIGSEGV	== 9);
+> +static_assert(NSIGSEGV	== 10);
+>  static_assert(NSIGBUS	== 5);
+>  static_assert(NSIGTRAP	== 6);
+>  static_assert(NSIGCHLD	== 6);
+> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> index d8aaf4b6f432..d2da57c415b8 100644
+> --- a/arch/arm64/kernel/signal.c
+> +++ b/arch/arm64/kernel/signal.c
+> @@ -983,7 +983,7 @@ void __init minsigstksz_setup(void)
+>   */
+>  static_assert(NSIGILL	== 11);
+>  static_assert(NSIGFPE	== 15);
+> -static_assert(NSIGSEGV	== 9);
+> +static_assert(NSIGSEGV	== 10);
+>  static_assert(NSIGBUS	== 5);
+>  static_assert(NSIGTRAP	== 6);
+>  static_assert(NSIGCHLD	== 6);
+> diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
+> index d984282b979f..8776a34c6444 100644
+> --- a/arch/arm64/kernel/signal32.c
+> +++ b/arch/arm64/kernel/signal32.c
+> @@ -460,7 +460,7 @@ void compat_setup_restart_syscall(struct pt_regs *regs)
+>   */
+>  static_assert(NSIGILL	== 11);
+>  static_assert(NSIGFPE	== 15);
+> -static_assert(NSIGSEGV	== 9);
+> +static_assert(NSIGSEGV	== 10);
+>  static_assert(NSIGBUS	== 5);
+>  static_assert(NSIGTRAP	== 6);
+>  static_assert(NSIGCHLD	== 6);
+> diff --git a/arch/sparc/kernel/signal32.c b/arch/sparc/kernel/signal32.c
+> index 6cc124a3bb98..dc50b2a78692 100644
+> --- a/arch/sparc/kernel/signal32.c
+> +++ b/arch/sparc/kernel/signal32.c
+> @@ -752,7 +752,7 @@ asmlinkage int do_sys32_sigstack(u32 u_ssptr, u32 u_ossptr, unsigned long sp)
+>   */
+>  static_assert(NSIGILL	== 11);
+>  static_assert(NSIGFPE	== 15);
+> -static_assert(NSIGSEGV	== 9);
+> +static_assert(NSIGSEGV	== 10);
+>  static_assert(NSIGBUS	== 5);
+>  static_assert(NSIGTRAP	== 6);
+>  static_assert(NSIGCHLD	== 6);
+> diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
+> index 2a78d2af1265..7fe2bd37bd1a 100644
+> --- a/arch/sparc/kernel/signal_64.c
+> +++ b/arch/sparc/kernel/signal_64.c
+> @@ -562,7 +562,7 @@ void do_notify_resume(struct pt_regs *regs, unsigned long orig_i0, unsigned long
+>   */
+>  static_assert(NSIGILL	== 11);
+>  static_assert(NSIGFPE	== 15);
+> -static_assert(NSIGSEGV	== 9);
+> +static_assert(NSIGSEGV	== 10);
+>  static_assert(NSIGBUS	== 5);
+>  static_assert(NSIGTRAP	== 6);
+>  static_assert(NSIGCHLD	== 6);
+> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
+> index 1345088e9902..a90791433152 100644
+> --- a/arch/x86/include/asm/idtentry.h
+> +++ b/arch/x86/include/asm/idtentry.h
+> @@ -562,6 +562,10 @@ DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_SS,	exc_stack_segment);
+>  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP,	exc_general_protection);
+>  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_AC,	exc_alignment_check);
 >  
->  
->  #define MSR_CORE_PERF_LIMIT_REASONS	0x00000690
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP, exc_control_protection);
+> +#endif
 > +
-> +/* Control-flow Enforcement Technology MSRs */
-> +#define MSR_IA32_U_CET			0x000006a0 /* user mode cet setting */
-> +#define MSR_IA32_S_CET			0x000006a2 /* kernel mode cet setting */
-> +#define CET_SHSTK_EN			BIT_ULL(0)
-> +#define CET_WRSS_EN			BIT_ULL(1)
-> +#define CET_ENDBR_EN			BIT_ULL(2)
-> +#define CET_LEG_IW_EN			BIT_ULL(3)
-> +#define CET_NO_TRACK_EN			BIT_ULL(4)
-> +#define CET_SUPPRESS_DISABLE		BIT_ULL(5)
-> +#define CET_RESERVED			(BIT_ULL(6) | BIT_ULL(7) | BIT_ULL(8) | BIT_ULL(9))
-
-Would GENMASK_ULL() look any nicer here?  I guess it's pretty clear
-as-is that bits 6->9 are reserved.
-
-> +#define CET_SUPPRESS			BIT_ULL(10)
-> +#define CET_WAIT_ENDBR			BIT_ULL(11)
-
-Are those bit fields common for both registers?  It might be worth a
-comment to mention that.
-
-> +#define MSR_IA32_PL0_SSP		0x000006a4 /* kernel shadow stack pointer */
-> +#define MSR_IA32_PL1_SSP		0x000006a5 /* ring-1 shadow stack pointer */
-> +#define MSR_IA32_PL2_SSP		0x000006a6 /* ring-2 shadow stack pointer */
-
-Are PL1/2 ever used in this implementation?  If not, let's axe these
-definitions.
-
-> +#define MSR_IA32_PL3_SSP		0x000006a7 /* user shadow stack pointer */
-> +#define MSR_IA32_INT_SSP_TAB		0x000006a8 /* exception shadow stack table */
+>  /* Raw exception entries which need extra work */
+>  DECLARE_IDTENTRY_RAW(X86_TRAP_UD,		exc_invalid_op);
+>  DECLARE_IDTENTRY_RAW(X86_TRAP_BP,		exc_int3);
+> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
+> index df0fa695bb09..9f1bdaabc246 100644
+> --- a/arch/x86/kernel/idt.c
+> +++ b/arch/x86/kernel/idt.c
+> @@ -113,6 +113,10 @@ static const __initconst struct idt_data def_idts[] = {
+>  #elif defined(CONFIG_X86_32)
+>  	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_32),
+>  #endif
 > +
->  #define MSR_GFX_PERF_LIMIT_REASONS	0x000006B0
->  #define MSR_RING_PERF_LIMIT_REASONS	0x000006B1
->  
-> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-> index 02b3ddaf4f75..44397202762b 100644
-> --- a/arch/x86/kernel/fpu/xstate.c
-> +++ b/arch/x86/kernel/fpu/xstate.c
-> @@ -50,6 +50,8 @@ static const char *xfeature_names[] =
->  	"Processor Trace (unused)"	,
->  	"Protection Keys User registers",
->  	"PASID state",
-> +	"Control-flow User registers"	,
-> +	"Control-flow Kernel registers"	,
->  	"unknown xstate feature"	,
->  	"unknown xstate feature"	,
->  	"unknown xstate feature"	,
-> @@ -73,6 +75,8 @@ static unsigned short xsave_cpuid_features[] __initdata = {
->  	[XFEATURE_PT_UNIMPLEMENTED_SO_FAR]	= X86_FEATURE_INTEL_PT,
->  	[XFEATURE_PKRU]				= X86_FEATURE_PKU,
->  	[XFEATURE_PASID]			= X86_FEATURE_ENQCMD,
-> +	[XFEATURE_CET_USER]			= X86_FEATURE_SHSTK,
-> +	[XFEATURE_CET_KERNEL]			= X86_FEATURE_SHSTK,
->  	[XFEATURE_XTILE_CFG]			= X86_FEATURE_AMX_TILE,
->  	[XFEATURE_XTILE_DATA]			= X86_FEATURE_AMX_TILE,
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +	INTG(X86_TRAP_CP,		asm_exc_control_protection),
+> +#endif
 >  };
-> @@ -250,6 +254,8 @@ static void __init print_xstate_features(void)
->  	print_xstate_feature(XFEATURE_MASK_Hi16_ZMM);
->  	print_xstate_feature(XFEATURE_MASK_PKRU);
->  	print_xstate_feature(XFEATURE_MASK_PASID);
-> +	print_xstate_feature(XFEATURE_MASK_CET_USER);
-> +	print_xstate_feature(XFEATURE_MASK_CET_KERNEL);
->  	print_xstate_feature(XFEATURE_MASK_XTILE_CFG);
->  	print_xstate_feature(XFEATURE_MASK_XTILE_DATA);
->  }
-> @@ -405,6 +411,7 @@ static __init void os_xrstor_booting(struct xregs_state *xstate)
->  	 XFEATURE_MASK_BNDREGS |		\
->  	 XFEATURE_MASK_BNDCSR |			\
->  	 XFEATURE_MASK_PASID |			\
-> +	 XFEATURE_MASK_CET_USER |		\
->  	 XFEATURE_MASK_XTILE)
 >  
 >  /*
-> @@ -621,6 +628,8 @@ static bool __init check_xstate_against_struct(int nr)
->  	XCHECK_SZ(sz, nr, XFEATURE_PKRU,      struct pkru_state);
->  	XCHECK_SZ(sz, nr, XFEATURE_PASID,     struct ia32_pasid_state);
->  	XCHECK_SZ(sz, nr, XFEATURE_XTILE_CFG, struct xtile_cfg);
-> +	XCHECK_SZ(sz, nr, XFEATURE_CET_USER,   struct cet_user_state);
-> +	XCHECK_SZ(sz, nr, XFEATURE_CET_KERNEL, struct cet_kernel_state);
+> diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
+> index b52407c56000..ff50cd978ea5 100644
+> --- a/arch/x86/kernel/signal_compat.c
+> +++ b/arch/x86/kernel/signal_compat.c
+> @@ -27,7 +27,7 @@ static inline void signal_compat_build_tests(void)
+>  	 */
+>  	BUILD_BUG_ON(NSIGILL  != 11);
+>  	BUILD_BUG_ON(NSIGFPE  != 15);
+> -	BUILD_BUG_ON(NSIGSEGV != 9);
+> +	BUILD_BUG_ON(NSIGSEGV != 10);
+>  	BUILD_BUG_ON(NSIGBUS  != 5);
+>  	BUILD_BUG_ON(NSIGTRAP != 6);
+>  	BUILD_BUG_ON(NSIGCHLD != 6);
+> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+> index c9d566dcf89a..54b7a146fd5e 100644
+> --- a/arch/x86/kernel/traps.c
+> +++ b/arch/x86/kernel/traps.c
+> @@ -39,6 +39,7 @@
+>  #include <linux/io.h>
+>  #include <linux/hardirq.h>
+>  #include <linux/atomic.h>
+> +#include <linux/nospec.h>
 >  
->  	/* The tile data size varies between implementations. */
->  	if (nr == XFEATURE_XTILE_DATA)
-> @@ -634,7 +643,9 @@ static bool __init check_xstate_against_struct(int nr)
->  	if ((nr < XFEATURE_YMM) ||
->  	    (nr >= XFEATURE_MAX) ||
->  	    (nr == XFEATURE_PT_UNIMPLEMENTED_SO_FAR) ||
-> -	    ((nr >= XFEATURE_RSRVD_COMP_11) && (nr <= XFEATURE_RSRVD_COMP_16))) {
-> +	    (nr == XFEATURE_RSRVD_COMP_13) ||
-> +	    (nr == XFEATURE_RSRVD_COMP_14) ||
-> +	    (nr == XFEATURE_RSRVD_COMP_16)) {
->  		WARN_ONCE(1, "no structure for xstate: %d\n", nr);
->  		XSTATE_WARN_ON(1);
->  		return false;
+>  #include <asm/stacktrace.h>
+>  #include <asm/processor.h>
+> @@ -641,6 +642,67 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
+>  	cond_local_irq_disable(regs);
+>  }
+>  
+> +#ifdef CONFIG_X86_SHADOW_STACK
+> +static const char * const control_protection_err[] = {
+> +	"unknown",
+> +	"near-ret",
+> +	"far-ret/iret",
+> +	"endbranch",
+> +	"rstorssp",
+> +	"setssbsy",
+> +	"unknown",
+> +};
+> +
+> +static DEFINE_RATELIMIT_STATE(cpf_rate, DEFAULT_RATELIMIT_INTERVAL,
+> +			      DEFAULT_RATELIMIT_BURST);
+> +
+> +/*
+> + * When a control protection exception occurs, send a signal to the responsible
+> + * application.  Currently, control protection is only enabled for user mode.
+> + * This exception should not come from kernel mode.
+> + */
 
-That if() is getting unweildy.  While I generally despise macros
-implicitly modifying variables, this might be worth it.  We could have a
-local function variable:
+Please move that last sentence to the code which enforces that expectation.
 
-	bool feature_checked = false;
+> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+> +{
+> +	struct task_struct *tsk;
+> +
+> +	if (!user_mode(regs)) {
+> +		die("kernel control protection fault", regs, error_code);
+> +		panic("Unexpected kernel control protection fault.  Machine halted.");
+> +	}
 
-and then muck with it in the macro:
+s/  Machine halted.//
 
-#define XCHECK_SZ(sz, nr, nr_macro, __struct) do {
-	if (nr == nr_macro)) {
-		feature_checked = true;
-		if (WARN_ONCE(sz != sizeof(__struct), ... ) {
-			__xstate_dump_leaves();
-		}
-        }
-} while (0)
+I think they'll get the point when they see "kernel panic".
 
-Then the if() just makes sure the feature was checked instead of
-checking for reserved features explicitly.  We could also do:
+> +
+> +	cond_local_irq_enable(regs);
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
+> +		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
+> +
+> +	tsk = current;
+> +	tsk->thread.error_code = error_code;
+> +	tsk->thread.trap_nr = X86_TRAP_CP;
+> +
+> +	/*
+> +	 * Ratelimit to prevent log spamming.
+> +	 */
+> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
+> +	    __ratelimit(&cpf_rate)) {
+> +		unsigned long ssp;
+> +		int cpf_type;
+> +
+> +		cpf_type = array_index_nospec(error_code, ARRAY_SIZE(control_protection_err));
 
-	bool c = false;
+Isn't 'error_code' generated by the hardware?  Is this defending against
+userspace which can somehow get trigger this with an arbitrary 'error_code'?
 
-	...
+I'm also not sure I like using array_index_nospec() as the *only* bounds
+checking on the array.  Is that the way folks are using it these days?
+Even the comment above it has a pattern like this:
 
-        c |= XCHECK_SZ(sz, nr, XFEATURE_YMM,       struct ymmh_struct);
-        c |= XCHECK_SZ(sz, nr, XFEATURE_BNDREGS,   struct ...
-        c |= XCHECK_SZ(sz, nr, XFEATURE_BNDCSR,    struct ...
-	...
+>  *     if (index < size) {
+>  *         index = array_index_nospec(index, size);
+>  *         val = array[index];
+>  *     }
 
-but that starts to run into 80 columns.  Those are both nice because
-they mean you don't have to maintain a list of reserved features in the
-code.  Another option would be to define a:
 
-bool xfeature_is_reserved(int nr)
-{
-	switch (nr) {
-		case XFEATURE_RSRVD_COMP_13:
-		...
+> +		rdmsrl(MSR_IA32_PL3_SSP, ssp);
+> +		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
+> +			 tsk->comm, task_pid_nr(tsk),
+> +			 regs->ip, regs->sp, ssp, error_code,
+> +			 control_protection_err[cpf_type]);
+> +		print_vma_addr(KERN_CONT " in ", regs->ip);
+> +		pr_cont("\n");
+> +	}
+> +
+> +	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
+> +	cond_local_irq_disable(regs);
+> +}
+> +#endif
+> +
+>  static bool do_int3(struct pt_regs *regs)
+>  {
+>  	int res;
+> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
+> index 3ba180f550d7..081f4b37d22c 100644
+> --- a/include/uapi/asm-generic/siginfo.h
+> +++ b/include/uapi/asm-generic/siginfo.h
+> @@ -240,7 +240,8 @@ typedef struct siginfo {
+>  #define SEGV_ADIPERR	7	/* Precise MCD exception */
+>  #define SEGV_MTEAERR	8	/* Asynchronous ARM MTE error */
+>  #define SEGV_MTESERR	9	/* Synchronous ARM MTE exception */
+> -#define NSIGSEGV	9
+> +#define SEGV_CPERR	10	/* Control protection fault */
+> +#define NSIGSEGV	10
+>  
+>  /*
+>   * SIGBUS si_codes
 
-so the if() looks nicer and won't grow; the function will grow instead.
-
-Either way, I think this needs some refactoring.
