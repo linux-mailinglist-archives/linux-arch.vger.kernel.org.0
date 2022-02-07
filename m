@@ -2,113 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634B24AB508
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Feb 2022 07:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B431B4AB60B
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Feb 2022 08:49:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231767AbiBGGVH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Feb 2022 01:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
+        id S233934AbiBGHik (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Feb 2022 02:38:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239061AbiBGFiW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 00:38:22 -0500
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9C5C043181;
-        Sun,  6 Feb 2022 21:38:21 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id k18so22618586wrg.11;
-        Sun, 06 Feb 2022 21:38:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=byr958ymnG7EGtbbRHy8FEsvmnA+OZjvX3uXRPh6Z4E=;
-        b=xWqxHPzWfiPnCRWqMX0G6nt9K63YEHMlaBJcreR7keWoEHD6lSiv6awVPqd4pJ0qCe
-         W2x50WA2xEAyPlRDIWz4fLCwvHhXiVTL5af2TxBKrfTDnaiyn3k1VFkbivInnHdQoCgG
-         hoYQMb4tN+lgoXs+wCsCWIxQqedEdi6kLntDz3mMwoKocuvxtkkS5kzkUao1xTDkhpRC
-         EEwIDc7f0hz+a9E10R32pV3K591aB+EOVFTXIZKQwF9qvvsRZaTdmMkr5BnL7kOeG0nR
-         ZHwgU4ouzdxx6vBpNGAGzkIyVEu+zCWvS2OmeXNwySP94WLWifeLjXg545u09mBuMtM6
-         UdXQ==
-X-Gm-Message-State: AOAM533OjWGYDqkxFfHGpPwHdf0tfpLoK/fS3ax+bLKS0jjOfIXqSDZk
-        2LHuRrgKfZ1VEwmWDfYOEnlkAukmZLV4ag==
-X-Google-Smtp-Source: ABdhPJwPLsGKwDunoy8I0Myez3SxQ6VYLq3bfG33of6vYqoVy/EKGY4dAvht6XnNrJZEz+OnSQ488A==
-X-Received: by 2002:adf:d1c6:: with SMTP id b6mr8399158wrd.669.1644212299712;
-        Sun, 06 Feb 2022 21:38:19 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id f14sm8693006wmq.40.2022.02.06.21.38.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Feb 2022 21:38:18 -0800 (PST)
-Message-ID: <35f29dbd-04ec-037e-007c-7a079caf0d5b@kernel.org>
-Date:   Mon, 7 Feb 2022 06:38:16 +0100
+        with ESMTP id S232738AbiBGH3M (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 02:29:12 -0500
+X-Greylist: delayed 540 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Feb 2022 23:29:09 PST
+Received: from rhlx01.hs-esslingen.de (rhlx01.hs-esslingen.DE [IPv6:2001:7c0:700::10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C13C043181;
+        Sun,  6 Feb 2022 23:29:09 -0800 (PST)
+Received: by rhlx01.hs-esslingen.de (Postfix, from userid 1203)
+        id 39F2529B540F; Mon,  7 Feb 2022 08:20:02 +0100 (CET)
+Date:   Mon, 7 Feb 2022 08:20:02 +0100
+From:   Adrian Reber <adrian@lisas.de>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com,
+        Andrei Vagin <avagin@gmail.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <YgDIIpCm3UITk896@lisas.de>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <YgAWVSGQg8FPCeba@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 3/3] vstatus: Display an informational message when the
- VSTATUS character is pressed or TIOCSTAT ioctl is called.
-Content-Language: en-US
-To:     Walt Drummond <walt@drummond.us>, agordeev@linux.ibm.com,
-        arnd@arndb.de, benh@kernel.crashing.org, borntraeger@de.ibm.com,
-        chris@zankel.net, davem@davemloft.net, gregkh@linuxfoundation.org,
-        hca@linux.ibm.com, deller@gmx.de, ink@jurassic.park.msu.ru,
-        James.Bottomley@HansenPartnership.com, mattst88@gmail.com,
-        jcmvbkbc@gmail.com, mpe@ellerman.id.au, paulus@samba.org,
-        rth@twiddle.net, dalias@libc.org, tsbogend@alpha.franken.de,
-        gor@linux.ibm.com, ysato@users.osdn.me
-Cc:     linux-kernel@vger.kernel.org, ar@cs.msu.ru,
-        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-References: <20220206154856.2355838-1-walt@drummond.us>
- <20220206154856.2355838-4-walt@drummond.us>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220206154856.2355838-4-walt@drummond.us>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YgAWVSGQg8FPCeba@kernel.org>
+X-Url:  <http://lisas.de/~adrian/>
+X-Operating-System: Linux (5.15.12-200.fc35.x86_64)
+X-Load-Average: 2.46 2.60 2.63
+X-Unexpected: The Spanish Inquisition
+X-GnuPG-Key: gpg --recv-keys D3C4906A
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 06. 02. 22, 16:48, Walt Drummond wrote:
-> When triggered by pressing the VSTATUS key or calling the TIOCSTAT
-> ioctl, the n_tty line discipline will display a message on the user's
-> tty that provides basic information about the system and an
-> 'interesting' process in the current foreground process group, eg:
-> 
->    load: 0.58  cmd: sleep 744474 [sleeping] 0.36r 0.00u 0.00s 0% 772k
-> 
-> The status message provides:
->   - System load average
->   - Command name and process id (from the perspective of the session)
->   - Scheduler state
->   - Total wall-clock run time
->   - User space run time
->   - System space run time
->   - Percentage of on-cpu time
->   - Resident set size
-> 
-> The message is only displayed when the tty has the VSTATUS character
-> set, the local flags ICANON and IEXTEN are enabled and NOKERNINFO is
-> disabled; it is always displayed when TIOCSTAT is called regardless of
-> tty settings.
-> 
-> Signed-off-by: Walt Drummond <walt@drummond.us>
-> ---
+On Sun, Feb 06, 2022 at 08:42:03PM +0200, Mike Rapoport wrote:
+> (added more CRIU people)
 
-It looks like my comments were addressed. However you did not document 
-the chances since v1 here. IOW, [v2] tag missing here.
+Thanks, Mike.
 
-And please add the CCs I added last time, so that relevant people still 
-can comment.
+> On Sun, Jan 30, 2022 at 01:18:03PM -0800, Rick Edgecombe wrote:
+> > This is a slight reboot of the userspace CET series. I will be taking over the 
+> > series from Yu-cheng. Per some internal recommendations, I’ve reset the version
+> > number and am calling it a new series. Hopefully, it doesn’t cause confusion.
+> > 
+> > The new plan is to upstream only userspace Shadow Stack support at this point. 
+> > IBT can follow later, but for now I’ll focus solely on the most in-demand and
+> > widely available (with the feature on AMD CPUs now) part of CET.
+> > 
+> > I thought as part of this reset, it might be useful to more fully write-up the 
+> > design and summarize the history of the previous CET series. So this slightly
+> > long cover letter does that. The "Updates" section has the changes, if anyone
+> > doesn't want the history.
 
-thanks,
--- 
-js
-suse labs
+[...]
+
+> > 	CRIU Support
+> > 	------------
+> > 	In the past there was some speculation on the mailing list about 
+> > 	whether CRIU would need to be taught about CET. It turns out, it does. 
+> > 	The first issue hit is that CRIU calls sigreturn directly from its 
+> > 	“parasite code” that it injects into the dumper process. This violates
+> > 	this shadow stack implementation’s protection that intends to prevent
+> > 	attackers from doing this.
+> > 
+> > 	With so many packages already enabled with shadow stack, there is 
+> > 	probably desire to make it work seamlessly. But in the meantime if 
+> > 	distros want to support shadow stack and CRIU, users could manually 
+> > 	disabled shadow stack via “GLIBC_TUNABLES=glibc.cpu.x86_shstk=off” for 
+> > 	a process they will wants to dump. It’s not ideal.
+> > 
+> > 	I’d like to hear what people think about having shadow stack in the 
+> > 	kernel without this resolved. Nothing would change for any users until 
+> > 	they enable shadow stack in the kernel and update to a glibc configured
+> > 	with CET. Should CRIU userspace be solved before kernel support?
+
+From the CRIU side I can say that I would definitely like to see this
+resolved. CRIU just went through a similar exercise with rseq() being
+enabled in glibc and CI broke all around for us and other projects
+relying on CRIU. Although rseq() was around for a long time we were not
+aware of it but luckily 5.13 introduced a way to handle it for CRIU with
+ptrace. An environment variable existed but did not really help when
+CRIU is called somewhere in the middle of the container software stack.
+
+From my point of view a solution not involving an environment variable
+would definitely be preferred.
+
+		Adrian
