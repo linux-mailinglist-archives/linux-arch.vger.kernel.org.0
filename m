@@ -2,125 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9934AB8CD
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Feb 2022 11:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64C24AC2CF
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Feb 2022 16:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241517AbiBGKf7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Feb 2022 05:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S230397AbiBGPSE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Feb 2022 10:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352785AbiBGKWx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 05:22:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8319C043181
-        for <linux-arch@vger.kernel.org>; Mon,  7 Feb 2022 02:22:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644229372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2smJ/GlsLCD4bPAcOtXvALm5pEn5dU6rKnsOljI8KSo=;
-        b=Xf7UbQquJIXbvEWSX6hyv9QGpoOj4YVDWVM0fONsNAyWJOrj+IiNGxqOpkQHhXSpy5S/hJ
-        em3AZSU+b91fhfOT0mFA3X0y1SOWq68qXylB63fmskfYYUSJZjiATdt2Et6SFGK9NxAVPJ
-        J5KvvYOclSAke6fP+7oPrsHch8wPkZs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-65-idtXnJI4OrGmulbvj6Mxvg-1; Mon, 07 Feb 2022 05:22:46 -0500
-X-MC-Unique: idtXnJI4OrGmulbvj6Mxvg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3B34A1800D50;
-        Mon,  7 Feb 2022 10:22:42 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.193.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 23E96607B6;
-        Mon,  7 Feb 2022 10:22:21 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Edgecombe, Rick P'" <rick.p.edgecombe@intel.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-References: <87fsozek0j.ffs@tglx>
-        <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
-        <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com>
-        <CAMe9rOonepEiRyoAyTGkDMQQhuyuoP4iTZJJhKGxgnq9vv=dLQ@mail.gmail.com>
-        <9f948745435c4c9273131146d50fe6f328b91a78.camel@intel.com>
-        <782f27dbe6fc419a8946eeb426253e28@AcuMS.aculab.com>
-Date:   Mon, 07 Feb 2022 11:22:20 +0100
-In-Reply-To: <782f27dbe6fc419a8946eeb426253e28@AcuMS.aculab.com> (David
-        Laight's message of "Sun, 6 Feb 2022 13:42:42 +0000")
-Message-ID: <8735kvm0wz.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        with ESMTP id S1442390AbiBGOuL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 09:50:11 -0500
+X-Greylist: delayed 1248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 07 Feb 2022 06:50:11 PST
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDE8C0401C2
+        for <linux-arch@vger.kernel.org>; Mon,  7 Feb 2022 06:50:11 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4JspS22MSMz9sSr;
+        Mon,  7 Feb 2022 15:29:22 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dOz3A4mIe6Sr; Mon,  7 Feb 2022 15:29:22 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4JspS21WlXz9sSq;
+        Mon,  7 Feb 2022 15:29:22 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E342B8B770;
+        Mon,  7 Feb 2022 15:29:21 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id om8gFrsfA6rV; Mon,  7 Feb 2022 15:29:21 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C48188B76C;
+        Mon,  7 Feb 2022 15:29:21 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 217ETCrr1245796
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 7 Feb 2022 15:29:12 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 217ETBfP1245795;
+        Mon, 7 Feb 2022 15:29:11 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH] ilog2: Force inlining of __ilog2_u32() and __ilog2_u64()
+Date:   Mon,  7 Feb 2022 15:29:08 +0100
+Message-Id: <803a2ac3d923ebcfd0dd40f5886b05cae7bb0aba.1644243860.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1644244146; l=3187; s=20211009; h=from:subject:message-id; bh=LbJyGmP0iWIV+hgEVGW0oqWQQm1oTy/XNUfH89Xt7zQ=; b=mNHf9SFAjgfitOeHz35BBXMOILPxupHhNaZkP1W+y+gPMKMHKePKlO4d50S4Lfmb78ZD9UoznNAk UQK1iUI1BJvp1QJ1fm+xY+UP2EbLYWNqfZaA/vyQGESu5PZDni/A
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-* David Laight:
+Building a kernel with CONFIG_CC_OPTIMISE_FOR_SIZE leads to
+__ilog2_u32() being duplicated 50 times and __ilog2_u64() 3 times
+in vmlinux on a tiny powerpc32 config.
 
-> Was there any 'spare' space in struct jmpbuf ?
+__ilog2_u32() being 2 instructions it is not worth being kept out
+of line, so force inlining. Allthough the u64 version is a bit bigger,
+there is still a small benefit in keeping it inlined. On a 64 bits
+config there's a real benefit.
 
-jmp_buf in glibc looks like this:
+With this change the size of vmlinux text is reduced by 1 kbytes,
+which is approx 50% more than the size of the removed functions.
 
-(gdb) ptype/o jmp_buf
-type = struct __jmp_buf_tag {
-/*      0      |      64 */    __jmp_buf __jmpbuf;
-/*     64      |       4 */    int __mask_was_saved;
-/* XXX  4-byte hole      */
-/*     72      |     128 */    __sigset_t __saved_mask;
+Before the patch there is for instance:
 
-                               /* total size (bytes):  200 */
-                             } [1]
-(gdb) ptype/o __jmp_buf
-type = long [8]
+	c00d2a94 <__ilog2_u32>:
+	c00d2a94:	7c 63 00 34 	cntlzw  r3,r3
+	c00d2a98:	20 63 00 1f 	subfic  r3,r3,31
+	c00d2a9c:	4e 80 00 20 	blr
 
-The glibc ABI reserves space for 1024 signals, something that Linux is
-never going to implement.  We can use that space to store a few extra
-registers in __save_mask.  There is a complication because the
-pthread_cancel unwinding allocates only space for the __jmpbuf member.
-Fortunately, we do not need to unwind the shadow stack for thread
-cancellation, so we don't need that extra space in that case.
+	c00d36d8 <__order_base_2>:
+	c00d36d8:	28 03 00 01 	cmplwi  r3,1
+	c00d36dc:	40 81 00 2c 	ble     c00d3708 <__order_base_2+0x30>
+	c00d36e0:	94 21 ff f0 	stwu    r1,-16(r1)
+	c00d36e4:	7c 08 02 a6 	mflr    r0
+	c00d36e8:	38 63 ff ff 	addi    r3,r3,-1
+	c00d36ec:	90 01 00 14 	stw     r0,20(r1)
+	c00d36f0:	4b ff f3 a5 	bl      c00d2a94 <__ilog2_u32>
+	c00d36f4:	80 01 00 14 	lwz     r0,20(r1)
+	c00d36f8:	38 63 00 01 	addi    r3,r3,1
+	c00d36fc:	7c 08 03 a6 	mtlr    r0
+	c00d3700:	38 21 00 10 	addi    r1,r1,16
+	c00d3704:	4e 80 00 20 	blr
+	c00d3708:	38 60 00 00 	li      r3,0
+	c00d370c:	4e 80 00 20 	blr
 
-Thanks,
-Florian
+With the patch it has become:
+
+	c00d356c <__order_base_2>:
+	c00d356c:	28 03 00 01 	cmplwi  r3,1
+	c00d3570:	40 81 00 14 	ble     c00d3584 <__order_base_2+0x18>
+	c00d3574:	38 63 ff ff 	addi    r3,r3,-1
+	c00d3578:	7c 63 00 34 	cntlzw  r3,r3
+	c00d357c:	20 63 00 20 	subfic  r3,r3,32
+	c00d3580:	4e 80 00 20 	blr
+	c00d3584:	38 60 00 00 	li      r3,0
+	c00d3588:	4e 80 00 20 	blr
+
+No more need for __order_base_2() to setup a stack frame and
+save/restore caller address. And the following 'add 1' is
+merged in the substract.
+
+Another typical use of it:
+
+	c080ff28 <hugepagesz_setup>:
+	...
+	c080fff8:	7f c3 f3 78 	mr      r3,r30
+	c080fffc:	4b 8f 81 f1 	bl      c01081ec <__ilog2_u32>
+	c0810000:	38 63 ff f2 	addi    r3,r3,-14
+	...
+
+Becomes
+
+	c080ff1c <hugepagesz_setup>:
+	...
+	c080ffec:	7f c3 00 34 	cntlzw  r3,r30
+	c080fff0:	20 63 00 11 	subfic  r3,r3,17
+	...
+
+Here no need to move r30 argument to r3 then substract 14 to result. Just work
+on r30 and merge the 'sub 14' with the 'sub from 31'.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ include/linux/log2.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/log2.h b/include/linux/log2.h
+index df0b155c2141..9f30d087a128 100644
+--- a/include/linux/log2.h
++++ b/include/linux/log2.h
+@@ -18,7 +18,7 @@
+  * - the arch is not required to handle n==0 if implementing the fallback
+  */
+ #ifndef CONFIG_ARCH_HAS_ILOG2_U32
+-static inline __attribute__((const))
++static __always_inline __attribute__((const))
+ int __ilog2_u32(u32 n)
+ {
+ 	return fls(n) - 1;
+@@ -26,7 +26,7 @@ int __ilog2_u32(u32 n)
+ #endif
+ 
+ #ifndef CONFIG_ARCH_HAS_ILOG2_U64
+-static inline __attribute__((const))
++static __always_inline __attribute__((const))
+ int __ilog2_u64(u64 n)
+ {
+ 	return fls64(n) - 1;
+-- 
+2.33.1
 
