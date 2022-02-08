@@ -2,146 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72C64ADED8
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 18:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238024AE100
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 19:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383672AbiBHRCk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Feb 2022 12:02:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S238482AbiBHSkf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Feb 2022 13:40:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbiBHRCh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Feb 2022 12:02:37 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774CBC061576;
-        Tue,  8 Feb 2022 09:02:36 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id 13so975306lfp.7;
-        Tue, 08 Feb 2022 09:02:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=H8i2s4xHp0rxY84LN1BxRLDP7j4EYhoJJT+IslnvpoI=;
-        b=CeAOjWIQeZbI3marhQ90i70bJhrQHxUVRvRhMaA7tO26fi3eAnnwdrAiiS300jSV9/
-         rFSHN4hYn1DFUV+ovphjx0xXDwujZlMu41W0cY9mh9STuL/ULgRD/Wpc6FL3E9W0MB9n
-         jLShmsInPn/dCkb+n4MWvEH945FHvrOMejxdZhgHNF4js4UR2qDQTn/K6X8YvUU6bh2J
-         CwADrvNHkjsZ90nrYWTIqhYSWrZTmKNZqq+w8ZDD1jbFN//e4zhAc83dzLx+Gq7+0Umg
-         +DTbBao0meb6h15uFR49pmkJHnipUI1jYORJOXulRakWI6MK3fRCNb6YAeKE4+WTCV/V
-         isYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H8i2s4xHp0rxY84LN1BxRLDP7j4EYhoJJT+IslnvpoI=;
-        b=x24ylxJJPbDZ3UksW3/C9ZX5TLB5h/rB3Or+0367mT6F3eefU2y1wu7eOc7kdUWBY1
-         i+1V6z9qI/HOO1rBlbSLUfaouRZkKe2J1FGM2DMAaxdbm4949mHm/R/oPsURALofY/XZ
-         8rBcuHVrsk3xJlKUh11cQhxEE7S4/DvhLBK7s0bGGnpqoewmVLEXqnyur+FOYe9nLTY9
-         wqUNp1Up76f0Xh2G2MgRyjLzoadI6mbxR4M+rl9KgZyxTR37HhWOaPrLjwqnrlIFNFHm
-         7eDKXI+quol1YOAJrH/160x9nDs9E9YBHRFOetvAXfSU0KaUZOuXVIsRRSZyMEIBlW8q
-         oEiA==
-X-Gm-Message-State: AOAM530KjF306tVkKAZgHCfUTFL4YvxvypjGdpiLgM3dwbnAtObDvOK0
-        SfZIVMWE88Ai93/Ziqpsny0=
-X-Google-Smtp-Source: ABdhPJy4vAOsUuMcyywyagL71dLBFChw5CtMbZ5KClivwczQn/i8XjekNjbmQlZlpAVvbRy7btJhpg==
-X-Received: by 2002:a05:6512:33c8:: with SMTP id d8mr3533852lfg.41.1644339754685;
-        Tue, 08 Feb 2022 09:02:34 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id a12sm643118lfu.162.2022.02.08.09.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 09:02:33 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 80F685A0020; Tue,  8 Feb 2022 20:02:32 +0300 (MSK)
-Date:   Tue, 8 Feb 2022 20:02:32 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Mike Rapoport <rppt@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Adrian Reber <adrian@lisas.de>,
-        Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Message-ID: <YgKiKEcsNt7mpMHN@grain>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org>
- <YgDIIpCm3UITk896@lisas.de>
- <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org>
- <YgI37n+3JfLSNQCQ@grain>
- <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
+        with ESMTP id S231149AbiBHSke (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Feb 2022 13:40:34 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EE9C061579;
+        Tue,  8 Feb 2022 10:40:31 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8DE1D1F387;
+        Tue,  8 Feb 2022 18:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1644345630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jdw+TI4CIqxgVnyNgubuTkK3R4ZTBSmLHhOkGr2VwbM=;
+        b=G2S7x10Mrrf2/Pa/VZkTCIlv7iL0i+FD2NbkgDsTy/GD6Vznw+so0ylyvTh9qrR6r7J93J
+        04Ue5FWUdyaq6uRCuCrIoSwIjWj/LQNqtOZKyN/cL79m8zoUd2cQQSWFaHW3YME2Nsl1R1
+        /O6De15sOs6wELkTrUGF3GPKQ8cJHsc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1644345630;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jdw+TI4CIqxgVnyNgubuTkK3R4ZTBSmLHhOkGr2VwbM=;
+        b=JP21ChhnYhMUXNASGjs5KkXOyZc8Vg8hIeeV8nPZmnJizD+KuyALDb9msBVTnWZdZTjGOt
+        xeQkzWNQ/EVRJkBA==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 236BDA3B84;
+        Tue,  8 Feb 2022 18:40:30 +0000 (UTC)
+Date:   Tue, 8 Feb 2022 19:40:29 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH v3 4/6] modules: Add
+ CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+Message-ID: <20220208184029.GB3113@kunlun.suse.cz>
+References: <cover.1643475473.git.christophe.leroy@csgroup.eu>
+ <b59ed8781ef9af995c5bfa762de1f42fdfc57c74.1643475473.git.christophe.leroy@csgroup.eu>
+ <YfsbcXD74BwJ9ci2@bombadil.infradead.org>
+ <228849f5-f6a4-eb45-5e1e-a9b3eccb28b3@csgroup.eu>
+ <YfwyKR1xFaApWjRb@bombadil.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
-User-Agent: Mutt/2.0.7 (2021-05-04)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YfwyKR1xFaApWjRb@bombadil.infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 08:21:20AM -0800, Andy Lutomirski wrote:
-> >> But such a knob will immediately reduce the security value of the entire
-> >> thing, and I don't have good ideas how to deal with it :(
-> >
-> > Probably a kind of latch in the task_struct which would trigger off once
-> > returt to a different address happened, thus we would be able to jump inside
-> > paratite code. Of course such trigger should be available under proper
-> > capability only.
-> 
-> I'm not fully in touch with how parasite, etc works.  Are we talking about save or restore?
+Hello,
 
-We use parasite code in question during checkpoint phase as far as I remember.
-push addr/lret trick is used to run "injected" code (code injection itself is
-done via ptrace) in compat mode at least. Dima, Andrei, I didn't look into this code
-for years already, do we still need to support compat mode at all?
-
-> If it's restore, what exactly does CRIU need to do?  Is it just that CRIU needs to return
-> out from its resume code into the to-be-resumed program without tripping CET?  Would it
-> be acceptable for CRIU to require that at least one shstk slot be free at save time?
-> Or do we need a mechanism to atomically switch to a completely full shadow stack at resume?
+On Thu, Feb 03, 2022 at 11:51:05AM -0800, Luis Chamberlain wrote:
+> On Thu, Feb 03, 2022 at 07:05:13AM +0000, Christophe Leroy wrote:
+> > Le 03/02/2022 à 01:01, Luis Chamberlain a écrit :
+> > > On Sat, Jan 29, 2022 at 05:02:09PM +0000, Christophe Leroy wrote:
+> > >> diff --git a/kernel/module.c b/kernel/module.c
+> > >> index 11f51e17fb9f..f3758115ebaa 100644
+> > >> --- a/kernel/module.c
+> > >> +++ b/kernel/module.c
+> > >> @@ -81,7 +81,9 @@
+> > >>   /* If this is set, the section belongs in the init part of the module */
+> > >>   #define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
+> > >>   
+> > >> +#ifndef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> > >>   #define	data_layout core_layout
+> > >> +#endif
+> > >>   
+> > >>   /*
+> > >>    * Mutex protects:
+> > >> @@ -111,6 +113,12 @@ static struct mod_tree_root {
+> > >>   #define module_addr_min mod_tree.addr_min
+> > >>   #define module_addr_max mod_tree.addr_max
+> > >>   
+> > >> +#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> > >> +static struct mod_tree_root mod_data_tree __cacheline_aligned = {
+> > >> +	.addr_min = -1UL,
+> > >> +};
+> > >> +#endif
+> > >> +
+> > >>   #ifdef CONFIG_MODULES_TREE_LOOKUP
+> > >>   
+> > >>   /*
+> > >> @@ -186,6 +194,11 @@ static void mod_tree_insert(struct module *mod)
+> > >>   	__mod_tree_insert(&mod->core_layout.mtn, &mod_tree);
+> > >>   	if (mod->init_layout.size)
+> > >>   		__mod_tree_insert(&mod->init_layout.mtn, &mod_tree);
+> > >> +
+> > >> +#ifdef CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+> > >> +	mod->data_layout.mtn.mod = mod;
+> > >> +	__mod_tree_insert(&mod->data_layout.mtn, &mod_data_tree);
+> > >> +#endif
+> > > 
+> > > 
+> > > kernel/ directory has quite a few files, module.c is the second to
+> > > largest file, and it has tons of stuff. Aaron is doing work to
+> > > split things out to make code easier to read and so that its easier
+> > > to review changes. See:
+> > > 
+> > > https://lkml.kernel.org/r/20220130213214.1042497-1-atomlin@redhat.com
+> > > 
+> > > I think this is a good patch example which could benefit from that work.
+> > > So I'd much prefer to see that work go in first than this, so to see if
+> > > we can make the below changes more compartamentalized.
+> > > 
+> > > Curious, how much testing has been put into this series?
+> > 
+> > 
+> > I tested the change up to (including) patch 4 to verify it doesn't 
+> > introduce regression when not using 
+> > CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC,
 > 
-> Off the top of my head, a sigreturn (or sigreturn-like mechanism) that is intended for
-> use for altshadowstack could safely verify a token on the altshdowstack, possibly
-> compare to something in ucontext (or not -- this isn't clearly necessary) and switch
-> back to the previous stack.  CRIU could use that too.  Obviously CRIU will need a way
-> to populate the relevant stacks, but WRUSS can be used for that, and I think this
-> is a fundamental requirement for CRIU -- CRIU restore absolutely needs a way to write
-> the saved shadow stack data into the shadow stack.
+> > Then I tested with patch 5. I first tried with the 'hello world' test 
+> > module. After that I loaded several important modules and checked I 
+> > didn't get any regression, both with and without STRICT_MODULES_RWX and 
+> > I checked the consistency in /proc/vmallocinfo
+> >   /proc/modules /sys/class/modules/*
 > 
-> So I think the only special capability that CRIU really needs is WRUSS, and
-> we need to wire that up anyway.
+> I wonder if we have a test for STRICT_MODULES_RWX.
+> 
+> > I also tested with a hacked module_alloc() to force branch trampolines.
+> 
+> So to verify that reducing these trampolines actually helps on an
+> architecture? I wonder if we can generalize this somehow to let archs
+> verify such strategies can help.
+> 
+> I was hoping for a bit more wider testing, like actually users, etc.
+> It does not seem like so. So we can get to that by merging this soon
+> into modules-next and having this bleed out issues with linux-next.
+> We are in good time to do this now.
+> 
+> The kmod tree has tons of tests:
+> 
+> https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/
+> 
+> Can you use that to verify there are no regressions?
 
-Thanks for these notes, Andy! I can't provide any sane answer here since didn't
-read tech spec for this feature yet :-)
+openSUSE has the testsuite packaged so it's easy to run on arbitrary
+kernel but only on ppc64(le) because there is no ppc there anymore.
+
+So yes, it does not regress Book3S/64 as far as kmod testsuite is
+conderned and building s390x non-modular kernel also still worka but
+that's not saying much.
+
+Thanks
+
+Michal
