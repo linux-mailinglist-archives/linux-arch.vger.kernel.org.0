@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D784ACCE7
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 02:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8561E4ACD06
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 02:07:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236856AbiBHBFb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Feb 2022 20:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
+        id S244850AbiBHBFe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Feb 2022 20:05:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbiBGX4m (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 18:56:42 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD2CC061355;
-        Mon,  7 Feb 2022 15:56:41 -0800 (PST)
+        with ESMTP id S241527AbiBHANv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Feb 2022 19:13:51 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3259AC061355;
+        Mon,  7 Feb 2022 16:13:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644278201; x=1675814201;
+  t=1644279231; x=1675815231;
   h=message-id:date:mime-version:to:cc:references:from:
    subject:in-reply-to:content-transfer-encoding;
-  bh=G21F/4cXJmHG0nsJDWqQXo5LlOADSXHZqRfEJ0bXMWM=;
-  b=QfkWiI2gNVdth79qWFs7rAzYk/tZ1npCLgirAp2FIeiAcHAVxfsOQWU7
-   0q4VyKkrFJG/O0BNXKcOFOrE+FB8+6L8dsTOlJzVksEW2UXr6qP+JB75p
-   0W1O3/8cfjd1XAwrv0PP9kgIE/j+Vk0kBVQ+Cc+w6TDpx9sLUFRZTQLQU
-   5BS7y3c5ine1IYfYFPjeWEgM8UlmMz9V7n14oO5frMbMM4zKX1ARhO4mD
-   H8574XsspmhT0OtGV0qchbCqd1NI5dwhUIFZs23MGljJOkuG+5qejAXvT
-   C+CsQgWq8anypKrRhfwbtuddm/KpQ1YfMIUhUM+6efbnhQRdqPBd8GcAG
+  bh=BPhMCShSVCOniHzYsoSxv9XqF3MkYnnOdHCV78VWtYE=;
+  b=WoUOH0XueyPf6viG/SvNCzthgcBzOXDApLFisYC5ny5vXAcSqYlCTzUY
+   MWg57ImYiaTSm4bnYeJjVaiG6ej90jV4hUuRogP0+LAdgAwB/zTdo+02I
+   oxzrGZVDcyaQmYlHrc0/kyIlRkXe4SScCA2oXcGKs1GOXcghBxFv8aMXS
+   Pp25DJ33kDdvEKwthR19EGC7zF8TJvK/ZVi+jJZMpgg/8uWq+y56JuGty
+   LDI+UmF6bbZCrUxPiswXn29mRbkt/qfWqGxAeIPxqLzdolV0GoKdoesNZ
+   jyCu+7ngti/x3fFuLLCRNJxBHhUrOsbZWEbqUG0Bzq1Gf8ZI6+cPdZAak
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="335234965"
+X-IronPort-AV: E=McAfee;i="6200,9189,10251"; a="312134685"
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="335234965"
+   d="scan'208";a="312134685"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:56:41 -0800
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 16:13:49 -0800
 X-IronPort-AV: E=Sophos;i="5.88,351,1635231600"; 
-   d="scan'208";a="525325995"
+   d="scan'208";a="525332786"
 Received: from hgrunes-mobl1.amr.corp.intel.com (HELO [10.251.3.57]) ([10.251.3.57])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 15:56:39 -0800
-Message-ID: <40453c9d-f08c-e419-3d04-22605e219594@intel.com>
-Date:   Mon, 7 Feb 2022 15:56:38 -0800
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2022 16:13:48 -0800
+Message-ID: <672fa390-c88c-4e2a-aa42-52d171acfd62@intel.com>
+Date:   Mon, 7 Feb 2022 16:13:45 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -70,13 +70,12 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         joao.moreira@intel.com, John Allen <john.allen@amd.com>,
         kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>, Christoph Hellwig <hch@lst.de>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-7-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-8-rick.p.edgecombe@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 06/35] x86/cet: Add control-protection fault handler
-In-Reply-To: <20220130211838.8382-7-rick.p.edgecombe@intel.com>
+Subject: Re: [PATCH 07/35] x86/mm: Remove _PAGE_DIRTY from kernel RO pages
+In-Reply-To: <20220130211838.8382-8-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -90,252 +89,46 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 1/30/22 13:18, Rick Edgecombe wrote:
-> A control-protection fault is triggered when a control-flow transfer
-> attempt violates Shadow Stack or Indirect Branch Tracking constraints.
-> For example, the return address for a RET instruction differs from the copy
-> on the shadow stack; or an indirect JMP instruction, without the NOTRACK
-> prefix, arrives at a non-ENDBR opcode.
-> 
-> The control-protection fault handler works in a similar way as the general
-> protection fault handler.  It provides the si_code SEGV_CPERR to the signal
-> handler.
+> The x86 family of processors do not directly create read-only and Dirty
+> PTEs.  These PTEs are created by software.
 
-It's not a big deal, but we should probably just remove IBT from the
-changelogs for now.
+That's not strictly correct.
 
->  arch/arm/kernel/signal.c           |  2 +-
->  arch/arm64/kernel/signal.c         |  2 +-
->  arch/arm64/kernel/signal32.c       |  2 +-
->  arch/sparc/kernel/signal32.c       |  2 +-
->  arch/sparc/kernel/signal_64.c      |  2 +-
->  arch/x86/include/asm/idtentry.h    |  4 ++
->  arch/x86/kernel/idt.c              |  4 ++
->  arch/x86/kernel/signal_compat.c    |  2 +-
->  arch/x86/kernel/traps.c            | 62 ++++++++++++++++++++++++++++++
->  include/uapi/asm-generic/siginfo.h |  3 +-
->  10 files changed, 78 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/arm/kernel/signal.c b/arch/arm/kernel/signal.c
-> index c532a6041066..59aaadce9d52 100644
-> --- a/arch/arm/kernel/signal.c
-> +++ b/arch/arm/kernel/signal.c
-> @@ -681,7 +681,7 @@ asmlinkage void do_rseq_syscall(struct pt_regs *regs)
->   */
->  static_assert(NSIGILL	== 11);
->  static_assert(NSIGFPE	== 15);
-> -static_assert(NSIGSEGV	== 9);
-> +static_assert(NSIGSEGV	== 10);
->  static_assert(NSIGBUS	== 5);
->  static_assert(NSIGTRAP	== 6);
->  static_assert(NSIGCHLD	== 6);
-> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
-> index d8aaf4b6f432..d2da57c415b8 100644
-> --- a/arch/arm64/kernel/signal.c
-> +++ b/arch/arm64/kernel/signal.c
-> @@ -983,7 +983,7 @@ void __init minsigstksz_setup(void)
->   */
->  static_assert(NSIGILL	== 11);
->  static_assert(NSIGFPE	== 15);
-> -static_assert(NSIGSEGV	== 9);
-> +static_assert(NSIGSEGV	== 10);
->  static_assert(NSIGBUS	== 5);
->  static_assert(NSIGTRAP	== 6);
->  static_assert(NSIGCHLD	== 6);
-> diff --git a/arch/arm64/kernel/signal32.c b/arch/arm64/kernel/signal32.c
-> index d984282b979f..8776a34c6444 100644
-> --- a/arch/arm64/kernel/signal32.c
-> +++ b/arch/arm64/kernel/signal32.c
-> @@ -460,7 +460,7 @@ void compat_setup_restart_syscall(struct pt_regs *regs)
->   */
->  static_assert(NSIGILL	== 11);
->  static_assert(NSIGFPE	== 15);
-> -static_assert(NSIGSEGV	== 9);
-> +static_assert(NSIGSEGV	== 10);
->  static_assert(NSIGBUS	== 5);
->  static_assert(NSIGTRAP	== 6);
->  static_assert(NSIGCHLD	== 6);
-> diff --git a/arch/sparc/kernel/signal32.c b/arch/sparc/kernel/signal32.c
-> index 6cc124a3bb98..dc50b2a78692 100644
-> --- a/arch/sparc/kernel/signal32.c
-> +++ b/arch/sparc/kernel/signal32.c
-> @@ -752,7 +752,7 @@ asmlinkage int do_sys32_sigstack(u32 u_ssptr, u32 u_ossptr, unsigned long sp)
->   */
->  static_assert(NSIGILL	== 11);
->  static_assert(NSIGFPE	== 15);
-> -static_assert(NSIGSEGV	== 9);
-> +static_assert(NSIGSEGV	== 10);
->  static_assert(NSIGBUS	== 5);
->  static_assert(NSIGTRAP	== 6);
->  static_assert(NSIGCHLD	== 6);
-> diff --git a/arch/sparc/kernel/signal_64.c b/arch/sparc/kernel/signal_64.c
-> index 2a78d2af1265..7fe2bd37bd1a 100644
-> --- a/arch/sparc/kernel/signal_64.c
-> +++ b/arch/sparc/kernel/signal_64.c
-> @@ -562,7 +562,7 @@ void do_notify_resume(struct pt_regs *regs, unsigned long orig_i0, unsigned long
->   */
->  static_assert(NSIGILL	== 11);
->  static_assert(NSIGFPE	== 15);
-> -static_assert(NSIGSEGV	== 9);
-> +static_assert(NSIGSEGV	== 10);
->  static_assert(NSIGBUS	== 5);
->  static_assert(NSIGTRAP	== 6);
->  static_assert(NSIGCHLD	== 6);
-> diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-> index 1345088e9902..a90791433152 100644
-> --- a/arch/x86/include/asm/idtentry.h
-> +++ b/arch/x86/include/asm/idtentry.h
-> @@ -562,6 +562,10 @@ DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_SS,	exc_stack_segment);
->  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_GP,	exc_general_protection);
->  DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_AC,	exc_alignment_check);
->  
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +DECLARE_IDTENTRY_ERRORCODE(X86_TRAP_CP, exc_control_protection);
-> +#endif
-> +
->  /* Raw exception entries which need extra work */
->  DECLARE_IDTENTRY_RAW(X86_TRAP_UD,		exc_invalid_op);
->  DECLARE_IDTENTRY_RAW(X86_TRAP_BP,		exc_int3);
-> diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-> index df0fa695bb09..9f1bdaabc246 100644
-> --- a/arch/x86/kernel/idt.c
-> +++ b/arch/x86/kernel/idt.c
-> @@ -113,6 +113,10 @@ static const __initconst struct idt_data def_idts[] = {
->  #elif defined(CONFIG_X86_32)
->  	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_32),
->  #endif
-> +
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +	INTG(X86_TRAP_CP,		asm_exc_control_protection),
-> +#endif
->  };
->  
->  /*
-> diff --git a/arch/x86/kernel/signal_compat.c b/arch/x86/kernel/signal_compat.c
-> index b52407c56000..ff50cd978ea5 100644
-> --- a/arch/x86/kernel/signal_compat.c
-> +++ b/arch/x86/kernel/signal_compat.c
-> @@ -27,7 +27,7 @@ static inline void signal_compat_build_tests(void)
->  	 */
->  	BUILD_BUG_ON(NSIGILL  != 11);
->  	BUILD_BUG_ON(NSIGFPE  != 15);
-> -	BUILD_BUG_ON(NSIGSEGV != 9);
-> +	BUILD_BUG_ON(NSIGSEGV != 10);
->  	BUILD_BUG_ON(NSIGBUS  != 5);
->  	BUILD_BUG_ON(NSIGTRAP != 6);
->  	BUILD_BUG_ON(NSIGCHLD != 6);
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index c9d566dcf89a..54b7a146fd5e 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -39,6 +39,7 @@
->  #include <linux/io.h>
->  #include <linux/hardirq.h>
->  #include <linux/atomic.h>
-> +#include <linux/nospec.h>
->  
->  #include <asm/stacktrace.h>
->  #include <asm/processor.h>
-> @@ -641,6 +642,67 @@ DEFINE_IDTENTRY_ERRORCODE(exc_general_protection)
->  	cond_local_irq_disable(regs);
->  }
->  
-> +#ifdef CONFIG_X86_SHADOW_STACK
-> +static const char * const control_protection_err[] = {
-> +	"unknown",
-> +	"near-ret",
-> +	"far-ret/iret",
-> +	"endbranch",
-> +	"rstorssp",
-> +	"setssbsy",
-> +	"unknown",
-> +};
-> +
-> +static DEFINE_RATELIMIT_STATE(cpf_rate, DEFAULT_RATELIMIT_INTERVAL,
-> +			      DEFAULT_RATELIMIT_BURST);
-> +
-> +/*
-> + * When a control protection exception occurs, send a signal to the responsible
-> + * application.  Currently, control protection is only enabled for user mode.
-> + * This exception should not come from kernel mode.
-> + */
+There's nothing in the architecture today to prevent the CPU from
+creating Write=0,Dirty=1 PTEs.  In fact, some CPUs do this in weird
+situations.  It wouldn't be wrong to say:
 
-Please move that last sentence to the code which enforces that expectation.
+	Processors sometimes directly create read-only and Dirty PTEs.
 
-> +DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
-> +{
-> +	struct task_struct *tsk;
-> +
-> +	if (!user_mode(regs)) {
-> +		die("kernel control protection fault", regs, error_code);
-> +		panic("Unexpected kernel control protection fault.  Machine halted.");
-> +	}
+which is the opposite of what is written above.  This is why the CET
+spec has the blurb about shadow-stack-supporting CPUs promise not to do
+this any more.
 
-s/  Machine halted.//
+> One such case is that kernel
+> read-only pages are historically setup as Dirty.
 
-I think they'll get the point when they see "kernel panic".
+				   ^ set up
 
-> +
-> +	cond_local_irq_enable(regs);
-> +
-> +	if (!cpu_feature_enabled(X86_FEATURE_SHSTK))
-> +		WARN_ONCE(1, "Control protection fault with CET support disabled\n");
-> +
-> +	tsk = current;
-> +	tsk->thread.error_code = error_code;
-> +	tsk->thread.trap_nr = X86_TRAP_CP;
-> +
-> +	/*
-> +	 * Ratelimit to prevent log spamming.
-> +	 */
-> +	if (show_unhandled_signals && unhandled_signal(tsk, SIGSEGV) &&
-> +	    __ratelimit(&cpf_rate)) {
-> +		unsigned long ssp;
-> +		int cpf_type;
-> +
-> +		cpf_type = array_index_nospec(error_code, ARRAY_SIZE(control_protection_err));
+> New processors that support Shadow Stack regard read-only and Dirty PTEs as
+> shadow stack pages.
 
-Isn't 'error_code' generated by the hardware?  Is this defending against
-userspace which can somehow get trigger this with an arbitrary 'error_code'?
+This also isn't *quite* correct.  It's not just having a new processor,
+it includes enabling shadow stacks.
 
-I'm also not sure I like using array_index_nospec() as the *only* bounds
-checking on the array.  Is that the way folks are using it these days?
-Even the comment above it has a pattern like this:
+> This results in ambiguity between shadow stack and kernel read-only
+> pages.  To resolve this, removed Dirty from kernel read- only pages.
+One thing that's not clear from the spec: does this cause an *actual*
+problem?  For instance, does setting:
 
->  *     if (index < size) {
->  *         index = array_index_nospec(index, size);
->  *         val = array[index];
->  *     }
+	IA32_U_CET.SH_STK_EN=1
+but
+	IA32_S_CET.SH_STK_EN=0
 
+means that shadow stacks are enforced in user *MODE* or on
+user-paging-permission (U=0) PTEs?
 
-> +		rdmsrl(MSR_IA32_PL3_SSP, ssp);
-> +		pr_emerg("%s[%d] control protection ip:%lx sp:%lx ssp:%lx error:%lx(%s)",
-> +			 tsk->comm, task_pid_nr(tsk),
-> +			 regs->ip, regs->sp, ssp, error_code,
-> +			 control_protection_err[cpf_type]);
-> +		print_vma_addr(KERN_CONT " in ", regs->ip);
-> +		pr_cont("\n");
-> +	}
-> +
-> +	force_sig_fault(SIGSEGV, SEGV_CPERR, (void __user *)0);
-> +	cond_local_irq_disable(regs);
-> +}
-> +#endif
-> +
->  static bool do_int3(struct pt_regs *regs)
->  {
->  	int res;
-> diff --git a/include/uapi/asm-generic/siginfo.h b/include/uapi/asm-generic/siginfo.h
-> index 3ba180f550d7..081f4b37d22c 100644
-> --- a/include/uapi/asm-generic/siginfo.h
-> +++ b/include/uapi/asm-generic/siginfo.h
-> @@ -240,7 +240,8 @@ typedef struct siginfo {
->  #define SEGV_ADIPERR	7	/* Precise MCD exception */
->  #define SEGV_MTEAERR	8	/* Asynchronous ARM MTE error */
->  #define SEGV_MTESERR	9	/* Synchronous ARM MTE exception */
-> -#define NSIGSEGV	9
-> +#define SEGV_CPERR	10	/* Control protection fault */
-> +#define NSIGSEGV	10
->  
->  /*
->   * SIGBUS si_codes
+I think it's modes, but it would be nice to be clear.  *BUT*, if this is
+accurate, doesn't it also mean that this patch is not strictly necessary?
 
+Don't get me wrong, the patch is probably still a good idea, but let's
+make sure we get the exact reasoning clear.
