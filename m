@@ -2,121 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5507F4AD4E2
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 10:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D904AD500
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Feb 2022 10:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352729AbiBHJ3Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Feb 2022 04:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S1355100AbiBHJb7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Feb 2022 04:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237653AbiBHJ3X (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Feb 2022 04:29:23 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D52AC03FEC1;
-        Tue,  8 Feb 2022 01:29:22 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id j14so23571624lja.3;
-        Tue, 08 Feb 2022 01:29:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9jFgBcCwyw+JzDYCLTCZj7IYtY0O/7Fz6FpDwFz3WSA=;
-        b=Cxuiov0oEhEhABwISaLLYTLHN3tzQ6PF+RTizCxpWY8feQ6Sz2x+TM3jmZxxWmNjv0
-         q28EFyaFYTlAbN1maWEM6RERHZTjoR/WE4mgvNqHUPt7F6oC+sNYeL39cBMJkac7Rt4k
-         kUBoOyjvcvD5l4yg9lsDUOOVNrISyrJwp9TnBNmBymRYU5g+xMtxKKXGdSLwIbGt40Xr
-         9xIN01VqwKLFRMjcCZqZdmBpwPLLHoO8truWxbF68Q80kAncmQE0NdLHt8zNjFWP7x3c
-         bFBayng/aXL7nLzKIHE6ncR/BwiQDML3zbzzfgLrBoV66II6hhCr/WvsDuz+OaCQo3Nv
-         Uy9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9jFgBcCwyw+JzDYCLTCZj7IYtY0O/7Fz6FpDwFz3WSA=;
-        b=L79+gecAXd+TkUFcY1fbPB9uM7A0iR5Oo0eh13n0QIo4HoEhYzAO/t+DQBv4HGYQIP
-         LZeSF8q/t70KJ30pByt0cqk/OulCBwbWVxbw/Hy2YjrLQZ82Pz91AFD+N2XmH1zaFYmp
-         42u6DiQfWgzTe6+pPymFeWTYFJEyuFOtri3FxinlEmXojzYCkcC4tgVD/t+EEo4/n8ER
-         yZEibR6dfJGVEdPSq5JYr113YG9FH86IZopaEe/7WlWRzueTT5gesf/EUGbJ4CS+J+6P
-         +4S35uWOt4KwgyIs3rIJ/q5QkAlCpDgnQGcPNFrSmJHEhmKB1p8tnqHB8UtsJLDMjfus
-         ddUQ==
-X-Gm-Message-State: AOAM532MZkSEdK7rmsE8WqPdmVej+E/mxiTcPVaTH+9tkz75HKuQIFz+
-        jOdNmQG8wl5JE8907/OemHw=
-X-Google-Smtp-Source: ABdhPJxU2OmzIM9fb0K8HePdfkwJ4Iqh+Y8JVXS0ExB8DZQYOb2juUMhr/5kpFM8JthwVNZVVhO1Yg==
-X-Received: by 2002:a2e:8751:: with SMTP id q17mr2240779ljj.65.1644312560537;
-        Tue, 08 Feb 2022 01:29:20 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id p16sm1958258ljc.86.2022.02.08.01.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 01:29:19 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id C01F55A0020; Tue,  8 Feb 2022 12:29:18 +0300 (MSK)
-Date:   Tue, 8 Feb 2022 12:29:18 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
+        with ESMTP id S1354933AbiBHJb5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Feb 2022 04:31:57 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DBEC03FECE;
+        Tue,  8 Feb 2022 01:31:41 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1644312700;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H/6XqdlLk396Y2QV/u0CviHdgHbavtEEfHO99e5VpJc=;
+        b=CmLoRoLkw9ZPal5/x5vYmdWovEEjkL22TdXDf3Bz5mlZfXlyt/sMLDc0uEJIVAodf+LWrE
+        HgkJZludL/EhO9uJA0YLtM8QVA4heoIJNY1NefW+kfLlckpXfiAP7lO2Dcku6F66XMwMRq
+        o/wVlYgTrmhT2C5SWnBcyAqQGVrrJDAOWdLCmZSb+M5A0ReRjGX/poGxnMwDe8HlVuOzfG
+        HsvCPtALHi0fb0j4MvIFLzL//G/nsR0nxEgLhD0plKyEHHOHFo0+X8BOqt7BaP8TvXZcXA
+        E63QNZ+qJ51B7WlphbW+fJCrUi5OW8k3WD42qk3vQ1PqWrlOfX4PK0b65cozlA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1644312700;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H/6XqdlLk396Y2QV/u0CviHdgHbavtEEfHO99e5VpJc=;
+        b=bHhv8L+M3WgmMTbcDFVYRJHeq1WUkvHtzrNL3+LG8QxP8fqsZV0dX9MvnHHnd0sc5AgSIO
+        Oga7MeFeLvO8DpDg==
+To:     Andy Lutomirski <luto@kernel.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "David.Laight@aculab.com" <David.Laight@aculab.com>,
         Adrian Reber <adrian@lisas.de>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        Cyrill Gorcunov <gorcunov@openvz.org>,
         Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com,
-        Andrei Vagin <avagin@gmail.com>,
         Dmitry Safonov <0x7f454c46@gmail.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>, "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
 Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Message-ID: <YgI37n+3JfLSNQCQ@grain>
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org>
- <YgDIIpCm3UITk896@lisas.de>
- <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org>
+In-Reply-To: <6ba06196-0756-37a4-d6c4-2e47e6601dcd@kernel.org>
+References: <87fsozek0j.ffs@tglx>
+ <a7e59ae16e0e05579b087caf4045e42b174e2167.camel@intel.com>
+ <3421da7fc8474b6db0e265b20ffd28d0@AcuMS.aculab.com>
+ <CAMe9rOonepEiRyoAyTGkDMQQhuyuoP4iTZJJhKGxgnq9vv=dLQ@mail.gmail.com>
+ <9f948745435c4c9273131146d50fe6f328b91a78.camel@intel.com>
+ <6ba06196-0756-37a4-d6c4-2e47e6601dcd@kernel.org>
+Date:   Tue, 08 Feb 2022 10:31:39 +0100
+Message-ID: <87mtj1vh50.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YgI1A0CtfmT7GMIp@kernel.org>
-User-Agent: Mutt/2.0.7 (2021-05-04)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 08, 2022 at 11:16:51AM +0200, Mike Rapoport wrote:
->  
-> > Any thoughts on how you would _like_ to see this resolved?
-> 
-> Ideally, CRIU will need a knob that will tell the kernel/CET machinery
-> where the next RET will jump, along the lines of
-> restore_signal_shadow_stack() AFAIU.
-> 
-> But such a knob will immediately reduce the security value of the entire
-> thing, and I don't have good ideas how to deal with it :(
+On Mon, Feb 07 2022 at 17:31, Andy Lutomirski wrote:
+> So this leaves altshadowstack.  If we want to allow userspace to handle 
+> a shstk overflow, I think we need altshadowstack.  And I can easily 
+> imagine signal handling in a coroutine or user-threading evironment (Go? 
+> UMCG or whatever it's called?) wanting this.  As noted, this obnoxious 
+> Andy person didn't like putting any shstk-related extensions in the FPU 
+> state.
+>
+> For better or for worse, altshadowstack is (I think) fundamentally a new 
+> API.  No amount of ucontext magic is going to materialize an entire 
+> shadow stack out of nowhere when someone calls sigaltstack().  So the 
+> questions are: should we support altshadowstack from day one and, if so, 
+> what should it look like?
 
-Probably a kind of latch in the task_struct which would trigger off once
-returt to a different address happened, thus we would be able to jump inside
-paratite code. Of course such trigger should be available under proper
-capability only.
+I think we should support them from day one.
+
+> So I don't have a complete or even almost complete design in mind, but I 
+> think we do need to make a conscious decision either to design this 
+> right or to skip it for v1.
+
+Skipping it might create a fundamental design fail situation as it might
+require changes to the shadow stack signal handling in general which
+becomes a nightmare once a non-altstack API is exposed.
+
+> As for CRIU, I don't think anyone really expects a new kernel, running 
+> new userspace that takes advantage of features in the new kernel, to 
+> work with old CRIU.
+
+Yes, CRIU needs updates, but what ensures that CRIU managed user space
+does not use SHSTK if CRIU is not updated yet?
+
+> Upgrading to a SHSTK kernel should still allow using CRIU with
+> non-SHSTK userspace, but I don't see how it's possible for CRIU to
+> handle SHSTK without updates.  We should certainly do our best to make
+> CRIU's life easy, though.
+
+Handling CRIU with SHSTK enabled has to be part of the overall design
+otherwise we'll either end up with horrible hacks or with a requirement
+to change the V1 UAPI....
+
+Thanks,
+
+        tglx
