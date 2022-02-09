@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9624B001A
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 23:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED464B002E
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 23:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235495AbiBIWYA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 17:24:00 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:51816 "EHLO
+        id S235758AbiBIW2j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 17:28:39 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235498AbiBIWXz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 17:23:55 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77F9E00E5B7;
-        Wed,  9 Feb 2022 14:23:57 -0800 (PST)
+        with ESMTP id S235632AbiBIW2Z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 17:28:25 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86480E01A2DD;
+        Wed,  9 Feb 2022 14:27:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644445437; x=1675981437;
+  t=1644445677; x=1675981677;
   h=message-id:date:mime-version:to:cc:references:from:
    subject:in-reply-to:content-transfer-encoding;
-  bh=xkpFBXYQrPgtUiGsMKx5OqlH/pGeqV2L1Ykn/ZtyOSU=;
-  b=YGbc47ASftPxIwFd2kxXZYK63tZmGW0thBn1KD+ynYIc434TWmP3Etu/
-   +PUeQ81/uJ+1y9DiTFHR7SC1vkGd1E8cjLkzdnrFGdkV4LdQmiHtnucTq
-   wJEFJyOgAwrMJpPzqZ8+l6iH7L2Cb4EW+Goy6DHMSnbIh5aSpk6eYP52H
-   KV3l7aLXuxBta92d/rdsD1EhWoYkgZe0vrVVt0mAZcw5+aDgbeate9uB4
-   tbTmeSajgeXcAn2R5tZLql2BGBnFlE59sn0oPYWW8KBvzSQRzHGN5JBU+
-   OWYqC79xyhUcfg9ih/Xp0owIgt/P7tLBgTIi1QH4B/H3P5GqxYdANOqIn
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="312646845"
+  bh=SfeEZ6Op0bvafHg5MlJ6fjdSi90N4yjAydK+PCRbadk=;
+  b=lly4Pgpp4F2zK0o/xha6ocMtS/XxRo1XzPkLQ2tCtu17LSx0wu34pJrw
+   uOkr52lfHWnHNO7wrwas5AzAgoHk/a2k2KaubN38xYrLC20HgYFFRHO0Q
+   fAxiC2S9gkb0bff4S0hrYkhKrGko3Ls9dfOcgCiMizHZZffGEDhmg1yHk
+   1zcmSMJ0ePiUKYN2X5TAgGHfdX9wWeuYiG5n6f8nt72MqbmOrjUytZYHN
+   Uwgd1Rz/0cBTED8y+AsSsApbls5l2kM3wVQMbHiQmSiDRkOHApzzU0eK+
+   u6dN7qe4BkhpeC2FjL9Lmi3O7BHC4CFelB/KmXL8IwIbBCKXYlb9y3+P5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="230003811"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="312646845"
+   d="scan'208";a="230003811"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:23:57 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:27:57 -0800
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="585744181"
+   d="scan'208";a="585744850"
 Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:23:55 -0800
-Message-ID: <f92c5110-7d97-b68d-d387-7e6a16a29e49@intel.com>
-Date:   Wed, 9 Feb 2022 14:23:51 -0800
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:27:55 -0800
+Message-ID: <804adbac-61e6-0fd2-f726-5735fb290199@intel.com>
+Date:   Wed, 9 Feb 2022 14:27:53 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -72,10 +72,11 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         kcc@google.com, eranian@google.com
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-19-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-20-rick.p.edgecombe@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 18/35] mm: Add guard pages around a shadow stack.
-In-Reply-To: <20220130211838.8382-19-rick.p.edgecombe@intel.com>
+Subject: Re: [PATCH 19/35] mm/mmap: Add shadow stack pages to memory
+ accounting
+In-Reply-To: <20220130211838.8382-20-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -89,139 +90,50 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 1/30/22 13:18, Rick Edgecombe wrote:
-> INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
-> first and the last elements in the range, effectively touches those memory
-> areas.
-
-This is a pretty close copy of the instruction reference text for
-INCSSP.  I'm feeling rather dense today, but that's just not making any
-sense.
-
-The pseudocode is more sensible in the SDM.  I think this needs a better
-explanation:
-
-	The INCSSP instruction increments the shadow stack pointer.  It
-	is the shadow stack analog of an instruction like:
-
-		addq	$0x80, %rsp
-
-	However, there is one important difference between an ADD on
-	%rsp and INCSSP.  In addition to modifying SSP, INCSSP also
-	reads from the memory of the first and last elements that were
-	"popped".  You can think of it as acting like this:
-
-	READ_ONCE(ssp);       // read+discard top element on stack
-	ssp += nr_to_pop * 8; // move the shadow stack
-	READ_ONCE(ssp-8);     // read+discard last popped stack element
-	
-
-> The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
-> 255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
-
-... That maximum distance, combined with an a guard pages at the end of
-a shadow stack ensures that INCSSP will fault before it is able to move
-across an entire guard page.
-
-> Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
-> CALL, and RET from going beyond.
-
-> 
-> diff --git a/arch/x86/include/asm/page_types.h b/arch/x86/include/asm/page_types.h
-> index a506a411474d..e1533fdc08b4 100644
-> --- a/arch/x86/include/asm/page_types.h
-> +++ b/arch/x86/include/asm/page_types.h
-> @@ -73,6 +73,13 @@ bool pfn_range_is_mapped(unsigned long start_pfn, unsigned long end_pfn);
->  
->  extern void initmem_init(void);
->  
-> +#define vm_start_gap vm_start_gap
-> +struct vm_area_struct;
-> +extern unsigned long vm_start_gap(struct vm_area_struct *vma);
-> +
-> +#define vm_end_gap vm_end_gap
-> +extern unsigned long vm_end_gap(struct vm_area_struct *vma);
-> +
->  #endif	/* !__ASSEMBLY__ */
->  
->  #endif	/* _ASM_X86_PAGE_DEFS_H */
-> diff --git a/arch/x86/mm/mmap.c b/arch/x86/mm/mmap.c
-> index f3f52c5e2fd6..81f9325084d3 100644
-> --- a/arch/x86/mm/mmap.c
-> +++ b/arch/x86/mm/mmap.c
-> @@ -250,3 +250,49 @@ bool pfn_modify_allowed(unsigned long pfn, pgprot_t prot)
->  		return false;
->  	return true;
+> +bool is_shadow_stack_mapping(vm_flags_t vm_flags)
+> +{
+> +	return vm_flags & VM_SHADOW_STACK;
+> +}
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index bc8713a76e03..21fdb1273571 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -911,6 +911,14 @@ static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
+>  	__ptep_modify_prot_commit(vma, addr, ptep, pte);
 >  }
+>  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
 > +
-> +/*
-> + * Shadow stack pointer is moved by CALL, RET, and INCSSP(Q/D).  INCSSPQ
-> + * moves shadow stack pointer up to 255 * 8 = ~2 KB (~1KB for INCSSPD) and
-> + * touches the first and the last element in the range, which triggers a
-> + * page fault if the range is not in a shadow stack.  Because of this,
-> + * creating 4-KB guard pages around a shadow stack prevents these
-> + * instructions from going beyond.
-> + */
-> +#define SHADOW_STACK_GUARD_GAP PAGE_SIZE
-> +
-> +unsigned long vm_start_gap(struct vm_area_struct *vma)
+> +#ifndef is_shadow_stack_mapping
+> +static inline bool is_shadow_stack_mapping(vm_flags_t vm_flags)
 > +{
-> +	unsigned long vm_start = vma->vm_start;
-> +	unsigned long gap = 0;
-> +
-> +	if (vma->vm_flags & VM_GROWSDOWN)
-> +		gap = stack_guard_gap;
-> +	else if (vma->vm_flags & VM_SHADOW_STACK)
-> +		gap = SHADOW_STACK_GUARD_GAP;
-> +
-> +	if (gap != 0) {
-> +		vm_start -= gap;
-> +		if (vm_start > vma->vm_start)
-> +			vm_start = 0;
-> +	}
-> +	return vm_start;
+> +	return false;
 > +}
-> +
-> +unsigned long vm_end_gap(struct vm_area_struct *vma)
-> +{
-> +	unsigned long vm_end = vma->vm_end;
-> +	unsigned long gap = 0;
-> +
-> +	if (vma->vm_flags & VM_GROWSUP)
-> +		gap = stack_guard_gap;
-> +	else if (vma->vm_flags & VM_SHADOW_STACK)
-> +		gap = SHADOW_STACK_GUARD_GAP;
-> +
-> +	if (gap != 0) {
-> +		vm_end += gap;
-> +		if (vm_end < vma->vm_end)
-> +			vm_end = -PAGE_SIZE;
-> +	}
-> +	return vm_end;
-> +}
+> +#endif
 
-First of all, __weak would be a lot better than these #ifdefs.
+Hold your horses there.  Remember:
 
-Second, I have the same basic objection to this as the maybe_mkwrite()
-mess.  This is a forked copy of the code.  Instead of refactoring, it's
-just copied-pasted-and-#ifdef'd.  Not so nice.
++#ifdef CONFIG_X86_SHADOW_STACK
++# define VM_SHADOW_STACK       VM_HIGH_ARCH_5
++#else
++# define VM_SHADOW_STACK       VM_NONE
++#endif
 
-Isn't this just a matter of overriding 'stack_guard_gap' for
-VM_SHADOW_STACK?  Why don't we just do this:
+Plus:
 
-unsigned long stack_guard_gap(struct vm_area_struct *vma)
+#define VM_NONE         0x00000000
+
+That means the arch-generic version, when CONFIG_X86_SHADOW_STACK is off
+compiles down to:
+
+bool is_shadow_stack_mapping(vm_flags_t vm_flags)
 {
-	if (vma->vm_flags & VM_SHADOW_STACK)
-		return SHADOW_STACK_GUARD_GAP;
-
-	return __stack_guard_gap;
+	return vm_flags & 0x00000000;
 }
 
-Or, worst-case if people don't want 2 easily compiled-out lines added to
-generic code, define:
+I _suspect_ the compiler *might* compile that down to the same thing as:
 
-unsigned long __weak stack_guard_gap(struct vm_area_struct *vma)
-{
-	return __stack_guard_gap;
-}
+	return false;
 
-in generic code, and put the top definition in arch/x86.
+So, why not just have one version, no additional #ifdefs, and be done
+with it?  Heck, why have the helper in the first place?  Just check
+VM_SHADOW_STACK directly.
