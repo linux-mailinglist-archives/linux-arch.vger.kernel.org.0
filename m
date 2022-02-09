@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A114AFCAB
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 20:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6432B4AFC93
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 20:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241043AbiBITBt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 14:01:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S241913AbiBITAt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 14:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241892AbiBITAn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 14:00:43 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73AFC0613C9;
-        Wed,  9 Feb 2022 11:00:06 -0800 (PST)
+        with ESMTP id S241918AbiBITAl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 14:00:41 -0500
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9721C0401E8;
+        Wed,  9 Feb 2022 10:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644433206; x=1675969206;
+  t=1644433171; x=1675969171;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=0aNNbbOIO8oCl2L/symLxvLv9Zx7Xic4udN3gqOpiJ0=;
-  b=iWvCeLVSAsZPkKsP83qEJdogfaKrsfeTk1Q/KEs/nWzA2tFLoAF5B2IZ
-   T0YUrpEJqUah75UhPgzmbi6H2gI1dvG0ajeseg5dzjWVof9Dwwj4MAeHg
-   DH3drfJ5CfqSf/xuXwVKvomxgvQT5TUyLlysfDltSJrERwpHjG0FqLLjJ
-   Bwumir0YEJCr70oN+NI0hN1XlG2ZU78Pe0IaK6wUhpt7C87RxZub42Y2v
-   OoZUDhJ/Z2wP051RgldgQDIdZe14IrpHRYkoAov70L80jPZqOIVyfviYx
-   F9+CG4/Oz91i1yVzGXVBEp00lMTwg038AviC2edYPHzqA1rwD2Mgpe+wY
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="249062925"
+  bh=obKShbvScnyyqNuVr6VaKqL5Df2no/qrA8+ufle7+e0=;
+  b=Vz4smZxpiG9hqGviLMKL53k5tSw5kqHUuegkufU0kVU2Ye/mU9u+YDIV
+   bcQwfxUbVyIWAGiIpV1zj39kUlEZqdbR0Y3ryeQFxJd7/QJJPe2Uakn1R
+   C9tyzriovYPTyGmHM0Q+91DHC+VMua8fRAZCt/kzZog7eg+TazFPosSrt
+   8iLZwS3mHjF0dWu8kauFJE1x0WjoWCYt2JYWukuo5h1Fv+R/vqzKhjEKV
+   4JCCsozOFYZyr6cO6IGusJfEqomjBy4K3vx/a6ecE7WhACgLnvUBu9Qhu
+   6aWQd0TQSrniD02lSsU89BrpBmjMLXxHEZ02bhQ9nY28xA4N66l6mOr9l
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="310047670"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="249062925"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:05 -0800
+   d="scan'208";a="310047670"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="633343853"
+   d="scan'208";a="701372210"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga004.jf.intel.com with ESMTP; 09 Feb 2022 10:58:57 -0800
+  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2022 10:58:59 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQR031082;
-        Wed, 9 Feb 2022 18:58:54 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQS031082;
+        Wed, 9 Feb 2022 18:58:56 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -78,9 +78,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v10 04/15] arch: introduce asm function sections
-Date:   Wed,  9 Feb 2022 19:57:41 +0100
-Message-Id: <20220209185752.1226407-5-alexandr.lobakin@intel.com>
+Subject: [PATCH v10 05/15] x86: support asm function sections
+Date:   Wed,  9 Feb 2022 19:57:42 +0100
+Message-Id: <20220209185752.1226407-6-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
 References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
@@ -88,423 +88,822 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Sometimes it can be useful to create a separate section for every
-function (symbol in general) to be able then to selectively merge
-them back into one or several others. This is how Dead Code
-Elimination (DCE, CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) and a part
-of Link-Time Optimization (LTO, currently CONFIG_LTO_CLANG) work.
-Currently, this can only be done for C functions as the compilers
-are able to do this automatically when `-ffunction-sections` is
-specified.
+Address places which need special care and enable
+CONFIG_ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS.
 
-Add a basic infra for supporting asm function sections, which means
-support for putting functions written in assembly into separate
-sections. If any of the required build options (DCE, LTO, FG-KASLR
-later) is on and the target architecture claims it supports them,
-all asm functions and "code" will be placed into separate so-named
-("current_section.function_name") sections by default.
-This is achieved using `--sectname-subst` GAS flag which will then
-substitute "%S" in a .pushsection or .section directive with the
-name of the current section. So,
+Notably:
+ - propagate `--sectname-subst` to KBUILD_AFLAGS in
+   x86/boot/Makefile and x86/boot/compressed/Makefile as both
+   override them;
+ - symbols starting with a dot (like ".Lrelocated") should be
+   handled manually with SYM_*_START_SECT(.Lrelocated, relocated)
+   as "two dots" is a special (and CPP doesn't want to concatenate
+   two dots in general);
+ - some symbols explicitly need to reside in one section (like
+   kexec control code, hibernation page etc.);
+ - macros creating aliases for functions (like __memcpy() for
+   memcpy() etc.) should go after the main declaration (as
+   aliases should be declared in the same section and they
+   don't have SYM_PUSH_SECTION() inside);
+ - things like ".org", ".align" should be manually pushed to
+   the same section the next symbol goes to;
+ - expand indirect_thunk wildcards in vmlinux.lds.S to catch
+   symbols back into the "main" section;
+ - inline ASM functions like __raw_callee*() should be pushed
+   manually as well.
 
-.section .entry.text      # current section is .entry.text
-SYM_FUNC_START(foo)
- -> .pushsection %S.foo   # now the section is .entry.text.foo
-do_something
-SYM_FUNC_END(foo)
- -> .popsection           # back to .entry.text
+With these changes and `-ffunction-sections` enabled, "plain"
+".text" section is empty which means that everything works
+right as expected.
 
-Now the function "foo" is placed into .entry.text.foo and can be
-garbage-collected if there are no consumers for it.
-Otherwise, the linker script will merge it back into .entry.text.
-
-Since modpost is being run on vmlinux.o, i.e. before the final
-linking, expand its okay-list to cover new potential sections
-(which will get processed afterwards).
-
-Suggested-by: Peter Zijlstra <peterz@infradead.org> # always do, then merge
-Suggested-by: Nicolas Pitre <nico@fluxnic.net> # --sectname-subst flag
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- Makefile                          |  18 +++++
- arch/Kconfig                      |   6 ++
- include/asm-generic/vmlinux.lds.h |  21 +++---
- include/linux/linkage.h           | 119 +++++++++++++++++++++++++++++-
- init/Kconfig                      |  10 +++
- scripts/mod/modpost.c             |   6 +-
- 6 files changed, 167 insertions(+), 13 deletions(-)
+ arch/x86/Kconfig                              |  1 +
+ arch/x86/boot/Makefile                        |  1 +
+ arch/x86/boot/compressed/Makefile             |  1 +
+ arch/x86/boot/compressed/head_32.S            |  2 +-
+ arch/x86/boot/compressed/head_64.S            | 32 ++++++++++++-------
+ arch/x86/boot/pmjump.S                        |  2 +-
+ arch/x86/crypto/aesni-intel_asm.S             |  4 +--
+ arch/x86/crypto/poly1305-x86_64-cryptogams.pl |  4 +++
+ arch/x86/include/asm/paravirt.h               |  2 ++
+ arch/x86/include/asm/qspinlock_paravirt.h     |  2 ++
+ arch/x86/kernel/head_32.S                     |  4 +--
+ arch/x86/kernel/head_64.S                     |  4 +--
+ arch/x86/kernel/kprobes/core.c                |  2 ++
+ arch/x86/kernel/kvm.c                         |  2 ++
+ arch/x86/kernel/relocate_kernel_32.S          | 10 +++---
+ arch/x86/kernel/relocate_kernel_64.S          | 12 ++++---
+ arch/x86/kernel/vmlinux.lds.S                 |  2 +-
+ arch/x86/kvm/emulate.c                        |  7 +++-
+ arch/x86/lib/copy_user_64.S                   |  2 +-
+ arch/x86/lib/error-inject.c                   |  2 ++
+ arch/x86/lib/getuser.S                        |  5 ++-
+ arch/x86/lib/memcpy_64.S                      |  4 +--
+ arch/x86/lib/memmove_64.S                     |  5 ++-
+ arch/x86/lib/memset_64.S                      |  5 +--
+ arch/x86/lib/putuser.S                        |  2 +-
+ arch/x86/power/hibernate_asm_32.S             | 10 +++---
+ arch/x86/power/hibernate_asm_64.S             | 10 +++---
+ 27 files changed, 89 insertions(+), 50 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index fa9f947c9839..fbe2d13028f4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -877,6 +877,24 @@ ifeq ($(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL)$(CONFIG_LIVEPATCH),yy)
- KBUILD_LDFLAGS += -z unique-symbol
- endif
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 391c4cac8958..f6bb48d41349 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -102,6 +102,7 @@ config X86
+ 	select ARCH_MIGHT_HAVE_PC_SERIO
+ 	select ARCH_STACKWALK
+ 	select ARCH_SUPPORTS_ACPI
++	select ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
+ 	select ARCH_SUPPORTS_ATOMIC_RMW
+ 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
+ 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK	if X86_64
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index b5aecb524a8a..080990b09f06 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -68,6 +68,7 @@ targets += cpustr.h
  
-+# Allow ASM code to generate separate sections for each function. See
-+# `include/linux/linkage.h` for explanation. This flag is to enable GAS to
-+# insert the name of the previous section instead of `%S` inside .pushsection
-+ifdef CONFIG_HAVE_ASM_FUNCTION_SECTIONS
-+ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_LTO_CLANG),)
-+SECSUBST_AFLAGS := -Wa,--sectname-subst
-+KBUILD_AFLAGS_KERNEL += $(SECSUBST_AFLAGS)
-+KBUILD_CFLAGS_KERNEL += $(SECSUBST_AFLAGS)
-+export SECSUBST_AFLAGS
-+endif
-+
-+# Same for modules. LD DCE doesn't work for them, thus not checking for it
-+ifneq ($(CONFIG_LTO_CLANG),)
-+KBUILD_AFLAGS_MODULE += -Wa,--sectname-subst
-+KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
-+endif
-+endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
-+
- ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
- KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
- LDFLAGS_vmlinux += --gc-sections
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 678a80713b21..550f0599e211 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1322,6 +1322,12 @@ config DYNAMIC_SIGFRAME
- config HAVE_ARCH_NODE_DEV_GROUP
- 	bool
+ KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP
+ KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
++KBUILD_AFLAGS	+= $(SECSUBST_AFLAGS)
+ KBUILD_CFLAGS	+= $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+ KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
+ GCOV_PROFILE := n
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 6115274fe10f..e7ee94d5f55a 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -58,6 +58,7 @@ KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
+ CFLAGS_sev.o += -I$(objtree)/arch/x86/lib/
  
-+config ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
-+	bool
-+	help
-+	  An arch should select this if it can be built and run with its
-+	  asm functions placed into separate sections to improve DCE and LTO.
-+
- source "kernel/gcov/Kconfig"
+ KBUILD_AFLAGS  := $(KBUILD_CFLAGS) -D__ASSEMBLY__
++KBUILD_AFLAGS += $(SECSUBST_AFLAGS)
+ GCOV_PROFILE := n
+ UBSAN_SANITIZE :=n
  
- source "scripts/gcc-plugins/Kconfig"
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 42f3866bca69..e7b8a84e0e64 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -84,6 +84,9 @@
- /* Align . to a 8 byte boundary equals to maximum function alignment. */
- #define ALIGN_FUNCTION()  . = ALIGN(8)
+diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
+index 659fad53ca82..a3a667f5e5cd 100644
+--- a/arch/x86/boot/compressed/head_32.S
++++ b/arch/x86/boot/compressed/head_32.S
+@@ -158,8 +158,8 @@ SYM_FUNC_START_ALIAS(efi_stub_entry)
+ 	call	efi_main
+ 	/* efi_main returns the possibly relocated address of startup_32 */
+ 	jmp	*%eax
+-SYM_FUNC_END(efi32_stub_entry)
+ SYM_FUNC_END_ALIAS(efi_stub_entry)
++SYM_FUNC_END(efi32_stub_entry)
+ #endif
  
-+/* This is useful for collecting individual sections back into one main */
-+#define SECT_WILDCARD(sect)	sect sect.[0-9a-zA-Z_]*
-+
+ 	.text
+diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+index fd9441f40457..b6fb27fd7abd 100644
+--- a/arch/x86/boot/compressed/head_64.S
++++ b/arch/x86/boot/compressed/head_64.S
+@@ -72,7 +72,7 @@
+ #define rva(X) ((X) - startup_32)
+ 
+ 	.code32
+-SYM_FUNC_START(startup_32)
++SYM_FUNC_START_SECT(startup_32, startup)
+ 	/*
+ 	 * 32bit entry is 0 and it is ABI so immutable!
+ 	 * If we come here directly from a bootloader,
+@@ -297,8 +297,10 @@ SYM_FUNC_START(startup_32)
+ SYM_FUNC_END(startup_32)
+ 
+ #ifdef CONFIG_EFI_MIXED
++SYM_PUSH_SECTION(startup)
+ 	.org 0x190
+-SYM_FUNC_START(efi32_stub_entry)
++SYM_POP_SECTION()
++SYM_FUNC_START_SECT(efi32_stub_entry, startup)
+ 	add	$0x4, %esp		/* Discard return address */
+ 	popl	%ecx
+ 	popl	%edx
+@@ -332,8 +334,10 @@ SYM_FUNC_END(efi32_stub_entry)
+ #endif
+ 
+ 	.code64
++SYM_PUSH_SECTION(startup)
+ 	.org 0x200
+-SYM_CODE_START(startup_64)
++SYM_POP_SECTION()
++SYM_CODE_START_SECT(startup_64, startup)
+ 	/*
+ 	 * 64bit entry is 0x200 and it is ABI so immutable!
+ 	 * We come here either from startup_32 or directly from a
+@@ -533,8 +537,10 @@ trampoline_return:
+ SYM_CODE_END(startup_64)
+ 
+ #ifdef CONFIG_EFI_STUB
++SYM_PUSH_SECTION(startup)
+ 	.org 0x390
+-SYM_FUNC_START(efi64_stub_entry)
++SYM_POP_SECTION()
++SYM_FUNC_START_SECT(efi64_stub_entry, startup)
+ SYM_FUNC_START_ALIAS(efi_stub_entry)
+ 	and	$~0xf, %rsp			/* realign the stack */
+ 	movq	%rdx, %rbx			/* save boot_params pointer */
+@@ -542,12 +548,12 @@ SYM_FUNC_START_ALIAS(efi_stub_entry)
+ 	movq	%rbx,%rsi
+ 	leaq	rva(startup_64)(%rax), %rax
+ 	jmp	*%rax
+-SYM_FUNC_END(efi64_stub_entry)
+ SYM_FUNC_END_ALIAS(efi_stub_entry)
++SYM_FUNC_END(efi64_stub_entry)
+ #endif
+ 
+ 	.text
+-SYM_FUNC_START_LOCAL_NOALIGN(.Lrelocated)
++SYM_FUNC_START_LOCAL_NOALIGN_SECT(.Lrelocated, relocated)
+ 
  /*
-  * LD_DEAD_CODE_DATA_ELIMINATION option enables -fdata-sections, which
-  * generates .data.identifier sections, which need to be pulled in with
-@@ -97,12 +100,12 @@
-  * sections to be brought in with rodata.
-  */
- #if defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) || defined(CONFIG_LTO_CLANG)
--#define TEXT_MAIN .text .text.[0-9a-zA-Z_]*
--#define DATA_MAIN .data .data.[0-9a-zA-Z_]* .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
--#define SDATA_MAIN .sdata .sdata.[0-9a-zA-Z_]*
--#define RODATA_MAIN .rodata .rodata.[0-9a-zA-Z_]* .rodata..L*
--#define BSS_MAIN .bss .bss.[0-9a-zA-Z_]* .bss..compoundliteral*
--#define SBSS_MAIN .sbss .sbss.[0-9a-zA-Z_]*
-+#define TEXT_MAIN SECT_WILDCARD(.text)
-+#define DATA_MAIN SECT_WILDCARD(.data) .data..L* .data..compoundliteral* .data.$__unnamed_* .data.$L*
-+#define SDATA_MAIN SECT_WILDCARD(.sdata)
-+#define RODATA_MAIN SECT_WILDCARD(.rodata) .rodata..L*
-+#define BSS_MAIN SECT_WILDCARD(.bss) .bss..compoundliteral*
-+#define SBSS_MAIN SECT_WILDCARD(.sbss)
- #else
- #define TEXT_MAIN .text
- #define DATA_MAIN .data
-@@ -564,7 +567,7 @@
- #define NOINSTR_TEXT							\
- 		ALIGN_FUNCTION();					\
- 		__noinstr_text_start = .;				\
--		*(.noinstr.text)					\
-+		*(SECT_WILDCARD(.noinstr.text))				\
- 		__noinstr_text_end = .;
+  * Clear BSS (stack is currently empty)
+@@ -670,20 +676,22 @@ SYM_CODE_START(trampoline_32bit_src)
+ SYM_CODE_END(trampoline_32bit_src)
  
+ 	.code64
+-SYM_FUNC_START_LOCAL_NOALIGN(.Lpaging_enabled)
++SYM_FUNC_START_LOCAL_NOALIGN_SECT(.Lpaging_enabled, trampoline_32bit_src)
+ 	/* Return from the trampoline */
+ 	jmp	*%rdi
+ SYM_FUNC_END(.Lpaging_enabled)
+ 
++SYM_PUSH_SECTION(trampoline_32bit_src)
+ 	/*
+          * The trampoline code has a size limit.
+          * Make sure we fail to compile if the trampoline code grows
+          * beyond TRAMPOLINE_32BIT_CODE_SIZE bytes.
+ 	 */
+ 	.org	trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_SIZE
++SYM_POP_SECTION()
+ 
+ 	.code32
+-SYM_FUNC_START_LOCAL_NOALIGN(.Lno_longmode)
++SYM_FUNC_START_LOCAL_NOALIGN_SECT(.Lno_longmode, no_longmode)
+ 	/* This isn't an x86-64 CPU, so hang intentionally, we cannot continue */
+ 1:
+ 	hlt
+@@ -747,7 +755,7 @@ SYM_DATA(efi_is64, .byte 1)
+ 
+ 	__HEAD
+ 	.code32
+-SYM_FUNC_START(efi32_pe_entry)
++SYM_FUNC_START_SECT(efi32_pe_entry, startup)
  /*
-@@ -621,7 +624,7 @@
- #define ENTRY_TEXT							\
- 		ALIGN_FUNCTION();					\
- 		__entry_text_start = .;					\
--		*(.entry.text)						\
-+		*(SECT_WILDCARD(.entry.text))				\
- 		__entry_text_end = .;
+  * efi_status_t efi32_pe_entry(efi_handle_t image_handle,
+  *			       efi_system_table_32_t *sys_table)
+@@ -839,7 +847,7 @@ SYM_DATA_END(loaded_image_proto)
+  *
+  * Physical offset is expected in %ebp
+  */
+-SYM_FUNC_START(startup32_set_idt_entry)
++SYM_FUNC_START_SECT(startup32_set_idt_entry, startup)
+ 	push    %ebx
+ 	push    %ecx
  
- #define IRQENTRY_TEXT							\
-@@ -643,7 +646,7 @@
- 		__static_call_text_end = .;
- 
- /* Section used for early init (in .S files) */
--#define HEAD_TEXT  KEEP(*(.head.text))
-+#define HEAD_TEXT  KEEP(*(SECT_WILDCARD(.head.text)))
- 
- #define HEAD_TEXT_SECTION							\
- 	.head.text : AT(ADDR(.head.text) - LOAD_OFFSET) {		\
-diff --git a/include/linux/linkage.h b/include/linux/linkage.h
-index dbf8506decca..f3b966a6427e 100644
---- a/include/linux/linkage.h
-+++ b/include/linux/linkage.h
-@@ -73,6 +73,38 @@
- #define __ALIGN_STR	".align 4,0x90"
+@@ -872,7 +880,7 @@ SYM_FUNC_START(startup32_set_idt_entry)
+ SYM_FUNC_END(startup32_set_idt_entry)
  #endif
  
-+/*
-+ * Allow ASM symbols to have their own unique sections if they are being
-+ * generated by the compiler for C functions (DCE, LTO). Correlates with
-+ * the presence of the `-ffunction-section` in KBUILD_CFLAGS.
-+ */
-+#if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
-+    ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
-+     (defined(CONFIG_LTO_CLANG)))
-+
-+#define SYM_PUSH_SECTION(name)				\
-+	.pushsection %S.name, "ax"
-+
-+#define SYM_POP_SECTION()				\
-+	.popsection
-+
-+#define __ASM_PUSH_SECTION(name)			\
-+	".pushsection %S." name ", \"ax\""
-+
-+#else /* !(CONFIG_HAVE_ASM_FUNCTION_SECTIONS && (DCE || LTO)) */
-+
-+#define SYM_PUSH_SECTION(name)
-+#define SYM_POP_SECTION()
-+#define __ASM_PUSH_SECTION(name)
-+
-+#endif /* !(CONFIG_HAVE_ASM_FUNCTION_SECTIONS && (DCE || LTO)) */
-+
-+#define ASM_PUSH_SECTION(name)				\
-+	__ASM_PUSH_SECTION(__stringify(name))
-+
-+#define ASM_POP_SECTION()				\
-+	__stringify(SYM_POP_SECTION())
-+
- #ifdef __ASSEMBLY__
+-SYM_FUNC_START(startup32_load_idt)
++SYM_FUNC_START_SECT(startup32_load_idt, startup)
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ 	/* #VC handler */
+ 	leal    rva(startup32_vc_handler)(%ebp), %eax
+@@ -904,7 +912,7 @@ SYM_FUNC_END(startup32_load_idt)
+  * succeed. An incorrect C-bit position will map all memory unencrypted, so that
+  * the compare will use the encrypted random data and fail.
+  */
+-SYM_FUNC_START(startup32_check_sev_cbit)
++SYM_FUNC_START_SECT(startup32_check_sev_cbit, startup)
+ #ifdef CONFIG_AMD_MEM_ENCRYPT
+ 	pushl	%eax
+ 	pushl	%ebx
+diff --git a/arch/x86/boot/pmjump.S b/arch/x86/boot/pmjump.S
+index cbec8bd0841f..e647c17000a9 100644
+--- a/arch/x86/boot/pmjump.S
++++ b/arch/x86/boot/pmjump.S
+@@ -46,7 +46,7 @@ SYM_FUNC_END(protected_mode_jump)
  
- /* SYM_T_FUNC -- type used by assembler to mark functions */
-@@ -209,6 +241,15 @@
- 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ 	.code32
+ 	.section ".text32","ax"
+-SYM_FUNC_START_LOCAL_NOALIGN(.Lin_pm32)
++SYM_FUNC_START_LOCAL_NOALIGN_SECT(.Lin_pm32, in_pm32)
+ 	# Set up data segments for flat 32-bit mode
+ 	movl	%ecx, %ds
+ 	movl	%ecx, %es
+diff --git a/arch/x86/crypto/aesni-intel_asm.S b/arch/x86/crypto/aesni-intel_asm.S
+index 363699dd7220..6b92beb7820a 100644
+--- a/arch/x86/crypto/aesni-intel_asm.S
++++ b/arch/x86/crypto/aesni-intel_asm.S
+@@ -1752,8 +1752,8 @@ SYM_FUNC_END(aesni_gcm_finalize)
  #endif
  
-+/*
-+ * SYM_FUNC_START_WEAK_ALIAS -- use where there are two global names for one
-+ * function, and one of them is weak
-+ */
-+#ifndef SYM_FUNC_START_WEAK_ALIAS
-+#define SYM_FUNC_START_WEAK_ALIAS(name)			\
-+	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
-+#endif
-+
+ 
+-SYM_FUNC_START_LOCAL_ALIAS(_key_expansion_128)
+ SYM_FUNC_START_LOCAL(_key_expansion_256a)
++SYM_FUNC_START_LOCAL_ALIAS(_key_expansion_128)
+ 	pshufd $0b11111111, %xmm1, %xmm1
+ 	shufps $0b00010000, %xmm0, %xmm4
+ 	pxor %xmm4, %xmm0
+@@ -1763,8 +1763,8 @@ SYM_FUNC_START_LOCAL(_key_expansion_256a)
+ 	movaps %xmm0, (TKEYP)
+ 	add $0x10, TKEYP
+ 	RET
+-SYM_FUNC_END(_key_expansion_256a)
+ SYM_FUNC_END_ALIAS(_key_expansion_128)
++SYM_FUNC_END(_key_expansion_256a)
+ 
+ SYM_FUNC_START_LOCAL(_key_expansion_192a)
+ 	pshufd $0b01010101, %xmm1, %xmm1
+diff --git a/arch/x86/crypto/poly1305-x86_64-cryptogams.pl b/arch/x86/crypto/poly1305-x86_64-cryptogams.pl
+index 71fae5a09e56..221a4596f390 100644
+--- a/arch/x86/crypto/poly1305-x86_64-cryptogams.pl
++++ b/arch/x86/crypto/poly1305-x86_64-cryptogams.pl
+@@ -421,6 +421,7 @@ my ($H0,$H1,$H2,$H3,$H4, $T0,$T1,$T2,$T3,$T4, $D0,$D1,$D2,$D3,$D4, $MASK) =
+     map("%xmm$_",(0..15));
+ 
+ $code.=<<___;
++SYM_PUSH_SECTION(__poly1305_block)
+ .type	__poly1305_block,\@abi-omnipotent
+ .align	32
+ __poly1305_block:
+@@ -431,7 +432,9 @@ $code.=<<___;
+ 	pop $ctx
+ 	ret
+ .size	__poly1305_block,.-__poly1305_block
++SYM_POP_SECTION()
+ 
++SYM_PUSH_SECTION(__poly1305_init_avx)
+ .type	__poly1305_init_avx,\@abi-omnipotent
+ .align	32
+ __poly1305_init_avx:
+@@ -596,6 +599,7 @@ __poly1305_init_avx:
+ 	pop %rbp
+ 	ret
+ .size	__poly1305_init_avx,.-__poly1305_init_avx
++SYM_POP_SECTION()
+ ___
+ 
+ &declare_function("poly1305_blocks_avx", 32, 4);
+diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
+index 0d76502cc6f5..3efdac789bc4 100644
+--- a/arch/x86/include/asm/paravirt.h
++++ b/arch/x86/include/asm/paravirt.h
+@@ -663,6 +663,7 @@ bool __raw_callee_save___native_vcpu_is_preempted(long cpu);
+ 	extern typeof(func) __raw_callee_save_##func;			\
+ 									\
+ 	asm(".pushsection " section ", \"ax\";"				\
++	    ASM_PUSH_SECTION(__raw_callee_save_##func) ";"		\
+ 	    ".globl " PV_THUNK_NAME(func) ";"				\
+ 	    ".type " PV_THUNK_NAME(func) ", @function;"			\
+ 	    PV_THUNK_NAME(func) ":"					\
+@@ -673,6 +674,7 @@ bool __raw_callee_save___native_vcpu_is_preempted(long cpu);
+ 	    FRAME_END							\
+ 	    ASM_RET							\
+ 	    ".size " PV_THUNK_NAME(func) ", .-" PV_THUNK_NAME(func) ";"	\
++	    ASM_POP_SECTION() ";"					\
+ 	    ".popsection")
+ 
+ #define PV_CALLEE_SAVE_REGS_THUNK(func)			\
+diff --git a/arch/x86/include/asm/qspinlock_paravirt.h b/arch/x86/include/asm/qspinlock_paravirt.h
+index 1474cf96251d..3fde623bbcb2 100644
+--- a/arch/x86/include/asm/qspinlock_paravirt.h
++++ b/arch/x86/include/asm/qspinlock_paravirt.h
+@@ -35,6 +35,7 @@ PV_CALLEE_SAVE_REGS_THUNK(__pv_queued_spin_unlock_slowpath);
+  *   rdx = internal variable (set to 0)
+  */
+ asm    (".pushsection .text;"
++	ASM_PUSH_SECTION(__raw_callee_save___pv_queued_spin_unlock) ";"
+ 	".globl " PV_UNLOCK ";"
+ 	".type " PV_UNLOCK ", @function;"
+ 	".align 4,0x90;"
+@@ -58,6 +59,7 @@ asm    (".pushsection .text;"
+ 	FRAME_END
+ 	ASM_RET
+ 	".size " PV_UNLOCK ", .-" PV_UNLOCK ";"
++	ASM_POP_SECTION() ";"
+ 	".popsection");
+ 
+ #else /* CONFIG_64BIT */
+diff --git a/arch/x86/kernel/head_32.S b/arch/x86/kernel/head_32.S
+index eb8656bac99b..d58422148481 100644
+--- a/arch/x86/kernel/head_32.S
++++ b/arch/x86/kernel/head_32.S
+@@ -342,7 +342,7 @@ setup_once:
+ 	andl $0,setup_once_ref	/* Once is enough, thanks */
+ 	RET
+ 
+-SYM_FUNC_START(early_idt_handler_array)
++SYM_FUNC_START_SECT(early_idt_handler_array, early_idt_handler)
+ 	# 36(%esp) %eflags
+ 	# 32(%esp) %cs
+ 	# 28(%esp) %eip
+@@ -359,7 +359,7 @@ SYM_FUNC_START(early_idt_handler_array)
+ 	.endr
+ SYM_FUNC_END(early_idt_handler_array)
+ 	
+-SYM_CODE_START_LOCAL(early_idt_handler_common)
++SYM_CODE_START_LOCAL_SECT(early_idt_handler_common, early_idt_handler)
+ 	/*
+ 	 * The stack is the hardware frame, an error code or zero, and the
+ 	 * vector number.
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 9c63fc5988cd..a19b6fa2bf87 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -367,7 +367,7 @@ SYM_DATA(initial_stack, .quad init_thread_union + THREAD_SIZE - FRAME_SIZE)
+ 	__FINITDATA
+ 
+ 	__INIT
+-SYM_CODE_START(early_idt_handler_array)
++SYM_CODE_START_SECT(early_idt_handler_array, early_idt_handler)
+ 	i = 0
+ 	.rept NUM_EXCEPTION_VECTORS
+ 	.if ((EXCEPTION_ERRCODE_MASK >> i) & 1) == 0
+@@ -385,7 +385,7 @@ SYM_CODE_START(early_idt_handler_array)
+ 	UNWIND_HINT_IRET_REGS offset=16
+ SYM_CODE_END(early_idt_handler_array)
+ 
+-SYM_CODE_START_LOCAL(early_idt_handler_common)
++SYM_CODE_START_LOCAL_SECT(early_idt_handler_common, early_idt_handler)
+ 	/*
+ 	 * The stack is the hardware frame, an error code or zero, and the
+ 	 * vector number.
+diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
+index 6290712cb36d..e0be6bc76337 100644
+--- a/arch/x86/kernel/kprobes/core.c
++++ b/arch/x86/kernel/kprobes/core.c
+@@ -1019,6 +1019,7 @@ NOKPROBE_SYMBOL(kprobe_int3_handler);
+  */
+ asm(
+ 	".text\n"
++	ASM_PUSH_SECTION(__kretprobe_trampoline) "\n"
+ 	".global __kretprobe_trampoline\n"
+ 	".type __kretprobe_trampoline, @function\n"
+ 	"__kretprobe_trampoline:\n"
+@@ -1053,6 +1054,7 @@ asm(
+ #endif
+ 	ASM_RET
+ 	".size __kretprobe_trampoline, .-__kretprobe_trampoline\n"
++	ASM_POP_SECTION() "\n"
+ );
+ NOKPROBE_SYMBOL(__kretprobe_trampoline);
  /*
-  * SYM_FUNC_START_ALIAS -- use where there are two global names for one
-  * function
-@@ -225,12 +266,24 @@
-  * later.
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index a438217cbfac..6a497d5647e7 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -1021,6 +1021,7 @@ extern bool __raw_callee_save___kvm_vcpu_is_preempted(long);
   */
- #define SYM_FUNC_START(name)				\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
-+	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
-+#endif
-+
-+/*
-+ * SYM_FUNC_START_SECT -- use for global functions, will be conditionally
-+ * placed into a section specified in the second argument
-+ */
-+#ifndef SYM_FUNC_START_SECT
-+#define SYM_FUNC_START_SECT(name, sect)			\
-+	SYM_PUSH_SECTION(sect) ASM_NL			\
- 	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
- #endif
+ asm(
+ ".pushsection .text;"
++ASM_PUSH_SECTION(__raw_callee_save___kvm_vcpu_is_preempted) ";"
+ ".global __raw_callee_save___kvm_vcpu_is_preempted;"
+ ".type __raw_callee_save___kvm_vcpu_is_preempted, @function;"
+ "__raw_callee_save___kvm_vcpu_is_preempted:"
+@@ -1029,6 +1030,7 @@ asm(
+ "setne	%al;"
+ "ret;"
+ ".size __raw_callee_save___kvm_vcpu_is_preempted, .-__raw_callee_save___kvm_vcpu_is_preempted;"
++ASM_POP_SECTION() ";"
+ ".popsection");
  
- /* SYM_FUNC_START_NOALIGN -- use for global functions, w/o alignment */
- #ifndef SYM_FUNC_START_NOALIGN
- #define SYM_FUNC_START_NOALIGN(name)			\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
- 	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
  #endif
+diff --git a/arch/x86/kernel/relocate_kernel_32.S b/arch/x86/kernel/relocate_kernel_32.S
+index fcc8a7699103..ff36f21e665a 100644
+--- a/arch/x86/kernel/relocate_kernel_32.S
++++ b/arch/x86/kernel/relocate_kernel_32.S
+@@ -35,7 +35,7 @@
+ #define CP_PA_BACKUP_PAGES_MAP	DATA(0x1c)
  
-@@ -238,24 +291,38 @@
- #ifndef SYM_FUNC_START_LOCAL
- /* the same as SYM_FUNC_START_LOCAL_ALIAS, see comment near SYM_FUNC_START */
- #define SYM_FUNC_START_LOCAL(name)			\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
- 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
+ 	.text
+-SYM_CODE_START_NOALIGN(relocate_kernel)
++SYM_CODE_START_NOALIGN_SECT(relocate_kernel, kexec_control_code)
+ 	/* Save the CPU context, used for jumping back */
+ 
+ 	pushl	%ebx
+@@ -94,7 +94,7 @@ SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	RET
+ SYM_CODE_END(relocate_kernel)
+ 
+-SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
++SYM_CODE_START_LOCAL_NOALIGN_SECT(identity_mapped, kexec_control_code)
+ 	/* set return address to 0 if not preserving context */
+ 	pushl	$0
+ 	/* store the start address on the stack */
+@@ -193,7 +193,7 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	RET
+ SYM_CODE_END(identity_mapped)
+ 
+-SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
++SYM_CODE_START_LOCAL_NOALIGN_SECT(virtual_mapped, kexec_control_code)
+ 	movl	CR4(%edi), %eax
+ 	movl	%eax, %cr4
+ 	movl	CR3(%edi), %eax
+@@ -212,7 +212,7 @@ SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
+ SYM_CODE_END(virtual_mapped)
+ 
+ 	/* Do the copies */
+-SYM_CODE_START_LOCAL_NOALIGN(swap_pages)
++SYM_CODE_START_LOCAL_NOALIGN_SECT(swap_pages, kexec_control_code)
+ 	movl	8(%esp), %edx
+ 	movl	4(%esp), %ecx
+ 	pushl	%ebp
+@@ -274,5 +274,7 @@ SYM_CODE_START_LOCAL_NOALIGN(swap_pages)
+ 	RET
+ SYM_CODE_END(swap_pages)
+ 
++SYM_PUSH_SECTION(kexec_control_code)
+ 	.globl kexec_control_code_size
+ .set kexec_control_code_size, . - relocate_kernel
++SYM_POP_SECTION()
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index 399f075ccdc4..fb8ff461436e 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -38,9 +38,11 @@
+ #define CP_PA_BACKUP_PAGES_MAP	DATA(0x30)
+ 
+ 	.text
++SYM_PUSH_SECTION(kexec_control_code)
+ 	.align PAGE_SIZE
+ 	.code64
+-SYM_CODE_START_NOALIGN(relocate_kernel)
++SYM_POP_SECTION()
++SYM_CODE_START_NOALIGN_SECT(relocate_kernel, kexec_control_code)
+ 	UNWIND_HINT_EMPTY
+ 	/*
+ 	 * %rdi indirection_page
+@@ -107,7 +109,7 @@ SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	RET
+ SYM_CODE_END(relocate_kernel)
+ 
+-SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
++SYM_CODE_START_LOCAL_NOALIGN_SECT(identity_mapped, kexec_control_code)
+ 	UNWIND_HINT_EMPTY
+ 	/* set return address to 0 if not preserving context */
+ 	pushq	$0
+@@ -213,7 +215,7 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	RET
+ SYM_CODE_END(identity_mapped)
+ 
+-SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
++SYM_CODE_START_LOCAL_NOALIGN_SECT(virtual_mapped, kexec_control_code)
+ 	UNWIND_HINT_EMPTY
+ 	movq	RSP(%r8), %rsp
+ 	movq	CR4(%r8), %rax
+@@ -235,7 +237,7 @@ SYM_CODE_START_LOCAL_NOALIGN(virtual_mapped)
+ SYM_CODE_END(virtual_mapped)
+ 
+ 	/* Do the copies */
+-SYM_CODE_START_LOCAL_NOALIGN(swap_pages)
++SYM_CODE_START_LOCAL_NOALIGN_SECT(swap_pages, kexec_control_code)
+ 	UNWIND_HINT_EMPTY
+ 	movq	%rdi, %rcx 	/* Put the page_list in %rcx */
+ 	xorl	%edi, %edi
+@@ -291,5 +293,7 @@ SYM_CODE_START_LOCAL_NOALIGN(swap_pages)
+ 	RET
+ SYM_CODE_END(swap_pages)
+ 
++SYM_PUSH_SECTION(kexec_control_code)
+ 	.globl kexec_control_code_size
+ .set kexec_control_code_size, . - relocate_kernel
++SYM_POP_SECTION()
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 27f830345b6f..5550bd68f6e7 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -141,7 +141,7 @@ SECTIONS
+ 
+ #ifdef CONFIG_RETPOLINE
+ 		__indirect_thunk_start = .;
+-		*(.text.__x86.indirect_thunk)
++		*(SECT_WILDCARD(.text.__x86.indirect_thunk))
+ 		__indirect_thunk_end = .;
  #endif
+ 	} :text =0xcccc
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 40da8c7f3019..85ce58b041ac 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -309,6 +309,7 @@ static void invalidate_registers(struct x86_emulate_ctxt *ctxt)
+ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
  
- /* SYM_FUNC_START_LOCAL_NOALIGN -- use for local functions, w/o alignment */
- #ifndef SYM_FUNC_START_LOCAL_NOALIGN
- #define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
-+	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
-+#endif
-+
-+/*
-+ * SYM_FUNC_START_LOCAL_NOALIGN_SECT -- use for local functions, w/o alignment,
-+ * will be conditionally placed into a section specified in the second argument
-+ */
-+#ifndef SYM_FUNC_START_LOCAL_NOALIGN_SECT
-+#define SYM_FUNC_START_LOCAL_NOALIGN_SECT(name, sect)	\
-+	SYM_PUSH_SECTION(sect) ASM_NL			\
- 	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
- #endif
+ #define __FOP_FUNC(name) \
++	__ASM_PUSH_SECTION(name) "\n\t" \
+ 	".align " __stringify(FASTOP_SIZE) " \n\t" \
+ 	".type " name ", @function \n\t" \
+ 	name ":\n\t"
+@@ -318,7 +319,8 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
  
- /* SYM_FUNC_START_WEAK -- use for weak functions */
- #ifndef SYM_FUNC_START_WEAK
- #define SYM_FUNC_START_WEAK(name)			\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
- 	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)
- #endif
+ #define __FOP_RET(name) \
+ 	"11: " ASM_RET \
+-	".size " name ", .-" name "\n\t"
++	".size " name ", .-" name "\n\t" \
++	ASM_POP_SECTION() "\n\t"
  
- /* SYM_FUNC_START_WEAK_NOALIGN -- use for weak functions, w/o alignment */
- #ifndef SYM_FUNC_START_WEAK_NOALIGN
- #define SYM_FUNC_START_WEAK_NOALIGN(name)		\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
- 	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)
- #endif
+ #define FOP_RET(name) \
+ 	__FOP_RET(#name)
+@@ -326,11 +328,13 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
+ #define FOP_START(op) \
+ 	extern void em_##op(struct fastop *fake); \
+ 	asm(".pushsection .text, \"ax\" \n\t" \
++	    ASM_PUSH_SECTION(em_##op) "\n\t" \
+ 	    ".global em_" #op " \n\t" \
+ 	    ".align " __stringify(FASTOP_SIZE) " \n\t" \
+ 	    "em_" #op ":\n\t"
  
-@@ -272,24 +339,59 @@
- #ifndef SYM_FUNC_END
- /* the same as SYM_FUNC_END_ALIAS, see comment near SYM_FUNC_START */
- #define SYM_FUNC_END(name)				\
--	SYM_END(name, SYM_T_FUNC)
-+	SYM_END(name, SYM_T_FUNC) ASM_NL		\
-+	SYM_POP_SECTION()
- #endif
+ #define FOP_END \
++	    ASM_POP_SECTION() "\n\t" \
+ 	    ".popsection")
  
- /* SYM_CODE_START -- use for non-C (special) functions */
- #ifndef SYM_CODE_START
- #define SYM_CODE_START(name)				\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
-+	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
-+#endif
-+
-+/*
-+ * SYM_CODE_START_SECT -- use for non-C (special) functions, will be
-+ * conditionally placed into a section specified in the second argument
-+ */
-+#ifndef SYM_CODE_START_SECT
-+#define SYM_CODE_START_SECT(name, sect)			\
-+	SYM_PUSH_SECTION(sect) ASM_NL			\
- 	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
- #endif
+ #define __FOPNOP(name) \
+@@ -430,6 +434,7 @@ static int fastop(struct x86_emulate_ctxt *ctxt, fastop_t fop);
  
- /* SYM_CODE_START_NOALIGN -- use for non-C (special) functions, w/o alignment */
- #ifndef SYM_CODE_START_NOALIGN
- #define SYM_CODE_START_NOALIGN(name)			\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
-+	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
-+#endif
-+
-+/*
-+ * SYM_CODE_START_NOALIGN_SECT -- use for non-C (special) functions,
-+ * w/o alignment, will be conditionally placed into a section specified
-+ * in the second argument
-+ */
-+#ifndef SYM_CODE_START_NOALIGN_SECT
-+#define SYM_CODE_START_NOALIGN_SECT(name, sect)		\
-+	SYM_PUSH_SECTION(sect) ASM_NL			\
- 	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)
- #endif
- 
- /* SYM_CODE_START_LOCAL -- use for local non-C (special) functions */
- #ifndef SYM_CODE_START_LOCAL
- #define SYM_CODE_START_LOCAL(name)			\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
-+	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
-+#endif
-+
-+/*
-+ * SYM_CODE_START_LOCAL -- use for local non-C (special) functions, will
-+ * be conditionally placing into a section specified in the second argument
-+ */
-+#ifndef SYM_CODE_START_LOCAL_SECT
-+#define SYM_CODE_START_LOCAL_SECT(name, sect)		\
-+	SYM_PUSH_SECTION(sect) ASM_NL			\
- 	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)
- #endif
- 
-@@ -299,13 +401,26 @@
+ /* Special case for SETcc - 1 instruction per cc */
+ #define FOP_SETCC(op) \
++	ASM_PUSH_SECTION(op) "\n\t" \
+ 	".align 4 \n\t" \
+ 	".type " #op ", @function \n\t" \
+ 	#op ": \n\t" \
+diff --git a/arch/x86/lib/copy_user_64.S b/arch/x86/lib/copy_user_64.S
+index 8ca5ecf16dc4..ddbd6b5b7b47 100644
+--- a/arch/x86/lib/copy_user_64.S
++++ b/arch/x86/lib/copy_user_64.S
+@@ -220,7 +220,7 @@ EXPORT_SYMBOL(copy_user_enhanced_fast_string)
+  * Output:
+  * eax uncopied bytes or 0 if successful.
   */
- #ifndef SYM_CODE_START_LOCAL_NOALIGN
- #define SYM_CODE_START_LOCAL_NOALIGN(name)		\
-+	SYM_PUSH_SECTION(name) ASM_NL			\
-+	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
-+#endif
+-SYM_CODE_START_LOCAL(.Lcopy_user_handle_tail)
++SYM_CODE_START_LOCAL_SECT(.Lcopy_user_handle_tail, copy_user_handle_tail)
+ 	cmp $X86_TRAP_MC,%eax
+ 	je 3f
+ 
+diff --git a/arch/x86/lib/error-inject.c b/arch/x86/lib/error-inject.c
+index 520897061ee0..720a73d4ee70 100644
+--- a/arch/x86/lib/error-inject.c
++++ b/arch/x86/lib/error-inject.c
+@@ -8,11 +8,13 @@ asmlinkage void just_return_func(void);
+ 
+ asm(
+ 	".text\n"
++	ASM_PUSH_SECTION(just_return_func) "\n"
+ 	".type just_return_func, @function\n"
+ 	".globl just_return_func\n"
+ 	"just_return_func:\n"
+ 		ASM_RET
+ 	".size just_return_func, .-just_return_func\n"
++	ASM_POP_SECTION() "\n"
+ );
+ 
+ void override_function_with_return(struct pt_regs *regs)
+diff --git a/arch/x86/lib/getuser.S b/arch/x86/lib/getuser.S
+index b70d98d79a9d..06d288909a68 100644
+--- a/arch/x86/lib/getuser.S
++++ b/arch/x86/lib/getuser.S
+@@ -163,8 +163,7 @@ SYM_FUNC_START(__get_user_nocheck_8)
+ SYM_FUNC_END(__get_user_nocheck_8)
+ EXPORT_SYMBOL(__get_user_nocheck_8)
+ 
+-
+-SYM_CODE_START_LOCAL(.Lbad_get_user_clac)
++SYM_CODE_START_LOCAL_SECT(.Lbad_get_user_clac, bad_get_user_clac)
+ 	ASM_CLAC
+ bad_get_user:
+ 	xor %edx,%edx
+@@ -173,7 +172,7 @@ bad_get_user:
+ SYM_CODE_END(.Lbad_get_user_clac)
+ 
+ #ifdef CONFIG_X86_32
+-SYM_CODE_START_LOCAL(.Lbad_get_user_8_clac)
++SYM_CODE_START_LOCAL_SECT(.Lbad_get_user_8_clac, bad_get_user_8_clac)
+ 	ASM_CLAC
+ bad_get_user_8:
+ 	xor %edx,%edx
+diff --git a/arch/x86/lib/memcpy_64.S b/arch/x86/lib/memcpy_64.S
+index 59cf2343f3d9..2dc6033e2932 100644
+--- a/arch/x86/lib/memcpy_64.S
++++ b/arch/x86/lib/memcpy_64.S
+@@ -27,8 +27,8 @@
+  * Output:
+  * rax original destination
+  */
+-SYM_FUNC_START_ALIAS(__memcpy)
+ SYM_FUNC_START_WEAK(memcpy)
++SYM_FUNC_START_ALIAS(__memcpy)
+ 	ALTERNATIVE_2 "jmp memcpy_orig", "", X86_FEATURE_REP_GOOD, \
+ 		      "jmp memcpy_erms", X86_FEATURE_ERMS
+ 
+@@ -40,8 +40,8 @@ SYM_FUNC_START_WEAK(memcpy)
+ 	movl %edx, %ecx
+ 	rep movsb
+ 	RET
+-SYM_FUNC_END(memcpy)
+ SYM_FUNC_END_ALIAS(__memcpy)
++SYM_FUNC_END(memcpy)
+ EXPORT_SYMBOL(memcpy)
+ EXPORT_SYMBOL(__memcpy)
+ 
+diff --git a/arch/x86/lib/memmove_64.S b/arch/x86/lib/memmove_64.S
+index 50ea390df712..0040ac38751b 100644
+--- a/arch/x86/lib/memmove_64.S
++++ b/arch/x86/lib/memmove_64.S
+@@ -24,9 +24,8 @@
+  * Output:
+  * rax: dest
+  */
+-SYM_FUNC_START_WEAK(memmove)
+ SYM_FUNC_START(__memmove)
+-
++SYM_FUNC_START_WEAK_ALIAS(memmove)
+ 	mov %rdi, %rax
+ 
+ 	/* Decide forward/backward copy mode */
+@@ -206,7 +205,7 @@ SYM_FUNC_START(__memmove)
+ 	movb %r11b, (%rdi)
+ 13:
+ 	RET
+-SYM_FUNC_END(__memmove)
+ SYM_FUNC_END_ALIAS(memmove)
++SYM_FUNC_END(__memmove)
+ EXPORT_SYMBOL(__memmove)
+ EXPORT_SYMBOL(memmove)
+diff --git a/arch/x86/lib/memset_64.S b/arch/x86/lib/memset_64.S
+index d624f2bc42f1..32cf147393e7 100644
+--- a/arch/x86/lib/memset_64.S
++++ b/arch/x86/lib/memset_64.S
+@@ -17,8 +17,9 @@
+  *
+  * rax   original destination
+  */
+-SYM_FUNC_START_WEAK(memset)
 +
-+/*
-+ * SYM_CODE_START_LOCAL_NOALIGN_SECT -- use for local non-C (special)
-+ * functions, w/o alignment, will be conditionally placed into a section
-+ * specified in the second argument
-+ */
-+#ifndef SYM_CODE_START_LOCAL_NOALIGN_SECT
-+#define SYM_CODE_START_LOCAL_NOALIGN_SECT(name, sect)	\
-+	SYM_PUSH_SECTION(sect) ASM_NL			\
- 	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)
- #endif
+ SYM_FUNC_START(__memset)
++SYM_FUNC_START_WEAK_ALIAS(memset)
+ 	/*
+ 	 * Some CPUs support enhanced REP MOVSB/STOSB feature. It is recommended
+ 	 * to use it when possible. If not available, use fast string instructions.
+@@ -41,8 +42,8 @@ SYM_FUNC_START(__memset)
+ 	rep stosb
+ 	movq %r9,%rax
+ 	RET
+-SYM_FUNC_END(__memset)
+ SYM_FUNC_END_ALIAS(memset)
++SYM_FUNC_END(__memset)
+ EXPORT_SYMBOL(memset)
+ EXPORT_SYMBOL(__memset)
  
- /* SYM_CODE_END -- the end of SYM_CODE_START_LOCAL, SYM_CODE_START, ... */
- #ifndef SYM_CODE_END
- #define SYM_CODE_END(name)				\
--	SYM_END(name, SYM_T_NONE)
-+	SYM_END(name, SYM_T_NONE) ASM_NL		\
-+	SYM_POP_SECTION()
- #endif
+diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
+index ecb2049c1273..be6b2dc0967c 100644
+--- a/arch/x86/lib/putuser.S
++++ b/arch/x86/lib/putuser.S
+@@ -102,7 +102,7 @@ SYM_FUNC_END(__put_user_8)
+ EXPORT_SYMBOL(__put_user_8)
+ EXPORT_SYMBOL(__put_user_nocheck_8)
  
- /* === data annotations === */
-diff --git a/init/Kconfig b/init/Kconfig
-index 8e900d17d42b..4acfc80f22df 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1386,6 +1386,16 @@ config CC_OPTIMIZE_FOR_SIZE
+-SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
++SYM_CODE_START_LOCAL_SECT(.Lbad_put_user_clac, bad_put_user_clac)
+ 	ASM_CLAC
+ .Lbad_put_user:
+ 	movl $-EFAULT,%ecx
+diff --git a/arch/x86/power/hibernate_asm_32.S b/arch/x86/power/hibernate_asm_32.S
+index 5606a15cf9a1..06f666e3e28a 100644
+--- a/arch/x86/power/hibernate_asm_32.S
++++ b/arch/x86/power/hibernate_asm_32.S
+@@ -16,7 +16,7 @@
  
- endchoice
+ .text
  
-+config HAVE_ASM_FUNCTION_SECTIONS
-+	depends on ARCH_SUPPORTS_ASM_FUNCTION_SECTIONS
-+	depends on $(cc-option,-Wa$(comma)--sectname-subst)
-+	def_bool y
-+	help
-+	  This enables asm function sections if both architecture and
-+	  toolchain support it. It allows creating a separate section
-+	  for each function written in assembly in order to improve DCE
-+	  and LTO (works the same way as -ffunction-sections for C code).
-+
- config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
- 	bool
- 	help
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index ec521ccebea6..84d2c44f9383 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -960,7 +960,9 @@ static void check_section(const char *modname, struct elf_info *elf,
- 		".kprobes.text", ".cpuidle.text", ".noinstr.text"
- #define OTHER_TEXT_SECTIONS ".ref.text", ".head.text", ".spinlock.text", \
- 		".fixup", ".entry.text", ".exception.text", ".text.*", \
--		".coldtext", ".softirqentry.text"
-+		".coldtext", ".softirqentry.text", ".text.unlikely.*", \
-+		".noinstr.text.*", ".head.text.*", ".fixup.*", \
-+		".entry.text.*"
+-SYM_FUNC_START(swsusp_arch_suspend)
++SYM_FUNC_START_SECT(swsusp_arch_suspend, hibernate_page)
+ 	movl %esp, saved_context_esp
+ 	movl %ebx, saved_context_ebx
+ 	movl %ebp, saved_context_ebp
+@@ -35,7 +35,7 @@ SYM_FUNC_START(swsusp_arch_suspend)
+ 	RET
+ SYM_FUNC_END(swsusp_arch_suspend)
  
- #define INIT_SECTIONS      ".init.*"
- #define MEM_INIT_SECTIONS  ".meminit.*"
-@@ -1041,7 +1043,7 @@ enum mismatch {
- struct sectioncheck {
- 	const char *fromsec[20];
- 	const char *bad_tosec[20];
--	const char *good_tosec[20];
-+	const char *good_tosec[25];
- 	enum mismatch mismatch;
- 	const char *symbol_white_list[20];
- 	void (*handler)(const char *modname, struct elf_info *elf,
+-SYM_CODE_START(restore_image)
++SYM_CODE_START_SECT(restore_image, hibernate_page)
+ 	/* prepare to jump to the image kernel */
+ 	movl	restore_jump_address, %ebx
+ 	movl	restore_cr3, %ebp
+@@ -48,7 +48,7 @@ SYM_CODE_START(restore_image)
+ SYM_CODE_END(restore_image)
+ 
+ /* code below has been relocated to a safe page */
+-SYM_CODE_START(core_restore_code)
++SYM_CODE_START_SECT(core_restore_code, hibernate_page)
+ 	movl	temp_pgt, %eax
+ 	movl	%eax, %cr3
+ 
+@@ -81,8 +81,10 @@ done:
+ SYM_CODE_END(core_restore_code)
+ 
+ 	/* code below belongs to the image kernel */
++SYM_PUSH_SECTION(hibernate_page)
+ 	.align PAGE_SIZE
+-SYM_FUNC_START(restore_registers)
++SYM_POP_SECTION()
++SYM_FUNC_START_SECT(restore_registers, hibernate_page)
+ 	/* go back to the original page tables */
+ 	movl	%ebp, %cr3
+ 	movl	mmu_cr4_features, %ecx
+diff --git a/arch/x86/power/hibernate_asm_64.S b/arch/x86/power/hibernate_asm_64.S
+index 0a0539e1cc81..fdca1949ad9f 100644
+--- a/arch/x86/power/hibernate_asm_64.S
++++ b/arch/x86/power/hibernate_asm_64.S
+@@ -24,8 +24,10 @@
+ #include <asm/nospec-branch.h>
+ 
+ 	 /* code below belongs to the image kernel */
++SYM_PUSH_SECTION(hibernate_page)
+ 	.align PAGE_SIZE
+-SYM_FUNC_START(restore_registers)
++SYM_POP_SECTION()
++SYM_FUNC_START_SECT(restore_registers, hibernate_page)
+ 	/* go back to the original page tables */
+ 	movq    %r9, %cr3
+ 
+@@ -69,7 +71,7 @@ SYM_FUNC_START(restore_registers)
+ 	RET
+ SYM_FUNC_END(restore_registers)
+ 
+-SYM_FUNC_START(swsusp_arch_suspend)
++SYM_FUNC_START_SECT(swsusp_arch_suspend, hibernate_page)
+ 	movq	$saved_context, %rax
+ 	movq	%rsp, pt_regs_sp(%rax)
+ 	movq	%rbp, pt_regs_bp(%rax)
+@@ -99,7 +101,7 @@ SYM_FUNC_START(swsusp_arch_suspend)
+ 	RET
+ SYM_FUNC_END(swsusp_arch_suspend)
+ 
+-SYM_FUNC_START(restore_image)
++SYM_FUNC_START_SECT(restore_image, hibernate_page)
+ 	/* prepare to jump to the image kernel */
+ 	movq	restore_jump_address(%rip), %r8
+ 	movq	restore_cr3(%rip), %r9
+@@ -118,7 +120,7 @@ SYM_FUNC_START(restore_image)
+ SYM_FUNC_END(restore_image)
+ 
+ 	/* code below has been relocated to a safe page */
+-SYM_FUNC_START(core_restore_code)
++SYM_FUNC_START_SECT(core_restore_code, hibernate_page)
+ 	/* switch to temporary page tables */
+ 	movq	%rax, %cr3
+ 	/* flush TLB */
 -- 
 2.34.1
 
