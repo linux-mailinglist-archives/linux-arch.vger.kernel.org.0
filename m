@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 568854AFCB3
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 20:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0AE4AFCA5
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 20:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241506AbiBITBv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 14:01:51 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:44796 "EHLO
+        id S235509AbiBITBr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 14:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241995AbiBITAz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 14:00:55 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E341C03E979;
-        Wed,  9 Feb 2022 11:00:51 -0800 (PST)
+        with ESMTP id S241915AbiBITAl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 14:00:41 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E9EC05CBBB;
+        Wed,  9 Feb 2022 10:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644433251; x=1675969251;
+  t=1644433170; x=1675969170;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PTeOZ6wKDX3cB7PGjpgNbRHEUmYTEIk9wVKxU4z6mig=;
-  b=A6HZ/AyENUBNJ+JS7jCHJgJOHYWosLJyRSjirJl5NAlo5hC8Lin/tbGT
-   rbGjKsDIW7UT233t3uqe3df4VuFRo4yHqLf3FfMu7BM2SD7h+9moT0bAU
-   RXXe2nu27wYPVHrBjyZbiFDQDIF3g4iyItd7OXhXPeoSRn37vkoXMMnf2
-   OAI876341PR/PmabGgXBO0U3K5+xTb1yW+QnBDsx8jSKKQEbmqCwa4Oom
-   /iwpk+doQSDzXK1kAjdyKUj44ZheSaGo4mkcjRG7CiXYTw7g967+r7pvG
-   X8VVCLHpdRqljeZxt/z2OBH9pDt1RsBW7QpCA3zicx0VqkxLm18FXQIW0
+  bh=R+jBO/npeGvXg7XDYxgpHbHrFNhYQT3ckL7ow46HPUI=;
+  b=dZSxB9GPood0yX0Ynj0VnmHSjCTmXfM2KqDrd+3twKsIGDM7I32rG6M0
+   BaXVmgLQqha0RHljP7Oc8wknr4SVvf42n6Q8Q6Px76OHQEVuU5araNeRg
+   yHlpUAxXC+7S+oW5+FzjOa2TxVhLquhutju4fuzH9v2za6136IXt+1fy/
+   4z5b6vDWSIZ5xEQkoHJq0i5ZFbYrIoG9FnnUWf7sayPNXPBQFKL1Z5UI9
+   HIdKqu6llFbymnq0BNqIkPIUsMAilrSrYovRthcO0Ml7OwudzGyW/v+pK
+   mIo/N7Xpy1ehIRAR69YyzCImnRoCbZn5SEvV5moR9HqIlaptYdXgnWG2f
    A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="232869414"
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="248140554"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="232869414"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:18 -0800
+   d="scan'208";a="248140554"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:21 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="701372275"
+   d="scan'208";a="629389938"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 09 Feb 2022 10:59:09 -0800
+  by fmsmga002.fm.intel.com with ESMTP; 09 Feb 2022 10:59:13 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQX031082;
-        Wed, 9 Feb 2022 18:59:07 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQZ031082;
+        Wed, 9 Feb 2022 18:59:11 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -78,361 +78,238 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v10 10/15] FG-KASLR: use a scripted approach to handle .text.* sections
-Date:   Wed,  9 Feb 2022 19:57:47 +0100
-Message-Id: <20220209185752.1226407-11-alexandr.lobakin@intel.com>
+Subject: [PATCH v10 12/15] module: add arch-indep FG-KASLR for randomizing function layout
+Date:   Wed,  9 Feb 2022 19:57:49 +0100
+Message-Id: <20220209185752.1226407-13-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
 References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Instead of relying on the linker and his heuristics about where to
-place (orphan) .text.* section, use a script to read vmlinux.o and
-generate a new .tmp_vmlinux.lds which will contain an entry for
-each of them. It relies on a magic marker inside the preprocessed
-vmlinux.lds (which is harmless in case FG-KASLR is disabled) and
-injects a list of input text sections there.
+From: Kristen Carlson Accardi <kristen@linux.intel.com>
 
-As a bonus, this approach allows us to configure FG-KASLR in terms
-of number of functions per each section. The zero value means one
-section per each functions, it is the strongest choice, but the
-resulting vmlinux also has the biggest size here, as well as the
-total number of sections and the boottime delay (which is still
-barely noticeable). The values of 4-8 are still strong enough and
-allows to save some space, and so on.
+Introduce a new config option to allow modules to be re-ordered
+by function. This option can be enabled independently of the
+kernel text KASLR or FG_KASLR settings so that it can be used
+by architectures that do not support either of these features.
+This option will be selected by default if CONFIG_FG_KASLR is
+selected.
 
-We also keep tracking the maximum alignment we found while
-traversing through the readelf output and the number of times we
-spotted it. It's actual only for values >= 128 and is required to
-reserve some space between the last .text.* section and the _etext
-marker.
-The reason is that e.g. x86 has at least 3 asm sections (4 with
-ClangCFI) aligned to 4096, and when mixing them with the small
-sections, we could go past the _etext and render the kernel
-unbootable. This reserved space ensures this won't happen.
+If a module has functions split out into separate text sections
+(i.e. compiled with the -ffunction-sections flag), reorder the
+functions to provide some code diversification to modules.
 
-When CONFIG_HAVE_ASM_FUNCTION_SECTIONS=y, the generated script makes
-sure you don't have anything in "plain" ".text" to not leak random
-code. This assertion is omitted otherwise.
+Alexander Lobakin:
 
+Make it work with ClangCFI -- in such builds, .text section must
+always come first and be page-aligned. Exclude it from the shuffle
+list and leave as it is.
+Make this feature depend on `-z unique-symbol` as well, due to the
+very same reasons as for FG-KASLR for vmlinux.
+Use common shuffle_array() from <linux/random.h> instead of
+open-coding it.
+
+Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Tested-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Tested-by: Tony Luck <tony.luck@intel.com>
+Acked-by: Jessica Yu <jeyu@kernel.org>
+Tested-by: Jessica Yu <jeyu@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com> # swap.cocci
+Co-developed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- arch/x86/kernel/vmlinux.lds.S     |   4 +-
- include/asm-generic/vmlinux.lds.h |   6 ++
- init/Kconfig                      |  14 +++
- scripts/generate_text_sections.pl | 165 ++++++++++++++++++++++++++++++
- scripts/link-vmlinux.sh           |  30 +++++-
- 5 files changed, 217 insertions(+), 2 deletions(-)
- create mode 100755 scripts/generate_text_sections.pl
+ Makefile                |  6 +++-
+ include/linux/linkage.h |  1 +
+ init/Kconfig            | 14 ++++++++
+ kernel/module.c         | 73 +++++++++++++++++++++++++++++++++++++++--
+ 4 files changed, 91 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 54f16801e9d6..06ba33f5bc58 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -146,9 +146,11 @@ SECTIONS
- #endif
- 	} :text =0xcccc
+diff --git a/Makefile b/Makefile
+index 4328d53d8b25..cf7cf5cbdad9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -889,7 +889,7 @@ export SECSUBST_AFLAGS
+ endif
  
-+	TEXT_FG_KASLR
+ # Same for modules. LD DCE doesn't work for them, thus not checking for it
+-ifneq ($(CONFIG_LTO_CLANG),)
++ifneq ($(CONFIG_MODULE_FG_KASLR)$(CONFIG_LTO_CLANG),)
+ KBUILD_AFLAGS_MODULE += -Wa,--sectname-subst
+ KBUILD_CFLAGS_MODULE += -Wa,--sectname-subst
+ endif
+@@ -898,6 +898,10 @@ endif # CONFIG_HAVE_ASM_FUNCTION_SECTIONS
+ # ClangLTO implies `-ffunction-sections -fdata-sections`, no need
+ # to specify them manually and trigger a pointless full rebuild
+ ifndef CONFIG_LTO_CLANG
++ifdef CONFIG_MODULE_FG_KASLR
++KBUILD_CFLAGS_MODULE += -ffunction-sections
++endif
 +
- 	/* End of text section, which should occupy whole number of pages */
--	_etext = .;
- 	. = ALIGN(PAGE_SIZE);
-+	_etext = .;
+ ifneq ($(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION)$(CONFIG_FG_KASLR),)
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections
+ endif
+diff --git a/include/linux/linkage.h b/include/linux/linkage.h
+index 95ca162a868c..12cf21f9d8ad 100644
+--- a/include/linux/linkage.h
++++ b/include/linux/linkage.h
+@@ -81,6 +81,7 @@
+ #if defined(CONFIG_HAVE_ASM_FUNCTION_SECTIONS) && \
+     ((defined(CONFIG_LD_DEAD_CODE_DATA_ELIMINATION) && !defined(MODULE)) || \
+      (defined(CONFIG_FG_KASLR) && !defined(MODULE)) || \
++     (defined(CONFIG_MODULE_FG_KASLR) && defined(MODULE)) || \
+      (defined(CONFIG_LTO_CLANG)))
  
- 	X86_ALIGN_RODATA_BEGIN
- 	RO_DATA(PAGE_SIZE)
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 586465b2abb2..e63d5a69f1bc 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -130,6 +130,12 @@
- #define TEXT_MAIN		.text
- #endif
- 
-+/*
-+ * Used by scripts/generate_text_sections.pl to inject text sections,
-+ * harmless if FG-KASLR is disabled.
-+ */
-+#define TEXT_FG_KASLR		__fg_kaslr_magic = .;
-+
- /*
-  * GCC 4.5 and later have a 32 bytes section alignment for structures.
-  * Except GCC 4.9, that feels the need to align on 64 bytes.
+ #define SYM_PUSH_SECTION(name)				\
 diff --git a/init/Kconfig b/init/Kconfig
-index 26f9a6e52dbd..5fbd1c294df4 100644
+index 5fbd1c294df4..86a2d3fd6390 100644
 --- a/init/Kconfig
 +++ b/init/Kconfig
-@@ -2076,6 +2076,20 @@ config FG_KASLR
+@@ -2386,6 +2386,20 @@ config UNUSED_KSYMS_WHITELIST
+ 	  one per line. The path can be absolute, or relative to the kernel
+ 	  source tree.
  
- 	  If unsure, say N.
- 
-+config FG_KASLR_SHIFT
-+	int "FG-KASLR granularity (number of functions per section shift)"
-+	depends on FG_KASLR
-+	range 0 16
-+	default 0
++config MODULE_FG_KASLR
++	bool "Module Function Granular Layout Randomization"
++	depends on $(cc-option,-ffunction-sections)
++	depends on LD_HAS_Z_UNIQUE_SYMBOL || !LIVEPATCH
++	default FG_KASLR
++	depends on BROKEN
 +	help
-+	  This sets the number of functions that will be put in each section
-+	  as a power of two.
-+	  Decreasing the value increases the randomization, but also increases
-+	  the size of the final kernel/vmlinux due to the amount of sections.
-+	  0 means that a separate section will be created for each function.
-+	  16 almost disables the randomization, leaving only the manual
-+	  separation.
++	  This option randomizes the module text section by reordering the text
++	  section by function at module load time. In order to use this
++	  feature, the module must have been compiled with the
++	  -ffunction-sections compiler flag.
 +
- endmenu		# General setup
++	  If unsure, say N.
++
+ endif # MODULES
  
- source "arch/Kconfig"
-diff --git a/scripts/generate_text_sections.pl b/scripts/generate_text_sections.pl
-new file mode 100755
-index 000000000000..999e1b68181f
---- /dev/null
-+++ b/scripts/generate_text_sections.pl
-@@ -0,0 +1,165 @@
-+#!/usr/bin/env perl
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# Generates a new LD script with every .text.* section described for FG-KASLR
-+# to avoid orphan/heuristic section placement and double-checks we don't have
-+# any symbols in plain .text section.
-+#
-+# Copyright (C) 2021-2022, Intel Corporation.
-+# Author: Alexander Lobakin <alexandr.lobakin@intel.com>
-+#
-+
-+use strict;
-+use warnings;
-+
-+## parameters
-+my $add_assert = 0;
-+my $expecting = 0;
-+my $shift = 0;
-+my $file;
-+
-+foreach (@ARGV) {
-+	if ($_ eq '-a') {
-+		$add_assert = 1;
-+	} elsif ($_ eq '-s') {
-+		$expecting = 1;
-+	} elsif ($expecting) {
-+		$shift = $_ + 0;
-+		if ($shift < 0) {
-+			$shift = 0;
-+		} elsif ($shift > 16) {
-+			$shift = 16;
-+		}
-+		$expecting = 0;
-+	} elsif (!defined($file)) {
-+		$file = $_;
-+	} else {
-+		die "$0: usage: $0 [-a] [-s shift] binary < linker script";
-+	}
-+}
-+
-+if (!defined($file)) {
-+	die "$0: usage: $0 [-a] [-s shift] binary < linker script";
-+}
-+
-+## environment
-+my $readelf = $ENV{'READELF'} || die "$0: ERROR: READELF not set?";
-+
-+## text sections array
-+my @sections = ();
-+my $has_ccf = 0;
-+
-+## max alignment found to reserve some space. It would probably be
-+## better to start from 64, but CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B
-+## (which aligns every function to 64b) would explode the $count then
-+my $max_align = 128;
-+my $count = 0;
-+
-+sub read_sections {
-+	open(my $fh, "\"$readelf\" -SW \"$file\" 2>/dev/null |")
-+		or die "$0: ERROR: failed to execute \"$readelf\": $!";
-+
-+	while (<$fh>) {
-+		my $name;
-+		my $align;
-+		chomp;
-+
-+		($name, $align) = $_ =~ /^\s*\[[\s0-9]*\]\s*(\.\S*)\s*[A-Z]*\s*[0-9a-f]{16}\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]*\s*[0-9a-f]{2}\s*[A-Z]{2}\s*[0-9]\s*[0-9]\s*([0-9]*)$/;
-+
-+		if (!defined($name)) {
-+			next;
-+		}
-+
-+		## Clang 13 onwards emits __cfi_check_fail only on final
-+		## linking, so it won't appear in .o files and will be
-+		## missing in @sections. Add it manually to prevent
-+		## spawning orphans.
-+		if ($name eq ".text.__cfi_check_fail") {
-+			$has_ccf = 1;
-+		}
-+
-+		if (!($name =~ /^\.text(\.(?!hot\.|unknown\.|unlikely\.|.san\.)[0-9a-zA-Z_]*){1,2}((\.constprop|\.isra|\.part)\.[0-9]){0,2}(|\.[0-9cfi]*)$/)) {
-+			next;
-+		}
-+
-+		if ($align > $max_align) {
-+			$max_align = $align;
-+			$count = 1;
-+		} elsif ($align == $max_align) {
-+			$count++;
-+		}
-+
-+		push(@sections, $name);
-+	}
-+
-+	close($fh);
-+
-+	if (!$has_ccf) {
-+		push(@sections, ".text.__cfi_check_fail");
-+	}
-+
-+	@sections = sort @sections;
-+}
-+
-+sub print_sections {
-+	my $fps = 1 << $shift;
-+	my $counter = 1;
-+
-+	print "\t.text.0 : ALIGN(16) {\n";
-+	print "\t\t*(.text)\n";
-+	print "\t}\n";
-+
-+	## If we have asm function sections, we shouldn't have anything
-+	## in here.
-+	if ($add_assert) {
-+		print "\tASSERT(SIZEOF(.text.0) == 0, \"Plain .text is not empty!\")\n\n";
-+	}
-+
-+	if (!@sections) {
-+		return;
-+	}
-+
-+	while () {
-+		print "\t.text.$counter : ALIGN(16) {\n";
-+
-+		my @a = (($counter - 1) * $fps .. ($counter * $fps) - 1);
-+		for (@a) {
-+			print "\t\t*($sections[$_])\n";
-+
-+			if ($sections[$_] eq $sections[-1]) {
-+				print "\t}\n";
-+				return;
-+			}
-+		}
-+
-+		print "\t}\n";
-+		$counter++;
-+	}
-+}
-+
-+sub print_reserve {
-+	## If we have text sections aligned with 128 bytes or more, make
-+	## sure we reserve some space for them to not overlap _etext
-+	## while shuffling sections.
-+	if (!$count) {
-+		return;
-+	}
-+
-+	print "\n\t. += $max_align * $count;\n";
-+}
-+
-+sub print_lds {
-+	while (<STDIN>) {
-+		if ($_ =~ /^\s*__fg_kaslr_magic = \.;$/) {
-+			print_sections();
-+			print_reserve();
-+		} else {
-+			print $_;
-+		}
-+	}
-+}
-+
-+## main
-+
-+read_sections();
-+print_lds();
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 666f7bbc13eb..701cf540c12e 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -70,6 +70,23 @@ gen_symversions()
- 	done
+ config MODULES_TREE_LOOKUP
+diff --git a/kernel/module.c b/kernel/module.c
+index 46a5c2ed1928..616a622953fa 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -57,6 +57,7 @@
+ #include <linux/bsearch.h>
+ #include <linux/dynamic_debug.h>
+ #include <linux/audit.h>
++#include <linux/random.h>
+ #include <uapi/linux/module.h>
+ #include "module-internal.h"
+ 
+@@ -1526,7 +1527,7 @@ static void free_sect_attrs(struct module_sect_attrs *sect_attrs)
+ 
+ 	for (section = 0; section < sect_attrs->nsections; section++)
+ 		kfree(sect_attrs->attrs[section].battr.attr.name);
+-	kfree(sect_attrs);
++	kvfree(sect_attrs);
  }
  
-+# If CONFIG_FG_KASLR is selected, generate a linker script which will
-+# declare all custom text sections for future boottime shuffling
-+gen_text_sections()
+ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+@@ -1543,7 +1544,7 @@ static void add_sect_attrs(struct module *mod, const struct load_info *info)
+ 	size[0] = ALIGN(struct_size(sect_attrs, attrs, nloaded),
+ 			sizeof(sect_attrs->grp.bin_attrs[0]));
+ 	size[1] = (nloaded + 1) * sizeof(sect_attrs->grp.bin_attrs[0]);
+-	sect_attrs = kzalloc(size[0] + size[1], GFP_KERNEL);
++	sect_attrs = kvzalloc(size[0] + size[1], GFP_KERNEL);
+ 	if (sect_attrs == NULL)
+ 		return;
+ 
+@@ -2415,6 +2416,71 @@ static bool module_init_layout_section(const char *sname)
+ 	return module_init_section(sname);
+ }
+ 
++/*
++ * randomize_text()
++ * Look through the core section looking for executable code sections.
++ * Store sections in an array and then shuffle the sections
++ * to reorder the functions.
++ */
++static void randomize_text(struct module *mod, struct load_info *info)
 +{
-+	local shift=$(sed -n 's/^CONFIG_FG_KASLR_SHIFT=\(.*\)$/\1/p' include/config/auto.conf)
-+	local assert=""
++	int max_sections = info->hdr->e_shnum;
++	int num_text_sections = 0;
++	Elf_Shdr **text_list;
++	int i, size;
 +
-+	is_enabled CONFIG_HAVE_ASM_FUNCTION_SECTIONS && assert="-a"
++	text_list = kvmalloc_array(max_sections, sizeof(*text_list), GFP_KERNEL);
++	if (!text_list)
++		return;
 +
-+	info GEN .tmp_vmlinux.lds
++	for (i = 0; i < max_sections; i++) {
++		Elf_Shdr *shdr = &info->sechdrs[i];
++		const char *sname = info->secstrings + shdr->sh_name;
 +
-+	${PERL} ${srctree}/scripts/generate_text_sections.pl	\
-+		${assert} -s "${shift}" vmlinux.o		\
-+		< "${objtree}/${KBUILD_LDS}"			\
-+		> .tmp_vmlinux.lds
++		if (!(shdr->sh_flags & SHF_ALLOC) ||
++		    !(shdr->sh_flags & SHF_EXECINSTR) ||
++		    (shdr->sh_flags & ARCH_SHF_SMALL) ||
++		    module_init_layout_section(sname))
++			continue;
++
++		/*
++		 * With CONFIG_CFI_CLANG, .text with __cfi_check() must come
++		 * before any other text sections, and be aligned to PAGE_SIZE.
++		 * Don't include it in the shuffle list.
++		 */
++		if (IS_ENABLED(CONFIG_CFI_CLANG) && !strcmp(sname, ".text"))
++			continue;
++
++		if (!num_text_sections)
++			size = shdr->sh_entsize;
++
++		text_list[num_text_sections] = shdr;
++		num_text_sections++;
++	}
++
++	if (!num_text_sections)
++		goto exit;
++
++	shuffle_array(text_list, num_text_sections);
++
++	for (i = 0; i < num_text_sections; i++) {
++		Elf_Shdr *shdr = text_list[i];
++
++		/*
++		 * get_offset has a section index for it's last
++		 * argument, that is only used by arch_mod_section_prepend(),
++		 * which is only defined by parisc. Since this type
++		 * of randomization isn't supported on parisc, we can
++		 * safely pass in zero as the last argument, as it is
++		 * ignored.
++		 */
++		shdr->sh_entsize = get_offset(mod, &size, shdr, 0);
++	}
++
++exit:
++	kvfree(text_list);
 +}
 +
- # Link of vmlinux.o used for section mismatch analysis
- # ${1} output file
- modpost_link()
-@@ -162,12 +179,19 @@ vmlinux_link()
- 	local ld
- 	local ldflags
- 	local ldlibs
-+	local lds
- 
- 	info LD ${output}
- 
- 	# skip output file argument
- 	shift
- 
-+	if is_enabled CONFIG_FG_KASLR; then
-+		lds=".tmp_vmlinux.lds"
-+	else
-+		lds="${objtree}/${KBUILD_LDS}"
-+	fi
+ /*
+  * Lay out the SHF_ALLOC sections in a way not dissimilar to how ld
+  * might -- code, read-only data, read-write data, small data.  Tally
+@@ -2509,6 +2575,9 @@ static void layout_sections(struct module *mod, struct load_info *info)
+ 			break;
+ 		}
+ 	}
 +
- 	if is_enabled CONFIG_LTO_CLANG; then
- 		# Use vmlinux.o instead of performing the slow LTO link again.
- 		objs=vmlinux.o
-@@ -189,7 +213,7 @@ vmlinux_link()
- 		ldlibs=
- 	fi
++	if (IS_ENABLED(CONFIG_MODULE_FG_KASLR))
++		randomize_text(mod, info);
+ }
  
--	ldflags="${ldflags} ${wl}--script=${objtree}/${KBUILD_LDS}"
-+	ldflags="${ldflags} ${wl}--script=${lds}"
- 
- 	# The kallsyms linking does not need debug symbols included.
- 	if [ "$output" != "${output#.tmp_vmlinux.kallsyms}" ] ; then
-@@ -346,6 +370,10 @@ info GEN modules.builtin
- tr '\0' '\n' < modules.builtin.modinfo | sed -n 's/^[[:alnum:]:_]*\.file=//p' |
- 	tr ' ' '\n' | uniq | sed -e 's:^:kernel/:' -e 's/$/.ko/' > modules.builtin
- 
-+if is_enabled CONFIG_FG_KASLR; then
-+	gen_text_sections
-+fi
-+
- btf_vmlinux_bin_o=""
- if is_enabled CONFIG_DEBUG_INFO_BTF; then
- 	btf_vmlinux_bin_o=.btf.vmlinux.bin.o
+ static void set_license(struct module *mod, const char *license)
 -- 
 2.34.1
 
