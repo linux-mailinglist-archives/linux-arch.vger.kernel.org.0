@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3F14AFC97
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 20:01:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2394AFCA8
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 20:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241820AbiBITAu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 14:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S238908AbiBITBs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 14:01:48 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241924AbiBITAm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 14:00:42 -0500
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52614C03E95B;
-        Wed,  9 Feb 2022 10:59:43 -0800 (PST)
+        with ESMTP id S241954AbiBITAn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 14:00:43 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CA9C03C184;
+        Wed,  9 Feb 2022 11:00:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644433183; x=1675969183;
+  t=1644433217; x=1675969217;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=r5aNsFC+ONEwa9lwkz7NNrwO0O+QDfFDV0LODK7//hE=;
-  b=nPr7gfVJdWSUqFqPq0B2ceGCSZtcFYCWX8LXAqh474J/q4ChICdYmp1S
-   glMOecOs2JVMwqqKeJuc4mWvUS2bfq0wjNZT5fW9RyBULSduvLhM9KKRZ
-   iBz2L86Q/pfWPCyTNUfAoP6uohAKpHRVTpeSf7AT1tVonR+ZNiLXyKVeh
-   LotLysqAfYiAJUJqo/NV2z5Jk+lbkNTXlLPngbgil0f+kXK3YgCy5HZnp
-   JpHA4k3MrzFImIYcyYWkZUmeaSOmMcmepkufZtwtHiHLKTz31yySGqEYN
-   1Nfx38w/eZGs0Ic0k766NKla4d3J+bnpZLzjK/B6MEMYjC0vKZRk9ojRu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="310047717"
+  bh=s84uSm9qyBNadCbATFCw5Cxj1InKAjGvq6LbxYnviTE=;
+  b=n3tnxuw28owdJv6zCB1sHx9JFoCIWIhV/VVmqDKZgSk+Ls1TTB50fUGe
+   E7qWFhbX5V/l9/9BDY5CzPWCA3Fmh7eSbLLX3hdisAoq+WZCXDb6P63s9
+   +5LXxXHQvBBmHjwv0vvLMh+iLzTYOjEto3gxPsMAKO0ILbFPKvI/jj2IM
+   fMtijjucJeSVA4lRb6QP33Su3TO0kTogTRDa2LwLmKtqwCWncPCQTXZuI
+   KD1yyBaKZ5iEVC/1N0gPLnJMbzGCLN/2rxV7ANeLOULNrSi0HENTXGxXa
+   NJHn/TAAEup3Ip0Qh6vM8YYztecaYRJpCPT+5LMudwcdmN6b6rg3oonXT
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="229953321"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="310047717"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:26 -0800
+   d="scan'208";a="229953321"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 10:59:29 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="541248674"
+   d="scan'208";a="500088812"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga008.jf.intel.com with ESMTP; 09 Feb 2022 10:59:18 -0800
+  by orsmga002.jf.intel.com with ESMTP; 09 Feb 2022 10:59:20 -0800
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQb031082;
-        Wed, 9 Feb 2022 18:59:15 GMT
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 219IwjQc031082;
+        Wed, 9 Feb 2022 18:59:17 GMT
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     linux-hardening@vger.kernel.org, x86@kernel.org
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -78,9 +78,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
         llvm@lists.linux.dev
-Subject: [PATCH v10 14/15] Documentation: add documentation for FG-KASLR
-Date:   Wed,  9 Feb 2022 19:57:51 +0100
-Message-Id: <20220209185752.1226407-15-alexandr.lobakin@intel.com>
+Subject: [PATCH v10 15/15] maintainers: add MAINTAINERS entry for FG-KASLR
+Date:   Wed,  9 Feb 2022 19:57:52 +0100
+Message-Id: <20220209185752.1226407-16-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
 References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
@@ -96,227 +96,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Kristen Carlson Accardi <kristen@linux.intel.com>
+Add an entry for FG-KASLR containing the maintainers, reviewers,
+public mailing lists, files and so on.
 
-Describe the main principles behind the FG-KASLR hardening feature
-in a new doc section.
-
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 ---
- .../admin-guide/kernel-parameters.txt         |   6 +
- Documentation/security/fgkaslr.rst            | 172 ++++++++++++++++++
- Documentation/security/index.rst              |   1 +
- 3 files changed, 179 insertions(+)
- create mode 100644 Documentation/security/fgkaslr.rst
+ MAINTAINERS | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f5a27f067db9..bb8804c5fa5c 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2235,6 +2235,12 @@
- 			kernel and module base offset ASLR (Address Space
- 			Layout Randomization).
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f53d30463c21..49a0974d32a7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7925,6 +7925,18 @@ L:	platform-driver-x86@vger.kernel.org
+ S:	Maintained
+ F:	drivers/platform/x86/fujitsu-tablet.c
  
-+	nofgkaslr	[KNL]
-+			When CONFIG_FG_KASLR is set, this parameter
-+			disables kernel function granular ASLR
-+			(Address Space Layout Randomization).
-+			See Documentation/security/fgkaslr.rst.
++FUNCTION-GRAINED KASLR (FG-KASLR)
++M:	Alexander Lobakin <alexandr.lobakin@intel.com>
++R:	Kristen Carlson Accardi <kristen@linux.intel.com>
++R:	Kees Cook <keescook@chromium.org>
++L:	linux-hardening@vger.kernel.org
++S:	Supported
++F:	Documentation/security/fgkaslr.rst
++F:	arch/x86/boot/compressed/fgkaslr.c
++F:	arch/x86/boot/compressed/gen-symbols.h
++F:	arch/x86/boot/compressed/utils.c
++F:	scripts/generate_text_sections.pl
 +
- 	kasan_multi_shot
- 			[KNL] Enforce KASAN (Kernel Address Sanitizer) to print
- 			report on every invalid memory access. Without this
-diff --git a/Documentation/security/fgkaslr.rst b/Documentation/security/fgkaslr.rst
-new file mode 100644
-index 000000000000..50dc24f675b5
---- /dev/null
-+++ b/Documentation/security/fgkaslr.rst
-@@ -0,0 +1,172 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================================================================
-+Function Granular Kernel Address Space Layout Randomization (fgkaslr)
-+=====================================================================
-+
-+:Date: 6 April 2020
-+:Author: Kristen Accardi
-+
-+Kernel Address Space Layout Randomization (KASLR) was merged into the kernel
-+with the objective of increasing the difficulty of code reuse attacks. Code
-+reuse attacks reused existing code snippets to get around existing memory
-+protections. They exploit software bugs which expose addresses of useful code
-+snippets to control the flow of execution for their own nefarious purposes.
-+KASLR as it was originally implemented moves the entire kernel code text as a
-+unit at boot time in order to make addresses less predictable. The order of the
-+code within the segment is unchanged - only the base address is shifted. There
-+are a few shortcomings to this algorithm.
-+
-+1. Low Entropy - there are only so many locations the kernel can fit in. This
-+   means an attacker could guess without too much trouble.
-+2. Knowledge of a single address can reveal the offset of the base address,
-+   exposing all other locations for a published/known kernel image.
-+3. Info leaks abound.
-+
-+Finer grained ASLR has been proposed as a way to make ASLR more resistant
-+to info leaks. It is not a new concept at all, and there are many variations
-+possible. Function reordering is an implementation of finer grained ASLR
-+which randomizes the layout of an address space on a function level
-+granularity. The term "fgkaslr" is used in this document to refer to the
-+technique of function reordering when used with KASLR, as well as finer grained
-+KASLR in general.
-+
-+The objective of this patch set is to improve a technology that is already
-+merged into the kernel (KASLR). This code will not prevent all code reuse
-+attacks, and should be considered as one of several tools that can be used.
-+
-+Implementation Details
-+======================
-+
-+The over-arching objective of the fgkaslr implementation is incremental
-+improvement over the existing KASLR algorithm. It is designed to work with
-+the existing solution, and there are two main area where code changes occur:
-+Build time, and Load time.
-+
-+Build time
-+----------
-+
-+GCC has had an option to place functions into individual .text sections
-+for many years now (-ffunction-sections). This option is used to implement
-+function reordering at load time. The final compiled vmlinux retains all the
-+section headers, which can be used to help find the address ranges of each
-+function. Using this information and an expanded table of relocation addresses,
-+individual text sections can be shuffled immediately after decompression.
-+Some data tables inside the kernel that have assumptions about order
-+require sorting after the update. In order to modify these tables,
-+a few key symbols from the objcopy symbol stripping process are preserved
-+for use after shuffling the text segments. Any special input sections which are
-+defined by the kernel build process and collected into the .text output
-+segment are left unmodified and will still be present inside the .text segment,
-+unrandomized other than normal base address randomization.
-+
-+Load time
-+---------
-+
-+The boot kernel was modified to parse the vmlinux elf file after
-+decompression to check for symbols for modifying data tables, and to
-+look for any .text.* sections to randomize. The sections are then shuffled,
-+and tables are updated or resorted. The existing code which updated relocation
-+addresses was modified to account for not just a fixed delta from the load
-+address, but the offset that the function section was moved to. This requires
-+inspection of each address to see if it was impacted by a randomization.
-+
-+In order to hide the new layout, symbols reported through /proc/kallsyms will
-+be displayed in a random order.
-+
-+Performance Impact
-+==================
-+
-+There are two areas where function reordering can impact performance: boot
-+time latency, and run time performance.
-+
-+Boot time latency
-+-----------------
-+
-+This implementation of finer grained KASLR impacts the boot time of the kernel
-+in several places. It requires additional parsing of the kernel ELF file to
-+obtain the section headers of the sections to be randomized. It calls the
-+random number generator for each section to be randomized to determine that
-+section's new memory location. It copies the decompressed kernel into a new
-+area of memory to avoid corruption when laying out the newly randomized
-+sections. It increases the number of relocations the kernel has to perform at
-+boot time vs. standard KASLR, and it also requires a lookup on each address
-+that needs to be relocated to see if it was in a randomized section and needs
-+to be adjusted by a new offset. Finally, it re-sorts a few data tables that
-+are required to be sorted by address.
-+
-+Booting a test VM on a modern, well appointed system showed an increase in
-+latency of approximately 1 second.
-+
-+Run time
-+--------
-+
-+The performance impact at run-time of function reordering varies by workload.
-+Randomly reordering the functions will cause an increase in cache misses
-+for some workloads. Some workloads perform significantly worse under FGKASLR,
-+while others stay the same or even improve. In general, it will depend on the
-+code flow whether or not finer grained KASLR will impact a workload, and how
-+the underlying code was designed. Because the layout changes per boot, each
-+time a system is rebooted the performance of a workload may change.
-+
-+Image Size
-+==========
-+
-+fgkaslr increases the size of the kernel binary due to the extra section
-+headers that are included, as well as the extra relocations that need to
-+be added. You can expect fgkaslr to increase the size of the resulting
-+vmlinux by about 3%, and the compressed image (bzImage) by 15%.
-+
-+Memory Usage
-+============
-+
-+fgkaslr increases the amount of heap that is required at boot time,
-+although this extra memory is released when the kernel has finished
-+decompression. As a result, it may not be appropriate to use this feature
-+on systems without much memory.
-+
-+Building
-+========
-+
-+To enable fine grained KASLR, you need to have the following config options
-+set (including all the ones you would use to build normal KASLR)
-+
-+``CONFIG_FG_KASLR=y``
-+
-+fgkaslr for the kernel is only supported for the X86_64 architecture.
-+
-+Modules
-+=======
-+
-+Modules are randomized similarly to the rest of the kernel by shuffling
-+the sections at load time prior to moving them into memory. The module must
-+also have been build with the -ffunction-sections compiler option.
-+
-+Although fgkaslr for the kernel is only supported for the X86_64 architecture,
-+it is possible to use fgkaslr with modules on other architectures. To enable
-+this feature, select the following config option:
-+
-+``CONFIG_MODULE_FG_KASLR``
-+
-+This option is selected automatically for X86_64 when CONFIG_FG_KASLR is set.
-+
-+Disabling
-+=========
-+
-+Disabling normal kaslr using the nokaslr command line option also disables
-+fgkaslr. In addition, it is possible to disable fgkaslr separately by booting
-+with "nofgkaslr" on the commandline.
-+
-+Further Information
-+===================
-+
-+There are a lot of academic papers which explore finer grained ASLR.
-+This paper in particular contributed significantly to the implementation design.
-+
-+Selfrando: Securing the Tor Browser against De-anonymization Exploits,
-+M. Conti, S. Crane, T. Frassetto, et al.
-+
-+For more information on how function layout impacts performance, see:
-+
-+Optimizing Function Placement for Large-Scale Data-Center Applications,
-+G. Ottoni, B. Maher
-diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
-index 16335de04e8c..41444124090f 100644
---- a/Documentation/security/index.rst
-+++ b/Documentation/security/index.rst
-@@ -7,6 +7,7 @@ Security Documentation
- 
-    credentials
-    IMA-templates
-+   fgkaslr
-    keys/index
-    lsm
-    lsm-development
+ FUSE: FILESYSTEM IN USERSPACE
+ M:	Miklos Szeredi <miklos@szeredi.hu>
+ L:	linux-fsdevel@vger.kernel.org
 -- 
 2.34.1
 
