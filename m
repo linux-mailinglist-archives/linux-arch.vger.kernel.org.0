@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED464B002E
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 23:29:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFDB4B00A5
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 23:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbiBIW2j (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 17:28:39 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:57790 "EHLO
+        id S236395AbiBIWub (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 17:50:31 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235632AbiBIW2Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 17:28:25 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86480E01A2DD;
-        Wed,  9 Feb 2022 14:27:57 -0800 (PST)
+        with ESMTP id S236400AbiBIWua (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 17:50:30 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCDDE01925B;
+        Wed,  9 Feb 2022 14:50:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644445677; x=1675981677;
+  t=1644447032; x=1675983032;
   h=message-id:date:mime-version:to:cc:references:from:
    subject:in-reply-to:content-transfer-encoding;
-  bh=SfeEZ6Op0bvafHg5MlJ6fjdSi90N4yjAydK+PCRbadk=;
-  b=lly4Pgpp4F2zK0o/xha6ocMtS/XxRo1XzPkLQ2tCtu17LSx0wu34pJrw
-   uOkr52lfHWnHNO7wrwas5AzAgoHk/a2k2KaubN38xYrLC20HgYFFRHO0Q
-   fAxiC2S9gkb0bff4S0hrYkhKrGko3Ls9dfOcgCiMizHZZffGEDhmg1yHk
-   1zcmSMJ0ePiUKYN2X5TAgGHfdX9wWeuYiG5n6f8nt72MqbmOrjUytZYHN
-   Uwgd1Rz/0cBTED8y+AsSsApbls5l2kM3wVQMbHiQmSiDRkOHApzzU0eK+
-   u6dN7qe4BkhpeC2FjL9Lmi3O7BHC4CFelB/KmXL8IwIbBCKXYlb9y3+P5
+  bh=4Pwqb82pRVxdynG25KCR6umaUemEEUALqmeKoSY7z9M=;
+  b=XCpCH/3Td0KFvE4yaMT6TS9hx1cEETvcDzl4o8R9X8atUDJAsi8Tr33i
+   t01Go6d8A5PzjQJU0VHAT7enZLKRImwWFNk0eyxd82e/VAbE0uV7DOIYh
+   0GfBbJWb4NL0WN9b8CVLJKbns9CSv8KZzgS5CVWYKrQbnC8vLVxxiPJ4I
+   /5IM7ulccWLpI7u+1JKEsrLe84rF9h1l+VUBFlqQUsLy47HglmiFNQcBY
+   pzPRyR3Wwd7/27hyGXdcY59jU2Lvw5mldIfl0do4aC2S8RN693duW/Jsz
+   vnZ7lL47aKWywTwTyRsBAL1eIAeErAJy45CwhN3Wxn7pfrbyKp8XBshIM
    Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="230003811"
+X-IronPort-AV: E=McAfee;i="6200,9189,10253"; a="312652486"
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="230003811"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:27:57 -0800
+   d="scan'208";a="312652486"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:50:31 -0800
 X-IronPort-AV: E=Sophos;i="5.88,356,1635231600"; 
-   d="scan'208";a="585744850"
+   d="scan'208";a="701445624"
 Received: from sanvery-mobl.amr.corp.intel.com (HELO [10.212.232.139]) ([10.212.232.139])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:27:55 -0800
-Message-ID: <804adbac-61e6-0fd2-f726-5735fb290199@intel.com>
-Date:   Wed, 9 Feb 2022 14:27:53 -0800
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2022 14:50:31 -0800
+Message-ID: <74038286-6ff3-7eb2-ea65-2e223a894900@intel.com>
+Date:   Wed, 9 Feb 2022 14:50:27 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -72,11 +72,10 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         kcc@google.com, eranian@google.com
 Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-20-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-21-rick.p.edgecombe@intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 19/35] mm/mmap: Add shadow stack pages to memory
- accounting
-In-Reply-To: <20220130211838.8382-20-rick.p.edgecombe@intel.com>
+Subject: Re: [PATCH 20/35] mm: Update can_follow_write_pte() for shadow stack
+In-Reply-To: <20220130211838.8382-21-rick.p.edgecombe@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -90,50 +89,73 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On 1/30/22 13:18, Rick Edgecombe wrote:
-> +bool is_shadow_stack_mapping(vm_flags_t vm_flags)
-> +{
-> +	return vm_flags & VM_SHADOW_STACK;
-> +}
-> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-> index bc8713a76e03..21fdb1273571 100644
-> --- a/include/linux/pgtable.h
-> +++ b/include/linux/pgtable.h
-> @@ -911,6 +911,14 @@ static inline void ptep_modify_prot_commit(struct vm_area_struct *vma,
->  	__ptep_modify_prot_commit(vma, addr, ptep, pte);
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> Can_follow_write_pte() ensures a read-only page is COWed by checking the
+> FOLL_COW flag, and uses pte_dirty() to validate the flag is still valid.
+> 
+> Like a writable data page, a shadow stack page is writable, and becomes
+> read-only during copy-on-write,
+
+I thought we could not have read-only shadow stack pages.  What does a
+read-only shadow stack PTE look like? ;)
+
+> but it is always dirty.  Thus, in the
+> can_follow_write_pte() check, it belongs to the writable page case and
+> should be excluded from the read-only page pte_dirty() check.  Apply
+> the same changes to can_follow_write_pmd().
+> 
+> While at it, also split the long line into smaller ones.
+
+FWIW, I probably would have had a preparatory patch for this part.  The
+advantage is that if you break existing code, it's a lot easier to
+figure it out if you have a separate refactoring patch.  Also, for a
+patch like this, the refactoring might result in the same exact binary.
+ It's a pretty good sign that your patch won't cause regressions if it
+results in the same binary.
+
+> diff --git a/mm/gup.c b/mm/gup.c
+> index f0af462ac1e2..95b7d1084c44 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -464,10 +464,18 @@ static int follow_pfn_pte(struct vm_area_struct *vma, unsigned long address,
+>   * FOLL_FORCE can write to even unwritable pte's, but only
+>   * after we've gone through a COW cycle and they are dirty.
+>   */
+> -static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
+> +static inline bool can_follow_write_pte(pte_t pte, unsigned int flags,
+> +					struct vm_area_struct *vma)
+>  {
+> -	return pte_write(pte) ||
+> -		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
+> +	if (pte_write(pte))
+> +		return true;
+> +	if ((flags & (FOLL_FORCE | FOLL_COW)) != (FOLL_FORCE | FOLL_COW))
+> +		return false;
+> +	if (!pte_dirty(pte))
+> +		return false;
+> +	if (is_shadow_stack_mapping(vma->vm_flags))
+> +		return false;
+
+You had me up until this is_shadow_stack_mapping().  It wasn't mentioned
+at all in the changelog.  Logically, I think it's trying to say that a
+shadow stack VMA never allows a FOLL_FORCE override.
+
+That makes some sense, but it's a pretty big point not to mention in the
+changelog.
+
+> +	return true;
 >  }
->  #endif /* __HAVE_ARCH_PTEP_MODIFY_PROT_TRANSACTION */
-> +
-> +#ifndef is_shadow_stack_mapping
-> +static inline bool is_shadow_stack_mapping(vm_flags_t vm_flags)
-> +{
-> +	return false;
-> +}
-> +#endif
+>  
+>  static struct page *follow_page_pte(struct vm_area_struct *vma,
+> @@ -510,7 +518,7 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+>  	}
+>  	if ((flags & FOLL_NUMA) && pte_protnone(pte))
+>  		goto no_page;
+> -	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags)) {
+> +	if ((flags & FOLL_WRITE) && !can_follow_write_pte(pte, flags, vma)) {
+>  		pte_unmap_unlock(ptep, ptl);
+>  		return NULL;
+>  	}
 
-Hold your horses there.  Remember:
 
-+#ifdef CONFIG_X86_SHADOW_STACK
-+# define VM_SHADOW_STACK       VM_HIGH_ARCH_5
-+#else
-+# define VM_SHADOW_STACK       VM_NONE
-+#endif
-
-Plus:
-
-#define VM_NONE         0x00000000
-
-That means the arch-generic version, when CONFIG_X86_SHADOW_STACK is off
-compiles down to:
-
-bool is_shadow_stack_mapping(vm_flags_t vm_flags)
-{
-	return vm_flags & 0x00000000;
-}
-
-I _suspect_ the compiler *might* compile that down to the same thing as:
-
-	return false;
-
-So, why not just have one version, no additional #ifdefs, and be done
-with it?  Heck, why have the helper in the first place?  Just check
-VM_SHADOW_STACK directly.
