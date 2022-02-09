@@ -2,57 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E553B4AEA7E
-	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 07:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2523D4AF03F
+	for <lists+linux-arch@lfdr.de>; Wed,  9 Feb 2022 12:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232942AbiBIGno (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 01:43:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S231337AbiBIL4O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 06:56:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232761AbiBIGnm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 01:43:42 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDEC0401C7;
-        Tue,  8 Feb 2022 22:43:46 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id u6so2276156lfm.10;
-        Tue, 08 Feb 2022 22:43:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pAAzM9YEmsN6BS7NBJa5z8OM37Zy1PTMVGmhl1fo81w=;
-        b=FlVvYLWZE91QEPrPjnkeKbrPdSH+5IeJN/XcHoBhkj2vD8EH3wR/24NglxFpdb+eTM
-         +Odo2S8UX7+C1f+j+JnNN86RN0MrROOerK5spsgTF6441CEsncZo/EiJgLd0UrXyq4ew
-         qHQXBblQ10ly18eF9co0j+Qc2WNfBqX5upTijJ/pjxqLnI8t+ay/agCNONO08mJ5AA1F
-         0ITPdrQi+oJsoFHrbIY0yP36MjyXKjJalN84O6oJ72h0/6YvgWje0y4XPRZiDWDr5CDT
-         n5JCD0U1OKqfyDCf0nIdC1BI7qsCi7MOC0jApbRuMropCtd+nHE/kgkqk9z586rPkztl
-         FYLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pAAzM9YEmsN6BS7NBJa5z8OM37Zy1PTMVGmhl1fo81w=;
-        b=4J2o/wuZ3ZQn0gX1G8vxcly/RJJ04IULveF2oUi6s904Rdv2l0RuKSEVer3DbcVXPB
-         DKmOd/MpbEpR5T7uEo+T+HS6iHZ2F0xe0afrqF04UXpDPijGR6pSnzD9GGsk+46BJp1h
-         bbooWN/flwAcmF7YdbIwvncQBsFX+xaIxUnuJqA8o4z47OKOPo0XacX9LLJCxFK2qMiR
-         YjaNV/mr0jLuOCxDkOFr/Lcr/OxOEzD0jrsBuTWcmcnX3jBLR+Xo8L9qWuD+q/EU+UtF
-         HdmHRJQMoXHFSDysW4WVlbJjGHRGfdLFYvE8YWrrz+DKavER1CHmI4N2woQqBO0JZA8c
-         PAXg==
-X-Gm-Message-State: AOAM532hYOySh1LlGWvsXEs/cEH2IYboDCuNimrzb5I5ktnU8/gMdXL3
-        nIQPv1w6y3B1u0Y73GDYBoM=
-X-Google-Smtp-Source: ABdhPJypQnDZgbJ8Curzq6PkvfxuGqIegGNX0qm0cm40T1ctE7nHCinC134HL2iJXR+3MIPZGN5BQw==
-X-Received: by 2002:a05:6512:b11:: with SMTP id w17mr590074lfu.381.1644389024921;
-        Tue, 08 Feb 2022 22:43:44 -0800 (PST)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id e13sm2328340ljj.85.2022.02.08.22.43.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 22:43:43 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 349FD5A0020; Wed,  9 Feb 2022 09:43:43 +0300 (MSK)
-Date:   Wed, 9 Feb 2022 09:43:43 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
+        with ESMTP id S231597AbiBILz0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 06:55:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887D9C0045A9;
+        Wed,  9 Feb 2022 02:54:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1527B612E7;
+        Wed,  9 Feb 2022 10:54:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F355C340EE;
+        Wed,  9 Feb 2022 10:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644404049;
+        bh=8nfXi2bAkBkxKe4ZmVJ1McrLUR/vS+aiNoKC3c4V54c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o8kvTb2TMbpq1whYqOyKIm1hlJzLi/Q/a7JoUpj/jGssXx7Qt2YZfBNYkEkw/hZXE
+         oSInBQ5nuOk5Os7WPqk0FsmT5MYuYpJeH1AwVx9/sNxYghplvePkYAHWRcNnd3okRc
+         M9krUM2hOFkqKwv1q7AvLokp6kWPbgxm4oByhL31KH+6gGAD8NURHSZGlgRPeJ34wR
+         oKsYkioVYxJpiwc0Ji4Sp/jM+78yoZTEYYk3XHfiYOqzRm+ha7Fh2SpXMJsyh6VB8N
+         ivZdoNTpo9Vm+5jKSaeoJXseiJK/X0ch6HI7SG9uzqs2raWQmeBW+yzpszfgW8m8ad
+         YPv9Vixyl0Iow==
+Date:   Wed, 9 Feb 2022 12:53:51 +0200
+From:   Mike Rapoport <rppt@kernel.org>
 To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
 Cc:     "Lutomirski, Andy" <luto@kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
         "bsingharora@gmail.com" <bsingharora@gmail.com>,
         "hpa@zytor.com" <hpa@zytor.com>,
         "Syromiatnikov, Eugene" <esyr@redhat.com>,
@@ -81,7 +64,6 @@ Cc:     "Lutomirski, Andy" <luto@kernel.org>,
         "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
         "x86@kernel.org" <x86@kernel.org>,
         "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
         "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
         "john.allen@amd.com" <john.allen@amd.com>,
         "mingo@redhat.com" <mingo@redhat.com>,
@@ -89,11 +71,9 @@ Cc:     "Lutomirski, Andy" <luto@kernel.org>,
         "corbet@lwn.net" <corbet@lwn.net>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        alexander.mikhalitsyn@virtuozzo.com
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
 Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Message-ID: <YgNin5wkSaixCwdx@grain>
+Message-ID: <YgOdP7YFwbX13SlP@kernel.org>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
  <YgAWVSGQg8FPCeba@kernel.org>
  <YgDIIpCm3UITk896@lisas.de>
@@ -107,19 +87,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
-User-Agent: Mutt/2.0.7 (2021-05-04)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Rick,
+
 On Wed, Feb 09, 2022 at 02:18:42AM +0000, Edgecombe, Rick P wrote:
-...
+> On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
+> > On Tue, Feb 08, 2022 at 08:21:20AM -0800, Andy Lutomirski wrote:
+> > > > > But such a knob will immediately reduce the security value of
+> > > > > the entire
+> > > > > thing, and I don't have good ideas how to deal with it :(
+> > > > 
+> > > > Probably a kind of latch in the task_struct which would trigger
+> > > > off once
+> > > > returt to a different address happened, thus we would be able to
+> > > > jump inside
+> > > > paratite code. Of course such trigger should be available under
+> > > > proper
+> > > > capability only.
+> > > 
+> > > I'm not fully in touch with how parasite, etc works.  Are we
+> > > talking about save or restore?
+> > 
+> > We use parasite code in question during checkpoint phase as far as I
+> > remember.
+> > push addr/lret trick is used to run "injected" code (code injection
+> > itself is
+> > done via ptrace) in compat mode at least. Dima, Andrei, I didn't look
+> > into this code
+> > for years already, do we still need to support compat mode at all?
+> > 
+> > > If it's restore, what exactly does CRIU need to do?  Is it just
+> > > that CRIU needs to return
+> > > out from its resume code into the to-be-resumed program without
+> > > tripping CET?  Would it
+> > > be acceptable for CRIU to require that at least one shstk slot be
+> > > free at save time?
+> > > Or do we need a mechanism to atomically switch to a completely full
+> > > shadow stack at resume?
+> > > 
+> > > Off the top of my head, a sigreturn (or sigreturn-like mechanism)
+> > > that is intended for
+> > > use for altshadowstack could safely verify a token on the
+> > > altshdowstack, possibly
+> > > compare to something in ucontext (or not -- this isn't clearly
+> > > necessary) and switch
+> > > back to the previous stack.  CRIU could use that too.  Obviously
+> > > CRIU will need a way
+> > > to populate the relevant stacks, but WRUSS can be used for that,
+> > > and I think this
+> > > is a fundamental requirement for CRIU -- CRIU restore absolutely
+> > > needs a way to write
+> > > the saved shadow stack data into the shadow stack.
 > 
 > Still wrapping my head around the CRIU save and restore steps, but
 > another general approach might be to give ptrace the ability to
@@ -127,7 +154,18 @@ On Wed, Feb 09, 2022 at 02:18:42AM +0000, Edgecombe, Rick P wrote:
 > thread. Then injected code doesn't need to jump through any hoops or
 > possibly run into road blocks. I'm not sure how much this opens things
 > up if the thread has to be stopped...
-> 
+ 
+IIRC, criu dump does something like this:
+* Stop the process being dumped (victim) with ptrace
+* Inject parasite code and data into the victim, again with ptrace.
+  Among other things the parasite data contains a sigreturn frame with
+  saved victim state.
+* Resume the victim process, which will run parasite code now.
+* When parasite finishes it uses that frame to sigreturn to normal victim
+  execution
+
+So, my feeling is that for dump side WRUSS should be enough.
+
 > Cyrill, could it fit into the CRIU pause and resume flow? What action
 > causes the final resuming of execution of the restored process for
 > checkpointing and for restore? Wondering if we could somehow make CET
@@ -137,6 +175,36 @@ On Wed, Feb 09, 2022 at 02:18:42AM +0000, Edgecombe, Rick P wrote:
 > a specific address to match where they were in the dumped process. That
 > is missing in this series.
 
-Thanks Rick! This sounds like an option. I need a couple of days to refresh
-my memory about criu internals. Let me CC a few current active criu developers
-(CC list is already big enough though:), maybe this will speedup the procedure.
+Yes, criu restore will need to recreate shadow stack mappings. Currently,
+we recreate the restored process (target) address space based on
+/proc/pid/maps and /proc/pid/smaps. CRIU preserves the virtual addresses
+and VMA flags. The relevant steps of restore process can be summarised as:
+* Clone() the target process tree
+* Recreate VMAs with the needed size and flags, but not necessarily at the
+  correct place yet
+* Partially populate memory data from the saved images
+* Move VMAs to their exact addresses
+* Complete restoring the data
+* Create a frame for sigreturn and jump to the target.
+
+Here, the stack used after sigreturn contains the data that was captured
+during dump and it entirely different from what shadow stack will contain.
+
+There are several points when the target threads are stopped, so
+pausing/resuming CET may help.
+ 
+> > > So I think the only special capability that CRIU really needs is
+> > > WRUSS, and
+> > > we need to wire that up anyway.
+> > 
+> > Thanks for these notes, Andy! I can't provide any sane answer here
+> > since didn't
+> > read tech spec for this feature yet :-)
+> 
+> 
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.
