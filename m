@@ -2,37 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950034B09D2
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 10:46:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6444B09C9
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 10:44:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238968AbiBJJqe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 10 Feb 2022 04:46:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35266 "EHLO
+        id S238089AbiBJJmz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 10 Feb 2022 04:42:55 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238777AbiBJJqd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Feb 2022 04:46:33 -0500
-X-Greylist: delayed 309 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 01:46:34 PST
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF511A7
-        for <linux-arch@vger.kernel.org>; Thu, 10 Feb 2022 01:46:34 -0800 (PST)
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MA88C-1nTfkU014k-00BYfr; Thu, 10 Feb 2022 10:41:24 +0100
-Received: by mail-wr1-f42.google.com with SMTP id k18so8410970wrg.11;
-        Thu, 10 Feb 2022 01:41:23 -0800 (PST)
-X-Gm-Message-State: AOAM532FlZbzThx9zWPgYSmUFoDGJC+hFyS/v5J9R9p3sn2ApYzDZ5x/
-        Sas5baxFJwnIk2DNNyhzU/HFySxP3/sv7fmPsNc=
-X-Google-Smtp-Source: ABdhPJwFAXHn/oxpkrKGkjNdQCVhvPPwJqoR18BfcNL1lEqEkdOenRkU6MzFWE9oH1War435497Ub7+zNJE6VpNe5D8=
-X-Received: by 2002:adf:e5ce:: with SMTP id a14mr691958wrn.317.1644486083668;
- Thu, 10 Feb 2022 01:41:23 -0800 (PST)
+        with ESMTP id S237813AbiBJJmy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Feb 2022 04:42:54 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5ACB8;
+        Thu, 10 Feb 2022 01:42:54 -0800 (PST)
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N6KpF-1oON1B2ubp-016fKk; Thu, 10 Feb 2022 10:42:52 +0100
+Received: by mail-wr1-f52.google.com with SMTP id o24so5799634wro.3;
+        Thu, 10 Feb 2022 01:42:52 -0800 (PST)
+X-Gm-Message-State: AOAM532/HSira21YaoUeLlFKj2aA0oN2Hb0hoYliLyGBgf1VU52Bbe4i
+        uVjVhrQIsRQaSlNvXa6E8EZjB3/q/1e8a8DUnK4=
+X-Google-Smtp-Source: ABdhPJzhHs9stg1CGjBG4tYNZmGgHgYXJf8g0kYd6wB04Op66IuXzXvecmd40GTVBsPrfi8m3IvRyQ/IC3YdpZH/xvo=
+X-Received: by 2002:adf:e5ce:: with SMTP id a14mr696840wrn.317.1644486172328;
+ Thu, 10 Feb 2022 01:42:52 -0800 (PST)
 MIME-Version: 1.0
-References: <20220210021129.3386083-1-masahiroy@kernel.org> <20220210021129.3386083-6-masahiroy@kernel.org>
-In-Reply-To: <20220210021129.3386083-6-masahiroy@kernel.org>
+References: <20220210021129.3386083-1-masahiroy@kernel.org> <20220210021129.3386083-5-masahiroy@kernel.org>
+In-Reply-To: <20220210021129.3386083-5-masahiroy@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 10 Feb 2022 10:41:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3biD8Fmd2GMTkwPtU1ezinvyvbBZqey0cAiJh4_5svKQ@mail.gmail.com>
-Message-ID: <CAK8P3a3biD8Fmd2GMTkwPtU1ezinvyvbBZqey0cAiJh4_5svKQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] kexec.h: add linux/kexec.h to UAPI compile-test coverage
+Date:   Thu, 10 Feb 2022 10:42:36 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a20A4bMNYiLCgaPZbnAG-gY=c5Qh_AqbupF3kLYUz5yZg@mail.gmail.com>
+Message-ID: <CAK8P3a20A4bMNYiLCgaPZbnAG-gY=c5Qh_AqbupF3kLYUz5yZg@mail.gmail.com>
+Subject: Re: [PATCH 4/6] fsmap.h: add linux/fsmap.h to UAPI compile-test coverage
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -40,26 +39,26 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:ehHi4GhNJ7W0pBtKH6PXaACeiIpDdyufnrP9Kn4RSrxY28y506Y
- tv9ROIN7wsDt+fkuc5im9FXCHrt9coUqTp3xS9sWgFw+iTVimamqcQgewNppZi1G3ClkwZW
- xugVn7mWYP6SWeR6MrYmS9BMtbcJnmI5hl1No4L9BGvXOdlfxLE39JGiB3h2vgLq4htBNdU
- +jNNPTtNf61R3gOmmRw+Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7ScsKC1nxzo=:222LMN1bT7TviN5PhhGGVX
- ARcddAIuywx6Tif+RiRINGOFpci+iPPcdYzqlfR5J9smBO57UoHLogIAdWnjz9O1yJyoPE5tG
- qoO+f0No7Pk4oQveOxCEYWpnMSlSJIHY11SqJ+adjat2a3VNEAasWaEoBwN9zZhUUp4B3z3QT
- wZ1f7ssZB+ZIAb1Yqedjn1DRd2plA8H/rDE3Vc9ARNukfD0ovNZ4p8pbkk389pWGslDi2ZluN
- c1C6/+gyfzr2UcHTRsWQpptFDvZ1zTxSjW/lD1QRY5JaB5iCJISkiLKBUg3iTpJr+lfNocKuj
- EbcyFSunX8LyIIC8GKbsVFKKqWXI6W0EDBADC3KQfdyJ2WZE5YQT63sHDDb6p1qQDSIZPlp8Z
- CPP7Il135ir2PB4xFILzPD6FO5MCGNeM5Imkc+ldEyq70C7JrjQoDRvwISL9u1b5jiBarkiOP
- Qx5qJhUZjy9Dr17BpHK6upmErjNNEgGJWqusNRDzMyfrI/RJeJnHwOuOFWTUpj+eozvOCEKtg
- PKHtMNZiYgYbrvAXnMQepwdE7Udfq4JaRLfSoW2yHmmxyazcXj44KOX8YarefQpZnCgvBgD78
- 7SLL0kwdvJjutlxpNwwhud646+4FfQaluHTxduSQunJ3IdKGAK+Bcv9eRHCu8Tf02npk+TbKo
- QBbxlz6jODi4X7NNaz3LkNI08cuLBpul1baKmKRZRkdoJQEF1ldRRZjrZMyY42GlKbe4S9fuR
- bDedaraqjSYLNL9CPehs9hlbWjCF1nV4P1O1Kq4t5FhLhlWAwVlIie8RYiitFdtaOwj8IrBOJ
- syoca3I5VfAZgh88agai7NI1X5WtaHvHo1UgWm9gmFlsa56vO0=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:SKFBc6gh2BQcpDMOOfR5sBuuKK6JA4YwdeXfHeOqsJTo1BqQp+Q
+ vDb6a6EHi/CGoN105kxDSq1BrVdWYbnY1gAfg7t36fDIfsWRMjj6tyHSdDOgusICDXmdJce
+ qwMMScjjNCGAL8e4ulAdqfqaO1yVRlNEyBKU3wbMjsna9fZgyMsAzZ7gMi5FfxgLxjOgY/T
+ oiM4cTkFq3ozKZ6SQ5GXQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:FvvoPiJvMLg=:x70AYA8UT3KJCdbwfBIuh8
+ zXRs2tv4mOrNoDvp83YN3oPxcGqQzP6Q4wAQmLL2kXCSVzwe+OL1L8btAOwMw/3/wgGd1Rk0J
+ HdOPI0RCW+TKSb6XJ097CenjHUPQY2fnQMd56+HWcEQotyO6XhJia8wPJ3LtFPM42unIZwCLJ
+ WRzak2zrqysMZ8brYVpoTjUAkgUNEOnw0U47XIJ91Fersdg89/v888V0HWdr6BgafuDf/KgkN
+ pw6rw8uMVfbYyIQZHYP6QcOv1JS4faXX4eGZuW8f/fk3BWsFpJZsYUJGUpyx0Hjdg/QrQ5ZcC
+ KfXbLzytaI3HMDbNXwwKpn69O74/Z7xiG/wX5U4nN5Def3IVR9I80jpVeQkKhpAGAtkZYn7Dm
+ hLR2W+gblrve1hW6p7WGngOWEeV72fqIjjaU32D2XygdaOs/F7yyfy0nfkHB5SwmtvwnhJtf/
+ WJqFmnM+a5Cp7nYewiX6ccP38EKK/8iaFLG3vkVAiIX82o1r/SUzl/B0sS14qKDF/ult0sB6Q
+ 0UhML/t8YBxDwKm6eWwOYSbD+T/jw6cPZwX0zJQ/ib7wf6oEYzqueCzsPDgcguFTxdKP7koj2
+ Tw+6OVQ/lSr6+7jyzYJtcs91je5skSnWbaeEH+IlSyyLwCiplFNvQOXLlZj31OyWYBD+t2ySV
+ XoymN4FNGF4ZUYzUYrPQJP6Y/GptZjylnsp+2u++1lYTdHg1zZ+6tJAwsw3i+XhkyVeVWoUsm
+ qmPeDfikSexYe6wLRDuK3gPp8YB6R9dYHnyqZEPM0SXTXegVS1Nk/K1lKLMCy+R7OL4c4v7sd
+ aYwrWw8kLfO9gohTkyqL5CNiIPLd0Yu5j5xLNoqPd3i5x4wClE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,19 +67,16 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Thu, Feb 10, 2022 at 3:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> linux/kexec.h is currently excluded from the UAPI compile-test because
-> of the errors like follows:
+> linux/fsmap.h is currently excluded from the UAPI compile-test because
+> of the error like follows:
 >
->     HDRTEST usr/include/linux/kexec.h
+>     HDRTEST usr/include/linux/fsmap.h
 >   In file included from <command-line>:
->   ./usr/include/linux/kexec.h:56:9: error: unknown type name ‘size_t’
->      56 |         size_t bufsz;
->         |         ^~~~~~
->   ./usr/include/linux/kexec.h:58:9: error: unknown type name ‘size_t’
->      58 |         size_t memsz;
->         |         ^~~~~~
+>   ./usr/include/linux/fsmap.h:72:19: error: unknown type name ‘size_t’
+>      72 | static __inline__ size_t
+>         |                   ^~~~~~
 >
-> The errors can be fixed by replacing size_t with __kernel_size_t.
+> The error can be fixed by replacing size_t with __kernel_size_t.
 >
 > Then, remove the no-header-test entry from user/include/Makefile.
 >
