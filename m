@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350EA4B033D
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 03:20:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FFF4B0339
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 03:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiBJCUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 21:20:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39694 "EHLO
+        id S229808AbiBJCTA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 21:19:00 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiBJCUj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 21:20:39 -0500
-Received: from condef-05.nifty.com (condef-05.nifty.com [202.248.20.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B13722B36;
-        Wed,  9 Feb 2022 18:20:38 -0800 (PST)
-Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-05.nifty.com with ESMTP id 21A2CEgX007238;
+        with ESMTP id S229704AbiBJCS7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 21:18:59 -0500
+Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7A725CA;
+        Wed,  9 Feb 2022 18:19:00 -0800 (PST)
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-01.nifty.com with ESMTP id 21A2CEFY024863;
         Thu, 10 Feb 2022 11:12:14 +0900
 Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 21A2BVGw030193;
+        by conuserg-12.nifty.com with ESMTP id 21A2BVGx030193;
         Thu, 10 Feb 2022 11:11:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21A2BVGw030193
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21A2BVGx030193
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644459092;
-        bh=9rlTIDf+U0DYlyosnkaUCepGIAJ7vKKws/NpiQ+PL4I=;
+        s=dec2015msa; t=1644459093;
+        bh=BgrcsyoUOdWLgz4rAIphuCEW51c0c/5R+2Ow60R9bB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BX06GH+WTisBdFFp+EltlSA9tkoYjTNeBLO7faiKnMDs7ZLUmIsKRWStl5IhyytnX
-         PYJGfycgxdchdg12CxlQoENG8h9dVJFRLEOE5kpRGXBkVRAukfS87erh35xanyWtvQ
-         QAQPOPAGSc6IcOr9vHsXKARlCN83342LfRCHcxQy/aiLrLLHDqH3hVEPK9aJmhfYrg
-         YhYutTdWp/eMzVoIsD8wVBxf56ihdHWdWwtnSVorxcDXqwVYN50JYWcglod/oWsIsu
-         e+W/jMKXF4K6MvXOVnJiMTPdMmVtxXVdvL9UvkMAWi6GHkhSDu1twcEjuCXWdqzpI0
-         bI7Zvcnr1SnJw==
+        b=feNGzLID3LYlOV5n4mKLtXUPF4kgKQ2Abd84X5tlxdFtpKDaiFAVs2xfCcQu8cEDS
+         k+4p/Bb6BN8a+1umUvAc6TkLtPggeYWvpayf5A+miDrgOhCB/hRBx+ph1lV8anUzGp
+         cwTSRrfsVyUDhmq6inujkOyNMVPCbifK8cLYH/OiMygLh7DzITppkBYKgabDuxXHFM
+         kR7BnOAjsO1CGP8TfFpcwq4qWD9cb3BK/Wy960k0eOySl1QQv+RYuTGatFa9g8H21Z
+         Vf4rYyrQj8UgKnAn7Omy/MTrV3ZIvvWnXWfqNCPxUzkA/LfLMqqfc5l5/aezzWpTL6
+         IacZ41RYUZTMg==
 X-Nifty-SrcIP: [133.32.232.101]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 1/6] signal.h: add linux/signal.h and asm/signal.h to UAPI compile-test coverage
-Date:   Thu, 10 Feb 2022 11:11:24 +0900
-Message-Id: <20220210021129.3386083-2-masahiroy@kernel.org>
+Subject: [PATCH 2/6] shmbuf.h: add asm/shmbuf.h to UAPI compile-test coverage
+Date:   Thu, 10 Feb 2022 11:11:25 +0900
+Message-Id: <20220210021129.3386083-3-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210021129.3386083-1-masahiroy@kernel.org>
 References: <20220210021129.3386083-1-masahiroy@kernel.org>
@@ -54,235 +54,210 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-linux/signal.h and asm/signal.h are currently excluded from the UAPI
-compile-test because of the errors like follows:
+asm/shmbuf.h is currently excluded from the UAPI compile-test because of
+the errors like follows:
 
-    HDRTEST usr/include/asm/signal.h
-  In file included from <command-line>:
-  ./usr/include/asm/signal.h:103:9: error: unknown type name ‘size_t’
-    103 |         size_t ss_size;
+    HDRTEST usr/include/asm/shmbuf.h
+  In file included from ./usr/include/asm/shmbuf.h:6,
+                   from <command-line>:
+  ./usr/include/asm-generic/shmbuf.h:26:33: error: field ‘shm_perm’ has incomplete type
+     26 |         struct ipc64_perm       shm_perm;       /* operation perms */
+        |                                 ^~~~~~~~
+  ./usr/include/asm-generic/shmbuf.h:27:9: error: unknown type name ‘size_t’
+     27 |         size_t                  shm_segsz;      /* size of segment (bytes) */
         |         ^~~~~~
+  ./usr/include/asm-generic/shmbuf.h:40:9: error: unknown type name ‘__kernel_pid_t’
+     40 |         __kernel_pid_t          shm_cpid;       /* pid of creator */
+        |         ^~~~~~~~~~~~~~
+  ./usr/include/asm-generic/shmbuf.h:41:9: error: unknown type name ‘__kernel_pid_t’
+     41 |         __kernel_pid_t          shm_lpid;       /* pid of last operator */
+        |         ^~~~~~~~~~~~~~
 
-The errors can be fixed by replacing size_t with __kernel_size_t.
+The errors can be fixed by replacing size_t with __kernel_size_t and by
+including proper headers.
 
-Then, remove the no-header-test entries from user/include/Makefile.
+Then, remove the no-header-test entry from user/include/Makefile.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- arch/alpha/include/uapi/asm/signal.h   | 2 +-
- arch/arm/include/uapi/asm/signal.h     | 2 +-
- arch/h8300/include/uapi/asm/signal.h   | 2 +-
- arch/ia64/include/uapi/asm/signal.h    | 2 +-
- arch/m68k/include/uapi/asm/signal.h    | 2 +-
- arch/mips/include/uapi/asm/signal.h    | 2 +-
- arch/parisc/include/uapi/asm/signal.h  | 2 +-
- arch/powerpc/include/uapi/asm/signal.h | 2 +-
- arch/s390/include/uapi/asm/signal.h    | 2 +-
- arch/sparc/include/uapi/asm/signal.h   | 3 ++-
- arch/x86/include/uapi/asm/signal.h     | 2 +-
- arch/xtensa/include/uapi/asm/signal.h  | 2 +-
- include/uapi/asm-generic/signal.h      | 2 +-
- usr/include/Makefile                   | 2 --
- 14 files changed, 14 insertions(+), 15 deletions(-)
+ arch/mips/include/uapi/asm/shmbuf.h    | 7 +++++--
+ arch/parisc/include/uapi/asm/shmbuf.h  | 2 ++
+ arch/powerpc/include/uapi/asm/shmbuf.h | 5 ++++-
+ arch/sparc/include/uapi/asm/shmbuf.h   | 5 ++++-
+ arch/x86/include/uapi/asm/shmbuf.h     | 6 +++++-
+ arch/xtensa/include/uapi/asm/shmbuf.h  | 5 ++++-
+ include/uapi/asm-generic/shmbuf.h      | 4 +++-
+ usr/include/Makefile                   | 1 -
+ 8 files changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/arch/alpha/include/uapi/asm/signal.h b/arch/alpha/include/uapi/asm/signal.h
-index a69dd8d080a8..1413075f7616 100644
---- a/arch/alpha/include/uapi/asm/signal.h
-+++ b/arch/alpha/include/uapi/asm/signal.h
-@@ -100,7 +100,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
+diff --git a/arch/mips/include/uapi/asm/shmbuf.h b/arch/mips/include/uapi/asm/shmbuf.h
+index 680bb95b2240..eb74d304b779 100644
+--- a/arch/mips/include/uapi/asm/shmbuf.h
++++ b/arch/mips/include/uapi/asm/shmbuf.h
+@@ -2,6 +2,9 @@
+ #ifndef _ASM_SHMBUF_H
+ #define _ASM_SHMBUF_H
  
- /* sigstack(2) is deprecated, and will be withdrawn in a future version
-diff --git a/arch/arm/include/uapi/asm/signal.h b/arch/arm/include/uapi/asm/signal.h
-index c9a3ea1d8d41..9e2178420db2 100644
---- a/arch/arm/include/uapi/asm/signal.h
-+++ b/arch/arm/include/uapi/asm/signal.h
-@@ -93,7 +93,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/h8300/include/uapi/asm/signal.h b/arch/h8300/include/uapi/asm/signal.h
-index 2cd0dce2b6a6..1165481f80f6 100644
---- a/arch/h8300/include/uapi/asm/signal.h
-+++ b/arch/h8300/include/uapi/asm/signal.h
-@@ -85,7 +85,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/ia64/include/uapi/asm/signal.h b/arch/ia64/include/uapi/asm/signal.h
-index 38166a88e4c9..63d574e802a2 100644
---- a/arch/ia64/include/uapi/asm/signal.h
-+++ b/arch/ia64/include/uapi/asm/signal.h
-@@ -90,7 +90,7 @@ struct siginfo;
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/m68k/include/uapi/asm/signal.h b/arch/m68k/include/uapi/asm/signal.h
-index 4619291df601..80f520b9b10b 100644
---- a/arch/m68k/include/uapi/asm/signal.h
-+++ b/arch/m68k/include/uapi/asm/signal.h
-@@ -83,7 +83,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- #endif /* _UAPI_M68K_SIGNAL_H */
-diff --git a/arch/mips/include/uapi/asm/signal.h b/arch/mips/include/uapi/asm/signal.h
-index e6c78a15cb2f..94a00f82e373 100644
---- a/arch/mips/include/uapi/asm/signal.h
-+++ b/arch/mips/include/uapi/asm/signal.h
-@@ -100,7 +100,7 @@ struct sigaction {
- /* IRIX compatible stack_t  */
- typedef struct sigaltstack {
- 	void __user *ss_sp;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- 	int ss_flags;
- } stack_t;
- 
-diff --git a/arch/parisc/include/uapi/asm/signal.h b/arch/parisc/include/uapi/asm/signal.h
-index e5a2657477ac..8e4895c5ea5d 100644
---- a/arch/parisc/include/uapi/asm/signal.h
-+++ b/arch/parisc/include/uapi/asm/signal.h
-@@ -67,7 +67,7 @@ struct siginfo;
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- #endif /* !__ASSEMBLY */
-diff --git a/arch/powerpc/include/uapi/asm/signal.h b/arch/powerpc/include/uapi/asm/signal.h
-index 04873dd311c2..37d41d87c45b 100644
---- a/arch/powerpc/include/uapi/asm/signal.h
-+++ b/arch/powerpc/include/uapi/asm/signal.h
-@@ -86,7 +86,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/s390/include/uapi/asm/signal.h b/arch/s390/include/uapi/asm/signal.h
-index 0189f326aac5..e74d6ba1bd3b 100644
---- a/arch/s390/include/uapi/asm/signal.h
-+++ b/arch/s390/include/uapi/asm/signal.h
-@@ -108,7 +108,7 @@ struct sigaction {
- typedef struct sigaltstack {
-         void __user *ss_sp;
-         int ss_flags;
--        size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
- 
- 
-diff --git a/arch/sparc/include/uapi/asm/signal.h b/arch/sparc/include/uapi/asm/signal.h
-index 53758d53ac0e..d395af9b46d2 100644
---- a/arch/sparc/include/uapi/asm/signal.h
-+++ b/arch/sparc/include/uapi/asm/signal.h
-@@ -2,6 +2,7 @@
- #ifndef _UAPI__SPARC_SIGNAL_H
- #define _UAPI__SPARC_SIGNAL_H
- 
++#include <asm/ipcbuf.h>
 +#include <asm/posix_types.h>
- #include <asm/sigcontext.h>
- #include <linux/compiler.h>
++
+ /*
+  * The shmid64_ds structure for the MIPS architecture.
+  * Note extra padding because this structure is passed back and forth
+@@ -16,7 +19,7 @@
+ #ifdef __mips64
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	long			shm_atime;	/* last attach time */
+ 	long			shm_dtime;	/* last detach time */
+ 	long			shm_ctime;	/* last change time */
+@@ -29,7 +32,7 @@ struct shmid64_ds {
+ #else
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	unsigned long		shm_atime;	/* last attach time */
+ 	unsigned long		shm_dtime;	/* last detach time */
+ 	unsigned long		shm_ctime;	/* last change time */
+diff --git a/arch/parisc/include/uapi/asm/shmbuf.h b/arch/parisc/include/uapi/asm/shmbuf.h
+index 5da3089be65e..532da742fb56 100644
+--- a/arch/parisc/include/uapi/asm/shmbuf.h
++++ b/arch/parisc/include/uapi/asm/shmbuf.h
+@@ -3,6 +3,8 @@
+ #define _PARISC_SHMBUF_H
  
-@@ -171,7 +172,7 @@ struct __old_sigaction {
- typedef struct sigaltstack {
- 	void			__user *ss_sp;
- 	int			ss_flags;
--	size_t			ss_size;
-+	__kernel_size_t		ss_size;
- } stack_t;
+ #include <asm/bitsperlong.h>
++#include <asm/ipcbuf.h>
++#include <asm/posix_types.h>
  
+ /* 
+  * The shmid64_ds structure for parisc architecture.
+diff --git a/arch/powerpc/include/uapi/asm/shmbuf.h b/arch/powerpc/include/uapi/asm/shmbuf.h
+index 00422b2f3c63..439a3a02ba64 100644
+--- a/arch/powerpc/include/uapi/asm/shmbuf.h
++++ b/arch/powerpc/include/uapi/asm/shmbuf.h
+@@ -2,6 +2,9 @@
+ #ifndef _ASM_POWERPC_SHMBUF_H
+ #define _ASM_POWERPC_SHMBUF_H
  
-diff --git a/arch/x86/include/uapi/asm/signal.h b/arch/x86/include/uapi/asm/signal.h
-index 164a22a72984..777c3a0f4e23 100644
---- a/arch/x86/include/uapi/asm/signal.h
-+++ b/arch/x86/include/uapi/asm/signal.h
-@@ -104,7 +104,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
++#include <asm/ipcbuf.h>
++#include <asm/posix_types.h>
++
+ /*
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU General Public License
+@@ -34,7 +37,7 @@ struct shmid64_ds {
+ 	unsigned long		shm_ctime;	/* last change time */
+ 	unsigned long		__unused4;
+ #endif
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	__kernel_pid_t		shm_cpid;	/* pid of creator */
+ 	__kernel_pid_t		shm_lpid;	/* pid of last operator */
+ 	unsigned long		shm_nattch;	/* no. of current attaches */
+diff --git a/arch/sparc/include/uapi/asm/shmbuf.h b/arch/sparc/include/uapi/asm/shmbuf.h
+index a5d7d8d681c4..ed4f061c7a15 100644
+--- a/arch/sparc/include/uapi/asm/shmbuf.h
++++ b/arch/sparc/include/uapi/asm/shmbuf.h
+@@ -2,6 +2,9 @@
+ #ifndef _SPARC_SHMBUF_H
+ #define _SPARC_SHMBUF_H
  
- #endif /* __ASSEMBLY__ */
-diff --git a/arch/xtensa/include/uapi/asm/signal.h b/arch/xtensa/include/uapi/asm/signal.h
-index 79ddabaa4e5d..b8c824dd4b74 100644
---- a/arch/xtensa/include/uapi/asm/signal.h
-+++ b/arch/xtensa/include/uapi/asm/signal.h
-@@ -103,7 +103,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
++#include <asm/ipcbuf.h>
++#include <asm/posix_types.h>
++
+ /* 
+  * The shmid64_ds structure for sparc architecture.
+  * Note extra padding because this structure is passed back and forth
+@@ -25,7 +28,7 @@ struct shmid64_ds {
+ 	unsigned long		shm_ctime_high;
+ 	unsigned long		shm_ctime;	/* last change time */
+ #endif
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	__kernel_pid_t		shm_cpid;	/* pid of creator */
+ 	__kernel_pid_t		shm_lpid;	/* pid of last operator */
+ 	unsigned long		shm_nattch;	/* no. of current attaches */
+diff --git a/arch/x86/include/uapi/asm/shmbuf.h b/arch/x86/include/uapi/asm/shmbuf.h
+index fce18eaa070c..13775bfdfee2 100644
+--- a/arch/x86/include/uapi/asm/shmbuf.h
++++ b/arch/x86/include/uapi/asm/shmbuf.h
+@@ -5,6 +5,10 @@
+ #if !defined(__x86_64__) || !defined(__ILP32__)
+ #include <asm-generic/shmbuf.h>
+ #else
++
++#include <asm/ipcbuf.h>
++#include <asm/posix_types.h>
++
+ /*
+  * The shmid64_ds structure for x86 architecture with x32 ABI.
+  *
+@@ -15,7 +19,7 @@
  
- #endif	/* __ASSEMBLY__ */
-diff --git a/include/uapi/asm-generic/signal.h b/include/uapi/asm-generic/signal.h
-index f634822906e4..0eb69dc8e572 100644
---- a/include/uapi/asm-generic/signal.h
-+++ b/include/uapi/asm-generic/signal.h
-@@ -85,7 +85,7 @@ struct sigaction {
- typedef struct sigaltstack {
- 	void __user *ss_sp;
- 	int ss_flags;
--	size_t ss_size;
-+	__kernel_size_t ss_size;
- } stack_t;
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	__kernel_long_t		shm_atime;	/* last attach time */
+ 	__kernel_long_t		shm_dtime;	/* last detach time */
+ 	__kernel_long_t		shm_ctime;	/* last change time */
+diff --git a/arch/xtensa/include/uapi/asm/shmbuf.h b/arch/xtensa/include/uapi/asm/shmbuf.h
+index 554a57a6a90f..bb8bdddae9b5 100644
+--- a/arch/xtensa/include/uapi/asm/shmbuf.h
++++ b/arch/xtensa/include/uapi/asm/shmbuf.h
+@@ -20,9 +20,12 @@
+ #ifndef _XTENSA_SHMBUF_H
+ #define _XTENSA_SHMBUF_H
  
- #endif /* __ASSEMBLY__ */
++#include <asm/ipcbuf.h>
++#include <asm/posix_types.h>
++
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ 	unsigned long		shm_atime;	/* last attach time */
+ 	unsigned long		shm_atime_high;
+ 	unsigned long		shm_dtime;	/* last detach time */
+diff --git a/include/uapi/asm-generic/shmbuf.h b/include/uapi/asm-generic/shmbuf.h
+index 2bab955e0fed..2979b6dd2c56 100644
+--- a/include/uapi/asm-generic/shmbuf.h
++++ b/include/uapi/asm-generic/shmbuf.h
+@@ -3,6 +3,8 @@
+ #define __ASM_GENERIC_SHMBUF_H
+ 
+ #include <asm/bitsperlong.h>
++#include <asm/ipcbuf.h>
++#include <asm/posix_types.h>
+ 
+ /*
+  * The shmid64_ds structure for x86 architecture.
+@@ -24,7 +26,7 @@
+ 
+ struct shmid64_ds {
+ 	struct ipc64_perm	shm_perm;	/* operation perms */
+-	size_t			shm_segsz;	/* size of segment (bytes) */
++	__kernel_size_t		shm_segsz;	/* size of segment (bytes) */
+ #if __BITS_PER_LONG == 64
+ 	long			shm_atime;	/* last attach time */
+ 	long			shm_dtime;	/* last detach time */
 diff --git a/usr/include/Makefile b/usr/include/Makefile
-index 8dbd1d8a245f..e7230a5a402a 100644
+index e7230a5a402a..b0b6cc455930 100644
 --- a/usr/include/Makefile
 +++ b/usr/include/Makefile
-@@ -24,7 +24,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+@@ -23,7 +23,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
+ # Please consider to fix the header first.
  #
  # Sorted alphabetically.
- no-header-test += asm/shmbuf.h
--no-header-test += asm/signal.h
+-no-header-test += asm/shmbuf.h
  no-header-test += asm/ucontext.h
  no-header-test += drm/vmwgfx_drm.h
  no-header-test += linux/am437x-vpfe.h
-@@ -44,7 +43,6 @@ no-header-test += linux/patchkey.h
- no-header-test += linux/phonet.h
- no-header-test += linux/reiserfs_xattr.h
- no-header-test += linux/sctp.h
--no-header-test += linux/signal.h
- no-header-test += linux/sysctl.h
- no-header-test += linux/usb/audio.h
- no-header-test += linux/v4l2-mediabus.h
 -- 
 2.32.0
 
