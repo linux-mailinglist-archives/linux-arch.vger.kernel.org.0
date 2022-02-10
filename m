@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB4F4B0334
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 03:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 846784B032C
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 03:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiBJCRv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 21:17:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38350 "EHLO
+        id S229764AbiBJCQD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 9 Feb 2022 21:16:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiBJCRv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 21:17:51 -0500
-Received: from condef-09.nifty.com (condef-09.nifty.com [202.248.20.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E67A22B18;
-        Wed,  9 Feb 2022 18:17:52 -0800 (PST)
-Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-09.nifty.com with ESMTP id 21A2CFEP025231;
-        Thu, 10 Feb 2022 11:12:15 +0900
+        with ESMTP id S229696AbiBJCQA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 21:16:00 -0500
+Received: from condef-02.nifty.com (condef-02.nifty.com [202.248.20.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEA9263D;
+        Wed,  9 Feb 2022 18:16:01 -0800 (PST)
+Received: from conuserg-12.nifty.com ([10.126.8.75])by condef-02.nifty.com with ESMTP id 21A2CEfC020362;
+        Thu, 10 Feb 2022 11:12:14 +0900
 Received: from localhost.localdomain (133-32-232-101.west.xps.vectant.ne.jp [133.32.232.101]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 21A2BVH0030193;
-        Thu, 10 Feb 2022 11:11:33 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21A2BVH0030193
+        by conuserg-12.nifty.com with ESMTP id 21A2BVH1030193;
+        Thu, 10 Feb 2022 11:11:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21A2BVH1030193
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1644459093;
-        bh=mLWWEi1eNL+fE8D/ke2cTxgfWwEUC2jo0gGhItPyzZk=;
+        s=dec2015msa; t=1644459094;
+        bh=EBMkOKAnMrvy5dowfLOIUWafGuf2A3oU3Qa+cTxHO/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ds6XXxftljXHuqTMlRT1Xup0SdU7zZCfpwYKwAEeY0PCITuVRMN3uRLt3A0/M1X1V
-         Kv/L25kt8Lgh57bvHWdwb540wDHT8ym9lLcIJg6YPRcr+SOjwuRkr8Uy99hRtIiLht
-         OlsFVFAUusy99HPpj14K3KdnDP8JCBW2m6gB6VZ+Qmn1nboVgQL3F9n4/jyvs1AKqx
-         XN+5LK2eLbhd0uMudNOThT2aTXuW8DKWOkRQDgbu1eQXluCgReX6MkGBGpSAo+udBI
-         eldyuhbJqmMD4ljK0KmYWTtcfF+KGlCoIMC7F8sPJ5LBQKcimmoh+zPdXV9wUj+0ab
-         fDo7I9CufRdHA==
+        b=U1BY2Gf+SymejXVDtpcey2bI14xjnXX4aL9iVbP1R0ZP3WJB5Q3/XI6yedmJ55DrA
+         ts2kwjfP9/8KwLWDbmhOF4Ab/iStomKwW5T4F5cg6+7YYgj9m50RArbDztuayQcoXw
+         khhJHdVzjlpwvYP7sGL/c4Ofm1dKn/aMGsIH/WSJ3d1uEtgiDNQpy92ZaKaxw9RMPq
+         DzKotF3ZvEHc/qdq67fKtICBtE3ayS8WNaAnnOmzHFGi0twtU/7vQHtJuC18QxI2L2
+         iXxGCUivyutb1KWu30Y1VX+bhwTLMf1vaDVMWHYh2uAxEeevhkzl+pFyVU7tgWr7u+
+         FWf66P+5ZS14A==
 X-Nifty-SrcIP: [133.32.232.101]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         linux-kernel@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 3/6] android/binder.h: add linux/android/binder(fs).h to UAPI compile-test coverage
-Date:   Thu, 10 Feb 2022 11:11:26 +0900
-Message-Id: <20220210021129.3386083-4-masahiroy@kernel.org>
+Subject: [PATCH 4/6] fsmap.h: add linux/fsmap.h to UAPI compile-test coverage
+Date:   Thu, 10 Feb 2022 11:11:27 +0900
+Message-Id: <20220210021129.3386083-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220210021129.3386083-1-masahiroy@kernel.org>
 References: <20220210021129.3386083-1-masahiroy@kernel.org>
@@ -54,57 +54,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-linux/android/binder.h and linux/android/binderfs.h are currently
-excluded from the UAPI compile-test because of the errors like follows:
+linux/fsmap.h is currently excluded from the UAPI compile-test because
+of the error like follows:
 
-    HDRTEST usr/include/linux/android/binder.h
+    HDRTEST usr/include/linux/fsmap.h
   In file included from <command-line>:
-  ./usr/include/linux/android/binder.h:291:9: error: unknown type name ‘pid_t’
-    291 |         pid_t           sender_pid;
-        |         ^~~~~
-  ./usr/include/linux/android/binder.h:292:9: error: unknown type name ‘uid_t’
-    292 |         uid_t           sender_euid;
-        |         ^~~~~
+  ./usr/include/linux/fsmap.h:72:19: error: unknown type name ‘size_t’
+     72 | static __inline__ size_t
+        |                   ^~~~~~
 
-The errors can be fixed by replacing {pid,uid}_t with __kernel_{pid,uid}_t.
+The error can be fixed by replacing size_t with __kernel_size_t.
 
-Then, remove the no-header-test entries from user/include/Makefile.
+Then, remove the no-header-test entry from user/include/Makefile.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- include/uapi/linux/android/binder.h | 4 ++--
- usr/include/Makefile                | 2 --
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ include/uapi/linux/fsmap.h | 2 +-
+ usr/include/Makefile       | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/android/binder.h b/include/uapi/linux/android/binder.h
-index 3246f2c74696..11157fae8a8e 100644
---- a/include/uapi/linux/android/binder.h
-+++ b/include/uapi/linux/android/binder.h
-@@ -288,8 +288,8 @@ struct binder_transaction_data {
+diff --git a/include/uapi/linux/fsmap.h b/include/uapi/linux/fsmap.h
+index 91fd519a3f7d..c690d17f1d07 100644
+--- a/include/uapi/linux/fsmap.h
++++ b/include/uapi/linux/fsmap.h
+@@ -69,7 +69,7 @@ struct fsmap_head {
+ };
  
- 	/* General information about the transaction. */
- 	__u32	        flags;
--	pid_t		sender_pid;
--	uid_t		sender_euid;
-+	__kernel_pid_t	sender_pid;
-+	__kernel_uid_t	sender_euid;
- 	binder_size_t	data_size;	/* number of bytes of data */
- 	binder_size_t	offsets_size;	/* number of bytes of offsets */
- 
+ /* Size of an fsmap_head with room for nr records. */
+-static inline size_t
++static inline __kernel_size_t
+ fsmap_sizeof(
+ 	unsigned int	nr)
+ {
 diff --git a/usr/include/Makefile b/usr/include/Makefile
-index b0b6cc455930..717c7d4c89bb 100644
+index 717c7d4c89bb..9e35d022fd88 100644
 --- a/usr/include/Makefile
 +++ b/usr/include/Makefile
-@@ -26,8 +26,6 @@ override c_flags = $(UAPI_CFLAGS) -Wp,-MMD,$(depfile) -I$(objtree)/usr/include
- no-header-test += asm/ucontext.h
- no-header-test += drm/vmwgfx_drm.h
- no-header-test += linux/am437x-vpfe.h
--no-header-test += linux/android/binder.h
--no-header-test += linux/android/binderfs.h
+@@ -29,7 +29,6 @@ no-header-test += linux/am437x-vpfe.h
  no-header-test += linux/coda.h
  no-header-test += linux/cyclades.h
  no-header-test += linux/errqueue.h
+-no-header-test += linux/fsmap.h
+ no-header-test += linux/hdlc/ioctl.h
+ no-header-test += linux/ivtv.h
+ no-header-test += linux/kexec.h
 -- 
 2.32.0
 
