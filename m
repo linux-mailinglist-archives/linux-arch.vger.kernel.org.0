@@ -2,60 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01684B1880
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 23:44:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 496DE4B18C4
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 23:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345137AbiBJWnp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Feb 2022 17:43:45 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60810 "EHLO
+        id S1345221AbiBJWrD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Feb 2022 17:47:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244866AbiBJWno (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Feb 2022 17:43:44 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0F15F41;
-        Thu, 10 Feb 2022 14:43:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1644533023; x=1676069023;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3M8IIwvsuOqGIFi2k0uaq5Qj6oZtRqaS6GfOESfH9CM=;
-  b=X0hya5ADAOmuvFoDifDsSXV/gmlS/M0AxwFneZhASUfMAVt4+XklMNf3
-   dZbe088wA7w24OtTlxPrJc4t9QCFHsy+ajI5rWAlr0gSOvh1NwUXnqR1O
-   fzL6GyaUfws6kOpWtv77YCn6DKBCvXN7IT3V4alvhExUhAJbYO043ArA/
-   wFW4FzidJMTvEJRHh9zCXBV7nI+5xhq1A8x9MLdMQcwW6dVXcm5FAC2xQ
-   ODxgXRFBPexpEEHGNuEkCHpkBtW5udrg1EaRYUhgVlTpLNE1NkLJO8c3I
-   sGxa43jwLYexxPn5Y16vIUscWi1X/FIxNeLTc+AD6s3luyGcnSEivqvL9
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10254"; a="249819281"
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="249819281"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 14:43:43 -0800
-X-IronPort-AV: E=Sophos;i="5.88,359,1635231600"; 
-   d="scan'208";a="500561782"
-Received: from pengyusu-mobl.amr.corp.intel.com (HELO [10.212.149.216]) ([10.212.149.216])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2022 14:43:42 -0800
-Message-ID: <4c216532-2b68-dd95-93f1-542df4786d7a@intel.com>
-Date:   Thu, 10 Feb 2022 14:43:39 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 18/35] mm: Add guard pages around a shadow stack.
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        with ESMTP id S1345219AbiBJWrC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Feb 2022 17:47:02 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 864A55F4B
+        for <linux-arch@vger.kernel.org>; Thu, 10 Feb 2022 14:47:02 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-320-tnvpk8ZBMl6vvx44NdPNoA-1; Thu, 10 Feb 2022 22:45:02 +0000
+X-MC-Unique: tnvpk8ZBMl6vvx44NdPNoA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Thu, 10 Feb 2022 22:45:00 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Thu, 10 Feb 2022 22:45:00 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Dave Hansen' <dave.hansen@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Balbir Singh <bsingharora@gmail.com>,
         Borislav Petkov <bp@alien8.de>,
         Cyrill Gorcunov <gorcunov@gmail.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
+        "Eugene Syromiatnikov" <esyr@redhat.com>,
         Florian Weimer <fweimer@redhat.com>,
         "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -69,36 +57,57 @@ To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
         Dave Martin <Dave.Martin@arm.com>,
         Weijiang Yang <weijiang.yang@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
-        kcc@google.com, eranian@google.com
-Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+        "joao.moreira@intel.com" <joao.moreira@intel.com>,
+        John Allen <john.allen@amd.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "eranian@google.com" <eranian@google.com>
+CC:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: RE: [PATCH 20/35] mm: Update can_follow_write_pte() for shadow stack
+Thread-Topic: [PATCH 20/35] mm: Update can_follow_write_pte() for shadow stack
+Thread-Index: AQHYHgex3kDJpMh0kE6CJu25wcKQLKyNYu3Q
+Date:   Thu, 10 Feb 2022 22:45:00 +0000
+Message-ID: <cd5e3eb792474e41bca1bd04d1747c9a@AcuMS.aculab.com>
 References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <20220130211838.8382-19-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220130211838.8382-19-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-21-rick.p.edgecombe@intel.com>
+ <37426b64-2139-dc24-c7be-f3cefa4f0dd9@intel.com>
+In-Reply-To: <37426b64-2139-dc24-c7be-f3cefa4f0dd9@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 1/30/22 13:18, Rick Edgecombe wrote:
-> INCSSP(Q/D) increments shadow stack pointer and 'pops and discards' the
-> first and the last elements in the range, effectively touches those memory
-> areas.
-> 
-> The maximum moving distance by INCSSPQ is 255 * 8 = 2040 bytes and
-> 255 * 4 = 1020 bytes by INCSSPD.  Both ranges are far from PAGE_SIZE.
-> Thus, putting a gap page on both ends of a shadow stack prevents INCSSP,
-> CALL, and RET from going beyond.
+RnJvbTogRGF2ZSBIYW5zZW4NCj4gU2VudDogMDkgRmVicnVhcnkgMjAyMiAyMjo1Mg0KPiANCj4g
+T24gMS8zMC8yMiAxMzoxOCwgUmljayBFZGdlY29tYmUgd3JvdGU6DQo+ID4gTGlrZSBhIHdyaXRh
+YmxlIGRhdGEgcGFnZSwgYSBzaGFkb3cgc3RhY2sgcGFnZSBpcyB3cml0YWJsZSwgYW5kIGJlY29t
+ZXMNCj4gPiByZWFkLW9ubHkgZHVyaW5nIGNvcHktb24td3JpdGUsIGJ1dCBpdCBpcyBhbHdheXMg
+ZGlydHkuDQo+IA0KPiBPbmUgb3RoZXIgdGhpbmcuLi4NCj4gDQo+IFRoZSBsYW5ndWFnZSBpbiB0
+aGVzZSBjaGFuZ2Vsb2dzIGlzIGEgYml0IHNsb3BweS4gIEZvciBpbnN0YW5jZSwgd2hhdA0KPiBk
+b2VzICJhbHdheXMgZGlydHkiIG1lYW4gaGVyZT8gIHB0ZV9kaXJ0eSgpPyAgT3Igc3RyaWN0bHkg
+X1BBR0VfRElSVFk/DQo+IA0KPiBJbiBvdGhlciB3b3JkcywgbG9naWNhbGx5IGRpcnR5LCBvciBs
+aXRlcmFsbHkgImhhcyAqdGhlKiBkaXJ0eSBiaXQgc2V0Ij8NCg0KRG9lc24ndCBDT1cgaGF2ZSB0
+byBzZXQgaXQgcmVhZG9ubHkgLSBzbyB0aGF0IHRoZSBhY2Nlc3MgZmF1bHRzLg0KQW5kIHRoZW4g
+c2V0IHRoZSBmYXVsdCBjb2RlIHNldCBpdCByZWFkb25seStkaXJ0eSAod2l0aG91dCB3cml0ZSkN
+CnRvIGFsbG93IHRoZSBzaGFkb3cgc3RhY2sgYWNjZXNzZXMgdG8gbm90LWZhdWx0Lg0KDQpPciBh
+bSBJIG1pcy1ndWVzc2luZyB3aGF0IHRoZSBkb2NzIGFjdHVhbGx5IHNheT8NCg0KCURhdmlkDQoN
+Ci0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJt
+LCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChX
+YWxlcykNCg==
 
-What is the downside of not applying this patch?  The shadow stack gap
-is 1MB instead of 4k?
-
-That, frankly, doesn't seem too bad.  How badly do we *need* this patch?
