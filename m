@@ -2,93 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06A2F4B0A9C
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 11:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552DD4B0DBD
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 13:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239660AbiBJKat (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Feb 2022 05:30:49 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44066 "EHLO
+        id S241686AbiBJMpv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 10 Feb 2022 07:45:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239658AbiBJKas (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Feb 2022 05:30:48 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F08B92;
-        Thu, 10 Feb 2022 02:30:49 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JvY1J0XpGz4xdh;
-        Thu, 10 Feb 2022 21:30:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1644489045;
-        bh=/j80aUQlKa/S6QbooAK3y3Gg9NwGU+PKEkWBN3ktOAM=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=TCawh+Udct1RMjVH8ZU19XAOaHAEWi8UE1gSqYxtxWKCdRgozgSyMUWR+VA7h+4A3
-         Y2Gyi5C40KuLmrAQqF/6A+MsFAN+YhOqhEfvn2Y+2ycFiYtPbcbTshYBObJyP8KJpD
-         tNOxEYpjJyuyllbretPziOS745L4qVaZMOpvP4gCycccURrg7tABnvGHCU0WMDfdnc
-         pPjeHrx9ubrYDqQVG9HhvZVJg0KptHYyoMC5QExkKEF4mRtdrzhg24JzeaTF3mQcwc
-         2uscyDi9MUqhI1cZoTyihNTNMY8RpFcVwAawyAl3q5b1LQ+bP6NK6OGjQFoPNiLAgA
-         c4imi8H1U2f+A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 08/12] asm-generic: Refactor
- dereference_[kernel]_function_descriptor()
-In-Reply-To: <93a2006a5d90292baf69cb1c34af5785da53efde.1634457599.git.christophe.leroy@csgroup.eu>
-References: <cover.1634457599.git.christophe.leroy@csgroup.eu>
- <93a2006a5d90292baf69cb1c34af5785da53efde.1634457599.git.christophe.leroy@csgroup.eu>
-Date:   Thu, 10 Feb 2022 21:30:43 +1100
-Message-ID: <8735kr814c.fsf@mpe.ellerman.id.au>
+        with ESMTP id S241647AbiBJMpv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Feb 2022 07:45:51 -0500
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ACBF48;
+        Thu, 10 Feb 2022 04:45:52 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id c36so2922603uae.13;
+        Thu, 10 Feb 2022 04:45:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+hZIUujqvuEu4DLoVrRx+zoFH3RE8l04FFsuqOBtXpk=;
+        b=7XdvBNnPmpFlNIPF6r0O2jq3fex88k+WAr/yANIAwkl+qU3IdUTJkXuiT+mbXJU/8f
+         5TM+ebhMx6fvzcNoEwhpne4K/Wpnl6G4uCci8UYwV9qnuW2D4MIl5lNTtxu2tkm8YOYj
+         eSOOVn0ICthNc4LDEmg96YNYw+BmHJ8tT6io+vWpJbldZYpNZwdZsStst3PezlZzuHI2
+         4THAn7ExEjQy3ZSEDeSIe9/11dtc+EMwIr4U6WGFINDiB9twSPqiUtg/Hqwm/AepgyXM
+         bxrwgMigsMtRBDJ23DPm8Wj6UCAFvNEErsfidvOhpHsc9Az6vjTWfeplt/l4f0GA6m1l
+         P1gg==
+X-Gm-Message-State: AOAM533QZ2oNYHaGfst6ZvPrHKv7d6kIq23LOz2deDm3OBMOD5hXO4E/
+        FTf/P57ujn8lVKncBScEopRQGdvu+qyHhQ==
+X-Google-Smtp-Source: ABdhPJwfRWkXPJ8j52OLJfhDNRtW9+RCa9z+PVVrx/HMgb64Qm8I8tQ4BIMF0/oDG5XYBNiSnj7FMg==
+X-Received: by 2002:ab0:731a:: with SMTP id v26mr2369382uao.68.1644497151634;
+        Thu, 10 Feb 2022 04:45:51 -0800 (PST)
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com. [209.85.217.47])
+        by smtp.gmail.com with ESMTPSA id l24sm293850vkm.27.2022.02.10.04.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Feb 2022 04:45:51 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id r20so6292703vsn.0;
+        Thu, 10 Feb 2022 04:45:51 -0800 (PST)
+X-Received: by 2002:a67:a401:: with SMTP id n1mr2193894vse.38.1644497151058;
+ Thu, 10 Feb 2022 04:45:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220210021129.3386083-1-masahiroy@kernel.org> <20220210021129.3386083-2-masahiroy@kernel.org>
+In-Reply-To: <20220210021129.3386083-2-masahiroy@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 10 Feb 2022 13:45:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUgz_5OLStQ+XO3k-qmb=edYUBZPb6GF369Drk0JF1paA@mail.gmail.com>
+Message-ID: <CAMuHMdUgz_5OLStQ+XO3k-qmb=edYUBZPb6GF369Drk0JF1paA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] signal.h: add linux/signal.h and asm/signal.h to UAPI
+ compile-test coverage
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> diff --git a/kernel/extable.c b/kernel/extable.c
-> index b0ea5eb0c3b4..1ef13789bea9 100644
-> --- a/kernel/extable.c
-> +++ b/kernel/extable.c
-> @@ -159,12 +160,32 @@ int kernel_text_address(unsigned long addr)
->  }
->  
->  /*
-> - * On some architectures (PPC64, IA64) function pointers
-> + * On some architectures (PPC64, IA64, PARISC) function pointers
->   * are actually only tokens to some data that then holds the
->   * real function address. As a result, to find if a function
->   * pointer is part of the kernel text, we need to do some
->   * special dereferencing first.
->   */
-> +#ifdef CONFIG_HAVE_FUNCTION_DESCRIPTORS
-> +void *dereference_function_descriptor(void *ptr)
-> +{
-> +	func_desc_t *desc = ptr;
-> +	void *p;
-> +
-> +	if (!get_kernel_nofault(p, (void *)&desc->addr))
-> +		ptr = p;
-> +	return ptr;
-> +}
+On Thu, Feb 10, 2022 at 3:36 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> linux/signal.h and asm/signal.h are currently excluded from the UAPI
+> compile-test because of the errors like follows:
+>
+>     HDRTEST usr/include/asm/signal.h
+>   In file included from <command-line>:
+>   ./usr/include/asm/signal.h:103:9: error: unknown type name ‘size_t’
+>     103 |         size_t ss_size;
+>         |         ^~~~~~
+>
+> The errors can be fixed by replacing size_t with __kernel_size_t.
+>
+> Then, remove the no-header-test entries from user/include/Makefile.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-This needs an EXPORT_SYMBOL_GPL(), otherwise the build breaks after
-patch 10 with CONFIG_LKDTM=m.
+>  arch/m68k/include/uapi/asm/signal.h    | 2 +-
 
-cheers
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
