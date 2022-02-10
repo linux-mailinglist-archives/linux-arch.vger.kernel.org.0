@@ -2,189 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135C74B039B
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 03:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21B4F4B09C4
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Feb 2022 10:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiBJCyM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 9 Feb 2022 21:54:12 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57582 "EHLO
+        id S238921AbiBJJnK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Thu, 10 Feb 2022 04:43:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiBJCyK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 9 Feb 2022 21:54:10 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBB12409C;
-        Wed,  9 Feb 2022 18:54:12 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id c5-20020a17090a1d0500b001b904a7046dso5581711pjd.1;
-        Wed, 09 Feb 2022 18:54:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LYtzFa4ASuB/belwk4SpigACGs97QFCNc+YA+b4+Pu8=;
-        b=ooyOBN7rERkODAn/O7i91EVsu/B8py9/9Ax69BwNB/kc8twYaVRYQbpcJLPfemS8hb
-         HkZrVDMhaV95LcunHTo0tXcqRJZORHlOHEddL00vfE0PK8esTG7SYwyfiB500tCWC5ri
-         l6pU4DRAUF2bgKokxVocV+eyMRJSuUiaChrZncXI+PVNYsSVUld+MssdbvKffnPGzFCP
-         /mFWpEPHIlrNEUqjbs//hj1a3I/579YtM3Jds8TxeUAfuDxW/OEsiijqam43ukxKjsH2
-         DVh6iBEBwC5CIYV0XcyMGIqDOrpfE98dazgVv4DXpTrUcv9pfj8LdcCQ7wiJQIrh4Oh5
-         3Jlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LYtzFa4ASuB/belwk4SpigACGs97QFCNc+YA+b4+Pu8=;
-        b=uALWmATrZX74RaBe98UHtNXaO4Hi28sKD9ehr2ue7uiuMjaZ3NQA18CDPRmfozkRPB
-         q+0wadNFhmTb3/TM7B0xzKK9+dpDvM1dYrpNeU2tg4jRqDGiCPOmOFedjqwQRR5IjxWv
-         LOw2NYLFOcnfO8oLhRyyUP75QfWZG/ghB/uQ6bJIQgJc6GAQeLS+qUAudQmEJnKDFZTE
-         LiM+RRRh+fGVtXxtkUk7K9tBqVG3FNPpzqZdsj80X0V4nWLFubaf0hNMyU+XT6thyJGM
-         MDWqlXurgp/6Sve2NGtls/J+sDubocjwNa5eK2UF0Xg1pwrgeSbWcgETWOF15RCyvlOx
-         1obA==
-X-Gm-Message-State: AOAM530nZC8cGP8fB+AEg4rfvv3nPQsqbLNJGOd5A5yCHrW+XLpquTcY
-        F0VgsjdM+eMcxlvorzJYHPUwl4a3DyCy0WezQmM=
-X-Google-Smtp-Source: ABdhPJzYBhEkkbttuvOrcTM53VUGSP9oL8rWSIPgIMmpLUpLM1VPVkR+SLhvmLHyyTITlBZxB9qfd23OzJjqo7RcYHM=
-X-Received: by 2002:a17:903:2351:: with SMTP id c17mr367198plh.4.1644461651987;
- Wed, 09 Feb 2022 18:54:11 -0800 (PST)
+        with ESMTP id S237813AbiBJJnJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Feb 2022 04:43:09 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E84198
+        for <linux-arch@vger.kernel.org>; Thu, 10 Feb 2022 01:43:10 -0800 (PST)
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MmlCY-1nzR3i0nG2-00jtxd; Thu, 10 Feb 2022 10:38:04 +0100
+Received: by mail-wr1-f45.google.com with SMTP id o24so5777689wro.3;
+        Thu, 10 Feb 2022 01:38:04 -0800 (PST)
+X-Gm-Message-State: AOAM533kp+AEBUaVNUg6ZmbOJEWztxtLWnPklf0Y6tAEDEjjH6kSeSey
+        pB1W+XW88RgTxZ2XM1D4vy9w4HnyV6mqNffl8OY=
+X-Google-Smtp-Source: ABdhPJxyuPFqVuAPp0m7wxkmSqedZ5gdhAYe8N0BP0zMGS9YdwnNAcEToFaurnCdHolQDzxAj8ZmIRKq3k4br+ZsfeY=
+X-Received: by 2002:adf:e5ce:: with SMTP id a14mr681191wrn.317.1644485883806;
+ Thu, 10 Feb 2022 01:38:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
- <YgAWVSGQg8FPCeba@kernel.org> <YgDIIpCm3UITk896@lisas.de> <8f96c2a6-9c03-f97a-df52-73ffc1d87957@intel.com>
- <YgI1A0CtfmT7GMIp@kernel.org> <YgI37n+3JfLSNQCQ@grain> <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
- <YgKiKEcsNt7mpMHN@grain> <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
- <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
-In-Reply-To: <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Wed, 9 Feb 2022 18:53:35 -0800
-Message-ID: <CAMe9rOo+RbmK5GyFKe2q3GGFP4Oi3o16x9xVpD7HpoEn=v0mfQ@mail.gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-To:     Andy Lutomirski <luto@kernel.org>,
-        Felix Willgerodt <felix.willgerodt@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "adrian@lisas.de" <adrian@lisas.de>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "avagin@gmail.com" <avagin@gmail.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>, "bp@alien8.de" <bp@alien8.de>,
-        "oleg@redhat.com" <oleg@redhat.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "Dave.Martin@arm.com" <Dave.Martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+References: <20220210021129.3386083-1-masahiroy@kernel.org> <20220210021129.3386083-4-masahiroy@kernel.org>
+In-Reply-To: <20220210021129.3386083-4-masahiroy@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 10 Feb 2022 10:37:47 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a07kN8H-8Zx2vX8b0rHfAjaeWyg4-c1aNEVhTF=miOEpA@mail.gmail.com>
+Message-ID: <CAK8P3a07kN8H-8Zx2vX8b0rHfAjaeWyg4-c1aNEVhTF=miOEpA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] android/binder.h: add linux/android/binder(fs).h to
+ UAPI compile-test coverage
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:c/BbFZ5D1fK5UZMctKsor9U6uDxXVPmqFomyNPi5TWKLgvq2Dwi
+ 0dsQp76fHAMUch5kg1AbIlwHf3dPcS2tJMhAKdJn6zL6/T9uxE+BA8wgJz2g3RYVBKHb/30
+ GnOmU2B4U9UsoJnhTnDFOTekt9bCbyQqYL6Xp90dyNOLDcuxAd1GiNHW05eqn6RPSzUMJLD
+ FnWT8ipfqwV5kcRaGyL0w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:k9FZneEZ10I=:gfFpsIbz4URS+tHOasrHsR
+ wdBu4fzHHwZhGZgXLo+QC2iR+B2YXBlVG0RPZsVqXa2VvQ4CgY3YhZiHGukocmyknjl/p+rir
+ pdI+wTfj+0D19mprFUavXwBQXLEcJvEgI0KaGdk1K/d3LNMhuZgkJw5nWX6Yjvs2c+MEBXEd8
+ IkVVOokzyhT+wjOvHWuwEYeizR/ei5twQJcBr0lqgFeBVF5FPM0cFBTAVmqtE6WYoFmUebBPq
+ BygLMR0UKBdQqNeYW00extBdV1GkAXpTy1fm0Y9sFdvkr7nmnYP5ssnSrR1NpcNojOhjT7m83
+ wcjlC1tzfM8xtiCjK4Mgu+zP58MPEva9fGiOcC3b57LUpqV6Q4qgFqLL8kSjh8yLuabPbHSFB
+ gV8qzd2RA6YfnQBbxgLs8tDS3G0T9FXu+TQdFgttBT6Up/aqD8lICxGTA1ev1DpSqwLnzO+bT
+ IUZ6wXGt+HYwiahHqUybReBKlHjHmKmc4KmBmLPtaArGLrQz1S6NvqwMkTSC3zed4VO/e8Ua5
+ McckcsRog3F7NYxK/aqgOPGsFbgDH9SeLfHGaWbS3Wiy+VEKK4QzdQtY0STbg9c82ZQMKQXFf
+ AxahakWpAZqm+/pphzd+ea8McfWn9Hpr+0ZXsTT0LfgxpRMUgHHq+lmYBcxCmZTHdC1tWH9OQ
+ 5zCNfvfF9qp43rDp8Ogc+OPa4w1JTGwesqM/koIaB3EFGlK00GEJ2+/JJgDLoxfIWczo=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 9, 2022 at 6:37 PM Andy Lutomirski <luto@kernel.org> wrote:
+On Thu, Feb 10, 2022 at 3:11 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> On 2/8/22 18:18, Edgecombe, Rick P wrote:
-> > On Tue, 2022-02-08 at 20:02 +0300, Cyrill Gorcunov wrote:
-> >> On Tue, Feb 08, 2022 at 08:21:20AM -0800, Andy Lutomirski wrote:
-> >>>>> But such a knob will immediately reduce the security value of
-> >>>>> the entire
-> >>>>> thing, and I don't have good ideas how to deal with it :(
-> >>>>
-> >>>> Probably a kind of latch in the task_struct which would trigger
-> >>>> off once
-> >>>> returt to a different address happened, thus we would be able to
-> >>>> jump inside
-> >>>> paratite code. Of course such trigger should be available under
-> >>>> proper
-> >>>> capability only.
-> >>>
-> >>> I'm not fully in touch with how parasite, etc works.  Are we
-> >>> talking about save or restore?
-> >>
-> >> We use parasite code in question during checkpoint phase as far as I
-> >> remember.
-> >> push addr/lret trick is used to run "injected" code (code injection
-> >> itself is
-> >> done via ptrace) in compat mode at least. Dima, Andrei, I didn't look
-> >> into this code
-> >> for years already, do we still need to support compat mode at all?
-> >>
-> >>> If it's restore, what exactly does CRIU need to do?  Is it just
-> >>> that CRIU needs to return
-> >>> out from its resume code into the to-be-resumed program without
-> >>> tripping CET?  Would it
-> >>> be acceptable for CRIU to require that at least one shstk slot be
-> >>> free at save time?
-> >>> Or do we need a mechanism to atomically switch to a completely full
-> >>> shadow stack at resume?
-> >>>
-> >>> Off the top of my head, a sigreturn (or sigreturn-like mechanism)
-> >>> that is intended for
-> >>> use for altshadowstack could safely verify a token on the
-> >>> altshdowstack, possibly
-> >>> compare to something in ucontext (or not -- this isn't clearly
-> >>> necessary) and switch
-> >>> back to the previous stack.  CRIU could use that too.  Obviously
-> >>> CRIU will need a way
-> >>> to populate the relevant stacks, but WRUSS can be used for that,
-> >>> and I think this
-> >>> is a fundamental requirement for CRIU -- CRIU restore absolutely
-> >>> needs a way to write
-> >>> the saved shadow stack data into the shadow stack.
-> >
-> > Still wrapping my head around the CRIU save and restore steps, but
-> > another general approach might be to give ptrace the ability to
-> > temporarily pause/resume/set CET enablement and SSP for a stopped
-> > thread. Then injected code doesn't need to jump through any hoops or
-> > possibly run into road blocks. I'm not sure how much this opens things
-> > up if the thread has to be stopped...
+> linux/android/binder.h and linux/android/binderfs.h are currently
+> excluded from the UAPI compile-test because of the errors like follows:
 >
-> Hmm, that's maybe not insane.
+>     HDRTEST usr/include/linux/android/binder.h
+>   In file included from <command-line>:
+>   ./usr/include/linux/android/binder.h:291:9: error: unknown type name ‘pid_t’
+>     291 |         pid_t           sender_pid;
+>         |         ^~~~~
+>   ./usr/include/linux/android/binder.h:292:9: error: unknown type name ‘uid_t’
+>     292 |         uid_t           sender_euid;
+>         |         ^~~~~
 >
-> An alternative would be to add a bona fide ptrace call-a-function
-> mechanism.  I can think of two potentially usable variants:
+> The errors can be fixed by replacing {pid,uid}_t with __kernel_{pid,uid}_t.
 >
-> 1. Straight call.  PTRACE_CALL_FUNCTION(addr) just emulates CALL addr,
-> shadow stack push and all.
+> Then, remove the no-header-test entries from user/include/Makefile.
 >
-> 2. Signal-style.  PTRACE_CALL_FUNCTION_SIGFRAME injects an actual signal
-> frame just like a real signal is being delivered with the specified
-> handler.  There could be a variant to opt-in to also using a specified
-> altstack and altshadowstack.
->
-> 2 would be more expensive but would avoid the need for much in the way
-> of asm magic.  The injected code could be plain C (or Rust or Zig or
-> whatever).
->
-> All of this only really handles save, not restore.  I don't understand
-> restore enough to fully understand the issue.
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-FWIW, CET enabled GDB can call a function in a CET enabled process.
-Adding Felix who may know more about it.
-
-
--- 
-H.J.
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
