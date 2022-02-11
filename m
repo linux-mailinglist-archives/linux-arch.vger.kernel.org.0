@@ -2,85 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D784B3052
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Feb 2022 23:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 312BA4B3157
+	for <lists+linux-arch@lfdr.de>; Sat, 12 Feb 2022 00:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345551AbiBKWV4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Feb 2022 17:21:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55074 "EHLO
+        id S1354192AbiBKXhJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Feb 2022 18:37:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234605AbiBKWVy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Feb 2022 17:21:54 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522C8D48;
-        Fri, 11 Feb 2022 14:21:52 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id 9so15722476pfx.12;
-        Fri, 11 Feb 2022 14:21:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Gp/zsuHKYh5My8PR8Z8zMLkl9KcvlSL8qBfbEmgIsWo=;
-        b=FbC+aa/JuHHGAUA0o4a7ARROkYlUgtF89jqqv1971NAcrPrUSBCHntXAKxWKY1qSQE
-         AFVRvaMiLhFaWVq4PK+cScT+HTjVT3B+3FYvmez6AKToFoigGVn2E9A3a642mY2KMEj4
-         5/0tuPl72S/A1jO943oZMmvPk9oa7cBAhbvSI5HhcdfggrFAkt6tK0wEiKe90MFWuKYS
-         0HDbNhFEBCn7hewZSU0mhtre4vrbPav2md7HpiW4LtrZzxCgBHalGEmdN67mq/xeWXRy
-         U2JluWcMTCjoX1ZOKDB+b1e5XJiTbnrxj+l36UkSk+7fxf9MNZVo8UxJppvmMDayZFro
-         ufOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Gp/zsuHKYh5My8PR8Z8zMLkl9KcvlSL8qBfbEmgIsWo=;
-        b=hPl7DGfSnQWChC+ZGUeLukhiapy1QoNSK0Ud0w7+KGw0HD5b2R4n/tYwOR7lTDq/N/
-         4SmQkEMw1LRskN4JO4+4d8xMoEQtBLbJX/f8lY7lANm5q1t3ytIOfVlll6KZHfLDX7vQ
-         +v6S9iivozQNzv9G90YxygdBw5uI5sZjWg3MrFT+DkeA2kR8iXzAwF2EajjCTdqh1I8X
-         qZhaiWjj2eSlA6pttR62Qqb/ySdVkkq18RlPs3EZOn+hImru8G8vMr7aq4nuczZd+GLX
-         BxH/BgyVvZsV6o3e4g61+OjJ7nbiBkoYxLyO0IAS3+vTZTZKOYhms+H/07o2vr7P5AM3
-         VoHg==
-X-Gm-Message-State: AOAM532+/9j+bixYQ58DlN0+fTCM7k+AWxp7Ej6twxlNGTe1vKVRIsyI
-        r7ST+1qtOoxDqfKRZzAym6I=
-X-Google-Smtp-Source: ABdhPJzgUOwow1Kw0Nqi3SZXj+CluzcAukjRqtFGLhJHuV04lh6TJBYGd6gfq9E4miw55l9+syK/tw==
-X-Received: by 2002:aa7:8d08:: with SMTP id j8mr3616091pfe.68.1644618111742;
-        Fri, 11 Feb 2022 14:21:51 -0800 (PST)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id a12sm24442962pfv.18.2022.02.11.14.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 14:21:51 -0800 (PST)
-Date:   Sat, 12 Feb 2022 07:21:49 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
-Message-ID: <YgbhfZ4tlWByxm+B@antec>
-References: <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
- <CAK8P3a2Om2SYchx8q=ddkNeJ4o=1MVXD2MFSV2SGJ_vuTUcp0Q@mail.gmail.com>
- <126ae5ee-342c-334c-9c07-c00213dd7b7e@xilinx.com>
- <CAK8P3a2zZfFa55nNeMicWHhia7fkT0cJBzYvUi0O+v0B13BOMA@mail.gmail.com>
- <YgROuYDWfWYlTUKD@antec>
- <YgWrFnoOOn/B3X4k@antec>
- <CAK8P3a0eAv168eepvdZQbYDstTQHc-Hb2_PMS3bseV3caB4oAA@mail.gmail.com>
- <CAHk-=wj7kOxDg+2Ym1EQsTZaZqU-p7aFHiNVOmtEhNS8jjapLQ@mail.gmail.com>
- <CAK8P3a22q+vTb3cEurhA0zXzw8-9+jKJRotC0oWMncS3sb-7zA@mail.gmail.com>
- <87a6exxg7h.fsf@email.froward.int.ebiederm.org>
+        with ESMTP id S239391AbiBKXhI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Feb 2022 18:37:08 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCF0D6A;
+        Fri, 11 Feb 2022 15:37:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644622626; x=1676158626;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=n+pCIpoYcPq/hU9tjTp1ZYglJMzSc25WZnIG3BnVpns=;
+  b=RgsRGfeStggMFAnzh4MHkKCJCMOiBzZWnCG9hSYt6xP0Wnw1ynYmSpDQ
+   8X/iT42en14UY6k3Z2DUQKbxdvSOrcSF5CGfsz1CLIKYHtlYcPVzHlqZ8
+   zAdX8CLVPfmybMtms2zT+U9o8ILqD6vvxvJgpwcNcw8z6xH4bqympXa/2
+   VLTTyPVtiCS5+r6QZfc+HMngk3Opvxy6UVkfWRgaPUOyzhsLn+ODXcKLy
+   lcEG/1CHAvKaOrzSLs0MEAxlpoBOmABJ8dFxPHD/qOfPAuLWUVfTR9BzD
+   pUfbYUYg07TjPqMHulWl7p5JSi7QhWr5RqGC+Y/YkZ2pKGMZUkGE6CqN8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10255"; a="248660820"
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="248660820"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 15:37:06 -0800
+X-IronPort-AV: E=Sophos;i="5.88,361,1635231600"; 
+   d="scan'208";a="542286966"
+Received: from nsmdimra-mobl.amr.corp.intel.com (HELO [10.209.96.127]) ([10.209.96.127])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2022 15:37:05 -0800
+Message-ID: <e2586482-dfba-2752-0247-7b8dfe95d7fe@intel.com>
+Date:   Fri, 11 Feb 2022 15:37:03 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a6exxg7h.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        joao.moreira@intel.com, John Allen <john.allen@amd.com>,
+        kcc@google.com, eranian@google.com
+Cc:     Yu-cheng Yu <yu-cheng.yu@intel.com>
+References: <20220130211838.8382-1-rick.p.edgecombe@intel.com>
+ <20220130211838.8382-26-rick.p.edgecombe@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 25/35] x86/cet/shstk: Add user-mode shadow stack support
+In-Reply-To: <20220130211838.8382-26-rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,24 +88,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 11, 2022 at 03:10:10PM -0600, Eric W. Biederman wrote:
-> Arnd Bergmann <arnd@kernel.org> writes:
-> >
-> > I had previously gotten stuck at ia64, but gave it another go now
-> > and uploaded an updated branch with ia64 taken care of and another
-> > patch to clean up bits afterwards.
-> >
-> > I only gave it light testing so far, mainly building the defconfig for every
-> > architecture. I'll post the series once the build bots are happy with the
-> > branch overall.
-> >
-> 
-> Thank you so much for doing this work.
-> 
+On 1/30/22 13:18, Rick Edgecombe wrote:
+> Add the user shadow stack MSRs to the xsave helpers, so they can be used
+> to implement the functionality.
 
-I'll echo this.  Thank you, the changes look good.  I test built and booted the
-OpenRISC architecture and it works.
+Do these MSRs ever affect kernel-mode operation?
 
-I can drop the openrisc only patch for this from the openrisc queue now.
+If so, we might need to switch them more aggressively at context-switch
+time like PKRU.
 
--Stafford
+If not, they can continue to be context-switched with the PASID state
+which does not affect kernel-mode operation.
+
+Either way, it would be nice to have some changelog material to that effect.
+
