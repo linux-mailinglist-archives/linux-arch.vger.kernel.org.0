@@ -2,188 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DF84B2BEE
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Feb 2022 18:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 733974B2C03
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Feb 2022 18:46:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352240AbiBKRll (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 11 Feb 2022 12:41:41 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34248 "EHLO
+        id S1352263AbiBKRqZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Feb 2022 12:46:25 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235581AbiBKRlk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Feb 2022 12:41:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C051C69
-        for <linux-arch@vger.kernel.org>; Fri, 11 Feb 2022 09:41:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1644601298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DsslKcWWZw1ZEXjoK3NOAcTJ9ntP6kaMA/aNOxKWKsA=;
-        b=UdEf2vRp6YBaFDsxA7p3QQhiK+u/+E80YCkmISYBpbL/19lRzqkjcaihB5NQZh4/LZLHlj
-        cXvolKmSNPQEXqSmFDlRgeB6wf4+LKZTnFujMHY3sWleAuBLRgI2cORvx8g4BZguE0uYNV
-        lSm+UrmjXU6UO8UUTMStP+CJv9t9Sbg=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-16-1lII4rHaPP-TqGh36nOXrA-1; Fri, 11 Feb 2022 12:41:37 -0500
-X-MC-Unique: 1lII4rHaPP-TqGh36nOXrA-1
-Received: by mail-oo1-f71.google.com with SMTP id f8-20020a4aa688000000b002ede70d37dbso6016220oom.16
-        for <linux-arch@vger.kernel.org>; Fri, 11 Feb 2022 09:41:36 -0800 (PST)
+        with ESMTP id S245006AbiBKRqY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Feb 2022 12:46:24 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2F738D
+        for <linux-arch@vger.kernel.org>; Fri, 11 Feb 2022 09:46:23 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id u20so20139848ejx.3
+        for <linux-arch@vger.kernel.org>; Fri, 11 Feb 2022 09:46:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MA9z/nAeEAqw03l/kdUwd44agJ7PPHF1efYwVNLWeSs=;
+        b=N7i2fk2zHkfW0E6UKnO6Wo/Imf/u3S8xkzP3Yc7yfmEvKZ55/UBpbB0BGzwdoZLLoL
+         LFRA1QHQEkob4dV4TmcGOBlPgteITlzuVBQtBvnc+zpgvda3Dg2/r+Sjs/vxwlEMXyvO
+         OzLGDDdjEUGfehlgywVSMxpodGt90Z9SUiN+M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DsslKcWWZw1ZEXjoK3NOAcTJ9ntP6kaMA/aNOxKWKsA=;
-        b=6CB+iQpWjc0RYw/i5TY8/hQ07Fy7e9FTtZa3NTCpI38BHvkRILGoEqDTDjhnDPta8h
-         Vn5XM5YzEvujQoFLHuOWgXq+o622pqUeuC7b2IVWLLuMXVF/0Q1F0wgfVCmNzCyFI3Bb
-         OnP3SfN091pEEYcYCSf6kFhIbv6KFqI+oeJabUPqrIKNbdtHLdEn2TYvf5zA/3IBdHm3
-         YBQ180ovgWf9G9VI5TN18FWaSddRhLi5Yokpw9BoxrgfjRGuTckTkJ/fvEDZE7Uqo7+z
-         nLR7ZKJT6X99eAZWeuf/D5cVS7VtOH5aieAp4vruTsGYa3RyNgHYcdxUTj5joyYHBJHs
-         CQ8g==
-X-Gm-Message-State: AOAM533YqB9vO7tOX3mt/lbyuYKQjuC0S0NGLOE2Q60IOmDUAHZ6Wc7h
-        Hpho1oJ4jYXHIHr+qOwbyriUuxt99LIalAJtnogcnQMTFm3R0M13LDs4ERCTPkk6tRrOMZKpsP6
-        WDlZYHoGJuPUsefdRZ5bk/Q==
-X-Received: by 2002:a4a:c803:: with SMTP id s3mr962348ooq.12.1644601296296;
-        Fri, 11 Feb 2022 09:41:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw7xm9RS9Cg53scRBXEPeV5dlBglzJkb0Owt5LpyK2WIvJG9HWSL4pe7TqN1DSUSb+3hY9s4g==
-X-Received: by 2002:a4a:c803:: with SMTP id s3mr962335ooq.12.1644601296044;
-        Fri, 11 Feb 2022 09:41:36 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id l4sm9620481otq.50.2022.02.11.09.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Feb 2022 09:41:35 -0800 (PST)
-Date:   Fri, 11 Feb 2022 09:41:30 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220211174130.xxgjoqr2vidotvyw@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MA9z/nAeEAqw03l/kdUwd44agJ7PPHF1efYwVNLWeSs=;
+        b=dnp/Gr7zPqrI/HU/THFcZMgCt/VMptidxL5bAyEyakPxjhQCumZyzU9RFD/pLV41wR
+         rrrzpSNwJrMlkvXRyH9q3JSHBJ+MMWrOI6DRzE/dkUkfYhB3JgRnDpBOewTKLWClqHb2
+         WD5sWwbtrtd7faFvdDPE/CxFF2tstZD6UKa3jqRVRlJncvqSjNoi7uul7k9mGP2005vI
+         P2qD7Upp3KfOW7gqGNz/yGABwAAR/d5I1pQyr2sUyxqRsetM/IZy2Id0FnqTeumbVVWO
+         isULnX8f9lj9RVgzU9wlPKXG+k3a2vXFSTGY04ey7xbA9xDRuLOKRsLcdwpvfNMdhRVh
+         XOjA==
+X-Gm-Message-State: AOAM533IvxODHmdKNXUeznHrD7e7JzTPKcrbkvyjJbsNaEcyX0Di1QWu
+        yNEuI+Yy+Ja0RJ0/V2dTwRHvEFZrA8YkH4x9MSA=
+X-Google-Smtp-Source: ABdhPJx9DKr7kDrmtuDgE09RKU+GvjHI8W/yPydC3BrUo4QXflvuCyCSIrC9uZnNuLMdiRvgenYSZQ==
+X-Received: by 2002:a17:907:1a55:: with SMTP id mf21mr411680ejc.235.1644601581550;
+        Fri, 11 Feb 2022 09:46:21 -0800 (PST)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id z13sm438188ejl.78.2022.02.11.09.46.20
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Feb 2022 09:46:20 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id c192so5917897wma.4
+        for <linux-arch@vger.kernel.org>; Fri, 11 Feb 2022 09:46:20 -0800 (PST)
+X-Received: by 2002:a05:600c:15ca:: with SMTP id v10mr1224526wmf.26.1644601580144;
+ Fri, 11 Feb 2022 09:46:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220209185752.1226407-3-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAK8P3a22ntk5fTuk6xjh1pyS-eVbGo7zDQSVkn2VG1xgp01D9g@mail.gmail.com>
+ <20220117132757.1881981-1-arnd@kernel.org> <CAHTX3dKyAha8_nu=7e413pKr+SAaPBLp9=FTdQ=GZNdjQHW+zA@mail.gmail.com>
+ <CAK8P3a2Om2SYchx8q=ddkNeJ4o=1MVXD2MFSV2SGJ_vuTUcp0Q@mail.gmail.com>
+ <126ae5ee-342c-334c-9c07-c00213dd7b7e@xilinx.com> <CAK8P3a2zZfFa55nNeMicWHhia7fkT0cJBzYvUi0O+v0B13BOMA@mail.gmail.com>
+ <YgROuYDWfWYlTUKD@antec> <YgWrFnoOOn/B3X4k@antec> <CAK8P3a0eAv168eepvdZQbYDstTQHc-Hb2_PMS3bseV3caB4oAA@mail.gmail.com>
+In-Reply-To: <CAK8P3a0eAv168eepvdZQbYDstTQHc-Hb2_PMS3bseV3caB4oAA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 11 Feb 2022 09:46:03 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj7kOxDg+2Ym1EQsTZaZqU-p7aFHiNVOmtEhNS8jjapLQ@mail.gmail.com>
+Message-ID: <CAHk-=wj7kOxDg+2Ym1EQsTZaZqU-p7aFHiNVOmtEhNS8jjapLQ@mail.gmail.com>
+Subject: Re: [PATCH] microblaze: remove CONFIG_SET_FS
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Stafford Horne <shorne@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
-> Position-based search, which means that if there are several symbols
-> with the same name, the user needs to additionally provide the
-> "index" of a desired symbol, is fragile. For example, it breaks
-> when two symbols with the same name are located in different
-> sections.
-> 
-> Since a while, LD has a flag `-z unique-symbol` which appends
-> numeric suffixes to the functions with the same name (in symtab
-> and strtab). It can be used to effectively prevent from having
-> any ambiguity when referring to a symbol by its name.
+On Fri, Feb 11, 2022 at 9:00 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> I have now uploaded a cleanup series to
+> https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git/log/?h=set_fs
+>
+> This uses the same access_ok() function across almost all
+> architectures, with the exception of those that need something else,
+> and I then I went further and killed off set_fs for everything other
+> than ia64.
 
-In the patch description can you also give the version of binutils (and
-possibly other linkers) which have the flag?
+Thanks, looks good to me.
 
-> Check for its availability and always prefer when the livepatching
-> is on. It can be used unconditionally later on after broader testing
-> on a wide variety of machines, but for now let's stick to the actual
-> CONFIG_LIVEPATCH=y case, which is true for most of distro configs
-> anyways.
+Can you say why you didn't convert ia64? I don't see any set_fs() use
+there, except for the unaligned handler, which looks trivial to
+remove. It looks like the only reason for it is kernel-mode unaligned
+exceptions, which we should just turn fatal, I suspect (they already
+get logged).
 
-Has anybody objected to just enabling it for *all* configs, not just for
-livepatch?
+And ia64 people could make the unaligned handling do the kernel mode
+case in emulate_load/store_int() - it doesn't look *that* painful.
 
-I'd much prefer that: the less "special" livepatch is (and the distros
-which enable it), the better.  And I think having unique symbols would
-benefit some other components.
+But maybe you noticed something else?
 
-> +++ b/kernel/livepatch/core.c
-> @@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const char *name,
->  	args->count++;
->  
->  	/*
-> -	 * Finish the search when the symbol is found for the desired position
-> -	 * or the position is not defined for a non-unique symbol.
-> +	 * Finish the search when unique symbol names are enabled
-> +	 * or the symbol is found for the desired position or the
-> +	 * position is not defined for a non-unique symbol.
->  	 */
-> -	if ((args->pos && (args->count == args->pos)) ||
-> -	    (!args->pos && (args->count > 1)))
-> +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
-> +	    (args->pos && args->count == args->pos) ||
-> +	    (!args->pos && args->count > 1))
->  		return 1;
+It would be really good to just be able to say that set_fs() no longer
+exists at all.
 
-There's no real need to do this.  The code already works as-is, even if
-there are no unique symbols.
-
-Even if there are no duplicates, there's little harm in going through
-all the symbols anyway, to check for errors just in case something
-unexpected happened with the linking (unexpected duplicate) or the patch
-creation (unexpected sympos).  It's not a hot path, so performance isn't
-really a concern.
-
-When the old linker versions eventually age out, we can then go strip
-out all the sympos stuff.
-
-> @@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objname, const char *name,
->  	else
->  		kallsyms_on_each_symbol(klp_find_callback, &args);
->  
-> +	/*
-> +	 * If the LD's `-z unique-symbol` flag is available and enabled,
-> +	 * sympos checks are not relevant.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
-> +		sympos = 0;
-> +
-
-Similarly, I don't see a need for this.  If the patch is legit then
-sympos should already be zero.  If not, an error gets reported and the
-patch fails to load.
-
--- 
-Josh
-
+                Linus
