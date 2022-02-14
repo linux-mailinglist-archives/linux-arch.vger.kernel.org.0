@@ -2,52 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE894B5C88
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 22:22:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0FC4B5C64
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 22:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiBNVVU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Feb 2022 16:21:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45324 "EHLO
+        id S230355AbiBNVQS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Feb 2022 16:16:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiBNVVT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 16:21:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0927913C390;
-        Mon, 14 Feb 2022 13:21:10 -0800 (PST)
+        with ESMTP id S230319AbiBNVQS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 16:16:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9581133C8;
+        Mon, 14 Feb 2022 13:16:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E93F6111F;
-        Mon, 14 Feb 2022 19:25:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8984C340F4;
-        Mon, 14 Feb 2022 19:25:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 778A16115B;
+        Mon, 14 Feb 2022 19:40:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5FFAC340FD;
+        Mon, 14 Feb 2022 19:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644866741;
-        bh=zLWY4rc6tKJzkfOHU66+tSLIxceIVdBozj8MWHl9tz8=;
+        s=k20201202; t=1644867624;
+        bh=5szbHF9etsKpvbwWwwc9H/Y1QakuvzjKYGUIBcYFA80=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dahbLYzx2Cck5kbI+J06pUjtONQgq4wac0B/zMHO2t8H4+atEXbbC3nQoEeMZmjvT
-         itq7QzJ+hcqJRhHre9S0Rv1ba7ESMo4l9io+gmxznvUC35vP0sSOIkYlCR+0otG3GN
-         tdNTUG6Qu0hKopOLGNe9r6lsk3LXktZTgdyM6DDF4qnI4CaboAovPMzaA5UAbOEp8B
-         APnMM/NoSUEX7k/TbfFZOMIAXqeOgVfYlaUUwS5IVx/KX2WaZSUcXBZdLbU9c3dXWc
-         B7yscltnO9vN4AE6rtNUxs37L8HmCFQQ4zLTncxcS+Y4byxc1hWLvKupRncU1kUVIh
-         Se79TuvvAK7PA==
-Received: by mail-wr1-f41.google.com with SMTP id e3so28621725wra.0;
-        Mon, 14 Feb 2022 11:25:41 -0800 (PST)
-X-Gm-Message-State: AOAM533lGBGdzQ2n4n/+tiFsDCW6M+1s0S1dxwkv7EnqcNwoNPD/D0To
-        g73TG23bEoHghzGuOFucaeUtVTcCMiOXD2j8fXA=
-X-Google-Smtp-Source: ABdhPJwrOpkav7UeztG9pweW7/OWsS+hZNYg7RZgUDmgoSoPSixwWLgUERuof4XivnroH6SdfUIEp08YoMpfbv7qa3w=
-X-Received: by 2002:a5d:5446:: with SMTP id w6mr422520wrv.12.1644866740020;
- Mon, 14 Feb 2022 11:25:40 -0800 (PST)
+        b=e8SkA3FlLGu70hI/WgHcE1Xcld6ahEqgd/8aP3tnN+Ui+6c+MZmJxArGum1LdtmAc
+         TVm8LqkWXJbpel0WqJluZlN0q2Rc8pObOFXCjWsE1d3haVSN1sOjQ5hKRVHWsZ71lN
+         9Hnj9zqBHSBBx6qUNlA6sc7rmD8pMbOGHJ9SDDCXuRY9FNQ7binWt4bsfA/Yof8Egb
+         Ksm8rfkNmn9T9/rsBeFI1yBap4xnb6nVmSKUusmotl5Q02Llm+mwF8WcKWget2RALt
+         X3B6AavEfyIeX6XUTomqUIV78jVQAYplU/28sKTs9My6dabsF705ywSdaO+p8h0D4l
+         JZS2fHyItMkuQ==
+Received: by mail-wm1-f54.google.com with SMTP id x3-20020a05600c21c300b0037c01ad715bso96481wmj.2;
+        Mon, 14 Feb 2022 11:40:24 -0800 (PST)
+X-Gm-Message-State: AOAM532dvZbtvOPm1OVJdRP6UdnKTYMjhyzK9noTSPV4d2TnlmwY4VjK
+        c6zphPR526O7Yd9rGGuLi8qjsl/2HmGocLZjIrU=
+X-Google-Smtp-Source: ABdhPJzTYqCeBLA8ZZTCXfIkkUBrupnk+RLzKXVQdywxm2I/SfNIqW0R0tvlKvR6EMssd+gXW/CMf7zH4TFa2LGJB14=
+X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id
+ l39-20020a05600c1d2700b0037c74bb2b4dmr252362wms.82.1644867623104; Mon, 14 Feb
+ 2022 11:40:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-8-arnd@kernel.org>
- <YgqOLZbFK7/B2HJT@zeniv-ca.linux.org.uk>
-In-Reply-To: <YgqOLZbFK7/B2HJT@zeniv-ca.linux.org.uk>
+References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-11-arnd@kernel.org>
+ <YgqL/NJ3YHEAhj4i@infradead.org>
+In-Reply-To: <YgqL/NJ3YHEAhj4i@infradead.org>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 14 Feb 2022 20:25:24 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a36U35DK22UT6id=WawWaJa-2+_W9HFgmwdDJ_tVYE5NQ@mail.gmail.com>
-Message-ID: <CAK8P3a36U35DK22UT6id=WawWaJa-2+_W9HFgmwdDJ_tVYE5NQ@mail.gmail.com>
-Subject: Re: [PATCH 07/14] uaccess: generalize access_ok()
-To:     Al Viro <viro@zeniv.linux.org.uk>
+Date:   Mon, 14 Feb 2022 20:40:07 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3eOw=QpxWFnODE61EFt8oGPJ7dcusfbPSD1vdEsUmekQ@mail.gmail.com>
+Message-ID: <CAK8P3a3eOw=QpxWFnODE61EFt8oGPJ7dcusfbPSD1vdEsUmekQ@mail.gmail.com>
+Subject: Re: [PATCH 10/14] uaccess: remove most CONFIG_SET_FS users
+To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -55,53 +56,50 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Helge Deller <deller@gmx.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         "open list:SYNOPSYS ARC ARCHITECTURE" 
         <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
         "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
+        <linux-xtensa@linux-xtensa.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        David Miller <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,47 +107,23 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 6:15 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Mon, Feb 14, 2022 at 6:06 PM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> On Mon, Feb 14, 2022 at 05:34:45PM +0100, Arnd Bergmann wrote:
->
-> > diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
-> > index c7b763d2f526..8867ddf3e6c7 100644
-> > --- a/arch/csky/kernel/signal.c
-> > +++ b/arch/csky/kernel/signal.c
-> > @@ -136,7 +136,7 @@ static inline void __user *get_sigframe(struct ksignal *ksig,
-> >  static int
-> >  setup_rt_frame(struct ksignal *ksig, sigset_t *set, struct pt_regs *regs)
-> >  {
-> > -     struct rt_sigframe *frame;
-> > +     struct rt_sigframe __user *frame;
-> >       int err = 0;
+> On Mon, Feb 14, 2022 at 05:34:48PM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
 > >
-> >       frame = get_sigframe(ksig, regs, sizeof(*frame));
+> > On almost all architectures, there are no remaining callers
+> > of set_fs(), so CONFIG_SET_FS can be disabled, along with
+> > removing the thread_info field and any references to it.
+> >
+> > This turns access_ok() into a cheaper check against TASK_SIZE_MAX.
 >
-> Minor nit: might make sense to separate annotations (here, on nios2, etc.) from the rest...
+> Wouldn't it make more sense to just merge this into the last patch?
 
-Done.
-
-> > -}
-> > -
-> > -static inline int access_ok(const void __user * addr, unsigned long size)
-> > -{
-> > -     return 1;
-> > -}
-> > +#define __range_not_ok(addr, size, limit) (!__access_ok(addr, size))
->
-> is really wrong.  For sparc64, access_ok() should always be true.
-> This __range_not_ok() thing is used *only* for valid_user_frame() in
-> arch/sparc/kernel/perf_event.c - it's not a part of normal access_ok()
-> there.
->
-> sparc64 has separate address spaces for kernel and for userland; access_ok()
-> had never been useful there.
-
-Ok, fixed as well now. I had the access_ok() bit right, the definition just
-moved around here so it comes before the #include, but I missed the
-bit about __range_not_ok(), which I have now reverted back to the
-correct version in my tree.
+Yes, sounds good. I wasn't sure at first if there is enough buy-in to get
+all architectures cleaned up, and I hadn't done the ia64 patch, so it
+seemed more important to do this part early, but now it seems that it
+will all go in at the same time, so doing this as part of a big removal
+at the end makes sense.
 
         Arnd
