@@ -2,35 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB424B3F92
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 03:32:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E2D4B3F8F
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 03:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239617AbiBNCcQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 13 Feb 2022 21:32:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46016 "EHLO
+        id S239662AbiBNCcW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 13 Feb 2022 21:32:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239616AbiBNCcB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Feb 2022 21:32:01 -0500
+        with ESMTP id S239571AbiBNCcC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Feb 2022 21:32:02 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB27A55BE1;
-        Sun, 13 Feb 2022 18:31:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4376656C24;
+        Sun, 13 Feb 2022 18:31:49 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B1FA1396;
-        Sun, 13 Feb 2022 18:31:45 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC340106F;
+        Sun, 13 Feb 2022 18:31:48 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.47.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D418E3F718;
-        Sun, 13 Feb 2022 18:31:42 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 218233F718;
+        Sun, 13 Feb 2022 18:31:45 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Christoph Hellwig <hch@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: [PATCH 14/30] s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 14 Feb 2022 08:00:37 +0530
-Message-Id: <1644805853-21338-15-git-send-email-anshuman.khandual@arm.com>
+        linux-arch@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH 15/30] riscv/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 14 Feb 2022 08:00:38 +0530
+Message-Id: <1644805853-21338-16-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
 References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
@@ -47,98 +49,108 @@ This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
 macros can be dropped which are no longer needed.
 
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: linux-riscv@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/s390/Kconfig               |  1 +
- arch/s390/include/asm/pgtable.h | 17 -----------------
- arch/s390/mm/mmap.c             | 33 +++++++++++++++++++++++++++++++++
- 3 files changed, 34 insertions(+), 17 deletions(-)
+ arch/riscv/Kconfig               |  1 +
+ arch/riscv/include/asm/pgtable.h | 16 ------------
+ arch/riscv/mm/init.c             | 42 ++++++++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 16 deletions(-)
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index be9f39fd06df..cb1b487e8201 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -78,6 +78,7 @@ config S390
- 	select ARCH_HAS_SYSCALL_WRAPPER
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index 5adcbd9b5e88..9391742f9286 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -31,6 +31,7 @@ config RISCV
+ 	select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
  	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARCH_HAS_VDSO_DATA
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_INLINE_READ_LOCK
- 	select ARCH_INLINE_READ_LOCK_BH
-diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-index 008a6c856fa4..3893ef64b439 100644
---- a/arch/s390/include/asm/pgtable.h
-+++ b/arch/s390/include/asm/pgtable.h
-@@ -422,23 +422,6 @@ static inline int is_module_addr(void *addr)
-  * implies read permission.
-  */
-          /*xwr*/
--#define __P000	PAGE_NONE
--#define __P001	PAGE_RO
--#define __P010	PAGE_RO
--#define __P011	PAGE_RO
--#define __P100	PAGE_RX
--#define __P101	PAGE_RX
--#define __P110	PAGE_RX
--#define __P111	PAGE_RX
--
--#define __S000	PAGE_NONE
--#define __S001	PAGE_RO
--#define __S010	PAGE_RW
--#define __S011	PAGE_RW
--#define __S100	PAGE_RX
--#define __S101	PAGE_RX
--#define __S110	PAGE_RWX
--#define __S111	PAGE_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
+ 	select ARCH_STACKWALK
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 7e949f25c933..d2bb14cac28b 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -183,24 +183,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
+ extern pgd_t swapper_pg_dir[];
  
- /*
-  * Segment entry (large page) protection definitions.
-diff --git a/arch/s390/mm/mmap.c b/arch/s390/mm/mmap.c
-index e54f928503c5..e99c198aa5de 100644
---- a/arch/s390/mm/mmap.c
-+++ b/arch/s390/mm/mmap.c
-@@ -188,3 +188,36 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
- 		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
- 	}
+ /* MAP_PRIVATE permissions: xwr (copy-on-write) */
+-#define __P000	PAGE_NONE
+-#define __P001	PAGE_READ
+-#define __P010	PAGE_COPY
+-#define __P011	PAGE_COPY
+-#define __P100	PAGE_EXEC
+-#define __P101	PAGE_READ_EXEC
+-#define __P110	PAGE_COPY_EXEC
+-#define __P111	PAGE_COPY_READ_EXEC
+ 
+ /* MAP_SHARED permissions: xwr */
+-#define __S000	PAGE_NONE
+-#define __S001	PAGE_READ
+-#define __S010	PAGE_SHARED
+-#define __S011	PAGE_SHARED
+-#define __S100	PAGE_EXEC
+-#define __S101	PAGE_READ_EXEC
+-#define __S110	PAGE_SHARED_EXEC
+-#define __S111	PAGE_SHARED_EXEC
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ static inline int pmd_present(pmd_t pmd)
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index cf4d018b7d66..ed4a26422555 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -1048,3 +1048,45 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+ 	return vmemmap_populate_basepages(start, end, node, NULL);
  }
+ #endif
 +
++#ifdef CONFIG_MMU
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
 +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
++	/* MAP_PRIVATE permissions: xwr (copy-on-write) */
 +	case VM_NONE:
 +		return PAGE_NONE;
 +	case VM_READ:
++		return PAGE_READ;
 +	case VM_WRITE:
 +	case VM_WRITE | VM_READ:
-+		return PAGE_RO;
++		return PAGE_COPY;
 +	case VM_EXEC:
++		return PAGE_EXEC;
 +	case VM_EXEC | VM_READ:
++		return PAGE_READ_EXEC;
 +	case VM_EXEC | VM_WRITE:
++		return PAGE_COPY_EXEC;
 +	case VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_RX;
++		return PAGE_COPY_READ_EXEC;
++	/* MAP_SHARED permissions: xwr */
 +	case VM_SHARED:
 +		return PAGE_NONE;
 +	case VM_SHARED | VM_READ:
-+		return PAGE_RO;
++		return PAGE_READ;
 +	case VM_SHARED | VM_WRITE:
 +	case VM_SHARED | VM_WRITE | VM_READ:
-+		return PAGE_RW;
++		return PAGE_SHARED;
 +	case VM_SHARED | VM_EXEC:
++		return PAGE_EXEC;
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_RX;
++		return PAGE_READ_EXEC;
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
 +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_RWX;
++		return PAGE_SHARED_EXEC;
 +	default:
 +		BUILD_BUG();
 +	}
 +}
 +EXPORT_SYMBOL(vm_get_page_prot);
++#endif /* CONFIG_MMU */
 -- 
 2.25.1
 
