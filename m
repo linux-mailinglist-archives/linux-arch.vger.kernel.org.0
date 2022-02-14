@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA654B5709
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 17:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E03C4B572D
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 17:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356708AbiBNQis (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Feb 2022 11:38:48 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44604 "EHLO
+        id S1346289AbiBNQjT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Feb 2022 11:39:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356551AbiBNQiD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 11:38:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB8960D88;
-        Mon, 14 Feb 2022 08:37:55 -0800 (PST)
+        with ESMTP id S1356702AbiBNQis (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 11:38:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5E36517F;
+        Mon, 14 Feb 2022 08:38:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BAF86150D;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9AEE4CE19D3;
+        Mon, 14 Feb 2022 16:38:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 362D3C340F9;
         Mon, 14 Feb 2022 16:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14ABC340E9;
-        Mon, 14 Feb 2022 16:37:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644856674;
-        bh=V6/ZfWZ1PAD3Y97L2QNR1QNU/2itdbWUv5bvEuYuqFQ=;
+        s=k20201202; t=1644856685;
+        bh=HK+tVapaV31snBn8v5Q1USmrkGxBnfuKp+8RGzmZzjI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MOAf9yBvH1riDXG/nGNPY+w9Gc9bnqic4pnJ0+tu96kd19/UyQ+Onu2FZTuj/qx3H
-         5DZ48NElBgU3qg/LDAY1SezCwzOrzgR1DEV7JVhEQY1s/p3xpNft39stpuEoc4sI/q
-         K7roa/97KxpQjsDrcV7HwA+T3TThR5YApydcNi+mLOC0+byS8aASvctyxWuoL5KLh3
-         DMrCNNigujQsLvalAFKiivzphwW9Yj5VBRBUajRIBc/jTjiD3QI/Gt/oNiPbyJR5ar
-         MJMqnkbNnG0hh+1THGkOhds095tIBm/qJ0icPc9d1KZtauxvKz3+3Ip0UHfF/dGlgx
-         UNo5dPaPdtkMg==
+        b=sew1S67bnhoMY5c49zcCmVRZ3MOYx2q48Skp8Z1jWB1y3m3FX5X/CbgDimmp42pLA
+         HHmjvksveAMCqvqvPQch1eIfQomefg6NefVJUVdYCVL+qP8b9GZ9EHtyvNCf3xNdwW
+         UCbS4ebpNuxlyp/9cPqUADw0r/KytnLgIHF8bgf7dkwKw48dckmqX222ZtEdgK4US1
+         me23m4sr6V84MA+bMP4xeFtTv5t4+cRJ+fuV3GNxxb6bcWH4Zt7KagcQC7NupredLb
+         DFscCdHqj05ofPG2UpQIvjln2Iz0XYBZ3B/oT88YDgbLzwIqIAFKWGfwvNiO2WaAaP
+         LnhHLZBiJAAzg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc:     linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
         linux-xtensa@linux-xtensa.org
-Subject: [PATCH 12/14] sh: remove CONFIG_SET_FS support
-Date:   Mon, 14 Feb 2022 17:34:50 +0100
-Message-Id: <20220214163452.1568807-13-arnd@kernel.org>
+Subject: [PATCH 13/14] ia64: remove CONFIG_SET_FS support
+Date:   Mon, 14 Feb 2022 17:34:51 +0100
+Message-Id: <20220214163452.1568807-14-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220214163452.1568807-1-arnd@kernel.org>
 References: <20220214163452.1568807-1-arnd@kernel.org>
@@ -74,262 +74,305 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-sh uses set_fs/get_fs only in one file, to handle address
-errors in both user and kernel memory.
-
-It already has an abstraction to differentiate between I/O
-and memory, so adding a third class for kernel memory fits
-into the same scheme and lets us kill off CONFIG_SET_FS.
+ia64 only uses set_fs() in one file to handle unaligned access for
+both user space and kernel instructions. Rewrite this to explicitly
+pass around a flag about which one it is and drop the feature from
+the architecture.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/sh/Kconfig                   |  1 -
- arch/sh/include/asm/processor.h   |  1 -
- arch/sh/include/asm/segment.h     | 33 -------------------------------
- arch/sh/include/asm/thread_info.h |  2 --
- arch/sh/include/asm/uaccess.h     |  4 ----
- arch/sh/kernel/io_trapped.c       |  9 ++-------
- arch/sh/kernel/process_32.c       |  2 --
- arch/sh/kernel/traps_32.c         | 30 +++++++++++++++++-----------
- 8 files changed, 21 insertions(+), 61 deletions(-)
- delete mode 100644 arch/sh/include/asm/segment.h
+ arch/ia64/Kconfig                   |  1 -
+ arch/ia64/include/asm/processor.h   |  4 --
+ arch/ia64/include/asm/thread_info.h |  2 -
+ arch/ia64/include/asm/uaccess.h     | 21 +++-------
+ arch/ia64/kernel/unaligned.c        | 60 +++++++++++++++++++----------
+ 5 files changed, 45 insertions(+), 43 deletions(-)
 
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 2474a04ceac4..f676e92b7d5b 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -65,7 +65,6 @@ config SUPERH
- 	select PERF_EVENTS
- 	select PERF_USE_VMALLOC
- 	select RTC_LIB
+diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+index a7e01573abd8..6b6a35b3d959 100644
+--- a/arch/ia64/Kconfig
++++ b/arch/ia64/Kconfig
+@@ -61,7 +61,6 @@ config IA64
+ 	select NEED_SG_DMA_LENGTH
+ 	select NUMA if !FLATMEM
+ 	select PCI_MSI_ARCH_FALLBACKS if PCI_MSI
 -	select SET_FS
- 	select SPARSE_IRQ
- 	select TRACE_IRQFLAGS_SUPPORT
+ 	select ZONE_DMA32
+ 	default y
  	help
-diff --git a/arch/sh/include/asm/processor.h b/arch/sh/include/asm/processor.h
-index 3820d698846e..85a6c1c3c16e 100644
---- a/arch/sh/include/asm/processor.h
-+++ b/arch/sh/include/asm/processor.h
-@@ -3,7 +3,6 @@
- #define __ASM_SH_PROCESSOR_H
+diff --git a/arch/ia64/include/asm/processor.h b/arch/ia64/include/asm/processor.h
+index 45365c2ef598..7cbce290f4e5 100644
+--- a/arch/ia64/include/asm/processor.h
++++ b/arch/ia64/include/asm/processor.h
+@@ -243,10 +243,6 @@ DECLARE_PER_CPU(struct cpuinfo_ia64, ia64_cpu_info);
  
- #include <asm/cpu-features.h>
--#include <asm/segment.h>
- #include <asm/cache.h>
+ extern void print_cpu_info (struct cpuinfo_ia64 *);
  
- #ifndef __ASSEMBLY__
-diff --git a/arch/sh/include/asm/segment.h b/arch/sh/include/asm/segment.h
-deleted file mode 100644
-index 02e54a3335d6..000000000000
---- a/arch/sh/include/asm/segment.h
-+++ /dev/null
-@@ -1,33 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __ASM_SH_SEGMENT_H
--#define __ASM_SH_SEGMENT_H
--
--#ifndef __ASSEMBLY__
--
 -typedef struct {
 -	unsigned long seg;
 -} mm_segment_t;
 -
--#define MAKE_MM_SEG(s)	((mm_segment_t) { (s) })
+ #define SET_UNALIGN_CTL(task,value)								\
+ ({												\
+ 	(task)->thread.flags = (((task)->thread.flags & ~IA64_THREAD_UAC_MASK)			\
+diff --git a/arch/ia64/include/asm/thread_info.h b/arch/ia64/include/asm/thread_info.h
+index 51d20cb37706..ef83493e6778 100644
+--- a/arch/ia64/include/asm/thread_info.h
++++ b/arch/ia64/include/asm/thread_info.h
+@@ -27,7 +27,6 @@ struct thread_info {
+ 	__u32 cpu;			/* current CPU */
+ 	__u32 last_cpu;			/* Last CPU thread ran on */
+ 	__u32 status;			/* Thread synchronous flags */
+-	mm_segment_t addr_limit;	/* user-level address space limit */
+ 	int preempt_count;		/* 0=premptable, <0=BUG; will also serve as bh-counter */
+ #ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
+ 	__u64 utime;
+@@ -48,7 +47,6 @@ struct thread_info {
+ 	.task		= &tsk,			\
+ 	.flags		= 0,			\
+ 	.cpu		= 0,			\
+-	.addr_limit	= KERNEL_DS,		\
+ 	.preempt_count	= INIT_PREEMPT_COUNT,	\
+ }
+ 
+diff --git a/arch/ia64/include/asm/uaccess.h b/arch/ia64/include/asm/uaccess.h
+index e242a3cc1330..60adadeb3e9e 100644
+--- a/arch/ia64/include/asm/uaccess.h
++++ b/arch/ia64/include/asm/uaccess.h
+@@ -42,26 +42,17 @@
+ #include <asm/extable.h>
+ 
+ /*
+- * For historical reasons, the following macros are grossly misnamed:
+- */
+-#define KERNEL_DS	((mm_segment_t) { ~0UL })		/* cf. access_ok() */
+-#define USER_DS		((mm_segment_t) { TASK_SIZE-1 })	/* cf. access_ok() */
+-
+-#define get_fs()  (current_thread_info()->addr_limit)
+-#define set_fs(x) (current_thread_info()->addr_limit = (x))
 -
 -/*
-- * The fs value determines whether argument validity checking should be
-- * performed or not.  If get_fs() == USER_DS, checking is performed, with
-- * get_fs() == KERNEL_DS, checking is bypassed.
-- *
-- * For historical reasons, these macros are grossly misnamed.
-- */
--#define KERNEL_DS	MAKE_MM_SEG(0xFFFFFFFFUL)
--#ifdef CONFIG_MMU
--#define USER_DS		MAKE_MM_SEG(PAGE_OFFSET)
--#else
--#define USER_DS		KERNEL_DS
--#endif
--
--#define uaccess_kernel() (get_fs().seg == KERNEL_DS.seg)
--
--#define get_fs()	(current_thread_info()->addr_limit)
--#define set_fs(x)	(current_thread_info()->addr_limit = (x))
--
--#endif /* __ASSEMBLY__ */
--#endif /* __ASM_SH_SEGMENT_H */
-diff --git a/arch/sh/include/asm/thread_info.h b/arch/sh/include/asm/thread_info.h
-index 598d0184ffea..b119b859a0a3 100644
---- a/arch/sh/include/asm/thread_info.h
-+++ b/arch/sh/include/asm/thread_info.h
-@@ -30,7 +30,6 @@ struct thread_info {
- 	__u32			status;		/* thread synchronous flags */
- 	__u32			cpu;
- 	int			preempt_count; /* 0 => preemptable, <0 => BUG */
--	mm_segment_t		addr_limit;	/* thread address space */
- 	unsigned long		previous_sp;	/* sp of previous stack in case
- 						   of nested IRQ stacks */
- 	__u8			supervisor_stack[0];
-@@ -58,7 +57,6 @@ struct thread_info {
- 	.status		= 0,			\
- 	.cpu		= 0,			\
- 	.preempt_count	= INIT_PREEMPT_COUNT,	\
--	.addr_limit	= KERNEL_DS,		\
+- * When accessing user memory, we need to make sure the entire area really is in
+- * user-level space.  In order to do this efficiently, we make sure that the page at
+- * address TASK_SIZE is never valid.  We also need to make sure that the address doesn't
++ * When accessing user memory, we need to make sure the entire area really is
++ * in user-level space.  We also need to make sure that the address doesn't
+  * point inside the virtually mapped linear page table.
+  */
+ static inline int __access_ok(const void __user *p, unsigned long size)
+ {
++	unsigned long limit = TASK_SIZE;
+ 	unsigned long addr = (unsigned long)p;
+-	unsigned long seg = get_fs().seg;
+-	return likely(addr <= seg) &&
+-	 (seg == KERNEL_DS.seg || likely(REGION_OFFSET(addr) < RGN_MAP_LIMIT));
++
++	return likely((size <= limit) && (addr <= (limit - size)) &&
++		 likely(REGION_OFFSET(addr) < RGN_MAP_LIMIT));
  }
- 
- /* how to get the current stack pointer from C */
-diff --git a/arch/sh/include/asm/uaccess.h b/arch/sh/include/asm/uaccess.h
-index ccd219d74851..a79609eb14be 100644
---- a/arch/sh/include/asm/uaccess.h
-+++ b/arch/sh/include/asm/uaccess.h
-@@ -2,11 +2,7 @@
- #ifndef __ASM_SH_UACCESS_H
- #define __ASM_SH_UACCESS_H
- 
--#include <asm/segment.h>
- #include <asm/extable.h>
--
--#define user_addr_max()	(current_thread_info()->addr_limit.seg)
--
+ #define __access_ok __access_ok
  #include <asm-generic/access_ok.h>
+diff --git a/arch/ia64/kernel/unaligned.c b/arch/ia64/kernel/unaligned.c
+index 6c1a8951dfbb..0acb5a0cd7ab 100644
+--- a/arch/ia64/kernel/unaligned.c
++++ b/arch/ia64/kernel/unaligned.c
+@@ -749,9 +749,25 @@ emulate_load_updates (update_t type, load_store_t ld, struct pt_regs *regs, unsi
+ 	}
+ }
  
- /*
-diff --git a/arch/sh/kernel/io_trapped.c b/arch/sh/kernel/io_trapped.c
-index 004ad0130b10..e803b14ef12e 100644
---- a/arch/sh/kernel/io_trapped.c
-+++ b/arch/sh/kernel/io_trapped.c
-@@ -270,7 +270,6 @@ static struct mem_access trapped_io_access = {
++static int emulate_store(unsigned long ifa, void *val, int len, bool kernel_mode)
++{
++	if (kernel_mode)
++		return copy_to_kernel_nofault((void *)ifa, val, len);
++
++	return copy_to_user((void __user *)ifa, val, len);
++}
++
++static int emulate_load(void *val, unsigned long ifa, int len, bool kernel_mode)
++{
++	if (kernel_mode)
++	       return copy_from_kernel_nofault(val, (void *)ifa, len);
++
++	return copy_from_user(val, (void __user *)ifa, len);
++}
  
- int handle_trapped_io(struct pt_regs *regs, unsigned long address)
+ static int
+-emulate_load_int (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
++emulate_load_int (unsigned long ifa, load_store_t ld, struct pt_regs *regs,
++		  bool kernel_mode)
  {
--	mm_segment_t oldfs;
- 	insn_size_t instruction;
- 	int tmp;
+ 	unsigned int len = 1 << ld.x6_sz;
+ 	unsigned long val = 0;
+@@ -774,7 +790,7 @@ emulate_load_int (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
+ 		return -1;
+ 	}
+ 	/* this assumes little-endian byte-order: */
+-	if (copy_from_user(&val, (void __user *) ifa, len))
++	if (emulate_load(&val, ifa, len, kernel_mode))
+ 		return -1;
+ 	setreg(ld.r1, val, 0, regs);
  
-@@ -281,16 +280,12 @@ int handle_trapped_io(struct pt_regs *regs, unsigned long address)
+@@ -872,7 +888,8 @@ emulate_load_int (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
+ }
  
- 	WARN_ON(user_mode(regs));
- 
--	oldfs = get_fs();
--	set_fs(KERNEL_DS);
--	if (copy_from_user(&instruction, (void *)(regs->pc),
--			   sizeof(instruction))) {
--		set_fs(oldfs);
-+	if (copy_from_kernel_nofault(&instruction, (void *)(regs->pc),
-+				     sizeof(instruction))) {
- 		return 0;
+ static int
+-emulate_store_int (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
++emulate_store_int (unsigned long ifa, load_store_t ld, struct pt_regs *regs,
++		   bool kernel_mode)
+ {
+ 	unsigned long r2;
+ 	unsigned int len = 1 << ld.x6_sz;
+@@ -901,7 +918,7 @@ emulate_store_int (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
  	}
  
- 	tmp = handle_unaligned_access(instruction, regs,
- 				      &trapped_io_access, 1, address);
--	set_fs(oldfs);
- 	return tmp == 0;
+ 	/* this assumes little-endian byte-order: */
+-	if (copy_to_user((void __user *) ifa, &r2, len))
++	if (emulate_store(ifa, &r2, len, kernel_mode))
+ 		return -1;
+ 
+ 	/*
+@@ -1021,7 +1038,7 @@ float2mem_double (struct ia64_fpreg *init, struct ia64_fpreg *final)
  }
-diff --git a/arch/sh/kernel/process_32.c b/arch/sh/kernel/process_32.c
-index 1c28e3cddb60..ca01286a0610 100644
---- a/arch/sh/kernel/process_32.c
-+++ b/arch/sh/kernel/process_32.c
-@@ -123,7 +123,6 @@ int copy_thread(unsigned long clone_flags, unsigned long usp, unsigned long arg,
- #if defined(CONFIG_SH_FPU)
- 		childregs->sr |= SR_FD;
- #endif
--		ti->addr_limit = KERNEL_DS;
- 		ti->status &= ~TS_USEDFPU;
- 		p->thread.fpu_counter = 0;
- 		return 0;
-@@ -132,7 +131,6 @@ int copy_thread(unsigned long clone_flags, unsigned long usp, unsigned long arg,
  
- 	if (usp)
- 		childregs->regs[15] = usp;
--	ti->addr_limit = USER_DS;
- 
- 	if (clone_flags & CLONE_SETTLS)
- 		childregs->gbr = tls;
-diff --git a/arch/sh/kernel/traps_32.c b/arch/sh/kernel/traps_32.c
-index b3c715bc254b..6cdda3a621a1 100644
---- a/arch/sh/kernel/traps_32.c
-+++ b/arch/sh/kernel/traps_32.c
-@@ -75,6 +75,23 @@ static struct mem_access user_mem_access = {
- 	copy_to_user,
- };
- 
-+static unsigned long copy_from_kernel_wrapper(void *dst, const void __user *src,
-+					      unsigned long cnt)
-+{
-+	return copy_from_kernel_nofault(dst, (const void __force *)src, cnt);
-+}
-+
-+static unsigned long copy_to_kernel_wrapper(void __user *dst, const void *src,
-+					    unsigned long cnt)
-+{
-+	return copy_to_kernel_nofault((void __force *)dst, src, cnt);
-+}
-+
-+static struct mem_access kernel_mem_access = {
-+	copy_from_kernel_wrapper,
-+	copy_to_kernel_wrapper,
-+};
-+
- /*
-  * handle an instruction that does an unaligned memory access by emulating the
-  * desired behaviour
-@@ -473,7 +490,6 @@ asmlinkage void do_address_error(struct pt_regs *regs,
- 				 unsigned long address)
+ static int
+-emulate_load_floatpair (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
++emulate_load_floatpair (unsigned long ifa, load_store_t ld, struct pt_regs *regs, bool kernel_mode)
  {
- 	unsigned long error_code = 0;
--	mm_segment_t oldfs;
- 	insn_size_t instruction;
- 	int tmp;
+ 	struct ia64_fpreg fpr_init[2];
+ 	struct ia64_fpreg fpr_final[2];
+@@ -1050,8 +1067,8 @@ emulate_load_floatpair (unsigned long ifa, load_store_t ld, struct pt_regs *regs
+ 		 * This assumes little-endian byte-order.  Note that there is no "ldfpe"
+ 		 * instruction:
+ 		 */
+-		if (copy_from_user(&fpr_init[0], (void __user *) ifa, len)
+-		    || copy_from_user(&fpr_init[1], (void __user *) (ifa + len), len))
++		if (emulate_load(&fpr_init[0], ifa, len, kernel_mode)
++		    || emulate_load(&fpr_init[1], (ifa + len), len, kernel_mode))
+ 			return -1;
  
-@@ -489,13 +505,10 @@ asmlinkage void do_address_error(struct pt_regs *regs,
- 		local_irq_enable();
- 		inc_unaligned_user_access();
+ 		DPRINT("ld.r1=%d ld.imm=%d x6_sz=%d\n", ld.r1, ld.imm, ld.x6_sz);
+@@ -1126,7 +1143,8 @@ emulate_load_floatpair (unsigned long ifa, load_store_t ld, struct pt_regs *regs
  
--		oldfs = force_uaccess_begin();
- 		if (copy_from_user(&instruction, (insn_size_t __user *)(regs->pc & ~1),
- 				   sizeof(instruction))) {
--			force_uaccess_end(oldfs);
- 			goto uspace_segv;
+ 
+ static int
+-emulate_load_float (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
++emulate_load_float (unsigned long ifa, load_store_t ld, struct pt_regs *regs,
++	            bool kernel_mode)
+ {
+ 	struct ia64_fpreg fpr_init;
+ 	struct ia64_fpreg fpr_final;
+@@ -1152,7 +1170,7 @@ emulate_load_float (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
+ 	 * See comments in ldX for descriptions on how the various loads are handled.
+ 	 */
+ 	if (ld.x6_op != 0x2) {
+-		if (copy_from_user(&fpr_init, (void __user *) ifa, len))
++		if (emulate_load(&fpr_init, ifa, len, kernel_mode))
+ 			return -1;
+ 
+ 		DPRINT("ld.r1=%d x6_sz=%d\n", ld.r1, ld.x6_sz);
+@@ -1202,7 +1220,8 @@ emulate_load_float (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
+ 
+ 
+ static int
+-emulate_store_float (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
++emulate_store_float (unsigned long ifa, load_store_t ld, struct pt_regs *regs,
++		     bool kernel_mode)
+ {
+ 	struct ia64_fpreg fpr_init;
+ 	struct ia64_fpreg fpr_final;
+@@ -1244,7 +1263,7 @@ emulate_store_float (unsigned long ifa, load_store_t ld, struct pt_regs *regs)
+ 	DDUMP("fpr_init =", &fpr_init, len);
+ 	DDUMP("fpr_final =", &fpr_final, len);
+ 
+-	if (copy_to_user((void __user *) ifa, &fpr_final, len))
++	if (emulate_store(ifa, &fpr_final, len, kernel_mode))
+ 		return -1;
+ 
+ 	/*
+@@ -1295,7 +1314,6 @@ void
+ ia64_handle_unaligned (unsigned long ifa, struct pt_regs *regs)
+ {
+ 	struct ia64_psr *ipsr = ia64_psr(regs);
+-	mm_segment_t old_fs = get_fs();
+ 	unsigned long bundle[2];
+ 	unsigned long opcode;
+ 	const struct exception_table_entry *eh = NULL;
+@@ -1304,6 +1322,7 @@ ia64_handle_unaligned (unsigned long ifa, struct pt_regs *regs)
+ 		load_store_t insn;
+ 	} u;
+ 	int ret = -1;
++	bool kernel_mode = false;
+ 
+ 	if (ia64_psr(regs)->be) {
+ 		/* we don't support big-endian accesses */
+@@ -1367,13 +1386,13 @@ ia64_handle_unaligned (unsigned long ifa, struct pt_regs *regs)
+ 			if (unaligned_dump_stack)
+ 				dump_stack();
  		}
--		force_uaccess_end(oldfs);
- 
- 		/* shout about userspace fixups */
- 		unaligned_fixups_notify(current, instruction, regs);
-@@ -518,11 +531,9 @@ asmlinkage void do_address_error(struct pt_regs *regs,
- 			goto uspace_segv;
- 		}
- 
--		oldfs = force_uaccess_begin();
- 		tmp = handle_unaligned_access(instruction, regs,
- 					      &user_mem_access, 0,
- 					      address);
--		force_uaccess_end(oldfs);
- 
- 		if (tmp == 0)
- 			return; /* sorted */
-@@ -538,21 +549,18 @@ asmlinkage void do_address_error(struct pt_regs *regs,
- 		if (regs->pc & 1)
- 			die("unaligned program counter", regs, error_code);
- 
 -		set_fs(KERNEL_DS);
--		if (copy_from_user(&instruction, (void __user *)(regs->pc),
-+		if (copy_from_kernel_nofault(&instruction, (void *)(regs->pc),
- 				   sizeof(instruction))) {
- 			/* Argh. Fault on the instruction itself.
- 			   This should never happen non-SMP
- 			*/
--			set_fs(oldfs);
- 			die("insn faulting in do_address_error", regs, 0);
- 		}
- 
- 		unaligned_fixups_notify(current, instruction, regs);
- 
--		handle_unaligned_access(instruction, regs, &user_mem_access,
-+		handle_unaligned_access(instruction, regs, &kernel_mem_access,
- 					0, address);
--		set_fs(oldfs);
++		kernel_mode = true;
  	}
- }
  
+ 	DPRINT("iip=%lx ifa=%lx isr=%lx (ei=%d, sp=%d)\n",
+ 	       regs->cr_iip, ifa, regs->cr_ipsr, ipsr->ri, ipsr->it);
+ 
+-	if (__copy_from_user(bundle, (void __user *) regs->cr_iip, 16))
++	if (emulate_load(bundle, regs->cr_iip, 16, kernel_mode))
+ 		goto failure;
+ 
+ 	/*
+@@ -1467,7 +1486,7 @@ ia64_handle_unaligned (unsigned long ifa, struct pt_regs *regs)
+ 	      case LDCCLR_IMM_OP:
+ 	      case LDCNC_IMM_OP:
+ 	      case LDCCLRACQ_IMM_OP:
+-		ret = emulate_load_int(ifa, u.insn, regs);
++		ret = emulate_load_int(ifa, u.insn, regs, kernel_mode);
+ 		break;
+ 
+ 	      case ST_OP:
+@@ -1478,7 +1497,7 @@ ia64_handle_unaligned (unsigned long ifa, struct pt_regs *regs)
+ 		fallthrough;
+ 	      case ST_IMM_OP:
+ 	      case STREL_IMM_OP:
+-		ret = emulate_store_int(ifa, u.insn, regs);
++		ret = emulate_store_int(ifa, u.insn, regs, kernel_mode);
+ 		break;
+ 
+ 	      case LDF_OP:
+@@ -1486,21 +1505,21 @@ ia64_handle_unaligned (unsigned long ifa, struct pt_regs *regs)
+ 	      case LDFCCLR_OP:
+ 	      case LDFCNC_OP:
+ 		if (u.insn.x)
+-			ret = emulate_load_floatpair(ifa, u.insn, regs);
++			ret = emulate_load_floatpair(ifa, u.insn, regs, kernel_mode);
+ 		else
+-			ret = emulate_load_float(ifa, u.insn, regs);
++			ret = emulate_load_float(ifa, u.insn, regs, kernel_mode);
+ 		break;
+ 
+ 	      case LDF_IMM_OP:
+ 	      case LDFA_IMM_OP:
+ 	      case LDFCCLR_IMM_OP:
+ 	      case LDFCNC_IMM_OP:
+-		ret = emulate_load_float(ifa, u.insn, regs);
++		ret = emulate_load_float(ifa, u.insn, regs, kernel_mode);
+ 		break;
+ 
+ 	      case STF_OP:
+ 	      case STF_IMM_OP:
+-		ret = emulate_store_float(ifa, u.insn, regs);
++		ret = emulate_store_float(ifa, u.insn, regs, kernel_mode);
+ 		break;
+ 
+ 	      default:
+@@ -1521,7 +1540,6 @@ ia64_handle_unaligned (unsigned long ifa, struct pt_regs *regs)
+ 
+ 	DPRINT("ipsr->ri=%d iip=%lx\n", ipsr->ri, regs->cr_iip);
+   done:
+-	set_fs(old_fs);		/* restore original address limit */
+ 	return;
+ 
+   failure:
 -- 
 2.29.2
 
