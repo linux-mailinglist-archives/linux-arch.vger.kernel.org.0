@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6234B5B13
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 21:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B7C4B5B49
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 21:52:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiBNURy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Feb 2022 15:17:54 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:56444 "EHLO
+        id S229883AbiBNUqW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Feb 2022 15:46:22 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiBNURx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 15:17:53 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A4A192B2;
-        Mon, 14 Feb 2022 12:17:36 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 2A25C68AA6; Mon, 14 Feb 2022 21:00:11 +0100 (CET)
-Date:   Mon, 14 Feb 2022 21:00:11 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        with ESMTP id S229697AbiBNUp6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 15:45:58 -0500
+Received: from zeniv-ca.linux.org.uk (zeniv-ca.linux.org.uk [IPv6:2607:5300:60:148a::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076FE23A1BA;
+        Mon, 14 Feb 2022 12:44:00 -0800 (PST)
+Received: from viro by zeniv-ca.linux.org.uk with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nJhmV-001mcz-Ba; Mon, 14 Feb 2022 20:17:07 +0000
+Date:   Mon, 14 Feb 2022 20:17:07 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
         Christoph Hellwig <hch@lst.de>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>,
@@ -66,43 +66,42 @@ Cc:     Christoph Hellwig <hch@infradead.org>,
         Richard Weinberger <richard@nod.at>,
         Andrew Morton <akpm@linux-foundation.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
+        David Miller <davem@davemloft.net>
 Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
-Message-ID: <20220214200011.GA3786@lst.de>
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-5-arnd@kernel.org> <YgqLFYqIqkIsNC92@infradead.org> <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+Message-ID: <Ygq4wy9fikDYmuHU@zeniv-ca.linux.org.uk>
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-5-arnd@kernel.org>
+ <YgqLFYqIqkIsNC92@infradead.org>
+ <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+ <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 08:45:52PM +0100, Arnd Bergmann wrote:
-> As Al pointed out, they turned out to be necessary on sparc64, but the only
-> definitions are on sparc64 and x86, so it's possible that they serve a similar
-> purpose here, in which case changing the limit from TASK_SIZE to
-> TASK_SIZE_MAX is probably wrong as well.
+On Mon, Feb 14, 2022 at 12:01:05PM -0800, Linus Torvalds wrote:
+> On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> >
+> > As Al pointed out, they turned out to be necessary on sparc64, but the only
+> > definitions are on sparc64 and x86, so it's possible that they serve a similar
+> > purpose here, in which case changing the limit from TASK_SIZE to
+> > TASK_SIZE_MAX is probably wrong as well.
 > 
-> So either I need to revert the original definition as I did on sparc64, or
-> they can be removed completely. Hopefully Al or the x86 maintainers
-> can clarify.
+> x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
+> get_user() assembler implementation does the same.
+> 
+> I think any __range_not_ok() users that use TASK_SIZE are entirely
+> historical, and should be just fixed.
 
-Looking at the x86 users I think:
-
- - valid_user_frame should go away and the caller should use get_user
-   instead of __get_user
- - the one in copy_code can just go away, as there is another check
-   in copy_from_user_nmi
- - copy_stack_frame should just use access_ok
- - as does copy_from_user_nmi
-
-but yes, having someone who actually knows this code look over it
-would be very helpful.
+IIRC, that was mostly userland stack trace collection in perf.
+I'll try to dig in archives and see what shows up - it's been
+a while ago...
