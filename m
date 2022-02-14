@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D264B56E4
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 17:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FA654B5709
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 17:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356627AbiBNQiO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Feb 2022 11:38:14 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44514 "EHLO
+        id S1356708AbiBNQis (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Feb 2022 11:38:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343676AbiBNQiB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 11:38:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966DF60DAB;
-        Mon, 14 Feb 2022 08:37:45 -0800 (PST)
+        with ESMTP id S1356551AbiBNQiD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 11:38:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB8960D88;
+        Mon, 14 Feb 2022 08:37:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1479A614F9;
-        Mon, 14 Feb 2022 16:37:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B36DDC340FA;
-        Mon, 14 Feb 2022 16:37:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BAF86150D;
+        Mon, 14 Feb 2022 16:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14ABC340E9;
+        Mon, 14 Feb 2022 16:37:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644856664;
-        bh=qzcMb1Of30JXf/rqzR1r/df08I6ZO/2jC9ykeex8sLA=;
+        s=k20201202; t=1644856674;
+        bh=V6/ZfWZ1PAD3Y97L2QNR1QNU/2itdbWUv5bvEuYuqFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCZI1EiNAHtP6Jl7m8crNbvmWkKDIPu8zX2cl9eWsgmUYwbkTsdZ4y0nwymRonV4e
-         1SWEoBHCzYXY+nAayVfYtDtrC+giQHBttqLN8D+xAO5QxOiY1CXIluLY60oytlDLqQ
-         F9Sozxj4k0Mu5lilY58GTG5bJFE41iEMphAq/A+bZaCwvWYD/zRgPfLflA180nBDCM
-         ZDqfM4HfvLXXsd4neDaOjkmUlKrLA0F2NAuXEIJZ8r1diPxA49X7S7amhSeV0GtN3l
-         KhoSzCNjwQEN5rdDbl0H1FbyZi43ML6uozMB2KWPJVDUCbBnWugwNxJ0FVu6Cvf+QU
-         GhgFh/g7gcxwg==
+        b=MOAf9yBvH1riDXG/nGNPY+w9Gc9bnqic4pnJ0+tu96kd19/UyQ+Onu2FZTuj/qx3H
+         5DZ48NElBgU3qg/LDAY1SezCwzOrzgR1DEV7JVhEQY1s/p3xpNft39stpuEoc4sI/q
+         K7roa/97KxpQjsDrcV7HwA+T3TThR5YApydcNi+mLOC0+byS8aASvctyxWuoL5KLh3
+         DMrCNNigujQsLvalAFKiivzphwW9Yj5VBRBUajRIBc/jTjiD3QI/Gt/oNiPbyJR5ar
+         MJMqnkbNnG0hh+1THGkOhds095tIBm/qJ0icPc9d1KZtauxvKz3+3Ip0UHfF/dGlgx
+         UNo5dPaPdtkMg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc:     linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
         linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
         linux-xtensa@linux-xtensa.org
-Subject: [PATCH 11/14] sparc64: remove CONFIG_SET_FS support
-Date:   Mon, 14 Feb 2022 17:34:49 +0100
-Message-Id: <20220214163452.1568807-12-arnd@kernel.org>
+Subject: [PATCH 12/14] sh: remove CONFIG_SET_FS support
+Date:   Mon, 14 Feb 2022 17:34:50 +0100
+Message-Id: <20220214163452.1568807-13-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220214163452.1568807-1-arnd@kernel.org>
 References: <20220214163452.1568807-1-arnd@kernel.org>
@@ -64,7 +64,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,242 +74,260 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-sparc64 uses address space identifiers to differentiate between kernel
-and user space, using ASI_P for kernel threads but ASI_AIUS for normal
-user space, with the option of changing between them.
+sh uses set_fs/get_fs only in one file, to handle address
+errors in both user and kernel memory.
 
-As nothing really changes the ASI any more, just hardcode ASI_AIUS
-everywhere. Kernel threads are not allowed to access __user pointers
-anyway.
+It already has an abstraction to differentiate between I/O
+and memory, so adding a third class for kernel memory fits
+into the same scheme and lets us kill off CONFIG_SET_FS.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/sparc/Kconfig                      |  1 -
- arch/sparc/include/asm/processor_64.h   |  4 ----
- arch/sparc/include/asm/switch_to_64.h   |  4 +---
- arch/sparc/include/asm/thread_info_64.h |  4 +---
- arch/sparc/include/asm/uaccess_64.h     | 24 ------------------------
- arch/sparc/kernel/process_64.c          | 12 ------------
- arch/sparc/kernel/traps_64.c            |  2 --
- arch/sparc/lib/NGmemcpy.S               |  3 +--
- arch/sparc/mm/init_64.c                 |  3 ---
- 9 files changed, 3 insertions(+), 54 deletions(-)
+ arch/sh/Kconfig                   |  1 -
+ arch/sh/include/asm/processor.h   |  1 -
+ arch/sh/include/asm/segment.h     | 33 -------------------------------
+ arch/sh/include/asm/thread_info.h |  2 --
+ arch/sh/include/asm/uaccess.h     |  4 ----
+ arch/sh/kernel/io_trapped.c       |  9 ++-------
+ arch/sh/kernel/process_32.c       |  2 --
+ arch/sh/kernel/traps_32.c         | 30 +++++++++++++++++-----------
+ 8 files changed, 21 insertions(+), 61 deletions(-)
+ delete mode 100644 arch/sh/include/asm/segment.h
 
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 875388835a58..5f08e4d16ad8 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -99,7 +99,6 @@ config SPARC64
- 	select HAVE_SETUP_PER_CPU_AREA
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
+diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
+index 2474a04ceac4..f676e92b7d5b 100644
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -65,7 +65,6 @@ config SUPERH
+ 	select PERF_EVENTS
+ 	select PERF_USE_VMALLOC
+ 	select RTC_LIB
 -	select SET_FS
+ 	select SPARSE_IRQ
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 	help
+diff --git a/arch/sh/include/asm/processor.h b/arch/sh/include/asm/processor.h
+index 3820d698846e..85a6c1c3c16e 100644
+--- a/arch/sh/include/asm/processor.h
++++ b/arch/sh/include/asm/processor.h
+@@ -3,7 +3,6 @@
+ #define __ASM_SH_PROCESSOR_H
  
- config ARCH_PROC_KCORE_TEXT
- 	def_bool y
-diff --git a/arch/sparc/include/asm/processor_64.h b/arch/sparc/include/asm/processor_64.h
-index ae851e8fce4c..89850dff6b03 100644
---- a/arch/sparc/include/asm/processor_64.h
-+++ b/arch/sparc/include/asm/processor_64.h
-@@ -47,10 +47,6 @@
+ #include <asm/cpu-features.h>
+-#include <asm/segment.h>
+ #include <asm/cache.h>
  
  #ifndef __ASSEMBLY__
- 
+diff --git a/arch/sh/include/asm/segment.h b/arch/sh/include/asm/segment.h
+deleted file mode 100644
+index 02e54a3335d6..000000000000
+--- a/arch/sh/include/asm/segment.h
++++ /dev/null
+@@ -1,33 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __ASM_SH_SEGMENT_H
+-#define __ASM_SH_SEGMENT_H
+-
+-#ifndef __ASSEMBLY__
+-
 -typedef struct {
--	unsigned char seg;
+-	unsigned long seg;
 -} mm_segment_t;
 -
- /* The Sparc processor specific thread struct. */
- /* XXX This should die, everything can go into thread_info now. */
- struct thread_struct {
-diff --git a/arch/sparc/include/asm/switch_to_64.h b/arch/sparc/include/asm/switch_to_64.h
-index b1d4e2e3210f..14f3c49bfdbc 100644
---- a/arch/sparc/include/asm/switch_to_64.h
-+++ b/arch/sparc/include/asm/switch_to_64.h
-@@ -20,10 +20,8 @@ do {						\
- 	 */
- #define switch_to(prev, next, last)					\
- do {	save_and_clear_fpu();						\
--	/* If you are tempted to conditionalize the following */	\
--	/* so that ASI is only written if it changes, think again. */	\
- 	__asm__ __volatile__("wr %%g0, %0, %%asi"			\
--	: : "r" (task_thread_info(next)->current_ds));\
-+	: : "r" (ASI_AIUS));						\
- 	trap_block[current_thread_info()->cpu].thread =			\
- 		task_thread_info(next);					\
- 	__asm__ __volatile__(						\
-diff --git a/arch/sparc/include/asm/thread_info_64.h b/arch/sparc/include/asm/thread_info_64.h
-index 8047a9caab2f..1a44372e2bc0 100644
---- a/arch/sparc/include/asm/thread_info_64.h
-+++ b/arch/sparc/include/asm/thread_info_64.h
-@@ -46,7 +46,7 @@ struct thread_info {
- 	struct pt_regs		*kregs;
- 	int			preempt_count;	/* 0 => preemptable, <0 => BUG */
- 	__u8			new_child;
--	__u8			current_ds;
-+	__u8			__pad;
- 	__u16			cpu;
- 
- 	unsigned long		*utraps;
-@@ -81,7 +81,6 @@ struct thread_info {
- #define TI_KREGS	0x00000028
- #define TI_PRE_COUNT	0x00000030
- #define TI_NEW_CHILD	0x00000034
--#define TI_CURRENT_DS	0x00000035
- #define TI_CPU		0x00000036
- #define TI_UTRAPS	0x00000038
- #define TI_REG_WINDOW	0x00000040
-@@ -116,7 +115,6 @@ struct thread_info {
- #define INIT_THREAD_INFO(tsk)				\
- {							\
- 	.task		=	&tsk,			\
--	.current_ds	=	ASI_P,			\
- 	.preempt_count	=	INIT_PREEMPT_COUNT,	\
- 	.kregs		=	(struct pt_regs *)(init_stack+THREAD_SIZE)-1 \
- }
-diff --git a/arch/sparc/include/asm/uaccess_64.h b/arch/sparc/include/asm/uaccess_64.h
-index 000bac67cf31..617a462d1f56 100644
---- a/arch/sparc/include/asm/uaccess_64.h
-+++ b/arch/sparc/include/asm/uaccess_64.h
-@@ -13,24 +13,6 @@
- 
- #include <asm/processor.h>
- 
+-#define MAKE_MM_SEG(s)	((mm_segment_t) { (s) })
+-
 -/*
-- * Sparc64 is segmented, though more like the M68K than the I386.
-- * We use the secondary ASI to address user memory, which references a
-- * completely different VM map, thus there is zero chance of the user
-- * doing something queer and tricking us into poking kernel memory.
+- * The fs value determines whether argument validity checking should be
+- * performed or not.  If get_fs() == USER_DS, checking is performed, with
+- * get_fs() == KERNEL_DS, checking is bypassed.
 - *
-- * What is left here is basically what is needed for the other parts of
-- * the kernel that expect to be able to manipulate, erum, "segments".
-- * Or perhaps more properly, permissions.
-- *
-- * "For historical reasons, these macros are grossly misnamed." -Linus
+- * For historical reasons, these macros are grossly misnamed.
 - */
+-#define KERNEL_DS	MAKE_MM_SEG(0xFFFFFFFFUL)
+-#ifdef CONFIG_MMU
+-#define USER_DS		MAKE_MM_SEG(PAGE_OFFSET)
+-#else
+-#define USER_DS		KERNEL_DS
+-#endif
 -
--#define KERNEL_DS   ((mm_segment_t) { ASI_P })
--#define USER_DS     ((mm_segment_t) { ASI_AIUS })	/* har har har */
+-#define uaccess_kernel() (get_fs().seg == KERNEL_DS.seg)
 -
--#define get_fs() ((mm_segment_t){(current_thread_info()->current_ds)})
+-#define get_fs()	(current_thread_info()->addr_limit)
+-#define set_fs(x)	(current_thread_info()->addr_limit = (x))
 -
- static inline int __access_ok(const void __user *addr, unsigned long size)
- {
- 	return 1;
-@@ -38,12 +20,6 @@ static inline int __access_ok(const void __user *addr, unsigned long size)
- #define __access_ok __access_ok
+-#endif /* __ASSEMBLY__ */
+-#endif /* __ASM_SH_SEGMENT_H */
+diff --git a/arch/sh/include/asm/thread_info.h b/arch/sh/include/asm/thread_info.h
+index 598d0184ffea..b119b859a0a3 100644
+--- a/arch/sh/include/asm/thread_info.h
++++ b/arch/sh/include/asm/thread_info.h
+@@ -30,7 +30,6 @@ struct thread_info {
+ 	__u32			status;		/* thread synchronous flags */
+ 	__u32			cpu;
+ 	int			preempt_count; /* 0 => preemptable, <0 => BUG */
+-	mm_segment_t		addr_limit;	/* thread address space */
+ 	unsigned long		previous_sp;	/* sp of previous stack in case
+ 						   of nested IRQ stacks */
+ 	__u8			supervisor_stack[0];
+@@ -58,7 +57,6 @@ struct thread_info {
+ 	.status		= 0,			\
+ 	.cpu		= 0,			\
+ 	.preempt_count	= INIT_PREEMPT_COUNT,	\
+-	.addr_limit	= KERNEL_DS,		\
+ }
+ 
+ /* how to get the current stack pointer from C */
+diff --git a/arch/sh/include/asm/uaccess.h b/arch/sh/include/asm/uaccess.h
+index ccd219d74851..a79609eb14be 100644
+--- a/arch/sh/include/asm/uaccess.h
++++ b/arch/sh/include/asm/uaccess.h
+@@ -2,11 +2,7 @@
+ #ifndef __ASM_SH_UACCESS_H
+ #define __ASM_SH_UACCESS_H
+ 
+-#include <asm/segment.h>
+ #include <asm/extable.h>
+-
+-#define user_addr_max()	(current_thread_info()->addr_limit.seg)
+-
  #include <asm-generic/access_ok.h>
  
--#define set_fs(val)								\
--do {										\
--	current_thread_info()->current_ds = (val).seg;				\
--	__asm__ __volatile__ ("wr %%g0, %0, %%asi" : : "r" ((val).seg));	\
--} while(0)
--
  /*
-  * Test whether a block of memory is a valid user space address.
-  * Returns 0 if the range is valid, nonzero otherwise.
-diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_64.c
-index f5b2cac8669f..9a2ceb080ac9 100644
---- a/arch/sparc/kernel/process_64.c
-+++ b/arch/sparc/kernel/process_64.c
-@@ -106,18 +106,13 @@ static void show_regwindow32(struct pt_regs *regs)
+diff --git a/arch/sh/kernel/io_trapped.c b/arch/sh/kernel/io_trapped.c
+index 004ad0130b10..e803b14ef12e 100644
+--- a/arch/sh/kernel/io_trapped.c
++++ b/arch/sh/kernel/io_trapped.c
+@@ -270,7 +270,6 @@ static struct mem_access trapped_io_access = {
+ 
+ int handle_trapped_io(struct pt_regs *regs, unsigned long address)
  {
- 	struct reg_window32 __user *rw;
- 	struct reg_window32 r_w;
--	mm_segment_t old_fs;
- 	
- 	__asm__ __volatile__ ("flushw");
- 	rw = compat_ptr((unsigned int)regs->u_regs[14]);
--	old_fs = get_fs();
--	set_fs (USER_DS);
- 	if (copy_from_user (&r_w, rw, sizeof(r_w))) {
--		set_fs (old_fs);
- 		return;
+-	mm_segment_t oldfs;
+ 	insn_size_t instruction;
+ 	int tmp;
+ 
+@@ -281,16 +280,12 @@ int handle_trapped_io(struct pt_regs *regs, unsigned long address)
+ 
+ 	WARN_ON(user_mode(regs));
+ 
+-	oldfs = get_fs();
+-	set_fs(KERNEL_DS);
+-	if (copy_from_user(&instruction, (void *)(regs->pc),
+-			   sizeof(instruction))) {
+-		set_fs(oldfs);
++	if (copy_from_kernel_nofault(&instruction, (void *)(regs->pc),
++				     sizeof(instruction))) {
+ 		return 0;
  	}
  
--	set_fs (old_fs);			
- 	printk("l0: %08x l1: %08x l2: %08x l3: %08x "
- 	       "l4: %08x l5: %08x l6: %08x l7: %08x\n",
- 	       r_w.locals[0], r_w.locals[1], r_w.locals[2], r_w.locals[3],
-@@ -136,7 +131,6 @@ static void show_regwindow(struct pt_regs *regs)
- 	struct reg_window __user *rw;
- 	struct reg_window *rwk;
- 	struct reg_window r_w;
--	mm_segment_t old_fs;
- 
- 	if ((regs->tstate & TSTATE_PRIV) || !(test_thread_flag(TIF_32BIT))) {
- 		__asm__ __volatile__ ("flushw");
-@@ -145,14 +139,10 @@ static void show_regwindow(struct pt_regs *regs)
- 		rwk = (struct reg_window *)
- 			(regs->u_regs[14] + STACK_BIAS);
- 		if (!(regs->tstate & TSTATE_PRIV)) {
--			old_fs = get_fs();
--			set_fs (USER_DS);
- 			if (copy_from_user (&r_w, rw, sizeof(r_w))) {
--				set_fs (old_fs);
- 				return;
- 			}
- 			rwk = &r_w;
--			set_fs (old_fs);			
- 		}
- 	} else {
- 		show_regwindow32(regs);
-@@ -598,7 +588,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
- 		memset(child_trap_frame, 0, child_stack_sz);
- 		__thread_flag_byte_ptr(t)[TI_FLAG_BYTE_CWP] = 
- 			(current_pt_regs()->tstate + 1) & TSTATE_CWP;
--		t->current_ds = ASI_P;
- 		t->kregs->u_regs[UREG_G1] = sp; /* function */
- 		t->kregs->u_regs[UREG_G2] = arg;
+ 	tmp = handle_unaligned_access(instruction, regs,
+ 				      &trapped_io_access, 1, address);
+-	set_fs(oldfs);
+ 	return tmp == 0;
+ }
+diff --git a/arch/sh/kernel/process_32.c b/arch/sh/kernel/process_32.c
+index 1c28e3cddb60..ca01286a0610 100644
+--- a/arch/sh/kernel/process_32.c
++++ b/arch/sh/kernel/process_32.c
+@@ -123,7 +123,6 @@ int copy_thread(unsigned long clone_flags, unsigned long usp, unsigned long arg,
+ #if defined(CONFIG_SH_FPU)
+ 		childregs->sr |= SR_FD;
+ #endif
+-		ti->addr_limit = KERNEL_DS;
+ 		ti->status &= ~TS_USEDFPU;
+ 		p->thread.fpu_counter = 0;
  		return 0;
-@@ -613,7 +602,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
- 	t->kregs->u_regs[UREG_FP] = sp;
- 	__thread_flag_byte_ptr(t)[TI_FLAG_BYTE_CWP] = 
- 		(regs->tstate + 1) & TSTATE_CWP;
--	t->current_ds = ASI_AIUS;
- 	if (sp != regs->u_regs[UREG_FP]) {
- 		unsigned long csp;
+@@ -132,7 +131,6 @@ int copy_thread(unsigned long clone_flags, unsigned long usp, unsigned long arg,
  
-diff --git a/arch/sparc/kernel/traps_64.c b/arch/sparc/kernel/traps_64.c
-index 21077821f427..5b4de4a89dec 100644
---- a/arch/sparc/kernel/traps_64.c
-+++ b/arch/sparc/kernel/traps_64.c
-@@ -2857,8 +2857,6 @@ void __init trap_init(void)
- 		     TI_PRE_COUNT != offsetof(struct thread_info,
- 					      preempt_count) ||
- 		     TI_NEW_CHILD != offsetof(struct thread_info, new_child) ||
--		     TI_CURRENT_DS != offsetof(struct thread_info,
--						current_ds) ||
- 		     TI_KUNA_REGS != offsetof(struct thread_info,
- 					      kern_una_regs) ||
- 		     TI_KUNA_INSN != offsetof(struct thread_info,
-diff --git a/arch/sparc/lib/NGmemcpy.S b/arch/sparc/lib/NGmemcpy.S
-index 8e4d22a6ba0b..ee51c1230689 100644
---- a/arch/sparc/lib/NGmemcpy.S
-+++ b/arch/sparc/lib/NGmemcpy.S
-@@ -10,8 +10,7 @@
- #include <asm/thread_info.h>
- #define GLOBAL_SPARE	%g7
- #define RESTORE_ASI(TMP)	\
--	ldub	[%g6 + TI_CURRENT_DS], TMP;  \
--	wr	TMP, 0x0, %asi;
-+	wr	%g0, ASI_AIUS, %asi
- #else
- #define GLOBAL_SPARE	%g5
- #define RESTORE_ASI(TMP)	\
-diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
-index 1b23639e2fcd..ee08c279d67c 100644
---- a/arch/sparc/mm/init_64.c
-+++ b/arch/sparc/mm/init_64.c
-@@ -709,9 +709,6 @@ static void __init inherit_prom_mappings(void)
+ 	if (usp)
+ 		childregs->regs[15] = usp;
+-	ti->addr_limit = USER_DS;
  
- void prom_world(int enter)
+ 	if (clone_flags & CLONE_SETTLS)
+ 		childregs->gbr = tls;
+diff --git a/arch/sh/kernel/traps_32.c b/arch/sh/kernel/traps_32.c
+index b3c715bc254b..6cdda3a621a1 100644
+--- a/arch/sh/kernel/traps_32.c
++++ b/arch/sh/kernel/traps_32.c
+@@ -75,6 +75,23 @@ static struct mem_access user_mem_access = {
+ 	copy_to_user,
+ };
+ 
++static unsigned long copy_from_kernel_wrapper(void *dst, const void __user *src,
++					      unsigned long cnt)
++{
++	return copy_from_kernel_nofault(dst, (const void __force *)src, cnt);
++}
++
++static unsigned long copy_to_kernel_wrapper(void __user *dst, const void *src,
++					    unsigned long cnt)
++{
++	return copy_to_kernel_nofault((void __force *)dst, src, cnt);
++}
++
++static struct mem_access kernel_mem_access = {
++	copy_from_kernel_wrapper,
++	copy_to_kernel_wrapper,
++};
++
+ /*
+  * handle an instruction that does an unaligned memory access by emulating the
+  * desired behaviour
+@@ -473,7 +490,6 @@ asmlinkage void do_address_error(struct pt_regs *regs,
+ 				 unsigned long address)
  {
--	if (!enter)
--		set_fs(get_fs());
--
- 	__asm__ __volatile__("flushw");
+ 	unsigned long error_code = 0;
+-	mm_segment_t oldfs;
+ 	insn_size_t instruction;
+ 	int tmp;
+ 
+@@ -489,13 +505,10 @@ asmlinkage void do_address_error(struct pt_regs *regs,
+ 		local_irq_enable();
+ 		inc_unaligned_user_access();
+ 
+-		oldfs = force_uaccess_begin();
+ 		if (copy_from_user(&instruction, (insn_size_t __user *)(regs->pc & ~1),
+ 				   sizeof(instruction))) {
+-			force_uaccess_end(oldfs);
+ 			goto uspace_segv;
+ 		}
+-		force_uaccess_end(oldfs);
+ 
+ 		/* shout about userspace fixups */
+ 		unaligned_fixups_notify(current, instruction, regs);
+@@ -518,11 +531,9 @@ asmlinkage void do_address_error(struct pt_regs *regs,
+ 			goto uspace_segv;
+ 		}
+ 
+-		oldfs = force_uaccess_begin();
+ 		tmp = handle_unaligned_access(instruction, regs,
+ 					      &user_mem_access, 0,
+ 					      address);
+-		force_uaccess_end(oldfs);
+ 
+ 		if (tmp == 0)
+ 			return; /* sorted */
+@@ -538,21 +549,18 @@ asmlinkage void do_address_error(struct pt_regs *regs,
+ 		if (regs->pc & 1)
+ 			die("unaligned program counter", regs, error_code);
+ 
+-		set_fs(KERNEL_DS);
+-		if (copy_from_user(&instruction, (void __user *)(regs->pc),
++		if (copy_from_kernel_nofault(&instruction, (void *)(regs->pc),
+ 				   sizeof(instruction))) {
+ 			/* Argh. Fault on the instruction itself.
+ 			   This should never happen non-SMP
+ 			*/
+-			set_fs(oldfs);
+ 			die("insn faulting in do_address_error", regs, 0);
+ 		}
+ 
+ 		unaligned_fixups_notify(current, instruction, regs);
+ 
+-		handle_unaligned_access(instruction, regs, &user_mem_access,
++		handle_unaligned_access(instruction, regs, &kernel_mem_access,
+ 					0, address);
+-		set_fs(oldfs);
+ 	}
  }
  
 -- 
