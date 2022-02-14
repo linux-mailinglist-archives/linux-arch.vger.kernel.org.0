@@ -2,134 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C1E4B58B5
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 18:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5024B5962
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 19:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357163AbiBNRkx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Feb 2022 12:40:53 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:60770 "EHLO
+        id S1357339AbiBNSKT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Feb 2022 13:10:19 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357158AbiBNRkx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 12:40:53 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128FA65427
-        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 09:40:45 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id bu29so26875981lfb.0
-        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 09:40:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
-        b=B3+89vMVlD+t/jr4Ir3J5heCAGLy+8O/Bfqv5DSjHS7vGRacFAUCCs0TF2tOD5+IOJ
-         DARHbhMwmXg8IKTGNN5wyW1UIWJ3dy3zDkUXnMSy6euD4EH/SAawjrYbWaSs+0JtxWja
-         ZBOb3OkzZ9V/CSYGxjkJVHb89skxzNvZve0yg=
+        with ESMTP id S1349096AbiBNSKS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 13:10:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03B8265171
+        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 10:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1644862209;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CGNOFCt1MU85Ts1xBeqV0FyWp/WQxMTDQKYlq49a4uc=;
+        b=QM6ImguIZ8zc4cCkdJFURHD34Ls3owlDOTdkpmfFPgjf55xKBNBA68rwYbbjrIYv/QDw+v
+        i6wOfxzcl2LAc+dz8o8yepmuHSQ3n0axurH5sFJdnctgJkXXp6Q4I2GmZaOOEUsy68xWzO
+        rnAC4vYaOXo+04ubSRO5X2yxRAoGoY8=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-31-8V1Vu-hIP4-hOjXhDcrizQ-1; Mon, 14 Feb 2022 13:10:07 -0500
+X-MC-Unique: 8V1Vu-hIP4-hOjXhDcrizQ-1
+Received: by mail-qt1-f198.google.com with SMTP id x10-20020ac8700a000000b002c3ef8fc44cso13097296qtm.8
+        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 10:10:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hl2tx2/b0j1as4iPc8br7ak6VbssTN3Lkaa01qKImp4=;
-        b=aHFvG0kdm6Scj6LABC13Ul7DAcOTOK0y7OUAsPnTK1iTdGbwW8h7tiLqO2aOfJLS6m
-         0Ya5faJoWFH1iZPxL6GS+bNPrTORzSxEL2yTxb1+ah4kPBEdlKo6sNmXkyD8tPhuyjT4
-         iL/N5EafQS5/O7FFH9SHlUQ47wGVMYabaOYIDdhPiODjQ5+zkZpX26Kaidyz5vo67Gqx
-         56It06aFaW8Ot2ou5PneU0u7crcvtFL8bHO0BAnfuaGzTxBRfyR7FkyMtY0lf510pmI0
-         Zy5vYzZ2Rmw8troQ/4zGddnNZOS2z8v9uDL5xr+9p3ZWJg5TaJKkN/Ml6krzYoDSYiEK
-         e+1g==
-X-Gm-Message-State: AOAM531hEegB5CFXLXfYpmwuxTXBvU1obP6ua5HzlkEJJhIBJmK/uJSM
-        tCGyAxkFloS9L/EeLgw1iQAF6R0q1UOF+6z+I50=
-X-Google-Smtp-Source: ABdhPJzqXxA6uiXknfomZoN4L+WLKS1XnzKsAmDzUQb+11CAmoZ3CHEIN+ZLm7GeF0r7rFwqombCBw==
-X-Received: by 2002:a05:6512:a85:: with SMTP id m5mr63851lfu.465.1644860443186;
-        Mon, 14 Feb 2022 09:40:43 -0800 (PST)
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
-        by smtp.gmail.com with ESMTPSA id t10sm4185707lfe.215.2022.02.14.09.40.42
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 09:40:42 -0800 (PST)
-Received: by mail-lf1-f50.google.com with SMTP id z19so32029950lfq.13
-        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 09:40:42 -0800 (PST)
-X-Received: by 2002:a19:4302:: with SMTP id q2mr49672lfa.449.1644860131952;
- Mon, 14 Feb 2022 09:35:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org>
-In-Reply-To: <20220214163452.1568807-1-arnd@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Feb 2022 09:35:15 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
-Message-ID: <CAHk-=whXYWoP6of7js=f4zov62on97mNFRSVRWhY75WoGM6CoQ@mail.gmail.com>
-Subject: Re: [PATCH 00/14] clean up asm/uaccess.h, kill set_fs for good
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CGNOFCt1MU85Ts1xBeqV0FyWp/WQxMTDQKYlq49a4uc=;
+        b=sypBNBO5Qr+DuvTreQ0l9giMPbDGQXtDMGG5BtdgHR7zOr85qi1Kcr5G04ZdOxiPhL
+         KmoikX7G+abCa3b5bh27p5O2e6h21KIZvzGHmw/7aO5LCdQXZWq8uaCrkjsvnr4VrzIx
+         s2F7C7RMrGEXGLDwEbRcncOvnvAWT9Xyd1Yyf4KT2vpRAAfE7geVthbLfn8WiXY4+bn0
+         NsZlK2+Glr/bYdD0MW/FWvWXVYigyOpmTfY8tS+6j7gB02vK74jgLwsbCkCi8qnLHPLo
+         FqZ28EFsM3v55jBL9gWeVkbPb1t8Aw7DW1DS0O1P9IaGJORRRYN+QHQ2Q24WfG4qyzL8
+         IA2A==
+X-Gm-Message-State: AOAM5328Z1l3fcLmrx6s8RNs5V2fdV4utVn2mPfF8egHTFp2rLH8/lLR
+        GvHOU5EKl437RIcp6KO0QAGuhGkPGdxF9C65Bvp9hlXhfjyh2pSL+vcXK9Ww9DTltfSvGtrqlMC
+        Yg4ZB1ty2tNxYrj/3uE4kTw==
+X-Received: by 2002:a05:6214:762:: with SMTP id f2mr693723qvz.24.1644862206845;
+        Mon, 14 Feb 2022 10:10:06 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx/vy40rnBwdMoVvt1Kva6lhknBX3yMZ/S5wMQcb4vy84dEW8nb/n8AHTcudHMUidnRHHxsJw==
+X-Received: by 2002:a05:6214:762:: with SMTP id f2mr693693qvz.24.1644862206520;
+        Mon, 14 Feb 2022 10:10:06 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::35])
+        by smtp.gmail.com with ESMTPSA id br30sm16056253qkb.67.2022.02.14.10.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 10:10:05 -0800 (PST)
+Date:   Mon, 14 Feb 2022 10:10:00 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
         Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-hexagon <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        openrisc@lists.librecores.org,
-        linux-parisc <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-sparc <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+Message-ID: <20220214181000.xln2qgyzgswjxwcz@treble>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+ <20220211174130.xxgjoqr2vidotvyw@treble>
+ <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+ <20220211183529.q7qi2qmlyuscxyto@treble>
+ <20220214122433.288910-1-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220214122433.288910-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 8:35 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> I did a patch for microblaze at some point, which turned out to be fairly
-> generic, and now ported it to most other architectures, using new generic
-> implementations of access_ok() and __{get,put}_kernel_nocheck().
+On Mon, Feb 14, 2022 at 01:24:33PM +0100, Alexander Lobakin wrote:
+> > One idea I mentioned before, it may be worth exploring changing the "F"
+> > in FGKASLR to "File" instead of "Function".  In other words, only
+> > shuffle at an object-file granularity.  Then, even with duplicates, the
+> > <file+function> symbol pair doesn't change in the symbol table.  And as
+> > a bonus, it should help FGKASLR i-cache performance, significantly.
+> 
+> Yeah, I keep that in mind. However, this wouldn't solve the
+> duplicate static function names problem, right?
+> Let's say you have a static function f() in file1 and f() in file2,
+> then the layout each boot can be
+> 
+> .text.file1  or  .text.file2
+> f()              f()
+> .text.file2      .text.file1
+> f()              f()
+> 
+> and position-based search won't work anyway, right?
 
-Thanks for doing this.
+Right, so we'd have to abandon position-based search in favor of
+file+func based search.
 
-Apart from the sparc64 issue with completely separate address spaces
-(so access_ok() should always return true like Al pointed out), this
-looks excellent to me.
+It's not perfect because there are still a few file+func duplicates.
+But it might be good enough.  We would presumably just refuse to patch a
+duplicate.  Or we could remove them (and enforce their continued removal
+with tooling-based warnings).
 
-Somebody should check that there aren't other cases like sparc64, but
-let's merge this asap other than that.
+Another variant of this which I described here
 
-              Linus
+  https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
+
+would be to keep it function-granular, but have kallsyms keep track of
+what file each func belongs to.  Then livepatch could still do the
+file+func based search.
+
+-- 
+Josh
+
