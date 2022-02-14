@@ -2,53 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0D54B5BD3
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 22:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A3C4B5C6F
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 22:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiBNVBT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Feb 2022 16:01:19 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36480 "EHLO
+        id S229530AbiBNVQJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Feb 2022 16:16:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiBNVBS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 16:01:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABAA7A9A0;
-        Mon, 14 Feb 2022 13:01:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85B276114B;
-        Mon, 14 Feb 2022 19:46:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7E9C36AE5;
-        Mon, 14 Feb 2022 19:46:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644867970;
-        bh=kZ0Ha+ZttRWbRYErkpKyuJC1dyK+QrO2i6Uu5KgHMvM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Y0tFdEItPyIpX9Q57aljIliTeAqJEjfsGhV5sRnV7cHDKUAHBtZxnjnJQ0aG/E0DY
-         ntmMdawRiR6T8SjqmJRkg+eiX9WIai06zkYCR7faiov+1eO6KA28Xd0WJ3G4HzZ7Ki
-         PswrJdfwevWrM+GcXzzieldjGJJj+F38X56atyYmYHaGjvacQFUxk+Q3y53FA51+T8
-         ZklKna1hQALqex7ucGzH+u+kKR6+AMMF6Gi34rWhxaWoueN0V5gBdQpdknscuvJdj6
-         4dVyfkX9O/n11Gjix37hL+YmaFTxTy2u9mOy0+3ugdzfzd4uf88HSfSBljtkByDhnd
-         ubPSK5lCMcVZQ==
-Received: by mail-wr1-f41.google.com with SMTP id u1so14852926wrg.11;
-        Mon, 14 Feb 2022 11:46:09 -0800 (PST)
-X-Gm-Message-State: AOAM530+hUo7NYph3CoxZKeAS43/bo2W3QPt8WJJKe7U6Fn0KDR5F9k4
-        RArsrLOi1yqH17m35h1qJUJXZtctpKBtOdHzC0c=
-X-Google-Smtp-Source: ABdhPJyfeYwWpAfp1t9O1z8BIiteD6oMiQUhUFLNHvAQyjgPbxD0FyJauHtAzbL5TNr8UyIGWRM1U9VPuoeyXIyyYo0=
-X-Received: by 2002:adf:f6ce:: with SMTP id y14mr445399wrp.219.1644867968239;
- Mon, 14 Feb 2022 11:46:08 -0800 (PST)
+        with ESMTP id S230382AbiBNVQH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 16:16:07 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A1011B32B
+        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 13:15:54 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id o2so33175402lfd.1
+        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 13:15:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
+        b=ZcumWtnhggjMFDUHhywZOsPSWocj5WFiFD4wxX4meGi3Jv+FEek8bAx8wm544tPFuD
+         FZMy/4sQc4BwvneObDdXEv1mNtlI8GPACMt1JW8whp1hkRcRU1/uCicaO7g7UXSaSO+q
+         JQ0jz81cHBjFl3QlKdIkLJ7hR07DlS4kmaNNI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
+        b=4IgwWOlRhH8v/zPfccDwmY7Ygu2R5rZwvstltU+/AmokNlunGLWpY+DQ4RAjj330Y7
+         xzmwktqqhuJ0M7zG+JLbb3qn40Ebe/idJsoRtoQjYnYAPp1qyf9b5Y8u3EA7+e3xVNOu
+         NS1RPF2tJAYccM2K/B5pzSNLdi7216WWZkVrU0DztZKEh3sMTAOCIjDXZKsh0LdEA2je
+         il9uYVpV6zJtnZre93jvqITElvOjRRi49oFJhSVeeU6kY72xpglMp4lNYXQZzF79THZZ
+         on6hH9E3KiY5BzbSbpSSYgnVg+9IhzvTJc/YUkUZzaXDhcHm52KxV92dJVgSRJuvjwc6
+         1olg==
+X-Gm-Message-State: AOAM532HgyADgRpDb2LI9/LNmeH2DF0Ei6Y+BRCw04ZH4H1yED6HTKhi
+        EspnfmCwAuQ+FwU38Rp4NbsNtX3Qqsd1EuQo8h8=
+X-Google-Smtp-Source: ABdhPJykLEs8kiEVl7VjtDyC05wU6netIcqmoAwoYr7XaWUoASuA2WUG1ntMqa4zD00FUng7aoGCDQ==
+X-Received: by 2002:a2e:a58a:: with SMTP id m10mr220795ljp.451.1644869224133;
+        Mon, 14 Feb 2022 12:07:04 -0800 (PST)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id r13sm398148ljn.34.2022.02.14.12.07.03
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Feb 2022 12:07:03 -0800 (PST)
+Received: by mail-lj1-f180.google.com with SMTP id n24so21124499ljj.10
+        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 12:07:03 -0800 (PST)
+X-Received: by 2002:a2e:a231:: with SMTP id i17mr205093ljm.443.1644868881602;
+ Mon, 14 Feb 2022 12:01:21 -0800 (PST)
 MIME-Version: 1.0
 References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-5-arnd@kernel.org>
- <YgqLFYqIqkIsNC92@infradead.org>
-In-Reply-To: <YgqLFYqIqkIsNC92@infradead.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 14 Feb 2022 20:45:52 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-Message-ID: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+ <YgqLFYqIqkIsNC92@infradead.org> <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+In-Reply-To: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 14 Feb 2022 12:01:05 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
+Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
 Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
         Christoph Hellwig <hch@lst.de>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>,
@@ -97,31 +108,36 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         David Miller <davem@davemloft.net>,
         Al Viro <viro@zeniv.linux.org.uk>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 6:02 PM Christoph Hellwig <hch@infradead.org> wrote:
+On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> On Mon, Feb 14, 2022 at 05:34:42PM +0100, Arnd Bergmann wrote:
-> > +#define __range_not_ok(addr, size, limit)    (!__access_ok(addr, size))
-> > +#define __chk_range_not_ok(addr, size, limit)        (!__access_ok((void __user *)addr, size))
->
-> Can we just kill these off insted of letting themm obsfucate the code?
+> As Al pointed out, they turned out to be necessary on sparc64, but the only
+> definitions are on sparc64 and x86, so it's possible that they serve a similar
+> purpose here, in which case changing the limit from TASK_SIZE to
+> TASK_SIZE_MAX is probably wrong as well.
 
-As Al pointed out, they turned out to be necessary on sparc64, but the only
-definitions are on sparc64 and x86, so it's possible that they serve a similar
-purpose here, in which case changing the limit from TASK_SIZE to
-TASK_SIZE_MAX is probably wrong as well.
+x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
+get_user() assembler implementation does the same.
 
-So either I need to revert the original definition as I did on sparc64, or
-they can be removed completely. Hopefully Al or the x86 maintainers
-can clarify.
+I think any __range_not_ok() users that use TASK_SIZE are entirely
+historical, and should be just fixed.
 
-         Arnd
+                 Linus
+
+(*) And by "always" I mean "as far back as I bothered to go". In the
+2.6.12 git import, we had
+
+    #define USER_DS          MAKE_MM_SEG(PAGE_OFFSET)
+
+so the user access limit was actually not really TASK_SIZE_MAX at all,
+but the beginning of the kernel mapping, which on x86-64 is much much
+higher.
