@@ -2,142 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A3C4B5C6F
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 22:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4583B4B5C41
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Feb 2022 22:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiBNVQJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Feb 2022 16:16:09 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57702 "EHLO
+        id S229693AbiBNVHW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Feb 2022 16:07:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiBNVQH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 16:16:07 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A1011B32B
-        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 13:15:54 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id o2so33175402lfd.1
-        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 13:15:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
-        b=ZcumWtnhggjMFDUHhywZOsPSWocj5WFiFD4wxX4meGi3Jv+FEek8bAx8wm544tPFuD
-         FZMy/4sQc4BwvneObDdXEv1mNtlI8GPACMt1JW8whp1hkRcRU1/uCicaO7g7UXSaSO+q
-         JQ0jz81cHBjFl3QlKdIkLJ7hR07DlS4kmaNNI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dgwPr3jWEXZiHeYJRBUfKrH3C5wLRAnP7Z6R5s1EJ5U=;
-        b=4IgwWOlRhH8v/zPfccDwmY7Ygu2R5rZwvstltU+/AmokNlunGLWpY+DQ4RAjj330Y7
-         xzmwktqqhuJ0M7zG+JLbb3qn40Ebe/idJsoRtoQjYnYAPp1qyf9b5Y8u3EA7+e3xVNOu
-         NS1RPF2tJAYccM2K/B5pzSNLdi7216WWZkVrU0DztZKEh3sMTAOCIjDXZKsh0LdEA2je
-         il9uYVpV6zJtnZre93jvqITElvOjRRi49oFJhSVeeU6kY72xpglMp4lNYXQZzF79THZZ
-         on6hH9E3KiY5BzbSbpSSYgnVg+9IhzvTJc/YUkUZzaXDhcHm52KxV92dJVgSRJuvjwc6
-         1olg==
-X-Gm-Message-State: AOAM532HgyADgRpDb2LI9/LNmeH2DF0Ei6Y+BRCw04ZH4H1yED6HTKhi
-        EspnfmCwAuQ+FwU38Rp4NbsNtX3Qqsd1EuQo8h8=
-X-Google-Smtp-Source: ABdhPJykLEs8kiEVl7VjtDyC05wU6netIcqmoAwoYr7XaWUoASuA2WUG1ntMqa4zD00FUng7aoGCDQ==
-X-Received: by 2002:a2e:a58a:: with SMTP id m10mr220795ljp.451.1644869224133;
-        Mon, 14 Feb 2022 12:07:04 -0800 (PST)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id r13sm398148ljn.34.2022.02.14.12.07.03
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Feb 2022 12:07:03 -0800 (PST)
-Received: by mail-lj1-f180.google.com with SMTP id n24so21124499ljj.10
-        for <linux-arch@vger.kernel.org>; Mon, 14 Feb 2022 12:07:03 -0800 (PST)
-X-Received: by 2002:a2e:a231:: with SMTP id i17mr205093ljm.443.1644868881602;
- Mon, 14 Feb 2022 12:01:21 -0800 (PST)
+        with ESMTP id S230207AbiBNVHV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Feb 2022 16:07:21 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 767FD108579;
+        Mon, 14 Feb 2022 13:07:12 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ABB93139F;
+        Mon, 14 Feb 2022 13:07:11 -0800 (PST)
+Received: from [10.57.70.89] (unknown [10.57.70.89])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A689F3F718;
+        Mon, 14 Feb 2022 13:07:04 -0800 (PST)
+Message-ID: <cc6006c6-b073-7cc0-484d-7ddd193a8c2c@arm.com>
+Date:   Mon, 14 Feb 2022 21:06:58 +0000
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-5-arnd@kernel.org>
- <YgqLFYqIqkIsNC92@infradead.org> <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-In-Reply-To: <CAK8P3a1F3JaYaJPy9bSCG1+YV6EN05PE0DbwpD_GT1qRwFSJ-w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 14 Feb 2022 12:01:05 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
-Message-ID: <CAHk-=whq6_Nh3cB3FieP481VcRyCu69X3=wO1yLHGmcZEj69SA@mail.gmail.com>
-Subject: Re: [PATCH 04/14] x86: use more conventional access_ok() definition
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Helge Deller <deller@gmx.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Richard Weinberger <richard@nod.at>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        David Miller <davem@davemloft.net>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 08/14] arm64: simplify access_ok()
+Content-Language: en-GB
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org
+Cc:     linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org
+References: <20220214163452.1568807-1-arnd@kernel.org>
+ <20220214163452.1568807-9-arnd@kernel.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220214163452.1568807-9-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 14, 2022 at 11:46 AM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> As Al pointed out, they turned out to be necessary on sparc64, but the only
-> definitions are on sparc64 and x86, so it's possible that they serve a similar
-> purpose here, in which case changing the limit from TASK_SIZE to
-> TASK_SIZE_MAX is probably wrong as well.
+On 2022-02-14 16:34, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> arm64 has an inline asm implementation of access_ok() that is derived from
+> the 32-bit arm version and optimized for the case that both the limit and
+> the size are variable. With set_fs() gone, the limit is always constant,
+> and the size usually is as well, so just using the default implementation
+> reduces the check into a comparison against a constant that can be
+> scheduled by the compiler.
 
-x86-64 has always(*) used TASK_SIZE_MAX for access_ok(), and the
-get_user() assembler implementation does the same.
+Aww, I still vividly remember the birth of this madness, sat with my 
+phone on a Saturday morning waiting for my bike to be MOT'd, staring at 
+the 7-instruction sequence that Mark and I had come up with and certain 
+that it could be shortened still. Kinda sad to see it go, but at the 
+same time, glad that it can.
 
-I think any __range_not_ok() users that use TASK_SIZE are entirely
-historical, and should be just fixed.
+Acked-by: Robin Murphy <robin.murphy@arm.com>
 
-                 Linus
+> On a defconfig build, this saves over 28KB of .text.
 
-(*) And by "always" I mean "as far back as I bothered to go". In the
-2.6.12 git import, we had
+Not to mention saving those "WTF is going on there... oh yeah, 
+access_ok()" moments when looking through disassembly :)
 
-    #define USER_DS          MAKE_MM_SEG(PAGE_OFFSET)
+Cheers,
+Robin.
 
-so the user access limit was actually not really TASK_SIZE_MAX at all,
-but the beginning of the kernel mapping, which on x86-64 is much much
-higher.
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   arch/arm64/include/asm/uaccess.h | 28 +++++-----------------------
+>   1 file changed, 5 insertions(+), 23 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+> index 357f7bd9c981..e8dce0cc5eaa 100644
+> --- a/arch/arm64/include/asm/uaccess.h
+> +++ b/arch/arm64/include/asm/uaccess.h
+> @@ -26,6 +26,8 @@
+>   #include <asm/memory.h>
+>   #include <asm/extable.h>
+>   
+> +static inline int __access_ok(const void __user *ptr, unsigned long size);
+> +
+>   /*
+>    * Test whether a block of memory is a valid user space address.
+>    * Returns 1 if the range is valid, 0 otherwise.
+> @@ -33,10 +35,8 @@
+>    * This is equivalent to the following test:
+>    * (u65)addr + (u65)size <= (u65)TASK_SIZE_MAX
+>    */
+> -static inline unsigned long __access_ok(const void __user *addr, unsigned long size)
+> +static inline int access_ok(const void __user *addr, unsigned long size)
+>   {
+> -	unsigned long ret, limit = TASK_SIZE_MAX - 1;
+> -
+>   	/*
+>   	 * Asynchronous I/O running in a kernel thread does not have the
+>   	 * TIF_TAGGED_ADDR flag of the process owning the mm, so always untag
+> @@ -46,27 +46,9 @@ static inline unsigned long __access_ok(const void __user *addr, unsigned long s
+>   	    (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
+>   		addr = untagged_addr(addr);
+>   
+> -	__chk_user_ptr(addr);
+> -	asm volatile(
+> -	// A + B <= C + 1 for all A,B,C, in four easy steps:
+> -	// 1: X = A + B; X' = X % 2^64
+> -	"	adds	%0, %3, %2\n"
+> -	// 2: Set C = 0 if X > 2^64, to guarantee X' > C in step 4
+> -	"	csel	%1, xzr, %1, hi\n"
+> -	// 3: Set X' = ~0 if X >= 2^64. For X == 2^64, this decrements X'
+> -	//    to compensate for the carry flag being set in step 4. For
+> -	//    X > 2^64, X' merely has to remain nonzero, which it does.
+> -	"	csinv	%0, %0, xzr, cc\n"
+> -	// 4: For X < 2^64, this gives us X' - C - 1 <= 0, where the -1
+> -	//    comes from the carry in being clear. Otherwise, we are
+> -	//    testing X' - C == 0, subject to the previous adjustments.
+> -	"	sbcs	xzr, %0, %1\n"
+> -	"	cset	%0, ls\n"
+> -	: "=&r" (ret), "+r" (limit) : "Ir" (size), "0" (addr) : "cc");
+> -
+> -	return ret;
+> +	return likely(__access_ok(addr, size));
+>   }
+> -#define __access_ok __access_ok
+> +#define access_ok access_ok
+>   
+>   #include <asm-generic/access_ok.h>
+>   
