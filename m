@@ -2,208 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC734B6AA8
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Feb 2022 12:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9DE4B6C65
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Feb 2022 13:43:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237096AbiBOLYw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Feb 2022 06:24:52 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:43490 "EHLO
+        id S237884AbiBOMnY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Feb 2022 07:43:24 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbiBOLYv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Feb 2022 06:24:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3865B108766;
-        Tue, 15 Feb 2022 03:24:37 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF7F21476;
-        Tue, 15 Feb 2022 03:24:36 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.89.144])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 160403F718;
-        Tue, 15 Feb 2022 03:24:29 -0800 (PST)
-Date:   Tue, 15 Feb 2022 11:24:26 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Ard Biesheuvel' <ardb@kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>, Rich Felker <dalias@libc.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Guo Ren <guoren@kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Will Deacon <will@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Helge Deller <deller@gmx.de>, X86 ML <x86@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        Stafford Horne <shorne@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Richard Weinberger <richard@nod.at>,
+        with ESMTP id S237955AbiBOMnJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Feb 2022 07:43:09 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFDE220DE;
+        Tue, 15 Feb 2022 04:42:18 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Jyggy1NNJz9sSj;
+        Tue, 15 Feb 2022 13:41:34 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id aAFigYi3mPjJ; Tue, 15 Feb 2022 13:41:34 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Jyggn54j6z9sSq;
+        Tue, 15 Feb 2022 13:41:25 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A34A58B778;
+        Tue, 15 Feb 2022 13:41:25 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 8BMkLkapqY1B; Tue, 15 Feb 2022 13:41:25 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.6.174])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 864958B780;
+        Tue, 15 Feb 2022 13:41:24 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21FCfF0a080604
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 15 Feb 2022 13:41:15 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21FCfCsi080602;
+        Tue, 15 Feb 2022 13:41:12 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 08/14] arm64: simplify access_ok()
-Message-ID: <YguNamXeOtGVPyJf@FVFF77S0Q05N>
-References: <20220214163452.1568807-1-arnd@kernel.org>
- <20220214163452.1568807-9-arnd@kernel.org>
- <CAMj1kXHixUFjV=4m3tzfGz7AiRWc-VczymbKuZq7dyZZNuLKxQ@mail.gmail.com>
- <153bb1887f484ed79ce8224845a4b2ea@AcuMS.aculab.com>
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+Date:   Tue, 15 Feb 2022 13:40:55 +0100
+Message-Id: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <153bb1887f484ed79ce8224845a4b2ea@AcuMS.aculab.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1644928860; l=3486; s=20211009; h=from:subject:message-id; bh=m/DTx99DZSafIIAwqkPz//VBU0dyGp+Z1HSmYNYxr4k=; b=cA7HXYxl5bBjs2eDNDE7zc7AazTXQFugH4g9S2nHM9kGtuT4amV6deKgKTSjs1MSmqM/lI026rsd Qqw7wMTrAUUX5rW7aGfQEz1o7/o1rvZAnijGSKkg2maBIdk3DYCk
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:30:41AM +0000, David Laight wrote:
-> From: Ard Biesheuvel
-> > Sent: 15 February 2022 08:18
-> > 
-> > On Mon, 14 Feb 2022 at 17:37, Arnd Bergmann <arnd@kernel.org> wrote:
-> > >
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > arm64 has an inline asm implementation of access_ok() that is derived from
-> > > the 32-bit arm version and optimized for the case that both the limit and
-> > > the size are variable. With set_fs() gone, the limit is always constant,
-> > > and the size usually is as well, so just using the default implementation
-> > > reduces the check into a comparison against a constant that can be
-> > > scheduled by the compiler.
-> > >
-> > > On a defconfig build, this saves over 28KB of .text.
-> > >
-> > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > ---
-> > >  arch/arm64/include/asm/uaccess.h | 28 +++++-----------------------
-> > >  1 file changed, 5 insertions(+), 23 deletions(-)
-> > >
-> > > diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-> > > index 357f7bd9c981..e8dce0cc5eaa 100644
-> > > --- a/arch/arm64/include/asm/uaccess.h
-> > > +++ b/arch/arm64/include/asm/uaccess.h
-> > > @@ -26,6 +26,8 @@
-> > >  #include <asm/memory.h>
-> > >  #include <asm/extable.h>
-> > >
-> > > +static inline int __access_ok(const void __user *ptr, unsigned long size);
-> > > +
-> > >  /*
-> > >   * Test whether a block of memory is a valid user space address.
-> > >   * Returns 1 if the range is valid, 0 otherwise.
-> > > @@ -33,10 +35,8 @@
-> > >   * This is equivalent to the following test:
-> > >   * (u65)addr + (u65)size <= (u65)TASK_SIZE_MAX
-> > >   */
-> > > -static inline unsigned long __access_ok(const void __user *addr, unsigned long size)
-> > > +static inline int access_ok(const void __user *addr, unsigned long size)
-> > >  {
-> > > -       unsigned long ret, limit = TASK_SIZE_MAX - 1;
-> > > -
-> > >         /*
-> > >          * Asynchronous I/O running in a kernel thread does not have the
-> > >          * TIF_TAGGED_ADDR flag of the process owning the mm, so always untag
-> > > @@ -46,27 +46,9 @@ static inline unsigned long __access_ok(const void __user *addr, unsigned long s
-> > >             (current->flags & PF_KTHREAD || test_thread_flag(TIF_TAGGED_ADDR)))
-> > >                 addr = untagged_addr(addr);
-> > >
-> > > -       __chk_user_ptr(addr);
-> > > -       asm volatile(
-> > > -       // A + B <= C + 1 for all A,B,C, in four easy steps:
-> > > -       // 1: X = A + B; X' = X % 2^64
-> > > -       "       adds    %0, %3, %2\n"
-> > > -       // 2: Set C = 0 if X > 2^64, to guarantee X' > C in step 4
-> > > -       "       csel    %1, xzr, %1, hi\n"
-> > > -       // 3: Set X' = ~0 if X >= 2^64. For X == 2^64, this decrements X'
-> > > -       //    to compensate for the carry flag being set in step 4. For
-> > > -       //    X > 2^64, X' merely has to remain nonzero, which it does.
-> > > -       "       csinv   %0, %0, xzr, cc\n"
-> > > -       // 4: For X < 2^64, this gives us X' - C - 1 <= 0, where the -1
-> > > -       //    comes from the carry in being clear. Otherwise, we are
-> > > -       //    testing X' - C == 0, subject to the previous adjustments.
-> > > -       "       sbcs    xzr, %0, %1\n"
-> > > -       "       cset    %0, ls\n"
-> > > -       : "=&r" (ret), "+r" (limit) : "Ir" (size), "0" (addr) : "cc");
-> > > -
-> > > -       return ret;
-> > > +       return likely(__access_ok(addr, size));
-> > >  }
-> > > -#define __access_ok __access_ok
-> > > +#define access_ok access_ok
-> > >
-> > >  #include <asm-generic/access_ok.h>
-> > >
-> > > --
-> > > 2.29.2
-> > >
-> > 
-> > With set_fs() out of the picture, wouldn't it be sufficient to check
-> > that bit #55 is clear? (the bit that selects between TTBR0 and TTBR1)
-> > That would also remove the need to strip the tag from the address.
-> > 
-> > Something like
-> > 
-> >     asm goto("tbnz  %0, #55, %2     \n"
-> >              "tbnz  %1, #55, %2     \n"
-> >              :: "r"(addr), "r"(addr + size - 1) :: notok);
-> >     return 1;
-> > notok:
-> >     return 0;
-> > 
-> > with an additional sanity check on the size which the compiler could
-> > eliminate for compile-time constant values.
-> 
-> Is there are reason not to just use:
-> 	size < 1u << 48 && !((addr | (addr + size - 1)) & 1u << 55)
+PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+on those three architectures because LKDTM messes up function
+descriptors with functions.
 
-That has a few problems, including being an ABI change for tasks not using the
-relaxed tag ABI and not working for 52-bit VAs.
+This series does some cleanup in the three architectures and
+refactors function descriptors so that it can then easily use it
+in a generic way in LKDTM.
 
-If we really want to relax the tag checking aspect, there are simpler options,
-including variations on Ard's approach above.
+Changes in v4:
+- Added patch 1 which Fixes 'sparse' for powerpc64le after wrong report on previous series, refer https://github.com/ruscur/linux-ci/actions/runs/1351427671
+- Exported dereference_function_descriptor() to modules
+- Addressed other received comments
+- Rebased on latest powerpc/next (5a72345e6a78120368fcc841b570331b6c5a50da)
 
-> Ugg, is arm64 addressing as horrid as it looks - with the 'kernel'
-> bit in the middle of the virtual address space?
+Changes in v3:
+- Addressed received comments
+- Swapped some of the powerpc patches to keep func_descr_t renamed as struct func_desc and remove 'struct ppc64_opd_entry'
+- Changed HAVE_FUNCTION_DESCRIPTORS macro to a config item CONFIG_HAVE_FUNCTION_DESCRIPTORS
+- Dropped patch 11 ("Fix lkdtm_EXEC_RODATA()")
 
-It's just sign-extension/canonical addressing, except bits [63:56] are
-configurable between a few uses, so the achitecture says bit 55 is the one to
-look at in all configurations to figure out if an address is high/low (in
-addition to checking the remaining bits are canonical).
+Changes in v2:
+- Addressed received comments
+- Moved dereference_[kernel]_function_descriptor() out of line
+- Added patches to remove func_descr_t and func_desc_t in powerpc
+- Using func_desc_t instead of funct_descr_t
+- Renamed HAVE_DEREFERENCE_FUNCTION_DESCRIPTOR to HAVE_FUNCTION_DESCRIPTORS
+- Added a new lkdtm test to check protection of function descriptors
 
-Thanks,
-Mark.
+Christophe Leroy (13):
+  powerpc: Fix 'sparse' checking on PPC64le
+  powerpc: Move and rename func_descr_t
+  powerpc: Use 'struct func_desc' instead of 'struct ppc64_opd_entry'
+  powerpc: Remove 'struct ppc64_opd_entry'
+  powerpc: Prepare func_desc_t for refactorisation
+  ia64: Rename 'ip' to 'addr' in 'struct fdesc'
+  asm-generic: Define CONFIG_HAVE_FUNCTION_DESCRIPTORS
+  asm-generic: Define 'func_desc_t' to commonly describe function
+    descriptors
+  asm-generic: Refactor dereference_[kernel]_function_descriptor()
+  lkdtm: Force do_nothing() out of line
+  lkdtm: Really write into kernel text in WRITE_KERN
+  lkdtm: Fix execute_[user]_location()
+  lkdtm: Add a test for function descriptors protection
+
+ arch/Kconfig                             |  3 +
+ arch/ia64/Kconfig                        |  1 +
+ arch/ia64/include/asm/elf.h              |  2 +-
+ arch/ia64/include/asm/sections.h         | 24 +-------
+ arch/ia64/kernel/module.c                |  6 +-
+ arch/parisc/Kconfig                      |  1 +
+ arch/parisc/include/asm/sections.h       | 16 ++----
+ arch/parisc/kernel/process.c             | 21 -------
+ arch/powerpc/Kconfig                     |  1 +
+ arch/powerpc/Makefile                    |  2 +-
+ arch/powerpc/include/asm/code-patching.h |  2 +-
+ arch/powerpc/include/asm/elf.h           |  6 ++
+ arch/powerpc/include/asm/sections.h      | 29 ++--------
+ arch/powerpc/include/asm/types.h         |  6 --
+ arch/powerpc/include/uapi/asm/elf.h      |  8 ---
+ arch/powerpc/kernel/module_64.c          | 42 ++++++--------
+ arch/powerpc/kernel/ptrace/ptrace.c      |  6 ++
+ arch/powerpc/kernel/signal_64.c          |  8 +--
+ drivers/misc/lkdtm/core.c                |  1 +
+ drivers/misc/lkdtm/lkdtm.h               |  1 +
+ drivers/misc/lkdtm/perms.c               | 71 +++++++++++++++++++-----
+ include/asm-generic/sections.h           | 15 ++++-
+ include/linux/kallsyms.h                 |  2 +-
+ kernel/extable.c                         | 24 +++++++-
+ tools/testing/selftests/lkdtm/tests.txt  |  1 +
+ 25 files changed, 155 insertions(+), 144 deletions(-)
+
+-- 
+2.34.1
+
