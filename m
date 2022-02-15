@@ -2,103 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666F14B672A
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Feb 2022 10:13:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8E84B674E
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Feb 2022 10:18:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbiBOJNK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Feb 2022 04:13:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33540 "EHLO
+        id S234547AbiBOJSn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Feb 2022 04:18:43 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233369AbiBOJNJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Feb 2022 04:13:09 -0500
+        with ESMTP id S233971AbiBOJSn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Feb 2022 04:18:43 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E751224BC1;
-        Tue, 15 Feb 2022 01:12:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F42122BB38;
+        Tue, 15 Feb 2022 01:18:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 637BE616C6;
-        Tue, 15 Feb 2022 09:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5E00C34101;
-        Tue, 15 Feb 2022 09:12:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92A0F60A6B;
+        Tue, 15 Feb 2022 09:18:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04120C340F8;
+        Tue, 15 Feb 2022 09:18:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644916378;
-        bh=nPLs5v71E/xzzKRq/jdD2UxtX1DBSgxHKB2i8EHy1KY=;
+        s=k20201202; t=1644916713;
+        bh=auvbexz8OfCE17jezkrwExlxQUSMdLXG0OAD2bmLs8A=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=j3kUIfoQTYxq0nCVjg3xJUAdSTCwwH8temh7NFjmZfpkIjAXQ/i5eqNNYmAAO/ny1
-         Uhrqg321bjTbiL2bLfcsiw3L/YssCCJFSkB1FTV4deiCrv9oCd+WLuGBXT1JJy17rS
-         k8cMdKEehveud6wTzU+zMEsNNO9j8HHxKx2E1NBNFWFufNsE2sT4ymojJeWA5L/d5h
-         cw/DGlUHQEdW9cC4Q+y80YkhF8+ZZBz928QLF/gO6sphG+kkzt0wgVNEOYTAhGmy7s
-         fFzb6USqyb2JRrGEB+Xy9zVF9/7CIibD5o8jjgMioj1JxGYIThdIqK2msRJNx3V5hb
-         RhnYTF7LWjKEQ==
-Received: by mail-wr1-f53.google.com with SMTP id s10so17397971wrb.1;
-        Tue, 15 Feb 2022 01:12:58 -0800 (PST)
-X-Gm-Message-State: AOAM5326jOU9poDd7nicGzGVYqcKXu6zBv1rw1GVFd7ne8SXkSFiRPjk
-        0nhHrMbsfN7Si6N9gM2CoMfhsBGks4+0R8nwRUE=
-X-Google-Smtp-Source: ABdhPJwP302M1cXBE3IXsZS/v83gWi9XJR2q13sQJhY9b6tnSpJCd4099durtVh9QEm0yhQ4WeUq4MKNAAS9P/JPfzc=
-X-Received: by 2002:adf:f6ce:: with SMTP id y14mr2380558wrp.219.1644916376776;
- Tue, 15 Feb 2022 01:12:56 -0800 (PST)
+        b=R1Pf445AMn7iEf0TcHJGtZqUinPVYRIlRYIhUK+pqFhNMydlmGdLOnDcwqdoOpcxv
+         rM+QtlC5MX40dddlY60U1EemOtvK01KeP4rBm30AWnHXp/wG3B2AqNZ0rlunLaOMbW
+         tr7Vs0w/mpIoN0XApZa80K1xHxowMUZXp7dP4/BbBM9W+v5sudL1uLbQT49sSxdXFp
+         TQxXAYDRaUN8F2rMT1u+N/nJuunLdz+VObtLisWpW965HLfjJNrl621lEvA4NBgly+
+         FEKN2xUIJ9o0fBCy3UJA1PmxKT+NsxLFmCAClaf0u/3M6fW1/dPCwNdFwRQIJqLuEw
+         iPMY1EoXY49Bg==
+Received: by mail-wr1-f46.google.com with SMTP id s10so17421685wrb.1;
+        Tue, 15 Feb 2022 01:18:32 -0800 (PST)
+X-Gm-Message-State: AOAM533GmPZgCwmwAponTxUPmfUNvcd9k2G4x9rqSFqZv81DGsq2BSDd
+        EvJ7IlR2rzNgXgHbmDTYe2rPYNGK+wNOWr6l66A=
+X-Google-Smtp-Source: ABdhPJytLoTfipZUwnG73E442/QjIxHnERGjQ2aeR9o7LjnpbatwjsLI+Mk7641j6VpHXtVWtwvDTIufUdUsOw5At+o=
+X-Received: by 2002:a5d:5446:: with SMTP id w6mr2390801wrv.12.1644916711299;
+ Tue, 15 Feb 2022 01:18:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-9-arnd@kernel.org>
- <CAMj1kXHixUFjV=4m3tzfGz7AiRWc-VczymbKuZq7dyZZNuLKxQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXHixUFjV=4m3tzfGz7AiRWc-VczymbKuZq7dyZZNuLKxQ@mail.gmail.com>
+References: <20220214163452.1568807-1-arnd@kernel.org> <20220214163452.1568807-4-arnd@kernel.org>
+ <YgqK1ihlJvRFHJ9h@infradead.org>
+In-Reply-To: <YgqK1ihlJvRFHJ9h@infradead.org>
 From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Tue, 15 Feb 2022 10:12:40 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2VfvDkueaJNTA9SiB+PFsi_Q17AX+aL46ueooW2ahmQw@mail.gmail.com>
-Message-ID: <CAK8P3a2VfvDkueaJNTA9SiB+PFsi_Q17AX+aL46ueooW2ahmQw@mail.gmail.com>
-Subject: Re: [PATCH 08/14] arm64: simplify access_ok()
-To:     Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 15 Feb 2022 10:18:15 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1XkWNQcFEhJQ0+qWzih1YRQDS_N8xiosN7FHn3yoTJpQ@mail.gmail.com>
+Message-ID: <CAK8P3a1XkWNQcFEhJQ0+qWzih1YRQDS_N8xiosN7FHn3yoTJpQ@mail.gmail.com>
+Subject: Re: [PATCH 03/14] nds32: fix access_ok() checks in get/put_user
+To:     Christoph Hellwig <hch@infradead.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-MM <linux-mm@kvack.org>,
         Linux API <linux-api@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
         Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>, X86 ML <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
+        Rich Felker <dalias@libc.org>, linux-ia64@vger.kernel.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>, Guo Ren <guoren@kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Brian Cain <bcain@codeaurora.org>,
+        Helge Deller <deller@gmx.de>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        linux-csky@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         "open list:SYNOPSYS ARC ARCHITECTURE" 
         <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:S390" <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
         "open list:TENSILICA XTENSA PORT (xtensa)" 
         <linux-xtensa@linux-xtensa.org>,
-        Robin Murphy <robin.murphy@arm.com>
+        Heiko Carstens <hca@linux.ibm.com>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Openrisc <openrisc@lists.librecores.org>,
+        Greentime Hu <green.hu@gmail.com>,
+        Stafford Horne <shorne@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        David Miller <davem@davemloft.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -110,35 +107,30 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 9:17 AM Ard Biesheuvel <ardb@kernel.org> wrote:
-> On Mon, 14 Feb 2022 at 17:37, Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, Feb 14, 2022 at 6:01 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Mon, Feb 14, 2022 at 05:34:41PM +0100, Arnd Bergmann wrote:
 > > From: Arnd Bergmann <arnd@arndb.de>
 > >
+> > The get_user()/put_user() functions are meant to check for
+> > access_ok(), while the __get_user()/__put_user() functions
+> > don't.
+> >
+> > This broke in 4.19 for nds32, when it gained an extraneous
+> > check in __get_user(), but lost the check it needs in
+> > __put_user().
 >
-> With set_fs() out of the picture, wouldn't it be sufficient to check
-> that bit #55 is clear? (the bit that selects between TTBR0 and TTBR1)
-> That would also remove the need to strip the tag from the address.
->
-> Something like
->
->     asm goto("tbnz  %0, #55, %2     \n"
->              "tbnz  %1, #55, %2     \n"
->              :: "r"(addr), "r"(addr + size - 1) :: notok);
->     return 1;
-> notok:
->     return 0;
->
-> with an additional sanity check on the size which the compiler could
-> eliminate for compile-time constant values.
+> Can we follow the lead of MIPS (which this was originally copied
+> from I think) and kill the pointless __get/put_user_check wrapper
+> that just obsfucate the code?
 
-That should work, but I don't see it as a clear enough advantage to
-have a custom implementation. For the constant-size case, it probably
-isn't better than a compiler-scheduled comparison against a
-constant limit, but it does hurt maintainability when the next person
-wants to change the behavior of access_ok() globally.
+I had another look, but I think that would be a bigger change than
+I want to have in a fix for stable backports, as nds32 also uses
+the _check versions in __{get,put}_user_error.
 
-If we want to get into micro-optimizing uaccess, I think a better target
-would be a CONFIG_CC_HAS_ASM_GOTO_OUTPUT version
-of __get_user()/__put_user as we have on x86 and powerpc.
+If we instead clean it up in a separate patch, it should be done for
+all eight architectures that do the same thing, but at that point,
+the time seems better spent at coming up with a new set of
+calling conventions that work with asm-goto.
 
          Arnd
