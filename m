@@ -2,29 +2,29 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D6D4B907D
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 19:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D44F4B908D
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 19:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237735AbiBPSla (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Feb 2022 13:41:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51648 "EHLO
+        id S237750AbiBPSof (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Feb 2022 13:44:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237740AbiBPSl3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 13:41:29 -0500
-Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014282AF902
-        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 10:41:15 -0800 (PST)
+        with ESMTP id S234744AbiBPSoe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 13:44:34 -0500
+Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF031222DDC
+        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 10:44:19 -0800 (PST)
 Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx2.smtp.larsendata.com (Halon) with ESMTPS
-        id 0f791715-8f58-11ec-b2df-0050568cd888;
-        Wed, 16 Feb 2022 18:41:32 +0000 (UTC)
+        by mx1.smtp.larsendata.com (Halon) with ESMTPS
+        id 7cf017e4-8f58-11ec-baa1-0050568c148b;
+        Wed, 16 Feb 2022 18:44:35 +0000 (UTC)
 Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id B2BEB194B1C;
-        Wed, 16 Feb 2022 19:41:12 +0100 (CET)
-Date:   Wed, 16 Feb 2022 19:41:09 +0100
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 3B79C194B3E;
+        Wed, 16 Feb 2022 19:44:17 +0100 (CET)
+Date:   Wed, 16 Feb 2022 19:44:13 +0100
 X-Report-Abuse-To: abuse@mxhotel.dk
 From:   Sam Ravnborg <sam@ravnborg.org>
 To:     Arnd Bergmann <arnd@kernel.org>
@@ -49,17 +49,16 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v2 15/18] sparc64: remove CONFIG_SET_FS support
-Message-ID: <Yg1FRZcrhlh5C//V@ravnborg.org>
+Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
+Message-ID: <Yg1F/VT4vRX4aHEt@ravnborg.org>
 References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-16-arnd@kernel.org>
- <Yg1D08+olCSGmnYU@ravnborg.org>
+ <20220216131332.1489939-19-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yg1D08+olCSGmnYU@ravnborg.org>
+In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,37 +68,102 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi Arnd,
 
-On Wed, Feb 16, 2022 at 07:34:59PM +0100, Sam Ravnborg wrote:
-> Hi Arnd.
-> 
-> On Wed, Feb 16, 2022 at 02:13:29PM +0100, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > sparc64 uses address space identifiers to differentiate between kernel
-> > and user space, using ASI_P for kernel threads but ASI_AIUS for normal
-> > user space, with the option of changing between them.
-> > 
-> > As nothing really changes the ASI any more, just hardcode ASI_AIUS
-> > everywhere. Kernel threads are not allowed to access __user pointers
-> > anyway.
-> > 
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  arch/sparc/include/asm/processor_64.h   |  4 ----
-> >  arch/sparc/include/asm/switch_to_64.h   |  4 +---
-> >  arch/sparc/include/asm/thread_info_64.h |  4 +---
-> >  arch/sparc/include/asm/uaccess_64.h     | 20 +-------------------
-> >  arch/sparc/kernel/process_64.c          | 12 ------------
-> >  arch/sparc/kernel/traps_64.c            |  2 --
-> >  arch/sparc/lib/NGmemcpy.S               |  3 +--
-> >  arch/sparc/mm/init_64.c                 |  7 ++++---
-> >  8 files changed, 8 insertions(+), 48 deletions(-)
-> 
-> I think you somehow missed the Kconfig change, and also the related
-> sparc32 change which continue to have set_fs() after this patch.
-I now notice the sparc32 bits are in the last patch.
-To avoid breaking bisect-ability on sparc64 I think you need to merge
-the sparc32 changes with this patch, unless the sparc64 changes can
-coexist with CONFIG_SET_FS continue to be set.
+Fix spelling in $subject...
 
-	Sam
+sparc/Kconfig b/arch/sparc/Kconfig
+> index 9f6f9bce5292..9276f321b3e3 100644
+> --- a/arch/sparc/Kconfig
+> +++ b/arch/sparc/Kconfig
+> @@ -46,7 +46,6 @@ config SPARC
+>  	select LOCKDEP_SMALL if LOCKDEP
+>  	select NEED_DMA_MAP_STATE
+>  	select NEED_SG_DMA_LENGTH
+> -	select SET_FS
+>  	select TRACE_IRQFLAGS_SUPPORT
+>  
+>  config SPARC32
+> @@ -101,6 +100,7 @@ config SPARC64
+>  	select HAVE_SETUP_PER_CPU_AREA
+>  	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+>  	select NEED_PER_CPU_PAGE_FIRST_CHUNK
+> +	select SET_FS
+This looks wrong - looks like some merge went wrong here.
+
+>  
+>  config ARCH_PROC_KCORE_TEXT
+>  	def_bool y
+> diff --git a/arch/sparc/include/asm/processor_32.h b/arch/sparc/include/asm/processor_32.h
+> index 647bf0ac7beb..b26c35336b51 100644
+> --- a/arch/sparc/include/asm/processor_32.h
+> +++ b/arch/sparc/include/asm/processor_32.h
+> @@ -32,10 +32,6 @@ struct fpq {
+>  };
+>  #endif
+>  
+> -typedef struct {
+> -	int seg;
+> -} mm_segment_t;
+> -
+>  /* The Sparc processor specific thread struct. */
+>  struct thread_struct {
+>  	struct pt_regs *kregs;
+> @@ -50,11 +46,9 @@ struct thread_struct {
+>  	unsigned long   fsr;
+>  	unsigned long   fpqdepth;
+>  	struct fpq	fpqueue[16];
+> -	mm_segment_t current_ds;
+>  };
+>  
+>  #define INIT_THREAD  { \
+> -	.current_ds = KERNEL_DS, \
+>  	.kregs = (struct pt_regs *)(init_stack+THREAD_SIZE)-1 \
+>  }
+>  
+> diff --git a/arch/sparc/include/asm/uaccess_32.h b/arch/sparc/include/asm/uaccess_32.h
+> index 367747116260..9fd6c53644b6 100644
+> --- a/arch/sparc/include/asm/uaccess_32.h
+> +++ b/arch/sparc/include/asm/uaccess_32.h
+> @@ -12,19 +12,6 @@
+>  #include <linux/string.h>
+>  
+>  #include <asm/processor.h>
+> -
+> -/* Sparc is not segmented, however we need to be able to fool access_ok()
+> - * when doing system calls from kernel mode legitimately.
+> - *
+> - * "For historical reasons, these macros are grossly misnamed." -Linus
+> - */
+> -
+> -#define KERNEL_DS   ((mm_segment_t) { 0 })
+> -#define USER_DS     ((mm_segment_t) { -1 })
+> -
+> -#define get_fs()	(current->thread.current_ds)
+> -#define set_fs(val)	((current->thread.current_ds) = (val))
+> -
+>  #include <asm-generic/access_ok.h>
+>  
+>  /* Uh, these should become the main single-value transfer routines..
+> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_32.c
+> index 2dc0bf9fe62e..88c0c14aaff0 100644
+> --- a/arch/sparc/kernel/process_32.c
+> +++ b/arch/sparc/kernel/process_32.c
+> @@ -300,7 +300,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+>  		extern int nwindows;
+>  		unsigned long psr;
+>  		memset(new_stack, 0, STACKFRAME_SZ + TRACEREG_SZ);
+> -		p->thread.current_ds = KERNEL_DS;
+>  		ti->kpc = (((unsigned long) ret_from_kernel_thread) - 0x8);
+>  		childregs->u_regs[UREG_G1] = sp; /* function */
+>  		childregs->u_regs[UREG_G2] = arg;
+> @@ -311,7 +310,6 @@ int copy_thread(unsigned long clone_flags, unsigned long sp, unsigned long arg,
+>  	}
+>  	memcpy(new_stack, (char *)regs - STACKFRAME_SZ, STACKFRAME_SZ + TRACEREG_SZ);
+>  	childregs->u_regs[UREG_FP] = sp;
+> -	p->thread.current_ds = USER_DS;
+>  	ti->kpc = (((unsigned long) ret_from_fork) - 0x8);
+>  	ti->kpsr = current->thread.fork_kpsr | PSR_PIL;
+>  	ti->kwim = current->thread.fork_kwim;
+
+Other than the above the sparc32 changes looks fine, and with the Kconf
+stuff fixed:
+Acked-by: Sam Ravnborg <sam@ravnborg.org> # for sparc32 changes
