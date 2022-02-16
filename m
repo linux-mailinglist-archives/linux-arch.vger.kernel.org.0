@@ -2,106 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDCB4B937D
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 23:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4284B93A9
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 23:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbiBPWDU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Feb 2022 17:03:20 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34314 "EHLO
+        id S236776AbiBPWNs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Feb 2022 17:13:48 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiBPWDS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 17:03:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9B7136869;
-        Wed, 16 Feb 2022 14:03:05 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2896DB81EE6;
-        Wed, 16 Feb 2022 22:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4A0CC340E8;
-        Wed, 16 Feb 2022 22:03:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645048982;
-        bh=ay/5589FenTcDxawo4c9r5D5w/FgYtE3zMvoHKiKBw4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mp2N4j25K83NMCfLyY4s4Fvr/02r2is80WsbciAWUvDE4/m4hXq9EgLORcancLhbT
-         umY9FHnexAjN//UsA7q/C9fckLYXF0oQ8KHvfjTR59rKGClK+gPz3WGNFPqYUuSPAl
-         tKqmRElhXMvcu84IyYLNk1Jx9OrqFY1VeIjfZrMgYnNZnH7Q43IubRg0WPfzhGBBBX
-         /OdSxH8IZ7Kz0nHhQxDWelZPRHLPHQFw8aTJU8Fd/gQNcc2Tz29BgNtd0/VTT0Eadn
-         af5BPEGJl881/LlmZF1PoTMkEDGEvxPy+W0AvrAYWFrqce134uQiJLaLzOGaZJOGGy
-         d7XYuXjZgGD6w==
-Received: by mail-wr1-f47.google.com with SMTP id o24so5675140wro.3;
-        Wed, 16 Feb 2022 14:03:02 -0800 (PST)
-X-Gm-Message-State: AOAM531iRFG/S6RMolu6glgbZgQ34WWjreN+sPxTsBsT3SlMlPs/xg8W
-        0B2qsbUQ0jDCWxZfe2Kq4IwiFj1ajZ1vsFML+mY=
-X-Google-Smtp-Source: ABdhPJyk0zQXj5EZ1uP9z1YUTizioO4kJ6rvneTTyuZji8J8rGr64s8uMSDVOcQeT3f3UOdAxVtCGFpnKRwe/RHh9ys=
-X-Received: by 2002:adf:cf0c:0:b0:1e6:22fe:4580 with SMTP id
- o12-20020adfcf0c000000b001e622fe4580mr53483wrj.12.1645048981311; Wed, 16 Feb
- 2022 14:03:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-19-arnd@kernel.org>
- <Yg1F/VT4vRX4aHEt@ravnborg.org>
-In-Reply-To: <Yg1F/VT4vRX4aHEt@ravnborg.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 16 Feb 2022 23:02:45 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2gx2w=RDECNbrO4Zu3ZUTfz2UrLbNSz+ieCgMEFiK3TA@mail.gmail.com>
-Message-ID: <CAK8P3a2gx2w=RDECNbrO4Zu3ZUTfz2UrLbNSz+ieCgMEFiK3TA@mail.gmail.com>
-Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Brian Cain <bcain@codeaurora.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        with ESMTP id S236665AbiBPWNr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 17:13:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E6D42AED8A
+        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 14:13:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1645049612;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
+        b=gt5ZzQS+E8Z3cPcIVhuK8DF2rNR9fyTOuDz3K96kuuPwEroSyKNmOLex9kHvGVOJo5oiyF
+        +ywTazmMs0hwVa1svmxjp7UxiSqntfingy5+UVIe0/B8uuqkOj5LQJJvjZ5xBvHe9tIyai
+        0cH+sGqwyxebOoafOky5qYzJRNFEeos=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-595-2PPIn4y3Pf6hqre74FUoRQ-1; Wed, 16 Feb 2022 17:13:31 -0500
+X-MC-Unique: 2PPIn4y3Pf6hqre74FUoRQ-1
+Received: by mail-qk1-f200.google.com with SMTP id u9-20020ae9c009000000b0049ae89c924aso2445421qkk.9
+        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 14:13:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GInsY8EWMmzWnfSQud73Z6xT/DOtOKlNQiWr2Elb/hk=;
+        b=ay3sjYwrEmexuSfbpfqkE/eqi2Z4FrGei4C8DEpj2UID6MNFArEpLtQG6sOjReY4vf
+         KZapMLqgVtQocs3GQ8s7b8TNhQNtYmk4c9RQ/HcVsrmCQx/iWPuf1XSgMhnve9gNjDUK
+         KxWHbQZNwOGIEyKslwZAQ0WNrmMi2SWNn0Ne/v2rntOGiyo9oE6ap4K4iHYIzAoWtdIG
+         /iEmoOzv942iZ+KRAk+xof3XQiM9MEqY8KDpufVZ6t6LpbbXFLuldDQ0C6gEYNm8E8kC
+         Ptb1/dg7rNAmn8dsmJ8TRy4pQPL6Slk0roaT3uYHBs7bclaOKXGvRXROL3LrfWHwlH3H
+         CA0Q==
+X-Gm-Message-State: AOAM53144NB5WZWQiPlcKQo9RcM82WWQpSj/CSizIC2U/Ln8Z7Svg1am
+        N9J06J6jQ8+lSrfbiCPhpj+cPrJMGYMi95aDSPaFbJVe/qfOlaNUJpzkXHh3KzbZsgFTF1oi3jw
+        +iCnseeNHbGSd6CToku8tSA==
+X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2498054qkl.227.1645049610697;
+        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJylNMRi17SxjrpZK57rI6C9v3gwc8m6LOiygd1+pTiydJMqSsqj+XSkhj9zykPsZ8CKxgwdIw==
+X-Received: by 2002:a37:bcd:0:b0:508:19df:59ac with SMTP id 196-20020a370bcd000000b0050819df59acmr2497996qkl.227.1645049610346;
+        Wed, 16 Feb 2022 14:13:30 -0800 (PST)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id m22sm19966780qkn.35.2022.02.16.14.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 14:13:29 -0800 (PST)
+Date:   Wed, 16 Feb 2022 14:13:24 -0800
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
+        linux-hardening@vger.kernel.org, x86@kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
         Ard Biesheuvel <ardb@kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>, linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
+ unique-symbol` is available
+Message-ID: <20220216221324.4b4avd5l3qdmqfcv@treble>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
+ <20220209185752.1226407-3-alexandr.lobakin@intel.com>
+ <20220211174130.xxgjoqr2vidotvyw@treble>
+ <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+ <20220211183529.q7qi2qmlyuscxyto@treble>
+ <20220214122433.288910-1-alexandr.lobakin@intel.com>
+ <20220214181000.xln2qgyzgswjxwcz@treble>
+ <Yg1fab6h1rTjVbYO@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yg1fab6h1rTjVbYO@redhat.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,40 +118,63 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 7:44 PM Sam Ravnborg <sam@ravnborg.org> wrote:
->
-> Hi Arnd,
->
-> Fix spelling in $subject...
+On Wed, Feb 16, 2022 at 03:32:41PM -0500, Joe Lawrence wrote:
+> > Right, so we'd have to abandon position-based search in favor of
+> > file+func based search.
+> > 
+> > It's not perfect because there are still a few file+func duplicates.
+> > But it might be good enough.  We would presumably just refuse to patch a
+> > duplicate.  Or we could remove them (and enforce their continued removal
+> > with tooling-based warnings).
+> > 
+> 
+> You're talking about duplicate file+func combinations as stored in the
+> symbol table?
 
-done
+Right.
 
-> sparc/Kconfig b/arch/sparc/Kconfig
-> > index 9f6f9bce5292..9276f321b3e3 100644
-> > --- a/arch/sparc/Kconfig
-> > +++ b/arch/sparc/Kconfig
-> > @@ -46,7 +46,6 @@ config SPARC
-> >       select LOCKDEP_SMALL if LOCKDEP
-> >       select NEED_DMA_MAP_STATE
-> >       select NEED_SG_DMA_LENGTH
-> > -     select SET_FS
-> >       select TRACE_IRQFLAGS_SUPPORT
-> >
-> >  config SPARC32
-> > @@ -101,6 +100,7 @@ config SPARC64
-> >       select HAVE_SETUP_PER_CPU_AREA
-> >       select NEED_PER_CPU_EMBED_FIRST_CHUNK
-> >       select NEED_PER_CPU_PAGE_FIRST_CHUNK
-> > +     select SET_FS
-> This looks wrong - looks like some merge went wrong here.
+> ...
+>       6 OBJECT core.c::__func__.3
+>       6 OBJECT core.c::__func__.5
+>       7 OBJECT core.c::__func__.1
+>       8 OBJECT core.c::__func__.0
+>       8 OBJECT core.c::__func__.2
+> 
+> We could probably minimize the FUNC duplicates with unique names, but
+> I'm not as optimistic about the OBJECTs as most are created via macros
+> like __already_done.X.  Unless clever macro magic?
 
-Fixed now.
+Good point about objects, as we rely on disambiguating them for klp
+relocations.  Luckily, the fact that most of them are created by macros
+is largely a good thing.  We consider most of those to be "special"
+static locals, which don't actually need to be correlated or referenced
+with a klp reloc.
 
->
-> Other than the above the sparc32 changes looks fine, and with the Kconf
-> stuff fixed:
-> Acked-by: Sam Ravnborg <sam@ravnborg.org> # for sparc32 changes
+For example:
 
-Thanks!
+- '__func__' is just the function name.  The patched function shouldn't
+  need to reference the original function's function name string.
 
-      Arnd
+- '__already_done' is used for printk_once(); no harm in making a new
+  variable initialized to false and printing it again; or converting
+  printk_once() to just printk() to avoid an extra print.
+
+- '__key' is used by lockdep to track lock usage and validate locking
+  order.  It probably makes sense to use a new key in the patched
+  function, since the new function might have different locking
+  behavior.
+
+> Next question: what are the odds that these entries, at least the ones
+> we can't easily rename, need disambiguity for livepatching?  or
+> kpatch-build for related purposes?
+
+I would guess the odds are rather low, given the fact that there are so
+few functions, and we don't care about most of the objects on the list.
+
+If duplicates were to become problematic then we could consider adding
+tooling which warns on a duplicate file:sym pair with the goal of
+eliminating duplicates (exculding the "special" objects).
+
+-- 
+Josh
+
