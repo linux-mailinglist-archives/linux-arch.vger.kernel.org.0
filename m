@@ -2,95 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E5C4B8EB9
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 18:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8884B9058
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 19:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbiBPRBh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Feb 2022 12:01:37 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53928 "EHLO
+        id S237697AbiBPSg3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Feb 2022 13:36:29 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236457AbiBPRBf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 12:01:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D4C2A5232
-        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 09:01:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S237685AbiBPSg2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 13:36:28 -0500
+X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 16 Feb 2022 10:36:15 PST
+Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2E22ABD03
+        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 10:36:15 -0800 (PST)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx2.smtp.larsendata.com (Halon) with ESMTPS
+        id 36dbd7e5-8f57-11ec-b2df-0050568cd888;
+        Wed, 16 Feb 2022 18:35:28 +0000 (UTC)
+Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A13CB81F91
-        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 17:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C348C340ED;
-        Wed, 16 Feb 2022 17:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645030879;
-        bh=ISfq5qFGY5Xiu1jnPEb1x8D0N2MDbc5oRRG1O93yGrU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lvt25QaJBi5CB2AmZAGBx5sHmVK/mcXQQnNvgedTv8gyCV8x/i8ViG7eWR88bN/3p
-         Z1PslyFeRPr1oQqaanAwRE+VoS5MV9X2IssAdBYS1dpLTORCdmDyhlpCURHBFUmM0U
-         HVOmPqRg2ZKJKtgW8R4+Wc/tEzdIDS6dyDTIwOiTgrvmcrRoATl0XgNnCs33rj9rDe
-         5VrnaG0HNdtwrwXGQl25MnEioAXVO9VQrMKitqwtnuo5MlBXn5JC49wpNNeAb81bIh
-         OONMZlOQtKgpcIxxg1QrV3069TJ4knCqj20qde/BHjOvAllX6cOQKiKAMWUVqNWdAP
-         FjljSOpknEq6Q==
-Date:   Wed, 16 Feb 2022 17:01:14 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Szabolcs Nagy <szabolcs.nagy@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arch@vger.kernel.org,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>, libc-alpha@sourceware.org,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 0/4] arm64: Enable BTI for the executable as well as
- the interpreter
-Message-ID: <Yg0t2srflG80zQKF@sirena.org.uk>
-References: <20220124150704.2559523-1-broonie@kernel.org>
- <20220215183456.GB9026@willie-the-truck>
- <Ygz9YX3jBY0MpepU@arm.com>
- <20220216164954.GH2692478@arm.com>
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 10F5F194B3E;
+        Wed, 16 Feb 2022 19:35:03 +0100 (CET)
+Date:   Wed, 16 Feb 2022 19:34:59 +0100
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
+        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, nickhu@andestech.com,
+        green.hu@gmail.com, dinguyen@kernel.org, shorne@gmail.com,
+        deller@gmx.de, mpe@ellerman.id.au, peterz@infradead.org,
+        mingo@redhat.com, mark.rutland@arm.com, hca@linux.ibm.com,
+        dalias@libc.org, davem@davemloft.net, richard@nod.at,
+        x86@kernel.org, jcmvbkbc@gmail.com, ebiederm@xmission.com,
+        akpm@linux-foundation.org, ardb@kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v2 15/18] sparc64: remove CONFIG_SET_FS support
+Message-ID: <Yg1D08+olCSGmnYU@ravnborg.org>
+References: <20220216131332.1489939-1-arnd@kernel.org>
+ <20220216131332.1489939-16-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="IDIQYRRmJXIEAoCv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216164954.GH2692478@arm.com>
-X-Cookie: Fremen add life to spice!
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220216131332.1489939-16-arnd@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Arnd.
 
---IDIQYRRmJXIEAoCv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Wed, Feb 16, 2022 at 02:13:29PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> sparc64 uses address space identifiers to differentiate between kernel
+> and user space, using ASI_P for kernel threads but ASI_AIUS for normal
+> user space, with the option of changing between them.
+> 
+> As nothing really changes the ASI any more, just hardcode ASI_AIUS
+> everywhere. Kernel threads are not allowed to access __user pointers
+> anyway.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/sparc/include/asm/processor_64.h   |  4 ----
+>  arch/sparc/include/asm/switch_to_64.h   |  4 +---
+>  arch/sparc/include/asm/thread_info_64.h |  4 +---
+>  arch/sparc/include/asm/uaccess_64.h     | 20 +-------------------
+>  arch/sparc/kernel/process_64.c          | 12 ------------
+>  arch/sparc/kernel/traps_64.c            |  2 --
+>  arch/sparc/lib/NGmemcpy.S               |  3 +--
+>  arch/sparc/mm/init_64.c                 |  7 ++++---
+>  8 files changed, 8 insertions(+), 48 deletions(-)
 
-On Wed, Feb 16, 2022 at 04:49:54PM +0000, Szabolcs Nagy wrote:
+I think you somehow missed the Kconfig change, and also the related
+sparc32 change which continue to have set_fs() after this patch.
 
-> if we ever wanted to map bti marked binaries without PROT_BTI
-> and introduced a knob to do that in ld.so, then this change
-> would be problematic (we cannot easily remove PROT_BTI from
-> the exe), but we don't have such plans.
 
-In general or only in the case where MWDE is enabled (in which case it's
-the same problem as exists today trying to enable BTI in the presence of
-MWDE)?
+I did not manage to review the patch - as I am too unfamiliar with the
+code paths and the set_fs() removal changes.
 
---IDIQYRRmJXIEAoCv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmINLdkACgkQJNaLcl1U
-h9B3Vgf9Gf4hM0r0r3E8yAJ65goIc2UaT7kWPfaSGqjaIG3+qS8yv9KVfXzhEkgx
-vzPb8pmp35UYVRmzy+YwOncM19icLq9YGv4955W2q+e+gmALZkzQ5qfNGVVlmJ5C
-SU1pLwRnsNmmCTqiET4vKhjwiRxiHAExirnJWJWk5+sFjF28hdXBOxeQDjyGwVC4
-buo3gcZKIkEl/uu+JsMtak/hFyVy8/roRjfEeTlLKN8RqFftSZdjV7jF8EwD4gGc
-Wk2YMbMAnYjFXm15gmMYp4cgLbWdvLprGuSRK/2/pXg3NawF3ja7NIpJimr8ZS2u
-KlgT0n1ed0+dj3Kyq7hlifTVqZ8vfw==
-=+V3F
------END PGP SIGNATURE-----
-
---IDIQYRRmJXIEAoCv--
+	Sam
