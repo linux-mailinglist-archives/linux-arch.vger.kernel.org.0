@@ -2,174 +2,99 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766F44B8C30
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 16:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBF14B8DB3
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 17:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbiBPPPg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Feb 2022 10:15:36 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38918 "EHLO
+        id S236251AbiBPQUQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Feb 2022 11:20:16 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiBPPPf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 10:15:35 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C521D11C0F;
-        Wed, 16 Feb 2022 07:15:22 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5D49C218B0;
-        Wed, 16 Feb 2022 15:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645024521; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
-        b=aWHBGySjkoi4X4eJw6em22aIBrUvu9NxLgBGA1YPe5teGkVd+OZMbfz5mAR/H5p27cqtNr
-        eTyibmLvFW46B/0440TTtOsAILpkMgsqB/KGMtndC8IzoufDHI25QQen3Or6hJ/HuWla6K
-        Pa5Mx18v2FogkqbxvqZV2A45oG5hbUQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645024521;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
-        b=LP1Mp5P/8Rc3AyVBb8kXt+yBGl6ouToT79WXn4Nyw3u61X15U3AEuc87d4w0SeVJ1668cR
-        KD0RqNXhlm6bqmAA==
-Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id EBB23A3B83;
-        Wed, 16 Feb 2022 15:15:20 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 16:15:20 +0100 (CET)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-In-Reply-To: <20220211183529.q7qi2qmlyuscxyto@treble>
-Message-ID: <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble> <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
- <20220211183529.q7qi2qmlyuscxyto@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        with ESMTP id S233783AbiBPQUQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 11:20:16 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3152AE28B
+        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 08:20:04 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 139so2581665pge.1
+        for <linux-arch@vger.kernel.org>; Wed, 16 Feb 2022 08:20:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SUEK1OPatjz/xS89rOiQIJkojmQppC70TLq4uXsnOCU=;
+        b=awiYRJK7xVss9qUlz/+ZAsH80T6s71tCIdTOeiyrQ0x99UFr0wnuctr63kQIRgErZp
+         Pjfqzv1BqeebYXL4GcrP/MyMzdMDlGQjvfr6bbW2B//BH8jrUYt1XEZHs+OKMGfIVuiv
+         RJpsPjfFgg4A8/+DgzM1yTr8QymR2qoNgB2u0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SUEK1OPatjz/xS89rOiQIJkojmQppC70TLq4uXsnOCU=;
+        b=6wCDc9MEe9Rw8kZ4yTuPFizhzipCY2PeeMRCa3dA26jsGQyn0hMRCJCKbfPU/Tupfp
+         iROjck0jeVLVQm2QlOKyNYg/Kzpm6VU0cItsPjAMFakXzb7ZjWWhdqC3dlQ9PGvdhTpi
+         lEbzwy31mGXjpWNl+cjs8KYvf6UFs0BSqAHZVVUOgS7KR3V2hxYifBMDb6lG5rth09+c
+         18VCkFvCH4WYQG8QtiuBPn0RZpWxR8u3idEK+kvkBYRfp+rgNGIB35NpqbEzI0wsCr0H
+         8O9WyOA5FGcDcE05p9WxXErGNxlWhKcOgOFI6NL4XEzaLuSMndfzpg6+1UsVbB2k8ou4
+         E3EA==
+X-Gm-Message-State: AOAM5301/dMt/s3EwaK4/9R2e+Qx0dpklfu2dA+9HKvkvkhQujlJqNH9
+        P/tEbzeJ//E7CfXb0IB2fpT1+A==
+X-Google-Smtp-Source: ABdhPJwkMae/H/K70R+Ctzw/galxZ1wgyt9T2ZBccthHmsi3muEDVk9x1KPlstE3Ys6++5ijnUTmdw==
+X-Received: by 2002:a63:86:0:b0:36c:48e8:627e with SMTP id 128-20020a630086000000b0036c48e8627emr2940332pga.53.1645028403498;
+        Wed, 16 Feb 2022 08:20:03 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x4sm1535073pjq.2.2022.02.16.08.20.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Feb 2022 08:20:03 -0800 (PST)
+Date:   Wed, 16 Feb 2022 08:20:02 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+Message-ID: <202202160818.7C3862B@keescook>
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+ <202202150807.D584917D34@keescook>
+ <87y22bm25y.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="1678380546-2016212218-1645024395=:1475"
-Content-ID: <alpine.LSU.2.21.2202161614020.1475@pobox.suse.cz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y22bm25y.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---1678380546-2016212218-1645024395=:1475
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.LSU.2.21.2202161614021.1475@pobox.suse.cz>
-
-On Fri, 11 Feb 2022, Josh Poimboeuf wrote:
-
-> On Fri, Feb 11, 2022 at 10:05:02AM -0800, Fāng-ruì Sòng wrote:
-> > On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > >
-> > > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
-> > > > Position-based search, which means that if there are several symbols
-> > > > with the same name, the user needs to additionally provide the
-> > > > "index" of a desired symbol, is fragile. For example, it breaks
-> > > > when two symbols with the same name are located in different
-> > > > sections.
-> > > >
-> > > > Since a while, LD has a flag `-z unique-symbol` which appends
-> > > > numeric suffixes to the functions with the same name (in symtab
-> > > > and strtab). It can be used to effectively prevent from having
-> > > > any ambiguity when referring to a symbol by its name.
-> > >
-> > > In the patch description can you also give the version of binutils (and
-> > > possibly other linkers) which have the flag?
-> > 
-> > GNU ld>=2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-symbol.
-> > 
-> > I subscribe to llvm@lists.linux.dev and happen to notice this message
-> > (can't keep up with the changes...)
-> > I am a bit concerned with this option and replied last time on
-> > https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
-> > 
-> > My full reasoning is on
-> > https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+On Wed, Feb 16, 2022 at 11:22:33PM +1100, Michael Ellerman wrote:
+> Kees Cook <keescook@chromium.org> writes:
+> > On Tue, Feb 15, 2022 at 01:40:55PM +0100, Christophe Leroy wrote:
+> >> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+> >> on those three architectures because LKDTM messes up function
+> >> descriptors with functions.
+> >> 
+> >> This series does some cleanup in the three architectures and
+> >> refactors function descriptors so that it can then easily use it
+> >> in a generic way in LKDTM.
+> >
+> > Thanks for doing this! It looks good to me. :)
 > 
-> Ah, right.  Also discussed here:
+> How should we merge this series, it's a bit all over the map.
 > 
->   https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
->   https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
-> 
-> I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
-> sound good.  And we want to support livepatch for LTO kernels.
+> I could put it in a topic branch?
 
-Hm, bear with me, because I am very likely missing something which is 
-clear to everyone else...
+That's fine by me -- I had assumed it'd go via the ppc tree. But if
+you'd rather I take it as a topic branch I can do that too.
 
-Is the stability really a problem for the live patching (and I am talking 
-about the live patching only here. It may be a problem elsewhere, but I am 
-just trying to understand.)? I understand that two different kernel builds 
-could have a different name mapping between the original symbols and their 
-unique renames. Not nice. But we can prepare two different live patches 
-for these two different kernels. Something one would like to avoid if 
-possible, but it is not impossible. Am I missing something?
- 
-> Also I realized that this flag would have a negative effect on
-> kpatch-build, as it currently does its analysis on .o files.  So it
-> would have to figure out how to properly detect function renames, to
-> avoid patching the wrong function for example.
-
-Yes, that is unfortunate. And not only for kpatch-build.
-
-> And if LLD doesn't plan to support the flag then it will be a headache
-> for livepatch (and the kernel in general) to deal with the divergent
-> configs.
-
-True.
-
-The position-based approach clearly shows its limits. I like <file+func> 
-approach based on kallsyms tracking, that you proposed elsewhere in the 
-thread, more.
-
-Miroslav
---1678380546-2016212218-1645024395=:1475--
+-- 
+Kees Cook
