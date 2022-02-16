@@ -2,46 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7494B8C0A
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 16:06:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 766F44B8C30
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 16:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235339AbiBPPGm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Feb 2022 10:06:42 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34060 "EHLO
+        id S235442AbiBPPPg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Feb 2022 10:15:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235343AbiBPPGl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 10:06:41 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DFE13DE6;
-        Wed, 16 Feb 2022 07:06:27 -0800 (PST)
+        with ESMTP id S231866AbiBPPPf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 10:15:35 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C521D11C0F;
+        Wed, 16 Feb 2022 07:15:22 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9E6EA1F383;
-        Wed, 16 Feb 2022 15:06:25 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5D49C218B0;
+        Wed, 16 Feb 2022 15:15:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1645023985; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1645024521; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3it8c4g9PmcpMm7AVyWFVcPZi877GGLsiHCyQXjAw2E=;
-        b=vUlnkrqW1PQVcaEji7C7yhlvwvbKzJFH0ouape6Cas7VyK46roEZIBVwoCVL12yr5MboGc
-        oA8WlCkpLciutCICFw3I06QebT0gG2rXBpj726aHbZEH+55lIpVbPOTfcTz05osj48HyfZ
-        M+3+xd9vqQ1oGrY59A1DsymghJzi/j0=
+        bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
+        b=aWHBGySjkoi4X4eJw6em22aIBrUvu9NxLgBGA1YPe5teGkVd+OZMbfz5mAR/H5p27cqtNr
+        eTyibmLvFW46B/0440TTtOsAILpkMgsqB/KGMtndC8IzoufDHI25QQen3Or6hJ/HuWla6K
+        Pa5Mx18v2FogkqbxvqZV2A45oG5hbUQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1645023985;
+        s=susede2_ed25519; t=1645024521;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=3it8c4g9PmcpMm7AVyWFVcPZi877GGLsiHCyQXjAw2E=;
-        b=2Qz8dy5ipnslWsHoRc2D1woM7dc2nhEm2cxygn+mfXoRXSse0FqcjMK7bCdJ8mmneVNXE+
-        WY6zm6dMxQlRAKBg==
+        bh=yBnvgUiufkd6hqXyIL1xCUzZ9EdBPJ7jQt3pk+22Jeo=;
+        b=LP1Mp5P/8Rc3AyVBb8kXt+yBGl6ouToT79WXn4Nyw3u61X15U3AEuc87d4w0SeVJ1668cR
+        KD0RqNXhlm6bqmAA==
 Received: from pobox.suse.cz (pobox.suse.cz [10.100.2.14])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8B9A7A3B84;
-        Wed, 16 Feb 2022 15:06:24 +0000 (UTC)
-Date:   Wed, 16 Feb 2022 16:06:24 +0100 (CET)
+        by relay2.suse.de (Postfix) with ESMTPS id EBB23A3B83;
+        Wed, 16 Feb 2022 15:15:20 +0000 (UTC)
+Date:   Wed, 16 Feb 2022 16:15:20 +0100 (CET)
 From:   Miroslav Benes <mbenes@suse.cz>
 To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+cc:     =?UTF-8?Q?F=C4=81ng-ru=C3=AC_S=C3=B2ng?= <maskray@google.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-hardening@vger.kernel.org, x86@kernel.org,
         Borislav Petkov <bp@alien8.de>,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
@@ -78,12 +79,14 @@ cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         llvm@lists.linux.dev
 Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
  unique-symbol` is available
-In-Reply-To: <20220211174130.xxgjoqr2vidotvyw@treble>
-Message-ID: <alpine.LSU.2.21.2202161601010.1475@pobox.suse.cz>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble>
+In-Reply-To: <20220211183529.q7qi2qmlyuscxyto@treble>
+Message-ID: <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-3-alexandr.lobakin@intel.com> <20220211174130.xxgjoqr2vidotvyw@treble> <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
+ <20220211183529.q7qi2qmlyuscxyto@treble>
 User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/mixed; BOUNDARY="1678380546-2016212218-1645024395=:1475"
+Content-ID: <alpine.LSU.2.21.2202161614020.1475@pobox.suse.cz>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -94,62 +97,79 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> > +++ b/kernel/livepatch/core.c
-> > @@ -143,11 +143,13 @@ static int klp_find_callback(void *data, const char *name,
-> >  	args->count++;
-> >  
-> >  	/*
-> > -	 * Finish the search when the symbol is found for the desired position
-> > -	 * or the position is not defined for a non-unique symbol.
-> > +	 * Finish the search when unique symbol names are enabled
-> > +	 * or the symbol is found for the desired position or the
-> > +	 * position is not defined for a non-unique symbol.
-> >  	 */
-> > -	if ((args->pos && (args->count == args->pos)) ||
-> > -	    (!args->pos && (args->count > 1)))
-> > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL) ||
-> > +	    (args->pos && args->count == args->pos) ||
-> > +	    (!args->pos && args->count > 1))
-> >  		return 1;
-> 
-> There's no real need to do this.  The code already works as-is, even if
-> there are no unique symbols.
-> 
-> Even if there are no duplicates, there's little harm in going through
-> all the symbols anyway, to check for errors just in case something
-> unexpected happened with the linking (unexpected duplicate) or the patch
-> creation (unexpected sympos).  It's not a hot path, so performance isn't
-> really a concern.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Correct.
+--1678380546-2016212218-1645024395=:1475
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <alpine.LSU.2.21.2202161614021.1475@pobox.suse.cz>
+
+On Fri, 11 Feb 2022, Josh Poimboeuf wrote:
+
+> On Fri, Feb 11, 2022 at 10:05:02AM -0800, Fāng-ruì Sòng wrote:
+> > On Fri, Feb 11, 2022 at 9:41 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> > >
+> > > On Wed, Feb 09, 2022 at 07:57:39PM +0100, Alexander Lobakin wrote:
+> > > > Position-based search, which means that if there are several symbols
+> > > > with the same name, the user needs to additionally provide the
+> > > > "index" of a desired symbol, is fragile. For example, it breaks
+> > > > when two symbols with the same name are located in different
+> > > > sections.
+> > > >
+> > > > Since a while, LD has a flag `-z unique-symbol` which appends
+> > > > numeric suffixes to the functions with the same name (in symtab
+> > > > and strtab). It can be used to effectively prevent from having
+> > > > any ambiguity when referring to a symbol by its name.
+> > >
+> > > In the patch description can you also give the version of binutils (and
+> > > possibly other linkers) which have the flag?
+> > 
+> > GNU ld>=2.36 supports -z unique-symbol. ld.lld doesn't support -z unique-symbol.
+> > 
+> > I subscribe to llvm@lists.linux.dev and happen to notice this message
+> > (can't keep up with the changes...)
+> > I am a bit concerned with this option and replied last time on
+> > https://lore.kernel.org/r/20220105032456.hs3od326sdl4zjv4@google.com
+> > 
+> > My full reasoning is on
+> > https://maskray.me/blog/2020-11-15-explain-gnu-linker-options#z-unique-symbol
+> 
+> Ah, right.  Also discussed here:
+> 
+>   https://lore.kernel.org/all/20210123225928.z5hkmaw6qjs2gu5g@google.com/T/#u
+>   https://lore.kernel.org/all/20210125172124.awabevkpvq4poqxf@treble/
+> 
+> I'm not qualified to comment on LTO/PGO stability issues, but it doesn't
+> sound good.  And we want to support livepatch for LTO kernels.
+
+Hm, bear with me, because I am very likely missing something which is 
+clear to everyone else...
+
+Is the stability really a problem for the live patching (and I am talking 
+about the live patching only here. It may be a problem elsewhere, but I am 
+just trying to understand.)? I understand that two different kernel builds 
+could have a different name mapping between the original symbols and their 
+unique renames. Not nice. But we can prepare two different live patches 
+for these two different kernels. Something one would like to avoid if 
+possible, but it is not impossible. Am I missing something?
  
-> When the old linker versions eventually age out, we can then go strip
-> out all the sympos stuff.
+> Also I realized that this flag would have a negative effect on
+> kpatch-build, as it currently does its analysis on .o files.  So it
+> would have to figure out how to properly detect function renames, to
+> avoid patching the wrong function for example.
 
-Yes.
+Yes, that is unfortunate. And not only for kpatch-build.
 
-> > @@ -169,6 +171,13 @@ static int klp_find_object_symbol(const char *objname, const char *name,
-> >  	else
-> >  		kallsyms_on_each_symbol(klp_find_callback, &args);
-> >  
-> > +	/*
-> > +	 * If the LD's `-z unique-symbol` flag is available and enabled,
-> > +	 * sympos checks are not relevant.
-> > +	 */
-> > +	if (IS_ENABLED(CONFIG_LD_HAS_Z_UNIQUE_SYMBOL))
-> > +		sympos = 0;
-> > +
-> 
-> Similarly, I don't see a need for this.  If the patch is legit then
-> sympos should already be zero.  If not, an error gets reported and the
-> patch fails to load.
+> And if LLD doesn't plan to support the flag then it will be a headache
+> for livepatch (and the kernel in general) to deal with the divergent
+> configs.
 
-My concern was that if the patch is not legit (that is, sympos is > 0 for 
-some reason), the error would be really cryptic and would not help the 
-user at all. So zeroing sympos seems to be a good idea to me. There is no 
-harm and the change is very small and compact.
+True.
 
-On the other hand, I do not insist on this.
+The position-based approach clearly shows its limits. I like <file+func> 
+approach based on kallsyms tracking, that you proposed elsewhere in the 
+thread, more.
 
-Regards,
 Miroslav
+--1678380546-2016212218-1645024395=:1475--
