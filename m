@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41C14B88B6
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 14:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F444B88C0
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 14:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233773AbiBPNQV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Feb 2022 08:16:21 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32850 "EHLO
+        id S229796AbiBPNQg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Feb 2022 08:16:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiBPNQU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 08:16:20 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF36D2A797B;
-        Wed, 16 Feb 2022 05:16:06 -0800 (PST)
+        with ESMTP id S233812AbiBPNQd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 08:16:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BFB2A796A;
+        Wed, 16 Feb 2022 05:16:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 14743CE26F3;
-        Wed, 16 Feb 2022 13:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BA1C340F0;
-        Wed, 16 Feb 2022 13:15:53 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 276E8CE26F1;
+        Wed, 16 Feb 2022 13:16:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D7CC004E1;
+        Wed, 16 Feb 2022 13:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645017363;
-        bh=pxtLV1Eo2uhzbr/ZGDUi5vmKQTdm70WnLcSn91l2Vi4=;
+        s=k20201202; t=1645017373;
+        bh=FUHsy4SbKAUYNozm8BPMqbHwV1/3+i881CYSdrE+f4c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZpRpPZZ56QuGCzWKWIA8wL+2evDjiPNn22sA3IyfSnxeSs4NljN0bMDriNWZNGwOV
-         kFJGnNtw7i2L/YqdH0OrjhgSlxDXkKvsObNGouNeE3xHH01IQrp9Q7uEH1vPiRAxti
-         M+gWF7dq0Z0OKwNJnW8Pf+DVxIg46RXVw+ghV6JkK7gYKJhkz/FRa+64uk7sJQlkYa
-         grRqHak77628J1lm/iv9sC116oN+V3z5UuU6vHXOuqQW+Attotzf8/GDQdCnI0mVdf
-         zfpxriQqY58hcPAxkXpPjVdrCsL1sAU3QszV1ujsYZtkxZR217/jpmnw0TPF0gjCBh
-         S8i/GRFxP5xLA==
+        b=C3unWCwA5MgDv8fBfemfvwfjvGBTJZsKYlZzOMmGSxWCOv3egbiFfgvi6CZWYIz62
+         SqGuR0wjzV94ZlsbXH8YShBv61bKTXHsmJKwfNnJSi4HJBQAdVsCYFbFQbcaYjWab/
+         jAEKucXwBpQtGdC077SOUTz4KZTjRYlCivfC6ZNebr6LssQEH2Z1PZ8sjKbXXO+4xO
+         V7228/v7+85km2+/m1Pe7WU22HBCYxgzfS1ftOJ3VFgXEwTnGmqW4VM9xWj2N15Prw
+         9+iRP8Nmriy3u7jzXRk+4VwmX64BlsD4oODBGwxfjJOtD+0J43y9gbdz9dd+byQFJ4
+         25FHN4etW4bpg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
@@ -52,10 +52,11 @@ Cc:     linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: [PATCH v2 02/18] uaccess: fix nios2 and microblaze get_user_8()
-Date:   Wed, 16 Feb 2022 14:13:16 +0100
-Message-Id: <20220216131332.1489939-3-arnd@kernel.org>
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        stable@vger.kernel.org
+Subject: [PATCH v2 03/18] nds32: fix access_ok() checks in get/put_user
+Date:   Wed, 16 Feb 2022 14:13:17 +0100
+Message-Id: <20220216131332.1489939-4-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220216131332.1489939-1-arnd@kernel.org>
 References: <20220216131332.1489939-1-arnd@kernel.org>
@@ -73,133 +74,70 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-These two architectures implement 8-byte get_user() through
-a memcpy() into a four-byte variable, which won't fit.
+The get_user()/put_user() functions are meant to check for
+access_ok(), while the __get_user()/__put_user() functions
+don't.
 
-Use a temporary 64-bit variable instead here, and use a double
-cast the way that risc-v and openrisc do to avoid compile-time
-warnings.
+This broke in 4.19 for nds32, when it gained an extraneous
+check in __get_user(), but lost the check it needs in
+__put_user().
 
-Fixes: 6a090e97972d ("arch/microblaze: support get_user() of size 8 bytes")
-Fixes: 5ccc6af5e88e ("nios2: Memory management")
+Fixes: 487913ab18c2 ("nds32: Extract the checking and getting pointer to a macro")
+Cc: stable@vger.kernel.org @ v4.19+
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/microblaze/include/asm/uaccess.h | 18 +++++++++---------
- arch/nios2/include/asm/uaccess.h      | 26 ++++++++++++++++----------
- 2 files changed, 25 insertions(+), 19 deletions(-)
+ arch/nds32/include/asm/uaccess.h | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/arch/microblaze/include/asm/uaccess.h b/arch/microblaze/include/asm/uaccess.h
-index 5b6e0e7788f4..3fe96979d2c6 100644
---- a/arch/microblaze/include/asm/uaccess.h
-+++ b/arch/microblaze/include/asm/uaccess.h
-@@ -130,27 +130,27 @@ extern long __user_bad(void);
+diff --git a/arch/nds32/include/asm/uaccess.h b/arch/nds32/include/asm/uaccess.h
+index d4cbf069dc22..37a40981deb3 100644
+--- a/arch/nds32/include/asm/uaccess.h
++++ b/arch/nds32/include/asm/uaccess.h
+@@ -70,9 +70,7 @@ static inline void set_fs(mm_segment_t fs)
+  * versions are void (ie, don't return a value as such).
+  */
  
- #define __get_user(x, ptr)						\
+-#define get_user	__get_user					\
+-
+-#define __get_user(x, ptr)						\
++#define get_user(x, ptr)						\
  ({									\
--	unsigned long __gu_val = 0;					\
- 	long __gu_err;							\
- 	switch (sizeof(*(ptr))) {					\
- 	case 1:								\
--		__get_user_asm("lbu", (ptr), __gu_val, __gu_err);	\
-+		__get_user_asm("lbu", (ptr), x, __gu_err);		\
- 		break;							\
- 	case 2:								\
--		__get_user_asm("lhu", (ptr), __gu_val, __gu_err);	\
-+		__get_user_asm("lhu", (ptr), x, __gu_err);		\
- 		break;							\
- 	case 4:								\
--		__get_user_asm("lw", (ptr), __gu_val, __gu_err);	\
-+		__get_user_asm("lw", (ptr), x, __gu_err);		\
- 		break;							\
--	case 8:								\
--		__gu_err = __copy_from_user(&__gu_val, ptr, 8);		\
--		if (__gu_err)						\
--			__gu_err = -EFAULT;				\
-+	case 8: {							\
-+		__u64 __x = 0;						\
-+		__gu_err = raw_copy_from_user(&__x, ptr, 8) ?		\
-+							-EFAULT : 0;	\
-+		(x) = (typeof(x))(typeof((x) - (x)))__x;		\
- 		break;							\
-+	}								\
- 	default:							\
- 		/* __gu_val = 0; __gu_err = -EINVAL;*/ __gu_err = __user_bad();\
- 	}								\
--	x = (__force __typeof__(*(ptr))) __gu_val;			\
- 	__gu_err;							\
+ 	long __gu_err = 0;						\
+ 	__get_user_check((x), (ptr), __gu_err);				\
+@@ -85,6 +83,14 @@ static inline void set_fs(mm_segment_t fs)
+ 	(void)0;							\
  })
  
-diff --git a/arch/nios2/include/asm/uaccess.h b/arch/nios2/include/asm/uaccess.h
-index ba9340e96fd4..ca9285a915ef 100644
---- a/arch/nios2/include/asm/uaccess.h
-+++ b/arch/nios2/include/asm/uaccess.h
-@@ -88,6 +88,7 @@ extern __must_check long strnlen_user(const char __user *s, long n);
- /* Optimized macros */
- #define __get_user_asm(val, insn, addr, err)				\
- {									\
-+	unsigned long __gu_val;						\
- 	__asm__ __volatile__(						\
- 	"       movi    %0, %3\n"					\
- 	"1:   " insn " %1, 0(%2)\n"					\
-@@ -96,14 +97,20 @@ extern __must_check long strnlen_user(const char __user *s, long n);
- 	"       .section __ex_table,\"a\"\n"				\
- 	"       .word 1b, 2b\n"						\
- 	"       .previous"						\
--	: "=&r" (err), "=r" (val)					\
-+	: "=&r" (err), "=r" (__gu_val)					\
- 	: "r" (addr), "i" (-EFAULT));					\
-+	val = (__force __typeof__(*(addr)))__gu_val;			\
- }
- 
--#define __get_user_unknown(val, size, ptr, err) do {			\
-+extern void __get_user_unknown(void);
++#define __get_user(x, ptr)						\
++({									\
++	long __gu_err = 0;						\
++	const __typeof__(*(ptr)) __user *__p = (ptr);			\
++	__get_user_err((x), __p, (__gu_err));				\
++	__gu_err;							\
++})
 +
-+#define __get_user_8(val, ptr, err) do {				\
-+	u64 __val = 0;							\
- 	err = 0;							\
--	if (__copy_from_user(&(val), ptr, size)) {			\
-+	if (raw_copy_from_user(&(__val), ptr, sizeof(val))) {		\
- 		err = -EFAULT;						\
-+	} else {							\
-+		val = (typeof(val))(typeof((val) - (val)))__val;	\
- 	}								\
- 	} while (0)
- 
-@@ -119,8 +126,11 @@ do {									\
- 	case 4:								\
- 		__get_user_asm(val, "ldw", ptr, err);			\
- 		break;							\
-+	case 8:								\
-+		__get_user_8(val, ptr, err);				\
-+		break;							\
- 	default:							\
--		__get_user_unknown(val, size, ptr, err);		\
-+		__get_user_unknown();					\
- 		break;							\
- 	}								\
- } while (0)
-@@ -129,9 +139,7 @@ do {									\
- 	({								\
- 	long __gu_err = -EFAULT;					\
- 	const __typeof__(*(ptr)) __user *__gu_ptr = (ptr);		\
--	unsigned long __gu_val = 0;					\
--	__get_user_common(__gu_val, sizeof(*(ptr)), __gu_ptr, __gu_err);\
--	(x) = (__force __typeof__(x))__gu_val;				\
-+	__get_user_common(x, sizeof(*(ptr)), __gu_ptr, __gu_err);	\
- 	__gu_err;							\
- 	})
- 
-@@ -139,11 +147,9 @@ do {									\
+ #define __get_user_check(x, ptr, err)					\
  ({									\
- 	long __gu_err = -EFAULT;					\
- 	const __typeof__(*(ptr)) __user *__gu_ptr = (ptr);		\
--	unsigned long __gu_val = 0;					\
- 	if (access_ok( __gu_ptr, sizeof(*__gu_ptr)))	\
--		__get_user_common(__gu_val, sizeof(*__gu_ptr),		\
-+		__get_user_common(x, sizeof(*__gu_ptr),			\
- 			__gu_ptr, __gu_err);				\
--	(x) = (__force __typeof__(x))__gu_val;				\
- 	__gu_err;							\
+ 	const __typeof__(*(ptr)) __user *__p = (ptr);			\
+@@ -165,12 +171,18 @@ do {									\
+ 		: "r"(addr), "i"(-EFAULT)				\
+ 		: "cc")
+ 
+-#define put_user	__put_user					\
++#define put_user(x, ptr)						\
++({									\
++	long __pu_err = 0;						\
++	__put_user_check((x), (ptr), __pu_err);				\
++	__pu_err;							\
++})
+ 
+ #define __put_user(x, ptr)						\
+ ({									\
+ 	long __pu_err = 0;						\
+-	__put_user_err((x), (ptr), __pu_err);				\
++	__typeof__(*(ptr)) __user *__p = (ptr);				\
++	__put_user_err((x), __p, __pu_err);				\
+ 	__pu_err;							\
  })
  
 -- 
