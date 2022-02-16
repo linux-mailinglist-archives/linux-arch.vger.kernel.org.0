@@ -2,98 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DD04B77F8
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Feb 2022 21:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B96C54B8779
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Feb 2022 13:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237686AbiBOTY6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Feb 2022 14:24:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:58104 "EHLO
+        id S233104AbiBPMWy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Feb 2022 07:22:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbiBOTY6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Feb 2022 14:24:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79308566E;
-        Tue, 15 Feb 2022 11:24:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229790AbiBPMWx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Feb 2022 07:22:53 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2D3D1D6A;
+        Wed, 16 Feb 2022 04:22:41 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 513F3617CB;
-        Tue, 15 Feb 2022 19:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8127AC340EB;
-        Tue, 15 Feb 2022 19:24:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1644953086;
-        bh=kUCZYr9eynBGfoyFNpGztKhdR0TjeWfPR20goAdEojo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pgheRwOAKjRlXMfJul10RwEjs5CBKHR/i0QEhyIM79774uc0ovg3u5myvyhB8s/qu
-         xkZdoun6Ve/NuXn1+qZDB9F/trYlid+yq9euKiwm3PP7bJ4zoGvDfPTjgfeWCzsH6f
-         Z5GtGABFqXnkSAxbAOokUuetZQuukvg8GogLN1PAUilOeXNWgORbaiYjI/aeCr++5W
-         YWvZj7f6KVH+xfahOEVmZaopl52rdr1jj6eaQg39ut/UgM8cVQWsEKIq8K1eRZzAAa
-         TaPAe7uN1AmbZCmz+9XMV8T/S9ihvGxGOcJfBqdWD8uwk44Sq4S7ITZBKug7wSeC6N
-         S7tHpNRHJfaSA==
-Date:   Tue, 15 Feb 2022 13:32:21 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        linux-crypto@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, mpi3mr-linuxdrv.pdl@broadcom.com,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org, sparmaintainer@unisys.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-ext4@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        greybus-dev@lists.linaro.org, linux-i3c@lists.infradead.org,
-        linux-rdma@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] treewide: Replace zero-length arrays with
- flexible-array members
-Message-ID: <20220215193221.GA884407@embeddedor>
-References: <20220215174743.GA878920@embeddedor>
- <202202151016.C0471D6E@keescook>
- <20220215192110.GA883653@embeddedor>
- <Ygv8wY75hNqS7zO6@unreal>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4JzHCd2Q32z4xcP;
+        Wed, 16 Feb 2022 23:22:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1645014159;
+        bh=b5eBM0apAamYiz9FmsL/tdSBnGcg3AeLZmO6Sx4f7CI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TMxJSrmZkyabs6lKbBV2TP83SZhbStzLgUK6grRi9ZcKO7+n12nPpEJHnpP9OCnY8
+         8/bVkXeSr4TuornxqhL4RcEJrh5rUkChWpyGLeNFcP3Fu87/lxk921secNCIk3zvXn
+         BlugRQjvtHFZmPYTcTXBw7d7BsSBvevEK4rNDjwe4nPGbzuq+EGD1vma1jJ/4Dgehe
+         sxUPxAJ2AFXp33B1HKQXCUuBwuY1vMQ9z/9K1vmjr0O+WWlzXUtQEA/4e7zkVvD8JR
+         25CCKfBbyRgfLd8CdMrj1LnmkMIF+epDwaFgwNX5TeFYQN4QCzduAchXgnbefq4FDq
+         CcGqmYN75RJWA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Kees Cook <keescook@chromium.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+In-Reply-To: <202202150807.D584917D34@keescook>
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+ <202202150807.D584917D34@keescook>
+Date:   Wed, 16 Feb 2022 23:22:33 +1100
+Message-ID: <87y22bm25y.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ygv8wY75hNqS7zO6@unreal>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Feb 15, 2022 at 09:19:29PM +0200, Leon Romanovsky wrote:
-> On Tue, Feb 15, 2022 at 01:21:10PM -0600, Gustavo A. R. Silva wrote:
-> > On Tue, Feb 15, 2022 at 10:17:40AM -0800, Kees Cook wrote:
-> > > On Tue, Feb 15, 2022 at 11:47:43AM -0600, Gustavo A. R. Silva wrote:
-> > > 
-> > > These all look trivially correct to me. Only two didn't have the end of
-> > > the struct visible in the patch, and checking those showed them to be
-> > > trailing members as well, so:
-> > > 
-> > > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > 
-> > I'll add this to my -next tree.
-> 
-> I would like to ask you to send mlx5 patch separately to netdev. We are working
-> to delete that file completely and prefer to avoid from unnecessary merge conflicts.
+Kees Cook <keescook@chromium.org> writes:
+> On Tue, Feb 15, 2022 at 01:40:55PM +0100, Christophe Leroy wrote:
+>> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+>> on those three architectures because LKDTM messes up function
+>> descriptors with functions.
+>> 
+>> This series does some cleanup in the three architectures and
+>> refactors function descriptors so that it can then easily use it
+>> in a generic way in LKDTM.
+>
+> Thanks for doing this! It looks good to me. :)
 
-Oh OK. Sure thing; I will do so.
+How should we merge this series, it's a bit all over the map.
 
-Thanks
---
-Gustavo
+I could put it in a topic branch?
+
+cheers
