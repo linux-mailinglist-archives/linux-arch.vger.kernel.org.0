@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C774BA8D1
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Feb 2022 19:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EC24BA8C8
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Feb 2022 19:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244678AbiBQSue (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Feb 2022 13:50:34 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45696 "EHLO
+        id S244680AbiBQSug (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Feb 2022 13:50:36 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244641AbiBQSu0 (ORCPT
+        with ESMTP id S244649AbiBQSu0 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Feb 2022 13:50:26 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E7F532EB;
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6775522F1;
         Thu, 17 Feb 2022 10:50:11 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id lw4so9369046ejb.12;
-        Thu, 17 Feb 2022 10:50:10 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id p9so9428087ejd.6;
+        Thu, 17 Feb 2022 10:50:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Hlr/d/ERnD+pEeo92J4Kt7XJIn6OwqkRg8lOkxiwSi8=;
-        b=D3JhmgGijhe3YeJmKhqsDrxlZTQ+nnCfZEpNZe7LPE6dXw10y8ST1pJLuyZD5e9HsZ
-         lYgmzgswvUJZc5BG65+MszYjimqoG3vM6Ml372J3SYkzyHW1C54yGU6uIqZ4Q+ZuwpjO
-         5pr91+m/GY85v3qUuCnd9CdkAnGV4Tt9QSlOlvBfAaWd7cE87MC+cDAJ6WtT7kw7bxih
-         Iq//cM3wU2OYT/r4Q6VO4yQnPs/wfiMma84wIdcgzJj85X6E8AzrfOpHeBmYj/jTDGch
-         gGOgACbSUluM7aIKdO2fyOLJ2Zvxkah6bFib0+ej4/7nj4orH5+wHFMQI0spXovkWqSf
-         eikA==
+        bh=zM+Hp2WVjXIaMPVWa2mQUV9ISK0HqYCrHac37DPF8pw=;
+        b=BolWhcpS/6HTOxCBDIDuBl/h5hPvE9JkG/muCPtASmFx6+y5sndVaFYhkOPuPssfkn
+         N+WkOdD+19aO763ei3Eu2WU9ftQN1kp2LK8+YjHnTP+d1bzQRvVcFvzir84VaaZy28qh
+         snuYfFYT79MuLmapUWJYpxEHds4dVHjeyRv0d+6T2s9RwEDKe+ZQu7lgo9gpCtIbQU/4
+         3A+2aUTEa797Akyg/0hLzZ8eZn+p9LnYhoJV8TN3b6tuVbcogD/UXwv+tlWJ9SDzZCrg
+         +P8c0Giv0WWtwBFlUZ0Oq0JXsY7DLui47NCMGSowRFKP1k4VtDZGpz5Ldv6bL7JB4BA9
+         14Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Hlr/d/ERnD+pEeo92J4Kt7XJIn6OwqkRg8lOkxiwSi8=;
-        b=bWofK+jJdNavO1pnJjEZI7zufYZcmW7GaypFCRhnCkXrL66XBtOMxKvTSuD37XKymg
-         kp2T3zOZYMytx79M1XuFu0OckRA5glV231zXiW/wIztp+yiGQMNfreViXKK7xeB1O9im
-         95RqDthf8xBV23dp44MnUHynvQpVm6s3+LD1vdXIgp2qZN8795WupP6mBgJj3cEpPBMq
-         NuMisIdZV9/TsU23UatV8j5TWKX/PPJiV5OsoEWZ/xEdNlbK2bbUGKmopF6/a2uB/8SG
-         5nTvM5LTkcf2p/guVT8a4rs61SNId9BCM195uZHBgoCoLz8EX6rJha2tDzDz47BzpZus
-         1lLQ==
-X-Gm-Message-State: AOAM531QsKxTM2NDa3BLF87/hz9l8j+rh+HAyU/bpV6FFonfyRf2ZZZa
-        273k8Kg50CbQAJ69fn4Hc1M=
-X-Google-Smtp-Source: ABdhPJyfVVaVMtT7VEzDXjRAGsw/dEiLnrRHhU06v4Gu0cLH+aZPppiyCb2ciGRnLovYHS91Jz/N0w==
-X-Received: by 2002:a17:906:1582:b0:6a8:3574:119 with SMTP id k2-20020a170906158200b006a835740119mr3374995ejd.173.1645123809650;
-        Thu, 17 Feb 2022 10:50:09 -0800 (PST)
+        bh=zM+Hp2WVjXIaMPVWa2mQUV9ISK0HqYCrHac37DPF8pw=;
+        b=lAJM+uUNMVavKbvgr28gZUaExTKc9uT1rHYnMG69Fhw0oJBm7L2q0ivNkcFybxExHh
+         LR4uRJTpQNdFOtvUDnIzrj0AmoyICsyE4ChUrbm9fOeeEQTE+lUG2eYRJzRnVb6ft14j
+         SucmcA9lwClWjVtJw92O1ayd7gx8UTeuuU8Ak9sitMhooQHeP1rDGwBtfmhWpB8GS0z3
+         M8IRzh937gDGCMla1rYyEr2LDXWvXICDZcKbdbPihNsTHUjtuNd5wBV53rJ3wkVBQo3K
+         7Gx1P+82R7x3kx5yWnYIVcnUOQ84zkhnC6rCZwOE+DDZ8QRQ53i4JhD1IFtbC9s+oWU+
+         DLKQ==
+X-Gm-Message-State: AOAM533hD4jvIIYgmzjWvGha5J/zTEofD4EJhVCDlgGJulOfsyK9ykFh
+        QSZ209r1ahSqWVAniECldU32OKfK9Aj1Ok0bZmrk0Q==
+X-Google-Smtp-Source: ABdhPJxAa77nD+43PdtywudpGPQcktl4VzQxfGah+xpGfQDtyZvDMsYlyiTUJn8yQjbvV3UEVOkWiA==
+X-Received: by 2002:a17:906:82c4:b0:6b7:e0fc:c9e0 with SMTP id a4-20020a17090682c400b006b7e0fcc9e0mr3507573ejy.555.1645123810477;
+        Thu, 17 Feb 2022 10:50:10 -0800 (PST)
 Received: from localhost.localdomain (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.50.08
+        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.50.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 10:50:09 -0800 (PST)
+        Thu, 17 Feb 2022 10:50:10 -0800 (PST)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org
@@ -62,9 +62,9 @@ Cc:     linux-arch@vger.kernel.org,
         Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [RFC PATCH 12/13] staging: greybus: audio: Remove usage of list iterator after the loop
-Date:   Thu, 17 Feb 2022 19:48:28 +0100
-Message-Id: <20220217184829.1991035-13-jakobkoschel@gmail.com>
+Subject: [RFC PATCH 13/13] scsi: mpt3sas: comment about invalid usage of the list iterator
+Date:   Thu, 17 Feb 2022 19:48:29 +0100
+Message-Id: <20220217184829.1991035-14-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220217184829.1991035-1-jakobkoschel@gmail.com>
 References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
@@ -80,29 +80,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The list iterator module should not be used if data == NULL.
-module can only old a legitimate value if data != NULL.
+Since the list iteration never exists early, reply_q is guaranteed to
+be an invalid variable and should not be used within
+_base_process_reply_queue(). Since I'm not sure what this code was
+supposed to do, I just marked this with this comment.
 
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/staging/greybus/audio_codec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
-index b589cf6b1d03..e19b91e7a72e 100644
---- a/drivers/staging/greybus/audio_codec.c
-+++ b/drivers/staging/greybus/audio_codec.c
-@@ -599,8 +599,8 @@ static int gbcodec_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
- 			break;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 511726f92d9a..a6746e124226 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -2013,7 +2013,7 @@ mpt3sas_base_sync_reply_irqs(struct MPT3SAS_ADAPTER *ioc, u8 poll)
+ 		}
  	}
- 	if (!data) {
--		dev_err(dai->dev, "%s:%s DATA connection missing\n",
--			dai->name, module->name);
-+		dev_err(dai->dev, "%s DATA connection missing\n",
-+			dai->name);
- 		mutex_unlock(&codec->lock);
- 		return -ENODEV;
- 	}
+ 	if (poll)
+-		_base_process_reply_queue(reply_q);
++		_base_process_reply_queue(reply_q); // COMMENT
+ }
+ 
+ /**
 -- 
 2.25.1
 
