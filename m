@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFAE4BA8C3
-	for <lists+linux-arch@lfdr.de>; Thu, 17 Feb 2022 19:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC514BA8CC
+	for <lists+linux-arch@lfdr.de>; Thu, 17 Feb 2022 19:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244625AbiBQSu0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 17 Feb 2022 13:50:26 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45200 "EHLO
+        id S244652AbiBQSu1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 17 Feb 2022 13:50:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244640AbiBQSuR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Feb 2022 13:50:17 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDA1522EF;
-        Thu, 17 Feb 2022 10:50:02 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id vz16so9556606ejb.0;
-        Thu, 17 Feb 2022 10:50:02 -0800 (PST)
+        with ESMTP id S244632AbiBQSu0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Feb 2022 13:50:26 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E60F527D1;
+        Thu, 17 Feb 2022 10:50:03 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id lw4so9368369ejb.12;
+        Thu, 17 Feb 2022 10:50:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=unUH0vvyOBECU4IrGGURVauaUXMQWjJ7wkWDp8rOwCg=;
-        b=Fl3qxwWQ5BLecyc2lLwyIjWUBs0RQaVZrk6sfZcHIjbYnBUMpeF0Gsv2igqs1xjD+9
-         5v1Kdd57Q35HedaFP09/Iom0huFuGfh0uCygJnKVLHh/wtbFHE6Nsa/itVlT5w+v36I2
-         8y+V8HUoVwJQV8aRG8ne216+yVcyYjqM3PIFBDoeZFAkMw1+S+0ka2O55icCeOCF3Yuy
-         68LKEqYcjBsZwc2MQpzC6/1bFen/+5+9/QiER2lfM6mEezOTo2t4SYFQuaIaCo7jaugC
-         aCan1E2p2RnHQVIE92rWEdYnl7vYnBzK5wDkbdzhY4pKP8g3kluE8ubdW6sifyYxUzup
-         qzBA==
+        bh=s2EDUr3xcd5mXkWQmbeSTJkbyfBykW87kRKEwtU/qi4=;
+        b=KMhtZy1aw/g9aZk2dKJwQL+5I7qUzM9kmJTJZ67p5IR7ZCAUJ7h2I8tTGd3M/sknjm
+         gi7SEe6J+b6Gn1l6vIe752TXM860itvoV6U2b+XDuotIxetF7l9JyCUyY5N68O2V/HnV
+         LvBh5c1PFXGmkhWk2dHGOLbbFKdG+nlg302kC08igise0K2xFzjQe8pr/8GAgqsC/+tS
+         1n0KzDTkPdlJbP29JODQLNf75LgvBVLrrUh5KYmL5aUF0XE/eOn+LWW6+fiVLsaU0tzX
+         xWT1Wl7lg1sw0kNz/39GS03sETp0uIcZxWPbHEGEHz0HneUSxEZoKCjwRn4wBcGbhJur
+         w6bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=unUH0vvyOBECU4IrGGURVauaUXMQWjJ7wkWDp8rOwCg=;
-        b=yvGPBavcbXt+SGR1HfCz6jubsiRCKXxUTymhu1B2Pc09ZuQ0PoPRAoT44b63N2RMKn
-         JhQF/xNXPBpSHNtv7F0RVbO7YWMMG016Kx6nnK8YPnRSedg2QxtroMpXu5n1SHrm7KgP
-         knny13f4hm+oJtIsHMltFY7FFr3K+2wLA61r929/dT1cuOhY0OHzieWLQqItIsrG73D5
-         Jq5ZzSUL3v5Z29zUTH/DwkOowxOYdi/1Ltl1Gb95/t/zZXEUEI+/rf1BDE177q0Y5S4J
-         wsNvVVvZR43DjfRoVepzyKmRjlHTEcxU25T1jmNTjZvnSqwMRoUzFx6qZiojfxpiAV2k
-         Sf2A==
-X-Gm-Message-State: AOAM531Xm+Ize6ZdCWDI/utSl9iwmz/ctbY5BWRDkokUxemKCMetpBtz
-        8GPV9BUllE+r+0s6NqK4UhA=
-X-Google-Smtp-Source: ABdhPJyDAa1AKzFWhHhYKIS5pXEt6jcYgUa5Vbkg43ImUDfsxSd5kyjg4MEf2hS5UQ9eOXQTcGseeA==
-X-Received: by 2002:a17:906:27db:b0:6ce:6f8:d0e3 with SMTP id k27-20020a17090627db00b006ce06f8d0e3mr3515168ejc.455.1645123800878;
-        Thu, 17 Feb 2022 10:50:00 -0800 (PST)
+        bh=s2EDUr3xcd5mXkWQmbeSTJkbyfBykW87kRKEwtU/qi4=;
+        b=CJI4MaEmBRDqflv3fxszJVDOfn0cVHQsI82vEpZs8cpkQuIA/Qx1PdlkvpiFVFfQcM
+         Oy+Z6w92ekudbtAWZfoT5OJ2QbJF/zYeTj51v9PNenhET2ZZbPHykXm7r3doWs3U7kAg
+         l4SQmwHh5nr+G032JWTwNdEiiBU3drislln95SGcvbSpc2VB9O7rYS1fLnuqXzYnzz5a
+         CKiVAStFXZU8YnsQtD0r8psevJfnrkPt0NijrY/Fe5y2Y3Wb+sWupNEun6xkX/zNuN6u
+         /6inRy8RMY71uIIlgQMqARiuBcg6kVPF3JUy52fnaUbNBz8lttzR7zD65XPmlJljBWbx
+         DglQ==
+X-Gm-Message-State: AOAM5323aYi7H4YlhuSy1Sh9ef6Uq1HKkNhDFtnuMk3UKfShucWcAucp
+        ZoEN4AZ0oYo6Fe4O8A/ns9I=
+X-Google-Smtp-Source: ABdhPJzTxZDIUqCgkh4rMHsmNsIMTp1nMdZ8ITZuVbR0PoJ9bbt1buiZMTtj+pfxqYHdC12tG5hM1A==
+X-Received: by 2002:a17:907:1256:b0:6b0:5b4c:d855 with SMTP id wc22-20020a170907125600b006b05b4cd855mr3727693ejb.458.1645123801867;
+        Thu, 17 Feb 2022 10:50:01 -0800 (PST)
 Received: from localhost.localdomain (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.49.59
+        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.50.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 10:50:00 -0800 (PST)
+        Thu, 17 Feb 2022 10:50:01 -0800 (PST)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org
@@ -62,9 +62,9 @@ Cc:     linux-arch@vger.kernel.org,
         Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [RFC PATCH 03/13] usb: remove the usage of the list iterator after the loop
-Date:   Thu, 17 Feb 2022 19:48:19 +0100
-Message-Id: <20220217184829.1991035-4-jakobkoschel@gmail.com>
+Subject: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list iterator after the loop
+Date:   Thu, 17 Feb 2022 19:48:20 +0100
+Message-Id: <20220217184829.1991035-5-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220217184829.1991035-1-jakobkoschel@gmail.com>
 References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
@@ -80,45 +80,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-It is unsafe to assume that &req->req != _req can only evaluate
-to false if the break within the list iterator is hit.
+It is unsafe to assume that tmp != mdev can only evaluate to false
+if the break within the list iterator is hit.
 
-When the break is not hit, req is set to an address derived from the
-head element. If _req would match with that value of req it would
-allow continuing beyond the safety check even if the _req was never
-found within the list.
+When the break is not hit, tmp is set to an address derived from the
+head element. If mdev would match with that value of tmp it would allow
+continuing beyond the safety check even if mdev was never found within
+the list
 
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- drivers/usb/gadget/udc/gr_udc.c | 7 +++++--
+ drivers/vfio/mdev/mdev_core.c | 7 +++++--
  1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
-index 4b35739d3695..18ae2c7a1656 100644
---- a/drivers/usb/gadget/udc/gr_udc.c
-+++ b/drivers/usb/gadget/udc/gr_udc.c
-@@ -1695,6 +1695,7 @@ static int gr_dequeue(struct usb_ep *_ep, struct usb_request *_req)
- 	struct gr_udc *dev;
- 	int ret = 0;
- 	unsigned long flags;
+diff --git a/drivers/vfio/mdev/mdev_core.c b/drivers/vfio/mdev/mdev_core.c
+index b314101237fe..e646ba5036f4 100644
+--- a/drivers/vfio/mdev/mdev_core.c
++++ b/drivers/vfio/mdev/mdev_core.c
+@@ -339,14 +339,17 @@ int mdev_device_remove(struct mdev_device *mdev)
+ {
+ 	struct mdev_device *tmp;
+ 	struct mdev_parent *parent = mdev->type->parent;
 +	bool found = false;
  
- 	ep = container_of(_ep, struct gr_ep, ep);
- 	if (!_ep || !_req || (!ep->ep.desc && ep->num != 0))
-@@ -1711,10 +1712,12 @@ static int gr_dequeue(struct usb_ep *_ep, struct usb_request *_req)
- 
- 	/* Make sure it's actually queued on this endpoint */
- 	list_for_each_entry(req, &ep->queue, queue) {
--		if (&req->req == _req)
-+		if (&req->req == _req) {
+ 	mutex_lock(&mdev_list_lock);
+ 	list_for_each_entry(tmp, &mdev_list, next) {
+-		if (tmp == mdev)
++		if (tmp == mdev) {
 +			found = true;
  			break;
 +		}
  	}
--	if (&req->req != _req) {
+ 
+-	if (tmp != mdev) {
 +	if (!found) {
- 		ret = -EINVAL;
- 		goto out;
+ 		mutex_unlock(&mdev_list_lock);
+ 		return -ENODEV;
  	}
 -- 
 2.25.1
