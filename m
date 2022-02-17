@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 134334BA8CE
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3B74BA8CF
 	for <lists+linux-arch@lfdr.de>; Thu, 17 Feb 2022 19:52:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiBQSu3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S244668AbiBQSu3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Thu, 17 Feb 2022 13:50:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45684 "EHLO
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:45658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244654AbiBQSu0 (ORCPT
+        with ESMTP id S244657AbiBQSu0 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Thu, 17 Feb 2022 13:50:26 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E77532D9;
-        Thu, 17 Feb 2022 10:50:06 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id qk11so9473224ejb.2;
-        Thu, 17 Feb 2022 10:50:06 -0800 (PST)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A714532DC;
+        Thu, 17 Feb 2022 10:50:07 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id bg10so9440255ejb.4;
+        Thu, 17 Feb 2022 10:50:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=QtTQzoKh6SHELhVbK7UgiDGo5+sChsVz7qZ/mZQ4wRk=;
-        b=LfG5Bww0Oy3sfjvyo7UZik9CTOze3VJSleCGeTzqBYFQBb7GCb81WoeNFCcwMDHAf2
-         6KDyRC9FbU54q681hajrooEUs1aUj1/X/WjuVoV3omcO+G34AxBIxo5VUbbH/vgctNu5
-         1nPnBsA8HLXrB09j1Wal4ffV2IdeaqW/EDGtqMw6CEptfUVX/9wu9p6LShOkI46d0IfV
-         f3qb+rqVCZPlnikjHQsgKr/voCZUNSLcpsDDevv90CtSx//A6/d3IEgX3w+q0SNjp1ng
-         d7OUNelVCif/q3zsuV5zwuSk4/D/XArrjWCtU6hHhewjLLju4BupSa/6nftUykdH73+X
-         JYSw==
+        bh=0f0QJvPY6l0YYLP/JaHLlRhitBBVJpxHfsxb6a5gC7w=;
+        b=NOHnBOOXAe/1NOKIQEtHf1BD/jt26baU7KPvJ3ZJu0lACzvjtWpWH0bHsrMSFrMiG4
+         fbsIYo888fQ1/DhUvWC4j4rq17q3qLHPiZH8GljDv9JANH/ilWYaaKyjm+ySqwluPLHO
+         ycesZ4+dZL1mP39QZkzjg22+FQtYM+/WEG71sWfD3bLEwjDThIvdGADqEnV50FVzYDXB
+         t6pFv+LYM07FfktZxJQIMr0tpsLM5HsZCIBpwyg7u7T5t+qA6zrvHtU4Fa+ur+Anf14n
+         6NpdYq57CtPS5KKpw5dVGov8WfN+u2ZVvY9VjVWEvIb7fWIOjk3hj0MWQblEhoHzT9yl
+         wNHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QtTQzoKh6SHELhVbK7UgiDGo5+sChsVz7qZ/mZQ4wRk=;
-        b=wn0sqvOmQxI0h5noPo+XCYO52Gj+7O66j323rHL6/4f68W/mx2ECsONeQmrqgkfHpr
-         YYHTRCYJkYfXopX70g4jKzeW/3Ag6kOgfufGkKgKdtjfP8TOMn92JBpwBOVg5sZtavwk
-         USFwyFisy8Efj/OoErFXyrN/uU/EC8xMuf3bcwHVceQq63vwygpRsvhL2AE7R8uYCva8
-         9VeFJ0W1f3cD607iOPjvHHVGwhzdFIL9xxPS8FqH8AAcGX0kPdtL4+LWBQOXD+tW3YWU
-         wnClr9WQMBekTCu8lU2RJtIBG0j6x4qufWkPl+818hxJHwwz6iU9Gp+gUlltc41zZ8Vy
-         ZRlw==
-X-Gm-Message-State: AOAM530xyLyQNaDStFYAEKpaZViBoEdHdmG9A9PVLH52kb5ZnhAvMDCL
-        q6iqQfSzOzpaIyFAgdzpOWk=
-X-Google-Smtp-Source: ABdhPJwmtpAYY/5eTeVCIMOnvNGpPiD0a5ljZK65FIzDqh88/jSCNF3UR1fL3OrGOhT7yseUT8jxJw==
-X-Received: by 2002:a17:906:284b:b0:6ae:9d05:e904 with SMTP id s11-20020a170906284b00b006ae9d05e904mr3341561ejc.345.1645123804953;
-        Thu, 17 Feb 2022 10:50:04 -0800 (PST)
+        bh=0f0QJvPY6l0YYLP/JaHLlRhitBBVJpxHfsxb6a5gC7w=;
+        b=duq8XzKXq1ywrdUaSHoTlph8PgdwqWPkbQ7Wfew+O8zSj4NEajZAQukeC3uPlB7XFV
+         fCW0kNOKdpEe7gQSkO7ZexaYnt9KQnid54I2ni1UtRyT/VN6fEH9cWAkrNuLt3ViKOSf
+         unK73Od5Sb82lo94b0uqEYie8yaBgOjeulqoXle3YtBOArgwf7jas1BUDTze+RhgYzud
+         hrOkTsL8/oZ0WyDtci0ymmVyo9akyCgYFSx85HC+tfpzwW2AAHcNWyoYThn1hQC9iM//
+         QE5fajwovhHg294u9AYmmEdcePXsLs733V43tzPli/m/lIOSqMOq4UkyWM0i9HjnV992
+         WHGw==
+X-Gm-Message-State: AOAM531zQCLajO7cAQU1uk/hdOzhH26iwGs9s9V0WjMpqj1sV7VnP+Q/
+        EkHpYR3UODzsw/ZY1RASYek=
+X-Google-Smtp-Source: ABdhPJxjICCO3Vhtu+h5/lwmu13mORMlDwV7qSQHPyl3AlJ7a6Vo6Bk6htNd9lAOcvIdXee4sR6crQ==
+X-Received: by 2002:a17:906:eb4a:b0:6cf:bb0e:69fb with SMTP id mc10-20020a170906eb4a00b006cfbb0e69fbmr3501911ejb.149.1645123805842;
+        Thu, 17 Feb 2022 10:50:05 -0800 (PST)
 Received: from localhost.localdomain (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.50.04
+        by smtp.googlemail.com with ESMTPSA id q7sm3493268edv.93.2022.02.17.10.50.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Feb 2022 10:50:04 -0800 (PST)
+        Thu, 17 Feb 2022 10:50:05 -0800 (PST)
 From:   Jakob Koschel <jakobkoschel@gmail.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org
@@ -62,9 +62,9 @@ Cc:     linux-arch@vger.kernel.org,
         Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jakobkoschel@gmail.com>
-Subject: [RFC PATCH 07/13] udp_tunnel: remove the usage of the list iterator after the loop
-Date:   Thu, 17 Feb 2022 19:48:23 +0100
-Message-Id: <20220217184829.1991035-8-jakobkoschel@gmail.com>
+Subject: [RFC PATCH 08/13] net: dsa: future proof usage of list iterator after the loop
+Date:   Thu, 17 Feb 2022 19:48:24 +0100
+Message-Id: <20220217184829.1991035-9-jakobkoschel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220217184829.1991035-1-jakobkoschel@gmail.com>
 References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
@@ -80,42 +80,28 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The usage of node->dev after the loop body is a legitimate type
-confusion if the break was not hit. It will compare an undefined
-memory location with dev that could potentially be equal. The value
-of node->dev in this case could either be a random struct member of the
-head element or an out-of-bounds value.
-
-Therefore it is more safe to use the found variable. With the
-introduction of speculative safe list iterator this check could be
-replaced with if (!node).
+With the speculative safe version of the list iterator p will be NULL if
+the terminating condition was hit and needs to be reset to p derived
+from the head, before using p->list.
 
 Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 ---
- net/ipv4/udp_tunnel_nic.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/net/dsa/sja1105/sja1105_vl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/ipv4/udp_tunnel_nic.c b/net/ipv4/udp_tunnel_nic.c
-index b91003538d87..c47f9fb36d29 100644
---- a/net/ipv4/udp_tunnel_nic.c
-+++ b/net/ipv4/udp_tunnel_nic.c
-@@ -842,11 +842,14 @@ udp_tunnel_nic_unregister(struct net_device *dev, struct udp_tunnel_nic *utn)
- 	 */
- 	if (info->shared) {
- 		struct udp_tunnel_nic_shared_node *node, *first;
-+		bool found = false;
- 
- 		list_for_each_entry(node, &info->shared->devices, list)
--			if (node->dev == dev)
-+			if (node->dev == dev) {
-+				found = true;
+diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
+index f5dca6a9b0f9..a4f2b95b09c4 100644
+--- a/drivers/net/dsa/sja1105/sja1105_vl.c
++++ b/drivers/net/dsa/sja1105/sja1105_vl.c
+@@ -40,6 +40,8 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
+ 			if (e->interval < p->interval)
  				break;
--		if (node->dev != dev)
-+			}
-+		if (!found)
- 			return;
+ 		}
++		if (!p)
++			p = list_entry(p, &gating_cfg->entries, list);
+ 		list_add(&e->list, p->list.prev);
+ 	}
  
- 		list_del(&node->list);
 -- 
 2.25.1
 
