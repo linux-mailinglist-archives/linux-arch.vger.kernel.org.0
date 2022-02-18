@@ -2,138 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E301D4BBC6A
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Feb 2022 16:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 500A94BBCF0
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Feb 2022 17:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237153AbiBRPsa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 18 Feb 2022 10:48:30 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53856 "EHLO
+        id S232689AbiBRQDP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Feb 2022 11:03:15 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237164AbiBRPsX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Feb 2022 10:48:23 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8236A2B3AE0
-        for <linux-arch@vger.kernel.org>; Fri, 18 Feb 2022 07:46:07 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-70--4RjbVXtMcueaeoDqT_n6w-1; Fri, 18 Feb 2022 15:45:59 +0000
-X-MC-Unique: -4RjbVXtMcueaeoDqT_n6w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Fri, 18 Feb 2022 15:45:56 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Fri, 18 Feb 2022 15:45:56 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Christoph Hellwig' <hch@lst.de>, Arnd Bergmann <arnd@kernel.org>
-CC:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "will@kernel.org" <will@kernel.org>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "bcain@codeaurora.org" <bcain@codeaurora.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "monstr@monstr.eu" <monstr@monstr.eu>,
-        "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-        "nickhu@andestech.com" <nickhu@andestech.com>,
-        "green.hu@gmail.com" <green.hu@gmail.com>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "shorne@gmail.com" <shorne@gmail.com>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "dalias@libc.org" <dalias@libc.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "richard@nod.at" <richard@nod.at>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jcmvbkbc@gmail.com" <jcmvbkbc@gmail.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: RE: [PATCH v2 05/18] x86: remove __range_not_ok()
-Thread-Topic: [PATCH v2 05/18] x86: remove __range_not_ok()
-Thread-Index: AQHYJJDV6CwChj5QoEqoVAdoFeMQC6yZc16A
-Date:   Fri, 18 Feb 2022 15:45:56 +0000
-Message-ID: <905678e9e05d40b9a4e13e7b1a34cb68@AcuMS.aculab.com>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-6-arnd@kernel.org> <20220218062851.GC22576@lst.de>
-In-Reply-To: <20220218062851.GC22576@lst.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S233766AbiBRQDP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Feb 2022 11:03:15 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF66488A2
+        for <linux-arch@vger.kernel.org>; Fri, 18 Feb 2022 08:02:57 -0800 (PST)
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MLhwM-1nccbX1mlc-00Hhlh for <linux-arch@vger.kernel.org>; Fri, 18 Feb
+ 2022 17:02:55 +0100
+Received: by mail-wm1-f51.google.com with SMTP id bg21-20020a05600c3c9500b0035283e7a012so6768346wmb.0
+        for <linux-arch@vger.kernel.org>; Fri, 18 Feb 2022 08:02:55 -0800 (PST)
+X-Gm-Message-State: AOAM531MEVHS6tckun35Py8CrcMR7WzRkFyhPC2mCsSWoDi83Q3zx2l/
+        b+DbFWMER3BOq7KU6T9WDeGxjbjZOk1yKdaJA4I=
+X-Google-Smtp-Source: ABdhPJyTn8nYwhnulN5cUK7fj/zvCPmFQnvDDynZq0jB+RTyFCg/kf815QfeKumv1movRZhTmRNkPR7cBdcSsPn3a9U=
+X-Received: by 2002:a05:600c:1d27:b0:37c:74bb:2b4d with SMTP id
+ l39-20020a05600c1d2700b0037c74bb2b4dmr11220609wms.82.1645200175107; Fri, 18
+ Feb 2022 08:02:55 -0800 (PST)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <202202172154.lJ3Z0yXe-lkp@intel.com>
+In-Reply-To: <202202172154.lJ3Z0yXe-lkp@intel.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 18 Feb 2022 17:02:38 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3AV4rpPdFsaz=PTe=LGNDUo1H5i2g35kr56T_pZrjewg@mail.gmail.com>
+Message-ID: <CAK8P3a3AV4rpPdFsaz=PTe=LGNDUo1H5i2g35kr56T_pZrjewg@mail.gmail.com>
+Subject: Re: [arnd-asm-generic:master 19/26] arch/sparc/include/uapi/asm/posix_types.h:14:
+ Error: Unknown opcode: `typedef'
+To:     kernel test robot <lkp@intel.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>, kbuild-all@lists.01.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:o05F8RJUIio8LWN9ZML2z+eKXqtobH+iRhYlVOMuYUQ+1nGgBTO
+ 9Bn6iFCV6EI2Z6BXgTNAyY+yOmGcs/xc1CF577jubEre742KnC1Q08vHdGNN6dWapIlq2R2
+ bGoHrAsR+0VOW5U5DpF4OGLWd1YadpH2t7FmCH3vPxlk76zFxSTPyAi/34fMFAZlxoUN45a
+ WrX+GqR5WVeZBcwtJT65A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bjLTu5QXNeU=:9UKSRhE+NiZxAVPXPk/vpI
+ HZkccVlQ6cQCWjt4FPAk5RSbpP2xa/pvok2V0tGNC8fMBOCCdt7qGKsdkQE8+BxMziLnfNq+X
+ tuAhRGv3PBA/gbgA6G5bzww0siI8rg/VZPlXI23OhXQKpppLZe4M6JRrbqUyH7qq1xq5mbD0M
+ bfdvEha1xvuJKbsC++eQ0FuV99o9wVFLwHfk7IriafWEWjPwco9dts5Jx1+MBEb67phsUt4u/
+ yGzTNXOXsaxMh2NliuGJ6/+QPttvMQVwiJxu5/oGrYr/OfagWkP4ndGTIsgHy/n+RjkdeY89U
+ 9NHgKTSjB1zC9JrbIrb4M57RXVTLvJt2kN5LUcq6le58f8ErnuzlJKI23TmcdWvTuTmNhVwpT
+ u7c7JTLlHuhpMQBhEMLB93XnTnuToWHxsGQrM68n75XFkOq3SiA8gXIjlTnAzS1FYYRdeyWYB
+ kuQICzG3vDiH9ZzQS1TVo+XaNCOSzT08420PPBfNHcA2XFnN9ljxWEGzIbO8PTFRrJ0DmYZNU
+ Q5jBoF8Uv3W91NOxYvKLhoZLG0Mws3+Zb+KobUOai0YYWhfs19ldLGfjd5Qr2VXi0btwPlEWM
+ rfVw4f87fejQWSvl1RHIEuJ0ltE8yOtrZNgc3EN902mMGdG3MqYDwvcXB+Vby+AZ+wnXZwLYz
+ 74BGE4a5jJgClkMZQqrIvbs+Vjbi8u8kYas8k9hmMgl9I1LO+/7/IfbcjH+gmedsm8/4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Christoph Hellwig
-> Sent: 18 February 2022 06:29
-...
-> 
-> > diff --git a/arch/x86/kernel/stacktrace.c b/arch/x86/kernel/stacktrace.c
-> > index 15b058eefc4e..ee117fcf46ed 100644
-> > --- a/arch/x86/kernel/stacktrace.c
-> > +++ b/arch/x86/kernel/stacktrace.c
-> > @@ -90,7 +90,7 @@ copy_stack_frame(const struct stack_frame_user __user *fp,
-> >  {
-> >  	int ret;
-> >
-> > -	if (__range_not_ok(fp, sizeof(*frame), TASK_SIZE))
-> > +	if (!__access_ok(fp, sizeof(*frame)))
-> >  		return 0;
-> 
-> Just switch the __get_user calls below to get_user instead.
+On Thu, Feb 17, 2022 at 2:15 PM kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git master
+> head:   3f2b41135db9099b8d216fffeede5c2cb38ed277
+> commit: 72113d0a7d90d950c7c9a87ab905bffb6bc5752d [19/26] signal.h: add linux/signal.h and asm/signal.h to UAPI compile-test coverage
+> config: sparc64-randconfig-r036-20220217 (https://download.01.org/0day-ci/archive/20220217/202202172154.lJ3Z0yXe-lkp@intel.com/config)
+> compiler: sparc64-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=72113d0a7d90d950c7c9a87ab905bffb6bc5752d
+>         git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+>         git fetch --no-tags arnd-asm-generic master
+>         git checkout 72113d0a7d90d950c7c9a87ab905bffb6bc5752d
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc64 SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Is this worth doing at all?
-How much userspace code is actually compiled with stack frames?
+Thanks for the report, I added a fixup now:
 
-Won't work well for a 32bit process on a 64bit kernel either.
 
-	David
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+commit be92e1ded1d17d68444a793fb07c118ab98b28b5
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Fri Feb 18 16:59:04 2022 +0100
 
+    sparc64: fix building assembly files
+
+    linux/posix_types.h must not be included in assembler files,
+    so move the #include statement down into the appropriate
+    ifdef section.
+
+    Fixes: 72113d0a7d90 ("signal.h: add linux/signal.h and
+asm/signal.h to UAPI compile-test coverage")
+    Reported-by: kernel test robot <lkp@intel.com>
+    Link: https://lore.kernel.org/linux-arch/202202172154.lJ3Z0yXe-lkp@intel.com/
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+diff --git a/arch/sparc/include/uapi/asm/signal.h
+b/arch/sparc/include/uapi/asm/signal.h
+index d395af9b46d2..b61382924725 100644
+--- a/arch/sparc/include/uapi/asm/signal.h
++++ b/arch/sparc/include/uapi/asm/signal.h
+@@ -2,7 +2,6 @@
+ #ifndef _UAPI__SPARC_SIGNAL_H
+ #define _UAPI__SPARC_SIGNAL_H
+
+-#include <asm/posix_types.h>
+ #include <asm/sigcontext.h>
+ #include <linux/compiler.h>
+
+@@ -152,6 +151,7 @@ struct sigstack {
+
+
+ #include <asm-generic/signal-defs.h>
++#include <asm/posix_types.h>
+
+ #ifndef __KERNEL__
+ struct __new_sigaction {
