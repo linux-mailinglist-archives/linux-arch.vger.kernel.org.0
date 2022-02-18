@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DC94BB285
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Feb 2022 07:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE714BB295
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Feb 2022 07:37:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbiBRGgk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Feb 2022 01:36:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32886 "EHLO
+        id S231288AbiBRGhf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Feb 2022 01:37:35 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231603AbiBRGgh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Feb 2022 01:36:37 -0500
+        with ESMTP id S230321AbiBRGhe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Feb 2022 01:37:34 -0500
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C003D1D0;
-        Thu, 17 Feb 2022 22:36:21 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CDABF52;
+        Thu, 17 Feb 2022 22:37:18 -0800 (PST)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0636E68BFE; Fri, 18 Feb 2022 07:36:18 +0100 (CET)
-Date:   Fri, 18 Feb 2022 07:36:17 +0100
+        id 342C768BFE; Fri, 18 Feb 2022 07:37:15 +0100 (CET)
+Date:   Fri, 18 Feb 2022 07:37:14 +0100
 From:   Christoph Hellwig <hch@lst.de>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,13 +40,13 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v2 16/18] sh: remove CONFIG_SET_FS support
-Message-ID: <20220218063617.GK22576@lst.de>
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-17-arnd@kernel.org>
+Subject: Re: [PATCH v2 18/18] uaccess: drop maining CONFIG_SET_FS users
+Message-ID: <20220218063714.GL22576@lst.de>
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-19-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220216131332.1489939-17-arnd@kernel.org>
+In-Reply-To: <20220216131332.1489939-19-arnd@kernel.org>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
@@ -57,6 +57,15 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Looks good:
+s/maining/remaining/ ?
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Or maybe rather:
+
+uaccess: remove CONFIG_SET_FS
+
+because it is all gone now.
+
+> With CONFIG_SET_FS gone, so drop all remaining references to
+> set_fs()/get_fs(), mm_segment_t and uaccess_kernel().
+
+And this sentence does not parse.
