@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4A24BB4BE
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Feb 2022 10:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 187044BB4F1
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Feb 2022 10:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232963AbiBRJBK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Feb 2022 04:01:10 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54218 "EHLO
+        id S233190AbiBRJDu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Feb 2022 04:03:50 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232897AbiBRJBJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Feb 2022 04:01:09 -0500
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7711D1867C4;
-        Fri, 18 Feb 2022 01:00:52 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id q9so3731377vsg.2;
-        Fri, 18 Feb 2022 01:00:52 -0800 (PST)
+        with ESMTP id S233062AbiBRJDp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Feb 2022 04:03:45 -0500
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3AE369CFF;
+        Fri, 18 Feb 2022 01:03:28 -0800 (PST)
+Received: by mail-pg1-f176.google.com with SMTP id 27so2073038pgk.10;
+        Fri, 18 Feb 2022 01:03:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1nYL/qjPVlkIqK+5dnbJ/5QVdVKG9AQSDTVmJuSTxwE=;
-        b=Zv5we/RxYb0vPcwmthg0UKS7t8MJAYVmVgrUzX//i6/+r/z75j0fq9KuaSGpBRCpRD
-         pZQVMpJrgHDjmG/pE8NlMIvxraQAFXZnmK35GZwk3dCq7hULFowna8Yz/6wIN1vtjrWg
-         lj0Oyn2RsxPnATMlbZt062i4aueZdDsQ8CYOVZfIggEJ5EAMCANlwVUlMHA196K4g6b+
-         kT0ndFGmgRy0zi8Tbd/Tqb7JAUhQDMdAROWAJIF1NzUZ27qX4OlzI5x0LiEXRgN4YiWd
-         sKJI0XDR/2shnBfhqNzA1yJeMbZQTBjUrPoMcf/6mCGwNr017Gv2BTYqMMgB8+rLJ4jD
-         YlzQ==
-X-Gm-Message-State: AOAM532ndTqZyoRzKkrB94qVdAYO9LGhrj6jjuLVe0C2uEIPb4o6vVLZ
-        Dfoh87O71pgFgZS3iuGX6YHyHo0+q8dGPA==
-X-Google-Smtp-Source: ABdhPJxp40nmkJXiu8iNeCwx9n2AED0TZQVM/tj+B9o99AsQIveQ6vybTcySkFQDWjbvuLfgWeR4eA==
-X-Received: by 2002:a67:d50a:0:b0:31b:9be2:8aa0 with SMTP id l10-20020a67d50a000000b0031b9be28aa0mr2906226vsj.76.1645174851807;
-        Fri, 18 Feb 2022 01:00:51 -0800 (PST)
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com. [209.85.217.53])
-        by smtp.gmail.com with ESMTPSA id n77sm7184646vkn.29.2022.02.18.01.00.50
+        bh=acpcDWZvSxDwOAzGTb7O2RMIWdslBDMuoEt9Qz/Phu0=;
+        b=LTM47bdxH3KvatcTOZ0SyhwJwKWZCBDrhBkA4wakl4Lq/Zc/0vFZtuRdy3m59wbRg6
+         GT4vGr+wHZ854SjCHkA0YAYZ/AB9tMRbEhDmDFhVxraZspSMy2P8tfWjo4C+ZDJhXTmc
+         CR5Ap3rRL8OiLG1MJVF0juyv/ZiqnlVSbfHgx4G9fX/eWRyz95I+vOcFt/UgF1R0bUGV
+         GyxCrxVwX+ueW5S5CTqXDfoRW03sy9xUqphZXyUVVIsx0iqT4cyOLSGh/1DERxafuxpS
+         +xiQTqAjA/9Xo4vGwDC+2Hlhuz82RU68XRvhDniweyICkxhbal7vvmxF7wOMfHqibJea
+         kt6g==
+X-Gm-Message-State: AOAM532m13OMRxaiqcQ/zGy+5b8ez0koiv5rvHHFaBYkVPkvFLVUVm10
+        H2NGZb63JME5A768pLi4swnJP2cC+2uqfA==
+X-Google-Smtp-Source: ABdhPJzPBL5STQ5SWVtgWhjt6OOwuimkBzdG1JZ8lxPoqw4kSbCf1q9z8LT5qoUE8q7ghKppplSXfQ==
+X-Received: by 2002:a05:6a00:16d3:b0:4cb:51e2:1923 with SMTP id l19-20020a056a0016d300b004cb51e21923mr6690786pfc.7.1645175007970;
+        Fri, 18 Feb 2022 01:03:27 -0800 (PST)
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com. [209.85.216.47])
+        by smtp.gmail.com with ESMTPSA id f7sm2343490pfj.48.2022.02.18.01.03.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Feb 2022 01:00:50 -0800 (PST)
-Received: by mail-vs1-f53.google.com with SMTP id u10so9161585vsu.13;
-        Fri, 18 Feb 2022 01:00:50 -0800 (PST)
-X-Received: by 2002:a67:e113:0:b0:30e:303d:d1d6 with SMTP id
- d19-20020a67e113000000b0030e303dd1d6mr3151546vsl.38.1645174850220; Fri, 18
- Feb 2022 01:00:50 -0800 (PST)
+        Fri, 18 Feb 2022 01:03:27 -0800 (PST)
+Received: by mail-pj1-f47.google.com with SMTP id q11-20020a17090a304b00b001b94d25eaecso7911105pjl.4;
+        Fri, 18 Feb 2022 01:03:27 -0800 (PST)
+X-Received: by 2002:a67:e10e:0:b0:31b:956b:70cf with SMTP id
+ d14-20020a67e10e000000b0031b956b70cfmr2916488vsl.77.1645174557092; Fri, 18
+ Feb 2022 00:55:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-11-arnd@kernel.org>
-In-Reply-To: <20220216131332.1489939-11-arnd@kernel.org>
+References: <20220216131332.1489939-1-arnd@kernel.org> <20220216131332.1489939-9-arnd@kernel.org>
+In-Reply-To: <20220216131332.1489939-9-arnd@kernel.org>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 18 Feb 2022 10:00:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWMhP5WgZ7CvOz53SyfizaAvLkHbeuds8G+_nZkwzhWWw@mail.gmail.com>
-Message-ID: <CAMuHMdWMhP5WgZ7CvOz53SyfizaAvLkHbeuds8G+_nZkwzhWWw@mail.gmail.com>
-Subject: Re: [PATCH v2 10/18] m68k: fix access_ok for coldfire
+Date:   Fri, 18 Feb 2022 09:55:45 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVtRh5GHutxGf5dzGHBca7G4td3qqDTHM2KgoDr-kJ91Q@mail.gmail.com>
+Message-ID: <CAMuHMdVtRh5GHutxGf5dzGHBca7G4td3qqDTHM2KgoDr-kJ91Q@mail.gmail.com>
+Subject: Re: [PATCH v2 08/18] uaccess: add generic __{get,put}_kernel_nofault
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@lst.de>,
@@ -109,54 +109,22 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
-
 On Wed, Feb 16, 2022 at 2:17 PM Arnd Bergmann <arnd@kernel.org> wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> While most m68k platforms use separate address spaces for user
-> and kernel space, at least coldfire does not, and the other
-> ones have a TASK_SIZE that is less than the entire 4GB address
-> range.
+> Nine architectures are still missing __{get,put}_kernel_nofault:
+> alpha, ia64, microblaze, nds32, nios2, openrisc, sh, sparc32, xtensa.
 >
-> Using the default implementation of __access_ok() stops coldfire
-> user space from trivially accessing kernel memory.
+> Add a generic version that lets everything use the normal
+> copy_{from,to}_kernel_nofault() code based on these, removing the last
+> use of get_fs()/set_fs() from architecture-independent code.
 >
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks for your patch!
+>  arch/m68k/include/asm/uaccess.h     |   2 -
 
-> --- a/arch/m68k/include/asm/uaccess.h
-> +++ b/arch/m68k/include/asm/uaccess.h
-> @@ -12,14 +12,21 @@
->  #include <asm/extable.h>
->
->  /* We let the MMU do all checking */
-> -static inline int access_ok(const void __user *addr,
-> +static inline int access_ok(const void __user *ptr,
->                             unsigned long size)
->  {
-> +       unsigned long limit = TASK_SIZE;
-> +       unsigned long addr = (unsigned long)ptr;
-> +
->         /*
->          * XXX: for !CONFIG_CPU_HAS_ADDRESS_SPACES this really needs to check
->          * for TASK_SIZE!
-> +        * Removing this helper is probably sufficient.
->          */
-
-Shouldn't the above comment block be removed completely,
-as this is now implemented below?
-
-> -       return 1;
-> +       if (IS_ENABLED(CONFIG_CPU_HAS_ADDRESS_SPACES))
-> +               return 1;
-> +
-> +       return (size <= limit) && (addr <= (limit - size));
->  }
-
-Any pesky compilers that warn (or worse with -Werror) about
-"condition always true" for TASK_SIZE = 0xFFFFFFFFUL?
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
 Gr{oetje,eeting}s,
 
