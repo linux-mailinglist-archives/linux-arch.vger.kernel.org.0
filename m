@@ -2,133 +2,130 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2994BC0FA
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Feb 2022 21:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D509F4BCA80
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Feb 2022 20:44:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238693AbiBRUIi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Feb 2022 15:08:38 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54744 "EHLO
+        id S243132AbiBSTo4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 19 Feb 2022 14:44:56 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238510AbiBRUIg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Feb 2022 15:08:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DCEFE24B2A0
-        for <linux-arch@vger.kernel.org>; Fri, 18 Feb 2022 12:08:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645214896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qbD0qiU4RjhqV726jofvBeaOVqKh7JjTJAB5iz2l93M=;
-        b=cA7EwE5OdFiTLj2JF3mjF4lI6iI+z3lsffT4McmY3J3L3ZtEAJ3UrMQ8iv6sz+qdHsQ8qz
-        30mp4oi3Pcxr1W2A4iM/+nUzrTY/KIaOOpbqkrkLywNuMpfZqgzBQpt38FoSyXtmly/gPF
-        cB4ISfdUG4W9MIusrvPBxFyUN396AVk=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-5-VZGxcR9BO7yideQSkiMLOg-1; Fri, 18 Feb 2022 15:08:15 -0500
-X-MC-Unique: VZGxcR9BO7yideQSkiMLOg-1
-Received: by mail-qk1-f199.google.com with SMTP id 199-20020a3703d0000000b005f17c5b0356so5051786qkd.16
-        for <linux-arch@vger.kernel.org>; Fri, 18 Feb 2022 12:08:15 -0800 (PST)
+        with ESMTP id S243123AbiBSToy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Feb 2022 14:44:54 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5771A2AFB
+        for <linux-arch@vger.kernel.org>; Sat, 19 Feb 2022 11:44:34 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id r20so9021328ljj.1
+        for <linux-arch@vger.kernel.org>; Sat, 19 Feb 2022 11:44:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=j4ygKhiha2w81mFp35k6HnVjHKstOlRMTFzZECx5vNI=;
+        b=IktfDu44u+ZBl7LXYDdB+a4/t3sJFwoE1XPrU/66Ycjh4yBQThK8AY0I9nF2x7mRfJ
+         7ehEkTXyo+K+zTpxWBDQcwwSqhWOm5RZHCY8jVEOzsREVE1R98JQ6N0Bj15ypu6sDJo/
+         3MfjVwgbHq1gnZyw+w+W9mbImVk/mdRpQ/boJJJcZdb+fBHVdE0oKz4qDneKXI9f1R22
+         JPlKnRQgzz5uTnajaxAP5fWGvqpwod2J71yzuQuAQRI0Gy7MOGW0SXr6kd1DCAk+rscY
+         EO5fWumULKHNX7qK6V37lohxL5eZQoiVmzz0hxx1jXWCUPEGvF+hqm/gmzx9lnGq0jvt
+         b+RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qbD0qiU4RjhqV726jofvBeaOVqKh7JjTJAB5iz2l93M=;
-        b=sp/HR6YF/F6O7k0iBBzHj22zbPihk8A+10xhkW31ySgJHEsIqN+jsyNT8ZJ3mhsHlE
-         4DLNiywC7fZNxUi8UswbNg2CMJNl+NcWo9zso0mwZ6wCHuYU41pjbo5Yk2LUvtW7cgzh
-         Z9azieadSzT1rzWIvKnHE9nnQvplHGLTDYqGT7qYPzSa+Neehb6c0ujAFHIDismDcE35
-         IiXbsz12e2+XWT54BxQmjIVM4UbtEJpqgoGxG6t87/sM1dbyMfiCOWXTsI5tHOvnwBCf
-         iusZL8AHocDtBmsgrQ4BSTG9SfmSe6XKlaX76gI4X1+oKYWVJPd6XDMTcGJmh9qocmjI
-         jcHg==
-X-Gm-Message-State: AOAM5324yTKL2ffIvNt6bMnl8SKeFg3joQNcR++FRbDxPHccHqAfvbYc
-        sj/dHyuVgjNQwo1zO85ZdbM4rPTX8UW2buIpHWYJQTeNGjeXdvFhJsd0dwELKEytFaUC645wOp4
-        d9CJ1NNFTTahe9x9fUN2+1g==
-X-Received: by 2002:a05:6214:17c2:b0:42c:b915:69f with SMTP id cu2-20020a05621417c200b0042cb915069fmr7009999qvb.95.1645214894992;
-        Fri, 18 Feb 2022 12:08:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyES3jxSXm6PUQSrWkCWkJOx1aXkyiFLiwQrMEdx8mKix/Dv/YjSGuwkSGrstdFEaba1AKRqg==
-X-Received: by 2002:a05:6214:17c2:b0:42c:b915:69f with SMTP id cu2-20020a05621417c200b0042cb915069fmr7009947qvb.95.1645214894772;
-        Fri, 18 Feb 2022 12:08:14 -0800 (PST)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id e64sm6288522qkd.122.2022.02.18.12.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Feb 2022 12:08:14 -0800 (PST)
-Date:   Fri, 18 Feb 2022 12:08:08 -0800
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Miroslav Benes <mbenes@suse.cz>,
-        =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        linux-hardening@vger.kernel.org, x86@kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, live-patching@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH v10 02/15] livepatch: avoid position-based search if `-z
- unique-symbol` is available
-Message-ID: <20220218200808.juxnoidtxa7fjsk7@treble>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com>
- <20220209185752.1226407-3-alexandr.lobakin@intel.com>
- <20220211174130.xxgjoqr2vidotvyw@treble>
- <CAFP8O3KvZOZJqOR8HYp9xZGgnYf3D8q5kNijZKORs06L-Vit1g@mail.gmail.com>
- <20220211183529.q7qi2qmlyuscxyto@treble>
- <alpine.LSU.2.21.2202161606430.1475@pobox.suse.cz>
- <20220218163111.98564-1-alexandr.lobakin@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j4ygKhiha2w81mFp35k6HnVjHKstOlRMTFzZECx5vNI=;
+        b=K5dxRyu3boWE0VNFOMaB/iIpAMumr8utv/eHz9k3uQyYyjIwj5Uas0exci8Lp1Ws90
+         auD2dPVBzhfzZPKHKM/YRvJr2/j+geqxdHM5wOMS7UGe5AzP1Gf2HnmdU0JpgM56+2wj
+         DQzeJD2Nbm0RITgeQHXTLSm/y7ZscrQhAMULFmkjzruAz6gk/VQf8YRDYXAxE0haAvDW
+         ECq1mctsYak6ErYSozaL8KVd5/h5D6tjDTYCgHMk8q12/HfUkAF5LHJWmUk57s9uGPP+
+         1/wbYsQCRYEJ046eTx9LsweDa4nh6bDXVv/0gC/B1RWRADfrYi3VLuQ41fNTLcFnUXzH
+         ZoWg==
+X-Gm-Message-State: AOAM531DFGbXBc0VhisVLSZisFt2KDFT9msBUV45wMCB8dVVxJv7Rgyx
+        gFK4Sy8lFc9g7cyks0HHal2l4gtdVlSeCsYrDaPjHA==
+X-Google-Smtp-Source: ABdhPJxxbPRQYl9gtrGRBmlOTi1cGA+dTg5STBR/j2psBl+nfqXJtsxZy72mbaNbt4sKH4N5zfjGKQfW1PmLiBuNWmo=
+X-Received: by 2002:a05:651c:1509:b0:241:8db:ca24 with SMTP id
+ e9-20020a05651c150900b0024108dbca24mr9567535ljf.347.1645299872364; Sat, 19
+ Feb 2022 11:44:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220218163111.98564-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com> <20220217184829.1991035-2-jakobkoschel@gmail.com>
+In-Reply-To: <20220217184829.1991035-2-jakobkoschel@gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Sat, 19 Feb 2022 20:44:04 +0100
+Message-ID: <CAG48ez2fcxaESyXiB=+KMWy=JV3KH_2G78bTQEnzRSbYqg-zZw@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/13] list: introduce speculative safe list_for_each_entry()
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Feb 18, 2022 at 05:31:11PM +0100, Alexander Lobakin wrote:
-> it took 2 minutes to generate the whole map (instead of a split
-> second) (on 64-core CPU, but I guess nm runs in one thread).
-> I guess it can be optimized? I'm no a binutils master (will take a
-> look after sending this), is there a way to do it manually skipping
-> this nm lag or maybe make nm emit filenames without such delays?
+On Thu, Feb 17, 2022 at 7:48 PM Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> list_for_each_entry() selects either the correct value (pos) or a safe
+> value for the additional mispredicted iteration (NULL) for the list
+> iterator.
+> list_for_each_entry() calls select_nospec(), which performs
+> a branch-less select.
+>
+> On x86, this select is performed via a cmov. Otherwise, it's performed
+> via various shift/mask/etc. operations.
+[...]
+>  #define list_for_each_entry(pos, head, member)                         \
+>         for (pos = list_first_entry(head, typeof(*pos), member);        \
+> -            !list_entry_is_head(pos, head, member);                    \
+> +           ({ bool _cond = !list_entry_is_head(pos, head, member);     \
+> +            pos = select_nospec(_cond, pos, NULL); _cond; }); \
+>              pos = list_next_entry(pos, member))
 
-Hm, yeah, adding 2 minutes to the link time isn't going to fly ;-)  It
-probably takes a while to parse all the DWARF.
+Actually I do have one ugly question about this:
 
-Based on ther other discussions I think just using the basename (main.o)
-in STT_FILE would be good enough.  Some duplicates are probably ok.
+Is NULL a good/safe choice here?
 
--- 
-Josh
+We already know that CPUs try very aggressively to do store-to-load
+forwarding. Until now, my mental model of store-to-load forwarding was
+basically: "The CPU has to guess whether the linear addresses will be
+the same, and once it knows the linear addresses, it can verify
+whether that guess was correct."
 
+But of course that can't really be the whole mechanism, because many
+architectures guarantee that if you access the same physical page
+through multiple linear addresses, everything stays coherent. So I'm
+wondering: Are there basically two stages of speculation based on
+address guesses? A first stage where the CPU guesses whether the
+linear addresses are the same, and a second stage where it assumes
+that different linear addresses also map to different physical
+addresses, or something like that?
+
+And so, if we don't have a TLB entry for NULL, and we misspeculate
+through a speculative write to an object of type A at NULL and then a
+speculative read (at the same offset) from an object of type B at
+NULL, will we get speculative type confusion through the nonexistent
+object at NULL that lasts until either the branches are resolved or
+the page walk for NULL reports back that there is no page at NULL?
+
+(Also, it's been known for a long time that speculative accesses to
+NULL can be a performance problem, too:
+https://lwn.net/Articles/444336/)
+
+So I'm wondering whether, on 64-bit architectures that have canonical
+address bits, it would be safer and also reduce the amount of useless
+pagetable walks to try to butcher up the canonical bits of the address
+somehow so that the CPU can quickly see that the access is bogus,
+without potentially having to do a pagetable walk first.
