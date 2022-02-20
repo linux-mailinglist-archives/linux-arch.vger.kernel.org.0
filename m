@@ -2,130 +2,209 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D509F4BCA80
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Feb 2022 20:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AFD4BD1E4
+	for <lists+linux-arch@lfdr.de>; Sun, 20 Feb 2022 22:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243132AbiBSTo4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 19 Feb 2022 14:44:56 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46336 "EHLO
+        id S245093AbiBTVWS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 20 Feb 2022 16:22:18 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243123AbiBSToy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 19 Feb 2022 14:44:54 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5771A2AFB
-        for <linux-arch@vger.kernel.org>; Sat, 19 Feb 2022 11:44:34 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id r20so9021328ljj.1
-        for <linux-arch@vger.kernel.org>; Sat, 19 Feb 2022 11:44:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j4ygKhiha2w81mFp35k6HnVjHKstOlRMTFzZECx5vNI=;
-        b=IktfDu44u+ZBl7LXYDdB+a4/t3sJFwoE1XPrU/66Ycjh4yBQThK8AY0I9nF2x7mRfJ
-         7ehEkTXyo+K+zTpxWBDQcwwSqhWOm5RZHCY8jVEOzsREVE1R98JQ6N0Bj15ypu6sDJo/
-         3MfjVwgbHq1gnZyw+w+W9mbImVk/mdRpQ/boJJJcZdb+fBHVdE0oKz4qDneKXI9f1R22
-         JPlKnRQgzz5uTnajaxAP5fWGvqpwod2J71yzuQuAQRI0Gy7MOGW0SXr6kd1DCAk+rscY
-         EO5fWumULKHNX7qK6V37lohxL5eZQoiVmzz0hxx1jXWCUPEGvF+hqm/gmzx9lnGq0jvt
-         b+RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j4ygKhiha2w81mFp35k6HnVjHKstOlRMTFzZECx5vNI=;
-        b=K5dxRyu3boWE0VNFOMaB/iIpAMumr8utv/eHz9k3uQyYyjIwj5Uas0exci8Lp1Ws90
-         auD2dPVBzhfzZPKHKM/YRvJr2/j+geqxdHM5wOMS7UGe5AzP1Gf2HnmdU0JpgM56+2wj
-         DQzeJD2Nbm0RITgeQHXTLSm/y7ZscrQhAMULFmkjzruAz6gk/VQf8YRDYXAxE0haAvDW
-         ECq1mctsYak6ErYSozaL8KVd5/h5D6tjDTYCgHMk8q12/HfUkAF5LHJWmUk57s9uGPP+
-         1/wbYsQCRYEJ046eTx9LsweDa4nh6bDXVv/0gC/B1RWRADfrYi3VLuQ41fNTLcFnUXzH
-         ZoWg==
-X-Gm-Message-State: AOAM531DFGbXBc0VhisVLSZisFt2KDFT9msBUV45wMCB8dVVxJv7Rgyx
-        gFK4Sy8lFc9g7cyks0HHal2l4gtdVlSeCsYrDaPjHA==
-X-Google-Smtp-Source: ABdhPJxxbPRQYl9gtrGRBmlOTi1cGA+dTg5STBR/j2psBl+nfqXJtsxZy72mbaNbt4sKH4N5zfjGKQfW1PmLiBuNWmo=
-X-Received: by 2002:a05:651c:1509:b0:241:8db:ca24 with SMTP id
- e9-20020a05651c150900b0024108dbca24mr9567535ljf.347.1645299872364; Sat, 19
- Feb 2022 11:44:32 -0800 (PST)
+        with ESMTP id S239021AbiBTVWR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Feb 2022 16:22:17 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89771C10D
+        for <linux-arch@vger.kernel.org>; Sun, 20 Feb 2022 13:21:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1645392114; x=1676928114;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=O2v/WM+DscrC4lQ4qNRDt8haXNQCgPBVWBOq28G0mt8=;
+  b=mVMCNK0FMRngeYDGLFSFCcSbAHK1RZXxjzmIZsz1RvgvHgJNgk/uMdpQ
+   +gQQZkMqXp7oI/GeWRyM2TNQlNnEPFLYeTfTYFqr+hDN1JJAn2og6KroO
+   wEKGgzInvMJ4JTIUYVI5X2Ps0fb/v6co6hVjSAXrM0OpsSRpv7jx8hjXD
+   LYARGqpufR/acfSN+sJgVG0STUhXEqLlMw/AIHyZpzmgrAjBmCW7stBFT
+   nLt0mgWFpFf2CCYJpriwCNU/YMidMkDVniEhaCju8CDXlvCdCY9sutgnL
+   bYJqcM/HAJMw/R1Q7GHBRG4zTUiETzR/butcGTRBVB5l6WPJ67/9ZJ2o8
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="234944028"
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="234944028"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:21:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
+   d="scan'208";a="706024641"
+Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 20 Feb 2022 13:21:53 -0800
+Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nLteS-0000nx-Ei; Sun, 20 Feb 2022 21:21:52 +0000
+Date:   Mon, 21 Feb 2022 05:21:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 45d9de484a57be37a3730f32682943b643a4785a
+Message-ID: <6212b0c9.grIGVPtLa1M5m4es%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com> <20220217184829.1991035-2-jakobkoschel@gmail.com>
-In-Reply-To: <20220217184829.1991035-2-jakobkoschel@gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Sat, 19 Feb 2022 20:44:04 +0100
-Message-ID: <CAG48ez2fcxaESyXiB=+KMWy=JV3KH_2G78bTQEnzRSbYqg-zZw@mail.gmail.com>
-Subject: Re: [RFC PATCH 01/13] list: introduce speculative safe list_for_each_entry()
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 7:48 PM Jakob Koschel <jakobkoschel@gmail.com> wrote:
-> list_for_each_entry() selects either the correct value (pos) or a safe
-> value for the additional mispredicted iteration (NULL) for the list
-> iterator.
-> list_for_each_entry() calls select_nospec(), which performs
-> a branch-less select.
->
-> On x86, this select is performed via a cmov. Otherwise, it's performed
-> via various shift/mask/etc. operations.
-[...]
->  #define list_for_each_entry(pos, head, member)                         \
->         for (pos = list_first_entry(head, typeof(*pos), member);        \
-> -            !list_entry_is_head(pos, head, member);                    \
-> +           ({ bool _cond = !list_entry_is_head(pos, head, member);     \
-> +            pos = select_nospec(_cond, pos, NULL); _cond; }); \
->              pos = list_next_entry(pos, member))
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 45d9de484a57be37a3730f32682943b643a4785a  Merge branch 'set_fs-3' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic into asm-generic
 
-Actually I do have one ugly question about this:
+elapsed time: 731m
 
-Is NULL a good/safe choice here?
+configs tested: 126
+configs skipped: 3
 
-We already know that CPUs try very aggressively to do store-to-load
-forwarding. Until now, my mental model of store-to-load forwarding was
-basically: "The CPU has to guess whether the linear addresses will be
-the same, and once it knows the linear addresses, it can verify
-whether that guess was correct."
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-But of course that can't really be the whole mechanism, because many
-architectures guarantee that if you access the same physical page
-through multiple linear addresses, everything stays coherent. So I'm
-wondering: Are there basically two stages of speculation based on
-address guesses? A first stage where the CPU guesses whether the
-linear addresses are the same, and a second stage where it assumes
-that different linear addresses also map to different physical
-addresses, or something like that?
+gcc tested configs:
+arm                                 defconfig
+arm                              allmodconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+mips                 randconfig-c004-20220220
+i386                          randconfig-c001
+sh                          landisk_defconfig
+powerpc                     redwood_defconfig
+arm                          badge4_defconfig
+arm                         lpc18xx_defconfig
+powerpc                     pq2fads_defconfig
+mips                             allyesconfig
+ia64                         bigsur_defconfig
+mips                      maltasmvp_defconfig
+xtensa                    smp_lx200_defconfig
+xtensa                          iss_defconfig
+powerpc                      ppc40x_defconfig
+sh                        edosk7760_defconfig
+powerpc                       ppc64_defconfig
+arm                       multi_v4t_defconfig
+powerpc                    klondike_defconfig
+m68k                        m5272c3_defconfig
+xtensa                              defconfig
+powerpc                      pcm030_defconfig
+mips                       bmips_be_defconfig
+h8300                            alldefconfig
+powerpc                    sam440ep_defconfig
+powerpc                   motionpro_defconfig
+sh                             espt_defconfig
+powerpc                     tqm8555_defconfig
+sh                           se7343_defconfig
+sh                   rts7751r2dplus_defconfig
+nios2                         10m50_defconfig
+arm                         lubbock_defconfig
+sh                         ecovec24_defconfig
+mips                           xway_defconfig
+mips                      loongson3_defconfig
+arm64                            alldefconfig
+powerpc                     rainier_defconfig
+sh                        dreamcast_defconfig
+sh                  sh7785lcr_32bit_defconfig
+mips                        vocore2_defconfig
+um                           x86_64_defconfig
+sh                           se7751_defconfig
+arm                            zeus_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                      bamboo_defconfig
+nds32                               defconfig
+powerpc                      ppc6xx_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220220
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+s390                 randconfig-r044-20220220
+riscv                randconfig-r042-20220220
+arc                  randconfig-r043-20220220
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-And so, if we don't have a TLB entry for NULL, and we misspeculate
-through a speculative write to an object of type A at NULL and then a
-speculative read (at the same offset) from an object of type B at
-NULL, will we get speculative type confusion through the nonexistent
-object at NULL that lasts until either the branches are resolved or
-the page walk for NULL reports back that there is no page at NULL?
+clang tested configs:
+powerpc              randconfig-c003-20220220
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220220
+mips                 randconfig-c004-20220220
+i386                          randconfig-c001
+riscv                randconfig-c006-20220220
+powerpc                    mvme5100_defconfig
+powerpc                        fsp2_defconfig
+powerpc                 mpc836x_mds_defconfig
+powerpc                     mpc5200_defconfig
+powerpc                     kilauea_defconfig
+mips                        workpad_defconfig
+powerpc                   bluestone_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220220
+hexagon              randconfig-r041-20220220
 
-(Also, it's been known for a long time that speculative accesses to
-NULL can be a performance problem, too:
-https://lwn.net/Articles/444336/)
-
-So I'm wondering whether, on 64-bit architectures that have canonical
-address bits, it would be safer and also reduce the amount of useless
-pagetable walks to try to butcher up the canonical bits of the address
-somehow so that the CPU can quickly see that the access is bogus,
-without potentially having to do a pagetable walk first.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
