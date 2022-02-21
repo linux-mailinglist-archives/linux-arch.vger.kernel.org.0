@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486B84BD625
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 07:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E794BD65B
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 07:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345468AbiBUGlf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1345484AbiBUGlf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Mon, 21 Feb 2022 01:41:35 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42080 "EHLO
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244711AbiBUGlW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 01:41:22 -0500
+        with ESMTP id S1345495AbiBUGlX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 01:41:23 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 288CB45063;
-        Sun, 20 Feb 2022 22:40:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E6B32A721;
+        Sun, 20 Feb 2022 22:40:11 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED7511476;
-        Sun, 20 Feb 2022 22:40:07 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2556D1509;
+        Sun, 20 Feb 2022 22:40:11 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.49.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 478B43F70D;
-        Sun, 20 Feb 2022 22:40:05 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8AFA53F70D;
+        Sun, 20 Feb 2022 22:40:08 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org, akpm@linux-foundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Christoph Hellwig <hch@infradead.org>,
-        linux-arch@vger.kernel.org, Michal Simek <monstr@monstr.eu>
-Subject: [PATCH V2 24/30] microblaze/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 21 Feb 2022 12:08:33 +0530
-Message-Id: <1645425519-9034-25-git-send-email-anshuman.khandual@arm.com>
+        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH V2 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 21 Feb 2022 12:08:34 +0530
+Message-Id: <1645425519-9034-26-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
 References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
@@ -45,99 +45,105 @@ This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
 macros can be dropped which are no longer needed.
 
-Cc: Michal Simek <monstr@monstr.eu>
+Cc: Dinh Nguyen <dinguyen@kernel.org>
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
- arch/microblaze/Kconfig               |  1 +
- arch/microblaze/include/asm/pgtable.h | 17 -----------
- arch/microblaze/mm/init.c             | 41 +++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 17 deletions(-)
+ arch/nios2/Kconfig               |  1 +
+ arch/nios2/include/asm/pgtable.h | 16 ------------
+ arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
+ 3 files changed, 46 insertions(+), 16 deletions(-)
 
-diff --git a/arch/microblaze/Kconfig b/arch/microblaze/Kconfig
-index 59798e43cdb0..f2c25ba8621e 100644
---- a/arch/microblaze/Kconfig
-+++ b/arch/microblaze/Kconfig
-@@ -7,6 +7,7 @@ config MICROBLAZE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
+diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+index 33fd06f5fa41..85a58a357a3b 100644
+--- a/arch/nios2/Kconfig
++++ b/arch/nios2/Kconfig
+@@ -6,6 +6,7 @@ config NIOS2
  	select ARCH_HAS_SYNC_DMA_FOR_CPU
  	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+ 	select ARCH_HAS_DMA_SET_UNCACHED
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select BUILDTIME_TABLE_SORT
-diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
-index c136a01e467e..6df373077ff2 100644
---- a/arch/microblaze/include/asm/pgtable.h
-+++ b/arch/microblaze/include/asm/pgtable.h
-@@ -204,23 +204,6 @@ extern pte_t *va_to_pte(unsigned long address);
-  * We consider execute permission the same as read.
-  * Also, write permissions imply read permissions.
+ 	select ARCH_NO_SWAP
+ 	select COMMON_CLK
+ 	select TIMER_OF
+diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+index 4a995fa628ee..2678dad58a63 100644
+--- a/arch/nios2/include/asm/pgtable.h
++++ b/arch/nios2/include/asm/pgtable.h
+@@ -40,24 +40,8 @@ struct mm_struct;
   */
--#define __P000	PAGE_NONE
--#define __P001	PAGE_READONLY_X
--#define __P010	PAGE_COPY
--#define __P011	PAGE_COPY_X
--#define __P100	PAGE_READONLY
--#define __P101	PAGE_READONLY_X
--#define __P110	PAGE_COPY
--#define __P111	PAGE_COPY_X
--
--#define __S000	PAGE_NONE
--#define __S001	PAGE_READONLY_X
--#define __S010	PAGE_SHARED
--#define __S011	PAGE_SHARED_X
--#define __S100	PAGE_READONLY
--#define __S101	PAGE_READONLY_X
--#define __S110	PAGE_SHARED
--#define __S111	PAGE_SHARED_X
  
- #ifndef __ASSEMBLY__
- /*
-diff --git a/arch/microblaze/mm/init.c b/arch/microblaze/mm/init.c
-index 952f35b335b2..68faf7d04faf 100644
---- a/arch/microblaze/mm/init.c
-+++ b/arch/microblaze/mm/init.c
-@@ -280,3 +280,44 @@ void * __ref zalloc_maybe_bootmem(size_t size, gfp_t mask)
+ /* Remove W bit on private pages for COW support */
+-#define __P000	MKP(0, 0, 0)
+-#define __P001	MKP(0, 0, 1)
+-#define __P010	MKP(0, 0, 0)	/* COW */
+-#define __P011	MKP(0, 0, 1)	/* COW */
+-#define __P100	MKP(1, 0, 0)
+-#define __P101	MKP(1, 0, 1)
+-#define __P110	MKP(1, 0, 0)	/* COW */
+-#define __P111	MKP(1, 0, 1)	/* COW */
  
- 	return p;
+ /* Shared pages can have exact HW mapping */
+-#define __S000	MKP(0, 0, 0)
+-#define __S001	MKP(0, 0, 1)
+-#define __S010	MKP(0, 1, 0)
+-#define __S011	MKP(0, 1, 1)
+-#define __S100	MKP(1, 0, 0)
+-#define __S101	MKP(1, 0, 1)
+-#define __S110	MKP(1, 1, 0)
+-#define __S111	MKP(1, 1, 1)
+ 
+ /* Used all over the kernel */
+ #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
+diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
+index 613fcaa5988a..311b2146a248 100644
+--- a/arch/nios2/mm/init.c
++++ b/arch/nios2/mm/init.c
+@@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
+ {
+ 	return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
  }
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
 +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
 +	case VM_NONE:
-+		return PAGE_NONE;
++		return MKP(0, 0, 0);
 +	case VM_READ:
-+		return PAGE_READONLY_X;
++		return MKP(0, 0, 1);
++	/* COW */
 +	case VM_WRITE:
-+		return PAGE_COPY;
++		return MKP(0, 0, 0);
++	/* COW */
 +	case VM_WRITE | VM_READ:
-+		return PAGE_COPY_X;
++		return MKP(0, 0, 1);
 +	case VM_EXEC:
-+		return PAGE_READONLY;
++		return MKP(1, 0, 0);
 +	case VM_EXEC | VM_READ:
-+		return PAGE_READONLY_X;
++		return MKP(1, 0, 1);
++	/* COW */
 +	case VM_EXEC | VM_WRITE:
-+		return PAGE_COPY;
++		return MKP(1, 0, 0);
++	/* COW */
 +	case VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_COPY_X;
++		return MKP(1, 0, 1);
 +	case VM_SHARED:
-+		return PAGE_NONE;
++		return MKP(0, 0, 0);
 +	case VM_SHARED | VM_READ:
-+		return PAGE_READONLY_X;
++		return MKP(0, 0, 1);
 +	case VM_SHARED | VM_WRITE:
-+		return PAGE_SHARED;
++		return MKP(0, 1, 0);
 +	case VM_SHARED | VM_WRITE | VM_READ:
-+		return PAGE_SHARED_X;
++		return MKP(0, 1, 1);
 +	case VM_SHARED | VM_EXEC:
-+		return PAGE_READONLY;
++		return MKP(1, 0, 0);
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_READONLY_X;
++		return MKP(1, 0, 1);
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
-+		return PAGE_SHARED;
++		return MKP(1, 1, 0);
 +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_SHARED_X;
++		return MKP(1, 1, 1);
 +	default:
 +		BUILD_BUG();
 +	}
