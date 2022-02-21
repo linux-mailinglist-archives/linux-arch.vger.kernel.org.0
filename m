@@ -2,145 +2,87 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FCD4BEA7E
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 20:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305A44BEB91
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 21:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbiBUSOH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Feb 2022 13:14:07 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40774 "EHLO
+        id S233431AbiBUUHM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Feb 2022 15:07:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbiBUSLk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 13:11:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D57913D70
-        for <linux-arch@vger.kernel.org>; Mon, 21 Feb 2022 10:02:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F9FB61471
-        for <linux-arch@vger.kernel.org>; Mon, 21 Feb 2022 18:02:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A164C340F3;
-        Mon, 21 Feb 2022 18:02:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645466522;
-        bh=1o//f7ci38Nltr9ZStFH8Ui/1ANWC7noWUcvVsxH4Dk=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=tuZrJAgzdRelGFErIBenRd270wD/oE/BIOhQhynAKVpTiYIHwL7iuzDit6XRDEdek
-         ea7byCu0dYO+/q44KRLTH/2H9j6hZJRecdushbu6QUkSXBQCHg8Lp9DlF2+JrWjRfy
-         RIN+AibzlmP+MN3475dDcXPpT5oNlR70DsykLmsh408rG0y26qXeEUbvBgkIp7ak4g
-         V1ennLcuTNlNt8xL9sSvYn2yhbuUAXb9wBDdaU5w2T08jpHsmAmZUPiLry1JbLSOtS
-         47i2yz9Cp9Eam6j95ouBGhKhtYpqB1AKY8sImlJlgsU/iJeFup5E7P9kD9ovnKSZs1
-         PiJdKlL2bSUhQ==
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C58BF27C005C;
-        Mon, 21 Feb 2022 13:02:00 -0500 (EST)
-Received: from imap48 ([10.202.2.98])
-  by compute5.internal (MEProxy); Mon, 21 Feb 2022 13:02:00 -0500
-X-ME-Sender: <xms:ltMTYrOO-q2eTdc7-lefNVhRw6CMzIIUjeq1Fl3pSsQUg5p0v4T3DQ>
-    <xme:ltMTYl-w3T6R0n3Nu6LPsQLBvomkxGIVmuyU0GhbO1DIpztXMJlRsLtQTCEYEh028
-    pjjpM0MX0B0CmMumOs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeeigddutdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpeffffekfeeuueffkedvueeujeduledvteefveevvdeftdfhtdegfeej
-    geehveefudenucffohhmrghinhepuhhrrghnughomhdruggvvhdpshgvrhhvvghrrdguvg
-    hvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghn
-    ugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudekheeifedvqd
-    dvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuhigrdhluhht
-    ohdruhhs
-X-ME-Proxy: <xmx:ltMTYqTKzeHmFBPj0KeeRRyeIPkPiIPH6vrTikCX73-28YSIWW4E9A>
-    <xmx:ltMTYvsLwlTbcAc-2gQCU0GdilV3LUcAV3MWMIErkd6OV7tI1F8Liw>
-    <xmx:ltMTYjdgCl_PWiXjxovjIlwKP-0RphBlU2K8uA3PaBzbcFmq9vAImg>
-    <xmx:mNMTYsvOQibdXI0qUTvczgxlr_u6ezUHEVT1YByEYw8pV2tlEZ9rHX6Q-Nw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 01C9B21E006E; Mon, 21 Feb 2022 13:01:57 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4778-g14fba9972e-fm-20220217.001-g14fba997
-Mime-Version: 1.0
-Message-Id: <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
-In-Reply-To: <20220217162848.303601-1-Jason@zx2c4.com>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
-Date:   Mon, 21 Feb 2022 10:01:37 -0800
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Linux Crypto Mailing List" <linux-crypto@vger.kernel.org>,
-        linux-arch@vger.kernel.org
-Cc:     "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Nick Hu" <nickhu@andestech.com>,
-        "Max Filippov" <jcmvbkbc@gmail.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Borislav Petkov" <bp@alien8.de>, "Guo Ren" <guoren@kernel.org>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Joshua Kinard" <kumba@gentoo.org>,
-        "David Laight" <David.Laight@aculab.com>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        "Eric Biggers" <ebiggers@google.com>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Lennart Poettering" <mzxreary@0pointer.de>,
-        "Konstantin Ryabitsev" <konstantin@linuxfoundation.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233436AbiBUUHL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 15:07:11 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9F8BB2;
+        Mon, 21 Feb 2022 12:06:47 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.94)
+          with esmtps (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1nMEx5-000y2E-0O; Mon, 21 Feb 2022 21:06:31 +0100
+Received: from p57ae5149.dip0.t-ipconnect.de ([87.174.81.73] helo=[192.168.178.35])
+          by inpost2.zedat.fu-berlin.de (Exim 4.94)
+          with esmtpsa (TLS1.2)
+          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1nMEx4-003eHP-Q3; Mon, 21 Feb 2022 21:06:30 +0100
+Message-ID: <5326a8e6-3888-dca4-7e7f-73a85d53aa68@physik.fu-berlin.de>
+Date:   Mon, 21 Feb 2022 21:06:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+Content-Language: en-US
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+ <9cac37da-f719-13f8-1a21-2aac7a574479@physik.fu-berlin.de>
+In-Reply-To: <9cac37da-f719-13f8-1a21-2aac7a574479@physik.fu-berlin.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.174.81.73
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 17, 2022, at 8:28 AM, Jason A. Donenfeld wrote:
-> This topic has come up countless times, and usually doesn't go anywhere.
-> This time I thought I'd bring it up with a slightly narrower focus,
-> updated for some developments over the last three years: we finally can
-> make /dev/urandom always secure, in light of the fact that our RNG is
-> now always seeded.
->
-> Ever since Linus' 50ee7529ec45 ("random: try to actively add entropy
-> rather than passively wait for it"), the RNG does a haveged-style jitter
-> dance around the scheduler, in order to produce entropy (and credit it)
-> for the case when we're stuck in wait_for_random_bytes(). How ever you
-> feel about the Linus Jitter Dance is beside the point: it's been there
-> for three years and usually gets the RNG initialized in a second or so.
->
-> As a matter of fact, this is what happens currently when people use
-> getrandom(). It's already there and working, and most people have been
-> using it for years without realizing.
->
-> So, given that the kernel has grown this mechanism for seeding itself
-> from nothing, and that this procedure happens pretty fast, maybe there's
-> no point any longer in having /dev/urandom give insecure bytes. In the
-> past we didn't want the boot process to deadlock, which was
-> understandable. But now, in the worst case, a second goes by, and the
-> problem is resolved. It seems like maybe we're finally at a point when
-> we can get rid of the infamous "urandom read hole".
->
+Hi!
 
-This patch is 100% about a historical mistake.  Way back when (not actually that long ago), there were two usable interfaces to the random number generator: /dev/random and /dev/urandom.  /dev/random was, at least in principle, secure, but it blocked unnecessarily and was, therefore, incredibly slow.  It was totally unsuitable for repeated use by any sort of server.  /dev/urandom didn't block but was insecure if called too early.  *But* urandom was also the correct interface to get best-effort-i-need-them-right-now random bits.  The actual semantics that general crypography users wanted were not available.
+On 2/16/22 13:25, John Paul Adrian Glaubitz wrote:
+>> This series does some cleanup in the three architectures and
+>> refactors function descriptors so that it can then easily use it
+>> in a generic way in LKDTM.
+> 
+> I'll test the series on ia64 later this week. I have an Itanium box at
+> home for testing kernel patches.
 
-Fast forward to today.  /dev/random has the correct semantics for cryptographic purposes.  getrandom() also has the correct semantics for cryptographic purposes and is reliable as such -- it is guaranteed to either not exist or to DTRT.  And best-effort users can use GRND_INSECURE or /dev/urandom.
+Series applied on top of 038101e6b2cd5c55f888f85db42ea2ad3aecb4b6 and
+successfully tested on my HP Integrity RX2600 server.
 
-If we imagine that every user program we care about uses GRND_INSECURE for best-effort and /dev/random or getrandom() without GRND_INSECURE for cryptography, then we're in great shape and this patch is irrelevant.
+Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 
-But we don't get to rely on that.  New kernels are supposed to be compatible with old userspace.  And with *old* userspace, we do not know whether /dev/urandom users want cryptographically secure output or whether they want insecure output.  And there is this window during boot that lasts, supposedly, up to 1 second, there is a massive difference. [0]
+Adrian
 
-So, sorry, this patch is an ABI break.  You're reinterpreting any program that wanted best-effort randomness right after boot as wanting cryptographic randomness, this can delay boot by up to a second [0], and that's more than enough delay to be considered a break.
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer - glaubitz@debian.org
+`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
-So I don't like this without a stronger justification and a clearer compatibility story.  I could *maybe* get on board if you had a urandom=insecure boot option to switch back to the old behavior and a very clear message like "random: startup of %s is delayed. Set urandom=insecure for faster boot if you do not need cryptographically secure urandom during boot", but I don't think this patch is okay otherwise.
-
-Or we stick with the status quo and make the warning clearer.  "random: %s us using insecure urandom output.  Fix it to use getrandom() or /dev/rando as appropriate."
-
-[0] I just booted 5.16 in a Skylake -rdrand,-rdseed VM and it took 1.14 seconds to initialize.
