@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5FCA4BD661
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 07:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 270FF4BD6AA
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 07:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345460AbiBUGlc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Feb 2022 01:41:32 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42278 "EHLO
+        id S1345306AbiBUGlb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Feb 2022 01:41:31 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:41614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345351AbiBUGlG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 01:41:06 -0500
+        with ESMTP id S1345403AbiBUGlT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 01:41:19 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D99524474F;
-        Sun, 20 Feb 2022 22:39:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D3394476E;
+        Sun, 20 Feb 2022 22:39:58 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1B121476;
-        Sun, 20 Feb 2022 22:39:54 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFE271509;
+        Sun, 20 Feb 2022 22:39:57 -0800 (PST)
 Received: from p8cg001049571a15.arm.com (unknown [10.163.49.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 41ECF3F70D;
-        Sun, 20 Feb 2022 22:39:50 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3A4493F70D;
+        Sun, 20 Feb 2022 22:39:54 -0800 (PST)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org, akpm@linux-foundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Christoph Hellwig <hch@infradead.org>,
-        linux-arch@vger.kernel.org, Chris Zankel <chris@zankel.net>,
-        Guo Ren <guoren@kernel.org>, linux-xtensa@linux-xtensa.org,
-        linux-csky@vger.kernel.org
-Subject: [PATCH V2 20/30] extensa/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Mon, 21 Feb 2022 12:08:29 +0530
-Message-Id: <1645425519-9034-21-git-send-email-anshuman.khandual@arm.com>
+        linux-arch@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        linux-parisc@vger.kernel.org
+Subject: [PATCH V2 21/30] parisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Mon, 21 Feb 2022 12:08:30 +0530
+Message-Id: <1645425519-9034-22-git-send-email-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
 References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
@@ -47,67 +47,67 @@ This defines and exports a platform specific custom vm_get_page_prot() via
 subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
 macros can be dropped which are no longer needed.
 
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-csky@vger.kernel.org
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: linux-parisc@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/xtensa/Kconfig               |  1 +
- arch/xtensa/include/asm/pgtable.h | 18 ----------------
- arch/xtensa/mm/init.c             | 35 +++++++++++++++++++++++++++++++
- 3 files changed, 36 insertions(+), 18 deletions(-)
+ arch/parisc/Kconfig               |  1 +
+ arch/parisc/include/asm/pgtable.h | 20 ----------------
+ arch/parisc/mm/init.c             | 40 +++++++++++++++++++++++++++++++
+ 3 files changed, 41 insertions(+), 20 deletions(-)
 
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 8ac599aa6d99..1608f7517546 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -9,6 +9,7 @@ config XTENSA
- 	select ARCH_HAS_DMA_SET_UNCACHED if MMU
- 	select ARCH_HAS_STRNCPY_FROM_USER if !KASAN
- 	select ARCH_HAS_STRNLEN_USER
+diff --git a/arch/parisc/Kconfig b/arch/parisc/Kconfig
+index 43c1c880def6..de512f120b50 100644
+--- a/arch/parisc/Kconfig
++++ b/arch/parisc/Kconfig
+@@ -10,6 +10,7 @@ config PARISC
+ 	select ARCH_HAS_ELF_RANDOMIZE
+ 	select ARCH_HAS_STRICT_KERNEL_RWX
+ 	select ARCH_HAS_UBSAN_SANITIZE_ALL
 +	select ARCH_HAS_VM_GET_PAGE_PROT
- 	select ARCH_USE_MEMTEST
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
-diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
-index bd5aeb795567..ed6e93097142 100644
---- a/arch/xtensa/include/asm/pgtable.h
-+++ b/arch/xtensa/include/asm/pgtable.h
-@@ -200,24 +200,6 @@
-  * What follows is the closest we can get by reasonable means..
-  * See linux/mm/mmap.c for protection_map[] array that uses these definitions.
+ 	select ARCH_NO_SG_CHAIN
+ 	select ARCH_SUPPORTS_HUGETLBFS if PA20
+ 	select ARCH_SUPPORTS_MEMORY_FAILURE
+diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
+index 3e7cf882639f..80d99b2b5913 100644
+--- a/arch/parisc/include/asm/pgtable.h
++++ b/arch/parisc/include/asm/pgtable.h
+@@ -269,26 +269,6 @@ extern void __update_cache(pte_t pte);
+  * pages.
   */
--#define __P000	PAGE_NONE		/* private --- */
--#define __P001	PAGE_READONLY		/* private --r */
--#define __P010	PAGE_COPY		/* private -w- */
--#define __P011	PAGE_COPY		/* private -wr */
--#define __P100	PAGE_READONLY_EXEC	/* private x-- */
--#define __P101	PAGE_READONLY_EXEC	/* private x-r */
--#define __P110	PAGE_COPY_EXEC		/* private xw- */
--#define __P111	PAGE_COPY_EXEC		/* private xwr */
--
--#define __S000	PAGE_NONE		/* shared  --- */
--#define __S001	PAGE_READONLY		/* shared  --r */
--#define __S010	PAGE_SHARED		/* shared  -w- */
--#define __S011	PAGE_SHARED		/* shared  -wr */
--#define __S100	PAGE_READONLY_EXEC	/* shared  x-- */
--#define __S101	PAGE_READONLY_EXEC	/* shared  x-r */
--#define __S110	PAGE_SHARED_EXEC	/* shared  xw- */
--#define __S111	PAGE_SHARED_EXEC	/* shared  xwr */
--
- #ifndef __ASSEMBLY__
  
- #define pte_ERROR(e) \
-diff --git a/arch/xtensa/mm/init.c b/arch/xtensa/mm/init.c
-index 6a32b2cf2718..5f090749e9e0 100644
---- a/arch/xtensa/mm/init.c
-+++ b/arch/xtensa/mm/init.c
-@@ -216,3 +216,38 @@ static int __init parse_memmap_opt(char *str)
- 	return 0;
+-	 /*xwr*/
+-#define __P000  PAGE_NONE
+-#define __P001  PAGE_READONLY
+-#define __P010  __P000 /* copy on write */
+-#define __P011  __P001 /* copy on write */
+-#define __P100  PAGE_EXECREAD
+-#define __P101  PAGE_EXECREAD
+-#define __P110  __P100 /* copy on write */
+-#define __P111  __P101 /* copy on write */
+-
+-#define __S000  PAGE_NONE
+-#define __S001  PAGE_READONLY
+-#define __S010  PAGE_WRITEONLY
+-#define __S011  PAGE_SHARED
+-#define __S100  PAGE_EXECREAD
+-#define __S101  PAGE_EXECREAD
+-#define __S110  PAGE_RWX
+-#define __S111  PAGE_RWX
+-
+-
+ extern pgd_t swapper_pg_dir[]; /* declared in init_task.c */
+ 
+ /* initial page tables for 0-8MB for kernel */
+diff --git a/arch/parisc/mm/init.c b/arch/parisc/mm/init.c
+index 1dc2e88e7b04..f9e841f874a8 100644
+--- a/arch/parisc/mm/init.c
++++ b/arch/parisc/mm/init.c
+@@ -865,3 +865,43 @@ void flush_tlb_all(void)
+ 	spin_unlock(&sid_lock);
  }
- early_param("memmap", parse_memmap_opt);
+ #endif
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
@@ -116,28 +116,33 @@ index 6a32b2cf2718..5f090749e9e0 100644
 +		return PAGE_NONE;
 +	case VM_READ:
 +		return PAGE_READONLY;
++	/* copy on write */
 +	case VM_WRITE:
++		return PAGE_NONE;
++	/* copy on write */
 +	case VM_WRITE | VM_READ:
-+		return PAGE_COPY;
++		return PAGE_READONLY;
 +	case VM_EXEC:
 +	case VM_EXEC | VM_READ:
-+		return PAGE_READONLY_EXEC;
++	/* copy on write */
 +	case VM_EXEC | VM_WRITE:
++	/* copy on write */
 +	case VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_COPY_EXEC;
++		return PAGE_EXECREAD;
 +	case VM_SHARED:
 +		return PAGE_NONE;
 +	case VM_SHARED | VM_READ:
 +		return PAGE_READONLY;
 +	case VM_SHARED | VM_WRITE:
++		return PAGE_WRITEONLY;
 +	case VM_SHARED | VM_WRITE | VM_READ:
 +		return PAGE_SHARED;
 +	case VM_SHARED | VM_EXEC:
 +	case VM_SHARED | VM_EXEC | VM_READ:
-+		return PAGE_READONLY_EXEC;
++		return PAGE_EXECREAD;
 +	case VM_SHARED | VM_EXEC | VM_WRITE:
 +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-+		return PAGE_SHARED_EXEC;
++		return PAGE_RWX;
 +	default:
 +		BUILD_BUG();
 +	}
