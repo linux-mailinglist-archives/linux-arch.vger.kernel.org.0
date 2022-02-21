@@ -2,209 +2,215 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6964BD1FD
-	for <lists+linux-arch@lfdr.de>; Sun, 20 Feb 2022 22:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F664BD645
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 07:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245058AbiBTVWQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 20 Feb 2022 16:22:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57822 "EHLO
+        id S1345260AbiBUGjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Feb 2022 01:39:10 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239021AbiBTVWQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Feb 2022 16:22:16 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2E71AF13
-        for <linux-arch@vger.kernel.org>; Sun, 20 Feb 2022 13:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1645392114; x=1676928114;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=57TygeFpPkkBqOCo3XnmROODD5q1i3sWxEXfQPl+Q5Y=;
-  b=aUyuZgHNUr2gDxFK01/gmwuNxncH0iunkhZsVgcqtKloBjLHevUg+F0+
-   C3ONt4k7nMt5GBC74BHO5GvX4cimMyKc+KssOpH2uiRU7Se5A60D73z0B
-   PUA8faZ5daqHmZK++EFXFUYPzXSzZVGv7Zv1aRsCTCLMrYbl3tW8Dmz4j
-   CXMg7J875ifXilLLllO0VOoN1QQbsvJcplET8hZSxGCQyjudo52+r8Eh3
-   3xOUKD6Rk8Ld1bqujl9WrYm2M0JsxfogecRyvazYc6YurZXf/SXq/FvoX
-   CWpNX80zf37C+6uM0Bdg0SUH8INEhKuUPX7xKQ91hhn2CtTTTY8Gor4Ma
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10264"; a="248984005"
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="248984005"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2022 13:21:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,384,1635231600"; 
-   d="scan'208";a="775811379"
-Received: from lkp-server01.sh.intel.com (HELO da3212ac2f54) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Feb 2022 13:21:53 -0800
-Received: from kbuild by da3212ac2f54 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nLteS-0000oA-Gv; Sun, 20 Feb 2022 21:21:52 +0000
-Date:   Mon, 21 Feb 2022 05:21:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:set_fs-3] BUILD SUCCESS
- 81ba80d2dbd7f4536edb20b54754ad03b910e4aa
-Message-ID: <6212b0e6.dr1YHt5V0Vk02tgX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S1345259AbiBUGjK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 01:39:10 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE1A5654D;
+        Sun, 20 Feb 2022 22:38:46 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 95DCA113E;
+        Sun, 20 Feb 2022 22:38:46 -0800 (PST)
+Received: from p8cg001049571a15.arm.com (unknown [10.163.49.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2EF0F3F70D;
+        Sun, 20 Feb 2022 22:38:43 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch@vger.kernel.org
+Subject: [PATCH V2 00/30] mm/mmap: Drop protection_map[] and platform's __SXXX/__PXXX requirements
+Date:   Mon, 21 Feb 2022 12:08:09 +0530
+Message-Id: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git set_fs-3
-branch HEAD: 81ba80d2dbd7f4536edb20b54754ad03b910e4aa  uaccess: remove CONFIG_SET_FS
+protection_map[] is an array based construct that translates given vm_flags
+combination. This array contains page protection map, which is populated by
+the platform via [__S000 .. __S111] and [__P000 .. __P111] exported macros.
+Primary usage for protection_map[] is for vm_get_page_prot(), which is used
+to determine page protection value for a given vm_flags. vm_get_page_prot()
+implementation, could again call platform overrides arch_vm_get_page_prot()
+and arch_filter_pgprot(). Some platforms override protection_map[] that was
+originally built with __SXXX/__PXXX with different runtime values.
 
-elapsed time: 731m
+Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+, protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+between the platform and generic MM, finally defining vm_get_page_prot().
 
-configs tested: 126
-configs skipped: 3
+Hence this series proposes to drop all these abstraction levels and instead
+just move the responsibility of defining vm_get_page_prot() to the platform
+itself making it clean and simple.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This first introduces ARCH_HAS_VM_GET_PAGE_PROT which enables the platforms
+to define custom vm_get_page_prot(). This starts converting platforms that
+either change protection_map[] or define the overrides arch_filter_pgprot()
+or arch_vm_get_page_prot() which enables for those constructs to be dropped
+off completely. This series then converts remaining platforms which enables
+for __SXXX/__PXXX constructs to be dropped off completely. Finally it drops
+the generic vm_get_page_prot() and then ARCH_HAS_VM_GET_PAGE_PROT as every
+platform now defines their own vm_get_page_prot().
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allmodconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-mips                 randconfig-c004-20220220
-i386                          randconfig-c001
-sh                          landisk_defconfig
-powerpc                     redwood_defconfig
-arm                          badge4_defconfig
-arm                         lpc18xx_defconfig
-powerpc                     pq2fads_defconfig
-mips                             allyesconfig
-ia64                         bigsur_defconfig
-mips                      maltasmvp_defconfig
-xtensa                    smp_lx200_defconfig
-xtensa                          iss_defconfig
-powerpc                      ppc40x_defconfig
-sh                        edosk7760_defconfig
-powerpc                       ppc64_defconfig
-arm                       multi_v4t_defconfig
-powerpc                    klondike_defconfig
-m68k                        m5272c3_defconfig
-xtensa                              defconfig
-powerpc                      pcm030_defconfig
-mips                       bmips_be_defconfig
-h8300                            alldefconfig
-powerpc                    sam440ep_defconfig
-powerpc                   motionpro_defconfig
-sh                             espt_defconfig
-powerpc                     tqm8555_defconfig
-sh                           se7343_defconfig
-sh                   rts7751r2dplus_defconfig
-nios2                         10m50_defconfig
-arm                         lubbock_defconfig
-sh                         ecovec24_defconfig
-mips                           xway_defconfig
-mips                      loongson3_defconfig
-arm64                            alldefconfig
-powerpc                     rainier_defconfig
-sh                        dreamcast_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                        vocore2_defconfig
-um                           x86_64_defconfig
-sh                           se7751_defconfig
-arm                            zeus_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                      bamboo_defconfig
-nds32                               defconfig
-powerpc                      ppc6xx_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220220
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-arc                  randconfig-r043-20220220
-riscv                randconfig-r042-20220220
-s390                 randconfig-r044-20220220
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
+The series has been inspired from an earlier discuss with Christoph Hellwig
 
-clang tested configs:
-powerpc              randconfig-c003-20220220
-x86_64                        randconfig-c007
-arm                  randconfig-c002-20220220
-mips                 randconfig-c004-20220220
-i386                          randconfig-c001
-riscv                randconfig-c006-20220220
-powerpc                    mvme5100_defconfig
-powerpc                        fsp2_defconfig
-powerpc                 mpc836x_mds_defconfig
-powerpc                     mpc5200_defconfig
-powerpc                     kilauea_defconfig
-mips                        workpad_defconfig
-powerpc                   bluestone_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220220
-hexagon              randconfig-r041-20220220
+https://lore.kernel.org/all/1632712920-8171-1-git-send-email-anshuman.khandual@arm.com/
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This series applies on 5.17-rc5 after the following patch.
+
+https://lore.kernel.org/all/1643004823-16441-1-git-send-email-anshuman.khandual@arm.com/
+
+This series has been cross built for multiple platforms.
+
+- Anshuman
+
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Changes in V2:
+
+- Dropped the entire comment block in [PATCH 30/30] per Geert
+- Replaced __P010 (although commented) with __PAGE_COPY on arm platform
+- Replaced __P101 with PAGE_READONLY on um platform
+
+Changes in V1:
+
+https://lore.kernel.org/all/1644805853-21338-1-git-send-email-anshuman.khandual@arm.com/
+
+- Add white spaces around the | operators 
+- Moved powerpc_vm_get_page_prot() near vm_get_page_prot() on powerpc
+- Moved arm64_vm_get_page_prot() near vm_get_page_prot() on arm64
+- Moved sparc_vm_get_page_prot() near vm_get_page_prot() on sparc
+- Compacted vm_get_page_prot() switch cases on all platforms
+-  _PAGE_CACHE040 inclusion is dependent on CPU_IS_040_OR_060
+- VM_SHARED case should return PAGE_NONE (not PAGE_COPY) on SH platform
+- Reorganized VM_SHARED, VM_EXEC, VM_WRITE, VM_READ
+- Dropped the last patch [RFC V1 31/31] which added macros for vm_flags combinations
+  https://lore.kernel.org/all/1643029028-12710-32-git-send-email-anshuman.khandual@arm.com/
+
+Changes in RFC:
+
+https://lore.kernel.org/all/1643029028-12710-1-git-send-email-anshuman.khandual@arm.com/
+
+Anshuman Khandual (29):
+  mm/debug_vm_pgtable: Drop protection_map[] usage
+  mm/mmap: Clarify protection_map[] indices
+  mm/mmap: Add new config ARCH_HAS_VM_GET_PAGE_PROT
+  powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  sparc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mips/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mm/mmap: Drop protection_map[]
+  mm/mmap: Drop arch_filter_pgprot()
+  mm/mmap: Drop arch_vm_get_page_pgprot()
+  s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  riscv/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  alpha/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  sh/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  csky/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  extensa/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  parisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  openrisc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  um/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  microblaze/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  hexagon/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  nds32/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  ia64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mm/mmap: Drop generic vm_get_page_prot()
+  mm/mmap: Drop ARCH_HAS_VM_GET_PAGE_PROT
+
+Christoph Hellwig (1):
+  x86/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+
+ arch/alpha/include/asm/pgtable.h          |  17 ----
+ arch/alpha/mm/init.c                      |  37 ++++++++
+ arch/arc/include/asm/pgtable-bits-arcv2.h |  17 ----
+ arch/arc/mm/mmap.c                        |  41 +++++++++
+ arch/arm/include/asm/pgtable.h            |  18 ----
+ arch/arm/lib/uaccess_with_memcpy.c        |   2 +-
+ arch/arm/mm/mmu.c                         |  44 +++++++--
+ arch/arm64/Kconfig                        |   1 -
+ arch/arm64/include/asm/mman.h             |  24 -----
+ arch/arm64/include/asm/pgtable-prot.h     |  18 ----
+ arch/arm64/include/asm/pgtable.h          |  11 ---
+ arch/arm64/mm/mmap.c                      |  78 ++++++++++++++++
+ arch/csky/include/asm/pgtable.h           |  18 ----
+ arch/csky/mm/init.c                       |  32 +++++++
+ arch/hexagon/include/asm/pgtable.h        |  24 -----
+ arch/hexagon/mm/init.c                    |  67 ++++++++++++++
+ arch/ia64/include/asm/pgtable.h           |  17 ----
+ arch/ia64/mm/init.c                       |  41 ++++++++-
+ arch/m68k/include/asm/mcf_pgtable.h       |  59 ------------
+ arch/m68k/include/asm/motorola_pgtable.h  |  22 -----
+ arch/m68k/include/asm/sun3_pgtable.h      |  22 -----
+ arch/m68k/mm/init.c                       | 104 ++++++++++++++++++++++
+ arch/m68k/mm/motorola.c                   |  48 +++++++++-
+ arch/microblaze/include/asm/pgtable.h     |  17 ----
+ arch/microblaze/mm/init.c                 |  41 +++++++++
+ arch/mips/include/asm/pgtable.h           |  22 -----
+ arch/mips/mm/cache.c                      |  60 +++++++------
+ arch/nds32/include/asm/pgtable.h          |  17 ----
+ arch/nds32/mm/mmap.c                      |  37 ++++++++
+ arch/nios2/include/asm/pgtable.h          |  16 ----
+ arch/nios2/mm/init.c                      |  45 ++++++++++
+ arch/openrisc/include/asm/pgtable.h       |  18 ----
+ arch/openrisc/mm/init.c                   |  41 +++++++++
+ arch/parisc/include/asm/pgtable.h         |  20 -----
+ arch/parisc/mm/init.c                     |  40 +++++++++
+ arch/powerpc/include/asm/mman.h           |  12 ---
+ arch/powerpc/include/asm/pgtable.h        |  19 ----
+ arch/powerpc/mm/mmap.c                    |  59 ++++++++++++
+ arch/riscv/include/asm/pgtable.h          |  16 ----
+ arch/riscv/mm/init.c                      |  42 +++++++++
+ arch/s390/include/asm/pgtable.h           |  17 ----
+ arch/s390/mm/mmap.c                       |  33 +++++++
+ arch/sh/include/asm/pgtable.h             |  17 ----
+ arch/sh/mm/mmap.c                         |  38 ++++++++
+ arch/sparc/include/asm/mman.h             |   6 --
+ arch/sparc/include/asm/pgtable_32.h       |  19 ----
+ arch/sparc/include/asm/pgtable_64.h       |  19 ----
+ arch/sparc/mm/init_32.c                   |  35 ++++++++
+ arch/sparc/mm/init_64.c                   |  70 +++++++++++----
+ arch/um/include/asm/pgtable.h             |  17 ----
+ arch/um/kernel/mem.c                      |  35 ++++++++
+ arch/x86/Kconfig                          |   1 -
+ arch/x86/include/asm/pgtable.h            |   5 --
+ arch/x86/include/asm/pgtable_types.h      |  19 ----
+ arch/x86/include/uapi/asm/mman.h          |  14 ---
+ arch/x86/mm/Makefile                      |   2 +-
+ arch/x86/mm/mem_encrypt_amd.c             |   4 -
+ arch/x86/mm/pgprot.c                      |  71 +++++++++++++++
+ arch/x86/um/mem_32.c                      |   2 +-
+ arch/xtensa/include/asm/pgtable.h         |  18 ----
+ arch/xtensa/mm/init.c                     |  35 ++++++++
+ include/linux/mm.h                        |   6 --
+ include/linux/mman.h                      |   4 -
+ mm/Kconfig                                |   3 -
+ mm/debug_vm_pgtable.c                     |  31 ++++---
+ mm/mmap.c                                 |  42 ---------
+ 66 files changed, 1142 insertions(+), 705 deletions(-)
+ create mode 100644 arch/x86/mm/pgprot.c
+
+-- 
+2.25.1
+
