@@ -2,328 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B4E4BE99F
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 19:07:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A384BE264
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Feb 2022 18:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348213AbiBULzL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Feb 2022 06:55:11 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:52142 "EHLO
+        id S1358506AbiBUNDx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Feb 2022 08:03:53 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356969AbiBULzG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 06:55:06 -0500
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738071EEED;
-        Mon, 21 Feb 2022 03:54:41 -0800 (PST)
-Received: by mail-vs1-f49.google.com with SMTP id u10so17225797vsu.13;
-        Mon, 21 Feb 2022 03:54:41 -0800 (PST)
+        with ESMTP id S1358508AbiBUNDw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Feb 2022 08:03:52 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1831EAEB
+        for <linux-arch@vger.kernel.org>; Mon, 21 Feb 2022 05:03:28 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id u16so8772210pfg.12
+        for <linux-arch@vger.kernel.org>; Mon, 21 Feb 2022 05:03:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=r1zJaBUPNQBJIkixJM/WVkMBxWgtgajvPcDkUoia8nw=;
+        b=QnZkls7K0VNfKFBglx6GNOStp6Yq+iqgHp41VtEBvqCXS6w/C9J9NJnnMlf2M6aogJ
+         WHdxc+hZD0FmS01Jv3fAwEU/Q9o74oK0Kn9OGGyrhSO5YxQlkE7nn5192T9lfi40MyU8
+         0EMBAOjyeLXN5D0gBPWl6xeh7Qn2LwiITJ/sJ2oSPRMaW8NMZbkDruWAs/n1iWQcWhPB
+         +SoYQlkKmi8+IO9Ee3clR9oX+NVf5O200F4KKH8WVrzNhlOIESFBTLVxbJSHjK4pmELS
+         QS9LlNAKWe1Z9FDd/sS4CdLo2qvkspIY/x+5PL8e8zZvd0lOvYuQuHpE/F4NLdelkAoy
+         qCYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t9glkrk7WFBjBWlhxGJJjxKdsiWpb+Qpxc6YsbbmFGE=;
-        b=WEIXnCdMIoqOxNuwXX78kcR4LqeBB7YRIdCysJLbhmbo1D9EO3Sj7heLsJPkgwh1I7
-         Lyw5a5SQdQcPSRY+30lYw5S4LNe4pCLYNvi+anRpPRbAFiieofPpfuuFTdStC56yaYK7
-         wxv+Q1ups177Re4FuPQ+pbxVXvMVPl0KW6tV1oYqSdjfA+nifRX3yVZiuJYJhUxNIDV9
-         6ijtnvcHWt/gKAGQ5Z8vD931Jegu7zR0Gjy2ZfzzV+seiW5XPC4L+G2Dfxg2xQcnmi+1
-         NM9X5lyiVv7lAZbyZvh2sIfUTaX1w6UpgXUOUgOy4uBkJFlmIhmOSQdHTu7uIcqJJXHk
-         yH7Q==
-X-Gm-Message-State: AOAM530HO39jN2B8/GiTD7qGIRGZtPHG9yCkoRm/udYFk+2cMtP56zao
-        rmF1CJulFlfP9Xz6LoSENXySsK7HkkoXBA==
-X-Google-Smtp-Source: ABdhPJyh1G2tM1yuaBb14wanBkfA8XBta8okdeqN1cA4hCMtWIremTrS/pMgq3OMx9Is8YvJt0sb6g==
-X-Received: by 2002:a05:6102:418a:b0:31a:1d33:6803 with SMTP id cd10-20020a056102418a00b0031a1d336803mr7910313vsb.40.1645444480412;
-        Mon, 21 Feb 2022 03:54:40 -0800 (PST)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
-        by smtp.gmail.com with ESMTPSA id i13sm646550uap.12.2022.02.21.03.54.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Feb 2022 03:54:40 -0800 (PST)
-Received: by mail-ua1-f54.google.com with SMTP id 110so5849721uak.4;
-        Mon, 21 Feb 2022 03:54:39 -0800 (PST)
-X-Received: by 2002:a9f:360f:0:b0:341:8a12:8218 with SMTP id
- r15-20020a9f360f000000b003418a128218mr6031609uad.14.1645444479570; Mon, 21
- Feb 2022 03:54:39 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=r1zJaBUPNQBJIkixJM/WVkMBxWgtgajvPcDkUoia8nw=;
+        b=R/Hwh4dgCR073DnEkG2cI3tCTKVeEVSaJTgzDRYdo4JXQFhN3ZDzZzPHmJ/nmi25ZR
+         Bv+RZI+7QuZHoLpgqbZfJTx/MFrAsEbISk4TDTyGgD1L72+pkjJ8lmJ7MRDlqA+9vS00
+         xjDDcfO1HBwCny+uWtn7rgQjKgNOyb+mWUYkWZ+WWn2s3IUXB37Kh0lZi6Sm6Ipx6Zv3
+         9nYpGx/fFVTV/yFmycgrSo4XGay8BB4NkGIT47nLHlDPe+4zanAmuNX0NqRrWUDcxeyc
+         RIgy0DD3BY1y2oFjlE231RC7z5MD4Yl12FvWUhxt6USLCa1jpO+B5mH042/mHmETZ1zG
+         7ihQ==
+X-Gm-Message-State: AOAM532zVR0bigSztJlWr1o/Au4AAYsO5eWigY3d8plTuoa1XsWrC57F
+        8PKxn92x+omjfyQCo8f33D2OThbBUYUPZSFeYlQ=
+X-Google-Smtp-Source: ABdhPJyxm9XQb8UAcmwMjaql0CRPtfGhVq4b3EHRsVqmXF9mIx6HevSbmlzdmUAYK7+fqQ020lp5bYjCVskHIysj7Hs=
+X-Received: by 2002:a05:6a00:2313:b0:4e0:ffa7:bbe0 with SMTP id
+ h19-20020a056a00231300b004e0ffa7bbe0mr19856274pfh.53.1645448608066; Mon, 21
+ Feb 2022 05:03:28 -0800 (PST)
 MIME-Version: 1.0
-References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com> <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
-In-Reply-To: <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Feb 2022 12:54:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUrA4u5BTRuqTSn++vXFNn0w=HRmp9ZD_8SNZ1wMUKwwQ@mail.gmail.com>
-Message-ID: <CAMuHMdUrA4u5BTRuqTSn++vXFNn0w=HRmp9ZD_8SNZ1wMUKwwQ@mail.gmail.com>
-Subject: Re: [PATCH V2 08/30] m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Reply-To: wallaceharrisonun1@gmail.com
+Sender: mj6455009@gmail.com
+Received: by 2002:a05:6a20:4a09:b0:76:527d:adaa with HTTP; Mon, 21 Feb 2022
+ 05:03:27 -0800 (PST)
+From:   "Mr. wallace harrisonun" <wallaceharrisonun1@gmail.com>
+Date:   Mon, 21 Feb 2022 05:03:27 -0800
+X-Google-Sender-Auth: QWjfpu5pcsO8OfrPFyACyFs2bvM
+Message-ID: <CALQs60wTJYH76=OoaV-fUvQsULozm5ND8uYtOKDCRFJd-ZRn5w@mail.gmail.com>
+Subject: Palliative Empowerment
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
+        MONEY_FORM_SHORT,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:434 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [wallaceharrisonun1[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wallaceharrisonun1[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mj6455009[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  1.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  0.0 MONEY_FRAUD_3 Lots of money and several fraud phrases
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Anshuman,
+Greetings!
 
-On Mon, Feb 21, 2022 at 9:45 AM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
-> This defines and exports a platform specific custom vm_get_page_prot() via
-> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
-> macros can be dropped which are no longer needed.
->
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-m68k@lists.linux-m68k.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+ We are writing this message to you from the United Nations Centre to
+inform you that you have been chosen as our Representative in your
+country, to distribute the total sum of $500,000 US Dollars, For
+Palliative Empowerment in order to help the poor people in your city.
+Such as the Disabled people, The homeless, Orphanages, schools, and
+Generals=E2=80=99 Hospitals ,if you receive the message reply to us with yo=
+ur
+details, Your Full Name Your Address: Your Occupation: Via this
+Email:<wallaceharrisonun1@gmail.com>  For more information about the
+payment.
 
-Thanks for your patch!
-
-> --- a/arch/m68k/mm/init.c
-> +++ b/arch/m68k/mm/init.c
-> @@ -128,3 +128,107 @@ void __init mem_init(void)
->         memblock_free_all();
->         init_pointer_tables();
->  }
-> +
-> +#ifdef CONFIG_COLDFIRE
-> +/*
-> + * Page protections for initialising protection_map. See mm/mmap.c
-> + * for use. In general, the bit positions are xwr, and P-items are
-> + * private, the S-items are shared.
-> + */
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-
-Wouldn't it make more sense to add this to arch/m68k/mm/mcfmmu.c?
-
-> +{
-> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +       case VM_NONE:
-> +               return PAGE_NONE;
-> +       case VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE);
-> +       case VM_WRITE:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_WRITABLE);
-> +       case VM_WRITE | VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE | CF_PAGE_WRITABLE);
-> +       case VM_EXEC:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_EXEC);
-> +       case VM_EXEC | VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE | CF_PAGE_EXEC);
-> +       case VM_EXEC | VM_WRITE:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_WRITABLE | CF_PAGE_EXEC);
-> +       case VM_EXEC | VM_WRITE | VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE | CF_PAGE_WRITABLE |
-> +                               CF_PAGE_EXEC);
-> +       case VM_SHARED:
-> +               return PAGE_NONE;
-> +       case VM_SHARED | VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE);
-
-This is the same as the plain VM_READ case.
-Perhaps they can be merged?
-
-> +       case VM_SHARED | VM_WRITE:
-> +               return PAGE_SHARED;
-> +       case VM_SHARED | VM_WRITE | VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE | CF_PAGE_SHARED);
-> +       case VM_SHARED | VM_EXEC:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_EXEC);
-
-Same as plain VM_EXEC.
-
-> +       case VM_SHARED | VM_EXEC | VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE | CF_PAGE_EXEC);
-
-Same as plain VM_EXEC | VM_READ.
-
-> +       case VM_SHARED | VM_EXEC | VM_WRITE:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_SHARED | CF_PAGE_EXEC);
-> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
-> +                               CF_PAGE_READABLE | CF_PAGE_SHARED |
-> +                               CF_PAGE_EXEC);
-> +       default:
-> +               BUILD_BUG();
-> +       }
-> +}
-> +#endif
-> +
-> +#ifdef CONFIG_SUN3
-> +/*
-> + * Page protections for initialising protection_map. The sun3 has only two
-> + * protection settings, valid (implying read and execute) and writeable. These
-> + * are as close as we can get...
-> + */
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-
-Wouldn't it make more sense to add this to arch/m68k/mm/sun3mmu.c?
-
-> +{
-> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +       case VM_NONE:
-> +               return PAGE_NONE;
-> +       case VM_READ:
-> +               return PAGE_READONLY;
-> +       case VM_WRITE:
-> +       case VM_WRITE | VM_READ:
-
-So you did merge some of them...
-
-> +               return PAGE_COPY;
-> +       case VM_EXEC:
-> +       case VM_EXEC | VM_READ:
-> +               return PAGE_READONLY;
-
-But not all? More below...
-
-> +       case VM_EXEC | VM_WRITE:
-> +       case VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_COPY;
-> +       case VM_SHARED:
-> +               return PAGE_NONE;
-> +       case VM_SHARED | VM_READ:
-> +               return PAGE_READONLY;
-> +       case VM_SHARED | VM_WRITE:
-> +       case VM_SHARED | VM_WRITE | VM_READ:
-> +               return PAGE_SHARED;
-> +       case VM_SHARED | VM_EXEC:
-> +       case VM_SHARED | VM_EXEC | VM_READ:
-> +               return PAGE_READONLY;
-> +       case VM_SHARED | VM_EXEC | VM_WRITE:
-> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +               return PAGE_SHARED;
-> +       default:
-> +               BUILD_BUG();
-> +       }
-> +}
-> +#endif
-> +EXPORT_SYMBOL(vm_get_page_prot);
-> diff --git a/arch/m68k/mm/motorola.c b/arch/m68k/mm/motorola.c
-> index ecbe948f4c1a..495ba0ea083c 100644
-> --- a/arch/m68k/mm/motorola.c
-> +++ b/arch/m68k/mm/motorola.c
-> @@ -400,12 +400,9 @@ void __init paging_init(void)
->
->         /* Fix the cache mode in the page descriptors for the 680[46]0.  */
->         if (CPU_IS_040_OR_060) {
-> -               int i;
->  #ifndef mm_cachebits
->                 mm_cachebits = _PAGE_CACHE040;
->  #endif
-> -               for (i = 0; i < 16; i++)
-> -                       pgprot_val(protection_map[i]) |= _PAGE_CACHE040;
->         }
->
->         min_addr = m68k_memory[0].addr;
-> @@ -483,3 +480,48 @@ void __init paging_init(void)
->         max_zone_pfn[ZONE_DMA] = memblock_end_of_DRAM();
->         free_area_init(max_zone_pfn);
->  }
-> +
-> +/*
-> + * The m68k can't do page protection for execute, and considers that
-> + * the same are read. Also, write permissions imply read permissions.
-> + * This is the closest we can get..
-> + */
-> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
-
-Good, this one is in arch/m68k/mm/motorola.c :-)
-
-> +{
-> +       unsigned long cachebits = 0;
-> +
-> +       if (CPU_IS_040_OR_060)
-> +               cachebits = _PAGE_CACHE040;
-
-If you would use the non-"_C"-variants (e.g. PAGE_NONE instead of
-PAGE_NONE_C) below, you would get the cachebits handling for free!
-After that, the "_C" variants are no longer used, and can be removed.
-Cfr. arch/m68k/include/asm/motorola_pgtable.h:
-
-    #define PAGE_NONE       __pgprot(_PAGE_PROTNONE | _PAGE_ACCESSED |
-mm_cachebits)
-    #define PAGE_SHARED     __pgprot(_PAGE_PRESENT | _PAGE_ACCESSED |
-mm_cachebits)
-    #define PAGE_COPY       __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-_PAGE_ACCESSED | mm_cachebits)
-    #define PAGE_READONLY   __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-_PAGE_ACCESSED | mm_cachebits)
-    #define PAGE_KERNEL     __pgprot(_PAGE_PRESENT | _PAGE_DIRTY |
-_PAGE_ACCESSED | mm_cachebits)
-
-    /* Alternate definitions that are compile time constants, for
-       initializing protection_map.  The cachebits are fixed later.  */
-    #define PAGE_NONE_C     __pgprot(_PAGE_PROTNONE | _PAGE_ACCESSED)
-    #define PAGE_SHARED_C   __pgprot(_PAGE_PRESENT | _PAGE_ACCESSED)
-    #define PAGE_COPY_C     __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-_PAGE_ACCESSED)
-    #define PAGE_READONLY_C __pgprot(_PAGE_PRESENT | _PAGE_RONLY |
-_PAGE_ACCESSED)
-
-BTW, this shows you left a reference in a comment to the now-gone
-"protection_map".  There are several more across the tree.
-
-> +
-> +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
-> +       case VM_NONE:
-> +               return __pgprot(pgprot_val(PAGE_NONE_C) | cachebits);
-> +       case VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_READONLY_C) | cachebits);
-> +       case VM_WRITE:
-> +       case VM_WRITE | VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_COPY_C) | cachebits);
-> +       case VM_EXEC:
-> +       case VM_EXEC | VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_READONLY_C) | cachebits);
-> +       case VM_EXEC | VM_WRITE:
-> +       case VM_EXEC | VM_WRITE | VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_COPY_C) | cachebits);
-> +       case VM_SHARED:
-> +               return __pgprot(pgprot_val(PAGE_NONE_C) | cachebits);
-
-Same as the VM_NONE case.  More to be merged below...
-
-> +       case VM_SHARED | VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_READONLY_C) | cachebits);
-> +       case VM_SHARED | VM_WRITE:
-> +       case VM_SHARED | VM_WRITE | VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_SHARED_C) | cachebits);
-> +       case VM_SHARED | VM_EXEC:
-> +       case VM_SHARED | VM_EXEC | VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_READONLY_C) | cachebits);
-> +       case VM_SHARED | VM_EXEC | VM_WRITE:
-> +       case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
-> +               return __pgprot(pgprot_val(PAGE_SHARED_C) | cachebits);
-> +       default:
-> +               BUILD_BUG();
-> +       }
-> +}
-> +EXPORT_SYMBOL(vm_get_page_prot);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards
+Dylan.
