@@ -2,100 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C644C00AB
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Feb 2022 18:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F82D4C04F0
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Feb 2022 23:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbiBVR5o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Feb 2022 12:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
+        id S236144AbiBVW4e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Feb 2022 17:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234752AbiBVR5m (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Feb 2022 12:57:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F046E9F3AC
-        for <linux-arch@vger.kernel.org>; Tue, 22 Feb 2022 09:57:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1645552632;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hJzZgeDzNY7zmhhmPD8Ts6QhadgVuW+LtnZrIEdFmk4=;
-        b=dzhLqdcCZ+v0UEC8Rvd8QMlBU2yb+DBopO06Pqc4uVxV83lzhdMysU004Wq5Ah4epxHexq
-        vsgtBn4GCWkxLnGHvgwWyVWDHMPvqgnOGvE3Vx820+RFsZ62dBQCQep/zUni0BX1N4bGHX
-        K/pt2UgjEsrcgiNFBsk+Wg4pbq0Gcg8=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-383-3aqusp7eOXCJaAxjKcIc-g-1; Tue, 22 Feb 2022 12:57:08 -0500
-X-MC-Unique: 3aqusp7eOXCJaAxjKcIc-g-1
-Received: by mail-wr1-f70.google.com with SMTP id f14-20020adfc98e000000b001e8593b40b0so8564049wrh.14
-        for <linux-arch@vger.kernel.org>; Tue, 22 Feb 2022 09:57:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hJzZgeDzNY7zmhhmPD8Ts6QhadgVuW+LtnZrIEdFmk4=;
-        b=Rt5wkkNch0sFqNHNZ4+QoNu6jlrNTbeIXlpfTGeeh7lfehIIMLSLgWrtwwZ7ocl6gz
-         rhncsPEveNy6lb9+pm3/DbYjEvvhpSJ3YNxtRmxmkhTQENZGy7vBfeJK+2l7jMqlEK+U
-         tcWXaGD05F+R3RMlnqquQ8r9fSYxaZBz8M4cx22j6zaFteSXH6DPL63Vkc88z4hcLA4u
-         abmbw8C4LP+NoRSV0eqYtXxAjojWWID66nrp3ptb8DxWuN3CnUiOCvLVvJp0P9RjQqXC
-         1X3Yv0nILG3M8wLwzkrhDxrdxJ+j+fyahTf6NF9U+gkt+kbpsRwNRL2qZnM3Tc65+fO5
-         k2Gw==
-X-Gm-Message-State: AOAM533xOyCrzHjttcHgwCyDMdBzww/icyTGldhDuNjSGat4e9KNo0Vu
-        2//mULuDusDS0Xa3KevTQgtsI4fw20xqDIcz2m+cI6dNTUEMUD+9wVyOIsU3zFwQsOc+z24Ro4t
-        U0CXqQYoOkxYbBV6w3IOo
-X-Received: by 2002:adf:e10a:0:b0:1e3:3188:79c7 with SMTP id t10-20020adfe10a000000b001e3318879c7mr20431441wrz.329.1645552626669;
-        Tue, 22 Feb 2022 09:57:06 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxBLqieyLWhR9YxZvOyFiDe21CGa5pv2+OROhVCjx6WLj1pEI28rUPcGkTq6FUILDxoAizVhQ==
-X-Received: by 2002:adf:e10a:0:b0:1e3:3188:79c7 with SMTP id t10-20020adfe10a000000b001e3318879c7mr20431432wrz.329.1645552626509;
-        Tue, 22 Feb 2022 09:57:06 -0800 (PST)
-Received: from localhost (cpc111743-lutn13-2-0-cust979.9-3.cable.virginm.net. [82.17.115.212])
-        by smtp.gmail.com with ESMTPSA id e7sm33021244wrg.44.2022.02.22.09.57.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Feb 2022 09:57:06 -0800 (PST)
-Date:   Tue, 22 Feb 2022 17:57:05 +0000
-From:   Aaron Tomlin <atomlin@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v5 1/6] module: Always have struct mod_tree_root
-Message-ID: <20220222175705.ryqmhhrpokx7xbgv@ava.usersys.com>
-X-PGP-Key: http://pgp.mit.edu/pks/lookup?search=atomlin%40redhat.com
-X-PGP-Fingerprint: 7906 84EB FA8A 9638 8D1E  6E9B E2DE 9658 19CC 77D6
-References: <cover.1645541930.git.christophe.leroy@csgroup.eu>
- <c9584f48abce748e62e65e6757ceb23800f15380.1645541930.git.christophe.leroy@csgroup.eu>
+        with ESMTP id S235210AbiBVW4d (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Feb 2022 17:56:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DB266AFB;
+        Tue, 22 Feb 2022 14:56:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59ECC60BC9;
+        Tue, 22 Feb 2022 22:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46CEC340E8;
+        Tue, 22 Feb 2022 22:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645570565;
+        bh=NRmy3RSn/nbdEABt2HaHzeybpTLaSk8inhbxfo1jZpU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QgxpLl+iLkSrHvtdsG0z8VhK+E0iSmS4f5eb7XHZQD2Y0X+cX0ziliYGN8pxIi7cw
+         j5HrxPp8oglQjLa5e9D+cAQcMrYvBwgmI2V1zyF3tDf5MnyCzxwTI/zTT2Onn8N+2f
+         li0+mdDFYFNVj27BABhQDzhqHp705Hw7eKxGurt/xCdHJ7xKi31vZlba6kfh0ehyTW
+         349nqG5vmahkB3Nk7DALQN1kd9pDu8ewczCwljpLnLSkIQmRwVIkC0+fTIIaVbemVa
+         B1hGoDNPfcIgo6GNfffEh1ez6DJJ6EYucDw+lhe+FgGN/nJYjdF3K1b7KYitySEwsz
+         HYPmrYzMLXz9g==
+Message-ID: <158868e5-257a-1986-4b85-b47b368a5ec7@kernel.org>
+Date:   Tue, 22 Feb 2022 16:56:03 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c9584f48abce748e62e65e6757ceb23800f15380.1645541930.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V2 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch@vger.kernel.org
+References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
+ <1645425519-9034-26-git-send-email-anshuman.khandual@arm.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <1645425519-9034-26-git-send-email-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue 2022-02-22 16:00 +0100, Christophe Leroy wrote:
-> In order to separate text and data, we need to setup
-> two rb trees.
+
+
+On 2/21/22 00:38, Anshuman Khandual wrote:
+> This defines and exports a platform specific custom vm_get_page_prot() via
+> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> macros can be dropped which are no longer needed.
 > 
-> This means that struct mod_tree_root is required even without
-> MODULES_TREE_LOOKUP.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
 > ---
->  kernel/module/internal.h | 4 +++-
->  kernel/module/main.c     | 5 -----
->  2 files changed, 3 insertions(+), 6 deletions(-)
+>   arch/nios2/Kconfig               |  1 +
+>   arch/nios2/include/asm/pgtable.h | 16 ------------
+>   arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
+>   3 files changed, 46 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+> index 33fd06f5fa41..85a58a357a3b 100644
+> --- a/arch/nios2/Kconfig
+> +++ b/arch/nios2/Kconfig
+> @@ -6,6 +6,7 @@ config NIOS2
+>   	select ARCH_HAS_SYNC_DMA_FOR_CPU
+>   	select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+>   	select ARCH_HAS_DMA_SET_UNCACHED
+> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>   	select ARCH_NO_SWAP
+>   	select COMMON_CLK
+>   	select TIMER_OF
+> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+> index 4a995fa628ee..2678dad58a63 100644
+> --- a/arch/nios2/include/asm/pgtable.h
+> +++ b/arch/nios2/include/asm/pgtable.h
+> @@ -40,24 +40,8 @@ struct mm_struct;
+>    */
+>   
+>   /* Remove W bit on private pages for COW support */
+> -#define __P000	MKP(0, 0, 0)
+> -#define __P001	MKP(0, 0, 1)
+> -#define __P010	MKP(0, 0, 0)	/* COW */
+> -#define __P011	MKP(0, 0, 1)	/* COW */
+> -#define __P100	MKP(1, 0, 0)
+> -#define __P101	MKP(1, 0, 1)
+> -#define __P110	MKP(1, 0, 0)	/* COW */
+> -#define __P111	MKP(1, 0, 1)	/* COW */
+>   
+>   /* Shared pages can have exact HW mapping */
+> -#define __S000	MKP(0, 0, 0)
+> -#define __S001	MKP(0, 0, 1)
+> -#define __S010	MKP(0, 1, 0)
+> -#define __S011	MKP(0, 1, 1)
+> -#define __S100	MKP(1, 0, 0)
+> -#define __S101	MKP(1, 0, 1)
+> -#define __S110	MKP(1, 1, 0)
+> -#define __S111	MKP(1, 1, 1)
+>   
+>   /* Used all over the kernel */
+>   #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
+> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
+> index 613fcaa5988a..311b2146a248 100644
+> --- a/arch/nios2/mm/init.c
+> +++ b/arch/nios2/mm/init.c
+> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
+>   {
+>   	return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
+>   }
+> +
+> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> +	case VM_NONE:
+> +		return MKP(0, 0, 0);
+> +	case VM_READ:
+> +		return MKP(0, 0, 1);
+> +	/* COW */
+> +	case VM_WRITE:
+> +		return MKP(0, 0, 0);
+> +	/* COW */
+> +	case VM_WRITE | VM_READ:
+> +		return MKP(0, 0, 1);
+> +	case VM_EXEC:
+> +		return MKP(1, 0, 0);
+> +	case VM_EXEC | VM_READ:
+> +		return MKP(1, 0, 1);
+> +	/* COW */
+> +	case VM_EXEC | VM_WRITE:
+> +		return MKP(1, 0, 0);
+> +	/* COW */
+> +	case VM_EXEC | VM_WRITE | VM_READ:
+> +		return MKP(1, 0, 1);
+> +	case VM_SHARED:
+> +		return MKP(0, 0, 0);
+> +	case VM_SHARED | VM_READ:
+> +		return MKP(0, 0, 1);
+> +	case VM_SHARED | VM_WRITE:
+> +		return MKP(0, 1, 0);
+> +	case VM_SHARED | VM_WRITE | VM_READ:
+> +		return MKP(0, 1, 1);
+> +	case VM_SHARED | VM_EXEC:
+> +		return MKP(1, 0, 0);
+> +	case VM_SHARED | VM_EXEC | VM_READ:
+> +		return MKP(1, 0, 1);
+> +	case VM_SHARED | VM_EXEC | VM_WRITE:
+> +		return MKP(1, 1, 0);
+> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+> +		return MKP(1, 1, 1);
+> +	default:
+> +		BUILD_BUG();
+> +	}
+> +}
+> +EXPORT_SYMBOL(vm_get_page_prot);
 
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+Applied!
 
--- 
-Aaron Tomlin
-
+Thanks,
+Dinh
