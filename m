@@ -2,129 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DBC4BFAB3
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Feb 2022 15:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D184BFBCD
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Feb 2022 16:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiBVOPt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Feb 2022 09:15:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36904 "EHLO
+        id S232244AbiBVPDT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Feb 2022 10:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232829AbiBVOPr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Feb 2022 09:15:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FEC160420
-        for <linux-arch@vger.kernel.org>; Tue, 22 Feb 2022 06:15:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F33ACB81754
-        for <linux-arch@vger.kernel.org>; Tue, 22 Feb 2022 14:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D010CC340F3;
-        Tue, 22 Feb 2022 14:15:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645539319;
-        bh=sHHdLDoYjS+X7SW4eOp5R6pJ+pWe3Bi0v0TDpRLQLgg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZLR4fTZohlsw+zWq2LZmwmGbtaX1Zyj5BS0NzD1b8y6K48Xw5h1+16V3ZBJ9tc0AT
-         ovkZAFwc6zp6+myxYDQP0e3dG+8CysPM08zGZjqflPeEbQDN7RL9pkPcJ34+HPT+8R
-         sF+Vl4BW9zqgViRvSSfgJuLaqWYnebrHvstApXps7V1hf5Znv742fOBozvyw6mIPjl
-         HNuJc94sg/gzwlbV2Gfd22vN+9kxIOu/5bPmyIBmt4ycWTQbMVK7p4xreGEUN65aXw
-         eBq1CHbiVKePAeglUNpuenRRlUCuwQMzBRInqf3zmr4v4oQz7RcOKxZP6GKCCIJIjX
-         5xoI265lq5wHg==
-Date:   Tue, 22 Feb 2022 14:15:14 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org
-Subject: Re: [PATCH v8 0/4] arm64: Enable BTI for the executable as well as
- the interpreter
-Message-ID: <YhTv8p5JVPjqW8nE@sirena.org.uk>
-References: <20220124150704.2559523-1-broonie@kernel.org>
- <20220215183456.GB9026@willie-the-truck>
- <Ygz9YX3jBY0MpepU@arm.com>
+        with ESMTP id S233219AbiBVPC2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Feb 2022 10:02:28 -0500
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6B6160429;
+        Tue, 22 Feb 2022 07:01:05 -0800 (PST)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4K32RN4Yt5z9sSX;
+        Tue, 22 Feb 2022 16:00:48 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jUS-I58NIWE3; Tue, 22 Feb 2022 16:00:48 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4K32RF4Tbmz9sSq;
+        Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 89CBD8B778;
+        Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id twoxT6Wk121T; Tue, 22 Feb 2022 16:00:41 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.7.78])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CA66A8B77C;
+        Tue, 22 Feb 2022 16:00:40 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 21MF0V3h1087059
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 22 Feb 2022 16:00:31 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 21MF0UWY1087057;
+        Tue, 22 Feb 2022 16:00:30 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Aaron Tomlin <atomlin@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kgdb-bugreport@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: [PATCH v5 0/6] Allocate module text and data separately
+Date:   Tue, 22 Feb 2022 16:00:17 +0100
+Message-Id: <cover.1645541930.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="njsqzvVrJx5rdbfb"
-Content-Disposition: inline
-In-Reply-To: <Ygz9YX3jBY0MpepU@arm.com>
-X-Cookie: I smell a wumpus.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1645542019; l=2069; s=20211009; h=from:subject:message-id; bh=vT+HtZuIc4tR/dCOg1oXL5RYCzAmw2cfyGL9n79gTuw=; b=N9aK/3o0a2abh6NrLLGjWLf0bPQndtrvH5N4Z/A3ykaTzXTaLBTGHurSFdAaIaXhVlQokNvjCQ5D dV2wrKrkDxj7IZ9KQ/SsIfBVEKB/1EmR6Sn9k07enWxpz+QWXS40
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+This series applies on top of Aaron's series "module: core code clean up" v8.
 
---njsqzvVrJx5rdbfb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Wed, Feb 16, 2022 at 01:34:25PM +0000, Catalin Marinas wrote:
-> On Tue, Feb 15, 2022 at 06:34:56PM +0000, Will Deacon wrote:
+This series allow architectures to request having modules data in
+vmalloc area instead of module area.
 
-> > This appears to be a user-visible change which cannot be detected or
-> > disabled from userspace. If there is code out there which does not work
-> > when BTI is enabled, won't that now explode when the kernel enables it?
-> > How are we supposed to handle such a regression?
+This is required on powerpc book3s/32 in order to set data non
+executable, because it is not possible to set executability on page
+basis, this is done per 256 Mbytes segments. The module area has exec
+right, vmalloc area has noexec. Without this change module data
+remains executable regardless of CONFIG_STRICT_MODULES_RWX.
 
-> If this ever happens, the only workaround is to disable BTI on the
-> kernel command line. If we need a knob closer to user, we could add a
-> sysctl option (as we did for the tagged address ABI, though I doubt
-> people are even aware that exists). The dynamic loader doesn't do
-> anything smart when deciding to map objects with PROT_BTI (like env
-> variables), it simply relies on the ELF information.
+This can also be useful on other powerpc/32 in order to maximize the
+chance of code being close enough to kernel core to avoid branch
+trampolines.
 
-The dynamic loader is the place where I'd expect to do any
-per-executable workarounds, but currently that's not actually
-implemented anywhere.  Someone could also make a tool to strip BTI
-annotations from executables.
+Changes in v5:
+- Rebased on top of Aaron's series "module: core code clean up" v8
 
-> I think the only difference would be with a BTI-unware dynamic loader
-> (e.g. older distro). Here the main executable, if compiled with BTI,
-> would be mapped as executable while the rest of the libraries are
-> non-BTI. The interworking should be fine but we can't test everything
-> since such BTI binaries would not normally be part of the distro.
+Changes in v4:
+- Rebased on top of Aaron's series "module: core code clean up" v6
 
-> If there are dodgy libraries out there that do tricks and branch into
-> the middle of a function in the main executable, they will fail with
-> this series but also fail if MDWE is disabled and the dynamic linker is
-> BTI-aware. So this hardly counts as a use-case.
+Changes in v3:
+- Fixed the tree for data_layout at one place (Thanks Miroslav)
+- Moved removal of module_addr_min/module_addr_max macro out of patch 1 in a new patch at the end of the series to reduce churn.
 
-I'm not aware of any issues we've run into which are due to interworking
-between binaries rather than within a binary due to either miscompilation
-or doing something in hand coded assembler that needs updating for BTI.
-It doesn't mean it can't happen but it's hard to see what people might
-be doing.
+Changes in v2:
+- Dropped first two patches which are not necessary. They may be added back later as a follow-up series.
+- Fixed the printks in GDB
 
-> For consistency, I think whoever does the initial mapping should also
-> set the correct attributes as we do for static binaries. If you think
-> another knob is needed other than the cmdline, I'm fine with it.
+Christophe Leroy (6):
+  module: Always have struct mod_tree_root
+  module: Prepare for handling several RB trees
+  module: Introduce data_layout
+  module: Add CONFIG_ARCH_WANTS_MODULES_DATA_IN_VMALLOC
+  module: Remove module_addr_min and module_addr_max
+  powerpc: Select ARCH_WANTS_MODULES_DATA_IN_VMALLOC on book3s/32 and
+    8xx
 
-Might also be worth pointing out that we already map the vDSO with BTI
-enabled if it's built with BTI.
+ arch/Kconfig                |   6 +++
+ arch/powerpc/Kconfig        |   1 +
+ include/linux/module.h      |   8 +++
+ kernel/debug/kdb/kdb_main.c |  10 +++-
+ kernel/module/internal.h    |  13 +++--
+ kernel/module/kallsyms.c    |  18 +++----
+ kernel/module/main.c        | 103 +++++++++++++++++++++++++++---------
+ kernel/module/procfs.c      |   8 ++-
+ kernel/module/strict_rwx.c  |  10 ++--
+ kernel/module/tree_lookup.c |  28 ++++++----
+ 10 files changed, 149 insertions(+), 56 deletions(-)
 
---njsqzvVrJx5rdbfb
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIU7/IACgkQJNaLcl1U
-h9ADUwf+OhJEkXOirLj5jU5NaKV0GWE0p7t4zjt8reYjBA9Ktc2GhfBP08nXjZMq
-dgSqPCiB7Rh21Krl9h9CNSa/cVXi5ghIws7pOVXhRRjBHezCiGBx6d16XX8luLt3
-leGnBo3sHTv6dfO9YaLhvQp+PrDdTLyeZOp1BZiIuEaqWHBdLguSlxOkK9RmFLA1
-X6DQ2e6S/sFj6PAWJRhXveK02eniBs+xB1U1Qne5On43GB9xYKSaKKa75xq8RmVb
-isiENMQaeaG8y/YkVZx1txN7/uJ9G74mrpm/SqJcpcbJp98D0i4T4s0nlyoxKV/f
-Sgr50KRd4xkx51TlmENNLgdtpmW/cw==
-=0wYJ
------END PGP SIGNATURE-----
-
---njsqzvVrJx5rdbfb--
