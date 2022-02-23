@@ -2,73 +2,116 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6174C15CB
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 15:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12CCD4C1939
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 18:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234605AbiBWOwL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Feb 2022 09:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S237984AbiBWRDs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Feb 2022 12:03:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbiBWOwK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 09:52:10 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB95B45AD4
-        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 06:51:41 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id h15so27581821edv.7
-        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 06:51:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=cc9MqNMmRPnGn2jNc7Pps65gjZID7Zsj838zurhiU3RpQ1hviS1Qors8acteYzwE5/
-         sVQwm1RhW2p+0lMpwc5138aCJ/arkBRgNuZBItqX1cnCV/GFT/FbQ5RTe3eLuCJ5azwJ
-         gl3USkY/oQB+r24UyVHZ8stpxvVQ1hBfcAdZQPnIHanPjKglDWzr4Y1vv7oe1rPGCHhy
-         +P4ZoUECS72mNSazRKgGfLzksQPQ3hianGB5AXc4ezEtcBjS/cN5rkCLFMZ+puHBaSSc
-         QDPhuheObzxnfuXhgvo8vp+5oZkoU6x8Baa6GCVNkJm1Ufnro5ut3sibAj1A/EMo29tK
-         19Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=cdPJDM04cbKhhbGYYQaYySUKt9vRIUiIssLg5wBsut8N3IW3XkQCZic5uX+dMrDKFb
-         DiWPbp+c8uj8Xc0irIaigwV5N9BuAgXiwC0qexIYhMHg6Byq4QH3hQtMunToYyFw+Tdx
-         VMv67w/gFKUmQw0cq2uY9a4IJfxk2O5V3y5AMzAawFw2Ap6MvO1PWldwWMdQolLmIRz3
-         MHsBfUeBRa1m5PKlGsS55NwAka9t80IoDGW4F5+8ce0jEpiWDW5U6sRFs2luyzu+hbt2
-         V8KoM6PWWLhqXijKqlTamKF8/92A+P6TkjhyB9/H83JBR/j/XY88NQtaH8HSI/nbzb1Q
-         7MYQ==
-X-Gm-Message-State: AOAM531bV/ysRlKILsFhb56XbP+NWAtcNA47uxmyDhcUcN0zpQRQDZ4c
-        5qyfNae0Kg2UcM8OLNJisFSWKHojsXIWFLasngI=
-X-Google-Smtp-Source: ABdhPJy9kNKhy0W1vTVANhBanBxz+2ZuiOK/eQxSbnYvSVYEvhXrniitLscasACW5Y3sEwASSotEBIFuXLTDoStFezc=
-X-Received: by 2002:a50:c30a:0:b0:413:2ddb:b75 with SMTP id
- a10-20020a50c30a000000b004132ddb0b75mr4709337edb.19.1645627900098; Wed, 23
- Feb 2022 06:51:40 -0800 (PST)
+        with ESMTP id S241607AbiBWRDr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 12:03:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9967F4ECF4;
+        Wed, 23 Feb 2022 09:03:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48D1DB82117;
+        Wed, 23 Feb 2022 17:03:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76CD2C340F6;
+        Wed, 23 Feb 2022 17:03:14 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CDnOLrRM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1645635788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Pp12ena6dYDhd7GMsoT5AC0lytZr3q+Tcps8HSwUknA=;
+        b=CDnOLrRMtk4VRy2HmVtFBTs/Gbq3hrc0eMc9ePBYzEqT6grdqpdnNipnlYVZf6F4Vk0SHW
+        UBQv2m2COWqYCowr3DsdzXxn0vhuP6gQQGak8DDHGqSPEvUdh4/AM8Yx8yjWa1bZLEBZ8R
+        Dd+0HBkIG2pLvh7UELcEVRGSKfRHDjw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id dd0a54aa (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 23 Feb 2022 17:03:07 +0000 (UTC)
+Received: by mail-yb1-f179.google.com with SMTP id w63so28048122ybe.10;
+        Wed, 23 Feb 2022 09:03:06 -0800 (PST)
+X-Gm-Message-State: AOAM531s7hJD0rB4w0QrH/mhacpYiJzfuDv05Xe+rwHYV9wz2ZyrMotI
+        oR7hN9EUKngAMLui61Z0frjP0/OLK0ReMztertk=
+X-Google-Smtp-Source: ABdhPJwPRBaPOjS3KtoDamJStmC6n2tfcA0U7gkU1wr5DyfkQa76VS2mekyDcU8DDIo2C3IK2X3TBhpqi9a0bun2Qt0=
+X-Received: by 2002:a05:6902:693:b0:613:7f4f:2e63 with SMTP id
+ i19-20020a056902069300b006137f4f2e63mr567022ybt.271.1645635783597; Wed, 23
+ Feb 2022 09:03:03 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6402:440d:0:0:0:0 with HTTP; Wed, 23 Feb 2022 06:51:39
- -0800 (PST)
-Reply-To: avamedicinemed3@gmail.com
-From:   Dr Ava Smith <tracywilliamusa@gmail.com>
-Date:   Wed, 23 Feb 2022 06:51:39 -0800
-Message-ID: <CAKU4NYmg4qt-Uk4ovetvcH3FDAYsfw2wiY-r5h_kjke_yz-Vdg@mail.gmail.com>
-Subject: From Dr Ava Smith from United States
-To:     undisclosed-recipients:;
+References: <20220217162848.303601-1-Jason@zx2c4.com> <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
+In-Reply-To: <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 23 Feb 2022 18:02:52 +0100
+X-Gmail-Original-Message-ID: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
+Message-ID: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+Hi Andy,
+
+I think your analysis is a bit mismatched from the reality of the
+situation. That reality is that cryptographic users still find
+themselves using /dev/urandom, as that's been the "standard good
+advice" for a very long time. And people are still encouraged to do
+that, either out of ignorance or out of "compatibility". The
+cryptographic problem is not going away.
+
+Fixing this issue means, yes, adding a 1 second delay to the small
+group of init system users who haven't switched to using
+getrandom(GRND_INSECURE) for that less common usage (who even are
+those users actually?). That's not breaking compatibility or breaking
+userspace or breaking anything; that's accepting the reality of _how_
+/dev/urandom is mostly used -- for crypto -- and making that usage
+finally secure, at the expense of a 1 second delay for those other
+users who haven't switched to getrandom(GRND_INSECURE) yet. That seems
+like a _very_ small price to pay for eliminating a footgun.
+
+And in general, deemphasizing the rare performance of the less common
+usage in favor of fixing a commonly triggered footgun seems on par
+with how things morph and change over time. There's no actual
+breakage. There's no ABI change violation. What you're saying simply
+isn't so.
+
+In other words, I'm not really at all convinced by what you're saying.
+
+Jason
