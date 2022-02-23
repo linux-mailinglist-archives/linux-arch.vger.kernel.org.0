@@ -2,135 +2,190 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F5C4C10DE
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 11:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F754C111F
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 12:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235714AbiBWLAW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Feb 2022 06:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S239788AbiBWLTQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Feb 2022 06:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiBWLAW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 06:00:22 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE5C8C7D1;
-        Wed, 23 Feb 2022 02:59:54 -0800 (PST)
-Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MlfCk-1o4Ra6312w-00inTg; Wed, 23 Feb 2022 11:59:52 +0100
-Received: by mail-wr1-f52.google.com with SMTP id o4so2135193wrf.3;
-        Wed, 23 Feb 2022 02:59:52 -0800 (PST)
-X-Gm-Message-State: AOAM532w0I/FQasSXoRn7paj/0r708sN7Hcll05a600icEtPzbVFW5nu
-        NA3gFKSoZzvNLofXWNFCuRR21wXtMvkt8QI7GtY=
-X-Google-Smtp-Source: ABdhPJz3tjc3IejYq+UPcpb0b0B/1/NsttPG6/6KnMrBytsQxjHYO0/p2daBPMgz1AgVYfLNcxR3Ydw+Oyz4L5S8GiA=
-X-Received: by 2002:adf:90c1:0:b0:1e4:ad27:22b9 with SMTP id
- i59-20020adf90c1000000b001e4ad2722b9mr23150986wri.219.1645613992251; Wed, 23
- Feb 2022 02:59:52 -0800 (PST)
+        with ESMTP id S239778AbiBWLTO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 06:19:14 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819458F612;
+        Wed, 23 Feb 2022 03:18:47 -0800 (PST)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 21N8mKpn012722;
+        Wed, 23 Feb 2022 11:18:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=2edBr+yA1u4tfCoNZ51i6nGbnULTqu47+hi+OSwmfgE=;
+ b=Uobji5yrBW4Xb1Ci8Jdi3aDpr2pFCL1nx9DWol7+wGXvDQN5GzZ0QuDpe25gVGRkKArL
+ FO/YhuwTnq2zdFzHY8ZKiOYJp5JXDwlzlXVccVZLLvJ5JqMTOxGLjie0CmlzqIhMkFH9
+ s2uFxEOxFec9xBrXP4P50jnJ3ihcbRLiBruaewIAWTTMa4J+tsDN5UF5W5zEdo/zZCWJ
+ xaPumw0Ys0Brgi5bhwbFBKq+BZ3ggicyrxEV3SaHtcuFHAdiE+l9+4f8ACQyxtitW71q
+ 3r8RDZYf1cxWNC4nKaHXCtdIA6z2cQE+U2zgIv90prghN63R+bHfCe9qFGDUBWEy0opv 8g== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3edhqsaqkd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 11:18:38 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 21NBGQ4E029180;
+        Wed, 23 Feb 2022 11:18:36 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3ear69fugj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 23 Feb 2022 11:18:36 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 21NBIU1i59113914
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 23 Feb 2022 11:18:30 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B4FAC42049;
+        Wed, 23 Feb 2022 11:18:30 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3223C4203F;
+        Wed, 23 Feb 2022 11:18:30 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.145.72.183])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 23 Feb 2022 11:18:30 +0000 (GMT)
+Date:   Wed, 23 Feb 2022 12:18:28 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH V2 14/30] s390/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <YhYYBMT6HaSviD7X@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
+ <1645425519-9034-15-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-References: <20220201150545.1512822-1-guoren@kernel.org> <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
-In-Reply-To: <mhng-36783ff3-37c2-454b-9337-8cb124195255@palmer-ri-x1c9>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Feb 2022 11:59:36 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
-Message-ID: <CAK8P3a1W3Ns1WYiSGXb3Qn6-p+SPsx1UGqXdTkk2taPB72OZUA@mail.gmail.com>
-Subject: Re: [PATCH V5 00/21] riscv: compat: Add COMPAT mode support for rv64
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Guo Ren <guoren@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:fDj8UNVRV8r/eEkDy+HCLSo5oTnkzwOoBxcvqklwcRxXRwi6wUV
- 6SE5GCBES+rEkqbaFiHz6aGc/CNcIz7j4g51nG2OX1z+qqp19c2xUqQAOlXIpbA/+vI2jCi
- 66nCed0HrHG8pKuBjTvpQfJ7mhp2uPg7qBZSY37R2iNdBB0GFnk2uzfcY2yijMhTM9tVR5a
- 82jnAWH9+MAZlTC76Larg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VYpzYxJP3NU=:KiMJ/01sPAWeZQz4PFOQPd
- EUCgAbE0c2Cin8EOQRowCayryy7BPpe5bQgq2432OdqeY3VSVKI/wNylTiMVyAmj6FT2ytEiM
- gL1j8GQTU/d4DIa8yFaX2cUj/wMx2326wezaZ/Eg+xrmMuJ22WbnjY/4ERGhOlKbe2ajo2q4j
- nB1wwbuu2/KVd3tKlRy0wp6mdIDFpfpVGcEqCqwAj/hP5wu4Bpxj+rAKgQYaWLjMjB0i8h7OV
- ODpdELWbpwXtYHT1HK6t4KipCMhxoWeyfSxoLNNTG+0iakeWXjAJm7KH4geyKsF5/dBiVLve9
- MKzdUoMmTtdVLU0sMdKfHKhCsTfnPdYQbHoCzlVJOPOWfiUsbKZBWyaJbNPiDikGERCSzNAAX
- C4eXdL1FU/X0/uSzrmBOisTs1d7tFnm4TPPjLwuvkpTeDoFyCotroxkVLOwXyLoW/6Mtt2A5L
- f7HnXCuoCVK9NDA56rC8hmP4fvF5PgPXfZ53EjoRa0KAXhkeOt6hjiioccWF8GB3wtpYCSz2Q
- x/w188d2UL8fdFCA4/qcA93GYKxVDxtyijHEs2fv4X9cjVSLS1xofqo82uQlZNOld5oQD8grR
- 9xl/STptXx2jNltgonnEIU+jCcw8/C7Gq4wQYgpPWV4qU+vacJZX3kzdQKa4ngeO+Nmodh57z
- d51eBFgsR+V899w2wccXBgAg4hC1fCn0bVJEkBD2re7ZZKS51/XEGqsuqHdGgdz0vP3FvtHR9
- q8gtkkCIZPBMtMVsq/zXp0ciSyWaDJ1PcchbymzduRV9j0RoDYiuZAkhzcXQdeR8TUPw23V9y
- gjOWaejEBuP9kA/k1Ei5FfLOuljURkZ8ilqRlxgTSyUIVJnqi4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645425519-9034-15-git-send-email-anshuman.khandual@arm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: UXZJEmT1Y-WzhFohdDob4sQiOuoY1tgv
+X-Proofpoint-ORIG-GUID: UXZJEmT1Y-WzhFohdDob4sQiOuoY1tgv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-02-23_03,2022-02-23_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=767 phishscore=0 impostorscore=0 spamscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202230062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 2:43 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Tue, 01 Feb 2022 07:05:24 PST (-0800), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
-> > s390, mips, sparc) have supported COMPAT mode. But they all have
-> > history issues and can't use standard linux unistd.h. RISC-V would
-> > be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
-> > /unistd.h.
->
-> TBH, I'd always sort of hoped we wouldn't have to do this: it's a lot of
-> ABI surface to keep around for a use case I'm not really sure is ever
-> going to get any traction (it's not like we have legacy 32-bit
-> userspaces floating around, the 32-bit userspace is newer than the
-> 64-bit userspace).
+On Mon, Feb 21, 2022 at 12:08:23PM +0530, Anshuman Khandual wrote:
+> This defines and exports a platform specific custom vm_get_page_prot() via
+> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> macros can be dropped which are no longer needed.
+> 
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-The low-end embedded market isn't usually that newsworthy, but the
-machines ship in huge quantities, and they all run 32-bit user
-space for good reasons:
+Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
 
-The cheapest Linux systems at the moment use a low-end MIPS or
-Arm core with a single DDR2 (32MB to 128MB) or DDR3 (128MB
-to 512MB) memory chip that for now is a bit cheaper than a larger
-LP-DDR4 (256MB+). The smaller configurations will go away over
-time as they get outpriced by systems with LP-DDR4, but a 32-bit
-system with 256MB will keep beating a 64-bit-only system with
-512MB on price, and will run most workloads better than a 64-bit
-system with the same amount of RAM.
-
-On the Arm side, I hope that these systems will migrate to Armv8
-based designs (Cortex-A53/A35 or newer) running 64-bit kernel
-with 32-bit user space to replace the currently dominant but aging
-32-bit Cortex-A7 cores. As you say, RISC-V is at a disadvantage
-here because there is no existing 32-bit ecosystem, but it may take
-a chunk of that market anyway based on licensing cost. Between
-doing this using pure 32-bit cores or on mixed 32/64-bit cores,
-I found Guo Ren's explanation very sensible, it lets you use the
-same chip both as a low-end embedded version with SiP
-memory, or using an external DDR3/LPDDR4 chip with enough
-capacity to run a generic 64-bit distro.
-
-> My assumption is that users who actually wanted the
-> memory savings (likely a very small number) would be better served with
-> rv64/ilp32, as that'll allow the larger registers that the hardware
-> supports.  From some earlier discussions it looks like rv64/ilp32 isn't
-> going to be allowed, though, so this seems like the only way to go.
-
-Right, between rv32 user space and a hypothetical rv64-ilp32 target,
-I think it's clear that the former is better because it means introducing
-only one fringe ABI rather than two incompatible ones with minor
-performance differences.
-
-        Arnd
+> ---
+>  arch/s390/Kconfig               |  1 +
+>  arch/s390/include/asm/pgtable.h | 17 -----------------
+>  arch/s390/mm/mmap.c             | 33 +++++++++++++++++++++++++++++++++
+>  3 files changed, 34 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index be9f39fd06df..cb1b487e8201 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -78,6 +78,7 @@ config S390
+>  	select ARCH_HAS_SYSCALL_WRAPPER
+>  	select ARCH_HAS_UBSAN_SANITIZE_ALL
+>  	select ARCH_HAS_VDSO_DATA
+> +	select ARCH_HAS_VM_GET_PAGE_PROT
+>  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>  	select ARCH_INLINE_READ_LOCK
+>  	select ARCH_INLINE_READ_LOCK_BH
+> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+> index 008a6c856fa4..3893ef64b439 100644
+> --- a/arch/s390/include/asm/pgtable.h
+> +++ b/arch/s390/include/asm/pgtable.h
+> @@ -422,23 +422,6 @@ static inline int is_module_addr(void *addr)
+>   * implies read permission.
+>   */
+>           /*xwr*/
+> -#define __P000	PAGE_NONE
+> -#define __P001	PAGE_RO
+> -#define __P010	PAGE_RO
+> -#define __P011	PAGE_RO
+> -#define __P100	PAGE_RX
+> -#define __P101	PAGE_RX
+> -#define __P110	PAGE_RX
+> -#define __P111	PAGE_RX
+> -
+> -#define __S000	PAGE_NONE
+> -#define __S001	PAGE_RO
+> -#define __S010	PAGE_RW
+> -#define __S011	PAGE_RW
+> -#define __S100	PAGE_RX
+> -#define __S101	PAGE_RX
+> -#define __S110	PAGE_RWX
+> -#define __S111	PAGE_RWX
+>  
+>  /*
+>   * Segment entry (large page) protection definitions.
+> diff --git a/arch/s390/mm/mmap.c b/arch/s390/mm/mmap.c
+> index e54f928503c5..e99c198aa5de 100644
+> --- a/arch/s390/mm/mmap.c
+> +++ b/arch/s390/mm/mmap.c
+> @@ -188,3 +188,36 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
+>  		mm->get_unmapped_area = arch_get_unmapped_area_topdown;
+>  	}
+>  }
+> +
+> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+> +{
+> +	switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> +	case VM_NONE:
+> +		return PAGE_NONE;
+> +	case VM_READ:
+> +	case VM_WRITE:
+> +	case VM_WRITE | VM_READ:
+> +		return PAGE_RO;
+> +	case VM_EXEC:
+> +	case VM_EXEC | VM_READ:
+> +	case VM_EXEC | VM_WRITE:
+> +	case VM_EXEC | VM_WRITE | VM_READ:
+> +		return PAGE_RX;
+> +	case VM_SHARED:
+> +		return PAGE_NONE;
+> +	case VM_SHARED | VM_READ:
+> +		return PAGE_RO;
+> +	case VM_SHARED | VM_WRITE:
+> +	case VM_SHARED | VM_WRITE | VM_READ:
+> +		return PAGE_RW;
+> +	case VM_SHARED | VM_EXEC:
+> +	case VM_SHARED | VM_EXEC | VM_READ:
+> +		return PAGE_RX;
+> +	case VM_SHARED | VM_EXEC | VM_WRITE:
+> +	case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+> +		return PAGE_RWX;
+> +	default:
+> +		BUILD_BUG();
+> +	}
+> +}
+> +EXPORT_SYMBOL(vm_get_page_prot);
+> -- 
+> 2.25.1
+> 
