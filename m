@@ -2,67 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55ABE4C1B8B
+	by mail.lfdr.de (Postfix) with ESMTP id 09BEF4C1B8A
 	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 20:13:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236306AbiBWTMq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Feb 2022 14:12:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S240668AbiBWTMz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Feb 2022 14:12:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiBWTMp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 14:12:45 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3164B31213
-        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 11:12:17 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id a23so54305715eju.3
-        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 11:12:17 -0800 (PST)
+        with ESMTP id S229913AbiBWTMy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 14:12:54 -0500
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA04A26114
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 11:12:25 -0800 (PST)
+Received: by mail-qv1-xf2d.google.com with SMTP id w7so952520qvr.3
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 11:12:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mL0nR+ziEzThvzLITlZK1PYh9ofonS5DJNnVhGA9cEk=;
-        b=ZxfU9J7Sv2Cr5l8MpDBHBUZBrVW4RtmdXoajMkfvwL5M7gMkck9lVPP17E6o9PJ3/z
-         ETsUPxqKeXn2I8IImb0calaYlReEIGEV8iHd0/zOMfzCOmOYGI7/nX2ky2VlME1H418/
-         TnIcjdzbSuOjm67cwnrFkZVsdsAAO/6HIThdo=
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nWjAURTXXFUt4V9KPu3K0BgdcVkHvnbRCLY8V8ZLyTQ=;
+        b=gmhsmcTiDoYU7aSdGVFyN+rym7mHAfe/gELsswwblGvGEyBAIz3xKmzfy0IUiOaPvk
+         gvexjsWRALM3JhcrEUssGZ/CYBEKRPcbCWMIwiXtpGu/XwNWzWjauS33ywJ8jTFM/FdH
+         GTUbIauA+5k3WLUweM12er+GPgsxrcuHzYO+nMOYln6CPBbTc6LkjWMgzj0/fSQrVNgR
+         zDOEiBGeAsgKh2FRY0rwYCBMEQyJegVvSG/URKwYo1dDBWjoDBCfpqIRF2ycshUmtDS8
+         xxwQp9PJEJHGdFdYEZ9Q+3YIqo6vDmwJ2bfYkpba60bWkW4dYizaW6YHW8ZhdZ0JdXtx
+         3hfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mL0nR+ziEzThvzLITlZK1PYh9ofonS5DJNnVhGA9cEk=;
-        b=NIq3kUQk+HaKokepXldFPGLISdhC9Bfx1QzNHIHSer159uJ+AwiWBNZDTr4BCeZuf9
-         CGWIiAyoOxedNCnpuNAxtQhmG0p/Fu6hndIcKHlBCH+4VJ1a6Gu76zG/v9q+7abLAfCi
-         jGATnuG1asCkbW4EDjRYcgT+dRqIUSezSjU1wRyYI4MYGzeZji397h7DUByUdrYZ7AZE
-         lwZGLlelNyG55Y9qswLSZ5Dnk4J9AKvRuTqcRuI0JAJAQZRaqEDN6CUGuxS/TNm96Vgn
-         ejo/Xyuw48sVZsmK/cCUJKgdaAgnRBAnThmX9q3lgOBN0QCax+YPQCEK++U/Xe8t4FHv
-         ixcA==
-X-Gm-Message-State: AOAM532lpIFd5T8S5diMTPbW3kODEID2UtKZYFf9Y1sRVrk+5l7eaMBy
-        WO8ByoDx7mSFXm7iGD7MaoLGFwjbzkSKmRVs2lc=
-X-Google-Smtp-Source: ABdhPJyewqeBbsGr6vOW2KL0VpAU+DYWPhowW4UbUFrXxlfXPNAQMqeFMRoOdsVYwSrpqT1OG2hqCw==
-X-Received: by 2002:a17:906:3adb:b0:6b7:876c:d11b with SMTP id z27-20020a1709063adb00b006b7876cd11bmr899890ejd.250.1645643535415;
-        Wed, 23 Feb 2022 11:12:15 -0800 (PST)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id l1sm216229ejb.81.2022.02.23.11.12.15
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Feb 2022 11:12:15 -0800 (PST)
-Received: by mail-wr1-f43.google.com with SMTP id x15so6842679wrg.8
-        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 11:12:15 -0800 (PST)
-X-Received: by 2002:a2e:80c6:0:b0:246:3334:9778 with SMTP id
- r6-20020a2e80c6000000b0024633349778mr543364ljg.443.1645643179121; Wed, 23 Feb
- 2022 11:06:19 -0800 (PST)
-MIME-Version: 1.0
-References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
- <20220217184829.1991035-5-jakobkoschel@gmail.com> <20220218151216.GE1037534@ziepe.ca>
- <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com>
-In-Reply-To: <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 23 Feb 2022 11:06:03 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
-Message-ID: <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
-Subject: Re: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list
- iterator after the loop
-To:     Jakob <jakobkoschel@gmail.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nWjAURTXXFUt4V9KPu3K0BgdcVkHvnbRCLY8V8ZLyTQ=;
+        b=lrCPUNotht5pws1mMdAlBr+4h4LsTvCDhIFon1YbskOjkxyVOaHppgvZRH/hf/uCtc
+         e6CpSWU7ZSCXq+JfS3+xFNh6lK5jiMJcHbLaC6WZcKvlh3c0G0zpNEd7Olfij/S8p0oC
+         CyMZtqiUpv7MSjh6NplWxdt6EqC3YNHqXs5lZPYoRPOuusmbEv6dgluMoQ8Fx//vi5v6
+         7DqnzBYDh7MK2zN09qnOn3LsgkDy3mE9CjYMkmNYkAa8CaYhaNYyNs4ptpQbrB29zCCw
+         6jSsQ9BfyHDxcAeHPMpZqJTyz5YmTTbHk1vtz3EPLa6qAlcQlLDpW5VtJVfJFKUOqMiB
+         w7+w==
+X-Gm-Message-State: AOAM532tsheRfp7BOTcZ4VbKEQ1Y/o6Kc6F/zOdky/NLY975dffe8OOU
+        zPAgaGBdfXuaX8Js65X2fsApvnSr46WZYg==
+X-Google-Smtp-Source: ABdhPJxzoEo9EUkOhZuahOgNwguvUhyWayCfkdT5Cqa71z8iHTlwb9JaXlbVKc1MXzozbYCnwZBuRg==
+X-Received: by 2002:a0c:a9d7:0:b0:432:662d:e1b6 with SMTP id c23-20020a0ca9d7000000b00432662de1b6mr989319qvb.73.1645643544832;
+        Wed, 23 Feb 2022 11:12:24 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id h18sm205742qke.61.2022.02.23.11.12.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Feb 2022 11:12:23 -0800 (PST)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nMx3m-001hEw-Qg; Wed, 23 Feb 2022 15:12:22 -0400
+Date:   Wed, 23 Feb 2022 15:12:22 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jakob <jakobkoschel@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -76,78 +67,48 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH 04/13] vfio/mdev: remove the usage of the list
+ iterator after the loop
+Message-ID: <20220223191222.GC10361@ziepe.ca>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-5-jakobkoschel@gmail.com>
+ <20220218151216.GE1037534@ziepe.ca>
+ <6BA40980-554F-45E2-914D-5E4CD02FF21C@gmail.com>
+ <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wir=xabJ73Upk1dsuoMKWTTjTfeLFJ=p2S0yRYYaxW4fA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 6:18 AM Jakob <jakobkoschel@gmail.com> wrote:
->
-> However, in this example, 'tmp' will be a out-of-bounds pointer
-> if the loop did finish without hitting the break, so the check past the
-> loop *could* match 'mdev' even though no break was ever met.
+On Wed, Feb 23, 2022 at 11:06:03AM -0800, Linus Torvalds wrote:
 
-So just as context for others, since I was hit with the same confusion
-and didn't see what the relevance was for type speculation, when these
-patches seemed to be not about speculation at all.
+> And as such, you not only can't dereference it, but you also shouldn't
+> even compare pointer values - because the pointer arithmetic that was
+> valid for loop entries is not valid for the HEAD entry that is
+> embedded in another type. So the pointer arithmetic might have turned
+> it into a pointer outside the real container of the HEAD, and might
+> actually match something else.
 
-The background for this is that the list_for_each_entry() will set the
-iterator variable (here 'tmp') to be not the actual internal list
-pointer, but the pointer to the containing type (which is the whole
-'entry' part of the name, of course).
+Yes, this is what I had put together as well about this patch, and I
+think it is OK as-is. In this case the list head is in the .bss of a
+module so I don't think it is very likely that the type confused
+container_of() will alias a kalloc result, but it is certainly
+technically wrong as-is.
 
-And that is all good and true, but it's true only *WITHIN* that loop.
-At the exit condition, it will have hit the 'head' of the list, and
-the type that contains the list head is *not* necessarily the same
-type as the list entries.
+> So elsewhere I suggested that the fix to "you can't use the pointer
+> outside the loop" be made to literally disallow it (using C99 for-loop
+> variables seems the cleanest model), and have the compiler refuse to
+> touch code that tries to use the loop iterator outside.
 
-So that's where the type confusion comes from: if you access the list
-iterator outside the loop, and it could have fallen off the end of the
-loop, the list iterator pointer is now not actually really a valid
-pointer of that 'entry' type at all.
+Oh yes, that would be really nice solution.
 
-And as such, you not only can't dereference it, but you also shouldn't
-even compare pointer values - because the pointer arithmetic that was
-valid for loop entries is not valid for the HEAD entry that is
-embedded in another type. So the pointer arithmetic might have turned
-it into a pointer outside the real container of the HEAD, and might
-actually match something else.
-
-Now, there are a number of reasons I really dislike the current RFC
-patch series, so I'm not claiming the patch is something we should
-apply as-is, but I'm trying to clarify why Jakob is doing what he's
-doing (because clearly I wasn't the only one taken  by surprise by
-it).
-
-The reasons I don't like it is:
-
- - patches like these are very random. And very hard to read (and very
-easy to re-introduce the bug).
-
- - I think it conflates the non-speculative "use pointer of the wrong
-type" issue like in this patch with the speculation
-
- - I'm not even convinced that 'list_for_each_entry()' is that special
-wrt speculative type accesses, considering that we have other uses of
-doubly linked list *everywhere* - and it can happen in a lot of other
-situations anyway, so it all seems to be a bit ad hoc.
-
-but I do think the problem is real.
-
-So elsewhere I suggested that the fix to "you can't use the pointer
-outside the loop" be made to literally disallow it (using C99 for-loop
-variables seems the cleanest model), and have the compiler refuse to
-touch code that tries to use the loop iterator outside.
-
-And that is then entirely separate from the issue of actual
-speculative accesses (but honestly, I think that's a "you have to
-teach the compiler not to do them" issue, not a "let's randomly change
-*one* of our loop walkers).
-
-                Linus
+Jason 
