@@ -2,103 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0804E4C1A50
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 18:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 231554C1B1E
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 19:47:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241520AbiBWR5l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Feb 2022 12:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
+        id S244012AbiBWSr7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Feb 2022 13:47:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235343AbiBWR5i (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 12:57:38 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BB93C728;
-        Wed, 23 Feb 2022 09:57:09 -0800 (PST)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 21NHttsY015836
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Feb 2022 12:55:55 -0500
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 25DFF15C0036; Wed, 23 Feb 2022 12:55:55 -0500 (EST)
-Date:   Wed, 23 Feb 2022 12:55:55 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.osdn.me>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1] random: block in /dev/urandom
-Message-ID: <YhZ1Kxmhs4ObbXOB@mit.edu>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <6e117393-9c2f-441c-9c72-62c209643622@www.fastmail.com>
- <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
+        with ESMTP id S243938AbiBWSrw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 13:47:52 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2129B40
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 10:47:23 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id i11so32807532lfu.3
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 10:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ny/Yyfn0acnuJvT2YtBGV0/3IFWA2cjT9fj9k9ksRRI=;
+        b=KNfaQOa+6QSvmFTOGqYpYeRSoiXf9wHxA/iHvB01NoLk3HfON5rfU+N9wZjLNeGR+q
+         7K5xhIHDS4KQ75tEFTPXV/leGfyTtb7VkA1gOzBPe9d/fOWQz2LiWQTUZgetvkhyDQ9a
+         DSuTvtVZTilVTwEjztPGWE5muzD55Epi6clu4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ny/Yyfn0acnuJvT2YtBGV0/3IFWA2cjT9fj9k9ksRRI=;
+        b=Ks/JF+ib3RltcAq/J1+tjJAwx9OhOcQgcRYpRcadd9K6qeCDQlNXqN/hNIfVdGH+Ib
+         18+vvpWZU+gfkccYnkK4LUudUIUUdBqlnim/IPGoEIWJ762+9DU9q7kKSXdlcVLfCuxh
+         YxDaF0FoKeg/cjHgC92TWHbTvfpDTamOLmGxn7WsmNtZ6zzzGVinf8VISssbwFJpSEhY
+         9hFpdb4KlvrQMQOQBHkIJYI17R5inizGmMHsKzZza++cw1XLv4g2cglUhPSuZy+thmXb
+         y47SzSU2p/akY3IEg/T/s4UmlIiBTpyWOUKoiv4oajTWq8Ulcov14kQNBzsHyIRDyWGe
+         nYYw==
+X-Gm-Message-State: AOAM533maumea+RonQXhWeZBjhRuaF0QAZaqFhykMBcEFfgG7BLBEM4b
+        ASJezL+dh9uhn13RyEk7ein+tc244oZv+OHQ
+X-Google-Smtp-Source: ABdhPJxveIXtw2mKi4qYJTDFx9MgzkPSf7t133N+CFtneFzMh8fkXSEIi4pJUOEC3KQW3ZoN1hAahw==
+X-Received: by 2002:a05:6512:3329:b0:443:aec5:564e with SMTP id l9-20020a056512332900b00443aec5564emr673957lfe.263.1645642041712;
+        Wed, 23 Feb 2022 10:47:21 -0800 (PST)
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
+        by smtp.gmail.com with ESMTPSA id bg40sm56164ljb.59.2022.02.23.10.47.17
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 10:47:18 -0800 (PST)
+Received: by mail-lf1-f43.google.com with SMTP id w27so15040993lfa.5
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 10:47:17 -0800 (PST)
+X-Received: by 2002:a05:6512:130b:b0:443:c2eb:399d with SMTP id
+ x11-20020a056512130b00b00443c2eb399dmr648396lfu.27.1645642037279; Wed, 23 Feb
+ 2022 10:47:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHmME9qcUM+G8E3ag5iPfowUF4-iYATODGK+MoLjkfaipnkgjA@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+In-Reply-To: <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Feb 2022 10:47:00 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+Message-ID: <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+To:     Jakob <jakobkoschel@gmail.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 06:02:52PM +0100, Jason A. Donenfeld wrote:
-> 
-> I think your analysis is a bit mismatched from the reality of the
-> situation. That reality is that cryptographic users still find
-> themselves using /dev/urandom, as that's been the "standard good
-> advice" for a very long time. And people are still encouraged to do
-> that, either out of ignorance or out of "compatibility". The
-> cryptographic problem is not going away.
+[ Arnd was already on the participants, but I moved him from 'Cc:' to
+'To:', just because I think this is once again tangentially related to
+the whole "c99 base" thing ]
 
-Or they open /dev/urandom because getrandom() and getentropy() isn't
-available on some OS's (all the world is not Linux, despite what the
-systemd folks like to believe), and some other OS's have a
-/dev/urandom-like device that they can open, and so it's just more
-convenient for application programers to open and read from
-/dev/urandom.
+On Wed, Feb 23, 2022 at 6:13 AM Jakob <jakobkoschel@gmail.com> wrote:
+>
+> I'm sorry for having created the confusion. I made this patch to support
+> the speculative safe list_for_each_entry() version but it is not actually
+> related to that. I do believe that this an actual bug and *could*
+> *potentially* be misused. I'll follow up with an example to illustrate that.
 
-> Fixing this issue means, yes, adding a 1 second delay to the small
-> group of init system users who haven't switched to using
-> getrandom(GRND_INSECURE) for that less common usage (who even are
-> those users actually?). That's not breaking compatibility or breaking
-> userspace or breaking anything; that's accepting the reality of _how_
-> /dev/urandom is mostly used -- for crypto -- and making that usage
-> finally secure, at the expense of a 1 second delay for those other
-> users who haven't switched to getrandom(GRND_INSECURE) yet. That seems
-> like a _very_ small price to pay for eliminating a footgun.
+Ok, so this is just a regular bug, plain and simple.
 
-I agree.  So long as we're only blocking for short amount of time, and
-only during early after the system was booted, people shouldn't care.
-The reason why we had to add the "gee-I-hope-this-jitterentropy-like-
-hack-is-actually-secure on all architectures but it's better than the
-alternatives people were trying to get Linus to adopt" was because
-there were systems were hanging for hours or days.
+The problem being that the list_for_each_entry() will iterate over
+each list entry - but at the end of the loop it will not point at any
+entry at all (it will have a pointer value that is related to the
+*HEAD* of the list, but that is not necessarily the same kind of entry
+that the list members are.
 
-      	   	   		    	  - Ted
+Honestly, I think this kind of fix should have been done entirely separately.
+
+In fact, I think the change to list_for_each_entry() should have been
+done not as "fix type speculation", but as a much more interesting
+"fix the list iterators".
+
+The whole reason this kind of non-speculative bug can happen is that
+we historically didn't have C99-style "declare variables in loops". So
+list_for_each_entry() - and all the other ones - fundamentally always
+leaks the last HEAD entry out of the loop, simply because we couldn't
+declare the iterator variable in the loop itself.
+
+(And by "couldn't", I mean "without making for special syntax": we do
+exactly that in "for_each_thread ()" and friends, but they have an
+"end_for_each_thread()" thing at the end).
+
+So what I'd personally *really* like to see would be for us to - once
+again - look at using "-std=gnu99", and fix the whole "leak final
+invalid pointer outside the loop".
+
+Then the type speculation thing would be an entirely separate patch.
+
+Because honestly, I kind of hate the completely random type
+speculation patch. It fixes one particular type of loop, and not even
+one that seems all that special.
+
+But we still don't do "gnu99", because we had some odd problem with
+some ancient gcc versions that broke documented initializers.
+
+I honestly _thought_ we had gotten over that already. I think the
+problem cases were gcc-4.9 and older, and now we require gcc-5.1, and
+we could just use "--std=gnu99" for the kernel, and we could finally
+start using variable declarations in for-statements.
+
+Arnd - remind me, please.. Was there some other problem than just gcc-4.9?
+
+                 Linus
