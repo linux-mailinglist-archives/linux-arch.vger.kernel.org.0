@@ -2,59 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42AB74C152F
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 15:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2644C1536
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 15:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241441AbiBWONv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Feb 2022 09:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
+        id S239610AbiBWOQp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Feb 2022 09:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241433AbiBWONu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 09:13:50 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE6A58E61;
-        Wed, 23 Feb 2022 06:13:23 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id gb39so52842764ejc.1;
-        Wed, 23 Feb 2022 06:13:23 -0800 (PST)
+        with ESMTP id S241462AbiBWOQo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 09:16:44 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492A0B1895;
+        Wed, 23 Feb 2022 06:16:13 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id s1so11324393edd.13;
+        Wed, 23 Feb 2022 06:16:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=sk3EKu2n8A3lB1TBZNR6LFIu5Y28hGEYtP8FhYL7krM=;
-        b=UjwnJSchAJBzunfzc3V9nwiSju/yw4FX242TSa5LNAfqNf3dN2pjZe0GWA3SklQAMe
-         hbxVatHL/TPzONThWuK+mZpZCsRqqRqAk9vuf1UL4Hj7XBSuMh9RPTxQvqbmXvRrY3tA
-         QPEfwD3q3lv9KGYt1/gC9OKFb0b4kN1ZusK4BJ2EOE5Ak1rpzZ/H4u8i8b9WT07jgBKa
-         osX9OxO5PNt+H6qqbrqgN2KGwsIxWZdEHQRASGSmH+7+GjI3yQFL0fvJ51h7gFVJdYLR
-         6jMBK16QS3Nyyzy3ucl+dq3hIvY6FCVDi9GDv34qaDTg42f8VTQfU9J20ZtMTmaWhp6W
-         PsJA==
+        bh=It8FN98uI0gWCGpr8ZQrhbKJFnKd2KRuLbUsKftnJwM=;
+        b=LmvVCjb48o8HIJVT5QTyy0/yIjciEfwEDu/z9oGeXQ248LxFopz+o55lzSIMSoCmyq
+         uwW4RBcQyVquiMn9re741LXiUrgxumQxqgqW2Y493r6DNgZ+z/QYJW3jw43f9BmS8cW0
+         7/h7GTB1JnnV/o+EL1rOBwR5aTFVSzcQJHeR8mRwMtXVPvsascPOr8BTGsM/WUrsF3qe
+         /xRFbTBzG2C+VHPcF+8U02eONrOlBkUPD7ZUQtjXhC33Vdrr0xkeV13ODrfNRQhOnBLD
+         uBVu5Rg9Rfj4Pou88JVQ22tc0C90yRZK0FfnMk2CKbZXYsAnGAM9qrVBvALvFtjLIpE6
+         +e1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=sk3EKu2n8A3lB1TBZNR6LFIu5Y28hGEYtP8FhYL7krM=;
-        b=bW4G0Ws2SCU0H1Y1ckDcPFVlreOfOnzez6Ifz2Sdc8q6QFhqETtkQeEZJYyLi5yyPf
-         JttTnb3TNwOF8GysOnhAMAErgADkDKSboREtubcBJ7MAe4SbZ2Vcw3Cb4N5bdqMyfrVo
-         bSBewpH13MMYxoCLI9bVkq7QysgQyPjKv6/x9eSSUr/JckOu8oviXbCEddYRYXWH7pix
-         mAdzj7pTtLMLa5S/YNQopuscfTN6KMHN7AXxlNTkrtehAt6Bvme3EKDjKQ2Tfc80ZWZm
-         LDS6mw0QXlbEhnHVuCxiC83oO/9ezMSS6zzNN36tRdF51rj7hj2hFeIrJ5rCb0Gw7ng/
-         +Q5w==
-X-Gm-Message-State: AOAM533yohPML8vFDpxuyyWjRbc8hMuvl629KcYkoAoNmH57V/Z3RmnT
-        d5BFLcjCjUXxXWBo4TmDsH0=
-X-Google-Smtp-Source: ABdhPJznanM6NcAAN1Vn4Qug+zFjoQcwAYXMvpqTbOgsPTOtDoQ3KmNGl0mTPrV1mQHZC6hbDWFwkA==
-X-Received: by 2002:a17:907:765a:b0:6d1:bc6:df10 with SMTP id kj26-20020a170907765a00b006d10bc6df10mr14891861ejc.254.1645625601536;
-        Wed, 23 Feb 2022 06:13:21 -0800 (PST)
+        bh=It8FN98uI0gWCGpr8ZQrhbKJFnKd2KRuLbUsKftnJwM=;
+        b=werjRJQrIKscsLz7xo/UIaMgJ3MHJaW9i4I2O8053cf7TRQjU24/IwGos0wPoLu/N2
+         fdECQoJygYJgqgTnXaKRfgqzbW+GoYOgoPBt6hGTJjW3+SNgRUZkRkI/lbZ4Fs+qKAV8
+         ZML8LNasI97W0Hw+UorLS7SOAoU8mLVkeTRpqRd7O6fkuLjPZOTPmMOSLXx586b9bMgq
+         jOXWUneI3mL5zxuRWKkkQltwXf0zVZGq5KxnI49oIyXhkvFHuyuohsXukRti7zwCNtSH
+         wYiQrtznXZWas9SLj5vmeHQssOAYdoLkQdeDsy+y+b95xRl+n5odznuhEO/fGn9DxT4o
+         CWYw==
+X-Gm-Message-State: AOAM532ws7Ssll/ZQabC/2ie2dalWnp7WtS/WDoEvZeyaXBqXC1X1/zI
+        CWnDLvu0pG0EHJy7xJ3tNYXxXPyerpGTaVbgAFtibg==
+X-Google-Smtp-Source: ABdhPJwdahiI1bqr8gpSBx8NAi2Lzg6slziDDB3cE7GLLOY2hzOjQ8G4BMmBxxL9seXUxUkbNGAHLg==
+X-Received: by 2002:a05:6402:2709:b0:413:1871:3bc7 with SMTP id y9-20020a056402270900b0041318713bc7mr11991773edd.71.1645625771773;
+        Wed, 23 Feb 2022 06:16:11 -0800 (PST)
 Received: from smtpclient.apple (dhcp-077-250-038-153.chello.nl. [77.250.38.153])
-        by smtp.gmail.com with ESMTPSA id ej19sm9227076edb.108.2022.02.23.06.13.20
+        by smtp.gmail.com with ESMTPSA id r19sm1443051ejz.139.2022.02.23.06.16.10
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Feb 2022 06:13:20 -0800 (PST)
+        Wed, 23 Feb 2022 06:16:11 -0800 (PST)
 Content-Type: text/plain;
         charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
 Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
  after the loop
 From:   Jakob <jakobkoschel@gmail.com>
-In-Reply-To: <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
-Date:   Wed, 23 Feb 2022 15:13:19 +0100
+In-Reply-To: <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+Date:   Wed, 23 Feb 2022 15:16:09 +0100
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -69,10 +69,11 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+Message-Id: <86C4CE7D-6D93-456B-AA82-F8ADEACA40B7@gmail.com>
 References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
  <20220217184829.1991035-4-jakobkoschel@gmail.com>
  <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 X-Mailer: Apple Mail (2.3693.60.0.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,65 +86,125 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Note that I changed the location of the struct member 'req' in =
+gr_request
+to make this work. Instead of reshuffling struct members this can also =
+be
+introduced by simply adding new struct members in certain spots.
+In other code locations with the same pattern I didn't have to do that.
+
+Assuming '_req' passed to gr_dequeue() is located just past 'ep' on the
+heap, the check could pass even though the list searched is completely
+empty.
+
+&req->req for the head element will be an out-of-bounds pointer
+that by coincidence or heap massaging is where '_req' is located.
+
+Even if the list is empty the list_for_each_entry() macro will do:
+
+	pos =3D list_first_entry(head, typeof(*pos), member);
+
+resolving all the macros (list_first_entry() etc) it will look like =
+this:
+
+	pos =3D container_of(head->next, typeof(*pos), member)
+
+Since the list is empty head->next =3D=3D head and container_of() is =
+called on something
+that is *not* actually of type gr_request.
+
+Next, the check if the end of the loop is hit is evaluated:
+
+	!list_entry_is_head(pos, head, member);
+
+which will stop the loop directly before executing a single iteration.
+
+then using '&req->req' is some bogus pointer pointing just past the =
+struct gr_ep,
+where in this case '_req' is located.
+
+The point I'm trying to make: it's probably not safe to rely on the =
+compiler and
+that everyone is aware of this risk when adding/removing/reordering =
+struct members.
 
 
-> On 17. Feb 2022, at 20:28, Linus Torvalds =
-<torvalds@linux-foundation.org> wrote:
->=20
-> On Thu, Feb 17, 2022 at 10:50 AM Jakob Koschel =
-<jakobkoschel@gmail.com> wrote:
->>=20
->> It is unsafe to assume that &req->req !=3D _req can only evaluate
->> to false if the break within the list iterator is hit.
->=20
-> I don't understand what problem you are trying to fix.
->=20
-> Since "req" absolutely *has* to be stable for any of this code to be
-> valid, then "&req->req" is stable and unambiguous too. The *only* way
-> _req can point to it would be if we finished the iteration properly.
->=20
-> So I don't see the unsafeness.
->=20
-> Note that all this work with "speculative" execution fundamentally CAN
-> NOT affect semantics of the code, yet this patch makes statements
-> about exactly that.
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+---
+drivers/usb/gadget/udc/gr_udc.c | 25 +++++++++++++++++++++++++
+drivers/usb/gadget/udc/gr_udc.h |  2 +-
+2 files changed, 26 insertions(+), 1 deletion(-)
 
-I'm sorry for having created the confusion. I made this patch to support
-the speculative safe list_for_each_entry() version but it is not =
-actually
-related to that. I do believe that this an actual bug and *could*
-*potentially* be misused. I'll follow up with an example to illustrate =
-that.
+diff --git a/drivers/usb/gadget/udc/gr_udc.c =
+b/drivers/usb/gadget/udc/gr_udc.c
+index 4b35739d3695..29c662f28428 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -1718,6 +1718,7 @@ static int gr_dequeue(struct usb_ep *_ep, struct =
+usb_request *_req)
+		ret =3D -EINVAL;
+		goto out;
+	}
++	printk(KERN_INFO "JKL: This does print, but shouldn't");
 
-I agree that this has nothing to do with the speculative execution =
-iterator
-(apart from making it work) and should best be discussed separately.
+	if (list_first_entry(&ep->queue, struct gr_request, queue) =3D=3D =
+req) {
+		/* This request is currently being processed */
+@@ -1739,6 +1740,30 @@ static int gr_dequeue(struct usb_ep *_ep, struct =
+usb_request *_req)
+	return ret;
+}
 
-I'll attach an example on how I think this code *can* become a problem.
-Note that this highly depends on the used compiler and how the struct
-offsets are laid out.
++static int __init init_test_jkl3(void)
++{
++	struct gr_ep *ep;
++	struct gr_udc *dev;
++	struct usb_request *_req;
++	void *buffer;
++
++	/* assume the usb_request struct is located just after the 'ep' =
+on the heap */
++	buffer =3D kzalloc(sizeof(struct gr_ep)+sizeof(struct =
+usb_request), GFP_KERNEL);
++	ep =3D buffer;
++	_req =3D buffer+sizeof(struct gr_ep);
++
++	/* setup to call gr_dequeue() */
++	dev =3D kzalloc(sizeof(struct gr_udc), GFP_KERNEL);
++	ep->dev =3D dev;
++	ep->dev->driver =3D 1;
++	INIT_LIST_HEAD(&ep->queue); /* list is empty */
++
++	gr_dequeue(&ep->ep, _req);
++
++	return 0;
++}
++__initcall(init_test_jkl3);
++
+/* Helper for gr_set_halt and gr_set_wedge */
+static int gr_set_halt_wedge(struct usb_ep *_ep, int halt, int wedge)
+{
+diff --git a/drivers/usb/gadget/udc/gr_udc.h =
+b/drivers/usb/gadget/udc/gr_udc.h
+index 70134239179e..14a18d5b5cf8 100644
+--- a/drivers/usb/gadget/udc/gr_udc.h
++++ b/drivers/usb/gadget/udc/gr_udc.h
+@@ -159,7 +159,6 @@ struct gr_ep {
+};
 
->=20
-> That's not how CPU speculation works.
->=20
-> CPU speculation can expose hidden information that is not
-> "semantically important" (typically through cache access patterns, but
-> that's not the only way). So it might be exposing information it
-> shouldn't.
->=20
-> But if speculation is actually changing semantics, then it's no longer
-> "speculation" - it's just a bug, plain and simple (either a software
-> bug due to insufficient serialization, or an actual hardware bug).
->=20
-> IOW, I don't want to see these kinds of apparently pointless changes
-> to list walking. The patches should explain what that SECONDARY hidden
-> value you try to protect actually is for each case.
->=20
-> This patch is basically not sensible. It just moves code around in a
-> way that the compiler could have done anyway (or the compiler could
-> decide to undo). It doesn't explain what the magic protected value is
-> that shouldn't be leaked, and it leaves the code just looking odd and
-> pointless.
->=20
->                   Linus
+struct gr_request {
+-	struct usb_request req;
+	struct list_head queue;
 
+	/* Chain of dma descriptors */
+@@ -171,6 +170,7 @@ struct gr_request {
+	u16 oddlen; /* Size of odd length tail if buffer length is "odd" =
+*/
+
+	u8 setup; /* Setup packet */
++	struct usb_request req;
+};
+
+enum gr_ep0state {
+--=20
+2.25.1
