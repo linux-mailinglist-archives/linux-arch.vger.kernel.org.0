@@ -2,80 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F6C4C0D72
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 08:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 476474C0EB2
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 09:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbiBWHmS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Feb 2022 02:42:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
+        id S239133AbiBWI7y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Feb 2022 03:59:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238714AbiBWHmP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 02:42:15 -0500
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B10639156;
-        Tue, 22 Feb 2022 23:41:45 -0800 (PST)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1nMmHJ-0002z4-00; Wed, 23 Feb 2022 08:41:37 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 9B37FC2742; Wed, 23 Feb 2022 08:41:27 +0100 (CET)
-Date:   Wed, 23 Feb 2022 08:41:27 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@lst.de>, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, linux-api@vger.kernel.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux@armlinux.org.uk, will@kernel.org, guoren@kernel.org,
-        bcain@codeaurora.org, geert@linux-m68k.org, monstr@monstr.eu,
-        nickhu@andestech.com, green.hu@gmail.com, dinguyen@kernel.org,
-        shorne@gmail.com, deller@gmx.de, mpe@ellerman.id.au,
-        peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
-        hca@linux.ibm.com, dalias@libc.org, davem@davemloft.net,
-        richard@nod.at, x86@kernel.org, jcmvbkbc@gmail.com,
-        ebiederm@xmission.com, akpm@linux-foundation.org, ardb@kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v2 09/18] mips: use simpler access_ok()
-Message-ID: <20220223074127.GA8287@alpha.franken.de>
-References: <20220216131332.1489939-1-arnd@kernel.org>
- <20220216131332.1489939-10-arnd@kernel.org>
+        with ESMTP id S239132AbiBWI7w (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 03:59:52 -0500
+X-Greylist: delayed 848 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 23 Feb 2022 00:59:25 PST
+Received: from mail.olerise.pl (mail.olerise.pl [46.183.184.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D300A7CDDD
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 00:59:25 -0800 (PST)
+Received: by mail.olerise.pl (Postfix, from userid 1001)
+        id 826A944968; Wed, 23 Feb 2022 09:41:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=olerise.pl; s=mail;
+        t=1645605836; bh=ZNYiuZLXlxCdAPtstEG/gwJieB5RBwA/cHj1SZ3Mpl0=;
+        h=Date:From:To:Subject:From;
+        b=JUzCB7b1p3JnWXxNgmYarUi65GecJuEyUx6Fy116ZAxH/8pEiQsy6sbGyyFAZcVL3
+         EGd59OeNOTeP+y1ACbIJiPUPSdfAFtdR4VFOV/Z6FCSfYNion8w8q1jkO5m1h0/wA9
+         dw/fQ3YWo/MtloscX6IBOboNiwflchQR99sDLeggWDswtBRO7Sl+xl2EQ/RgezZAuX
+         pL6nK9+g2caOuGW2x3XnA3A9P4K6QYZIYP8oiaCSCVJONEBUIGx2CIbC0kOln3DnVf
+         o5wF/Qf4jar08yX+ZdUIAljRni/kN47JCjob82oEm04YBoRoNHLroqo+wrFxEByWBv
+         Z6B7nm2YBHumg==
+Received: by mail.olerise.pl for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 08:40:28 GMT
+Message-ID: <20220223084500-0.1.1x.fhzw.0.qhmxhmwlc0@olerise.pl>
+Date:   Wed, 23 Feb 2022 08:40:28 GMT
+From:   =?UTF-8?Q? "Miko=C5=82aj_Rudzik" ?= <mikolaj.rudzik@olerise.pl>
+To:     <linux-arch@vger.kernel.org>
+Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
+X-Mailer: mail.olerise.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220216131332.1489939-10-arnd@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_PERMERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 02:13:23PM +0100, Arnd Bergmann wrote:
-> diff --git a/arch/mips/include/asm/uaccess.h b/arch/mips/include/asm/uaccess.h
-> index db9a8e002b62..d7c89dc3426c 100644
-> --- a/arch/mips/include/asm/uaccess.h
-> +++ b/arch/mips/include/asm/uaccess.h
-> @@ -19,6 +19,7 @@
->  #ifdef CONFIG_32BIT
->  
->  #define __UA_LIMIT 0x80000000UL
-> +#define TASK_SIZE_MAX	__UA_LIMIT
+Dzie=C5=84 dobry,
 
-using KSEG0 instead would IMHO be the better choice. This gives the
-chance to remove __UA_LIMIT completly after cleaning up ptrace.c
+chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
+skania nowych zlece=C5=84 ze strony www.
 
-Thomas.
+Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
+, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
+=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
+jonowania strony w Google.
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
+
+
+Pozdrawiam
+Miko=C5=82aj Rudzik
