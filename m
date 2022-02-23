@@ -2,44 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A854C1DFD
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 22:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B91E4C1E26
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Feb 2022 23:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239391AbiBWVwj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Feb 2022 16:52:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S242431AbiBWWBm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Feb 2022 17:01:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbiBWVwi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 16:52:38 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF533C4B9;
-        Wed, 23 Feb 2022 13:52:07 -0800 (PST)
-Received: from mail-ej1-f51.google.com ([209.85.218.51]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mc02T-1nwrnu3KHv-00da4O; Wed, 23 Feb 2022 22:52:05 +0100
-Received: by mail-ej1-f51.google.com with SMTP id r13so249489ejd.5;
-        Wed, 23 Feb 2022 13:52:05 -0800 (PST)
-X-Gm-Message-State: AOAM5308jvEXhpKL/w+dlKOqx/PFZZgd5JfDS6c5Bk8AtLsATnuuPNun
-        FTUsSC+jEyRTsxcmRagkzksfRbiAM3ocICNcygA=
-X-Google-Smtp-Source: ABdhPJxtj8uyicd8SyqQTEpI7vIdv7hPv52/WmZ5AoYWSFitVsWjSUWx5lKV5rVYc5oiMdSbMnSOL/JSvK5tIzHTFXA=
-X-Received: by 2002:a5d:59aa:0:b0:1ed:9f45:c2ff with SMTP id
- p10-20020a5d59aa000000b001ed9f45c2ffmr1035641wrr.192.1645649355189; Wed, 23
- Feb 2022 12:49:15 -0800 (PST)
+        with ESMTP id S234750AbiBWWBl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Feb 2022 17:01:41 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3750F50449
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 14:01:13 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id p14so229751ejf.11
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 14:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4TnD6jYOSsNtQKWO0JaU3gwq6Qdh6TjyUgcvqEl+K5I=;
+        b=dX/Jy7+F597/hIqi/9qMzXNMQrDyhVkP3dTnhBEOAl49NjqeCD8FqayzKHmPDChTw3
+         FXxIkt9v5pPo2K0sD+mRbJ2ze9fZjc9QQ0YoibAdDT8COHVHj0K4UemJxZnobNcdHhFL
+         ecGrXKp1xqB580NwK5g7hNFGZEgHao6WIIXUA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4TnD6jYOSsNtQKWO0JaU3gwq6Qdh6TjyUgcvqEl+K5I=;
+        b=70qSKpm8DQWgEn7LDFkTpPPOVe5Ja2u2STCCsPI+ZbpVq9UL0LCLWVS190OxV+/OSP
+         xPChzw6/TiliVyQfg587Kd+bANSp+ED+xmm6UILGZs7bofzrL06jjcvvDRPZipYPtG6S
+         w64YG8sB9kKm8foy4iwsGdgWnEO5Gd+6+5UsyJvZ9nwtitNyZk9PJ6mUY2REJrq3gO8n
+         nuctg+LAwrcQiGNxZaUyndB6vt/3o6lVdN0Jn3pEXgBiMLHPEewyLdX03+NaiiuAZgNw
+         164LUl3xKsgcmsZvcghizJs20w2TNh1OnpNd8cGbkrwcCnXkjh7tcwLrht3e66CdKZGR
+         08Pg==
+X-Gm-Message-State: AOAM531s0Kin+WX51635aLCgs8mCBgABKDepLUCGhf9+MAfe3UPDdNVX
+        NERIZ2cPfcmgxDvsHlIsSv8P7W5dqeblljCsDj4=
+X-Google-Smtp-Source: ABdhPJwkxJlF7JlyzfKJS8/ys3T91Eldpp0x1Vlc6uEu6vV4aMdujTcjz5m3M0AeackqWBkl7sxxIQ==
+X-Received: by 2002:a17:906:93f7:b0:6cc:6319:6c43 with SMTP id yl23-20020a17090693f700b006cc63196c43mr1342062ejb.176.1645653671373;
+        Wed, 23 Feb 2022 14:01:11 -0800 (PST)
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
+        by smtp.gmail.com with ESMTPSA id r19sm357206ejz.139.2022.02.23.14.01.10
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 14:01:11 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id d28so112168wra.4
+        for <linux-arch@vger.kernel.org>; Wed, 23 Feb 2022 14:01:10 -0800 (PST)
+X-Received: by 2002:a05:6512:2033:b0:443:3d49:dac with SMTP id
+ s19-20020a056512203300b004433d490dacmr1067001lfs.52.1645653236389; Wed, 23
+ Feb 2022 13:53:56 -0800 (PST)
 MIME-Version: 1.0
 References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
  <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
  <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
  <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
- <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com> <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com>
-In-Reply-To: <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Feb 2022 21:48:59 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
-Message-ID: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
+ <CAK8P3a0DOC3s7x380XR_kN8UYQvkRqvE5LkHQfK2-KzwhcYqQQ@mail.gmail.com>
+ <CAHk-=wicJ0VxEmnpb8=TJfkSDytFuf+dvQJj8kFWj0OF2FBZ9w@mail.gmail.com> <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2b_RtXkhQ2pwqbZ1zz6QtjaWwD4em_MCF_wGXRwZirKA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 23 Feb 2022 13:53:39 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wh97QY9fEQUK6zMVQwaQ_JWDvR=R+TxQ_0OYrMHQ+egvQ@mail.gmail.com>
+Message-ID: <CAHk-=wh97QY9fEQUK6zMVQwaQ_JWDvR=R+TxQ_0OYrMHQ+egvQ@mail.gmail.com>
 Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
  after the loop
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Jakob <jakobkoschel@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -53,60 +79,37 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>, Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:cjkUysxlJscg26BdLEqvQDwPBkRPWuqIBWReqtQZ15RnMmjfj5A
- FReQE+scpfMJKfK1nSKyO3B+N6OnxYFTXnwyAGB2Eobvu65WBoTlkEx+RaGqyBuqmR2p2vV
- yt/yJUMtHyZBsuwj2WOWK7cq4UvbcFFPdKOLJimz3wd3kC8J5tiqJYItu3+WU41vGpRkQe8
- 4AKDYq3OmeMc1vKbCm/pQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3MLiFAkrs2E=:9Tf5B1NU3+YtBT74Jx1q64
- +JNlxJdngVHLKPENxJcTq5Wy3AYtzwF4uAUGLkZluOndrX+1cQMcH770BO+fVqcqBO26KxcPT
- wyTqxnko6GWoBQTzIL9OPjmZOQvb+TK9bc4KZOoR4AA+OI3eHfw44TcIeHBxcKH+rg5L6j08Z
- byvTUW/r0foAa9S7xniGGPclGJbRAo9Rt65aRhepIR3u6cX+nBC8EGEwYbULFBSY47bjs8Tu4
- Nsftv/BOYuHaqOg5JZ9lw5GIcPpE/2TJAtJFej3Qo9qrQ/lgPE5/NL9nIK05Mdh2dwRso5NeS
- oS0lMKJlef/2jlC3KpDLdHS1l8Eh5SFjHbih8rO+PPz/bZBNgmgpbLQl4RbWZsrJK8yBgGZVz
- I+/kUp4XoILQjQus/654TzbeXD3gmbAQg7zSp90wnSwAu4IfRFQi2eexMSRXXwLDrBYimTxlf
- CD3P9+peR8lw56EoUky+dIpS65Rk5st8cXXx5toWhkRQsS3kAo1a6xfr5K0Pk2HQWQ3nAdT4A
- PT2cUspSW+Xy6SjqBHqGHhsFsaCqhURKoy+m85RfsYlyk1vsRdxek4MEKeoCvMAoEf0huRxsh
- 4ipSZexpkrm2sa7rSwN1Rp0OQ0UEYleXjlooqO543a0xxEyZNXWcgP+STje3pD8NSplL27It5
- 9t4EEUaO8LNjPNZrEIO0sioyXo/A+nVLBsjPas7XBp/0JEYV5buwvjqWF5TjDZAj50ZoO3krV
- l2YIuoYkD7ntHXD3AmN/5O2kzuQQLQ75/dE17re9G0hm9RC0vpflONqoAyocfXoY+NtFEvsuf
- JkpUxd7y1Nqo6vDBmavUOSrAJdldpeQXFmdSlq6SGH7U61Anp4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 23, 2022 at 9:43 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Wed, Feb 23, 2022 at 1:46 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Wed, Feb 23, 2022 at 12:25 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > I looked at the gcc documentation for this flag, and it tells me that
-> > it's default-enabled for std=c99 or higher. Turning it on for --std=gnu89
-> > shows the same warning, so at least it doesn't sound like the actual
-> > behavior changed, only the warning output. clang does not warn
-> > for this code at all, regardless of the --std= flag.
+> > Ok, so we should be able to basically convert '--std=gnu89' into
+> > '--std=gnu11 -Wno-shift-negative-value' with no expected change of
+> > behavior.
 >
-> Ok, so we should be able to basically convert '--std=gnu89' into
-> '--std=gnu11 -Wno-shift-negative-value' with no expected change of
-> behavior.
+> Yes, I think that is correct.
 
-Yes, I think that is correct.
+Ok, somebody please remind me, and let's just try this early in the
+5.18 merge window.
 
-> Of course, maybe we need to make -Wno-shift-negative-value be
-> conditional on the compiler supporting it in the first place?
+Because at least for me, doing
 
-I think they all do. I discussed this with Nathan Chancellor on IRC, to
-see what clang does, and he points out that the warning was made
-conditional on -fwrapv there a while ago:
+-                  -std=gnu89
++                  -std=gnu11 -Wno-shift-negative-value
 
-https://github.com/llvm/llvm-project/commit/59802321785b4b9fc31b10456c62ba3a06d3a631
+for KBUILD_CFLAGS works fine both in my gcc and clang builds. But
+that's obviously just one version of each.
 
-So the normal behavior on clang is to always warn about it, but since
-we explicitly ask for sane signed integer behavior, it doesn't warn for
-the kernel.
+(I left the host compiler flags alone - I have this memory of us
+having had issues with people having old host compilers and wanting
+headers for tools still build with gcc-4)
 
-        Arnd
+                Linus
