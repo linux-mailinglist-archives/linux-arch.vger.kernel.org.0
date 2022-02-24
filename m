@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1C34C277A
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Feb 2022 10:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2DF64C28DA
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Feb 2022 11:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbiBXJEz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Feb 2022 04:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S233203AbiBXKJL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Feb 2022 05:09:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiBXJEy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Feb 2022 04:04:54 -0500
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B7518A7A4;
-        Thu, 24 Feb 2022 01:04:24 -0800 (PST)
-Received: from mail-wm1-f47.google.com ([209.85.128.47]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MWiYo-1nlKm71Ofo-00X7zY; Thu, 24 Feb 2022 10:04:23 +0100
-Received: by mail-wm1-f47.google.com with SMTP id l1-20020a7bcf01000000b0037f881182a8so3065539wmg.2;
-        Thu, 24 Feb 2022 01:04:23 -0800 (PST)
-X-Gm-Message-State: AOAM530FCm5GYNTPUNhsxLPZjBSLMZWXuWIg8HSA9REPaezbRWPguvIQ
-        CVrUzD2MVro3CMZbCKcDDdiaMRYotRsx4rldn8w=
-X-Google-Smtp-Source: ABdhPJyjEw35XhDO0nptzAMVKk2Hxde9tm8LwW6lNeB58GkA2TxxKPLSRkO1YZW5ApcDqUwIlDhAXRFgLJ95HKAPDdY=
-X-Received: by 2002:a05:600c:48a:b0:380:3f3a:e08e with SMTP id
- d10-20020a05600c048a00b003803f3ae08emr10577359wme.1.1645693462887; Thu, 24
- Feb 2022 01:04:22 -0800 (PST)
+        with ESMTP id S231319AbiBXKJK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Feb 2022 05:09:10 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAA028A109;
+        Thu, 24 Feb 2022 02:08:40 -0800 (PST)
+Received: from mail-lj1-f182.google.com ([209.85.208.182]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mo6zD-1o2IUW1RQB-00pbU6; Thu, 24 Feb 2022 11:08:39 +0100
+Received: by mail-lj1-f182.google.com with SMTP id bn33so2071645ljb.6;
+        Thu, 24 Feb 2022 02:08:39 -0800 (PST)
+X-Gm-Message-State: AOAM532G8Nc3Lr+kfTgtRAzsLg/iGKWg5v1Px0de78F49wEhGEADs0E2
+        94bcPp89euS1fmF54swAl9txrZlXM7kDSpE9kGY=
+X-Google-Smtp-Source: ABdhPJzPVQaW1f3Bbzw+kTDiMg4Tajz+c6SJ2JtQUsJaSw6D1lJ8eGh3OG9MaDTzij1odC2MMgMswcl0VWfIMCexGbY=
+X-Received: by 2002:a5d:59aa:0:b0:1ed:9f45:c2ff with SMTP id
+ p10-20020a5d59aa000000b001ed9f45c2ffmr1412807wrr.192.1645694019453; Thu, 24
+ Feb 2022 01:13:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-20-guoren@kernel.org>
-In-Reply-To: <20220224085410.399351-20-guoren@kernel.org>
+References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-17-guoren@kernel.org>
+In-Reply-To: <20220224085410.399351-17-guoren@kernel.org>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 24 Feb 2022 10:04:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3vmB4Vm9UOHx3qnTY6wUyw_r3R11amYwyHNpEhFiknrw@mail.gmail.com>
-Message-ID: <CAK8P3a3vmB4Vm9UOHx3qnTY6wUyw_r3R11amYwyHNpEhFiknrw@mail.gmail.com>
-Subject: Re: [PATCH V6 19/20] riscv: compat: ptrace: Add compat_arch_ptrace implement
+Date:   Thu, 24 Feb 2022 10:13:23 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com>
+Message-ID: <CAK8P3a13_VBpTidoF_pUdV5g0MFqpSe17rgw=XUv69CCFCN0_g@mail.gmail.com>
+Subject: Re: [PATCH V6 16/20] riscv: compat: vdso: Add rv32 VDSO base code implementation
 To:     Guo Ren <guoren@kernel.org>
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         Anup Patel <anup@brainfault.org>,
@@ -52,29 +52,28 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
         "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hqP+0S9onqPXjEc/plYI652niBmPQNsect9n2Zn0kmP9aAUySLJ
- JV5CqZA6ExYvpjHrNwUeqPQndgnaxyn/FMhuE70Nf5JCQqlRFqrnVgM1PdqmazzSogipLXQ
- AiJ2dp2HAGvlKjxOaGDSWWYGDm4zJv2aViLkM/ccCw4F/AlycXVrRlqlU9DTGlpMj8CyH6K
- lPhaqxyPXj3BykKqOWhVg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UFZmV5HYQXI=:4zIeOikdnlT7/1M6xfURhe
- yD3y9gKQZW676YNE3EcSPMFEvhfJoGMJbLPO6AXTBmC2uVWRQfE9S/DW7NZwsrjD4oJwT1pMj
- H1lFJ4mQdP6EFpN+6V6ykRYaGbQtZLQGBYwZirAR5wAy3MUfhq0U/Rn3JLSdIkXzyTR09IzId
- PuEh+dt1NJBQl+JaMqzy3hUM09pzLMxhKgH0zCXpQY3TLt3GWuMCfaKxsytADB6S3vMkuL6EB
- gNQXnYjcoXERIOKEPGluqC5EatgbMrn2yz5LxfX+QLoKOkS2xCYuovSHC83/UGdTnUT92BKLQ
- 1TbRFcs+Z+nFgjTWvQFs+6qVMuCuQATvhknEfyWuCiD1BTMX6/fjw4+ApNVgDa7QE13qCdLAq
- bY/d7+REG/kewRLDJ1kdCCFh9117j2gSDy80ZCvo0BC2i4XeSOuAuFrEKY0N+RueYn4E/WJoh
- yX0mdgfNCUAeFVXBSpYaAOC109Ycytki2m6XXKF2YhwPvNWEApv8k4lpbNwvETpELyTbVUaZP
- BzX5doYZN364zRYyh5lzNCv8Z7dRxY0aZW5uN9mR3SOoEQNqsh4LgPM69cWuR5xm00Fv5tklB
- FDPebKiqC72nutCNrZrpxC1d/bL8UU934DukBJDvKzPw2zyOca0x+h8eiNBAr55fgPaLztuZc
- ZqE/uqYeyyjt/YagyqvRkowGe4Bxixe+a+s9Uqwq/8GCELdm9r38J5KXgkppvJgDJaBUNZfBi
- dcg5UZ7ErPULVlamJbkqV0/jgN2YpngkcNVYs0vs5bRIP9hj0y4Kl7/YJZpd/0OQbYqunBXbB
- d8f1tUAd7xxRV42Bl/1aB5an3+SPIq+NqNY+qvvx1J5nCWKiMc=
+X-Provags-ID: V03:K1:s5S3jWFc5RkWSW1T8zhfkjyFM+NtY1UTK5PZjDzVdrUIGCAi+dI
+ 1HMN5WMb+Hx0SFXx6NYytdF/RHKuQjmxKquYmQeOY4IIuD8EZh1pQGcStz2/KiODy/IXQw1
+ rR3LEQ6hrUugBHhsHBUc7/pMDiVlDZDiZrQ24lKsFeLjTelCk2E0iok+2h5fPKfXbu12FL8
+ 6xq9n2NG0QYZrlyCMg3TA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NiNxplWOlyE=:cKTvBCD+xcsnkPA7P47Qo3
+ 7LIAQUjMulhaEHwuIGgZJV+qdzepuabf9FmzSgmBt2fSUfDtN+WdH68SdgbXreVkFdN/u8vsO
+ /2IOcRklgJiT4/hHojoNvx3Nr0Nq+4QHrBqwmrHCd8YKftGez64ervPAg4gAHdqFvyqcgH6zJ
+ WoJXjZLSyo614T5KXcvUMo6k0s89/QZxmYzPzyhT1d3GjW0oH9QWwNtOVBM50UKNUVofEtSNU
+ YEeOGt/Lz6jRukL4DhrJIWdPxtatgbtiuqfl6nxhWbZkQqFBUk+zHMV+bkRiBJd616S0W01GJ
+ QWToZ6TQhWK02oemfQZc1mGczFNWPW7Om0UlrrtrsuCQFXbu8TA8SEzY3qYY47AzbStQUHoij
+ OwG0oMMRHSBo1hbiZF8JQ5uhnKl3H+xYezmaZxEQrmCDBaMQWhTXy91WK1VwfV4yw2wclXkWp
+ 4+gnwqaz9En6vLo4ULS06NJGq4Qheonqp2SBEuAW9kyDR0AHau5dD8+lnwvw+/LplMFeyo6Hw
+ NJ9xsHWvj83zU9P+ZcsmRIliMnSwTLqwQ80U1M2S3pty23lFkULF1PEy9kDb03K+DiNxS6L+t
+ wKeMKma+atCJd3T2XORM6KaPj/RmAcf94t27JBU6mF4jJkPWFZAxNuLbM4IzWbzjJDmMcNc6k
+ +sbw7p1zwytolKDdL+LlACrbRds1w/SNWdQ1ZP3h6H5ql1HTjp6/dXUCoA0rPOkeJ5OAfJw6r
+ 4MRUG/jUm2JV5nqc4YJIaQ5RsYKMNMlDpcxBSslA8vfoeJomInoailMTI4EK95VCutL8BWUQW
+ uAj7JlXByDwzU4cLV/bUpiWZ2jFHzWp5GarE5btpKFCczLJ0Pg=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,11 +81,23 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Thu, Feb 24, 2022 at 9:54 AM <guoren@kernel.org> wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-
 >
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> There is no vgettimeofday supported in rv32 that makes simple to
+> generate rv32 vdso code which only needs riscv64 compiler. Other
+> architectures need change compiler or -m (machine parameter) to
+> support vdso32 compiling. If rv32 support vgettimeofday (which
+> cause C compile) in future, we would add CROSS_COMPILE to support
+> that makes more requirement on compiler enviornment.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+I think it's just a bug that rv32 doesn't have the vdso version of the
+time syscalls. Fixing that is of course independent of the compat support,
+but I think you need that anyway, and it would be better to start
+out by building the compat vdso with the correct
+architecture level.
+
+At least this should be a lot easier than on arch/arm64 because you
+can assume that an rv64 compiler is able to also build rv32 output.
+
+        Arnd
