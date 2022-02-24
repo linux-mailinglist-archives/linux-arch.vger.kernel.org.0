@@ -2,109 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86CF4C2920
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Feb 2022 11:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5EC34C297D
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Feb 2022 11:31:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiBXKQw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Feb 2022 05:16:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
+        id S233487AbiBXKbQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Feb 2022 05:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbiBXKQu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Feb 2022 05:16:50 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3761528D38D
-        for <linux-arch@vger.kernel.org>; Thu, 24 Feb 2022 02:16:21 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so919747wmp.5
-        for <linux-arch@vger.kernel.org>; Thu, 24 Feb 2022 02:16:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=M+9E/4kdcDHX+kADMEgL+77UKaeIJe66vooZh14SxpQ=;
-        b=J1XttCVHQmSAfgTTkZRPiLhdvxpMVbe4bPXYmdAGmzjU3fzOwnX7g8PNXmZhRIrj9q
-         PjpLMPn6E/DWY+qDK58JJgM+o6rtneSIkdSBdgdyZLxoPMryMTff20aZqPRDzkcNugGS
-         AFxrUki/Rap7cYcJAw+8rJ3oGUoDygURs01EThnyhh3lDloaLE7fxXxaRD+DCd77bmRV
-         Hkkzrn86LitySmn0OJ8Q6u1pTehfGDPriQ2a4jWbwsnM9vQjkZfgUPhR2ky6OFL2EHbG
-         EOBAhpwgVdhhn7goWIvPN3fwrESxYkMVrUuILH3d+GcrcWEC4FfAPiJig7lXmf5BlP43
-         tg2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=M+9E/4kdcDHX+kADMEgL+77UKaeIJe66vooZh14SxpQ=;
-        b=mbAwxphhV5E129LbxomNeUnt7gcVRHHWgw809Acz7sLyGr/0ElW/BvTkfx8x9Mk9hO
-         GySTzfFtUXMMdDkXkDhuY/wCbaS9afnNCKSAmng1G9PpzMpeAQnxXraiiDOSHLc55Do6
-         gpLjU2UHD+KaBu8UH5uAcXoi2Hwl+qpG5ePVe9PaTkXO7yMeu6va74Jq0ZOntB8CKe99
-         YuE3yLAHryaqprqmwiw0I7y2ZfoshD6HuzBDmp5gmn792pfmWCTO2wEBNH48MjJK83KY
-         lbxUTkc82HlHHEN0NQKC+1v9QP8GQ5R3mj73z/hmZfW5lTUZ/vnf8Vi9Q94ON/OszPep
-         v9ww==
-X-Gm-Message-State: AOAM530HjUaeRzwAg6cUE4SxIBpkqa7SRTCFbHzXVejBz9SMYRHAS7Ae
-        LStmxGhOyskgK25Kafr/shIe/883DUaODPMKn4M=
-X-Google-Smtp-Source: ABdhPJwIvuPEj66LyG8ZHS5PnlZPk9OfM3hMsqkRbNVkBYf7TvwL29aAyCjKxwPcyO7El+yo/qcEPwpzraP7YNiHAU0=
-X-Received: by 2002:a05:600c:35c4:b0:37c:debf:6f2d with SMTP id
- r4-20020a05600c35c400b0037cdebf6f2dmr10770763wmq.142.1645697779635; Thu, 24
- Feb 2022 02:16:19 -0800 (PST)
+        with ESMTP id S233478AbiBXKbM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Feb 2022 05:31:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A553420A3B8;
+        Thu, 24 Feb 2022 02:30:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 438F76162C;
+        Thu, 24 Feb 2022 10:30:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAB6C340F5;
+        Thu, 24 Feb 2022 10:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645698641;
+        bh=UVBFu/2kd+72msKvbsEhY06n98IaQ0VgsAo0y3uTQ2c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=uKMo67CXZRSwdhBzi8/EEN9oztBr9soHLP8RvL0hIDZzDAQWECQ7f8/Z8eugIY42z
+         hdfwcBluy+paiOgWEjWvgQKMnK4adKDRPYUcdzCO1eHFfPr8N0p6F+ynpzpVaLf9iv
+         CZRG6rIeJEwNiFrzJtmKDTMeHAoxInP0LBcoot5lwoVNesSWsfBfyAK/NsNtQnkts0
+         AMlDmrllC81ZcK3cvVTbMA9khRkXj8pu1dHnRsqHjwpW8ZIpgngP/5/BCpTl75RUUI
+         vy/3K30H2fYs4D+RRMADFd4EhSy9aqCosQIJHK8SpqR9iXdhesbYPT0MaBTAKEOI9x
+         ItmMoXkR49BCQ==
+Received: by mail-vk1-f176.google.com with SMTP id k9so922391vki.4;
+        Thu, 24 Feb 2022 02:30:41 -0800 (PST)
+X-Gm-Message-State: AOAM53356GDXiNzYC3BdaVZfnWdnLdzuU6RTWh+kwNDoTN7fiPNJdVzG
+        q40iGuFT0bflOc33OENuEZJUDBMJ9+7vj4FN45I=
+X-Google-Smtp-Source: ABdhPJzrvZFAbp4Whh2uDrOBDpqD226YSRYRm6BxUCxiOKTwC758aaNZI0rGrTfTm/5o1TQu5AW4BErik6sfPZlMfiQ=
+X-Received: by 2002:a1f:2355:0:b0:32a:e5bb:29a1 with SMTP id
+ j82-20020a1f2355000000b0032ae5bb29a1mr790584vkj.2.1645698640594; Thu, 24 Feb
+ 2022 02:30:40 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6020:907:b0:196:d190:b904 with HTTP; Thu, 24 Feb 2022
- 02:16:18 -0800 (PST)
-From:   see peter2 <seepeter85@gmail.com>
-Date:   Thu, 24 Feb 2022 11:16:18 +0100
-Message-ID: <CAGyXJ3HCcJf=2tmPctbn5goOqBMOq8qcejx7SSk-dNqWfHE11w@mail.gmail.com>
-Subject: Dear one,
-To:     undisclosed-recipients:;
+References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-12-guoren@kernel.org>
+ <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
+In-Reply-To: <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 24 Feb 2022 18:30:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQratosmRtoiKx9xTm3-gBSrnEaWgVrYj1U2WZafR1RVg@mail.gmail.com>
+Message-ID: <CAJF2gTQratosmRtoiKx9xTm3-gBSrnEaWgVrYj1U2WZafR1RVg@mail.gmail.com>
+Subject: Re: [PATCH V6 11/20] riscv: compat: syscall: Add compat_sys_call_table
+ implementation
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Anup Patel <anup@brainfault.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,LOTTO_DEPT,
-        MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,T_SHARE_50_50,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:342 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [seepeter85[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [seepeter85[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_SHARE_50_50 Share the money 50/50
-        *  0.0 T_MONEY_PERCENT X% of a lot of money for you
-        *  0.0 LOTTO_DEPT Claims Department
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  3.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Dear one,
+On Thu, Feb 24, 2022 at 5:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Thu, Feb 24, 2022 at 9:54 AM <guoren@kernel.org> wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Implement compat sys_call_table and some system call functions:
+> > truncate64, ftruncate64, fallocate, pread64, pwrite64,
+> > sync_file_range, readahead, fadvise64_64 which need argument
+> > translation.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+>
+> Here, I was hoping you'd convert some of the other architectures to use
+> the same code, but the changes you did do look correct.
+>
+> Please at least add the missing bit for big-endian architectures here:
+>
+> +#if !defined(compat_arg_u64) && !defined(CONFIG_CPU_BIG_ENDIAN)
+> +#define compat_arg_u64(name)           u32  name##_lo, u32  name##_hi
+> +#define compat_arg_u64_dual(name)      u32, name##_lo, u32, name##_hi
+> +#define compat_arg_u64_glue(name)      (((u64)name##_hi << 32) | \
+> +                                        ((u64)name##_lo & 0xffffffffUL))
+> +#endif
+>
+> with the lo/hi words swapped. With that change:
+Got it, I would change it in next version of patch.
 
- My name is Mr.peter see, I am the manager foreign remittance department of
-Bank in Cote d'Ivoire Abidjan Africa. I have a business proposal in the
-tune of ($3.5 Million United States Dollar only) after the successful
-transfer;We shall share the fund in ratio of 40% for you and 50% for
-me,while 10% will be mapped out for any expenses we may incurre in this
-transaction if any. Please if you are interested,So we can commence all
-arrangements,And I will Give you more information on how we would handle
-This project. Please treat this business with utmost Confidentiality and
-send me the Following information's below to enable us commence immediately
+>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 
-Best Regards,
 
- Mr.peter see
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
