@@ -2,74 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EC34C297D
-	for <lists+linux-arch@lfdr.de>; Thu, 24 Feb 2022 11:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED4F4C2995
+	for <lists+linux-arch@lfdr.de>; Thu, 24 Feb 2022 11:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbiBXKbQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 24 Feb 2022 05:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S233398AbiBXKe0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 24 Feb 2022 05:34:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233478AbiBXKbM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Feb 2022 05:31:12 -0500
+        with ESMTP id S230147AbiBXKe0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 24 Feb 2022 05:34:26 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A553420A3B8;
-        Thu, 24 Feb 2022 02:30:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E8028DDFD;
+        Thu, 24 Feb 2022 02:33:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 438F76162C;
-        Thu, 24 Feb 2022 10:30:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAB6C340F5;
-        Thu, 24 Feb 2022 10:30:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645698641;
-        bh=UVBFu/2kd+72msKvbsEhY06n98IaQ0VgsAo0y3uTQ2c=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uKMo67CXZRSwdhBzi8/EEN9oztBr9soHLP8RvL0hIDZzDAQWECQ7f8/Z8eugIY42z
-         hdfwcBluy+paiOgWEjWvgQKMnK4adKDRPYUcdzCO1eHFfPr8N0p6F+ynpzpVaLf9iv
-         CZRG6rIeJEwNiFrzJtmKDTMeHAoxInP0LBcoot5lwoVNesSWsfBfyAK/NsNtQnkts0
-         AMlDmrllC81ZcK3cvVTbMA9khRkXj8pu1dHnRsqHjwpW8ZIpgngP/5/BCpTl75RUUI
-         vy/3K30H2fYs4D+RRMADFd4EhSy9aqCosQIJHK8SpqR9iXdhesbYPT0MaBTAKEOI9x
-         ItmMoXkR49BCQ==
-Received: by mail-vk1-f176.google.com with SMTP id k9so922391vki.4;
-        Thu, 24 Feb 2022 02:30:41 -0800 (PST)
-X-Gm-Message-State: AOAM53356GDXiNzYC3BdaVZfnWdnLdzuU6RTWh+kwNDoTN7fiPNJdVzG
-        q40iGuFT0bflOc33OENuEZJUDBMJ9+7vj4FN45I=
-X-Google-Smtp-Source: ABdhPJzrvZFAbp4Whh2uDrOBDpqD226YSRYRm6BxUCxiOKTwC758aaNZI0rGrTfTm/5o1TQu5AW4BErik6sfPZlMfiQ=
-X-Received: by 2002:a1f:2355:0:b0:32a:e5bb:29a1 with SMTP id
- j82-20020a1f2355000000b0032ae5bb29a1mr790584vkj.2.1645698640594; Thu, 24 Feb
- 2022 02:30:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20220224085410.399351-1-guoren@kernel.org> <20220224085410.399351-12-guoren@kernel.org>
- <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
-In-Reply-To: <CAK8P3a3wg9S_zPad74FiJzYBn0M9bQyunuKzmH3z_QQrags5ng@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 24 Feb 2022 18:30:29 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQratosmRtoiKx9xTm3-gBSrnEaWgVrYj1U2WZafR1RVg@mail.gmail.com>
-Message-ID: <CAJF2gTQratosmRtoiKx9xTm3-gBSrnEaWgVrYj1U2WZafR1RVg@mail.gmail.com>
-Subject: Re: [PATCH V6 11/20] riscv: compat: syscall: Add compat_sys_call_table
- implementation
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Anup Patel <anup@brainfault.org>,
-        gregkh <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 246756166A;
+        Thu, 24 Feb 2022 10:33:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BB5C340E9;
+        Thu, 24 Feb 2022 10:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1645698835;
+        bh=lzWyFdL31RKE3zQVYxiJ04dyKxK6IDEAx7DqCxzEvLk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SuXeo0uTHBEsHEZqV/bw4+zKtzE6dvT7tUVWBC8PNQ/ccPXTmC4MyeOIu8M8cdEXG
+         FpqPBxMO7lhWOjpFerqJAPdZcjklhi7suxJ4pDv76WKJ5+gmPIjhUaKuAXHBy8T4aD
+         LvSVaaiFqFnU6d1qNW4O3aaf0dmQUW3f958cY3Wg=
+Date:   Thu, 24 Feb 2022 11:33:52 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jakob <jakobkoschel@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Message-ID: <YhdfEIwI4EdtHdym@kroah.com>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com>
+ <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+ <86C4CE7D-6D93-456B-AA82-F8ADEACA40B7@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86C4CE7D-6D93-456B-AA82-F8ADEACA40B7@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -80,44 +66,147 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Feb 24, 2022 at 5:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Feb 24, 2022 at 9:54 AM <guoren@kernel.org> wrote:
-> >
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Implement compat sys_call_table and some system call functions:
-> > truncate64, ftruncate64, fallocate, pread64, pwrite64,
-> > sync_file_range, readahead, fadvise64_64 which need argument
-> > translation.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
->
-> Here, I was hoping you'd convert some of the other architectures to use
-> the same code, but the changes you did do look correct.
->
-> Please at least add the missing bit for big-endian architectures here:
->
-> +#if !defined(compat_arg_u64) && !defined(CONFIG_CPU_BIG_ENDIAN)
-> +#define compat_arg_u64(name)           u32  name##_lo, u32  name##_hi
-> +#define compat_arg_u64_dual(name)      u32, name##_lo, u32, name##_hi
-> +#define compat_arg_u64_glue(name)      (((u64)name##_hi << 32) | \
-> +                                        ((u64)name##_lo & 0xffffffffUL))
-> +#endif
->
-> with the lo/hi words swapped. With that change:
-Got it, I would change it in next version of patch.
+On Wed, Feb 23, 2022 at 03:16:09PM +0100, Jakob wrote:
+> Note that I changed the location of the struct member 'req' in gr_request
+> to make this work. Instead of reshuffling struct members this can also be
+> introduced by simply adding new struct members in certain spots.
+> In other code locations with the same pattern I didn't have to do that.
+> 
+> Assuming '_req' passed to gr_dequeue() is located just past 'ep' on the
+> heap, the check could pass even though the list searched is completely
+> empty.
+> 
+> &req->req for the head element will be an out-of-bounds pointer
+> that by coincidence or heap massaging is where '_req' is located.
+> 
+> Even if the list is empty the list_for_each_entry() macro will do:
+> 
+> 	pos = list_first_entry(head, typeof(*pos), member);
+> 
+> resolving all the macros (list_first_entry() etc) it will look like this:
+> 
+> 	pos = container_of(head->next, typeof(*pos), member)
+> 
+> Since the list is empty head->next == head and container_of() is called on something
+> that is *not* actually of type gr_request.
+> 
+> Next, the check if the end of the loop is hit is evaluated:
+> 
+> 	!list_entry_is_head(pos, head, member);
+> 
+> which will stop the loop directly before executing a single iteration.
+> 
+> then using '&req->req' is some bogus pointer pointing just past the struct gr_ep,
+> where in this case '_req' is located.
+> 
+> The point I'm trying to make: it's probably not safe to rely on the compiler and
+> that everyone is aware of this risk when adding/removing/reordering struct members.
+> 
+> 
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> ---
+> drivers/usb/gadget/udc/gr_udc.c | 25 +++++++++++++++++++++++++
+> drivers/usb/gadget/udc/gr_udc.h |  2 +-
+> 2 files changed, 26 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+> index 4b35739d3695..29c662f28428 100644
+> --- a/drivers/usb/gadget/udc/gr_udc.c
+> +++ b/drivers/usb/gadget/udc/gr_udc.c
+> @@ -1718,6 +1718,7 @@ static int gr_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+> 		ret = -EINVAL;
+> 		goto out;
+> 	}
+> +	printk(KERN_INFO "JKL: This does print, but shouldn't");
+> 
+> 	if (list_first_entry(&ep->queue, struct gr_request, queue) == req) {
+> 		/* This request is currently being processed */
+> @@ -1739,6 +1740,30 @@ static int gr_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+> 	return ret;
+> }
+> 
+> +static int __init init_test_jkl3(void)
+> +{
+> +	struct gr_ep *ep;
+> +	struct gr_udc *dev;
+> +	struct usb_request *_req;
+> +	void *buffer;
+> +
+> +	/* assume the usb_request struct is located just after the 'ep' on the heap */
+> +	buffer = kzalloc(sizeof(struct gr_ep)+sizeof(struct usb_request), GFP_KERNEL);
+> +	ep = buffer;
+> +	_req = buffer+sizeof(struct gr_ep);
+> +
+> +	/* setup to call gr_dequeue() */
+> +	dev = kzalloc(sizeof(struct gr_udc), GFP_KERNEL);
+> +	ep->dev = dev;
+> +	ep->dev->driver = 1;
+> +	INIT_LIST_HEAD(&ep->queue); /* list is empty */
+> +
+> +	gr_dequeue(&ep->ep, _req);
+> +
+> +	return 0;
+> +}
+> +__initcall(init_test_jkl3);
+> +
+> /* Helper for gr_set_halt and gr_set_wedge */
+> static int gr_set_halt_wedge(struct usb_ep *_ep, int halt, int wedge)
+> {
+> diff --git a/drivers/usb/gadget/udc/gr_udc.h b/drivers/usb/gadget/udc/gr_udc.h
+> index 70134239179e..14a18d5b5cf8 100644
+> --- a/drivers/usb/gadget/udc/gr_udc.h
+> +++ b/drivers/usb/gadget/udc/gr_udc.h
+> @@ -159,7 +159,6 @@ struct gr_ep {
+> };
+> 
+> struct gr_request {
+> -	struct usb_request req;
+> 	struct list_head queue;
+> 
+> 	/* Chain of dma descriptors */
+> @@ -171,6 +170,7 @@ struct gr_request {
+> 	u16 oddlen; /* Size of odd length tail if buffer length is "odd" */
+> 
+> 	u8 setup; /* Setup packet */
+> +	struct usb_request req;
+> };
+> 
+> enum gr_ep0state {
+> -- 
+> 2.25.1
 
->
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+So, to follow the proposed solution in this thread, the following change
+is the "correct" one to make, right?
 
 
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+index 4b35739d3695..5d65d8ad5281 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -1690,7 +1690,8 @@ static int gr_queue_ext(struct usb_ep *_ep, struct usb_request *_req,
+ /* Dequeue JUST ONE request */
+ static int gr_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ {
+-	struct gr_request *req;
++	struct gr_request *req = NULL;
++	struct gr_request *tmp;
+ 	struct gr_ep *ep;
+ 	struct gr_udc *dev;
+ 	int ret = 0;
+@@ -1710,11 +1711,13 @@ static int gr_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 
+ 	/* Make sure it's actually queued on this endpoint */
+-	list_for_each_entry(req, &ep->queue, queue) {
+-		if (&req->req == _req)
++	list_for_each_entry(tmp, &ep->queue, queue) {
++		if (&tmp->req == _req) {
++			req = tmp;
+ 			break;
++		}
+ 	}
+-	if (&req->req != _req) {
++	if (!req) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
