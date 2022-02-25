@@ -2,60 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C863A4C47C6
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Feb 2022 15:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDE54C485E
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Feb 2022 16:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231975AbiBYOjR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Feb 2022 09:39:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
+        id S237422AbiBYPMZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Feb 2022 10:12:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiBYOjR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Feb 2022 09:39:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66B71AE656;
-        Fri, 25 Feb 2022 06:38:44 -0800 (PST)
+        with ESMTP id S233681AbiBYPMY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Feb 2022 10:12:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF1266AE0
+        for <linux-arch@vger.kernel.org>; Fri, 25 Feb 2022 07:11:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6225260FD3;
-        Fri, 25 Feb 2022 14:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D44C340E7;
-        Fri, 25 Feb 2022 14:38:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2E4DB83247
+        for <linux-arch@vger.kernel.org>; Fri, 25 Feb 2022 15:11:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45960C340E7;
+        Fri, 25 Feb 2022 15:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645799923;
-        bh=NPDWNX4z15E/nqAD2vGd2TQeDDWREovDKjiNWAiQWYI=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=LLFcRuCqAx0Ofpr1UyhOV9cVmRpmEYfshwPkdi7vYBN4BpX5xl3IPqDVsga3LHPcL
-         yviGcRxmJEtO3joHSepSfmGTd6eUAAK9mWFMw/HXA8ypbeUfySxWQeo3OMO4uY90TC
-         40asBPPg/Npk5RJI1PRFGI/utCx0Tl3znNYEfozp1/8NxSlpHXe8n9iImgG++sEaUY
-         jDUaCnumZvyf4M0zH4CmE2dDIcRF1+KzXoHySpZWWeTZ9q4CKPJqEcIe/mz8KhA8kV
-         N0Vx/NbOuXHsZaLsmt2lpbrMFvFwxP8Ro2sShP3875LE4dGnF6UxL9vWIymLS3Zp7q
-         wtvWT/sj9f2Ag==
-Message-ID: <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
-Date:   Fri, 25 Feb 2022 08:38:41 -0600
+        s=k20201202; t=1645801909;
+        bh=Zsi0/aqG33r5+G+hlgdfYyiw4dDF/YnpD1VEIoFztmA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=snveTBp6cvFv5GpNlBUAwfVWpOYAQx4VPG8nPHmjKkPDzB/bmI/1dTSRnmbOFdad1
+         q6FVMSK6zOMmGV94g6YuTn/Yl8lSfo/QxVUI7wXPmNOr0xvC9i5NDvd7KSkJMer+0i
+         9pYul4pR7KlNg9yLGlHnSOBVCDgVl44G7ufosaQjxA5vC5RCormZT4fjzhcAyHtIYw
+         LPBBm0uJ/qccRMoHd6wI7l6QNlk57FP06yYE+MaNLAq89cbqdPNn8S4KTctaa1JDts
+         xCpWqgbmdcIdB5cQzotgu00GCK9SBNoGsCHByU1F/tYgKC/cxk0bfS5lZOyuSPg99H
+         5xXtdlEO+ABUg==
+Date:   Fri, 25 Feb 2022 15:11:43 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org
+Subject: Re: [PATCH v8 0/4] arm64: Enable BTI for the executable as well as
+ the interpreter
+Message-ID: <Yhjxr3+U2qd6b3yK@sirena.org.uk>
+References: <20220124150704.2559523-1-broonie@kernel.org>
+ <20220215183456.GB9026@willie-the-truck>
+ <Ygz9YX3jBY0MpepU@arm.com>
+ <20220225135350.GA19698@willie-the-truck>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
- <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
- <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
- <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
- <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
-In-Reply-To: <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6hJfgwb1yMHoRrnk"
+Content-Disposition: inline
+In-Reply-To: <20220225135350.GA19698@willie-the-truck>
+X-Cookie: I smell a wumpus.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,146 +65,34 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
+--6hJfgwb1yMHoRrnk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2/25/22 08:29, Dinh Nguyen wrote:
-> 
-> 
-> On 2/25/22 02:52, Anshuman Khandual wrote:
->>
->>
->> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
->>> Hi Anshuman,
->>>
->>> On 2/13/22 20:30, Anshuman Khandual wrote:
->>>> This defines and exports a platform specific custom 
->>>> vm_get_page_prot() via
->>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and 
->>>> __PXXX
->>>> macros can be dropped which are no longer needed.
->>>>
->>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>>> ---
->>>>    arch/nios2/Kconfig               |  1 +
->>>>    arch/nios2/include/asm/pgtable.h | 16 ------------
->>>>    arch/nios2/mm/init.c             | 45 
->>>> ++++++++++++++++++++++++++++++++
->>>>    3 files changed, 46 insertions(+), 16 deletions(-)
->>>>
->>>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
->>>> index 33fd06f5fa41..85a58a357a3b 100644
->>>> --- a/arch/nios2/Kconfig
->>>> +++ b/arch/nios2/Kconfig
->>>> @@ -6,6 +6,7 @@ config NIOS2
->>>>        select ARCH_HAS_SYNC_DMA_FOR_CPU
->>>>        select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->>>>        select ARCH_HAS_DMA_SET_UNCACHED
->>>> +    select ARCH_HAS_VM_GET_PAGE_PROT
->>>>        select ARCH_NO_SWAP
->>>>        select COMMON_CLK
->>>>        select TIMER_OF
->>>> diff --git a/arch/nios2/include/asm/pgtable.h 
->>>> b/arch/nios2/include/asm/pgtable.h
->>>> index 4a995fa628ee..2678dad58a63 100644
->>>> --- a/arch/nios2/include/asm/pgtable.h
->>>> +++ b/arch/nios2/include/asm/pgtable.h
->>>> @@ -40,24 +40,8 @@ struct mm_struct;
->>>>     */
->>>>      /* Remove W bit on private pages for COW support */
->>>> -#define __P000    MKP(0, 0, 0)
->>>> -#define __P001    MKP(0, 0, 1)
->>>> -#define __P010    MKP(0, 0, 0)    /* COW */
->>>> -#define __P011    MKP(0, 0, 1)    /* COW */
->>>> -#define __P100    MKP(1, 0, 0)
->>>> -#define __P101    MKP(1, 0, 1)
->>>> -#define __P110    MKP(1, 0, 0)    /* COW */
->>>> -#define __P111    MKP(1, 0, 1)    /* COW */
->>>>      /* Shared pages can have exact HW mapping */
->>>> -#define __S000    MKP(0, 0, 0)
->>>> -#define __S001    MKP(0, 0, 1)
->>>> -#define __S010    MKP(0, 1, 0)
->>>> -#define __S011    MKP(0, 1, 1)
->>>> -#define __S100    MKP(1, 0, 0)
->>>> -#define __S101    MKP(1, 0, 1)
->>>> -#define __S110    MKP(1, 1, 0)
->>>> -#define __S111    MKP(1, 1, 1)
->>>>      /* Used all over the kernel */
->>>>    #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | 
->>>> _PAGE_READ | \
->>>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
->>>> index 613fcaa5988a..311b2146a248 100644
->>>> --- a/arch/nios2/mm/init.c
->>>> +++ b/arch/nios2/mm/init.c
->>>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct 
->>>> *vma)
->>>>    {
->>>>        return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->>>>    }
->>>> +
->>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>>> +{
->>>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->>>> +    case VM_NONE:
->>>> +        return MKP(0, 0, 0);
->>>> +    case VM_READ:
->>>> +        return MKP(0, 0, 1);
->>>> +    /* COW */
->>>> +    case VM_WRITE:
->>>> +        return MKP(0, 0, 0);
->>>> +    /* COW */
->>>> +    case VM_WRITE | VM_READ:
->>>> +        return MKP(0, 0, 1);
->>>> +    case VM_EXEC:
->>>> +        return MKP(1, 0, 0);
->>>> +    case VM_EXEC | VM_READ:
->>>> +        return MKP(1, 0, 1);
->>>> +    /* COW */
->>>> +    case VM_EXEC | VM_WRITE:
->>>> +        return MKP(1, 0, 0);
->>>> +    /* COW */
->>>> +    case VM_EXEC | VM_WRITE | VM_READ:
->>>> +        return MKP(1, 0, 1);
->>>> +    case VM_SHARED:
->>>> +        return MKP(0, 0, 0);
->>>> +    case VM_SHARED | VM_READ:
->>>> +        return MKP(0, 0, 1);
->>>> +    case VM_SHARED | VM_WRITE:
->>>> +        return MKP(0, 1, 0);
->>>> +    case VM_SHARED | VM_WRITE | VM_READ:
->>>> +        return MKP(0, 1, 1);
->>>> +    case VM_SHARED | VM_EXEC:
->>>> +        return MKP(1, 0, 0);
->>>> +    case VM_SHARED | VM_EXEC | VM_READ:
->>>> +        return MKP(1, 0, 1);
->>>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
->>>> +        return MKP(1, 1, 0);
->>>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->>>> +        return MKP(1, 1, 1);
->>>> +    default:
->>>> +        BUILD_BUG();
->>>> +    }
->>>> +}
->>>> +EXPORT_SYMBOL(vm_get_page_prot);
->>>
->>> I'm getting this compile error after applying this patch when build 
->>> NIOS2:
->>
->> Hmm, that is strange.
->>
->> Did you apply the entire series or atleast upto the nios2 patch ? Generic
->> vm_get_page_prot() should not be called (which is build complaining here)
->> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
->>
->> Ran a quick build test on nios2 for the entire series and also just upto
->> this particular patch, build was successful.
->>
-> 
-> Ok, I did not apply the whole series, just this patch.
-> 
+On Fri, Feb 25, 2022 at 01:53:51PM +0000, Will Deacon wrote:
 
+> I still think this new behaviour should be opt-in, so adding a sysctl for
+> that would be my preference if we proceed with this approach.
 
-Is someone taking this whole series or should I just take this patch?
+I'm happy to have a sysctl but I'd rather it be opt out rather than opt
+in since it seems better to default to enabling the security feature
+when there is a strong expectation that it would seem better to enable
+it by default sine it's not expected to be disruptive and the sysctl is
+more of a "what if there's a problem" thing.
 
-Dinh
+--6hJfgwb1yMHoRrnk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIY8a8ACgkQJNaLcl1U
+h9Bpagf/Qa3XQwrrpcD8o5hL6Hcly0nN3c1oddDQMVn8t95ZxqdVD58AFN2xKULJ
+dUJyThV6a83oQT3bzLZB3lCFXKwaIDXPB/i/Q5+i0v7zMryNllxQeBuALWG6Fxru
+qPTh4s3kEzMVQZiJmQJqxFw1hw1KIKZtCYIQCdHXe/8nxbYqlWo1CCu7MH88zpMu
+lu4DQGel9GA2kMfKKvFc2sV371HfYohcTxuqjZkXIJu6v/3+C8sp/yHArIfRK/aY
+4n2AmN8NDTVgFYW+Joy1KzHXUN7AmCyf53bQEu1LlC3NjyXYbnh4vjLG/MDB3gtl
+r2wx9Y5Sj2FQwFc7Jywjrf2sF21Bbg==
+=ve8P
+-----END PGP SIGNATURE-----
+
+--6hJfgwb1yMHoRrnk--
