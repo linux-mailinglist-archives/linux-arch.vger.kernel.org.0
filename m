@@ -2,120 +2,192 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CA34C46F0
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Feb 2022 14:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C3D4C4772
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Feb 2022 15:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiBYNyc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Feb 2022 08:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        id S241640AbiBYOaM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Feb 2022 09:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238218AbiBYNyc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Feb 2022 08:54:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38D41C2D97
-        for <linux-arch@vger.kernel.org>; Fri, 25 Feb 2022 05:53:59 -0800 (PST)
+        with ESMTP id S232662AbiBYOaG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Feb 2022 09:30:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FA42325CF;
+        Fri, 25 Feb 2022 06:29:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8DAB2B831D3
-        for <linux-arch@vger.kernel.org>; Fri, 25 Feb 2022 13:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72485C340F1;
-        Fri, 25 Feb 2022 13:53:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 184CF6126A;
+        Fri, 25 Feb 2022 14:29:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24F4C340E7;
+        Fri, 25 Feb 2022 14:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1645797237;
-        bh=ye5CqF5m/giHWTTPMc2ZX0zR1vx3XB7Lg4x9Qgp6q64=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aYtsX5FO7PLQiXuu8zjZrTygRX5vXQYNEParE8Jy5NBxXfzCYozM05g2wvmzRbGyo
-         PYSx/MaD4VOF4Hcd/WqGblwDoPxeaDJrSSJJC4GZ0WLR71Zp5mpWpF+KgZIPawPOJh
-         HNQqZGso9WFvyMgml6qbxcYFMF49UL5alouhMldGBTej563/kk5/3EAwdXnUpI5X8X
-         NRXaMI/HJMlb9QW5rA2s262VEVdZNJAIjTXODdDPSPjxvIv3dJf14FU1sGhMpqdgOw
-         OWCtKOplKzWa/uDUql042UqjotUVqUo48GZzFQ6G1sdsG8RMxZzX3UFOAUNlJEY1U/
-         6qwjcDKcNDStw==
-Date:   Fri, 25 Feb 2022 13:53:51 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org
-Subject: Re: [PATCH v8 0/4] arm64: Enable BTI for the executable as well as
- the interpreter
-Message-ID: <20220225135350.GA19698@willie-the-truck>
-References: <20220124150704.2559523-1-broonie@kernel.org>
- <20220215183456.GB9026@willie-the-truck>
- <Ygz9YX3jBY0MpepU@arm.com>
+        s=k20201202; t=1645799373;
+        bh=iWripn2F/c2T3ZQ+kXnkv4O/ng8xeHt3AqgattZQUjk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=O4kvev2uq4G1MOAGbL4SkgIvzLHhXmysqT05TIxpwYP9JgnF3ilL59xJxn0/BQy7p
+         ZZejkKGJc3fnF0hmuK/iAnj9KnYRJLlIPIk+CWGhn2FHc7LZIcBGOGgEcF17zVSf0s
+         sQba1ArGDCecbjR6hv80xQknWChO0enZK8n7eoz75JeYbWwYYHHj7CiUVvtWCGWDeo
+         e/S0JlxnKQZq+GB1FXXFmtQS58aMtkFGWM8wasOjrDkgBxrUW0D3YQ2Gh+ZM6QdBWE
+         qPk2RIOvN0go6y01L7DmaBrBeiYVsdZ7EgLU0QYeRlcu/drDWp7Uo6E2oMWBmj5E4/
+         FT2zze1N8KRRg==
+Message-ID: <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
+Date:   Fri, 25 Feb 2022 08:29:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ygz9YX3jBY0MpepU@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arch@vger.kernel.org
+References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
+ <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
+ <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
+ <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Feb 16, 2022 at 01:34:25PM +0000, Catalin Marinas wrote:
-> On Tue, Feb 15, 2022 at 06:34:56PM +0000, Will Deacon wrote:
-> > On Mon, Jan 24, 2022 at 03:07:00PM +0000, Mark Brown wrote:
-> > > Deployments of BTI on arm64 have run into issues interacting with
-> > > systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
-> > > linked executables the kernel will only handle architecture specific
-> > > properties like BTI for the interpreter, the expectation is that the
-> > > interpreter will then handle any properties on the main executable.
-> > > For BTI this means remapping the executable segments PROT_EXEC |
-> > > PROT_BTI.
-> > > 
-> > > This interacts poorly with MemoryDenyWriteExecute since that is
-> > > implemented using a seccomp filter which prevents setting PROT_EXEC on
-> > > already mapped memory and lacks the context to be able to detect that
-> > > memory is already mapped with PROT_EXEC.  This series resolves this by
-> > > handling the BTI property for both the interpreter and the main
-> > > executable.
-> > 
-> > This appears to be a user-visible change which cannot be detected or
-> > disabled from userspace. If there is code out there which does not work
-> > when BTI is enabled, won't that now explode when the kernel enables it?
-> > How are we supposed to handle such a regression?
-> 
-> If this ever happens, the only workaround is to disable BTI on the
-> kernel command line. If we need a knob closer to user, we could add a
-> sysctl option (as we did for the tagged address ABI, though I doubt
-> people are even aware that exists). The dynamic loader doesn't do
-> anything smart when deciding to map objects with PROT_BTI (like env
-> variables), it simply relies on the ELF information.
-> 
-> I think that's very unlikely and feedback from Szabolcs in the past and
-> additional testing by Mark and Jeremy was that it should be fine. The
-> architecture allows interworking between BTI and non-BTI objects and on
-> distros with both BTI and MDWE enabled, this is already the case: the
-> main executable is mapped without PROT_BTI while the libraries will be
-> mapped with PROT_BTI. The new behaviour allows both to be mapped with
-> PROT_BTI, just as if MDWE was disabled.
-> 
-> I think the only difference would be with a BTI-unware dynamic loader
-> (e.g. older distro). Here the main executable, if compiled with BTI,
-> would be mapped as executable while the rest of the libraries are
-> non-BTI. The interworking should be fine but we can't test everything
-> since such BTI binaries would not normally be part of the distro.
-> 
-> If there are dodgy libraries out there that do tricks and branch into
-> the middle of a function in the main executable, they will fail with
-> this series but also fail if MDWE is disabled and the dynamic linker is
-> BTI-aware. So this hardly counts as a use-case.
-> 
-> For consistency, I think whoever does the initial mapping should also
-> set the correct attributes as we do for static binaries. If you think
-> another knob is needed other than the cmdline, I'm fine with it.
 
-I still think this new behaviour should be opt-in, so adding a sysctl for
-that would be my preference if we proceed with this approach.
 
-Will
+On 2/25/22 02:52, Anshuman Khandual wrote:
+> 
+> 
+> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
+>> Hi Anshuman,
+>>
+>> On 2/13/22 20:30, Anshuman Khandual wrote:
+>>> This defines and exports a platform specific custom vm_get_page_prot() via
+>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+>>> macros can be dropped which are no longer needed.
+>>>
+>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
+>>> Cc: linux-kernel@vger.kernel.org
+>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+>>> ---
+>>>    arch/nios2/Kconfig               |  1 +
+>>>    arch/nios2/include/asm/pgtable.h | 16 ------------
+>>>    arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
+>>>    3 files changed, 46 insertions(+), 16 deletions(-)
+>>>
+>>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
+>>> index 33fd06f5fa41..85a58a357a3b 100644
+>>> --- a/arch/nios2/Kconfig
+>>> +++ b/arch/nios2/Kconfig
+>>> @@ -6,6 +6,7 @@ config NIOS2
+>>>        select ARCH_HAS_SYNC_DMA_FOR_CPU
+>>>        select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+>>>        select ARCH_HAS_DMA_SET_UNCACHED
+>>> +    select ARCH_HAS_VM_GET_PAGE_PROT
+>>>        select ARCH_NO_SWAP
+>>>        select COMMON_CLK
+>>>        select TIMER_OF
+>>> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
+>>> index 4a995fa628ee..2678dad58a63 100644
+>>> --- a/arch/nios2/include/asm/pgtable.h
+>>> +++ b/arch/nios2/include/asm/pgtable.h
+>>> @@ -40,24 +40,8 @@ struct mm_struct;
+>>>     */
+>>>      /* Remove W bit on private pages for COW support */
+>>> -#define __P000    MKP(0, 0, 0)
+>>> -#define __P001    MKP(0, 0, 1)
+>>> -#define __P010    MKP(0, 0, 0)    /* COW */
+>>> -#define __P011    MKP(0, 0, 1)    /* COW */
+>>> -#define __P100    MKP(1, 0, 0)
+>>> -#define __P101    MKP(1, 0, 1)
+>>> -#define __P110    MKP(1, 0, 0)    /* COW */
+>>> -#define __P111    MKP(1, 0, 1)    /* COW */
+>>>      /* Shared pages can have exact HW mapping */
+>>> -#define __S000    MKP(0, 0, 0)
+>>> -#define __S001    MKP(0, 0, 1)
+>>> -#define __S010    MKP(0, 1, 0)
+>>> -#define __S011    MKP(0, 1, 1)
+>>> -#define __S100    MKP(1, 0, 0)
+>>> -#define __S101    MKP(1, 0, 1)
+>>> -#define __S110    MKP(1, 1, 0)
+>>> -#define __S111    MKP(1, 1, 1)
+>>>      /* Used all over the kernel */
+>>>    #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
+>>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
+>>> index 613fcaa5988a..311b2146a248 100644
+>>> --- a/arch/nios2/mm/init.c
+>>> +++ b/arch/nios2/mm/init.c
+>>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
+>>>    {
+>>>        return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
+>>>    }
+>>> +
+>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>>> +{
+>>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+>>> +    case VM_NONE:
+>>> +        return MKP(0, 0, 0);
+>>> +    case VM_READ:
+>>> +        return MKP(0, 0, 1);
+>>> +    /* COW */
+>>> +    case VM_WRITE:
+>>> +        return MKP(0, 0, 0);
+>>> +    /* COW */
+>>> +    case VM_WRITE | VM_READ:
+>>> +        return MKP(0, 0, 1);
+>>> +    case VM_EXEC:
+>>> +        return MKP(1, 0, 0);
+>>> +    case VM_EXEC | VM_READ:
+>>> +        return MKP(1, 0, 1);
+>>> +    /* COW */
+>>> +    case VM_EXEC | VM_WRITE:
+>>> +        return MKP(1, 0, 0);
+>>> +    /* COW */
+>>> +    case VM_EXEC | VM_WRITE | VM_READ:
+>>> +        return MKP(1, 0, 1);
+>>> +    case VM_SHARED:
+>>> +        return MKP(0, 0, 0);
+>>> +    case VM_SHARED | VM_READ:
+>>> +        return MKP(0, 0, 1);
+>>> +    case VM_SHARED | VM_WRITE:
+>>> +        return MKP(0, 1, 0);
+>>> +    case VM_SHARED | VM_WRITE | VM_READ:
+>>> +        return MKP(0, 1, 1);
+>>> +    case VM_SHARED | VM_EXEC:
+>>> +        return MKP(1, 0, 0);
+>>> +    case VM_SHARED | VM_EXEC | VM_READ:
+>>> +        return MKP(1, 0, 1);
+>>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
+>>> +        return MKP(1, 1, 0);
+>>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+>>> +        return MKP(1, 1, 1);
+>>> +    default:
+>>> +        BUILD_BUG();
+>>> +    }
+>>> +}
+>>> +EXPORT_SYMBOL(vm_get_page_prot);
+>>
+>> I'm getting this compile error after applying this patch when build NIOS2:
+> 
+> Hmm, that is strange.
+> 
+> Did you apply the entire series or atleast upto the nios2 patch ? Generic
+> vm_get_page_prot() should not be called (which is build complaining here)
+> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
+> 
+> Ran a quick build test on nios2 for the entire series and also just upto
+> this particular patch, build was successful.
+> 
+
+Ok, I did not apply the whole series, just this patch.
+
+Dinh
