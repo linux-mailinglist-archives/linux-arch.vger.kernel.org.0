@@ -2,177 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A1C4C40BD
-	for <lists+linux-arch@lfdr.de>; Fri, 25 Feb 2022 09:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A744C40E0
+	for <lists+linux-arch@lfdr.de>; Fri, 25 Feb 2022 10:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238707AbiBYIzP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 25 Feb 2022 03:55:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S238863AbiBYJDc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 25 Feb 2022 04:03:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237759AbiBYIzO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Feb 2022 03:55:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2524B22A29E;
-        Fri, 25 Feb 2022 00:54:42 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4F49106F;
-        Fri, 25 Feb 2022 00:54:41 -0800 (PST)
-Received: from [10.163.51.16] (unknown [10.163.51.16])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 086403F70D;
-        Fri, 25 Feb 2022 00:54:39 -0800 (PST)
-Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
- <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
- <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
- <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
-Message-ID: <34d2e89c-5264-1510-ef8e-a4719b4114ee@arm.com>
-Date:   Fri, 25 Feb 2022 14:24:36 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        with ESMTP id S238886AbiBYJDa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 25 Feb 2022 04:03:30 -0500
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC3A98F6E;
+        Fri, 25 Feb 2022 01:02:58 -0800 (PST)
+Received: by mail-vs1-f47.google.com with SMTP id i27so4830248vsr.10;
+        Fri, 25 Feb 2022 01:02:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F2yPQQkyfifzSb4UKUP/UBnBQil6yFEzzS1VsqjkII0=;
+        b=7CrXJFRlHRE/QUMhax14jMyBVNdI0Vydx1IslgVMcPGgFUD0Mh++dfYBqTHQGwFwo4
+         PZoXJsmWO1yNqLkpeq27aPH0zUJcvPf1HtKBppdskBAPCbfcXlcqGkUEs9gtptvQIZXV
+         z3ALSrHz+2aJgVYyrtGOKwQ0ZELtzN6mUDAOA5ZajVAzKt8qTrwwGVqB0hzKB77b43RR
+         A5NcD3tQAJD8WZG2mVTxKXAWysTZVNgUp8eeORFPK0d1t0QsvL1lT9oWRxSfJUuTpWU3
+         zIDTs5qiJlbQO7lW9K65rxumJ0krp8n4Xz0AYPC9XPTLLH1PZDxRR4OzEjF16jgxNRec
+         v39w==
+X-Gm-Message-State: AOAM5334RLoPHZvgnzBykQL3I0+RztUZXJyYRC8VrEV9IZkm7oAX9B2O
+        m17PFSOZpD6u6hDuJpMXC7S9UD1mWIqEFQ==
+X-Google-Smtp-Source: ABdhPJxG5HoVXg1eE1vd/0Mx1PYq9jTqf9BaehELgXLjH5lBh5GvBNt2mAuZ8lt1LPVSQDsBqGxABg==
+X-Received: by 2002:a67:ef98:0:b0:31b:fdff:f374 with SMTP id r24-20020a67ef98000000b0031bfdfff374mr3078941vsp.56.1645779777081;
+        Fri, 25 Feb 2022 01:02:57 -0800 (PST)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id q6-20020a1fd906000000b003319bbeabd3sm297348vkg.18.2022.02.25.01.02.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Feb 2022 01:02:56 -0800 (PST)
+Received: by mail-vs1-f48.google.com with SMTP id e26so4870184vso.3;
+        Fri, 25 Feb 2022 01:02:56 -0800 (PST)
+X-Received: by 2002:a67:e113:0:b0:30e:303d:d1d6 with SMTP id
+ d19-20020a67e113000000b0030e303dd1d6mr2782888vsl.38.1645779776278; Fri, 25
+ Feb 2022 01:02:56 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1645425519-9034-1-git-send-email-anshuman.khandual@arm.com>
+ <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com> <CAMuHMdUrA4u5BTRuqTSn++vXFNn0w=HRmp9ZD_8SNZ1wMUKwwQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUrA4u5BTRuqTSn++vXFNn0w=HRmp9ZD_8SNZ1wMUKwwQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 25 Feb 2022 10:02:45 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXRO5dph1m21=V3bVyniVvKfhDLbMoEHQzwPgvSesXj6A@mail.gmail.com>
+Message-ID: <CAMuHMdXRO5dph1m21=V3bVyniVvKfhDLbMoEHQzwPgvSesXj6A@mail.gmail.com>
+Subject: Re: [PATCH V2 08/30] m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi Anshuman, Andrew,
 
+On Mon, Feb 21, 2022 at 12:54 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Mon, Feb 21, 2022 at 9:45 AM Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
+> > This defines and exports a platform specific custom vm_get_page_prot() via
+> > subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+> > macros can be dropped which are no longer needed.
+> >
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: linux-m68k@lists.linux-m68k.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>
+> Thanks for your patch!
+>
+> > --- a/arch/m68k/mm/init.c
+> > +++ b/arch/m68k/mm/init.c
+> > @@ -128,3 +128,107 @@ void __init mem_init(void)
+> >         memblock_free_all();
+> >         init_pointer_tables();
+> >  }
+> > +
+> > +#ifdef CONFIG_COLDFIRE
+> > +/*
+> > + * Page protections for initialising protection_map. See mm/mmap.c
+> > + * for use. In general, the bit positions are xwr, and P-items are
+> > + * private, the S-items are shared.
+> > + */
+> > +pgprot_t vm_get_page_prot(unsigned long vm_flags)
+>
+> Wouldn't it make more sense to add this to arch/m68k/mm/mcfmmu.c?
 
-On 2/25/22 2:22 PM, Anshuman Khandual wrote:
-> 
-> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
->> Hi Anshuman,
->>
->> On 2/13/22 20:30, Anshuman Khandual wrote:
->>> This defines and exports a platform specific custom vm_get_page_prot() via
->>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->>> macros can be dropped which are no longer needed.
->>>
->>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>> Cc: linux-kernel@vger.kernel.org
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>> ---
->>>   arch/nios2/Kconfig               |  1 +
->>>   arch/nios2/include/asm/pgtable.h | 16 ------------
->>>   arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
->>>   3 files changed, 46 insertions(+), 16 deletions(-)
->>>
->>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
->>> index 33fd06f5fa41..85a58a357a3b 100644
->>> --- a/arch/nios2/Kconfig
->>> +++ b/arch/nios2/Kconfig
->>> @@ -6,6 +6,7 @@ config NIOS2
->>>       select ARCH_HAS_SYNC_DMA_FOR_CPU
->>>       select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->>>       select ARCH_HAS_DMA_SET_UNCACHED
->>> +    select ARCH_HAS_VM_GET_PAGE_PROT
->>>       select ARCH_NO_SWAP
->>>       select COMMON_CLK
->>>       select TIMER_OF
->>> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
->>> index 4a995fa628ee..2678dad58a63 100644
->>> --- a/arch/nios2/include/asm/pgtable.h
->>> +++ b/arch/nios2/include/asm/pgtable.h
->>> @@ -40,24 +40,8 @@ struct mm_struct;
->>>    */
->>>     /* Remove W bit on private pages for COW support */
->>> -#define __P000    MKP(0, 0, 0)
->>> -#define __P001    MKP(0, 0, 1)
->>> -#define __P010    MKP(0, 0, 0)    /* COW */
->>> -#define __P011    MKP(0, 0, 1)    /* COW */
->>> -#define __P100    MKP(1, 0, 0)
->>> -#define __P101    MKP(1, 0, 1)
->>> -#define __P110    MKP(1, 0, 0)    /* COW */
->>> -#define __P111    MKP(1, 0, 1)    /* COW */
->>>     /* Shared pages can have exact HW mapping */
->>> -#define __S000    MKP(0, 0, 0)
->>> -#define __S001    MKP(0, 0, 1)
->>> -#define __S010    MKP(0, 1, 0)
->>> -#define __S011    MKP(0, 1, 1)
->>> -#define __S100    MKP(1, 0, 0)
->>> -#define __S101    MKP(1, 0, 1)
->>> -#define __S110    MKP(1, 1, 0)
->>> -#define __S111    MKP(1, 1, 1)
->>>     /* Used all over the kernel */
->>>   #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
->>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
->>> index 613fcaa5988a..311b2146a248 100644
->>> --- a/arch/nios2/mm/init.c
->>> +++ b/arch/nios2/mm/init.c
->>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->>>   {
->>>       return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->>>   }
->>> +
->>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>> +{
->>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->>> +    case VM_NONE:
->>> +        return MKP(0, 0, 0);
->>> +    case VM_READ:
->>> +        return MKP(0, 0, 1);
->>> +    /* COW */
->>> +    case VM_WRITE:
->>> +        return MKP(0, 0, 0);
->>> +    /* COW */
->>> +    case VM_WRITE | VM_READ:
->>> +        return MKP(0, 0, 1);
->>> +    case VM_EXEC:
->>> +        return MKP(1, 0, 0);
->>> +    case VM_EXEC | VM_READ:
->>> +        return MKP(1, 0, 1);
->>> +    /* COW */
->>> +    case VM_EXEC | VM_WRITE:
->>> +        return MKP(1, 0, 0);
->>> +    /* COW */
->>> +    case VM_EXEC | VM_WRITE | VM_READ:
->>> +        return MKP(1, 0, 1);
->>> +    case VM_SHARED:
->>> +        return MKP(0, 0, 0);
->>> +    case VM_SHARED | VM_READ:
->>> +        return MKP(0, 0, 1);
->>> +    case VM_SHARED | VM_WRITE:
->>> +        return MKP(0, 1, 0);
->>> +    case VM_SHARED | VM_WRITE | VM_READ:
->>> +        return MKP(0, 1, 1);
->>> +    case VM_SHARED | VM_EXEC:
->>> +        return MKP(1, 0, 0);
->>> +    case VM_SHARED | VM_EXEC | VM_READ:
->>> +        return MKP(1, 0, 1);
->>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
->>> +        return MKP(1, 1, 0);
->>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->>> +        return MKP(1, 1, 1);
->>> +    default:
->>> +        BUILD_BUG();
->>> +    }
->>> +}
->>> +EXPORT_SYMBOL(vm_get_page_prot);
->> I'm getting this compile error after applying this patch when build NIOS2:
-> Hmm, that is strange.
-> 
-> Did you apply the entire series or atleast upto the nios2 patch ? Generic
-> vm_get_page_prot() should not be called (which is build complaining here)
-> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
-> 
-> Ran a quick build test on nios2 for the entire series and also just upto
-> this particular patch, build was successful.
-> 
+It's not just about sense, but also about correctness.
+The CF_PAGE_* definitions below exist only if CONFIG_MMU=y,
+thus causing breakage for cfnommu in today's linux-next.
+http://kisskb.ellerman.id.au/kisskb/buildresult/14701640/
 
-Please refer to the latest version V2 instead.
+>
+> > +{
+> > +       switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+> > +       case VM_NONE:
+> > +               return PAGE_NONE;
+> > +       case VM_READ:
+> > +               return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+> > +                               CF_PAGE_READABLE);
 
-https://lore.kernel.org/linux-mm/1645425519-9034-1-git-send-email-anshuman.khandual@arm.com/
+> > +               BUILD_BUG();
+> > +       }
+> > +}
+> > +#endif
+> > +EXPORT_SYMBOL(vm_get_page_prot);
+
+Having this outside the #ifdef means we now get ...
+
+> > --- a/arch/m68k/mm/motorola.c
+> > +++ b/arch/m68k/mm/motorola.c
+
+> > +}
+> > +EXPORT_SYMBOL(vm_get_page_prot);
+
+... two of them in normal m68k builds.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
