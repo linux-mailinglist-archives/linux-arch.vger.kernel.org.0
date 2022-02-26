@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE854C557C
-	for <lists+linux-arch@lfdr.de>; Sat, 26 Feb 2022 12:12:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022F54C557F
+	for <lists+linux-arch@lfdr.de>; Sat, 26 Feb 2022 12:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiBZLMe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 26 Feb 2022 06:12:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S229984AbiBZLM6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 26 Feb 2022 06:12:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiBZLMd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Feb 2022 06:12:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F5F7E5B7;
-        Sat, 26 Feb 2022 03:11:52 -0800 (PST)
+        with ESMTP id S231420AbiBZLMv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 26 Feb 2022 06:12:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8D27EA0D;
+        Sat, 26 Feb 2022 03:12:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB395B819E8;
-        Sat, 26 Feb 2022 11:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC74C340F1;
-        Sat, 26 Feb 2022 11:11:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5046661126;
+        Sat, 26 Feb 2022 11:12:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4CAC340F0;
+        Sat, 26 Feb 2022 11:12:09 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -35,9 +35,9 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V6 10/22] LoongArch: Add exception/interrupt handling
-Date:   Sat, 26 Feb 2022 19:03:26 +0800
-Message-Id: <20220226110338.77547-11-chenhuacai@loongson.cn>
+Subject: [PATCH V6 11/22] LoongArch: Add process management
+Date:   Sat, 26 Feb 2022 19:03:27 +0800
+Message-Id: <20220226110338.77547-12-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220226110338.77547-1-chenhuacai@loongson.cn>
 References: <20220226110338.77547-1-chenhuacai@loongson.cn>
@@ -52,1800 +52,1998 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds the exception and interrupt handling machanism for
-LoongArch.
+This patch adds process management support for LoongArch, including:
+thread info definition, context switch and process tracing.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/branch.h       |  21 +
- arch/loongarch/include/asm/bug.h          |  23 +
- arch/loongarch/include/asm/entry-common.h |  13 +
- arch/loongarch/include/asm/hardirq.h      |  24 +
- arch/loongarch/include/asm/hw_irq.h       |  17 +
- arch/loongarch/include/asm/irq.h          | 130 ++++
- arch/loongarch/include/asm/irq_regs.h     |  27 +
- arch/loongarch/include/asm/irqflags.h     |  78 +++
- arch/loongarch/include/asm/kdebug.h       |  23 +
- arch/loongarch/include/asm/stackframe.h   | 212 ++++++
- arch/loongarch/include/asm/stacktrace.h   |  74 +++
- arch/loongarch/include/uapi/asm/break.h   |  23 +
- arch/loongarch/kernel/access-helper.h     |  13 +
- arch/loongarch/kernel/genex.S             |  95 +++
- arch/loongarch/kernel/irq.c               | 131 ++++
- arch/loongarch/kernel/traps.c             | 755 ++++++++++++++++++++++
- 16 files changed, 1659 insertions(+)
- create mode 100644 arch/loongarch/include/asm/branch.h
- create mode 100644 arch/loongarch/include/asm/bug.h
- create mode 100644 arch/loongarch/include/asm/entry-common.h
- create mode 100644 arch/loongarch/include/asm/hardirq.h
- create mode 100644 arch/loongarch/include/asm/hw_irq.h
- create mode 100644 arch/loongarch/include/asm/irq.h
- create mode 100644 arch/loongarch/include/asm/irq_regs.h
- create mode 100644 arch/loongarch/include/asm/irqflags.h
- create mode 100644 arch/loongarch/include/asm/kdebug.h
- create mode 100644 arch/loongarch/include/asm/stackframe.h
- create mode 100644 arch/loongarch/include/asm/stacktrace.h
- create mode 100644 arch/loongarch/include/uapi/asm/break.h
- create mode 100644 arch/loongarch/kernel/access-helper.h
- create mode 100644 arch/loongarch/kernel/genex.S
- create mode 100644 arch/loongarch/kernel/irq.c
- create mode 100644 arch/loongarch/kernel/traps.c
+ arch/loongarch/include/asm/fpu.h         | 129 +++++++
+ arch/loongarch/include/asm/idle.h        |   9 +
+ arch/loongarch/include/asm/mmu.h         |  16 +
+ arch/loongarch/include/asm/mmu_context.h | 152 ++++++++
+ arch/loongarch/include/asm/processor.h   | 208 +++++++++++
+ arch/loongarch/include/asm/ptrace.h      | 150 ++++++++
+ arch/loongarch/include/asm/switch_to.h   |  37 ++
+ arch/loongarch/include/asm/thread_info.h | 116 ++++++
+ arch/loongarch/include/uapi/asm/ptrace.h |  50 +++
+ arch/loongarch/kernel/fpu.S              | 264 ++++++++++++++
+ arch/loongarch/kernel/idle.c             |  16 +
+ arch/loongarch/kernel/process.c          | 259 ++++++++++++++
+ arch/loongarch/kernel/ptrace.c           | 432 +++++++++++++++++++++++
+ arch/loongarch/kernel/switch.S           |  35 ++
+ 14 files changed, 1873 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/fpu.h
+ create mode 100644 arch/loongarch/include/asm/idle.h
+ create mode 100644 arch/loongarch/include/asm/mmu.h
+ create mode 100644 arch/loongarch/include/asm/mmu_context.h
+ create mode 100644 arch/loongarch/include/asm/processor.h
+ create mode 100644 arch/loongarch/include/asm/ptrace.h
+ create mode 100644 arch/loongarch/include/asm/switch_to.h
+ create mode 100644 arch/loongarch/include/asm/thread_info.h
+ create mode 100644 arch/loongarch/include/uapi/asm/ptrace.h
+ create mode 100644 arch/loongarch/kernel/fpu.S
+ create mode 100644 arch/loongarch/kernel/idle.c
+ create mode 100644 arch/loongarch/kernel/process.c
+ create mode 100644 arch/loongarch/kernel/ptrace.c
+ create mode 100644 arch/loongarch/kernel/switch.S
 
-diff --git a/arch/loongarch/include/asm/branch.h b/arch/loongarch/include/asm/branch.h
+diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
 new file mode 100644
-index 000000000000..3f33c89f35b4
+index 000000000000..3e1c6f01aec5
 --- /dev/null
-+++ b/arch/loongarch/include/asm/branch.h
-@@ -0,0 +1,21 @@
++++ b/arch/loongarch/include/asm/fpu.h
+@@ -0,0 +1,129 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_BRANCH_H
-+#define _ASM_BRANCH_H
-+
-+#include <asm/ptrace.h>
-+
-+static inline unsigned long exception_era(struct pt_regs *regs)
-+{
-+	return regs->csr_era;
-+}
-+
-+static inline int compute_return_era(struct pt_regs *regs)
-+{
-+	regs->csr_era += 4;
-+	return 0;
-+}
-+
-+#endif /* _ASM_BRANCH_H */
-diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
-new file mode 100644
-index 000000000000..bda49108a76d
---- /dev/null
-+++ b/arch/loongarch/include/asm/bug.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_BUG_H
-+#define __ASM_BUG_H
-+
-+#include <linux/compiler.h>
-+
-+#ifdef CONFIG_BUG
-+
-+#include <asm/break.h>
-+
-+static inline void __noreturn BUG(void)
-+{
-+	__asm__ __volatile__("break %0" : : "i" (BRK_BUG));
-+	unreachable();
-+}
-+
-+#define HAVE_ARCH_BUG
-+
-+#endif
-+
-+#include <asm-generic/bug.h>
-+
-+#endif /* __ASM_BUG_H */
-diff --git a/arch/loongarch/include/asm/entry-common.h b/arch/loongarch/include/asm/entry-common.h
-new file mode 100644
-index 000000000000..0fe2a098ded9
---- /dev/null
-+++ b/arch/loongarch/include/asm/entry-common.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef ARCH_LOONGARCH_ENTRY_COMMON_H
-+#define ARCH_LOONGARCH_ENTRY_COMMON_H
-+
-+#include <linux/sched.h>
-+#include <linux/processor.h>
-+
-+static inline bool on_thread_stack(void)
-+{
-+	return !(((unsigned long)(current->stack) ^ current_stack_pointer) & ~(THREAD_SIZE - 1));
-+}
-+
-+#endif
-diff --git a/arch/loongarch/include/asm/hardirq.h b/arch/loongarch/include/asm/hardirq.h
-new file mode 100644
-index 000000000000..d32f83938880
---- /dev/null
-+++ b/arch/loongarch/include/asm/hardirq.h
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_HARDIRQ_H
-+#define _ASM_HARDIRQ_H
-+
-+#include <linux/cache.h>
-+#include <linux/threads.h>
-+#include <linux/irq.h>
-+
-+extern void ack_bad_irq(unsigned int irq);
-+#define ack_bad_irq ack_bad_irq
-+
-+#define NR_IPI	2
-+
-+typedef struct {
-+	unsigned int ipi_irqs[NR_IPI];
-+	unsigned int __softirq_pending;
-+} ____cacheline_aligned irq_cpustat_t;
-+
-+DECLARE_PER_CPU_ALIGNED(irq_cpustat_t, irq_stat);
-+
-+#endif /* _ASM_HARDIRQ_H */
-diff --git a/arch/loongarch/include/asm/hw_irq.h b/arch/loongarch/include/asm/hw_irq.h
-new file mode 100644
-index 000000000000..af4f4e8fbd85
---- /dev/null
-+++ b/arch/loongarch/include/asm/hw_irq.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_HW_IRQ_H
-+#define __ASM_HW_IRQ_H
-+
-+#include <linux/atomic.h>
-+
-+extern atomic_t irq_err_count;
-+
-+/*
-+ * interrupt-retrigger: NOP for now. This may not be appropriate for all
-+ * machines, we'll see ...
-+ */
-+
-+#endif /* __ASM_HW_IRQ_H */
-diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-new file mode 100644
-index 000000000000..cd95d0d4e10f
---- /dev/null
-+++ b/arch/loongarch/include/asm/irq.h
-@@ -0,0 +1,130 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_IRQ_H
-+#define _ASM_IRQ_H
-+
-+#include <linux/irqdomain.h>
-+#include <linux/irqreturn.h>
-+
-+#define IRQ_STACK_SIZE			THREAD_SIZE
-+#define IRQ_STACK_START			(IRQ_STACK_SIZE - 16)
-+
-+DECLARE_PER_CPU(unsigned long, irq_stack);
-+
-+/*
-+ * The highest address on the IRQ stack contains a dummy frame which is
-+ * structured as follows:
-+ *
-+ *   top ------------
-+ *       | task sp  | <- irq_stack[cpu] + IRQ_STACK_START
-+ *       ------------
-+ *       |          | <- First frame of IRQ context
-+ *       ------------
-+ *
-+ * task sp holds a copy of the task stack pointer where the struct pt_regs
-+ * from exception entry can be found.
-+ */
-+
-+static inline bool on_irq_stack(int cpu, unsigned long sp)
-+{
-+	unsigned long low = per_cpu(irq_stack, cpu);
-+	unsigned long high = low + IRQ_STACK_SIZE;
-+
-+	return (low <= sp && sp <= high);
-+}
-+
-+int get_ipi_irq(void);
-+int get_pmc_irq(void);
-+int get_timer_irq(void);
-+void spurious_interrupt(void);
-+
-+#define NR_IRQS_LEGACY 16
-+
-+#define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
-+void arch_trigger_cpumask_backtrace(const struct cpumask *mask, bool exclude_self);
-+
-+#define MAX_IO_PICS 2
-+#define NR_IRQS	(64 + (256 * MAX_IO_PICS))
-+
-+#define CORES_PER_EIO_NODE	4
-+
-+#define LOONGSON_CPU_UART0_VEC		10 /* CPU UART0 */
-+#define LOONGSON_CPU_THSENS_VEC		14 /* CPU Thsens */
-+#define LOONGSON_CPU_HT0_VEC		16 /* CPU HT0 irq vector base number */
-+#define LOONGSON_CPU_HT1_VEC		24 /* CPU HT1 irq vector base number */
-+
-+/* IRQ number definitions */
-+#define LOONGSON_LPC_IRQ_BASE		0
-+#define LOONGSON_LPC_LAST_IRQ		(LOONGSON_LPC_IRQ_BASE + 15)
-+
-+#define LOONGSON_CPU_IRQ_BASE		16
-+#define LOONGSON_CPU_LAST_IRQ		(LOONGSON_CPU_IRQ_BASE + 14)
-+
-+#define LOONGSON_PCH_IRQ_BASE		64
-+#define LOONGSON_PCH_ACPI_IRQ		(LOONGSON_PCH_IRQ_BASE + 47)
-+#define LOONGSON_PCH_LAST_IRQ		(LOONGSON_PCH_IRQ_BASE + 64 - 1)
-+
-+#define LOONGSON_MSI_IRQ_BASE		(LOONGSON_PCH_IRQ_BASE + 64)
-+#define LOONGSON_MSI_LAST_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
-+
-+#define GSI_MIN_LPC_IRQ		LOONGSON_LPC_IRQ_BASE
-+#define GSI_MAX_LPC_IRQ		(LOONGSON_LPC_IRQ_BASE + 16 - 1)
-+#define GSI_MIN_CPU_IRQ		LOONGSON_CPU_IRQ_BASE
-+#define GSI_MAX_CPU_IRQ		(LOONGSON_CPU_IRQ_BASE + 48 - 1)
-+#define GSI_MIN_PCH_IRQ		LOONGSON_PCH_IRQ_BASE
-+#define GSI_MAX_PCH_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
-+
-+extern int find_pch_pic(u32 gsi);
-+extern int eiointc_get_node(int id);
-+
-+static inline void eiointc_enable(void)
-+{
-+	uint64_t misc;
-+
-+	misc = iocsr_readq(LOONGARCH_IOCSR_MISC_FUNC);
-+	misc |= IOCSR_MISC_FUNC_EXT_IOI_EN;
-+	iocsr_writeq(misc, LOONGARCH_IOCSR_MISC_FUNC);
-+}
-+
-+struct acpi_madt_lio_pic;
-+struct acpi_madt_eio_pic;
-+struct acpi_madt_ht_pic;
-+struct acpi_madt_bio_pic;
-+struct acpi_madt_msi_pic;
-+struct acpi_madt_lpc_pic;
-+
-+struct irq_domain *loongarch_cpu_irq_init(void);
-+
-+struct irq_domain *liointc_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_lio_pic *acpi_liointc);
-+struct irq_domain *eiointc_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_eio_pic *acpi_eiointc);
-+
-+struct irq_domain *htvec_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_ht_pic *acpi_htvec);
-+struct irq_domain *pch_lpc_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_lpc_pic *acpi_pchlpc);
-+struct irq_domain *pch_msi_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_msi_pic *acpi_pchmsi);
-+struct irq_domain *pch_pic_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_bio_pic *acpi_pchpic);
-+
-+extern struct acpi_madt_lio_pic *acpi_liointc;
-+extern struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
-+
-+extern struct acpi_madt_ht_pic *acpi_htintc;
-+extern struct acpi_madt_lpc_pic *acpi_pchlpc;
-+extern struct acpi_madt_msi_pic *acpi_pchmsi[MAX_IO_PICS];
-+extern struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
-+
-+extern struct irq_domain *cpu_domain;
-+extern struct irq_domain *liointc_domain;
-+extern struct irq_domain *pch_lpc_domain;
-+extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
-+extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
-+
-+#include <asm-generic/irq.h>
-+
-+#endif /* _ASM_IRQ_H */
-diff --git a/arch/loongarch/include/asm/irq_regs.h b/arch/loongarch/include/asm/irq_regs.h
-new file mode 100644
-index 000000000000..3d62d815bf6b
---- /dev/null
-+++ b/arch/loongarch/include/asm/irq_regs.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_IRQ_REGS_H
-+#define __ASM_IRQ_REGS_H
-+
-+#define ARCH_HAS_OWN_IRQ_REGS
-+
-+#include <linux/thread_info.h>
-+
-+static inline struct pt_regs *get_irq_regs(void)
-+{
-+	return current_thread_info()->regs;
-+}
-+
-+static inline struct pt_regs *set_irq_regs(struct pt_regs *new_regs)
-+{
-+	struct pt_regs *old_regs;
-+
-+	old_regs = get_irq_regs();
-+	current_thread_info()->regs = new_regs;
-+
-+	return old_regs;
-+}
-+
-+#endif /* __ASM_IRQ_REGS_H */
-diff --git a/arch/loongarch/include/asm/irqflags.h b/arch/loongarch/include/asm/irqflags.h
-new file mode 100644
-index 000000000000..52121cd791fe
---- /dev/null
-+++ b/arch/loongarch/include/asm/irqflags.h
-@@ -0,0 +1,78 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_IRQFLAGS_H
-+#define _ASM_IRQFLAGS_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/compiler.h>
-+#include <linux/stringify.h>
-+#include <asm/compiler.h>
-+#include <asm/loongarch.h>
-+
-+static inline void arch_local_irq_enable(void)
-+{
-+	u32 flags = CSR_CRMD_IE;
-+	__asm__ __volatile__(
-+		"csrxchg %[val], %[mask], %[reg]\n\t"
-+		: [val] "+r" (flags)
-+		: [mask] "r" (CSR_CRMD_IE), [reg] "i" (LOONGARCH_CSR_CRMD)
-+		: "memory");
-+}
-+
-+static inline void arch_local_irq_disable(void)
-+{
-+	u32 flags = 0;
-+	__asm__ __volatile__(
-+		"csrxchg %[val], %[mask], %[reg]\n\t"
-+		: [val] "+r" (flags)
-+		: [mask] "r" (CSR_CRMD_IE), [reg] "i" (LOONGARCH_CSR_CRMD)
-+		: "memory");
-+}
-+
-+static inline unsigned long arch_local_irq_save(void)
-+{
-+	u32 flags = 0;
-+	__asm__ __volatile__(
-+		"csrxchg %[val], %[mask], %[reg]\n\t"
-+		: [val] "+r" (flags)
-+		: [mask] "r" (CSR_CRMD_IE), [reg] "i" (LOONGARCH_CSR_CRMD)
-+		: "memory");
-+	return flags;
-+}
-+
-+static inline void arch_local_irq_restore(unsigned long flags)
-+{
-+	__asm__ __volatile__(
-+		"csrxchg %[val], %[mask], %[reg]\n\t"
-+		: [val] "+r" (flags)
-+		: [mask] "r" (CSR_CRMD_IE), [reg] "i" (LOONGARCH_CSR_CRMD)
-+		: "memory");
-+}
-+
-+static inline unsigned long arch_local_save_flags(void)
-+{
-+	u32 flags;
-+	__asm__ __volatile__(
-+		"csrrd %[val], %[reg]\n\t"
-+		: [val] "=r" (flags)
-+		: [reg] "i" (LOONGARCH_CSR_CRMD)
-+		: "memory");
-+	return flags;
-+}
-+
-+static inline int arch_irqs_disabled_flags(unsigned long flags)
-+{
-+	return !(flags & CSR_CRMD_IE);
-+}
-+
-+static inline int arch_irqs_disabled(void)
-+{
-+	return arch_irqs_disabled_flags(arch_local_save_flags());
-+}
-+
-+#endif /* #ifndef __ASSEMBLY__ */
-+
-+#endif /* _ASM_IRQFLAGS_H */
-diff --git a/arch/loongarch/include/asm/kdebug.h b/arch/loongarch/include/asm/kdebug.h
-new file mode 100644
-index 000000000000..d721b4b82fae
---- /dev/null
-+++ b/arch/loongarch/include/asm/kdebug.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_LOONGARCH_KDEBUG_H
-+#define _ASM_LOONGARCH_KDEBUG_H
-+
-+#include <linux/notifier.h>
-+
-+enum die_val {
-+	DIE_OOPS = 1,
-+	DIE_RI,
-+	DIE_FP,
-+	DIE_SIMD,
-+	DIE_TRAP,
-+	DIE_PAGE_FAULT,
-+	DIE_BREAK,
-+	DIE_SSTEPBP,
-+	DIE_UPROBE,
-+	DIE_UPROBE_XOL,
-+};
-+
-+#endif /* _ASM_LOONGARCH_KDEBUG_H */
-diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-new file mode 100644
-index 000000000000..fed198fbd51d
---- /dev/null
-+++ b/arch/loongarch/include/asm/stackframe.h
-@@ -0,0 +1,212 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_STACKFRAME_H
-+#define _ASM_STACKFRAME_H
-+
-+#include <linux/threads.h>
-+
-+#include <asm/asm.h>
-+#include <asm/asmmacro.h>
-+#include <asm/asm-offsets.h>
-+#include <asm/loongarch.h>
-+#include <asm/thread_info.h>
-+
-+/* Make the addition of cfi info a little easier. */
-+	.macro cfi_rel_offset reg offset=0 docfi=0
-+	.if \docfi
-+	.cfi_rel_offset \reg, \offset
-+	.endif
-+	.endm
-+
-+	.macro cfi_st reg offset=0 docfi=0
-+	cfi_rel_offset \reg, \offset, \docfi
-+	LONG_S	\reg, sp, \offset
-+	.endm
-+
-+	.macro cfi_restore reg offset=0 docfi=0
-+	.if \docfi
-+	.cfi_restore \reg
-+	.endif
-+	.endm
-+
-+	.macro cfi_ld reg offset=0 docfi=0
-+	LONG_L	\reg, sp, \offset
-+	cfi_restore \reg \offset \docfi
-+	.endm
-+
-+	.macro BACKUP_T0T1
-+	csrwr	t0, EXCEPTION_KS0
-+	csrwr	t1, EXCEPTION_KS1
-+	.endm
-+
-+	.macro RELOAD_T0T1
-+	csrrd   t0, EXCEPTION_KS0
-+	csrrd   t1, EXCEPTION_KS1
-+	.endm
-+
-+	.macro	SAVE_TEMP docfi=0
-+	RELOAD_T0T1
-+	cfi_st	t0, PT_R12, \docfi
-+	cfi_st	t1, PT_R13, \docfi
-+	cfi_st	t2, PT_R14, \docfi
-+	cfi_st	t3, PT_R15, \docfi
-+	cfi_st	t4, PT_R16, \docfi
-+	cfi_st	t5, PT_R17, \docfi
-+	cfi_st	t6, PT_R18, \docfi
-+	cfi_st	t7, PT_R19, \docfi
-+	cfi_st	t8, PT_R20, \docfi
-+	.endm
-+
-+	.macro	SAVE_STATIC docfi=0
-+	cfi_st	s0, PT_R23, \docfi
-+	cfi_st	s1, PT_R24, \docfi
-+	cfi_st	s2, PT_R25, \docfi
-+	cfi_st	s3, PT_R26, \docfi
-+	cfi_st	s4, PT_R27, \docfi
-+	cfi_st	s5, PT_R28, \docfi
-+	cfi_st	s6, PT_R29, \docfi
-+	cfi_st	s7, PT_R30, \docfi
-+	cfi_st	s8, PT_R31, \docfi
-+	.endm
-+
-+/*
-+ * get_saved_sp returns the SP for the current CPU by looking in the
-+ * kernelsp array for it. It stores the current sp in t0 and loads the
-+ * new value in sp.
-+ */
-+	.macro	get_saved_sp docfi=0
-+	la.abs	t1, kernelsp
-+	move	t0, sp
-+	.if \docfi
-+	.cfi_register sp, t0
-+	.endif
-+	LONG_L	sp, t1, 0
-+	.endm
-+
-+	.macro	set_saved_sp stackp temp temp2
-+	la.abs	\temp, kernelsp
-+	LONG_S	\stackp, \temp, 0
-+	.endm
-+
-+	.macro	SAVE_SOME docfi=0
-+	csrrd	t1, LOONGARCH_CSR_PRMD
-+	andi	t1, t1, 0x3	/* extract pplv bit */
-+	move	t0, sp
-+	beqz	t1, 8f
-+	/* Called from user mode, new stack. */
-+	get_saved_sp docfi=\docfi
-+8:
-+	PTR_ADDIU sp, sp, -PT_SIZE
-+	.if \docfi
-+	.cfi_def_cfa sp, 0
-+	.endif
-+	cfi_st	t0, PT_R3, \docfi
-+	cfi_rel_offset  sp, PT_R3, \docfi
-+	LONG_S	zero, sp, PT_R0
-+	csrrd	t0, LOONGARCH_CSR_PRMD
-+	LONG_S	t0, sp, PT_PRMD
-+	csrrd	t0, LOONGARCH_CSR_CRMD
-+	LONG_S	t0, sp, PT_CRMD
-+	csrrd	t0, LOONGARCH_CSR_EUEN
-+	LONG_S  t0, sp, PT_EUEN
-+	csrrd	t0, LOONGARCH_CSR_ECFG
-+	LONG_S	t0, sp, PT_ECFG
-+	csrrd	t0, LOONGARCH_CSR_ESTAT
-+	PTR_S	t0, sp, PT_ESTAT
-+	cfi_st	ra, PT_R1, \docfi
-+	cfi_st	a0, PT_R4, \docfi
-+	cfi_st	a1, PT_R5, \docfi
-+	cfi_st	a2, PT_R6, \docfi
-+	cfi_st	a3, PT_R7, \docfi
-+	cfi_st	a4, PT_R8, \docfi
-+	cfi_st	a5, PT_R9, \docfi
-+	cfi_st	a6, PT_R10, \docfi
-+	cfi_st	a7, PT_R11, \docfi
-+	csrrd	ra, LOONGARCH_CSR_ERA
-+	LONG_S	ra, sp, PT_ERA
-+	.if \docfi
-+	.cfi_rel_offset ra, PT_ERA
-+	.endif
-+	cfi_st	tp, PT_R2, \docfi
-+	cfi_st	fp, PT_R22, \docfi
-+
-+	/* Set thread_info if we're coming from user mode */
-+	csrrd	t0, LOONGARCH_CSR_PRMD
-+	andi	t0, t0, 0x3	/* extract pplv bit */
-+	beqz	t0, 9f
-+
-+	li.d	tp, ~_THREAD_MASK
-+	and	tp, tp, sp
-+	cfi_st  u0, PT_R21, \docfi
-+	csrrd	u0, PERCPU_BASE_KS
-+9:
-+	.endm
-+
-+	.macro	SAVE_ALL docfi=0
-+	SAVE_SOME \docfi
-+	SAVE_TEMP \docfi
-+	SAVE_STATIC \docfi
-+	.endm
-+
-+	.macro	RESTORE_TEMP docfi=0
-+	cfi_ld	t0, PT_R12, \docfi
-+	cfi_ld	t1, PT_R13, \docfi
-+	cfi_ld	t2, PT_R14, \docfi
-+	cfi_ld	t3, PT_R15, \docfi
-+	cfi_ld	t4, PT_R16, \docfi
-+	cfi_ld	t5, PT_R17, \docfi
-+	cfi_ld	t6, PT_R18, \docfi
-+	cfi_ld	t7, PT_R19, \docfi
-+	cfi_ld	t8, PT_R20, \docfi
-+	.endm
-+
-+	.macro	RESTORE_STATIC docfi=0
-+	cfi_ld	s0, PT_R23, \docfi
-+	cfi_ld	s1, PT_R24, \docfi
-+	cfi_ld	s2, PT_R25, \docfi
-+	cfi_ld	s3, PT_R26, \docfi
-+	cfi_ld	s4, PT_R27, \docfi
-+	cfi_ld	s5, PT_R28, \docfi
-+	cfi_ld	s6, PT_R29, \docfi
-+	cfi_ld	s7, PT_R30, \docfi
-+	cfi_ld	s8, PT_R31, \docfi
-+	.endm
-+
-+	.macro	RESTORE_SOME docfi=0
-+	LONG_L	a0, sp, PT_PRMD
-+	andi    a0, a0, 0x3	/* extract pplv bit */
-+	beqz    a0, 8f
-+	cfi_ld  u0, PT_R21, \docfi
-+8:
-+	LONG_L	a0, sp, PT_ERA
-+	csrwr	a0, LOONGARCH_CSR_ERA
-+	LONG_L	a0, sp, PT_PRMD
-+	csrwr	a0, LOONGARCH_CSR_PRMD
-+	cfi_ld	ra, PT_R1, \docfi
-+	cfi_ld	a0, PT_R4, \docfi
-+	cfi_ld	a1, PT_R5, \docfi
-+	cfi_ld	a2, PT_R6, \docfi
-+	cfi_ld	a3, PT_R7, \docfi
-+	cfi_ld	a4, PT_R8, \docfi
-+	cfi_ld	a5, PT_R9, \docfi
-+	cfi_ld	a6, PT_R10, \docfi
-+	cfi_ld	a7, PT_R11, \docfi
-+	cfi_ld	tp, PT_R2, \docfi
-+	cfi_ld	fp, PT_R22, \docfi
-+	.endm
-+
-+	.macro	RESTORE_SP_AND_RET docfi=0
-+	cfi_ld	sp, PT_R3, \docfi
-+	ertn
-+	.endm
-+
-+	.macro	RESTORE_ALL_AND_RET docfi=0
-+	RESTORE_STATIC \docfi
-+	RESTORE_TEMP \docfi
-+	RESTORE_SOME \docfi
-+	RESTORE_SP_AND_RET \docfi
-+	.endm
-+
-+#endif /* _ASM_STACKFRAME_H */
-diff --git a/arch/loongarch/include/asm/stacktrace.h b/arch/loongarch/include/asm/stacktrace.h
-new file mode 100644
-index 000000000000..26483e396ad1
---- /dev/null
-+++ b/arch/loongarch/include/asm/stacktrace.h
-@@ -0,0 +1,74 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_STACKTRACE_H
-+#define _ASM_STACKTRACE_H
-+
-+#include <asm/asm.h>
-+#include <asm/ptrace.h>
-+#include <asm/loongarch.h>
-+#include <linux/stringify.h>
-+
-+#define STR_LONG_L    __stringify(LONG_L)
-+#define STR_LONG_S    __stringify(LONG_S)
-+#define STR_LONGSIZE  __stringify(LONGSIZE)
-+
-+#define STORE_ONE_REG(r) \
-+    STR_LONG_S   " $r" __stringify(r)", %1, "STR_LONGSIZE"*"__stringify(r)"\n\t"
-+
-+#define CSRRD_ONE_REG(reg) \
-+    __stringify(csrrd) " %0, "__stringify(reg)"\n\t"
-+
-+static __always_inline void prepare_frametrace(struct pt_regs *regs)
-+{
-+	__asm__ __volatile__(
-+		/* Save $r1 */
-+		STORE_ONE_REG(1)
-+		/* Use $r1 to save PC */
-+		"pcaddi	$r1, 0\n\t"
-+		STR_LONG_S " $r1, %0\n\t"
-+		/* Restore $r1 */
-+		STR_LONG_L " $r1, %1, "STR_LONGSIZE"\n\t"
-+		STORE_ONE_REG(2)
-+		STORE_ONE_REG(3)
-+		STORE_ONE_REG(4)
-+		STORE_ONE_REG(5)
-+		STORE_ONE_REG(6)
-+		STORE_ONE_REG(7)
-+		STORE_ONE_REG(8)
-+		STORE_ONE_REG(9)
-+		STORE_ONE_REG(10)
-+		STORE_ONE_REG(11)
-+		STORE_ONE_REG(12)
-+		STORE_ONE_REG(13)
-+		STORE_ONE_REG(14)
-+		STORE_ONE_REG(15)
-+		STORE_ONE_REG(16)
-+		STORE_ONE_REG(17)
-+		STORE_ONE_REG(18)
-+		STORE_ONE_REG(19)
-+		STORE_ONE_REG(20)
-+		STORE_ONE_REG(21)
-+		STORE_ONE_REG(22)
-+		STORE_ONE_REG(23)
-+		STORE_ONE_REG(24)
-+		STORE_ONE_REG(25)
-+		STORE_ONE_REG(26)
-+		STORE_ONE_REG(27)
-+		STORE_ONE_REG(28)
-+		STORE_ONE_REG(29)
-+		STORE_ONE_REG(30)
-+		STORE_ONE_REG(31)
-+		: "=m" (regs->csr_era)
-+		: "r" (regs->regs)
-+		: "memory");
-+	__asm__ __volatile__(CSRRD_ONE_REG(LOONGARCH_CSR_BADV) : "=r" (regs->csr_badvaddr));
-+	__asm__ __volatile__(CSRRD_ONE_REG(LOONGARCH_CSR_CRMD) : "=r" (regs->csr_crmd));
-+	__asm__ __volatile__(CSRRD_ONE_REG(LOONGARCH_CSR_PRMD) : "=r" (regs->csr_prmd));
-+	__asm__ __volatile__(CSRRD_ONE_REG(LOONGARCH_CSR_EUEN) : "=r" (regs->csr_euen));
-+	__asm__ __volatile__(CSRRD_ONE_REG(LOONGARCH_CSR_ECFG) : "=r" (regs->csr_ecfg));
-+	__asm__ __volatile__(CSRRD_ONE_REG(LOONGARCH_CSR_ESTAT) : "=r" (regs->csr_estat));
-+}
-+
-+#endif /* _ASM_STACKTRACE_H */
-diff --git a/arch/loongarch/include/uapi/asm/break.h b/arch/loongarch/include/uapi/asm/break.h
-new file mode 100644
-index 000000000000..bb9b82ba59f2
---- /dev/null
-+++ b/arch/loongarch/include/uapi/asm/break.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __UAPI_ASM_BREAK_H
-+#define __UAPI_ASM_BREAK_H
-+
-+#define BRK_DEFAULT		0	/* Used as default */
-+#define BRK_BUG			1	/* Used by BUG() */
-+#define BRK_KDB			2	/* Used in KDB_ENTER() */
-+#define BRK_MATHEMU		3	/* Used by FPU emulator */
-+#define BRK_USERBP		4	/* User bp (used by debuggers) */
-+#define BRK_SSTEPBP		5	/* User bp (used by debuggers) */
-+#define BRK_OVERFLOW		6	/* Overflow check */
-+#define BRK_DIVZERO		7	/* Divide by zero check */
-+#define BRK_RANGE		8	/* Range error check */
-+#define BRK_MULOVFL		9	/* Multiply overflow */
-+#define BRK_KPROBE_BP		10	/* Kprobe break */
-+#define BRK_KPROBE_SSTEPBP	11	/* Kprobe single step break */
-+#define BRK_UPROBE_BP		12	/* See <asm/uprobes.h> */
-+#define BRK_UPROBE_XOLBP	13	/* See <asm/uprobes.h> */
-+
-+#endif /* __UAPI_ASM_BREAK_H */
-diff --git a/arch/loongarch/kernel/access-helper.h b/arch/loongarch/kernel/access-helper.h
-new file mode 100644
-index 000000000000..4a35ca81bd08
---- /dev/null
-+++ b/arch/loongarch/kernel/access-helper.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/uaccess.h>
-+
-+static inline int __get_inst(u32 *i, u32 *p, bool user)
-+{
-+	return user ? get_user(*i, (u32 __user *)p) : get_kernel_nofault(*i, p);
-+}
-+
-+static inline int __get_addr(unsigned long *a, unsigned long *p, bool user)
-+{
-+	return user ? get_user(*a, (unsigned long __user *)p) : get_kernel_nofault(*a, p);
-+}
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-new file mode 100644
-index 000000000000..93496852b3cc
---- /dev/null
-+++ b/arch/loongarch/kernel/genex.S
-@@ -0,0 +1,95 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ *
-+ * Derived from MIPS:
-+ * Copyright (C) 1994 - 2000, 2001, 2003 Ralf Baechle
-+ * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-+ * Copyright (C) 2002, 2007  Maciej W. Rozycki
-+ * Copyright (C) 2001, 2012 MIPS Technologies, Inc.  All rights reserved.
-+ */
-+#include <asm/asm.h>
-+#include <asm/asmmacro.h>
-+#include <asm/loongarch.h>
-+#include <asm/regdef.h>
-+#include <asm/fpregdef.h>
-+#include <asm/stackframe.h>
-+#include <asm/thread_info.h>
-+
-+	.align	5
-+SYM_FUNC_START(__arch_cpu_idle)
-+	/* start of rollback region */
-+	LONG_L	t0, tp, TI_FLAGS
-+	nop
-+	andi	t0, t0, _TIF_NEED_RESCHED
-+	bnez	t0, 1f
-+	nop
-+	nop
-+	nop
-+	idle	0
-+	/* end of rollback region */
-+1:	jirl	zero, ra, 0
-+SYM_FUNC_END(__arch_cpu_idle)
-+
-+SYM_FUNC_START(handle_vint)
-+	BACKUP_T0T1
-+	SAVE_ALL
-+	la.abs	t1, __arch_cpu_idle
-+	LONG_L  t0, sp, PT_ERA
-+	/* 32 byte rollback region */
-+	ori	t0, t0, 0x1f
-+	xori	t0, t0, 0x1f
-+	bne	t0, t1, 1f
-+	LONG_S  t0, sp, PT_ERA
-+1:	move	a0, sp
-+	move	a1, sp
-+	la.abs	t0, do_vint
-+	jirl    ra, t0, 0
-+	RESTORE_ALL_AND_RET
-+SYM_FUNC_END(handle_vint)
-+
-+SYM_FUNC_START(except_vec_cex)
-+	b	cache_parity_error
-+SYM_FUNC_END(except_vec_cex)
-+
-+	.macro	build_prep_badv
-+	csrrd	t0, LOONGARCH_CSR_BADV
-+	PTR_S	t0, sp, PT_BVADDR
-+	.endm
-+
-+	.macro	build_prep_fcsr
-+	movfcsr2gr	a1, fcsr0
-+	.endm
-+
-+	.macro	build_prep_none
-+	.endm
-+
-+	.macro	BUILD_HANDLER exception handler prep
-+	.align	5
-+	SYM_FUNC_START(handle_\exception)
-+	BACKUP_T0T1
-+	SAVE_ALL
-+	build_prep_\prep
-+	move	a0, sp
-+	la.abs	t0, do_\handler
-+	jirl    ra, t0, 0
-+	RESTORE_ALL_AND_RET
-+	SYM_FUNC_END(handle_\exception)
-+	.endm
-+
-+	BUILD_HANDLER ade ade badv
-+	BUILD_HANDLER ale ale badv
-+	BUILD_HANDLER bp bp none
-+	BUILD_HANDLER fpe fpe fcsr
-+	BUILD_HANDLER fpu fpu none
-+	BUILD_HANDLER lsx lsx none
-+	BUILD_HANDLER lasx lasx none
-+	BUILD_HANDLER lbt lbt none
-+	BUILD_HANDLER ri ri none
-+	BUILD_HANDLER watch watch none
-+	BUILD_HANDLER reserved reserved none	/* others */
-+
-+SYM_FUNC_START(handle_sys)
-+	la.abs	t0, handle_syscall
-+	jirl    zero, t0, 0
-+SYM_FUNC_END(handle_sys)
-diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-new file mode 100644
-index 000000000000..48032ffd9331
---- /dev/null
-+++ b/arch/loongarch/kernel/irq.c
-@@ -0,0 +1,131 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <linux/kernel.h>
-+#include <linux/acpi.h>
-+#include <linux/atomic.h>
-+#include <linux/delay.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel_stat.h>
-+#include <linux/proc_fs.h>
-+#include <linux/mm.h>
-+#include <linux/random.h>
-+#include <linux/sched.h>
-+#include <linux/seq_file.h>
-+#include <linux/kallsyms.h>
-+#include <linux/uaccess.h>
-+
-+#include <asm/irq.h>
-+#include <asm/loongson.h>
-+#include <asm/setup.h>
-+
-+DEFINE_PER_CPU(unsigned long, irq_stack);
-+
-+struct acpi_madt_lio_pic *acpi_liointc;
-+struct acpi_madt_eio_pic *acpi_eiointc[MAX_IO_PICS];
-+
-+struct acpi_madt_ht_pic *acpi_htintc;
-+struct acpi_madt_lpc_pic *acpi_pchlpc;
-+struct acpi_madt_msi_pic *acpi_pchmsi[MAX_IO_PICS];
-+struct acpi_madt_bio_pic *acpi_pchpic[MAX_IO_PICS];
-+
-+struct irq_domain *cpu_domain;
-+struct irq_domain *liointc_domain;
-+struct irq_domain *pch_lpc_domain;
-+struct irq_domain *pch_msi_domain[MAX_IO_PICS];
-+struct irq_domain *pch_pic_domain[MAX_IO_PICS];
-+
-+int find_pch_pic(u32 gsi)
-+{
-+	int i, start, end;
-+
-+	/* Find the PCH_PIC that manages this GSI. */
-+	for (i = 0; i < loongson_sysconf.nr_io_pics; i++) {
-+		struct acpi_madt_bio_pic *irq_cfg = acpi_pchpic[i];
-+
-+		start = irq_cfg->gsi_base;
-+		end   = irq_cfg->gsi_base + irq_cfg->size;
-+		if (gsi >= start && gsi < end)
-+			return i;
-+	}
-+
-+	pr_err("ERROR: Unable to locate PCH_PIC for GSI %d\n", gsi);
-+	return -1;
-+}
-+
-+/*
-+ * 'what should we do if we get a hw irq event on an illegal vector'.
-+ * each architecture has to answer this themselves.
-+ */
-+void ack_bad_irq(unsigned int irq)
-+{
-+	pr_warn("Unexpected IRQ # %d\n", irq);
-+}
-+
-+atomic_t irq_err_count;
-+
-+asmlinkage void spurious_interrupt(void)
-+{
-+	atomic_inc(&irq_err_count);
-+}
-+
-+int arch_show_interrupts(struct seq_file *p, int prec)
-+{
-+	seq_printf(p, "%*s: %10u\n", prec, "ERR", atomic_read(&irq_err_count));
-+	return 0;
-+}
-+
-+void __init setup_IRQ(void)
-+{
-+	int i;
-+	struct irq_domain *parent_domain;
-+
-+	if (!acpi_eiointc[0])
-+		cpu_data[0].options &= ~LOONGARCH_CPU_EXTIOI;
-+
-+	cpu_domain = loongarch_cpu_irq_init();
-+	liointc_domain = liointc_acpi_init(cpu_domain, acpi_liointc);
-+
-+	if (cpu_has_extioi) {
-+		pr_info("Using EIOINTC interrupt mode\n");
-+		for (i = 0; i < loongson_sysconf.nr_io_pics; i++) {
-+			parent_domain = eiointc_acpi_init(cpu_domain, acpi_eiointc[i]);
-+			pch_pic_domain[i] = pch_pic_acpi_init(parent_domain, acpi_pchpic[i]);
-+			pch_msi_domain[i] = pch_msi_acpi_init(parent_domain, acpi_pchmsi[i]);
-+		}
-+	} else {
-+		pr_info("Using HTVECINTC interrupt mode\n");
-+		parent_domain = htvec_acpi_init(liointc_domain, acpi_htintc);
-+		pch_pic_domain[0] = pch_pic_acpi_init(parent_domain, acpi_pchpic[0]);
-+		pch_msi_domain[0] = pch_msi_acpi_init(parent_domain, acpi_pchmsi[0]);
-+	}
-+
-+	irq_set_default_host(pch_pic_domain[0]);
-+	pch_lpc_domain = pch_lpc_acpi_init(pch_pic_domain[0], acpi_pchlpc);
-+}
-+
-+void __init init_IRQ(void)
-+{
-+	int i;
-+	unsigned int order = get_order(IRQ_STACK_SIZE);
-+
-+	clear_csr_ecfg(ECFG0_IM);
-+	clear_csr_estat(ESTATF_IP);
-+
-+	setup_IRQ();
-+
-+	for (i = 0; i < NR_IRQS; i++)
-+		irq_set_noprobe(i);
-+
-+	for_each_possible_cpu(i) {
-+		void *s = (void *)__get_free_pages(GFP_KERNEL, order);
-+
-+		per_cpu(irq_stack, i) = (unsigned long)s;
-+		pr_debug("CPU%d IRQ stack at 0x%lx - 0x%lx\n", i,
-+			per_cpu(irq_stack, i), per_cpu(irq_stack, i) + IRQ_STACK_SIZE);
-+	}
-+
-+	set_csr_ecfg(ECFGF_IP0 | ECFGF_IP1 | ECFGF_IP2 | ECFGF_IPI | ECFGF_PMC);
-+}
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-new file mode 100644
-index 000000000000..c850174c7985
---- /dev/null
-+++ b/arch/loongarch/kernel/traps.c
-@@ -0,0 +1,755 @@
-+// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Author: Huacai Chen <chenhuacai@loongson.cn>
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 + */
-+#include <linux/bitops.h>
-+#include <linux/bug.h>
-+#include <linux/compiler.h>
-+#include <linux/context_tracking.h>
-+#include <linux/entry-common.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/extable.h>
-+#include <linux/mm.h>
-+#include <linux/sched/mm.h>
-+#include <linux/sched/debug.h>
-+#include <linux/smp.h>
-+#include <linux/spinlock.h>
-+#include <linux/kallsyms.h>
-+#include <linux/memblock.h>
-+#include <linux/interrupt.h>
++#ifndef _ASM_FPU_H
++#define _ASM_FPU_H
++
++#include <linux/sched.h>
++#include <linux/sched/task_stack.h>
 +#include <linux/ptrace.h>
-+#include <linux/kgdb.h>
-+#include <linux/kdebug.h>
-+#include <linux/kprobes.h>
-+#include <linux/notifier.h>
-+#include <linux/irq.h>
-+#include <linux/perf_event.h>
++#include <linux/thread_info.h>
++#include <linux/bitops.h>
 +
-+#include <asm/addrspace.h>
-+#include <asm/bootinfo.h>
-+#include <asm/branch.h>
-+#include <asm/break.h>
 +#include <asm/cpu.h>
-+#include <asm/fpu.h>
++#include <asm/cpu-features.h>
++#include <asm/current.h>
 +#include <asm/loongarch.h>
-+#include <asm/mmu_context.h>
-+#include <asm/pgtable.h>
++#include <asm/processor.h>
 +#include <asm/ptrace.h>
-+#include <asm/sections.h>
-+#include <asm/siginfo.h>
-+#include <asm/stacktrace.h>
-+#include <asm/tlb.h>
-+#include <asm/types.h>
 +
-+#include "access-helper.h"
++struct sigcontext;
 +
-+extern asmlinkage void handle_ade(void);
-+extern asmlinkage void handle_ale(void);
-+extern asmlinkage void handle_sys(void);
-+extern asmlinkage void handle_bp(void);
-+extern asmlinkage void handle_ri(void);
-+extern asmlinkage void handle_fpu(void);
-+extern asmlinkage void handle_fpe(void);
-+extern asmlinkage void handle_lbt(void);
-+extern asmlinkage void handle_lsx(void);
-+extern asmlinkage void handle_lasx(void);
-+extern asmlinkage void handle_reserved(void);
-+extern asmlinkage void handle_watch(void);
-+extern asmlinkage void handle_vint(void);
-+
-+static void show_backtrace(struct task_struct *task, const struct pt_regs *regs,
-+			   const char *loglvl, bool user)
-+{
-+	unsigned long addr;
-+	unsigned long *sp = (unsigned long *)(regs->regs[3] & ~3);
-+
-+	printk("%sCall Trace:", loglvl);
-+#ifdef CONFIG_KALLSYMS
-+	printk("%s\n", loglvl);
-+#endif
-+	while (!kstack_end(sp)) {
-+		if (__get_addr(&addr, sp++, user)) {
-+			printk("%s (Bad stack address)", loglvl);
-+			break;
-+		}
-+		if (__kernel_text_address(addr))
-+			print_ip_sym(loglvl, addr);
-+	}
-+	printk("%s\n", loglvl);
-+}
-+
-+static void show_stacktrace(struct task_struct *task,
-+	const struct pt_regs *regs, const char *loglvl, bool user)
-+{
-+	int i;
-+	const int field = 2 * sizeof(unsigned long);
-+	unsigned long stackdata;
-+	unsigned long *sp = (unsigned long *)regs->regs[3];
-+
-+	printk("%sStack :", loglvl);
-+	i = 0;
-+	while ((unsigned long) sp & (PAGE_SIZE - 1)) {
-+		if (i && ((i % (64 / field)) == 0)) {
-+			pr_cont("\n");
-+			printk("%s       ", loglvl);
-+		}
-+		if (i > 39) {
-+			pr_cont(" ...");
-+			break;
-+		}
-+
-+		if (__get_addr(&stackdata, sp++, user)) {
-+			pr_cont(" (Bad stack address)");
-+			break;
-+		}
-+
-+		pr_cont(" %0*lx", field, stackdata);
-+		i++;
-+	}
-+	pr_cont("\n");
-+	show_backtrace(task, regs, loglvl, user);
-+}
-+
-+void show_stack(struct task_struct *task, unsigned long *sp, const char *loglvl)
-+{
-+	struct pt_regs regs;
-+
-+	regs.csr_crmd = 0;
-+	if (sp) {
-+		regs.csr_era = 0;
-+		regs.regs[1] = 0;
-+		regs.regs[3] = (unsigned long)sp;
-+	} else {
-+		if (!task || task == current)
-+			prepare_frametrace(&regs);
-+		else {
-+			regs.csr_era = task->thread.reg01;
-+			regs.regs[1] = 0;
-+			regs.regs[3] = task->thread.reg03;
-+			regs.regs[22] = task->thread.reg22;
-+		}
-+	}
-+
-+	show_stacktrace(task, &regs, loglvl, false);
-+}
-+
-+static void show_code(void *pc, bool user)
-+{
-+	long i;
-+	unsigned int insn;
-+
-+	printk("Code:");
-+
-+	for(i = -3 ; i < 6 ; i++) {
-+		if (__get_inst(&insn, pc + i, user)) {
-+			pr_cont(" (Bad address in era)\n");
-+			break;
-+		}
-+		pr_cont("%c%08x%c", (i?' ':'<'), insn, (i?' ':'>'));
-+	}
-+	pr_cont("\n");
-+}
-+
-+static void __show_regs(const struct pt_regs *regs)
-+{
-+	const int field = 2 * sizeof(unsigned long);
-+	unsigned int excsubcode;
-+	unsigned int exccode;
-+	int i;
-+
-+	show_regs_print_info(KERN_DEFAULT);
-+
-+	/*
-+	 * Saved main processor registers
-+	 */
-+	for (i = 0; i < 32; ) {
-+		if ((i % 4) == 0)
-+			printk("$%2d   :", i);
-+		pr_cont(" %0*lx", field, regs->regs[i]);
-+
-+		i++;
-+		if ((i % 4) == 0)
-+			pr_cont("\n");
-+	}
-+
-+	/*
-+	 * Saved csr registers
-+	 */
-+	printk("era   : %0*lx %pS\n", field, regs->csr_era,
-+	       (void *) regs->csr_era);
-+	printk("ra    : %0*lx %pS\n", field, regs->regs[1],
-+	       (void *) regs->regs[1]);
-+
-+	printk("CSR crmd: %08lx	", regs->csr_crmd);
-+	printk("CSR prmd: %08lx	", regs->csr_prmd);
-+	printk("CSR euen: %08lx	", regs->csr_euen);
-+	printk("CSR ecfg: %08lx	", regs->csr_ecfg);
-+	printk("CSR estat: %08lx	", regs->csr_estat);
-+
-+	pr_cont("\n");
-+
-+	exccode = ((regs->csr_estat) & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
-+	excsubcode = ((regs->csr_estat) & CSR_ESTAT_ESUBCODE) >> CSR_ESTAT_ESUBCODE_SHIFT;
-+	printk("ExcCode : %x (SubCode %x)\n", exccode, excsubcode);
-+
-+	if (exccode >= EXCCODE_TLBL && exccode <= EXCCODE_ALE)
-+		printk("BadVA : %0*lx\n", field, regs->csr_badvaddr);
-+
-+	printk("PrId  : %08x (%s)\n", read_cpucfg(LOONGARCH_CPUCFG0),
-+	       cpu_family_string());
-+}
-+
-+void show_regs(struct pt_regs *regs)
-+{
-+	__show_regs((struct pt_regs *)regs);
-+	dump_stack();
-+}
-+
-+void show_registers(struct pt_regs *regs)
-+{
-+	__show_regs(regs);
-+	print_modules();
-+	printk("Process %s (pid: %d, threadinfo=%p, task=%p)\n",
-+	       current->comm, current->pid, current_thread_info(), current);
-+
-+	show_stacktrace(current, regs, KERN_DEFAULT, user_mode(regs));
-+	show_code((void *)regs->csr_era, user_mode(regs));
-+	printk("\n");
-+}
-+
-+static DEFINE_RAW_SPINLOCK(die_lock);
-+
-+void __noreturn die(const char *str, struct pt_regs *regs)
-+{
-+	static int die_counter;
-+	int sig = SIGSEGV;
-+
-+	oops_enter();
-+
-+	if (notify_die(DIE_OOPS, str, regs, 0, current->thread.trap_nr,
-+		       SIGSEGV) == NOTIFY_STOP)
-+		sig = 0;
-+
-+	console_verbose();
-+	raw_spin_lock_irq(&die_lock);
-+	bust_spinlocks(1);
-+
-+	printk("%s[#%d]:\n", str, ++die_counter);
-+	show_registers(regs);
-+	add_taint(TAINT_DIE, LOCKDEP_NOW_UNRELIABLE);
-+	raw_spin_unlock_irq(&die_lock);
-+
-+	oops_exit();
-+
-+	if (in_interrupt())
-+		panic("Fatal exception in interrupt");
-+
-+	if (panic_on_oops)
-+		panic("Fatal exception");
-+
-+	make_task_dead(sig);
-+}
-+
-+static inline void setup_vint_size(unsigned int size)
-+{
-+	unsigned int vs;
-+
-+	vs = ilog2(size/4);
-+
-+	if (vs == 0 || vs > 7)
-+		panic("vint_size %d Not support yet", vs);
-+
-+	csr_xchgl(vs<<CSR_ECFG_VS_SHIFT, CSR_ECFG_VS, LOONGARCH_CSR_ECFG);
-+}
++extern void _init_fpu(unsigned int);
++extern void _save_fp(struct loongarch_fpu *);
++extern void _restore_fp(struct loongarch_fpu *);
 +
 +/*
-+ * Send SIGFPE according to FCSR Cause bits, which must have already
-+ * been masked against Enable bits.  This is impotant as Inexact can
-+ * happen together with Overflow or Underflow, and `ptrace' can set
-+ * any bits.
++ * Mask the FCSR Cause bits according to the Enable bits, observing
++ * that Unimplemented is always enabled.
 + */
-+void force_fcsr_sig(unsigned long fcsr, void __user *fault_addr,
-+		     struct task_struct *tsk)
++static inline unsigned long mask_fcsr_x(unsigned long fcsr)
 +{
-+	int si_code = FPE_FLTUNK;
-+
-+	if (fcsr & FPU_CSR_INV_X)
-+		si_code = FPE_FLTINV;
-+	else if (fcsr & FPU_CSR_DIV_X)
-+		si_code = FPE_FLTDIV;
-+	else if (fcsr & FPU_CSR_OVF_X)
-+		si_code = FPE_FLTOVF;
-+	else if (fcsr & FPU_CSR_UDF_X)
-+		si_code = FPE_FLTUND;
-+	else if (fcsr & FPU_CSR_INE_X)
-+		si_code = FPE_FLTRES;
-+
-+	force_sig_fault(SIGFPE, si_code, fault_addr);
++	return fcsr & ((fcsr & FPU_CSR_ALL_E) <<
++			(ffs(FPU_CSR_ALL_X) - ffs(FPU_CSR_ALL_E)));
 +}
 +
-+int process_fpemu_return(int sig, void __user *fault_addr, unsigned long fcsr)
++static inline int is_fp_enabled(void)
 +{
-+	int si_code;
++	return (csr_readl(LOONGARCH_CSR_EUEN) & CSR_EUEN_FPEN) ?
++		1 : 0;
++}
 +
-+	switch (sig) {
-+	case 0:
++#define enable_fpu()		set_csr_euen(CSR_EUEN_FPEN)
++
++#define disable_fpu()		clear_csr_euen(CSR_EUEN_FPEN)
++
++#define clear_fpu_owner()	clear_thread_flag(TIF_USEDFPU)
++
++static inline int is_fpu_owner(void)
++{
++	return test_thread_flag(TIF_USEDFPU);
++}
++
++static inline void __own_fpu(void)
++{
++	enable_fpu();
++	set_thread_flag(TIF_USEDFPU);
++	KSTK_EUEN(current) |= CSR_EUEN_FPEN;
++}
++
++static inline void own_fpu_inatomic(int restore)
++{
++	if (cpu_has_fpu && !is_fpu_owner()) {
++		__own_fpu();
++		if (restore)
++			_restore_fp(&current->thread.fpu);
++	}
++}
++
++static inline void own_fpu(int restore)
++{
++	preempt_disable();
++	own_fpu_inatomic(restore);
++	preempt_enable();
++}
++
++static inline void lose_fpu_inatomic(int save, struct task_struct *tsk)
++{
++	if (is_fpu_owner()) {
++		if (save)
++			_save_fp(&tsk->thread.fpu);
++		disable_fpu();
++		clear_tsk_thread_flag(tsk, TIF_USEDFPU);
++	}
++	KSTK_EUEN(tsk) &= ~(CSR_EUEN_FPEN | CSR_EUEN_LSXEN | CSR_EUEN_LASXEN);
++}
++
++static inline void lose_fpu(int save)
++{
++	preempt_disable();
++	lose_fpu_inatomic(save, current);
++	preempt_enable();
++}
++
++static inline void init_fpu(void)
++{
++	unsigned int fcsr = current->thread.fpu.fcsr;
++
++	__own_fpu();
++	_init_fpu(fcsr);
++	set_used_math();
++}
++
++static inline void save_fp(struct task_struct *tsk)
++{
++	if (cpu_has_fpu)
++		_save_fp(&tsk->thread.fpu);
++}
++
++static inline void restore_fp(struct task_struct *tsk)
++{
++	if (cpu_has_fpu)
++		_restore_fp(&tsk->thread.fpu);
++}
++
++static inline union fpureg *get_fpu_regs(struct task_struct *tsk)
++{
++	if (tsk == current) {
++		preempt_disable();
++		if (is_fpu_owner())
++			_save_fp(&current->thread.fpu);
++		preempt_enable();
++	}
++
++	return tsk->thread.fpu.fpr;
++}
++
++#endif /* _ASM_FPU_H */
+diff --git a/arch/loongarch/include/asm/idle.h b/arch/loongarch/include/asm/idle.h
+new file mode 100644
+index 000000000000..f7f2b7dbf958
+--- /dev/null
++++ b/arch/loongarch/include/asm/idle.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_IDLE_H
++#define __ASM_IDLE_H
++
++#include <linux/linkage.h>
++
++extern asmlinkage void __arch_cpu_idle(void);
++
++#endif /* __ASM_IDLE_H  */
+diff --git a/arch/loongarch/include/asm/mmu.h b/arch/loongarch/include/asm/mmu.h
+new file mode 100644
+index 000000000000..0cc2d0803537
+--- /dev/null
++++ b/arch/loongarch/include/asm/mmu.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef __ASM_MMU_H
++#define __ASM_MMU_H
++
++#include <linux/atomic.h>
++#include <linux/spinlock.h>
++
++typedef struct {
++	u64 asid[NR_CPUS];
++	void *vdso;
++} mm_context_t;
++
++#endif /* __ASM_MMU_H */
+diff --git a/arch/loongarch/include/asm/mmu_context.h b/arch/loongarch/include/asm/mmu_context.h
+new file mode 100644
+index 000000000000..ccd3c8a47cad
+--- /dev/null
++++ b/arch/loongarch/include/asm/mmu_context.h
+@@ -0,0 +1,152 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Switch a MMU context.
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_MMU_CONTEXT_H
++#define _ASM_MMU_CONTEXT_H
++
++#include <linux/errno.h>
++#include <linux/sched.h>
++#include <linux/mm_types.h>
++#include <linux/smp.h>
++#include <linux/slab.h>
++
++#include <asm/cacheflush.h>
++#include <asm/tlbflush.h>
++#include <asm-generic/mm_hooks.h>
++
++/*
++ *  All unused by hardware upper bits will be considered
++ *  as a software asid extension.
++ */
++static inline u64 asid_version_mask(unsigned int cpu)
++{
++	return ~(u64)(cpu_asid_mask(&cpu_data[cpu]));
++}
++
++static inline u64 asid_first_version(unsigned int cpu)
++{
++	return cpu_asid_mask(&cpu_data[cpu]) + 1;
++}
++
++#define cpu_context(cpu, mm)	((mm)->context.asid[cpu])
++#define asid_cache(cpu)		(cpu_data[cpu].asid_cache)
++#define cpu_asid(cpu, mm)	(cpu_context((cpu), (mm)) & cpu_asid_mask(&cpu_data[cpu]))
++
++static inline int asid_valid(struct mm_struct *mm, unsigned int cpu)
++{
++	if ((cpu_context(cpu, mm) ^ asid_cache(cpu)) & asid_version_mask(cpu))
 +		return 0;
 +
-+	case SIGFPE:
-+		force_fcsr_sig(fcsr, fault_addr, current);
-+		return 1;
++	return 1;
++}
 +
-+	case SIGBUS:
-+		force_sig_fault(SIGBUS, BUS_ADRERR, fault_addr);
-+		return 1;
++static inline void enter_lazy_tlb(struct mm_struct *mm, struct task_struct *tsk)
++{
++}
 +
-+	case SIGSEGV:
-+		mmap_read_lock(current->mm);
-+		if (vma_lookup(current->mm, (unsigned long)fault_addr))
-+			si_code = SEGV_ACCERR;
-+		else
-+			si_code = SEGV_MAPERR;
-+		mmap_read_unlock(current->mm);
-+		force_sig_fault(SIGSEGV, si_code, fault_addr);
-+		return 1;
++/* Normal, classic get_new_mmu_context */
++static inline void
++get_new_mmu_context(struct mm_struct *mm, unsigned long cpu)
++{
++	u64 asid = asid_cache(cpu);
 +
-+	default:
-+		force_sig(sig);
-+		return 1;
-+	}
++	if (!((++asid) & cpu_asid_mask(&cpu_data[cpu])))
++		local_flush_tlb_user();	/* start new asid cycle */
++
++	cpu_context(cpu, mm) = asid_cache(cpu) = asid;
 +}
 +
 +/*
-+ * Delayed fp exceptions when doing a lazy ctx switch
++ * Initialize the context related info for a new mm_struct
++ * instance.
 + */
-+asmlinkage void noinstr do_fpe(struct pt_regs *regs, unsigned long fcsr)
++static inline int
++init_new_context(struct task_struct *tsk, struct mm_struct *mm)
 +{
-+	int sig;
-+	void __user *fault_addr;
-+	irqentry_state_t state = irqentry_enter(regs);
++	int i;
 +
-+	if (notify_die(DIE_FP, "FP exception", regs, 0, current->thread.trap_nr,
-+		       SIGFPE) == NOTIFY_STOP)
-+		goto out;
++	for_each_possible_cpu(i)
++		cpu_context(i, mm) = 0;
 +
-+	/* Clear FCSR.Cause before enabling interrupts */
-+	write_fcsr(LOONGARCH_FCSR0, fcsr & ~mask_fcsr_x(fcsr));
-+	local_irq_enable();
-+
-+	die_if_kernel("FP exception in kernel code", regs);
-+
-+	sig = SIGFPE;
-+	fault_addr = (void __user *) regs->csr_era;
-+
-+	/* Send a signal if required.  */
-+	process_fpemu_return(sig, fault_addr, fcsr);
-+
-+out:
-+	local_irq_disable();
-+	irqentry_exit(regs, state);
++	return 0;
 +}
 +
-+asmlinkage void noinstr do_ade(struct pt_regs *regs)
++static inline void switch_mm_irqs_off(struct mm_struct *prev, struct mm_struct *next,
++				      struct task_struct *tsk)
 +{
-+	irqentry_state_t state = irqentry_enter(regs);
++	unsigned int cpu = smp_processor_id();
 +
-+	die_if_kernel("Kernel ade access", regs);
-+	force_sig_fault(SIGBUS, BUS_ADRERR, (void __user *)regs->csr_badvaddr);
++	/* Check if our ASID is of an older version and thus invalid */
++	if (!asid_valid(next, cpu))
++		get_new_mmu_context(next, cpu);
 +
-+	irqentry_exit(regs, state);
-+}
++	write_csr_asid(cpu_asid(cpu, next));
 +
-+asmlinkage void noinstr do_ale(struct pt_regs *regs)
-+{
-+	irqentry_state_t state = irqentry_enter(regs);
-+
-+	die_if_kernel("Kernel ale access", regs);
-+	force_sig_fault(SIGBUS, BUS_ADRALN, (void __user *)regs->csr_badvaddr);
-+
-+	irqentry_exit(regs, state);
-+}
-+
-+asmlinkage void noinstr do_bp(struct pt_regs *regs)
-+{
-+	bool user = user_mode(regs);
-+	unsigned int opcode, bcode;
-+	unsigned long era = exception_era(regs);
-+	irqentry_state_t state = irqentry_enter(regs);
-+
-+	local_irq_enable();
-+	current->thread.trap_nr = read_csr_excode();
-+	if (__get_inst(&opcode, (u32 *)era, user))
-+		goto out_sigsegv;
-+
-+	bcode = (opcode & 0x7fff);
++	if (next != &init_mm)
++		csr_writeq((unsigned long)next->pgd, LOONGARCH_CSR_PGDL);
++	else
++		csr_writeq((unsigned long)invalid_pg_dir, LOONGARCH_CSR_PGDL);
 +
 +	/*
-+	 * notify the kprobe handlers, if instruction is likely to
-+	 * pertain to them.
++	 * Mark current->active_mm as not "active" anymore.
++	 * We don't want to mislead possible IPI tlb flush routines.
 +	 */
-+	switch (bcode) {
-+	case BRK_KPROBE_BP:
-+		if (notify_die(DIE_BREAK, "Kprobe", regs, bcode,
-+			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
++	cpumask_set_cpu(cpu, mm_cpumask(next));
++}
++
++#define switch_mm_irqs_off switch_mm_irqs_off
++
++static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next,
++			     struct task_struct *tsk)
++{
++	unsigned long flags;
++
++	local_irq_save(flags);
++	switch_mm_irqs_off(prev, next, tsk);
++	local_irq_restore(flags);
++}
++
++/*
++ * Destroy context related info for an mm_struct that is about
++ * to be put to rest.
++ */
++static inline void destroy_context(struct mm_struct *mm)
++{
++}
++
++#define activate_mm(prev, next)	switch_mm(prev, next, current)
++#define deactivate_mm(task, mm)	do { } while (0)
++
++/*
++ * If mm is currently active, we can't really drop it.
++ * Instead, we will get a new one for it.
++ */
++static inline void
++drop_mmu_context(struct mm_struct *mm, unsigned int cpu)
++{
++	int asid;
++	unsigned long flags;
++
++	local_irq_save(flags);
++
++	asid = read_csr_asid() & cpu_asid_mask(&current_cpu_data);
++
++	if (asid == cpu_asid(cpu, mm)) {
++		if (!current->mm || (current->mm == mm)) {
++			get_new_mmu_context(mm, cpu);
++			write_csr_asid(cpu_asid(cpu, mm));
 +			goto out;
-+		else
-+			break;
-+	case BRK_KPROBE_SSTEPBP:
-+		if (notify_die(DIE_SSTEPBP, "Kprobe_SingleStep", regs, bcode,
-+			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
-+			goto out;
-+		else
-+			break;
-+	case BRK_UPROBE_BP:
-+		if (notify_die(DIE_UPROBE, "Uprobe", regs, bcode,
-+			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
-+			goto out;
-+		else
-+			break;
-+	case BRK_UPROBE_XOLBP:
-+		if (notify_die(DIE_UPROBE_XOL, "Uprobe_XOL", regs, bcode,
-+			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
-+			goto out;
-+		else
-+			break;
-+	default:
-+		if (notify_die(DIE_TRAP, "Break", regs, bcode,
-+			       current->thread.trap_nr, SIGTRAP) == NOTIFY_STOP)
-+			goto out;
-+		else
-+			break;
++		}
 +	}
 +
-+	switch (bcode) {
-+	case BRK_BUG:
-+		die_if_kernel("Kernel bug detected", regs);
-+		force_sig(SIGTRAP);
-+		break;
-+	case BRK_DIVZERO:
-+		die_if_kernel("Break instruction in kernel code", regs);
-+		force_sig_fault(SIGFPE, FPE_INTDIV, (void __user *)regs->csr_era);
-+		break;
-+	case BRK_OVERFLOW:
-+		die_if_kernel("Break instruction in kernel code", regs);
-+		force_sig_fault(SIGFPE, FPE_INTOVF, (void __user *)regs->csr_era);
-+		break;
-+	default:
-+		die_if_kernel("Break instruction in kernel code", regs);
-+		force_sig_fault(SIGTRAP, TRAP_BRKPT, (void __user *)regs->csr_era);
-+		break;
-+	}
-+
++	/* Will get a new context next time */
++	cpu_context(cpu, mm) = 0;
++	cpumask_clear_cpu(cpu, mm_cpumask(mm));
 +out:
-+	local_irq_disable();
-+	irqentry_exit(regs, state);
-+	return;
-+
-+out_sigsegv:
-+	force_sig(SIGSEGV);
-+	goto out;
++	local_irq_restore(flags);
 +}
 +
-+asmlinkage void noinstr do_watch(struct pt_regs *regs)
-+{
-+	pr_warn("Hardware watch point handler not implemented!\n");
++#endif /* _ASM_MMU_CONTEXT_H */
+diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
+new file mode 100644
+index 000000000000..5fc32cea8ec7
+--- /dev/null
++++ b/arch/loongarch/include/asm/processor.h
+@@ -0,0 +1,208 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_PROCESSOR_H
++#define _ASM_PROCESSOR_H
++
++#include <linux/atomic.h>
++#include <linux/cpumask.h>
++#include <linux/sizes.h>
++
++#include <asm/cpu.h>
++#include <asm/cpu-info.h>
++#include <asm/loongarch.h>
++#include <asm/vdso/processor.h>
++#include <uapi/asm/ptrace.h>
++#include <uapi/asm/sigcontext.h>
++
++#ifdef CONFIG_32BIT
++#define TASK_SIZE	0x80000000UL
++#define STACK_TOP_MAX	TASK_SIZE
++
++#define TASK_IS_32BIT_ADDR 1
++
++#endif
++
++#ifdef CONFIG_64BIT
++
++#define TASK_SIZE32	0x100000000UL
++
++#define TASK_SIZE64     (0x1UL << ((cpu_vabits > VA_BITS) ? VA_BITS : cpu_vabits))
++
++#define TASK_SIZE (test_thread_flag(TIF_32BIT_ADDR) ? TASK_SIZE32 : TASK_SIZE64)
++
++#define STACK_TOP_MAX	TASK_SIZE64
++
++#define TASK_SIZE_OF(tsk)						\
++	(test_tsk_thread_flag(tsk, TIF_32BIT_ADDR) ? TASK_SIZE32 : TASK_SIZE64)
++
++#define TASK_IS_32BIT_ADDR test_thread_flag(TIF_32BIT_ADDR)
++
++#endif
++
++#define VDSO_RANDOMIZE_SIZE	(TASK_IS_32BIT_ADDR ? SZ_1M : SZ_64M)
++
++unsigned long stack_top(void);
++#define STACK_TOP stack_top()
++
++/*
++ * This decides where the kernel will search for a free chunk of vm
++ * space during mmap's.
++ */
++#define TASK_UNMAPPED_BASE PAGE_ALIGN(TASK_SIZE / 3)
++
++#define FPU_REG_WIDTH		256
++#define FPU_ALIGN		__attribute__((aligned(32)))
++
++union fpureg {
++	__u32	val32[FPU_REG_WIDTH / 32];
++	__u64	val64[FPU_REG_WIDTH / 64];
++};
++
++#define FPR_IDX(width, idx)	(idx)
++
++#define BUILD_FPR_ACCESS(width) \
++static inline u##width get_fpr##width(union fpureg *fpr, unsigned idx)	\
++{									\
++	return fpr->val##width[FPR_IDX(width, idx)];			\
++}									\
++									\
++static inline void set_fpr##width(union fpureg *fpr, unsigned int idx,	\
++				  u##width val)				\
++{									\
++	fpr->val##width[FPR_IDX(width, idx)] = val;			\
 +}
 +
-+asmlinkage void noinstr do_ri(struct pt_regs *regs)
-+{
-+	int status = -1;
-+	unsigned int opcode = 0;
-+	unsigned int __user *era = (unsigned int __user *)exception_era(regs);
-+	unsigned long old_era = regs->csr_era;
-+	unsigned long old_ra = regs->regs[1];
-+	irqentry_state_t state = irqentry_enter(regs);
++BUILD_FPR_ACCESS(32)
++BUILD_FPR_ACCESS(64)
 +
-+	local_irq_enable();
-+	current->thread.trap_nr = read_csr_excode();
++struct loongarch_fpu {
++	unsigned int	fcsr;
++	unsigned int	vcsr;
++	uint64_t	fcc;	/* 8x8 */
++	union fpureg	fpr[NUM_FPU_REGS];
++};
 +
-+	if (notify_die(DIE_RI, "RI Fault", regs, 0, current->thread.trap_nr,
-+		       SIGILL) == NOTIFY_STOP)
-+		goto out;
-+
-+	die_if_kernel("Reserved instruction in kernel code", regs);
-+
-+	if (unlikely(compute_return_era(regs) < 0))
-+		goto out;
-+
-+	if (unlikely(get_user(opcode, era) < 0)) {
-+		status = SIGSEGV;
-+		current->thread.error_code = 1;
-+	}
-+
-+	if (status < 0)
-+		status = SIGILL;
-+
-+	if (unlikely(status > 0)) {
-+		regs->csr_era = old_era;		/* Undo skip-over.  */
-+		regs->regs[1] = old_ra;
-+		force_sig(status);
-+	}
-+
-+out:
-+	local_irq_disable();
-+	irqentry_exit(regs, state);
++#define INIT_CPUMASK { \
++	{0,} \
 +}
 +
-+static void init_restore_fp(void)
-+{
-+	if (!used_math()) {
-+		/* First time FP context user. */
-+		init_fpu();
-+	} else {
-+		/* This task has formerly used the FP context */
-+		if (!is_fpu_owner())
-+			own_fpu_inatomic(1);
-+	}
++#define ARCH_MIN_TASKALIGN	32
 +
-+	BUG_ON(!is_fp_enabled());
++struct loongarch_vdso_info;
++
++/*
++ * If you change thread_struct remember to change the #defines below too!
++ */
++struct thread_struct {
++	/* Saved main processor registers. */
++	unsigned long reg01, reg03, reg22; /* ra sp fp */
++	unsigned long reg23, reg24, reg25, reg26; /* s0-s3 */
++	unsigned long reg27, reg28, reg29, reg30, reg31; /* s4-s8 */
++
++	/* Saved csr registers */
++	unsigned long csr_prmd;
++	unsigned long csr_crmd;
++	unsigned long csr_euen;
++	unsigned long csr_ecfg;
++	unsigned long csr_badvaddr;	/* Last user fault */
++
++	/* Saved scratch registers */
++	unsigned long scr0;
++	unsigned long scr1;
++	unsigned long scr2;
++	unsigned long scr3;
++
++	/* Saved eflags register */
++	unsigned long eflags;
++
++	/* Other stuff associated with the thread. */
++	unsigned long trap_nr;
++	unsigned long error_code;
++	struct loongarch_vdso_info *vdso;
++
++	/*
++	 * Saved fpu register stuff, must be at last because
++	 * it is conditionally copied at fork.
++	 */
++	struct loongarch_fpu fpu FPU_ALIGN;
++};
++
++#define INIT_THREAD  {						\
++	/*							\
++	 * Saved main processor registers			\
++	 */							\
++	.reg01			= 0,				\
++	.reg03			= 0,				\
++	.reg22			= 0,				\
++	.reg23			= 0,				\
++	.reg24			= 0,				\
++	.reg25			= 0,				\
++	.reg26			= 0,				\
++	.reg27			= 0,				\
++	.reg28			= 0,				\
++	.reg29			= 0,				\
++	.reg30			= 0,				\
++	.reg31			= 0,				\
++	.csr_crmd		= 0,				\
++	.csr_prmd		= 0,				\
++	.csr_euen		= 0,				\
++	.csr_ecfg		= 0,				\
++	.csr_badvaddr		= 0,				\
++	/*							\
++	 * Other stuff associated with the process		\
++	 */							\
++	.trap_nr		= 0,				\
++	.error_code		= 0,				\
++	/*							\
++	 * Saved fpu register stuff				\
++	 */							\
++	.fpu			= {				\
++		.fcsr		= 0,				\
++		.vcsr		= 0,				\
++		.fcc		= 0,				\
++		.fpr		= {{{0,},},},			\
++	},							\
 +}
 +
-+asmlinkage void noinstr do_fpu(struct pt_regs *regs)
++struct task_struct;
++
++/* Free all resources held by a thread. */
++#define release_thread(thread) do { } while (0)
++
++enum idle_boot_override {IDLE_NO_OVERRIDE = 0, IDLE_HALT, IDLE_NOMWAIT, IDLE_POLL};
++
++extern unsigned long		boot_option_idle_override;
++/*
++ * Do necessary setup to start up a newly executed thread.
++ */
++extern void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long sp);
++
++static inline void flush_thread(void)
 +{
-+	irqentry_state_t state = irqentry_enter(regs);
++}
 +
-+	local_irq_enable();
-+	die_if_kernel("do_fpu invoked from kernel context!", regs);
++unsigned long __get_wchan(struct task_struct *p);
 +
++#define __KSTK_TOS(tsk) ((unsigned long)task_stack_page(tsk) + \
++			 THREAD_SIZE - 32 - sizeof(struct pt_regs))
++#define task_pt_regs(tsk) ((struct pt_regs *)__KSTK_TOS(tsk))
++#define KSTK_EIP(tsk) (task_pt_regs(tsk)->csr_era)
++#define KSTK_ESP(tsk) (task_pt_regs(tsk)->regs[3])
++#define KSTK_EUEN(tsk) (task_pt_regs(tsk)->csr_euen)
++#define KSTK_ECFG(tsk) (task_pt_regs(tsk)->csr_ecfg)
++
++#define return_address() ({__asm__ __volatile__("":::"$1"); __builtin_return_address(0);})
++
++#ifdef CONFIG_CPU_HAS_PREFETCH
++
++#define ARCH_HAS_PREFETCH
++#define prefetch(x) __builtin_prefetch((x), 0, 1)
++
++#define ARCH_HAS_PREFETCHW
++#define prefetchw(x) __builtin_prefetch((x), 1, 1)
++
++#endif
++
++#endif /* _ASM_PROCESSOR_H */
+diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
+new file mode 100644
+index 000000000000..1fd46d92bc89
+--- /dev/null
++++ b/arch/loongarch/include/asm/ptrace.h
+@@ -0,0 +1,150 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_PTRACE_H
++#define _ASM_PTRACE_H
++
++#include <asm/page.h>
++#include <asm/thread_info.h>
++#include <uapi/asm/ptrace.h>
++
++/*
++ * This struct defines the way the registers are stored on the stack during
++ * a system call/exception. If you add a register here, please also add it to
++ * regoffset_table[] in arch/loongarch/kernel/ptrace.c.
++ */
++struct pt_regs {
++	/* Saved main processor registers. */
++	unsigned long regs[32];
++
++	/* Saved special registers. */
++	unsigned long orig_a0;
++	unsigned long csr_era;
++	unsigned long csr_badvaddr;
++	unsigned long csr_crmd;
++	unsigned long csr_prmd;
++	unsigned long csr_euen;
++	unsigned long csr_ecfg;
++	unsigned long csr_estat;
++	unsigned long __last[0];
++} __aligned(8);
++
++static inline int regs_irqs_disabled(struct pt_regs *regs)
++{
++	return arch_irqs_disabled_flags(regs->csr_prmd);
++}
++
++static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
++{
++	return regs->regs[3];
++}
++
++/*
++ * Don't use asm-generic/ptrace.h it defines FP accessors that don't make
++ * sense on LoongArch.  We rather want an error if they get invoked.
++ */
++
++static inline void instruction_pointer_set(struct pt_regs *regs, unsigned long val)
++{
++	regs->csr_era = val;
++}
++
++/* Query offset/name of register from its name/offset */
++extern int regs_query_register_offset(const char *name);
++#define MAX_REG_OFFSET (offsetof(struct pt_regs, __last))
++
++/**
++ * regs_get_register() - get register value from its offset
++ * @regs:       pt_regs from which register value is gotten.
++ * @offset:     offset number of the register.
++ *
++ * regs_get_register returns the value of a register. The @offset is the
++ * offset of the register in struct pt_regs address which specified by @regs.
++ * If @offset is bigger than MAX_REG_OFFSET, this returns 0.
++ */
++static inline unsigned long regs_get_register(struct pt_regs *regs, unsigned int offset)
++{
++	if (unlikely(offset > MAX_REG_OFFSET))
++		return 0;
++
++	return *(unsigned long *)((unsigned long)regs + offset);
++}
++
++/**
++ * regs_within_kernel_stack() - check the address in the stack
++ * @regs:       pt_regs which contains kernel stack pointer.
++ * @addr:       address which is checked.
++ *
++ * regs_within_kernel_stack() checks @addr is within the kernel stack page(s).
++ * If @addr is within the kernel stack, it returns true. If not, returns false.
++ */
++static inline int regs_within_kernel_stack(struct pt_regs *regs, unsigned long addr)
++{
++	return ((addr & ~(THREAD_SIZE - 1))  ==
++		(kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1)));
++}
++
++/**
++ * regs_get_kernel_stack_nth() - get Nth entry of the stack
++ * @regs:       pt_regs which contains kernel stack pointer.
++ * @n:          stack entry number.
++ *
++ * regs_get_kernel_stack_nth() returns @n th entry of the kernel stack which
++ * is specified by @regs. If the @n th entry is NOT in the kernel stack,
++ * this returns 0.
++ */
++static inline unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
++{
++	unsigned long *addr = (unsigned long *)kernel_stack_pointer(regs);
++
++	addr += n;
++	if (regs_within_kernel_stack(regs, (unsigned long)addr))
++		return *addr;
++	else
++		return 0;
++}
++
++struct task_struct;
++
++/*
++ * Does the process account for user or for system time?
++ */
++#define user_mode(regs) (((regs)->csr_prmd & PLV_MASK) == PLV_USER)
++
++static inline long regs_return_value(struct pt_regs *regs)
++{
++	return regs->regs[4];
++}
++
++#define instruction_pointer(regs) ((regs)->csr_era)
++#define profile_pc(regs) instruction_pointer(regs)
++
++extern void die(const char *, struct pt_regs *) __noreturn;
++
++static inline void die_if_kernel(const char *str, struct pt_regs *regs)
++{
++	if (unlikely(!user_mode(regs)))
++		die(str, regs);
++}
++
++#define current_pt_regs()						\
++({									\
++	unsigned long sp = (unsigned long)__builtin_frame_address(0);	\
++	(struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1 - 32) - 1;	\
++})
++
++/* Helpers for working with the user stack pointer */
++
++static inline unsigned long user_stack_pointer(struct pt_regs *regs)
++{
++	return regs->regs[3];
++}
++
++static inline void user_stack_pointer_set(struct pt_regs *regs,
++	unsigned long val)
++{
++	regs->regs[3] = val;
++}
++
++#endif /* _ASM_PTRACE_H */
+diff --git a/arch/loongarch/include/asm/switch_to.h b/arch/loongarch/include/asm/switch_to.h
+new file mode 100644
+index 000000000000..2a8d04375574
+--- /dev/null
++++ b/arch/loongarch/include/asm/switch_to.h
+@@ -0,0 +1,37 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_SWITCH_TO_H
++#define _ASM_SWITCH_TO_H
++
++#include <asm/cpu-features.h>
++#include <asm/fpu.h>
++
++struct task_struct;
++
++/**
++ * __switch_to - switch execution of a task
++ * @prev:	The task previously executed.
++ * @next:	The task to begin executing.
++ * @next_ti:	task_thread_info(next).
++ *
++ * This function is used whilst scheduling to save the context of prev & load
++ * the context of next. Returns prev.
++ */
++extern asmlinkage struct task_struct *__switch_to(struct task_struct *prev,
++			struct task_struct *next, struct thread_info *next_ti);
++
++/*
++ * For newly created kernel threads switch_to() will return to
++ * ret_from_kernel_thread, newly created user threads to ret_from_fork.
++ * That is, everything following __switch_to() will be skipped for new threads.
++ * So everything that matters to new threads should be placed before __switch_to().
++ */
++#define switch_to(prev, next, last)					\
++do {									\
++	lose_fpu_inatomic(1, prev);					\
++	(last) = __switch_to(prev, next, task_thread_info(next));	\
++} while (0)
++
++#endif /* _ASM_SWITCH_TO_H */
+diff --git a/arch/loongarch/include/asm/thread_info.h b/arch/loongarch/include/asm/thread_info.h
+new file mode 100644
+index 000000000000..a6642b07a64e
+--- /dev/null
++++ b/arch/loongarch/include/asm/thread_info.h
+@@ -0,0 +1,116 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * thread_info.h: LoongArch low-level thread information
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++
++#ifndef _ASM_THREAD_INFO_H
++#define _ASM_THREAD_INFO_H
++
++#ifdef __KERNEL__
++
++#ifndef __ASSEMBLY__
++
++#include <asm/processor.h>
++
++/*
++ * low level task data that entry.S needs immediate access to
++ * - this struct should fit entirely inside of one cache line
++ * - this struct shares the supervisor stack pages
++ * - if the contents of this structure are changed, the assembly constants
++ *   must also be changed
++ */
++struct thread_info {
++	struct task_struct	*task;		/* main task structure */
++	unsigned long		flags;		/* low level flags */
++	unsigned long		tp_value;	/* thread pointer */
++	__u32			cpu;		/* current CPU */
++	int			preempt_count;	/* 0 => preemptible, <0 => BUG */
++	struct pt_regs		*regs;
++	unsigned long		syscall;	/* syscall number */
++	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
++};
++
++/*
++ * macros/functions for gaining access to the thread information structure
++ */
++#define INIT_THREAD_INFO(tsk)			\
++{						\
++	.task		= &tsk,			\
++	.flags		= 0,			\
++	.cpu		= 0,			\
++	.preempt_count	= INIT_PREEMPT_COUNT,	\
++}
++
++/* How to get the thread information struct from C. */
++register struct thread_info *__current_thread_info __asm__("$r2");
++
++static inline struct thread_info *current_thread_info(void)
++{
++	return __current_thread_info;
++}
++
++register unsigned long current_stack_pointer __asm__("$r3");
++
++#endif /* !__ASSEMBLY__ */
++
++/* thread information allocation */
++#ifdef CONFIG_PAGE_SIZE_4KB
++#define THREAD_SIZE_ORDER (2)
++#endif
++#ifdef CONFIG_PAGE_SIZE_16KB
++#define THREAD_SIZE_ORDER (0)
++#endif
++#ifdef CONFIG_PAGE_SIZE_64KB
++#define THREAD_SIZE_ORDER (0)
++#endif
++
++#define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
++#define THREAD_MASK (THREAD_SIZE - 1UL)
++
++#define STACK_WARN	(THREAD_SIZE / 8)
++
++/*
++ * thread information flags
++ * - these are process state flags that various assembly files may need to
++ *   access
++ * - pending work-to-be-done flags are in LSW
++ * - other flags in MSW
++ */
++#define TIF_SIGPENDING		1	/* signal pending */
++#define TIF_NEED_RESCHED	2	/* rescheduling necessary */
++#define TIF_NOTIFY_RESUME	3	/* callback before returning to user */
++#define TIF_NOTIFY_SIGNAL	4	/* signal notifications exist */
++#define TIF_RESTORE_SIGMASK	5	/* restore signal mask in do_signal() */
++#define TIF_NOHZ		6	/* in adaptive nohz mode */
++#define TIF_UPROBE		7	/* breakpointed or singlestepping */
++#define TIF_USEDFPU		8	/* FPU was used by this task this quantum (SMP) */
++#define TIF_USEDSIMD		9	/* SIMD has been used this quantum */
++#define TIF_MEMDIE		10	/* is terminating due to OOM killer */
++#define TIF_FIXADE		11	/* Fix address errors in software */
++#define TIF_LOGADE		12	/* Log address errors to syslog */
++#define TIF_32BIT_REGS		13	/* 32-bit general purpose registers */
++#define TIF_32BIT_ADDR		14	/* 32-bit address space */
++#define TIF_LOAD_WATCH		15	/* If set, load watch registers */
++#define TIF_LSX_CTX_LIVE	16	/* LSX context must be preserved */
++#define TIF_LASX_CTX_LIVE	17	/* LASX context must be preserved */
++
++#define _TIF_SIGPENDING		(1<<TIF_SIGPENDING)
++#define _TIF_NEED_RESCHED	(1<<TIF_NEED_RESCHED)
++#define _TIF_NOTIFY_RESUME	(1<<TIF_NOTIFY_RESUME)
++#define _TIF_NOTIFY_SIGNAL	(1<<TIF_NOTIFY_SIGNAL)
++#define _TIF_NOHZ		(1<<TIF_NOHZ)
++#define _TIF_UPROBE		(1<<TIF_UPROBE)
++#define _TIF_USEDFPU		(1<<TIF_USEDFPU)
++#define _TIF_USEDSIMD		(1<<TIF_USEDSIMD)
++#define _TIF_FIXADE		(1<<TIF_FIXADE)
++#define _TIF_LOGADE		(1<<TIF_LOGADE)
++#define _TIF_32BIT_REGS		(1<<TIF_32BIT_REGS)
++#define _TIF_32BIT_ADDR		(1<<TIF_32BIT_ADDR)
++#define _TIF_LOAD_WATCH		(1<<TIF_LOAD_WATCH)
++#define _TIF_LSX_CTX_LIVE	(1<<TIF_LSX_CTX_LIVE)
++#define _TIF_LASX_CTX_LIVE	(1<<TIF_LASX_CTX_LIVE)
++
++#endif /* __KERNEL__ */
++#endif /* _ASM_THREAD_INFO_H */
+diff --git a/arch/loongarch/include/uapi/asm/ptrace.h b/arch/loongarch/include/uapi/asm/ptrace.h
+new file mode 100644
+index 000000000000..23685624b108
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/ptrace.h
+@@ -0,0 +1,50 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++/*
++ * Author: Hanlu Li <lihanlu@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _UAPI_ASM_PTRACE_H
++#define _UAPI_ASM_PTRACE_H
++
++#include <linux/types.h>
++
++#ifndef __KERNEL__
++#include <stdint.h>
++#endif
++
++/*
++ * For PTRACE_{POKE,PEEK}USR. 0 - 31 are GPRs,
++ * 32 is syscall's original ARG0, 33 is PC, 34 is BADVADDR.
++ */
++#define GPR_BASE	0
++#define GPR_NUM		32
++#define GPR_END		(GPR_BASE + GPR_NUM - 1)
++#define ARG0		(GPR_END + 1)
++#define PC		(GPR_END + 2)
++#define BADVADDR	(GPR_END + 3)
++
++#define NUM_FPU_REGS	32
++
++struct user_pt_regs {
++	/* Saved main processor registers. */
++	unsigned long regs[32];
++
++	/* Saved special registers. */
++	unsigned long orig_a0;
++	unsigned long csr_era;
++	unsigned long csr_badv;
++	unsigned long reserved[10];
++} __attribute__((aligned(8)));
++
++struct user_fp_state {
++	uint64_t    fpr[32];
++	uint64_t    fcc;
++	uint32_t    fcsr;
++};
++
++#define PTRACE_SYSEMU			0x1f
++#define PTRACE_SYSEMU_SINGLESTEP	0x20
++
++#endif /* _UAPI_ASM_PTRACE_H */
+diff --git a/arch/loongarch/kernel/fpu.S b/arch/loongarch/kernel/fpu.S
+new file mode 100644
+index 000000000000..7ff9b91043b1
+--- /dev/null
++++ b/arch/loongarch/kernel/fpu.S
+@@ -0,0 +1,264 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Author: Lu Zeng <zenglu@loongson.cn>
++ *         Pei Huang <huangpei@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#include <asm/asm.h>
++#include <asm/asmmacro.h>
++#include <asm/asm-offsets.h>
++#include <asm/errno.h>
++#include <asm/export.h>
++#include <asm/fpregdef.h>
++#include <asm/loongarch.h>
++#include <asm/regdef.h>
++
++#undef v0
++#undef v1
++
++#define FPU_REG_WIDTH		8
++#define LSX_REG_WIDTH		16
++#define LASX_REG_WIDTH		32
++
++	.macro	EX insn, reg, src, offs
++.ex\@:	\insn	\reg, \src, \offs
++	.section __ex_table,"a"
++	PTR	.ex\@, fault
++	.previous
++	.endm
++
++	.macro sc_save_fp base
++	EX	fst.d $f0,  \base, (0 * FPU_REG_WIDTH)
++	EX	fst.d $f1,  \base, (1 * FPU_REG_WIDTH)
++	EX	fst.d $f2,  \base, (2 * FPU_REG_WIDTH)
++	EX	fst.d $f3,  \base, (3 * FPU_REG_WIDTH)
++	EX	fst.d $f4,  \base, (4 * FPU_REG_WIDTH)
++	EX	fst.d $f5,  \base, (5 * FPU_REG_WIDTH)
++	EX	fst.d $f6,  \base, (6 * FPU_REG_WIDTH)
++	EX	fst.d $f7,  \base, (7 * FPU_REG_WIDTH)
++	EX	fst.d $f8,  \base, (8 * FPU_REG_WIDTH)
++	EX	fst.d $f9,  \base, (9 * FPU_REG_WIDTH)
++	EX	fst.d $f10, \base, (10 * FPU_REG_WIDTH)
++	EX	fst.d $f11, \base, (11 * FPU_REG_WIDTH)
++	EX	fst.d $f12, \base, (12 * FPU_REG_WIDTH)
++	EX	fst.d $f13, \base, (13 * FPU_REG_WIDTH)
++	EX	fst.d $f14, \base, (14 * FPU_REG_WIDTH)
++	EX	fst.d $f15, \base, (15 * FPU_REG_WIDTH)
++	EX	fst.d $f16, \base, (16 * FPU_REG_WIDTH)
++	EX	fst.d $f17, \base, (17 * FPU_REG_WIDTH)
++	EX	fst.d $f18, \base, (18 * FPU_REG_WIDTH)
++	EX	fst.d $f19, \base, (19 * FPU_REG_WIDTH)
++	EX	fst.d $f20, \base, (20 * FPU_REG_WIDTH)
++	EX	fst.d $f21, \base, (21 * FPU_REG_WIDTH)
++	EX	fst.d $f22, \base, (22 * FPU_REG_WIDTH)
++	EX	fst.d $f23, \base, (23 * FPU_REG_WIDTH)
++	EX	fst.d $f24, \base, (24 * FPU_REG_WIDTH)
++	EX	fst.d $f25, \base, (25 * FPU_REG_WIDTH)
++	EX	fst.d $f26, \base, (26 * FPU_REG_WIDTH)
++	EX	fst.d $f27, \base, (27 * FPU_REG_WIDTH)
++	EX	fst.d $f28, \base, (28 * FPU_REG_WIDTH)
++	EX	fst.d $f29, \base, (29 * FPU_REG_WIDTH)
++	EX	fst.d $f30, \base, (30 * FPU_REG_WIDTH)
++	EX	fst.d $f31, \base, (31 * FPU_REG_WIDTH)
++	.endm
++
++	.macro sc_restore_fp base
++	EX	fld.d $f0,  \base, (0 * FPU_REG_WIDTH)
++	EX	fld.d $f1,  \base, (1 * FPU_REG_WIDTH)
++	EX	fld.d $f2,  \base, (2 * FPU_REG_WIDTH)
++	EX	fld.d $f3,  \base, (3 * FPU_REG_WIDTH)
++	EX	fld.d $f4,  \base, (4 * FPU_REG_WIDTH)
++	EX	fld.d $f5,  \base, (5 * FPU_REG_WIDTH)
++	EX	fld.d $f6,  \base, (6 * FPU_REG_WIDTH)
++	EX	fld.d $f7,  \base, (7 * FPU_REG_WIDTH)
++	EX	fld.d $f8,  \base, (8 * FPU_REG_WIDTH)
++	EX	fld.d $f9,  \base, (9 * FPU_REG_WIDTH)
++	EX	fld.d $f10, \base, (10 * FPU_REG_WIDTH)
++	EX	fld.d $f11, \base, (11 * FPU_REG_WIDTH)
++	EX	fld.d $f12, \base, (12 * FPU_REG_WIDTH)
++	EX	fld.d $f13, \base, (13 * FPU_REG_WIDTH)
++	EX	fld.d $f14, \base, (14 * FPU_REG_WIDTH)
++	EX	fld.d $f15, \base, (15 * FPU_REG_WIDTH)
++	EX	fld.d $f16, \base, (16 * FPU_REG_WIDTH)
++	EX	fld.d $f17, \base, (17 * FPU_REG_WIDTH)
++	EX	fld.d $f18, \base, (18 * FPU_REG_WIDTH)
++	EX	fld.d $f19, \base, (19 * FPU_REG_WIDTH)
++	EX	fld.d $f20, \base, (20 * FPU_REG_WIDTH)
++	EX	fld.d $f21, \base, (21 * FPU_REG_WIDTH)
++	EX	fld.d $f22, \base, (22 * FPU_REG_WIDTH)
++	EX	fld.d $f23, \base, (23 * FPU_REG_WIDTH)
++	EX	fld.d $f24, \base, (24 * FPU_REG_WIDTH)
++	EX	fld.d $f25, \base, (25 * FPU_REG_WIDTH)
++	EX	fld.d $f26, \base, (26 * FPU_REG_WIDTH)
++	EX	fld.d $f27, \base, (27 * FPU_REG_WIDTH)
++	EX	fld.d $f28, \base, (28 * FPU_REG_WIDTH)
++	EX	fld.d $f29, \base, (29 * FPU_REG_WIDTH)
++	EX	fld.d $f30, \base, (30 * FPU_REG_WIDTH)
++	EX	fld.d $f31, \base, (31 * FPU_REG_WIDTH)
++	.endm
++
++	.macro sc_save_fcc base, tmp0, tmp1
++	movcf2gr	\tmp0, $fcc0
++	move	\tmp1, \tmp0
++	movcf2gr	\tmp0, $fcc1
++	bstrins.d	\tmp1, \tmp0, 15, 8
++	movcf2gr	\tmp0, $fcc2
++	bstrins.d	\tmp1, \tmp0, 23, 16
++	movcf2gr	\tmp0, $fcc3
++	bstrins.d	\tmp1, \tmp0, 31, 24
++	movcf2gr	\tmp0, $fcc4
++	bstrins.d	\tmp1, \tmp0, 39, 32
++	movcf2gr	\tmp0, $fcc5
++	bstrins.d	\tmp1, \tmp0, 47, 40
++	movcf2gr	\tmp0, $fcc6
++	bstrins.d	\tmp1, \tmp0, 55, 48
++	movcf2gr	\tmp0, $fcc7
++	bstrins.d	\tmp1, \tmp0, 63, 56
++	EX	st.d \tmp1, \base, 0
++	.endm
++
++	.macro sc_restore_fcc base, tmp0, tmp1
++	EX	ld.d \tmp0, \base, 0
++	bstrpick.d	\tmp1, \tmp0, 7, 0
++	movgr2cf	$fcc0, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 15, 8
++	movgr2cf	$fcc1, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 23, 16
++	movgr2cf	$fcc2, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 31, 24
++	movgr2cf	$fcc3, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 39, 32
++	movgr2cf	$fcc4, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 47, 40
++	movgr2cf	$fcc5, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 55, 48
++	movgr2cf	$fcc6, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 63, 56
++	movgr2cf	$fcc7, \tmp1
++	.endm
++
++	.macro sc_save_fcsr base, tmp0
++	movfcsr2gr	\tmp0, fcsr0
++	EX	st.w \tmp0, \base, 0
++	.endm
++
++	.macro sc_restore_fcsr base, tmp0
++	EX	ld.w \tmp0, \base, 0
++	movgr2fcsr	fcsr0, \tmp0
++	.endm
++
++	.macro sc_save_vcsr base, tmp0
++	movfcsr2gr	\tmp0, vcsr16
++	EX	st.w \tmp0, \base, 0
++	.endm
++
++	.macro sc_restore_vcsr base, tmp0
++	EX	ld.w \tmp0, \base, 0
++	movgr2fcsr	vcsr16, \tmp0
++	.endm
++
++/*
++ * Save a thread's fp context.
++ */
++SYM_FUNC_START(_save_fp)
++	fpu_save_csr	a0 t1
++	fpu_save_double a0 t1			# clobbers t1
++	fpu_save_cc	a0 t1 t2		# clobbers t1, t2
++	jirl zero, ra, 0
++SYM_FUNC_END(_save_fp)
++EXPORT_SYMBOL(_save_fp)
++
++/*
++ * Restore a thread's fp context.
++ */
++SYM_FUNC_START(_restore_fp)
++	fpu_restore_double a0 t1		# clobbers t1
++	fpu_restore_csr	a0 t1
++	fpu_restore_cc	a0 t1 t2		# clobbers t1, t2
++	jirl zero, ra, 0
++SYM_FUNC_END(_restore_fp)
++
++/*
++ * Load the FPU with signalling NANS.  This bit pattern we're using has
++ * the property that no matter whether considered as single or as double
++ * precision represents signaling NANS.
++ *
++ * The value to initialize fcsr0 to comes in $a0.
++ */
++
++SYM_FUNC_START(_init_fpu)
++	li.w	t1, CSR_EUEN_FPEN
++	csrxchg	t1, t1, LOONGARCH_CSR_EUEN
++
++	movgr2fcsr	fcsr0, a0
++
++	li.w	t1, -1				# SNaN
++
++	movgr2fr.d	$f0, t1
++	movgr2fr.d	$f1, t1
++	movgr2fr.d	$f2, t1
++	movgr2fr.d	$f3, t1
++	movgr2fr.d	$f4, t1
++	movgr2fr.d	$f5, t1
++	movgr2fr.d	$f6, t1
++	movgr2fr.d	$f7, t1
++	movgr2fr.d	$f8, t1
++	movgr2fr.d	$f9, t1
++	movgr2fr.d	$f10, t1
++	movgr2fr.d	$f11, t1
++	movgr2fr.d	$f12, t1
++	movgr2fr.d	$f13, t1
++	movgr2fr.d	$f14, t1
++	movgr2fr.d	$f15, t1
++	movgr2fr.d	$f16, t1
++	movgr2fr.d	$f17, t1
++	movgr2fr.d	$f18, t1
++	movgr2fr.d	$f19, t1
++	movgr2fr.d	$f20, t1
++	movgr2fr.d	$f21, t1
++	movgr2fr.d	$f22, t1
++	movgr2fr.d	$f23, t1
++	movgr2fr.d	$f24, t1
++	movgr2fr.d	$f25, t1
++	movgr2fr.d	$f26, t1
++	movgr2fr.d	$f27, t1
++	movgr2fr.d	$f28, t1
++	movgr2fr.d	$f29, t1
++	movgr2fr.d	$f30, t1
++	movgr2fr.d	$f31, t1
++
++	jirl zero, ra, 0
++SYM_FUNC_END(_init_fpu)
++
++/*
++ * a0: fpregs
++ * a1: fcc
++ * a2: fcsr
++ */
++SYM_FUNC_START(_save_fp_context)
++	sc_save_fcc a1 t1 t2
++	sc_save_fcsr a2 t1
++	sc_save_fp a0
++	li.w	a0, 0					# success
++	jirl zero, ra, 0
++SYM_FUNC_END(_save_fp_context)
++
++/*
++ * a0: fpregs
++ * a1: fcc
++ * a2: fcsr
++ */
++SYM_FUNC_START(_restore_fp_context)
++	sc_restore_fp a0
++	sc_restore_fcc a1 t1 t2
++	sc_restore_fcsr a2 t1
++	li.w	a0, 0					# success
++	jirl zero, ra, 0
++SYM_FUNC_END(_restore_fp_context)
++
++SYM_FUNC_START(fault)
++	li.w	a0, -EFAULT				# failure
++	jirl zero, ra, 0
++SYM_FUNC_END(fault)
+diff --git a/arch/loongarch/kernel/idle.c b/arch/loongarch/kernel/idle.c
+new file mode 100644
+index 000000000000..1a65d0527d25
+--- /dev/null
++++ b/arch/loongarch/kernel/idle.c
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * LoongArch idle loop support.
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#include <linux/cpu.h>
++#include <linux/irqflags.h>
++#include <asm/cpu.h>
++#include <asm/idle.h>
++
++void __cpuidle arch_cpu_idle(void)
++{
++	raw_local_irq_enable();
++	__arch_cpu_idle(); /* idle instruction needs irq enabled */
++}
+diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
+new file mode 100644
+index 000000000000..a7794d89e1ac
+--- /dev/null
++++ b/arch/loongarch/kernel/process.c
+@@ -0,0 +1,259 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Author: Huacai Chen <chenhuacai@loongson.cn>
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ *
++ * Derived from MIPS:
++ * Copyright (C) 1994 - 1999, 2000 by Ralf Baechle and others.
++ * Copyright (C) 2005, 2006 by Ralf Baechle (ralf@linux-mips.org)
++ * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
++ * Copyright (C) 2004 Thiemo Seufer
++ * Copyright (C) 2013  Imagination Technologies Ltd.
++ */
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/errno.h>
++#include <linux/sched.h>
++#include <linux/sched/debug.h>
++#include <linux/sched/task.h>
++#include <linux/sched/task_stack.h>
++#include <linux/mm.h>
++#include <linux/stddef.h>
++#include <linux/unistd.h>
++#include <linux/export.h>
++#include <linux/ptrace.h>
++#include <linux/mman.h>
++#include <linux/personality.h>
++#include <linux/sys.h>
++#include <linux/completion.h>
++#include <linux/kallsyms.h>
++#include <linux/random.h>
++#include <linux/prctl.h>
++#include <linux/nmi.h>
++
++#include <asm/asm.h>
++#include <asm/bootinfo.h>
++#include <asm/cpu.h>
++#include <asm/elf.h>
++#include <asm/fpu.h>
++#include <asm/io.h>
++#include <asm/irq.h>
++#include <asm/irq_regs.h>
++#include <asm/loongarch.h>
++#include <asm/pgtable.h>
++#include <asm/processor.h>
++#include <asm/reg.h>
++#include <asm/vdso.h>
++
++/*
++ * Idle related variables and functions
++ */
++
++unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
++EXPORT_SYMBOL(boot_option_idle_override);
++
++asmlinkage void ret_from_fork(void);
++asmlinkage void ret_from_kernel_thread(void);
++
++void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long sp)
++{
++	unsigned long crmd;
++	unsigned long prmd;
++	unsigned long euen;
++
++	/* New thread loses kernel privileges. */
++	crmd = regs->csr_crmd & ~(PLV_MASK);
++	crmd |= PLV_USER;
++	regs->csr_crmd = crmd;
++
++	prmd = regs->csr_prmd & ~(PLV_MASK);
++	prmd |= PLV_USER;
++	regs->csr_prmd = prmd;
++
++	euen = regs->csr_euen & ~(CSR_EUEN_FPEN);
++	regs->csr_euen = euen;
++	lose_fpu(0);
++
++	clear_thread_flag(TIF_LSX_CTX_LIVE);
++	clear_thread_flag(TIF_LASX_CTX_LIVE);
++	clear_used_math();
++	regs->csr_era = pc;
++	regs->regs[3] = sp;
++}
++
++void exit_thread(struct task_struct *tsk)
++{
++}
++
++int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
++{
++	/*
++	 * Save any process state which is live in hardware registers to the
++	 * parent context prior to duplication. This prevents the new child
++	 * state becoming stale if the parent is preempted before copy_thread()
++	 * gets a chance to save the parent's live hardware registers to the
++	 * child context.
++	 */
 +	preempt_disable();
-+	init_restore_fp();
++
++	if (is_fpu_owner())
++		save_fp(current);
++
 +	preempt_enable();
 +
-+	local_irq_disable();
-+	irqentry_exit(regs, state);
++	if (used_math())
++		memcpy(dst, src, sizeof(struct task_struct));
++	else
++		memcpy(dst, src, offsetof(struct task_struct, thread.fpu.fpr));
++
++	return 0;
 +}
 +
-+asmlinkage void noinstr do_lsx(struct pt_regs *regs)
++/*
++ * Copy architecture-specific thread state
++ */
++int copy_thread(unsigned long clone_flags, unsigned long usp,
++	unsigned long kthread_arg, struct task_struct *p, unsigned long tls)
 +{
-+	irqentry_state_t state = irqentry_enter(regs);
++	unsigned long childksp;
++	struct pt_regs *childregs, *regs = current_pt_regs();
 +
-+	local_irq_enable();
-+	force_sig(SIGILL);
-+	local_irq_disable();
++	childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE - 32;
 +
-+	irqentry_exit(regs, state);
-+}
++	/* set up new TSS. */
++	childregs = (struct pt_regs *) childksp - 1;
++	/*  Put the stack after the struct pt_regs.  */
++	childksp = (unsigned long) childregs;
++	p->thread.csr_euen = 0;
++	p->thread.csr_crmd = csr_readl(LOONGARCH_CSR_CRMD);
++	p->thread.csr_prmd = csr_readl(LOONGARCH_CSR_PRMD);
++	p->thread.csr_ecfg = csr_readl(LOONGARCH_CSR_ECFG);
++	if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
++		/* kernel thread */
++		p->thread.reg23 = usp; /* fn */
++		p->thread.reg24 = kthread_arg;
++		p->thread.reg03 = childksp;
++		p->thread.reg01 = (unsigned long) ret_from_kernel_thread;
++		memset(childregs, 0, sizeof(struct pt_regs));
++		childregs->csr_euen = p->thread.csr_euen;
++		childregs->csr_crmd = p->thread.csr_crmd;
++		childregs->csr_prmd = p->thread.csr_prmd;
++		childregs->csr_ecfg = p->thread.csr_ecfg;
++		return 0;
++	}
 +
-+asmlinkage void noinstr do_lasx(struct pt_regs *regs)
-+{
-+	irqentry_state_t state = irqentry_enter(regs);
++	/* user thread */
++	*childregs = *regs;
++	childregs->regs[4] = 0; /* Child gets zero as return value */
++	if (usp)
++		childregs->regs[3] = usp;
 +
-+	local_irq_enable();
-+	force_sig(SIGILL);
-+	local_irq_disable();
-+
-+	irqentry_exit(regs, state);
-+}
-+
-+asmlinkage void noinstr do_lbt(struct pt_regs *regs)
-+{
-+	irqentry_state_t state = irqentry_enter(regs);
-+
-+	local_irq_enable();
-+	force_sig(SIGILL);
-+	local_irq_disable();
-+
-+	irqentry_exit(regs, state);
-+}
-+
-+asmlinkage void noinstr do_reserved(struct pt_regs *regs)
-+{
-+	irqentry_state_t state = irqentry_enter(regs);
++	p->thread.reg03 = (unsigned long) childregs;
++	p->thread.reg01 = (unsigned long) ret_from_fork;
 +
 +	/*
-+	 * Game over - no way to handle this if it ever occurs.	 Most probably
-+	 * caused by a new unknown cpu type or after another deadly
-+	 * hard/software error.
++	 * New tasks lose permission to use the fpu. This accelerates context
++	 * switching for most programs since they don't use the fpu.
 +	 */
-+	local_irq_enable();
-+	show_regs(regs);
-+	panic("Caught reserved exception %u - should not happen.", read_csr_excode());
-+	local_irq_disable();
++	childregs->csr_euen = 0;
 +
-+	irqentry_exit(regs, state);
++	clear_tsk_thread_flag(p, TIF_USEDFPU);
++	clear_tsk_thread_flag(p, TIF_USEDSIMD);
++	clear_tsk_thread_flag(p, TIF_LSX_CTX_LIVE);
++	clear_tsk_thread_flag(p, TIF_LASX_CTX_LIVE);
++
++	if (clone_flags & CLONE_SETTLS)
++		childregs->regs[2] = tls;
++
++	return 0;
 +}
 +
-+asmlinkage void cache_parity_error(void)
++unsigned long __get_wchan(struct task_struct *task)
 +{
-+	const int field = 2 * sizeof(unsigned long);
-+	unsigned int reg_val;
++	return 0;
++}
 +
-+	/* For the moment, report the problem and hang. */
-+	pr_err("Cache error exception:\n");
-+	pr_err("csr_merrera == %0*llx\n", field, csr_readq(LOONGARCH_CSR_MERRERA));
-+	reg_val = csr_readl(LOONGARCH_CSR_MERRCTL);
-+	pr_err("csr_merrctl == %08x\n", reg_val);
++unsigned long stack_top(void)
++{
++	unsigned long top = TASK_SIZE & PAGE_MASK;
 +
-+	pr_err("Decoded c0_cacheerr: %s cache fault in %s reference.\n",
-+	       reg_val & (1<<30) ? "secondary" : "primary",
-+	       reg_val & (1<<31) ? "data" : "insn");
-+	if (((current_cpu_data.processor_id & 0xff0000) == PRID_COMP_LOONGSON)) {
-+		pr_err("Error bits: %s%s%s%s%s%s%s%s\n",
-+			reg_val & (1<<29) ? "ED " : "",
-+			reg_val & (1<<28) ? "ET " : "",
-+			reg_val & (1<<27) ? "ES " : "",
-+			reg_val & (1<<26) ? "EE " : "",
-+			reg_val & (1<<25) ? "EB " : "",
-+			reg_val & (1<<24) ? "EI " : "",
-+			reg_val & (1<<23) ? "E1 " : "",
-+			reg_val & (1<<22) ? "E0 " : "");
-+	} else {
-+		pr_err("Error bits: %s%s%s%s%s%s%s\n",
-+			reg_val & (1<<29) ? "ED " : "",
-+			reg_val & (1<<28) ? "ET " : "",
-+			reg_val & (1<<26) ? "EE " : "",
-+			reg_val & (1<<25) ? "EB " : "",
-+			reg_val & (1<<24) ? "EI " : "",
-+			reg_val & (1<<23) ? "E1 " : "",
-+			reg_val & (1<<22) ? "E0 " : "");
++	/* Space for the VDSO & data page */
++	top -= PAGE_ALIGN(current->thread.vdso->size);
++	top -= PAGE_SIZE;
++
++	/* Space to randomize the VDSO base */
++	if (current->flags & PF_RANDOMIZE)
++		top -= VDSO_RANDOMIZE_SIZE;
++
++	return top;
++}
++
++/*
++ * Don't forget that the stack pointer must be aligned on a 8 bytes
++ * boundary for 32-bits ABI and 16 bytes for 64-bits ABI.
++ */
++unsigned long arch_align_stack(unsigned long sp)
++{
++	if (!(current->personality & ADDR_NO_RANDOMIZE) && randomize_va_space)
++		sp -= get_random_int() & ~PAGE_MASK;
++
++	return sp & ALMASK;
++}
++
++static DEFINE_PER_CPU(call_single_data_t, backtrace_csd);
++static struct cpumask backtrace_csd_busy;
++
++static void handle_backtrace(void *info)
++{
++	nmi_cpu_backtrace(get_irq_regs());
++	cpumask_clear_cpu(smp_processor_id(), &backtrace_csd_busy);
++}
++
++static void raise_backtrace(cpumask_t *mask)
++{
++	call_single_data_t *csd;
++	int cpu;
++
++	for_each_cpu(cpu, mask) {
++		/*
++		 * If we previously sent an IPI to the target CPU & it hasn't
++		 * cleared its bit in the busy cpumask then it didn't handle
++		 * our previous IPI & it's not safe for us to reuse the
++		 * call_single_data_t.
++		 */
++		if (cpumask_test_and_set_cpu(cpu, &backtrace_csd_busy)) {
++			pr_warn("Unable to send backtrace IPI to CPU%u - perhaps it hung?\n",
++				cpu);
++			continue;
++		}
++
++		csd = &per_cpu(backtrace_csd, cpu);
++		csd->func = handle_backtrace;
++		smp_call_function_single_async(cpu, csd);
 +	}
-+	pr_err("IDX: 0x%08x\n", reg_val & ((1<<22)-1));
-+
-+	panic("Can't handle the cache error!");
 +}
 +
-+asmlinkage void noinstr handle_loongarch_irq(struct pt_regs *regs)
++void arch_trigger_cpumask_backtrace(const cpumask_t *mask, bool exclude_self)
 +{
-+	struct pt_regs *old_regs;
-+
-+	irq_enter_rcu();
-+	old_regs = set_irq_regs(regs);
-+	handle_arch_irq(regs);
-+	set_irq_regs(old_regs);
-+	irq_exit_rcu();
++	nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_backtrace);
 +}
 +
-+asmlinkage void noinstr do_vint(struct pt_regs *regs, unsigned long sp)
-+{
-+	register int cpu;
-+	register unsigned long stack;
-+	irqentry_state_t state = irqentry_enter(regs);
-+
-+	cpu = smp_processor_id();
-+
-+	if (on_irq_stack(cpu, sp))
-+		handle_loongarch_irq(regs);
-+	else {
-+		stack = per_cpu(irq_stack, cpu) + IRQ_STACK_START;
-+
-+		/* Save task's sp on IRQ stack for unwinding */
-+		*(unsigned long *)stack = sp;
-+
-+		__asm__ __volatile__(
-+		"move	$s0, $sp		\n" /* Preserve sp */
-+		"move	$sp, %[stk]		\n" /* Switch stack */
-+		"move	$a0, %[regs]		\n"
-+		"bl	handle_loongarch_irq	\n"
-+		"move	$sp, $s0		\n" /* Restore sp */
-+		: /* No outputs */
-+		: [stk] "r" (stack), [regs] "r" (regs)
-+		: "$a0", "$a1", "$a2", "$a3", "$a4", "$a5", "$a6", "$a7", "$s0",
-+		  "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7", "$t8",
-+		  "memory");
-+	}
-+
-+	irqentry_exit(regs, state);
-+}
-+
-+extern void tlb_init(void);
-+extern void cache_error_setup(void);
-+
-+unsigned long eentry;
-+EXPORT_SYMBOL_GPL(eentry);
-+unsigned long tlbrentry;
-+EXPORT_SYMBOL_GPL(tlbrentry);
-+
-+long exception_handlers[VECSIZE * 128 / sizeof(long)] __aligned(SZ_64K);
-+
-+static void configure_exception_vector(void)
-+{
-+	eentry    = (unsigned long)exception_handlers;
-+	tlbrentry = (unsigned long)exception_handlers + 80*VECSIZE;
-+
-+	csr_writeq(eentry, LOONGARCH_CSR_EENTRY);
-+	csr_writeq(eentry, LOONGARCH_CSR_MERRENTRY);
-+	csr_writeq(tlbrentry, LOONGARCH_CSR_TLBRENTRY);
-+}
-+
-+void per_cpu_trap_init(int cpu)
++#ifdef CONFIG_64BIT
++void loongarch_dump_regs64(u64 *uregs, const struct pt_regs *regs)
 +{
 +	unsigned int i;
 +
-+	setup_vint_size(VECSIZE);
++	for (i = LOONGARCH_EF_R1; i <= LOONGARCH_EF_R31; i++) {
++		uregs[i] = regs->regs[i - LOONGARCH_EF_R0];
++	}
 +
-+	configure_exception_vector();
-+
-+	if (!cpu_data[cpu].asid_cache)
-+		cpu_data[cpu].asid_cache = asid_first_version(cpu);
-+
-+	mmgrab(&init_mm);
-+	current->active_mm = &init_mm;
-+	BUG_ON(current->mm);
-+	enter_lazy_tlb(&init_mm, current);
-+
-+	/* Initialise exception handlers */
-+	if (cpu == 0)
-+		for (i = 0; i < 64; i++)
-+			set_handler(i * VECSIZE, handle_reserved, VECSIZE);
-+
-+	tlb_init();
-+	cpu_cache_init();
++	uregs[LOONGARCH_EF_CSR_ERA] = regs->csr_era;
++	uregs[LOONGARCH_EF_CSR_BADV] = regs->csr_badvaddr;
++	uregs[LOONGARCH_EF_CSR_CRMD] = regs->csr_crmd;
++	uregs[LOONGARCH_EF_CSR_PRMD] = regs->csr_prmd;
++	uregs[LOONGARCH_EF_CSR_EUEN] = regs->csr_euen;
++	uregs[LOONGARCH_EF_CSR_ECFG] = regs->csr_ecfg;
++	uregs[LOONGARCH_EF_CSR_ESTAT] = regs->csr_estat;
 +}
++#endif /* CONFIG_64BIT */
+diff --git a/arch/loongarch/kernel/ptrace.c b/arch/loongarch/kernel/ptrace.c
+new file mode 100644
+index 000000000000..40250fe9cc2d
+--- /dev/null
++++ b/arch/loongarch/kernel/ptrace.c
+@@ -0,0 +1,432 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Author: Hanlu Li <lihanlu@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ *
++ * Derived from MIPS:
++ * Copyright (C) 1992 Ross Biro
++ * Copyright (C) Linus Torvalds
++ * Copyright (C) 1994, 95, 96, 97, 98, 2000 Ralf Baechle
++ * Copyright (C) 1996 David S. Miller
++ * Kevin D. Kissell, kevink@mips.com and Carsten Langgaard, carstenl@mips.com
++ * Copyright (C) 1999 MIPS Technologies, Inc.
++ * Copyright (C) 2000 Ulf Carlsson
++ */
++#include <linux/kernel.h>
++#include <linux/audit.h>
++#include <linux/compiler.h>
++#include <linux/context_tracking.h>
++#include <linux/elf.h>
++#include <linux/errno.h>
++#include <linux/ftrace.h>
++#include <linux/mm.h>
++#include <linux/ptrace.h>
++#include <linux/regset.h>
++#include <linux/sched.h>
++#include <linux/sched/task_stack.h>
++#include <linux/security.h>
++#include <linux/smp.h>
++#include <linux/stddef.h>
++#include <linux/seccomp.h>
++#include <linux/tracehook.h>
++#include <linux/uaccess.h>
 +
-+/* Install CPU exception handler */
-+void set_handler(unsigned long offset, void *addr, unsigned long size)
++#include <asm/abidefs.h>
++#include <asm/byteorder.h>
++#include <asm/cpu.h>
++#include <asm/cpu-info.h>
++#include <asm/fpu.h>
++#include <asm/loongarch.h>
++#include <asm/page.h>
++#include <asm/pgtable.h>
++#include <asm/processor.h>
++#include <asm/syscall.h>
++#include <asm/reg.h>
++
++static void init_fp_ctx(struct task_struct *target)
 +{
-+	memcpy((void *)(eentry + offset), addr, size);
-+	local_flush_icache_range(eentry + offset, eentry + offset + size);
-+}
++	/* The target already has context */
++	if (tsk_used_math(target))
++		return;
 +
-+static const char panic_null_cerr[] =
-+	"Trying to set NULL cache error exception handler\n";
++	/* Begin with data registers set to all 1s... */
++	memset(&target->thread.fpu.fpr, ~0, sizeof(target->thread.fpu.fpr));
++	set_stopped_child_used_math(target);
++}
 +
 +/*
-+ * Install uncached CPU exception handler.
-+ * This is suitable only for the cache error exception which is the only
-+ * exception handler that is being run uncached.
++ * Called by kernel/ptrace.c when detaching..
++ *
++ * Make sure single step bits etc are not set.
 + */
-+void set_merr_handler(unsigned long offset, void *addr, unsigned long size)
++void ptrace_disable(struct task_struct *child)
 +{
-+	unsigned long uncached_eentry = TO_UNCAC(__pa(eentry));
-+
-+	if (!addr)
-+		panic(panic_null_cerr);
-+
-+	memcpy((void *)(uncached_eentry + offset), addr, size);
++	/* Don't load the watchpoint registers for the ex-child. */
++	clear_tsk_thread_flag(child, TIF_LOAD_WATCH);
 +}
 +
-+void __init trap_init(void)
++/* regset get/set implementations */
++
++static int gpr_get(struct task_struct *target,
++		   const struct user_regset *regset,
++		   struct membuf to)
 +{
-+	long i;
++	int r;
++	struct pt_regs *regs = task_pt_regs(target);
 +
-+	/* Set interrupt vector handler */
-+	for (i = EXCCODE_INT_START; i < EXCCODE_INT_END; i++)
-+		set_handler(i * VECSIZE, handle_vint, VECSIZE);
++	r = membuf_write(&to, &regs->regs, sizeof(u64) * GPR_NUM);
++	r = membuf_write(&to, &regs->orig_a0, sizeof(u64));
++	r = membuf_write(&to, &regs->csr_era, sizeof(u64));
++	r = membuf_write(&to, &regs->csr_badvaddr, sizeof(u64));
 +
-+	set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
-+	set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
-+	set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
-+	set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
-+	set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
-+	set_handler(EXCCODE_IPE * VECSIZE, handle_ri, VECSIZE);
-+	set_handler(EXCCODE_FPDIS * VECSIZE, handle_fpu, VECSIZE);
-+	set_handler(EXCCODE_LSXDIS * VECSIZE, handle_lsx, VECSIZE);
-+	set_handler(EXCCODE_LASXDIS * VECSIZE, handle_lasx, VECSIZE);
-+	set_handler(EXCCODE_FPE * VECSIZE, handle_fpe, VECSIZE);
-+	set_handler(EXCCODE_BTDIS * VECSIZE, handle_lbt, VECSIZE);
-+	set_handler(EXCCODE_WATCH * VECSIZE, handle_watch, VECSIZE);
-+
-+	cache_error_setup();
-+
-+	local_flush_icache_range(eentry, eentry + 0x400);
++	return r;
 +}
++
++static int gpr_set(struct task_struct *target,
++		   const struct user_regset *regset,
++		   unsigned int pos, unsigned int count,
++		   const void *kbuf, const void __user *ubuf)
++{
++	int err;
++	int a0_start = sizeof(u64) * GPR_NUM;
++	int era_start = a0_start + sizeof(u64);
++	int badvaddr_start = era_start + sizeof(u64);
++	struct pt_regs *regs = task_pt_regs(target);
++
++	err = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				 &regs->regs,
++				 0, a0_start);
++	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				 &regs->orig_a0,
++				 a0_start, a0_start + sizeof(u64));
++	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				 &regs->csr_era,
++				 era_start, era_start + sizeof(u64));
++	err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++				 &regs->csr_badvaddr,
++				 badvaddr_start, badvaddr_start + sizeof(u64));
++
++	return err;
++}
++
++
++/*
++ * Get the general floating-point registers.
++ */
++static int gfpr_get(struct task_struct *target, struct membuf *to)
++{
++	return membuf_write(to, &target->thread.fpu.fpr,
++			    sizeof(elf_fpreg_t) * NUM_FPU_REGS);
++}
++
++static int gfpr_get_simd(struct task_struct *target, struct membuf *to)
++{
++	int i, r;
++	u64 fpr_val;
++
++	BUILD_BUG_ON(sizeof(fpr_val) != sizeof(elf_fpreg_t));
++	for (i = 0; i < NUM_FPU_REGS; i++) {
++		fpr_val = get_fpr64(&target->thread.fpu.fpr[i], 0);
++		r = membuf_write(to, &fpr_val, sizeof(elf_fpreg_t));
++	}
++
++	return r;
++}
++
++/*
++ * Choose the appropriate helper for general registers, and then copy
++ * the FCC and FCSR registers separately.
++ */
++static int fpr_get(struct task_struct *target,
++		   const struct user_regset *regset,
++		   struct membuf to)
++{
++	int r;
++
++	if (sizeof(target->thread.fpu.fpr[0]) == sizeof(elf_fpreg_t))
++		r = gfpr_get(target, &to);
++	else
++		r = gfpr_get_simd(target, &to);
++
++	r = membuf_write(&to, &target->thread.fpu.fcc, sizeof(target->thread.fpu.fcc));
++	r = membuf_write(&to, &target->thread.fpu.fcsr, sizeof(target->thread.fpu.fcsr));
++
++	return r;
++}
++
++static int gfpr_set(struct task_struct *target,
++		    unsigned int *pos, unsigned int *count,
++		    const void **kbuf, const void __user **ubuf)
++{
++	return user_regset_copyin(pos, count, kbuf, ubuf,
++				  &target->thread.fpu.fpr,
++				  0, NUM_FPU_REGS * sizeof(elf_fpreg_t));
++}
++
++static int gfpr_set_simd(struct task_struct *target,
++		       unsigned int *pos, unsigned int *count,
++		       const void **kbuf, const void __user **ubuf)
++{
++	int i, err;
++	u64 fpr_val;
++
++	BUILD_BUG_ON(sizeof(fpr_val) != sizeof(elf_fpreg_t));
++	for (i = 0; i < NUM_FPU_REGS && *count > 0; i++) {
++		err = user_regset_copyin(pos, count, kbuf, ubuf,
++					 &fpr_val, i * sizeof(elf_fpreg_t),
++					 (i + 1) * sizeof(elf_fpreg_t));
++		if (err)
++			return err;
++		set_fpr64(&target->thread.fpu.fpr[i], 0, fpr_val);
++	}
++
++	return 0;
++}
++
++/*
++ * Choose the appropriate helper for general registers, and then copy
++ * the FCC register separately.
++ */
++static int fpr_set(struct task_struct *target,
++		   const struct user_regset *regset,
++		   unsigned int pos, unsigned int count,
++		   const void *kbuf, const void __user *ubuf)
++{
++	const int fcc_start = NUM_FPU_REGS * sizeof(elf_fpreg_t);
++	const int fcc_end = fcc_start + sizeof(u64);
++	int err;
++
++	BUG_ON(count % sizeof(elf_fpreg_t));
++	if (pos + count > sizeof(elf_fpregset_t))
++		return -EIO;
++
++	init_fp_ctx(target);
++
++	if (sizeof(target->thread.fpu.fpr[0]) == sizeof(elf_fpreg_t))
++		err = gfpr_set(target, &pos, &count, &kbuf, &ubuf);
++	else
++		err = gfpr_set_simd(target, &pos, &count, &kbuf, &ubuf);
++	if (err)
++		return err;
++
++	if (count > 0)
++		err |= user_regset_copyin(&pos, &count, &kbuf, &ubuf,
++					  &target->thread.fpu.fcc,
++					  fcc_start, fcc_end);
++
++	return err;
++}
++
++static int cfg_get(struct task_struct *target,
++		   const struct user_regset *regset,
++		   struct membuf to)
++{
++	int i, r;
++	u32 cfg_val;
++
++	i = 0;
++	while (to.left > 0) {
++		cfg_val = read_cpucfg(i++);
++		r = membuf_write(&to, &cfg_val, sizeof(u32));
++	}
++
++	return r;
++}
++
++/*
++ * CFG registers are read-only.
++ */
++static int cfg_set(struct task_struct *target,
++		   const struct user_regset *regset,
++		   unsigned int pos, unsigned int count,
++		   const void *kbuf, const void __user *ubuf)
++{
++	return 0;
++}
++
++struct pt_regs_offset {
++	const char *name;
++	int offset;
++};
++
++#define REG_OFFSET_NAME(n, r) {.name = #n, .offset = offsetof(struct pt_regs, r)}
++#define REG_OFFSET_END {.name = NULL, .offset = 0}
++
++static const struct pt_regs_offset regoffset_table[] = {
++	REG_OFFSET_NAME(r0, regs[0]),
++	REG_OFFSET_NAME(r1, regs[1]),
++	REG_OFFSET_NAME(r2, regs[2]),
++	REG_OFFSET_NAME(r3, regs[3]),
++	REG_OFFSET_NAME(r4, regs[4]),
++	REG_OFFSET_NAME(r5, regs[5]),
++	REG_OFFSET_NAME(r6, regs[6]),
++	REG_OFFSET_NAME(r7, regs[7]),
++	REG_OFFSET_NAME(r8, regs[8]),
++	REG_OFFSET_NAME(r9, regs[9]),
++	REG_OFFSET_NAME(r10, regs[10]),
++	REG_OFFSET_NAME(r11, regs[11]),
++	REG_OFFSET_NAME(r12, regs[12]),
++	REG_OFFSET_NAME(r13, regs[13]),
++	REG_OFFSET_NAME(r14, regs[14]),
++	REG_OFFSET_NAME(r15, regs[15]),
++	REG_OFFSET_NAME(r16, regs[16]),
++	REG_OFFSET_NAME(r17, regs[17]),
++	REG_OFFSET_NAME(r18, regs[18]),
++	REG_OFFSET_NAME(r19, regs[19]),
++	REG_OFFSET_NAME(r20, regs[20]),
++	REG_OFFSET_NAME(r21, regs[21]),
++	REG_OFFSET_NAME(r22, regs[22]),
++	REG_OFFSET_NAME(r23, regs[23]),
++	REG_OFFSET_NAME(r24, regs[24]),
++	REG_OFFSET_NAME(r25, regs[25]),
++	REG_OFFSET_NAME(r26, regs[26]),
++	REG_OFFSET_NAME(r27, regs[27]),
++	REG_OFFSET_NAME(r28, regs[28]),
++	REG_OFFSET_NAME(r29, regs[29]),
++	REG_OFFSET_NAME(r30, regs[30]),
++	REG_OFFSET_NAME(r31, regs[31]),
++	REG_OFFSET_NAME(csr_era, csr_era),
++	REG_OFFSET_NAME(csr_badvaddr, csr_badvaddr),
++	REG_OFFSET_NAME(csr_crmd, csr_crmd),
++	REG_OFFSET_NAME(csr_prmd, csr_prmd),
++	REG_OFFSET_NAME(csr_euen, csr_euen),
++	REG_OFFSET_NAME(csr_ecfg, csr_ecfg),
++	REG_OFFSET_NAME(csr_estat, csr_estat),
++	REG_OFFSET_END,
++};
++
++/**
++ * regs_query_register_offset() - query register offset from its name
++ * @name:       the name of a register
++ *
++ * regs_query_register_offset() returns the offset of a register in struct
++ * pt_regs from its name. If the name is invalid, this returns -EINVAL;
++ */
++int regs_query_register_offset(const char *name)
++{
++	const struct pt_regs_offset *roff;
++
++	for (roff = regoffset_table; roff->name != NULL; roff++)
++		if (!strcmp(roff->name, name))
++			return roff->offset;
++	return -EINVAL;
++}
++
++enum loongarch_regset {
++	REGSET_GPR,
++	REGSET_FPR,
++	REGSET_CPUCFG,
++};
++
++static const struct user_regset loongarch64_regsets[] = {
++	[REGSET_GPR] = {
++		.core_note_type	= NT_PRSTATUS,
++		.n		= ELF_NGREG,
++		.size		= sizeof(elf_greg_t),
++		.align		= sizeof(elf_greg_t),
++		.regset_get	= gpr_get,
++		.set		= gpr_set,
++	},
++	[REGSET_FPR] = {
++		.core_note_type	= NT_PRFPREG,
++		.n		= ELF_NFPREG,
++		.size		= sizeof(elf_fpreg_t),
++		.align		= sizeof(elf_fpreg_t),
++		.regset_get	= fpr_get,
++		.set		= fpr_set,
++	},
++	[REGSET_CPUCFG] = {
++		.core_note_type	= NT_LOONGARCH_CPUCFG,
++		.n		= 64,
++		.size		= sizeof(u32),
++		.align		= sizeof(u32),
++		.regset_get	= cfg_get,
++		.set		= cfg_set,
++	},
++};
++
++static const struct user_regset_view user_loongarch64_view = {
++	.name		= "loongarch64",
++	.e_machine	= ELF_ARCH,
++	.regsets	= loongarch64_regsets,
++	.n		= ARRAY_SIZE(loongarch64_regsets),
++};
++
++
++const struct user_regset_view *task_user_regset_view(struct task_struct *task)
++{
++	return &user_loongarch64_view;
++}
++
++static inline int read_user(struct task_struct *target, unsigned long addr,
++			    unsigned long __user *data)
++{
++	unsigned long tmp = 0;
++
++	switch (addr) {
++	case 0 ... 31:
++		tmp = task_pt_regs(target)->regs[addr];
++		break;
++	case ARG0:
++		tmp = task_pt_regs(target)->orig_a0;
++		break;
++	case PC:
++		tmp = task_pt_regs(target)->csr_era;
++		break;
++	case BADVADDR:
++		tmp = task_pt_regs(target)->csr_badvaddr;
++		break;
++	default:
++		return -EIO;
++	}
++
++	return put_user(tmp, data);
++}
++
++static inline int write_user(struct task_struct *target, unsigned long addr,
++			    unsigned long data)
++{
++	switch (addr) {
++	case 0 ... 31:
++		task_pt_regs(target)->regs[addr] = data;
++		break;
++	case ARG0:
++		task_pt_regs(target)->orig_a0 = data;
++		break;
++	case PC:
++		task_pt_regs(target)->csr_era = data;
++		break;
++	case BADVADDR:
++		task_pt_regs(target)->csr_badvaddr = data;
++		break;
++	default:
++		return -EIO;
++	}
++
++	return 0;
++}
++
++long arch_ptrace(struct task_struct *child, long request,
++		 unsigned long addr, unsigned long data)
++{
++	int ret;
++	unsigned long __user *datap = (void __user *) data;
++
++	switch (request) {
++	case PTRACE_PEEKUSR:
++		ret = read_user(child, addr, datap);
++		break;
++
++	case PTRACE_POKEUSR:
++		ret = write_user(child, addr, data);
++		break;
++
++	default:
++		ret = ptrace_request(child, request, addr, data);
++		break;
++	}
++
++	return ret;
++}
+diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switch.S
+new file mode 100644
+index 000000000000..b864fde4a808
+--- /dev/null
++++ b/arch/loongarch/kernel/switch.S
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#include <asm/asm.h>
++#include <asm/asmmacro.h>
++#include <asm/asm-offsets.h>
++#include <asm/loongarch.h>
++#include <asm/regdef.h>
++#include <asm/stackframe.h>
++#include <asm/thread_info.h>
++
++/*
++ * task_struct *__switch_to(task_struct *prev, task_struct *next,
++ *			    struct thread_info *next_ti)
++ */
++	.align	5
++SYM_FUNC_START(__switch_to)
++	csrrd	t1, LOONGARCH_CSR_PRMD
++	stptr.d	t1, a0, THREAD_CSRPRMD
++
++	cpu_save_nonscratch a0
++	stptr.d	ra, a0, THREAD_REG01
++	move	tp, a2
++	cpu_restore_nonscratch a1
++
++	li.w	t0, _THREAD_SIZE - 32
++	PTR_ADDU	t0, t0, tp
++	set_saved_sp	t0, t1, t2
++
++	ldptr.d	t1, a1, THREAD_CSRPRMD
++	csrwr	t1, LOONGARCH_CSR_PRMD
++
++	jr	ra
++SYM_FUNC_END(__switch_to)
 -- 
 2.27.0
 
