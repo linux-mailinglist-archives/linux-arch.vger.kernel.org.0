@@ -2,46 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A974C5A20
-	for <lists+linux-arch@lfdr.de>; Sun, 27 Feb 2022 10:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E31FB4C5AA6
+	for <lists+linux-arch@lfdr.de>; Sun, 27 Feb 2022 12:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiB0JLp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 27 Feb 2022 04:11:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
+        id S230238AbiB0LjG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 27 Feb 2022 06:39:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiB0JLp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 27 Feb 2022 04:11:45 -0500
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B48D6D4EF;
-        Sun, 27 Feb 2022 01:11:08 -0800 (PST)
-Received: from grover.. (133-32-176-37.west.xps.vectant.ne.jp [133.32.176.37]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 21R9AVvT024355;
-        Sun, 27 Feb 2022 18:10:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 21R9AVvT024355
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1645953032;
-        bh=mOcLKSAIGUfePOBI6By4Xw9RDNdqliYg+gQKo6ayREY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=u+OvsUi5UrQcZL572ybd+7hoT1bMDmH6vZCZMl7d/dSHUCB8gnkUT5iXVqWOsQCmv
-         kXFe2PPQoGZCTklE8bLQQC5X2TgRWZscIdXVkDrETRYUrS44wNSAhJgdK/ILeOixzZ
-         cqsKhVo+1Qra14yEgasbuYbFBbxSAmpvHL29pgBZRb5rlgGi3IylwEbcs2dXaz0mMv
-         de7jmBlljwOlnmMd9L0qNAZrqcP+ExeqNsSvZzMDl1EBfBFBHvW7rSJ7D98Uawdd51
-         z1jlewjTPSYY1rF4vaNJqVH+DBexY/1KaMHupMUavXnlKjwl68mMR+ymG1xxRE3Vn5
-         0aJ5XjGeyOx6Q==
-X-Nifty-SrcIP: [133.32.176.37]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] arch: syscalls: simplify uapi/kapi directory creation
-Date:   Sun, 27 Feb 2022 18:10:24 +0900
-Message-Id: <20220227091024.207786-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
+        with ESMTP id S230237AbiB0LjF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 27 Feb 2022 06:39:05 -0500
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12DF222B18;
+        Sun, 27 Feb 2022 03:38:26 -0800 (PST)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 21RBWpjr023197;
+        Sun, 27 Feb 2022 05:32:51 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 21RBWjtP023189;
+        Sun, 27 Feb 2022 05:32:45 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Sun, 27 Feb 2022 05:32:45 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator after the loop
+Message-ID: <20220227113245.GY614@gate.crashing.org>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com> <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com> <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com> <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com> <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com> <20220227010956.GW614@gate.crashing.org> <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,208 +57,80 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-$(shell ...) expands to empty. There is no need to assign it to _dummy.
+On Sun, Feb 27, 2022 at 07:10:45AM +0000, David Laight wrote:
+> From: Segher Boessenkool
+> > Sent: 27 February 2022 01:10
+> > On Sat, Feb 26, 2022 at 11:14:15PM +0100, Arnd Bergmann wrote:
+> > > On Sat, Feb 26, 2022 at 1:42 PM Segher Boessenkool
+> > > <segher@kernel.crashing.org> wrote:
+> > > > The only reason the warning exists is because it is undefined behaviour
+> > > > (not implementation-defined or anything).  The reason it is that in the
+> > > > standard is that it is hard to implement and even describe for machines
+> > > > that are not two's complement.  However relevant that is today :-)
+> 
+> I thought only right shifts of negative values were 'undefined'.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+All shifts by a negative amount, or an amount greater or equal to the
+width of the first operand (after the integer promotions).
 
- arch/alpha/kernel/syscalls/Makefile      | 3 +--
- arch/arm/tools/Makefile                  | 3 +--
- arch/ia64/kernel/syscalls/Makefile       | 3 +--
- arch/m68k/kernel/syscalls/Makefile       | 3 +--
- arch/microblaze/kernel/syscalls/Makefile | 3 +--
- arch/mips/kernel/syscalls/Makefile       | 3 +--
- arch/parisc/kernel/syscalls/Makefile     | 3 +--
- arch/powerpc/kernel/syscalls/Makefile    | 3 +--
- arch/s390/kernel/syscalls/Makefile       | 3 +--
- arch/sh/kernel/syscalls/Makefile         | 3 +--
- arch/sparc/kernel/syscalls/Makefile      | 3 +--
- arch/x86/entry/syscalls/Makefile         | 3 +--
- arch/xtensa/kernel/syscalls/Makefile     | 3 +--
- 13 files changed, 13 insertions(+), 26 deletions(-)
+Right shifts of a negative value.
 
-diff --git a/arch/alpha/kernel/syscalls/Makefile b/arch/alpha/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/alpha/kernel/syscalls/Makefile
-+++ b/arch/alpha/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/arm/tools/Makefile b/arch/arm/tools/Makefile
-index 4a5c50f67ced..81f13bdf32f2 100644
---- a/arch/arm/tools/Makefile
-+++ b/arch/arm/tools/Makefile
-@@ -29,8 +29,7 @@ kapi:	$(kapi-hdrs-y) $(gen-y)
- uapi:	$(uapi-hdrs-y)
- 
- # Create output directory if not already present
--_dummy := $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)') \
--          $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')
-+$(shell mkdir -p $(kapi) $(uapi))
- 
- quiet_cmd_gen_mach = GEN     $@
-       cmd_gen_mach = $(AWK) -f $(real-prereqs) > $@
-diff --git a/arch/ia64/kernel/syscalls/Makefile b/arch/ia64/kernel/syscalls/Makefile
-index 14f40ecf8b65..d009f927a048 100644
---- a/arch/ia64/kernel/syscalls/Makefile
-+++ b/arch/ia64/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/m68k/kernel/syscalls/Makefile b/arch/m68k/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/m68k/kernel/syscalls/Makefile
-+++ b/arch/m68k/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/microblaze/kernel/syscalls/Makefile b/arch/microblaze/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/microblaze/kernel/syscalls/Makefile
-+++ b/arch/microblaze/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/mips/kernel/syscalls/Makefile b/arch/mips/kernel/syscalls/Makefile
-index 10bf90dc02c0..e6b21de65cca 100644
---- a/arch/mips/kernel/syscalls/Makefile
-+++ b/arch/mips/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syshdr := $(srctree)/scripts/syscallhdr.sh
- sysnr := $(srctree)/$(src)/syscallnr.sh
-diff --git a/arch/parisc/kernel/syscalls/Makefile b/arch/parisc/kernel/syscalls/Makefile
-index d63f18dd058d..8440c16dfb22 100644
---- a/arch/parisc/kernel/syscalls/Makefile
-+++ b/arch/parisc/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/powerpc/kernel/syscalls/Makefile b/arch/powerpc/kernel/syscalls/Makefile
-index 5476f62eb80f..9d7bd81510b8 100644
---- a/arch/powerpc/kernel/syscalls/Makefile
-+++ b/arch/powerpc/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/s390/kernel/syscalls/Makefile b/arch/s390/kernel/syscalls/Makefile
-index b98f25029b8e..fb85e797946d 100644
---- a/arch/s390/kernel/syscalls/Makefile
-+++ b/arch/s390/kernel/syscalls/Makefile
-@@ -21,8 +21,7 @@ uapi:	$(uapi-hdrs-y)
- 
- 
- # Create output directory if not already present
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)') \
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- filechk_syshdr = $(CONFIG_SHELL) '$(systbl)' -H -a $(syshdr_abi_$(basetarget)) -f "$2" < $<
- 
-diff --git a/arch/sh/kernel/syscalls/Makefile b/arch/sh/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/sh/kernel/syscalls/Makefile
-+++ b/arch/sh/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/sparc/kernel/syscalls/Makefile b/arch/sparc/kernel/syscalls/Makefile
-index d63f18dd058d..8440c16dfb22 100644
---- a/arch/sparc/kernel/syscalls/Makefile
-+++ b/arch/sparc/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
-diff --git a/arch/x86/entry/syscalls/Makefile b/arch/x86/entry/syscalls/Makefile
-index 5b3efed0e4e8..9104039cd8f2 100644
---- a/arch/x86/entry/syscalls/Makefile
-+++ b/arch/x86/entry/syscalls/Makefile
-@@ -3,8 +3,7 @@ out := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
- # Create output directory if not already present
--_dummy := $(shell [ -d '$(out)' ] || mkdir -p '$(out)') \
--	  $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')
-+$(shell mkdir -p $(out) $(uapi))
- 
- syscall32 := $(src)/syscall_32.tbl
- syscall64 := $(src)/syscall_64.tbl
-diff --git a/arch/xtensa/kernel/syscalls/Makefile b/arch/xtensa/kernel/syscalls/Makefile
-index 6713c65a25e1..b265e4bc16c2 100644
---- a/arch/xtensa/kernel/syscalls/Makefile
-+++ b/arch/xtensa/kernel/syscalls/Makefile
-@@ -2,8 +2,7 @@
- kapi := arch/$(SRCARCH)/include/generated/asm
- uapi := arch/$(SRCARCH)/include/generated/uapi/asm
- 
--_dummy := $(shell [ -d '$(uapi)' ] || mkdir -p '$(uapi)')	\
--	  $(shell [ -d '$(kapi)' ] || mkdir -p '$(kapi)')
-+$(shell mkdir -p $(uapi) $(kapi))
- 
- syscall := $(src)/syscall.tbl
- syshdr := $(srctree)/scripts/syscallhdr.sh
--- 
-2.32.0
+Left shifts of a negative value where E1*2**E2 is not expressable in the
+result type.
 
+C90 (aka C89) had those right shifts merely implementation-defined
+behaviour, and the left shifts perfectly well-defined.
+
+> And that was to allow cpu that only had logical shift right
+> (ie ones that didn't propagate the sign) to be conformant.
+
+The C99 rationale says
+  The C89 Committee affirmed the freedom in implementation granted by
+  K&R in not requiring the signed right shift operation to sign extend,
+  since such a requirement might slow down fast code and since the
+  usefulness of sign extended shifts is marginal. (Shifting a negative
+  two’s-complement integer arithmetically right one place is not the
+  same as dividing by two!)
+
+> I wonder when the last cpu like that was?
+
+There still are one-off cores without such an instruction.  If you have
+right shifts at all (if you have shifts at all!) it quickly becomes
+apparent what a hassle it is not to have an SRA/ASR/SAR instruction, and
+it is easy to implement, so :-)
+
+The last widely spread ones' complement machine was the 6600 I guess,
+which disappeared somewhere in the 80's.  Sign-magnitude machines are
+still made: all FP is like that, and some (simple, embedded, etc.)
+machines have no separate integer register set.  C is available for most
+such fringe CPUs :-)
+
+> Quite why the standards keeps using the term 'undefined behaviour'
+> beats me - there ought to be something for 'undefined value'.
+
+It is pretty much impossible to not have *some* undefined behaviour.
+How will you define dividing by zero so that its behaviour is reasonable
+for every program, for example?  Invoking an error handler at runtime
+has most of the same unwanted effects, except is is never silent.  You
+can get that via UBSAN for example.  Defining some arbitrary value as
+the "correct" answer when that is not at all obvious *does* give silent,
+unexpected results.
+
+C does have "unspecified value"s and "unspecified behaviour".  It
+requires the implementation to document the choice made here.  At least
+some effort was made not to have undefined behaviour everywhere.
+
+Perhaps C does have the concept you are after in 6.3.2/2, where it talks
+about using uninitialised objects?  Of course, using an uninitialised
+object is undefined behaviour :-P
+
+C has much more undefined behaviours than most other languages.  On one
+hand there was no clear, formal definition of the language (and
+testsuites for it etc.) before it became popular.  On the other hand, it
+was implemented on widely different architectures, back in the days when
+there was a lot more variety in implementation choices than there is
+now.  When the language was standardised (and all the way to this day)
+the sentiment was to not unnecessarily break existing implementations.
+
+
+Segher
