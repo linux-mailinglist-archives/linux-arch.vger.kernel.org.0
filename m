@@ -2,73 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42B44C5EF6
-	for <lists+linux-arch@lfdr.de>; Sun, 27 Feb 2022 22:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 575414C5F12
+	for <lists+linux-arch@lfdr.de>; Sun, 27 Feb 2022 22:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiB0VGI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 27 Feb 2022 16:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S230300AbiB0V3h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 27 Feb 2022 16:29:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiB0VFr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 27 Feb 2022 16:05:47 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187F828E02
-        for <linux-arch@vger.kernel.org>; Sun, 27 Feb 2022 13:05:09 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id o6so14807417ljp.3
-        for <linux-arch@vger.kernel.org>; Sun, 27 Feb 2022 13:05:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eSHr3nTbnOhAHHvD9gcRuzb7Z+l/28mCvr6FBYKx3Jg=;
-        b=cz5eFf016k8zCL008IYZ3R+cQOb1ZLSrvaH9TuTcK33seJTFNea2L6f1v/f6Q3Jdy5
-         NFzHYU5pSElShwGf1W+/92sNTVXqYzefCxivdNt4eI+wHqItKzpbafgD6tz2sVbC8Sed
-         xc12WaBJOXbs9pLvKFyf1hV8Upui8mPhoKcY4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eSHr3nTbnOhAHHvD9gcRuzb7Z+l/28mCvr6FBYKx3Jg=;
-        b=N6gsoxt/m2K5/Jfx/vkuwVn4QNDanedWIwDhC8tepbmq8uOtRuE6k9wXKXumd/Exy3
-         vfV8/GbSUid3u65UO4G6a9Ji68OXhoV9rrUcFEtVogz/NAwxTEMe0DY6YymC5XmTu+uv
-         RZx9iDdMVE960XC9Pt5LjqIs9pVvMUeDaCH58kDnXhShwtoc9cAc2R505jlx/q+7dGxV
-         i2q8jGj1AxtpKWgwtPHS+FYhlZwd0oAYqX/5bnDkdbaJb3MIKXK1+7KhAvwMK86jCu5c
-         Qi8fY6rE8L5LYY8xJslTquCETMwZfVxX6fra15D/epDA4AzQGd+BS4gkLNWu20l6LNxJ
-         UNWg==
-X-Gm-Message-State: AOAM530RNfvDnaOoHW6Ka9ZINZgfGWDscnK6pFR1qOVJsAmHCr28isTY
-        UcmTmEv35gw782SOluKtQU5EmjIx1AHbBA9KBmk=
-X-Google-Smtp-Source: ABdhPJyvEyToDkhpWeueVGIMnzWCJPloGxteo4ssrH8Wjj+DDZk0XmidYQmoRr3G+jCYRJiUQqtI/A==
-X-Received: by 2002:a05:651c:307:b0:23b:1de6:5376 with SMTP id a7-20020a05651c030700b0023b1de65376mr12035203ljp.261.1645995907088;
-        Sun, 27 Feb 2022 13:05:07 -0800 (PST)
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
-        by smtp.gmail.com with ESMTPSA id p9-20020a19f109000000b00443a79313a8sm732306lfh.271.2022.02.27.13.05.04
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 13:05:05 -0800 (PST)
-Received: by mail-lj1-f180.google.com with SMTP id v22so14805339ljh.7
-        for <linux-arch@vger.kernel.org>; Sun, 27 Feb 2022 13:05:04 -0800 (PST)
-X-Received: by 2002:a2e:924d:0:b0:246:370c:5618 with SMTP id
- v13-20020a2e924d000000b00246370c5618mr12174195ljg.358.1645995904456; Sun, 27
- Feb 2022 13:05:04 -0800 (PST)
+        with ESMTP id S229549AbiB0V3h (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 27 Feb 2022 16:29:37 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F584BFDB;
+        Sun, 27 Feb 2022 13:28:59 -0800 (PST)
+Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MaIvV-1nlAWC1tuH-00WHCz; Sun, 27 Feb 2022 22:28:57 +0100
+Received: by mail-wm1-f52.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so4764783wmj.0;
+        Sun, 27 Feb 2022 13:28:57 -0800 (PST)
+X-Gm-Message-State: AOAM532Yh0EM/vUi3XrRrspMDFAX2SaJ5rv7tdetecnYVjti06tDdWFO
+        SH4Tvha2ueTqxdoi4bWFQM5ZpyECPT48oZb8Ix0=
+X-Google-Smtp-Source: ABdhPJzPpJK3kNFeFtCRMNEMS0Me6SFTBXzOWyPSNiCvLYylg14xxS+eF0Aj0iTsHF8iMxcR3IMA0ji5lT283orHBm0=
+X-Received: by 2002:a05:600c:4f8e:b0:381:6de4:fccc with SMTP id
+ n14-20020a05600c4f8e00b003816de4fcccmr442954wmq.82.1645997337125; Sun, 27 Feb
+ 2022 13:28:57 -0800 (PST)
 MIME-Version: 1.0
-References: <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+References: <20220217184829.1991035-1-jakobkoschel@gmail.com>
+ <20220217184829.1991035-4-jakobkoschel@gmail.com> <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
  <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com> <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
  <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
  <20220226124249.GU614@gate.crashing.org> <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
- <20220227010956.GW614@gate.crashing.org> <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
- <20220227113245.GY614@gate.crashing.org> <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
- <20220227201724.GZ614@gate.crashing.org>
-In-Reply-To: <20220227201724.GZ614@gate.crashing.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 27 Feb 2022 13:04:48 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wijh=SQ_9_-H6O08HgmXrWz37_vcdm55oECo+31LUs2EQ@mail.gmail.com>
-Message-ID: <CAHk-=wijh=SQ_9_-H6O08HgmXrWz37_vcdm55oECo+31LUs2EQ@mail.gmail.com>
+ <20220227010956.GW614@gate.crashing.org>
+In-Reply-To: <20220227010956.GW614@gate.crashing.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 27 Feb 2022 22:28:41 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2bocgetbPQzy5xWhnW=mOdGynp_pWrPt6KeVTkEfEwKg@mail.gmail.com>
+Message-ID: <CAK8P3a2bocgetbPQzy5xWhnW=mOdGynp_pWrPt6KeVTkEfEwKg@mail.gmail.com>
 Subject: Re: [RFC PATCH 03/13] usb: remove the usage of the list iterator
  after the loop
 To:     Segher Boessenkool <segher@kernel.crashing.org>
-Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob <jakobkoschel@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -82,108 +56,55 @@ Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:ciFczsxT+CkOslJ2l0u6JWGBxbS4E0kMNdAbJTITFYATBX0CNY2
+ 7+AncTxqmDLOwHEmCgBAUSM4aZJ94QW7o94x4sG/Exo+a/3yH3UynluzSL8WE0Q7Ryykbeh
+ U4U/Uvp21ZFndObDj62+2BzyVnp58UAEMZ8xHlSXfA3O7T1ZzMsKegffhGe3EQdziId/cOx
+ GDhtYvmjUydW/4Tzfc84w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:41G5XSrR0U0=:gBsDSllfoD+0ibXraVqNyP
+ kJjWSAvD2hKOfVjLs9CRKkacECdySQjOxpVjft8KH4KvMgsh46wS3pzgjtX6Ph4KegHnmQdWc
+ GffFcsPLAg96Npv+LNkXad9BKE3IRfJDXwk6K/+saBMYf2DBl/NX4X9+kVj4pWvBqm3XlgSEQ
+ SVipWz6hBhfdex9J7KzA8IM7t7eHCoiYMNEQ2uZfHGsysToRqnJzQODFWmS4fOTdyxaLDNfVo
+ dJK+2dpccs+SA56Rjszlb7Z1gQ83X4t3rcLn/03pYbumtiNisVOD+d+OY0jB29Rd9vvxqqxwg
+ KeUXPUWsqV13Z6yUZcUg26t10sVEZCz2CUBOzzQcugLXPo3q4rU3N5czJ2ecgfNQVdfws+bPh
+ 5KE11bZW0Fpg5Ckt5PJvGqWkJMqBTqOzavSXoCcPUcj5apqh4yMUJvtrx4S3vcDjt4KFHoozk
+ qbcvtCEwNGZjTeA/RCX4LA3Z8HNi7u89KgQ2F9I5nD0cSkdJe6tZuHSyJtlK4S7fBZrHaagXI
+ 1UL6SdJwViVICwSccjTQFUeEsLLZx45To6XD6cfeofgUHc0Ql6A3M35gzm1hyJy2qdu6+JdE0
+ fN/dAEcvVh5FQTyDubi2hmjA9lcDqr89j27mC9jgEp70KsDt25fR/dtB1a3h+1dfNM01KIv1D
+ R2vFWO47yLKp0Btc/jNJxGCKnAaamQ9WC56lWxr5pnHzBvCqUPq+dxAfOhUsZGDF2nC0=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Feb 27, 2022 at 12:22 PM Segher Boessenkool
+On Sun, Feb 27, 2022 at 2:09 AM Segher Boessenkool
 <segher@kernel.crashing.org> wrote:
 >
-> Requiring to annotate every place that has UB (or *can* have UB!) by the
-> user is even less friendly than having so much UB is already :-(
+> So imo we should just never do this by default, not just if the nasty
+> -fwrapv or nastier -fno-strict-overflow is used, just like we suggest
+> in our own documentation.  The only valid reason -Wshift-negative-value
+> is in -Wextra is it warns for situations that always are undefined
+> behaviour (even if not in GCC).
 
-Yeah, I don't think that's the solution. In fact, I don't think that's
-even practically the _issue_.
+Ok, I just realized that this is specific to the i915 driver because
+that, unlike
+most of the kernel builds with -Wextra by default. -Wextra is enabled when
+users ask for a 'make W=1' build in linux, and i915 is one of just three
+drivers that enable an equivalent set of warnings, the other ones
+being greybus and btrfs.
 
-Honestly, a lot of "undefined behavior" in C is quite often of the
-kind "the programmer knows what he wants".
+This means to work around the extra warnings, we also just need to disable
+it in the W=1 part of scripts/Makefile.extrawarn, as well as the three drivers
+that copy those options, but not the default warnings that don't include them.
 
-Things like word size or byte order issues etc are classic "undefined
-behavior" in the sense that the C compiler really doesn't understand
-them. The C compiler won't silently fix any silly behavior you get
-from writing files in native byte order, and them not working on other
-platforms.
+> Could you open a GCC PR for this?  The current situation is quite
+> suboptimal, and what we document as our implementation choice is much
+> more useful!
 
-Same goes for things like memory allocators - they often need to do
-things that the standard doesn't really cover, and shouldn't even
-*try* to cover. It's very much a core example of where people do odd
-pointer arithmetic and change the type of pointers.
+I hope I managed to capture the issue in
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104711
 
-The problem with the C model of "undefined behavior" is not that the
-behavior ends up being architecture-specific and depending on various
-in-memory (or in-register) representation of the data. No, those
-things are often very much intentional (even if in the case of byte
-order, the "intention" may be that the programmer simply does not
-care, and "knows" that all the world is little endian).
-
-If the C compiler just generates reliable code that can sanely be
-debugged - including very much using tools that look for "hey, this
-behavior can be surprising", ie all those "look for bad patterns at
-run-time", then that would be 100% FINE.
-
-But the problem with the C notion of undefined behavior is NOT that
-"results can depend on memory layout and other architecture issues
-that the compiler doesn't understand".
-
-No, the problem is that the C standards people - and compiler people -
-have then declared that "because this can be surprising, and the
-compiler doesn't understand what is going on, now the compiler can do
-something *else* entirely".
-
-THAT is the problem.
-
-The classic case - and my personal "beat a dead horse" - is the
-completely broken type-based aliasing rules. The standards people
-literally said "the compiler doesn't understand this, it can expose
-byte order dependencies that shouldn't be explained, SO THE COMPILER
-CAN NOW DO SOMETHING COMPLETELY INSANE INSTEAD".
-
-And compiler people? They rushed out to do completely broken garbage -
-at least some of them did.
-
-You can literally find compiler people who see code like this (very
-traditional, traditionally very valid and common, although):
-
-   // Return the least significant 16 bits of 'a' on LE machines
-  #define low_16_bits(x) (*(unsigned short *)&(x))
-
-and say "oh, because that's undefined, I can now decide to not do what
-the programmer told me to do AT ALL".
-
-Note that the above wasn't actually even badly defined originally. It
-was well-defined, it was used, and it was done by programmers that
-knew what they were doing.
-
-And then the C standards people decided that "because our job isn't to
-describe all the architectural issues you can hit, we'll call it
-undefined, and in the process let compiler people intentionally break
-it".
-
-THAT is a problem.
-
-Undefined results are are often intentional in system software - or
-they can be debugged using smart tools (including possibly very
-expensive run-time code generation) that actively look for them.
-
-But compilers that randomly do crazy things because the standard was
-bad? That's just broken.
-
-If compilers treated "undefined" as the same as
-"implementation-defined, but not explicitly documented", then that
-would be fine. But the C standards people - and a lot of compiler
-people - really don't seem to understand the problems they caused.
-
-And, btw, caused for no actual good reason. The HPC people who wanted
-Fortran-style aliasing could easily have had that with an extension.
-Yes, "restrict" is kind of a crappy one, but it could have been
-improved upon. Instead, people said "let's just break the language".
-
-Same exact thing goes for signed integer overflow.
-
-               Linus
+         Arnd
