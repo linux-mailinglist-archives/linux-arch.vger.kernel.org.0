@@ -2,94 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63B54C7802
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 19:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E71574C77F8
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 19:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238545AbiB1SjO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Feb 2022 13:39:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S239792AbiB1SiX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Feb 2022 13:38:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238607AbiB1SjD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 13:39:03 -0500
-Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B65F1003;
-        Mon, 28 Feb 2022 10:26:58 -0800 (PST)
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id 8480C81766;
-        Mon, 28 Feb 2022 18:20:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 5C4272002A;
-        Mon, 28 Feb 2022 18:20:29 +0000 (UTC)
-Message-ID: <0be9de3920442df490f01b6fb1c42521c3de6190.camel@perches.com>
-Subject: Re: [PATCH 1/6] drivers: usb: remove usage of list iterator past
- the loop body
-From:   Joe Perches <joe@perches.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        with ESMTP id S240879AbiB1Shw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 13:37:52 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 249389A98A
+        for <linux-arch@vger.kernel.org>; Mon, 28 Feb 2022 10:24:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2E171042;
+        Mon, 28 Feb 2022 10:24:11 -0800 (PST)
+Received: from arm.com (arrakis.cambridge.arm.com [10.1.196.175])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E23C3F70D;
+        Mon, 28 Feb 2022 10:24:09 -0800 (PST)
+Date:   Mon, 28 Feb 2022 18:24:07 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Will Deacon <will@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
         Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sgx@vger.kernel.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, kvm@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        v9fs-developer@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Date:   Mon, 28 Feb 2022 10:20:28 -0800
-In-Reply-To: <20220228112413.GA2812@kadam>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
-         <20220228110822.491923-2-jakobkoschel@gmail.com>
-         <20220228112413.GA2812@kadam>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org
+Subject: Re: [PATCH v10 2/2] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <Yh0TR3l6kWpsg0uu@arm.com>
+References: <20220228130606.1070960-1-broonie@kernel.org>
+ <20220228130606.1070960-3-broonie@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 1e1i8ombnsc3cdkptu3anccezjc89zox
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 5C4272002A
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+i6vY6IDwHpNq++UEo/5hqvP4PvgQNb4E=
-X-HE-Tag: 1646072429-12569
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228130606.1070960-3-broonie@kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2022-02-28 at 14:24 +0300, Dan Carpenter wrote:
+On Mon, Feb 28, 2022 at 01:06:06PM +0000, Mark Brown wrote:
+> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> index 5369e649fa79..82aaf361fa17 100644
+> --- a/arch/arm64/kernel/process.c
+> +++ b/arch/arm64/kernel/process.c
+> @@ -701,23 +701,49 @@ core_initcall(tagged_addr_init);
+>  #endif	/* CONFIG_ARM64_TAGGED_ADDR_ABI */
+>  
+>  #ifdef CONFIG_BINFMT_ELF
+> +static unsigned int bti_main;
+> +
+>  int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
+>  			 bool has_interp, bool is_interp)
+>  {
+> -	/*
+> -	 * For dynamically linked executables the interpreter is
+> -	 * responsible for setting PROT_BTI on everything except
+> -	 * itself.
+> -	 */
+> -	if (is_interp != has_interp)
+> -		return prot;
+> -
+> -	if (!(state->flags & ARM64_ELF_BTI))
+> -		return prot;
+> -
+> -	if (prot & PROT_EXEC)
+> +	if ((prot & PROT_EXEC) &&
+> +	    (is_interp || !has_interp || bti_main) &&
+> +	    (state->flags & arm64_elf_bti_flag(is_interp)))
+>  		prot |= PROT_BTI;
+>  
+>  	return prot;
+>  }
 
-> a multi-line indent gets curly braces for readability even though
-> it's not required by C.  And then both sides would get curly braces.
+TBH, I liked the other series more as we were getting rid of
+'has_interp' in patches 3 and 4. Now we keep it around only for the
+bti_main case on dynamic executables (i.e. we need to distinguish them
+from static). We could still get rid of has_interp if bti_main was
+default on and it affected static binaries as well (for consistency, it
+wouldn't be a bad idea).
 
-That's more your personal preference than a coding style guideline.
+I think the risk of ABI breaking is negligible in a glibc distro since
+currently the dynamic loader sets PROT_BTI on the main exe anyway, just
+as the kernel does after this series.
 
+Anyway, from a correctness perspective, this patch looks fine to me,
+just a preference for the other series:
 
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
