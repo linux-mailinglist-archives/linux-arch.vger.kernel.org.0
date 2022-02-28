@@ -2,193 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2664C6116
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 03:27:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A72B4C62D4
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 07:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiB1C2f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 27 Feb 2022 21:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S231546AbiB1GQs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Feb 2022 01:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiB1C2e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 27 Feb 2022 21:28:34 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED30B522E8;
-        Sun, 27 Feb 2022 18:27:55 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70952D6E;
-        Sun, 27 Feb 2022 18:27:55 -0800 (PST)
-Received: from [10.163.47.185] (unknown [10.163.47.185])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E4803F73D;
-        Sun, 27 Feb 2022 18:27:53 -0800 (PST)
-Subject: Re: [PATCH 25/30] nios2/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-To:     Dinh Nguyen <dinguyen@kernel.org>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
+        with ESMTP id S229548AbiB1GQr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 01:16:47 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C0FC3DDF6
+        for <linux-arch@vger.kernel.org>; Sun, 27 Feb 2022 22:16:04 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-125-lgUm4UbTM6iVn5quhs8lMw-1; Mon, 28 Feb 2022 06:16:02 +0000
+X-MC-Unique: lgUm4UbTM6iVn5quhs8lMw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Mon, 28 Feb 2022 06:15:59 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Mon, 28 Feb 2022 06:15:59 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Linus Torvalds' <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>
+CC:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Jakob <jakobkoschel@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch@vger.kernel.org
-References: <1644805853-21338-1-git-send-email-anshuman.khandual@arm.com>
- <1644805853-21338-26-git-send-email-anshuman.khandual@arm.com>
- <50ac6dc2-7c71-2a8b-aa00-78926351b252@kernel.org>
- <637cfc45-60ad-3cd1-5127-76ecabb87def@arm.com>
- <7043506b-ad04-4572-316c-c5498873b8b1@kernel.org>
- <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-Message-ID: <bd239f45-3c9a-5faf-ba0e-610f2383720b@arm.com>
-Date:   Mon, 28 Feb 2022 07:57:51 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: RE: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Topic: [RFC PATCH 03/13] usb: remove the usage of the list iterator
+ after the loop
+Thread-Index: AQHYK3er/AEA45TQBUCd0AhQFcgB96ym+KOQgADr1YCAAJR3MA==
+Date:   Mon, 28 Feb 2022 06:15:59 +0000
+Message-ID: <6729109ae6ad429f87270e2bef2eed2f@AcuMS.aculab.com>
+References: <CAHk-=wg1RdFQ6OGb_H4ZJoUwEr-gk11QXeQx63n91m0tvVUdZw@mail.gmail.com>
+ <6DFD3D91-B82C-469C-8771-860C09BD8623@gmail.com>
+ <CAHk-=wiyCH7xeHcmiFJ-YgXUy2Jaj7pnkdKpcovt8fYbVFW3TA@mail.gmail.com>
+ <CAHk-=wgLe-OSLTEHm=V7eRG6Fcr0dpAM1ZRV1a=R_g6pBOr8Bg@mail.gmail.com>
+ <20220226124249.GU614@gate.crashing.org>
+ <CAK8P3a2Dd+ZMzn=gDnTzOW=S3RHQVmm1j3Gy=aKmFEbyD-q=rQ@mail.gmail.com>
+ <20220227010956.GW614@gate.crashing.org>
+ <7abf3406919b4f0c828dacea6ce97ce8@AcuMS.aculab.com>
+ <20220227113245.GY614@gate.crashing.org>
+ <CANiq72m28WrjVHkcg5Y0LDa51Ur4OCpFbGdcq+v4gqiC0Wi6zg@mail.gmail.com>
+ <20220227201724.GZ614@gate.crashing.org>
+ <CAHk-=wijh=SQ_9_-H6O08HgmXrWz37_vcdm55oECo+31LUs2EQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wijh=SQ_9_-H6O08HgmXrWz37_vcdm55oECo+31LUs2EQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-In-Reply-To: <153130cc-e8d2-e65a-ff83-0a5ed243cc1c@kernel.org>
-Content-Type: text/plain; charset=utf-8
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+RnJvbTogTGludXMgVG9ydmFsZHMNCj4gU2VudDogMjcgRmVicnVhcnkgMjAyMiAyMTowNQ0KLi4u
+DQo+IEFuZCB0aGVuIHRoZSBDIHN0YW5kYXJkcyBwZW9wbGUgZGVjaWRlZCB0aGF0ICJiZWNhdXNl
+IG91ciBqb2IgaXNuJ3QgdG8NCj4gZGVzY3JpYmUgYWxsIHRoZSBhcmNoaXRlY3R1cmFsIGlzc3Vl
+cyB5b3UgY2FuIGhpdCwgd2UnbGwgY2FsbCBpdA0KPiB1bmRlZmluZWQsIGFuZCBpbiB0aGUgcHJv
+Y2VzcyBsZXQgY29tcGlsZXIgcGVvcGxlIGludGVudGlvbmFsbHkgYnJlYWsNCj4gaXQiLg0KPiAN
+Cj4gVEhBVCBpcyBhIHByb2JsZW0uDQoNCkknbSB3YWl0aW5nIGZvciB0aGVtIHRvIGRlY2lkZSB0
+aGF0IG1lbXNldChwdHIsIDAsIGxlbikgb2YNCmFueSBzdHJ1Y3R1cmUgdGhhdCBjb250YWlucyBh
+IHBvaW50ZXIgaXMgVUIgKGJlY2F1c2UgYSBOVUxMDQpwb2ludGVyIG5lZWQgbm90IGJlIHRoZSBh
+bGwgemVybyBiaXQgcGF0dGVybikgc28gZGVjaWRlDQp0byBkaXNjYXJkIHRoZSBjYWxsIGNvbXBs
+ZXRlbHkgKG9yIHNvbWUgc3VjaCkuDQoNCk5vbi16ZXJvIE5VTEwgcG9pbnRlcnMgaXMgdGhlIG9u
+bHkgcmVhc29uIGFyaXRobWV0aWMgb24gTlVMTA0KcG9pbnRlcnMgaXNuJ3QgdmFsaWQuDQoNCk9y
+IG1heWJlIHRoYXQgY2hhcmFjdGVyIHJhbmdlIHRlc3RzIGFyZSBVQiBiZWNhdXNlICcwJyB0byAn
+OScNCmRvbid0IGhhdmUgdG8gYmUgYWRqYWNlbnQgLSB0aGV5IGFyZSBldmVuIGFkamFjZW50IGlu
+IEVCQ0RJQy4NCg0KU29tZSBvZiB0aGUgJ3N0cmljdCBhbGlhc2luZycgYml0cyBhcmUgYWN0dWFs
+bHkgdXNlZnVsIHNpbmNlDQp0aGV5IGxldCB0aGUgY29tcGlsZXIgcmVvcmRlciByZWFkcyBhbmQg
+d3JpdGVzLg0KQnV0IHRoZSBkZWZpbml0aW9uIGlzIGJyYWluLWRlYWQuDQpTb21ldGltZXMgaXQg
+d291bGQgYmUgbmljZSB0byBoYXZlIGJ5dGUgd3JpdGVzIHJlb3JkZXJlZCwNCmJ1dCBldmVuIHVz
+aW5nIGludDo4IGRvZXNuJ3Qgd29yay4NCg0KSSBoYXZlIG5ldmVyIHdvcmtlZCBvdXQgd2hhdCAn
+cmVzdHJpY3QnIGFjdHVhbGx5IGRvZXMsDQppbiBhbnkgcGxhY2VzIEkndmUgdHJpZWQgaXQgZGlk
+IG5vdGhpbmcuDQpBbHRob3VnaCBJIG1heSBoYXZlIGJlZW4gaG9waW5nIGl0IHdvdWxkIHN0aWxs
+IGhlbHAgd2hlbg0KdGhlIGZ1bmN0aW9uIGdvdCBpbmxpbmVkLg0KDQoJRGF2aWQNCg0KLQ0KUmVn
+aXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRv
+biBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-
-On 2/25/22 8:08 PM, Dinh Nguyen wrote:
-> 
-> 
-> On 2/25/22 08:29, Dinh Nguyen wrote:
->>
->>
->> On 2/25/22 02:52, Anshuman Khandual wrote:
->>>
->>>
->>> On 2/25/22 7:01 AM, Dinh Nguyen wrote:
->>>> Hi Anshuman,
->>>>
->>>> On 2/13/22 20:30, Anshuman Khandual wrote:
->>>>> This defines and exports a platform specific custom vm_get_page_prot() via
->>>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
->>>>> macros can be dropped which are no longer needed.
->>>>>
->>>>> Cc: Dinh Nguyen <dinguyen@kernel.org>
->>>>> Cc: linux-kernel@vger.kernel.org
->>>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>>> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
->>>>> ---
->>>>>    arch/nios2/Kconfig               |  1 +
->>>>>    arch/nios2/include/asm/pgtable.h | 16 ------------
->>>>>    arch/nios2/mm/init.c             | 45 ++++++++++++++++++++++++++++++++
->>>>>    3 files changed, 46 insertions(+), 16 deletions(-)
->>>>>
->>>>> diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
->>>>> index 33fd06f5fa41..85a58a357a3b 100644
->>>>> --- a/arch/nios2/Kconfig
->>>>> +++ b/arch/nios2/Kconfig
->>>>> @@ -6,6 +6,7 @@ config NIOS2
->>>>>        select ARCH_HAS_SYNC_DMA_FOR_CPU
->>>>>        select ARCH_HAS_SYNC_DMA_FOR_DEVICE
->>>>>        select ARCH_HAS_DMA_SET_UNCACHED
->>>>> +    select ARCH_HAS_VM_GET_PAGE_PROT
->>>>>        select ARCH_NO_SWAP
->>>>>        select COMMON_CLK
->>>>>        select TIMER_OF
->>>>> diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
->>>>> index 4a995fa628ee..2678dad58a63 100644
->>>>> --- a/arch/nios2/include/asm/pgtable.h
->>>>> +++ b/arch/nios2/include/asm/pgtable.h
->>>>> @@ -40,24 +40,8 @@ struct mm_struct;
->>>>>     */
->>>>>      /* Remove W bit on private pages for COW support */
->>>>> -#define __P000    MKP(0, 0, 0)
->>>>> -#define __P001    MKP(0, 0, 1)
->>>>> -#define __P010    MKP(0, 0, 0)    /* COW */
->>>>> -#define __P011    MKP(0, 0, 1)    /* COW */
->>>>> -#define __P100    MKP(1, 0, 0)
->>>>> -#define __P101    MKP(1, 0, 1)
->>>>> -#define __P110    MKP(1, 0, 0)    /* COW */
->>>>> -#define __P111    MKP(1, 0, 1)    /* COW */
->>>>>      /* Shared pages can have exact HW mapping */
->>>>> -#define __S000    MKP(0, 0, 0)
->>>>> -#define __S001    MKP(0, 0, 1)
->>>>> -#define __S010    MKP(0, 1, 0)
->>>>> -#define __S011    MKP(0, 1, 1)
->>>>> -#define __S100    MKP(1, 0, 0)
->>>>> -#define __S101    MKP(1, 0, 1)
->>>>> -#define __S110    MKP(1, 1, 0)
->>>>> -#define __S111    MKP(1, 1, 1)
->>>>>      /* Used all over the kernel */
->>>>>    #define PAGE_KERNEL __pgprot(_PAGE_PRESENT | _PAGE_CACHED | _PAGE_READ | \
->>>>> diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
->>>>> index 613fcaa5988a..311b2146a248 100644
->>>>> --- a/arch/nios2/mm/init.c
->>>>> +++ b/arch/nios2/mm/init.c
->>>>> @@ -124,3 +124,48 @@ const char *arch_vma_name(struct vm_area_struct *vma)
->>>>>    {
->>>>>        return (vma->vm_start == KUSER_BASE) ? "[kuser]" : NULL;
->>>>>    }
->>>>> +
->>>>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>>>> +{
->>>>> +    switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
->>>>> +    case VM_NONE:
->>>>> +        return MKP(0, 0, 0);
->>>>> +    case VM_READ:
->>>>> +        return MKP(0, 0, 1);
->>>>> +    /* COW */
->>>>> +    case VM_WRITE:
->>>>> +        return MKP(0, 0, 0);
->>>>> +    /* COW */
->>>>> +    case VM_WRITE | VM_READ:
->>>>> +        return MKP(0, 0, 1);
->>>>> +    case VM_EXEC:
->>>>> +        return MKP(1, 0, 0);
->>>>> +    case VM_EXEC | VM_READ:
->>>>> +        return MKP(1, 0, 1);
->>>>> +    /* COW */
->>>>> +    case VM_EXEC | VM_WRITE:
->>>>> +        return MKP(1, 0, 0);
->>>>> +    /* COW */
->>>>> +    case VM_EXEC | VM_WRITE | VM_READ:
->>>>> +        return MKP(1, 0, 1);
->>>>> +    case VM_SHARED:
->>>>> +        return MKP(0, 0, 0);
->>>>> +    case VM_SHARED | VM_READ:
->>>>> +        return MKP(0, 0, 1);
->>>>> +    case VM_SHARED | VM_WRITE:
->>>>> +        return MKP(0, 1, 0);
->>>>> +    case VM_SHARED | VM_WRITE | VM_READ:
->>>>> +        return MKP(0, 1, 1);
->>>>> +    case VM_SHARED | VM_EXEC:
->>>>> +        return MKP(1, 0, 0);
->>>>> +    case VM_SHARED | VM_EXEC | VM_READ:
->>>>> +        return MKP(1, 0, 1);
->>>>> +    case VM_SHARED | VM_EXEC | VM_WRITE:
->>>>> +        return MKP(1, 1, 0);
->>>>> +    case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
->>>>> +        return MKP(1, 1, 1);
->>>>> +    default:
->>>>> +        BUILD_BUG();
->>>>> +    }
->>>>> +}
->>>>> +EXPORT_SYMBOL(vm_get_page_prot);
->>>>
->>>> I'm getting this compile error after applying this patch when build NIOS2:
->>>
->>> Hmm, that is strange.
->>>
->>> Did you apply the entire series or atleast upto the nios2 patch ? Generic
->>> vm_get_page_prot() should not be called (which is build complaining here)
->>> when ARCH_HAS_VM_GET_PAGE_PROT is already enabled on nios2 platform.
->>>
->>> Ran a quick build test on nios2 for the entire series and also just upto
->>> this particular patch, build was successful.
->>>
->>
->> Ok, I did not apply the whole series, just this patch.
->>
-> 
-> 
-> Is someone taking this whole series or should I just take this patch?
-
-I expect the series (latest instead) will go via the mm tree, but will
-really appreciate your tags if you find the series acceptable.
