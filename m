@@ -2,219 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7544C6BF7
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 13:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE78A4C6CAB
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 13:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbiB1MUN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Feb 2022 07:20:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S236526AbiB1MhQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Feb 2022 07:37:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiB1MUM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 07:20:12 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2077.outbound.protection.outlook.com [40.107.93.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACBB70849;
-        Mon, 28 Feb 2022 04:19:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gak+0VG7f2cK1qGBIYboMz3Rmo1e2+a3Qadt70yr+SXalhPkhKa3w30ibrppZy7J9X0U+bYR1DEsjxK7vkl+BudKRh2xhxnGWokUrtqa9Ya7IfUQlH57vxKDpZGaToSEDW9l7aFNG3sxll4z7Cw3o6ihXkNwnjdKSc8q1j7cNYGZijzB+GOgJtLQlm3hrumQbSSOfCPjerllCYNa+Y6byoisv/EQrCAg39Paj09WWowL67ZuiWACgQOClzLerq7E1FeC0W9wdN7gFQiQmga03SsKY43ILsXZUa9Mucd961jBDV7QKl9s8tl1ErdLe8FWGo3uTdaFMixnDJB0vZmePQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dFAhmo3JBYJdhOBKzHNL9AJtIawE+V/fgYNxajT2ljI=;
- b=SzZWjd1fmgSJStHirEOCRnkAmcu3OmudpoaEyqknhomm8RjYXkMjnw1ABFAQ2dq8DbNrpQGxXY9ZQCiz+GnKJJqoOOTTXEuSJttXUAE7tqLVwj72QyYBoUE01Ym1R2ysVx8qf1JEPCuK12Olclw0Hna1trvdCt7Ic2GSai4vecGnv3uFeBp1cenwkYIGQD/CdiTDXQhMTXAYac+GdgHxinfvyCaI+nKqXhAaeYMEQJpqURd4/Dsaya54VHucuv6Zoch9wWHfqV2fB2v0eT2viWGd7XTwAYkc5qGDRx9T7ETYzGx6t8awxL24AQJ31xn8GI8ufl45Byu3EOXIQm4IMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dFAhmo3JBYJdhOBKzHNL9AJtIawE+V/fgYNxajT2ljI=;
- b=AlIDg5tMzU18Zc+t9R+CoEaHA+AOb1jz/Nyu5OM7D+/2O/6lpB0dewE1ku3pJKeEoY8BydetUnPZUqFvCh2ilwJroT6ut+CA2XOTHnKRtbmsCQfR7AAIyWnBiCUAjqsHtIoqImAU9HMv8ZrZaEvOJGpDXNmlwxNnn4UlV4i6ZuQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MWHPR12MB1295.namprd12.prod.outlook.com (2603:10b6:300:11::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5017.23; Mon, 28 Feb
- 2022 12:19:30 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e03f:901a:be6c:b581%6]) with mapi id 15.20.5017.027; Mon, 28 Feb 2022
- 12:19:30 +0000
-Message-ID: <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
-Date:   Mon, 28 Feb 2022 13:19:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel@lists.freedesktop.org,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx@lists.freedesktop.org, samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-cifs@vger.kernel.org, kvm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net, linux-tegra@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-sgx@vger.kernel.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, Mike Rapoport <rppt@kernel.org>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220228110822.491923-3-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM6P193CA0051.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:209:8e::28) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        with ESMTP id S230389AbiB1MhO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 07:37:14 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C5DF75638
+        for <linux-arch@vger.kernel.org>; Mon, 28 Feb 2022 04:36:35 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-164--JsiAWFvP7mJeI5M5rTVpA-1; Mon, 28 Feb 2022 12:36:29 +0000
+X-MC-Unique: -JsiAWFvP7mJeI5M5rTVpA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Mon, 28 Feb 2022 12:36:26 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Mon, 28 Feb 2022 12:36:26 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Guo Ren' <guoren@kernel.org>
+CC:     "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "anup@brainfault.org" <anup@brainfault.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "liush@allwinnertech.com" <liush@allwinnertech.com>,
+        "wefu@redhat.com" <wefu@redhat.com>,
+        "drew@beagleboard.org" <drew@beagleboard.org>,
+        "wangjunqiang@iscas.ac.cn" <wangjunqiang@iscas.ac.cn>,
+        "hch@lst.de" <hch@lst.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH V7 03/20] compat: consolidate the compat_flock{,64}
+ definition
+Thread-Topic: [PATCH V7 03/20] compat: consolidate the compat_flock{,64}
+ definition
+Thread-Index: AQHYK/ctkLOBFN5NzkqkonsQCyvC26yogbZggABZggCAAAIWoIAAA+wAgAADRgA=
+Date:   Mon, 28 Feb 2022 12:36:26 +0000
+Message-ID: <75af91aff07c43f4afd1f1a024e23bd4@AcuMS.aculab.com>
+References: <20220227162831.674483-1-guoren@kernel.org>
+ <20220227162831.674483-4-guoren@kernel.org>
+ <b8e765910e274c0fb574ff23f88b881c@AcuMS.aculab.com>
+ <CAJF2gTRQ0XWSjoEeREtEGr5PPD-rHrBKFY_i6_9uW3eEN_6muQ@mail.gmail.com>
+ <e5ee4f6799704bd59b0c580157a05d2d@AcuMS.aculab.com>
+ <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
+In-Reply-To: <CAJF2gTQhFK55z4juC7uHpWmHsEXSOkbMyXeid6KsnhfPRo7wqg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 927c171a-822c-407a-0fdb-08d9fab491db
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1295:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB1295A5EA7DAABF83602189E383019@MWHPR12MB1295.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qxyezJsmPy26yjbJiE7nsfiUmF0CrlIboTAwmgzX+NACMNF0P25qUQTowXZYFwLnL07ApfYLgfmlTTlbgnXiRNw3HipcQ8YR9n20WGUM4qVXClwvgS2U+5fbxmfiL1YJ3b4dKP58UnnBLEPlJ59UilT4fZs46PS1fW/z09P1pFxsFPxnfyjzXR4SKtzdPjD8pdLQ8Kuy+2l0dAgEnArYv3uj5znNa1rQ1Hoq/K9GX8bP7u3bYhwZ3G7tvOtwzFR8Ta2MGzOk18aOUbCOKf9+NPI1BAokmmASt6vuYyQl9d6diYO5nnGHvlTt8B97TsJduPfAWtmOXc4pGnhEnGvVkJzJ9Q5UoXw6MGsLnQFAvjCFOS5HUttb3W5KQYRHVWSwfogIFAGfvtFO+lDHC+zygYhcr4vKIF5NwmlrjZe/eYf8EP+TvHA9+tl3ASpRWWdauBP0CwG4cAkCxjiJR/bBkhVEPuvZl3gldzU8eZLh6J409seJbpIj1B3mXQakZi/ADxm0gFDuRFrSFkrLksAlJNLnP2ba8pyWbR8sZiD7/xv+btdb9URSvZP51q7+HLGr+O6HkKjfWrXmkHOpnHpQ0HDh1kufULkKjdiTyUbvjlsAcLox6Kv+USztKXk8wsuMfL7cp8xrU8lMEmEm4ojd6a9DhZsM9Wdu+UjIl4m5D/tT+6dGUe98wGH7LMWEEawZ3jSOjYoFYkV7E4/D5zrhIvYMsvhiVWs/D7ffpMq0AfurcvoBBzJjFVjkZdegPoSo
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7406005)(6512007)(5660300002)(7366002)(7416002)(6506007)(31686004)(36756003)(6486002)(2906002)(83380400001)(2616005)(54906003)(508600001)(110136005)(31696002)(8936002)(86362001)(186003)(38100700002)(6666004)(316002)(4326008)(66476007)(66946007)(66556008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QnVEZUhHVmdLQlRDREtha0hYNEd6bWZuNDJmWmFJc2I4MHI3amtWSVdaSTNv?=
- =?utf-8?B?VkxUUUMxWU5QSzNpSHU3QzdicVZ0RWFpcTc2NHk5aVJLaUF6S2EreTNldTd2?=
- =?utf-8?B?Y1ZDZEcwakpzV0VORi9yNmt5YktCVWVlaWVSTmlQWjNUZDAyQ0NBOFlKV1R0?=
- =?utf-8?B?K3VIQnZ3N1k2ajl6WURIOTVYRmdkbzFBUlFQY1ZIVDl5ZVVNZE04WWY3RzdI?=
- =?utf-8?B?NFBENGxZMVh3KzdYSmVKYzB2MlY1YytOZ3pQdjZ1NHdiRmtNSlQwYjYrSGJS?=
- =?utf-8?B?S0lmS3RRUVU1TGh2Ym0yQkdmWWFzN1VwSmNzQW1IR0RmMmU4SjZ5Mm0ydXVP?=
- =?utf-8?B?UEN6a3N0aGJVQkQrTG5nWTVYTzVDQkI1dGxlMURwN0N2Rk1FN0g1VnNKZWVW?=
- =?utf-8?B?S1VoamV3L1BKLzBnaEdCWUhEN2I3ZERSM21LVXBEcVo1M011QmVuQXZMS05Z?=
- =?utf-8?B?NFNEV2tydTR2VlFkMlNESjdzVGhaNW1PNjlBNDA0bEthUnBJc3F3UkhvaE9o?=
- =?utf-8?B?M2ZyVVcvMTNvSU13ZTl0UTRUTXZFY3IzZmxlcnlnZ2FudWM3dXZOZ3IvNEVD?=
- =?utf-8?B?cS96alNTbmFWNzZrcUVJdUgzeGM5MCs0c2JKWUZMRnkzR3E2TVUycTB2RVFy?=
- =?utf-8?B?MzE4QUtkUmQ4bCtqcmI0QktyYVVmd3k5eXZ0Z1R4ejZwekhIUFYyUjRYVkQ0?=
- =?utf-8?B?Z1JiUWpWbzRITWtSc1FTV2lIY0ZlTzhKampXVVhwbk1qbTE4NXNobDNUdWdo?=
- =?utf-8?B?dngxTjRLTGlpYmVtYzBaZWJPNEs0Nkg0Q05ERDY1RjBzZVlZMks1UVhlYTNT?=
- =?utf-8?B?LytTbGxaV29uWFpiYmRlVjc4QUh1OEYwT3FUbHpXZDNkbnNZVkJWZHArZ0Zx?=
- =?utf-8?B?bFFMV2FTUHhtZ3BJSTNzeEd1QnpZS21nWiszbEpxWXNSOU4wb3FWUEd6WUN6?=
- =?utf-8?B?bmc4OEZ4RGY3N2tsdFdhRVZhR1E5YU1QUFJFSnAxb2s1SjI0YkRYeW1ybDI5?=
- =?utf-8?B?YzQ2c0lJZ3ZSQXVZNVVYWHFMTENXclNua3lORlhuM3Bac2pLUVQ1aFdQYldQ?=
- =?utf-8?B?Qm5iVnM2RTBoYVV6eWlVWDdFTG1NaGdZeDVVeG5HdmxGOW9oVkIxMk5GanRC?=
- =?utf-8?B?L1RxOVNMOHduYUNLM0VYbzg3TTd1TmxPQjZOV2ZzZjRScjRoejlaTURnVHJj?=
- =?utf-8?B?V3E5MHZyS0FNc0VRSmg2aGM1MVhUeFppdnBjbWtSQjUxY3hjTW9sVytKY0tl?=
- =?utf-8?B?bXI2MjJNMFZRTzZSajQyMEpHMnBqZThxK2ljY0pIN2NkemdCazdMYWZTZXhO?=
- =?utf-8?B?THpWZE9iVG16UkZvNENTUkpzdkI4eFNvMGxTWi96Q214R20xeWQ2Q3ZhZEN4?=
- =?utf-8?B?ZmZJb1N2WXc0NUsreUM5ekFOc1dlQTJQVkN5TW1QSy82WmZLTkorNE1aNzNE?=
- =?utf-8?B?dFhzdnk2dys4RmtUVytnZk9Zdlhrb1ptMFk3SWlCYmpUS1JxcGRLdWNkZTV5?=
- =?utf-8?B?K3h1SFcrOFliSWhzZWt5eGFINWpaWEFXL0FpNWRRelJOd0JMS3lpdDFEMUdP?=
- =?utf-8?B?eDhPQjhjVm9MS2xoYTgvdTlGbFd5WnZ4cW9uNjRHWWdueXlwZUJRWVBGN1Bm?=
- =?utf-8?B?b2tlcmh3Tm5pU0drcVBTVVltN2w2OXpPZS9tSjd6YTY1dTJMY1MzQnB5eUQ1?=
- =?utf-8?B?c2VHME0zd3N4dVIrUVlKeE4xcVJ0QWI2dW9vaEpkelNsVXM3cWZqRGlEZTJP?=
- =?utf-8?B?MUY2RHR3MWZ0Yk82NSthdy9FTG1CQ3J4YnFMakU5UUtlZWJlN1NXazR5a1NZ?=
- =?utf-8?B?d09rUmV5QXpwTjMzK2F6SVRZNFNMTGtlUCtTNS9qc3Byc3ZaRUJFQUtJTW5y?=
- =?utf-8?B?NUNYck1SckJLTnpOR1d4L3Rpb21OSHlSR1JkVDdZZlVGUjVXWGxlRTA2bmg5?=
- =?utf-8?B?U1JDZXdQUjd0WkVjajE4dFY0QWpYNkN1cGVxdFR1OVkxUFlGUjRaUzhEQWlp?=
- =?utf-8?B?cjYwaWc1L2Y0NTVzd3lrMlBodGMybWZLb2VUWWx2US9EclJjR29OaEZ1ZjZ4?=
- =?utf-8?B?UFdYck5CMlA2UytrZUdob1Z6YjdnTEh6cElLT0lLMjByVGJJOTBZRWE1Um5h?=
- =?utf-8?B?QmZ2OFNhNXBNU1lwVGI5YkNoRnRSdFdqeGRSbmFkL1I2anJyRXZ0bW5IeVI4?=
- =?utf-8?Q?R6iIn8pdIonNpLAFjDShZ1w=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 927c171a-822c-407a-0fdb-08d9fab491db
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2022 12:19:30.0401
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Yz+/jU3IY5U41ZTP4nxROOoIIb/zKsZboh12RZsNA0NdemZ8rLgm5wIEvLhrWIBd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1295
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Am 28.02.22 um 12:08 schrieb Jakob Koschel:
-> If the list does not contain the expected element, the value of
-> list_for_each_entry() iterator will not point to a valid structure.
-> To avoid type confusion in such case, the list iterator
-> scope will be limited to list_for_each_entry() loop.
+RnJvbTogR3VvIFJlbg0KPiBTZW50OiAyOCBGZWJydWFyeSAyMDIyIDEyOjEzDQo+IA0KPiBPbiBN
+b24sIEZlYiAyOCwgMjAyMiBhdCA4OjAyIFBNIERhdmlkIExhaWdodCA8RGF2aWQuTGFpZ2h0QGFj
+dWxhYi5jb20+IHdyb3RlOg0KPiA+DQo+ID4gRnJvbTogR3VvIFJlbg0KPiA+ID4gU2VudDogMjgg
+RmVicnVhcnkgMjAyMiAxMTo1Mg0KPiA+ID4NCj4gPiA+IE9uIE1vbiwgRmViIDI4LCAyMDIyIGF0
+IDI6NDAgUE0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAYWN1bGFiLmNvbT4gd3JvdGU6DQo+
+ID4gPiA+DQo+ID4gPiA+IEZyb206IGd1b3JlbkBrZXJuZWwub3JnDQo+ID4gPiA+ID4gU2VudDog
+MjcgRmVicnVhcnkgMjAyMiAxNjoyOA0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gRnJvbTogQ2hyaXN0
+b3BoIEhlbGx3aWcgPGhjaEBsc3QuZGU+DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBQcm92aWRlIGEg
+c2luZ2xlIGNvbW1vbiBkZWZpbml0aW9uIGZvciB0aGUgY29tcGF0X2Zsb2NrIGFuZA0KPiA+ID4g
+PiA+IGNvbXBhdF9mbG9jazY0IHN0cnVjdHVyZXMgdXNpbmcgdGhlIHNhbWUgdHJpY2tzIGFzIGZv
+ciB0aGUgbmF0aXZlDQo+ID4gPiA+ID4gdmFyaWFudHMuICBBbm90aGVyIGV4dHJhIGRlZmluZSBp
+cyBhZGRlZCBmb3IgdGhlIHBhY2tpbmcgcmVxdWlyZWQgb24NCj4gPiA+ID4gPiB4ODYuDQo+ID4g
+PiA+IC4uLg0KPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9jb21w
+YXQuaCBiL2FyY2gveDg2L2luY2x1ZGUvYXNtL2NvbXBhdC5oDQo+ID4gPiA+IC4uLg0KPiA+ID4g
+PiA+ICAvKg0KPiA+ID4gPiA+IC0gKiBJQTMyIHVzZXMgNCBieXRlIGFsaWdubWVudCBmb3IgNjQg
+Yml0IHF1YW50aXRpZXMsDQo+ID4gPiA+ID4gLSAqIHNvIHdlIG5lZWQgdG8gcGFjayB0aGlzIHN0
+cnVjdHVyZS4NCj4gPiA+ID4gPiArICogSUEzMiB1c2VzIDQgYnl0ZSBhbGlnbm1lbnQgZm9yIDY0
+IGJpdCBxdWFudGl0aWVzLCBzbyB3ZSBuZWVkIHRvIHBhY2sgdGhlDQo+ID4gPiA+ID4gKyAqIGNv
+bXBhdCBmbG9jazY0IHN0cnVjdHVyZS4NCj4gPiA+ID4gPiAgICovDQo+ID4gPiA+IC4uLg0KPiA+
+ID4gPiA+ICsjZGVmaW5lIF9fQVJDSF9ORUVEX0NPTVBBVF9GTE9DSzY0X1BBQ0tFRA0KPiA+ID4g
+PiA+DQo+ID4gPiA+ID4gIHN0cnVjdCBjb21wYXRfc3RhdGZzIHsNCj4gPiA+ID4gPiAgICAgICBp
+bnQgICAgICAgICAgICAgZl90eXBlOw0KPiA+ID4gPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xp
+bnV4L2NvbXBhdC5oIGIvaW5jbHVkZS9saW51eC9jb21wYXQuaA0KPiA+ID4gPiA+IGluZGV4IDFj
+NzU4YjBlMDM1OS4uYTA0ODFmZTZjNWQ1IDEwMDY0NA0KPiA+ID4gPiA+IC0tLSBhL2luY2x1ZGUv
+bGludXgvY29tcGF0LmgNCj4gPiA+ID4gPiArKysgYi9pbmNsdWRlL2xpbnV4L2NvbXBhdC5oDQo+
+ID4gPiA+ID4gQEAgLTI1OCw2ICsyNTgsMzcgQEAgc3RydWN0IGNvbXBhdF9ybGltaXQgew0KPiA+
+ID4gPiA+ICAgICAgIGNvbXBhdF91bG9uZ190ICBybGltX21heDsNCj4gPiA+ID4gPiAgfTsNCj4g
+PiA+ID4gPg0KPiA+ID4gPiA+ICsjaWZkZWYgX19BUkNIX05FRURfQ09NUEFUX0ZMT0NLNjRfUEFD
+S0VEDQo+ID4gPiA+ID4gKyNkZWZpbmUgX19BUkNIX0NPTVBBVF9GTE9DSzY0X1BBQ0sgICBfX2F0
+dHJpYnV0ZV9fKChwYWNrZWQpKQ0KPiA+ID4gPiA+ICsjZWxzZQ0KPiA+ID4gPiA+ICsjZGVmaW5l
+IF9fQVJDSF9DT01QQVRfRkxPQ0s2NF9QQUNLDQo+ID4gPiA+ID4gKyNlbmRpZg0KPiA+ID4gPiAu
+Li4NCj4gPiA+ID4gPiArc3RydWN0IGNvbXBhdF9mbG9jazY0IHsNCj4gPiA+ID4gPiArICAgICBz
+aG9ydCAgICAgICAgICAgbF90eXBlOw0KPiA+ID4gPiA+ICsgICAgIHNob3J0ICAgICAgICAgICBs
+X3doZW5jZTsNCj4gPiA+ID4gPiArICAgICBjb21wYXRfbG9mZl90ICAgbF9zdGFydDsNCj4gPiA+
+ID4gPiArICAgICBjb21wYXRfbG9mZl90ICAgbF9sZW47DQo+ID4gPiA+ID4gKyAgICAgY29tcGF0
+X3BpZF90ICAgIGxfcGlkOw0KPiA+ID4gPiA+ICsjaWZkZWYgX19BUkNIX0NPTVBBVF9GTE9DSzY0
+X1BBRA0KPiA+ID4gPiA+ICsgICAgIF9fQVJDSF9DT01QQVRfRkxPQ0s2NF9QQUQNCj4gPiA+ID4g
+PiArI2VuZGlmDQo+ID4gPiA+ID4gK30gX19BUkNIX0NPTVBBVF9GTE9DSzY0X1BBQ0s7DQo+ID4g
+PiA+ID4gKw0KPiA+ID4gPg0KPiA+ID4gPiBQcm92aWRlZCBjb21wYXRfbG9mZl90IGFyZSBjb3Jy
+ZWN0bHkgZGVmaW5lZCB3aXRoIF9fYWxpZ25lZF9fKDQpDQo+ID4gPiBTZWUgaW5jbHVkZS9hc20t
+Z2VuZXJpYy9jb21wYXQuaA0KPiA+ID4NCj4gPiA+IHR5cGVkZWYgczY0IGNvbXBhdF9sb2ZmX3Q7
+DQo+ID4gPg0KPiA+ID4gT25seToNCj4gPiA+ICNpZmRlZiBDT05GSUdfQ09NUEFUX0ZPUl9VNjRf
+QUxJR05NRU5UDQo+ID4gPiB0eXBlZGVmIHM2NCBfX2F0dHJpYnV0ZV9fKChhbGlnbmVkKDQpKSkg
+Y29tcGF0X3M2NDsNCj4gPiA+DQo+ID4gPiBTbyBob3cgZG8geW91IHRoaW5rIGNvbXBhdF9sb2Zm
+X3QgY291bGQgYmUgZGVmaW5lZCB3aXRoIF9fYWxpZ25lZF9fKDQpPw0KPiA+DQo+ID4gY29tcGF0
+X2xvZmZfdCBzaG91bGQgYmUgY29tcGF0X3M2NCBub3QgczY0Lg0KPiA+DQo+ID4gVGhlIHNhbWUg
+c2hvdWxkIGJlIGRvbmUgZm9yIGFsbCA2NGJpdCAnY29tcGF0JyB0eXBlcy4NCj4gQ2hhbmdpbmcN
+Cj4gdHlwZWRlZiBzNjQgY29tcGF0X2xvZmZfdDsNCj4gdG8NCj4gdHlwZWRlZiBjb21wYXRfczY0
+IGNvbXBhdF9sb2ZmX3Q7DQo+IA0KPiBzaG91bGQgYmUgYW5vdGhlciBwYXRjaCBhbmQgaXQgYWZm
+ZWN0cyBhbGwgYXJjaGl0ZWN0dXJlcywgSSBkb24ndA0KPiB0aGluayB3ZSBzaG91bGQgaW52b2x2
+ZSBpdCBpbiB0aGlzIHNlcmllcy4NCg0KRXhjZXB0IHRoYXQgSSB0aGluayBvbmx5IHg4NiBzZXRz
+IENPTkZJR19DT01QQVRfRk9SX1U2NF9BTElHTk1FTlQuDQoNCj4gbG9vayBhdCBrZXJuZWwvcG93
+ZXIvdXNlci5jOg0KPiBzdHJ1Y3QgY29tcGF0X3Jlc3VtZV9zd2FwX2FyZWEgew0KPiAgICAgICAg
+IGNvbXBhdF9sb2ZmX3Qgb2Zmc2V0Ow0KPiAgICAgICAgIHUzMiBkZXY7DQo+IH0gX19wYWNrZWQ7
+DQoNClRoYXQgaXMgYSBidWchDQpUaGUgc2l6ZSBzaG91bGQgYmUgMTYgYnl0ZXMgb24gbW9zdCAz
+MmJpdCBhcmNoaXRlY3R1cmVzLg0KU28gdGhlIGNvbXBhdCBjb2RlIHdvbid0IGZhdWx0IGlmIHRo
+ZSBsYXN0IDQgYnl0ZXMgYXJlbid0IG1hcHBlZA0Kd2hlcmVhcyB0aGUgbmF0aXZlIDMyYml0IHZl
+cnNpb24gd2lsbCBmYXVsdC4NCg0KSG9wZWZ1bGx5IHRoZSBjb21waWxlciByZWFsaXNlcyB0aGUg
+b24tc3RhY2sgaXRlbSBpcyBhY3R1YWxseQ0KYWxpZ25lZCBhbmQgZG9lc24ndCB1c2UgYnl0ZSBs
+b2FkcyBhbmQgc2hpZnRzIG9uIChlZykgc3BhcmM2NC4NCg0KPiBJIHRobmsga2VlcCAidHlwZWRl
+ZiBzNjQgY29tcGF0X2xvZmZfdDsiIGlzIGEgc2Vuc2libGUgY2hvaWNlIGZvcg0KPiBDT01QQVQg
+c3VwcG9ydCBwYXRjaHNldCBzZXJpZXMuDQoNCkJ1dCBpdCBpcyB3cm9uZyA6LSkNCg0KY29tcGF0
+X1tzdV02NCBleGlzdCBzbyB0aGF0IGNvbXBhdCBzeXNjYWxscyB0aGF0IGNvbnRhaW4gNjRiaXQN
+CnZhbHVlcyBnZXQgdGhlIGNvcnJlY3QgYWxpZ25tZW50Lg0KV2hpY2ggaXMgZXhhY3RseSB3aGF0
+IHlvdSBoYXZlIGhlcmUuDQoNCkFGQUlDVCBtb3N0IG9mIHRoZSB1c2VzIG9mIF9fcGFja2VkIGlu
+IHRoZSBrZXJuZWwgYXJlIHdyb25nLg0KSXQgc2hvdWxkIG9ubHkgYmUgdXNlZCAob24gYSBzdHJ1
+Y3R1cmUpIGlmIHRoZSBzdHJ1Y3R1cmUgbWlnaHQNCmJlIG9uIGEgbWlzYWxpZ25lZCBhZGRyZXNz
+Lg0KVGhpcyBjYW4gaGFwcGVuIGluIGRhdGEgZm9yIHNvbWUgbmV0d29yayBwcm90b2NvbHMuDQpJ
+dCBzaG91bGQgbm90IGJlIHVzZWQgYmVjYXVzZSB0aGUgc3RydWN0dXJlIHNob3VsZCBoYXZlIG5v
+IGhvbGVzLg0KKEVzcGVjaWFsbHkgaW4gb25lcyB0aGF0IGRvbid0IGhhdmUgYW55IGhvbGVzLikN
+Cg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2Fk
+LCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5v
+OiAxMzk3Mzg2IChXYWxlcykNCg==
 
-We explicitly have the list_entry_is_head() macro to test after a loop 
-if the element pointer points to the head of the list instead of a valid 
-list entry.
-
-So at least from my side I absolutely don't think that this is a good idea.
-
-> In preparation to limiting scope of a list iterator to the list traversal
-> loop, use a dedicated pointer to point to the found element.
-> Determining if an element was found is then simply checking if
-> the pointer is != NULL.
-
-Since when do we actually want to do this?
-
-Take this code here as an example:
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> index 48afe96ae0f0..6c916416decc 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> @@ -450,7 +450,8 @@ static void sgx_mmu_notifier_release(struct mmu_notifier *mn,
->   				     struct mm_struct *mm)
->   {
->   	struct sgx_encl_mm *encl_mm = container_of(mn, struct sgx_encl_mm, mmu_notifier);
-> -	struct sgx_encl_mm *tmp = NULL;
-> +	struct sgx_encl_mm *found_encl_mm = NULL;
-> +	struct sgx_encl_mm *tmp;
->
->   	/*
->   	 * The enclave itself can remove encl_mm.  Note, objects can't be moved
-> @@ -460,12 +461,13 @@ static void sgx_mmu_notifier_release(struct mmu_notifier *mn,
->   	list_for_each_entry(tmp, &encl_mm->encl->mm_list, list) {
->   		if (tmp == encl_mm) {
->   			list_del_rcu(&encl_mm->list);
-> +			found_encl_mm = tmp;
->   			break;
->   		}
->   	}
->   	spin_unlock(&encl_mm->encl->mm_lock);
->
-> -	if (tmp == encl_mm) {
-> +	if (found_encl_mm) {
->   		synchronize_srcu(&encl_mm->encl->srcu);
->   		mmu_notifier_put(mn);
->   	}
-
-I don't think that using the extra variable makes the code in any way 
-more reliable or easier to read.
-
-Regards,
-Christian.
