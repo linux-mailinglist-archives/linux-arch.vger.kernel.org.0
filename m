@@ -2,52 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6544C7D4F
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 23:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 785A04C7DC3
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 23:50:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiB1W3p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Feb 2022 17:29:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
+        id S231608AbiB1WvC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Feb 2022 17:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiB1W3o (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 17:29:44 -0500
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECE9EDF1A;
-        Mon, 28 Feb 2022 14:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1646087344;
-        bh=gnitHaDoKtFYFmdfHx7ZmUK+2K99mC4OdMWiGF3yqts=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=aDv+zUJMVLbpHnTobs88HMeKXt8e/Fsm3NyltqbtXmut8dDpKPmgZQHvU7CQAhpxT
-         x8yyOH8cKkqI9wCCVd7mWgGGPtOdFvurEvTcoJzgoG8F+eqVyUcxI30U1Z3UyKmv+s
-         JFRv6cmaJ/MAgdj571KO+Pve8Zec5bTLqNmzMPjU=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2FE4A1281036;
-        Mon, 28 Feb 2022 17:29:04 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UdsLtl38GfVe; Mon, 28 Feb 2022 17:29:04 -0500 (EST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1646087343;
-        bh=gnitHaDoKtFYFmdfHx7ZmUK+2K99mC4OdMWiGF3yqts=;
-        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-        b=u33hwQnb0VqdOXP8ulufSc5IRuZCZipVBGZNcGF9+k1EE0TmKFXpcGOMGd4fMwEgO
-         9syQhDBoNk9Z7GUqfbwA47rALQtXFHUxFeSSP/G0sxjEsJWs9EMuAmppU6twhzQzk+
-         fAgT3F3AJIbVTwM2ufsCoBYKhhHBSRhleqdyR2l4=
-Received: from jarvis.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:c551::527])
+        with ESMTP id S231577AbiB1WvB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 17:51:01 -0500
+Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29BB14A048;
+        Mon, 28 Feb 2022 14:50:17 -0800 (PST)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C21DB1280D34;
-        Mon, 28 Feb 2022 17:28:59 -0500 (EST)
-Message-ID: <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop
- body as a ptr
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Mike Rapoport <rppt@kernel.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
+        by mail-41104.protonmail.ch (Postfix) with ESMTPS id 4K6wZJ2jhyz4wxmV;
+        Mon, 28 Feb 2022 22:50:16 +0000 (UTC)
+Authentication-Results: mail-41104.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="cBGwkD0d"
+Date:   Mon, 28 Feb 2022 22:50:06 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1646088609;
+        bh=EcotLxkQaYgY6ajZYic/GfxM/AoG16BTcQ37oNetF9g=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=cBGwkD0dY6C6UZ8ZjhjHcbwM06BMDKF9S/uxRi+rS2UvdSsFLFOG1HSm6qlJyiCUO
+         uC1XgssvVNSFSsxdHJ1aOl5NwIA18vjg17jCvCkv13dOUO+5hOt3OCcfXLX2AxvryX
+         lsXEg4vAoBljMT4ewAP2cK1EUDuyezakLW8pnSEAczd9xFJNkZ4Y3ZLxhFb22yslY3
+         3xdTS3cTZ9GeOv+wrf2xTPfY4Kamc1tDDmDy3yCaRm+7b1f1xP0Y+5xR0FjORV+5kM
+         cK85iRo45YcxaJSZ64KqeuDyrCIZDsEiDwE78vJR0ycrL/ZWpMTXDPzJnBHTv4Qo8t
+         TiTx0AcdTLM/g==
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
         alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
@@ -95,22 +88,17 @@ Cc:     Jakob Koschel <jakobkoschel@gmail.com>,
         linux-mediatek@lists.infradead.org,
         Andrew Morton <akpm@linux-foundation.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Date:   Mon, 28 Feb 2022 17:28:58 -0500
-In-Reply-To: <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
-         <20220228110822.491923-3-jakobkoschel@gmail.com>
-         <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
-         <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
-         <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
-         <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
-         <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+Reply-To: =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body as a ptr
+Message-ID: <Ax76nlte5gO6McgVlkdlM8SHBdfYoG0hb6pFO3MJ6iEg3VCk3kzPWFQ6HS2uVDB8eeyLSr4ku62pXF-FrsROsQvF_VDAW1I5lXTFZTkkMfk=@protonmail.com>
+In-Reply-To: <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com> <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com> <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com> <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org> <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,70 +106,33 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 2022-02-28 at 23:59 +0200, Mike Rapoport wrote:
-> 
-> On February 28, 2022 10:42:53 PM GMT+02:00, James Bottomley <
-> James.Bottomley@HansenPartnership.com> wrote:
-> > On Mon, 2022-02-28 at 21:07 +0100, Christian König wrote:
-[...]
-> > > > I do wish we could actually poison the 'pos' value after the
-> > > > loop somehow - but clearly the "might be uninitialized" I was
-> > > > hoping for isn't the way to do it.
-> > > > 
-> > > > Anybody have any ideas?
-> > > 
-> > > I think we should look at the use cases why code is touching
-> > > (pos) after the loop.
-> > > 
-> > > Just from skimming over the patches to change this and experience
-> > > with the drivers/subsystems I help to maintain I think the
-> > > primary pattern looks something like this:
-> > > 
-> > > list_for_each_entry(entry, head, member) {
-> > >      if (some_condition_checking(entry))
-> > >          break;
-> > > }
-> > > do_something_with(entry);
-> > 
-> > Actually, we usually have a check to see if the loop found
-> > anything, but in that case it should something like
-> > 
-> > if (list_entry_is_head(entry, head, member)) {
-> >    return with error;
-> > }
-> > do_somethin_with(entry);
-> > 
-> > Suffice?  The list_entry_is_head() macro is designed to cope with
-> > the bogus entry on head problem.
-> 
-> Won't suffice because the end goal of this work is to limit scope of
-> entry only to loop. Hence the need for additional variable.
-
-Well, yes, but my objection is more to the size of churn than the
-desire to do loop local.  I'm not even sure loop local is possible,
-because it's always annoyed me that for (int i = 0; ...  in C++ defines
-i in the outer scope not the loop scope, which is why I never use it.
-
-However, if the desire is really to poison the loop variable then we
-can do
-
-#define list_for_each_entry(pos, head, member)				\
-	for (pos = list_first_entry(head, typeof(*pos), member);	\
-	     !list_entry_is_head(pos, head, member) && ((pos = NULL) == NULL;			\
-	     pos = list_next_entry(pos, member))
-
-Which would at least set pos to NULL when the loop completes.
-
-> Besides, there are no guarantees that people won't
-> do_something_with(entry) without the check or won't compare entry to
-> NULL to check if the loop finished with break or not.
-
-I get the wider goal, but we have to patch the problem cases now and a
-simple one-liner is better than a larger patch that may or may not work
-if we ever achieve the local definition or value poisoning idea.  I'm
-also fairly certain coccinelle can come up with a use without checking
-for loop completion semantic patch which we can add to 0day.
-
-James
+Hi
 
 
+2022. febru=C3=A1r 28., h=C3=A9tf=C5=91 23:28 keltez=C3=A9ssel, James Botto=
+mley =C3=ADrta:
+> [...]
+> Well, yes, but my objection is more to the size of churn than the
+> desire to do loop local.  I'm not even sure loop local is possible,
+> because it's always annoyed me that for (int i =3D 0; ...  in C++ defines
+> i in the outer scope not the loop scope, which is why I never use it.
+
+It is arguably off-topic to the discussion at hand, but I think you might b=
+e
+thinking of something else (or maybe it was the case in an ancient version =
+of C++)
+because that does not appear to be case. If it were,
+
+  for (int i ...) { ... }
+  for (int i ...) { ... }
+
+would have to trigger a redeclaration error, but that happens neither in C+=
++ nor in C.
+The variable is also inaccessible outside the loop.
+
+
+> [...]
+
+
+Regards,
+Barnab=C3=A1s P=C5=91cze
