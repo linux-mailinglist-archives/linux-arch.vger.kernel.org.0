@@ -2,41 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0B24C7CA5
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 23:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7AE4C7CC4
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 23:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiB1WCM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Feb 2022 17:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S229666AbiB1WGM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Feb 2022 17:06:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiB1WCL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 17:02:11 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CAF9EBB6;
-        Mon, 28 Feb 2022 14:01:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29AD1B81698;
-        Mon, 28 Feb 2022 22:01:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 677EEC340F1;
-        Mon, 28 Feb 2022 22:01:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646085677;
-        bh=bmzYeqH+wd1Y/i05gxZoeqc9TywPR9wpt0imv9Fx7Nw=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=lb9MoeFhEeGqaET4WoooJnliR/Aftbuf2qgeJWcsJRMUD7lxaPDCkpbBw1fltPmKc
-         jIEBu8SnVjgO3Aaf+8FYuXvVgG5MgAciJgva3R/8WVNn/ktDFk3hANDz2GKUoZWtxI
-         SvipV/Wo2m8Yu0T44/FsB9ncJWS6zqb8Cis19xBBpG1gsQAhwdKCM2xymmzy1B6vAh
-         NLgpj3CkfoCj7XXB9+t8bZHUSaMtCcXi/0/BYE3ppk5zRyoiwaHoQXmDsDHRdh2g9L
-         BKDOg0IEHzQ+qInzyklcGdLSrMWPhR+ZxEuCQewyXU3mL+4cdRVVpWMroWAhmtcL3w
-         /5xJdekiDQkIw==
-Date:   Mon, 28 Feb 2022 23:59:07 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        =?ISO-8859-1?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-CC:     Jakob Koschel <jakobkoschel@gmail.com>,
+        with ESMTP id S229838AbiB1WGL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 17:06:11 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F44C4B55;
+        Mon, 28 Feb 2022 14:05:31 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id qx21so27621667ejb.13;
+        Mon, 28 Feb 2022 14:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=rjAgW0TZYa01aB+RWuD5jL6/P65QVmPGzGS1fypwqkM=;
+        b=SsE2iptdX/xTNU84zbtZf+FZ8hKTkJX9H9ZM578+fdgJrDU7+0yGKs3Y1+Ec8zM22z
+         4L/SCSccM9eH+aBbsU9p5ll5VTrDlXvOt1QFHQZ0QoX++s1RFseEQQ8VJGBWAvwFCFIq
+         jeFzH1SGTYgHS7irPmR7cmG6wYjaX3+E6LxhLklpw86+z7E18Zuelcsa1QvD5X9AuKj5
+         NYlhLrqxXUYjh+QgOiXwDeMKoQqdSp4BR7hulFUTvSZMfnkNflEuO+lrt30n2JUf7UIn
+         5TdA8KwzIEgmQjPXnxPtLxIzLgpwPLiA+LehnjNWRY5HBdt4E59Tm/VNBLrMAmAi/DS2
+         EEuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=rjAgW0TZYa01aB+RWuD5jL6/P65QVmPGzGS1fypwqkM=;
+        b=W/12CwqZ3uzF9/7JkXERS4Y+CdZGwbbbQ0nWvsM7TR1zmYzDQ26zI1lWM+qtzN/t1i
+         XtDLx3/As3xn++hIWRYWHc+ZWHdBfXN63sO2xLAW9UlAiLBZuqIm0rP5a1jqCDrwOkjZ
+         dQccJ/7ZLiYu7KLCH5U25inYMSnunbQzlWsk8OkOlrGDB05bYe6bdNrvLbywT+HUzs3w
+         FrkFGkFM85IXPhqoa3rByMdo/mvXvVUwb1rQiGL9ZO3OvQl8OKMRECNJSvOJLtOSUwhD
+         0y/onbfE+nza7Kt2o5oUKpgj64lq1VLWbXAiVXpZz2QzDJWpeNMdnAyN+dmjq73P9SyC
+         Gp9w==
+X-Gm-Message-State: AOAM5317JvYWqn+H3SXcsseeu1Ak49y9S5UGir6uxGGuNvVTz3RflWEV
+        mvwm/Fvfl9DIpNtBFqCK+YE=
+X-Google-Smtp-Source: ABdhPJy9dyrpbH/urhqhSpy7WKh/oklsnc56vlW33h3ZTWE1g0yI8U4qpehenqdC8nVSV7dV3sC9Vw==
+X-Received: by 2002:a17:906:370f:b0:6ce:6e7:7344 with SMTP id d15-20020a170906370f00b006ce06e77344mr16083589ejc.654.1646085929715;
+        Mon, 28 Feb 2022 14:05:29 -0800 (PST)
+Received: from smtpclient.apple ([2a02:8109:9d80:3f6c:957a:1d13:c949:d1f3])
+        by smtp.gmail.com with ESMTPSA id v2-20020a17090606c200b006a728f4a9bcsm4769566ejb.148.2022.02.28.14.05.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Feb 2022 14:05:29 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <0b65541a-3da7-dc35-690a-0ada75b0adae@amd.com>
+Date:   Mon, 28 Feb 2022 23:05:26 +0100
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
@@ -83,20 +103,23 @@ CC:     Jakob Koschel <jakobkoschel@gmail.com>,
         dma <dmaengine@vger.kernel.org>,
         linux-mediatek@lists.infradead.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_2/6=5D_treewide=3A_remove_using?= =?US-ASCII?Q?_list_iterator_after_loop_body_as_a_ptr?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com> <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com> <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com> <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
-Message-ID: <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <192A6D7F-E803-47AE-9C7A-267B4E87C856@gmail.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
+ <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
+ <0b65541a-3da7-dc35-690a-0ada75b0adae@amd.com>
+To:     =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -105,94 +128,86 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-On February 28, 2022 10:42:53 PM GMT+02:00, James Bottomley <James=2EBotto=
-mley@HansenPartnership=2Ecom> wrote:
->On Mon, 2022-02-28 at 21:07 +0100, Christian K=C3=B6nig wrote:
->> Am 28=2E02=2E22 um 20:56 schrieb Linus Torvalds:
->> > On Mon, Feb 28, 2022 at 4:19 AM Christian K=C3=B6nig
->> > <christian=2Ekoenig@amd=2Ecom> wrote:
->> > > I don't think that using the extra variable makes the code in any
->> > > way
->> > > more reliable or easier to read=2E
->> > So I think the next step is to do the attached patch (which
->> > requires
->> > that "-std=3Dgnu11" that was discussed in the original thread)=2E
->> >=20
->> > That will guarantee that the 'pos' parameter of
->> > list_for_each_entry()
->> > is only updated INSIDE the for_each_list_entry() loop, and can
->> > never
->> > point to the (wrongly typed) head entry=2E
->> >=20
->> > And I would actually hope that it should actually cause compiler
->> > warnings about possibly uninitialized variables if people then use
->> > the
->> > 'pos' pointer outside the loop=2E Except
->> >=20
->> >   (a) that code in sgx/encl=2Ec currently initializes 'tmp' to NULL
->> > for
->> > inexplicable reasons - possibly because it already expected this
->> > behavior
->> >=20
->> >   (b) when I remove that NULL initializer, I still don't get a
->> > warning,
->> > because we've disabled -Wno-maybe-uninitialized since it results in
->> > so
->> > many false positives=2E
->> >=20
->> > Oh well=2E
->> >=20
->> > Anyway, give this patch a look, and at least if it's expanded to do
->> > "(pos) =3D NULL" in the entry statement for the for-loop, it will
->> > avoid the HEAD type confusion that Jakob is working on=2E And I think
->> > in a cleaner way than the horrid games he plays=2E
->> >=20
->> > (But it won't avoid possible CPU speculation of such type
->> > confusion=2E That, in my opinion, is a completely different issue)
+> On 28. Feb 2022, at 21:56, Christian K=C3=B6nig =
+<christian.koenig@amd.com> wrote:
+>=20
+>=20
+>=20
+> Am 28.02.22 um 21:42 schrieb James Bottomley:
+>> On Mon, 2022-02-28 at 21:07 +0100, Christian K=C3=B6nig wrote:
+>>> Am 28.02.22 um 20:56 schrieb Linus Torvalds:
+>>>> On Mon, Feb 28, 2022 at 4:19 AM Christian K=C3=B6nig
+>>>> <christian.koenig@amd.com> wrote:
+>>>> [SNIP]
+>>>> Anybody have any ideas?
+>>> I think we should look at the use cases why code is touching (pos)
+>>> after the loop.
+>>>=20
+>>> Just from skimming over the patches to change this and experience
+>>> with the drivers/subsystems I help to maintain I think the primary
+>>> pattern looks something like this:
+>>>=20
+>>> list_for_each_entry(entry, head, member) {
+>>>      if (some_condition_checking(entry))
+>>>          break;
+>>> }
+>>> do_something_with(entry);
+
+There are other cases where the list iterator variable is used after the =
+loop
+Some examples:
+
+- list_for_each_entry_continue() and list_for_each_entry_from().
+
+- (although very rare) the head is actually of the correct struct type.
+		(ppc440spe_get_group_entry(): =
+drivers/dma/ppc4xx/adma.c:1436)
+
+- to use pos->list for example for list_add_tail():
+		(add_static_vm_early(): arch/arm/mm/ioremap.c:107)
+
+If the scope of the list iterator is limited those still need fixing in =
+a different way.
+
 >>=20
->> Yes, completely agree=2E
+>> Actually, we usually have a check to see if the loop found anything,
+>> but in that case it should something like
 >>=20
->> > I do wish we could actually poison the 'pos' value after the loop
->> > somehow - but clearly the "might be uninitialized" I was hoping for
->> > isn't the way to do it=2E
->> >=20
->> > Anybody have any ideas?
->>=20
->> I think we should look at the use cases why code is touching (pos)
->> after the loop=2E
->>=20
->> Just from skimming over the patches to change this and experience
->> with the drivers/subsystems I help to maintain I think the primary
->> pattern looks something like this:
->>=20
->> list_for_each_entry(entry, head, member) {
->>      if (some_condition_checking(entry))
->>          break;
+>> if (list_entry_is_head(entry, head, member)) {
+>>     return with error;
 >> }
->> do_something_with(entry);
->
->
->Actually, we usually have a check to see if the loop found anything,
->but in that case it should something like
->
->if (list_entry_is_head(entry, head, member)) {
->    return with error;
->}
->do_somethin_with(entry);
->
->Suffice?  The list_entry_is_head() macro is designed to cope with the
->bogus entry on head problem=2E
+>> do_somethin_with(entry);
+>>=20
+>> Suffice?  The list_entry_is_head() macro is designed to cope with the
+>> bogus entry on head problem.
+>=20
+> That will work and is also what people already do.
+>=20
+> The key problem is that we let people do the same thing over and over =
+again with slightly different implementations.
+>=20
+> Out in the wild I've seen at least using a separate variable, using a =
+bool to indicate that something was found and just assuming that the =
+list has an entry.
+>=20
+> The last case is bogus and basically what can break badly.
+>=20
+> If we would have an unified macro which search for an entry combined =
+with automated reporting on patches to use that macro I think the =
+potential to introduce such issues will already go down massively =
+without auditing tons of existing code.
 
-Won't suffice because the end goal of this work is to limit scope of entry=
- only to loop=2E Hence the need for additional variable=2E
+Having a unified way to do the same thing would indeed be great.
 
-Besides, there are no guarantees that people won't do_something_with(entry=
-) without the check or won't compare entry to NULL to check if the loop fin=
-ished with break or not=2E
+>=20
+> Regards,
+> Christian.
+>=20
+>>=20
+>> James
+>>=20
+>>=20
+>=20
 
->James
+- Jakob
 
-
---=20
-Sincerely yours,
-Mike
