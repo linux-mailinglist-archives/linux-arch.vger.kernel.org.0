@@ -2,127 +2,236 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D724C6B7E
-	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 13:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47614C6B98
+	for <lists+linux-arch@lfdr.de>; Mon, 28 Feb 2022 13:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236089AbiB1MD3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Feb 2022 07:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S236128AbiB1MEY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Feb 2022 07:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236079AbiB1MDZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 07:03:25 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8B2363F4
-        for <linux-arch@vger.kernel.org>; Mon, 28 Feb 2022 04:02:44 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-166-d7SEXvIjOR2492KDyKN4ug-1; Mon, 28 Feb 2022 12:02:41 +0000
-X-MC-Unique: d7SEXvIjOR2492KDyKN4ug-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 28 Feb 2022 12:02:38 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 28 Feb 2022 12:02:38 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Guo Ren' <guoren@kernel.org>
-CC:     "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "anup@brainfault.org" <anup@brainfault.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "liush@allwinnertech.com" <liush@allwinnertech.com>,
-        "wefu@redhat.com" <wefu@redhat.com>,
-        "drew@beagleboard.org" <drew@beagleboard.org>,
-        "wangjunqiang@iscas.ac.cn" <wangjunqiang@iscas.ac.cn>,
-        "hch@lst.de" <hch@lst.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [PATCH V7 03/20] compat: consolidate the compat_flock{,64}
- definition
-Thread-Topic: [PATCH V7 03/20] compat: consolidate the compat_flock{,64}
- definition
-Thread-Index: AQHYK/ctkLOBFN5NzkqkonsQCyvC26yogbZggABZggCAAAIWoA==
-Date:   Mon, 28 Feb 2022 12:02:38 +0000
-Message-ID: <e5ee4f6799704bd59b0c580157a05d2d@AcuMS.aculab.com>
-References: <20220227162831.674483-1-guoren@kernel.org>
- <20220227162831.674483-4-guoren@kernel.org>
- <b8e765910e274c0fb574ff23f88b881c@AcuMS.aculab.com>
- <CAJF2gTRQ0XWSjoEeREtEGr5PPD-rHrBKFY_i6_9uW3eEN_6muQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTRQ0XWSjoEeREtEGr5PPD-rHrBKFY_i6_9uW3eEN_6muQ@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S236121AbiB1MEX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 07:04:23 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D10A2C13A;
+        Mon, 28 Feb 2022 04:03:41 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id p15so24284100ejc.7;
+        Mon, 28 Feb 2022 04:03:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=m/mYa1XqvvHLfnL3BOoOqYDa1ViNV7MB47waZKIycw0=;
+        b=puET9FaE+iPLWSLHaH0Jc15P7LML3ILv/CtQc1xDRlDOvchBnePGr3CpZ8iNTFg26S
+         MvdmzyKLao5C/5rXrSzR7jzTPZ0Yuj+7M+cqDE4eOMJCgAt9uraXgTEJwynFkzni1Fvy
+         Vjo1HNa/jUOUFI/CmrkLVTegwpA5o7Cf0wR8qBn5y2xARegC4rz7JN5F70qSFE936vyK
+         a6/WQ787WIaZ7lFx0I/tSaiXwe3z6FIrVBWdIQkzq0oVXXDZs7cCv56cl8qPmZ4RxzRI
+         sP+DHiZk3rxPTft7o6PkfUdJMVZiSNaECaj+ljhYu978P5TkgTkfoRd54h/EuhklkuKS
+         esTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=m/mYa1XqvvHLfnL3BOoOqYDa1ViNV7MB47waZKIycw0=;
+        b=b5ErhjzOgn9U4hMBWo62yCMMDr61Wbhoawc/0WIGvgv7uxDqgPBoMig5dkM4VcHO7D
+         XKGWXQAibWijkLhBlKxLdxo61wnOSvx2UA6hpeOSM9Kcuf7/XZfe5J0/n1I5On+XdXXK
+         PFQcVcX3hWp/zNSc2A+ockxR4gcqCtFm6svFqpVzEXI/0Xk81KyM/fDpKtm0e8ViUMcX
+         o/CdwN5J0ITvoc2Erb4pWTpaOetb2pONRYytJagcudWss0yCyhqPe1OVwvoSobXHk6O4
+         swJRhuM3X8J92q2Tx5p5S+FryA/Dtr1braIlwDEjBlzC0ufkOGMpNIGrGLDVVdoY+DiY
+         6qYQ==
+X-Gm-Message-State: AOAM532P7Eovede7RZdlai8eb3Qd6/DRPl1sWJVIfHcd4AoqihYZ5BTx
+        KlHFJt41/QKvCU8lHPeyZ80=
+X-Google-Smtp-Source: ABdhPJyPihjoYwx+e9NKg98XvxKCbWi7t13guT1EBLKeJ6QGdK72cKHCeJpX8hRszpc83uJxZ+jQ9w==
+X-Received: by 2002:a17:906:d14e:b0:6cd:8d7e:eec9 with SMTP id br14-20020a170906d14e00b006cd8d7eeec9mr14944415ejb.28.1646049820086;
+        Mon, 28 Feb 2022 04:03:40 -0800 (PST)
+Received: from smtpclient.apple ([2a02:8109:9d80:3f6c:957a:1d13:c949:d1f3])
+        by smtp.gmail.com with ESMTPSA id l9-20020a1709060cc900b006ce04bb8668sm4257528ejh.184.2022.02.28.04.03.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 28 Feb 2022 04:03:39 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH 1/6] drivers: usb: remove usage of list iterator past the
+ loop body
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <20220228112413.GA2812@kadam>
+Date:   Mon, 28 Feb 2022 13:03:36 +0100
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergman <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-sgx@vger.kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux1394-devel@lists.sourceforge.net,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, kvm@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        v9fs-developer@lists.sourceforge.net,
+        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E31E215E-C409-40B8-8452-57E70C91484C@gmail.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-2-jakobkoschel@gmail.com>
+ <20220228112413.GA2812@kadam>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogR3VvIFJlbg0KPiBTZW50OiAyOCBGZWJydWFyeSAyMDIyIDExOjUyDQo+IA0KPiBPbiBN
-b24sIEZlYiAyOCwgMjAyMiBhdCAyOjQwIFBNIERhdmlkIExhaWdodCA8RGF2aWQuTGFpZ2h0QGFj
-dWxhYi5jb20+IHdyb3RlOg0KPiA+DQo+ID4gRnJvbTogZ3VvcmVuQGtlcm5lbC5vcmcNCj4gPiA+
-IFNlbnQ6IDI3IEZlYnJ1YXJ5IDIwMjIgMTY6MjgNCj4gPiA+DQo+ID4gPiBGcm9tOiBDaHJpc3Rv
-cGggSGVsbHdpZyA8aGNoQGxzdC5kZT4NCj4gPiA+DQo+ID4gPiBQcm92aWRlIGEgc2luZ2xlIGNv
-bW1vbiBkZWZpbml0aW9uIGZvciB0aGUgY29tcGF0X2Zsb2NrIGFuZA0KPiA+ID4gY29tcGF0X2Zs
-b2NrNjQgc3RydWN0dXJlcyB1c2luZyB0aGUgc2FtZSB0cmlja3MgYXMgZm9yIHRoZSBuYXRpdmUN
-Cj4gPiA+IHZhcmlhbnRzLiAgQW5vdGhlciBleHRyYSBkZWZpbmUgaXMgYWRkZWQgZm9yIHRoZSBw
-YWNraW5nIHJlcXVpcmVkIG9uDQo+ID4gPiB4ODYuDQo+ID4gLi4uDQo+ID4gPiBkaWZmIC0tZ2l0
-IGEvYXJjaC94ODYvaW5jbHVkZS9hc20vY29tcGF0LmggYi9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9j
-b21wYXQuaA0KPiA+IC4uLg0KPiA+ID4gIC8qDQo+ID4gPiAtICogSUEzMiB1c2VzIDQgYnl0ZSBh
-bGlnbm1lbnQgZm9yIDY0IGJpdCBxdWFudGl0aWVzLA0KPiA+ID4gLSAqIHNvIHdlIG5lZWQgdG8g
-cGFjayB0aGlzIHN0cnVjdHVyZS4NCj4gPiA+ICsgKiBJQTMyIHVzZXMgNCBieXRlIGFsaWdubWVu
-dCBmb3IgNjQgYml0IHF1YW50aXRpZXMsIHNvIHdlIG5lZWQgdG8gcGFjayB0aGUNCj4gPiA+ICsg
-KiBjb21wYXQgZmxvY2s2NCBzdHJ1Y3R1cmUuDQo+ID4gPiAgICovDQo+ID4gLi4uDQo+ID4gPiAr
-I2RlZmluZSBfX0FSQ0hfTkVFRF9DT01QQVRfRkxPQ0s2NF9QQUNLRUQNCj4gPiA+DQo+ID4gPiAg
-c3RydWN0IGNvbXBhdF9zdGF0ZnMgew0KPiA+ID4gICAgICAgaW50ICAgICAgICAgICAgIGZfdHlw
-ZTsNCj4gPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2NvbXBhdC5oIGIvaW5jbHVkZS9s
-aW51eC9jb21wYXQuaA0KPiA+ID4gaW5kZXggMWM3NThiMGUwMzU5Li5hMDQ4MWZlNmM1ZDUgMTAw
-NjQ0DQo+ID4gPiAtLS0gYS9pbmNsdWRlL2xpbnV4L2NvbXBhdC5oDQo+ID4gPiArKysgYi9pbmNs
-dWRlL2xpbnV4L2NvbXBhdC5oDQo+ID4gPiBAQCAtMjU4LDYgKzI1OCwzNyBAQCBzdHJ1Y3QgY29t
-cGF0X3JsaW1pdCB7DQo+ID4gPiAgICAgICBjb21wYXRfdWxvbmdfdCAgcmxpbV9tYXg7DQo+ID4g
-PiAgfTsNCj4gPiA+DQo+ID4gPiArI2lmZGVmIF9fQVJDSF9ORUVEX0NPTVBBVF9GTE9DSzY0X1BB
-Q0tFRA0KPiA+ID4gKyNkZWZpbmUgX19BUkNIX0NPTVBBVF9GTE9DSzY0X1BBQ0sgICBfX2F0dHJp
-YnV0ZV9fKChwYWNrZWQpKQ0KPiA+ID4gKyNlbHNlDQo+ID4gPiArI2RlZmluZSBfX0FSQ0hfQ09N
-UEFUX0ZMT0NLNjRfUEFDSw0KPiA+ID4gKyNlbmRpZg0KPiA+IC4uLg0KPiA+ID4gK3N0cnVjdCBj
-b21wYXRfZmxvY2s2NCB7DQo+ID4gPiArICAgICBzaG9ydCAgICAgICAgICAgbF90eXBlOw0KPiA+
-ID4gKyAgICAgc2hvcnQgICAgICAgICAgIGxfd2hlbmNlOw0KPiA+ID4gKyAgICAgY29tcGF0X2xv
-ZmZfdCAgIGxfc3RhcnQ7DQo+ID4gPiArICAgICBjb21wYXRfbG9mZl90ICAgbF9sZW47DQo+ID4g
-PiArICAgICBjb21wYXRfcGlkX3QgICAgbF9waWQ7DQo+ID4gPiArI2lmZGVmIF9fQVJDSF9DT01Q
-QVRfRkxPQ0s2NF9QQUQNCj4gPiA+ICsgICAgIF9fQVJDSF9DT01QQVRfRkxPQ0s2NF9QQUQNCj4g
-PiA+ICsjZW5kaWYNCj4gPiA+ICt9IF9fQVJDSF9DT01QQVRfRkxPQ0s2NF9QQUNLOw0KPiA+ID4g
-Kw0KPiA+DQo+ID4gUHJvdmlkZWQgY29tcGF0X2xvZmZfdCBhcmUgY29ycmVjdGx5IGRlZmluZWQg
-d2l0aCBfX2FsaWduZWRfXyg0KQ0KPiBTZWUgaW5jbHVkZS9hc20tZ2VuZXJpYy9jb21wYXQuaA0K
-PiANCj4gdHlwZWRlZiBzNjQgY29tcGF0X2xvZmZfdDsNCj4gDQo+IE9ubHk6DQo+ICNpZmRlZiBD
-T05GSUdfQ09NUEFUX0ZPUl9VNjRfQUxJR05NRU5UDQo+IHR5cGVkZWYgczY0IF9fYXR0cmlidXRl
-X18oKGFsaWduZWQoNCkpKSBjb21wYXRfczY0Ow0KPiANCj4gU28gaG93IGRvIHlvdSB0aGluayBj
-b21wYXRfbG9mZl90IGNvdWxkIGJlIGRlZmluZWQgd2l0aCBfX2FsaWduZWRfXyg0KT8NCg0KY29t
-cGF0X2xvZmZfdCBzaG91bGQgYmUgY29tcGF0X3M2NCBub3QgczY0Lg0KDQpUaGUgc2FtZSBzaG91
-bGQgYmUgZG9uZSBmb3IgYWxsIDY0Yml0ICdjb21wYXQnIHR5cGVzLg0KDQoJRGF2aWQNCg0KLQ0K
-UmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1p
-bHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVz
-KQ0K
+
+
+> On 28. Feb 2022, at 12:24, Dan Carpenter <dan.carpenter@oracle.com> =
+wrote:
+>=20
+> On Mon, Feb 28, 2022 at 12:08:17PM +0100, Jakob Koschel wrote:
+>> diff --git a/drivers/usb/gadget/udc/at91_udc.c =
+b/drivers/usb/gadget/udc/at91_udc.c
+>> index 9040a0561466..0fd0307bc07b 100644
+>> --- a/drivers/usb/gadget/udc/at91_udc.c
+>> +++ b/drivers/usb/gadget/udc/at91_udc.c
+>> @@ -150,13 +150,14 @@ static void proc_ep_show(struct seq_file *s, =
+struct at91_ep *ep)
+>> 	if (list_empty (&ep->queue))
+>> 		seq_printf(s, "\t(queue empty)\n");
+>>=20
+>> -	else list_for_each_entry (req, &ep->queue, queue) {
+>> -		unsigned	length =3D req->req.actual;
+>> +	else
+>> +		list_for_each_entry(req, &ep->queue, queue) {
+>> +			unsigned int	length =3D req->req.actual;
+>>=20
+>> -		seq_printf(s, "\treq %p len %d/%d buf %p\n",
+>> -				&req->req, length,
+>> -				req->req.length, req->req.buf);
+>> -	}
+>> +			seq_printf(s, "\treq %p len %d/%d buf %p\n",
+>> +					&req->req, length,
+>> +					req->req.length, req->req.buf);
+>> +		}
+>=20
+> Don't make unrelated white space changes.  It just makes the patch
+> harder to review.  As you're writing the patch make note of any
+> additional changes and do them later in a separate patch.
+>=20
+> Also a multi-line indent gets curly braces for readability even though
+> it's not required by C.  And then both sides would get curly braces.
+>=20
+>> 	spin_unlock_irqrestore(&udc->lock, flags);
+>> }
+>>=20
+>> @@ -226,7 +227,7 @@ static int proc_udc_show(struct seq_file *s, void =
+*unused)
+>>=20
+>> 	if (udc->enabled && udc->vbus) {
+>> 		proc_ep_show(s, &udc->ep[0]);
+>> -		list_for_each_entry (ep, &udc->gadget.ep_list, =
+ep.ep_list) {
+>> +		list_for_each_entry(ep, &udc->gadget.ep_list, =
+ep.ep_list) {
+>=20
+> Another unrelated change.
+>=20
+>> 			if (ep->ep.desc)
+>> 				proc_ep_show(s, ep);
+>> 		}
+>=20
+>=20
+> [ snip ]
+
+Thanks for pointing out, I'll remove the changes here and note them down
+to send them separately.
+
+>=20
+>> diff --git a/drivers/usb/gadget/udc/net2272.c =
+b/drivers/usb/gadget/udc/net2272.c
+>> index 7c38057dcb4a..bb59200f1596 100644
+>> --- a/drivers/usb/gadget/udc/net2272.c
+>> +++ b/drivers/usb/gadget/udc/net2272.c
+>> @@ -926,7 +926,8 @@ static int
+>> net2272_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+>> {
+>> 	struct net2272_ep *ep;
+>> -	struct net2272_request *req;
+>> +	struct net2272_request *req =3D NULL;
+>> +	struct net2272_request *tmp;
+>> 	unsigned long flags;
+>> 	int stopped;
+>>=20
+>> @@ -939,11 +940,13 @@ net2272_dequeue(struct usb_ep *_ep, struct =
+usb_request *_req)
+>> 	ep->stopped =3D 1;
+>>=20
+>> 	/* make sure it's still queued on this endpoint */
+>> -	list_for_each_entry(req, &ep->queue, queue) {
+>> -		if (&req->req =3D=3D _req)
+>> +	list_for_each_entry(tmp, &ep->queue, queue) {
+>> +		if (&tmp->req =3D=3D _req) {
+>> +			req =3D tmp;
+>> 			break;
+>> +		}
+>> 	}
+>> -	if (&req->req !=3D _req) {
+>> +	if (!req) {
+>> 		ep->stopped =3D stopped;
+>> 		spin_unlock_irqrestore(&ep->dev->lock, flags);
+>> 		return -EINVAL;
+>> @@ -954,7 +957,6 @@ net2272_dequeue(struct usb_ep *_ep, struct =
+usb_request *_req)
+>> 		dev_dbg(ep->dev->dev, "unlink (%s) pio\n", _ep->name);
+>> 		net2272_done(ep, req, -ECONNRESET);
+>> 	}
+>> -	req =3D NULL;
+>=20
+> Another unrelated change.  These are all good changes but send them as
+> separate patches.
+
+You are referring to the req =3D NULL, right?
+
+I've changed the use of 'req' in the same function and assumed that I =
+can
+just remove the unnecessary statement. But if it's better to do =
+separately
+I'll do that.
+
+>=20
+>> 	ep->stopped =3D stopped;
+>>=20
+>> 	spin_unlock_irqrestore(&ep->dev->lock, flags);
+>=20
+> regards,
+> dan carpenter
+
+thanks,
+Jakob Koschel
 
