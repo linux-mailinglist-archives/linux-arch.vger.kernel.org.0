@@ -2,140 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4021E4C7FF6
-	for <lists+linux-arch@lfdr.de>; Tue,  1 Mar 2022 02:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B68754C7FFB
+	for <lists+linux-arch@lfdr.de>; Tue,  1 Mar 2022 02:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiCABEb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Feb 2022 20:04:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S231791AbiCABFA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 28 Feb 2022 20:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiCABEa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 20:04:30 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99D3237EC
-        for <linux-arch@vger.kernel.org>; Mon, 28 Feb 2022 17:03:50 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id u11so19799547lju.4
-        for <linux-arch@vger.kernel.org>; Mon, 28 Feb 2022 17:03:50 -0800 (PST)
+        with ESMTP id S231392AbiCABE7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Feb 2022 20:04:59 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EEDDFDA;
+        Mon, 28 Feb 2022 17:04:19 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id bx9-20020a17090af48900b001bc64ee7d3cso778100pjb.4;
+        Mon, 28 Feb 2022 17:04:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+UrwimTIhzKiU9pJv3o5X6bf+6FXMWBGxz+Z+GIIGDc=;
-        b=avIYh8aQ2dDobwKAVUmxzj/7dS14/rGtEVGY0pMiaJUsHbP3qIU6kno3XMfBz/RlQM
-         DBr9tOtZ8iqO/uKNwSujAwo9mle8zBl2HT1HDuvvvRH+Bqr8BYPzCJojUUOk2VYbR5wW
-         hMzIeM3di7snjNNfrAaBZvtX47IfluwYB/RPY=
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JxbuS4aazLDL51xW5kf+AQjRVbpgf9TG+em7RLL+8w4=;
+        b=dB9Clx8zmHr6yzW3aX6j6WXoTlHrg5n2x0hjgiXerhpzAfxcgU9G/x4d+wNouipXk6
+         qSo7DgvVlGzHdH9U7crZwrssu7wRqs8vqpp7VzwbW6E10nDvqHtW31sACoVAIoR856sm
+         3B6PK0MVKfR5aC0Rje68dCwbUTiMiQuCprLLHPKjV4MLT+OcogmQpnSzmMv1SQjs1ZYi
+         Vq54U7z2JIEkiYgKSW4GzEjyJC/Z1HtcjTQkpd7E/YW5AIvU54clEalIsgYUgBluWuFo
+         0q7JFz1ffva/IFpoViX2GYCn7Nch1vWOsZD/a/gLuoYwBwWGW+TJp4erqZAPHJW2vahv
+         n+OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+UrwimTIhzKiU9pJv3o5X6bf+6FXMWBGxz+Z+GIIGDc=;
-        b=bK5Ff3REYWnZFkG7fu73Xzjmk5aMYULZRg+CdeyRknR08HVePkeYHxvs70beUScapU
-         J1YohkotQfPM5NU5/4tLnNaDlQFS5QLmj7ZbG8vlNwzbCZNVwirRNSBxHug7wZhoAINK
-         Brt8hInh8XiMmvO93c8cZ+V1Rb7Q2U7nugPmHxUes6AXv7J31C3rYU4fgeirV5R4nPEt
-         viL0dSfMj6VeORINcGLmgY7/c1eUxaJFLs/zMBR9vQsJZN459CUMBk7QIrRFoYbOFgoa
-         IIwZykpFnjdd7u9Yr+CdG8Hn+GkQM5EpvQq0Yl+SmdvLYdKWWYRr0zrlEC9i0Y9q8eIB
-         ye6w==
-X-Gm-Message-State: AOAM533T8EPphr+ISC0qIQALka/KAOUTVZXVQXKVYHYCxicJD0j7AwOi
-        pvCS90sFwAD6sdeRNXwfcVkQ4080rztnwep7i+M=
-X-Google-Smtp-Source: ABdhPJw1DQfv6L51dAALzEf8CtgB/J0a+MpGdyMMBpzSmDXcCkQ4xoCuUqVcCBXWWtwe4z713wzjcg==
-X-Received: by 2002:a05:651c:1148:b0:244:bb6a:ed9a with SMTP id h8-20020a05651c114800b00244bb6aed9amr15571720ljo.510.1646096628990;
-        Mon, 28 Feb 2022 17:03:48 -0800 (PST)
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
-        by smtp.gmail.com with ESMTPSA id v25-20020a056512049900b00443f5c2edb6sm1220969lfq.81.2022.02.28.17.03.48
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Feb 2022 17:03:48 -0800 (PST)
-Received: by mail-lf1-f45.google.com with SMTP id i11so24349269lfu.3
-        for <linux-arch@vger.kernel.org>; Mon, 28 Feb 2022 17:03:48 -0800 (PST)
-X-Received: by 2002:a05:6512:3042:b0:437:96f5:e68a with SMTP id
- b2-20020a056512304200b0043796f5e68amr14803965lfb.449.1646096282839; Mon, 28
- Feb 2022 16:58:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220228110822.491923-3-jakobkoschel@gmail.com> <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
- <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
- <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
- <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
- <Yh0tl3Lni4weIMkl@casper.infradead.org> <CAHk-=wgBfJ1-cPA2LTvFyyy8owpfmtCuyiZi4+um8DhFNe+CyA@mail.gmail.com>
- <Yh1aMm3hFe/j9ZbI@casper.infradead.org> <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
-In-Reply-To: <CAHk-=wi0gSUMBr2SVF01Gy1xC1w1iGtJT5ztju9BPWYKjdh+NA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 28 Feb 2022 16:57:46 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whqJmCZ+VHTJPwsHYc1YNNEvWS7=ukqGKfBxcBYAToAkw@mail.gmail.com>
-Message-ID: <CAHk-=whqJmCZ+VHTJPwsHYc1YNNEvWS7=ukqGKfBxcBYAToAkw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        intel-wired-lan@lists.osuosl.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        bcm-kernel-feedback-list@broadcom.com,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        v9fs-developer@lists.sourceforge.net,
-        linux-tegra <linux-tegra@vger.kernel.org>,
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=JxbuS4aazLDL51xW5kf+AQjRVbpgf9TG+em7RLL+8w4=;
+        b=gIWTmjPQDKjSAlBr3mmnO18fkgaMCn052vfDtNvVelXC62pxTtImU4K830RBzSRnhl
+         0oKPtDHNNjS3eTZvXdQ6NEa8Tk5bzuo0HG4D3BmWW76VyIW9ex5DVQ9yOjC+y/2Yoir6
+         A56r1O6+iMvFE2m1EDbV3w62Ydwpf48XqRkQXzxsPs+cWvjMVeisneq89HN6G5uF0R90
+         0PVaxpD7MvvvosmZGy3KWMdRAYAfGOnykZvo+BwBlbLIOhWg1KmYBzkBnDf9qNj4Q8wC
+         p3ZWg+wRh2UnqTB6GqvVz2KrfWHMdqHQqwi8j+NPonpHbuC97nv/OLhghWU5w9DB6us+
+         9Zeg==
+X-Gm-Message-State: AOAM531Zvh1mbV70RptIx21G+Gwnq2NTM0fE/sXGliAQ50bnrFcgsR0Y
+        yGS8pk4noEpQzg9xPB8mZR0=
+X-Google-Smtp-Source: ABdhPJzV+sq8kEU2RDQZxJoEVlhPZjoiXebtB+kHHRMxLRH5EBx23aIIx559emKKm2xLfONZUR8rng==
+X-Received: by 2002:a17:902:b945:b0:14f:f05e:5479 with SMTP id h5-20020a170902b94500b0014ff05e5479mr22651166pls.94.1646096658850;
+        Mon, 28 Feb 2022 17:04:18 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:726c:585a:8796:a60a])
+        by smtp.gmail.com with ESMTPSA id cv15-20020a17090afd0f00b001bedcbca1a9sm83861pjb.57.2022.02.28.17.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Feb 2022 17:04:18 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-sgx@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        tipc-discussion@lists.sourceforge.net,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Byungchul Park <byungchul.park@lge.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        bpf@vger.kernel.org, Radoslaw Burny <rburny@google.com>
+Subject: [RFC 0/4] locking: Add new lock contention tracepoints (v2)
+Date:   Mon, 28 Feb 2022 17:04:08 -0800
+Message-Id: <20220301010412.431299-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.35.1.574.g5d30c73bfb-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 4:45 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Yeah, except that's ugly beyond belief, plus it's literally not what
-> we do in the kernel.
+Hello,
 
-(Of course, I probably shouldn't have used 'min()' as an example,
-because that is actually one of the few places where we do exactly
-that, using our __UNIQUE_ID() macros. Exactly because people _have_
-tried to do -Wshadow when doing W=2).
+There have been some requests for low-overhead kernel lock contention
+monitoring.  The kernel has CONFIG_LOCK_STAT to provide such an infra
+either via /proc/lock_stat or tracepoints directly.
 
-                 Linus
+However it's not light-weight and hard to be used in production.  So
+I'm trying to add new tracepoints for lock contention and using them
+as a base to build a new monitoring system.
+
+* Changes in v2
+ - do not use lockdep infrastructure
+ - add flags argument to lock:contention_begin tracepoint
+
+As we don't want to increase the size of lock data structure, it's
+hard to have the name of locks or their classes.  Instead we can use
+caller IP to identify contended locks.  I had to modify some places to
+have that information meaningful.
+
+Also, I added a flags argument in the contention_begin to classify
+locks in question.  The lower 2 bytes will have a task state it goes
+to.  This can be TASK_RUNNING (0) for spinlocks, or other values for
+sleeping locks (mutex, rwsem, ...).  And the upper 2 bytes will have
+addition info like whether it's a reader-writer lock or real-time and
+so on.
+
+The patch 01 added the tracepoints in a new file and two new wrapper
+functions were added.  This file contains definition of all locking
+tracepoints including lockdep/lock_stat.  The wrappers are necessary
+because some kind of locks are defined in a header file and it was not
+possible to include tracepoint headers directly due to circular
+dependencies.
+
+The patch 02 actually installs the tracepoints in the locking code.
+To minimize the overhead, they were added in the slow path of the code
+separately.  As spinlocks are defined in the arch headers, I couldn't
+handle them all.  I've just added it to generic queued spinlock and
+rwlocks only.  Each arch can add the tracepoints later.
+
+The patch 03 and 04 updates the mutex and rwsem code to pass proper
+caller IPs.  Getting the caller IP at the tracepoint won't work if any
+of the locking code is not inlined.  So pass the IP from the API
+function to the internal ones.
+
+This series base on the current tip/locking/core and you get it from
+'locking/tracepoint-v2' branch in my tree at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+
+Thanks,
+Namhyung
+
+
+Namhyung Kim (4):
+  locking: Add lock contention tracepoints
+  locking: Apply contention tracepoints in the slow path
+  locking/mutex: Pass proper call-site ip
+  locking/rwsem: Pass proper call-site ip
+
+ include/asm-generic/qrwlock.h   |  5 ++
+ include/asm-generic/qspinlock.h |  3 ++
+ include/linux/lock_trace.h      | 31 +++++++++++++
+ include/linux/lockdep.h         | 29 +++++++++++-
+ include/trace/events/lock.h     | 43 ++++++++++++++++-
+ kernel/locking/Makefile         |  2 +-
+ kernel/locking/lockdep.c        |  1 -
+ kernel/locking/mutex.c          | 44 ++++++++++--------
+ kernel/locking/percpu-rwsem.c   | 11 ++++-
+ kernel/locking/rtmutex.c        | 12 ++++-
+ kernel/locking/rwbase_rt.c      | 11 ++++-
+ kernel/locking/rwsem.c          | 81 ++++++++++++++++++++-------------
+ kernel/locking/tracepoint.c     | 21 +++++++++
+ 13 files changed, 235 insertions(+), 59 deletions(-)
+ create mode 100644 include/linux/lock_trace.h
+ create mode 100644 kernel/locking/tracepoint.c
+
+
+base-commit: cd27ccfc727e99352321c0c75012ab9c5a90321e
+-- 
+2.35.1.574.g5d30c73bfb-goog
+
