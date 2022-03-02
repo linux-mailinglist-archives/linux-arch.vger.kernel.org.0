@@ -2,111 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC104CA366
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Mar 2022 12:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E234CA711
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Mar 2022 15:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241410AbiCBLUv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Mar 2022 06:20:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
+        id S242587AbiCBOFJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 2 Mar 2022 09:05:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241529AbiCBLUm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Mar 2022 06:20:42 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E146645F;
-        Wed,  2 Mar 2022 03:19:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=I1/BTw8u15H3AVnQDepPulkDIkTQG/EDO8JslQ2y518=; b=yzUOmQTC9SehCgZYgd4h+Ey12C
-        IF3SwMxqhKSw9mftTnudCgM/6vhgVjqN1K54lqRScHZdWomhMSw8gc4Q17z82/t4ePZPTadPDNBW0
-        RAYoi7RTG5lEPYnuj/W83EiMnjCPrblb+04/X34ls5AXk4/1qSt0tzJPYiQCOWZ8wtXGi6o/0W54C
-        JYouMTieLlNBty6aTd82+iHFYVBl998jCqSMezXTJKHViIkOZV4L90kAOBr7Bjp+j1Cc20Fo3g2xF
-        ZHXM5LboaCYqutYgpLpdk+j1UVvj2hjc2fYOc6snFpF3IOhlr7vydYbVzzsl941esiWGhbWsi5Amp
-        qfJLh3Qg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57592)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nPN0v-0002K5-5r; Wed, 02 Mar 2022 11:19:25 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nPN0s-00085f-7p; Wed, 02 Mar 2022 11:19:22 +0000
-Date:   Wed, 2 Mar 2022 11:19:22 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        with ESMTP id S242654AbiCBOFD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Mar 2022 09:05:03 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A767488B1F
+        for <linux-arch@vger.kernel.org>; Wed,  2 Mar 2022 06:04:18 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-196-4Li6Fux3PdyQ14Lo-DMf3A-1; Wed, 02 Mar 2022 14:04:10 +0000
+X-MC-Unique: 4Li6Fux3PdyQ14Lo-DMf3A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Wed, 2 Mar 2022 14:04:06 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Wed, 2 Mar 2022 14:04:06 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Xiaomeng Tong' <xiam0nd.tong@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "bjohannesmeyer@gmail.com" <bjohannesmeyer@gmail.com>,
+        "c.giuffrida@vu.nl" <c.giuffrida@vu.nl>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "h.j.bos@vu.nl" <h.j.bos@vu.nl>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Message-ID: <Yh9SuiayqcDdIB3B@shell.armlinux.org.uk>
-References: <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
- <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
- <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
- <Yh1pYAOiskEQes3p@shell.armlinux.org.uk>
- <dc3c95a4-de06-9889-ce1e-f660fc9fbb95@csgroup.eu>
- <c3b60de0-38cd-160a-aa15-831349e07e23@arm.com>
- <52866c88-59f9-2d1c-6f5a-5afcaf23f2bb@csgroup.eu>
- <9caa90f5-c10d-75dd-b403-1388b7a3d296@arm.com>
- <CAMuHMdU11kaOzanhHZRH+mLTJzaz-i=PnKdK7NF9V-qx6kp8wg@mail.gmail.com>
- <b1eca2cd-36e6-3a9a-9fe7-70fc0caed7a9@arm.com>
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>
+Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Topic: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Thread-Index: AQHYLhg9+DU/OogLf0+tiSFmjztyUKysHu+Q
+Date:   Wed, 2 Mar 2022 14:04:06 +0000
+Message-ID: <1077f17e50d34dc2bbfdf4e52a1cb2fd@AcuMS.aculab.com>
+References: <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+ <20220302093106.8402-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220302093106.8402-1-xiam0nd.tong@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1eca2cd-36e6-3a9a-9fe7-70fc0caed7a9@arm.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 04:36:52PM +0530, Anshuman Khandual wrote:
-> On 3/2/22 3:35 PM, Geert Uytterhoeven wrote:
-> > I doubt the switch() variant would give better code on any platform.
-> > 
-> > What about using tables everywhere, using designated initializers
-> > to improve readability?
+From: Xiaomeng Tong
+> Sent: 02 March 2022 09:31
 > 
-> Designated initializers ? Could you please be more specific. A table look
-> up on arm platform would be something like this and arm_protection_map[]
-> needs to be updated with user_pgprot like before.
+> On Mon, 28 Feb 2022 16:41:04 -0800, Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > But basically to _me_, the important part is that the end result is
+> > maintainable longer-term.
+> 
+> I couldn't agree more. And because of that, I stick with the following
+> approach because it's maintainable longer-term than "type(pos) pos" one:
+>  Implements a new macro for each list_for_each_entry* with _inside suffix.
+>   #define list_for_each_entry_inside(pos, type, head, member)
 
-There is *absolutely* nothing wrong with that. Updating it once during
-boot is way more efficient than having to compute the value each time
-vm_get_page_prot() gets called.
+I think that it would be better to make any alternate loop macro
+just set the variable to NULL on the loop exit.
+That is easier to code for and the compiler might be persuaded to
+not redo the test.
 
-Thanks.
+It also doesn't need an extra variable defined in the for() statement
+so can be back-ported to older kernels without required declaration
+in the middle of blocks.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+OTOH there may be alternative definitions that can be used to get
+the compiler (or other compiler-like tools) to detect broken code.
+Even if the definition can't possibly generate a working kerrnel.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
