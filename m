@@ -2,88 +2,218 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B944CA12E
-	for <lists+linux-arch@lfdr.de>; Wed,  2 Mar 2022 10:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82014CA151
+	for <lists+linux-arch@lfdr.de>; Wed,  2 Mar 2022 10:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240665AbiCBJsT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 2 Mar 2022 04:48:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S238929AbiCBJwS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 2 Mar 2022 04:52:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231388AbiCBJsR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Mar 2022 04:48:17 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF6C2D1F0
-        for <linux-arch@vger.kernel.org>; Wed,  2 Mar 2022 01:47:30 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id f11so1057263qvz.4
-        for <linux-arch@vger.kernel.org>; Wed, 02 Mar 2022 01:47:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
-        b=QWdde23KNX46k7WkqryQHz1i3nNKX3hJ6bUw0DjcHiOt75WWu7w5auh04nLkT/xnOJ
-         R0VQHYTpPb3pK1dC5Q61RFQMwi4trskiEVa2TQn04UuisHYWibAazS7ATmu54TIBxXdA
-         5lK9Ys3nLH2M+OL5YbUWmBjXKkfNKuHDhT335FY7373hVh3ljtDU7hufDm+HoFdxRSC5
-         irTZ1zsjvdJCrCgb+ck2wdaojqCCFwevHlYpXu0UnAPPXOqgUXh+Q4uM4deQ12SqSBxO
-         anQ3SzaZnzqNuLNM3DIBa/tSUB0jwrQxi9OOPrEA2SXa6sqI0YSXgXVQjBwH2TaK1Eg7
-         1gOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=oVymzacBmHlfSEBN0NUcViscc1BlJREjJA6+b6RGOmg=;
-        b=pjFalf849I5OSt7bQNQoWPoNKj077sKZJU48gB2tnWek+zFAHICPMO8SWQ3KSQmC+Y
-         2LRd91N++1xjL/FX43zxN0NcgaGohQa5HJan9Fd37Wuu3Q5ivt52qklRlp5rUW6E1HtL
-         1f9ifOffLBsU4WZmR4WuLcSyX3M4kqCQxNrfP+aTDvXxFTsXj6UbtehPHURxa17mxOES
-         V12EtVNt0U+jUaLBYo6Gh2TwbrS6HhMFoGgj8vhSSrhfA1qRAa+qLeQm7xq1y8vytT1X
-         CLZXOoHlFHe5Z1gaLWgw0jDYfpRA5+9zsWfuIed2ur7LMazwXQKRr7RYsI99YHYmrjqI
-         CGZw==
-X-Gm-Message-State: AOAM530SAvFi0oDtwfmqp8LOF90ESZ7r4c88piLVD1+AX7KCt2o4PHz+
-        ppboMpbIedTcVfMHrDmbZbMYaHKrL2+jzPs8Zfc=
-X-Google-Smtp-Source: ABdhPJwbpxn+o5lpNUFUhQmBWdx4hvUvkX98PANWZ50On8S1tPm3b2kQMdzMgrFsQtUtHu3RHExhB4D+i2WeoxrhN7I=
-X-Received: by 2002:a05:6214:f2d:b0:432:dc5f:ea15 with SMTP id
- iw13-20020a0562140f2d00b00432dc5fea15mr14989081qvb.81.1646214448456; Wed, 02
- Mar 2022 01:47:28 -0800 (PST)
+        with ESMTP id S233574AbiCBJwQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 2 Mar 2022 04:52:16 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7094EBA75C;
+        Wed,  2 Mar 2022 01:51:32 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 146371042;
+        Wed,  2 Mar 2022 01:51:32 -0800 (PST)
+Received: from [10.163.49.202] (unknown [10.163.49.202])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE96F3F66F;
+        Wed,  2 Mar 2022 01:51:24 -0800 (PST)
+Subject: Re: [PATCH V3 09/30] arm/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <1646045273-9343-1-git-send-email-anshuman.khandual@arm.com>
+ <1646045273-9343-10-git-send-email-anshuman.khandual@arm.com>
+ <Yhyqjo/4bozJB6j5@shell.armlinux.org.uk>
+ <542fa048-131e-240b-cc3a-fd4fff7ce4ba@arm.com>
+ <Yh1pYAOiskEQes3p@shell.armlinux.org.uk>
+ <dc3c95a4-de06-9889-ce1e-f660fc9fbb95@csgroup.eu>
+ <c3b60de0-38cd-160a-aa15-831349e07e23@arm.com>
+ <52866c88-59f9-2d1c-6f5a-5afcaf23f2bb@csgroup.eu>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <9caa90f5-c10d-75dd-b403-1388b7a3d296@arm.com>
+Date:   Wed, 2 Mar 2022 15:21:22 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: by 2002:ad4:5443:0:0:0:0:0 with HTTP; Wed, 2 Mar 2022 01:47:27 -0800 (PST)
-From:   Anna Zakharchenko <fpar.org@gmail.com>
-Date:   Wed, 2 Mar 2022 10:47:27 +0100
-Message-ID: <CALr0R0oEzU-WF+OhADUDAnG2qytOv4T7_0dX6YBZoqPbR=3=NA@mail.gmail.com>
-Subject: Re: Help me in Ukraine
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,URG_BIZ autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+In-Reply-To: <52866c88-59f9-2d1c-6f5a-5afcaf23f2bb@csgroup.eu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
 
 
-I am a Russian widow trapped in Ukraine's Donbass region amid Vladimir
-Putin's senseless conflict. During the 2014 battle in the Donbass, I
-lost my husband, a prominent Ukrainian businessman, who died without
-having children with me. I am currently in an underground bunker in
-Donetsk Oblast, a separatist war zone recognized by Russian President
-Vladimir Putin. I urgently request your assistance in moving my family
-trust fund worth =C2=A33,500,000.00 from the UK to your country to prevent
-European Union sanctions from seizing my money because I am a Russian
-citizen.
+On 3/2/22 12:35 PM, Christophe Leroy wrote:
+> 
+> 
+> Le 02/03/2022 à 04:22, Anshuman Khandual a écrit :
+>>
+>>
+>> On 3/1/22 1:46 PM, Christophe Leroy wrote:
+>>>
+>>>
+>>> Le 01/03/2022 à 01:31, Russell King (Oracle) a écrit :
+>>>> On Tue, Mar 01, 2022 at 05:30:41AM +0530, Anshuman Khandual wrote:
+>>>>> On 2/28/22 4:27 PM, Russell King (Oracle) wrote:
+>>>>>> On Mon, Feb 28, 2022 at 04:17:32PM +0530, Anshuman Khandual wrote:
+>>>>>>> This defines and exports a platform specific custom vm_get_page_prot() via
+>>>>>>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. Subsequently all __SXXX and __PXXX
+>>>>>>> macros can be dropped which are no longer needed.
+>>>>>>
+>>>>>> What I would really like to know is why having to run _code_ to work out
+>>>>>> what the page protections need to be is better than looking it up in a
+>>>>>> table.
+>>>>>>
+>>>>>> Not only is this more expensive in terms of CPU cycles, it also brings
+>>>>>> additional code size with it.
+>>>>>>
+>>>>>> I'm struggling to see what the benefit is.
+>>>>>
+>>>>> Currently vm_get_page_prot() is also being _run_ to fetch required page
+>>>>> protection values. Although that is being run in the core MM and from a
+>>>>> platform perspective __SXXX, __PXXX are just being exported for a table.
+>>>>> Looking it up in a table (and applying more constructs there after) is
+>>>>> not much different than a clean switch case statement in terms of CPU
+>>>>> usage. So this is not more expensive in terms of CPU cycles.
+>>>>
+>>>> I disagree.
+>>>
+>>> So do I.
+>>>
+>>>>
+>>>> However, let's base this disagreement on some evidence. Here is the
+>>>> present 32-bit ARM implementation:
+>>>>
+>>>> 00000048 <vm_get_page_prot>:
+>>>>         48:       e200000f        and     r0, r0, #15
+>>>>         4c:       e3003000        movw    r3, #0
+>>>>                           4c: R_ARM_MOVW_ABS_NC   .LANCHOR1
+>>>>         50:       e3403000        movt    r3, #0
+>>>>                           50: R_ARM_MOVT_ABS      .LANCHOR1
+>>>>         54:       e7930100        ldr     r0, [r3, r0, lsl #2]
+>>>>         58:       e12fff1e        bx      lr
+>>>>
+>>>> That is five instructions long.
+>>>
+>>> On ppc32 I get:
+>>>
+>>> 00000094 <vm_get_page_prot>:
+>>>         94:	3d 20 00 00 	lis     r9,0
+>>> 			96: R_PPC_ADDR16_HA	.data..ro_after_init
+>>>         98:	54 84 16 ba 	rlwinm  r4,r4,2,26,29
+>>>         9c:	39 29 00 00 	addi    r9,r9,0
+>>> 			9e: R_PPC_ADDR16_LO	.data..ro_after_init
+>>>         a0:	7d 29 20 2e 	lwzx    r9,r9,r4
+>>>         a4:	91 23 00 00 	stw     r9,0(r3)
+>>>         a8:	4e 80 00 20 	blr
+>>>
+>>>
+>>>>
+>>>> Please show that your new implementation is not more expensive on
+>>>> 32-bit ARM. Please do so by building a 32-bit kernel, and providing
+>>>> the disassembly.
+>>>
+>>> With your series I get:
+>>>
+>>> 00000000 <vm_get_page_prot>:
+>>>      0:	3d 20 00 00 	lis     r9,0
+>>> 			2: R_PPC_ADDR16_HA	.rodata
+>>>      4:	39 29 00 00 	addi    r9,r9,0
+>>> 			6: R_PPC_ADDR16_LO	.rodata
+>>>      8:	54 84 16 ba 	rlwinm  r4,r4,2,26,29
+>>>      c:	7d 49 20 2e 	lwzx    r10,r9,r4
+>>>     10:	7d 4a 4a 14 	add     r10,r10,r9
+>>>     14:	7d 49 03 a6 	mtctr   r10
+>>>     18:	4e 80 04 20 	bctr
+>>>     1c:	39 20 03 15 	li      r9,789
+>>>     20:	91 23 00 00 	stw     r9,0(r3)
+>>>     24:	4e 80 00 20 	blr
+>>>     28:	39 20 01 15 	li      r9,277
+>>>     2c:	91 23 00 00 	stw     r9,0(r3)
+>>>     30:	4e 80 00 20 	blr
+>>>     34:	39 20 07 15 	li      r9,1813
+>>>     38:	91 23 00 00 	stw     r9,0(r3)
+>>>     3c:	4e 80 00 20 	blr
+>>>     40:	39 20 05 15 	li      r9,1301
+>>>     44:	91 23 00 00 	stw     r9,0(r3)
+>>>     48:	4e 80 00 20 	blr
+>>>     4c:	39 20 01 11 	li      r9,273
+>>>     50:	4b ff ff d0 	b       20 <vm_get_page_prot+0x20>
+>>>
+>>>
+>>> That is definitely more expensive, it implements a table of branches.
+>>
+>> Okay, will split out the PPC32 implementation that retains existing
+>> table look up method. Also planning to keep that inside same file
+>> (arch/powerpc/mm/mmap.c), unless you have a difference preference.
+> 
+> My point was not to get something specific for PPC32, but to amplify on 
+> Russell's objection.
+> 
+> As this is bad for ARM and bad for PPC32, do we have any evidence that 
+> your change is good for any other architecture ?
+> 
+> I checked PPC64 and there is exactly the same drawback. With the current 
+> implementation it is a small function performing table read then a few 
+> adjustment. After your change it is a bigger function implementing a 
+> table of branches.
 
-Please help me save and protect this money. You will receive 30% of
-the total money as a reward for your efforts, while you must keep 70%
-for me until the conflict is over. For more information, you can
-contact me directly at (anna@sc2000.net).
+I am wondering if this would not be the case for any other switch case
+statement on the platform ? Is there something specific/different just
+on vm_get_page_prot() implementation ? Are you suggesting that switch
+case statements should just be avoided instead ?
 
+> 
+> So, as requested by Russell, could you look at the disassembly for other 
+> architectures and show us that ARM and POWERPC are the only ones for 
+> which your change is not optimal ?
 
-Cordially
-Anna Zakharchenko
-My email address is: anna@sc2000.net
+But the primary purpose of this series is not to guarantee optimized
+code on platform by platform basis, while migrating from a table based
+look up method into a switch case statement.
+
+But instead, the purposes is to remove current levels of unnecessary
+abstraction while converting a vm_flags access combination into page
+protection. The switch case statement for platform implementation of
+vm_get_page_prot() just seemed logical enough. Christoph's original
+suggestion patch for x86 had the same implementation as well.
+
+But if the table look up is still better/preferred method on certain
+platforms like arm or ppc32, will be happy to preserve that.
+
+- Anshuman
