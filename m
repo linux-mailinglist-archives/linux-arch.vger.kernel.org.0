@@ -2,60 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A871E4CD222
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Mar 2022 11:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C24CF4CD253
+	for <lists+linux-arch@lfdr.de>; Fri,  4 Mar 2022 11:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235389AbiCDKNf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Mar 2022 05:13:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
+        id S233379AbiCDKYv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 4 Mar 2022 05:24:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbiCDKNe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Mar 2022 05:13:34 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F1437AA0;
-        Fri,  4 Mar 2022 02:12:45 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id z10so3367624uaa.3;
-        Fri, 04 Mar 2022 02:12:45 -0800 (PST)
+        with ESMTP id S231445AbiCDKYu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Mar 2022 05:24:50 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223F14EA21;
+        Fri,  4 Mar 2022 02:24:01 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id d11so8548656vsm.5;
+        Fri, 04 Mar 2022 02:24:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uS2B76amqrUivQxdB2w6x2mADYcqGePMbA5ahPvBBes=;
-        b=RCIpE6wEAaYuKuKX/hp+Oe12HxIgX6sWPqSWPRACWxshXS2i/LzlMn1UK2IrafkheI
-         +H/8ANRbrXNuKaRdulMMDyEg52ZccMsk16uhuNpBrxjmD8k6EuqAqpF9xyp4lKj/cHQz
-         bJwohnjIZPiA7VYh9zA+iUGRkcgR1j5PJo2OQw5USXJzekubVXJfJcXSPrEzAfL/rPej
-         6nZFOuUfUq0j8ziGZrptkFHXxm76dMm2rAE6EKhq7FLtmYSn83O97+IJ4qrwTQ5LrYAv
-         SsRGDFNDIfSYHOX0L1omVnqjcbsqWKD74IOGmsGfMjlTQKFWHsiS/HaxnXw0ZJxKDyTd
-         zlow==
+        bh=PwCgFrKVYtlfIz8CnnCvaOjD8UASRKkBxkcuQcJ6l6A=;
+        b=Y9ZO8AtQhlGhlG5+TkZj1HExcNwp0f+E3W8wnWfIr4KqgBPS/5xha/nzqSzOI3zEJZ
+         UjJpihIQgM2LlKg7Z34ZqN4eZAJUIIxth9d1cGuUY8aWp6JU1GyoVbK5LCxpxOi6XQ7S
+         vgE69sJ8/qUPLWVVla3cbDWlG1v0LDZ1gdLky3Dyj+YjfZ/0eWjUukSgy7smOIoRdFXz
+         h8AcwYHbPD0Ci1h9YpAWfxGIiyi3w+0bCPn0w0V8QSw3USqvlfBO5KyUWn+l6WtJQBAT
+         7PnjX9LjGoEJ+pn2X84Ifk9IsswPhyNO8ANgBc5htWze+QvGJYtzS8Qxhf7QZ2REgyVy
+         aRjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uS2B76amqrUivQxdB2w6x2mADYcqGePMbA5ahPvBBes=;
-        b=RzzMHGGSZVVr9HRMoF6039jqW596Wzx46oCfE6shRfhHmBh+QNd74G2ZcI98GVBdXX
-         rNg3oE+5ebklC6ZPcxjt/dVLrG+GZpz4GkVgmT1flO08TMxRXiXqdjuPr4FZbRbsOk+d
-         MpteKcpbVgKXzaDDEJ/xz21OLFYY0MTWCgYQKxYkHEBJvwOFisgcM7jCCQ4paIidyYkY
-         O73t47fHtQc9f80rb9h9DBXkEivIMMAr03gz6n36d3pqK+scwEjD0p07+/+3PoOoWahC
-         lf/5x9x4qVC/n6WLwVO1hcC9F67+TyS22YqyU/iuAzH+zAvtJgTtyFjLg3rhMRBG3ZLw
-         UH1w==
-X-Gm-Message-State: AOAM530Np18W6Nhq9tiu10bHmScK9Hr3VmiFPMFrVJ5n/3UDklaL450q
-        nMNHtWwpP3K67kVUq53x3CmwKJ+xOjiZdk3lTts=
-X-Google-Smtp-Source: ABdhPJw00lQPrCec3/TTZ20tO8Lzug4ENjMEKPnCnZxXCFM/b1zV8TSFgelW8P7mCLV2akEObVBWiXZdgWA1+5zZwqE=
-X-Received: by 2002:ab0:2809:0:b0:341:f4aa:829d with SMTP id
- w9-20020ab02809000000b00341f4aa829dmr16117477uap.42.1646388764333; Fri, 04
- Mar 2022 02:12:44 -0800 (PST)
+        bh=PwCgFrKVYtlfIz8CnnCvaOjD8UASRKkBxkcuQcJ6l6A=;
+        b=tysw6Ca0OodzcMuqDeHGaEIimmcZvPDSTuPH4TiffL36x6fnrr2LGPWfjRDNNP7h1P
+         qAWLWE2GR6wAvuJ4ZfxH2D8BLUSaDjJQYX0uRk7XmTrKdb07s+VPdmOGUiKT5teytrsI
+         3kFcUmcShqPz4ShDI1ID8f9fRwO0cWu4zzov+afHScIKIU8mAGDruWjHfDT3XtUE23OA
+         HMPFDpjvLPsRhaitsN69fBOyzOAYfovOmYXW8vnkcp/NbUybA3JLqnBIHJ9fM7giPeWG
+         5Sq9MYMNlvh9kdCJNj3lqZHINRArSlrhRr+/NYQ9Ffd8QveoJAlG3O6vI+H7xtomvC1k
+         XU4w==
+X-Gm-Message-State: AOAM532jhVcpwxOlrnQtGGA8OP8oJVucyXjmxUYf/SHy2E5bJCecNClv
+        hTvv+mOR3Jf1A3PcvYlug6xOcEwIkVe64SWPpOo=
+X-Google-Smtp-Source: ABdhPJwjLuVqoDFgtAh/T7A5IBTy0nkEOc4EOhnDv7STkYQqXNkZdWeRJ0Ugd32BXSmAqMJolhIwuxlpx2XCHBkAixk=
+X-Received: by 2002:a05:6102:5589:b0:31b:dff9:3ddb with SMTP id
+ dc9-20020a056102558900b0031bdff93ddbmr16907830vsb.62.1646389440179; Fri, 04
+ Mar 2022 02:24:00 -0800 (PST)
 MIME-Version: 1.0
 References: <20220226110338.77547-1-chenhuacai@loongson.cn>
- <20220226110338.77547-13-chenhuacai@loongson.cn> <YiDp1VmAv4aMfX3B@kernel.org>
-In-Reply-To: <YiDp1VmAv4aMfX3B@kernel.org>
+ <20220226110338.77547-10-chenhuacai@loongson.cn> <CAMj1kXHWRZcjF9H2jZ+p-HNuXyPs-=9B8WiYLsrDJGpipgKo_w@mail.gmail.com>
+ <YhupaVZvbipgke2Z@kroah.com> <CAAhV-H6hmvyniHP-CMxtOopRHp6XYaF58re13snMrk_Umj+wSQ@mail.gmail.com>
+ <CAMj1kXFa447Z21q3uu0UFExDDDG9Y42ZHtiUppu6QpuNA_5bhA@mail.gmail.com>
+ <CAAhV-H7X+Txq4HaaF49QZ9deD=Dwx_GX-2E9q_nA8P76ZRDeXg@mail.gmail.com>
+ <CAMj1kXGH1AtL8_KbFkK+FRgWQPzPm1dCdvEF0A2KksREGTSeCg@mail.gmail.com>
+ <CAAhV-H6fdJwbVG_m0ZL_JGROKCrCbc-fKpj3dnOowaEUA+3ujQ@mail.gmail.com>
+ <CAK8P3a2hr2rjyLpkeG1EKiOVGrY4UCB61OHGj5nzft-KCS3jYA@mail.gmail.com>
+ <CAMj1kXHGG80LdNUUA+Ug1VBXWuvtPxKpqnuChg2N=6Hf2EhY7g@mail.gmail.com>
+ <CAAhV-H6dxkdmDizd+ZVhJ_zHZ9RK8QjKU-3U-CaovLiNbEVpbg@mail.gmail.com>
+ <CAK8P3a2wF2XA8wCFtP9RNTNQf3W9D8fKOuQ704yE+dRSS5aCVw@mail.gmail.com>
+ <CAAhV-H65PeK8w0U2DSbQ0eSWzAR-zjhPz8swSgZhbtKKJAYAKg@mail.gmail.com>
+ <CAMj1kXFgCu659zGuZPpRLYPzFemtBv0jsOt1Yz0U0-R4DucqTw@mail.gmail.com>
+ <CAAhV-H6GrAH_HGehqernowaTyZjQRNOyp=O8QNE3_7RHfarUFQ@mail.gmail.com>
+ <CAAhV-H7B0xxNeTLd5n1cqPbF_hCp2N1KTbnNMAXFGxfZDzMcpw@mail.gmail.com> <CAMj1kXHc-Mpt_NTyR1CVzttV3ORtPerj23BBGNf=g7WmDu7BhA@mail.gmail.com>
+In-Reply-To: <CAMj1kXHc-Mpt_NTyR1CVzttV3ORtPerj23BBGNf=g7WmDu7BhA@mail.gmail.com>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 4 Mar 2022 18:12:31 +0800
-Message-ID: <CAAhV-H77MeSNOjh_cr=BuN_ns6Zfq3csN-iVS_nQLDRF+SyQJQ@mail.gmail.com>
-Subject: Re: [PATCH V6 12/22] LoongArch: Add memory management
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
+Date:   Fri, 4 Mar 2022 18:23:47 +0800
+Message-ID: <CAAhV-H5WS18XNaXVZUUKfL9BrVgb+xjH7vTsdyG7sJn0Pk0GEg@mail.gmail.com>
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -63,11 +78,12 @@ Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Jonathan Corbet <corbet@lwn.net>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -79,403 +95,135 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Mike,
+Hi, Ard & Arnd,
 
-On Fri, Mar 4, 2022 at 12:16 AM Mike Rapoport <rppt@kernel.org> wrote:
+On Thu, Mar 3, 2022 at 5:54 PM Ard Biesheuvel <ardb@kernel.org> wrote:
 >
-> On Sat, Feb 26, 2022 at 07:03:28PM +0800, Huacai Chen wrote:
-> > This patch adds memory management support for LoongArch, including:
-> > cache and tlb management, page fault handling and ioremap/mmap support.
+> On Thu, 3 Mar 2022 at 07:26, Huacai Chen <chenhuacai@gmail.com> wrote:
 > >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
+> > Hi, Ard & Arnd,
+> >
+> > On Wed, Mar 2, 2022 at 5:20 PM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > >
+> > > Hi, Ard,
+> > >
+> > > On Wed, Mar 2, 2022 at 4:58 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > >
+> > > > On Wed, 2 Mar 2022 at 09:56, Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > >
+> > > > > Hi, Arnd & Ard,
+> > > > >
+> > > > > On Tue, Mar 1, 2022 at 6:19 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > >
+> > > > > > On Tue, Mar 1, 2022 at 5:17 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > > > > On Mon, Feb 28, 2022 at 7:35 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > > > On Mon, 28 Feb 2022 at 12:24, Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > > > > > On Mon, Feb 28, 2022 at 11:42 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > > > > > > Can't you just use the UEFI protocol for kernel entry regardless
+> > > > > > > > > of the bootloader? It seems odd to use a different protocol for loading
+> > > > > > > > > grub and the kernel, especially if that means you end up having to
+> > > > > > > > > support both protocols inside of u-boot and grub, in order to chain-load
+> > > > > > > > > a uefi application like grub.
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > I think this would make sense. Now that the EFI stub has generic
+> > > > > > > > support for loading the initrd via a UEFI specific protocol (of which
+> > > > > > > > u-boot already carries an implementation), booting via UEFI only would
+> > > > > > > > mean that no Linux boot protocol would need to be defined outside of
+> > > > > > > > the kernel at all (i.e., where to load the kernel, where to put the
+> > > > > > > > command line, where to put the initrd, other arch specific rules etc
+> > > > > > > > etc) UEFI already supports both ACPI and DT boot
+> > > > > > >
+> > > > > > > After one night thinking, I agree with Ard that we can use RISCV-style
+> > > > > > > fdt to support the raw elf kernel at present, and add efistub support
+> > > > > > > after new UEFI SPEC released.
+> > > > > >
+> > > > > > I think that is the opposite of what Ard and I discussed above.
+> > > > > Hmm, I thought that new UEFI SPEC is a requirement of efistub, maybe I'm wrong?
+> > > > >
+> > > > > >
+> > > > > > > If I'm right, it seems that RISC-V passes a0 (hartid) and a1 (fdt
+> > > > > > > pointer, which contains cmdline, initrd, etc.) to the raw elf kernel.
+> > > > > > > And in my opinion, the main drawback of current LoongArch method
+> > > > > > > (a0=argc a1=argv a2=bootparamsinterface pointer) is it uses a
+> > > > > > > non-standard method to pass kernel args and initrd. So, can the below
+> > > > > > > new solution be acceptable?
+> > > > > > >
+> > > > > > > a0=bootparamsinterface pointer (the same as a2 in current method)
+> > > > > > > a1=fdt pointer (contains cmdline, initrd, etc., like RISC-V, I think
+> > > > > > > this is the standard method)
+> > > > > >
+> > > > > > It would seem more logical to me to keep those details as part of the
+> > > > > > interface between the EFI stub and the kernel, rather than the
+> > > > > > documented boot interface.
+> > > > > >
+> > > > > > You said that there is already grub support using the UEFI
+> > > > > > loader, so I assume you have a working draft of the boot
+> > > > > > protocol. Are there still open questions about the interface
+> > > > > > definition for that preventing you from using it as the only
+> > > > > > way to enter the kernel from a bootloader?
+> > > > > Things become simple if we only consider efistub rather than raw elf.
+> > > > > But there are still some problems:
+> > > > > 1, We want the first patch series as minimal as possible, efistub
+> > > > > support will add a lot of code.
+> > > > > 2, EFISTUB hides the interface between bootloader and raw kernel, but
+> > > > > the interface does actually exist (efistub itself is also a
+> > > > > bootloader, though it binds with the raw kernel). In the current
+> > > > > implementation (a0=argc a1=argv a2=bootparaminterface), we should
+> > > > > select EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER which is marked as
+> > > > > deprecated. Is this acceptable? If not, we still need to change the
+> > > > > bootloader-kernel interface, maybe use the method in my previous
+> > > > > email?
+> > > >
+> > > > Why do you need this?
+> > > Because in the current implementation (a0=argc a1=argv
+> > > a2=bootparaminterface), initrd should be passed by cmdline
+> > > (initrd=xxxx). If without that option, efi_load_initrd_cmdline() will
+> > > not call handle_cmdline_files().
+> > It seems I'm wrong. EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER controls
+> > "initrd=xxxx" from BIOS to EFISTUB, but has nothing to do with
+> > a0/a1/a2 usage (which controls the "initrd=xxxx" from efistub to raw
+> > kernel). The real reason is our UEFI BIOS has an old codebase without
+> > LoadFile2 support.
+> >
 >
-> ...
+> The problem with initrd= is that it can only load the initrd from the
+> same EFI block device that the kernel was loaded from, which is highly
+> restrictive, and doesn't work with bootloaders that call LoadImage()
+> on a kernel image loaded into memory. This is why x86 supports passing
+> the initrd in memory, and provide the base/size via struct bootparams,
+> and arm64 supports the same using DT.
 >
-> > diff --git a/arch/loongarch/include/asm/fixmap.h b/arch/loongarch/include/asm/fixmap.h
-> > new file mode 100644
-> > index 000000000000..04ac3c871294
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/fixmap.h
-> > @@ -0,0 +1,15 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * fixmap.h: compile-time virtual memory allocation
-> > + *
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +
-> > +#ifndef _ASM_FIXMAP_H
-> > +#define _ASM_FIXMAP_H
-> > +
-> > +#include <asm/page.h>
+> The LoadImage2 protocol based method intends to provide a generic
+> alternative to this, as it uses a pure EFI abstraction, and therefore
+> does not rely on struct bootparams or DT at all.
 >
-> Why this include is needed here?
-OK, let's remove it.
+> So the LoadImage2() based method is preferred, but if your
+> architecture implements DT support already, there is nothing
+> preventing you from passing initrd information directly to the kernel
+> via the /chosen node.
+>
+> > Then, my new questions are:
+> > 1, Is EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER an unacceptable option
+> > for a new Arch? If yes, we should backport LoadFile2 support to our
+> > BIOS.
+>
+> See above.
+>
+> > 2, We now all agree that EFISTUB is the standard and maybe the only
+> > way in future. But, can we do the efistub work in the second series,
+> > in order to make the first series as minimal as possible? (I will
+> > update the commit message to make it clear that a0/a1/a2 usage is only
+> > an internal interface between efistub and raw kernel).
+> >
+>
+> I think it would be better to drop the UEFI and ACPI pieces for now,
+> and resubmit it once the dust has settled around this.
+FDT support is our future goal, at present we only have ACPI firmware
+and kernel. I mentioned FDT just wants to replace a0/a1 to pass
+cmdline, not means we already have FDT support.
 
->
-> > +
-> > +#define NR_FIX_BTMAPS 64
-> > +
-> > +#endif
-> > diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/asm/page.h
-> > new file mode 100644
-> > index 000000000000..8619ef2823ad
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/page.h
-> > @@ -0,0 +1,127 @@
->
-> ...
->
-> > +/*
-> > + * __pa()/__va() should be used only during mem init.
-> > + */
-> > +#define __pa(x)              PHYSADDR(x)
-> > +#define __va(x)              ((void *)((unsigned long)(x) + PAGE_OFFSET - PHYS_OFFSET))
-> > +
-> > +#ifndef __pa_symbol
-> > +#define __pa_symbol(x)       __pa(RELOC_HIDE((unsigned long)(x), 0))
-> > +#endif
->
-> This is the same definition as in include/linux/mm.h.
-> Is it required here?
-OK, let's remove it.
-
->
-> ...
->
-> > diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> > new file mode 100644
-> > index 000000000000..61993cd4c3d7
-> > --- /dev/null
-> > +++ b/arch/loongarch/include/asm/pgtable.h
->
-> ...
->
-> > +#define PGD_ORDER            0
-> > +#define PUD_ORDER            0
-> > +#define PMD_ORDER            0
-> > +#define PTE_ORDER            0
->
-> Is it possible for these to change?
-> If not, please remove them.
->
-> ...
->
-> > diff --git a/arch/loongarch/mm/fault.c b/arch/loongarch/mm/fault.c
-> > new file mode 100644
-> > index 000000000000..d0170e4d5fe0
-> > --- /dev/null
-> > +++ b/arch/loongarch/mm/fault.c
-> > @@ -0,0 +1,257 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + *
-> > + * Derived from MIPS:
-> > + * Copyright (C) 1995 - 2000 by Ralf Baechle
-> > + */
-> > +#include <linux/context_tracking.h>
-> > +#include <linux/signal.h>
-> > +#include <linux/sched.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/entry-common.h>
-> > +#include <linux/errno.h>
-> > +#include <linux/string.h>
-> > +#include <linux/types.h>
-> > +#include <linux/ptrace.h>
-> > +#include <linux/ratelimit.h>
-> > +#include <linux/mman.h>
-> > +#include <linux/mm.h>
-> > +#include <linux/smp.h>
-> > +#include <linux/kdebug.h>
-> > +#include <linux/kprobes.h>
-> > +#include <linux/perf_event.h>
-> > +#include <linux/uaccess.h>
-> > +
-> > +#include <asm/branch.h>
-> > +#include <asm/mmu_context.h>
-> > +#include <asm/ptrace.h>
-> > +
-> > +int show_unhandled_signals = 1;
-> > +
-> > +/*
-> > + * This routine handles page faults.  It determines the address,
-> > + * and the problem, and then passes it off to one of the appropriate
-> > + * routines.
-> > + */
-> > +static void __kprobes __do_page_fault(struct pt_regs *regs, unsigned long write,
-> > +     unsigned long address)
-> > +{
-> > +     int si_code;
-> > +     const int field = sizeof(unsigned long) * 2;
-> > +     unsigned int flags = FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
-> > +     struct task_struct *tsk = current;
-> > +     struct mm_struct *mm = tsk->mm;
-> > +     struct vm_area_struct *vma = NULL;
-> > +     vm_fault_t fault;
-> > +
-> > +     static DEFINE_RATELIMIT_STATE(ratelimit_state, 5 * HZ, 10);
-> > +
-> > +     si_code = SEGV_MAPERR;
-> > +
-> > +     if (user_mode(regs) && (address & __UA_LIMIT))
-> > +             goto bad_area_nosemaphore;
-> > +
-> > +     /*
-> > +      * We fault-in kernel-space virtual memory on-demand. The
-> > +      * 'reference' page table is init_mm.pgd.
-> > +      *
-> > +      * NOTE! We MUST NOT take any locks for this case. We may
-> > +      * be in an interrupt or a critical region, and should
-> > +      * only copy the information from the master page table,
-> > +      * nothing more.
-> > +      */
-> > +     if (unlikely(address >= MODULES_VADDR && address <= MODULES_END))
-> > +             goto no_context;
-> > +
-> > +     if (unlikely(address >= VMALLOC_START && address <= VMALLOC_END))
-> > +             goto no_context;
-> > +
-> > +     /*
-> > +      * If we're in an interrupt or have no user
-> > +      * context, we must not take the fault..
-> > +      */
-> > +     if (faulthandler_disabled() || !mm)
-> > +             goto bad_area_nosemaphore;
-> > +
-> > +     if (user_mode(regs))
-> > +             flags |= FAULT_FLAG_USER;
-> > +retry:
-> > +     mmap_read_lock(mm);
-> > +     vma = find_vma(mm, address);
-> > +     if (!vma)
-> > +             goto bad_area;
-> > +     if (vma->vm_start <= address)
-> > +             goto good_area;
-> > +     if (!(vma->vm_flags & VM_GROWSDOWN))
-> > +             goto bad_area;
-> > +     if (expand_stack(vma, address))
-> > +             goto bad_area;
-> > +/*
-> > + * Ok, we have a good vm_area for this memory access, so
-> > + * we can handle it..
-> > + */
-> > +good_area:
-> > +     si_code = SEGV_ACCERR;
-> > +
-> > +     if (write) {
-> > +             if (!(vma->vm_flags & VM_WRITE))
-> > +                     goto bad_area;
-> > +             flags |= FAULT_FLAG_WRITE;
-> > +     } else {
-> > +             if (address == regs->csr_era && !(vma->vm_flags & VM_EXEC))
-> > +                     goto bad_area;
-> > +             if (!(vma->vm_flags & VM_READ) && exception_era(regs) != address)
-> > +                     goto bad_area;
-> > +     }
-> > +
-> > +     /*
-> > +      * If for any reason at all we couldn't handle the fault,
-> > +      * make sure we exit gracefully rather than endlessly redo
-> > +      * the fault.
-> > +      */
-> > +     fault = handle_mm_fault(vma, address, flags, regs);
-> > +
-> > +     if (fault_signal_pending(fault, regs)) {
-> > +             if (!user_mode(regs))
-> > +                     goto no_context;
-> > +             return;
-> > +     }
-> > +
-> > +     perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
-> > +     if (unlikely(fault & VM_FAULT_ERROR)) {
-> > +             if (fault & VM_FAULT_OOM)
-> > +                     goto out_of_memory;
-> > +             else if (fault & VM_FAULT_SIGSEGV)
-> > +                     goto bad_area;
-> > +             else if (fault & (VM_FAULT_SIGBUS|VM_FAULT_HWPOISON|VM_FAULT_HWPOISON_LARGE))
-> > +                     goto do_sigbus;
-> > +             BUG();
-> > +     }
-> > +     if (flags & FAULT_FLAG_ALLOW_RETRY) {
-> > +             if (fault & VM_FAULT_MAJOR) {
-> > +                     perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1,
-> > +                                               regs, address);
-> > +                     tsk->maj_flt++;
-> > +             } else {
-> > +                     perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1,
-> > +                                               regs, address);
-> > +                     tsk->min_flt++;
-> > +             }
-> > +             if (fault & VM_FAULT_RETRY) {
-> > +                     flags &= ~FAULT_FLAG_ALLOW_RETRY;
-> > +                     flags |= FAULT_FLAG_TRIED;
-> > +
-> > +                     /*
-> > +                      * No need to mmap_read_unlock(mm) as we would
-> > +                      * have already released it in __lock_page_or_retry
-> > +                      * in mm/filemap.c.
-> > +                      */
-> > +
-> > +                     goto retry;
-> > +             }
-> > +     }
-> > +
-> > +     mmap_read_unlock(mm);
-> > +     return;
-> > +
-> > +/*
-> > + * Something tried to access memory that isn't in our memory map..
-> > + * Fix it, but check if it's kernel or user first..
-> > + */
-> > +bad_area:
-> > +     mmap_read_unlock(mm);
-> > +
-> > +bad_area_nosemaphore:
-> > +     /* User mode accesses just cause a SIGSEGV */
-> > +     if (user_mode(regs)) {
-> > +             tsk->thread.csr_badvaddr = address;
-> > +             if (!write)
-> > +                     tsk->thread.error_code = 1;
-> > +             else
-> > +                     tsk->thread.error_code = 2;
-> > +
-> > +             if (show_unhandled_signals &&
-> > +                 unhandled_signal(tsk, SIGSEGV) &&
-> > +                 __ratelimit(&ratelimit_state)) {
-> > +                     pr_info("do_page_fault(): sending SIGSEGV to %s for invalid %s %0*lx\n",
-> > +                             tsk->comm,
-> > +                             write ? "write access to" : "read access from",
-> > +                             field, address);
-> > +                     pr_info("era = %0*lx in", field,
-> > +                             (unsigned long) regs->csr_era);
-> > +                     print_vma_addr(KERN_CONT " ", regs->csr_era);
-> > +                     pr_cont("\n");
-> > +                     pr_info("ra  = %0*lx in", field,
-> > +                             (unsigned long) regs->regs[1]);
-> > +                     print_vma_addr(KERN_CONT " ", regs->regs[1]);
-> > +                     pr_cont("\n");
-> > +             }
-> > +             current->thread.trap_nr = read_csr_excode();
-> > +             force_sig_fault(SIGSEGV, si_code, (void __user *)address);
-> > +             return;
-> > +     }
-> > +
-> > +no_context:
-> > +     /* Are we prepared to handle this kernel fault?  */
-> > +     if (fixup_exception(regs))
-> > +             return;
-> > +
-> > +     /*
-> > +      * Oops. The kernel tried to access some bad page. We'll have to
-> > +      * terminate things with extreme prejudice.
-> > +      */
-> > +     bust_spinlocks(1);
-> > +
-> > +     pr_alert("CPU %d Unable to handle kernel paging request at "
-> > +            "virtual address %0*lx, era == %0*lx, ra == %0*lx\n",
-> > +            raw_smp_processor_id(), field, address, field, regs->csr_era,
-> > +            field,  regs->regs[1]);
-> > +     die("Oops", regs);
-> > +
-> > +out_of_memory:
-> > +     /*
-> > +      * We ran out of memory, call the OOM killer, and return the userspace
-> > +      * (which will retry the fault, or kill us if we got oom-killed).
-> > +      */
-> > +     mmap_read_unlock(mm);
-> > +     if (!user_mode(regs))
-> > +             goto no_context;
-> > +     pagefault_out_of_memory();
-> > +
-> > +     return;
-> > +
-> > +do_sigbus:
-> > +     mmap_read_unlock(mm);
-> > +
-> > +     /* Kernel mode? Handle exceptions or die */
-> > +     if (!user_mode(regs))
-> > +             goto no_context;
-> > +
-> > +     /*
-> > +      * Send a sigbus, regardless of whether we were in kernel
-> > +      * or user mode.
-> > +      */
-> > +     current->thread.trap_nr = read_csr_excode();
-> > +     tsk->thread.csr_badvaddr = address;
-> > +     force_sig_fault(SIGBUS, BUS_ADRERR, (void __user *)address);
-> > +
->
-> The page fault handler is really long.
-> Consider splitting it to several functions.
-OK, it's difficult but let me try.
-
->
-> > +     return;
-> > +}
-> > +
-> > +asmlinkage void __kprobes do_page_fault(struct pt_regs *regs,
-> > +     unsigned long write, unsigned long address)
-> > +{
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> > +     /* Enable interrupt if enabled in parent context */
-> > +     if (likely(regs->csr_prmd & CSR_PRMD_PIE))
-> > +             local_irq_enable();
-> > +
-> > +     __do_page_fault(regs, write, address);
-> > +
-> > +     local_irq_disable();
-> > +
-> > +     irqentry_exit(regs, state);
-> > +}
->
-> ...
->
-> > diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-> > new file mode 100644
-> > index 000000000000..b8aa96903056
-> > --- /dev/null
-> > +++ b/arch/loongarch/mm/init.c
-> > @@ -0,0 +1,196 @@
->
-> ...
->
-> > +void free_init_pages(const char *what, unsigned long begin, unsigned long end)
-> > +{
->
-> This function seems unused
-OK, let's remove it.
-
->
-> > +     unsigned long pfn;
-> > +
-> > +     for (pfn = PFN_UP(begin); pfn < PFN_DOWN(end); pfn++) {
-> > +             struct page *page = pfn_to_page(pfn);
-> > +             void *addr = phys_to_virt(PFN_PHYS(pfn));
-> > +
-> > +             memset(addr, POISON_FREE_INITMEM, PAGE_SIZE);
-> > +             free_reserved_page(page);
-> > +     }
-> > +     pr_info("Freeing %s: %ldk freed\n", what, (end - begin) >> 10);
-> > +}
-> > +
-> > +#ifdef CONFIG_BLK_DEV_INITRD
-> > +void free_initrd_mem(unsigned long start, unsigned long end)
-> > +{
->
-> There is a generic free_initrd_mem(), no need to override it.
-OK, let's remove it.
+So, let's keep the existing a0/a1/a2 usage as an internal interface
+for now, then backport LoadFile2 and add efistub support.
 
 Huacai
->
-> > +     free_reserved_area((void *)start, (void *)end, POISON_FREE_INITMEM,
-> > +                        "initrd");
-> > +}
-> > +#endif
->
-> --
-> Sincerely yours,
-> Mike.
