@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FE44CEB3B
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Mar 2022 12:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F934CEB3D
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Mar 2022 12:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbiCFLjr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Mar 2022 06:39:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
+        id S233483AbiCFLlF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Mar 2022 06:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiCFLjq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Mar 2022 06:39:46 -0500
+        with ESMTP id S229476AbiCFLlF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Mar 2022 06:41:05 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF5927CD1;
-        Sun,  6 Mar 2022 03:38:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615312DD61;
+        Sun,  6 Mar 2022 03:40:12 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F810B80E98;
-        Sun,  6 Mar 2022 11:38:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD8AC340EE;
-        Sun,  6 Mar 2022 11:38:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7479B80E94;
+        Sun,  6 Mar 2022 11:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16E9BC340EC;
+        Sun,  6 Mar 2022 11:40:04 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -34,10 +34,12 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Yanteng Si <siyanteng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V7 13/22] LoongArch: Add system call support
-Date:   Sun,  6 Mar 2022 19:28:41 +0800
-Message-Id: <20220306112850.811504-14-chenhuacai@loongson.cn>
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH V7 14/22] LoongArch: Add signal handling support
+Date:   Sun,  6 Mar 2022 19:28:42 +0800
+Message-Id: <20220306112850.811504-15-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220306112850.811504-1-chenhuacai@loongson.cn>
 References: <20220306112850.811504-1-chenhuacai@loongson.cn>
@@ -52,657 +54,725 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds system call support and related uaccess.h for LoongArch.
+This patch adds signal handling support for LoongArch.
 
-Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
-A: Until the latest glibc release (2.34), statx is only used for 32-bit
-   platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
-   bit platforms still use newstat now.
-
-Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
-A: The latest glibc release (2.34) has some basic support for clone3 but
-   it isn't complete. E.g., pthread_create() and spawni() have converted
-   to use clone3 but fork() will still use clone. Moreover, some seccomp
-   related applications can still not work perfectly with clone3.
-
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/seccomp.h     |  20 ++
- arch/loongarch/include/asm/syscall.h     |  74 ++++++
- arch/loongarch/include/asm/uaccess.h     | 316 +++++++++++++++++++++++
- arch/loongarch/include/asm/unistd.h      |  11 +
- arch/loongarch/include/uapi/asm/unistd.h |   6 +
- arch/loongarch/kernel/entry.S            |  89 +++++++
- arch/loongarch/kernel/syscall.c          |  63 +++++
- 7 files changed, 579 insertions(+)
- create mode 100644 arch/loongarch/include/asm/seccomp.h
- create mode 100644 arch/loongarch/include/asm/syscall.h
- create mode 100644 arch/loongarch/include/asm/uaccess.h
- create mode 100644 arch/loongarch/include/asm/unistd.h
- create mode 100644 arch/loongarch/include/uapi/asm/unistd.h
- create mode 100644 arch/loongarch/kernel/entry.S
- create mode 100644 arch/loongarch/kernel/syscall.c
+ arch/loongarch/include/uapi/asm/sigcontext.h |  63 ++
+ arch/loongarch/include/uapi/asm/signal.h     |  13 +
+ arch/loongarch/include/uapi/asm/ucontext.h   |  35 ++
+ arch/loongarch/kernel/signal.c               | 569 +++++++++++++++++++
+ 4 files changed, 680 insertions(+)
+ create mode 100644 arch/loongarch/include/uapi/asm/sigcontext.h
+ create mode 100644 arch/loongarch/include/uapi/asm/signal.h
+ create mode 100644 arch/loongarch/include/uapi/asm/ucontext.h
+ create mode 100644 arch/loongarch/kernel/signal.c
 
-diff --git a/arch/loongarch/include/asm/seccomp.h b/arch/loongarch/include/asm/seccomp.h
+diff --git a/arch/loongarch/include/uapi/asm/sigcontext.h b/arch/loongarch/include/uapi/asm/sigcontext.h
 new file mode 100644
-index 000000000000..31d6ab42e43e
+index 000000000000..efeb8b3f8236
 --- /dev/null
-+++ b/arch/loongarch/include/asm/seccomp.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _ASM_SECCOMP_H
-+#define _ASM_SECCOMP_H
-+
-+#include <asm/unistd.h>
-+
-+#include <asm-generic/seccomp.h>
-+
-+#ifdef CONFIG_32BIT
-+# define SECCOMP_ARCH_NATIVE		AUDIT_ARCH_LOONGARCH32
-+# define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
-+# define SECCOMP_ARCH_NATIVE_NAME	"loongarch32"
-+#else
-+# define SECCOMP_ARCH_NATIVE		AUDIT_ARCH_LOONGARCH64
-+# define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
-+# define SECCOMP_ARCH_NATIVE_NAME	"loongarch64"
-+#endif
-+
-+#endif /* _ASM_SECCOMP_H */
-diff --git a/arch/loongarch/include/asm/syscall.h b/arch/loongarch/include/asm/syscall.h
-new file mode 100644
-index 000000000000..e286dc58476e
---- /dev/null
-+++ b/arch/loongarch/include/asm/syscall.h
-@@ -0,0 +1,74 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Author: Hanlu Li <lihanlu@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+#ifndef __ASM_LOONGARCH_SYSCALL_H
-+#define __ASM_LOONGARCH_SYSCALL_H
-+
-+#include <linux/compiler.h>
-+#include <uapi/linux/audit.h>
-+#include <linux/elf-em.h>
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/uaccess.h>
-+#include <asm/ptrace.h>
-+#include <asm/unistd.h>
-+
-+extern void *sys_call_table[];
-+
-+static inline long syscall_get_nr(struct task_struct *task,
-+				  struct pt_regs *regs)
-+{
-+	return regs->regs[11];
-+}
-+
-+static inline void syscall_rollback(struct task_struct *task,
-+				    struct pt_regs *regs)
-+{
-+        regs->regs[4] = regs->orig_a0;
-+}
-+
-+static inline long syscall_get_error(struct task_struct *task,
-+				     struct pt_regs *regs)
-+{
-+	unsigned long error = regs->regs[4];
-+
-+	return IS_ERR_VALUE(error) ? error : 0;
-+}
-+
-+static inline long syscall_get_return_value(struct task_struct *task,
-+					    struct pt_regs *regs)
-+{
-+	return regs->regs[4];
-+}
-+
-+static inline void syscall_set_return_value(struct task_struct *task,
-+					    struct pt_regs *regs,
-+					    int error, long val)
-+{
-+	regs->regs[4] = (long) error ? error : val;
-+}
-+
-+static inline void syscall_get_arguments(struct task_struct *task,
-+					 struct pt_regs *regs,
-+					 unsigned long *args)
-+{
-+	args[0] = regs->orig_a0;
-+	memcpy(&args[1], &regs->regs[5], 5 * sizeof(long));
-+}
-+
-+static inline int syscall_get_arch(struct task_struct *task)
-+{
-+	return AUDIT_ARCH_LOONGARCH64;
-+}
-+
-+static inline bool arch_syscall_is_vdso_sigreturn(struct pt_regs *regs)
-+{
-+	return false;
-+}
-+
-+#endif	/* __ASM_LOONGARCH_SYSCALL_H */
-diff --git a/arch/loongarch/include/asm/uaccess.h b/arch/loongarch/include/asm/uaccess.h
-new file mode 100644
-index 000000000000..19788d0b0a45
---- /dev/null
-+++ b/arch/loongarch/include/asm/uaccess.h
-@@ -0,0 +1,316 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ *
-+ * Derived from MIPS:
-+ * Copyright (C) 1996, 1997, 1998, 1999, 2000, 03, 04 by Ralf Baechle
-+ * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-+ * Copyright (C) 2007  Maciej W. Rozycki
-+ * Copyright (C) 2014, Imagination Technologies Ltd.
-+ */
-+#ifndef _ASM_UACCESS_H
-+#define _ASM_UACCESS_H
-+
-+#include <linux/kernel.h>
-+#include <linux/string.h>
-+#include <linux/extable.h>
-+#include <asm-generic/extable.h>
-+
-+extern u64 __ua_limit;
-+
-+#define __UA_LIMIT	__ua_limit
-+
-+#define __UA_ADDR	".dword"
-+#define __UA_ADDU	"add.d"
-+#define __UA_LA		"la.abs"
-+
-+/*
-+ * Is a address valid? This does a straightforward calculation rather
-+ * than tests.
-+ *
-+ * Address valid if:
-+ *  - "addr" doesn't have any high-bits set
-+ *  - AND "size" doesn't have any high-bits set
-+ *  - AND "addr+size" doesn't have any high-bits set
-+ *  - OR we are in kernel mode.
-+ *
-+ * __ua_size() is a trick to avoid runtime checking of positive constant
-+ * sizes; for those we already know at compile time that the size is ok.
-+ */
-+#define __ua_size(size)							\
-+	((__builtin_constant_p(size) && (signed long) (size) > 0) ? 0 : (size))
-+
-+/*
-+ * access_ok: - Checks if a user space pointer is valid
-+ * @addr: User space pointer to start of block to check
-+ * @size: Size of block to check
-+ *
-+ * Context: User context only. This function may sleep if pagefaults are
-+ *          enabled.
-+ *
-+ * Checks if a pointer to a block of memory in user space is valid.
-+ *
-+ * Returns true (nonzero) if the memory block may be valid, false (zero)
-+ * if it is definitely invalid.
-+ *
-+ * Note that, depending on architecture, this function probably just
-+ * checks that the pointer is in the user space range - after calling
-+ * this function, memory access functions may still return -EFAULT.
-+ */
-+static inline int __access_ok(const void __user *p, unsigned long size)
-+{
-+	unsigned long addr = (unsigned long)p;
-+	unsigned long end = addr + size - !!size;
-+
-+	return (__UA_LIMIT & (addr | end | __ua_size(size))) == 0;
-+}
-+
-+#define access_ok(addr, size)					\
-+	likely(__access_ok((addr), (size)))
-+
-+/*
-+ * get_user: - Get a simple variable from user space.
-+ * @x:	 Variable to store result.
-+ * @ptr: Source address, in user space.
-+ *
-+ * Context: User context only. This function may sleep if pagefaults are
-+ *          enabled.
-+ *
-+ * This macro copies a single simple variable from user space to kernel
-+ * space.  It supports simple types like char and int, but not larger
-+ * data types like structures or arrays.
-+ *
-+ * @ptr must have pointer-to-simple-variable type, and the result of
-+ * dereferencing @ptr must be assignable to @x without a cast.
-+ *
-+ * Returns zero on success, or -EFAULT on error.
-+ * On error, the variable @x is set to zero.
-+ */
-+#define get_user(x, ptr) \
-+({									\
-+	const __typeof__(*(ptr)) __user *__p = (ptr);			\
-+									\
-+	might_fault();							\
-+	access_ok(__p, sizeof(*__p)) ? __get_user((x), __p) :		\
-+				       ((x) = 0, -EFAULT);		\
-+})
-+
-+/*
-+ * put_user: - Write a simple value into user space.
-+ * @x:	 Value to copy to user space.
-+ * @ptr: Destination address, in user space.
-+ *
-+ * Context: User context only. This function may sleep if pagefaults are
-+ *          enabled.
-+ *
-+ * This macro copies a single simple value from kernel space to user
-+ * space.  It supports simple types like char and int, but not larger
-+ * data types like structures or arrays.
-+ *
-+ * @ptr must have pointer-to-simple-variable type, and @x must be assignable
-+ * to the result of dereferencing @ptr.
-+ *
-+ * Returns zero on success, or -EFAULT on error.
-+ */
-+#define put_user(x, ptr) \
-+({									\
-+	__typeof__(*(ptr)) __user *__p = (ptr);				\
-+									\
-+	might_fault();							\
-+	access_ok(__p, sizeof(*__p)) ? __put_user((x), __p) : -EFAULT;	\
-+})
-+
-+/*
-+ * __get_user: - Get a simple variable from user space, with less checking.
-+ * @x:	 Variable to store result.
-+ * @ptr: Source address, in user space.
-+ *
-+ * Context: User context only. This function may sleep if pagefaults are
-+ *          enabled.
-+ *
-+ * This macro copies a single simple variable from user space to kernel
-+ * space.  It supports simple types like char and int, but not larger
-+ * data types like structures or arrays.
-+ *
-+ * @ptr must have pointer-to-simple-variable type, and the result of
-+ * dereferencing @ptr must be assignable to @x without a cast.
-+ *
-+ * Caller must check the pointer with access_ok() before calling this
-+ * function.
-+ *
-+ * Returns zero on success, or -EFAULT on error.
-+ * On error, the variable @x is set to zero.
-+ */
-+#define __get_user(x, ptr) \
-+({									\
-+	int __gu_err = 0;						\
-+									\
-+	__chk_user_ptr(ptr);						\
-+	__get_user_common((x), sizeof(*(ptr)), ptr);			\
-+	__gu_err;							\
-+})
-+
-+/*
-+ * __put_user: - Write a simple value into user space, with less checking.
-+ * @x:	 Value to copy to user space.
-+ * @ptr: Destination address, in user space.
-+ *
-+ * Context: User context only. This function may sleep if pagefaults are
-+ *          enabled.
-+ *
-+ * This macro copies a single simple value from kernel space to user
-+ * space.  It supports simple types like char and int, but not larger
-+ * data types like structures or arrays.
-+ *
-+ * @ptr must have pointer-to-simple-variable type, and @x must be assignable
-+ * to the result of dereferencing @ptr.
-+ *
-+ * Caller must check the pointer with access_ok() before calling this
-+ * function.
-+ *
-+ * Returns zero on success, or -EFAULT on error.
-+ */
-+#define __put_user(x, ptr) \
-+({									\
-+	int __pu_err = 0;						\
-+	__typeof__(*(ptr)) __pu_val;					\
-+									\
-+	__pu_val = (x);							\
-+	__chk_user_ptr(ptr);						\
-+	__put_user_common(ptr, sizeof(*(ptr)));					\
-+	__pu_err;							\
-+})
-+
-+struct __large_struct { unsigned long buf[100]; };
-+#define __m(x) (*(struct __large_struct __user *)(x))
-+
-+#define __get_user_common(val, size, ptr)				\
-+do {									\
-+	switch (size) {							\
-+	case 1: __get_data_asm(val, "ld.b", ptr); break;		\
-+	case 2: __get_data_asm(val, "ld.h", ptr); break;		\
-+	case 4: __get_data_asm(val, "ld.w", ptr); break;		\
-+	case 8: __get_data_asm(val, "ld.d", ptr); break;			\
-+	default: BUILD_BUG(); break;					\
-+	}								\
-+} while (0)
-+
-+#define __get_kernel_common(val, size, ptr) __get_user_common(val, size, ptr)
-+
-+#define __get_data_asm(val, insn, addr)					\
-+{									\
-+	long __gu_tmp;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"1:	" insn "	%1, %3				\n"	\
-+	"2:							\n"	\
-+	"	.section .fixup,\"ax\"				\n"	\
-+	"3:	li.w	%0, %4					\n"	\
-+	"	or	%1, $r0, $r0				\n"	\
-+	"	b	2b					\n"	\
-+	"	.previous					\n"	\
-+	"	.section __ex_table,\"a\"			\n"	\
-+	"	"__UA_ADDR "\t1b, 3b				\n"	\
-+	"	.previous					\n"	\
-+	: "=r" (__gu_err), "=r" (__gu_tmp)				\
-+	: "0" (0), "o" (__m(addr)), "i" (-EFAULT));			\
-+									\
-+	(val) = (__typeof__(*(addr))) __gu_tmp;				\
-+}
-+
-+#define __put_user_common(ptr, size)					\
-+do {									\
-+	switch (size) {							\
-+	case 1: __put_data_asm("st.b", ptr); break;			\
-+	case 2: __put_data_asm("st.h", ptr); break;			\
-+	case 4: __put_data_asm("st.w", ptr); break;			\
-+	case 8: __put_data_asm("st.d", ptr); break;				\
-+	default: BUILD_BUG(); break;					\
-+	}								\
-+} while (0)
-+
-+#define __put_kernel_common(ptr, size) __put_user_common(ptr, size)
-+
-+#define __put_data_asm(insn, ptr)					\
-+{									\
-+	__asm__ __volatile__(						\
-+	"1:	" insn "	%z2, %3		# __put_user_asm\n"	\
-+	"2:							\n"	\
-+	"	.section	.fixup,\"ax\"			\n"	\
-+	"3:	li.w	%0, %4					\n"	\
-+	"	b	2b					\n"	\
-+	"	.previous					\n"	\
-+	"	.section	__ex_table,\"a\"		\n"	\
-+	"	" __UA_ADDR "	1b, 3b				\n"	\
-+	"	.previous					\n"	\
-+	: "=r" (__pu_err)						\
-+	: "0" (0), "Jr" (__pu_val), "o" (__m(ptr)),			\
-+	  "i" (-EFAULT));						\
-+}
-+
-+#define HAVE_GET_KERNEL_NOFAULT
-+
-+#define __get_kernel_nofault(dst, src, type, err_label)			\
-+do {									\
-+	int __gu_err = 0;							\
-+									\
-+	__get_kernel_common(*((type *)(dst)), sizeof(type),		\
-+			    (__force type *)(src));			\
-+	if (unlikely(__gu_err))						\
-+		goto err_label;						\
-+} while (0)
-+
-+#define __put_kernel_nofault(dst, src, type, err_label)			\
-+do {									\
-+	type __pu_val;					\
-+	int __pu_err = 0;						\
-+									\
-+	__pu_val = *(__force type *)(src);				\
-+	__put_kernel_common(((type *)(dst)), sizeof(type));		\
-+	if (unlikely(__pu_err))						\
-+		goto err_label;						\
-+} while (0)
-+
-+extern unsigned long __copy_user(void *to, const void *from, __kernel_size_t n);
-+
-+static inline unsigned long __must_check
-+raw_copy_from_user(void *to, const void __user *from, unsigned long n)
-+{
-+	return __copy_user(to, from, n);
-+}
-+
-+static inline unsigned long __must_check
-+raw_copy_to_user(void __user *to, const void *from, unsigned long n)
-+{
-+	return __copy_user(to, from, n);
-+}
-+
-+#define INLINE_COPY_FROM_USER
-+#define INLINE_COPY_TO_USER
-+
-+/*
-+ * __clear_user: - Zero a block of memory in user space, with less checking.
-+ * @addr: Destination address, in user space.
-+ * @size: Number of bytes to zero.
-+ *
-+ * Zero a block of memory in user space.  Caller must check
-+ * the specified block with access_ok() before calling this function.
-+ *
-+ * Returns number of bytes that could not be cleared.
-+ * On success, this will be zero.
-+ */
-+extern unsigned long __clear_user(void __user *addr, __kernel_size_t size);
-+
-+#define clear_user(addr, n)						\
-+({									\
-+	void __user *__cl_addr = (addr);				\
-+	unsigned long __cl_size = (n);					\
-+	if (__cl_size && access_ok(__cl_addr, __cl_size))		\
-+		__cl_size = __clear_user(__cl_addr, __cl_size);		\
-+	__cl_size;							\
-+})
-+
-+extern long strncpy_from_user(char *to, const char __user *from, long n);
-+extern long strnlen_user(const char __user *str, long n);
-+
-+#endif /* _ASM_UACCESS_H */
-diff --git a/arch/loongarch/include/asm/unistd.h b/arch/loongarch/include/asm/unistd.h
-new file mode 100644
-index 000000000000..cfddb0116a8c
---- /dev/null
-+++ b/arch/loongarch/include/asm/unistd.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Author: Hanlu Li <lihanlu@loongson.cn>
-+ *         Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+#include <uapi/asm/unistd.h>
-+
-+#define NR_syscalls (__NR_syscalls)
-diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-new file mode 100644
-index 000000000000..b344b1f91715
---- /dev/null
-+++ b/arch/loongarch/include/uapi/asm/unistd.h
-@@ -0,0 +1,6 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#define __ARCH_WANT_NEW_STAT
-+#define __ARCH_WANT_SYS_CLONE
-+#define __ARCH_WANT_SYS_CLONE3
-+
-+#include <asm-generic/unistd.h>
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-new file mode 100644
-index 000000000000..d5b3dbcf5425
---- /dev/null
-+++ b/arch/loongarch/kernel/entry.S
-@@ -0,0 +1,89 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ *
-+ * Derived from MIPS:
-+ * Copyright (C) 1994 - 2000, 2001, 2003 Ralf Baechle
-+ * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
-+ * Copyright (C) 2001 MIPS Technologies, Inc.
-+ */
-+
-+#include <asm/asm.h>
-+#include <asm/asmmacro.h>
-+#include <asm/loongarch.h>
-+#include <asm/regdef.h>
-+#include <asm/stackframe.h>
-+#include <asm/thread_info.h>
-+
-+	.text
-+	.cfi_sections	.debug_frame
-+	.align	5
-+SYM_FUNC_START(handle_syscall)
-+	csrrd	t0, PERCPU_BASE_KS
-+	la.abs	t1, kernelsp
-+	add.d	t1, t1, t0
-+	move	t2, sp
-+	ld.d	sp, t1, 0
-+
-+	addi.d	sp, sp, -PT_SIZE
-+	cfi_st	t2, PT_R3
-+	cfi_rel_offset  sp, PT_R3
-+	st.d	zero, sp, PT_R0
-+	csrrd	t2, LOONGARCH_CSR_PRMD
-+	st.d	t2, sp, PT_PRMD
-+	csrrd	t2, LOONGARCH_CSR_CRMD
-+	st.d	t2, sp, PT_CRMD
-+	csrrd	t2, LOONGARCH_CSR_EUEN
-+	st.d	t2, sp, PT_EUEN
-+	csrrd	t2, LOONGARCH_CSR_ECFG
-+	st.d	t2, sp, PT_ECFG
-+	csrrd	t2, LOONGARCH_CSR_ESTAT
-+	st.d	t2, sp, PT_ESTAT
-+	cfi_st	ra, PT_R1
-+	cfi_st	a0, PT_R4
-+	cfi_st	a1, PT_R5
-+	cfi_st	a2, PT_R6
-+	cfi_st	a3, PT_R7
-+	cfi_st	a4, PT_R8
-+	cfi_st	a5, PT_R9
-+	cfi_st	a6, PT_R10
-+	cfi_st	a7, PT_R11
-+	csrrd	ra, LOONGARCH_CSR_ERA
-+	st.d	ra, sp, PT_ERA
-+	cfi_rel_offset ra, PT_ERA
-+
-+	cfi_st	tp, PT_R2
-+	cfi_st	u0, PT_R21
-+	cfi_st	fp, PT_R22
-+
-+	SAVE_STATIC
-+
-+	move	u0, t0
-+	li.d	tp, ~_THREAD_MASK
-+	and	tp, tp, sp
-+
-+	move	a0, sp
-+	bl	do_syscall
-+
-+	RESTORE_ALL_AND_RET
-+SYM_FUNC_END(handle_syscall)
-+
-+SYM_CODE_START(ret_from_fork)
-+	bl	schedule_tail		# a0 = struct task_struct *prev
-+	move	a0, sp
-+	bl 	syscall_exit_to_user_mode
-+	RESTORE_STATIC
-+	RESTORE_SOME
-+	RESTORE_SP_AND_RET
-+SYM_CODE_END(ret_from_fork)
-+
-+SYM_CODE_START(ret_from_kernel_thread)
-+	bl	schedule_tail		# a0 = struct task_struct *prev
-+	move	a0, s1
-+	jirl	ra, s0, 0
-+	move	a0, sp
-+	bl	syscall_exit_to_user_mode
-+	RESTORE_STATIC
-+	RESTORE_SOME
-+	RESTORE_SP_AND_RET
-+SYM_CODE_END(ret_from_kernel_thread)
-diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
-new file mode 100644
-index 000000000000..3fc4211db989
---- /dev/null
-+++ b/arch/loongarch/kernel/syscall.c
++++ b/arch/loongarch/include/uapi/asm/sigcontext.h
 @@ -0,0 +1,63 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++/*
++ * Author: Hanlu Li <lihanlu@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _UAPI_ASM_SIGCONTEXT_H
++#define _UAPI_ASM_SIGCONTEXT_H
++
++#include <linux/types.h>
++#include <linux/posix_types.h>
++
++/* FP context was used */
++#define USED_FP			(1 << 0)
++/* Load/Store access flags for address error */
++#define ADRERR_RD		(1 << 30)
++#define ADRERR_WR		(1 << 31)
++
++struct sigcontext {
++	__u64	sc_pc;
++	__u64	sc_regs[32];
++	__u32	sc_flags;
++	__u64	sc_extcontext[0] __attribute__((__aligned__(16)));
++};
++
++#define CONTEXT_INFO_ALIGN	16
++struct _ctxinfo {
++	__u32	magic;
++	__u32	size;
++	__u64	padding;	/* padding to 16 bytes */
++};
++
++/* FPU context */
++#define FPU_CTX_MAGIC		0x46505501
++#define FPU_CTX_ALIGN		8
++struct fpu_context {
++	__u64	regs[32];
++	__u64	fcc;
++	__u32	fcsr;
++};
++
++/* LSX context */
++#define LSX_CTX_MAGIC		0x53580001
++#define LSX_CTX_ALIGN		16
++struct lsx_context {
++	__u64	regs[2*32];
++	__u64	fcc;
++	__u32	fcsr;
++	__u32	vcsr;
++};
++
++/* LASX context */
++#define LASX_CTX_MAGIC		0x41535801
++#define LASX_CTX_ALIGN		32
++struct lasx_context {
++	__u64	regs[4*32];
++	__u64	fcc;
++	__u32	fcsr;
++	__u32	vcsr;
++};
++
++#endif /* _UAPI_ASM_SIGCONTEXT_H */
+diff --git a/arch/loongarch/include/uapi/asm/signal.h b/arch/loongarch/include/uapi/asm/signal.h
+new file mode 100644
+index 000000000000..992d965aa13f
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/signal.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _UAPI_ASM_SIGNAL_H
++#define _UAPI_ASM_SIGNAL_H
++
++#define MINSIGSTKSZ 4096
++#define SIGSTKSZ    16384
++
++#include <asm-generic/signal.h>
++
++#endif
+diff --git a/arch/loongarch/include/uapi/asm/ucontext.h b/arch/loongarch/include/uapi/asm/ucontext.h
+new file mode 100644
+index 000000000000..12577e22b1c7
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/ucontext.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef __LOONGARCH_UAPI_ASM_UCONTEXT_H
++#define __LOONGARCH_UAPI_ASM_UCONTEXT_H
++
++/**
++ * struct ucontext - user context structure
++ * @uc_flags:
++ * @uc_link:
++ * @uc_stack:
++ * @uc_mcontext:	holds basic processor state
++ * @uc_sigmask:
++ * @uc_extcontext:	holds extended processor state
++ */
++struct ucontext {
++	unsigned long		uc_flags;
++	struct ucontext		*uc_link;
++	stack_t			uc_stack;
++	sigset_t		uc_sigmask;
++	/* There's some padding here to allow sigset_t to be expanded in the
++	 * future.  Though this is unlikely, other architectures put uc_sigmask
++	 * at the end of this structure and explicitly state it can be
++	 * expanded, so we didn't want to box ourselves in here. */
++	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
++	/* We can't put uc_sigmask at the end of this structure because we need
++	 * to be able to expand sigcontext in the future.  For example, the
++	 * vector ISA extension will almost certainly add ISA state.  We want
++	 * to ensure all user-visible ISA state can be saved and restored via a
++	 * ucontext, so we're putting this at the end in order to allow for
++	 * infinite extensibility.  Since we know this will be extended and we
++	 * assume sigset_t won't be extended an extreme amount, we're
++	 * prioritizing this. */
++	struct sigcontext	uc_mcontext;
++};
++
++#endif /* __LOONGARCH_UAPI_ASM_UCONTEXT_H */
+diff --git a/arch/loongarch/kernel/signal.c b/arch/loongarch/kernel/signal.c
+new file mode 100644
+index 000000000000..8c5480674625
+--- /dev/null
++++ b/arch/loongarch/kernel/signal.c
+@@ -0,0 +1,569 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
 + * Author: Hanlu Li <lihanlu@loongson.cn>
 + *         Huacai Chen <chenhuacai@loongson.cn>
-+ *
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ *
++ * Derived from MIPS:
++ * Copyright (C) 1991, 1992  Linus Torvalds
++ * Copyright (C) 1994 - 2000  Ralf Baechle
++ * Copyright (C) 1999, 2000 Silicon Graphics, Inc.
++ * Copyright (C) 2014, Imagination Technologies Ltd.
 + */
-+#include <linux/capability.h>
-+#include <linux/entry-common.h>
++#include <linux/audit.h>
++#include <linux/cache.h>
++#include <linux/context_tracking.h>
++#include <linux/irqflags.h>
++#include <linux/sched.h>
++#include <linux/mm.h>
++#include <linux/personality.h>
++#include <linux/smp.h>
++#include <linux/kernel.h>
++#include <linux/signal.h>
 +#include <linux/errno.h>
-+#include <linux/linkage.h>
-+#include <linux/syscalls.h>
++#include <linux/wait.h>
++#include <linux/ptrace.h>
 +#include <linux/unistd.h>
++#include <linux/compiler.h>
++#include <linux/syscalls.h>
++#include <linux/uaccess.h>
++#include <linux/tracehook.h>
 +
 +#include <asm/asm.h>
-+#include <asm/signal.h>
-+#include <asm/switch_to.h>
-+#include <asm-generic/syscalls.h>
++#include <asm/cacheflush.h>
++#include <asm/cpu-features.h>
++#include <asm/fpu.h>
++#include <asm/ucontext.h>
++#include <asm/vdso.h>
 +
-+#undef __SYSCALL
-+#define __SYSCALL(nr, call)	[nr] = (call),
++#ifdef DEBUG_SIG
++#  define DEBUGP(fmt, args...) printk("%s: " fmt, __func__, ##args)
++#else
++#  define DEBUGP(fmt, args...)
++#endif
 +
-+SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len, unsigned long,
-+		prot, unsigned long, flags, unsigned long, fd, off_t, offset)
-+{
-+	if (offset & ~PAGE_MASK)
-+		return -EINVAL;
++/* Make sure we will not lose FPU ownership */
++#define lock_fpu_owner()	({ preempt_disable(); pagefault_disable(); })
++#define unlock_fpu_owner()	({ pagefault_enable(); preempt_enable(); })
 +
-+	return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset >> PAGE_SHIFT);
-+}
++/* Assembly functions to move context to/from the FPU */
++extern asmlinkage int
++_save_fp_context(void __user *fpregs, void __user *fcc, void __user *csr);
++extern asmlinkage int
++_restore_fp_context(void __user *fpregs, void __user *fcc, void __user *csr);
 +
-+void *sys_call_table[__NR_syscalls] = {
-+	[0 ... __NR_syscalls - 1] = sys_ni_syscall,
-+#include <asm/unistd.h>
++struct rt_sigframe {
++	struct siginfo rs_info;
++	struct ucontext rs_uctx;
 +};
 +
-+typedef long (*sys_call_fn)(unsigned long, unsigned long,
-+	unsigned long, unsigned long, unsigned long, unsigned long);
++struct _ctx_layout {
++	struct _ctxinfo *addr;
++	unsigned int size;
++};
 +
-+void noinstr do_syscall(struct pt_regs *regs)
++struct extctx_layout {
++	unsigned long size;
++	unsigned int flags;
++	struct _ctx_layout fpu;
++	struct _ctx_layout lsx;
++	struct _ctx_layout lasx;
++	struct _ctx_layout end;
++};
++
++static void __user *get_ctx_through_ctxinfo(struct _ctxinfo *info)
 +{
-+	unsigned long nr;
-+	sys_call_fn syscall_fn;
++	return (void __user *)((char *)info + sizeof(struct _ctxinfo));
++}
 +
-+	nr = regs->regs[11];
-+	/* Set for syscall restarting */
-+	if (nr < NR_syscalls)
-+		regs->regs[0] = nr + 1;
++/*
++ * Thread saved context copy to/from a signal context presumed to be on the
++ * user stack, and therefore accessed with appropriate macros from uaccess.h.
++ */
++static int copy_fpu_to_sigcontext(struct fpu_context __user *ctx)
++{
++	int i;
++	int err = 0;
++	uint64_t __user *regs	= (uint64_t *)&ctx->regs;
++	uint64_t __user *fcc	= &ctx->fcc;
++	uint32_t __user *fcsr	= &ctx->fcsr;
 +
-+	regs->csr_era += 4;
-+	regs->orig_a0 = regs->regs[4];
-+	regs->regs[4] = -ENOSYS;
++	for (i = 0; i < NUM_FPU_REGS; i++) {
++		err |=
++		    __put_user(get_fpr64(&current->thread.fpu.fpr[i], 0),
++			       &regs[i]);
++	}
++	err |= __put_user(current->thread.fpu.fcc, fcc);
++	err |= __put_user(current->thread.fpu.fcsr, fcsr);
 +
-+	nr = syscall_enter_from_user_mode(regs, nr);
++	return err;
++}
 +
-+	if (nr < NR_syscalls) {
-+		syscall_fn = sys_call_table[nr];
-+		regs->regs[4] = syscall_fn(regs->orig_a0, regs->regs[5], regs->regs[6],
-+					   regs->regs[7], regs->regs[8], regs->regs[9]);
++static int copy_fpu_from_sigcontext(struct fpu_context __user *ctx)
++{
++	int i;
++	int err = 0;
++	u64 fpr_val;
++	uint64_t __user *regs	= (uint64_t *)&ctx->regs;
++	uint64_t __user *fcc	= &ctx->fcc;
++	uint32_t __user *fcsr	= &ctx->fcsr;
++
++	for (i = 0; i < NUM_FPU_REGS; i++) {
++		err |= __get_user(fpr_val, &regs[i]);
++		set_fpr64(&current->thread.fpu.fpr[i], 0, fpr_val);
++	}
++	err |= __get_user(current->thread.fpu.fcc, fcc);
++	err |= __get_user(current->thread.fpu.fcsr, fcsr);
++
++	return err;
++}
++
++/*
++ * Wrappers for the assembly _{save,restore}_fp_context functions.
++ */
++static int save_hw_fpu_context(struct fpu_context __user *ctx)
++{
++	uint64_t __user *regs	= (uint64_t *)&ctx->regs;
++	uint64_t __user *fcc	= &ctx->fcc;
++	uint32_t __user *fcsr	= &ctx->fcsr;
++
++	return _save_fp_context(regs, fcc, fcsr);
++}
++
++static int restore_hw_fpu_context(struct fpu_context __user *ctx)
++{
++	uint64_t __user *regs	= (uint64_t *)&ctx->regs;
++	uint64_t __user *fcc	= &ctx->fcc;
++	uint32_t __user *fcsr	= &ctx->fcsr;
++
++	return _restore_fp_context(regs, fcc, fcsr);
++}
++
++int fpcsr_pending(unsigned int __user *fpcsr)
++{
++	int err, sig = 0;
++	unsigned int csr, enabled;
++
++	err = __get_user(csr, fpcsr);
++	enabled = ((csr & FPU_CSR_ALL_E) << 24);
++	/*
++	 * If the signal handler set some FPU exceptions, clear it and
++	 * send SIGFPE.
++	 */
++	if (csr & enabled) {
++		csr &= ~enabled;
++		err |= __put_user(csr, fpcsr);
++		sig = SIGFPE;
++	}
++	return err ?: sig;
++}
++
++/*
++ * Helper routines
++ */
++static int protected_save_fpu_context(struct extctx_layout *extctx)
++{
++	int err = 0;
++	struct _ctxinfo __user *info = extctx->fpu.addr;
++	struct fpu_context __user *fpu_ctx = (struct fpu_context *)get_ctx_through_ctxinfo(info);
++	uint64_t __user *regs	= (uint64_t *)&fpu_ctx->regs;
++	uint64_t __user *fcc	= &fpu_ctx->fcc;
++	uint32_t __user *fcsr	= &fpu_ctx->fcsr;
++
++	while (1) {
++		lock_fpu_owner();
++		if (is_fpu_owner())
++			err = save_hw_fpu_context(fpu_ctx);
++		else
++			err = copy_fpu_to_sigcontext(fpu_ctx);
++		unlock_fpu_owner();
++
++		err |= __put_user(FPU_CTX_MAGIC, &info->magic);
++		err |= __put_user(extctx->fpu.size, &info->size);
++
++		if (likely(!err))
++			break;
++		/* Touch the FPU context and try again */
++		err = __put_user(0, &regs[0]) |
++			__put_user(0, &regs[31]) |
++			__put_user(0, fcc) |
++			__put_user(0, fcsr);
++		if (err)
++			return err;	/* really bad sigcontext */
 +	}
 +
-+	syscall_exit_to_user_mode(regs);
++	return err;
++}
++
++static int protected_restore_fpu_context(struct extctx_layout *extctx)
++{
++	int err = 0, sig = 0, tmp __maybe_unused;
++	struct _ctxinfo __user *info = extctx->fpu.addr;
++	struct fpu_context __user *fpu_ctx = (struct fpu_context *)get_ctx_through_ctxinfo(info);
++	uint64_t __user *regs	= (uint64_t *)&fpu_ctx->regs;
++	uint64_t __user *fcc	= &fpu_ctx->fcc;
++	uint32_t __user *fcsr	= &fpu_ctx->fcsr;
++
++	err = sig = fpcsr_pending(fcsr);
++	if (err)
++		return err;
++
++	while (1) {
++		lock_fpu_owner();
++		if (is_fpu_owner())
++			err = restore_hw_fpu_context(fpu_ctx);
++		else
++			err = copy_fpu_from_sigcontext(fpu_ctx);
++		unlock_fpu_owner();
++
++		if (likely(!err))
++			break;
++		/* Touch the FPU context and try again */
++		err = __get_user(tmp, &regs[0]) |
++			__get_user(tmp, &regs[31]) |
++			__get_user(tmp, fcc) |
++			__get_user(tmp, fcsr);
++		if (err)
++			break;	/* really bad sigcontext */
++	}
++
++	return err ?: sig;
++}
++
++static int setup_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc,
++			    struct extctx_layout *extctx)
++{
++	int i, err = 0;
++	struct _ctxinfo __user *info;
++
++	err |= __put_user(regs->csr_era, &sc->sc_pc);
++	err |= __put_user(extctx->flags, &sc->sc_flags);
++
++	err |= __put_user(0, &sc->sc_regs[0]);
++	for (i = 1; i < 32; i++)
++		err |= __put_user(regs->regs[i], &sc->sc_regs[i]);
++
++	if (extctx->fpu.addr)
++		err |= protected_save_fpu_context(extctx);
++
++	/* Set the "end" magic */
++	info = (struct _ctxinfo *)extctx->end.addr;
++	err |= __put_user(0, &info->magic);
++	err |= __put_user(0, &info->size);
++
++	return err;
++}
++
++static int parse_extcontext(struct sigcontext __user *sc, struct extctx_layout *extctx)
++{
++	int err = 0;
++	unsigned int magic, size;
++	struct _ctxinfo __user *info = (struct _ctxinfo __user *)&sc->sc_extcontext;
++
++	while(1) {
++		err |= __get_user(magic, &info->magic);
++		err |= __get_user(size, &info->size);
++		if (err)
++			return err;
++
++		switch (magic) {
++		case 0: /* END */
++			goto done;
++
++		case FPU_CTX_MAGIC:
++			if (size < (sizeof(struct _ctxinfo) +
++				    sizeof(struct fpu_context)))
++				goto invalid;
++			extctx->fpu.addr = info;
++			break;
++
++		default:
++			goto invalid;
++		}
++
++		info = (struct _ctxinfo *)((char *)info + size);
++	}
++
++done:
++	return 0;
++
++invalid:
++	return -EINVAL;
++}
++
++static int restore_sigcontext(struct pt_regs *regs, struct sigcontext __user *sc)
++{
++	int i, err = 0;
++	struct extctx_layout extctx;
++
++	memset(&extctx, 0, sizeof(struct extctx_layout));
++
++	err = __get_user(extctx.flags, &sc->sc_flags);
++	if (err)
++		goto bad;
++
++	err = parse_extcontext(sc, &extctx);
++	if (err)
++		goto bad;
++
++	conditional_used_math(extctx.flags & USED_FP);
++
++	/*
++	 * The signal handler may have used FPU; give it up if the program
++	 * doesn't want it following sigreturn.
++	 */
++	if (!(extctx.flags & USED_FP))
++		lose_fpu(0);
++
++	/* Always make any pending restarted system calls return -EINTR */
++	current->restart_block.fn = do_no_restart_syscall;
++
++	err |= __get_user(regs->csr_era, &sc->sc_pc);
++	for (i = 1; i < 32; i++)
++		err |= __get_user(regs->regs[i], &sc->sc_regs[i]);
++
++	if (extctx.fpu.addr)
++		err |= protected_restore_fpu_context(&extctx);
++
++bad:
++	return err;
++}
++
++static unsigned int handle_flags(void)
++{
++	unsigned int flags = 0;
++
++	flags |= used_math() ? USED_FP : 0;
++
++	switch (current->thread.error_code) {
++	case 1:
++		flags |= ADRERR_RD;
++		break;
++	case 2:
++		flags |= ADRERR_WR;
++		break;
++	}
++
++	return flags;
++}
++
++static unsigned long extframe_alloc(struct extctx_layout *extctx,
++				    struct _ctx_layout *layout,
++				    size_t size, unsigned int align, unsigned long base)
++{
++	unsigned long new_base = base - size;
++
++	new_base = round_down(new_base, (align < 16 ? 16 : align));
++	new_base -= sizeof(struct _ctxinfo);
++
++	layout->addr = (void *)new_base;
++	layout->size = (unsigned int)(base - new_base);
++	extctx->size += layout->size;
++
++	return new_base;
++}
++
++static unsigned long setup_extcontext(struct extctx_layout *extctx, unsigned long sp)
++{
++	unsigned long new_sp = sp;
++
++	memset(extctx, 0, sizeof(struct extctx_layout));
++
++	extctx->flags = handle_flags();
++
++	/* Grow down, alloc "end" context info first. */
++	new_sp -= sizeof(struct _ctxinfo);
++	extctx->end.addr = (void *)new_sp;
++	extctx->end.size = (unsigned int)sizeof(struct _ctxinfo);
++	extctx->size += extctx->end.size;
++
++	if (extctx->flags & USED_FP) {
++		if (cpu_has_fpu)
++			new_sp = extframe_alloc(extctx, &extctx->fpu,
++			  sizeof(struct fpu_context), FPU_CTX_ALIGN, new_sp);
++	}
++
++	return new_sp;
++}
++
++void __user *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
++			  struct extctx_layout *extctx)
++{
++	unsigned long sp;
++
++	/* Default to using normal stack */
++	sp = regs->regs[3];
++
++	/*
++	 * If we are on the alternate signal stack and would overflow it, don't.
++	 * Return an always-bogus address instead so we will die with SIGSEGV.
++	 */
++	if (on_sig_stack(sp) &&
++	    !likely(on_sig_stack(sp - sizeof(struct rt_sigframe))))
++		return (void __user __force *)(-1UL);
++
++	sp = sigsp(sp, ksig);
++	sp = round_down(sp, 16);
++	sp = setup_extcontext(extctx, sp);
++	sp -= sizeof(struct rt_sigframe);
++
++	if (!IS_ALIGNED(sp, 16))
++		BUG();
++
++	return (void __user *)sp;
++}
++
++/*
++ * Atomically swap in the new signal mask, and wait for a signal.
++ */
++
++asmlinkage long sys_rt_sigreturn(void)
++{
++	int sig;
++	sigset_t set;
++	struct pt_regs *regs;
++	struct rt_sigframe __user *frame;
++
++	regs = current_pt_regs();
++	frame = (struct rt_sigframe __user *)regs->regs[3];
++	if (!access_ok(frame, sizeof(*frame)))
++		goto badframe;
++	if (__copy_from_user(&set, &frame->rs_uctx.uc_sigmask, sizeof(set)))
++		goto badframe;
++
++	set_current_blocked(&set);
++
++	sig = restore_sigcontext(regs, &frame->rs_uctx.uc_mcontext);
++	if (sig < 0)
++		goto badframe;
++	else if (sig)
++		force_sig(sig);
++
++	regs->regs[0] = 0; /* No syscall restarting */
++	if (restore_altstack(&frame->rs_uctx.uc_stack))
++		goto badframe;
++
++	return regs->regs[4];
++
++badframe:
++	force_sig(SIGSEGV);
++	return 0;
++}
++
++static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
++			  struct pt_regs *regs, sigset_t *set)
++{
++	int err = 0;
++	struct extctx_layout extctx;
++	struct rt_sigframe __user *frame;
++
++	frame = get_sigframe(ksig, regs, &extctx);
++	if (!access_ok(frame, sizeof(*frame) + extctx.size))
++		return -EFAULT;
++
++	/* Create siginfo.  */
++	err |= copy_siginfo_to_user(&frame->rs_info, &ksig->info);
++
++	/* Create the ucontext.	 */
++	err |= __put_user(0, &frame->rs_uctx.uc_flags);
++	err |= __put_user(NULL, &frame->rs_uctx.uc_link);
++	err |= __save_altstack(&frame->rs_uctx.uc_stack, regs->regs[3]);
++	err |= setup_sigcontext(regs, &frame->rs_uctx.uc_mcontext, &extctx);
++	err |= __copy_to_user(&frame->rs_uctx.uc_sigmask, set, sizeof(*set));
++
++	if (err)
++		return -EFAULT;
++
++	/*
++	 * Arguments to signal handler:
++	 *
++	 *   a0 = signal number
++	 *   a1 = pointer to siginfo
++	 *   a2 = pointer to ucontext
++	 *
++	 * c0_era point to the signal handler, $r3 (sp) points to
++	 * the struct rt_sigframe.
++	 */
++	regs->regs[4] = ksig->sig;
++	regs->regs[5] = (unsigned long) &frame->rs_info;
++	regs->regs[6] = (unsigned long) &frame->rs_uctx;
++	regs->regs[3] = (unsigned long) frame;
++	regs->regs[1] = (unsigned long) sig_return;
++	regs->csr_era = (unsigned long) ksig->ka.sa.sa_handler;
++
++	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
++	       current->comm, current->pid,
++	       frame, regs->csr_era, regs->regs[1]);
++
++	return 0;
++}
++
++static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
++{
++	int ret;
++	sigset_t *oldset = sigmask_to_save();
++	void *vdso = current->mm->context.vdso;
++
++	/* Are we from a system call? */
++	if (regs->regs[0]) {
++		switch (regs->regs[4]) {
++		case -ERESTART_RESTARTBLOCK:
++		case -ERESTARTNOHAND:
++			regs->regs[4] = -EINTR;
++			break;
++		case -ERESTARTSYS:
++			if (!(ksig->ka.sa.sa_flags & SA_RESTART)) {
++				regs->regs[4] = -EINTR;
++				break;
++			}
++			fallthrough;
++		case -ERESTARTNOINTR:
++			regs->regs[4] = regs->orig_a0;
++			regs->csr_era -= 4;
++		}
++
++		regs->regs[0] = 0;	/* Don't deal with this again.	*/
++	}
++
++	rseq_signal_deliver(ksig, regs);
++
++	ret = setup_rt_frame(vdso + current->thread.vdso->offset_sigreturn, ksig, regs, oldset);
++
++	signal_setup_done(ret, ksig, 0);
++}
++
++void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
++{
++	struct ksignal ksig;
++
++	if (has_signal && get_signal(&ksig)) {
++		/* Whee!  Actually deliver the signal.	*/
++		handle_signal(&ksig, regs);
++		return;
++	}
++
++	/* Are we from a system call? */
++	if (regs->regs[0]) {
++		switch (regs->regs[4]) {
++		case -ERESTARTNOHAND:
++		case -ERESTARTSYS:
++		case -ERESTARTNOINTR:
++			regs->regs[4] = regs->orig_a0;
++			regs->csr_era -= 4;
++			break;
++
++		case -ERESTART_RESTARTBLOCK:
++			regs->regs[4] = regs->orig_a0;
++			regs->regs[11] = __NR_restart_syscall;
++			regs->csr_era -= 4;
++			break;
++		}
++		regs->regs[0] = 0;	/* Don't deal with this again.	*/
++	}
++
++	/*
++	 * If there's no signal to deliver, we just put the saved sigmask
++	 * back
++	 */
++	restore_saved_sigmask();
 +}
 -- 
 2.27.0
