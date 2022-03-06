@@ -2,166 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160744CDD2F
-	for <lists+linux-arch@lfdr.de>; Fri,  4 Mar 2022 20:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B52C44CE98A
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Mar 2022 07:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiCDTOP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 4 Mar 2022 14:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S233007AbiCFGvW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Mar 2022 01:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiCDTOO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 4 Mar 2022 14:14:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8441C1E503D;
-        Fri,  4 Mar 2022 11:13:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C72461967;
-        Fri,  4 Mar 2022 19:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF926C340E9;
-        Fri,  4 Mar 2022 19:13:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646421203;
-        bh=qL6iqVP9OuyTm0GEY6s+DvIkOVU6QwersrNGlp/pNAQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=qXFhsWwdJChSBrDiMNOy0W8bhNXVxM23uT12zfeia9Z23pQeNq4I5Uyrn1kQyQlIW
-         kVtJ0+0yktLFpXWeTdWJz/Ef7ePZgmYXnhrh8pxGYaUTUYvD7JfZLCFWySSAtZxBb9
-         HptwyzSm1L3GGbPU5l0sYvjP7ENIid06nY9cz3lAmiUAYX0wcl++MiSOwpwhVRxRYS
-         PKnSglCpB63Tld61KR1bHnvp+avLCEt8V3GMXDhSOpH/fN9LXooTP2A5dYnpO9eNc0
-         Z2xTgl8l0O4ojStWwDFwQ0mhdYxGSLlRl1qdptva51LvsQXc98hh4BXaeO/AwCke01
-         MGyu/FC5Db62Q==
-Message-ID: <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org>
-Date:   Fri, 4 Mar 2022 11:13:19 -0800
+        with ESMTP id S232011AbiCFGvW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Mar 2022 01:51:22 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7D53123A
+        for <linux-arch@vger.kernel.org>; Sat,  5 Mar 2022 22:50:29 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id v28so16279236ljv.9
+        for <linux-arch@vger.kernel.org>; Sat, 05 Mar 2022 22:50:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=YrElWOnioSvi6agwGYpHn6eZnGGJJfzwROlfAOI7afI3FV4uoIIP6uxre83Z9b2Fh0
+         wQ6KOmzkNElWZABEXIDDtP1L2VjDwznzBB1GC0rXi6dQtUl7wLwBnLPCzmuYdmGAKqEl
+         Pg1+0U3LoYo1om+zDOrLTEuKDciHiwd26bRN8UE7/f0A3L1LQiqPKA5pVLKGJuDpsIFN
+         MuZW5HeDgvRoNrUzxy4HhVZeKq2qZFzUPVtZNg5e/yeJRLpUBCroJEkQOq7U5qgHYgiP
+         r8mMBcda5A1M6t314IKnZgdBqZQs94WFh2xL7O+UQEJ9dtFtkgeAbMvbXLvs2zshWuFc
+         gp3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=M2rv7iQHVOB7KgJUNI3QHRPcjLmtfITkppPlxH/Q55g7xLESKyTAEwExeNK+JH1oZC
+         kBnP5BwWW8JYTXhuT+VvakCcz0DEPLY3FmceDsYKl4a65qufNah6WrNd0stNFGzoGncr
+         J5ettRdBN6Dms1Kt30b7mOM2Ob2QKSCPzhocUj0eWXvU8rRms3gyAWySE12XwvcTHWpN
+         /xxVRO105Toii6VJS24EhxCbziwPg7ZbaShmo3hr/ICMF82UTqK+W+3cMlq21NlziXNO
+         MnSaqzIJfV/eXkfeVI658bAv3kKK+wpOWnPzmWqhaZYQjGUSzBeyGGFGZ93frVY4XJrd
+         DV+w==
+X-Gm-Message-State: AOAM533uF5esR0Rp7o2W+baLJ/xSyyEzHaPqiOSDSjBpOIrn5bHRGGty
+        g13rSlIT7OBbcRFHOXsJnH0v+aT4gK0gTiJqxZg=
+X-Google-Smtp-Source: ABdhPJyJ8hMPh4DWVCIiJShT2FiXX6IorN+yUVHTNiqhvLlQ9gEIgZvAzGFDeIGTG5i27pzoQ5fj0JTAXmPMf7ibwQc=
+X-Received: by 2002:a2e:9a98:0:b0:247:e29f:fbd7 with SMTP id
+ p24-20020a2e9a98000000b00247e29ffbd7mr897608lji.509.1646549428226; Sat, 05
+ Mar 2022 22:50:28 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-Content-Language: en-US
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "rppt@kernel.org" <rppt@kernel.org>
-Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "adrian@lisas.de" <adrian@lisas.de>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "avagin@gmail.com" <avagin@gmail.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "dave.martin@arm.com" <dave.martin@arm.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-References: <YgI1A0CtfmT7GMIp@kernel.org> <YgI37n+3JfLSNQCQ@grain>
- <357664de-b089-4617-99d1-de5098953c80@www.fastmail.com>
- <YgKiKEcsNt7mpMHN@grain>
- <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
- <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
- <Yh0wIMjFdDl8vaNM@kernel.org>
- <5a792e77-0072-4ded-9f89-e7fcc7f7a1d6@www.fastmail.com>
- <Yh0+9cFyAfnsXqxI@kernel.org>
- <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
- <YiEZyTT/UBFZd6Am@kernel.org>
- <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
- <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-In-Reply-To: <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: mrs.susanelwoodhara17@gmail.com
+Sender: mrs.arawyann@gmail.com
+Received: by 2002:ab3:7d89:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 22:50:27 -0800 (PST)
+From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
+Date:   Sun, 6 Mar 2022 06:50:27 +0000
+X-Google-Sender-Auth: 2IDmeeCswS-nXDmPj-lzApf7VfY
+Message-ID: <CACppo44FdZoD_SnrwVyD-yvu7pHgFq0czow3nR5ViQfkjD1p4g@mail.gmail.com>
+Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 3/3/22 17:30, Edgecombe, Rick P wrote:
-> On Thu, 2022-03-03 at 15:00 -0800, Andy Lutomirski wrote:
->>>> The intent of PTRACE_CALL_FUNCTION_SIGFRAME is push a signal
->>>> frame onto
->>>> the stack and call a function.  That function should then be able
->>>> to call
->>>> sigreturn just like any normal signal handler.
->>>
->>> Ok, let me reiterate.
->>>
->>> We have a seized and stopped tracee, use
->>> PTRACE_CALL_FUNCTION_SIGFRAME
->>> to push a signal frame onto the tracee's stack so that sigreturn
->>> could use
->>> that frame, then set the tracee %rip to the function we'd like to
->>> call and
->>> then we PTRACE_CONT the tracee. Tracee continues to execute the
->>> parasite
->>> code that calls sigreturn to clean up and restore the tracee
->>> process.
->>>
->>> PTRACE_CALL_FUNCTION_SIGFRAME also pushes a restore token to the
->>> shadow
->>> stack, just like setup_rt_frame() does, so that sys_rt_sigreturn()
->>> won't
->>> bail out at restore_signal_shadow_stack().
->>
->> That is the intent.
->>
->>>
->>> The only thing that CRIU actually needs is to push a restore token
->>> to the
->>> shadow stack, so for us a ptrace call that does that would be
->>> ideal.
->>>
->>
->> That seems fine too.  The main benefit of the SIGFRAME approach is
->> that, AIUI, CRIU eventually constructs a signal frame anyway, and
->> getting one ready-made seems plausibly helpful.  But if it's not
->> actually that useful, then there's no need to do it.
-> 
-> I guess pushing a token to the shadow stack could be done like GDB does
-> calls, with just the basic CET ptrace support. So do we even need a
-> specific push token operation?
-> 
-> I suppose if CRIU already used some kernel encapsulation of a seized
-> call/return operation it would have been easier to make CRIU work with
-> the introduction of CET. But the design of CRIU seems to be to have the
-> kernel expose just enough and then tie it all together in userspace.
-> 
-> Andy, did you have any other usages for PTRACE_CALL_FUNCTION in mind? I
-> couldn't find any other CRIU-like users of sigreturn in the debian
-> source search (but didn't read all 819 pages that come up with
-> "sigreturn"). It seemed to be mostly seccomp sandbox references.
+GOD BLESS YOU AS YOU REPLY URGENTLY
 
-I don't see a benefit compelling enough to justify the added complexity, 
-given that existing mechanisms can do it.
-
-The sigframe thing, OTOH, seems genuinely useful if CRIU would actually 
-use it to save the full register state.  Generating a signal frame from 
-scratch is a pain.  That being said, if CRIU isn't excited, then don't 
-bother.
+ Hello Dear,
+Greetings, I am contacting you regarding an important information i
+have for you please reply to confirm your email address and for more
+details Thanks
+Regards
+Mrs Susan Elwood Hara.
