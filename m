@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A854CEB22
-	for <lists+linux-arch@lfdr.de>; Sun,  6 Mar 2022 12:31:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175614CEB25
+	for <lists+linux-arch@lfdr.de>; Sun,  6 Mar 2022 12:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbiCFLcF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 6 Mar 2022 06:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S231402AbiCFLdC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 6 Mar 2022 06:33:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbiCFLcF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Mar 2022 06:32:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EBB2A73B;
-        Sun,  6 Mar 2022 03:31:12 -0800 (PST)
+        with ESMTP id S231276AbiCFLdC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 6 Mar 2022 06:33:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E41F2A73B;
+        Sun,  6 Mar 2022 03:32:09 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C2C60BBD;
-        Sun,  6 Mar 2022 11:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73488C340EC;
-        Sun,  6 Mar 2022 11:31:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FCAB60B97;
+        Sun,  6 Mar 2022 11:32:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2239DC340EC;
+        Sun,  6 Mar 2022 11:32:03 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -35,9 +35,9 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V7 07/22] LoongArch: Add atomic/locking headers
-Date:   Sun,  6 Mar 2022 19:28:35 +0800
-Message-Id: <20220306112850.811504-8-chenhuacai@loongson.cn>
+Subject: [PATCH V7 08/22] LoongArch: Add other common headers
+Date:   Sun,  6 Mar 2022 19:28:36 +0800
+Message-Id: <20220306112850.811504-9-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220306112850.811504-1-chenhuacai@loongson.cn>
 References: <20220306112850.811504-1-chenhuacai@loongson.cn>
@@ -52,883 +52,1026 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds common headers (atomic, bitops, barrier and locking)
-for basic LoongArch support.
-
-LoongArch has no native sub-word xchg/cmpxchg instructions now, but
-LoongArch-based CPUs support NUMA (e.g., quad-core Loongson-3A5000
-supports as many as 16 nodes, 64 cores in total). So, we emulate sub-
-word xchg/cmpxchg in software and use qspinlock/qrwlock rather than
-ticket locks.
+This patch adds some other common headers for basic LoongArch support.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/atomic.h         | 358 ++++++++++++++++++++
- arch/loongarch/include/asm/barrier.h        |  51 +++
- arch/loongarch/include/asm/bitops.h         |  33 ++
- arch/loongarch/include/asm/bitrev.h         |  34 ++
- arch/loongarch/include/asm/cmpxchg.h        | 135 ++++++++
- arch/loongarch/include/asm/local.h          | 138 ++++++++
- arch/loongarch/include/asm/percpu.h         |  20 ++
- arch/loongarch/include/asm/spinlock.h       |  12 +
- arch/loongarch/include/asm/spinlock_types.h |  11 +
- 9 files changed, 792 insertions(+)
- create mode 100644 arch/loongarch/include/asm/atomic.h
- create mode 100644 arch/loongarch/include/asm/barrier.h
- create mode 100644 arch/loongarch/include/asm/bitops.h
- create mode 100644 arch/loongarch/include/asm/bitrev.h
- create mode 100644 arch/loongarch/include/asm/cmpxchg.h
- create mode 100644 arch/loongarch/include/asm/local.h
- create mode 100644 arch/loongarch/include/asm/percpu.h
- create mode 100644 arch/loongarch/include/asm/spinlock.h
- create mode 100644 arch/loongarch/include/asm/spinlock_types.h
+ arch/loongarch/include/asm/asm-prototypes.h   |   7 +
+ arch/loongarch/include/asm/asm.h              | 189 +++++++++++
+ arch/loongarch/include/asm/asmmacro.h         | 302 ++++++++++++++++++
+ arch/loongarch/include/asm/clocksource.h      |  12 +
+ arch/loongarch/include/asm/compiler.h         |  15 +
+ arch/loongarch/include/asm/linkage.h          |  36 +++
+ arch/loongarch/include/asm/perf_event.h       |  10 +
+ arch/loongarch/include/asm/prefetch.h         |  29 ++
+ arch/loongarch/include/asm/serial.h           |  11 +
+ arch/loongarch/include/asm/time.h             |  50 +++
+ arch/loongarch/include/asm/timex.h            |  31 ++
+ arch/loongarch/include/asm/topology.h         |  15 +
+ arch/loongarch/include/asm/types.h            |  33 ++
+ arch/loongarch/include/uapi/asm/abidefs.h     |  20 ++
+ arch/loongarch/include/uapi/asm/bitfield.h    |  15 +
+ arch/loongarch/include/uapi/asm/bitsperlong.h |   9 +
+ arch/loongarch/include/uapi/asm/byteorder.h   |  13 +
+ arch/loongarch/include/uapi/asm/reg.h         |  59 ++++
+ tools/include/uapi/asm/bitsperlong.h          |   2 +
+ 19 files changed, 858 insertions(+)
+ create mode 100644 arch/loongarch/include/asm/asm-prototypes.h
+ create mode 100644 arch/loongarch/include/asm/asm.h
+ create mode 100644 arch/loongarch/include/asm/asmmacro.h
+ create mode 100644 arch/loongarch/include/asm/clocksource.h
+ create mode 100644 arch/loongarch/include/asm/compiler.h
+ create mode 100644 arch/loongarch/include/asm/linkage.h
+ create mode 100644 arch/loongarch/include/asm/perf_event.h
+ create mode 100644 arch/loongarch/include/asm/prefetch.h
+ create mode 100644 arch/loongarch/include/asm/serial.h
+ create mode 100644 arch/loongarch/include/asm/time.h
+ create mode 100644 arch/loongarch/include/asm/timex.h
+ create mode 100644 arch/loongarch/include/asm/topology.h
+ create mode 100644 arch/loongarch/include/asm/types.h
+ create mode 100644 arch/loongarch/include/uapi/asm/abidefs.h
+ create mode 100644 arch/loongarch/include/uapi/asm/bitfield.h
+ create mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
+ create mode 100644 arch/loongarch/include/uapi/asm/byteorder.h
+ create mode 100644 arch/loongarch/include/uapi/asm/reg.h
 
-diff --git a/arch/loongarch/include/asm/atomic.h b/arch/loongarch/include/asm/atomic.h
+diff --git a/arch/loongarch/include/asm/asm-prototypes.h b/arch/loongarch/include/asm/asm-prototypes.h
 new file mode 100644
-index 000000000000..f0ed7f9c08c9
+index 000000000000..ed06d3997420
 --- /dev/null
-+++ b/arch/loongarch/include/asm/atomic.h
-@@ -0,0 +1,358 @@
++++ b/arch/loongarch/include/asm/asm-prototypes.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#include <linux/uaccess.h>
++#include <asm/fpu.h>
++#include <asm/mmu_context.h>
++#include <asm/page.h>
++#include <asm/ftrace.h>
++#include <asm-generic/asm-prototypes.h>
+diff --git a/arch/loongarch/include/asm/asm.h b/arch/loongarch/include/asm/asm.h
+new file mode 100644
+index 000000000000..8399a6cb862a
+--- /dev/null
++++ b/arch/loongarch/include/asm/asm.h
+@@ -0,0 +1,189 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Atomic operations.
++ * Some useful macros for LoongArch assembler code
 + *
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ *
++ * Derived from MIPS:
++ * Copyright (C) 1995, 1996, 1997, 1999, 2001 by Ralf Baechle
++ * Copyright (C) 1999 by Silicon Graphics, Inc.
++ * Copyright (C) 2001 MIPS Technologies, Inc.
++ * Copyright (C) 2002  Maciej W. Rozycki
 + */
-+#ifndef _ASM_ATOMIC_H
-+#define _ASM_ATOMIC_H
++#ifndef __ASM_ASM_H
++#define __ASM_ASM_H
 +
-+#include <linux/types.h>
-+#include <asm/barrier.h>
-+#include <asm/cmpxchg.h>
-+#include <asm/compiler.h>
++#include <asm/abidefs.h>
 +
-+#if _LOONGARCH_SZLONG == 32
-+#define __LL		"ll.w	"
-+#define __SC		"sc.w	"
-+#define __AMADD		"amadd.w	"
-+#define __AMAND_SYNC	"amand_db.w	"
-+#define __AMOR_SYNC	"amor_db.w	"
-+#define __AMXOR_SYNC	"amxor_db.w	"
-+#elif _LOONGARCH_SZLONG == 64
-+#define __LL		"ll.d	"
-+#define __SC		"sc.d	"
-+#define __AMADD		"amadd.d	"
-+#define __AMAND_SYNC	"amand_db.d	"
-+#define __AMOR_SYNC	"amor_db.d	"
-+#define __AMXOR_SYNC	"amxor_db.d	"
++/* LoongArch pref instruction. */
++#ifdef CONFIG_CPU_HAS_PREFETCH
++
++#define PREF(hint, addr, offs)				\
++		preld	hint, addr, offs;		\
++
++#define PREFX(hint, addr, index)			\
++		preldx	hint, addr, index;		\
++
++#else /* !CONFIG_CPU_HAS_PREFETCH */
++
++#define PREF(hint, addr, offs)
++#define PREFX(hint, addr, index)
++
++#endif /* !CONFIG_CPU_HAS_PREFETCH */
++
++/*
++ * Stack alignment
++ */
++#if (_LOONGARCH_SIM == _LOONGARCH_SIM_ABILP64)
++#define ALSZ	15
++#define ALMASK	~15
 +#endif
 +
-+#define ATOMIC_INIT(i)	  { (i) }
++/*
++ * Macros to handle different pointer/register sizes for 32/64-bit code
++ */
 +
 +/*
-+ * arch_atomic_read - read atomic variable
-+ * @v: pointer of type atomic_t
-+ *
-+ * Atomically reads the value of @v.
++ * Size of a register
 + */
-+#define arch_atomic_read(v)	READ_ONCE((v)->counter)
-+
-+/*
-+ * arch_atomic_set - set atomic variable
-+ * @v: pointer of type atomic_t
-+ * @i: required value
-+ *
-+ * Atomically sets the value of @v to @i.
-+ */
-+#define arch_atomic_set(v, i)	WRITE_ONCE((v)->counter, (i))
-+
-+#define ATOMIC_OP(op, I, asm_op)					\
-+static inline void arch_atomic_##op(int i, atomic_t *v)			\
-+{									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.w" " $zero, %1, %0	\n"			\
-+	: "+ZB" (v->counter)						\
-+	: "r" (I)							\
-+	: "memory");							\
-+}
-+
-+#define ATOMIC_OP_RETURN(op, I, asm_op, c_op)				\
-+static inline int arch_atomic_##op##_return_relaxed(int i, atomic_t *v)	\
-+{									\
-+	int result;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.w" " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)				\
-+	: "r" (I)							\
-+	: "memory");							\
-+									\
-+	return result c_op I;						\
-+}
-+
-+#define ATOMIC_FETCH_OP(op, I, asm_op)					\
-+static inline int arch_atomic_fetch_##op##_relaxed(int i, atomic_t *v)	\
-+{									\
-+	int result;							\
-+									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.w" " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)				\
-+	: "r" (I)							\
-+	: "memory");							\
-+									\
-+	return result;							\
-+}
-+
-+#define ATOMIC_OPS(op, I, asm_op, c_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_OP_RETURN(op, I, asm_op, c_op)				\
-+	ATOMIC_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC_OPS(add, i, add, +)
-+ATOMIC_OPS(sub, -i, add, +)
-+
-+#define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
-+#define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
-+#define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
-+#define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
-+
-+#undef ATOMIC_OPS
-+
-+#define ATOMIC_OPS(op, I, asm_op)					\
-+	ATOMIC_OP(op, I, asm_op)					\
-+	ATOMIC_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC_OPS(and, i, and)
-+ATOMIC_OPS(or, i, or)
-+ATOMIC_OPS(xor, i, xor)
-+
-+#define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
-+#define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
-+#define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
-+
-+#undef ATOMIC_OPS
-+#undef ATOMIC_FETCH_OP
-+#undef ATOMIC_OP_RETURN
-+#undef ATOMIC_OP
-+
-+static inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int u)
-+{
-+       int prev, rc;
-+
-+	__asm__ __volatile__ (
-+		"0:	ll.w	%[p],  %[c]\n"
-+		"	beq	%[p],  %[u], 1f\n"
-+		"	add.w	%[rc], %[p], %[a]\n"
-+		"	sc.w	%[rc], %[c]\n"
-+		"	beqz	%[rc], 0b\n"
-+		"	b	2f\n"
-+		"1:\n"
-+		__WEAK_LLSC_MB
-+		"2:\n"
-+		: [p]"=&r" (prev), [rc]"=&r" (rc),
-+		  [c]"=ZB" (v->counter)
-+		: [a]"r" (a), [u]"r" (u)
-+		: "memory");
-+
-+	return prev;
-+}
-+#define arch_atomic_fetch_add_unless arch_atomic_fetch_add_unless
-+
-+/*
-+ * arch_atomic_sub_if_positive - conditionally subtract integer from atomic variable
-+ * @i: integer value to subtract
-+ * @v: pointer of type atomic_t
-+ *
-+ * Atomically test @v and subtract @i if @v is greater or equal than @i.
-+ * The function returns the old value of @v minus @i.
-+ */
-+static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
-+{
-+	int result;
-+	int temp;
-+
-+	if (__builtin_constant_p(i)) {
-+		__asm__ __volatile__(
-+		"1:	ll.w	%1, %2		# atomic_sub_if_positive\n"
-+		"	addi.w	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.w	%1, %2					\n"
-+		"	beq	$zero, %1, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "I" (-i));
-+	} else {
-+		__asm__ __volatile__(
-+		"1:	ll.w	%1, %2		# atomic_sub_if_positive\n"
-+		"	sub.w	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.w	%1, %2					\n"
-+		"	beq	$zero, %1, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "r" (i));
-+	}
-+
-+	return result;
-+}
-+
-+#define arch_atomic_cmpxchg(v, o, n) (arch_cmpxchg(&((v)->counter), (o), (n)))
-+#define arch_atomic_xchg(v, new) (arch_xchg(&((v)->counter), (new)))
-+
-+/*
-+ * arch_atomic_dec_if_positive - decrement by 1 if old value positive
-+ * @v: pointer of type atomic_t
-+ */
-+#define arch_atomic_dec_if_positive(v)	arch_atomic_sub_if_positive(1, v)
-+
-+#ifdef CONFIG_64BIT
-+
-+#define ATOMIC64_INIT(i)    { (i) }
-+
-+/*
-+ * arch_atomic64_read - read atomic variable
-+ * @v: pointer of type atomic64_t
-+ *
-+ */
-+#define arch_atomic64_read(v)	READ_ONCE((v)->counter)
-+
-+/*
-+ * arch_atomic64_set - set atomic variable
-+ * @v: pointer of type atomic64_t
-+ * @i: required value
-+ */
-+#define arch_atomic64_set(v, i)	WRITE_ONCE((v)->counter, (i))
-+
-+#define ATOMIC64_OP(op, I, asm_op)					\
-+static inline void arch_atomic64_##op(long i, atomic64_t *v)		\
-+{									\
-+	__asm__ __volatile__(						\
-+	"am"#asm_op"_db.d " " $zero, %1, %0	\n"			\
-+	: "+ZB" (v->counter)						\
-+	: "r" (I)							\
-+	: "memory");							\
-+}
-+
-+#define ATOMIC64_OP_RETURN(op, I, asm_op, c_op)					\
-+static inline long arch_atomic64_##op##_return_relaxed(long i, atomic64_t *v)	\
-+{										\
-+	long result;								\
-+	__asm__ __volatile__(							\
-+	"am"#asm_op"_db.d " " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)					\
-+	: "r" (I)								\
-+	: "memory");								\
-+										\
-+	return result c_op I;							\
-+}
-+
-+#define ATOMIC64_FETCH_OP(op, I, asm_op)					\
-+static inline long arch_atomic64_fetch_##op##_relaxed(long i, atomic64_t *v)	\
-+{										\
-+	long result;								\
-+										\
-+	__asm__ __volatile__(							\
-+	"am"#asm_op"_db.d " " %1, %2, %0		\n"			\
-+	: "+ZB" (v->counter), "=&r" (result)					\
-+	: "r" (I)								\
-+	: "memory");								\
-+										\
-+	return result;								\
-+}
-+
-+#define ATOMIC64_OPS(op, I, asm_op, c_op)				      \
-+	ATOMIC64_OP(op, I, asm_op)					      \
-+	ATOMIC64_OP_RETURN(op, I, asm_op, c_op)				      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC64_OPS(add, i, add, +)
-+ATOMIC64_OPS(sub, -i, add, +)
-+
-+#define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
-+#define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
-+#define arch_atomic64_fetch_add_relaxed		arch_atomic64_fetch_add_relaxed
-+#define arch_atomic64_fetch_sub_relaxed		arch_atomic64_fetch_sub_relaxed
-+
-+#undef ATOMIC64_OPS
-+
-+#define ATOMIC64_OPS(op, I, asm_op)					      \
-+	ATOMIC64_OP(op, I, asm_op)					      \
-+	ATOMIC64_FETCH_OP(op, I, asm_op)
-+
-+ATOMIC64_OPS(and, i, and)
-+ATOMIC64_OPS(or, i, or)
-+ATOMIC64_OPS(xor, i, xor)
-+
-+#define arch_atomic64_fetch_and_relaxed	arch_atomic64_fetch_and_relaxed
-+#define arch_atomic64_fetch_or_relaxed	arch_atomic64_fetch_or_relaxed
-+#define arch_atomic64_fetch_xor_relaxed	arch_atomic64_fetch_xor_relaxed
-+
-+#undef ATOMIC64_OPS
-+#undef ATOMIC64_FETCH_OP
-+#undef ATOMIC64_OP_RETURN
-+#undef ATOMIC64_OP
-+
-+static inline long arch_atomic64_fetch_add_unless(atomic64_t *v, long a, long u)
-+{
-+       long prev, rc;
-+
-+	__asm__ __volatile__ (
-+		"0:	ll.d	%[p],  %[c]\n"
-+		"	beq	%[p],  %[u], 1f\n"
-+		"	add.d	%[rc], %[p], %[a]\n"
-+		"	sc.d	%[rc], %[c]\n"
-+		"	beqz	%[rc], 0b\n"
-+		"	b	2f\n"
-+		"1:\n"
-+		__WEAK_LLSC_MB
-+		"2:\n"
-+		: [p]"=&r" (prev), [rc]"=&r" (rc),
-+		  [c] "=ZB" (v->counter)
-+		: [a]"r" (a), [u]"r" (u)
-+		: "memory");
-+
-+	return prev;
-+}
-+#define arch_atomic64_fetch_add_unless arch_atomic64_fetch_add_unless
-+
-+/*
-+ * arch_atomic64_sub_if_positive - conditionally subtract integer from atomic variable
-+ * @i: integer value to subtract
-+ * @v: pointer of type atomic64_t
-+ *
-+ * Atomically test @v and subtract @i if @v is greater or equal than @i.
-+ * The function returns the old value of @v minus @i.
-+ */
-+static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
-+{
-+	long result;
-+	long temp;
-+
-+	if (__builtin_constant_p(i)) {
-+		__asm__ __volatile__(
-+		"1:	ll.d	%1, %2	# atomic64_sub_if_positive	\n"
-+		"	addi.d	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.d	%1, %2					\n"
-+		"	beq	%1, $zero, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "I" (-i));
-+	} else {
-+		__asm__ __volatile__(
-+		"1:	ll.d	%1, %2	# atomic64_sub_if_positive	\n"
-+		"	sub.d	%0, %1, %3				\n"
-+		"	or	%1, %0, $zero				\n"
-+		"	blt	%0, $zero, 2f				\n"
-+		"	sc.d	%1, %2					\n"
-+		"	beq	%1, $zero, 1b				\n"
-+		"2:							\n"
-+		: "=&r" (result), "=&r" (temp),
-+		  "+" GCC_OFF_SMALL_ASM() (v->counter)
-+		: "r" (i));
-+	}
-+
-+	return result;
-+}
-+
-+#define arch_atomic64_cmpxchg(v, o, n) \
-+	((__typeof__((v)->counter))arch_cmpxchg(&((v)->counter), (o), (n)))
-+#define arch_atomic64_xchg(v, new) (arch_xchg(&((v)->counter), (new)))
-+
-+/*
-+ * arch_atomic64_dec_if_positive - decrement by 1 if old value positive
-+ * @v: pointer of type atomic64_t
-+ */
-+#define arch_atomic64_dec_if_positive(v)	arch_atomic64_sub_if_positive(1, v)
-+
-+#endif /* CONFIG_64BIT */
-+
-+#endif /* _ASM_ATOMIC_H */
-diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/include/asm/barrier.h
-new file mode 100644
-index 000000000000..cc6c7e3f5ce6
---- /dev/null
-+++ b/arch/loongarch/include/asm/barrier.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_BARRIER_H
-+#define __ASM_BARRIER_H
-+
-+#define __sync()	__asm__ __volatile__("dbar 0" : : : "memory")
-+
-+#define fast_wmb()	__sync()
-+#define fast_rmb()	__sync()
-+#define fast_mb()	__sync()
-+#define fast_iob()	__sync()
-+#define wbflush()	__sync()
-+
-+#define wmb()		fast_wmb()
-+#define rmb()		fast_rmb()
-+#define mb()		fast_mb()
-+#define iob()		fast_iob()
-+
-+/**
-+ * array_index_mask_nospec() - generate a ~0 mask when index < size, 0 otherwise
-+ * @index: array element index
-+ * @size: number of elements in array
-+ *
-+ * Returns:
-+ *     0 - (@index < @size)
-+ */
-+#define array_index_mask_nospec array_index_mask_nospec
-+static inline unsigned long array_index_mask_nospec(unsigned long index,
-+						    unsigned long size)
-+{
-+	unsigned long mask;
-+
-+	__asm__ __volatile__(
-+		"sltu	%0, %1, %2\n\t"
-+#if (_LOONGARCH_SZLONG == 32)
-+		"sub.w	%0, $r0, %0\n\t"
-+#elif (_LOONGARCH_SZLONG == 64)
-+		"sub.d	%0, $r0, %0\n\t"
-+#endif
-+		: "=r" (mask)
-+		: "r" (index), "r" (size)
-+		:);
-+
-+	return mask;
-+}
-+
-+#include <asm-generic/barrier.h>
-+
-+#endif /* __ASM_BARRIER_H */
-diff --git a/arch/loongarch/include/asm/bitops.h b/arch/loongarch/include/asm/bitops.h
-new file mode 100644
-index 000000000000..69e00f8d8034
---- /dev/null
-+++ b/arch/loongarch/include/asm/bitops.h
-@@ -0,0 +1,33 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef _ASM_BITOPS_H
-+#define _ASM_BITOPS_H
-+
-+#include <linux/compiler.h>
-+
-+#ifndef _LINUX_BITOPS_H
-+#error only <linux/bitops.h> can be included directly
-+#endif
-+
-+#include <asm/barrier.h>
-+
-+#include <asm-generic/bitops/builtin-ffs.h>
-+#include <asm-generic/bitops/builtin-fls.h>
-+#include <asm-generic/bitops/builtin-__ffs.h>
-+#include <asm-generic/bitops/builtin-__fls.h>
-+
-+#include <asm-generic/bitops/ffz.h>
-+#include <asm-generic/bitops/fls64.h>
-+
-+#include <asm-generic/bitops/sched.h>
-+#include <asm-generic/bitops/hweight.h>
-+
-+#include <asm-generic/bitops/atomic.h>
-+#include <asm-generic/bitops/non-atomic.h>
-+#include <asm-generic/bitops/lock.h>
-+#include <asm-generic/bitops/le.h>
-+#include <asm-generic/bitops/ext2-atomic.h>
-+
-+#endif /* _ASM_BITOPS_H */
-diff --git a/arch/loongarch/include/asm/bitrev.h b/arch/loongarch/include/asm/bitrev.h
-new file mode 100644
-index 000000000000..46f275b9cdf7
---- /dev/null
-+++ b/arch/loongarch/include/asm/bitrev.h
-@@ -0,0 +1,34 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __LOONGARCH_ASM_BITREV_H__
-+#define __LOONGARCH_ASM_BITREV_H__
-+
-+#include <linux/swab.h>
-+
-+static __always_inline __attribute_const__ u32 __arch_bitrev32(u32 x)
-+{
-+	u32 ret;
-+
-+	asm("bitrev.4b	%0, %1" : "=r"(ret) : "r"(__swab32(x)));
-+	return ret;
-+}
-+
-+static __always_inline __attribute_const__ u16 __arch_bitrev16(u16 x)
-+{
-+	u16 ret;
-+
-+	asm("bitrev.4b	%0, %1" : "=r"(ret) : "r"(__swab16(x)));
-+	return ret;
-+}
-+
-+static __always_inline __attribute_const__ u8 __arch_bitrev8(u8 x)
-+{
-+	u8 ret;
-+
-+	asm("bitrev.4b	%0, %1" : "=r"(ret) : "r"(x));
-+	return ret;
-+}
-+
-+#endif /* __LOONGARCH_ASM_BITREV_H__ */
-diff --git a/arch/loongarch/include/asm/cmpxchg.h b/arch/loongarch/include/asm/cmpxchg.h
-new file mode 100644
-index 000000000000..69c3e2b7827d
---- /dev/null
-+++ b/arch/loongarch/include/asm/cmpxchg.h
-@@ -0,0 +1,135 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_CMPXCHG_H
-+#define __ASM_CMPXCHG_H
-+
-+#include <linux/build_bug.h>
-+
-+#define __xchg_asm(amswap_db, m, val)		\
-+({						\
-+		__typeof(val) __ret;		\
-+						\
-+		__asm__ __volatile__ (		\
-+		" "amswap_db" %1, %z2, %0 \n"	\
-+		: "+ZB" (*m), "=&r" (__ret)	\
-+		: "Jr" (val)			\
-+		: "memory");			\
-+						\
-+		__ret;				\
-+})
-+
-+extern unsigned long __xchg_small(volatile void *ptr, unsigned long x,
-+				  unsigned int size);
-+
-+static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
-+				   int size)
-+{
-+	switch (size) {
-+	case 1:
-+	case 2:
-+		return __xchg_small(ptr, x, size);
-+
-+	case 4:
-+		return __xchg_asm("amswap_db.w", (volatile u32 *)ptr, (u32)x);
-+
-+	case 8:
-+		return __xchg_asm("amswap_db.d", (volatile u64 *)ptr, (u64)x);
-+
-+	default:
-+		BUILD_BUG();
-+	}
-+
-+	return 0;
-+}
-+
-+#define arch_xchg(ptr, x)						\
-+({									\
-+	__typeof__(*(ptr)) __res;					\
-+									\
-+	__res = (__typeof__(*(ptr)))					\
-+		__xchg((ptr), (unsigned long)(x), sizeof(*(ptr)));	\
-+									\
-+	__res;								\
-+})
-+
-+#define __cmpxchg_asm(ld, st, m, old, new)				\
-+({									\
-+	__typeof(old) __ret;						\
-+									\
-+	__asm__ __volatile__(						\
-+	"1:	" ld "	%0, %2		# __cmpxchg_asm \n"		\
-+	"	bne	%0, %z3, 2f			\n"		\
-+	"	or	$t0, %z4, $zero			\n"		\
-+	"	" st "	$t0, %1				\n"		\
-+	"	beq	$zero, $t0, 1b			\n"		\
-+	"2:						\n"		\
-+	: "=&r" (__ret), "=ZB"(*m)					\
-+	: "ZB"(*m), "Jr" (old), "Jr" (new)				\
-+	: "t0", "memory");						\
-+									\
-+	__ret;								\
-+})
-+
-+extern unsigned long __cmpxchg_small(volatile void *ptr, unsigned long old,
-+				     unsigned long new, unsigned int size);
-+
-+static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
-+				      unsigned long new, unsigned int size)
-+{
-+	switch (size) {
-+	case 1:
-+	case 2:
-+		return __cmpxchg_small(ptr, old, new, size);
-+
-+	case 4:
-+		return __cmpxchg_asm("ll.w", "sc.w", (volatile u32 *)ptr,
-+				     (u32)old, new);
-+
-+	case 8:
-+		return __cmpxchg_asm("ll.d", "sc.d", (volatile u64 *)ptr,
-+				     (u64)old, new);
-+
-+	default:
-+		BUILD_BUG();
-+	}
-+
-+	return 0;
-+}
-+
-+#define arch_cmpxchg_local(ptr, old, new)				\
-+	((__typeof__(*(ptr)))						\
-+		__cmpxchg((ptr),					\
-+			  (unsigned long)(__typeof__(*(ptr)))(old),	\
-+			  (unsigned long)(__typeof__(*(ptr)))(new),	\
-+			  sizeof(*(ptr))))
-+
-+#define arch_cmpxchg(ptr, old, new)					\
-+({									\
-+	__typeof__(*(ptr)) __res;					\
-+									\
-+	__res = arch_cmpxchg_local((ptr), (old), (new));		\
-+									\
-+	__res;								\
-+})
-+
-+#ifdef CONFIG_64BIT
-+#define arch_cmpxchg64_local(ptr, o, n)					\
-+  ({									\
-+	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
-+	arch_cmpxchg_local((ptr), (o), (n));				\
-+  })
-+
-+#define arch_cmpxchg64(ptr, o, n)					\
-+  ({									\
-+	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
-+	arch_cmpxchg((ptr), (o), (n));					\
-+  })
++#ifdef __loongarch64
++#define SZREG	8
 +#else
-+#include <asm-generic/cmpxchg-local.h>
-+#define arch_cmpxchg64_local(ptr, o, n) __generic_cmpxchg64_local((ptr), (o), (n))
-+#define arch_cmpxchg64(ptr, o, n) arch_cmpxchg64_local((ptr), (o), (n))
++#define SZREG	4
 +#endif
 +
-+#endif /* __ASM_CMPXCHG_H */
-diff --git a/arch/loongarch/include/asm/local.h b/arch/loongarch/include/asm/local.h
++/*
++ * Use the following macros in assemblercode to load/store registers,
++ * pointers etc.
++ */
++#if (_LOONGARCH_SIM == _LOONGARCH_SIM_ABILP64)
++#define REG_S		st.d
++#define REG_L		ld.d
++#define REG_SUBU	sub.d
++#define REG_ADDU	add.d
++#endif
++
++/*
++ * How to add/sub/load/store/shift C int variables.
++ */
++#if (_LOONGARCH_SZINT == 32)
++#define INT_ADDU	add.w
++#define INT_ADDIU	addi.w
++#define INT_SUBU	sub.w
++#define INT_L		ld.w
++#define INT_S		st.w
++#define INT_SLL		slli.w
++#define INT_SLLV	sll.w
++#define INT_SRL		srli.w
++#define INT_SRLV	srl.w
++#define INT_SRA		srai.w
++#define INT_SRAV	sra.w
++#endif
++
++#if (_LOONGARCH_SZINT == 64)
++#define INT_ADDU	add.d
++#define INT_ADDIU	addi.d
++#define INT_SUBU	sub.d
++#define INT_L		ld.d
++#define INT_S		st.d
++#define INT_SLL		slli.d
++#define INT_SLLV	sll.d
++#define INT_SRL		srli.d
++#define INT_SRLV	srl.d
++#define INT_SRA		sra.w
++#define INT_SRAV	sra.d
++#endif
++
++/*
++ * How to add/sub/load/store/shift C long variables.
++ */
++#if (_LOONGARCH_SZLONG == 32)
++#define LONG_ADDU	add.w
++#define LONG_ADDIU	addi.w
++#define LONG_SUBU	sub.w
++#define LONG_L		ld.w
++#define LONG_S		st.w
++#define LONG_SP		swp
++#define LONG_SLL	slli.w
++#define LONG_SLLV	sll.w
++#define LONG_SRL	srli.w
++#define LONG_SRLV	srl.w
++#define LONG_SRA	srai.w
++#define LONG_SRAV	sra.w
++
++#ifdef __ASSEMBLY__
++#define LONG		.word
++#endif
++#define LONGSIZE	4
++#define LONGMASK	3
++#define LONGLOG		2
++#endif
++
++#if (_LOONGARCH_SZLONG == 64)
++#define LONG_ADDU	add.d
++#define LONG_ADDIU	addi.d
++#define LONG_SUBU	sub.d
++#define LONG_L		ld.d
++#define LONG_S		st.d
++#define LONG_SP		sdp
++#define LONG_SLL	slli.d
++#define LONG_SLLV	sll.d
++#define LONG_SRL	srli.d
++#define LONG_SRLV	srl.d
++#define LONG_SRA	sra.w
++#define LONG_SRAV	sra.d
++
++#ifdef __ASSEMBLY__
++#define LONG		.dword
++#endif
++#define LONGSIZE	8
++#define LONGMASK	7
++#define LONGLOG		3
++#endif
++
++/*
++ * How to add/sub/load/store/shift pointers.
++ */
++#if (_LOONGARCH_SZPTR == 32)
++#define PTR_ADDU	add.w
++#define PTR_ADDIU	addi.w
++#define PTR_SUBU	sub.w
++#define PTR_L		ld.w
++#define PTR_S		st.w
++#define PTR_LI		li.w
++#define PTR_SLL		slli.w
++#define PTR_SLLV	sll.w
++#define PTR_SRL		srli.w
++#define PTR_SRLV	srl.w
++#define PTR_SRA		srai.w
++#define PTR_SRAV	sra.w
++
++#define PTR_SCALESHIFT	2
++
++#define PTR		.word
++#define PTRSIZE		4
++#define PTRLOG		2
++#endif
++
++#if (_LOONGARCH_SZPTR == 64)
++#define PTR_ADDU	add.d
++#define PTR_ADDIU	addi.d
++#define PTR_SUBU	sub.d
++#define PTR_L		ld.d
++#define PTR_S		st.d
++#define PTR_LI		li.d
++#define PTR_SLL		slli.d
++#define PTR_SLLV	sll.d
++#define PTR_SRL		srli.d
++#define PTR_SRLV	srl.d
++#define PTR_SRA		srai.d
++#define PTR_SRAV	sra.d
++
++#define PTR_SCALESHIFT	3
++
++#define PTR		.dword
++#define PTRSIZE		8
++#define PTRLOG		3
++#endif
++
++#endif /* __ASM_ASM_H */
+diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
 new file mode 100644
-index 000000000000..2052a2267337
+index 000000000000..9f1d5a307fde
 --- /dev/null
-+++ b/arch/loongarch/include/asm/local.h
-@@ -0,0 +1,138 @@
++++ b/arch/loongarch/include/asm/asmmacro.h
+@@ -0,0 +1,302 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 + */
-+#ifndef _ARCH_LOONGARCH_LOCAL_H
-+#define _ARCH_LOONGARCH_LOCAL_H
++#ifndef _ASM_ASMMACRO_H
++#define _ASM_ASMMACRO_H
 +
-+#include <linux/percpu.h>
-+#include <linux/bitops.h>
-+#include <linux/atomic.h>
-+#include <asm/cmpxchg.h>
-+#include <asm/compiler.h>
++#include <asm/asm-offsets.h>
++#include <asm/regdef.h>
++#include <asm/fpregdef.h>
++#include <asm/loongarch.h>
 +
-+typedef struct {
-+	atomic_long_t a;
-+} local_t;
++#undef v0
++#undef v1
 +
-+#define LOCAL_INIT(i)	{ ATOMIC_LONG_INIT(i) }
++	.macro	parse_v var val
++	\var	= \val
++	.endm
 +
-+#define local_read(l)	atomic_long_read(&(l)->a)
-+#define local_set(l, i) atomic_long_set(&(l)->a, (i))
++	.macro	parse_r var r
++	\var	= -1
++	.ifc	\r, $r0
++	\var	= 0
++	.endif
++	.ifc	\r, $r1
++	\var	= 1
++	.endif
++	.ifc	\r, $r2
++	\var	= 2
++	.endif
++	.ifc	\r, $r3
++	\var	= 3
++	.endif
++	.ifc	\r, $r4
++	\var	= 4
++	.endif
++	.ifc	\r, $r5
++	\var	= 5
++	.endif
++	.ifc	\r, $r6
++	\var	= 6
++	.endif
++	.ifc	\r, $r7
++	\var	= 7
++	.endif
++	.ifc	\r, $r8
++	\var	= 8
++	.endif
++	.ifc	\r, $r9
++	\var	= 9
++	.endif
++	.ifc	\r, $r10
++	\var	= 10
++	.endif
++	.ifc	\r, $r11
++	\var	= 11
++	.endif
++	.ifc	\r, $r12
++	\var	= 12
++	.endif
++	.ifc	\r, $r13
++	\var	= 13
++	.endif
++	.ifc	\r, $r14
++	\var	= 14
++	.endif
++	.ifc	\r, $r15
++	\var	= 15
++	.endif
++	.ifc	\r, $r16
++	\var	= 16
++	.endif
++	.ifc	\r, $r17
++	\var	= 17
++	.endif
++	.ifc	\r, $r18
++	\var	= 18
++	.endif
++	.ifc	\r, $r19
++	\var	= 19
++	.endif
++	.ifc	\r, $r20
++	\var	= 20
++	.endif
++	.ifc	\r, $r21
++	\var	= 21
++	.endif
++	.ifc	\r, $r22
++	\var	= 22
++	.endif
++	.ifc	\r, $r23
++	\var	= 23
++	.endif
++	.ifc	\r, $r24
++	\var	= 24
++	.endif
++	.ifc	\r, $r25
++	\var	= 25
++	.endif
++	.ifc	\r, $r26
++	\var	= 26
++	.endif
++	.ifc	\r, $r27
++	\var	= 27
++	.endif
++	.ifc	\r, $r28
++	\var	= 28
++	.endif
++	.ifc	\r, $r29
++	\var	= 29
++	.endif
++	.ifc	\r, $r30
++	\var	= 30
++	.endif
++	.ifc	\r, $r31
++	\var	= 31
++	.endif
++	.iflt	\var
++	.error	"Unable to parse register name \r"
++	.endif
++	.endm
 +
-+#define local_add(i, l) atomic_long_add((i), (&(l)->a))
-+#define local_sub(i, l) atomic_long_sub((i), (&(l)->a))
-+#define local_inc(l)	atomic_long_inc(&(l)->a)
-+#define local_dec(l)	atomic_long_dec(&(l)->a)
++	.macro	cpu_save_nonscratch thread
++	stptr.d	s0, \thread, THREAD_REG23
++	stptr.d	s1, \thread, THREAD_REG24
++	stptr.d	s2, \thread, THREAD_REG25
++	stptr.d	s3, \thread, THREAD_REG26
++	stptr.d	s4, \thread, THREAD_REG27
++	stptr.d	s5, \thread, THREAD_REG28
++	stptr.d	s6, \thread, THREAD_REG29
++	stptr.d	s7, \thread, THREAD_REG30
++	stptr.d	s8, \thread, THREAD_REG31
++	stptr.d	sp, \thread, THREAD_REG03
++	stptr.d	fp, \thread, THREAD_REG22
++	.endm
 +
-+/*
-+ * Same as above, but return the result value
-+ */
-+static inline long local_add_return(long i, local_t *l)
-+{
-+	unsigned long result;
++	.macro	cpu_restore_nonscratch thread
++	ldptr.d	s0, \thread, THREAD_REG23
++	ldptr.d	s1, \thread, THREAD_REG24
++	ldptr.d	s2, \thread, THREAD_REG25
++	ldptr.d	s3, \thread, THREAD_REG26
++	ldptr.d	s4, \thread, THREAD_REG27
++	ldptr.d	s5, \thread, THREAD_REG28
++	ldptr.d	s6, \thread, THREAD_REG29
++	ldptr.d	s7, \thread, THREAD_REG30
++	ldptr.d	s8, \thread, THREAD_REG31
++	ldptr.d	ra, \thread, THREAD_REG01
++	ldptr.d	sp, \thread, THREAD_REG03
++	ldptr.d	fp, \thread, THREAD_REG22
++	.endm
 +
-+	__asm__ __volatile__(
-+	"   " __AMADD " %1, %2, %0      \n"
-+	: "+ZB" (l->a.counter), "=&r" (result)
-+	: "r" (i)
-+	: "memory");
-+	result = result + i;
++	.macro fpu_save_csr thread tmp
++	movfcsr2gr	\tmp, fcsr0
++	stptr.w	\tmp, \thread, THREAD_FCSR
++	.endm
 +
-+	return result;
-+}
++	.macro fpu_restore_csr thread tmp
++	ldptr.w	\tmp, \thread, THREAD_FCSR
++	movgr2fcsr	fcsr0, \tmp
++	.endm
 +
-+static inline long local_sub_return(long i, local_t *l)
-+{
-+	unsigned long result;
++	.macro fpu_save_cc thread tmp0 tmp1
++	movcf2gr	\tmp0, $fcc0
++	move	\tmp1, \tmp0
++	movcf2gr	\tmp0, $fcc1
++	bstrins.d	\tmp1, \tmp0, 15, 8
++	movcf2gr	\tmp0, $fcc2
++	bstrins.d	\tmp1, \tmp0, 23, 16
++	movcf2gr	\tmp0, $fcc3
++	bstrins.d	\tmp1, \tmp0, 31, 24
++	movcf2gr	\tmp0, $fcc4
++	bstrins.d	\tmp1, \tmp0, 39, 32
++	movcf2gr	\tmp0, $fcc5
++	bstrins.d	\tmp1, \tmp0, 47, 40
++	movcf2gr	\tmp0, $fcc6
++	bstrins.d	\tmp1, \tmp0, 55, 48
++	movcf2gr	\tmp0, $fcc7
++	bstrins.d	\tmp1, \tmp0, 63, 56
++	stptr.d		\tmp1, \thread, THREAD_FCC
++	.endm
 +
-+	__asm__ __volatile__(
-+	"   " __AMADD "%1, %2, %0       \n"
-+	: "+ZB" (l->a.counter), "=&r" (result)
-+	: "r" (-i)
-+	: "memory");
++	.macro fpu_restore_cc thread tmp0 tmp1
++	ldptr.d	\tmp0, \thread, THREAD_FCC
++	bstrpick.d	\tmp1, \tmp0, 7, 0
++	movgr2cf	$fcc0, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 15, 8
++	movgr2cf	$fcc1, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 23, 16
++	movgr2cf	$fcc2, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 31, 24
++	movgr2cf	$fcc3, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 39, 32
++	movgr2cf	$fcc4, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 47, 40
++	movgr2cf	$fcc5, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 55, 48
++	movgr2cf	$fcc6, \tmp1
++	bstrpick.d	\tmp1, \tmp0, 63, 56
++	movgr2cf	$fcc7, \tmp1
++	.endm
 +
-+	result = result - i;
++	.macro	fpu_save_double thread tmp
++	li.w	\tmp, THREAD_FPR0
++	PTR_ADDU \tmp, \tmp, \thread
++	fst.d	$f0, \tmp, THREAD_FPR0  - THREAD_FPR0
++	fst.d	$f1, \tmp, THREAD_FPR1  - THREAD_FPR0
++	fst.d	$f2, \tmp, THREAD_FPR2  - THREAD_FPR0
++	fst.d	$f3, \tmp, THREAD_FPR3  - THREAD_FPR0
++	fst.d	$f4, \tmp, THREAD_FPR4  - THREAD_FPR0
++	fst.d	$f5, \tmp, THREAD_FPR5  - THREAD_FPR0
++	fst.d	$f6, \tmp, THREAD_FPR6  - THREAD_FPR0
++	fst.d	$f7, \tmp, THREAD_FPR7  - THREAD_FPR0
++	fst.d	$f8, \tmp, THREAD_FPR8  - THREAD_FPR0
++	fst.d	$f9, \tmp, THREAD_FPR9  - THREAD_FPR0
++	fst.d	$f10, \tmp, THREAD_FPR10 - THREAD_FPR0
++	fst.d	$f11, \tmp, THREAD_FPR11 - THREAD_FPR0
++	fst.d	$f12, \tmp, THREAD_FPR12 - THREAD_FPR0
++	fst.d	$f13, \tmp, THREAD_FPR13 - THREAD_FPR0
++	fst.d	$f14, \tmp, THREAD_FPR14 - THREAD_FPR0
++	fst.d	$f15, \tmp, THREAD_FPR15 - THREAD_FPR0
++	fst.d	$f16, \tmp, THREAD_FPR16 - THREAD_FPR0
++	fst.d	$f17, \tmp, THREAD_FPR17 - THREAD_FPR0
++	fst.d	$f18, \tmp, THREAD_FPR18 - THREAD_FPR0
++	fst.d	$f19, \tmp, THREAD_FPR19 - THREAD_FPR0
++	fst.d	$f20, \tmp, THREAD_FPR20 - THREAD_FPR0
++	fst.d	$f21, \tmp, THREAD_FPR21 - THREAD_FPR0
++	fst.d	$f22, \tmp, THREAD_FPR22 - THREAD_FPR0
++	fst.d	$f23, \tmp, THREAD_FPR23 - THREAD_FPR0
++	fst.d	$f24, \tmp, THREAD_FPR24 - THREAD_FPR0
++	fst.d	$f25, \tmp, THREAD_FPR25 - THREAD_FPR0
++	fst.d	$f26, \tmp, THREAD_FPR26 - THREAD_FPR0
++	fst.d	$f27, \tmp, THREAD_FPR27 - THREAD_FPR0
++	fst.d	$f28, \tmp, THREAD_FPR28 - THREAD_FPR0
++	fst.d	$f29, \tmp, THREAD_FPR29 - THREAD_FPR0
++	fst.d	$f30, \tmp, THREAD_FPR30 - THREAD_FPR0
++	fst.d	$f31, \tmp, THREAD_FPR31 - THREAD_FPR0
++	.endm
 +
-+	return result;
-+}
++	.macro	fpu_restore_double thread tmp
++	li.w	\tmp, THREAD_FPR0
++	PTR_ADDU \tmp, \tmp, \thread
++	fld.d	$f0, \tmp, THREAD_FPR0  - THREAD_FPR0
++	fld.d	$f1, \tmp, THREAD_FPR1  - THREAD_FPR0
++	fld.d	$f2, \tmp, THREAD_FPR2  - THREAD_FPR0
++	fld.d	$f3, \tmp, THREAD_FPR3  - THREAD_FPR0
++	fld.d	$f4, \tmp, THREAD_FPR4  - THREAD_FPR0
++	fld.d	$f5, \tmp, THREAD_FPR5  - THREAD_FPR0
++	fld.d	$f6, \tmp, THREAD_FPR6  - THREAD_FPR0
++	fld.d	$f7, \tmp, THREAD_FPR7  - THREAD_FPR0
++	fld.d	$f8, \tmp, THREAD_FPR8  - THREAD_FPR0
++	fld.d	$f9, \tmp, THREAD_FPR9  - THREAD_FPR0
++	fld.d	$f10, \tmp, THREAD_FPR10 - THREAD_FPR0
++	fld.d	$f11, \tmp, THREAD_FPR11 - THREAD_FPR0
++	fld.d	$f12, \tmp, THREAD_FPR12 - THREAD_FPR0
++	fld.d	$f13, \tmp, THREAD_FPR13 - THREAD_FPR0
++	fld.d	$f14, \tmp, THREAD_FPR14 - THREAD_FPR0
++	fld.d	$f15, \tmp, THREAD_FPR15 - THREAD_FPR0
++	fld.d	$f16, \tmp, THREAD_FPR16 - THREAD_FPR0
++	fld.d	$f17, \tmp, THREAD_FPR17 - THREAD_FPR0
++	fld.d	$f18, \tmp, THREAD_FPR18 - THREAD_FPR0
++	fld.d	$f19, \tmp, THREAD_FPR19 - THREAD_FPR0
++	fld.d	$f20, \tmp, THREAD_FPR20 - THREAD_FPR0
++	fld.d	$f21, \tmp, THREAD_FPR21 - THREAD_FPR0
++	fld.d	$f22, \tmp, THREAD_FPR22 - THREAD_FPR0
++	fld.d	$f23, \tmp, THREAD_FPR23 - THREAD_FPR0
++	fld.d	$f24, \tmp, THREAD_FPR24 - THREAD_FPR0
++	fld.d	$f25, \tmp, THREAD_FPR25 - THREAD_FPR0
++	fld.d	$f26, \tmp, THREAD_FPR26 - THREAD_FPR0
++	fld.d	$f27, \tmp, THREAD_FPR27 - THREAD_FPR0
++	fld.d	$f28, \tmp, THREAD_FPR28 - THREAD_FPR0
++	fld.d	$f29, \tmp, THREAD_FPR29 - THREAD_FPR0
++	fld.d	$f30, \tmp, THREAD_FPR30 - THREAD_FPR0
++	fld.d	$f31, \tmp, THREAD_FPR31 - THREAD_FPR0
++	.endm
 +
-+#define local_cmpxchg(l, o, n) \
-+	((long)cmpxchg_local(&((l)->a.counter), (o), (n)))
-+#define local_xchg(l, n) (atomic_long_xchg((&(l)->a), (n)))
++.macro jr dst
++	jirl	zero, \dst, 0
++.endm
 +
-+/**
-+ * local_add_unless - add unless the number is a given value
-+ * @l: pointer of type local_t
-+ * @a: the amount to add to l...
-+ * @u: ...unless l is equal to u.
-+ *
-+ * Atomically adds @a to @l, so long as it was not @u.
-+ * Returns non-zero if @l was not @u, and zero otherwise.
-+ */
-+#define local_add_unless(l, a, u)				\
-+({								\
-+	long c, old;						\
-+	c = local_read(l);					\
-+	while (c != (u) && (old = local_cmpxchg((l), c, c + (a))) != c) \
-+		c = old;					\
-+	c != (u);						\
-+})
-+#define local_inc_not_zero(l) local_add_unless((l), 1, 0)
++.macro jalr	dst
++	jirl	ra, \dst, 0
++.endm
 +
-+#define local_dec_return(l) local_sub_return(1, (l))
-+#define local_inc_return(l) local_add_return(1, (l))
++.macro not dst src
++	nor	\dst, \src, zero
++.endm
 +
-+/*
-+ * local_sub_and_test - subtract value from variable and test result
-+ * @i: integer value to subtract
-+ * @l: pointer of type local_t
-+ *
-+ * Atomically subtracts @i from @l and returns
-+ * true if the result is zero, or false for all
-+ * other cases.
-+ */
-+#define local_sub_and_test(i, l) (local_sub_return((i), (l)) == 0)
++.macro bgt r0 r1 label
++	blt	\r1, \r0, \label
++.endm
 +
-+/*
-+ * local_inc_and_test - increment and test
-+ * @l: pointer of type local_t
-+ *
-+ * Atomically increments @l by 1
-+ * and returns true if the result is zero, or false for all
-+ * other cases.
-+ */
-+#define local_inc_and_test(l) (local_inc_return(l) == 0)
++.macro bltz r0 label
++	blt	\r0, zero, \label
++.endm
 +
-+/*
-+ * local_dec_and_test - decrement by 1 and test
-+ * @l: pointer of type local_t
-+ *
-+ * Atomically decrements @l by 1 and
-+ * returns true if the result is 0, or false for all other
-+ * cases.
-+ */
-+#define local_dec_and_test(l) (local_sub_return(1, (l)) == 0)
++.macro bgez r0 label
++	bge	\r0, zero, \label
++.endm
 +
-+/*
-+ * local_add_negative - add and test if negative
-+ * @l: pointer of type local_t
-+ * @i: integer value to add
-+ *
-+ * Atomically adds @i to @l and returns true
-+ * if the result is negative, or false when
-+ * result is greater than or equal to zero.
-+ */
-+#define local_add_negative(i, l) (local_add_return(i, (l)) < 0)
-+
-+/* Use these for per-cpu local_t variables: on some archs they are
-+ * much more efficient than these naive implementations.  Note they take
-+ * a variable, not an address.
-+ */
-+
-+#define __local_inc(l)		((l)->a.counter++)
-+#define __local_dec(l)		((l)->a.counter++)
-+#define __local_add(i, l)	((l)->a.counter += (i))
-+#define __local_sub(i, l)	((l)->a.counter -= (i))
-+
-+#endif /* _ARCH_LOONGARCH_LOCAL_H */
-diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
++#define v0 $r4
++#define v1 $r5
++#endif /* _ASM_ASMMACRO_H */
+diff --git a/arch/loongarch/include/asm/clocksource.h b/arch/loongarch/include/asm/clocksource.h
 new file mode 100644
-index 000000000000..7d5b22ebd834
+index 000000000000..58e64aa05d26
 --- /dev/null
-+++ b/arch/loongarch/include/asm/percpu.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_PERCPU_H
-+#define __ASM_PERCPU_H
-+
-+/* Use r21 for fast access */
-+register unsigned long __my_cpu_offset __asm__("$r21");
-+
-+static inline void set_my_cpu_offset(unsigned long off)
-+{
-+	__my_cpu_offset = off;
-+	csr_writeq(off, PERCPU_BASE_KS);
-+}
-+#define __my_cpu_offset __my_cpu_offset
-+
-+#include <asm-generic/percpu.h>
-+
-+#endif /* __ASM_PERCPU_H */
-diff --git a/arch/loongarch/include/asm/spinlock.h b/arch/loongarch/include/asm/spinlock.h
-new file mode 100644
-index 000000000000..7cb3476999be
---- /dev/null
-+++ b/arch/loongarch/include/asm/spinlock.h
++++ b/arch/loongarch/include/asm/clocksource.h
 @@ -0,0 +1,12 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
++ * Author: Huacai Chen <chenhuacai@loongson.cn>
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 + */
-+#ifndef _ASM_SPINLOCK_H
-+#define _ASM_SPINLOCK_H
 +
-+#include <asm/processor.h>
-+#include <asm/qspinlock.h>
-+#include <asm/qrwlock.h>
++#ifndef __ASM_CLOCKSOURCE_H
++#define __ASM_CLOCKSOURCE_H
 +
-+#endif /* _ASM_SPINLOCK_H */
-diff --git a/arch/loongarch/include/asm/spinlock_types.h b/arch/loongarch/include/asm/spinlock_types.h
++#include <asm/vdso/clocksource.h>
++
++#endif /* __ASM_CLOCKSOURCE_H */
+diff --git a/arch/loongarch/include/asm/compiler.h b/arch/loongarch/include/asm/compiler.h
 new file mode 100644
-index 000000000000..7458d036c161
+index 000000000000..657cebe70ace
 --- /dev/null
-+++ b/arch/loongarch/include/asm/spinlock_types.h
++++ b/arch/loongarch/include/asm/compiler.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_COMPILER_H
++#define _ASM_COMPILER_H
++
++#define GCC_OFF_SMALL_ASM() "ZC"
++
++#define LOONGARCH_ISA_LEVEL "loongarch"
++#define LOONGARCH_ISA_ARCH_LEVEL "arch=loongarch"
++#define LOONGARCH_ISA_LEVEL_RAW loongarch
++#define LOONGARCH_ISA_ARCH_LEVEL_RAW LOONGARCH_ISA_LEVEL_RAW
++
++#endif /* _ASM_COMPILER_H */
+diff --git a/arch/loongarch/include/asm/linkage.h b/arch/loongarch/include/asm/linkage.h
+new file mode 100644
+index 000000000000..283b3389b561
+--- /dev/null
++++ b/arch/loongarch/include/asm/linkage.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_LINKAGE_H
++#define __ASM_LINKAGE_H
++
++#define __ALIGN		.align 2
++#define __ALIGN_STR	".align 2"
++
++#define SYM_FUNC_START(name)				\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)	\
++	.cfi_startproc;
++
++#define SYM_FUNC_START_NOALIGN(name)			\
++	SYM_START(name, SYM_L_GLOBAL, SYM_A_NONE)	\
++	.cfi_startproc;
++
++#define SYM_FUNC_START_LOCAL(name)			\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_ALIGN)	\
++	.cfi_startproc;
++
++#define SYM_FUNC_START_LOCAL_NOALIGN(name)		\
++	SYM_START(name, SYM_L_LOCAL, SYM_A_NONE)	\
++	.cfi_startproc;
++
++#define SYM_FUNC_START_WEAK(name)			\
++	SYM_START(name, SYM_L_WEAK, SYM_A_ALIGN)	\
++	.cfi_startproc;
++
++#define SYM_FUNC_START_WEAK_NOALIGN(name)		\
++	SYM_START(name, SYM_L_WEAK, SYM_A_NONE)		\
++	.cfi_startproc;
++
++#define SYM_FUNC_END(name)				\
++	.cfi_endproc;					\
++	SYM_END(name, SYM_T_FUNC)
++
++#endif
+diff --git a/arch/loongarch/include/asm/perf_event.h b/arch/loongarch/include/asm/perf_event.h
+new file mode 100644
+index 000000000000..44293ec8c153
+--- /dev/null
++++ b/arch/loongarch/include/asm/perf_event.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Author: Huacai Chen <chenhuacai@loongson.cn>
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++
++#ifndef __LOONGARCH_PERF_EVENT_H__
++#define __LOONGARCH_PERF_EVENT_H__
++/* Leave it empty here. The file is required by linux/perf_event.h */
++#endif /* __LOONGARCH_PERF_EVENT_H__ */
+diff --git a/arch/loongarch/include/asm/prefetch.h b/arch/loongarch/include/asm/prefetch.h
+new file mode 100644
+index 000000000000..1672262a5e2e
+--- /dev/null
++++ b/arch/loongarch/include/asm/prefetch.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef __ASM_PREFETCH_H
++#define __ASM_PREFETCH_H
++
++#define Pref_Load	0
++#define Pref_Store	8
++
++#ifdef __ASSEMBLY__
++
++	.macro	__pref hint addr
++#ifdef CONFIG_CPU_HAS_PREFETCH
++	preld	\hint, \addr, 0
++#endif
++	.endm
++
++	.macro	pref_load addr
++	__pref	Pref_Load, \addr
++	.endm
++
++	.macro	pref_store addr
++	__pref	Pref_Store, \addr
++	.endm
++
++#endif
++
++#endif /* __ASM_PREFETCH_H */
+diff --git a/arch/loongarch/include/asm/serial.h b/arch/loongarch/include/asm/serial.h
+new file mode 100644
+index 000000000000..3fb550eb9115
+--- /dev/null
++++ b/arch/loongarch/include/asm/serial.h
 @@ -0,0 +1,11 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 + */
-+#ifndef _ASM_SPINLOCK_TYPES_H
-+#define _ASM_SPINLOCK_TYPES_H
++#ifndef __ASM__SERIAL_H
++#define __ASM__SERIAL_H
 +
-+#include <asm-generic/qspinlock_types.h>
-+#include <asm-generic/qrwlock_types.h>
++#define BASE_BAUD 0
++#define STD_COM_FLAGS (ASYNC_BOOT_AUTOCONF | ASYNC_SKIP_TEST)
 +
++#endif /* __ASM__SERIAL_H */
+diff --git a/arch/loongarch/include/asm/time.h b/arch/loongarch/include/asm/time.h
+new file mode 100644
+index 000000000000..ace1665695b8
+--- /dev/null
++++ b/arch/loongarch/include/asm/time.h
+@@ -0,0 +1,50 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_TIME_H
++#define _ASM_TIME_H
++
++#include <linux/clockchips.h>
++#include <linux/clocksource.h>
++#include <asm/loongarch.h>
++
++extern u64 cpu_clock_freq;
++extern u64 const_clock_freq;
++
++extern void sync_counter(void);
++
++static inline unsigned int calc_const_freq(void)
++{
++	unsigned int res;
++	unsigned int base_freq;
++	unsigned int cfm, cfd;
++
++	res = read_cpucfg(LOONGARCH_CPUCFG2);
++	if (!(res & CPUCFG2_LLFTP))
++		return 0;
++
++	base_freq = read_cpucfg(LOONGARCH_CPUCFG4);
++	res = read_cpucfg(LOONGARCH_CPUCFG5);
++	cfm = res & 0xffff;
++	cfd = (res >> 16) & 0xffff;
++
++	if (!base_freq || !cfm || !cfd)
++		return 0;
++	else
++		return (base_freq * cfm / cfd);
++}
++
++/*
++ * Initialize the calling CPU's timer interrupt as clockevent device
++ */
++extern int constant_clockevent_init(void);
++extern int constant_clocksource_init(void);
++
++static inline void clockevent_set_clock(struct clock_event_device *cd,
++					unsigned int clock)
++{
++	clockevents_calc_mult_shift(cd, clock, 4);
++}
++
++#endif /* _ASM_TIME_H */
+diff --git a/arch/loongarch/include/asm/timex.h b/arch/loongarch/include/asm/timex.h
+new file mode 100644
+index 000000000000..3f8db082f00d
+--- /dev/null
++++ b/arch/loongarch/include/asm/timex.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_TIMEX_H
++#define _ASM_TIMEX_H
++
++#ifdef __KERNEL__
++
++#include <linux/compiler.h>
++
++#include <asm/cpu.h>
++#include <asm/cpu-features.h>
++
++/*
++ * Standard way to access the cycle counter.
++ * Currently only used on SMP for scheduling.
++ *
++ * We know that all SMP capable CPUs have cycle counters.
++ */
++
++typedef unsigned long cycles_t;
++
++static inline cycles_t get_cycles(void)
++{
++	return drdtime();
++}
++
++#endif /* __KERNEL__ */
++
++#endif /*  _ASM_TIMEX_H */
+diff --git a/arch/loongarch/include/asm/topology.h b/arch/loongarch/include/asm/topology.h
+new file mode 100644
+index 000000000000..9ac71a25207a
+--- /dev/null
++++ b/arch/loongarch/include/asm/topology.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef __ASM_TOPOLOGY_H
++#define __ASM_TOPOLOGY_H
++
++#include <linux/smp.h>
++
++#define cpu_logical_map(cpu)  0
++
++#include <asm-generic/topology.h>
++
++static inline void arch_fix_phys_package_id(int num, u32 slot) { }
++#endif /* __ASM_TOPOLOGY_H */
+diff --git a/arch/loongarch/include/asm/types.h b/arch/loongarch/include/asm/types.h
+new file mode 100644
+index 000000000000..f783cf11ea52
+--- /dev/null
++++ b/arch/loongarch/include/asm/types.h
+@@ -0,0 +1,33 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_TYPES_H
++#define _ASM_TYPES_H
++
++#include <asm-generic/int-ll64.h>
++#include <uapi/asm/types.h>
++
++/*
++ * The following macros are especially useful for __asm__
++ * inline assembler.
++ */
++#ifndef __STR
++#define __STR(x) #x
 +#endif
++#ifndef STR
++#define STR(x) __STR(x)
++#endif
++
++/*
++ *  Configure language
++ */
++#ifdef __ASSEMBLY__
++#define _ULCAST_
++#define _U64CAST_
++#else
++#define _ULCAST_ (unsigned long)
++#define _U64CAST_ (u64)
++#endif
++
++#endif /* _ASM_TYPES_H */
+diff --git a/arch/loongarch/include/uapi/asm/abidefs.h b/arch/loongarch/include/uapi/asm/abidefs.h
+new file mode 100644
+index 000000000000..ac5ad2f38796
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/abidefs.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++/*
++ * Author: Hanlu Li <lihanlu@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef __ASM_ABIDEFS_H
++#define __ASM_ABIDEFS_H
++
++#define _LOONGARCH_ISA_LOONGARCH32	1
++#define _LOONGARCH_ISA_LOONGARCH64	2
++
++/*
++ * Subprogram calling convention
++ */
++#define _LOONGARCH_SIM_ABILP32		1
++#define _LOONGARCH_SIM_ABILP64		3
++
++#endif /* __ASM_ABIDEFS_H */
+diff --git a/arch/loongarch/include/uapi/asm/bitfield.h b/arch/loongarch/include/uapi/asm/bitfield.h
+new file mode 100644
+index 000000000000..e31a719b7007
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/bitfield.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++/*
++ * Author: Hanlu Li <lihanlu@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef __UAPI_ASM_BITFIELD_H
++#define __UAPI_ASM_BITFIELD_H
++
++#define __BITFIELD_FIELD(field, more)					\
++	more								\
++	field;
++
++#endif /* __UAPI_ASM_BITFIELD_H */
+diff --git a/arch/loongarch/include/uapi/asm/bitsperlong.h b/arch/loongarch/include/uapi/asm/bitsperlong.h
+new file mode 100644
+index 000000000000..5c2c8779a695
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/bitsperlong.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef __ASM_LOONGARCH_BITSPERLONG_H
++#define __ASM_LOONGARCH_BITSPERLONG_H
++
++#define __BITS_PER_LONG _LOONGARCH_SZLONG
++
++#include <asm-generic/bitsperlong.h>
++
++#endif /* __ASM_LOONGARCH_BITSPERLONG_H */
+diff --git a/arch/loongarch/include/uapi/asm/byteorder.h b/arch/loongarch/include/uapi/asm/byteorder.h
+new file mode 100644
+index 000000000000..b1722d890deb
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/byteorder.h
+@@ -0,0 +1,13 @@
++/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
++/*
++ * Author: Hanlu Li <lihanlu@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++#ifndef _ASM_BYTEORDER_H
++#define _ASM_BYTEORDER_H
++
++#include <linux/byteorder/little_endian.h>
++
++#endif /* _ASM_BYTEORDER_H */
+diff --git a/arch/loongarch/include/uapi/asm/reg.h b/arch/loongarch/include/uapi/asm/reg.h
+new file mode 100644
+index 000000000000..90ad910c60eb
+--- /dev/null
++++ b/arch/loongarch/include/uapi/asm/reg.h
+@@ -0,0 +1,59 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Various register offset definitions for debuggers, core file
++ * examiners and whatnot.
++ *
++ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++ */
++
++#ifndef __UAPI_ASM_LOONGARCH_REG_H
++#define __UAPI_ASM_LOONGARCH_REG_H
++
++#define LOONGARCH_EF_R0		0
++#define LOONGARCH_EF_R1		1
++#define LOONGARCH_EF_R2		2
++#define LOONGARCH_EF_R3		3
++#define LOONGARCH_EF_R4		4
++#define LOONGARCH_EF_R5		5
++#define LOONGARCH_EF_R6		6
++#define LOONGARCH_EF_R7		7
++#define LOONGARCH_EF_R8		8
++#define LOONGARCH_EF_R9		9
++#define LOONGARCH_EF_R10	10
++#define LOONGARCH_EF_R11	11
++#define LOONGARCH_EF_R12	12
++#define LOONGARCH_EF_R13	13
++#define LOONGARCH_EF_R14	14
++#define LOONGARCH_EF_R15	15
++#define LOONGARCH_EF_R16	16
++#define LOONGARCH_EF_R17	17
++#define LOONGARCH_EF_R18	18
++#define LOONGARCH_EF_R19	19
++#define LOONGARCH_EF_R20	20
++#define LOONGARCH_EF_R21	21
++#define LOONGARCH_EF_R22	22
++#define LOONGARCH_EF_R23	23
++#define LOONGARCH_EF_R24	24
++#define LOONGARCH_EF_R25	25
++#define LOONGARCH_EF_R26	26
++#define LOONGARCH_EF_R27	27
++#define LOONGARCH_EF_R28	28
++#define LOONGARCH_EF_R29	29
++#define LOONGARCH_EF_R30	30
++#define LOONGARCH_EF_R31	31
++
++/*
++ * Saved special registers
++ */
++#define LOONGARCH_EF_ORIG_A0	32
++#define LOONGARCH_EF_CSR_ERA	33
++#define LOONGARCH_EF_CSR_BADV	34
++#define LOONGARCH_EF_CSR_CRMD	35
++#define LOONGARCH_EF_CSR_PRMD	36
++#define LOONGARCH_EF_CSR_EUEN	37
++#define LOONGARCH_EF_CSR_ECFG	38
++#define LOONGARCH_EF_CSR_ESTAT	39
++
++#define LOONGARCH_EF_SIZE	320	/* size in bytes */
++
++#endif /* __UAPI_ASM_LOONGARCH_REG_H */
+diff --git a/tools/include/uapi/asm/bitsperlong.h b/tools/include/uapi/asm/bitsperlong.h
+index edba4d93e9e6..da5206517158 100644
+--- a/tools/include/uapi/asm/bitsperlong.h
++++ b/tools/include/uapi/asm/bitsperlong.h
+@@ -17,6 +17,8 @@
+ #include "../../../arch/riscv/include/uapi/asm/bitsperlong.h"
+ #elif defined(__alpha__)
+ #include "../../../arch/alpha/include/uapi/asm/bitsperlong.h"
++#elif defined(__loongarch__)
++#include "../../../arch/loongarch/include/uapi/asm/bitsperlong.h"
+ #else
+ #include <asm-generic/bitsperlong.h>
+ #endif
 -- 
 2.27.0
 
