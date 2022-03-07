@@ -2,118 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEC84D0769
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Mar 2022 20:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8564D0A76
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Mar 2022 23:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245024AbiCGTQj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Mar 2022 14:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S231446AbiCGWEu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Mar 2022 17:04:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244960AbiCGTQ2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Mar 2022 14:16:28 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4910B7D015
-        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 11:15:33 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id r4so2352639lfr.1
-        for <linux-arch@vger.kernel.org>; Mon, 07 Mar 2022 11:15:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TwTcsRMn5VZVrmgXZDV1J6sFeJgAdw8S2EoV6iZ5xnc=;
-        b=dlpUNu5q4CyzmXtBLA/gOu0GC/00SF7ttDAollAbHZtk5bw2xAtIqb7CwTopnt8lf3
-         AbfnSVPq9xulj/tw8AvoPmKfCZDzXeZNEVEEDbHlLhh/I5bp+zk8upvRu1BNSASuquhE
-         pUQrRqiHujQApoBOt9qnNksqqhPlFfAR59MXs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TwTcsRMn5VZVrmgXZDV1J6sFeJgAdw8S2EoV6iZ5xnc=;
-        b=PXcstlJ9xsrBlhofo1h2xn5vCarG4JmPzeMMiNxkyIJiA/tx2MxR1iE/bQxbbbUyTg
-         fu+QILz1DvCfwzrtb4KEnILFOx0hoBZJTpHEfAB2AiCW0OD4Md37WUcWyS6Nz0w82BbV
-         jzrC0lsrZBgPjl1slPvaav/W8fD61ZZqRosZb7eWbYxT2IYT6c9fLCWpIGOvxVIAl5Sj
-         6YA7nFvDBzi732mQVBirW3H31lxm9NxBHo1ezMYQnI5a3ZjUvkvsT8iEvt3QkxnJIoUh
-         tTYjIy92a5Dag3OUGi47SyGtTlMV1dpVNLmeBk47LP5N0yoezrbQoKB9SBoWvLJCFrIc
-         wfCA==
-X-Gm-Message-State: AOAM5315PsIeFTJUjyOMZdkd61ZnGMOz+s2AIxhKyDSyHR5pHOMO3No/
-        8JshyNft7N/axjwa2I0zEJF1fWdUao1d63Clhb8=
-X-Google-Smtp-Source: ABdhPJxg7jB9EEG4tdptPXvjVhG5ZRZiiLxgqsZ4rQb7SAdTNCvOWckaHjuWx2BafV8JTY2zZdwTVQ==
-X-Received: by 2002:a05:6512:1513:b0:448:39c0:def0 with SMTP id bq19-20020a056512151300b0044839c0def0mr915700lfb.469.1646680530167;
-        Mon, 07 Mar 2022 11:15:30 -0800 (PST)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id r28-20020a2eb61c000000b00247e43e83e0sm1074965ljn.58.2022.03.07.11.15.25
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 11:15:27 -0800 (PST)
-Received: by mail-lj1-f175.google.com with SMTP id u3so5447810ljd.0
-        for <linux-arch@vger.kernel.org>; Mon, 07 Mar 2022 11:15:25 -0800 (PST)
-X-Received: by 2002:a05:651c:1213:b0:247:e2d9:cdda with SMTP id
- i19-20020a05651c121300b00247e2d9cddamr5310350lja.443.1646680524503; Mon, 07
- Mar 2022 11:15:24 -0800 (PST)
-MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220307150037.GD3293@kadam> <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
-In-Reply-To: <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 7 Mar 2022 11:15:07 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjnsmmGdh-SZzaPD=e1rKhoBkQAF3JeVhGvpa=Gax--7g@mail.gmail.com>
-Message-ID: <CAHk-=wjnsmmGdh-SZzaPD=e1rKhoBkQAF3JeVhGvpa=Gax--7g@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Remove usage of list iterator past the loop body
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        with ESMTP id S237549AbiCGWEq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Mar 2022 17:04:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8C13A199
+        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 14:03:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C3EB60E86
+        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 22:03:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5A5C340F4;
+        Mon,  7 Mar 2022 22:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646690630;
+        bh=ZfB+qqW0LGpCiciJCSs/OO+Ysvkzg3uawsoNh3RpyhU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nGvNERzJtRRihZMnpHcs/jVf3YXkxnM4pgobcMW6f/lacBNuWKLt6vO7S90GyqRnL
+         X6T65Ll7kyLIxcEf6oCenDkBeJ4h3z8S8RRFSEH7PHXCrsdD3cInGmA4/6Qb/W4vxE
+         hKytU11uozyRtnLLJuOeIyCJSuZAQHOhnHC6UsoXWJyz3GHkc61sIF1+1COXLxogBW
+         OPYwHSz/HaddTII4E3LTPEKADUOGnV+2SnybDKTf8HWP8wM3Y7aR0Jp45jgJtD9E2D
+         O38I8VNfB6HepRIXUM7TY8uE+WFYfHlIRz8GX4Y083O1H+ctH+7tOJq9CbpG4zob5Q
+         j6PnviJ+2afjQ==
+From:   Will Deacon <will@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
+        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Kees Cook <keescook@chromium.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v10 0/2] arm64: Enable BTI for the executable as well as the interpreter
+Date:   Mon,  7 Mar 2022 22:03:27 +0000
+Message-Id: <164669030645.141062.12667484591752564518.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220228130606.1070960-1-broonie@kernel.org>
+References: <20220228130606.1070960-1-broonie@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 7, 2022 at 7:26 AM David Laight <David.Laight@aculab.com> wrote:
->
-> I'd write the following new defines (but I might be using
-> the old names here):
+On Mon, 28 Feb 2022 13:06:04 +0000, Mark Brown wrote:
+> Deployments of BTI on arm64 have run into issues interacting with
+> systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
+> linked executables the kernel will only handle architecture specific
+> properties like BTI for the interpreter, the expectation is that the
+> interpreter will then handle any properties on the main executable.
+> For BTI this means remapping the executable segments PROT_EXEC |
+> PROT_BTI.
+> 
+> [...]
 
-See my email at
+Applied to arm64 (for-next/bti), thanks!
 
-  https://lore.kernel.org/all/CAHk-=wiacQM76xec=Hr7cLchVZ8Mo9VDHmXRJzJ_EX4sOsApEA@mail.gmail.com/
+[1/2] elf: Allow architectures to parse properties on the main executable
+      https://git.kernel.org/arm64/c/825b99a491ec
+[2/2] arm64: Enable BTI for main executable as well as the interpreter
+      https://git.kernel.org/arm64/c/ddc35eb71d63
 
-for what I think is the way forward if we want to do new defines and
-clean up the situation.
+Cheers,
+-- 
+Will
 
-It's really just an example (and converts two list cases and one
-single file that uses them), so it's not in any way complete.
-
-I also has that "-std=gnu11" in the patch so that you can use the
-loop-declared variables - but without the other small fixups for some
-of the things that exposed.
-
-I'll merge the proper version of the "update C standard version" from
-Arnd early in the 5.18 merge window, but for testing that one file
-example change I sent out the patch like that.
-
-          Linus
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
