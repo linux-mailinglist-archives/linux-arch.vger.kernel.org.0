@@ -2,88 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8564D0A76
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Mar 2022 23:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E9D4D0AEE
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Mar 2022 23:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbiCGWEu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Mar 2022 17:04:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55458 "EHLO
+        id S240418AbiCGWWz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Mon, 7 Mar 2022 17:22:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbiCGWEq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Mar 2022 17:04:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8C13A199
-        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 14:03:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C3EB60E86
-        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 22:03:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5A5C340F4;
-        Mon,  7 Mar 2022 22:03:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646690630;
-        bh=ZfB+qqW0LGpCiciJCSs/OO+Ysvkzg3uawsoNh3RpyhU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nGvNERzJtRRihZMnpHcs/jVf3YXkxnM4pgobcMW6f/lacBNuWKLt6vO7S90GyqRnL
-         X6T65Ll7kyLIxcEf6oCenDkBeJ4h3z8S8RRFSEH7PHXCrsdD3cInGmA4/6Qb/W4vxE
-         hKytU11uozyRtnLLJuOeIyCJSuZAQHOhnHC6UsoXWJyz3GHkc61sIF1+1COXLxogBW
-         OPYwHSz/HaddTII4E3LTPEKADUOGnV+2SnybDKTf8HWP8wM3Y7aR0Jp45jgJtD9E2D
-         O38I8VNfB6HepRIXUM7TY8uE+WFYfHlIRz8GX4Y083O1H+ctH+7tOJq9CbpG4zob5Q
-         j6PnviJ+2afjQ==
-From:   Will Deacon <will@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v10 0/2] arm64: Enable BTI for the executable as well as the interpreter
-Date:   Mon,  7 Mar 2022 22:03:27 +0000
-Message-Id: <164669030645.141062.12667484591752564518.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220228130606.1070960-1-broonie@kernel.org>
-References: <20220228130606.1070960-1-broonie@kernel.org>
+        with ESMTP id S243047AbiCGWWv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Mar 2022 17:22:51 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F19DA8CDBD
+        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 14:21:55 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-165-8y9FGRZFPriMZfq4Jpk07A-1; Mon, 07 Mar 2022 22:21:53 +0000
+X-MC-Unique: 8y9FGRZFPriMZfq4Jpk07A-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.28; Mon, 7 Mar 2022 22:21:49 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.028; Mon, 7 Mar 2022 22:21:49 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Mike Rapoport' <rppt@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>
+CC:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "dave.martin@arm.com" <dave.martin@arm.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Subject: RE: [PATCH 00/35] Shadow stacks for userspace
+Thread-Topic: [PATCH 00/35] Shadow stacks for userspace
+Thread-Index: AQHYMlUnLgOMkkzJIkGC5fp7CqAYeKy0fYyg
+Date:   Mon, 7 Mar 2022 22:21:49 +0000
+Message-ID: <776fb081217145f4a488f7bca3e16eab@AcuMS.aculab.com>
+References: <8e36f20723ca175db49ed3cc73e42e8aa28d2615.camel@intel.com>
+ <9d664c91-2116-42cc-ef8d-e6d236de43d0@kernel.org>
+ <Yh0wIMjFdDl8vaNM@kernel.org>
+ <5a792e77-0072-4ded-9f89-e7fcc7f7a1d6@www.fastmail.com>
+ <Yh0+9cFyAfnsXqxI@kernel.org>
+ <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
+ <YiEZyTT/UBFZd6Am@kernel.org>
+ <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
+ <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
+ <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org>
+ <YiZVbPwlgSFnhadv@kernel.org>
+In-Reply-To: <YiZVbPwlgSFnhadv@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 28 Feb 2022 13:06:04 +0000, Mark Brown wrote:
-> Deployments of BTI on arm64 have run into issues interacting with
-> systemd's MemoryDenyWriteExecute feature.  Currently for dynamically
-> linked executables the kernel will only handle architecture specific
-> properties like BTI for the interpreter, the expectation is that the
-> interpreter will then handle any properties on the main executable.
-> For BTI this means remapping the executable segments PROT_EXEC |
-> PROT_BTI.
+From: Mike Rapoport
+> Sent: 07 March 2022 18:57
+...
+> > The sigframe thing, OTOH, seems genuinely useful if CRIU would actually use
+> > it to save the full register state.  Generating a signal frame from scratch
+> > is a pain.  That being said, if CRIU isn't excited, then don't bother.
 > 
-> [...]
+> CRIU is excited :)
+> 
+> I just was looking for the minimal possible interface that will allow us to
+> call sigreturn. Rick is right and CRIU does try to expose as little as
+> possible and handle the pain in the userspace.
+> 
+> The SIGFRAME approach is indeed very helpful, especially if we can make it
+> work on other architectures eventually.
 
-Applied to arm64 (for-next/bti), thanks!
+I thought the full sigframe layout depends very much on what the kernel
+decides it needs to save?
+Some parts are exposed to the signal handler, but there are large
+blocks of data that XSAVE (etc) save that have to be put onto the
+signal stack.
+Is it even vaguely feasible to replicate what a specific kernel
+generates on specific hardware in a userspace library?
+The size of this data is getting bigger and bigger - causing
+issues with the SIGALTSTACK (and even thread stack) minimum sizes.
 
-[1/2] elf: Allow architectures to parse properties on the main executable
-      https://git.kernel.org/arm64/c/825b99a491ec
-[2/2] arm64: Enable BTI for main executable as well as the interpreter
-      https://git.kernel.org/arm64/c/ddc35eb71d63
+	David
 
-Cheers,
--- 
-Will
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
