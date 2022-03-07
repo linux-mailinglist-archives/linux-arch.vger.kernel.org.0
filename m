@@ -2,169 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966D74D02D3
-	for <lists+linux-arch@lfdr.de>; Mon,  7 Mar 2022 16:27:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A0D4D055B
+	for <lists+linux-arch@lfdr.de>; Mon,  7 Mar 2022 18:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240285AbiCGP2J convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 7 Mar 2022 10:28:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S244463AbiCGRi1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 7 Mar 2022 12:38:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243756AbiCGP16 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Mar 2022 10:27:58 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83BE392D07
-        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 07:27:00 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-85-dcBRBPURPaqNT771jbYVzw-1; Mon, 07 Mar 2022 15:26:52 +0000
-X-MC-Unique: dcBRBPURPaqNT771jbYVzw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Mon, 7 Mar 2022 15:26:48 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Mon, 7 Mar 2022 15:26:48 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Dan Carpenter' <dan.carpenter@oracle.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>
-CC:     "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jason Gunthorpe <jgg@ziepe.ca>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Arnd Bergman" <arnd@arndb.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        with ESMTP id S244372AbiCGRiZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Mar 2022 12:38:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898E62DE9;
+        Mon,  7 Mar 2022 09:37:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57D4EB8166B;
+        Mon,  7 Mar 2022 17:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10B1C340EF;
+        Mon,  7 Mar 2022 17:37:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646674646;
+        bh=yW1LLFgt1eD8m0p0l5v2PYdxc1QHIWZY2uI4QX2lZU8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MraUV01e2qxAhLJGToTlICAopVwdZ+PiTKGmH59R4ROB4tnETEd/CwhqQZskHAi8r
+         p+G0Re70/df9+yEbNe0XzS5yHU5TGE9WB/M7rMEzRC4PCXGEmpjcNp5no67/yedFJF
+         O7dy97RC/5m79C7AHvLF0+lGq5NQsjdHFdi3l9rY/ozOcSYbstFbjfCFhoB/X1w9+w
+         J/8+We9fthy8+YIKCWrhSLPwiSWhtNei2/7G7IA7OKWwaJ2AKkArlYjlDeGIciI20r
+         O/XQhOj6hWoMm5XRiftlhDx/tQ0q3oyEORS9YjBsWWc/LT/HN26Nz2+ta2cn9SBPUE
+         QmC3sTSxk8eFA==
+Date:   Mon, 7 Mar 2022 19:37:14 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: RE: [PATCH 0/6] Remove usage of list iterator past the loop body
-Thread-Topic: [PATCH 0/6] Remove usage of list iterator past the loop body
-Thread-Index: AQHYMjRtYqIeET2JD0yO+p9PX3jHEKy0Bmqg
-Date:   Mon, 7 Mar 2022 15:26:48 +0000
-Message-ID: <f7ffd78aa68340e1ade6af15fa2f06d8@AcuMS.aculab.com>
-References: <20220228110822.491923-1-jakobkoschel@gmail.com>
- <20220307150037.GD3293@kadam>
-In-Reply-To: <20220307150037.GD3293@kadam>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+Message-ID: <YiZCypeuJ+0FCJ+w@kernel.org>
+References: <20220226110338.77547-1-chenhuacai@loongson.cn>
+ <20220226110338.77547-10-chenhuacai@loongson.cn>
+ <YiCpYRwoUSmd/GE3@kernel.org>
+ <CAAhV-H4-zVjjUkoVFw4ppg_tsM-wxBZmPr-2q8zuoLDHTWAE0w@mail.gmail.com>
+ <YiHuuyqW8KSAri/M@kernel.org>
+ <CAAhV-H6z3H3QbzvG6=fgVJF1z2qEvKVGnyqb--bkqomH3jTXJQ@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H6z3H3QbzvG6=fgVJF1z2qEvKVGnyqb--bkqomH3jTXJQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Dan Carpenter
-> Sent: 07 March 2022 15:01
+Hi,
+
+On Fri, Mar 04, 2022 at 08:43:03PM +0800, Huacai Chen wrote:
+> Hi, Mike,
 > 
-> Updating this API is risky because some places rely on the old behavior
-> and not all of them have been updated.  Here are some additional places
-> you might want to change.
+> On Fri, Mar 4, 2022 at 6:49 PM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > Hi,
+> >
+> >
+> > So ideally, the physical memory detection and registration should follow
+> > something like:
+> >
+> > * memblock_reserve() the memory used by firmware, kernel and initrd
+> > * detect NUMA topology
+> > * add memory regions along with their node ids to memblock.
+> >
+> > s390::setup_arch() is a good example of doing early reservations:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/s390/kernel/setup.c#n988
+> I have a fast reading of S390, and I think we can do some adjust:
+> 1, call memblock_set_node(0, ULONG_MAX, &memblock.memory, 0) in
+> early_memblock_init().
+> 2, move memblock_reserve(PHYS_OFFSET, 0x200000) and
+> memblock_reserve(__pa_symbol(&_text), __pa_symbol(&_end) -
+> __pa_symbol(&_text)) to early_memblock_init().
+> 3, Reserve initrd memory in the first place.
+> It is nearly the same as the S390, then.
 
-I really can't help thinking that trying to merge this patch is
-actually impossible.
-It affects far too many different parts of the tree.
+It does not have to look like the same as s390 :)
+The important thing is to reserve all the memory before memblock
+allocations are possible. 
 
-Since (I believe) this is a doubly linked list with forwards and
-backwards pointers that point to a 'node' (not that there is a
-nice comment to that effect in the header - and there are lots of
-ways to do linked lists) the 'head' pretty much has to be a 'node'.
+> > > > > +early_param("memmap", early_parse_memmap);
+> > > >
+> > > > The memmap= processing is a hack indented to workaround bugs in firmware
+> > > > related to the memory detection. Please don't copy if over unless there is
+> > > > really strong reason.
+> > >
+> > > Hmmm, I have read the documents, most archs only support mem=limit,
+> > > but MIPS support mem=limit@base. memmap not only supports
+> > > memmap=limit@base, but also a lot of advanced syntax. LoongArch needs
+> > > both limit and limit@base syntax. So can we make our code to support
+> > > only mem=limit and memmap=limit@base, and remove all other syntax
+> > > here?
+> >
+> > The documentation describes what was there historically and both these
+> > options tend not to play well with complex memory layouts.
+> >
+> > If you must have them it's better to use x86 as an example rather than
+> > MIPS, just take into the account that on x86 memory always starts from 0,
+> > so they never needed to have a different base.
+> >
+> > For what use-cases LoongArch needs options?
+>
+> The use-case of limit@base syntax is kdump, because our kernel is not
+> relocatable. I'll use X86 as an example.
 
-I'd write the following new defines (but I might be using
-the old names here):
+I missed that mem= can be used several times, so with MIPS implementation
+it's possible to define something like "mem=limit0@base0 mem=limit1@base1"
+and this will create two contiguous memory regions.
+ 
+> Huacai
 
-list_first(head, field) First item, NULL if empty.
-list_last(head, field) Last item NULL if empty.
-list_next(head, item, field) Item after 'item', NULL if last.
-list_prev(head, item. field) Item before 'item', NULL if first.
-
-You get (something like):
-#define list_first(head, field) \
-	head->next == &head ? NULL : list_item(head->next, field)
-(probably needs typeof(item) from somewhere).
-
-The iterator loop is then just:
-#define loop_iterate(item, head, field) \
-	for (item = list_first(head, field); item; \
-		item = list_next(head, item, field)
-
-I'm not sure, but making the 'head' be a structure that contains
-a single member that is a 'node' might help type checking.
-
-Then all the code that uses the current defines can slowly be
-moved over (probably a couple of releases) before the existing
-defines are deleted.
-
-That should simplify all the open-coded search loops that are
-just as likely to be buggy (possibly more so).
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+-- 
+Sincerely yours,
+Mike.
