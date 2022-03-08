@@ -2,175 +2,343 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608174D0EE8
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 06:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE1E4D1082
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 07:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbiCHFCX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Mar 2022 00:02:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
+        id S245179AbiCHGxL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Mar 2022 01:53:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiCHFCU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 00:02:20 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300CC24BC3;
-        Mon,  7 Mar 2022 21:01:24 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id l45so7479045uad.1;
-        Mon, 07 Mar 2022 21:01:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HKvhppFceChLgmUpgQVEk1mZ3VY0JaSZJA2aB43Q7Vk=;
-        b=VSM2HLY0kX84OL07y9j206vTbYJdekrGShRw4CrfWN3ujt3SEitgG1bAfG8KlfUSOw
-         ElJWiSRFumUKR+fyDaiQhfWzvG908o7Ub3CRG6tvrBdC1ZBAlcQns5X15xg+DVcA98sR
-         xefn8uAIem+hS4+KTbQmIiAaZstaqv+dXPNdvJdQEX0DTlkxdbO9uz+LJhZEGYcq5ydy
-         SRQ8UlIZvCr9Ep4TQyn6e0AenP5jKJY5XOt87AXUbuP0M3OpLMIYGV1YwjzxOFyFeqvX
-         7GfhoIaJGtsAqYuTKqfFV/EG2YMuWM5eOZkavzjm/tqiEgUyIZLQSpgKMSrca/ZKaTP0
-         ItkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HKvhppFceChLgmUpgQVEk1mZ3VY0JaSZJA2aB43Q7Vk=;
-        b=dwxDxgOS+ujuBkT3lpxio1d75N8uR53sk19RGz+cUYlyV7aNGJ2GlO0PNKwFj1FAoH
-         uKUij1fTeRS3uMZuBehrVoskwPR33nuEzrfmGvh36JcL19j9ofQFUzZIL1mqfPBpOVni
-         eVupYGaKFkFOKKSR1oc4LSaD5eUKsdnCpY5yR6/exPAInQ09s++iupjv5UAemlDxZ2Qe
-         tE3kjHpOUI2tNwVG83jgHJh42NkD7GA/IgzkkhiY8y+g8VNJG5uietHRzbREm6A8oJgB
-         ozypjOrUqEd8mSDW/13O+6h0Fwa/Jdy8h0pFUPwTWIBErHzCLg7DZJiWgCDwnSdwZKRb
-         2b5g==
-X-Gm-Message-State: AOAM531Mod8Awta1IAXu/WmqgkzIWxaMlQiOZYtucITNMGOzO1otic3+
-        +1T9fSSyPziHALMaGWe3QeisdWFd5KkSfKc1SGQvVkbFS3ldCA==
-X-Google-Smtp-Source: ABdhPJzbMqED95ln7Nv/0kYruwHO9Qug+J1OiHrch1cXgj6krfHGEm91/jREsdcS5fHYIgs4Bkzz5WRXAqvKWZl8ixc=
-X-Received: by 2002:a9f:24d6:0:b0:348:d872:5917 with SMTP id
- 80-20020a9f24d6000000b00348d8725917mr5014892uar.118.1646715683203; Mon, 07
- Mar 2022 21:01:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20220226110338.77547-1-chenhuacai@loongson.cn>
- <20220226110338.77547-10-chenhuacai@loongson.cn> <YiCpYRwoUSmd/GE3@kernel.org>
- <CAAhV-H4-zVjjUkoVFw4ppg_tsM-wxBZmPr-2q8zuoLDHTWAE0w@mail.gmail.com>
- <YiHuuyqW8KSAri/M@kernel.org> <CAAhV-H6z3H3QbzvG6=fgVJF1z2qEvKVGnyqb--bkqomH3jTXJQ@mail.gmail.com>
- <YiZCypeuJ+0FCJ+w@kernel.org>
-In-Reply-To: <YiZCypeuJ+0FCJ+w@kernel.org>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Tue, 8 Mar 2022 13:01:11 +0800
-Message-ID: <CAAhV-H6WnnqVs+9syRcRYWTdqYKWr1c03TR2_cJB-tN223MS-w@mail.gmail.com>
-Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        with ESMTP id S244684AbiCHGxL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 01:53:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66FDD2A733;
+        Mon,  7 Mar 2022 22:52:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=/yKwct0b4ss4FukQegiXNehQmZXPiS+Wk9lmglO2t/c=; b=QnCOI7sadUYOtcjaSgq15cpR1p
+        MBWrPcnwEW+hB2ifQNfo4rJUUZtPFdPyMRmrkA8RIrLGcvr7XIVbL3FQhVCHfZPcAGnDZLI0eWlMr
+        rGdUHwZ5tYV6HIRXqKAY03LGLmcfr84BGiByWdw6AJrG1rmy8TqMXLztB8uCAJVkUtWgOaXqU5Gut
+        9y9j7K/jbpCv9YTlIz618N7TzgJFHPF6WYespFtD1aVFw7fWbycpWS42AmHfyinxpzXBaw2Wc2llC
+        gDcOa4IEoJUGh7T7ECHPNIk9AZEXj6NxkZh5Uc6I7QTOg7lej/XtQI5+pHEG8wuFY+IHwcr+KHdah
+        iqXLCSHQ==;
+Received: from [2001:4bb8:184:7746:6f50:7a98:3141:c37b] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nRThZ-002y1W-7I; Tue, 08 Mar 2022 06:52:09 +0000
+Date:   Tue, 8 Mar 2022 07:52:07 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp
+Subject: [RFC PULL] remove arch/h8300
+Message-ID: <Yib9F5SqKda/nH9c@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Mike,
+Hi all,
 
-On Tue, Mar 8, 2022 at 1:37 AM Mike Rapoport <rppt@kernel.org> wrote:
->
-> Hi,
->
-> On Fri, Mar 04, 2022 at 08:43:03PM +0800, Huacai Chen wrote:
-> > Hi, Mike,
-> >
-> > On Fri, Mar 4, 2022 at 6:49 PM Mike Rapoport <rppt@kernel.org> wrote:
-> > >
-> > > Hi,
-> > >
-> > >
-> > > So ideally, the physical memory detection and registration should follow
-> > > something like:
-> > >
-> > > * memblock_reserve() the memory used by firmware, kernel and initrd
-> > > * detect NUMA topology
-> > > * add memory regions along with their node ids to memblock.
-> > >
-> > > s390::setup_arch() is a good example of doing early reservations:
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/s390/kernel/setup.c#n988
-> > I have a fast reading of S390, and I think we can do some adjust:
-> > 1, call memblock_set_node(0, ULONG_MAX, &memblock.memory, 0) in
-> > early_memblock_init().
-> > 2, move memblock_reserve(PHYS_OFFSET, 0x200000) and
-> > memblock_reserve(__pa_symbol(&_text), __pa_symbol(&_end) -
-> > __pa_symbol(&_text)) to early_memblock_init().
-> > 3, Reserve initrd memory in the first place.
-> > It is nearly the same as the S390, then.
->
-> It does not have to look like the same as s390 :)
-> The important thing is to reserve all the memory before memblock
-> allocations are possible.
-New version is here, it's not completely the same as S390, but very similar:
-https://lore.kernel.org/linux-arch/20220306112850.811504-1-chenhuacai@loongson.cn/T/#Z2e.:..:20220306112850.811504-10-chenhuacai::40loongson.cn:1arch:loongarch:kernel:mem.c
+h8300 hasn't been maintained for quite a while, with even years old
+pull request lingering in the old repo.  Given that it always was
+rather fringe to start with I'd suggest to go ahead and remove the
+port:
 
-Firmware is not in SYSRAM regions, so we don't need to reserve them.
-The first 2MB and the kernel region are reserved in
-early_memblock_init(), before any allocations.
+The following changes since commit 5c1ee569660d4a205dced9cb4d0306b907fb7599:
 
-Initrd information is passed by cmdline, and initrd is now reserved
-immediately after cmdline has parsed, by merging
-init_initrd/finalize_initrd as you suggested:
-https://lore.kernel.org/linux-arch/20220306112850.811504-1-chenhuacai@loongson.cn/T/#Z2e.:..:20220306112850.811504-10-chenhuacai::40loongson.cn:1arch:loongarch:kernel:setup.c
+  Merge branch 'for-5.17-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup (2022-02-22 16:14:35 -0800)
 
->
-> > > > > > +early_param("memmap", early_parse_memmap);
-> > > > >
-> > > > > The memmap= processing is a hack indented to workaround bugs in firmware
-> > > > > related to the memory detection. Please don't copy if over unless there is
-> > > > > really strong reason.
-> > > >
-> > > > Hmmm, I have read the documents, most archs only support mem=limit,
-> > > > but MIPS support mem=limit@base. memmap not only supports
-> > > > memmap=limit@base, but also a lot of advanced syntax. LoongArch needs
-> > > > both limit and limit@base syntax. So can we make our code to support
-> > > > only mem=limit and memmap=limit@base, and remove all other syntax
-> > > > here?
-> > >
-> > > The documentation describes what was there historically and both these
-> > > options tend not to play well with complex memory layouts.
-> > >
-> > > If you must have them it's better to use x86 as an example rather than
-> > > MIPS, just take into the account that on x86 memory always starts from 0,
-> > > so they never needed to have a different base.
-> > >
-> > > For what use-cases LoongArch needs options?
-> >
-> > The use-case of limit@base syntax is kdump, because our kernel is not
-> > relocatable. I'll use X86 as an example.
->
-> I missed that mem= can be used several times, so with MIPS implementation
-> it's possible to define something like "mem=limit0@base0 mem=limit1@base1"
-> and this will create two contiguous memory regions.
-The new version is here:
-https://lore.kernel.org/linux-arch/20220306112850.811504-1-chenhuacai@loongson.cn/T/#Z2e.:..:20220306112850.811504-10-chenhuacai::40loongson.cn:1arch:loongarch:kernel:setup.c
-If I use the MIPS implementation, then memmap= is useless and can be
-removed, but the MIPS implementation is not obey the rules in kernel
-documents.
+are available in the Git repository at:
 
-Huacai
->
-> > Huacai
->
-> --
-> Sincerely yours,
-> Mike.
+  git://git.infradead.org/users/hch/misc.git remove-h8300
+
+for you to fetch changes up to 1c4b5ecb7ea190fa3e9f9d6891e6c90b60e04f24:
+
+  remove the h8300 architecture (2022-02-23 08:52:50 +0100)
+
+----------------------------------------------------------------
+Christoph Hellwig (1):
+      remove the h8300 architecture
+
+ .../bindings/clock/renesas,h8300-div-clock.txt     |  24 --
+ Documentation/devicetree/bindings/h8300/cpu.txt    |  13 -
+ .../interrupt-controller/renesas,h8300h-intc.txt   |  22 --
+ .../interrupt-controller/renesas,h8s-intc.txt      |  22 --
+ .../memory-controllers/renesas,h8300-bsc.yaml      |  35 --
+ .../features/core/cBPF-JIT/arch-support.txt        |   1 -
+ .../features/core/eBPF-JIT/arch-support.txt        |   1 -
+ .../core/generic-idle-thread/arch-support.txt      |   1 -
+ .../features/core/jump-labels/arch-support.txt     |   1 -
+ .../core/thread-info-in-task/arch-support.txt      |   1 -
+ .../features/core/tracehook/arch-support.txt       |   1 -
+ .../features/debug/KASAN/arch-support.txt          |   1 -
+ .../debug/debug-vm-pgtable/arch-support.txt        |   1 -
+ .../debug/gcov-profile-all/arch-support.txt        |   1 -
+ Documentation/features/debug/kcov/arch-support.txt |   1 -
+ Documentation/features/debug/kgdb/arch-support.txt |   1 -
+ .../features/debug/kmemleak/arch-support.txt       |   1 -
+ .../debug/kprobes-on-ftrace/arch-support.txt       |   1 -
+ .../features/debug/kprobes/arch-support.txt        |   1 -
+ .../features/debug/kretprobes/arch-support.txt     |   1 -
+ .../features/debug/optprobes/arch-support.txt      |   1 -
+ .../features/debug/stackprotector/arch-support.txt |   1 -
+ .../features/debug/uprobes/arch-support.txt        |   1 -
+ .../debug/user-ret-profiler/arch-support.txt       |   1 -
+ .../features/io/dma-contiguous/arch-support.txt    |   1 -
+ .../locking/cmpxchg-local/arch-support.txt         |   1 -
+ .../features/locking/lockdep/arch-support.txt      |   1 -
+ .../locking/queued-rwlocks/arch-support.txt        |   1 -
+ .../locking/queued-spinlocks/arch-support.txt      |   1 -
+ .../features/perf/kprobes-event/arch-support.txt   |   1 -
+ .../features/perf/perf-regs/arch-support.txt       |   1 -
+ .../features/perf/perf-stackdump/arch-support.txt  |   1 -
+ .../sched/membarrier-sync-core/arch-support.txt    |   1 -
+ .../features/sched/numa-balancing/arch-support.txt |   1 -
+ .../seccomp/seccomp-filter/arch-support.txt        |   1 -
+ .../time/arch-tick-broadcast/arch-support.txt      |   1 -
+ .../features/time/clockevents/arch-support.txt     |   1 -
+ .../time/context-tracking/arch-support.txt         |   1 -
+ .../features/time/irq-time-acct/arch-support.txt   |   1 -
+ .../features/time/virt-cpuacct/arch-support.txt    |   1 -
+ .../features/vm/ELF-ASLR/arch-support.txt          |   1 -
+ .../features/vm/PG_uncached/arch-support.txt       |   1 -
+ Documentation/features/vm/THP/arch-support.txt     |   1 -
+ Documentation/features/vm/TLB/arch-support.txt     |   1 -
+ .../features/vm/huge-vmap/arch-support.txt         |   1 -
+ .../features/vm/ioremap_prot/arch-support.txt      |   1 -
+ .../features/vm/pte_special/arch-support.txt       |   1 -
+ MAINTAINERS                                        |  11 -
+ arch/h8300/Kbuild                                  |   5 -
+ arch/h8300/Kconfig                                 |  50 ---
+ arch/h8300/Kconfig.cpu                             |  99 -----
+ arch/h8300/Kconfig.debug                           |   2 -
+ arch/h8300/Makefile                                |  44 ---
+ arch/h8300/boot/Makefile                           |  27 --
+ arch/h8300/boot/compressed/Makefile                |  45 ---
+ arch/h8300/boot/compressed/head.S                  |  49 ---
+ arch/h8300/boot/compressed/misc.c                  |  76 ----
+ arch/h8300/boot/compressed/vmlinux.lds             |  35 --
+ arch/h8300/boot/compressed/vmlinux.scr             |   9 -
+ arch/h8300/boot/dts/Makefile                       |   6 -
+ arch/h8300/boot/dts/edosk2674.dts                  | 108 -----
+ arch/h8300/boot/dts/h8300h_sim.dts                 |  97 -----
+ arch/h8300/boot/dts/h8s_sim.dts                    | 100 -----
+ arch/h8300/configs/edosk2674_defconfig             |  48 ---
+ arch/h8300/configs/h8300h-sim_defconfig            |  48 ---
+ arch/h8300/configs/h8s-sim_defconfig               |  48 ---
+ arch/h8300/include/asm/Kbuild                      |   8 -
+ arch/h8300/include/asm/bitops.h                    | 179 ---------
+ arch/h8300/include/asm/bug.h                       |  13 -
+ arch/h8300/include/asm/byteorder.h                 |   7 -
+ arch/h8300/include/asm/cache.h                     |  12 -
+ arch/h8300/include/asm/elf.h                       | 102 -----
+ arch/h8300/include/asm/flat.h                      |  36 --
+ arch/h8300/include/asm/hash.h                      |  54 ---
+ arch/h8300/include/asm/io.h                        |  67 ----
+ arch/h8300/include/asm/irq.h                       |  25 --
+ arch/h8300/include/asm/irqflags.h                  |  97 -----
+ arch/h8300/include/asm/kgdb.h                      |  45 ---
+ arch/h8300/include/asm/mmu_context.h               |   6 -
+ arch/h8300/include/asm/page.h                      |  17 -
+ arch/h8300/include/asm/page_offset.h               |   2 -
+ arch/h8300/include/asm/pgtable.h                   |  43 --
+ arch/h8300/include/asm/processor.h                 | 127 ------
+ arch/h8300/include/asm/ptrace.h                    |  39 --
+ arch/h8300/include/asm/segment.h                   |  40 --
+ arch/h8300/include/asm/signal.h                    |  23 --
+ arch/h8300/include/asm/smp.h                       |   1 -
+ arch/h8300/include/asm/string.h                    |  18 -
+ arch/h8300/include/asm/switch_to.h                 |  52 ---
+ arch/h8300/include/asm/syscall.h                   |  43 --
+ arch/h8300/include/asm/thread_info.h               | 105 -----
+ arch/h8300/include/asm/tlb.h                       |   7 -
+ arch/h8300/include/asm/traps.h                     |  41 --
+ arch/h8300/include/asm/user.h                      |  75 ----
+ arch/h8300/include/asm/vmalloc.h                   |   4 -
+ arch/h8300/include/uapi/asm/Kbuild                 |   2 -
+ arch/h8300/include/uapi/asm/byteorder.h            |   7 -
+ arch/h8300/include/uapi/asm/posix_types.h          |  13 -
+ arch/h8300/include/uapi/asm/ptrace.h               |  43 --
+ arch/h8300/include/uapi/asm/sigcontext.h           |  19 -
+ arch/h8300/include/uapi/asm/signal.h               |  92 -----
+ arch/h8300/include/uapi/asm/unistd.h               |   8 -
+ arch/h8300/kernel/.gitignore                       |   2 -
+ arch/h8300/kernel/Makefile                         |  22 --
+ arch/h8300/kernel/asm-offsets.c                    |  70 ----
+ arch/h8300/kernel/entry.S                          | 434 ---------------------
+ arch/h8300/kernel/h8300_ksyms.c                    |  35 --
+ arch/h8300/kernel/head_ram.S                       |  61 ---
+ arch/h8300/kernel/head_rom.S                       | 111 ------
+ arch/h8300/kernel/irq.c                            |  99 -----
+ arch/h8300/kernel/kgdb.c                           | 135 -------
+ arch/h8300/kernel/module.c                         |  71 ----
+ arch/h8300/kernel/process.c                        | 173 --------
+ arch/h8300/kernel/ptrace.c                         | 200 ----------
+ arch/h8300/kernel/ptrace_h.c                       | 256 ------------
+ arch/h8300/kernel/ptrace_s.c                       |  44 ---
+ arch/h8300/kernel/setup.c                          | 213 ----------
+ arch/h8300/kernel/signal.c                         | 287 --------------
+ arch/h8300/kernel/sim-console.c                    |  31 --
+ arch/h8300/kernel/syscalls.c                       |  15 -
+ arch/h8300/kernel/traps.c                          | 156 --------
+ arch/h8300/kernel/vmlinux.lds.S                    |  69 ----
+ arch/h8300/lib/Makefile                            |   9 -
+ arch/h8300/lib/abs.S                               |  21 -
+ arch/h8300/lib/ashldi3.c                           |  25 --
+ arch/h8300/lib/ashrdi3.c                           |  25 --
+ arch/h8300/lib/delay.c                             |  41 --
+ arch/h8300/lib/libgcc.h                            |  78 ----
+ arch/h8300/lib/lshrdi3.c                           |  24 --
+ arch/h8300/lib/memcpy.S                            |  86 ----
+ arch/h8300/lib/memset.S                            |  70 ----
+ arch/h8300/lib/moddivsi3.S                         |  73 ----
+ arch/h8300/lib/modsi3.S                            |  73 ----
+ arch/h8300/lib/muldi3.c                            |  45 ---
+ arch/h8300/lib/mulsi3.S                            |  39 --
+ arch/h8300/lib/ucmpdi2.c                           |  18 -
+ arch/h8300/lib/udivsi3.S                           |  77 ----
+ arch/h8300/mm/Makefile                             |   6 -
+ arch/h8300/mm/fault.c                              |  57 ---
+ arch/h8300/mm/init.c                               | 101 -----
+ arch/h8300/mm/memory.c                             |  53 ---
+ drivers/clk/Makefile                               |   1 -
+ drivers/clk/h8300/Makefile                         |   3 -
+ drivers/clk/h8300/clk-div.c                        |  57 ---
+ drivers/clk/h8300/clk-h8s2678.c                    | 145 -------
+ drivers/clocksource/Kconfig                        |  20 -
+ drivers/clocksource/Makefile                       |   3 -
+ drivers/clocksource/h8300_timer16.c                | 192 ---------
+ drivers/clocksource/h8300_timer8.c                 | 211 ----------
+ drivers/clocksource/h8300_tpu.c                    | 158 --------
+ drivers/irqchip/Kconfig                            |  11 -
+ drivers/irqchip/Makefile                           |   2 -
+ drivers/irqchip/irq-renesas-h8300h.c               |  94 -----
+ drivers/irqchip/irq-renesas-h8s.c                  | 102 -----
+ drivers/net/ethernet/smsc/Kconfig                  |   4 +-
+ drivers/net/ethernet/smsc/smc91x.h                 |  11 -
+ drivers/tty/serial/Kconfig                         |   5 +-
+ init/Kconfig                                       |   3 +-
+ tools/arch/h8300/include/asm/bitsperlong.h         |  15 -
+ tools/arch/h8300/include/uapi/asm/mman.h           |   7 -
+ 160 files changed, 5 insertions(+), 6981 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/renesas,h8300-div-clock.txt
+ delete mode 100644 Documentation/devicetree/bindings/h8300/cpu.txt
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,h8300h-intc.txt
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/renesas,h8s-intc.txt
+ delete mode 100644 Documentation/devicetree/bindings/memory-controllers/renesas,h8300-bsc.yaml
+ delete mode 100644 arch/h8300/Kbuild
+ delete mode 100644 arch/h8300/Kconfig
+ delete mode 100644 arch/h8300/Kconfig.cpu
+ delete mode 100644 arch/h8300/Kconfig.debug
+ delete mode 100644 arch/h8300/Makefile
+ delete mode 100644 arch/h8300/boot/Makefile
+ delete mode 100644 arch/h8300/boot/compressed/Makefile
+ delete mode 100644 arch/h8300/boot/compressed/head.S
+ delete mode 100644 arch/h8300/boot/compressed/misc.c
+ delete mode 100644 arch/h8300/boot/compressed/vmlinux.lds
+ delete mode 100644 arch/h8300/boot/compressed/vmlinux.scr
+ delete mode 100644 arch/h8300/boot/dts/Makefile
+ delete mode 100644 arch/h8300/boot/dts/edosk2674.dts
+ delete mode 100644 arch/h8300/boot/dts/h8300h_sim.dts
+ delete mode 100644 arch/h8300/boot/dts/h8s_sim.dts
+ delete mode 100644 arch/h8300/configs/edosk2674_defconfig
+ delete mode 100644 arch/h8300/configs/h8300h-sim_defconfig
+ delete mode 100644 arch/h8300/configs/h8s-sim_defconfig
+ delete mode 100644 arch/h8300/include/asm/Kbuild
+ delete mode 100644 arch/h8300/include/asm/bitops.h
+ delete mode 100644 arch/h8300/include/asm/bug.h
+ delete mode 100644 arch/h8300/include/asm/byteorder.h
+ delete mode 100644 arch/h8300/include/asm/cache.h
+ delete mode 100644 arch/h8300/include/asm/elf.h
+ delete mode 100644 arch/h8300/include/asm/flat.h
+ delete mode 100644 arch/h8300/include/asm/hash.h
+ delete mode 100644 arch/h8300/include/asm/io.h
+ delete mode 100644 arch/h8300/include/asm/irq.h
+ delete mode 100644 arch/h8300/include/asm/irqflags.h
+ delete mode 100644 arch/h8300/include/asm/kgdb.h
+ delete mode 100644 arch/h8300/include/asm/mmu_context.h
+ delete mode 100644 arch/h8300/include/asm/page.h
+ delete mode 100644 arch/h8300/include/asm/page_offset.h
+ delete mode 100644 arch/h8300/include/asm/pgtable.h
+ delete mode 100644 arch/h8300/include/asm/processor.h
+ delete mode 100644 arch/h8300/include/asm/ptrace.h
+ delete mode 100644 arch/h8300/include/asm/segment.h
+ delete mode 100644 arch/h8300/include/asm/signal.h
+ delete mode 100644 arch/h8300/include/asm/smp.h
+ delete mode 100644 arch/h8300/include/asm/string.h
+ delete mode 100644 arch/h8300/include/asm/switch_to.h
+ delete mode 100644 arch/h8300/include/asm/syscall.h
+ delete mode 100644 arch/h8300/include/asm/thread_info.h
+ delete mode 100644 arch/h8300/include/asm/tlb.h
+ delete mode 100644 arch/h8300/include/asm/traps.h
+ delete mode 100644 arch/h8300/include/asm/user.h
+ delete mode 100644 arch/h8300/include/asm/vmalloc.h
+ delete mode 100644 arch/h8300/include/uapi/asm/Kbuild
+ delete mode 100644 arch/h8300/include/uapi/asm/byteorder.h
+ delete mode 100644 arch/h8300/include/uapi/asm/posix_types.h
+ delete mode 100644 arch/h8300/include/uapi/asm/ptrace.h
+ delete mode 100644 arch/h8300/include/uapi/asm/sigcontext.h
+ delete mode 100644 arch/h8300/include/uapi/asm/signal.h
+ delete mode 100644 arch/h8300/include/uapi/asm/unistd.h
+ delete mode 100644 arch/h8300/kernel/.gitignore
+ delete mode 100644 arch/h8300/kernel/Makefile
+ delete mode 100644 arch/h8300/kernel/asm-offsets.c
+ delete mode 100644 arch/h8300/kernel/entry.S
+ delete mode 100644 arch/h8300/kernel/h8300_ksyms.c
+ delete mode 100644 arch/h8300/kernel/head_ram.S
+ delete mode 100644 arch/h8300/kernel/head_rom.S
+ delete mode 100644 arch/h8300/kernel/irq.c
+ delete mode 100644 arch/h8300/kernel/kgdb.c
+ delete mode 100644 arch/h8300/kernel/module.c
+ delete mode 100644 arch/h8300/kernel/process.c
+ delete mode 100644 arch/h8300/kernel/ptrace.c
+ delete mode 100644 arch/h8300/kernel/ptrace_h.c
+ delete mode 100644 arch/h8300/kernel/ptrace_s.c
+ delete mode 100644 arch/h8300/kernel/setup.c
+ delete mode 100644 arch/h8300/kernel/signal.c
+ delete mode 100644 arch/h8300/kernel/sim-console.c
+ delete mode 100644 arch/h8300/kernel/syscalls.c
+ delete mode 100644 arch/h8300/kernel/traps.c
+ delete mode 100644 arch/h8300/kernel/vmlinux.lds.S
+ delete mode 100644 arch/h8300/lib/Makefile
+ delete mode 100644 arch/h8300/lib/abs.S
+ delete mode 100644 arch/h8300/lib/ashldi3.c
+ delete mode 100644 arch/h8300/lib/ashrdi3.c
+ delete mode 100644 arch/h8300/lib/delay.c
+ delete mode 100644 arch/h8300/lib/libgcc.h
+ delete mode 100644 arch/h8300/lib/lshrdi3.c
+ delete mode 100644 arch/h8300/lib/memcpy.S
+ delete mode 100644 arch/h8300/lib/memset.S
+ delete mode 100644 arch/h8300/lib/moddivsi3.S
+ delete mode 100644 arch/h8300/lib/modsi3.S
+ delete mode 100644 arch/h8300/lib/muldi3.c
+ delete mode 100644 arch/h8300/lib/mulsi3.S
+ delete mode 100644 arch/h8300/lib/ucmpdi2.c
+ delete mode 100644 arch/h8300/lib/udivsi3.S
+ delete mode 100644 arch/h8300/mm/Makefile
+ delete mode 100644 arch/h8300/mm/fault.c
+ delete mode 100644 arch/h8300/mm/init.c
+ delete mode 100644 arch/h8300/mm/memory.c
+ delete mode 100644 drivers/clk/h8300/Makefile
+ delete mode 100644 drivers/clk/h8300/clk-div.c
+ delete mode 100644 drivers/clk/h8300/clk-h8s2678.c
+ delete mode 100644 drivers/clocksource/h8300_timer16.c
+ delete mode 100644 drivers/clocksource/h8300_timer8.c
+ delete mode 100644 drivers/clocksource/h8300_tpu.c
+ delete mode 100644 drivers/irqchip/irq-renesas-h8300h.c
+ delete mode 100644 drivers/irqchip/irq-renesas-h8s.c
+ delete mode 100644 tools/arch/h8300/include/asm/bitsperlong.h
+ delete mode 100644 tools/arch/h8300/include/uapi/asm/mman.h
