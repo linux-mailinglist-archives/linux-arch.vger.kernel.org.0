@@ -2,150 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B374D13A6
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 10:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E314D16E5
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 13:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344110AbiCHJq2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Mar 2022 04:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
+        id S234731AbiCHMLm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Mar 2022 07:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236177AbiCHJq1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 04:46:27 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8FE3E5C9
-        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 01:45:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S234137AbiCHMLm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 07:11:42 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B8D3ED14;
+        Tue,  8 Mar 2022 04:10:45 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ACDBB81810
-        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 09:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11416C340EC;
-        Tue,  8 Mar 2022 09:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646732728;
-        bh=iotVYzC96pnctOSwfHjiP/LZc5bmukNkEwD4I7skqws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hYdsDQO19ZsfpxsJzU9IbHSkiCYxEI+46imI2pk0F8sGhdGj31bdBMnqmjwx+vjra
-         7evH2Jlya1+eNkgMkUj1VoQghXUaHHGnNgkMiRIaIseGpMQJ7krh5eDj4SNMsKpMfA
-         W8Gy595ceZPJTZEkIHd345HRcRfAFCFrnFJ+lnjiOt9vOkAWx30FZ3LcPJ2jGrwXWJ
-         lrzlUoW1L2S2w0OKnIM2GKML9B4ENo250KxUDepB5KWOpX9cveOx+zClbkgEEZ4MiZ
-         ZsbEEEBRf86styeCwhwwtpSzMo1ljOZNkWSPJllDpSkoZ5lDgROB63v1PMShmJQyBZ
-         Ayfh3exaIkkaA==
-Date:   Tue, 8 Mar 2022 09:45:22 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org, Dave Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v10 1/2] elf: Allow architectures to parse properties on
- the main executable
-Message-ID: <20220308094521.GA31063@willie-the-truck>
-References: <20220228130606.1070960-1-broonie@kernel.org>
- <20220228130606.1070960-2-broonie@kernel.org>
- <202203071551.DBABE01@keescook>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCZ0d4W2hz4xvG;
+        Tue,  8 Mar 2022 23:10:41 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+In-Reply-To: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
+Message-Id: <164674125384.3322453.12551849351633372798.b4-ty@ellerman.id.au>
+Date:   Tue, 08 Mar 2022 23:07:33 +1100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203071551.DBABE01@keescook>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 07, 2022 at 04:00:15PM -0800, Kees Cook wrote:
-> On Mon, Feb 28, 2022 at 01:06:05PM +0000, Mark Brown wrote:
-> > Currently the ELF code only attempts to parse properties on the image
-> > that will start execution, either the interpreter or for statically linked
-> > executables the main executable. The expectation is that any property
-> > handling for the main executable will be done by the interpreter. This is
-> > a bit inconsistent since we do map the executable and is causing problems
-> > for the arm64 BTI support when used in conjunction with systemd's use of
-> > seccomp to implement MemoryDenyWriteExecute which stops the dynamic linker
-> > adjusting the permissions of executable segments.
-> > 
-> > Allow architectures to handle properties for both the dynamic linker and
-> > main executable, adjusting arch_parse_elf_properties() to have a new
-> > flag is_interp flag as with arch_elf_adjust_prot() and calling it for
-> > both the main executable and any intepreter.
-> > 
-> > The user of this code, arm64, is adapted to ensure that there is no
-> > functional change.
-> > 
-> > Signed-off-by: Mark Brown <broonie@kernel.org>
-> > Tested-by: Jeremy Linton <jeremy.linton@arm.com>
-> > Reviewed-by: Dave Martin <Dave.Martin@arm.com>
-> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> > ---
-> >  arch/arm64/include/asm/elf.h |  3 ++-
-> >  fs/binfmt_elf.c              | 32 +++++++++++++++++++++++---------
-> >  include/linux/elf.h          |  4 +++-
-> >  3 files changed, 28 insertions(+), 11 deletions(-)
-> > 
-> > diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-> > index 97932fbf973d..5cc002376abe 100644
-> > --- a/arch/arm64/include/asm/elf.h
-> > +++ b/arch/arm64/include/asm/elf.h
-> > @@ -259,6 +259,7 @@ struct arch_elf_state {
-> >  
-> >  static inline int arch_parse_elf_property(u32 type, const void *data,
-> >  					  size_t datasz, bool compat,
-> > +					  bool has_interp, bool is_interp,
-> >  					  struct arch_elf_state *arch)
+On Tue, 15 Feb 2022 13:40:55 +0100, Christophe Leroy wrote:
+> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
+> on those three architectures because LKDTM messes up function
+> descriptors with functions.
 > 
-> Adding more and more args to a functions like this gives me the sense
-> that some kind of argument structure is needed.
+> This series does some cleanup in the three architectures and
+> refactors function descriptors so that it can then easily use it
+> in a generic way in LKDTM.
 > 
-> Once I get enough unit testing written in here, I'm hoping to refactor
-> a bunch of this. To the future! :)
-> 
-> > @@ -828,6 +832,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
-> >  	unsigned long error;
-> >  	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
-> >  	struct elf_phdr *elf_property_phdata = NULL;
-> > +	struct elf_phdr *interp_elf_property_phdata = NULL;
-> >  	unsigned long elf_bss, elf_brk;
-> >  	int bss_prot = 0;
-> >  	int retval, i;
-> > @@ -865,6 +870,9 @@ static int load_elf_binary(struct linux_binprm *bprm)
-> >  	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
-> >  		char *elf_interpreter;
-> >  
-> > +		if (interpreter && elf_property_phdata)
-> > +			break;
-> > +
-> 
-> This is not okay. This introduces a memory resource leak for malicious
-> ELF files with multiple INTERP headers.
-> 
-> >  		if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
-> >  			elf_property_phdata = elf_ppnt;
-> >  			continue;
-> > @@ -919,7 +927,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
-> >  		if (retval < 0)
-> >  			goto out_free_dentry;
-> >  
-> > -		break;
-> > +		continue;
-> 
-> Because of this.
-> 
-> As a fix, I'd expect the PT_INTERP test to be updated:
-> 
->                 if (interpreter || elf_ppnt->p_type != PT_INTERP)
->                         continue;
+> [...]
 
-Thanks, Kees. I'll drop this branch from -next until it's been resolved.
+Applied to powerpc/next.
 
-Will
+[01/13] powerpc: Fix 'sparse' checking on PPC64le
+        https://git.kernel.org/powerpc/c/81df21de8fb45d3a55d41da9c7f5724797d51ce6
+[02/13] powerpc: Move and rename func_descr_t
+        https://git.kernel.org/powerpc/c/5b23cb8cc6b0aab0535253cc2aa362572bab7072
+[03/13] powerpc: Use 'struct func_desc' instead of 'struct ppc64_opd_entry'
+        https://git.kernel.org/powerpc/c/d3e32b997a4ca2e7be71cb770bcb2c000ee20b36
+[04/13] powerpc: Remove 'struct ppc64_opd_entry'
+        https://git.kernel.org/powerpc/c/0a9c5ae279c963149df9a84588281d3d607f7a1f
+[05/13] powerpc: Prepare func_desc_t for refactorisation
+        https://git.kernel.org/powerpc/c/2fd986377d546bedaf27e36554dc9090d272f15d
+[06/13] ia64: Rename 'ip' to 'addr' in 'struct fdesc'
+        https://git.kernel.org/powerpc/c/41a88b45479da873bfc5d29ba1a545a780c5329a
+[07/13] asm-generic: Define CONFIG_HAVE_FUNCTION_DESCRIPTORS
+        https://git.kernel.org/powerpc/c/a257cacc38718c83cee003487e03197f237f5c3f
+[08/13] asm-generic: Define 'func_desc_t' to commonly describe function descriptors
+        https://git.kernel.org/powerpc/c/0dc690e4ef5b901e9d4b53520854fbd5c749e09d
+[09/13] asm-generic: Refactor dereference_[kernel]_function_descriptor()
+        https://git.kernel.org/powerpc/c/e1478d8eaf27704db17a44dee4c53696ed01fc9c
+[10/13] lkdtm: Force do_nothing() out of line
+        https://git.kernel.org/powerpc/c/69b420ed8fd3917ac7073256b4929aa246b6fe31
+[11/13] lkdtm: Really write into kernel text in WRITE_KERN
+        https://git.kernel.org/powerpc/c/b64913394f123e819bffabc79a0e48f98e78dc5d
+[12/13] lkdtm: Fix execute_[user]_location()
+        https://git.kernel.org/powerpc/c/72a86433049dcfe918886645ac3d19c1eaaa67ab
+[13/13] lkdtm: Add a test for function descriptors protection
+        https://git.kernel.org/powerpc/c/5e5a6c5441654d1b9e576ce4ca8a1759e701079e
+
+cheers
