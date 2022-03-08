@@ -2,93 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E314D16E5
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 13:10:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD484D1728
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 13:21:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiCHMLm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 8 Mar 2022 07:11:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50620 "EHLO
+        id S236602AbiCHMWL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Mar 2022 07:22:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234137AbiCHMLm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 07:11:42 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B8D3ED14;
-        Tue,  8 Mar 2022 04:10:45 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S244739AbiCHMWL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 07:22:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14884507F
+        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 04:21:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KCZ0d4W2hz4xvG;
-        Tue,  8 Mar 2022 23:10:41 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Helge Deller <deller@gmx.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-In-Reply-To: <cover.1644928018.git.christophe.leroy@csgroup.eu>
-References: <cover.1644928018.git.christophe.leroy@csgroup.eu>
-Subject: Re: [PATCH v4 00/13] Fix LKDTM for PPC64/IA64/PARISC v4
-Message-Id: <164674125384.3322453.12551849351633372798.b4-ty@ellerman.id.au>
-Date:   Tue, 08 Mar 2022 23:07:33 +1100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B178B8189F
+        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 12:21:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A69FC340EB;
+        Tue,  8 Mar 2022 12:21:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646742072;
+        bh=KTP0EyNkT6c0ZeITjTnlyxXXHObFRSLXNLnpc2z3MgU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s2FsfIoPcq5/HsoYc8XdL7m5Xwaf4NF/D53HgdT7MQz2eNAtuebxlmsXc3aQaPNBc
+         PtcVDTProzaM89ezLSi+4to3EYsHiaqvfhuzApGU0swLNpNTgMYB60j63Qoz2JUR1X
+         2Rz8zAhaGjGaXu3AQt1I85lOmDhP82Zg00sBDpBUSEEaduYqGJe/sBGOaxSN5YZHsf
+         h7upD2tTT6yYCu1gWXb5lKMhdRE6aNX3XBbCjogkjEbTz6OlWlneDRYnmrg+TtFJru
+         Nwuhl+2XpfFqb6mXBmBv86BvG6xt6HNtcsvufisjGuASyhFijlOhjh5tb3NdlOzh3H
+         uexWR8KAw3QXA==
+Date:   Tue, 8 Mar 2022 12:21:04 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org, Dave Martin <Dave.Martin@arm.com>
+Subject: Re: [PATCH v10 1/2] elf: Allow architectures to parse properties on
+ the main executable
+Message-ID: <YidKMHDSifdDcnPL@sirena.org.uk>
+References: <20220228130606.1070960-1-broonie@kernel.org>
+ <20220228130606.1070960-2-broonie@kernel.org>
+ <202203071551.DBABE01@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nspsNZs5QU34na1d"
+Content-Disposition: inline
+In-Reply-To: <202203071551.DBABE01@keescook>
+X-Cookie: Dental health is next to mental health.
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 15 Feb 2022 13:40:55 +0100, Christophe Leroy wrote:
-> PPC64/IA64/PARISC have function descriptors. LKDTM doesn't work
-> on those three architectures because LKDTM messes up function
-> descriptors with functions.
-> 
-> This series does some cleanup in the three architectures and
-> refactors function descriptors so that it can then easily use it
-> in a generic way in LKDTM.
-> 
-> [...]
 
-Applied to powerpc/next.
+--nspsNZs5QU34na1d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[01/13] powerpc: Fix 'sparse' checking on PPC64le
-        https://git.kernel.org/powerpc/c/81df21de8fb45d3a55d41da9c7f5724797d51ce6
-[02/13] powerpc: Move and rename func_descr_t
-        https://git.kernel.org/powerpc/c/5b23cb8cc6b0aab0535253cc2aa362572bab7072
-[03/13] powerpc: Use 'struct func_desc' instead of 'struct ppc64_opd_entry'
-        https://git.kernel.org/powerpc/c/d3e32b997a4ca2e7be71cb770bcb2c000ee20b36
-[04/13] powerpc: Remove 'struct ppc64_opd_entry'
-        https://git.kernel.org/powerpc/c/0a9c5ae279c963149df9a84588281d3d607f7a1f
-[05/13] powerpc: Prepare func_desc_t for refactorisation
-        https://git.kernel.org/powerpc/c/2fd986377d546bedaf27e36554dc9090d272f15d
-[06/13] ia64: Rename 'ip' to 'addr' in 'struct fdesc'
-        https://git.kernel.org/powerpc/c/41a88b45479da873bfc5d29ba1a545a780c5329a
-[07/13] asm-generic: Define CONFIG_HAVE_FUNCTION_DESCRIPTORS
-        https://git.kernel.org/powerpc/c/a257cacc38718c83cee003487e03197f237f5c3f
-[08/13] asm-generic: Define 'func_desc_t' to commonly describe function descriptors
-        https://git.kernel.org/powerpc/c/0dc690e4ef5b901e9d4b53520854fbd5c749e09d
-[09/13] asm-generic: Refactor dereference_[kernel]_function_descriptor()
-        https://git.kernel.org/powerpc/c/e1478d8eaf27704db17a44dee4c53696ed01fc9c
-[10/13] lkdtm: Force do_nothing() out of line
-        https://git.kernel.org/powerpc/c/69b420ed8fd3917ac7073256b4929aa246b6fe31
-[11/13] lkdtm: Really write into kernel text in WRITE_KERN
-        https://git.kernel.org/powerpc/c/b64913394f123e819bffabc79a0e48f98e78dc5d
-[12/13] lkdtm: Fix execute_[user]_location()
-        https://git.kernel.org/powerpc/c/72a86433049dcfe918886645ac3d19c1eaaa67ab
-[13/13] lkdtm: Add a test for function descriptors protection
-        https://git.kernel.org/powerpc/c/5e5a6c5441654d1b9e576ce4ca8a1759e701079e
+On Mon, Mar 07, 2022 at 04:00:15PM -0800, Kees Cook wrote:
+> On Mon, Feb 28, 2022 at 01:06:05PM +0000, Mark Brown wrote:
 
-cheers
+> >  static inline int arch_parse_elf_property(u32 type, const void *data,
+> >  					  size_t datasz, bool compat,
+> > +					  bool has_interp, bool is_interp,
+> >  					  struct arch_elf_state *arch)
+
+> Adding more and more args to a functions like this gives me the sense
+> that some kind of argument structure is needed.
+
+> Once I get enough unit testing written in here, I'm hoping to refactor
+> a bunch of this. To the future! :)
+
+Yes, this code is not lovely.  I'll leave cleanups to future work
+though, it seems out of scope here and I'm not sure how good an idea it
+is to do too much without more solid testing.
+
+--nspsNZs5QU34na1d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmInSi8ACgkQJNaLcl1U
+h9C0+Qf/VvMWAajMDoxXD1JjLDqmzUdmWkqhXBT0nF0f5AuhUNhzzD903PbsCtSu
+X9WgiMARxaf8Iz1dwGOwAg/FKXZqYTId/6UTFAS93DYjbIYA5QRK0NlMF7KzYBLN
+2gNAJZ+1QbAaOA5mpYr+KMdsXjl3b9AIMD3Rkc7BbJGViM3I0BhxMyFrqpu3BqAA
+fz5L/NzVa6NghfMPWINXL4SuhuxMtzkqZsupo4uhgGVNcWEHViAk64B0XvVUmBOP
+qP3e+1JbnMMlKjk2x3L3YxGLzWOW1laSERyVnnxQXHJPWUpIdHn4ytl8X+2/o2g/
+wjVQAV7QkWUvfgVut424HnhuZX6Fww==
+=6C4G
+-----END PGP SIGNATURE-----
+
+--nspsNZs5QU34na1d--
