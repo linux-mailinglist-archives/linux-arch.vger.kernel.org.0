@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F7F04D191C
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 14:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8064D191D
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 14:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233135AbiCHNZf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1343989AbiCHNZf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Tue, 8 Mar 2022 08:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343989AbiCHNZd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 08:25:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C6E419AF
-        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 05:24:37 -0800 (PST)
+        with ESMTP id S1347129AbiCHNZe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 08:25:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CCA41FA1
+        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 05:24:38 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B790DB818B6
-        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 13:24:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8F5DC340EF;
-        Tue,  8 Mar 2022 13:24:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B707961022
+        for <linux-arch@vger.kernel.org>; Tue,  8 Mar 2022 13:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4591C340F7;
+        Tue,  8 Mar 2022 13:24:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646745874;
-        bh=lHUngDb3JG65efOCSgXugMJgOduRgeXgNxQy7YDbt30=;
+        s=k20201202; t=1646745877;
+        bh=uekWLuTeuAPbxKz2+RfH89ey7s+mfr2vZ1i359l07Mk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qf+aRm8l3oWXxgUrAwavKSWFQHzOFGGH0KQh36WVHhZ4ReB0lsVO+JXiiXLYsL69M
-         G7neAt1tcUmsrNACi9t99GgG9S1LqmtGjnVEO05HDcHk1e3y5YKT2dn2W8FpOpaSip
-         TEAaOWhI9MOEoqp4bg5Fw3SX/QCoBAs0dpnhDWHOiVU17XulWO1GfRuOOTs1WSXVnc
-         wnhpelS98yRu3g6doVay0nsGpfrh9jpBwhFtrqbzoo1x6JU30uQlDICAZSk4pvXjGA
-         vU1a3U90lOktdmAcZ1A7D+OSIMtNdBby892/ulL7sy1K1Dx/TEiTd90YOyMP/v11hs
-         MzeaIoN2hQbCA==
+        b=As9vgWzQcHC9k1i/RFedaQqF+3kGXD/sLp+dyfmmK1X2PDq6SslFjGKKeve/SSZvr
+         OJkEAuJ1m5q35vAhZvLUQ1qEb/ATuw8km9+nLitI/YJWh05CXulTmGG7lfPIfn0UQj
+         UqvNgFmc9GD/BYGjfIIMgnMAm7ctrbeYmoCK0l/rYhopRl4b1SuZdXejJbcyK+LOhW
+         MaYYSe7H+V0F1vRFpBU3nyEfX37O7UsG2i6Op5fb73mWn90FfeBBGrgAhj6e/WJoqX
+         1XmUptwbIkLmS2isM3rdDFEx0+1lCrXZ1n/9wwUjjtvK8v2ElCy5T2oN1s5H/8Jn00
+         G7D2vVyssFuvQ==
 From:   Mark Brown <broonie@kernel.org>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>
@@ -41,16 +41,15 @@ Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
         Kees Cook <keescook@chromium.org>,
         Eric Biederman <ebiederm@xmission.com>,
         linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>
-Subject: [PATCH v11 1/2] elf: Allow architectures to parse properties on the main executable
-Date:   Tue,  8 Mar 2022 13:22:39 +0000
-Message-Id: <20220308132240.1697784-2-broonie@kernel.org>
+        libc-alpha@sourceware.org, Mark Brown <broonie@kernel.org>
+Subject: [PATCH v11 2/2] arm64: Enable BTI for main executable as well as the interpreter
+Date:   Tue,  8 Mar 2022 13:22:40 +0000
+Message-Id: <20220308132240.1697784-3-broonie@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220308132240.1697784-1-broonie@kernel.org>
 References: <20220308132240.1697784-1-broonie@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6534; h=from:subject; bh=lHUngDb3JG65efOCSgXugMJgOduRgeXgNxQy7YDbt30=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiJ1icFP6pzB6OAQoWN88VhS52UdMGyQHtGXxnK7aF WLwsiHyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYidYnAAKCRAk1otyXVSH0EkRB/ 9JiakRkkhGtDih4eRkisaPnGCP119jy2dFUCaJauJGEUxszq9SLLwdkuixu4LfB9IMj/2n2ZPYJ8D5 CmU6tLYZPnjPbNdfIsudOcvuGwkoNAv8WDT/5e0qmhCn4OA/19jxBq8P6lJbGciVR0nz/WYUkH4Whb OpPU554NPaoos/6Dd/50FbJVoQI5qMGZBnaLefN3awy+SyzQlVE5sZ02OnSr4GiWvkqwSh5je1jvfO 5TWeyqEKprzRjLCB+qLKGT3UUaj54Rw5uKddWVJ6rPe3Qgwb4oK3TQRb7vrP36ADFJB1xzyxtEc1HS wX/qzn9qc/7cxrbFCXqNiiFG8he/5w
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3954; h=from:subject; bh=uekWLuTeuAPbxKz2+RfH89ey7s+mfr2vZ1i359l07Mk=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBiJ1ic3SJIqA5CA/Ix0aaYKO1oN9856cF1XwHAWEa+ sLC4HY+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYidYnAAKCRAk1otyXVSH0G4RB/ 9Mk90zfmkidbljt3perRxjDgIev5VztiuEROBGeqGjH2nSkKteDJxdKE8Qos0SjbhNjFymXDQ7EaDw qkeLKqNndNQrtlkMDeSi5dTTaTX5yZGpQpbyqUbg/9dxhUIYiVpBBRotdQoRIk9xa26B0ZBAUgbPaO 1tVWmfr9YRiRC+PzV83DTE9+v4TEV+sBDY5MAtcEqGmdxUy8M+n7jY2zu32yPzldVeLjI1bEQEzzT9 kNa11CRAz7ol+qvTihWC9YIZt9JHOzBj2rSyXBLW69FEFsPuvtbQqhadt+tlWYMFwBBrsV8F89ngkU CsBYGrtIcdNfjDfWZc/qzSSTbh2AbY
 X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,187 +62,132 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently the ELF code only attempts to parse properties on the image
-that will start execution, either the interpreter or for statically linked
-executables the main executable. The expectation is that any property
-handling for the main executable will be done by the interpreter. This is
-a bit inconsistent since we do map the executable and is causing problems
-for the arm64 BTI support when used in conjunction with systemd's use of
-seccomp to implement MemoryDenyWriteExecute which stops the dynamic linker
-adjusting the permissions of executable segments.
+Currently for dynamically linked ELF executables we only enable BTI for
+the interpreter, expecting the interpreter to do this for the main
+executable. This is a bit inconsistent since we do map main executable and
+is causing issues with systemd's MemoryDenyWriteExecute feature which is
+implemented using a seccomp filter which prevents setting PROT_EXEC on
+already mapped memory and lacks the context to be able to detect that
+memory is already mapped with PROT_EXEC.
 
-Allow architectures to handle properties for both the dynamic linker and
-main executable, adjusting arch_parse_elf_properties() to have a new
-flag is_interp flag as with arch_elf_adjust_prot() and calling it for
-both the main executable and any intepreter.
-
-The user of this code, arm64, is adapted to ensure that there is no
-functional change.
+Resolve this by adding a sysctl abi.bti_main which causes the kernel to
+checking the BTI property for the main executable and enable BTI if it
+is present when doing the initial mapping. This sysctl is disabled by
+default.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
-Tested-by: Jeremy Linton <jeremy.linton@arm.com>
-Reviewed-by: Dave Martin <Dave.Martin@arm.com>
 Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- arch/arm64/include/asm/elf.h |  3 ++-
- fs/binfmt_elf.c              | 34 ++++++++++++++++++++++++----------
- include/linux/elf.h          |  4 +++-
- 3 files changed, 29 insertions(+), 12 deletions(-)
+ arch/arm64/include/asm/elf.h | 15 ++++++++---
+ arch/arm64/kernel/process.c  | 52 +++++++++++++++++++++++++++---------
+ 2 files changed, 51 insertions(+), 16 deletions(-)
 
 diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-index 97932fbf973d..5cc002376abe 100644
+index 5cc002376abe..c4aa60db76a4 100644
 --- a/arch/arm64/include/asm/elf.h
 +++ b/arch/arm64/include/asm/elf.h
-@@ -259,6 +259,7 @@ struct arch_elf_state {
+@@ -251,12 +251,21 @@ struct arch_elf_state {
+ 	int flags;
+ };
  
+-#define ARM64_ELF_BTI		(1 << 0)
++#define ARM64_ELF_INTERP_BTI		(1 << 0)
++#define ARM64_ELF_EXEC_BTI		(1 << 1)
+ 
+ #define INIT_ARCH_ELF_STATE {			\
+ 	.flags = 0,				\
+ }
+ 
++static inline int arm64_elf_bti_flag(bool is_interp)
++{
++	if (is_interp)
++		return ARM64_ELF_INTERP_BTI;
++	else
++		return ARM64_ELF_EXEC_BTI;
++}
++
  static inline int arch_parse_elf_property(u32 type, const void *data,
  					  size_t datasz, bool compat,
-+					  bool has_interp, bool is_interp,
- 					  struct arch_elf_state *arch)
- {
- 	/* No known properties for AArch32 yet */
-@@ -271,7 +272,7 @@ static inline int arch_parse_elf_property(u32 type, const void *data,
+ 					  bool has_interp, bool is_interp,
+@@ -272,9 +281,9 @@ static inline int arch_parse_elf_property(u32 type, const void *data,
  		if (datasz != sizeof(*p))
  			return -ENOEXEC;
  
--		if (system_supports_bti() &&
-+		if (system_supports_bti() && has_interp == is_interp &&
+-		if (system_supports_bti() && has_interp == is_interp &&
++		if (system_supports_bti() &&
  		    (*p & GNU_PROPERTY_AARCH64_FEATURE_1_BTI))
- 			arch->flags |= ARM64_ELF_BTI;
- 	}
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 605017eb9349..a04e0db6ff9f 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -716,8 +716,9 @@ static unsigned long load_elf_interp(struct elfhdr *interp_elf_ex,
-  */
- 
- static int parse_elf_property(const char *data, size_t *off, size_t datasz,
--			      struct arch_elf_state *arch,
--			      bool have_prev_type, u32 *prev_type)
-+			      struct arch_elf_state *arch, bool has_interp,
-+			      bool is_interp, bool have_prev_type,
-+			      u32 *prev_type)
- {
- 	size_t o, step;
- 	const struct gnu_property *pr;
-@@ -751,7 +752,8 @@ static int parse_elf_property(const char *data, size_t *off, size_t datasz,
- 	*prev_type = pr->pr_type;
- 
- 	ret = arch_parse_elf_property(pr->pr_type, data + o,
--				      pr->pr_datasz, ELF_COMPAT, arch);
-+				      pr->pr_datasz, ELF_COMPAT,
-+				      has_interp, is_interp, arch);
- 	if (ret)
- 		return ret;
- 
-@@ -764,6 +766,7 @@ static int parse_elf_property(const char *data, size_t *off, size_t datasz,
- #define NOTE_NAME_SZ (sizeof(GNU_PROPERTY_TYPE_0_NAME))
- 
- static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
-+				bool has_interp, bool is_interp,
- 				struct arch_elf_state *arch)
- {
- 	union {
-@@ -813,7 +816,8 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- 	have_prev_type = false;
- 	do {
- 		ret = parse_elf_property(note.data, &off, datasz, arch,
--					 have_prev_type, &prev_type);
-+					 has_interp, is_interp, have_prev_type,
-+					 &prev_type);
- 		have_prev_type = true;
- 	} while (!ret);
- 
-@@ -828,6 +832,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
- 	struct elf_phdr *elf_property_phdata = NULL;
-+	struct elf_phdr *interp_elf_property_phdata = NULL;
- 	unsigned long elf_bss, elf_brk;
- 	int bss_prot = 0;
- 	int retval, i;
-@@ -865,12 +870,15 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
- 		char *elf_interpreter;
- 
-+		if (interpreter && elf_property_phdata)
-+			break;
-+
- 		if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
- 			elf_property_phdata = elf_ppnt;
- 			continue;
- 		}
- 
--		if (elf_ppnt->p_type != PT_INTERP)
-+		if (interpreter || elf_ppnt->p_type != PT_INTERP)
- 			continue;
- 
- 		/*
-@@ -919,7 +927,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 		if (retval < 0)
- 			goto out_free_dentry;
- 
--		break;
-+		continue;
- 
- out_free_interp:
- 		kfree(elf_interpreter);
-@@ -963,12 +971,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 			goto out_free_dentry;
- 
- 		/* Pass PT_LOPROC..PT_HIPROC headers to arch code */
--		elf_property_phdata = NULL;
- 		elf_ppnt = interp_elf_phdata;
- 		for (i = 0; i < interp_elf_ex->e_phnum; i++, elf_ppnt++)
- 			switch (elf_ppnt->p_type) {
- 			case PT_GNU_PROPERTY:
--				elf_property_phdata = elf_ppnt;
-+				interp_elf_property_phdata = elf_ppnt;
- 				break;
- 
- 			case PT_LOPROC ... PT_HIPROC:
-@@ -979,10 +986,17 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 					goto out_free_dentry;
- 				break;
- 			}
-+
-+		retval = parse_elf_properties(interpreter,
-+					      interp_elf_property_phdata,
-+					      true, true, &arch_state);
-+		if (retval)
-+			goto out_free_dentry;
-+
+-			arch->flags |= ARM64_ELF_BTI;
++			arch->flags |= arm64_elf_bti_flag(is_interp);
  	}
  
--	retval = parse_elf_properties(interpreter ?: bprm->file,
--				      elf_property_phdata, &arch_state);
-+	retval = parse_elf_properties(bprm->file, elf_property_phdata,
-+				      interpreter, false, &arch_state);
- 	if (retval)
- 		goto out_free_dentry;
- 
-diff --git a/include/linux/elf.h b/include/linux/elf.h
-index c9a46c4e183b..1c45ecf29147 100644
---- a/include/linux/elf.h
-+++ b/include/linux/elf.h
-@@ -88,13 +88,15 @@ struct arch_elf_state;
- #ifndef CONFIG_ARCH_USE_GNU_PROPERTY
- static inline int arch_parse_elf_property(u32 type, const void *data,
- 					  size_t datasz, bool compat,
-+					  bool has_interp, bool is_interp,
- 					  struct arch_elf_state *arch)
- {
  	return 0;
- }
- #else
- extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
--				   bool compat, struct arch_elf_state *arch);
-+				   bool compat, bool has_interp, bool is_interp,
-+				   struct arch_elf_state *arch);
- #endif
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 5369e649fa79..82aaf361fa17 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -701,23 +701,49 @@ core_initcall(tagged_addr_init);
+ #endif	/* CONFIG_ARM64_TAGGED_ADDR_ABI */
  
- #ifdef CONFIG_ARCH_HAVE_ELF_PROT
+ #ifdef CONFIG_BINFMT_ELF
++static unsigned int bti_main;
++
+ int arch_elf_adjust_prot(int prot, const struct arch_elf_state *state,
+ 			 bool has_interp, bool is_interp)
+ {
+-	/*
+-	 * For dynamically linked executables the interpreter is
+-	 * responsible for setting PROT_BTI on everything except
+-	 * itself.
+-	 */
+-	if (is_interp != has_interp)
+-		return prot;
+-
+-	if (!(state->flags & ARM64_ELF_BTI))
+-		return prot;
+-
+-	if (prot & PROT_EXEC)
++	if ((prot & PROT_EXEC) &&
++	    (is_interp || !has_interp || bti_main) &&
++	    (state->flags & arm64_elf_bti_flag(is_interp)))
+ 		prot |= PROT_BTI;
+ 
+ 	return prot;
+ }
+-#endif
++
++#ifdef CONFIG_ARM64_BTI
++/*
++ * If this sysctl is enabled then we will apply PROT_BTI to the main
++ * executable as well as the dynamic linker if it has the appropriate
++ * ELF note.  It is disabled by default, in which case we will only
++ * apply PROT_BTI to the dynamic linker or static binaries.
++ */
++static struct ctl_table bti_main_sysctl_table[] = {
++	{
++		.procname	= "bti_main",
++		.mode		= 0644,
++		.data		= &bti_main,
++		.maxlen		= sizeof(int),
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_ONE,
++	},
++	{ }
++};
++
++static int __init bti_main_init(void)
++{
++	if (!system_supports_bti())
++		return 0;
++
++	if (!register_sysctl("abi", bti_main_sysctl_table))
++		return -EINVAL;
++	return 0;
++}
++core_initcall(bti_main_init);
++#endif /* CONFIG_ARM64_BTI */
++
++#endif /* CONFIG_BINFMT_ELF */
 -- 
 2.30.2
 
