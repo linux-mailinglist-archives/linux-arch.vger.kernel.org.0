@@ -2,222 +2,175 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4DF4D0C5E
-	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 01:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 608174D0EE8
+	for <lists+linux-arch@lfdr.de>; Tue,  8 Mar 2022 06:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbiCHABP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 7 Mar 2022 19:01:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
+        id S231633AbiCHFCX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 8 Mar 2022 00:02:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236744AbiCHABO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 7 Mar 2022 19:01:14 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3735433A3A
-        for <linux-arch@vger.kernel.org>; Mon,  7 Mar 2022 16:00:17 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id a5so4251040pfv.2
-        for <linux-arch@vger.kernel.org>; Mon, 07 Mar 2022 16:00:17 -0800 (PST)
+        with ESMTP id S230105AbiCHFCU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 8 Mar 2022 00:02:20 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300CC24BC3;
+        Mon,  7 Mar 2022 21:01:24 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id l45so7479045uad.1;
+        Mon, 07 Mar 2022 21:01:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CSChNH+lUdAbaPTUG1zJh3zIL8Yt/GuhG02ImIJkwsA=;
-        b=hJ6HSu1DtgxnnOolcgDpDd+f9cHxxGgMPxupO96VRQXTbydy7fPYwJM6r0kvkLQrVS
-         6i0415EqzFGhhyo7ZtUfXJQ3xEVwvjVMBh1QVWE2gZ/vFwbrYKQ8JglhynXwiotCnJWn
-         7Rgv09FEOcqiw1iH3AUiPwsC9K9T+Q4Vc1DYw=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HKvhppFceChLgmUpgQVEk1mZ3VY0JaSZJA2aB43Q7Vk=;
+        b=VSM2HLY0kX84OL07y9j206vTbYJdekrGShRw4CrfWN3ujt3SEitgG1bAfG8KlfUSOw
+         ElJWiSRFumUKR+fyDaiQhfWzvG908o7Ub3CRG6tvrBdC1ZBAlcQns5X15xg+DVcA98sR
+         xefn8uAIem+hS4+KTbQmIiAaZstaqv+dXPNdvJdQEX0DTlkxdbO9uz+LJhZEGYcq5ydy
+         SRQ8UlIZvCr9Ep4TQyn6e0AenP5jKJY5XOt87AXUbuP0M3OpLMIYGV1YwjzxOFyFeqvX
+         7GfhoIaJGtsAqYuTKqfFV/EG2YMuWM5eOZkavzjm/tqiEgUyIZLQSpgKMSrca/ZKaTP0
+         ItkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CSChNH+lUdAbaPTUG1zJh3zIL8Yt/GuhG02ImIJkwsA=;
-        b=R14PSBHN4v/EEPw5dQ1qhKIXomGYEu0n/H9tPmcE66oIJ7C1dtKE5scTUMguniiHo1
-         NQASK1mzzVl5cgB4kufjc860AMUXqx7YqUFoKsp4cSv2Dgx/28FkRTn16rZ8Sa+RkieG
-         OL7Dieyz8US/N9qevmczofErZqp5PO2kTOe8/XWKtirhrR08bgz5Qf+lM0EdeuFXrBKT
-         iPVmKsJjQDKWQOSvSNyWDmAFJF8FDXOHFDD8nP4yPojD9o1VpkuPYz0c8Uk37EzSuAXD
-         f09jCS7VOLYFeY6XMVFIfICEeruu74bSek3CyGXJIzf/n99Pui/h2nt94bTQLmdJt0yk
-         Z07A==
-X-Gm-Message-State: AOAM531VbD0oYStSYU9DuTUc+87JVT0ZdBWiM/TNnlGKlovIBMAknmA0
-        dgk8dyFZNwz33AlKU8puAJT4Vg==
-X-Google-Smtp-Source: ABdhPJxDSuiVE8cbbycz0Ergwkg83bRoKMz9OjxmT3mGTQV67u5NSLYDiOHNckRjeKg+omngneNRog==
-X-Received: by 2002:a65:610e:0:b0:378:d43b:9703 with SMTP id z14-20020a65610e000000b00378d43b9703mr11685997pgu.229.1646697616613;
-        Mon, 07 Mar 2022 16:00:16 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u18-20020a056a00159200b004f708ecd48esm4742514pfk.149.2022.03.07.16.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 16:00:16 -0800 (PST)
-Date:   Mon, 7 Mar 2022 16:00:15 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        libc-alpha@sourceware.org, Dave Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v10 1/2] elf: Allow architectures to parse properties on
- the main executable
-Message-ID: <202203071551.DBABE01@keescook>
-References: <20220228130606.1070960-1-broonie@kernel.org>
- <20220228130606.1070960-2-broonie@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HKvhppFceChLgmUpgQVEk1mZ3VY0JaSZJA2aB43Q7Vk=;
+        b=dwxDxgOS+ujuBkT3lpxio1d75N8uR53sk19RGz+cUYlyV7aNGJ2GlO0PNKwFj1FAoH
+         uKUij1fTeRS3uMZuBehrVoskwPR33nuEzrfmGvh36JcL19j9ofQFUzZIL1mqfPBpOVni
+         eVupYGaKFkFOKKSR1oc4LSaD5eUKsdnCpY5yR6/exPAInQ09s++iupjv5UAemlDxZ2Qe
+         tE3kjHpOUI2tNwVG83jgHJh42NkD7GA/IgzkkhiY8y+g8VNJG5uietHRzbREm6A8oJgB
+         ozypjOrUqEd8mSDW/13O+6h0Fwa/Jdy8h0pFUPwTWIBErHzCLg7DZJiWgCDwnSdwZKRb
+         2b5g==
+X-Gm-Message-State: AOAM531Mod8Awta1IAXu/WmqgkzIWxaMlQiOZYtucITNMGOzO1otic3+
+        +1T9fSSyPziHALMaGWe3QeisdWFd5KkSfKc1SGQvVkbFS3ldCA==
+X-Google-Smtp-Source: ABdhPJzbMqED95ln7Nv/0kYruwHO9Qug+J1OiHrch1cXgj6krfHGEm91/jREsdcS5fHYIgs4Bkzz5WRXAqvKWZl8ixc=
+X-Received: by 2002:a9f:24d6:0:b0:348:d872:5917 with SMTP id
+ 80-20020a9f24d6000000b00348d8725917mr5014892uar.118.1646715683203; Mon, 07
+ Mar 2022 21:01:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228130606.1070960-2-broonie@kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220226110338.77547-1-chenhuacai@loongson.cn>
+ <20220226110338.77547-10-chenhuacai@loongson.cn> <YiCpYRwoUSmd/GE3@kernel.org>
+ <CAAhV-H4-zVjjUkoVFw4ppg_tsM-wxBZmPr-2q8zuoLDHTWAE0w@mail.gmail.com>
+ <YiHuuyqW8KSAri/M@kernel.org> <CAAhV-H6z3H3QbzvG6=fgVJF1z2qEvKVGnyqb--bkqomH3jTXJQ@mail.gmail.com>
+ <YiZCypeuJ+0FCJ+w@kernel.org>
+In-Reply-To: <YiZCypeuJ+0FCJ+w@kernel.org>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Tue, 8 Mar 2022 13:01:11 +0800
+Message-ID: <CAAhV-H6WnnqVs+9syRcRYWTdqYKWr1c03TR2_cJB-tN223MS-w@mail.gmail.com>
+Subject: Re: [PATCH V6 09/22] LoongArch: Add boot and setup routines
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 01:06:05PM +0000, Mark Brown wrote:
-> Currently the ELF code only attempts to parse properties on the image
-> that will start execution, either the interpreter or for statically linked
-> executables the main executable. The expectation is that any property
-> handling for the main executable will be done by the interpreter. This is
-> a bit inconsistent since we do map the executable and is causing problems
-> for the arm64 BTI support when used in conjunction with systemd's use of
-> seccomp to implement MemoryDenyWriteExecute which stops the dynamic linker
-> adjusting the permissions of executable segments.
-> 
-> Allow architectures to handle properties for both the dynamic linker and
-> main executable, adjusting arch_parse_elf_properties() to have a new
-> flag is_interp flag as with arch_elf_adjust_prot() and calling it for
-> both the main executable and any intepreter.
-> 
-> The user of this code, arm64, is adapted to ensure that there is no
-> functional change.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Tested-by: Jeremy Linton <jeremy.linton@arm.com>
-> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> ---
->  arch/arm64/include/asm/elf.h |  3 ++-
->  fs/binfmt_elf.c              | 32 +++++++++++++++++++++++---------
->  include/linux/elf.h          |  4 +++-
->  3 files changed, 28 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
-> index 97932fbf973d..5cc002376abe 100644
-> --- a/arch/arm64/include/asm/elf.h
-> +++ b/arch/arm64/include/asm/elf.h
-> @@ -259,6 +259,7 @@ struct arch_elf_state {
->  
->  static inline int arch_parse_elf_property(u32 type, const void *data,
->  					  size_t datasz, bool compat,
-> +					  bool has_interp, bool is_interp,
->  					  struct arch_elf_state *arch)
+Hi, Mike,
 
-Adding more and more args to a functions like this gives me the sense
-that some kind of argument structure is needed.
+On Tue, Mar 8, 2022 at 1:37 AM Mike Rapoport <rppt@kernel.org> wrote:
+>
+> Hi,
+>
+> On Fri, Mar 04, 2022 at 08:43:03PM +0800, Huacai Chen wrote:
+> > Hi, Mike,
+> >
+> > On Fri, Mar 4, 2022 at 6:49 PM Mike Rapoport <rppt@kernel.org> wrote:
+> > >
+> > > Hi,
+> > >
+> > >
+> > > So ideally, the physical memory detection and registration should follow
+> > > something like:
+> > >
+> > > * memblock_reserve() the memory used by firmware, kernel and initrd
+> > > * detect NUMA topology
+> > > * add memory regions along with their node ids to memblock.
+> > >
+> > > s390::setup_arch() is a good example of doing early reservations:
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/s390/kernel/setup.c#n988
+> > I have a fast reading of S390, and I think we can do some adjust:
+> > 1, call memblock_set_node(0, ULONG_MAX, &memblock.memory, 0) in
+> > early_memblock_init().
+> > 2, move memblock_reserve(PHYS_OFFSET, 0x200000) and
+> > memblock_reserve(__pa_symbol(&_text), __pa_symbol(&_end) -
+> > __pa_symbol(&_text)) to early_memblock_init().
+> > 3, Reserve initrd memory in the first place.
+> > It is nearly the same as the S390, then.
+>
+> It does not have to look like the same as s390 :)
+> The important thing is to reserve all the memory before memblock
+> allocations are possible.
+New version is here, it's not completely the same as S390, but very similar:
+https://lore.kernel.org/linux-arch/20220306112850.811504-1-chenhuacai@loongson.cn/T/#Z2e.:..:20220306112850.811504-10-chenhuacai::40loongson.cn:1arch:loongarch:kernel:mem.c
 
-Once I get enough unit testing written in here, I'm hoping to refactor
-a bunch of this. To the future! :)
+Firmware is not in SYSRAM regions, so we don't need to reserve them.
+The first 2MB and the kernel region are reserved in
+early_memblock_init(), before any allocations.
 
-> @@ -828,6 +832,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  	unsigned long error;
->  	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
->  	struct elf_phdr *elf_property_phdata = NULL;
-> +	struct elf_phdr *interp_elf_property_phdata = NULL;
->  	unsigned long elf_bss, elf_brk;
->  	int bss_prot = 0;
->  	int retval, i;
-> @@ -865,6 +870,9 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  	for (i = 0; i < elf_ex->e_phnum; i++, elf_ppnt++) {
->  		char *elf_interpreter;
->  
-> +		if (interpreter && elf_property_phdata)
-> +			break;
-> +
+Initrd information is passed by cmdline, and initrd is now reserved
+immediately after cmdline has parsed, by merging
+init_initrd/finalize_initrd as you suggested:
+https://lore.kernel.org/linux-arch/20220306112850.811504-1-chenhuacai@loongson.cn/T/#Z2e.:..:20220306112850.811504-10-chenhuacai::40loongson.cn:1arch:loongarch:kernel:setup.c
 
-This is not okay. This introduces a memory resource leak for malicious
-ELF files with multiple INTERP headers.
+>
+> > > > > > +early_param("memmap", early_parse_memmap);
+> > > > >
+> > > > > The memmap= processing is a hack indented to workaround bugs in firmware
+> > > > > related to the memory detection. Please don't copy if over unless there is
+> > > > > really strong reason.
+> > > >
+> > > > Hmmm, I have read the documents, most archs only support mem=limit,
+> > > > but MIPS support mem=limit@base. memmap not only supports
+> > > > memmap=limit@base, but also a lot of advanced syntax. LoongArch needs
+> > > > both limit and limit@base syntax. So can we make our code to support
+> > > > only mem=limit and memmap=limit@base, and remove all other syntax
+> > > > here?
+> > >
+> > > The documentation describes what was there historically and both these
+> > > options tend not to play well with complex memory layouts.
+> > >
+> > > If you must have them it's better to use x86 as an example rather than
+> > > MIPS, just take into the account that on x86 memory always starts from 0,
+> > > so they never needed to have a different base.
+> > >
+> > > For what use-cases LoongArch needs options?
+> >
+> > The use-case of limit@base syntax is kdump, because our kernel is not
+> > relocatable. I'll use X86 as an example.
+>
+> I missed that mem= can be used several times, so with MIPS implementation
+> it's possible to define something like "mem=limit0@base0 mem=limit1@base1"
+> and this will create two contiguous memory regions.
+The new version is here:
+https://lore.kernel.org/linux-arch/20220306112850.811504-1-chenhuacai@loongson.cn/T/#Z2e.:..:20220306112850.811504-10-chenhuacai::40loongson.cn:1arch:loongarch:kernel:setup.c
+If I use the MIPS implementation, then memmap= is useless and can be
+removed, but the MIPS implementation is not obey the rules in kernel
+documents.
 
->  		if (elf_ppnt->p_type == PT_GNU_PROPERTY) {
->  			elf_property_phdata = elf_ppnt;
->  			continue;
-> @@ -919,7 +927,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  		if (retval < 0)
->  			goto out_free_dentry;
->  
-> -		break;
-> +		continue;
-
-Because of this.
-
-As a fix, I'd expect the PT_INTERP test to be updated:
-
-                if (interpreter || elf_ppnt->p_type != PT_INTERP)
-                        continue;
-
-
->  
->  out_free_interp:
->  		kfree(elf_interpreter);
-> @@ -963,12 +971,11 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  			goto out_free_dentry;
->  
->  		/* Pass PT_LOPROC..PT_HIPROC headers to arch code */
-> -		elf_property_phdata = NULL;
->  		elf_ppnt = interp_elf_phdata;
->  		for (i = 0; i < interp_elf_ex->e_phnum; i++, elf_ppnt++)
->  			switch (elf_ppnt->p_type) {
->  			case PT_GNU_PROPERTY:
-> -				elf_property_phdata = elf_ppnt;
-> +				interp_elf_property_phdata = elf_ppnt;
->  				break;
->  
->  			case PT_LOPROC ... PT_HIPROC:
-> @@ -979,10 +986,17 @@ static int load_elf_binary(struct linux_binprm *bprm)
->  					goto out_free_dentry;
->  				break;
->  			}
-> +
-> +		retval = parse_elf_properties(interpreter,
-> +					      interp_elf_property_phdata,
-> +					      true, true, &arch_state);
-> +		if (retval)
-> +			goto out_free_dentry;
-> +
->  	}
->  
-> -	retval = parse_elf_properties(interpreter ?: bprm->file,
-> -				      elf_property_phdata, &arch_state);
-> +	retval = parse_elf_properties(bprm->file, elf_property_phdata,
-> +				      interpreter, false, &arch_state);
->  	if (retval)
->  		goto out_free_dentry;
->  
-> diff --git a/include/linux/elf.h b/include/linux/elf.h
-> index c9a46c4e183b..1c45ecf29147 100644
-> --- a/include/linux/elf.h
-> +++ b/include/linux/elf.h
-> @@ -88,13 +88,15 @@ struct arch_elf_state;
->  #ifndef CONFIG_ARCH_USE_GNU_PROPERTY
->  static inline int arch_parse_elf_property(u32 type, const void *data,
->  					  size_t datasz, bool compat,
-> +					  bool has_interp, bool is_interp,
->  					  struct arch_elf_state *arch)
->  {
->  	return 0;
->  }
->  #else
->  extern int arch_parse_elf_property(u32 type, const void *data, size_t datasz,
-> -				   bool compat, struct arch_elf_state *arch);
-> +				   bool compat, bool has_interp, bool is_interp,
-> +				   struct arch_elf_state *arch);
->  #endif
->  
->  #ifdef CONFIG_ARCH_HAVE_ELF_PROT
-> -- 
-> 2.30.2
-> 
-
--- 
-Kees Cook
+Huacai
+>
+> > Huacai
+>
+> --
+> Sincerely yours,
+> Mike.
