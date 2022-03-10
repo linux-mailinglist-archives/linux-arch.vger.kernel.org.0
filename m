@@ -2,122 +2,234 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EE44D423A
-	for <lists+linux-arch@lfdr.de>; Thu, 10 Mar 2022 09:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD164D443E
+	for <lists+linux-arch@lfdr.de>; Thu, 10 Mar 2022 11:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236132AbiCJIK7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Mar 2022 03:10:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
+        id S241064AbiCJKH2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 10 Mar 2022 05:07:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232834AbiCJIK6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Mar 2022 03:10:58 -0500
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCEC13396D;
-        Thu, 10 Mar 2022 00:09:58 -0800 (PST)
-Received: by mail-qv1-f54.google.com with SMTP id jq9so4012994qvb.0;
-        Thu, 10 Mar 2022 00:09:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HfibjxXpSiDUQkdsSWqfUL3zPU0FxzAokd4WU1kLbJM=;
-        b=VIHeGNCzsEug6JSTznyhYDRuqFYhNS5IM+wCUly3SyVu8S0B9DaDbotAGybkwkGGUw
-         bu+229bxuffmxyN3GNyVZmD8jv3yaRW9lchcZU+J3qmkgsTqT7ncNw/85MYVI3yAo9xz
-         fpaYFMwt8y5ScjXf3ngWvmLw7pDcZu3yMYL+71q3oeOsGfGLQdrLcyfBWseLSyF+s9Q7
-         Y244WsdUGzjpyQVtHfnd/u63AUmUETwI4cIWYGN/eEkB6imcYurnxzZ7trhM7curroMN
-         /2DpUA7JZWrbIqO1el24YNj+s+/9kqvGPTn6hi40ALf9FavrG7bFFTZwC1QhtkRUgxOO
-         CExA==
-X-Gm-Message-State: AOAM531WzJaKG2X44Px14YzepFfZR8WSJFjGIjvyVF5w+mPYEBZrzsEm
-        sqXQ40E05Oz4hsvFl630lOaPk7OcwmIFmg==
-X-Google-Smtp-Source: ABdhPJxICWNDTxNVx7O/YwUWXStD8W1F+v06J6hGPZuCfIaFgRldu+p1o0OD3lSlzKcHSygKWfyaIw==
-X-Received: by 2002:a05:6214:29e9:b0:435:3428:d0f3 with SMTP id jv9-20020a05621429e900b004353428d0f3mr2751669qvb.28.1646899796952;
-        Thu, 10 Mar 2022 00:09:56 -0800 (PST)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id 22-20020ac85916000000b002d6844c51b9sm2811209qty.86.2022.03.10.00.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 00:09:56 -0800 (PST)
-Received: by mail-yb1-f180.google.com with SMTP id f38so9391427ybi.3;
-        Thu, 10 Mar 2022 00:09:56 -0800 (PST)
-X-Received: by 2002:a5b:5d0:0:b0:623:c68d:d473 with SMTP id
- w16-20020a5b05d0000000b00623c68dd473mr2923471ybp.506.1646899795891; Thu, 10
- Mar 2022 00:09:55 -0800 (PST)
+        with ESMTP id S240199AbiCJKH1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Mar 2022 05:07:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B56D13D927;
+        Thu, 10 Mar 2022 02:06:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B9609CE2315;
+        Thu, 10 Mar 2022 10:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0EC5C340F5;
+        Thu, 10 Mar 2022 10:06:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646906782;
+        bh=vhFXTfR/hHQwooRMbLLv+htbY75oKp351jSwOX6ruus=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ud5l1qsbXJFf8gH+uYExyTYvIz8T6lX3+I9F5nGWuFeMgL1BlC5il7yZEy9Pq1jLQ
+         nDKmXAUT8gXbXi7oDJgboC3xxlHkuln8v/mLbeLLvO5uzw1gOunhZv4JbH5021WNIq
+         g97xqb1Uy9C9vWkGU2U0nDJcwD4VhE57HPj+c0rni/Qbq6cKLTZjLabYQFXW2nTNqo
+         8lrRQU9ez/ZlWCmyK17bvCLl3ffRET3rsX96uJX97ksR2RYMBCIxo/8ori2WEd59/O
+         OL7rioB5cgwtNpFV23tgpV2bB+46QAVVqSLDqlSOgSatoXmUK8z4m/gLlECpItSWkp
+         utWcxHO1iuYVA==
+Received: by mail-vs1-f45.google.com with SMTP id u124so5296398vsb.10;
+        Thu, 10 Mar 2022 02:06:22 -0800 (PST)
+X-Gm-Message-State: AOAM532QD1kKYLDdvA4GHDy2hm7znWX/9hnVc1cpRVvKSPOETZHJeKXp
+        nwdsJp7XvVV2j+17Df/4zyK3MTXkXvtjt1L+U1U=
+X-Google-Smtp-Source: ABdhPJxmgtCny+YtcJg2sILVIeyOg6uUfrGYFkSlV5X2IRbm6w3wA9qxxW2buYTHGP3tmE/NAGGje/tSIZYaB3Wi5MY=
+X-Received: by 2002:a67:fc17:0:b0:320:b039:afc0 with SMTP id
+ o23-20020a67fc17000000b00320b039afc0mr2196611vsq.2.1646906781754; Thu, 10 Mar
+ 2022 02:06:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20220113160115.5375-1-bp@alien8.de> <YeBzxuO0wLn/B2Ew@mit.edu>
- <YeCuNapJLK4M5sat@zn.tnic> <CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com>
- <YeHLIDsjGB944GSP@zn.tnic> <CAMuHMdUBr+gpF6Z5nPadjHFYJwgGd+LGoNTV=Sxty+yaY5EWxg@mail.gmail.com>
- <YeHQmbMYyy92AbBp@zn.tnic> <YeKyBP5rac8sVvWw@zn.tnic> <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de>
- <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 10 Mar 2022 09:09:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVLyu6LNONJa1QcMGv__bWSCRvVq9haD7=fOm1k5O3Pnw@mail.gmail.com>
-Message-ID: <CAMuHMdVLyu6LNONJa1QcMGv__bWSCRvVq9haD7=fOm1k5O3Pnw@mail.gmail.com>
-Subject: Re: [PATCH] a.out: Stop building a.out/osf1 support on alpha and m68k
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "Theodore Ts'o" <tytso@mit.edu>, X86 ML <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
-        Michael Cree <mcree@orcon.net.nz>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-15-guoren@kernel.org>
+In-Reply-To: <20220227162831.674483-15-guoren@kernel.org>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 10 Mar 2022 18:06:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQLWZbh_yZJMXAsWbjRfkeQMpdsuo5fQcFRYZbKQyGKaA@mail.gmail.com>
+Message-ID: <CAJF2gTQLWZbh_yZJMXAsWbjRfkeQMpdsuo5fQcFRYZbKQyGKaA@mail.gmail.com>
+Subject: Re: [PATCH V7 14/20] riscv: compat: Add elf.h implementation
+To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Arnd Bergmann <arnd@arndb.de>, Christoph Hellwig <hch@lst.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 9:04 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> There has been repeated discussion on removing a.out support, the most
-> recent was[1].  Having read through a bunch of the discussion it looks
-> like no one has see any reason why we need to keep a.out support.
+Hi Palmer & Arnd
+
+Seems we need a more strict check to distinguish ELFCLASS32/64 RISC in
+elf for the elf_check_arch & compat_elf_check_arch. SET_PERSONALITY is
+not enough.
+
+diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+index d87d3bcc758d..2fcd854fb516 100644
+--- a/arch/riscv/include/asm/elf.h
++++ b/arch/riscv/include/asm/elf.h
+@@ -33,7 +33,8 @@
+ /*
+  * This is used to ensure we don't load something for the wrong architecture.
+  */
+-#define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
++#define elf_check_arch(x) (((x)->e_machine == EM_RISCV) && \
++                          ((x)->e_ident[EI_CLASS] == ELF_CLASS))
+
+ /*
+  * Use the same code with elf_check_arch, because elf32_hdr &
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 8caa5f48d0a1..f46016e96235 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -88,7 +88,9 @@ static bool compat_mode_supported __read_mostly;
+
+ bool compat_elf_check_arch(Elf32_Ehdr *hdr)
+ {
+-       return compat_mode_supported && hdr->e_machine == EM_RISCV;
++       return compat_mode_supported &&
++              hdr->e_machine == EM_RISCV &&
++              hdr->e_ident[EI_CLASS] == ELFCLASS32;
+ }
+
+ static int __init compat_mode_detect(void)
+
+On Mon, Feb 28, 2022 at 12:30 AM <guoren@kernel.org> wrote:
 >
-> The m68k maintainer has even come out in favor of removing a.out
-> support[2].
+> From: Guo Ren <guoren@linux.alibaba.com>
 >
-> At a practical level with only two rarely used architectures building
-> a.out support, it gets increasingly hard to test and to care about.
-> Which means the code will almost certainly bit-rot.
+> Implement necessary type and macro for compat elf. See the code
+> comment for detail.
 >
-> Let's see if anyone cares about a.out support on the last two
-> architectures that build it, by disabling the build of the support in
-> Kconfig.  If anyone cares, this can be easily reverted, and we can then
-> have a discussion about what it is going to take to support a.out
-> binaries in the long term.
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/riscv/include/asm/elf.h | 46 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
 >
-> Cc: Richard Henderson <rth@twiddle.net>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: linux-alpha@vger.kernel.org
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: linux-m68k@lists.linux-m68k.org
-> [1] https://lkml.kernel.org/r/20220113160115.5375-1-bp@alien8.de
-> [2] https://lkml.kernel.org/r/CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com
-> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+> diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
+> index f53c40026c7a..aee40040917b 100644
+> --- a/arch/riscv/include/asm/elf.h
+> +++ b/arch/riscv/include/asm/elf.h
+> @@ -8,6 +8,8 @@
+>  #ifndef _ASM_RISCV_ELF_H
+>  #define _ASM_RISCV_ELF_H
+>
+> +#include <uapi/linux/elf.h>
+> +#include <linux/compat.h>
+>  #include <uapi/asm/elf.h>
+>  #include <asm/auxvec.h>
+>  #include <asm/byteorder.h>
+> @@ -18,11 +20,13 @@
+>   */
+>  #define ELF_ARCH       EM_RISCV
+>
+> +#ifndef ELF_CLASS
+>  #ifdef CONFIG_64BIT
+>  #define ELF_CLASS      ELFCLASS64
+>  #else
+>  #define ELF_CLASS      ELFCLASS32
+>  #endif
+> +#endif
+>
+>  #define ELF_DATA       ELFDATA2LSB
+>
+> @@ -31,6 +35,13 @@
+>   */
+>  #define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+>
+> +/*
+> + * Use the same code with elf_check_arch, because elf32_hdr &
+> + * elf64_hdr e_machine's offset are different. The checker is
+> + * a little bit simple compare to other architectures.
+> + */
+> +#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
+> +
+>  #define CORE_DUMP_USE_REGSET
+>  #define ELF_EXEC_PAGESIZE      (PAGE_SIZE)
+>
+> @@ -43,8 +54,14 @@
+>  #define ELF_ET_DYN_BASE                ((TASK_SIZE / 3) * 2)
+>
+>  #ifdef CONFIG_64BIT
+> +#ifdef CONFIG_COMPAT
+> +#define STACK_RND_MASK         (test_thread_flag(TIF_32BIT) ? \
+> +                                0x7ff >> (PAGE_SHIFT - 12) : \
+> +                                0x3ffff >> (PAGE_SHIFT - 12))
+> +#else
+>  #define STACK_RND_MASK         (0x3ffff >> (PAGE_SHIFT - 12))
+>  #endif
+> +#endif
+>  /*
+>   * This yields a mask that user programs can use to figure out what
+>   * instruction set this CPU supports.  This could be done in user space,
+> @@ -60,11 +77,19 @@ extern unsigned long elf_hwcap;
+>   */
+>  #define ELF_PLATFORM   (NULL)
+>
+> +#define COMPAT_ELF_PLATFORM    (NULL)
+> +
+>  #ifdef CONFIG_MMU
+>  #define ARCH_DLINFO                                            \
+>  do {                                                           \
+> +       /*                                                      \
+> +        * Note that we add ulong after elf_addr_t because      \
+> +        * casting current->mm->context.vdso triggers a cast    \
+> +        * warning of cast from pointer to integer for          \
+> +        * COMPAT ELFCLASS32.                                   \
+> +        */                                                     \
+>         NEW_AUX_ENT(AT_SYSINFO_EHDR,                            \
+> -               (elf_addr_t)current->mm->context.vdso);         \
+> +               (elf_addr_t)(ulong)current->mm->context.vdso);  \
+>         NEW_AUX_ENT(AT_L1I_CACHESIZE,                           \
+>                 get_cache_size(1, CACHE_TYPE_INST));            \
+>         NEW_AUX_ENT(AT_L1I_CACHEGEOMETRY,                       \
+> @@ -90,4 +115,23 @@ do {                                                        \
+>                 *(struct user_regs_struct *)regs;       \
+>  } while (0);
+>
+> +#ifdef CONFIG_COMPAT
+> +
+> +#define SET_PERSONALITY(ex)                                    \
+> +do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)              \
+> +               set_thread_flag(TIF_32BIT);                     \
+> +       else                                                    \
+> +               clear_thread_flag(TIF_32BIT);                   \
+> +       if (personality(current->personality) != PER_LINUX32)   \
+> +               set_personality(PER_LINUX |                     \
+> +                       (current->personality & (~PER_MASK)));  \
+> +} while (0)
+> +
+> +#define COMPAT_ELF_ET_DYN_BASE         ((TASK_SIZE_32 / 3) * 2)
+> +
+> +/* rv32 registers */
+> +typedef compat_ulong_t                 compat_elf_greg_t;
+> +typedef compat_elf_greg_t              compat_elf_gregset_t[ELF_NGREG];
+> +
+> +#endif /* CONFIG_COMPAT */
+>  #endif /* _ASM_RISCV_ELF_H */
+> --
+> 2.25.1
+>
 
->  arch/m68k/Kconfig  | 1 -
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+-- 
+Best Regards
+ Guo Ren
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ML: https://lore.kernel.org/linux-csky/
