@@ -2,131 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31934D5832
-	for <lists+linux-arch@lfdr.de>; Fri, 11 Mar 2022 03:38:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A64044D5DB5
+	for <lists+linux-arch@lfdr.de>; Fri, 11 Mar 2022 09:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345650AbiCKCjZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 10 Mar 2022 21:39:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
+        id S240624AbiCKIs1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 11 Mar 2022 03:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235051AbiCKCjY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 10 Mar 2022 21:39:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D24EA108763;
-        Thu, 10 Mar 2022 18:38:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D373600BE;
-        Fri, 11 Mar 2022 02:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC43C340FC;
-        Fri, 11 Mar 2022 02:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646966301;
-        bh=Jl8zmUlue4qqSpvupSe770nwEDFbxuYU+7Bv15ArLNk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lSDH6JbZLjCrBKwhP5l06T0OkCO9oN/A8aEEjauCFSKrSGqZSLjhPkfyba8lYXT8b
-         qYNbLTfBYoaFYS9/EdstBjbcmkW1UfcrGbXKAA3XzivX2N/X7M8/MG2dJGhgzUj1xe
-         JwIgADZuHHJQV+vkPugE9tLJ05ZgR4K+s7Tqg3OYy0S0d/gkDWxZGRTQdcVyEyVTta
-         XcdW+bJU/6F0zGvwFWhD4c7+eaOFthHqbXVWvY103F1BoVPLPmpdBFX9VrRB9dX0cQ
-         RFdNXU0aoXtMTFwXmsyOd8jEdA/NcC/+rOGDrpxxb7LrGBkBTS5gvraGhc0yhF8ir3
-         59IUblFQhb99Q==
-Received: by mail-vs1-f48.google.com with SMTP id u124so8098304vsb.10;
-        Thu, 10 Mar 2022 18:38:21 -0800 (PST)
-X-Gm-Message-State: AOAM531r+0RCSa1uP+4DxvpwfnmVIeolCIthRU6hs16y0vps/+RpTX7N
-        HjMThTmSp9v4Mq//k9W35qDGb7jrYRzugH1eYPA=
-X-Google-Smtp-Source: ABdhPJzYUvUjuAFq8XvtZ71Qsvionf8y5EprAZIyEokbvQbCG5RE3xULelpIsGE/d8q0ktAquLt4SKjjcxqaZOgU8Ls=
-X-Received: by 2002:a05:6102:806:b0:31e:2206:f1c with SMTP id
- g6-20020a056102080600b0031e22060f1cmr3912870vsb.59.1646966300562; Thu, 10 Mar
- 2022 18:38:20 -0800 (PST)
+        with ESMTP id S238232AbiCKIs1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 11 Mar 2022 03:48:27 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340E01BA936;
+        Fri, 11 Mar 2022 00:47:23 -0800 (PST)
+Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MXotA-1nenlG1jJs-00YE6N; Fri, 11 Mar 2022 09:47:22 +0100
+Received: by mail-wr1-f42.google.com with SMTP id r6so11404548wrr.2;
+        Fri, 11 Mar 2022 00:47:22 -0800 (PST)
+X-Gm-Message-State: AOAM5336bBOJAkXYhsZJbP5e0qVrygcAg1IGKUzCNkHBO7vrRxIPgCHi
+        1BNPaTi8jRDuTsewXa13gg68+KNV3+mNzopRZE8=
+X-Google-Smtp-Source: ABdhPJyTWgAieFCZt1WE7SEInVHv7v1JH2rfBR/3E5KZi1Bf2JZ9KsD3KkY+eiRV+p6njpLjmQ0EccxM00+yxiNm90U=
+X-Received: by 2002:a5d:6810:0:b0:203:7cbb:20be with SMTP id
+ w16-20020a5d6810000000b002037cbb20bemr6468602wru.219.1646988442050; Fri, 11
+ Mar 2022 00:47:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20220227162831.674483-1-guoren@kernel.org> <20220227162831.674483-14-guoren@kernel.org>
-In-Reply-To: <20220227162831.674483-14-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 11 Mar 2022 10:38:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
-Message-ID: <CAJF2gTSJFMg1YJ=dbaNyemNV4sc_3P=+_PrS=RD_Y2_xz3TzPA@mail.gmail.com>
-Subject: Re: [PATCH V7 13/20] riscv: compat: process: Add UXL_32 support in start_thread
-To:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anup Patel <anup@brainfault.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        liush <liush@allwinnertech.com>, Wei Fu <wefu@redhat.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Wang Junqiang <wangjunqiang@iscas.ac.cn>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
+References: <20220113160115.5375-1-bp@alien8.de> <YeBzxuO0wLn/B2Ew@mit.edu>
+ <YeCuNapJLK4M5sat@zn.tnic> <CAMuHMdUbTNNr16YY1TFe=-uRLjg6yGzgw_RqtAFpyhnOMM5Pvw@mail.gmail.com>
+ <YeHLIDsjGB944GSP@zn.tnic> <CAMuHMdUBr+gpF6Z5nPadjHFYJwgGd+LGoNTV=Sxty+yaY5EWxg@mail.gmail.com>
+ <YeHQmbMYyy92AbBp@zn.tnic> <YeKyBP5rac8sVvWw@zn.tnic> <b40d1377-51d5-4ba3-ab3f-b40626c229ad@physik.fu-berlin.de>
+ <87ilsmdhb5.fsf_-_@email.froward.int.ebiederm.org> <164686349541.391760.11942525130947458475.b4-ty@chromium.org>
+ <87czit4cae.fsf_-_@email.froward.int.ebiederm.org> <CAHk-=wgpToUf0XORoH_t7Wrqv3=VcqCCDV2qnCbqjtCsrd3Cyg@mail.gmail.com>
+In-Reply-To: <CAHk-=wgpToUf0XORoH_t7Wrqv3=VcqCCDV2qnCbqjtCsrd3Cyg@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 11 Mar 2022 09:47:06 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3N_d_xh=hhg=yHC6tdcruLh5stxGPHVmoWtxQj66O2Eg@mail.gmail.com>
+Message-ID: <CAK8P3a3N_d_xh=hhg=yHC6tdcruLh5stxGPHVmoWtxQj66O2Eg@mail.gmail.com>
+Subject: Re: [PATCH] x86: Remove a.out support
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?TcOlbnMgUnVsbGfDpXJk?= <mans@mansr.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Michael Cree <mcree@orcon.net.nz>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Borislav Petkov <bp@alien8.de>, Arnd Bergmann <arnd@arndb.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        X86 ML <x86@kernel.org>, Matt Turner <mattst88@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:/HIokTBxA7LjX5itZF5A9yzq4rvrB9mKdQYuccUhEjSuWchzrKZ
+ oZaPw61ShDQ09CZytG5JJ+pjRs2caRf5bCwyvoONKeFjQfT8rnHThDlAn2mEahrLJdEqp+y
+ bZK7BxIyA9Um/jBowxsBKvmuAEGivNQWl/KbiK/tTIbKDVYSNjSw3iOnoGZfAzZsJW31CwC
+ uAEfewQ/uBLaeMlpSR8SA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GCFrgdvA3B0=:OnsTeVKH7VrDLBnOw9Bonr
+ lHbhqz8Tjr+R7nIe7snqFJHWiu/IYCXfZxzd2IKo+Qv8/9U4Tag+QqgEoAMKK0WS5GpCCynm5
+ SX8dRKHAniKXkIowxFDqBcHKtNMjVVd8H5/8HQsS/x8UnHWEM6jIFCXwZx7IPOrwjflPxRYDc
+ W8x6MSfn30pLDR3VN4OG8hqSXrVXJMOzmj4fK+x7JXNC0fcdhXyhUdA+PCDRu9xn2qmJFxkZp
+ QMCaBAY4PVd0UMCTuanqeen1gqAnF2WZ3dnP6OWevvZpplnofvh+4B7c0LJlb3yRXbDRhd0Ft
+ BLOB6fCKaKZ9qonxWI6TyvEx2q6zGiDeAnCTBX6tG/p//G4lHHi6m6EzZZQTIoH86m8oP+FGA
+ 2o8SYBPdAy32Op7FJI4MzjspcxA1VDvK2tcQc3ldWpYJ9yM3nLPIoCKFKsZXz7t5IEgw52r5N
+ peznevHnHNrW5NdFcdjFcGv4BZAc9sqe04cUNStJWCMkNwQTA/tvd85+VNhQax1RFHyCDOcNQ
+ JAKBemaw2Bi078hd9SEaFmEQsnmuKdWE5m31nKZGP0WKp+Vudkz/aGsWoX/PdEPDvglSvoHQn
+ 8vdhPD1yOg/wYpfZZqfjeUFR8kBedSN0D3fH9hf+6I0mdlU8A/BC0IjtF8IfyCoYIntUg7LYI
+ od8CZtrGgyDjJeZBJTQWzRrVVEZlJYYBdIKyzyiBSUw42hEU8R+kPy5afRqDUYlAt1XrX5Rqy
+ RSQndMQdnjMgf3h7QfIRBvYMdr15eTqu9ZUx5rU1A3oIZB+wRTNdZr4D5mmjI5aqbMVatonHz
+ A2O4V85kMDhXgj0EAUDfh+2jFClj42zeqW87JB5hDzaXLapGA4=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
-
-On Mon, Feb 28, 2022 at 12:30 AM <guoren@kernel.org> wrote:
+On Fri, Mar 11, 2022 at 12:35 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> From: Guo Ren <guoren@linux.alibaba.com>
+> On Thu, Mar 10, 2022 at 3:29 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >
+> > Kees can you pick this one up in for-next/execve as well?
+> >
+> > It still applies cleanly and the actual patch seems to have gotten lost
+> > in the conversation about what more we could do.
 >
-> If the current task is in COMPAT mode, set SR_UXL_32 in status for
-> returning userspace. We need CONFIG _COMPAT to prevent compiling
-> errors with rv32 defconfig.
+> Side note: there are similar other turds if a.out goes away, ie on
+> alpha it's OSF4_COMPAT, and it enables support for a couple of legacy
+> OSF/1 system calls.
 >
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> ---
->  arch/riscv/kernel/process.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> index 03ac3aa611f5..54787ca9806a 100644
-> --- a/arch/riscv/kernel/process.c
-> +++ b/arch/riscv/kernel/process.c
-> @@ -97,6 +97,11 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
->         }
->         regs->epc = pc;
->         regs->sp = sp;
-> +
-FIxup:
+> I think that was also discussed in the (old) a.out deprecation thread
+> back in 2019..
 
-+ #ifdef CONFIG_COMPAT
-> +       if (is_compat_task())
-> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_32;
-> +       else
-> +               regs->status = (regs->status & ~SR_UXL) | SR_UXL_64;
-+ #endif
+The only thing that actually depends on CONFIG_OSF4_COMPAT seems to be
+the custom logic in readv() and writev(). Those are the two that you removed
+in your patch back then[1].
 
-We still need "#ifdef CONFIG_COMPAT" here, because for rv32 we can't
-set SR_UXL at all. SR_UXL is BIT[32, 33].
+For the other system calls, I fear we can only try to guess which of them
+are used in Linux applications and which ones are not. These were always
+available to normal Linux user space, so the ones that are similar to our
+syscalls could have been used in glibc, e.g. mmap, wait4, stat.
 
->  }
->
->  void flush_thread(void)
-> --
-> 2.25.1
->
+         Arnd
 
+[1] https://lore.kernel.org/all/CAHk-=wgt7M6yA5BJCJo0nF22WgPJnN8CvViL9CAJmd+S+Civ6w@mail.gmail.com/
 
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+[2] $ git grep sys_osf arch/alpha/kernel/syscalls/syscall.tbl
+7 common osf_wait4 sys_osf_wait4
+17 common brk sys_osf_brk
+21 common osf_mount sys_osf_mount
+43 common osf_set_program_attributes sys_osf_set_program_attributes
+48 common osf_sigprocmask sys_osf_sigprocmask
+71 common mmap sys_osf_mmap
+93 common osf_select sys_osf_select
+100 common getpriority sys_osf_getpriority
+112 common osf_sigstack sys_osf_sigstack
+116 common osf_gettimeofday sys_osf_gettimeofday
+117 common osf_getrusage sys_osf_getrusage
+120 common readv sys_osf_readv
+121 common writev sys_osf_writev
+122 common osf_settimeofday sys_osf_settimeofday
+138 common osf_utimes sys_osf_utimes
+156 common sigaction sys_osf_sigaction
+159 common osf_getdirentries sys_osf_getdirentries
+160 common osf_statfs sys_osf_statfs
+161 common osf_fstatfs sys_osf_fstatfs
+165 common osf_getdomainname sys_osf_getdomainname
+207 common osf_utsname sys_osf_utsname
+224 common osf_stat sys_osf_stat
+225 common osf_lstat sys_osf_lstat
+226 common osf_fstat sys_osf_fstat
+227 common osf_statfs64 sys_osf_statfs64
+228 common osf_fstatfs64 sys_osf_fstatfs64
+241 common osf_sysinfo sys_osf_sysinfo
+244 common osf_proplist_syscall sys_osf_proplist_syscall
+251 common osf_usleep_thread sys_osf_usleep_thread
+256 common osf_getsysinfo sys_osf_getsysinfo
+257 common osf_setsysinfo sys_osf_setsysinfo
