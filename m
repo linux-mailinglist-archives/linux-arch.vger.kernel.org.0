@@ -2,72 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46B74D79A5
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Mar 2022 04:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A394D7DF0
+	for <lists+linux-arch@lfdr.de>; Mon, 14 Mar 2022 09:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiCNDcv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 13 Mar 2022 23:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
+        id S237349AbiCNI7H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 14 Mar 2022 04:59:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiCNDcv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 13 Mar 2022 23:32:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84CB565E9;
-        Sun, 13 Mar 2022 20:31:42 -0700 (PDT)
+        with ESMTP id S237367AbiCNI7G (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Mar 2022 04:59:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D0155B6
+        for <linux-arch@vger.kernel.org>; Mon, 14 Mar 2022 01:57:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29A2860F79;
-        Mon, 14 Mar 2022 03:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A1A2C340E9;
-        Mon, 14 Mar 2022 03:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647228701;
-        bh=9lv71GxeVZNDHbm/CSl+pzvHGP16YZgnpphJBKi7cZs=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=G2LzKzorwdmZq+cBBTnD/mnUEHirV4tSIjMLoWKGe7IvcKpEwWcxYMczeh43OsoI2
-         kt0CfFqkmfa1eTWHjGjjujnbvoy3UEnGGwQf2l9Duom0cFp4/yXZAmb4lQMlfGcifW
-         wxfKEajdfuxQNpdo0vdITFJO4mJx4Vb1CwCYRVQPjSvf1LqG9bY0dt/3xi+9C46KJg
-         oWo8xDckffM4YGSzQ7RxPrnilcmrPKvSNPZ9Q/1ew0AQcxVN4fcFEg2jJ26iguVtVK
-         l0jRLoSVa0gAZK5FQd5NKGwNHFij8TRe7gR5jVOna5/4fJLbLIEm9dPaAzWR9ZjIWo
-         Fj5AgazHNh+5w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2B6A55C4167; Sun, 13 Mar 2022 20:31:41 -0700 (PDT)
-Date:   Sun, 13 Mar 2022 20:31:41 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, kernel-team@fb.com,
-        stern@rowland.harvard.edu
-Subject: [GIT PULL] LKMM changes for v5.18
-Message-ID: <20220314033141.GA2594098@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D661B61253
+        for <linux-arch@vger.kernel.org>; Mon, 14 Mar 2022 08:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F155C340EC;
+        Mon, 14 Mar 2022 08:57:53 +0000 (UTC)
+Date:   Mon, 14 Mar 2022 08:57:49 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org
+Subject: Re: [PATCH v11 2/2] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <Yi8DjeTU1xzX9iSv@arm.com>
+References: <20220308132240.1697784-1-broonie@kernel.org>
+ <20220308132240.1697784-3-broonie@kernel.org>
+ <59fc8a58-5013-606b-f544-8277cda18e50@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <59fc8a58-5013-606b-f544-8277cda18e50@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello, Linus,
+On Tue, Mar 08, 2022 at 12:01:17PM -0600, Jeremy Linton wrote:
+> On 3/8/22 07:22, Mark Brown wrote:
+> > Currently for dynamically linked ELF executables we only enable BTI for
+> > the interpreter, expecting the interpreter to do this for the main
+> > executable. This is a bit inconsistent since we do map main executable and
+> > is causing issues with systemd's MemoryDenyWriteExecute feature which is
+> > implemented using a seccomp filter which prevents setting PROT_EXEC on
+> > already mapped memory and lacks the context to be able to detect that
+> > memory is already mapped with PROT_EXEC.
+> > 
+> > Resolve this by adding a sysctl abi.bti_main which causes the kernel to
+> > checking the BTI property for the main executable and enable BTI if it
+> > is present when doing the initial mapping. This sysctl is disabled by
+> > default.
+> 
+> This seems less than ideal, maybe the default can be flipped with a CONFIG
+> option?
 
-Please pull the latest LKMM git tree from:
+I'm not keen on config options changing the ABI. If there's a good
+chance that this feature won't be turned on (via sysfs) in distros with
+MDWE, I'd rather drop the whole series than maintain unused code in the
+kernel.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/lkmm.2022.03.13a
-  # HEAD: e2b665f612ca2ddc61c3d54817a3a780aee6b251: tools/memory-model: Explain syntactic and semantic dependencies (2022-02-01 17:32:30 -0800)
+(we can go back fixing this properly at the mprotect() level, as long as
+systemd folk are willing to move away from eBPF for MDWE; happy to
+provide kernel patches to start the discussion)
 
-This series contains an improved explanation of syntactic and semantic
-dependencies from Alan Stern.
-
-----------------------------------------------------------------
-Alan Stern (1):
-      tools/memory-model: Explain syntactic and semantic dependencies
-
- tools/memory-model/Documentation/explanation.txt | 51 ++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+-- 
+Catalin
