@@ -2,75 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB14C4D98DF
-	for <lists+linux-arch@lfdr.de>; Tue, 15 Mar 2022 11:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9054D9B01
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Mar 2022 13:19:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347129AbiCOKgU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 15 Mar 2022 06:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
+        id S244761AbiCOMUx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Mar 2022 08:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347110AbiCOKgT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Mar 2022 06:36:19 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB2E31374;
-        Tue, 15 Mar 2022 03:35:07 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id q14so28261797wrc.4;
-        Tue, 15 Mar 2022 03:35:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:in-reply-to;
-        bh=6kmDLxEDF1QGDB/FLS/358IHP43jGlaqFUhg/QX1G3A=;
-        b=D23aK+AJAUiRqF+xeDEU6Ac0cb4UW/kYSNfcD3j0d3j0c/eD1FDlXzoX6wbkQB6i7E
-         i4qQSMOmNpOo4bNM/p9JY8mOf7Kn7N9AMgd0FIxsvTNDidNIaIXn6+gLJ37Pl5zGacIt
-         KGjxpVJPAYo7YTg1VkHyvfpMqTRa1e9xyWGKxw89FZb0OqrI2RfxGZJNiAxRYXxq72Yw
-         FWmnAxmPrjz4S/HDefdlpPSMkKMQ5FcJbx7a/NFH++R9sGX9ezAoXD7oIuGZcB2PX4kY
-         StPd+BA67BllpaOtoS7vWnjIUkg6kFgeVcQpmTYGaRbipVfi/sUOqoMQzmi0eD0ilVC+
-         c1sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:in-reply-to;
-        bh=6kmDLxEDF1QGDB/FLS/358IHP43jGlaqFUhg/QX1G3A=;
-        b=vS8yV/ObGBr0YCvr8+BRsVBSWS+yInjtrsnfUZ0KJf86tdywDdsGr/auE93rbXwDDT
-         l7llRzrg4+6gWKG73pBQBPc1MbzyFNfm8x110EwZIsYdKxLoY0WoSkSCTGseCWvebaUP
-         GMtGgDazQlg8Is+O5pQ7EHnHE2odGsc2H8lOL+/OUTeir68T+ZQ11VvB6dT8Hh2QsId0
-         DgYmHj4hCLIZmAZXCSLPrR936txbCbJTPwvUFR4rtt+GuG9AxNbitDsSe5o6DmdI+d/p
-         imD28JqJ89YUU6mFWNr/gmODQtz0UP4ZTsVImNZXhjsRKRhDh190dNYTWgD+81pO/IjZ
-         eJuQ==
-X-Gm-Message-State: AOAM532zStMLSCb/49UOCIWSF4rFoybpnqqqRK6CgWPdnbgIbq74lhgx
-        x2c8g2ds5G8M5obXuyTV0bD0U24VWf4=
-X-Google-Smtp-Source: ABdhPJzzazYsfRQIdWS6iPa5yy4rxV5xEbKMD6ewvXpB1bHkxSBa5gxFtgIO8l58dhPlewDO5NDl7Q==
-X-Received: by 2002:a5d:6c69:0:b0:203:78af:48b2 with SMTP id r9-20020a5d6c69000000b0020378af48b2mr19842165wrz.123.1647340506260;
-        Tue, 15 Mar 2022 03:35:06 -0700 (PDT)
-Received: from gmail.com (0526F1FC.dsl.pool.telekom.hu. [5.38.241.252])
-        by smtp.gmail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm238154wrs.73.2022.03.15.03.35.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Mar 2022 03:35:05 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 15 Mar 2022 11:35:03 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [TREE] "Fast Kernel Headers" Tree -v3
-Message-ID: <YjBr10JXLGHfEFfi@gmail.com>
+        with ESMTP id S1348194AbiCOMUw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Mar 2022 08:20:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1423352B3D
+        for <linux-arch@vger.kernel.org>; Tue, 15 Mar 2022 05:19:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4ABF6151A
+        for <linux-arch@vger.kernel.org>; Tue, 15 Mar 2022 12:19:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3CFCC340E8;
+        Tue, 15 Mar 2022 12:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647346780;
+        bh=4wckTH9rL/UfOFGnbxCUk89TVPAfVswVZ7b0/oiTD+s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oWx3wghITTwAsxs+Lyj3fN40nVm4X4ocNQhfvPUteNViSR+AVeG6tx39yIc3J7fzs
+         3l1Zt1bB3H9B2wkjXp+dXOzot5FSkYfUzkOCD4SKxiSEXmUnBFe5DGDOkF1c0E10n5
+         lAaoeZTJ4oD7OoaacN865+jgrVAdc25c2fixTvfexxRnY+h+KEogSFbon8vajibqB7
+         1ue7ThTyGbgwJ0nh7mCnGeuDo7iNDVqrCMqKb6cw9+mxj8HZkjEwfLAVrtAvuZTHNk
+         qQI7P1P5kGSdKzFB0LOzHlp8FbxrAVsnRBUJP/XGiOkTfTL1jWfhCSW0onQ/lXob5G
+         Vf0NpxYWqQJMw==
+Date:   Tue, 15 Mar 2022 12:19:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        libc-alpha@sourceware.org
+Subject: Re: [PATCH v11 2/2] arm64: Enable BTI for main executable as well as
+ the interpreter
+Message-ID: <YjCEVt/nC5ik23Q/@sirena.org.uk>
+References: <20220308132240.1697784-1-broonie@kernel.org>
+ <20220308132240.1697784-3-broonie@kernel.org>
+ <59fc8a58-5013-606b-f544-8277cda18e50@arm.com>
+ <Yi8DjeTU1xzX9iSv@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Zn5OOgOYreyhG/5Y"
 Content-Disposition: inline
-In-Reply-To: <Ydm7ReZWQPrbIugn@gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yi8DjeTU1xzX9iSv@arm.com>
+X-Cookie: Tax and title extra.
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,27 +67,42 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-This is -v3 of the "Fast Kernel Headers" tree, which is an ongoing rework 
-of the Linux kernel's header hierarchy & header dependencies, with the dual 
-goals of:
+--Zn5OOgOYreyhG/5Y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
- - speeding up the kernel build (both absolute and incremental build times)
- 
- - decoupling subsystem type & API definitions from each other
- 
-The fast-headers tree consists of over 25 sub-trees internally, spanning 
-over 2,300 commits, which can be found at:
+On Mon, Mar 14, 2022 at 08:57:49AM +0000, Catalin Marinas wrote:
+> On Tue, Mar 08, 2022 at 12:01:17PM -0600, Jeremy Linton wrote:
 
-    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
+> > > Resolve this by adding a sysctl abi.bti_main which causes the kernel to
+> > > checking the BTI property for the main executable and enable BTI if it
+> > > is present when doing the initial mapping. This sysctl is disabled by
+> > > default.
 
-There's various changes in -v3, and it's now ported to the latest kernel 
-(v5.17-rc8).
+> > This seems less than ideal, maybe the default can be flipped with a CONFIG
+> > option?
 
-Diffstat difference:
+> I'm not keen on config options changing the ABI. If there's a good
+> chance that this feature won't be turned on (via sysfs) in distros with
+> MDWE, I'd rather drop the whole series than maintain unused code in the
+> kernel.
 
- -v2: 25332 files changed, 178498 insertions(+), 74790 deletions(-)
- -v3: 25513 files changed, 180947 insertions(+), 74572 deletions(-)
+I think it's more just that it's a pain to have to also update userspace
+for something fairly low risk than that it's an insurmountable obstacle.
 
-Thanks,
+--Zn5OOgOYreyhG/5Y
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	Ingo
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmIwhFUACgkQJNaLcl1U
+h9B+EQf/e5kbNpMgB2L6fsV1GSv1FEr+TMcObpZSeO0ZOhP8ji1gCLy/CUwnf+8p
+0IQBQEJ8kpHsgmrtH8DXZeDcpy284Z4ST1fYfzI4sS7nj3U5Af71+n0zjMxtNvSN
+9tywEji0AovV8vnFZo1CbwfshCVn9SwaJQR8dVWhIy9c9ju8268HqQ66qHEYNx79
+97p6elUKnpdLi/1AeuGF9NgndWfnt27mD1ZSq0K/DUEWel4pLCl0I3kogH1Z49/j
+Vnzp+2rpjXiP1tc0hJScmTv1goIANTELAW/O6P0pq4Sv9pBx68BWTaWfwfhy6wQ3
+1D9ZKticmaF2rEyq3LBNXhrIrk7XFA==
+=a1ze
+-----END PGP SIGNATURE-----
+
+--Zn5OOgOYreyhG/5Y--
