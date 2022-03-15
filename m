@@ -2,98 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132D24D8EF9
-	for <lists+linux-arch@lfdr.de>; Mon, 14 Mar 2022 22:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB14C4D98DF
+	for <lists+linux-arch@lfdr.de>; Tue, 15 Mar 2022 11:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245310AbiCNVp3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 14 Mar 2022 17:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S1347129AbiCOKgU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 15 Mar 2022 06:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237993AbiCNVp2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 14 Mar 2022 17:45:28 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA256193ED;
-        Mon, 14 Mar 2022 14:44:17 -0700 (PDT)
-Received: by mail-lf1-f50.google.com with SMTP id g17so29643280lfh.2;
-        Mon, 14 Mar 2022 14:44:17 -0700 (PDT)
+        with ESMTP id S1347110AbiCOKgT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 15 Mar 2022 06:36:19 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB2E31374;
+        Tue, 15 Mar 2022 03:35:07 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id q14so28261797wrc.4;
+        Tue, 15 Mar 2022 03:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:in-reply-to;
+        bh=6kmDLxEDF1QGDB/FLS/358IHP43jGlaqFUhg/QX1G3A=;
+        b=D23aK+AJAUiRqF+xeDEU6Ac0cb4UW/kYSNfcD3j0d3j0c/eD1FDlXzoX6wbkQB6i7E
+         i4qQSMOmNpOo4bNM/p9JY8mOf7Kn7N9AMgd0FIxsvTNDidNIaIXn6+gLJ37Pl5zGacIt
+         KGjxpVJPAYo7YTg1VkHyvfpMqTRa1e9xyWGKxw89FZb0OqrI2RfxGZJNiAxRYXxq72Yw
+         FWmnAxmPrjz4S/HDefdlpPSMkKMQ5FcJbx7a/NFH++R9sGX9ezAoXD7oIuGZcB2PX4kY
+         StPd+BA67BllpaOtoS7vWnjIUkg6kFgeVcQpmTYGaRbipVfi/sUOqoMQzmi0eD0ilVC+
+         c1sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2VfnhbEGoaJMBxbZk/tXhcsK9P2W1Pv5LMv/tBwaIfo=;
-        b=gqFwpR5aJyOGQqvePQE5NWYaKTi370jQjW/2L/ts1xGaTpQ4QfjMv+JqadXeoG2FTw
-         mjp1/0l276dQdWj/+SRBx3x0JzTYWYjo8c4L+LrpDDADSeG3+OtxwjaDk2t9gMNeZEho
-         +wKDwLsEcpCd2B83UZCr4tVfMAmfnMZT/GDyZvP2Bimk8rK7XtyH/p80yBFLOhITHEzx
-         x1fpZ3uqS8IDwy8jtaY3fLCbmByDlTjfOBCKcupRPfVllV2Gx3WH9lEAnjjodGsQvPfj
-         5g9YiexxqUSOXfGWlFWHBJ+yIZsbsOM257QOpd+c1lGPNgAVdIkoPxhU4MAzVMJe8L7d
-         thjg==
-X-Gm-Message-State: AOAM533ZKh0AX2An3UQlx45daYnlDk8VY/k5RknXre2Ug1mNCEN89VtA
-        EDEihZWJWhLfhFNclONFHrOxQaGAEI7/AGcVg8Q=
-X-Google-Smtp-Source: ABdhPJwxEXoBr4ZBfHBu6jBT617TwgtgRa+XqjNS61tSGsjG05PbvU4akXVAa/APfYJL6iDAN9GZoTYHduL2i9Q84ZU=
-X-Received: by 2002:a19:6b0d:0:b0:448:53c6:702b with SMTP id
- d13-20020a196b0d000000b0044853c6702bmr14479332lfa.528.1647294256086; Mon, 14
- Mar 2022 14:44:16 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mime-version:content-disposition:in-reply-to;
+        bh=6kmDLxEDF1QGDB/FLS/358IHP43jGlaqFUhg/QX1G3A=;
+        b=vS8yV/ObGBr0YCvr8+BRsVBSWS+yInjtrsnfUZ0KJf86tdywDdsGr/auE93rbXwDDT
+         l7llRzrg4+6gWKG73pBQBPc1MbzyFNfm8x110EwZIsYdKxLoY0WoSkSCTGseCWvebaUP
+         GMtGgDazQlg8Is+O5pQ7EHnHE2odGsc2H8lOL+/OUTeir68T+ZQ11VvB6dT8Hh2QsId0
+         DgYmHj4hCLIZmAZXCSLPrR936txbCbJTPwvUFR4rtt+GuG9AxNbitDsSe5o6DmdI+d/p
+         imD28JqJ89YUU6mFWNr/gmODQtz0UP4ZTsVImNZXhjsRKRhDh190dNYTWgD+81pO/IjZ
+         eJuQ==
+X-Gm-Message-State: AOAM532zStMLSCb/49UOCIWSF4rFoybpnqqqRK6CgWPdnbgIbq74lhgx
+        x2c8g2ds5G8M5obXuyTV0bD0U24VWf4=
+X-Google-Smtp-Source: ABdhPJzzazYsfRQIdWS6iPa5yy4rxV5xEbKMD6ewvXpB1bHkxSBa5gxFtgIO8l58dhPlewDO5NDl7Q==
+X-Received: by 2002:a5d:6c69:0:b0:203:78af:48b2 with SMTP id r9-20020a5d6c69000000b0020378af48b2mr19842165wrz.123.1647340506260;
+        Tue, 15 Mar 2022 03:35:06 -0700 (PDT)
+Received: from gmail.com (0526F1FC.dsl.pool.telekom.hu. [5.38.241.252])
+        by smtp.gmail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm238154wrs.73.2022.03.15.03.35.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Mar 2022 03:35:05 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Tue, 15 Mar 2022 11:35:03 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [TREE] "Fast Kernel Headers" Tree -v3
+Message-ID: <YjBr10JXLGHfEFfi@gmail.com>
 MIME-Version: 1.0
-References: <20220301010412.431299-1-namhyung@kernel.org> <20220301010412.431299-3-namhyung@kernel.org>
- <Yh3heodejlBiwqLj@hirez.programming.kicks-ass.net>
-In-Reply-To: <Yh3heodejlBiwqLj@hirez.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 14 Mar 2022 14:44:04 -0700
-Message-ID: <CAM9d7ciHObwkvyy9Uz5NRb=KBY-HtXAtAJTgXocA6C42aBoAyg@mail.gmail.com>
-Subject: Re: [PATCH 2/4] locking: Apply contention tracepoints in the slow path
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Radoslaw Burny <rburny@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ydm7ReZWQPrbIugn@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 1:04 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Feb 28, 2022 at 05:04:10PM -0800, Namhyung Kim wrote:
-> > @@ -1718,9 +1726,11 @@ static __always_inline void __sched rtlock_slowlock(struct rt_mutex_base *lock)
-> >  {
-> >       unsigned long flags;
-> >
-> > +     trace_contention_begin(lock, _RET_IP_, LCB_F_RT | TASK_RTLOCK_WAIT);
-> >       raw_spin_lock_irqsave(&lock->wait_lock, flags);
-> >       rtlock_slowlock_locked(lock);
-> >       raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
-> > +     trace_contention_end(lock);
-> >  }
->
-> Same, if you do it one level in, you can have the tracepoint itself look
-> at current->__state.
 
-So I tried this by reading the state in the trace like below:
+This is -v3 of the "Fast Kernel Headers" tree, which is an ongoing rework 
+of the Linux kernel's header hierarchy & header dependencies, with the dual 
+goals of:
 
-+       TP_fast_assign(
-+               __entry->lock_addr = lock;
-+               __entry->flags = flags | get_current_state();
-+       ),
+ - speeding up the kernel build (both absolute and incremental build times)
+ 
+ - decoupling subsystem type & API definitions from each other
+ 
+The fast-headers tree consists of over 25 sub-trees internally, spanning 
+over 2,300 commits, which can be found at:
 
-But I sometimes see unrelated values which contain
-__TASK_TRACED or __TASK_STOPPED and some unexpected values
-like TASK_UNINTERRUPTIBLE for rwlocks.  Maybe I missed something.
+    git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
 
-Anyway I think it's confusing and complicates things unnecessarily.
-Probably it'd better using new flags like LCB_F_SPIN and LCB_F_WAIT.
+There's various changes in -v3, and it's now ported to the latest kernel 
+(v5.17-rc8).
+
+Diffstat difference:
+
+ -v2: 25332 files changed, 178498 insertions(+), 74790 deletions(-)
+ -v3: 25513 files changed, 180947 insertions(+), 74572 deletions(-)
 
 Thanks,
-Namhyung
+
+	Ingo
