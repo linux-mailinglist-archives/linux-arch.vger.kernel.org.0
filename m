@@ -2,128 +2,179 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C733A4DAB5E
-	for <lists+linux-arch@lfdr.de>; Wed, 16 Mar 2022 08:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9179E4DAD10
+	for <lists+linux-arch@lfdr.de>; Wed, 16 Mar 2022 09:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244779AbiCPHJD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 16 Mar 2022 03:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S1351618AbiCPI72 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 16 Mar 2022 04:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354285AbiCPHHe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Mar 2022 03:07:34 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0D127CD4;
-        Wed, 16 Mar 2022 00:05:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 05368CE1D38;
-        Wed, 16 Mar 2022 07:05:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03B3C340F2;
-        Wed, 16 Mar 2022 07:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647414325;
-        bh=qyoPYJlSA6NEig6jnwlt/QYfSWiYQ9maXb6WEkmPDVA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JIDcpiyYJGUG0u1uBju5PqK5t9M2mPYNatynjN0Mv5NqHVzP2HQEfvwkvepJ1eMla
-         lipxIQuXxrUrwGQy+P12VKgy/HG8qmRmlXKH/+sdG5/TnC4qKfeyeIxsGR+5xgliN3
-         XJEOAcpVeh9dPEEXypx+oaEiFkbKOvlbAsW+aff2lx976+56uP4Qfqs2fKMTCJrcNK
-         GK7/mXelJLLIDZNpWb3Bx4q5VlhLdMLQurplQ0PA3sk2WAdqUdMULGsg5qucMreHuj
-         3XuyRm7ks8Zc0ee6nsctIa1LxX4BEA/wJ3945l11HpcWRMoPwwQn4QztJS7nyI/XpV
-         8xhP4p6q/rBXg==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        anup@brainfault.org, gregkh@linuxfoundation.org, hch@lst.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        x86@kernel.org, heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V8 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-Date:   Wed, 16 Mar 2022 15:03:17 +0800
-Message-Id: <20220316070317.1864279-21-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220316070317.1864279-1-guoren@kernel.org>
-References: <20220316070317.1864279-1-guoren@kernel.org>
+        with ESMTP id S239096AbiCPI71 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 16 Mar 2022 04:59:27 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2381A81E;
+        Wed, 16 Mar 2022 01:58:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZO6T+T6VdhnXFg3DFC0hePFp/Gp9l+EG3ROcsdfHimI=; b=hIrSRoOagI53lLjOGSK/k278vN
+        cZ7iCZuRhzmJwK+3urA//1N7SwFBNCIOi02dhCx2BWCpLMthq39xx5jC8iFVske1nqKga+BbrrYW6
+        qUKurJK5maBQOLWzOG6xJpfO1aZXi8BxCQw6P47wuXm8Hw8M4c+/nfkx1oCpL8BivgVeCA5OFiWjL
+        9mPLxqy04S3or4aPorHIMNLcqJOcFqyYC6+SrMDTdfrl85X3quKgDSbGaNpYL3Kc/sMq7bRvAwfUf
+        rwZdIeORDm3+0+b08gtqSeLnTGTtlGCkKs4qKNm5sUgmBLZgSmvzRFYMv4c5AlS34tlqTRII0PTXi
+        P425ehcg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nUPTf-001UlC-3O; Wed, 16 Mar 2022 08:57:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6FFF630021B;
+        Wed, 16 Mar 2022 09:57:52 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5441821BE7625; Wed, 16 Mar 2022 09:57:52 +0100 (CET)
+Date:   Wed, 16 Mar 2022 09:57:52 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jianxing Wang <wangjianxing@loongson.cn>
+Cc:     will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, npiggin@gmail.com,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] mm/mmu_gather: limit tlb batch count and add
+ schedule point in tlb_batch_pages_flush
+Message-ID: <YjGmkOKfmj71bfMA@hirez.programming.kicks-ass.net>
+References: <20220315125536.1036303-1-wangjianxing@loongson.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220315125536.1036303-1-wangjianxing@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Tue, Mar 15, 2022 at 08:55:36AM -0400, Jianxing Wang wrote:
+> free a large list of pages maybe cause rcu_sched starved on
+> non-preemptible kernels. howerver free_unref_page_list maybe can't
+> cond_resched as it maybe called in interrupt or atomic context,
+> especially can't detect atomic context in CONFIG_PREEMPTION=n.
+> 
+> tlb flush batch count depends on PAGE_SIZE, it's too large if
+> PAGE_SIZE > 4K, here limit max batch size with 4K.
+> And add schedule point in tlb_batch_pages_flush.
+> 
+> rcu: rcu_sched kthread starved for 5359 jiffies! g454793 f0x0
+> RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=19
+> [...]
+> Call Trace:
+>    free_unref_page_list+0x19c/0x270
+>    release_pages+0x3cc/0x498
+>    tlb_flush_mmu_free+0x44/0x70
+>    zap_pte_range+0x450/0x738
+>    unmap_page_range+0x108/0x240
+>    unmap_vmas+0x74/0xf0
+>    unmap_region+0xb0/0x120
+>    do_munmap+0x264/0x438
+>    vm_munmap+0x58/0xa0
+>    sys_munmap+0x10/0x20
+>    syscall_common+0x24/0x38
+> 
+> Signed-off-by: Jianxing Wang <wangjianxing@loongson.cn>
+> ---
+>  include/asm-generic/tlb.h | 7 ++++++-
+>  mm/mmu_gather.c           | 7 +++++--
+>  2 files changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+> index 2c68a545ffa7..47c7f93ca695 100644
+> --- a/include/asm-generic/tlb.h
+> +++ b/include/asm-generic/tlb.h
+> @@ -230,8 +230,13 @@ struct mmu_gather_batch {
+>  	struct page		*pages[0];
+>  };
+>  
+> +#if PAGE_SIZE > 4096UL
+> +#define MAX_GATHER_BATCH_SZ	4096
+> +#else
+> +#define MAX_GATHER_BATCH_SZ	PAGE_SIZE
+> +#endif
+>  #define MAX_GATHER_BATCH	\
+> -	((PAGE_SIZE - sizeof(struct mmu_gather_batch)) / sizeof(void *))
+> +	((MAX_GATHER_BATCH_SZ - sizeof(struct mmu_gather_batch)) / sizeof(void *))
+>  
+>  /*
+>   * Limit the maximum number of mmu_gather batches to reduce a risk of soft
+> diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+> index afb7185ffdc4..f2c105810b3f 100644
+> --- a/mm/mmu_gather.c
+> +++ b/mm/mmu_gather.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/rcupdate.h>
+>  #include <linux/smp.h>
+>  #include <linux/swap.h>
+> +#include <linux/slab.h>
+>  
+>  #include <asm/pgalloc.h>
+>  #include <asm/tlb.h>
+> @@ -27,7 +28,7 @@ static bool tlb_next_batch(struct mmu_gather *tlb)
+>  	if (tlb->batch_count == MAX_GATHER_BATCH_COUNT)
+>  		return false;
+>  
+> -	batch = (void *)__get_free_pages(GFP_NOWAIT | __GFP_NOWARN, 0);
+> +	batch = kmalloc(MAX_GATHER_BATCH_SZ, GFP_NOWAIT | __GFP_NOWARN);
+>  	if (!batch)
+>  		return false;
+>  
+> @@ -49,6 +50,8 @@ static void tlb_batch_pages_flush(struct mmu_gather *tlb)
+>  	for (batch = &tlb->local; batch && batch->nr; batch = batch->next) {
+>  		free_pages_and_swap_cache(batch->pages, batch->nr);
+>  		batch->nr = 0;
+> +
+> +		cond_resched();
+>  	}
+>  	tlb->active = &tlb->local;
+>  }
+> @@ -59,7 +62,7 @@ static void tlb_batch_list_free(struct mmu_gather *tlb)
+>  
+>  	for (batch = tlb->local.next; batch; batch = next) {
+>  		next = batch->next;
+> -		free_pages((unsigned long)batch, 0);
+> +		kfree(batch);
+>  	}
+>  	tlb->local.next = NULL;
+>  }
 
-Adds initial skeletal COMPAT Kbuild (Running 32bit U-mode on
-64bit S-mode) support.
- - Setup kconfig & dummy functions for compiling.
- - Implement compat_start_thread by the way.
+This seems like a really complicated way of writing something like the
+below...
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
----
- arch/riscv/Kconfig | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 5adcbd9b5e88..6f11df8c189f 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -73,6 +73,7 @@ config RISCV
- 	select HAVE_ARCH_KGDB if !XIP_KERNEL
- 	select HAVE_ARCH_KGDB_QXFER_PKT
- 	select HAVE_ARCH_MMAP_RND_BITS if MMU
-+	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
-@@ -123,12 +124,18 @@ config ARCH_MMAP_RND_BITS_MIN
- 	default 18 if 64BIT
- 	default 8
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index afb7185ffdc4..b382e86c1b47 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -47,8 +47,17 @@ static void tlb_batch_pages_flush(struct mmu_gather *tlb)
+ 	struct mmu_gather_batch *batch;
  
-+config ARCH_MMAP_RND_COMPAT_BITS_MIN
-+	default 8
+ 	for (batch = &tlb->local; batch && batch->nr; batch = batch->next) {
+-		free_pages_and_swap_cache(batch->pages, batch->nr);
+-		batch->nr = 0;
++		struct page_struct *pages = batch->pages;
 +
- # max bits determined by the following formula:
- #  VA_BITS - PAGE_SHIFT - 3
- config ARCH_MMAP_RND_BITS_MAX
- 	default 24 if 64BIT # SV39 based
- 	default 17
- 
-+config ARCH_MMAP_RND_COMPAT_BITS_MAX
-+	default 17
++		do {
++			int nr = min(512, batch->nr);
 +
- # set if we run in machine mode, cleared if we run in supervisor mode
- config RISCV_M_MODE
- 	bool
-@@ -406,6 +413,18 @@ config CRASH_DUMP
- 
- 	  For more details see Documentation/admin-guide/kdump/kdump.rst
- 
-+config COMPAT
-+	bool "Kernel support for 32-bit U-mode"
-+	default 64BIT
-+	depends on 64BIT && MMU
-+	help
-+	  This option enables support for a 32-bit U-mode running under a 64-bit
-+	  kernel at S-mode. riscv32-specific components such as system calls,
-+	  the user helper functions (vdso), signal rt_frame functions and the
-+	  ptrace interface are handled appropriately by the kernel.
++			free_pages_and_swap_cache(pages, nr);
++			pages += nr;
++			batch->nr -= nr;
 +
-+	  If you want to execute 32-bit userspace applications, say Y.
-+
- endmenu
- 
- menu "Boot options"
--- 
-2.25.1
-
++			cond_resched();
++		} while (batch->nr);
+ 	}
+ 	tlb->active = &tlb->local;
+ }
