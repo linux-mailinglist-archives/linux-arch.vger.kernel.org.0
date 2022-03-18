@@ -2,56 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935DC4DE34E
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Mar 2022 22:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A51D74DE399
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Mar 2022 22:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239272AbiCRVOS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Mar 2022 17:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S238907AbiCRVg2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Mar 2022 17:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240990AbiCRVOM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 17:14:12 -0400
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF3D53A49;
-        Fri, 18 Mar 2022 14:12:52 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id p15so5228579lfk.8;
-        Fri, 18 Mar 2022 14:12:52 -0700 (PDT)
+        with ESMTP id S231609AbiCRVg1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 17:36:27 -0400
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5CB223858;
+        Fri, 18 Mar 2022 14:35:07 -0700 (PDT)
+Received: by mail-lj1-f169.google.com with SMTP id bx44so6358711ljb.13;
+        Fri, 18 Mar 2022 14:35:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ksuX6MNNVKcpHa2cJxv8Npehy7dLW5BZP8Nd24HsaFA=;
-        b=XSCNq5gPxnqtXW1aGcvA1pn28uVm8lQZLYralUh8/p8/vPtEeeQN2nrW67DCYZEtL4
-         pdxeZ+ZKHgDTzBFmPDkn0xuitRVLqzN/ibCiPrF8uTNYa38e/5VZgY6XZuQCmbDGAT39
-         Ic8V+U0QrzKv9cJYGHdoqKKSZHcDHG+LDon862LyGZFk4WJRBN6Y0oywSB39FHp8KOCW
-         O3yIu9L4edG1p4WuKrdxI8uS9N/kG5IdVhvlqf2AK5B0HWMt1U1Z8GyaL4pjXcQnAqVE
-         v747Cn+ROgiNB4x8KqqUUGRWlU3xO99cphcH/5Fk6L0r3DfG7Z0KXLtzBSKTJzFwll9W
-         94RQ==
-X-Gm-Message-State: AOAM532CjMjuyCqC52iGPwjnAIm+h0vY9MKmlYiT3qsWDYMjJYVHv3Ae
-        bJJV1P48osQKvQ/+6By7N0hmSGyy46xQ9IXi6Kg=
-X-Google-Smtp-Source: ABdhPJwAoZP/Evj9WuqznTWvuq6qRzv5hLg45b2J0BU02fW2LyOukiW0H/T59dTOSxGuzYiY/OINHNMgru0MhYiP1ts=
-X-Received: by 2002:a05:6512:1195:b0:448:4fcc:34f2 with SMTP id
- g21-20020a056512119500b004484fcc34f2mr6997466lfr.454.1647637971048; Fri, 18
- Mar 2022 14:12:51 -0700 (PDT)
+        bh=tmNrK/0TVfWJk8R0ovTzUXynuF+kFI2QuCNhtLcQl8I=;
+        b=HAUZVqkX9chRsevOejcswOUKI5oD2Q5wf5k8CRTwz5UXydLO/N6eEAwR4+zXEke/yl
+         XrR/EAH5TNfhTEoE0yKyTqD7RxDYetHUO4mq4v/ktuYEcyclearYyHszg/TDPy1mvXdE
+         ZbuAxIUJm1nJoqNIWxTxvnma6axcjxhBwev0RSa6R9qp6QbAo8qJGK/1JzUfSk1jyIrb
+         DuYjZsH5MSNXyAcQjragjyYEvRR2grhoUn9APNPyb5ILs5ShoCqMjLviVDP1wOcEAYJm
+         Ad1J90lMoFImJws8kIyCQXVLjfb2NEgXRvn9kilL0CCDectsY0qqxcxQlEOrg/Gk5hbi
+         6ZsA==
+X-Gm-Message-State: AOAM5328cHbF+7MKzwxXZalqe6N3I00i/nBDckKW5dPJ6ZDgnTaGHA83
+        uFpA+6M2PLrn/zHInm4vgWha/iC3fHErziTBa2M=
+X-Google-Smtp-Source: ABdhPJwiLPmoLHdEN2HDYWChXlmjkxr2z/nl8WdGLQzSzWtV0HJp8/eiCaUH5zCVt6teYO1o0i0tz7MpMs80E3aFZVE=
+X-Received: by 2002:a05:651c:516:b0:249:23ef:d9c7 with SMTP id
+ o22-20020a05651c051600b0024923efd9c7mr7177966ljp.202.1647639304557; Fri, 18
+ Mar 2022 14:35:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220316224548.500123-1-namhyung@kernel.org> <YjNwq+YrUULI/3QC@ip-172-31-19-208.ap-northeast-1.compute.internal>
-In-Reply-To: <YjNwq+YrUULI/3QC@ip-172-31-19-208.ap-northeast-1.compute.internal>
+References: <20220316224548.500123-1-namhyung@kernel.org> <20220316224548.500123-3-namhyung@kernel.org>
+ <365529974.156362.1647524728813.JavaMail.zimbra@efficios.com>
+In-Reply-To: <365529974.156362.1647524728813.JavaMail.zimbra@efficios.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 18 Mar 2022 14:12:39 -0700
-Message-ID: <CAM9d7cjgN2BM4Jy9R=18=0eRJkLdi5SB2EbqELLLnbnxOJJ12g@mail.gmail.com>
-Subject: Re: [PATCH 0/2] locking: Add new lock contention tracepoints (v3)
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Date:   Fri, 18 Mar 2022 14:34:53 -0700
+Message-ID: <CAM9d7chFVp6SPGoZPJF6+CMkbZyp1Fmxxu2Xn3Ks=DYcgbUG5w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow path
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        rostedt <rostedt@goodmis.org>,
         Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        paulmck <paulmck@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         Radoslaw Burny <rburny@google.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>
@@ -66,159 +65,119 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Hyeonggon,
-
-On Thu, Mar 17, 2022 at 10:32 AM Hyeonggon Yoo <42.hyeyoo@gmail.com> wrote:
+On Thu, Mar 17, 2022 at 6:45 AM Mathieu Desnoyers
+<mathieu.desnoyers@efficios.com> wrote:
 >
-> On Wed, Mar 16, 2022 at 03:45:46PM -0700, Namhyung Kim wrote:
-> > Hello,
+> ----- On Mar 16, 2022, at 6:45 PM, Namhyung Kim namhyung@kernel.org wrote:
+>
+> > Adding the lock contention tracepoints in various lock function slow
+> > paths.  Note that each arch can define spinlock differently, I only
+> > added it only to the generic qspinlock for now.
 > >
-> > There have been some requests for low-overhead kernel lock contention
-> > monitoring.  The kernel has CONFIG_LOCK_STAT to provide such an infra
-> > either via /proc/lock_stat or tracepoints directly.
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> > kernel/locking/mutex.c        |  3 +++
+> > kernel/locking/percpu-rwsem.c |  3 +++
+> > kernel/locking/qrwlock.c      |  9 +++++++++
+> > kernel/locking/qspinlock.c    |  5 +++++
+> > kernel/locking/rtmutex.c      | 11 +++++++++++
+> > kernel/locking/rwbase_rt.c    |  3 +++
+> > kernel/locking/rwsem.c        |  9 +++++++++
+> > kernel/locking/semaphore.c    | 14 +++++++++++++-
+> > 8 files changed, 56 insertions(+), 1 deletion(-)
 > >
-> > However it's not light-weight and hard to be used in production.  So
-> > I'm trying to add new tracepoints for lock contention and using them
-> > as a base to build a new monitoring system.
+> > diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+> > index ee2fd7614a93..c88deda77cf2 100644
+> > --- a/kernel/locking/mutex.c
+> > +++ b/kernel/locking/mutex.c
+> > @@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
+> > unsigned int subclas
+> >       }
+> >
+> >       set_current_state(state);
+> > +     trace_contention_begin(lock, 0);
 >
-> Hello Namhyung,
-> I like this series so much.
-> Lock contentions became much more visible without serious overhead.
->
-> For the series:
-> Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> This should be LCB_F_SPIN rather than the hardcoded 0.
 
-Thanks!
+I don't think so.  LCB_F_SPIN is for spin locks indicating that
+it's spinning on a cpu.  And the value is not 0.
 
 >
-> How would you use these tracepoints, is there a script you use?
+> >       for (;;) {
+> >               bool first;
+> >
+> > @@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
+> > unsigned int subclas
+> > skip_wait:
+> >       /* got the lock - cleanup and rejoice! */
+> >       lock_acquired(&lock->dep_map, ip);
+> > +     trace_contention_end(lock, 0);
+> >
+> >       if (ww_ctx)
+> >               ww_mutex_lock_acquired(ww, ww_ctx);
+> > @@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state,
+> > unsigned int subclas
+> > err:
+> >       __set_current_state(TASK_RUNNING);
+> >       __mutex_remove_waiter(lock, &waiter);
+> > +     trace_contention_end(lock, ret);
+> > err_early_kill:
+> >       raw_spin_unlock(&lock->wait_lock);
+> >       debug_mutex_free_waiter(&waiter);
+> > diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
+> > index c9fdae94e098..833043613af6 100644
+> > --- a/kernel/locking/percpu-rwsem.c
+> > +++ b/kernel/locking/percpu-rwsem.c
+> > @@ -9,6 +9,7 @@
+> > #include <linux/sched/task.h>
+> > #include <linux/sched/debug.h>
+> > #include <linux/errno.h>
+> > +#include <trace/events/lock.h>
+> >
+> > int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
+> >                       const char *name, struct lock_class_key *key)
+> > @@ -154,6 +155,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore
+> > *sem, bool reader)
+> >       }
+> >       spin_unlock_irq(&sem->waiters.lock);
+> >
+> > +     trace_contention_begin(sem, LCB_F_PERCPU | (reader ? LCB_F_READ :
+> > LCB_F_WRITE));
+> >       while (wait) {
+> >               set_current_state(TASK_UNINTERRUPTIBLE);
+> >               if (!smp_load_acquire(&wq_entry.private))
+> > @@ -161,6 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore
+> > *sem, bool reader)
+> >               schedule();
+> >       }
+> >       __set_current_state(TASK_RUNNING);
+> > +     trace_contention_end(sem, 0);
+>
+> So for the reader-write locks, and percpu rwlocks, the "trace contention end" will always
+> have ret=0. Likewise for qspinlock, qrwlock, and rtlock. It seems to be a waste of trace
+> buffer space to always have space for a return value that is always 0.
 
-Not yet.  But I'm thinking something similar to your script.
-Probably I'll extend 'perf lock' command to have this kind of output
-but it doesn't have lock name and use avg/min/max time instead of
-histogram.
+Right, I think it'd be better to have a new tracepoint for the error cases
+and get rid of the return value in the contention_end.
+
+Like contention_error or contention_return ?
+
+>
+> Sorry if I missed prior dicussions of that topic, but why introduce this single
+> "trace contention begin/end" muxer tracepoint with flags rather than per-locking-type
+> tracepoint ? The per-locking-type tracepoint could be tuned to only have the fields
+> that are needed for each locking type.
+
+No prior discussions on that topic and thanks for bringing it out.
+
+Having per-locking-type tracepoints will help if you want to filter
+out specific types of locks efficiently.  Otherwise it'd be simpler
+for users to have a single set of tracepoints to handle all locking
+types like the existing lockdep tracepoints do.
+
+As it's in a contended path, I think it's allowed to be a little bit
+less efficient and the flags can tell which type of locks it's tracing
+so you can filter it out anyway.
 
 Thanks,
 Namhyung
-
-
-> For testing, I just wrote a simple bpftrace script:
->
-> $ sudo bpftrace -e 'BEGIN
-> {
->         printf("Collecting lockstats... Hit Ctrl-C to end.\n");
-> }
->
-> tracepoint:lock:contention_begin
-> {
->         @start_us[tid] = nsecs / 1000;
-> }
->
-> tracepoint:lock:contention_end
-> {
->         if (args->ret == 0) {
->                 @stats[kstack] = hist(nsecs / 1000 - @start_us[tid]);
->         }
-> }
->
-> END
-> {
->         clear(@start_us);
-> }'
->
-> And it shows its distribution of slowpath wait time like below. Great.
->
-> @stats[
->     __traceiter_contention_end+76
->     __traceiter_contention_end+76
->     queued_spin_lock_slowpath+556
->     _raw_spin_lock+108
->     rmqueue_bulk+80
->     rmqueue+1060
->     get_page_from_freelist+372
->     __alloc_pages+208
->     alloc_pages_vma+160
->     alloc_zeroed_user_highpage_movable+72
->     do_anonymous_page+92
->     handle_pte_fault+320
->     __handle_mm_fault+252
->     handle_mm_fault+244
->     do_page_fault+340
->     do_translation_fault+100
->     do_mem_abort+76
->     el0_da+60
->     el0t_64_sync_handler+232
->     el0t_64_sync+420
-> ]:
-> [2, 4)                 1 |@                                                   |
-> [4, 8)                30 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@     |
-> [8, 16)               25 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@             |
-> [16, 32)              33 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [32, 64)              29 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@       |
-> [64, 128)             13 |@@@@@@@@@@@@@@@@@@@@                                |
-> [128, 256)             2 |@@@                                                 |
->
->
-> @stats[
->     __traceiter_contention_end+76
->     __traceiter_contention_end+76
->     rwsem_down_write_slowpath+1216
->     down_write_killable+100
->     do_mprotect_pkey.constprop.0+176
->     __arm64_sys_mprotect+40
->     invoke_syscall+80
->     el0_svc_common.constprop.0+76
->     do_el0_svc+52
->     el0_svc+48
->     el0t_64_sync_handler+164
->     el0t_64_sync+420
-> ]:
-> [1]                   13 |@@@@@@@@@@@                                         |
-> [2, 4)                42 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                |
-> [4, 8)                 5 |@@@@                                                |
-> [8, 16)               10 |@@@@@@@@                                            |
-> [16, 32)              60 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [32, 64)              41 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                 |
-> [64, 128)             40 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                  |
-> [128, 256)            14 |@@@@@@@@@@@@                                        |
-> [256, 512)             7 |@@@@@@                                              |
-> [512, 1K)              6 |@@@@@                                               |
-> [1K, 2K)               2 |@                                                   |
-> [2K, 4K)               1 |                                                    |
->
-> @stats[
->     __traceiter_contention_end+76
->     __traceiter_contention_end+76
->     queued_spin_lock_slowpath+556
->     _raw_spin_lock+108
->     futex_wake+168
->     do_futex+200
->     __arm64_sys_futex+112
->     invoke_syscall+80
->     el0_svc_common.constprop.0+76
->     do_el0_svc+52
->     el0_svc+48
->     el0t_64_sync_handler+164
->     el0t_64_sync+420
-> ]:
-> [0]                    3 |                                                    |
-> [1]                 2515 |@                                                   |
-> [2, 4)              8747 |@@@@@                                               |
-> [4, 8)             17052 |@@@@@@@@@@                                          |
-> [8, 16)            46706 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                       |
-> [16, 32)           82105 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
-> [32, 64)           46918 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                       |
-> [64, 128)             99 |                                                    |
-> [128, 256)             1 |                                                    |
-> [256, 512)             8 |                                                    |
-> [512, 1K)              0 |                                                    |
-> [1K, 2K)               0 |                                                    |
-> [2K, 4K)               0 |                                                    |
-> [4K, 8K)               0 |                                                    |
-> [8K, 16K)              0 |                                                    |
-> [16K, 32K)             5 |                                                    |
-> [32K, 64K)            12 |                                                    |
-> [64K, 128K)           34 |                                                    |
-> [128K, 256K)          68 |                                                    |
-> [256K, 512K)           7 |                                                    |
->
