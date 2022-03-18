@@ -2,103 +2,205 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619574DD561
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Mar 2022 08:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B7C4DD642
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Mar 2022 09:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233192AbiCRHpu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Mar 2022 03:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
+        id S231259AbiCRIgF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Mar 2022 04:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbiCRHpo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 03:45:44 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F731F42D2;
-        Fri, 18 Mar 2022 00:44:25 -0700 (PDT)
-Received: from mail-wr1-f42.google.com ([209.85.221.42]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mbj3e-1o66GH3f4A-00dDLd; Fri, 18 Mar 2022 08:44:23 +0100
-Received: by mail-wr1-f42.google.com with SMTP id x15so10537017wru.13;
-        Fri, 18 Mar 2022 00:44:23 -0700 (PDT)
-X-Gm-Message-State: AOAM531FTlH57ouvnkxx9jRG6mZfwgsSMPvRmeDZAIjdTb0ixiecWBdO
-        iVRx68m9YlLw62eogSi/YprB71p9jsSQfMaTnRc=
-X-Google-Smtp-Source: ABdhPJzIXhZOJi6NWdZqeu15CdJ5JFHp9oqnOe609rHntiPX/cWxExSEoXOsOalxM26KcvxA30q//5tG2XN3EpRswjE=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr6942693wrq.192.1647589463306; Fri, 18
- Mar 2022 00:44:23 -0700 (PDT)
+        with ESMTP id S233764AbiCRIgE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 04:36:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234621FCD31;
+        Fri, 18 Mar 2022 01:34:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68391B80B2E;
+        Fri, 18 Mar 2022 08:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC57C340E8;
+        Fri, 18 Mar 2022 08:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647592482;
+        bh=8LsQHARc36osfxHPIM0ZbutdnqRcT4bVoo5JOGzezRk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BLhLgHS0EsguLvExFj1WKJgZJe69d7yOXU0MW77sz3Wpo0D2njetetnc+r68yufwx
+         HzhdbwKLDTNu3LN4GVsqj3tgVj9qTTvDYvh3CdB8dDEZsdxKRnnkPzrugRir/rjSkI
+         yfuPMPEUzyW8Ezs/Otxf8UIqgE6HwPW2BtUF63LutIKG3O23gxy4rziVRStC5QzB98
+         bCsbmOO+FWR7i7xmQxeOAqMvF3RdFluFfosDA6lfSbK1wwDj5jiwqLsu58gcBO7aVo
+         j++lcHX7ePMNPFcOWceUzTzy35ihmNTQr3vl5HQnsFWwgjJKIuA+pi1p3g5LYwaioh
+         q37i3dB/6CYvw==
+From:   guoren@kernel.org
+To:     palmer@rivosinc.com
+Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: Move to generic ticket-spinlock
+Date:   Fri, 18 Mar 2022 16:34:21 +0800
+Message-Id: <20220318083421.2062259-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220318071130.163942-1-chenjiahao16@huawei.com>
-In-Reply-To: <20220318071130.163942-1-chenjiahao16@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 18 Mar 2022 08:44:07 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
-Message-ID: <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
-Subject: Re: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
-To:     Chen Jiahao <chenjiahao16@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xeXYH6qbgvt7UHc7zDtYFQsBnW61JIFhVjyTjlYhP91VSEkQz49
- 0Z6vAIYbrA2pEGDpoBZ70w5BJm3sRMSx6BUqn2aqTsWfOu4A2JagdEcssWF0FAv7iJrTMFZ
- u7B/I7ALAVCuhwe2BFnLqoT5XIUenK6PcZZwnHu3EzWanFOKEjI0h/VivNNgEB9sJ0GWRws
- eeZ2WRlF8xpSINOS9cK9g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0P+KlHjPBMg=:rHJzmBHGlNG+M2D+4oveca
- fkhqpwbBsOG1Am8s1I04Uba7/FMpmGRPd4LQK/mU5giubn919sik/YYf34X2I8ERQY9Hthzyg
- 1Qwckv4Cfaes3aWZruuMEuz+8cpf7ZCuAS9cDZs+N3ZkX34OVhwmHT34qZXz499ODx3AnJbkr
- 9PHykrskRoBzdE3nGz8T70SmxYd9stp0hWi94AkJZm992V0F417q3lt3OPlgzg2c7hLnc+Oca
- eIMVEFmXmrtzDyjRr1kvLy76XjOlCI4PfapxjKvF1t3s5NcBWqD12psaIbwXyhMcD9OWaQlbu
- zci7UdgyE/W4Ia30g7kXNmf/aMEVb5xQrsYGkyj5DZyK3gG9hyW0lQBEqn6RYSkPjS0ZqYJwv
- WXFg4ANP0+c+pLGvh4bK89VxOTfgd0Ij/jg5xj7R5+w5jtQTrbvzFOI6GZKZqKHQAfBGz4IxZ
- i5cRK65bL5jR80H4cegMEC3W3Zn5PucfA/5+2YVclRPaWDl7fOr4T4ir2pMYaPLZmrO2UeSP6
- PEJ13+uPLtWYBQiyKJp8aanVGAjLhXMik6QRkQM/s1X5mQMK14qDU8DDay2yKgsXb/wnkpY+x
- hzhGDTcn4kNw0AOeFIN3qtrq26yTI6L4/QHTgJRw7vm9X5HUUEBouZcFfSmO2f7ltpQSQ3f1r
- JNuaudGZJVXzCAD7SxL/IsQLrxUDxOOdjA/MzJ6UVQKVnlzVL26uNC4jpmcKrntW6lT1XmNUH
- LG+kOU6gkEc2stU35rgDD8KiNascE1WGszQhWkiuZZMQ6SmZMbkZDblhVt7HZlpsUxXlbMecc
- rBprlwCSN5g2bDZbnXegLvS3igBgIddgEWD7uQ02I/Y8QcOBlU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 8:11 AM Chen Jiahao <chenjiahao16@huawei.com> wrote:
->
-> In __access_ok, TASK_SIZE_MAX is used to check if a memory access
-> is in user address space, but some cases may get omitted in compat
-> mode.
->
-> For example, a 32-bit testcase calling pread64(fd, buf, -1, 1)
-> and running in x86-64 kernel, the obviously illegal size "-1" will
-> get ignored by __access_ok. Since from the kernel point of view,
-> 32-bit userspace 0xffffffff is within the limit of 64-bit
-> TASK_SIZE_MAX.
->
-> Replacing the limit TASK_SIZE_MAX with TASK_SIZE in __access_ok
-> will fix the problem above.
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I don't see what problem this fixes, the choice of TASK_SIZE_MAX in
-__access_ok() is intentional, as this means we can use a compile-time
-constant as the limit, which produces better code.
+There is no benefit from custom implementation for ticket-spinlock,
+so move to generic ticket-spinlock for easy maintenance.
 
-Any user pointer between COMPAT_TASK_SIZE and TASK_SIZE_MAX is
-not accessible by a user process but will not let user space access
-any kernel data either, which is the point of the check.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ arch/csky/include/asm/Kbuild           |  2 +
+ arch/csky/include/asm/spinlock.h       | 82 +-------------------------
+ arch/csky/include/asm/spinlock_types.h | 20 +------
+ 3 files changed, 4 insertions(+), 100 deletions(-)
 
-In your example of using '-1' as the pointer, access_ok() returns true,
-so the kernel can go on to perform an unchecked __get_user() on
-__put_user() on 0xffffffffull, which causes page fault that is intercepted
-by the ex_table fixup.
+diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
+index 904a18a818be..d94434288c31 100644
+--- a/arch/csky/include/asm/Kbuild
++++ b/arch/csky/include/asm/Kbuild
+@@ -3,6 +3,8 @@ generic-y += asm-offsets.h
+ generic-y += extable.h
+ generic-y += gpio.h
+ generic-y += kvm_para.h
++generic-y += ticket-lock.h
++generic-y += ticket-lock-types.h
+ generic-y += qrwlock.h
+ generic-y += user.h
+ generic-y += vmlinux.lds.h
+diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
+index 69f5aa249c5f..8bc179ba0d8d 100644
+--- a/arch/csky/include/asm/spinlock.h
++++ b/arch/csky/include/asm/spinlock.h
+@@ -3,87 +3,7 @@
+ #ifndef __ASM_CSKY_SPINLOCK_H
+ #define __ASM_CSKY_SPINLOCK_H
+ 
+-#include <linux/spinlock_types.h>
+-#include <asm/barrier.h>
+-
+-/*
+- * Ticket-based spin-locking.
+- */
+-static inline void arch_spin_lock(arch_spinlock_t *lock)
+-{
+-	arch_spinlock_t lockval;
+-	u32 ticket_next = 1 << TICKET_NEXT;
+-	u32 *p = &lock->lock;
+-	u32 tmp;
+-
+-	asm volatile (
+-		"1:	ldex.w		%0, (%2) \n"
+-		"	mov		%1, %0	 \n"
+-		"	add		%0, %3	 \n"
+-		"	stex.w		%0, (%2) \n"
+-		"	bez		%0, 1b   \n"
+-		: "=&r" (tmp), "=&r" (lockval)
+-		: "r"(p), "r"(ticket_next)
+-		: "cc");
+-
+-	while (lockval.tickets.next != lockval.tickets.owner)
+-		lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
+-
+-	smp_mb();
+-}
+-
+-static inline int arch_spin_trylock(arch_spinlock_t *lock)
+-{
+-	u32 tmp, contended, res;
+-	u32 ticket_next = 1 << TICKET_NEXT;
+-	u32 *p = &lock->lock;
+-
+-	do {
+-		asm volatile (
+-		"	ldex.w		%0, (%3)   \n"
+-		"	movi		%2, 1	   \n"
+-		"	rotli		%1, %0, 16 \n"
+-		"	cmpne		%1, %0     \n"
+-		"	bt		1f         \n"
+-		"	movi		%2, 0	   \n"
+-		"	add		%0, %0, %4 \n"
+-		"	stex.w		%0, (%3)   \n"
+-		"1:				   \n"
+-		: "=&r" (res), "=&r" (tmp), "=&r" (contended)
+-		: "r"(p), "r"(ticket_next)
+-		: "cc");
+-	} while (!res);
+-
+-	if (!contended)
+-		smp_mb();
+-
+-	return !contended;
+-}
+-
+-static inline void arch_spin_unlock(arch_spinlock_t *lock)
+-{
+-	smp_mb();
+-	WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
+-}
+-
+-static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+-{
+-	return lock.tickets.owner == lock.tickets.next;
+-}
+-
+-static inline int arch_spin_is_locked(arch_spinlock_t *lock)
+-{
+-	return !arch_spin_value_unlocked(READ_ONCE(*lock));
+-}
+-
+-static inline int arch_spin_is_contended(arch_spinlock_t *lock)
+-{
+-	struct __raw_tickets tickets = READ_ONCE(lock->tickets);
+-
+-	return (tickets.next - tickets.owner) > 1;
+-}
+-#define arch_spin_is_contended	arch_spin_is_contended
+-
++#include <asm/ticket-lock.h>
+ #include <asm/qrwlock.h>
+ 
+ #endif /* __ASM_CSKY_SPINLOCK_H */
+diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
+index db87a12c3827..0bb7f6022a3b 100644
+--- a/arch/csky/include/asm/spinlock_types.h
++++ b/arch/csky/include/asm/spinlock_types.h
+@@ -3,25 +3,7 @@
+ #ifndef __ASM_CSKY_SPINLOCK_TYPES_H
+ #define __ASM_CSKY_SPINLOCK_TYPES_H
+ 
+-#ifndef __LINUX_SPINLOCK_TYPES_RAW_H
+-# error "please don't include this file directly"
+-#endif
+-
+-#define TICKET_NEXT	16
+-
+-typedef struct {
+-	union {
+-		u32 lock;
+-		struct __raw_tickets {
+-			/* little endian */
+-			u16 owner;
+-			u16 next;
+-		} tickets;
+-	};
+-} arch_spinlock_t;
+-
+-#define __ARCH_SPIN_LOCK_UNLOCKED	{ { 0 } }
+-
++#include <asm/ticket-lock-types.h>
+ #include <asm-generic/qrwlock_types.h>
+ 
+ #endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
+-- 
+2.25.1
 
-This should not result in any user visible difference, in both cases
-user process will see a -EFAULT return code from its system call.
-Are you able to come up with a test case that shows an observable
-difference in behavior?
-
-      Arnd
