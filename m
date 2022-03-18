@@ -2,159 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C814DDA8A
-	for <lists+linux-arch@lfdr.de>; Fri, 18 Mar 2022 14:28:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9D04DDB62
+	for <lists+linux-arch@lfdr.de>; Fri, 18 Mar 2022 15:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236687AbiCRNaA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Mar 2022 09:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S237045AbiCROQJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Mar 2022 10:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbiCRNaA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 09:30:00 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC7F180041;
-        Fri, 18 Mar 2022 06:28:41 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n2so6959689plf.4;
-        Fri, 18 Mar 2022 06:28:41 -0700 (PDT)
+        with ESMTP id S237146AbiCROQH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 10:16:07 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE3824F290
+        for <linux-arch@vger.kernel.org>; Fri, 18 Mar 2022 07:14:47 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id r1so6495468qvr.12
+        for <linux-arch@vger.kernel.org>; Fri, 18 Mar 2022 07:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T8TYfEa1ru48XVVByk53Qi+iGu8psJDdH3gD/7G0awo=;
-        b=oO8RZTq8u1xW4mLhlxq08I5LajCSO8NlGkg5Vwh7s2awgG2XSUSC6a3P+nJy+retw/
-         LCiXMgUxnM9xlH4jpZaRNrRRMHvJWTMjLyl+q1yLDPpi/a1ZLsDQHkrXv40owQEvs73R
-         QGDAMsc3akoKBKZTcgCeaOVSQ87uL4Pk0r3HQDG1hKObjGWQtbU+/+D6tYg7yW9TTbuN
-         8MwUUWNUZdEyCDf3FEsv4T2qZ08fOfSIzj7RQlCn9polG6uoGcRMTsk8v+s1RAY92tdQ
-         UF1ka9AbmXK8VK1k/yH43dJD8o0OsO8hH5v+hOHxqHLJEOS6MG3DRwY/XBpxt+jCrqDH
-         0bcg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hJ1LZFGh9JrH4kLmBili/XVhpdUQ1ROx+3aGkRwtWcI=;
+        b=ZQyTAMy/ScpfxQEloYqrCUcFgo6qloh6qWxRiKKAtZkyPrSuLS5yTxNvKXrtfyMeXC
+         5qly6FgPCzATRsLI25+Q51/YesrhGC9wr1NEy+UDUqBTH1zmwVOQHfbGMLcM+RwZhwSC
+         5rpt8CpNTz/z+PT/JhlyjUII85wYFh+tL8KLT/7YV4W94DFaynL7nxxZzX30zsGDls3S
+         EJJLovQHLzYpe8LlrhMKCOXe1MBd8ZWgKCTogVt04cXQ+voExMLKKYvOcx8Rd8hMJgJX
+         vvete9Y0IByOyVxi9/pEXtK1SxEAof+jaw9+Mz/cPfuUZlWmW5SApovgM288iSUU21Td
+         PqDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T8TYfEa1ru48XVVByk53Qi+iGu8psJDdH3gD/7G0awo=;
-        b=gTI5cTMU+q3gvrYk+vNZPgt4+ZovM6e0nCOW0lSMs1xbMPDFdDxq1m4uHu2yrmKk9S
-         LyfM5gONoU79tHWx8DUWbVDwTjapG6H55tdHm8+yNp8TyC3mREF8r94Kfg401zoiuxR5
-         zW5N94NCSVN68kEmG+fW42C7DWjytCIUbHmXgxFbtwvRE2qUiuJ0D/mWaDzBqO550poK
-         pSfzrL7dwc13lSXHmzY2g0Ivpq+E+wNr93Us9Nr6GyKVHSGm8HEpGiW1blLKnYk60l29
-         ubdKk4SW3pX4Qt9YGIlU5VpyjsTEG3BT4vdDCBK8pXdyUwojpTa7UQbv9W46Hr6XygG6
-         VD5A==
-X-Gm-Message-State: AOAM531znkZ9TtDDa+nmdlWOexSocv076iROQGnl4+vEYGRqI2z9cIVL
-        geR0/JbNnlzbYQpZRJLvi3M=
-X-Google-Smtp-Source: ABdhPJwPvzGyge1l9ML5FOiHonA62LG+hA/D3eyn/oX5UYdtkXemyceYIAS/eXsTqa3iLkL5Up/fqA==
-X-Received: by 2002:a17:90b:1bc7:b0:1c6:c3ac:894a with SMTP id oa7-20020a17090b1bc700b001c6c3ac894amr1347498pjb.125.1647610120543;
-        Fri, 18 Mar 2022 06:28:40 -0700 (PDT)
-Received: from odroid ([114.29.23.97])
-        by smtp.gmail.com with ESMTPSA id l10-20020a056a00140a00b004c55d0dcbd1sm9635671pfu.120.2022.03.18.06.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Mar 2022 06:28:40 -0700 (PDT)
-Date:   Fri, 18 Mar 2022 13:28:33 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] locking: Apply contention tracepoints in the slow
- path
-Message-ID: <20220318132833.GB1665646@odroid>
-References: <20220316224548.500123-1-namhyung@kernel.org>
- <20220316224548.500123-3-namhyung@kernel.org>
- <YjSBRNxzaE9c+F/1@boqun-archlinux>
- <20220318132424.GA1665646@odroid>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hJ1LZFGh9JrH4kLmBili/XVhpdUQ1ROx+3aGkRwtWcI=;
+        b=bAhkjnh11jJ6i26cYUV92qeVfbNqjc0F0zwEaEzKiC5zXTH05ZefLg+zctcaJfBOPq
+         rJD4u6nSnzvJaC1kOcyOcZkU0Y792OdAZT+edmYbIBWNbAQbnT/QG6EaaB1PdDgM2ZnB
+         uWFbJSizCBmtdpqLHoDmSuPVUsKDlCUs+NB6zn43GpOReK62wrjvhCI5z2uvsONQzGRb
+         80u0lXB18I8x9sWqm4WxAym/AJ38BJeR6iV1fKhjkN+QxvDV/V7DuY86djvRP+FoX/xz
+         0fjOYaWnoM/HRymUrM+DK99bxVWe8m1azKt+bf5PP0t+PdnaUyBAKt1He2VM1RABcoGj
+         N30g==
+X-Gm-Message-State: AOAM530ma57UlLgEJSTgzcT5dJ/JZIm7dxXlP2cTHV1Oj6cu8GX/dLkS
+        tpjy0NNW7rkqiJ9msznVu/I/B1jjyoLxRNhO1x6miA==
+X-Google-Smtp-Source: ABdhPJxvrcJRmBQ4O88N5dr023OMDX4aws1b92iUMNfld//QEeUr0i9SS+OlluqCchFGqXUdrKptwr+QUv1W5ylNiHE=
+X-Received: by 2002:a05:6214:2342:b0:42d:7c8b:9eac with SMTP id
+ hu2-20020a056214234200b0042d7c8b9eacmr7144475qvb.5.1647612886526; Fri, 18 Mar
+ 2022 07:14:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220318132424.GA1665646@odroid>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-11-glider@google.com>
+ <YbnvTso+V6eZYGt+@FVFF77S0Q05N>
+In-Reply-To: <YbnvTso+V6eZYGt+@FVFF77S0Q05N>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 18 Mar 2022 15:14:10 +0100
+Message-ID: <CAG_fn=WWKsYULa-9UHLAWHgGOVjP-Zw8=Kxj4QEZQ5VDL55_Tw@mail.gmail.com>
+Subject: Re: [PATCH 10/43] kmsan: pgtable: reduce vmalloc space
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 01:24:24PM +0000, Hyeonggon Yoo wrote:
-> On Fri, Mar 18, 2022 at 08:55:32PM +0800, Boqun Feng wrote:
-> > On Wed, Mar 16, 2022 at 03:45:48PM -0700, Namhyung Kim wrote:
-> > [...]
-> > > @@ -209,6 +210,7 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
-> > >  								long timeout)
-> > >  {
-> > >  	struct semaphore_waiter waiter;
-> > > +	bool tracing = false;
-> > >  
-> > >  	list_add_tail(&waiter.list, &sem->wait_list);
-> > >  	waiter.task = current;
-> > > @@ -220,18 +222,28 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
-> > >  		if (unlikely(timeout <= 0))
-> > >  			goto timed_out;
-> > >  		__set_current_state(state);
-> > > +		if (!tracing) {
-> > > +			trace_contention_begin(sem, 0);
-> > 
-> > This looks a littl ugly ;-/
-> 
-> I agree this can be simplified a bit.
-> 
-> > Maybe we can rename __down_common() to
-> > ___down_common() and implement __down_common() as:
-> > 
-> > 	static inline int __sched __down_common(...)
-> > 	{
-> > 		int ret;
-> > 		trace_contention_begin(sem, 0);
-> > 		ret = ___down_common(...);
-> > 		trace_contention_end(sem, ret);
-> > 		return ret;
-> > 	}
-> > 
-> > Thoughts?
-> >
-> 
-> But IMO inlining tracepoints is generally not a good idea.
-> Will increase kernel size a lot.
+On Wed, Dec 15, 2021 at 2:36 PM Mark Rutland <mark.rutland@arm.com> wrote:
 >
+> On Tue, Dec 14, 2021 at 05:20:17PM +0100, Alexander Potapenko wrote:
+> > KMSAN is going to use 3/4 of existing vmalloc space to hold the
+> > metadata, therefore we lower VMALLOC_END to make sure vmalloc() doesn't
+> > allocate past the first 1/4.
+> >
+> > Signed-off-by: Alexander Potapenko <glider@google.com>
+>
+> It might be worth adding an 'x86: ' prefix to the commit title, since this
+> specifically affects x86 headers.
 
-Ah, it's already inlined. Sorry.
-
-> > Regards,
-> > Boqun
-> > 
-> > > +			tracing = true;
-> > > +		}
-> > >  		raw_spin_unlock_irq(&sem->lock);
-> > >  		timeout = schedule_timeout(timeout);
-> > >  		raw_spin_lock_irq(&sem->lock);
-> > > -		if (waiter.up)
-> > > +		if (waiter.up) {
-> > > +			trace_contention_end(sem, 0);
-> > >  			return 0;
-> > > +		}
-> > >  	}
-> > >  
-> > >   timed_out:
-> > > +	if (tracing)
-> > > +		trace_contention_end(sem, -ETIME);
-> > >  	list_del(&waiter.list);
-> > >  	return -ETIME;
-> > >  
-> > >   interrupted:
-> > > +	if (tracing)
-> > > +		trace_contention_end(sem, -EINTR);
-> > >  	list_del(&waiter.list);
-> > >  	return -EINTR;
-> > >  }
-> > > -- 
-> > > 2.35.1.894.gb6a874cedc-goog
-> > > 
+Makes sense, will do!
