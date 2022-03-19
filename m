@@ -2,45 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639874DE596
-	for <lists+linux-arch@lfdr.de>; Sat, 19 Mar 2022 04:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4DB4DE59C
+	for <lists+linux-arch@lfdr.de>; Sat, 19 Mar 2022 04:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241950AbiCSD4g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 18 Mar 2022 23:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S241962AbiCSD4m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 18 Mar 2022 23:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiCSD4g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 23:56:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6F7201AD;
-        Fri, 18 Mar 2022 20:55:15 -0700 (PDT)
+        with ESMTP id S241958AbiCSD4k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 18 Mar 2022 23:56:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A13B2E09D;
+        Fri, 18 Mar 2022 20:55:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87152B825D5;
-        Sat, 19 Mar 2022 03:55:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB0EC340EC;
-        Sat, 19 Mar 2022 03:55:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C80DCB82158;
+        Sat, 19 Mar 2022 03:55:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC82CC340EF;
+        Sat, 19 Mar 2022 03:55:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647662113;
-        bh=YTk93zwuaGZlbGJYQpGVX2DQwDayvasBfkPYcHh8gIk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nKlhwcjbrbTFviWdQBTu3WNloG1jgLcDtDoTMwafpkUo0Wb84lOTYscr2NuACdEA7
-         TZkKNzeVChhvA35+Ku/YlGkd8r7mIqpVTmtozurPhoWQQrGiFRInRRxoBSAXoIabeh
-         Ix14wd0/aTu0OlnjrcGwqx+RRsvx1NlR8T0kx/Hv+GOoyW9S/KhCMcPbLJDmdNxFtc
-         /s50rZmR5fC1vJ1YHqyIg0J1dGzOIBNthyLLoxyjJ99FbY93Y7CtdFfn2U3PFiovGB
-         fKnsz5EUUnJGzuiKpsLj3VtAVyxzJZlj/a1DfpfrVdXrSuxpZ+xERjuUT+eJDpNuFv
-         8f/K8jPnqs0+Q==
+        s=k20201202; t=1647662116;
+        bh=/bReo6UVHKvKAiVeuG78E1Bfu20TwWPnkpvpQ38eLMw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tw1o6hQeHP8BdNW9F2BDp9jWTMRAzO9NzPUeRJ1pFXcix/NrEoOhvkB9xDhlqVKVI
+         zQMw9nJaZfYuGC2z8Os6CpcQmRQcdG+MdLHIbZeVzmJDr7fk7zKomcuIIkTluvG6IR
+         bGozB5kWVnYOqIckguD1i835j9uyC2le0EO9GXi72QFIuLFa3GMOb7etZKFlgMlJq1
+         CrxPyH08y2ZN7DtmohrCowviTsM0vOUXxjRnAfZMLm7i1rUfi4L4aSsOk8dctj4GZd
+         tlemMNcw0SIR0Dzh56L+iKPhzVDyWtbBoYeoW4N6X/9ZV3Fu0/oVMGC972BQlJmdmF
+         l109uoGQf8rqA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         boqun.feng@gmail.com, longman@redhat.com, peterz@infradead.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V2 0/5] Generic Ticket Spinlocks
-Date:   Sat, 19 Mar 2022 11:54:52 +0800
-Message-Id: <20220319035457.2214979-1-guoren@kernel.org>
+        openrisc@lists.librecores.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH V2 1/5] asm-generic: ticket-lock: New generic ticket-based spinlock
+Date:   Sat, 19 Mar 2022 11:54:53 +0800
+Message-Id: <20220319035457.2214979-2-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220319035457.2214979-1-guoren@kernel.org>
+References: <20220319035457.2214979-1-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -53,83 +55,186 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-Palmer:
-Peter sent an RFC out about a year ago
-<https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
-but after a spirited discussion it looks like we lost track of things.
-IIRC there was broad consensus on this being the way to go, but there
-was a lot of discussion so I wasn't sure.  Given that it's been a year,
-I figured it'd be best to just send this out again formatted a bit more
-explicitly as a patch.
+This is a simple, fair spinlock.  Specifically it doesn't have all the
+subtle memory model dependencies that qspinlock has, which makes it more
+suitable for simple systems as it is more likely to be correct.
 
-This has had almost no testing (just a build test on RISC-V defconfig),
-but I wanted to send it out largely as-is because I didn't have a SOB
-from Peter on the code.  I had sent around something sort of similar in
-spirit, but this looks completely re-written.  Just to play it safe I
-wanted to send out almost exactly as it was posted.  I'd probably rename
-this tspinlock and tspinlock_types, as the mis-match kind of makes my
-eyes go funny, but I don't really care that much.  I'll also go through
-the other ports and see if there's any more candidates, I seem to
-remember there having been more than just OpenRISC but it's been a
-while.
+[Palmer: commit text]
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-I'm in no big rush for this and given the complex HW dependencies I
-think it's best to target it for 5.19, that'd give us a full merge
-window for folks to test/benchmark it on their systems to make sure it's
-OK.  RISC-V has a forward progress guarantee so we should be safe, but
-these can always trip things up.
+--
 
-Guo:
-Update V2 with Arnd's suggestion [1].
-
-[1] https://lore.kernel.org/linux-arch/CAK8P3a0NMPVGVw7===uEOtNnu1hr1GqimMbZT+Kea1CUxRvPmw@mail.gmail.com/raw
-
-Changes in V2:
- - Follow Arnd suggestion to make the patch series more generic.
- - Add csky in the series.
- - Combine RISC-V's two patches into one.
- - Modify openrisc's patch to suit the new generic version.
-
-Guo Ren (1):
-  csky: Move to generic ticket-spinlock
-
-Palmer Dabbelt (1):
-  RISC-V: Move to ticket-spinlocks & RW locks
-
-Peter Zijlstra (3):
-  asm-generic: ticket-lock: New generic ticket-based spinlock
-  asm-generic: qspinlock: Indicate the use of mixed-size atomics
-  openrisc: Move to ticket-spinlock
-
- arch/csky/include/asm/Kbuild               |   3 +-
- arch/csky/include/asm/spinlock.h           |  89 --------------
- arch/csky/include/asm/spinlock_types.h     |  27 -----
- arch/openrisc/Kconfig                      |   1 -
- arch/openrisc/include/asm/Kbuild           |   7 +-
- arch/openrisc/include/asm/spinlock.h       |  27 -----
- arch/openrisc/include/asm/spinlock_types.h |   7 --
- arch/riscv/Kconfig                         |   1 +
- arch/riscv/include/asm/Kbuild              |   2 +
- arch/riscv/include/asm/spinlock.h          | 135 ---------------------
- arch/riscv/include/asm/spinlock_types.h    |  25 ----
- include/asm-generic/qspinlock.h            |  30 +++++
- include/asm-generic/spinlock.h             |  11 +-
- include/asm-generic/spinlock_types.h       |  15 +++
- include/asm-generic/ticket-lock-types.h    |  11 ++
- include/asm-generic/ticket-lock.h          |  86 +++++++++++++
- 16 files changed, 157 insertions(+), 320 deletions(-)
- delete mode 100644 arch/csky/include/asm/spinlock.h
- delete mode 100644 arch/csky/include/asm/spinlock_types.h
- delete mode 100644 arch/openrisc/include/asm/spinlock.h
- delete mode 100644 arch/openrisc/include/asm/spinlock_types.h
- delete mode 100644 arch/riscv/include/asm/spinlock.h
- delete mode 100644 arch/riscv/include/asm/spinlock_types.h
+I have specifically not included Peter's SOB on this, as he sent his
+original patch
+<https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
+without one.
+---
+ include/asm-generic/spinlock.h          | 11 +++-
+ include/asm-generic/spinlock_types.h    | 15 +++++
+ include/asm-generic/ticket-lock-types.h | 11 ++++
+ include/asm-generic/ticket-lock.h       | 86 +++++++++++++++++++++++++
+ 4 files changed, 120 insertions(+), 3 deletions(-)
  create mode 100644 include/asm-generic/spinlock_types.h
  create mode 100644 include/asm-generic/ticket-lock-types.h
  create mode 100644 include/asm-generic/ticket-lock.h
 
+diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+index adaf6acab172..a8e2aa1bcea4 100644
+--- a/include/asm-generic/spinlock.h
++++ b/include/asm-generic/spinlock.h
+@@ -1,12 +1,17 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef __ASM_GENERIC_SPINLOCK_H
+ #define __ASM_GENERIC_SPINLOCK_H
++
+ /*
+- * You need to implement asm/spinlock.h for SMP support. The generic
+- * version does not handle SMP.
++ * Using ticket-spinlock.h as generic for SMP support.
+  */
+ #ifdef CONFIG_SMP
+-#error need an architecture specific asm/spinlock.h
++#include <asm-generic/ticket-lock.h>
++#ifdef CONFIG_QUEUED_RWLOCKS
++#include <asm-generic/qrwlock.h>
++#else
++#error Please select ARCH_USE_QUEUED_RWLOCKS in architecture Kconfig
++#endif
+ #endif
+ 
+ #endif /* __ASM_GENERIC_SPINLOCK_H */
+diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/spinlock_types.h
+new file mode 100644
+index 000000000000..ba8ef4b731ba
+--- /dev/null
++++ b/include/asm-generic/spinlock_types.h
+@@ -0,0 +1,15 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __ASM_GENERIC_SPINLOCK_TYPES_H
++#define __ASM_GENERIC_SPINLOCK_TYPES_H
++
++/*
++ * Using ticket spinlock as generic for SMP support.
++ */
++#ifdef CONFIG_SMP
++#include <asm-generic/ticket-lock-types.h>
++#include <asm-generic/qrwlock_types.h>
++#else
++#error The asm-generic/spinlock_types.h is not for CONFIG_SMP=n
++#endif
++
++#endif /* __ASM_GENERIC_SPINLOCK_TYPES_H */
+diff --git a/include/asm-generic/ticket-lock-types.h b/include/asm-generic/ticket-lock-types.h
+new file mode 100644
+index 000000000000..829759aedda8
+--- /dev/null
++++ b/include/asm-generic/ticket-lock-types.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __ASM_GENERIC_TICKET_LOCK_TYPES_H
++#define __ASM_GENERIC_TICKET_LOCK_TYPES_H
++
++#include <linux/types.h>
++typedef atomic_t arch_spinlock_t;
++
++#define __ARCH_SPIN_LOCK_UNLOCKED	ATOMIC_INIT(0)
++
++#endif /* __ASM_GENERIC_TICKET_LOCK_TYPES_H */
+diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+new file mode 100644
+index 000000000000..59373de3e32a
+--- /dev/null
++++ b/include/asm-generic/ticket-lock.h
+@@ -0,0 +1,86 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * 'Generic' ticket-lock implementation.
++ *
++ * It relies on atomic_fetch_add() having well defined forward progress
++ * guarantees under contention. If your architecture cannot provide this, stick
++ * to a test-and-set lock.
++ *
++ * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
++ * sub-word of the value. This is generally true for anything LL/SC although
++ * you'd be hard pressed to find anything useful in architecture specifications
++ * about this. If your architecture cannot do this you might be better off with
++ * a test-and-set.
++ *
++ * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
++ * uses atomic_fetch_add() which is SC to create an RCsc lock.
++ *
++ * The implementation uses smp_cond_load_acquire() to spin, so if the
++ * architecture has WFE like instructions to sleep instead of poll for word
++ * modifications be sure to implement that (see ARM64 for example).
++ *
++ */
++
++#ifndef __ASM_GENERIC_TICKET_LOCK_H
++#define __ASM_GENERIC_TICKET_LOCK_H
++
++#include <linux/atomic.h>
++#include <asm-generic/ticket-lock-types.h>
++
++static __always_inline void ticket_lock(arch_spinlock_t *lock)
++{
++	u32 val = atomic_fetch_add(1<<16, lock); /* SC, gives us RCsc */
++	u16 ticket = val >> 16;
++
++	if (ticket == (u16)val)
++		return;
++
++	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
++}
++
++static __always_inline bool ticket_trylock(arch_spinlock_t *lock)
++{
++	u32 old = atomic_read(lock);
++
++	if ((old >> 16) != (old & 0xffff))
++		return false;
++
++	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc */
++}
++
++static __always_inline void ticket_unlock(arch_spinlock_t *lock)
++{
++	u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
++	u32 val = atomic_read(lock);
++
++	smp_store_release(ptr, (u16)val + 1);
++}
++
++static __always_inline int ticket_is_locked(arch_spinlock_t *lock)
++{
++	u32 val = atomic_read(lock);
++
++	return ((val >> 16) != (val & 0xffff));
++}
++
++static __always_inline int ticket_is_contended(arch_spinlock_t *lock)
++{
++	u32 val = atomic_read(lock);
++
++	return (s16)((val >> 16) - (val & 0xffff)) > 1;
++}
++
++static __always_inline int ticket_value_unlocked(arch_spinlock_t lock)
++{
++	return !ticket_is_locked(&lock);
++}
++
++#define arch_spin_lock(l)		ticket_lock(l)
++#define arch_spin_trylock(l)		ticket_trylock(l)
++#define arch_spin_unlock(l)		ticket_unlock(l)
++#define arch_spin_is_locked(l)		ticket_is_locked(l)
++#define arch_spin_is_contended(l)	ticket_is_contended(l)
++#define arch_spin_value_unlocked(l)	ticket_value_unlocked(l)
++
++#endif /* __ASM_GENERIC_TICKET_LOCK_H */
 -- 
 2.25.1
 
