@@ -2,68 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D374E275C
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 14:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2A94E2A6E
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 15:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234032AbiCUNTy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Mar 2022 09:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S242756AbiCUOZB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Mar 2022 10:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347806AbiCUNTv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 09:19:51 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDFC22BE9
-        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 06:18:21 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id bp39so91130qtb.6
-        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 06:18:21 -0700 (PDT)
+        with ESMTP id S1350373AbiCUOVA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 10:21:00 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8357C17709A
+        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 07:13:35 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id i4so11952037qti.7
+        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 07:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=TQ5DlndeeL1f8ja+gUYUVQpHHaIrThDTIuKyf0ppDTc=;
-        b=LIRTe+Eafb9scj4JV2xH2RID6I1OGtDAZhtFmMZjaSpAoscNtWTI3rrhlkkhwkAI8d
-         lxNzMRzHjCGHa+i1t92Dp7lRCxzfAttZ/Q9Hg0HPkk6JdV9t8bSixip+EbBHX1VZDiO5
-         pcerS60YzGYqUsQDa0b6EYqO/Bm4EtCwINiVYkhLjHAB/e8VsXliPXsV7dajsqig5Wic
-         eJfMN6eE2JTFjri9e1JJ2oE3BVOrsBSmJ5UihOLHs9KxZdvLgHiDbOurrvuPLuhiLPHF
-         DLJXp8tRVFiXxpnI6AYG+ojp5dmN+uYY6I1CWoRlTJm+0o1khQ3RlL+/9hKLlWRTFSQW
-         9bBw==
+        bh=SpcQ2fQs0B6gsc0zmrC1AWzw07HBH7voJSyZVgn+CmY=;
+        b=YMmPb6ufUoPO1xJawFqx/pw7tcukS4GdHAOpTMI6TNm1HeyLUsenwKkAlmFC5sskS9
+         G+wNHb8XVZRirIOXD5IKpxnzUczJMsQkb3lb26bM4xIpkG0BSfd+K9hOZug87/lkap3n
+         loetXdhMOO4esSZ12p6xttO72PGLNa5Hjolu+3w+yQPa2P/PJi6jx/BzjMHrk3CRVets
+         x7Dsj4N9NW7rj0axqNTcVj/HX2wMlYDfqvxQ/+uge9Lm786bX2wDZMSBj82IRVskN39c
+         UY8Q8tqzp7am3VQ1xUTUHBNkExHsBO5n5rJvr14CodpI8BFubxJhna6n/VaZsQlP+qru
+         6A0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TQ5DlndeeL1f8ja+gUYUVQpHHaIrThDTIuKyf0ppDTc=;
-        b=xbwCz9PqkrezNw5woCmVAqOriXsMeHExpxVrJSTBxwxfizSU5yra0NQ42FiUH6us2i
-         BcoQ8sMWmnvxjvAql/5xUonqViV4Aogwm4ObMx/YMs2g6gDA5SPHJXqwzYcsy0L2+3cI
-         NCIwMLsCw1HB+8OeU75T/Lbm1N5KNQv37t9lJIKL4wb0NNKnL/6jsh9HnurN2ml+mVZG
-         fuDk362PuqOVyEbh4bTFbdAYzn1IgHfBostPT1eUy4VGfU8uu0HVf297SNk7lQL7B9KC
-         8QkHKIxL72l647J0jjMk70ct+jXb3oIcbyjrJOAokcxjMR+8r34u+xf6xrOAhvFJbuH6
-         PoFg==
-X-Gm-Message-State: AOAM533qsgqsHlj9MESIwpocaegRGju7NTCBJi0zNFCcrfUXk35ZiTEY
-        WsVRpUQE7eIeYBkPatV4+p5e/AHZqYai9NwNduYZ1g==
-X-Google-Smtp-Source: ABdhPJwVmUD3yoMMw5kXu4JqJXi4wUkn2PlRIab4lbVgU5Iae1T4ofWbeudwh+1zEUcmvCn/AbwF6c2nWPK2J/sGW+8=
-X-Received: by 2002:ac8:5809:0:b0:2e1:f0bc:2e88 with SMTP id
- g9-20020ac85809000000b002e1f0bc2e88mr14516126qtg.138.1647868700564; Mon, 21
- Mar 2022 06:18:20 -0700 (PDT)
+        bh=SpcQ2fQs0B6gsc0zmrC1AWzw07HBH7voJSyZVgn+CmY=;
+        b=xZODZnWevRMwoY62X45j90YV39A+/1uxAuGAuUNK8AyWovrlTnRUInJelZwCo2hVLI
+         ChF0Q/R4gh9o2N0MdQPezdVrw73r061Z9kWVi90tQkbO/JG5I7Pakoi2GrkIH/j9Db6d
+         8GqlN/uis0kF9Xz2tAt1wS0ivTY/q0b11HY9wCju+oTLrW2j6epHtKW183qthWOiSEgN
+         ZzZQBgATMQWq29NYcadan1I8ltS+Bz4haWpdTlxfohHBtytKUkizCGh0uuPf+q5GzkXx
+         kRwagGQwZnl81RvBEiL8cRmDqlMLMwqsMd/BSN4TMjQAO1iLFZKYsE9wIxvoYUoEFPbE
+         hK4Q==
+X-Gm-Message-State: AOAM533731rrYJW32kWqYOh28CK3NPFHNBcyaH3ajIidYSo8ZybtnFhx
+        p+P8Zb03ZDr2wfpxf7eLY2UpQHWpn8kYjdlayksJzQ==
+X-Google-Smtp-Source: ABdhPJyWAH+sDRJ270zMfxco+YyNWJFwLR4+S6xqqYj7oSaBnbkhA+KnL9o9TtC8VsgFFIuLqvJvGIdWalshA80NzoM=
+X-Received: by 2002:a05:622a:1709:b0:2e1:2cbd:6139 with SMTP id
+ h9-20020a05622a170900b002e12cbd6139mr16332484qtk.578.1647872011635; Mon, 21
+ Mar 2022 07:13:31 -0700 (PDT)
 MIME-Version: 1.0
 References: <20211214162050.660953-1-glider@google.com> <20211214162050.660953-14-glider@google.com>
- <CACT4Y+Y_torRwzh0eDMn+pJh=YT26hGrAPA499WqN1dV+4bDHA@mail.gmail.com>
-In-Reply-To: <CACT4Y+Y_torRwzh0eDMn+pJh=YT26hGrAPA499WqN1dV+4bDHA@mail.gmail.com>
+ <YbjHerrHit/ZqXYs@kroah.com> <CAG_fn=XX3vbuo=cyG8C1Syv_JXiQ1rnfoffKqEc-N8uLei5T2A@mail.gmail.com>
+ <Yby5Rwr0jgAcK4th@kroah.com>
+In-Reply-To: <Yby5Rwr0jgAcK4th@kroah.com>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 21 Mar 2022 14:17:44 +0100
-Message-ID: <CAG_fn=WvjRCNH+F65QuuCnrmLcicz1zu0s-uu8DrmUtr0tcZ7Q@mail.gmail.com>
+Date:   Mon, 21 Mar 2022 15:12:55 +0100
+Message-ID: <CAG_fn=V1bCUkrE_d2hwm+XVip35pRspHzjYaXhU_PfyJE0QwoA@mail.gmail.com>
 Subject: Re: [PATCH 13/43] kmsan: add KMSAN runtime core
-To:     Dmitry Vyukov <dvyukov@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrey Konovalov <andreyknvl@google.com>,
         Andy Lutomirski <luto@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
         Christoph Hellwig <hch@lst.de>,
         Christoph Lameter <cl@linux.com>,
         David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
@@ -82,100 +82,55 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vlastimil Babka <vbabka@suse.cz>,
         Linux Memory Management List <linux-mm@kvack.org>,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> > +       KMSAN_WARN_ON(!src_slots || !dst_slots);
-> > +       KMSAN_WARN_ON((src_slots < 1) || (dst_slots < 1));
+> >
+> > Just to make sure I don't misunderstand - for example for "kmsan: mm:
+> > call KMSAN hooks from SLUB code", would it be better to pull the code
+> > in mm/kmsan/core.c implementing kmsan_slab_alloc() and
+> > kmsan_slab_free() into that patch?
 >
-> The above 2 checks look equivalent.
-Right, I'll drop the first one.
-
-> > +       KMSAN_WARN_ON((src_slots - dst_slots > 1) ||
-> > +                     (dst_slots - src_slots < -1));
-> > +       backwards =3D dst > src;
-> > +       i =3D backwards ? min(src_slots, dst_slots) - 1 : 0;
-> > +       iter =3D backwards ? -1 : 1;
-> > +
-> > +       align_shadow_src =3D
-> > +               (u32 *)ALIGN_DOWN((u64)shadow_src, KMSAN_ORIGIN_SIZE);
-> > +       for (step =3D 0; step < min(src_slots, dst_slots); step++, i +=
-=3D iter) {
-> > +               KMSAN_WARN_ON(i < 0);
-> > +               shadow =3D align_shadow_src[i];
-> > +               if (i =3D=3D 0) {
-> > +                       /*
-> > +                        * If |src| isn't aligned on KMSAN_ORIGIN_SIZE,=
- don't
-> > +                        * look at the first |src % KMSAN_ORIGIN_SIZE| =
-bytes
-> > +                        * of the first shadow slot.
-> > +                        */
-> > +                       skip_bits =3D ((u64)src % KMSAN_ORIGIN_SIZE) * =
-8;
-> > +                       shadow =3D (shadow << skip_bits) >> skip_bits;
+> Yes.
 >
-> Is this correct?...
-> For the first slot we want to ignore some of the first (low) bits. To
-> ignore low bits we need to shift right and then left, no?
-
-Yes, you are right, I forgot about the endianness. Will try to add
-some tests for this case.
-
-> > +               }
-> > +               if (i =3D=3D src_slots - 1) {
-> > +                       /*
-> > +                        * If |src + n| isn't aligned on
-> > +                        * KMSAN_ORIGIN_SIZE, don't look at the last
-> > +                        * |(src + n) % KMSAN_ORIGIN_SIZE| bytes of the
-> > +                        * last shadow slot.
-> > +                        */
-> > +                       skip_bits =3D (((u64)src + n) % KMSAN_ORIGIN_SI=
-ZE) * 8;
-> > +                       shadow =3D (shadow >> skip_bits) << skip_bits;
+> > I thought maintainers would prefer to have patches to their code
+> > separated from KMSAN code, but if it's not true, I can surely fix
+> > that.
 >
-> Same here.
-Done
+> As a maintainer, I want to know what the function call that you just
+> added to my subsystem to call does.  Wouldn't you?  Put it all in the
+> same patch.
+
+Ok, will be done in v2, thanks!
+
+> Think about submitting a patch series as telling a story.  You need to
+> show the progression forward of the feature so that everyone can
+> understand what is going on.  To just throw tiny snippets at us is
+> impossible to follow along with what your goal is.
 >
-
-
-> This can be a bit shorted and w/o the temp var as:
+> You want reviewers to be able to easily see if the things you describe
+> being done in the changelog actually are implemented in the diff.
+> Dividing stuff up by files does not show that at all.
 >
-> new_origin =3D kmsan_internal_chain_origin(old_origin);
-> /*
-> * kmsan_internal_chain_origin() may return
-> * NULL, but we don't want to lose the previous
-> * origin value.
-> */
-> if (!new_origin)
->    new_origin =3D old_origin;
-
-Done.
-
+> thanks,
 >
->
-> > +               }
-> > +               if (shadow)
-> > +                       origin_dst[i] =3D new_origin;
->
-> Are we sure that origin_dst is aligned here?
-Yes, kmsan_get_metadata(..., KMSAN_META_ORIGIN) always returns aligned poin=
-ters.
+> greg k-h
 
 
 
---
+--=20
 Alexander Potapenko
 Software Engineer
 
