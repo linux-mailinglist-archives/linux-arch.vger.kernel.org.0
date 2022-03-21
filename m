@@ -2,53 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE56E4E2267
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 09:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 639314E2291
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 09:53:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242941AbiCUIsH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Mar 2022 04:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40392 "EHLO
+        id S1343500AbiCUIy4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Mar 2022 04:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345416AbiCUIr7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 04:47:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA67A27CC;
-        Mon, 21 Mar 2022 01:46:34 -0700 (PDT)
+        with ESMTP id S240765AbiCUIyz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 04:54:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB3A3CA67;
+        Mon, 21 Mar 2022 01:53:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BD21B81135;
-        Mon, 21 Mar 2022 08:46:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8188C340F4;
-        Mon, 21 Mar 2022 08:46:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C1F361166;
+        Mon, 21 Mar 2022 08:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4192C340F2;
+        Mon, 21 Mar 2022 08:53:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647852391;
-        bh=ncJjFwIzoe32DkMd8J7TFkIPBIC3KWEZV3tVyByKr5M=;
+        s=k20201202; t=1647852809;
+        bh=U2Ovm8ntcG6XtGmB1msmTfFNN3ysz5JeGnJ11m8KPWA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RUYdzG6ttLqBh4mmoUuNFXtZiovyf8EL32Ifja5eb85KFi2+qcosC6Av44kg4SDTu
-         ng4BF86lFaVajvu1E+/2JBQLCq1MTutjnoX3BblicXFtDFc72Mm+bgZ7fxMJIi5JBF
-         vJWwu5sqNqTfEn1ELvoHGUGXvR7wc++jA2PmrlGTB/+FRTTWu4gAmjckJDMahkkv2H
-         qfBjgHQlPyi2iTnBQ4c1KtMdwntNAZfLDLFVTYLa0stRTY1Xt51DbldbqOCzOnPicO
-         2aCNAry1vKI/CNSHm15m9izd4HhpYzQ/zCt0bSc1P2GW/p8rRUEuprYVKi203TMErn
-         NC1S3iG5kPCDQ==
-Received: by mail-ua1-f45.google.com with SMTP id 34so5491859uao.13;
-        Mon, 21 Mar 2022 01:46:31 -0700 (PDT)
-X-Gm-Message-State: AOAM531YyDZ+FC1HgqxMEU1jHQeNiHnZaWOfOBYVbLMyXcVOSb1iLsmQ
-        VGhjBmz0+iM7/r62aEtWzBMZPDyTFj9/W4kN3YI=
-X-Google-Smtp-Source: ABdhPJy+xM/H9L9cr/krgDDPRDpEPe6mjR2ZF9aZeSj5hKVvobzISzwUAVg+tEIVTg2bgvk3wxDh1jfMbEeIMbiIQhc=
+        b=t1ZPR+JjQZJDXK527T7aciTdnEJplNDW7uaduQA4+TeNAIjcPTXQ1y2tFjTdHGoAH
+         MDp+U1RIWvrktWZlM2hGpSAStqCZNMrKdH391wZ80nVLMrjuQbCbkR5RgnMzN+L+Y5
+         VznBqAEnO1aA51civ+Sf6blc33EiDuEQPffKqIooT+kSXXOyekogDTDtjOPn0aClHs
+         NF8L4BX2t6JZwq2dr5FMBHcMZjbUa1piR6+5CAYL/Ri2FsNHP/EsIyZZEI5IGcKg94
+         EbIm3Y50Xu9eSxKcg6XW6u02MhEIOS+5RIrpTqq37IiRzEAyC2BhixBtYpKVEaQrHu
+         jDhoI4o3WYv8g==
+Received: by mail-ua1-f51.google.com with SMTP id t40so5179941uad.2;
+        Mon, 21 Mar 2022 01:53:29 -0700 (PDT)
+X-Gm-Message-State: AOAM533QGJShKMJJEQCbWnc9gMgU7QAwo2Z6Fd77Th9QZe68+687xYEu
+        0PJ1b4X5FOozcaZ6jIbXaIhwxhiZ2FlmL8KlH2w=
+X-Google-Smtp-Source: ABdhPJwvWzWeFCt9MQpdxmPAWk8GoAGAd6IR8abJAWJLuqH0wSI5SrmxBLkNkoXsJmZZYCaqq9Hcc7WStQXsiKGWNQo=
 X-Received: by 2002:ab0:6544:0:b0:352:ec5d:b570 with SMTP id
- x4-20020ab06544000000b00352ec5db570mr6082359uap.96.1647852390724; Mon, 21 Mar
- 2022 01:46:30 -0700 (PDT)
+ x4-20020ab06544000000b00352ec5db570mr6089068uap.96.1647852808843; Mon, 21 Mar
+ 2022 01:53:28 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-3-chenhuacai@loongson.cn>
- <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com>
-In-Reply-To: <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com>
+ <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-5-chenhuacai@loongson.cn>
+ <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
+In-Reply-To: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 21 Mar 2022 16:46:22 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6eDSU20gjLgEKM318i1ksk23thv9cLJKmAo_cBzjtEkw@mail.gmail.com>
-Message-ID: <CAAhV-H6eDSU20gjLgEKM318i1ksk23thv9cLJKmAo_cBzjtEkw@mail.gmail.com>
-Subject: Re: [PATCH V8 10/22] LoongArch: Add exception/interrupt handling
+Date:   Mon, 21 Mar 2022 16:53:20 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6jDDFNvaEp6P1abFtf7zcvzT1xXFnp8wYBbn9-i4t59A@mail.gmail.com>
+Message-ID: <CAAhV-H6jDDFNvaEp6P1abFtf7zcvzT1xXFnp8wYBbn9-i4t59A@mail.gmail.com>
+Subject: Re: [PATCH V8 05/22] LoongArch: Add build infrastructure
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -77,19 +77,20 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Arnd,
 
-On Mon, Mar 21, 2022 at 4:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Mon, Mar 21, 2022 at 4:31 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > This patch adds Kbuild, Makefile, Kconfig and link script for LoongArch
+> > build infrastructure.
 >
-> > +unsigned long eentry;
-> > +EXPORT_SYMBOL_GPL(eentry);
-> > +unsigned long tlbrentry;
-> > +EXPORT_SYMBOL_GPL(tlbrentry);
+> Looks good, but I spotted one detail:
 >
-> Why are these exported to modules? Maybe add a comment here, or remove
-> the export if it's not actually needed.
-They are used by the kvm module in our internal repo.
+> > +       select HAVE_FUTEX_CMPXCHG if FUTEX
+>
+> HAVE_FUTEX_CMPXCHG no longer exists, everyone supports it now,
+> so you should drop this line as well.
+Thanks, this will be removed.
 
 Huacai
 >
->        Arnd
+>        ARnd
