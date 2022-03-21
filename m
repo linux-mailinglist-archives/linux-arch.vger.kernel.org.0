@@ -2,159 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E484E1E69
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 01:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF334E223A
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 09:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343870AbiCUAXp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 20 Mar 2022 20:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
+        id S1345281AbiCUIdM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Mar 2022 04:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234559AbiCUAXp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 20 Mar 2022 20:23:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BFBD95C3;
-        Sun, 20 Mar 2022 17:22:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F39166126A;
-        Mon, 21 Mar 2022 00:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2A6C36AE2;
-        Mon, 21 Mar 2022 00:22:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647822140;
-        bh=sl757+nQ+uoFAxIuw/aW760I9HoJj/9PyrFKOdrvNPc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FaiuqVxuSXdpGRvEpDxoM+RJxM/OiPTeOBHcmxMy4hOU34jzlt7y8hxP1G9mgEEME
-         YSYT3z/urqe2Jix0G2SD5g2K8I7xvs5FfETynak3yu1xUVdnnydZ7NhSjGmZEPHOZi
-         yn83ZWnN+anRqZEXdP7wNRAW5/RQUJx+++8CxsUhvAtPms7Xtrwe0fJZ3fXJQvbH9R
-         UDgziGUYpQlnF2Crqt+yGJ5TAU+smY5s8nVPEorCmdBuD00ycNVS7ye4ugauhVzBrS
-         ANHE8JNJsO3F1cVJ+4BqUTMXb90mjqNHqwPgSdg7IY7YT8t3GGikF6Qs7TY3xMQ8IT
-         4jbU8GeAkYJuw==
-Received: by mail-vk1-f179.google.com with SMTP id x125so1427666vkb.7;
-        Sun, 20 Mar 2022 17:22:20 -0700 (PDT)
-X-Gm-Message-State: AOAM533zl//8y7x2w5FAypLqVSlBZUxpWo94NPMPnXwddfx5dQzI8+iq
-        QFwIzP8pszQ07Jx/EqnaTdMjzGWTWwQvenNn9Z4=
-X-Google-Smtp-Source: ABdhPJwJRuOhAiysCoOvQHwSmmYd801IxVPP+erWrfdv5T2vb3ztD/y1NOJnWVmPMPDyYpcC1/3ppbBpVDzb6NrH1hM=
-X-Received: by 2002:a1f:2d6:0:b0:33e:9b64:e07e with SMTP id
- 205-20020a1f02d6000000b0033e9b64e07emr5719806vkc.28.1647822139345; Sun, 20
- Mar 2022 17:22:19 -0700 (PDT)
+        with ESMTP id S1345282AbiCUIdL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 04:33:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7085E158;
+        Mon, 21 Mar 2022 01:31:46 -0700 (PDT)
+Received: from mail-wr1-f53.google.com ([209.85.221.53]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MBDzc-1nMpmp02H8-00CgfB; Mon, 21 Mar 2022 09:31:45 +0100
+Received: by mail-wr1-f53.google.com with SMTP id r13so4543509wrr.9;
+        Mon, 21 Mar 2022 01:31:44 -0700 (PDT)
+X-Gm-Message-State: AOAM533d2oLOP4ggDTp+ZT1ZGVxKmCEtVetk0b2ewAAwmUOlC3CHiroN
+        IQPY+nqrOUDKPzhEzYmEwtvJQ05Y/hu1NeP91s4=
+X-Google-Smtp-Source: ABdhPJwNXiwsoigTvelrjNs5EbXksDtDKvgY9x9aJt86WRD44JHHj4qZkGEwvdPjubVD7qa0SC7fOGzOnaEQv83dZHU=
+X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
+ e15-20020a5d6d0f000000b0020391571c48mr17100710wrq.192.1647851504650; Mon, 21
+ Mar 2022 01:31:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220316070317.1864279-1-guoren@kernel.org> <20220316070317.1864279-11-guoren@kernel.org>
-In-Reply-To: <20220316070317.1864279-11-guoren@kernel.org>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 21 Mar 2022 08:22:08 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSqbS3cUNcxKGoMT2zE3ws+gH6a0EssVEutpypR5YoHCA@mail.gmail.com>
-Message-ID: <CAJF2gTSqbS3cUNcxKGoMT2zE3ws+gH6a0EssVEutpypR5YoHCA@mail.gmail.com>
-Subject: Re: [PATCH V8 10/20] riscv: compat: Re-implement TASK_SIZE for COMPAT_32BIT
-To:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
+References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
+ <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-5-chenhuacai@loongson.cn>
+In-Reply-To: <20220319143130.1026432-5-chenhuacai@loongson.cn>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 21 Mar 2022 09:31:28 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
+Message-ID: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
+Subject: Re: [PATCH V8 05/22] LoongArch: Add build infrastructure
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:ZdHIvV1BtcEI1gX4wU//OX4oJC5NRpmkhfoVFsJOH5Jr1ZJObZw
+ ln06/5/rgAjITdJsqK9oZvqddKD+Xw/zMXTQi4oV9lBtV/AZDXmP3sRC/dfvIhVHspMa8BM
+ FhUoVeM1yGjwLQhS+le6bwcSGMomY6orS6SwX5QxEjARERUqxisGEnNMowa65ew/ZIZyFED
+ rmXyuJB85Ed495+hSf6FQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LJxcEdo9OWc=:/wHgL8BynPJugPKJ9vsSVM
+ wYYis3Vtzu9ccMa8CcyupqLNlNG6HtpunpgmyxeVDQtA/AwVCZop58PIQB2r09DnOl0TwxxKo
+ t6XrBUWvHMHqd8FbMQ+xyC6Rf7DCnysl42+C1Awkv1nLNWzbn28Gl+sMDsLWzpxS++OoBCZmM
+ dMfwr74msMQjS6aoRgVrsRiyWXp19ibT7rbbLq+NpQjJXPE/x5+Msao6azt+3V3igZ2AbSmiY
+ EwINTKJyi6odpsYaf7QPI5qxdnm3SB53VsoX+3XNPTUKcFXOS/ossaIBt1F5B/hGt3TpVz12B
+ RMDAjgTvZGyTprv37+29HpNZ+IHDY8T75zDmpoKVgk/Lq0ulf+lt6cSNAW5ylkOexnyv2/h5I
+ Ml+BnkZQyFF9kZwkuCuXXajOBdQChVmSrjeO6t4xqTnQUWUXEnOn7T1mOXWZisReND+UXt6V7
+ M5EW2xEqiIonmX20HYa4T8jsv6Yf0Dqj4oRjQv0AvIuINJU+yD1MOIZBpNOkWq7b8CGAx2Yoz
+ coPdy2nCuwT9wJ9G5wOd/PPL3DYOI4md8rIFANFsNwzJW9aMPCZiyabsBH7+dve9UEo7l74O/
+ TjcTO7qjoFCWDzR0oikvO/D2Xt5yN9KUwwOpjvkcoNsAEkRNs/NMp07fHen/vwIn3XOzx1N/0
+ Wb7Shy83krg45G4A2vJNQxt61O1IcD7wDO+XT9t5F+YkwuI0YAsvybyv9LgxOmHSRbu9z0QkY
+ SFsLoq+HxAkStuBNYz3r0NRtKhH0n/WmoYXFiuK+cy4i8x22sTztU8pA0IjCzrXJPeZ/tWSkj
+ BmfGblBsFlOWl/ROksCJF/A+3O98gq9h5Z5QwFcccJTM+tE2e8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-For this patch, we need to add below to fixup the rv32 call rv64 elf
-segment fault.
+On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> This patch adds Kbuild, Makefile, Kconfig and link script for LoongArch
+> build infrastructure.
 
-diff --git a/arch/riscv/include/asm/processor.h
-b/arch/riscv/include/asm/processor.h
-index 0749924d9e55..21c8072dce17 100644
---- a/arch/riscv/include/asm/processor.h
-+++ b/arch/riscv/include/asm/processor.h
-@@ -19,7 +19,11 @@
- #define TASK_UNMAPPED_BASE     PAGE_ALIGN(TASK_SIZE / 3)
+Looks good, but I spotted one detail:
 
- #define STACK_TOP              TASK_SIZE
--#define STACK_TOP_MAX          STACK_TOP
-+#ifdef CONFIG_64BIT
-+#define STACK_TOP_MAX          TASK_SIZE_64
-+#else
-+#define STACK_TOP_MAX          TASK_SIZE
-+#endif
- #define STACK_ALIGN            16
+> +       select HAVE_FUTEX_CMPXCHG if FUTEX
 
- #ifndef __ASSEMBLY__
+HAVE_FUTEX_CMPXCHG no longer exists, everyone supports it now,
+so you should drop this line as well.
 
-On Wed, Mar 16, 2022 at 3:04 PM <guoren@kernel.org> wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> Make TASK_SIZE from const to dynamic detect TIF_32BIT flag
-> function. Refer to arm64 to implement DEFAULT_MAP_WINDOW_64 for
-> efi-stub.
->
-> Limit 32-bit compatible process in 0-2GB virtual address range
-> (which is enough for real scenarios), because it could avoid
-> address sign extend problem when 32-bit enter 64-bit and ease
-> software design.
->
-> The standard 32-bit TASK_SIZE is 0x9dc00000:FIXADDR_START, and
-> compared to a compatible 32-bit, it increases 476MB for the
-> application's virtual address.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> ---
->  arch/riscv/include/asm/pgtable.h | 13 +++++++++++--
->  1 file changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pg=
-table.h
-> index e3549e50de95..afdc9ece2ba4 100644
-> --- a/arch/riscv/include/asm/pgtable.h
-> +++ b/arch/riscv/include/asm/pgtable.h
-> @@ -705,8 +705,17 @@ static inline pmd_t pmdp_establish(struct vm_area_st=
-ruct *vma,
->   * 63=E2=80=9348 all equal to bit 47, or else a page-fault exception wil=
-l occur."
->   */
->  #ifdef CONFIG_64BIT
-> -#define TASK_SIZE      (PGDIR_SIZE * PTRS_PER_PGD / 2)
-> -#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
-> +#define TASK_SIZE_64   (PGDIR_SIZE * PTRS_PER_PGD / 2)
-> +#define TASK_SIZE_MIN  (PGDIR_SIZE_L3 * PTRS_PER_PGD / 2)
-> +
-> +#ifdef CONFIG_COMPAT
-> +#define TASK_SIZE_32   (_AC(0x80000000, UL) - PAGE_SIZE)
-> +#define TASK_SIZE      (test_thread_flag(TIF_32BIT) ? \
-> +                        TASK_SIZE_32 : TASK_SIZE_64)
-> +#else
-> +#define TASK_SIZE      TASK_SIZE_64
-> +#endif
-> +
->  #else
->  #define TASK_SIZE      FIXADDR_START
->  #define TASK_SIZE_MIN  TASK_SIZE
-> --
-> 2.25.1
->
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+       ARnd
