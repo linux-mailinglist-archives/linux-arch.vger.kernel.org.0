@@ -2,55 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639314E2291
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 09:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506164E2396
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 10:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343500AbiCUIy4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Mar 2022 04:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36774 "EHLO
+        id S235734AbiCUJsu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Mar 2022 05:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240765AbiCUIyz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 04:54:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB3A3CA67;
-        Mon, 21 Mar 2022 01:53:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C1F361166;
-        Mon, 21 Mar 2022 08:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4192C340F2;
-        Mon, 21 Mar 2022 08:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647852809;
-        bh=U2Ovm8ntcG6XtGmB1msmTfFNN3ysz5JeGnJ11m8KPWA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=t1ZPR+JjQZJDXK527T7aciTdnEJplNDW7uaduQA4+TeNAIjcPTXQ1y2tFjTdHGoAH
-         MDp+U1RIWvrktWZlM2hGpSAStqCZNMrKdH391wZ80nVLMrjuQbCbkR5RgnMzN+L+Y5
-         VznBqAEnO1aA51civ+Sf6blc33EiDuEQPffKqIooT+kSXXOyekogDTDtjOPn0aClHs
-         NF8L4BX2t6JZwq2dr5FMBHcMZjbUa1piR6+5CAYL/Ri2FsNHP/EsIyZZEI5IGcKg94
-         EbIm3Y50Xu9eSxKcg6XW6u02MhEIOS+5RIrpTqq37IiRzEAyC2BhixBtYpKVEaQrHu
-         jDhoI4o3WYv8g==
-Received: by mail-ua1-f51.google.com with SMTP id t40so5179941uad.2;
-        Mon, 21 Mar 2022 01:53:29 -0700 (PDT)
-X-Gm-Message-State: AOAM533QGJShKMJJEQCbWnc9gMgU7QAwo2Z6Fd77Th9QZe68+687xYEu
-        0PJ1b4X5FOozcaZ6jIbXaIhwxhiZ2FlmL8KlH2w=
-X-Google-Smtp-Source: ABdhPJwvWzWeFCt9MQpdxmPAWk8GoAGAd6IR8abJAWJLuqH0wSI5SrmxBLkNkoXsJmZZYCaqq9Hcc7WStQXsiKGWNQo=
-X-Received: by 2002:ab0:6544:0:b0:352:ec5d:b570 with SMTP id
- x4-20020ab06544000000b00352ec5db570mr6089068uap.96.1647852808843; Mon, 21 Mar
- 2022 01:53:28 -0700 (PDT)
+        with ESMTP id S1346025AbiCUJsl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 05:48:41 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168AD1350A4;
+        Mon, 21 Mar 2022 02:47:14 -0700 (PDT)
+Received: from mail-wr1-f48.google.com ([209.85.221.48]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MOzjW-1niHLI2G8y-00PQYd; Mon, 21 Mar 2022 10:47:12 +0100
+Received: by mail-wr1-f48.google.com with SMTP id h4so1886414wrc.13;
+        Mon, 21 Mar 2022 02:47:12 -0700 (PDT)
+X-Gm-Message-State: AOAM532fABBkxkanJAfZPCNauoHejVllUnZlaKMU87qgQmjA3xaeECVh
+        PqqRJBS6PxAlByq8h+x1icqAue1KP/fwoNz2JZc=
+X-Google-Smtp-Source: ABdhPJyOugVZs0WuLZGA5S5fvh4E/SZOrX2XaObUjw113bg3VATG3qE5f/uf70NlJtAeFLbVSJkTwKN5RI+nUV2zcU0=
+X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
+ e15-20020a5d6d0f000000b0020391571c48mr17167113wrq.192.1647852867006; Mon, 21
+ Mar 2022 01:54:27 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-5-chenhuacai@loongson.cn>
- <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
-In-Reply-To: <CAK8P3a3ycOKLvKunyatRETN0n3=D+=Y-EZF3aYH95G5WF8M7bg@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 21 Mar 2022 16:53:20 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6jDDFNvaEp6P1abFtf7zcvzT1xXFnp8wYBbn9-i4t59A@mail.gmail.com>
-Message-ID: <CAAhV-H6jDDFNvaEp6P1abFtf7zcvzT1xXFnp8wYBbn9-i4t59A@mail.gmail.com>
-Subject: Re: [PATCH V8 05/22] LoongArch: Add build infrastructure
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Andy Lutomirski <luto@kernel.org>,
+ <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-6-chenhuacai@loongson.cn>
+In-Reply-To: <20220319143817.1026708-6-chenhuacai@loongson.cn>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 21 Mar 2022 09:54:11 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com>
+Message-ID: <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com>
+Subject: Re: [PATCH V8 13/22] LoongArch: Add system call support
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -62,35 +47,103 @@ Cc:     Andy Lutomirski <luto@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:rCdFpqmPfHoRNRNaxUfc7r0fQcv9wGvASDzi0v1Tk9Btj28/S55
+ G4RecOA35Q8EeyTP6FMkSBtB3yoxWpgQ4SyAzfpm9nOCoBWBdgYWYEy0+31VkMMx61HN1s/
+ yYP+Mqrvd/SiAz4zPg5weyXLGuLlyxT4vjPQ0mvvi+b0z3DPKtYtgCj2xj68uvVVhztSW4x
+ FCNi15ETYUXu6smuqmf8g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Sxg/epg92uQ=:ue5eF+gDBmWW08+qFfFcXf
+ h83T+kssmzjynZ90jvgxYSD0o7DLi8Z2MXjo7fWY1RocC1iefr29urjy0iZAGIcqlez2win+0
+ jgSswiKGZPDWEexrAlLxrrtpHb7Je4UOvs8VkqflJB7OT32gtPby6b+UxVFkJByH/xxk+Em1H
+ IXoLzJurcMvjOIU6QREsMwJy0yIBSObf6GfK/vBNsvi+I4MQNlCZYK1DOvDO61XlzWGD6BgjY
+ I4/KcjFGTqlNphgQ4ZFUEPNJZzTtS+CHJ0slSx5xZxn3nX1feVXNz3zDWRZO4q+NvHpoE5qKM
+ PLC6sGYt+egiQ+vU5OXUCgWD6I8aRUmVlpwDHMtJ7HzwoxhhERdwwmUYCoS8U0xUvrC/vXPj+
+ nnzayW9BEqsuItYZNp38NqLSMJIeAnQSdi0x7doN0/nH0ZsPzomUwL9fFw/khXCcp/GSkCq9+
+ 65XURyCCN+1ZtEsA/6Mh5yPZCnZMY/OeuPWBqUhaNrETThdBBM/bJvMxA8+snJXq54LhOve0b
+ rRsLZc2BOt9fb8+3RcFqfWtI9q1VUHUz4dnFC4Zxj0p18yV3AHgdHtocoJndSdvjNu3a4ulz1
+ AlelrsUTFDTgVlPdlDO4Q1yXeKkNeIyUP/X33z4X8JmJfm9IAiTC6BUXsKEGm/yUgbJaowyFF
+ MF6r+gvDxeSfg5OpiPQ9a88OGEh6FDUNPmh1/162ceKoaO8qAQgSU6GelmLD8n7CwHo/8LlDJ
+ QlhXlwf1hkhlEcEIv+6JESi/YMRiGl6eZDFhRXhduGxJ8cImQGibR/BvVMHupUbf6nDqmzulx
+ EHvViHDD/BI1PA9ymfsczDFwPaz89pkDxU+YRYHJox8FWlTeXk=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> This patch adds system call support and related uaccess.h for LoongArch.
+>
+> Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
+> A: Until the latest glibc release (2.34), statx is only used for 32-bit
+>    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
+>    bit platforms still use newstat now.
+>
+> Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
+> A: The latest glibc release (2.34) has some basic support for clone3 but
+>    it isn't complete. E.g., pthread_create() and spawni() have converted
+>    to use clone3 but fork() will still use clone. Moreover, some seccomp
+>    related applications can still not work perfectly with clone3.
 
-On Mon, Mar 21, 2022 at 4:31 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > This patch adds Kbuild, Makefile, Kconfig and link script for LoongArch
-> > build infrastructure.
->
-> Looks good, but I spotted one detail:
->
-> > +       select HAVE_FUTEX_CMPXCHG if FUTEX
->
-> HAVE_FUTEX_CMPXCHG no longer exists, everyone supports it now,
-> so you should drop this line as well.
-Thanks, this will be removed.
+Please leave those out of the mainline kernel support though: Any users
+of existing glibc binaries can keep using patched kernels for the moment,
+and then later drop those pages when the proper glibc support gets
+merged.
 
-Huacai
->
->        ARnd
+> +#define __ua_size(size)                                                        \
+> +       ((__builtin_constant_p(size) && (signed long) (size) > 0) ? 0 : (size))
+> +
+> +/*
+> + * access_ok: - Checks if a user space pointer is valid
+> + * @addr: User space pointer to start of block to check
+> + * @size: Size of block to check
+> + *
+> + * Context: User context only. This function may sleep if pagefaults are
+> + *          enabled.
+> + *
+> + * Checks if a pointer to a block of memory in user space is valid.
+> + *
+> + * Returns true (nonzero) if the memory block may be valid, false (zero)
+> + * if it is definitely invalid.
+> + *
+> + * Note that, depending on architecture, this function probably just
+> + * checks that the pointer is in the user space range - after calling
+> + * this function, memory access functions may still return -EFAULT.
+> + */
+> +static inline int __access_ok(const void __user *p, unsigned long size)
+> +{
+> +       unsigned long addr = (unsigned long)p;
+> +       unsigned long end = addr + size - !!size;
+> +
+> +       return (__UA_LIMIT & (addr | end | __ua_size(size))) == 0;
+> +}
+> +
+> +#define access_ok(addr, size)                                  \
+> +       likely(__access_ok((addr), (size)))
+
+I rewrote this bit a series that is currently queued for 5.18, so you
+will have to adapt it to the new version, by just removing your
+custom definitions.
+
+> +#define __get_user(x, ptr) \
+> +({                                                                     \
+> +       int __gu_err = 0;                                               \
+> +                                                                       \
+> +       __chk_user_ptr(ptr);                                            \
+> +       __get_user_common((x), sizeof(*(ptr)), ptr);                    \
+> +       __gu_err;                                                       \
+> +})
+
+It would be good to also provide a
+__kernel_kernel_nofault()/__put_kernel_nofault()
+implementation, as the default based on __get_user()/__put_user is not
+ideal.
+
+        Arnd
