@@ -2,38 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EC64E224F
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 09:38:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4726D4E225B
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 09:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345323AbiCUIkS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Mar 2022 04:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
+        id S1345362AbiCUIoo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Mar 2022 04:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345232AbiCUIkQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 04:40:16 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F2B21821;
-        Mon, 21 Mar 2022 01:38:50 -0700 (PDT)
-Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MOAJt-1nhXAu00Dp-00OUpg; Mon, 21 Mar 2022 09:38:49 +0100
-Received: by mail-wr1-f43.google.com with SMTP id p9so19575698wra.12;
-        Mon, 21 Mar 2022 01:38:48 -0700 (PDT)
-X-Gm-Message-State: AOAM532zG0r5Z7rmM/TUx5+bv2dR352oQSPnVsHLMof6qJLc5NhDkEFu
-        lCYGE7lFqzKMgVHeWdElQNzVt2eqxFAptLDVSY0=
-X-Google-Smtp-Source: ABdhPJzC1aPs0mRRzYw94T1L169g4imODEwIVrWcSBzsU4X1Z77CvsT1+Hkq9ngveBo9XP4ELRkzqz2K49xJzH0geF4=
-X-Received: by 2002:a5d:66ca:0:b0:203:fb72:a223 with SMTP id
- k10-20020a5d66ca000000b00203fb72a223mr10115814wrw.12.1647851928676; Mon, 21
- Mar 2022 01:38:48 -0700 (PDT)
+        with ESMTP id S243773AbiCUIon (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 04:44:43 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCE0BCA2
+        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 01:43:17 -0700 (PDT)
+Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MfYDO-1nyvcJ38VE-00fwNK for <linux-arch@vger.kernel.org>; Mon, 21 Mar
+ 2022 09:43:15 +0100
+Received: by mail-wm1-f45.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so823697wms.2;
+        Mon, 21 Mar 2022 01:43:15 -0700 (PDT)
+X-Gm-Message-State: AOAM5318sSbofeVG/+hYaqRR+feFy6zuMzGjsVBqhEGZRhpUd6RzRR9B
+        lS3Jq1NpY/4HqdgNfxh+NzgAWv5jAJ6NEDxGhGo=
+X-Google-Smtp-Source: ABdhPJwHrKUKxYkZNzmmlwfspjQ9k/71XpCyBvdLMSQD+yuTHl2E5JvC+V3hbYc0A6xq6NZLQGug9dNQCUt046C6+7g=
+X-Received: by 2002:a1c:f20b:0:b0:389:c99a:4360 with SMTP id
+ s11-20020a1cf20b000000b00389c99a4360mr26314299wmc.174.1647852195434; Mon, 21
+ Mar 2022 01:43:15 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-3-chenhuacai@loongson.cn>
-In-Reply-To: <20220319143817.1026708-3-chenhuacai@loongson.cn>
+ <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-4-chenhuacai@loongson.cn>
+In-Reply-To: <20220319143817.1026708-4-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 09:38:32 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com>
-Message-ID: <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com>
-Subject: Re: [PATCH V8 10/22] LoongArch: Add exception/interrupt handling
+Date:   Mon, 21 Mar 2022 09:42:59 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1ST1hBnhepvoQ9UTbAM=56JEU=-OiBAFQeK2rgaZ5aWw@mail.gmail.com>
+Message-ID: <CAK8P3a1ST1hBnhepvoQ9UTbAM=56JEU=-OiBAFQeK2rgaZ5aWw@mail.gmail.com>
+Subject: Re: [PATCH V8 11/22] LoongArch: Add process management
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -51,26 +52,28 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:hrZpOzbz9UmNY/btGpxVdxrIMhvMeFOM+sdnRcOMkJDPD6kxYJc
- /GWI2Wuawvw6GiZ1GJ7/fhxD6VCq86O+wUK9RqmvazaoHZSdzLl+vMow33tuaJyqnY+ojx5
- ucdD73T34t9SqPtHkNxiVkqG52UUKvDgEUS2PZcTjICGBSSqkh2ho9QeUgS6qOqgGbDeFe0
- L8pyadSbr0/hpkirl1fiA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vJ5rL7UIry4=:zhPxe3hGPfuwfe68NqQ39G
- /sg3ea8jlmvaAl/x7P3QkfnPJlSRuuvTCY5CkigfQheRQOaV1qrlxzLUTQZzQxLXztaDxy+Bm
- 5z9iC/asCl4Ek5Mjx+2MRRjYYmlcOSEDO+BldRQg1Yh9uEKxA0JuXrDILpW6jpaJ5gjOFbKF8
- CjBubhF9SLbFmOSZvQmzetyA3oXipZGhx7DseuxAv4AYIGzEQI2SLmKtE6S/2Br0hNFz6oRTN
- PqrUCctd0G15oQtXW2L8b5bndNyTnFcfAIP0T1hTtizw3nw2AixWsNes0/XeirbWIyJsfUFMp
- C+RFyZ3g6IZIC5IqwZcYMmA0D17qO6AlLHQ9rTOnXNXfKaYoLIOA2i3qddjw7MVlbw1SGgWgt
- pIWWwbw3kM9Ht8bo2zOWWQKfcveil6POPPRcBqEeRXTXSky22E0zN2veXNvQcO06lpw7v8Ide
- 4WfQi8x6kU0ha+B24QNpvC7VEq0NWL+nAY4YGoVPIeiK7+pI3w/wjJSXDqj24kbi/iv1MICFi
- lltIooFhcV42kXNXJeE07ZqptRftLoW8n0XXTTQboYEzLnSIDSYyI2T0fASu8v0JLTxAUkdJb
- j/B/GqQLJlyo2Jqm8avNGt8jC01oiliIZYcnKTahJaCsMYJZ4XiOJphS0DHwVFqoO9cNQf9Bw
- CijxPiFdbsMDGrpAYjPWsaYWOPNQDJVWRyd5+F6xmDwlxnhKF6GxjjPvKuRHL6AxxpKtr9WfH
- P3AnvY3TWO+UH19L+G7vaRzPp4uIeRv1E574+xL3XRxW8M+Eclsao9gdyoWCJtrFkmJs/hlIo
- wcXGmjvZz7yjXU423lsFoSKWbWFqnmrxVlZO5pcQFwumJOSRpo=
+X-Provags-ID: V03:K1:RBq5plTSvL7jyjPFW+cXGPvNSSi/CW9qVdYnu3tM5HNCd33I4DZ
+ 6Ok4f57u8tnj1/KviJfMtSNVjqRwT4DZl0JvhaUkp8vYhblnj4FrqbbfA3M4ZAqrhn3vn0D
+ v7ymKiP1pWsirGOkkD9AbQjmcKgmQmLwzdmS0Y3u3O898+KzqZlgzkkhzQz6q+xQXPnWfQ4
+ 3HHZB3NL4p2dk9kcBWRRA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EDr6Dai2+yI=:gFf/900yRXqs4m9P9GqrgX
+ oyMQEFJT69HIbPGluigHKkJWrFAlpq7mhngog2Djjzhwy7t6v/H6DVrvadgj7wAqqhT9z5nXR
+ G2MFW8vcv6v+LWUozX7ywDLPddxauH8R0UHaQlTnViWPo6/sKS8Vq8wNlAR2TOyQ42Dh7QKj/
+ w1XFxUGzMGeK1seDFs/EueMRf1H98E+AzUw+H1x2YovBhB381SndWkkpOKwGlBN4oju8uARf+
+ kdT0G0HM/8+q0Q5U3kmY35yj6QLxxglXTIrN89cwGVWPvUH3O9jN7PnmpKUkoWe5PywDxtUc2
+ d+CgkDuxOEYPyuiZ4C2hqyBVd7gPfM/ec9pnwMQZGB4xcjSnG0iNDogrngtbnXiX+Lll1EibO
+ T3XmJNL1C+2RKnwaOGcKFWZn2ujq+ZZ/4MwN/mDjc085NLHwpMRQs1hR6NxEx2f8u0yzCDrx0
+ /lYxmkl1ZEPvoACsyWuFVeK2jmCtnwuf4+LI0OqTAE4mX3T6KtNEXQtjfGiTkXjwJT5nQ3IuH
+ X/M6r23QueFqBd3CCbPwJRA+CMd/J2Vrik5nzTX7sirZqODYHbIL69LA6ThWA0xknjGP9VwTm
+ Vtblq833mWIn3BrPovy6WfsuCbDEdFYexYpmyGtpEYtz4l6OSPx/jTXnIr+5nTZTGfbJd4+x/
+ qXD2esFw+lgXtQudjGRgRtL3MhZ0a8azrQRMtcJq/aZUpqGLVIUNK0UFNt/qY+Nha76wfGCtH
+ OZwBi3oqmBmRanxM2ZgF8YKrCEpvV0Z85Gwb37sj7+pBWC8PNtDNovFjFSB5+EUY8IyWCOtBL
+ jDi1lBgjB22S2ZVRdG1RFnah3kpxVOelu8xa3mWs/Co0pLUNFZSH7tywQ98bm3Hk6eoO9n1+f
+ SxT3Qt4mH3jaRp4/5j2+SbvdJ1dvndfguCZgaxffc9utEfiPQ/HhWucRjWr4/hCPqe2lcU5FI
+ FLrxN4PnpXQ==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,12 +82,20 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
 
-> +unsigned long eentry;
-> +EXPORT_SYMBOL_GPL(eentry);
-> +unsigned long tlbrentry;
-> +EXPORT_SYMBOL_GPL(tlbrentry);
+> +#ifdef CONFIG_PAGE_SIZE_64KB
+> +#define THREAD_SIZE_ORDER (0)
+> +#endif
+> +
+> +#define THREAD_SIZE (PAGE_SIZE << THREAD_SIZE_ORDER)
+> +#define THREAD_MASK (THREAD_SIZE - 1UL)
+> +
 
-Why are these exported to modules? Maybe add a comment here, or remove
-the export if it's not actually needed.
+Having a 64KB stack area is rather wasteful. I think you should use a sub-page
+allocation in this configuration, or possibly disallow 64KB page configuration
+entirely.
+
+Note that you have to use full pages when using CONFIG_VMAP_STACK, but
+you don't seem to support that at the moment, so allocating only 16KB stacks
+on a 64KB page config should still work.
 
        Arnd
