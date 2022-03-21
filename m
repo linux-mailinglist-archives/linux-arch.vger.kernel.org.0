@@ -2,38 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C32E4E2380
-	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 10:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E2B4E239B
+	for <lists+linux-arch@lfdr.de>; Mon, 21 Mar 2022 10:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345956AbiCUJoP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Mar 2022 05:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
+        id S1343533AbiCUJtf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Mar 2022 05:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345969AbiCUJoN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 05:44:13 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35001350AC;
-        Mon, 21 Mar 2022 02:42:47 -0700 (PDT)
-Received: from mail-wr1-f41.google.com ([209.85.221.41]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MsIbU-1oLRVM0yOA-00tkvb; Mon, 21 Mar 2022 10:42:46 +0100
-Received: by mail-wr1-f41.google.com with SMTP id r10so19861803wrp.3;
-        Mon, 21 Mar 2022 02:42:46 -0700 (PDT)
-X-Gm-Message-State: AOAM533aeaByClywtDYNhhd7ufOyjhZJouBXHTd6e57pFgsiLd9KkBG8
-        vKr0hH1uAs4jc459oVE0NP4JszIqRKZaMwttsdI=
-X-Google-Smtp-Source: ABdhPJwkq1FLAD225Eea2kcRUR2sWY4ab1/G2z0OQte1KuaMBsakyF/QdgKdIrAo10lFEv61K8gbZU+EWwJDOvZX33c=
-X-Received: by 2002:a5d:6d0f:0:b0:203:9157:1c48 with SMTP id
- e15-20020a5d6d0f000000b0020391571c48mr17324397wrq.192.1647855765838; Mon, 21
- Mar 2022 02:42:45 -0700 (PDT)
+        with ESMTP id S1345420AbiCUJtd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 05:49:33 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127D92BF9
+        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 02:48:06 -0700 (PDT)
+Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N3sRi-1oEKov1NR2-00znun for <linux-arch@vger.kernel.org>; Mon, 21 Mar
+ 2022 10:48:05 +0100
+Received: by mail-wr1-f49.google.com with SMTP id p9so19820556wra.12;
+        Mon, 21 Mar 2022 02:48:05 -0700 (PDT)
+X-Gm-Message-State: AOAM533yupXPAWH0ngzUsh4f+vj2wbbz0wR6UdCxMlaRIQN0eALLWP3R
+        z+LAKAZS7OKtmu2e2q0TnmxY96yD2ozbBl5INF8=
+X-Google-Smtp-Source: ABdhPJwXz+ToNHL4TpOoh+HdlcxuOPou7dXTvfzP0iFHuBYr3vtjBj/zXXognFOzrqzkSJ6ZJ2iZfEfVsapaC/m5OFY=
+X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id
+ y1-20020adfd081000000b001ef9378b7ccmr17934085wrh.407.1647856084986; Mon, 21
+ Mar 2022 02:48:04 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-7-chenhuacai@loongson.cn>
-In-Reply-To: <20220319143130.1026432-7-chenhuacai@loongson.cn>
+ <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-6-chenhuacai@loongson.cn>
+ <CAK8P3a2kroHVN3fTabuFVMz08SXytz-SC8X11BxxszsUCksJ4g@mail.gmail.com> <CAAhV-H6zE7p6Tq8rg1Fq5cK5L38z-VHjxsZ+qm8+Cp5x=u_bUQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H6zE7p6Tq8rg1Fq5cK5L38z-VHjxsZ+qm8+Cp5x=u_bUQ@mail.gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 21 Mar 2022 10:42:29 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0wVKWFASv6cVDOZmX=1h7EeAVyrxLFXmoH5REVaAoNhQ@mail.gmail.com>
-Message-ID: <CAK8P3a0wVKWFASv6cVDOZmX=1h7EeAVyrxLFXmoH5REVaAoNhQ@mail.gmail.com>
-Subject: Re: [PATCH V8 07/22] LoongArch: Add atomic/locking headers
+Date:   Mon, 21 Mar 2022 10:47:49 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
+Message-ID: <CAK8P3a38nUyAt8gGEYregqivdP7NsXS0RuU1NX4_EAVvwGQBWA@mail.gmail.com>
+Subject: Re: [PATCH V8 13/22] LoongArch: Add system call support
 To:     Huacai Chen <chenhuacai@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -47,88 +49,86 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Christian Brauner <brauner@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:cGMrCqph8HJu7ee//vUaC4KO121C4Qvdi45F+lo3pu6si7Hiuyy
- IewIcYpkHv90N1g6JHpCbOhSLTaXlSvMFm4PNPJbTj/RAH9EW8GjyskOkkfUghAjIxBBf/r
- 9Us4usFkwgyV1KPFGc1oH0fp9wFN6c1oTmqBQSKuj5WFEgoWt7grgL7PUamQcWzitV2dhHy
- 7SVcGMJEn+xLXE+8+kbTQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xHfyISuKSXo=:EN1aIqlABHA0g4N2THTWMB
- DbfFSbg2Xv87HVmTfuuhIYVdlTqRtdEPlo7Tm4/u4sKRU9XO98VJSfl1v3pU523sd02mCDkrg
- +OOjRJc7ivVPPOpnrj5ruf7874WO29ykFVYA4BtmPR0Na55pRCMhPflZcWQqgw+UAxltsbVQV
- /pxGjt3m9ye0zkNTZCFLFyrS61z11lwoFHjhM6XCRFIi1xjc/Uj7rSBiTExelQaQncUrWJ1dO
- JyPwgycmvoWU0mJGK8zjd+PuHDnUDlRuaCnoPBnkcuyCDv/NO353utZG6jLEC6J24CvUaJitE
- oTiAa68ZhIkbbgAyWf6Cm9cXYH0y5zz96QnOpOjs6YV1o9DKgY5FUB6BDh4U/4h9inK3rF6ZZ
- HBU26KyTNJMRg2Z6skSWTSbxMZ5Me7KYSjFDTp7Gq6SaF1HZYOScBlJ9h0Sc//Db8yOYPkMhm
- YOf32aI1XQFcs9rtVqQJHJe589Ydm6TaB60TdUbe7lTx91p129ajDOtbf+IZdUZRdrRml5abt
- zV7pPL5QihdzC06TKoC+mL+EQHoY7n399kn7Km2KDhIlb/aa0VxQVQlYLPpakD6N9doQcDJtl
- ojUlBTdHxPX7C0m3rVOr4DBYo5qYUVD3QHn05fmZEXKkcudtCaq4Onjrk0BUCv1R7StmikA56
- /GVkte1bhQLwUaPHNuk6Q1A/J7qOrf6FHw6IZV0F9JqZQreZunM1cVxs1PX/oE8bAjhFPBAUM
- jbqCkwmrKmiAVDa/VKyXyUbfurciEK86cWQyd07WPkvBQjkVU/l4X+DbBOU4XZO18Hig7+WwY
- xC92hsSDKIdq5TRfSP/iYx02ewQ4Ix/ORC9JCCwJ3oidPY0+4A=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:N/tE4lL/H/yyEAycNERWNTSI0BOiXfvH7d85Ael9bEHajHyRbyv
+ TjMiaM0LdSt0kfbH4J80j5SIKwofgWPegSY4RC9Oekp39F+3HMbE9L7u6cINLYlFvzabzJj
+ biTfD+xwULv8H8+iNaK/+VXb71JfoxlgmLbWPAaXjHgfuEXuk2GnofWFpRgHlDsK++m4JqR
+ k5bNWXisTn3QRU7ndz2uA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Tk4MELvBfG0=:Ae0yRRa6PpVoQ468AdT2aE
+ +Y+Aq+8qda1hPf8YNXoxeIyrKvpfy3L4CKndYtFY34lMkV9pccG7H6thZze6oAa2NMyxDI983
+ fPgSRmx5n86TRKqBkJw+kYKEghaTzpPI4aX68Tgig/HUzU5Hf5K4qCpyLCW2vE+Z4qRtYUI7S
+ DNpkM/NZupawjLejJQt4tBYTCupt7pd9oL3ISsPEgRC195trcrpysD15Re0EruaAJuB/H8t63
+ 2EwffdgWJVC5Enp2c5xBsXvvnnpJw1/Z37CxfhgEXI76XvdQcxHoqAnbhqCiSWdAeyjUwVY6o
+ SULXhSioue3Ci/W7oNDQjGzY0N/E5WlAPXpQNma99UGIJA9dScTqO7PFy366+56EpVc82ij7E
+ e7jOjY+RQ4PkOA6xNQBd7Vp4/atbyXfKvDo4RkCtDRkWeSbU0WGXc5VCkf164N5fZxE7jUP/j
+ VWXm3eCG889LRtbH+Q5wBfmYT7ixrNJWWS1mB96ImMlNGgdXDpGh9pTej5BCSE/XsU929SRxc
+ lep65bsyYDV5Sd5OB3XQmeYCdvKUA02anUTcf7bL+zasLqL1ixnmAy2M4pqXKSOc0Pl4ORmpE
+ 6q6Naj/ckGcykpQK0YubaXDIC6Y4ew1EzCVBM6IhQd4GDHkXzjRWiaS+fuwWupvCWWmkXk73S
+ Ej5RavedRDwPbKt3GpOBdRQJP51WiYE0laTpHyb6GsI5EFr9JzTapZ0/dYAxLcVoSK0g9PEuM
+ B8E6KuHnsqzPYLEFXrKXpexwrLmGyS9eYo/QdQVT+XmvT5hWdVzyZ2aKCvEq2JBPuY5RVAHSs
+ jRGPuiF5xH7p40J141VT2kkyvlyasRZqtNI2R6lh/xVInkv+uE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> LoongArch has no native sub-word xchg/cmpxchg instructions now, but
-> LoongArch-based CPUs support NUMA (e.g., quad-core Loongson-3A5000
-> supports as many as 16 nodes, 64 cores in total). So, we emulate sub-
-> word xchg/cmpxchg in software and use qspinlock/qrwlock rather than
-> ticket locks.
-...
-> +extern unsigned long __xchg_small(volatile void *ptr, unsigned long x,
-> +                                 unsigned int size);
-> +
-> +static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
-> +                                  int size)
-> +{
-> +       switch (size) {
-> +       case 1:
-> +       case 2:
-> +               return __xchg_small(ptr, x, size);
-> +
+On Mon, Mar 21, 2022 at 10:41 AM Huacai Chen <chenhuacai@kernel.org> wrote:
+> On Mon, Mar 21, 2022 at 5:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >
+> > > This patch adds system call support and related uaccess.h for LoongArch.
+> > >
+> > > Q: Why keep __ARCH_WANT_NEW_STAT definition while there is statx:
+> > > A: Until the latest glibc release (2.34), statx is only used for 32-bit
+> > >    platforms, or 64-bit platforms with 32-bit timestamp. I.e., Most 64-
+> > >    bit platforms still use newstat now.
+> > >
+> > > Q: Why keep _ARCH_WANT_SYS_CLONE definition while there is clone3:
+> > > A: The latest glibc release (2.34) has some basic support for clone3 but
+> > >    it isn't complete. E.g., pthread_create() and spawni() have converted
+> > >    to use clone3 but fork() will still use clone. Moreover, some seccomp
+> > >    related applications can still not work perfectly with clone3.
+> >
+> > Please leave those out of the mainline kernel support though: Any users
+> > of existing glibc binaries can keep using patched kernels for the moment,
+> > and then later drop those pages when the proper glibc support gets
+> > merged.
+> The glibc commit d8ea0d0168b190bdf138a20358293c939509367f ("Add an
+> internal wrapper for clone, clone2 and clone3") modified nearly
+> everything in order to move to clone3(), except arch_fork() which used
+> by fork(). And I cannot find any submitted patches to solve it. So I
+> don't think this is just a forget, maybe there are other fundamental
+> problems?
 
-I think it's better to not define the "small" versions at all, since they are
-inefficient and probably not safe to use for the few things that try to call
-them, such as the qspinlock implementation.
+I don't think there are fundamental issues, they probably did not consider
+it necessary because so far all architectures supported clone().
 
-I have an experimental patch set that removes these from the kernel
-altogether and makes xchg()/cmpxchg() only work on 32-bit or
-64-bit values.
+Adding Christian Brauner and H.J. Lu for clarificatoin.
 
-> diff --git a/arch/loongarch/include/asm/spinlock.h b/arch/loongarch/include/asm/spinlock.h
-> new file mode 100644
-> index 000000000000..7cb3476999be
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/spinlock.h
-> +
-> +#include <asm/processor.h>
-> +#include <asm/qspinlock.h>
-> +#include <asm/qrwlock.h>
-> +
+> > > +#define __get_user(x, ptr) \
+> > > +({                                                                     \
+> > > +       int __gu_err = 0;                                               \
+> > > +                                                                       \
+> > > +       __chk_user_ptr(ptr);                                            \
+> > > +       __get_user_common((x), sizeof(*(ptr)), ptr);                    \
+> > > +       __gu_err;                                                       \
+> > > +})
+> >
+> > It would be good to also provide a
+> > __kernel_kernel_nofault()/__put_kernel_nofault()
+> > implementation, as the default based on __get_user()/__put_user is not
+> > ideal.
+> They are provided in this file below.
 
-There is a patch series from Peter Zijlstra, Palmer Dabbelt and Guo Ren
-that is currently under review for risc-v and csky, to add a generic ticket lock
-implementation that does not rely on sub-word atomics [1]. I think we
-also want to convert mips, xtensa, openrisc, and sparc64 to use that,
-since they have the same issue with the lack of 16-bit atomics.
+Ok, I see them now, not sure what I did wrong when I looked earlier.
 
-Please coordinate the inclusion of the patches with them and use that
-spinlock implementation for the initial merge, to avoid further discussion
-on the topic. If at a later point you are able to come up with a qspinlock
-implementation that has convincing forward-progress guarantees and
-can be shown to be better, we can revisit this.
-
-      Arnd
-
-[1] https://lore.kernel.org/lkml/20220319035457.2214979-1-guoren@kernel.org/
+        Arnd
