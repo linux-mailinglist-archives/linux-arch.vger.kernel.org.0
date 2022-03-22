@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A79F14E4657
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 19:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E7B4E465A
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 19:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiCVS6l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Mar 2022 14:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
+        id S229916AbiCVS6q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Mar 2022 14:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiCVS6l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 14:58:41 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8235291548;
-        Tue, 22 Mar 2022 11:57:13 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id bc27so13270276pgb.4;
-        Tue, 22 Mar 2022 11:57:13 -0700 (PDT)
+        with ESMTP id S229846AbiCVS6n (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 14:58:43 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4C091548;
+        Tue, 22 Mar 2022 11:57:15 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id w21so9579888pgm.7;
+        Tue, 22 Mar 2022 11:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7/C+r+DGfxoX8ATQDf4s+Is3SaexFRtpbLCXDVcWdio=;
-        b=kSfHfmNgWSWJBBFWfVDRwsGt99pDFf9+abSF3um81FCUeThZCoB4o7i9fADQsiluTL
-         r8VcwMtkwPV6YJeUxjOzY+7jVrj3pEcOaqlYrHks2c+sYaAQsZuRNDwRj5WqeyT/NSTP
-         K1jBl8+cDjcZJC0XlKIxgw2G5RHHEZyyfPvWjmp0hdcF/v0IREWtnMGiz9j8fpOIUoao
-         NIdUZJFwXF3MhpUTQJ2gOU+htX24hh12s2wf8VSFP061H4YAxbODwx5xVrHr7ME/Aqdb
-         3si7wURU5mCd7aGLgRfuSDBukrDxw++G2mXVdE3apZuesLAvAZjv22M4X8KsACSKMwOd
-         GNWg==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gAMBj1S29rgAzHcNPl/UWJtGAptXvHHW2Jh7MIwSDOM=;
+        b=hmhlSxZTx6aS+hIMhHNUz2KF//sFEwtfxPJISnORBDnKoJz+FNhUrWg2su2tviz/cN
+         J2Q7GYV3bp2NNybGH17XweiZlGNpdm2v3fJmudkY1dKQLA0nidLaj8syH+wdh0kWXaTJ
+         +8duOg01rsa+Za8uuBZJxXAeeG6qxd004HiungJcyaasNl1SUbArMI6MlzxAIgZl8H2f
+         JbSIS6PEIWgTPVFeM4R9fFClqdICrgKL0A8rMNKEiyFAi7zWa1mj9s03Ejwx+5ESUNRs
+         jrVH//4MvM9ENJlifOH2YFl9dmEfWCWRCjYUbi3XL9jqgFTHiVWpHG1r8lpBiKe8ZqMJ
+         ApGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=7/C+r+DGfxoX8ATQDf4s+Is3SaexFRtpbLCXDVcWdio=;
-        b=U40oswWIVzcC1lriX3n51LepF73FwQ1jAdoXebZIxBkfYv+K0xUFL6qEdcyBPF804t
-         xe4ck53i7KY2+t94ABNKnIbyNU3taz22SIEOv7mAP37w5GaOQ/g6iWNFsa6WY7COCemJ
-         0eWz/yr4rINL6XorEPrlvOK8wejqaq6qwVJcF3Dpf/mcVzvgL+Ol6mJwBh/czpCYDXzf
-         pEbIG+2E7C0qDxoDXHKfd1b4oV1TDQ6xWj03J4ckdHWkQLG8JWWxE44KY3srhlArISq2
-         PtUIDlQYHJrPQQQbYW+PKOdgM47lrxDk8Fr1WDF5jMKHJt8+hyp5oRdyg0ZiI2Q+T2yI
-         Jv0w==
-X-Gm-Message-State: AOAM530k1/XeYBi7WMyXiNz8AmCfCAybf5GRDuSoi6842/Uf+BcLv9J5
-        orY35O93nUFT1KohUYW+mxz/Qm4HXBo=
-X-Google-Smtp-Source: ABdhPJxfagjRc+kiSTPP2nVajfWpYTsYr0uvUXeR0af+I1dJ+0wOKYuvefOGneiaCuv7gk2acOP/JA==
-X-Received: by 2002:a63:af06:0:b0:378:3582:a49f with SMTP id w6-20020a63af06000000b003783582a49fmr23051758pge.125.1647975432914;
-        Tue, 22 Mar 2022 11:57:12 -0700 (PDT)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=gAMBj1S29rgAzHcNPl/UWJtGAptXvHHW2Jh7MIwSDOM=;
+        b=0I9hC0o8I84NG0a2akb1dd86lVaeaBNfZOte73H4o9qYN/x7SzY3YJhdJ0A1bDCe9P
+         crXe+dF1pQI8LgRl+dY4qN+ngwejQWvmGiZImeR2rsByhizmesU9d2x7/eyourRA3VT4
+         l+lbACS65PPHr4gX/wqOh7uB9lJK2avhGteFziwxf2X7fOXiz+E+r1kVR+SXcXWyDU5f
+         1yuNpoCe4i+CMX2JEFhR1MYz11NqCwGSNTkIyLTBemngL5O4xu15kpn0rtLSDfg1Rj39
+         AYPGq4mYZNhCwVQ7Mh8tv4B1XmVXdB+bBtiqMSAFO2ze3Fja0eF1Fh5lOzCeqvaJPRuR
+         EIGw==
+X-Gm-Message-State: AOAM531PyBtdQwZI8Z7G9eO3ZfvcPniA3gNmRKBzvkXADHcAniDBPO6h
+        lTfnbY/y65eKzgNvVei1a1Cshyxl3PU=
+X-Google-Smtp-Source: ABdhPJz/yMJgmlsKxx/8y/7qKGZmUAeKx49YYWs9Wej7R+HBSQop0d4WzwpMbAKrAcafRuZhsCPbvA==
+X-Received: by 2002:a63:ea51:0:b0:380:7c35:188e with SMTP id l17-20020a63ea51000000b003807c35188emr23113078pgk.607.1647975435002;
+        Tue, 22 Mar 2022 11:57:15 -0700 (PDT)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:c09f:7727:246c:bda2])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056a00124e00b004fab8f3245fsm3772681pfi.149.2022.03.22.11.57.10
+        by smtp.gmail.com with ESMTPSA id u14-20020a056a00124e00b004fab8f3245fsm3772681pfi.149.2022.03.22.11.57.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 11:57:12 -0700 (PDT)
+        Tue, 22 Mar 2022 11:57:14 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>,
@@ -61,11 +61,13 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH 0/2] locking: Add new lock contention tracepoints (v4)
-Date:   Tue, 22 Mar 2022 11:57:07 -0700
-Message-Id: <20220322185709.141236-1-namhyung@kernel.org>
+        bpf@vger.kernel.org, Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Subject: [PATCH 1/2] locking: Add lock contention tracepoints
+Date:   Tue, 22 Mar 2022 11:57:08 -0700
+Message-Id: <20220322185709.141236-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
+In-Reply-To: <20220322185709.141236-1-namhyung@kernel.org>
+References: <20220322185709.141236-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,72 +81,135 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello,
+This adds two new lock contention tracepoints like below:
 
-There have been some requests for low-overhead kernel lock contention
-monitoring.  The kernel has CONFIG_LOCK_STAT to provide such an infra
-either via /proc/lock_stat or tracepoints directly.
+ * lock:contention_begin
+ * lock:contention_end
 
-However it's not light-weight and hard to be used in production.  So
-I'm trying to add new tracepoints for lock contention and using them
-as a base to build a new monitoring system.
+The lock:contention_begin takes a flags argument to classify locks.  I
+found it useful to identify what kind of locks it's tracing like if
+it's spinning or sleeping, reader-writer lock, real-time, and per-cpu.
 
-* Changes in v4
- - use __print_flags in the TP_printk()
- - reworked __down_common for semaphore
- - add Tested-by from Hyeonggon Yoo
+Move tracepoint definitions into mutex.c so that we can use them
+without lockdep.
+
+Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ include/trace/events/lock.h | 61 +++++++++++++++++++++++++++++++++++--
+ kernel/locking/lockdep.c    |  1 -
+ kernel/locking/mutex.c      |  3 ++
+ 3 files changed, 61 insertions(+), 4 deletions(-)
+
+diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
+index d7512129a324..b9b6e3edd518 100644
+--- a/include/trace/events/lock.h
++++ b/include/trace/events/lock.h
+@@ -5,11 +5,21 @@
+ #if !defined(_TRACE_LOCK_H) || defined(TRACE_HEADER_MULTI_READ)
+ #define _TRACE_LOCK_H
  
-* Changes in v3
- - move the tracepoints deeper in the slow path
- - remove the caller ip
- - don't use task state in the flags
- - add 'ret' field to the contention end tracepoint
-
-* Changes in v2
- - do not use lockdep infrastructure
- - add flags argument to lock:contention_begin tracepoint
-
-I added a flags argument in the contention_begin to classify locks in
-question.  It can tell whether it's a spinlock, reader-writer lock or
-a mutex.  With stacktrace, users can identify which lock is contended.
-
-The patch 01 added the tracepoints and move the definition to the
-mutex.c file so that it can see the tracepoints without lockdep.
-
-The patch 02 actually installs the tracepoints in the locking code.
-To minimize the overhead, they were added in the slow path of the code
-separately.  As spinlocks are defined in the arch headers, I couldn't
-handle them all.  I've just added it to generic queued spinlock and
-rwlocks only.  Each arch can add the tracepoints later.
-
-This series base on the current tip/locking/core and you get it from
-'locking/tracepoint-v4' branch in my tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-
-Thanks,
-Namhyung
-
-
-Namhyung Kim (2):
-  locking: Add lock contention tracepoints
-  locking: Apply contention tracepoints in the slow path
-
- include/trace/events/lock.h   | 61 +++++++++++++++++++++++++++++++++--
- kernel/locking/lockdep.c      |  1 -
- kernel/locking/mutex.c        |  6 ++++
- kernel/locking/percpu-rwsem.c |  3 ++
- kernel/locking/qrwlock.c      |  9 ++++++
- kernel/locking/qspinlock.c    |  5 +++
- kernel/locking/rtmutex.c      | 11 +++++++
- kernel/locking/rwbase_rt.c    |  3 ++
- kernel/locking/rwsem.c        |  9 ++++++
- kernel/locking/semaphore.c    | 15 ++++++++-
- 10 files changed, 118 insertions(+), 5 deletions(-)
-
-
-base-commit: cd27ccfc727e99352321c0c75012ab9c5a90321e
+-#include <linux/lockdep.h>
++#include <linux/sched.h>
+ #include <linux/tracepoint.h>
+ 
++/* flags for lock:contention_begin */
++#define LCB_F_SPIN	(1U << 0)
++#define LCB_F_READ	(1U << 1)
++#define LCB_F_WRITE	(1U << 2)
++#define LCB_F_RT	(1U << 3)
++#define LCB_F_PERCPU	(1U << 4)
++
++
+ #ifdef CONFIG_LOCKDEP
+ 
++#include <linux/lockdep.h>
++
+ TRACE_EVENT(lock_acquire,
+ 
+ 	TP_PROTO(struct lockdep_map *lock, unsigned int subclass,
+@@ -78,8 +88,53 @@ DEFINE_EVENT(lock, lock_acquired,
+ 	TP_ARGS(lock, ip)
+ );
+ 
+-#endif
+-#endif
++#endif /* CONFIG_LOCK_STAT */
++#endif /* CONFIG_LOCKDEP */
++
++TRACE_EVENT(contention_begin,
++
++	TP_PROTO(void *lock, unsigned int flags),
++
++	TP_ARGS(lock, flags),
++
++	TP_STRUCT__entry(
++		__field(void *, lock_addr)
++		__field(unsigned int, flags)
++	),
++
++	TP_fast_assign(
++		__entry->lock_addr = lock;
++		__entry->flags = flags;
++	),
++
++	TP_printk("%p (flags=%s)", __entry->lock_addr,
++		  __print_flags(__entry->flags, "|",
++				{ LCB_F_SPIN,		"SPIN" },
++				{ LCB_F_READ,		"READ" },
++				{ LCB_F_WRITE,		"WRITE" },
++				{ LCB_F_RT,		"RT" },
++				{ LCB_F_PERCPU,		"PERCPU" }
++			  ))
++);
++
++TRACE_EVENT(contention_end,
++
++	TP_PROTO(void *lock, int ret),
++
++	TP_ARGS(lock, ret),
++
++	TP_STRUCT__entry(
++		__field(void *, lock_addr)
++		__field(int, ret)
++	),
++
++	TP_fast_assign(
++		__entry->lock_addr = lock;
++		__entry->ret = ret;
++	),
++
++	TP_printk("%p (ret=%d)", __entry->lock_addr, __entry->ret)
++);
+ 
+ #endif /* _TRACE_LOCK_H */
+ 
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 50036c10b518..08f8fb6a2d1e 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -60,7 +60,6 @@
+ 
+ #include "lockdep_internals.h"
+ 
+-#define CREATE_TRACE_POINTS
+ #include <trace/events/lock.h>
+ 
+ #ifdef CONFIG_PROVE_LOCKING
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index 5e3585950ec8..ee2fd7614a93 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -30,6 +30,9 @@
+ #include <linux/debug_locks.h>
+ #include <linux/osq_lock.h>
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/lock.h>
++
+ #ifndef CONFIG_PREEMPT_RT
+ #include "mutex.h"
+ 
 -- 
 2.35.1.894.gb6a874cedc-goog
 
