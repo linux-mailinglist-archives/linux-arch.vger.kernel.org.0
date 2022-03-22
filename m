@@ -2,114 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218174E45D6
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 19:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8333A4E45DB
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 19:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237178AbiCVSTv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Mar 2022 14:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S239500AbiCVSU6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Mar 2022 14:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232524AbiCVSTv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 14:19:51 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C6846644
-        for <linux-arch@vger.kernel.org>; Tue, 22 Mar 2022 11:18:22 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id p9so24585901wra.12
-        for <linux-arch@vger.kernel.org>; Tue, 22 Mar 2022 11:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Au0wuGbmyZQRc3YRooDi+lrIszQt6rNnlcrfEDXqtwM=;
-        b=mXhuIMjn3uChtCcb9K8CZhFjjPYtbSBGn8NMsUNFxDideafXuSwJUpedM6R5NkuD41
-         FWodwy/Zvv2BSJCJ6e32JpS18fFx7FY0lvk37TkItGCwdtB+yU5idyhXuiemVKE18V0C
-         l0QquQJW2o06l3mJTYCKgD3MpzmwURJInuRHOM7HTvRdIxV6/dKbwY9BEuIJdlyqLswQ
-         yu7D6bN6COkQhTMw+tRbDgkQycyMvHZLHG/AH8r/GHfE9g148SbWHA7YERGAvqYSLwn3
-         v0FU5xXPaWOTSku+mt5Szj0T2gQQXoVEKOnOWDR7bAukdFSUyKm3n3XOLAHcO2q3zcsw
-         dfoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Au0wuGbmyZQRc3YRooDi+lrIszQt6rNnlcrfEDXqtwM=;
-        b=z3xtDjpB3AhOI5Sgtnn9LUTCdBlQifR9k5qYjyokRJEnckk0WxnfJY/J9gZaNO4qHJ
-         Gl/Y+9QsyzJ8XTNk+H0bCt9BTYP0UZbHTPcqoM6hK4qTdYLpsQHCc+mZ4X487gXpHMEY
-         XFk1kgD88L9+8Ka6cH09fAY4N2WtihE/KD0CkjIKyMGWJKnvD2UtS4TPajh0Z7RDpWt4
-         /i3ag/yDpiw0eisYkSpwYWTmxJiZTLgj0/Bw88MtAJdUGZOS/e8JYXRgvZxtYpqe7K6H
-         xNlQBUVDyztHXUbhUcGlfG0Aw8bOC0/7mnuOOS6vOhf35vKvCNCO847SiTSBG0pnE0t2
-         tgow==
-X-Gm-Message-State: AOAM531ZzyqE1GeM90rWeXbStdVFth0t6ltLSNDsvFcdry7MkkNTdKZi
-        XVD3/rQglFsbb++9T8R9oV6uHA==
-X-Google-Smtp-Source: ABdhPJzo+v251N7F/kHeIIlbL9L7OkMaXL6JiW+aiVCl9WMXHup3N+5Shv6bcH5nGjpVfy+o5CVcdw==
-X-Received: by 2002:adf:fe8d:0:b0:203:e02e:c6c7 with SMTP id l13-20020adffe8d000000b00203e02ec6c7mr23986364wrr.37.1647973101291;
-        Tue, 22 Mar 2022 11:18:21 -0700 (PDT)
-Received: from [192.168.2.116] ([109.76.4.19])
-        by smtp.gmail.com with ESMTPSA id z13-20020a5d440d000000b00203f2b010b1sm11796069wrq.44.2022.03.22.11.18.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 11:18:20 -0700 (PDT)
-Message-ID: <c0328672-6dd1-b65b-1e2f-6f2562084f2d@conchuod.ie>
-Date:   Tue, 22 Mar 2022 18:18:18 +0000
+        with ESMTP id S240234AbiCVSU4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 14:20:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF786FF6B;
+        Tue, 22 Mar 2022 11:19:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAE84B81D57;
+        Tue, 22 Mar 2022 18:19:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CB13C340EC;
+        Tue, 22 Mar 2022 18:19:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="f7++ytaT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1647973161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kC3rlTX6IZ1qsGZ7LbDOlnDblc/s2ccWEzBAw4VZMDc=;
+        b=f7++ytaT+H4u8qIP3z8QM4EFX6FAMoDH590KSUK64ZOpOrVJ5PuZLQuBMwkGrSFTEN1k/a
+        d05Aa9C/shaEo0E+EIQY7x2vghRnB6o4FvQbDIhwvvXfNkxlVtbdf2zIVQKm0FLTxA2H1K
+        /o8yXOT4AC4cjLQqpX6LcrKPdfygCxQ=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 262f21e8 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 22 Mar 2022 18:19:20 +0000 (UTC)
+Date:   Tue, 22 Mar 2022 12:19:16 -0600
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <YjoTJFRook+rGyDI@zx2c4.com>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoC5kQMqyC/3L5Y@zx2c4.com>
+ <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/5] Generic Ticket Spinlocks
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        linux-riscv@lists.infradead.org
-Cc:     jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, mingo@redhat.com, Will Deacon <will@kernel.org>,
-        longman@redhat.com, boqun.feng@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, jszhang@kernel.org,
-        wangkefeng.wang@huawei.com, openrisc@lists.librecores.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        peterz@infradead.org
-References: <20220316232600.20419-1-palmer@rivosinc.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220316232600.20419-1-palmer@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 16/03/2022 23:25, Palmer Dabbelt wrote:
-> Peter sent an RFC out about a year ago
-> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
-> but after a spirited discussion it looks like we lost track of things.
-> IIRC there was broad consensus on this being the way to go, but there
-> was a lot of discussion so I wasn't sure.  Given that it's been a year,
-> I figured it'd be best to just send this out again formatted a bit more
-> explicitly as a patch.
-> 
-> This has had almost no testing (just a build test on RISC-V defconfig),
-> but I wanted to send it out largely as-is because I didn't have a SOB
-> from Peter on the code.  I had sent around something sort of similar in
-> spirit, but this looks completely re-written.  Just to play it safe I
-> wanted to send out almost exactly as it was posted.  I'd probably rename
-> this tspinlock and tspinlock_types, as the mis-match kind of makes my
-> eyes go funny, but I don't really care that much.  I'll also go through
-> the other ports and see if there's any more candidates, I seem to
-> remember there having been more than just OpenRISC but it's been a
-> while.
-> 
-> I'm in no big rush for this and given the complex HW dependencies I
-> think it's best to target it for 5.19, that'd give us a full merge
-> window for folks to test/benchmark it on their systems to make sure it's
-> OK.
+Hi Guenter,
 
-Is there a specific way you have been testing/benching things, or is it 
-just a case of test what we ourselves care about?
+On Tue, Mar 22, 2022 at 10:56:44AM -0700, Guenter Roeck wrote:
+> Everything - including the various root file systems - is at
+> git@github.com:groeck/linux-build-test.git. Look into rootfs/ for the
+> various boot tests. I'll be happy to provide some qemu command lines
+> if needed.
 
-Thanks,
-Conor.
+Thanks. It looks like the "problem" is with this shell script:
 
-> RISC-V has a forward progress guarantee so we should be safe, but
-> these can always trip things up.
+  init_rng() {
+    if check_file_size; then
+      printf 'Initializing random number generator: '
+      dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1 2> /dev/null
+      status=$?
+      if [ "$status" -eq 0 ]; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
+      return "$status"
+    fi
+  }
+  
+  save_random_seed() {
+    printf 'Saving random seed: '
+    if touch "$URANDOM_SEED" 2> /dev/null; then
+      old_umask=$(umask)
+      umask 077
+      dd if=/dev/urandom of="$URANDOM_SEED" bs="$pool_size" count=1 2> /dev/null
+      status=$?
+      umask "$old_umask"
+      if [ "$status" -eq 0 ]; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
+    else
+      status=$?
+      echo "SKIP (read-only file system detected)"
+    fi
+    return "$status"
+  }
+
+  case "$1" in
+    start|restart|reload)
+      # Carry a random seed from start-up to start-up
+      # Load and then save the whole entropy pool
+      init_rng && save_random_seed;;
+
+This code is actually problematic for a number of reasons. (And Linus,
+I'm not saying "userspace is wrong" to justify breaking it or something,
+don't worry.)
+
+The first `dd if="$URANDOM_SEED" bs="$pool_size" of=/dev/urandom count=1`
+will write the seed into the input pool, but:
+
+  - It won't credit the entropy from that seed, so the pool won't
+    actually initialize. (You need to use the ioctl to credit it.)
+  - Because the pool doesn't initialize, subsequent reads from
+    /dev/urandom won't actually use that seed.
+
+The first point is why we had to revert this patch. But the second one
+is actually a bit dangerous: you might write in a perfectly good seed to
+/dev/urandom, but what you read out for the subsequent seed may be
+complete deterministic crap. This is because the call to write_pool()
+goes right into the input pool and doesn't touch any of the "fast init"
+stuff, where we immediately mutate the crng key during early boot.
+
+As far as I can tell, this has been the behavior for a really long time,
+making the above innocuous pattern a pretty old thing that's broken. So
+I could perhaps say, "this behavior is so old now, that your userspace
+code is just plain broken," but I think I might actually have a very
+quick unobtrusive fix for this. I'll mull some things over for rc2 or
+later in rc1.
+
+But, anyway, this only fixes the second point mentioned above. The first
+one -- which resulted in the revert -- remains a stumper for now.
+
+Jason
