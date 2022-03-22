@@ -2,193 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECAD54E466D
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 20:04:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6238E4E4728
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 21:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiCVTFi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Mar 2022 15:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S232507AbiCVUE3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Mar 2022 16:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230383AbiCVTFg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 15:05:36 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA25DE85;
-        Tue, 22 Mar 2022 12:04:08 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id b24so22830262edu.10;
-        Tue, 22 Mar 2022 12:04:08 -0700 (PDT)
+        with ESMTP id S232506AbiCVUE2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 16:04:28 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256CA4ECF4
+        for <linux-arch@vger.kernel.org>; Tue, 22 Mar 2022 13:02:59 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o68-20020a17090a0a4a00b001c686a48263so2343240pjo.1
+        for <linux-arch@vger.kernel.org>; Tue, 22 Mar 2022 13:02:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hfLUfSmKk/F6oL+pEdnJmHbr46HHHKKN6gcQZmfRAMw=;
-        b=XwH1KBP7s8AWHIdqkpt29/9jKPxp2TUdIHq4DYz2SkEkpNwuXBjh3+Jy773jmZN6vj
-         sGD8nlOqmKY20ZzqpHgfGQ7HA1sKoi1IGecbHnUkjkXIJHX9nSBa4vEcYvbfXLmwf9oA
-         PAOYtiyhUEIHXoC7hcexSBXROndfo13UwiiWpxZmGa4lGFc6v8cRehieAJDpVYKVAQRR
-         PVfct1tzf+vcw2wkAWT3DyWC8aCjz4nfCSYkYOMam1zXJrrwGB0+V9/dJlPdDpWUCewS
-         zyspE8YDK/F8HcmixEnYeAmTYvTj40gQOd8cSN6U1Be3leUfhC1PtA7n+8mASN1LJCsW
-         EgpQ==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9z2OhjirVkz2pUbqaGLshsVzbhbV6ISeuMuKyH7hsWQ=;
+        b=K2Z9Zm7zGkxEMQYec2pWhgy2XOQfPvprN/HESKZHkKo7Ap1wOflyxcYFVKuQSFNTtJ
+         b9eFHIu5L4AWWJc2rbAjlYQK/tgMamITSdBIPTLzdCBvH8/DXHUfNKDYKSV7uYAznF90
+         5FxANI/+CMn1ACq4S2PDBARc6QZrHnYt+JDhpLr4w8ewc+e7OZeymUewObip6OUr83bx
+         ISHC6wAzK0V580zpUIfhQ0ipyyDhSG+fqlhmjqKrcby6Xp2j4oPkxHvlbuOTiWi5cEHr
+         onyxLF1gkS/IltPtPUFuIQ6wdwtukxWWzPL22YWYSAJ3n74leqv6DMiSscTz9OOEhs1N
+         LAvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hfLUfSmKk/F6oL+pEdnJmHbr46HHHKKN6gcQZmfRAMw=;
-        b=PX7OQml7m+370t6HaGT1d2RkmkeX527LEHYVocFYqQLqQ7T5EDGaMjwVSPuSM5EhpG
-         BUokspA1bm8m8dW3p1WTjz8gtWJhyvuDEj0fLCFPj3oid6dWV2eAIJKLsE9zwuOrfBu1
-         s98RcQMzqZVXgJ15WDAnfzIPNmNTTXtYuLjOfLW4SPkwjW8iY+Ux4kiRBDXyW9AFFOlH
-         7d7o8jaPHgjQX63jKQZqfKq0PB6a2dkNIUAG9K68M8Baw/JOaWc0a33btuUUeEzIg9pN
-         CC52CgCdItbieKvbm6GWHIk+jwlWYIAQOHi25vUJVo0ZP7zuQ9+J4fSNYMyktO5q7XVT
-         2Dmw==
-X-Gm-Message-State: AOAM532+Wn7cN3ScyjqMyqywp1RJnHNGXBfalOrdUk8/yzwcUopPZ/ZS
-        /4aZYkVKzLrCb5a2rj2n0lezUE/PX1v2XXyVYCo=
-X-Google-Smtp-Source: ABdhPJwfpbpd/pXkiH2VtyBbD4b0xTNa7Dts7vTqnqzOw6ZriE6R584i1NaFtOgyocc/mhJuDI6NiS1GOuS42sgPR9w=
-X-Received: by 2002:a50:ec16:0:b0:40f:28a0:d0d6 with SMTP id
- g22-20020a50ec16000000b0040f28a0d0d6mr24268596edr.368.1647975847194; Tue, 22
- Mar 2022 12:04:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <Ydm7ReZWQPrbIugn@gmail.com> <YjBr10JXLGHfEFfi@gmail.com>
- <CAKBF=pvWzuPx0JB3XZ-v+i7KGbhMQTgH6xtii_Bed+qKRFx+ww@mail.gmail.com>
- <b8095bf8-961f-827c-2bd6-2ffa6298b730@infradead.org> <CAC=eVgQCs97N_jkB1LKOdxhd=Yvgf1SZfBWcDbG2dGhsihXLqw@mail.gmail.com>
-In-Reply-To: <CAC=eVgQCs97N_jkB1LKOdxhd=Yvgf1SZfBWcDbG2dGhsihXLqw@mail.gmail.com>
-From:   Kari Argillander <kari.argillander@gmail.com>
-Date:   Tue, 22 Mar 2022 21:03:56 +0200
-Message-ID: <CAC=eVgQeawN4Kr2DSePunCdLr_z9zbE=W72vVcLpHU63_3u4YA@mail.gmail.com>
-Subject: Re: [TREE] "Fast Kernel Headers" Tree -v3
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Kari Argillander <kari.argillander@stargateuniverse.net>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=9z2OhjirVkz2pUbqaGLshsVzbhbV6ISeuMuKyH7hsWQ=;
+        b=Hh5cgDwS+uDwjG1ueQNKYDT+UEcDB+ln19IUlsU0zNgdOR+rXChMFJ2U3X0065XNe+
+         vG5qUJGL33QkFwYc0VXtCo/ixcPlCHj2v3kpOco4Fa/PEYQ7SAwCFHcFSXcHjIhikcKi
+         uBbfP0yU8bb6zLoK72NIDYQQXnoKyJD/KptTr58XXdJSSvoNxKOOWySwl8goR9QABhVS
+         Q2eydocSLVtnOz4KEieYCoyaTqsJSizdq+WNJzrFcQ03hSPzCn6eGYGU9+gPfcgsw0dD
+         8szkpE3ASVvB/V1TFsQ/GwuHMz1JMcQcmikl+wYtKqJ2vBW2Q2JgwrOeUTgzImrnwn4r
+         dSlQ==
+X-Gm-Message-State: AOAM532jgZHSFDdCwRRSd4fgaGbFH8hFBU/D7Ui0LXdDe6CIvL0A9jAm
+        tKzQU+hSNCoZOee8Mvrvp+Mrxg==
+X-Google-Smtp-Source: ABdhPJxGBLZF1jlZKcKbjlOflMXaW/vAHBWu7fR9pPGvxm7TO7lO3LkOEzMtr4yuUNUKm16mJIbDEQ==
+X-Received: by 2002:a17:902:e88e:b0:154:7562:176d with SMTP id w14-20020a170902e88e00b001547562176dmr8166892plg.13.1647979378618;
+        Tue, 22 Mar 2022 13:02:58 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id h2-20020a056a00218200b004f6519ce666sm24451135pfi.170.2022.03.22.13.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Mar 2022 13:02:58 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 13:02:58 -0700 (PDT)
+X-Google-Original-Date: Tue, 22 Mar 2022 13:02:56 PDT (-0700)
+Subject:     Re: [PATCH 0/5] Generic Ticket Spinlocks
+In-Reply-To: <c0328672-6dd1-b65b-1e2f-6f2562084f2d@conchuod.ie>
+CC:     linux-riscv@lists.infradead.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        mingo@redhat.com, Will Deacon <will@kernel.org>,
+        longman@redhat.com, boqun.feng@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        jszhang@kernel.org, wangkefeng.wang@huawei.com,
+        openrisc@lists.librecores.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, peterz@infradead.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     mail@conchuod.ie
+Message-ID: <mhng-f97b1e7d-1523-4ae5-923b-e73a8db48824@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-22.03.2022 18.22 Kari Argillander (kari.argillander@gmail.com) wrote:
+On Tue, 22 Mar 2022 11:18:18 PDT (-0700), mail@conchuod.ie wrote:
+> On 16/03/2022 23:25, Palmer Dabbelt wrote:
+>> Peter sent an RFC out about a year ago
+>> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>,
+>> but after a spirited discussion it looks like we lost track of things.
+>> IIRC there was broad consensus on this being the way to go, but there
+>> was a lot of discussion so I wasn't sure.  Given that it's been a year,
+>> I figured it'd be best to just send this out again formatted a bit more
+>> explicitly as a patch.
+>>
+>> This has had almost no testing (just a build test on RISC-V defconfig),
+>> but I wanted to send it out largely as-is because I didn't have a SOB
+>> from Peter on the code.  I had sent around something sort of similar in
+>> spirit, but this looks completely re-written.  Just to play it safe I
+>> wanted to send out almost exactly as it was posted.  I'd probably rename
+>> this tspinlock and tspinlock_types, as the mis-match kind of makes my
+>> eyes go funny, but I don't really care that much.  I'll also go through
+>> the other ports and see if there's any more candidates, I seem to
+>> remember there having been more than just OpenRISC but it's been a
+>> while.
+>>
+>> I'm in no big rush for this and given the complex HW dependencies I
+>> think it's best to target it for 5.19, that'd give us a full merge
+>> window for folks to test/benchmark it on their systems to make sure it's
+>> OK.
 >
-> 22.03.2022 17.37 Randy Dunlap (rdunlap@infradead.org) wrote:
-> >
-> > Hi Kari,
-> >
-> > On 3/22/22 00:59, Kari Argillander wrote:
-> > > 15.3.2022 12.35 Ingo Molnar (mingo@kernel.org) wrote:
-> > >>
-> > >> This is -v3 of the "Fast Kernel Headers" tree, which is an ongoing r=
-ework
-> > >> of the Linux kernel's header hierarchy & header dependencies, with t=
-he dual
-> > >> goals of:
-> > >>
-> > >>  - speeding up the kernel build (both absolute and incremental build=
- times)
-> > >>
-> > >>  - decoupling subsystem type & API definitions from each other
-> > >>
-> > >> The fast-headers tree consists of over 25 sub-trees internally, span=
-ning
-> > >> over 2,300 commits, which can be found at:
-> > >>
-> > >>     git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git mast=
-er
-> > >
-> > > I have had problems to build master branch (defconfig) with gcc9
-> > >     gcc (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-> > >
-> > > I did also test v2 and problems where there too. I have no problem wi=
-th gcc10 or
-> > > Clang11. Error I get is:
-> > >
-> > > In file included from ./include/linux/rcuwait_api.h:7,
-> > >                  from ./include/linux/rcuwait.h:6,
-> > >                  from ./include/linux/irq_work.h:7,
-> > >                  from ./include/linux/perf_event_types.h:44,
-> > >                  from ./include/linux/perf_event_api.h:17,
-> > >                  from arch/x86/kernel/kprobes/opt.c:8:
-> > > ./include/linux/rcuwait_api.h: In function =E2=80=98rcuwait_active=E2=
-=80=99:
-> > > ./include/linux/rcupdate.h:328:9: error: dereferencing pointer to
-> > > incomplete type =E2=80=98struct task_struct=E2=80=99
-> > >   328 |  typeof(*p) *local =3D (typeof(*p) *__force)READ_ONCE(p); \
-> > >       |         ^
-> > > ./include/linux/rcupdate.h:439:31: note: in expansion of macro
-> > > =E2=80=98__rcu_access_pointer=E2=80=99
-> > >   439 | #define rcu_access_pointer(p) __rcu_access_pointer((p),
-> > > __UNIQUE_ID(rcu), __rcu)
-> > >       |                               ^~~~~~~~~~~~~~~~~~~~
-> > > ./include/linux/rcuwait_api.h:15:11: note: in expansion of macro
-> > > =E2=80=98rcu_access_pointer=E2=80=99
-> > >    15 |  return !!rcu_access_pointer(w->task);
-> > >
-> > >     Argillander
-> >
-> > You could try the patch here:
-> > https://lore.kernel.org/all/917e9ce0-c8cf-61b2-d1ba-ebf25bbd979d@infrad=
-ead.org/
+> Is there a specific way you have been testing/benching things, or is it
+> just a case of test what we ourselves care about?
+
+I do a bunch of functional testing in QEMU (it's all in my 
+riscv-systems-ci repo, but that's not really fit for human consumption 
+so I don't tell folks to use it).  That's pretty much useless for 
+something like this: sure it'd find something just straight-up broken in 
+the lock implementation, but the stuff I'm really worried about here 
+would be poor interactions with hardware that wasn't designed/tested 
+against this flavor of locks.
+
+I don't currently do any regular testing on HW, but there's a handful of 
+folks who do.  If you've got HW you care about then the best bet is to 
+give this a shot on it.  There's already been some boot test reports, so 
+it's at least mostly there (on RISC-V, last I saw it was breaking 
+OpenRISC so there's probably some lurking issue somewhere).  I was 
+hoping we'd get enough coverage that way to have confidence in this, but 
+if not then I've got a bunch of RISC-V hardware lying around that I can 
+spin up to fill the gaps.
+
+As far as what workloads, I really don't know here.  At least on RISC-V, 
+I think any lock microbenchmarks would be essentially meaningless: this 
+is fair, so even if lock/unlock is a bit slower that's probably a win 
+for real workloads.  That said, I'm not sure any of the existing 
+hardware runs any workloads that I'm personally interested in so unless 
+this is some massive hit to just general system responsiveness or 
+make/GCC then I'm probably not going to find anything.
+
+Happy to hear if anyone has ideas, though.
+
 >
-> I have to edit it to <linux/cgroup_types.h> as there is no <linux/cgroup-=
-defs.h>
-> with fast headers. I also tried a couple other things but it didn't
-> seem to make a
-> difference.
+> Thanks,
+> Conor.
 >
-> > although the build error that it fixes doesn't look exactly the same
-> > as yours.
->
-> Quite close still. Maybe I should try to bisect this and I will also
-> see how bisectable
-> this branch is.
-
-Ok. I have now bisect first bad to this commit.
-c4ad6fcb67c4 ("sched/headers: Reorganize, clean up and optimize
-kernel/sched/fair.c dependencies")
-Note that this has been also bisect by others.
-
-With this I get little bit different error:
-
-In file included from ./arch/x86/include/generated/asm/rwonce.h:1,
-                 from ./include/linux/compiler.h:255,
-                 from ./include/linux/export.h:43,
-                 from ./include/linux/linkage.h:7,
-                 from ./include/linux/kernel.h:17,
-                 from ./include/linux/cpumask.h:10,
-                 from ./include/linux/energy_model.h:4,
-                 from kernel/sched/fair.c:23:
-./include/linux/psi.h: In function =E2=80=98cgroup_move_task=E2=80=99:
-./include/linux/rcupdate.h:414:36: error: dereferencing pointer to
-incomplete type =E2=80=98struct css_set=E2=80=99
-  414 | #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
-      |                                    ^~~~
-
-Which is actually the same error that is in Randy's message. Patch of
-Randy works
-on top of this commit. But I cannot get this patch to work with HEAD,
-but probably
-I'm just missing something obvious. Still nice to see that probably a
-solution is near.
-
-> > >> There's various changes in -v3, and it's now ported to the latest ke=
-rnel
-> > >> (v5.17-rc8).
-> > >>
-> > >> Diffstat difference:
-> > >>
-> > >>  -v2: 25332 files changed, 178498 insertions(+), 74790 deletions(-)
-> > >>  -v3: 25513 files changed, 180947 insertions(+), 74572 deletions(-)
-> >
-> >
-> > --
-> > ~Randy
+>> RISC-V has a forward progress guarantee so we should be safe, but
+>> these can always trip things up.
