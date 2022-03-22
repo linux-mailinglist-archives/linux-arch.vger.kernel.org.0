@@ -2,413 +2,193 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8734E465D
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 19:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAD54E466D
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 20:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiCVS6y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Mar 2022 14:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S229846AbiCVTFi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Mar 2022 15:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbiCVS6q (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 14:58:46 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E368291AC1;
-        Tue, 22 Mar 2022 11:57:17 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id mm17-20020a17090b359100b001c6da62a559so3917485pjb.3;
-        Tue, 22 Mar 2022 11:57:17 -0700 (PDT)
+        with ESMTP id S230383AbiCVTFg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 15:05:36 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA25DE85;
+        Tue, 22 Mar 2022 12:04:08 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id b24so22830262edu.10;
+        Tue, 22 Mar 2022 12:04:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=keBC9Cx+GJD+G5K0Ly5PenznMe+A5tNwjNrarSMPHBA=;
-        b=NFf0LtyI24+Q8VE54OYusrQ04kac7DYJBxK0WMr1H+2dmCCu7ZJX8Khn+uF1486Avv
-         5ntX7SSIZrQhEmf7MmcT0QdLmH54Le2AwY75WarC0mPKUcwiCMz3cYzzNnbFskdyw5Mw
-         uKDRznbc6zvZCzTYdSSDqo4+WErJp7kv6GSIfs7NUOMCpJZYlejYnLuIe9Ume+Rn8gL1
-         We9GmR5aYE8uY7NRnKqsbuZripS+IO1yIe39+E1hZyE6mEKzFrnb/40+Fpgm1VzCrgxs
-         qulVwoZw7mLE3mPJjDKLwFFxTPSwtFd1uWFRWVojjR+LgnXIF+eaDTDl5JrP+aK+zUEA
-         d7gw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hfLUfSmKk/F6oL+pEdnJmHbr46HHHKKN6gcQZmfRAMw=;
+        b=XwH1KBP7s8AWHIdqkpt29/9jKPxp2TUdIHq4DYz2SkEkpNwuXBjh3+Jy773jmZN6vj
+         sGD8nlOqmKY20ZzqpHgfGQ7HA1sKoi1IGecbHnUkjkXIJHX9nSBa4vEcYvbfXLmwf9oA
+         PAOYtiyhUEIHXoC7hcexSBXROndfo13UwiiWpxZmGa4lGFc6v8cRehieAJDpVYKVAQRR
+         PVfct1tzf+vcw2wkAWT3DyWC8aCjz4nfCSYkYOMam1zXJrrwGB0+V9/dJlPdDpWUCewS
+         zyspE8YDK/F8HcmixEnYeAmTYvTj40gQOd8cSN6U1Be3leUfhC1PtA7n+8mASN1LJCsW
+         EgpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=keBC9Cx+GJD+G5K0Ly5PenznMe+A5tNwjNrarSMPHBA=;
-        b=aWCGGdpFLOmt94oRK5gVkgUmfF+fQvZAwhiYxq4cSgdwduTNX9igXL+7muP93FC9t2
-         XHEVoHQRW+a00k0+wI+q8iURlGIE2rzyn1gX6YQVxtKwdimcdLks7ZtpBA44Em4zbilI
-         q39+Tn5NRsr+wsEEoN/+y75LxdAOkJ1E3SbPfGSy37m/dfJqj37SD5LCgdGDuNPfeqS9
-         Djh0YUi0w86748tAYduD5Vtu4oQbFH5WnSRQmkyjqggiujI3oXtd+M/RFZIxxgLur2yL
-         cchB8ZDLYO1gKPBDPihX/UqfELjmABAMdHvzVDOUwYvEPUdb7dHvlz8jIJSwJ1oWGXjB
-         OlJQ==
-X-Gm-Message-State: AOAM5324QmHyyvmr9INVxcgbNxsK2PA2MzSRlUCYJDXGY1vR3ceB8P1O
-        4EdipZtIOUUNjiCanHfwDOo=
-X-Google-Smtp-Source: ABdhPJyBs8Y3ozg7kH6SjL1LnKarp2lRFTvpbbSMncl4VTl/9Lu6/zI3Di6kyuZ6cfEsT98aJouojw==
-X-Received: by 2002:a17:902:ef46:b0:153:81f7:7fc2 with SMTP id e6-20020a170902ef4600b0015381f77fc2mr20047798plx.26.1647975437342;
-        Tue, 22 Mar 2022 11:57:17 -0700 (PDT)
-Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:3540:c09f:7727:246c:bda2])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056a00124e00b004fab8f3245fsm3772681pfi.149.2022.03.22.11.57.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Mar 2022 11:57:16 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Byungchul Park <byungchul.park@lge.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Radoslaw Burny <rburny@google.com>, linux-arch@vger.kernel.org,
-        bpf@vger.kernel.org, Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: [PATCH 2/2] locking: Apply contention tracepoints in the slow path
-Date:   Tue, 22 Mar 2022 11:57:09 -0700
-Message-Id: <20220322185709.141236-3-namhyung@kernel.org>
-X-Mailer: git-send-email 2.35.1.894.gb6a874cedc-goog
-In-Reply-To: <20220322185709.141236-1-namhyung@kernel.org>
-References: <20220322185709.141236-1-namhyung@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hfLUfSmKk/F6oL+pEdnJmHbr46HHHKKN6gcQZmfRAMw=;
+        b=PX7OQml7m+370t6HaGT1d2RkmkeX527LEHYVocFYqQLqQ7T5EDGaMjwVSPuSM5EhpG
+         BUokspA1bm8m8dW3p1WTjz8gtWJhyvuDEj0fLCFPj3oid6dWV2eAIJKLsE9zwuOrfBu1
+         s98RcQMzqZVXgJ15WDAnfzIPNmNTTXtYuLjOfLW4SPkwjW8iY+Ux4kiRBDXyW9AFFOlH
+         7d7o8jaPHgjQX63jKQZqfKq0PB6a2dkNIUAG9K68M8Baw/JOaWc0a33btuUUeEzIg9pN
+         CC52CgCdItbieKvbm6GWHIk+jwlWYIAQOHi25vUJVo0ZP7zuQ9+J4fSNYMyktO5q7XVT
+         2Dmw==
+X-Gm-Message-State: AOAM532+Wn7cN3ScyjqMyqywp1RJnHNGXBfalOrdUk8/yzwcUopPZ/ZS
+        /4aZYkVKzLrCb5a2rj2n0lezUE/PX1v2XXyVYCo=
+X-Google-Smtp-Source: ABdhPJwfpbpd/pXkiH2VtyBbD4b0xTNa7Dts7vTqnqzOw6ZriE6R584i1NaFtOgyocc/mhJuDI6NiS1GOuS42sgPR9w=
+X-Received: by 2002:a50:ec16:0:b0:40f:28a0:d0d6 with SMTP id
+ g22-20020a50ec16000000b0040f28a0d0d6mr24268596edr.368.1647975847194; Tue, 22
+ Mar 2022 12:04:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <Ydm7ReZWQPrbIugn@gmail.com> <YjBr10JXLGHfEFfi@gmail.com>
+ <CAKBF=pvWzuPx0JB3XZ-v+i7KGbhMQTgH6xtii_Bed+qKRFx+ww@mail.gmail.com>
+ <b8095bf8-961f-827c-2bd6-2ffa6298b730@infradead.org> <CAC=eVgQCs97N_jkB1LKOdxhd=Yvgf1SZfBWcDbG2dGhsihXLqw@mail.gmail.com>
+In-Reply-To: <CAC=eVgQCs97N_jkB1LKOdxhd=Yvgf1SZfBWcDbG2dGhsihXLqw@mail.gmail.com>
+From:   Kari Argillander <kari.argillander@gmail.com>
+Date:   Tue, 22 Mar 2022 21:03:56 +0200
+Message-ID: <CAC=eVgQeawN4Kr2DSePunCdLr_z9zbE=W72vVcLpHU63_3u4YA@mail.gmail.com>
+Subject: Re: [TREE] "Fast Kernel Headers" Tree -v3
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Kari Argillander <kari.argillander@stargateuniverse.net>,
+        Ingo Molnar <mingo@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Adding the lock contention tracepoints in various lock function slow
-paths.  Note that each arch can define spinlock differently, I only
-added it only to the generic qspinlock for now.
+22.03.2022 18.22 Kari Argillander (kari.argillander@gmail.com) wrote:
+>
+> 22.03.2022 17.37 Randy Dunlap (rdunlap@infradead.org) wrote:
+> >
+> > Hi Kari,
+> >
+> > On 3/22/22 00:59, Kari Argillander wrote:
+> > > 15.3.2022 12.35 Ingo Molnar (mingo@kernel.org) wrote:
+> > >>
+> > >> This is -v3 of the "Fast Kernel Headers" tree, which is an ongoing r=
+ework
+> > >> of the Linux kernel's header hierarchy & header dependencies, with t=
+he dual
+> > >> goals of:
+> > >>
+> > >>  - speeding up the kernel build (both absolute and incremental build=
+ times)
+> > >>
+> > >>  - decoupling subsystem type & API definitions from each other
+> > >>
+> > >> The fast-headers tree consists of over 25 sub-trees internally, span=
+ning
+> > >> over 2,300 commits, which can be found at:
+> > >>
+> > >>     git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git mast=
+er
+> > >
+> > > I have had problems to build master branch (defconfig) with gcc9
+> > >     gcc (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
+> > >
+> > > I did also test v2 and problems where there too. I have no problem wi=
+th gcc10 or
+> > > Clang11. Error I get is:
+> > >
+> > > In file included from ./include/linux/rcuwait_api.h:7,
+> > >                  from ./include/linux/rcuwait.h:6,
+> > >                  from ./include/linux/irq_work.h:7,
+> > >                  from ./include/linux/perf_event_types.h:44,
+> > >                  from ./include/linux/perf_event_api.h:17,
+> > >                  from arch/x86/kernel/kprobes/opt.c:8:
+> > > ./include/linux/rcuwait_api.h: In function =E2=80=98rcuwait_active=E2=
+=80=99:
+> > > ./include/linux/rcupdate.h:328:9: error: dereferencing pointer to
+> > > incomplete type =E2=80=98struct task_struct=E2=80=99
+> > >   328 |  typeof(*p) *local =3D (typeof(*p) *__force)READ_ONCE(p); \
+> > >       |         ^
+> > > ./include/linux/rcupdate.h:439:31: note: in expansion of macro
+> > > =E2=80=98__rcu_access_pointer=E2=80=99
+> > >   439 | #define rcu_access_pointer(p) __rcu_access_pointer((p),
+> > > __UNIQUE_ID(rcu), __rcu)
+> > >       |                               ^~~~~~~~~~~~~~~~~~~~
+> > > ./include/linux/rcuwait_api.h:15:11: note: in expansion of macro
+> > > =E2=80=98rcu_access_pointer=E2=80=99
+> > >    15 |  return !!rcu_access_pointer(w->task);
+> > >
+> > >     Argillander
+> >
+> > You could try the patch here:
+> > https://lore.kernel.org/all/917e9ce0-c8cf-61b2-d1ba-ebf25bbd979d@infrad=
+ead.org/
+>
+> I have to edit it to <linux/cgroup_types.h> as there is no <linux/cgroup-=
+defs.h>
+> with fast headers. I also tried a couple other things but it didn't
+> seem to make a
+> difference.
+>
+> > although the build error that it fixes doesn't look exactly the same
+> > as yours.
+>
+> Quite close still. Maybe I should try to bisect this and I will also
+> see how bisectable
+> this branch is.
 
-Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- kernel/locking/mutex.c        |  3 +++
- kernel/locking/percpu-rwsem.c |  3 +++
- kernel/locking/qrwlock.c      |  9 +++++++++
- kernel/locking/qspinlock.c    |  5 +++++
- kernel/locking/rtmutex.c      | 11 +++++++++++
- kernel/locking/rwbase_rt.c    |  3 +++
- kernel/locking/rwsem.c        |  9 +++++++++
- kernel/locking/semaphore.c    | 15 ++++++++++++++-
- 8 files changed, 57 insertions(+), 1 deletion(-)
+Ok. I have now bisect first bad to this commit.
+c4ad6fcb67c4 ("sched/headers: Reorganize, clean up and optimize
+kernel/sched/fair.c dependencies")
+Note that this has been also bisect by others.
 
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index ee2fd7614a93..c88deda77cf2 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -644,6 +644,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 	}
- 
- 	set_current_state(state);
-+	trace_contention_begin(lock, 0);
- 	for (;;) {
- 		bool first;
- 
-@@ -710,6 +711,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- skip_wait:
- 	/* got the lock - cleanup and rejoice! */
- 	lock_acquired(&lock->dep_map, ip);
-+	trace_contention_end(lock, 0);
- 
- 	if (ww_ctx)
- 		ww_mutex_lock_acquired(ww, ww_ctx);
-@@ -721,6 +723,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- err:
- 	__set_current_state(TASK_RUNNING);
- 	__mutex_remove_waiter(lock, &waiter);
-+	trace_contention_end(lock, ret);
- err_early_kill:
- 	raw_spin_unlock(&lock->wait_lock);
- 	debug_mutex_free_waiter(&waiter);
-diff --git a/kernel/locking/percpu-rwsem.c b/kernel/locking/percpu-rwsem.c
-index c9fdae94e098..833043613af6 100644
---- a/kernel/locking/percpu-rwsem.c
-+++ b/kernel/locking/percpu-rwsem.c
-@@ -9,6 +9,7 @@
- #include <linux/sched/task.h>
- #include <linux/sched/debug.h>
- #include <linux/errno.h>
-+#include <trace/events/lock.h>
- 
- int __percpu_init_rwsem(struct percpu_rw_semaphore *sem,
- 			const char *name, struct lock_class_key *key)
-@@ -154,6 +155,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
- 	}
- 	spin_unlock_irq(&sem->waiters.lock);
- 
-+	trace_contention_begin(sem, LCB_F_PERCPU | (reader ? LCB_F_READ : LCB_F_WRITE));
- 	while (wait) {
- 		set_current_state(TASK_UNINTERRUPTIBLE);
- 		if (!smp_load_acquire(&wq_entry.private))
-@@ -161,6 +163,7 @@ static void percpu_rwsem_wait(struct percpu_rw_semaphore *sem, bool reader)
- 		schedule();
- 	}
- 	__set_current_state(TASK_RUNNING);
-+	trace_contention_end(sem, 0);
- }
- 
- bool __sched __percpu_down_read(struct percpu_rw_semaphore *sem, bool try)
-diff --git a/kernel/locking/qrwlock.c b/kernel/locking/qrwlock.c
-index ec36b73f4733..b9f6f963d77f 100644
---- a/kernel/locking/qrwlock.c
-+++ b/kernel/locking/qrwlock.c
-@@ -12,6 +12,7 @@
- #include <linux/percpu.h>
- #include <linux/hardirq.h>
- #include <linux/spinlock.h>
-+#include <trace/events/lock.h>
- 
- /**
-  * queued_read_lock_slowpath - acquire read lock of a queue rwlock
-@@ -34,6 +35,8 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
- 	}
- 	atomic_sub(_QR_BIAS, &lock->cnts);
- 
-+	trace_contention_begin(lock, LCB_F_READ | LCB_F_SPIN);
-+
- 	/*
- 	 * Put the reader into the wait queue
- 	 */
-@@ -51,6 +54,8 @@ void queued_read_lock_slowpath(struct qrwlock *lock)
- 	 * Signal the next one in queue to become queue head
- 	 */
- 	arch_spin_unlock(&lock->wait_lock);
-+
-+	trace_contention_end(lock, 0);
- }
- EXPORT_SYMBOL(queued_read_lock_slowpath);
- 
-@@ -62,6 +67,8 @@ void queued_write_lock_slowpath(struct qrwlock *lock)
- {
- 	int cnts;
- 
-+	trace_contention_begin(lock, LCB_F_WRITE | LCB_F_SPIN);
-+
- 	/* Put the writer into the wait queue */
- 	arch_spin_lock(&lock->wait_lock);
- 
-@@ -79,5 +86,7 @@ void queued_write_lock_slowpath(struct qrwlock *lock)
- 	} while (!atomic_try_cmpxchg_acquire(&lock->cnts, &cnts, _QW_LOCKED));
- unlock:
- 	arch_spin_unlock(&lock->wait_lock);
-+
-+	trace_contention_end(lock, 0);
- }
- EXPORT_SYMBOL(queued_write_lock_slowpath);
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index cbff6ba53d56..65a9a10caa6f 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -22,6 +22,7 @@
- #include <linux/prefetch.h>
- #include <asm/byteorder.h>
- #include <asm/qspinlock.h>
-+#include <trace/events/lock.h>
- 
- /*
-  * Include queued spinlock statistics code
-@@ -401,6 +402,8 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	idx = node->count++;
- 	tail = encode_tail(smp_processor_id(), idx);
- 
-+	trace_contention_begin(lock, LCB_F_SPIN);
-+
- 	/*
- 	 * 4 nodes are allocated based on the assumption that there will
- 	 * not be nested NMIs taking spinlocks. That may not be true in
-@@ -554,6 +557,8 @@ void queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- 	pv_kick_node(lock, next);
- 
- release:
-+	trace_contention_end(lock, 0);
-+
- 	/*
- 	 * release the node
- 	 */
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 8555c4efe97c..7779ee8abc2a 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -24,6 +24,8 @@
- #include <linux/sched/wake_q.h>
- #include <linux/ww_mutex.h>
- 
-+#include <trace/events/lock.h>
-+
- #include "rtmutex_common.h"
- 
- #ifndef WW_RT
-@@ -1579,6 +1581,8 @@ static int __sched __rt_mutex_slowlock(struct rt_mutex_base *lock,
- 
- 	set_current_state(state);
- 
-+	trace_contention_begin(lock, LCB_F_RT);
-+
- 	ret = task_blocks_on_rt_mutex(lock, waiter, current, ww_ctx, chwalk);
- 	if (likely(!ret))
- 		ret = rt_mutex_slowlock_block(lock, ww_ctx, state, NULL, waiter);
-@@ -1601,6 +1605,9 @@ static int __sched __rt_mutex_slowlock(struct rt_mutex_base *lock,
- 	 * unconditionally. We might have to fix that up.
- 	 */
- 	fixup_rt_mutex_waiters(lock);
-+
-+	trace_contention_end(lock, ret);
-+
- 	return ret;
- }
- 
-@@ -1683,6 +1690,8 @@ static void __sched rtlock_slowlock_locked(struct rt_mutex_base *lock)
- 	/* Save current state and set state to TASK_RTLOCK_WAIT */
- 	current_save_and_set_rtlock_wait_state();
- 
-+	trace_contention_begin(lock, LCB_F_RT);
-+
- 	task_blocks_on_rt_mutex(lock, &waiter, current, NULL, RT_MUTEX_MIN_CHAINWALK);
- 
- 	for (;;) {
-@@ -1712,6 +1721,8 @@ static void __sched rtlock_slowlock_locked(struct rt_mutex_base *lock)
- 	 */
- 	fixup_rt_mutex_waiters(lock);
- 	debug_rt_mutex_free_waiter(&waiter);
-+
-+	trace_contention_end(lock, 0);
- }
- 
- static __always_inline void __sched rtlock_slowlock(struct rt_mutex_base *lock)
-diff --git a/kernel/locking/rwbase_rt.c b/kernel/locking/rwbase_rt.c
-index 6fd3162e4098..ec7b1fda7982 100644
---- a/kernel/locking/rwbase_rt.c
-+++ b/kernel/locking/rwbase_rt.c
-@@ -247,11 +247,13 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
- 		goto out_unlock;
- 
- 	rwbase_set_and_save_current_state(state);
-+	trace_contention_begin(rwb, LCB_F_WRITE | LCB_F_RT);
- 	for (;;) {
- 		/* Optimized out for rwlocks */
- 		if (rwbase_signal_pending_state(state, current)) {
- 			rwbase_restore_current_state();
- 			__rwbase_write_unlock(rwb, 0, flags);
-+			trace_contention_end(rwb, -EINTR);
- 			return -EINTR;
- 		}
- 
-@@ -265,6 +267,7 @@ static int __sched rwbase_write_lock(struct rwbase_rt *rwb,
- 		set_current_state(state);
- 	}
- 	rwbase_restore_current_state();
-+	trace_contention_end(rwb, 0);
- 
- out_unlock:
- 	raw_spin_unlock_irqrestore(&rtm->wait_lock, flags);
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index acde5d6f1254..465db7bd84f8 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -27,6 +27,7 @@
- #include <linux/export.h>
- #include <linux/rwsem.h>
- #include <linux/atomic.h>
-+#include <trace/events/lock.h>
- 
- #ifndef CONFIG_PREEMPT_RT
- #include "lock_events.h"
-@@ -1014,6 +1015,8 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	wake_up_q(&wake_q);
- 
-+	trace_contention_begin(sem, LCB_F_READ);
-+
- 	/* wait to be given the lock */
- 	for (;;) {
- 		set_current_state(state);
-@@ -1035,6 +1038,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 
- 	__set_current_state(TASK_RUNNING);
- 	lockevent_inc(rwsem_rlock);
-+	trace_contention_end(sem, 0);
- 	return sem;
- 
- out_nolock:
-@@ -1042,6 +1046,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	__set_current_state(TASK_RUNNING);
- 	lockevent_inc(rwsem_rlock_fail);
-+	trace_contention_end(sem, -EINTR);
- 	return ERR_PTR(-EINTR);
- }
- 
-@@ -1109,6 +1114,8 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- wait:
- 	/* wait until we successfully acquire the lock */
- 	set_current_state(state);
-+	trace_contention_begin(sem, LCB_F_WRITE);
-+
- 	for (;;) {
- 		if (rwsem_try_write_lock(sem, &waiter)) {
- 			/* rwsem_try_write_lock() implies ACQUIRE on success */
-@@ -1148,6 +1155,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 	__set_current_state(TASK_RUNNING);
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	lockevent_inc(rwsem_wlock);
-+	trace_contention_end(sem, 0);
- 	return sem;
- 
- out_nolock:
-@@ -1159,6 +1167,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 	raw_spin_unlock_irq(&sem->wait_lock);
- 	wake_up_q(&wake_q);
- 	lockevent_inc(rwsem_wlock_fail);
-+	trace_contention_end(sem, -EINTR);
- 	return ERR_PTR(-EINTR);
- }
- 
-diff --git a/kernel/locking/semaphore.c b/kernel/locking/semaphore.c
-index 9ee381e4d2a4..f2654d2fe43a 100644
---- a/kernel/locking/semaphore.c
-+++ b/kernel/locking/semaphore.c
-@@ -32,6 +32,7 @@
- #include <linux/semaphore.h>
- #include <linux/spinlock.h>
- #include <linux/ftrace.h>
-+#include <trace/events/lock.h>
- 
- static noinline void __down(struct semaphore *sem);
- static noinline int __down_interruptible(struct semaphore *sem);
-@@ -205,7 +206,7 @@ struct semaphore_waiter {
-  * constant, and thus optimised away by the compiler.  Likewise the
-  * 'timeout' parameter for the cases without timeouts.
-  */
--static inline int __sched __down_common(struct semaphore *sem, long state,
-+static inline int __sched ___down_common(struct semaphore *sem, long state,
- 								long timeout)
- {
- 	struct semaphore_waiter waiter;
-@@ -236,6 +237,18 @@ static inline int __sched __down_common(struct semaphore *sem, long state,
- 	return -EINTR;
- }
- 
-+static inline int __sched __down_common(struct semaphore *sem, long state,
-+					long timeout)
-+{
-+	int ret;
-+
-+	trace_contention_begin(sem, 0);
-+	ret = ___down_common(sem, state, timeout);
-+	trace_contention_end(sem, ret);
-+
-+	return ret;
-+}
-+
- static noinline void __sched __down(struct semaphore *sem)
- {
- 	__down_common(sem, TASK_UNINTERRUPTIBLE, MAX_SCHEDULE_TIMEOUT);
--- 
-2.35.1.894.gb6a874cedc-goog
+With this I get little bit different error:
 
+In file included from ./arch/x86/include/generated/asm/rwonce.h:1,
+                 from ./include/linux/compiler.h:255,
+                 from ./include/linux/export.h:43,
+                 from ./include/linux/linkage.h:7,
+                 from ./include/linux/kernel.h:17,
+                 from ./include/linux/cpumask.h:10,
+                 from ./include/linux/energy_model.h:4,
+                 from kernel/sched/fair.c:23:
+./include/linux/psi.h: In function =E2=80=98cgroup_move_task=E2=80=99:
+./include/linux/rcupdate.h:414:36: error: dereferencing pointer to
+incomplete type =E2=80=98struct css_set=E2=80=99
+  414 | #define RCU_INITIALIZER(v) (typeof(*(v)) __force __rcu *)(v)
+      |                                    ^~~~
+
+Which is actually the same error that is in Randy's message. Patch of
+Randy works
+on top of this commit. But I cannot get this patch to work with HEAD,
+but probably
+I'm just missing something obvious. Still nice to see that probably a
+solution is near.
+
+> > >> There's various changes in -v3, and it's now ported to the latest ke=
+rnel
+> > >> (v5.17-rc8).
+> > >>
+> > >> Diffstat difference:
+> > >>
+> > >>  -v2: 25332 files changed, 178498 insertions(+), 74790 deletions(-)
+> > >>  -v3: 25513 files changed, 180947 insertions(+), 74572 deletions(-)
+> >
+> >
+> > --
+> > ~Randy
