@@ -2,125 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81DAD4E4323
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 16:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E27FD4E4365
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 16:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbiCVPiq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Mar 2022 11:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S236214AbiCVP4O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Mar 2022 11:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbiCVPiq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 11:38:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319D942ECC;
-        Tue, 22 Mar 2022 08:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Zq9b6qW9yqhzWMBguVnnbJQ6vTAg5F0MU+Zq1pB747c=; b=aIJTZtt6pziYzGkma+W+rGdydn
-        GeuoZw+OPZ9XCXNgkQtGrplz61bo2oXckqq06onWdSJWftdWCJwDi5ZBx7ILWmkwxQOaTT0xtAtr4
-        BGTFHrKXXXXWMyhdvjdd+IBV6NGc9HFOFqD/TI76JXceavlpCsPex4+yCKdBsShH0Z+jIVRSf2aQE
-        hlC34JB5soOZz5mbo+T7puKZoYMBuRuIbNmWMuPHuPMyzmZLnUQACvWPI0U8Jf0z27i1yYgKjxdlG
-        S0GEJ58BO+VYPBMaxlKIwuMa4Hiuemk3ARKBo1udE38xLefQtlTFbbPukQqx6SkYpF/SBH+oR0RPz
-        MBvut3Cw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nWgZN-00Bicc-Mw; Tue, 22 Mar 2022 15:37:14 +0000
-Message-ID: <b8095bf8-961f-827c-2bd6-2ffa6298b730@infradead.org>
-Date:   Tue, 22 Mar 2022 08:37:07 -0700
+        with ESMTP id S236030AbiCVP4N (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 11:56:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 890E639D
+        for <linux-arch@vger.kernel.org>; Tue, 22 Mar 2022 08:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647964484;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bhnT3KW2N7nGUFmNkySnEopkUtzZ8brHDUQP8GeFjGo=;
+        b=US2MxyWsyB3+4ufCqnt2P8fqB8gOLPFsfnexkcJ1mfI9c3exHdrqAAg1FhvDtfcB8KC13I
+        o2nAmzyBVvgD0ImCd4koStkKFqxMkZ4MbWCX6CdV1Iaxs9zP1TnL2RPWZTTK5Y+X2OoB35
+        AF2fHf3XkqIl6jgJAXISJx9WEFLG3vY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-428-j0LrWmyDNnym6QHTL5OVNg-1; Tue, 22 Mar 2022 11:54:39 -0400
+X-MC-Unique: j0LrWmyDNnym6QHTL5OVNg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F6EE29ABA2E;
+        Tue, 22 Mar 2022 15:54:38 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 99C5A4229D0;
+        Tue, 22 Mar 2022 15:54:37 +0000 (UTC)
+Message-ID: <54d6221d-0c4f-9329-042d-4f74c4ea288f@redhat.com>
+Date:   Tue, 22 Mar 2022 11:54:37 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [TREE] "Fast Kernel Headers" Tree -v3
+ Thunderbird/91.5.0
+Subject: Re: [OpenRISC] [PATCH V2 1/5] asm-generic: ticket-lock: New generic
+ ticket-based spinlock
 Content-Language: en-US
-To:     Kari Argillander <kari.argillander@stargateuniverse.net>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, kari.argillander@gmail.com
-References: <Ydm7ReZWQPrbIugn@gmail.com> <YjBr10JXLGHfEFfi@gmail.com>
- <CAKBF=pvWzuPx0JB3XZ-v+i7KGbhMQTgH6xtii_Bed+qKRFx+ww@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAKBF=pvWzuPx0JB3XZ-v+i7KGbhMQTgH6xtii_Bed+qKRFx+ww@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Stafford Horne <shorne@gmail.com>, guoren@kernel.org
+Cc:     palmer@dabbelt.com, arnd@arndb.de, boqun.feng@gmail.com,
+        peterz@infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        openrisc@lists.librecores.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-riscv@lists.infradead.org
+References: <20220319035457.2214979-1-guoren@kernel.org>
+ <20220319035457.2214979-2-guoren@kernel.org> <Yjk+LGwhc50zvsk2@antec>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yjk+LGwhc50zvsk2@antec>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Kari,
+On 3/21/22 23:10, Stafford Horne wrote:
+> Hello,
+>
+> There is a problem with this patch on Big Endian machines, see below.
+>
+> On Sat, Mar 19, 2022 at 11:54:53AM +0800, guoren@kernel.org wrote:
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> This is a simple, fair spinlock.  Specifically it doesn't have all the
+>> subtle memory model dependencies that qspinlock has, which makes it more
+>> suitable for simple systems as it is more likely to be correct.
+>>
+>> [Palmer: commit text]
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>
+>> --
+>>
+>> I have specifically not included Peter's SOB on this, as he sent his
+>> original patch
+>> <https://lore.kernel.org/lkml/YHbBBuVFNnI4kjj3@hirez.programming.kicks-ass.net/>
+>> without one.
+>> ---
+>>   include/asm-generic/spinlock.h          | 11 +++-
+>>   include/asm-generic/spinlock_types.h    | 15 +++++
+>>   include/asm-generic/ticket-lock-types.h | 11 ++++
+>>   include/asm-generic/ticket-lock.h       | 86 +++++++++++++++++++++++++
+>>   4 files changed, 120 insertions(+), 3 deletions(-)
+>>   create mode 100644 include/asm-generic/spinlock_types.h
+>>   create mode 100644 include/asm-generic/ticket-lock-types.h
+>>   create mode 100644 include/asm-generic/ticket-lock.h
+>>
+>> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+>> new file mode 100644
+>> index 000000000000..59373de3e32a
+>> --- /dev/null
+>> +++ b/include/asm-generic/ticket-lock.h
+> ...
+>
+>> +static __always_inline void ticket_unlock(arch_spinlock_t *lock)
+>> +{
+>> +	u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
+> As mentioned, this patch series breaks SMP on OpenRISC.  I traced it to this
+> line.  The above `__is_defined(__BIG_ENDIAN)`  does not return 1 as expected
+> even on BIG_ENDIAN machines.  This works:
+>
+>
+> diff --git a/include/asm-generic/ticket-lock.h b/include/asm-generic/ticket-lock.h
+> index 59373de3e32a..52b5dc9ffdba 100644
+> --- a/include/asm-generic/ticket-lock.h
+> +++ b/include/asm-generic/ticket-lock.h
+> @@ -26,6 +26,7 @@
+>   #define __ASM_GENERIC_TICKET_LOCK_H
+>   
+>   #include <linux/atomic.h>
+> +#include <linux/kconfig.h>
+>   #include <asm-generic/ticket-lock-types.h>
+>   
+>   static __always_inline void ticket_lock(arch_spinlock_t *lock)
+> @@ -51,7 +52,7 @@ static __always_inline bool ticket_trylock(arch_spinlock_t *lock)
+>   
+>   static __always_inline void ticket_unlock(arch_spinlock_t *lock)
+>   {
+> -       u16 *ptr = (u16 *)lock + __is_defined(__BIG_ENDIAN);
+> +       u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
+>          u32 val = atomic_read(lock);
+>   
+>          smp_store_release(ptr, (u16)val + 1);
+>
+>
+>> +	u32 val = atomic_read(lock);
+>> +
+>> +	smp_store_release(ptr, (u16)val + 1);
+>> +}
+>> +
 
-On 3/22/22 00:59, Kari Argillander wrote:
-> 15.3.2022 12.35 Ingo Molnar (mingo@kernel.org) wrote:
->>
->> This is -v3 of the "Fast Kernel Headers" tree, which is an ongoing rework
->> of the Linux kernel's header hierarchy & header dependencies, with the dual
->> goals of:
->>
->>  - speeding up the kernel build (both absolute and incremental build times)
->>
->>  - decoupling subsystem type & API definitions from each other
->>
->> The fast-headers tree consists of over 25 sub-trees internally, spanning
->> over 2,300 commits, which can be found at:
->>
->>     git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git master
-> 
-> I have had problems to build master branch (defconfig) with gcc9
->     gcc (Ubuntu 9.4.0-1ubuntu1~20.04) 9.4.0
-> 
-> I did also test v2 and problems where there too. I have no problem with gcc10 or
-> Clang11. Error I get is:
-> 
-> In file included from ./include/linux/rcuwait_api.h:7,
->                  from ./include/linux/rcuwait.h:6,
->                  from ./include/linux/irq_work.h:7,
->                  from ./include/linux/perf_event_types.h:44,
->                  from ./include/linux/perf_event_api.h:17,
->                  from arch/x86/kernel/kprobes/opt.c:8:
-> ./include/linux/rcuwait_api.h: In function ‘rcuwait_active’:
-> ./include/linux/rcupdate.h:328:9: error: dereferencing pointer to
-> incomplete type ‘struct task_struct’
->   328 |  typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
->       |         ^
-> ./include/linux/rcupdate.h:439:31: note: in expansion of macro
-> ‘__rcu_access_pointer’
->   439 | #define rcu_access_pointer(p) __rcu_access_pointer((p),
-> __UNIQUE_ID(rcu), __rcu)
->       |                               ^~~~~~~~~~~~~~~~~~~~
-> ./include/linux/rcuwait_api.h:15:11: note: in expansion of macro
-> ‘rcu_access_pointer’
->    15 |  return !!rcu_access_pointer(w->task);
-> 
->     Argillander
+__BIG_ENDIAN is defined in <linux/kconfig.h>. I believe that if you 
+include <linux/kconfig.h>, the second hunk is not really needed and vice 
+versa.
 
-You could try the patch here:
-https://lore.kernel.org/all/917e9ce0-c8cf-61b2-d1ba-ebf25bbd979d@infradead.org/
+Cheers,
+Longman
 
-although the build error that it fixes doesn't look exactly the same
-as yours.
-
->> There's various changes in -v3, and it's now ported to the latest kernel
->> (v5.17-rc8).
->>
->> Diffstat difference:
->>
->>  -v2: 25332 files changed, 178498 insertions(+), 74790 deletions(-)
->>  -v3: 25513 files changed, 180947 insertions(+), 74572 deletions(-)
-
-
--- 
-~Randy
