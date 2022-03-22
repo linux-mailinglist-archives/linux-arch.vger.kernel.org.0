@@ -2,97 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0444E33B8
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 00:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BB54E36E0
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 03:53:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231940AbiCUXAW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 21 Mar 2022 19:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S235628AbiCVCzD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 21 Mar 2022 22:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbiCUW6l (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 18:58:41 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D30362D1A
-        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 15:36:16 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id qx21so32646429ejb.13
-        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 15:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BH/ZvdHwavygsraND3jZ9umdlqtC3J2xs3HpZjL2mwo=;
-        b=c9f3Pm5IXTpo39kOd0g++gJvtwaFhoqGjkoHxlqOe7Xi1L7cCP3CuQXXRVkJjdLjuo
-         IE79P2+w5wFiYpdJmX0ofyWAZYycl34hnsS8D4ynzd82H5n4Ly8vXdsyUlivtGQuBnmL
-         b9SF9v0advLxASxQduWy0nkNPxJMmDIwkXSzI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BH/ZvdHwavygsraND3jZ9umdlqtC3J2xs3HpZjL2mwo=;
-        b=j8mnkYF0BL5ibme0S0aYHetZAkQYPTnkAmBwqbt2LlYz57C0o8nxsqkFBx91SiHZ1G
-         7rnzA0FuZ9BMwlGXppDuyvL7Jw5EWt4SlO0h9P6zgB+W9K2eMul3il8LOmL9FPVuYaoZ
-         Ian/l00ZfLOyUWuGXPFPllShMGwaIJgkJdEGebufnwcoJz2c120OTFLAwf+BKVatfwM0
-         S0vdsu4teyLe1gntboeDL30QCFER62Ft8oT+FG+OcMQx/j/fdUmEjMp+ggIpY+JwPV71
-         z4HJ2n6osOxNWJkaeIGoRPRXJ1jVXmlkpxEzyedq8KexVkCPMAt8pkGauNGXf0X/+n+S
-         9HQg==
-X-Gm-Message-State: AOAM5327u+/W6Q2yupKyURN85gvywlrh94Cu+dGuuzmWiIZCY7CNMAAp
-        DmHpuLg8X1syXzve48WXuA+k0nOZtdI34TayvUE=
-X-Google-Smtp-Source: ABdhPJwGHTJrkFNfMhrx/6Bzwjun8pbYo4wV/fwq1ZvY6BEVDT6jgPFIkvFlccaEHg0DTCYd4rsm+g==
-X-Received: by 2002:ac2:563a:0:b0:448:9181:104b with SMTP id b26-20020ac2563a000000b004489181104bmr15753218lff.2.1647900216221;
-        Mon, 21 Mar 2022 15:03:36 -0700 (PDT)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id y16-20020a2e9d50000000b00247b105c11dsm2212636ljj.34.2022.03.21.15.03.35
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 15:03:36 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id t25so26815043lfg.7
-        for <linux-arch@vger.kernel.org>; Mon, 21 Mar 2022 15:03:35 -0700 (PDT)
-X-Received: by 2002:a05:6512:2294:b0:448:6c86:3c78 with SMTP id
- f20-20020a056512229400b004486c863c78mr15507615lfu.531.1647900215381; Mon, 21
- Mar 2022 15:03:35 -0700 (PDT)
+        with ESMTP id S235685AbiCVCzB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 21 Mar 2022 22:55:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB75130C34;
+        Mon, 21 Mar 2022 19:53:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31EB96111E;
+        Tue, 22 Mar 2022 02:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93ED4C36AEA;
+        Tue, 22 Mar 2022 02:53:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647917612;
+        bh=vBcCiXwRGGbyM3jDSIY//Yb05Zqr3yL4wE0ITjd0Zkg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=lFxvQ12/5InyCYCmdKIREud5ibVPRJkVULCo9iuAtGmFY/nz2fN8U7wnWQmC2A9ky
+         LoKacK6y5G6ZePsB3JcCSZXUsIwEpx4gb/cYoa8W+hol0NxYwAe652+BuBmog8dp+E
+         LqMvhFyJ+9InWg+09sUmjeWyM5qQ6cZf5DQ0XBD4vcyFzEXebsyYfUFO1ydr6RqUoM
+         aq0X7jQ/vz806SmvSH38vHeHAaC1Z0fFUmJiirbsbK+sTZHvZRdR/OY8JFQfzXGchh
+         4xNnfsxfVNpgPmGZSdMMDxw6hYRftQ1yCpgANFqxdoylymy7D5ZjxUsvVfMPlG/mvj
+         k8E2P9TlhFi2A==
+Received: by mail-vs1-f41.google.com with SMTP id a127so9504859vsa.3;
+        Mon, 21 Mar 2022 19:53:32 -0700 (PDT)
+X-Gm-Message-State: AOAM533+iRVwby8+tJtwm+0zzDcwHT/vwIeDcFQD31SY0ELjk/7Xf5yQ
+        NLyteaIOaQWpEFvUaS4wzyuCk3UabFpBEstRMek=
+X-Google-Smtp-Source: ABdhPJwl1toKmvF+Gk8R6UAzWG4eJC+We2oGMF+gqSvWETI5Ru0ckJ2Fn30jOEin3068r5f4+PBix9g1VBfLVWRCMu0=
+X-Received: by 2002:a05:6102:5490:b0:325:2ca5:14f with SMTP id
+ bk16-20020a056102549000b003252ca5014fmr1727074vsb.40.1647917611519; Mon, 21
+ Mar 2022 19:53:31 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <CAK8P3a12dY57+ZPEREAUrsNf45S0_4-yYHen6p0-PjJEivjczg@mail.gmail.com>
- <CAHk-=wj81Cgjb5xj=ghB0oEA4ronnc=WKZLTPGpJYPUn=QcQ5g@mail.gmail.com> <CAK8P3a33TZm2NZg28KbCCeLzLvf759_5r8hr-rcWftci9qinog@mail.gmail.com>
-In-Reply-To: <CAK8P3a33TZm2NZg28KbCCeLzLvf759_5r8hr-rcWftci9qinog@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 21 Mar 2022 15:03:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiHLUK8oew17oD=4v-7DXUEDAbrup+7oZ8Stq0m9S2EGQ@mail.gmail.com>
-Message-ID: <CAHk-=wiHLUK8oew17oD=4v-7DXUEDAbrup+7oZ8Stq0m9S2EGQ@mail.gmail.com>
-Subject: Re: [PATCH V8 00/22] arch: Add basic LoongArch support
+ <20220319143817.1026708-1-chenhuacai@loongson.cn> <20220319143817.1026708-3-chenhuacai@loongson.cn>
+ <CAK8P3a2gKGuMTLawFSf1hd3LY7rCVUquTPVHMcxBTok6+y-Rag@mail.gmail.com>
+ <CAAhV-H6eDSU20gjLgEKM318i1ksk23thv9cLJKmAo_cBzjtEkw@mail.gmail.com> <CAK8P3a0PXeEAvZeq0djqCFqPSkFe5z-bg81kcs69ZTcBSL=24Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a0PXeEAvZeq0djqCFqPSkFe5z-bg81kcs69ZTcBSL=24Q@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 22 Mar 2022 10:53:23 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6GZCD6Cwf1DE5pV5PpTWUfSOhT8dR5sfzU+Nrtdmw_nA@mail.gmail.com>
+Message-ID: <CAAhV-H6GZCD6Cwf1DE5pV5PpTWUfSOhT8dR5sfzU+Nrtdmw_nA@mail.gmail.com>
+Subject: Re: [PATCH V8 10/22] LoongArch: Add exception/interrupt handling
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
+Cc:     Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
         Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 2:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
+Hi, Arnd,
+
+On Mon, Mar 21, 2022 at 6:48 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> I can prepare a pull request when it gets to that, but I think the boot protocol
-> should be fixed first, and that makes it 5.19 material.
+> On Mon, Mar 21, 2022 at 9:46 AM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > On Mon, Mar 21, 2022 at 4:38 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Sat, Mar 19, 2022 at 3:38 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >
+> > > > +unsigned long eentry;
+> > > > +EXPORT_SYMBOL_GPL(eentry);
+> > > > +unsigned long tlbrentry;
+> > > > +EXPORT_SYMBOL_GPL(tlbrentry);
+> > >
+> > > Why are these exported to modules? Maybe add a comment here, or remove
+> > > the export if it's not actually needed.
+> >
+> > They are used by the kvm module in our internal repo.
+>
+> Ok, that is fine then. For the moment, please add a comment about it here,
+> or remove the exports in the initial merge and add them back when you
+> submit the kvm code.
+OK, I will remove them.
 
-Thanks. No problem on 5.19, it's not like I don't have enough pending
-for this merge window already..
-
-                 Linus
+Huacai
+>
+>        Arnd
