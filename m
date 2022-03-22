@@ -2,107 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AEC4E3BB3
-	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 10:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571B84E3EDE
+	for <lists+linux-arch@lfdr.de>; Tue, 22 Mar 2022 13:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbiCVJZl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Mar 2022 05:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
+        id S233957AbiCVM52 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 22 Mar 2022 08:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiCVJZj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 05:25:39 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D423337D;
-        Tue, 22 Mar 2022 02:24:12 -0700 (PDT)
-Received: from mail-wm1-f54.google.com ([209.85.128.54]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M2Nm2-1nW32y3IzO-003vD9; Tue, 22 Mar 2022 10:24:10 +0100
-Received: by mail-wm1-f54.google.com with SMTP id r7so9991344wmq.2;
-        Tue, 22 Mar 2022 02:24:10 -0700 (PDT)
-X-Gm-Message-State: AOAM5319y3xG6KE30cXZa02tZk5szEol9jGRNrauJbCyUcQNUwIXEKW5
-        D3bVOk3lTl+dzBtV+8d82q9cjcLJBNBS2iGz450=
-X-Google-Smtp-Source: ABdhPJwsixCYKczxHEkB8tnxWnn7WcRL3uS0+upLMvgBna2t7w8kHg6YLFFU+Drbavx3w8/MLHV5750XhIVVex2zZF0=
-X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
- f19-20020a7bcd13000000b0038bf39c1181mr2957769wmj.20.1647941050207; Tue, 22
- Mar 2022 02:24:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220319142759.1026237-1-chenhuacai@loongson.cn>
- <20220319143130.1026432-1-chenhuacai@loongson.cn> <20220319143130.1026432-7-chenhuacai@loongson.cn>
- <CAK8P3a0wVKWFASv6cVDOZmX=1h7EeAVyrxLFXmoH5REVaAoNhQ@mail.gmail.com> <CAAhV-H6zddef+ezmXhK+K3eZtvVECqq-nujyr9H2RjS1iJndrg@mail.gmail.com>
-In-Reply-To: <CAAhV-H6zddef+ezmXhK+K3eZtvVECqq-nujyr9H2RjS1iJndrg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 22 Mar 2022 10:23:53 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0rJi35Bx+_Joq1NH79Pvd-+hNV8apDv5othr0_7_SqcQ@mail.gmail.com>
-Message-ID: <CAK8P3a0rJi35Bx+_Joq1NH79Pvd-+hNV8apDv5othr0_7_SqcQ@mail.gmail.com>
-Subject: Re: [PATCH V8 07/22] LoongArch: Add atomic/locking headers
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        with ESMTP id S233936AbiCVM50 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 08:57:26 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19275BE52;
+        Tue, 22 Mar 2022 05:55:58 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KNBLF5S7Dz1GClp;
+        Tue, 22 Mar 2022 20:55:49 +0800 (CST)
+Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Tue, 22 Mar 2022 20:55:56 +0800
+Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Tue, 22 Mar
+ 2022 20:55:56 +0800
+Subject: Re: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     "Eric W . Biederman" <ebiederm@xmission.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Stafford Horne <shorne@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:GsZZXVIyiFWAil3OKfUQDeR3PG8Hyp4LfdjBL4/0CGCIX9DyTBw
- 79WB2ES2iqdZNU3UkmpzmCAhKwBmVSmz8qtKMqHUA5Eo7HFh74XAdGStqFhe6lEtv+bw18Q
- +r998ajs2qP4kwCrIauh1scQXo4DcG1SfJczz1a2hIaMkDDIeBJSMRP8BjGrz9Sf4+2iAv+
- kqoHgKzvs5XoOdjgjpzUQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0cUHH2aJ6Tw=:7C5yPvboapmwLvnOrfGXe/
- IDOct5/8Rnu68+uGrbNLpYTdu6Rlr/RAoalDiNAXAHBfHRvP/wPwgcFCHBENJfX6dJcx7a0hy
- 4fmgDIR0J9P/MESv2PxehvkicPb/3usvpJ3pCe2RYkhJmETYa+4JT9x2JEZ1Rkwu/2ISAEPys
- +Iw6jQSSlWKKb5iqJ0KYW1zTOC4fu5+/Rjca259fDNT4WmTm7A0qPnFRsDBiTgZfdzis6h/wv
- jEgegu+aHR+ejR8QBIasddGA6YMFqcnyHrBeLxLcUaT7IFIoIQCwiEhfIQZXvDsvX2TkjXsFQ
- tkMbD8n+rolnk5yc01u3y7qfsBT46xdw0wfow/LGABLMnvFeSIe6uo39aI6e9TEsGrB9XnyDW
- eMM1RqV0Lr8zpMdqqyc/tvrWda5IZNwHyRkW7s8c+lhTJ4FbQgTdr8qmW9pcVizad7qmiM+l0
- el7ESCr1duVvmquTRQ5EwHNx9DJ5nDkKFZx5yT+JQ90JgGmuh5OG+dIyiujRXk7/U/zn8HZ/o
- LdiTh4neRito/mq9hcxA1rnI6ozzT7J1+mGZrRItgfvw5TszFqNzAgCDuO6kuSVkXVAfO0WWj
- 6JtLQEgR7ECRjP1oAzh09q/HhiWU27QYn2cN8zJcqokM7GPNBd/6e74afj0MHFVhq/i+Qh46Q
- 4wcL+Z3acwAAtkFH6brvW0myBt/AalGCM6f39FOORqPHWsnivCyQukH7lzGls2q8EEBG+o/qd
- lc49B2EvJ4+4qYd03FF+lGDbMuWKQUMdbkNljO29eSAvZEoHYAmLkvMBdy8bEwanvhB8nxyGN
- 0MCrmjbm4FyHaxqwuGkGOPsjRrHvF8pCycDNmkKfbyaSvU+4T0=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <20220318071130.163942-1-chenjiahao16@huawei.com>
+ <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
+From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
+Message-ID: <88ff36b3-558b-9c3f-f21d-5ef05b3227c5@huawei.com>
+Date:   Tue, 22 Mar 2022 20:55:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.26]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 4:03 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> On Mon, Mar 21, 2022 at 5:42 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Sat, Mar 19, 2022 at 3:31 PM Huacai Chen <chenhuacai@kernel.org> wrote:
 
-> > Please coordinate the inclusion of the patches with them and use that
-> > spinlock implementation for the initial merge, to avoid further discussion
-> > on the topic. If at a later point you are able to come up with a qspinlock
-> > implementation that has convincing forward-progress guarantees and
-> > can be shown to be better, we can revisit this.
+在 2022/3/18 15:44, Arnd Bergmann 写道:
+> On Fri, Mar 18, 2022 at 8:11 AM Chen Jiahao <chenjiahao16@huawei.com> wrote:
+>> In __access_ok, TASK_SIZE_MAX is used to check if a memory access
+>> is in user address space, but some cases may get omitted in compat
+>> mode.
+>>
+>> For example, a 32-bit testcase calling pread64(fd, buf, -1, 1)
+>> and running in x86-64 kernel, the obviously illegal size "-1" will
+>> get ignored by __access_ok. Since from the kernel point of view,
+>> 32-bit userspace 0xffffffff is within the limit of 64-bit
+>> TASK_SIZE_MAX.
+>>
+>> Replacing the limit TASK_SIZE_MAX with TASK_SIZE in __access_ok
+>> will fix the problem above.
+> I don't see what problem this fixes, the choice of TASK_SIZE_MAX in
+> __access_ok() is intentional, as this means we can use a compile-time
+> constant as the limit, which produces better code.
 >
-> In my opinion, forward-progress is solved in V2, since we have
-> reworked __xchg_small()/__cmpxchg_small(), and qspinlock is needed by
-> NUMA.
-> However, if the generic ticket lock is merged later, I will try to use
-> it at present.
+> Any user pointer between COMPAT_TASK_SIZE and TASK_SIZE_MAX is
+> not accessible by a user process but will not let user space access
+> any kernel data either, which is the point of the check.
+>
+> In your example of using '-1' as the pointer, access_ok() returns true,
+> so the kernel can go on to perform an unchecked __get_user() on
+> __put_user() on 0xffffffffull, which causes page fault that is intercepted
+> by the ex_table fixup.
+>
+> This should not result in any user visible difference, in both cases
+> user process will see a -EFAULT return code from its system call.
+> Are you able to come up with a test case that shows an observable
+> difference in behavior?
+>
+>        Arnd
+>
+> .
 
-Yes, please do. If I merge both the ticket spinlock code and your architecture
-code through the asm-generic tree for 5.19, this should work out nicely.
+Actually, this patch do comes from a testcase failure, the code is 
+pasted below:
 
-I'd good to hear that you have a solution for the forward-progress
-issue with qspinlock, We should discuss that when the architecture
-is merged then, and see what this means for the other architectures
-that currently use the qspinlock code, to decide which ones of those
-should be converted to ticket lock, which can use the same approach
-that you have, and which are already safe.
+#define TMPFILE "__1234567890"
+#define BUF_SIZE    1024
 
-        Arnd
+int main()
+{
+     char buf[BUF_SIZE] = {0};
+     int fd;
+     int ret;
+     int err;
+
+     fd = open(TMPFILE, O_CREAT | O_RDWR);
+     if(-1 == fd)
+     {
+         perror("open");
+         return 1;
+     }
+
+     ret = pread64(fd, buf, -1, 1);
+     if((-1 == ret) && (EFAULT == errno))
+     {
+         close(fd);
+         unlink(TMPFILE);
+         printf("PASS\n");
+         return 0;
+     }
+     err = errno;
+     perror("pread64");
+     printf("err = %d\n", err);
+     close(fd);
+     unlink(TMPFILE);
+     printf("FAIL\n");
+
+     return 1;
+  }
+
+The expected result is:
+
+PASS
+
+but the result of 32-bit testcase running in x86-64 kernel with compat 
+mode is:
+
+pread64: Success
+err = 0
+FAIL
+
+
+In my explanation, pread64 is called with count '0xffffffffull' and 
+offset '1', which might still not trigger
+
+page fault in 64-bit kernel.
+
+
+This patch uses TASK_SIZE as the addr_limit to performance a stricter 
+address check and intercepts
+
+the illegal pointer address from 32-bit userspace at a very early time. 
+Which is roughly the same
+
+address limit check as __access_ok in arch/ia64.
+
+
+This is why this fixes my testcase failure above, or have I missed 
+anything else?
+
+
+Jiahao
+
