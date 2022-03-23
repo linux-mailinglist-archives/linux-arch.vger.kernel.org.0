@@ -2,32 +2,31 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915C84E4A86
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Mar 2022 02:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34BA4E505D
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Mar 2022 11:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238882AbiCWBhI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 22 Mar 2022 21:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S239672AbiCWKg3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Mar 2022 06:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbiCWBhI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 22 Mar 2022 21:37:08 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BBFEE092
-        for <linux-arch@vger.kernel.org>; Tue, 22 Mar 2022 18:35:38 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-314-XHEmaLmFMKCfa60oSAy2oA-1; Wed, 23 Mar 2022 01:35:34 +0000
-X-MC-Unique: XHEmaLmFMKCfa60oSAy2oA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Wed, 23 Mar 2022 01:35:34 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Wed, 23 Mar 2022 01:35:34 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Arnd Bergmann' <arnd@arndb.de>,
-        "chenjiahao (C)" <chenjiahao16@huawei.com>
+        with ESMTP id S234425AbiCWKg2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Mar 2022 06:36:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4E925E81;
+        Wed, 23 Mar 2022 03:34:58 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KNl7R2yBxzfYqr;
+        Wed, 23 Mar 2022 18:33:23 +0800 (CST)
+Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 23 Mar 2022 18:34:56 +0800
+Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
+ (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 23 Mar
+ 2022 18:34:56 +0800
+Subject: Re: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
+To:     Arnd Bergmann <arnd@arndb.de>
 CC:     "Eric W . Biederman" <ebiederm@xmission.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         Stafford Horne <shorne@gmail.com>,
@@ -37,73 +36,161 @@ CC:     "Eric W . Biederman" <ebiederm@xmission.com>,
         Linux API <linux-api@vger.kernel.org>,
         Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
         the arch/x86 maintainers <x86@kernel.org>
-Subject: RE: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
-Thread-Topic: [PATCH -next] uaccess: fix __access_ok limit setup in compat
- mode
-Thread-Index: AQHYPfsecjlH4Ezf4kOvHM6pPLYCHKzMKolw
-Date:   Wed, 23 Mar 2022 01:35:34 +0000
-Message-ID: <bdebdcb56b8a4af8a6b1d22029a2e7ba@AcuMS.aculab.com>
 References: <20220318071130.163942-1-chenjiahao16@huawei.com>
  <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
  <88ff36b3-558b-9c3f-f21d-5ef05b3227c5@huawei.com>
  <CAK8P3a3_iZihNmgRNz7Ntrp8sj0hB_Yrpu5iT++ivMjsUXH7+w@mail.gmail.com>
-In-Reply-To: <CAK8P3a3_iZihNmgRNz7Ntrp8sj0hB_Yrpu5iT++ivMjsUXH7+w@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
+Message-ID: <6517b497-f85e-c4dd-98b9-39997ad120d5@huawei.com>
+Date:   Wed, 23 Mar 2022 18:34:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAK8P3a3_iZihNmgRNz7Ntrp8sj0hB_Yrpu5iT++ivMjsUXH7+w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.108.26]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500016.china.huawei.com (7.185.36.25)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogQXJuZCBCZXJnbWFubg0KPiBTZW50OiAyMiBNYXJjaCAyMDIyIDE0OjQxDQo+IA0KPiBP
-biBUdWUsIE1hciAyMiwgMjAyMiBhdCAxOjU1IFBNIGNoZW5qaWFoYW8gKEMpIDxjaGVuamlhaGFv
-MTZAaHVhd2VpLmNvbT4gd3JvdGU6DQo+ID4g5ZyoIDIwMjIvMy8xOCAxNTo0NCwgQXJuZCBCZXJn
-bWFubiDlhpnpgZM6DQo+ID4gPg0KPiA+ID4gVGhpcyBzaG91bGQgbm90IHJlc3VsdCBpbiBhbnkg
-dXNlciB2aXNpYmxlIGRpZmZlcmVuY2UsIGluIGJvdGggY2FzZXMNCj4gPiA+IHVzZXIgcHJvY2Vz
-cyB3aWxsIHNlZSBhIC1FRkFVTFQgcmV0dXJuIGNvZGUgZnJvbSBpdHMgc3lzdGVtIGNhbGwuDQo+
-ID4gPiBBcmUgeW91IGFibGUgdG8gY29tZSB1cCB3aXRoIGEgdGVzdCBjYXNlIHRoYXQgc2hvd3Mg
-YW4gb2JzZXJ2YWJsZQ0KPiA+ID4gZGlmZmVyZW5jZSBpbiBiZWhhdmlvcj8NCj4gPg0KPiA+IEFj
-dHVhbGx5LCB0aGlzIHBhdGNoIGRvIGNvbWVzIGZyb20gYSB0ZXN0Y2FzZSBmYWlsdXJlLCB0aGUg
-Y29kZSBpcw0KPiA+IHBhc3RlZCBiZWxvdzoNCj4gDQo+IFRoYW5rIHlvdSBmb3IgdGhlIHRlc3Qg
-Y2FzZSENCj4gDQouLi4NCj4gPiAgICAgIHJldCA9IHByZWFkNjQoZmQsIGJ1ZiwgLTEsIDEpOw0K
-PiA+ICAgICAgaWYoKC0xID09IHJldCkgJiYgKEVGQVVMVCA9PSBlcnJubykpDQo+ID4gICAgICB7
-DQouLi4NCj4gPiAgICAgICAgICBwcmludGYoIlBBU1NcbiIpOw0KLi4uDQo+ID4gSW4gbXkgZXhw
-bGFuYXRpb24sIHByZWFkNjQgaXMgY2FsbGVkIHdpdGggY291bnQgJzB4ZmZmZmZmZmZ1bGwnIGFu
-ZA0KPiA+IG9mZnNldCAnMScsIHdoaWNoIG1pZ2h0IHN0aWxsIG5vdCB0cmlnZ2VyDQo+ID4NCj4g
-PiBwYWdlIGZhdWx0IGluIDY0LWJpdCBrZXJuZWwuDQo+ID4NCj4gPg0KPiA+IFRoaXMgcGF0Y2gg
-dXNlcyBUQVNLX1NJWkUgYXMgdGhlIGFkZHJfbGltaXQgdG8gcGVyZm9ybWFuY2UgYSBzdHJpY3Rl
-cg0KPiA+IGFkZHJlc3MgY2hlY2sgYW5kIGludGVyY2VwdHMNCj4gDQo+IEkgc2VlLiBTbyB3aGls
-ZSB0aGUga2VybmVsIGJlaGF2aW9yIHdhcyBub3QgbWVhbnQgdG8gY2hhbmdlIGZyb20NCj4gbXkg
-cGF0Y2gsIGl0IGNsZWFybHkgZGlkLCB3aGljaCBtYXkgY2F1c2UgcHJvYmxlbXMuIEhvd2V2ZXIs
-IEknbQ0KPiBub3Qgc3VyZSBpZiB0aGUgY2hhbmdlZCBiZWhhdmlvciBpcyBhY3R1YWxseSB3cm9u
-Zy4NCg0KSXQgaXNuJ3QgcmVhbGx5IGFueSBkaWZmZXJlbnQgZnJvbSBwYXNzaW5nIGEgbGVuZ3Ro
-IG9mICgxIDw8IDMwKQ0KKGFuZCBhIGJ1ZmZlciBhdCBhIGxvdyB1c2VyIGFkZHJlc3MpLg0KVGhl
-IGVudGlyZSBidWZmZXIgaXMgdmFsaWQgdXNlciBhZGRyZXNzZXMsIGJ1dCBtb3N0IG9mIGl0IGlz
-DQppbnZhbGlkIGJlY2F1c2UgdGhlcmUgaXMgbm90aGluZyBtYXBwZWQgYXQgdGhlIHJlbGV2YW50
-IGFkZHJlc3Nlcy4NClVubGVzcyB5b3UgYWN0dWFsbHkgdHJ5IHRvIGFjY2VzcyBvbmUgb2YgdGhl
-IG1lbW9yeSBsb2NhdGlvbnMNCnlvdSB3b24ndCBnZXQgYSBmYXVsdCAtIGFuZCB0aGUgY29ycmVj
-dCByZXR1cm4gaXMgdGhlbiBhIHBhcnRpYWwgcmVhZC4NCg0KU2ltaWxhcmx5IGl0IGlzIHZhbGlk
-IGZvciB0aGUga2VybmVsIHRvIGVuc3VyZSB0aGVyZSBpcyBhbg0KdW5tYXBwZWQgcGFnZSBiZXR3
-ZWVuIHVzZXIgYW5kIGtlcm5lbCBhZGRyZXNzZXMgYW5kIHRoZW4NCm5vdCBjaGVjayB0aGUgYnVm
-ZmVyIHNpemUgYXQgYWxsIC0gcmVxdWlyaW5nIHRoZSBrZXJuZWwgY29kZQ0KZG8gKGFkZXF1YXRl
-bHkpIHNlcXVlbnRpYWwgYWNjZXNzZXMuDQpBZ2FpbiB5b3VyIHRlc3QgJ2ZhaWxzJy4NCg0KWW91
-IGNvdWxkIGVxdWFsbHkgd2VsbCBhcmd1ZSB0aGF0IHRoZSAnb2xkJyBiZWhhdmlvdXIgaXMgd3Jv
-bmchDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
-Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
-biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
+在 2022/3/22 22:41, Arnd Bergmann 写道:
+> On Tue, Mar 22, 2022 at 1:55 PM chenjiahao (C) <chenjiahao16@huawei.com> wrote:
+>> 在 2022/3/18 15:44, Arnd Bergmann 写道:
+>>> This should not result in any user visible difference, in both cases
+>>> user process will see a -EFAULT return code from its system call.
+>>> Are you able to come up with a test case that shows an observable
+>>> difference in behavior?
+>> Actually, this patch do comes from a testcase failure, the code is
+>> pasted below:
+> Thank you for the test case!
+>
+>> #define TMPFILE "__1234567890"
+>> #define BUF_SIZE    1024
+>>
+>> int main()
+>> {
+>>       char buf[BUF_SIZE] = {0};
+>>       int fd;
+>>       int ret;
+>>       int err;
+>>
+>>       fd = open(TMPFILE, O_CREAT | O_RDWR);
+>>       if(-1 == fd)
+>>       {
+>>           perror("open");
+>>           return 1;
+>>       }
+>>
+>>       ret = pread64(fd, buf, -1, 1);
+>>       if((-1 == ret) && (EFAULT == errno))
+>>       {
+>>           close(fd);
+>>           unlink(TMPFILE);
+>>           printf("PASS\n");
+>>           return 0;
+>>       }
+>>       err = errno;
+>>       perror("pread64");
+>>       printf("err = %d\n", err);
+>>       close(fd);
+>>       unlink(TMPFILE);
+>>       printf("FAIL\n");
+>>
+>>       return 1;
+>>    }
+>>
+>> The expected result is:
+>>
+>> PASS
+>>
+>> but the result of 32-bit testcase running in x86-64 kernel with compat
+>> mode is:
+>>
+>> pread64: Success
+>> err = 0
+>> FAIL
+>>
+>>
+>> In my explanation, pread64 is called with count '0xffffffffull' and
+>> offset '1', which might still not trigger
+>>
+>> page fault in 64-bit kernel.
+>>
+>>
+>> This patch uses TASK_SIZE as the addr_limit to performance a stricter
+>> address check and intercepts
+> I see. So while the kernel behavior was not meant to change from
+> my patch, it clearly did, which may cause problems. However, I'm
+> not sure if the changed behavior is actually wrong.
+>
+>> the illegal pointer address from 32-bit userspace at a very early time.
+>> Which is roughly the same
+>>
+>> address limit check as __access_ok in arch/ia64.
+>>
+>>
+>> This is why this fixes my testcase failure above, or have I missed
+>> anything else?
+> My interpretation of what is going on here is that the pread64() call
+> still behaves according to the documented behavior, returning a small
+> number of bytes from the file, up to the first faulting address.
+>
+> As the manual page for pread64() describes,
+>
+>         On  success,  pread()  returns  the  number  of  bytes read
+>         (a return of zero indicates end of file) and pwrite() returns
+>         the number of bytes written.
+>         Note that it is not an error for a successful call to transfer
+>         fewer bytes than requested  (see  read(2)
+>         and write(2)).
+
+I have really missed this point. The behavior here is and should
+
+be aligned with the manual definition.
+
+>
+> The difference after my patch is that originally it returned
+> -EFAULT because part of the buffer is outside of the
+> addressable memory, but now it returns success because
+> part of the buffer is inside the addressable memory ;-)
+>
+> I'm also not sure about which patch caused the change in
+> behavior, can you double-check that? The one you cited,
+> 967747bbc084 ("uaccess: remove CONFIG_SET_FS"), does
+> not actually touch the x86 implementation, and commit
+> 36903abedfe8 ("x86: remove __range_not_ok()") does touch
+> x86 but the limit was already TASK_SIZE_MAX since commit
+> 47058bb54b57 ("x86: remove address space overrides using
+> set_fs()") back in linux-5.10.
+
+I have performed the testcase on the same environment with
+
+several old LTS kernel versions, all the results are "fault".
+
+The behavior before and after your patches should be consistent.
+
+
+So the fault should due to the disagreement between the
+
+testcase's intention and the real pread64 definition. I have been
+
+misled by the former one. Thanks for your interpretation.
+
+
+Jiahao
+
+>
+>          Arnd
+>
+> .
