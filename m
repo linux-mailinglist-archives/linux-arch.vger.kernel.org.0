@@ -2,61 +2,79 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34BA4E505D
-	for <lists+linux-arch@lfdr.de>; Wed, 23 Mar 2022 11:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629B54E51E1
+	for <lists+linux-arch@lfdr.de>; Wed, 23 Mar 2022 13:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239672AbiCWKg3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 23 Mar 2022 06:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
+        id S230134AbiCWMLr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 23 Mar 2022 08:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234425AbiCWKg2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Mar 2022 06:36:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4E925E81;
-        Wed, 23 Mar 2022 03:34:58 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KNl7R2yBxzfYqr;
-        Wed, 23 Mar 2022 18:33:23 +0800 (CST)
-Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Mar 2022 18:34:56 +0800
-Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Wed, 23 Mar
- 2022 18:34:56 +0800
-Subject: Re: [PATCH -next] uaccess: fix __access_ok limit setup in compat mode
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     "Eric W . Biederman" <ebiederm@xmission.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stafford Horne <shorne@gmail.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-References: <20220318071130.163942-1-chenjiahao16@huawei.com>
- <CAK8P3a3==vLKZUOceuMh3X1U5_sN82Vpm8J_3P-H-+q3sKKMxg@mail.gmail.com>
- <88ff36b3-558b-9c3f-f21d-5ef05b3227c5@huawei.com>
- <CAK8P3a3_iZihNmgRNz7Ntrp8sj0hB_Yrpu5iT++ivMjsUXH7+w@mail.gmail.com>
-From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
-Message-ID: <6517b497-f85e-c4dd-98b9-39997ad120d5@huawei.com>
-Date:   Wed, 23 Mar 2022 18:34:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.2
+        with ESMTP id S234249AbiCWMLr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 23 Mar 2022 08:11:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE74739162;
+        Wed, 23 Mar 2022 05:10:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FFC7614DD;
+        Wed, 23 Mar 2022 12:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338B1C340E8;
+        Wed, 23 Mar 2022 12:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648037416;
+        bh=vbcI4mero0N/bJWLX90aYg9H0pV4+j0AozrkgOJahHY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JEITn10iUJpImQkt/uXRjniHYZUsd6BAzcy643WWTVYjsTo6LxFwUOnlQRwy8OBWs
+         w+4D6eknX4FOtFXmSAea1GdGlwv0HFpq0K1HD3cALlwlnsouh+AQX8r/I0wsJUGDxp
+         8BIw8b8ZDdFDNkobUgmmMF3gItUrnC9A2s0QrNjQKU2xQ8hD+mT9YeZ/822MKbVIln
+         cCPNK2h+QBEWIOYkWi/kUDqmg9dWlU6ayXMjSlhvOuiqzrp6L1J0sK1ZBwiBEV5Emi
+         f97DvFO2X4mz0npZGdc9uAPrqNl/o/+geIXj5acz32k1eHUYV1tvby8dwPUkZicHfI
+         XSuP6rifB8qRg==
+Date:   Wed, 23 Mar 2022 12:10:06 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-arch@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <YjsOHmvDgAxwLFMg@sirena.org.uk>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoUU+8zrzB02pW7@sirena.org.uk>
+ <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a3_iZihNmgRNz7Ntrp8sj0hB_Yrpu5iT++ivMjsUXH7+w@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.26]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tJxr+BfuLW0D7ewQ"
+Content-Disposition: inline
+In-Reply-To: <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
+X-Cookie: Nice guys get sick.
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,133 +82,46 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
-在 2022/3/22 22:41, Arnd Bergmann 写道:
-> On Tue, Mar 22, 2022 at 1:55 PM chenjiahao (C) <chenjiahao16@huawei.com> wrote:
->> 在 2022/3/18 15:44, Arnd Bergmann 写道:
->>> This should not result in any user visible difference, in both cases
->>> user process will see a -EFAULT return code from its system call.
->>> Are you able to come up with a test case that shows an observable
->>> difference in behavior?
->> Actually, this patch do comes from a testcase failure, the code is
->> pasted below:
-> Thank you for the test case!
->
->> #define TMPFILE "__1234567890"
->> #define BUF_SIZE    1024
->>
->> int main()
->> {
->>       char buf[BUF_SIZE] = {0};
->>       int fd;
->>       int ret;
->>       int err;
->>
->>       fd = open(TMPFILE, O_CREAT | O_RDWR);
->>       if(-1 == fd)
->>       {
->>           perror("open");
->>           return 1;
->>       }
->>
->>       ret = pread64(fd, buf, -1, 1);
->>       if((-1 == ret) && (EFAULT == errno))
->>       {
->>           close(fd);
->>           unlink(TMPFILE);
->>           printf("PASS\n");
->>           return 0;
->>       }
->>       err = errno;
->>       perror("pread64");
->>       printf("err = %d\n", err);
->>       close(fd);
->>       unlink(TMPFILE);
->>       printf("FAIL\n");
->>
->>       return 1;
->>    }
->>
->> The expected result is:
->>
->> PASS
->>
->> but the result of 32-bit testcase running in x86-64 kernel with compat
->> mode is:
->>
->> pread64: Success
->> err = 0
->> FAIL
->>
->>
->> In my explanation, pread64 is called with count '0xffffffffull' and
->> offset '1', which might still not trigger
->>
->> page fault in 64-bit kernel.
->>
->>
->> This patch uses TASK_SIZE as the addr_limit to performance a stricter
->> address check and intercepts
-> I see. So while the kernel behavior was not meant to change from
-> my patch, it clearly did, which may cause problems. However, I'm
-> not sure if the changed behavior is actually wrong.
->
->> the illegal pointer address from 32-bit userspace at a very early time.
->> Which is roughly the same
->>
->> address limit check as __access_ok in arch/ia64.
->>
->>
->> This is why this fixes my testcase failure above, or have I missed
->> anything else?
-> My interpretation of what is going on here is that the pread64() call
-> still behaves according to the documented behavior, returning a small
-> number of bytes from the file, up to the first faulting address.
->
-> As the manual page for pread64() describes,
->
->         On  success,  pread()  returns  the  number  of  bytes read
->         (a return of zero indicates end of file) and pwrite() returns
->         the number of bytes written.
->         Note that it is not an error for a successful call to transfer
->         fewer bytes than requested  (see  read(2)
->         and write(2)).
+--tJxr+BfuLW0D7ewQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have really missed this point. The behavior here is and should
+On Tue, Mar 22, 2022 at 02:54:20PM -0700, Guenter Roeck wrote:
+> On 3/22/22 11:24, Mark Brown wrote:
 
-be aligned with the manual definition.
+> > Just as a datapoint for debugging at least qemu/arm is getting coverage
+> > in CI systems (KernelCI is covering a bunch of different emulated
+> > machines and LKFT has at least one configuration as well, clang's tests
+> > have some wider architecture coverage as well I think) and they don't
+> > seem to be seeing any problems - there's some other variable in there.
 
->
-> The difference after my patch is that originally it returned
-> -EFAULT because part of the buffer is outside of the
-> addressable memory, but now it returns success because
-> part of the buffer is inside the addressable memory ;-)
->
-> I'm also not sure about which patch caused the change in
-> behavior, can you double-check that? The one you cited,
-> 967747bbc084 ("uaccess: remove CONFIG_SET_FS"), does
-> not actually touch the x86 implementation, and commit
-> 36903abedfe8 ("x86: remove __range_not_ok()") does touch
-> x86 but the limit was already TASK_SIZE_MAX since commit
-> 47058bb54b57 ("x86: remove address space overrides using
-> set_fs()") back in linux-5.10.
+> I use buildroot 2021.02.3. I have not changed the buildroot code, and it
+> still seems to be the same in 2022.02. I don't see the problem with all
+> boot tests, only with the architectures mentioned above, and not with all
+> qemu machines on the affected platforms. For arm, mostly older machines
+> are affected (versatile, realview, pxa configurations, collie, integratorcp,
+> sx1, mps2-an385, vexpress-a9, cubieboard). I didn't check, but maybe
+> kernelci doesn't test those machines ?
 
-I have performed the testcase on the same environment with
+Kind of academic given that Jason seems to have a handle on what the
+issues are but for KernelCI it's variations on mach-virt, plus
+versatile-pb.  There's a physical cubietruck as well, and BeagleBone
+Blacks among others.  My best guess would be systems with low RAM are
+somehow more prone to issues.
 
-several old LTS kernel versions, all the results are "fault".
+--tJxr+BfuLW0D7ewQ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The behavior before and after your patches should be consistent.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmI7Dh0ACgkQJNaLcl1U
+h9BcKgf9GIwAeN+f0WgtlSoiS81pYIPqyjQ+X1zRuvJIR7xCVZq+sYQ27js719v2
+oES8pLcPkyjZHNziBmIDbpiNeKJWWbYlxxXdyyW5sTe+GzEUzh/+MVxLeGUDF1Qx
+rpZYsiZ/NybofrWfkOwDmm/R5tTn2JgJFZaRHtMeUn67ElJPNu107LsgeDVujePG
+Pywun/VDDjcC5scInU3cbhzRoo2ipY8/nwAxPcM6fddMqgaymdFrC5wU8+ihxGsc
+55rSw4QnKKPRpX8CGjc4wSmYXax1OsLc5Lsh9FQHf9EqVs46ZsJHwd6FntTpIht2
+fiOwR2pk7XiyL1tJEsCZyQfE4vAmBw==
+=b+8U
+-----END PGP SIGNATURE-----
 
-So the fault should due to the disagreement between the
-
-testcase's intention and the real pread64 definition. I have been
-
-misled by the former one. Thanks for your interpretation.
-
-
-Jiahao
-
->
->          Arnd
->
-> .
+--tJxr+BfuLW0D7ewQ--
