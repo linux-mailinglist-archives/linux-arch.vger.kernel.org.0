@@ -2,56 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0C54EAD6D
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Mar 2022 14:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 678014EAD5F
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Mar 2022 14:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236108AbiC2Moj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Mar 2022 08:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S236458AbiC2Mol (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Mar 2022 08:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236622AbiC2Mni (ORCPT
+        with ESMTP id S236524AbiC2Mni (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Mar 2022 08:43:38 -0400
 Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654F622F3FB
-        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:32 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id n4-20020a5099c4000000b00418ed58d92fso10976485edb.0
-        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646AB23192F
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:35 -0700 (PDT)
+Received: by mail-ed1-x54a.google.com with SMTP id i22-20020a508716000000b0041908045af3so10873210edb.3
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=1qZ36eD+kaWsJnQ8auEpiZ1rW+bfAeskKwd1x/lbm8E=;
-        b=Rcnu0ftYaviimZCkKchXhLzv4Y9UohEdLtNeE87+i4g2lUAFIdAHcrYb6VunYkRO45
-         0OlJa6TS8CgDxoAQ27qSa4/PMQF86Knx0tCOfbCLtEU24OihmG2+K8/Xo6wOyhahHFhr
-         JmmVtHN25QPgPBe0WNM/XDHAv3tqmwVnno70IommFUD2T5T0L84175cKoN/YlYtKFc+X
-         aXelqCm+GznSbMRU3j6C+wZrte+7TkDPvPe87ccCSj4gMUczWPnDSQWiPrlld8xpNWhg
-         l9rwkEHT/9p/eJIqOK330aaMwuIxjN+oh9bbey1ho0lgCeKyd6Q+1EnhAOJQA5Oa789Z
-         LNHQ==
+        bh=lsB3lK0aPu+8HWqdJ6/yM1q11PTSMtec/DSdWJ9paXQ=;
+        b=Y2VTXLEBSbXPLu5uhbEKKqB5AO9gIHu9jp/jSny35LuwmGZ+c+hEVtLUWlhSpPVc22
+         TxOvlY9Yoi7apyfs9Ow6Y9SD8BcLDmBd8zCFsJWqvD1r8+3P/s4FNpxe3VpbUFeGmI1r
+         M2s3smZ8WKAQfLh/zIYUs4yveEnHKHAWaMCHAYZM2EsQtnTEE9sa+vHBJ2c8G01CB99w
+         h+wWzCDc56ZhTweuBlI3h1rdzZJaGibE55vpeLcLzYyMpMH4Nsc8X53WytkodgNs2hJR
+         4GEA20pYgJcw96lcVe50mTK7DAkc1u2xxRnNcQ3uEduO2cpHhhWmbgpFaG8L9ULcZ04m
+         Xtfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=1qZ36eD+kaWsJnQ8auEpiZ1rW+bfAeskKwd1x/lbm8E=;
-        b=RK4Jp+AB6P9ap9F6W9GFUUwYhJqQl6I8XmHXXq+lDy2qIdwwRXdQEBAIS2P6uoOoVl
-         dTaTI8cGvm/r/9drZUmU9Beqxaa6D9iPNix7285TPSAQUKmnhxwRLuLPQZBU51JRvNNE
-         r09lQFaM2rDlwnpzRJ7eRTMKbd02KgcUvdzChHZ+8vyZjw6f2/DyaogGfbWX9+4RPKul
-         x0THDt9jDcRAV1RWczB47vGcQNmaFkgBVOViqr1Ey0vaH5pJb8oN+/RgAJMsYGWVlCl+
-         VCLM9Abd7dg5s0UEHSeVPpdX1bvY8e7Uw9IQ4Lfi9stgy7OlEdxKt+nBtC+iSlUOLD2Q
-         IXdg==
-X-Gm-Message-State: AOAM5328iUl3NL7DREUy4BkfXri+b3X+jvqFU7Yb2DbHjjnHJJpD8IDR
-        i3JDVxljLwedTSplcXq3mgtRIwXOE6k=
-X-Google-Smtp-Source: ABdhPJwlWxNKietnPeU8wgYIdm3etjxbDw8r9KenX80watwB3MiI5sKIPJR8qvY4K4Ud6K1EwuvorSt75Fw=
+        bh=lsB3lK0aPu+8HWqdJ6/yM1q11PTSMtec/DSdWJ9paXQ=;
+        b=gc4e1EqfD8oq9dge8P2u/iHfZOrMFHdLBBCePtcWux8vQBW0tTqjqzMPaf1Z0xHnkX
+         g/3vH2qH33MY+50fMDneevTT8WIg5mjNWT/uQv+3VD4WafvZghJTZc2sO77axWen4FkN
+         Fa+t0wmQhEvprJC5o3jIK/xR5p2EHF1dXHBqUoWW/r5fMeF63ba1j6vENnpUXjFjREBw
+         wz6opHV4MjyBEedYaOLq/urqhOanglvkSyBrRKA24h/g1cEY7uuMLFacim1rYlM6fuZE
+         YVslaBqaRsGZ69erfbmyVnZv0+QPf6uVDpnT0KlAn71agc9AG7nWMySj635PpDbpHxdn
+         ZxMA==
+X-Gm-Message-State: AOAM530uYDVRyBPAOH0p3SDn2DK4++diPjnTZwdXs01wY514CtadXZTm
+        q/MjOVV7K1wV7nmZBQ3e8rLkqdYiCRs=
+X-Google-Smtp-Source: ABdhPJxMT7rO1P57N71ZmYbIOwRuf4arJokbiW9dyI3uwrKnuskidOOGFTc8VrM1ts4i4n0XHHumgcOFJA8=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:36eb:759:798f:98c3])
- (user=glider job=sendgmr) by 2002:a05:6402:6c2:b0:419:1a14:8fb2 with SMTP id
- n2-20020a05640206c200b004191a148fb2mr4326522edy.415.1648557691238; Tue, 29
- Mar 2022 05:41:31 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:39:52 +0200
+ (user=glider job=sendgmr) by 2002:a17:906:1ec3:b0:6cf:d118:59e2 with SMTP id
+ m3-20020a1709061ec300b006cfd11859e2mr34473282ejj.767.1648557693731; Tue, 29
+ Mar 2022 05:41:33 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:39:53 +0200
 In-Reply-To: <20220329124017.737571-1-glider@google.com>
-Message-Id: <20220329124017.737571-24-glider@google.com>
+Message-Id: <20220329124017.737571-25-glider@google.com>
 Mime-Version: 1.0
 References: <20220329124017.737571-1-glider@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 23/48] kmsan: add iomap support
+Subject: [PATCH v2 24/48] Input: libps2: mark data received in __ps2_command()
+ as initialized
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -87,208 +88,49 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Functions from lib/iomap.c interact with hardware, so KMSAN must ensure
-that:
- - every read function returns an initialized value
- - every write function checks values before sending them to hardware.
+KMSAN does not know that the device initializes certain bytes in
+ps2dev->cmdbuf. Call kmsan_unpoison_memory() to explicitly mark them as
+initialized.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
-Link: https://linux-review.googlesource.com/id/I45527599f09090aca046dfe1a26df453adab100d
+Link: https://linux-review.googlesource.com/id/I2d26f6baa45271d37320d3f4a528c39cb7e545f0
 ---
- lib/iomap.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ drivers/input/serio/libps2.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/lib/iomap.c b/lib/iomap.c
-index fbaa3e8f19d6c..bdda1a42771b2 100644
---- a/lib/iomap.c
-+++ b/lib/iomap.c
-@@ -6,6 +6,7 @@
-  */
- #include <linux/pci.h>
- #include <linux/io.h>
+diff --git a/drivers/input/serio/libps2.c b/drivers/input/serio/libps2.c
+index 250e213cc80c6..3e19344eda93c 100644
+--- a/drivers/input/serio/libps2.c
++++ b/drivers/input/serio/libps2.c
+@@ -12,6 +12,7 @@
+ #include <linux/sched.h>
+ #include <linux/interrupt.h>
+ #include <linux/input.h>
 +#include <linux/kmsan-checks.h>
+ #include <linux/serio.h>
+ #include <linux/i8042.h>
+ #include <linux/libps2.h>
+@@ -294,9 +295,11 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
  
- #include <linux/export.h>
+ 	serio_pause_rx(ps2dev->serio);
  
-@@ -70,26 +71,31 @@ static void bad_io_access(unsigned long port, const char *access)
- #define mmio_read64be(addr) swab64(readq(addr))
- #endif
+-	if (param)
++	if (param) {
+ 		for (i = 0; i < receive; i++)
+ 			param[i] = ps2dev->cmdbuf[(receive - 1) - i];
++		kmsan_unpoison_memory(param, receive);
++	}
  
-+__no_sanitize_memory
- unsigned int ioread8(const void __iomem *addr)
- {
- 	IO_COND(addr, return inb(port), return readb(addr));
- 	return 0xff;
- }
-+__no_sanitize_memory
- unsigned int ioread16(const void __iomem *addr)
- {
- 	IO_COND(addr, return inw(port), return readw(addr));
- 	return 0xffff;
- }
-+__no_sanitize_memory
- unsigned int ioread16be(const void __iomem *addr)
- {
- 	IO_COND(addr, return pio_read16be(port), return mmio_read16be(addr));
- 	return 0xffff;
- }
-+__no_sanitize_memory
- unsigned int ioread32(const void __iomem *addr)
- {
- 	IO_COND(addr, return inl(port), return readl(addr));
- 	return 0xffffffff;
- }
-+__no_sanitize_memory
- unsigned int ioread32be(const void __iomem *addr)
- {
- 	IO_COND(addr, return pio_read32be(port), return mmio_read32be(addr));
-@@ -142,18 +148,21 @@ static u64 pio_read64be_hi_lo(unsigned long port)
- 	return lo | (hi << 32);
- }
- 
-+__no_sanitize_memory
- u64 ioread64_lo_hi(const void __iomem *addr)
- {
- 	IO_COND(addr, return pio_read64_lo_hi(port), return readq(addr));
- 	return 0xffffffffffffffffULL;
- }
- 
-+__no_sanitize_memory
- u64 ioread64_hi_lo(const void __iomem *addr)
- {
- 	IO_COND(addr, return pio_read64_hi_lo(port), return readq(addr));
- 	return 0xffffffffffffffffULL;
- }
- 
-+__no_sanitize_memory
- u64 ioread64be_lo_hi(const void __iomem *addr)
- {
- 	IO_COND(addr, return pio_read64be_lo_hi(port),
-@@ -161,6 +170,7 @@ u64 ioread64be_lo_hi(const void __iomem *addr)
- 	return 0xffffffffffffffffULL;
- }
- 
-+__no_sanitize_memory
- u64 ioread64be_hi_lo(const void __iomem *addr)
- {
- 	IO_COND(addr, return pio_read64be_hi_lo(port),
-@@ -188,22 +198,32 @@ EXPORT_SYMBOL(ioread64be_hi_lo);
- 
- void iowrite8(u8 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, outb(val,port), writeb(val, addr));
- }
- void iowrite16(u16 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, outw(val,port), writew(val, addr));
- }
- void iowrite16be(u16 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, pio_write16be(val,port), mmio_write16be(val, addr));
- }
- void iowrite32(u32 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, outl(val,port), writel(val, addr));
- }
- void iowrite32be(u32 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, pio_write32be(val,port), mmio_write32be(val, addr));
- }
- EXPORT_SYMBOL(iowrite8);
-@@ -239,24 +259,32 @@ static void pio_write64be_hi_lo(u64 val, unsigned long port)
- 
- void iowrite64_lo_hi(u64 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, pio_write64_lo_hi(val, port),
- 		writeq(val, addr));
- }
- 
- void iowrite64_hi_lo(u64 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, pio_write64_hi_lo(val, port),
- 		writeq(val, addr));
- }
- 
- void iowrite64be_lo_hi(u64 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, pio_write64be_lo_hi(val, port),
- 		mmio_write64be(val, addr));
- }
- 
- void iowrite64be_hi_lo(u64 val, void __iomem *addr)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(&val, sizeof(val));
- 	IO_COND(addr, pio_write64be_hi_lo(val, port),
- 		mmio_write64be(val, addr));
- }
-@@ -328,14 +356,20 @@ static inline void mmio_outsl(void __iomem *addr, const u32 *src, int count)
- void ioread8_rep(const void __iomem *addr, void *dst, unsigned long count)
- {
- 	IO_COND(addr, insb(port,dst,count), mmio_insb(addr, dst, count));
-+	/* KMSAN must treat values read from devices as initialized. */
-+	kmsan_unpoison_memory(dst, count);
- }
- void ioread16_rep(const void __iomem *addr, void *dst, unsigned long count)
- {
- 	IO_COND(addr, insw(port,dst,count), mmio_insw(addr, dst, count));
-+	/* KMSAN must treat values read from devices as initialized. */
-+	kmsan_unpoison_memory(dst, count * 2);
- }
- void ioread32_rep(const void __iomem *addr, void *dst, unsigned long count)
- {
- 	IO_COND(addr, insl(port,dst,count), mmio_insl(addr, dst, count));
-+	/* KMSAN must treat values read from devices as initialized. */
-+	kmsan_unpoison_memory(dst, count * 4);
- }
- EXPORT_SYMBOL(ioread8_rep);
- EXPORT_SYMBOL(ioread16_rep);
-@@ -343,14 +377,20 @@ EXPORT_SYMBOL(ioread32_rep);
- 
- void iowrite8_rep(void __iomem *addr, const void *src, unsigned long count)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(src, count);
- 	IO_COND(addr, outsb(port, src, count), mmio_outsb(addr, src, count));
- }
- void iowrite16_rep(void __iomem *addr, const void *src, unsigned long count)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(src, count * 2);
- 	IO_COND(addr, outsw(port, src, count), mmio_outsw(addr, src, count));
- }
- void iowrite32_rep(void __iomem *addr, const void *src, unsigned long count)
- {
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(src, count * 4);
- 	IO_COND(addr, outsl(port, src,count), mmio_outsl(addr, src, count));
- }
- EXPORT_SYMBOL(iowrite8_rep);
+ 	if (ps2dev->cmdcnt &&
+ 	    (command != PS2_CMD_RESET_BAT || ps2dev->cmdcnt != 1)) {
 -- 
 2.35.1.1021.g381101b075-goog
 
