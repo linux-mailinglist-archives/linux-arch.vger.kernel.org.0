@@ -2,56 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 076FB4EAD7A
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Mar 2022 14:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F7414EAD7B
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Mar 2022 14:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236641AbiC2MqH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 29 Mar 2022 08:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S236666AbiC2Mqj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Mar 2022 08:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236654AbiC2MoF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Mar 2022 08:44:05 -0400
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23680236B9C
-        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:46 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id mm20-20020a170906cc5400b006dfec7725f3so8114034ejb.15
-        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:45 -0700 (PDT)
+        with ESMTP id S236682AbiC2Moh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Mar 2022 08:44:37 -0400
+Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8F2238D37
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:48 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id k16-20020a17090632d000b006ae1cdb0f07so8117816ejk.16
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:41:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=NcXyKO/GU5wv+AINtBvHToR0v2IpKVpreq+8SU9KtO4=;
-        b=DIWfKg7bP7QnSfYaoX5/svSrQlbraANJFz4ZkJPOWATm87bCAU2GbOOvwevJcEHoKi
-         wbdwLM4FSdQAgqD+aGltFF1nNlgaZOezyHxrai+rBf8lAExLt9TsIObDqEZCzGpIi7nH
-         xwWzJXVyfWrhAFtE1DDgdB13tMX7M2TNnBpf5xo5AKOhlt6Ra/sgjz/MvMdpU1BtHlRO
-         AokxmkFDUGancBTS6WUAyS0jZ1/25Z/5/NnX5iVI36FKkApjAbgSShp4qxN4eRySlGQN
-         LaDPdH7+3zFsETzZOVpB1jP5H2P3l6+9CkkA76YAQaezI3vMYZPtpAZ47ee1hp/xomfj
-         t6zg==
+        bh=O02VuhTFNs3OTl+6EdHhE8hyAxR47CEkJ1c0ak5Vr4s=;
+        b=C7gGD19m/XveB8Ws/Mrjzquo4UNw5iFhMF9IPlHcdW4Pk7ozQxZ0PNkEpCOMh/tb00
+         yCiWkUdHR91r9//CRvGweQPLnnFSzPbvrVzmonGkPHKHJKpSLL7cZLAlDCFYeFIGL0Ss
+         /IHCNCWokewlL1qO8a1mb2PQPEKWlCRk5OzGhzGAqj2hGFDN9YdHtSVskka/fzfTrsMa
+         j1HMSwQQR8sw9adaQ+zA9d1GRw1pKIsT10NfugO2m9bXeTnFmGN1T9OiXau82BOJCc7K
+         C/JGIJ/LSEbzSTmqkiIN+J1LwkC97hJDp0NnsDzTO1d3X/gZnjcZCBRAdS59i777oAr4
+         GMUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=NcXyKO/GU5wv+AINtBvHToR0v2IpKVpreq+8SU9KtO4=;
-        b=bs1J7V/h0JQtweVAqYTZwvQEfeeXmdL1HO2IyMKB4rwu6mVOOaNMMrurPpEC/J3dtt
-         iGm3bXGnJREfizYw0pB0NaXPm7JCp7yL2yJ2pKkHejUDxNBR2acXQnbv0NhFZlxQrdPI
-         4ImX0AVEs0n4lpDJaEwyZmr4X21poApuxh6ZRN84fG+p+Uj4co9ziK6D+JdMi2wAPYdW
-         BaC2c3VSipRZQyLbW443qLLImuxo5cf3/E/Mu215woI/LDAQtSlDZqHbwHYNKqhEqHNs
-         K7HpOgdXTHzeNqkjOFvFvS9r7+fPlB2fSbxIN0Ch2vwi6Vn3Itcg9ZEP/Ifs/LjUb4WW
-         vYiQ==
-X-Gm-Message-State: AOAM532V3tsvAdZcnR9o06owq8hG82KJR1QFCwGw+SypBAF/wjZlHVsp
-        /5JKf3mqTX4bmHPvzpLfXwyKckBQCwg=
-X-Google-Smtp-Source: ABdhPJwPdBpHIJ0mASGI8QRZZRZI3D7LOk/yhFizlkS2OYABeZsKpvCixcNsVmSaozXNqIJyvElCXIKXLNA=
+        bh=O02VuhTFNs3OTl+6EdHhE8hyAxR47CEkJ1c0ak5Vr4s=;
+        b=X50nGz5/kIBulN3O3JIK18DTUDMEH0zXA1hIgZVDjf4GnCKrLFyz+pfD8rpOa94CkK
+         +CJBy45XApG3xmbhuLj8X2gjkrK8gqVDwZLJDrg0tvEJ1RCbY/OjDKdMGkPcPhslLZMK
+         F5PaKIxPZgP0RRNapdWGapZW7UmvKmW1sAJ4R4EUf5CpidKtH2YXmytqWuCsGBR2BXNe
+         4HqPWtAO0mjoW1X9XdW/AZoDkmdRif3nyvJZOWOqeqDocjlh3X+aV1GloiJtiLATbVhB
+         bZ41VSu6Kqnf9nuxF5O8KUvYWwWON1Or8g6TslWRS/D1jFuWC1ki+04sjB+1vLf3EqBK
+         L5Gw==
+X-Gm-Message-State: AOAM53130g2NZyfUdZslG4IKEjZ1YVy1c1OKFIeSCoYh97lnYG9UpPjr
+        P6wit/ArwQHL0NbiSxYY5iJD3DpoPDg=
+X-Google-Smtp-Source: ABdhPJyB/bcFcN+qpi65yKy1mIxhG89Sd6SxBmOpeaEdxDCuTuOOvV2uj+2kKbIDqHQp3uDGpI9M/qBVr2s=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:36eb:759:798f:98c3])
- (user=glider job=sendgmr) by 2002:a17:907:1dc8:b0:6df:f5fc:f4f9 with SMTP id
- og8-20020a1709071dc800b006dff5fcf4f9mr34096038ejc.739.1648557704420; Tue, 29
- Mar 2022 05:41:44 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:39:57 +0200
+ (user=glider job=sendgmr) by 2002:a17:906:4786:b0:6e0:c7b:d267 with SMTP id
+ cw6-20020a170906478600b006e00c7bd267mr34808708ejc.115.1648557707096; Tue, 29
+ Mar 2022 05:41:47 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:39:58 +0200
 In-Reply-To: <20220329124017.737571-1-glider@google.com>
-Message-Id: <20220329124017.737571-29-glider@google.com>
+Message-Id: <20220329124017.737571-30-glider@google.com>
 Mime-Version: 1.0
 References: <20220329124017.737571-1-glider@google.com>
 X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
-Subject: [PATCH v2 28/48] kmsan: instrumentation.h: add instrumentation_begin_with_regs()
+Subject: [PATCH v2 29/48] kmsan: entry: handle register passing from
+ uninstrumented code
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -94,108 +95,120 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When calling KMSAN-instrumented functions from non-instrumented
-functions, function parameters may not be initialized properly, leading
-to false positive reports. In particular, this happens all the time when
-calling interrupt handlers from `noinstr` IDT entries.
-
-We introduce instrumentation_begin_with_regs(), which calls
-instrumentation_begin() and notifies KMSAN about the beginning of the
-potentially instrumented region by calling
-kmsan_instrumentation_begin(), which:
- - wipes the current KMSAN state at the beginning of the region, ensuring
-   that the first call of an instrumented function receives initialized
-   parameters (this is a pretty good approximation of having all other
-   instrumented functions receive initialized parameters);
- - unpoisons the `struct pt_regs` set up by the non-instrumented assembly
-   code.
+Replace instrumentation_begin()	with instrumentation_begin_with_regs()
+to let KMSAN handle the non-instrumented code and unpoison pt_regs
+passed from the instrumented part.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I0f5e3372e00bd5fe25ddbf286f7260aae9011858
+Link: https://linux-review.googlesource.com/id/I7f0a9809b66bd85faae43142971d0095771b7a42
 ---
- include/linux/instrumentation.h |  6 ++++++
- include/linux/kmsan.h           | 11 +++++++++++
- mm/kmsan/hooks.c                | 16 ++++++++++++++++
- 3 files changed, 33 insertions(+)
+ kernel/entry/common.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/instrumentation.h b/include/linux/instrumentation.h
-index 24359b4a96053..3bbce9d556381 100644
---- a/include/linux/instrumentation.h
-+++ b/include/linux/instrumentation.h
-@@ -15,6 +15,11 @@
- })
- #define instrumentation_begin() __instrumentation_begin(__COUNTER__)
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index bad713684c2e3..dcf91ab14512a 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -21,7 +21,7 @@ static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
+ 	CT_WARN_ON(ct_state() != CONTEXT_USER);
+ 	user_exit_irqoff();
  
-+#define instrumentation_begin_with_regs(regs) do {			\
-+	__instrumentation_begin(__COUNTER__);				\
-+	kmsan_instrumentation_begin(regs);				\
-+} while (0)
-+
- /*
-  * Because instrumentation_{begin,end}() can nest, objtool validation considers
-  * _begin() a +1 and _end() a -1 and computes a sum over the instructions.
-@@ -55,6 +60,7 @@
- #define instrumentation_end() __instrumentation_end(__COUNTER__)
- #else
- # define instrumentation_begin()	do { } while(0)
-+# define instrumentation_begin_with_regs(regs) kmsan_instrumentation_begin(regs)
- # define instrumentation_end()		do { } while(0)
- #endif
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	trace_hardirqs_off_finish();
+ 	instrumentation_end();
+ }
+@@ -103,7 +103,7 @@ noinstr long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall)
  
-diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-index 55f976b721566..209a5a2192e22 100644
---- a/include/linux/kmsan.h
-+++ b/include/linux/kmsan.h
-@@ -247,6 +247,13 @@ void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
-  */
- void kmsan_handle_urb(const struct urb *urb, bool is_out);
+ 	__enter_from_user_mode(regs);
  
-+/**
-+ * kmsan_instrumentation_begin() - handle instrumentation_begin().
-+ * @regs: pointer to struct pt_regs that non-instrumented code passes to
-+ *        instrumented code.
-+ */
-+void kmsan_instrumentation_begin(struct pt_regs *regs);
-+
- #else
- 
- static inline void kmsan_init_shadow(void)
-@@ -343,6 +350,10 @@ static inline void kmsan_handle_urb(const struct urb *urb, bool is_out)
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	local_irq_enable();
+ 	ret = __syscall_enter_from_user_work(regs, syscall);
+ 	instrumentation_end();
+@@ -114,7 +114,7 @@ noinstr long syscall_enter_from_user_mode(struct pt_regs *regs, long syscall)
+ noinstr void syscall_enter_from_user_mode_prepare(struct pt_regs *regs)
  {
+ 	__enter_from_user_mode(regs);
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	local_irq_enable();
+ 	instrumentation_end();
  }
+@@ -296,7 +296,7 @@ void syscall_exit_to_user_mode_work(struct pt_regs *regs)
  
-+static inline void kmsan_instrumentation_begin(struct pt_regs *regs)
-+{
-+}
-+
- #endif
+ __visible noinstr void syscall_exit_to_user_mode(struct pt_regs *regs)
+ {
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	__syscall_exit_to_user_mode_work(regs);
+ 	instrumentation_end();
+ 	__exit_to_user_mode();
+@@ -309,7 +309,7 @@ noinstr void irqentry_enter_from_user_mode(struct pt_regs *regs)
  
- #endif /* _LINUX_KMSAN_H */
-diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-index d95fd16a4b1dc..6b133533ff7d9 100644
---- a/mm/kmsan/hooks.c
-+++ b/mm/kmsan/hooks.c
-@@ -366,3 +366,19 @@ void kmsan_check_memory(const void *addr, size_t size)
- 					   REASON_ANY);
- }
- EXPORT_SYMBOL(kmsan_check_memory);
-+
-+void kmsan_instrumentation_begin(struct pt_regs *regs)
-+{
-+	struct kmsan_context_state *state = &kmsan_get_context()->cstate;
-+
-+	if (state)
-+		__memset(state, 0, sizeof(struct kmsan_context_state));
-+	if (!kmsan_enabled || !regs)
-+		return;
-+	/*
-+	 * @regs may reside in cpu_entry_area, for which KMSAN does not allocate
-+	 * metadata. Do not force an error in that case.
-+	 */
-+	kmsan_internal_unpoison_memory(regs, sizeof(*regs), /*checked*/ false);
-+}
-+EXPORT_SYMBOL(kmsan_instrumentation_begin);
+ noinstr void irqentry_exit_to_user_mode(struct pt_regs *regs)
+ {
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	exit_to_user_mode_prepare(regs);
+ 	instrumentation_end();
+ 	__exit_to_user_mode();
+@@ -357,7 +357,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+ 		 */
+ 		lockdep_hardirqs_off(CALLER_ADDR0);
+ 		rcu_irq_enter();
+-		instrumentation_begin();
++		instrumentation_begin_with_regs(regs);
+ 		trace_hardirqs_off_finish();
+ 		instrumentation_end();
+ 
+@@ -372,7 +372,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+ 	 * in having another one here.
+ 	 */
+ 	lockdep_hardirqs_off(CALLER_ADDR0);
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	rcu_irq_enter_check_tick();
+ 	trace_hardirqs_off_finish();
+ 	instrumentation_end();
+@@ -409,7 +409,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+ 		 * and RCU as the return to user mode path.
+ 		 */
+ 		if (state.exit_rcu) {
+-			instrumentation_begin();
++			instrumentation_begin_with_regs(regs);
+ 			/* Tell the tracer that IRET will enable interrupts */
+ 			trace_hardirqs_on_prepare();
+ 			lockdep_hardirqs_on_prepare(CALLER_ADDR0);
+@@ -419,7 +419,7 @@ noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state)
+ 			return;
+ 		}
+ 
+-		instrumentation_begin();
++		instrumentation_begin_with_regs(regs);
+ 		if (IS_ENABLED(CONFIG_PREEMPTION)) {
+ #ifdef CONFIG_PREEMPT_DYNAMIC
+ 			static_call(irqentry_exit_cond_resched)();
+@@ -451,7 +451,7 @@ irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs)
+ 	lockdep_hardirq_enter();
+ 	rcu_nmi_enter();
+ 
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	trace_hardirqs_off_finish();
+ 	ftrace_nmi_enter();
+ 	instrumentation_end();
+@@ -461,7 +461,7 @@ irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs)
+ 
+ void noinstr irqentry_nmi_exit(struct pt_regs *regs, irqentry_state_t irq_state)
+ {
+-	instrumentation_begin();
++	instrumentation_begin_with_regs(regs);
+ 	ftrace_nmi_exit();
+ 	if (irq_state.lockdep) {
+ 		trace_hardirqs_on_prepare();
 -- 
 2.35.1.1021.g381101b075-goog
 
