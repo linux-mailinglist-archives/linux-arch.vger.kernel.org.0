@@ -2,423 +2,362 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A264F4EA428
-	for <lists+linux-arch@lfdr.de>; Tue, 29 Mar 2022 02:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AD64EAD3E
+	for <lists+linux-arch@lfdr.de>; Tue, 29 Mar 2022 14:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiC2AbY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 28 Mar 2022 20:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S236364AbiC2MmN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 29 Mar 2022 08:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbiC2AbX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 28 Mar 2022 20:31:23 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCDA04C439;
-        Mon, 28 Mar 2022 17:29:40 -0700 (PDT)
-Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 41FCC20DEDEC;
-        Mon, 28 Mar 2022 17:29:40 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 41FCC20DEDEC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1648513780;
-        bh=cGM0P3lImfAhuv+Yt4UwFeKiKEe0eNnM7spBmF6LXqI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OLCqGS7bPasQodPgsrNc/kytvUrvb18MQCmipexkF0LYdCpjuZylQfU7Z7rYlfKJn
-         P1CYLza/TCs8WZ9j/7M2NyM29UtRFN1BFHO1+9X00cUT86mb5sU9/1AhD0pwFu+tyN
-         38rAiS3gcN1TJSOEwbp5B3j84MiWqB2jmunxHKa4=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     mathieu.desnoyers@efficios.com
-Cc:     beaub@microsoft.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        rostedt@goodmis.org, mhiramat@kernel.org
-Subject: Re: Comments on new user events ABI
-Date:   Mon, 28 Mar 2022 17:29:35 -0700
-Message-Id: <20220329002935.2869-1-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
-References: <2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233980AbiC2MmN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 29 Mar 2022 08:42:13 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00801FE54F
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:40:29 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id og28-20020a1709071ddc00b006dfb92d8e3fso8108747ejc.14
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 05:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=idyUlMdq5BMXiIOe92RRuZtIC/cOc/uhzkiCJLOfnYM=;
+        b=i+fGc7ae47jvsgRbm96MuyBrl2jm1JEcyXZoC6oigC6/0zfxLEy8WTnBB9PlqdKWnA
+         0bhxrXlOl5E8YUnioNW2noa1655PWZmpZbT5Yc5VF+VO6CVe2wz+krNkkPfHUWI3Z7iC
+         Qesy+gj3KUokSyJyyHZQQu8NK+cF7vIkniH6sV0t4j3HRuLr3lXj81vENhedbtwNOZKk
+         g9uUgXydtWYkrD7Q3J6g1rgibkpwnyj3kNqAQqcfC73uCRrFqBg21fzSOhUT1acE7EDq
+         /ZMh9flZGUZNBHrYTn9EuE7D1QS9fVexdrlx/A3QeUlngzRRPIIP5wYE+dExhdsLo6SD
+         GCYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=idyUlMdq5BMXiIOe92RRuZtIC/cOc/uhzkiCJLOfnYM=;
+        b=pEqYrUSwT9k+LM+LbWJcO576ZqtKShG4OeIZ9LWjcpC7yxpRwKmwwOF8Stuhgwz8eD
+         tFX76lF5BKiTDSJL3f/J4D8YwWpsuU74FOa/bArAK1kMykEuJ2ZMQDx1OWvW1XutAybM
+         thQrl2tJ5W1uRWw/7LCLWQjSzhsrJg9Fr3uZmQznQbkiRGMnGvQyPXWaVq+DO4vCU4jn
+         38tqp+0jacBF1x1+MgulUsaXUjYz3+te3/aI3AgB7e99VBMG8la6aa9JCVNyC8l0OoI+
+         jrY/9T38jGgJ1WxdQD/gglucT5wKPy1LCzd9ad4xcOChbscuyF6Zmzgcb20z9akoVH6m
+         /odw==
+X-Gm-Message-State: AOAM531owG+9oMSfgppqSD1RfLYY8WHbmj5Zko9URR8/SStym8ADW7XN
+        rhzkL/WF6qijzdlE3HJiWhrnhDpnelY=
+X-Google-Smtp-Source: ABdhPJwRMiYs/NYeDIzzQSgprsus8zmPd4Xmh1vDim06VwSWUJS/AwqBclTDbGOeTw5b+X6azgzZenPhBug=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:36eb:759:798f:98c3])
+ (user=glider job=sendgmr) by 2002:a17:907:3e18:b0:6da:7ac5:4ad4 with SMTP id
+ hp24-20020a1709073e1800b006da7ac54ad4mr34574223ejc.212.1648557628012; Tue, 29
+ Mar 2022 05:40:28 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:39:29 +0200
+Message-Id: <20220329124017.737571-1-glider@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1021.g381101b075-goog
+Subject: [PATCH v2 00/48] Add KernelMemorySanitizer infrastructure
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> ----- On Mar 28, 2022, at 4:24 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
-> Hi Beau, Hi Steven,
-> 
-> I've done a review of the trace events ABI, and I have a few comments.
-> Sorry for being late to the party, but I only noticed this new ABI recently.
-> Hopefully we can improve this ABI before the 5.18 release.
-> 
+KernelMemorySanitizer (KMSAN) is a detector of errors related to uses of
+uninitialized memory. It relies on compile-time Clang instrumentation
+(similar to MSan in the userspace [1]) and tracks the state of every bit
+of kernel memory, being able to report an error if uninitialized value is
+used in a condition, dereferenced, or escapes to userspace, USB or DMA.
 
-Welcome to the party :)
+KMSAN has reported more than 300 bugs in the past few years (recently
+fixed bugs: [2]), most of them with the help of syzkaller. Such bugs
+keep getting introduced into the kernel despite new compiler warnings and
+other analyses (the 5.16 cycle already resulted in several KMSAN-reported
+bugs, e.g. [3]). Mitigations like total stack and heap initialization are
+unfortunately very far from being deployable.
 
-> * user_events_status memory mapping
-> 
-> As I understand it, one part of the user events ABI is a memory mapping
-> which contains "flags" which indicates whether a given event is enabled.
-> It is indexed by byte, and each byte has this bitwise meaning:
-> 
-> /* Bits 0-6 are for known probe types, Bit 7 is for unknown probes */
-> #define EVENT_BIT_FTRACE 0
-> #define EVENT_BIT_PERF 1
-> #define EVENT_BIT_OTHER 7
-> 
-> There are a few things I find odd here. First, to improve use of CPU cache,
-> I would have expected this memory mapping to expose enable flags as a
-> bitmap rather than an array of bytes, indexed bit-wise rather than byte-wise.
-> I also don't get what user-space is expected to do differently if FTRACE vs
-> PERF is enabled, considering that it gates a writev() to a file descriptor
-> associated with /sys/kernel/debug/tracing/user_events_data.
-> 
+The proposed patchset contains KMSAN runtime implementation together with
+small changes to other subsystems needed to make KMSAN work.
 
-The intention wasn't for user-space to check the byte other than non-zero.
-User processes could do that, but it's more so administration tools can see
-where the events are registered if they cannot be closed and the state of the
-machine.
+The latter changes fall into several categories:
 
-Maybe you have a slicker way to do this, but it seems to check a bit in the
-page would involve at least a byte read followed by a mask or shift? That
-seems more expensive than checking a byte?
+1. Changes and refactorings of existing code required to add KMSAN:
+ - [1/48] x86: add missing include to sparsemem.h
+ - [2/48] stackdepot: reserve 5 extra bits in depot_stack_handle_t
+ - [3/48] kasan: common: adapt to the new prototype of __stack_depot_save()
+ - [4/48] instrumented.h: allow instrumenting both sides of copy_from_user()
+ - [5/48] x86: asm: instrument usercopy in get_user() and __put_user_size()
+ - [6/48] asm-generic: instrument usercopy in cacheflush.h
+ - [11/48] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+ - [12/48] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
 
-> I would have rather thought that tracers implemented in user-space could register
-> themselves, and then there could be one /sys/kernel/debug/tracing/user_events_status
-> per tracer. Considering that all kernel tracers use the same ABI to write an event,
-> and then dispatch this event internally within the kernel to each registered
-> tracer, I would expect to have a single memory mapping for all those (e.g. a
-> /sys/kernel/debug/tracing/user_events_status/kernel_tracers file).
-> 
-> Then eventually if we have other user-space tracers such as lttng-ust with its
-> their own user-space code performing tracing in a shared memory ring buffer, it
-> would make sense to allow it to register its own
-> /sys/kernel/debug/tracing/user_events_status/lttng_ust file, with its own indexes.
-> 
+2. KMSAN-related declarations in generic code, KMSAN runtime library,
+   docs and configs:
+ - [7/48] kmsan: add ReST documentation
+ - [8/48] kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+ - [10/48] x86: kmsan: pgtable: reduce vmalloc space
+ - [13/48] kmsan: add KMSAN runtime core
+ - [16/48] MAINTAINERS: add entry for KMSAN
+ - [30/48] kmsan: add tests for KMSAN
+ - [38/48] objtool: kmsan: list KMSAN API functions as uaccess-safe
+ - [43/48] x86: kmsan: use __msan_ string functions where possible.
+ - [48/48] x86: kmsan: enable KMSAN builds for x86
 
-I don't follow that. The intention is to get user processes to participate with
-trace_events and the built-in tooling. When would a user-space tracer be used
-instead of perf/ftrace?
+3. Adding hooks from different subsystems to notify KMSAN about memory
+   state changes:
+ - [17/48] kmsan: mm: maintain KMSAN metadata for page operations
+ - [18/48] kmsan: mm: call KMSAN hooks from SLUB code
+ - [19/48] kmsan: handle task creation and exiting
+ - [20/48] kmsan: init: call KMSAN initialization routines
+ - [21/48] instrumented.h: add KMSAN support
+ - [23/48] kmsan: add iomap support
+ - [24/48] Input: libps2: mark data received in __ps2_command() as initialized
+ - [25/48] kmsan: dma: unpoison DMA mappings
+ - [42/48] x86: kmsan: handle open-coded assembly in lib/iomem.c
+ - [44/48] x86: kmsan: sync metadata pages on page fault
 
-It seems like a feature request?
+4. Changes that prevent false reports by explicitly initializing memory,
+   disabling optimized code that may trick KMSAN, selectively skipping
+   instrumentation:
+ - [14/48] kmsan: implement kmsan_init(), initialize READ_ONCE_NOCHECK()
+ - [15/48] kmsan: disable instrumentation of unsupported common kernel code
+ - [22/48] kmsan: unpoison @tlb in arch_tlb_gather_mmu()
+ - [26/48] kmsan: virtio: check/unpoison scatterlist in vring_map_one_sg()
+ - [27/48] kmsan: handle memory sent to/from USB
+ - [31/48] kernel: kmsan: don't instrument stacktrace.c
+ - [32/48] kmsan: disable strscpy() optimization under KMSAN
+ - [33/48] crypto: kmsan: disable accelerated configs under KMSAN
+ - [34/48] kmsan: disable physical page merging in biovec
+ - [35/48] kmsan: block: skip bio block merging logic for KMSAN
+ - [36/48] kmsan: kcov: unpoison area->list in kcov_remote_area_put()
+ - [37/48] security: kmsan: fix interoperability with auto-initialization
+ - [39/48] x86: kmsan: make READ_ONCE_TASK_STACK() return initialized values
+ - [40/48] x86: kmsan: disable instrumentation of unsupported code
+ - [41/48] x86: kmsan: skip shadow checks in __switch_to()
+ - [45/48] x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for KASAN/KMSAN
+ - [46/48] x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
 
-> If this facility is ever used by lttng-ust to enable user-space tracing, I would not
-> want to take the overhead of calling writev for the sake of kernel tracers if
-> those are disabled.
-> 
+5. Noinstr handling:
+ - [9/48] kmsan: mark noinstr as __no_sanitize_memory
+ - [28/48] kmsan: instrumentation.h: add instrumentation_begin_with_regs()
+ - [29/48] kmsan: entry: handle register passing from uninstrumented code
+ - [47/48] x86: kmsan: handle register passing from uninstrumented code
 
-If they were disabled the byte wouldn't be set, right? So no writev overhead.
+This patchset allows one to boot and run a defconfig+KMSAN kernel on a
+QEMU without known false positives. It however doesn't guarantee there
+are no false positives in drivers of certain devices or less tested
+subsystems, although KMSAN is actively tested on syzbot with a large
+config.
 
-Seems I'm missing something.
+The patchset was generated relative to Linux v5.17. The most
+up-to-date KMSAN tree currently resides at
+https://github.com/google/kmsan/.
+One may find it handy to review these patches in Gerrit:
+https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/12604/25
 
-> So perhaps in the short-term there is no need to implement the user-space tracer
-> registration ABI, but I would have expected a simple bitmap for
-> /sys/kernel/debug/tracing/user_events_data/kernel_tracers rather than the
-> bytewise index, because as far as the kernel tracers are concerned, providing
-> the bit to tell userspace instrumentation exactly which tracers are internally
-> enabled within the kernel does not appear to be of any use other than increasing
-> the footprint on the actively used cpu cache lines.
-> 
-> 
-> * user_events_data page faults
-> 
-> If my understanding is correct, when the user-space program's memory containing
-> the payload passed to writev() to a user_events_data file descriptor is kicked
-> out from the page cache between fault_in_iov_iter_readable and its use by the
-> tracers due to high memory pressure, the writev() will fail with -EFAULT and
-> the data will be discarded unless user-space somehow handles this error (which
-> is not handled in the samples/user_events/sample.c example program). It is good
-> that the memory is faulted in immediately before calling the tracers, but
-> considering that it is not mlock'd, should we make more effort to ensure the
-> tracers are able to handle page faults ?
-> 
-> Integration of the work done by Michael Jeanson and myself on faultable tracepoint
-> would allow the tracepoint probes to take page faults. Then, further modifications
-> in the kernel tracers would be needed to handle those page faults.
-> 
+A huge thanks goes to the reviewers of the RFC patch series sent to LKML
+in 2020
+(https://lore.kernel.org/all/20200325161249.55095-1-glider@google.com/).
 
-Is this something that can be done later or does it require ABI changes?
+[1] https://clang.llvm.org/docs/MemorySanitizer.html
+[2] https://syzkaller.appspot.com/upstream/fixed?manager=ci-upstream-kmsan-gce
+[3] https://lore.kernel.org/all/20211126124746.761278-1-glider@google.com/
 
-I would love to never miss data due to page faults.
 
-> 
-> * user_reg name_args and write_index vs purely user-space tracers
-> 
-> That part of the user event registration (event layout and ID allocation) appears
-> to be intrinsically tied to the kernel tracers and the expected event layout. This
-> seems fine as long as the only users we consider are the kernel tracers, but it
-> appears to be less relevant for purely user-space tracers. Actually, tying the
-> mmap'd event enable mechanism with the event ID and description makes me wonder
-> whether it might be better to have LTTng-UST implement its own shared-memory based
-> "fast-event-enabling" mechanism rather than use this user-event ABI. The other
-> advantage of doing all of this in user-space would be to allow many instances
-> of this bitmap to exist on a given system, e.g. one per container in a multi-container
-> system, rather than requiring this to be a global kernel-wide singleton, and to use
-> it from a non-privileged user.
-> 
+Alexander Potapenko (47):
+  stackdepot: reserve 5 extra bits in depot_stack_handle_t
+  kasan: common: adapt to the new prototype of __stack_depot_save()
+  instrumented.h: allow instrumenting both sides of copy_from_user()
+  x86: asm: instrument usercopy in get_user() and __put_user_size()
+  asm-generic: instrument usercopy in cacheflush.h
+  kmsan: add ReST documentation
+  kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+  kmsan: mark noinstr as __no_sanitize_memory
+  x86: kmsan: pgtable: reduce vmalloc space
+  libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+  kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
+  kmsan: add KMSAN runtime core
+  kmsan: implement kmsan_init(), initialize READ_ONCE_NOCHECK()
+  kmsan: disable instrumentation of unsupported common kernel code
+  MAINTAINERS: add entry for KMSAN
+  kmsan: mm: maintain KMSAN metadata for page operations
+  kmsan: mm: call KMSAN hooks from SLUB code
+  kmsan: handle task creation and exiting
+  kmsan: init: call KMSAN initialization routines
+  instrumented.h: add KMSAN support
+  kmsan: unpoison @tlb in arch_tlb_gather_mmu()
+  kmsan: add iomap support
+  Input: libps2: mark data received in __ps2_command() as initialized
+  kmsan: dma: unpoison DMA mappings
+  kmsan: virtio: check/unpoison scatterlist in vring_map_one_sg()
+  kmsan: handle memory sent to/from USB
+  kmsan: instrumentation.h: add instrumentation_begin_with_regs()
+  kmsan: entry: handle register passing from uninstrumented code
+  kmsan: add tests for KMSAN
+  kernel: kmsan: don't instrument stacktrace.c
+  kmsan: disable strscpy() optimization under KMSAN
+  crypto: kmsan: disable accelerated configs under KMSAN
+  kmsan: disable physical page merging in biovec
+  kmsan: block: skip bio block merging logic for KMSAN
+  kmsan: kcov: unpoison area->list in kcov_remote_area_put()
+  security: kmsan: fix interoperability with auto-initialization
+  objtool: kmsan: list KMSAN API functions as uaccess-safe
+  x86: kmsan: make READ_ONCE_TASK_STACK() return initialized values
+  x86: kmsan: disable instrumentation of unsupported code
+  x86: kmsan: skip shadow checks in __switch_to()
+  x86: kmsan: handle open-coded assembly in lib/iomem.c
+  x86: kmsan: use __msan_ string functions where possible.
+  x86: kmsan: sync metadata pages on page fault
+  x86: kasan: kmsan: support CONFIG_GENERIC_CSUM on x86, enable it for
+    KASAN/KMSAN
+  x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
+  x86: kmsan: handle register passing from uninstrumented code
+  x86: kmsan: enable KMSAN builds for x86
 
-We have some conversation going about using namespaces/cgroups to isolation
-containers with bitmaps/status pages. The main thing I personally want to be
-able to do is from the root namespace see all the events in the descendents
-easily via perf, eBPF or ftrace.
+Dmitry Vyukov (1):
+  x86: add missing include to sparsemem.h
 
-Link: https://lore.kernel.org/linux-trace-devel/20220316232009.7952988633787ef1003f13b0@kernel.org/
+ Documentation/dev-tools/index.rst       |   1 +
+ Documentation/dev-tools/kmsan.rst       | 414 ++++++++++++++++++
+ MAINTAINERS                             |  12 +
+ Makefile                                |   1 +
+ arch/x86/Kconfig                        |   9 +-
+ arch/x86/boot/Makefile                  |   1 +
+ arch/x86/boot/compressed/Makefile       |   1 +
+ arch/x86/entry/common.c                 |   3 +-
+ arch/x86/entry/vdso/Makefile            |   3 +
+ arch/x86/include/asm/checksum.h         |  16 +-
+ arch/x86/include/asm/idtentry.h         |  10 +-
+ arch/x86/include/asm/page_64.h          |  13 +
+ arch/x86/include/asm/pgtable_64_types.h |  41 +-
+ arch/x86/include/asm/sparsemem.h        |   2 +
+ arch/x86/include/asm/string_64.h        |  23 +-
+ arch/x86/include/asm/uaccess.h          |   7 +
+ arch/x86/include/asm/unwind.h           |  23 +-
+ arch/x86/kernel/Makefile                |   2 +
+ arch/x86/kernel/cpu/Makefile            |   1 +
+ arch/x86/kernel/cpu/mce/core.c          |   2 +-
+ arch/x86/kernel/kvm.c                   |   2 +-
+ arch/x86/kernel/nmi.c                   |   2 +-
+ arch/x86/kernel/process_64.c            |   1 +
+ arch/x86/kernel/sev.c                   |   4 +-
+ arch/x86/kernel/traps.c                 |  14 +-
+ arch/x86/lib/Makefile                   |   2 +
+ arch/x86/lib/iomem.c                    |   5 +
+ arch/x86/mm/Makefile                    |   2 +
+ arch/x86/mm/fault.c                     |  25 +-
+ arch/x86/mm/init_64.c                   |   2 +-
+ arch/x86/mm/ioremap.c                   |   3 +
+ arch/x86/realmode/rm/Makefile           |   1 +
+ block/bio.c                             |   2 +
+ block/blk.h                             |   7 +
+ crypto/Kconfig                          |  30 ++
+ drivers/firmware/efi/libstub/Makefile   |   1 +
+ drivers/input/serio/libps2.c            |   5 +-
+ drivers/net/Kconfig                     |   1 +
+ drivers/nvdimm/nd.h                     |   2 +-
+ drivers/nvdimm/pfn_devs.c               |   2 +-
+ drivers/usb/core/urb.c                  |   2 +
+ drivers/virtio/virtio_ring.c            |  10 +-
+ include/asm-generic/cacheflush.h        |   9 +-
+ include/asm-generic/rwonce.h            |   5 +-
+ include/linux/compiler-clang.h          |  23 +
+ include/linux/compiler-gcc.h            |   6 +
+ include/linux/compiler_types.h          |   3 +-
+ include/linux/fortify-string.h          |   2 +
+ include/linux/highmem.h                 |   3 +
+ include/linux/instrumentation.h         |   6 +
+ include/linux/instrumented.h            |  26 +-
+ include/linux/kmsan-checks.h            | 123 ++++++
+ include/linux/kmsan.h                   | 359 ++++++++++++++++
+ include/linux/mm_types.h                |  12 +
+ include/linux/sched.h                   |   5 +
+ include/linux/stackdepot.h              |   8 +
+ include/linux/uaccess.h                 |  19 +-
+ init/main.c                             |   3 +
+ kernel/Makefile                         |   6 +
+ kernel/dma/mapping.c                    |   9 +-
+ kernel/entry/common.c                   |  22 +-
+ kernel/exit.c                           |   2 +
+ kernel/fork.c                           |   2 +
+ kernel/kcov.c                           |   7 +
+ kernel/locking/Makefile                 |   3 +-
+ lib/Kconfig.debug                       |   1 +
+ lib/Kconfig.kcsan                       |  11 -
+ lib/Kconfig.kmsan                       |  39 ++
+ lib/Makefile                            |   1 +
+ lib/iomap.c                             |  40 ++
+ lib/iov_iter.c                          |   9 +-
+ lib/stackdepot.c                        |  29 +-
+ lib/string.c                            |   8 +
+ lib/usercopy.c                          |   3 +-
+ mm/Makefile                             |   1 +
+ mm/internal.h                           |   6 +
+ mm/kasan/common.c                       |   2 +-
+ mm/kmsan/Makefile                       |  26 ++
+ mm/kmsan/annotations.c                  |  28 ++
+ mm/kmsan/core.c                         | 463 ++++++++++++++++++++
+ mm/kmsan/hooks.c                        | 384 +++++++++++++++++
+ mm/kmsan/init.c                         | 240 +++++++++++
+ mm/kmsan/instrumentation.c              | 267 ++++++++++++
+ mm/kmsan/kmsan.h                        | 188 +++++++++
+ mm/kmsan/kmsan_test.c                   | 536 ++++++++++++++++++++++++
+ mm/kmsan/report.c                       | 211 ++++++++++
+ mm/kmsan/shadow.c                       | 336 +++++++++++++++
+ mm/memory.c                             |   2 +
+ mm/mmu_gather.c                         |  10 +
+ mm/page_alloc.c                         |  18 +
+ mm/slab.h                               |   1 +
+ mm/slub.c                               |  21 +-
+ mm/vmalloc.c                            |  20 +-
+ scripts/Makefile.kmsan                  |   1 +
+ scripts/Makefile.lib                    |   9 +
+ security/Kconfig.hardening              |   4 +
+ tools/objtool/check.c                   |  19 +
+ 97 files changed, 4209 insertions(+), 98 deletions(-)
+ create mode 100644 Documentation/dev-tools/kmsan.rst
+ create mode 100644 include/linux/kmsan-checks.h
+ create mode 100644 include/linux/kmsan.h
+ create mode 100644 lib/Kconfig.kmsan
+ create mode 100644 mm/kmsan/Makefile
+ create mode 100644 mm/kmsan/annotations.c
+ create mode 100644 mm/kmsan/core.c
+ create mode 100644 mm/kmsan/hooks.c
+ create mode 100644 mm/kmsan/init.c
+ create mode 100644 mm/kmsan/instrumentation.c
+ create mode 100644 mm/kmsan/kmsan.h
+ create mode 100644 mm/kmsan/kmsan_test.c
+ create mode 100644 mm/kmsan/report.c
+ create mode 100644 mm/kmsan/shadow.c
+ create mode 100644 scripts/Makefile.kmsan
 
-> 
-> Some comments about the implementation:
-> 
-> kernel/trace/trace_events_user.c:
-> static ssize_t user_events_write(struct file *file, const char __user *ubuf,
->                                  size_t count, loff_t *ppos)
-> {
->         struct iovec iov;
->         struct iov_iter i;
-> 
->         if (unlikely(*ppos != 0))
->                 return -EFAULT;
-> 
->         if (unlikely(import_single_range(READ, (char *)ubuf, count, &iov, &i)))
->                 return -EFAULT;
->                                          ^ shouldn't this be "WRITE" ? This takes data from
->                                            user-space and copies it into the kernel, similarly
->                                            to fs/read_write.c:new_sync_write().
+-- 
+2.35.1.1021.g381101b075-goog
 
-I think so, I mis-took the direction/rw flags for what the intention/protection
-was. It appears the direction in this case is the direction of the user.
-
-> 
->         return user_events_write_core(file, &i);
-> }
-> 
-> include/uapi/linux/user_events.h:
-> 
-> struct user_reg {
-> 
->         /* Input: Size of the user_reg structure being used */
->         __u32 size;
-> 
->         /* Input: Pointer to string with event name, description and flags */
->         __u64 name_args;
-> 
->         /* Output: Byte index of the event within the status page */
->         __u32 status_index;
-> 
->         /* Output: Index of the event to use when writing data */
->         __u32 write_index;
-> };
-> 
-> As this structure is expected to grow, and the user-space sample program uses "sizeof()"
-> to figure out its size (which includes padding), I would be more comfortable if this was
-> a packed structure rather than non-packed, because as fields are added, it's tricky to
-> figure out from the kernel perspective whether the size received are fields that user-space
-> is aware of, or if this is just padding.
-> 
-
-I think that would be a good idea, Steven?
-
-> include/uapi/linux/user_events.h:
-> 
-> struct user_bpf_iter {
-> 
->         /* Offset of the data within the first iovec */
->         __u32 iov_offset;
-> 
->         /* Number of iovec structures */
->         __u32 nr_segs;
-> 
->         /* Pointer to iovec structures */
->         const struct iovec *iov;
-> 
->                            ^ a pointer in a uapi header is usually a no-go. This should be a u64.
-> };
-> 
-> include/uapi/linux/user_events.h:
-> 
-> struct user_bpf_context {
-> 
->         /* Data type being passed (see union below) */
->         __u32 data_type;
-> 
->         /* Length of the data */
->         __u32 data_len;
-> 
->         /* Pointer to data, varies by data type */
->         union {
->                 /* Kernel data (data_type == USER_BPF_DATA_KERNEL) */
->                 void *kdata;
-> 
->                 /* User data (data_type == USER_BPF_DATA_USER) */
->                 void *udata;
-> 
->                 /* Direct iovec (data_type == USER_BPF_DATA_ITER) */
->                 struct user_bpf_iter *iter;
-> 
->                                ^ likewise for the 3 pointers above. Should be u64 in uapi headers.
->         };
-> };
-> 
-
-The bpf structs are only used within a BPF program. At that point the pointer
-sizes should all align, right?
-
-I wanted to ensure libbpf type scenarios have easy access to the BPF argument
-structures.
-
-I guess I could move them to the kernel side, but then users would have to get
-access to them for BPF programs.
-
-> kernel/trace/trace_events_user.c:
-> 
-> static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
-> {
->         u32 size;
->         long ret;
-> 
->         ret = get_user(size, &ureg->size);
-> 
->         if (ret)
->                 return ret;
-> 
-> 
->         if (size > PAGE_SIZE)
->                 return -E2BIG;
-> 
->         ^ here I would be tempted to validate that the structure size at least provides room
->           for the "v0" ABI, e.g.:
-> 
->              if (size < offsetofend(struct user_reg, write_index))
->                   return -EINVAL;
-> 
->         return copy_struct_from_user(kreg, sizeof(*kreg), ureg, size);
-> 
->               ^ I find it odd that the kernel copy of struct user_reg may contain a
->                 size field which contents differs from the size fetched by get_user().
->                 This can happen if a buggy or plainly hostile user-space attempts to
->                 confuse the kernel about the size of this structure. Fortunately, the
->                 size field does not seem to be used afterwards, but I would think it
->                 safer to copy back the "size" fetched by get_user into the reg->size
->                 after copy_struct_from_user in case future changes in the code end up
->                 relying on a consistent size field.
-> }
-> 
-
-Any size that the user doesn't fill in will zero out, if they enter a large
-size then we error out. I tried to get the data out from the user once and use
-it consistently from the kernel side. I didn't want users changing their values
-at key places trying to get the kernel to do bad things.
-
-This is why the size isn't used beyond the first copy (and why the data in the
-write paths is only validated after paging in and copy the data to a buffer
-that the user process no longer can modify mid-write).
-
-> kernel/trace/trace_events_user.c:
-> 
-> static struct user_event *find_user_event(char *name, u32 *outkey)
-> {
->         struct user_event *user;
->         u32 key = user_event_key(name);
-> 
->         *outkey = key;
-> 
->         hash_for_each_possible(register_table, user, node, key)
->                 if (!strcmp(EVENT_NAME(user), name)) {
->                         atomic_inc(&user->refcnt);
-> 
->                         ^ what happens if an ill-intended user-space populates enough references
->                           to overflow refcnt (atomic_t). I suspect it can make the kernel free
->                           memory that is still in use, and trigger a use-after-free scenario.
->                           Usually reference counters should use include/linux/refcount.h which
->                           handles reference counter saturation. user_event_parse() has also a use
->                           of atomic_inc() on that same refcnt which userspace can overflow.
-> 
-
-This is a good catch. I'll look into refcount.h, thanks!
-
->                         return user;
->                 }
-> 
->         return NULL;
-> }
-> 
-> kernel/trace/trace_events_user.c:
-> 
-> static int user_events_release(struct inode *node, struct file *file)
-> {
-> [...]
->         /*
->          * Ensure refs cannot change under any situation by taking the
->          * register mutex during the final freeing of the references.
->          */
->         mutex_lock(&reg_mutex);
-> [...]
->         mutex_unlock(&reg_mutex);
-> 
->         kfree(refs);
-> 
->         ^ AFAIU, the user_events_write() does not rely on reg_mutex to ensure mutual exclusion.
->           Doing so would be prohibitive performance-wise. But I suspect that freeing "refs" here
->           without waiting for a RCU grace period can be an issue if user_events_write_core is using
->           refs concurrently with file descriptor close.
-> 
-
-The refs is per-file, so if user_events_write() is running release cannot be
-called for that file instance, since it's being used. Did I miss something?
-
-> kernel/trace/trace_events_user.c:
-> 
-> static bool user_field_match(struct ftrace_event_field *field, int argc,
->                              const char **argv, int *iout)
-> [...]
-> 
->         for (; i < argc; ++i) {
-> [...]
->                 pos += snprintf(arg_name + pos, len - pos, argv[i]);
-> 
->         ^ what happens if strlen(argv[i]) > (len - pos) ? Based on lib/vsprintf.c:
-> 
->  * The return value is the number of characters which would be
->  * generated for the given input, excluding the trailing null,
->  * as per ISO C99.  If the return is greater than or equal to
->  * @size, the resulting string is truncated.
-> 
->         So the "pos" returned by the first call to sprintf would be greater than MAX_FIELD_ARG_NAME.
->         Then the second call to snprintf passes a @size argument of "len - pos" using the pos value
->         which is larger than len... which is a negative integer passed as argument to a size_t (unsigned).
->         So it expects a very long string. And the @buf argument is out-of-bound (field_name + pos).
->         Is this pattern for using snprintf() used elsewhere ? From a quick grep, I find this pattern in
->         a few places where AFAIU the input is not user-controlled (as it seems to be the case here), but
->         still it might be worth looking into:
-> 
->              kernel/cgroup/cgroup.c:show_delegatable_files()
->              kernel/time/clocksource.c:available_clocksource_show()
-> 
-> Also, passing a copy of a userspace string (argv[i]) as format string argument to
-> snprintf can be misused to leak kernel data to user-space.
-> 
-> The same function also appear to have similar issues with its use of the field->name userspace input
-> string.
-> 
-
-The strings are copied first before coming down these paths, so they cannot
-be forced to changed mid-reads, etc.
-
-I think simply checking if any arg is beyond the MAX_FIELD_ARG_NAME would
-prevent these types of issues, right?
-
-> Unfortunately this is all the time I have for review right now, but it is at least a good starting
-> point for discussion.
-> 
-> Thanks,
-> 
-> Mathieu
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
-Thanks,
--Beau
