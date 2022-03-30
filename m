@@ -2,61 +2,89 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307404EBA1A
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Mar 2022 07:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4154EBA89
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Mar 2022 08:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239493AbiC3FYd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Mar 2022 01:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        id S243135AbiC3GCi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Mar 2022 02:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiC3FYc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Mar 2022 01:24:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D21015B987;
-        Tue, 29 Mar 2022 22:22:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6256615AE;
-        Wed, 30 Mar 2022 05:22:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0277EC340EE;
-        Wed, 30 Mar 2022 05:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648617767;
-        bh=MJKsvBQ12FvT30/ZTbEHl9aaaA+42sFCmsreyXrBKNU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SkYLQIsd5AJBx8xrtUVjID4Oq1RzFIK8qF9u/qC5hFgyXu2iCId0g1UTHzKxfoiZ5
-         vL/Epu+gIdPE/+SI1yVd/zXG9MIsH0HZhqeDWhhN4+y55VRYzQ/bpUC0Q5Z7C/ygH2
-         u0oeSOd8JoPAUpxImH90Ebp2UvLNIScEscJyJ83FtpvKt6MVWoyRbbn9K6zvVlU/tg
-         MrT5eatFKJtSOoUuaSvevnjoHQ9sfTtB40TUsP6vCJsmnFHFbag5ucifIVa+9hGlrU
-         Td0rNb/5s4zgOwkKwcK0klZOwROG5tBcTuXboZ8gVfE2pEcXceP25Hk91Ix6q2L0Gy
-         9kj445xnIAR0Q==
-Date:   Wed, 30 Mar 2022 14:22:42 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
+        with ESMTP id S243133AbiC3GCb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Mar 2022 02:02:31 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FE51CFFC
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 23:00:42 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id g9so32808829ybf.1
+        for <linux-arch@vger.kernel.org>; Tue, 29 Mar 2022 23:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l4H/jXM2Rm5a65oviYgvwa+04XGLXLD2DF5i6wOLQLk=;
+        b=Vuks7XErLEhcNi2ye01c54I5fu+jCmDSOakCCznT+E5592ZGQeCDVgDLAC1Oe1j8Hc
+         arjQm/015wC9O7r8EUYvWo1JdfnwHgit9pya3K0qKVHC8n1PrzsjO/1ililAl1IjhfQk
+         hleVis9Kr1Qyf0mw+RYN0MImDkC2drk+l5C4qAnRAQdi2lixVi0nJFGc7a2kn+A8U/dS
+         zFaSQ9GlIpLuif/J2hksClNYZAcORcG79/LOxU/aqKbHvarX2eDKn9oon1LeDe7mq9S6
+         r9U7iAxmkiKOU586S5VakC690uQgl7swxVVhVIBZJflz9IirG0tQWmocB2Fd88MovWNQ
+         j5sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l4H/jXM2Rm5a65oviYgvwa+04XGLXLD2DF5i6wOLQLk=;
+        b=YT1Dv+yk5tMWtSBDi5F3yNg/KH7ljs90lhukPytlovL5smYsUALW8PWz5gfOiWgw5Q
+         /6sg6kZAoGCPiiAwg8F8YO4UJCfg2o1LqwMOHsdMmPU5hvhULv7BZ2grV4tx8C0ibWPL
+         LB0nSNJBmxJGB+JKON0RT2Y+wuIEexOsa0Z5ijWqtj43AcU9GSXhUvB1Ry0HkJqOsEuw
+         3OKlfYUyS+hi4SHX9YPdmlAqMxckv01d0Xw9z0x3aKuCo6HRdeI0OS8OHQBzVyNuK6e/
+         OCWMQc7G+Ih222vJv77bERSxsFiFQyGhQ4ISjTQx7H8PCsEt5518cKuYiBFTcaiKbfFW
+         YzOg==
+X-Gm-Message-State: AOAM530tee85npx69fiEMi6XS5Mo0S5QVJhNow+OHWHI+Ck+DVG7jn/N
+        MYSsjbWJ0QwFiGsEzFrOqXKT8hqWfc2yKEHsnkfSjw==
+X-Google-Smtp-Source: ABdhPJz5J5Vu63dqmmJtsEsyg5gp4hpxm11sB9Wij7Lc+9+3maHYDp7YZQF7jyhRhcglPFanYfN+0YeuhYyzXVsUg9Q=
+X-Received: by 2002:a25:8251:0:b0:63d:662:4fcf with SMTP id
+ d17-20020a258251000000b0063d06624fcfmr2942147ybn.533.1648620041949; Tue, 29
+ Mar 2022 23:00:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220329124017.737571-1-glider@google.com> <20220329124017.737571-13-glider@google.com>
+In-Reply-To: <20220329124017.737571-13-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 30 Mar 2022 08:00:00 +0200
+Message-ID: <CANpmjNP7BG5OwV53UUZ8HZ0OwAk-Ownn44jiF2TwhAD-mu2YbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 12/48] kcsan: clang: retire CONFIG_KCSAN_KCOV_BROKEN
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
- created events
-Message-Id: <20220330142242.87b8b84ff922ef3688559b61@kernel.org>
-In-Reply-To: <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
-References: <20220329181935.2183-1-beaub@linux.microsoft.com>
-        <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
-        <20220329201057.GA2549@kbox>
-        <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,90 +92,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 29 Mar 2022 15:31:31 -0700
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Tue, 29 Mar 2022 at 14:41, Alexander Potapenko <glider@google.com> wrote:
+>
+> kcov used to be broken prior to Clang 11, but right now that version is
+> already the minimum required to build with KCSAN, because no prior
+> compiler has "-tsan-distinguish-volatile=1".
+>
+> Therefore KCSAN_KCOV_BROKEN is not needed anymore.
+>
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 
-> On Tue, Mar 29, 2022 at 1:11 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> >
-> > On Tue, Mar 29, 2022 at 12:50:40PM -0700, Alexei Starovoitov wrote:
-> > > On Tue, Mar 29, 2022 at 11:19 AM Beau Belgrave
-> > > <beaub@linux.microsoft.com> wrote:
-> > > >
-> > > > Send user_event data to attached eBPF programs for user_event based perf
-> > > > events.
-> > > >
-> > > > Add BPF_ITER flag to allow user_event data to have a zero copy path into
-> > > > eBPF programs if required.
-> > > >
-> > > > Update documentation to describe new flags and structures for eBPF
-> > > > integration.
-> > > >
-> > > > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> > >
-> > > The commit describes _what_ it does, but says nothing about _why_.
-> > > At present I see no use out of bpf and user_events connection.
-> > > The whole user_events feature looks redundant to me.
-> > > We have uprobes and usdt. It doesn't look to me that
-> > > user_events provide anything new that wasn't available earlier.
-> >
-> > A lot of the why, in general, for user_events is covered in the first
-> > change in the series.
-> > Link: https://lore.kernel.org/all/20220118204326.2169-1-beaub@linux.microsoft.com/
-> >
-> > The why was also covered in Linux Plumbers Conference 2021 within the
-> > tracing microconference.
-> >
-> > An example of why we want user_events:
-> > Managed code running that emits data out via Open Telemetry.
-> > Since it's managed there isn't a stub location to patch, it moves.
-> > We watch the Open Telemetry spans in an eBPF program, when a span takes
-> > too long we collect stack data and perform other actions.
-> > With user_events and perf we can monitor the entire system from the root
-> > container without having to have relay agents within each
-> > cgroup/namespace taking up resources.
-> > We do not need to enter each cgroup mnt space and determine the correct
-> > patch location or the right version of each binary for processes that
-> > use user_events.
-> >
-> > An example of why we want eBPF integration:
-> > We also have scenarios where we are live decoding the data quickly.
-> > Having user_data fed directly to eBPF lets us cast the data coming in to
-> > a struct and decode very very quickly to determine if something is
-> > wrong.
-> > We can take that data quickly and put it into maps to perform further
-> > aggregation as required.
-> > We have scenarios that have "skid" problems, where we need to grab
-> > further data exactly when the process that had the problem was running.
-> > eBPF lets us do all of this that we cannot easily do otherwise.
-> >
-> > Another benefit from user_events is the tracing is much faster than
-> > uprobes or others using int 3 traps. This is critical to us to enable on
-> > production systems.
-> 
-> None of it makes sense to me.
-> To take advantage of user_events user space has to be modified
-> and writev syscalls inserted.
+FYI, this is superseded by
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b027471adaf955efde6153d67f391fe1604b7292
 
-That can be done by introducing new user SDT macros, which currently
-expected to use uprobes (thus it just introduces a list of probe
-address and semaphore in a section). But we can provide another
-implementation for lighter user-events.
-
-> This is not cheap and I cannot see a production system using this interface.
-
-I agree this point. At least this needs to be paired with user-space
-library so that the applications can use it. But I also think that
-new feature is not always requires an actual production system which
-relays on that, since that means such production system must use
-out-of-tree custom kernel. That should be avoided from the upstream-first
-policy viewpoint. (However, I would like to know the actual use case.)
-
-> All you did is a poor man version of lttng that doesn't rely
-> on such heavy instrumentation.
-
-Isn't it reasonable to avoid using heavy instrumentation? :-)
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+> Link: https://linux-review.googlesource.com/id/Ida287421577f37de337139b5b5b9e977e4a6fee2
+> ---
+>  lib/Kconfig.kcsan | 11 -----------
+>  1 file changed, 11 deletions(-)
+>
+> diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
+> index 63b70b8c55519..de022445fbba5 100644
+> --- a/lib/Kconfig.kcsan
+> +++ b/lib/Kconfig.kcsan
+> @@ -10,21 +10,10 @@ config HAVE_KCSAN_COMPILER
+>           For the list of compilers that support KCSAN, please see
+>           <file:Documentation/dev-tools/kcsan.rst>.
+>
+> -config KCSAN_KCOV_BROKEN
+> -       def_bool KCOV && CC_HAS_SANCOV_TRACE_PC
+> -       depends on CC_IS_CLANG
+> -       depends on !$(cc-option,-Werror=unused-command-line-argument -fsanitize=thread -fsanitize-coverage=trace-pc)
+> -       help
+> -         Some versions of clang support either KCSAN and KCOV but not the
+> -         combination of the two.
+> -         See https://bugs.llvm.org/show_bug.cgi?id=45831 for the status
+> -         in newer releases.
+> -
+>  menuconfig KCSAN
+>         bool "KCSAN: dynamic data race detector"
+>         depends on HAVE_ARCH_KCSAN && HAVE_KCSAN_COMPILER
+>         depends on DEBUG_KERNEL && !KASAN
+> -       depends on !KCSAN_KCOV_BROKEN
+>         select STACKTRACE
+>         help
+>           The Kernel Concurrency Sanitizer (KCSAN) is a dynamic
+> --
+> 2.35.1.1021.g381101b075-goog
+>
