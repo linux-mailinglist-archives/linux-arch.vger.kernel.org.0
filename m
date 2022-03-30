@@ -2,112 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC3D4ECC7C
-	for <lists+linux-arch@lfdr.de>; Wed, 30 Mar 2022 20:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C884ECBED
+	for <lists+linux-arch@lfdr.de>; Wed, 30 Mar 2022 20:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348263AbiC3Six (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 30 Mar 2022 14:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
+        id S1350473AbiC3S02 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 30 Mar 2022 14:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350056AbiC3SZP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Mar 2022 14:25:15 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C649CF14;
-        Wed, 30 Mar 2022 11:22:43 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso906841pjh.3;
-        Wed, 30 Mar 2022 11:22:43 -0700 (PDT)
+        with ESMTP id S1350502AbiC3S0K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 30 Mar 2022 14:26:10 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583FF48E42
+        for <linux-arch@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id a16so4324022plh.13
+        for <linux-arch@vger.kernel.org>; Wed, 30 Mar 2022 11:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+CAeQ6WbO75b05CAGgEyrOcN/e8ROoiFTSHaPW0jBEU=;
-        b=W9mnOdTJXi67DDGPDvM/CI7eE6yWDHJKjY77YMX5aYlBYvnffHWK17C8Cb1lUi3X1A
-         /e4/iaifYgfXWjdsta3C3K8yoO090sUdApnAaAyf8mEADC6v2dOia2eMoQvZ0Ht2e30s
-         BcCn00DtCu5QXB9vb2NCfra9khR8kcoZvht/Nawa9CwDcaHjSXxPuxnd8CUROC5c+pXC
-         ImusgsO9px5vn0X+ZswQgxp9rdFYInYG5F5DpwBAnP7Py++PEjxDFRy9JeaYOSbxYw2s
-         UGLeAPZkDrc6LVYWcbzWq7Ad0OtZdYSZXxScLaP2LrAIEoitWcnYweUky1uT+YHJ4V2E
-         5jYw==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=U1oUia1Thamt6Z7oWm6PGNKOk9RXK6Jv76DGrI1cLcYRcY5/d1Tt5qepQRdZm6lsyq
+         RBa/xpJM28ShOu5ibphzafHjPKptRC4OMeOVco0xYKihrCNFhnaGQOBDSvUdgHWgE3gf
+         cWTbx+dPO2nv/wujOZrrbxfJpePUzp7QZ1RCloUPxJhGXTvBKUziPieC1LSkK8oSaB+t
+         E85QJNBGnQK8HE8wei7Zq5jQSpeI5JY8kzofCGcJSUHLIHQXWsBy6ta+brl9WPLZzyWA
+         2jPBZlOFyxLxFI8awBJCcZtcLmSyu35IRMr8cJ72zb2pokIUUqe6EUB9pKUwVKwbq4my
+         ou5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+CAeQ6WbO75b05CAGgEyrOcN/e8ROoiFTSHaPW0jBEU=;
-        b=hGoPIQIl4zRvNbNwadMIwgckx62Umad3L7S/2n0jfeevt4oum4ugXioipAZEwFfSJG
-         o5dsPwlJTGwrsBhO3arlJn1XSn7jZacc3+uCWGsLvR/4yIhri68+hc88gooSSz2oVulJ
-         vH63xUieGbV9HqKf9Q/sovVNP7QoWIzz+EdabWACuKFiat38mWzMciSNyToeSEpergpT
-         Ob8C//hm5+Oa//7voT4zx2SrX203iE2KcU3I/vdptgnJ6fMvKrOcMv/gy2gU1kegpPDi
-         NJjJzjZtiS8VrWIMH1h3h3ZBMUH/8JVnYqr7mq60gbneshylYurNVVVMjCGPusefs+nP
-         8dOw==
-X-Gm-Message-State: AOAM531o3THBaGslMLS8XTDMrDLe5ReQXwKN2mGi5YFmbXXpIL9yKcm8
-        xyJH/zef0xtAS2IkE1hjJvnTEbeeCw+yetucsWjm5Ptw
-X-Google-Smtp-Source: ABdhPJyYxmyaH69ztISMlFUIhBXJ6kSvz8m/+MHArZXryyDLLdkJ7zwHk5XRiWm72rVNX35roncs4phtAedywt9F07c=
-X-Received: by 2002:a17:902:ba83:b0:154:727e:5fc5 with SMTP id
- k3-20020a170902ba8300b00154727e5fc5mr633290pls.55.1648664563315; Wed, 30 Mar
- 2022 11:22:43 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=6PnxJaVdYHTfEoSreao3ANO+XeqxY/p/4dxKSObIH1I=;
+        b=WrOIrTpXCnFmpFPQzO7722rS+e4fHvncwVMDJ7bwFdCa2HzDuenVqP0XzYTeIfKfmF
+         9Vd4msGeiQjlC3eNtM2oWQiVLQTYEfYR3NQA+vX8YLxu9E5JhgvYSxnpLfNtZSR/ix8O
+         SM0Z3B5I3ayeNYHeKlZWh9r8IpTEXGMBj+wPlrRa62BFkCuLU8ovTW8LKHd9ZyrwDYZw
+         lEHW7g1rHcLLLdtzJ3xNc0ryOFg6ADRzTHysMxALWc18z4JhVR/P2o/86FRa3lOaEA2i
+         2B1D65ebmrbzJXGj8iPLAThtOfakvmNiONlzHrQDaVrbvm3nPcdcQYahiaQyKSqpsZfH
+         pzWg==
+X-Gm-Message-State: AOAM530w+ba/C3xWsPZlrUwMzi+fpe/c2h6ohOLneID53nRhXXWR4Nd0
+        qHSbbLh0KlVxTTx+hh32FWti7ReQXRe6dFi80Q==
+X-Google-Smtp-Source: ABdhPJzkTl+tJbylc9dRvis6ZhULbTl7j4ynIkLgm4b/Lu4YSrf6PCWjehKBvofPJCmWKHUKJGD0xbE01MjL0VC50Jo=
+X-Received: by 2002:a17:90b:3143:b0:1c7:5cee:3948 with SMTP id
+ ip3-20020a17090b314300b001c75cee3948mr852445pjb.140.1648664618224; Wed, 30
+ Mar 2022 11:23:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329181935.2183-1-beaub@linux.microsoft.com>
- <CAADnVQ+XpoCjL-rSz2hj05L21s8NtMJuWYC14b9Mvk7XE5KT_g@mail.gmail.com>
- <20220329201057.GA2549@kbox> <CAADnVQ+gm4yU9S6y+oeR3TNj82kKX0gk4ey9gVnKXKWy1Js4-A@mail.gmail.com>
- <20220329231137.GA3357@kbox> <CAPhsuW4WH4Hn+DaQZui5au=ueG1G5zGYiOACfKm9imG2kGA+KA@mail.gmail.com>
- <20220330163411.GA1812@kbox>
-In-Reply-To: <20220330163411.GA1812@kbox>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 30 Mar 2022 11:22:32 -0700
-Message-ID: <CAADnVQKQw+K2CoCW-nA=bngKtjP495wpB1yhEXNjKg4wSeXAWg@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Add eBPF interface for user_event
- created events
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Song Liu <song@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reply-To: isabellasayouba0@gmail.com
+Sender: 040stherchurch@gmail.com
+Received: by 2002:a05:6a20:691d:b0:76:6cf5:d552 with HTTP; Wed, 30 Mar 2022
+ 11:23:37 -0700 (PDT)
+From:   Mrs Isabella Sayouba <isabellasayouba0@gmail.com>
+Date:   Wed, 30 Mar 2022 18:23:37 +0000
+X-Google-Sender-Auth: _Xe1kByDkvq-Dn04BagO7gok_qM
+Message-ID: <CAAzQq761QVaWKiKernxpKjqNCK+6V9mRKHBnOcqF8rXJO9Y+aA@mail.gmail.com>
+Subject: =?UTF-8?B?44GC44GE44GV44Gk44CC?=
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 9:34 AM Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > >
-> > > But you are fine with uprobe costs? uprobes appear to be much more costly
-> > > than a syscall approach on the hardware I've run on.
-
-Care to share the numbers?
-uprobe over USDT is a single trap.
-Not much slower compared to syscall with kpti.
-
-> >
-> > Can we achieve the same/similar performance with sys_bpf(BPF_PROG_RUN)?
-> >
->
-> I think so, the tough part is how do you let the user-space know which
-> program is attached to run? In the current code this is done by the BPF
-> program attaching to the event via perf and we run the one there if
-> any when data is emitted out via write calls.
->
-> I would want to make sure that operators can decide where the user-space
-> data goes (perf/ftrace/eBPF) after the code has been written. With the
-> current code this is done via the tracepoint callbacks that perf/ftrace
-> hook up when operators enable recording via perf, tracefs, libbpf, etc.
->
-> We have managed code (C#/Java) where we cannot utilize stubs or traps
-> easily due to code movement. So we are limited in how we can approach
-> this problem. Having the interface be mmap/write has enabled this
-> for us, since it's easy to interact with in most languages and gives us
-> lifetime management of the trace objects between user-space and the
-> kernel.
-
-Then you should probably invest into making USDT work inside
-java applications instead of reinventing the wheel.
-
-As an alternative you can do a dummy write or any other syscall
-and attach bpf on the kernel side.
-No kernel changes are necessary.
+44GC44GE44GV44Gk44CCDQoNCua2meOCkua1geOBl+OBquOBjOOCieOBk+OBruODoeODvOODq+OC
+kuabuOOBhOOBpuOBhOOBvuOBmeOAguengeOBruebruOBq+OBr+Wkp+OBjeOBquaCsuOBl+OBv+OB
+jOOBguOCiuOBvuOBmeOAguengeOBruWQjeWJjeOBr+OCpOOCtuODmeODqeODu+OCteODqOOCpuOD
+kOOBleOCk+OBp+OBmeOAguODgeODpeODi+OCuOOCouWHuui6q+OBp+OAgeODluODq+OCreODiuOD
+leOCoeOCveOBrueXhemZouOBi+OCiemAo+e1oeOCkuWPluOCiuOBvuOBmeOAguengeOBr+OBguOB
+quOBn+OBq+W/g+OCkumWi+OBhOOBpuaEn+WLleOBl+OBn+OBruOBp+OAgeOBguOBquOBn+OBq+ip
+seOBmeS7peWkluOBq+mBuOaKnuiCouOBr+OBguOCiuOBvuOBm+OCk+OAguengeOBr+OAgTIwMTHl
+ubTjgavkuqHjgY/jgarjgovliY3jgavjg5bjg6vjgq3jg4rjg5XjgqHjgr3jga7jg4Hjg6Xjg4vj
+grjjgqLlpKfkvb/jgag55bm06ZaT5YON44GE44Gm44GE44GfU2F5b3ViYQ0KQnJvd27msI/jgajn
+tZDlqZrjgZfjgb7jgZfjgZ/jgILlrZDkvpvjgarjgZfjgacxMeW5tOmWk+e1kOWpmuOBl+OBn+OA
+gg0KDQrlvbzjga/jgZ/jgaPjgZ815pel6ZaT57aa44GE44Gf55+t44GE55eF5rCX44Gu5b6M44Gn
+5q2744Gr44G+44GX44Gf44CC5b2844Gu5q275b6M44CB56eB44Gv5YaN5ama44GX44Gq44GE44GT
+44Go44Gr5rG644KB44G+44GX44Gf44CC5Lqh44GP44Gq44Gj44Gf5aSr44GM55Sf44GN44Gm44GE
+44Gf44Go44GN44CB5b2844Gv57eP6aGNODUw5LiH44OJ44Or44KS6aCQ44GR44G+44GX44Gf44CC
+DQrvvIg4MDDkuIc1MDAw44OJ44Or77yJ6KW/44Ki44OV44Oq44Kr44Gu44OW44Or44Kt44OK44OV
+44Kh44K944Gu6aaW6YO944Ov44Ks44OJ44Kl44Kw44O844Gu6YqA6KGM44Gn44CC54++5Zyo44CB
+44GT44Gu44GK6YeR44Gv44G+44Gg6YqA6KGM44Gr44GC44KK44G+44GZ44CC5b2844Gv44GT44Gu
+44GK6YeR44KS44OW44Or44Kt44OK44OV44Kh44K944Gu6Ymx5qWt44GL44KJ44Gu6YeR44Gu6Ly4
+5Ye644Gr5Yip55So44Gn44GN44KL44KI44GG44Gr44GX44G+44GX44Gf44CCDQoNCuacgOi/keOA
+geengeOBruWMu+iAheOBr+engeOBjOeZjOOBqOiEs+WNkuS4reOBruWVj+mhjOOBruOBn+OCgeOB
+qzfjg7bmnIjplpPjga/ntprjgYvjgarjgYTjgaDjgo3jgYbjgajnp4HjgavoqIDjgYTjgb7jgZfj
+gZ/jgILnp4HjgpLmnIDjgoLmgqnjgb7jgZvjgabjgYTjgovjga7jga/ohLPljZLkuK3jga7nl4Xm
+sJfjgafjgZnjgILnp4Hjga7nirbmhYvjgpLnn6XjgaPjgZ/jga7jgafjgIHnp4Hjga/jgZPjga7j
+gYrph5HjgpLjgYLjgarjgZ/jgavmuKHjgZfjgabjgIHmgbXjgb7jgozjgarjgYTkurrjgIXjga7k
+uJboqbHjgpLjgZnjgovjgZPjgajjgavjgZfjgb7jgZfjgZ/jgILjgYLjgarjgZ/jga/jgZPjga7j
+gYrph5HjgpLnp4HjgYzjgZPjgZPjgafmjIfnpLrjgZnjgovmlrnms5XjgafliKnnlKjjgZnjgovj
+gafjgZfjgofjgYbjgILnp4Hjga/jgYLjgarjgZ/jgavjgYLjgarjgZ/jga7lgIvkurrnmoTjgark
+vb/nlKjjga7jgZ/jgoHjgavnt4/jgYrph5Hjga4zMOODkeODvOOCu+ODs+ODiOOCkuWPluOBo+OB
+puassuOBl+OBhOOBp+OBmeOAguOBiumHkeOBrjcw77yF44Gv56eB44Gu5ZCN5YmN44Gn5a2k5YWQ
+6Zmi44KS5bu644Gm44CB6YCa44KK44Gu6LKn44GX44GE5Lq644CF44KS5Yqp44GR44KL44Gf44KB
+44Gr5L2/44GG44Gn44GX44KH44GG44CC56eB44Gv5a2k5YWQ44Go44GX44Gm6IKy44Gh44G+44GX
+44Gf44GM44CB56We44Gu5a6244KS57at5oyB44GZ44KL44Gf44KB44Gg44GR44Gr44CB5a625peP
+44Gr44Gv6Kqw44KC44GE44G+44Gb44KT44CC44GT44Gu55eF5rCX44GM56eB44KS44Go44Gm44KC
+6Ium44GX44KB44Gf44Gu44Gn44CB56We44GM56eB44Gu572q44KS6LWm44GX44CB5qW95ZyS44Gn
+56eB44Gu6a2C44KS5Y+X44GR5YWl44KM44KL44KI44GG44Gr44GT44KM44KS44GX44Gm44GE44KL
+44Gu44Gn44GZ44CCDQoNCui/lOS/oeOCkuWPl+OBkeWPluOCiuasoeesrOOAgeODluODq+OCreOD
+iuODleOCoeOCveOBrumKgOihjOOBrumAo+e1oeWFiOOCkuOBiuefpeOCieOBm+OBl+OBvuOBmeOA
+guOBvuOBn+OAgemKgOihjOOBruePvuWcqOOBruWPl+WPluS6uuOBp+OBguOCi+OBk+OBqOOCkuio
+vOaYjuOBmeOCi+aoqemZkOabuOOCkueZuuihjOOBmeOCi+OCiOOBhumKgOihjOmVt+OBq+aMh+ek
+uuOBl+OBvuOBmeOAguengeOBjOOBk+OBk+OBp+i/sOOBueOBn+OCiOOBhuOBq+OBguOBquOBn+OB
+jOOBneOCjOOBq+W/nOOBmOOBpuihjOWLleOBmeOCi+OBk+OBqOOCkuengeOBq+S/neiovOOBl+OB
+puOBj+OBoOOBleOBhOOAgg0KDQrjgqTjgrbjg5njg6njg7vjgrXjg6jjgqbjg5DlpKvkurrjgYvj
+gonjgIINCg==
