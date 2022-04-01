@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76C84EFD31
-	for <lists+linux-arch@lfdr.de>; Sat,  2 Apr 2022 01:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD634EFD36
+	for <lists+linux-arch@lfdr.de>; Sat,  2 Apr 2022 01:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353474AbiDAXpW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Apr 2022 19:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
+        id S1353482AbiDAXpX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Apr 2022 19:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353459AbiDAXpS (ORCPT
+        with ESMTP id S1353456AbiDAXpS (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Apr 2022 19:45:18 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A5742DCA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A61F2DF7;
         Fri,  1 Apr 2022 16:43:27 -0700 (PDT)
 Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D50A820DF56E;
-        Fri,  1 Apr 2022 16:43:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D50A820DF56E
+        by linux.microsoft.com (Postfix) with ESMTPSA id 20B5920DF570;
+        Fri,  1 Apr 2022 16:43:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 20B5920DF570
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1648856605;
-        bh=R2wmpWeJqkJGpUihjavIWxYmwa4YCuMevl2v9Hn3sEY=;
+        bh=dxneIxyFrTOTz7WRpQU5x5JzmKlH6pr4TBlRuoXEHsU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ELVMFzeEFRG66+UxugzKTJfbVUt6Vewyjcwp4JHmR4EnWSEUTnV3NHD/YC+mgaigW
-         lMtIO8VhVLoFTnL7M23sa7zI7HQ3v8sIlSPoowvexMtDb7TkMHPsfDQoe1JtS+GCi2
-         MNjfd7aj6zN58QGukD4mcrYz6M12U+E6EC3phl0Q=
+        b=n5KSa9Db49+uG+J/PM8NwppUB1DtfCKpVLACIieSGy329S5K8EPhCwDPpFNnB/O0H
+         h24uG7buNojo2g6phn7T+Zx5shTFUHdFO4yUKUkLP/Q7OMEq7DrNKnI793gEqEMTiQ
+         vxN0TENfcqj5qFpXdVkMfjShUxPv8QvrHtQOQfDE=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, beaub@linux.microsoft.com
-Subject: [PATCH 6/7] tracing/user_events: Use bits vs bytes for enabled status page data
-Date:   Fri,  1 Apr 2022 16:43:08 -0700
-Message-Id: <20220401234309.21252-7-beaub@linux.microsoft.com>
+Subject: [PATCH 7/7] tracing/user_events: Update ABI documentation to align to bits vs bytes
+Date:   Fri,  1 Apr 2022 16:43:09 -0700
+Message-Id: <20220401234309.21252-8-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220401234309.21252-1-beaub@linux.microsoft.com>
 References: <20220401234309.21252-1-beaub@linux.microsoft.com>
@@ -48,338 +48,106 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-User processes may require many events and when they do the cache
-performance of a byte index status check is less ideal than a bit index.
-The previous event limit per-page was 4096, the new limit is 32,768.
+Update the documentation to reflect the new ABI requirements and how to
+use the byte index with the mask properly to check event status.
 
-This change adds a mask property to the user_reg struct. Programs check
-that the byte at status_index has a bit set by ANDing the status_mask.
-
-Link: https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
-
-Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- include/linux/user_events.h                   | 19 +++---
- kernel/trace/trace_events_user.c              | 58 ++++++++++++++++---
- samples/user_events/example.c                 | 12 ++--
- .../selftests/user_events/ftrace_test.c       | 16 ++---
- .../testing/selftests/user_events/perf_test.c |  6 +-
- 5 files changed, 77 insertions(+), 34 deletions(-)
+ Documentation/trace/user_events.rst | 46 +++++++++++++----------------
+ 1 file changed, 21 insertions(+), 25 deletions(-)
 
-diff --git a/include/linux/user_events.h b/include/linux/user_events.h
-index 736e05603463..c5051fee26c6 100644
---- a/include/linux/user_events.h
-+++ b/include/linux/user_events.h
-@@ -20,15 +20,6 @@
- #define USER_EVENTS_SYSTEM "user_events"
- #define USER_EVENTS_PREFIX "u:"
+diff --git a/Documentation/trace/user_events.rst b/Documentation/trace/user_events.rst
+index c180936f49fc..6aabdb126f2e 100644
+--- a/Documentation/trace/user_events.rst
++++ b/Documentation/trace/user_events.rst
+@@ -20,14 +20,15 @@ dynamic_events is the same as the ioctl with the u: prefix applied.
  
--/* Bits 0-6 are for known probe types, Bit 7 is for unknown probes */
--#define EVENT_BIT_FTRACE 0
--#define EVENT_BIT_PERF 1
--#define EVENT_BIT_OTHER 7
+ Typically programs will register a set of events that they wish to expose to
+ tools that can read trace_events (such as ftrace and perf). The registration
+-process gives back two ints to the program for each event. The first int is the
+-status index. This index describes which byte in the
++process gives back three ints to the program for each event. The first int is
++the status index. This index describes which byte in the
+ /sys/kernel/debug/tracing/user_events_status file represents this event. The
+-second int is the write index. This index describes the data when a write() or
+-writev() is called on the /sys/kernel/debug/tracing/user_events_data file.
++second int is the mask to use on the byte to check the event status. The third
++int is the write index which describes the data when a write() or writev() is
++called on the /sys/kernel/debug/tracing/user_events_data file.
+ 
+-The structures referenced in this document are contained with the
+-/include/uap/linux/user_events.h file in the source tree.
++The structures referenced in this document are contained within the
++/include/uapi/linux/user_events.h file in the source tree.
+ 
+ **NOTE:** *Both user_events_status and user_events_data are under the tracefs
+ filesystem and may be mounted at different paths than above.*
+@@ -44,6 +45,7 @@ This command takes a struct user_reg as an argument::
+         u32 size;
+         u64 name_args;
+         u32 status_index;
++        u32 status_mask;
+         u32 write_index;
+   };
+ 
+@@ -112,14 +114,19 @@ writev() calls when something is actively attached to the event.
+ 
+ User programs call mmap() on /sys/kernel/debug/tracing/user_events_status to
+ check the status for each event that is registered. The byte to check in the
+-file is given back after the register ioctl() via user_reg.status_index.
++file is given back after the register ioctl() via user_reg.status_index. The
++byte needs to be AND'd with the user_reg.status_mask value to check if the
++event is enabled currently.
++
+ Currently the size of user_events_status is a single page, however, custom
+ kernel configurations can change this size to allow more user based events. In
+ all cases the size of the file is a multiple of a page size.
+ 
+-For example, if the register ioctl() gives back a status_index of 3 you would
+-check byte 3 of the returned mmap data to see if anything is attached to that
+-event.
++For example, if the register ioctl() gives back a status_index of 3 and a mask
++of 1 you would check byte 3 of the returned mmap data and then AND the result
++with 1 (e.g. status_page[3] & 1) to see if anything is attached to that event.
++A helper function is available called user_event_enabled() which does this for
++you.
+ 
+ Administrators can easily check the status of all registered events by reading
+ the user_events_status file directly via a terminal. The output is as follows::
+@@ -137,7 +144,7 @@ For example, on a system that has a single event the output looks like this::
+ 
+   Active: 1
+   Busy: 0
+-  Max: 4096
++  Max: 32768
+ 
+ If a user enables the user event via ftrace, the output would change to this::
+ 
+@@ -145,21 +152,10 @@ If a user enables the user event via ftrace, the output would change to this::
+ 
+   Active: 1
+   Busy: 1
+-  Max: 4096
 -
--#define EVENT_STATUS_FTRACE (1 << EVENT_BIT_FTRACE)
--#define EVENT_STATUS_PERF (1 << EVENT_BIT_PERF)
--#define EVENT_STATUS_OTHER (1 << EVENT_BIT_OTHER)
+-**NOTE:** *A status index of 0 will never be returned. This allows user
+-programs to have an index that can be used on error cases.*
 -
- /* Create dynamic location entry within a 32-bit value */
- #define DYN_LOC(offset, size) ((size) << 16 | (offset))
+-Status Bits
+-^^^^^^^^^^^
+-The byte being checked will be non-zero if anything is attached. Programs can
+-check specific bits in the byte to see what mechanism has been attached.
+-
+-The following values are defined to aid in checking what has been attached:
+-
+-**EVENT_STATUS_FTRACE** - Bit set if ftrace has been attached (Bit 0).
++  Max: 32768
  
-@@ -48,9 +39,17 @@ struct user_reg {
- 	/* Output: Byte index of the event within the status page */
- 	__u32 status_index;
+-**EVENT_STATUS_PERF** - Bit set if perf has been attached (Bit 1).
++**NOTE:** *A status index of 0 with a mask of 1 will never be returned. This
++allows user programs to have an index and mask that can be used on error cases.*
  
-+	/* Output: Mask for the event within the status page byte */
-+	__u32 status_mask;
-+
- 	/* Output: Index of the event to use when writing data */
- 	__u32 write_index;
--};
-+} __attribute__((__packed__));
-+
-+static inline int user_event_enabled(void *status_data, int index, int mask)
-+{
-+	return status_data && (((const char *)status_data)[index] & mask);
-+}
- 
- #define DIAG_IOC_MAGIC '*'
- 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 2bcae7abfa81..d960b5ea76c4 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -40,17 +40,26 @@
-  */
- #define MAX_PAGE_ORDER 0
- #define MAX_PAGES (1 << MAX_PAGE_ORDER)
--#define MAX_EVENTS (MAX_PAGES * PAGE_SIZE)
-+#define MAX_BYTES (MAX_PAGES * PAGE_SIZE)
-+#define MAX_EVENTS (MAX_BYTES * 8)
- 
- /* Limit how long of an event name plus args within the subsystem. */
- #define MAX_EVENT_DESC 512
- #define EVENT_NAME(user_event) ((user_event)->tracepoint.name)
- #define MAX_FIELD_ARRAY_SIZE 1024
- 
-+#define STATUS_BYTE(bit) ((bit) >> 3)
-+#define STATUS_MASK(bit) (1 << ((bit) & 7))
-+
-+/* Internal bits to keep track of connected probes */
-+#define EVENT_STATUS_FTRACE (1 << 0)
-+#define EVENT_STATUS_PERF (1 << 1)
-+#define EVENT_STATUS_OTHER (1 << 7)
-+
- static char *register_page_data;
- 
- static DEFINE_MUTEX(reg_mutex);
--static DEFINE_HASHTABLE(register_table, 4);
-+static DEFINE_HASHTABLE(register_table, 8);
- static DECLARE_BITMAP(page_bitmap, MAX_EVENTS);
- 
- /*
-@@ -72,6 +81,7 @@ struct user_event {
- 	int index;
- 	int flags;
- 	int min_size;
-+	char status;
- };
- 
- /*
-@@ -106,6 +116,22 @@ static u32 user_event_key(char *name)
- 	return jhash(name, strlen(name), 0);
- }
- 
-+static __always_inline
-+void user_event_register_set(struct user_event *user)
-+{
-+	int i = user->index;
-+
-+	register_page_data[STATUS_BYTE(i)] |= STATUS_MASK(i);
-+}
-+
-+static __always_inline
-+void user_event_register_clear(struct user_event *user)
-+{
-+	int i = user->index;
-+
-+	register_page_data[STATUS_BYTE(i)] &= ~STATUS_MASK(i);
-+}
-+
- static __always_inline __must_check
- bool user_event_last_ref(struct user_event *user)
- {
-@@ -648,7 +674,7 @@ static int destroy_user_event(struct user_event *user)
- 
- 	dyn_event_remove(&user->devent);
- 
--	register_page_data[user->index] = 0;
-+	user_event_register_clear(user);
- 	clear_bit(user->index, page_bitmap);
- 	hash_del(&user->node);
- 
-@@ -827,7 +853,12 @@ static void update_reg_page_for(struct user_event *user)
- 		rcu_read_unlock_sched();
- 	}
- 
--	register_page_data[user->index] = status;
-+	if (status)
-+		user_event_register_set(user);
-+	else
-+		user_event_register_clear(user);
-+
-+	user->status = status;
- }
- 
- /*
-@@ -1332,7 +1363,17 @@ static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
- 	if (size > PAGE_SIZE)
- 		return -E2BIG;
- 
--	return copy_struct_from_user(kreg, sizeof(*kreg), ureg, size);
-+	if (size < offsetofend(struct user_reg, write_index))
-+		return -EINVAL;
-+
-+	ret = copy_struct_from_user(kreg, sizeof(*kreg), ureg, size);
-+
-+	if (ret)
-+		return ret;
-+
-+	kreg->size = size;
-+
-+	return 0;
- }
- 
- /*
-@@ -1376,7 +1417,8 @@ static long user_events_ioctl_reg(struct file *file, unsigned long uarg)
- 		return ret;
- 
- 	put_user((u32)ret, &ureg->write_index);
--	put_user(user->index, &ureg->status_index);
-+	put_user(STATUS_BYTE(user->index), &ureg->status_index);
-+	put_user(STATUS_MASK(user->index), &ureg->status_mask);
- 
- 	return 0;
- }
-@@ -1485,7 +1527,7 @@ static int user_status_mmap(struct file *file, struct vm_area_struct *vma)
- {
- 	unsigned long size = vma->vm_end - vma->vm_start;
- 
--	if (size != MAX_EVENTS)
-+	if (size != MAX_BYTES)
- 		return -EINVAL;
- 
- 	return remap_pfn_range(vma, vma->vm_start,
-@@ -1520,7 +1562,7 @@ static int user_seq_show(struct seq_file *m, void *p)
- 	mutex_lock(&reg_mutex);
- 
- 	hash_for_each(register_table, i, user, node) {
--		status = register_page_data[user->index];
-+		status = user->status;
- 		flags = user->flags;
- 
- 		seq_printf(m, "%d:%s", user->index, EVENT_NAME(user));
-diff --git a/samples/user_events/example.c b/samples/user_events/example.c
-index 4f5778e441c0..e72260bf6e49 100644
---- a/samples/user_events/example.c
-+++ b/samples/user_events/example.c
-@@ -33,7 +33,8 @@ static int event_status(char **status)
- 	return 0;
- }
- 
--static int event_reg(int fd, const char *command, int *status, int *write)
-+static int event_reg(int fd, const char *command, int *index, int *mask,
-+		     int *write)
- {
- 	struct user_reg reg = {0};
- 
-@@ -43,7 +44,8 @@ static int event_reg(int fd, const char *command, int *status, int *write)
- 	if (ioctl(fd, DIAG_IOCSREG, &reg) == -1)
- 		return -1;
- 
--	*status = reg.status_index;
-+	*index = reg.status_index;
-+	*mask = reg.status_mask;
- 	*write = reg.write_index;
- 
- 	return 0;
-@@ -51,7 +53,7 @@ static int event_reg(int fd, const char *command, int *status, int *write)
- 
- int main(int argc, char **argv)
- {
--	int data_fd, status, write;
-+	int data_fd, index, mask, write;
- 	char *status_page;
- 	struct iovec io[2];
- 	__u32 count = 0;
-@@ -61,7 +63,7 @@ int main(int argc, char **argv)
- 
- 	data_fd = open(data_file, O_RDWR);
- 
--	if (event_reg(data_fd, "test u32 count", &status, &write) == -1)
-+	if (event_reg(data_fd, "test u32 count", &index, &mask, &write) == -1)
- 		return errno;
- 
- 	/* Setup iovec */
-@@ -75,7 +77,7 @@ int main(int argc, char **argv)
- 	getchar();
- 
- 	/* Check if anyone is listening */
--	if (status_page[status]) {
-+	if (user_event_enabled(status_page, index, mask)) {
- 		/* Yep, trace out our data */
- 		writev(data_fd, (const struct iovec *)io, 2);
- 
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index a80fb5ef61d5..ba7a2757dcbd 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -197,12 +197,12 @@ TEST_F(user, register_events) {
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_index);
-+	ASSERT_EQ(0, reg.status_index == 0 && reg.status_mask == 1);
- 
- 	/* Multiple registers should result in same index */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_index);
-+	ASSERT_EQ(0, reg.status_index == 0 && reg.status_mask == 1);
- 
- 	/* Ensure disabled */
- 	self->enable_fd = open(enable_file, O_RDWR);
-@@ -212,15 +212,15 @@ TEST_F(user, register_events) {
- 	/* MMAP should work and be zero'd */
- 	ASSERT_NE(MAP_FAILED, status_page);
- 	ASSERT_NE(NULL, status_page);
--	ASSERT_EQ(0, status_page[reg.status_index]);
-+	ASSERT_EQ(0, status_page[reg.status_index] & reg.status_mask);
- 
- 	/* Enable event and ensure bits updated in status */
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
--	ASSERT_EQ(EVENT_STATUS_FTRACE, status_page[reg.status_index]);
-+	ASSERT_NE(0, status_page[reg.status_index] & reg.status_mask);
- 
- 	/* Disable event and ensure bits updated in status */
- 	ASSERT_NE(-1, write(self->enable_fd, "0", sizeof("0")))
--	ASSERT_EQ(0, status_page[reg.status_index]);
-+	ASSERT_EQ(0, status_page[reg.status_index] & reg.status_mask);
- 
- 	/* File still open should return -EBUSY for delete */
- 	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSDEL, "__test_event"));
-@@ -257,7 +257,7 @@ TEST_F(user, write_events) {
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_index);
-+	ASSERT_EQ(0, reg.status_index == 0 && reg.status_mask == 1);
- 
- 	/* Write should fail on invalid slot with ENOENT */
- 	io[0].iov_base = &field2;
-@@ -298,7 +298,7 @@ TEST_F(user, write_fault) {
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_index);
-+	ASSERT_EQ(0, reg.status_index == 0 && reg.status_mask == 1);
- 
- 	/* Write should work normally */
- 	ASSERT_NE(-1, writev(self->data_fd, (const struct iovec *)io, 2));
-@@ -322,7 +322,7 @@ TEST_F(user, write_validator) {
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_index);
-+	ASSERT_EQ(0, reg.status_index == 0 && reg.status_mask == 1);
- 
- 	io[0].iov_base = &reg.write_index;
- 	io[0].iov_len = sizeof(reg.write_index);
-diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
-index 26851d51d6bb..81ceaf71e364 100644
---- a/tools/testing/selftests/user_events/perf_test.c
-+++ b/tools/testing/selftests/user_events/perf_test.c
-@@ -120,8 +120,8 @@ TEST_F(user, perf_write) {
- 	/* Register should work */
- 	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
- 	ASSERT_EQ(0, reg.write_index);
--	ASSERT_NE(0, reg.status_index);
--	ASSERT_EQ(0, status_page[reg.status_index]);
-+	ASSERT_EQ(0, reg.status_index == 0 && reg.status_mask == 1);
-+	ASSERT_EQ(0, status_page[reg.status_index] & reg.status_mask);
- 
- 	/* Id should be there */
- 	id = get_id();
-@@ -144,7 +144,7 @@ TEST_F(user, perf_write) {
- 	ASSERT_NE(MAP_FAILED, perf_page);
- 
- 	/* Status should be updated */
--	ASSERT_EQ(EVENT_STATUS_PERF, status_page[reg.status_index]);
-+	ASSERT_NE(0, status_page[reg.status_index] & reg.status_mask);
- 
- 	event.index = reg.write_index;
- 	event.field1 = 0xc001;
+ Writing Data
+ ------------
 -- 
 2.25.1
 
