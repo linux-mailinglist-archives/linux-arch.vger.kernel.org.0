@@ -2,38 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732624EFD2D
-	for <lists+linux-arch@lfdr.de>; Sat,  2 Apr 2022 01:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D8C4EFD2E
+	for <lists+linux-arch@lfdr.de>; Sat,  2 Apr 2022 01:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353446AbiDAXpR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1353452AbiDAXpR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Fri, 1 Apr 2022 19:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236763AbiDAXpQ (ORCPT
+        with ESMTP id S1353442AbiDAXpQ (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Apr 2022 19:45:16 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E619F10A1;
-        Fri,  1 Apr 2022 16:43:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0351010A3;
+        Fri,  1 Apr 2022 16:43:24 -0700 (PDT)
 Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5F65B20DEEDA;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 9CDDF20DF564;
         Fri,  1 Apr 2022 16:43:23 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5F65B20DEEDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9CDDF20DF564
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1648856603;
-        bh=o3+64FyHzHFGISd3O72rfJhaBDSRw3VyMvr43Q6rw9Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nwnS8u68KgDr+OZ9f4Qu/8BJK7Bn+8NjRTt8KNu/fach/C3ELFciafdvpGwav30wl
-         MjwbhzpCwTcUofazZGwUKvB8gz9XMlNjLQ3bPcs9EH5M4c3AfEZBB3kAhcmaofpdGr
-         BfU74a3W45oDaeY4FN6Gt8Wn5wjtEjlF+aaxQsPg=
+        bh=naE2yWyZaQaNiMnDIQWiov5WR90Psm2QKZv45rv75Kg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nmiuJaa2xPPy2t/Dv9Z1nsbu3f1AtYgsKkp8vW/UuVk868xl4JR6DtuSaaa5eTtQ+
+         cpUBQ4/7kqfujkyB5lFYPbHGCXVJZa+RtRP2VOioMyUx3kX4td/pCgZHooMT3i9C6a
+         ibmDaxHI6Tl/fUSi+4L04XPv5mHAmYr6dj3vuKyk=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, beaub@linux.microsoft.com
-Subject: [PATCH 0/7] tracing/user_events: Update user_events ABI from
-Date:   Fri,  1 Apr 2022 16:43:02 -0700
-Message-Id: <20220401234309.21252-1-beaub@linux.microsoft.com>
+Subject: [PATCH 1/7] tracing/user_events: Fix repeated word in comments
+Date:   Fri,  1 Apr 2022 16:43:03 -0700
+Message-Id: <20220401234309.21252-2-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220401234309.21252-1-beaub@linux.microsoft.com>
+References: <20220401234309.21252-1-beaub@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -46,63 +48,26 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This series covers the changes that were brought up once user_events went into
-5.18. The largest change is moving away from byte index to a bit index, as
-first suggested by Mathieu Desnoyers.
+Trivial fix to remove accidental double wording of have in comments.
 
-The other changes are either fixes that have accumulated or found by Mathieu.
+Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+---
+ kernel/trace/trace_events_user.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-NOTE: The sample and self-tests do not build unless you manually install
-user_events.h into usr/include/linux.
-
-Link: https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
-
-Psuedo code example of typical usage with the new ABI:
-struct user_reg reg;
-
-int page_fd = open("user_events_status", O_RDWR);
-char *page_data = mmap(NULL, PAGE_SIZE, PROT_READ, MAP_SHARED, page_fd, 0);
-close(page_fd);
-
-int data_fd = open("user_events_data", O_RDWR);
-
-reg.size = sizeof(reg);
-reg.name_args = (__u64)"test";
-
-ioctl(data_fd, DIAG_IOCSREG, &reg);
-int status_id = reg.status_index;
-int status_mask = reg.status_mask;
-int write_id = reg.write_index;
-
-struct iovec io[2];
-io[0].iov_base = &write_id;
-io[0].iov_len = sizeof(write_id);
-io[1].iov_base = payload;
-io[1].iov_len = sizeof(payload);
-
-if (page_data[status_id] & status_mask)
-	writev(data_fd, io, 2);
-
-Beau Belgrave (7):
-  tracing/user_events: Fix repeated word in comments
-  tracing/user_events: Use NULL for strstr checks
-  tracing/user_events: Use WRITE instead of READ for io vector import
-  tracing/user_events: Ensure user provided strings are safely formatted
-  tracing/user_events: Use refcount instead of atomic for ref tracking
-  tracing/user_events: Use bits vs bytes for enabled status page data
-  tracing/user_events: Update ABI documentation to align to bits vs
-    bytes
-
- Documentation/trace/user_events.rst           |  46 ++--
- include/linux/user_events.h                   |  19 +-
- kernel/trace/trace_events_user.c              | 213 ++++++++++++------
- samples/user_events/example.c                 |  12 +-
- .../selftests/user_events/ftrace_test.c       |  16 +-
- .../testing/selftests/user_events/perf_test.c |   6 +-
- 6 files changed, 187 insertions(+), 125 deletions(-)
-
-
-base-commit: bfdf01279299f1254561d6c2072f1919e457e23a
+diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+index 706e1686b5eb..a6621c52ce45 100644
+--- a/kernel/trace/trace_events_user.c
++++ b/kernel/trace/trace_events_user.c
+@@ -567,7 +567,7 @@ static int user_event_set_call_visible(struct user_event *user, bool visible)
+ 	 * to allow user_event files to be less locked down. The extreme case
+ 	 * being "other" has read/write access to user_events_data/status.
+ 	 *
+-	 * When not locked down, processes may not have have permissions to
++	 * When not locked down, processes may not have permissions to
+ 	 * add/remove calls themselves to tracefs. We need to temporarily
+ 	 * switch to root file permission to allow for this scenario.
+ 	 */
 -- 
 2.25.1
 
