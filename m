@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21264F038F
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0BF4F038D
 	for <lists+linux-arch@lfdr.de>; Sat,  2 Apr 2022 15:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356053AbiDBN5H (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 2 Apr 2022 09:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S1350188AbiDBN56 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 2 Apr 2022 09:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356087AbiDBN46 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 2 Apr 2022 09:56:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283811D322;
-        Sat,  2 Apr 2022 06:54:42 -0700 (PDT)
+        with ESMTP id S1356151AbiDBN5D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 2 Apr 2022 09:57:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CD01408C;
+        Sat,  2 Apr 2022 06:54:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B84AE6154B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6C17B80688;
+        Sat,  2 Apr 2022 13:54:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7640C34111;
         Sat,  2 Apr 2022 13:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279F9C34110;
-        Sat,  2 Apr 2022 13:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648907681;
-        bh=eCC4+U4U/ci3tY5teY5dpBY9tw/1fY0xwkgGYQqbXuQ=;
+        s=k20201202; t=1648907686;
+        bh=gwexS5cDOjG6yPTnK5UPDkjABFJAJgKWUEeKQb6lmUo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UDIL2c9uu4aGNMZumA88opJH+VNpWXPNObaI4GaDZA4zDACdGj43wHOYTjnMxh3P5
-         U9nND6BTbKX5598TiAXDMqyaK11aKEX7IXHbn5DRaEuLvVii1nVRlnQ4C9az5FymR7
-         wJOfdBBhHz6LKUviY6lmvXtcMpWoku8x05vvQnxOn0vgcaiY9/gJQg6RMBnSjCP9zZ
-         AyDAC6EROPP+JhmKIm2v4WfsYfBKPwAZExtdwtiv4hABmp9TyjSdBnIl1CgM+QbW4H
-         dwaN63HWIJ/xUhoK+RvnraRUObkiFg6tzKT3biWLmuvArWyzpHt1XAQFlrKOxNTaiG
-         Y1O4lx1XuIVOw==
+        b=R9fpHoZbeu1eDBi1uEi1fTij5xc5mqHAGFugsSagEJ6ZvueBytn3UTn6o6BUWAaWm
+         BAl2NNHfspxT1gZefVI9cwajn+JFmwHasizV4dHqF3XymkpJlbylcReayuzgOibO3x
+         VC/noLrZxBef1eyD8lOAsyhzL+SO621v0Mcx/gWJacphM5Jfi0yKXNfDfo1iij2qca
+         viXWhCkAPFWK57Tr7xfy+5DHyJEy9ZGRg8x/ZPe/lC+oIVxuQ8t9Oz3uO1/0r6qXe0
+         9jTGIkZFVPyae81rQ9WrY/Pdqz6EflIcWmzw0L6A3v/93ltfCUXGdhCNce6trG4lQo
+         36YhUMNHoKGng==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         gregkh@linuxfoundation.org, hch@lst.de
@@ -42,9 +42,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org, heiko@sntech.de,
         Guo Ren <guoren@linux.alibaba.com>,
         Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH V11 17/20] riscv: compat: vdso: Add setup additional pages implementation
-Date:   Sat,  2 Apr 2022 21:52:53 +0800
-Message-Id: <20220402135256.2691868-18-guoren@kernel.org>
+Subject: [PATCH V11 18/20] riscv: compat: signal: Add rt_frame implementation
+Date:   Sat,  2 Apr 2022 21:52:54 +0800
+Message-Id: <20220402135256.2691868-19-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220402135256.2691868-1-guoren@kernel.org>
 References: <20220402135256.2691868-1-guoren@kernel.org>
@@ -62,9 +62,9 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Reconstruct __setup_additional_pages() by appending vdso info
-pointer argument to meet compat_vdso_info requirement. And change
-vm_special_mapping *dm, *cm initialization into static.
+Implement compat_setup_rt_frame for sigcontext save & restore. The
+main process is the same with signal, but the rv32 pt_regs' size
+is different from rv64's, so we needs convert them.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
@@ -72,261 +72,310 @@ Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
 Tested-by: Heiko Stuebner <heiko@sntech.de>
 Cc: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/riscv/include/asm/elf.h |   5 ++
- arch/riscv/include/asm/mmu.h |   1 +
- arch/riscv/kernel/vdso.c     | 105 +++++++++++++++++++++++------------
- 3 files changed, 76 insertions(+), 35 deletions(-)
+ arch/riscv/kernel/Makefile        |   1 +
+ arch/riscv/kernel/compat_signal.c | 243 ++++++++++++++++++++++++++++++
+ arch/riscv/kernel/signal.c        |  13 +-
+ 3 files changed, 256 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/kernel/compat_signal.c
 
-diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-index 754fdb8cee96..14fc7342490b 100644
---- a/arch/riscv/include/asm/elf.h
-+++ b/arch/riscv/include/asm/elf.h
-@@ -130,5 +130,10 @@ do {    if ((ex).e_ident[EI_CLASS] == ELFCLASS32)		\
- typedef compat_ulong_t			compat_elf_greg_t;
- typedef compat_elf_greg_t		compat_elf_gregset_t[ELF_NGREG];
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 6365f382d2fd..2712a5925515 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -69,4 +69,5 @@ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
  
-+extern int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
-+					      int uses_interp);
-+#define compat_arch_setup_additional_pages \
-+				compat_arch_setup_additional_pages
+ obj-$(CONFIG_EFI)		+= efi.o
+ obj-$(CONFIG_COMPAT)		+= compat_syscall_table.o
++obj-$(CONFIG_COMPAT)		+= compat_signal.o
+ obj-$(CONFIG_COMPAT)		+= compat_vdso/
+diff --git a/arch/riscv/kernel/compat_signal.c b/arch/riscv/kernel/compat_signal.c
+new file mode 100644
+index 000000000000..7041742ded08
+--- /dev/null
++++ b/arch/riscv/kernel/compat_signal.c
+@@ -0,0 +1,243 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
 +
- #endif /* CONFIG_COMPAT */
- #endif /* _ASM_RISCV_ELF_H */
-diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
-index 0099dc116168..cedcf8ea3c76 100644
---- a/arch/riscv/include/asm/mmu.h
-+++ b/arch/riscv/include/asm/mmu.h
-@@ -16,6 +16,7 @@ typedef struct {
- 	atomic_long_t id;
- #endif
- 	void *vdso;
-+	void *vdso_info;
- #ifdef CONFIG_SMP
- 	/* A local icache flush is needed before user execution can resume. */
- 	cpumask_t icache_stale_mask;
-diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
-index a9436a65161a..50fe4c877603 100644
---- a/arch/riscv/kernel/vdso.c
-+++ b/arch/riscv/kernel/vdso.c
-@@ -23,6 +23,9 @@ struct vdso_data {
- #endif
- 
- extern char vdso_start[], vdso_end[];
-+#ifdef CONFIG_COMPAT
-+extern char compat_vdso_start[], compat_vdso_end[];
-+#endif
- 
- enum vvar_pages {
- 	VVAR_DATA_PAGE_OFFSET,
-@@ -30,6 +33,11 @@ enum vvar_pages {
- 	VVAR_NR_PAGES,
- };
- 
-+enum rv_vdso_map {
-+	RV_VDSO_MAP_VVAR,
-+	RV_VDSO_MAP_VDSO,
++#include <linux/compat.h>
++#include <linux/signal.h>
++#include <linux/uaccess.h>
++#include <linux/syscalls.h>
++#include <linux/tracehook.h>
++#include <linux/linkage.h>
++
++#include <asm/ucontext.h>
++#include <asm/vdso.h>
++#include <asm/switch_to.h>
++#include <asm/csr.h>
++
++#define COMPAT_DEBUG_SIG 0
++
++struct compat_sigcontext {
++	struct compat_user_regs_struct sc_regs;
++	union __riscv_fp_state sc_fpregs;
 +};
 +
- #define VVAR_SIZE  (VVAR_NR_PAGES << PAGE_SHIFT)
++struct compat_ucontext {
++	compat_ulong_t		uc_flags;
++	struct compat_ucontext	*uc_link;
++	compat_stack_t		uc_stack;
++	sigset_t		uc_sigmask;
++	/* There's some padding here to allow sigset_t to be expanded in the
++	 * future.  Though this is unlikely, other architectures put uc_sigmask
++	 * at the end of this structure and explicitly state it can be
++	 * expanded, so we didn't want to box ourselves in here. */
++	__u8		  __unused[1024 / 8 - sizeof(sigset_t)];
++	/* We can't put uc_sigmask at the end of this structure because we need
++	 * to be able to expand sigcontext in the future.  For example, the
++	 * vector ISA extension will almost certainly add ISA state.  We want
++	 * to ensure all user-visible ISA state can be saved and restored via a
++	 * ucontext, so we're putting this at the end in order to allow for
++	 * infinite extensibility.  Since we know this will be extended and we
++	 * assume sigset_t won't be extended an extreme amount, we're
++	 * prioritizing this. */
++	struct compat_sigcontext uc_mcontext;
++};
++
++struct compat_rt_sigframe {
++	struct compat_siginfo info;
++	struct compat_ucontext uc;
++};
++
++#ifdef CONFIG_FPU
++static long compat_restore_fp_state(struct pt_regs *regs,
++	union __riscv_fp_state __user *sc_fpregs)
++{
++	long err;
++	struct __riscv_d_ext_state __user *state = &sc_fpregs->d;
++	size_t i;
++
++	err = __copy_from_user(&current->thread.fstate, state, sizeof(*state));
++	if (unlikely(err))
++		return err;
++
++	fstate_restore(current, regs);
++
++	/* We support no other extension state at this time. */
++	for (i = 0; i < ARRAY_SIZE(sc_fpregs->q.reserved); i++) {
++		u32 value;
++
++		err = __get_user(value, &sc_fpregs->q.reserved[i]);
++		if (unlikely(err))
++			break;
++		if (value != 0)
++			return -EINVAL;
++	}
++
++	return err;
++}
++
++static long compat_save_fp_state(struct pt_regs *regs,
++			  union __riscv_fp_state __user *sc_fpregs)
++{
++	long err;
++	struct __riscv_d_ext_state __user *state = &sc_fpregs->d;
++	size_t i;
++
++	fstate_save(current, regs);
++	err = __copy_to_user(state, &current->thread.fstate, sizeof(*state));
++	if (unlikely(err))
++		return err;
++
++	/* We support no other extension state at this time. */
++	for (i = 0; i < ARRAY_SIZE(sc_fpregs->q.reserved); i++) {
++		err = __put_user(0, &sc_fpregs->q.reserved[i]);
++		if (unlikely(err))
++			break;
++	}
++
++	return err;
++}
++#else
++#define compat_save_fp_state(task, regs) (0)
++#define compat_restore_fp_state(task, regs) (0)
++#endif
++
++static long compat_restore_sigcontext(struct pt_regs *regs,
++	struct compat_sigcontext __user *sc)
++{
++	long err;
++	struct compat_user_regs_struct cregs;
++
++	/* sc_regs is structured the same as the start of pt_regs */
++	err = __copy_from_user(&cregs, &sc->sc_regs, sizeof(sc->sc_regs));
++
++	cregs_to_regs(&cregs, regs);
++
++	/* Restore the floating-point state. */
++	if (has_fpu())
++		err |= compat_restore_fp_state(regs, &sc->sc_fpregs);
++	return err;
++}
++
++COMPAT_SYSCALL_DEFINE0(rt_sigreturn)
++{
++	struct pt_regs *regs = current_pt_regs();
++	struct compat_rt_sigframe __user *frame;
++	struct task_struct *task;
++	sigset_t set;
++
++	/* Always make any pending restarted system calls return -EINTR */
++	current->restart_block.fn = do_no_restart_syscall;
++
++	frame = (struct compat_rt_sigframe __user *)regs->sp;
++
++	if (!access_ok(frame, sizeof(*frame)))
++		goto badframe;
++
++	if (__copy_from_user(&set, &frame->uc.uc_sigmask, sizeof(set)))
++		goto badframe;
++
++	set_current_blocked(&set);
++
++	if (compat_restore_sigcontext(regs, &frame->uc.uc_mcontext))
++		goto badframe;
++
++	if (compat_restore_altstack(&frame->uc.uc_stack))
++		goto badframe;
++
++	return regs->a0;
++
++badframe:
++	task = current;
++	if (show_unhandled_signals) {
++		pr_info_ratelimited(
++			"%s[%d]: bad frame in %s: frame=%p pc=%p sp=%p\n",
++			task->comm, task_pid_nr(task), __func__,
++			frame, (void *)regs->epc, (void *)regs->sp);
++	}
++	force_sig(SIGSEGV);
++	return 0;
++}
++
++static long compat_setup_sigcontext(struct compat_rt_sigframe __user *frame,
++	struct pt_regs *regs)
++{
++	struct compat_sigcontext __user *sc = &frame->uc.uc_mcontext;
++	struct compat_user_regs_struct cregs;
++	long err;
++
++	regs_to_cregs(&cregs, regs);
++
++	/* sc_regs is structured the same as the start of pt_regs */
++	err = __copy_to_user(&sc->sc_regs, &cregs, sizeof(sc->sc_regs));
++	/* Save the floating-point state. */
++	if (has_fpu())
++		err |= compat_save_fp_state(regs, &sc->sc_fpregs);
++	return err;
++}
++
++static inline void __user *compat_get_sigframe(struct ksignal *ksig,
++	struct pt_regs *regs, size_t framesize)
++{
++	unsigned long sp;
++	/* Default to using normal stack */
++	sp = regs->sp;
++
++	/*
++	 * If we are on the alternate signal stack and would overflow it, don't.
++	 * Return an always-bogus address instead so we will die with SIGSEGV.
++	 */
++	if (on_sig_stack(sp) && !likely(on_sig_stack(sp - framesize)))
++		return (void __user __force *)(-1UL);
++
++	/* This is the X/Open sanctioned signal stack switching. */
++	sp = sigsp(sp, ksig) - framesize;
++
++	/* Align the stack frame. */
++	sp &= ~0xfUL;
++
++	return (void __user *)sp;
++}
++
++int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
++	struct pt_regs *regs)
++{
++	struct compat_rt_sigframe __user *frame;
++	long err = 0;
++
++	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
++	if (!access_ok(frame, sizeof(*frame)))
++		return -EFAULT;
++
++	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
++
++	/* Create the ucontext. */
++	err |= __put_user(0, &frame->uc.uc_flags);
++	err |= __put_user(NULL, &frame->uc.uc_link);
++	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
++	err |= compat_setup_sigcontext(frame, regs);
++	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
++	if (err)
++		return -EFAULT;
++
++	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
++			current->mm->context.vdso, rt_sigreturn);
++
++	/*
++	 * Set up registers for signal handler.
++	 * Registers that we don't modify keep the value they had from
++	 * user-space at the time we took the signal.
++	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
++	 * since some things rely on this (e.g. glibc's debug/segfault.c).
++	 */
++	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
++	regs->sp = (unsigned long)frame;
++	regs->a0 = ksig->sig;                     /* a0: signal number */
++	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
++	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
++
++#if COMPAT_DEBUG_SIG
++	pr_info("SIG deliver (%s:%d): sig=%d pc=%p ra=%p sp=%p\n",
++		current->comm, task_pid_nr(current), ksig->sig,
++		(void *)regs->epc, (void *)regs->ra, frame);
++#endif
++
++	return 0;
++}
+diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+index c2d5ecbe5526..27d8f39228c4 100644
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -6,6 +6,7 @@
+  * Copyright (C) 2012 Regents of the University of California
+  */
  
- /*
-@@ -52,12 +60,6 @@ struct __vdso_info {
- 	struct vm_special_mapping *cm;
- };
- 
--static struct __vdso_info vdso_info __ro_after_init = {
--	.name = "vdso",
--	.vdso_code_start = vdso_start,
--	.vdso_code_end = vdso_end,
--};
--
- static int vdso_mremap(const struct vm_special_mapping *sm,
- 		       struct vm_area_struct *new_vma)
- {
-@@ -66,37 +68,33 @@ static int vdso_mremap(const struct vm_special_mapping *sm,
++#include <linux/compat.h>
+ #include <linux/signal.h>
+ #include <linux/uaccess.h>
+ #include <linux/syscalls.h>
+@@ -229,6 +230,11 @@ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
  	return 0;
  }
  
--static int __init __vdso_init(void)
-+static void __init __vdso_init(struct __vdso_info *vdso_info)
++#ifdef CONFIG_COMPAT
++extern int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
++				 struct pt_regs *regs);
++#endif
++
+ static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
  {
- 	unsigned int i;
- 	struct page **vdso_pagelist;
- 	unsigned long pfn;
- 
--	if (memcmp(vdso_info.vdso_code_start, "\177ELF", 4)) {
--		pr_err("vDSO is not a valid ELF object!\n");
--		return -EINVAL;
--	}
-+	if (memcmp(vdso_info->vdso_code_start, "\177ELF", 4))
-+		panic("vDSO is not a valid ELF object!\n");
- 
--	vdso_info.vdso_pages = (
--		vdso_info.vdso_code_end -
--		vdso_info.vdso_code_start) >>
-+	vdso_info->vdso_pages = (
-+		vdso_info->vdso_code_end -
-+		vdso_info->vdso_code_start) >>
- 		PAGE_SHIFT;
- 
--	vdso_pagelist = kcalloc(vdso_info.vdso_pages,
-+	vdso_pagelist = kcalloc(vdso_info->vdso_pages,
- 				sizeof(struct page *),
- 				GFP_KERNEL);
- 	if (vdso_pagelist == NULL)
--		return -ENOMEM;
-+		panic("vDSO kcalloc failed!\n");
- 
- 	/* Grab the vDSO code pages. */
--	pfn = sym_to_pfn(vdso_info.vdso_code_start);
-+	pfn = sym_to_pfn(vdso_info->vdso_code_start);
- 
--	for (i = 0; i < vdso_info.vdso_pages; i++)
-+	for (i = 0; i < vdso_info->vdso_pages; i++)
- 		vdso_pagelist[i] = pfn_to_page(pfn + i);
- 
--	vdso_info.cm->pages = vdso_pagelist;
--
--	return 0;
-+	vdso_info->cm->pages = vdso_pagelist;
- }
- 
- #ifdef CONFIG_TIME_NS
-@@ -116,13 +114,14 @@ int vdso_join_timens(struct task_struct *task, struct time_namespace *ns)
- {
- 	struct mm_struct *mm = task->mm;
- 	struct vm_area_struct *vma;
-+	struct __vdso_info *vdso_info = mm->context.vdso_info;
- 
- 	mmap_read_lock(mm);
- 
- 	for (vma = mm->mmap; vma; vma = vma->vm_next) {
- 		unsigned long size = vma->vm_end - vma->vm_start;
- 
--		if (vma_is_special_mapping(vma, vdso_info.dm))
-+		if (vma_is_special_mapping(vma, vdso_info->dm))
- 			zap_page_range(vma, vma->vm_start, size);
+ 	sigset_t *oldset = sigmask_to_save();
+@@ -258,8 +264,13 @@ static void handle_signal(struct ksignal *ksig, struct pt_regs *regs)
+ 		}
  	}
  
-@@ -187,11 +186,6 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
- 	return vmf_insert_pfn(vma, vmf->address, pfn);
- }
- 
--enum rv_vdso_map {
--	RV_VDSO_MAP_VVAR,
--	RV_VDSO_MAP_VDSO,
--};
--
- static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
- 	[RV_VDSO_MAP_VVAR] = {
- 		.name   = "[vvar]",
-@@ -203,25 +197,46 @@ static struct vm_special_mapping rv_vdso_maps[] __ro_after_init = {
- 	},
- };
- 
-+static struct __vdso_info vdso_info __ro_after_init = {
-+	.name = "vdso",
-+	.vdso_code_start = vdso_start,
-+	.vdso_code_end = vdso_end,
-+	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-+	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-+};
-+
 +#ifdef CONFIG_COMPAT
-+static struct __vdso_info compat_vdso_info __ro_after_init = {
-+	.name = "compat_vdso",
-+	.vdso_code_start = compat_vdso_start,
-+	.vdso_code_end = compat_vdso_end,
-+	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
-+	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
-+};
+ 	/* Set up the stack frame */
+-	ret = setup_rt_frame(ksig, oldset, regs);
++	if (is_compat_task())
++		ret = compat_setup_rt_frame(ksig, oldset, regs);
++	else
 +#endif
-+
- static int __init vdso_init(void)
- {
--	vdso_info.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR];
--	vdso_info.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO];
-+	__vdso_init(&vdso_info);
-+#ifdef CONFIG_COMPAT
-+	__vdso_init(&compat_vdso_info);
-+#endif
++		ret = setup_rt_frame(ksig, oldset, regs);
  
--	return __vdso_init();
-+	return 0;
+ 	signal_setup_done(ret, ksig, 0);
  }
- arch_initcall(vdso_init);
- 
- static int __setup_additional_pages(struct mm_struct *mm,
- 				    struct linux_binprm *bprm,
--				    int uses_interp)
-+				    int uses_interp,
-+				    struct __vdso_info *vdso_info)
- {
- 	unsigned long vdso_base, vdso_text_len, vdso_mapping_len;
- 	void *ret;
- 
- 	BUILD_BUG_ON(VVAR_NR_PAGES != __VVAR_PAGES);
- 
--	vdso_text_len = vdso_info.vdso_pages << PAGE_SHIFT;
-+	vdso_text_len = vdso_info->vdso_pages << PAGE_SHIFT;
- 	/* Be sure to map the data page */
- 	vdso_mapping_len = vdso_text_len + VVAR_SIZE;
- 
-@@ -232,16 +247,18 @@ static int __setup_additional_pages(struct mm_struct *mm,
- 	}
- 
- 	ret = _install_special_mapping(mm, vdso_base, VVAR_SIZE,
--		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info.dm);
-+		(VM_READ | VM_MAYREAD | VM_PFNMAP), vdso_info->dm);
- 	if (IS_ERR(ret))
- 		goto up_fail;
- 
- 	vdso_base += VVAR_SIZE;
- 	mm->context.vdso = (void *)vdso_base;
-+	mm->context.vdso_info = (void *)vdso_info;
-+
- 	ret =
- 	   _install_special_mapping(mm, vdso_base, vdso_text_len,
- 		(VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC),
--		vdso_info.cm);
-+		vdso_info->cm);
- 
- 	if (IS_ERR(ret))
- 		goto up_fail;
-@@ -253,6 +270,24 @@ static int __setup_additional_pages(struct mm_struct *mm,
- 	return PTR_ERR(ret);
- }
- 
-+#ifdef CONFIG_COMPAT
-+int compat_arch_setup_additional_pages(struct linux_binprm *bprm,
-+				       int uses_interp)
-+{
-+	struct mm_struct *mm = current->mm;
-+	int ret;
-+
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
-+
-+	ret = __setup_additional_pages(mm, bprm, uses_interp,
-+							&compat_vdso_info);
-+	mmap_write_unlock(mm);
-+
-+	return ret;
-+}
-+#endif
-+
- int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- {
- 	struct mm_struct *mm = current->mm;
-@@ -261,7 +296,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
- 	if (mmap_write_lock_killable(mm))
- 		return -EINTR;
- 
--	ret = __setup_additional_pages(mm, bprm, uses_interp);
-+	ret = __setup_additional_pages(mm, bprm, uses_interp, &vdso_info);
- 	mmap_write_unlock(mm);
- 
- 	return ret;
 -- 
 2.25.1
 
