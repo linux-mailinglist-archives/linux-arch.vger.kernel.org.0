@@ -2,40 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2510F4F1590
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 15:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020494F15E4
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 15:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349750AbiDDNLt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Apr 2022 09:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S1352733AbiDDNcM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Apr 2022 09:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiDDNLq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 09:11:46 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129E32BF;
-        Mon,  4 Apr 2022 06:09:49 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nbMSf-00426f-IX; Mon, 04 Apr 2022 15:09:37 +0200
-Received: from dynamic-077-183-077-178.77.183.pool.telefonica.de ([77.183.77.178] helo=[192.168.1.9])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nbMSf-0001in-BQ; Mon, 04 Apr 2022 15:09:37 +0200
-Message-ID: <9c99caa1-d92d-2527-0918-17ee22a46637@physik.fu-berlin.de>
-Date:   Mon, 4 Apr 2022 15:09:36 +0200
+        with ESMTP id S1352768AbiDDNcL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 09:32:11 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD7421839;
+        Mon,  4 Apr 2022 06:30:15 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso5223142otj.5;
+        Mon, 04 Apr 2022 06:30:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZellbTNVDmTMxAgtDVNk9zjzT/qb3sIv3YZKoTrbp+w=;
+        b=1KfbxEDz38L5R9KdesZHkY5ynl/UX0AnY9Fyb+czL6Gbvf3vJ/l2ULBhZgg/uHwL4T
+         aykgjcV25Ib2yaccgxUc4diqfj/MqbPGkkPEiPGHcE+4yBd9m7kyCEVeHvw2TGvmOEvq
+         jBzRsZ90h/zHC8aeMlIfVceZPGzhILwdE9WK9YOGJCdeudOUDnxlW7OyQwT5Dby+qsBT
+         SvY2q6wQZEw9y9/gSwlgQrlTanTDU4YlQLCSAHeRLCxxDgCCTxp9cRAstQABcd0vAbLQ
+         V3ogOPtlBFtU5em14L0DYTLK0nyCIChIoUigZGOF2Ed3/8xfjbD/o3ColF1oOYXZeNxp
+         gZiA==
+X-Gm-Message-State: AOAM533cm4bpClOPyYrkfJGhw7j831GpmeTV/+J3+tdysiN0zhjNQYbj
+        oRjkJBDz8uYZlUA+bJkiV6wmVyAvA0yotQ==
+X-Google-Smtp-Source: ABdhPJwfzMcr7Vf5J9Ba+NiuXJokEEdlN7dIQtrMSP2AO/+MkLtbJL7dhYZeavgWHKEtMv4vV+iZUA==
+X-Received: by 2002:a9d:1b68:0:b0:5c9:5da1:3752 with SMTP id l95-20020a9d1b68000000b005c95da13752mr5858otl.354.1649079014713;
+        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com. [209.85.210.41])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05687072c200b000d9ae3e1fabsm4144385oak.12.2022.04.04.06.30.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so7242708otj.1;
+        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
+X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr20945994yba.393.1649078582711;
+ Mon, 04 Apr 2022 06:23:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Apr 2022 15:22:51 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
+Message-ID: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
 Subject: Re: [RFC PULL] remove arch/h8300
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
@@ -47,20 +63,13 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-m68k <linux-m68k@lists.linux-m68k.org>,
         Greg Ungerer <gerg@linux-m68k.org>,
         Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 77.183.77.178
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Rich Felker <dalias@libc.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,32 +77,49 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Arnd!
+Hi Arnd,
 
-On 4/4/22 15:07, Arnd Bergmann wrote:
-> 2. arch/sh Hitachi/Renesas sh2 (non-j2) support appears to be in a similar state
->     to h8300, I don't think anyone would miss it
-> 
-> 8<----- This may we where we want to draw the line ----
-> 
+On Mon, Apr 4, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
+> > On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
+> > > If there are no other objections, I'll just queue this up for 5.18 in
+> > > the asm-generic
+> > > tree along with the nds32 removal.
+> >
+> > So it is the last day of te merge window and arch/h8300 is till there.
+> > And checking nw the removal has also not made it to linux-next.  Looks
+> > like it is so stale that even the removal gets ignored :(
+>
+> I was really hoping that someone else would at least comment.
+
+Doh, I hadn't seen this patch before ;-)
+Nevertheless, I do not have access to H8/300 hardware.
+
 > 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
 > changes, but I think
 >     Rich still cares about it and wants to add J32 support (with MMU)
 > in the future
-> 
-> 4. m68k Dragonball, Coldfire v2 and Coldfire v3 are just as obsolete as SH2 as
->    hardware is concerned, but Greg Ungerer keeps maintaining it, along with the
->    newer Coldfire v4 (with MMU)
 
-I'm always interested in everything m68k and SH, so if something needs attention,
-I'm happy to help. I actually have SH-2 hardware at home although I haven't tried
-a recent kernel.
+Yep, when the SH4 patents will have expired.
+I believe that's planned for 2016 (Islamic calendar? ;-)
 
-Adrian
+BTW, the unresponsiveness of the SH maintainers is also annoying.
+Patches are sent to the list (sometimes multiple people are solving
+the same recurring issue), but ignored.
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Anyway, I do regular boot tests on SH4.
 
+> 5. K210 was added in 2020. I assume you still want to keep it.
+
+FTR, I do regular boot tests on K210.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
