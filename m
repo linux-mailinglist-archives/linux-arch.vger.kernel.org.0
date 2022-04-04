@@ -2,58 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6EC4F1D5A
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 23:39:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52134F1D45
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 23:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382534AbiDDVaz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Apr 2022 17:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37426 "EHLO
+        id S1357274AbiDDVai (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Apr 2022 17:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380649AbiDDUu2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 16:50:28 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14723D6C;
-        Mon,  4 Apr 2022 13:48:29 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g22so12596083edz.2;
-        Mon, 04 Apr 2022 13:48:29 -0700 (PDT)
+        with ESMTP id S1380675AbiDDU6p (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 16:58:45 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C62430F6D;
+        Mon,  4 Apr 2022 13:56:49 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bg10so22574945ejb.4;
+        Mon, 04 Apr 2022 13:56:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Hwk8wNBo32OmqYHy/lorDp6jxAIWbUvyfxVID6NQWMs=;
-        b=MgQmlEUX2awo9FGSPrgoUcYWe7XJZtfBcbV29fxnVVbjc3fXXrfVTWrbf2FEFcWonc
-         f0aKsGNt8xLswvAf+ZPhMd5j5QzbyREtH5EG01bJE669ZjjMFoCvsLGPKRLoJVuom9dZ
-         kYDVGColrzu6iRkzxv5ZReRUd9ML2sggd3BMjTtGMEkH1295xZhX2QGenYIfKlQxetMx
-         wEl7pjgvYdNikY+mO/2Nm0tMPt7LhohPkX3Rwa6Aslkud3EOtvKb96eSd5wNJblieh0R
-         40OeE78e2N7TGKbSRYTN0wXN/vb0WgldQS9luj+/MJkrgEZ2kqq3FNMc4ahhO48f2+pr
-         C7Tg==
+        bh=bVlKvULZm2JgZ5AGytzLrLB0CSLrK0ggDRTo65+yxyA=;
+        b=ku1Mni2YP6skEb4UzKwM1qgc933zwKLIlMM21YZAd7k4Ios0mzpOc/rIaiQVjhFQSY
+         G+txssoqd3A6QKy5AZVACJTlGPSO1le+tQYos/vc/E2PB8bCCueGVPQ5Scvt5bZZ0s2f
+         I52BoNzvPo67Aqv6eXqqyFzU1vQDqrs2VWVcVapC6o/pGzwkb1H3txizNNHwVD4d6ScG
+         2eIDS0ScxBnD2FZzrF1d1lKbTPDJ8/l3KKd8gewI19+L9UviMfXxa0WaQTj9+PHYcB7I
+         7cJb+/UH9X0jvg07Ut3LmEkLNSOS7IFE/S9dHP7d26coaZhJq40PwzaU1UKeGEFNTonV
+         YiIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Hwk8wNBo32OmqYHy/lorDp6jxAIWbUvyfxVID6NQWMs=;
-        b=tgSn6xXMmJndzz8y2ABHME8eE9nPr4OoFw8S+8G6N9tud4cz4XWzadHTph1YUnzFJn
-         6BFWJOV64kp1WdZzDwH21tRKFMmBoaCYo4db0wjGAfrTxNib8Vco9s/JQYTxa7srlUXg
-         fljeO/QgQEpZlJprcQCoBHHXvEcClr37nXYAxOGW0ihCA5z9PIGUG/XKGk3MLS6xcprc
-         GDtBnWY2YHpr1M03w+i+11wVqa5sblTlVlTej4gl5UzARJoHaeIK66wXHPVlHNzVR2Ix
-         DbPUkh8DdYYUyX5WHF2HTXgtFXkL76BkE0gIRFhOt5JnVYgZOLcI7yJDFNxVC7XjeEYU
-         JKbQ==
-X-Gm-Message-State: AOAM533TKMyKCSPhAzUJgsAb098ZYK4RTJ5N/NEzTiBR5vDMv3KLqdzA
-        53jqPW57DANxFJMhOi7x+MkFz1mWrKO+fLexqNiseJO/
-X-Google-Smtp-Source: ABdhPJwcTZ56W4jcHhaPz18ivbz2Gd1BIwaysH0yZIitWtcgDhHrV8MgH68GVFQRRYpSZqIgJE5hbn6sHjvo6V1CGTw=
-X-Received: by 2002:a05:6402:27d0:b0:419:5184:58ae with SMTP id
- c16-20020a05640227d000b00419518458aemr4939ede.314.1649105307534; Mon, 04 Apr
- 2022 13:48:27 -0700 (PDT)
+        bh=bVlKvULZm2JgZ5AGytzLrLB0CSLrK0ggDRTo65+yxyA=;
+        b=ADpGwSD2J3Ly+6ODxHl337T+g8oWZTx2PZ3zU49l6o/xvzRODv9nx9nQV+abr+jPK1
+         4QgB1M0hR+TJfiCil8X6v+le+V+njcTlHPlXbj+nA6716xVsQTlEXW1j8GrE1Ex7hmXV
+         BAqxTavkO759OTbrW6hw66hWZqz6TfRQiCpm0pCwfOkyLWd+NAg1RmFs0WFGi9tnyLBk
+         sT4Y/dHaPudG7t/kX1chw8OURNqnuWm8lX3n8Z8WmBPRsXL2Qrg7tetTEz58Cz3o+VqN
+         HjQ12vjDbhJpdR61SLFixyEd31HkkoberI2vJKeVogTwj0QkUk3+T7xGOOTZLrOVrCx1
+         9N6g==
+X-Gm-Message-State: AOAM532p0QLx0Om0oA3qug+ZlJ/gCGkAqDEjIGu6xPgI3hcu5ix33ik9
+        X65GOOYNZ8mAVMLJISe0Kde6e+u6wL4RnYTQ/ClAfvlb7Vc=
+X-Google-Smtp-Source: ABdhPJxR6ykDRFXeBPhlCfq09GQEDxUi37N3Qk4mgFJMv7QLL7sMtSVvzSM8nSllVj9W6nUE0impfg7PMyukPyB4+IQ=
+X-Received: by 2002:a17:906:f75a:b0:6e6:e3f1:c946 with SMTP id
+ jp26-20020a170906f75a00b006e6e3f1c946mr67964ejb.676.1649105807881; Mon, 04
+ Apr 2022 13:56:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
  <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
  <CAMo8BfKgn0T5RtUTb89fPvygNJJYLy7r1=RZTmTTm=jiDfx1hQ@mail.gmail.com>
  <CAK8P3a0J1--WSyWY+TptFa0nn5d-mOxapadCE1csGRkfhSPbVw@mail.gmail.com>
- <CAMo8BfLT8vMw3aGQPs1+9ry7W63SQphmDc4Tt4A3JvADHJhxiQ@mail.gmail.com> <CAK8P3a3iFb+ZacZ40d8PC_xcJpLVFXT0Qc-oYEZNkFqXdsfNZw@mail.gmail.com>
-In-Reply-To: <CAK8P3a3iFb+ZacZ40d8PC_xcJpLVFXT0Qc-oYEZNkFqXdsfNZw@mail.gmail.com>
+ <CAMo8BfLT8vMw3aGQPs1+9ry7W63SQphmDc4Tt4A3JvADHJhxiQ@mail.gmail.com>
+ <CAK8P3a3iFb+ZacZ40d8PC_xcJpLVFXT0Qc-oYEZNkFqXdsfNZw@mail.gmail.com> <CAK8P3a1goN3c772xiFtz13kHZs0XEDSxfXX=ub7OH3S98Mddsw@mail.gmail.com>
+In-Reply-To: <CAK8P3a1goN3c772xiFtz13kHZs0XEDSxfXX=ub7OH3S98Mddsw@mail.gmail.com>
 From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Mon, 4 Apr 2022 13:48:15 -0700
-Message-ID: <CAMo8BfJJXTTbeiUSgU=FLoDMM89fjybjKO+sPz2wu4f=2obAxg@mail.gmail.com>
+Date:   Mon, 4 Apr 2022 13:56:36 -0700
+Message-ID: <CAMo8BfJ5oqq3DXGf31uy8ab01EXqfzsO8hA2Tia=F1fBGiznKw@mail.gmail.com>
 Subject: Re: [RFC PULL] remove arch/h8300
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Christoph Hellwig <hch@infradead.org>,
@@ -82,45 +83,19 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 12:36 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Mon, Apr 4, 2022 at 9:14 PM Max Filippov <jcmvbkbc@gmail.com> wrote:
-> > On Mon, Apr 4, 2022 at 12:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Mon, Apr 4, 2022 at 7:57 PM Max Filippov <jcmvbkbc@gmail.com> wrote:
-> > > > Please let me know if you observe any specific build/runtime issues.
-> > > xtensa-linux-gcc-11.1.0 -DKCONFIG_SEED=
-> > ...
-> > > /git/arm-soc/arch/xtensa/kernel/head.S: Assembler messages:
-> > > /git/arm-soc/arch/xtensa/kernel/head.S:87: Error: invalid register
-> > > 'atomctl' for 'wsr' instruction
-> >
-> > Sure, one cannot use an arbitrary xtensa compiler for the kernel
-> > build, the compiler configuration must match the core variant selected
-> > in the linux configuration. Specifically, for the nommu_kc705_defconfig
-> > the following compiler can be used:
-> >
-> > https://github.com/foss-xtensa/toolchain/releases/download/2020.07/x86_64-2020.07-xtensa-de212-elf.tar.gz
-> >
-> > If you build the toolchain yourself using crosstool-ng or buildroot they
-> > accept the 'configuration overlay' parameter that does the compiler
-> > customization.
-> >
-> > Perhaps the documentation for this part is what needs to be improved.
->
-> It sounds like a bug in the kernel Makefile. On all other architectures,
-> you can generally just pick any (recent) compiler and build any kernel,
-> as the compiler arguments set the exact target machine type based
-> on the kernel config. You can't normally rely on the compiler defaults
-> for kernel builds.
+On Mon, Apr 4, 2022 at 12:44 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> Let me know if I need to enable additional options to get a compiler
+> that works for all xtensa targets. Usually the --enable-targets=all
+> is meant to be sufficient.
 
-It's not just the defaults. The binary instruction encoding is configurable
-on the xtensa architecture, configuration overlay replaces parts of
-the toolchain that do that.
-The additional CPU state is configurable and the kernel gets customized
-with the code that loads and stores this state when someone builds it for
-a specific xtensa core.
-These customizations are done by the users of the xtensa architecture and
-there are hundreds of configurations in existence. The toolchain has never
-been supposed to support all of them at once.
+This is not possible with the current design of the xtensa toolchain port.
+There's an effort to make switching between the core configurations easy
+(without the whole toolchain rebuild:
+ https://github.com/jcmvbkbc/xtensa-dynconfig
+ https://github.com/jcmvbkbc/gcc-xtensa/tree/xtensa-dynconfig
+ https://github.com/jcmvbkbc/binutils-gdb-xtensa/tree/xtensa-plugin-env ),
+but it still involves building plugins for the parts of the toolchain
+for each new xtensa core.
 
 -- 
 Thanks.
