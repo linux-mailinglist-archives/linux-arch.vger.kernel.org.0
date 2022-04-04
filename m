@@ -2,127 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4EF4F13CF
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 13:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845994F13F6
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 13:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350385AbiDDLdL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Apr 2022 07:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
+        id S1346463AbiDDLqF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Apr 2022 07:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbiDDLdL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 07:33:11 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382AC3C732;
-        Mon,  4 Apr 2022 04:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649071875; x=1680607875;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ErXKJwnxX8hclXQqvYKDIF2ZZ3KufEcKMWs1slKVfPY=;
-  b=aqWWVANRfW6tRnubDWdO6j7jy0kxKl8xbvrBYM3sb5UJWB9VkrF7AeTM
-   rSxVJ8PFembyJom9T3RiOFtLPXdAiZoGxZ5MUeEhRPoyAPz5bkGwuI4ht
-   Ijev9M+w2dM2ZFTkRyrJ9cjxeJLJnMtvnbKYrJyLurkEAZBE169fIVe77
-   R9313lQ1DcxqcDW3FdJIwpUaCkkBZ/6Y/IRsOFz5oc6mw2GLJ/qkpx66y
-   TX9qUwnC4CWqob1avAVXWWoU7Twdt9muazRRpVX6kGf5esjDWrEfchcJe
-   uLvwuduWMgTV7Q5PEJ6gL6UC96wRMEt7KvO+L1vKxPqiSpptUmbj7QyEO
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="242634145"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="242634145"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 04:31:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="556127945"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 04 Apr 2022 04:31:12 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbKvP-00020N-Ri;
-        Mon, 04 Apr 2022 11:31:11 +0000
-Date:   Mon, 4 Apr 2022 19:30:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH 7/8] posix_types.h: add __kernel_uintptr_t to UAPI
- posix_types.h
-Message-ID: <202204041919.bIUKxOch-lkp@intel.com>
-References: <20220404061948.2111820-8-masahiroy@kernel.org>
+        with ESMTP id S1348762AbiDDLqE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 07:46:04 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9CB1B7A7;
+        Mon,  4 Apr 2022 04:44:08 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id cs16so1456035qvb.8;
+        Mon, 04 Apr 2022 04:44:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nYvQ/9sOxTrqd5FO05k5YTA5C/LjNCLjagWPfQG2994=;
+        b=TBjThrjyTVGV54MpL6ZIexcyW0rJu6yhTulv5b07N1fqiwyVK4VfBz8lIB1/nwLR+m
+         zvsbVMjV88OurfMyzYhQpmLw44taIJYnnZI9mAf7t4fno50TQAXD5grCHNSJE2eyZE2N
+         oAwOmgIGYwG1c1OZzWJ2d7BLjQoBhla4/XO8/0Y6FSfPhe2P7x0CTXxmYTv8xp8cKomQ
+         ePmQeKr37Ks5CZmW7nAustErX5QbB51D0nx7cbcBmN9SlqBdI9g+/G7KHEiNPJPQsvEn
+         /kZy46eQ9JMH5B5x1/zezm8lUCt8yvhol/ZxoQF7RJvNLGqmqwhD/AbDpKIvpoItuP7v
+         m4ww==
+X-Gm-Message-State: AOAM532HMyNGTYI+vJNPRtQdsUkbBwt8AzfqTydAMjhQvoYEMDS59aiM
+        7LOX1SShTI/v7GZAQrts/BTSdHCZuqoxfA==
+X-Google-Smtp-Source: ABdhPJwdMakYhtdX8SLs2XnS0r8JzMTRUuj7J4cA8fynCYCjUd89wsDtWFurjirFgAHi4fKX92+/EQ==
+X-Received: by 2002:a05:6214:c44:b0:443:c09c:b15c with SMTP id r4-20020a0562140c4400b00443c09cb15cmr7518017qvj.30.1649072646773;
+        Mon, 04 Apr 2022 04:44:06 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id e20-20020ac84e54000000b002e06753cf70sm9416199qtw.6.2022.04.04.04.44.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 04:44:06 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2e5e9025c20so95510687b3.7;
+        Mon, 04 Apr 2022 04:44:05 -0700 (PDT)
+X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
+ v133-20020a81618b000000b002dbd9528a39mr22035506ywb.132.1649072645615; Mon, 04
+ Apr 2022 04:44:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404061948.2111820-8-masahiroy@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220404111204.935357-1-elver@google.com>
+In-Reply-To: <20220404111204.935357-1-elver@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Apr 2022 13:43:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdURqaCYDt5SJg0GLKqEs92JgUhHAhVa8B4RKextRH43aQ@mail.gmail.com>
+Message-ID: <CAMuHMdURqaCYDt5SJg0GLKqEs92JgUhHAhVa8B4RKextRH43aQ@mail.gmail.com>
+Subject: Re: [PATCH] signal: Deliver SIGTRAP on perf event asynchronously if blocked
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Masahiro,
+On Mon, Apr 4, 2022 at 1:30 PM Marco Elver <elver@google.com> wrote:
+> With SIGTRAP on perf events, we have encountered termination of
+> processes due to user space attempting to block delivery of SIGTRAP.
+> Consider this case:
+>
+>     <set up SIGTRAP on a perf event>
+>     ...
+>     sigset_t s;
+>     sigemptyset(&s);
+>     sigaddset(&s, SIGTRAP | <and others>);
+>     sigprocmask(SIG_BLOCK, &s, ...);
+>     ...
+>     <perf event triggers>
+>
+> When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
+> will force the signal, but revert back to the default handler, thus
+> terminating the task.
+>
+> This makes sense for error conditions, but not so much for explicitly
+> requested monitoring. However, the expectation is still that signals
+> generated by perf events are synchronous, which will no longer be the
+> case if the signal is blocked and delivered later.
+>
+> To give user space the ability to clearly distinguish synchronous from
+> asynchronous signals, introduce siginfo_t::si_perf_flags and
+> TRAP_PERF_FLAG_ASYNC (opted for flags in case more binary information is
+> required in future).
+>
+> The resolution to the problem is then to (a) no longer force the signal
+> (avoiding the terminations), but (b) tell user space via si_perf_flags
+> if the signal was synchronous or not, so that such signals can be
+> handled differently (e.g. let user space decide to ignore or consider
+> the data imprecise).
+>
+> The alternative of making the kernel ignore SIGTRAP on perf events if
+> the signal is blocked may work for some usecases, but likely causes
+> issues in others that then have to revert back to interception of
+> sigprocmask() (which we want to avoid). [ A concrete example: when using
+> breakpoint perf events to track data-flow, in a region of code where
+> signals are blocked, data-flow can no longer be tracked accurately.
+> When a relevant asynchronous signal is received after unblocking the
+> signal, the data-flow tracking logic needs to know its state is
+> imprecise. ]
+>
+> Link: https://lore.kernel.org/all/Yjmn%2FkVblV3TdoAq@elver.google.com/
+> Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
+> Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-I love your patch! Perhaps something to improve:
+>  arch/m68k/kernel/signal.c          |  1 +
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on linux/master v5.18-rc1 next-20220404]
-[cannot apply to soc/for-next drm/drm-next powerpc/next uclinux-h8/h8300-next s390/features arnd-asm-generic/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
-config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220404/202204041919.bIUKxOch-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e8154d995f34b79843e473d85645fb543d554e7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
-        git checkout e8154d995f34b79843e473d85645fb543d554e7f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/fsl/
+Gr{oetje,eeting}s,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+                        Geert
 
-All warnings (new ones prefixed by >>):
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->> sound/soc/fsl/imx-audmux.c:148:40: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   snprintf(buf, sizeof(buf), "ssi%lu", i);
-                                                  ~~~   ^
-                                                  %u
-   1 warning generated.
-
-
-vim +148 sound/soc/fsl/imx-audmux.c
-
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  139  
-b8909783a22b4f sound/soc/fsl/imx-audmux.c    Lars-Peter Clausen 2014-04-24  140  static void audmux_debugfs_init(void)
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  141  {
-e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01  142  	uintptr_t i;
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  143  	char buf[20];
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  144  
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  145  	audmux_debugfs_root = debugfs_create_dir("audmux", NULL);
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  146  
-409b78cc17a4a3 sound/soc/fsl/imx-audmux.c    Torben Hohn        2012-07-18  147  	for (i = 0; i < MX31_AUDMUX_PORT7_SSI_PINS_7 + 1; i++) {
-e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01 @148  		snprintf(buf, sizeof(buf), "ssi%lu", i);
-227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  149  		debugfs_create_file(buf, 0444, audmux_debugfs_root,
-227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  150  				    (void *)i, &audmux_debugfs_fops);
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  151  	}
-7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  152  }
-3bc34a6143359d arch/arm/plat-mxc/audmux.c    Richard Zhao       2012-03-05  153  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
