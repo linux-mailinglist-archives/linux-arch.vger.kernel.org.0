@@ -2,133 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2184F1765
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 16:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1154F1781
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Apr 2022 16:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354324AbiDDOpj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Apr 2022 10:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
+        id S1351755AbiDDOs5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Apr 2022 10:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379350AbiDDOok (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 10:44:40 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814BD44A3D
-        for <linux-arch@vger.kernel.org>; Mon,  4 Apr 2022 07:40:09 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id z33so13499387ybh.5
-        for <linux-arch@vger.kernel.org>; Mon, 04 Apr 2022 07:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pz3pYCujkv281hkCmxtkOvOxylf8pz3W8bcVxSFrQPo=;
-        b=rp/qQxgcvWDdpmgA7fnhdYdZmKKGoA5Rh0NrghNK6QHGJaNrHNYoL1GD0Lo1sS0BUA
-         Nby0xgsdoq1R6HeNh2u1Wkukpnqh5Ntkf5q76zL3bFMxJlmTeFTJnNsnhZRKvy55qwnZ
-         slBewtIQuNbDNpCxmj1Fdp5nbCcMAsJsPryda6tMxoCyTky12lj33/ip4ciiZUz3koC/
-         szf7VWLN8gWAJvRw9nJCWeTApXNEDA5qLIldc38tppkwV5o9VxDq6OSye/JUfjA+DBO8
-         6/xeIsUOwgR8bNW/D7SxqiCFntXvCDnf4E8IDKNocpBYt9rOmdfd/xKobqm1+B6tbRe1
-         GBtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pz3pYCujkv281hkCmxtkOvOxylf8pz3W8bcVxSFrQPo=;
-        b=jb0Z1lebfeJSi8mYTg3FW5KLdWkyaAj+KQJw7JScAlXZBC13C2vjIMI0cfhox2Cfcs
-         s9uSRKD4jIQr9kYBNQDye0VjKVVezyJyeTCcBNsUGk/ACSmNn+9XJE/SLQZhBwH4MSL0
-         gtwIxlM1jiC7X29Q3gG7KF0sh2gepSyi6K2yUBE2AJL7W3HHHFQT8NhLkEhklLU1b6BQ
-         Uz6jaQCZdhgFetA23ZnDvKdyVGffgQVNhgRFuE3bKSc05c4iAZPoAcMW4mFWtEQ5ooXQ
-         ylPq5V+CzQJQnnhJgclwQ0oumbwSoatDe2qwVDrwQh8TLfXWdBykU0//B+bNE6eBMCfo
-         aiAg==
-X-Gm-Message-State: AOAM530qgKremlkFh41MZCIGY60eYuVmwH4iEEoCJiwOa1/0NrF7RFDD
-        0Bkc/H72+gk2mZZnaKtHso+clhZoftvMbmhudAAnDg==
-X-Google-Smtp-Source: ABdhPJzn3nqxMsBH+7CEIPeIkwewLgc0IoSM83IwhtPQ5GBOQVPSfRg5TvY6utuFCSGhkNhPJBRtsnAq/8hPKoD3/xA=
-X-Received: by 2002:a25:3750:0:b0:634:6b89:ca9f with SMTP id
- e77-20020a253750000000b006346b89ca9fmr78127yba.363.1649083208503; Mon, 04 Apr
- 2022 07:40:08 -0700 (PDT)
+        with ESMTP id S1378639AbiDDOsr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 10:48:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B442740907;
+        Mon,  4 Apr 2022 07:44:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32424B8171B;
+        Mon,  4 Apr 2022 14:44:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2E7C340EE;
+        Mon,  4 Apr 2022 14:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649083485;
+        bh=hfIqoM3h/gz+tByTCRoRc0EQZSOX5qfDE+fO89hWlj0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GcAaiI9iWaGMwggzARvbZP6s+jScCgB92HITxahAIxTos8ySrkjWS/7/FF8ZEgcsI
+         iR1iTIb8FgwbkVquVEBOtQI7RnuJdMJaAAs2yW5z1XXNcZPBIe54tKTE51YhV+ry/U
+         4nt4LiXVwXc5U+Nkj76JzQlY+Miq7LOtFet/isPZZD+ymi87TzMk0L+x5wPwzspAdR
+         7+FT2JnNqfSQ6jse9ENuHWnJEft40JBlld49Oa54b8FAQ4z0mzISE0u1z0WUbVnJUR
+         vnGs81zo/1e4dYke+kN6l3AtWJ6vn2Nqq7DswY/BATuMfM8AdO56sn2o3E8VcMNG2Z
+         kt8P09vYiulWQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: optimize memcpy_{from,to}io() and memset_io()
+Date:   Mon,  4 Apr 2022 22:44:27 +0800
+Message-Id: <20220404144427.2793051-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220329124017.737571-1-glider@google.com> <20220329124017.737571-14-glider@google.com>
-In-Reply-To: <20220329124017.737571-14-glider@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 4 Apr 2022 16:39:31 +0200
-Message-ID: <CAG_fn=XvC7UPaBbcDM4-Rc_4RdWSceQK5jV9n6q7DtTeZbd0zw@mail.gmail.com>
-Subject: Re: [PATCH v2 13/48] kmsan: add KMSAN runtime core
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> +depot_stack_handle_t kmsan_save_stack_with_flags(gfp_t flags,
-> +                                                unsigned int extra)
-> +{
-> +       unsigned long entries[KMSAN_STACK_DEPTH];
-> +       unsigned int nr_entries;
-> +
-> +       nr_entries = stack_trace_save(entries, KMSAN_STACK_DEPTH, 0);
-> +       nr_entries = filter_irq_stacks(entries, nr_entries);
+From: Guo Ren <guoren@linux.alibaba.com>
 
-This is redundant, __stack_depot_save() below already calls filter_irq_stacks().
+Optimize memcpy_{from,to}io() and memset_io() by transferring in
+64 bit as much as possible with minimized barrier usage.  This
+simplest optimization brings faster throughput compare to current
+byte-by-byte read and write with barrier in the loop. Code's
+skeleton is taken from the powerpc & arm64.
 
-> +
-> +       if (depth >= MAX_CHAIN_DEPTH) {
-> +               static atomic_long_t kmsan_skipped_origins;
-> +               long skipped = atomic_long_inc_return(&kmsan_skipped_origins);
-> +
-> +               if (skipped % NUM_SKIPPED_TO_WARN == 0) {
-> +                       pr_warn("not chained %ld origins\n", skipped);
-> +                       dump_stack();
-> +                       kmsan_print_origin(id);
-> +               }
-> +               return id;
-> +       }
-> +       depth++;
-> +       extra_bits = kmsan_extra_bits(depth, uaf);
-> +
-> +       entries[0] = KMSAN_CHAIN_MAGIC_ORIGIN;
-> +       entries[1] = kmsan_save_stack_with_flags(GFP_ATOMIC, 0);
-> +       entries[2] = id;
-> +       return __stack_depot_save(entries, ARRAY_SIZE(entries), extra_bits,
-> +                                 GFP_ATOMIC, true);
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+---
+ arch/csky/include/asm/io.h | 11 +++++
+ arch/csky/kernel/io.c      | 91 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+)
+ create mode 100644 arch/csky/kernel/io.c
 
-@entries is initialized in non-instrumented code, so passing it to
-filter_irq_stacks() etc. will result in false positives, unless we
-explicitly unpoison it.
-(right now KMSAN does not instrument kernel/stacktrace.c, but it
-probably should)
+diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+index f82654053dc0..adb64e26194f 100644
+--- a/arch/csky/include/asm/io.h
++++ b/arch/csky/include/asm/io.h
+@@ -32,6 +32,17 @@
+ #define writel(v,c)		({ wmb(); writel_relaxed((v),(c)); mb(); })
+ #endif
+ 
++/*
++ * String version of I/O memory access operations.
++ */
++extern void __memcpy_fromio(void *, const volatile void __iomem *, size_t);
++extern void __memcpy_toio(volatile void __iomem *, const void *, size_t);
++extern void __memset_io(volatile void __iomem *, int, size_t);
++
++#define memset_io(c,v,l)        __memset_io((c),(v),(l))
++#define memcpy_fromio(a,c,l)    __memcpy_fromio((a),(c),(l))
++#define memcpy_toio(c,a,l)      __memcpy_toio((c),(a),(l))
++
+ /*
+  * I/O memory mapping functions.
+  */
+diff --git a/arch/csky/kernel/io.c b/arch/csky/kernel/io.c
+new file mode 100644
+index 000000000000..5883f13fa2b1
+--- /dev/null
++++ b/arch/csky/kernel/io.c
+@@ -0,0 +1,91 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/export.h>
++#include <linux/types.h>
++#include <linux/io.h>
++
++/*
++ * Copy data from IO memory space to "real" memory space.
++ */
++void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
++{
++	while (count && !IS_ALIGNED((unsigned long)from, 4)) {
++		*(u8 *)to = __raw_readb(from);
++		from++;
++		to++;
++		count--;
++	}
++
++	while (count >= 4) {
++		*(u32 *)to = __raw_readl(from);
++		from += 4;
++		to += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		*(u8 *)to = __raw_readb(from);
++		from++;
++		to++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memcpy_fromio);
++
++/*
++ * Copy data from "real" memory space to IO memory space.
++ */
++void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
++{
++	while (count && !IS_ALIGNED((unsigned long)to, 4)) {
++		__raw_writeb(*(u8 *)from, to);
++		from++;
++		to++;
++		count--;
++	}
++
++	while (count >= 4) {
++		__raw_writel(*(u32 *)from, to);
++		from += 4;
++		to += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		__raw_writeb(*(u8 *)from, to);
++		from++;
++		to++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memcpy_toio);
++
++/*
++ * "memset" on IO memory space.
++ */
++void __memset_io(volatile void __iomem *dst, int c, size_t count)
++{
++	u32 qc = (u8)c;
++
++	qc |= qc << 8;
++	qc |= qc << 16;
++
++	while (count && !IS_ALIGNED((unsigned long)dst, 4)) {
++		__raw_writeb(c, dst);
++		dst++;
++		count--;
++	}
++
++	while (count >= 4) {
++		__raw_writel(qc, dst);
++		dst += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		__raw_writeb(c, dst);
++		dst++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memset_io);
+-- 
+2.25.1
+
