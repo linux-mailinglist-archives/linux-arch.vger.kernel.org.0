@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1FF4F2435
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Apr 2022 09:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4CC4F2421
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Apr 2022 09:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiDEHRI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Apr 2022 03:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
+        id S231468AbiDEHRD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Apr 2022 03:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiDEHQX (ORCPT
+        with ESMTP id S231588AbiDEHQX (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Apr 2022 03:16:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AEF1107;
-        Tue,  5 Apr 2022 00:14:21 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F44B26C1;
+        Tue,  5 Apr 2022 00:14:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BBE96B81B14;
-        Tue,  5 Apr 2022 07:14:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6E4C34112;
-        Tue,  5 Apr 2022 07:14:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A8861615;
+        Tue,  5 Apr 2022 07:14:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A7FAC34111;
+        Tue,  5 Apr 2022 07:14:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649142858;
-        bh=i7PzdXl6Dn+FdofUFi023qh/x+M4yzmCIkQuIb/yw0M=;
+        s=k20201202; t=1649142864;
+        bh=Ozahyc/w+nU9i7KqLsvrZN14JQ1Eg6uadYyBxIpHozM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HJCIg9dymp/i3aYY8UDGKP6XwUMI28CDXVTTuITqtu219zO0Lxn23mDuhegiJzT9o
-         6VoKVF8iGni6jpWF9GRDjJb6aoZw7Gc/Jzm7gD+EMaiYqASXVyeql+u4JQJGgPbkVQ
-         m7RkMxlBkVTY071Sdi1zkDXSUPfpbycxNWKkl6WEqcwIXzGXqsdeelojFAlyNKiEtz
-         KTL5O27JfICsO8FoUskCgR/ON5gA0/y/3OdDj2cV9WGlC2p6ME2xqLYnFS8tNl1NvT
-         Ghp1FSuIuHRSTQmgQJLxPrkjcZZIOacuzpf592EwBhj7o7JasfnhZ0w2Y4fo75Fa8X
-         muA3+K2dMOUhQ==
+        b=Ys8Cmi6POwUaireIIRTeLhKK+v7o2EqkTGQSRxqajtar5HmxCLoC3GA0eeO2Jdh7f
+         7WhzZ8247EkkROcV33xkAmsA6ZVRM/KJfhGALQlgJAH8DdgD+HuhdZyO2JrLPvyLbD
+         lK6zMp958X6Nu06bQQzZV5xZNo7ixFrZt7ypv7re/+p5ulumO9Mo1qR1WuOjxV7MnT
+         jE2p2eV+1qxQVnMDMWoSQz93kfij6KBuG7JfR+6KNumajqsqAvV6rtsOqZFK7SSRYW
+         eXSdkrbZ3DAxMyJHVNYk03/zfADcWc6XefNmEjDQtImrxrupXdOMLp+0LVQUTeANq7
+         CEq9QZi2uMpyA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
         gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
@@ -41,9 +41,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, x86@kernel.org,
         heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V12 08/20] riscv: Fixup difference with defconfig
-Date:   Tue,  5 Apr 2022 15:13:02 +0800
-Message-Id: <20220405071314.3225832-9-guoren@kernel.org>
+Subject: [PATCH V12 09/20] riscv: compat: Add basic compat data type implementation
+Date:   Tue,  5 Apr 2022 15:13:03 +0800
+Message-Id: <20220405071314.3225832-10-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
 References: <20220405071314.3225832-1-guoren@kernel.org>
@@ -61,35 +61,170 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Let's follow the origin patch's spirit:
+Implement riscv asm/compat.h for struct compat_xxx,
+is_compat_task, compat_user_regset, regset convert.
 
-The only difference between rv32_defconfig and defconfig is that
-rv32_defconfig has  CONFIG_ARCH_RV32I=y.
+The rv64 compat.h has inherited most of the structs
+from the generic one.
 
-This is helpful to compare rv64-compat-rv32 v.s. rv32-linux.
-
-Fixes: 1b937e8faa87ccfb ("RISC-V: Add separate defconfig for 32bit systems")
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Tested-by: Heiko Stuebner <heiko@sntech.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>
 ---
- arch/riscv/Makefile | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/riscv/include/asm/compat.h      | 129 +++++++++++++++++++++++++++
+ arch/riscv/include/asm/thread_info.h |   1 +
+ 2 files changed, 130 insertions(+)
+ create mode 100644 arch/riscv/include/asm/compat.h
 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 7d81102cffd4..c6ca1b9cbf71 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -154,3 +154,7 @@ PHONY += rv64_randconfig
- rv64_randconfig:
- 	$(Q)$(MAKE) KCONFIG_ALLCONFIG=$(srctree)/arch/riscv/configs/64-bit.config \
- 		-f $(srctree)/Makefile randconfig
+diff --git a/arch/riscv/include/asm/compat.h b/arch/riscv/include/asm/compat.h
+new file mode 100644
+index 000000000000..2ac955b51148
+--- /dev/null
++++ b/arch/riscv/include/asm/compat.h
+@@ -0,0 +1,129 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __ASM_COMPAT_H
++#define __ASM_COMPAT_H
 +
-+PHONY += rv32_defconfig
-+rv32_defconfig:
-+	$(Q)$(MAKE) -f $(srctree)/Makefile defconfig 32-bit.config
++#define COMPAT_UTS_MACHINE	"riscv\0\0"
++
++/*
++ * Architecture specific compatibility types
++ */
++#include <linux/types.h>
++#include <linux/sched.h>
++#include <linux/sched/task_stack.h>
++#include <asm-generic/compat.h>
++
++static inline int is_compat_task(void)
++{
++	return test_thread_flag(TIF_32BIT);
++}
++
++struct compat_user_regs_struct {
++	compat_ulong_t pc;
++	compat_ulong_t ra;
++	compat_ulong_t sp;
++	compat_ulong_t gp;
++	compat_ulong_t tp;
++	compat_ulong_t t0;
++	compat_ulong_t t1;
++	compat_ulong_t t2;
++	compat_ulong_t s0;
++	compat_ulong_t s1;
++	compat_ulong_t a0;
++	compat_ulong_t a1;
++	compat_ulong_t a2;
++	compat_ulong_t a3;
++	compat_ulong_t a4;
++	compat_ulong_t a5;
++	compat_ulong_t a6;
++	compat_ulong_t a7;
++	compat_ulong_t s2;
++	compat_ulong_t s3;
++	compat_ulong_t s4;
++	compat_ulong_t s5;
++	compat_ulong_t s6;
++	compat_ulong_t s7;
++	compat_ulong_t s8;
++	compat_ulong_t s9;
++	compat_ulong_t s10;
++	compat_ulong_t s11;
++	compat_ulong_t t3;
++	compat_ulong_t t4;
++	compat_ulong_t t5;
++	compat_ulong_t t6;
++};
++
++static inline void regs_to_cregs(struct compat_user_regs_struct *cregs,
++				 struct pt_regs *regs)
++{
++	cregs->pc	= (compat_ulong_t) regs->epc;
++	cregs->ra	= (compat_ulong_t) regs->ra;
++	cregs->sp	= (compat_ulong_t) regs->sp;
++	cregs->gp	= (compat_ulong_t) regs->gp;
++	cregs->tp	= (compat_ulong_t) regs->tp;
++	cregs->t0	= (compat_ulong_t) regs->t0;
++	cregs->t1	= (compat_ulong_t) regs->t1;
++	cregs->t2	= (compat_ulong_t) regs->t2;
++	cregs->s0	= (compat_ulong_t) regs->s0;
++	cregs->s1	= (compat_ulong_t) regs->s1;
++	cregs->a0	= (compat_ulong_t) regs->a0;
++	cregs->a1	= (compat_ulong_t) regs->a1;
++	cregs->a2	= (compat_ulong_t) regs->a2;
++	cregs->a3	= (compat_ulong_t) regs->a3;
++	cregs->a4	= (compat_ulong_t) regs->a4;
++	cregs->a5	= (compat_ulong_t) regs->a5;
++	cregs->a6	= (compat_ulong_t) regs->a6;
++	cregs->a7	= (compat_ulong_t) regs->a7;
++	cregs->s2	= (compat_ulong_t) regs->s2;
++	cregs->s3	= (compat_ulong_t) regs->s3;
++	cregs->s4	= (compat_ulong_t) regs->s4;
++	cregs->s5	= (compat_ulong_t) regs->s5;
++	cregs->s6	= (compat_ulong_t) regs->s6;
++	cregs->s7	= (compat_ulong_t) regs->s7;
++	cregs->s8	= (compat_ulong_t) regs->s8;
++	cregs->s9	= (compat_ulong_t) regs->s9;
++	cregs->s10	= (compat_ulong_t) regs->s10;
++	cregs->s11	= (compat_ulong_t) regs->s11;
++	cregs->t3	= (compat_ulong_t) regs->t3;
++	cregs->t4	= (compat_ulong_t) regs->t4;
++	cregs->t5	= (compat_ulong_t) regs->t5;
++	cregs->t6	= (compat_ulong_t) regs->t6;
++};
++
++static inline void cregs_to_regs(struct compat_user_regs_struct *cregs,
++				 struct pt_regs *regs)
++{
++	regs->epc	= (unsigned long) cregs->pc;
++	regs->ra	= (unsigned long) cregs->ra;
++	regs->sp	= (unsigned long) cregs->sp;
++	regs->gp	= (unsigned long) cregs->gp;
++	regs->tp	= (unsigned long) cregs->tp;
++	regs->t0	= (unsigned long) cregs->t0;
++	regs->t1	= (unsigned long) cregs->t1;
++	regs->t2	= (unsigned long) cregs->t2;
++	regs->s0	= (unsigned long) cregs->s0;
++	regs->s1	= (unsigned long) cregs->s1;
++	regs->a0	= (unsigned long) cregs->a0;
++	regs->a1	= (unsigned long) cregs->a1;
++	regs->a2	= (unsigned long) cregs->a2;
++	regs->a3	= (unsigned long) cregs->a3;
++	regs->a4	= (unsigned long) cregs->a4;
++	regs->a5	= (unsigned long) cregs->a5;
++	regs->a6	= (unsigned long) cregs->a6;
++	regs->a7	= (unsigned long) cregs->a7;
++	regs->s2	= (unsigned long) cregs->s2;
++	regs->s3	= (unsigned long) cregs->s3;
++	regs->s4	= (unsigned long) cregs->s4;
++	regs->s5	= (unsigned long) cregs->s5;
++	regs->s6	= (unsigned long) cregs->s6;
++	regs->s7	= (unsigned long) cregs->s7;
++	regs->s8	= (unsigned long) cregs->s8;
++	regs->s9	= (unsigned long) cregs->s9;
++	regs->s10	= (unsigned long) cregs->s10;
++	regs->s11	= (unsigned long) cregs->s11;
++	regs->t3	= (unsigned long) cregs->t3;
++	regs->t4	= (unsigned long) cregs->t4;
++	regs->t5	= (unsigned long) cregs->t5;
++	regs->t6	= (unsigned long) cregs->t6;
++};
++
++#endif /* __ASM_COMPAT_H */
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 74d888c8d631..78933ac04995 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -97,6 +97,7 @@ struct thread_info {
+ #define TIF_SECCOMP		8	/* syscall secure computing */
+ #define TIF_NOTIFY_SIGNAL	9	/* signal notifications exist */
+ #define TIF_UPROBE		10	/* uprobe breakpoint or singlestep */
++#define TIF_32BIT		11	/* compat-mode 32bit process */
+ 
+ #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+ #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
 -- 
 2.25.1
 
