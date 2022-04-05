@@ -2,160 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EA34F204D
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Apr 2022 01:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81D604F212A
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Apr 2022 06:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiDDXgb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Apr 2022 19:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48948 "EHLO
+        id S229667AbiDECVz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Apr 2022 22:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbiDDXg3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 19:36:29 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E7B33E38
-        for <linux-arch@vger.kernel.org>; Mon,  4 Apr 2022 16:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1649115268; x=1680651268;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+5MMmPyU6ZJJ0lTiy81U+nJ/FsY36S456cHlcxHKPSc=;
-  b=EXoW8yD0l2yaKTCUmyzLmcSb6gtcyKPXJFYJysT7lZ9QgAKTSI2t0jPe
-   gF+PmxXs58Am4aQMqfaoPL4ay297UxxC58XqyvuvTfBvA1LDzYTTl6r2e
-   e7cWDDC6m9meG8B+fFtWxrGZ/HNYC4sAlfZcT9kHWwf2R/aWVAdMpqLmI
-   JxQ8p1GXLSa52Hn8hT7bweN6dmfuJgbNLn0NGPWjETRBHaEYk9AZfYj4g
-   asfPq3qTODCGv9mb34H1MSIuj8nNwRZmG2NzUQT/y9tzMVR2UtNGiVmP8
-   HH7t/BbR8AbnvyjDCOD4NVDfI3PSmP/YT3/ba3lEMGUv/+vyHHs4kuuGw
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,235,1643644800"; 
-   d="scan'208";a="301247869"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Apr 2022 07:34:26 +0800
-IronPort-SDR: I/1qGMgcVCkWfxq1ltPwpHHWNbjgY2FH/iBCRsfIkh73LSrZqWJUsHM1OTIOxefSncKU47o3ri
- qAlC5K2gyHVYfoy+2rf/IgyOsmreMuCDYVUI0qvR92ec1bTEj0zGtVXKvm7McVRN65AumL6Ok/
- NqH7q5iL5ddykCBQnMDX6yfAouvG8tvAZPTCABduKJqmLlwNzFNC8QWCkgzfPdnhQgmAhPhsei
- o6wEQeMeM7n6gl0/L8xBFuGB8l3EpSxO90kfeKVZ2i6xUkHkalJ4QJqS/j3WgbFbumhosxVzYo
- 7oAzxuX7un4SRe9a5t34+B7G
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Apr 2022 16:06:00 -0700
-IronPort-SDR: TYgMAw3S1w2JuvqzS6aM/i0j94HAFJxedsJGk8ZK2d9SzWWoHB+cpaND7PANyJwCeojV2jAAx6
- lBRBHV3KtLb9IdqOx3+MP+pAsG+G7CF6/Wckn+gNdvCcpOg5XWPN3JaGMdgGRRMxuPSrt34F/H
- vI60wQ8VS9gkOGcMpFPrgkCoL/LPp7kkfpeduc2AxfLazmf6Pqjew5LjuIOtcAWBTII71NCMmV
- 7klATmY6HU6xOwGMcSay6qXT51uTsyAhSzJI0mK8XJh4zgMfKXaqOHlzN2gipJydikYLF7N6H5
- Nvs=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Apr 2022 16:34:26 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KXRv54l9Tz1SVnx
-        for <linux-arch@vger.kernel.org>; Mon,  4 Apr 2022 16:34:25 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1649115264; x=1651707265; bh=+5MMmPyU6ZJJ0lTiy81U+nJ/FsY36S456cH
-        lcxHKPSc=; b=NmXGSpihtKJypsJDwlOSBugs5bzoYpMuuBDgh/oBqIn+/Eb8mMq
-        lI6D/MptbIBjXUVDl/UMgUaRdw4yZZvwum/7IJjbVyOrmgTT+k/7Pf/TIW2Szu6k
-        gc7mfbb8PoLSzmV7Wh2r1w3TskdGFURxSc8XADmTZENiyab6u+3Ep2eTIOdqdSF6
-        NWkS2OD25F1vSAjy1UWzi5Cy3L1OuNi1q6ge7xGAumKL2x02HwBUCiLi9eXMfRNm
-        SiZfFUOR8TizSU1svfJKmtFfvy1CHmvgomNA5aLGazPZojpQLhdHYFwFf34/zQHz
-        XYUG2Wmpho9kURuveUVhewHi9fGM2cECXOw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id iGafQulLbrs2 for <linux-arch@vger.kernel.org>;
-        Mon,  4 Apr 2022 16:34:24 -0700 (PDT)
-Received: from [10.225.163.2] (unknown [10.225.163.2])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KXRv20dN1z1Rvlx;
-        Mon,  4 Apr 2022 16:34:21 -0700 (PDT)
-Message-ID: <5245096f-6003-39a9-6e5e-db2fc4f567fd@opensource.wdc.com>
-Date:   Tue, 5 Apr 2022 08:34:20 +0900
+        with ESMTP id S229668AbiDECVy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Apr 2022 22:21:54 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC8A41856B;
+        Mon,  4 Apr 2022 18:17:08 -0700 (PDT)
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2351D5xo003801;
+        Tue, 5 Apr 2022 10:13:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2351D5xo003801
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649121185;
+        bh=1XB8+03FMw6quXMbGDHBGH2OtifIRC6gyEDeKLl9zco=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fykuV1TsMj3k9Ws57DHlBBiTRfCJLa78wHm24isrFs0OYjWLYXMwTpBYPIq4cXIEn
+         HbOl44nWGcfnHr7bWwaB7WnXkTOOfHkk6+jdAmUjgu4Ndoevp2LwXY3h4udSNspNqP
+         vqdDv5VRBBqCoS/VT7h39RpohTeG1pg896jeODp9E4NQh+Sd78v12Z6++gJ6PnlzYP
+         L8It+ZYbHlhIJWQ1iMWnGF8CYqvynrJxAFL6w72QZb8r+++bKVfZ+kTyvQYYPvSiCM
+         SzCvzpqI0sJxlfL/s/jJtSPm/hmJCMC5Aqg82tgHAACtvpK/A51PmBOuRL2dfZPuBp
+         hO3NWsHy8f70Q==
+X-Nifty-SrcIP: [209.85.215.172]
+Received: by mail-pg1-f172.google.com with SMTP id 125so1420894pgc.11;
+        Mon, 04 Apr 2022 18:13:05 -0700 (PDT)
+X-Gm-Message-State: AOAM532dgC25C3ebR1RXPtQl+w0G1FdAUP3WmD0agZ99S01hrjQrrqMB
+        ByahInHY5xGkqtG0ZhB/KcTO780LNK6GweZnrUk=
+X-Google-Smtp-Source: ABdhPJzLBjj4278xvNykiD3w2yfsWF6xRsbcL3Ms+s4YFFRyIBmJxQbqTeWwwPYUkRsLo2sjYt6EdjjfGmwkd6VfZgE=
+X-Received: by 2002:a05:6a00:234f:b0:4fa:f52b:46a1 with SMTP id
+ j15-20020a056a00234f00b004faf52b46a1mr1137771pfj.32.1649121184875; Mon, 04
+ Apr 2022 18:13:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PULL] remove arch/h8300
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <20220404061948.2111820-3-masahiroy@kernel.org> <YkqhQhJIQEL2qh8C@infradead.org>
+ <YkssI2uDHRq41zjw@google.com>
+In-Reply-To: <YkssI2uDHRq41zjw@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 5 Apr 2022 10:12:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQDD4u5acyG7m4mziz-nz3D2u+ukdZZB+jZah_3JZFMTQ@mail.gmail.com>
+Message-ID: <CAK7LNAQDD4u5acyG7m4mziz-nz3D2u+ukdZZB+jZah_3JZFMTQ@mail.gmail.com>
+Subject: Re: [PATCH 2/8] kbuild: prevent exported headers from including
+ <stdlib.h>, <stdbool.h>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rich Felker <dalias@libc.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
- <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/4/22 22:22, Geert Uytterhoeven wrote:
-> Hi Arnd,
-> 
-> On Mon, Apr 4, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
->>> On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
->>>> If there are no other objections, I'll just queue this up for 5.18 in
->>>> the asm-generic
->>>> tree along with the nds32 removal.
->>>
->>> So it is the last day of te merge window and arch/h8300 is till there.
->>> And checking nw the removal has also not made it to linux-next.  Looks
->>> like it is so stale that even the removal gets ignored :(
->>
->> I was really hoping that someone else would at least comment.
-> 
-> Doh, I hadn't seen this patch before ;-)
-> Nevertheless, I do not have access to H8/300 hardware.
-> 
->> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
->> changes, but I think
->>     Rich still cares about it and wants to add J32 support (with MMU)
->> in the future
-> 
-> Yep, when the SH4 patents will have expired.
-> I believe that's planned for 2016 (Islamic calendar? ;-)
-> 
-> BTW, the unresponsiveness of the SH maintainers is also annoying.
-> Patches are sent to the list (sometimes multiple people are solving
-> the same recurring issue), but ignored.
-> 
-> Anyway, I do regular boot tests on SH4.
-> 
->> 5. K210 was added in 2020. I assume you still want to keep it.
-> 
-> FTR, I do regular boot tests on K210.
+On Tue, Apr 5, 2022 at 2:34 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Mon, Apr 04, 2022 at 12:41:54AM -0700, Christoph Hellwig wrote:
+> > On Mon, Apr 04, 2022 at 03:19:42PM +0900, Masahiro Yamada wrote:
+> > > If we can make kernel headers self-contained (that is, none of exported
+> > > kernel headers includes system headers), we will be able to add the
+> > > -nostdinc flag, but that is much far from where we stand now.
+>
+> This is something I'd like to see done. IMO, the kernel headers should
+> be the independent variable of which the libc is the dependendent
+> variable.
+>
+> Android's libc, Bionic, is making use of the UAPI headers. They are
+> doing some rewriting of UAPI headers, but I'd like to see what needs to
+> be upstreamed from there. I just noticed
+> include/uapi/linux/libc-compat.h, which seems like a good place for such
+> compat related issues.
+>
+> In particular, having UAPI_HEADER_TESTS depend on CC_CAN_LINK is
+> something I think we can works towards removing. The header tests
+> themselves don't link; they force a dependency on a prebuilt libc
+> sysroot, and they only need the headers from the sysroot because of this
+> existing circular dependency between kernel headers and libc headers.
+>
+> I'd be happy to be explicitly cc'ed on changes like this series, going
+> forward. Masahiro, if there's parts you'd like me to help with besides
+> just code review, please let me know how I can help.
 
-FYI, we identified the problem that makes userspace execution unreliable.
-Working on a fix.
+
+I wanted to make uapi headers as self-contained as possible,
+but I did not see much progress.
+
+I just fixed up some low-hanging fruits, but there are still
+many remaining issues.
+
+Thank you very much for your contribution:
+https://lore.kernel.org/all/20220404175448.46200-1-ndesaulniers@google.com/
+
+If you eliminate other issues, that would be appreciated.
+
+
+> >
+> > What is still missing for that?
+
 
 
 -- 
-Damien Le Moal
-Western Digital Research
+Best Regards
+Masahiro Yamada
