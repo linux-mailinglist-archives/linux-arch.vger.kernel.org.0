@@ -2,134 +2,329 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229534F460E
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Apr 2022 00:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F184F462B
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Apr 2022 01:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236164AbiDENYv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Apr 2022 09:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
+        id S237636AbiDEPEP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Apr 2022 11:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381352AbiDEMy3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Apr 2022 08:54:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B733429CAC
-        for <linux-arch@vger.kernel.org>; Tue,  5 Apr 2022 04:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649159875;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4tf5cml5DKG34+H+/7P2EmXNj5BSxC+Di2E2isNkLxI=;
-        b=en4YBQCHvkYBN4SIWnA1KZxiwUcwRl6eDizBNbd7KaJAKk8SHO89C6j0vdQ5SevWf1oiDT
-        kZybj9pJTD1ZSGVumcHfD5G8O1Yyb5V54SPUQDIJnoasAsLlH4N0scsTweaWly6DEHDp3p
-        nAhypvbbbhjmg3Ofuix7hwJ9tyuaL4U=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-468-biSEfP3JNCeiEzc6IAGj7Q-1; Tue, 05 Apr 2022 07:57:54 -0400
-X-MC-Unique: biSEfP3JNCeiEzc6IAGj7Q-1
-Received: by mail-wm1-f69.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so1148954wmj.5
-        for <linux-arch@vger.kernel.org>; Tue, 05 Apr 2022 04:57:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4tf5cml5DKG34+H+/7P2EmXNj5BSxC+Di2E2isNkLxI=;
-        b=vr0YwhK7cxbIO2kGuH1WPjnIDnXXNLRDWqtGXs90sC+NuAlmL04tDXh45po4VSrC6y
-         Pe/V5E/zGjVYJkIUG8moMDNNvXqoXsaxbsUUwFV4NENwtIcwBDTbU39btzvXeoqu6IZo
-         w4QoVpCONIIUtzE3ADD3HTV8bGtXE3rkYwEKfI+gILG2PtXvfKOviY9aGyakoWnW55o2
-         mX4G65yOgtNtO8t5cgOhD+0iPlOSAlWPm29vX/2/beBg2oxZPi867rRpzKNjGQdX4UfJ
-         +qkoDjl0tO5VAMwAMDWxBzQbBfZQkaAyLwHPCABKMrQuy8POzyDo2RI1FSxnB1+tfPLC
-         MDqg==
-X-Gm-Message-State: AOAM531/6n+CKiFyM/74AgZsp7k3GZ/m0rIdK5B4jv91WcXdqFrwHbBa
-        q3vhAZwrptZRQoneaAE/iXE8LIvNdQrp47+8mW/C4vcqiegzvAA05g3TZPkwH747ouXjvJ6kcoT
-        j/Al6DB4j1iS5hKRXyxB3+w==
-X-Received: by 2002:adf:8050:0:b0:206:40a:a770 with SMTP id 74-20020adf8050000000b00206040aa770mr2535500wrk.380.1649159873349;
-        Tue, 05 Apr 2022 04:57:53 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzgqTZayIX4u/UnvkTDHW17PSUoPyzp3WUxX6v1B27xgUyGVSxDLohCf9WBiOzGI5DL0p4UMA==
-X-Received: by 2002:adf:8050:0:b0:206:40a:a770 with SMTP id 74-20020adf8050000000b00206040aa770mr2535488wrk.380.1649159873090;
-        Tue, 05 Apr 2022 04:57:53 -0700 (PDT)
-Received: from redhat.com ([2.52.17.211])
-        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm1992438wmh.31.2022.04.05.04.57.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 04:57:52 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 07:57:49 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 8/8] virtio_ring.h: do not include <stdint.h> from
- exported header
-Message-ID: <20220405075738-mutt-send-email-mst@kernel.org>
-References: <20220404061948.2111820-1-masahiroy@kernel.org>
- <20220404061948.2111820-9-masahiroy@kernel.org>
+        with ESMTP id S1392207AbiDENtk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Apr 2022 09:49:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A1071A043;
+        Tue,  5 Apr 2022 05:51:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 07A13D6E;
+        Tue,  5 Apr 2022 05:51:42 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.8.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5DFE03F5A1;
+        Tue,  5 Apr 2022 05:51:39 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 13:51:30 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, gcc@gcc.gnu.org,
+        catalin.marinas@arm.com, will@kernel.org, marcan@marcan.st,
+        maz@kernel.org, szabolcs.nagy@arm.com, f.fainelli@gmail.com,
+        opendmb@gmail.com, Andrew Pinski <pinskia@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        andrew.cooper3@citrix.com, Jeremy Linton <jeremy.linton@arm.com>
+Subject: GCC 12 miscompilation of volatile asm (was: Re: [PATCH] arm64/io:
+ Remind compiler that there is a memory side effect)
+Message-ID: <Ykw7UnlTnx63z/Ca@FVFF77S0Q05N>
+References: <20220401164406.61583-1-jeremy.linton@arm.com>
+ <Ykc0xrLv391/jdJj@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404061948.2111820-9-masahiroy@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ykc0xrLv391/jdJj@FVFF77S0Q05N>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 03:19:48PM +0900, Masahiro Yamada wrote:
-> Arnd mentioned a limitation when including <stdint.h> from UAPI
-> headers. [1]
-> 
-> Besides, I'd like exported headers to be as compliant with the
-> traditional C as possible.
-> 
-> In fact, the UAPI headers are compile-tested with -std=c90 (see
-> usr/include/Makefile) even though the kernel itself is now built
-> with -std=gnu11.
-> 
-> Currently, include/uapi/linux/virtio_ring.h includes <stdint.h>
-> presumably because it uses uintptr_t.
-> 
-> Replace it with __kernel_uintptr_t, and stop including <stdint.h>.
-> 
-> [1]: https://lore.kernel.org/all/CAK8P3a0bz8XYJOsmND2=CT_oTDmGMJGaRo9+QMroEhpekSMEaQ@mail.gmail.com/
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Hi all,
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+[adding kernel folk who work on asm stuff]
 
-> ---
-> 
->  include/uapi/linux/virtio_ring.h | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/uapi/linux/virtio_ring.h b/include/uapi/linux/virtio_ring.h
-> index 476d3e5c0fe7..6329e4ff35f4 100644
-> --- a/include/uapi/linux/virtio_ring.h
-> +++ b/include/uapi/linux/virtio_ring.h
-> @@ -31,9 +31,7 @@
->   * SUCH DAMAGE.
->   *
->   * Copyright Rusty Russell IBM Corporation 2007. */
-> -#ifndef __KERNEL__
-> -#include <stdint.h>
-> -#endif
-> +
->  #include <linux/types.h>
->  #include <linux/virtio_types.h>
->  
-> @@ -196,7 +194,7 @@ static inline void vring_init(struct vring *vr, unsigned int num, void *p,
->  	vr->num = num;
->  	vr->desc = p;
->  	vr->avail = (struct vring_avail *)((char *)p + num * sizeof(struct vring_desc));
-> -	vr->used = (void *)(((uintptr_t)&vr->avail->ring[num] + sizeof(__virtio16)
-> +	vr->used = (void *)(((__kernel_uintptr_t)&vr->avail->ring[num] + sizeof(__virtio16)
->  		+ align-1) & ~(align - 1));
->  }
->  
-> -- 
-> 2.32.0
-> 
-> 
+As a heads-up, GCC 12 (not yet released) appears to erroneously optimize away
+calls to functions with volatile asm. Szabolcs has raised an issue on the GCC
+bugzilla:  
 
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105160
+
+... which is a P1 release blocker, and is currently being investigated.
+
+Jemery originally reported this as an issue with {readl,writel}_relaxed(), but
+the underlying problem doesn't have anything to do with those specifically.
+
+I'm dumping a bunch of info here largely for posterity / archival, and to find
+out who (from the kernel side) is willing and able to test proposed compiler
+fixes, once those are available.
+
+I'm happy to do so for aarch64; Peter, I assume you'd be happy to look at the
+x86 side?
+
+This is a generic issue, and 
+
+I wrote test cases for aarch64 and x86_64. Those are inline later in this mail,
+and currently you can see them on compiler explorer:
+
+  aarch64: https://godbolt.org/z/vMczqjYvs
+
+  x86_64: https://godbolt.org/z/cveff9hq5
+
+
+
+My aarch64 test case is:
+
+| #define sysreg_read(regname)		\
+| ({					\
+| 	unsigned long __sr_val;		\
+| 	asm volatile(			\
+| 	"mrs %0, " #regname "\n"	\
+| 	: "=r" (__sr_val));		\
+| 					\
+| 	__sr_val;			\
+| })
+| 
+| #define sysreg_write(regname, __sw_val)	\
+| do {					\
+| 	asm volatile(			\
+| 	"msr " #regname ", %0\n"	\
+| 	:				\
+| 	: "r" (__sw_val));		\
+| } while (0)
+| 
+| #define isb()				\
+| do {					\
+| 	asm volatile(			\
+| 	"isb"				\
+| 	:				\
+| 	:				\
+| 	: "memory");			\
+| } while (0)
+| 
+| static unsigned long sctlr_read(void)
+| {
+| 	return sysreg_read(sctlr_el1);
+| }
+| 
+| static void sctlr_write(unsigned long val)
+| {
+| 	sysreg_write(sctlr_el1, val);
+| }
+| 
+| static void sctlr_rmw(void)
+| {
+| 	unsigned long val;
+| 
+| 	val = sctlr_read();
+| 	val |= 1UL << 7;
+| 	sctlr_write(val);
+| }
+| 
+| void sctlr_read_multiple(void)
+| {
+| 	sctlr_read();
+| 	sctlr_read();
+| 	sctlr_read();
+| 	sctlr_read();
+| }
+| 
+| void sctlr_write_multiple(void)
+| {
+| 	sctlr_write(0);
+| 	sctlr_write(0);
+| 	sctlr_write(0);
+| 	sctlr_write(0);
+| 	sctlr_write(0);
+| }
+| 
+| void sctlr_rmw_multiple(void)
+| {
+| 	sctlr_rmw();
+| 	sctlr_rmw();
+| 	sctlr_rmw();
+| 	sctlr_rmw();
+| }
+| 
+| void function(void)
+| {
+| 	sctlr_read_multiple();
+| 	sctlr_write_multiple();
+| 	sctlr_rmw_multiple();
+| 
+| 	isb();
+| }
+
+Per compiler explorer (https://godbolt.org/z/vMczqjYvs) GCC trunk currently
+compiles this as:
+
+| sctlr_rmw:
+|         mrs x0, sctlr_el1
+|         orr     x0, x0, 128
+|         msr sctlr_el1, x0
+|         ret
+| sctlr_read_multiple:
+|         mrs x0, sctlr_el1
+|         mrs x0, sctlr_el1
+|         mrs x0, sctlr_el1
+|         mrs x0, sctlr_el1
+|         ret
+| sctlr_write_multiple:
+|         mov     x0, 0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         ret
+| sctlr_rmw_multiple:
+|         ret
+| function:
+|         isb
+|         ret
+
+Whereas GCC 11.2 compiles this as:
+
+| sctlr_rmw:
+|         mrs x0, sctlr_el1
+|         orr     x0, x0, 128
+|         msr sctlr_el1, x0
+|         ret
+| sctlr_read_multiple:
+|         mrs x0, sctlr_el1
+|         mrs x0, sctlr_el1
+|         mrs x0, sctlr_el1
+|         mrs x0, sctlr_el1
+|         ret
+| sctlr_write_multiple:
+|         mov     x0, 0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         msr sctlr_el1, x0
+|         ret
+| sctlr_rmw_multiple:
+|         stp     x29, x30, [sp, -16]!
+|         mov     x29, sp
+|         bl      sctlr_rmw
+|         bl      sctlr_rmw
+|         bl      sctlr_rmw
+|         bl      sctlr_rmw
+|         ldp     x29, x30, [sp], 16
+|         ret
+| function:
+|         stp     x29, x30, [sp, -16]!
+|         mov     x29, sp
+|         bl      sctlr_read_multiple
+|         bl      sctlr_write_multiple
+|         bl      sctlr_rmw_multiple
+|         isb
+|         ldp     x29, x30, [sp], 16
+|         ret
+
+
+
+My x86_64 test case is:
+
+| unsigned long rdmsr(unsigned long reg)
+| {
+|     unsigned int lo, hi;
+| 
+|     asm volatile(
+|     "rdmsr"
+|     : "=d" (hi), "=a" (lo)
+|     : "c" (reg)
+|     );
+| 
+|     return ((unsigned long)hi << 32) | lo;
+| }
+| 
+| void wrmsr(unsigned long reg, unsigned long val)
+| {
+|     unsigned int lo = val;
+|     unsigned int hi = val >> 32;
+| 
+|     asm volatile(
+|     "wrmsr"
+|     :
+|     : "d" (hi), "a" (lo), "c" (reg)
+|     );
+| }
+| 
+| void msr_rmw_set_bits(unsigned long reg, unsigned long bits)
+| {
+|     unsigned long val;
+| 
+|     val = rdmsr(reg);
+|     val |= bits;
+|     wrmsr(reg, val);
+| }
+| 
+| void func_with_msr_side_effects(unsigned long reg)
+| {
+|     msr_rmw_set_bits(reg, 1UL << 0);
+|     msr_rmw_set_bits(reg, 1UL << 1);
+|     msr_rmw_set_bits(reg, 1UL << 2);
+|     msr_rmw_set_bits(reg, 1UL << 3);
+| }
+
+Per compiler explorer (https://godbolt.org/z/cveff9hq5) GCC trunk currently
+compiles this as:
+
+| msr_rmw_set_bits:
+|         mov     rcx, rdi
+|         rdmsr
+|         sal     rdx, 32
+|         mov     eax, eax
+|         or      rax, rsi
+|         or      rax, rdx
+|         mov     rdx, rax
+|         shr     rdx, 32
+|         wrmsr
+|         ret
+| func_with_msr_side_effects:
+|         ret
+
+While GCC 11.2 compiles that as:
+
+| msr_rmw_set_bits:
+|         mov     rcx, rdi
+|         rdmsr
+|         sal     rdx, 32
+|         mov     eax, eax
+|         or      rax, rsi
+|         or      rax, rdx
+|         mov     rdx, rax
+|         shr     rdx, 32
+|         wrmsr
+|         ret
+| func_with_msr_side_effects:
+|         push    rbp
+|         push    rbx
+|         mov     rbx, rdi
+|         mov     rbp, rsi
+|         call    msr_rmw_set_bits
+|         mov     rsi, rbp
+|         mov     rdi, rbx
+|         call    msr_rmw_set_bits
+|         mov     rsi, rbp
+|         mov     rdi, rbx
+|         call    msr_rmw_set_bits
+|         mov     rsi, rbp
+|         mov     rdi, rbx
+|         call    msr_rmw_set_bits
+|         pop     rbx
+|         pop     rbp
+|         ret
+
+Thanks,
+Mark.
