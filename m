@@ -2,62 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEAA4F43F9
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Apr 2022 00:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229534F460E
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Apr 2022 00:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238966AbiDENY5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Apr 2022 09:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S236164AbiDENYv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Apr 2022 09:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379577AbiDELlS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Apr 2022 07:41:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370A21A3BB;
-        Tue,  5 Apr 2022 03:57:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649156228; x=1680692228;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6wvRk7VHAMl/TnyqPrVEEVDPoFVFwLe5+Khs3jMmwas=;
-  b=bYAZPMrtmcnGByEJtQ+SELmg3oDgiX1O4z4P2bRFYLK5gKgQfKj97Ohc
-   /piztIIkFyYUVs54lvxMEhNIkcGrzRjB4qIdpqbH7A7JSKXaIl+ogNKVT
-   k2V4mZP2i4WAxDgBkqd26hqJD19gTUJ6pUiQ1AmX9pMQHdNxVU++v+irf
-   6FqWP00XditWhsdWj5itRgNG3MKiK13oOGGResA/zUPHTI/mUCro4PoYj
-   3S8H8IgDRCax0aHYta/PJjMyrnFtN5AlsqB+xTN6vRNp0rNtTlLKPFPts
-   50hrH1+2ti0EV3qbbdA+LVXI2GGCR5Zw3L8U4CnzhBoKAERFgbA/rLw20
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="285678809"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="285678809"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 03:57:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="523414728"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 05 Apr 2022 03:57:05 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbgrw-000364-HN;
-        Tue, 05 Apr 2022 10:57:04 +0000
-Date:   Tue, 5 Apr 2022 18:56:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     kbuild-all@lists.01.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] csky: optimize memcpy_{from,to}io() and memset_io()
-Message-ID: <202204051859.sUrlh86t-lkp@intel.com>
-References: <20220404144427.2793051-1-guoren@kernel.org>
+        with ESMTP id S1381352AbiDEMy3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Apr 2022 08:54:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B733429CAC
+        for <linux-arch@vger.kernel.org>; Tue,  5 Apr 2022 04:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649159875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4tf5cml5DKG34+H+/7P2EmXNj5BSxC+Di2E2isNkLxI=;
+        b=en4YBQCHvkYBN4SIWnA1KZxiwUcwRl6eDizBNbd7KaJAKk8SHO89C6j0vdQ5SevWf1oiDT
+        kZybj9pJTD1ZSGVumcHfD5G8O1Yyb5V54SPUQDIJnoasAsLlH4N0scsTweaWly6DEHDp3p
+        nAhypvbbbhjmg3Ofuix7hwJ9tyuaL4U=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-biSEfP3JNCeiEzc6IAGj7Q-1; Tue, 05 Apr 2022 07:57:54 -0400
+X-MC-Unique: biSEfP3JNCeiEzc6IAGj7Q-1
+Received: by mail-wm1-f69.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so1148954wmj.5
+        for <linux-arch@vger.kernel.org>; Tue, 05 Apr 2022 04:57:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4tf5cml5DKG34+H+/7P2EmXNj5BSxC+Di2E2isNkLxI=;
+        b=vr0YwhK7cxbIO2kGuH1WPjnIDnXXNLRDWqtGXs90sC+NuAlmL04tDXh45po4VSrC6y
+         Pe/V5E/zGjVYJkIUG8moMDNNvXqoXsaxbsUUwFV4NENwtIcwBDTbU39btzvXeoqu6IZo
+         w4QoVpCONIIUtzE3ADD3HTV8bGtXE3rkYwEKfI+gILG2PtXvfKOviY9aGyakoWnW55o2
+         mX4G65yOgtNtO8t5cgOhD+0iPlOSAlWPm29vX/2/beBg2oxZPi867rRpzKNjGQdX4UfJ
+         +qkoDjl0tO5VAMwAMDWxBzQbBfZQkaAyLwHPCABKMrQuy8POzyDo2RI1FSxnB1+tfPLC
+         MDqg==
+X-Gm-Message-State: AOAM531/6n+CKiFyM/74AgZsp7k3GZ/m0rIdK5B4jv91WcXdqFrwHbBa
+        q3vhAZwrptZRQoneaAE/iXE8LIvNdQrp47+8mW/C4vcqiegzvAA05g3TZPkwH747ouXjvJ6kcoT
+        j/Al6DB4j1iS5hKRXyxB3+w==
+X-Received: by 2002:adf:8050:0:b0:206:40a:a770 with SMTP id 74-20020adf8050000000b00206040aa770mr2535500wrk.380.1649159873349;
+        Tue, 05 Apr 2022 04:57:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzgqTZayIX4u/UnvkTDHW17PSUoPyzp3WUxX6v1B27xgUyGVSxDLohCf9WBiOzGI5DL0p4UMA==
+X-Received: by 2002:adf:8050:0:b0:206:40a:a770 with SMTP id 74-20020adf8050000000b00206040aa770mr2535488wrk.380.1649159873090;
+        Tue, 05 Apr 2022 04:57:53 -0700 (PDT)
+Received: from redhat.com ([2.52.17.211])
+        by smtp.gmail.com with ESMTPSA id f11-20020a7bcc0b000000b0037e0c362b6dsm1992438wmh.31.2022.04.05.04.57.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 04:57:52 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 07:57:49 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 8/8] virtio_ring.h: do not include <stdint.h> from
+ exported header
+Message-ID: <20220405075738-mutt-send-email-mst@kernel.org>
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <20220404061948.2111820-9-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404144427.2793051-1-guoren@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20220404061948.2111820-9-masahiroy@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,148 +77,59 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+On Mon, Apr 04, 2022 at 03:19:48PM +0900, Masahiro Yamada wrote:
+> Arnd mentioned a limitation when including <stdint.h> from UAPI
+> headers. [1]
+> 
+> Besides, I'd like exported headers to be as compliant with the
+> traditional C as possible.
+> 
+> In fact, the UAPI headers are compile-tested with -std=c90 (see
+> usr/include/Makefile) even though the kernel itself is now built
+> with -std=gnu11.
+> 
+> Currently, include/uapi/linux/virtio_ring.h includes <stdint.h>
+> presumably because it uses uintptr_t.
+> 
+> Replace it with __kernel_uintptr_t, and stop including <stdint.h>.
+> 
+> [1]: https://lore.kernel.org/all/CAK8P3a0bz8XYJOsmND2=CT_oTDmGMJGaRo9+QMroEhpekSMEaQ@mail.gmail.com/
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I love your patch! Yet something to improve:
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-[auto build test ERROR on soc/for-next]
-[also build test ERROR on linus/master linux/master v5.18-rc1 next-20220405]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> ---
+> 
+>  include/uapi/linux/virtio_ring.h | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/uapi/linux/virtio_ring.h b/include/uapi/linux/virtio_ring.h
+> index 476d3e5c0fe7..6329e4ff35f4 100644
+> --- a/include/uapi/linux/virtio_ring.h
+> +++ b/include/uapi/linux/virtio_ring.h
+> @@ -31,9 +31,7 @@
+>   * SUCH DAMAGE.
+>   *
+>   * Copyright Rusty Russell IBM Corporation 2007. */
+> -#ifndef __KERNEL__
+> -#include <stdint.h>
+> -#endif
+> +
+>  #include <linux/types.h>
+>  #include <linux/virtio_types.h>
+>  
+> @@ -196,7 +194,7 @@ static inline void vring_init(struct vring *vr, unsigned int num, void *p,
+>  	vr->num = num;
+>  	vr->desc = p;
+>  	vr->avail = (struct vring_avail *)((char *)p + num * sizeof(struct vring_desc));
+> -	vr->used = (void *)(((uintptr_t)&vr->avail->ring[num] + sizeof(__virtio16)
+> +	vr->used = (void *)(((__kernel_uintptr_t)&vr->avail->ring[num] + sizeof(__virtio16)
+>  		+ align-1) & ~(align - 1));
+>  }
+>  
+> -- 
+> 2.32.0
+> 
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/csky-optimize-memcpy_-from-to-io-and-memset_io/20220404-224954
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: csky-randconfig-r034-20220405 (https://download.01.org/0day-ci/archive/20220405/202204051859.sUrlh86t-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2e50048555b298851590ec8272100b595b8801f9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review guoren-kernel-org/csky-optimize-memcpy_-from-to-io-and-memset_io/20220404-224954
-        git checkout 2e50048555b298851590ec8272100b595b8801f9
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   csky-linux-ld: drivers/bus/mhi/core/init.o: in function `mhi_prepare_for_power_up':
->> init.c:(.text+0xfaa): undefined reference to `__memset_io'
->> csky-linux-ld: init.c:(.text+0x1028): undefined reference to `__memset_io'
-   csky-linux-ld: drivers/pci/pci-sysfs.o: in function `pci_read_rom':
-   pci-sysfs.c:(.text+0x3a6): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/pci/pci-sysfs.o: in function `pci_write_config':
-   pci-sysfs.c:(.text+0x534): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/pci/switch/switchtec.o: in function `io_string_show':
-   switchtec.c:(.text+0x7a2): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/pci/switch/switchtec.o: in function `vendor_id_show':
-   switchtec.c:(.text+0x89c): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/pci/switch/switchtec.o: in function `mrpc_cmd_submit.part.0':
-   switchtec.c:(.text+0x1c64): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/pci/switch/switchtec.o: in function `switchtec_dev_write':
-   switchtec.c:(.text+0x1dbc): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/pci/switch/switchtec.o: in function `mrpc_complete_cmd':
-   switchtec.c:(.text+0x1f78): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: switchtec.c:(.text+0x1f8c): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_read':
-   dpaa2-console.c:(.text+0xd8): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: dpaa2-console.c:(.text+0x112): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: dpaa2-console.c:(.text+0x1b0): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/misc/sram.o: in function `sram_write':
-   sram.c:(.text+0xa8): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/misc/sram.o: in function `sram_read':
-   sram.c:(.text+0xe8): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/misc/sram.o: in function `kmalloc_array.constprop.0':
-   sram.c:(.text+0x15c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sram.c:(.text+0x164): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/ntb/test/ntb_tool.o: in function `tool_peer_mw_write':
->> ntb_tool.c:(.text+0xee6): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/ntb/test/ntb_tool.o: in function `tool_peer_mw_read':
-   ntb_tool.c:(.text+0xf70): undefined reference to `__memcpy_toio'
->> csky-linux-ld: ntb_tool.c:(.text+0xf7c): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/ntb/test/ntb_tool.o: in function `ntb_peer_port_number':
->> ntb_tool.c:(.text+0x1018): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/ntb/test/ntb_perf.o: in function `perf_copy_chunk':
->> ntb_perf.c:(.text+0x20ca): undefined reference to `__memcpy_toio'
->> csky-linux-ld: ntb_perf.c:(.text+0x211c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/ntb/ntb_transport.o: in function `ntb_memcpy_tx':
->> ntb_transport.c:(.text+0x9ba): undefined reference to `__memcpy_toio'
->> csky-linux-ld: ntb_transport.c:(.text+0xa04): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sound/pci/rme96.o: in function `snd_rme96_capture_copy_kernel':
->> rme96.c:(.text+0x74e): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: sound/pci/rme96.o: in function `snd_rme96_capture_copy':
-   rme96.c:(.text+0x784): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: sound/pci/rme96.o: in function `snd_rme96_playback_copy_kernel':
->> rme96.c:(.text+0x87e): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sound/pci/rme96.o: in function `snd_rme96_playback_silence':
->> rme96.c:(.text+0x8c6): undefined reference to `__memset_io'
->> csky-linux-ld: rme96.c:(.text+0x8f4): undefined reference to `__memcpy_toio'
->> csky-linux-ld: rme96.c:(.text+0x8fc): undefined reference to `__memset_io'
-   csky-linux-ld: sound/soc/fsl/fsl_xcvr.o: in function `irq0_isr':
->> fsl_xcvr.c:(.text+0x52c): undefined reference to `__memcpy_fromio'
->> csky-linux-ld: fsl_xcvr.c:(.text+0x546): undefined reference to `__memcpy_fromio'
->> csky-linux-ld: fsl_xcvr.c:(.text+0x588): undefined reference to `__memset_io'
-   csky-linux-ld: fsl_xcvr.c:(.text+0x6a4): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: fsl_xcvr.c:(.text+0x6ac): undefined reference to `__memset_io'
-   csky-linux-ld: fsl_xcvr.c:(.text+0x6f2): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: fsl_xcvr.c:(.text+0x72c): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/dma/ti/edma.o: in function `edma_write_slot':
-   edma.c:(.text+0x158): undefined reference to `__memcpy_toio'
-   csky-linux-ld: edma.c:(.text+0x174): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/dma/ti/edma.o: in function `dma_ccerr_handler':
-   edma.c:(.text+0x24c8): undefined reference to `__memcpy_fromio'
->> csky-linux-ld: edma.c:(.text+0x2548): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/tty/serial/jsm/jsm_neo.o: in function `neo_copy_data_from_queue_to_uart':
->> jsm_neo.c:(.text+0x624): undefined reference to `__memcpy_toio'
->> csky-linux-ld: jsm_neo.c:(.text+0x69c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/tty/serial/jsm/jsm_neo.o: in function `neo_copy_data_from_uart_to_queue':
-   jsm_neo.c:(.text+0x8ce): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: jsm_neo.c:(.text+0x93a): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: jsm_neo.c:(.text+0x960): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: jsm_neo.c:(.text+0x9fe): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: jsm_neo.c:(.text+0xa94): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/misc/habanalabs/common/firmware_if.o: in function `hl_fw_copy_fw_to_device':
-   firmware_if.c:(.text+0x106): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/misc/habanalabs/common/firmware_if.o: in function `usleep_range':
-   firmware_if.c:(.text+0x130): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/misc/habanalabs/common/firmware_if.o: in function `hl_fw_static_init_cpu':
-   firmware_if.c:(.text+0xafa): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: firmware_if.c:(.text+0xb60): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/misc/habanalabs/common/firmware_if.o: in function `hl_fw_read_preboot_status':
-   firmware_if.c:(.text+0x2208): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: firmware_if.c:(.text+0x2290): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/misc/habanalabs/common/firmware_if.o: in function `hl_fw_dynamic_request_descriptor':
-   firmware_if.c:(.text.unlikely+0x530): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: drivers/misc/habanalabs/common/firmware_if.o:firmware_if.c:(.text.unlikely+0x628): more undefined references to `__memcpy_fromio' follow
-   csky-linux-ld: drivers/misc/habanalabs/common/firmware_if.o: in function `hl_fw_dynamic_send_msg.constprop.0':
-   firmware_if.c:(.text.unlikely+0x7dc): undefined reference to `__memcpy_toio'
-   csky-linux-ld: firmware_if.c:(.text.unlikely+0x86c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/misc/habanalabs/goya/goya.o: in function `goya_pqe_write':
-   goya.c:(.text+0x3148): undefined reference to `__memcpy_toio'
-   csky-linux-ld: drivers/misc/habanalabs/goya/goya.o: in function `goya_get_dma_desc_list_size':
-   goya.c:(.text+0x3240): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sound/core/memory.o: in function `copy_to_user_fromio':
-   memory.c:(.text+0x6e): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: sound/core/memory.o: in function `copy_from_user_toio':
-   memory.c:(.text+0x116): undefined reference to `__memcpy_toio'
-   csky-linux-ld: memory.c:(.text+0x14c): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: memory.c:(.text+0x15c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sound/pci/mixart/mixart_core.o: in function `get_msg.constprop.0':
-   mixart_core.c:(.text+0x29c): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: mixart_core.c:(.text+0x310): undefined reference to `__memcpy_fromio'
-   csky-linux-ld: sound/pci/mixart/mixart_hwdep.o: in function `mixart_dsp_load':
-   mixart_hwdep.c:(.text+0x538): undefined reference to `__memcpy_toio'
-   csky-linux-ld: mixart_hwdep.c:(.text+0x59c): undefined reference to `__memcpy_toio'
-   csky-linux-ld: mixart_hwdep.c:(.text+0x67e): undefined reference to `__memcpy_toio'
-   csky-linux-ld: mixart_hwdep.c:(.text+0x710): undefined reference to `__memcpy_toio'
-   csky-linux-ld: mixart_hwdep.c:(.text+0x776): undefined reference to `__memcpy_toio'
-   csky-linux-ld: sound/pci/mixart/mixart_hwdep.o:mixart_hwdep.c:(.text+0x888): more undefined references to `__memcpy_toio' follow
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
