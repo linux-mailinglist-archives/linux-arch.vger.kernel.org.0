@@ -2,197 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55A14F6D22
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Apr 2022 23:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1A64F6ED6
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Apr 2022 01:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236129AbiDFVoG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Apr 2022 17:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S238114AbiDFXsL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Apr 2022 19:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237412AbiDFVnh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Apr 2022 17:43:37 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021BCF8EE4
-        for <linux-arch@vger.kernel.org>; Wed,  6 Apr 2022 14:21:50 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id y3-20020a056830070300b005cd9c4d03feso2598652ots.3
-        for <linux-arch@vger.kernel.org>; Wed, 06 Apr 2022 14:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HfFrcmd70k7cFbm2ZXnWFiX/H5FhSCRXyrLZ2pjFPSI=;
-        b=JWAdKKIGlR2GXRY2EyBHJpOHb12AGoA/GSAiazO0z3sUuJl2pbLq3y8f2LLZRiK7ag
-         jF0pPAE80m/StQPAn0HI9Jocd1N932K40FWD3K+6jyCPxSDW85yi+b5RM+j3udvxF4+j
-         4zvhIFli6DskhDlP9Zev4QI97hRqVRtIMcyyKrm7nX3owwnxPNDHJhwIikd2t2FloXmA
-         Wk/pQwPT1sVLvBHFuFUW6X+vOB/f3di+0I5KpQAE5mktFyy59esdv+bNVlWExchHjewr
-         ahjX/NWsjkK4v6+AkxwjmUhoWZbdfC6ilBaig9EYYETbKicXqqZULA+yUUodPHV8EKDI
-         QR8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HfFrcmd70k7cFbm2ZXnWFiX/H5FhSCRXyrLZ2pjFPSI=;
-        b=mJhMx7pCuQ8CkQecvdtAW6KnTn0TjqZ5OO/FE7WHIGKQshUrvxbhWmDEnwjZ7hp3aH
-         MGWLR7W/68qNYSaJvm+EtiPL1mctZhjT0pKczIKf2nN7O87eTai0WxsmZDrbEnCoVAQY
-         Q9/lLy2heLyyj9sP3G3Psq0bscX6jYWZ7tBqnKTUnYQr56kUyd60j78f1BFrtGDEcZTi
-         /k83Ff4VVfrFDIpzKytUjBcS8HdC2vvPf0Ei1NpMU9vUmAGYxoBOUYoi9aNBdRoc3AMC
-         xCdkZU6hbtBmTT2qS9Tc4Q8ub7jwV3t7hxQ+EGZgL1mAmY+ia822pnTf414HTtVCCYoK
-         Dd+g==
-X-Gm-Message-State: AOAM533b+RB2k1myDow8PXyU1PAkq7CxqKtqGGhCKgkr7ILWAovp4MSa
-        cSf+OL+eDPYA2VJCvdFEarRIQg==
-X-Google-Smtp-Source: ABdhPJxZn7W+k8uRxWVFozQX95YWH7+EoUvtnn2OqSRwx2HUCEvYG912nG22JE+OWDU4RAdahCRb6g==
-X-Received: by 2002:a9d:4d12:0:b0:5c9:4997:452c with SMTP id n18-20020a9d4d12000000b005c94997452cmr3741105otf.127.1649280109270;
-        Wed, 06 Apr 2022 14:21:49 -0700 (PDT)
-Received: from [192.168.86.186] ([136.62.4.88])
-        by smtp.gmail.com with ESMTPSA id e12-20020a4aa60c000000b00324bb45d7ecsm6352052oom.48.2022.04.06.14.21.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 14:21:48 -0700 (PDT)
-Message-ID: <c3e7ee64-68fc-ed53-4a90-9f9296583d7c@landley.net>
-Date:   Wed, 6 Apr 2022 16:25:48 -0500
+        with ESMTP id S238093AbiDFXsK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Apr 2022 19:48:10 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CD4150415
+        for <linux-arch@vger.kernel.org>; Wed,  6 Apr 2022 16:46:12 -0700 (PDT)
+Date:   Wed, 06 Apr 2022 23:46:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1649288767;
+        bh=msv3nOGjLIGTrH1A0ydlYoFmzBEnAkJ0hjTDqARjFZY=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=VO5Vhnal3btdccM03/zjx2HXeh90LnPQtZxVlbYpXI/CIiB1agDAywbdGZh5hywcq
+         ABZlR70nWy5Ow9CkEO/b7fi6iEkoZCzmSITCMiB7MjVivjekK659yX21GM2dNVOIRA
+         mh59hg3iMWpa2Z+NfVHe3TPbA6B69hxMVJR5JzD8ZsZ1nW2u9MIUMZBgDT1MsW60lq
+         A+aMAv9jOnBanleUgziFJ7IbNKttao6DHkEcfLY675fWBdkapXa3bm8kOBxcieAygi
+         9GJ9QNw4ZrZLFW2iSKAgXg0dG1qMEwHClLk4n7XC6K8HFN/eb1kQPE6jYtGllJ3H9d
+         6DkQR7EZW/BwQ==
+To:     Arnd Bergmann <arnd@arndb.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>,
+        Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Lobakin <alobakin@pm.me>
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: [PATCH] asm-generic: fix __get_unaligned_be48() on 32 bit platforms
+Message-ID: <20220406233909.529613-1-alobakin@pm.me>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PULL] remove arch/h8300
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rich Felker <dalias@libc.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
- <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/4/22 08:22, Geert Uytterhoeven wrote:
-> Hi Arnd,
-> 
-> On Mon, Apr 4, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
->> > On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
->> > > If there are no other objections, I'll just queue this up for 5.18 in
->> > > the asm-generic
->> > > tree along with the nds32 removal.
->> >
->> > So it is the last day of te merge window and arch/h8300 is till there.
->> > And checking nw the removal has also not made it to linux-next.  Looks
->> > like it is so stale that even the removal gets ignored :(
->>
->> I was really hoping that someone else would at least comment.
-> 
-> Doh, I hadn't seen this patch before ;-)
-> Nevertheless, I do not have access to H8/300 hardware.
+While testing the new macros for working with 48 bit containers,
+I faced a weird problem:
 
-The 8300 never got qemu support but I had lunch with the maintainer in Tokyo a
-few years back and he showed me how to use gdb to simulate it, which included
-booting Linux under the gdb simulation (built-in initramfs talking to serial
-console). Here's somebody else using gdb simulation for h8/300:
+32 + 16: 0x2ef6e8da 0x79e60000
+48: 0xffffe8da + 0x79e60000
 
-https://www4.cs.fau.de/~felser/RCXSimulator/
+All the bits starting from the 32nd were getting 1d in 9/10 cases.
+The debug showed:
 
-I'm interested in H8300 because it's a tiny architecture (under 6k lines total,
-in 93 files) and thus a good way to see what a minimal Linux port looks like. If
-somebody would like to suggest a different one for that...
+p[0]: 0x00002e0000000000
+p[1]: 0x00002ef600000000
+p[2]: 0xffffffffe8000000
+p[3]: 0xffffffffe8da0000
+p[4]: 0xffffffffe8da7900
+p[5]: 0xffffffffe8da79e6
 
->> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
->> changes, but I think
->>     Rich still cares about it and wants to add J32 support (with MMU)
->> in the future
-> 
-> Yep, when the SH4 patents will have expired.
+that the value becomes a garbage after the third OR, i.e. on
+`p[2] << 24`.
+When the 31st bit is 1 and there's no explicit cast to an unsigned,
+it's being considered as a signed int and getting sign-extended on
+OR, so `e8000000` becomes `ffffffffe8000000` and messes up the
+result.
+Cast the @p[2] to u64 as well to avoid this. Now:
 
-They've had a working J32 on FPGA for a while now, the problem is porting Linux
-to it. The MMU design they went with wasn't compatible with sh3/sh4. (Userspace
-is, kernel side needs some tweaking.) And they don't want to finalize the design
-until they have proper test loads running on it, and then they went off to do
-VPN hardware and such during the pandemic...
+32 + 16: 0x7ef6a490 0xddc10000
+48: 0x7ef6a490 + 0xddc10000
 
-> I believe that's planned for 2016 (Islamic calendar? ;-)
+p[0]: 0x00007e0000000000
+p[1]: 0x00007ef600000000
+p[2]: 0x00007ef6a4000000
+p[3]: 0x00007ef6a4900000
+p[4]: 0x00007ef6a490dd00
+p[5]: 0x00007ef6a490ddc1
 
-The website's kind of archived and needs to be completely redone. (It moved
-hosts and I lost access to update it for a while, and I got sucked into other
-projects since. The mailing list server is also mothballed. Ask Jeff, I brought
-it up every weekly call for 6 months...)
+Fixes: c2ea5fcf53d5 ("asm-generic: introduce be48 unaligned accessors")
+Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+---
+ include/asm-generic/unaligned.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jeff's team is working on making a J2 asic this year (through sky130), and
-everything else is queued up after that. They've been grabbing various I/O
-subsystems (like the GPS correlators and crypto engine and such) and doing work
-on them to make go/no-go decisions for the asic inclusion. (Lots of activity
-goes by on the Signal channel, but I can't even get cut and paste to work in
-that thing's Android app, and I don't really have the domain expertise to help
-out with that part.)
+diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligne=
+d.h
+index 8fc637379899..df30f11b4a46 100644
+--- a/include/asm-generic/unaligned.h
++++ b/include/asm-generic/unaligned.h
+@@ -143,7 +143,7 @@ static inline void put_unaligned_be48(const u64 val, vo=
+id *p)
 
-> BTW, the unresponsiveness of the SH maintainers is also annoying.
-> Patches are sent to the list (sometimes multiple people are solving
-> the same recurring issue), but ignored.
+ static inline u64 __get_unaligned_be48(const u8 *p)
+ {
+-=09return (u64)p[0] << 40 | (u64)p[1] << 32 | p[2] << 24 |
++=09return (u64)p[0] << 40 | (u64)p[1] << 32 | (u64)p[2] << 24 |
+ =09=09p[3] << 16 | p[4] << 8 | p[5];
+ }
 
-I mailed four or five turtle boards out to people last year, in hopes of getting
-wider testing, but everybody I sent one to seems to have vanished. (The pandemic
-chip shortage kinda derailed plans to productize that...)
+--
+2.35.1
 
-I tested 5.17 on J2 FPGA when it came out, and it booted with two local patches:
 
-1) Commit 790eb67374 needs to be reverted or the j2 boot just hangs before
-producing any console output. Dunno why, it seems COMPLETELY unrelated, and yet.
-(Wild guess: disturbs the alignment of some important piece of data? Rich knows
-and it's in queue.)
-
-2) This patch from Rich stops the j2 boot messages from being a thousand lines
-of IRQ warnings, but he called it a hack when he sent it to me and I have no
-clue what a "proper" fix would look like (or why that isn't)?
-
-diff --git a/drivers/irqchip/irq-jcore-aic.c b/drivers/irqchip/irq-jcore-aic.c
-index 5f47d8ee4ae3..730252cb7b08 100644
---- a/drivers/irqchip/irq-jcore-aic.c
-+++ b/drivers/irqchip/irq-jcore-aic.c
-@@ -68,6 +68,7 @@ static int __init aic_irq_of_init(struct device_node *node,
- 	unsigned min_irq = JCORE_AIC2_MIN_HWIRQ;
- 	unsigned dom_sz = JCORE_AIC_MAX_HWIRQ+1;
- 	struct irq_domain *domain;
-+	int rc;
-
- 	pr_info("Initializing J-Core AIC\n");
-
-@@ -100,6 +101,11 @@ static int __init aic_irq_of_init(struct device_node *node,
- 	jcore_aic.irq_unmask = noop;
- 	jcore_aic.name = "AIC";
-
-+	rc = irq_alloc_descs(min_irq, min_irq, dom_sz - min_irq,
-+			     of_node_to_nid(node));
-+	if (rc < 0)
-+		pr_info("Cannot allocate irq_descs @ IRQ%d, assuming pre-allocated\n",
-+			min_irq);
- 	domain = irq_domain_add_legacy(node, dom_sz - min_irq, min_irq, min_irq,
- 				       &jcore_aic_irqdomain_ops,
- 				       &jcore_aic);
-
-I'm spinning too many plates to reliably reply to stuff, but I try to check in
-as often as I can, and at LEAST regression test each new release.
-
-Rob
