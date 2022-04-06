@@ -2,45 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7064F65EB
-	for <lists+linux-arch@lfdr.de>; Wed,  6 Apr 2022 18:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41314F6685
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Apr 2022 19:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238017AbiDFQyF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Apr 2022 12:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S238093AbiDFRFr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Apr 2022 13:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238133AbiDFQxF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Apr 2022 12:53:05 -0400
+        with ESMTP id S238255AbiDFRFh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Apr 2022 13:05:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014DF21799B;
-        Wed,  6 Apr 2022 07:17:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151C34961FB;
+        Wed,  6 Apr 2022 07:28:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3B44B82426;
-        Wed,  6 Apr 2022 14:17:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8C6C385A3;
-        Wed,  6 Apr 2022 14:17:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EA4EB82353;
+        Wed,  6 Apr 2022 14:28:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9470DC385A3;
+        Wed,  6 Apr 2022 14:28:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649254625;
-        bh=OMfx41/031A0MP+RHm+KFwlRg5XT4Op6fvW1GZ75ZuQ=;
+        s=k20201202; t=1649255316;
+        bh=6ilL6lDyJxwwFSqe1lKQGv1TTtCGzwxuY6CWzqW3O/c=;
         h=From:To:Cc:Subject:Date:From;
-        b=ie+v5zV3XbfY5P59UHcq+VjkI8jYwX+M798YCErKW4mWwv0QnMTzYY0jffAZsFU3G
-         NlvREmST3Mo+7tk9Vp8tFVLhFCiuSyJIkSpUxz6C4lQp7KkFTVq4pylTTO7CbyOB8b
-         qQtOHKG+zvk0IRBtTWkeqALBoUjyzccmtfUr63v+sODqL7mIXCl97wfuhgbOegKmjx
-         SrKL4NSIwcwdfxICNvyal+YIFKmN+GtAtnmrPXerskHsKWm1LUkZ7REub0s/5tBAkg
-         paiu7LCYgtynayD8d832/BWLmBKdP9cKgoHq5Bdon9dXOufgzpTLpqeIsn36OZqjYH
-         /rQKYtCcfkKVg==
+        b=hgjDMg8XINxqdmkR9f8AdMKEfhxzsrPumb8XbUGwhvsXdS8enBomrRCBxL1/fdeo5
+         HJXRIG5UrwQhajTiMS5314t15cGqDyjEvjRWm5qzPCBqqZ1f+lT9+TrWA0HWOjVclP
+         IA4bL8acXWbzqz2lbWLWN1OcqKnUVTpACzoQ8UL0ZJwB7KH9REsfITVpxRtYvIXmsJ
+         +okbrVHjHzaBSkbpT5+heKmhrQQfLxLFCFQVuj8mWVe7GC1QISj6XJhMA98RzCrJAq
+         atD8tYueuk2mvgnMMjuCNWsuJ3Ze9nxiNIZytrDh035g383swaQ/RKiqxAtRqvp9nQ
+         JkjUqGSadJQTA==
 From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com
+To:     guoren@kernel.org, arnd@arndb.de, jcmvbkbc@gmail.com,
+        chris@zankel.net
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+        linux-xtensa@linux-xtensa.org, Guo Ren <guoren@linux.alibaba.com>,
         Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH V3] riscv: patch_text: Fixup last cpu should be master
-Date:   Wed,  6 Apr 2022 22:16:49 +0800
-Message-Id: <20220406141649.728971-1-guoren@kernel.org>
+Subject: [PATCH V3] xtensa: patch_text: Fixup last cpu should be master
+Date:   Wed,  6 Apr 2022 22:28:19 +0800
+Message-Id: <20220406142819.730238-1-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -65,26 +64,26 @@ last CPU as the master to solve the potential risk.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
 Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: <stable@vger.kernel.org>
 ---
- arch/riscv/kernel/patch.c | 2 +-
+ arch/xtensa/kernel/jump_label.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-index 0b552873a577..765004b60513 100644
---- a/arch/riscv/kernel/patch.c
-+++ b/arch/riscv/kernel/patch.c
-@@ -104,7 +104,7 @@ static int patch_text_cb(void *data)
- 	struct patch_insn *patch = data;
- 	int ret = 0;
+diff --git a/arch/xtensa/kernel/jump_label.c b/arch/xtensa/kernel/jump_label.c
+index 0dde21e0d3de..ad1841cecdfb 100644
+--- a/arch/xtensa/kernel/jump_label.c
++++ b/arch/xtensa/kernel/jump_label.c
+@@ -40,7 +40,7 @@ static int patch_text_stop_machine(void *data)
+ {
+ 	struct patch *patch = data;
  
 -	if (atomic_inc_return(&patch->cpu_count) == 1) {
 +	if (atomic_inc_return(&patch->cpu_count) == num_online_cpus()) {
- 		ret =
- 		    patch_text_nosync(patch->addr, &patch->insn,
- 					    GET_INSN_LENGTH(patch->insn));
+ 		local_patch_text(patch->addr, patch->data, patch->sz);
+ 		atomic_inc(&patch->cpu_count);
+ 	} else {
 -- 
 2.25.1
 
