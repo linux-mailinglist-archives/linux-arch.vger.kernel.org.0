@@ -2,68 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF064F740B
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Apr 2022 05:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83F94F7619
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Apr 2022 08:33:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiDGDiA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Apr 2022 23:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49628 "EHLO
+        id S237801AbiDGGfa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Apr 2022 02:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240677AbiDGDhf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Apr 2022 23:37:35 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13798237FD3;
-        Wed,  6 Apr 2022 20:35:25 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bq8so8113862ejb.10;
-        Wed, 06 Apr 2022 20:35:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s4H2T8JJWjYpt3XRuRhcXEKbniAwe816BUUeRliUgkw=;
-        b=RYYfcvd5j+SVV/sd5xTnMZnGZGK5WJeopGbkKSiIaFlplxy/lUvGU0BeF+Hj7cUQi/
-         YwXHsGAtNA5aYLC8HHzJ7wmtEVcC9G6qOh0WavFyKinlkK6cnHU0tnWPvL6J+4Fz+rqu
-         83JC0zexGRoU8GVxbnhGqK0cYymzxSMj0KSBkJY9MUR02ugeCFvxzWawMU0mqFKGNMGt
-         GsIz6sj9Qb44ZG3LTfhgmuuGYj05RNIfk/hPym5qIUGgyWqMr2OnSDCtGJejCWk/BwG1
-         vbCBTZnWhpx4c1RvA2cv8Txp8wzfAjMxFiXNvNPgfKivp/v1I2pdTJ6BJmxm5I3vvaKj
-         G9cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s4H2T8JJWjYpt3XRuRhcXEKbniAwe816BUUeRliUgkw=;
-        b=NNnwzpui2KkcD17IjyJmt1k3PuO0E4bDhrM2H+8Db7wmTxTGz0IcicFGwRAR250biR
-         403b0o2/fvi1JDnvD0CXUfYGO5EmbLvRtfadYTlvyn6GPZeWn0lojqDcgPhT0fJGeyxg
-         K5ggSCFBJpVWUI7XMzCND3FUWDujSMZO5ywQp6sGrCWfNITuGC/BagQx7nM0Vwj+MUQT
-         oCkTI83c0UTU7EY8qW4SbFwOLKjipUw4CCmEezuRMpecNcfAguId/hTiGkOFRjE+k2PI
-         qX8Tt5aN5O7I3wwyDbzrsHxjniUmMOygrA0xxvyIY7/kO8ck5hpEtNmLFT8x/dcMsy/H
-         84aQ==
-X-Gm-Message-State: AOAM5328VWi1eJVpkBDHMrUsZPxYK3fVlSj1JnVqL9d5cexLyQlsQLQ5
-        rRakej62psKI/kkNZHHTZG1vI4AOQKVUzRqkgxg=
-X-Google-Smtp-Source: ABdhPJyrpOKbsN9sg7QHzokqGzRTkcBC9jLm5ASAzAbKnmphjqIK3b+O1o1mqT8GFMRkTvjd4qHlCwwh8vAQ5Ct+z6k=
-X-Received: by 2002:a17:907:8a19:b0:6e8:a7e:5f50 with SMTP id
- sc25-20020a1709078a1900b006e80a7e5f50mr11570936ejc.322.1649302524167; Wed, 06
- Apr 2022 20:35:24 -0700 (PDT)
+        with ESMTP id S234388AbiDGGf3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Apr 2022 02:35:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558A27C787;
+        Wed,  6 Apr 2022 23:33:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E669E61D61;
+        Thu,  7 Apr 2022 06:33:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47324C385A4;
+        Thu,  7 Apr 2022 06:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649313209;
+        bh=sDANlglzy7xVa8qGoxcrgCLEkRlQHE1kd8mStA7Kz0c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Q0EHT5pnwshFeUDmtz85bKrE/NAtBkY1SyxftEQ+3zRMyhbEqMn331qKHMfCHknO2
+         /eKy55yCqS3/cnwKSYncJEYLWeMoXNzHjJieYuNYosu3o/3AE5wwf4/dGIlqvIH92E
+         TCQ1lch8dSL5pr3JDvT11dqPE3HME8uWGkNmn678PJNs04mbQLEgmrchE1ldjvAH6b
+         LpMiv8l+x+FiIxY/VlyANEPnLmmcXht4AYdrUwVBQTaPcmxphV4y48hJRAgffJeSGH
+         CJJGAEHjPDfPvvedIGboghdIltzlyaMVa1k9OPT6wE/CoPvQM2NxK5Dyt3GEUPGww0
+         OwHjJtonlDkLA==
+Received: by mail-vk1-f173.google.com with SMTP id w67so200196vkw.6;
+        Wed, 06 Apr 2022 23:33:29 -0700 (PDT)
+X-Gm-Message-State: AOAM532Ct/116C9hukGAyEfGDzBwuNLWc5K66AxzTWdLya9JBiSI8p+3
+        qAcOGZPzZ6E/SEL3CIbk19lFT5C7rpq3WeGW5EM=
+X-Google-Smtp-Source: ABdhPJzMCqMoT2Gd6QJ5rs+cItH1+UtCvIzkKAHZRFSnh1VzJk3cciLCRxgzeP2vyn9dXGYHTrgGhuFB+wbWj19KRm8=
+X-Received: by 2002:a1f:bd96:0:b0:33f:6185:f723 with SMTP id
+ n144-20020a1fbd96000000b0033f6185f723mr4303359vkf.28.1649313208175; Wed, 06
+ Apr 2022 23:33:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406142819.730238-1-guoren@kernel.org>
-In-Reply-To: <20220406142819.730238-1-guoren@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Wed, 6 Apr 2022 20:35:12 -0700
-Message-ID: <CAMo8BfK6uo5fPCbo8Wp3oRYOUXoz0jv_zJMHuVHhFgh3DSSqNQ@mail.gmail.com>
-Subject: Re: [PATCH V3] xtensa: patch_text: Fixup last cpu should be master
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Chris Zankel <chris@zankel.net>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
+References: <20220406141649.728971-1-guoren@kernel.org> <Yk3YUFfvEszb+cXT@kroah.com>
+In-Reply-To: <Yk3YUFfvEszb+cXT@kroah.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Thu, 7 Apr 2022 14:33:17 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQH-cnTx_x3xO=UZRTrhewb0damO_cqtPxhxoZe6bxr8g@mail.gmail.com>
+Message-ID: <CAJF2gTQH-cnTx_x3xO=UZRTrhewb0damO_cqtPxhxoZe6bxr8g@mail.gmail.com>
+Subject: Re: [PATCH V3] riscv: patch_text: Fixup last cpu should be master
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
         Guo Ren <guoren@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
         Masami Hiramatsu <mhiramat@kernel.org>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +66,36 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 7:28 AM <guoren@kernel.org> wrote:
+On Thu, Apr 7, 2022 at 2:13 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> From: Guo Ren <guoren@linux.alibaba.com>
+> On Wed, Apr 06, 2022 at 10:16:49PM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > These patch_text implementations are using stop_machine_cpuslocked
+> > infrastructure with atomic cpu_count. The original idea: When the
+> > master CPU patch_text, the others should wait for it. But current
+> > implementation is using the first CPU as master, which couldn't
+> > guarantee the remaining CPUs are waiting. This patch changes the
+> > last CPU as the master to solve the potential risk.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > Cc: <stable@vger.kernel.org>
+> > ---
+> >  arch/riscv/kernel/patch.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> These patch_text implementations are using stop_machine_cpuslocked
-> infrastructure with atomic cpu_count. The original idea: When the
-> master CPU patch_text, the others should wait for it. But current
-> implementation is using the first CPU as master, which couldn't
-> guarantee the remaining CPUs are waiting. This patch changes the
-> last CPU as the master to solve the potential risk.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
-> Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: <stable@vger.kernel.org>
-> ---
->  arch/xtensa/kernel/jump_label.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> What commit id does this change fix?
+Thx for pointing this out, I would follow the rule to add Cc:
+<stable@vger.kernel.org>.
 
-Thanks. Applied to my xtensa tree.
+>
 
--- Max
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
