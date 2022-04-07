@@ -2,209 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68D54F871C
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Apr 2022 20:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C6F4F8AF6
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Apr 2022 02:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbiDGSeX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Apr 2022 14:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
+        id S231812AbiDGXWh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Apr 2022 19:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiDGSeX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Apr 2022 14:34:23 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437F91B0BFE;
-        Thu,  7 Apr 2022 11:32:22 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KZ9385y6Fz9sRn;
-        Thu,  7 Apr 2022 20:32:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 34dnQT70PsPL; Thu,  7 Apr 2022 20:32:20 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KZ9384kBPz9sRk;
-        Thu,  7 Apr 2022 20:32:20 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 925B38B792;
-        Thu,  7 Apr 2022 20:32:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id KpdHInGLHfNB; Thu,  7 Apr 2022 20:32:20 +0200 (CEST)
-Received: from [192.168.202.234] (unknown [192.168.202.234])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id CDCA38B765;
-        Thu,  7 Apr 2022 20:32:17 +0200 (CEST)
-Message-ID: <9b1b475c-f3de-02a4-b863-c00345d3364b@csgroup.eu>
-Date:   Thu, 7 Apr 2022 20:32:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH] lkdtm: Replace lkdtm_rodata_do_nothing() by
- do_nothing()
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <fe36bf23fb14e7eff92a95a1092ed38edb01d5f5.1634491011.git.christophe.leroy@csgroup.eu>
- <26d37781-9824-3306-240d-6ce6044c2412@csgroup.eu>
-In-Reply-To: <26d37781-9824-3306-240d-6ce6044c2412@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S232494AbiDGXW3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Apr 2022 19:22:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1639630B;
+        Thu,  7 Apr 2022 16:20:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BE2860F26;
+        Thu,  7 Apr 2022 23:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64848C385A0;
+        Thu,  7 Apr 2022 23:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649373625;
+        bh=3fTd4/oB9ZoXEdf+K+L8T8ud1sgeiHXYri5q9XU2dws=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZSvawR2SP4z25+5v05hEzD/SNY3BquUg00da51rb2XpIhfun/uRj9F50//O4lmLVK
+         mMLQ0SBSzdnOSHOJqeZeyVk3ZlzylTqp4UUO/tQPLTSgSiMH0RDrND71V5dVeKi6ET
+         qbMbsgu4SDWZr0njwS/0ZGtXu6KbiDlG0yFJTssU=
+Date:   Thu, 7 Apr 2022 16:20:24 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 0/7] mm/mmap: Drop arch_vm_get_page_prot() and
+ arch_filter_pgprot()
+Message-Id: <20220407162024.7747ee14092d04082f13aa9d@linux-foundation.org>
+In-Reply-To: <20220407103251.1209606-1-anshuman.khandual@arm.com>
+References: <20220407103251.1209606-1-anshuman.khandual@arm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Kees,
+On Thu,  7 Apr 2022 16:02:44 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
 
-Le 23/02/2022 à 18:17, Christophe Leroy a écrit :
-> Hi Kees,
+> protection_map[] is an array based construct that translates given vm_flags
+> combination. This array contains page protection map, which is populated by
+> the platform via [__S000 .. __S111] and [__P000 .. __P111] exported macros.
+> Primary usage for protection_map[] is for vm_get_page_prot(), which is used
+> to determine page protection value for a given vm_flags. vm_get_page_prot()
+> implementation, could again call platform overrides arch_vm_get_page_prot()
+> and arch_filter_pgprot(). Some platforms override protection_map[] that was
+> originally built with __SXXX/__PXXX with different runtime values.
 > 
-> Le 17/10/2021 à 19:19, Christophe Leroy a écrit :
->> All EXEC tests are based on running a copy of do_nothing()
->> except lkdtm_EXEC_RODATA which uses a different function
->> called lkdtm_rodata_do_nothing().
->>
->> On architectures using function descriptors, EXEC tests are
->> performed using execute_location() which is a function
->> that most of the time copies do_nothing() at the tested
->> location then duplicates do_nothing() function descriptor
->> and updates it with the address of the copy of do_nothing().
->>
->> But for EXEC_RODATA test, execute_location() uses
->> lkdtm_rodata_do_nothing() which is already in rodata section
->> at build time instead of using a copy of do_nothing(). However
->> it still uses the function descriptor of do_nothing(). There
->> is a risk that running lkdtm_rodata_do_nothing() with the
->> function descriptor of do_thing() is wrong.
->>
->> To remove the above risk, change the approach and do the same
->> as for other EXEC tests: use a copy of do_nothing(). The copy
->> cannot be done during the test because RODATA area is write
->> protected. Do the copy during init, before RODATA becomes
->> write protected.
->>
->> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+> , protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+> between the platform and generic MM, finally defining vm_get_page_prot().
 > 
-> Any opinion on this patch ?
+> Hence this series proposes to drop later two abstraction levels and instead
+> just move the responsibility of defining vm_get_page_prot() to the platform
+> (still utilizing generic protection_map[] array) itself making it clean and
+> simple.
+> 
+> This first introduces ARCH_HAS_VM_GET_PAGE_PROT which enables the platforms
+> to define custom vm_get_page_prot(). This starts converting platforms that
+> define the overrides arch_filter_pgprot() or arch_vm_get_page_prot() which
+> enables for those constructs to be dropped off completely.
+> 
+> The series has been inspired from an earlier discuss with Christoph Hellwig
+> 
+> https://lore.kernel.org/all/1632712920-8171-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> This series applies on 5.18-rc1 after the following patch.
+> 
+> https://lore.kernel.org/all/1643004823-16441-1-git-send-email-anshuman.khandual@arm.com/
 
-Any opinion ?
+Confusing.  That patch is already in 5.18-rc1.
 
-Thanks
-Christophe
+But the version which was merged (24e988c7fd1ee701e) lacked the change
+to arch/arm64/Kconfig.  I seem to recall that this patch went through a
+few issues and perhaps the arm64 change was dropped.  Can you please
+check?
 
-> 
-> Thanks
-> Christophe
-> 
->> ---
->> This applies on top of series v3 "Fix LKDTM for PPC64/IA64/PARISC"
->>
->>   drivers/misc/lkdtm/Makefile | 11 -----------
->>   drivers/misc/lkdtm/lkdtm.h  |  3 ---
->>   drivers/misc/lkdtm/perms.c  |  9 +++++++--
->>   drivers/misc/lkdtm/rodata.c | 11 -----------
->>   4 files changed, 7 insertions(+), 27 deletions(-)
->>   delete mode 100644 drivers/misc/lkdtm/rodata.c
->>
->> diff --git a/drivers/misc/lkdtm/Makefile b/drivers/misc/lkdtm/Makefile
->> index e2984ce51fe4..3d45a2b3007d 100644
->> --- a/drivers/misc/lkdtm/Makefile
->> +++ b/drivers/misc/lkdtm/Makefile
->> @@ -6,21 +6,10 @@ lkdtm-$(CONFIG_LKDTM)        += bugs.o
->>   lkdtm-$(CONFIG_LKDTM)        += heap.o
->>   lkdtm-$(CONFIG_LKDTM)        += perms.o
->>   lkdtm-$(CONFIG_LKDTM)        += refcount.o
->> -lkdtm-$(CONFIG_LKDTM)        += rodata_objcopy.o
->>   lkdtm-$(CONFIG_LKDTM)        += usercopy.o
->>   lkdtm-$(CONFIG_LKDTM)        += stackleak.o
->>   lkdtm-$(CONFIG_LKDTM)        += cfi.o
->>   lkdtm-$(CONFIG_LKDTM)        += fortify.o
->>   lkdtm-$(CONFIG_PPC_BOOK3S_64)    += powerpc.o
->> -KASAN_SANITIZE_rodata.o        := n
->>   KASAN_SANITIZE_stackleak.o    := n
->> -KCOV_INSTRUMENT_rodata.o    := n
->> -CFLAGS_REMOVE_rodata.o        += $(CC_FLAGS_LTO)
->> -
->> -OBJCOPYFLAGS :=
->> -OBJCOPYFLAGS_rodata_objcopy.o    := \
->> -            --rename-section 
->> .noinstr.text=.rodata,alloc,readonly,load,contents
->> -targets += rodata.o rodata_objcopy.o
->> -$(obj)/rodata_objcopy.o: $(obj)/rodata.o FORCE
->> -    $(call if_changed,objcopy)
->> diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
->> index 188bd0fd6575..905555d4c2cf 100644
->> --- a/drivers/misc/lkdtm/lkdtm.h
->> +++ b/drivers/misc/lkdtm/lkdtm.h
->> @@ -137,9 +137,6 @@ void lkdtm_REFCOUNT_SUB_AND_TEST_SATURATED(void);
->>   void lkdtm_REFCOUNT_TIMING(void);
->>   void lkdtm_ATOMIC_TIMING(void);
->> -/* rodata.c */
->> -void lkdtm_rodata_do_nothing(void);
->> -
->>   /* usercopy.c */
->>   void __init lkdtm_usercopy_init(void);
->>   void __exit lkdtm_usercopy_exit(void);
->> diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
->> index 2c6aba3ff32b..9b951ca48363 100644
->> --- a/drivers/misc/lkdtm/perms.c
->> +++ b/drivers/misc/lkdtm/perms.c
->> @@ -27,6 +27,7 @@ static const unsigned long rodata = 0xAA55AA55;
->>   /* This is marked __ro_after_init, so it should ultimately be 
->> .rodata. */
->>   static unsigned long ro_after_init __ro_after_init = 0x55AA5500;
->> +static u8 rodata_area[EXEC_SIZE] __ro_after_init;
->>   /*
->>    * This just returns to the caller. It is designed to be copied into
->> @@ -193,8 +194,7 @@ void lkdtm_EXEC_VMALLOC(void)
->>   void lkdtm_EXEC_RODATA(void)
->>   {
->> -    
->> execute_location(dereference_function_descriptor(lkdtm_rodata_do_nothing), 
->>
->> -             CODE_AS_IS);
->> +    execute_location(rodata_area, CODE_AS_IS);
->>   }
->>   void lkdtm_EXEC_USERSPACE(void)
->> @@ -269,4 +269,9 @@ void __init lkdtm_perms_init(void)
->>   {
->>       /* Make sure we can write to __ro_after_init values during 
->> __init */
->>       ro_after_init |= 0xAA;
->> +
->> +    memcpy(rodata_area, dereference_function_descriptor(do_nothing),
->> +           EXEC_SIZE);
->> +    flush_icache_range((unsigned long)rodata_area,
->> +               (unsigned long)rodata_area + EXEC_SIZE);
->>   }
->> diff --git a/drivers/misc/lkdtm/rodata.c b/drivers/misc/lkdtm/rodata.c
->> deleted file mode 100644
->> index baacb876d1d9..000000000000
->> --- a/drivers/misc/lkdtm/rodata.c
->> +++ /dev/null
->> @@ -1,11 +0,0 @@
->> -// SPDX-License-Identifier: GPL-2.0
->> -/*
->> - * This includes functions that are meant to live entirely in .rodata
->> - * (via objcopy tricks), to validate the non-executability of .rodata.
->> - */
->> -#include "lkdtm.h"
->> -
->> -void noinstr lkdtm_rodata_do_nothing(void)
->> -{
->> -    /* Does nothing. We just want an architecture agnostic "return". */
->> -}
+(It would be easier for me to track all this down if the original patch
+had had cc:linux-mm.  Please cc linux-mm!)
+
