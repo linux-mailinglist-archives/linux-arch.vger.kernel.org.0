@@ -2,61 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 991544FAC80
-	for <lists+linux-arch@lfdr.de>; Sun, 10 Apr 2022 09:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF2F4FAC86
+	for <lists+linux-arch@lfdr.de>; Sun, 10 Apr 2022 09:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiDJHME (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 10 Apr 2022 03:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
+        id S233874AbiDJHYx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 10 Apr 2022 03:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233690AbiDJHMD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 10 Apr 2022 03:12:03 -0400
-Received: from mail-oa1-x42.google.com (mail-oa1-x42.google.com [IPv6:2001:4860:4864:20::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBA6F3B
-        for <linux-arch@vger.kernel.org>; Sun, 10 Apr 2022 00:09:53 -0700 (PDT)
-Received: by mail-oa1-x42.google.com with SMTP id 586e51a60fabf-dacc470e03so14061775fac.5
-        for <linux-arch@vger.kernel.org>; Sun, 10 Apr 2022 00:09:53 -0700 (PDT)
+        with ESMTP id S233864AbiDJHYw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 10 Apr 2022 03:24:52 -0400
+Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95DBD11A12
+        for <linux-arch@vger.kernel.org>; Sun, 10 Apr 2022 00:22:41 -0700 (PDT)
+Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-de3eda6b5dso14139562fac.0
+        for <linux-arch@vger.kernel.org>; Sun, 10 Apr 2022 00:22:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=landley-net.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OKup0UvyxPHrx0lsepB2qlQY1RT8puztmE8wI+Ie6eo=;
-        b=QCTXxgYbpzlPbQmu7QRkEF4MSgBLoi71fZIg7nNTtVwhbP4ZzU0ijP5Katefmz09CM
-         7nekHR+oM9sNPqq7w2ZC1Itd/L5PjXkgQDl/aBdYchkS7oXLbtyA7xzAKrBnfVmRd+T2
-         rMk0+lA5ZL9QY5cmhoJyotOMDYzKf2H0YBAid47gFuq1ODRrYAxhcY0n6+VlQgvS0Nzv
-         SB+jZI16hqzMhbV3BONWAvZIQQl3x2qkxtYOA6v2b3NdKaeKGeh8nJiN90wzxwUEn9zG
-         BiinAFmTfMtXURXkkl/BCS77f4e26tAseFf7a7NM6Aqcx913REwEgW6LAJBc97rca0qu
-         RScQ==
+        bh=HLcHxok0TrE1xQrUdzzB3gUD4+EGnlP7Z3j2dVkEC1E=;
+        b=CDOKrgbEU+Q9Ta7bNjY7kM0CEtCjXc4Mdx5lNRcE1AlbQ4sEiQA1TcL/jymJDPD2T6
+         IkK56d0xkBbM6FgVF0CUCOLNn6PrZJALVEuLH+d4jUkn/4f5gayUjqa1Tr8s7d3qUK5j
+         tR+OiveAwIczYKdp6hgPUkHydMNPOoEXQvBo+D77BKSGZJTEMfb9+MpPyZ4jTbQla9j6
+         H3J9AfzlLd6ni3B331Wa0jUfqM40xPxLiSKyHYlJAs7AAE6gIvChiS1BczYifu6VDnIP
+         aTbfbosD9dfF4kveqfYYbaUIdlOg084qs/0/9yfVqjDrmoELIaFPLRP3ksk6yqJv6EG/
+         RmVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=OKup0UvyxPHrx0lsepB2qlQY1RT8puztmE8wI+Ie6eo=;
-        b=LSawvue3xIf0cx9XaaOsmMafHTmm82Rnld5DkM+2AEFzZzRhnlAFSJjUyHYsZLkdEN
-         KLdRfi+fFz6tDgL8fHupSHpnXKD0XBKc9NE33d8kN9wu2E+VScYudjhJDUaK3FGaYRDx
-         L3HjPTT6GNkrU/FVdYIAapKCCSvOwTsSQ8DlZU5kCeozx1gJjA1e+Et4PIWAeoXnsuX9
-         yX27ayyKIOJKSWvzNQtjDObVknfyM2fqHsWrKmxtSesGYMevL7rPtm8Nsdoc8U4dkwWC
-         /QXlVOP0byzV7gmFOWH1F/+vvCF3fBpkkgiotlyR1cABhkNSJ5YZEoR/iN/mfOIdpdPJ
-         8ARg==
-X-Gm-Message-State: AOAM531OXN6BOzYETS8loXlioYtxu3xStwLYErOzEmNORWsASAVUM+/w
-        tgVOKzUejxNSmp8qmyHQzyRPTg==
-X-Google-Smtp-Source: ABdhPJxbO7EoBK0LBV5p3t+tud/FMcIYTo+1NKItqNRZ77i9OoY59ZK0upMNHy9Cd/jRS17Y3Yxziw==
-X-Received: by 2002:a05:6870:a189:b0:da:b3f:2b83 with SMTP id a9-20020a056870a18900b000da0b3f2b83mr11770176oaf.290.1649574592181;
-        Sun, 10 Apr 2022 00:09:52 -0700 (PDT)
+        bh=HLcHxok0TrE1xQrUdzzB3gUD4+EGnlP7Z3j2dVkEC1E=;
+        b=DLDkbsnCROev+3McDDsVDNCSHk6+skvWV6mzPUDy5UtOJ/Ix9rrzvldQQV8mTydmRX
+         ZtwceK6v9CO5DqR6ODaElt4/WA3Vb3hw1JiFKekpfihGroY0PZ8NPB9R2N3cqZ2SoJr4
+         9mpTjxbBEMsIbwHwOv7BOhwz2HzJOg1cMuc27OGU816sG5N1vx5GxRWGs5R3aboEwa6Q
+         3FIrk4Mx8VARQW2TlUErnsEygqqveDasGDXqo40JafFTImCxS0Z+MGojChlElnrcCQPy
+         fMWuxKTZfhsCHKlIeYl9ukY6d54qqOh/aRgzbTWeHL/NH9aabju7UloKqz0ds9KVp18l
+         41tw==
+X-Gm-Message-State: AOAM530nHuj6+zWtuksNdoOMKOgBoCUh70NIMfVI2bKNcAja7Qho3p+Y
+        xFKFQ1aSDFYx6+RnG/2dSUU1YA==
+X-Google-Smtp-Source: ABdhPJzgSAIgurvIZBg0mjDm5TRgjmByFBGeU2r6N5ZSwlpKBXt97DTKHaVc1p5t/OeQuek6SKXj9g==
+X-Received: by 2002:a05:6870:639e:b0:e2:ab7c:d868 with SMTP id t30-20020a056870639e00b000e2ab7cd868mr1856692oap.108.1649575360859;
+        Sun, 10 Apr 2022 00:22:40 -0700 (PDT)
 Received: from [192.168.224.179] ([172.58.198.202])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm11420278oae.33.2022.04.10.00.09.50
+        by smtp.gmail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm10328337oig.52.2022.04.10.00.22.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 00:09:51 -0700 (PDT)
-Message-ID: <1730bed2-3978-cc4d-98ad-b0f6af38ab8e@landley.net>
-Date:   Sun, 10 Apr 2022 02:13:56 -0500
+        Sun, 10 Apr 2022 00:22:40 -0700 (PDT)
+Message-ID: <ae4125f5-e725-43ed-d05b-b1f88c0cd50c@landley.net>
+Date:   Sun, 10 Apr 2022 02:26:45 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Subject: Re: [RFC PULL] remove arch/h8300
 Content-Language: en-US
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>, Arnd Bergmann <arnd@arndb.de>,
+To:     Greg Ungerer <gerg@linux-m68k.org>,
+        Finn Thain <fthain@linux-m68k.org>
+Cc:     Daniel Palmer <daniel@0x0f.com>, Arnd Bergmann <arnd@arndb.de>,
         Christoph Hellwig <hch@infradead.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
@@ -78,9 +79,10 @@ References: <Yib9F5SqKda/nH9c@infradead.org>
  <CAFr9PXkk=8HOxPwVvFRzqHZteRREWxSOOcdjrcOPe0d=9AW2yQ@mail.gmail.com>
  <5b7687d4-8ba5-ad79-8a74-33fc2496a3db@linux-m68k.org>
  <8f9be869-7244-d92a-4683-f9c53da97755@landley.net>
- <CAFr9PXmMzFa_iD1iECi7S=DvpMRKgLu=7P+=2RmbEWtqczjduA@mail.gmail.com>
+ <3d5cf48c-94f1-2948-1683-4a2a87f4c697@linux-m68k.org>
+ <147dc6cc-1fbb-558f-8e6d-29d4327d54b4@linux-m68k.org>
 From:   Rob Landley <rob@landley.net>
-In-Reply-To: <CAFr9PXmMzFa_iD1iECi7S=DvpMRKgLu=7P+=2RmbEWtqczjduA@mail.gmail.com>
+In-Reply-To: <147dc6cc-1fbb-558f-8e6d-29d4327d54b4@linux-m68k.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -93,97 +95,91 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/8/22 22:37, Daniel Palmer wrote:
-> Hi Rob,
+
+
+On 4/8/22 23:18, Greg Ungerer wrote:
 > 
-> On Sat, 9 Apr 2022 at 09:20, Rob Landley <rob@landley.net> wrote:
+> On 9/4/22 11:59, Finn Thain wrote:
+>> On Fri, 8 Apr 2022, Rob Landley wrote:
+>> 
+>>> On 4/5/22 08:07, Greg Ungerer wrote:
+>>>> On 5/4/22 13:23, Daniel Palmer wrote:
+>>>>> On Mon, 4 Apr 2022 at 22:42, Greg Ungerer <gerg@linux-m68k.org> wrote:
+>>>>>> But we could consider the Dragonball support for removal. I keep it
+>>>>>> compiling, but I don't use it and can't test that it actually works.
+>>>>>> Not sure that it has been used for a very long time now. And I
+>>>>>> didn't even realize but its serial driver (68328serial.c) was
+>>>>>> removed in 2015. No one seems too have noticed and complained.
+>>>>>
+>>>>> I noticed this and I am working on fixing it up for a new Dragonball
+>>>>> homebrew machine. I'm trying to add a 68000 machine to QEMU to make
+>>>>> the development easier because I'm currently waiting an hour or more
+>>>>> for a kernel to load over serial. It might be a few months.
+>>>
+>>> I've been booting Linux on qemu-system-m68k -M q800 for a couple years
+>>> now? (The CROSS=m68k target of mkroot in toybox?)
+>>>
+>>> # cat /proc/cpuinfo
+>>> CPU:		68040
+>>> MMU:		68040
+>>> FPU:		68040
+>>> Clocking:	1261.9MHz
+>>> BogoMips:	841.31
+>>> Calibration:	4206592 loops
+>>>
+>>> It certainly THINKS it's got m68000...
+>>>
+>> 
+>> Most 68040 processor variants have a built-in MMU and the m68k "nommu"
+>> Linux port doesn't support them. The nommu port covers processors like
+>> 68000, Dragonball etc. whereas the m68k "mmu" port covers 680x0 where x is
+>> one of 2,3,4,6 with MMU.
+
+In theory you can switch the MMU off. (Or at least give it a NOP page table that
+maps all the physical memory into one big contiguous block 1:1 with the physical
+address and leave it there.)
+
+Doesn't mean anybody's bothered to implement and add a config option to stub
+that out in the kernel yet. But presumably you could have a bootloader shim do it...
+
+>>> (I'd love to get an m68k nommu system working but never sat down and
+>>> worked out a kernel .config qemu agreed to run, plus compiler and libc.
+>>> Musl added m68k support but I dunno if that includes coldfire?)
+>>>
+>> 
+>> I could never figure out how to boot a coldfire machine in qemu either.
+>> There was no documentation about that back when I attempted it but maybe
+>> things have improved since.
 > 
->> I've been booting Linux on qemu-system-m68k -M q800 for a couple years now? (The
->> CROSS=m68k target of mkroot in toybox?)
->>
->> # cat /proc/cpuinfo
->> CPU:            68040
->> MMU:            68040
->> FPU:            68040
->> Clocking:       1261.9MHz
->> BogoMips:       841.31
->> Calibration:    4206592 loops
->>
->> It certainly THINKS it's got m68000...
+> FWIW this will do it:
 > 
-> I couldn't work out how to define a mc68000 machine on the command line alone.
-> There might be a way but it didn't seem like it.
-
-By adding "-cpu m68000" to the qemu command line?
-
-The problem is you need a working _system_. If you wget
-http://landley.net/toybox/downloads/binaries/mkroot/latest/m68k.tgz and extract
-it and run
-./qemu-m68k.sh it boots to a shell prompt. If you "./qemu-m68k.sh -cpu m68000"
-it doesn't boot because the kernel is built for 68040.
-
->> (I'd love to get an m68k nommu system working but never sat down and worked out
->> a kernel .config qemu agreed to run, plus compiler and libc. Musl added m68k
->> support but I dunno if that includes coldfire?)
+>      qemu-system-m68k -nographic -machine mcf5208evb -kernel vmlinux
 > 
-> Once I get QEMU to emulate a simple mc68000 system my plan is to get
-> u-boot going (I managed to get it to build for plain mc68000 but I
-> didn't get far enough with the QEMU bit to try booting it yet) then
-> put together the buildroot configs to build qemu, u-boot, a kernel and
-> rootfs that just work. Then I can hook it into CI and have it build
-> and boot test automatically and it won't bit rot anymore.
+> That will boot an m5208evb_defconfig generated vmlinux.
+> But you will need a user space to get a full boot to login/shell.
 
-I don't bother with buildroot much, I wrote a 300 line bash script that builds a
-bootable Linux system instead:
+No FDPIC support. :(
 
-  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+I had a binflt toolchain working with uClibc in 2015 or so, but I end of lifed
+https://landley.net/aboriginal in 2017 (five years ago now). Multiple reasons,
+but one was the old "last GPLv2 release" toolchain was getting painful to force
+the kernel to build with.
 
-As for adding coldfire support, let's see... google for "qemu coldfire" first
-hit is https://qemu.readthedocs.io/en/latest/system/target-m68k.html which says
-the default board in qemu-system-m68k is coldfire and has run uclinux. There's a
-defconfig for it (arch/m68k/configs/m5208evb_defconfig) so:
+These days there's articles on lwn.net about yanking a.out support, which fdpic
+is a buggy variant of that didn't actually have a maintained elf2flt repository
+when I was assembling my toolchain. (I vaguely recall I poked enough people that
+somebody picked it up and stuck a repository on github, but Jeff Dionne
+explained some fundamental design flaw that had been introduced having to do
+with register offsets being calculated in the wrong framework or something?
 
-$ make ARCH=m68k m5208evb_defconfig
-...
-$ CROSS_COMPILE=m68k-linux-musl- make ARCH-m68k
-...
-$ qemu-system-m68k -nographic -kernel vmlinux
+I don't remember, I lost interest because it's _conceptually_ obsolete. FDPIC is
+ELF with a little extra header info, it's clean and potentially even useful on
+with-MMU systems as extra ASLR. BINFLT is a.out run through a postprocessing
+tool that nominally converts ELF files into the new format but actually needs .o
+files from earlier in the process and is kind of an alternate linker except it
+doesn't replace the linker... It's layers of ugly.
 
-Hey, console output on serial using my existing m68k toolchain. Good sign. Ok,
-let's see, can I get a userspace...
-
-No, I can't. The coldfire kernel only supports BINFLT, which is an a.out
-derivative. All the nommu targets I'm supporting are either FDPIC or (where gcc
-hasn't merged fdpic support yet) I'm building static pie and using the FDPIC
-loader in the kernel, which can load normal ELF: FDPIC makes the 4
-bss/data/text/rodata sections independently relocatable and static PIE has those
-4 glued together into one contiguous lump but at least that lump is relocatable,
-so it's a lot worse about fragmentation but does at least RUN...
-
-If I can't wire up the fdpic loader for coldfire, I can't build ELF format
-binaries for it, and I just don't mess with a.out anymore.
-
->> >> It looked like 68328serial.c was removed because someone tried to
->> >> clean it up and it was decided that no one was using it and it was
->> >> best to delete it.
->> >> My plan was to at some point send a series to fix up the issues with
->> >> the Dragonball support, revert removing the serial driver and adding
->> >> the patch that cleaned it up.
->> >
->> > Nice. I will leave all the 68000/68328 code alone for now then.
->>
->> The q800 config uses CONFIG_SERIAL_PMACZILOG. Seems to work fine?
-> 
-> Dragonball uses a weird UART that doesn't seem to be compatible with
-> any of the common ones so it needs its own driver.
-
-Indeed.
-
-That said, the 5208 is using CONFIG_SERIAL_MCF and I got serial output from the
-kernel I just built. Pity it hasn't got FDPIC support...
-
-> Cheers,
-> 
-> Daniel
+> Regards
+> Greg
 
 Rob
