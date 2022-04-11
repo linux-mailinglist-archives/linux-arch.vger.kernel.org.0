@@ -2,389 +2,328 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB094FC2FB
-	for <lists+linux-arch@lfdr.de>; Mon, 11 Apr 2022 19:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581DC4FC402
+	for <lists+linux-arch@lfdr.de>; Mon, 11 Apr 2022 20:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345219AbiDKROb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Apr 2022 13:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S1349126AbiDKSYB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Apr 2022 14:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiDKRO1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Apr 2022 13:14:27 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3E125592;
-        Mon, 11 Apr 2022 10:11:59 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BF2K3R022836;
-        Mon, 11 Apr 2022 17:09:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=PnN9h8B7grLufEkfeJDsA9P2l8BNkrfjO0ZVvbwJXEw=;
- b=epPPfHPL/vEBq4vpHkdRSPgS7Ha+Wg0fhv830nQM2a5KNmwNdRUYHnyZ27Tqp12hG9c2
- QBBywpBU0unadNbrfCHNMMh37ylm8qOiblJlcMFWocrdGQNphcsPmL/WRDJ8Leyzkxnv
- r/hQwTr1A8kVNE8F0eH0hKof17RIWGkBLHmH53Q88Vs16kIee+D9idnu1+9GofHsS0LP
- ZfBKfJbqG3g1jxq3oTMlC3BeibFyEJYdALmYK0ofiN0WQvkQNQozyXXs5LVLBzCQ4QFG
- vhIIUmJuQU+nJGy0ky+EsR43tGqhXWGFes1Jk6sZ5O1QfHbYQozWl/o/FqlrrBvkP4aV Lw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0jd49s7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 17:09:57 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23BH19jr007965;
-        Mon, 11 Apr 2022 17:09:56 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2106.outbound.protection.outlook.com [104.47.58.106])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fb0k1n5ja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 17:09:56 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E+oluz+5OFMpRwHDCWOSIE7Tprpop23b0+BB7cfiyXuL4i8RVj9nSlessimPwQG2LYDYjkQ5xiUqmVQfiC/5Qibrek8EuoFXBaijAifaimC5BvtkhsBUe9BNZPV+GGk4WbINFjk9jRQ8MGYT5ZiBNyo6Se2YMSSGJrP6PYnZNCQHGtc1Z+Hend4s24G05Guq0DAnmMMnGIbaRORP1nGbtEbrQqC/v4IpSPvOLRx4XJSXIY6t39y3rxZNjv13KhZIIUaBlmY74wJ2cqGmWloOQnUX/9cZMXLhO2oTpSlMMoBNlD+OB21BTeNuPAv9JaeStTViNTCUBlKf38fPyMTwag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PnN9h8B7grLufEkfeJDsA9P2l8BNkrfjO0ZVvbwJXEw=;
- b=a/OkjoKY5yXzp7xs+C+wy89qCO/ocWJoYtg2Zae2O2ym1JLAfuVPyWryDP8wwy6baqBya3aBgRYtmYI9/UVf5otr2g2ZFlsxLGTODyvP9fNucRwm/cSlPLmZVdMjlw+eYoDP0nJwsSlRhXjYCMRJqq2BQ0VCGGi/BZ+BBvsUXPiSph2liUl0Y1SthLAc1pMmK7DF4P6U1YEweBs+LnhmGYbNcdnOjgoqQb56vxPRAMQ17MNCu9RbibGhHbB8sltt7ObvYxpjcPyEacOF/y4efK0h5BpmuAmO5Qmwo4l2XIRVQIWCpLSRY2WLR9ZEbwL6lmHCyclakHBy48UdTGHcVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PnN9h8B7grLufEkfeJDsA9P2l8BNkrfjO0ZVvbwJXEw=;
- b=SwBZYFQVKjIi1MbtDI5wNxTq03kd3+sCnDSfjZcyWS3sg3ScUL7grEpcTqHQY0SxC0EUDgjTiYQZVHwUAmMxNlKVc6SmDkgPQ5l3ttbhOx2wNLEq2cYuJ1ZoYkRWNdrXWq+zcQ117tniK4FlKHNvboGf6DRY2swRyHtQVEdeP/s=
-Received: from BLAPR10MB5315.namprd10.prod.outlook.com (2603:10b6:208:324::8)
- by DM6PR10MB4393.namprd10.prod.outlook.com (2603:10b6:5:223::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 17:09:53 +0000
-Received: from BLAPR10MB5315.namprd10.prod.outlook.com
- ([fe80::d9c8:54d:a93a:54e0]) by BLAPR10MB5315.namprd10.prod.outlook.com
- ([fe80::d9c8:54d:a93a:54e0%7]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 17:09:53 +0000
-From:   Alex Kogan <alex.kogan@oracle.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-CC:     "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        with ESMTP id S1347575AbiDKSYA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Apr 2022 14:24:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4BB2AD0;
+        Mon, 11 Apr 2022 11:21:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83EE0B817FD;
+        Mon, 11 Apr 2022 18:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4691FC385A4;
+        Mon, 11 Apr 2022 18:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649701302;
+        bh=PiNuPNk+6l26kgsR8fDzAxyPFcRQN+JgTZLJVWwDBYE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=noOI5ZLjGQD7hoyTo16tgnjCgJouFmSZ63y24DCLm9z2eLrf6gclO4hSIRYLxcRGy
+         nzm5MaqsbovJtDGsDzoRWxx2KFE3gaDNMsVBxRNx2qpXmCN9TvmQfiv8iT1xHEwXOZ
+         0Df90tz/qQUHJ/p5FeQKXS/GALQiSu/jUR90j04kKDRRWibWJt2qYGBL4vGQVgEOCM
+         gezfbD2EylBDJKxiHlike2ZGNVWZclIEcISmRz6Lvy2Ct+tU+5kyZ2r2qrKWIsKcaw
+         gJcTwlFlF8QDKJaWynKcLc1fz7F4LDdnxKliEy5g9N07PCS1lgwUMDlhj6onHR4IdZ
+         OlGFgTjC3wnuw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EBCF05C03AE; Mon, 11 Apr 2022 11:21:41 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 11:21:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Waiman Long <longman@redhat.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Jan Glauber <jglauber@marvell.com>,
-        Steven Sistare <steven.sistare@oracle.com>,
-        Daniel Jordan <daniel.m.jordan@oracle.com>,
-        Dave Dice <dave.dice@oracle.com>
-Subject: Re: [PATCH v15 0/6] Add NUMA-awareness to qspinlock
-Thread-Topic: [PATCH v15 0/6] Add NUMA-awareness to qspinlock
-Thread-Index: AQHYTcb0ItDmpDT0R0WUWd+2hoaJ1A==
-Date:   Mon, 11 Apr 2022 17:09:53 +0000
-Message-ID: <50F3F13D-705C-4213-89C3-043B0DA2C5AF@oracle.com>
-References: <20210514200743.3026725-1-alex.kogan@oracle.com>
-In-Reply-To: <20210514200743.3026725-1-alex.kogan@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.60.0.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f1dee9dd-3b4b-4380-61bd-08da1bde18b0
-x-ms-traffictypediagnostic: DM6PR10MB4393:EE_
-x-microsoft-antispam-prvs: <DM6PR10MB4393CDC9AE7E543EAC22A162F1EA9@DM6PR10MB4393.namprd10.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WgY/YIhpXUWNeAiqF2LFCnfX6BqMrZlGE4lShJYIRgXsjQEuLS9JKfBm/TbWsXB/5sNA663LT4VtENeOqqmRAZKL9BGNUAKlBPTi/Dcy5uwuxZm0hmC9pyeJ1cai5gIVlr/Ja1yXRvwVUMjQ/2yphSVKxvcin3QJgTL7hfnVf6VJsdvefb4ayuHM2WVayT2Ttf5QksF6U/YjDZ4zg3fASeci16qZqyAsloEDl/k8iE8F0KGj80UU+jwF+F1mZihF0BLnutuEMTqqj664gcme4pnUMdKlMPLFR05/ggV3/+Z7vZPhbOMDt6gbobkUBjO+NIoyxww0wDfo2/E3O1Hn7vIX2GzaNgBDKSMvro5Nr0NsMm9iFLC7I9eG+o7kLN4v7m6UisQymnVp+O0gV6Ao91iRo9jgvHOGxSLxuwNA1SMW3l5YmuY4Ho2LwNjzwiJcVG8w6bI3bWAfncThkpCRuKMvS1kxsuv2X5wKXZ7rEK+vp+GOazfR9tQ8oIPQgcPEuVHzLfZ5gOgdepTU9TGd2XCmhBYHiyLJFTtli5RXCarpyxa4reotDXxIYw8BvO1qlrrwqrRp5umcOXbS3hJGSMtJyfrpMiV3sZtMUYiFo0bAfUylBryfFAM9258cIVvn3DSgkgoSdLVhI5ISWYNZ5+ka5AyVoJm2bTHWOHgXWsONY5VwnTGJn6zE35gsQwZUkyH88h8hbX1pFkMdkIy/1sm6xDV2dkBZzYFPsxgDVhMb6ixxmv7asVfSb9ZzTEJdURQ3FeXXk9I/DRESAJY8kZbt0Sp6qCfosTPyPBfXqHDCATgJA57a44mg9RiJqN7VRS9rUs3p/24NcshitkycQeBnpHwGWraI4JfZ9IxXOQ0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5315.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(83380400001)(6506007)(33656002)(36756003)(2906002)(40140700001)(2616005)(53546011)(6512007)(6916009)(8936002)(30864003)(86362001)(66556008)(44832011)(38100700002)(966005)(6486002)(122000001)(71200400001)(508600001)(66476007)(66446008)(64756008)(186003)(107886003)(4326008)(316002)(7416002)(5660300002)(91956017)(8676002)(66946007)(38070700005)(76116006)(54906003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OHlWQ1JVZGk2bXU1QU9EV3dQN0NxQUYreURQZGV5NXBBbnppd0NCVGZURzdB?=
- =?utf-8?B?L3JkeGlobGJRcEZKUmVQSFlxMDJGZmw2MUMyV0M1YmM2S2ozMkNZTE1VREU5?=
- =?utf-8?B?a1ZqbnB5eW1kajUxYnpJQVQwWlJaUXlHSzAwYzNwNFo2UTgwS3pTQ0xPeHd1?=
- =?utf-8?B?bUFKMHdPYTFodmV2NFpadXMvRXNxWWJSL3dTT2dsckkrRkNXUGdrNUV3QWFr?=
- =?utf-8?B?RDgrcnZFWUdaMFNVZVZKMVVjTFR2ZzJoREtZY29jRGV6aVdsOHc3QnRMazZE?=
- =?utf-8?B?YzljQzg0L1ppSkFKa0krNWpkVGNOVEFMU1lqTnJQczdoWkJZcldJaEMvQmNL?=
- =?utf-8?B?b2dxVkpoLzNlR0JJcHc4TG0rUGYyWnZBc0hBQnp0V3plbkI5d0hZM056R2Zp?=
- =?utf-8?B?ZnpsMFVudVg5OTUyNjNCY1BGa1VCQndsT2tEekxWU2d1cWZoci8vK1RnN0Ny?=
- =?utf-8?B?VUQ0L3RwUjdhKzYxdE1JVFJ2K1ZudFZtS05XejFwTWxsbUllcVJkMXNGU2ZE?=
- =?utf-8?B?TGo1aWhiZSsvcGZHR3p3TkVIdG9VRitiU2NaTWk5Nm9PaG5FSDNjZklkV2Jl?=
- =?utf-8?B?SnpoQ0Y4WGpBN0ZHb0svK28xOXE1cXZSY0pZTUJydGhSVURYMTN6cGxDMm1l?=
- =?utf-8?B?eTFlaS95QlpHN3AvQUZkb3RwSzR3a3hqWVpQQVhXZS85Q1Jra3FRb2NqL2Ft?=
- =?utf-8?B?RktwR3drWTh3ZmcvWStaRUpTWGV5QnJCUkZUbW1aaUdYMm4xN1ZjYlpFZkxN?=
- =?utf-8?B?RmN3MStkYTUzUXIzNFRSOFV2NUZUWCtJeDdrZ0FyeG91MTlqV2dlUUVyaHJW?=
- =?utf-8?B?TU1hMUxXMTlEanoxdXpXenMwVXJ0L2wxZGhHUHpwZTduVzNPVHU4RkFjOWZi?=
- =?utf-8?B?RmUwdjFuU3I2bCtUTm44R0RNME5LcFNpRlBZOENWTzJzRHBCcDhPQ1Z1SzFD?=
- =?utf-8?B?dDFhN1VQOEM4d2w3c0hUQTBoNVJKUE1pcStOUjN1bnB1eURZN3lkTmtUZzAr?=
- =?utf-8?B?M3A1djBtMFAreDhvVi9kNFNwcWFWTmVobUJ5ekZDVGRUc2lKeS9kemptanFo?=
- =?utf-8?B?d3g5Yng2cGJXWnJUc1Q5Ky94ckxrMFg2VElvS0g5d1Bud2ZrajI5NkxSODRw?=
- =?utf-8?B?MG9KNGxzc1ZXVHJFNThYSnpianhWWTVQb0k4NWl0cEdpeWJJYS83Zm5WSy96?=
- =?utf-8?B?UFA2cFdOdlFHcFJiU1NPYk5zbVFSUENtNHFOVlowNzNXTzlXc3ZZWmhYcFBF?=
- =?utf-8?B?R1hWTnFvMEFpVzNCbExWbzI5aHh0cytuYjFpUEdjQWRTd1B4M1NIcTlwMmlm?=
- =?utf-8?B?dHNORDUvbVhPZ1JOdjNCTHlPMmwraVlWZDRlRVpFb0Z6M0h5cmdRVnU0THJP?=
- =?utf-8?B?eDlEZ3BtQWdGeGR4OEk0RVo2cmczVVhCSXMzRldTZlhnMlVDMFA3Z3VnRyti?=
- =?utf-8?B?TS9XR0thYTJuYzlGYitML0V0T1lSbEJDU09sOTQvcTVwUGJ4Q2hDZEZ2dGdS?=
- =?utf-8?B?TkdDNElwSWxoRTBDS2oraUZhRVYwSlFmTkhOblFDMUxWUzl5OEd6MXpPeFIz?=
- =?utf-8?B?OWN2aUs5TjJTK1JoTWN3bktVZS9OYmpUREJudVBDWC9CT2o3ZVlOQ0V0VVZ4?=
- =?utf-8?B?TEtTTWVkcnVHbS9uUkl6dzdYS1BONWdRbFFpek5PUUhnS2lwSm01Mnk4OXBp?=
- =?utf-8?B?V1pWQzlKMFY5NUN4K3ExeUl5VFdJL1F0VWJvSzZBQkNrUytsZldGSlgrd2l5?=
- =?utf-8?B?QncyNklHSlAwc3k3NEtPM2c2d2JFdmZ5V252Y2VkR0wyQUtyeTcrUC9oYWhw?=
- =?utf-8?B?d0czTW1zZWlrazFOMUIvU2dTRVJ2am9OK1F0OFlDRngwTy92N0NZS25rQzdz?=
- =?utf-8?B?QzhjNEpxVDk5a3EwVlB2UmdhYk9peXQ0aFJ6aWNFcXJTUWN3Ty9XajB4bENS?=
- =?utf-8?B?NnhhYWw1bGFDUEdGbVRUQkNETnFEclNwZVhqRVhLOHRvZzY3M0IybFdod2cr?=
- =?utf-8?B?L29lNzg4L2hQYTFTL3FlL01QenVaWHRmU0s2Mm1odkFjdk5BdFlmWml5aHJJ?=
- =?utf-8?B?RTVKNkh3VUJuZzBLbHRwcmI1WkcwaFBaaUVpTjJGQndVVWFkdld2UVJPdjA0?=
- =?utf-8?B?Ty93R2ZaTnhybDUrV3JMVHZVb1lCT3R4WStyRU05NmJ4SjVZV1JtYzNKTVVO?=
- =?utf-8?B?d1ZRMHRseVJuUE85b01rVjNBak9lZWMzZEhIemtLTWJIVEE3dXdQRi9Wc0xZ?=
- =?utf-8?B?cnYzdTlnMFRMT3VOL2FGWmpXU0kxY1VSOEpnT05lUmEzWjFQUFVRSlg5SnpC?=
- =?utf-8?B?Z2todEpUcm81Z21iR29ZQlVvWVVPTTJkQjRtdVBtVWpLTVFoR0V0MlU2R2ds?=
- =?utf-8?Q?rxTmq14nE1y5SAYyJERCOsWaB38joOkF6JQ8g?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E1D5ECEC53FEDF46ADC78BC691150BC5@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5315.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1dee9dd-3b4b-4380-61bd-08da1bde18b0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2022 17:09:53.6143
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5xLSwra3bkKr5kd3Kobn7pLglfhyQ4rQnr3CBQENpXZF4NWduH3KG6CpD87i+KqPk/Yc7JEoHnIwpsctYJDwWQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4393
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
- definitions=2022-04-11_06:2022-04-11,2022-04-11 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 mlxscore=0
- bulkscore=0 phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204110095
-X-Proofpoint-ORIG-GUID: yO8qMx5nOR-v6HWzRwaepJLZ2zSXDPYe
-X-Proofpoint-GUID: yO8qMx5nOR-v6HWzRwaepJLZ2zSXDPYe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-SGksIGFsbC4NCg0KSeKAmXZlIGdvdCBhcm91bmQgdG8gY29sbGVjdCBtb3JlIHBlcmZvcm1hbmNl
-IGRhdGEgd2l0aCBtYWNyby1iZW5jaG1hcmtzDQpmcm9tIHRoZSBMS1Agc3VpdGVbMV0uIFNwZWNp
-ZmljYWxseSwgSSBtZWFzdXJlZCBtb3JlIHRoYW4gMi41eCBpbXByb3ZlbWVudA0Kd2l0aCBmc21h
-cmsgYW5kIHVwIHRvIG5lYXJseSAyeCBpbXByb3ZlbWVudCB3aXRoIEFJTTcuIE5vdGUgdGhhdCBz
-aW1pbGFyIA0KaW1wcm92ZW1lbnRzIGhhdmUgYmVlbiBwcmV2aW91c2x5IHJlcG9ydGVkIGJ5IHRo
-ZSBrZXJuZWwgdGVzdCByb2JvdCBbMiwzXSwNCmJ1dCBpdCBpcyBuaWNlIHRvIHNlZSB0aGF0IHRo
-ZXkgYXJlIHJlcHJvZHVjaWJsZSBvbiBvdXIgc3lzdGVtIGFzIHdlbGwuIA0KVGhlIGRldGFpbHMg
-YXBwZWFyIGJlbG93Lg0KDQpPdXIgcGVyZm9ybWFuY2UgdGVhbSBhbHNvIGV2YWx1YXRlZCB0aGUg
-cGVyZm9ybWFuY2Ugb2YgVFBDLUMgd2l0aCANCk9yYWNsZSBEQiBvbiB0aGUgcGF0Y2hlZCBrZXJu
-ZWwgd2l0aCBDTkEuIFRoZSBldmFsdWF0aW9uLCBjYXJyaWVkIG9uIGENCnN5c3RlbSBlcXVpcHBl
-ZCB3aXRoIHR3byBBTUQgRVBZQyA3NTUxIHByb2Nlc3NvcnMsIHNob3dlZA0Kbm8gc2Vuc2l0aXZp
-dHkgdG8gQ05BIC0tIG5vIGltcHJvdmVtZW50cywgbm8gcmVncmVzc2lvbnMuDQoNCj09PT09PT09
-PT09PT0NCg0KVGhlIGZvbGxvd2luZyByZXN1bHRzIGFyZSBmcm9tIGFuIE9yYWNsZSBYNS04IHNl
-cnZlciAoZWlnaHQgSW50ZWwgWGVvbg0KRTctODg5NSB2MyBAIDIuNjBHSHogc29ja2V0cyB3aXRo
-IDE4IGh5cGVydGhyZWFkZWQgY29yZXMgZWFjaCkuIEVhY2gNCm51bWJlciByZXByZXNlbnRzIGF2
-ZXJhZ2UgdGhyb3VnaHB1dCBvdmVyIDI1IHJ1bnMuIFRoZSBzdGFuZGFyZCBkZXZpYXRpb24NCmlz
-IGFsc28gcmVwb3J0ZWQgaW4gKCksIGFuZCBpdCB3YXMgcHJldHR5IGxhcmdlIGluIHNvbWUgZXhw
-ZXJpbWVudHMuIA0KDQpUaGUgZm9sbG93aW5nIHJlc3VsdHMgYXJlIGZyb20gdGhlIGZzbWFyayBi
-ZW5jaG1hcmsgKGJhc2VkIG9uIHRoZSANCmBmc21hcmstZ2VuZXJpYy0xYnJkLTFCUkRfNDhHLTRN
-LWJ0cmZzLTF4LSp0LU5vU3luYy0yNEdgIGNvbmZpZykuDQpUaGUgcmVwb3J0ZWQgbnVtYmVycyBy
-ZXByZXNlbnQgYGZpbGVzLXBlci1zZWNgLg0KDQpudW0tdGhyZWFkcyAgc3RvY2sgICAgICBDTkEg
-ICAgICAgICAgLyBzcGVlZHVwDQogIDEgIDQwMC4yMTYgKDcuMzk5KSA0MDMuMjEyICg3LjE2OSkg
-LyAxLjAwNw0KICAyICA3ODQuNDg0ICgxMy44MDkpIDc3OC4xOTYgKDIyLjY5OSkgLyAwLjk5Mg0K
-ICA0ICAxMTUzLjc5MiAoNTQuNjk5KSAxMTMwLjE0MCAoNTMuODIzKSAvIDAuOTgwDQogIDggIDEy
-NDAuNDI0ICgxNjAuNDUzKSAxMjg3LjUzMiAoMTY5LjY1OSkgLyAxLjAzOA0KIDE2ICAxNDQwLjcy
-MCAoMTgyLjU1NSkgMTQ4OS4yODggKDE0OC42MDQpIC8gMS4wMzQNCiAzMiAgMTYwMC40MzIgKDU5
-Ljk0NCkgMTg2MC42NTIgKDIxMi45NzEpIC8gMS4xNjMNCiA2NCAgMTE2OS43NDAgKDQwLjgxNSkg
-MzAyNy42ODAgKDE0Mi4zNDkpIC8gMi41ODgNCiA3MiAgMTE3NC4yNDAgKDM5LjI2MSkgMjY4Mi41
-NjAgKDU0My42OTApIC8gMi4yODUNCjE0NCAgMTE2NC4yOTYgKDQyLjQ0MSkgMjg0Mi42ODQgKDQw
-MC42NjQpIC8gMi40NDINCjIxNiAgMTE3NC4zMTIgKDM4LjM5MikgMjQ0NS4xNjggKDU3NS42Njgp
-IC8gMi4wODINCjI4NiAgMTE3NC43MzIgKDUyLjQzMCkgMjU5OC40NDQgKDQ2OC42MTUpIC8gMi4y
-MTINCg0KV2UgYWxzbyBleHBlcmltZW50ZWQgd2l0aCBhbm90aGVyIGNvbmZpZyANCihgZnNtYXJr
-LWdlbmVyaWMtMWJyZC0xQlJEXzQ4Ry00TS1idHJmcy0xeC0qdC1mc3luY0JlZm9yZUNsb3NlLTI0
-R2ApDQphbmQgbWVhc3VyZWQgbW9yZSBtb2Rlc3QsIHlldCByb2J1c3QgaW1wcm92ZW1lbnQ6DQoN
-Cm51bS10aHJlYWRzICBzdG9jayAgICAgIENOQSAgICAgICAgICAvIHNwZWVkdXANCiAgMSAgMTc3
-LjMwNCAoMy42NTkpIDE3OC41OTYgKDMuMjk5KSAvIDEuMDA3DQogIDIgIDM0NS4yNjAgKDguMzk4
-KSAzNDkuMzg0ICg1LjcwNikgLyAxLjAxMg0KICA0ICA2NDcuMjkyICgxNC45ODIpIDY0OC4xNjQg
-KDExLjI4NikgLyAxLjAwMQ0KICA4ICAxMDA4LjMwNCAoNDYuMzQyKSAxMDA3LjEwOCAoMzcuNzY1
-KSAvIDAuOTk5DQogMTYgIDExMTYuNjUyICg1Ny44MTYpIDExNTAuNzUyICg0OS4wMDUpIC8gMS4w
-MzENCiAzMiAgMTIyOS43NjAgKDg0LjkzMikgMTM0Ni4xMzIgKDgwLjkzNSkgLyAxLjA5NQ0KIDY0
-ICA5ODEuNTY0ICg1OS41MzMpIDEzMTMuOTkyICg3NC45NzEpIC8gMS4zMzkNCiA3MiAgOTk1LjE4
-MCAoNTkuMjI4KSAxMjY2LjY2MCAoNjMuMjg3KSAvIDEuMjczDQoxNDQgIDk3OC40NDggKDY5LjU4
-MSkgMTI5MC4zMzYgKDQzLjA2NSkgLyAxLjMxOQ0KMjE2ICAxMDExLjg4MCAoNjAuMTU0KSAxMzEw
-LjUyNCAoNjEuNjMxKSAvIDEuMjk1DQoyODYgIDk4NS4xNjQgKDY3LjAxNikgMTMwNS4yNDQgKDYz
-LjczNSkgLyAxLjMyNQ0KDQpUaGUgZm9sbG93aW5nIHJlc3VsdHMgYXJlIGZyb20gdGhlIEFJTTcg
-YmVuY2htYXJrIChiYXNlZCBvbiB0aGUgDQpgYWltNy1mcy1yYWlkLTRCUkRfMTJHLWJ0cmZzLSot
-UkFJRDAtZGlza19ycmAgY29uZmlnKS4gSGVyZSB3ZSB2YXJ5IA0KdGhlIGxvYWQsIGFuZCBtZWFz
-dXJlIHBlcmZvcm1hbmNlIGluIGBqb2JzLXBlci1taW51dGVgIHVuaXRzLiBEdWUgdG8gdGltZQ0K
-bGltaXRhdGlvbnMsIGVhY2ggZXhwZXJpbWVudCB3YXMgcmVwZWF0ZWQgb25seSA3IHRpbWVzLg0K
-DQpsb2FkICBzdG9jayAgICAgIENOQSAgICAgICAgICAvIHNwZWVkdXANCiAgMiAgOTY1LjYzMSAo
-MS42OTYpIDk2My45NjkgKDAuOTY1KSAvIDAuOTk4DQogMjAgIDc5MDEuNjQ3ICgxMTYuNjcxKSA4
-MjU2LjU3NiAoOTMuMzYyKSAvIDEuMDQ1DQoxMDAgIDE2NDA5LjE0NCAoMjgwLjgyOCkgMjMzODAu
-ODE5ICgyNzkuMzY1KSAvIDEuNDI1DQo1MDAgIDIwMzU1LjU0MSAoMzUzLjg2MikgMzQyODEuODM2
-ICg4NzMuMzU3KSAvIDEuNjg0DQoxMDAwICAyMDczMy45NDcgKDUwNy4zODgpIDM2NTQ2LjgyOSAo
-Njk1LjI3MykgLyAxLjc2Mw0KMTUwMCAgMjE1NzAuNjM5ICg0OTkuMjA1KSAzNzA3OC4yNDkgKDgw
-Ni42NjkpIC8gMS43MTkNCjMwMDAgIDIyMDY4Ljc2MSAoNDE1LjgxMykgMzY2NDkuMTQ0ICgxMjE5
-LjYzOCkgLyAxLjY2MQ0KOTAwMCAgMTk1NTEuNjgxICgzMzcuMjMyKSAzNzk5OC40NjQgKDY4Ny4w
-NTkpIC8gMS45NDMNCg0KQmVzdCByZWdhcmRzLA0K4oCUIEFsZXgNCg0KWzFdIGh0dHBzOi8vZ2l0
-aHViLmNvbS9pbnRlbC9sa3AtdGVzdHMuZ2l0DQpbMl0gaHR0cHM6Ly9saXN0cy4wMS5vcmcvaHlw
-ZXJraXR0eS9saXN0L2xrcEBsaXN0cy4wMS5vcmcvdGhyZWFkL0hHVk9DWURFRTVLVExZUFRBRkJE
-MlJYRFFPQ0RQRlVKLw0KWzNdIGh0dHBzOi8vbGlzdHMuMDEub3JnL2h5cGVya2l0dHkvbGlzdC9s
-a3BAbGlzdHMuMDEub3JnL3RocmVhZC9ETk1FUVBYSlJRWTJJS0haM0VSR1JZNlRVUFdEVEZVTi8N
-Cg0KPiBPbiBNYXkgMTQsIDIwMjEsIGF0IDQ6MDcgUE0sIEFsZXggS29nYW4gPGFsZXgua29nYW5A
-b3JhY2xlLmNvbT4gd3JvdGU6DQo+IA0KPiBDaGFuZ2VzIGZyb20gdjE0Og0KPiAtLS0tLS0tLS0t
-LS0tLS0tDQo+IA0KPiAtIENoYW5nZSB0aGUgd2F5IHRoZSBtYWluIHF1ZXVlIGlzIHNjYW5uZWQg
-YW5kIHJlb3JkZXJlZCBpbg0KPiBjbmFfd2FpdF9oZWFkX29yX2xvY2soKSwgYmFzZWQgb24gUGV0
-ZXIncyBzdWdnZXN0aW9uLg0KPiANCj4gSW4gZGV0YWlsOiBpbnN0ZWFkIG9mIGluc3BlY3Rpbmcg
-b25seSBvbmUgcXVldWUgbm9kZSwgd2Ugbm93IHNjYW4NCj4gKGFuZCBtb3ZlIG5vZGVzIGludG8g
-dGhlIHNlY29uZGFyeSBxdWV1ZSkgYXMgbG9uZyBhcyB0aGUgbG9jaw0KPiByZW1haW5zIGJ1c3ku
-IFRoaXMgc2ltcGxpZmllZCB0aGUgY29kZSBxdWl0ZSBhIGJpdCwgYXMgd2UgZG9uJ3QgbmVlZA0K
-PiB0byBjYWxsIGNuYV9vcmRlcl9xdWV1ZSgpIGFnYWluIGZyb20gY25hX2xvY2tfaGFuZG9mZigp
-LiANCj4gDQo+IC0gVXNlIGxvY2FsX2Nsb2NrKCkgaW5zdGVhZCBvZiByZWx5aW5nIG9uIGppZmZp
-ZXMgdG8gZGVjaWRlIHdoZW4gdG8NCj4gZmx1c2ggdGhlIHNlY29uZGFyeSBxdWV1ZSwgcGVyIEFu
-ZHkncyBzdWdnZXN0aW9uLg0KPiANCj4gLSBVc2UgbW9kdWxlX3BhcmFtKCkgZm9yIG51bWFfc3Bp
-bmxvY2tfdGhyZXNob2xkX25zLCBzbyBpdCBjYW4gYmUgdHdlYWtlZA0KPiBhdCBydW50aW1lLCBw
-ZXIgQW5keSdzIHN1Z2dlc3Rpb24uDQo+IA0KPiAtIFJlZHVjZSB0aGUgZGVmYXVsdCB2YWx1ZSBm
-b3IgbnVtYV9zcGlubG9ja190aHJlc2hvbGRfbnMgdG8gMW1zIGJhc2VkIG9uDQo+IHRoZSBjb21t
-ZW50cyBmcm9tIEFuZHkgYW5kIFBldGVyLiBUaGUgcGVyZm9ybWFuY2UgbnVtYmVycyBiZWxvdyBp
-bmNsdWRlDQo+IHJlc3VsdHMgd2l0aCB0aGUgbmV3IGRlZmF1bHQgYXMgd2VsbCBhcyB3aXRoIHRo
-ZSB2YWx1ZSBvZiAxMG1zLCB3aGljaCB3YXMgDQo+IHRoZSBkZWZhdWx0IHRocmVzaG9sZCBpbiBw
-cmV2aW91cyByZXZpc2lvbnMgb2YgdGhlIHNlcmllcy4NCj4gDQo+IFN1bW1hcnkNCj4gLS0tLS0t
-LQ0KPiANCj4gTG9jayB0aHJvdWdocHV0IGNhbiBiZSBpbmNyZWFzZWQgYnkgaGFuZGluZyBhIGxv
-Y2sgdG8gYSB3YWl0ZXIgb24gdGhlDQo+IHNhbWUgTlVNQSBub2RlIGFzIHRoZSBsb2NrIGhvbGRl
-ciwgcHJvdmlkZWQgY2FyZSBpcyB0YWtlbiB0byBhdm9pZA0KPiBzdGFydmF0aW9uIG9mIHdhaXRl
-cnMgb24gb3RoZXIgTlVNQSBub2Rlcy4gVGhpcyBwYXRjaCBpbnRyb2R1Y2VzIENOQQ0KPiAoY29t
-cGFjdCBOVU1BLWF3YXJlIGxvY2spIGFzIHRoZSBzbG93IHBhdGggZm9yIHFzcGlubG9jay4gSXQg
-aXMNCj4gZW5hYmxlZCB0aHJvdWdoIGEgY29uZmlndXJhdGlvbiBvcHRpb24gKE5VTUFfQVdBUkVf
-U1BJTkxPQ0tTKS4NCj4gDQo+IENOQSBpcyBhIE5VTUEtYXdhcmUgdmVyc2lvbiBvZiB0aGUgTUNT
-IGxvY2suIFNwaW5uaW5nIHRocmVhZHMgYXJlDQo+IG9yZ2FuaXplZCBpbiB0d28gcXVldWVzLCBh
-IHByaW1hcnkgcXVldWUgZm9yIHRocmVhZHMgcnVubmluZyBvbiB0aGUgc2FtZQ0KPiBub2RlIGFz
-IHRoZSBjdXJyZW50IGxvY2sgaG9sZGVyLCBhbmQgYSBzZWNvbmRhcnkgcXVldWUgZm9yIHRocmVh
-ZHMNCj4gcnVubmluZyBvbiBvdGhlciBub2Rlcy4gVGhyZWFkcyBzdG9yZSB0aGUgSUQgb2YgdGhl
-IG5vZGUgb24gd2hpY2gNCj4gdGhleSBhcmUgcnVubmluZyBpbiB0aGVpciBxdWV1ZSBub2Rlcy4g
-QWZ0ZXIgYWNxdWlyaW5nIHRoZSBNQ1MgbG9jayBhbmQNCj4gYmVmb3JlIGFjcXVpcmluZyB0aGUg
-c3BpbmxvY2ssIHRoZSBNQ1MgbG9jayBob2xkZXIgY2hlY2tzIHdoZXRoZXIgdGhlIG5leHQNCj4g
-d2FpdGVyIGluIHRoZSBwcmltYXJ5IHF1ZXVlIChpZiBleGlzdHMpIGlzIHJ1bm5pbmcgb24gdGhl
-IHNhbWUgTlVNQSBub2RlLg0KPiBJZiBpdCBpcyBub3QsIHRoYXQgd2FpdGVyIGlzIGRldGFjaGVk
-IGZyb20gdGhlIG1haW4gcXVldWUgYW5kIG1vdmVkIGludG8NCj4gdGhlIHRhaWwgb2YgdGhlIHNl
-Y29uZGFyeSBxdWV1ZS4gVGhpcyB3YXksIHdlIGdyYWR1YWxseSBmaWx0ZXIgdGhlIHByaW1hcnkN
-Cj4gcXVldWUsIGxlYXZpbmcgb25seSB3YWl0ZXJzIHJ1bm5pbmcgb24gdGhlIHNhbWUgcHJlZmVy
-cmVkIE5VTUEgbm9kZS4gTm90ZQ0KPiB0aGF0IGNlcnRhaW4gcHJpb3J0aXplZCB3YWl0ZXJzIChl
-LmcuLCBpbiBpcnEgYW5kIG5taSBjb250ZXh0cykgYXJlDQo+IGV4Y2x1ZGVkIGZyb20gYmVpbmcg
-bW92ZWQgdG8gdGhlIHNlY29uZGFyeSBxdWV1ZS4gV2UgY2hhbmdlIHRoZSBOVU1BIG5vZGUNCj4g
-cHJlZmVyZW5jZSBhZnRlciBhIHdhaXRlciBhdCB0aGUgaGVhZCBvZiB0aGUgc2Vjb25kYXJ5IHF1
-ZXVlIHNwaW5zIGZvciBhDQo+IGNlcnRhaW4gYW1vdW50IG9mIHRpbWUuIFdlIGRvIHRoYXQgYnkg
-Zmx1c2hpbmcgdGhlIHNlY29uZGFyeSBxdWV1ZSBpbnRvDQo+IHRoZSBoZWFkIG9mIHRoZSBwcmlt
-YXJ5IHF1ZXVlLCBlZmZlY3RpdmVseSBjaGFuZ2luZyB0aGUgcHJlZmVyZW5jZSB0byB0aGUNCj4g
-TlVNQSBub2RlIG9mIHRoZSB3YWl0ZXIgYXQgdGhlIGhlYWQgb2YgdGhlIHNlY29uZGFyeSBxdWV1
-ZSBhdCB0aGUgdGltZSBvZg0KPiB0aGUgZmx1c2guDQo+IA0KPiBNb3JlIGRldGFpbHMgYXJlIGF2
-YWlsYWJsZSBhdCBodHRwczovL2FyeGl2Lm9yZy9hYnMvMTgxMC4wNTYwMC4NCj4gDQo+IFdlIGhh
-dmUgZG9uZSBzb21lIHBlcmZvcm1hbmNlIGV2YWx1YXRpb24gd2l0aCB0aGUgbG9ja3RvcnR1cmUg
-bW9kdWxlDQo+IGFzIHdlbGwgYXMgd2l0aCBzZXZlcmFsIGJlbmNobWFya3MgZnJvbSB0aGUgd2ls
-bC1pdC1zY2FsZSByZXBvLg0KPiBUaGUgZm9sbG93aW5nIGxvY2t0b3J0dXJlIHJlc3VsdHMgYXJl
-IGZyb20gYW4gT3JhY2xlIFg1LTQgc2VydmVyDQo+IChmb3VyIEludGVsIFhlb24gRTctODg5NSB2
-MyBAIDIuNjBHSHogc29ja2V0cyB3aXRoIDE4IGh5cGVydGhyZWFkZWQNCj4gY29yZXMgZWFjaCku
-IEVhY2ggbnVtYmVyIHJlcHJlc2VudHMgYW4gYXZlcmFnZSAob3ZlciAyNSBydW5zKSBvZiB0aGUN
-Cj4gdG90YWwgbnVtYmVyIG9mIG9wcyAoeDEwXjcpIHJlcG9ydGVkIGF0IHRoZSBlbmQgb2YgZWFj
-aCBydW4uIFRoZSANCj4gc3RhbmRhcmQgZGV2aWF0aW9uIGlzIGFsc28gcmVwb3J0ZWQgaW4gKCks
-IGFuZCBpbiBnZW5lcmFsIGlzIGFib3V0IDMlDQo+IGZyb20gdGhlIGF2ZXJhZ2UuIFRoZSAnc3Rv
-Y2snIGtlcm5lbCBpcyB2NS4xMi4wLA0KPiBjb21taXQgM2NmNWM4ZWEzYTY2LCBjb21waWxlZCBp
-biB0aGUgZGVmYXVsdCBjb25maWd1cmF0aW9uLiANCj4gJ0NOQScgaXMgdGhlIG1vZGlmaWVkIGtl
-cm5lbCB3aXRoIE5VTUFfQVdBUkVfU1BJTkxPQ0tTIHNldCBhbmQNCj4gdGhlIG5ldyBkZWZhdWx0
-IHRocmVzaG9sZCBvZiAxbXMgZm9yIGZsdXNoaW5nIHRoZSBzZWNvbmRhcnkgcXVldWUNCj4gKG51
-bWFfc3BpbmxvY2tfdGhyZXNob2xkX25zKTsgJ0NOQS0xMG1zJyBpcyB0aGUgc2FtZSBhcyBDTkEs
-IA0KPiBidXQgdXNlcyB0aGUgdGhyZXNob2xkIG9mIDEwbXMuIFRoZSBzcGVlZHVwIGlzIGNhbGN1
-bGF0ZWQgYnkgZGl2aWRpbmcgDQo+IHRoZSByZXN1bHQgb2YgJ0NOQScgYW5kICdDTkEtMTBtcycs
-IHJlc3BlY3RpdmVseSwgYnkgdGhlIHJlc3VsdA0KPiBhY2hpZXZlZCB3aXRoICdzdG9jaycuDQo+
-IA0KPiAjdGhyICAJIHN0b2NrICAgICAgQ05BICAgICAgICAgIC8gc3BlZWR1cCAgQ05BLTEwbXMg
-ICAgLyBzcGVlZHVwDQo+ICAxICAyLjY5NSAoMC4xMDgpIDIuNzA0ICgwLjA5OSkgLyAxLjAwMyAg
-Mi43MTIgKDAuMDc3KSAvIDEuMDA2DQo+ICAyICAyLjc1MyAoMC4xODcpIDIuNzg1ICgwLjE3MSkg
-LyAxLjAxMiAgMi44MjIgKDAuMTc0KSAvIDEuMDI1DQo+ICA0ICA0LjM1NSAoMC4xMzkpIDQuNDE3
-ICgwLjE3OSkgLyAxLjAxNCAgNC4zNjEgKDAuMTgxKSAvIDEuMDAxDQo+ICA4ICA1LjE2MyAoMC4x
-MTkpIDcuMDE3ICgwLjE5NSkgLyAxLjM1OSAgNy4zNjkgKDAuMTg2KSAvIDEuNDI3DQo+IDE2ICA1
-Ljk0NCAoMC4xMzQpIDkuMTEwICgwLjI0MikgLyAxLjUzMiAgOS4xODcgKDAuMjMzKSAvIDEuNTQ2
-DQo+IDMyICA2LjMxMCAoMC4wODIpIDkuNzEwICgwLjE1NikgLyAxLjUzOSAgOS44MjcgKDAuMTYx
-KSAvIDEuNTU3DQo+IDM2ICA2LjM3NCAoMC4xMTIpIDkuNzc3ICgwLjE0MSkgLyAxLjUzNCAgOS44
-MzAgKDAuMTI0KSAvIDEuNTQyDQo+IDcyICA2LjE3MCAoMC4xMzkpIDkuOTIyICgwLjE5MCkgLyAx
-LjYwOCAgOS45NDUgKDAuMTM2KSAvIDEuNjEyDQo+IDEwOCAgNi4wMDIgKDAuMDg5KSA5LjY1MSAo
-MC4xNzYpIC8gMS42MDggIDkuODQ3ICgwLjEyNSkgLyAxLjY0MQ0KPiAxNDIgIDUuNzg0ICgwLjA3
-OSkgOS40NzcgKDAuMDg5KSAvIDEuNjM4ICA5LjY0MSAoMC4xMTMpIC8gMS42NjcNCj4gDQo+IFRo
-ZSBmb2xsb3dpbmcgdGFibGVzIGNvbnRhaW4gdGhyb3VnaHB1dCByZXN1bHRzIChvcHMvdXMpIGZy
-b20gdGhlIHNhbWUNCj4gc2V0dXAgZm9yIHdpbGwtaXQtc2NhbGUvb3BlbjFfdGhyZWFkczogDQo+
-IA0KPiAjdGhyICAJIHN0b2NrICAgICAgQ05BICAgICAgICAgIC8gc3BlZWR1cCAgQ05BLTEwbXMg
-ICAgLyBzcGVlZHVwDQo+ICAxICAwLjUwMyAoMC4wMDQpIDAuNTAxICgwLjAwMSkgLyAwLjk5NiAg
-MC41MDMgKDAuMDAyKSAvIDEuMDAwDQo+ICAyICAwLjc4MyAoMC4wMTQpIDAuNzczICgwLjAxMSkg
-LyAwLjk4OCAgMC43NzQgKDAuMDE2KSAvIDAuOTg5DQo+ICA0ICAxLjQyMiAoMC4wMjUpIDEuMzk4
-ICgwLjAzMCkgLyAwLjk4MyAgMS40MDMgKDAuMDI1KSAvIDAuOTg3DQo+ICA4ICAxLjc1MyAoMC4x
-MDQpIDEuNjQxICgwLjEzMikgLyAwLjkzNiAgMS42NzUgKDAuMTM0KSAvIDAuOTU2DQo+IDE2ICAx
-Ljg1MSAoMC4wOTcpIDEuNzYwICgwLjEwMykgLyAwLjk1MSAgMS43NzQgKDAuMTE5KSAvIDAuOTU5
-DQo+IDMyICAwLjkwNSAoMC4wODEpIDEuNzA4ICgwLjA4MSkgLyAxLjg4OCAgMS43MzggKDAuMDY5
-KSAvIDEuOTIyDQo+IDM2ICAwLjg5NSAoMC4wNTgpIDEuNzI2ICgwLjA2NSkgLyAxLjkyOCAgMS43
-MzUgKDAuMDgxKSAvIDEuOTM4DQo+IDcyICAwLjgyMyAoMC4wMzMpIDEuNjEwICgwLjA2NykgLyAx
-Ljk1NyAgMS42NDcgKDAuMDY3KSAvIDIuMDAyDQo+IDEwOCAgMC44NDUgKDAuMDM1KSAxLjU4OCAo
-MC4wNTQpIC8gMS44NzggIDEuNzQwICgwLjA2NykgLyAyLjA1OA0KPiAxNDIgIDAuODQwICgwLjAz
-MCkgMS41NDYgKDAuMDQyKSAvIDEuODM5ICAxLjc0MCAoMC4wNDgpIC8gMi4wNzANCj4gDQo+IGFu
-ZCB3aWxsLWl0LXNjYWxlL2xvY2syX3RocmVhZHM6DQo+IA0KPiAjdGhyICAJIHN0b2NrICAgICAg
-Q05BICAgICAgICAgIC8gc3BlZWR1cCAgQ05BLTEwbXMgICAgLyBzcGVlZHVwDQo+ICAxICAxLjU1
-MSAoMC4wMDMpIDEuNTU4ICgwLjAwNikgLyAxLjAwNSAgMS41NTggKDAuMDAzKSAvIDEuMDA1DQo+
-ICAyICAyLjcyMiAoMC4wNjQpIDIuNzA0ICgwLjA2MykgLyAwLjk5MyAgMi43MjcgKDAuMDU4KSAv
-IDEuMDAyDQo+ICA0ICA1LjI4NiAoMC4xNzgpIDUuMzYwICgwLjE1MSkgLyAxLjAxNCAgNS4zNjAg
-KDAuMTM1KSAvIDEuMDE0DQo+ICA4ICA0LjExNSAoMC4yOTcpIDMuOTA2ICgwLjM4MykgLyAwLjk0
-OSAgNC4wNjIgKDAuMzY2KSAvIDAuOTg3DQo+IDE2ICA0LjExOSAoMC4xMjEpIDMuOTUwICgwLjEz
-MSkgLyAwLjk1OSAgNC4wMDkgKDAuMTMyKSAvIDAuOTczDQo+IDMyICAyLjUwOCAoMC4wOTcpIDMu
-ODA1ICgwLjEwNikgLyAxLjUxNyAgMy45NjAgKDAuMDkxKSAvIDEuNTc5DQo+IDM2ICAyLjQ1NyAo
-MC4xMDEpIDMuODEwICgwLjA3MikgLyAxLjU1MSAgMy45MzEgKDAuMTA2KSAvIDEuNjAwDQo+IDcy
-ICAxLjkxMyAoMC4xMDMpIDMuNTMwICgwLjA3MCkgLyAxLjg0NSAgMy44NjAgKDAuMDc4KSAvIDIu
-MDE4DQo+IDEwOCAgMS44OTEgKDAuMTA5KSAzLjQxMCAoMC4wNzkpIC8gMS44MDMgIDMuODgxICgw
-LjA5NykgLyAyLjA1Mg0KPiAxNDIgIDEuNzUyICgwLjA5NikgMy4yMzYgKDAuMDgwKSAvIDEuODQ3
-ICAzLjc3NCAoMC4wNzgpIC8gMi4xNTUNCj4gDQo+IE91ciBldmFsdWF0aW9uIHNob3dzIHRoYXQg
-Q05BIGFsc28gaW1wcm92ZXMgcGVyZm9ybWFuY2Ugb2YgdXNlciANCj4gYXBwbGljYXRpb25zIHRo
-YXQgaGF2ZSBob3QgcHRocmVhZCBtdXRleGVzLiBUaG9zZSBtdXRleGVzIGFyZSANCj4gYmxvY2tp
-bmcsIGFuZCB3YWl0aW5nIHRocmVhZHMgcGFyayBhbmQgdW5wYXJrIHZpYSB0aGUgZnV0ZXggDQo+
-IG1lY2hhbmlzbSBpbiB0aGUga2VybmVsLiBHaXZlbiB0aGF0IGtlcm5lbCBmdXRleCBjaGFpbnMs
-IHdoaWNoDQo+IGFyZSBoYXNoZWQgYnkgdGhlIG11dGV4IGFkZHJlc3MsIGFyZSBlYWNoIHByb3Rl
-Y3RlZCBieSBhIA0KPiBjaGFpbi1zcGVjaWZpYyBzcGluIGxvY2ssIHRoZSBjb250ZW50aW9uIG9u
-IGEgdXNlci1tb2RlIG11dGV4IA0KPiB0cmFuc2xhdGVzIGludG8gY29udGVudGlvbiBvbiBhIGtl
-cm5lbCBsZXZlbCBzcGlubG9jay4gDQo+IA0KPiBIZXJlIGFyZSB0aGUgdGhyb3VnaHB1dCByZXN1
-bHRzIChvcHMvdXMpIGZvciB0aGUgbGV2ZWxkYiDigJhyZWFkcmFuZG9t4oCZDQo+IGJlbmNobWFy
-azoNCj4gDQo+ICN0aHIgIAkgc3RvY2sgICAgICBDTkEgICAgICAgICAgLyBzcGVlZHVwICBDTkEt
-MTBtcyAgICAvIHNwZWVkdXANCj4gIDEgIDAuNTMzICgwLjAxMSkgMC41MzkgKDAuMDE0KSAvIDEu
-MDEyICAwLjUzNiAoMC4wMTMpIC8gMS4wMDYNCj4gIDIgIDAuODU0ICgwLjAyMikgMC44NTYgKDAu
-MDE3KSAvIDEuMDAzICAwLjg1NyAoMC4wMjApIC8gMS4wMDQNCj4gIDQgIDEuMjM2ICgwLjAyOCkg
-MS4yMzggKDAuMDU0KSAvIDEuMDAyICAxLjIxNyAoMC4wNTQpIC8gMC45ODUNCj4gIDggIDEuMjA3
-ICgwLjExNykgMS4xOTggKDAuMTIyKSAvIDAuOTkzICAxLjE1NSAoMC4xMzgpIC8gMC45NTcNCj4g
-MTYgIDAuNzU4ICgwLjA1NSkgMS4xMjggKDAuMTE4KSAvIDEuNDg5ICAxLjA2OCAoMC4xMzEpIC8g
-MS40MDkNCj4gMzIgIDAuNzQzICgwLjAyNykgMS4xNTMgKDAuMDI4KSAvIDEuNTUxICAxLjE0NyAo
-MC4wMjEpIC8gMS41NDMNCj4gMzYgIDAuNzA4ICgwLjAyNykgMS4xNTAgKDAuMDI0KSAvIDEuNjIz
-ICAxLjEzNyAoMC4wMjYpIC8gMS42MDUNCj4gNzIgIDAuNjI5ICgwLjAxNikgMS4xMTIgKDAuMDE5
-KSAvIDEuNzY3ICAxLjEzNCAoMC4wMTkpIC8gMS44MDINCj4gMTA4ICAwLjYxMCAoMC4wMTIpIDEu
-MDUzICgwLjAxOCkgLyAxLjcyNSAgMS4xMzAgKDAuMDE3KSAvIDEuODUzDQo+IDE0MiAgMC42MDYg
-KDAuMDEzKSAxLjAwOCAoMC4wMjApIC8gMS42NjQgIDEuMTEwICgwLjAyMykgLyAxLjgzMw0KPiAN
-Cj4gRnVydGhlciBjb21tZW50cyBhcmUgd2VsY29tZSBhbmQgYXBwcmVjaWF0ZWQuDQo+IA0KPiBB
-bGV4IEtvZ2FuICg2KToNCj4gIGxvY2tpbmcvcXNwaW5sb2NrOiBSZW5hbWUgbWNzIGxvY2svdW5s
-b2NrIG1hY3JvcyBhbmQgbWFrZSB0aGVtIG1vcmUNCj4gICAgZ2VuZXJpYw0KPiAgbG9ja2luZy9x
-c3BpbmxvY2s6IFJlZmFjdG9yIHRoZSBxc3BpbmxvY2sgc2xvdyBwYXRoDQo+ICBsb2NraW5nL3Fz
-cGlubG9jazogSW50cm9kdWNlIENOQSBpbnRvIHRoZSBzbG93IHBhdGggb2YgcXNwaW5sb2NrDQo+
-ICBsb2NraW5nL3FzcGlubG9jazogSW50cm9kdWNlIHN0YXJ2YXRpb24gYXZvaWRhbmNlIGludG8g
-Q05BDQo+ICBsb2NraW5nL3FzcGlubG9jazogQXZvaWQgbW92aW5nIGNlcnRhaW4gdGhyZWFkcyBi
-ZXR3ZWVuIHdhaXRpbmcgcXVldWVzDQo+ICAgIGluIENOQQ0KPiAgbG9ja2luZy9xc3BpbmxvY2s6
-IEludHJvZHVjZSB0aGUgc2h1ZmZsZSByZWR1Y3Rpb24gb3B0aW1pemF0aW9uIGludG8NCj4gICAg
-Q05BDQo+IA0KPiAuLi4vYWRtaW4tZ3VpZGUva2VybmVsLXBhcmFtZXRlcnMudHh0ICAgICAgICAg
-fCAgMTggKw0KPiBhcmNoL2FybS9pbmNsdWRlL2FzbS9tY3Nfc3BpbmxvY2suaCAgICAgICAgICAg
-fCAgIDYgKy0NCj4gYXJjaC94ODYvS2NvbmZpZyAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgIDIwICsNCj4gYXJjaC94ODYvaW5jbHVkZS9hc20vcXNwaW5sb2NrLmggICAgICAgICAgICAg
-IHwgICA0ICsNCj4gYXJjaC94ODYva2VybmVsL2FsdGVybmF0aXZlLmMgICAgICAgICAgICAgICAg
-IHwgICA0ICsNCj4gaW5jbHVkZS9hc20tZ2VuZXJpYy9tY3Nfc3BpbmxvY2suaCAgICAgICAgICAg
-IHwgICA0ICstDQo+IGtlcm5lbC9sb2NraW5nL21jc19zcGlubG9jay5oICAgICAgICAgICAgICAg
-ICB8ICAyMCArLQ0KPiBrZXJuZWwvbG9ja2luZy9xc3BpbmxvY2suYyAgICAgICAgICAgICAgICAg
-ICAgfCAgODIgKysrLQ0KPiBrZXJuZWwvbG9ja2luZy9xc3BpbmxvY2tfY25hLmggICAgICAgICAg
-ICAgICAgfCA0MjUgKysrKysrKysrKysrKysrKysrDQo+IGtlcm5lbC9sb2NraW5nL3FzcGlubG9j
-a19wYXJhdmlydC5oICAgICAgICAgICB8ICAgMiArLQ0KPiAxMCBmaWxlcyBjaGFuZ2VkLCA1NjIg
-aW5zZXJ0aW9ucygrKSwgMjMgZGVsZXRpb25zKC0pDQo+IGNyZWF0ZSBtb2RlIDEwMDY0NCBrZXJu
-ZWwvbG9ja2luZy9xc3BpbmxvY2tfY25hLmgNCj4gDQo+IC0tIA0KPiAyLjI0LjMgKEFwcGxlIEdp
-dC0xMjgpDQo+IA0KDQo=
+On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
+> Hi all,
+> 
+> work on my dependency checker tool is progressing nicely, and it is
+> flagging, what I believe is, a harmful addr to ctrl dependency
+> transformation. For context, see [1] and [2]. I'm using the Clang
+> compiler.
+> 
+> The dependency in question runs from line 618 into the for loop
+> increment, i.e. the third expresion in the for loop condition, in line
+> 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
+> 
+> I did my best to reverse-engineer some pseudocode from Clang's IR for
+> showing what I think is going on.
+
+First, thank you very much for doing this work!
+
+> Clang's unoptimised version:
+> 
+> > restart:
+> > 	if(place_holder != NULL)
+> > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
+> > 	if(delegation != NULL)
+> > 		if(delegation != place_holder_deleg)
+> > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
+> > 
+> > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
+> > 		/*
+> > 		 * Can continue, "goto restart" or "goto break" (after loop). 
+> > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
+> > 		 * "delegation" might be assigned either a value depending on 
+> > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
+> > 		 * or NULL.
+> > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
+> > 		 * points to.
+> > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
+> > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
+> > 		 * and the for loop's increment is executed.
+> > 		 */
+> > 	}
+> 
+> Clang's optimised version:
+> 
+> > restart:
+> > 	if(place_holder == NULL) {
+> > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > 	} else {
+> > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
+> > 		if(cmp != NULL) { /* Transformation to ctrl dep */
+> > 			if(cmp == place_holder_deleg) {
+> > 				delegation = place_holder_deleg;
+> > 			} else {
+> > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
+> > 			}
+> > 		} else {
+> > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > 		}
+> > 	}
+> > 
+> > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
+> > 		/*
+> > 		 * At this point, "delegation" cannot depend on line 618 anymore
+> > 		 * since the "rcu_dereference()" was only used for an assignment
+> > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
+> > 		 * Therefore, the loop increment cannot depend on the
+> > 		 * "rcu_dereference()" either. The dependency chain has been
+> > 		 * broken.
+> > 		 */
+> >         }
+> 
+> The above is an abstraction of the following control flow path in
+> "nfs_server_return_marked_delegations()":
+> 
+> 1. When "nfs_server_return_marked_delegations()" gets called, it has no
+> choice but to skip the dependency beginning in line 620, since
+> "place_holder" is NULL the first time round.
+> 
+> 2. Now take a path until "place_holder", the condition for the
+> dependency beginning, becomes true and "!delegation || delegation !=
+> place_holder_deleg", the condition for the assignment in line 620,
+> becomes false. Then, enter the loop again and take a path to one of the
+> "goto restart" statements without reassigning to "delegation".
+> 
+> 3. After going back to "restart", since the condition for line 618
+> became true, "rcu_dereference()" into "delegation".
+> 
+> 4. Enter the for loop again, but avoid the "goto restart" statements in
+> the first iteration and ensure that "&(delegation)->super_list !=
+> &server->delegations", the loop condition, remains true and "delegation"
+> isn't assigned NULL.
+> 
+> 5. When the for loop condition is reached for the second time, the loop
+> increment is executed and there is an address dependency.
+> 
+> Now, why would the compiler decide to assign "place_holder_deleg" to
+> "delegation" instead of what "rcu_dereference()" returned? Here's my
+> attempt at explaining.
+> 
+> In the pseudo code above, i.e. in the optimised IR, the assignment of
+> "place_holder_deleg" is guarded by two conditions. It is executed iff
+> "place_holder" isn't NULL and the "rcu_dereference()" didn't return
+> NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
+> NULL" holds at line 617, then "delegation == rcu_dereference() ==
+> place_holder_deleg" must hold at line 622. Otherwise, the optimisation
+> would be wrong.
+> 
+> Assume control flow has just reached the first if, i.e. line 617, in
+> source code. Since "place_holder" isn't NULL, it will execute the first
+> if's body and "rcu_dereference()" into "delegation" (618). Now it has
+> reached the second if. Per our aussmption, "rcu_dereference()" returned
+> something that wasn't NULL. Therefore, "!delegation", the first part of
+> the second if condition's OR, will be false.
+> 
+> However, if we want "rcu_dereference() == delegation" to hold after the
+> two if's, we can't enter the second if anyway, as it will overwrite
+> "delegation" with a value that might not be equal to what
+> "rcu_dereference()" returned. So, we want the second part of the second
+> if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
+> as well.
+> 
+> When is that the case? It is the case when "delegation ==
+> place_holder_deleg" holds.
+> 
+> So, if we want "delegation == rcu_dereference() == place_holder_deleg"
+> to hold after the two if's, "place_holder != NULL && rcu_dereference()
+> != NULL" must hold before the two if's, which is what we wanted to show
+> and what the compiler figured out too.
+> 
+> TL;DR: it appears the compiler optimisation is plausible, yet it still
+> breaks the address dependency.
+> 
+> For those interested, I have made the unoptimised and optimised IR CFGs
+> available. In the optimised one, the interesting part is the transition
+> from "if.end" to "if.end13".
+> 
+> Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
+> 
+> Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
+> 
+> What do you think?
+> 
+> Many thanks,
+> Paul
+> 
+> [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+
+If I understand this correctly (rather unlikely), this stems from
+violating the following rule in Documentation/RCU/rcu_dereference.rst:
+
+------------------------------------------------------------------------
+
+-	Be very careful about comparing pointers obtained from
+	rcu_dereference() against non-NULL values.  As Linus Torvalds
+	explained, if the two pointers are equal, the compiler could
+	substitute the pointer you are comparing against for the pointer
+	obtained from rcu_dereference().  For example::
+
+		p = rcu_dereference(gp);
+		if (p == &default_struct)
+			do_default(p->a);
+
+	Because the compiler now knows that the value of "p" is exactly
+	the address of the variable "default_struct", it is free to
+	transform this code into the following::
+
+		p = rcu_dereference(gp);
+		if (p == &default_struct)
+			do_default(default_struct.a);
+
+	On ARM and Power hardware, the load from "default_struct.a"
+	can now be speculated, such that it might happen before the
+	rcu_dereference().  This could result in bugs due to misordering.
+
+	However, comparisons are OK in the following cases:
+
+	-	The comparison was against the NULL pointer.  If the
+		compiler knows that the pointer is NULL, you had better
+		not be dereferencing it anyway.  If the comparison is
+		non-equal, the compiler is none the wiser.  Therefore,
+		it is safe to compare pointers from rcu_dereference()
+		against NULL pointers.
+
+	-	The pointer is never dereferenced after being compared.
+		Since there are no subsequent dereferences, the compiler
+		cannot use anything it learned from the comparison
+		to reorder the non-existent subsequent dereferences.
+		This sort of comparison occurs frequently when scanning
+		RCU-protected circular linked lists.
+
+		Note that if checks for being within an RCU read-side
+		critical section are not required and the pointer is never
+		dereferenced, rcu_access_pointer() should be used in place
+		of rcu_dereference().
+
+	-	The comparison is against a pointer that references memory
+		that was initialized "a long time ago."  The reason
+		this is safe is that even if misordering occurs, the
+		misordering will not affect the accesses that follow
+		the comparison.  So exactly how long ago is "a long
+		time ago"?  Here are some possibilities:
+
+		-	Compile time.
+
+		-	Boot time.
+
+		-	Module-init time for module code.
+
+		-	Prior to kthread creation for kthread code.
+
+		-	During some prior acquisition of the lock that
+			we now hold.
+
+		-	Before mod_timer() time for a timer handler.
+
+		There are many other possibilities involving the Linux
+		kernel's wide array of primitives that cause code to
+		be invoked at a later time.
+
+	-	The pointer being compared against also came from
+		rcu_dereference().  In this case, both pointers depend
+		on one rcu_dereference() or another, so you get proper
+		ordering either way.
+
+		That said, this situation can make certain RCU usage
+		bugs more likely to happen.  Which can be a good thing,
+		at least if they happen during testing.  An example
+		of such an RCU usage bug is shown in the section titled
+		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
+
+	-	All of the accesses following the comparison are stores,
+		so that a control dependency preserves the needed ordering.
+		That said, it is easy to get control dependencies wrong.
+		Please see the "CONTROL DEPENDENCIES" section of
+		Documentation/memory-barriers.txt for more details.
+
+	-	The pointers are not equal *and* the compiler does
+		not have enough information to deduce the value of the
+		pointer.  Note that the volatile cast in rcu_dereference()
+		will normally prevent the compiler from knowing too much.
+
+		However, please note that if the compiler knows that the
+		pointer takes on only one of two values, a not-equal
+		comparison will provide exactly the information that the
+		compiler needs to deduce the value of the pointer.
+
+------------------------------------------------------------------------
+
+But it would be good to support this use case, for example, by having
+the compiler provide some way of marking the "delegation" variable as
+carrying a full dependency.
+
+Or did I miss a turn in here somewhere?
+
+							Thanx, Paul
