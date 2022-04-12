@@ -2,51 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A8B4FCD51
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Apr 2022 05:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07704FCE16
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Apr 2022 06:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345291AbiDLDwt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Apr 2022 23:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S235544AbiDLEkl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Apr 2022 00:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345258AbiDLDwo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Apr 2022 23:52:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7B417A90;
-        Mon, 11 Apr 2022 20:50:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D85A7B81A93;
-        Tue, 12 Apr 2022 03:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6078C385AC;
-        Tue, 12 Apr 2022 03:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649735425;
-        bh=O2y3teAL9Rp1btL3NXWebprGsFA2ymLi02cTCI1njfs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HgFIXpXyatOm2DaTaDUeoy8YS8nwMT4zsGyWUanxympfGxzA5PYMcFivgLiBKduNV
-         4igcn0Ao59VrB7hYFUE5IV3dG4AwItsdQynQSoeG2ruRqmCCO58LOCYO7IspPFIQdq
-         hNalsA3hzgd8FPUa9tsIEzzo3SCoFZ51MyJGB053SVIH1DqA5cDueGnYvPhXwBtING
-         MBqEaGm9U8IWiiXJNNeXGsdsT053jQiAkZqUoAd4ObFISo+VCsXBTvSnHC7uT8Pu4F
-         b81ICNG1Kd2Bef52wjyJIMuvmqDxX1FU7qKyLo3zwPSg1oNB43eHA2H3buN6dbpCAi
-         sAj2KGP15xZ1A==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
-        mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V2 3/3] riscv: atomic: Optimize memory barrier semantics of LRSC-pairs
-Date:   Tue, 12 Apr 2022 11:49:57 +0800
-Message-Id: <20220412034957.1481088-4-guoren@kernel.org>
+        with ESMTP id S231811AbiDLEkk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Apr 2022 00:40:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03BF02980C;
+        Mon, 11 Apr 2022 21:38:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94FD71570;
+        Mon, 11 Apr 2022 21:38:23 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.38.213])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 49E993F70D;
+        Mon, 11 Apr 2022 21:38:18 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     christophe.leroy@csgroup.eu, catalin.marinas@arm.com,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V5 0/7] mm/mmap: Drop arch_vm_get_page_prot() and arch_filter_pgprot()
+Date:   Tue, 12 Apr 2022 10:08:41 +0530
+Message-Id: <20220412043848.80464-1-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220412034957.1481088-1-guoren@kernel.org>
-References: <20220412034957.1481088-1-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,125 +43,136 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+protection_map[] is an array based construct that translates given vm_flags
+combination. This array contains page protection map, which is populated by
+the platform via [__S000 .. __S111] and [__P000 .. __P111] exported macros.
+Primary usage for protection_map[] is for vm_get_page_prot(), which is used
+to determine page protection value for a given vm_flags. vm_get_page_prot()
+implementation, could again call platform overrides arch_vm_get_page_prot()
+and arch_filter_pgprot(). Some platforms override protection_map[] that was
+originally built with __SXXX/__PXXX with different runtime values.
 
-The current implementation is the same with 8e86f0b409a4 ("arm64:
-atomics: fix use of acquire + release for full barrier semantics").
-RISC-V could combine acquire and release into the AMO instructions
-and it could reduce the cost of instruction in performance. Here
-are the reasons for optimization:
- - Reduce one extra fence instruction
- - The "LR/SC" instruction with "acquire and release" operation is
-   less cost than ACQUIRE_BARRIER/RELEASE_BARRIER which used
-   precedes-loads/subsequent-stores prohibit to protect only LR/SC
-   self-instruction.
- - Putting acquire/release barrier into the loop shouldn't cost
-   extra performance problems from the micro-arch design view.
-   Because LR and SC are sequential in the loop by RVWMO rules.
+Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+, protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+between the platform and generic MM, finally defining vm_get_page_prot().
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
----
- arch/riscv/include/asm/atomic.h  |  6 ++----
- arch/riscv/include/asm/cmpxchg.h | 18 ++++++------------
- 2 files changed, 8 insertions(+), 16 deletions(-)
+Hence this series proposes to drop later two abstraction levels and instead
+just move the responsibility of defining vm_get_page_prot() to the platform
+(still utilizing generic protection_map[] array) itself making it clean and
+simple.
 
-diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
-index 20ce8b83bc18..4aaf5b01e7c6 100644
---- a/arch/riscv/include/asm/atomic.h
-+++ b/arch/riscv/include/asm/atomic.h
-@@ -382,9 +382,8 @@ static __always_inline int arch_atomic_sub_if_positive(atomic_t *v, int offset)
- 		"0:	lr.w     %[p],  %[c]\n"
- 		"	sub      %[rc], %[p], %[o]\n"
- 		"	bltz     %[rc], 1f\n"
--		"	sc.w.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		: [o]"r" (offset)
-@@ -404,9 +403,8 @@ static __always_inline s64 arch_atomic64_sub_if_positive(atomic64_t *v, s64 offs
- 		"0:	lr.d     %[p],  %[c]\n"
- 		"	sub      %[rc], %[p], %[o]\n"
- 		"	bltz     %[rc], 1f\n"
--		"	sc.d.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		: [o]"r" (offset)
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 1af8db92250b..dfb51c98324d 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -215,9 +215,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
- 			"	bne  %0, %z3, 1f\n"			\
--			"	sc.w %1, %z4, %2\n"			\
-+			"	sc.w.aq %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
--			RISCV_ACQUIRE_BARRIER				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" ((long)__old), "rJ" (__new)		\
-@@ -227,9 +226,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.d %0, %2\n"				\
- 			"	bne %0, %z3, 1f\n"			\
--			"	sc.d %1, %z4, %2\n"			\
-+			"	sc.d.aq %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
--			RISCV_ACQUIRE_BARRIER				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" (__old), "rJ" (__new)			\
-@@ -259,8 +257,7 @@
- 	switch (size) {							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"0:	lr.w %0, %2\n"				\
-+			"0:	lr.w.rl %0, %2\n"			\
- 			"	bne  %0, %z3, 1f\n"			\
- 			"	sc.w %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
-@@ -271,8 +268,7 @@
- 		break;							\
- 	case 8:								\
- 		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"0:	lr.d %0, %2\n"				\
-+			"0:	lr.d.rl %0, %2\n"			\
- 			"	bne %0, %z3, 1f\n"			\
- 			"	sc.d %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
-@@ -307,9 +303,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
- 			"	bne  %0, %z3, 1f\n"			\
--			"	sc.w.rl %1, %z4, %2\n"			\
-+			"	sc.w.aqrl %1, %z4, %2\n"		\
- 			"	bnez %1, 0b\n"				\
--			"	fence rw, rw\n"				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" ((long)__old), "rJ" (__new)		\
-@@ -319,9 +314,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.d %0, %2\n"				\
- 			"	bne %0, %z3, 1f\n"			\
--			"	sc.d.rl %1, %z4, %2\n"			\
-+			"	sc.d.aqrl %1, %z4, %2\n"		\
- 			"	bnez %1, 0b\n"				\
--			"	fence rw, rw\n"				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" (__old), "rJ" (__new)			\
+This first introduces ARCH_HAS_VM_GET_PAGE_PROT which enables the platforms
+to define custom vm_get_page_prot(). This starts converting platforms that
+define the overrides arch_filter_pgprot() or arch_vm_get_page_prot() which
+enables for those constructs to be dropped off completely.
+
+The series has been inspired from an earlier discuss with Christoph Hellwig
+
+https://lore.kernel.org/all/1632712920-8171-1-git-send-email-anshuman.khandual@arm.com/
+
+This series applies on 5.18-rc2.
+
+This series has been cross built for multiple platforms.
+
+- Anshuman
+
+Cc: Christoph Hellwig <hch@infradead.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Changes in V5:
+
+- Collected new tags on various patches in the series
+- Coalesced arm64_arch_vm_get_page_prot() into vm_get_page_prot() per Catalin
+- Modified powerpc's vm_get_page_prot() implementation per Christophe
+
+Changes in V4:
+
+https://lore.kernel.org/all/20220407103251.1209606-1-anshuman.khandual@arm.com/
+
+- ARCH_HAS_VM_GET_PAGE_PROT now excludes generic protection_map[]
+- Changed platform's vm_get_page_prot() to use generic protection_map[]
+- Dropped all platform changes not enabling either arch_vm_get_page_prot() or arch_filter_pgprot() 
+- Dropped all previous tags as code base has changed
+
+Changes in V3:
+
+https://lore.kernel.org/all/1646045273-9343-1-git-send-email-anshuman.khandual@arm.com/
+
+- Dropped variable 'i' from sme_early_init() on x86 platform
+- Moved CONFIG_COLDFIRE vm_get_page_prot() inside arch/m68k/mm/mcfmmu.c
+- Moved CONFIG_SUN3 vm_get_page_prot() inside arch/m68k/mm/sun3mmu.c
+- Dropped cachebits for vm_get_page_prot() inside arch/m68k/mm/motorola.c
+- Dropped PAGE_XXX_C definitions from arch/m68k/include/asm/motorola_pgtable.h
+- Used PAGE_XXX instead for vm_get_page_prot() inside arch/m68k/mm/motorola.c
+- Dropped all references to protection_map[] in the tree
+- Replaced s/extensa/xtensa/ on the patch title
+- Moved left over comments from pgtable.h into init.c on nios2 platform
+
+Changes in V2:
+
+https://lore.kernel.org/all/1645425519-9034-1-git-send-email-anshuman.khandual@arm.com/
+
+- Dropped the entire comment block in [PATCH 30/30] per Geert
+- Replaced __P010 (although commented) with __PAGE_COPY on arm platform
+- Replaced __P101 with PAGE_READONLY on um platform
+
+Changes in V1:
+
+https://lore.kernel.org/all/1644805853-21338-1-git-send-email-anshuman.khandual@arm.com/
+
+- Add white spaces around the | operators 
+- Moved powerpc_vm_get_page_prot() near vm_get_page_prot() on powerpc
+- Moved arm64_vm_get_page_prot() near vm_get_page_prot() on arm64
+- Moved sparc_vm_get_page_prot() near vm_get_page_prot() on sparc
+- Compacted vm_get_page_prot() switch cases on all platforms
+-  _PAGE_CACHE040 inclusion is dependent on CPU_IS_040_OR_060
+- VM_SHARED case should return PAGE_NONE (not PAGE_COPY) on SH platform
+- Reorganized VM_SHARED, VM_EXEC, VM_WRITE, VM_READ
+- Dropped the last patch [RFC V1 31/31] which added macros for vm_flags combinations
+  https://lore.kernel.org/all/1643029028-12710-32-git-send-email-anshuman.khandual@arm.com/
+
+Changes in RFC:
+
+https://lore.kernel.org/all/1643029028-12710-1-git-send-email-anshuman.khandual@arm.com/
+
+
+Anshuman Khandual (6):
+  mm/mmap: Add new config ARCH_HAS_VM_GET_PAGE_PROT
+  powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  sparc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+  mm/mmap: Drop arch_filter_pgprot()
+  mm/mmap: Drop arch_vm_get_page_pgprot()
+
+Christoph Hellwig (1):
+  x86/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+
+ arch/arm64/Kconfig                 |  1 +
+ arch/arm64/include/asm/mman.h      | 24 --------------------
+ arch/arm64/mm/mmap.c               | 25 +++++++++++++++++++++
+ arch/powerpc/Kconfig               |  1 +
+ arch/powerpc/include/asm/mman.h    | 12 ----------
+ arch/powerpc/mm/book3s64/pgtable.c | 20 +++++++++++++++++
+ arch/sparc/Kconfig                 |  1 +
+ arch/sparc/include/asm/mman.h      |  6 -----
+ arch/sparc/mm/init_64.c            | 13 +++++++++++
+ arch/x86/Kconfig                   |  2 +-
+ arch/x86/include/asm/pgtable.h     |  5 -----
+ arch/x86/include/uapi/asm/mman.h   | 14 ------------
+ arch/x86/mm/Makefile               |  2 +-
+ arch/x86/mm/pgprot.c               | 35 ++++++++++++++++++++++++++++++
+ include/linux/mman.h               |  4 ----
+ mm/Kconfig                         |  2 +-
+ mm/mmap.c                          | 14 ++++--------
+ 17 files changed, 103 insertions(+), 78 deletions(-)
+ create mode 100644 arch/x86/mm/pgprot.c
+
 -- 
 2.25.1
 
