@@ -2,166 +2,347 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C36D4FE157
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Apr 2022 14:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1D74FE196
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Apr 2022 15:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232969AbiDLM7S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Apr 2022 08:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S1355083AbiDLNF6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Apr 2022 09:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354820AbiDLM4x (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Apr 2022 08:56:53 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120050.outbound.protection.outlook.com [40.107.12.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F82A4D611;
-        Tue, 12 Apr 2022 05:30:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G8RvQqTtNpwnrtsqoRh17iraYn6DUd7CanWu0ygxB6q5Q7S6mm6/2JQvK3m+4A4TCTLy/h62iTVuZiy39oa8JqblYmh+1j8YDrJjTdfwX0LGxV5HnBjRDiRJn/AlWB8ZzHvX42xa8SZRZrmWX9L2Xo+Hy5efwYcNPE4DpzQNDS5TwEyRku9984zdumenOsdO9uf4VlcwE11a31s0O3OCHUq0i4kpGoRBFEWVaTqXbvok+ejuPBzWw6HL17ZHHjZxB0kb1Gx58rUbwj8wEJoGuO9JKbzKv1Qk/TowmuF+iE5Okd7WF3t3X0Es0A3X8YJl6WpqxAS3CtSsnnoawW3UPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=el11HsS71lefoMzcvMPVtVlGuXUd4+R9QyEFI1J89oQ=;
- b=LdkZf0ibPbBE9f9VssZzUN2c4ljneRpYOHxFur+W+fX+9TGa/jIyR/CSdRcQLuROSl5MZkLwGG79QyOyzMemBcTRpiUdqs2k07m3YDklIHo9M4M6VX+XkGgVlqDcB2xXnOB20e4ktHBLhpMz/RSZ1+5DFjbYoFZO8UDMGLpv0W3iwRzQJD+AJbIF1chDMQ127PBJ4/DIJI4GqFySqkQ4yodvIijSu7k86JcaaASYwHzcdbThEV8MNthy/eoV521CB0hWz6tkvjsdFlTtPWWCVUWkuskLN1vY+tnyN/TcDvU5buT5eBFCC6l2Eu/GfIQ9DLY45l/i+V2DrRIKRkA7EA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by MRZP264MB2665.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:1e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
- 2022 12:30:44 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::59c:ae33:63c1:cb1c]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::59c:ae33:63c1:cb1c%9]) with mapi id 15.20.5144.030; Tue, 12 Apr 2022
- 12:30:44 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V5 7/7] mm/mmap: Drop arch_vm_get_page_pgprot()
-Thread-Topic: [PATCH V5 7/7] mm/mmap: Drop arch_vm_get_page_pgprot()
-Thread-Index: AQHYTic7TC1Upfj0QkagENkxhWjEtKzsNfEA
-Date:   Tue, 12 Apr 2022 12:30:43 +0000
-Message-ID: <99d110d7-6c99-c42e-e93a-a6bc7cbde8d8@csgroup.eu>
-References: <20220412043848.80464-1-anshuman.khandual@arm.com>
- <20220412043848.80464-8-anshuman.khandual@arm.com>
-In-Reply-To: <20220412043848.80464-8-anshuman.khandual@arm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: da343467-779f-4409-7563-08da1c80438d
-x-ms-traffictypediagnostic: MRZP264MB2665:EE_
-x-microsoft-antispam-prvs: <MRZP264MB2665B4B46477CC0758AE77F3EDED9@MRZP264MB2665.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OwTThoxPX5Mvo1OrLsRaQia8PgPsn5PEXFIB31+i0SAOwDzj6gIie5g8u4JXUuBxmXiLa//CZx5avWNAgmthaeEsPmAEgc/yN8WIEHDyZq+CkwfhZT3PIi0lsAGrCvrkmD3Z8efwGxVjxyDn+R5cpc081p8h2N2SFFMi5EBqYF1tqL48FIyPaKoF6rqaEQzvDF/mXOdVbYQExzcQ8TpgoWvVKtLtRZw0aQhTT5gFALdhJ5N2j4W7+Lyeqd5ZPtVm2TT4f1u1t4io5UZ5A3Twlh91Ig9oF1CMiKEkm6Rw/KeeX6LfLV08oB3pSNIQ+8KqMShJ6i31AifydJKSjnrpTzdRHdBKW0rxZwyHR32CZT8/epqSNbeMqZ3popcqGzU5PIKdF15xEYqg5cDIWhQQ7rKzV4iVhR0aIEOgziwEUd5Gv0/p6cmLcxYN8cIaqFzskqJJUbimTDwie7TcWkcleGJUjrq1eBA8tTFKKeKndz1jrIjRAJqC8BWbnzxQEkM8qaIw7qCrtOBQld9ADCWtYXzrPQWNFqs1SIFOYLqpNC2UuDC7eb4AI3qJZlzcFmSgwSLO1YH9mtVSlLCXUMhSh8y/xUiqsSZtn1ApllcsTJNnwpaPNGFojhzXw76Brtmb6EHbmNI41MKduswwDjxaFLFpEynLZ5jkeu6aCTo8KEQPjuan3zcjFwXObibcN7UM7X6xyjzEUPrtWzLjiznpaNCQt3BpvhiVikPlrntBoUPN1FtlGmGaeCePm0KoKbY+SJSiBLY4U2lpbp7s40le2w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(91956017)(66556008)(4326008)(38100700002)(6506007)(66476007)(66946007)(76116006)(8936002)(6486002)(66446008)(7416002)(8676002)(83380400001)(31696002)(64756008)(508600001)(122000001)(31686004)(110136005)(54906003)(36756003)(86362001)(38070700005)(2906002)(26005)(186003)(71200400001)(316002)(2616005)(44832011)(66574015)(6512007)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NDc2SmNleWhEWFJSNENVemM3dXhMWjlrRVIzOFEzdG82UTljdGtTWTNEa282?=
- =?utf-8?B?a3IzOWt0RjR1aHhQN1FRd2doSVo4UERac1l6RkJuRmhUTDlMU2MwSUt1cHJt?=
- =?utf-8?B?YWl4ejMxY3R0c0kxa1dOWnV3bW56akppOGtEQlE3RlpHd3p0ZWtmOVhjd3Ry?=
- =?utf-8?B?MUlYblovR1pyUnV1ZHZIWGxWa2xZaUorMDNCdGVIU2s2N3NlN3Z0S1o4T0x1?=
- =?utf-8?B?Tm1ZZm9oWSt5K0VGQTVOWWJsK3daZ0MyWTE0VHlNOU1MOGFIdEZOQWZ0b3VH?=
- =?utf-8?B?eTd3dEdqMHh2Y3V1QXM4UmRaOGk5QVJqWG9wMGRZZHRMV2VwWHNzVER3em0r?=
- =?utf-8?B?SnJiM0loYlVZUDFoRFlOWFVad1pIOUpEMEJObldVU1RiV3FMbTFnTFJxb3Jo?=
- =?utf-8?B?VmpRYUw2d0NYbXQ3dDNoSHlpTXBZcjJ1VHN0NjBzSXdsYW5GU2pYdE9JMmtC?=
- =?utf-8?B?K3NlcEhHN1hwaXN6d1NZZjNSWmM0K3p3LzYvVVRoUjRMQmVFang2UVQzRlVu?=
- =?utf-8?B?RkxpaXhUZUh0V0NicFdpLzFZelJBcHIzd0toUGp6Z0EyT1lxc1RTaDZackdh?=
- =?utf-8?B?QUN4V2VZcEl1M20zZVlwdDJscU5MUi83TDREUFk3UXdYMHNKSGJsRGg2eU11?=
- =?utf-8?B?d3FUUW0vUmdyMFZrNlRmajJTTVAxWW5FZy9ieUFMUFBHNnJYejN5Rk5hYy9o?=
- =?utf-8?B?OVhCVmRqTE1HTVdpNWN1YUxtOWFIenJDKzRXdXVaUXkyY3R5VWUwTjlCQklG?=
- =?utf-8?B?MzFrVExrMDhobEVOcUdLYk9uaWcvdXFyT2VTTXh3NXZDdUZmZmVTcDAxc2FI?=
- =?utf-8?B?UXZDaG9xRGxMWDU3Vi9VY3kxNXBXQ2pMSm5jRW5OdWF5cWhPOEcwR0F4ZXNt?=
- =?utf-8?B?cHZMVkZIb28zZHZXQXNqVG9hczF3RCtrMk9scjhMQnpqZE1KRmVPZFowZ1Fi?=
- =?utf-8?B?NlJvV040VDAzRk9NYjN1SjEwY3VRQ3R3L3Z4MGVtUGxGZXI1eVU3amtVVDhC?=
- =?utf-8?B?ZENUOFV0NUVRYkZJdDJWRlVsVkxpbEJneGh0U1JOc24raDBkMFVydllqUHkv?=
- =?utf-8?B?TGZqS21JcXBqTzNXRXJvVnFic0E5UlFySnhkckVOc0M3T0VrSEwxSTJzNm5M?=
- =?utf-8?B?RGVIdnQ2NjdKV1B4UndBeHlheUQvdUsvekhlSXpyUnVLcUNwZ3p4V3JFc3FB?=
- =?utf-8?B?dDcyQ3IyVVNrVEdPc3BsdWpnZ2dyNFBHYVhrbkE3TE93ejBtM24xR0tiTXdD?=
- =?utf-8?B?VmJHT0tjYWV3Zzlyc1NXRjRCNE1BRmNrS3dnS0w4UkRlYkMwUE5hSDNDZTNo?=
- =?utf-8?B?cGlGZkpKT2tDemF3d0RIUVhnSnVQR1VkRlZuMmhqclY2bG9xNTI1Q3UyNngx?=
- =?utf-8?B?TUlZTFlWMmVOaWNxaUtjdU54RkEvb3FxU3JLbFVrMmdtYURlUHN5TjEwNDNV?=
- =?utf-8?B?SHl6c3dPbERqbTIyWU53VEYzNmRaMzJ4cUlPeWg1TitIaytaK3VVeDZNRDRH?=
- =?utf-8?B?eExsMzBiUGNTQzhzMW41Y2FZVDdwa01KcHZWWFpiRHdQUGxEL0xvdDZJU1N3?=
- =?utf-8?B?aldYL25aRGEyNXNDZUZ4UlVFMEtySFBpTDlmUTBZK1lDUFZEMEd1elB0Nk5I?=
- =?utf-8?B?aitxcFVpdU5NTlA2WlgzWG5tby9WMlR1N0hVZ3JvYjlod3Q2aFE2WmpmMXFk?=
- =?utf-8?B?UnRFUGFnRVMzakwvZFdtNjl3Qk1UY1YyUnRxOXJFSUFUTkcrdzYyY1lJME5G?=
- =?utf-8?B?K1NseFBNZkJMRVh0dVZNZ2M4d2R3UDV6WGtTZTNEbFBicFFyTkJnaitFWVNH?=
- =?utf-8?B?OXlGdS9TNHZidy9iTDBIOEZveEdLT2VNbC8yeGk4SWZ4Ly9ibXZ5YTA4ZUlh?=
- =?utf-8?B?TEJSVWxkR2YwdXJjMmczam1tTzdnczk4ZHE1QnhMZlpZanVwK0hhQW9hVk1v?=
- =?utf-8?B?bngreXA0WUVNaE9PMlF6U0ZDeTE5amNYLytYT0N2SDg5K1lpN2x1YVVKbWRv?=
- =?utf-8?B?VTA4d043UWx1UFJjYkkxNERHNjc4U3hGV2ZJcmpCNUN0V3RYdk96Yk5FN0Ji?=
- =?utf-8?B?ZndoN3ZsTWtKSFVuVjlUWWNBd1VXY2ZzbFlWdjRxSWJMck5KMzhaNFpQUmRm?=
- =?utf-8?B?QzZiRU12UXZ0Vm5PQTMvZUQxd3c2ZUZjM0RLWENBeXB4Zi9HaHk1VVlPUk5j?=
- =?utf-8?B?NktaRFJmdDdtSmZsZ2ZIdkxpUzVrS0FReklQLzdaRTVYR2ZpQjJzT1o3U09U?=
- =?utf-8?B?eDVJU2Mxb2t4Q2pDR2U2dEVtakJ0UWZjQjBWNDhKdTRWa3BTYzJXOFU3c1VC?=
- =?utf-8?B?UU1lZzNpYWtzTlQ5Q3B5L2ZGSXZZTUJrMDBiS3F2L0pBTllSMTFWUkM5K0hG?=
- =?utf-8?Q?1N9Fu8c+N4J6h+Negwoyj/sOQQWlt2NMlaKxN?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D52AA4A775878E4CB6453D2DE1DAA7EF@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        with ESMTP id S1356982AbiDLNEN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Apr 2022 09:04:13 -0400
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684A6340E3;
+        Tue, 12 Apr 2022 05:48:21 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 520B44C047C;
+        Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1649767698;
+        bh=WVqpsKFERF6/eOkQXNZY4IJ8hqcJfaSUzzBXe4fgwjI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kBrx9WeyfmvMyOPhszxQMW5Vk3yV5X3GWH3Dl2wCUkqN0o1pJVwE2Zclkti2nql2G
+         O6jWbEX+8IzmPgGEYykH9A5Nh6AvFzVNc8xp7pyOrKodWXnGF1a6PkSMnYzdiOdm7G
+         s4WRDMLtd8RaLZ5/VD9ij/3TPbdszKcfNgVokP2xUb5yl6B2aoIHbKNEC+TJ0tAp5/
+         R2Y0V2LUJz5BVTBDtfclAiRxK1q69L3O+Hr3kKr/uYT2C6vJPbcZj7DiOzbdJK9I6M
+         oxLXUYu/IkTiqBbXakOXMZ1/Z9q6WW0jm5KKwwOI3KmlBY6bZKusHuxsNKdPLeGvG+
+         EiI0wqhe7hJkA==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 4E81D256; Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 1E7EB254;
+        Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 1A638252;
+        Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 163154A047D; Tue, 12 Apr 2022 14:48:18 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 33CE54A0144;
+        Tue, 12 Apr 2022 14:48:17 +0200 (CEST)
+        (Extended-Queue-bit xtech_lz@fff.in.tum.de)
+Date:   Tue, 12 Apr 2022 14:48:15 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+ <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: da343467-779f-4409-7563-08da1c80438d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Apr 2022 12:30:43.9988
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 856gjqtb1vfcMc1rdZhRvi0sevPail2K4R6IYqOKhwohs/8fuFRCVEiv8XW/sLqgZZaVktdtIDKTh4o8Up+C1QPTgaEh9O6NxatKxh6JbF4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRZP264MB2665
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-DQoNCkxlIDEyLzA0LzIwMjIgw6AgMDY6MzgsIEFuc2h1bWFuIEtoYW5kdWFsIGEgw6ljcml0wqA6
-DQo+IFRoZXJlIGFyZSBubyBwbGF0Zm9ybXMgbGVmdCB3aGljaCB1c2UgYXJjaF92bV9nZXRfcGFn
-ZV9wcm90KCkuIEp1c3QgZHJvcA0KPiBnZW5lcmljIGFyY2hfdm1fZ2V0X3BhZ2VfcHJvdCgpLg0K
-PiANCj4gQ2M6IEFuZHJldyBNb3J0b24gPGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmc+DQo+IENj
-OiBsaW51eC1tbUBrdmFjay5vcmcNCj4gQ2M6IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcN
-Cj4gUmV2aWV3ZWQtYnk6IENhdGFsaW4gTWFyaW5hcyA8Y2F0YWxpbi5tYXJpbmFzQGFybS5jb20+
-DQo+IFNpZ25lZC1vZmYtYnk6IEFuc2h1bWFuIEtoYW5kdWFsIDxhbnNodW1hbi5raGFuZHVhbEBh
-cm0uY29tPg0KPiAtLS0NCj4gICBpbmNsdWRlL2xpbnV4L21tYW4uaCB8IDQgLS0tLQ0KPiAgIG1t
-L21tYXAuYyAgICAgICAgICAgIHwgMyArLS0NCj4gICAyIGZpbGVzIGNoYW5nZWQsIDEgaW5zZXJ0
-aW9uKCspLCA2IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgv
-bW1hbi5oIGIvaW5jbHVkZS9saW51eC9tbWFuLmgNCj4gaW5kZXggYjY2ZTkxYjgxNzZjLi41OGIz
-YWJkNDU3YTMgMTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvbGludXgvbW1hbi5oDQo+ICsrKyBiL2lu
-Y2x1ZGUvbGludXgvbW1hbi5oDQo+IEBAIC05MywxMCArOTMsNiBAQCBzdGF0aWMgaW5saW5lIHZv
-aWQgdm1fdW5hY2N0X21lbW9yeShsb25nIHBhZ2VzKQ0KPiAgICNkZWZpbmUgYXJjaF9jYWxjX3Zt
-X2ZsYWdfYml0cyhmbGFncykgMA0KPiAgICNlbmRpZg0KPiAgIA0KPiAtI2lmbmRlZiBhcmNoX3Zt
-X2dldF9wYWdlX3Byb3QNCj4gLSNkZWZpbmUgYXJjaF92bV9nZXRfcGFnZV9wcm90KHZtX2ZsYWdz
-KSBfX3BncHJvdCgwKQ0KPiAtI2VuZGlmDQo+IC0NCj4gICAjaWZuZGVmIGFyY2hfdmFsaWRhdGVf
-cHJvdA0KPiAgIC8qDQo+ICAgICogVGhpcyBpcyBjYWxsZWQgZnJvbSBtcHJvdGVjdCgpLiAgUFJP
-VF9HUk9XU0RPV04gYW5kIFBST1RfR1JPV1NVUCBoYXZlDQo+IGRpZmYgLS1naXQgYS9tbS9tbWFw
-LmMgYi9tbS9tbWFwLmMNCj4gaW5kZXggZWRmMmE1ZTM4ZjRkLi5kYjdmMzMxNTQyMDYgMTAwNjQ0
-DQo+IC0tLSBhL21tL21tYXAuYw0KPiArKysgYi9tbS9tbWFwLmMNCj4gQEAgLTExMCw4ICsxMTAs
-NyBAQCBwZ3Byb3RfdCBwcm90ZWN0aW9uX21hcFsxNl0gX19yb19hZnRlcl9pbml0ID0gew0KPiAg
-IHBncHJvdF90IHZtX2dldF9wYWdlX3Byb3QodW5zaWduZWQgbG9uZyB2bV9mbGFncykNCj4gICB7
-DQo+ICAgCXBncHJvdF90IHJldCA9IF9fcGdwcm90KHBncHJvdF92YWwocHJvdGVjdGlvbl9tYXBb
-dm1fZmxhZ3MgJg0KPiAtCQkJCShWTV9SRUFEfFZNX1dSSVRFfFZNX0VYRUN8Vk1fU0hBUkVEKV0p
-IHwNCj4gLQkJCXBncHJvdF92YWwoYXJjaF92bV9nZXRfcGFnZV9wcm90KHZtX2ZsYWdzKSkpOw0K
-PiArCQkJCShWTV9SRUFEfFZNX1dSSVRFfFZNX0VYRUN8Vk1fU0hBUkVEKV0pKTsNCj4gICANCj4g
-ICAJcmV0dXJuIHJldDsNCj4gICB9DQoNCl9fcGdwcm90KHBncHJvdF92YWwoeCkpIGlzIGEgbm8t
-b3AuDQoNCllvdSBjYW4gc2ltcGx5IGRvOg0KDQoJcmV0dXJuIHByb3RlY3Rpb25fbWFwW3ZtX2Zs
-YWdzICYNCgkJKFZNX1JFQUR8Vk1fV1JJVEV8Vk1fRVhFQ3xWTV9TSEFSRUQpOw==
+On Mon, Apr 11, 2022 at 11:21:41AM -0700, Paul E. McKenney wrote:
+> On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
+> > Hi all,
+> > 
+> > work on my dependency checker tool is progressing nicely, and it is
+> > flagging, what I believe is, a harmful addr to ctrl dependency
+> > transformation. For context, see [1] and [2]. I'm using the Clang
+> > compiler.
+> > 
+> > The dependency in question runs from line 618 into the for loop
+> > increment, i.e. the third expresion in the for loop condition, in line
+> > 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
+> > 
+> > I did my best to reverse-engineer some pseudocode from Clang's IR for
+> > showing what I think is going on.
+> 
+> First, thank you very much for doing this work!
+> 
+> > Clang's unoptimised version:
+> > 
+> > > restart:
+> > > 	if(place_holder != NULL)
+> > > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
+> > > 	if(delegation != NULL)
+> > > 		if(delegation != place_holder_deleg)
+> > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
+> > > 
+> > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
+> > > 		/*
+> > > 		 * Can continue, "goto restart" or "goto break" (after loop). 
+> > > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
+> > > 		 * "delegation" might be assigned either a value depending on 
+> > > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
+> > > 		 * or NULL.
+> > > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
+> > > 		 * points to.
+> > > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
+> > > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
+> > > 		 * and the for loop's increment is executed.
+> > > 		 */
+> > > 	}
+> > 
+> > Clang's optimised version:
+> > 
+> > > restart:
+> > > 	if(place_holder == NULL) {
+> > > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > 	} else {
+> > > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
+> > > 		if(cmp != NULL) { /* Transformation to ctrl dep */
+> > > 			if(cmp == place_holder_deleg) {
+> > > 				delegation = place_holder_deleg;
+> > > 			} else {
+> > > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
+> > > 			}
+> > > 		} else {
+> > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > > 		}
+> > > 	}
+> > > 
+> > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
+> > > 		/*
+> > > 		 * At this point, "delegation" cannot depend on line 618 anymore
+> > > 		 * since the "rcu_dereference()" was only used for an assignment
+> > > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
+> > > 		 * Therefore, the loop increment cannot depend on the
+> > > 		 * "rcu_dereference()" either. The dependency chain has been
+> > > 		 * broken.
+> > > 		 */
+> > >         }
+> > 
+> > The above is an abstraction of the following control flow path in
+> > "nfs_server_return_marked_delegations()":
+> > 
+> > 1. When "nfs_server_return_marked_delegations()" gets called, it has no
+> > choice but to skip the dependency beginning in line 620, since
+> > "place_holder" is NULL the first time round.
+> > 
+> > 2. Now take a path until "place_holder", the condition for the
+> > dependency beginning, becomes true and "!delegation || delegation !=
+> > place_holder_deleg", the condition for the assignment in line 620,
+> > becomes false. Then, enter the loop again and take a path to one of the
+> > "goto restart" statements without reassigning to "delegation".
+> > 
+> > 3. After going back to "restart", since the condition for line 618
+> > became true, "rcu_dereference()" into "delegation".
+> > 
+> > 4. Enter the for loop again, but avoid the "goto restart" statements in
+> > the first iteration and ensure that "&(delegation)->super_list !=
+> > &server->delegations", the loop condition, remains true and "delegation"
+> > isn't assigned NULL.
+> > 
+> > 5. When the for loop condition is reached for the second time, the loop
+> > increment is executed and there is an address dependency.
+> > 
+> > Now, why would the compiler decide to assign "place_holder_deleg" to
+> > "delegation" instead of what "rcu_dereference()" returned? Here's my
+> > attempt at explaining.
+> > 
+> > In the pseudo code above, i.e. in the optimised IR, the assignment of
+> > "place_holder_deleg" is guarded by two conditions. It is executed iff
+> > "place_holder" isn't NULL and the "rcu_dereference()" didn't return
+> > NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
+> > NULL" holds at line 617, then "delegation == rcu_dereference() ==
+> > place_holder_deleg" must hold at line 622. Otherwise, the optimisation
+> > would be wrong.
+> > 
+> > Assume control flow has just reached the first if, i.e. line 617, in
+> > source code. Since "place_holder" isn't NULL, it will execute the first
+> > if's body and "rcu_dereference()" into "delegation" (618). Now it has
+> > reached the second if. Per our aussmption, "rcu_dereference()" returned
+> > something that wasn't NULL. Therefore, "!delegation", the first part of
+> > the second if condition's OR, will be false.
+> > 
+> > However, if we want "rcu_dereference() == delegation" to hold after the
+> > two if's, we can't enter the second if anyway, as it will overwrite
+> > "delegation" with a value that might not be equal to what
+> > "rcu_dereference()" returned. So, we want the second part of the second
+> > if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
+> > as well.
+> > 
+> > When is that the case? It is the case when "delegation ==
+> > place_holder_deleg" holds.
+> > 
+> > So, if we want "delegation == rcu_dereference() == place_holder_deleg"
+> > to hold after the two if's, "place_holder != NULL && rcu_dereference()
+> > != NULL" must hold before the two if's, which is what we wanted to show
+> > and what the compiler figured out too.
+> > 
+> > TL;DR: it appears the compiler optimisation is plausible, yet it still
+> > breaks the address dependency.
+> > 
+> > For those interested, I have made the unoptimised and optimised IR CFGs
+> > available. In the optimised one, the interesting part is the transition
+> > from "if.end" to "if.end13".
+> > 
+> > Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
+> > 
+> > Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
+> > 
+> > What do you think?
+> > 
+> > Many thanks,
+> > Paul
+> > 
+> > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+> 
+> If I understand this correctly (rather unlikely), this stems from
+> violating the following rule in Documentation/RCU/rcu_dereference.rst:
+> 
+> ------------------------------------------------------------------------
+> 
+> -	Be very careful about comparing pointers obtained from
+> 	rcu_dereference() against non-NULL values.  As Linus Torvalds
+> 	explained, if the two pointers are equal, the compiler could
+> 	substitute the pointer you are comparing against for the pointer
+> 	obtained from rcu_dereference().  For example::
+> 
+> 		p = rcu_dereference(gp);
+> 		if (p == &default_struct)
+> 			do_default(p->a);
+> 
+> 	Because the compiler now knows that the value of "p" is exactly
+> 	the address of the variable "default_struct", it is free to
+> 	transform this code into the following::
+> 
+> 		p = rcu_dereference(gp);
+> 		if (p == &default_struct)
+> 			do_default(default_struct.a);
+> 
+> 	On ARM and Power hardware, the load from "default_struct.a"
+> 	can now be speculated, such that it might happen before the
+> 	rcu_dereference().  This could result in bugs due to misordering.
+> 
+> 	However, comparisons are OK in the following cases:
+> 
+> 	-	The comparison was against the NULL pointer.  If the
+> 		compiler knows that the pointer is NULL, you had better
+> 		not be dereferencing it anyway.  If the comparison is
+> 		non-equal, the compiler is none the wiser.  Therefore,
+> 		it is safe to compare pointers from rcu_dereference()
+> 		against NULL pointers.
+> 
+> 	-	The pointer is never dereferenced after being compared.
+> 		Since there are no subsequent dereferences, the compiler
+> 		cannot use anything it learned from the comparison
+> 		to reorder the non-existent subsequent dereferences.
+> 		This sort of comparison occurs frequently when scanning
+> 		RCU-protected circular linked lists.
+> 
+> 		Note that if checks for being within an RCU read-side
+> 		critical section are not required and the pointer is never
+> 		dereferenced, rcu_access_pointer() should be used in place
+> 		of rcu_dereference().
+> 
+> 	-	The comparison is against a pointer that references memory
+> 		that was initialized "a long time ago."  The reason
+> 		this is safe is that even if misordering occurs, the
+> 		misordering will not affect the accesses that follow
+> 		the comparison.  So exactly how long ago is "a long
+> 		time ago"?  Here are some possibilities:
+> 
+> 		-	Compile time.
+> 
+> 		-	Boot time.
+> 
+> 		-	Module-init time for module code.
+> 
+> 		-	Prior to kthread creation for kthread code.
+> 
+> 		-	During some prior acquisition of the lock that
+> 			we now hold.
+> 
+> 		-	Before mod_timer() time for a timer handler.
+> 
+> 		There are many other possibilities involving the Linux
+> 		kernel's wide array of primitives that cause code to
+> 		be invoked at a later time.
+> 
+> 	-	The pointer being compared against also came from
+> 		rcu_dereference().  In this case, both pointers depend
+> 		on one rcu_dereference() or another, so you get proper
+> 		ordering either way.
+> 
+> 		That said, this situation can make certain RCU usage
+> 		bugs more likely to happen.  Which can be a good thing,
+> 		at least if they happen during testing.  An example
+> 		of such an RCU usage bug is shown in the section titled
+> 		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
+> 
+> 	-	All of the accesses following the comparison are stores,
+> 		so that a control dependency preserves the needed ordering.
+> 		That said, it is easy to get control dependencies wrong.
+> 		Please see the "CONTROL DEPENDENCIES" section of
+> 		Documentation/memory-barriers.txt for more details.
+> 
+> 	-	The pointers are not equal *and* the compiler does
+> 		not have enough information to deduce the value of the
+> 		pointer.  Note that the volatile cast in rcu_dereference()
+> 		will normally prevent the compiler from knowing too much.
+> 
+> 		However, please note that if the compiler knows that the
+> 		pointer takes on only one of two values, a not-equal
+> 		comparison will provide exactly the information that the
+> 		compiler needs to deduce the value of the pointer.
+> 
+> ------------------------------------------------------------------------
+> 
+> But it would be good to support this use case, for example, by having
+> the compiler provide some way of marking the "delegation" variable as
+> carrying a full dependency.
+> 
+> Or did I miss a turn in here somewhere?
+> 
+> 							Thanx, Paul
+
+Actually, I think you're spot on! The original source code has a,
+allbeit nested, comparison of "delegation" against a non-NULL value,
+which is exactly what the documentation discourages as it helps the
+compiler figure out the value of "delegation".
+
+I'll try to prepare a patch, using my dependency checker tool to verify
+that this was indeed the issue.
+
+Many thanks,
+Paul
