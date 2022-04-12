@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3E9E4FCB79
+	by mail.lfdr.de (Postfix) with ESMTP id 623194FCB77
 	for <lists+linux-arch@lfdr.de>; Tue, 12 Apr 2022 03:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343839AbiDLBFT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 11 Apr 2022 21:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
+        id S1345056AbiDLBFQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 11 Apr 2022 21:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344531AbiDLA6N (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Apr 2022 20:58:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7395C286D6;
-        Mon, 11 Apr 2022 17:50:02 -0700 (PDT)
+        with ESMTP id S1345230AbiDLA6a (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 11 Apr 2022 20:58:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6102F2ED7D;
+        Mon, 11 Apr 2022 17:51:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D9A4B819D3;
-        Tue, 12 Apr 2022 00:50:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A54C385A4;
-        Tue, 12 Apr 2022 00:49:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F02B860B45;
+        Tue, 12 Apr 2022 00:51:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13434C385AB;
+        Tue, 12 Apr 2022 00:51:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724600;
-        bh=FxXsQ/0pA/79CvGYTRmab7Da+yVjb4SEgBgD6c/awrc=;
+        s=k20201202; t=1649724682;
+        bh=VyEcuoF2F0p7x6N4J1cOYrfyEqF00/9kbCYzkjxnbf4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XP5LL7T4xFF2ujVeyuA89uqhaEE5qzowyzEQ0o1mA9GkN8DMQqcD3ONZwvxyhKjZN
-         gev1oz4SaCeWMdbJou2YvVWZMw4ggjcwWc03OenXhXwNZCBOIu5eEW9/kWaPUMz76o
-         l//0dIX1lmz7ARrKle9Hr/Bp3T/SdH6Uz3yLH14sDVv+52f+yo2c/NGw9xrJXQCnkV
-         OrJ0SzmIy2Nb6bMMFd3CEZchyIfGEE/2NzI/shWchurgXZO29fJGEvxfeswSIAbagu
-         G9i9+fipI3+zkqu4QOy6z9bjp5ty98KljZdA+JfqKq/h5Vgtfvps7cjFJboDXb30Qb
-         4bc7R2ItT4t4w==
+        b=hV+gdNgeZcsqLLNgvdprGqaiU54ZQitaVJGHqLEYXchH/LM++OKhch0oDytV181H7
+         L4GGxRUYLbF/e2yKNiPflgOXcqzcW1gm4WbFOnrTTnSuOhSVB/VNCX3hmhRt31Az1Z
+         QEH5GpJz7cDntAzJqFiwi31nbmitpAJxOoyXSM5un2af7xchnahchERMnsV5OLv5nT
+         2pSevTIsRewqQmyM6ETiKkXwEzl8chdOtN7t128pgYEhtwWbSERqT+0GhFSuhyIIbk
+         DTVxbCh0KDWhdfStC5FGwuML9Hqgph3LesTqdEWZT8MmAYiBNMPJ51Omj1yzeyPQ0B
+         5tD6XmbmjLZ0g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Steve Capper <steve.capper@arm.com>,
@@ -41,12 +41,12 @@ Cc:     Steve Capper <steve.capper@arm.com>,
         Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
         aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
         linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH AUTOSEL 5.10 19/30] tlb: hugetlb: Add more sizes to tlb_remove_huge_tlb_entry
-Date:   Mon, 11 Apr 2022 20:48:53 -0400
-Message-Id: <20220412004906.350678-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 14/21] tlb: hugetlb: Add more sizes to tlb_remove_huge_tlb_entry
+Date:   Mon, 11 Apr 2022 20:50:33 -0400
+Message-Id: <20220412005042.351105-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412004906.350678-1-sashal@kernel.org>
-References: <20220412004906.350678-1-sashal@kernel.org>
+In-Reply-To: <20220412005042.351105-1-sashal@kernel.org>
+References: <20220412005042.351105-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -98,10 +98,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 3 deletions(-)
 
 diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 6661ee1cff47..a0c4b99d2899 100644
+index 46294ef620ff..268674c1d568 100644
 --- a/include/asm-generic/tlb.h
 +++ b/include/asm-generic/tlb.h
-@@ -563,10 +563,14 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
+@@ -547,10 +547,14 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
  #define tlb_remove_huge_tlb_entry(h, tlb, ptep, address)	\
  	do {							\
  		unsigned long _sz = huge_page_size(h);		\
