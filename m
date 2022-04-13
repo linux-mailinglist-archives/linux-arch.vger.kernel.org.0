@@ -2,60 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5F24FFA88
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Apr 2022 17:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FA04FFA96
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Apr 2022 17:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiDMPoS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Apr 2022 11:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S236629AbiDMPse (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Apr 2022 11:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236644AbiDMPoS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 11:44:18 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCA4A3D0;
-        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=0yWcD2SXEiL1FSCIHyph+R1LsmAft7nq95dBjryG2Sc=; b=bKst/k9HeRVIhWFbd9lRaPJoyq
-        66vq7lbhnKOP9sAn6HtGswUaaHR7KXplyM/d0UPR0zGU4HBiwFNstDyArZyGwq7l1zV9A891StTCA
-        duFW0qJpTvwesBNKozLQ+y2USTpDy/poe3lxcWehcroBLrTg4REC/mbp9H2Pf3po3jqU0SIDbG++o
-        Hl0Sbgj356r3uxLqNNpFk31gL0mIDN/T6wUEAqG6E+bo3f9P1YusNUmxDpMVLNFppO44m3TJkD+F0
-        DjXY2GtlfLs6O/xGSSTATovhc8JnYvkjVJuiTkuSB5TSbeQWmFU+240khvW9NR2cdwsvb9+/hRSpI
-        zi2C/DQw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nef7n-00EMtk-Qt; Wed, 13 Apr 2022 15:41:44 +0000
-Message-ID: <8eb6f58a-2621-0977-1b67-b2c58e4d5fba@infradead.org>
-Date:   Wed, 13 Apr 2022 08:41:39 -0700
+        with ESMTP id S231373AbiDMPsd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 11:48:33 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD43A5EBF7;
+        Wed, 13 Apr 2022 08:46:11 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id b189so1712992qkf.11;
+        Wed, 13 Apr 2022 08:46:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1YdLQXxMOH03x0SbnGmKpWrPU6dm2R7TxKypWUEVbgQ=;
+        b=N/5+rE05+wJmxX89f5a2Dz/r6Gp205oy9BOnTqiTZF7l9Y5vVpWcvsfpxfraZ/Y7Xt
+         3MROOCvvSLcekz4PRkWNLWGxUl4YCX8xD3sKvNMse3NTnPFyPa/gEaMbEUVAiSwXupJc
+         dqttYsb+nzr4FRMNrBwXwd3hz4Br4LuKqgbR+L/yAg1bIvPn8FErdyW9aU/vMdds9ZX1
+         Ij5xEPKixKBlkp8BqT2K641J2keHtI8bfjq9iULbWq3FzNv6MqsYN7ehORgGUzhEuFAv
+         8gf8uLCNXroOVEE2gl9eMggstv2bmY0Z9By7PIrFSZChD8kiEKJ4E16YYaDYutzVVvfQ
+         hJGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1YdLQXxMOH03x0SbnGmKpWrPU6dm2R7TxKypWUEVbgQ=;
+        b=48gcV861XK88SwmO+K1mFWbboHKzkCb8/6PPkNmn72QKvxcMc0s1cEURq2RoqeLrW6
+         Oe3jPA460k/2r4XRmiiC++pU5pd1Ni45NKuGPpt5WH3IwshXOZF5sZWgwAjJypSNWW/s
+         u2aetzrJ4nBD+2fshsPCDArJxYcf3OiZMzGkQhjq0QpT6jVIQFptoBky/aCnklP2c3au
+         JycjoXp3QaWdquFMJgnrkDLVqIFnrIJuMsmddHR28mt6R42II5elfdQD5Nlpn73gR4U0
+         kC/Hz/6BuQzXwcWg9h/TV7vfFaZFwcbjeIMGTE+EpmeTfPvkudlz0ogzIhB4RxS3r3Ll
+         POPw==
+X-Gm-Message-State: AOAM532MiqPAIOu2L7Ms4WnuFOIU7xWpwDe3VdK1hLJE0nGp2e5cfKiP
+        /J6naVmthXi6MOk7YnwoG+d5tI5kQxA=
+X-Google-Smtp-Source: ABdhPJwucGmNCNzNG5RX1VXPuLCdwMFZeNJYY+st3YU+BqtTMgL90GMQoqUyb8tpFQO3S5dXc/Bcjw==
+X-Received: by 2002:a37:389:0:b0:69b:f56e:1672 with SMTP id 131-20020a370389000000b0069bf56e1672mr7463010qkd.614.1649864770825;
+        Wed, 13 Apr 2022 08:46:10 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id 2-20020a05620a070200b0069c231ab4a9sm5351832qkc.16.2022.04.13.08.46.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 08:46:09 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9B8BD27C005A;
+        Wed, 13 Apr 2022 11:46:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 13 Apr 2022 11:46:08 -0400
+X-ME-Sender: <xms:P_BWYiQedrJBlnrkpQdIcsCc7hFTsPI0L7yWwa4BV7HIb4YG4CIQhQ>
+    <xme:P_BWYnxJhWRjCWjO6KLRlldt_tZ5c67hmLXR5DaQ5TsF3PLCQ3OWS0exShUpuWrmQ
+    941FaZ6ztTOFRAhaA>
+X-ME-Received: <xmr:P_BWYv0Jdsrpiy41epwEZa6weK_4rZPLqwKgaq8eWkSDRQ_nOb2Hp0entQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeluddgieeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepheefudejueffjeelkedtgeelleelgfffhffhvdehtdekveehjeeivdejgedu
+    udegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
+    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
+    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
+    hmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:P_BWYuD6WiFuchiGBVOVEkc3jIF5jJtpq-YT7juylSfnP0EXIyeSog>
+    <xmx:P_BWYrjV5bPEaPU14ER2Q6kh3yMOu3DqAf-qgL1yUdcLo4FloLDDKQ>
+    <xmx:P_BWYqrrZS3ZbYKqR54cNSrrP2v528-Jxxm5MLK6Pq1cqso_liHivQ>
+    <xmx:QPBWYgZGzeB2-jB3xuemWJbTtBt6WL_jAwARAn7XOLwOV3JlTL16VQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 13 Apr 2022 11:46:04 -0400 (EDT)
+Date:   Wed, 13 Apr 2022 23:46:00 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@dabbelt.com, mark.rutland@arm.com,
+        will@kernel.org, peterz@infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Andrea Parri <parri.andrea@gmail.com>
+Subject: Re: [PATCH V2 0/3] riscv: atomic: Optimize AMO instructions usage
+Message-ID: <YlbwOG46mCR8Q5tJ@tardis>
+References: <20220412034957.1481088-1-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
- dependency for CPUMASK_OFFSTACK
-Content-Language: en-US
-To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
-        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
-        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-References: <20220412231508.32629-1-libo.chen@oracle.com>
- <20220412231508.32629-2-libo.chen@oracle.com>
- <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
- <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
- <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org>
- <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
- <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org>
- <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3IglbufFOlP6AShH"
+Content-Disposition: inline
+In-Reply-To: <20220412034957.1481088-1-guoren@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,133 +99,61 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 
+--3IglbufFOlP6AShH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 4/12/22 23:56, Libo Chen wrote:
-> Hi Randy
-> 
-> On 4/12/22 22:54, Randy Dunlap wrote:
->> Hi Libo,
->>
->> On 4/12/22 19:34, Libo Chen wrote:
->>>
->>> On 4/12/22 19:13, Randy Dunlap wrote:
->>>> Hi,
->>>>
->>>> On 4/12/22 18:35, Libo Chen wrote:
->>>>> Hi Randy,
->>>>>
->>>>> On 4/12/22 17:18, Randy Dunlap wrote:
->>>>>> Hi--
->>>>>>
->>>>>> On 4/12/22 16:15, Libo Chen wrote:
->>>>>>> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
->>>>>>> make a lot of sense nowaday. Even the original patch dating back to 2008,
->>>>>>> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
->>>>>>> rationale for such dependency.
->>>>>>>
->>>>>>> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
->>>>>>> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
->>>>>>> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
->>>>>>> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
->>>>>>> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
->>>>>>> There is no reason other architectures cannot given the fact that they
->>>>>>> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
->>>>>>> x86.
->>>>>>>
->>>>>>> Signed-off-by: Libo Chen <libo.chen@oracle.com>
->>>>>>> ---
->>>>>>>     lib/Kconfig | 2 +-
->>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff --git a/lib/Kconfig b/lib/Kconfig
->>>>>>> index 087e06b4cdfd..7209039dfb59 100644
->>>>>>> --- a/lib/Kconfig
->>>>>>> +++ b/lib/Kconfig
->>>>>>> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
->>>>>>>         bool
->>>>>>>       config CPUMASK_OFFSTACK
->>>>>>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
->>>>>> This "if" dependency only controls whether the Kconfig symbol's prompt is
->>>>>> displayed (presented) in kconfig tools. Removing it makes the prompt always
->>>>>> be displayed.
->>>>>>
->>>>>> Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
->>>>>> of DEBUG_PER_CPU_MAPS.
->>>>> Do you mean changing arch/xxxx/Kconfig to select CPUMASK_OFFSTACK under some config xxx? That will work but it requires code changes for each architecture.
->>>>> But if you are talking about setting CONFIG_CPUMASK_OFFSTACK=y without CONFIG_DEBUG_PER_CPU_MAPS directly in config file, I have tried, it doesn't work.
->>>> I'm just talking about the Kconfig change below.  Not talking about whatever else
->>>> it might require per architecture.
->>>>
->>>> But you say you have tried that and it doesn't work. What part of it doesn't work?
->>>> The Kconfig part or some code execution?
->>> oh the Kconfig part. For example, make olddefconfig on a config file with CPUMASK_OFFSTACK=y only turns off CPUMASK_OFFSTACK unless I explicitly set DEBUG_PER_CPU_MAPS=y
->> I can enable CPUMASK_OFFSTACK for arm64 without having DEBUG_PER_CPU_MAPS enabled.
->> (with a patch, of course.)
->> It builds OK. I don't know if it will run OK.
-> 
-> I am a little confused, did you succeed with your patch (replacing "if" with "depends on") or my patch (removing "if")? Because I definitely cannot enable CPUMASK_OFFSTACK for arm64 without DEBUG_PER_CPUMAPS enabled using your change.
+[Cc Andrea]
 
-This patch builds cleanly for me:
+On Tue, Apr 12, 2022 at 11:49:54AM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> These patch series contain one cleanup and some optimizations for
+> atomic operations.
+>=20
 
----
- arch/arm64/Kconfig |    1 +
- lib/Kconfig        |    2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Seems to me that you are basically reverting 5ce6c1f3535f
+("riscv/atomic: Strengthen implementations with fences"). That commit
+fixed an memory ordering issue, could you explain why the issue no
+longer needs a fix?
 
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -511,7 +511,7 @@ config CHECK_SIGNATURE
- 	bool
- 
- config CPUMASK_OFFSTACK
--	bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
-+	bool "Force CPU masks off stack"
- 	help
- 	  Use dynamic allocation for cpumask_var_t, instead of putting
- 	  them on the stack.  This is a bit more expensive, but avoids
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -316,6 +316,7 @@ config ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
- 
- config SMP
- 	def_bool y
-+	select CPUMASK_OFFSTACK
- 
- config KERNEL_MODE_NEON
- 	def_bool y
+Regards,
+Boqun
 
-along with:
-# CONFIG_DEBUG_PER_CPU_MAPS is not set
+> Changes in V2:
+>  - Fixup LR/SC memory barrier semantic problems which pointed by
+>    Rutland
+>  - Combine patches into one patchset series
+>  - Separate AMO optimization & LRSC optimization for convenience
+>    patch review
+>=20
+> Guo Ren (3):
+>   riscv: atomic: Cleanup unnecessary definition
+>   riscv: atomic: Optimize acquire and release for AMO operations
+>   riscv: atomic: Optimize memory barrier semantics of LRSC-pairs
+>=20
+>  arch/riscv/include/asm/atomic.h  | 70 ++++++++++++++++++++++++++++++--
+>  arch/riscv/include/asm/cmpxchg.h | 42 +++++--------------
+>  2 files changed, 76 insertions(+), 36 deletions(-)
+>=20
+> --=20
+> 2.25.1
+>=20
 
+--3IglbufFOlP6AShH
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> I think that you are arguing for a patch like this:
-> 
-> I am actually arguing for the opposite, I don't think CPUMASK_OFFSTACK should require DEBUG_PER_CPU_MAPS. They should be separate and independent to each other. So removing "if ..." should be enough in my opinion.
+-----BEGIN PGP SIGNATURE-----
 
-I agree.
+iQEzBAABCAAdFiEEj5IosQTPz8XU1wRHSXnow7UH+rgFAmJW8DMACgkQSXnow7UH
++rj7oQf+M4BWYub6wHMeoa6yx+iNDGo5x5qEHT1XmIZjZUrpk3Nl3YNVCrZq9oaf
+6IwoRm1XKJhmlrkqUcrp0P8Bm/mq6PZ1mOTdSRtW3cp6mmjl+y6zhidet3KOJJFp
+gZz8CquT+PbQaNsnUMwWoosE85hL8FG/XYTQhoiCFVKF7PeqyFix2doCw66nRzvY
+Wdj458el5Yf+XrEIzEBsrBHCeSdBRiqjulU+SHBbtivfhoaIvpjKdvBOBxF9CC7+
+DI0HuLWz38I6coBeHOmo64WoC8amPCi8xVUZvUgFdUGMSRT25elqoS0qSbq9Afm2
+npRG/rZbHDLvSC1t4rCiN+HS1lVQYw==
+=lcp2
+-----END PGP SIGNATURE-----
 
->> --- a/lib/Kconfig
->> +++ b/lib/Kconfig
->> @@ -511,7 +511,8 @@ config CHECK_SIGNATURE
->>       bool
->>     config CPUMASK_OFFSTACK
->> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
->> +    bool "Force CPU masks off stack"
->> +    depends on DEBUG_PER_CPU_MAPS
-> 
-> This forces every arch to enable DEBUG_PER_CPU_MAPS if they want to enable CPUMASK_OFFSTACK, it's even stronger than "if". My whole argument is CPUMASK_OFFSTACK should be enable/disabled independent of DEBUG_PER_CPU_MASK
->>       help
->>         Use dynamic allocation for cpumask_var_t, instead of putting
->>         them on the stack.  This is a bit more expensive, but avoids
->>
->>
->> As I said earlier, the "if" on the "bool" line just controls the prompt message.
->> This patch make CPUMASK_OFFSTACK require DEBUG_PER_CPU_MAPS -- which might be overkill.
->>
-> 
-> Okay I understand now "if" on the "boot" is not a dependency and it only controls the prompt message, then the question is why we cannot enable CPUMASK_OFFSTACK without DEBUG_PER_CPU_MAPS if it only controls prompt message? Is it not the behavior we expect?
-
-Yes, it is. I don't know that the problem is...
-
--- 
-~Randy
+--3IglbufFOlP6AShH--
