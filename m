@@ -2,65 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBAA4FF923
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Apr 2022 16:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5F24FFA88
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Apr 2022 17:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbiDMOnl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Apr 2022 10:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S229732AbiDMPoS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Apr 2022 11:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234466AbiDMOnj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 10:43:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531C40E52;
-        Wed, 13 Apr 2022 07:41:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649860877; x=1681396877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=linNOV4EomB16L2HapHfKkK9INH52m95HA/3C7Gt7dc=;
-  b=Gf1QutFsWw4xQHNwPWm9xJbrKtf8v3m+AQWMLuHe/JfZhrtmTB+/ZlE6
-   CS5pBlET/nxZTQhDKVRkgdC9eWZQ7jmPfNWaVEdRMRyMJ/lkKWWe2VsMK
-   pCUHjx6VeZfWblhIPknj/rYww0YkT2sfl8Fw93yV1SMnQy6VAgI5RPPOV
-   9GX9ulniC/SrNEkuj0mz8iNHIi6GK5oWL+8u9zOZ8Gf/56HBBd5Gf8Nkx
-   QLUXDfIrJRsIplAv+tzP6AhcxgG21wHMJ0qC8uSyU1Vjh9MQCjGu0V5EF
-   dolLZg3G9NP+C/oXvatb3NHjFMqEJsAHlzvENFUFM5+glN0oMc/8Qe/hb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="242619758"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="242619758"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:34:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="645191086"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Apr 2022 07:34:19 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nee4Y-0000NU-RM;
-        Wed, 13 Apr 2022 14:34:18 +0000
-Date:   Wed, 13 Apr 2022 22:33:27 +0800
-From:   kernel test robot <lkp@intel.com>
+        with ESMTP id S236644AbiDMPoS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 11:44:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CCA4A3D0;
+        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=0yWcD2SXEiL1FSCIHyph+R1LsmAft7nq95dBjryG2Sc=; b=bKst/k9HeRVIhWFbd9lRaPJoyq
+        66vq7lbhnKOP9sAn6HtGswUaaHR7KXplyM/d0UPR0zGU4HBiwFNstDyArZyGwq7l1zV9A891StTCA
+        duFW0qJpTvwesBNKozLQ+y2USTpDy/poe3lxcWehcroBLrTg4REC/mbp9H2Pf3po3jqU0SIDbG++o
+        Hl0Sbgj356r3uxLqNNpFk31gL0mIDN/T6wUEAqG6E+bo3f9P1YusNUmxDpMVLNFppO44m3TJkD+F0
+        DjXY2GtlfLs6O/xGSSTATovhc8JnYvkjVJuiTkuSB5TSbeQWmFU+240khvW9NR2cdwsvb9+/hRSpI
+        zi2C/DQw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nef7n-00EMtk-Qt; Wed, 13 Apr 2022 15:41:44 +0000
+Message-ID: <8eb6f58a-2621-0977-1b67-b2c58e4d5fba@infradead.org>
+Date:   Wed, 13 Apr 2022 08:41:39 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
+Content-Language: en-US
 To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
         masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
         mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
- dependency for CPUMASK_OFFSTACK
-Message-ID: <202204132236.KPzXaw0b-lkp@intel.com>
-References: <20220412231508.32629-2-libo.chen@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412231508.32629-2-libo.chen@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
+References: <20220412231508.32629-1-libo.chen@oracle.com>
+ <20220412231508.32629-2-libo.chen@oracle.com>
+ <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
+ <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
+ <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org>
+ <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
+ <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org>
+ <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,162 +62,134 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Libo,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.18-rc2 next-20220413]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Libo-Chen/lib-Kconfig-remove-DEBUG_PER_CPU_MAPS-dependency-for-CPUMASK_OFFSTACK/20220413-073657
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-config: parisc-randconfig-r014-20220413 (https://download.01.org/0day-ci/archive/20220413/202204132236.KPzXaw0b-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6636f7cf28d2a79cde937c0f212e8a87080da06d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Libo-Chen/lib-Kconfig-remove-DEBUG_PER_CPU_MAPS-dependency-for-CPUMASK_OFFSTACK/20220413-073657
-        git checkout 6636f7cf28d2a79cde937c0f212e8a87080da06d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   hppa-linux-ld: kernel/workqueue.o: in function `free_workqueue_attrs':
->> kernel/workqueue.c:3370: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `alloc_workqueue_attrs':
->> kernel/workqueue.c:3390: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `workqueue_set_unbound_cpumask':
->> kernel/workqueue.c:5390: undefined reference to `zalloc_cpumask_var'
->> hppa-linux-ld: kernel/workqueue.c:5406: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `wq_unbound_cpumask_store':
-   kernel/workqueue.c:5664: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.c:5671: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/workqueue.o: in function `workqueue_init_early':
-   kernel/workqueue.c:5995: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `sched_setaffinity':
->> kernel/sched/core.c:7948: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/sched/core.c:7951: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/sched/core.c:7978: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.c:7980: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `__se_sys_sched_setaffinity':
-   kernel/sched/core.c:8051: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.c:8057: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `__se_sys_sched_getaffinity':
-   kernel/sched/core.c:8108: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.c:8120: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/sched/core.o: in function `sched_init':
->> kernel/sched/core.c:9499: undefined reference to `load_balance_mask'
->> hppa-linux-ld: kernel/sched/core.c:9499: undefined reference to `load_balance_mask'
->> hppa-linux-ld: kernel/sched/core.c:9501: undefined reference to `select_idle_mask'
->> hppa-linux-ld: kernel/sched/core.c:9501: undefined reference to `select_idle_mask'
-   hppa-linux-ld: kernel/sched/build_utility.o: in function `housekeeping_setup_type':
->> kernel/sched/isolation.c:104: undefined reference to `alloc_bootmem_cpumask_var'
-   hppa-linux-ld: kernel/sched/build_utility.o: in function `housekeeping_setup':
-   kernel/sched/isolation.c:122: undefined reference to `alloc_bootmem_cpumask_var'
->> hppa-linux-ld: kernel/sched/isolation.c:128: undefined reference to `alloc_bootmem_cpumask_var'
->> hppa-linux-ld: kernel/sched/isolation.c:173: undefined reference to `free_bootmem_cpumask_var'
-   hppa-linux-ld: kernel/sched/isolation.c:175: undefined reference to `free_bootmem_cpumask_var'
-   hppa-linux-ld: kernel/taskstats.o: in function `taskstats_user_cmd':
->> kernel/taskstats.c:441: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/taskstats.c:457: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: kernel/taskstats.c:464: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/events/core.o: in function `perf_event_init':
->> kernel/events/core.c:13237: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: fs/io_uring.o: in function `__io_uring_register':
->> fs/io_uring.c:11472: undefined reference to `alloc_cpumask_var'
->> hppa-linux-ld: fs/io_uring.c:11488: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: fs/io_uring.c:11493: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: fs/io-wq.o: in function `io_wq_create':
-   fs/io-wq.c:1180: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: fs/io-wq.c:1214: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: fs/io-wq.o: in function `io_wq_put_and_exit':
-   fs/io-wq.c:1290: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: block/blk-mq.o: in function `blk_mq_alloc_hctx':
-   block/blk-mq.c:3528: undefined reference to `zalloc_cpumask_var_node'
-   hppa-linux-ld: block/blk-mq.c:3575: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.o: in function `print_cpus_offline':
-   drivers/base/cpu.c:245: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.c:249: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.o: in function `print_cpus_isolated':
-   drivers/base/cpu.c:274: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: drivers/base/cpu.c:281: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/emulex/benet/be_main.o: in function `be_clear_queues':
-   drivers/net/ethernet/emulex/benet/be_main.c:2943: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/emulex/benet/be_main.o: in function `be_setup_queues':
-   drivers/net/ethernet/emulex/benet/be_main.c:2981: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/sfc/falcon/efx.o: in function `ef4_probe_nic':
-   drivers/net/ethernet/sfc/falcon/efx.c:1329: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: drivers/net/ethernet/sfc/falcon/efx.c:1344: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: net/core/dev.o: in function `netif_get_num_default_rss_queues':
-   net/core/dev.c:3001: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: net/core/dev.c:3009: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/profile.o: in function `prof_cpu_mask_proc_write':
-   kernel/profile.c:361: undefined reference to `zalloc_cpumask_var'
-   hppa-linux-ld: kernel/profile.c:369: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/profile.o: in function `profile_init':
-   kernel/profile.c:114: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: kernel/profile.c:132: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/torture.o: in function `torture_cleanup_begin':
-   kernel/torture.c:591: undefined reference to `free_cpumask_var'
-   hppa-linux-ld: kernel/torture.o: in function `torture_shuffle_init':
-   kernel/torture.c:572: undefined reference to `alloc_cpumask_var'
-   hppa-linux-ld: block/blk-mq-sysfs.o: in function `blk_mq_hw_sysfs_release':
-   block/blk-mq-sysfs.c:41: undefined reference to `free_cpumask_var'
 
 
-vim +3370 kernel/workqueue.c
+On 4/12/22 23:56, Libo Chen wrote:
+> Hi Randy
+> 
+> On 4/12/22 22:54, Randy Dunlap wrote:
+>> Hi Libo,
+>>
+>> On 4/12/22 19:34, Libo Chen wrote:
+>>>
+>>> On 4/12/22 19:13, Randy Dunlap wrote:
+>>>> Hi,
+>>>>
+>>>> On 4/12/22 18:35, Libo Chen wrote:
+>>>>> Hi Randy,
+>>>>>
+>>>>> On 4/12/22 17:18, Randy Dunlap wrote:
+>>>>>> Hi--
+>>>>>>
+>>>>>> On 4/12/22 16:15, Libo Chen wrote:
+>>>>>>> Forcing CPUMASK_OFFSTACK to be conditoned on DEBUG_PER_CPU_MAPS doesn't
+>>>>>>> make a lot of sense nowaday. Even the original patch dating back to 2008,
+>>>>>>> aab46da0520a ("cpumask: Add CONFIG_CPUMASK_OFFSTACK") didn't give any
+>>>>>>> rationale for such dependency.
+>>>>>>>
+>>>>>>> Nowhere in the code supports the presumption that DEBUG_PER_CPU_MAPS is
+>>>>>>> necessary for CONFIG_CPUMASK_OFFSTACK. Make no mistake, it's good to
+>>>>>>> have DEBUG_PER_CPU_MAPS for debugging purpose or precaution, but it's
+>>>>>>> simply not a hard requirement for CPUMASK_OFFSTACK. Moreover, x86 Kconfig
+>>>>>>> already can set CPUMASK_OFFSTACK=y without DEBUG_PER_CPU_MAPS=y.
+>>>>>>> There is no reason other architectures cannot given the fact that they
+>>>>>>> have even fewer, if any, arch-specific CONFIG_DEBUG_PER_CPU_MAPS code than
+>>>>>>> x86.
+>>>>>>>
+>>>>>>> Signed-off-by: Libo Chen <libo.chen@oracle.com>
+>>>>>>> ---
+>>>>>>>     lib/Kconfig | 2 +-
+>>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/lib/Kconfig b/lib/Kconfig
+>>>>>>> index 087e06b4cdfd..7209039dfb59 100644
+>>>>>>> --- a/lib/Kconfig
+>>>>>>> +++ b/lib/Kconfig
+>>>>>>> @@ -511,7 +511,7 @@ config CHECK_SIGNATURE
+>>>>>>>         bool
+>>>>>>>       config CPUMASK_OFFSTACK
+>>>>>>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
+>>>>>> This "if" dependency only controls whether the Kconfig symbol's prompt is
+>>>>>> displayed (presented) in kconfig tools. Removing it makes the prompt always
+>>>>>> be displayed.
+>>>>>>
+>>>>>> Any architecture could select (should be able to) CPUMASK_OFFSTACK independently
+>>>>>> of DEBUG_PER_CPU_MAPS.
+>>>>> Do you mean changing arch/xxxx/Kconfig to select CPUMASK_OFFSTACK under some config xxx? That will work but it requires code changes for each architecture.
+>>>>> But if you are talking about setting CONFIG_CPUMASK_OFFSTACK=y without CONFIG_DEBUG_PER_CPU_MAPS directly in config file, I have tried, it doesn't work.
+>>>> I'm just talking about the Kconfig change below.  Not talking about whatever else
+>>>> it might require per architecture.
+>>>>
+>>>> But you say you have tried that and it doesn't work. What part of it doesn't work?
+>>>> The Kconfig part or some code execution?
+>>> oh the Kconfig part. For example, make olddefconfig on a config file with CPUMASK_OFFSTACK=y only turns off CPUMASK_OFFSTACK unless I explicitly set DEBUG_PER_CPU_MAPS=y
+>> I can enable CPUMASK_OFFSTACK for arm64 without having DEBUG_PER_CPU_MAPS enabled.
+>> (with a patch, of course.)
+>> It builds OK. I don't know if it will run OK.
+> 
+> I am a little confused, did you succeed with your patch (replacing "if" with "depends on") or my patch (removing "if")? Because I definitely cannot enable CPUMASK_OFFSTACK for arm64 without DEBUG_PER_CPUMAPS enabled using your change.
 
-1fa44ecad2b864 James Bottomley     2006-02-23  3360  
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3361  /**
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3362   * free_workqueue_attrs - free a workqueue_attrs
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3363   * @attrs: workqueue_attrs to free
-226223ab3c4118 Tejun Heo           2013-03-12  3364   *
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3365   * Undo alloc_workqueue_attrs().
-226223ab3c4118 Tejun Heo           2013-03-12  3366   */
-513c98d0868295 Daniel Jordan       2019-09-05  3367  void free_workqueue_attrs(struct workqueue_attrs *attrs)
-226223ab3c4118 Tejun Heo           2013-03-12  3368  {
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3369  	if (attrs) {
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02 @3370  		free_cpumask_var(attrs->cpumask);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3371  		kfree(attrs);
-226223ab3c4118 Tejun Heo           2013-03-12  3372  	}
-226223ab3c4118 Tejun Heo           2013-03-12  3373  }
-226223ab3c4118 Tejun Heo           2013-03-12  3374  
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3375  /**
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3376   * alloc_workqueue_attrs - allocate a workqueue_attrs
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3377   *
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3378   * Allocate a new workqueue_attrs, initialize with default settings and
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3379   * return it.
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3380   *
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3381   * Return: The allocated new workqueue_attr on success. %NULL on failure.
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3382   */
-513c98d0868295 Daniel Jordan       2019-09-05  3383  struct workqueue_attrs *alloc_workqueue_attrs(void)
-226223ab3c4118 Tejun Heo           2013-03-12  3384  {
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3385  	struct workqueue_attrs *attrs;
-226223ab3c4118 Tejun Heo           2013-03-12  3386  
-be69d00d976957 Thomas Gleixner     2019-06-26  3387  	attrs = kzalloc(sizeof(*attrs), GFP_KERNEL);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3388  	if (!attrs)
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3389  		goto fail;
-be69d00d976957 Thomas Gleixner     2019-06-26 @3390  	if (!alloc_cpumask_var(&attrs->cpumask, GFP_KERNEL))
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3391  		goto fail;
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3392  
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3393  	cpumask_copy(attrs->cpumask, cpu_possible_mask);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3394  	return attrs;
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3395  fail:
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3396  	free_workqueue_attrs(attrs);
-6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3397  	return NULL;
-226223ab3c4118 Tejun Heo           2013-03-12  3398  }
-226223ab3c4118 Tejun Heo           2013-03-12  3399  
+This patch builds cleanly for me:
+
+---
+ arch/arm64/Kconfig |    1 +
+ lib/Kconfig        |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -511,7 +511,7 @@ config CHECK_SIGNATURE
+ 	bool
+ 
+ config CPUMASK_OFFSTACK
+-	bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
++	bool "Force CPU masks off stack"
+ 	help
+ 	  Use dynamic allocation for cpumask_var_t, instead of putting
+ 	  them on the stack.  This is a bit more expensive, but avoids
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -316,6 +316,7 @@ config ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
+ 
+ config SMP
+ 	def_bool y
++	select CPUMASK_OFFSTACK
+ 
+ config KERNEL_MODE_NEON
+ 	def_bool y
+
+along with:
+# CONFIG_DEBUG_PER_CPU_MAPS is not set
+
+
+>> I think that you are arguing for a patch like this:
+> 
+> I am actually arguing for the opposite, I don't think CPUMASK_OFFSTACK should require DEBUG_PER_CPU_MAPS. They should be separate and independent to each other. So removing "if ..." should be enough in my opinion.
+
+I agree.
+
+>> --- a/lib/Kconfig
+>> +++ b/lib/Kconfig
+>> @@ -511,7 +511,8 @@ config CHECK_SIGNATURE
+>>       bool
+>>     config CPUMASK_OFFSTACK
+>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
+>> +    bool "Force CPU masks off stack"
+>> +    depends on DEBUG_PER_CPU_MAPS
+> 
+> This forces every arch to enable DEBUG_PER_CPU_MAPS if they want to enable CPUMASK_OFFSTACK, it's even stronger than "if". My whole argument is CPUMASK_OFFSTACK should be enable/disabled independent of DEBUG_PER_CPU_MASK
+>>       help
+>>         Use dynamic allocation for cpumask_var_t, instead of putting
+>>         them on the stack.  This is a bit more expensive, but avoids
+>>
+>>
+>> As I said earlier, the "if" on the "bool" line just controls the prompt message.
+>> This patch make CPUMASK_OFFSTACK require DEBUG_PER_CPU_MAPS -- which might be overkill.
+>>
+> 
+> Okay I understand now "if" on the "boot" is not a dependency and it only controls the prompt message, then the question is why we cannot enable CPUMASK_OFFSTACK without DEBUG_PER_CPU_MAPS if it only controls prompt message? Is it not the behavior we expect?
+
+Yes, it is. I don't know that the problem is...
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy
