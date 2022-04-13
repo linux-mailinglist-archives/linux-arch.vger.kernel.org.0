@@ -2,279 +2,228 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258774FF8BE
-	for <lists+linux-arch@lfdr.de>; Wed, 13 Apr 2022 16:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBAA4FF923
+	for <lists+linux-arch@lfdr.de>; Wed, 13 Apr 2022 16:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbiDMOS6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Apr 2022 10:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
+        id S229644AbiDMOnl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Apr 2022 10:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234248AbiDMOS4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 10:18:56 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF0261A24;
-        Wed, 13 Apr 2022 07:16:29 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23DDfRS9028018;
-        Wed, 13 Apr 2022 14:15:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=srV6HHyLtBRl/IaJFkKSldk05tcf0nWiWzyq6u3AYnk=;
- b=aRBwej2b1fmx7auTzZZjpDlz6zGVvT0z1ZVX4T2VybhDazVMV4qIPbFrGo5mAZ4xsz8P
- qzUBPm5tPv/SvwAMI2u7HwCsX6+g1Dj0GaTlhRYER8ALEBVLT5b4rhP39ANojpyaNgSD
- RQseK7p9odtVjQuclNz1eIpEmnESRRIF3p+dLk951XXlGd1/uA7Eqbrg7/vfI7ZsKT99
- defwsLLAIma5rH6EIUVcUn4ldSU5999NyMf7g5Fs8s+lejREfyGdlvXoHL2Vz6j9sayf
- Q7jVmoXj75smAbqUMGw4iFVjFvvYAsshvsT6MYunfg2MDSOvX+yDqK+/4uFHpimDEfyA qA== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb21a1p44-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 14:15:54 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23DEBpsm040387;
-        Wed, 13 Apr 2022 14:15:54 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2170.outbound.protection.outlook.com [104.47.57.170])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fb0k47ae7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Apr 2022 14:15:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aGj+PfS0h1hQa5Z8s9dHuZOvS7s8hUHhIMnULTYdAWftT3+VR3BS/HiujNQllYgGw8wMqKL0NoPAdhGZBUszNwu7xnHoVGvnJcORY7MilldH2VQHjHfpuJGFxVwePgns6S5Sjq7REwxh+/PSwt2D538On7aKKaHrAp0CYTc4Z2iOHJ8o5GYpwh0oVc17LbTzFShe2Tgxb1/Cgti6w8bRzjalgR3qULfg/3hUdFBgluIMkgqKmpDm1z9F1weTYnF4ntGjUD0CSj9zl1ZBsYjbgmjv5QAy0eCcZjwQ38/NAYD93sar+vWXImkH6mvAq5LWeCiLeQ6PGNtRZtUCvMzA8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=srV6HHyLtBRl/IaJFkKSldk05tcf0nWiWzyq6u3AYnk=;
- b=cfh1KNpGaRo6UOZSVIxi5jTjHN9OgflXAxGGXcU90xWHOoyrsBVZqeQC0uo97xJBBcKv/z2WWl3Ww6JvTfa972R/k8ed3e1fA0u3zo1o3pSBNWp0PDUTs/45VdWFYKNUuuBcAv4l6wdok4rO9fnCyUXQUIrfw+bpWx6qH6vNa5pVr9EaH4yTG0Q8Mu2O6uUTwN3E2kKVYzlbQYrLtHPQuHZfR1MYwIohaM+tj1zgMbav11nSITqA59cxedU8mHTm/0sUiNHUe61NMrIk5+GAA9LeB2x51hgZFrSSVqAn89wlNlfOnqfQrwRQ9wtQEusMbALQIndVkP1fph5NMUHx7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=srV6HHyLtBRl/IaJFkKSldk05tcf0nWiWzyq6u3AYnk=;
- b=orGfqqvvG7dxkgnOzw6fd2rdlZLCSf2Ya9lv1DlAKIB4Ib9l3KFHYl5ydhhluHYVbU39dHKA7Oy9do8Evl2MLd9jtH95aWeVJNfwyDQSbYD5DAwkC9k+j6l5N0+w4Ty/GHLT1Zt+754vPuLlLz+1i4fLq9w278REj83yzC2Anr4=
-Received: from BN8PR10MB3220.namprd10.prod.outlook.com (2603:10b6:408:c8::18)
- by DM6PR10MB3691.namprd10.prod.outlook.com (2603:10b6:5:157::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
- 2022 14:15:51 +0000
-Received: from BN8PR10MB3220.namprd10.prod.outlook.com
- ([fe80::41da:48ff:402:1a40]) by BN8PR10MB3220.namprd10.prod.outlook.com
- ([fe80::41da:48ff:402:1a40%6]) with mapi id 15.20.5164.020; Wed, 13 Apr 2022
- 14:15:51 +0000
-Message-ID: <c9a95b2d-9628-6c0d-5da9-c8164ff93a05@oracle.com>
-Date:   Wed, 13 Apr 2022 08:15:53 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V6 4/7] sparc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Cc:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20220413055840.392628-1-anshuman.khandual@arm.com>
- <20220413055840.392628-5-anshuman.khandual@arm.com>
- <c3619877-32db-aaa3-5dd9-4917c067bc42@csgroup.eu>
- <e0efde60-625c-fa58-79c4-5e8a86ddf203@arm.com>
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-In-Reply-To: <e0efde60-625c-fa58-79c4-5e8a86ddf203@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR21CA0014.namprd21.prod.outlook.com
- (2603:10b6:a03:114::24) To BN8PR10MB3220.namprd10.prod.outlook.com
- (2603:10b6:408:c8::18)
+        with ESMTP id S234466AbiDMOnj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 10:43:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9531C40E52;
+        Wed, 13 Apr 2022 07:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649860877; x=1681396877;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=linNOV4EomB16L2HapHfKkK9INH52m95HA/3C7Gt7dc=;
+  b=Gf1QutFsWw4xQHNwPWm9xJbrKtf8v3m+AQWMLuHe/JfZhrtmTB+/ZlE6
+   CS5pBlET/nxZTQhDKVRkgdC9eWZQ7jmPfNWaVEdRMRyMJ/lkKWWe2VsMK
+   pCUHjx6VeZfWblhIPknj/rYww0YkT2sfl8Fw93yV1SMnQy6VAgI5RPPOV
+   9GX9ulniC/SrNEkuj0mz8iNHIi6GK5oWL+8u9zOZ8Gf/56HBBd5Gf8Nkx
+   QLUXDfIrJRsIplAv+tzP6AhcxgG21wHMJ0qC8uSyU1Vjh9MQCjGu0V5EF
+   dolLZg3G9NP+C/oXvatb3NHjFMqEJsAHlzvENFUFM5+glN0oMc/8Qe/hb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="242619758"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="242619758"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 07:34:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="645191086"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Apr 2022 07:34:19 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nee4Y-0000NU-RM;
+        Wed, 13 Apr 2022 14:34:18 +0000
+Date:   Wed, 13 Apr 2022 22:33:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Libo Chen <libo.chen@oracle.com>, gregkh@linuxfoundation.org,
+        masahiroy@kernel.org, tglx@linutronix.de, peterz@infradead.org,
+        mingo@kernel.org, vbabka@suse.cz, akpm@linux-foundation.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
+Message-ID: <202204132236.KPzXaw0b-lkp@intel.com>
+References: <20220412231508.32629-2-libo.chen@oracle.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 506ef692-5d45-4ed8-c05a-08da1d581d85
-X-MS-TrafficTypeDiagnostic: DM6PR10MB3691:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR10MB3691CD5F8E657F52CF8FBFE986EC9@DM6PR10MB3691.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AF/sauRK4DO/zM7uJD1VDDU0ACF3mGJZvmazjgLfOgcv/vsCvkJ6kqc+WttkpdqJzJo+gDRCLINnTmHZt7pfKcFztzasItfuqVAFRln1aDwmLIqYqNw3qt1MSJRTwFQmGEgTXPxUSCybqDGMSbW3mnI5pVxZS+eE90zANRjirorVbIRJFZ1ZVOfoDlMeIKlzhq9vs6mf0ZR6zIoz6k08o/4Cbxs5NSyH9OaiS8g8sFnd8q/mrl7LIuOFLMmdkWXyoA45SqVjJlGkR70AWdoaADePC+VIC60ZVx090+v6P2cOr2u/arw4ea+8ijDiemClIptHpVlKeBceMTw5oqDnvjR/bj4wst6eq14rt2sKL53D4Rg0kprwKDh2gbQIb+Ns/XQhEvHvq3ryafbIdFjTs+rCyM2ZtRc4En3lneplvGbQib42SNysTjGYF/6XWqItCkpvxxzZb/EEgmuFKsKOq+O7B1UhuVLalzd58ZchEE6dDWqsucL877b7xY2N8MA4r+dj7RhkxZMvKb6XtLeCrscQBrsIbYcZkZeV7DS9bLlIO2WT2/0F+QPZfj+jpvV4Jpe1TeIs71KqVwWeWwbJMwQjtCyrIvKt9mQ0Tzo831SpM1/+zFy6Jlhkp/3KucEx65dVAwwukHVJcIRWxonQiF7MoIbzPZcngwFH/ZnbO+gsB2h1Je/8lMj2pMIMhoNkgcpCQjgSuhij6avQRTZtspjlpX25M5UzuNVxMhgf8Zg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3220.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(6506007)(31696002)(316002)(31686004)(110136005)(5660300002)(186003)(36756003)(26005)(66574015)(38100700002)(54906003)(7416002)(44832011)(86362001)(4326008)(53546011)(8676002)(83380400001)(6512007)(66946007)(66556008)(66476007)(2906002)(2616005)(508600001)(8936002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Vm9pcEVGbCtKZDJUOUwxVUprdVNpM3pPMm8rTXNyR3ViUHNTY21oYkpZS3oy?=
- =?utf-8?B?WlZxUTVaZlhFVENnVUEwbGNxT0wwbk9JQTVYMDVvak1oU21EdXo1Y0RyMEQx?=
- =?utf-8?B?c3JaZ1hVTGE2RUNaelFaUEs5K0R5Vy8wcHlqSjkyZ1M0MzVyVmZWOFpKYWxD?=
- =?utf-8?B?aWJpRW5yMThmK0p0Ti80ZFg5c0R0NHNUSE5TRDNiUXQ0TWgrZWRxaXlUR3Rm?=
- =?utf-8?B?VXNjWHk3eUV1Uk9FbmFyUy9hbUMzMlJrdkw3Qjc4OW1USllSc1Yvc0V5Ylpw?=
- =?utf-8?B?U2U0Rjk0bW5kUEtKcFZDSzdmejhrZldyY1dNaEcwQ2VMZm1JSXJFZUxyS2Ez?=
- =?utf-8?B?QmFxd3lBbVpQcmVTNWxMSTBnRVVxN3pQRjh3RHZIY0M3Z2xZRVFyTzN2Qmtx?=
- =?utf-8?B?UTIyMGdHd1RKRktFR25nRk5zRlFBb1FobzBjZW5mdXFOQU9hSHY3K2ErRXV5?=
- =?utf-8?B?M052aHNHOGFXYnhvbUtpdmpBSWE5bjJaWFlRTndheUFSTmhqTnRscUJOQUJZ?=
- =?utf-8?B?Wjd6eWxGYU5vM3pod25JTm5nT09zeFVZQWc1U0RUR1dkcDRRSWJXTUw3Ym5q?=
- =?utf-8?B?K2lqWHpwL0dRcHNyRExiYmhjSUdFN3ExazR5ajZLQ0tJOFpYdGZSNUJyTDQx?=
- =?utf-8?B?WjZoUGFLTXFsRU5CT3NnWVBnVTdra0kvRGdVYVZrV0VIY2h1Y01PbG9TYWUw?=
- =?utf-8?B?dWxsaU5KbHVzRkJKd1o2TzNQSkhTQUZxOW9wckNwb3hvSkhOa1FOazNlMEhp?=
- =?utf-8?B?Z29GcFAwMjFPaHRDL2hJRTV5cW14RlU3SzVqcEpXbDA1dnRzOEhiaHR3aCtw?=
- =?utf-8?B?aUl2dFphVXNPTURBc1U3VTNqVUIyaVZDWlFQL1kzOFBNMTkvMXBzMXFhRDND?=
- =?utf-8?B?TCtWSUlKcTVGZ3BVQ3p1c1pwcHRQR203MHJucE5iRDEyN0RFY29EUUFJRVha?=
- =?utf-8?B?VEttS1dDWXpaQWlwU3pxYUdQSUtXYU9CZlROUVE5UG9pNEk3NlFnY0w5NnNG?=
- =?utf-8?B?TklVUmUrdU0ycC8wdnlmVkt3REZwQ3QwSEMvMm16Wm1jSWpEdklReDl1cE9q?=
- =?utf-8?B?SzJhSzRQUGtqenNYRXJGcHM5OUNReS9HVTltVFJxYWJyN3kvbmVlSlpzL0cr?=
- =?utf-8?B?OXBoUEFZM2lSamx3Tk5TcTlVb0F2SmptTTJiUjRWYitMWnhKRXNMYUh1SlF5?=
- =?utf-8?B?ODlCTWY3Z2V0cmRvQTB1emo1VkwvVVZqS2c0a09wclZzcnR1d2p0WVF1THpE?=
- =?utf-8?B?aC9Tdmphek1QM0ttdzNkSjBrTjRsS3NCVkNTVHl1R05VcHNKOUNmMForNnpr?=
- =?utf-8?B?NUxQaHVRbWF5V0NIWERuVElJTVcyVnp0cS9MV1pKY0JGT3VVZUdDTjl1bzB2?=
- =?utf-8?B?TThyTjVhNkJXYXZIUmJXcityRmo0MjNhYy9lMHp2UWVkalVNVHdpcS9nRVgx?=
- =?utf-8?B?QVRWb3RyeTYvbUx1RnJzaXhBTTNDTzdCU3RSa2NqY2VMcC9wNkhIZEFGSTFm?=
- =?utf-8?B?YWgrcEhpd01INkc3TFlTWlpxakFNeGw2cDlkdkdJNjV2bGdlaFh5N09JQmFa?=
- =?utf-8?B?cGE1TGxnanZNM3dxeHF2NnVQRXlXQTh5a29sTkFVY2oxWk0rTUNqby9yc09o?=
- =?utf-8?B?K2JSZmxSdDV5L1VLN2pOandGbFByRnN1YVVjbjdTUEVBK0dHeVJMTGxtRUtl?=
- =?utf-8?B?RTZrS05BVGpUcDJDbElwMXJPL0huVkdKWGFIc2NYc1ZMOG1ISzRMY0pPVjFm?=
- =?utf-8?B?UDZWYW5Ndm02TDRQTUlDTmpCYkJrRHdLUGdwMk1DdjhLS0NORmg4WXVVdDQv?=
- =?utf-8?B?RVBvNTZCSy9TdTNOUkVXYWgxbTFaT1BIVDQybE1YWktSeXNiQlFvcVhMRm8y?=
- =?utf-8?B?Y1FKS1ArMmpFRmprd2Z5MkloalF1aEdyK2ZWSnJtdGg0ZVlJS1RNWTFDckVx?=
- =?utf-8?B?eHBoT1lOQzZRSHIyaVhMNWxqKy9lRWI3RzVJWmNkNEdpRFo5anBqby83ZDJi?=
- =?utf-8?B?azVPbFRCTG8vZlFXTVk5RjJFZFZwbzhaUTkwTW1sYnNHaHh3NjFPMkJiNmRR?=
- =?utf-8?B?M08vK1RSdUtPVWU2Qk5zWXFISVVrVExJemI4ZnhhV2d5Ky9VU2VGQi9KZEFC?=
- =?utf-8?B?SVd5Wnk4VnluV0JHK3hvaFdQVlVueVVaQTRrMFh5ekFyQ0ZwQzZiWDlNekxs?=
- =?utf-8?B?a2c2UlpoaW9VeVpkM0xraldjcHliMFFhQjJmaEl6dW9GR1EwbU9DblFDQnBh?=
- =?utf-8?B?Vk5GL2xGSnBHQjVHOGxmZU1NWEc0ZThzYmhnd05yRHpkYnUwY2RXOElKNWlI?=
- =?utf-8?B?MnF3TVFUTDVobEZKNStmZTlnQnNxWjRyTXNCeTZFVVlLZDEzRHBUZz09?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 506ef692-5d45-4ed8-c05a-08da1d581d85
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR10MB3220.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 14:15:51.8009
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8ZUsDkf163W+j054lgF9RFKDKmn2GZk3LexnN1G5txM8Id1rqTkYrtvpLUqj8JMfWM/cXe/f7G/GFzbNuSK6+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3691
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-13_02:2022-04-13,2022-04-13 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204130076
-X-Proofpoint-GUID: iBbKMebAFKxn6SQC2Cc9RY6b4TFPWHHV
-X-Proofpoint-ORIG-GUID: iBbKMebAFKxn6SQC2Cc9RY6b4TFPWHHV
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412231508.32629-2-libo.chen@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/13/22 00:22, Anshuman Khandual wrote:
-> 
-> 
-> On 4/13/22 11:43, Christophe Leroy wrote:
->>
->>
->> Le 13/04/2022 à 07:58, Anshuman Khandual a écrit :
->>> This defines and exports a platform specific custom vm_get_page_prot() via
->>> subscribing ARCH_HAS_VM_GET_PAGE_PROT. It localizes arch_vm_get_page_prot()
->>> as sparc_vm_get_page_prot() and moves near vm_get_page_prot().
->>>
->>> Cc: "David S. Miller" <davem@davemloft.net>
->>> Cc: Khalid Aziz <khalid.aziz@oracle.com>
->>> Cc: sparclinux@vger.kernel.org
->>> Cc: linux-kernel@vger.kernel.org
->>> Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
->>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>> ---
->>>    arch/sparc/Kconfig            |  1 +
->>>    arch/sparc/include/asm/mman.h |  6 ------
->>>    arch/sparc/mm/init_64.c       | 13 +++++++++++++
->>>    3 files changed, 14 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
->>> index 9200bc04701c..85b573643af6 100644
->>> --- a/arch/sparc/Kconfig
->>> +++ b/arch/sparc/Kconfig
->>> @@ -84,6 +84,7 @@ config SPARC64
->>>    	select PERF_USE_VMALLOC
->>>    	select ARCH_HAVE_NMI_SAFE_CMPXCHG
->>>    	select HAVE_C_RECORDMCOUNT
->>> +	select ARCH_HAS_VM_GET_PAGE_PROT
->>>    	select HAVE_ARCH_AUDITSYSCALL
->>>    	select ARCH_SUPPORTS_ATOMIC_RMW
->>>    	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
->>> diff --git a/arch/sparc/include/asm/mman.h b/arch/sparc/include/asm/mman.h
->>> index 274217e7ed70..af9c10c83dc5 100644
->>> --- a/arch/sparc/include/asm/mman.h
->>> +++ b/arch/sparc/include/asm/mman.h
->>> @@ -46,12 +46,6 @@ static inline unsigned long sparc_calc_vm_prot_bits(unsigned long prot)
->>>    	}
->>>    }
->>>    
->>> -#define arch_vm_get_page_prot(vm_flags) sparc_vm_get_page_prot(vm_flags)
->>> -static inline pgprot_t sparc_vm_get_page_prot(unsigned long vm_flags)
->>> -{
->>> -	return (vm_flags & VM_SPARC_ADI) ? __pgprot(_PAGE_MCD_4V) : __pgprot(0);
->>> -}
->>> -
->>>    #define arch_validate_prot(prot, addr) sparc_validate_prot(prot, addr)
->>>    static inline int sparc_validate_prot(unsigned long prot, unsigned long addr)
->>>    {
->>> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
->>> index 8b1911591581..dcb17763c1f2 100644
->>> --- a/arch/sparc/mm/init_64.c
->>> +++ b/arch/sparc/mm/init_64.c
->>> @@ -3184,3 +3184,16 @@ void copy_highpage(struct page *to, struct page *from)
->>>    	}
->>>    }
->>>    EXPORT_SYMBOL(copy_highpage);
->>> +
->>> +static pgprot_t sparc_vm_get_page_prot(unsigned long vm_flags)
->>> +{
->>> +	return (vm_flags & VM_SPARC_ADI) ? __pgprot(_PAGE_MCD_4V) : __pgprot(0);
->>> +}
->>> +
->>> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->>> +{
->>> +	return __pgprot(pgprot_val(protection_map[vm_flags &
->>> +			(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
->>> +			pgprot_val(sparc_vm_get_page_prot(vm_flags)));
->>> +}
->>> +EXPORT_SYMBOL(vm_get_page_prot);
->>
->>
->> sparc is now the only one with two functions. You can most likely do
->> like you did for ARM and POWERPC: merge into a single function:
-> 
-> I was almost about to do this one as well but as this patch has already been
-> reviewed with a tag, just skipped it. I will respin the series once more :)
-> 
-> Khalid,
-> 
-> Could I keep your review tag after the following change ?
+Hi Libo,
 
-Hi Anshuman,
+Thank you for the patch! Yet something to improve:
 
-Yes, this change makes sense.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v5.18-rc2 next-20220413]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
---
-Khalid
+url:    https://github.com/intel-lab-lkp/linux/commits/Libo-Chen/lib-Kconfig-remove-DEBUG_PER_CPU_MAPS-dependency-for-CPUMASK_OFFSTACK/20220413-073657
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
+config: parisc-randconfig-r014-20220413 (https://download.01.org/0day-ci/archive/20220413/202204132236.KPzXaw0b-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6636f7cf28d2a79cde937c0f212e8a87080da06d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Libo-Chen/lib-Kconfig-remove-DEBUG_PER_CPU_MAPS-dependency-for-CPUMASK_OFFSTACK/20220413-073657
+        git checkout 6636f7cf28d2a79cde937c0f212e8a87080da06d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=parisc SHELL=/bin/bash
 
-> 
->>
->> pgprot_t vm_get_page_prot(unsigned long vm_flags)
->> {
->> 	unsigned long prot = pgprot_val(protection_map[vm_flags &
->> 		(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]);
->>
->> 	if (vm_flags & VM_SPARC_ADI)
->> 		prot |= _PAGE_MCD_4V;
->>
->> 	return __pgprot(prot);
->> }
->> EXPORT_SYMBOL(vm_get_page_prot);
-> 
-> - Anshuman
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>):
+
+   hppa-linux-ld: kernel/workqueue.o: in function `free_workqueue_attrs':
+>> kernel/workqueue.c:3370: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/workqueue.o: in function `alloc_workqueue_attrs':
+>> kernel/workqueue.c:3390: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: kernel/workqueue.o: in function `workqueue_set_unbound_cpumask':
+>> kernel/workqueue.c:5390: undefined reference to `zalloc_cpumask_var'
+>> hppa-linux-ld: kernel/workqueue.c:5406: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/workqueue.o: in function `wq_unbound_cpumask_store':
+   kernel/workqueue.c:5664: undefined reference to `zalloc_cpumask_var'
+   hppa-linux-ld: kernel/workqueue.c:5671: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/workqueue.o: in function `workqueue_init_early':
+   kernel/workqueue.c:5995: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: kernel/sched/core.o: in function `sched_setaffinity':
+>> kernel/sched/core.c:7948: undefined reference to `alloc_cpumask_var'
+>> hppa-linux-ld: kernel/sched/core.c:7951: undefined reference to `alloc_cpumask_var'
+>> hppa-linux-ld: kernel/sched/core.c:7978: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/sched/core.c:7980: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/sched/core.o: in function `__se_sys_sched_setaffinity':
+   kernel/sched/core.c:8051: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: kernel/sched/core.c:8057: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/sched/core.o: in function `__se_sys_sched_getaffinity':
+   kernel/sched/core.c:8108: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: kernel/sched/core.c:8120: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/sched/core.o: in function `sched_init':
+>> kernel/sched/core.c:9499: undefined reference to `load_balance_mask'
+>> hppa-linux-ld: kernel/sched/core.c:9499: undefined reference to `load_balance_mask'
+>> hppa-linux-ld: kernel/sched/core.c:9501: undefined reference to `select_idle_mask'
+>> hppa-linux-ld: kernel/sched/core.c:9501: undefined reference to `select_idle_mask'
+   hppa-linux-ld: kernel/sched/build_utility.o: in function `housekeeping_setup_type':
+>> kernel/sched/isolation.c:104: undefined reference to `alloc_bootmem_cpumask_var'
+   hppa-linux-ld: kernel/sched/build_utility.o: in function `housekeeping_setup':
+   kernel/sched/isolation.c:122: undefined reference to `alloc_bootmem_cpumask_var'
+>> hppa-linux-ld: kernel/sched/isolation.c:128: undefined reference to `alloc_bootmem_cpumask_var'
+>> hppa-linux-ld: kernel/sched/isolation.c:173: undefined reference to `free_bootmem_cpumask_var'
+   hppa-linux-ld: kernel/sched/isolation.c:175: undefined reference to `free_bootmem_cpumask_var'
+   hppa-linux-ld: kernel/taskstats.o: in function `taskstats_user_cmd':
+>> kernel/taskstats.c:441: undefined reference to `alloc_cpumask_var'
+>> hppa-linux-ld: kernel/taskstats.c:457: undefined reference to `alloc_cpumask_var'
+>> hppa-linux-ld: kernel/taskstats.c:464: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/events/core.o: in function `perf_event_init':
+>> kernel/events/core.c:13237: undefined reference to `zalloc_cpumask_var'
+   hppa-linux-ld: fs/io_uring.o: in function `__io_uring_register':
+>> fs/io_uring.c:11472: undefined reference to `alloc_cpumask_var'
+>> hppa-linux-ld: fs/io_uring.c:11488: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: fs/io_uring.c:11493: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: fs/io-wq.o: in function `io_wq_create':
+   fs/io-wq.c:1180: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: fs/io-wq.c:1214: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: fs/io-wq.o: in function `io_wq_put_and_exit':
+   fs/io-wq.c:1290: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: block/blk-mq.o: in function `blk_mq_alloc_hctx':
+   block/blk-mq.c:3528: undefined reference to `zalloc_cpumask_var_node'
+   hppa-linux-ld: block/blk-mq.c:3575: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: drivers/base/cpu.o: in function `print_cpus_offline':
+   drivers/base/cpu.c:245: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: drivers/base/cpu.c:249: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: drivers/base/cpu.o: in function `print_cpus_isolated':
+   drivers/base/cpu.c:274: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: drivers/base/cpu.c:281: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: drivers/net/ethernet/emulex/benet/be_main.o: in function `be_clear_queues':
+   drivers/net/ethernet/emulex/benet/be_main.c:2943: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: drivers/net/ethernet/emulex/benet/be_main.o: in function `be_setup_queues':
+   drivers/net/ethernet/emulex/benet/be_main.c:2981: undefined reference to `zalloc_cpumask_var'
+   hppa-linux-ld: drivers/net/ethernet/sfc/falcon/efx.o: in function `ef4_probe_nic':
+   drivers/net/ethernet/sfc/falcon/efx.c:1329: undefined reference to `zalloc_cpumask_var'
+   hppa-linux-ld: drivers/net/ethernet/sfc/falcon/efx.c:1344: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: net/core/dev.o: in function `netif_get_num_default_rss_queues':
+   net/core/dev.c:3001: undefined reference to `zalloc_cpumask_var'
+   hppa-linux-ld: net/core/dev.c:3009: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/profile.o: in function `prof_cpu_mask_proc_write':
+   kernel/profile.c:361: undefined reference to `zalloc_cpumask_var'
+   hppa-linux-ld: kernel/profile.c:369: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/profile.o: in function `profile_init':
+   kernel/profile.c:114: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: kernel/profile.c:132: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/torture.o: in function `torture_cleanup_begin':
+   kernel/torture.c:591: undefined reference to `free_cpumask_var'
+   hppa-linux-ld: kernel/torture.o: in function `torture_shuffle_init':
+   kernel/torture.c:572: undefined reference to `alloc_cpumask_var'
+   hppa-linux-ld: block/blk-mq-sysfs.o: in function `blk_mq_hw_sysfs_release':
+   block/blk-mq-sysfs.c:41: undefined reference to `free_cpumask_var'
+
+
+vim +3370 kernel/workqueue.c
+
+1fa44ecad2b864 James Bottomley     2006-02-23  3360  
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3361  /**
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3362   * free_workqueue_attrs - free a workqueue_attrs
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3363   * @attrs: workqueue_attrs to free
+226223ab3c4118 Tejun Heo           2013-03-12  3364   *
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3365   * Undo alloc_workqueue_attrs().
+226223ab3c4118 Tejun Heo           2013-03-12  3366   */
+513c98d0868295 Daniel Jordan       2019-09-05  3367  void free_workqueue_attrs(struct workqueue_attrs *attrs)
+226223ab3c4118 Tejun Heo           2013-03-12  3368  {
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3369  	if (attrs) {
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02 @3370  		free_cpumask_var(attrs->cpumask);
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3371  		kfree(attrs);
+226223ab3c4118 Tejun Heo           2013-03-12  3372  	}
+226223ab3c4118 Tejun Heo           2013-03-12  3373  }
+226223ab3c4118 Tejun Heo           2013-03-12  3374  
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3375  /**
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3376   * alloc_workqueue_attrs - allocate a workqueue_attrs
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3377   *
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3378   * Allocate a new workqueue_attrs, initialize with default settings and
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3379   * return it.
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3380   *
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3381   * Return: The allocated new workqueue_attr on success. %NULL on failure.
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3382   */
+513c98d0868295 Daniel Jordan       2019-09-05  3383  struct workqueue_attrs *alloc_workqueue_attrs(void)
+226223ab3c4118 Tejun Heo           2013-03-12  3384  {
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3385  	struct workqueue_attrs *attrs;
+226223ab3c4118 Tejun Heo           2013-03-12  3386  
+be69d00d976957 Thomas Gleixner     2019-06-26  3387  	attrs = kzalloc(sizeof(*attrs), GFP_KERNEL);
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3388  	if (!attrs)
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3389  		goto fail;
+be69d00d976957 Thomas Gleixner     2019-06-26 @3390  	if (!alloc_cpumask_var(&attrs->cpumask, GFP_KERNEL))
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3391  		goto fail;
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3392  
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3393  	cpumask_copy(attrs->cpumask, cpu_possible_mask);
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3394  	return attrs;
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3395  fail:
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3396  	free_workqueue_attrs(attrs);
+6ba94429c8e7b8 Frederic Weisbecker 2015-04-02  3397  	return NULL;
+226223ab3c4118 Tejun Heo           2013-03-12  3398  }
+226223ab3c4118 Tejun Heo           2013-03-12  3399  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
