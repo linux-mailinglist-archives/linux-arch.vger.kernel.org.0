@@ -2,363 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FDD500941
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Apr 2022 11:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBF9500C4F
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Apr 2022 13:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbiDNJHV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Apr 2022 05:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S242406AbiDNLn5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Apr 2022 07:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236051AbiDNJHU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Apr 2022 05:07:20 -0400
-Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FAC62A19;
-        Thu, 14 Apr 2022 02:04:53 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
-        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 152F84C0486;
-        Thu, 14 Apr 2022 11:04:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1649927091;
-        bh=N3KRViML6P0KL6WjkU6CKmFdRzGnL98KUT7E8Vw+9Go=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cKxGUrORXSYc75KD+lXTTo24ai6Z/9rNjXkNAG0+w6fWCm9hzjWAx7ce08Yrx5PZt
-         nIi3ZVHEPoL08IbD5TSk5jggmwc9x+7RKl7v7jOuw6uMgQrFAXqm4vauOT7Z4ciqoj
-         UaIRUDewEbgP0Mw3LXWxao2lkQIuJ6sNcYXaOo4j0BB6lsRB8/SWpX5h+aqDNZP5zT
-         6rjH6/Kk4InvldLFp+mdIWCMpCsKz3H3GeZ79wND2K/w8aLTutRD2a6LmDQ0Yyt94k
-         3Pf2A8UkI0Y6NpEL0ieARr/gCPIjKpHoSIYa9YDb8Uz8TR3vaYlomQtOG6N/Es0POg
-         Poh/p2fYCxrDw==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 10D8B6D7; Thu, 14 Apr 2022 11:04:51 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id D607355F;
-        Thu, 14 Apr 2022 11:04:50 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id D1A4324E;
-        Thu, 14 Apr 2022 11:04:50 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id CE2544A047E; Thu, 14 Apr 2022 11:04:50 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id B8F9E4A027B;
-        Thu, 14 Apr 2022 11:04:49 +0200 (CEST)
-        (Extended-Queue-bit xtech_vf@fff.in.tum.de)
-Date:   Thu, 14 Apr 2022 11:04:42 +0200
-From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: Dangerous addr to ctrl dependency transformation in
- fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-Message-ID: <Ylfjqk0a6rAiIIB8@Pauls-MacBook-Pro.local>
-References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
- <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
- <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
- <20220412152649.GF4285@paulmck-ThinkPad-P17-Gen-1>
+        with ESMTP id S242395AbiDNLn4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Apr 2022 07:43:56 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9209F53E09;
+        Thu, 14 Apr 2022 04:41:31 -0700 (PDT)
+Received: from mail-wr1-f51.google.com ([209.85.221.51]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1Mnq4Q-1oH5wx3Dq6-00pNtq; Thu, 14 Apr 2022 13:41:29 +0200
+Received: by mail-wr1-f51.google.com with SMTP id g18so6495999wrb.10;
+        Thu, 14 Apr 2022 04:41:27 -0700 (PDT)
+X-Gm-Message-State: AOAM530lsz7qu7JrhcQrSVUm+lY5oqOj72y+Br0tngOpP1f0at7J6mTx
+        Kn9IH5VnpKG/T3fF4JJfxYLqrGELB7OTymIL1sA=
+X-Google-Smtp-Source: ABdhPJxDkbKKBQkTpfl/Oj838rv2VbzeElx6+NcSFuTvJBfQ5J//st0GmYuZABtNrIuj+4aYSg8U+Kt7cb2jJl5ZcKQ=
+X-Received: by 2002:a05:6000:178c:b0:204:648:b4c4 with SMTP id
+ e12-20020a056000178c00b002040648b4c4mr1676626wrg.219.1649936487384; Thu, 14
+ Apr 2022 04:41:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220412152649.GF4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220412231508.32629-1-libo.chen@oracle.com> <20220412231508.32629-2-libo.chen@oracle.com>
+ <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org> <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
+ <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org> <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
+ <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org> <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
+ <8eb6f58a-2621-0977-1b67-b2c58e4d5fba@infradead.org> <c2e6bb8b-c9d9-ad39-7a8e-3df6849b2fb2@oracle.com>
+ <CAK8P3a3wgbYPY6CxbkkFkEboXYLWREaL3oUmHyet5wPYpc4Vng@mail.gmail.com> <ce420ed3-4a36-122f-460d-8cccd0310033@oracle.com>
+In-Reply-To: <ce420ed3-4a36-122f-460d-8cccd0310033@oracle.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 14 Apr 2022 13:41:11 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0uy8JcHP_G_ebz61AMB-Mx6jr5+vuzJHmWbDCajTdTfQ@mail.gmail.com>
+Message-ID: <CAK8P3a0uy8JcHP_G_ebz61AMB-Mx6jr5+vuzJHmWbDCajTdTfQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
+To:     Libo Chen <libo.chen@oracle.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Y7bjTG5yZhKSo0QonGX0bjrqMCV8FqCn2Jc/gpu9j2TXS37tuEO
+ BsIiZ4BZNvTNt3uzFLgJmA8czEw6WM4HOxMsyMinuRUWTaiR3RjjgsT5cdWzfOrFldN0Vee
+ n1hj4S2GZ5L1NZlkSgHlxKnJxgOK/meswZDx1TcQtRtX7Io3YXXqfNh0p4St2r37C/7/6lr
+ lPqD22Ms77jBo7mprkeFA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:T3O8cO2vhA4=:mkttKl+5Zwfmc0W5nvAZUV
+ uOXYKowyLJD1OMsdExf7wHc7GYnDPvXMrAIGHU4rR9JXbPiHRWNuTL4elvflyp4w6cBBm25rs
+ ERAUXp0NX8nAsNqmnC6f1d1/JRQMtXlsCSDO44B6t5+gs0U+/3U3AgwMdu49vq5OdQ02zwJxF
+ UbcYTMjp5yUPN7eYGHHk05PO/euvy5411NxYcQu8wlONf9uiPxV9tfDEQuJEp1Gvf2PNPHifM
+ JH2WxgoW6aZunT97R7Yras0K20Uz8BOHqY5Eca6EU7c4itA6fRncAToEiFCWmRU6+RRdfEOGV
+ 6gTqpHULbtUtJ0YXDSFGWFZGOSJ0UL0hNfKAP2M07OaSJigsuifhsOHh86sqPwXsulHu0E5js
+ YNL9IbKWMdO3V4ORkBiUxCUkOe2z/VvdaJBgiBVMELrxLAFLYrhpgxmVV9tYXtAXJESV75g7O
+ N9o2S6mnWmINmL4UkiVuSWcGtrvf3pXPQ/nmnjuRzewfy1WdYPvXn/dyL/MDwD7XKwsvgzomx
+ SgHx2rYBbno3F2zSef4vQhv6QyK9YiQnlyJ4AQGn6ZQuJv8q0hA5bpr607fhAdmHJZ/5H3qom
+ +RpYteJe8AkPdx1NhQo7QKtPbJmG40lyWAkH5V/RYc57un7mfmZBn+a158wSEc3p1YFL3WDuP
+ zwJ63bsnaAdHeK5FVLjR6Lz7a03A/IHLusR01Y8Hy/VkCKvtx96Fv8dXR3LevJEUPfSNAxzUd
+ 0vohc3fwuhkjjMbOo0K3Z6YoSqUzj+B4lkYO7af+w2beJ7EOuLLTKnrrtM8H3Tletes5j/9C5
+ NMKzytmJXEdE1lcSBo/FTYnL1QDXHMqs8eqeAUQ+5kgCN9q5Uk=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 08:26:49AM -0700, Paul E. McKenney wrote:
-> On Tue, Apr 12, 2022 at 02:48:15PM +0200, Paul Heidekrüger wrote:
-> > On Mon, Apr 11, 2022 at 11:21:41AM -0700, Paul E. McKenney wrote:
-> > > On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
-> > > > Hi all,
-> > > > 
-> > > > work on my dependency checker tool is progressing nicely, and it is
-> > > > flagging, what I believe is, a harmful addr to ctrl dependency
-> > > > transformation. For context, see [1] and [2]. I'm using the Clang
-> > > > compiler.
-> > > > 
-> > > > The dependency in question runs from line 618 into the for loop
-> > > > increment, i.e. the third expresion in the for loop condition, in line
-> > > > 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
-> > > > 
-> > > > I did my best to reverse-engineer some pseudocode from Clang's IR for
-> > > > showing what I think is going on.
-> > > 
-> > > First, thank you very much for doing this work!
-> > > 
-> > > > Clang's unoptimised version:
-> > > > 
-> > > > > restart:
-> > > > > 	if(place_holder != NULL)
-> > > > > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
-> > > > > 	if(delegation != NULL)
-> > > > > 		if(delegation != place_holder_deleg)
-> > > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
-> > > > > 
-> > > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
-> > > > > 		/*
-> > > > > 		 * Can continue, "goto restart" or "goto break" (after loop). 
-> > > > > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
-> > > > > 		 * "delegation" might be assigned either a value depending on 
-> > > > > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
-> > > > > 		 * or NULL.
-> > > > > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
-> > > > > 		 * points to.
-> > > > > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
-> > > > > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
-> > > > > 		 * and the for loop's increment is executed.
-> > > > > 		 */
-> > > > > 	}
-> > > > 
-> > > > Clang's optimised version:
-> > > > 
-> > > > > restart:
-> > > > > 	if(place_holder == NULL) {
-> > > > > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> > > > > 	} else {
-> > > > > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
-> > > > > 		if(cmp != NULL) { /* Transformation to ctrl dep */
-> > > > > 			if(cmp == place_holder_deleg) {
-> > > > > 				delegation = place_holder_deleg;
-> > > > > 			} else {
-> > > > > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
-> > > > > 			}
-> > > > > 		} else {
-> > > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> > > > > 		}
-> > > > > 	}
-> > > > > 
-> > > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
-> > > > > 		/*
-> > > > > 		 * At this point, "delegation" cannot depend on line 618 anymore
-> > > > > 		 * since the "rcu_dereference()" was only used for an assignment
-> > > > > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
-> > > > > 		 * Therefore, the loop increment cannot depend on the
-> > > > > 		 * "rcu_dereference()" either. The dependency chain has been
-> > > > > 		 * broken.
-> > > > > 		 */
-> > > > >         }
-> > > > 
-> > > > The above is an abstraction of the following control flow path in
-> > > > "nfs_server_return_marked_delegations()":
-> > > > 
-> > > > 1. When "nfs_server_return_marked_delegations()" gets called, it has no
-> > > > choice but to skip the dependency beginning in line 620, since
-> > > > "place_holder" is NULL the first time round.
-> > > > 
-> > > > 2. Now take a path until "place_holder", the condition for the
-> > > > dependency beginning, becomes true and "!delegation || delegation !=
-> > > > place_holder_deleg", the condition for the assignment in line 620,
-> > > > becomes false. Then, enter the loop again and take a path to one of the
-> > > > "goto restart" statements without reassigning to "delegation".
-> > > > 
-> > > > 3. After going back to "restart", since the condition for line 618
-> > > > became true, "rcu_dereference()" into "delegation".
-> > > > 
-> > > > 4. Enter the for loop again, but avoid the "goto restart" statements in
-> > > > the first iteration and ensure that "&(delegation)->super_list !=
-> > > > &server->delegations", the loop condition, remains true and "delegation"
-> > > > isn't assigned NULL.
-> > > > 
-> > > > 5. When the for loop condition is reached for the second time, the loop
-> > > > increment is executed and there is an address dependency.
-> > > > 
-> > > > Now, why would the compiler decide to assign "place_holder_deleg" to
-> > > > "delegation" instead of what "rcu_dereference()" returned? Here's my
-> > > > attempt at explaining.
-> > > > 
-> > > > In the pseudo code above, i.e. in the optimised IR, the assignment of
-> > > > "place_holder_deleg" is guarded by two conditions. It is executed iff
-> > > > "place_holder" isn't NULL and the "rcu_dereference()" didn't return
-> > > > NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
-> > > > NULL" holds at line 617, then "delegation == rcu_dereference() ==
-> > > > place_holder_deleg" must hold at line 622. Otherwise, the optimisation
-> > > > would be wrong.
-> > > > 
-> > > > Assume control flow has just reached the first if, i.e. line 617, in
-> > > > source code. Since "place_holder" isn't NULL, it will execute the first
-> > > > if's body and "rcu_dereference()" into "delegation" (618). Now it has
-> > > > reached the second if. Per our aussmption, "rcu_dereference()" returned
-> > > > something that wasn't NULL. Therefore, "!delegation", the first part of
-> > > > the second if condition's OR, will be false.
-> > > > 
-> > > > However, if we want "rcu_dereference() == delegation" to hold after the
-> > > > two if's, we can't enter the second if anyway, as it will overwrite
-> > > > "delegation" with a value that might not be equal to what
-> > > > "rcu_dereference()" returned. So, we want the second part of the second
-> > > > if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
-> > > > as well.
-> > > > 
-> > > > When is that the case? It is the case when "delegation ==
-> > > > place_holder_deleg" holds.
-> > > > 
-> > > > So, if we want "delegation == rcu_dereference() == place_holder_deleg"
-> > > > to hold after the two if's, "place_holder != NULL && rcu_dereference()
-> > > > != NULL" must hold before the two if's, which is what we wanted to show
-> > > > and what the compiler figured out too.
-> > > > 
-> > > > TL;DR: it appears the compiler optimisation is plausible, yet it still
-> > > > breaks the address dependency.
-> > > > 
-> > > > For those interested, I have made the unoptimised and optimised IR CFGs
-> > > > available. In the optimised one, the interesting part is the transition
-> > > > from "if.end" to "if.end13".
-> > > > 
-> > > > Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
-> > > > 
-> > > > Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
-> > > > 
-> > > > What do you think?
-> > > > 
-> > > > Many thanks,
-> > > > Paul
-> > > > 
-> > > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> > > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
-> > > 
-> > > If I understand this correctly (rather unlikely), this stems from
-> > > violating the following rule in Documentation/RCU/rcu_dereference.rst:
-> > > 
-> > > ------------------------------------------------------------------------
-> > > 
-> > > -	Be very careful about comparing pointers obtained from
-> > > 	rcu_dereference() against non-NULL values.  As Linus Torvalds
-> > > 	explained, if the two pointers are equal, the compiler could
-> > > 	substitute the pointer you are comparing against for the pointer
-> > > 	obtained from rcu_dereference().  For example::
-> > > 
-> > > 		p = rcu_dereference(gp);
-> > > 		if (p == &default_struct)
-> > > 			do_default(p->a);
-> > > 
-> > > 	Because the compiler now knows that the value of "p" is exactly
-> > > 	the address of the variable "default_struct", it is free to
-> > > 	transform this code into the following::
-> > > 
-> > > 		p = rcu_dereference(gp);
-> > > 		if (p == &default_struct)
-> > > 			do_default(default_struct.a);
-> > > 
-> > > 	On ARM and Power hardware, the load from "default_struct.a"
-> > > 	can now be speculated, such that it might happen before the
-> > > 	rcu_dereference().  This could result in bugs due to misordering.
-> > > 
-> > > 	However, comparisons are OK in the following cases:
-> > > 
-> > > 	-	The comparison was against the NULL pointer.  If the
-> > > 		compiler knows that the pointer is NULL, you had better
-> > > 		not be dereferencing it anyway.  If the comparison is
-> > > 		non-equal, the compiler is none the wiser.  Therefore,
-> > > 		it is safe to compare pointers from rcu_dereference()
-> > > 		against NULL pointers.
-> > > 
-> > > 	-	The pointer is never dereferenced after being compared.
-> > > 		Since there are no subsequent dereferences, the compiler
-> > > 		cannot use anything it learned from the comparison
-> > > 		to reorder the non-existent subsequent dereferences.
-> > > 		This sort of comparison occurs frequently when scanning
-> > > 		RCU-protected circular linked lists.
-> > > 
-> > > 		Note that if checks for being within an RCU read-side
-> > > 		critical section are not required and the pointer is never
-> > > 		dereferenced, rcu_access_pointer() should be used in place
-> > > 		of rcu_dereference().
-> > > 
-> > > 	-	The comparison is against a pointer that references memory
-> > > 		that was initialized "a long time ago."  The reason
-> > > 		this is safe is that even if misordering occurs, the
-> > > 		misordering will not affect the accesses that follow
-> > > 		the comparison.  So exactly how long ago is "a long
-> > > 		time ago"?  Here are some possibilities:
-> > > 
-> > > 		-	Compile time.
-> > > 
-> > > 		-	Boot time.
-> > > 
-> > > 		-	Module-init time for module code.
-> > > 
-> > > 		-	Prior to kthread creation for kthread code.
-> > > 
-> > > 		-	During some prior acquisition of the lock that
-> > > 			we now hold.
-> > > 
-> > > 		-	Before mod_timer() time for a timer handler.
-> > > 
-> > > 		There are many other possibilities involving the Linux
-> > > 		kernel's wide array of primitives that cause code to
-> > > 		be invoked at a later time.
-> > > 
-> > > 	-	The pointer being compared against also came from
-> > > 		rcu_dereference().  In this case, both pointers depend
-> > > 		on one rcu_dereference() or another, so you get proper
-> > > 		ordering either way.
-> > > 
-> > > 		That said, this situation can make certain RCU usage
-> > > 		bugs more likely to happen.  Which can be a good thing,
-> > > 		at least if they happen during testing.  An example
-> > > 		of such an RCU usage bug is shown in the section titled
-> > > 		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
-> > > 
-> > > 	-	All of the accesses following the comparison are stores,
-> > > 		so that a control dependency preserves the needed ordering.
-> > > 		That said, it is easy to get control dependencies wrong.
-> > > 		Please see the "CONTROL DEPENDENCIES" section of
-> > > 		Documentation/memory-barriers.txt for more details.
-> > > 
-> > > 	-	The pointers are not equal *and* the compiler does
-> > > 		not have enough information to deduce the value of the
-> > > 		pointer.  Note that the volatile cast in rcu_dereference()
-> > > 		will normally prevent the compiler from knowing too much.
-> > > 
-> > > 		However, please note that if the compiler knows that the
-> > > 		pointer takes on only one of two values, a not-equal
-> > > 		comparison will provide exactly the information that the
-> > > 		compiler needs to deduce the value of the pointer.
-> > > 
-> > > ------------------------------------------------------------------------
-> > > 
-> > > But it would be good to support this use case, for example, by having
-> > > the compiler provide some way of marking the "delegation" variable as
-> > > carrying a full dependency.
-> > > 
-> > > Or did I miss a turn in here somewhere?
-> > > 
-> > > 							Thanx, Paul
-> > 
-> > Actually, I think you're spot on! The original source code has a,
-> > allbeit nested, comparison of "delegation" against a non-NULL value,
-> > which is exactly what the documentation discourages as it helps the
-> > compiler figure out the value of "delegation".
-> 
-> Sometimes I get lucky.  ;-)
-> 
-> > I'll try to prepare a patch, using my dependency checker tool to verify
-> > that this was indeed the issue.
-> 
-> This would be a kernel patch to avoid the comparison?  Or a patch to
-> the compiler to tell it that the "delegation" variable carries a full
-> dependency?  Either would be useful, just curious.
+On Wed, Apr 13, 2022 at 11:50 PM Libo Chen <libo.chen@oracle.com> wrote:
+> On 4/13/22 13:52, Arnd Bergmann wrote:
+> >>> Yes, it is. I don't know that the problem is...
+> >> Masahiro explained that CPUMASK_OFFSTACK can only be configured by
+> >> options not users if DEBUG_PER_CPU_MASK is not enabled. This doesn't
+> >> seem to be what we want.
+> > I think the correct way to do it is to follow x86 and powerpc, and tying
+> > CPUMASK_OFFSTACK to "large" values of CONFIG_NR_CPUS.
+> > For smaller values of NR_CPUS, the onstack masks are obviously
+> > cheaper, we just need to decide what the cut-off point is.
+>
+> I agree. It appears enabling CPUMASK_OFFSTACK breaks kernel builds on
+> some architectures such as parisc and nios2 as reported by kernel test
+> robot. Maybe it makes sense to use DEBUG_PER_CPU_MAPS as some kind of
+> guard on CPUMASK_OFFSTACK.
 
-Ah, sorry, ambiguous. I was referring to a kernel patch which avoids the
-comparions. But we, i.e. everyone involved with the dependency checker
-tool, are also aware of the value of a dependency-preserving compiler
-and have had some discussions around the topic. Not making any promises
-in that regard though :-)
+NIOS2 does not support SMP builds at all, so it should never be possible to
+select CPUMASK_OFFSTACK there. We may want to guard
+DEBUG_PER_CPU_MAPS by adding a 'depends on SMP' in order to
+prevent it from getting selected.
 
-Many thanks,
-Paul
+For PARISC, the largest configuration is 32-way SMP, so CPUMASK_OFFSTACK
+is clearly pointless there as well, even though it should technically
+be possible
+to support. What is the build error on parisc?
+
+> > In x86, the onstack masks can be selected for normal SMP builds with
+> > up to 512 CPUs, while CONFIG_MAXSMP=y raises the limit to 8192
+> > CPUs while selecting CPUMASK_OFFSTACK.
+> > PowerPC does it the other way round, selecting CPUMASK_OFFSTACK
+> > implicitly whenever NR_CPUS is set to 8192 or more.
+> >
+> > I think we can easily do the same as powerpc on arm64. With the
+> I am leaning more towards x86's way because even NR_CPUS=160 is too
+> expensive for 4-core arm64 VMs according to apachebench. I highly doubt
+> that there is a good cut-off point to make everybody happy (or not unhappy).
+
+It seems surprising that you would see any improvement for offstack masks
+when using NR_CPUS=160, that is just three 64-bit words worth of data, but
+it requires allocating the mask dynamically, which takes way more memory
+to initialize.
+
+> > ApacheBench test you cite in the patch description, what is the
+> > value of NR_CPUS at which you start seeing a noticeable
+> > benefit for offstack masks? Can you do the same test for
+> > NR_CPUS=1024 or 2048?
+>
+> As mentioned above, a good cut-off point moves depends on the actual
+> number of CPUs. But yeah I can do the same test for 1024 or even smaller
+> NR_CPUs values on the same 64-core arm64 VM setup.
+
+If you see an improvement for small NR_CPUS values using offstack masks,
+it's possible that the actual difference is something completely
+different and we
+can just make the on-stack case faster, possibly the cause is something about
+cacheline alignment or inlining decisions using your specific kernel config.
+
+Are you able to compare the 'perf report' output between runs with either
+size to see where the extra time gets spent?
+
+        Arnd
