@@ -2,24 +2,24 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E7A5005E3
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Apr 2022 08:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86145005E8
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Apr 2022 08:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240027AbiDNGXh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Apr 2022 02:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
+        id S240082AbiDNGXw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Apr 2022 02:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbiDNGXf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Apr 2022 02:23:35 -0400
+        with ESMTP id S237829AbiDNGXl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Apr 2022 02:23:41 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 054CD1F601;
-        Wed, 13 Apr 2022 23:21:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 185584D26C;
+        Wed, 13 Apr 2022 23:21:17 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE1761576;
-        Wed, 13 Apr 2022 23:21:10 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCA2515BF;
+        Wed, 13 Apr 2022 23:21:16 -0700 (PDT)
 Received: from a077893.arm.com (unknown [10.163.37.202])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4EAD83F70D;
-        Wed, 13 Apr 2022 23:21:03 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6B7423F70D;
+        Wed, 13 Apr 2022 23:21:11 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-mm@kvack.org, akpm@linux-foundation.org
 Cc:     christophe.leroy@csgroup.eu, catalin.marinas@arm.com,
@@ -28,11 +28,10 @@ Cc:     christophe.leroy@csgroup.eu, catalin.marinas@arm.com,
         linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>
-Subject: [PATCH V7 2/7] powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Date:   Thu, 14 Apr 2022 11:51:20 +0530
-Message-Id: <20220414062125.609297-3-anshuman.khandual@arm.com>
+        Will Deacon <will@kernel.org>
+Subject: [PATCH V7 3/7] arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Date:   Thu, 14 Apr 2022 11:51:21 +0530
+Message-Id: <20220414062125.609297-4-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220414062125.609297-1-anshuman.khandual@arm.com>
 References: <20220414062125.609297-1-anshuman.khandual@arm.com>
@@ -48,85 +47,97 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 This defines and exports a platform specific custom vm_get_page_prot() via
-subscribing ARCH_HAS_VM_GET_PAGE_PROT. While here, this also localizes
-arch_vm_get_page_prot() as __vm_get_page_prot() and moves it near
-vm_get_page_prot().
+subscribing ARCH_HAS_VM_GET_PAGE_PROT. It localizes arch_vm_get_page_prot()
+and moves it near vm_get_page_prot().
 
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/powerpc/Kconfig               |  1 +
- arch/powerpc/include/asm/mman.h    | 12 ------------
- arch/powerpc/mm/book3s64/pgtable.c | 17 +++++++++++++++++
- 3 files changed, 18 insertions(+), 12 deletions(-)
+ arch/arm64/Kconfig            |  1 +
+ arch/arm64/include/asm/mman.h | 24 ------------------------
+ arch/arm64/mm/mmap.c          | 25 +++++++++++++++++++++++++
+ 3 files changed, 26 insertions(+), 24 deletions(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 174edabb74fa..69e44358a235 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -140,6 +140,7 @@ config PPC
- 	select ARCH_HAS_TICK_BROADCAST		if GENERIC_CLOCKEVENTS_BROADCAST
- 	select ARCH_HAS_UACCESS_FLUSHCACHE
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
-+	select ARCH_HAS_VM_GET_PAGE_PROT	if PPC_BOOK3S_64
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index 57c4c995965f..dd0b15162bb3 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -45,6 +45,7 @@ config ARM64
+ 	select ARCH_HAS_SYSCALL_WRAPPER
+ 	select ARCH_HAS_TEARDOWN_DMA_OPS if IOMMU_SUPPORT
+ 	select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
++	select ARCH_HAS_VM_GET_PAGE_PROT
+ 	select ARCH_HAS_ZONE_DMA_SET if EXPERT
+ 	select ARCH_HAVE_ELF_PROT
  	select ARCH_HAVE_NMI_SAFE_CMPXCHG
- 	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
-diff --git a/arch/powerpc/include/asm/mman.h b/arch/powerpc/include/asm/mman.h
-index 7cb6d18f5cd6..1b024e64c8ec 100644
---- a/arch/powerpc/include/asm/mman.h
-+++ b/arch/powerpc/include/asm/mman.h
-@@ -24,18 +24,6 @@ static inline unsigned long arch_calc_vm_prot_bits(unsigned long prot,
+diff --git a/arch/arm64/include/asm/mman.h b/arch/arm64/include/asm/mman.h
+index e3e28f7daf62..5966ee4a6154 100644
+--- a/arch/arm64/include/asm/mman.h
++++ b/arch/arm64/include/asm/mman.h
+@@ -35,30 +35,6 @@ static inline unsigned long arch_calc_vm_flag_bits(unsigned long flags)
  }
- #define arch_calc_vm_prot_bits(prot, pkey) arch_calc_vm_prot_bits(prot, pkey)
+ #define arch_calc_vm_flag_bits(flags) arch_calc_vm_flag_bits(flags)
  
 -static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
 -{
--#ifdef CONFIG_PPC_MEM_KEYS
--	return (vm_flags & VM_SAO) ?
--		__pgprot(_PAGE_SAO | vmflag_to_pte_pkey_bits(vm_flags)) :
--		__pgprot(0 | vmflag_to_pte_pkey_bits(vm_flags));
--#else
--	return (vm_flags & VM_SAO) ? __pgprot(_PAGE_SAO) : __pgprot(0);
--#endif
+-	pteval_t prot = 0;
+-
+-	if (vm_flags & VM_ARM64_BTI)
+-		prot |= PTE_GP;
+-
+-	/*
+-	 * There are two conditions required for returning a Normal Tagged
+-	 * memory type: (1) the user requested it via PROT_MTE passed to
+-	 * mmap() or mprotect() and (2) the corresponding vma supports MTE. We
+-	 * register (1) as VM_MTE in the vma->vm_flags and (2) as
+-	 * VM_MTE_ALLOWED. Note that the latter can only be set during the
+-	 * mmap() call since mprotect() does not accept MAP_* flags.
+-	 * Checking for VM_MTE only is sufficient since arch_validate_flags()
+-	 * does not permit (VM_MTE & !VM_MTE_ALLOWED).
+-	 */
+-	if (vm_flags & VM_MTE)
+-		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
+-
+-	return __pgprot(prot);
 -}
 -#define arch_vm_get_page_prot(vm_flags) arch_vm_get_page_prot(vm_flags)
 -
- static inline bool arch_validate_prot(unsigned long prot, unsigned long addr)
+ static inline bool arch_validate_prot(unsigned long prot,
+ 	unsigned long addr __always_unused)
  {
- 	if (prot & ~(PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM | PROT_SAO))
-diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c
-index 052e6590f84f..8b474ab32f67 100644
---- a/arch/powerpc/mm/book3s64/pgtable.c
-+++ b/arch/powerpc/mm/book3s64/pgtable.c
-@@ -7,6 +7,7 @@
- #include <linux/mm_types.h>
- #include <linux/memblock.h>
- #include <linux/memremap.h>
-+#include <linux/pkeys.h>
- #include <linux/debugfs.h>
- #include <misc/cxl-base.h>
- 
-@@ -549,3 +550,19 @@ unsigned long memremap_compat_align(void)
+diff --git a/arch/arm64/mm/mmap.c b/arch/arm64/mm/mmap.c
+index 77ada00280d9..78e9490f748d 100644
+--- a/arch/arm64/mm/mmap.c
++++ b/arch/arm64/mm/mmap.c
+@@ -55,3 +55,28 @@ static int __init adjust_protection_map(void)
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(memremap_compat_align);
- #endif
+ arch_initcall(adjust_protection_map);
 +
 +pgprot_t vm_get_page_prot(unsigned long vm_flags)
 +{
-+	unsigned long prot = pgprot_val(protection_map[vm_flags &
-+					(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]);
++	pteval_t prot = pgprot_val(protection_map[vm_flags &
++				   (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]);
 +
-+	if (vm_flags & VM_SAO)
-+		prot |= _PAGE_SAO;
++	if (vm_flags & VM_ARM64_BTI)
++		prot |= PTE_GP;
 +
-+#ifdef CONFIG_PPC_MEM_KEYS
-+	prot |= vmflag_to_pte_pkey_bits(vm_flags);
-+#endif
++	/*
++	 * There are two conditions required for returning a Normal Tagged
++	 * memory type: (1) the user requested it via PROT_MTE passed to
++	 * mmap() or mprotect() and (2) the corresponding vma supports MTE. We
++	 * register (1) as VM_MTE in the vma->vm_flags and (2) as
++	 * VM_MTE_ALLOWED. Note that the latter can only be set during the
++	 * mmap() call since mprotect() does not accept MAP_* flags.
++	 * Checking for VM_MTE only is sufficient since arch_validate_flags()
++	 * does not permit (VM_MTE & !VM_MTE_ALLOWED).
++	 */
++	if (vm_flags & VM_MTE)
++		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
 +
 +	return __pgprot(prot);
 +}
