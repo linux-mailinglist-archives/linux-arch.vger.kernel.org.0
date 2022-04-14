@@ -2,65 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E67500335
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Apr 2022 02:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6CD500393
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Apr 2022 03:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiDNAwM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 13 Apr 2022 20:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
+        id S239408AbiDNBX7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 13 Apr 2022 21:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiDNAwL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 20:52:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC0615A3F;
-        Wed, 13 Apr 2022 17:49:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20914610FB;
-        Thu, 14 Apr 2022 00:49:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E38C385A3;
-        Thu, 14 Apr 2022 00:49:43 +0000 (UTC)
-Message-ID: <7a26156e-1f06-b0b1-2859-432a75e9e0d4@linux-m68k.org>
-Date:   Thu, 14 Apr 2022 10:49:40 +1000
+        with ESMTP id S236605AbiDNBX6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 13 Apr 2022 21:23:58 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5427522E7;
+        Wed, 13 Apr 2022 18:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=eO6g3QJQoh9UepWfm4OKwawAGep6aOU9+cq2xVm+3vg=; b=SPONtgEmQitAtBRkT6U+Opulqj
+        iGTs+IXxV3jha+HGHodDBTF5C0FhWNzu1gQEUJY5+lXdzP5N1NtCLVcHoPFuKSNkNUzfrSDq7izzC
+        cyzgpN7QQF3ko097QhpvB1w4/+gvllHQB5I+aE2AGsaH9CpHwBz46YNz0/LB2jEX6JUIAbGe2lfaz
+        xhP6a69Hwp0cshjsIl/9+38GLlyNnpyJ7TSRZeUGN0NifBRy4sX/E9KOMX+h5s4DSTH2wEA1ebjao
+        P/QRREnPL5sPzYfFIUt82ZeiapFgtj1wHTj9/Hr6wQ3MtW3L+ucURLW9v+c+jvE+qqghLr+gJQm7f
+        PHmjToXg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neoAW-004qcD-1n; Thu, 14 Apr 2022 01:21:09 +0000
+Message-ID: <98d190a3-b3f3-0fa5-be0f-8d602ffe7aea@infradead.org>
+Date:   Wed, 13 Apr 2022 18:20:58 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PULL] remove arch/h8300
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RESEND 1/1] lib/Kconfig: remove DEBUG_PER_CPU_MAPS
+ dependency for CPUMASK_OFFSTACK
 Content-Language: en-US
-To:     Rob Landley <rob@landley.net>, Finn Thain <fthain@linux-m68k.org>
-Cc:     Daniel Palmer <daniel@0x0f.com>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+To:     Libo Chen <libo.chen@oracle.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     gregkh <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
- <6a38e8b8-7ccc-afba-6826-cb6e4f92af83@linux-m68k.org>
- <CAFr9PXkk=8HOxPwVvFRzqHZteRREWxSOOcdjrcOPe0d=9AW2yQ@mail.gmail.com>
- <5b7687d4-8ba5-ad79-8a74-33fc2496a3db@linux-m68k.org>
- <8f9be869-7244-d92a-4683-f9c53da97755@landley.net>
- <3d5cf48c-94f1-2948-1683-4a2a87f4c697@linux-m68k.org>
- <147dc6cc-1fbb-558f-8e6d-29d4327d54b4@linux-m68k.org>
- <ae4125f5-e725-43ed-d05b-b1f88c0cd50c@landley.net>
-From:   Greg Ungerer <gerg@linux-m68k.org>
-In-Reply-To: <ae4125f5-e725-43ed-d05b-b1f88c0cd50c@landley.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+References: <20220412231508.32629-1-libo.chen@oracle.com>
+ <20220412231508.32629-2-libo.chen@oracle.com>
+ <c7d26e9d-8c70-86a6-cdab-b180a365804f@infradead.org>
+ <157cb46a-d134-2e72-4a65-14e378dd2b8e@oracle.com>
+ <26855467-107d-4ba1-4f32-2afd5918d5b7@infradead.org>
+ <cbb6b94e-3b9d-c7b6-a10e-6203a3a8b3f3@oracle.com>
+ <4c6b3445-78b2-090f-c7c9-291d49c45019@infradead.org>
+ <506db9a9-47ff-658a-a821-27315949e8c3@oracle.com>
+ <8eb6f58a-2621-0977-1b67-b2c58e4d5fba@infradead.org>
+ <c2e6bb8b-c9d9-ad39-7a8e-3df6849b2fb2@oracle.com>
+ <CAK8P3a3wgbYPY6CxbkkFkEboXYLWREaL3oUmHyet5wPYpc4Vng@mail.gmail.com>
+ <ce420ed3-4a36-122f-460d-8cccd0310033@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <ce420ed3-4a36-122f-460d-8cccd0310033@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,96 +73,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi,
 
-
-On 10/4/22 17:26, Rob Landley wrote:
+On 4/13/22 14:50, Libo Chen wrote:
 > 
 > 
-> On 4/8/22 23:18, Greg Ungerer wrote:
->>
->> On 9/4/22 11:59, Finn Thain wrote:
->>> On Fri, 8 Apr 2022, Rob Landley wrote:
->>>
->>>> On 4/5/22 08:07, Greg Ungerer wrote:
->>>>> On 5/4/22 13:23, Daniel Palmer wrote:
->>>>>> On Mon, 4 Apr 2022 at 22:42, Greg Ungerer <gerg@linux-m68k.org> wrote:
->>>>>>> But we could consider the Dragonball support for removal. I keep it
->>>>>>> compiling, but I don't use it and can't test that it actually works.
->>>>>>> Not sure that it has been used for a very long time now. And I
->>>>>>> didn't even realize but its serial driver (68328serial.c) was
->>>>>>> removed in 2015. No one seems too have noticed and complained.
+> On 4/13/22 13:52, Arnd Bergmann wrote:
+>> On Wed, Apr 13, 2022 at 9:28 PM Libo Chen <libo.chen@oracle.com> wrote:
+>>> On 4/13/22 08:41, Randy Dunlap wrote:
+>>>> On 4/12/22 23:56, Libo Chen wrote:
+>>>>>> --- a/lib/Kconfig
+>>>>>> +++ b/lib/Kconfig
+>>>>>> @@ -511,7 +511,8 @@ config CHECK_SIGNATURE
+>>>>>>         bool
+>>>>>>       config CPUMASK_OFFSTACK
+>>>>>> -    bool "Force CPU masks off stack" if DEBUG_PER_CPU_MAPS
+>>>>>> +    bool "Force CPU masks off stack"
+>>>>>> +    depends on DEBUG_PER_CPU_MAPS
+>>>>> This forces every arch to enable DEBUG_PER_CPU_MAPS if they want to enable CPUMASK_OFFSTACK, it's even stronger than "if". My whole argument is CPUMASK_OFFSTACK should be enable/disabled independent of DEBUG_PER_CPU_MASK
+>>>>>>         help
+>>>>>>           Use dynamic allocation for cpumask_var_t, instead of putting
+>>>>>>           them on the stack.  This is a bit more expensive, but avoids
 >>>>>>
->>>>>> I noticed this and I am working on fixing it up for a new Dragonball
->>>>>> homebrew machine. I'm trying to add a 68000 machine to QEMU to make
->>>>>> the development easier because I'm currently waiting an hour or more
->>>>>> for a kernel to load over serial. It might be a few months.
->>>>
->>>> I've been booting Linux on qemu-system-m68k -M q800 for a couple years
->>>> now? (The CROSS=m68k target of mkroot in toybox?)
->>>>
->>>> # cat /proc/cpuinfo
->>>> CPU:		68040
->>>> MMU:		68040
->>>> FPU:		68040
->>>> Clocking:	1261.9MHz
->>>> BogoMips:	841.31
->>>> Calibration:	4206592 loops
->>>>
->>>> It certainly THINKS it's got m68000...
->>>>
->>>
->>> Most 68040 processor variants have a built-in MMU and the m68k "nommu"
->>> Linux port doesn't support them. The nommu port covers processors like
->>> 68000, Dragonball etc. whereas the m68k "mmu" port covers 680x0 where x is
->>> one of 2,3,4,6 with MMU.
-> 
-> In theory you can switch the MMU off. (Or at least give it a NOP page table that
-> maps all the physical memory into one big contiguous block 1:1 with the physical
-> address and leave it there.)
-> 
-> Doesn't mean anybody's bothered to implement and add a config option to stub
-> that out in the kernel yet. But presumably you could have a bootloader shim do it...
-> 
->>>> (I'd love to get an m68k nommu system working but never sat down and
->>>> worked out a kernel .config qemu agreed to run, plus compiler and libc.
->>>> Musl added m68k support but I dunno if that includes coldfire?)
->>>>
->>>
->>> I could never figure out how to boot a coldfire machine in qemu either.
->>> There was no documentation about that back when I attempted it but maybe
->>> things have improved since.
->>
->> FWIW this will do it:
->>
->>       qemu-system-m68k -nographic -machine mcf5208evb -kernel vmlinux
->>
->> That will boot an m5208evb_defconfig generated vmlinux.
->> But you will need a user space to get a full boot to login/shell.
-> 
-> No FDPIC support. :(
-> 
-> I had a binflt toolchain working with uClibc in 2015 or so, but I end of lifed
-> https://landley.net/aboriginal in 2017 (five years ago now). Multiple reasons,
-> but one was the old "last GPLv2 release" toolchain was getting painful to force
-> the kernel to build with.
-> 
-> These days there's articles on lwn.net about yanking a.out support, which fdpic
-> is a buggy variant of that didn't actually have a maintained elf2flt repository
-> when I was assembling my toolchain. (I vaguely recall I poked enough people that
-> somebody picked it up and stuck a repository on github, but Jeff Dionne
-> explained some fundamental design flaw that had been introduced having to do
-> with register offsets being calculated in the wrong framework or something?
-> 
-> I don't remember, I lost interest because it's _conceptually_ obsolete. FDPIC is
-> ELF with a little extra header info, it's clean and potentially even useful on
-> with-MMU systems as extra ASLR. BINFLT is a.out run through a postprocessing
-> tool that nominally converts ELF files into the new format but actually needs .o
-> files from earlier in the process and is kind of an alternate linker except it
-> doesn't replace the linker... It's layers of ugly.
+>>>>>>
+>>>>>> As I said earlier, the "if" on the "bool" line just controls the prompt message.
+>>>>>> This patch make CPUMASK_OFFSTACK require DEBUG_PER_CPU_MAPS -- which might be overkill.
+>>>>>>
+>>>>> Okay I understand now "if" on the "boot" is not a dependency and it only controls the prompt message, then the question is why we cannot enable CPUMASK_OFFSTACK without DEBUG_PER_CPU_MAPS if it only controls prompt message? Is it not the behavior we expect?
+>>>> Yes, it is. I don't know that the problem is...
+>>> Masahiro explained that CPUMASK_OFFSTACK can only be configured by
+>>> options not users if DEBUG_PER_CPU_MASK is not enabled. This doesn't
+>>> seem to be what we want.
+>> I think the correct way to do it is to follow x86 and powerpc, and tying
+>> CPUMASK_OFFSTACK to "large" values of CONFIG_NR_CPUS.
 
-FLAT format has nothing to do with a.out.
-Removing a.out support from the kernel will have no impact on binfmt_flat.
+Sure. Just FTR, I was just trying to see if an arch (arm64) would build OK or not
+when CPUMASK_OFFSTACK was enabled. and it does.
+My patch wasn't meant to have a very long life.
 
-Regards
-Greg
+>> For smaller values of NR_CPUS, the onstack masks are obviously
+>> cheaper, we just need to decide what the cut-off point is.
+> I agree. It appears enabling CPUMASK_OFFSTACK breaks kernel builds on some architectures such as parisc and nios2 as reported by kernel test robot. Maybe it makes sense to use DEBUG_PER_CPU_MAPS as some kind of guard on CPUMASK_OFFSTACK.
+>> In x86, the onstack masks can be selected for normal SMP builds with
+>> up to 512 CPUs, while CONFIG_MAXSMP=y raises the limit to 8192
+>> CPUs while selecting CPUMASK_OFFSTACK.
+>> PowerPC does it the other way round, selecting CPUMASK_OFFSTACK
+>> implicitly whenever NR_CPUS is set to 8192 or more.
+>>
+>> I think we can easily do the same as powerpc on arm64. With the
+> I am leaning more towards x86's way because even NR_CPUS=160 is too expensive for 4-core arm64 VMs according to apachebench. I highly doubt that there is a good cut-off point to make everybody happy (or not unhappy).
+>> ApacheBench test you cite in the patch description, what is the
+>> value of NR_CPUS at which you start seeing a noticeable
+>> benefit for offstack masks? Can you do the same test for
+>> NR_CPUS=1024 or 2048?
+> As mentioned above, a good cut-off point moves depends on the actual number of CPUs. But yeah I can do the same test for 1024 or even smaller NR_CPUs values on the same 64-core arm64 VM setup.
 
+
+-- 
+~Randy
