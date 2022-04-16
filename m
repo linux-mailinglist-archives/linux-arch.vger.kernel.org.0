@@ -2,135 +2,285 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1F0502E29
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Apr 2022 19:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602E95033BE
+	for <lists+linux-arch@lfdr.de>; Sat, 16 Apr 2022 07:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbiDORFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Apr 2022 13:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S229542AbiDPCMs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Apr 2022 22:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356098AbiDORFV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Apr 2022 13:05:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86B699D07C
-        for <linux-arch@vger.kernel.org>; Fri, 15 Apr 2022 10:02:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650042171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZzBogzvEUo8J9TgEmB5sb1Fv1z0k0Lt5IOZ/xOeDFpw=;
-        b=Fir3usGGicsxIIRRk3Hm1Xl7tY+M684AL5AETZWxr8Rn5BcLkaZCpPHnHiQdmVjqwj4l4V
-        19xjTSu19GBx+l2OX2b9iUUGwY8I6BXEdfvzhHShvo1AwQbdTvdtDxXHXymFymtpwkL+1R
-        OBOs+K2cmjBhSkmCrAZO4Q2/0lGp0Nk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-499-7v658Eh0O260N3sQjcrLhg-1; Fri, 15 Apr 2022 13:02:48 -0400
-X-MC-Unique: 7v658Eh0O260N3sQjcrLhg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E2723C18535;
-        Fri, 15 Apr 2022 17:02:47 +0000 (UTC)
-Received: from [10.22.32.72] (unknown [10.22.32.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 95928202F320;
-        Fri, 15 Apr 2022 17:02:42 +0000 (UTC)
-Message-ID: <8f2a3903-ab49-23cc-a362-a9857dc38410@redhat.com>
-Date:   Fri, 15 Apr 2022 13:02:42 -0400
+        with ESMTP id S229725AbiDPCMW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Apr 2022 22:12:22 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F41FFFA5
+        for <linux-arch@vger.kernel.org>; Fri, 15 Apr 2022 19:09:24 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id t207so7733670qke.2
+        for <linux-arch@vger.kernel.org>; Fri, 15 Apr 2022 19:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :mime-version;
+        bh=m8a3d/+EJKjumbouQ4BS4OJBYwQ9PXyRdMOc5wTu4no=;
+        b=OccracmQRr3AObUnWo+vytfXwM36YQSXp5f1NitmWWTrhydFzF+jmDRLiuvSEktYeM
+         ETugzDjDRKcDd2dRghecDdWqu3ORwhU4yyxK5YLO6vNTUXTy8j/WzQhtpXJLC2CBc0c+
+         KJpSSvofwpUhKxJiOcH36d+09fP/OvcjWzUvBYxCpx9FWCP+QiafBJ1RiI4kmT+LZsFN
+         9jzt6t+sm6IWOVT6+cpl0zBebonYR6jpmQiU0y8bT11pwn3pPAnbMmjDGYMGT+KYRLIe
+         UBGezGgcV3tAVtfwR7aF7g9+VVHEtp47YVEpT/dbl0unB+ZGsb0SQ4UDlVAVW1RetY7E
+         nNhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:mime-version;
+        bh=m8a3d/+EJKjumbouQ4BS4OJBYwQ9PXyRdMOc5wTu4no=;
+        b=4l4KPY00AZRXoePfLnAcISUF9ZrBKCCSkU/L3a2DiMBpKtGgK2UUgCGw6VS4jGNs1X
+         0QcFLu3FpgtU6yxhXrXzjXyWeCMh6377llsjukwVF67iMmxayGC+lRZ2DWspE7uPqNpj
+         OAkHPafSydeq0dnn4DhV60JVz4xxpzcalrE087kp7xhsj4u0JA6C/VW4s6omlddQkXZU
+         UB/P4hi98Tyjp5qjmtIgdtpVCqDkRj7oEtvphLVUK/8RwFIswykBqzncIL5Ootvquh9i
+         zzPQzTi5Xc1b02lCeQPsiIQEjaKNcVtlsStPQdK9/W2JPPKxDxRJL7EhwgCPmxxhLez7
+         c8rg==
+X-Gm-Message-State: AOAM530DSAN43NHXOqQwOIs2UQm51eP2nl6ramhnGN+SS08tXB1oEBDp
+        Mtb0dasLBcVPKhlC3uV2YGx+242+ZbKqIdKU
+X-Google-Smtp-Source: ABdhPJz3V2UwBFP2I7rWW4vLSDGW6uxWjN6Ux/8EGsfQfvs78nOTAYQLNfd162mQMoEePad1dry++Q==
+X-Received: by 2002:a05:620a:25cd:b0:699:c467:fab0 with SMTP id y13-20020a05620a25cd00b00699c467fab0mr884453qko.395.1650070740000;
+        Fri, 15 Apr 2022 17:59:00 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w3-20020a05622a190300b002f1d63a13fdsm3673901qtc.22.2022.04.15.17.58.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 17:58:59 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 17:58:45 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Patrice CHOTARD <patrice.chotard@foss.st.com>
+cc:     Hugh Dickins <hughd@google.com>, Arnd Bergmann <arnd@arndb.de>,
+        mpatocka@redhat.com, lczerner@redhat.com, djwong@kernel.org,
+        hch@lst.de, zkabelac@redhat.com, miklos@szeredi.hu, bp@suse.de,
+        akpm@linux-foundation.org,
+        Alexandre TORGUE - foss <alexandre.torgue@foss.st.com>,
+        Valentin CARON - foss <valentin.caron@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        linux-m68k@lists.linux-m68k.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: Regression with v5.18-rc1 tag on STM32F7 and STM32H7 based
+ boards
+In-Reply-To: <3695dc2a-7518-dee4-a647-821c7cda4a0f@foss.st.com>
+Message-ID: <2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com>
+References: <481a13f8-d339-f726-0418-ab4258228e91@foss.st.com> <95a0d1dd-bcce-76c7-97b9-8374c9913321@google.com> <7f2993a9-adc5-2b90-9218-c4ca8239c3e@google.com> <3695dc2a-7518-dee4-a647-821c7cda4a0f@foss.st.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 1/7] asm-generic: ticket-lock: New generic ticket-based
- spinlock
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de, guoren@kernel.org,
-        shorne@gmail.com, peterz@infradead.org, mingo@redhat.com,
-        Will Deacon <will@kernel.org>, boqun.feng@gmail.com,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, macro@orcam.me.uk,
-        Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, wangkefeng.wang@huawei.com,
-        jszhang@kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
-References: <mhng-f4d144dd-b6ed-4f3f-bfc3-6dc29fab14e4@palmer-ri-x1c9>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <mhng-f4d144dd-b6ed-4f3f-bfc3-6dc29fab14e4@palmer-ri-x1c9>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/15/22 12:46, Palmer Dabbelt wrote:
->
->>> diff --git a/include/asm-generic/spinlock_types.h 
->>> b/include/asm-generic/spinlock_types.h
->>> new file mode 100644
->>> index 000000000000..e56ddb84d030
->>> --- /dev/null
->>> +++ b/include/asm-generic/spinlock_types.h
->>> @@ -0,0 +1,17 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>> +
->>> +#ifndef __ASM_GENERIC_TICKET_LOCK_TYPES_H
->>> +#define __ASM_GENERIC_TICKET_LOCK_TYPES_H
->>> +
->>> +#include <linux/types.h>
->>> +typedef atomic_t arch_spinlock_t;
->>> +
->>> +/*
->>> + * qrwlock_types depends on arch_spinlock_t, so we must typedef 
->>> that before the
->>> + * include.
->>> + */
->>> +#include <asm/qrwlock_types.h>
->>
->> I believe that if you guard the include line by
->>
->> #ifdef CONFIG_QUEUED_RWLOCK
->> #include <asm/qrwlock_types.h>
->> #endif
->>
->> You may not need to do the hack in patch 5.
->
-> Yes, and we actually had it that way the first time around 
-> (specifically the ARCH_USES_QUEUED_RWLOCKS, but IIUC that's the same 
-> here).  The goal was to avoid adding the ifdef to the asm-generic code 
-> and instead keep the oddness in arch/riscv, it's only there for that 
-> one commit (and just so we can split out the spinlock conversion from 
-> the rwlock conversion, in case there's a bug and these need to be 
-> bisected later).
->
-> I'd also considered renaming qrwlock* to rwlock*, which would avoid 
-> the ifdef and make it a touch easier to override the rwlock 
-> implementation, but that didn't seem useful enough to warrant the 
-> diff.  These all seem a bit more coupled than I expected them to be 
-> (both {spin,qrw}lock{,_types}.h and the bits in linux/), I looked into 
-> cleaning that up a bit but it seemed like too much for just the one 
-> patch set.
+On Wed, 6 Apr 2022, Patrice CHOTARD wrote:
+> On 4/6/22 08:22, Hugh Dickins wrote:
+> > Asking Arnd and others below: should noMMU arches have a good ZERO_PAGE?
+> > 
+> > On Tue, 5 Apr 2022, Hugh Dickins wrote:
+> >> On Tue, 5 Apr 2022, Patrice CHOTARD wrote:
+> >>>
+> >>> We found an issue with last kernel tag v5.18-rc1 on stm32f746-disco and 
+> >>> stm32h743-disco boards (ARMV7-M SoCs).
+> >>>
+> >>> Kernel hangs when executing SetPageUptodate(ZERO_PAGE(0)); in mm/filemap.c.
+> >>>
+> >>> By reverting commit 56a8c8eb1eaf ("tmpfs: do not allocate pages on read"), 
+> >>> kernel boots without any issue.
+> >>
+> >> Sorry about that, thanks a lot for finding.
+> >>
+> >> I see that arch/arm/configs/stm32_defconfig says CONFIG_MMU is not set:
+> >> please confirm that is the case here.
+> >>
+> >> Yes, it looks as if NOMMU platforms are liable to have a bogus (that's my
+> >> reading, but it may be unfair) definition for ZERO_PAGE(vaddr), and I was
+> >> walking on ice to touch it without regard for !CONFIG_MMU.
+> >>
+> >> CONFIG_SHMEM depends on CONFIG_MMU, so that PageUptodate is only needed
+> >> when CONFIG_MMU.
+> >>
+> >> Easily fixed by an #ifdef CONFIG_MMU there in mm/filemap.c, but I'll hunt
+> >> around (again) for a better place to do it - though I won't want to touch
+> >> all the architectures for it.  I'll post later today.
+> > 
+> > I could put #ifdef CONFIG_MMU around the SetPageUptodate(ZERO_PAGE(0))
+> > added to pagecache_init(); or if that's considered distasteful, I could
+> > skip making it potentially useful to other filesystems, revert the change
+> > to pagecache_init(), and just do it in mm/shmem.c's CONFIG_SHMEM (hence
+> > CONFIG_MMU) instance of shmem_init().
+> > 
+> > But I wonder if it's safe for noMMU architectures to go on without a
+> > working ZERO_PAGE(0).  It has uses scattered throughout the tree, in
+> > drivers, fs, crypto and more, and it's not at all obvious (to me) that
+> > they all depend on CONFIG_MMU.  Some might cause (unreported) crashes,
+> > some might use an unzeroed page in place of a pageful of zeroes.
+> > 
+> > arm noMMU and h8300 noMMU and m68k noMMU each has
+> > #define ZERO_PAGE(vaddr)	(virt_to_page(0))
+> > which seems riskily wrong to me.
+> > 
+> > h8300 and m68k actually go to the trouble of allocating an empty_zero_page
+> > for this, but then forget to link it up to the ZERO_PAGE(vaddr) definition,
+> > which is what all the common code uses.
+> > 
+> > arm noMMU does not presently allocate such a page; and I do not feel
+> > entitled to steal a page from arm noMMU platforms, for a hypothetical
+> > case, without agreement.
+> > 
+> > But here's an unbuilt and untested patch for consideration - which of
+> > course should be split in three if agreed (and perhaps the h8300 part
+> > quietly forgotten if h8300 is already on its way out).
+> > 
+> > (Yes, arm uses empty_zero_page in a different way from all the other
+> > architectures; but that's okay, and I think arm's way, with virt_to_page()
+> > already baked in, is better than the others; but I've no wish to get into
+> > changing them.)
+> > 
+> > Patrice, does this patch build and run for you? I have no appreciation
+> > of arm early startup issues, and may have got it horribly wrong.
+> 
+> This patch is okay on my side on both boards (STM32F7 and STM32H7), boot are OK.
+> 
+> Thanks for your reactivity ;-)
+> Patrice
 
-Then you are forcing arches that use asm_generic/spinlock.h to use 
-qrwlock as well. Even though most of them probably will, but forcing it 
-this way remove the flexibility an arch may want to have.
+Just to wrap up this thread: the tentative arch/ patches below did not
+go into 5.18-rc2, but 5.18-rc3 will contain
+1bdec44b1eee ("tmpfs: fix regressions from wider use of ZERO_PAGE")
+which fixes a further issue, and deletes the line which gave you trouble.
 
-The difference between CONFIG_QUEUED_RWLOCK and ARCH_USES_QUEUED_RWLOCKS 
-is that qrwlock will not be compiled in when PREEMPT_RT || !SMP. So 
-CONFIG_QUEUED_RWLOCK is a more accurate guard as to whether qrwlock 
-should really be used.
+With arch/h8300 removed from linux-next, and arch/arm losing a page by
+the patch below, I don't think it's worth my arguing for those changes.
+I'd still prefer arch/m68k to expose its empty_zero_page in ZERO_PAGE(),
+or else not allocate it; but I won't be pursuing this further.
 
-Cheers,
-Longman
+Thanks for reporting!
+Hugh
 
+> > 
+> >  arch/arm/include/asm/pgtable-nommu.h |    3 ++-
+> >  arch/arm/mm/nommu.c                  |   16 ++++++++++++++++
+> >  arch/h8300/include/asm/pgtable.h     |    6 +++++-
+> >  arch/h8300/mm/init.c                 |    5 +++--
+> >  arch/m68k/include/asm/pgtable_no.h   |    5 ++++-
+> >  5 files changed, 30 insertions(+), 5 deletions(-)
+> > 
+> > --- a/arch/arm/include/asm/pgtable-nommu.h
+> > +++ b/arch/arm/include/asm/pgtable-nommu.h
+> > @@ -48,7 +48,8 @@ typedef pte_t *pte_addr_t;
+> >   * ZERO_PAGE is a global shared page that is always zero: used
+> >   * for zero-mapped memory areas etc..
+> >   */
+> > -#define ZERO_PAGE(vaddr)	(virt_to_page(0))
+> > +extern struct page *empty_zero_page;
+> > +#define ZERO_PAGE(vaddr)	(empty_zero_page)
+> >  
+> >  /*
+> >   * Mark the prot value as uncacheable and unbufferable.
+> > --- a/arch/arm/mm/nommu.c
+> > +++ b/arch/arm/mm/nommu.c
+> > @@ -24,6 +24,13 @@
+> >  
+> >  #include "mm.h"
+> >  
+> > +/*
+> > + * empty_zero_page is a special page that is used for
+> > + * zero-initialized data and COW.
+> > + */
+> > +struct page *empty_zero_page;
+> > +EXPORT_SYMBOL(empty_zero_page);
+> > +
+> >  unsigned long vectors_base;
+> >  
+> >  #ifdef CONFIG_ARM_MPU
+> > @@ -148,9 +155,18 @@ void __init adjust_lowmem_bounds(void)
+> >   */
+> >  void __init paging_init(const struct machine_desc *mdesc)
+> >  {
+> > +	void *zero_page;
+> > +
+> >  	early_trap_init((void *)vectors_base);
+> >  	mpu_setup();
+> >  	bootmem_init();
+> > +
+> > +	zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+> > +	if (!zero_page)
+> > +		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
+> > +		      __func__, PAGE_SIZE, PAGE_SIZE);
+> > +	empty_zero_page = virt_to_page(zero_page);
+> > +	flush_dcache_page(empty_zero_page);
+> >  }
+> >  
+> >  /*
+> > --- a/arch/h8300/include/asm/pgtable.h
+> > +++ b/arch/h8300/include/asm/pgtable.h
+> > @@ -19,11 +19,15 @@ extern void paging_init(void);
+> >  
+> >  static inline int pte_file(pte_t pte) { return 0; }
+> >  #define swapper_pg_dir ((pgd_t *) 0)
+> > +
+> > +/* zero page used for uninitialized stuff */
+> > +extern void *empty_zero_page;
+> > +
+> >  /*
+> >   * ZERO_PAGE is a global shared page that is always zero: used
+> >   * for zero-mapped memory areas etc..
+> >   */
+> > -#define ZERO_PAGE(vaddr)	(virt_to_page(0))
+> > +#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
+> >  
+> >  /*
+> >   * These would be in other places but having them here reduces the diffs.
+> > --- a/arch/h8300/mm/init.c
+> > +++ b/arch/h8300/mm/init.c
+> > @@ -41,7 +41,8 @@
+> >   * ZERO_PAGE is a special page that is used for zero-initialized
+> >   * data and COW.
+> >   */
+> > -unsigned long empty_zero_page;
+> > +void *empty_zero_page;
+> > +EXPORT_SYMBOL(empty_zero_page);
+> >  
+> >  /*
+> >   * paging_init() continues the virtual memory environment setup which
+> > @@ -65,7 +66,7 @@ void __init paging_init(void)
+> >  	 * Initialize the bad page table and bad page to point
+> >  	 * to a couple of allocated pages.
+> >  	 */
+> > -	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+> > +	empty_zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+> >  	if (!empty_zero_page)
+> >  		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
+> >  		      __func__, PAGE_SIZE, PAGE_SIZE);
+> > --- a/arch/m68k/include/asm/pgtable_no.h
+> > +++ b/arch/m68k/include/asm/pgtable_no.h
+> > @@ -38,11 +38,14 @@ extern void paging_init(void);
+> >  #define __pte_to_swp_entry(pte)	((swp_entry_t) { pte_val(pte) })
+> >  #define __swp_entry_to_pte(x)	((pte_t) { (x).val })
+> >  
+> > +/* zero page used for uninitialized stuff */
+> > +extern void *empty_zero_page;
+> > +
+> >  /*
+> >   * ZERO_PAGE is a global shared page that is always zero: used
+> >   * for zero-mapped memory areas etc..
+> >   */
+> > -#define ZERO_PAGE(vaddr)	(virt_to_page(0))
+> > +#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
+> >  
+> >  /*
+> >   * All 32bit addresses are effectively valid for vmalloc...
+> 
