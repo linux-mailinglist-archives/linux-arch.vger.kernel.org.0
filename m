@@ -2,43 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455EE504718
-	for <lists+linux-arch@lfdr.de>; Sun, 17 Apr 2022 10:33:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E7150471E
+	for <lists+linux-arch@lfdr.de>; Sun, 17 Apr 2022 10:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbiDQIe7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 17 Apr 2022 04:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
+        id S233645AbiDQIfF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 17 Apr 2022 04:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiDQIe6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Apr 2022 04:34:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FAF13CF2;
-        Sun, 17 Apr 2022 01:32:23 -0700 (PDT)
+        with ESMTP id S233662AbiDQIfE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 17 Apr 2022 04:35:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1256022BDA;
+        Sun, 17 Apr 2022 01:32:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8004861156;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EFC3B80AB8;
+        Sun, 17 Apr 2022 08:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EDFC385A7;
         Sun, 17 Apr 2022 08:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27D8DC385AB;
-        Sun, 17 Apr 2022 08:32:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650184342;
-        bh=tT+UgmaXSNo+62iExN7OhXhZp9x+ZWFzp7S/nZVbKIE=;
+        s=k20201202; t=1650184346;
+        bh=aYiZYeIshnaSiZ6d6WBe6NcWpMN/JFn2nH/bghcbAaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MH/UQN+mMEUAv6nRR4n8H9Azczr77APNUrw33potgNx7HtXnqMQJlnM8slmkBT0Dp
-         Q+Rsa3F0ZlG/hrRROuJJON7X9sYli/NP4pvjBAcTG+i6o/rkWC2d4Wgye4IDlMT1n0
-         G4Nu3hidMNFoMmf33kZpoOlUe229Epp6s9bCLjLdpqHsCXmxbJcSX5jCKz3EIJ4Jfu
-         lGK1lw6AxJoJmtU6OI8lcDVc8yVh/KjAFoMCk+Key3n0WUM45IcFlc3xnBIhvT+oE4
-         /uNZgPoTKTGxeZ0MsbC/bHKoMR832cYEUSEpwWnIjlLmCcuKPAOGfaXygt7EzUSjR/
-         8PJ7sIcUFpBlQ==
+        b=SjSisn4tVGQ4eatVm6Skl2PcP6CCR8C8jmNBiGk+SSV/D7u5GjlsBzO7+YkF1bl30
+         n5C0IHtxazOKC1Q+84ZKAjVpxPiWPa2Aqw/00eS7Ulr8EeCYmt9I48bp375sqdslxl
+         wVnmnTN5MwKMz73FGYR8IGvFTF9Tr7kJymvnPgbTHIph6K7NM5tpeFHFc9AKUBhPDo
+         htqPxLkjNQZo9g6zUJfpIRrd6vzLft/fEc5XJFXlJmH8Ye9MxvjWmAEi3Kmp/rZXgD
+         srp0pAgRVKoP6KGEDRS1KSu8i3oMqQWMAHmUlukx8d0ycxF5UEbrrXHhMT4NkCP57A
+         rYnmQp3Uzn8Nw==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, arnd@arndb.de, mark.rutland@arm.com,
         boqun.feng@gmail.com, peterz@infradead.org, will@kernel.org
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3 1/3] csky: cmpxchg: Optimize with acquire & release
-Date:   Sun, 17 Apr 2022 16:32:02 +0800
-Message-Id: <20220417083204.2048364-2-guoren@kernel.org>
+Subject: [PATCH V3 2/3] csky: atomic: Add custom atomic.h implementation
+Date:   Sun, 17 Apr 2022 16:32:03 +0800
+Message-Id: <20220417083204.2048364-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220417083204.2048364-1-guoren@kernel.org>
 References: <20220417083204.2048364-1-guoren@kernel.org>
@@ -56,8 +56,10 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Optimize arch_xchg|cmpxchg|cmpxchg_local with ASM acquire|release
-instructions instead of previous C based.
+The generic atomic.h used cmpxchg to implement the atomic
+operations, it will cause daul loop to reduce the forward
+guarantee. The patch implement csky custom atomic operations with
+ldex/stex instructions for the best performance.
 
 Important reference comment by Rutland:
 8e86f0b409a4 ("arm64: atomics: fix use of acquire + release for
@@ -68,127 +70,170 @@ Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
 ---
- arch/csky/include/asm/barrier.h | 11 +++---
- arch/csky/include/asm/cmpxchg.h | 64 ++++++++++++++++++++++++++++++---
- 2 files changed, 67 insertions(+), 8 deletions(-)
+ arch/csky/include/asm/atomic.h | 154 +++++++++++++++++++++++++++++++++
+ 1 file changed, 154 insertions(+)
+ create mode 100644 arch/csky/include/asm/atomic.h
 
-diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
-index f4045dd53e17..fb63335ffa33 100644
---- a/arch/csky/include/asm/barrier.h
-+++ b/arch/csky/include/asm/barrier.h
-@@ -37,17 +37,21 @@
-  * bar.brar
-  * bar.bwaw
-  */
-+#define ACQUIRE_FENCE		".long 0x8427c000\n"
-+#define RELEASE_FENCE		".long 0x842ec000\n"
-+#define FULL_FENCE		".long 0x842fc000\n"
+diff --git a/arch/csky/include/asm/atomic.h b/arch/csky/include/asm/atomic.h
+new file mode 100644
+index 000000000000..5ecc657a2a66
+--- /dev/null
++++ b/arch/csky/include/asm/atomic.h
+@@ -0,0 +1,154 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
- #define __bar_brw()	asm volatile (".long 0x842cc000\n":::"memory")
- #define __bar_br()	asm volatile (".long 0x8424c000\n":::"memory")
- #define __bar_bw()	asm volatile (".long 0x8428c000\n":::"memory")
- #define __bar_arw()	asm volatile (".long 0x8423c000\n":::"memory")
- #define __bar_ar()	asm volatile (".long 0x8421c000\n":::"memory")
- #define __bar_aw()	asm volatile (".long 0x8422c000\n":::"memory")
--#define __bar_brwarw()	asm volatile (".long 0x842fc000\n":::"memory")
--#define __bar_brarw()	asm volatile (".long 0x8427c000\n":::"memory")
-+#define __bar_brwarw()	asm volatile (FULL_FENCE:::"memory")
-+#define __bar_brarw()	asm volatile (ACQUIRE_FENCE:::"memory")
- #define __bar_bwarw()	asm volatile (".long 0x842bc000\n":::"memory")
- #define __bar_brwar()	asm volatile (".long 0x842dc000\n":::"memory")
--#define __bar_brwaw()	asm volatile (".long 0x842ec000\n":::"memory")
-+#define __bar_brwaw()	asm volatile (RELEASE_FENCE:::"memory")
- #define __bar_brar()	asm volatile (".long 0x8425c000\n":::"memory")
- #define __bar_brar()	asm volatile (".long 0x8425c000\n":::"memory")
- #define __bar_bwaw()	asm volatile (".long 0x842ac000\n":::"memory")
-@@ -56,7 +60,6 @@
- #define __smp_rmb()	__bar_brar()
- #define __smp_wmb()	__bar_bwaw()
- 
--#define ACQUIRE_FENCE		".long 0x8427c000\n"
- #define __smp_acquire_fence()	__bar_brarw()
- #define __smp_release_fence()	__bar_brwaw()
- 
-diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
-index d1bef11f8dc9..06c550448bf1 100644
---- a/arch/csky/include/asm/cmpxchg.h
-+++ b/arch/csky/include/asm/cmpxchg.h
-@@ -64,15 +64,71 @@ extern void __bad_xchg(void);
- #define arch_cmpxchg_relaxed(ptr, o, n) \
- 	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
- 
--#define arch_cmpxchg(ptr, o, n) 				\
-+#define __cmpxchg_acquire(ptr, old, new, size)			\
- ({								\
-+	__typeof__(ptr) __ptr = (ptr);				\
-+	__typeof__(new) __new = (new);				\
-+	__typeof__(new) __tmp;					\
-+	__typeof__(old) __old = (old);				\
-+	__typeof__(*(ptr)) __ret;				\
-+	switch (size) {						\
-+	case 4:							\
-+		asm volatile (					\
-+		"1:	ldex.w		%0, (%3) \n"		\
-+		"	cmpne		%0, %4   \n"		\
-+		"	bt		2f       \n"		\
-+		"	mov		%1, %2   \n"		\
-+		"	stex.w		%1, (%3) \n"		\
-+		"	bez		%1, 1b   \n"		\
-+		ACQUIRE_FENCE					\
-+		"2:				 \n"		\
-+			: "=&r" (__ret), "=&r" (__tmp)		\
-+			: "r" (__new), "r"(__ptr), "r"(__old)	\
-+			:);					\
-+		break;						\
-+	default:						\
-+		__bad_xchg();					\
-+	}							\
-+	__ret;							\
-+})
++#ifndef __ASM_CSKY_ATOMIC_H
++#define __ASM_CSKY_ATOMIC_H
 +
-+#define arch_cmpxchg_acquire(ptr, o, n) \
-+	(__cmpxchg_acquire((ptr), (o), (n), sizeof(*(ptr))))
++#ifdef CONFIG_SMP
++#include <asm-generic/atomic64.h>
 +
-+#define __cmpxchg(ptr, old, new, size)				\
-+({								\
-+	__typeof__(ptr) __ptr = (ptr);				\
-+	__typeof__(new) __new = (new);				\
-+	__typeof__(new) __tmp;					\
-+	__typeof__(old) __old = (old);				\
- 	__typeof__(*(ptr)) __ret;				\
--	__smp_release_fence();					\
--	__ret = arch_cmpxchg_relaxed(ptr, o, n);		\
--	__smp_acquire_fence();					\
-+	switch (size) {						\
-+	case 4:							\
-+		asm volatile (					\
-+		"1:	ldex.w		%0, (%3) \n"		\
-+		"	cmpne		%0, %4   \n"		\
-+		"	bt		2f       \n"		\
-+		"	mov		%1, %2   \n"		\
-+		RELEASE_FENCE					\
-+		"	stex.w		%1, (%3) \n"		\
-+		"	bez		%1, 1b   \n"		\
-+		FULL_FENCE					\
-+		"2:				 \n"		\
-+			: "=&r" (__ret), "=&r" (__tmp)		\
-+			: "r" (__new), "r"(__ptr), "r"(__old)	\
-+			:);					\
-+		break;						\
-+	default:						\
-+		__bad_xchg();					\
-+	}							\
- 	__ret;							\
- })
- 
-+#define arch_cmpxchg(ptr, o, n) \
-+	(__cmpxchg((ptr), (o), (n), sizeof(*(ptr))))
++#include <asm/cmpxchg.h>
++#include <asm/barrier.h>
 +
-+#define arch_cmpxchg_local(ptr, o, n)				\
-+	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
- #else
- #include <asm-generic/cmpxchg.h>
- #endif
++#define __atomic_acquire_fence()	__smp_acquire_fence()
++
++#define __atomic_release_fence()	__smp_release_fence()
++
++static __always_inline int arch_atomic_read(const atomic_t *v)
++{
++	return READ_ONCE(v->counter);
++}
++static __always_inline void arch_atomic_set(atomic_t *v, int i)
++{
++	WRITE_ONCE(v->counter, i);
++}
++
++#define ATOMIC_OP(op)							\
++static __always_inline							\
++void arch_atomic_##op(int i, atomic_t *v)				\
++{									\
++	unsigned long tmp;						\
++	__asm__ __volatile__ (						\
++	"1:	ldex.w		%0, (%2)	\n"			\
++	"	" #op "		%0, %1		\n"			\
++	"	stex.w		%0, (%2)	\n"			\
++	"	bez		%0, 1b		\n"			\
++	: "=&r" (tmp)							\
++	: "r" (i), "r" (&v->counter)					\
++	: "memory");							\
++}
++
++ATOMIC_OP(add)
++ATOMIC_OP(sub)
++ATOMIC_OP(and)
++ATOMIC_OP( or)
++ATOMIC_OP(xor)
++
++#undef ATOMIC_OP
++
++#define ATOMIC_FETCH_OP(op)						\
++static __always_inline							\
++int arch_atomic_fetch_##op##_relaxed(int i, atomic_t *v)		\
++{									\
++	register int ret, tmp;						\
++	__asm__ __volatile__ (						\
++	"1:	ldex.w		%0, (%3) \n"				\
++	"	mov		%1, %0   \n"				\
++	"	" #op "		%0, %2   \n"				\
++	"	stex.w		%0, (%3) \n"				\
++	"	bez		%0, 1b   \n"				\
++		: "=&r" (tmp), "=&r" (ret)				\
++		: "r" (i), "r"(&v->counter) 				\
++		: "memory");						\
++	return ret;							\
++}
++
++#define ATOMIC_OP_RETURN(op, c_op)					\
++static __always_inline							\
++int arch_atomic_##op##_return_relaxed(int i, atomic_t *v)		\
++{									\
++	return arch_atomic_fetch_##op##_relaxed(i, v) c_op i;		\
++}									\
++static __always_inline							\
++int arch_atomic_##op##_return(int i, atomic_t *v)			\
++{									\
++	return arch_atomic_fetch_##op(i, v) c_op i;			\
++}
++
++#define ATOMIC_OPS(op, c_op)						\
++	ATOMIC_FETCH_OP(op)						\
++	ATOMIC_OP_RETURN(op, c_op)
++
++ATOMIC_OPS(add, +)
++ATOMIC_OPS(sub, -)
++
++#define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
++#define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
++#define arch_atomic_fetch_add		arch_atomic_fetch_add
++#define arch_atomic_fetch_sub		arch_atomic_fetch_sub
++
++#define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
++#define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
++#define arch_atomic_add_return		arch_atomic_add_return
++#define arch_atomic_sub_return		arch_atomic_sub_return
++
++#undef ATOMIC_OPS
++#undef ATOMIC_OP_RETURN
++
++#define ATOMIC_OPS(op)							\
++	ATOMIC_FETCH_OP(op)
++
++ATOMIC_OPS(and)
++ATOMIC_OPS( or)
++ATOMIC_OPS(xor)
++
++#define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
++#define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
++#define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
++#define arch_atomic_fetch_and		arch_atomic_fetch_and
++#define arch_atomic_fetch_or		arch_atomic_fetch_or
++#define arch_atomic_fetch_xor		arch_atomic_fetch_xor
++
++#undef ATOMIC_OPS
++
++#undef ATOMIC_FETCH_OP
++
++#define ATOMIC_OP()							\
++static __always_inline							\
++int arch_atomic_xchg_relaxed(atomic_t *v, int n)			\
++{									\
++	return __xchg_relaxed(n, &(v->counter), 4);			\
++}									\
++static __always_inline							\
++int arch_atomic_xchg(atomic_t *v, int n)				\
++{									\
++	return __xchg(n, &(v->counter), 4);				\
++}									\
++static __always_inline							\
++int arch_atomic_cmpxchg_relaxed(atomic_t *v, int o, int n)		\
++{									\
++	return __cmpxchg_relaxed(&(v->counter), o, n, 4);		\
++}									\
++static __always_inline							\
++int arch_atomic_cmpxchg(atomic_t *v, int o, int n)			\
++{									\
++	return __cmpxchg(&(v->counter), o, n, 4);			\
++}
++
++#define ATOMIC_OPS()							\
++	ATOMIC_OP()
++
++ATOMIC_OPS()
++
++#define arch_atomic_xchg_relaxed	arch_atomic_xchg_relaxed
++#define arch_atomic_xchg		arch_atomic_xchg
++#define arch_atomic_cmpxchg_relaxed	arch_atomic_cmpxchg_relaxed
++#define arch_atomic_cmpxchg		arch_atomic_cmpxchg
++
++#undef ATOMIC_OPS
++#undef ATOMIC_OP
++
++#else
++#include <asm-generic/atomic.h>
++#endif
++
++#endif /* __ASM_CSKY_ATOMIC_H */
 -- 
 2.25.1
 
