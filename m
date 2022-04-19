@@ -2,52 +2,52 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAA750763F
-	for <lists+linux-arch@lfdr.de>; Tue, 19 Apr 2022 19:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6725450764F
+	for <lists+linux-arch@lfdr.de>; Tue, 19 Apr 2022 19:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbiDSRPd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 19 Apr 2022 13:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
+        id S239201AbiDSRQj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 19 Apr 2022 13:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiDSRPc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Apr 2022 13:15:32 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2065.outbound.protection.outlook.com [40.107.237.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDEC559C;
-        Tue, 19 Apr 2022 10:12:49 -0700 (PDT)
+        with ESMTP id S231878AbiDSRQi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 19 Apr 2022 13:16:38 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2080.outbound.protection.outlook.com [40.107.237.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ABE3B56B;
+        Tue, 19 Apr 2022 10:13:55 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mq6Po2OYCYuBpmvPbmoIlRGZXo7lIu83fPlIpTwrdPuEVBzZ7bSVg6tKRBwr2PpJFnscTrJsSG8925JiPga50sYTlWE0FQTTu1rOLAiZ6bFrQPHanQwjiphfm83Dg92+NL3WeyQ8iqrIxY1NSkJ2CEWSVwpwpXPOZHvazyMY9GpqRI9FBp7Jmfg7ywX57j8bOllCphcdvvBNHWgDl0IAtutSok4Ck1Jp/5iwWMwXs+1+NcQzjTOAK/a49jpulN8LfS0Ympj0JcsP3mbdXjtwfEoKtPLSkXLeiJeqvR2mHmLlmLevJ5WZ/YwwbzElFL+ABPv1gax3iU+FAtcWS6j3uw==
+ b=gJEvH4x5dne1CNrYWys7+o6RrlwkvaeoGRxaNHQuilMuGEZNkr9eGlwcAfihsMPHddEAHXA4h8qFj4X+rwPZOtYk9A5olbNNET/LfUPlfmSB2Xw5pmf0KRucRkI32Gp7+lZpkRswYya+S3v94TCqYRXnwOmr+BTOqmybVp20L3TffFpuvbMCf/b3jyKNf8KC6dWpjfsdDa6had861Cr7PzfVz2y5CbPpfeYZKP6C8BrFpqW7SZEz0T9LLf/ofw6MFJj+//lQ5JIbiDgSFoj5oEHyk6eP8RNtWumrBoJ0GoVteiTOJi19M8tBbQ2dUsiIG7Wiy7+/+KpBNgh97T/q8A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/PSp05J+jfqDQ8Tb/TuuYSWPO4ads6TbPQTzLdgrJ88=;
- b=ApruOvsDBfEuHkalo1xGqmIVgZPbwPWjdc4jkjkNnH6QNQcHpj1cDBJQ53zv4eJyoh9QEvSBoyl27mERVwSGh8tTJlH12w53NyHVi/7QT9FG6qpLNTMbGTvTvQSRd/AReQ8Tooxl/PCk/hsiSosJF4MRO2UBma6mwinxMoDdsfJ1ocvoF0z8HfteA39sqW/1g5qVU3a/NUPkQiN4mwWpv74qarh/0I12JlAELI4qBEIBtTUuqYiPDiv+lva4PVC/IDcPZs2Jeiyy86jx4sQawtDER2NbbTlb13Wzw+VPcnDabb+MlmdOje8/MzkGTMbh7WifB68TrZaXygfrJFlovw==
+ bh=i6MqCf3WEp+GFEKB/YyJl0kqC3qVPOiNo57Pdyv1zQ8=;
+ b=kNa3AS4A2XdhtZoQCco1W+kcqwCyvBAHCuc1+IdAjUwOFuQ+KC2ys8m1Ff6FxmgkNtAcU23zwe3tv66XN2fBiMPfhmPXxb/FlJ2BTm7kDqjRWRwxz28I1bfaeNhC9Wml3FI0S64FXS0TyPB5OM5tEnRxVEt19bbvIbDB3pMMNhV/5Lc8VJZcuPyIHKtWgAMynCrB4Rjcmd5Cm8OwPlVzPU2cbtBY9el3d2BUi6Az+/8K/SL7f+Th0LFNGfJXF46zuJfsn5kNML9EmQ52yRXkbko5T2mSf5mRMeF/5MH7Es7VkmhAW3c80rXKXnXO0krEXpa6pumShGUKK88cDIfUGA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/PSp05J+jfqDQ8Tb/TuuYSWPO4ads6TbPQTzLdgrJ88=;
- b=qy+HZRLU1+huYQIvMg3FGlG/AlniCgZdEeOlSGqG2hkoESvjeukK0AoXd9RxXSNldsucSwFMRIorKtLhZrLm9W1nwgEbZ8htAKToxoPf22vsPDfE+CKyy03qO5ImQxkdGIkDFdfgYR4YPqcUe9Om1ZWR/fj2r9m6YSBEDf42LDHn0ezq/MgmCmvLqZHX56EEmh2CqO4j43HqC0RD64qFNWRODnIctDb7tK6Z1+e7KvqT2U17FJRxTAD59S8qDjRoQhfn3qRErfa8gDgFZTwR582Io/OXskAKkF4VSrqczCJM4x6k0Ajosck3vX2FxgnL6mJybXYLYGLf+HZz6avtEw==
+ bh=i6MqCf3WEp+GFEKB/YyJl0kqC3qVPOiNo57Pdyv1zQ8=;
+ b=oNIvopeG1j5SrEvkMnIdFnzdoL5oMZbVY5K4nItGX9hc9T8WEUaE1VPgZV83A2Ppkq2RdDXCOsRSeeYLJjXhrRCSJgvdFSbRfeDZ03zgmWT2rnGU4OeR+SlKEwPotXnuSiaH+0Gy6ryWRWdxONt7W1MqBgtTaLGoSTBB9juv8Fqah617zRbNrGaAyABkwfF8Ts+xucf9Bg85bTObbsNIZ2obVCSoZdh5TnjuSw9g0sSz30dbjRwXYJZxr+URloJRz2yNY7xaW9Y+37T1Fx/4acwFv/VrjlbYTdPYiw8uGrqQAMZMED2gpKFljjOuKhCveOR/H+GJ8SiuA56046ihAA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB3437.namprd12.prod.outlook.com (2603:10b6:208:c3::20)
  by MW2PR12MB2410.namprd12.prod.outlook.com (2603:10b6:907:f::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
- 2022 17:12:38 +0000
+ 2022 17:13:50 +0000
 Received: from MN2PR12MB3437.namprd12.prod.outlook.com
  ([fe80::18b1:f463:cb9b:82f0]) by MN2PR12MB3437.namprd12.prod.outlook.com
  ([fe80::18b1:f463:cb9b:82f0%6]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
- 17:12:37 +0000
-Message-ID: <3f7dd397-2ccd-dfa3-a0ec-dcce6cbc0476@nvidia.com>
-Date:   Tue, 19 Apr 2022 13:12:33 -0400
+ 17:13:50 +0000
+Message-ID: <3e6713ef-5109-25b7-1359-7229fce368dd@nvidia.com>
+Date:   Tue, 19 Apr 2022 13:13:46 -0400
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 Subject: Re: [PATCH V2 0/3] riscv: atomic: Optimize AMO instructions usage
 Content-Language: en-US
-To:     Guo Ren <guoren@kernel.org>, Boqun Feng <boqun.feng@gmail.com>
-Cc:     Andrea Parri <parri.andrea@gmail.com>,
+To:     Andrea Parri <parri.andrea@gmail.com>, Guo Ren <guoren@kernel.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
         "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -61,75 +61,73 @@ Cc:     Andrea Parri <parri.andrea@gmail.com>,
 References: <20220412034957.1481088-1-guoren@kernel.org>
  <YlbwOG46mCR8Q5tJ@tardis>
  <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
- <Ylt6zqPgimmKpJzg@tardis>
- <CAJF2gTTZnBh_z31VK81cYiBrTt5NRVpSahoPh35Zo4Ns5hCv7A@mail.gmail.com>
+ <20220418234137.GA444607@anparri>
 From:   Dan Lustig <dlustig@nvidia.com>
-In-Reply-To: <CAJF2gTTZnBh_z31VK81cYiBrTt5NRVpSahoPh35Zo4Ns5hCv7A@mail.gmail.com>
+In-Reply-To: <20220418234137.GA444607@anparri>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0398.namprd13.prod.outlook.com
- (2603:10b6:208:2c2::13) To MN2PR12MB3437.namprd12.prod.outlook.com
- (2603:10b6:208:c3::20)
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR01CA0039.prod.exchangelabs.com (2603:10b6:208:23f::8)
+ To MN2PR12MB3437.namprd12.prod.outlook.com (2603:10b6:208:c3::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 05564653-418d-4ebd-9a95-08da2227cd94
+X-MS-Office365-Filtering-Correlation-Id: 10affc09-1dc0-4cbb-48a2-08da2227f914
 X-MS-TrafficTypeDiagnostic: MW2PR12MB2410:EE_
-X-Microsoft-Antispam-PRVS: <MW2PR12MB2410D4084D87AAEF150B5DADDCF29@MW2PR12MB2410.namprd12.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <MW2PR12MB2410B1541232936D5C2E9FA7DCF29@MW2PR12MB2410.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YLjb9UhexdN5E2Vc2QZHKZNlOE3nqlOPIOdBZLDEamHeZ/OkoxcK8BwkgbItVCcIJkIxGA3VXLm/Vdeeijaa5id4jHaIoa2PXi+NXl4vtRTp9LkUBTknOkZbar+UsZS9oYyueEvBshDJ396SHl63RjnVpqItQlNe9GE8VS8FXaP14D9qRAjI7+hSd3p8RChBcf7ypgDQy42Df4qgcZdrt71ckHpTZVt7ISWfunufHAH2sPufP6Z/jntlBXb8KuMlpXrI8J5ri7sDNPdsxMCY0pepxceM+dnYyCszRzWU/66Sm6TADM37Q8tVMPE9h52gx+J842WafZxmBYmtSToQLahZWuR26btCBYZFw2MfOD/NZ37Yyayb51fl211iNi+j2mgOfikp9qni7bierDiCWZ3aGFOdpGcAxOuEpQW0RcJ3jy6IX/YyDpFtUb9S/SYFJ8A5TLXvNgzddYSHNTGKVEjho844P8+1lkoAc4gRFeOhEnuqisjobngcdODjTX5V6RWwGfT7H+cPgBpC8NLQSHE6JyFRS4cGxUICYjssGDqI0bA7fV33lJ5VlzMn8V5teVfpTjKz+GmdawzFt0B96Yyt3pY/T9KRBScPMmBCf/WoozjeaAPwio5xP6sjymhuA4wekBUtvv+Gr2kpqNb0vMqHAqDY0CWm0jczsMBPOu64UjbWZaHVVkadnsI8oymYdNkWqZVM6Yqj3fF3COy1ZNU+89qsIFQaYW1D5/SEC+fboQdlpQTdEh6AYAe9Y+H8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3437.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(66476007)(110136005)(26005)(6512007)(186003)(5660300002)(6486002)(8676002)(66946007)(4326008)(508600001)(31696002)(86362001)(316002)(7416002)(66556008)(38100700002)(6666004)(6506007)(54906003)(31686004)(36756003)(83380400001)(2906002)(8936002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ti3jrnykKiwK/BJ1BEFgTUdaMP7mPV5+95UDi/gGQ2TIGAdgtkqfBmqPyA4Ob7DHvW7pkjtNIuzLf/Q4xS+KcND6E3CkIxKpehOXBJ+NaZ/JPellrJIhOJfGG9CscK5IUOBewn/s3zkRFRMR7zXmkLK9NwfLvUgt+BNgBGKIbcD1TDU7xqcW6Fv+jjLGMmKs7MeHb/buqLDlF7Lk1nLe2VzgKzFMbUZauVlbYdZqmAvPtsAXMeWfkU+/iHD3+04fhxT9+GRT8s/pTedI2Bo6809gMDOGc1mW1lOE6JiwFOPT++UKMVOnK8iuIZTvpmYsfR1vmZHuNKRR1uU7BPbYPgUIC+jeb94j1/YnA08+chaww4ZnjBPFMToW48vY6/+BdOf+sFtYkp31qRZiqMdp2RM8C1GZbs5LRDmLfAG40gZssonblCSVvtNpXYgn3z1kEhaF6Hm5Avxz+w50k9lbNRR2xQHqmKZw70jmWo/IbOW2Qvn2l9ZPSrhazGfG3Rns87BAPW3Y5Z2Q8iWB4V6hW6w8AiRTF5JhqJQrgr93Y1ATH/JRiB1yhts78cbVX3sMWbhjzStoqBgCojgCmC37piyHHwS9UJWH2ttNgiCLSXmcqr+yiH8KPL81E06GrVZ7ogjizwxoFughQd28f+g1v7n/oXU0AFTIEO2MUAC+OGE4DJd9aVrB62AhGzFnHeKiDxeCQJli8II5hHYGM6GStrEDtJYljOak5fLZKRVFBpZYcbhfcvmkabLgaN13683zuNTcx5Qy5uTct3mPIQ14QdyylSUqVPZuiKCx6D7cqcUcdI6qYBRyGLZiB2rLkKeHE7NfCU2NHKnHYy8Jbr/AdHnzVN5PD3zJny/tLoFalSY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3437.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2616005)(66476007)(110136005)(26005)(6512007)(186003)(5660300002)(6486002)(8676002)(66946007)(966005)(4326008)(508600001)(31696002)(86362001)(316002)(7416002)(4744005)(66556008)(38100700002)(6666004)(6506007)(54906003)(31686004)(36756003)(83380400001)(2906002)(8936002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3ErMFdpa2V5OXovQXNvQkV6ZUEyclpEekVYUVZZWi9Fblo2eHcvcWZwWlBH?=
- =?utf-8?B?M0cweUNLNnFZdlU1SWVhL1ZINy84dUprQVdEKy93TEhhV2FtemJpSXgvODZE?=
- =?utf-8?B?OU1kUnA2SUxQRyttT290eUMrMjhMM2pLeVpYeHdwaGxaTUJRZVduR1hyWG8w?=
- =?utf-8?B?dHM5UmxuTGh3ekUvZ05wcUFOc3M4RG5zcWxvRGxzck05SGRBT3BTSUpYeWQy?=
- =?utf-8?B?RHcvSTd5WDZWemU4OEhhdytCT0gybU9KZ0lDN0dFM0dtSngxczVQaitoODZl?=
- =?utf-8?B?OUxTcmVuQjZ5OXB4QXQ4Sk1odjdFNGltWG5WNU9ObmtUSUlyTXNEaTdrRU1m?=
- =?utf-8?B?U0RCMjdlNnBtKzV3SkRJOGxWVXEyZFdpOENIY1NpcmxTQzRnWGh6a0p1REo1?=
- =?utf-8?B?cThreHdZVGxDUWVrZnNzU3Q2SFhQdHN6YTlCVWVOMmZ5TW1NTzFUUXN5bFlV?=
- =?utf-8?B?Rkp1OW4xN3hEMlZZMjB2MFpiQUU0bUVSc1pWQVZHV210bDNrZWhvTW9Fc3V5?=
- =?utf-8?B?bmxUWU1pbkc2UkJ6NXgrTTZzUGZtTXY0bFZjUTE0aUx3UjBuWGhVMkt2MzN5?=
- =?utf-8?B?dGlVelh3TXNFZUNEbnpQWm5GL2F6NThKZTdxZkt1eXBDRzF1dXZTNjkvTExn?=
- =?utf-8?B?NDZPd1hrNGs4bjJoMzN5eC9tcUVWdTM1YUI0VGRLWGlaWUplRXozdDhjYXEy?=
- =?utf-8?B?UlVJeTZRRkRHZXEvamIyY1NaaStDRlVmZXBoYUJBSnBjbm5NN0ZaQW5TY0Vn?=
- =?utf-8?B?ODZ6WncrajZzeHVCVmxJakV1OXRHYVNFQ2ZWTkpPc2NYUEpKc3NDWFB3NmZO?=
- =?utf-8?B?M21MOHFiSGxNekc0YVJoT3hSUE1UR0FtUGMvTDAwK2FyRG0xWVJoczNyQWZ0?=
- =?utf-8?B?U1ZyYXMzWHgrTStvRTU1NFBiRCtaalIzNVBHbFdYak1Mby9lRmxJQ1M5MmEx?=
- =?utf-8?B?NnlGNHoxMVp1QW9qeEpsQ0RlUTdxT2tBSmlXNHlSaFdWcmlZMFNObXR5Snli?=
- =?utf-8?B?ZEtSVmxZaEtnNSswVmdPcWhQajhtQUpRZUJjUU0rMldKUVM3bnZqNjRIUWtm?=
- =?utf-8?B?L3V0NDNvZ2k1bC81bzR0VkNnaXVrOGRCVXVVb0dXbE9UdnVkT21zVkdHMEtx?=
- =?utf-8?B?ak1SZWpleFYrZlQ5SklTbkM2NnAzKzdkTjNNVnBZUWczLyt0R3AvWDZhZzhK?=
- =?utf-8?B?OWtZckozZ0ovNTBnWmRQQkRCYktsZUVaTVNtSUhxVlBqaTlvVDcvemFWajlo?=
- =?utf-8?B?bDV0UHdZZEdlMGpBRUJkZTlTMUpRTFR1K0hBZnF0NnJYZjRrSGlJV1pRMTNI?=
- =?utf-8?B?bHR1aE51SmdKMkZGZ2FQVys1dWszazFjaXp5WkE1dGN6S2NXMFphUzBKbUM0?=
- =?utf-8?B?eW9EK0lIdnZnNXN0VW1TTkVyZVJNL1BkU0JpbXhQdFB2c2NldXZFT0l0VDg4?=
- =?utf-8?B?RytxeGV6ZDhFcGVnY042ajdOcWxzdis0ZkRrVVJEa0ZtZWxrTUxQamx6SE9n?=
- =?utf-8?B?OVN3R3VCUGpZMXNTMWY1endGYWEvNGR5a3JnVzN6dXJjakJQKzhjR2RXT0xN?=
- =?utf-8?B?YWdkcDc1VXhyeVB4bVJDb2pQbGllMjF3c1d0OXhlM0FaNklMVFpFWDEwSzA2?=
- =?utf-8?B?ZFNNRnNqSlBkaVBFVzU2dnN5RGVrMzNVa0ZQYU9PSG4yTGM1aUdNem1CWGY0?=
- =?utf-8?B?VTJGakE4dGI5am9McUszMjJvUXpBRHFnek1DT044R0JXblJzSlFEWkhQWDRI?=
- =?utf-8?B?VnR2Z01SZUZmSDg1bUsyeWJhelB3WGk5L0RuSlN3UU40N2k3czY4NXBnYjkv?=
- =?utf-8?B?STVtSkowdGJQS1BMek1HZmpKUXV2ZDQ2K0xsTDFWeFJFaHJPU2xoR01tNDk5?=
- =?utf-8?B?aDJYUEZuOU5NbWVVdTdKY3lzT2J3eEtLQmh6eGpHVmpheG8xSUs1YmdaNmtS?=
- =?utf-8?B?Uks2QUNXWDlxRFcwdDNOOERDV1F1S29KZkF0bGZRckRqcmJQVTFzbnBkb2Nl?=
- =?utf-8?B?VjJsWWVhZTJWdHJSVjZ2ZHQxQkp2b1B1d3ExWnNRSE9pTjNJYmJ2TmJ2TWZH?=
- =?utf-8?B?WXFTc0UvbS8vakxTVGtvait5Q3NPSFZra3J0elhuNllmc3NFWkFWdlpPNSt3?=
- =?utf-8?B?VlRZenJIa0Z2ZHpvREhCY1VrYnJtdzdvZXIrMmx2TGVIVEV4NXNDSHFUc3Rv?=
- =?utf-8?B?SFNjVEZBU0pCdzNKUFpYQnd2RjQvaEppUm5FcmExM1NWa3h6YTAwMkVxcGtp?=
- =?utf-8?B?RVRuWTkra2JqMTFnVXZxTENYaWFrcEc5UXhHalVwTVNwVWo2QXBsdjhpbW9z?=
- =?utf-8?B?RXoxcE1QOWRZQmwvbG9XNHdNL3l3Sm44VzZpcG91eDhXU2lFdUo3dz09?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N0pGM0h4U1ZtYjZGWC9SeTZlUnh5MG5zZ1hyRnVKM0l5ZnRRWlpaQWR5VTFk?=
+ =?utf-8?B?bnhwWWdUbW80YWNrUlV6MG55bkFZaTN2c3JZYVVLV2NaeEdwQzQwczRGNkZT?=
+ =?utf-8?B?bGpJbkVDcmRMemlrZ0dBcHgzeHM3by9KdTFGcWRaNEdtTGRpQTFNaXFONmI5?=
+ =?utf-8?B?bnE4Z2VKRm1WNmlVK01naU85eXU1cnE4dUUzam9mcHBCRHNGdGdIcFRaK2dF?=
+ =?utf-8?B?RHI0MlQyRXRiNy90UEU5WFh6RHovNVU1ai8xTjc0NEZoSHBMazRwc29BdVMr?=
+ =?utf-8?B?ZWZJVzdpdEJhQW9mY1VBNW9HcVQzMWxvNlM2S0RTNFJWdW9hVlRVeXhvSUdC?=
+ =?utf-8?B?emVJdHFxdHd0ams0aSt4MWJTL2F3MVREQllaWnBCMEErbklkL1c0UHhjQ3Bk?=
+ =?utf-8?B?UVBoRHBKSTQyNDE5RE5FOGc1VXhqd3BSSkN6TTFzR25IYlEzclVCU2NCbkE4?=
+ =?utf-8?B?bVNvWFp1dWlNWGdWVUlqOFZwdXFCa0VDNWNzR0FoZzJuOUJETytGM3l2Z0tG?=
+ =?utf-8?B?VXBnSTdjYnQ4ZE1nN3pRTHkwd3FJZTd6RTQ3Rng2U2ZzaENGWE52U3BVaXVK?=
+ =?utf-8?B?YkVCTEFVYlJkVXN3R2dMV2U3dFJlelBkaHpFRHYrYjdzZ0FobjJrbVpCcnk1?=
+ =?utf-8?B?U0JqVXRzVThmVml5amx3b2pQalBqTlMrN3ZsbWJubm5TT2RydHBrRU14N0xp?=
+ =?utf-8?B?aHQ1cElJaktLZ0pRZnJtbXhkWGJhTnNvUXJQdG5rSUN6V0QvRTMvU3F6REQ1?=
+ =?utf-8?B?SEVsZjJEeVRBMFlhN2ZrSS82dndKTnBUaEkxWDd3NnRIdzVYNklsaVY3SFNp?=
+ =?utf-8?B?R0lCSDFLMWZvc1FzR2gxUCtGNnFnS3R3ckJBK2h3N1Q4Y05NWnhpeXgxakVz?=
+ =?utf-8?B?SnIxTW9MMXpaRklDY0k3L1V0RFhhR0I5MnpzNHhhUjFSZW5qWmJQV3RzQ3RJ?=
+ =?utf-8?B?T2ozSDhhMG5wbTlXZXUzdHBLUXlKd2NHcDVCWDV6SzhtR0JvUDlGSmFzUnV6?=
+ =?utf-8?B?VzJlWVdqUkl4Rm9OMmVVSXh6djJLZ0ZpNmtJdE5vbjRGY3NxY1NCTXFXdjkv?=
+ =?utf-8?B?ZHdZaDJ2ekU3ZFRRRUJIb1JzU2ZPZ1dScy9ITFNrNEZkc0tDNWc3SEhCVlRE?=
+ =?utf-8?B?ZzBtdHo3N0IxVGpESTY3VG4wL3VYSndZcGprRU85OVptQkw1SzFwY1F0R2x6?=
+ =?utf-8?B?bk1idWUwSitQWWw3ZnBuakpnekhUckJWT0xDMm5tMUNQRTROVXdMT0ZFczRo?=
+ =?utf-8?B?MlZ0cUNuVXc4akhQd3V1TWFyVGhHY0VYd2U3V05tQkNYSkFsVzYySi84ODgy?=
+ =?utf-8?B?cjdlWjhkR1RiWEpSdVlCMDNFT0FYRTFsd0MwbGJjMWpZM3dFWTVpWFR1cjY1?=
+ =?utf-8?B?WUpyU2s4VGdEcFJyZVJHQ2Zwcm1pbWRhSm5YSFU0NGFxSGovS0tseWV3L0tS?=
+ =?utf-8?B?azJTSlVEbkVRYXpVcTdvTjhOaFlkWGFVV0YxcHRTRW9IRE5QRDZ5ckdrN3BY?=
+ =?utf-8?B?REdnQWcwQ1ZDWGt6K2QzdGxQMWExWlNacDU3d1kvU1czRHVObU1WNllKOUEv?=
+ =?utf-8?B?OUdOUFpGZGF3RDJ2TUpBSlZkN0hla3VLNHQ3V2FvdWx3eDR5eUdVQ1FjcEdm?=
+ =?utf-8?B?RXpSblB4TkFCaE1JSFdXQnBrelZqZmRqTXFkOWJkbHh4OGkvUEVqUXUvNm5i?=
+ =?utf-8?B?aER6aGVkcFJKWGgvOVJpSndCMzkxaVkySXBtK2hHOHdWMzl3aXZSSm1YaWp2?=
+ =?utf-8?B?U1NrekRyRjVKR2JWVC96RWV2dWpyS0F6ZUpLeURUSUs2M3o5TUNXYTZMYnlW?=
+ =?utf-8?B?ZXhZc3p5VERlN2JnRlBveDdETnFxU2FMckQ5TlpjU00vS1UvZkNubFhFMUE3?=
+ =?utf-8?B?aHBCUVlsZTl5OEJUbkRxSU8vS0lYbkwvemtpcENYZmIwNVlHRW1Ba2c4WmdG?=
+ =?utf-8?B?MXhKVDF6NzZYRk56UlREdmorWHFGOFltL05IY2JjUjlkS2FKYnY3NEw3Y08z?=
+ =?utf-8?B?UGcrL0ZrMDgrWGlvaVBmNnJPL3FRZmhVa09aRGkvbzRXNFRWYmpYcWdYc2hP?=
+ =?utf-8?B?QjdzTWdvaC9sUVVzV015ZlY5TTM2MlZ1dUZibGlURW1heWFnV1hjVDBxQThY?=
+ =?utf-8?B?ZHZkOFh0L00vSjhPUFM2Nld4ZjhWa0hDRTIvZmcwMTZjTnpuaGc5Q3Y0eitV?=
+ =?utf-8?B?aE5RWUlNZlJyT2RQc3RDWVJsK0pMQ1ByVzVoYU4xd3p2Q1NmakR4MzU0c1hG?=
+ =?utf-8?B?WW1tTHZIYUpPbXhNZDRveCtyeWd4YS9XY0RaampKSEtaQlljcEtiaGFYTEdJ?=
+ =?utf-8?B?Y0VFVnRKQm80a2F2OVVHMnlTSDFxK1J3eHFIN2M0L0s0MlVCeFJtdz09?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05564653-418d-4ebd-9a95-08da2227cd94
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10affc09-1dc0-4cbb-48a2-08da2227f914
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3437.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 17:12:37.8233
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 17:13:50.5521
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5GBpB7tS9C+iQijMOK6Nk3d2esM9TIgf0JDxw3NpskaXPStWDHbmeZgi8q1aQ35sBP/DiEsAAybNLPO1C1kDig==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 68Y6mG91z1hidQ+dcESEFmi7gh9g0CyCNTOFCckQyCov9QJpwMWzdlwdKqASPpx2sxWcVsVKlj1LFkoZ7dWMwA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2410
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -142,112 +140,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/17/2022 12:51 AM, Guo Ren wrote:
-> Hi Boqun & Andrea,
-> 
-> On Sun, Apr 17, 2022 at 10:26 AM Boqun Feng <boqun.feng@gmail.com> wrote:
+On 4/18/2022 7:41 PM, Andrea Parri wrote:
+>>> Seems to me that you are basically reverting 5ce6c1f3535f
+>>> ("riscv/atomic: Strengthen implementations with fences"). That commit
+>>> fixed an memory ordering issue, could you explain why the issue no
+>>> longer needs a fix?
 >>
->> On Sun, Apr 17, 2022 at 12:49:44AM +0800, Guo Ren wrote:
->> [...]
->>>
->>> If both the aq and rl bits are set, the atomic memory operation is
->>> sequentially consistent and cannot be observed to happen before any
->>> earlier memory operations or after any later memory operations in the
->>> same RISC-V hart and to the same address domain.
->>>                 "0:     lr.w     %[p],  %[c]\n"
->>>                 "       sub      %[rc], %[p], %[o]\n"
->>>                 "       bltz     %[rc], 1f\n".
->>> -               "       sc.w.rl  %[rc], %[rc], %[c]\n"
->>> +               "       sc.w.aqrl %[rc], %[rc], %[c]\n"
->>>                 "       bnez     %[rc], 0b\n"
->>> -               "       fence    rw, rw\n"
->>>                 "1:\n"
->>> So .rl + fence rw, rw is over constraints, only using sc.w.aqrl is more proper.
->>>
+>> I'm not reverting the prior patch, just optimizing it.
 >>
->> Can .aqrl order memory accesses before and after it (not against itself,
->> against each other), i.e. act as a full memory barrier? For example, can
-> From the RVWMO spec description, the .aqrl annotation appends the same
-> effect with "fence rw, rw" to the AMO instruction, so it's RCsc.
+>> In RISC-V “A” Standard Extension for Atomic Instructions spec, it said:
 > 
-> Not only .aqrl, and I think the below also could be an RCsc when
-> sc.w.aq is executed:
-> A: Pre-Access
-> B: lr.w.rl ADDR-0
-> ...
-> C: sc.w.aq ADDR-0
-> D: Post-Acess
-> Because sc.w.aq has overlap address & data dependency on lr.w.rl, the
-> global memory order should be A->B->C->D when sc.w.aq is executed. For
-> the amoswap
+> With reference to the RISC-V herd specification at:
+> 
+>   https://github.com/riscv/riscv-isa-manual.git
+> 
+> the issue, better, lr-sc-aqrl-pair-vs-full-barrier seems to _no longer_
+> need a fix since commit:
+> 
+>   03a5e722fc0f ("Updates to the memory consistency model spec")
+> 
+> (here a template, to double check:
+> 
+>   https://github.com/litmus-tests/litmus-tests-riscv/blob/master/tests/non-mixed-size/HAND/LR-SC-NOT-FENCE.litmus )
+> 
+> I defer to Daniel/others for a "bi-section" of the prose specification.
+> ;-)
 
-These opcodes aren't actually meaningful, unfortunately.
-
-Quoting the ISA manual chapter 10.2: "Software should not set the rl bit
-on an LR instruction unless the aq bit is also set, nor should software
-set the aq bit on an SC instruction unless the rl bit is also set."
+What is the question exactly?
 
 Dan
 
-> The purpose of the whole patchset is to reduce the usage of
-> independent fence rw, rw instructions, and maximize the usage of the
-> .aq/.rl/.aqrl aonntation of RISC-V.
 > 
->                 __asm__ __volatile__ (                                  \
->                         "0:     lr.w %0, %2\n"                          \
->                         "       bne  %0, %z3, 1f\n"                     \
->                         "       sc.w.rl %1, %z4, %2\n"                  \
->                         "       bnez %1, 0b\n"                          \
->                         "       fence rw, rw\n"                         \
->                         "1:\n"                                          \
-> 
->> we end up with u == 1, v == 1, r1 on P0 is 0 and r1 on P1 is 0, for the
->> following litmus test?
->>
->>     C lr-sc-aqrl-pair-vs-full-barrier
->>
->>     {}
->>
->>     P0(int *x, int *y, atomic_t *u)
->>     {
->>             int r0;
->>             int r1;
->>
->>             WRITE_ONCE(*x, 1);
->>             r0 = atomic_cmpxchg(u, 0, 1);
->>             r1 = READ_ONCE(*y);
->>     }
->>
->>     P1(int *x, int *y, atomic_t *v)
->>     {
->>             int r0;
->>             int r1;
->>
->>             WRITE_ONCE(*y, 1);
->>             r0 = atomic_cmpxchg(v, 0, 1);
->>             r1 = READ_ONCE(*x);
->>     }
->>
->>     exists (u=1 /\ v=1 /\ 0:r1=0 /\ 1:r1=0)
-> I think my patchset won't affect the above sequence guarantee. Current
-> RISC-V implementation only gives RCsc when the original value is the
-> same at least once. So I prefer RISC-V cmpxchg should be:
-> 
-> 
-> -                       "0:     lr.w %0, %2\n"                          \
-> +                      "0:     lr.w.rl %0, %2\n"                          \
->                         "       bne  %0, %z3, 1f\n"                     \
->                         "       sc.w.rl %1, %z4, %2\n"                  \
->                         "       bnez %1, 0b\n"                          \
-> -                       "       fence rw, rw\n"                         \
->                         "1:\n"                                          \
-> +                        "       fence w, rw\n"                    \
-> 
-> To give an unconditional RSsc for atomic_cmpxchg.
-> 
->>
->> Regards,
->> Boqun
-> 
-> 
-> 
+>   Andrea
