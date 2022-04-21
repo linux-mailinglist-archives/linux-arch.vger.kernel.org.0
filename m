@@ -2,134 +2,114 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D815098E8
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Apr 2022 09:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7B2509C78
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Apr 2022 11:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385640AbiDUHPZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Apr 2022 03:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S1356019AbiDUJhE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Apr 2022 05:37:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385621AbiDUHPX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Apr 2022 03:15:23 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3E717A81
-        for <linux-arch@vger.kernel.org>; Thu, 21 Apr 2022 00:12:34 -0700 (PDT)
-Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
- mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MbRXj-1oIhYG11dR-00bpCW; Thu, 21 Apr 2022 09:12:33 +0200
-Received: by mail-wm1-f41.google.com with SMTP id ay11-20020a05600c1e0b00b0038eb92fa965so5216104wmb.4;
-        Thu, 21 Apr 2022 00:12:33 -0700 (PDT)
-X-Gm-Message-State: AOAM530Ybh2YrZwIJarfVWgYYu3pRDL5LBGSk/ZXfGBoOlqUGJ5BHY0D
-        Qdc8aKnK0mxOYn40muHQ0I9A06pxIopB5dl05ZA=
-X-Google-Smtp-Source: ABdhPJyiDq8vDuHIbY6D8eienOMlm5JvlAwo2YuDKmIos2MBFwy3hSQ+D3GAoUjwkE1kjA32vI2wLWEQWYui85aMEb4=
-X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
- s25-20020a1cf219000000b0038c782c03bbmr6996684wmc.94.1650525152760; Thu, 21
- Apr 2022 00:12:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220414091018.896737-1-niklas.cassel@wdc.com>
- <f379cb56-6ff5-f256-d5f2-3718a47e976d@opensource.wdc.com> <Yli8voX7hw3EZ7E/@x1-carbon>
- <81788b56-5b15-7308-38c7-c7f2502c4e15@linux-m68k.org> <87levzzts4.fsf_-_@email.froward.int.ebiederm.org>
- <01b063d7-d5c2-8af0-ad90-ed6c069252c5@linux-m68k.org> <CAMuHMdXd94L=766usN4WG-hK2MpQLy50mJZ=9G9NGv03kx8V8Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdXd94L=766usN4WG-hK2MpQLy50mJZ=9G9NGv03kx8V8Q@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 21 Apr 2022 09:12:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3Cjna7H_YxFvg6UEOqQf9ZqLp9EVOCFFewzWBHVT4nWg@mail.gmail.com>
-Message-ID: <CAK8P3a3Cjna7H_YxFvg6UEOqQf9ZqLp9EVOCFFewzWBHVT4nWg@mail.gmail.com>
-Subject: Re: [PATCH] binfmt_flat: Remove shared library support
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
+        with ESMTP id S1344421AbiDUJhD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Apr 2022 05:37:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E83F1DA7A
+        for <linux-arch@vger.kernel.org>; Thu, 21 Apr 2022 02:34:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD72D6179B
+        for <linux-arch@vger.kernel.org>; Thu, 21 Apr 2022 09:34:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3957BC385A1;
+        Thu, 21 Apr 2022 09:34:11 +0000 (UTC)
+Date:   Thu, 21 Apr 2022 10:34:07 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
         Kees Cook <keescook@chromium.org>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mike Frysinger <vapier@gentoo.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        Jesse Taube <Mr.Bossman075@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:AnKS55OURsqF0k+WfRdXuD9BM8buN8Mbwoc8FI9tXjJLFGTbe3y
- PcqrpQ9h898pPNrInIbRk2ml2JcjSVTnepfYr1B3MLdgEDa7+TCAZXw/UgPtthe68aOsKQ0
- qGnx98dccBSfWikOAK7utp183m3T7Q8iOGPiVAPCdM20UqcGDpW+T8VEfSYrnsGRW5mLmqn
- 385GSQ5/7sSnyM6aNVbRg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/JMMmNE2Oic=:BirHcXuMGJCFrC6RSL7/5o
- 1VjRILjb7n4eFtZEheoeOoxF2woHNdWCkWmYOxLnpUfip81LCLCEgsKFgXvug/ON4h8kc+7Ta
- eJYfaorU4tsFOAdByTEkmQSXk2wEzU+vW749+CrEG7GQ8qRMn4Oym26IzVIJ4SP0aJSt3E8b9
- GLAb7veGQN2C0OP2+9GkUVfiVvDp/Kgv3PlT8eOio0CdYOUla1/eEfoIK/tuWQv4KwXvE69Bs
- iCqt7609gLCu7mZ6vQqLzOc/nHwlS97fLA85NT4wduU5aYjRCuWrCxKqMUBiJImwqupq91wHY
- 7eusNJlToo4mlBtBrCDMz5x8KbtyFGg38h0NG43oTGPAPvHYUzSBSoDR9cZrZrPin/5Cpf1vA
- t6Rr8VRzjJMLW6Arb3uKn7iMLqMK/M67WU+yYDErDGC1ms9Ny04LQ0wiQQOl7GcctAyvQpOHP
- eWrFRZL7k6F0054+aIB+/XaQWukOLFRZJ2R4fWQcqEUSHXh8+o6P4J/Jftx6eQsA1T7V7MyHc
- /U8H/vsoFrSbyMMW8JdQAMvRzzITGN5l6NnCaNw3r2jHsHO2e6kUetEwWeRiFCq6XWv7fmJEz
- PoXLQIxr1rMVJeK6S0En1ishKX6+BWssbsSdkzmRUUmItNYejbwWsh87BXX9rsxK3BMG+H9nC
- JWDFyy88upCmWM1e6bCuKbouXFFSh83nUVZs9N/cAYKf1n/V1r8/Qu+IYDGMp3vRQBXQbS0CE
- eKGShbPDc6TUGMT3f9EpE2PvwcALKfUa8+QlQYSMg+sLY1Glf/SOoUheuPHanKFiKoTR1gxzQ
- CcWT63fI9R5ooXXW370XX0eqQ0DmlEmCiPHtt9DYxI0vm/fXSo=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        linux-arm-kernel@lists.infradead.org, hjl.tools@gmail.com,
+        libc-alpha@sourceware.org, szabolcs.nagy@arm.com,
+        yu-cheng.yu@intel.com, ebiederm@xmission.com,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v13 0/2] arm64: Enable BTI for the executable as well as
+ the interpreter
+Message-ID: <YmElD5AghKP4Zgdd@arm.com>
+References: <20220419105156.347168-1-broonie@kernel.org>
+ <165043278356.1481705.13924459838445776007.b4-ty@chromium.org>
+ <20220420093612.GB6954@willie-the-truck>
+ <Yl/ZCvPB2Qx98+OG@arm.com>
+ <Yl/1KertC3/UtwR4@sirena.org.uk>
+ <d6c4e1ca-b485-48e5-ede9-d346bd0af599@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d6c4e1ca-b485-48e5-ede9-d346bd0af599@arm.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 8:52 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Thu, Apr 21, 2022 at 1:53 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
-> > On 21/4/22 00:58, Eric W. Biederman wrote:
-> > > In a recent discussion[1] it was reported that the binfmt_flat library
-> > > support was only ever used on m68k and even on m68k has not been used
-> > > in a very long time.
-> > >
-> > > The structure of binfmt_flat is different from all of the other binfmt
-> > > implementations becasue of this shared library support and it made
-> > > life and code review more effort when I refactored the code in fs/exec.c.
-> > >
-> > > Since in practice the code is dead remove the binfmt_flat shared libarary
-> > > support and make maintenance of the code easier.
-> > >
-> > > [1] https://lkml.kernel.org/r/81788b56-5b15-7308-38c7-c7f2502c4e15@linux-m68k.org
-> > > Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-> > > ---
-> > >
-> > > Can the binfmt_flat folks please verify that the shared library support
-> > > really isn't used?
-> >
-> > I can definitely confirm I don't use it on m68k. And I don't know of
-> > anyone that has used it in many years.
-> >
-> >
-> > > Was binfmt_flat being enabled on arm and sh the mistake it looks like?
->
-> I think the question was intended to be
->
->     Was *binfmt_flat_shared_flat* being enabled on arm and sh the
->     mistake it looks like?
->
-> > >
-> > >   arch/arm/configs/lpc18xx_defconfig |   1 -
-> > >   arch/arm/configs/mps2_defconfig    |   1 -
-> > >   arch/arm/configs/stm32_defconfig   |   1 -
-> > >   arch/arm/configs/vf610m4_defconfig |   1 -
+On Wed, Apr 20, 2022 at 08:39:14AM -0500, Jeremy Linton wrote:
+> On 4/20/22 06:57, Mark Brown wrote:
+> > On Wed, Apr 20, 2022 at 10:57:30AM +0100, Catalin Marinas wrote:
+> > > On Wed, Apr 20, 2022 at 10:36:13AM +0100, Will Deacon wrote:
+> > > > Kees, please can you drop this series while Catalin's alternative solution
+> > > > is under discussion (his Reviewed-by preceded the other patches)?
+> > 
+> > > > https://lore.kernel.org/r/20220413134946.2732468-1-catalin.marinas@arm.com
+> > 
+> > > > Both series expose new behaviours to userspace and we don't need both.
+[...]
+> > > Arguably, the two approaches are complementary but the way this series
+> > > turned out is for the BTI on main executable to be default off. I have a
+> > > worry that the feature won't get used, so we just carry unnecessary code
+> > > in the kernel. Jeremy also found this approach less than ideal:
+> > 
+> > > https://lore.kernel.org/r/59fc8a58-5013-606b-f544-8277cda18e50@arm.com
+> > 
+> > I'm not sure there was a fundamental concern with the approach there but
+> > rather some pushback on the instance on turning it off by default.
+> 
+> Right, this one seems to have the smallest impact on systemd as it exists
+> today.
 
-Adding stm32, mps2 and imxrt maintainers to Cc, they are the most active
-armv7-m users and should know if the shared library support is used anywhere.
+It had a bigger impact on glibc which had to rework the dynamic library
+mapping to use munmap/mmap() instead of an mprotect() (though that's
+already done). I think glibc still prefers the mprotect() approach for
+dynamic libraries.
 
-     Arnd
+> I would have expected the default to be on, because IMHO this set
+> corrects what at first glance just looks like a small oversight.
+
+This was a design decision at the time, maybe not the best but it gives
+us some flexibility (and we haven't thought of MDWE).
+
+> I find the ABI questions a bit theoretical, given that this should
+> only affect environments that don't exist outside of labs/development
+> orgs at this point (aka systemd services on HW that implements BTI).
+
+The worry is not what breaks now but rather what happens when today's
+distros will eventually be deployed on large-scale BTI-capable hardware.
+It's a very small risk but non-zero. The idea is that if we come across
+some weird problem, a fixed-up dynamic loader could avoid enabling BTI
+on a per-process basis without the need to do this at the system level.
+
+Personally I'm fine with this risk. Will is not and I respect his
+position, hence I started the other thread to come up with a MDWE
+alternative.
+
+> The other approach works, and if the systemd folks are on board with it also
+> should solve the underlying problem, but it creates a bit of a compatibility
+> problem with existing containers/etc that might exist today (although
+> running systemd/services in a container is itself a discussion).
+> 
+> So, frankly, I don't see why they aren't complementary.
+
+They are complementary, though if we change the MDWE approach, there's
+less of a need for this patchset.
+
+-- 
+Catalin
