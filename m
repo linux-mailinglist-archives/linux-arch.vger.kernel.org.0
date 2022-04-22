@@ -2,73 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9968B50B4F9
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Apr 2022 12:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7AC50B540
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Apr 2022 12:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446488AbiDVK3S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Apr 2022 06:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S1446652AbiDVKjA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Apr 2022 06:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379632AbiDVK3R (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Apr 2022 06:29:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B01BA546BE;
-        Fri, 22 Apr 2022 03:26:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37DEF1477;
-        Fri, 22 Apr 2022 03:26:24 -0700 (PDT)
-Received: from [10.57.12.164] (unknown [10.57.12.164])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C18F3F766;
-        Fri, 22 Apr 2022 03:26:18 -0700 (PDT)
-Message-ID: <91c64a80-3892-944d-4178-5b57a4f2899d@arm.com>
-Date:   Fri, 22 Apr 2022 11:26:46 +0100
+        with ESMTP id S1446631AbiDVKiv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Apr 2022 06:38:51 -0400
+Received: from mailout2.rbg.tum.de (mailout2.rbg.tum.de [IPv6:2a09:80c0::202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D9354FAD;
+        Fri, 22 Apr 2022 03:35:54 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mailout2.rbg.tum.de (Postfix) with ESMTPS id 7C0704C02B0;
+        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1650623749;
+        bh=bCNDShSNWamzrapZyCH2+MaOYLPQy3BG0jVzD+WNbD4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dT+Zo14Mw3Zm1XxiUb4lp1L+yp/xGGuTBLjGLo5o8N/e9+BZaFpaWXuulYOOhz6Ib
+         oKaQ3sSQ9GiWnhU1giBGZwJQyLv9Vw/JKzbWwJ9gEXhuCT9ytBiie1yu2ib53kNJ3y
+         aDsCRtWsWp3Y3882MQVZ5hPSYXSOdLwe+rRZIbEGTC8ckRolOWQEBB1O4l3bmLtjEe
+         a7FHmnSmgjO2veh/5kLbGHVY7kJEs1CPL+daN7HoJ3DfEr0F2otg/uN3wwYHayQudm
+         0UCgCPpAozOgr/clanEiNpP0eUk80HirH/bI5BSGD1xUqeFWuIcD7rXeBtIudnzkfp
+         57ZbauIKayR0Q==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 763FE6D8; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 41EF06D7;
+        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 3CF2D55F;
+        Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 1AEA74A037C; Fri, 22 Apr 2022 12:35:49 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 496B74A01EC;
+        Fri, 22 Apr 2022 12:35:48 +0200 (CEST)
+        (Extended-Queue-bit xtech_eq@fff.in.tum.de)
+Date:   Fri, 22 Apr 2022 12:35:41 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Shakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Broken Address Dependency in mm/ksm.c::cmp_and_merge_page()
+Message-ID: <YmKE/XgmRnGKrBbB@Pauls-MacBook-Pro.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] binfmt_flat: Remove shared library support
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mike Frysinger <vapier@gentoo.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Jesse Taube <Mr.Bossman075@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Pierre-Yves MORDRET <pierre-yves.mordret@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-References: <20220414091018.896737-1-niklas.cassel@wdc.com>
- <f379cb56-6ff5-f256-d5f2-3718a47e976d@opensource.wdc.com>
- <Yli8voX7hw3EZ7E/@x1-carbon>
- <81788b56-5b15-7308-38c7-c7f2502c4e15@linux-m68k.org>
- <87levzzts4.fsf_-_@email.froward.int.ebiederm.org>
- <01b063d7-d5c2-8af0-ad90-ed6c069252c5@linux-m68k.org>
- <CAMuHMdXd94L=766usN4WG-hK2MpQLy50mJZ=9G9NGv03kx8V8Q@mail.gmail.com>
- <CAK8P3a3Cjna7H_YxFvg6UEOqQf9ZqLp9EVOCFFewzWBHVT4nWg@mail.gmail.com>
-From:   Vladimir Murzin <vladimir.murzin@arm.com>
-In-Reply-To: <CAK8P3a3Cjna7H_YxFvg6UEOqQf9ZqLp9EVOCFFewzWBHVT4nWg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,53 +78,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/21/22 8:12 AM, Arnd Bergmann wrote:
-> On Thu, Apr 21, 2022 at 8:52 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->> On Thu, Apr 21, 2022 at 1:53 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
->>> On 21/4/22 00:58, Eric W. Biederman wrote:
->>>> In a recent discussion[1] it was reported that the binfmt_flat library
->>>> support was only ever used on m68k and even on m68k has not been used
->>>> in a very long time.
->>>>
->>>> The structure of binfmt_flat is different from all of the other binfmt
->>>> implementations becasue of this shared library support and it made
->>>> life and code review more effort when I refactored the code in fs/exec.c.
->>>>
->>>> Since in practice the code is dead remove the binfmt_flat shared libarary
->>>> support and make maintenance of the code easier.
->>>>
->>>> [1] https://lkml.kernel.org/r/81788b56-5b15-7308-38c7-c7f2502c4e15@linux-m68k.org
->>>> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
->>>> ---
->>>>
->>>> Can the binfmt_flat folks please verify that the shared library support
->>>> really isn't used?
->>>
->>> I can definitely confirm I don't use it on m68k. And I don't know of
->>> anyone that has used it in many years.
->>>
->>>
->>>> Was binfmt_flat being enabled on arm and sh the mistake it looks like?
->>
->> I think the question was intended to be
->>
->>      Was *binfmt_flat_shared_flat* being enabled on arm and sh the
->>      mistake it looks like?
->>
->>>>
->>>>    arch/arm/configs/lpc18xx_defconfig |   1 -
->>>>    arch/arm/configs/mps2_defconfig    |   1 -
->>>>    arch/arm/configs/stm32_defconfig   |   1 -
->>>>    arch/arm/configs/vf610m4_defconfig |   1 -
+Hi all, 
+
+My dependency checker is flagging yet another broken dependency. For
+context, see [1].
+
+Thankfully, it is fairly straight-forward to explain this time.
+
+> stable_node = page_stable_node(page);
+
+Line 2032 in mm/ksm.c::cmp_and_merge_page() sees the return value of a
+call to "page_stable_node()", which can depend on a "READ_ONCE()", being
+assigned to "stable_node".
+
+> if (stable_node) {
+>         if (stable_node->head != &migrate_nodes &&
+>             get_kpfn_nid(READ_ONCE(stable_node->kpfn)) != 
+>             NUMA(stable_node->nid)) {
+>                 stable_node_dup_del(stable_node); ‣dup: stable_node
+>                 stable_node->head = &migrate_nodes;
+>                 list_add(&stable_node->list, stable_node->head);
+
+The dependency chain then runs into the two following if's, through an
+assignment of "migrate_nodes" to "stable_node->head" (line 2038) and
+finally reaches a call to "list_add()" (line 2039) where
+"stable_node->head" gets passed as the second function argument. 
+
+>         }
+> }
 > 
-> Adding stm32, mps2 and imxrt maintainers to Cc, they are the most active
-> armv7-m users and should know if the shared library support is used anywhere.
-
-Never seen shared library in use for flat format, so FWIW
-
-Acked-by: Vladimir Murzin <vladimir.murzin@arm.com> # ARM
-
-
+> static inline void list_add(struct list_head *new, struct list_head *head)
+> {
+>         __list_add(new, head, head->next);
+> }
 > 
->       Arnd
+> static inline void __list_add(struct list_head *new,
+>                               struct list_head *prev,
+>                               struct list_head *next)
+> {
+>         if (!__list_add_valid(new, prev, next))
+>                 return;
+> 
+>         next->prev = new;
+>         new->next = next;
+>         new->prev = prev;
+>         WRITE_ONCE(prev->next, new);
+> }
+
+By being passed into "list_add()" via "stable_node->head", the
+dependency chain eventually reaches a "WRITE_ONCE()" in "__list_add()"
+whose destination address, "stable_node->head->next", is part of the
+dependency chain and therefore carries an address dependency. 
+
+However, as a result of the assignment in line 2038, Clang knows that
+"stable_node->head" is "migrate_nodes" and replaces it, thereby breaking
+the dependency chain. 
+
+What do you think?
+
+Many thanks,
+Paul
+
+--
+[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/
 
