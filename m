@@ -2,231 +2,350 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1EE50AE96
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Apr 2022 05:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C31C50B0F0
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Apr 2022 08:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443797AbiDVDsS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Apr 2022 23:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S233482AbiDVG7E (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Apr 2022 02:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236246AbiDVDsR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Apr 2022 23:48:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D898F3BBCD;
-        Thu, 21 Apr 2022 20:45:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B6F761A90;
-        Fri, 22 Apr 2022 03:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA05C385AF;
-        Fri, 22 Apr 2022 03:45:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650599124;
-        bh=tmez4P5V6x2mGY+oYdwSCDpGcMlFQL7bGA1+b5tLcj4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R6gCSXNdxplxUOAnsGUYLm4lANFgJkdEL0RiE8VKlm9aH15wOSkv1q8tRuZLxqwKm
-         YvfTUveVbg1ynV3+HVE+6sn4X2r79hoP//Xe8Gg3oSlnh951h6OAnazm38TBhhg5xe
-         heq5rQiH8fOCsU8DWAYFqXdEapVHMtvjy4JUCiys/ER40fiRIJLg3Tytxv6piBERlj
-         snk5ZSeQT2CjQxidUDBMiyuOc8jaAwvXkMHUuujFmNsV5SVPEWyluR9c013hl1nPn8
-         LZlUgjD/WeTnmOrC4HVP12TDY6HrvTQ4ChwQj4jSOjbOGXAKYexBxVqF4T4AImCiTc
-         m86FmGTy3i9JA==
-Received: by mail-vs1-f48.google.com with SMTP id t202so6332948vst.8;
-        Thu, 21 Apr 2022 20:45:24 -0700 (PDT)
-X-Gm-Message-State: AOAM533qJ5v2C/qt6pcc2v4uOdGiDeke852BsBSBypHUpFJ2hYuPeglY
-        AWu5gYtsqjm6oJXNdX0Kg6UiY/keyPVr96wEQtU=
-X-Google-Smtp-Source: ABdhPJwdFIbt41ljQQ8r2gKIQEXrsHC5o0ouBqmKTuaxB5urgUsqP3gFhZOSzPCig/IhGXkagPauRNHnS+5M064lgN4=
-X-Received: by 2002:a67:e28a:0:b0:32a:4917:9f08 with SMTP id
- g10-20020a67e28a000000b0032a49179f08mr728853vsf.51.1650599123631; Thu, 21 Apr
- 2022 20:45:23 -0700 (PDT)
+        with ESMTP id S233500AbiDVG7D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Apr 2022 02:59:03 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163204F46D;
+        Thu, 21 Apr 2022 23:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650610571; x=1682146571;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=woXVSuBAGz1p/nvMIX6dnxqIxJiltEEBE48SXFVx2FE=;
+  b=a3kDZY0ncheDhigOR2yVIM9inmZjZceU+Ao93Ct//OmOoH4CKNB7HGbs
+   KJwkHw941KYmQ8rqcJwVnw0RFXwhcgmRw5lNamfkgUr3hQDEDwPF+njRm
+   qfGoAoUItlEXQ9KE5qT7/oGjK0R0f13VuKdmsoXT8KT7jKQOohSbUYQSQ
+   ag56qwIpSlryomcGFnObk/QjeYfRwKoF+kp7I4cVC3Y1d1G0WS+Yv6P5w
+   pbRoBzAXXnezcl9P70aAqlpHiG9+GdyjVfz05YraBUhcrR2TVekJCiImw
+   tY3LWsejVfDsyyt3/mq4J6y39jAIVAkVAcOVdIqoJZh1Z7DcU+pcDHlqo
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="264068824"
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="264068824"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 23:55:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,281,1643702400"; 
+   d="scan'208";a="615277913"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Apr 2022 23:55:52 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nhnCp-0009LO-QU;
+        Fri, 22 Apr 2022 06:55:51 +0000
+Date:   Fri, 22 Apr 2022 14:55:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-arch@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH V2 08/30] m68k/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
+Message-ID: <202202211826.rxBv4dl1-lkp@intel.com>
+References: <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-References: <20220417083204.2048364-1-guoren@kernel.org> <20220417083204.2048364-2-guoren@kernel.org>
- <YmIfBmisFVBu8Z5R@tardis>
-In-Reply-To: <YmIfBmisFVBu8Z5R@tardis>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 22 Apr 2022 11:45:12 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQU251odn6BQOQzma-cyEdw4vE39hauCPunnPY6v0fuyQ@mail.gmail.com>
-Message-ID: <CAJF2gTQU251odn6BQOQzma-cyEdw4vE39hauCPunnPY6v0fuyQ@mail.gmail.com>
-Subject: Re: [PATCH V3 1/3] csky: cmpxchg: Optimize with acquire & release
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1645425519-9034-9-git-send-email-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 11:20 AM Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> On Sun, Apr 17, 2022 at 04:32:02PM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Optimize arch_xchg|cmpxchg|cmpxchg_local with ASM acquire|release
-> > instructions instead of previous C based.
-> >
-> > Important reference comment by Rutland:
-> > 8e86f0b409a4 ("arm64: atomics: fix use of acquire + release for
-> > full barrier semantics")
-> >
-> > Link: https://lore.kernel.org/linux-riscv/CAJF2gTSAxpAi=LbAdu7jntZRUa=-dJwL0VfmDfBV5MHB=rcZ-w@mail.gmail.com/T/#m27a0f1342995deae49ce1d0e1f2683f8a181d6c3
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > ---
-> >  arch/csky/include/asm/barrier.h | 11 +++---
-> >  arch/csky/include/asm/cmpxchg.h | 64 ++++++++++++++++++++++++++++++---
-> >  2 files changed, 67 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
-> > index f4045dd53e17..fb63335ffa33 100644
-> > --- a/arch/csky/include/asm/barrier.h
-> > +++ b/arch/csky/include/asm/barrier.h
-> > @@ -37,17 +37,21 @@
-> >   * bar.brar
-> >   * bar.bwaw
-> >   */
-> > +#define ACQUIRE_FENCE                ".long 0x8427c000\n"
-> > +#define RELEASE_FENCE                ".long 0x842ec000\n"
-> > +#define FULL_FENCE           ".long 0x842fc000\n"
-> > +
-> >  #define __bar_brw()  asm volatile (".long 0x842cc000\n":::"memory")
-> >  #define __bar_br()   asm volatile (".long 0x8424c000\n":::"memory")
-> >  #define __bar_bw()   asm volatile (".long 0x8428c000\n":::"memory")
-> >  #define __bar_arw()  asm volatile (".long 0x8423c000\n":::"memory")
-> >  #define __bar_ar()   asm volatile (".long 0x8421c000\n":::"memory")
-> >  #define __bar_aw()   asm volatile (".long 0x8422c000\n":::"memory")
-> > -#define __bar_brwarw()       asm volatile (".long 0x842fc000\n":::"memory")
-> > -#define __bar_brarw()        asm volatile (".long 0x8427c000\n":::"memory")
-> > +#define __bar_brwarw()       asm volatile (FULL_FENCE:::"memory")
-> > +#define __bar_brarw()        asm volatile (ACQUIRE_FENCE:::"memory")
-> >  #define __bar_bwarw()        asm volatile (".long 0x842bc000\n":::"memory")
-> >  #define __bar_brwar()        asm volatile (".long 0x842dc000\n":::"memory")
-> > -#define __bar_brwaw()        asm volatile (".long 0x842ec000\n":::"memory")
-> > +#define __bar_brwaw()        asm volatile (RELEASE_FENCE:::"memory")
-> >  #define __bar_brar() asm volatile (".long 0x8425c000\n":::"memory")
-> >  #define __bar_brar() asm volatile (".long 0x8425c000\n":::"memory")
-> >  #define __bar_bwaw() asm volatile (".long 0x842ac000\n":::"memory")
-> > @@ -56,7 +60,6 @@
-> >  #define __smp_rmb()  __bar_brar()
-> >  #define __smp_wmb()  __bar_bwaw()
-> >
-> > -#define ACQUIRE_FENCE                ".long 0x8427c000\n"
-> >  #define __smp_acquire_fence()        __bar_brarw()
-> >  #define __smp_release_fence()        __bar_brwaw()
-> >
-> > diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
-> > index d1bef11f8dc9..06c550448bf1 100644
-> > --- a/arch/csky/include/asm/cmpxchg.h
-> > +++ b/arch/csky/include/asm/cmpxchg.h
-> > @@ -64,15 +64,71 @@ extern void __bad_xchg(void);
-> >  #define arch_cmpxchg_relaxed(ptr, o, n) \
-> >       (__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
-> >
-> > -#define arch_cmpxchg(ptr, o, n)                              \
-> > +#define __cmpxchg_acquire(ptr, old, new, size)                       \
-> >  ({                                                           \
-> > +     __typeof__(ptr) __ptr = (ptr);                          \
-> > +     __typeof__(new) __new = (new);                          \
-> > +     __typeof__(new) __tmp;                                  \
-> > +     __typeof__(old) __old = (old);                          \
-> > +     __typeof__(*(ptr)) __ret;                               \
-> > +     switch (size) {                                         \
-> > +     case 4:                                                 \
-> > +             asm volatile (                                  \
-> > +             "1:     ldex.w          %0, (%3) \n"            \
-> > +             "       cmpne           %0, %4   \n"            \
-> > +             "       bt              2f       \n"            \
-> > +             "       mov             %1, %2   \n"            \
-> > +             "       stex.w          %1, (%3) \n"            \
-> > +             "       bez             %1, 1b   \n"            \
-> > +             ACQUIRE_FENCE                                   \
-> > +             "2:                              \n"            \
-> > +                     : "=&r" (__ret), "=&r" (__tmp)          \
-> > +                     : "r" (__new), "r"(__ptr), "r"(__old)   \
-> > +                     :);                                     \
-> > +             break;                                          \
-> > +     default:                                                \
-> > +             __bad_xchg();                                   \
-> > +     }                                                       \
-> > +     __ret;                                                  \
-> > +})
-> > +
-> > +#define arch_cmpxchg_acquire(ptr, o, n) \
-> > +     (__cmpxchg_acquire((ptr), (o), (n), sizeof(*(ptr))))
-> > +
-> > +#define __cmpxchg(ptr, old, new, size)                               \
-> > +({                                                           \
-> > +     __typeof__(ptr) __ptr = (ptr);                          \
-> > +     __typeof__(new) __new = (new);                          \
-> > +     __typeof__(new) __tmp;                                  \
-> > +     __typeof__(old) __old = (old);                          \
-> >       __typeof__(*(ptr)) __ret;                               \
-> > -     __smp_release_fence();                                  \
-> > -     __ret = arch_cmpxchg_relaxed(ptr, o, n);                \
-> > -     __smp_acquire_fence();                                  \
-> > +     switch (size) {                                         \
-> > +     case 4:                                                 \
-> > +             asm volatile (                                  \
-> > +             "1:     ldex.w          %0, (%3) \n"            \
-> > +             "       cmpne           %0, %4   \n"            \
-> > +             "       bt              2f       \n"            \
-> > +             "       mov             %1, %2   \n"            \
-> > +             RELEASE_FENCE                                   \
->
-> FWIW, you probably need to make sure that a barrier instruction inside
-> an lr/sc loop is a good thing. IIUC, the execution time of a barrier
-> instruction is determined by the status of store buffers and invalidate
-> queues (and probably other stuffs), so it may increase the execution
-> time of the lr/sc loop, and make it unlikely to succeed. But this really
-> depends on how the arch executes these instructions.
-Yes, you are right. FENCE would plus overhead in lr/sc loop and that
-would make it harder to succeed.
+Hi Anshuman,
 
-I would fix up it and include your comment in the next version of the patchset.
+Thank you for the patch! Yet something to improve:
 
->
-> Regards,
-> Boqun
->
-> > +             "       stex.w          %1, (%3) \n"            \
-> > +             "       bez             %1, 1b   \n"            \
-> > +             FULL_FENCE                                      \
-> > +             "2:                              \n"            \
-> > +                     : "=&r" (__ret), "=&r" (__tmp)          \
-> > +                     : "r" (__new), "r"(__ptr), "r"(__old)   \
-> > +                     :);                                     \
-> > +             break;                                          \
-> > +     default:                                                \
-> > +             __bad_xchg();                                   \
-> > +     }                                                       \
-> >       __ret;                                                  \
-> >  })
-> >
-> > +#define arch_cmpxchg(ptr, o, n) \
-> > +     (__cmpxchg((ptr), (o), (n), sizeof(*(ptr))))
-> > +
-> > +#define arch_cmpxchg_local(ptr, o, n)                                \
-> > +     (__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
-> >  #else
-> >  #include <asm-generic/cmpxchg.h>
-> >  #endif
-> > --
-> > 2.25.1
-> >
+[auto build test ERROR on hnaz-mm/master]
+
+url:    https://github.com/0day-ci/linux/commits/Anshuman-Khandual/mm-mmap-Drop-protection_map-and-platform-s-__SXXX-__PXXX-requirements/20220221-144133
+base:   https://github.com/hnaz/linux-mm master
+config: m68k-randconfig-r033-20220221 (https://download.01.org/0day-ci/archive/20220221/202202211826.rxBv4dl1-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/e75c29d8b212cfab904914acdd5a027fb15d2f16
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-protection_map-and-platform-s-__SXXX-__PXXX-requirements/20220221-144133
+        git checkout e75c29d8b212cfab904914acdd5a027fb15d2f16
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash arch/m68k/mm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/m68k/mm/init.c:138:10: error: redefinition of 'vm_get_page_prot'
+     138 | pgprot_t vm_get_page_prot(unsigned long vm_flags)
+         |          ^~~~~~~~~~~~~~~~
+   In file included from arch/m68k/mm/init.c:14:
+   include/linux/mm.h:2801:24: note: previous definition of 'vm_get_page_prot' with type 'pgprot_t(long unsigned int)'
+    2801 | static inline pgprot_t vm_get_page_prot(unsigned long vm_flags)
+         |                        ^~~~~~~~~~~~~~~~
+   In file included from arch/m68k/include/asm/thread_info.h:6,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/m68k/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from arch/m68k/include/asm/irqflags.h:6,
+                    from include/linux/irqflags.h:16,
+                    from arch/m68k/include/asm/atomic.h:6,
+                    from include/linux/atomic.h:7,
+                    from include/linux/mm_types_task.h:13,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from arch/m68k/mm/init.c:11:
+   arch/m68k/mm/init.c: In function 'vm_get_page_prot':
+>> arch/m68k/mm/init.c:144:33: error: 'CF_PAGE_VALID' undeclared (first use in this function)
+     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+         |                                 ^~~~~~~~~~~~~
+   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
+      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
+         |                                        ^
+   arch/m68k/mm/init.c:144:33: note: each undeclared identifier is reported only once for each function it appears in
+     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+         |                                 ^~~~~~~~~~~~~
+   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
+      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
+         |                                        ^
+>> arch/m68k/mm/init.c:144:49: error: 'CF_PAGE_ACCESSED' undeclared (first use in this function); did you mean 'FGP_ACCESSED'?
+     144 |                 return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+         |                                                 ^~~~~~~~~~~~~~~~
+   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
+      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
+         |                                        ^
+>> arch/m68k/mm/init.c:145:33: error: 'CF_PAGE_READABLE' undeclared (first use in this function); did you mean 'PAGE_READONLY'?
+     145 |                                 CF_PAGE_READABLE);
+         |                                 ^~~~~~~~~~~~~~~~
+   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
+      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
+         |                                        ^
+>> arch/m68k/mm/init.c:148:33: error: 'CF_PAGE_WRITABLE' undeclared (first use in this function); did you mean 'NR_PAGETABLE'?
+     148 |                                 CF_PAGE_WRITABLE);
+         |                                 ^~~~~~~~~~~~~~~~
+   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
+      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
+         |                                        ^
+>> arch/m68k/mm/init.c:154:33: error: 'CF_PAGE_EXEC' undeclared (first use in this function)
+     154 |                                 CF_PAGE_EXEC);
+         |                                 ^~~~~~~~~~~~
+   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
+      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
+         |                                        ^
+>> arch/m68k/mm/init.c:174:52: error: 'CF_PAGE_SHARED' undeclared (first use in this function); did you mean 'PAGE_SHARED'?
+     174 |                                 CF_PAGE_READABLE | CF_PAGE_SHARED);
+         |                                                    ^~~~~~~~~~~~~~
+   arch/m68k/include/asm/page.h:51:40: note: in definition of macro '__pgprot'
+      51 | #define __pgprot(x)     ((pgprot_t) { (x) } )
+         |                                        ^
 
 
+vim +/vm_get_page_prot +138 arch/m68k/mm/init.c
 
---
-Best Regards
- Guo Ren
+  > 11	#include <linux/module.h>
+    12	#include <linux/signal.h>
+    13	#include <linux/sched.h>
+    14	#include <linux/mm.h>
+    15	#include <linux/swap.h>
+    16	#include <linux/kernel.h>
+    17	#include <linux/string.h>
+    18	#include <linux/types.h>
+    19	#include <linux/init.h>
+    20	#include <linux/memblock.h>
+    21	#include <linux/gfp.h>
+    22	
+    23	#include <asm/setup.h>
+    24	#include <linux/uaccess.h>
+    25	#include <asm/page.h>
+    26	#include <asm/pgalloc.h>
+    27	#include <asm/traps.h>
+    28	#include <asm/machdep.h>
+    29	#include <asm/io.h>
+    30	#ifdef CONFIG_ATARI
+    31	#include <asm/atari_stram.h>
+    32	#endif
+    33	#include <asm/sections.h>
+    34	#include <asm/tlb.h>
+    35	
+    36	/*
+    37	 * ZERO_PAGE is a special page that is used for zero-initialized
+    38	 * data and COW.
+    39	 */
+    40	void *empty_zero_page;
+    41	EXPORT_SYMBOL(empty_zero_page);
+    42	
+    43	#ifdef CONFIG_MMU
+    44	
+    45	int m68k_virt_to_node_shift;
+    46	
+    47	void __init m68k_setup_node(int node)
+    48	{
+    49		node_set_online(node);
+    50	}
+    51	
+    52	#else /* CONFIG_MMU */
+    53	
+    54	/*
+    55	 * paging_init() continues the virtual memory environment setup which
+    56	 * was begun by the code in arch/head.S.
+    57	 * The parameters are pointers to where to stick the starting and ending
+    58	 * addresses of available kernel virtual memory.
+    59	 */
+    60	void __init paging_init(void)
+    61	{
+    62		/*
+    63		 * Make sure start_mem is page aligned, otherwise bootmem and
+    64		 * page_alloc get different views of the world.
+    65		 */
+    66		unsigned long end_mem = memory_end & PAGE_MASK;
+    67		unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0, };
+    68	
+    69		high_memory = (void *) end_mem;
+    70	
+    71		empty_zero_page = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
+    72		if (!empty_zero_page)
+    73			panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
+    74			      __func__, PAGE_SIZE, PAGE_SIZE);
+    75		max_zone_pfn[ZONE_DMA] = end_mem >> PAGE_SHIFT;
+    76		free_area_init(max_zone_pfn);
+    77	}
+    78	
+    79	#endif /* CONFIG_MMU */
+    80	
+    81	void free_initmem(void)
+    82	{
+    83	#ifndef CONFIG_MMU_SUN3
+    84		free_initmem_default(-1);
+    85	#endif /* CONFIG_MMU_SUN3 */
+    86	}
+    87	
+    88	#if defined(CONFIG_MMU) && !defined(CONFIG_COLDFIRE)
+    89	#define VECTORS	&vectors[0]
+    90	#else
+    91	#define VECTORS	_ramvec
+    92	#endif
+    93	
+    94	static inline void init_pointer_tables(void)
+    95	{
+    96	#if defined(CONFIG_MMU) && !defined(CONFIG_SUN3) && !defined(CONFIG_COLDFIRE)
+    97		int i, j;
+    98	
+    99		/* insert pointer tables allocated so far into the tablelist */
+   100		init_pointer_table(kernel_pg_dir, TABLE_PGD);
+   101		for (i = 0; i < PTRS_PER_PGD; i++) {
+   102			pud_t *pud = (pud_t *)&kernel_pg_dir[i];
+   103			pmd_t *pmd_dir;
+   104	
+   105			if (!pud_present(*pud))
+   106				continue;
+   107	
+   108			pmd_dir = (pmd_t *)pgd_page_vaddr(kernel_pg_dir[i]);
+   109			init_pointer_table(pmd_dir, TABLE_PMD);
+   110	
+   111			for (j = 0; j < PTRS_PER_PMD; j++) {
+   112				pmd_t *pmd = &pmd_dir[j];
+   113				pte_t *pte_dir;
+   114	
+   115				if (!pmd_present(*pmd))
+   116					continue;
+   117	
+   118				pte_dir = (pte_t *)pmd_page_vaddr(*pmd);
+   119				init_pointer_table(pte_dir, TABLE_PTE);
+   120			}
+   121		}
+   122	#endif
+   123	}
+   124	
+   125	void __init mem_init(void)
+   126	{
+   127		/* this will put all memory onto the freelists */
+   128		memblock_free_all();
+   129		init_pointer_tables();
+   130	}
+   131	
+   132	#ifdef CONFIG_COLDFIRE
+   133	/*
+   134	 * Page protections for initialising protection_map. See mm/mmap.c
+   135	 * for use. In general, the bit positions are xwr, and P-items are
+   136	 * private, the S-items are shared.
+   137	 */
+ > 138	pgprot_t vm_get_page_prot(unsigned long vm_flags)
+   139	{
+   140		switch (vm_flags & (VM_READ | VM_WRITE | VM_EXEC | VM_SHARED)) {
+   141		case VM_NONE:
+   142			return PAGE_NONE;
+   143		case VM_READ:
+ > 144			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+ > 145					CF_PAGE_READABLE);
+   146		case VM_WRITE:
+   147			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+ > 148					CF_PAGE_WRITABLE);
+   149		case VM_WRITE | VM_READ:
+   150			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   151					CF_PAGE_READABLE | CF_PAGE_WRITABLE);
+   152		case VM_EXEC:
+   153			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+ > 154					CF_PAGE_EXEC);
+   155		case VM_EXEC | VM_READ:
+   156			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   157					CF_PAGE_READABLE | CF_PAGE_EXEC);
+   158		case VM_EXEC | VM_WRITE:
+   159			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   160					CF_PAGE_WRITABLE | CF_PAGE_EXEC);
+   161		case VM_EXEC | VM_WRITE | VM_READ:
+   162			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   163					CF_PAGE_READABLE | CF_PAGE_WRITABLE |
+   164					CF_PAGE_EXEC);
+   165		case VM_SHARED:
+   166			return PAGE_NONE;
+   167		case VM_SHARED | VM_READ:
+   168			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   169					CF_PAGE_READABLE);
+   170		case VM_SHARED | VM_WRITE:
+   171			return PAGE_SHARED;
+   172		case VM_SHARED | VM_WRITE | VM_READ:
+   173			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+ > 174					CF_PAGE_READABLE | CF_PAGE_SHARED);
+   175		case VM_SHARED | VM_EXEC:
+   176			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   177					CF_PAGE_EXEC);
+   178		case VM_SHARED | VM_EXEC | VM_READ:
+   179			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   180					CF_PAGE_READABLE | CF_PAGE_EXEC);
+   181		case VM_SHARED | VM_EXEC | VM_WRITE:
+   182			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   183					CF_PAGE_SHARED | CF_PAGE_EXEC);
+   184		case VM_SHARED | VM_EXEC | VM_WRITE | VM_READ:
+   185			return __pgprot(CF_PAGE_VALID | CF_PAGE_ACCESSED |
+   186					CF_PAGE_READABLE | CF_PAGE_SHARED |
+   187					CF_PAGE_EXEC);
+   188		default:
+   189			BUILD_BUG();
+   190		}
+   191	}
+   192	#endif
+   193	
 
-ML: https://lore.kernel.org/linux-csky/
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
