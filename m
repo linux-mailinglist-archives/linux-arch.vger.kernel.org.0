@@ -2,260 +2,187 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1553250C636
-	for <lists+linux-arch@lfdr.de>; Sat, 23 Apr 2022 03:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DD450CADC
+	for <lists+linux-arch@lfdr.de>; Sat, 23 Apr 2022 15:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbiDWBxp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Apr 2022 21:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S235780AbiDWN7f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 23 Apr 2022 09:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiDWBxp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Apr 2022 21:53:45 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2731002
-        for <linux-arch@vger.kernel.org>; Fri, 22 Apr 2022 18:50:49 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id bo5so9573513pfb.4
-        for <linux-arch@vger.kernel.org>; Fri, 22 Apr 2022 18:50:49 -0700 (PDT)
+        with ESMTP id S232696AbiDWN7c (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 23 Apr 2022 09:59:32 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442A8EA9;
+        Sat, 23 Apr 2022 06:56:34 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id v65so7407161oig.10;
+        Sat, 23 Apr 2022 06:56:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iuHt4Iz4FeZBvfTekgoBxhqf7wWZiBSKlKE/b+2tuYo=;
-        b=goIqv8VMZbjl/c21Jd/hdMFrKYsyG7ZmdvPyMP0a/LfpPFogQ2pz0rqGGlL/AbTqAs
-         9pSaiVPXATwgYFD5N5J3yDUb/pSsg0GPEKelq16yimQnW972dgloHJe65mdFFqD9Do1K
-         rfbVg7wta3owfIXNgtPf9exTJ5PLWsXRn7YHotwHXiR3Lkj659kCquaRDrj310oN7KKB
-         jMZM6HpvA98IESGZVPUiQud4tbPccE2u3eNVzqTqrXy3s0yTKF6yVKnJ7iGeA60/fd96
-         +GWnu5/SHFOm3yjfGlSdAu7G7dd4BdX/igL9srOjG3lvbYLAaHSMkweQg27Zn7pzyHq/
-         VUDA==
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9R0Eg/CRNtKLpWzpMCYm6Btgzdkg1gctUTsNegEGWlM=;
+        b=Wr8k4l382g+3NU7GdO4bZQhLS3tkaq1xWN4EwUxxIC2X32IoWloyzSF3bdOwXZq+yj
+         iNswazFUaRowyji9sL/LuelCUvvtzXUpvqFq+6vfUYpu334rdp0GfptWrDAw1zR4rb/L
+         zPXKQITLjC5OIdeSujAJ6P08/UmUY5LWbho81OWNsZimhmx8U12cW3ACEXwW1NO/Pn1Q
+         Kth1QGm/58HjB9TeLpsQToaeemTn1dURh0BZBxi0KUWq7hNccVVwdLyU3V6veR5JpqZ0
+         /0k1EURXc/NB7aUkZLQYt9Zd08y4Bzqo75FwNisafvkLPlELIoVCTZ6iDlgCROcD0reW
+         nmzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=iuHt4Iz4FeZBvfTekgoBxhqf7wWZiBSKlKE/b+2tuYo=;
-        b=fMvcYHd8POkoTvu9nrfbTRow3miOHFhRxTKKbGRu4ir4pZ0SwdS//fRkNhJZ+ycPoO
-         b9ICLC57Uz2Lnu11TVAiNjrfoLjLLPJRdh7EZa78vdpbDfFxEJI2qCNxskS8lwfkXb+3
-         fk+8daSKvJe1BwoNdFB2iRHlm9Eedpd0KbAqHmOXEHombZfT2tyk55Sg5v3D9p2bHxC2
-         061kvJKZWu1+dgyjHcKcUdu8d3zdbSoaKpwSX7OKQl42cu0WmXjbl2nkgm9Yk3ZVSXE7
-         SG1o4WhcwZTcFo+orNPS1PVN7Rs2dFEb4vwRZzEpZ/ttIYXbrMjKHx2+ExB8ah9mCvEe
-         ZBUA==
-X-Gm-Message-State: AOAM5339IZPSQmFBCeydPTqSk+F/7ClK2w5+WToeSWj9CMwX3yog/t7X
-        WAA4wejeBKL0PQj/uaKZ9cLbAA==
-X-Google-Smtp-Source: ABdhPJxJGqglrviMvw8Swe1RM63k2IYS5w00YAqVduQcH5u9WbhL2yia4TEU96zrIIxxdu1APdK0XA==
-X-Received: by 2002:a63:c5:0:b0:3aa:9882:9f91 with SMTP id 188-20020a6300c5000000b003aa98829f91mr6164187pga.574.1650678648423;
-        Fri, 22 Apr 2022 18:50:48 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id 123-20020a620681000000b004fa7c20d732sm3684931pfg.133.2022.04.22.18.50.47
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=9R0Eg/CRNtKLpWzpMCYm6Btgzdkg1gctUTsNegEGWlM=;
+        b=SHhwMQTn+H7ExRfqEUFx8tR/ZP2jkm7rWgIUA+FR0qwiroCKINNL6Sd/BVTQHMYpMJ
+         DxaQ3xsQy+DN6jHjBmaqDx0+uR86FD8USne5pBbb/pk/b4GgCPl5hIzabKbFzOj5kzi1
+         NaVCbGrGitOi8DxOa60hUwo0rX9qp24IzSKPEWF3HhWQnPNSguIx/5VfGlZXx3wiWh/N
+         4cnKCOHqdx+TEhvcmlzCGc9L9aPeYYGTN6Y6M4XVW8A+Eylc+kXKBAo1C32TUDg8im2B
+         wD3adgyZZhs1BQxKYafBWxMy4iRmmvU32xwIczF9t9XNFqv3/Z2N3QYzz/rQa2WP5el/
+         SMeA==
+X-Gm-Message-State: AOAM531W72W5VFH3XD7G5reBqVICr3NcnsVLE3GjMswadayO1Et/Hzo1
+        5ve5eFZNf8Zoa+xIyThSMJk=
+X-Google-Smtp-Source: ABdhPJw7YNYwCpYaxw7KrX+wjmPQlXrdJ/V++S3i2tSN/asd38+TKG6ivFWm3ZdQjwkF0Ov/sSBshg==
+X-Received: by 2002:a05:6808:1992:b0:322:ca0b:cce3 with SMTP id bj18-20020a056808199200b00322ca0bcce3mr4410515oib.168.1650722193655;
+        Sat, 23 Apr 2022 06:56:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 1-20020a05687011c100b000de98359b43sm1631885oav.1.2022.04.23.06.56.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 18:50:47 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 18:50:47 -0700 (PDT)
-X-Google-Original-Date: Fri, 22 Apr 2022 18:50:27 PDT (-0700)
-Subject:     Re: [PATCH v3 00/13] Introduce sv48 support without relocatable kernel
-In-Reply-To: <CA+zEjCuyEsB0cHoL=zepejcRbn9Rwg9nRXLMZCOXe_daSWbvig@mail.gmail.com>
-CC:     corbet@lwn.net, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, zong.li@sifive.com, anup@brainfault.org,
-        Atish.Patra@rivosinc.com, Christoph Hellwig <hch@lst.de>,
-        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
-        dvyukov@google.com, ardb@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        keescook@chromium.org, guoren@linux.alibaba.com,
-        heinrich.schuchardt@canonical.com, mchitale@ventanamicro.com,
-        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     alexandre.ghiti@canonical.com
-Message-ID: <mhng-f386a42e-77d9-4644-914f-552a8e721f5c@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sat, 23 Apr 2022 06:56:33 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 23 Apr 2022 06:56:31 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Nick Hu <nickhu@andestech.com>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Michal Simek <monstr@monstr.eu>,
+        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Joshua Kinard <kumba@gentoo.org>,
+        David Laight <David.Laight@aculab.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v1] random: block in /dev/urandom
+Message-ID: <20220423135631.GB3958174@roeck-us.net>
+References: <20220217162848.303601-1-Jason@zx2c4.com>
+ <20220322155820.GA1745955@roeck-us.net>
+ <YjoC5kQMqyC/3L5Y@zx2c4.com>
+ <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
+ <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 01 Apr 2022 05:56:30 PDT (-0700), alexandre.ghiti@canonical.com wrote:
-> On Fri, Feb 18, 2022 at 11:45 AM Alexandre Ghiti
-> <alexandre.ghiti@canonical.com> wrote:
->>
->> Hi Palmer,
->>
->> On Thu, Jan 20, 2022 at 11:05 AM Alexandre Ghiti
->> <alexandre.ghiti@canonical.com> wrote:
->> >
->> > On Thu, Jan 20, 2022 at 8:30 AM Alexandre Ghiti
->> > <alexandre.ghiti@canonical.com> wrote:
->> > >
->> > > On Thu, Jan 20, 2022 at 5:18 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->> > > >
->> > > > On Mon, 06 Dec 2021 02:46:44 PST (-0800), alexandre.ghiti@canonical.com wrote:
->> > > > > * Please note notable changes in memory layouts and kasan population *
->> > > > >
->> > > > > This patchset allows to have a single kernel for sv39 and sv48 without
->> > > > > being relocatable.
->> > > > >
->> > > > > The idea comes from Arnd Bergmann who suggested to do the same as x86,
->> > > > > that is mapping the kernel to the end of the address space, which allows
->> > > > > the kernel to be linked at the same address for both sv39 and sv48 and
->> > > > > then does not require to be relocated at runtime.
->> > > > >
->> > > > > This implements sv48 support at runtime. The kernel will try to
->> > > > > boot with 4-level page table and will fallback to 3-level if the HW does not
->> > > > > support it. Folding the 4th level into a 3-level page table has almost no
->> > > > > cost at runtime.
->> > > > >
->> > > > > Note that kasan region had to be moved to the end of the address space
->> > > > > since its location must be known at compile-time and then be valid for
->> > > > > both sv39 and sv48 (and sv57 that is coming).
->> > > > >
->> > > > > Tested on:
->> > > > >   - qemu rv64 sv39: OK
->> > > > >   - qemu rv64 sv48: OK
->> > > > >   - qemu rv64 sv39 + kasan: OK
->> > > > >   - qemu rv64 sv48 + kasan: OK
->> > > > >   - qemu rv32: OK
->> > > > >
->> > > > > Changes in v3:
->> > > > >   - Fix SZ_1T, thanks to Atish
->> > > > >   - Fix warning create_pud_mapping, thanks to Atish
->> > > > >   - Fix k210 nommu build, thanks to Atish
->> > > > >   - Fix wrong rebase as noted by Samuel
->> > > > >   - * Downgrade to sv39 is only possible if !KASAN (see commit changelog) *
->> > > > >   - * Move KASAN next to the kernel: virtual layouts changed and kasan population *
->> > > > >
->> > > > > Changes in v2:
->> > > > >   - Rebase onto for-next
->> > > > >   - Fix KASAN
->> > > > >   - Fix stack canary
->> > > > >   - Get completely rid of MAXPHYSMEM configs
->> > > > >   - Add documentation
->> > > > >
->> > > > > Alexandre Ghiti (13):
->> > > > >   riscv: Move KASAN mapping next to the kernel mapping
->> > > > >   riscv: Split early kasan mapping to prepare sv48 introduction
->> > > > >   riscv: Introduce functions to switch pt_ops
->> > > > >   riscv: Allow to dynamically define VA_BITS
->> > > > >   riscv: Get rid of MAXPHYSMEM configs
->> > > > >   asm-generic: Prepare for riscv use of pud_alloc_one and pud_free
->> > > > >   riscv: Implement sv48 support
->> > > > >   riscv: Use pgtable_l4_enabled to output mmu_type in cpuinfo
->> > > > >   riscv: Explicit comment about user virtual address space size
->> > > > >   riscv: Improve virtual kernel memory layout dump
->> > > > >   Documentation: riscv: Add sv48 description to VM layout
->> > > > >   riscv: Initialize thread pointer before calling C functions
->> > > > >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
->> > > > >
->> > > > >  Documentation/riscv/vm-layout.rst             |  48 ++-
->> > > > >  arch/riscv/Kconfig                            |  37 +-
->> > > > >  arch/riscv/configs/nommu_k210_defconfig       |   1 -
->> > > > >  .../riscv/configs/nommu_k210_sdcard_defconfig |   1 -
->> > > > >  arch/riscv/configs/nommu_virt_defconfig       |   1 -
->> > > > >  arch/riscv/include/asm/csr.h                  |   3 +-
->> > > > >  arch/riscv/include/asm/fixmap.h               |   1
->> > > > >  arch/riscv/include/asm/kasan.h                |  11 +-
->> > > > >  arch/riscv/include/asm/page.h                 |  20 +-
->> > > > >  arch/riscv/include/asm/pgalloc.h              |  40 ++
->> > > > >  arch/riscv/include/asm/pgtable-64.h           | 108 ++++-
->> > > > >  arch/riscv/include/asm/pgtable.h              |  47 +-
->> > > > >  arch/riscv/include/asm/sparsemem.h            |   6 +-
->> > > > >  arch/riscv/kernel/cpu.c                       |  23 +-
->> > > > >  arch/riscv/kernel/head.S                      |   4 +-
->> > > > >  arch/riscv/mm/context.c                       |   4 +-
->> > > > >  arch/riscv/mm/init.c                          | 408 ++++++++++++++----
->> > > > >  arch/riscv/mm/kasan_init.c                    | 250 ++++++++---
->> > > > >  drivers/firmware/efi/libstub/efi-stub.c       |   2
->> > > > >  drivers/pci/controller/pci-xgene.c            |   2 +-
->> > > > >  include/asm-generic/pgalloc.h                 |  24 +-
->> > > > >  include/linux/sizes.h                         |   1
->> > > > >  22 files changed, 833 insertions(+), 209 deletions(-)
->> > > >
->> > > > Sorry this took a while.  This is on for-next, with a bit of juggling: a
->> > > > handful of trivial fixes for configs that were failing to build/boot and
->> > > > some merge issues.  I also pulled out that MAXPHYSMEM fix to the top, so
->> > > > it'd be easier to backport.  This is bigger than something I'd normally like to
->> > > > take late in the cycle, but given there's a lot of cleanups, likely some fixes,
->> > > > and it looks like folks have been testing this I'm just going to go with it.
->> > > >
->> > >
->> > > Yes yes yes! That's fantastic news :)
->> > >
->> > > > Let me know if there's any issues with the merge, it was a bit hairy.
->> > > > Probably best to just send along a fixup patch at this point.
->> > >
->> > > I'm going to take a look at that now, and I'll fix anything that comes
->> > > up quickly :)
->> >
->> > I see in for-next that you did not take the following patches:
->> >
->> >   riscv: Improve virtual kernel memory layout dump
->> >   Documentation: riscv: Add sv48 description to VM layout
->> >   riscv: Initialize thread pointer before calling C functions
->> >   riscv: Allow user to downgrade to sv39 when hw supports sv48 if !KASAN
->> >
->> > I'm not sure this was your intention. If it was, I believe that at
->> > least the first 2 patches are needed in this series, the 3rd one is a
->> > useful fix and we can discuss the 4th if that's an issue for you.
->>
->> Can you confirm that this was intentional and maybe explain the
->> motivation behind it? Because I see value in those patches.
->
-> Palmer,
->
-> I read that you were still taking patches for 5.18, so I confirm again
-> that the patches above are needed IMO.
+On Fri, Apr 22, 2022 at 03:42:46PM +0200, Jason A. Donenfeld wrote:
+> Hey Guenter,
+> 
+> On Tue, Mar 22, 2022 at 6:56 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > On 3/22/22 10:09, Jason A. Donenfeld wrote:
+> > > Hey Guenter,
+> > >
+> > > On Tue, Mar 22, 2022 at 08:58:20AM -0700, Guenter Roeck wrote:
+> > >> On Thu, Feb 17, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
+> > >>> This topic has come up countless times, and usually doesn't go anywhere.
+> > >>> This time I thought I'd bring it up with a slightly narrower focus,
+> > >>> updated for some developments over the last three years: we finally can
+> > >>> make /dev/urandom always secure, in light of the fact that our RNG is
+> > >>> now always seeded.
+> > >>>
+> > >>
+> > >> [ ... ]
+> > >>
+> > >> This patch (or a later version of it) made it into mainline and causes a
+> > >> large number of qemu boot test failures for various architectures (arm,
+> > >> m68k, microblaze, sparc32, xtensa are the ones I observed). Common
+> > >> denominator is that boot hangs at "Saving random seed:". A sample bisect
+> > >> log is attached. Reverting this patch fixes the problem.
+> > >
+> > > As Linus said, it was worth a try, but I guess it just didn't work. For
+> > > my own curiosity, though, do you have a link to those QEMU VMs you could
+> > > share? I'd sort of like to poke around, and if we do ever reattempt this
+> > > sometime down the road, it seems like understanding everything about why
+> > > the previous time failed might be a good idea.
+> > >
+> >
+> > Everything - including the various root file systems - is at
+> > git@github.com:groeck/linux-build-test.git. Look into rootfs/ for the
+> > various boot tests. I'll be happy to provide some qemu command lines
+> > if needed.
+> 
+> I've been playing with a few things, and I'm wondering how close I am
+> to making this problem go away. I just made this branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/log/?h=jd/for-guenter
+> 
+> Any interest in setting your tests on that and seeing if it still
+> breaks? Or, perhaps better, do you have a single script that runs all
 
-It was too late for this when it was sent (I saw it then, but just got 
-around to actually doing the work to sort it out).
+Looks like your code is already in -next; I see the same failures in
+your tree and there.
 
-It took me a while to figure out exactly what was going on here, but I 
-think I remember now: that downgrade patch (and the follow-on I just 
-sent) is broken for medlow, because mm/init.c must be built medany 
-(which we're using for the mostly-PIC qualities).  I remember being in 
-the middle of rebasing/debugging this a while ago, I must have forgotten 
-I was in the middle of that and accidentally merged the branch as-is.  
-Certainly wasn't trying to silently take half the patch set and leave 
-the rest in limbo, that's the wrong way to do things. 
+openrisc generates a warning backtrace.
 
-I'm not sure what the right answer is here, but I just sent a patch to 
-drop support for medlow.  We'll have to talk about that, for now I 
-cleaned up some other minor issues, rearranged that docs and fix to come 
-first, and put this at palmer/riscv-sv48.  I think that fix is 
-reasonable to take the doc and fix into fixes, then the dump improvement 
-on for-next.  We'll have to see what folks think about the medany-only 
-kernels, the other option would be to build FDT as medany which seems a 
-bit awkward.  
+WARNING: CPU: 0 PID: 0 at drivers/char/random.c:1006 rand_initialize+0x148/0x174
+Missing cycle counter and fallback timer; RNG entropy collection will consequently suffer.
 
-> Maybe even the relocatable series?
+parisc crashes.
 
-Do you mind giving me a pointer?  I'm not sure why I'm so drop-prone 
-with your patches, I promise I'm not doing it on purpose.
+[    0.000000] Kernel Fault: Code=15 (Data TLB miss fault) at addr 00000000
+[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 5.18.0-rc3-32bit+ #1
+[    0.000000]
+[    0.000000]      YZrvWESTHLNXBCVMcbcbcbcbOGFRQPDI
+[    0.000000] PSW: 00000000000001001011111100001110 Not tainted
+[    0.000000] r00-03  0004bf0e 10f2c978 10773aa0 10e74300
+[    0.000000] r04-07  00000004 10e74208 10e869d0 10e83978
+[    0.000000] r08-11  f0023b90 f0023390 0004000e 10104f68
+[    0.000000] r12-15  00000002 00000000 00000008 fffffff9
+[    0.000000] r16-19  00000028 00080000 00000000 10dc6364
+[    0.000000] r20-23  10dc6364 00000000 00000000 fefefeff
+[    0.000000] r24-27  00000000 00000004 00000000 10dc6178
+[    0.000000] r28-31  0073a08d 80000000 10e74340 00000000
+[    0.000000] sr00-03  00000000 00000000 00000000 00000000
+[    0.000000] sr04-07  00000000 00000000 00000000 00000000
+[    0.000000]
+[    0.000000] IASQ: 00000000 00000000 IAOQ: 1024d09c 1024d0a0
+[    0.000000]  IIR: 0f401096    ISR: 00000000  IOR: 00000000
+[    0.000000]  CPU:        0   CR30: 10e869d0 CR31: 00000000
+[    0.000000]  ORIG_R28: 10e83ce8
+[    0.000000]  IAOQ[0]: random_get_entropy_fallback+0x18/0x38
+[    0.000000]  IAOQ[1]: random_get_entropy_fallback+0x1c/0x38
+[    0.000000]  RP(r2): add_device_randomness+0x30/0xc8
+[    0.000000] Backtrace:
+[    0.000000]  [<10773aa0>] add_device_randomness+0x30/0xc8
+[    0.000000]  [<10108734>] collect_boot_cpu_data+0x44/0x270
+[    0.000000]  [<10104f28>] setup_arch+0x98/0xd4
+[    0.000000]  [<10100a90>] start_kernel+0x8c/0x6d0
 
->
-> Thanks,
->
-> Alex
->
->>
->> Thanks,
->>
->> Alex
->>
->> >
->> > I tested for-next on both sv39 and sv48 successfully, I took a glance
->> > at the code and noticed you fixed the PTRS_PER_PGD error, thanks for
->> > that. Otherwise nothing obvious has popped.
->> >
->> > Thanks again,
->> >
->> > Alex
->> >
->> > >
->> > > Thanks!
->> > >
->> > > Alex
->> > >
->> > > >
->> > > > Thanks!
+s390 crashes silently, no crash log.
+
+Hope that helps,
+Guenter
