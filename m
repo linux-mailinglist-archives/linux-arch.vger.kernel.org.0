@@ -2,128 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4D850D6BC
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Apr 2022 03:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C3D50D79A
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Apr 2022 05:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbiDYB5Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 24 Apr 2022 21:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
+        id S240653AbiDYDiD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Apr 2022 23:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234324AbiDYB5W (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Apr 2022 21:57:22 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E536140A32;
-        Sun, 24 Apr 2022 18:54:15 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id i3-20020a056830010300b00605468119c3so9831493otp.11;
-        Sun, 24 Apr 2022 18:54:15 -0700 (PDT)
+        with ESMTP id S240672AbiDYDhn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Apr 2022 23:37:43 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FE12CCBD
+        for <linux-arch@vger.kernel.org>; Sun, 24 Apr 2022 20:34:40 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id z2so15798399oic.6
+        for <linux-arch@vger.kernel.org>; Sun, 24 Apr 2022 20:34:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=igNMWVB0BCCRkPYfikUJYnBxF9vywzLMTQ38+RboaBU=;
-        b=eGKOKm7arB3Mkck5UGNAVGH1J+LW9yasn1IK/T07ZIbbSGNYF5qegU0+OrvbQAwafz
-         JNdWdyLj/T74zZe5iMRtOwYZSEWqnePyVCDuwzx7ebcF4DTsq9eMSXWzpX/NjFC8u3Fa
-         0sbT6fZdcWjxAPpxGoehybf1M8SXzWaxKb2YC9jzvbtM9A7yhBgF3/DFmnoeaipNXLjV
-         JQhlDMB3SsWnyUdKZOYZjqoxvQ0rjUCwZu8M05px9rxWQRTstKx/CzBj/MBJhU/aXiUU
-         t4ffQDIhzUmvd0nU4+vU/EayqrGotXZr/ih6L/obEZHUhcWjcK+5qy2heREUFCPnrK9a
-         Us7Q==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=B1QfoAi5AbmZrNfgKcOMoR0g+jeoWpDUXn39NnppiO8=;
+        b=RP5YQMrqRBjFc1TPzDRF/VNHpK8/m7n4dXSd/cW6Z5KUCS1IKHMEhUBJ5NZBxPSlQe
+         7w69F6X6ON+ARmCOQU0idD+EYWSxMlBPBMReqAsXwbNBrW3/87epvMb6ASjFylpL/qcT
+         PlQP2jiXuw8pn/O8+w35QVbGxauzbtyJro3+/mru8XCY6zwaT9g3mN7ITl336PH9kTPK
+         lV7kpe0CHmxr5jjvZV36lVm345wKpfd7SjO1S5pwz+Lqc12HAHCQ+CeXXfqmxvVDi/uu
+         2JS8/XRGqAInv+agUB3X6u1ASYWsrcuw+QvXWEyK0vxNdPObwZHiGre7X9RvphN4xv+E
+         e8fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=igNMWVB0BCCRkPYfikUJYnBxF9vywzLMTQ38+RboaBU=;
-        b=57llMSg5QAxSxn4DYrzA9PTd6lDOKUu3X3YeiOXwhQ3iys7jlmg+OMpY+OYW1oURRh
-         DiU8wWmTl6KPo+0jMUkFkXvD95VGfqeF9COfVv1hfEEJqs89/1YZRJ+EhxHFIppCPR/9
-         3Hnnf5HVWi9wPgUa1QW2IwOGUMz+c+krsOHzxcPxnm957QRqcEPqupXAEUAewAWzSVH+
-         bQTQwEIC1AijA1Y8MX7l0rbl7SPM8Jxg3/TO20SxLzu1pFDTyw9kOtffvVblYg5yJ0ga
-         dxR7P1zEb/GDK/uJdaVDTz96EtwwIyievLn6jxkdIwcwlTEfagK3o7SK/B/zXafPXTt5
-         AfrA==
-X-Gm-Message-State: AOAM531z+8JYT0DZLhjfjrmv87bYQx8pIpBmnXP2hathOSRcc0Sb5xG5
-        XiLSJWMH5EyogJOL34YVXX4=
-X-Google-Smtp-Source: ABdhPJydeC4xOzNedxnPid3fIWvDUhntKJuRxEUcVA9wj+uWTuCsq7BzKnYP+Eccbkl8lfeC8tg0/g==
-X-Received: by 2002:a9d:2f29:0:b0:605:4290:ec9a with SMTP id h38-20020a9d2f29000000b006054290ec9amr5432881otb.344.1650851655199;
-        Sun, 24 Apr 2022 18:54:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d3-20020a9d2903000000b005cda765f578sm3281005otb.0.2022.04.24.18.54.11
+        bh=B1QfoAi5AbmZrNfgKcOMoR0g+jeoWpDUXn39NnppiO8=;
+        b=s8oA1M72hleQP22eiLlEYrGK/IwngLTRJLYm3Zw7u9IvZhHak9v48jspqG/sV9Sdgc
+         XbkoCZ3ryL9585Q+uaMFQvLl0e75+ACBIlcCKb6ktODnBTxUv8Yjg6Hze0tgr0xoVNMU
+         afAEkbOQvOmJLN80bPVTLRag6G3vOan7+WfQOXWpb5/IZ7/090JyJXBqkzeVAbQNa3Dh
+         o1DjO1mz+nzyK2Sm7NN6+OI9aggf9eOsjZVWMG5T24+ObdzdQh6rJ47qC74py7PkBkDd
+         gEVS2dpo839LxVUJQe/UM4/TziqMT62PpKPfu5XjpgJgQIU/Sw/fUjBWdaX20zcJ1QhW
+         9jdQ==
+X-Gm-Message-State: AOAM530i8wBd9BM8aFlupkpsYghdAIsRUYX5gMJNkjIrWn7REUsZMmwv
+        XJ4HYq+BTITd3mMJ2xsMaobvyQ==
+X-Google-Smtp-Source: ABdhPJxo8MI+d6zaUs6uXLuDmIBbvncR0vS1nSWd1hInEUCXQb+VfGu0cvlm09UQJgV/8onv8BD9pw==
+X-Received: by 2002:a05:6808:1690:b0:325:4159:2004 with SMTP id bb16-20020a056808169000b0032541592004mr214582oib.86.1650857680070;
+        Sun, 24 Apr 2022 20:34:40 -0700 (PDT)
+Received: from [192.168.208.243] ([172.56.88.231])
+        by smtp.gmail.com with ESMTPSA id i26-20020a4a929a000000b0033a29c8d564sm3899603ooh.3.2022.04.24.20.34.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 18:54:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <8c27dfab-db37-651e-2828-78309755cb87@roeck-us.net>
-Date:   Sun, 24 Apr 2022 18:54:10 -0700
+        Sun, 24 Apr 2022 20:34:39 -0700 (PDT)
+Message-ID: <ab454879-5506-fe7d-cd59-812a6bc9d193@landley.net>
+Date:   Sun, 24 Apr 2022 22:38:58 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v1] random: block in /dev/urandom
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] binfmt_flat: Remove shared library support
 Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Nick Hu <nickhu@andestech.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Michal Simek <monstr@monstr.eu>,
-        Borislav Petkov <bp@alien8.de>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Joshua Kinard <kumba@gentoo.org>,
-        David Laight <David.Laight@aculab.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Theodore Ts'o <tytso@mit.edu>
-References: <20220217162848.303601-1-Jason@zx2c4.com>
- <20220322155820.GA1745955@roeck-us.net> <YjoC5kQMqyC/3L5Y@zx2c4.com>
- <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
- <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
- <20220423135631.GB3958174@roeck-us.net> <YmRrUYfsXkF3XZ5S@zx2c4.com>
- <5dfb14f4-23c6-1aa9-9ab3-bd5373ceaa64@roeck-us.net>
- <YmXncURQMUHOS0IQ@zx2c4.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YmXncURQMUHOS0IQ@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Kees Cook <keescook@chromium.org>, Rich Felker <dalias@libc.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, ebiederm@xmission.com,
+        damien.lemoal@opensource.wdc.com, Niklas.Cassel@wdc.com,
+        viro@zeniv.linux.org.uk, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, vapier@gentoo.org, stable@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
+        gerg@linux-m68k.org, linux-arm-kernel@lists.infradead.org,
+        linux-sh@vger.kernel.org, ysato@users.sourceforge.jp
+References: <87levzzts4.fsf_-_@email.froward.int.ebiederm.org>
+ <mhng-32cab6aa-87a3-4a5c-bf83-836c25432fdd@palmer-ri-x1c9>
+ <20220420165935.GA12207@brightrain.aerifal.cx>
+ <202204201044.ACFEB0C@keescook>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <202204201044.ACFEB0C@keescook>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/24/22 17:12, Jason A. Donenfeld wrote:
-> Hi Guenter,
+On 4/20/22 12:47, Kees Cook wrote:
+>> For what it's worth, bimfmt_flat (with or without shared library
+>> support) should be simple to implement as a binfmt_misc handler if
+>> anyone needs the old shared library support (or if kernel wanted to
+>> drop it entirely, which I would be in favor of). That's how I handled
+>> old aout binaries I wanted to run after aout was removed: trivial
+>> binfmt_misc loader.
 > 
-> On Sat, Apr 23, 2022 at 07:04:26PM -0700, Guenter Roeck wrote:
->> I'll run another test tonight.
-> 
-> Super, thanks. Looking forward to learning what transpires. Hopefully
-> all pass this time through...
-> 
+> Yeah, I was trying to understand why systems were using binfmt_flat and
+> not binfmt_elf, given the mention of elf2flat -- is there really such a
+> large kernel memory footprint savings to be had from removing
+> binfmt_elf?
 
-Build results:
-	total: 147 pass: 146 fail: 1
-Failed builds:
-	m68k:allmodconfig
-Qemu test results:
-	total: 489 pass: 489 fail: 0
+elf2flat is a terrible name: it doesn't take an executable as input, it takes a
+.o file as input. (I mean it's an elf format .o file, but... misleading.)
 
-The failure is inherited from mainline, so all looks good.
+> But regardless, yes, it seems like if you're doing anything remotely
+> needing shared libraries with binfmt_flat, such a system could just use
+> ELF instead.
 
-Guenter
+A) The binfmt_elf.c loader won't run on nommu systems. The fdpic loader will,
+and in theory can handle normal ELF binaries (it's ELF with _more_
+capabilities), but sadly it's not supported on most architectures for reasons
+that are unclear to me.
 
+B) You can't run conventional ELF on nommu, because everything is offset from 0
+so PID 1 eats that address range and you can't run exec program.
+
+You can run PIE binaries on nommu (the symbols offset from a base pointer which
+can point anywhere), but they're inefficient (can't share text or rodata
+sections between instances because every symbol is offset from a single shared
+base pointer), and highly vulnerable to fragmentation (because it needs a
+contiguous blob of memory for text, rodata, bss, and data: see single base
+pointer everything has an integer offset from).
+
+All fdpic really does is give you 4 base pointers, one for each section. That
+way you can share text and rodata, and put bss and data into smaller independent
+fragments of memory. Various security guys use this as super-aslr even on mmu
+systems, but tend not to advertise that they're doing so. :)
+
+Rob
