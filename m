@@ -2,43 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28FF450DE86
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Apr 2022 13:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B250950DFB5
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Apr 2022 14:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiDYLPJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Apr 2022 07:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S233877AbiDYMNC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 25 Apr 2022 08:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233379AbiDYLPF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Apr 2022 07:15:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDDA27B1C;
-        Mon, 25 Apr 2022 04:11:59 -0700 (PDT)
+        with ESMTP id S234940AbiDYMMu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Apr 2022 08:12:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00075B3C2;
+        Mon, 25 Apr 2022 05:09:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98433611BB;
-        Mon, 25 Apr 2022 11:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F73BC385A4;
-        Mon, 25 Apr 2022 11:11:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Fb81gOwC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650885113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pyGMSlT7TKWMqyO7rxkqbT4wkDaJbn9bAIlXs0o1pvk=;
-        b=Fb81gOwC3EH8unqp6LruzR4yJE1OPRBE1EZPUHJw+CxmH9eHpWvyJQv76wzpowvU+ZAu0Y
-        H2zothHVmufGsf9HWMj5327ATZll2C+DDvP2eA0Cnok2buZ+Mdv6RQNOwuozlzigFulERw
-        hfLhJH2Hy88KUXsF+R2lEgdjz2WG55k=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bed3e851 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 25 Apr 2022 11:11:53 +0000 (UTC)
-Date:   Mon, 25 Apr 2022 13:11:45 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CFC1B8160E;
+        Mon, 25 Apr 2022 12:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC5AC385A7;
+        Mon, 25 Apr 2022 12:09:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650888584;
+        bh=1cGqa9zyT58RE2mP9Te3PxJ0mlr36OZJHKDXdnMZfr0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lF9f5yW897I0R3eQH311XOACxuKiPKWTs8ZKJ4KDbI/UkGn3qWUHChSAaAE/4Og3U
+         yBZ2nTQ1Ykj224QMHk5YVtaftIlMrNgme88N4KotkNcY9mW7Vmrx3n4WbU8yh6PoES
+         nF1PyLMFvhqA3xI2Jm6GnK4UPiPFawD6ggvWmRwZkfd0/w2P7FSP0gZrC13cFx1CJX
+         50uCeKszDyL5YGy+dlzB7+V4d7DjEELMB9Vq1jCpO7MFTl05NRXat79UdxwfDw2R1F
+         2uGHTHMY8nn1VDwRSdu7Kxb9F87cv7Jpoborq4dXI91GWbJaDn1sLC5+YYlrpqrT1l
+         aeyR5bEwsmmRw==
+Date:   Mon, 25 Apr 2022 13:09:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Dinh Nguyen <dinguyen@kernel.org>,
         Nick Hu <nickhu@andestech.com>,
@@ -54,7 +53,6 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Dominik Brodowski <linux@dominikbrodowski.net>,
         Eric Biggers <ebiggers@google.com>,
         Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Andy Lutomirski <luto@kernel.org>,
         Kees Cook <keescook@chromium.org>,
@@ -64,66 +62,70 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Theodore Ts'o <tytso@mit.edu>
 Subject: Re: [PATCH v1] random: block in /dev/urandom
-Message-ID: <YmaB8TifJ7EWW1Xi@zx2c4.com>
+Message-ID: <YmaPfvWq5eRixiJK@sirena.org.uk>
 References: <20220217162848.303601-1-Jason@zx2c4.com>
  <20220322155820.GA1745955@roeck-us.net>
- <YjoC5kQMqyC/3L5Y@zx2c4.com>
- <d5c23f68-30ba-a5eb-6bea-501736e79c88@roeck-us.net>
- <CAHmME9rmeQAD2DwG=APTmDxuVxFDH=6GXoKpgPrU9rc9oXrmxQ@mail.gmail.com>
- <20220423135631.GB3958174@roeck-us.net>
- <YmRrUYfsXkF3XZ5S@zx2c4.com>
- <5dfb14f4-23c6-1aa9-9ab3-bd5373ceaa64@roeck-us.net>
- <YmXncURQMUHOS0IQ@zx2c4.com>
- <8c27dfab-db37-651e-2828-78309755cb87@roeck-us.net>
+ <YjoUU+8zrzB02pW7@sirena.org.uk>
+ <0d20fb04-81b8-eeee-49ab-5b0a9e78c9f8@roeck-us.net>
+ <YjsOHmvDgAxwLFMg@sirena.org.uk>
+ <ebafdf77-5d96-556b-0197-a172b656bb01@roeck-us.net>
+ <CAK8P3a1hzmXTTMsGcCA2ekEHnff+M7GrYSQDN4bVfVk6Ui=Apw@mail.gmail.com>
+ <CAHmME9pMFMk6Uu1p4z9SzdAwg2q52FnH3fcsGXCK0OZod=YwLw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="onvU6J0IiWNDQHVw"
 Content-Disposition: inline
-In-Reply-To: <8c27dfab-db37-651e-2828-78309755cb87@roeck-us.net>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHmME9pMFMk6Uu1p4z9SzdAwg2q52FnH3fcsGXCK0OZod=YwLw@mail.gmail.com>
+X-Cookie: An apple a day makes 365 apples a year.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Guenter,
 
-On Sun, Apr 24, 2022 at 06:54:10PM -0700, Guenter Roeck wrote:
-> On 4/24/22 17:12, Jason A. Donenfeld wrote:
-> > Hi Guenter,
-> > 
-> > On Sat, Apr 23, 2022 at 07:04:26PM -0700, Guenter Roeck wrote:
-> >> I'll run another test tonight.
-> > 
-> > Super, thanks. Looking forward to learning what transpires. Hopefully
-> > all pass this time through...
-> > 
-> 
-> Build results:
-> 	total: 147 pass: 146 fail: 1
-> Failed builds:
-> 	m68k:allmodconfig
-> Qemu test results:
-> 	total: 489 pass: 489 fail: 0
-> 
-> The failure is inherited from mainline, so all looks good.
+--onvU6J0IiWNDQHVw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-That is excellent news! Thanks again for testing.
+On Sat, Apr 23, 2022 at 02:52:51AM +0200, Jason A. Donenfeld wrote:
+> On Wed, Mar 23, 2022 at 4:53 PM Arnd Bergmann <arnd@arndb.de> wrote:
 
-So what this means is: the rationale for reverting the /dev/random +
-/dev/urandom unification has now been fixed. That's some real tangible
-progress.
+> > Maybe kernelci has a virtio-rng device assigned to the machine
+> > and you don't? That would clearly avoid the issue here.
 
-Now, I don't want to rush into trying the unification again too soon. I
-think if anything, the lesson from the first attempt wasn't simply, "I
-should fix a few of Guenter's test cases," but rather that the problem
-is fairly nuanced and will take a lot wider testing and research.
-However, the fact that the initial thing, across multiple platforms,
-that lead to the revert has been fixed gives me a decent amount of
-optimism that at /some point/ down the road, we'll be able to try this
-again. One step at a time.
+> Indeed it's probably something like that. Or maybe they're networked
+> with something that has a steady stream of interrupts. I say this
+> because I was able to reproduce Guenter's findings using the
+> versatilepb machine with the versatile_defconfig config and the
+> versatile-pb.dtb file. Indeed this board doesn't have a cycle counter.
+> However, I did have success using the fallback timer and the other
+> patches in the jd/for-guenter branch, so at least for versatile's
+> nuances, I think (hope?) there's a reasonable success story here.
 
-Jason
+There's no virtio-rng device being instantiated, unless qemu is doing
+that by default (I can't see anything in the logs that suggests it did).
+There is networking though.  A sample command for invoking qemu for
+versatilepb is:
+
+qemu-system-arm -cpu arm926 -machine versatilepb -nographic -net nic,model=smc91c111,macaddr=52:54:00:12:34:58 -net user -m 256 -monitor none -dtb /var/lib/lava/dispatcher/tmp/85180/deployimages-hitd6sn_/dtb/versatile-pb.dtb -kernel /var/lib/lava/dispatcher/tmp/85180/deployimages-hitd6sn_/kernel/zImage -append "console=ttyAMA0,115200 root=/dev/ram0 debug verbose console_msg_format=syslog earlycon" -initrd /var/lib/lava/dispatcher/tmp/85180/deployimages-hitd6sn_/ramdisk/rootfs.cpio.gz -drive format=qcow2,file=/var/lib/lava/dispatcher/tmp/85180/apply-overlay-guest-l9_f_lxl/lava-guest.qcow2,media=disk,if=scsi,id=lavatest
+
+--onvU6J0IiWNDQHVw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJmj34ACgkQJNaLcl1U
+h9CeWwf/Yaj9E+Pc63nMbfJFj83Dzh5N/lIq7zixSu3FpWYBuYqbtE8Dmnnch2Rg
+WWWZuPFHNUsUnTfVjCf6UUhoVa0gVphiNVhGZ3AR18HCxB6jpmue2o0rjuGvhpw0
+G8gmLrP1qTXptqiG3bG2SNmAzazeqxsl+KRseLjhSRKzDzQbDFByTNePc6pmKDJW
+gAqV2YZfGNSNOz2nvzqwTXVK4vL7/QPB2sVEVlkb9uSuOWbNSMrcCtNsfeWzY4hQ
+h45dDgk/+DigcTOCpBNOq4+bMGHy+wXKzMsT37S3t4YFd0gimba4r/CbVsYWmo/6
+z9ktO6xoFAC+q42db0+s6en2SzVLLg==
+=/kLK
+-----END PGP SIGNATURE-----
+
+--onvU6J0IiWNDQHVw--
