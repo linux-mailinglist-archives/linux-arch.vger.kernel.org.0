@@ -2,124 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C3D50D79A
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Apr 2022 05:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E0450D7D6
+	for <lists+linux-arch@lfdr.de>; Mon, 25 Apr 2022 05:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240653AbiDYDiD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 24 Apr 2022 23:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S240985AbiDYDtI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Apr 2022 23:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240672AbiDYDhn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Apr 2022 23:37:43 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FE12CCBD
-        for <linux-arch@vger.kernel.org>; Sun, 24 Apr 2022 20:34:40 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id z2so15798399oic.6
-        for <linux-arch@vger.kernel.org>; Sun, 24 Apr 2022 20:34:40 -0700 (PDT)
+        with ESMTP id S240944AbiDYDs7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Apr 2022 23:48:59 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71772186C2
+        for <linux-arch@vger.kernel.org>; Sun, 24 Apr 2022 20:45:51 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id t15so15834490oie.1
+        for <linux-arch@vger.kernel.org>; Sun, 24 Apr 2022 20:45:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=landley-net.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B1QfoAi5AbmZrNfgKcOMoR0g+jeoWpDUXn39NnppiO8=;
-        b=RP5YQMrqRBjFc1TPzDRF/VNHpK8/m7n4dXSd/cW6Z5KUCS1IKHMEhUBJ5NZBxPSlQe
-         7w69F6X6ON+ARmCOQU0idD+EYWSxMlBPBMReqAsXwbNBrW3/87epvMb6ASjFylpL/qcT
-         PlQP2jiXuw8pn/O8+w35QVbGxauzbtyJro3+/mru8XCY6zwaT9g3mN7ITl336PH9kTPK
-         lV7kpe0CHmxr5jjvZV36lVm345wKpfd7SjO1S5pwz+Lqc12HAHCQ+CeXXfqmxvVDi/uu
-         2JS8/XRGqAInv+agUB3X6u1ASYWsrcuw+QvXWEyK0vxNdPObwZHiGre7X9RvphN4xv+E
-         e8fA==
+        bh=dCbuXnt8KI6vT4+iL+5GGDKwywcs08Pazm0PAaoYNFI=;
+        b=ZvaDEohb8ZLj7cvPeWXG70F+Xmei4RkLyAyXVmfQrQwpmNzLUAwA3X85LIHV2dvy3B
+         zdls0TLE9Bm0H7NsvkqqSigKYPQmL1fEIk5ubVzVX7gH77cDgy0gcYKaDwbqepEx+Z42
+         beIuU3yYuC2nJ2JPlxGkDdPy5pfY6i9g6EviD4PM1Biie+s8LDe1rU1v7Chqf9+Of2DM
+         hj/fz3cO/2reyFq0zD0PoG1gQgbBJr8wL+PmUB6jjTiewSYBc88jCiVWlYLS+ZIGuJG5
+         9Lz/5+i0Ir9Lvrsf2fCg6oedgf2axiFm5gLfRx95D6fG5Ndv39Ybt7WM3UQW1//pXBzv
+         tO1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=B1QfoAi5AbmZrNfgKcOMoR0g+jeoWpDUXn39NnppiO8=;
-        b=s8oA1M72hleQP22eiLlEYrGK/IwngLTRJLYm3Zw7u9IvZhHak9v48jspqG/sV9Sdgc
-         XbkoCZ3ryL9585Q+uaMFQvLl0e75+ACBIlcCKb6ktODnBTxUv8Yjg6Hze0tgr0xoVNMU
-         afAEkbOQvOmJLN80bPVTLRag6G3vOan7+WfQOXWpb5/IZ7/090JyJXBqkzeVAbQNa3Dh
-         o1DjO1mz+nzyK2Sm7NN6+OI9aggf9eOsjZVWMG5T24+ObdzdQh6rJ47qC74py7PkBkDd
-         gEVS2dpo839LxVUJQe/UM4/TziqMT62PpKPfu5XjpgJgQIU/Sw/fUjBWdaX20zcJ1QhW
-         9jdQ==
-X-Gm-Message-State: AOAM530i8wBd9BM8aFlupkpsYghdAIsRUYX5gMJNkjIrWn7REUsZMmwv
-        XJ4HYq+BTITd3mMJ2xsMaobvyQ==
-X-Google-Smtp-Source: ABdhPJxo8MI+d6zaUs6uXLuDmIBbvncR0vS1nSWd1hInEUCXQb+VfGu0cvlm09UQJgV/8onv8BD9pw==
-X-Received: by 2002:a05:6808:1690:b0:325:4159:2004 with SMTP id bb16-20020a056808169000b0032541592004mr214582oib.86.1650857680070;
-        Sun, 24 Apr 2022 20:34:40 -0700 (PDT)
+        bh=dCbuXnt8KI6vT4+iL+5GGDKwywcs08Pazm0PAaoYNFI=;
+        b=4l5zu6igNY4wGAoVhjwNXXdwdnprT493m2p53UB3jEXfhhgcD0NRCGIkPgecGrh1s2
+         DcfE3i7MNx0DP+DJpRXkPukSb2gxnd4LqKnvIr/Lek+BRTS/3I4cLMwZaUSO/bGeh2ay
+         rZi7mzlT3+nDToAvcnnXMBUVO+Bldb8E9JhTRnBjCobhNZYkHGG7N+PhwPXu7Z5TSPYc
+         Y86lKeD/Vd40a98HfQuOhfVjLbZcJVEkiCfq7MYcA0bViZfgppHUa1v94cBWVqi+lEIs
+         ZCFFaSmj68GYPSWVqWzhY95Yi2Qb2fspe7UYBhFvBR4OLIPoFipV0jd8mIvoiHQNklvg
+         v7IQ==
+X-Gm-Message-State: AOAM530bqAWCfqGBZoiX6UurcTtvOI5R6cI6X0Xx5590jccnIBsfywrw
+        DklHiY4uu/ORGacjN0dD+krH5g==
+X-Google-Smtp-Source: ABdhPJyjXv8VnX8iTAuwua0Imy62cyfWX3ohly9ACpWE55XVrjfJZYK8m6QF79M73snVG+oZVSSfmQ==
+X-Received: by 2002:a05:6808:1381:b0:325:1ffe:af93 with SMTP id c1-20020a056808138100b003251ffeaf93mr2368429oiw.191.1650858350829;
+        Sun, 24 Apr 2022 20:45:50 -0700 (PDT)
 Received: from [192.168.208.243] ([172.56.88.231])
-        by smtp.gmail.com with ESMTPSA id i26-20020a4a929a000000b0033a29c8d564sm3899603ooh.3.2022.04.24.20.34.37
+        by smtp.gmail.com with ESMTPSA id e16-20020a4a9b50000000b0035e5b5acc04sm1834959ook.24.2022.04.24.20.45.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 24 Apr 2022 20:34:39 -0700 (PDT)
-Message-ID: <ab454879-5506-fe7d-cd59-812a6bc9d193@landley.net>
-Date:   Sun, 24 Apr 2022 22:38:58 -0500
+        Sun, 24 Apr 2022 20:45:50 -0700 (PDT)
+Message-ID: <24f1fd7f-7e1c-bb56-3a08-56ccfc686a61@landley.net>
+Date:   Sun, 24 Apr 2022 22:50:09 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.6.2
 Subject: Re: [PATCH] binfmt_flat: Remove shared library support
 Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Rich Felker <dalias@libc.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, ebiederm@xmission.com,
-        damien.lemoal@opensource.wdc.com, Niklas.Cassel@wdc.com,
-        viro@zeniv.linux.org.uk, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, vapier@gentoo.org, stable@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        geert@linux-m68k.org, linux-m68k@lists.linux-m68k.org,
-        gerg@linux-m68k.org, linux-arm-kernel@lists.infradead.org,
-        linux-sh@vger.kernel.org, ysato@users.sourceforge.jp
-References: <87levzzts4.fsf_-_@email.froward.int.ebiederm.org>
- <mhng-32cab6aa-87a3-4a5c-bf83-836c25432fdd@palmer-ri-x1c9>
- <20220420165935.GA12207@brightrain.aerifal.cx>
- <202204201044.ACFEB0C@keescook>
+To:     Rich Felker <dalias@libc.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Greg Ungerer <gerg@linux-m68k.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Niklas Cassel <Niklas.Cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mike Frysinger <vapier@gentoo.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+References: <20220414091018.896737-1-niklas.cassel@wdc.com>
+ <f379cb56-6ff5-f256-d5f2-3718a47e976d@opensource.wdc.com>
+ <Yli8voX7hw3EZ7E/@x1-carbon>
+ <81788b56-5b15-7308-38c7-c7f2502c4e15@linux-m68k.org>
+ <87levzzts4.fsf_-_@email.froward.int.ebiederm.org>
+ <01b063d7-d5c2-8af0-ad90-ed6c069252c5@linux-m68k.org>
+ <CAMuHMdXd94L=766usN4WG-hK2MpQLy50mJZ=9G9NGv03kx8V8Q@mail.gmail.com>
+ <20220421124326.GG7074@brightrain.aerifal.cx>
 From:   Rob Landley <rob@landley.net>
-In-Reply-To: <202204201044.ACFEB0C@keescook>
+In-Reply-To: <20220421124326.GG7074@brightrain.aerifal.cx>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 4/20/22 12:47, Kees Cook wrote:
->> For what it's worth, bimfmt_flat (with or without shared library
->> support) should be simple to implement as a binfmt_misc handler if
->> anyone needs the old shared library support (or if kernel wanted to
->> drop it entirely, which I would be in favor of). That's how I handled
->> old aout binaries I wanted to run after aout was removed: trivial
->> binfmt_misc loader.
+
+
+On 4/21/22 07:43, Rich Felker wrote:
+> On Thu, Apr 21, 2022 at 08:52:59AM +0200, Geert Uytterhoeven wrote:
+>> On Thu, Apr 21, 2022 at 1:53 AM Greg Ungerer <gerg@linux-m68k.org> wrote:
+>> > On 21/4/22 00:58, Eric W. Biederman wrote:
+>> > > In a recent discussion[1] it was reported that the binfmt_flat library
+>> > > support was only ever used on m68k and even on m68k has not been used
+>> > > in a very long time.
+>> > >
+>> > > The structure of binfmt_flat is different from all of the other binfmt
+>> > > implementations becasue of this shared library support and it made
+>> > > life and code review more effort when I refactored the code in fs/exec.c.
+>> > >
+>> > > Since in practice the code is dead remove the binfmt_flat shared libarary
+>> > > support and make maintenance of the code easier.
+>> > >
+>> > > [1] https://lkml.kernel.org/r/81788b56-5b15-7308-38c7-c7f2502c4e15@linux-m68k.org
+>> > > Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>> > > ---
+>> > >
+>> > > Can the binfmt_flat folks please verify that the shared library support
+>> > > really isn't used?
+>> >
+>> > I can definitely confirm I don't use it on m68k. And I don't know of
+>> > anyone that has used it in many years.
+>> >
+>> >
+>> > > Was binfmt_flat being enabled on arm and sh the mistake it looks like?
+>> 
+>> I think the question was intended to be
+>> 
+>>     Was *binfmt_flat_shared_flat* being enabled on arm and sh the
+>>     mistake it looks like?
 > 
-> Yeah, I was trying to understand why systems were using binfmt_flat and
-> not binfmt_elf, given the mention of elf2flat -- is there really such a
-> large kernel memory footprint savings to be had from removing
-> binfmt_elf?
+> Early in my work on j2, I tried to research the history of shared flat
+> support on sh, and it turned out the mainline tooling never even
+> supported it, and the out-of-line tooling I eventually found was using
+> all sorts of wrong conditionals for how it did the linking and elf2flt
+> conversion, e.g. mere presence of any PIC-like relocation in any file
+> made it assume the whole program was PIC-compatible. There's no way
+> that stuf was ever used in any meaningful way. It just didn't work.
+> 
+> Quickly dropped that and got plain ELF (no shared text/xip, but no
+> worse than the existing flat support) working, and soon after, FDPIC.
+> 
+> The whole binfmt_flat ecosystem is a mess with no good reason to
+> exist.
 
-elf2flat is a terrible name: it doesn't take an executable as input, it takes a
-.o file as input. (I mean it's an elf format .o file, but... misleading.)
+FYI when I had to come up to speed on this in 2014 I did a writeup on my own
+research:
 
-> But regardless, yes, it seems like if you're doing anything remotely
-> needing shared libraries with binfmt_flat, such a system could just use
-> ELF instead.
+https://landley.net/notes-2014.html#07-12-2014
 
-A) The binfmt_elf.c loader won't run on nommu systems. The fdpic loader will,
-and in theory can handle normal ELF binaries (it's ELF with _more_
-capabilities), but sadly it's not supported on most architectures for reasons
-that are unclear to me.
+The lack of a canonical "upstream" elf2flt repository was probably the biggest
+problem at the time.
 
-B) You can't run conventional ELF on nommu, because everything is offset from 0
-so PID 1 eats that address range and you can't run exec program.
+(There's a reason I grabbed fdpic hard and tried to make that work everywhere.)
 
-You can run PIE binaries on nommu (the symbols offset from a base pointer which
-can point anywhere), but they're inefficient (can't share text or rodata
-sections between instances because every symbol is offset from a single shared
-base pointer), and highly vulnerable to fragmentation (because it needs a
-contiguous blob of memory for text, rodata, bss, and data: see single base
-pointer everything has an integer offset from).
-
-All fdpic really does is give you 4 base pointers, one for each section. That
-way you can share text and rodata, and put bss and data into smaller independent
-fragments of memory. Various security guys use this as super-aslr even on mmu
-systems, but tend not to advertise that they're doing so. :)
+> Rich
 
 Rob
