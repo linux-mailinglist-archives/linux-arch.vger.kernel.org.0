@@ -2,56 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA969510472
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 18:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F20510469
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 18:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353421AbiDZQv3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Apr 2022 12:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S1353302AbiDZQva (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Apr 2022 12:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353295AbiDZQu7 (ORCPT
+        with ESMTP id S1353355AbiDZQu7 (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 12:50:59 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2364A48337
-        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:55 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id o8-20020a170906974800b006f3a8be7502so2044645ejy.8
-        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:55 -0700 (PDT)
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46E94833C
+        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:57 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id ee56-20020a056402293800b00425b0f5b9c6so7562932edb.9
+        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=UzBVkSVOyNRYl4KHuto6hQklAwc82x2pMcEIZC5XiS8=;
-        b=owv8rcv7uy/IjMK2oDHnzdeRikUPc32v+DR6vPabqmMBgOdq0UhvmmpjftMy8ytPNt
-         HM3P5/DQ+pT5uKlWjCFQLCWuI9NAXILUzfH3+gwTr92gjb0OskwwBjPetTXSTIPD/6OL
-         3KUV5a7F0Rw16/K17cTVV6HnNmzJ94eEPwwrT81RmiU5XvUiR8m/dPbUUMv64bYcnrfS
-         8JLEMyNSW8k05BHKUBKubnloTQr7UOc9bvvDZfi1MjSOdb0FNIpfyPVgIpYfdedOBZYB
-         K6n0Di2ypZYYijr3xtes9AkKQrrbDkPvtqX7ow2f4ddywq7YCN1BIaM7a/np99bjjIjy
-         k1tg==
+        bh=Fx98fFr6n4NVKGBzav2AZaWX3VRzhlrRB+7m3pCHiSE=;
+        b=XHfBp7Cl9xVO2N8a97yhZbWVDGYXssOGKoCjey19oDLs3NuPvKFqJlX77OVyMj94Gt
+         2jjyaOrHBMMVqPlV8iHx1esMbi+0FDIhnzF7Cykz5C7cq/uxOyLSo3F2oQbehHxHtWWq
+         J0Gr9w+xpCyeNSmgjOjL6MaF2r1Jb+P68Kxo24lt3IECVMYNwPiYSWt8f1OWxVrhhtpd
+         NO15cOsJnLjPuQEWdNOcUO0Xa9QVwX7bjyI3Sb7JSEshKJQJE+Pg0L1D80PFDwJ2uTlH
+         nrRZFhYPzn8Skr3KSaxneh2u7R3qXEV++ExcIhKQSHekMMa2AQX+GQFmuIwyxjASi21j
+         HPqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=UzBVkSVOyNRYl4KHuto6hQklAwc82x2pMcEIZC5XiS8=;
-        b=yiAWKR8MF0QV5aRbkD3CDqoad7aoLoMfRWLkyR3f1kR3FYCEFOPKNzYGszP6qgU1R/
-         rnt10e/S9y05b00nJzRQNiBG1MfC6OI4xKyIssUoJ0BwkxGx2WBfSvLl7OrQsL1tAcw5
-         eD6hPueGM90XQGE9w+hkyETo/w3tQxr8pxMwGNmwwc0aR5kBXEeoFPz7Un5FJe7mTeXI
-         7HS8CDo3Xu86SoBggTueMkg5USuJhDzdR6mDP0sS87DdQ1tbtG0Z0kQnZUvvEdeooUAl
-         z/ME6LssBMHHcphjoLnw2Jnea+p1oEGhG5CaTL0vpHSeRQMIO93630KC0fu1yFV1OV2M
-         xhgw==
-X-Gm-Message-State: AOAM531uMc+RnAzwdC4YNDuW/UxtOmsM+Y2qEeRNNJCeGVshHdtxOpWL
-        0CAKsS1SB1vfhAEF3o6gg+GWCbIo3es=
-X-Google-Smtp-Source: ABdhPJyuq9+TYZNExRenypS/KX++WGny+sO+6oBDx1c907ZTGsidHormgyYiaYHSTUT0xaavjbt6mR9vHwU=
+        bh=Fx98fFr6n4NVKGBzav2AZaWX3VRzhlrRB+7m3pCHiSE=;
+        b=lJIfVmZX2vV/dETVV/nlrAT8itEyIGEEZU4M5RjJutnvqM/X1ok1XI7H1VbfktIHrC
+         OYnxvndATsiYDOt52GRmIxtJseul2eHeQlYAtedkuebcxz6YQM5brGKjTF+lE2i69Ha7
+         qeE9ep7ejZmXYXVOqbElut+s/brK4V844+VUakxAZwKMfv5GBjYHKuxHCveAT69UKn6D
+         eru4nbvDkaEG27wbwHZvPvU9L5edcAsnN42wslg0neWCwW0Ya5z5C4UDiJCeRhJKYvCp
+         vWEJvT/Q7Yht4o+d9CZMxBZNNjEdK3/EHxeKksANc7C2nZQNQZoZJIQJMRgTdcNoukg4
+         HHtQ==
+X-Gm-Message-State: AOAM531Ib/pT+VIEuLSgCpgIRaejKUKWei4rjK4myD1ss+w9/ujrj8+z
+        J3ut+dLzxVg/y4N+dIb/RIiug1MLIuI=
+X-Google-Smtp-Source: ABdhPJz3WWkOPsikmC1Af3Hb7X8sg1uvJjDWagM85J5s9I3Wdek2Bn8waW8w9Db/kDe/JuhNTPmAIxhWeNI=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:d580:abeb:bf6d:5726])
- (user=glider job=sendgmr) by 2002:a05:6402:54:b0:419:9b58:e305 with SMTP id
- f20-20020a056402005400b004199b58e305mr25365353edu.158.1650991553606; Tue, 26
- Apr 2022 09:45:53 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 18:43:05 +0200
+ (user=glider job=sendgmr) by 2002:a05:6402:34d2:b0:423:e6c4:3e9 with SMTP id
+ w18-20020a05640234d200b00423e6c403e9mr26328332edc.372.1650991556120; Tue, 26
+ Apr 2022 09:45:56 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 18:43:06 +0200
 In-Reply-To: <20220426164315.625149-1-glider@google.com>
-Message-Id: <20220426164315.625149-37-glider@google.com>
+Message-Id: <20220426164315.625149-38-glider@google.com>
 Mime-Version: 1.0
 References: <20220426164315.625149-1-glider@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v3 36/46] objtool: kmsan: list KMSAN API functions as uaccess-safe
+Subject: [PATCH v3 37/46] x86: kmsan: make READ_ONCE_TASK_STACK() return
+ initialized values
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -95,67 +96,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-KMSAN inserts API function calls in a lot of places (function entries
-and exits, local variables, memory accesses), so they may get called
-from the uaccess regions as well.
-
-KMSAN API functions are used to update the metadata (shadow/origin pages)
-for kernel memory accesses. The metadata pages for kernel pointers are
-also located in the kernel memory, so touching them is not a problem.
-For userspace pointers, no metadata is allocated.
-
-If an API function is supposed to read or modify the metadata, it does so
-for kernel pointers and ignores userspace pointers.
-If an API function is supposed to return a pair of metadata pointers for
-the instrumentation to use (like all __msan_metadata_ptr_for_TYPE_SIZE()
-functions do), it returns the allocated metadata for kernel pointers and
-special dummy buffers residing in the kernel memory for userspace
-pointers.
-
-As a result, none of KMSAN API functions perform userspace accesses, but
-since they might be called from UACCESS regions they use
-user_access_save/restore().
+To avoid false positives, assume that reading from the task stack
+always produces initialized values.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-v3:
- -- updated the patch description
-
-Link: https://linux-review.googlesource.com/id/I242bc9816273fecad4ea3d977393784396bb3c35
+Link: https://linux-review.googlesource.com/id/I9e2350bf3e88688dd83537e12a23456480141997
 ---
- tools/objtool/check.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ arch/x86/include/asm/unwind.h | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index bd0c2c828940a..44825a96adc7c 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1008,6 +1008,25 @@ static const char *uaccess_safe_builtin[] = {
- 	"__sanitizer_cov_trace_cmp4",
- 	"__sanitizer_cov_trace_cmp8",
- 	"__sanitizer_cov_trace_switch",
-+	/* KMSAN */
-+	"kmsan_copy_to_user",
-+	"kmsan_report",
-+	"kmsan_unpoison_memory",
-+	"__msan_chain_origin",
-+	"__msan_get_context_state",
-+	"__msan_instrument_asm_store",
-+	"__msan_metadata_ptr_for_load_1",
-+	"__msan_metadata_ptr_for_load_2",
-+	"__msan_metadata_ptr_for_load_4",
-+	"__msan_metadata_ptr_for_load_8",
-+	"__msan_metadata_ptr_for_load_n",
-+	"__msan_metadata_ptr_for_store_1",
-+	"__msan_metadata_ptr_for_store_2",
-+	"__msan_metadata_ptr_for_store_4",
-+	"__msan_metadata_ptr_for_store_8",
-+	"__msan_metadata_ptr_for_store_n",
-+	"__msan_poison_alloca",
-+	"__msan_warning",
- 	/* UBSAN */
- 	"ubsan_type_mismatch_common",
- 	"__ubsan_handle_type_mismatch",
+diff --git a/arch/x86/include/asm/unwind.h b/arch/x86/include/asm/unwind.h
+index 7cede4dc21f00..87acc90875b74 100644
+--- a/arch/x86/include/asm/unwind.h
++++ b/arch/x86/include/asm/unwind.h
+@@ -128,18 +128,19 @@ unsigned long unwind_recover_ret_addr(struct unwind_state *state,
+ }
+ 
+ /*
+- * This disables KASAN checking when reading a value from another task's stack,
+- * since the other task could be running on another CPU and could have poisoned
+- * the stack in the meantime.
++ * This disables KASAN/KMSAN checking when reading a value from another task's
++ * stack, since the other task could be running on another CPU and could have
++ * poisoned the stack in the meantime. Frame pointers are uninitialized by
++ * default, so for KMSAN we mark the return value initialized unconditionally.
+  */
+-#define READ_ONCE_TASK_STACK(task, x)			\
+-({							\
+-	unsigned long val;				\
+-	if (task == current)				\
+-		val = READ_ONCE(x);			\
+-	else						\
+-		val = READ_ONCE_NOCHECK(x);		\
+-	val;						\
++#define READ_ONCE_TASK_STACK(task, x)				\
++({								\
++	unsigned long val;					\
++	if (task == current && !IS_ENABLED(CONFIG_KMSAN))	\
++		val = READ_ONCE(x);				\
++	else							\
++		val = READ_ONCE_NOCHECK(x);			\
++	val;							\
+ })
+ 
+ static inline bool task_on_another_cpu(struct task_struct *task)
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
