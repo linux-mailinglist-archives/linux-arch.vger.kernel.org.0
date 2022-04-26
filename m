@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C425103E8
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 18:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0AA510410
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 18:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353134AbiDZQrv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Apr 2022 12:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
+        id S1353128AbiDZQrz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Apr 2022 12:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353141AbiDZQrs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 12:47:48 -0400
+        with ESMTP id S1353148AbiDZQrt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 12:47:49 -0400
 Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31C8194B14
-        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:44:34 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id hp17-20020a1709073e1100b006ef69a535c3so9359188ejc.10
-        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:44:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4A51968A0
+        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:44:37 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id o8-20020a170906974800b006f3a8be7502so2042845ejy.8
+        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=n1CPd29HHKe3iLELt5x5zSxX1l0GlMUVKgGqbXsXPsc=;
-        b=Ul2x8GzRzl3HHeVNodduisFS+GirD7ttp4YhxIfHtZ/wAm96wAOKW0A3UvjvpnRyGE
-         dGIlLM7rLl8SOQncEfIhzWSYbpzWK4FIquce/uniGQa5s5Khmoip2xUEMKpML79SS2Nr
-         fjFDfjY+DOzRzBepJfAOlaHW98Dbj79IrR8+XSS3SP0heVjAw3rhmHavoXW9MHBQKoZG
-         wag5mhU0cWEiD2fbJEejotrtfue9XD44tRsrIfEYSpEORbTnfzF4DdsV8zcndXNrqw8l
-         /BmYauMIADOumK6gR7O9BDkDjdwUZNDb4ZrqS03yp+ROELB3q+NAfod4pzAvjwcIAOW/
-         JTFg==
+        bh=cG4bw4Dybp9do4PvtZBZ2e2ITt4Wsjs9LSUgy4lmV+4=;
+        b=RcuVhtgi/Tw1bMDtabWe38GwlUcwg4SUjFJCfkW2os/ElbHByzMYCT2RYzqn62C0bn
+         cbc56TqAri4pL54mxEkGuVkiAaJJ9tXSwdeAGi+nY3slj4lCV4ZtmvWqeaNCS3QKANio
+         WW7rLfKq9u9Kd3RXcYrkCGHS0aT05KrVMUMkow7J5zXgyXnRiQ3E/SReE2LZFqObeM2p
+         smA+CIkkQF6Odog2q36ChSrXewTMVXM+93iY1Gau5URCGueQT5zBnFATmZOSwzbaRVC1
+         zWWjq4eJBwkMFtGAv2hVypAFZhEDp0HEN6QVTrNW6nJcUAwldpsVdCTpJbkD3ZSC1KHK
+         QTEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=n1CPd29HHKe3iLELt5x5zSxX1l0GlMUVKgGqbXsXPsc=;
-        b=iwAsPf3bpZAOSufFftKYab077caBW095pr54CjPoJBeTtL5zUkGCZ+fw5wTlR0HD34
-         Kuki1fQoK5rt7Mh4CALn4GBVeTmcMD1dKLo4o3cerovyMiDpH67pKQmNinKqb8p6lu+P
-         X5g8Pk4zmpeLbvjlv/MfOkjdDZfjbHQEQcIu3/VcyJ6d+6os1TLl1qLIOZDvKz9NEnht
-         E26kXSaYtOzfpHaNwWBULEIlw6XHf8CNUtASch2cU/UCMewgXnKQF9NGhgPUJPPwQF1L
-         5XAgf9AL917kpaLXGJyXUpnwv0E6QsIdz9hgBfFOH8djaMUs2HGfBySEvJGz9zUS3K1+
-         ZOrA==
-X-Gm-Message-State: AOAM533rmR1LtnacMzho4D+mP2BsVJOoTkW6LZBwtov/3i9xEUvDGemh
-        kuzLd3qm6bvrKnKtbgqJUBxBy1RNs04=
-X-Google-Smtp-Source: ABdhPJyMKZH4q2GhaVIalO1baxoI+dFp4AmHdfwHW+zpAMwIACuxCiWEQZTqeJmEu9W2AFPYPsdcZ1aQv28=
+        bh=cG4bw4Dybp9do4PvtZBZ2e2ITt4Wsjs9LSUgy4lmV+4=;
+        b=HAoX6GPst1//UBaQqf56Vw+/Pwed5sIwwXxwWZvebnyWKbmWNeciUKYRXai1giVWt6
+         AJ3z2AhIJ/rIgkgt1h4kEXtFUl5GPdapRyScH8AwBIbWZfiO791TgLOO7VL/rnoTLB6B
+         NUsBx2upx+bARZ9L8/AIh+WYV12x3ce5gmSAJ4VrPx2qBKwk5MsJhZuLG2E02I32l86j
+         9P6LOZTxrQPohgif2VON0KZT9xhn9Wagu36rlcvcU+L3folrx6bCIUL1i7HzoXvg+Reh
+         Z+C8zVaBncDM2OfiRxTe0xjrFqPkQ0ypPhizWtXW3ScwWABLZkogsnx9WN1EQiPBi5rh
+         ByGQ==
+X-Gm-Message-State: AOAM530T6SgSCIZmX6WAXzrnaWQyFgAbitkf3wWw9wzckkTnu4cFNO3e
+        +MUm2K2SduO1iG6XWq+q3NqywK3Xyp8=
+X-Google-Smtp-Source: ABdhPJwJq5G2rpZj9OKDdv47ee+grpfL1muZK+Akh8tj6QCkzJXGooM+Bx/fhzrHXRviMJo4c+0ZnBDuFgY=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:d580:abeb:bf6d:5726])
- (user=glider job=sendgmr) by 2002:a05:6402:1385:b0:413:2bc6:4400 with SMTP id
- b5-20020a056402138500b004132bc64400mr25986634edv.94.1650991473255; Tue, 26
- Apr 2022 09:44:33 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 18:42:34 +0200
+ (user=glider job=sendgmr) by 2002:a05:6402:2809:b0:423:e123:5e40 with SMTP id
+ h9-20020a056402280900b00423e1235e40mr25792114ede.84.1650991475654; Tue, 26
+ Apr 2022 09:44:35 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 18:42:35 +0200
 In-Reply-To: <20220426164315.625149-1-glider@google.com>
-Message-Id: <20220426164315.625149-6-glider@google.com>
+Message-Id: <20220426164315.625149-7-glider@google.com>
 Mime-Version: 1.0
 References: <20220426164315.625149-1-glider@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v3 05/46] x86: asm: instrument usercopy in get_user() and __put_user_size()
+Subject: [PATCH v3 06/46] asm-generic: instrument usercopy in cacheflush.h
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -95,71 +95,50 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Use hooks from instrumented.h to notify bug detection tools about
-usercopy events in get_user() and put_user_size().
-
-It's still unclear how to instrument put_user(), which assumes that
-instrumentation code doesn't clobber RAX.
+Notify memory tools about usercopy events in copy_to_user_page() and
+copy_from_user_page().
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/Ia9f12bfe5832623250e20f1859fdf5cc485a2fce
+Link: https://linux-review.googlesource.com/id/Ic1ee8da1886325f46ad67f52176f48c2c836c48f
 ---
- arch/x86/include/asm/uaccess.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/asm-generic/cacheflush.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index f78e2b3501a19..0373d52a0543e 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -5,6 +5,7 @@
-  * User space memory access functions
-  */
- #include <linux/compiler.h>
+diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
+index 4f07afacbc239..0f63eb325025f 100644
+--- a/include/asm-generic/cacheflush.h
++++ b/include/asm-generic/cacheflush.h
+@@ -2,6 +2,8 @@
+ #ifndef _ASM_GENERIC_CACHEFLUSH_H
+ #define _ASM_GENERIC_CACHEFLUSH_H
+ 
 +#include <linux/instrumented.h>
- #include <linux/kasan-checks.h>
- #include <linux/string.h>
- #include <asm/asm.h>
-@@ -99,11 +100,13 @@ extern int __get_user_bad(void);
- 	int __ret_gu;							\
- 	register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);		\
- 	__chk_user_ptr(ptr);						\
-+	instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(ptr))); \
- 	asm volatile("call __" #fn "_%P4"				\
- 		     : "=a" (__ret_gu), "=r" (__val_gu),		\
- 			ASM_CALL_CONSTRAINT				\
- 		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
- 	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
-+	instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr)), 0); \
- 	__builtin_expect(__ret_gu, 0);					\
- })
++
+ struct mm_struct;
+ struct vm_area_struct;
+ struct page;
+@@ -105,6 +107,7 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
+ #ifndef copy_to_user_page
+ #define copy_to_user_page(vma, page, vaddr, dst, src, len)	\
+ 	do { \
++		instrument_copy_to_user(dst, src, len); \
+ 		memcpy(dst, src, len); \
+ 		flush_icache_user_page(vma, page, vaddr, len); \
+ 	} while (0)
+@@ -112,7 +115,11 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
  
-@@ -248,7 +251,9 @@ extern void __put_user_nocheck_8(void);
+ #ifndef copy_from_user_page
+ #define copy_from_user_page(vma, page, vaddr, dst, src, len) \
+-	memcpy(dst, src, len)
++	do { \
++		instrument_copy_from_user_before(dst, src, len); \
++		memcpy(dst, src, len); \
++		instrument_copy_from_user_after(dst, src, len, 0); \
++	} while (0)
+ #endif
  
- #define __put_user_size(x, ptr, size, label)				\
- do {									\
-+	__typeof__(*(ptr)) __pus_val = x;				\
- 	__chk_user_ptr(ptr);						\
-+	instrument_copy_to_user(ptr, &(__pus_val), size);		\
- 	switch (size) {							\
- 	case 1:								\
- 		__put_user_goto(x, ptr, "b", "iq", label);		\
-@@ -286,6 +291,7 @@ do {									\
- #define __get_user_size(x, ptr, size, label)				\
- do {									\
- 	__chk_user_ptr(ptr);						\
-+	instrument_copy_from_user_before((void *)&(x), ptr, size);	\
- 	switch (size) {							\
- 	case 1:	{							\
- 		unsigned char x_u8__;					\
-@@ -305,6 +311,7 @@ do {									\
- 	default:							\
- 		(x) = __get_user_bad();					\
- 	}								\
-+	instrument_copy_from_user_after((void *)&(x), ptr, size, 0);	\
- } while (0)
- 
- #define __get_user_asm(x, addr, itype, ltype, label)			\
+ #endif /* _ASM_GENERIC_CACHEFLUSH_H */
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
