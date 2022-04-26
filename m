@@ -2,304 +2,195 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B4750FF53
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 15:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9EE50FFD0
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 15:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351035AbiDZNnm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Apr 2022 09:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S1351321AbiDZOCG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Apr 2022 10:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241907AbiDZNnh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 09:43:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CF033EB8;
-        Tue, 26 Apr 2022 06:40:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S1351319AbiDZOCB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 10:02:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FCE19069A;
+        Tue, 26 Apr 2022 06:58:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EB126210F4;
-        Tue, 26 Apr 2022 13:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1650980427; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=h5CLSs8Gh8CUFGudIyexUA79QqWpuqzqatZWV14fpNY=;
-        b=p76aud3+uM4DlZad34bO/RHvxRamw8cjqkEXnBAz8uiZwWfGCLLNvmXRonqcFizU74PLFE
-        bWNSa66L2fZycOqbxnYy5lbyyj5IsPvXGJ/fXNIZXHgVj9iphuMYQtknm0bhsIVbDpbUms
-        xqSFgJILL5apX3LMQPa2/P45OEhgiiQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 46CBA13223;
-        Tue, 26 Apr 2022 13:40:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cBIJEEv2Z2ImNQAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 26 Apr 2022 13:40:27 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-hyperv@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Juergen Gross <jgross@suse.com>, Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
-Subject: [PATCH 2/2] virtio: replace arch_has_restricted_virtio_memory_access()
-Date:   Tue, 26 Apr 2022 15:40:21 +0200
-Message-Id: <20220426134021.11210-3-jgross@suse.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220426134021.11210-1-jgross@suse.com>
-References: <20220426134021.11210-1-jgross@suse.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6958B82004;
+        Tue, 26 Apr 2022 13:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF43AC385AA;
+        Tue, 26 Apr 2022 13:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650981527;
+        bh=Q2CbGzlO12o2sbSJCVILKFqSAKwSGP36Qpvd86jEE4c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rPlxeusTmjq/0/+EHFfnDlmdGs+COvFDZFCgTv+38FHJQLu/3K1jRTOXmXkqLXP/J
+         qA5n0a+3bskZdBKVwMeeYcIF3N60iifRKD7Sa6eyVSIhkcBzHwhLVOLaneSeWcqnhC
+         KjMJhwCaSLPfTwzfbLs4yha6/Z7mC05ooTVOw3+o=
+Date:   Tue, 26 Apr 2022 15:58:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Vicente Bergas <vicencb@gmail.com>,
+        Johan Hovold <johan@kernel.org>, heiko@sntech.de,
+        giulio.benetti@micronovasrl.com,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-api@vger.kernel.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 06/10] serial: General support for multipoint addresses
+Message-ID: <Ymf6lJdj+nR74Tak@kroah.com>
+References: <20220426122448.38997-1-ilpo.jarvinen@linux.intel.com>
+ <20220426122448.38997-7-ilpo.jarvinen@linux.intel.com>
+ <YmfsDng2Z04PT3GS@kroah.com>
+ <e67014bd-3c32-e7d-2982-a0edb741f3c0@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e67014bd-3c32-e7d-2982-a0edb741f3c0@linux.intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Instead of using arch_has_restricted_virtio_memory_access() together
-with CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS, replace those
-with platform_has() and a new platform feature
-PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS.
+On Tue, Apr 26, 2022 at 04:36:49PM +0300, Ilpo Järvinen wrote:
+> On Tue, 26 Apr 2022, Greg KH wrote:
+> 
+> > On Tue, Apr 26, 2022 at 03:24:44PM +0300, Ilpo Järvinen wrote:
+> > > Add generic support for serial multipoint addressing. Two new ioctls
+> > > are added. TIOCSADDR is used to indicate the destination/receive
+> > > address. TIOCGADDR returns the current address in use. The driver
+> > > should implement set_addr and get_addr to support addressing mode.
+> > > 
+> > > Adjust ADDRB clearing to happen only if driver does not provide
+> > > set_addr (=the driver doesn't support address mode).
+> > > 
+> > > This change is necessary for supporting devices with RS485 multipoint
+> > > addressing [*]. A following patch in the patch series adds support for
+> > > Synopsys Designware UART capable for 9th bit addressing mode. In this
+> > > mode, 9th bit is used to indicate an address (byte) within the
+> > > communication line. The 9th bit addressing mode is selected using ADDRB
+> > > introduced by the previous patch.
+> > > 
+> > > Transmit addresses / receiver filter are specified by setting the flags
+> > > SER_ADDR_DEST and/or SER_ADDR_RECV. When the user supplies the transmit
+> > > address, in the 9bit addressing mode it is sent out immediately with
+> > > the 9th bit set to 1. After that, the subsequent normal data bytes are
+> > > sent with 9th bit as 0 and they are intended to the device with the
+> > > given address. It is up to receiver to enforce the filter using
+> > > SER_ADDR_RECV. When userspace has supplied the receive address, the
+> > > driver is expected to handle the matching of the address and only data
+> > > with that address is forwarded to the user. Both SER_ADDR_DEST and
+> > > SER_ADDR_RECV can be given at the same time in a single call if the
+> > > addresses are the same.
+> > > 
+> > > The user can clear the receive filter with SER_ADDR_RECV_CLEAR.
+> > > 
+> > > [*] Technically, RS485 is just an electronic spec and does not itself
+> > > specify the 9th bit addressing mode but 9th bit seems at least
+> > > "semi-standard" way to do addressing with RS485.
+> > > 
+> > > Cc: linux-api@vger.kernel.org
+> > > Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+> > > Cc: Matt Turner <mattst88@gmail.com>
+> > > Cc: linux-alpha@vger.kernel.org
+> > > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > > Cc: linux-mips@vger.kernel.org
+> > > Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+> > > Cc: Helge Deller <deller@gmx.de>
+> > > Cc: linux-parisc@vger.kernel.org
+> > > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> > > Cc: Paul Mackerras <paulus@samba.org>
+> > > Cc: linuxppc-dev@lists.ozlabs.org
+> > > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > > Cc: Rich Felker <dalias@libc.org>
+> > > Cc: linux-sh@vger.kernel.org
+> > > Cc: "David S. Miller" <davem@davemloft.net>
+> > > Cc: sparclinux@vger.kernel.org
+> > > Cc: Chris Zankel <chris@zankel.net>
+> > > Cc: Max Filippov <jcmvbkbc@gmail.com>
+> > > Cc: linux-xtensa@linux-xtensa.org
+> > > Cc: Arnd Bergmann <arnd@arndb.de>
+> > > Cc: linux-arch@vger.kernel.org
+> > > Cc: linux-doc@vger.kernel.org
+> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > ---
+> 
+> > > diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+> > > index fa6b16e5fdd8..8cb785ea7087 100644
+> > > --- a/include/uapi/linux/serial.h
+> > > +++ b/include/uapi/linux/serial.h
+> > > @@ -149,4 +149,12 @@ struct serial_iso7816 {
+> > >  	__u32	reserved[5];
+> > >  };
+> > >  
+> > > +struct serial_addr {
+> > > +	__u32	flags;
+> > > +#define SER_ADDR_RECV			(1 << 0)
+> > > +#define SER_ADDR_RECV_CLEAR		(1 << 1)
+> > > +#define SER_ADDR_DEST			(1 << 2)
+> > 
+> > You never check for invalid flags being sent to the kernel, which means
+> > this api can never change in the future to add new flags :(
+> 
+> Ok, so you mean the general level should to check
+> if (...->flags & ~(SER_ADDR_FLAGS_ALL))
+> 	return -EINVAL;
+> ?
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-I've only done a compile test on x86 for now, as I can't test these
-changes easily (SEV might be doable for me, but s390 isn't).
----
- arch/s390/Kconfig                  |  1 -
- arch/s390/mm/init.c                | 13 +++----------
- arch/x86/Kconfig                   |  1 -
- arch/x86/kernel/cpu/mshyperv.c     |  5 ++++-
- arch/x86/mm/mem_encrypt.c          |  6 ------
- arch/x86/mm/mem_encrypt_identity.c |  5 +++++
- drivers/virtio/Kconfig             |  6 ------
- drivers/virtio/virtio.c            |  5 ++---
- include/linux/platform-feature.h   |  3 ++-
- include/linux/virtio_config.h      |  9 ---------
- 10 files changed, 16 insertions(+), 38 deletions(-)
+For any new kernel api you always have to ensure that no "extra" flags
+or bits are set and reject it otherwise you can never add any more bits
+or flags in the future.  This should be in the Documentation/ directory
+for how to add new ioctls somewhere.
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index e084c72104f8..f97a22ae69a8 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -772,7 +772,6 @@ menu "Virtualization"
- config PROTECTED_VIRTUALIZATION_GUEST
- 	def_bool n
- 	prompt "Protected virtualization guest support"
--	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
- 	help
- 	  Select this option, if you want to be able to run this
- 	  kernel as a protected virtualization KVM guest.
-diff --git a/arch/s390/mm/init.c b/arch/s390/mm/init.c
-index 86ffd0d51fd5..8e4fa10c6b12 100644
---- a/arch/s390/mm/init.c
-+++ b/arch/s390/mm/init.c
-@@ -31,6 +31,7 @@
- #include <linux/cma.h>
- #include <linux/gfp.h>
- #include <linux/dma-direct.h>
-+#include <linux/platform-feature.h>
- #include <asm/processor.h>
- #include <linux/uaccess.h>
- #include <asm/pgalloc.h>
-@@ -168,22 +169,14 @@ bool force_dma_unencrypted(struct device *dev)
- 	return is_prot_virt_guest();
- }
- 
--#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
--
--int arch_has_restricted_virtio_memory_access(void)
--{
--	return is_prot_virt_guest();
--}
--EXPORT_SYMBOL(arch_has_restricted_virtio_memory_access);
--
--#endif
--
- /* protected virtualization */
- static void pv_init(void)
- {
- 	if (!is_prot_virt_guest())
- 		return;
- 
-+	platform_set_feature(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
-+
- 	/* make sure bounce buffers are shared */
- 	swiotlb_force = SWIOTLB_FORCE;
- 	swiotlb_init(1);
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index b0142e01002e..20ac72546ae4 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1515,7 +1515,6 @@ config X86_CPA_STATISTICS
- config X86_MEM_ENCRYPT
- 	select ARCH_HAS_FORCE_DMA_UNENCRYPTED
- 	select DYNAMIC_PHYSICAL_MASK
--	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
- 	def_bool n
- 
- config AMD_MEM_ENCRYPT
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 4b67094215bb..435611d83895 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -19,6 +19,7 @@
- #include <linux/i8253.h>
- #include <linux/random.h>
- #include <linux/swiotlb.h>
-+#include <linux/platform-feature.h>
- #include <asm/processor.h>
- #include <asm/hypervisor.h>
- #include <asm/hyperv-tlfs.h>
-@@ -347,8 +348,10 @@ static void __init ms_hyperv_init_platform(void)
- #endif
- 		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
- 		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
--			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
-+			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE) {
- 				cc_set_vendor(CC_VENDOR_HYPERV);
-+				platform_set_feature(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
-+			}
- 		}
- 	}
- 
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-index 50d209939c66..9b6a7c98b2b1 100644
---- a/arch/x86/mm/mem_encrypt.c
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -76,9 +76,3 @@ void __init mem_encrypt_init(void)
- 
- 	print_mem_encrypt_feature_info();
- }
--
--int arch_has_restricted_virtio_memory_access(void)
--{
--	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
--}
--EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index b43bc24d2bb6..6043ba6cd17d 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -40,6 +40,7 @@
- #include <linux/mm.h>
- #include <linux/mem_encrypt.h>
- #include <linux/cc_platform.h>
-+#include <linux/platform-feature.h>
- 
- #include <asm/setup.h>
- #include <asm/sections.h>
-@@ -566,6 +567,10 @@ void __init sme_enable(struct boot_params *bp)
- 	} else {
- 		/* SEV state cannot be controlled by a command line option */
- 		sme_me_mask = me_mask;
-+
-+		/* Set restricted memory access for virtio. */
-+		platform_set_feature(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
-+
- 		goto out;
- 	}
- 
-diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
-index b5adf6abd241..a6dc8b5846fe 100644
---- a/drivers/virtio/Kconfig
-+++ b/drivers/virtio/Kconfig
-@@ -6,12 +6,6 @@ config VIRTIO
- 	  bus, such as CONFIG_VIRTIO_PCI, CONFIG_VIRTIO_MMIO, CONFIG_RPMSG
- 	  or CONFIG_S390_GUEST.
- 
--config ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
--	bool
--	help
--	  This option is selected if the architecture may need to enforce
--	  VIRTIO_F_ACCESS_PLATFORM
--
- config VIRTIO_PCI_LIB
- 	tristate
- 	help
-diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-index 22f15f444f75..371e16b18381 100644
---- a/drivers/virtio/virtio.c
-+++ b/drivers/virtio/virtio.c
-@@ -5,6 +5,7 @@
- #include <linux/module.h>
- #include <linux/idr.h>
- #include <linux/of.h>
-+#include <linux/platform-feature.h>
- #include <uapi/linux/virtio_ids.h>
- 
- /* Unique numbering for virtio devices. */
-@@ -170,12 +171,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
- static int virtio_features_ok(struct virtio_device *dev)
- {
- 	unsigned status;
--	int ret;
- 
- 	might_sleep();
- 
--	ret = arch_has_restricted_virtio_memory_access();
--	if (ret) {
-+	if (platform_has(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS)) {
- 		if (!virtio_has_feature(dev, VIRTIO_F_VERSION_1)) {
- 			dev_warn(&dev->dev,
- 				 "device must provide VIRTIO_F_VERSION_1\n");
-diff --git a/include/linux/platform-feature.h b/include/linux/platform-feature.h
-index df393d502a4f..34b649aaa1da 100644
---- a/include/linux/platform-feature.h
-+++ b/include/linux/platform-feature.h
-@@ -6,7 +6,8 @@
- #include <asm/platform-feature.h>
- 
- /* The platform features are starting with the architecture specific ones. */
--#define PLATFORM_FEAT_N				(0 + PLATFORM_ARCH_FEAT_N)
-+#define PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS	0
-+#define PLATFORM_FEAT_N				(1 + PLATFORM_ARCH_FEAT_N)
- 
- #define PLATFORM_FEAT_ARRAY_SZ	BITS_TO_LONGS(PLATFORM_FEAT_N)
- extern unsigned long platform_features[PLATFORM_FEAT_ARRAY_SZ];
-diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
-index b341dd62aa4d..79498298519d 100644
---- a/include/linux/virtio_config.h
-+++ b/include/linux/virtio_config.h
-@@ -559,13 +559,4 @@ static inline void virtio_cwrite64(struct virtio_device *vdev,
- 		_r;							\
- 	})
- 
--#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
--int arch_has_restricted_virtio_memory_access(void);
--#else
--static inline int arch_has_restricted_virtio_memory_access(void)
--{
--	return 0;
--}
--#endif /* CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS */
--
- #endif /* _LINUX_VIRTIO_CONFIG_H */
--- 
-2.34.1
+> There's some code in the driver that detects invalid flag combinations 
+> (in 10/10) but I guess it doesn't satisfies what you're after. It is 
+> similar to how serial_rs485 flags is handled, that is, clearing flags it 
+> didn't handle (when it can) and returning -EINVAL for impossible 
+> combinations such as getting both RECV and DEST addr at the same time.
+> I don't know if serial_rs485 flags is a good example at all, it certainly 
+> doesn't check whether bits are set where there's no flag defined.
+> 
+> > And what about struct serial_rs485?  Shouldn't that be used here
+> > instead?  Why do we need a new ioctl and structure?
+> 
+> It is possible (Lukas already mentioned that option too). It just means
+> this will be available only on RS485 which could well be enough but Andy 
+> mentioned he has in the past come across addressing mode also with some 
+> RS232 thing (he didn't remember details anymore and it could be 
+> insignificant for the real world of today).
 
+This is rs485 so let's keep it attached to that.  Lots of people do
+their own custom addressing schemes on top of 232 but that's up to them
+to support in userspace or as a line discipline.
+
+thanks,
+
+greg k-h
