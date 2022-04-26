@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6F4510443
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 18:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97FA510447
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 18:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353277AbiDZQvD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S1353267AbiDZQvD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Tue, 26 Apr 2022 12:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44232 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353267AbiDZQtd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 12:49:33 -0400
+        with ESMTP id S1353250AbiDZQtl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 12:49:41 -0400
 Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6707634D
-        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:29 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id hs26-20020a1709073e9a00b006f3b957ebb4so838084ejc.7
-        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718553CFCC
+        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:32 -0700 (PDT)
+Received: by mail-ej1-x649.google.com with SMTP id nb10-20020a1709071c8a00b006e8f89863ceso9377361ejc.18
+        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 09:45:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=kXck7gc8vUdG+uIpTKbHiyCLJU3V9DKcF3fYel7nQCw=;
-        b=HKjl4po9qikfY5w7sANNOWF8wIYoTZhGhPfGpG2oRS5qaieTXeddZbMui9oEk30REF
-         GfljSR8S1QIxGgAiHnxwjgEv6+EF2+8jJ7T7QZK2oSf8eJtoGjdxW0lf0sHwGI/lNoOh
-         KSwqI4UvdZtVfWHWxZE/JKd/uRDNjbPmLMNeGT3iF7SCfBSOExZCHwBizTIx/FZ301Kf
-         goPWSOE0bCzYKGYIAeB4b4w+/WYrsLZPjYvsQGeev90WIWm90jQbop08KYN+ktuukkjW
-         eqLwPo+Y1By7UOL4GBv0clQvJfdJAgsm6ae+0ok9ios/vlSXb1rGqpnveoFRq063DiYQ
-         GxtA==
+        bh=8+FTymzEXuQwrQ48VSTvyp6MK3t+ENPCVe5WmeEaVIc=;
+        b=fcJ50fxU8vlV4Zt4ow5QLp80TC8c56IdxjhwU67LEgyBqe8j9VHcHGiTXWvty1WMSf
+         1bPBfjkXUa51JG42+wVa+w3aHgsOYSrC1f9U8SZ2jz031VP/HC88wQw4NfXbVOoGdtcl
+         SS8jFJBwA5MYs/dZR6sjMvgZtOfXiYQhrCsRhuTSkWp5gWJqFxoT0Go1VP32lUvN66NF
+         QMYm/Pv7rIuLPqSnr2MRY4/KkU+A6liqUHe5KRLS7lCFdZ3JcG6G4DdynX7jifdqwnNt
+         rgjoa8UfdHnj1e0EoDPPBI7pDd0IfYihgK9kALl0k/qSo8xllk+StsshEgAnxbfsnzPI
+         nRkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=kXck7gc8vUdG+uIpTKbHiyCLJU3V9DKcF3fYel7nQCw=;
-        b=lntSxiWjMcXbhU61Eque6WdClkrmdUHtq2IBgGUEeEMn3UHo0C4Dxt7X826nQUHBuu
-         SIJQMreFgeOMyitm6jZGaT5Cp6uwjwLDgPFzEVjj57IKtObmSxbVoo3NPbxaicWp6DPx
-         y3Eer+mIZGRkys6/dnNelTkEqgp17kVKVKBA7sBEmBzpDcIAShVBR9L16TIgzEG8Cwud
-         vAUGL5y54klTAAd7JkrWzxwIS9HQfMv4SYAyX3p5CRy//PbQI3lQnAYi+dMBroNbPL9P
-         q23USt/IEJ3Rv77Ug84j9Xwc4v1RB1Ww91XkyNHZObwHWRPn90Fu19NARw2+qVOanQl9
-         p7iQ==
-X-Gm-Message-State: AOAM53264BIuCQ5VpO8LjPtUSKlPJoA9rVTdU2TMvWijHNiF9wulVWTp
-        qyPe4asDgWmFq79rFbu+r7bY9UKak+8=
-X-Google-Smtp-Source: ABdhPJz2TfzAbBIJqBzng2cj5zaotZzRLvL6/wlz3cGmkr5GPkO9jG7+a46FVlyYEs+vMIVeqbruPJFqxPk=
+        bh=8+FTymzEXuQwrQ48VSTvyp6MK3t+ENPCVe5WmeEaVIc=;
+        b=lW15y8AXkpWW435p1S4No+6ha2uKDWUa2XexG7xCY12zK+fWV0M0rj2mTGPvip4ma7
+         39XKU/kwvc7BgsH03EF/N3xSJQ93hkDMEh2q9n6eyZNsMlCsOmkaKEat9HyKJxej7ZQr
+         7U1NDi7/WKxWUwcf/+AtODGoMmdpBS+vbzFMVBovSaq8cf0slx4+FX/GUb31lzlmzYXJ
+         BPErIQ8oa+xTdR4JREj1+lvgOAPwtWG1IpAZL/2aYqUJtcSpTFPPyJmWWamOWMXEhDfE
+         hraodZve3+6y0x6vQ+TGEHGf+2cQaUy0AwkiGxVhUdgkdcfGILP50ghFV++12d+TQqkr
+         m+aQ==
+X-Gm-Message-State: AOAM531Br/NqobwFfcIUjSSUaLZXYRbCb9+vD6nKyJkZW5SOFQYBGdMV
+        o7Fx8F4p2eZeqxbrVGOYMm+dMB4dkCw=
+X-Google-Smtp-Source: ABdhPJzMNlQ7wgMMMKP2+ozorBxditMXEaVfv9SlYu5XvLbQQ4QNVo7xn2ciiuqzzcwq86sHWkzQRQWNmV4=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:15:13:d580:abeb:bf6d:5726])
- (user=glider job=sendgmr) by 2002:a17:907:1b15:b0:6d7:13bd:dd62 with SMTP id
- mp21-20020a1709071b1500b006d713bddd62mr21844408ejc.673.1650991528244; Tue, 26
- Apr 2022 09:45:28 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 18:42:55 +0200
+ (user=glider job=sendgmr) by 2002:a50:eb87:0:b0:425:c3e2:17a9 with SMTP id
+ y7-20020a50eb87000000b00425c3e217a9mr22640245edr.109.1650991530577; Tue, 26
+ Apr 2022 09:45:30 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 18:42:56 +0200
 In-Reply-To: <20220426164315.625149-1-glider@google.com>
-Message-Id: <20220426164315.625149-27-glider@google.com>
+Message-Id: <20220426164315.625149-28-glider@google.com>
 Mime-Version: 1.0
 References: <20220426164315.625149-1-glider@google.com>
 X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
-Subject: [PATCH v3 26/46] kmsan: handle memory sent to/from USB
+Subject: [PATCH v3 27/46] kmsan: instrumentation.h: add instrumentation_begin_with_regs()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -95,77 +95,78 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Depending on the value of is_out kmsan_handle_urb() KMSAN either
-marks the data copied to the kernel from a USB device as initialized,
-or checks the data sent to the device for being initialized.
+When calling KMSAN-instrumented functions from non-instrumented
+functions, function parameters may not be initialized properly, leading
+to false positive reports. In particular, this happens all the time when
+calling interrupt handlers from `noinstr` IDT entries.
+
+We introduce instrumentation_begin_with_regs(), which calls
+instrumentation_begin() and notifies KMSAN about the beginning of the
+potentially instrumented region by calling
+kmsan_instrumentation_begin(), which:
+ - wipes the current KMSAN state at the beginning of the region, ensuring
+   that the first call of an instrumented function receives initialized
+   parameters (this is a pretty good approximation of having all other
+   instrumented functions receive initialized parameters);
+ - unpoisons the `struct pt_regs` set up by the non-instrumented assembly
+   code.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
-v2:
- -- move kmsan_handle_urb() implementation to this patch
-
-Link: https://linux-review.googlesource.com/id/Ifa67fb72015d4de14c30e971556f99fc8b2ee506
+Link: https://linux-review.googlesource.com/id/I0f5e3372e00bd5fe25ddbf286f7260aae9011858
 ---
- drivers/usb/core/urb.c |  2 ++
- include/linux/kmsan.h  | 15 +++++++++++++++
- mm/kmsan/hooks.c       | 17 +++++++++++++++++
- 3 files changed, 34 insertions(+)
+ include/linux/instrumentation.h |  6 ++++++
+ include/linux/kmsan.h           | 11 +++++++++++
+ mm/kmsan/hooks.c                | 16 ++++++++++++++++
+ 3 files changed, 33 insertions(+)
 
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 33d62d7e3929f..1fe3f23205624 100644
---- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -8,6 +8,7 @@
- #include <linux/bitops.h>
- #include <linux/slab.h>
- #include <linux/log2.h>
-+#include <linux/kmsan-checks.h>
- #include <linux/usb.h>
- #include <linux/wait.h>
- #include <linux/usb/hcd.h>
-@@ -426,6 +427,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
- 			URB_SETUP_MAP_SINGLE | URB_SETUP_MAP_LOCAL |
- 			URB_DMA_SG_COMBINED);
- 	urb->transfer_flags |= (is_out ? URB_DIR_OUT : URB_DIR_IN);
-+	kmsan_handle_urb(urb, is_out);
+diff --git a/include/linux/instrumentation.h b/include/linux/instrumentation.h
+index 24359b4a96053..3bbce9d556381 100644
+--- a/include/linux/instrumentation.h
++++ b/include/linux/instrumentation.h
+@@ -15,6 +15,11 @@
+ })
+ #define instrumentation_begin() __instrumentation_begin(__COUNTER__)
  
- 	if (xfertype != USB_ENDPOINT_XFER_CONTROL &&
- 			dev->state < USB_STATE_CONFIGURED)
++#define instrumentation_begin_with_regs(regs) do {			\
++	__instrumentation_begin(__COUNTER__);				\
++	kmsan_instrumentation_begin(regs);				\
++} while (0)
++
+ /*
+  * Because instrumentation_{begin,end}() can nest, objtool validation considers
+  * _begin() a +1 and _end() a -1 and computes a sum over the instructions.
+@@ -55,6 +60,7 @@
+ #define instrumentation_end() __instrumentation_end(__COUNTER__)
+ #else
+ # define instrumentation_begin()	do { } while(0)
++# define instrumentation_begin_with_regs(regs) kmsan_instrumentation_begin(regs)
+ # define instrumentation_end()		do { } while(0)
+ #endif
+ 
 diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-index d8667161a10c8..55f976b721566 100644
+index 55f976b721566..209a5a2192e22 100644
 --- a/include/linux/kmsan.h
 +++ b/include/linux/kmsan.h
-@@ -20,6 +20,7 @@ struct page;
- struct kmem_cache;
- struct task_struct;
- struct scatterlist;
-+struct urb;
- 
- #ifdef CONFIG_KMSAN
- 
-@@ -236,6 +237,16 @@ void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
- void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
- 			 enum dma_data_direction dir);
+@@ -247,6 +247,13 @@ void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
+  */
+ void kmsan_handle_urb(const struct urb *urb, bool is_out);
  
 +/**
-+ * kmsan_handle_urb() - Handle a USB data transfer.
-+ * @urb:    struct urb pointer.
-+ * @is_out: data transfer direction (true means output to hardware).
-+ *
-+ * If @is_out is true, KMSAN checks the transfer buffer of @urb. Otherwise,
-+ * KMSAN initializes the transfer buffer.
++ * kmsan_instrumentation_begin() - handle instrumentation_begin().
++ * @regs: pointer to struct pt_regs that non-instrumented code passes to
++ *        instrumented code.
 + */
-+void kmsan_handle_urb(const struct urb *urb, bool is_out);
++void kmsan_instrumentation_begin(struct pt_regs *regs);
 +
  #else
  
  static inline void kmsan_init_shadow(void)
-@@ -328,6 +339,10 @@ static inline void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
+@@ -343,6 +350,10 @@ static inline void kmsan_handle_urb(const struct urb *urb, bool is_out)
  {
  }
  
-+static inline void kmsan_handle_urb(const struct urb *urb, bool is_out)
++static inline void kmsan_instrumentation_begin(struct pt_regs *regs)
 +{
 +}
 +
@@ -173,40 +174,29 @@ index d8667161a10c8..55f976b721566 100644
  
  #endif /* _LINUX_KMSAN_H */
 diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-index 8a6947a2a2f22..9aecbf2825837 100644
+index 9aecbf2825837..c20d105c143c1 100644
 --- a/mm/kmsan/hooks.c
 +++ b/mm/kmsan/hooks.c
-@@ -17,6 +17,7 @@
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
-+#include <linux/usb.h>
- 
- #include "../internal.h"
- #include "../slab.h"
-@@ -252,6 +253,22 @@ void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
+@@ -366,3 +366,19 @@ void kmsan_check_memory(const void *addr, size_t size)
+ 					   REASON_ANY);
  }
- EXPORT_SYMBOL(kmsan_copy_to_user);
- 
-+/* Helper function to check an URB. */
-+void kmsan_handle_urb(const struct urb *urb, bool is_out)
-+{
-+	if (!urb)
-+		return;
-+	if (is_out)
-+		kmsan_internal_check_memory(urb->transfer_buffer,
-+					    urb->transfer_buffer_length,
-+					    /*user_addr*/ 0, REASON_SUBMIT_URB);
-+	else
-+		kmsan_internal_unpoison_memory(urb->transfer_buffer,
-+					       urb->transfer_buffer_length,
-+					       /*checked*/ false);
-+}
-+EXPORT_SYMBOL(kmsan_handle_urb);
+ EXPORT_SYMBOL(kmsan_check_memory);
 +
- static void kmsan_handle_dma_page(const void *addr, size_t size,
- 				  enum dma_data_direction dir)
- {
++void kmsan_instrumentation_begin(struct pt_regs *regs)
++{
++	struct kmsan_context_state *state = &kmsan_get_context()->cstate;
++
++	if (state)
++		__memset(state, 0, sizeof(struct kmsan_context_state));
++	if (!kmsan_enabled || !regs)
++		return;
++	/*
++	 * @regs may reside in cpu_entry_area, for which KMSAN does not allocate
++	 * metadata. Do not force an error in that case.
++	 */
++	kmsan_internal_unpoison_memory(regs, sizeof(*regs), /*checked*/ false);
++}
++EXPORT_SYMBOL(kmsan_instrumentation_begin);
 -- 
 2.36.0.rc2.479.g8af0fa9b8e-goog
 
