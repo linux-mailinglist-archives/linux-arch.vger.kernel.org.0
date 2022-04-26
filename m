@@ -2,118 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190FE50EF27
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 05:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E3E50F0D1
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 08:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbiDZDZq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Apr 2022 23:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S241865AbiDZGVO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Apr 2022 02:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243294AbiDZDXf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Apr 2022 23:23:35 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4A5C2E;
-        Mon, 25 Apr 2022 20:20:23 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id p6so1720982pjm.1;
-        Mon, 25 Apr 2022 20:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vZCPCkNI/7Si5Odq1S7dwZOGeQzdpNIUvjGR2/U9O6k=;
-        b=EyziaLk8OVei83W5M78PKIhU/PuJ7eWuZgXv9ndgkj+28nTsRvYu4mH/cg2+hnc1Zm
-         DYNTRPt1jDPhTKdZaUK4ZBOSRlYlEuLLJpqW6q1qnxjNtxRDhonELX5T0TXfKCS1hdlY
-         Jk5RoDwLAOBzf8DxcXt/auBQyKDjG4upu5zMi5AZN+AcvcR90CbYu6l95a5q0mmVM4DG
-         3hU/CgnDqCzyw2G0U78esXLeY2B4EnfVcsubdxLAW4kkKyo4bGPLcEj4N38Ju+HNP7QW
-         D1VlYGRaOycj4dyiuKk6e0PZCCbA/qSdxA1NSWKAIHQ64AyKQlOp+/s3RSsMRz+v/NFq
-         LMdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vZCPCkNI/7Si5Odq1S7dwZOGeQzdpNIUvjGR2/U9O6k=;
-        b=PCj478KZKwKHlBqVEyIXwYAdsx378E0RxdebAzGF9561EbCjZWM2Kyw1cRwwnltuiF
-         4mAd2lA1QHxPxHVvSxDvi7laN6RfrOADe3J3XyEa0jq5ME2owfpeItdhWqORy+wf+Z8x
-         QN8bB7lt9hzWoMzB10mQpHST2rr9DDZYrUEYDXH3xFFN6vKB7VtbPDUeEl71kciG2YOh
-         Jpabwvz+o/yVEwGoU8mHkUwO3BDnsEi3sQBTaU7WGU272Sgb1KKaJYMcL/t1yvpOc6kF
-         Q28yygPpGdi5cCZxFzAddW5viM3lHwUte+SjhjEPNkYiTR7GQN1AGwrIXIeP2FTnm3Pf
-         JHyg==
-X-Gm-Message-State: AOAM530V0mPL54o/Ij/vtUPQM3v5naghAhig6H97QNPDCl2clNSKPn0n
-        lASkTR+Sahe3s6UMyXWfg2E=
-X-Google-Smtp-Source: ABdhPJy9YujCptf6I2+wmYcnwU5YO1zX3cvcZOqdocY3xrI9olbP2K8JXKu22uUVTGX8Xeek4wrgZA==
-X-Received: by 2002:a17:902:a501:b0:153:f956:29f0 with SMTP id s1-20020a170902a50100b00153f95629f0mr21347301plq.120.1650943223130;
-        Mon, 25 Apr 2022 20:20:23 -0700 (PDT)
-Received: from localhost.localdomain ([103.197.71.140])
-        by smtp.gmail.com with ESMTPSA id bo3-20020a17090b090300b001cd4989fecesm790354pjb.26.2022.04.25.20.20.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 20:20:22 -0700 (PDT)
-From:   Stephen Zhang <starzhangzsd@gmail.com>
-To:     arnd@arndb.de, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org
-Cc:     hpa@zytor.com, peterz@infradead.org, laijs@linux.alibaba.com,
-        lihuafei1@huawei.com, fenghua.yu@intel.com,
-        chang.seok.bae@intel.com, zhangshida@kylinos.cn,
-        starzhangzsd@gmail.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] bug: make __warn unconditionally defined
-Date:   Tue, 26 Apr 2022 11:20:07 +0800
-Message-Id: <20220426032007.510245-1-starzhangzsd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S229807AbiDZGVM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 02:21:12 -0400
+X-Greylist: delayed 1230 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 23:18:04 PDT
+Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC35A13CF4
+        for <linux-arch@vger.kernel.org>; Mon, 25 Apr 2022 23:18:03 -0700 (PDT)
+Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
+        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 23Q5vVcY063355
+        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 08:57:31 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
+        q=dns/txt; i=@ics.forth.gr; t=1650952646; x=1653544646;
+        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LL28OJv509egBstFeV2Ig3Njtp/Ayo/hHdAQn0ETPec=;
+        b=gTsKG8h03jM5+ldaoVuW9seg+42gSUPi1UUMCBYzaW37vvv71V2MMiVaWgb68B7h
+        4IAH43tZXzRgrXvJV+Jjfamj/mDoY1Nq2IW/SeNBCIw0jmV20mVosjqlbrg955i/
+        pIC2fv2f2Vb8DaCPh3FBJbuyANOfQLKPzfiqXw5M08FQRPN3U626ODJuMSWSuhsn
+        dY3haNb/mQBK1qGhOEb+byqJlvof3zRgLGaBbybbTmWmKcFv/R6u+DlLhq6rpT8b
+        43n//0dJ7ryCVUhSMRW7US0KE7cqL/dgMJ1lsBNksbyUp9zquZty2cQpyUNYtpnM
+        +EvhIdpaC46Bjypi2RE+2A==;
+X-AuditID: 8b5b014d-f2ab27000000641e-1f-626789c58245
+Received: from enigma.ics.forth.gr (enigma.ics.forth.gr [139.91.151.35])
+        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id C3.C0.25630.5C987626; Tue, 26 Apr 2022 08:57:25 +0300 (EEST)
+X-ICS-AUTH-INFO: Authenticated user: mick at ics.forth.gr
+Message-ID: <ff85cdc4-b1e3-06a3-19fc-a7e1acf99d40@ics.forth.gr>
+Date:   Tue, 26 Apr 2022 08:57:19 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 07/13] riscv: Implement sv48 support
+Content-Language: el-en
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <Atish.Patra@rivosinc.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
+ <20211206104657.433304-8-alexandre.ghiti@canonical.com>
+From:   Nick Kossifidis <mick@ics.forth.gr>
+In-Reply-To: <20211206104657.433304-8-alexandre.ghiti@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Rf0yMcRzH973n6Xmezo5vV/jKsF0MISw/vtTC2HpMfi3ze+Oqx/VL9HQ1
+        vx3ydN1hV6R5dPTjSsVC59JdIlnESlcNpd24MnNNhAiN0cXWf6993p/3+/3ZPgwhf0n6MjEJ
+        ao5PUMYrKCmp35btN6suXRUx5+a5QFyWb/fA/RnZNE7t/eCBLQMijX/0fQT4V+ZDGuutWgK/
+        qUkD2OAUaJz2qZrAjzptJC65WifB9mPtNC5++0qCG/S7sdb2lcR5gonEgvMlwK22HApXfEml
+        cFZ9F4ldracIfPlTL4UFcRR+ZLlF4F7HRWqpLzvwMxOwWQMNJCtqTlPsRU0zyb53uUj2gbaP
+        Zq2ig2Zzy5PZOxmPKfZupRmw5aXpFGt1LmLNpqNsVbuGYgvOnPVg28TN67y3SoOjuPiYFI6f
+        HbJTGv3678F7NfJ9TelGWgNKR+qAJ4PgPNR2wkDpgJSRwzqAclL7wJCwCJk/u8hBlsElqKtM
+        oAeZhFNQY3kHMTT3Qo8vvHHvjIabUZEty83eMAjdtJjdOQQci2wtOslggQ+sYVB9r9EdJIeH
+        kenJOzdTcDq63HL/r5lhPOEKlP5NPeRdgHQW3b+cSeh2Tw5hAKPEYdXisApxmEUcZskFZCmA
+        ypTAgJjIpIBde3h1dICKLwfu94PVlaDD3BNQCyQMqAWIIRQ+sqwpuyLksijl/gMcv2cHnxzP
+        JdWC8QypGCuj326KkEOVUs3Fcdxejv+vShhPX40ERDqrT9pvREQvb6yyLR7Zlg8tE88fmqCI
+        LNqy9nl/Siq89O1glDT8Wr598tQSR2PIVB+bv/lHN0z0exrkLxRKqrbLuaYKXWhlact0LdR3
+        tJnzjBmGLV1SU0H1jnFHRqwpenB//k/HEiGxInZOdzOZ2KrqDj/F+7vCus9Vh60MNlQCB0Gk
+        5RbeE7zM9jFN1lDvS2vHnS0JWv9bMiK3+Pv+1/mynuvqbGeB/vO7muCBhNiqkMS40ECDX/8R
+        r9irB7XWmZ2zjM9ySmQ+T6c9+74hLlJV1t5wRedYMSNPWmesCd8YVhy7bKewynQ32WPiws4X
+        25ufK3+tmly/5rhYOLu/RUEmRSvn+hN8kvIP4RAOL20DAAA=
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Shida Zhang <zhangshida@kylinos.cn>
+Hello Alex,
 
-__warn() was defined when CONFIG_BUG gets defined originally, but
-it was used unconditonally by traps.c. So the idea is to have the
-__warn unconditional.
+On 12/6/21 12:46, Alexandre Ghiti wrote:
+> 
+> +#ifdef CONFIG_64BIT
+> +static void __init disable_pgtable_l4(void)
+> +{
+> +	pgtable_l4_enabled = false;
+> +	kernel_map.page_offset = PAGE_OFFSET_L3;
+> +	satp_mode = SATP_MODE_39;
+> +}
+> +
+> +/*
+> + * There is a simple way to determine if 4-level is supported by the
+> + * underlying hardware: establish 1:1 mapping in 4-level page table mode
+> + * then read SATP to see if the configuration was taken into account
+> + * meaning sv48 is supported.
+> + */
+> +static __init void set_satp_mode(void)
+> +{
+> +	u64 identity_satp, hw_satp;
+> +	uintptr_t set_satp_mode_pmd;
+> +
+> +	set_satp_mode_pmd = ((unsigned long)set_satp_mode) & PMD_MASK;
+> +	create_pgd_mapping(early_pg_dir,
+> +			   set_satp_mode_pmd, (uintptr_t)early_pud,
+> +			   PGDIR_SIZE, PAGE_TABLE);
+> +	create_pud_mapping(early_pud,
+> +			   set_satp_mode_pmd, (uintptr_t)early_pmd,
+> +			   PUD_SIZE, PAGE_TABLE);
+> +	/* Handle the case where set_satp_mode straddles 2 PMDs */
+> +	create_pmd_mapping(early_pmd,
+> +			   set_satp_mode_pmd, set_satp_mode_pmd,
+> +			   PMD_SIZE, PAGE_KERNEL_EXEC);
+> +	create_pmd_mapping(early_pmd,
+> +			   set_satp_mode_pmd + PMD_SIZE,
+> +			   set_satp_mode_pmd + PMD_SIZE,
+> +			   PMD_SIZE, PAGE_KERNEL_EXEC);
+> +
+> +	identity_satp = PFN_DOWN((uintptr_t)&early_pg_dir) | satp_mode;
+> +
+> +	local_flush_tlb_all();
+> +	csr_write(CSR_SATP, identity_satp);
+> +	hw_satp = csr_swap(CSR_SATP, 0ULL);
+> +	local_flush_tlb_all();
+> +
+> +	if (hw_satp != identity_satp)
+> +		disable_pgtable_l4();
+> +
+> +	memset(early_pg_dir, 0, PAGE_SIZE);
+> +	memset(early_pud, 0, PAGE_SIZE);
+> +	memset(early_pmd, 0, PAGE_SIZE);
+> +}
+> +#endif
+> +
 
-Signed-off-by: Shida Zhang <zhangshida@kylinos.cn>
----
- Changelog in v1 -> v2:
- - To have the __warn() unconditional instead.
+When doing the 1:1 mapping you don't take into account the limitation 
+that all bits above 47 need to have the same value as bit 47. If the 
+kernel exists at a high physical address with bit 47 set the 
+corresponding virtual address will be invalid, resulting an instruction 
+fetch fault as the privilege spec mandates. We verified this bug on our 
+prototype. I suggest we re-write this in assembly and do a proper satp 
+switch like we do on head.S, so that we don't need the 1:1 mapping and 
+we also have a way to recover in case this fails.
 
- include/asm-generic/bug.h | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index edb0e2a602a8..ba1f860af38b 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -21,6 +21,12 @@
- #include <linux/panic.h>
- #include <linux/printk.h>
- 
-+struct warn_args;
-+struct pt_regs;
-+
-+void __warn(const char *file, int line, void *caller, unsigned taint,
-+	    struct pt_regs *regs, struct warn_args *args);
-+
- #ifdef CONFIG_BUG
- 
- #ifdef CONFIG_GENERIC_BUG
-@@ -110,11 +116,6 @@ extern __printf(1, 2) void __warn_printk(const char *fmt, ...);
- #endif
- 
- /* used internally by panic.c */
--struct warn_args;
--struct pt_regs;
--
--void __warn(const char *file, int line, void *caller, unsigned taint,
--	    struct pt_regs *regs, struct warn_args *args);
- 
- #ifndef WARN_ON
- #define WARN_ON(condition) ({						\
--- 
-2.30.2
-
+Regards,
+Nick
