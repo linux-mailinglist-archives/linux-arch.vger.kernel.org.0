@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC3D50FCEA
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 14:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE3D50FCF3
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 14:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349924AbiDZMaq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Apr 2022 08:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S1349968AbiDZMa6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Apr 2022 08:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349961AbiDZMam (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 08:30:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0085D6AA48;
-        Tue, 26 Apr 2022 05:27:25 -0700 (PDT)
+        with ESMTP id S1346338AbiDZMan (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 08:30:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D756949C;
+        Tue, 26 Apr 2022 05:27:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650976046; x=1682512046;
+  t=1650976055; x=1682512055;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=JFdiSI2jxgYQfx4wblcqQ6dbj7vYHduQcL+/CQ4c/k4=;
-  b=g9I9/IudkHZUQo8og/kM3hDRTTRDU+nB98+DLrMUPfudz6jWsLxLzim0
-   UH3ZTPug5fWx6GUb20YTRWrtmdHn3VEQrwIVohwGyyC5dNWtLE0g1Hsq0
-   M4HeVlTfsGnlTyQjLVB+PeRt4P47lNMc7uqE4YXV5iNNaBND90JOW8uYS
-   l5BbMJauQ6YlB6cK6LRkpV0/U3pkMFgEMzacBVI0kviCe1RXO0ar+zdGv
-   JUaB1WrJASt3KZ0JwWG6m1lAoeD03MON+ud6sPlqWmcNC0NUa4AJewbDn
-   Zfl3t4x//Nd9v8XmP/sMMobiIxaofbCXD2Tu/MUzh7pKC32g1tUZn9wnA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="252934816"
+  bh=992pMmMSIzYV7y0KEa3yv+K7RV9yrpGUXvIIXw6WJ3Q=;
+  b=MJy89OV44ynfEKiOij8eFG+yHWCoqbe4B//aTNO7VMCfnIDE6u+Qma/K
+   JEXommGtCRVTEE1L2pdHbJad4bLpvmQcaRNMwYU2vT1PMTb0lSdGaf/6J
+   NfNZcNeuymP8ZRncpk4SXVCkn9lIT4QMO75zNimEcmk9LD3Vx6LSiXfzF
+   jRAN0dl3Kjpie/lnlO2Ve3G5x6tS6ZjPDFNSKZrr5EGyKdRGerg2uszhs
+   luhf1JwKS3AjnIrYXMDzTJTAJsYzTg1zyBAj0cRq+wKtPbmzbZSBD1/D1
+   t/qa2//aTMHqfOW6grc/rlQOGwF90VjFPIssiqUiNcW73VUJQs9stbbBf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="265365557"
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="252934816"
+   d="scan'208";a="265365557"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 05:27:25 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 05:27:35 -0700
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579864899"
+   d="scan'208";a="579864945"
 Received: from mmilkovx-mobl.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.47.245])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 05:27:17 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 05:27:26 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
 Cc:     Jiri Slaby <jirislaby@kernel.org>, Lukas Wunner <lukas@wunner.de>,
@@ -58,12 +58,16 @@ Cc:     Jiri Slaby <jirislaby@kernel.org>, Lukas Wunner <lukas@wunner.de>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         linuxppc-dev@lists.ozlabs.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v5 05/10] serial: termbits: ADDRB to indicate 9th bit addressing mode
-Date:   Tue, 26 Apr 2022 15:24:43 +0300
-Message-Id: <20220426122448.38997-6-ilpo.jarvinen@linux.intel.com>
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v5 06/10] serial: General support for multipoint addresses
+Date:   Tue, 26 Apr 2022 15:24:44 +0300
+Message-Id: <20220426122448.38997-7-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220426122448.38997-1-ilpo.jarvinen@linux.intel.com>
 References: <20220426122448.38997-1-ilpo.jarvinen@linux.intel.com>
@@ -71,22 +75,42 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add ADDRB to termbits to indicate 9th bit addressing mode. This change
-is necessary for supporting devices with RS485 multipoint addressing
-[*]. A later patch in the patch series adds support for Synopsys
-Designware UART capable for 9th bit addressing mode. In this mode, 9th
-bit is used to indicate an address (byte) within the communication
-line. The 9th bit addressing mode is selected using ADDRB introduced by
-an earlier patch.
+Add generic support for serial multipoint addressing. Two new ioctls
+are added. TIOCSADDR is used to indicate the destination/receive
+address. TIOCGADDR returns the current address in use. The driver
+should implement set_addr and get_addr to support addressing mode.
+
+Adjust ADDRB clearing to happen only if driver does not provide
+set_addr (=the driver doesn't support address mode).
+
+This change is necessary for supporting devices with RS485 multipoint
+addressing [*]. A following patch in the patch series adds support for
+Synopsys Designware UART capable for 9th bit addressing mode. In this
+mode, 9th bit is used to indicate an address (byte) within the
+communication line. The 9th bit addressing mode is selected using ADDRB
+introduced by the previous patch.
+
+Transmit addresses / receiver filter are specified by setting the flags
+SER_ADDR_DEST and/or SER_ADDR_RECV. When the user supplies the transmit
+address, in the 9bit addressing mode it is sent out immediately with
+the 9th bit set to 1. After that, the subsequent normal data bytes are
+sent with 9th bit as 0 and they are intended to the device with the
+given address. It is up to receiver to enforce the filter using
+SER_ADDR_RECV. When userspace has supplied the receive address, the
+driver is expected to handle the matching of the address and only data
+with that address is forwarded to the user. Both SER_ADDR_DEST and
+SER_ADDR_RECV can be given at the same time in a single call if the
+addresses are the same.
+
+The user can clear the receive filter with SER_ADDR_RECV_CLEAR.
 
 [*] Technically, RS485 is just an electronic spec and does not itself
 specify the 9th bit addressing mode but 9th bit seems at least
@@ -105,313 +129,320 @@ Cc: Michael Ellerman <mpe@ellerman.id.au>
 Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 Cc: Paul Mackerras <paulus@samba.org>
 Cc: linuxppc-dev@lists.ozlabs.org
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>
 Cc: sparclinux@vger.kernel.org
+Cc: Chris Zankel <chris@zankel.net>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: linux-xtensa@linux-xtensa.org
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: linux-arch@vger.kernel.org
-Cc: linux-usb@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- arch/alpha/include/uapi/asm/termbits.h   | 1 +
- arch/mips/include/uapi/asm/termbits.h    | 1 +
- arch/parisc/include/uapi/asm/termbits.h  | 1 +
- arch/powerpc/include/uapi/asm/termbits.h | 1 +
- arch/sparc/include/uapi/asm/termbits.h   | 1 +
- drivers/char/pcmcia/synclink_cs.c        | 2 ++
- drivers/ipack/devices/ipoctal.c          | 2 ++
- drivers/mmc/core/sdio_uart.c             | 2 ++
- drivers/net/usb/hso.c                    | 3 ++-
- drivers/s390/char/tty3270.c              | 3 +++
- drivers/staging/greybus/uart.c           | 2 ++
- drivers/tty/amiserial.c                  | 6 +++++-
- drivers/tty/moxa.c                       | 1 +
- drivers/tty/mxser.c                      | 1 +
- drivers/tty/serial/serial_core.c         | 2 ++
- drivers/tty/synclink_gt.c                | 2 ++
- drivers/tty/tty_ioctl.c                  | 2 ++
- drivers/usb/class/cdc-acm.c              | 2 ++
- drivers/usb/serial/usb-serial.c          | 6 ++++--
- include/uapi/asm-generic/termbits.h      | 1 +
- net/bluetooth/rfcomm/tty.c               | 2 ++
- 21 files changed, 40 insertions(+), 4 deletions(-)
+ .../driver-api/serial/serial-rs485.rst        | 23 ++++++-
+ arch/alpha/include/uapi/asm/ioctls.h          |  3 +
+ arch/mips/include/uapi/asm/ioctls.h           |  3 +
+ arch/parisc/include/uapi/asm/ioctls.h         |  3 +
+ arch/powerpc/include/uapi/asm/ioctls.h        |  3 +
+ arch/sh/include/uapi/asm/ioctls.h             |  3 +
+ arch/sparc/include/uapi/asm/ioctls.h          |  3 +
+ arch/xtensa/include/uapi/asm/ioctls.h         |  3 +
+ drivers/tty/serial/8250/8250_core.c           |  2 +
+ drivers/tty/serial/serial_core.c              | 62 ++++++++++++++++++-
+ drivers/tty/tty_io.c                          |  2 +
+ include/linux/serial_core.h                   |  6 ++
+ include/uapi/asm-generic/ioctls.h             |  3 +
+ include/uapi/linux/serial.h                   |  8 +++
+ 14 files changed, 125 insertions(+), 2 deletions(-)
 
-diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
-index 4575ba34a0ea..0c123e715486 100644
---- a/arch/alpha/include/uapi/asm/termbits.h
-+++ b/arch/alpha/include/uapi/asm/termbits.h
-@@ -180,6 +180,7 @@ struct ktermios {
- #define HUPCL	00040000
+diff --git a/Documentation/driver-api/serial/serial-rs485.rst b/Documentation/driver-api/serial/serial-rs485.rst
+index 6bc824f948f9..2f45f007fa5b 100644
+--- a/Documentation/driver-api/serial/serial-rs485.rst
++++ b/Documentation/driver-api/serial/serial-rs485.rst
+@@ -95,7 +95,28 @@ RS485 Serial Communications
+ 		/* Error handling. See errno. */
+ 	}
  
- #define CLOCAL	00100000
-+#define ADDRB	004000000000		/* address bit */
- #define CMSPAR	  010000000000		/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000		/* flow control */
- 
-diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
-index dfeffba729b7..4732d31b0e4e 100644
---- a/arch/mips/include/uapi/asm/termbits.h
-+++ b/arch/mips/include/uapi/asm/termbits.h
-@@ -182,6 +182,7 @@ struct ktermios {
- #define	 B3500000 0010016
- #define	 B4000000 0010017
- #define CIBAUD	  002003600000	/* input baud rate */
-+#define ADDRB	  004000000000	/* address bit */
- #define CMSPAR	  010000000000	/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000	/* flow control */
- 
-diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-index 40e920f8d683..d6bbd10d92ba 100644
---- a/arch/parisc/include/uapi/asm/termbits.h
-+++ b/arch/parisc/include/uapi/asm/termbits.h
-@@ -159,6 +159,7 @@ struct ktermios {
- #define  B3500000 0010016
- #define  B4000000 0010017
- #define CIBAUD    002003600000		/* input baud rate */
-+#define ADDRB	  004000000000		/* address bit */
- #define CMSPAR    010000000000          /* mark or space (stick) parity */
- #define CRTSCTS   020000000000          /* flow control */
- 
-diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
-index ed18bc61f63d..c6a033732f39 100644
---- a/arch/powerpc/include/uapi/asm/termbits.h
-+++ b/arch/powerpc/include/uapi/asm/termbits.h
-@@ -171,6 +171,7 @@ struct ktermios {
- #define HUPCL	00040000
- 
- #define CLOCAL	00100000
-+#define ADDRB	004000000000		/* address bit */
- #define CMSPAR	  010000000000		/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000		/* flow control */
- 
-diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
-index ce5ad5d0f105..5eb1d547b5c4 100644
---- a/arch/sparc/include/uapi/asm/termbits.h
-+++ b/arch/sparc/include/uapi/asm/termbits.h
-@@ -201,6 +201,7 @@ struct ktermios {
- #define B3500000  0x00001012
- #define B4000000  0x00001013  */
- #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
-+#define ADDRB	  0x20000000  /* address bit */
- #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
- #define CRTSCTS	  0x80000000  /* flow control */
- 
-diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-index 78baba55a8b5..d179b9b57a25 100644
---- a/drivers/char/pcmcia/synclink_cs.c
-+++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -2287,6 +2287,8 @@ static void mgslpc_set_termios(struct tty_struct *tty, struct ktermios *old_term
- 		== RELEVANT_IFLAG(old_termios->c_iflag)))
- 	  return;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
+-5. References
++5. Multipoint Addressing
++========================
 +
- 	mgslpc_change_params(info, tty);
- 
- 	/* Handle transition to B0 status */
-diff --git a/drivers/ipack/devices/ipoctal.c b/drivers/ipack/devices/ipoctal.c
-index 20d2b9ec1227..d66cc9683ebc 100644
---- a/drivers/ipack/devices/ipoctal.c
-+++ b/drivers/ipack/devices/ipoctal.c
-@@ -506,6 +506,8 @@ static void ipoctal_set_termios(struct tty_struct *tty,
- 	struct ipoctal_channel *channel = tty->driver_data;
- 	speed_t baud;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
++   The Linux kernel provides serial_addr structure to handle addressing within
++   multipoint serial communications line such as RS485. 9th bit addressiong mode
++   is enabled by adding ADDRB flag in termios c_cflag.
 +
- 	cflag = tty->termios.c_cflag;
- 
- 	/* Disable and reset everything before change the setup */
-diff --git a/drivers/mmc/core/sdio_uart.c b/drivers/mmc/core/sdio_uart.c
-index 414aa82abc39..f28075952f3e 100644
---- a/drivers/mmc/core/sdio_uart.c
-+++ b/drivers/mmc/core/sdio_uart.c
-@@ -867,6 +867,8 @@ static void sdio_uart_set_termios(struct tty_struct *tty,
- 	if (sdio_uart_claim_func(port) != 0)
- 		return;
- 
-+	tty->termios.c_cflag &= ~ADDRB;
++   Serial core calls device specific set/get_addr in response to TIOCSADDR and
++   TIOCGADDR ioctls with a pointer to serial_addr. Destination and receive
++   address can be specified using serial_addr flags field. Receive address may
++   also be cleared using flags. Once an address is set, the communication
++   can occur only with the particular device and other peers are filtered out.
++   It is left up to the receiver side to enforce the filtering.
 +
- 	sdio_uart_change_speed(port, &tty->termios, old_termios);
- 
- 	/* Handle transition to B0 status */
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index f8221a7acf62..056352618804 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -1099,7 +1099,8 @@ static void _hso_serial_set_termios(struct tty_struct *tty)
- 		~(CSIZE		/* no size */
- 		| PARENB	/* disable parity bit */
- 		| CBAUD		/* clear current baud rate */
--		| CBAUDEX);	/* clear current buad rate */
-+		| CBAUDEX	/* clear current baud rate */
-+		| ADDRB);	/* disable 9th (addr) bit */
- 
- 	tty->termios.c_cflag |= CS8;	/* character size 8 bits */
- 
-diff --git a/drivers/s390/char/tty3270.c b/drivers/s390/char/tty3270.c
-index 5c83f71c1d0e..253d2997a1d3 100644
---- a/drivers/s390/char/tty3270.c
-+++ b/drivers/s390/char/tty3270.c
-@@ -1768,6 +1768,9 @@ tty3270_set_termios(struct tty_struct *tty, struct ktermios *old)
- 	tp = tty->driver_data;
- 	if (!tp)
- 		return;
++   Address flags:
++	- SER_ADDR_RECV: Receive (filter) address.
++	- SER_ADDR_RECV_CLEAR: Clear receive filter (only for TIOCSADDR).
++	- SER_ADDR_DEST: Destination address.
 +
-+	tty->termios.c_cflag &= ~ADDRB;
++   Note: not all devices supporting RS485 support multipoint addressing.
 +
- 	spin_lock_bh(&tp->view.lock);
- 	if (L_ICANON(tty)) {
- 		new = L_ECHO(tty) ? TF_INPUT: TF_INPUTN;
-diff --git a/drivers/staging/greybus/uart.c b/drivers/staging/greybus/uart.c
-index dc4ed0ff1ae2..83e73aefde0f 100644
---- a/drivers/staging/greybus/uart.c
-+++ b/drivers/staging/greybus/uart.c
-@@ -487,6 +487,8 @@ static void gb_tty_set_termios(struct tty_struct *tty,
- 	struct ktermios *termios = &tty->termios;
- 	u8 newctrl = gb_tty->ctrlout;
++6. References
+ =============
  
-+	termios->c_cflag &= ~ADDRB;
+  [1]	include/uapi/linux/serial.h
+diff --git a/arch/alpha/include/uapi/asm/ioctls.h b/arch/alpha/include/uapi/asm/ioctls.h
+index 971311605288..500cab3e1d6b 100644
+--- a/arch/alpha/include/uapi/asm/ioctls.h
++++ b/arch/alpha/include/uapi/asm/ioctls.h
+@@ -125,4 +125,7 @@
+ #define TIOCMIWAIT	0x545C	/* wait for a change on serial input line(s) */
+ #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
+ 
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
 +
- 	newline.rate = cpu_to_le32(tty_get_baud_rate(tty));
- 	newline.format = termios->c_cflag & CSTOPB ?
- 				GB_SERIAL_2_STOP_BITS : GB_SERIAL_1_STOP_BITS;
-diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
-index 533d02b38e02..3ca97007bd6e 100644
---- a/drivers/tty/amiserial.c
-+++ b/drivers/tty/amiserial.c
-@@ -1175,7 +1175,11 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
- {
- 	struct serial_state *info = tty->driver_data;
- 	unsigned long flags;
--	unsigned int cflag = tty->termios.c_cflag;
-+	unsigned int cflag;
+ #endif /* _ASM_ALPHA_IOCTLS_H */
+diff --git a/arch/mips/include/uapi/asm/ioctls.h b/arch/mips/include/uapi/asm/ioctls.h
+index 16aa8a766aec..3859dc46857e 100644
+--- a/arch/mips/include/uapi/asm/ioctls.h
++++ b/arch/mips/include/uapi/asm/ioctls.h
+@@ -96,6 +96,9 @@
+ #define TIOCGISO7816	_IOR('T', 0x42, struct serial_iso7816)
+ #define TIOCSISO7816	_IOWR('T', 0x43, struct serial_iso7816)
+ 
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
 +
-+	tty->termios.c_cflag &= ~ADDRB;
+ /* I hope the range from 0x5480 on is free ... */
+ #define TIOCSCTTY	0x5480		/* become controlling tty */
+ #define TIOCGSOFTCAR	0x5481
+diff --git a/arch/parisc/include/uapi/asm/ioctls.h b/arch/parisc/include/uapi/asm/ioctls.h
+index 82d1148c6379..62337743db64 100644
+--- a/arch/parisc/include/uapi/asm/ioctls.h
++++ b/arch/parisc/include/uapi/asm/ioctls.h
+@@ -86,6 +86,9 @@
+ #define TIOCSTOP	0x5462
+ #define TIOCSLTC	0x5462
+ 
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
 +
-+	cflag = tty->termios.c_cflag;
+ /* Used for packet mode */
+ #define TIOCPKT_DATA		 0
+ #define TIOCPKT_FLUSHREAD	 1
+diff --git a/arch/powerpc/include/uapi/asm/ioctls.h b/arch/powerpc/include/uapi/asm/ioctls.h
+index 2c145da3b774..84fd69ac366a 100644
+--- a/arch/powerpc/include/uapi/asm/ioctls.h
++++ b/arch/powerpc/include/uapi/asm/ioctls.h
+@@ -120,4 +120,7 @@
+ #define TIOCMIWAIT	0x545C	/* wait for a change on serial input line(s) */
+ #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
  
- 	change_speed(tty, info, old_termios);
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
++
+ #endif	/* _ASM_POWERPC_IOCTLS_H */
+diff --git a/arch/sh/include/uapi/asm/ioctls.h b/arch/sh/include/uapi/asm/ioctls.h
+index 11866d4f60e1..f82966b7dba2 100644
+--- a/arch/sh/include/uapi/asm/ioctls.h
++++ b/arch/sh/include/uapi/asm/ioctls.h
+@@ -113,4 +113,7 @@
+ #define TIOCMIWAIT	_IO('T', 92) /* 0x545C */	/* wait for a change on serial input line(s) */
+ #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
  
-diff --git a/drivers/tty/moxa.c b/drivers/tty/moxa.c
-index f3c72ab1476c..07cd88152d58 100644
---- a/drivers/tty/moxa.c
-+++ b/drivers/tty/moxa.c
-@@ -2050,6 +2050,7 @@ static int MoxaPortSetTermio(struct moxa_port *port, struct ktermios *termio,
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
++
+ #endif /* __ASM_SH_IOCTLS_H */
+diff --git a/arch/sparc/include/uapi/asm/ioctls.h b/arch/sparc/include/uapi/asm/ioctls.h
+index 7fd2f5873c9e..e44624c67c79 100644
+--- a/arch/sparc/include/uapi/asm/ioctls.h
++++ b/arch/sparc/include/uapi/asm/ioctls.h
+@@ -125,6 +125,9 @@
+ #define TIOCMIWAIT	0x545C /* Wait for change on serial input line(s) */
+ #define TIOCGICOUNT	0x545D /* Read serial port inline interrupt counts */
  
- 	ofsAddr = port->tableAddr;
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
++
+ /* Kernel definitions */
  
-+	termio->c_cflag &= ~ADDRB;
- 	mode = termio->c_cflag & CSIZE;
- 	if (mode == CS5)
- 		mode = MX_CS5;
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 6ebd3e4ed859..79c542aca1c3 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -577,6 +577,7 @@ static void mxser_change_speed(struct tty_struct *tty, struct ktermios *old_term
- 	struct mxser_port *info = tty->driver_data;
- 	unsigned cflag, cval;
+ /* Used for packet mode */
+diff --git a/arch/xtensa/include/uapi/asm/ioctls.h b/arch/xtensa/include/uapi/asm/ioctls.h
+index 6d4a87296c95..759ca9377f2a 100644
+--- a/arch/xtensa/include/uapi/asm/ioctls.h
++++ b/arch/xtensa/include/uapi/asm/ioctls.h
+@@ -127,4 +127,7 @@
+ #define TIOCMIWAIT	_IO('T', 92) /* wait for a change on serial input line(s) */
+ #define TIOCGICOUNT	0x545D	/* read serial port inline interrupt counts */
  
-+	tty->termios.c_cflag &= ~ADDRB;
- 	cflag = tty->termios.c_cflag;
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
++
+ #endif /* _XTENSA_IOCTLS_H */
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+index 01d30f6ed8fb..f67bc3b76f65 100644
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -1008,6 +1008,8 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
+ 		uart->port.rs485	= up->port.rs485;
+ 		uart->rs485_start_tx	= up->rs485_start_tx;
+ 		uart->rs485_stop_tx	= up->rs485_stop_tx;
++		uart->port.set_addr	= up->port.set_addr;
++		uart->port.get_addr	= up->port.get_addr;
+ 		uart->dma		= up->dma;
  
- 	if (mxser_set_baud(tty, tty_get_baud_rate(tty))) {
+ 		/* Take tx_loadsz from fifosize if it wasn't set separately */
 diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 82a1770dd808..0f397e67eeb0 100644
+index 0f397e67eeb0..5762987bf176 100644
 --- a/drivers/tty/serial/serial_core.c
 +++ b/drivers/tty/serial/serial_core.c
-@@ -1540,6 +1540,8 @@ static void uart_set_termios(struct tty_struct *tty,
+@@ -1397,6 +1397,56 @@ static int uart_set_iso7816_config(struct uart_port *port,
+ 	return 0;
+ }
+ 
++static int uart_set_addr(struct uart_port *port,
++			 struct serial_addr __user *serial_addr_user)
++{
++	struct serial_addr addr;
++	unsigned long flags;
++	int ret;
++
++	if (!port->set_addr)
++		return -ENOTTY;
++
++	if (copy_from_user(&addr, serial_addr_user, sizeof(*serial_addr_user)))
++		return -EFAULT;
++
++	spin_lock_irqsave(&port->lock, flags);
++	ret = port->set_addr(port, &addr);
++	spin_unlock_irqrestore(&port->lock, flags);
++	if (ret)
++		return ret;
++
++	if (copy_to_user(serial_addr_user, &addr, sizeof(addr)))
++		return -EFAULT;
++
++	return 0;
++}
++
++static int uart_get_addr(struct uart_port *port,
++			 struct serial_addr __user *serial_addr_user)
++{
++	struct serial_addr addr;
++	unsigned long flags;
++	int ret;
++
++	if (!port->get_addr)
++		return -ENOTTY;
++
++	if (copy_from_user(&addr, serial_addr_user, sizeof(*serial_addr_user)))
++		return -EFAULT;
++
++	spin_lock_irqsave(&port->lock, flags);
++	ret = port->get_addr(port, &addr);
++	spin_unlock_irqrestore(&port->lock, flags);
++	if (ret)
++		return ret;
++
++	if (copy_to_user(serial_addr_user, &addr, sizeof(addr)))
++		return -EFAULT;
++
++	return 0;
++}
++
+ /*
+  * Called via sys_ioctl.  We can use spin_lock_irq() here.
+  */
+@@ -1474,6 +1524,15 @@ uart_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
+ 	case TIOCGISO7816:
+ 		ret = uart_get_iso7816_config(state->uart_port, uarg);
+ 		break;
++
++	case TIOCSADDR:
++		ret = uart_set_addr(uport, uarg);
++		break;
++
++	case TIOCGADDR:
++		ret = uart_get_addr(uport, uarg);
++		break;
++
+ 	default:
+ 		if (uport->ops->ioctl)
+ 			ret = uport->ops->ioctl(uport, cmd, arg);
+@@ -1540,7 +1599,8 @@ static void uart_set_termios(struct tty_struct *tty,
  		goto out;
  	}
  
-+	tty->termios.c_cflag &= ~ADDRB;
-+
+-	tty->termios.c_cflag &= ~ADDRB;
++	if (!uport->set_addr)
++		tty->termios.c_cflag &= ~ADDRB;
+ 
  	uart_change_speed(tty, state, old_termios);
  	/* reload cflag from termios; port driver may have overridden flags */
- 	cflag = tty->termios.c_cflag;
-diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-index 9bc2a9265277..180f38f0f57a 100644
---- a/drivers/tty/synclink_gt.c
-+++ b/drivers/tty/synclink_gt.c
-@@ -714,6 +714,8 @@ static void set_termios(struct tty_struct *tty, struct ktermios *old_termios)
- 
- 	DBGINFO(("%s set_termios\n", tty->driver->name));
- 
-+	tty->termios.c_cflag &= ~ADDRB;
+diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
+index 8fec1d8648f5..ef22b95e9c79 100644
+--- a/drivers/tty/tty_io.c
++++ b/drivers/tty/tty_io.c
+@@ -2885,6 +2885,8 @@ static long tty_compat_ioctl(struct file *file, unsigned int cmd,
+ 	case TIOCSERGETLSR:
+ 	case TIOCGRS485:
+ 	case TIOCSRS485:
++	case TIOCSADDR:
++	case TIOCGADDR:
+ #ifdef TIOCGETP
+ 	case TIOCGETP:
+ 	case TIOCSETP:
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index cbd5070bc87f..2dd4c4d01c59 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -135,6 +135,12 @@ struct uart_port {
+ 						struct serial_rs485 *rs485);
+ 	int			(*iso7816_config)(struct uart_port *,
+ 						  struct serial_iso7816 *iso7816);
 +
- 	change_params(info);
- 
- 	/* Handle transition to B0 status */
-diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
-index 63181925ec1a..934037d78868 100644
---- a/drivers/tty/tty_ioctl.c
-+++ b/drivers/tty/tty_ioctl.c
-@@ -319,6 +319,8 @@ unsigned char tty_get_frame_size(unsigned int cflag)
- 		bits++;
- 	if (cflag & PARENB)
- 		bits++;
-+	if (cflag & ADDRB)
-+		bits++;
- 
- 	return bits;
- }
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 9b9aea24d58c..fd246ec70da8 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1056,6 +1056,8 @@ static void acm_tty_set_termios(struct tty_struct *tty,
- 	struct usb_cdc_line_coding newline;
- 	int newctrl = acm->ctrlout;
- 
-+	termios->c_cflag &= ~ADDRB;
++	int			(*set_addr)(struct uart_port *p,
++					    struct serial_addr *addr);
++	int			(*get_addr)(struct uart_port *p,
++					    struct serial_addr *addr);
 +
- 	newline.dwDTERate = cpu_to_le32(tty_get_baud_rate(tty));
- 	newline.bCharFormat = termios->c_cflag & CSTOPB ? 2 : 0;
- 	newline.bParityType = termios->c_cflag & PARENB ?
-diff --git a/drivers/usb/serial/usb-serial.c b/drivers/usb/serial/usb-serial.c
-index 24101bd7fcad..8d1d170eb7e6 100644
---- a/drivers/usb/serial/usb-serial.c
-+++ b/drivers/usb/serial/usb-serial.c
-@@ -525,10 +525,12 @@ static void serial_set_termios(struct tty_struct *tty, struct ktermios *old)
+ 	unsigned int		irq;			/* irq number */
+ 	unsigned long		irqflags;		/* irq flags  */
+ 	unsigned int		uartclk;		/* base uart clock */
+diff --git a/include/uapi/asm-generic/ioctls.h b/include/uapi/asm-generic/ioctls.h
+index cdc9f4ca8c27..689743366091 100644
+--- a/include/uapi/asm-generic/ioctls.h
++++ b/include/uapi/asm-generic/ioctls.h
+@@ -106,6 +106,9 @@
+ # define FIOQSIZE	0x5460
+ #endif
  
- 	dev_dbg(&port->dev, "%s\n", __func__);
- 
--	if (port->serial->type->set_termios)
-+	if (port->serial->type->set_termios) {
-+		tty->termios.c_cflag &= ~ADDRB;
- 		port->serial->type->set_termios(tty, port, old);
--	else
-+	} else {
- 		tty_termios_copy_hw(&tty->termios, old);
-+	}
- }
- 
- static int serial_break(struct tty_struct *tty, int break_state)
-diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
-index 2fbaf9ae89dd..e06eaa9cf8be 100644
---- a/include/uapi/asm-generic/termbits.h
-+++ b/include/uapi/asm-generic/termbits.h
-@@ -158,6 +158,7 @@ struct ktermios {
- #define  B3500000 0010016
- #define  B4000000 0010017
- #define CIBAUD	  002003600000	/* input baud rate */
-+#define ADDRB	  004000000000	/* address bit */
- #define CMSPAR	  010000000000	/* mark or space (stick) parity */
- #define CRTSCTS	  020000000000	/* flow control */
- 
-diff --git a/net/bluetooth/rfcomm/tty.c b/net/bluetooth/rfcomm/tty.c
-index ebd78fdbd6e8..832e725f23ab 100644
---- a/net/bluetooth/rfcomm/tty.c
-+++ b/net/bluetooth/rfcomm/tty.c
-@@ -871,6 +871,8 @@ static void rfcomm_tty_set_termios(struct tty_struct *tty, struct ktermios *old)
- 	if (!dev || !dev->dlc || !dev->dlc->session)
- 		return;
- 
-+	new->c_cflag &= ~ADDRB;
++#define TIOCSADDR	_IOWR('T', 0x63, struct serial_addr)
++#define TIOCGADDR	_IOWR('T', 0x64, struct serial_addr)
 +
- 	/* Handle turning off CRTSCTS */
- 	if ((old->c_cflag & CRTSCTS) && !(new->c_cflag & CRTSCTS))
- 		BT_DBG("Turning off CRTSCTS unsupported");
+ /* Used for packet mode */
+ #define TIOCPKT_DATA		 0
+ #define TIOCPKT_FLUSHREAD	 1
+diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+index fa6b16e5fdd8..8cb785ea7087 100644
+--- a/include/uapi/linux/serial.h
++++ b/include/uapi/linux/serial.h
+@@ -149,4 +149,12 @@ struct serial_iso7816 {
+ 	__u32	reserved[5];
+ };
+ 
++struct serial_addr {
++	__u32	flags;
++#define SER_ADDR_RECV			(1 << 0)
++#define SER_ADDR_RECV_CLEAR		(1 << 1)
++#define SER_ADDR_DEST			(1 << 2)
++	__u32	addr;
++};
++
+ #endif /* _UAPI_LINUX_SERIAL_H */
 -- 
 2.30.2
 
