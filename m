@@ -2,41 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944DE50FEA0
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 15:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFD050FF30
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 15:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241840AbiDZNQR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Apr 2022 09:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
+        id S231183AbiDZNkJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Apr 2022 09:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234550AbiDZNQQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 09:16:16 -0400
+        with ESMTP id S230361AbiDZNkJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 09:40:09 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A81566F9D;
-        Tue, 26 Apr 2022 06:13:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFDF41625;
+        Tue, 26 Apr 2022 06:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650978787; x=1682514787;
+  t=1650980221; x=1682516221;
   h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=4mkD7GLX3iLI2eXfIKWZSJugD5xfyLr658aN5QzAUA4=;
-  b=ADYLKnMtbizfbSF1o/kD2nPu5m/Ui0WFrU3lFWaWpeyldIqtefsCMvPT
-   7Lf1JBD5qTLueW1Bg0xoML6zG3vXEb5/rEPz5xOQYqUNpw/8aTn7w7V7B
-   vVKwHhoPnG4DEnNs74Dv3XaWAihV3wOk2X4ned7F849JrnXI0ZyHh7UPu
-   NDeK9NaNglDebUGrE0fGpdI7Ckwj7B7nwAY4aUKUr8NVGUGt7thzVSyBU
-   RRG1T9oqMduxu6E9+OtiYehqk89tvY8r15Dv4qRU2TSXMDGrSsJQURRGP
-   dB6BQwQ/WQYOEvvH8303zUdcWuulUQnfyZ1lUa3aqxcjG3wzn70Ql9SQ/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="263166228"
+   references:mime-version;
+  bh=znIfZ7k0b3tsWKqeY8a7aZ2RvvRTYgQ+kYfB+nCfQQ0=;
+  b=MMJNEsWFI+0DfJs8wJp6M8oM9elNbUXh8fSd8IQ+AShv8/ywTzfvPFHN
+   Sl/GDr+gs4anzFAxGEvAiQd6a2pnKynRJghQZyLk95PLrcex6WWJXc2F6
+   1aZMGnhqWQ5zfjGwFa+ywu4PViyPPHi5lS7HwGO1fBx7wAT99RD3MdW8t
+   hOyiy5PZJaj6VBwHFdh6522W7AvjP0v23nDIKxlEumTh7cfWBWPWqBg9I
+   fgoh4vth8+ZuhBzVc+MDLqV8jiMU4MvsM4AGA2iiXS+jySdoSAqcDgwzx
+   QXgUr+JfAAoWI5Op7/wlfDAjh38GRQmxupg/LYCyFl9kDjzHl69FtRGhm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="263171745"
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="263166228"
+   d="scan'208";a="263171745"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:13:07 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:37:00 -0700
 X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579884765"
+   d="scan'208";a="579897467"
 Received: from mmilkovx-mobl.amr.corp.intel.com ([10.249.47.245])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:12:59 -0700
-Date:   Tue, 26 Apr 2022 16:12:57 +0300 (EEST)
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:36:52 -0700
+Date:   Tue, 26 Apr 2022 16:36:49 +0300 (EEST)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Greg KH <gregkh@linuxfoundation.org>
 cc:     linux-serial <linux-serial@vger.kernel.org>,
@@ -60,17 +60,20 @@ cc:     linux-serial <linux-serial@vger.kernel.org>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         linuxppc-dev@lists.ozlabs.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v5 05/10] serial: termbits: ADDRB to indicate 9th bit
- addressing mode
-In-Reply-To: <Ymfq+jUXfZcNM/P/@kroah.com>
-Message-ID: <b667479-fb27-8712-cec8-938eed179240@linux.intel.com>
-References: <20220426122448.38997-1-ilpo.jarvinen@linux.intel.com> <20220426122448.38997-6-ilpo.jarvinen@linux.intel.com> <Ymfq+jUXfZcNM/P/@kroah.com>
+        sparclinux@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 06/10] serial: General support for multipoint
+ addresses
+In-Reply-To: <YmfsDng2Z04PT3GS@kroah.com>
+Message-ID: <e67014bd-3c32-e7d-2982-a0edb741f3c0@linux.intel.com>
+References: <20220426122448.38997-1-ilpo.jarvinen@linux.intel.com> <20220426122448.38997-7-ilpo.jarvinen@linux.intel.com> <YmfsDng2Z04PT3GS@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1902298920-1650977784=:1644"
-Content-ID: <9e9c7513-c53e-c92d-85d3-28ac5a3a7a22@linux.intel.com>
+Content-Type: multipart/mixed; boundary="8323329-1346511227-1650980220=:1644"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -83,21 +86,41 @@ X-Mailing-List: linux-arch@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1902298920-1650977784=:1644
-Content-Type: text/plain; CHARSET=ISO-8859-15
+--8323329-1346511227-1650980220=:1644
+Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8BIT
-Content-ID: <cd9fe5-9b4f-51fb-d37a-75d923e2ccc1@linux.intel.com>
 
 On Tue, 26 Apr 2022, Greg KH wrote:
 
-> On Tue, Apr 26, 2022 at 03:24:43PM +0300, Ilpo Järvinen wrote:
-> > Add ADDRB to termbits to indicate 9th bit addressing mode. This change
-> > is necessary for supporting devices with RS485 multipoint addressing
-> > [*]. A later patch in the patch series adds support for Synopsys
-> > Designware UART capable for 9th bit addressing mode. In this mode, 9th
-> > bit is used to indicate an address (byte) within the communication
-> > line. The 9th bit addressing mode is selected using ADDRB introduced by
-> > an earlier patch.
+> On Tue, Apr 26, 2022 at 03:24:44PM +0300, Ilpo Järvinen wrote:
+> > Add generic support for serial multipoint addressing. Two new ioctls
+> > are added. TIOCSADDR is used to indicate the destination/receive
+> > address. TIOCGADDR returns the current address in use. The driver
+> > should implement set_addr and get_addr to support addressing mode.
+> > 
+> > Adjust ADDRB clearing to happen only if driver does not provide
+> > set_addr (=the driver doesn't support address mode).
+> > 
+> > This change is necessary for supporting devices with RS485 multipoint
+> > addressing [*]. A following patch in the patch series adds support for
+> > Synopsys Designware UART capable for 9th bit addressing mode. In this
+> > mode, 9th bit is used to indicate an address (byte) within the
+> > communication line. The 9th bit addressing mode is selected using ADDRB
+> > introduced by the previous patch.
+> > 
+> > Transmit addresses / receiver filter are specified by setting the flags
+> > SER_ADDR_DEST and/or SER_ADDR_RECV. When the user supplies the transmit
+> > address, in the 9bit addressing mode it is sent out immediately with
+> > the 9th bit set to 1. After that, the subsequent normal data bytes are
+> > sent with 9th bit as 0 and they are intended to the device with the
+> > given address. It is up to receiver to enforce the filter using
+> > SER_ADDR_RECV. When userspace has supplied the receive address, the
+> > driver is expected to handle the matching of the address and only data
+> > with that address is forwarded to the user. Both SER_ADDR_DEST and
+> > SER_ADDR_RECV can be given at the same time in a single call if the
+> > addresses are the same.
+> > 
+> > The user can clear the receive filter with SER_ADDR_RECV_CLEAR.
 > > 
 > > [*] Technically, RS485 is just an electronic spec and does not itself
 > > specify the 9th bit addressing mode but 9th bit seems at least
@@ -116,137 +139,61 @@ On Tue, 26 Apr 2022, Greg KH wrote:
 > > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 > > Cc: Paul Mackerras <paulus@samba.org>
 > > Cc: linuxppc-dev@lists.ozlabs.org
+> > Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > Cc: Rich Felker <dalias@libc.org>
+> > Cc: linux-sh@vger.kernel.org
 > > Cc: "David S. Miller" <davem@davemloft.net>
 > > Cc: sparclinux@vger.kernel.org
+> > Cc: Chris Zankel <chris@zankel.net>
+> > Cc: Max Filippov <jcmvbkbc@gmail.com>
+> > Cc: linux-xtensa@linux-xtensa.org
 > > Cc: Arnd Bergmann <arnd@arndb.de>
 > > Cc: linux-arch@vger.kernel.org
-> > Cc: linux-usb@vger.kernel.org
+> > Cc: linux-doc@vger.kernel.org
 > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > > ---
-> >  arch/alpha/include/uapi/asm/termbits.h   | 1 +
-> >  arch/mips/include/uapi/asm/termbits.h    | 1 +
-> >  arch/parisc/include/uapi/asm/termbits.h  | 1 +
-> >  arch/powerpc/include/uapi/asm/termbits.h | 1 +
-> >  arch/sparc/include/uapi/asm/termbits.h   | 1 +
-> >  drivers/char/pcmcia/synclink_cs.c        | 2 ++
-> >  drivers/ipack/devices/ipoctal.c          | 2 ++
-> >  drivers/mmc/core/sdio_uart.c             | 2 ++
-> >  drivers/net/usb/hso.c                    | 3 ++-
-> >  drivers/s390/char/tty3270.c              | 3 +++
-> >  drivers/staging/greybus/uart.c           | 2 ++
-> >  drivers/tty/amiserial.c                  | 6 +++++-
-> >  drivers/tty/moxa.c                       | 1 +
-> >  drivers/tty/mxser.c                      | 1 +
-> >  drivers/tty/serial/serial_core.c         | 2 ++
-> >  drivers/tty/synclink_gt.c                | 2 ++
-> >  drivers/tty/tty_ioctl.c                  | 2 ++
-> >  drivers/usb/class/cdc-acm.c              | 2 ++
-> >  drivers/usb/serial/usb-serial.c          | 6 ++++--
-> >  include/uapi/asm-generic/termbits.h      | 1 +
-> >  net/bluetooth/rfcomm/tty.c               | 2 ++
-> >  21 files changed, 40 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
-> > index 4575ba34a0ea..0c123e715486 100644
-> > --- a/arch/alpha/include/uapi/asm/termbits.h
-> > +++ b/arch/alpha/include/uapi/asm/termbits.h
-> > @@ -180,6 +180,7 @@ struct ktermios {
-> >  #define HUPCL	00040000
-> >  
-> >  #define CLOCAL	00100000
-> > +#define ADDRB	004000000000		/* address bit */
-> >  #define CMSPAR	  010000000000		/* mark or space (stick) parity */
-> >  #define CRTSCTS	  020000000000		/* flow control */
-> >  
-> > diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
-> > index dfeffba729b7..4732d31b0e4e 100644
-> > --- a/arch/mips/include/uapi/asm/termbits.h
-> > +++ b/arch/mips/include/uapi/asm/termbits.h
-> > @@ -182,6 +182,7 @@ struct ktermios {
-> >  #define	 B3500000 0010016
-> >  #define	 B4000000 0010017
-> >  #define CIBAUD	  002003600000	/* input baud rate */
-> > +#define ADDRB	  004000000000	/* address bit */
-> >  #define CMSPAR	  010000000000	/* mark or space (stick) parity */
-> >  #define CRTSCTS	  020000000000	/* flow control */
-> >  
-> > diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-> > index 40e920f8d683..d6bbd10d92ba 100644
-> > --- a/arch/parisc/include/uapi/asm/termbits.h
-> > +++ b/arch/parisc/include/uapi/asm/termbits.h
-> > @@ -159,6 +159,7 @@ struct ktermios {
-> >  #define  B3500000 0010016
-> >  #define  B4000000 0010017
-> >  #define CIBAUD    002003600000		/* input baud rate */
-> > +#define ADDRB	  004000000000		/* address bit */
-> 
-> tabs where the rest were not?
-> 
-> >  #define CMSPAR    010000000000          /* mark or space (stick) parity */
-> >  #define CRTSCTS   020000000000          /* flow control */
-> >  
-> > diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
-> > index ed18bc61f63d..c6a033732f39 100644
-> > --- a/arch/powerpc/include/uapi/asm/termbits.h
-> > +++ b/arch/powerpc/include/uapi/asm/termbits.h
-> > @@ -171,6 +171,7 @@ struct ktermios {
-> >  #define HUPCL	00040000
-> >  
-> >  #define CLOCAL	00100000
-> > +#define ADDRB	004000000000		/* address bit */
-> >  #define CMSPAR	  010000000000		/* mark or space (stick) parity */
-> >  #define CRTSCTS	  020000000000		/* flow control */
-> >  
-> > diff --git a/arch/sparc/include/uapi/asm/termbits.h b/arch/sparc/include/uapi/asm/termbits.h
-> > index ce5ad5d0f105..5eb1d547b5c4 100644
-> > --- a/arch/sparc/include/uapi/asm/termbits.h
-> > +++ b/arch/sparc/include/uapi/asm/termbits.h
-> > @@ -201,6 +201,7 @@ struct ktermios {
-> >  #define B3500000  0x00001012
-> >  #define B4000000  0x00001013  */
-> >  #define CIBAUD	  0x100f0000  /* input baud rate (not used) */
-> > +#define ADDRB	  0x20000000  /* address bit */
-> >  #define CMSPAR	  0x40000000  /* mark or space (stick) parity */
-> >  #define CRTSCTS	  0x80000000  /* flow control */
-> 
-> Why all the different values?  Can't we pick one and use it for all
-> arches?  Having these be different in different arches and userspace
-> should not be a thing for new fields, right?
-> 
-> > diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/synclink_cs.c
-> > index 78baba55a8b5..d179b9b57a25 100644
-> > --- a/drivers/char/pcmcia/synclink_cs.c
-> > +++ b/drivers/char/pcmcia/synclink_cs.c
-> > @@ -2287,6 +2287,8 @@ static void mgslpc_set_termios(struct tty_struct *tty, struct ktermios *old_term
-> >  		== RELEVANT_IFLAG(old_termios->c_iflag)))
-> >  	  return;
-> >  
-> > +	tty->termios.c_cflag &= ~ADDRB;
-> 
-> Having to do this for all drivers feels wrong.  It isn't needed for any
-> other flag, right?
 
-My understanding is that it would be needed for other flags too, it's just 
-that many drivers probably haven't cared enough. Some drivers certainly 
-clear a few flags they don't support while others don't clear any but
-it's also challenging to determine it which flags which driver supports. 
-How bad the impact is per flag varies.
+> > diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+> > index fa6b16e5fdd8..8cb785ea7087 100644
+> > --- a/include/uapi/linux/serial.h
+> > +++ b/include/uapi/linux/serial.h
+> > @@ -149,4 +149,12 @@ struct serial_iso7816 {
+> >  	__u32	reserved[5];
+> >  };
+> >  
+> > +struct serial_addr {
+> > +	__u32	flags;
+> > +#define SER_ADDR_RECV			(1 << 0)
+> > +#define SER_ADDR_RECV_CLEAR		(1 << 1)
+> > +#define SER_ADDR_DEST			(1 << 2)
+> 
+> You never check for invalid flags being sent to the kernel, which means
+> this api can never change in the future to add new flags :(
 
-> That makes me really not like this change as it
-> feels very ackward and
-> yet-another-thing-a-serial-driver-has-to-remember.
+Ok, so you mean the general level should to check
+if (...->flags & ~(SER_ADDR_FLAGS_ALL))
+	return -EINVAL;
+?
 
-It would be nice to have some mask for supported bits per driver. But it
-will be challenging to add at this point and I'm far from sure I could get 
-them right per driver even if carefully trying to.
+There's some code in the driver that detects invalid flag combinations 
+(in 10/10) but I guess it doesn't satisfies what you're after. It is 
+similar to how serial_rs485 flags is handled, that is, clearing flags it 
+didn't handle (when it can) and returning -EINVAL for impossible 
+combinations such as getting both RECV and DEST addr at the same time.
+I don't know if serial_rs485 flags is a good example at all, it certainly 
+doesn't check whether bits are set where there's no flag defined.
 
-> And as you are wanting to pass this bit to userspace, where is that
-> documented?
+> And what about struct serial_rs485?  Shouldn't that be used here
+> instead?  Why do we need a new ioctl and structure?
 
-Ah, I probably should add it to driver-api/serial/driver.rst too but ADDRB
-is certainly mentioned alongside with other addressing mode documentation
-I wrote for the later changes in this series.
+It is possible (Lukas already mentioned that option too). It just means
+this will be available only on RS485 which could well be enough but Andy 
+mentioned he has in the past come across addressing mode also with some 
+RS232 thing (he didn't remember details anymore and it could be 
+insignificant for the real world of today).
+
 
 -- 
  i.
---8323329-1902298920-1650977784=:1644--
+
+--8323329-1346511227-1650980220=:1644--
