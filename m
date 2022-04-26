@@ -2,164 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E3E50F0D1
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 08:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3C850F396
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Apr 2022 10:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241865AbiDZGVO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Apr 2022 02:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
+        id S1344572AbiDZIZY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Apr 2022 04:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiDZGVM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 02:21:12 -0400
-X-Greylist: delayed 1230 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Apr 2022 23:18:04 PDT
-Received: from mailgate.ics.forth.gr (mailgate.ics.forth.gr [139.91.1.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC35A13CF4
-        for <linux-arch@vger.kernel.org>; Mon, 25 Apr 2022 23:18:03 -0700 (PDT)
-Received: from av3.ics.forth.gr (av3in.ics.forth.gr [139.91.1.77])
-        by mailgate.ics.forth.gr (8.15.2/ICS-FORTH/V10-1.8-GATE) with ESMTP id 23Q5vVcY063355
-        for <linux-arch@vger.kernel.org>; Tue, 26 Apr 2022 08:57:31 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; d=ics.forth.gr; s=av; c=relaxed/simple;
-        q=dns/txt; i=@ics.forth.gr; t=1650952646; x=1653544646;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=LL28OJv509egBstFeV2Ig3Njtp/Ayo/hHdAQn0ETPec=;
-        b=gTsKG8h03jM5+ldaoVuW9seg+42gSUPi1UUMCBYzaW37vvv71V2MMiVaWgb68B7h
-        4IAH43tZXzRgrXvJV+Jjfamj/mDoY1Nq2IW/SeNBCIw0jmV20mVosjqlbrg955i/
-        pIC2fv2f2Vb8DaCPh3FBJbuyANOfQLKPzfiqXw5M08FQRPN3U626ODJuMSWSuhsn
-        dY3haNb/mQBK1qGhOEb+byqJlvof3zRgLGaBbybbTmWmKcFv/R6u+DlLhq6rpT8b
-        43n//0dJ7ryCVUhSMRW7US0KE7cqL/dgMJ1lsBNksbyUp9zquZty2cQpyUNYtpnM
-        +EvhIdpaC46Bjypi2RE+2A==;
-X-AuditID: 8b5b014d-f2ab27000000641e-1f-626789c58245
-Received: from enigma.ics.forth.gr (enigma.ics.forth.gr [139.91.151.35])
-        by av3.ics.forth.gr (Symantec Messaging Gateway) with SMTP id C3.C0.25630.5C987626; Tue, 26 Apr 2022 08:57:25 +0300 (EEST)
-X-ICS-AUTH-INFO: Authenticated user: mick at ics.forth.gr
-Message-ID: <ff85cdc4-b1e3-06a3-19fc-a7e1acf99d40@ics.forth.gr>
-Date:   Tue, 26 Apr 2022 08:57:19 +0300
+        with ESMTP id S1344591AbiDZIZX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Apr 2022 04:25:23 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF903A5C3;
+        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id bx5so8040613pjb.3;
+        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ry61oQOw1TxefJWFjV86DTJxbbTM3u3aRIyja+cc07w=;
+        b=hYJberNWpJnZgnTf9pcAYGQU8G2uGwQ2H/D/mBrao6r6L3a1I5qEFJkqTZs4lJea0q
+         ctvAk6eqcD2ijFAs7BGRcE0NXBVDrJsP5Ff2/ZUetBi7VGCIMp/dr+E++nYuYJQ6Jlh9
+         gp5hFY/7219vQgRGSf5PglWn/eBG4mcEu+hNp/JWpOviLN4sPKKOVq8/SzswSPVvMLHM
+         APUJGGc246PwSz7zG0VxqC2cETjCATQuy/z3U5uJn7sCQlBNhhMzS2IkHTH6euQ6H/Kw
+         Hj0x+4nk/QT4/kzlUQAuwXJjB3vjImdFqxox0NBReIszeeZNyysFeZKCwUO/DOlKYyEx
+         s5pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ry61oQOw1TxefJWFjV86DTJxbbTM3u3aRIyja+cc07w=;
+        b=miiCMD2tsr/YmB+jQkQXDk2/oR5y0tKJihe8whwCnVkKY060X7mvbBU0cQ2I/vkIX0
+         bOhxeulxbKhuJfCg2xTfrzk7UaWLijm4pVVfacHcq+c/yILJ3gO2Xlun8NKS5zRcgbqG
+         55CQtzIpms4FzQybpm7aH25nEC7RogOY+OQ1M40ohX5cwC8/YzWJ8VJY6QqxkKXJPspP
+         Z+Vt+w6HbmH6jV8ZlLXvBpN0gjc+d9wL8IRmfmamYln6copYez+WPEGmmwpyvIfYZEhH
+         /TmCBgFYzmucrzOpCekJhr70h+OtVlnaakJworPWRM58uHsZ+1P1GHs44wrdsmq7ANsS
+         cq+g==
+X-Gm-Message-State: AOAM531nd6bN63Ktv12vyWZp9ue0gBr/a7KcH7dFhQ6PUphyiUo3f7i+
+        xw+d+nVsdHNgiGwwQly4HlA=
+X-Google-Smtp-Source: ABdhPJxNiF8zanUQKYJ607EC0HUpOomtgJ/TOStVYGUmh9XKjhgzkTyZdlRXyDGwNaSRPD1rBszaCA==
+X-Received: by 2002:a17:90b:304:b0:1d9:752b:437f with SMTP id ay4-20020a17090b030400b001d9752b437fmr10486148pjb.242.1650961336347;
+        Tue, 26 Apr 2022 01:22:16 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.111])
+        by smtp.gmail.com with ESMTPSA id s61-20020a17090a69c300b001cd4c118b07sm1879143pjj.16.2022.04.26.01.22.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 01:22:15 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Mengen Sun <mengensun@tencent.com>
+Subject: [PATCH] bitops: remove unnecessary assignment in fls()
+Date:   Tue, 26 Apr 2022 16:21:55 +0800
+Message-Id: <20220426082155.10571-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 07/13] riscv: Implement sv48 support
-Content-Language: el-en
-To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Zong Li <zong.li@sifive.com>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <Atish.Patra@rivosinc.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        panqinglin2020@iscas.ac.cn, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org
-References: <20211206104657.433304-1-alexandre.ghiti@canonical.com>
- <20211206104657.433304-8-alexandre.ghiti@canonical.com>
-From:   Nick Kossifidis <mick@ics.forth.gr>
-In-Reply-To: <20211206104657.433304-8-alexandre.ghiti@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Rf0yMcRzH973n6Xmezo5vV/jKsF0MISw/vtTC2HpMfi3ze+Oqx/VL9HQ1
-        vx3ydN1hV6R5dPTjSsVC59JdIlnESlcNpd24MnNNhAiN0cXWf6993p/3+/3ZPgwhf0n6MjEJ
-        ao5PUMYrKCmp35btN6suXRUx5+a5QFyWb/fA/RnZNE7t/eCBLQMijX/0fQT4V+ZDGuutWgK/
-        qUkD2OAUaJz2qZrAjzptJC65WifB9mPtNC5++0qCG/S7sdb2lcR5gonEgvMlwK22HApXfEml
-        cFZ9F4ldracIfPlTL4UFcRR+ZLlF4F7HRWqpLzvwMxOwWQMNJCtqTlPsRU0zyb53uUj2gbaP
-        Zq2ig2Zzy5PZOxmPKfZupRmw5aXpFGt1LmLNpqNsVbuGYgvOnPVg28TN67y3SoOjuPiYFI6f
-        HbJTGv3678F7NfJ9TelGWgNKR+qAJ4PgPNR2wkDpgJSRwzqAclL7wJCwCJk/u8hBlsElqKtM
-        oAeZhFNQY3kHMTT3Qo8vvHHvjIabUZEty83eMAjdtJjdOQQci2wtOslggQ+sYVB9r9EdJIeH
-        kenJOzdTcDq63HL/r5lhPOEKlP5NPeRdgHQW3b+cSeh2Tw5hAKPEYdXisApxmEUcZskFZCmA
-        ypTAgJjIpIBde3h1dICKLwfu94PVlaDD3BNQCyQMqAWIIRQ+sqwpuyLksijl/gMcv2cHnxzP
-        JdWC8QypGCuj326KkEOVUs3Fcdxejv+vShhPX40ERDqrT9pvREQvb6yyLR7Zlg8tE88fmqCI
-        LNqy9nl/Siq89O1glDT8Wr598tQSR2PIVB+bv/lHN0z0exrkLxRKqrbLuaYKXWhlact0LdR3
-        tJnzjBmGLV1SU0H1jnFHRqwpenB//k/HEiGxInZOdzOZ2KrqDj/F+7vCus9Vh60MNlQCB0Gk
-        5RbeE7zM9jFN1lDvS2vHnS0JWv9bMiK3+Pv+1/mynuvqbGeB/vO7muCBhNiqkMS40ECDX/8R
-        r9irB7XWmZ2zjM9ySmQ+T6c9+74hLlJV1t5wRedYMSNPWmesCd8YVhy7bKewynQ32WPiws4X
-        25ufK3+tmly/5rhYOLu/RUEmRSvn+hN8kvIP4RAOL20DAAA=
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Alex,
+From: Menglong Dong <imagedong@tencent.com>
 
-On 12/6/21 12:46, Alexandre Ghiti wrote:
-> 
-> +#ifdef CONFIG_64BIT
-> +static void __init disable_pgtable_l4(void)
-> +{
-> +	pgtable_l4_enabled = false;
-> +	kernel_map.page_offset = PAGE_OFFSET_L3;
-> +	satp_mode = SATP_MODE_39;
-> +}
-> +
-> +/*
-> + * There is a simple way to determine if 4-level is supported by the
-> + * underlying hardware: establish 1:1 mapping in 4-level page table mode
-> + * then read SATP to see if the configuration was taken into account
-> + * meaning sv48 is supported.
-> + */
-> +static __init void set_satp_mode(void)
-> +{
-> +	u64 identity_satp, hw_satp;
-> +	uintptr_t set_satp_mode_pmd;
-> +
-> +	set_satp_mode_pmd = ((unsigned long)set_satp_mode) & PMD_MASK;
-> +	create_pgd_mapping(early_pg_dir,
-> +			   set_satp_mode_pmd, (uintptr_t)early_pud,
-> +			   PGDIR_SIZE, PAGE_TABLE);
-> +	create_pud_mapping(early_pud,
-> +			   set_satp_mode_pmd, (uintptr_t)early_pmd,
-> +			   PUD_SIZE, PAGE_TABLE);
-> +	/* Handle the case where set_satp_mode straddles 2 PMDs */
-> +	create_pmd_mapping(early_pmd,
-> +			   set_satp_mode_pmd, set_satp_mode_pmd,
-> +			   PMD_SIZE, PAGE_KERNEL_EXEC);
-> +	create_pmd_mapping(early_pmd,
-> +			   set_satp_mode_pmd + PMD_SIZE,
-> +			   set_satp_mode_pmd + PMD_SIZE,
-> +			   PMD_SIZE, PAGE_KERNEL_EXEC);
-> +
-> +	identity_satp = PFN_DOWN((uintptr_t)&early_pg_dir) | satp_mode;
-> +
-> +	local_flush_tlb_all();
-> +	csr_write(CSR_SATP, identity_satp);
-> +	hw_satp = csr_swap(CSR_SATP, 0ULL);
-> +	local_flush_tlb_all();
-> +
-> +	if (hw_satp != identity_satp)
-> +		disable_pgtable_l4();
-> +
-> +	memset(early_pg_dir, 0, PAGE_SIZE);
-> +	memset(early_pud, 0, PAGE_SIZE);
-> +	memset(early_pmd, 0, PAGE_SIZE);
-> +}
-> +#endif
-> +
+The last bits left move for the various 'x' in fls() is unnecessary,
+and remove it.
 
-When doing the 1:1 mapping you don't take into account the limitation 
-that all bits above 47 need to have the same value as bit 47. If the 
-kernel exists at a high physical address with bit 47 set the 
-corresponding virtual address will be invalid, resulting an instruction 
-fetch fault as the privilege spec mandates. We verified this bug on our 
-prototype. I suggest we re-write this in assembly and do a proper satp 
-switch like we do on head.S, so that we don't need the 1:1 mapping and 
-we also have a way to recover in case this fails.
+Signed-off-by: Mengen Sun <mengensun@tencent.com>
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+---
+ include/asm-generic/bitops/fls.h       | 4 +---
+ tools/include/asm-generic/bitops/fls.h | 4 +---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-Regards,
-Nick
+diff --git a/include/asm-generic/bitops/fls.h b/include/asm-generic/bitops/fls.h
+index b168bb10e1be..07e5cdfc3b98 100644
+--- a/include/asm-generic/bitops/fls.h
++++ b/include/asm-generic/bitops/fls.h
+@@ -32,10 +32,8 @@ static __always_inline int fls(unsigned int x)
+ 		x <<= 2;
+ 		r -= 2;
+ 	}
+-	if (!(x & 0x80000000u)) {
+-		x <<= 1;
++	if (!(x & 0x80000000u))
+ 		r -= 1;
+-	}
+ 	return r;
+ }
+ 
+diff --git a/tools/include/asm-generic/bitops/fls.h b/tools/include/asm-generic/bitops/fls.h
+index b168bb10e1be..07e5cdfc3b98 100644
+--- a/tools/include/asm-generic/bitops/fls.h
++++ b/tools/include/asm-generic/bitops/fls.h
+@@ -32,10 +32,8 @@ static __always_inline int fls(unsigned int x)
+ 		x <<= 2;
+ 		r -= 2;
+ 	}
+-	if (!(x & 0x80000000u)) {
+-		x <<= 1;
++	if (!(x & 0x80000000u))
+ 		r -= 1;
+-	}
+ 	return r;
+ }
+ 
+-- 
+2.36.0
+
