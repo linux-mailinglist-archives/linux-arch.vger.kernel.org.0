@@ -2,59 +2,61 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3AE51218B
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Apr 2022 20:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A7E512286
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Apr 2022 21:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiD0Sv2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Apr 2022 14:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S233054AbiD0T1Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Apr 2022 15:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiD0SvB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 14:51:01 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 784617DE02;
-        Wed, 27 Apr 2022 11:36:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8430D1F37B;
-        Wed, 27 Apr 2022 18:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651084586; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPGj7n/vA6ah11cM3Ov68FdS/0km35hEepQltyzPhB8=;
-        b=u7XvmDwiqRHIocWGiLAYcscLlu02y9WmeQ1USlJ/XSK66O2hqcuH1uRea760zpnR4rh00j
-        3GyKDD9HMLZD5nTnnOihWYk0kshZybRNljb/ntBP/bERvhcWLw7uEpOak5MRTm3u4T7Uz5
-        E4o3/r0i9xxCMbEPqV+JO0KaNPcHmuE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA8DC13A39;
-        Wed, 27 Apr 2022 18:36:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lD+1JymNaWJ0XQAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 27 Apr 2022 18:36:25 +0000
-Message-ID: <3d85dccb-7a22-1701-5717-8efd08b7a50c@suse.com>
-Date:   Wed, 27 Apr 2022 20:36:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
+        with ESMTP id S233183AbiD0T1X (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 15:27:23 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA20932D;
+        Wed, 27 Apr 2022 12:24:10 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id k12so4853168lfr.9;
+        Wed, 27 Apr 2022 12:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=pmg9eRfQpwcLMR5lkJg14lCHYf1jgo1mZ8R/uEh2NcM=;
+        b=dgGddCVJMZenF3RahHHFuLmMOw5tyQ9QfPuTkQWIWU2Qil2Cn3gpire3r84vt/zxxb
+         E8Kq75bD5kabWgZ31jZQl9FL9ySi4AVbeIB+vV1gamCoouQuDxbcFdkCNRifSn5jcyIu
+         9PgRZUGFf4sU3Y2Y5J5wnjchOddTK0+u6wjiO6aJdhpOThZNWJGBNd7CMPpyMqaKUPpz
+         Sl9X3JHmrjWUenjAPR9EEqpY4IX/LZXG2eIIqXczUjT7dEEpbmtOywC5NgdmS1QGpvte
+         lcekBiOeNQvbYveziicyBVl8FjSNJDKJ1yAEEo4gzBVlj7xdlehklvpgxDMWhk2AhZGB
+         sGjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pmg9eRfQpwcLMR5lkJg14lCHYf1jgo1mZ8R/uEh2NcM=;
+        b=keBRWrE0YnJXCQwCJGvFV3Dn+xppYiCg2OI39WM4mvRaw1bOVcnFbNcrJKpz5So9PY
+         WvAgzUwCtaaDnxLshGm7hF5Ky6pBGjLghvEQkG9/v/kEVTjYhZlkZF0MBjCBP0zTfxB1
+         HusMwc9fTgmP7iWmSxH8l8aooYqg/z3f/E0FvGLo86/1vZxN0STFGpqs+2blXNAhaAH3
+         PtcLVdzgpg/pEduHB7k/MuMpsZgKbs9NXSMGHnIgp4GOUzopGhVVAJYHGqnaCWOhEqxw
+         pZPSaMlNcRatzasH9BXXluSIl2OP+Iyn20u2PATT+fMlV4we6Gvx+550NV6xj1HKij9s
+         DWXA==
+X-Gm-Message-State: AOAM53287GHw5piiZoznz8oS9ljaocS6UiV6kea3Knf01bcr0uCE1/iP
+        6wGB+QnyG0uNXZ6x1F0Sb58=
+X-Google-Smtp-Source: ABdhPJzo+xYrfyRoYNmBe0lc6s+9QZp/3p32wuIOdd0rLs+DCuZcQyF13esAG5AU3FOGUaqQXyA1Nw==
+X-Received: by 2002:ac2:5a47:0:b0:471:fdbe:910b with SMTP id r7-20020ac25a47000000b00471fdbe910bmr14912506lfn.315.1651087448735;
+        Wed, 27 Apr 2022 12:24:08 -0700 (PDT)
+Received: from [192.168.1.7] ([212.22.223.21])
+        by smtp.gmail.com with ESMTPSA id p16-20020a056512313000b004722373eda4sm439639lfd.92.2022.04.27.12.24.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 12:24:08 -0700 (PDT)
 Subject: Re: [PATCH v2 2/2] virtio: replace
  arch_has_restricted_virtio_memory_access()
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        x86@kernel.org, linux-s390@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Christian Borntraeger <borntraeger@linux.ibm.com>,
@@ -63,7 +65,7 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        KY Srinivasan <kys@microsoft.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
         Haiyang Zhang <haiyangz@microsoft.com>,
         Stephen Hemminger <sthemmin@microsoft.com>,
         Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
@@ -71,226 +73,283 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
         Peter Zijlstra <peterz@infradead.org>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
+        Christoph Hellwig <hch@infradead.org>
 References: <20220427153336.11091-1-jgross@suse.com>
  <20220427153336.11091-3-jgross@suse.com>
- <PH0PR21MB3025FAA99B4E2C8155A1AE12D7FA9@PH0PR21MB3025.namprd21.prod.outlook.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <PH0PR21MB3025FAA99B4E2C8155A1AE12D7FA9@PH0PR21MB3025.namprd21.prod.outlook.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------j0b7KV03sm3SSS00lOqpuvd3"
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Oleksandr <olekstysh@gmail.com>
+Message-ID: <9668d693-73f6-99e2-3931-bb5683c4afe2@gmail.com>
+Date:   Wed, 27 Apr 2022 22:24:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20220427153336.11091-3-jgross@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------j0b7KV03sm3SSS00lOqpuvd3
-Content-Type: multipart/mixed; boundary="------------u2CO02YVk1NKGgC5oPI9sJzg";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
- "x86@kernel.org" <x86@kernel.org>,
- "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
- "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
- "virtualization@lists.linux-foundation.org"
- <virtualization@lists.linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- KY Srinivasan <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
- Stephen Hemminger <sthemmin@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, "Michael S. Tsirkin"
- <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Christoph Hellwig <hch@infradead.org>,
- Oleksandr Tyshchenko <olekstysh@gmail.com>
-Message-ID: <3d85dccb-7a22-1701-5717-8efd08b7a50c@suse.com>
-Subject: Re: [PATCH v2 2/2] virtio: replace
- arch_has_restricted_virtio_memory_access()
-References: <20220427153336.11091-1-jgross@suse.com>
- <20220427153336.11091-3-jgross@suse.com>
- <PH0PR21MB3025FAA99B4E2C8155A1AE12D7FA9@PH0PR21MB3025.namprd21.prod.outlook.com>
-In-Reply-To: <PH0PR21MB3025FAA99B4E2C8155A1AE12D7FA9@PH0PR21MB3025.namprd21.prod.outlook.com>
 
---------------u2CO02YVk1NKGgC5oPI9sJzg
-Content-Type: multipart/mixed; boundary="------------PVKJ8AyElnAXikkyiJoY2hwt"
+On 27.04.22 18:33, Juergen Gross wrote:
 
---------------PVKJ8AyElnAXikkyiJoY2hwt
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
 
-T24gMjcuMDQuMjIgMTg6MzAsIE1pY2hhZWwgS2VsbGV5IChMSU5VWCkgd3JvdGU6DQo+IEZy
-b206IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4gU2VudDogV2VkbmVzZGF5LCBB
-cHJpbCAyNywgMjAyMiA4OjM0IEFNDQo+Pg0KPj4gSW5zdGVhZCBvZiB1c2luZyBhcmNoX2hh
-c19yZXN0cmljdGVkX3ZpcnRpb19tZW1vcnlfYWNjZXNzKCkgdG9nZXRoZXINCj4+IHdpdGgg
-Q09ORklHX0FSQ0hfSEFTX1JFU1RSSUNURURfVklSVElPX01FTU9SWV9BQ0NFU1MsIHJlcGxh
-Y2UgdGhvc2UNCj4+IHdpdGggcGxhdGZvcm1faGFzKCkgYW5kIGEgbmV3IHBsYXRmb3JtIGZl
-YXR1cmUNCj4+IFBMQVRGT1JNX1ZJUlRJT19SRVNUUklDVEVEX01FTV9BQ0NFU1MuDQo+Pg0K
-Pj4gU2lnbmVkLW9mZi1ieTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2UuY29tPg0KPj4g
-LS0tDQo+PiBWMjoNCj4+IC0gbW92ZSBzZXR0aW5nIG9mIFBMQVRGT1JNX1ZJUlRJT19SRVNU
-UklDVEVEX01FTV9BQ0NFU1MgaW4gU0VWIGNhc2UNCj4+ICAgIHRvIHNldl9zZXR1cF9hcmNo
-KCkuDQo+PiAtLS0NCj4+ICAgYXJjaC9zMzkwL0tjb25maWcgICAgICAgICAgICAgICAgfCAg
-MSAtDQo+PiAgIGFyY2gvczM5MC9tbS9pbml0LmMgICAgICAgICAgICAgIHwgMTMgKysrLS0t
-LS0tLS0tLQ0KPj4gICBhcmNoL3g4Ni9LY29uZmlnICAgICAgICAgICAgICAgICB8ICAxIC0N
-Cj4+ICAgYXJjaC94ODYva2VybmVsL2NwdS9tc2h5cGVydi5jICAgfCAgNSArKysrLQ0KPj4g
-ICBhcmNoL3g4Ni9tbS9tZW1fZW5jcnlwdC5jICAgICAgICB8ICA2IC0tLS0tLQ0KPj4gICBh
-cmNoL3g4Ni9tbS9tZW1fZW5jcnlwdF9hbWQuYyAgICB8ICA0ICsrKysNCj4+ICAgZHJpdmVy
-cy92aXJ0aW8vS2NvbmZpZyAgICAgICAgICAgfCAgNiAtLS0tLS0NCj4+ICAgZHJpdmVycy92
-aXJ0aW8vdmlydGlvLmMgICAgICAgICAgfCAgNSArKy0tLQ0KPj4gICBpbmNsdWRlL2xpbnV4
-L3BsYXRmb3JtLWZlYXR1cmUuaCB8ICAzICsrLQ0KPj4gICBpbmNsdWRlL2xpbnV4L3ZpcnRp
-b19jb25maWcuaCAgICB8ICA5IC0tLS0tLS0tLQ0KPj4gICAxMCBmaWxlcyBjaGFuZ2VkLCAx
-NSBpbnNlcnRpb25zKCspLCAzOCBkZWxldGlvbnMoLSkNCj4+DQo+PiBkaWZmIC0tZ2l0IGEv
-YXJjaC9zMzkwL0tjb25maWcgYi9hcmNoL3MzOTAvS2NvbmZpZw0KPj4gaW5kZXggZTA4NGM3
-MjEwNGY4Li5mOTdhMjJhZTY5YTggMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3MzOTAvS2NvbmZp
-Zw0KPj4gKysrIGIvYXJjaC9zMzkwL0tjb25maWcNCj4+IEBAIC03NzIsNyArNzcyLDYgQEAg
-bWVudSAiVmlydHVhbGl6YXRpb24iDQo+PiAgIGNvbmZpZyBQUk9URUNURURfVklSVFVBTEla
-QVRJT05fR1VFU1QNCj4+ICAgCWRlZl9ib29sIG4NCj4+ICAgCXByb21wdCAiUHJvdGVjdGVk
-IHZpcnR1YWxpemF0aW9uIGd1ZXN0IHN1cHBvcnQiDQo+PiAtCXNlbGVjdCBBUkNIX0hBU19S
-RVNUUklDVEVEX1ZJUlRJT19NRU1PUllfQUNDRVNTDQo+PiAgIAloZWxwDQo+PiAgIAkgIFNl
-bGVjdCB0aGlzIG9wdGlvbiwgaWYgeW91IHdhbnQgdG8gYmUgYWJsZSB0byBydW4gdGhpcw0K
-Pj4gICAJICBrZXJuZWwgYXMgYSBwcm90ZWN0ZWQgdmlydHVhbGl6YXRpb24gS1ZNIGd1ZXN0
-Lg0KPj4gZGlmZiAtLWdpdCBhL2FyY2gvczM5MC9tbS9pbml0LmMgYi9hcmNoL3MzOTAvbW0v
-aW5pdC5jDQo+PiBpbmRleCA4NmZmZDBkNTFmZDUuLjJjM2I0NTE4MTNlZCAxMDA2NDQNCj4+
-IC0tLSBhL2FyY2gvczM5MC9tbS9pbml0LmMNCj4+ICsrKyBiL2FyY2gvczM5MC9tbS9pbml0
-LmMNCj4+IEBAIC0zMSw2ICszMSw3IEBADQo+PiAgICNpbmNsdWRlIDxsaW51eC9jbWEuaD4N
-Cj4+ICAgI2luY2x1ZGUgPGxpbnV4L2dmcC5oPg0KPj4gICAjaW5jbHVkZSA8bGludXgvZG1h
-LWRpcmVjdC5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybS1mZWF0dXJlLmg+DQo+
-PiAgICNpbmNsdWRlIDxhc20vcHJvY2Vzc29yLmg+DQo+PiAgICNpbmNsdWRlIDxsaW51eC91
-YWNjZXNzLmg+DQo+PiAgICNpbmNsdWRlIDxhc20vcGdhbGxvYy5oPg0KPj4gQEAgLTE2OCwy
-MiArMTY5LDE0IEBAIGJvb2wgZm9yY2VfZG1hX3VuZW5jcnlwdGVkKHN0cnVjdCBkZXZpY2Ug
-KmRldikNCj4+ICAgCXJldHVybiBpc19wcm90X3ZpcnRfZ3Vlc3QoKTsNCj4+ICAgfQ0KPj4N
-Cj4+IC0jaWZkZWYgQ09ORklHX0FSQ0hfSEFTX1JFU1RSSUNURURfVklSVElPX01FTU9SWV9B
-Q0NFU1MNCj4+IC0NCj4+IC1pbnQgYXJjaF9oYXNfcmVzdHJpY3RlZF92aXJ0aW9fbWVtb3J5
-X2FjY2Vzcyh2b2lkKQ0KPj4gLXsNCj4+IC0JcmV0dXJuIGlzX3Byb3RfdmlydF9ndWVzdCgp
-Ow0KPj4gLX0NCj4+IC1FWFBPUlRfU1lNQk9MKGFyY2hfaGFzX3Jlc3RyaWN0ZWRfdmlydGlv
-X21lbW9yeV9hY2Nlc3MpOw0KPj4gLQ0KPj4gLSNlbmRpZg0KPj4gLQ0KPj4gICAvKiBwcm90
-ZWN0ZWQgdmlydHVhbGl6YXRpb24gKi8NCj4+ICAgc3RhdGljIHZvaWQgcHZfaW5pdCh2b2lk
-KQ0KPj4gICB7DQo+PiAgIAlpZiAoIWlzX3Byb3RfdmlydF9ndWVzdCgpKQ0KPj4gICAJCXJl
-dHVybjsNCj4+DQo+PiArCXBsYXRmb3JtX3NldChQTEFURk9STV9WSVJUSU9fUkVTVFJJQ1RF
-RF9NRU1fQUNDRVNTKTsNCj4+ICsNCj4+ICAgCS8qIG1ha2Ugc3VyZSBib3VuY2UgYnVmZmVy
-cyBhcmUgc2hhcmVkICovDQo+PiAgIAlzd2lvdGxiX2ZvcmNlID0gU1dJT1RMQl9GT1JDRTsN
-Cj4+ICAgCXN3aW90bGJfaW5pdCgxKTsNCj4+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9LY29u
-ZmlnIGIvYXJjaC94ODYvS2NvbmZpZw0KPj4gaW5kZXggYjAxNDJlMDEwMDJlLi4yMGFjNzI1
-NDZhZTQgMTAwNjQ0DQo+PiAtLS0gYS9hcmNoL3g4Ni9LY29uZmlnDQo+PiArKysgYi9hcmNo
-L3g4Ni9LY29uZmlnDQo+PiBAQCAtMTUxNSw3ICsxNTE1LDYgQEAgY29uZmlnIFg4Nl9DUEFf
-U1RBVElTVElDUw0KPj4gICBjb25maWcgWDg2X01FTV9FTkNSWVBUDQo+PiAgIAlzZWxlY3Qg
-QVJDSF9IQVNfRk9SQ0VfRE1BX1VORU5DUllQVEVEDQo+PiAgIAlzZWxlY3QgRFlOQU1JQ19Q
-SFlTSUNBTF9NQVNLDQo+PiAtCXNlbGVjdCBBUkNIX0hBU19SRVNUUklDVEVEX1ZJUlRJT19N
-RU1PUllfQUNDRVNTDQo+PiAgIAlkZWZfYm9vbCBuDQo+Pg0KPj4gICBjb25maWcgQU1EX01F
-TV9FTkNSWVBUDQo+PiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL2NwdS9tc2h5cGVy
-di5jIGIvYXJjaC94ODYva2VybmVsL2NwdS9tc2h5cGVydi5jDQo+PiBpbmRleCA0YjY3MDk0
-MjE1YmIuLjk2NTUxOGI5ZDE0YiAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9j
-cHUvbXNoeXBlcnYuYw0KPj4gKysrIGIvYXJjaC94ODYva2VybmVsL2NwdS9tc2h5cGVydi5j
-DQo+PiBAQCAtMTksNiArMTksNyBAQA0KPj4gICAjaW5jbHVkZSA8bGludXgvaTgyNTMuaD4N
-Cj4+ICAgI2luY2x1ZGUgPGxpbnV4L3JhbmRvbS5oPg0KPj4gICAjaW5jbHVkZSA8bGludXgv
-c3dpb3RsYi5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybS1mZWF0dXJlLmg+DQo+
-PiAgICNpbmNsdWRlIDxhc20vcHJvY2Vzc29yLmg+DQo+PiAgICNpbmNsdWRlIDxhc20vaHlw
-ZXJ2aXNvci5oPg0KPj4gICAjaW5jbHVkZSA8YXNtL2h5cGVydi10bGZzLmg+DQo+PiBAQCAt
-MzQ3LDggKzM0OCwxMCBAQCBzdGF0aWMgdm9pZCBfX2luaXQgbXNfaHlwZXJ2X2luaXRfcGxh
-dGZvcm0odm9pZCkNCj4+ICAgI2VuZGlmDQo+PiAgIAkJLyogSXNvbGF0aW9uIFZNcyBhcmUg
-dW5lbmxpZ2h0ZW5lZCBTRVYtYmFzZWQgVk1zLCB0aHVzIHRoaXMgY2hlY2s6ICovDQo+PiAg
-IAkJaWYgKElTX0VOQUJMRUQoQ09ORklHX0FNRF9NRU1fRU5DUllQVCkpIHsNCj4+IC0JCQlp
-ZiAoaHZfZ2V0X2lzb2xhdGlvbl90eXBlKCkgIT0gSFZfSVNPTEFUSU9OX1RZUEVfTk9ORSkN
-Cj4+ICsJCQlpZiAoaHZfZ2V0X2lzb2xhdGlvbl90eXBlKCkgIT0gSFZfSVNPTEFUSU9OX1RZ
-UEVfTk9ORSkgew0KPj4gICAJCQkJY2Nfc2V0X3ZlbmRvcihDQ19WRU5ET1JfSFlQRVJWKTsN
-Cj4+ICsNCj4+IAlwbGF0Zm9ybV9zZXQoUExBVEZPUk1fVklSVElPX1JFU1RSSUNURURfTUVN
-X0FDQ0VTUyk7DQo+PiArCQkJfQ0KPj4gICAJCX0NCj4+ICAgCX0NCj4+DQo+IA0KPiBVbmxl
-c3MgSSdtIG1pc3VuZGVyc3RhbmRpbmcgc29tZXRoaW5nLCB0aGUgSHlwZXItViBzcGVjaWZp
-YyBjaGFuZ2UgaXNuJ3QNCj4gbmVlZGVkLiAgIEh5cGVyLVYgZG9lc24ndCBzdXBwb3J0IHZp
-cnRpbyBpbiB0aGUgZmlyc3QgcGxhY2UsIHNvIGl0J3MgYSBiaXQNCj4gdW5leHBlY3RlZCBi
-ZSBzZXR0aW5nIGEgdmlydGlvLXJlbGF0ZWQgZmxhZyBpbiBIeXBlci1WIGNvZGUuICAgQWxz
-bywgSHlwZXItVg0KPiBndWVzdHMgY2FsbCBzZXZfc2V0dXBfYXJjaCgpIHdpdGggQ0NfQVRU
-Ul9HVUVTVF9NRU1fRU5DUllQVCBzZXQsDQo+IHNvIHRoaXMgdmlydGlvLXJlbGF0ZWQgZmxh
-ZyB3aWxsIGdldCBzZXQgYW55d2F5IHZpYSB0aGF0IHBhdGguDQoNCk9rYXksIHRoYW5rcy4g
-V2lsbCBkcm9wIHRoYXQgY2h1bmsgdGhlbi4NCg0KDQpKdWVyZ2VuDQo=
---------------PVKJ8AyElnAXikkyiJoY2hwt
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Hello Juergen, all
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> Instead of using arch_has_restricted_virtio_memory_access() together
+> with CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS, replace those
+> with platform_has() and a new platform feature
+> PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS.
+>
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+> V2:
+> - move setting of PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS in SEV case
+>    to sev_setup_arch().
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
 
---------------PVKJ8AyElnAXikkyiJoY2hwt--
+V2 works as fine as V1 did. I have tested on Arm64 in the context of 
+xen-virtio enabling work [1]. Thank you!
 
---------------u2CO02YVk1NKGgC5oPI9sJzg--
 
---------------j0b7KV03sm3SSS00lOqpuvd3
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Just small NIT below.
 
------BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJpjSkFAwAAAAAACgkQsN6d1ii/Ey98
-pgf/WiV67QRBats+u2omAOX4l0/3uBh9EBbHJyfewyl63ed6u5p3nv4ZgOe/R8vyv/YNM9g2Koaq
-kHIg61F0LYIYEVPKnTsA8axpm2/9OiuxjSCt/mFu3UpvdIhmWxOZtZWE6vZ+6OvklaY40bYGPjE8
-Xacv4RCgsNUvIFJ95zrpLEo5YlGTk/UZSRM+ua5OAT8aK5cvCTWM4tFXI5v60yWsDk4PEMUpUcJa
-qo/A9WLQYIiBBaI3YFsua4tqvAxCVkLUy26t1s6sxpzulV+0NpXnr4mZp8JVk8Q6kMfIO//VTuUn
-VUBsBn9UReq5Sn7Abux/iLuSKhvqF9423Mm7zchKjA==
-=N89D
------END PGP SIGNATURE-----
+> ---
+>   arch/s390/Kconfig                |  1 -
+>   arch/s390/mm/init.c              | 13 +++----------
+>   arch/x86/Kconfig                 |  1 -
+>   arch/x86/kernel/cpu/mshyperv.c   |  5 ++++-
+>   arch/x86/mm/mem_encrypt.c        |  6 ------
+>   arch/x86/mm/mem_encrypt_amd.c    |  4 ++++
+>   drivers/virtio/Kconfig           |  6 ------
+>   drivers/virtio/virtio.c          |  5 ++---
+>   include/linux/platform-feature.h |  3 ++-
+>   include/linux/virtio_config.h    |  9 ---------
+>   10 files changed, 15 insertions(+), 38 deletions(-)
+>
+> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> index e084c72104f8..f97a22ae69a8 100644
+> --- a/arch/s390/Kconfig
+> +++ b/arch/s390/Kconfig
+> @@ -772,7 +772,6 @@ menu "Virtualization"
+>   config PROTECTED_VIRTUALIZATION_GUEST
+>   	def_bool n
+>   	prompt "Protected virtualization guest support"
+> -	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+>   	help
+>   	  Select this option, if you want to be able to run this
+>   	  kernel as a protected virtualization KVM guest.
+> diff --git a/arch/s390/mm/init.c b/arch/s390/mm/init.c
+> index 86ffd0d51fd5..2c3b451813ed 100644
+> --- a/arch/s390/mm/init.c
+> +++ b/arch/s390/mm/init.c
+> @@ -31,6 +31,7 @@
+>   #include <linux/cma.h>
+>   #include <linux/gfp.h>
+>   #include <linux/dma-direct.h>
+> +#include <linux/platform-feature.h>
+>   #include <asm/processor.h>
+>   #include <linux/uaccess.h>
+>   #include <asm/pgalloc.h>
+> @@ -168,22 +169,14 @@ bool force_dma_unencrypted(struct device *dev)
+>   	return is_prot_virt_guest();
+>   }
+>   
+> -#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+> -
+> -int arch_has_restricted_virtio_memory_access(void)
+> -{
+> -	return is_prot_virt_guest();
+> -}
+> -EXPORT_SYMBOL(arch_has_restricted_virtio_memory_access);
+> -
+> -#endif
+> -
+>   /* protected virtualization */
+>   static void pv_init(void)
+>   {
+>   	if (!is_prot_virt_guest())
+>   		return;
+>   
+> +	platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
+> +
+>   	/* make sure bounce buffers are shared */
+>   	swiotlb_force = SWIOTLB_FORCE;
+>   	swiotlb_init(1);
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index b0142e01002e..20ac72546ae4 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1515,7 +1515,6 @@ config X86_CPA_STATISTICS
+>   config X86_MEM_ENCRYPT
+>   	select ARCH_HAS_FORCE_DMA_UNENCRYPTED
+>   	select DYNAMIC_PHYSICAL_MASK
+> -	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+>   	def_bool n
+>   
+>   config AMD_MEM_ENCRYPT
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index 4b67094215bb..965518b9d14b 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/i8253.h>
+>   #include <linux/random.h>
+>   #include <linux/swiotlb.h>
+> +#include <linux/platform-feature.h>
+>   #include <asm/processor.h>
+>   #include <asm/hypervisor.h>
+>   #include <asm/hyperv-tlfs.h>
+> @@ -347,8 +348,10 @@ static void __init ms_hyperv_init_platform(void)
+>   #endif
+>   		/* Isolation VMs are unenlightened SEV-based VMs, thus this check: */
+>   		if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
+> -			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE)
+> +			if (hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE) {
+>   				cc_set_vendor(CC_VENDOR_HYPERV);
+> +				platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
+> +			}
+>   		}
+>   	}
+>   
+> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
+> index 50d209939c66..9b6a7c98b2b1 100644
+> --- a/arch/x86/mm/mem_encrypt.c
+> +++ b/arch/x86/mm/mem_encrypt.c
+> @@ -76,9 +76,3 @@ void __init mem_encrypt_init(void)
+>   
+>   	print_mem_encrypt_feature_info();
+>   }
+> -
+> -int arch_has_restricted_virtio_memory_access(void)
+> -{
+> -	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
+> -}
+> -EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
 
---------------j0b7KV03sm3SSS00lOqpuvd3--
+I assume, everywhere where <linux/virtio_config.h> was specifically 
+included only for sake of arch_has_restricted_virtio_memory_access(), 
+the inclusion of <linux/virtio_config.h>
+
+could be removed now.
+
+
+> diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
+> index 6169053c2854..39b71084d36b 100644
+> --- a/arch/x86/mm/mem_encrypt_amd.c
+> +++ b/arch/x86/mm/mem_encrypt_amd.c
+> @@ -21,6 +21,7 @@
+>   #include <linux/dma-mapping.h>
+>   #include <linux/virtio_config.h>
+>   #include <linux/cc_platform.h>
+> +#include <linux/platform-feature.h>
+>   
+>   #include <asm/tlbflush.h>
+>   #include <asm/fixmap.h>
+> @@ -206,6 +207,9 @@ void __init sev_setup_arch(void)
+>   	size = total_mem * 6 / 100;
+>   	size = clamp_val(size, IO_TLB_DEFAULT_SIZE, SZ_1G);
+>   	swiotlb_adjust_size(size);
+> +
+> +	/* Set restricted memory access for virtio. */
+> +	platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
+>   }
+>   
+>   static unsigned long pg_level_to_pfn(int level, pte_t *kpte, pgprot_t *ret_prot)
+> diff --git a/drivers/virtio/Kconfig b/drivers/virtio/Kconfig
+> index b5adf6abd241..a6dc8b5846fe 100644
+> --- a/drivers/virtio/Kconfig
+> +++ b/drivers/virtio/Kconfig
+> @@ -6,12 +6,6 @@ config VIRTIO
+>   	  bus, such as CONFIG_VIRTIO_PCI, CONFIG_VIRTIO_MMIO, CONFIG_RPMSG
+>   	  or CONFIG_S390_GUEST.
+>   
+> -config ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+> -	bool
+> -	help
+> -	  This option is selected if the architecture may need to enforce
+> -	  VIRTIO_F_ACCESS_PLATFORM
+> -
+>   config VIRTIO_PCI_LIB
+>   	tristate
+>   	help
+> diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> index 22f15f444f75..371e16b18381 100644
+> --- a/drivers/virtio/virtio.c
+> +++ b/drivers/virtio/virtio.c
+> @@ -5,6 +5,7 @@
+>   #include <linux/module.h>
+>   #include <linux/idr.h>
+>   #include <linux/of.h>
+> +#include <linux/platform-feature.h>
+>   #include <uapi/linux/virtio_ids.h>
+>   
+>   /* Unique numbering for virtio devices. */
+> @@ -170,12 +171,10 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
+>   static int virtio_features_ok(struct virtio_device *dev)
+>   {
+>   	unsigned status;
+> -	int ret;
+>   
+>   	might_sleep();
+>   
+> -	ret = arch_has_restricted_virtio_memory_access();
+> -	if (ret) {
+> +	if (platform_has(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS)) {
+>   		if (!virtio_has_feature(dev, VIRTIO_F_VERSION_1)) {
+>   			dev_warn(&dev->dev,
+>   				 "device must provide VIRTIO_F_VERSION_1\n");
+> diff --git a/include/linux/platform-feature.h b/include/linux/platform-feature.h
+> index 6ed859928b97..5e2f08554b38 100644
+> --- a/include/linux/platform-feature.h
+> +++ b/include/linux/platform-feature.h
+> @@ -6,7 +6,8 @@
+>   #include <asm/platform-feature.h>
+>   
+>   /* The platform features are starting with the architecture specific ones. */
+> -#define PLATFORM_FEAT_N				(0 + PLATFORM_ARCH_FEAT_N)
+> +#define PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS	(0 + PLATFORM_ARCH_FEAT_N)
+
+I would add a sentence describing the purpose of that "common" feature.
+
+
+> +#define PLATFORM_FEAT_N				(1 + PLATFORM_ARCH_FEAT_N)
+>   
+>   void platform_set(unsigned int feature);
+>   void platform_clear(unsigned int feature);
+> diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> index b341dd62aa4d..79498298519d 100644
+> --- a/include/linux/virtio_config.h
+> +++ b/include/linux/virtio_config.h
+> @@ -559,13 +559,4 @@ static inline void virtio_cwrite64(struct virtio_device *vdev,
+>   		_r;							\
+>   	})
+>   
+> -#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
+> -int arch_has_restricted_virtio_memory_access(void);
+> -#else
+> -static inline int arch_has_restricted_virtio_memory_access(void)
+> -{
+> -	return 0;
+> -}
+> -#endif /* CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS */
+> -
+>   #endif /* _LINUX_VIRTIO_CONFIG_H */
+
+
+[1] 
+https://lore.kernel.org/lkml/1650646263-22047-1-git-send-email-olekstysh@gmail.com/T/#mf3eaee90da6bb2c52a4c4b36b9989dacc4e9c597
+
+
+-- 
+Regards,
+
+Oleksandr Tyshchenko
+
