@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A0651110E
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Apr 2022 08:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E87B511148
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Apr 2022 08:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238981AbiD0GYJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Apr 2022 02:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S242701AbiD0Gkp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Apr 2022 02:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiD0GYI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 02:24:08 -0400
+        with ESMTP id S238117AbiD0Gkp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 02:40:45 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CFF7091E;
-        Tue, 26 Apr 2022 23:20:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0131D336;
+        Tue, 26 Apr 2022 23:37:34 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0F32A210EB;
-        Wed, 27 Apr 2022 06:20:56 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CE819210EB;
+        Wed, 27 Apr 2022 06:37:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1651040456; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1651041452; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=tRo34n/wFbXNNEGrJxuKAKttKtLy++EbrN/0sbLAuLU=;
-        b=D+p83EMNol8Q5YflmfSLqYlSL6m+x+BioBiax6DtLYHppB6Bu50y31riJJBbu4NG3T+7Ku
-        8ktYbnnmCt5gnjnvbl5SE3bzZtmlNsUgJaMzREI5C3beFpLiWOmhiosZpX7lrqN8oqYd3G
-        IcinBTrMxrnYcuYp7ma664kok8/MuvU=
+        bh=hIAZm9r1VDhAElkE1+2svEA6lw1ewe4ogFbmiroQgP4=;
+        b=p9gYvueF1siXdTXd9t0+h6KpT9vy0RBkQ5GDeRB2NZ4QadZ1DUbkQ1soFwuR/YIye8V+Lb
+        RER9L++lDxAgGgTes9u5QfZ2B5td/67dtnFzANpoDN9CBH3TlzirGHZJgF4VaFdtMUV+ZJ
+        XYFdbP3xbsmzuYLHS215ZIk2j9V9ieA=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4BC1F1323E;
-        Wed, 27 Apr 2022 06:20:55 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 15E101323E;
+        Wed, 27 Apr 2022 06:37:32 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id Fc8iEcfgaGLnDAAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 27 Apr 2022 06:20:55 +0000
-Message-ID: <f7dca1db-8e4f-a793-231b-a69423451463@suse.com>
-Date:   Wed, 27 Apr 2022 08:20:54 +0200
+        id 3dCQA6zkaGIgEwAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 27 Apr 2022 06:37:32 +0000
+Message-ID: <1c1a4a7d-a273-c3b0-3683-195f6e09a027@suse.com>
+Date:   Wed, 27 Apr 2022 08:37:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.0
@@ -70,13 +70,14 @@ Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         Christoph Hellwig <hch@infradead.org>,
         Oleksandr Tyshchenko <olekstysh@gmail.com>
 References: <20220426134021.11210-1-jgross@suse.com>
- <20220426134021.11210-2-jgross@suse.com> <YmgsYvWQchxub8cW@zn.tnic>
+ <20220426134021.11210-3-jgross@suse.com> <Ymgtb2dSNYz7DBqx@zn.tnic>
 From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH 1/2] kernel: add platform_has() infrastructure
-In-Reply-To: <YmgsYvWQchxub8cW@zn.tnic>
+Subject: Re: [PATCH 2/2] virtio: replace
+ arch_has_restricted_virtio_memory_access()
+In-Reply-To: <Ymgtb2dSNYz7DBqx@zn.tnic>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------GT0cvmmMNAIgVAEXsN8EMHj0"
+ boundary="------------Tv20wGOiy6FQjb02RJyTGGbf"
 X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -87,8 +88,8 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------GT0cvmmMNAIgVAEXsN8EMHj0
-Content-Type: multipart/mixed; boundary="------------N0WDsQdFlRa8hwn0BEJ0uY0Y";
+--------------Tv20wGOiy6FQjb02RJyTGGbf
+Content-Type: multipart/mixed; boundary="------------g3LQIICVaZ9MN3qiKd20kOyb";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
 To: Borislav Petkov <bp@alien8.de>
@@ -108,40 +109,50 @@ Cc: linux-kernel@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
  <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
  Christoph Hellwig <hch@infradead.org>,
  Oleksandr Tyshchenko <olekstysh@gmail.com>
-Message-ID: <f7dca1db-8e4f-a793-231b-a69423451463@suse.com>
-Subject: Re: [PATCH 1/2] kernel: add platform_has() infrastructure
+Message-ID: <1c1a4a7d-a273-c3b0-3683-195f6e09a027@suse.com>
+Subject: Re: [PATCH 2/2] virtio: replace
+ arch_has_restricted_virtio_memory_access()
 References: <20220426134021.11210-1-jgross@suse.com>
- <20220426134021.11210-2-jgross@suse.com> <YmgsYvWQchxub8cW@zn.tnic>
-In-Reply-To: <YmgsYvWQchxub8cW@zn.tnic>
+ <20220426134021.11210-3-jgross@suse.com> <Ymgtb2dSNYz7DBqx@zn.tnic>
+In-Reply-To: <Ymgtb2dSNYz7DBqx@zn.tnic>
 
---------------N0WDsQdFlRa8hwn0BEJ0uY0Y
-Content-Type: multipart/mixed; boundary="------------0m0IZeiwI66kdGOBcI9J7h2H"
+--------------g3LQIICVaZ9MN3qiKd20kOyb
+Content-Type: multipart/mixed; boundary="------------UBo4NeYC7LUvi1M7vp3Ag3TK"
 
---------------0m0IZeiwI66kdGOBcI9J7h2H
+--------------UBo4NeYC7LUvi1M7vp3Ag3TK
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-T24gMjYuMDQuMjIgMTk6MzEsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBB
-cHIgMjYsIDIwMjIgYXQgMDM6NDA6MjBQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
-Cj4+IGRpZmYgLS1naXQgYS9rZXJuZWwvcGxhdGZvcm0tZmVhdHVyZS5jIGIva2VybmVsL3Bs
-YXRmb3JtLWZlYXR1cmUuYw0KPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+IGluZGV4IDAw
-MDAwMDAwMDAwMC4uMmQ1MmY4NDQyY2Q1DQo+PiAtLS0gL2Rldi9udWxsDQo+PiArKysgYi9r
-ZXJuZWwvcGxhdGZvcm0tZmVhdHVyZS5jDQo+PiBAQCAtMCwwICsxLDcgQEANCj4+ICsvLyBT
-UERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPj4gKw0KPj4gKyNpbmNsdWRlIDxs
-aW51eC9jYWNoZS5oPg0KPj4gKyNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybS1mZWF0dXJlLmg+
-DQo+PiArDQo+PiArdW5zaWduZWQgbG9uZyBfX3JlYWRfbW9zdGx5IHBsYXRmb3JtX2ZlYXR1
-cmVzW1BMQVRGT1JNX0ZFQVRfQVJSQVlfU1pdOw0KPiANCj4gUHJvYmFibHkgX19yb19hZnRl
-cl9pbml0Lg0KDQpZZXMsIGdvb2QgaWRlYS4NCg0KPiANCj4+ICtFWFBPUlRfU1lNQk9MX0dQ
-TChwbGF0Zm9ybV9mZWF0dXJlcyk7DQo+IA0KPiBZb3UgcHJvYmFibHkgc2hvdWxkIG1ha2Ug
-dGhhdCB0aGluZyBzdGF0aWMgYW5kIHVzZSBvbmx5IGFjY2Vzc29ycyB0bw0KPiBtb2RpZnkg
-aXQgaW4gY2FzZSB5b3Ugd2FubmEgY2hhbmdlIHRoZSB1bmRlcmx5aW5nIGRhdGEgc3RydWN0
-dXJlIGluIHRoZQ0KPiBmdXR1cmUuDQoNClRoZSBxdWVzdGlvbiBpcyB3aGV0aGVyIHdlIHRo
-aW5rIHRoYXQgdGhvc2UgcGxhdGZvcm0gZmVhdHVyZXMgd2lsbCBiZSB1c2VkDQppbiBob3Qg
-cGF0aHMgb3Igbm90LiBJZiBzbyB0aGUgaW5saW5lIGFjY2Vzc29ycyAoYXQgbGVhc3QgdGhl
-IHBsYXRmb3JtX2hhcygpDQpvbmUpIHdvdWxkIGJlIHByZWZlcnJlZCBJTU8uDQoNCk9UT0gg
-cmVhbGx5IHBlcmZvcm1hbmNlIGNyaXRpY2FsIGNhc2VzIGNvdWxkIHVzZSBzdGF0aWNfYnJh
-bmNoIG9yIHN1Y2guDQoNCg0KSnVlcmdlbg0K
---------------0m0IZeiwI66kdGOBcI9J7h2H
+T24gMjYuMDQuMjIgMTk6MzUsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gVHVlLCBB
+cHIgMjYsIDIwMjIgYXQgMDM6NDA6MjFQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+ICAgLyogcHJvdGVjdGVkIHZpcnR1YWxpemF0aW9uICovDQo+PiAgIHN0YXRpYyB2b2lk
+IHB2X2luaXQodm9pZCkNCj4+ICAgew0KPj4gICAJaWYgKCFpc19wcm90X3ZpcnRfZ3Vlc3Qo
+KSkNCj4+ICAgCQlyZXR1cm47DQo+PiAgIA0KPj4gKwlwbGF0Zm9ybV9zZXRfZmVhdHVyZShQ
+TEFURk9STV9WSVJUSU9fUkVTVFJJQ1RFRF9NRU1fQUNDRVNTKTsNCj4gDQo+IEtpbmRhIGxv
+bmctaXNoIGZvciBteSB0YXN0ZS4gSSdsbCBwcm9iYWJseSBjYWxsIGl0Og0KPiANCj4gCXBs
+YXRmb3JtX3NldCgpDQo+IA0KPiBhcyBpdCBpcyBpbXBsaWNpdCB0aGF0IGl0IHNldHMgYSBm
+ZWF0dXJlIGJpdC4NCg0KT2theSwgZmluZSB3aXRoIG1lLg0KDQo+IA0KPj4gZGlmZiAtLWdp
+dCBhL2FyY2gveDg2L21tL21lbV9lbmNyeXB0X2lkZW50aXR5LmMgYi9hcmNoL3g4Ni9tbS9t
+ZW1fZW5jcnlwdF9pZGVudGl0eS5jDQo+PiBpbmRleCBiNDNiYzI0ZDJiYjYuLjYwNDNiYTZj
+ZDE3ZCAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L21tL21lbV9lbmNyeXB0X2lkZW50aXR5
+LmMNCj4+ICsrKyBiL2FyY2gveDg2L21tL21lbV9lbmNyeXB0X2lkZW50aXR5LmMNCj4+IEBA
+IC00MCw2ICs0MCw3IEBADQo+PiAgICNpbmNsdWRlIDxsaW51eC9tbS5oPg0KPj4gICAjaW5j
+bHVkZSA8bGludXgvbWVtX2VuY3J5cHQuaD4NCj4+ICAgI2luY2x1ZGUgPGxpbnV4L2NjX3Bs
+YXRmb3JtLmg+DQo+PiArI2luY2x1ZGUgPGxpbnV4L3BsYXRmb3JtLWZlYXR1cmUuaD4NCj4+
+ICAgDQo+PiAgICNpbmNsdWRlIDxhc20vc2V0dXAuaD4NCj4+ICAgI2luY2x1ZGUgPGFzbS9z
+ZWN0aW9ucy5oPg0KPj4gQEAgLTU2Niw2ICs1NjcsMTAgQEAgdm9pZCBfX2luaXQgc21lX2Vu
+YWJsZShzdHJ1Y3QgYm9vdF9wYXJhbXMgKmJwKQ0KPj4gICAJfSBlbHNlIHsNCj4+ICAgCQkv
+KiBTRVYgc3RhdGUgY2Fubm90IGJlIGNvbnRyb2xsZWQgYnkgYSBjb21tYW5kIGxpbmUgb3B0
+aW9uICovDQo+PiAgIAkJc21lX21lX21hc2sgPSBtZV9tYXNrOw0KPj4gKw0KPj4gKwkJLyog
+U2V0IHJlc3RyaWN0ZWQgbWVtb3J5IGFjY2VzcyBmb3IgdmlydGlvLiAqLw0KPj4gKwkJcGxh
+dGZvcm1fc2V0X2ZlYXR1cmUoUExBVEZPUk1fVklSVElPX1JFU1RSSUNURURfTUVNX0FDQ0VT
+Uyk7DQo+IA0KPiBIdWgsIHdoYXQgZG9lcyB0aGF0IGhhdmUgdG8gZG8gd2l0aCBTTUU/DQoN
+CkkgcGlja2VkIHRoZSBmdW5jdGlvbiB3aGVyZSBzZXZfc3RhdHVzIGlzIGJlaW5nIHNldCwg
+YXMgdGhpcyBzZWVtZWQgdG8gYmUNCnRoZSBjb3JyZWN0IHBsYWNlIHRvIHNldCB0aGUgZmVh
+dHVyZSBiaXQuDQoNCkxvb2tpbmcgYXQgaXQgaW4gbW9yZSBkZXRhaWwgaXQgbWlnaHQgYmUg
+cHJlZmVyYWJsZSB0byBkbyBpdCBpbg0Kc2V2X3NldHVwX2FyY2goKSBpbnN0ZWFkLg0KDQoN
+Ckp1ZXJnZW4NCg==
+--------------UBo4NeYC7LUvi1M7vp3Ag3TK
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -199,24 +210,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------0m0IZeiwI66kdGOBcI9J7h2H--
+--------------UBo4NeYC7LUvi1M7vp3Ag3TK--
 
---------------N0WDsQdFlRa8hwn0BEJ0uY0Y--
+--------------g3LQIICVaZ9MN3qiKd20kOyb--
 
---------------GT0cvmmMNAIgVAEXsN8EMHj0
+--------------Tv20wGOiy6FQjb02RJyTGGbf
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJo4MYFAwAAAAAACgkQsN6d1ii/Ey86
-5gf+MT9EGStrBqHSYrnfMZLB74QV1EFSCMN8zW3eR1cgrrxb5+yzw2QbB2/V3B/KkXIpWpWcBiPH
-+3G1SmlrvpRmCXWGieytw1Yh+HF/fC+eC9czBpya+VpPunC+LoWZewWC14DQbWb6nPulSysvSpeN
-sJMFD6P0oQkwTa+cioNJ8Hb508wUbsb/NElzu5kCvy2hpsKB8YS6iSCpjfNyZ0P0vJ0HPeVlx4Pj
-IQM30i/ZkREDEGBFbep9IDbwOf1X1n23UaLXi6yjk9zIbuCjaakWPdS0vTNsn1UX21/U9+fEhqBp
-6slDwitOQpEQ+hgMeWWpVEyWXOqM44sw6bmGuX9ogQ==
-=UkqB
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmJo5KsFAwAAAAAACgkQsN6d1ii/Ey97
+qQgAnhF1BQYikeBdShj94UJG4leGZg9I17mVpNA5whmgpqA9u8YaGSbb2KLlrW0qGAx5sJu1Zy2m
+JYfTWc8Nqs9N67fq8iocL/5iiaULgIeYvAsr62I1znZELFaw9MAuCMQOZhPoVC39Rrsucp0RR39a
+9nt/YL+8cu91+kbMcF7QkZ0ORb1Y5ZWOBRyIWkDRkGU/uFnmot16zNpuF1ccqzJagi/84SxlRbFE
+e1B/3xYM/WyBCXFKKDNjYA27ct1EMkzIZ1lohSZSB0IgyWgN3nzB6d8ngjnrZhs3ChyhcTrawE/b
+SgiX7TNHX44Q3PTTAyZs3FvJ5tVDGSSDXuJ4wAlVwg==
+=niPG
 -----END PGP SIGNATURE-----
 
---------------GT0cvmmMNAIgVAEXsN8EMHj0--
+--------------Tv20wGOiy6FQjb02RJyTGGbf--
