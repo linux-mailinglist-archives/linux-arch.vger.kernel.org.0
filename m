@@ -2,38 +2,38 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44187511925
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Apr 2022 16:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36D4511AB2
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Apr 2022 16:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbiD0Nbn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Apr 2022 09:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56612 "EHLO
+        id S236006AbiD0Nfj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Apr 2022 09:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235860AbiD0Nbm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 09:31:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574C633E23;
-        Wed, 27 Apr 2022 06:28:26 -0700 (PDT)
+        with ESMTP id S235983AbiD0Nfj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 09:35:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E8A4756A;
+        Wed, 27 Apr 2022 06:32:26 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651066104;
+        s=2020; t=1651066344;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XeLkj9226T84S9BXMt19LKkxjN+pWXBCLzkSQX80Wy0=;
-        b=CnD8+0uDIKN5dkS4D3kOiZHg/aTrcuU3CSgu/18pNHX4Bq8eAM1hY3aI4Xu+WNh8Jmn/j7
-        R+SzJ5YdJvI5nC5LZnNvdrrvEC1pm6pUjngAw2WcmmOvWeilo9o88BsPnZiOq5IP7iVI/U
-        Ld+1XVU5417idG7bq4A6e0TRt8nItIYLaV0EYBB8dfsEPPtRua6GcUSKSQk5VEUw7RDcyu
-        sGfWU16My8O6Qii/arx971F7FyOPp6CQNVj3UlU8KnyEdjlbltkVPpGGF181Oy1zG3PJcb
-        dlAkAuEeKrWfS/iDZAZL6H5bcANyx5Px2Bs4sti+fqx2XT88qk8IB+qGc5NGQA==
+        bh=X7MGqKhcR2rK4bHhpyakvKk80PXfTvRpOEHw1CHocKs=;
+        b=ohn+hC646sn2jflwe2+UxebhGiwPyBV84sJRxiAvyqE37QW7aGwEfptKKOcUr3GZ10ZGJO
+        OK5sYNE/5x1GOtersnl4dBFpoxCEkYLpcHbf6zuIs/HjJsUQuhbYWTRIsF2BLKeE7EPZUT
+        h+qiVebu5bZsClGL1aLHWFs9tBrvecF74Qxr29uhbym2tYsLjtJbiw7fhzfHj+2+unjHXy
+        dVr2VwG+u3k3PQ0XxUQgqmFy6FCIBp95Hh3k7a0U6gcS13RuTKUADQ8fRSQ68kmWkShqAx
+        U/Odt/SoCJYK6j45Dny0vD2N7WOyZ2n5EsUXkEohvuxsvRSwmyMwsH6cgyXa5Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651066104;
+        s=2020e; t=1651066344;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XeLkj9226T84S9BXMt19LKkxjN+pWXBCLzkSQX80Wy0=;
-        b=mqNvTWF9p2Pn5UfW0rssM+TDypdzsffTK7XDNT84SfjwuIlFAdc4suevqEXX1MmYnM9rdo
-        Ccy/wwrc6gkF4WCA==
+        bh=X7MGqKhcR2rK4bHhpyakvKk80PXfTvRpOEHw1CHocKs=;
+        b=bCDiX4Fi9GAN0Y217Gcsro/3hVbm6FpepZEqlCHPe0fNNCAHEf2xbGEkJ8g5sLfVYuqOV2
+        ZiOzp4zTqL7wE2BQ==
 To:     Alexander Potapenko <glider@google.com>, glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -64,13 +64,13 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 27/46] kmsan: instrumentation.h: add
- instrumentation_begin_with_regs()
-In-Reply-To: <20220426164315.625149-28-glider@google.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+In-Reply-To: <20220426164315.625149-29-glider@google.com>
 References: <20220426164315.625149-1-glider@google.com>
- <20220426164315.625149-28-glider@google.com>
-Date:   Wed, 27 Apr 2022 15:28:23 +0200
-Message-ID: <87bkwmy7t4.ffs@tglx>
+ <20220426164315.625149-29-glider@google.com>
+Date:   Wed, 27 Apr 2022 15:32:23 +0200
+Message-ID: <87a6c6y7mg.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,20 +83,68 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Tue, Apr 26 2022 at 18:42, Alexander Potapenko wrote:
-> +void kmsan_instrumentation_begin(struct pt_regs *regs)
-> +{
-> +	struct kmsan_context_state *state = &kmsan_get_context()->cstate;
-> +
-> +	if (state)
-> +		__memset(state, 0, sizeof(struct kmsan_context_state));
 
-  sizeof(*state) please
+Can you please use 'entry:' as prefix. Slapping kmsan in front of
+everything does not really make sense.
 
-> +	if (!kmsan_enabled || !regs)
-> +		return;
+> Replace instrumentation_begin()	with instrumentation_begin_with_regs()
+> to let KMSAN handle the non-instrumented code and unpoison pt_regs
+> passed from the instrumented part.
 
-Why has state to be cleared when kmsan is not enabled and how do you end up
-with regs == NULL here?
+That should be:
+
+     from the non-instrumented part
+or
+     passed to the instrumented part
+
+right?
+
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -23,7 +23,7 @@ static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
+>  	CT_WARN_ON(ct_state() != CONTEXT_USER);
+>  	user_exit_irqoff();
+>  
+> -	instrumentation_begin();
+> +	instrumentation_begin_with_regs(regs);
+
+I can see what you are trying to do, but this will end up doing the same
+thing over and over. Let's just look at a syscall.
+
+__visible noinstr void do_syscall_64(struct pt_regs *regs, int nr)
+{
+        ...
+	nr = syscall_enter_from_user_mode(regs, nr)
+
+  		__enter_from_user_mode(regs)
+              		.....
+			instrumentation_begin_with_regs(regs);
+			....
+
+                instrumentation_begin_with_regs(regs);
+                ....                     
+
+	instrumentation_begin_with_regs(regs);
+
+	if (!do_syscall_x64(regs, nr) && !do_syscall_x32(regs, nr) && nr != -1) {
+		/* Invalid system call, but still a system call. */
+		regs->ax = __x64_sys_ni_syscall(regs);
+	}
+
+	instrumentation_end();
+
+        syscall_exit_to_user_mode(regs);
+		instrumentation_begin_with_regs(regs);
+  		__syscall_exit_to_user_mode_work(regs);
+  	instrumentation_end();
+  	__exit_to_user_mode();
+
+That means you memset state four times and unpoison regs four times. I'm
+not sure whether that's desired.
+
+instrumentation_begin()/end() are not really suitable IMO. They were
+added to allow objtool to validate that nothing escapes into
+instrumentable code unless annotated accordingly.
 
 Thanks,
 
