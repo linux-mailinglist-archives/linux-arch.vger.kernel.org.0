@@ -2,62 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E403512410
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Apr 2022 22:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D805128BB
+	for <lists+linux-arch@lfdr.de>; Thu, 28 Apr 2022 03:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbiD0UvP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Apr 2022 16:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S240501AbiD1Bas (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Apr 2022 21:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236859AbiD0UvK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 16:51:10 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CD27673
-        for <linux-arch@vger.kernel.org>; Wed, 27 Apr 2022 13:47:57 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id e12so5509252ybc.11
-        for <linux-arch@vger.kernel.org>; Wed, 27 Apr 2022 13:47:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wjBGniCkrPPn2XJZCJS3viIi0a1wQPIJsNzJkxVm3f8=;
-        b=YXmUuFGWRsnYvsuY8WxZpw1NN/uZTGV6gHRqPICsiQRgxqgwXOkO/+BP3u7R4nLgDR
-         J8RDj5ofdIF/V7CiQyuSIh+I2b9gslArzgmXoctHFZ2Pb5ps54nc1OGV9QJYvdnjEmnk
-         Jw5sUbmAmOp2wuhVs9orQottDeetDhjjGBsT9ePMvqZbpacVgXVeoEFSJwGNOaAnNHmk
-         /GDAcTiTIawFjZ2Nuf5OSztqR1DCor1lA++7hJnYa3lx31QP+T6V0ewLkbYbqtLy8lDS
-         XYUEJ/r6FA1QXwi/uBFdEBuWntwcKM4SsOMVR8N5FUzviZ5vjiZ7F+nt2Cq5CBkTtIKG
-         hUZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wjBGniCkrPPn2XJZCJS3viIi0a1wQPIJsNzJkxVm3f8=;
-        b=Pw8BQyb5VX+6ab46xCV9TN8x8SyrSd06u9fMV3aVH12p8Exe7ZZp5Gj1YnIFS+ROjL
-         k2OB6PYNDW3J+gbzAprDfbigC9/LjSHptKD0HQnVIcoLAKfvVnUGHxJ+SLd5MtZVcFZu
-         mbUmQJgrA1N047JqQzLWYoYmaFarxa6u8W0rS36nKeLJ95buuFzkVC9nKducOucBjbae
-         aCdv6yvTkMfdEQjdsVQrbKhMRlkVrua7l4c8ZYONnKO1YrhNH384A9NjZQmGlIcsz0Ku
-         3OI+cnk/eRcM0nB2d5tO+NyJUHTK1LI6M0+x4d6rZyMnPF5a7m1qWUFq79tk0l3znT/n
-         tjmg==
-X-Gm-Message-State: AOAM531WjlE5huVmPTZ0GY4JoqXInO8DPqM3nAfSh6GIP0a+iubdltKA
-        outO6guO8LpJdIS3zZxXVsuCd/JW6R00CUMgtsmkQA==
-X-Google-Smtp-Source: ABdhPJwN8etrWMh6Os0GxHfjXTwaVKnhY711RgcSmkqMqHskXsAPhaJWu2gLTWYYQDHYI8eCDcXjQUlF8pDMBdyhq4w=
-X-Received: by 2002:a25:ea48:0:b0:644:e2e5:309 with SMTP id
- o8-20020a25ea48000000b00644e2e50309mr27820653ybe.407.1651092476629; Wed, 27
- Apr 2022 13:47:56 -0700 (PDT)
+        with ESMTP id S240368AbiD1Bap (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Apr 2022 21:30:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E1872471;
+        Wed, 27 Apr 2022 18:27:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5614961F4C;
+        Thu, 28 Apr 2022 01:27:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B7AC385A7;
+        Thu, 28 Apr 2022 01:27:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651109251;
+        bh=5dLrCbyI9dL25gLCPU2lKXEykc++03SFd32wMmRhRMY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=koKAxCKdTDd8Xos0qjF/PfaziMK1H7iXllHu4DOFfT+tReZ2slA19GSEMY1NlrAXx
+         VCl18ElprtpHwUe4m65SdEsv1lGqWR3skTPCIuYj/AcvueZmK3CfpzJW38Oe9aW1zU
+         niSCpJJrh/1kho5qWUQ0hxDz49tTwAxQmRAVgyHOutEFpbyFTQT+0/n0f2LPwPcn1R
+         +Dx77zrHy1TrRK6QnZ774j01Ivr9AWwFEgJu1KMLXjMZHmBX7IyZ29UEvIk2CTFpUy
+         L/bxWFE2CanErRZcRufMiQgOIsSO8CHUEukTRo4tKbwzfo1NiCLAjsYKkuz+oVQVEq
+         ZQkANYmzOu1Zg==
+Message-ID: <bde14dfc-d1ea-ca1f-5074-01e13eef3cab@kernel.org>
+Date:   Wed, 27 Apr 2022 19:27:26 -0600
 MIME-Version: 1.0
-References: <202204270907.nUUrw3dS-lkp@intel.com> <20220427200259.2564-1-lnx.erin@gmail.com>
-In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 27 Apr 2022 13:47:45 -0700
-Message-ID: <CANn89iLDK=_MBo20S09Pq2PtKKPfWMM2R9FcDUWVjX-dk6cYDA@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
 Subject: Re: [PATCH net-next v3] net: SO_RCVMARK socket option for SO_MARK
  with recvmsg()
+Content-Language: en-US
 To:     Erin MacNeil <lnx.erin@gmail.com>
 Cc:     Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -72,7 +59,6 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         Alexander Aring <alex.aring@gmail.com>,
         Stefan Schmidt <stefan@datenfreihafen.org>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
         Steffen Klassert <steffen.klassert@secunet.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Jeremy Kerr <jk@codeconstruct.com.au>,
@@ -80,6 +66,7 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         Vlad Yasevich <vyasevich@gmail.com>,
         Neil Horman <nhorman@tuxdriver.com>,
         Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
         Lorenz Bauer <lmb@cloudflare.com>,
         Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
         Martynas Pumputis <m@lambda.lt>,
@@ -95,17 +82,21 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         Richard Sanger <rsanger@wand.net.nz>,
         Yajun Deng <yajun.deng@linux.dev>,
         Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        linux-alpha@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        sparclinux@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-wpan@vger.kernel.org,
+        linux-sctp@vger.kernel.org
+References: <202204270907.nUUrw3dS-lkp@intel.com>
+ <20220427200259.2564-1-lnx.erin@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220427200259.2564-1-lnx.erin@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,16 +104,15 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Apr 27, 2022 at 1:03 PM Erin MacNeil <lnx.erin@gmail.com> wrote:
->
+On 4/27/22 2:02 PM, Erin MacNeil wrote:
 > Adding a new socket option, SO_RCVMARK, to indicate that SO_MARK
 > should be included in the ancillary data returned by recvmsg().
->
+> 
 > Renamed the sock_recv_ts_and_drops() function to sock_recv_cmsgs().
->
+> 
 > Signed-off-by: Erin MacNeil <lnx.erin@gmail.com>
->
+> ---
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-Thanks.
+Reviewed-by: David Ahern <dsahern@kernel.org>
+
