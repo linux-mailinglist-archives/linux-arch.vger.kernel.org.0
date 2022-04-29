@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DE3514C0A
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15605514BE4
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376875AbiD2N76 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Apr 2022 09:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S1376922AbiD2N6P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Apr 2022 09:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376878AbiD2N54 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:57:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B950CFBAD;
-        Fri, 29 Apr 2022 06:52:20 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TB4Her024408;
+        with ESMTP id S1376683AbiD2N5C (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:57:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3357CEE23;
+        Fri, 29 Apr 2022 06:52:02 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TDh5Ui008450;
         Fri, 29 Apr 2022 13:51:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=LtY0U54p1j8DNuMexzH2liiZILMDtwwYZ4XNR2a0COU=;
- b=MMdo2ddUfmbKgQZYheX93Ub9LJpcNEVGOt6DkuEFegw9w20JKfCK6Qi/7F1Zavh9kbta
- 87bo5an8SedjTC18WCALxEmxaIzfiZdAF6MA/B3YwPHi2hnWo2jAB4xVLgEiiJ2Z/vl9
- 0Gir7mfywMPxVefoObENo32n3oIBwrB2pof4mux6mTZ/hhyiCrAzmy2w8gwt1ALDIeRE
- S8z8b8B6LeYf00q8Rv5XPj9RCsOO6CaSBJZeObKAdI/IsMIxTb7kGaeDNBJQIawIbc5y
- WNUeS+bJTp7OKp5AO5qQURUX1lYIUzo9O4yS5KAg3wuxYHr2TNFpPN4q3K0gcwArLBR9 +g== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqnke421b-1
+ bh=jJiPpkAfXZEY7v6S51aCc8XM18KdeKUPkAVx6F9Ajzs=;
+ b=VOpEe4oBZVaxv6wfuqRPK1ACeWnrWbvmMkAU0x6+Jb5mmHjQDZLMsK3vfqHxCQwNK0m8
+ AqGVdhR/Ge0SeWg9oRMDWICRz+WV9vyd9xu9RcvZ6TTDobLXJ4NTujwwh8DQudMN0r75
+ pDawJxPlmxU0jtokFHOMyv/8xXxQF5uTPWTupMqPX3vHJKurId6yhlkgmy03v2onVGvB
+ RwK2Mju7RqRfDX2V+J/i3FUtb8C+8dgrYAK40swHGcN5iglNr9CBynlZzvtJWJMmwTgU
+ s7j5yhtZsvB6CqDN9MxWzsz0kUum4KiyoWzzpagNdGJY5zTr37Ed+/G/DpPKHdYKTOWr 4w== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3frh55r60a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 29 Apr 2022 13:51:52 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDS1XR027891;
-        Fri, 29 Apr 2022 13:51:49 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 3fm938yank-1
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDQfA6021506;
+        Fri, 29 Apr 2022 13:51:50 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm93917rv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:49 +0000
+        Fri, 29 Apr 2022 13:51:50 +0000
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDccAZ53608796
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDpluF49676556
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 13:38:38 GMT
+        Fri, 29 Apr 2022 13:51:47 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DCE744C040;
-        Fri, 29 Apr 2022 13:51:46 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id AEBCF4C046;
+        Fri, 29 Apr 2022 13:51:47 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8C5F84C044;
-        Fri, 29 Apr 2022 13:51:46 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5FB264C044;
+        Fri, 29 Apr 2022 13:51:47 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 13:51:46 +0000 (GMT)
+        Fri, 29 Apr 2022 13:51:47 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -58,28 +58,28 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [RFC v2 35/39] usb: handle HAS_IOPORT dependencies
-Date:   Fri, 29 Apr 2022 15:51:02 +0200
-Message-Id: <20220429135108.2781579-65-schnelle@linux.ibm.com>
+Subject: [PATCH 36/37] usb: handle HAS_IOPORT dependencies
+Date:   Fri, 29 Apr 2022 15:51:03 +0200
+Message-Id: <20220429135108.2781579-66-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: AU2KwRPtisH_A7Cod8QttpmB897aRDm3
-X-Proofpoint-GUID: AU2KwRPtisH_A7Cod8QttpmB897aRDm3
+X-Proofpoint-ORIG-GUID: rvcpZzOhKSl5HklImPNNlTpQARy6obGF
+X-Proofpoint-GUID: rvcpZzOhKSl5HklImPNNlTpQARy6obGF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=780 bulkscore=0
- malwarescore=0 suspectscore=0 impostorscore=0 clxscore=1015 adultscore=0
- priorityscore=1501 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204290078
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ clxscore=1011 mlxlogscore=902 priorityscore=1501 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204290078
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -94,29 +94,28 @@ drivers requiring these functions need to depend on HAS_IOPORT.
 Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/usb/core/hcd-pci.c    |   2 +
+ drivers/usb/core/hcd-pci.c    |   3 +-
  drivers/usb/host/Kconfig      |   4 +-
  drivers/usb/host/pci-quirks.c | 128 ++++++++++++++++++----------------
- drivers/usb/host/pci-quirks.h |  31 +++++---
+ drivers/usb/host/pci-quirks.h |  33 ++++++---
  drivers/usb/host/uhci-hcd.c   |   2 +-
- drivers/usb/host/uhci-hcd.h   |  33 +++++----
- 6 files changed, 117 insertions(+), 83 deletions(-)
+ drivers/usb/host/uhci-hcd.h   |  77 +++++++++++++-------
+ 6 files changed, 149 insertions(+), 98 deletions(-)
 
 diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 8176bc81a635..4d119154acd0 100644
+index 8176bc81a635..50f1499a073e 100644
 --- a/drivers/usb/core/hcd-pci.c
 +++ b/drivers/usb/core/hcd-pci.c
-@@ -212,8 +212,10 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id,
+@@ -212,7 +212,8 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id,
  		goto free_irq_vectors;
  	}
  
-+#ifdef CONFIG_USB_PCI_AMD
- 	hcd->amd_resume_bug = (usb_hcd_amd_remote_wakeup_quirk(dev) &&
+-	hcd->amd_resume_bug = (usb_hcd_amd_remote_wakeup_quirk(dev) &&
++	hcd->amd_resume_bug = (IS_ENABLED(CONFIG_USB_PCI_AMD) &&
++			usb_hcd_amd_remote_wakeup_quirk(dev) &&
  			driver->flags & (HCD_USB11 | HCD_USB3)) ? 1 : 0;
-+#endif
  
  	if (driver->flags & HCD_MEMORY) {
- 		/* EHCI, OHCI */
 diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
 index 57ca5f97a3dc..cd1faa3174e3 100644
 --- a/drivers/usb/host/Kconfig
@@ -140,7 +139,7 @@ index 57ca5f97a3dc..cd1faa3174e3 100644
  	  The Universal Host Controller Interface is a standard by Intel for
  	  accessing the USB hardware in the PC (which is also called the USB
 diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-index ef08d68b9714..4fd06b48149d 100644
+index ef08d68b9714..01471902c274 100644
 --- a/drivers/usb/host/pci-quirks.c
 +++ b/drivers/usb/host/pci-quirks.c
 @@ -60,6 +60,23 @@
@@ -279,10 +278,10 @@ index ef08d68b9714..4fd06b48149d 100644
 +	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_WRITEREG_CMD);
 +	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_FLOWCTL_ADDR);
 +	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
-+
+ 
 +	if (usb_asmedia_wait_write(pdev) != 0)
 +		return;
- 
++
 +	/* send data to device */
 +	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_FLOWCTL_DATA);
 +	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_PSEUDO_DATA);
@@ -290,7 +289,7 @@ index ef08d68b9714..4fd06b48149d 100644
 +}
 +EXPORT_SYMBOL_GPL(usb_asmedia_modifyflowcontrol);
 +
-+#ifdef CONFIG_HAS_IOPORT
++#if IS_ENABLED(CONFIG_USB_UHCI_HCD) && defined(CONFIG_HAS_IOPORT)
  /*
   * Make sure the controller is completely inactive, unable to
   * generate interrupts or do DMA.
@@ -302,23 +301,16 @@ index ef08d68b9714..4fd06b48149d 100644
  
  static inline int io_type_enabled(struct pci_dev *pdev, unsigned int mask)
  {
-@@ -725,6 +730,7 @@ static inline int io_type_enabled(struct pci_dev *pdev, unsigned int mask)
- 
- static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
- {
-+#ifdef HAS_IOPORT
+@@ -728,7 +733,7 @@ static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
  	unsigned long base = 0;
  	int i;
  
-@@ -739,6 +745,7 @@ static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
+-	if (!pio_enabled(pdev))
++	if (!IS_ENABLED(CONFIG_HAS_IOPORT) || !pio_enabled(pdev))
+ 		return;
  
- 	if (base)
- 		uhci_check_and_reset_hc(pdev, base);
-+#endif
- }
- 
- static int mmio_resource_enabled(struct pci_dev *pdev, int idx)
-@@ -1273,7 +1280,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
+ 	for (i = 0; i < PCI_STD_NUM_BARS; i++)
+@@ -1273,7 +1278,8 @@ static void quirk_usb_early_handoff(struct pci_dev *pdev)
  			 "Can't enable PCI device, BIOS handoff failed.\n");
  		return;
  	}
@@ -329,10 +321,10 @@ index ef08d68b9714..4fd06b48149d 100644
  	else if (pdev->class == PCI_CLASS_SERIAL_USB_OHCI)
  		quirk_usb_handoff_ohci(pdev);
 diff --git a/drivers/usb/host/pci-quirks.h b/drivers/usb/host/pci-quirks.h
-index e729de21fad7..5642318fd1d1 100644
+index e729de21fad7..42eb18be37af 100644
 --- a/drivers/usb/host/pci-quirks.h
 +++ b/drivers/usb/host/pci-quirks.h
-@@ -2,33 +2,48 @@
+@@ -2,33 +2,50 @@
  #ifndef __LINUX_USB_PCI_QUIRKS_H
  #define __LINUX_USB_PCI_QUIRKS_H
  
@@ -340,6 +332,8 @@ index e729de21fad7..5642318fd1d1 100644
  void uhci_reset_hc(struct pci_dev *pdev, unsigned long base);
  int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base);
 -int usb_hcd_amd_remote_wakeup_quirk(struct pci_dev *pdev);
++
++struct pci_dev;
 +
 +#ifdef CONFIG_USB_PCI_AMD
  bool usb_amd_hang_symptom_quirk(void);
@@ -403,122 +397,147 @@ index d90b869f5f40..a3b0d3d3b395 100644
  #define	PCI_DRIVER		uhci_pci_driver
  #endif
 diff --git a/drivers/usb/host/uhci-hcd.h b/drivers/usb/host/uhci-hcd.h
-index 8ae5ccd26753..be4aee1f0ca5 100644
+index 8ae5ccd26753..8e30116b6fd2 100644
 --- a/drivers/usb/host/uhci-hcd.h
 +++ b/drivers/usb/host/uhci-hcd.h
-@@ -505,36 +505,43 @@ static inline bool uhci_is_aspeed(const struct uhci_hcd *uhci)
-  * we use memory mapped registers.
-  */
+@@ -586,12 +586,14 @@ static inline int uhci_aspeed_reg(unsigned int reg)
  
+ static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
+ {
 +#ifdef CONFIG_HAS_IOPORT
-+#define UHCI_IN(x)	x
-+#define UHCI_OUT(x)	x
-+#else
-+#define UHCI_IN(x)	0
-+#define UHCI_OUT(x)
+ 	if (uhci_has_pci_registers(uhci))
+ 		return inl(uhci->io_addr + reg);
+-	else if (uhci_is_aspeed(uhci))
 +#endif
- #ifndef CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC
- /* Support PCI only */
- static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
- {
--	return inl(uhci->io_addr + reg);
-+	return UHCI_IN(inl(uhci->io_addr + reg));
- }
++	if (uhci_is_aspeed(uhci))
+ 		return readl(uhci->regs + uhci_aspeed_reg(reg));
+ #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
+-	else if (uhci_big_endian_mmio(uhci))
++	if (uhci_big_endian_mmio(uhci))
+ 		return readl_be(uhci->regs + reg);
+ #endif
+ 	else
+@@ -600,72 +602,97 @@ static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
  
  static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
  {
--	outl(val, uhci->io_addr + reg);
-+	UHCI_OUT(outl(val, uhci->io_addr + reg));
+-	if (uhci_has_pci_registers(uhci))
++#ifdef CONFIG_HAS_IOPORT
++	if (uhci_has_pci_registers(uhci)) {
+ 		outl(val, uhci->io_addr + reg);
+-	else if (uhci_is_aspeed(uhci))
++		return;
++	}
++#endif
++	if (uhci_is_aspeed(uhci)) {
+ 		writel(val, uhci->regs + uhci_aspeed_reg(reg));
++		return;
++	}
+ #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
+-	else if (uhci_big_endian_mmio(uhci))
++	if (uhci_big_endian_mmio(uhci)) {
+ 		writel_be(val, uhci->regs + reg);
++		return;
++	}
+ #endif
+-	else
+-		writel(val, uhci->regs + reg);
++	writel(val, uhci->regs + reg);
  }
  
  static inline u16 uhci_readw(const struct uhci_hcd *uhci, int reg)
  {
--	return inw(uhci->io_addr + reg);
-+	return UHCI_IN(inw(uhci->io_addr + reg));
++#ifdef CONFIG_HAS_IOPORT
+ 	if (uhci_has_pci_registers(uhci))
+ 		return inw(uhci->io_addr + reg);
+-	else if (uhci_is_aspeed(uhci))
++#endif
++	if (uhci_is_aspeed(uhci))
+ 		return readl(uhci->regs + uhci_aspeed_reg(reg));
+ #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
+-	else if (uhci_big_endian_mmio(uhci))
++	if (uhci_big_endian_mmio(uhci))
+ 		return readw_be(uhci->regs + reg);
+ #endif
+-	else
+-		return readw(uhci->regs + reg);
++	return readw(uhci->regs + reg);
  }
  
  static inline void uhci_writew(const struct uhci_hcd *uhci, u16 val, int reg)
  {
--	outw(val, uhci->io_addr + reg);
-+	UHCI_OUT(outw(val, uhci->io_addr + reg));
+-	if (uhci_has_pci_registers(uhci))
++#ifdef CONFIG_HAS_IOPORT
++	if (uhci_has_pci_registers(uhci)) {
+ 		outw(val, uhci->io_addr + reg);
+-	else if (uhci_is_aspeed(uhci))
++		return;
++	}
++#endif
++	if (uhci_is_aspeed(uhci)) {
+ 		writel(val, uhci->regs + uhci_aspeed_reg(reg));
++		return;
++	}
+ #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
+-	else if (uhci_big_endian_mmio(uhci))
++	if (uhci_big_endian_mmio(uhci)) {
+ 		writew_be(val, uhci->regs + reg);
++		return;
++	}
+ #endif
+-	else
+-		writew(val, uhci->regs + reg);
++
++	writew(val, uhci->regs + reg);
  }
  
  static inline u8 uhci_readb(const struct uhci_hcd *uhci, int reg)
  {
--	return inb(uhci->io_addr + reg);
-+	return UHCI_IN(inb(uhci->io_addr + reg));
++#ifdef CONFIG_HAS_IOPORT
+ 	if (uhci_has_pci_registers(uhci))
+ 		return inb(uhci->io_addr + reg);
+-	else if (uhci_is_aspeed(uhci))
++#endif
++	if (uhci_is_aspeed(uhci))
+ 		return readl(uhci->regs + uhci_aspeed_reg(reg));
+ #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
+-	else if (uhci_big_endian_mmio(uhci))
++	if (uhci_big_endian_mmio(uhci))
+ 		return readb_be(uhci->regs + reg);
+ #endif
+-	else
+-		return readb(uhci->regs + reg);
++
++	return readb(uhci->regs + reg);
  }
  
  static inline void uhci_writeb(const struct uhci_hcd *uhci, u8 val, int reg)
  {
--	outb(val, uhci->io_addr + reg);
-+	UHCI_OUT(outb(val, uhci->io_addr + reg));
- }
- 
- #else
-@@ -587,7 +594,7 @@ static inline int uhci_aspeed_reg(unsigned int reg)
- static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
- {
- 	if (uhci_has_pci_registers(uhci))
--		return inl(uhci->io_addr + reg);
-+		return UHCI_IN(inl(uhci->io_addr + reg));
- 	else if (uhci_is_aspeed(uhci))
- 		return readl(uhci->regs + uhci_aspeed_reg(reg));
- #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
-@@ -601,7 +608,7 @@ static inline u32 uhci_readl(const struct uhci_hcd *uhci, int reg)
- static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
- {
- 	if (uhci_has_pci_registers(uhci))
--		outl(val, uhci->io_addr + reg);
-+		UHCI_OUT(outl(val, uhci->io_addr + reg));
- 	else if (uhci_is_aspeed(uhci))
+-	if (uhci_has_pci_registers(uhci))
++#ifdef CONFIG_HAS_IOPORT
++	if (uhci_has_pci_registers(uhci)) {
+ 		outb(val, uhci->io_addr + reg);
+-	else if (uhci_is_aspeed(uhci))
++		return;
++	}
++#endif
++	if (uhci_is_aspeed(uhci)) {
  		writel(val, uhci->regs + uhci_aspeed_reg(reg));
++		return;
++	}
  #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
-@@ -615,7 +622,7 @@ static inline void uhci_writel(const struct uhci_hcd *uhci, u32 val, int reg)
- static inline u16 uhci_readw(const struct uhci_hcd *uhci, int reg)
- {
- 	if (uhci_has_pci_registers(uhci))
--		return inw(uhci->io_addr + reg);
-+		return UHCI_IN(inw(uhci->io_addr + reg));
- 	else if (uhci_is_aspeed(uhci))
- 		return readl(uhci->regs + uhci_aspeed_reg(reg));
- #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
-@@ -629,7 +636,7 @@ static inline u16 uhci_readw(const struct uhci_hcd *uhci, int reg)
- static inline void uhci_writew(const struct uhci_hcd *uhci, u16 val, int reg)
- {
- 	if (uhci_has_pci_registers(uhci))
--		outw(val, uhci->io_addr + reg);
-+		UHCI_OUT(outw(val, uhci->io_addr + reg));
- 	else if (uhci_is_aspeed(uhci))
- 		writel(val, uhci->regs + uhci_aspeed_reg(reg));
- #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
-@@ -643,7 +650,7 @@ static inline void uhci_writew(const struct uhci_hcd *uhci, u16 val, int reg)
- static inline u8 uhci_readb(const struct uhci_hcd *uhci, int reg)
- {
- 	if (uhci_has_pci_registers(uhci))
--		return inb(uhci->io_addr + reg);
-+		return UHCI_IN(inb(uhci->io_addr + reg));
- 	else if (uhci_is_aspeed(uhci))
- 		return readl(uhci->regs + uhci_aspeed_reg(reg));
- #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
-@@ -657,7 +664,7 @@ static inline u8 uhci_readb(const struct uhci_hcd *uhci, int reg)
- static inline void uhci_writeb(const struct uhci_hcd *uhci, u8 val, int reg)
- {
- 	if (uhci_has_pci_registers(uhci))
--		outb(val, uhci->io_addr + reg);
-+		UHCI_OUT(outb(val, uhci->io_addr + reg));
- 	else if (uhci_is_aspeed(uhci))
- 		writel(val, uhci->regs + uhci_aspeed_reg(reg));
- #ifdef CONFIG_USB_UHCI_BIG_ENDIAN_MMIO
-@@ -668,6 +675,8 @@ static inline void uhci_writeb(const struct uhci_hcd *uhci, u8 val, int reg)
- 		writeb(val, uhci->regs + reg);
+-	else if (uhci_big_endian_mmio(uhci))
++	if (uhci_big_endian_mmio(uhci)) {
+ 		writeb_be(val, uhci->regs + reg);
++		return;
++	}
+ #endif
+-	else
+-		writeb(val, uhci->regs + reg);
++	writeb(val, uhci->regs + reg);
  }
  #endif /* CONFIG_USB_UHCI_SUPPORT_NON_PCI_HC */
-+#undef UHCI_IN
-+#undef UHCI_OUT
  
- /*
-  * The GRLIB GRUSBHC controller can use big endian format for its descriptors.
 -- 
 2.32.0
 
