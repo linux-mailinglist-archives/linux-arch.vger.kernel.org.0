@@ -2,84 +2,94 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A488514C12
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A038E514BD7
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377071AbiD2OA0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Apr 2022 10:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S1376935AbiD2N6R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Apr 2022 09:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376965AbiD2N6s (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:58:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8DACFE74;
-        Fri, 29 Apr 2022 06:52:30 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TBipZU027110;
-        Fri, 29 Apr 2022 13:51:54 GMT
+        with ESMTP id S1376685AbiD2N5C (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:57:02 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54DDCEE25;
+        Fri, 29 Apr 2022 06:52:04 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TDh14h008386;
+        Fri, 29 Apr 2022 13:51:55 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=+C8FlDhVWJtR+w96yXAxLPw9WZXAz/K2Ln7dWnWiEIo=;
- b=kJHbpbdiDBt7LNtY+Th6TCy4QJaY9wcrslDYSzWFtG0doYHmR1QPueJYOKbyH/+LVvU0
- SgLKFC6LRJBuvf8+Wjjghr0/+h8TnB0m2ujEOdgGXxxKUap7YLjxY59TGO45Zz4lnY9t
- 5YfTamzzY6q0s6A1wvy7ZzyincqfAa7gmgu4/nURn+AV0KZX3N4xhc+qhPOxnuSwRZwt
- L7nAXqTFbBsfH2OpzsTD1MnOTJfwRtxXl2IOn6tzPLroB0XH0WVCZSRwbY3b7UFnfOou
- jf75wy0MRjDWEScSSSaW9hImmbSM4uQ+JPU6piXtBJTN8gJAU2PRDPQXjw2X4v5Y07eg Gg== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqundujwj-1
+ bh=K4n4o7YXCgp339mIN18ePP8hJRhIVvRKgfFIdbm/FzU=;
+ b=r/8ztM3DeUxrhrwLe7Wzj7x0ydC24Kc7RpsotnB3aYxUNiBA33m4aDQGKsqZzPYMERgU
+ dnkohJ9vVDs9F1THkqBvT+084LR1aB9dyxk6XlHNrgLMd5DKpO0kQx+ke3mEyFxvkV2J
+ IjJwI6NqmdrvsnTXqvqzOmPbjt2d/mV8eHs8BvKCv3DBVEmb+x8+94VjGQRL2wVYxaBF
+ zLUGEEV/AzZz9/X5X+1OuyIj7YWdbmZRAtAjQNiHXjq1rhsRxoxgYEQbSf7bLMq7TOuR
+ 7HOJEtFLhjB9pGlTIud2TWHNu8zA8G8iNlmNW5L/tfmqFg3iGqXvwV14V9uoRX/YPkfm iA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3frh55r61x-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:53 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDSAZx025994;
-        Fri, 29 Apr 2022 13:51:51 GMT
+        Fri, 29 Apr 2022 13:51:55 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TDketc022854;
+        Fri, 29 Apr 2022 13:51:54 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3frh55r616-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 29 Apr 2022 13:51:54 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDQfA7021506;
+        Fri, 29 Apr 2022 13:51:52 GMT
 Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma05fra.de.ibm.com with ESMTP id 3fm938yage-1
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm93917ry-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:51 +0000
+        Fri, 29 Apr 2022 13:51:52 +0000
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDpnV714483722
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDpnTr15925518
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 29 Apr 2022 13:51:49 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2414D4C04E;
+        by IMSVA (Postfix) with ESMTP id BCE8E4C040;
         Fri, 29 Apr 2022 13:51:49 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD4C14C044;
-        Fri, 29 Apr 2022 13:51:48 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5917B4C044;
+        Fri, 29 Apr 2022 13:51:49 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 13:51:48 +0000 (GMT)
+        Fri, 29 Apr 2022 13:51:49 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-watchdog@vger.kernel.org (open list:WATCHDOG DEVICE DRIVERS)
-Subject: [RFC v2 37/39] watchdog: add HAS_IOPORT dependencies
-Date:   Fri, 29 Apr 2022 15:51:06 +0200
-Message-Id: <20220429135108.2781579-69-schnelle@linux.ibm.com>
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Jouni Malinen <j@w1.fi>,
+        linux-wireless@vger.kernel.org (open list:NETWORKING DRIVERS (WIRELESS)),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+Subject: [RFC v2 38/39] wireless: add HAS_IOPORT dependencies
+Date:   Fri, 29 Apr 2022 15:51:07 +0200
+Message-Id: <20220429135108.2781579-70-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: IIGdQ5oiWr_KNG9hqBv1KR3GAhts2IHP
-X-Proofpoint-GUID: IIGdQ5oiWr_KNG9hqBv1KR3GAhts2IHP
+X-Proofpoint-ORIG-GUID: LkT0e9uwRCPbE8YAamp5GWwhNaIhdD8L
+X-Proofpoint-GUID: chLt91eDVvLhzOlXefciDTd0Om4gxJp8
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- adultscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
- mlxlogscore=771 impostorscore=0 phishscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 mlxscore=0 adultscore=0
+ clxscore=1011 mlxlogscore=856 priorityscore=1501 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2204290078
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,47 +103,36 @@ those drivers using them.
 Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/watchdog/Kconfig | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/wireless/atmel/Kconfig           | 2 +-
+ drivers/net/wireless/intersil/hostap/Kconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index c4e82a8d863f..3242be37b2d7 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -453,6 +453,7 @@ config 21285_WATCHDOG
- config 977_WATCHDOG
- 	tristate "NetWinder WB83C977 watchdog"
- 	depends on (FOOTBRIDGE && ARCH_NETWINDER) || (ARM && COMPILE_TEST)
-+	depends on HAS_IOPORT
- 	help
- 	  Say Y here to include support for the WB977 watchdog included in
- 	  NetWinder machines. Alternatively say M to compile the driver as
-@@ -1235,6 +1236,7 @@ config ITCO_WDT
- 	select WATCHDOG_CORE
- 	depends on I2C || I2C=n
- 	depends on MFD_INTEL_PMC_BXT || !MFD_INTEL_PMC_BXT
-+	depends on HAS_IOPORT # for I2C_I801
- 	select LPC_ICH if !EXPERT
- 	select I2C_I801 if !EXPERT && I2C
- 	help
-@@ -2090,7 +2092,7 @@ comment "PCI-based Watchdog Cards"
+diff --git a/drivers/net/wireless/atmel/Kconfig b/drivers/net/wireless/atmel/Kconfig
+index ca45a1021cf4..bafdd57b049a 100644
+--- a/drivers/net/wireless/atmel/Kconfig
++++ b/drivers/net/wireless/atmel/Kconfig
+@@ -14,7 +14,7 @@ if WLAN_VENDOR_ATMEL
  
- config PCIPCWATCHDOG
- 	tristate "Berkshire Products PCI-PC Watchdog"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
- 	help
- 	  This is the driver for the Berkshire Products PCI-PC Watchdog card.
- 	  This card simply watches your kernel to make sure it doesn't freeze,
-@@ -2105,7 +2107,7 @@ config PCIPCWATCHDOG
+ config ATMEL
+ 	tristate "Atmel at76c50x chipset  802.11b support"
+-	depends on CFG80211 && (PCI || PCMCIA)
++	depends on CFG80211 && (PCI || PCMCIA) && HAS_IOPORT
+ 	select WIRELESS_EXT
+ 	select WEXT_PRIV
+ 	select FW_LOADER
+diff --git a/drivers/net/wireless/intersil/hostap/Kconfig b/drivers/net/wireless/intersil/hostap/Kconfig
+index c865d3156cea..2edff8efbcbb 100644
+--- a/drivers/net/wireless/intersil/hostap/Kconfig
++++ b/drivers/net/wireless/intersil/hostap/Kconfig
+@@ -56,7 +56,7 @@ config HOSTAP_FIRMWARE_NVRAM
  
- config WDTPCI
- 	tristate "PCI-WDT500/501 Watchdog timer"
--	depends on PCI
-+	depends on PCI && HAS_IOPORT
+ config HOSTAP_PLX
+ 	tristate "Host AP driver for Prism2/2.5/3 in PLX9052 PCI adaptors"
+-	depends on PCI && HOSTAP
++	depends on PCI && HOSTAP && HAS_IOPORT
  	help
- 	  If you have a PCI-WDT500/501 watchdog board, say Y here, otherwise N.
- 
+ 	Host AP driver's version for Prism2/2.5/3 PC Cards in PLX9052 based
+ 	PCI adaptors.
 -- 
 2.32.0
 
