@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1D95145AD
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 11:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFDE5145A9
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 11:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356882AbiD2Jtc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Apr 2022 05:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        id S1356770AbiD2Jsi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Apr 2022 05:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356872AbiD2Js6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 05:48:58 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FF2A6E3D;
-        Fri, 29 Apr 2022 02:45:40 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KqSJB2Ncdz1JBmy;
-        Fri, 29 Apr 2022 17:44:42 +0800 (CST)
+        with ESMTP id S245068AbiD2Jsc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 05:48:32 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1551A3BF;
+        Fri, 29 Apr 2022 02:45:13 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KqSCS2d4HzCsRc;
+        Fri, 29 Apr 2022 17:40:36 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 29 Apr 2022 17:45:10 +0800
+ 15.1.2375.24; Fri, 29 Apr 2022 17:45:11 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -36,9 +36,9 @@ CC:     <jthierry@redhat.com>, <catalin.marinas@arm.com>,
         <davem@davemloft.net>, <ardb@kernel.org>, <maz@kernel.org>,
         <tglx@linutronix.de>, <luc.vanoostenryck@gmail.com>,
         <chenzhongjin@huawei.com>
-Subject: [RFC PATCH v4 08/37] objtool: arm64: Decode load/store instructions
-Date:   Fri, 29 Apr 2022 17:43:26 +0800
-Message-ID: <20220429094355.122389-9-chenzhongjin@huawei.com>
+Subject: [RFC PATCH v4 09/37] objtool: arm64: Decode LDR instructions
+Date:   Fri, 29 Apr 2022 17:43:27 +0800
+Message-ID: <20220429094355.122389-10-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220429094355.122389-1-chenzhongjin@huawei.com>
 References: <20220429094355.122389-1-chenzhongjin@huawei.com>
@@ -58,195 +58,174 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Julien Thierry <jthierry@redhat.com>
 
-Decode load/store operations and create corresponding stack_ops for
-operations targeting SP or FP.
-
-Operations storing/loading multiple registers are split into separate
-stack_ops storing single registers.
-
-Operations modifying the base register get an additional stack_op
-for the register update. Since the atomic register(s) load/store + base
-register update gets split into multiple operations, to make sure
-objtool always sees a valid stack, consider store instruction to perform
-stack allocations (i.e. modifying the base pointer before the storing)
-and loads de-allocations (i.e. modifying the base pointer after the
-load).
+Load literal instructions can generate constants inside code sections.
+Record the locations of the constants in order to be able to remove
+their corresponding "struct instruction".
 
 Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- tools/objtool/arch/arm64/decode.c | 144 ++++++++++++++++++++++++++++++
- 1 file changed, 144 insertions(+)
+ tools/objtool/arch/arm64/decode.c    | 86 ++++++++++++++++++++++++++++
+ tools/objtool/arch/x86/decode.c      |  5 ++
+ tools/objtool/check.c                |  3 +
+ tools/objtool/include/objtool/arch.h |  3 +
+ 4 files changed, 97 insertions(+)
 
 diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
-index b07e0f51637e..4a868945dcfb 100644
+index 4a868945dcfb..b62addece734 100644
 --- a/tools/objtool/arch/arm64/decode.c
 +++ b/tools/objtool/arch/arm64/decode.c
-@@ -112,6 +112,48 @@ int arch_decode_hint_reg(u8 sp_reg, int *base)
- 	return -1;
+@@ -22,6 +22,73 @@ static unsigned long sign_extend(unsigned long x, int nbits)
+ 	return ((~0UL + (sign_bit ^ 1)) << nbits) | x;
  }
  
-+static struct stack_op *arm_make_store_op(enum aarch64_insn_register base,
-+					  enum aarch64_insn_register reg,
-+					  int offset)
++struct insn_loc {
++	const struct section *sec;
++	unsigned long offset;
++	struct hlist_node hnode;
++	bool delete;
++};
++
++DEFINE_HASHTABLE(invalid_insns, 16);
++
++static int record_invalid_insn(const struct section *sec,
++			       unsigned long offset,
++			       bool delete)
 +{
-+	struct stack_op *op;
++	struct insn_loc *loc;
++	struct hlist_head *l;
 +
-+	op = calloc(1, sizeof(*op));
-+	if (!op) {
-+		WARN("calloc failed");
-+		return NULL;
-+	}
-+	op->dest.type = OP_DEST_REG_INDIRECT;
-+	op->dest.reg = base;
-+	op->dest.offset = offset;
-+	op->src.type = OP_SRC_REG;
-+	op->src.reg = reg;
-+	op->src.offset = 0;
-+
-+	return op;
-+}
-+
-+static struct stack_op *arm_make_load_op(enum aarch64_insn_register base,
-+					 enum aarch64_insn_register reg,
-+					 int offset)
-+{
-+	struct stack_op *op;
-+
-+	op = calloc(1, sizeof(*op));
-+	if (!op) {
-+		WARN("calloc failed");
-+		return NULL;
-+	}
-+	op->dest.type = OP_DEST_REG;
-+	op->dest.reg = reg;
-+	op->dest.offset = 0;
-+	op->src.type = OP_SRC_REG_INDIRECT;
-+	op->src.reg = base;
-+	op->src.offset = offset;
-+
-+	return op;
-+}
-+
- static struct stack_op *arm_make_add_op(enum aarch64_insn_register dest,
- 					enum aarch64_insn_register src,
- 					int val)
-@@ -132,6 +174,98 @@ static struct stack_op *arm_make_add_op(enum aarch64_insn_register dest,
- 	return op;
- }
- 
-+static int arm_decode_load_store(u32 insn, unsigned long *immediate,
-+				 struct list_head *ops_list)
-+{
-+	enum aarch64_insn_register base;
-+	enum aarch64_insn_register rt;
-+	struct stack_op *op;
-+	int size;
-+	int offset;
-+
-+	if (aarch64_insn_is_store_single(insn) ||
-+	    aarch64_insn_is_load_single(insn))
-+		size = 1 << ((insn & GENMASK(31, 30)) >> 30);
-+	else
-+		size = 4 << ((insn >> 31) & 1);
-+
-+	if (aarch64_insn_is_store_imm(insn) || aarch64_insn_is_load_imm(insn))
-+		*immediate = size * aarch64_insn_decode_immediate(AARCH64_INSN_IMM_12,
-+								  insn);
-+	else if (aarch64_insn_is_store_pre(insn) ||
-+		 aarch64_insn_is_load_pre(insn) ||
-+		 aarch64_insn_is_store_post(insn) ||
-+		 aarch64_insn_is_load_post(insn))
-+		*immediate = sign_extend(aarch64_insn_decode_immediate(AARCH64_INSN_IMM_9,
-+								       insn),
-+					 9);
-+	else if (aarch64_insn_is_stp(insn) || aarch64_insn_is_ldp(insn) ||
-+		 aarch64_insn_is_stp_pre(insn) ||
-+		 aarch64_insn_is_ldp_pre(insn) ||
-+		 aarch64_insn_is_stp_post(insn) ||
-+		 aarch64_insn_is_ldp_post(insn))
-+		*immediate = size * sign_extend(aarch64_insn_decode_immediate(AARCH64_INSN_IMM_7,
-+									      insn),
-+						7);
-+	else
-+		return 1;
-+
-+	base = aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RN, insn);
-+	if (base != AARCH64_INSN_REG_FP && base != AARCH64_INSN_REG_SP)
++	l = &invalid_insns[hash_min(offset, HASH_BITS(invalid_insns))];
++	if (!hlist_empty(l)) {
++		loc = hlist_entry(l->first, struct insn_loc, hnode);
++		loc->delete |= delete;
 +		return 0;
-+
-+	offset = *immediate;
-+
-+	if (aarch64_insn_is_store_pre(insn) || aarch64_insn_is_stp_pre(insn) ||
-+	    aarch64_insn_is_store_post(insn) || aarch64_insn_is_stp_post(insn)) {
-+		op = arm_make_add_op(base, base, *immediate);
-+		list_add_tail(&op->list, ops_list);
-+
-+		if (aarch64_insn_is_store_post(insn) || aarch64_insn_is_stp_post(insn))
-+			offset = -*immediate;
-+		else
-+			offset = 0;
-+	} else if (aarch64_insn_is_load_post(insn) || aarch64_insn_is_ldp_post(insn)) {
-+		offset = 0;
 +	}
 +
-+	/* First register */
-+	rt = aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RT, insn);
-+	if (aarch64_insn_is_store_single(insn) ||
-+	    aarch64_insn_is_store_pair(insn))
-+		op = arm_make_store_op(base, rt, offset);
-+	else
-+		op = arm_make_load_op(base, rt, offset);
-+
-+	if (!op)
++	loc = malloc(sizeof(*loc));
++	if (!loc) {
++		WARN("malloc failed");
 +		return -1;
-+	list_add_tail(&op->list, ops_list);
-+
-+	/* Second register (if present) */
-+	if (aarch64_insn_is_store_pair(insn) ||
-+	    aarch64_insn_is_load_pair(insn)) {
-+		rt = aarch64_insn_decode_register(AARCH64_INSN_REGTYPE_RT2,
-+						  insn);
-+		if (aarch64_insn_is_store_pair(insn))
-+			op = arm_make_store_op(base, rt, offset + size);
-+		else
-+			op = arm_make_load_op(base, rt, offset + size);
-+		if (!op)
-+			return -1;
-+		list_add_tail(&op->list, ops_list);
 +	}
 +
-+	if (aarch64_insn_is_load_pre(insn) || aarch64_insn_is_ldp_pre(insn) ||
-+	    aarch64_insn_is_load_post(insn) || aarch64_insn_is_ldp_post(insn)) {
-+		op = arm_make_add_op(base, base, *immediate);
-+		if (!op)
-+			return -1;
-+		list_add_tail(&op->list, ops_list);
-+	}
++	loc->sec = sec;
++	loc->offset = offset;
++	loc->delete = delete;
++
++	hash_add(invalid_insns, &loc->hnode, loc->offset);
 +
 +	return 0;
 +}
 +
- static int arm_decode_add_sub_imm(u32 instr, bool set_flags,
- 				  unsigned long *immediate,
- 				  struct list_head *ops_list)
-@@ -247,6 +381,16 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
- 			*immediate = aarch64_insn_decode_immediate(AARCH64_INSN_IMM_16, insn);
- 		}
- 		break;
-+	case AARCH64_INSN_CLS_LDST:
-+	{
-+		int ret;
++int arch_post_process_instructions(struct objtool_file *file)
++{
++	struct hlist_node *tmp;
++	struct insn_loc *loc;
++	unsigned int bkt;
++	int res = 0;
 +
-+		ret = arm_decode_load_store(insn, immediate, ops_list);
-+		if (ret <= 0)
-+			return ret;
++	hash_for_each_safe(invalid_insns, bkt, tmp, loc, hnode) {
++		struct instruction *insn;
 +
-+		break;
++		insn = find_insn(file, (struct section *) loc->sec, loc->offset);
++		if (insn) {
++			if (loc->delete) {
++				list_del(&insn->list);
++				hash_del(&insn->hash);
++				free(insn);
++			} else {
++				WARN_FUNC("can't decode instruction", insn->sec, insn->offset);
++				insn->ignore = true;
++			}
++		}
++
++		hash_del(&loc->hnode);
++		free(loc);
 +	}
- 	default:
++
++	return res;
++}
++
+ bool arch_callee_saved_reg(unsigned char reg)
+ {
+ 	switch (reg) {
+@@ -389,6 +456,25 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 		if (ret <= 0)
+ 			return ret;
+ 
++		if (aarch64_insn_is_ldr_lit(insn)) {
++			long pc_offset;
++
++			pc_offset = insn & GENMASK(23, 5);
++			/* Sign extend and multiply by 4 */
++			pc_offset = (pc_offset << (64 - 23));
++			pc_offset = ((pc_offset >> (64 - 23)) >> 5) << 2;
++
++			if (record_invalid_insn(sec, offset + pc_offset, true))
++				return -1;
++
++			/* 64-bit literal */
++			if (insn & BIT(30)) {
++				if (record_invalid_insn(sec,
++							offset + pc_offset + 4,
++							true))
++					return -1;
++			}
++		}
  		break;
  	}
+ 	default:
+diff --git a/tools/objtool/arch/x86/decode.c b/tools/objtool/arch/x86/decode.c
+index 943cb41cddf7..c116b6a58898 100644
+--- a/tools/objtool/arch/x86/decode.c
++++ b/tools/objtool/arch/x86/decode.c
+@@ -693,6 +693,11 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 	return 0;
+ }
+ 
++int arch_post_process_instructions(struct objtool_file *file)
++{
++	return 0;
++}
++
+ void arch_initial_func_cfi_state(struct cfi_init_state *state)
+ {
+ 	int i;
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index bd0c2c828940..e71c2ab7327a 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -436,6 +436,9 @@ static int decode_instructions(struct objtool_file *file)
+ 	if (stats)
+ 		printf("nr_insns: %lu\n", nr_insns);
+ 
++	if (arch_post_process_instructions(file))
++		return -1;
++
+ 	return 0;
+ 
+ err:
+diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/objtool/arch.h
+index 9b19cc304195..ccd76ce1c92b 100644
+--- a/tools/objtool/include/objtool/arch.h
++++ b/tools/objtool/include/objtool/arch.h
+@@ -67,6 +67,7 @@ struct stack_op {
+ 	struct list_head list;
+ };
+ 
++struct objtool_file;
+ struct instruction;
+ 
+ void arch_initial_func_cfi_state(struct cfi_init_state *state);
+@@ -77,6 +78,8 @@ int arch_decode_instruction(struct objtool_file *file, const struct section *sec
+ 			    unsigned long *immediate,
+ 			    struct list_head *ops_list);
+ 
++int arch_post_process_instructions(struct objtool_file *file);
++
+ bool arch_callee_saved_reg(unsigned char reg);
+ 
+ unsigned long arch_jump_destination(struct instruction *insn);
 -- 
 2.17.1
 
