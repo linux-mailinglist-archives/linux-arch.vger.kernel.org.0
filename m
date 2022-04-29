@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFE75145BE
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 11:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7795145B7
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 11:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356804AbiD2JtS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Apr 2022 05:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S1356725AbiD2Jsd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Apr 2022 05:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356797AbiD2Jss (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 05:48:48 -0400
+        with ESMTP id S1356728AbiD2Jsc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 05:48:32 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB8D939A9;
-        Fri, 29 Apr 2022 02:45:21 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KqSJb6z1pzhYqK;
-        Fri, 29 Apr 2022 17:45:03 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFDB1A39E;
+        Fri, 29 Apr 2022 02:45:14 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KqSHg5DlMzfZqG;
+        Fri, 29 Apr 2022 17:44:15 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Fri, 29 Apr 2022 17:45:12 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -36,9 +36,9 @@ CC:     <jthierry@redhat.com>, <catalin.marinas@arm.com>,
         <davem@davemloft.net>, <ardb@kernel.org>, <maz@kernel.org>,
         <tglx@linutronix.de>, <luc.vanoostenryck@gmail.com>,
         <chenzhongjin@huawei.com>
-Subject: [RFC PATCH v4 15/37] objtool: arm64: Add unwind_hint support
-Date:   Fri, 29 Apr 2022 17:43:33 +0800
-Message-ID: <20220429094355.122389-16-chenzhongjin@huawei.com>
+Subject: [RFC PATCH v4 16/37] arm64: Add annotate_reachable() for objtools
+Date:   Fri, 29 Apr 2022 17:43:34 +0800
+Message-ID: <20220429094355.122389-17-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220429094355.122389-1-chenzhongjin@huawei.com>
 References: <20220429094355.122389-1-chenzhongjin@huawei.com>
@@ -56,112 +56,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Julien Thierry <jthierry@redhat.com>
+x86 removed annotate_reachable and replaced it with ASM_REACHABLE
+which is not suitable for arm64 micro because there are some cases
+GCC will merge duplicate inline asm.
 
-Provide unwind hint defines for arm64 and objtool hint decoding.
+Re-add annotation_reachable() for arm64.
 
-Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/include/asm/unwind_hints.h       | 27 +++++++++++++++++++++
- tools/arch/arm64/include/asm/unwind_hints.h | 27 +++++++++++++++++++++
- tools/objtool/arch/arm64/decode.c           |  8 +++++-
- 3 files changed, 61 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm64/include/asm/unwind_hints.h
- create mode 100644 tools/arch/arm64/include/asm/unwind_hints.h
+ include/linux/compiler.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/arm64/include/asm/unwind_hints.h b/arch/arm64/include/asm/unwind_hints.h
-new file mode 100644
-index 000000000000..60f866e4e12c
---- /dev/null
-+++ b/arch/arm64/include/asm/unwind_hints.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ASM_UNWIND_HINTS_H
-+#define __ASM_UNWIND_HINTS_H
-+
-+#include <linux/objtool.h>
-+
-+#define UNWIND_HINT_REG_UNDEFINED	0xff
-+#define UNWIND_HINT_REG_SP		31
-+
-+#ifdef __ASSEMBLY__
-+
-+.macro UNWIND_HINT_EMPTY
-+	UNWIND_HINT sp_reg=UNWIND_HINT_REG_UNDEFINED type=UNWIND_HINT_TYPE_CALL
-+.endm
-+
-+.macro UNWIND_HINT_FUNC sp_offset=0
-+	UNWIND_HINT sp_reg=UNWIND_HINT_REG_SP sp_offset=\sp_offset type=UNWIND_HINT_TYPE_CALL
-+.endm
-+
-+.macro UNWIND_HINT_REGS base=UNWIND_HINT_REG_SP offset=0
-+	UNWIND_HINT sp_reg=\base sp_offset=\offset type=UNWIND_HINT_TYPE_REGS
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* __ASM_UNWIND_HINTS_H */
-diff --git a/tools/arch/arm64/include/asm/unwind_hints.h b/tools/arch/arm64/include/asm/unwind_hints.h
-new file mode 100644
-index 000000000000..60f866e4e12c
---- /dev/null
-+++ b/tools/arch/arm64/include/asm/unwind_hints.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __ASM_UNWIND_HINTS_H
-+#define __ASM_UNWIND_HINTS_H
-+
-+#include <linux/objtool.h>
-+
-+#define UNWIND_HINT_REG_UNDEFINED	0xff
-+#define UNWIND_HINT_REG_SP		31
-+
-+#ifdef __ASSEMBLY__
-+
-+.macro UNWIND_HINT_EMPTY
-+	UNWIND_HINT sp_reg=UNWIND_HINT_REG_UNDEFINED type=UNWIND_HINT_TYPE_CALL
-+.endm
-+
-+.macro UNWIND_HINT_FUNC sp_offset=0
-+	UNWIND_HINT sp_reg=UNWIND_HINT_REG_SP sp_offset=\sp_offset type=UNWIND_HINT_TYPE_CALL
-+.endm
-+
-+.macro UNWIND_HINT_REGS base=UNWIND_HINT_REG_SP offset=0
-+	UNWIND_HINT sp_reg=\base sp_offset=\offset type=UNWIND_HINT_TYPE_REGS
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* __ASM_UNWIND_HINTS_H */
-diff --git a/tools/objtool/arch/arm64/decode.c b/tools/objtool/arch/arm64/decode.c
-index d2522ef43101..2e7affca1ec9 100644
---- a/tools/objtool/arch/arm64/decode.c
-+++ b/tools/objtool/arch/arm64/decode.c
-@@ -5,6 +5,7 @@
- #include <stdint.h>
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index 219aa5ddbc73..6a14e4bae37d 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -117,6 +117,14 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+  */
+ #define __stringify_label(n) #n
  
- #include <asm/insn.h>
-+#include <asm/unwind_hints.h>
- 
- #include <objtool/check.h>
- #include <objtool/arch.h>
-@@ -176,7 +177,12 @@ static int is_arm64(const struct elf *elf)
- 
- int arch_decode_hint_reg(u8 sp_reg, int *base)
- {
--	return -1;
-+	if (sp_reg == UNWIND_HINT_REG_UNDEFINED)
-+		*base = CFI_UNDEFINED;
-+	else
-+		*base = sp_reg;
++#define __annotate_reachable(c) ({					\
++	asm volatile(__stringify_label(c) ":\n\t"			\
++			".pushsection .discard.reachable\n\t"		\
++			".long " __stringify_label(c) "b - .\n\t"		\
++			".popsection\n\t");				\
++})
++#define annotate_reachable() __annotate_reachable(__COUNTER__)
 +
-+	return 0;
- }
+ #define __annotate_unreachable(c) ({					\
+ 	asm volatile(__stringify_label(c) ":\n\t"			\
+ 		     ".pushsection .discard.unreachable\n\t"		\
+@@ -129,6 +137,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
+ #define __annotate_jump_table __section(".rodata..c_jump_table")
  
- static struct stack_op *arm_make_store_op(enum aarch64_insn_register base,
+ #else
++#define annotate_reachable()
+ #define annotate_unreachable()
+ #define __annotate_jump_table
+ #endif
 -- 
 2.17.1
 
