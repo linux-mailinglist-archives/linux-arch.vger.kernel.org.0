@@ -2,60 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF24514AF4
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10DFF514B74
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376335AbiD2NsP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Apr 2022 09:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S1376695AbiD2N4N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Apr 2022 09:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376334AbiD2NsP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:48:15 -0400
+        with ESMTP id S1376596AbiD2Nzu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:55:50 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3D5CC51D;
-        Fri, 29 Apr 2022 06:44:56 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TCc4io016956;
-        Fri, 29 Apr 2022 13:44:36 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4B3692BD;
+        Fri, 29 Apr 2022 06:51:38 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TDE3dH026919;
+        Fri, 29 Apr 2022 13:51:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : content-transfer-encoding : mime-version; s=pp1;
  bh=xH1H+dZpcnkoXjkucpaq6JJ/BxwCu2uILw7KNDy7aWQ=;
- b=nlTaipuvXrKUA+OAOSnyBIFwdEWiircPn9NmgYwKt/nl54rcT6+Re0sXMDEjl81v+lfw
- Cr2NEwYpBfsCJcpVbyvCbqf3Do525Fx4vz/hkv+ghyKytLcqSNzpxxdUSacuaBJMhmnI
- 9iLfIVugA5JFq5i12cP+kLYwfiBQ4s7UafXQzplBOgLqOHwIc9+/JNvxzB14B3BLEgZT
- KC3QtNZvwkEOCXSda4oogtT5xXjWGhrXZ6NOxOv3Qszep2tFtCPU8mfMfgKINzCKOChl
- Hn1DzWNnMyCDkit4IshqACYsoeVLB2zWSv+CASNh87cIKm+uqE85pU1hrq+lkWUAzL9D ag== 
+ b=fpHIhE2wzCp/GSgwGsPiSJYIr2PtveG5Iz59hrxWkSf8C2XadyMUH6iCl2BIkscBsviH
+ bMs0kjoTouaEfvPpLBtn/02HDov4kpHi91QLo5zxNYdxZixe0/OTMgryMIWDQjawPbVb
+ 5a429a/xVpTjRciOyQ0UtFYxdJibkBbFHqEwMwH1xWXDHPdnOjJAN/h7CmSevCuypgQe
+ Jh4SnoKvS6VBQHbE7N+m1J2VM+b1lYcxnkvzwxEuLDD5X7N7MHWCQdCTnozg5GWY62G/
+ Aq5tCCd4krFcIBBg23QFx0d3l3CRkv97Y1SzqYAmmDp8vXQcQG0lO9O3wGbEpWVIHG27 VQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqqtnspm4-1
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvxmna3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:44:36 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TD4LbS032483;
-        Fri, 29 Apr 2022 13:44:35 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqqtnspkn-1
+        Fri, 29 Apr 2022 13:51:14 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TDgvAe001380;
+        Fri, 29 Apr 2022 13:51:14 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqtvxmn91-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:44:35 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDSeZh024602;
-        Fri, 29 Apr 2022 13:44:33 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 3fm938ya4g-1
+        Fri, 29 Apr 2022 13:51:13 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDQlIW021539;
+        Fri, 29 Apr 2022 13:51:11 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm93917qm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:44:33 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDiVQO47251784
+        Fri, 29 Apr 2022 13:51:11 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDp9Lj46596356
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Apr 2022 13:44:31 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DF26AE053;
-        Fri, 29 Apr 2022 13:44:31 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D188AAE045;
-        Fri, 29 Apr 2022 13:44:30 +0000 (GMT)
+        Fri, 29 Apr 2022 13:51:09 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 535344C040;
+        Fri, 29 Apr 2022 13:51:09 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8ADA4C04E;
+        Fri, 29 Apr 2022 13:51:08 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 13:44:30 +0000 (GMT)
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 29 Apr 2022 13:51:08 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -64,24 +64,28 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE)
 Subject: [RFC v2 00/39] Kconfig: Introduce HAS_IOPORT config option
-Date:   Fri, 29 Apr 2022 15:43:05 +0200
-Message-Id: <20220429134430.2607821-1-schnelle@linux.ibm.com>
+Date:   Fri, 29 Apr 2022 15:49:58 +0200
+Message-Id: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.32.0
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NLJ3a5TxLZAN4C-JQTC2Jqrv1a9rtw-_
-X-Proofpoint-GUID: -Vn1wGSaeQ2Fe2EKLTRlrGASTLYx_tRo
+X-Proofpoint-ORIG-GUID: cdpDh2WxnvzULvYFTeuMjjLEezvDLJdH
+X-Proofpoint-GUID: BkVAUnkRbGdJvgwI2KccZfGC2t9XHEzz
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- adultscore=0 impostorscore=0 malwarescore=0 suspectscore=0 phishscore=0
- priorityscore=1501 spamscore=0 clxscore=1011 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 suspectscore=0
+ clxscore=1011 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2202240000 definitions=main-2204290078
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
