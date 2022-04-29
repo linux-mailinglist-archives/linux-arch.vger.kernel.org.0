@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DB25145AA
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 11:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5163F5145C1
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 11:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356827AbiD2JtW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Apr 2022 05:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S1356794AbiD2Jtb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Apr 2022 05:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356854AbiD2Js4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 05:48:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C82A204D;
-        Fri, 29 Apr 2022 02:45:35 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KqSG51KfczGpX8;
-        Fri, 29 Apr 2022 17:42:53 +0800 (CST)
+        with ESMTP id S1356894AbiD2JtA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 05:49:00 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72662A94CD;
+        Fri, 29 Apr 2022 02:45:42 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KqSJB5Y1zz1JBnl;
+        Fri, 29 Apr 2022 17:44:42 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Fri, 29 Apr 2022 17:45:15 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -36,9 +36,9 @@ CC:     <jthierry@redhat.com>, <catalin.marinas@arm.com>,
         <davem@davemloft.net>, <ardb@kernel.org>, <maz@kernel.org>,
         <tglx@linutronix.de>, <luc.vanoostenryck@gmail.com>,
         <chenzhongjin@huawei.com>
-Subject: [RFC PATCH v4 32/37] arm64: crypto: Mark data in code sections
-Date:   Fri, 29 Apr 2022 17:43:50 +0800
-Message-ID: <20220429094355.122389-33-chenzhongjin@huawei.com>
+Subject: [RFC PATCH v4 33/37] arm64: Annotate ASM symbols with unknown stack state
+Date:   Fri, 29 Apr 2022 17:43:51 +0800
+Message-ID: <20220429094355.122389-34-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220429094355.122389-1-chenzhongjin@huawei.com>
 References: <20220429094355.122389-1-chenzhongjin@huawei.com>
@@ -56,163 +56,329 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Julien Thierry <jthierry@redhat.com>
+Some assembly symbols contain code that might be executed with an
+unspecified stack state (e.g. invalid stack pointer,
+no stackframe, ...).
 
-Use SYM_DATA_* macros to annotate data bytes in the middle of .text
-sections.
-
-For local symbols, ".L" prefix needs to be dropped as the assembler
-exclude the symbols from the .o symbol table, making objtool unable
-to see them.
+Annotate those symbol with UNWIND_HINT_EMPTY to let objtool be aware of
+them.
 
 Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/crypto/aes-neonbs-core.S | 14 +++++++-------
- arch/arm64/crypto/poly1305-armv8.pl |  4 ++++
- arch/arm64/crypto/sha512-armv8.pl   | 24 ++++++++++++++----------
- 3 files changed, 25 insertions(+), 17 deletions(-)
+ arch/arm64/include/asm/assembler.h  |  2 ++
+ arch/arm64/kernel/cpu-reset.S       |  2 ++
+ arch/arm64/kernel/efi-entry.S       |  2 ++
+ arch/arm64/kernel/entry.S           |  5 +++++
+ arch/arm64/kernel/head.S            | 13 +++++++++++++
+ arch/arm64/kernel/hibernate-asm.S   |  2 ++
+ arch/arm64/kernel/relocate_kernel.S |  2 ++
+ arch/arm64/kernel/sleep.S           |  3 +++
+ arch/arm64/kvm/hyp/hyp-entry.S      |  3 +++
+ 9 files changed, 34 insertions(+)
 
-diff --git a/arch/arm64/crypto/aes-neonbs-core.S b/arch/arm64/crypto/aes-neonbs-core.S
-index d427f4556b6e..fa161d1bf264 100644
---- a/arch/arm64/crypto/aes-neonbs-core.S
-+++ b/arch/arm64/crypto/aes-neonbs-core.S
-@@ -367,15 +367,15 @@
- 
- 
- 	.align		6
--M0:	.octa		0x0004080c0105090d02060a0e03070b0f
-+SYM_DATA_LOCAL(M0,	.octa		0x0004080c0105090d02060a0e03070b0f)
- 
--M0SR:	.octa		0x0004080c05090d010a0e02060f03070b
--SR:	.octa		0x0f0e0d0c0a09080b0504070600030201
--SRM0:	.octa		0x01060b0c0207080d0304090e00050a0f
-+SYM_DATA_LOCAL(M0SR,	.octa		0x0004080c05090d010a0e02060f03070b)
-+SYM_DATA_LOCAL(SR,	.octa		0x0f0e0d0c0a09080b0504070600030201)
-+SYM_DATA_LOCAL(SRM0,	.octa		0x01060b0c0207080d0304090e00050a0f)
- 
--M0ISR:	.octa		0x0004080c0d0105090a0e0206070b0f03
--ISR:	.octa		0x0f0e0d0c080b0a090504070602010003
--ISRM0:	.octa		0x0306090c00070a0d01040b0e0205080f
-+SYM_DATA_LOCAL(M0ISR,	.octa		0x0004080c0d0105090a0e0206070b0f03)
-+SYM_DATA_LOCAL(ISR,	.octa		0x0f0e0d0c080b0a090504070602010003)
-+SYM_DATA_LOCAL(ISRM0,	.octa		0x0306090c00070a0d01040b0e0205080f)
+diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
+index 8c5a61aeaf8e..68db05428e4b 100644
+--- a/arch/arm64/include/asm/assembler.h
++++ b/arch/arm64/include/asm/assembler.h
+@@ -25,6 +25,7 @@
+ #include <asm/pgtable-hwdef.h>
+ #include <asm/ptrace.h>
+ #include <asm/thread_info.h>
++#include <asm/unwind_hints.h>
  
  	/*
- 	 * void aesbs_convert_key(u8 out[], u32 const rk[], int rounds)
-diff --git a/arch/arm64/crypto/poly1305-armv8.pl b/arch/arm64/crypto/poly1305-armv8.pl
-index cbc980fb02e3..f460f33c127a 100644
---- a/arch/arm64/crypto/poly1305-armv8.pl
-+++ b/arch/arm64/crypto/poly1305-armv8.pl
-@@ -47,6 +47,8 @@ my ($mac,$nonce)=($inp,$len);
- my ($h0,$h1,$h2,$r0,$r1,$s1,$t0,$t1,$d0,$d1,$d2) = map("x$_",(4..14));
+ 	 * Provide a wxN alias for each wN register so what we can paste a xN
+@@ -147,6 +148,7 @@ lr	.req	x30		// link register
+  */
+ 	 .macro	ventry	label
+ 	.align	7
++	UNWIND_HINT_EMPTY
+ 	b	\label
+ 	.endm
  
- $code.=<<___;
-+#include <linux/linkage.h>
-+
- #ifndef __KERNEL__
- # include "arm_arch.h"
- .extern	OPENSSL_armcap_P
-@@ -888,8 +890,10 @@ poly1305_blocks_neon:
- .align	5
- .Lzeros:
- .long	0,0,0,0,0,0,0,0
-+SYM_DATA_START_LOCAL(POLY1305_str)
- .asciz	"Poly1305 for ARMv8, CRYPTOGAMS by \@dot-asm"
- .align	2
-+SYM_DATA_END(POLY1305_str)
- #if !defined(__KERNEL__) && !defined(_WIN64)
- .comm	OPENSSL_armcap_P,4,4
- .hidden	OPENSSL_armcap_P
-diff --git a/arch/arm64/crypto/sha512-armv8.pl b/arch/arm64/crypto/sha512-armv8.pl
-index dca0f22df07f..6e2a96e05c5a 100644
---- a/arch/arm64/crypto/sha512-armv8.pl
-+++ b/arch/arm64/crypto/sha512-armv8.pl
-@@ -193,6 +193,8 @@ ___
- }
+diff --git a/arch/arm64/kernel/cpu-reset.S b/arch/arm64/kernel/cpu-reset.S
+index 48a8af97faa9..c9022042bdec 100644
+--- a/arch/arm64/kernel/cpu-reset.S
++++ b/arch/arm64/kernel/cpu-reset.S
+@@ -10,6 +10,7 @@
+ #include <linux/linkage.h>
+ #include <asm/assembler.h>
+ #include <asm/sysreg.h>
++#include <asm/unwind_hints.h>
+ #include <asm/virt.h>
  
- $code.=<<___;
-+#include <linux/linkage.h>
-+
- #ifndef	__KERNEL__
- # include "arm_arch.h"
- #endif
-@@ -208,11 +210,11 @@ ___
- $code.=<<___	if ($SZ==4);
- #ifndef	__KERNEL__
- # ifdef	__ILP32__
--	ldrsw	x16,.LOPENSSL_armcap_P
-+	ldrsw	x16,OPENSSL_armcap_P_rel
- # else
--	ldr	x16,.LOPENSSL_armcap_P
-+	ldr	x16,OPENSSL_armcap_P_rel
- # endif
--	adr	x17,.LOPENSSL_armcap_P
-+	adr	x17,OPENSSL_armcap_P_rel
- 	add	x16,x16,x17
- 	ldr	w16,[x16]
- 	tst	w16,#ARMV8_SHA256
-@@ -237,7 +239,7 @@ $code.=<<___;
- 	ldp	$E,$F,[$ctx,#4*$SZ]
- 	add	$num,$inp,$num,lsl#`log(16*$SZ)/log(2)`	// end of input
- 	ldp	$G,$H,[$ctx,#6*$SZ]
--	adr	$Ktbl,.LK$BITS
-+	adr	$Ktbl,K$BITS
- 	stp	$ctx,$num,[x29,#96]
+ .text
+@@ -29,6 +30,7 @@
+  * flat identity mapping.
+  */
+ SYM_CODE_START(cpu_soft_restart)
++	UNWIND_HINT_EMPTY
+ 	mov_q	x12, INIT_SCTLR_EL1_MMU_OFF
+ 	pre_disable_mmu_workaround
+ 	/*
+diff --git a/arch/arm64/kernel/efi-entry.S b/arch/arm64/kernel/efi-entry.S
+index 61a87fa1c305..9a1a94c3c4db 100644
+--- a/arch/arm64/kernel/efi-entry.S
++++ b/arch/arm64/kernel/efi-entry.S
+@@ -9,10 +9,12 @@
+ #include <linux/init.h>
  
- .Loop:
-@@ -287,8 +289,7 @@ $code.=<<___;
- .size	$func,.-$func
+ #include <asm/assembler.h>
++#include <asm/unwind_hints.h>
  
- .align	6
--.type	.LK$BITS,%object
--.LK$BITS:
-+SYM_DATA_START_LOCAL(K$BITS)
- ___
- $code.=<<___ if ($SZ==8);
- 	.quad	0x428a2f98d728ae22,0x7137449123ef65cd
-@@ -353,18 +354,21 @@ $code.=<<___ if ($SZ==4);
- 	.long	0	//terminator
- ___
- $code.=<<___;
--.size	.LK$BITS,.-.LK$BITS
-+SYM_DATA_END(K$BITS)
- #ifndef	__KERNEL__
- .align	3
--.LOPENSSL_armcap_P:
-+SYM_DATA_START_LOCAL(OPENSSL_armcap_P_rel)
- # ifdef	__ILP32__
- 	.long	OPENSSL_armcap_P-.
- # else
- 	.quad	OPENSSL_armcap_P-.
- # endif
-+SYM_DATA_END(OPENSSL_armcap_P_rel)
- #endif
-+SYM_DATA_START_LOCAL(OPENSSL_str)
- .asciz	"SHA$BITS block transform for ARMv8, CRYPTOGAMS by <appro\@openssl.org>"
- .align	2
-+SYM_DATA_END(OPENSSL_str)
- ___
+ 	__INIT
  
- if ($SZ==4) {
-@@ -385,7 +389,7 @@ sha256_block_armv8:
- 	add		x29,sp,#0
+ SYM_CODE_START(efi_enter_kernel)
++	UNWIND_HINT_EMPTY
+ 	/*
+ 	 * efi_pe_entry() will have copied the kernel image if necessary and we
+ 	 * end up here with device tree address in x1 and the kernel entry
+diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
+index 0af74fd59510..10fac8f13982 100644
+--- a/arch/arm64/kernel/entry.S
++++ b/arch/arm64/kernel/entry.S
+@@ -29,6 +29,7 @@
+ #include <asm/thread_info.h>
+ #include <asm/asm-uaccess.h>
+ #include <asm/unistd.h>
++#include <asm/unwind_hints.h>
  
- 	ld1.32		{$ABCD,$EFGH},[$ctx]
--	adr		$Ktbl,.LK256
-+	adr		$Ktbl,K256
+ 	.macro	clear_gp_regs
+ 	.irp	n,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29
+@@ -38,6 +39,7 @@
  
- .Loop_hw:
- 	ld1		{@MSG[0]-@MSG[3]},[$inp],#64
-@@ -646,7 +650,7 @@ sha256_block_neon:
- .Lneon_entry:
- 	sub	sp,sp,#16*4
+ 	.macro kernel_ventry, el:req, ht:req, regsize:req, label:req
+ 	.align 7
++	UNWIND_HINT_EMPTY
+ .Lventry_start\@:
+ 	.if	\el == 0
+ 	/*
+@@ -663,6 +665,7 @@ alternative_else_nop_endif
  
--	adr	$Ktbl,.LK256
-+	adr	$Ktbl,K256
- 	add	$num,$inp,$num,lsl#6	// len to point at the end of inp
+ 	.macro tramp_ventry, vector_start, regsize, kpti, bhb
+ 	.align	7
++	UNWIND_HINT_EMPTY
+ 1:
+ 	.if	\regsize == 64
+ 	msr	tpidrro_el0, x30	// Restored in kernel_ventry
+@@ -764,10 +767,12 @@ SYM_CODE_START_NOALIGN(tramp_vectors)
+ SYM_CODE_END(tramp_vectors)
  
- 	ld1.8	{@X[0]},[$inp], #16
+ SYM_CODE_START_LOCAL(tramp_exit_native)
++	UNWIND_HINT_EMPTY
+ 	tramp_exit
+ SYM_CODE_END(tramp_exit_native)
+ 
+ SYM_CODE_START_LOCAL(tramp_exit_compat)
++	UNWIND_HINT_EMPTY
+ 	tramp_exit	32
+ SYM_CODE_END(tramp_exit_compat)
+ 
+diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
+index 64527718d4c2..e45e33f169b7 100644
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -33,6 +33,7 @@
+ #include <asm/smp.h>
+ #include <asm/sysreg.h>
+ #include <asm/thread_info.h>
++#include <asm/unwind_hints.h>
+ #include <asm/virt.h>
+ 
+ #include "efi-header.S"
+@@ -63,6 +64,7 @@
+ 	 * DO NOT MODIFY. Image header expected by Linux boot-loaders.
+ 	 */
+ SYM_DATA_LOCAL(efi_nop, efi_signature_nop)	// special NOP to identity as PE/COFF executable
++	UNWIND_HINT_EMPTY
+ 	b	primary_entry			// branch to kernel start, magic
+ SYM_DATA_LOCAL(_zero_reserved, .quad	0)	// Image load offset from start of RAM, little-endian
+ SYM_DATA_START_LOCAL(_arm64_common_header)
+@@ -111,6 +113,7 @@ SYM_CODE_END(primary_entry)
+  * Preserve the arguments passed by the bootloader in x0 .. x3
+  */
+ SYM_CODE_START_LOCAL(preserve_boot_args)
++	UNWIND_HINT_EMPTY
+ 	mov	x21, x0				// x21=FDT
+ 
+ 	adr_l	x0, boot_args			// record the contents of
+@@ -262,6 +265,7 @@ SYM_CODE_END(preserve_boot_args)
+  *     been enabled
+  */
+ SYM_CODE_START_LOCAL(__create_page_tables)
++	UNWIND_HINT_EMPTY
+ 	mov	x28, lr
+ 
+ 	/*
+@@ -496,6 +500,7 @@ EXPORT_SYMBOL(kimage_vaddr)
+  * booted in EL1 or EL2 respectively.
+  */
+ SYM_CODE_START(init_kernel_el)
++	UNWIND_HINT_EMPTY
+ 	mrs	x0, CurrentEL
+ 	cmp	x0, #CurrentEL_EL2
+ 	b.eq	init_el2
+@@ -566,6 +571,7 @@ SYM_CODE_END(init_kernel_el)
+  * in w0. See arch/arm64/include/asm/virt.h for more info.
+  */
+ SYM_CODE_START_LOCAL(set_cpu_boot_mode_flag)
++	UNWIND_HINT_EMPTY
+ 	adr_l	x1, __boot_cpu_mode
+ 	cmp	w0, #BOOT_CPU_MODE_EL2
+ 	b.ne	1f
+@@ -609,6 +615,7 @@ SYM_DATA_END(__early_cpu_boot_status)
+ 	 * cores are held until we're ready for them to initialise.
+ 	 */
+ SYM_CODE_START(secondary_holding_pen)
++	UNWIND_HINT_EMPTY
+ 	bl	init_kernel_el			// w0=cpu_boot_mode
+ 	bl	set_cpu_boot_mode_flag
+ 	mrs	x0, mpidr_el1
+@@ -627,6 +634,7 @@ SYM_CODE_END(secondary_holding_pen)
+ 	 * be used where CPUs are brought online dynamically by the kernel.
+ 	 */
+ SYM_CODE_START(secondary_entry)
++	UNWIND_HINT_EMPTY
+ 	bl	init_kernel_el			// w0=cpu_boot_mode
+ 	bl	set_cpu_boot_mode_flag
+ 	b	secondary_startup
+@@ -646,6 +654,7 @@ SYM_CODE_START_LOCAL(secondary_startup)
+ SYM_CODE_END(secondary_startup)
+ 
+ SYM_CODE_START_LOCAL(__secondary_switched)
++	UNWIND_HINT_EMPTY
+ 	adr_l	x5, vectors
+ 	msr	vbar_el1, x5
+ 	isb
+@@ -665,6 +674,7 @@ SYM_CODE_START_LOCAL(__secondary_switched)
+ SYM_CODE_END(__secondary_switched)
+ 
+ SYM_CODE_START_LOCAL(__secondary_too_slow)
++	UNWIND_HINT_EMPTY
+ 	wfe
+ 	wfi
+ 	b	__secondary_too_slow
+@@ -701,6 +711,7 @@ SYM_CODE_END(__secondary_too_slow)
+  * If it isn't, park the CPU
+  */
+ SYM_CODE_START(__enable_mmu)
++	UNWIND_HINT_EMPTY
+ 	mrs	x2, ID_AA64MMFR0_EL1
+ 	ubfx	x2, x2, #ID_AA64MMFR0_TGRAN_SHIFT, 4
+ 	cmp     x2, #ID_AA64MMFR0_TGRAN_SUPPORTED_MIN
+@@ -722,6 +733,7 @@ SYM_CODE_START(__enable_mmu)
+ SYM_CODE_END(__enable_mmu)
+ 
+ SYM_CODE_START_LOCAL(__cpu_secondary_check52bitva)
++	UNWIND_HINT_EMPTY
+ #ifdef CONFIG_ARM64_VA_BITS_52
+ 	ldr_l	x0, vabits_actual
+ 	cmp	x0, #52
+@@ -753,6 +765,7 @@ SYM_CODE_END(__no_granule_support)
+ 
+ #ifdef CONFIG_RELOCATABLE
+ SYM_CODE_START_LOCAL(__relocate_kernel)
++	UNWIND_HINT_EMPTY
+ 	/*
+ 	 * Iterate over each entry in the relocation table, and apply the
+ 	 * relocations in place.
+diff --git a/arch/arm64/kernel/hibernate-asm.S b/arch/arm64/kernel/hibernate-asm.S
+index 0e1d9c3c6a93..c0bec20bf0e0 100644
+--- a/arch/arm64/kernel/hibernate-asm.S
++++ b/arch/arm64/kernel/hibernate-asm.S
+@@ -13,6 +13,7 @@
+ #include <asm/cputype.h>
+ #include <asm/memory.h>
+ #include <asm/page.h>
++#include <asm/unwind_hints.h>
+ #include <asm/virt.h>
+ 
+ /*
+@@ -46,6 +47,7 @@
+  */
+ .pushsection    ".hibernate_exit.text", "ax"
+ SYM_CODE_START(swsusp_arch_suspend_exit)
++	UNWIND_HINT_EMPTY
+ 	/*
+ 	 * We execute from ttbr0, change ttbr1 to our copied linear map tables
+ 	 * with a break-before-make via the zero page
+diff --git a/arch/arm64/kernel/relocate_kernel.S b/arch/arm64/kernel/relocate_kernel.S
+index f0a3df9e18a3..f8cd8fcf2d4f 100644
+--- a/arch/arm64/kernel/relocate_kernel.S
++++ b/arch/arm64/kernel/relocate_kernel.S
+@@ -16,6 +16,7 @@
+ #include <asm/page.h>
+ #include <asm/sysreg.h>
+ #include <asm/virt.h>
++#include <asm/unwind_hints.h>
+ 
+ .macro turn_off_mmu tmp1, tmp2
+ 	mov_q   \tmp1, INIT_SCTLR_EL1_MMU_OFF
+@@ -37,6 +38,7 @@
+  * safe memory that has been set up to be preserved during the copy operation.
+  */
+ SYM_CODE_START(arm64_relocate_new_kernel)
++	UNWIND_HINT_EMPTY
+ 	/* Setup the list loop variables. */
+ 	ldr	x18, [x0, #KIMAGE_ARCH_ZERO_PAGE] /* x18 = zero page for BBM */
+ 	ldr	x17, [x0, #KIMAGE_ARCH_TTBR1]	/* x17 = linear map copy */
+diff --git a/arch/arm64/kernel/sleep.S b/arch/arm64/kernel/sleep.S
+index e01a24b5c5f7..7fd276f3c532 100644
+--- a/arch/arm64/kernel/sleep.S
++++ b/arch/arm64/kernel/sleep.S
+@@ -4,6 +4,7 @@
+ #include <asm/asm-offsets.h>
+ #include <asm/assembler.h>
+ #include <asm/smp.h>
++#include <asm/unwind_hints.h>
+ 
+ 	.text
+ /*
+@@ -100,6 +101,7 @@ SYM_FUNC_END(__cpu_suspend_enter)
+ 
+ 	.pushsection ".idmap.text", "awx"
+ SYM_CODE_START(cpu_resume)
++	UNWIND_HINT_EMPTY
+ 	bl	init_kernel_el
+ 	bl	switch_to_vhe
+ 	bl	__cpu_setup
+@@ -113,6 +115,7 @@ SYM_CODE_END(cpu_resume)
+ 	.popsection
+ 
+ SYM_CODE_START(_cpu_resume)
++	UNWIND_HINT_EMPTY
+ 	mrs	x1, mpidr_el1
+ 	adr_l	x8, mpidr_hash		// x8 = struct mpidr_hash virt address
+ 
+diff --git a/arch/arm64/kvm/hyp/hyp-entry.S b/arch/arm64/kvm/hyp/hyp-entry.S
+index 7839d075729b..a93af0730da0 100644
+--- a/arch/arm64/kvm/hyp/hyp-entry.S
++++ b/arch/arm64/kvm/hyp/hyp-entry.S
+@@ -14,6 +14,7 @@
+ #include <asm/kvm_asm.h>
+ #include <asm/mmu.h>
+ #include <asm/spectre.h>
++#include <asm/unwind_hints.h>
+ 
+ .macro save_caller_saved_regs_vect
+ 	/* x0 and x1 were saved in the vector entry */
+@@ -150,6 +151,7 @@ SYM_CODE_END(\label)
+ 
+ .macro valid_vect target
+ 	.align 7
++        UNWIND_HINT_EMPTY
+ 661:
+ 	esb
+ 	stp	x0, x1, [sp, #-16]!
+@@ -161,6 +163,7 @@ check_preamble_length 661b, 662b
+ 
+ .macro invalid_vect target
+ 	.align 7
++        UNWIND_HINT_EMPTY
+ 661:
+ 	nop
+ 	stp	x0, x1, [sp, #-16]!
 -- 
 2.17.1
 
