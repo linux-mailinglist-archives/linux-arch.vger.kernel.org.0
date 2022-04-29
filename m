@@ -2,86 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29F8514BCC
-	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BC75514BE9
+	for <lists+linux-arch@lfdr.de>; Fri, 29 Apr 2022 15:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376846AbiD2N53 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 29 Apr 2022 09:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S1350180AbiD2N6Y (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 29 Apr 2022 09:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376744AbiD2N4n (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:56:43 -0400
+        with ESMTP id S1376799AbiD2N5O (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 29 Apr 2022 09:57:14 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42430CE4B5;
-        Fri, 29 Apr 2022 06:51:54 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TBqiSs027102;
-        Fri, 29 Apr 2022 13:51:50 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EFACEE2D;
+        Fri, 29 Apr 2022 06:52:06 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23TDhcBO012407;
+        Fri, 29 Apr 2022 13:51:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=5IvyXxtKR+xlL08USfg9mK2J++R3Ob61Vdh1snI5Wnc=;
- b=HVld1a7wFyEMLwLzb4PKvmNG6xmmh9LN0ZIB2EdN2a4y85wArW83MofRvkdGhuldrTp1
- B8q5PX149HJs9kvTXYwmMWBiLyyjOSrjmV2tJUWEsTUlvXYEKhL2Y0TxwGG61a0now+K
- icBd0HTSU3M0cbgBDytlYi8/1k4PS7nzE4U+vkkhJs6LHZszEuCXYapKG6jg3ilaDCLj
- h1XoZn8jFECgnt1gKOKJQy0QmKNPBC0UGHV4auvN25q+jrVBcirltlOr5Opj07pKa4e/
- hqaltjT5h/pkGo50vMEIAL/6ppJ9+dB7NvQDe8Bbcx3SOQ2O/xlaZeWLAdv9A5PDHA7b 2Q== 
+ bh=9kDLSWsy7NshQTT/EoVWnlP7lW6zVt2SnvWgDk2YBBo=;
+ b=lSHRzPRkoJpEt2lZM7W2CwX0d1nAnNbgwBvBMUHqvWIuCC0vzAEl9+3SsA2e1FKdzjag
+ UTc/HeBAb3pFptTjUCHCeh6lqDzB957J1Untx/lKF0HjJbOnVFnq73hWkaPJ+GO5qF79
+ 8LhF7hYFVkJCKaJzZFKY8M2zoNHVgutA6QaXaYctIyqbPme15OEslkA7Syqw6saCtKnd
+ 2ugacMDj1/QjMObFhIbD3Lz+yFXex0RmJHWji9FegbLoA8OAOfY5DqERIIDvxo6a8Yje
+ NJhhvQzTzbUI9pdrciPIq24Kn7Rla/ZSI9X3uxAdtVg7QRBlLCB43HCVKGANXN3LOUQ+ xg== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqundujvn-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3frh5eg4jj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:49 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TDfe8e014772;
-        Fri, 29 Apr 2022 13:51:49 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fqundujuq-1
+        Fri, 29 Apr 2022 13:51:50 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 23TDhdqg012499;
+        Fri, 29 Apr 2022 13:51:50 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3frh5eg4hs-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:49 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDRu3N004596;
-        Fri, 29 Apr 2022 13:51:46 GMT
+        Fri, 29 Apr 2022 13:51:50 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23TDRL1u021679;
+        Fri, 29 Apr 2022 13:51:47 GMT
 Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fm8qj989a-1
+        by ppma03ams.nl.ibm.com with ESMTP id 3fm93917rr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 29 Apr 2022 13:51:46 +0000
+        Fri, 29 Apr 2022 13:51:47 +0000
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDpiXJ46203226
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23TDpiM034996510
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 29 Apr 2022 13:51:44 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 297294C044;
+        by IMSVA (Postfix) with ESMTP id B53AE4C044;
         Fri, 29 Apr 2022 13:51:44 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D467E4C046;
-        Fri, 29 Apr 2022 13:51:43 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 5E0434C040;
+        Fri, 29 Apr 2022 13:51:44 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 29 Apr 2022 13:51:43 +0000 (GMT)
+        Fri, 29 Apr 2022 13:51:44 +0000 (GMT)
 From:   Niklas Schnelle <schnelle@linux.ibm.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 33/37] PCI: make quirk using inw() depend on HAS_IOPORT
-Date:   Fri, 29 Apr 2022 15:50:57 +0200
-Message-Id: <20220429135108.2781579-60-schnelle@linux.ibm.com>
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Teddy Wang <teddy.wang@siliconmotion.com>,
+        Forest Bond <forest@alittletooquiet.net>,
+        linux-fbdev@vger.kernel.org (open list:STAGING - SILICON MOTION SM750
+        FRAME BUFFER DRIVER),
+        linux-staging@lists.linux.dev (open list:STAGING SUBSYSTEM)
+Subject: [RFC v2 33/39] staging: add HAS_IOPORT dependencies
+Date:   Fri, 29 Apr 2022 15:50:58 +0200
+Message-Id: <20220429135108.2781579-61-schnelle@linux.ibm.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -lESLlLa3VE2IXzG3UDUF4XITQi2kOHZ
-X-Proofpoint-GUID: YtG0Pd-3KI2ITcYzFM9Nhj8UddHcBTJn
+X-Proofpoint-GUID: fISylrswYxfDlgMVDtdxnNFoZygrgR1H
+X-Proofpoint-ORIG-GUID: 55AtpnA4nJ_pu1qAWthM1Pch2Y1lyNiX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-29_06,2022-04-28_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- adultscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 malwarescore=0
- mlxlogscore=999 impostorscore=0 phishscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204290078
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ phishscore=0 mlxlogscore=822 clxscore=1011 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204290078
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -91,35 +96,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In the future inw() and friends will not be compiled on architectures
-without I/O port support.
+In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+not being declared. We thus need to add HAS_IOPORT as dependency for
+those drivers using them.
 
 Co-developed-by: Arnd Bergmann <arnd@kernel.org>
 Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 ---
- drivers/pci/quirks.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/sm750fb/Kconfig | 2 +-
+ drivers/staging/vt6655/Kconfig  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index da829274fc66..27db2810f034 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -265,6 +265,7 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_1,	quirk_isa_d
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_2,	quirk_isa_dma_hangs);
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_NEC,	PCI_DEVICE_ID_NEC_CBUS_3,	quirk_isa_dma_hangs);
- 
-+#ifdef CONFIG_HAS_IOPORT
- /*
-  * Intel NM10 "TigerPoint" LPC PM1a_STS.BM_STS must be clear
-  * for some HT machines to use C4 w/o hanging.
-@@ -284,6 +285,7 @@ static void quirk_tigerpoint_bm_sts(struct pci_dev *dev)
- 	}
- }
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_TGP_LPC, quirk_tigerpoint_bm_sts);
-+#endif
- 
- /* Chipsets where PCI->PCI transfers vanish or hang */
- static void quirk_nopcipci(struct pci_dev *dev)
+diff --git a/drivers/staging/sm750fb/Kconfig b/drivers/staging/sm750fb/Kconfig
+index 8c0d8a873d5b..73781c5bf03a 100644
+--- a/drivers/staging/sm750fb/Kconfig
++++ b/drivers/staging/sm750fb/Kconfig
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config FB_SM750
+ 	tristate "Silicon Motion SM750 framebuffer support"
+-	depends on FB && PCI
++	depends on FB && PCI && HAS_IOPORT
+ 	select FB_MODE_HELPERS
+ 	select FB_CFB_FILLRECT
+ 	select FB_CFB_COPYAREA
+diff --git a/drivers/staging/vt6655/Kconfig b/drivers/staging/vt6655/Kconfig
+index d1cd5de46dcf..077f62ebe80c 100644
+--- a/drivers/staging/vt6655/Kconfig
++++ b/drivers/staging/vt6655/Kconfig
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config VT6655
+    tristate "VIA Technologies VT6655 support"
+-   depends on PCI && MAC80211 && m
++   depends on PCI && HAS_IOPORT && MAC80211 && m
+    help
+      This is a vendor-written driver for VIA VT6655.
 -- 
 2.32.0
 
