@@ -2,109 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271A9515D77
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Apr 2022 15:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5443515EBA
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Apr 2022 17:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235590AbiD3N0B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 30 Apr 2022 09:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S242866AbiD3PlQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 30 Apr 2022 11:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiD3NZ4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Apr 2022 09:25:56 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F16C6A42C
-        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 06:22:34 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id a11so9066458pff.1
-        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 06:22:34 -0700 (PDT)
+        with ESMTP id S242748AbiD3PlQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Apr 2022 11:41:16 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802A7A0BC8
+        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 08:37:53 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r83so8668922pgr.2
+        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 08:37:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mmn21HGnBMcyZvZiOKnwlQGRF5sgWcGXDhxVMtE/DjE=;
-        b=lkC3ZF63lH4ZLVYVJCwyF338V8NZJWqaMWT5bUfvqYQ1tShxpqX1+etMfx2shdS1Dr
-         cK/MOSotHI5vIY7OwU4N+KULBB3b5XH+sYHk1wIQwKzGXAxBv4y4fNbhY3vmRYc/XI5v
-         AGbCkD+opcDUvX2QUJ0/a+CjRJMPSPMzjYVXpTDqBCYf3HIh4gjs7fD9ZmbRb5enZaIK
-         66wocEZJOfKfnmCmlxiXaQxtC/FYWu4x/tSn60TerQtPqRXAMfdz+iLzR+eQWNyLF920
-         BqYdkVe/aoDFcCnqN3pqDM2AnOB/qDcOuGY+0BV71env48fTds3gCzR+etKbHKRws+gZ
-         r7Qw==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
+         :from:to;
+        bh=np4HtbwGSB6iapeRruj8GZIUHuBuKuckcGYZnwyb7bo=;
+        b=InNn+tkdTs6CYKbpqgE/Kt+T2kH9K4dNAnuziT6CNc1awAKVpLsBeXBEdSF55QM/8k
+         udH4gEcsFOVPawephKUVFL/54PfXCMPmAorXXpszoBfjsIKvSI3jL3yHoCz/uqq1IJn+
+         kVWFjf9c9lRBSJV5yXZBkvE8w4q0dL/oOu8lTnq28UsvEJQY0CH45LEYkuv+wRNYsTLP
+         Eyvd+DTwR/Od3TwiXZX3NEqkZmEX32Za9+ZkVKeQEHjNlAk+KM4nrwQUJ54ndJvbu69L
+         pGF/VGp+Zznm318sUZMvZlp/aR/nsxWR0vlR5TvJIrQjJvM+dt17gI1NbWJzGbD5zNqR
+         3vVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=mmn21HGnBMcyZvZiOKnwlQGRF5sgWcGXDhxVMtE/DjE=;
-        b=FSP+AwaAq2LkmMUzt5CvviwnX6iPYmWDVih9HUWK6WGwdxm4GAt19HUenCvTILV/F3
-         kPJX/lF6rwcY/8UhduMP1Xosrh8QTFe7r816jB6F1gVYLYHI3/2PLkhlH1GSNhTW8beG
-         Kazwhd7GjXcgzzHdUmkKbuDphUVLoQBgBFWyEO4wbqHWaY37BjRle0x115+Dkoq301ja
-         AKoOP62h0TngQk3rQrzxZm+N0YphAY5HnEBZ34pf9gFGGqZrCLGiq3XDbT8I19MD4QE3
-         h3mIMp+ZyeuRfZzMabBQeXfbH5U8yBF36c6moSWWit5bgqchYN+CfiKcCi8g8H9+XqvY
-         WlIw==
-X-Gm-Message-State: AOAM531YN71l7UBIzBnEFjZDazsqGBTh7GKUFnf/uCASxzIfslwYjpPO
-        2XGD33L6USp5gtQluTERdBI8QsUZ5qJGMg==
-X-Google-Smtp-Source: ABdhPJzVifXEst/jSLZeByETtT5Z2VCK1qICNh4p7J3VXLet4KXOrydzBQ2K22vBoXiQctUBhT277g==
-X-Received: by 2002:a63:4d64:0:b0:39d:5e6e:242d with SMTP id n36-20020a634d64000000b0039d5e6e242dmr3174660pgl.32.1651324953376;
-        Sat, 30 Apr 2022 06:22:33 -0700 (PDT)
+        h=x-gm-message-state:subject:date:message-id:mime-version
+         :content-transfer-encoding:cc:from:to;
+        bh=np4HtbwGSB6iapeRruj8GZIUHuBuKuckcGYZnwyb7bo=;
+        b=E/gbgTOjhmKXN7rl+r+REKtDIUNNYX3XRwIgRt7LhUFRA13MiGNLE/hspePxvszdak
+         qCW/afE8FrUXQKfsZ9thDkZaWe4WMfOlkNsKvVcy/cAI7j7ejKA9vDZ0fOtTytGW4f0U
+         7nCz7X+GAc3E7j/vdGcoERq4oj/dAVc+vEwYsa7d1VRjAbuZxJXPsNfd4RnsFG0etIJU
+         VTfsd+1OGv43lTuZuUbjxkhp5mJb6Exyo9qdXaJyhIkLwUvYaAHrhWU9gZ9BvBnKDGHO
+         FyH5FlnlD5VqhyNIlVHEmdSofQQSEEojdA6AT6RqU0qwqiy2a2uQ+r/4WXN6gB229s39
+         xLBw==
+X-Gm-Message-State: AOAM531DoVo2i6g3pVk4xfYq4PdWoX8PA0SMqLr4h1iEcIF1OtAlQ94E
+        ltIQbSws8ccBXmhQcl4TPcqh9g==
+X-Google-Smtp-Source: ABdhPJyY6PFEoD09nOYm4tiKmrVzmrmKd1omAejHwAiMVanwvGm+TKpg7gHnHCqyfyt/42onKskybA==
+X-Received: by 2002:a63:5606:0:b0:3ab:84d3:cfbe with SMTP id k6-20020a635606000000b003ab84d3cfbemr3521738pgb.191.1651333072975;
+        Sat, 30 Apr 2022 08:37:52 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id r4-20020a634404000000b003c18e0768e3sm6815904pga.78.2022.04.30.06.22.32
+        by smtp.gmail.com with ESMTPSA id p2-20020a17090ad30200b001cd4989feb7sm17264343pju.3.2022.04.30.08.37.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 06:22:32 -0700 (PDT)
-Date:   Sat, 30 Apr 2022 06:22:32 -0700 (PDT)
-X-Google-Original-Date: Sat, 30 Apr 2022 06:22:30 PDT (-0700)
-Subject:     Re: [PATCH V9 16/24] LoongArch: Add misc common routines
-In-Reply-To: <CAK8P3a1Cnp-SNiXnSbnUdbw9jC+aT1TxEjckK2jFYgwT-CSpcw@mail.gmail.com>
-CC:     chenhuacai@gmail.com, Arnd Bergmann <arnd@arndb.de>,
-        chenhuacai@loongson.cn, luto@kernel.org, tglx@linutronix.de,
-        peterz@infradead.org, akpm@linux-foundation.org, airlied@linux.ie,
-        corbet@lwn.net, Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lixuefeng@loongson.cn,
-        siyanteng@loongson.cn, guoren@kernel.org, kernel@xen0n.name,
-        jiaxun.yang@flygoat.com, guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Message-ID: <mhng-aac79f77-a392-42cd-a885-247e7625046c@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Sat, 30 Apr 2022 08:37:52 -0700 (PDT)
+Subject: [PATCH v4 0/7] Generic Ticket Spinlocks
+Date:   Sat, 30 Apr 2022 08:36:19 -0700
+Message-Id: <20220430153626.30660-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Cc:     guoren@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        Will Deacon <will@kernel.org>, longman@redhat.com,
+        boqun.feng@gmail.com, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        sudipm.mukherjee@gmail.com, macro@orcam.me.uk, jszhang@kernel.org,
+        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Arnd Bergmann <arnd@arndb.de>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 30 Apr 2022 03:41:59 PDT (-0700), Arnd Bergmann wrote:
-> On Sat, Apr 30, 2022 at 12:00 PM Huacai Chen <chenhuacai@gmail.com> wrote:
->>
->> On Sat, Apr 30, 2022 at 5:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> >
->> > On Sat, Apr 30, 2022 at 11:05 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
->> >
->> > > +unsigned long __xchg_small(volatile void *ptr, unsigned long val, unsigned int size)
->> > > +{
->> > > +       u32 old32, mask, temp;
->> > > +       volatile u32 *ptr32;
->> > > +       unsigned int shift;
->> > > +
->> > > +       /* Check that ptr is naturally aligned */
->> >
->> > As discussed, please remove this function and all the references to it.
->>
->> It seems that "generic ticket spinlock" hasn't been merged in 5.18?
->
-> No, but we can merge it together with the loongarch architecture for 5.19.
->
-> I suggested you coordinate with Guo Ren and Palmer Dabbelt about how
-> to best merge it. The latest version was pasted two weeks ago [1], and
-> it sounds like there are only minor issues to work out and that I can merge
-> v4 into the asm-generic tree before merging the loongarch code in the
-> same place.
->
->      Arnd
->
-> [1] https://lore.kernel.org/lkml/20220414220214.24556-1-palmer@rivosinc.com/
+Comments on the v3 looked pretty straight-forward, essentially just that
+RCsc issue I'd missed from the v2 and some cleanups.  A part of the
+discussion some additional possible cleanups came up related to the
+qrwlock headers, but I hadn't looked at those yet and I had already
+handled everything else.  This went on the back burner, but given that
+LoongArch appears to want to use it for their new port I think it's best
+to just run with this and defer the other cleanups until later.
 
-I can just send another version, IIRC it was just that discussion about 
-the memory barrier and there's already prototype code so it shouldn't be 
-too bad.  I was hoping to do it sooner, sorry.
+I've placed the whole patch set at palmer/tspinlock-v4, and also tagged
+the asm-generic bits as generic-ticket-spinlocks-v4.  Ideally I'd like
+to take that, along with the RISC-V patches, into my tree as there's
+some RISC-V specific testing before things land in linux-next.  This
+passes all my testing, but I'll hold off until merging things anywhere
+else to make sure everyone has time to look.  There's no rush on my end
+for this one, but I don't want to block LoongArch so I'll try to stay a
+bit more on top of this one.
+
+Changes since v3 <20220414220214.24556-1-palmer@rivosinc.com>:
+* Added a smp_mb() in the lock slow-path, to make sure that is RCsc.
+* Fixed the header guards.
+
+Changes since v2 <20220319035457.2214979-1-guoren@kernel.org>:
+* Picked up Peter's SOBs, which were posted on the v1.
+* Re-ordered the first two patches, as they
+* Re-worded the RISC-V qrwlock patch, as it was a bit mushy.  I also
+  added a blurb in the qrwlock's top comment about this dependency.
+* Picked up Stafford's fix for big-endian systems, which I have not
+  tested as I don't have one (at least easily availiable, I think the BE
+  MIPS systems are still in that pile in my garage).
+* Call the generic version <asm-genenic/spinlock{_types}.h>, as there's
+  really no utility to the version that only errors out.
+
+Changes since v1 <20220316232600.20419-1-palmer@rivosinc.com>:
+* Follow Arnd suggestion to make the patch series more generic.
+* Add csky in the series.
+* Combine RISC-V's two patches into one.
+* Modify openrisc's patch to suit the new generic version.
+
+
