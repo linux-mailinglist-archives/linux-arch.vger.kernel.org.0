@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB542515BF2
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Apr 2022 11:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68C7515BF6
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Apr 2022 11:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240996AbiD3Jam (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 30 Apr 2022 05:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S1382509AbiD3Jb2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 30 Apr 2022 05:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233774AbiD3Jal (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Apr 2022 05:30:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D290633A3;
-        Sat, 30 Apr 2022 02:27:19 -0700 (PDT)
+        with ESMTP id S1382516AbiD3Jb1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Apr 2022 05:31:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4F070929;
+        Sat, 30 Apr 2022 02:28:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7554B81D03;
-        Sat, 30 Apr 2022 09:27:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D53CEC385AC;
-        Sat, 30 Apr 2022 09:27:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A138160F57;
+        Sat, 30 Apr 2022 09:28:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55E5C385AA;
+        Sat, 30 Apr 2022 09:27:58 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -36,9 +36,9 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V9 19/24] LoongArch: Add VDSO and VSYSCALL support
-Date:   Sat, 30 Apr 2022 17:05:13 +0800
-Message-Id: <20220430090518.3127980-20-chenhuacai@loongson.cn>
+Subject: [PATCH V9 20/24] LoongArch: Add efistub booting support
+Date:   Sat, 30 Apr 2022 17:05:14 +0800
+Message-Id: <20220430090518.3127980-21-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220430090518.3127980-1-chenhuacai@loongson.cn>
 References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
@@ -53,763 +53,929 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This patch adds VDSO and VSYSCALL support (gettimeofday and its friends)
-for LoongArch.
+This patch adds efistub booting support, which is the standard UEFI boot
+protocol for us to use.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/Makefile                       |   2 +
- arch/loongarch/include/asm/vdso.h             |  38 +++++
- arch/loongarch/include/asm/vdso/clocksource.h |   8 +
- .../loongarch/include/asm/vdso/gettimeofday.h |  99 +++++++++++++
- arch/loongarch/include/asm/vdso/processor.h   |  14 ++
- arch/loongarch/include/asm/vdso/vdso.h        |  30 ++++
- arch/loongarch/include/asm/vdso/vsyscall.h    |  27 ++++
- arch/loongarch/kernel/vdso.c                  | 138 ++++++++++++++++++
- arch/loongarch/vdso/Makefile                  |  96 ++++++++++++
- arch/loongarch/vdso/elf.S                     |  15 ++
- arch/loongarch/vdso/gen_vdso_offsets.sh       |  13 ++
- arch/loongarch/vdso/sigreturn.S               |  24 +++
- arch/loongarch/vdso/vdso.S                    |  22 +++
- arch/loongarch/vdso/vdso.lds.S                |  72 +++++++++
- arch/loongarch/vdso/vgettimeofday.c           |  25 ++++
- 15 files changed, 623 insertions(+)
- create mode 100644 arch/loongarch/include/asm/vdso.h
- create mode 100644 arch/loongarch/include/asm/vdso/clocksource.h
- create mode 100644 arch/loongarch/include/asm/vdso/gettimeofday.h
- create mode 100644 arch/loongarch/include/asm/vdso/processor.h
- create mode 100644 arch/loongarch/include/asm/vdso/vdso.h
- create mode 100644 arch/loongarch/include/asm/vdso/vsyscall.h
- create mode 100644 arch/loongarch/kernel/vdso.c
- create mode 100644 arch/loongarch/vdso/Makefile
- create mode 100644 arch/loongarch/vdso/elf.S
- create mode 100755 arch/loongarch/vdso/gen_vdso_offsets.sh
- create mode 100644 arch/loongarch/vdso/sigreturn.S
- create mode 100644 arch/loongarch/vdso/vdso.S
- create mode 100644 arch/loongarch/vdso/vdso.lds.S
- create mode 100644 arch/loongarch/vdso/vgettimeofday.c
+ arch/loongarch/Kbuild                         |   3 +
+ arch/loongarch/Kconfig                        |   8 +
+ arch/loongarch/Makefile                       |  18 +-
+ arch/loongarch/boot/Makefile                  |  23 +
+ arch/loongarch/kernel/efi-header.S            | 100 +++++
+ arch/loongarch/kernel/head.S                  |  44 +-
+ arch/loongarch/kernel/image-vars.h            |  30 ++
+ arch/loongarch/kernel/vmlinux.lds.S           |  23 +-
+ drivers/firmware/efi/Kconfig                  |   4 +-
+ drivers/firmware/efi/libstub/Makefile         |  14 +-
+ drivers/firmware/efi/libstub/loongarch-stub.c | 425 ++++++++++++++++++
+ include/linux/pe.h                            |   1 +
+ 12 files changed, 680 insertions(+), 13 deletions(-)
+ create mode 100644 arch/loongarch/boot/Makefile
+ create mode 100644 arch/loongarch/kernel/efi-header.S
+ create mode 100644 arch/loongarch/kernel/image-vars.h
+ create mode 100644 drivers/firmware/efi/libstub/loongarch-stub.c
 
+diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
+index 1ad35aabdd16..ab5373d0a24f 100644
+--- a/arch/loongarch/Kbuild
++++ b/arch/loongarch/Kbuild
+@@ -1,3 +1,6 @@
+ obj-y += kernel/
+ obj-y += mm/
+ obj-y += vdso/
++
++# for cleaning
++subdir- += boot
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 44b763046893..55225ee5f868 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -265,6 +265,14 @@ config EFI
+ 	  resultant kernel should continue to boot on existing non-EFI
+ 	  platforms.
+ 
++config EFI_STUB
++	bool "EFI boot stub support"
++	default y
++	depends on EFI
++	help
++	  This kernel feature allows the kernel to be loaded directly by
++	  EFI firmware without the use of a bootloader.
++
+ config FORCE_MAX_ZONEORDER
+ 	int "Maximum zone order"
+ 	range 14 64 if PAGE_SIZE_64KB
 diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-index 0a40e79b3265..c4b3f53cd276 100644
+index c4b3f53cd276..d88a792dafbe 100644
 --- a/arch/loongarch/Makefile
 +++ b/arch/loongarch/Makefile
-@@ -76,9 +76,11 @@ head-y := arch/loongarch/kernel/head.o
+@@ -3,6 +3,14 @@
+ # Author: Huacai Chen <chenhuacai@loongson.cn>
+ # Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+ 
++boot	:= arch/loongarch/boot
++
++ifndef CONFIG_EFI_STUB
++KBUILD_IMAGE	= $(boot)/vmlinux
++else
++KBUILD_IMAGE	= $(boot)/vmlinux.efi
++endif
++
+ #
+ # Select the object file format to substitute into the linker script.
+ #
+@@ -30,8 +38,6 @@ ld-emul			= $(64bit-emul)
+ cflags-y		+= -mabi=lp64s
+ endif
+ 
+-all-y			:= vmlinux
+-
+ #
+ # GCC uses -G0 -mabicalls -fpic as default.  We don't want PIC in the kernel
+ # code since it only slows down the whole thing.  At some point we might make
+@@ -75,6 +81,7 @@ endif
+ head-y := arch/loongarch/kernel/head.o
  
  libs-y += arch/loongarch/lib/
++libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
  
-+ifeq ($(KBUILD_EXTMOD),)
+ ifeq ($(KBUILD_EXTMOD),)
  prepare: vdso_prepare
- vdso_prepare: prepare0
- 	$(Q)$(MAKE) $(build)=arch/loongarch/vdso include/generated/vdso-offsets.h
-+endif
- 
- PHONY += vdso_install
+@@ -86,12 +93,13 @@ PHONY += vdso_install
  vdso_install:
-diff --git a/arch/loongarch/include/asm/vdso.h b/arch/loongarch/include/asm/vdso.h
+ 	$(Q)$(MAKE) $(build)=arch/loongarch/vdso $@
+ 
+-all:	$(all-y)
++all:	$(KBUILD_IMAGE)
+ 
+-CLEAN_FILES += vmlinux
++$(KBUILD_IMAGE): vmlinux
++	$(Q)$(MAKE) $(build)=$(boot) $(bootvars-y) $@
+ 
+ install:
+-	$(Q)install -D -m 755 vmlinux $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
++	$(Q)install -D -m 755 $(KBUILD_IMAGE) $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
+ 	$(Q)install -D -m 644 .config $(INSTALL_PATH)/config-$(KERNELRELEASE)
+ 	$(Q)install -D -m 644 System.map $(INSTALL_PATH)/System.map-$(KERNELRELEASE)
+ 
+diff --git a/arch/loongarch/boot/Makefile b/arch/loongarch/boot/Makefile
 new file mode 100644
-index 000000000000..996bddae12dc
+index 000000000000..66f2293c34b2
 --- /dev/null
-+++ b/arch/loongarch/include/asm/vdso.h
-@@ -0,0 +1,38 @@
++++ b/arch/loongarch/boot/Makefile
+@@ -0,0 +1,23 @@
++#
++# arch/loongarch/boot/Makefile
++#
++# Copyright (C) 2020-2022 Loongson Technology Corporation Limited
++#
++
++drop-sections := .comment .note .options .note.gnu.build-id
++strip-flags   := $(addprefix --remove-section=,$(drop-sections)) -S
++
++targets := vmlinux
++quiet_cmd_strip = STRIP	  $@
++      cmd_strip = $(STRIP) -s $@
++
++$(obj)/vmlinux: vmlinux FORCE
++	$(call if_changed,copy)
++	$(call if_changed,strip)
++
++targets += vmlinux.efi
++quiet_cmd_eficopy = OBJCOPY $@
++      cmd_eficopy = $(OBJCOPY) -O binary $(strip-flags) $< $@
++
++$(obj)/vmlinux.efi: $(obj)/vmlinux FORCE
++	$(call if_changed,eficopy)
+diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/efi-header.S
+new file mode 100644
+index 000000000000..ceb44524944a
+--- /dev/null
++++ b/arch/loongarch/kernel/efi-header.S
+@@ -0,0 +1,100 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 + */
 +
-+#ifndef __ASM_VDSO_H
-+#define __ASM_VDSO_H
++#include <linux/pe.h>
++#include <linux/sizes.h>
 +
-+#include <linux/mm_types.h>
-+#include <vdso/datapage.h>
++	.macro	__EFI_PE_HEADER
++	.long	PE_MAGIC
++coff_header:
++	.short	IMAGE_FILE_MACHINE_LOONGARCH		/* Machine */
++	.short	section_count				/* NumberOfSections */
++	.long	0 					/* TimeDateStamp */
++	.long	0					/* PointerToSymbolTable */
++	.long	0					/* NumberOfSymbols */
++	.short	section_table - optional_header		/* SizeOfOptionalHeader */
++	.short	IMAGE_FILE_DEBUG_STRIPPED | \
++		IMAGE_FILE_EXECUTABLE_IMAGE | \
++		IMAGE_FILE_LINE_NUMS_STRIPPED		/* Characteristics */
 +
-+#include <asm/barrier.h>
++optional_header:
++	.short	PE_OPT_MAGIC_PE32PLUS			/* PE32+ format */
++	.byte	0x02					/* MajorLinkerVersion */
++	.byte	0x14					/* MinorLinkerVersion */
++	.long	__inittext_end - efi_header_end		/* SizeOfCode */
++	.long	_end - __initdata_begin			/* SizeOfInitializedData */
++	.long	0					/* SizeOfUninitializedData */
++	.long	__efistub_efi_pe_entry - _head		/* AddressOfEntryPoint */
++	.long	efi_header_end - _head			/* BaseOfCode */
 +
-+/**
-+ * struct loongarch_vdso_info - Details of a VDSO image.
-+ * @vdso: Pointer to VDSO image (page-aligned).
-+ * @size: Size of the VDSO image (page-aligned).
-+ * @off_rt_sigreturn: Offset of the rt_sigreturn() trampoline.
-+ * @code_mapping: Special mapping structure for vdso code.
-+ * @code_mapping: Special mapping structure for vdso data.
-+ *
-+ * This structure contains details of a VDSO image, including the image data
-+ * and offsets of certain symbols required by the kernel. It is generated as
-+ * part of the VDSO build process, aside from the mapping page array, which is
-+ * populated at runtime.
-+ */
-+struct loongarch_vdso_info {
-+	void *vdso;
-+	unsigned long size;
-+	unsigned long offset_sigreturn;
-+	struct vm_special_mapping code_mapping;
-+	struct vm_special_mapping data_mapping;
-+};
++extra_header_fields:
++	.quad	0					/* ImageBase */
++	.long	PECOFF_SEGMENT_ALIGN			/* SectionAlignment */
++	.long	PECOFF_FILE_ALIGN			/* FileAlignment */
++	.short	0					/* MajorOperatingSystemVersion */
++	.short	0					/* MinorOperatingSystemVersion */
++	.short	0					/* MajorImageVersion */
++	.short	0					/* MinorImageVersion */
++	.short	0					/* MajorSubsystemVersion */
++	.short	0					/* MinorSubsystemVersion */
++	.long	0					/* Win32VersionValue */
 +
-+extern struct loongarch_vdso_info vdso_info;
++	.long	_end - _head				/* SizeOfImage */
 +
-+#endif /* __ASM_VDSO_H */
-diff --git a/arch/loongarch/include/asm/vdso/clocksource.h b/arch/loongarch/include/asm/vdso/clocksource.h
++	/* Everything before the kernel image is considered part of the header */
++	.long	efi_header_end - _head			/* SizeOfHeaders */
++	.long	0					/* CheckSum */
++	.short	IMAGE_SUBSYSTEM_EFI_APPLICATION		/* Subsystem */
++	.short	0					/* DllCharacteristics */
++	.quad	0					/* SizeOfStackReserve */
++	.quad	0					/* SizeOfStackCommit */
++	.quad	0					/* SizeOfHeapReserve */
++	.quad	0					/* SizeOfHeapCommit */
++	.long	0					/* LoaderFlags */
++	.long	(section_table - .) / 8			/* NumberOfRvaAndSizes */
++
++	.quad	0					/* ExportTable */
++	.quad	0					/* ImportTable */
++	.quad	0					/* ResourceTable */
++	.quad	0					/* ExceptionTable */
++	.quad	0					/* CertificationTable */
++	.quad	0					/* BaseRelocationTable */
++
++	/* Section table */
++section_table:
++	.ascii	".text\0\0\0"
++	.long	__inittext_end - efi_header_end		/* VirtualSize */
++	.long	efi_header_end - _head			/* VirtualAddress */
++	.long	__inittext_end - efi_header_end		/* SizeOfRawData */
++	.long	efi_header_end - _head			/* PointerToRawData */
++
++	.long	0					/* PointerToRelocations */
++	.long	0					/* PointerToLineNumbers */
++	.short	0					/* NumberOfRelocations */
++	.short	0					/* NumberOfLineNumbers */
++	.long	IMAGE_SCN_CNT_CODE | \
++		IMAGE_SCN_MEM_READ | \
++		IMAGE_SCN_MEM_EXECUTE			/* Characteristics */
++
++	.ascii	".data\0\0\0"
++	.long	_end - __initdata_begin			/* VirtualSize */
++	.long	__initdata_begin - _head		/* VirtualAddress */
++	.long	_edata - __initdata_begin		/* SizeOfRawData */
++	.long	__initdata_begin - _head		/* PointerToRawData */
++
++	.long	0					/* PointerToRelocations */
++	.long	0					/* PointerToLineNumbers */
++	.short	0					/* NumberOfRelocations */
++	.short	0					/* NumberOfLineNumbers */
++	.long	IMAGE_SCN_CNT_INITIALIZED_DATA | \
++		IMAGE_SCN_MEM_READ | \
++		IMAGE_SCN_MEM_WRITE			/* Characteristics */
++
++	.org 0x20e
++	.word kernel_version - 512 -  _head
++
++	.set	section_count, (. - section_table) / 40
++efi_header_end:
++	.endm
+diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+index b4a0b28da3e7..361b72e8bfc5 100644
+--- a/arch/loongarch/kernel/head.S
++++ b/arch/loongarch/kernel/head.S
+@@ -11,11 +11,53 @@
+ #include <asm/regdef.h>
+ #include <asm/loongarch.h>
+ #include <asm/stackframe.h>
++#include <generated/compile.h>
++#include <generated/utsrelease.h>
+ 
+-SYM_ENTRY(_stext, SYM_L_GLOBAL, SYM_A_NONE)
++#ifdef CONFIG_EFI_STUB
++
++#include "efi-header.S"
++
++	__HEAD
++
++_head:
++	/* "MZ", MS-DOS header */
++	.word	MZ_MAGIC
++	.org	0x28
++	.ascii	"Loongson\0"
++	.org	0x3c
++	/* Offset to the PE header */
++	.long	pe_header - _head
++
++pe_header:
++	__EFI_PE_HEADER
++
++kernel_asize:
++	.long _end - _text
++
++kernel_fsize:
++	.long _edata - _text
++
++kernel_vaddr:
++	.quad VMLINUX_LOAD_ADDRESS
++
++kernel_offset:
++	.long kernel_offset - _text
++
++kernel_version:
++	.ascii  UTS_RELEASE " (" LINUX_COMPILE_BY "@" LINUX_COMPILE_HOST ") " UTS_VERSION "\0"
++
++SYM_L_GLOBAL(kernel_asize)
++SYM_L_GLOBAL(kernel_fsize)
++SYM_L_GLOBAL(kernel_vaddr)
++SYM_L_GLOBAL(kernel_offset)
++
++#endif
+ 
+ 	__REF
+ 
++SYM_ENTRY(_stext, SYM_L_GLOBAL, SYM_A_NONE)
++
+ SYM_CODE_START(kernel_entry)			# kernel entry point
+ 
+ 	/* Config direct window and set PG */
+diff --git a/arch/loongarch/kernel/image-vars.h b/arch/loongarch/kernel/image-vars.h
 new file mode 100644
-index 000000000000..13cd580d406d
+index 000000000000..0162402b6212
 --- /dev/null
-+++ b/arch/loongarch/include/asm/vdso/clocksource.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+#ifndef __ASM_VDSOCLOCKSOURCE_H
-+#define __ASM_VDSOCLOCKSOURCE_H
-+
-+#define VDSO_ARCH_CLOCKMODES	\
-+	VDSO_CLOCKMODE_CPU
-+
-+#endif /* __ASM_VDSOCLOCKSOURCE_H */
-diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loongarch/include/asm/vdso/gettimeofday.h
-new file mode 100644
-index 000000000000..5fc5a746b1c4
---- /dev/null
-+++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
-@@ -0,0 +1,99 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#ifndef __ASM_VDSO_GETTIMEOFDAY_H
-+#define __ASM_VDSO_GETTIMEOFDAY_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/unistd.h>
-+#include <asm/vdso/vdso.h>
-+
-+#define VDSO_HAS_CLOCK_GETRES		1
-+
-+static __always_inline long gettimeofday_fallback(
-+				struct __kernel_old_timeval *_tv,
-+				struct timezone *_tz)
-+{
-+	register struct __kernel_old_timeval *tv asm("a0") = _tv;
-+	register struct timezone *tz asm("a1") = _tz;
-+	register long nr asm("a7") = __NR_gettimeofday;
-+	register long ret asm("v0");
-+
-+	asm volatile(
-+	"       syscall 0\n"
-+	: "=r" (ret)
-+	: "r" (nr), "r" (tv), "r" (tz)
-+	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
-+	  "$t8", "memory");
-+
-+	return ret;
-+}
-+
-+static __always_inline long clock_gettime_fallback(
-+					clockid_t _clkid,
-+					struct __kernel_timespec *_ts)
-+{
-+	register clockid_t clkid asm("a0") = _clkid;
-+	register struct __kernel_timespec *ts asm("a1") = _ts;
-+	register long nr asm("a7") = __NR_clock_gettime;
-+	register long ret asm("v0");
-+
-+	asm volatile(
-+	"       syscall 0\n"
-+	: "=r" (ret)
-+	: "r" (nr), "r" (clkid), "r" (ts)
-+	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
-+	  "$t8", "memory");
-+
-+	return ret;
-+}
-+
-+static __always_inline int clock_getres_fallback(
-+					clockid_t _clkid,
-+					struct __kernel_timespec *_ts)
-+{
-+	register clockid_t clkid asm("a0") = _clkid;
-+	register struct __kernel_timespec *ts asm("a1") = _ts;
-+	register long nr asm("a7") = __NR_clock_getres;
-+	register long ret asm("v0");
-+
-+	asm volatile(
-+	"       syscall 0\n"
-+	: "=r" (ret)
-+	: "r" (nr), "r" (clkid), "r" (ts)
-+	: "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6", "$t7",
-+	  "$t8", "memory");
-+
-+	return ret;
-+}
-+
-+static __always_inline u64 __arch_get_hw_counter(s32 clock_mode,
-+						 const struct vdso_data *vd)
-+{
-+	unsigned int count;
-+
-+	__asm__ __volatile__(
-+	"	rdtime.d %0, $zero\n"
-+	: "=r" (count));
-+
-+	return count;
-+}
-+
-+static inline bool loongarch_vdso_hres_capable(void)
-+{
-+	return true;
-+}
-+#define __arch_vdso_hres_capable loongarch_vdso_hres_capable
-+
-+static __always_inline const struct vdso_data *__arch_get_vdso_data(void)
-+{
-+	return get_vdso_data();
-+}
-+
-+#endif /* !__ASSEMBLY__ */
-+
-+#endif /* __ASM_VDSO_GETTIMEOFDAY_H */
-diff --git a/arch/loongarch/include/asm/vdso/processor.h b/arch/loongarch/include/asm/vdso/processor.h
-new file mode 100644
-index 000000000000..ef5770b343a0
---- /dev/null
-+++ b/arch/loongarch/include/asm/vdso/processor.h
-@@ -0,0 +1,14 @@
++++ b/arch/loongarch/kernel/image-vars.h
+@@ -0,0 +1,30 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 + */
-+#ifndef __ASM_VDSO_PROCESSOR_H
-+#define __ASM_VDSO_PROCESSOR_H
++#ifndef __LOONGARCH_KERNEL_IMAGE_VARS_H
++#define __LOONGARCH_KERNEL_IMAGE_VARS_H
 +
-+#ifndef __ASSEMBLY__
++#ifdef CONFIG_EFI_STUB
 +
-+#define cpu_relax()	barrier()
++__efistub_memcmp		= memcmp;
++__efistub_memcpy		= memcpy;
++__efistub_memmove		= memmove;
++__efistub_memset		= memset;
++__efistub_strcat		= strcat;
++__efistub_strcmp		= strcmp;
++__efistub_strlen		= strlen;
++__efistub_strncat		= strncat;
++__efistub_strnstr		= strnstr;
++__efistub_strnlen		= strnlen;
++__efistub_strpbrk		= strpbrk;
++__efistub_strsep		= strsep;
++__efistub_kernel_entry		= kernel_entry;
++__efistub_kernel_asize		= kernel_asize;
++__efistub_kernel_fsize		= kernel_fsize;
++__efistub_kernel_vaddr		= kernel_vaddr;
++__efistub_kernel_offset		= kernel_offset;
 +
-+#endif /* __ASSEMBLY__ */
++#endif
 +
-+#endif /* __ASM_VDSO_PROCESSOR_H */
-diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
-new file mode 100644
-index 000000000000..5a01643a65b3
---- /dev/null
-+++ b/arch/loongarch/include/asm/vdso/vdso.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <asm/asm.h>
-+#include <asm/page.h>
-+
-+static inline unsigned long get_vdso_base(void)
-+{
-+	unsigned long addr;
-+
-+	__asm__(
-+	" la.pcrel %0, _start\n"
-+	: "=r" (addr)
-+	:
-+	:);
-+
-+	return addr;
-+}
-+
-+static inline const struct vdso_data *get_vdso_data(void)
-+{
-+	return (const struct vdso_data *)(get_vdso_base() - PAGE_SIZE);
-+}
-+
-+#endif /* __ASSEMBLY__ */
-diff --git a/arch/loongarch/include/asm/vdso/vsyscall.h b/arch/loongarch/include/asm/vdso/vsyscall.h
-new file mode 100644
-index 000000000000..5de615383a22
---- /dev/null
-+++ b/arch/loongarch/include/asm/vdso/vsyscall.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_VDSO_VSYSCALL_H
-+#define __ASM_VDSO_VSYSCALL_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/timekeeper_internal.h>
-+#include <vdso/datapage.h>
-+
-+extern struct vdso_data *vdso_data;
++#endif /* __LOONGARCH_KERNEL_IMAGE_VARS_H */
+diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
+index 02abfaaa4892..7da4c4d7c50d 100644
+--- a/arch/loongarch/kernel/vmlinux.lds.S
++++ b/arch/loongarch/kernel/vmlinux.lds.S
+@@ -12,6 +12,14 @@
+ #define BSS_FIRST_SECTIONS *(.bss..swapper_pg_dir)
+ 
+ #include <asm-generic/vmlinux.lds.h>
++#include "image-vars.h"
 +
 +/*
-+ * Update the vDSO data page to keep in sync with kernel timekeeping.
++ * Max avaliable Page Size is 64K, so we set SectionAlignment
++ * field of EFI application to 64K.
 + */
-+static __always_inline
-+struct vdso_data *__loongarch_get_k_vdso_data(void)
-+{
-+	return vdso_data;
-+}
-+#define __arch_get_k_vdso_data __loongarch_get_k_vdso_data
++PECOFF_FILE_ALIGN = 0x200;
++PECOFF_SEGMENT_ALIGN = 0x10000;
+ 
+ OUTPUT_ARCH(loongarch)
+ ENTRY(kernel_entry)
+@@ -27,6 +35,9 @@ SECTIONS
+ 	. = VMLINUX_LOAD_ADDRESS;
+ 
+ 	_text = .;
++	HEAD_TEXT_SECTION
 +
-+/* The asm-generic header needs to be included after the definitions above */
-+#include <asm-generic/vdso/vsyscall.h>
++	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 	.text : {
+ 		TEXT_TEXT
+ 		SCHED_TEXT
+@@ -38,11 +49,12 @@ SECTIONS
+ 		*(.fixup)
+ 		*(.gnu.warning)
+ 	} :text = 0
++	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 	_etext = .;
+ 
+ 	EXCEPTION_TABLE(16)
+ 
+-	. = ALIGN(PAGE_SIZE);
++	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 	__init_begin = .;
+ 	__inittext_begin = .;
+ 
+@@ -51,6 +63,7 @@ SECTIONS
+ 		EXIT_TEXT
+ 	}
+ 
++	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 	__inittext_end = .;
+ 
+ 	__initdata_begin = .;
+@@ -60,6 +73,10 @@ SECTIONS
+ 		EXIT_DATA
+ 	}
+ 
++	.init.bss : {
++		*(.init.bss)
++	}
++	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 	__initdata_end = .;
+ 
+ 	__init_end = .;
+@@ -71,11 +88,11 @@ SECTIONS
+ 	.sdata : {
+ 		*(.sdata)
+ 	}
+-
+-	. = ALIGN(SZ_64K);
++	.edata_padding : { BYTE(0); . = ALIGN(PECOFF_FILE_ALIGN); }
+ 	_edata =  .;
+ 
+ 	BSS_SECTION(0, SZ_64K, 8)
++	. = ALIGN(PECOFF_SEGMENT_ALIGN);
+ 
+ 	_end = .;
+ 
+diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+index 2c3dac5ecb36..ecb4e0b1295a 100644
+--- a/drivers/firmware/efi/Kconfig
++++ b/drivers/firmware/efi/Kconfig
+@@ -121,9 +121,9 @@ config EFI_ARMSTUB_DTB_LOADER
+ 
+ config EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER
+ 	bool "Enable the command line initrd loader" if !X86
+-	depends on EFI_STUB && (EFI_GENERIC_STUB || X86)
+-	default y if X86
+ 	depends on !RISCV
++	depends on EFI_STUB && (EFI_GENERIC_STUB || X86 || LOONGARCH)
++	default y if (X86 || LOONGARCH)
+ 	help
+ 	  Select this config option to add support for the initrd= command
+ 	  line parameter, allowing an initrd that resides on the same volume
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index d0537573501e..663e9d317299 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -26,6 +26,8 @@ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+ 				   $(call cc-option,-mno-single-pic-base)
+ cflags-$(CONFIG_RISCV)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+ 				   -fpic
++cflags-$(CONFIG_LOONGARCH)	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
++				   -fpic
+ 
+ cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+ 
+@@ -55,7 +57,7 @@ KCOV_INSTRUMENT			:= n
+ lib-y				:= efi-stub-helper.o gop.o secureboot.o tpm.o \
+ 				   file.o mem.o random.o randomalloc.o pci.o \
+ 				   skip_spaces.o lib-cmdline.o lib-ctype.o \
+-				   alignedmem.o relocate.o vsprintf.o
++				   alignedmem.o relocate.o string.o vsprintf.o
+ 
+ # include the stub's generic dependencies from lib/ when building for ARM/arm64
+ efi-deps-y := fdt_rw.c fdt_ro.c fdt_wip.c fdt.c fdt_empty_tree.c fdt_sw.c
+@@ -63,13 +65,15 @@ efi-deps-y := fdt_rw.c fdt_ro.c fdt_wip.c fdt.c fdt_empty_tree.c fdt_sw.c
+ $(obj)/lib-%.o: $(srctree)/lib/%.c FORCE
+ 	$(call if_changed_rule,cc_o_c)
+ 
+-lib-$(CONFIG_EFI_GENERIC_STUB)	+= efi-stub.o fdt.o string.o \
++lib-$(CONFIG_EFI_GENERIC_STUB)	+= efi-stub.o fdt.o \
+ 				   $(patsubst %.c,lib-%.o,$(efi-deps-y))
+ 
+ lib-$(CONFIG_ARM)		+= arm32-stub.o
+ lib-$(CONFIG_ARM64)		+= arm64-stub.o
+ lib-$(CONFIG_X86)		+= x86-stub.o
+ lib-$(CONFIG_RISCV)		+= riscv-stub.o
++lib-$(CONFIG_LOONGARCH)		+= loongarch-stub.o
 +
-+#endif /* !__ASSEMBLY__ */
+ CFLAGS_arm32-stub.o		:= -DTEXT_OFFSET=$(TEXT_OFFSET)
+ 
+ # Even when -mbranch-protection=none is set, Clang will generate a
+@@ -125,6 +129,12 @@ STUBCOPY_FLAGS-$(CONFIG_RISCV)	+= --prefix-alloc-sections=.init \
+ 				   --prefix-symbols=__efistub_
+ STUBCOPY_RELOC-$(CONFIG_RISCV)	:= R_RISCV_HI20
+ 
++# For LoongArch, keep all the symbols in .init section and make sure that no
++# absolute symbols references doesn't exist.
++STUBCOPY_FLAGS-$(CONFIG_LOONGARCH)	+= --prefix-alloc-sections=.init \
++					   --prefix-symbols=__efistub_
++STUBCOPY_RELOC-$(CONFIG_LOONGARCH)	:= R_LARCH_MARK_LA
 +
-+#endif /* __ASM_VDSO_VSYSCALL_H */
-diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+ $(obj)/%.stub.o: $(obj)/%.o FORCE
+ 	$(call if_changed,stubcopy)
+ 
+diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
 new file mode 100644
-index 000000000000..e20c8ca87473
+index 000000000000..399641a0b0cb
 --- /dev/null
-+++ b/arch/loongarch/kernel/vdso.c
-@@ -0,0 +1,138 @@
++++ b/drivers/firmware/efi/libstub/loongarch-stub.c
+@@ -0,0 +1,425 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
++ * Author: Yun Liu <liuyun@loongson.cn>
++ *         Huacai Chen <chenhuacai@loongson.cn>
 + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 + */
 +
-+#include <linux/binfmts.h>
-+#include <linux/elf.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/ioport.h>
-+#include <linux/kernel.h>
-+#include <linux/mm.h>
-+#include <linux/random.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+#include <linux/timekeeper_internal.h>
++#include <linux/efi.h>
++#include <linux/sort.h>
++#include <asm/efi.h>
++#include <asm/addrspace.h>
++#include <asm/boot_param.h>
++#include "efistub.h"
 +
-+#include <asm/page.h>
-+#include <asm/vdso.h>
-+#include <vdso/helpers.h>
-+#include <vdso/vsyscall.h>
-+#include <generated/vdso-offsets.h>
++#define MAX_ARG_COUNT		128
++#define CMDLINE_MAX_SIZE	0x200
 +
-+extern char vdso_start[], vdso_end[];
++static int argc;
++static char **argv;
++const efi_system_table_t *efi_system_table;
++static efi_guid_t screen_info_guid = LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID;
++static unsigned int map_entry[LOONGSON3_BOOT_MEM_MAP_MAX];
++static struct efi_mmap mmap_array[EFI_MAX_MEMORY_TYPE][LOONGSON3_BOOT_MEM_MAP_MAX];
 +
-+/* Kernel-provided data used by the VDSO. */
-+static union loongarch_vdso_data {
-+	u8 page[PAGE_SIZE];
-+	struct vdso_data data[CS_BASES];
-+} loongarch_vdso_data __page_aligned_data;
-+struct vdso_data *vdso_data = loongarch_vdso_data.data;
-+static struct page *vdso_pages[] = { NULL };
-+
-+static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struct *new_vma)
-+{
-+	current->mm->context.vdso = (void *)(new_vma->vm_start);
-+
-+	return 0;
-+}
-+
-+struct loongarch_vdso_info vdso_info = {
-+	.vdso = vdso_start,
-+	.size = PAGE_SIZE,
-+	.code_mapping = {
-+		.name = "[vdso]",
-+		.pages = vdso_pages,
-+		.mremap = vdso_mremap,
-+	},
-+	.data_mapping = {
-+		.name = "[vvar]",
-+	},
-+	.offset_sigreturn = vdso_offset_sigreturn,
++struct exit_boot_struct {
++	struct boot_params *bp;
++	unsigned int *runtime_entry_count;
 +};
 +
-+static int __init init_vdso(void)
++typedef void (*kernel_entry_t)(int argc, char *argv[], struct boot_params *boot_p);
++
++extern int kernel_asize;
++extern int kernel_fsize;
++extern int kernel_offset;
++extern unsigned long kernel_vaddr;
++extern kernel_entry_t kernel_entry;
++
++unsigned char efi_crc8(char *buff, int size)
 +{
-+	unsigned long i, pfn;
++	int sum, cnt;
 +
-+	BUG_ON(!PAGE_ALIGNED(vdso_info.vdso));
-+	BUG_ON(!PAGE_ALIGNED(vdso_info.size));
++	for (sum = 0, cnt = 0; cnt < size; cnt++)
++		sum = (char) (sum + *(buff + cnt));
 +
-+	pfn = __phys_to_pfn(__pa_symbol(vdso_info.vdso));
-+	for (i = 0; i < vdso_info.size / PAGE_SIZE; i++)
-+		vdso_info.code_mapping.pages[i] = pfn_to_page(pfn + i);
-+
-+	return 0;
++	return (char)(0x100 - sum);
 +}
-+subsys_initcall(init_vdso);
 +
-+static unsigned long vdso_base(void)
++struct screen_info *alloc_screen_info(void)
 +{
-+	unsigned long base = STACK_TOP;
++	efi_status_t status;
++	struct screen_info *si;
 +
-+	if (current->flags & PF_RANDOMIZE) {
-+		base += get_random_int() & (VDSO_RANDOMIZE_SIZE - 1);
-+		base = PAGE_ALIGN(base);
++	status = efi_bs_call(allocate_pool,
++			EFI_RUNTIME_SERVICES_DATA, sizeof(*si), (void **)&si);
++	if (status != EFI_SUCCESS)
++		return NULL;
++
++	status = efi_bs_call(install_configuration_table, &screen_info_guid, si);
++	if (status == EFI_SUCCESS)
++		return si;
++
++	efi_bs_call(free_pool, si);
++
++	return NULL;
++}
++
++static void setup_graphics(void)
++{
++	unsigned long size;
++	efi_status_t status;
++	efi_guid_t gop_proto = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
++	void **gop_handle = NULL;
++	struct screen_info *si = NULL;
++
++	size = 0;
++	status = efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
++				&gop_proto, NULL, &size, gop_handle);
++	if (status == EFI_BUFFER_TOO_SMALL) {
++		si = alloc_screen_info();
++		efi_setup_gop(si, &gop_proto, size);
++	}
++}
++
++struct boot_params *bootparams_init(efi_system_table_t *sys_table)
++{
++	efi_status_t status;
++	struct boot_params *p;
++	unsigned char sig[8] = {'B', 'P', 'I', '0', '1', '0', '0', '2'};
++
++	status = efi_bs_call(allocate_pool, EFI_RUNTIME_SERVICES_DATA, SZ_64K, (void **)&p);
++	if (status != EFI_SUCCESS)
++		return NULL;
++
++	memset(p, 0, SZ_64K);
++	memcpy(&p->signature, sig, sizeof(long));
++
++	return p;
++}
++
++static unsigned long convert_priv_cmdline(char *cmdline_ptr,
++		unsigned long rd_addr, unsigned long rd_size)
++{
++	unsigned int rdprev_size;
++	unsigned int cmdline_size;
++	efi_status_t status;
++	char *pstr, *substr;
++	char *initrd_ptr = NULL;
++	char convert_str[CMDLINE_MAX_SIZE];
++	static char cmdline_array[CMDLINE_MAX_SIZE];
++
++	cmdline_size = strlen(cmdline_ptr);
++	snprintf(cmdline_array, CMDLINE_MAX_SIZE, "kernel ");
++
++	initrd_ptr = strstr(cmdline_ptr, "initrd=");
++	if (!initrd_ptr) {
++		snprintf(cmdline_array, CMDLINE_MAX_SIZE, "kernel %s", cmdline_ptr);
++		goto completed;
++	}
++	snprintf(convert_str, CMDLINE_MAX_SIZE, " initrd=0x%lx,0x%lx", rd_addr, rd_size);
++	rdprev_size = cmdline_size - strlen(initrd_ptr);
++	strncat(cmdline_array, cmdline_ptr, rdprev_size);
++
++	cmdline_ptr = strnstr(initrd_ptr, " ", CMDLINE_MAX_SIZE);
++	strcat(cmdline_array, convert_str);
++	if (!cmdline_ptr)
++		goto completed;
++
++	strcat(cmdline_array, cmdline_ptr);
++
++completed:
++	status = efi_allocate_pages((MAX_ARG_COUNT + 1) * (sizeof(char *)),
++					(unsigned long *)&argv, ULONG_MAX);
++	if (status != EFI_SUCCESS) {
++		efi_err("Alloc argv mmap_array error\n");
++		return status;
 +	}
 +
-+	return base;
++	argc = 0;
++	pstr = cmdline_array;
++
++	substr = strsep(&pstr, " \t");
++	while (substr != NULL) {
++		if (strlen(substr)) {
++			argv[argc++] = substr;
++			if (argc == MAX_ARG_COUNT) {
++				efi_err("Argv mmap_array full!\n");
++				break;
++			}
++		}
++		substr = strsep(&pstr, " \t");
++	}
++
++	return EFI_SUCCESS;
 +}
 +
-+int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
++unsigned int efi_memmap_sort(struct loongsonlist_mem_map *memmap,
++			unsigned int index, unsigned int mem_type)
 +{
-+	int ret;
-+	unsigned long vvar_size, size, data_addr, vdso_addr;
-+	struct mm_struct *mm = current->mm;
-+	struct vm_area_struct *vma;
-+	struct loongarch_vdso_info *info = current->thread.vdso;
++	unsigned int i, t;
++	unsigned long msize;
 +
-+	if (mmap_write_lock_killable(mm))
-+		return -EINTR;
++	for (i = 0; i < map_entry[mem_type]; i = t) {
++		msize = mmap_array[mem_type][i].mem_size;
++		for (t = i + 1; t < map_entry[mem_type]; t++) {
++			if (mmap_array[mem_type][i].mem_start + msize <
++					mmap_array[mem_type][t].mem_start)
++				break;
++
++			msize += mmap_array[mem_type][t].mem_size;
++		}
++		memmap->map[index].mem_type = mem_type;
++		memmap->map[index].mem_start = mmap_array[mem_type][i].mem_start;
++		memmap->map[index].mem_size = msize;
++		memmap->map[index].attribute = mmap_array[mem_type][i].attribute;
++		index++;
++	}
++
++	return index;
++}
++
++static efi_status_t mk_mmap(struct efi_boot_memmap *map, struct boot_params *p)
++{
++	char checksum;
++	unsigned int i;
++	unsigned int nr_desc;
++	unsigned int mem_type;
++	unsigned long count;
++	efi_memory_desc_t *mem_desc;
++	struct loongsonlist_mem_map *mhp = NULL;
++
++	memset(map_entry, 0, sizeof(map_entry));
++	memset(mmap_array, 0, sizeof(mmap_array));
++
++	if (!strncmp((char *)p, "BPI", 3)) {
++		p->flags |= BPI_FLAGS_UEFI_SUPPORTED;
++		p->systemtable = (efi_system_table_t *)efi_system_table;
++		p->extlist_offset = sizeof(*p) + sizeof(unsigned long);
++		mhp = (struct loongsonlist_mem_map *)((char *)p + p->extlist_offset);
++
++		memcpy(&mhp->header.signature, "MEM", sizeof(unsigned long));
++		mhp->header.length = sizeof(*mhp);
++		mhp->desc_version = *map->desc_ver;
++		mhp->map_count = 0;
++	}
++	if (!(*(map->map_size)) || !(*(map->desc_size)) || !mhp) {
++		efi_err("get memory info error\n");
++		return EFI_INVALID_PARAMETER;
++	}
++	nr_desc = *(map->map_size) / *(map->desc_size);
 +
 +	/*
-+	 * Determine total area size. This includes the VDSO data itself
-+	 * and the data page.
++	 * According to UEFI SPEC, mmap_buf is the accurate Memory Map
++	 * mmap_array now we can fill platform specific memory structure.
 +	 */
-+	vvar_size = PAGE_SIZE;
-+	size = vvar_size + info->size;
++	for (i = 0; i < nr_desc; i++) {
++		mem_desc = (efi_memory_desc_t *)((void *)(*map->map) + (i * (*(map->desc_size))));
++		switch (mem_desc->type) {
++		case EFI_RESERVED_TYPE:
++		case EFI_RUNTIME_SERVICES_CODE:
++		case EFI_RUNTIME_SERVICES_DATA:
++		case EFI_MEMORY_MAPPED_IO:
++		case EFI_MEMORY_MAPPED_IO_PORT_SPACE:
++		case EFI_UNUSABLE_MEMORY:
++		case EFI_PAL_CODE:
++			mem_type = ADDRESS_TYPE_RESERVED;
++			break;
 +
-+	data_addr = get_unmapped_area(NULL, vdso_base(), size, 0, 0);
-+	if (IS_ERR_VALUE(data_addr)) {
-+		ret = data_addr;
-+		goto out;
++		case EFI_ACPI_MEMORY_NVS:
++			mem_type = ADDRESS_TYPE_NVS;
++			break;
++
++		case EFI_ACPI_RECLAIM_MEMORY:
++			mem_type = ADDRESS_TYPE_ACPI;
++			break;
++
++		case EFI_LOADER_CODE:
++		case EFI_LOADER_DATA:
++		case EFI_PERSISTENT_MEMORY:
++		case EFI_BOOT_SERVICES_CODE:
++		case EFI_BOOT_SERVICES_DATA:
++		case EFI_CONVENTIONAL_MEMORY:
++			mem_type = ADDRESS_TYPE_SYSRAM;
++			break;
++
++		default:
++			continue;
++		}
++
++		mmap_array[mem_type][map_entry[mem_type]].mem_type = mem_type;
++		mmap_array[mem_type][map_entry[mem_type]].mem_start =
++						mem_desc->phys_addr & TO_PHYS_MASK;
++		mmap_array[mem_type][map_entry[mem_type]].mem_size =
++						mem_desc->num_pages << EFI_PAGE_SHIFT;
++		mmap_array[mem_type][map_entry[mem_type]].attribute =
++						mem_desc->attribute;
++		map_entry[mem_type]++;
 +	}
-+	vdso_addr = data_addr + PAGE_SIZE;
 +
-+	vma = _install_special_mapping(mm, data_addr, vvar_size,
-+				       VM_READ | VM_MAYREAD,
-+				       &info->data_mapping);
-+	if (IS_ERR(vma)) {
-+		ret = PTR_ERR(vma);
-+		goto out;
++	count = mhp->map_count;
++	/* Sort EFI memmap and add to BPI for kernel */
++	for (i = 0; i < LOONGSON3_BOOT_MEM_MAP_MAX; i++) {
++		if (!map_entry[i])
++			continue;
++		count = efi_memmap_sort(mhp, count, i);
 +	}
 +
-+	/* Map VDSO data page. */
-+	ret = remap_pfn_range(vma, data_addr,
-+			      virt_to_phys(vdso_data) >> PAGE_SHIFT,
-+			      PAGE_SIZE, PAGE_READONLY);
-+	if (ret)
-+		goto out;
++	mhp->map_count = count;
++	mhp->header.checksum = 0;
 +
-+	/* Map VDSO code page. */
-+	vma = _install_special_mapping(mm, vdso_addr, info->size,
-+				       VM_READ | VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC,
-+				       &info->code_mapping);
-+	if (IS_ERR(vma)) {
-+		ret = PTR_ERR(vma);
-+		goto out;
++	checksum = efi_crc8((char *)mhp, mhp->header.length);
++	mhp->header.checksum = checksum;
++
++	return EFI_SUCCESS;
++}
++
++static efi_status_t exit_boot_func(struct efi_boot_memmap *map, void *priv)
++{
++	efi_status_t status;
++	struct exit_boot_struct *p = priv;
++
++	status = mk_mmap(map, p->bp);
++	if (status != EFI_SUCCESS) {
++		efi_err("Make kernel memory map failed!\n");
++		return status;
 +	}
 +
-+	mm->context.vdso = (void *)vdso_addr;
-+	ret = 0;
-+
-+out:
-+	mmap_write_unlock(mm);
-+	return ret;
++	return EFI_SUCCESS;
 +}
-diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
-new file mode 100644
-index 000000000000..6b6e16732c60
---- /dev/null
-+++ b/arch/loongarch/vdso/Makefile
-@@ -0,0 +1,96 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Objects to go into the VDSO.
 +
-+# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-+# the inclusion of generic Makefile.
-+ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
-+include $(srctree)/lib/vdso/Makefile
-+
-+obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
-+
-+# Common compiler flags between ABIs.
-+ccflags-vdso := \
-+	$(filter -I%,$(KBUILD_CFLAGS)) \
-+	$(filter -E%,$(KBUILD_CFLAGS)) \
-+	$(filter -march=%,$(KBUILD_CFLAGS)) \
-+	$(filter -m%-float,$(KBUILD_CFLAGS)) \
-+	-D__VDSO__
-+
-+ifeq ($(cc-name),clang)
-+ccflags-vdso += $(filter --target=%,$(KBUILD_CFLAGS))
-+endif
-+
-+cflags-vdso := $(ccflags-vdso) \
-+	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
-+	-O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
-+	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
-+	$(call cc-option, -fno-asynchronous-unwind-tables) \
-+	$(call cc-option, -fno-stack-protector)
-+aflags-vdso := $(ccflags-vdso) \
-+	-D__ASSEMBLY__ -Wa,-gdwarf-2
-+
-+ifneq ($(c-gettimeofday-y),)
-+  CFLAGS_vgettimeofday.o += -include $(c-gettimeofday-y)
-+endif
-+
-+# VDSO linker flags.
-+ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
-+	$(filter -E%,$(KBUILD_CFLAGS)) -nostdlib -shared \
-+	--hash-style=sysv --build-id -T
-+
-+GCOV_PROFILE := n
-+
-+#
-+# Shared build commands.
-+#
-+
-+quiet_cmd_vdsold_and_vdso_check = LD      $@
-+      cmd_vdsold_and_vdso_check = $(cmd_ld); $(cmd_vdso_check)
-+
-+quiet_cmd_vdsoas_o_S = AS       $@
-+      cmd_vdsoas_o_S = $(CC) $(a_flags) -c -o $@ $<
-+
-+# Generate VDSO offsets using helper script
-+gen-vdsosym := $(srctree)/$(src)/gen_vdso_offsets.sh
-+quiet_cmd_vdsosym = VDSOSYM $@
-+      cmd_vdsosym = $(NM) $< | $(gen-vdsosym) | LC_ALL=C sort > $@
-+
-+include/generated/vdso-offsets.h: $(obj)/vdso.so.dbg FORCE
-+	$(call if_changed,vdsosym)
-+
-+#
-+# Build native VDSO.
-+#
-+
-+native-abi := $(filter -mabi=%,$(KBUILD_CFLAGS))
-+
-+targets += $(obj-vdso-y)
-+targets += vdso.lds vdso.so.dbg vdso.so
-+
-+obj-vdso := $(obj-vdso-y:%.o=$(obj)/%.o)
-+
-+$(obj-vdso): KBUILD_CFLAGS := $(cflags-vdso) $(native-abi)
-+$(obj-vdso): KBUILD_AFLAGS := $(aflags-vdso) $(native-abi)
-+
-+$(obj)/vdso.lds: KBUILD_CPPFLAGS := $(ccflags-vdso) $(native-abi)
-+
-+$(obj)/vdso.so.dbg: $(obj)/vdso.lds $(obj-vdso) FORCE
-+	$(call if_changed,vdsold_and_vdso_check)
-+
-+$(obj)/vdso.so: OBJCOPYFLAGS := -S
-+$(obj)/vdso.so: $(obj)/vdso.so.dbg FORCE
-+	$(call if_changed,objcopy)
-+
-+obj-y += vdso.o
-+
-+$(obj)/vdso.o : $(obj)/vdso.so
-+
-+# install commands for the unstripped file
-+quiet_cmd_vdso_install = INSTALL $@
-+      cmd_vdso_install = cp $(obj)/$@.dbg $(MODLIB)/vdso/$@
-+
-+vdso.so: $(obj)/vdso.so.dbg
-+	@mkdir -p $(MODLIB)/vdso
-+	$(call cmd,vdso_install)
-+
-+vdso_install: vdso.so
-diff --git a/arch/loongarch/vdso/elf.S b/arch/loongarch/vdso/elf.S
-new file mode 100644
-index 000000000000..9bb21b9f9583
---- /dev/null
-+++ b/arch/loongarch/vdso/elf.S
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+#include <asm/vdso/vdso.h>
-+
-+#include <linux/elfnote.h>
-+#include <linux/version.h>
-+
-+ELFNOTE_START(Linux, 0, "a")
-+	.long LINUX_VERSION_CODE
-+ELFNOTE_END
-diff --git a/arch/loongarch/vdso/gen_vdso_offsets.sh b/arch/loongarch/vdso/gen_vdso_offsets.sh
-new file mode 100755
-index 000000000000..1bb4e12642ff
---- /dev/null
-+++ b/arch/loongarch/vdso/gen_vdso_offsets.sh
-@@ -0,0 +1,13 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+
-+#
-+# Derived from RISC-V and ARM64:
-+# Author: Will Deacon <will.deacon@arm.com>
-+#
-+# Match symbols in the DSO that look like VDSO_*; produce a header file
-+# of constant offsets into the shared object.
-+#
-+
-+LC_ALL=C sed -n -e 's/^00*/0/' -e \
-+'s/^\([0-9a-fA-F]*\) . VDSO_\([a-zA-Z0-9_]*\)$/\#define vdso_offset_\2\t0x\1/p'
-diff --git a/arch/loongarch/vdso/sigreturn.S b/arch/loongarch/vdso/sigreturn.S
-new file mode 100644
-index 000000000000..9cb3c58fad03
---- /dev/null
-+++ b/arch/loongarch/vdso/sigreturn.S
-@@ -0,0 +1,24 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+#include <asm/vdso/vdso.h>
-+
-+#include <linux/linkage.h>
-+#include <uapi/asm/unistd.h>
-+
-+#include <asm/regdef.h>
-+#include <asm/asm.h>
-+
-+	.section	.text
-+	.cfi_sections	.debug_frame
-+
-+SYM_FUNC_START(__vdso_rt_sigreturn)
-+
-+	li.w	a7, __NR_rt_sigreturn
-+	syscall	0
-+
-+SYM_FUNC_END(__vdso_rt_sigreturn)
-diff --git a/arch/loongarch/vdso/vdso.S b/arch/loongarch/vdso/vdso.S
-new file mode 100644
-index 000000000000..46789bade6ff
---- /dev/null
-+++ b/arch/loongarch/vdso/vdso.S
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ *
-+ * Derived from RISC-V:
-+ * Copyright (C) 2014 Regents of the University of California
-+ */
-+
-+#include <linux/init.h>
-+#include <linux/linkage.h>
-+#include <asm/page.h>
-+
-+	__PAGE_ALIGNED_DATA
-+
-+	.globl vdso_start, vdso_end
-+	.balign PAGE_SIZE
-+vdso_start:
-+	.incbin "arch/loongarch/vdso/vdso.so"
-+	.balign PAGE_SIZE
-+vdso_end:
-+
-+	.previous
-diff --git a/arch/loongarch/vdso/vdso.lds.S b/arch/loongarch/vdso/vdso.lds.S
-new file mode 100644
-index 000000000000..955f02de4a2d
---- /dev/null
-+++ b/arch/loongarch/vdso/vdso.lds.S
-@@ -0,0 +1,72 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+OUTPUT_FORMAT("elf64-loongarch", "elf64-loongarch", "elf64-loongarch")
-+
-+OUTPUT_ARCH(loongarch)
-+
-+SECTIONS
++static efi_status_t exit_boot_services(struct boot_params *boot_params, void *handle)
 +{
-+	PROVIDE(_start = .);
-+	. = SIZEOF_HEADERS;
++	unsigned int desc_version;
++	unsigned int runtime_entry_count = 0;
++	unsigned long map_size, key, desc_size, buff_size;
++	efi_status_t status;
++	efi_memory_desc_t *mem_map;
++	struct efi_boot_memmap map;
++	struct exit_boot_struct priv;
 +
-+	.hash		: { *(.hash) }			:text
-+	.gnu.hash	: { *(.gnu.hash) }
-+	.dynsym		: { *(.dynsym) }
-+	.dynstr		: { *(.dynstr) }
-+	.gnu.version	: { *(.gnu.version) }
-+	.gnu.version_d	: { *(.gnu.version_d) }
-+	.gnu.version_r	: { *(.gnu.version_r) }
-+
-+	.note		: { *(.note.*) }		:text :note
-+
-+	.text		: { *(.text*) }			:text
-+	PROVIDE (__etext = .);
-+	PROVIDE (_etext = .);
-+	PROVIDE (etext = .);
-+
-+	.eh_frame_hdr	: { *(.eh_frame_hdr) }		:text :eh_frame_hdr
-+	.eh_frame	: { KEEP (*(.eh_frame)) }	:text
-+
-+	.dynamic	: { *(.dynamic) }		:text :dynamic
-+
-+	.rodata		: { *(.rodata*) }		:text
-+
-+	_end = .;
-+	PROVIDE(end = .);
-+
-+	/DISCARD/	: {
-+		*(.gnu.attributes)
-+		*(.note.GNU-stack)
-+		*(.data .data.* .gnu.linkonce.d.* .sdata*)
-+		*(.bss .sbss .dynbss .dynsbss)
++	map.map			= &mem_map;
++	map.map_size		= &map_size;
++	map.desc_size		= &desc_size;
++	map.desc_ver		= &desc_version;
++	map.key_ptr		= &key;
++	map.buff_size		= &buff_size;
++	status = efi_get_memory_map(&map);
++	if (status != EFI_SUCCESS) {
++		efi_err("Unable to retrieve UEFI memory map.\n");
++		return status;
 +	}
-+}
 +
-+PHDRS
-+{
-+	text		PT_LOAD		FLAGS(5) FILEHDR PHDRS; /* PF_R|PF_X */
-+	dynamic		PT_DYNAMIC	FLAGS(4);		/* PF_R */
-+	note		PT_NOTE		FLAGS(4);		/* PF_R */
-+	eh_frame_hdr	PT_GNU_EH_FRAME;
-+}
++	priv.bp = boot_params;
++	priv.runtime_entry_count = &runtime_entry_count;
 +
-+VERSION
-+{
-+	LINUX_5.10 {
-+	global:
-+		__vdso_clock_getres;
-+		__vdso_clock_gettime;
-+		__vdso_gettimeofday;
-+		__vdso_rt_sigreturn;
-+	local: *;
-+	};
++	/* Might as well exit boot services now */
++	status = efi_exit_boot_services(handle, &map, &priv, exit_boot_func);
++	if (status != EFI_SUCCESS)
++		return status;
++
++	return EFI_SUCCESS;
 +}
 +
 +/*
-+ * Make the sigreturn code visible to the kernel.
++ * EFI entry point for the LoongArch EFI stub.
 + */
-+VDSO_sigreturn		= __vdso_rt_sigreturn;
-diff --git a/arch/loongarch/vdso/vgettimeofday.c b/arch/loongarch/vdso/vgettimeofday.c
-new file mode 100644
-index 000000000000..b1f4548dae92
---- /dev/null
-+++ b/arch/loongarch/vdso/vgettimeofday.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * LoongArch userspace implementations of gettimeofday() and similar.
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <linux/types.h>
-+
-+int __vdso_clock_gettime(clockid_t clock,
-+			 struct __kernel_timespec *ts)
++efi_status_t __efiapi efi_pe_entry(efi_handle_t handle, efi_system_table_t *sys_table)
 +{
-+	return __cvdso_clock_gettime(clock, ts);
-+}
++	unsigned int cmdline_size = 0;
++	unsigned long kernel_addr = 0;
++	unsigned long initrd_addr = 0;
++	unsigned long initrd_size = 0;
++	enum efi_secureboot_mode secure_boot;
++	char *cmdline_ptr = NULL;
++	struct boot_params *boot_p;
++	efi_status_t status;
++	efi_loaded_image_t *image;
++	efi_guid_t loaded_image_proto;
++	kernel_entry_t real_kernel_entry;
 +
-+int __vdso_gettimeofday(struct __kernel_old_timeval *tv,
-+			struct timezone *tz)
-+{
-+	return __cvdso_gettimeofday(tv, tz);
-+}
++	/* Config Direct Mapping */
++	csr_writeq(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
++	csr_writeq(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
 +
-+int __vdso_clock_getres(clockid_t clock_id,
-+			struct __kernel_timespec *res)
-+{
-+	return __cvdso_clock_getres(clock_id, res);
++	efi_system_table = sys_table;
++	loaded_image_proto = LOADED_IMAGE_PROTOCOL_GUID;
++	kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
++	real_kernel_entry = (kernel_entry_t)
++		((unsigned long)&kernel_entry - kernel_addr + kernel_vaddr);
++
++	/* Check if we were booted by the EFI firmware */
++	if (sys_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
++		goto fail;
++
++	/*
++	 * Get a handle to the loaded image protocol.  This is used to get
++	 * information about the running image, such as size and the command
++	 * line.
++	 */
++	status = sys_table->boottime->handle_protocol(handle,
++					&loaded_image_proto, (void *)&image);
++	if (status != EFI_SUCCESS) {
++		efi_err("Failed to get loaded image protocol\n");
++		goto fail;
++	}
++
++	/* Get the command line from EFI, using the LOADED_IMAGE protocol. */
++	cmdline_ptr = efi_convert_cmdline(image, &cmdline_size);
++	if (!cmdline_ptr) {
++		efi_err("Getting command line failed!\n");
++		goto fail_free_cmdline;
++	}
++
++#ifdef CONFIG_CMDLINE_BOOL
++	if (cmdline_size == 0)
++		efi_parse_options(CONFIG_CMDLINE);
++#endif
++	if (!IS_ENABLED(CONFIG_CMDLINE_OVERRIDE) && cmdline_size > 0)
++		efi_parse_options(cmdline_ptr);
++
++	efi_info("Booting Linux Kernel...\n");
++
++	efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
++			    PHYSADDR(kernel_vaddr), SZ_2M, PHYSADDR(kernel_vaddr));
++
++	setup_graphics();
++	secure_boot = efi_get_secureboot();
++	efi_enable_reset_attack_mitigation();
++
++	status = efi_load_initrd(image, &initrd_addr, &initrd_size, SZ_4G, ULONG_MAX);
++	if (status != EFI_SUCCESS) {
++		efi_err("Failed get initrd addr!\n");
++		goto fail_free;
++	}
++
++	status = convert_priv_cmdline(cmdline_ptr, initrd_addr, initrd_size);
++	if (status != EFI_SUCCESS) {
++		efi_err("Covert cmdline failed!\n");
++		goto fail_free;
++	}
++
++	boot_p = bootparams_init(sys_table);
++	if (!boot_p) {
++		efi_err("Create BPI struct error!\n");
++		goto fail;
++	}
++
++	status = exit_boot_services(boot_p, handle);
++	if (status != EFI_SUCCESS) {
++		efi_err("exit_boot services failed!\n");
++		goto fail_free;
++	}
++
++	real_kernel_entry(argc, argv, boot_p);
++
++	return EFI_SUCCESS;
++
++fail_free:
++	efi_free(initrd_size, initrd_addr);
++
++fail_free_cmdline:
++	efi_free(cmdline_size, (unsigned long)cmdline_ptr);
++
++fail:
++	return status;
 +}
+diff --git a/include/linux/pe.h b/include/linux/pe.h
+index daf09ffffe38..f4bb0b6a416d 100644
+--- a/include/linux/pe.h
++++ b/include/linux/pe.h
+@@ -65,6 +65,7 @@
+ #define	IMAGE_FILE_MACHINE_SH5		0x01a8
+ #define	IMAGE_FILE_MACHINE_THUMB	0x01c2
+ #define	IMAGE_FILE_MACHINE_WCEMIPSV2	0x0169
++#define	IMAGE_FILE_MACHINE_LOONGARCH	0x6264
+ 
+ /* flags */
+ #define IMAGE_FILE_RELOCS_STRIPPED           0x0001
 -- 
 2.27.0
 
