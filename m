@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA699515ECC
-	for <lists+linux-arch@lfdr.de>; Sat, 30 Apr 2022 17:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D54D515EC8
+	for <lists+linux-arch@lfdr.de>; Sat, 30 Apr 2022 17:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383010AbiD3Pli (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 30 Apr 2022 11:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        id S1382986AbiD3Plh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 30 Apr 2022 11:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352787AbiD3PlT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Apr 2022 11:41:19 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060B7A0BDD
-        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 08:37:57 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so12887002pjb.5
-        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 08:37:57 -0700 (PDT)
+        with ESMTP id S232786AbiD3Plg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 30 Apr 2022 11:41:36 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C02DA0BE4
+        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 08:37:58 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id z21so8667731pgj.1
+        for <linux-arch@vger.kernel.org>; Sat, 30 Apr 2022 08:37:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=GsO1g7Ro+rsf0io9vopg1aQfP2P2g91oLlrkEyQDXiM=;
-        b=kF7TN9WBue7gogtLcWCSwM/BfmlmiiSeL5p6P+r9TFf7mJTPo7V03Vb2pERNLvb7OE
-         aRiiolMYojHxd4x5cQCGpG9H2wT2LX9AGbU77WuAKd7VD9xTc7yVRQuxr9CmreoFTg1r
-         PvNjg/njaujbrqAe+WzlaHXAa3YGjcCyPClqxCArzRUK1f4wnu8wIGOKQzuuPux3fanL
-         dNudXAVOCI0w1bdRz0Bat3QH8ewK8iAbnP04kEkDwytD4R2TvR69JqSwtluXppkeLWp+
-         iJKg4ylgLJ4xSXkYkJB/5TkTjMKtqArr+XkBvDHr/ZIlgr8RD4A5+MLPtRKEzg0pyefW
-         MJ6Q==
+        bh=z3KLQgMj1TGNiy68N/+4cjWSftL0fQ46WdCXDumEo+g=;
+        b=OIjS69Rysux2zOuPu+QGyQyEdlRWBp2cAHY90hMkRDcU+740wg96FctIHu6gimhe37
+         lz3jiYHZzNFTdx32AfsrWEbeDRWge1y2JeufrIPVxrl4eUYhH7+j85QUjV4yTlpew1Qz
+         O/Lwal75dK7+QounVjK9C7dYqAFShV4gJMNyJ1gWPoAIdrZQYBITK18BbXnd0idplft1
+         QHNO3WQkZIuBSzo2GgKyrMyVdDvBNibHbD/fYMkpOV4gf5DDYvB1VFIuM6r8Hp6RMADH
+         N/4tYcc94hfUa/k8OhPS1Z3ZmLWbtys1gNxrDGeNmBnciOp1mBgdO5PLtUf77tbM7NSE
+         nxrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=GsO1g7Ro+rsf0io9vopg1aQfP2P2g91oLlrkEyQDXiM=;
-        b=nwmY3ooSq8xeijmIn/x6QsrDY7AUUAxw8PSWAEMmyMDwHwuUDA1auH6vHMKL415h5d
-         5S2GqWPlu7kF2E5Oga1Iee6madyZjTx5dFU/AQY3SvMuM/rdi3h0LRF/zxEDi0VqVIWE
-         8mK157qyylkwAicXsS/Bch7aY3sxME3flmuP3eGnZwDfK661nwnoJUqR4r5n6qUMvNyt
-         z6bJXpjngn/h2uhEVib5uIfSOUWp0H11/DBECMJke2MqQm9i93Ngw0O8McZb+hH7k8OK
-         Be6/CxEYxZ87kTzqLjB4wpvo/OwxKjouwiNaDuTxKEXut2a1Bu/Z23fsIdh8KXQWEO40
-         crZA==
-X-Gm-Message-State: AOAM533ReaQh1p56bxlin9heo+kNS50j9xP1+ADBaLIfvmq2MDZzWNAc
-        NOf0who8usPyMKbmvJXjMEBiXw==
-X-Google-Smtp-Source: ABdhPJzNtj8d/a+lfHQeb2reqO0YCZeJo7LPF+70BVvrDTXjKfwmfYC5tWlm1kzXph5Ui9RlcPxgHQ==
-X-Received: by 2002:a17:902:8d8e:b0:159:4f6:c4aa with SMTP id v14-20020a1709028d8e00b0015904f6c4aamr4142558plo.115.1651333076544;
-        Sat, 30 Apr 2022 08:37:56 -0700 (PDT)
+        bh=z3KLQgMj1TGNiy68N/+4cjWSftL0fQ46WdCXDumEo+g=;
+        b=zjv+oGKTxAMIoq0qfcJAHS/T9JmzfeUO8RJQNVFc8FhKQu1lfmMe6hw/YFhtet5Ij0
+         IjBSv0rkya3o3vVEd4i4EYzHZMdHJQCNhpJfRgyziS3ENNuBl2Y9VQKS4hf6x16TIjlD
+         v8cyg3Rp3SzIXrmHFpdDITVpWAOdUJHWceQFYNVja4tq5rufABVzpDrsY5AZD61e8NKp
+         Znmsnvscg8CfcbrmcNkJb8ACanoTHaKqZK3jCM+Ewf7kMsA9eKBnVL02zigDlWw05ZoG
+         XLdKvIsT2tVu8ftUAN+S4sCMYFIBnZILHwjAWsaZ3ku3f53eDh65By4twfeWHelBG1Gr
+         acYg==
+X-Gm-Message-State: AOAM5303uR2UOxqyVPQCPRUmj+IeUFwpV25IJGnPLpI/hJ34aOvkSYf1
+        wrX13WGDnHtmNt3KvCNXTxfJlw==
+X-Google-Smtp-Source: ABdhPJwQ5vPL3rfJKlBBkun+N1EkTvaAg1pnc1AebUDuMRn0c3hata7ORS3NhPRk+anvBJZz91htfQ==
+X-Received: by 2002:a63:81c8:0:b0:3ab:6025:f43c with SMTP id t191-20020a6381c8000000b003ab6025f43cmr3472832pgd.189.1651333077608;
+        Sat, 30 Apr 2022 08:37:57 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id m2-20020a17090a2c0200b001d7761ee6fcsm12923373pjd.3.2022.04.30.08.37.56
+        by smtp.gmail.com with ESMTPSA id g11-20020a63110b000000b003c14af50614sm8108129pgl.44.2022.04.30.08.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 08:37:56 -0700 (PDT)
-Subject: [PATCH v4 3/7] asm-generic: qrwlock: Document the spinlock fairness requirements
-Date:   Sat, 30 Apr 2022 08:36:22 -0700
-Message-Id: <20220430153626.30660-4-palmer@rivosinc.com>
+        Sat, 30 Apr 2022 08:37:57 -0700 (PDT)
+Subject: [PATCH v4 4/7] openrisc: Move to ticket-spinlock
+Date:   Sat, 30 Apr 2022 08:36:23 -0700
+Message-Id: <20220430153626.30660-5-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220430153626.30660-1-palmer@rivosinc.com>
 References: <20220430153626.30660-1-palmer@rivosinc.com>
@@ -71,39 +71,105 @@ Cc:     guoren@kernel.org, peterz@infradead.org, mingo@redhat.com,
 From:   Palmer Dabbelt <palmer@rivosinc.com>
 To:     Arnd Bergmann <arnd@arndb.de>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Palmer Dabbelt <palmer@rivosinc.com>
+From: Peter Zijlstra <peterz@infradead.org>
 
-I could only find the fairness requirements documented as the C code,
-this calls them out in a comment just to be a bit more explicit.
+We have no indications that openrisc meets the qspinlock requirements,
+so move to ticket-spinlock as that is more likey to be correct.
 
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Stafford Horne <shorne@gmail.com>
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- include/asm-generic/qrwlock.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/openrisc/Kconfig                      |  1 -
+ arch/openrisc/include/asm/Kbuild           |  5 ++--
+ arch/openrisc/include/asm/spinlock.h       | 27 ----------------------
+ arch/openrisc/include/asm/spinlock_types.h |  7 ------
+ 4 files changed, 2 insertions(+), 38 deletions(-)
+ delete mode 100644 arch/openrisc/include/asm/spinlock.h
+ delete mode 100644 arch/openrisc/include/asm/spinlock_types.h
 
-diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
-index 7ae0ece07b4e..24ae09c1db9f 100644
---- a/include/asm-generic/qrwlock.h
-+++ b/include/asm-generic/qrwlock.h
-@@ -2,6 +2,10 @@
- /*
-  * Queue read/write lock
-  *
-+ * These use generic atomic and locking routines, but depend on a fair spinlock
-+ * implementation in order to be fair themselves.  The implementation in
-+ * asm-generic/spinlock.h meets these requirements.
-+ *
-  * (C) Copyright 2013-2014 Hewlett-Packard Development Company, L.P.
-  *
-  * Authors: Waiman Long <waiman.long@hp.com>
+diff --git a/arch/openrisc/Kconfig b/arch/openrisc/Kconfig
+index 0d68adf6e02b..99f0e4a4cbbd 100644
+--- a/arch/openrisc/Kconfig
++++ b/arch/openrisc/Kconfig
+@@ -30,7 +30,6 @@ config OPENRISC
+ 	select HAVE_DEBUG_STACKOVERFLOW
+ 	select OR1K_PIC
+ 	select CPU_NO_EFFICIENT_FFS if !OPENRISC_HAVE_INST_FF1
+-	select ARCH_USE_QUEUED_SPINLOCKS
+ 	select ARCH_USE_QUEUED_RWLOCKS
+ 	select OMPIC if SMP
+ 	select ARCH_WANT_FRAME_POINTERS
+diff --git a/arch/openrisc/include/asm/Kbuild b/arch/openrisc/include/asm/Kbuild
+index ca5987e11053..3386b9c1c073 100644
+--- a/arch/openrisc/include/asm/Kbuild
++++ b/arch/openrisc/include/asm/Kbuild
+@@ -1,9 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ generic-y += extable.h
+ generic-y += kvm_para.h
+-generic-y += mcs_spinlock.h
+-generic-y += qspinlock_types.h
+-generic-y += qspinlock.h
++generic-y += spinlock_types.h
++generic-y += spinlock.h
+ generic-y += qrwlock_types.h
+ generic-y += qrwlock.h
+ generic-y += user.h
+diff --git a/arch/openrisc/include/asm/spinlock.h b/arch/openrisc/include/asm/spinlock.h
+deleted file mode 100644
+index 264944a71535..000000000000
+--- a/arch/openrisc/include/asm/spinlock.h
++++ /dev/null
+@@ -1,27 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * OpenRISC Linux
+- *
+- * Linux architectural port borrowing liberally from similar works of
+- * others.  All original copyrights apply as per the original source
+- * declaration.
+- *
+- * OpenRISC implementation:
+- * Copyright (C) 2003 Matjaz Breskvar <phoenix@bsemi.com>
+- * Copyright (C) 2010-2011 Jonas Bonn <jonas@southpole.se>
+- * et al.
+- */
+-
+-#ifndef __ASM_OPENRISC_SPINLOCK_H
+-#define __ASM_OPENRISC_SPINLOCK_H
+-
+-#include <asm/qspinlock.h>
+-
+-#include <asm/qrwlock.h>
+-
+-#define arch_spin_relax(lock)	cpu_relax()
+-#define arch_read_relax(lock)	cpu_relax()
+-#define arch_write_relax(lock)	cpu_relax()
+-
+-
+-#endif
+diff --git a/arch/openrisc/include/asm/spinlock_types.h b/arch/openrisc/include/asm/spinlock_types.h
+deleted file mode 100644
+index 7c6fb1208c88..000000000000
+--- a/arch/openrisc/include/asm/spinlock_types.h
++++ /dev/null
+@@ -1,7 +0,0 @@
+-#ifndef _ASM_OPENRISC_SPINLOCK_TYPES_H
+-#define _ASM_OPENRISC_SPINLOCK_TYPES_H
+-
+-#include <asm/qspinlock_types.h>
+-#include <asm/qrwlock_types.h>
+-
+-#endif /* _ASM_OPENRISC_SPINLOCK_TYPES_H */
 -- 
 2.34.1
 
