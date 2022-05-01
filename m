@@ -2,56 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC42351633E
-	for <lists+linux-arch@lfdr.de>; Sun,  1 May 2022 10:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99794516345
+	for <lists+linux-arch@lfdr.de>; Sun,  1 May 2022 10:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiEAI7A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 1 May 2022 04:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S244572AbiEAI7e (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 1 May 2022 04:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233784AbiEAI65 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 May 2022 04:58:57 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F646571;
-        Sun,  1 May 2022 01:55:25 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id o132so5464832vko.11;
-        Sun, 01 May 2022 01:55:25 -0700 (PDT)
+        with ESMTP id S1344611AbiEAI73 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 May 2022 04:59:29 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650812F3B6;
+        Sun,  1 May 2022 01:56:04 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id s68so5471530vke.6;
+        Sun, 01 May 2022 01:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aOUmnl7BKu1huo7JhRvlC6s5ifyyE6pCVv3geLjblJE=;
-        b=iw71wdeVgX/zqOqatNvV37VC5uK48TPq+zz/4eoVern9BMCrd+yw1BVQJhENpcrAY2
-         Y6X1JzJ860vYmWLV+Rc8ED2iFlSJhWX9pTmRJxoOThy1cnnNUrgstPJD0mXXCTrs3Ltq
-         cIaSTPwONr6lyKL86B1BEP9qA0kA4yKjo8NPmkt04+sH9QNPE2kPUxb8QBmaPW2uE81h
-         NHZtiPwQ2ezrLyi+dEY35WkeF49mauv4N/xlLrBVBKmvpScjODdA+zY++S3ht6RDVrv3
-         IJUiMixnC3tvHkaQ1TqrMmZsmOkxSfkW5UkWKr3lKS8zCFq5ZZr1Dn72zwiy2dhQbEoC
-         c+8A==
+        bh=mu1yMR5dKezm+SKTIruAqlfPoYV6aEjk0Uo++5Bnha0=;
+        b=c+mpNC4uvpgyJqOcd/Q6lrLbOoezDySUnYfSGyY/UZnChyX/Cvn9omVo4G6oUjSno1
+         36Lh36Kts3bq1upbfHCrkAfWL5VCrdhqXFCF67mB9KJPgvdMBXzQwZQ+cuJwdTxTKzSI
+         fOUlqqAlOQNcPOO2Y5XKzCb5ZIEEIvKpVf5bA/sKj6bsY2eefxOcNDdcQfvcxHMZIyaH
+         7nY+OUwGCWTGMUv5AX+Baa0rFChXXxm0l1bD26XD2avGPgnvSkrI7iN4lQXUVw36hD9u
+         5JbY6GUh3ulA5pD8O5Fbm3Buk8JS4ZKRmuzwRnTdJtzT/Ou92Q3+ep1WJXixf5ewp5L8
+         Dgjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aOUmnl7BKu1huo7JhRvlC6s5ifyyE6pCVv3geLjblJE=;
-        b=IymEvJ8VLvWky//dDlGZuWB+u6EvE7IuswCPjMrfKUf8cSZGjW2p4NlEKAfd5PN0nX
-         tXQg9PB+ZYIVY4KiY9KGNJLzfaemZapI1K3e0QBL780+cTdIGkRqzKv7IUjNPciMKJlf
-         V59zctSsJBo4X5sHQUbqFgQDYzMAKoDZMB3H33HJRkc3MxQb80FKsws6/yunYqKClH0A
-         +Vf6osoVWSLRPWxfbkpWM2bVjorFw0pENFDkINcWp1OYwzDvHJsgP470koUVCcWEUwl3
-         u4KCeQ4qolZxvJ6iNY5Ebhd0snYR6bGTRt+7rZfXczOWHczD0xzSeo+POMvlwQbKZNC1
-         /4xQ==
-X-Gm-Message-State: AOAM530tqbJ0HNdH4i0PKYGrHWmeOzu/Vkl6uctextqUqHdGI1NE6FWT
-        M0Ipy2i+nSiovTU9z+4i2Pi6a9xyj8vPD1jVKiU=
-X-Google-Smtp-Source: ABdhPJxS0HQA086kEmfeUwIUB4rXhF25fUjifO/tOBjk288xwlcLd601Qz4wOZZ6JkTl16aFo02CLuudHF0mnMcaPS0=
-X-Received: by 2002:a1f:e606:0:b0:34d:76c1:722c with SMTP id
- d6-20020a1fe606000000b0034d76c1722cmr1806372vkh.17.1651395323323; Sun, 01 May
- 2022 01:55:23 -0700 (PDT)
+        bh=mu1yMR5dKezm+SKTIruAqlfPoYV6aEjk0Uo++5Bnha0=;
+        b=2gxuQJiztndFJTNCPk6+ZoJRbg7xIKpbl8iqDSY4zuR/oXdT53/BWPZNQ9IKL/DIP6
+         fcBHB9iXxcpsDqDQhfP7Z+OAvcAct6IyWxAXtq9eTMyYxdL+tMG3UjvL/gZhQUcBSCRZ
+         74PAyx7fSImGP4a7UZP0Is4NdQm00nl0gvy2SoUu71wuvt/WhWc58+S4zV7TRy71q1cl
+         k6JLJRhF45CfE9taj+wzxdZNW6eLyrNr6fWd9f+D4ve9oFosFBOzUQHOCfDUgBO3AD/5
+         fJsUydBBP5V974Y9YP0Xr1iWcBBFQgMTTRF5edfWw+ZkkW18wjyinfsDAj8undHy6+Px
+         Bigw==
+X-Gm-Message-State: AOAM53282N3Y3NKT3BZIEGXBMzX9eAEcx0tiWyLKQ3wQHtAOIIYx5nU5
+        WwDR94vyEHDeLvTz7cawdXvdI9OFm3yYsCFQoiI=
+X-Google-Smtp-Source: ABdhPJzoWtE2BCiuSncncKnQGWP4I41Igi6YVM7fen1KtzZckIuWMxzuda367cPmaVgUjz/U3RBPcviyYcfKPE9uK7c=
+X-Received: by 2002:a1f:d102:0:b0:345:b1af:81a2 with SMTP id
+ i2-20020a1fd102000000b00345b1af81a2mr1807669vkg.5.1651395363415; Sun, 01 May
+ 2022 01:56:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-2-chenhuacai@loongson.cn> <Ym47ZAuwEA9as98h@debian.me>
-In-Reply-To: <Ym47ZAuwEA9as98h@debian.me>
+References: <20220430090518.3127980-1-chenhuacai@loongson.cn> <Ym5ClK4vg4nodfYV@debian.me>
+In-Reply-To: <Ym5ClK4vg4nodfYV@debian.me>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sun, 1 May 2022 16:55:12 +0800
-Message-ID: <CAAhV-H4evqhFc+cqPs-6X-CL71aQJ3ZnbVKGPdOfNeuizzAWeg@mail.gmail.com>
-Subject: Re: [PATCH V9 01/24] Documentation: LoongArch: Add basic documentations
+Date:   Sun, 1 May 2022 16:55:52 +0800
+Message-ID: <CAAhV-H71ovYt2F1nK5EtgV0oJQ8_PrjVL1v+1L5XCKJObARdLA@mail.gmail.com>
+Subject: Re: [PATCH V9 00/22] arch: Add basic LoongArch support
 To:     Bagas Sanjaya <bagasdotme@gmail.com>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -72,8 +71,8 @@ Cc:     Huacai Chen <chenhuacai@loongson.cn>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,259 +81,42 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Bagas,
 
-On Sun, May 1, 2022 at 3:49 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+On Sun, May 1, 2022 at 4:19 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 >
-> On Sat, Apr 30, 2022 at 05:04:55PM +0800, Huacai Chen wrote:
-> > +Instruction names (Mnemonics)
-> > +-----------------------------
-> > +
-> > +We only list the instruction names here, for details please read the references.
-> > +
-> > +Arithmetic Operation Instructions::
-> > +
-> > +  ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> > +  SLT SLTU SLTI SLTUI
-> > +  AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> > +  MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> > +  MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> > +  PCADDI PCADDU12I PCADDU18I
-> > +  LU12I.W LU32I.D LU52I.D ADDU16I.D
-> > +
-> > +Bit-shift Instructions::
-> > +
-> > +  SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> > +  SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
-> > +
-> > +Bit-manipulation Instructions::
-> > +
-> > +  EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> > +  BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> > +  REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> > +  MASKEQZ MASKNEZ
-> > +
-> > +Branch Instructions::
-> > +
-> > +  BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
-> > +
-> > +Load/Store Instructions::
-> > +
-> > +  LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> > +  LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> > +  LDPTR.W LDPTR.D STPTR.W STPTR.D
-> > +  PRELD PRELDX
-> > +
-> > +Atomic Operation Instructions::
-> > +
-> > +  LL.W SC.W LL.D SC.D
-> > +  AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> > +  AMMAX.W AMMAX.D AMMIN.W AMMIN.D
-> > +
-> > +Barrier Instructions::
-> > +
-> > +  IBAR DBAR
-> > +
-> > +Special Instructions::
-> > +
-> > +  SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
-> > +
-> > +Privileged Instructions::
-> > +
-> > +  CSRRD CSRWR CSRXCHG
-> > +  IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> > +  CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-> > +
+> On Sat, Apr 30, 2022 at 05:04:54PM +0800, Huacai Chen wrote:
+> > Huacai Chen(24):
+> >  Documentation: LoongArch: Add basic documentations.
+> >  Documentation/zh_CN: Add basic LoongArch documentations.
+> >  LoongArch: Add elf-related definitions.
+> >  LoongArch: Add writecombine support for drm.
+> >  LoongArch: Add build infrastructure.
+> >  LoongArch: Add CPU definition headers.
+> >  LoongArch: Add atomic/locking headers.
+> >  LoongArch: Add other common headers.
+> >  LoongArch: Add boot and setup routines.
+> >  LoongArch: Add exception/interrupt handling.
+> >  LoongArch: Add process management.
+> >  LoongArch: Add memory management.
+> >  LoongArch: Add system call support.
+> >  LoongArch: Add signal handling support.
+> >  LoongArch: Add elf and module support.
+> >  LoongArch: Add misc common routines.
+> >  LoongArch: Add some library functions.
+> >  LoongArch: Add PCI controller support.
+> >  LoongArch: Add VDSO and VSYSCALL support.
+> >  LoongArch: Add efistub booting support.
+> >  LoongArch: Add zboot (compressed kernel) support.
+> >  LoongArch: Add multi-processor (SMP) support.
+> >  LoongArch: Add Non-Uniform Memory Access (NUMA) support.
+> >  LoongArch: Add Loongson-3 default config file.
+> >
 >
-> Since these above are list of instruction categories, it's better to use
-> enumerated lists. Also, make use of ReST labels to link to References
-> sections, like this:
+> I have skimmed through patch descriptions, and I see patch 05-24/24 use
+> descriptive mood (This patch adds what...). Please write them in
+> imperative mood instead.
 OK, thanks, let me try.
 
 Huacai
->
-> -- >8 --
->
-> diff --git a/Documentation/loongarch/introduction.rst b/Documentation/loongarch/introduction.rst
-> index 420c0d2ebcfbe7..2d83283ecf28b9 100644
-> --- a/Documentation/loongarch/introduction.rst
-> +++ b/Documentation/loongarch/introduction.rst
-> @@ -194,60 +194,61 @@ can see I21L/I21H and I26L/I26H here.
->  Instruction names (Mnemonics)
->  -----------------------------
->
-> -We only list the instruction names here, for details please read the references.
-> +We only list the instruction names here, for details please read the
-> +:ref:`references <loongarch-references>`.
->
-> -Arithmetic Operation Instructions::
-> +1. Arithmetic Operation Instructions::
->
-> -  ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> -  SLT SLTU SLTI SLTUI
-> -  AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> -  MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> -  MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> -  PCADDI PCADDU12I PCADDU18I
-> -  LU12I.W LU32I.D LU52I.D ADDU16I.D
-> +     ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> +     SLT SLTU SLTI SLTUI
-> +     AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> +     MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> +     MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> +     PCADDI PCADDU12I PCADDU18I
-> +     LU12I.W LU32I.D LU52I.D ADDU16I.D
->
-> -Bit-shift Instructions::
-> +2. Bit-shift Instructions::
->
-> -  SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> -  SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
-> +     SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> +     SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
->
-> -Bit-manipulation Instructions::
-> +3. Bit-manipulation Instructions::
->
-> -  EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> -  BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> -  REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> -  MASKEQZ MASKNEZ
-> +     EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> +     BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> +     REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> +     MASKEQZ MASKNEZ
->
-> -Branch Instructions::
-> +4. Branch Instructions::
->
-> -  BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
-> +     BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
->
-> -Load/Store Instructions::
-> +5. Load/Store Instructions::
->
-> -  LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> -  LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> -  LDPTR.W LDPTR.D STPTR.W STPTR.D
-> -  PRELD PRELDX
-> +     LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> +     LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> +     LDPTR.W LDPTR.D STPTR.W STPTR.D
-> +     PRELD PRELDX
->
-> -Atomic Operation Instructions::
-> +6. Atomic Operation Instructions::
->
-> -  LL.W SC.W LL.D SC.D
-> -  AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> -  AMMAX.W AMMAX.D AMMIN.W AMMIN.D
-> +     LL.W SC.W LL.D SC.D
-> +     AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> +     AMMAX.W AMMAX.D AMMIN.W AMMIN.D
->
-> -Barrier Instructions::
-> +7. Barrier Instructions::
->
-> -  IBAR DBAR
-> +     IBAR DBAR
->
-> -Special Instructions::
-> +8. Special Instructions::
->
-> -  SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
-> +     SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
->
-> -Privileged Instructions::
-> +9. Privileged Instructions::
->
-> -  CSRRD CSRWR CSRXCHG
-> -  IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> -  CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-> +     CSRRD CSRWR CSRXCHG
-> +     IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> +     CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
->
->  Virtual Memory
->  ==============
-> @@ -315,6 +316,8 @@ MIPS, while New Loongson is based on LoongArch. Take Loongson-3 as an example:
->  Loongson-3A1000/3B1500/3A2000/3A3000/3A4000 are MIPS-compatible, while Loongson-
->  3A5000 (and future revisions) are all based on LoongArch.
->
-> +.. _loongarch-references:
-> +
->  References
->  ==========
->
->
-> > +
-> > + +---------------------------------------------+
-> > + |::                                           |
-> > + |                                             |
-> > + |    +-----+     +---------+     +-------+    |
-> > + |    | IPI | --> | CPUINTC | <-- | Timer |    |
-> > + |    +-----+     +---------+     +-------+    |
-> > + |                     ^                       |
-> > + |                     |                       |
-> > + |                +---------+     +-------+    |
-> > + |                | LIOINTC | <-- | UARTs |    |
-> > + |                +---------+     +-------+    |
-> > + |                     ^                       |
-> > + |                     |                       |
-> > + |               +-----------+                 |
-> > + |               | HTVECINTC |                 |
-> > + |               +-----------+                 |
-> > + |                ^         ^                  |
-> > + |                |         |                  |
-> > + |          +---------+ +---------+            |
-> > + |          | PCH-PIC | | PCH-MSI |            |
-> > + |          +---------+ +---------+            |
-> > + |            ^     ^           ^              |
-> > + |            |     |           |              |
-> > + |    +---------+ +---------+ +---------+      |
-> > + |    | PCH-LPC | | Devices | | Devices |      |
-> > + |    +---------+ +---------+ +---------+      |
-> > + |         ^                                   |
-> > + |         |                                   |
-> > + |    +---------+                              |
-> > + |    | Devices |                              |
-> > + |    +---------+                              |
-> > + |                                             |
-> > + |                                             |
-> > + +---------------------------------------------+
-> > +
-> ...
-> > +
-> > + +--------------------------------------------------------+
-> > + |::                                                      |
-> > + |                                                        |
-> > + |         +-----+     +---------+     +-------+          |
-> > + |         | IPI | --> | CPUINTC | <-- | Timer |          |
-> > + |         +-----+     +---------+     +-------+          |
-> > + |                      ^       ^                         |
-> > + |                      |       |                         |
-> > + |               +---------+ +---------+     +-------+    |
-> > + |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-> > + |               +---------+ +---------+     +-------+    |
-> > + |                ^       ^                               |
-> > + |                |       |                               |
-> > + |         +---------+ +---------+                        |
-> > + |         | PCH-PIC | | PCH-MSI |                        |
-> > + |         +---------+ +---------+                        |
-> > + |           ^     ^           ^                          |
-> > + |           |     |           |                          |
-> > + |   +---------+ +---------+ +---------+                  |
-> > + |   | PCH-LPC | | Devices | | Devices |                  |
-> > + |   +---------+ +---------+ +---------+                  |
-> > + |        ^                                               |
-> > + |        |                                               |
-> > + |   +---------+                                          |
-> > + |   | Devices |                                          |
-> > + |   +---------+                                          |
-> > + |                                                        |
-> > + |                                                        |
-> > + +--------------------------------------------------------+
-> > +
->
-> I think just literal blocks is enough for the diagrams above.
 >
 > --
 > An old man doll... just what I always wanted! - Clara
