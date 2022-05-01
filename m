@@ -2,35 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038A3516376
-	for <lists+linux-arch@lfdr.de>; Sun,  1 May 2022 11:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6FB516375
+	for <lists+linux-arch@lfdr.de>; Sun,  1 May 2022 11:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbiEAJma (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 1 May 2022 05:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S231879AbiEAJl4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 1 May 2022 05:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236939AbiEAJm0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 May 2022 05:42:26 -0400
+        with ESMTP id S231845AbiEAJly (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 May 2022 05:41:54 -0400
+X-Greylist: delayed 340 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 01 May 2022 02:38:25 PDT
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FB83EA8A;
-        Sun,  1 May 2022 02:38:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738083E5E3;
+        Sun,  1 May 2022 02:38:25 -0700 (PDT)
 Received: from [192.168.9.172] (unknown [101.88.28.48])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 6DA3C6010C;
-        Sun,  1 May 2022 17:32:42 +0800 (CST)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 2D46B601A1;
+        Sun,  1 May 2022 17:38:23 +0800 (CST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=xen0n.name; s=mail;
-        t=1651397562; bh=ZdQA6+lqDp40xaO1nnHvUXygtGFvv4YFyaF3F4aKwEQ=;
+        t=1651397903; bh=4lgotv728Ar5N9SCPmvMSR4VzCq4l//kfHw4rGr2GJ8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=En8CBI6GoSpvneTIb7/sMlDObScYHHGSVmU4Gmq/kMwTtsnoAApdMpjPTv4yDQiYV
-         IRmnYcOq0957CUZ+xkuQKMhrVn+7IkDT/G5JkLbrhjl5pnIkLElvGoWqR99pflUpci
-         rp9GH0qalILFFKzWydZivGIvU67jmD5dIkMDDams=
-Message-ID: <150d439e-093c-e512-c1fb-a297ce30c1b8@xen0n.name>
-Date:   Sun, 1 May 2022 17:32:41 +0800
+        b=INmo16xtq4iSyvnici5020TkoTbR4kywAHvc0roQOzYYTHLJbvfG/EVoa9UxKrmw9
+         eWNzjRrLbaCtRj0SosdEe7/5bt8EshtsNX1Cb4CsqRLkhZoat3HwaMayrLPrJMSECL
+         gIFDOHtnXfO74FImQIzVD4Rn2VxnO30EH4ZgUpeI=
+Message-ID: <dd52ef43-703d-326d-2aab-f716fac42c06@xen0n.name>
+Date:   Sun, 1 May 2022 17:38:22 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:101.0) Gecko/20100101
  Thunderbird/101.0a1
-Subject: Re: [PATCH V9 01/24] Documentation: LoongArch: Add basic
+Subject: Re: [PATCH V9 02/24] Documentation/zh_CN: Add basic LoongArch
  documentations
 Content-Language: en-US
 To:     Huacai Chen <chenhuacai@loongson.cn>,
@@ -47,11 +48,12 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Yanteng Si <siyanteng@loongson.cn>,
         Huacai Chen <chenhuacai@gmail.com>,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Alex Shi <alexs@kernel.org>
 References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-2-chenhuacai@loongson.cn>
+ <20220430090518.3127980-3-chenhuacai@loongson.cn>
 From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220430090518.3127980-2-chenhuacai@loongson.cn>
+In-Reply-To: <20220430090518.3127980-3-chenhuacai@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -66,62 +68,85 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi,
 
-Here's some rough review on the documentation bits, both semantic-wise 
-and English-wise; I'm not native English speaker though, so more eyes 
-are welcome.
-
-
 On 4/30/22 17:04, Huacai Chen wrote:
-> Add some basic documentation for LoongArch. LoongArch is a new RISC ISA,
-> which is a bit like MIPS or RISC-V. LoongArch includes a reduced 32-bit
-> version (LA32R), a standard 32-bit version (LA32S) and a 64-bit version
-> (LA64).
+> Add some basic documentation (zh_CN version) for LoongArch. LoongArch is
+> a new RISC ISA, which is a bit like MIPS or RISC-V. LoongArch includes a
+> reduced 32-bit version (LA32R), a standard 32-bit version (LA32S) and a
+> 64-bit version (LA64).
 >
+> Reviewed-by: Alex Shi <alexs@kernel.org>
+> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
 > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->   Documentation/arch.rst                     |   1 +
->   Documentation/loongarch/features.rst       |   3 +
->   Documentation/loongarch/index.rst          |  21 ++
->   Documentation/loongarch/introduction.rst   | 345 +++++++++++++++++++++
->   Documentation/loongarch/irq-chip-model.rst | 168 ++++++++++
->   5 files changed, 538 insertions(+)
->   create mode 100644 Documentation/loongarch/features.rst
->   create mode 100644 Documentation/loongarch/index.rst
->   create mode 100644 Documentation/loongarch/introduction.rst
->   create mode 100644 Documentation/loongarch/irq-chip-model.rst
+>   Documentation/translations/zh_CN/index.rst    |   1 +
+>   .../translations/zh_CN/loongarch/features.rst |   8 +
+>   .../translations/zh_CN/loongarch/index.rst    |  26 ++
+>   .../zh_CN/loongarch/introduction.rst          | 318 ++++++++++++++++++
+>   .../zh_CN/loongarch/irq-chip-model.rst        | 167 +++++++++
+>   5 files changed, 520 insertions(+)
+>   create mode 100644 Documentation/translations/zh_CN/loongarch/features.rst
+>   create mode 100644 Documentation/translations/zh_CN/loongarch/index.rst
+>   create mode 100644 Documentation/translations/zh_CN/loongarch/introduction.rst
+>   create mode 100644 Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
 >
-> diff --git a/Documentation/arch.rst b/Documentation/arch.rst
-> index 14bcd8294b93..41a66a8b38e4 100644
-> --- a/Documentation/arch.rst
-> +++ b/Documentation/arch.rst
-> @@ -13,6 +13,7 @@ implementation.
->      arm/index
->      arm64/index
->      ia64/index
+> diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
+> index 88d8df957a78..41c59950523c 100644
+> --- a/Documentation/translations/zh_CN/index.rst
+> +++ b/Documentation/translations/zh_CN/index.rst
+> @@ -171,6 +171,7 @@ TODOList:
+>      riscv/index
+>      openrisc/index
+>      parisc/index
 > +   loongarch/index
->      m68k/index
->      mips/index
->      nios2/index
-> diff --git a/Documentation/loongarch/features.rst b/Documentation/loongarch/features.rst
+>   
+>   TODOList:
+>   
+> diff --git a/Documentation/translations/zh_CN/loongarch/features.rst b/Documentation/translations/zh_CN/loongarch/features.rst
 > new file mode 100644
-> index 000000000000..ebacade3ea45
+> index 000000000000..3886e635ec06
 > --- /dev/null
-> +++ b/Documentation/loongarch/features.rst
-> @@ -0,0 +1,3 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/features.rst
+> @@ -0,0 +1,8 @@
 > +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/loongarch/features.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
 > +
 > +.. kernel-feat:: $srctree/Documentation/features loongarch
-> diff --git a/Documentation/loongarch/index.rst b/Documentation/loongarch/index.rst
+> diff --git a/Documentation/translations/zh_CN/loongarch/index.rst b/Documentation/translations/zh_CN/loongarch/index.rst
 > new file mode 100644
-> index 000000000000..d127e07a7ed3
+> index 000000000000..367dead02e3a
 > --- /dev/null
-> +++ b/Documentation/loongarch/index.rst
-> @@ -0,0 +1,21 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/index.rst
+> @@ -0,0 +1,26 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +================================
-> +LoongArch-specific Documentation
-> +================================
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/loongarch/index.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
+> +
+> +=================
+> +LoongArch特性文档
+
+This title is translated from "LoongArch-specific documentation", so 
+"特性文档" is wrong -- "LoongArch特性文档" is "LoongArch features 
+documentation" instead. You should say something like 
+"LoongArch架构相关文档" or "LoongArch架构相关信息" instead.
+
+(BTW, the translation for MIPS documentation has the same error, so 
+that's probably what you based the patch on...)
+
+And for the rest, most (but not all, specifically not those concerning 
+English usage) comments to the previous patch adding English 
+documentation applies here too. Please keep the two patches' contents in 
+sync.
+
+(no further comments below)
+
+> +=================
 > +
 > +.. toctree::
 > +   :maxdepth: 2
@@ -138,256 +163,167 @@ On 4/30/22 17:04, Huacai Chen wrote:
 > +   =======
 > +
 > +   * :ref:`genindex`
-> diff --git a/Documentation/loongarch/introduction.rst b/Documentation/loongarch/introduction.rst
+> diff --git a/Documentation/translations/zh_CN/loongarch/introduction.rst b/Documentation/translations/zh_CN/loongarch/introduction.rst
 > new file mode 100644
-> index 000000000000..420c0d2ebcfb
+> index 000000000000..432a6267f1f1
 > --- /dev/null
-> +++ b/Documentation/loongarch/introduction.rst
-> @@ -0,0 +1,345 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/introduction.rst
+> @@ -0,0 +1,318 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +=========================
-> +Introduction of LoongArch
-> +=========================
+> +.. include:: ../disclaimer-zh_CN.rst
 > +
-> +LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V. LoongArch
-> +includes a reduced 32-bit version (LA32R), a standard 32-bit version (LA32S)
-> +and a 64-bit version (LA64). LoongArch has 4 privilege levels (PLV0~PLV3),
-> +PLV0 is the highest level which used by kernel, and PLV3 is the lowest level
-> +which used by applications. This document introduces the registers, basic
-
-The sentence is a bit malformed; better reword into two sentences.
-
-"There are 4 privilege levels (PLVs) defined in LoongArch: PLV0~PLV3, 
-from high to low. Kernel runs at the PLV0 while applications runs at PLV3.
-
-> +instruction set, virtual memory and some other topics of LoongArch.
+> +:Original: Documentation/loongarch/introduction.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
 > +
-> +Registers
-> +=========
+> +=============
+> +LoongArch介绍
+> +=============
 > +
-> +LoongArch registers include general purpose registers (GPRs), floating point
-> +registers (FPRs), vector registers (VRs) and control status registers (CSRs)
-> +used in privileged mode (PLV0).
-Aren't privilege levels other than PLV0 also able to use CSRs?
+> +LoongArch是一种新的RISC ISA，在一定程度上类似于MIPS和RISC-V。LoongArch指令集
+> +包括一个精简32位版（LA32R）、一个标准32位版（LA32S）、一个64位版（LA64）。
+> +LoongArch有四个特权级（PLV0~PLV3），其中PLV0是最高特权级，用于内核；而PLV3是
+> +最低特权级，用于应用程序。本文档介绍了LoongArch的寄存器、基础指令集、虚拟内
+> +存以及其他一些主题。
 > +
-> +GPRs
-> +----
+> +寄存器
+> +======
 > +
-> +LoongArch has 32 GPRs ($r0 - $r31), each one is 32bit wide in LA32 and 64bit
-> +wide in LA64. $r0 is always zero, and other registers has no special feature,
-
-"while other registers are not special"
-
-But again, this is not technically true; $r1 ($ra) *is* architecturally 
-special, in that the BL instruction has it hard-wired as the link 
-register. This sentence may need a little tweak but I currently don't 
-have a concrete suggestion.
-
-> +but we actually have an ABI register convention as below.
-
-We may link to the official psABI specification now. When this port is 
-first announced the documentation is not yet ready, but we now have it 
-at [1], so by referring to the official bits we can avoid stale 
-description like...
-
-[1]: 
-https://loongson.github.io/LoongArch-Documentation/LoongArch-ELF-ABI-EN.html
-
+> +LoongArch的寄存器包括通用寄存器（GPRs）、浮点寄存器（FPRs）、向量寄存器（VRs）
+> +和用于特权模式（PLV0）的控制状态寄存器（CSRs）。
 > +
-> +================= =============== =================== ============
-> +Name              Alias           Usage               Preserved
-> +                                                      across calls
-> +================= =============== =================== ============
-> +``$r0``           ``$zero``       Constant zero       Unused
-> +``$r1``           ``$ra``         Return address      No
-> +``$r2``           ``$tp``         TLS                 Unused
-> +``$r3``           ``$sp``         Stack pointer       Yes
-> +``$r4``-``$r11``  ``$a0``-``$a7`` Argument registers  No
-> +``$r4``-``$r5``   ``$v0``-``$v1`` Return value        No
-... this (the ABI alias is deprecated in the latest spec), and...
-> +``$r12``-``$r20`` ``$t0``-``$t8`` Temp registers      No
-> +``$r21``          ``$x``          Reserved            Unused
-... this (for one thing, the alias is entirely removed in the latest 
-spec; for other thing, kernel does make use of this register), and...
-> +``$r22``          ``$fp``         Frame pointer       Yes
-... this (this can also be called $s9 when we don't care about or make 
-use of its frame-pointer nature).
-> +``$r23``-``$r31`` ``$s0``-``$s8`` Static registers    Yes
-> +================= =============== =================== ============
-And as described above, while the $r21 is reserved in the userspace ABI, 
-this port does make use of it (as the percpu base register); so we'd 
-better mention this too.
+> +通用寄存器
+> +----------
 > +
-> +FPRs
-> +----
+> +LoongArch包括32个通用寄存器（$r0 - $r31），LA32中每个寄存器为32位宽，LA64中
+> +每个寄存器为64位宽。$r0的内容总是0，而其他寄存器没有特殊功能。然而，我们有
+> +如下所示的一套ABI寄存器使用约定。
 > +
-> +LoongArch has 32 FPRs ($f0 - $f31), each one is 64bit wide. We also have an
-"each one is 64bit wide" -- what about the possible LA32 and LA64 
-distinction, as similarly shown in the GPR section?
-> +ABI register conversion as below.
+> +================= =============== =================== ==========
+> +寄存器名          别名            用途                跨调用保持
+> +================= =============== =================== ==========
+> +``$r0``           ``$zero``       常量0               不使用
+> +``$r1``           ``$ra``         返回地址            否
+> +``$r2``           ``$tp``         TLS（线程局部存储） 不使用
+> +``$r3``           ``$sp``         栈指针              是
+> +``$r4``-``$r11``  ``$a0``-``$a7`` 参数寄存器          否
+> +``$r4``-``$r5``   ``$v0``-``$v1`` 返回值              否
+> +``$r12``-``$r20`` ``$t0``-``$t8`` 临时寄存器          否
+> +``$r21``          ``$x``          保留                不使用
+> +``$r22``          ``$fp``         帧指针              是
+> +``$r23``-``$r31`` ``$s0``-``$s8`` 静态寄存器          是
+> +================= =============== =================== ==========
 > +
-> +================= ================== =================== ============
-> +Name              Alias              Usage               Preserved
-> +                                                         across calls
-> +================= ================== =================== ============
-> +``$f0``-``$f7``   ``$fa0``-``$fa7``  Argument registers  No
-> +``$f0``-``$f1``   ``$fv0``-``$fv1``  Return value        No
-Same here -- the $vX and $fvX aliases are deprecated.
-> +``$f8``-``$f23``  ``$ft0``-``$ft15`` Temp registers      No
-> +``$f24``-``$f31`` ``$fs0``-``$fs7``  Static registers    Yes
-> +================= ================== =================== ============
+> +浮点寄存器
+> +----------
 > +
-> +VRs
-> +----
+> +LoongArch有32个浮点寄存器（$f0 - $f31），每个寄存器均为64位宽。我们同样
+> +有如下所示的一套ABI寄存器使用约定。
 > +
-> +LoongArch has 128bit vector extension (LSX, short for Loongson SIMD eXtention)
-> +and 256bit vector extension (LASX, short for Loongson Advanced SIMD eXtension).
-> +There are also 32 vector registers, for LSX is $v0 - $v31, and for LASX is $x0
-> +- $x31. FPRs and VRs are reused, e.g. the lower 128bits of $x0 is $v0, and the
-
-"for LSX is ..." -- Chinglish; "$v0 ~ $v31 for LSX and $x0 ~ $x31 for 
-LASX" would be better.
-
-Also, see what you did here with "$vX"? I know the older names are 
-"$vrX" and "$xrX", but the latest reference manual already switched to 
-the current naming, so you really can't just continue using "$v[01]" for 
-"$a[01]" any more. ;-)
-
-"FPRs and VRs are reused" -- the word "overlap" is better, "FPRs and VRs 
-overlap; the FPRs share the same storage as VR's lower bits" might be a 
-better expression.
-
-> +lower 64bits of $v0 is $f0, etc.
+> +================= ================== =================== ==========
+> +寄存器名          别名               用途                跨调用保持
+> +================= ================== =================== ==========
+> +``$f0``-``$f7``   ``$fa0``-``$fa7``  参数寄存器          否
+> +``$f0``-``$f1``   ``$fv0``-``$fv1``  返回值              否
+> +``$f8``-``$f23``  ``$ft0``-``$ft15`` 临时寄存器          否
+> +``$f24``-``$f31`` ``$fs0``-``$fs7``  静态寄存器          是
+> +================= ================== =================== ==========
 > +
-> +CSRs
-> +----
+> +向量寄存器
+> +----------
 > +
-> +CSRs can only be used in privileged mode (PLV0):
+> +LoongArch拥有128位向量扩展（LSX，全称Loongson SIMD eXtention）和256位向量扩展
+> +（LASX，全称Loongson Advanced SIMD eXtension）。共有32个向量寄存器，对于LSX是
+> +$v0 - $v31，对于LASX是$x0 - $x31。浮点寄存器和向量寄存器是复用的，比如：$x0的
+> +低128位是$v0，而$v0的低64位又是$f0，以此类推。
 > +
-> +================= ===================================== ==============
-> +Address           Full Name                             Abbrev Name
-> +================= ===================================== ==============
-> +0x0               Current Mode information              CRMD
-> +0x1               Pre-exception Mode information        PRMD
-is the word "information" needed?
-> +0x2               Extended Unit Enable                  EUEN
-> +0x3               Miscellaneous controller              MISC
-"controller"? just remove the word or "control" would be better.
-> +0x4               Exception Configuration               ECFG
-> +0x5               Exception Status                      ESTAT
-> +0x6               Exception Return Address              ERA
-> +0x7               Bad Virtual Address                   BADV
-> +0x8               Bad Instruction                       BADI
-> +0xC               Exception Entry Base address          EENTRY
-> +0x10              TLB Index                             TLBIDX
-> +0x11              TLB Entry High-order bits             TLBEHI
-> +0x12              TLB Entry Low-order bits 0            TLBELO0
-> +0x13              TLB Entry Low-order bits 1            TLBELO1
-> +0x18              Address Space Identifier              ASID
-> +0x19              Page Global Directory address for     PGDL
-> +                  Lower half address space
-> +0x1A              Page Global Directory address for     PGDH
-> +                  Higher half address space
-> +0x1B              Page Global Directory address         PGD
-> +0x1C              Page Walk Controller for Lower        PWCL
-> +                  half address space
-> +0x1D              Page Walk Controller for Higher       PWCH
-> +                  half address space
-> +0x1E              STLB Page Size                        STLBPS
-> +0x1F              Reduced Virtual Address Configuration RVACFG
-> +0x20              CPU Identifier                        CPUID
-> +0x21              Privileged Resource Configuration 1   PRCFG1
-> +0x22              Privileged Resource Configuration 2   PRCFG2
-> +0x23              Privileged Resource Configuration 3   PRCFG3
-> +0x30+n (0≤n≤15)   Data Save register                    SAVEn
-These are actually scratch registers, but I imagine you can't use that 
-word as it's a bit MIPS-y... The name is less comprehensible but we 
-might have no choice.
-> +0x40              Timer Identifier                      TID
-> +0x41              Timer Configuration                   TCFG
-> +0x42              Timer Value                           TVAL
-> +0x43              Compensation of Timer Count           CNTC
-> +0x44              Timer Interrupt Clearing              TICLR
-> +0x60              LLBit Controller                      LLBCTL
-"Control" is probably sufficient -- same for other places.
-> +0x80              Implementation-specific Controller 1  IMPCTL1
-> +0x81              Implementation-specific Controller 2  IMPCTL2
-> +0x88              TLB Refill Exception Entry Base       TLBRENTRY
-> +                  address
-> +0x89              TLB Refill Exception BAD Virtual      TLBRBADV
-> +                  address
-> +0x8A              TLB Refill Exception Return Address   TLBRERA
-> +0x8B              TLB Refill Exception data SAVE        TLBRSAVE
-> +                  register
-> +0x8C              TLB Refill Exception Entry Low-order  TLBRELO0
-> +                  bits 0
-> +0x8D              TLB Refill Exception Entry Low-order  TLBRELO1
-> +                  bits 1
-> +0x8E              TLB Refill Exception Entry High-order TLBEHI
-> +                  bits
-> +0x8F              TLB Refill Exception Pre-exception    TLBRPRMD
-> +                  Mode information
-> +0x90              Machine Error Controller              MERRCTL
-> +0x91              Machine Error Information 1           MERRINFO1
-> +0x92              Machine Error Information 2           MERRINFO2
-> +0x93              Machine Error Exception Entry Base    MERRENTRY
-> +                  address
-> +0x94              Machine Error Exception Return        MERRERA
-> +                  address
-> +0x95              Machine Error Exception data SAVE     MERRSAVE
-> +                  register
-It seems you're trying to match capitalization here to the CSR acronym 
--- but the resulting names are inconsistent-looking, such as the "data 
-SAVE" here, and...
-> +0x98              Cache TAGs                            CTAG
-> +0x180+n (0≤n≤3)   Direct Mapping configuration Window n DMWn
-...here, and...
-> +0x200+2n (0≤n≤31) Performance Monitor Configuration n   PMCFGn
-> +0x201+2n (0≤n≤31) Performance Monitor overall Counter n PMCNTn
-> +0x300             Memory load/store WatchPoint          MWPC
-> +                  overall Controller
-
-here.
-
-It's inconsistent, because otherwise you'd have "CuRrent MoDe" at the 
-top of the table, similarly for other entries. As the reference manual 
-(Chinese version; this is the authoritative version) actually does NOT 
-give full English names for the CSRs (only Chinese full-name and the 
-abbreviation), I think we can be a bit lax here and use normal 
-capitalization for reading comfort.
-
-> +0x301             Memory load/store WatchPoint          MWPS
-> +                  overall Status
-> +0x310+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG1
-> +                  Configuration 1
-> +0x311+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG2
-> +                  Configuration 2
-> +0x312+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG3
-> +                  Configuration 3
-> +0x313+8n (0≤n≤7)  Memory load/store WatchPoint n        MWPnCFG4
-> +                  Configuration 4
-> +0x380             Fetch WatchPoint overall Controller   FWPC
-> +0x381             Fetch WatchPoint overall Status       FWPS
-> +0x390+8n (0≤n≤7)  Fetch WatchPoint n Configuration 1    FWPnCFG1
-> +0x391+8n (0≤n≤7)  Fetch WatchPoint n Configuration 2    FWPnCFG2
-> +0x392+8n (0≤n≤7)  Fetch WatchPoint n Configuration 3    FWPnCFG3
-> +0x393+8n (0≤n≤7)  Fetch WatchPoint n Configuration 4    FWPnCFG4
-> +0x500             Debug register                        DBG
-> +0x501             Debug Exception Return address        DERA
-> +0x502             Debug data SAVE register              DSAVE
-> +================= ===================================== ==============
+> +控制状态寄存器
+> +--------------
 > +
-> +ERA，TLBRERA，MERREEA and ERA sometimes are also called EPC，TLBREPC
-> +MERREPC and DEPC.
+> +控制状态寄存器只用于特权模式（PLV0）:
 > +
-> +Basic Instruction Set
-> +=====================
+> +================= ==================================== ==========
+> +地址              全称描述                             简称
+> +================= ==================================== ==========
+> +0x0               当前模式信息                         CRMD
+> +0x1               异常前模式信息                       PRMD
+> +0x2               扩展部件使能                         EUEN
+> +0x3               杂项控制                             MISC
+> +0x4               异常配置                             ECFG
+> +0x5               异常状态                             ESTAT
+> +0x6               异常返回地址                         ERA
+> +0x7               出错虚拟地址                         BADV
+> +0x8               出错指令                             BADI
+> +0xC               异常入口地址                         EENTRY
+> +0x10              TLB索引                              TLBIDX
+> +0x11              TLB表项高位                          TLBEHI
+> +0x12              TLB表项低位0                         TLBELO0
+> +0x13              TLB表项低位1                         TLBELO1
+> +0x18              地址空间标识符                       ASID
+> +0x19              低半地址空间页全局目录基址           PGDL
+> +0x1A              高半地址空间页全局目录基址           PGDH
+> +0x1B              页全局目录基址                       PGD
+> +0x1C              页表遍历控制低半部分                 PWCL
+> +0x1D              页表遍历控制高半部分                 PWCH
+> +0x1E              STLB页大小                           STLBPS
+> +0x1F              缩减虚地址配置                       RVACFG
+> +0x20              CPU编号                              CPUID
+> +0x21              特权资源配置信息1                    PRCFG1
+> +0x22              特权资源配置信息2                    PRCFG2
+> +0x23              特权资源配置信息3                    PRCFG3
+> +0x30+n (0≤n≤15)   数据保存寄存器                       SAVEn
+> +0x40              定时器编号                           TID
+> +0x41              定时器配置                           TCFG
+> +0x42              定时器值                             TVAL
+> +0x43              计时器补偿                           CNTC
+> +0x44              定时器中断清除                       TICLR
+> +0x60              LLBit相关控制                        LLBCTL
+> +0x80              实现相关控制1                        IMPCTL1
+> +0x81              实现相关控制2                        IMPCTL2
+> +0x88              TLB重填异常入口地址                  TLBRENTRY
+> +0x89              TLB重填异常出错虚地址                TLBRBADV
+> +0x8A              TLB重填异常返回地址                  TLBRERA
+> +0x8B              TLB重填异常数据保存                  TLBRSAVE
+> +0x8C              TLB重填异常表项低位0                 TLBRELO0
+> +0x8D              TLB重填异常表项低位1                 TLBRELO1
+> +0x8E              TLB重填异常表项高位                  TLBEHI
+> +0x8F              TLB重填异常前模式信息                TLBRPRMD
+> +0x90              机器错误控制                         MERRCTL
+> +0x91              机器错误信息1                        MERRINFO1
+> +0x92              机器错误信息2                        MERRINFO2
+> +0x93              机器错误异常入口地址                 MERRENTRY
+> +0x94              机器错误异常返回地址                 MERRERA
+> +0x95              机器错误异常数据保存                 MERRSAVE
+> +0x98              高速缓存标签                         CTAG
+> +0x180+n (0≤n≤3)   直接映射配置窗口n                    DMWn
+> +0x200+2n (0≤n≤31) 性能监测配置n                        PMCFGn
+> +0x201+2n (0≤n≤31) 性能监测计数器n                      PMCNTn
+> +0x300             内存读写监视点整体控制               MWPC
+> +0x301             内存读写监视点整体状态               MWPS
+> +0x310+8n (0≤n≤7)  内存读写监视点n配置1                 MWPnCFG1
+> +0x311+8n (0≤n≤7)  内存读写监视点n配置2                 MWPnCFG2
+> +0x312+8n (0≤n≤7)  内存读写监视点n配置3                 MWPnCFG3
+> +0x313+8n (0≤n≤7)  内存读写监视点n配置4                 MWPnCFG4
+> +0x380             取指监视点整体控制                   FWPC
+> +0x381             取指监视点整体状态                   FWPS
+> +0x390+8n (0≤n≤7)  取指监视点n配置1                     FWPnCFG1
+> +0x391+8n (0≤n≤7)  取指监视点n配置2                     FWPnCFG2
+> +0x392+8n (0≤n≤7)  取指监视点n配置3                     FWPnCFG3
+> +0x393+8n (0≤n≤7)  取指监视点n配置4                     FWPnCFG4
+> +0x500             调试寄存器                           DBG
+> +0x501             调试异常返回地址                     DERA
+> +0x502             调试数据保存                         DSAVE
+> +================= ==================================== ==========
 > +
-> +Instruction formats
-> +-------------------
+> +ERA，TLBRERA，MERREEA和ERA有时也称为EPC，TLBREPC，MERREPC和DEPC。
 > +
-> +LoongArch has 32-bit wide instructions, and there are 9 instruction formats::
+> +基础指令集
+> +==========
+> +
+> +指令格式
+> +--------
+> +
+> +LoongArch的指令字长为32位，一共有9种指令格式::
 > +
 > +  2R-type:    Opcode + Rj + Rd
 > +  3R-type:    Opcode + Rk + Rj + Rd
@@ -399,18 +335,17 @@ capitalization for reading comfort.
 > +  1RI21-type: Opcode + I21L + Rj + I21H
 > +  I26-type:   Opcode + I26L + I26H
 > +
-> +Rj and Rk are source operands (register), Rd is destination operand (register),
-> +and Ra is the additional operand (register) in 4R-type. I8/I12/I16/I21/I26 are
-> +8-bits/12-bits/16-bits/21-bits/26bits immediate data. 21bits/26bits immediate
-> +data are split into higher bits and lower bits in an instruction word, so you
-> +can see I21L/I21H and I26L/I26H here.
+> +Opcode是指令操作码，Rj和Rk是源操作数（寄存器），Rd是目标操作数（寄存器），Ra是
+> +4R-type格式特有的附加操作数（寄存器）。I8/I12/I16/I21/I26分别是8位/12位/16位/
+> +21位/26位的立即数。其中21位和26位立即数在指令字中被分割为高位部分与低位部分，
+> +所以你们在这里的格式描述中能够看到I21L/I21H和I26L/I26H这样的表述。
 > +
-> +Instruction names (Mnemonics)
-> +-----------------------------
+> +指令名称（助记符）
+> +------------------
 > +
-> +We only list the instruction names here, for details please read the references.
+> +我们在此只简单罗列一下指令名称，详细信息请阅读参考文献中的文档。
 > +
-> +Arithmetic Operation Instructions::
+> +算术运算指令::
 > +
 > +  ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
 > +  SLT SLTU SLTI SLTUI
@@ -420,199 +355,172 @@ capitalization for reading comfort.
 > +  PCADDI PCADDU12I PCADDU18I
 > +  LU12I.W LU32I.D LU52I.D ADDU16I.D
 > +
-> +Bit-shift Instructions::
+> +移位运算指令::
 > +
 > +  SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
 > +  SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
 > +
-> +Bit-manipulation Instructions::
+> +位域操作指令::
 > +
 > +  EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
 > +  BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
 > +  REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
 > +  MASKEQZ MASKNEZ
 > +
-> +Branch Instructions::
+> +分支转移指令::
 > +
 > +  BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
 > +
-> +Load/Store Instructions::
+> +访存读写指令::
 > +
 > +  LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
 > +  LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
 > +  LDPTR.W LDPTR.D STPTR.W STPTR.D
 > +  PRELD PRELDX
 > +
-> +Atomic Operation Instructions::
+> +原子操作指令::
 > +
 > +  LL.W SC.W LL.D SC.D
 > +  AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
 > +  AMMAX.W AMMAX.D AMMIN.W AMMIN.D
 > +
-> +Barrier Instructions::
+> +栅障指令::
 > +
 > +  IBAR DBAR
 > +
-> +Special Instructions::
+> +特殊指令::
 > +
 > +  SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
 > +
-> +Privileged Instructions::
+> +特权指令::
 > +
 > +  CSRRD CSRWR CSRXCHG
 > +  IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
 > +  CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-
-For the whole section, replace with reference to the official 
-(translated or not) documentation repo? I believe this is similar to the 
-psABI situation explained above.
-
 > +
-> +Virtual Memory
-> +==============
+> +虚拟内存
+> +========
 > +
-> +LoongArch can use direct-mapped virtual memory and page-mapped virtual memory.
+> +LoongArch可以使用直接映射虚拟内存和分页映射虚拟内存。
 > +
-> +Direct-mapped virtual memory is configured by CSR.DMWn (n=0~3), it has a simple
-> +relationship between virtual address (VA) and physical address (PA)::
-"... is configured via CSR.DMWn (n=0~3). It specifies a simple 
-relationship ..."
+> +直接映射虚拟内存通过CSR.DMWn（n=0~3）来进行配置，虚拟地址（VA）和物理地址（PA）
+> +之间有简单的映射关系::
 > +
-> + VA = PA + FixedOffset
+> + VA = PA + 固定偏移
 > +
-> +Page-mapped virtual memory has arbitrary relationship between VA and PA, which
-> +is recorded in TLB and page tables. LoongArch's TLB includes a fully-associative
-The first sentence is Chinglish. As the basics of paged virtual memory 
-should be common sense to kernel developers, could we simplify, or 
-better, just somehow get rid of the sentence?
-> +MTLB (Multiple Page Size TLB) and set-associative STLB (Single Page Size TLB).
+> +分页映射的虚拟地址（VA）和物理地址（PA）有任意的映射关系，这种关系记录在TLB和页
+> +表中。LoongArch的TLB包括一个全相联的MTLB（Multiple Page Size TLB，页大小可变）
+> +和一个组相联的STLB（Single Page Size TLB，页大小固定）。
 > +
-> +By default, the whole virtual address space of LA32 is configured like this:
+> +缺省状态下，LA32的整个虚拟地址空间配置如下：
 > +
-> +============ =========================== =============================
-> +Name         Address Range               Attributes
-> +============ =========================== =============================
-> +``UVRANGE``  ``0x00000000 - 0x7FFFFFFF`` Page-mapped, Cached, PLV0~3
-> +``KPRANGE0`` ``0x80000000 - 0x9FFFFFFF`` Direct-mapped, Uncached, PLV0
-> +``KPRANGE1`` ``0xA0000000 - 0xBFFFFFFF`` Direct-mapped, Cached, PLV0
-> +``KVRANGE``  ``0xC0000000 - 0xFFFFFFFF`` Page-mapped, Cached, PLV0
-The names sound awfully MIPS-like... I can't find any reference to the 
-names here in the reference manual, are these Linux-specific inventions 
-only documented here?
-> +============ =========================== =============================
+> +============ =========================== ===========================
+> +区段名       地址范围                    属性
+> +============ =========================== ===========================
+> +``UVRANGE``  ``0x00000000 - 0x7FFFFFFF`` 分页映射, 可缓存, PLV0~3
+> +``KPRANGE0`` ``0x80000000 - 0x9FFFFFFF`` 直接映射, 非缓存, PLV0
+> +``KPRANGE1`` ``0xA0000000 - 0xBFFFFFFF`` 直接映射, 可缓存, PLV0
+> +``KVRANGE``  ``0xC0000000 - 0xFFFFFFFF`` 分页映射, 可缓存, PLV0
+> +============ =========================== ===========================
 > +
-> +User mode (PLV3) can only access UVRANGE. For direct-mapped KPRANGE0 and
-> +KPRANGE1, PA is equal to VA with bit30~31 cleared. For example, the uncached
-> +direct-mapped VA of 0x00001000 is 0x80001000, and the cached direct-mapped
-> +VA of 0x00001000 is 0xA0001000.
+> +用户态（PLV3）只能访问UVRANGE，对于直接映射的KPRANGE0和KPRANGE1，将虚拟地址的第
+> +30~31位清零就等于物理地址。例如：物理地址0x00001000对应的非缓存直接映射虚拟地址
+> +是0x80001000，而其可缓存直接映射虚拟地址是0xA0001000。
 > +
-> +By default, the whole virtual address space of LA64 is configured like this:
+> +缺省状态下，LA64的整个虚拟地址空间配置如下：
 > +
-> +============ ====================== ======================================
-> +Name         Address Range          Attributes
-> +============ ====================== ======================================
-> +``XUVRANGE`` ``0x0000000000000000 - Page-mapped, Cached, PLV0~3
+> +============ ====================== ==================================
+> +区段名       地址范围               属性
+> +============ ====================== ==================================
+> +``XUVRANGE`` ``0x0000000000000000 - 分页映射, 可缓存, PLV0~3
 > +             0x3FFFFFFFFFFFFFFF``
-> +``XSPRANGE`` ``0x4000000000000000 - Direct-mapped, Cached / Uncached, PLV0
+> +``XSPRANGE`` ``0x4000000000000000 - 直接映射, 可缓存 / 非缓存, PLV0
 > +             0x7FFFFFFFFFFFFFFF``
-> +``XKPRANGE`` ``0x8000000000000000 - Direct-mapped, Cached / Uncached, PLV0
+> +``XKPRANGE`` ``0x8000000000000000 - 直接映射, 可缓存 / 非缓存, PLV0
 > +             0xBFFFFFFFFFFFFFFF``
-> +``XKVRANGE`` ``0xC000000000000000 - Page-mapped, Cached, PLV0
+> +``XKVRANGE`` ``0xC000000000000000 - 分页映射, 可缓存, PLV0
 > +             0xFFFFFFFFFFFFFFFF``
-Similarly here.
-> +============ ====================== ======================================
+> +============ ====================== ==================================
 > +
-> +User mode (PLV3) can only access XUVRANGE. For direct-mapped XSPRANGE and XKPRANGE,
-> +PA is equal to VA with bit60~63 cleared, and the cache attributes is configured by
-> +bit60~61 (0 is strongly-ordered uncached, 1 is coherent cached, and 2 is weakly-
-> +ordered uncached) in VA. Currently we only use XKPRANGE for direct mapping and
-> +XSPRANGE is reserved. As an example, the strongly-ordered uncached direct-mapped VA
-> +(in XKPRANGE) of 0x00000000 00001000 is 0x80000000 00001000, the coherent cached
-> +direct-mapped VA (in XKPRANGE) of 0x00000000 00001000 is 0x90000000 00001000, and
-> +the weakly-ordered uncached direct-mapped VA (in XKPRANGE) of 0x00000000 00001000
-> +is 0xA0000000 00001000.
+> +用户态（PLV3）只能访问XUVRANGE，对于直接映射的XSPRANGE和XKPRANGE，将虚拟地址的第
+> +60~63位清零就等于物理地址，而其缓存属性是通过虚拟地址的第60~61位配置的（0表示强序
+> +非缓存，1表示一致可缓存，2表示弱序非缓存）。目前，我们仅用XKPRANGE来进行直接映射，
+> +XSPRANGE保留给以后用。此处给出一个直接映射的例子：物理地址0x00000000 00001000的强
+> +序非缓存直接映射虚拟地址是0x80000000 00001000，其一致可缓存直接映射虚拟地址是
+> +0x90000000 00001000，而其弱序非缓存直接映射虚拟地址是0xA0000000 00001000。
 > +
-> +Relationship of Loongson and LoongArch
-> +======================================
+> +Loongson与LoongArch的关系
+> +=========================
 > +
-> +LoongArch is a RISC ISA which is different from any other existing ones, while
-> +Loongson is a family of processors. Loongson includes 3 series: Loongson-1 is
-> +the 32-bit processor series, Loongson-2 is the low-end 64-bit processor series,
-> +and Loongson-3 is the high-end 64-bit processor series. Old Loongson is based on
-> +MIPS, while New Loongson is based on LoongArch. Take Loongson-3 as an example:
-> +Loongson-3A1000/3B1500/3A2000/3A3000/3A4000 are MIPS-compatible, while Loongson-
-> +3A5000 (and future revisions) are all based on LoongArch.
-Is this section truly necessary? At least FWIW Loongson is first of all, 
-a corporation, in addition to its series of CPU products, bridge chip 
-products, browser offering and pretty much everything. We could use a 
-fair bit of clarification for this paragraph, at least use phrases like 
-"Loongson processors"...
+> +LoongArch是一种RISC指令集架构（ISA），不同于现存的任何一种ISA，而Loongson（即龙
+> +芯）是一个处理器家族。龙芯包括三个系列：Loongson-1（龙芯1号）是32位处理器系列，
+> +Loongson-2（龙芯2号）是低端64位处理器系列，而Loongson-3（龙芯3号）是高端64位处理
+> +器系列。旧的龙芯处理器基于MIPS架构，而新的龙芯处理器基于LoongArch架构。以龙芯3号
+> +为例：龙芯3A1000/3B1500/3A2000/3A3000/3A4000都是兼容MIPS的，而龙芯3A5000（以及将
+> +来的型号）都是基于LoongArch的。
 > +
-> +References
-> +==========
+> +参考文献
+> +========
 > +
-> +Official web site of Loongson and LoongArch (Loongson Technology Corp. Ltd.):
+> +Loongson与LoongArch的官方网站（龙芯中科技术股份有限公司）：
 > +
 > +  http://www.loongson.cn/index.html
-You may omit the "index.html" part...
 > +
-> +Developer web site of Loongson and LoongArch (Software and Documentation):
+> +Loongson与LoongArch的开发者网站（软件与文档资源）：
 > +
 > +  http://www.loongnix.cn/index.php
-Do you really mean loongnix.cn and not 
-https://loongson.github.io/LoongArch-Documentation/ ? Because 
-loongnix.cn is more an information portal for users... at least in its 
-current iteration there's no link to actual documentation, no link to 
-development repos, nothing useful for prospective contributors.
 > +
 > +  https://github.com/loongson
 > +
-> +Documentation of LoongArch ISA:
+> +LoongArch指令集架构的文档：
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-CN.pdf (in Chinese)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-CN.pdf （中文版）
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-EN.pdf (in English)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-Vol1-v1.00-EN.pdf （英文版）
 > +
-> +Documentation of LoongArch ELF ABI:
+> +LoongArch的ELF ABI文档：
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ELF-ABI-v1.00-CN.pdf (in Chinese)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ELF-ABI-v1.00-CN.pdf （中文版）
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ELF-ABI-v1.00-EN.pdf (in English)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/LoongArch-ELF-ABI-v1.00-EN.pdf （英文版）
 > +
-> +Linux kernel repository of Loongson and LoongArch:
+> +Loongson与LoongArch的Linux内核源码仓库：
 > +
 > +  https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git
-> diff --git a/Documentation/loongarch/irq-chip-model.rst b/Documentation/loongarch/irq-chip-model.rst
+> diff --git a/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst b/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
 > new file mode 100644
-> index 000000000000..bde112b81ace
+> index 000000000000..54c0c9ebac77
 > --- /dev/null
-> +++ b/Documentation/loongarch/irq-chip-model.rst
-> @@ -0,0 +1,168 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
+> @@ -0,0 +1,167 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +=======================================
-> +IRQ chip model (hierarchy) of LoongArch
-> +=======================================
+> +.. include:: ../disclaimer-zh_CN.rst
 > +
-> +Currently, LoongArch based processors (e.g. Loongson-3A5000) can only work together
-> +with LS7A chipsets. The irq chips in LoongArch computers include CPUINTC (CPU Core
-> +Interrupt Controller), LIOINTC (Legacy I/O Interrupt Controller), EIOINTC (Extended
-> +I/O Interrupt Controller), HTVECINTC (Hyper-Transport Vector Interrupt Controller),
-> +PCH-PIC (Main Interrupt Controller in LS7A chipset), PCH-LPC (LPC Interrupt Controller
-> +in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> +:Original: Documentation/loongarch/irq-chip-model.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
 > +
-> +CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC are per-package
-> +controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are controllers out of CPU (i.e.,
-> +in chipsets). These controllers (in other words, irqchips) are linked in a hierarchy,
-> +and there are two models of hierarchy (legacy model and extended model).
+> +==================================
+> +LoongArch的IRQ芯片模型（层级关系）
+> +==================================
 > +
-> +Legacy IRQ model
-> +================
+> +目前，基于LoongArch的处理器（如龙芯3A5000）只能与LS7A芯片组配合工作。LoongArch计算机
+> +中的中断控制器（即IRQ芯片）包括CPUINTC（CPU Core Interrupt Controller）、LIOINTC（
+> +Legacy I/O Interrupt Controller）、EIOINTC（Extended I/O Interrupt Controller）、
+> +HTVECINTC（Hyper-Transport Vector Interrupt Controller）、PCH-PIC（LS7A芯片组的主中
+> +断控制器）、PCH-LPC（LS7A芯片组的LPC中断控制器）和PCH-MSI（MSI中断控制器）。
 > +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
-> +to LIOINTC, and then CPUINTC.
+> +CPUINTC是一种CPU内部的每个核本地的中断控制器，LIOINTC/EIOINTC/HTVECINTC是CPU内部的
+> +全局中断控制器（每个芯片一个，所有核共享），而PCH-PIC/PCH-LPC/PCH-MSI是CPU外部的中
+> +断控制器（在配套芯片组里面）。这些中断控制器（或者说IRQ芯片）以一种层次树的组织形式
+> +级联在一起，一共有两种层级关系模型（传统IRQ模型和扩展IRQ模型）。
+> +
+> +传统IRQ模型
+> +===========
+> +
+> +在这种模型里面，IPI（Inter-Processor Interrupt）和CPU本地始终中断直接发送到CPUINTC，
+> +CPU串口（UARTs）中断发送到LIOINTC，而其他所有设备的中断则分别发送到所连接的PCH-PIC/
+> +PCH-LPC/PCH-MSI，然后被HTVECINTC统一收集，再发送到LIOINTC，最后到达CPUINTC。
 > +
 > + +---------------------------------------------+
 > + |::                                           |
@@ -649,13 +557,12 @@ development repos, nothing useful for prospective contributors.
 > + |                                             |
 > + +---------------------------------------------+
 > +
-> +Extended IRQ model
-> +==================
+> +扩展IRQ模型
+> +===========
 > +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
-> +to CPUINTC directly.
+> +在这种模型里面，IPI（Inter-Processor Interrupt）和CPU本地始终中断直接发送到CPUINTC，
+> +CPU串口（UARTs）中断发送到LIOINTC，而其他所有设备的中断则分别发送到所连接的PCH-PIC/
+> +PCH-LPC/PCH-MSI，然后被EIOINTC统一收集，再直接到达CPUINTC。
 > +
 > + +--------------------------------------------------------+
 > + |::                                                      |
@@ -687,8 +594,8 @@ development repos, nothing useful for prospective contributors.
 > + |                                                        |
 > + +--------------------------------------------------------+
 > +
-> +ACPI-related definitions
-> +========================
+> +ACPI相关的定义
+> +==============
 > +
 > +CPUINTC::
 > +
@@ -732,28 +639,24 @@ development repos, nothing useful for prospective contributors.
 > +  struct acpi_madt_lpc_pic;
 > +  enum acpi_madt_lpc_pic_version;
 > +
-> +References
-> +==========
+> +参考文献
+> +========
 > +
-> +Documentation of Loongson-3A5000:
+> +龙芯3A5000的文档：
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-CN.pdf (in Chinese)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-CN.pdf (中文版)
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-EN.pdf (in English)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-3A5000-usermanual-1.02-EN.pdf (英文版)
 > +
-> +Documentation of Loongson's LS7A chipset:
+> +龙芯LS7A芯片组的文档：
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-CN.pdf (in Chinese)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-CN.pdf (中文版)
 > +
-> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-EN.pdf (in English)
+> +  https://github.com/loongson/LoongArch-Documentation/releases/latest/download/Loongson-7A1000-usermanual-2.00-EN.pdf (英文版)
 > +
-> +Attention: CPUINTC is CSR.ECFG/CSR.ESTAT and its interrupt controller described
-"Note" may be enough. :-)
-> +in Section 7.4 of "LoongArch Reference Manual, Vol 1"; LIOINTC is "Legacy I/O
-> +Interrupts" described in Section 11.1 of "Loongson 3A5000 Processor Reference
-> +Manual"; EIOINTC is "Extended I/O Interrupts" described in Section 11.2 of
-> +"Loongson 3A5000 Processor Reference Manual"; HTVECINTC is "HyperTransport
-> +Interrupts" described in Section 14.3 of "Loongson 3A5000 Processor Reference
-> +Manual"; PCH-PIC/PCH-MSI is "Interrupt Controller" described in Section 5 of
-> +"Loongson 7A1000 Bridge User Manual"; PCH-LPC is "LPC Interrupts" described in
-> +Section 24.3 of "Loongson 7A1000 Bridge User Manual".
+> +注：CPUINTC即《龙芯架构参考手册卷一》第7.4节所描述的CSR.ECFG/CSR.ESTAT寄存器及其中断
+> +控制逻辑；LIOINTC即《龙芯3A5000处理器使用手册》第11.1节所描述的“传统I/O中断”；EIOINTC
+> +即《龙芯3A5000处理器使用手册》第11.2节所描述的“扩展I/O中断”；HTVECINTC即《龙芯3A5000
+> +处理器使用手册》第14.3节所描述的“HyperTransport中断”；PCH-PIC/PCH-MSI即《龙芯7A1000桥
+> +片用户手册》第5章所描述的“中断控制器”；PCH-LPC即《龙芯7A1000桥片用户手册》第24.3节所
+> +描述的“LPC中断”。
