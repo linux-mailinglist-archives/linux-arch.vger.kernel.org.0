@@ -2,98 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C29051667C
-	for <lists+linux-arch@lfdr.de>; Sun,  1 May 2022 19:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019B8516872
+	for <lists+linux-arch@lfdr.de>; Sun,  1 May 2022 23:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352156AbiEARMO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 1 May 2022 13:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S1376454AbiEAV7L (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 1 May 2022 17:59:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240473AbiEARMN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 May 2022 13:12:13 -0400
-Received: from mengyan1223.wang (mengyan1223.wang [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A1F4D9FC;
-        Sun,  1 May 2022 10:08:47 -0700 (PDT)
-Received: from localhost.localdomain (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@mengyan1223.wang)
-        by mengyan1223.wang (Postfix) with ESMTPSA id DA17C66572;
-        Sun,  1 May 2022 13:08:43 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mengyan1223.wang;
-        s=mail; t=1651424927;
-        bh=XYISo4h8KCnyxTuDi0BN/dzHxVCfbkmceDgjCj19MXU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=2OmCnLlIrXPnbgEiKmC7P7cHlUkobbFyTBLHl+wu/u+DEWBBfiV3w0gRMZM2/jF7s
-         0ojeh6h642czjkUxRRFDgLSEPbxTENJTwAluOfhO+fKY6Zfy94K7AtC8LGMhQ+eBK6
-         r82alvKa8iTgV5e9bWWyvCUhvEIXIP74fzTgNDL9t/aaABP4GnfzIMTHsIkZUQW+rO
-         CGWFBFYBpGmiSYPJ6re0kYZhl/I8V5Wb/UTSFimi9nf9GznCjdr5+JibvWHel+ZHLi
-         yvcopxHXTMtghfJgPKaHZ+AXx3w2hZQzQgqHBXdEM4wyEdVkKlivmnlI9c2v0sK8Cp
-         GIHAYm+9NZ46A==
-Message-ID: <2a534c89b3c905a34f947fb2739d58c9373bb915.camel@mengyan1223.wang>
-Subject: Re: [PATCH V9 10/24] LoongArch: Add exception/interrupt handling
-From:   Xi Ruoyao <xry111@mengyan1223.wang>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date:   Mon, 02 May 2022 01:08:41 +0800
-In-Reply-To: <4dd26d88b807c967dbbc81a7b2e5f4084d9603d7.camel@mengyan1223.wang>
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
-         <20220430090518.3127980-11-chenhuacai@loongson.cn>
-         <4dd26d88b807c967dbbc81a7b2e5f4084d9603d7.camel@mengyan1223.wang>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1 
+        with ESMTP id S1355443AbiEAV7K (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 1 May 2022 17:59:10 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163CA2DD7F
+        for <linux-arch@vger.kernel.org>; Sun,  1 May 2022 14:55:43 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id e12so23289357ybc.11
+        for <linux-arch@vger.kernel.org>; Sun, 01 May 2022 14:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7rmKOmP5MkmzB6kYwqydPOY8Y/8AVOpHSwETVjiHA9I=;
+        b=WAyuZryKlUvTJ6kmm5uy/jwqa15kiwrjusdIJ5eDuY3LzFArwiFBHppsGeFl93dGUA
+         aRFZM3OGRe9/1ZsfBAGsNrxtq9VIqDWOo4wYESFLFR0W3DPEm0C8ARYo3KzTKrBTkijw
+         r9Ri8TPuCaeRW63/lCZyBKuHyXD3oxSXHsAVra2RElgjum4GrMmy4OjAN3XpyQWy8TaO
+         yhLZRuBdNh8ocwUvZOb/5JKSEUzIjBzxE7DFL06GDxVfT8sWPk2RvudjrEDKInmr1+w3
+         5mOCiOp/5riekUqXbLCnRgTzfgjOdBAs7UcD7j5V28WNlgR84z+jAMc7M2oX2RI1uoY9
+         cX6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7rmKOmP5MkmzB6kYwqydPOY8Y/8AVOpHSwETVjiHA9I=;
+        b=rFvzRoo/W8pTOJ9jtPCug8kBd6DR5lUPFfv0ILwLCZ6WTTs+flvbLu0QhyND6mUiTL
+         85ii5H/w8KEAa6bJkjVNoEw4O1Jt+wM5uOfTTvz5C/fCOTc+l5qFTgyVpPKW6VsGhuNJ
+         iyX0CoPqTfXmjkMDdUmXSdID2fJ6LxKy/oI/dGW8mzFcbTjKKYXCXpw67OYdGonDu9cC
+         oiCP6tNIVwagCVJo2qcxjvtXMESwQuhiGsr9IGKTMw1zSXEMFKvlsj1GIPeC/LYZa4el
+         kxrcJtMLo5YXQaiNe9E/rqnEzFg1ro2C1aSYMmIQZvJeN46ROZDX8AP7RK08xaxKQAbU
+         rFNw==
+X-Gm-Message-State: AOAM533f1oLwGsGuktKqKTBlq1Ka7ek5f4OnwRRYhow0RvBMA7/CiNyg
+        k2gr6KW/SyD2ic5532yJOuKmZYvOSSYRIpljB+SULw==
+X-Google-Smtp-Source: ABdhPJxqR+wj7vzqumSDiGlciHIivrD/WScHz6GVJNOR1rgSzhxVA4VDvKDovYr4a2IaCgbibVBmgNfiIylUorU7RJY=
+X-Received: by 2002:a25:e684:0:b0:645:d429:78e9 with SMTP id
+ d126-20020a25e684000000b00645d42978e9mr8676157ybh.369.1651442142362; Sun, 01
+ May 2022 14:55:42 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-19-schnelle@linux.ibm.com> <Ymv3DnS1vPMY8QIg@fedora>
+ <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com> <YmwGLrh4U+pVJo0m@fedora>
+In-Reply-To: <YmwGLrh4U+pVJo0m@fedora>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 1 May 2022 23:55:31 +0200
+Message-ID: <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com>
+Subject: Re: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTA1LTAyIGF0IDAwOjI3ICswODAwLCBYaSBSdW95YW8gd3JvdGU6Cj4gT24g
-U2F0LCAyMDIyLTA0LTMwIGF0IDE3OjA1ICswODAwLCBIdWFjYWkgQ2hlbiB3cm90ZToKPiA+ICtz
-dHJ1Y3QgYWNwaV9tYWR0X2xpb19waWM7Cj4gPiArc3RydWN0IGFjcGlfbWFkdF9laW9fcGljOwo+
-ID4gK3N0cnVjdCBhY3BpX21hZHRfaHRfcGljOwo+ID4gK3N0cnVjdCBhY3BpX21hZHRfYmlvX3Bp
-YzsKPiA+ICtzdHJ1Y3QgYWNwaV9tYWR0X21zaV9waWM7Cj4gPiArc3RydWN0IGFjcGlfbWFkdF9s
-cGNfcGljOwo+IAo+IFdoZXJlIGFyZSB0aG9zZSBkZWZpbmVkP8KgIEkgY2FuJ3QgZmluZCB0aGVt
-IGFuZCB0aGUgY29tcGlsYXRpb24gZmFpbHMKPiB3aXRoOgo+IAo+IGFyY2gvbG9vbmdhcmNoL2tl
-cm5lbC9pcnEuYzogSW4gZnVuY3Rpb24g4oCYZmluZF9wY2hfcGlj4oCZOgo+IGFyY2gvbG9vbmdh
-cmNoL2tlcm5lbC9pcnEuYzo0ODozMjogZXJyb3I6IGludmFsaWQgdXNlIG9mIHVuZGVmaW5lZAo+
-IHR5cGUg4oCYc3RydWN0IGFjcGlfbWFkdF9iaW9fcGlj4oCZCj4gwqDCoCA0OCB8wqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RhcnQgPSBpcnFfY2ZnLT5nc2lfYmFzZTsKPiDCoMKg
-wqDCoMKgIHzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBefgo+IGFyY2gvbG9vbmdhcmNoL2tlcm5lbC9pcnEuYzo0OTozMjogZXJy
-b3I6IGludmFsaWQgdXNlIG9mIHVuZGVmaW5lZAo+IHR5cGUg4oCYc3RydWN0IGFjcGlfbWFkdF9i
-aW9fcGlj4oCZCj4gwqDCoCA0OSB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZW5k
-wqDCoCA9IGlycV9jZmctPmdzaV9iYXNlICsgaXJxX2NmZy0+c2l6ZTsKPiDCoMKgwqDCoMKgIHzC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBefgo+IGFyY2gvbG9vbmdhcmNoL2tlcm5lbC9pcnEuYzo0OTo1MjogZXJyb3I6IGludmFs
-aWQgdXNlIG9mIHVuZGVmaW5lZAo+IHR5cGUg4oCYc3RydWN0IGFjcGlfbWFkdF9iaW9fcGlj4oCZ
-Cj4gwqDCoCA0OSB8wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZW5kwqDCoCA9IGly
-cV9jZmctPmdzaV9iYXNlICsgaXJxX2NmZy0+c2l6ZTsKPiDCoMKgwqDCoMKgIHzCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXn4KCkFscmlnaHQsIG15IGJhZC4u
-LiBJIGRpZG4ndCByZWFsaXplIHRoZSBMb29uZ0FyY2ggcGF0Y2hlcyBhcmUgc3BsaXR0ZWQKaW50
-byBtdWx0aXBsZSBzZXJpZXMgZm9yIG11bHRpcGxlIGxpc3RzLiAgQnV0IGlzIHRoaXMgdGhlIFNP
-UCBvZiBrZXJuZWwKcGF0Y2ggcmV2aWV3aW5nPyAgV291bGQgaXQgYmUgZWFzaWVyIHRvIGp1c3Qg
-c2VuZCBvbmUgc2VyaWVzIGFuZCBDQyBhbGwKcmVsZXZlbnQgbGlzdHM/CgotLSAKWGkgUnVveWFv
-IDx4cnkxMTFAbWVuZ3lhbjEyMjMud2FuZz4KU2Nob29sIG9mIEFlcm9zcGFjZSBTY2llbmNlIGFu
-ZCBUZWNobm9sb2d5LCBYaWRpYW4gVW5pdmVyc2l0eQo=
+On Fri, Apr 29, 2022 at 5:37 PM William Breathitt Gray
+<william.gray@linaro.org> wrote:
+> On Fri, Apr 29, 2022 at 04:46:00PM +0200, Niklas Schnelle wrote:
 
+> > Good question. As far as I can see most (all?) of these have "select
+> > ISA_BUS_API" which is "def_bool ISA". Now "config ISA" seems to
+> > currently be repeated in architectures and doesn't have an explicit
+> > HAS_IOPORT dependency (it maybe should have one). But it does only make
+> > sense on architectures with HAS_IOPORT set.
+>
+> There is such a thing as ISA DMA, but you'll still need to initialize
+> the device via the IO Port bus first, so perhaps setting HAS_IOPORT for
+> "config ISA" is the right thing to do: all ISA devices are expected to
+> communicate in some way via ioport.
+
+Adding that dependency seems like the right solution to me.
+
+Yours,
+Linus Walleij
