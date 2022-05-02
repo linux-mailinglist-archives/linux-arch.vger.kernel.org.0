@@ -2,166 +2,243 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568415171A8
-	for <lists+linux-arch@lfdr.de>; Mon,  2 May 2022 16:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46899517546
+	for <lists+linux-arch@lfdr.de>; Mon,  2 May 2022 19:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380007AbiEBOiI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 May 2022 10:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S1358591AbiEBREk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 May 2022 13:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378194AbiEBOiH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 10:38:07 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B3C5F81;
-        Mon,  2 May 2022 07:34:39 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 242EVH50020019;
-        Mon, 2 May 2022 14:34:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=WdExTye17olTIg6QT8mBBfdfn+P/Stz7q1ekNoAttpE=;
- b=dxJ6fZaDeSA4ihga6rpilVdEGfjabtwwsf0ZJVuk3WBq2lc6XY5E8vJ90pFhHIwnS7ic
- s9M+aPW0IRYqIe7FV1Bf/NuQ3Ixo9S85C9EqHjVF9GDZQHywaoMvjvp2K2uEOktqV7RW
- n36HAaX1wbRZrSrd9ZPPFtVmk09yEOfP3RlqCuaqCzAPpXgnPkfjezg7XwWeU3Cif8dq
- cLEfIwW6QLsy4sKI4+v0l+JMQgbi5oYpI/hr6OGAL7UVnFMg9MsftDd5bzXxC3eHu0fQ
- xKPlBebfDEEmMesP30yAmbZz/kk5tQbbaJXiSdNN2mHxcpjpEhuDFb1CKrET1LGX8KFO 2g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fth4tg18m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 14:34:16 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 242EYG7c031072;
-        Mon, 2 May 2022 14:34:16 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3fth4tg186-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 14:34:16 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 242EWbT2032085;
-        Mon, 2 May 2022 14:34:14 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma03fra.de.ibm.com with ESMTP id 3fscdk1nuk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 02 May 2022 14:34:13 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 242EKu3q23462322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 2 May 2022 14:20:56 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 82282AE055;
-        Mon,  2 May 2022 14:34:11 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A6E6AE045;
-        Mon,  2 May 2022 14:34:11 +0000 (GMT)
-Received: from sig-9-145-11-74.uk.ibm.com (unknown [9.145.11.74])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon,  2 May 2022 14:34:11 +0000 (GMT)
-Message-ID: <438c88e740f674ad334cdc88004fcec5b9ec57f4.camel@linux.ibm.com>
-Subject: Re: [RFC v2 04/39] char: impi, tpm: depend on HAS_IOPORT
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Corey Minyard <minyard@acm.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "moderated list:IPMI SUBSYSTEM" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Date:   Mon, 02 May 2022 16:34:10 +0200
-In-Reply-To: <ff7605de-fe12-3bbf-cce9-aec18be9d54e@pengutronix.de>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-         <20220429135108.2781579-7-schnelle@linux.ibm.com>
-         <07c39877d9e940a96be41e21e22fe45dbb73d949.camel@linux.ibm.com>
-         <ff7605de-fe12-3bbf-cce9-aec18be9d54e@pengutronix.de>
+        with ESMTP id S1386499AbiEBREe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 13:04:34 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B362BD7
+        for <linux-arch@vger.kernel.org>; Mon,  2 May 2022 10:01:05 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2f7c424c66cso154939197b3.1
+        for <linux-arch@vger.kernel.org>; Mon, 02 May 2022 10:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZDNXgBhMz20++Q4yigO612T0eYygF7r9J92FIVtim7Y=;
+        b=JgdYu4i8LXmMnXLXrkcT7kHOAMHmAidhNS6U0ueSLoMV2xM914ojCWAfQT3FwPR+1l
+         PoLOfIxEoZUnpUcLAHkqdzewTFZmlPHzf2P4KtVSykjNiUaSjHEZ4JXGrO87YwYEfY29
+         Z+QTsgSlKNHz0OH4JLROLS99pvqLcEwt40oWqVFt9/peS0coGpNEREGC2CeybE9udTkZ
+         PBSCKT1mEj4EUvIGaFwp/YC2T3K64TVZ9MIoJHwe/x1WPyoerlcNsHxE9mUxBRzI6/O/
+         dA+GoQpNe65P4xsbfG25zceIOp2apEavuWjynEw+O1ENeDzWJe9o6sXQ0vlxCo8yyC69
+         UBEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZDNXgBhMz20++Q4yigO612T0eYygF7r9J92FIVtim7Y=;
+        b=Qmzad2XAc9UAofvlz8gD/lbazvvQXag+ai6+V7k73wLi8BNTfkDYhSSn77rNtBfufS
+         kVBiNHKOPL8mpnufD0OuNk/X9ooRGrhLzxgmNL37P5pbenuKcaaVU5H9R2E07et4SXfL
+         IB5vKpwFY5By83pzNy5Nz2ZXVrqPQ87FBNa618T/bidS5bEjcfkXuPkfnSoYYdMES0bR
+         e6hFPq4JjgClauDGOsMoMOmw6qs5k7cfsOdUn93MqEgjazoZV3uJHBy6JBosq8LHjkmO
+         ExlrpXYePen0TRsCFH9QhLElT+GWjYP5WIZCZKWQq4nCtasTQKXRgdFwqPA3QyxVUSPH
+         u0Ow==
+X-Gm-Message-State: AOAM533MEpjzb3wwrI+e3qWFTAWkKG4VP1ctn3GVWIB01/frPcILLLnX
+        tVfZPIGyZp76f14ggnEd08Jg5Aigkd75K/e+kXblsw==
+X-Google-Smtp-Source: ABdhPJy9WXshcsyYnhmFBRjyjSz+xXgG968fsEWEpZo4KzR8Ug2a15AebqyxN7IoToxv1Gm1KUB+/NnO5+jeZO0Mdww=
+X-Received: by 2002:a81:1f8b:0:b0:2f8:5846:445e with SMTP id
+ f133-20020a811f8b000000b002f85846445emr11776773ywf.50.1651510864112; Mon, 02
+ May 2022 10:01:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
+ <87a6c6y7mg.ffs@tglx>
+In-Reply-To: <87a6c6y7mg.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 2 May 2022 19:00:28 +0200
+Message-ID: <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Fm4gl_CCV9IRrCnZDVRyK0djotDq9YcN
-X-Proofpoint-ORIG-GUID: eIPjDVk3Gk_Wv_RNZGcDg89tcb5gRnjm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-02_04,2022-05-02_03,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 phishscore=0 mlxlogscore=920 spamscore=0 bulkscore=0
- clxscore=1011 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205020114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 2022-04-29 at 16:33 +0200, Ahmad Fatoum wrote:
-> Hello Niklas,
-> 
-> On 29.04.22 16:23, Niklas Schnelle wrote:
-> > > Hello Niklas,
-> > > 
-> > > On 29.04.22 15:50, Niklas Schnelle wrote:
-> > > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > > > not being declared. We thus need to add this dependency and ifdef
-> > > > sections of code using inb()/outb() as alternative access methods.
-> > > > 
-> > > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > > 
-> > > [snip]
-> > > 
-> > > > diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-> > > > index 9c924a1440a9..2d2ae37153ba 100644
-> > > > --- a/drivers/char/tpm/tpm_infineon.c
-> > > > +++ b/drivers/char/tpm/tpm_infineon.c
-> > > > @@ -51,34 +51,40 @@ static struct tpm_inf_dev tpm_dev;
-> > > >  
-> > > >  static inline void tpm_data_out(unsigned char data, unsigned char offset)
-> > > >  {
-> > > > +#ifdef CONFIG_HAS_IOPORT
-> > > >       if (tpm_dev.iotype == TPM_INF_IO_PORT)
-> > > >               outb(data, tpm_dev.data_regs + offset);
-> > > >       else
-> > > > +#endif
-> > > 
-> > > This looks ugly. Can't you declare inb/outb anyway and skip the definition,
-> > > so you can use IS_ENABLED() here instead?
-> > > 
-> > > You can mark the declarations with __compiletime_error("some message"), so
-> > > if an IS_ENABLED() reference is not removed at compile time, you get some
-> > > readable error message instead of a link error.
-> > > 
-> > > Cheers,
-> > > Ahmad
-> > 
-> > I didn't know about __compiletime_error() that certainly sounds
-> > interesting even when using a normal #ifdef.
-> > 
-> > That said either with the function not being declared or this
-> > __compiletime_error() mechanism I would think that using IS_ENABLED()
-> > relies on compiler optimizations not to compile in the missing/error
-> > function call, right? I'm not sure if that is something we should do.
-> 
-> Yes, it assumes your compiler is able to discard the body of an if (0),
-> which we already assume, otherwise it wouldn't make sense for any existing
-> code to use __compiletime_error().
-> 
-> To me this sounds much cleaner than #ifdefs in the midst of functions,
-> which are a detriment to maintainability.
-> 
-> Cheers,
-> Ahmad
-> 
+On Wed, Apr 27, 2022 at 3:32 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Tue, Apr 26 2022 at 18:42, Alexander Potapenko wrote:
+>
+> Can you please use 'entry:' as prefix. Slapping kmsan in front of
+> everything does not really make sense.
+Sure, will do.
 
-Ok, makes sense. I'll look into using __compiletime_error() and
-IS_ENABLED().
+> > Replace instrumentation_begin()       with instrumentation_begin_with_r=
+egs()
+> > to let KMSAN handle the non-instrumented code and unpoison pt_regs
+> > passed from the instrumented part.
+>
+> That should be:
+>
+>      from the non-instrumented part
+> or
+>      passed to the instrumented part
+>
+> right?
+
+That should be "from the non-instrumented part", you are right.
+
+> > --- a/kernel/entry/common.c
+> > +++ b/kernel/entry/common.c
+> > @@ -23,7 +23,7 @@ static __always_inline void __enter_from_user_mode(st=
+ruct pt_regs *regs)
+> >       CT_WARN_ON(ct_state() !=3D CONTEXT_USER);
+> >       user_exit_irqoff();
+> >
+> > -     instrumentation_begin();
+> > +     instrumentation_begin_with_regs(regs);
+>
+> I can see what you are trying to do, but this will end up doing the same
+> thing over and over. Let's just look at a syscall.
+>
+> __visible noinstr void do_syscall_64(struct pt_regs *regs, int nr)
+> {
+>         ...
+>         nr =3D syscall_enter_from_user_mode(regs, nr)
+>
+>                 __enter_from_user_mode(regs)
+>                         .....
+>                         instrumentation_begin_with_regs(regs);
+>                         ....
+>
+>                 instrumentation_begin_with_regs(regs);
+>                 ....
+>
+>         instrumentation_begin_with_regs(regs);
+>
+>         if (!do_syscall_x64(regs, nr) && !do_syscall_x32(regs, nr) && nr =
+!=3D -1) {
+>                 /* Invalid system call, but still a system call. */
+>                 regs->ax =3D __x64_sys_ni_syscall(regs);
+>         }
+>
+>         instrumentation_end();
+>
+>         syscall_exit_to_user_mode(regs);
+>                 instrumentation_begin_with_regs(regs);
+>                 __syscall_exit_to_user_mode_work(regs);
+>         instrumentation_end();
+>         __exit_to_user_mode();
+>
+> That means you memset state four times and unpoison regs four times. I'm
+> not sure whether that's desired.
+
+Regarding the regs, you are right. It should be enough to unpoison the
+regs at idtentry prologue instead.
+I tried that initially, but IIRC it required patching each of the
+DEFINE_IDTENTRY_XXX macros, which already use instrumentation_begin().
+This decision can probably be revisited.
+
+As for the state, what we are doing here is still not enough, although
+it appears to work.
+
+Every time an instrumented function calls another function, it sets up
+the metadata for the function arguments in the per-task struct
+kmsan_context_state.
+Similarly, every instrumented function expects its caller to put the
+metadata into that structure.
+Now, if a non-instrumented function (e.g. every `noinstr` function)
+calls an instrumented one (which happens inside the
+instrumentation_begin()/instrumentation_end() region), nobody sets up
+the state for that instrumented function, so it may report false
+positives when accessing its arguments, if there are leftover poisoned
+values in the state.
+
+To overcome this problem, ideally we need to wipe kmsan_context_state
+every time a call from the non-instrumented function occurs.
+But this cannot be done automatically exactly because we cannot
+instrument the named function :)
+
+We therefore apply an approximation, wiping the state at the point of
+the first transition between instrumented and non-instrumented code.
+Because poison values are generally rare, and instrumented regions
+tend to be short, it is unlikely that further calls from the same
+non-instrumented function will result in false positives.
+Yet it is not completely impossible, so wiping the state for the
+second/third etc. time won't hurt.
+
+>
+> instrumentation_begin()/end() are not really suitable IMO. They were
+> added to allow objtool to validate that nothing escapes into
+> instrumentable code unless annotated accordingly.
+
+An alternative to this would be adding some extra code unpoisoning the
+state to every non-instrumented function that contains an instrumented
+region.
+That code would have to precede the first instrumentation_begin()
+anyway, so I thought it would be reasonable to piggyback on the
+existing annotation.
+
+>
+> Thanks,
+>
+>         tglx
 
 
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.
