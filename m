@@ -2,79 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9996C516D28
-	for <lists+linux-arch@lfdr.de>; Mon,  2 May 2022 11:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E60516EB3
+	for <lists+linux-arch@lfdr.de>; Mon,  2 May 2022 13:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384117AbiEBJSb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 May 2022 05:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
+        id S231792AbiEBLUy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 May 2022 07:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234028AbiEBJSa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 05:18:30 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 50E8036B50;
-        Mon,  2 May 2022 02:15:01 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 776CE92009C; Mon,  2 May 2022 11:15:00 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 712B392009B;
-        Mon,  2 May 2022 10:15:00 +0100 (BST)
-Date:   Mon, 2 May 2022 10:15:00 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
-Subject: Re: [RFC v2 34/39] tty: serial: add HAS_IOPORT dependencies
-In-Reply-To: <20220429135108.2781579-63-schnelle@linux.ibm.com>
-Message-ID: <alpine.DEB.2.21.2205020341140.64520@angie.orcam.me.uk>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-63-schnelle@linux.ibm.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S229768AbiEBLUw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 07:20:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3715DEAC;
+        Mon,  2 May 2022 04:17:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 116D5B8162D;
+        Mon,  2 May 2022 11:17:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB30C385AC;
+        Mon,  2 May 2022 11:17:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651490239;
+        bh=/NUGOhWVSEuqyq23XVD3Tqg47orwt4l6Jhq/TPU9BYs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=s8GzRiAx3ohTo0JmFglIRoqgMhwjzEZrFgaFnMGwZ6X3B19v0mO7JLKDowlWt8Iu/
+         ShsWW1gmZ+J6ZVV0f9PfKKFhtGFkM8VGlHh/aDGxz8n5wSkrXKaQeP5iOx4/8TmlKL
+         KFGK0JOP/Uhw7842DPD+eYQSgTM7xuvXaISXhHfBcwHMuZKrN0R6APmplcO8GCCQgP
+         XGPuwc8/Ud9UDLRHi6OlhUuOMSZoSoqUnCeKAfg/f/+BaDcK1LdNPZwNoPG9SiSeFW
+         XVI7uP9kIbjY6+TwJ59KDm9w/SAL0YwOigep+mmZ6j02exptSADq7vk9qDYg9sL+de
+         Z9Esh1fJaFNuQ==
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     catalin.marinas@arm.com, will@kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [RFC PATCH 0/4] efi: implement generic compressed boot support
+Date:   Mon,  2 May 2022 13:17:06 +0200
+Message-Id: <20220502111710.4093567-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2499; h=from:subject; bh=/NUGOhWVSEuqyq23XVD3Tqg47orwt4l6Jhq/TPU9BYs=; b=owEB7QES/pANAwAKAcNPIjmS2Y8kAcsmYgBib72vxg9bgwfCuQEpVE6kPYxa6WuQSQ9xtMrKmy+1 zUG2VquJAbMEAAEKAB0WIQT72WJ8QGnJQhU3VynDTyI5ktmPJAUCYm+9rwAKCRDDTyI5ktmPJIr6DA CElnNxZviHMO0HsKLTzSZDVvyK2QpBqyaiT/5xNjhoJ0jw/1iF9kdhqrsGEtScx9qFgmeJLt72ZVCb eTiE8Qnj8G5woCUYf3adufjXJiVaIMV9jQE5PrdJI9u9GH0KwmjNdwhQNDl8U7AzWNzrChVjhI7Dvv pc8VbbdCU2vLeBPXsYyUAleR1kvQTROuMhnqb5NQZXnecOjSdDZtN5PRbzO53hkNQCjwlChbEjroau UwcojOaKuBVOADj4GlxIKO+awmDJwdQVeL215+3TAHHd7wXBzatPptGYkW/8TWWl4fg9jUgq6RYj55 yqmhikOBBxblhVZDY6GL1UwtLpb9plptINU97h6PHaZjkASSFVRIzImYMtoVoafo9usNEvRqV3eZqC Zqf9EQMEArJsfrOc2kyc9Xt2LQTMntLEpojXNiM/ycmRwJdufTVZWfPGfXqmm9wjOJ/907jxphiKzj Gf2QHKP5nRU8Z9Z/pgenZgrDUcaVYXJXjiX6/j5nhmG0E=
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 29 Apr 2022, Niklas Schnelle wrote:
+Relatively modern architectures such as arm64 or RISC-V don't implement
+a self-decompressing kernel, and leave it up to the bootloader to
+decompress the compressed image before executing it. Not doing so makes
+sense for bare metal boot, as it essentially duplicates a lot of fiddly
+preparation work to create a 1:1 mapping and set up the C runtime, and
+to discover or infer where DRAM lives from device trees or other
+firmware tables.
 
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
-[...]
-> diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-> index cd93ea6eed65..e216bf745e78 100644
-> --- a/drivers/tty/serial/8250/Kconfig
-> +++ b/drivers/tty/serial/8250/Kconfig
-> @@ -6,7 +6,7 @@
->  
->  config SERIAL_8250
->  	tristate "8250/16550 and compatible serial support"
-> -	depends on !S390
-> +	depends on HAS_IOPORT
->  	select SERIAL_CORE
->  	select SERIAL_MCTRL_GPIO if GPIOLIB
->  	help
+For EFI boot, the situation is a bit different: the EFI entrypoint is
+called with a 1:1 mapping covering all of DRAM already active, and with
+a stack, a heap, a memory map and boot services to load and start
+images. This means it is rather trivial to implement a
+self-decompressing wrapper for EFI boot in a generic manner, and reuse
+it across architectures that implement EFI boot.
 
- Similarly here some 8250-compatible platform or PCI/e serial port devices 
-use MMIO, e.g.:
+The downside is that two signatures are needed for UEFI secure boot: one
+for the decompressed image and one for the compressed images, as they
+are both PE/COFF EFI executables that are launched by the firmware. But
+that is actually the whole point, so it is simply the other side of the
+same coin.
 
-serial8250.0: ttyS2 at MMIO 0x1f000900 (irq = 20, base_baud = 230400) is a 16550A
+Related discussion going on here:
+https://lore.kernel.org/all/20220430090518.3127980-22-chenhuacai@loongson.cn/
 
-or:
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Huacai Chen <chenhuacai@loongson.cn>
 
-0001:01:00.0: ttyS0 at MMIO 0x600c080401000 (irq = 40, base_baud = 15625000) is a 16C950/954
+Ard Biesheuvel (4):
+  efi: stub: add prototypes for load_image and start_image
+  efi: stub: split off printk() routines
+  efi: stub: implement generic EFI zboot
+  arm64: efi: enable generic EFI compressed boot
 
-so this has to be sorted out within the driver rather than by disabling it 
-altogether.  Possibly with a suitable conditional wired to HAS_IOPORT in 
-`set_io_from_upio' in drivers/tty/serial/8250/8250_port.c.
+ arch/arm64/Makefile                            |   5 +
+ arch/arm64/boot/Makefile                       |  17 ++-
+ drivers/firmware/efi/Kconfig                   |   6 +
+ drivers/firmware/efi/libstub/Makefile          |   4 +-
+ drivers/firmware/efi/libstub/efi-stub-helper.c | 141 -----------------
+ drivers/firmware/efi/libstub/efistub.h         |   8 +-
+ drivers/firmware/efi/libstub/printk.c          | 158 ++++++++++++++++++++
+ drivers/firmware/efi/libstub/zboot-header.S    |  88 +++++++++++
+ drivers/firmware/efi/libstub/zboot.c           |  86 +++++++++++
+ drivers/firmware/efi/libstub/zboot.lds         |  44 ++++++
+ 10 files changed, 412 insertions(+), 145 deletions(-)
+ create mode 100644 drivers/firmware/efi/libstub/printk.c
+ create mode 100644 drivers/firmware/efi/libstub/zboot-header.S
+ create mode 100644 drivers/firmware/efi/libstub/zboot.c
+ create mode 100644 drivers/firmware/efi/libstub/zboot.lds
 
-  Maciej
+-- 
+2.30.2
+
