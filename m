@@ -2,108 +2,178 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D5951851F
-	for <lists+linux-arch@lfdr.de>; Tue,  3 May 2022 15:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C380518588
+	for <lists+linux-arch@lfdr.de>; Tue,  3 May 2022 15:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbiECNLr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 3 May 2022 09:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S236233AbiECNgl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 3 May 2022 09:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234743AbiECNLr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 May 2022 09:11:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B3662B184
-        for <linux-arch@vger.kernel.org>; Tue,  3 May 2022 06:08:07 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-234-VLCMgDn0OwqNyGTPU6svxg-1; Tue, 03 May 2022 14:08:05 +0100
-X-MC-Unique: VLCMgDn0OwqNyGTPU6svxg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Tue, 3 May 2022 14:08:04 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Tue, 3 May 2022 14:08:04 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Linus Walleij' <linus.walleij@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>
-CC:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: RE: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
-Thread-Topic: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
-Thread-Index: AQHYXaY4HSGVKKYe1UmuRZfv/6NY/a0NHk4Q
-Date:   Tue, 3 May 2022 13:08:04 +0000
-Message-ID: <c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
- <20220429135108.2781579-19-schnelle@linux.ibm.com> <Ymv3DnS1vPMY8QIg@fedora>
- <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
- <YmwGLrh4U+pVJo0m@fedora>
- <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com>
-In-Reply-To: <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S236224AbiECNgj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 3 May 2022 09:36:39 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1183136B47;
+        Tue,  3 May 2022 06:33:02 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VC793pK_1651584773;
+Received: from 30.39.210.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VC793pK_1651584773)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 03 May 2022 21:32:55 +0800
+Message-ID: <8cd231f3-9c8f-ca70-75e7-3dd1ed47258d@linux.alibaba.com>
+Date:   Tue, 3 May 2022 21:33:38 +0800
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+ <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
+ <20220429220214.4cfc5539@thinkpad>
+ <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
+ <20220502160232.589a6111@thinkpad>
+ <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
+ <20220503120343.6264e126@thinkpad>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220503120343.6264e126@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-RnJvbTogTGludXMgV2FsbGVpag0KPiBTZW50OiAwMSBNYXkgMjAyMiAyMjo1Ng0KPiANCj4gT24g
-RnJpLCBBcHIgMjksIDIwMjIgYXQgNTozNyBQTSBXaWxsaWFtIEJyZWF0aGl0dCBHcmF5DQo+IDx3
-aWxsaWFtLmdyYXlAbGluYXJvLm9yZz4gd3JvdGU6DQo+ID4gT24gRnJpLCBBcHIgMjksIDIwMjIg
-YXQgMDQ6NDY6MDBQTSArMDIwMCwgTmlrbGFzIFNjaG5lbGxlIHdyb3RlOg0KPiANCj4gPiA+IEdv
-b2QgcXVlc3Rpb24uIEFzIGZhciBhcyBJIGNhbiBzZWUgbW9zdCAoYWxsPykgb2YgdGhlc2UgaGF2
-ZSAic2VsZWN0DQo+ID4gPiBJU0FfQlVTX0FQSSIgd2hpY2ggaXMgImRlZl9ib29sIElTQSIuIE5v
-dyAiY29uZmlnIElTQSIgc2VlbXMgdG8NCj4gPiA+IGN1cnJlbnRseSBiZSByZXBlYXRlZCBpbiBh
-cmNoaXRlY3R1cmVzIGFuZCBkb2Vzbid0IGhhdmUgYW4gZXhwbGljaXQNCj4gPiA+IEhBU19JT1BP
-UlQgZGVwZW5kZW5jeSAoaXQgbWF5YmUgc2hvdWxkIGhhdmUgb25lKS4gQnV0IGl0IGRvZXMgb25s
-eSBtYWtlDQo+ID4gPiBzZW5zZSBvbiBhcmNoaXRlY3R1cmVzIHdpdGggSEFTX0lPUE9SVCBzZXQu
-DQo+ID4NCj4gPiBUaGVyZSBpcyBzdWNoIGEgdGhpbmcgYXMgSVNBIERNQSwgYnV0IHlvdSdsbCBz
-dGlsbCBuZWVkIHRvIGluaXRpYWxpemUNCj4gPiB0aGUgZGV2aWNlIHZpYSB0aGUgSU8gUG9ydCBi
-dXMgZmlyc3QsIHNvIHBlcmhhcHMgc2V0dGluZyBIQVNfSU9QT1JUIGZvcg0KPiA+ICJjb25maWcg
-SVNBIiBpcyB0aGUgcmlnaHQgdGhpbmcgdG8gZG86IGFsbCBJU0EgZGV2aWNlcyBhcmUgZXhwZWN0
-ZWQgdG8NCj4gPiBjb21tdW5pY2F0ZSBpbiBzb21lIHdheSB2aWEgaW9wb3J0Lg0KPiANCj4gQWRk
-aW5nIHRoYXQgZGVwZW5kZW5jeSBzZWVtcyBsaWtlIHRoZSByaWdodCBzb2x1dGlvbiB0byBtZS4N
-Cg0KSSB0aGluayBpdCBhbGwgZGVwZW5kcyBvbiB3aGF0IEhBU19JT1BPUlQgaXMgbWVhbnQgdG8g
-bWVhbiBhbmQNCmhvdyBwb3J0YWJsZSBrZXJuZWwgYmluYXJpZXMgbmVlZCB0byBiZS4NCg0KeDg2
-IGlzIChwcm9iYWJseSkgdGhlIG9ubHkgYXJjaGl0ZWN0dXJlIHRoYXQgYWN0dWFsbHkgaGFzICdp
-bicNCmFuZCAnb3V0JyBpbnN0cnVjdGlvbnMgLSBidXQgdGhhdCBkb2Vzbid0IG1lYW4gdGhhdCBz
-b21lIG90aGVyDQpjcHUgKGFuZCBJIG1lYW4gY3B1K3BjYiBub3QgYXJjaGl0ZWN0dXJlKSBoYXZl
-IHRoZSBhYmlsaXR5IHRvDQpnZW5lcmF0ZSAnSU8nIGJ1cyBjeWNsZXMgb24gYSBzcGVjaWZpYyBw
-aHlzaWNhbCBidXMuDQoNCldoaWxlIHRoZSBvYnZpb3VzIGNhc2UgaXMgYSBwaHlzaWNhbCBhZGRy
-ZXNzIHdpbmRvdyB0aGF0IGdlbmVyYXRlcw0KUENJKGUpIElPIGN5Y2xlcyBmcm9tIG5vcm1hbCBt
-ZW1vcnkgY3ljbGVzIGl0IGlzbid0IHRoZSBvbmx5IG9uZS4NCg0KSSd2ZSB1c2VkIHNwYXJjIGNw
-dSBzeXN0ZW1zIHRoYXQgaGF2ZSBwY21jaWEgY2FyZCBzbG90cy4NClRoZXNlIGFyZSBwcmV0dHkg
-bXVjaCBJU0EgYW5kIHRoZSBkcml2ZXJzIG1pZ2h0IGV4cGVjdCB0bw0KYWNjZXNzIHBvcnQgMHgz
-MDAgKGV0YykgLSBjZXJ0YWlubHkgdGhhdCB3b3VsZCBiZSByaWdodCBvbiB4ODYuDQoNCkluIHRo
-aXMgY2FzZSBpcyBpc24ndCBzbyBtdWNoIHRoYXQgdGhlIElTQV9CVVMgZGVwZW5kcyBvbiBzdXBw
-b3J0DQpmb3IgaW4vb3V0IGJ1dCB0aGF0IHByZXNlbmNlIG9mIHRoZSBJU0EgYnVzIHByb3ZpZGVz
-IHRoZSByZXF1aXJlZA0KaW4vb3V0IHN1cHBvcnQuDQoNCk5vdywgbWF5YmUsIHRoZSBkcml2ZXJz
-IHNob3VsZCBiZSB1c2luZyBzb21lIGlvcmVtYXAgdmFyaWFudCBhbmQNCnRoZW4gY2FsbGluZyBp
-b3JlYWQ4KCkgcmF0aGVyIHRoYW4gZGlyZWN0bHkgY2FsbGluZyBpbmIoKS4NCkJ1dCB0aGF0IHNl
-ZW1zIG9ydGhvZ29uYWwgdG8gdGhpcyBjaGFuZ2VzZXQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3Rl
-cmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtl
-eW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
+
+On 5/3/2022 6:03 PM, Gerald Schaefer wrote:
+> On Tue, 3 May 2022 10:19:46 +0800
+> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+> 
+>>
+>>
+>> On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
+>>> On Sat, 30 Apr 2022 11:22:33 +0800
+>>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+>>>
+>>>>
+>>>>
+>>>> On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
+>>>>> On Fri, 29 Apr 2022 16:14:43 +0800
+>>>>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+>>>>>
+>>>>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+>>>>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+>>>>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+>>>>>> size specified.
+>>>>>>
+>>>>>> When unmapping a hugetlb page, we will get the relevant page table
+>>>>>> entry by huge_pte_offset() only once to nuke it. This is correct
+>>>>>> for PMD or PUD size hugetlb, since they always contain only one
+>>>>>> pmd entry or pud entry in the page table.
+>>>>>>
+>>>>>> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+>>>>>> since they can contain several continuous pte or pmd entry with
+>>>>>> same page table attributes, so we will nuke only one pte or pmd
+>>>>>> entry for this CONT-PTE/PMD size hugetlb page.
+>>>>>>
+>>>>>> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
+>>>>>> which means now we will unmap only one pte entry for a CONT-PTE or
+>>>>>> CONT-PMD size poisoned hugetlb page, and we can still access other
+>>>>>> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
+>>>>>> which will cause serious issues possibly.
+>>>>>>
+>>>>>> So we should change to use huge_ptep_clear_flush() to nuke the
+>>>>>> hugetlb page table to fix this issue, which already considered
+>>>>>> CONT-PTE and CONT-PMD size hugetlb.
+>>>>>>
+>>>>>> Note we've already used set_huge_swap_pte_at() to set a poisoned
+>>>>>> swap entry for a poisoned hugetlb page.
+>>>>>>
+>>>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>>>>> ---
+>>>>>>     mm/rmap.c | 34 +++++++++++++++++-----------------
+>>>>>>     1 file changed, 17 insertions(+), 17 deletions(-)
+>>>>>>
+>>>>>> diff --git a/mm/rmap.c b/mm/rmap.c
+>>>>>> index 7cf2408..1e168d7 100644
+>>>>>> --- a/mm/rmap.c
+>>>>>> +++ b/mm/rmap.c
+>>>>>> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>>>>>>     					break;
+>>>>>>     				}
+>>>>>>     			}
+>>>>>> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+>>>>>
+>>>>> Unlike in your patch 2/3, I do not see that this (huge) pteval would later
+>>>>> be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
+>>>>> this (huge) pteval could end up at a set_pte_at() later, but if yes, then
+>>>>> this would be broken on s390, and you'd need to use set_huge_pte_at()
+>>>>> instead of set_pte_at() like in your patch 2/3.
+>>>>
+>>>> IIUC, As I said in the commit message, we will only unmap a poisoned
+>>>> hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be
+>>>> remapped with a poisoned entry by set_huge_swap_pte_at() in
+>>>> try_to_unmap_one(). So I think no need change to use set_huge_pte_at()
+>>>> instead of set_pte_at() for other cases, since the hugetlb page will not
+>>>> hit other cases.
+>>>>
+>>>> if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
+>>>> 	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
+>>>> 	if (folio_test_hugetlb(folio)) {
+>>>> 		hugetlb_count_sub(folio_nr_pages(folio), mm);
+>>>> 		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
+>>>> 				     vma_mmu_pagesize(vma));
+>>>> 	} else {
+>>>> 		dec_mm_counter(mm, mm_counter(&folio->page));
+>>>> 		set_pte_at(mm, address, pvmw.pte, pteval);
+>>>> 	}
+>>>>
+>>>> }
+>>>
+>>> OK, but wouldn't the pteval be overwritten here with
+>>> pteval = swp_entry_to_pte(make_hwpoison_entry(subpage))?
+>>> IOW, what sense does it make to save the returned pteval from
+>>> huge_ptep_clear_flush(), when it is never being used anywhere?
+>>
+>> Please see previous code, we'll use the original pte value to check if
+>> it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs
+>> is set noop_dirty_folio().
+>>
+>> pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
+> 
+> Uh, ok, that wouldn't work on s390, but we also don't have
+> CONFIG_PTE_MARKER_UFFD_WP / HAVE_ARCH_USERFAULTFD_WP set, so
+> I guess we will be fine (for now).
+
+OK.
+
+> 
+> Still, I find it a bit unsettling that pte_install_uffd_wp_if_needed()
+> would work on a potential hugetlb *pte, directly de-referencing it
+> instead of using huge_ptep_get().
+> 
+> The !pte_none(*pte) check at the beginning would be broken in the
+> hugetlb case for s390 (not sure about other archs, but I think s390
+> might be the only exception strictly requiring huge_ptep_get()
+> for de-referencing hugetlb *pte pointers).
+
+Right, I think so too. I'll look at the uffd code in detail, seems need 
+another patch to fix the hugetlb for uffd. Thanks for your comments.
