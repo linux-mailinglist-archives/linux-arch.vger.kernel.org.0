@@ -2,155 +2,735 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21421517BED
-	for <lists+linux-arch@lfdr.de>; Tue,  3 May 2022 04:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8725B517C0E
+	for <lists+linux-arch@lfdr.de>; Tue,  3 May 2022 04:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiECCWm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 May 2022 22:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S230197AbiECCws (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 May 2022 22:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiECCWl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 22:22:41 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECEA23BF6;
-        Mon,  2 May 2022 19:19:08 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VC4Od8S_1651544341;
-Received: from 30.39.210.51(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VC4Od8S_1651544341)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 03 May 2022 10:19:03 +0800
-Message-ID: <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
-Date:   Tue, 3 May 2022 10:19:46 +0800
+        with ESMTP id S229660AbiECCwr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 22:52:47 -0400
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D07C37A34;
+        Mon,  2 May 2022 19:49:14 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 2432lo57029457;
+        Tue, 3 May 2022 11:47:50 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 2432lo57029457
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651546070;
+        bh=HpstyiEwSZe2Hh+DERW9DUrly+Xd4WMxUDaMern5gP4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pZEZAOdE6Tewyxkq3crB9PYiAmg777wKSHHqF2R0YUT0bZiTvOImT2rx+xNKnEYZC
+         CFxIRk+yqkdwKanm426DSt64+IXW99prFGswHmqfE323vFvzMrLoiLAdqPnS5/9/k5
+         9DPkRspaaeZ0paMazcQxUWvT+k9HltORE0si5ZeQlhe+5nIDyB8K7dtDtQ3TDnIwR6
+         0lnxQfbK/68w656NuOS1TaQtBWSvLfB7ug3gTZuQU/+BXFaEp5sQ0l8/iNBdfsVePs
+         Pj93tFFnVYZ+V9ls+cBQziaGd7Rm7jH7LtqjI2rxQSNgsUL2N3mY8uUPKUhXV/ZMid
+         9YyTnJu7A7rMw==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v2] kbuild: factor out the common installation code into scripts/install.sh
+Date:   Tue,  3 May 2022 11:47:16 +0900
+Message-Id: <20220503024716.76666-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
- unmapping
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org
-References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
- <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
- <20220429220214.4cfc5539@thinkpad>
- <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
- <20220502160232.589a6111@thinkpad>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220502160232.589a6111@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.5 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Many architectures have similar install.sh scripts.
 
+The first half is really generic; verifies that the kernel image and
+System.map exist, then executes ~/bin/${INSTALLKERNEL} or
+/sbin/${INSTALLKERNEL} if available.
 
-On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
-> On Sat, 30 Apr 2022 11:22:33 +0800
-> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
-> 
->>
->>
->> On 4/30/2022 4:02 AM, Gerald Schaefer wrote:
->>> On Fri, 29 Apr 2022 16:14:43 +0800
->>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
->>>
->>>> On some architectures (like ARM64), it can support CONT-PTE/PMD size
->>>> hugetlb, which means it can support not only PMD/PUD size hugetlb:
->>>> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
->>>> size specified.
->>>>
->>>> When unmapping a hugetlb page, we will get the relevant page table
->>>> entry by huge_pte_offset() only once to nuke it. This is correct
->>>> for PMD or PUD size hugetlb, since they always contain only one
->>>> pmd entry or pud entry in the page table.
->>>>
->>>> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
->>>> since they can contain several continuous pte or pmd entry with
->>>> same page table attributes, so we will nuke only one pte or pmd
->>>> entry for this CONT-PTE/PMD size hugetlb page.
->>>>
->>>> And now we only use try_to_unmap() to unmap a poisoned hugetlb page,
->>>> which means now we will unmap only one pte entry for a CONT-PTE or
->>>> CONT-PMD size poisoned hugetlb page, and we can still access other
->>>> subpages of a CONT-PTE or CONT-PMD size poisoned hugetlb page,
->>>> which will cause serious issues possibly.
->>>>
->>>> So we should change to use huge_ptep_clear_flush() to nuke the
->>>> hugetlb page table to fix this issue, which already considered
->>>> CONT-PTE and CONT-PMD size hugetlb.
->>>>
->>>> Note we've already used set_huge_swap_pte_at() to set a poisoned
->>>> swap entry for a poisoned hugetlb page.
->>>>
->>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> ---
->>>>    mm/rmap.c | 34 +++++++++++++++++-----------------
->>>>    1 file changed, 17 insertions(+), 17 deletions(-)
->>>>
->>>> diff --git a/mm/rmap.c b/mm/rmap.c
->>>> index 7cf2408..1e168d7 100644
->>>> --- a/mm/rmap.c
->>>> +++ b/mm/rmap.c
->>>> @@ -1564,28 +1564,28 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
->>>>    					break;
->>>>    				}
->>>>    			}
->>>> +			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
->>>
->>> Unlike in your patch 2/3, I do not see that this (huge) pteval would later
->>> be used again with set_huge_pte_at() instead of set_pte_at(). Not sure if
->>> this (huge) pteval could end up at a set_pte_at() later, but if yes, then
->>> this would be broken on s390, and you'd need to use set_huge_pte_at()
->>> instead of set_pte_at() like in your patch 2/3.
->>
->> IIUC, As I said in the commit message, we will only unmap a poisoned
->> hugetlb page by try_to_unmap(), and the poisoned hugetlb page will be
->> remapped with a poisoned entry by set_huge_swap_pte_at() in
->> try_to_unmap_one(). So I think no need change to use set_huge_pte_at()
->> instead of set_pte_at() for other cases, since the hugetlb page will not
->> hit other cases.
->>
->> if (PageHWPoison(subpage) && !(flags & TTU_IGNORE_HWPOISON)) {
->> 	pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
->> 	if (folio_test_hugetlb(folio)) {
->> 		hugetlb_count_sub(folio_nr_pages(folio), mm);
->> 		set_huge_swap_pte_at(mm, address, pvmw.pte, pteval,
->> 				     vma_mmu_pagesize(vma));
->> 	} else {
->> 		dec_mm_counter(mm, mm_counter(&folio->page));
->> 		set_pte_at(mm, address, pvmw.pte, pteval);
->> 	}
->>
->> }
-> 
-> OK, but wouldn't the pteval be overwritten here with
-> pteval = swp_entry_to_pte(make_hwpoison_entry(subpage))?
-> IOW, what sense does it make to save the returned pteval from
-> huge_ptep_clear_flush(), when it is never being used anywhere?
+The second half is kind of arch-specific. It just copies the kernel image
+and System.map to the destination, but the code is slightly different.
 
-Please see previous code, we'll use the original pte value to check if 
-it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs 
-is set noop_dirty_folio().
+This patch factors out the generic part into scripts/install.sh.
 
-pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-/* Set the dirty flag on the folio now the pte is gone. */
-if (pte_dirty(pteval))
-	folio_mark_dirty(folio);
+Changes in v2:
+  - Move the installkernel parameters to scripts/install.sh
+
+ Makefile                     |  3 ++-
+ arch/arm/Makefile            |  4 ++--
+ arch/arm/boot/install.sh     | 21 ------------------
+ arch/arm64/Makefile          |  6 ++----
+ arch/arm64/boot/install.sh   | 21 ------------------
+ arch/ia64/Makefile           |  3 ++-
+ arch/ia64/install.sh         | 10 ---------
+ arch/m68k/Makefile           |  3 ++-
+ arch/m68k/install.sh         | 22 -------------------
+ arch/nios2/Makefile          |  3 +--
+ arch/nios2/boot/install.sh   | 22 -------------------
+ arch/parisc/Makefile         | 11 +++++-----
+ arch/parisc/install.sh       | 28 ------------------------
+ arch/powerpc/Makefile        |  3 +--
+ arch/powerpc/boot/install.sh | 23 --------------------
+ arch/riscv/Makefile          |  7 +++---
+ arch/riscv/boot/install.sh   | 21 ------------------
+ arch/s390/Makefile           |  3 +--
+ arch/s390/boot/install.sh    |  6 ------
+ arch/sparc/Makefile          |  3 +--
+ arch/sparc/boot/install.sh   | 22 -------------------
+ arch/x86/Makefile            |  3 +--
+ arch/x86/boot/install.sh     | 22 -------------------
+ scripts/install.sh           | 41 ++++++++++++++++++++++++++++++++++++
+ 24 files changed, 64 insertions(+), 247 deletions(-)
+ mode change 100644 => 100755 arch/arm/boot/install.sh
+ mode change 100644 => 100755 arch/arm64/boot/install.sh
+ mode change 100644 => 100755 arch/ia64/install.sh
+ mode change 100644 => 100755 arch/m68k/install.sh
+ mode change 100644 => 100755 arch/nios2/boot/install.sh
+ mode change 100644 => 100755 arch/parisc/install.sh
+ mode change 100644 => 100755 arch/powerpc/boot/install.sh
+ mode change 100644 => 100755 arch/riscv/boot/install.sh
+ mode change 100644 => 100755 arch/s390/boot/install.sh
+ mode change 100644 => 100755 arch/sparc/boot/install.sh
+ mode change 100644 => 100755 arch/x86/boot/install.sh
+ create mode 100755 scripts/install.sh
+
+diff --git a/Makefile b/Makefile
+index 9a60f732bb3c..154c32af8805 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1298,7 +1298,8 @@ scripts_unifdef: scripts_basic
+ # to this Makefile to build and install external modules.
+ # Cancel sub_make_done so that options such as M=, V=, etc. are parsed.
+ 
+-install: sub_make_done :=
++quiet_cmd_install = INSTALL $(INSTALL_PATH)
++      cmd_install = unset sub_make_done; $(srctree)/scripts/install.sh
+ 
+ # ---------------------------------------------------------------------------
+ # Tools
+diff --git a/arch/arm/Makefile b/arch/arm/Makefile
+index a2391b8de5a5..187f4b2c5c73 100644
+--- a/arch/arm/Makefile
++++ b/arch/arm/Makefile
+@@ -318,9 +318,9 @@ $(BOOT_TARGETS): vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) MACHINE=$(MACHINE) $(boot)/$@
+ 	@$(kecho) '  Kernel: $(boot)/$@ is ready'
+ 
++$(INSTALL_TARGETS): KBUILD_IMAGE = $(boot)/$(patsubst %install,%Image,$@)
+ $(INSTALL_TARGETS):
+-	$(CONFIG_SHELL) $(srctree)/$(boot)/install.sh "$(KERNELRELEASE)" \
+-	$(boot)/$(patsubst %install,%Image,$@) System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ PHONY += vdso_install
+ vdso_install:
+diff --git a/arch/arm/boot/install.sh b/arch/arm/boot/install.sh
+old mode 100644
+new mode 100755
+index 2a45092a40e3..9ec11fac7d8d
+--- a/arch/arm/boot/install.sh
++++ b/arch/arm/boot/install.sh
+@@ -1,7 +1,5 @@
+ #!/bin/sh
+ #
+-# arch/arm/boot/install.sh
+-#
+ # This file is subject to the terms and conditions of the GNU General Public
+ # License.  See the file "COPYING" in the main directory of this archive
+ # for more details.
+@@ -18,25 +16,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+ 
+ if [ "$(basename $2)" = "zImage" ]; then
+ # Compressed install
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 2f1de88651e6..6d9d4a58b898 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -162,11 +162,9 @@ Image: vmlinux
+ Image.%: Image
+ 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+ 
+-install: install-image := Image
+-zinstall: install-image := Image.gz
++install: KBUILD_IMAGE := $(boot)/Image
+ install zinstall:
+-	$(CONFIG_SHELL) $(srctree)/$(boot)/install.sh $(KERNELRELEASE) \
+-	$(boot)/$(install-image) System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ PHONY += vdso_install
+ vdso_install:
+diff --git a/arch/arm64/boot/install.sh b/arch/arm64/boot/install.sh
+old mode 100644
+new mode 100755
+index d91e1f022573..7399d706967a
+--- a/arch/arm64/boot/install.sh
++++ b/arch/arm64/boot/install.sh
+@@ -1,7 +1,5 @@
+ #!/bin/sh
+ #
+-# arch/arm64/boot/install.sh
+-#
+ # This file is subject to the terms and conditions of the GNU General Public
+ # License.  See the file "COPYING" in the main directory of this archive
+ # for more details.
+@@ -18,25 +16,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+ 
+ if [ "$(basename $2)" = "Image.gz" ]; then
+ # Compressed install
+diff --git a/arch/ia64/Makefile b/arch/ia64/Makefile
+index 6c4bfa54b703..e55c2f138656 100644
+--- a/arch/ia64/Makefile
++++ b/arch/ia64/Makefile
+@@ -72,8 +72,9 @@ archheaders:
+ 
+ CLEAN_FILES += vmlinux.gz
+ 
++install: KBUILD_IMAGE := vmlinux.gz
+ install:
+-	sh $(srctree)/arch/ia64/install.sh $(KERNELRELEASE) vmlinux.gz System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ define archhelp
+   echo '* compressed	- Build compressed kernel image'
+diff --git a/arch/ia64/install.sh b/arch/ia64/install.sh
+old mode 100644
+new mode 100755
+index 0e932f5dcd1a..2d4b66a9f362
+--- a/arch/ia64/install.sh
++++ b/arch/ia64/install.sh
+@@ -1,7 +1,5 @@
+ #!/bin/sh
+ #
+-# arch/ia64/install.sh
+-#
+ # This file is subject to the terms and conditions of the GNU General Public
+ # License.  See the file "COPYING" in the main directory of this archive
+ # for more details.
+@@ -17,14 +15,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-# User may have a custom install script
+-
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-
+-# Default install - same as make zlilo
+ 
+ if [ -f $4/vmlinuz ]; then
+ 	mv $4/vmlinuz $4/vmlinuz.old
+diff --git a/arch/m68k/Makefile b/arch/m68k/Makefile
+index 740fc97b9c0f..e358605b70ba 100644
+--- a/arch/m68k/Makefile
++++ b/arch/m68k/Makefile
+@@ -138,5 +138,6 @@ CLEAN_FILES += vmlinux.gz vmlinux.bz2
+ archheaders:
+ 	$(Q)$(MAKE) $(build)=arch/m68k/kernel/syscalls all
+ 
++install: KBUILD_IMAGE := vmlinux.gz
+ install:
+-	sh $(srctree)/arch/m68k/install.sh $(KERNELRELEASE) vmlinux.gz System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+diff --git a/arch/m68k/install.sh b/arch/m68k/install.sh
+old mode 100644
+new mode 100755
+index 57d640d4382c..af65e16e5147
+--- a/arch/m68k/install.sh
++++ b/arch/m68k/install.sh
+@@ -15,28 +15,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-
+-# Default install - same as make zlilo
+ 
+ if [ -f $4/vmlinuz ]; then
+ 	mv $4/vmlinuz $4/vmlinuz.old
+diff --git a/arch/nios2/Makefile b/arch/nios2/Makefile
+index 02d678559066..d6a7499b814c 100644
+--- a/arch/nios2/Makefile
++++ b/arch/nios2/Makefile
+@@ -56,8 +56,7 @@ $(BOOT_TARGETS): vmlinux
+ 	$(Q)$(MAKE) $(build)=$(nios2-boot) $(nios2-boot)/$@
+ 
+ install:
+-	sh $(srctree)/$(nios2-boot)/install.sh $(KERNELRELEASE) \
+-	$(KBUILD_IMAGE) System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ define archhelp
+   echo  '* vmImage         - Kernel-only image for U-Boot ($(KBUILD_IMAGE))'
+diff --git a/arch/nios2/boot/install.sh b/arch/nios2/boot/install.sh
+old mode 100644
+new mode 100755
+index 3cb3f468bc51..34a2feec42c8
+--- a/arch/nios2/boot/install.sh
++++ b/arch/nios2/boot/install.sh
+@@ -15,28 +15,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-
+-# Default install - same as make zlilo
+ 
+ if [ -f $4/vmlinuz ]; then
+ 	mv $4/vmlinuz $4/vmlinuz.old
+diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
+index 7583fc39ab2d..aca1710fd658 100644
+--- a/arch/parisc/Makefile
++++ b/arch/parisc/Makefile
+@@ -184,12 +184,11 @@ vdso_install:
+ 	$(Q)$(MAKE) $(build)=arch/parisc/kernel/vdso $@
+ 	$(if $(CONFIG_COMPAT_VDSO), \
+ 		$(Q)$(MAKE) $(build)=arch/parisc/kernel/vdso32 $@)
+-install:
+-	$(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
+-			$(KERNELRELEASE) vmlinux System.map "$(INSTALL_PATH)"
+-zinstall:
+-	$(CONFIG_SHELL) $(srctree)/arch/parisc/install.sh \
+-			$(KERNELRELEASE) vmlinuz System.map "$(INSTALL_PATH)"
++
++install: KBUILD_IMAGE := vmlinux
++zinstall: KBUILD_IMAGE := vmlinuz
++install zinstall:
++	$(call cmd,install)
+ 
+ CLEAN_FILES	+= lifimage
+ MRPROPER_FILES	+= palo.conf
+diff --git a/arch/parisc/install.sh b/arch/parisc/install.sh
+old mode 100644
+new mode 100755
+index 70d3cffb0251..933d031c249a
+--- a/arch/parisc/install.sh
++++ b/arch/parisc/install.sh
+@@ -1,7 +1,5 @@
+ #!/bin/sh
+ #
+-# arch/parisc/install.sh, derived from arch/i386/boot/install.sh
+-#
+ # This file is subject to the terms and conditions of the GNU General Public
+ # License.  See the file "COPYING" in the main directory of this archive
+ # for more details.
+@@ -17,32 +15,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-
+-if [ -n "${INSTALLKERNEL}" ]; then
+-  if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-  if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-  if [ -x /usr/sbin/${INSTALLKERNEL} ]; then exec /usr/sbin/${INSTALLKERNEL} "$@"; fi
+-fi
+-
+-# Default install
+ 
+ if [ "$(basename $2)" = "vmlinuz" ]; then
+ # Compressed install
+diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+index eb541e730d3c..45a9caa37b4e 100644
+--- a/arch/powerpc/Makefile
++++ b/arch/powerpc/Makefile
+@@ -408,8 +408,7 @@ endef
+ 
+ PHONY += install
+ install:
+-	sh -x $(srctree)/$(boot)/install.sh "$(KERNELRELEASE)" vmlinux \
+-	System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ ifeq ($(KBUILD_EXTMOD),)
+ # We need to generate vdso-offsets.h before compiling certain files in kernel/.
+diff --git a/arch/powerpc/boot/install.sh b/arch/powerpc/boot/install.sh
+old mode 100644
+new mode 100755
+index 14473150ddb4..461902c8a46d
+--- a/arch/powerpc/boot/install.sh
++++ b/arch/powerpc/boot/install.sh
+@@ -15,32 +15,9 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+ 
+-# Bail with error code if anything goes wrong
+ set -e
+ 
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-
+-# Default install
+-
+ # this should work for both the pSeries zImage and the iSeries vmlinux.sm
+ image_name=`basename $2`
+ 
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 7d81102cffd4..2b93ca9f4fc3 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -139,11 +139,10 @@ $(BOOT_TARGETS): vmlinux
+ Image.%: Image
+ 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+ 
+-install: install-image = Image
+-zinstall: install-image = Image.gz
++install: KBUILD_IMAGE := $(boot)/Image
++zinstall: KBUILD_IMAGE := $(boot)/Image.gz
+ install zinstall:
+-	$(CONFIG_SHELL) $(srctree)/$(boot)/install.sh $(KERNELRELEASE) \
+-	$(boot)/$(install-image) System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ PHONY += rv32_randconfig
+ rv32_randconfig:
+diff --git a/arch/riscv/boot/install.sh b/arch/riscv/boot/install.sh
+old mode 100644
+new mode 100755
+index 18c39159c0ff..4c63f3f0643d
+--- a/arch/riscv/boot/install.sh
++++ b/arch/riscv/boot/install.sh
+@@ -1,7 +1,5 @@
+ #!/bin/sh
+ #
+-# arch/riscv/boot/install.sh
+-#
+ # This file is subject to the terms and conditions of the GNU General Public
+ # License.  See the file "COPYING" in the main directory of this archive
+ # for more details.
+@@ -18,25 +16,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+ 
+ if [ "$(basename $2)" = "Image.gz" ]; then
+ # Compressed install
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index 7a65bca1e5af..cc2425539ef0 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -128,8 +128,7 @@ all: bzImage
+ KBUILD_IMAGE	:= $(boot)/bzImage
+ 
+ install:
+-	sh -x $(srctree)/$(boot)/install.sh $(KERNELRELEASE) $(KBUILD_IMAGE) \
+-	      System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ bzImage: vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+diff --git a/arch/s390/boot/install.sh b/arch/s390/boot/install.sh
+old mode 100644
+new mode 100755
+index 515b27a996b3..616ba1660f08
+--- a/arch/s390/boot/install.sh
++++ b/arch/s390/boot/install.sh
+@@ -14,12 +14,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-# User may have a custom install script
+-
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+ 
+ echo "Warning: '${INSTALLKERNEL}' command not available - additional " \
+      "bootloader config required" >&2
+diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+index c7008bbebc4c..fe58a410b4ce 100644
+--- a/arch/sparc/Makefile
++++ b/arch/sparc/Makefile
+@@ -72,8 +72,7 @@ image zImage uImage tftpboot.img vmlinux.aout: vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+ 
+ install:
+-	sh $(srctree)/$(boot)/install.sh $(KERNELRELEASE) $(KBUILD_IMAGE) \
+-		System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ archheaders:
+ 	$(Q)$(MAKE) $(build)=arch/sparc/kernel/syscalls all
+diff --git a/arch/sparc/boot/install.sh b/arch/sparc/boot/install.sh
+old mode 100644
+new mode 100755
+index b32851eae693..4f130f3f30d6
+--- a/arch/sparc/boot/install.sh
++++ b/arch/sparc/boot/install.sh
+@@ -15,28 +15,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+-	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-
+-# Default install - same as make zlilo
+ 
+ if [ -f $4/vmlinuz ]; then
+ 	mv $4/vmlinuz $4/vmlinuz.old
+diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+index 63d50f65b828..5e1f21aae12b 100644
+--- a/arch/x86/Makefile
++++ b/arch/x86/Makefile
+@@ -271,8 +271,7 @@ $(BOOT_TARGETS): vmlinux
+ 
+ PHONY += install
+ install:
+-	$(CONFIG_SHELL) $(srctree)/$(boot)/install.sh $(KERNELRELEASE) \
+-		$(KBUILD_IMAGE) System.map "$(INSTALL_PATH)"
++	$(call cmd,install)
+ 
+ PHONY += vdso_install
+ vdso_install:
+diff --git a/arch/x86/boot/install.sh b/arch/x86/boot/install.sh
+old mode 100644
+new mode 100755
+index d13ec1c38640..0849f4b42745
+--- a/arch/x86/boot/install.sh
++++ b/arch/x86/boot/install.sh
+@@ -15,28 +15,6 @@
+ #   $2 - kernel image file
+ #   $3 - kernel map file
+ #   $4 - default install path (blank if root directory)
+-#
+-
+-verify () {
+-	if [ ! -f "$1" ]; then
+-		echo ""                                                   1>&2
+-		echo " *** Missing file: $1"                              1>&2
+-		echo ' *** You need to run "make" before "make install".' 1>&2
+-		echo ""                                                   1>&2
+-		exit 1
+- 	fi
+-}
+-
+-# Make sure the files actually exist
+-verify "$2"
+-verify "$3"
+-
+-# User may have a custom install script
+-
+-if [ -x ~/bin/${INSTALLKERNEL} ]; then exec ~/bin/${INSTALLKERNEL} "$@"; fi
+-if [ -x /sbin/${INSTALLKERNEL} ]; then exec /sbin/${INSTALLKERNEL} "$@"; fi
+-
+-# Default install - same as make zlilo
+ 
+ if [ -f $4/vmlinuz ]; then
+ 	mv $4/vmlinuz $4/vmlinuz.old
+diff --git a/scripts/install.sh b/scripts/install.sh
+new file mode 100755
+index 000000000000..88c56250f669
+--- /dev/null
++++ b/scripts/install.sh
+@@ -0,0 +1,41 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# Copyright (C) 1995 by Linus Torvalds
++#
++# Adapted from code in arch/i386/boot/Makefile by H. Peter Anvin
++# Common code factored out by Masahiro Yamada
++
++set -e
++
++# Make sure the files actually exist
++for file in "${KBUILD_IMAGE}" System.map
++do
++	if [ ! -f "${file}" ]; then
++		echo >&2
++		echo >&2 " *** Missing file: ${file}"
++		echo >&2 ' *** You need to run "make" before "make install".'
++		echo >&2
++		exit 1
++	fi
++done
++
++# installkernel(8) says the parameters are like follows:
++#
++#   installkernel version zImage System.map [directory]
++
++set -- "${KERNELRELEASE}" "${KBUILD_IMAGE}" System.map "${INSTALL_PATH}"
++
++# User/arch may have a custom install script
++for file in "${HOME}/bin/${INSTALLKERNEL}"		\
++	    "/sbin/${INSTALLKERNEL}"			\
++	    "${srctree}/arch/${SRCARCH}/install.sh"	\
++	    "${srctree}/arch/${SRCARCH}/boot/install.sh"
++do
++	if [ -x "${file}" ]; then
++		exec "${file}" "$@"
++	fi
++done
++
++echo "No install script found" >&2
++exit 1
+-- 
+2.32.0
+
