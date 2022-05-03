@@ -2,256 +2,156 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CFB5179B1
-	for <lists+linux-arch@lfdr.de>; Tue,  3 May 2022 00:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C623517BB3
+	for <lists+linux-arch@lfdr.de>; Tue,  3 May 2022 03:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387858AbiEBWGi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 2 May 2022 18:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
+        id S229749AbiECBcY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 2 May 2022 21:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387872AbiEBWEg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 18:04:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25421121;
-        Mon,  2 May 2022 15:00:38 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651528836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S+6N0/e64EIdyK+q6LMgUsbq+bhYAt3HjkhVHWMdsus=;
-        b=J4ag3vPsEDwZL+oCRqsEO5q2bCVT/HCkvHwIg31PZIT8GAn+5OvAJ9MB0oE+dSl/FZn9lT
-        8VPpLDbIih1vFggASgksDtYmiVBbHSJwF/fubcT3vrCrUbbkVdHeGngVe0kLhHEucAvfGj
-        Pyexx+cRTEiAtoXS5txfgqibNdzqinMk3iNHKba4cz7SLU/uFjbq9loqbmQWaWdX7kwDMd
-        JD0HUcmMAB7CC4x/ovCypKg2bMkTHIJpPHY0BX920/Wh+q9EHwwnNq5+12TFhA2Boy6pxW
-        hmtN4ct8VE5HfqtehZYAeCyycX8/yEfdLx276Zgg8Z7BShDGBYTzFqWcmVhk5A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651528836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S+6N0/e64EIdyK+q6LMgUsbq+bhYAt3HjkhVHWMdsus=;
-        b=CrQCUSltbRIGwTmnXdob0vtJs1is4KaNlYBouH31HPLXfAgPFVKmtpsZle3KY/3l9JTQXk
-        UoH9SeEf65beUPAw==
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
- uninstrumented code
-In-Reply-To: <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
-References: <20220426164315.625149-1-glider@google.com>
- <20220426164315.625149-29-glider@google.com> <87a6c6y7mg.ffs@tglx>
- <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
-Date:   Tue, 03 May 2022 00:00:36 +0200
-Message-ID: <87y1zjlhmj.ffs@tglx>
+        with ESMTP id S229598AbiECBcW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 2 May 2022 21:32:22 -0400
+X-Greylist: delayed 233 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 02 May 2022 18:28:50 PDT
+Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FEF60D6;
+        Mon,  2 May 2022 18:28:50 -0700 (PDT)
+Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-01.nifty.com with ESMTP id 24313Ssi000782;
+        Tue, 3 May 2022 10:03:28 +0900
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2430wEQd008425;
+        Tue, 3 May 2022 09:58:14 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2430wEQd008425
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1651539495;
+        bh=X5yyCYnmChLJWpoXfwlLy3Yqy1jj1u5sgNOnl2YeT+8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=aRZ+3CIUS9z02RmoL6+keYfwec6SGR8l55vY8O7YN/YD8fA9t+YbxYUoUg3cqIxOz
+         7fS/W0toHGLlh1J4q5O+BQW6cZfc82tuWAsBNfozPKIZGpxDw7kwWVv9jFEWbg6Vb3
+         KSDrXCCPSLt2n56dM78W27r4IOXaYu1FDzEHhUH+prkClQWxpLjguUIksVR23AGl6K
+         9yMsGHR4nUxEUogDPdvGUI6jkjCesNhgh3oMFMjeYD8RcmtcZx2e3HWRv1v0yRUBBs
+         SCu/OdFZwzKhNaAD3DHa8+QbV/qS+xAznq2ut1qKO3k63WknYCuACGNW2ZUWMNC3/f
+         +1wneat+0RA+A==
+X-Nifty-SrcIP: [209.85.216.49]
+Received: by mail-pj1-f49.google.com with SMTP id cq17-20020a17090af99100b001dc0386cd8fso776908pjb.5;
+        Mon, 02 May 2022 17:58:14 -0700 (PDT)
+X-Gm-Message-State: AOAM531QEn2sAb+gni98iwGRuMK6bwuLy5czofNjjNHx7mbY8CAF9q2v
+        dpooWwn3PwcRPyBmIAIATsNmE22tns5RTGIcpuA=
+X-Google-Smtp-Source: ABdhPJz+NT1ytlT70sSlhO329TCvsmWaO6n7IEVV8ssLDz1hwnrwWgFpFLcb6+3gsOZ1Cyq8cWbiLDuibQJ8QIabxoU=
+X-Received: by 2002:a17:90a:e517:b0:1d7:5bbd:f9f0 with SMTP id
+ t23-20020a17090ae51700b001d75bbdf9f0mr2001475pjy.77.1651539493892; Mon, 02
+ May 2022 17:58:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com>
+In-Reply-To: <20220209185752.1226407-2-alexandr.lobakin@intel.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 3 May 2022 09:57:09 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS0SLmpCHB8W=D6kGmfb5S+ESjY674P6q7RiO7faD=wqQ@mail.gmail.com>
+Message-ID: <CAK7LNAS0SLmpCHB8W=D6kGmfb5S+ESjY674P6q7RiO7faD=wqQ@mail.gmail.com>
+Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        live-patching@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Alexander,
-
-On Mon, May 02 2022 at 19:00, Alexander Potapenko wrote:
-> On Wed, Apr 27, 2022 at 3:32 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->> > --- a/kernel/entry/common.c
->> > +++ b/kernel/entry/common.c
->> > @@ -23,7 +23,7 @@ static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
->> >       CT_WARN_ON(ct_state() != CONTEXT_USER);
->> >       user_exit_irqoff();
->> >
->> > -     instrumentation_begin();
->> > +     instrumentation_begin_with_regs(regs);
->>
->> I can see what you are trying to do, but this will end up doing the same
->> thing over and over. Let's just look at a syscall.
->>
->> __visible noinstr void do_syscall_64(struct pt_regs *regs, int nr)
->> {
->>         ...
->>         nr = syscall_enter_from_user_mode(regs, nr)
->>
->>                 __enter_from_user_mode(regs)
->>                         .....
->>                         instrumentation_begin_with_regs(regs);
->>                         ....
->>
->>                 instrumentation_begin_with_regs(regs);
->>                 ....
->>
->>         instrumentation_begin_with_regs(regs);
->>
->>         if (!do_syscall_x64(regs, nr) && !do_syscall_x32(regs, nr) && nr != -1) {
->>                 /* Invalid system call, but still a system call. */
->>                 regs->ax = __x64_sys_ni_syscall(regs);
->>         }
->>
->>         instrumentation_end();
->>
->>         syscall_exit_to_user_mode(regs);
->>                 instrumentation_begin_with_regs(regs);
->>                 __syscall_exit_to_user_mode_work(regs);
->>         instrumentation_end();
->>         __exit_to_user_mode();
->>
->> That means you memset state four times and unpoison regs four times. I'm
->> not sure whether that's desired.
+On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
 >
-> Regarding the regs, you are right. It should be enough to unpoison the
-> regs at idtentry prologue instead.
-> I tried that initially, but IIRC it required patching each of the
-> DEFINE_IDTENTRY_XXX macros, which already use instrumentation_begin().
-
-Exactly 4 instances :)
-
-> This decision can probably be revisited.
-
-It has to be revisited because the whole thing is incomplete if this is
-not addressed.
-
-> As for the state, what we are doing here is still not enough, although
-> it appears to work.
+> `-z unique-symbol` linker flag which is planned to use with FG-KASLR
+> to simplify livepatching (hopefully globally later on) triggers the
+> following:
 >
-> Every time an instrumented function calls another function, it sets up
-> the metadata for the function arguments in the per-task struct
-> kmsan_context_state.
-> Similarly, every instrumented function expects its caller to put the
-> metadata into that structure.
-> Now, if a non-instrumented function (e.g. every `noinstr` function)
-> calls an instrumented one (which happens inside the
-> instrumentation_begin()/instrumentation_end() region), nobody sets up
-> the state for that instrumented function, so it may report false
-> positives when accessing its arguments, if there are leftover poisoned
-> values in the state.
+> ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
 >
-> To overcome this problem, ideally we need to wipe kmsan_context_state
-> every time a call from the non-instrumented function occurs.
-> But this cannot be done automatically exactly because we cannot
-> instrument the named function :)
+> The reason is that for now the condition from remove_dot():
 >
-> We therefore apply an approximation, wiping the state at the point of
-> the first transition between instrumented and non-instrumented code.
-> Because poison values are generally rare, and instrumented regions
-> tend to be short, it is unlikely that further calls from the same
-> non-instrumented function will result in false positives.
-> Yet it is not completely impossible, so wiping the state for the
-> second/third etc. time won't hurt.
+> if (m && (s[n + m] == '.' || s[n + m] == 0))
+>
+> which was designed to test if it's a dot or a '\0' after the suffix
+> is never satisfied.
+> This is due to that `s[n + m]` always points to the last digit of a
+> numeric suffix, not on the symbol next to it (from a custom debug
+> print added to modpost):
+>
+> param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+>
+> So it's off-by-one and was like that since 2014.
+> Fix this for the sake of upcoming features, but don't bother
+> stable-backporting, as it's well hidden -- apart from that LD flag,
+> can be triggered only by GCC LTO which never landed upstream.
+>
+> Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
 
-Understood. But if I understand you correctly:
 
-> Similarly, every instrumented function expects its caller to put the
-> metadata into that structure.
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
 
-then
 
-     instrumentation_begin();
-     foo(fargs...);
-     bar(bargs...);
-     instrumentation_end();
 
-is a source of potential false positives because the state is not
-guaranteed to be correct, neither for foo() nor for bar(), even if you
-wipe the state in instrumentation_begin(), right?
+>  scripts/mod/modpost.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 6bfa33217914..4648b7afe5cc 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
+>
+>         if (n && s[n]) {
+>                 size_t m = strspn(s + n + 1, "0123456789");
+> -               if (m && (s[n + m] == '.' || s[n + m] == 0))
+> +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+>                         s[n] = 0;
+>
+>                 /* strip trailing .lto */
+> --
+> 2.34.1
+>
 
-This approximation approach smells fishy and it's inevitably going to be
-a constant source of 'add yet another kmsan annotation/fixup' patches,
-which I'm not interested in at all.
 
-As this needs compiler support anyway, then why not doing the obvious:
-
-#define noinstr                                 \
-        .... __kmsan_conditional
-
-#define instrumentation_begin()                 \
-        ..... __kmsan_cond_begin
-
-#define instrumentation_end()                   \
-        __kmsan_cond_end .......
-
-and let the compiler stick whatever is required into that code section
-between instrumentation_begin() and instrumentation_end()?
-
-That's not violating any of the noinstr constraints at all. In fact we
-allow _any_ instrumentation to be placed between this two points. We
-have tracepoints there today.
-
-We could also allow breakpoints, kprobes or whatever, but handling this
-at that granularity level for a production kernel is just overkill and
-the code in those instrumentable sections is usually not that
-interesting as it's mostly function calls.
-
-But if the compiler converts
-
-     instrumentation_begin();
-     foo(fargs...);
-     bar(bargs...);
-     instrumentation_end();
-
-to
-
-     instrumentation_begin();
-     kmsan_instr_begin_magic();
-     kmsan_magic(fargs...);
-     foo(fargs...);
-     kmsan_magic(bargs...);
-     bar(bargs...);
-     kmsan_instr_end_magic();
-     instrumentation_end();
-
-for the kmsan case and leaves anything outside of these sections alone,
-then you have:
-
-   - a minimal code change
-   - the best possible coverage
-   - the least false positive crap to chase and annotate
-
-IOW, a solution which is solid and future proof.
-
-I'm all for making use of advanced instrumentation, validation and
-debugging features, but this mindset of 'make the code comply to what
-the tool of today provides' is fundamentally wrong. Tools have to
-provide value to the programmer and not the other way round.
-
-Yes, it's more work on the tooling side, but the tooling side is mostly
-a one time effort while chasing the false positives is a long term
-nightmare.
-
-Thanks,
-
-        tglx
+-- 
+Best Regards
+Masahiro Yamada
