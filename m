@@ -2,61 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0876E51AE8A
-	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 21:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D8E51AF9A
+	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 22:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377804AbiEDUCB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 16:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S1378344AbiEDUqQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 16:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377809AbiEDUB7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 16:01:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6717C4ECFD;
-        Wed,  4 May 2022 12:58:22 -0700 (PDT)
+        with ESMTP id S1378345AbiEDUqN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 16:46:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C37517CE;
+        Wed,  4 May 2022 13:42:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 217C1B828AE;
-        Wed,  4 May 2022 19:58:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9228FC385C5;
-        Wed,  4 May 2022 19:58:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EB4F618B4;
+        Wed,  4 May 2022 20:42:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5766DC385A4;
+        Wed,  4 May 2022 20:42:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651694299;
-        bh=wg/hwHaSxHe1LkHbSod1h6BsaaYPOvKGNxiNFQApSN4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IEei63mRJ/spdJbRpHfqvFWnMNbGcCWPZq4aMcUy9xZDioyB7DPeTnBolTr7GDAr8
-         C4LTJXx5isZCuT0TjBbhqGsNmATm7lB95IA5GJDwlpKr2AuahZwWWeCqNqeqydylU9
-         3Pnh6htK1fYB0OVT5wtmV1wuy45rWhpYQ0TDn375MkIp7XeoqEZRwjj+tPpsIJgBR5
-         J2TJtPxqYWEEjBoZh0YOKWUFWouKBb14qMpPnOeBa+DyiLRWb5wYJ8oTNLo79j5cNl
-         hRGQOcyMwN3dxVyTtNEw2fitX8zpBXaHACycN6Wv3XSUlV7PplpbXJUuTT56T73qNH
-         AX/VBcZEHLx+A==
-Received: by mail-wm1-f48.google.com with SMTP id 129so1471683wmz.0;
-        Wed, 04 May 2022 12:58:19 -0700 (PDT)
-X-Gm-Message-State: AOAM5319wfJvZKMa79arLzruEBVNN//aYKmX2yf7k022xp4tb5BnEpJJ
-        Y8jeMsWNfowFcjWUpoDqe+FlNbMmeSfxN3+Vnxo=
-X-Google-Smtp-Source: ABdhPJxReb27gItIiCiA4/nx0PiFQ0K4TTLKwACwm/x2zamtFQpbVBUb2l7ouPrVta/3hUoysKWZ7+dVKwiJwvHyjRY=
-X-Received: by 2002:a7b:cf04:0:b0:394:27c8:d28a with SMTP id
- l4-20020a7bcf04000000b0039427c8d28amr948038wmg.94.1651694297479; Wed, 04 May
- 2022 12:58:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429135108.2781579-3-schnelle@linux.ibm.com> <20220504175352.GA456913@bhelgaas>
-In-Reply-To: <20220504175352.GA456913@bhelgaas>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 4 May 2022 21:58:01 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3AddBGnBV=6wK+LZDjZD05k=9tBBWd7LWm6smXLcfREQ@mail.gmail.com>
-Message-ID: <CAK8P3a3AddBGnBV=6wK+LZDjZD05k=9tBBWd7LWm6smXLcfREQ@mail.gmail.com>
-Subject: Re: [RFC v2 02/39] ACPI: add dependency on HAS_IOPORT
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        s=k20201202; t=1651696953;
+        bh=VHSa4GEXYgtRjGmNPuVVqJEuTANBA7a7IX32GVjUX2M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=F4yBn9jwctPNtQdKRFs/6nHnRsWwaxCScPBz+U95zYo6dgmIwNFZAmvmX7H6MWZbj
+         aGvZ1pgPWtQsqSGILPdOAZleOpFkfWLo+wv8aaE7UKRDq8McmpziK3S6XGv6ImLaK4
+         tEbzS+Iqg48BRS5nCKv0CRIqemfOXDaxRKVdoh7wbAWgrM7H5wsoZWdOyazV+SDgZl
+         MRPe3TPPKyrBXLf6V4al432Bt3TcUbNMCS+JgbLjeqSTWqAHMWVMtiLEJoJTIzNs2b
+         M4jQ+193ZgSgs/uLc4iz06CJPMzzGshZFYU6awy5fB7XKK9MOgLm/w0EQM0sW9ZJm+
+         t+6uIbwIIQGXg==
+Date:   Wed, 4 May 2022 15:42:31 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "supporter:QLOGIC QLA2XXX FC-SCSI DRIVER" 
+        <GR-QLogic-Storage-Upstream@marvell.com>,
+        "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:MEGARAID SCSI/SAS DRIVERS" 
+        <megaraidlinux.pdl@broadcom.com>
+Subject: Re: [RFC v2 30/39] scsi: add HAS_IOPORT dependencies
+Message-ID: <20220504204231.GA463295@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220429135108.2781579-54-schnelle@linux.ibm.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,37 +66,62 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 4, 2022 at 7:53 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Apr 29, 2022 at 03:50:00PM +0200, Niklas Schnelle wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. As ACPI always uses I/O port access we simply depend
-> > on HAS_IOPORT.
->
-> CONFIG_ACPI depends on ARCH_SUPPORTS_ACPI, which is only set by arm64,
-> ia64, and x86, all of which support I/O port access.  So does this
-> actually solve a problem?  I wouldn't think you'd be able to build
-> ACPI on s390 even without this patch.
-> "ACPI always uses I/O port access" is a pretty broad brush, and it
-> would be useful to know specifically what the dependencies are.
->
-> Many ACPI hardware accesses use acpi_hw_read()/acpi_hw_write(), which
-> use either MMIO or I/O port accesses depending on what the firmware
-> told us.
+On Fri, Apr 29, 2022 at 03:50:51PM +0200, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
 
-I think this came from my original prototype of the series where I tested it
-out on arm64 with HAS_IOPORT disabled. I would like to hide the definition
-of inb()/outb() from include/asm-generic/io.h whenever CONFIG_HAS_IOPORT
-is not set, and I was prototyping this on arm64.
+Some of these drivers support devices using either I/O ports or MMIO.
+Adding the HAS_IOPORT dependency means MMIO devices that *could* work
+on systems without I/O ports, won't work.
 
-There are uses of inb()/outb() in drivers/acpi/ec.c and drivers/acpi/osl.c,
-which in turn are not optional in ACPI, so it seems that those are
-required.
+Even the MMIO-only devices are probably old and not of much interest.
+But if you want to disable them even though they *could* work, I think
+that's worth mentioning in the commit log.
 
-If we want to allow building arm64 without HAS_IOPORT for some reason,
-that means either force-disabling ACPI as well, or changin ACPI to not
-rely on port I/O. I think it's fine to leave that as a problem for whoever
-wants to make HAS_IOPORT optional in the future, and drop the
-dependency here.
+> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+>  config SCSI_IPS
+>  	tristate "IBM ServeRAID support"
+> -	depends on PCI && SCSI
+> +	depends on PCI && HAS_IOPORT && SCSI
 
-       Arnd
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/ips.c?id=v5.17#n6867
+
+> diff --git a/drivers/scsi/aic7xxx/Kconfig.aic7xxx b/drivers/scsi/aic7xxx/Kconfig.aic7xxx
+>  config SCSI_AIC94XX
+>  	tristate "Adaptec AIC94xx SAS/SATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select SCSI_SAS_LIBSAS
+>  	select FW_LOADER
+>  	help
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/aic7xxx/aic79xx_osm_pci.c?id=v5.17#n304
+
+> diff --git a/drivers/scsi/megaraid/Kconfig.megaraid b/drivers/scsi/megaraid/Kconfig.megaraid
+>  config MEGARAID_LEGACY
+>  	tristate "LSI Logic Legacy MegaRAID Driver"
+> -	depends on PCI && SCSI
+> +	depends on PCI && HAS_IOPORT && SCSI
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/scsi/megaraid.c?id=v5.17#n4190
+
+> diff --git a/drivers/scsi/mvsas/Kconfig b/drivers/scsi/mvsas/Kconfig
+>  config SCSI_MVSAS
+>  	tristate "Marvell 88SE64XX/88SE94XX SAS/SATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select SCSI_SAS_LIBSAS
+>  	select FW_LOADER
+>  	help
+
+This turns off all MVSAS support, but apparently only mv_64xx.c uses
+I/O ports:
+
+  git grep -E "\<(in|out)[bwl]\>" drivers/scsi/mvsas
+  git grep -E "\<io[rw](8|16|32)\>" drivers/scsi/mvsas
+
+It doesn't look like the Makefile is currently set up to build
+mv_64xx.c separately.
+
+Bjorn
