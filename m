@@ -2,86 +2,93 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0A451A023
-	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 15:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E609E51A0DB
+	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 15:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349855AbiEDNGG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 09:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S1346562AbiEDN1o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 09:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241199AbiEDNGF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 09:06:05 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2837235DE7;
-        Wed,  4 May 2022 06:02:29 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 3B7EF92009C; Wed,  4 May 2022 15:02:28 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 3198792009B;
-        Wed,  4 May 2022 14:02:28 +0100 (BST)
-Date:   Wed, 4 May 2022 14:02:28 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     'Linus Walleij' <linus.walleij@linaro.org>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: RE: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
-In-Reply-To: <7bb4d0286f44462581d96320cfe105d6@AcuMS.aculab.com>
-Message-ID: <alpine.DEB.2.21.2205041352520.9548@angie.orcam.me.uk>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-19-schnelle@linux.ibm.com> <Ymv3DnS1vPMY8QIg@fedora> <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com> <YmwGLrh4U+pVJo0m@fedora>
- <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com> <c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com> <alpine.DEB.2.21.2205041226160.64942@angie.orcam.me.uk> <7bb4d0286f44462581d96320cfe105d6@AcuMS.aculab.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        with ESMTP id S1347065AbiEDN1l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 09:27:41 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C7DD88;
+        Wed,  4 May 2022 06:24:04 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id f38so2355465ybi.3;
+        Wed, 04 May 2022 06:24:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vvTTUaLWJsjzPOFhmxoasD7sFbTs6/YjaMVSqjmO3ts=;
+        b=VFHLhVpkw7v/V1fI3l0jrlIOpZ9OmvzXuxPnzWbk4k+w2wAo+9U5CPXaYrz/790OOU
+         ZPmO5+ikLZ49TvOFhvUkN8wPfMutOMFasYevjcrvIxZQTAsjUc/CUdr6yVKL+GsRbcDm
+         D18bEHEo1rMvPlmDW7rbYUbrLt5VPLZx9ZeaUTKECQVDRh5cp0mqyxPWVhsylszWrafZ
+         A23j4vnkhwcwyBlVreuaWh5eUTDMzKxMKK0vWv6X3oL8zDm3PJoMUViIY/U2WH1+YPLG
+         QqFL8ZadM0bnJQhFA9fucDzSZXk3h0k6mN5zX4p74oliju/d6BJMwHjfCYRcpxOcOQJ9
+         bYfA==
+X-Gm-Message-State: AOAM530UIK9XXExKRGpN6rMukDlf74Q8C/cxIMiP/b4PzJVKvN8mAVtr
+        xWJlph4CQ0FRplqwo6eIJldHJe1N0/VlwQJHZdg=
+X-Google-Smtp-Source: ABdhPJxppYsWFTgmx4TSOuqHe5105380Jz8OCQyRpJxioOe85R2bkm4kBc3Ir4s/36lupzUTfHVs8wA1Ac+nLmg8rAI=
+X-Received: by 2002:a25:3795:0:b0:648:fa25:5268 with SMTP id
+ e143-20020a253795000000b00648fa255268mr18583257yba.153.1651670643716; Wed, 04
+ May 2022 06:24:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com> <20220429135108.2781579-3-schnelle@linux.ibm.com>
+In-Reply-To: <20220429135108.2781579-3-schnelle@linux.ibm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 4 May 2022 15:23:52 +0200
+Message-ID: <CAJZ5v0jbX6kWWn9a9SBh0qhmreC-KDOHCB2TbM4A5_HSJu++UQ@mail.gmail.com>
+Subject: Re: [RFC v2 02/39] ACPI: add dependency on HAS_IOPORT
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 4 May 2022, David Laight wrote:
+On Fri, Apr 29, 2022 at 3:51 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+>
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. As ACPI always uses I/O port access we simply depend
+> on HAS_IOPORT.
+>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/acpi/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index 1e34f846508f..8ad0d168004c 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -5,6 +5,7 @@
+>
+>  config ARCH_SUPPORTS_ACPI
+>         bool
+> +       depends on HAS_IOPORT
 
-> >  Well, one can implement a pluggable PCI/e expansion card with a PCI-ISA
-> > bridge on it and a backplane to plug ISA cards into.  Without support for
-> > issuing I/O cycles to PCI from the host however you won't be able to make
-> > use of the ISA backplane except maybe for some ancient ISA memory cards.
-> > So logically I think CONFIG_ISA should depend on CONFIG_HAS_IOPORT and
-> > CONFIG_HAS_IOPORT ought to be selected by platform configurations.
-> 
-> But generating a PCI(e) I/O cycle doesn't need the cpu to be able to
-> generate an I/O cycle on its local bus interface.
-> All that required is for the PCI(e) host bridge to determine that it
-> needs to relevant kind of cycle on the target bus.
-> This can easily be based on the physical address.
+This and the analogous PNP change are both fine with me.
 
- Sure, you can encode address spaces however you like (there are no 
-special machine instructions either for PCI/e configuration space access 
-that I would know of in any CPU architecture), but the host bridge must be 
-willing to issue those PCI/e I/O cycles in the first place (see my other 
-message on POWER9 in this thread).
+Thanks!
 
-> What you should probably be doing is (outside of 'platform' code)
-> change the drivers to use ioread8() instead of inb().
-> Then adding in the required calls to get the correct 'token' to
-> pass to ioread8() to perform an I/O cycle on the correct target bus.
-
- Yes, probably.
-
-> It is really the attachment of the driver that can't succeed, not the
-> compilation.
-
- Except it makes no sense to offer those drivers for platforms known not 
-to provide for port I/O on PCI/e.
-
-  Maciej
+>
+>  menuconfig ACPI
+>         bool "ACPI (Advanced Configuration and Power Interface) Support"
+> --
+> 2.32.0
+>
