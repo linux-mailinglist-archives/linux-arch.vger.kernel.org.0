@@ -2,129 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CA7519CFA
-	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 12:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97FCF519D8C
+	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 13:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348179AbiEDKhW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 06:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S1348471AbiEDLG4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 07:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348156AbiEDKhU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 06:37:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E2728E03;
-        Wed,  4 May 2022 03:33:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1348461AbiEDLG4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 07:06:56 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A72E17E24;
+        Wed,  4 May 2022 04:03:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60A41B82553;
-        Wed,  4 May 2022 10:33:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EBB0C385AF;
-        Wed,  4 May 2022 10:33:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651660421;
-        bh=E8CEzIAsWz9Rmvw13XFPv/adMpOwsz2QRxp2bzHQxCE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=PQWOF9oSgEdn5spCau1vYDvRsS1HHfUeOA4Od05fC00yS0tyyOD+fOLl9QnmqHGQI
-         wHYQy7kje5Gg/nEp5ErHjoGmD/b4jW53yav9c/mfgu8szu/WN5+shhYk03/ZrkMCge
-         hqJscs8JhQ+E4P1lB+ZZjurxCFvVODHApQETnqTiVDaNHN/rPdujgfo2jZ6GUPlzQc
-         Nbar0v79O8QIIN5ZVjJCRaLxKzs20Aw4M4Pidg5HoDxB7CJzo0m3JPhkeMd+3WSEfq
-         m7+4Y5Z/fagiwY7a74bR52JdQzPQyGGYz6GaRyoSKxC7w0BowID1Z6upBKXRXBfuZP
-         9jSA629Vn2Qyw==
-Received: by mail-wm1-f51.google.com with SMTP id q20so604302wmq.1;
-        Wed, 04 May 2022 03:33:40 -0700 (PDT)
-X-Gm-Message-State: AOAM531WyMQtVWtA2d2Op2gBYAPD2Rt0kOvFMA9+1+iuKW9L5tTCrNhO
-        Dq7rYurHeFnXDCjiZ3s3cn6lvtdP4eEcK2bOdKg=
-X-Google-Smtp-Source: ABdhPJwOmoNuUoi/jWtPqmt55hkpFmZRUX1rQCTG/MBa1moNMRI9KXGnBtVTPDUY1plM3AGJvlzbvLih0M2ebaRjwPY=
-X-Received: by 2002:a7b:cc93:0:b0:394:2622:fcd9 with SMTP id
- p19-20020a7bcc93000000b003942622fcd9mr7398696wma.20.1651660419246; Wed, 04
- May 2022 03:33:39 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KtYpR36kMz4x7V;
+        Wed,  4 May 2022 21:03:10 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1651662194;
+        bh=LCpTjFnDEwsYkNeVhJ/7ZfUx41S6pzSAGCwTzE+zXeE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=oSdsWchJ7c6LaWBbTkrN4HY/gAMdpQJZcaKFI7EDhV0JeJSI6Ilrh5JXSrxrO+uBi
+         fz7astncBphLXFWCOHhi/UuBJgXcyFzZqYPiGHlIi6X45BigzITOjmK1rMnK6xaTol
+         wK+Fl001hFDLFxA3kebNvk3NpO9blGLOH5shsbSldk7k/YPS8CY+2HU/0urlMYnQPi
+         3f3A20Ra29iiAIuItwlZHJn/lAKzlgp6ft6XtuAwcXeHVWlSH3tlipFUOHXN4lOi74
+         kINmxaDpdRmWpd8ejwQmQIqRTqnHtMk+0OO2DYANcnQC+pIYh1SpDofrsXa2SehLI+
+         bhi5wSivAPsvA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Ilpo =?utf-8?Q?J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-serial <linux-serial@vger.kernel.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-api@vger.kernel.org,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] termbits: Convert octal defines to hex
+In-Reply-To: <2c8c96f-a12f-aadc-18ac-34c1d371929c@linux.intel.com>
+References: <2c8c96f-a12f-aadc-18ac-34c1d371929c@linux.intel.com>
+Date:   Wed, 04 May 2022 21:03:09 +1000
+Message-ID: <87bkwdv9ua.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20220429135108.2781579-44-schnelle@linux.ibm.com> <20220503233802.GA420374@bhelgaas>
-In-Reply-To: <20220503233802.GA420374@bhelgaas>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 4 May 2022 12:33:23 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com>
-Message-ID: <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com>
-Subject: Re: [RFC v2 25/39] pcmcia: add HAS_IOPORT dependencies
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, May 4, 2022 at 1:38 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> On Fri, Apr 29, 2022 at 03:50:41PM +0200, Niklas Schnelle wrote:
-> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > not being declared. PCMCIA devices are either LEGACY_PCI devices
-> > which implies HAS_IOPORT or require HAS_IOPORT.
-> >
-> > Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
-> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> > ---
-> >  drivers/pcmcia/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
-> > index 2ce261cfff8e..32b5cd324c58 100644
-> > --- a/drivers/pcmcia/Kconfig
-> > +++ b/drivers/pcmcia/Kconfig
-> > @@ -5,7 +5,7 @@
-> >
-> >  menuconfig PCCARD
-> >       tristate "PCCard (PCMCIA/CardBus) support"
-> > -     depends on !UML
-> > +     depends on HAS_IOPORT
+Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com> writes:
+> Many archs have termbits.h as octal numbers. It makes hard for humans
+> to parse the magnitude of large numbers correctly and to compare with
+> hex ones of the same define.
 >
-> I don't know much about PC Card.  Is there a requirement that these
-> devices must use I/O port space?  If so, can you include a spec
-> reference in the commit log?
-
-I think for PCMCIA devices, the dependency makes sense because
-all device drivers for PCMCIA devices need I/O ports.
-
-For cardbus, we can go either way, I don't see any reference to
-I/O ports in yenta_socket.c or the pccard core, so it would build
-fine with or without I/O ports.
-
-> I do see the PC Card spec, r8.1, sec 5.5.4.2.2 says:
+> Convert octal values to hex.
 >
->   All CardBus PC Card adapters must support either memory-mapped I/O
->   or both memory-mapped I/O and I/O space. The selection will depend
->   largely on the system architecture the adapter is intended to be
->   used in. The requirement to also support memory-mapped I/O, if I/O
->   space is supported, is driven by the potential emergence of
->   memory-mapped I/O only cards. Supporting both modes may also
->   position the adapter to be sold into multiple system architectures.
+> First step is an automated conversion with:
 >
-> which sounds like I/O space is optional.
+> for i in $(git ls-files | grep 'termbits\.h'); do
+> 	awk --non-decimal-data '/^#define\s+[A-Z][A-Z0-9]*\s+0[0-9]/ {
+> 		l=3Dint(((length($3) - 1) * 3 + 3) / 4);
+> 		repl =3D sprintf("0x%0" l "x", $3);
+> 		print gensub(/[^[:blank:]]+/, repl, 3);
+> 		next} {print}' $i > $i~;
+> 	mv $i~ $i;
+> done
+>
+> On top of that, some manual processing on alignment and number of zeros.
+> In addition, small tweaks to formatting of a few comments on the same=20
+> lines.
+>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>
+> I prefer this to go in though Greg's tty tree.
+>
+>  arch/alpha/include/uapi/asm/termbits.h   | 202 ++++++++++-----------
+>  arch/mips/include/uapi/asm/termbits.h    | 222 +++++++++++------------
+>  arch/parisc/include/uapi/asm/termbits.h  | 220 +++++++++++-----------
+>  arch/powerpc/include/uapi/asm/termbits.h | 202 ++++++++++-----------
 
-An earlier version of the patch series had a separate
-CONFIG_LEGACY_PCI that required CONFIG_HAS_IOPORT
-here, which I think made this clearer:
+I ran some horrible awk/sed/python mess over the before and after and
+they seem to be numerically identical, so LGTM.
 
-Almost all architectures that support CONFIG_PCI also provide
-HAS_IOPORT today (at least at compile time, if not at runtime),
-with s390 as a notable exception. Any machines that have legacy
-PCI device support will also have I/O ports because a lot of
-legacy PCI cards used it, and any machine with a pc-card slot
-should also support legacy PCI devices.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-If we get new architectures without I/O space in the future, they
-would certainly not care about supporting old cardbus devices.
-
-        Arnd
+cheers
