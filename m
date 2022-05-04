@@ -2,89 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF75519FB3
-	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 14:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE6A519FD6
+	for <lists+linux-arch@lfdr.de>; Wed,  4 May 2022 14:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349821AbiEDMmU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 08:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S1349941AbiEDMtn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 4 May 2022 08:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349822AbiEDMmS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 08:42:18 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4376233A3B;
-        Wed,  4 May 2022 05:38:36 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 6A2FD92009C; Wed,  4 May 2022 14:38:35 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 5C9E092009B;
-        Wed,  4 May 2022 13:38:35 +0100 (BST)
-Date:   Wed, 4 May 2022 13:38:35 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Arnd Bergmann <arnd@kernel.org>
-cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        with ESMTP id S1344100AbiEDMtm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 08:49:42 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8313635DE6
+        for <linux-arch@vger.kernel.org>; Wed,  4 May 2022 05:46:02 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-321-6Zv0gshzMsK-8vWOOuH8bg-1; Wed, 04 May 2022 13:45:59 +0100
+X-MC-Unique: 6Zv0gshzMsK-8vWOOuH8bg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Wed, 4 May 2022 13:45:58 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Wed, 4 May 2022 13:45:58 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Maciej W. Rozycki'" <macro@orcam.me.uk>
+CC:     'Linus Walleij' <linus.walleij@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
         Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+        "Arnd Bergmann" <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Subject: Re: [RFC v2 25/39] pcmcia: add HAS_IOPORT dependencies
-In-Reply-To: <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2205041311280.9548@angie.orcam.me.uk>
-References: <20220429135108.2781579-44-schnelle@linux.ibm.com> <20220503233802.GA420374@bhelgaas> <CAK8P3a02vidd7u5Kp6UJj=9tj_hFGL24SmzuNpDGu1GOa1w9+w@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: RE: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
+Thread-Topic: [RFC v2 10/39] gpio: add HAS_IOPORT dependencies
+Thread-Index: AQHYXaY4HSGVKKYe1UmuRZfv/6NY/a0NHk4QgAFu34CAABvB8A==
+Date:   Wed, 4 May 2022 12:45:58 +0000
+Message-ID: <7bb4d0286f44462581d96320cfe105d6@AcuMS.aculab.com>
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-19-schnelle@linux.ibm.com> <Ymv3DnS1vPMY8QIg@fedora>
+ <f006229ae056d4cdcf57fc5722a695ad4c257182.camel@linux.ibm.com>
+ <YmwGLrh4U+pVJo0m@fedora>
+ <CACRpkdaha37y-ZNSqYSbf=TvsJNcvbH1Y=N0JkVCewB-Lvf81Q@mail.gmail.com>
+ <c3a3cdd99d4645e2bbbe082808cbb2a5@AcuMS.aculab.com>
+ <alpine.DEB.2.21.2205041226160.64942@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2205041226160.64942@angie.orcam.me.uk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 4 May 2022, Arnd Bergmann wrote:
-
-> Almost all architectures that support CONFIG_PCI also provide
-> HAS_IOPORT today (at least at compile time, if not at runtime),
-> with s390 as a notable exception. Any machines that have legacy
-> PCI device support will also have I/O ports because a lot of
-> legacy PCI cards used it, and any machine with a pc-card slot
-> should also support legacy PCI devices.
+From: Maciej W. Rozycki
+> Sent: 04 May 2022 12:47
 > 
-> If we get new architectures without I/O space in the future, they
-> would certainly not care about supporting old cardbus devices.
+> On Tue, 3 May 2022, David Laight wrote:
+> 
+> > > > There is such a thing as ISA DMA, but you'll still need to initialize
+> > > > the device via the IO Port bus first, so perhaps setting HAS_IOPORT for
+> > > > "config ISA" is the right thing to do: all ISA devices are expected to
+> > > > communicate in some way via ioport.
+> > >
+> > > Adding that dependency seems like the right solution to me.
+> >
+> > I think it all depends on what HAS_IOPORT is meant to mean and
+> > how portable kernel binaries need to be.
+> >
+> > x86 is (probably) the only architecture that actually has 'in'
+> > and 'out' instructions - but that doesn't mean that some other
+> > cpu (and I mean cpu+pcb not architecture) have the ability to
+> > generate 'IO' bus cycles on a specific physical bus.
+> 
+>  I am fairly sure IA-64 has some form of IN/OUT machine instructions too.
+> 
+> > While the obvious case is a physical address window that generates
+> > PCI(e) IO cycles from normal memory cycles it isn't the only one.
+> >
+> > I've used sparc cpu systems that have pcmcia card slots.
+> > These are pretty much ISA and the drivers might expect to
+> > access port 0x300 (etc) - certainly that would be right on x86.
+> >
+> > In this case is isn't so much that the ISA_BUS depends on support
+> > for in/out but that presence of the ISA bus provides the required
+> > in/out support.
+> 
+>  Well, one can implement a pluggable PCI/e expansion card with a PCI-ISA
+> bridge on it and a backplane to plug ISA cards into.  Without support for
+> issuing I/O cycles to PCI from the host however you won't be able to make
+> use of the ISA backplane except maybe for some ancient ISA memory cards.
+> So logically I think CONFIG_ISA should depend on CONFIG_HAS_IOPORT and
+> CONFIG_HAS_IOPORT ought to be selected by platform configurations.
 
- POWER9 is another architecture with no port I/O space[1]:
+But generating a PCI(e) I/O cycle doesn't need the cpu to be able to
+generate an I/O cycle on its local bus interface.
+All that required is for the PCI(e) host bridge to determine that it
+needs to relevant kind of cycle on the target bus.
+This can easily be based on the physical address.
 
-Table 3-2. PCIe TLP command summary
------------+-----------------------------+-------------------------------
-  Class    |           Type Name         |           Notes
-===========+=============================+===============================
-Completion | Completion without Data     | For PCI CFG Writes (nonposted)
-           |                             | or for error responses.
-Completion | Completion with Data        | CI load responses.
-Nonposted  | Configuration Read Request  | Outbound only.
-Nonposted  | Configuration Write Request | Outbound only.
-Posted     | Message Request             | Inbound only.
-Nonposted  | Memory Read Request         |
-Posted     | Memory Write Request        |
-===========+=============================+===============================
- 1. All other valid PCIe command types are ignored and dropped.
- 2. Invalid PCIe request command types will result in a completion
-    response of Unsupported Request.
-------------------------------------+------------------------------------
+Many years ago I used a system with the strongarm SA1100/1101 pair.
+(Not running Linux, but I think that it could have - slowly.)
+Two (adjacent?) areas of the physical address map generated memory
+and I/O cycles to a pair of pcmcia slots.
+What you end up with is definitely ISA, but ARM definitely doesn't
+have in/out instructions.
 
-that we do support -- I have such a system.  And I guess POWER10 is the 
-same, as will be all future architecture updates.
+Now, while this is rather hypothetical, a 'generic' arm kernel running
+on that hardware would be able to support drivers that expect an ISA bus.
+But on different hardware the same generic kernel would have nowhere
+to 'attach' the same drivers - but they could still be part of the kernel
+(maybe as modules).
 
-References:
+What you should probably be doing is (outside of 'platform' code)
+change the drivers to use ioread8() instead of inb().
+Then adding in the required calls to get the correct 'token' to
+pass to ioread8() to perform an I/O cycle on the correct target bus.
 
-[1] "Power Systems Host Bridge 4 (PHB4) Specification", Version 1.0, 
-    International Business Machines Corporation, 27 July 2018, Section 3.1 
-    "PHB4 Command Details", p.29
+It is really the attachment of the driver that can't succeed, not the
+compilation.
 
-  Maciej
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
