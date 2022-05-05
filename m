@@ -2,131 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FE251BA2D
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 10:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B0151BAE0
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 10:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349118AbiEEIZz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 May 2022 04:25:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S231734AbiEEItY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 May 2022 04:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349126AbiEEIZt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 May 2022 04:25:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAD31D328;
-        Thu,  5 May 2022 01:20:40 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2457om3f031389;
-        Thu, 5 May 2022 08:20:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=7QCZWIKCv0xodO97AD5DPPlIdbYnmHCdNmsjpJ3TKwQ=;
- b=kl0RZqPP01iadYFGo0D/0/XTw2Z4SQsxM1mygceQjuUW+n6fKqTkp8Caa1Hefdcxtla+
- SsMc5SA8g953kMgxQXaU7ACcmwYbVcZbWIbxOtKHsL3L/DJIzBjka3aThiW8P39WfC+T
- ttxLxNGZJjPdrflBmMZQwIpMlw/+6ZQzqDrnt7ncnFCnTab4OK4E0lm5OxyXnnzMrYs7
- peqXY38WnaVQskr+zNSuOs8DP8USfjGgXWnMbnU8TUeATY3idf/mmxuGj63/VRGyB5wd
- bcB/u+1kmErpqwr4RyR0OTWc8G9tXaLzJf/eF0CS48pqksJSRYfMzIewNrHyHkKYRoJ2 qg== 
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fvaj4rh0k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 08:20:34 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2458I96q007125;
-        Thu, 5 May 2022 08:20:32 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3fttcj2teb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 05 May 2022 08:20:31 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2458KO1S35324240
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 5 May 2022 08:20:25 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A564011C04C;
-        Thu,  5 May 2022 08:20:29 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2AF5711C04A;
-        Thu,  5 May 2022 08:20:29 +0000 (GMT)
-Received: from sig-9-145-85-251.uk.ibm.com (unknown [9.145.85.251])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  5 May 2022 08:20:29 +0000 (GMT)
-Message-ID: <849f53a613b66991c1661799583714fa1883094c.camel@linux.ibm.com>
-Subject: Re: [RFC v2 02/39] ACPI: add dependency on HAS_IOPORT
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S241214AbiEEIs5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 May 2022 04:48:57 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30906B93;
+        Thu,  5 May 2022 01:45:15 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 4E39792009C; Thu,  5 May 2022 10:45:14 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 4A38F92009B;
+        Thu,  5 May 2022 09:45:14 +0100 (BST)
+Date:   Thu, 5 May 2022 09:45:14 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     Arnd Bergmann <arnd@kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-pci <linux-pci@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>
-Date:   Thu, 05 May 2022 10:20:28 +0200
-In-Reply-To: <CAK8P3a3AddBGnBV=6wK+LZDjZD05k=9tBBWd7LWm6smXLcfREQ@mail.gmail.com>
-References: <20220429135108.2781579-3-schnelle@linux.ibm.com>
-         <20220504175352.GA456913@bhelgaas>
-         <CAK8P3a3AddBGnBV=6wK+LZDjZD05k=9tBBWd7LWm6smXLcfREQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: aX9i4giMAEznhRBbGgTq9Z33L_sg2DcL
-X-Proofpoint-GUID: aX9i4giMAEznhRBbGgTq9Z33L_sg2DcL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-05_02,2022-05-04_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 clxscore=1015 malwarescore=0
- mlxscore=0 priorityscore=1501 mlxlogscore=863 adultscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2205050055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Subject: Re: [RFC v2 25/39] pcmcia: add HAS_IOPORT dependencies
+In-Reply-To: <20220504172201.GA454911@bhelgaas>
+Message-ID: <alpine.DEB.2.21.2205050917160.52331@angie.orcam.me.uk>
+References: <20220504172201.GA454911@bhelgaas>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 2022-05-04 at 21:58 +0200, Arnd Bergmann wrote:
-> On Wed, May 4, 2022 at 7:53 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Fri, Apr 29, 2022 at 03:50:00PM +0200, Niklas Schnelle wrote:
-> > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> > > not being declared. As ACPI always uses I/O port access we simply depend
-> > > on HAS_IOPORT.
-> > 
-> > CONFIG_ACPI depends on ARCH_SUPPORTS_ACPI, which is only set by arm64,
-> > ia64, and x86, all of which support I/O port access.  So does this
-> > actually solve a problem?  I wouldn't think you'd be able to build
-> > ACPI on s390 even without this patch.
-> > "ACPI always uses I/O port access" is a pretty broad brush, and it
-> > would be useful to know specifically what the dependencies are.
-> > 
-> > Many ACPI hardware accesses use acpi_hw_read()/acpi_hw_write(), which
-> > use either MMIO or I/O port accesses depending on what the firmware
-> > told us.
-> 
-> I think this came from my original prototype of the series where I tested it
-> out on arm64 with HAS_IOPORT disabled. I would like to hide the definition
-> of inb()/outb() from include/asm-generic/io.h whenever CONFIG_HAS_IOPORT
-> is not set, and I was prototyping this on arm64.
-> 
-> There are uses of inb()/outb() in drivers/acpi/ec.c and drivers/acpi/osl.c,
-> which in turn are not optional in ACPI, so it seems that those are
-> required.
-> 
-> If we want to allow building arm64 without HAS_IOPORT for some reason,
-> that means either force-disabling ACPI as well, or changin ACPI to not
-> rely on port I/O. I think it's fine to leave that as a problem for whoever
-> wants to make HAS_IOPORT optional in the future, and drop the
-> dependency here.
-> 
->        Arnd
+On Wed, 4 May 2022, Bjorn Helgaas wrote:
 
-I'll improve the commit message to make the dependency on HAS_IOPORT
-more clear. I also agree with Arnd that since all architectures where
-ACPI is useful have I/O ports making it work without I/O port access
-compiled in is for another day.
+> >  Well, yes, except I would expect POWER9_CPU (and any higher versions we 
+> > eventually get) to clear HAS_IOPORT.  Generic configurations (GENERIC_CPU) 
+> > would set HAS_IOPORT of course, as would any lower architecture variants 
+> > that do or may support port I/O (it's not clear to me if there are any 
+> > that do not).  Ideally a generic configuration would not issue accesses to 
+> > random MMIO locations for port I/O accesses via `inb'/`outb', etc. for 
+> > systems that do not support port I/O (which it now does, or at least used 
+> > to until recently).
+> 
+> It would seem weird to me that a module would build and run on a
+> generic kernel running on POWER9 (with some safe way of handling
+> inb/outb that don't actually work), but not on a kernel built
+> specifically for POWER9_CPU.
 
+ Why?  If you say configure your Alpha kernel for ALPHA_JENSEN, a pure 
+EISA system, then you won't get PCI support nor any PCI drivers offered 
+even though a generic Alpha kernel will get them all and still run on a 
+Jensen system.  I find that no different from our case here.
+
+ And if we do ever get TURBOchannel Alpha support, then a generic kernel 
+configuration will offer EISA, PCI and TURBOchannel drivers, while you 
+won't be offered TURBOchannel drivers for a PCI system and vice versa.  
+It would make no sense to me.
+
+ Please mind that the main objective for system-specific configurations is 
+optimisation, including both size and speed, and a part of the solution is 
+discarding stuff that's irrelevant for the respective system.  So in our 
+case we do want any port I/O code not to be there at all in compiled code 
+and consequently any driver that absolutely requires port I/O code to work 
+will have to become a useless stub in its compiled form.  What would be 
+the point then of having it there in the first place except to spread 
+confusion?
+
+  Maciej
