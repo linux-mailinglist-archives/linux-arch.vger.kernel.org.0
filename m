@@ -2,137 +2,246 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50BA51C652
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 19:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8C051C6B3
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 20:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382769AbiEERoE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 5 May 2022 13:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
+        id S243825AbiEESJI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 May 2022 14:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382758AbiEERnw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 May 2022 13:43:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDEB5BD2C;
-        Thu,  5 May 2022 10:40:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70DA7B82E13;
-        Thu,  5 May 2022 17:40:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EA1EC385C1;
-        Thu,  5 May 2022 17:40:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651772401;
-        bh=2IoE4BfEuAg77WmuhMuImyNDvTFHhyYDFxiBCowXMW0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jjkpXAHdVdaGYPRA/+3MWK8YySttWTFzcYC1keAu8erj/0Qv22sl3zrDQYguGunS5
-         EYa5oM+lHkIE7YTdldWLi0OWY/DsNHWma+k3zqfE22SXyjFuALh5riYHbPe1kbAc44
-         9KAWXnmbdCqw/9NbiY+BaqDNCtIn7quRedBG1XfiA99nj6AB8gym8fHYhho7MeeQF1
-         l9XXlvvZnqwjxE3vlzhp6PnrE7j4IrFhVl0Qex8zon67fDEF5nEZv2gZ3ktfM3q+fs
-         7pbwFrQBZZkl4jB1bUVpER7HBPy1pVzyBaA4EK56UQiDwNHTAidoXgBZp7AUZ4Ox2c
-         dWIFDXtyn6eAA==
-Received: by mail-wm1-f47.google.com with SMTP id l62-20020a1c2541000000b0038e4570af2fso3057496wml.5;
-        Thu, 05 May 2022 10:40:00 -0700 (PDT)
-X-Gm-Message-State: AOAM530yTQ0JfV7UcZJ2sGdAUtPmpZUHjzeVwfywFlcrhtcN+zBTpQ3E
-        I54ikdPAfAKxu/CEiGl5fe/z60RnqY9ehyeeKhM=
-X-Google-Smtp-Source: ABdhPJxtMhUha7a+dwpeZyyg5w+ON9JC8vKB6RB8veyDWjdr1D7VRDLkqvJBk615pYcXmnWu5kgj+KPCSrbSxhVU2uo=
-X-Received: by 2002:a7b:cc93:0:b0:394:2622:fcd9 with SMTP id
- p19-20020a7bcc93000000b003942622fcd9mr6321312wma.20.1651772399229; Thu, 05
- May 2022 10:39:59 -0700 (PDT)
+        with ESMTP id S1382980AbiEESJC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 May 2022 14:09:02 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B4626DE
+        for <linux-arch@vger.kernel.org>; Thu,  5 May 2022 11:05:22 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id y2so8972400ybi.7
+        for <linux-arch@vger.kernel.org>; Thu, 05 May 2022 11:05:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=lfs9ILt8sxsLN7d0CVj7IGkIjZk0ddULlJ98hbLjdl0=;
+        b=Ndgpe6IFiFofWceJK8I/DTEcQWT+/sHZsEWM1fYblnv9x81eSyj1R7FuXA8ILnq7mL
+         MirG8+CssXftrYGqNJ4vf1ERQtOm6a4Nq9IPOlrkw8GYT4MTbR51+m8zuOlLdoGmwuqT
+         LCH7motTy7WzByAkTNq0edQigKWkmNqayX293USnIaJr7BJOSxH8GmifZMRZNAE+kkk2
+         zWArlAg0ixMHNJJTifGAlU5k07E2zrU6JttPU9X300dt1NgXtfBycBtCfouCZIPcZCWE
+         LiBSab1rlgeKcaxikFZxkwfIaXNH19dfTS2sMDmjcRpqtla1OP0W8r34tKP8eXHD/c2L
+         VqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=lfs9ILt8sxsLN7d0CVj7IGkIjZk0ddULlJ98hbLjdl0=;
+        b=0gA+WostTUpgqDySdV3XHs9ctZ+k40PD3sfzCmD29+ab8it/RDGbW35sVAsr/UcoHH
+         mOwohrsFBvdCO2GGo3hdm73RkPM+rvMmIY+AyjGxL+XaXy6cBYH3KcFAInV1rROAsQFs
+         0y67gta4QNXIAMlMAsuT+wWpJhj2zKazRWodA0qRjkSZmeUpr8f2ZWcVGmtIJTAHpI7d
+         5QPSJR6nv0WstvKpnFcWFCWeEldP+K1IolrNhOxQSL5dCY1F6ZPek9CAuzVmAlUAga5Y
+         1+8PA9uLLn3Fsbm5u704ytN7rTplY6N03qg/xwSBxDAGR7UuGa/jBn6NYhe4eJSyXiH6
+         HW2w==
+X-Gm-Message-State: AOAM533mlkhJmVAoyJ1nyOUatBHmImHVBYgLXVajJibXPQ3bBJSwrSkq
+        CLygdxwihZ4DQvC2XVRNJTA5Q9g576Go9l7wjhHgCw==
+X-Google-Smtp-Source: ABdhPJxOGddy4d0Gcmj8AKq4eH0h4RCWeNm0um7E0xiCZcOB55dahtuyVvi1XSbZU3Ov8nWjJGuOmIU9Rx3UziGE6Uk=
+X-Received: by 2002:a25:aa62:0:b0:648:590f:5a53 with SMTP id
+ s89-20020a25aa62000000b00648590f5a53mr23847856ybi.5.1651773921071; Thu, 05
+ May 2022 11:05:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
- <20220505161028.GA492600@bhelgaas>
-In-Reply-To: <20220505161028.GA492600@bhelgaas>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Thu, 5 May 2022 19:39:42 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
-Message-ID: <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
- as necessary
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
+ <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
+ <87y1zjlhmj.ffs@tglx>
+In-Reply-To: <87y1zjlhmj.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 5 May 2022 20:04:44 +0200
+Message-ID: <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
+Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
+ uninstrumented code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        "open list:SUPERH" <linux-sh@vger.kernel.org>,
-        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
-        <sparclinux@vger.kernel.org>
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 5, 2022 at 6:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> On Wed, May 04, 2022 at 11:31:28PM +0200, Arnd Bergmann wrote:
+On Tue, May 3, 2022 at 12:00 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Alexander,
+
+First of all, thanks a lot for the comments, those are greatly appreciated!
+I tried to revert this patch and the previous one ("kmsan:
+instrumentation.h: add instrumentation_begin_with_regs()") and
+reimplement unpoisoning pt_regs without breaking into
+instrumentation_begin(), see below.
+
 > >
-> > The main goal is to avoid c), which is what happens on s390, but
-> > can also happen elsewhere. Catching b) would be nice as well,
-> > but is much harder to do from generic code as you'd need an
-> > architecture specific inline asm statement to insert a ex_table
-> > fixup, or a runtime conditional on each access.
+> > Regarding the regs, you are right. It should be enough to unpoison the
+> > regs at idtentry prologue instead.
+> > I tried that initially, but IIRC it required patching each of the
+> > DEFINE_IDTENTRY_XXX macros, which already use instrumentation_begin().
 >
-> Or s390 could implement its own inb().
+> Exactly 4 instances :)
 >
-> I'm hearing that generic powerpc kernels have to run both on machines
-> that have I/O port space and those that don't.  That makes me think
-> s390 could do something similar.
 
-No, this is actually the current situation, and it makes absolutely no
-sense. s390 has no way of implementing inb()/outb() because there
-are no instructions for it and it cannot tunnel them through a virtual
-address mapping like on most of the other architectures. (it has special
-instructions for accessing memory space, which is not the same as
-a pointer dereference here).
+Not really, I had to add a call to `kmsan_unpoison_memory(regs,
+sizeof(*regs));` to the following places in
+arch/x86/include/asm/idtentry.h:
+- DEFINE_IDTENTRY()
+- DEFINE_IDTENTRY_ERRORCODE()
+- DEFINE_IDTENTRY_RAW()
+- DEFINE_IDTENTRY_RAW_ERRORCODE()
+- DEFINE_IDTENTRY_IRQ()
+- DEFINE_IDTENTRY_SYSVEC()
+- DEFINE_IDTENTRY_SYSVEC_SIMPLE()
+- DEFINE_IDTENTRY_DF()
 
-The existing implementation gets flagged as a NULL pointer dereference
-by a compiler warning because it effectively is.
+, but even that wasn't enough. For some reason I also had to unpoison
+pt_regs directly in
+DEFINE_IDTENTRY_SYSVEC(sysvec_apic_timer_interrupt) and
+DEFINE_IDTENTRY_IRQ(common_interrupt).
+In the latter case, this could have been caused by
+asm_common_interrupt being entered from irq_entries_start(), but I am
+not sure what is so special about sysvec_apic_timer_interrupt().
 
-powerpc kernels generally map the I/O space into a section of the
-physical address space, where it gets mapped into a fixed virtual
-address and accessed through pointer dereference. This works on
-any powerpc CPU as long as it is implemented in the PCI host
-bridge in the usual way. The only difference between powerpc and
-arm here is that there are fewer implementations, so one can
-make assumptions about which PCI host bridge is used based on
-a CPU core.
+Ideally, it would be great to find that single point where pt_regs are
+set up before being passed to all IDT entries.
+I used to do that by inserting calls to kmsan_unpoison_memory right
+into arch/x86/entry/entry_64.S
+(https://github.com/google/kmsan/commit/3b0583f45f74f3a09f4c7e0e0588169cef9=
+18026),
+but that required storing/restoring all GP registers. Maybe there's a
+better way?
 
-     Arnd
+
+>
+> then
+>
+>      instrumentation_begin();
+>      foo(fargs...);
+>      bar(bargs...);
+>      instrumentation_end();
+>
+> is a source of potential false positives because the state is not
+> guaranteed to be correct, neither for foo() nor for bar(), even if you
+> wipe the state in instrumentation_begin(), right?
+
+Yes, this is right.
+
+> This approximation approach smells fishy and it's inevitably going to be
+> a constant source of 'add yet another kmsan annotation/fixup' patches,
+> which I'm not interested in at all.
+>
+> As this needs compiler support anyway, then why not doing the obvious:
+>
+> #define noinstr                                 \
+>         .... __kmsan_conditional
+>
+> #define instrumentation_begin()                 \
+>         ..... __kmsan_cond_begin
+>
+> #define instrumentation_end()                   \
+>         __kmsan_cond_end .......
+>
+> and let the compiler stick whatever is required into that code section
+> between instrumentation_begin() and instrumentation_end()?
+
+We define noinstr as
+__attribute__((disable_sanitizer_instrumentation))
+(https://llvm.org/docs/LangRef.html#:~:text=3Ddisable_sanitizer_instrumenta=
+tion),
+which means no instrumentation will be applied to the annotated
+function.
+Changing that behavior by adding subregions that can be instrumented
+sounds questionable.
+C also doesn't have good syntactic means to define these subregions -
+perhaps some __xxx_begin()/__xxx_end() intrinsics would work, but they
+would require both compile-time and run-time validation.
+
+Fortunately, I don't think we need to insert extra instrumentation
+into instrumentation_begin()/instrumentation_end() regions.
+
+What I have in mind is adding a bool flag to kmsan_context_state, that
+the instrumentation sets to true before the function call.
+When entering an instrumented function, KMSAN would check that flag
+and set it to false, so that the context state can be only used once.
+If a function is called from another instrumented function, the
+context state is properly set up, and there is nothing to worry about.
+If it is called from non-instrumented code (either noinstr or the
+skipped files that have KMSAN_SANITIZE:=3Dn), KMSAN would detect that
+and wipe the context state before use.
+
+By the way, I've noticed that at least for now (with pt_regs
+unpoisoning performed in IDT entries) the problem with false positives
+in noinstr code is entirely gone, so maybe we don't even have to
+bother.
+
+> Yes, it's more work on the tooling side, but the tooling side is mostly
+> a one time effort while chasing the false positives is a long term
+> nightmare.
+
+Well said.
+
+> Thanks,
+>
+>         tglx
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.
