@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FF651B6CC
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28ED951B6CE
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242246AbiEED72 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 23:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S242391AbiEED7i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 23:59:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242231AbiEED71 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A9D25EA6;
-        Wed,  4 May 2022 20:55:48 -0700 (PDT)
+        with ESMTP id S232757AbiEED72 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1DB393D3;
+        Wed,  4 May 2022 20:55:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A09AB82B79;
-        Thu,  5 May 2022 03:55:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6ACC385B0;
-        Thu,  5 May 2022 03:55:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A91161A8E;
+        Thu,  5 May 2022 03:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCF2C385AF;
+        Thu,  5 May 2022 03:55:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651722945;
-        bh=ycOArejrZ4wjdQN/FwZtyJLMUvQeie7e/tBekexR1Pg=;
+        s=k20201202; t=1651722949;
+        bh=zEP2zr6mxUqpeaQg8TqMs57O91k1mSJfPjusddLpquU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n9eEqytqxgDf0VPmrt6zlMu3c3irjitX/I2CI49aa+hS/g1MICM9/XdXsivNJGBGy
-         eOWEYo89jXAp2I2QUDSedMGcTmjIQFKuwPiAizJBpTZ1L94tLPFYveMynIfrGyZScf
-         e4X2rd/1kz9Tiv6R9vJsWyPlzCgJKWwJkw+D+AcQb0U+4kV2bniiyUxstme5+NFTYv
-         AeW7uEDY0y0gAbJJkKc4p3TdQVldYDf7bz15iKb8XW3cZuHn9XzCGUeiKweCc5Ui0C
-         2UTjBQEhDYWHWd4ztlXKgwfj//hcXg/xljSr4rNmJqIjPLLdt1F42Lbj5j+SMY6P5x
-         bUKi9mEBMIsuQ==
+        b=TC1QLMp6xzwEn1E1GLMCM6MfsYmcR9ekeHf+HNLGQZ8XkpIMiWDTeZJ5XmM5DZHI2
+         DyxDQe9ygFC3mJnzK4fGggD7gxnj3sOy7uMCVLwYAZOWSB8p09j2wyJ93I7A9lIm0n
+         tgw2E7ddKxSThSjeAL+uQbRbBf644VDJsWfMXVBVnvPJH9iXcXwWpMsq9Bx5OKwKFV
+         olxIXDt230yGcS2NblTwSBPgtaf28x6DZHAdEsgoTZlSOTuT4JqqOYRv5h4iZhBMhA
+         y+gUCqk01aOqfQWl87zRxAiW0ehpn4At00ihakDvu8uk1VLnYEoBjaepYre60Olmj0
+         IO2HMctw1E3sA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
         mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
         boqun.feng@gmail.com, dlustig@nvidia.com, parri.andrea@gmail.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 1/5] riscv: atomic: Cleanup unnecessary definition
-Date:   Thu,  5 May 2022 11:55:22 +0800
-Message-Id: <20220505035526.2974382-2-guoren@kernel.org>
+Subject: [PATCH V4 2/5] riscv: atomic: Optimize dec_if_positive functions
+Date:   Thu,  5 May 2022 11:55:23 +0800
+Message-Id: <20220505035526.2974382-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220505035526.2974382-1-guoren@kernel.org>
 References: <20220505035526.2974382-1-guoren@kernel.org>
@@ -57,41 +57,82 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The cmpxchg32 & cmpxchg32_local are not used in Linux anymore. So
-clean up asm/cmpxchg.h.
+Current implementation wastes another register to pass the
+argument, but we only need addi to calculate the result. Optimize
+the code with minimize the usage of registers.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Dan Lustig <dlustig@nvidia.com>
+Cc: Andrea Parri <parri.andrea@gmail.com>
 ---
- arch/riscv/include/asm/cmpxchg.h | 12 ------------
- 1 file changed, 12 deletions(-)
+ arch/riscv/include/asm/atomic.h | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 36dc962f6343..12debce235e5 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -348,18 +348,6 @@
- #define arch_cmpxchg_local(ptr, o, n)					\
- 	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+index ac9bdf4fc404..f3c6a6eac02a 100644
+--- a/arch/riscv/include/asm/atomic.h
++++ b/arch/riscv/include/asm/atomic.h
+@@ -310,47 +310,47 @@ ATOMIC_OPS()
+ #undef ATOMIC_OPS
+ #undef ATOMIC_OP
  
--#define cmpxchg32(ptr, o, n)						\
--({									\
--	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
--	arch_cmpxchg((ptr), (o), (n));					\
--})
--
--#define cmpxchg32_local(ptr, o, n)					\
--({									\
--	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
--	arch_cmpxchg_relaxed((ptr), (o), (n))				\
--})
--
- #define arch_cmpxchg64(ptr, o, n)					\
- ({									\
- 	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+-static __always_inline int arch_atomic_sub_if_positive(atomic_t *v, int offset)
++static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
+ {
+        int prev, rc;
+ 
+ 	__asm__ __volatile__ (
+ 		"0:	lr.w     %[p],  %[c]\n"
+-		"	sub      %[rc], %[p], %[o]\n"
++		"	addi     %[rc], %[p], -1\n"
+ 		"	bltz     %[rc], 1f\n"
+ 		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+ 		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		: [o]"r" (offset)
++		:
+ 		: "memory");
+-	return prev - offset;
++	return prev - 1;
+ }
+ 
+-#define arch_atomic_dec_if_positive(v)	arch_atomic_sub_if_positive(v, 1)
++#define arch_atomic_dec_if_positive arch_atomic_dec_if_positive
+ 
+ #ifndef CONFIG_GENERIC_ATOMIC64
+-static __always_inline s64 arch_atomic64_sub_if_positive(atomic64_t *v, s64 offset)
++static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
+ {
+        s64 prev;
+        long rc;
+ 
+ 	__asm__ __volatile__ (
+ 		"0:	lr.d     %[p],  %[c]\n"
+-		"	sub      %[rc], %[p], %[o]\n"
++		"	addi      %[rc], %[p], -1\n"
+ 		"	bltz     %[rc], 1f\n"
+ 		"	sc.d.rl  %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+ 		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+-		: [o]"r" (offset)
++		:
+ 		: "memory");
+-	return prev - offset;
++	return prev - 1;
+ }
+ 
+-#define arch_atomic64_dec_if_positive(v)	arch_atomic64_sub_if_positive(v, 1)
++#define arch_atomic64_dec_if_positive	arch_atomic64_dec_if_positive
+ #endif
+ 
+ #endif /* _ASM_RISCV_ATOMIC_H */
 -- 
 2.25.1
 
