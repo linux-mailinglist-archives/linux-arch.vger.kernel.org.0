@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15FF51B6D0
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6325C51B6D2
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242549AbiEED7m (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 23:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S242505AbiEED7n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 23:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242413AbiEED7j (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:39 -0400
+        with ESMTP id S242468AbiEED7k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1095B4BFF4;
-        Wed,  4 May 2022 20:55:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D4B4C414;
+        Wed,  4 May 2022 20:56:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 906BC61977;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5195C61977;
+        Thu,  5 May 2022 03:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B7BC385C0;
         Thu,  5 May 2022 03:55:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5986C385A4;
-        Thu,  5 May 2022 03:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651722957;
-        bh=0v6ObbrAdmPbTrFO/udpzX7A+GrHtoKSTX5QoRJ+xrA=;
+        s=k20201202; t=1651722960;
+        bh=8XLEMSuEe89wrb20sD10ke+Ufm9VTkGQ/8AZQEqbL1Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KzIXWQco6g6JV4dAzlbltsr8V0oE5Qyj1Gc26OCZMCNCGGJ+cFiIeTTGy4/eLO2DE
-         lcnuNQ20LKvW7zSZi7AbgLKoaKUebZUyRJrw7kxHGsiltA1VhQPM0E0F7jyp2zQ12z
-         OCIq4bJhp3m429WQ2cAncxwSrK3MyqpCBui+UTlGY5ClQ9/3GUS60lbnoWw5vG37SS
-         DU3Y1PF8yFehqzGlux2/tk2Qn3aWXbLP747AoY8VZt5YLw1miSgQxc3h2sON9rh0QW
-         REewB/mS+qdxDlTPoyyN59gYi/M3sMqCHMgREHQomdhDwYpQ7U3qfP5oIxj6Gr30Ia
-         76Tak31K+CMpg==
+        b=SAOvY8AOQbg9Fkt4GKHWZwvjDVyZth4XTpkBlu7cdANQnyoPfHGm6lKzfSPxdZFbd
+         OfFvnz4UvYVkFe3qMLHVNzU/QldmY9Ofhrg54ObsCi/ENdC44elYAVuPvYsUPA3DVU
+         5qwr5qO+SjE1A4tVF9k/G6TX0zFT22l3CUxCFulcTWFSDf00JsHrcIrd5raTsss9SJ
+         CCb+bNTe+5YrOSJYsdIi7Nf6EhOV6eKGnkU4MzZG8gDaMnCtX1GmMB2vqRvQ3i/IXp
+         iHmmJZQb6/VyV3mgeG0K6bDyBFhMZUYeDvXqUbQDBwWZO/s/jyM8CxxBMSgd3/vjSJ
+         EQGYxHmGS4xfQ==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
         mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
         boqun.feng@gmail.com, dlustig@nvidia.com, parri.andrea@gmail.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 4/5] riscv: atomic: Optimize atomic_ops & xchg with .aq/rl annotation
-Date:   Thu,  5 May 2022 11:55:25 +0800
-Message-Id: <20220505035526.2974382-5-guoren@kernel.org>
+Subject: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops with .aqrl annotation
+Date:   Thu,  5 May 2022 11:55:26 +0800
+Message-Id: <20220505035526.2974382-6-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220505035526.2974382-1-guoren@kernel.org>
 References: <20220505035526.2974382-1-guoren@kernel.org>
@@ -57,201 +57,163 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Current atomic_ops' acquire & release implementations are using
-fence instruction which causes another extra bad "fence r/fence
-,w" performance effect. They are too heavy for Linux atomic
-acquire & release semantic requirements. RISC-V AMO instructions
-could embed aquire and release into AMO instructions. Here is the
-related description from RISC-V ISA spec:
+The current implementation is the same with 8e86f0b409a4
+("arm64: atomics: fix use of acquire + release for full barrier
+semantics"). RISC-V could combine acquire and release into the SC
+instructions and it could reduce a fence instruction to gain better
+performance. Here is related descriptio from RISC-V ISA 10.2
+Load-Reserved/Store-Conditional Instructions:
 
-To help implement multiprocessor synchronization, the AMOs
-optionally provide release consistency semantics.
- - .aq:   If the aq bit is set, then no later memory operations
-          in this RISC-V hart can be observed to take place
-          before the AMO.
- - .rl:   If the rl bit is set, then other RISC-V harts will not
-          observe the AMO before memory accesses preceding the
-          AMO in this RISC-V hart.
- - .aqrl: Setting both the aq and the rl bit on an AMO makes the
-          sequence sequentially consistent, meaning that it cannot
-          be reordered with earlier or later memory operations
-          from the same hart.
+ - .aq:   The LR/SC sequence can be given acquire semantics by
+          setting the aq bit on the LR instruction.
+ - .rl:   The LR/SC sequence can be given release semantics by
+          setting the rl bit on the SC instruction.
+ - .aqrl: Setting the aq bit on the LR instruction, and setting
+          both the aq and the rl bit on the SC instruction makes
+          the LR/SC sequence sequentially consistent, meaning that
+          it cannot be reordered with earlier or later memory
+          operations from the same hart.
 
-Let's use the above to optimize riscv atomic performance, just
-like arm64/include/asm/atomic_lse.h.
+ Software should not set the rl bit on an LR instruction unless
+ the aq bit is also set, nor should software set the aq bit on an
+ SC instruction unless the rl bit is also set. LR.rl and SC.aq
+ instructions are not guaranteed to provide any stronger ordering
+ than those with both bits clear, but may result in lower
+ performance.
+
+The only difference is when sc.w/d.aqrl failed, it would cause .aq
+effect than before. But it's okay for sematic because overlap
+address LR couldn't beyond relating SC.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>
 Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Andrea Parri <parri.andrea@gmail.com>
 Cc: Dan Lustig <dlustig@nvidia.com>
+Cc: Andrea Parri <parri.andrea@gmail.com>
 ---
- arch/riscv/include/asm/atomic.h  | 64 ++++++++++++++++++++++++++++++++
- arch/riscv/include/asm/cmpxchg.h | 12 ++----
- 2 files changed, 68 insertions(+), 8 deletions(-)
+ arch/riscv/include/asm/atomic.h  | 24 ++++++++----------------
+ arch/riscv/include/asm/cmpxchg.h |  6 ++----
+ 2 files changed, 10 insertions(+), 20 deletions(-)
 
 diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
-index 0dfe9d857a76..34f757dfc8f2 100644
+index 34f757dfc8f2..aef8aa9ac4f4 100644
 --- a/arch/riscv/include/asm/atomic.h
 +++ b/arch/riscv/include/asm/atomic.h
-@@ -99,6 +99,30 @@ c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,		\
- 	return ret;							\
- }									\
- static __always_inline							\
-+c_type arch_atomic##prefix##_fetch_##op##_acquire(c_type i,		\
-+					     atomic##prefix##_t *v)	\
-+{									\
-+	register c_type ret;						\
-+	__asm__ __volatile__ (						\
-+		"	amo" #asm_op "." #asm_type ".aq %1, %2, %0"	\
-+		: "+A" (v->counter), "=r" (ret)				\
-+		: "r" (I)						\
-+		: "memory");						\
-+	return ret;							\
-+}									\
-+static __always_inline							\
-+c_type arch_atomic##prefix##_fetch_##op##_release(c_type i,		\
-+					     atomic##prefix##_t *v)	\
-+{									\
-+	register c_type ret;						\
-+	__asm__ __volatile__ (						\
-+		"	amo" #asm_op "." #asm_type ".rl %1, %2, %0"	\
-+		: "+A" (v->counter), "=r" (ret)				\
-+		: "r" (I)						\
-+		: "memory");						\
-+	return ret;							\
-+}									\
-+static __always_inline							\
- c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
- {									\
- 	register c_type ret;						\
-@@ -118,6 +142,18 @@ c_type arch_atomic##prefix##_##op##_return_relaxed(c_type i,		\
-         return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
- }									\
- static __always_inline							\
-+c_type arch_atomic##prefix##_##op##_return_acquire(c_type i,		\
-+					      atomic##prefix##_t *v)	\
-+{									\
-+        return arch_atomic##prefix##_fetch_##op##_acquire(i, v) c_op I;	\
-+}									\
-+static __always_inline							\
-+c_type arch_atomic##prefix##_##op##_return_release(c_type i,		\
-+					      atomic##prefix##_t *v)	\
-+{									\
-+        return arch_atomic##prefix##_fetch_##op##_release(i, v) c_op I;	\
-+}									\
-+static __always_inline							\
- c_type arch_atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
- {									\
-         return arch_atomic##prefix##_fetch_##op(i, v) c_op I;		\
-@@ -140,22 +176,38 @@ ATOMIC_OPS(sub, add, +, -i)
- 
- #define arch_atomic_add_return_relaxed	arch_atomic_add_return_relaxed
- #define arch_atomic_sub_return_relaxed	arch_atomic_sub_return_relaxed
-+#define arch_atomic_add_return_acquire	arch_atomic_add_return_acquire
-+#define arch_atomic_sub_return_acquire	arch_atomic_sub_return_acquire
-+#define arch_atomic_add_return_release	arch_atomic_add_return_release
-+#define arch_atomic_sub_return_release	arch_atomic_sub_return_release
- #define arch_atomic_add_return		arch_atomic_add_return
- #define arch_atomic_sub_return		arch_atomic_sub_return
- 
- #define arch_atomic_fetch_add_relaxed	arch_atomic_fetch_add_relaxed
- #define arch_atomic_fetch_sub_relaxed	arch_atomic_fetch_sub_relaxed
-+#define arch_atomic_fetch_add_acquire	arch_atomic_fetch_add_acquire
-+#define arch_atomic_fetch_sub_acquire	arch_atomic_fetch_sub_acquire
-+#define arch_atomic_fetch_add_release	arch_atomic_fetch_add_release
-+#define arch_atomic_fetch_sub_release	arch_atomic_fetch_sub_release
- #define arch_atomic_fetch_add		arch_atomic_fetch_add
- #define arch_atomic_fetch_sub		arch_atomic_fetch_sub
- 
- #ifndef CONFIG_GENERIC_ATOMIC64
- #define arch_atomic64_add_return_relaxed	arch_atomic64_add_return_relaxed
- #define arch_atomic64_sub_return_relaxed	arch_atomic64_sub_return_relaxed
-+#define arch_atomic64_add_return_acquire	arch_atomic64_add_return_acquire
-+#define arch_atomic64_sub_return_acquire	arch_atomic64_sub_return_acquire
-+#define arch_atomic64_add_return_release	arch_atomic64_add_return_release
-+#define arch_atomic64_sub_return_release	arch_atomic64_sub_return_release
- #define arch_atomic64_add_return		arch_atomic64_add_return
- #define arch_atomic64_sub_return		arch_atomic64_sub_return
- 
- #define arch_atomic64_fetch_add_relaxed	arch_atomic64_fetch_add_relaxed
- #define arch_atomic64_fetch_sub_relaxed	arch_atomic64_fetch_sub_relaxed
-+#define arch_atomic64_fetch_add_acquire	arch_atomic64_fetch_add_acquire
-+#define arch_atomic64_fetch_sub_acquire	arch_atomic64_fetch_sub_acquire
-+#define arch_atomic64_fetch_add_release	arch_atomic64_fetch_add_release
-+#define arch_atomic64_fetch_sub_release	arch_atomic64_fetch_sub_release
- #define arch_atomic64_fetch_add		arch_atomic64_fetch_add
- #define arch_atomic64_fetch_sub		arch_atomic64_fetch_sub
- #endif
-@@ -178,6 +230,12 @@ ATOMIC_OPS(xor, xor, i)
- #define arch_atomic_fetch_and_relaxed	arch_atomic_fetch_and_relaxed
- #define arch_atomic_fetch_or_relaxed	arch_atomic_fetch_or_relaxed
- #define arch_atomic_fetch_xor_relaxed	arch_atomic_fetch_xor_relaxed
-+#define arch_atomic_fetch_and_acquire	arch_atomic_fetch_and_acquire
-+#define arch_atomic_fetch_or_acquire	arch_atomic_fetch_or_acquire
-+#define arch_atomic_fetch_xor_acquire	arch_atomic_fetch_xor_acquire
-+#define arch_atomic_fetch_and_release	arch_atomic_fetch_and_release
-+#define arch_atomic_fetch_or_release	arch_atomic_fetch_or_release
-+#define arch_atomic_fetch_xor_release	arch_atomic_fetch_xor_release
- #define arch_atomic_fetch_and		arch_atomic_fetch_and
- #define arch_atomic_fetch_or		arch_atomic_fetch_or
- #define arch_atomic_fetch_xor		arch_atomic_fetch_xor
-@@ -186,6 +244,12 @@ ATOMIC_OPS(xor, xor, i)
- #define arch_atomic64_fetch_and_relaxed	arch_atomic64_fetch_and_relaxed
- #define arch_atomic64_fetch_or_relaxed	arch_atomic64_fetch_or_relaxed
- #define arch_atomic64_fetch_xor_relaxed	arch_atomic64_fetch_xor_relaxed
-+#define arch_atomic64_fetch_and_acquire	arch_atomic64_fetch_and_acquire
-+#define arch_atomic64_fetch_or_acquire	arch_atomic64_fetch_or_acquire
-+#define arch_atomic64_fetch_xor_acquire	arch_atomic64_fetch_xor_acquire
-+#define arch_atomic64_fetch_and_release	arch_atomic64_fetch_and_release
-+#define arch_atomic64_fetch_or_release	arch_atomic64_fetch_or_release
-+#define arch_atomic64_fetch_xor_release	arch_atomic64_fetch_xor_release
- #define arch_atomic64_fetch_and		arch_atomic64_fetch_and
- #define arch_atomic64_fetch_or		arch_atomic64_fetch_or
- #define arch_atomic64_fetch_xor		arch_atomic64_fetch_xor
+@@ -269,9 +269,8 @@ static __always_inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int
+ 		"0:	lr.w     %[p],  %[c]\n"
+ 		"	beq      %[p],  %[u], 1f\n"
+ 		"	add      %[rc], %[p], %[a]\n"
+-		"	sc.w.rl  %[rc], %[rc], %[c]\n"
++		"	sc.w.aqrl  %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		: [a]"r" (a), [u]"r" (u)
+@@ -290,9 +289,8 @@ static __always_inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a,
+ 		"0:	lr.d     %[p],  %[c]\n"
+ 		"	beq      %[p],  %[u], 1f\n"
+ 		"	add      %[rc], %[p], %[a]\n"
+-		"	sc.d.rl  %[rc], %[rc], %[c]\n"
++		"	sc.d.aqrl  %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		: [a]"r" (a), [u]"r" (u)
+@@ -382,9 +380,8 @@ static __always_inline bool arch_atomic_inc_unless_negative(atomic_t *v)
+ 		"0:	lr.w      %[p],  %[c]\n"
+ 		"	bltz      %[p],  1f\n"
+ 		"	addi      %[rc], %[p], 1\n"
+-		"	sc.w.rl   %[rc], %[rc], %[c]\n"
++		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
+ 		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		:
+@@ -402,9 +399,8 @@ static __always_inline bool arch_atomic_dec_unless_positive(atomic_t *v)
+ 		"0:	lr.w      %[p],  %[c]\n"
+ 		"	bgtz      %[p],  1f\n"
+ 		"	addi      %[rc], %[p], -1\n"
+-		"	sc.w.rl   %[rc], %[rc], %[c]\n"
++		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
+ 		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		:
+@@ -422,9 +418,8 @@ static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
+ 		"0:	lr.w     %[p],  %[c]\n"
+ 		"	addi     %[rc], %[p], -1\n"
+ 		"	bltz     %[rc], 1f\n"
+-		"	sc.w.rl  %[rc], %[rc], %[c]\n"
++		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		:
+@@ -444,9 +439,8 @@ static __always_inline bool arch_atomic64_inc_unless_negative(atomic64_t *v)
+ 		"0:	lr.d      %[p],  %[c]\n"
+ 		"	bltz      %[p],  1f\n"
+ 		"	addi      %[rc], %[p], 1\n"
+-		"	sc.d.rl   %[rc], %[rc], %[c]\n"
++		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
+ 		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		:
+@@ -465,9 +459,8 @@ static __always_inline bool arch_atomic64_dec_unless_positive(atomic64_t *v)
+ 		"0:	lr.d      %[p],  %[c]\n"
+ 		"	bgtz      %[p],  1f\n"
+ 		"	addi      %[rc], %[p], -1\n"
+-		"	sc.d.rl   %[rc], %[rc], %[c]\n"
++		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
+ 		"	bnez      %[rc], 0b\n"
+-		"	fence     rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		:
+@@ -486,9 +479,8 @@ static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
+ 		"0:	lr.d     %[p],  %[c]\n"
+ 		"	addi      %[rc], %[p], -1\n"
+ 		"	bltz     %[rc], 1f\n"
+-		"	sc.d.rl  %[rc], %[rc], %[c]\n"
++		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
+ 		"	bnez     %[rc], 0b\n"
+-		"	fence    rw, rw\n"
+ 		"1:\n"
+ 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+ 		:
 diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 12debce235e5..1af8db92250b 100644
+index 1af8db92250b..9269fceb86e0 100644
 --- a/arch/riscv/include/asm/cmpxchg.h
 +++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -52,16 +52,14 @@
- 	switch (size) {							\
- 	case 4:								\
+@@ -307,9 +307,8 @@
  		__asm__ __volatile__ (					\
--			"	amoswap.w %0, %2, %1\n"			\
--			RISCV_ACQUIRE_BARRIER				\
-+			"	amoswap.w.aq %0, %2, %1\n"		\
- 			: "=r" (__ret), "+A" (*__ptr)			\
- 			: "r" (__new)					\
- 			: "memory");					\
- 		break;							\
- 	case 8:								\
+ 			"0:	lr.w %0, %2\n"				\
+ 			"	bne  %0, %z3, 1f\n"			\
+-			"	sc.w.rl %1, %z4, %2\n"			\
++			"	sc.w.aqrl %1, %z4, %2\n"		\
+ 			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+ 			: "rJ" ((long)__old), "rJ" (__new)		\
+@@ -319,9 +318,8 @@
  		__asm__ __volatile__ (					\
--			"	amoswap.d %0, %2, %1\n"			\
--			RISCV_ACQUIRE_BARRIER				\
-+			"	amoswap.d.aq %0, %2, %1\n"		\
- 			: "=r" (__ret), "+A" (*__ptr)			\
- 			: "r" (__new)					\
- 			: "memory");					\
-@@ -87,16 +85,14 @@
- 	switch (size) {							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"	amoswap.w %0, %2, %1\n"			\
-+			"	amoswap.w.rl %0, %2, %1\n"		\
- 			: "=r" (__ret), "+A" (*__ptr)			\
- 			: "r" (__new)					\
- 			: "memory");					\
- 		break;							\
- 	case 8:								\
- 		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"	amoswap.d %0, %2, %1\n"			\
-+			"	amoswap.d.rl %0, %2, %1\n"		\
- 			: "=r" (__ret), "+A" (*__ptr)			\
- 			: "r" (__new)					\
- 			: "memory");					\
+ 			"0:	lr.d %0, %2\n"				\
+ 			"	bne %0, %z3, 1f\n"			\
+-			"	sc.d.rl %1, %z4, %2\n"			\
++			"	sc.d.aqrl %1, %z4, %2\n"		\
+ 			"	bnez %1, 0b\n"				\
+-			"	fence rw, rw\n"				\
+ 			"1:\n"						\
+ 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+ 			: "rJ" (__old), "rJ" (__new)			\
 -- 
 2.25.1
 
