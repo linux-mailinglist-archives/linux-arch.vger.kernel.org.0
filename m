@@ -2,79 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC42351BD72
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 12:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1CF51BD92
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 12:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237459AbiEEKuZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 5 May 2022 06:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S1356364AbiEELBV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 May 2022 07:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353497AbiEEKuZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 May 2022 06:50:25 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63AF15FD7;
-        Thu,  5 May 2022 03:46:44 -0700 (PDT)
-Received: from mail-wm1-f49.google.com ([209.85.128.49]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MC2sH-1ngkWc0SNh-00CTav; Thu, 05 May 2022 12:46:43 +0200
-Received: by mail-wm1-f49.google.com with SMTP id q20so2393754wmq.1;
-        Thu, 05 May 2022 03:46:42 -0700 (PDT)
-X-Gm-Message-State: AOAM533c9sfMuPrtHgRDKUD42mJz5pnnIox0XcM4CbXmTctETUpV6QZV
-        yyCxqln/3PaoAURcU+hdzEq2FXqt32sodmX2xe4=
-X-Google-Smtp-Source: ABdhPJyFwBY33nx8Flpk/PWMnjLEt5creYwEvl9Kax8NgZPjrsYAYPMUU9wJqfenypJSNx98Enu2cPCLEOTeKZBJGw0=
-X-Received: by 2002:a7b:cc93:0:b0:394:2622:fcd9 with SMTP id
- p19-20020a7bcc93000000b003942622fcd9mr4145550wma.20.1651747602669; Thu, 05
- May 2022 03:46:42 -0700 (PDT)
+        with ESMTP id S1356365AbiEELAz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 May 2022 07:00:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 852754EA0F;
+        Thu,  5 May 2022 03:56:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5544A106F;
+        Thu,  5 May 2022 03:56:54 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.29.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F9233FA27;
+        Thu,  5 May 2022 03:56:52 -0700 (PDT)
+Date:   Thu, 5 May 2022 11:56:45 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, jthierry@redhat.com,
+        catalin.marinas@arm.com, will@kernel.org, masahiroy@kernel.org,
+        jpoimboe@redhat.com, ycote@redhat.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, ardb@kernel.org, maz@kernel.org,
+        tglx@linutronix.de, luc.vanoostenryck@gmail.com
+Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
+Message-ID: <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220429094355.122389-1-chenzhongjin@huawei.com>
+ <20220429094355.122389-23-chenzhongjin@huawei.com>
+ <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
+ <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
+ <20220505092448.GE2501@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <2c8c96f-a12f-aadc-18ac-34c1d371929c@linux.intel.com>
- <CAK8P3a0hy8Ras7pwF9rJADtCAfeV49K7GWkftJnzqeGiQ6j-zA@mail.gmail.com>
- <ca39c741-8d15-33c0-7bd6-635778cc436@linux.intel.com> <CAK8P3a33b4KvsGayDV7fXte0+1FzCJp_J60d8LuZO3P+i1NUEg@mail.gmail.com>
- <386eed36-94f7-8acb-926f-99c74d55915f@linux.intel.com>
-In-Reply-To: <386eed36-94f7-8acb-926f-99c74d55915f@linux.intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 5 May 2022 12:46:25 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a06wdDC-c6V9kO6q3j_TB7HE7f1tdTUvC5yi7ekaHw1YQ@mail.gmail.com>
-Message-ID: <CAK8P3a06wdDC-c6V9kO6q3j_TB7HE7f1tdTUvC5yi7ekaHw1YQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] termbits: Convert octal defines to hex
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:sSGfFqyReakvFmMBoIFnKxXTt3YrM/AnN0JCkz+2KDvVIBHaIhO
- imKzkV0yjeWXzBJ5JXQvWrIFnusxADrODyOLWhZQYzBhr0/M3O2+4yOrCH4lIpVQ+XyA3mx
- g4fUMdGvwaFJDRwopyDq6+GQZ8HOS+VEHC0q3TWeMpqoJ2fRxUJ6NR1OD4tqfpoJwb9raXb
- JA+qppAU7xdxMzS5qE6qA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qroVvn/Q8aE=:KgtJ9Klgc8zNCMyp0WCvBW
- TmskdG82IVWkRJfBtPefNuZlNT7sEVh4wEAClPkidx2q7Kq33Xv6U0pG5jqKlN9G2TRLkMGt4
- a4iAaB10OrHTcK8VorQre3D1BQLH/PjlDjhe2QgLFzXYfwTZsl/3Jjhi1zAzK3cNMnenTjGzI
- RKudTV2wlKwZJykITtm1aVB2c3nxeNPHKwAG+LwoMGN9E8I20OgSInEMxRNOWRlPkzUtx9kXj
- L/Aozn7YpzdlU1OIOB8Exrv2tv3eenu+Tag7JwYce7bPn8Fq8bJXx/0GPx79QCzuWUlCHPmVj
- j02i85Fvnhv/XSatu1udT5ZuauLHWRB/V/HuuxJRvky/4eBGcbPqJoL70c6tubK3blDXDp68H
- 27vIlyJjr3AOJGHmNekjGY9uBrHvFiTJnNabUthL92lIqz1U3WILjclO4W+RU6gKnyYVrybkF
- rfdC/CtVjny8uitU+VA6AKQ0WJgZ3CpFtq+r722T2dC4VmBs4bj+1j+FIR0Y3pJqvITPf/Xeq
- c1LsQHJeRao2bqqlDfaBsqhbHI/1lK/51A652mv3sTLiahpWQFzZGDZnjsEI0VTBi4SfiWCme
- UGbl7M82FMzm36RIm7d/dnHdKJ7oofurFS13lk+Ya889Rn6TbAGIGyypqnLSCUeF+ADc6Ea0F
- 65x/M1wtGbYf1gYEB5QxjuPzdKFE0dsCQy65yC99NDxpXToIuwYg9W+wEuDaFEaOX6/8=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220505092448.GE2501@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,47 +50,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 5, 2022 at 10:56 AM Ilpo Järvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
-> On Wed, 4 May 2022, Arnd Bergmann wrote:
-> > On Wed, May 4, 2022 at 10:33 AM Ilpo Järvinen
-> > <ilpo.jarvinen@linux.intel.com> wrote:
-> > > On Wed, 4 May 2022, Arnd Bergmann wrote:
-> > > > On Wed, May 4, 2022 at 9:20 AM Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> wrote:
-> > > > >
-> > > > After applying the patch locally, I still see a bunch of whitespace
-> > > > differences in the
-> > > > changed lines if I run
-> > > >
-> > > > vimdiff arch/*/include/uapi/asm/termbits.h include/uapi/asm-generic/termbits.h
-> > > >
-> > > > I think this mostly because you left the sparc version alone (it already
-> > > > uses hex constants), but it may be nice to edit this a little more to
-> > > > make the actual differences stick out more.
-> > >
-> > > I took a look on further harmonizing, however, it turned out to be not
-> > > that simple. This is basically the pipeline I use to further cleanup the
-> > > differences and remove comments if you want to play yourself, just remove
-> > > stages from the tail to get the intermediate datas (gawk is required for
-> > > --non-decimal-data):
-> >
-> > I've played around with it some more to adjust the number of leading
-> > zeroes and the type of whitespace. This is what I ended up with on top
-> > of your patch: https://pastebin.com/raw/pkDPaKN1
-> >
-> > Feel free to fold it into yours.
->
-> Ok thanks. With that it seems to go a bit beyond octal to hex conversion
-> so I'll make a series out of it. The series will also introduce
-> include/uapi/asm-generic/termbits-common.h for the most obvious
-> intersection.
+On Thu, May 05, 2022 at 11:24:48AM +0200, Peter Zijlstra wrote:
+> On Thu, May 05, 2022 at 11:36:12AM +0800, Chen Zhongjin wrote:
+> > Hi Peter,
+> > 
+> > IIRC now the blacklist mechanisms all run on check stage, which after
+> > decoding, but the problem of kuser32.S happens in decoding stage. Other
+> > than that the assembly symbols in kuser32 is STT_NOTYPE and
+> > STACK_FRAME_NON_STANDARD will throw an error for this.
+> > 
+> > OBJECT_FILES_NON_STANDARD works for the single file but as you said
+> > after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
+> > for kuser32 case at all.
+> > 
+> > Now my strategy for undecodable instructions is: show an error message
+> > and mark insn->ignore = true, but do not stop anything so decoding work
+> > can going on.
+> > 
+> > To totally solve this my idea is that applying blacklist before decode.
+> > However for this part objtool doesn't have any insn or func info, so we
+> > should add a new blacklist just for this case...
+> 
+> OK, so Mark explained that this is 32bit userspace (VDSO) code.
+> 
+> And as such there's really no point in running objtool on it. Does all
+> that live in it's own section? Should it?
 
-Ok, sounds good. Here's a retroactive
+It's placed in .rodata by a linker script:
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+* The 32-bit vdso + kuser code is placed in .rodata, between the `vdso32_start`
+  and `vdso32_end` symbols, as raw bytes (via .incbin).
+  See arch/arm64/kernel/vdso32-wrap.S.
 
-for my changes so you can put them into a separate patch. I assume
-you will change it some more in the process, so maybe retain
-your ownership and just mark the bits a 'Co-developed-by: Arnd...'.
+* The 64-bit vdso code is placed in .rodata, between the `vdso_start`
+  and `vdso32` symbols, as raw bytes (via .incbin).
+  See arch/arm64/kernel/vdso-wrap.S.
 
-        Arnd
+The objects under arch/arm64/kernel/{vdso,vdso32}/ are all userspace objects,
+and from userspace's PoV the existing secrtions within those objects are
+correct, so I don't think those should change.
+
+How does x86 deal with its vdso objects?
+
+Thanks,
+Mark.
