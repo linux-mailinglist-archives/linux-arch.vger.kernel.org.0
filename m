@@ -2,113 +2,115 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F75051B694
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608A551B69F
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241377AbiEEDeG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 23:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S240591AbiEEDj5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 23:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241594AbiEEDeD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:34:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D68012634;
-        Wed,  4 May 2022 20:30:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5F4B61949;
-        Thu,  5 May 2022 03:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E1BAC385B5;
-        Thu,  5 May 2022 03:30:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651721423;
-        bh=vOH0kAdmR1eNZn7dq7qeSAVj/s+a8/0GdFuCXLUW/CU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g+9CtdtO3/zzV1+bZ2QmOejc7pc6dzZz5V0iTRIcx1bdlYXlMHrs9nQqg10r/BeYs
-         +PmvWnmGptI78zUdjkwjx425vxkvJixLXLplrhuBg86OnLbNCrvh/M64SOvKglEE7s
-         0EjNWcc7pr28auxz3kD64IaTwkSpy2qGJiCIvsSSsgdLp6NiCzjf1gNecbuBIFY5tR
-         OM5TFGUGGcWe4m9ktlTyOKeRL1GmMjEVGuX31mfWrJbyYnZVyp1slkTqDDEDsRonTS
-         p54NUkVH61i1VhOaYPi3pWgpqZoPBA/yCGJdCl1YnaYAHSCWgzgfOKzyePzU9CTlQA
-         ur4WWGWOtmk9w==
-Received: by mail-ua1-f44.google.com with SMTP id x5so1217211uap.8;
-        Wed, 04 May 2022 20:30:22 -0700 (PDT)
-X-Gm-Message-State: AOAM531D15dGflb6pDmuh3LQhtWqTwXqWARYZmuBL1Y9A+T2oxA+8HSh
-        mfvze6cQ0IPGBiVnmruIYh0yjMmKm7F441DD7zs=
-X-Google-Smtp-Source: ABdhPJzbU/iPzb/jLBOfTd8HLatPunLFi+iu4xyj0d3kkgDuJ1vstUU5IUyh/crnvfi60C0KDYx5aW4fbp9tD6SDpKg=
-X-Received: by 2002:ab0:2a87:0:b0:362:9cdb:8b64 with SMTP id
- h7-20020ab02a87000000b003629cdb8b64mr7496584uar.83.1651721421926; Wed, 04 May
- 2022 20:30:21 -0700 (PDT)
+        with ESMTP id S229999AbiEEDj4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:39:56 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37149934;
+        Wed,  4 May 2022 20:36:17 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ktzq36K7SzfbDj;
+        Thu,  5 May 2022 11:35:11 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 5 May 2022 11:36:16 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
+ 2022 11:36:15 +0800
+Message-ID: <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
+Date:   Thu, 5 May 2022 11:36:12 +0800
 MIME-Version: 1.0
-References: <20220430153626.30660-1-palmer@rivosinc.com> <20220430153626.30660-2-palmer@rivosinc.com>
- <2180881.iZASKD2KPV@diego>
-In-Reply-To: <2180881.iZASKD2KPV@diego>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Thu, 5 May 2022 11:30:09 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTSjwu3-SLfXAh=UrqSq28mq_7nxbFNQ9j9kqY32EiXcJw@mail.gmail.com>
-Message-ID: <CAJF2gTSjwu3-SLfXAh=UrqSq28mq_7nxbFNQ9j9kqY32EiXcJw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/7] asm-generic: ticket-lock: New generic ticket-based spinlock
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, macro@orcam.me.uk, jszhang@kernel.org,
-        linux-csky@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arch@vger.kernel.org>, <jthierry@redhat.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <masahiroy@kernel.org>, <jpoimboe@redhat.com>, <ycote@redhat.com>,
+        <herbert@gondor.apana.org.au>, <mark.rutland@arm.com>,
+        <davem@davemloft.net>, <ardb@kernel.org>, <maz@kernel.org>,
+        <tglx@linutronix.de>, <luc.vanoostenryck@gmail.com>
+References: <20220429094355.122389-1-chenzhongjin@huawei.com>
+ <20220429094355.122389-23-chenzhongjin@huawei.com>
+ <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Hi Peter,
 
-On Wed, May 4, 2022 at 7:57 PM Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->
-> Am Samstag, 30. April 2022, 17:36:20 CEST schrieb Palmer Dabbelt:
-> > From: Peter Zijlstra <peterz@infradead.org>
-> >
-> > This is a simple, fair spinlock.  Specifically it doesn't have all the
-> > subtle memory model dependencies that qspinlock has, which makes it mor=
-e
-> > suitable for simple systems as it is more likely to be correct.  It is
-> > implemented entirely in terms of standard atomics and thus works fine
-> > without any arch-specific code.
-> >
-> > This replaces the existing asm-generic/spinlock.h, which just errored
-> > out on SMP systems.
-> >
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> on riscv64+riscv32 qemu, beaglev and d1-nezha
->
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
->
->
+IIRC now the blacklist mechanisms all run on check stage, which after
+decoding, but the problem of kuser32.S happens in decoding stage. Other
+than that the assembly symbols in kuser32 is STT_NOTYPE and
+STACK_FRAME_NON_STANDARD will throw an error for this.
 
+OBJECT_FILES_NON_STANDARD works for the single file but as you said
+after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
+for kuser32 case at all.
 
---=20
-Best Regards
- Guo Ren
+Now my strategy for undecodable instructions is: show an error message
+and mark insn->ignore = true, but do not stop anything so decoding work
+can going on.
 
-ML: https://lore.kernel.org/linux-csky/
+To totally solve this my idea is that applying blacklist before decode.
+However for this part objtool doesn't have any insn or func info, so we
+should add a new blacklist just for this case...
+
+On 2022/4/29 19:05, Peter Zijlstra wrote:
+> On Fri, Apr 29, 2022 at 05:43:40PM +0800, Chen Zhongjin wrote:
+>> From: Raphael Gault <raphael.gault@arm.com>
+>>
+>> kuser32 being used for compatibility, it contains a32 instructions
+>> which are not recognised by objtool when trying to analyse arm64
+>> object files. Thus, we add an exception to skip validation on this
+>> particular file.
+>>
+>> Signed-off-by: Raphael Gault <raphael.gault@arm.com>
+>> Signed-off-by: Julien Thierry <jthierry@redhat.com>
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> ---
+>>  arch/arm64/kernel/Makefile | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+>> index 986837d7ec82..c4f01bfe79b4 100644
+>> --- a/arch/arm64/kernel/Makefile
+>> +++ b/arch/arm64/kernel/Makefile
+>> @@ -41,6 +41,9 @@ obj-$(CONFIG_COMPAT)			+= sys32.o signal32.o			\
+>>  					   sys_compat.o
+>>  obj-$(CONFIG_COMPAT)			+= sigreturn32.o
+>>  obj-$(CONFIG_KUSER_HELPERS)		+= kuser32.o
+>> +
+>> +OBJECT_FILES_NON_STANDARD_kuser32.o := y
+> 
+> File based skipping is depricated in the face of LTO and other link
+> target based objtool runs.
+> 
+> Please use function based blacklisting as per the previous patch.
+> 
+> .
+
