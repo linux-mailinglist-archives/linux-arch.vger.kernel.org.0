@@ -2,218 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6325C51B6D2
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0250351B9B7
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 10:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242505AbiEED7n (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 23:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55426 "EHLO
+        id S1346517AbiEEIQW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 5 May 2022 04:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242468AbiEED7k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D4B4C414;
-        Wed,  4 May 2022 20:56:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5195C61977;
-        Thu,  5 May 2022 03:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B7BC385C0;
-        Thu,  5 May 2022 03:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651722960;
-        bh=8XLEMSuEe89wrb20sD10ke+Ufm9VTkGQ/8AZQEqbL1Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SAOvY8AOQbg9Fkt4GKHWZwvjDVyZth4XTpkBlu7cdANQnyoPfHGm6lKzfSPxdZFbd
-         OfFvnz4UvYVkFe3qMLHVNzU/QldmY9Ofhrg54ObsCi/ENdC44elYAVuPvYsUPA3DVU
-         5qwr5qO+SjE1A4tVF9k/G6TX0zFT22l3CUxCFulcTWFSDf00JsHrcIrd5raTsss9SJ
-         CCb+bNTe+5YrOSJYsdIi7Nf6EhOV6eKGnkU4MzZG8gDaMnCtX1GmMB2vqRvQ3i/IXp
-         iHmmJZQb6/VyV3mgeG0K6bDyBFhMZUYeDvXqUbQDBwWZO/s/jyM8CxxBMSgd3/vjSJ
-         EQGYxHmGS4xfQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
-        mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, dlustig@nvidia.com, parri.andrea@gmail.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops with .aqrl annotation
-Date:   Thu,  5 May 2022 11:55:26 +0800
-Message-Id: <20220505035526.2974382-6-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220505035526.2974382-1-guoren@kernel.org>
-References: <20220505035526.2974382-1-guoren@kernel.org>
-MIME-Version: 1.0
+        with ESMTP id S234291AbiEEIQU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 5 May 2022 04:16:20 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E487724080;
+        Thu,  5 May 2022 01:12:41 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2454o237019760;
+        Thu, 5 May 2022 08:10:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=z4sq9VpdyC1twtJvv6LraDF4oC5l7K1Gjqz/EX96h48=;
+ b=byg8yPH7lB6IZpHqaGAW/IeqHBFw1qVNnemAYMuW6RqtAD2Pr44LXtY5qhdvLHHtmyHS
+ zx9iz65kowFV3EWLgEN1WG/d59kZe4yfXhGahlw0zEySpnmOMpKtnTu1H+qcza8lcgus
+ VP1jt7FqQK3My93W8lTLtP5pcjNasJUlrXI0Oj9oLP5ti+9vQ6TEUWY2ibcsPnUs14uv
+ NmvMjJPL0KUnhOk2z1eHsYp83y9pSRyRUfpRV7sovwq8yCY9xzBZFlBb50MQwBEdnaiO
+ 0N3pnELj4DvaEamDhYosnYTLvIbL2KA1mWAd5tpRBkVo6hFlV6xAvxmWORtU26wlKUnZ hw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fv7w5ayn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 08:10:24 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24580f9U005340;
+        Thu, 5 May 2022 08:10:23 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3fv7w5ayks-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 08:10:22 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 245884X7030065;
+        Thu, 5 May 2022 08:10:20 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06fra.de.ibm.com with ESMTP id 3fttcj2t2u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 May 2022 08:10:19 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2458AH1F53543266
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 May 2022 08:10:17 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C65511C050;
+        Thu,  5 May 2022 08:10:17 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B05911C04A;
+        Thu,  5 May 2022 08:10:15 +0000 (GMT)
+Received: from sig-9-145-85-251.uk.ibm.com (unknown [9.145.85.251])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  5 May 2022 08:10:15 +0000 (GMT)
+Message-ID: <ce5510ff230fe76d9a74d0368d7d5be22011ff88.camel@linux.ibm.com>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Date:   Thu, 05 May 2022 10:10:15 +0200
+In-Reply-To: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+References: <20220429135108.2781579-2-schnelle@linux.ibm.com>
+         <20220504210840.GA469916@bhelgaas>
+         <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TfB74bisdmBom1WXjB4-tPfxPcdeJalQ
+X-Proofpoint-ORIG-GUID: fSEH5H7pwKFZyghH7nTHuMCiubmCCcLs
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-05_02,2022-05-04_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ spamscore=0 clxscore=1015 malwarescore=0 adultscore=0 priorityscore=1501
+ suspectscore=0 bulkscore=0 mlxlogscore=278 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205050055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Wed, 2022-05-04 at 23:31 +0200, Arnd Bergmann wrote:
+> On Wed, May 4, 2022 at 11:08 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Apr 29, 2022 at 03:49:59PM +0200, Niklas Schnelle wrote:
+> > > We introduce a new HAS_IOPORT Kconfig option to indicate support for
+> > > I/O Port access. In a future patch HAS_IOPORT=n will disable compilation
+> > > of the I/O accessor functions inb()/outb() and friends on architectures
+> > > which can not meaningfully support legacy I/O spaces such as s390 or
+> > > where such support is optional.
+> > 
+> > So you plan to drop inb()/outb() on architectures where I/O port space
+> > is optional?  So even platforms that have I/O port space may not be
+> > able to use it?
+> > 
+> > This feels like a lot of work where the main benefit is to keep
+> > Kconfig from offering drivers that aren't of interest on s390.
+> > 
+> > Granted, there may be issues where inb()/outb() does the wrong thing
+> > such as dereferencing null pointers when I/O port space isn't
+> > implemented.  I think that's a defect in inb()/outb() and could be
+> > fixed there.
+> 
+> The current implementation in asm-generic/io.h implements inb()/outb()
+> using readb()/writeb() with a fixed architecture specific offset.
+> 
+> There are three possible things that can happen here:
+> 
+> a) there is a host bridge driver that maps its I/O ports to this window,
+>     and everything works
+> b) the address range is reserved and accessible but no host bridge
+>    driver has mapped its registers there, so an access causes a
+>    page fault
+> c) the architecture does not define an offset, and accessing low I/O
+>     ports ends up as a NULL pointer dereference
+> 
+> The main goal is to avoid c), which is what happens on s390, but
+> can also happen elsewhere. Catching b) would be nice as well,
+> but is much harder to do from generic code as you'd need an
+> architecture specific inline asm statement to insert a ex_table
+> fixup, or a runtime conditional on each access.
+> 
+>          Arnd
 
-The current implementation is the same with 8e86f0b409a4
-("arm64: atomics: fix use of acquire + release for full barrier
-semantics"). RISC-V could combine acquire and release into the SC
-instructions and it could reduce a fence instruction to gain better
-performance. Here is related descriptio from RISC-V ISA 10.2
-Load-Reserved/Store-Conditional Instructions:
+Yes and to add to this, we did try a local solution in inb()/outb()
+before. This added a warning when they are used and we know at compile
+time that we're dealing with case c). This approach was nacked by Linus
+though as we were turning a compile time known broken case into a
+runtime one:
 
- - .aq:   The LR/SC sequence can be given acquire semantics by
-          setting the aq bit on the LR instruction.
- - .rl:   The LR/SC sequence can be given release semantics by
-          setting the rl bit on the SC instruction.
- - .aqrl: Setting the aq bit on the LR instruction, and setting
-          both the aq and the rl bit on the SC instruction makes
-          the LR/SC sequence sequentially consistent, meaning that
-          it cannot be reordered with earlier or later memory
-          operations from the same hart.
+https://lore.kernel.org/lkml/CAHk-=wg80je=K7madF4e7WrRNp37e3qh6y10Svhdc7O8SZ_-8g@mail.gmail.com/
 
- Software should not set the rl bit on an LR instruction unless
- the aq bit is also set, nor should software set the aq bit on an
- SC instruction unless the rl bit is also set. LR.rl and SC.aq
- instructions are not guaranteed to provide any stronger ordering
- than those with both bits clear, but may result in lower
- performance.
-
-The only difference is when sc.w/d.aqrl failed, it would cause .aq
-effect than before. But it's okay for sematic because overlap
-address LR couldn't beyond relating SC.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Dan Lustig <dlustig@nvidia.com>
-Cc: Andrea Parri <parri.andrea@gmail.com>
----
- arch/riscv/include/asm/atomic.h  | 24 ++++++++----------------
- arch/riscv/include/asm/cmpxchg.h |  6 ++----
- 2 files changed, 10 insertions(+), 20 deletions(-)
-
-diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
-index 34f757dfc8f2..aef8aa9ac4f4 100644
---- a/arch/riscv/include/asm/atomic.h
-+++ b/arch/riscv/include/asm/atomic.h
-@@ -269,9 +269,8 @@ static __always_inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int
- 		"0:	lr.w     %[p],  %[c]\n"
- 		"	beq      %[p],  %[u], 1f\n"
- 		"	add      %[rc], %[p], %[a]\n"
--		"	sc.w.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.w.aqrl  %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		: [a]"r" (a), [u]"r" (u)
-@@ -290,9 +289,8 @@ static __always_inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a,
- 		"0:	lr.d     %[p],  %[c]\n"
- 		"	beq      %[p],  %[u], 1f\n"
- 		"	add      %[rc], %[p], %[a]\n"
--		"	sc.d.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.d.aqrl  %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		: [a]"r" (a), [u]"r" (u)
-@@ -382,9 +380,8 @@ static __always_inline bool arch_atomic_inc_unless_negative(atomic_t *v)
- 		"0:	lr.w      %[p],  %[c]\n"
- 		"	bltz      %[p],  1f\n"
- 		"	addi      %[rc], %[p], 1\n"
--		"	sc.w.rl   %[rc], %[rc], %[c]\n"
-+		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez      %[rc], 0b\n"
--		"	fence     rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		:
-@@ -402,9 +399,8 @@ static __always_inline bool arch_atomic_dec_unless_positive(atomic_t *v)
- 		"0:	lr.w      %[p],  %[c]\n"
- 		"	bgtz      %[p],  1f\n"
- 		"	addi      %[rc], %[p], -1\n"
--		"	sc.w.rl   %[rc], %[rc], %[c]\n"
-+		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez      %[rc], 0b\n"
--		"	fence     rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		:
-@@ -422,9 +418,8 @@ static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
- 		"0:	lr.w     %[p],  %[c]\n"
- 		"	addi     %[rc], %[p], -1\n"
- 		"	bltz     %[rc], 1f\n"
--		"	sc.w.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		:
-@@ -444,9 +439,8 @@ static __always_inline bool arch_atomic64_inc_unless_negative(atomic64_t *v)
- 		"0:	lr.d      %[p],  %[c]\n"
- 		"	bltz      %[p],  1f\n"
- 		"	addi      %[rc], %[p], 1\n"
--		"	sc.d.rl   %[rc], %[rc], %[c]\n"
-+		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez      %[rc], 0b\n"
--		"	fence     rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		:
-@@ -465,9 +459,8 @@ static __always_inline bool arch_atomic64_dec_unless_positive(atomic64_t *v)
- 		"0:	lr.d      %[p],  %[c]\n"
- 		"	bgtz      %[p],  1f\n"
- 		"	addi      %[rc], %[p], -1\n"
--		"	sc.d.rl   %[rc], %[rc], %[c]\n"
-+		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez      %[rc], 0b\n"
--		"	fence     rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		:
-@@ -486,9 +479,8 @@ static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
- 		"0:	lr.d     %[p],  %[c]\n"
- 		"	addi      %[rc], %[p], -1\n"
- 		"	bltz     %[rc], 1f\n"
--		"	sc.d.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		:
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 1af8db92250b..9269fceb86e0 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -307,9 +307,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
- 			"	bne  %0, %z3, 1f\n"			\
--			"	sc.w.rl %1, %z4, %2\n"			\
-+			"	sc.w.aqrl %1, %z4, %2\n"		\
- 			"	bnez %1, 0b\n"				\
--			"	fence rw, rw\n"				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" ((long)__old), "rJ" (__new)		\
-@@ -319,9 +318,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.d %0, %2\n"				\
- 			"	bne %0, %z3, 1f\n"			\
--			"	sc.d.rl %1, %z4, %2\n"			\
-+			"	sc.d.aqrl %1, %z4, %2\n"		\
- 			"	bnez %1, 0b\n"				\
--			"	fence rw, rw\n"				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" (__old), "rJ" (__new)			\
--- 
-2.25.1
+I do agree with this assesment and think this is the right™ approach
+but it is more churn as can be seen by the size of this series. I think
+longer term it could be valuable though especially if more platforms
+phase out I/O port support like POWER9 for which this also allows
+filtering what drivers will never work.
 
