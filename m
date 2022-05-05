@@ -2,115 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608A551B69F
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA41151B6CA
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240591AbiEEDj5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 23:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S234037AbiEED7W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 23:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiEEDj4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:39:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE37149934;
-        Wed,  4 May 2022 20:36:17 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ktzq36K7SzfbDj;
-        Thu,  5 May 2022 11:35:11 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 5 May 2022 11:36:16 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 5 May
- 2022 11:36:15 +0800
-Message-ID: <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
-Date:   Thu, 5 May 2022 11:36:12 +0800
+        with ESMTP id S232757AbiEED7V (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF62528B;
+        Wed,  4 May 2022 20:55:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6FBE619F4;
+        Thu,  5 May 2022 03:55:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3AD2C385AC;
+        Thu,  5 May 2022 03:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651722942;
+        bh=WtKfSSpJyyg8U7WnHs0+h877cAtlMW6k7Jts1zje+Yc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BLyjvww/B/ExPUb6b/Pk1RsHg+gDHh12Smnakuo3vtpcjA/Gfyrrl5GbQmSy7NSkz
+         Sa90xNvLa5TzNNJtPCNdhdslVHc2fuiGV6Ra9c38lZrH+PznvaswjdiDo29al//gV1
+         /P464VGIHNqGjDdaz7ETsrsjCrNH5j2kL4qHay5NTK+dJLnBrIV+aAMWxQvmYFk732
+         s9O0mpeYfo2QG3X9NIOTe6UiuOm3DCwMij+65LerUhc6nwkLzpN8Q4CpNW3wALir8U
+         p15YjkTYyRb66N056wfPtxuv8SfS8m0GdhRJPPExolHzQvm7jWYrkivUwe3IAGQD/2
+         zw8LPryNF0SbQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
+        mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, dlustig@nvidia.com, parri.andrea@gmail.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V4 0/5] riscv: Optimize atomic implementation
+Date:   Thu,  5 May 2022 11:55:21 +0800
+Message-Id: <20220505035526.2974382-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arch@vger.kernel.org>, <jthierry@redhat.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <masahiroy@kernel.org>, <jpoimboe@redhat.com>, <ycote@redhat.com>,
-        <herbert@gondor.apana.org.au>, <mark.rutland@arm.com>,
-        <davem@davemloft.net>, <ardb@kernel.org>, <maz@kernel.org>,
-        <tglx@linutronix.de>, <luc.vanoostenryck@gmail.com>
-References: <20220429094355.122389-1-chenzhongjin@huawei.com>
- <20220429094355.122389-23-chenzhongjin@huawei.com>
- <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Peter,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-IIRC now the blacklist mechanisms all run on check stage, which after
-decoding, but the problem of kuser32.S happens in decoding stage. Other
-than that the assembly symbols in kuser32 is STT_NOTYPE and
-STACK_FRAME_NON_STANDARD will throw an error for this.
+Here are some optimizations for riscv atomic implementation, the first
+three patches are normal cleanup and custom implementation without
+relating to atomic semantics.
 
-OBJECT_FILES_NON_STANDARD works for the single file but as you said
-after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
-for kuser32 case at all.
+The 4th is the same as arm64 LSE with using embedded .aq/.rl
+annotation.
 
-Now my strategy for undecodable instructions is: show an error message
-and mark insn->ignore = true, but do not stop anything so decoding work
-can going on.
+The 5th is good for riscv implementation with reducing a full-barrier
+cost.
 
-To totally solve this my idea is that applying blacklist before decode.
-However for this part objtool doesn't have any insn or func info, so we
-should add a new blacklist just for this case...
+Changes in V4:
+ - Coding convention & optimize the comments
+ - Re-order the patchset
 
-On 2022/4/29 19:05, Peter Zijlstra wrote:
-> On Fri, Apr 29, 2022 at 05:43:40PM +0800, Chen Zhongjin wrote:
->> From: Raphael Gault <raphael.gault@arm.com>
->>
->> kuser32 being used for compatibility, it contains a32 instructions
->> which are not recognised by objtool when trying to analyse arm64
->> object files. Thus, we add an exception to skip validation on this
->> particular file.
->>
->> Signed-off-by: Raphael Gault <raphael.gault@arm.com>
->> Signed-off-by: Julien Thierry <jthierry@redhat.com>
->> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
->> ---
->>  arch/arm64/kernel/Makefile | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
->> index 986837d7ec82..c4f01bfe79b4 100644
->> --- a/arch/arm64/kernel/Makefile
->> +++ b/arch/arm64/kernel/Makefile
->> @@ -41,6 +41,9 @@ obj-$(CONFIG_COMPAT)			+= sys32.o signal32.o			\
->>  					   sys_compat.o
->>  obj-$(CONFIG_COMPAT)			+= sigreturn32.o
->>  obj-$(CONFIG_KUSER_HELPERS)		+= kuser32.o
->> +
->> +OBJECT_FILES_NON_STANDARD_kuser32.o := y
-> 
-> File based skipping is depricated in the face of LTO and other link
-> target based objtool runs.
-> 
-> Please use function based blacklisting as per the previous patch.
-> 
-> .
+Changes in V3:
+ - Fixup usage of lr.rl & sc.aq with violation of ISA
+ - Add Optimize dec_if_positive functions
+ - Add conditional atomic operations' optimization
+
+Changes in V2:
+ - Fixup LR/SC memory barrier semantic problems which pointed by
+   Rutland
+ - Combine patches into one patchset series
+ - Separate AMO optimization & LRSC optimization for convenience
+   patch review
+
+Guo Ren (5):
+  riscv: atomic: Cleanup unnecessary definition
+  riscv: atomic: Optimize acquire and release for AMO operations
+  riscv: atomic: Optimize memory barrier semantics of LRSC-pairs
+  riscv: atomic: Optimize dec_if_positive functions
+  riscv: atomic: Add conditional atomic operations' optimization
+
+Guo Ren (5):
+  riscv: atomic: Cleanup unnecessary definition
+  riscv: atomic: Optimize dec_if_positive functions
+  riscv: atomic: Add custom conditional atomic operation implementation
+  riscv: atomic: Optimize atomic_ops & xchg with .aq/rl annotation
+  riscv: atomic: Optimize LRSC-pairs atomic ops with .aqrl annotation
+
+ arch/riscv/include/asm/atomic.h  | 174 +++++++++++++++++++++++++++----
+ arch/riscv/include/asm/cmpxchg.h |  30 ++----
+ 2 files changed, 162 insertions(+), 42 deletions(-)
+
+-- 
+2.25.1
 
