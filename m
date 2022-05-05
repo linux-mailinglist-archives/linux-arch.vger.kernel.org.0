@@ -2,45 +2,47 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA41151B6CA
-	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FF651B6CC
+	for <lists+linux-arch@lfdr.de>; Thu,  5 May 2022 05:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbiEED7W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 4 May 2022 23:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S242246AbiEED72 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 4 May 2022 23:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232757AbiEED7V (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF62528B;
-        Wed,  4 May 2022 20:55:43 -0700 (PDT)
+        with ESMTP id S242231AbiEED71 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 4 May 2022 23:59:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A9D25EA6;
+        Wed,  4 May 2022 20:55:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6FBE619F4;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A09AB82B79;
+        Thu,  5 May 2022 03:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A6ACC385B0;
         Thu,  5 May 2022 03:55:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3AD2C385AC;
-        Thu,  5 May 2022 03:55:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651722942;
-        bh=WtKfSSpJyyg8U7WnHs0+h877cAtlMW6k7Jts1zje+Yc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BLyjvww/B/ExPUb6b/Pk1RsHg+gDHh12Smnakuo3vtpcjA/Gfyrrl5GbQmSy7NSkz
-         Sa90xNvLa5TzNNJtPCNdhdslVHc2fuiGV6Ra9c38lZrH+PznvaswjdiDo29al//gV1
-         /P464VGIHNqGjDdaz7ETsrsjCrNH5j2kL4qHay5NTK+dJLnBrIV+aAMWxQvmYFk732
-         s9O0mpeYfo2QG3X9NIOTe6UiuOm3DCwMij+65LerUhc6nwkLzpN8Q4CpNW3wALir8U
-         p15YjkTYyRb66N056wfPtxuv8SfS8m0GdhRJPPExolHzQvm7jWYrkivUwe3IAGQD/2
-         zw8LPryNF0SbQ==
+        s=k20201202; t=1651722945;
+        bh=ycOArejrZ4wjdQN/FwZtyJLMUvQeie7e/tBekexR1Pg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=n9eEqytqxgDf0VPmrt6zlMu3c3irjitX/I2CI49aa+hS/g1MICM9/XdXsivNJGBGy
+         eOWEYo89jXAp2I2QUDSedMGcTmjIQFKuwPiAizJBpTZ1L94tLPFYveMynIfrGyZScf
+         e4X2rd/1kz9Tiv6R9vJsWyPlzCgJKWwJkw+D+AcQb0U+4kV2bniiyUxstme5+NFTYv
+         AeW7uEDY0y0gAbJJkKc4p3TdQVldYDf7bz15iKb8XW3cZuHn9XzCGUeiKweCc5Ui0C
+         2UTjBQEhDYWHWd4ztlXKgwfj//hcXg/xljSr4rNmJqIjPLLdt1F42Lbj5j+SMY6P5x
+         bUKi9mEBMIsuQ==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
         mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
         boqun.feng@gmail.com, dlustig@nvidia.com, parri.andrea@gmail.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V4 0/5] riscv: Optimize atomic implementation
-Date:   Thu,  5 May 2022 11:55:21 +0800
-Message-Id: <20220505035526.2974382-1-guoren@kernel.org>
+Subject: [PATCH V4 1/5] riscv: atomic: Cleanup unnecessary definition
+Date:   Thu,  5 May 2022 11:55:22 +0800
+Message-Id: <20220505035526.2974382-2-guoren@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220505035526.2974382-1-guoren@kernel.org>
+References: <20220505035526.2974382-1-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -55,50 +57,41 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Here are some optimizations for riscv atomic implementation, the first
-three patches are normal cleanup and custom implementation without
-relating to atomic semantics.
+The cmpxchg32 & cmpxchg32_local are not used in Linux anymore. So
+clean up asm/cmpxchg.h.
 
-The 4th is the same as arm64 LSE with using embedded .aq/.rl
-annotation.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Mark Rutland <mark.rutland@arm.com>
+---
+ arch/riscv/include/asm/cmpxchg.h | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-The 5th is good for riscv implementation with reducing a full-barrier
-cost.
-
-Changes in V4:
- - Coding convention & optimize the comments
- - Re-order the patchset
-
-Changes in V3:
- - Fixup usage of lr.rl & sc.aq with violation of ISA
- - Add Optimize dec_if_positive functions
- - Add conditional atomic operations' optimization
-
-Changes in V2:
- - Fixup LR/SC memory barrier semantic problems which pointed by
-   Rutland
- - Combine patches into one patchset series
- - Separate AMO optimization & LRSC optimization for convenience
-   patch review
-
-Guo Ren (5):
-  riscv: atomic: Cleanup unnecessary definition
-  riscv: atomic: Optimize acquire and release for AMO operations
-  riscv: atomic: Optimize memory barrier semantics of LRSC-pairs
-  riscv: atomic: Optimize dec_if_positive functions
-  riscv: atomic: Add conditional atomic operations' optimization
-
-Guo Ren (5):
-  riscv: atomic: Cleanup unnecessary definition
-  riscv: atomic: Optimize dec_if_positive functions
-  riscv: atomic: Add custom conditional atomic operation implementation
-  riscv: atomic: Optimize atomic_ops & xchg with .aq/rl annotation
-  riscv: atomic: Optimize LRSC-pairs atomic ops with .aqrl annotation
-
- arch/riscv/include/asm/atomic.h  | 174 +++++++++++++++++++++++++++----
- arch/riscv/include/asm/cmpxchg.h |  30 ++----
- 2 files changed, 162 insertions(+), 42 deletions(-)
-
+diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+index 36dc962f6343..12debce235e5 100644
+--- a/arch/riscv/include/asm/cmpxchg.h
++++ b/arch/riscv/include/asm/cmpxchg.h
+@@ -348,18 +348,6 @@
+ #define arch_cmpxchg_local(ptr, o, n)					\
+ 	(__cmpxchg_relaxed((ptr), (o), (n), sizeof(*(ptr))))
+ 
+-#define cmpxchg32(ptr, o, n)						\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	arch_cmpxchg((ptr), (o), (n));					\
+-})
+-
+-#define cmpxchg32_local(ptr, o, n)					\
+-({									\
+-	BUILD_BUG_ON(sizeof(*(ptr)) != 4);				\
+-	arch_cmpxchg_relaxed((ptr), (o), (n))				\
+-})
+-
+ #define arch_cmpxchg64(ptr, o, n)					\
+ ({									\
+ 	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
 -- 
 2.25.1
 
