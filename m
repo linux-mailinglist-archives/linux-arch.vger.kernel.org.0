@@ -2,300 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E4951D6A3
-	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 13:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7407B51D6AC
+	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 13:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391324AbiEFLaP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 May 2022 07:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S1391353AbiEFLhI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 May 2022 07:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389782AbiEFLaO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 07:30:14 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB4B13F7F;
-        Fri,  6 May 2022 04:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1651836387; bh=azHha70+GWhmg49YkWnFtTT3iKIMGLPZ6Q/jJlWPQuI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PE/TUtgED1vC70nqwhf+4/pi1bKNCjFm19JASheRMc2lYYis/Gq7FbfKbCJCAKqk2
-         jioMj/Q1zY4ITwJA2XqesgXVGpx5IEoEUYoZ19GNjXDbysOcyx8+MBFC+N8MSQY+nb
-         LP7ylM4j2W5XZCd3j5A0I33AP35IP89CdrWvRKT4=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S1346328AbiEFLhH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 07:37:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2963160C9;
+        Fri,  6 May 2022 04:33:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 734406068D;
-        Fri,  6 May 2022 19:26:27 +0800 (CST)
-Message-ID: <a6afaa3f-cb9f-2086-0e02-5ec21ba535d4@xen0n.name>
-Date:   Fri, 6 May 2022 19:26:24 +0800
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC1A0B8358E;
+        Fri,  6 May 2022 11:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40408C385BE;
+        Fri,  6 May 2022 11:33:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651836800;
+        bh=mPb8Q8Ok2oNk7WAjedaRk8DoRYKS47EIw5ypxOHVuLY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MEhcEVVROzt7JNAkcDasKjP6BiznNx2llyEJNiQphooQOz3sWxo0NeoXq1qGjma3j
+         4Zt4jDF3Ol/xJAYGhMV7xEI6p4hpnR/gRU7+VCsgRasl9P+SdnFoiymfONZVvlYETt
+         Boao+8XuCNnL8WJt+Ku2LRimxFR5pkFhCoiv4Gx3lyU9EAL5a8k+iOgArRRLkDSEJW
+         AaBLP7ncLeAs7u+HKJRBautcMPZHX2Pkrx+vHRF9kJ799TJSl12whMXRpdvA/BCx/X
+         tyIj+uq91VCi3tKMnerH0qkv3BEzLb7m0J7sSBXjzflmqbSrTeB5I+mO87mHoSsyFq
+         2FwMAHSG49yNQ==
+Received: by mail-yb1-f172.google.com with SMTP id y76so12363630ybe.1;
+        Fri, 06 May 2022 04:33:20 -0700 (PDT)
+X-Gm-Message-State: AOAM533WkIphyq6CzJGfB6I7e5q6tTbO0f97sEmW1Xub1pG1AICBETHh
+        I9cLEU4Z246x1tvEj71v40UpF5ZDwattFWn81Lk=
+X-Google-Smtp-Source: ABdhPJy5Vv8YTgA/+Yk25Xv8xMKQhcEw8LiqaQy/3bb0wg6KVBd/5y4hLeqVF7Zu5FslZtdBqz1tOtNTiterOIoDfDE=
+X-Received: by 2002:a25:d3c2:0:b0:645:74df:f43d with SMTP id
+ e185-20020a25d3c2000000b0064574dff43dmr1886331ybf.394.1651836798896; Fri, 06
+ May 2022 04:33:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V9 20/24] LoongArch: Add efistub booting support
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
+ <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
+ <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 6 May 2022 13:33:02 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
+Message-ID: <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
+ as necessary
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
- <20220430090518.3127980-21-chenhuacai@loongson.cn>
- <CAK8P3a2SPTLLrZtSz0LT0LqMpq4SKCScD4vLvr+DJn+u5W_CdA@mail.gmail.com>
- <CAMj1kXEDpJwLDD4ZGLwzdo1KcJG_90iD9MnBVamCK06YKF7BdA@mail.gmail.com>
- <CAAhV-H4eR5YvhABp9L4FBmofWwH+XM3V_nOjatQTV_M7Gihs7g@mail.gmail.com>
- <CAMj1kXFD8_CuijJFgQbrxvY4MVBLmKQKFKmYhD1NBFLn3v=+FQ@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAMj1kXFD8_CuijJFgQbrxvY4MVBLmKQKFKmYhD1NBFLn3v=+FQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
-
-On 5/6/22 16:14, Ard Biesheuvel wrote:
-> [snip]
->>>>> +
->>>>> +static efi_status_t mk_mmap(struct efi_boot_memmap *map, struct boot_params *p)
->>>>> +{
->>> Are you passing a different representation of the memory map to the
->>> core kernel? I think it would be easier just to pass the EFI memory
->>> map like other EFI arches do, and reuse all of the code that we
->>> already have.
->> Yes, this different representation is used by our "boot_params", the
->> interface between bootloader (including efistub) and the core kernel.
-> So how does the core kernel consume the EFI memory map? Only through
-> this mechanism?
+On Fri, May 6, 2022 at 12:20 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+> On Thu, 5 May 2022, Arnd Bergmann wrote:
+>  I think I'm missing something here.  IIUC we're talking about a PCI/PCIe
+> bus used with s390 hardware, right?
 >
->>>>> +       char checksum;
->>>>> +       unsigned int i;
->>>>> +       unsigned int nr_desc;
->>>>> +       unsigned int mem_type;
->>>>> +       unsigned long count;
->>>>> +       efi_memory_desc_t *mem_desc;
->>>>> +       struct loongsonlist_mem_map *mhp = NULL;
->>>>> +
->>>>> +       memset(map_entry, 0, sizeof(map_entry));
->>>>> +       memset(mmap_array, 0, sizeof(mmap_array));
->>>>> +
->>>>> +       if (!strncmp((char *)p, "BPI", 3)) {
->>>>> +               p->flags |= BPI_FLAGS_UEFI_SUPPORTED;
->>>>> +               p->systemtable = (efi_system_table_t *)efi_system_table;
->>>>> +               p->extlist_offset = sizeof(*p) + sizeof(unsigned long);
->>>>> +               mhp = (struct loongsonlist_mem_map *)((char *)p + p->extlist_offset);
->>>>> +
->>>>> +               memcpy(&mhp->header.signature, "MEM", sizeof(unsigned long));
->>>>> +               mhp->header.length = sizeof(*mhp);
->>>>> +               mhp->desc_version = *map->desc_ver;
->>>>> +               mhp->map_count = 0;
->>>>> +       }
->>>>> +       if (!(*(map->map_size)) || !(*(map->desc_size)) || !mhp) {
->>>>> +               efi_err("get memory info error\n");
->>>>> +               return EFI_INVALID_PARAMETER;
->>>>> +       }
->>>>> +       nr_desc = *(map->map_size) / *(map->desc_size);
->>>>> +
->>>>> +       /*
->>>>> +        * According to UEFI SPEC, mmap_buf is the accurate Memory Map
->>>>> +        * mmap_array now we can fill platform specific memory structure.
->>>>> +        */
->>>>> +       for (i = 0; i < nr_desc; i++) {
->>>>> +               mem_desc = (efi_memory_desc_t *)((void *)(*map->map) + (i * (*(map->desc_size))));
->>>>> +               switch (mem_desc->type) {
->>>>> +               case EFI_RESERVED_TYPE:
->>>>> +               case EFI_RUNTIME_SERVICES_CODE:
->>>>> +               case EFI_RUNTIME_SERVICES_DATA:
->>>>> +               case EFI_MEMORY_MAPPED_IO:
->>>>> +               case EFI_MEMORY_MAPPED_IO_PORT_SPACE:
->>>>> +               case EFI_UNUSABLE_MEMORY:
->>>>> +               case EFI_PAL_CODE:
->>>>> +                       mem_type = ADDRESS_TYPE_RESERVED;
->>>>> +                       break;
->>>>> +
->>>>> +               case EFI_ACPI_MEMORY_NVS:
->>>>> +                       mem_type = ADDRESS_TYPE_NVS;
->>>>> +                       break;
->>>>> +
->>>>> +               case EFI_ACPI_RECLAIM_MEMORY:
->>>>> +                       mem_type = ADDRESS_TYPE_ACPI;
->>>>> +                       break;
->>>>> +
->>>>> +               case EFI_LOADER_CODE:
->>>>> +               case EFI_LOADER_DATA:
->>>>> +               case EFI_PERSISTENT_MEMORY:
->>>>> +               case EFI_BOOT_SERVICES_CODE:
->>>>> +               case EFI_BOOT_SERVICES_DATA:
->>>>> +               case EFI_CONVENTIONAL_MEMORY:
->>>>> +                       mem_type = ADDRESS_TYPE_SYSRAM;
->>>>> +                       break;
->>>>> +
->>>>> +               default:
->>>>> +                       continue;
->>>>> +               }
->>>>> +
->>>>> +               mmap_array[mem_type][map_entry[mem_type]].mem_type = mem_type;
->>>>> +               mmap_array[mem_type][map_entry[mem_type]].mem_start =
->>>>> +                                               mem_desc->phys_addr & TO_PHYS_MASK;
->>>>> +               mmap_array[mem_type][map_entry[mem_type]].mem_size =
->>>>> +                                               mem_desc->num_pages << EFI_PAGE_SHIFT;
->>>>> +               mmap_array[mem_type][map_entry[mem_type]].attribute =
->>>>> +                                               mem_desc->attribute;
->>>>> +               map_entry[mem_type]++;
->>>>> +       }
->>>>> +
->>>>> +       count = mhp->map_count;
->>>>> +       /* Sort EFI memmap and add to BPI for kernel */
->>>>> +       for (i = 0; i < LOONGSON3_BOOT_MEM_MAP_MAX; i++) {
->>>>> +               if (!map_entry[i])
->>>>> +                       continue;
->>>>> +               count = efi_memmap_sort(mhp, count, i);
->>>>> +       }
->>>>> +
->>>>> +       mhp->map_count = count;
->>>>> +       mhp->header.checksum = 0;
->>>>> +
->>>>> +       checksum = efi_crc8((char *)mhp, mhp->header.length);
->>>>> +       mhp->header.checksum = checksum;
->>>>> +
->>>>> +       return EFI_SUCCESS;
->>>>> +}
->>>>> +
->>>>> +static efi_status_t exit_boot_func(struct efi_boot_memmap *map, void *priv)
->>>>> +{
->>>>> +       efi_status_t status;
->>>>> +       struct exit_boot_struct *p = priv;
->>>>> +
->>>>> +       status = mk_mmap(map, p->bp);
->>>>> +       if (status != EFI_SUCCESS) {
->>>>> +               efi_err("Make kernel memory map failed!\n");
->>>>> +               return status;
->>>>> +       }
->>>>> +
->>>>> +       return EFI_SUCCESS;
->>>>> +}
->>>>> +
->>>>> +static efi_status_t exit_boot_services(struct boot_params *boot_params, void *handle)
->>>>> +{
->>>>> +       unsigned int desc_version;
->>>>> +       unsigned int runtime_entry_count = 0;
->>>>> +       unsigned long map_size, key, desc_size, buff_size;
->>>>> +       efi_status_t status;
->>>>> +       efi_memory_desc_t *mem_map;
->>>>> +       struct efi_boot_memmap map;
->>>>> +       struct exit_boot_struct priv;
->>>>> +
->>>>> +       map.map                 = &mem_map;
->>>>> +       map.map_size            = &map_size;
->>>>> +       map.desc_size           = &desc_size;
->>>>> +       map.desc_ver            = &desc_version;
->>>>> +       map.key_ptr             = &key;
->>>>> +       map.buff_size           = &buff_size;
->>>>> +       status = efi_get_memory_map(&map);
->>>>> +       if (status != EFI_SUCCESS) {
->>>>> +               efi_err("Unable to retrieve UEFI memory map.\n");
->>>>> +               return status;
->>>>> +       }
->>>>> +
->>>>> +       priv.bp = boot_params;
->>>>> +       priv.runtime_entry_count = &runtime_entry_count;
->>>>> +
->>>>> +       /* Might as well exit boot services now */
->>>>> +       status = efi_exit_boot_services(handle, &map, &priv, exit_boot_func);
->>>>> +       if (status != EFI_SUCCESS)
->>>>> +               return status;
->>>>> +
->>>>> +       return EFI_SUCCESS;
->>>>> +}
->>>>> +
->>>>> +/*
->>>>> + * EFI entry point for the LoongArch EFI stub.
->>>>> + */
->>>>> +efi_status_t __efiapi efi_pe_entry(efi_handle_t handle, efi_system_table_t *sys_table)
->>> Why are you not using the generic EFI stub boot flow?
->> Hmmm, as I know, we define our own "boot_params", a interface between
->> bootloader (including efistub) and the core kernel to pass memmap,
->> cmdline and initrd information, three years ago. This method looks
->> like the X86 way, while different from the generic stub (which is
->> called arm stub before 5.8). In these years, many products have
->> already use the "boot_params" interface (including UEFI, PMON, Grub,
->> Kernel, etc., but most of them haven't be upstream). Replace
->> boot_params with FDT (i.e., the generic stub way) is difficult for us,
->> because it means a big broken of compatibility.
->>
-> OK, I understand. So using the generic stub is not possible for you.
+>  (It has to be PCI/PCIe, because other than x86/IA-64 host buses there are
+> only PCI/PCIe and EISA/ISA buses out there that define I/O access cycles
+> and EISA/ISA have long been obsoleted except perhaps from some niche use.)
 >
-> So as long as you don't enable deprecated features such as initrd=, or
-> rely on special hacks like putting magic numbers at fixed offsets in
-> the image, I'm fine with this approach.
+>  If this is PCI/PCIe indeed, then an I/O access is just a different bit
+> pattern put on the bus/in the TLP in the address phase.  So what is there
+> inherent to the s390 architecture that prevents that different bit pattern
+> from being used?
 
-I'd like to add some relevant background: this "struct boot_params" 
-thingy is actually a Loongson corporate standard. It is available at 
-[1]; only in Chinese but should be minimally recognizable given much of 
-it is C code, and you can see this struct and its friends barely changed 
-since 2019.
+The hardware design for PCI on s390 is very different from any other
+architecture, and more abstract. Rather than implementing MMIO register
+access as pointer dereference, this is a separate CPU instruction that
+takes a device/bar plus offset as arguments rather than a pointer, and
+Linux encodes this back into a fake __iomem token.
 
-The standard is in place long before inception of LoongArch (the 
-earliest spec is dated back to 2014). Back when Loongson was still doing 
-MIPS this is somewhat acceptable, due to fragmentation of the MIPS 
-world, but they didn't take the chance to re-think most of this for 
-LoongArch, instead simply porting everything over as-is. Hence the ship 
-has more-or-less already sailed, and we indeed have to support this flow 
-for keeping compatibility...
+>  If anything, I could imagine the same limitation as with current POWER9
+> implementations, that is whatever glue is used to wire PCI/PCIe to the
+> rest of the system does not implement a way to use said bit pattern (which
+> has nothing to do with the POWER9 processor instruction set).
+>
+>  But that has nothing to do with the presence or absence of any specific
+> processor instructions.  It's just a limitation of bus glue.  So I guess
+> it's just that all PCI/PCIe glue logic implementations for s390 have such
+> a limitation, right?
 
-Or is there compatibility at all?
+There are separate instructions for PCI memory and config space, but
+no instructions for I/O space, or for non-PCI MMIO that it could be mapped
+into.
 
-It turns out that this port is already incompatible with shipped 
-systems, in other ways, at least since the March revision or so.
-
-For one thing, the exact definition of this "struct boot_params" is 
-already incompatibly revised; this version [2] is the one actually 
-compatible with existing firmware, so people already have to write shims 
-(not started yet) or flash their firmware (not open-sourced or provided 
-by Loongson yet) to actually compile and run this port. (You haven't 
-read that wrong; indeed no one outside Loongson is able to run this 
-kernel so far.)
-
-For another thing, the kernel ABI and the userland (mainly glibc) are 
-also incompatible with the shipped systems with their pre-installed 
-vendor systems. Things like different NSIG, sigcontext, and glibc symbol 
-versions already ensured no binary can run in "the other world".
-
-So, in effect, this port is starting from scratch, and taking the chance 
-to fix early mistakes and oversights all over; hence my opinion is, 
-better do the Right Thing (tm) and give the generic codepath a chance.
-
-For the Loongson devs: at least, declare the struct boot_params flow 
-deprecated from day one, then work to eliminate it from future products, 
-if you really don't want to delay merging even further (it's already 
-unlikely to land in 5.19, given the discussion happening in LKML [3]). 
-It's not embarrassing to admit mistakes; we all make mistakes, and 
-what's important is to learn from them so we don't collectively repeat 
-ourselves.
-
-
-[1]: 
-https://web.archive.org/web/20190713081851/http://www.loongson.cn/uploadfile/devsysmanual/loongson_devsys_firmware_kernel_interface_specification.pdf
-[2]: 
-https://github.com/xen0n/linux/commit/a55739f8e748dc9164c12da504696161bb8b9911
-[3]: https://lwn.net/ml/linux-kernel/87v8uk6kfa.wl-maz@kernel.org/
-
+       Arnd
