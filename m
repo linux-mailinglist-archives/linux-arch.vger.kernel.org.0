@@ -2,128 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2F351D52F
-	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 12:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B7C51D597
+	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 12:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237208AbiEFKKm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 May 2022 06:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S245077AbiEFKYI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 May 2022 06:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390800AbiEFKKl (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 06:10:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 379DE5DA7F;
-        Fri,  6 May 2022 03:06:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F384C14BF;
-        Fri,  6 May 2022 03:06:57 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.65.197])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 583A13FA31;
-        Fri,  6 May 2022 03:06:55 -0700 (PDT)
-Date:   Fri, 6 May 2022 11:06:51 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, jthierry@redhat.com,
-        catalin.marinas@arm.com, will@kernel.org, masahiroy@kernel.org,
-        jpoimboe@redhat.com, ycote@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, ardb@kernel.org, maz@kernel.org,
-        tglx@linutronix.de, luc.vanoostenryck@gmail.com
-Subject: Re: [RFC PATCH v4 22/37] arm64: kernel: Skip validation of kuser32.o
-Message-ID: <YnTzO3imkSUAuIKx@FVFF77S0Q05N>
-References: <20220429094355.122389-1-chenzhongjin@huawei.com>
- <20220429094355.122389-23-chenzhongjin@huawei.com>
- <YmvGja62yWdPHPOW@hirez.programming.kicks-ass.net>
- <a57f7d73-6e01-8f41-9be3-8e90807ec08f@huawei.com>
- <20220505092448.GE2501@worktop.programming.kicks-ass.net>
- <YnOtbYOIT5OP7F0g@FVFF77S0Q05N.cambridge.arm.com>
- <51ce37b5-f527-9743-36d3-50247cb0939f@huawei.com>
+        with ESMTP id S238176AbiEFKYD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 06:24:03 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EE571083;
+        Fri,  6 May 2022 03:20:19 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 245B192009C; Fri,  6 May 2022 12:20:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 1C7D492009B;
+        Fri,  6 May 2022 11:20:17 +0100 (BST)
+Date:   Fri, 6 May 2022 11:20:17 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Arnd Bergmann <arnd@kernel.org>
+cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
+        "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        "open list:SUPERH" <linux-sh@vger.kernel.org>,
+        "open list:SPARC + UltraSPARC (sparc/sparc64)" 
+        <sparclinux@vger.kernel.org>
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+In-Reply-To: <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
+References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com> <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <51ce37b5-f527-9743-36d3-50247cb0939f@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, May 06, 2022 at 10:18:10AM +0800, Chen Zhongjin wrote:
-> On 2022/5/5 18:56, Mark Rutland wrote:
-> > On Thu, May 05, 2022 at 11:24:48AM +0200, Peter Zijlstra wrote:
-> >> On Thu, May 05, 2022 at 11:36:12AM +0800, Chen Zhongjin wrote:
-> >>> Hi Peter,
-> >>>
-> >>> IIRC now the blacklist mechanisms all run on check stage, which after
-> >>> decoding, but the problem of kuser32.S happens in decoding stage. Other
-> >>> than that the assembly symbols in kuser32 is STT_NOTYPE and
-> >>> STACK_FRAME_NON_STANDARD will throw an error for this.
-> >>>
-> >>> OBJECT_FILES_NON_STANDARD works for the single file but as you said
-> >>> after LTO it's invalid. However STACK_FRAME_NON_STANDARD doesn't work
-> >>> for kuser32 case at all.
-> >>>
-> >>> Now my strategy for undecodable instructions is: show an error message
-> >>> and mark insn->ignore = true, but do not stop anything so decoding work
-> >>> can going on.
-> >>>
-> >>> To totally solve this my idea is that applying blacklist before decode.
-> >>> However for this part objtool doesn't have any insn or func info, so we
-> >>> should add a new blacklist just for this case...
-> >>
-> >> OK, so Mark explained that this is 32bit userspace (VDSO) code.
-> >>
-> >> And as such there's really no point in running objtool on it. Does all
-> >> that live in it's own section? Should it?
-> > 
-> > It's placed in .rodata by a linker script:
-> > 
-> > * The 32-bit vdso + kuser code is placed in .rodata, between the `vdso32_start`
-> >   and `vdso32_end` symbols, as raw bytes (via .incbin).
-> >   See arch/arm64/kernel/vdso32-wrap.S.
-> > 
-> > * The 64-bit vdso code is placed in .rodata, between the `vdso_start`
-> >   and `vdso32` symbols, as raw bytes (via .incbin).
-> >   See arch/arm64/kernel/vdso-wrap.S.
-> > 
-> > The objects under arch/arm64/kernel/{vdso,vdso32}/ are all userspace objects,
-> > and from userspace's PoV the existing secrtions within those objects are
-> > correct, so I don't think those should change.
-> > 
-> > How does x86 deal with its vdso objects?
-> > 
-> > Thanks,
-> > Mark.
-> > .
+On Thu, 5 May 2022, Arnd Bergmann wrote:
+
+> > I'm hearing that generic powerpc kernels have to run both on machines
+> > that have I/O port space and those that don't.  That makes me think
+> > s390 could do something similar.
 > 
-> However for my build kuser32.o content is in .text 
+> No, this is actually the current situation, and it makes absolutely no
+> sense. s390 has no way of implementing inb()/outb() because there
+> are no instructions for it and it cannot tunnel them through a virtual
+> address mapping like on most of the other architectures. (it has special
+> instructions for accessing memory space, which is not the same as
+> a pointer dereference here).
 
-We should be able to move that into .rodata; it's never executed in kernel context.
+ I think I'm missing something here.  IIUC we're talking about a PCI/PCIe 
+bus used with s390 hardware, right?
 
-> and there is only `vdso` symbol in .rodata without `vdso32`.
+ (It has to be PCI/PCIe, because other than x86/IA-64 host buses there are 
+only PCI/PCIe and EISA/ISA buses out there that define I/O access cycles 
+and EISA/ISA have long been obsoleted except perhaps from some niche use.)
 
-That means you're not building with CROSS_COMPILE_COMPAT, and so we can't build
-the 32-bit VDSO.
+ If this is PCI/PCIe indeed, then an I/O access is just a different bit 
+pattern put on the bus/in the TLP in the address phase.  So what is there 
+inherent to the s390 architecture that prevents that different bit pattern 
+from being used?
 
-> And for defconfig the CONFIG_KUSER_HELPERS=y is on.
+ If anything, I could imagine the same limitation as with current POWER9 
+implementations, that is whatever glue is used to wire PCI/PCIe to the 
+rest of the system does not implement a way to use said bit pattern (which 
+has nothing to do with the POWER9 processor instruction set).
 
-Yes.
+ But that has nothing to do with the presence or absence of any specific 
+processor instructions.  It's just a limitation of bus glue.  So I guess 
+it's just that all PCI/PCIe glue logic implementations for s390 have such 
+a limitation, right?
 
-> According to your description, it seems something wrong here?
-
-Sorry, I was wrong about how we linked the kuser32 code.
-
-I believe we can move that into .rodata by adding:
-
-	.section .rodata
-
-... to the start of that.
-
-I think that'd be a nice cleanup to do regardless of objtool.
-
-Thanks,
-Mark.
+  Maciej
