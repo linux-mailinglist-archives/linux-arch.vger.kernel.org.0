@@ -2,60 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8687551DB59
-	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 17:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743F851DB67
+	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 17:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442565AbiEFPGF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 May 2022 11:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
+        id S1442597AbiEFPHB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 May 2022 11:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344485AbiEFPGE (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 11:06:04 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA313396B6;
-        Fri,  6 May 2022 08:02:20 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id js14so5584893qvb.12;
-        Fri, 06 May 2022 08:02:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T95DKyI860o0Ni6h4dJD+E7diEEpmm2y8EkaKK0YMZc=;
-        b=LIEt+Hj0vorrPId2XXAkIzYrafDHh4aGVFsTJERz19t6ZBEGg4QqxOeWZIiZm1IzdA
-         TP9/Gzt6OcBeCGJrc5ptrAoRAptT87/ed4fEOYP5rjMkxZ08BRCzZdUivGPaflqOrxid
-         UdUX9guNF636lqAAqf2X6uu7i5yfhqe2peiWMfrHN17BblyZntp85mXqSYolGtsOeahP
-         Bqhw8nXJb6yqqbGYgDVz49P6My1uYqB1fumdV7cjG5TbC6cor52Dz28WyGQi30JeLABb
-         BwvMlRhRT0caLQGmbZHgEmqY572uMTBhKKCF09qxgDuhQCaEESY+w7YTVJqhTkeqT76H
-         ghGQ==
-X-Gm-Message-State: AOAM532tB31TEiA294rcJNQ3ykT0zHFdc8p261lVpD/VsfCDQiBtEcEQ
-        J6moxrX2XxBrpszDFBVA1FtpGT0qW2d+VQ==
-X-Google-Smtp-Source: ABdhPJynUG3F533fte8dV60hdIv+ozcQx1diqhjWoKACMR0xOo9dFfthI5Vt9H+fq9TJ1Fj5nJKqwQ==
-X-Received: by 2002:a05:6214:29c1:b0:45a:e0e5:7b2b with SMTP id gh1-20020a05621429c100b0045ae0e57b2bmr2778900qvb.44.1651849339531;
-        Fri, 06 May 2022 08:02:19 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b0069fc13ce22asm2625608qkb.91.2022.05.06.08.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 08:02:19 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id w187so13355019ybe.2;
-        Fri, 06 May 2022 08:02:18 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr2817893ybu.604.1651849338111; Fri, 06
- May 2022 08:02:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
- <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
- <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk> <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
- <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk> <5239892986c94239a122ab2f7a18a7a5@AcuMS.aculab.com>
- <CAMuHMdWj5rmrP941DF7bsUXbiiemE-o2=8XqnAS-chgmpFFPQg@mail.gmail.com> <62c1bf6687ac4abc98d4015852930241@AcuMS.aculab.com>
-In-Reply-To: <62c1bf6687ac4abc98d4015852930241@AcuMS.aculab.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 May 2022 17:02:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV1HpUNKdZDqd0e5BKfr-FqGrwGJJ_xTKw5Z55bdEJa+Q@mail.gmail.com>
-Message-ID: <CAMuHMdV1HpUNKdZDqd0e5BKfr-FqGrwGJJ_xTKw5Z55bdEJa+Q@mail.gmail.com>
-Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
- as necessary
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        with ESMTP id S1442587AbiEFPG7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 11:06:59 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FD8B6B098;
+        Fri,  6 May 2022 08:03:16 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 022B79200C3; Fri,  6 May 2022 17:03:14 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id F242C9200C1;
+        Fri,  6 May 2022 16:03:14 +0100 (BST)
+Date:   Fri, 6 May 2022 16:03:14 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     David Laight <David.Laight@aculab.com>,
         Arnd Bergmann <arnd@kernel.org>, Rich Felker <dalias@libc.org>,
         "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
         "open list:SUPERH" <linux-sh@vger.kernel.org>,
@@ -96,71 +63,36 @@ Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         "open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" 
         <linuxppc-dev@lists.ozlabs.org>,
         "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+In-Reply-To: <CAMuHMdVsjRUKYqS0nkKsT08A4a4ipuhn7AG+ZqcHBqZvVX02OQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2205061558430.52331@angie.orcam.me.uk>
+References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com> <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com> <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk>
+ <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com> <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk> <5239892986c94239a122ab2f7a18a7a5@AcuMS.aculab.com> <alpine.DEB.2.21.2205061412080.52331@angie.orcam.me.uk>
+ <3669a28a055344a792b51439c953fd30@AcuMS.aculab.com> <alpine.DEB.2.21.2205061440260.52331@angie.orcam.me.uk> <CAMuHMdVsjRUKYqS0nkKsT08A4a4ipuhn7AG+ZqcHBqZvVX02OQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi David
+Hi Geert,
+> >  Sane access would require a single CPU instruction to read or write from
+> > the configuration space.  To access the conventional PCI configuration
+> > space in a direct linear manner you need 256 * 21 * 8 * 256 = 10.5MiB of
+> > address space.  Such amount of address space seems affordable even with
+> > 32-bit systems.
+> 
+> Won't have fit in the legacy 1 MiB space ("640 KiB...").
 
-On Fri, May 6, 2022 at 4:05 PM David Laight <David.Laight@aculab.com> wrote:
-> From: Geert Uytterhoeven
-> > Sent: 06 May 2022 14:09
-> > > The same is really true for other bus type - including ISA and EISA.
-> > > (Ignoring the horrid of probing ISI bus devices - hopefully they
-> > > are in the ACPI tables??_
-> > > If a driver is probed on a ISA bus there ought to be functions
-> > > equivalent to pci_ioremap() (for both memory and IO addresses)
-> > > that return tokens appropriate for the specific bus.
-> > >
-> > > That is all a different load of churn.
-> >
-> > A loooong time ago,  it was suggested to add register accessor
-> > functions to struct device, so e.g. readl(dev, offset) would call
-> > into these accessors, which would implement the bus-specific behavior.
-> > No more worries about readl(), __raw_readl(), ioread32b(), or whatever
-> > quirk is needed, at the (small on nowadays' machines) expense of
-> > some indirection...
->
-> I was just thinking that the access functions might need a 'device'.
-> Although you also need the BAR (or equivalent).
-> So readl(dev, bar_token, offset) or readl(dev, bar_token + offset).
+ Haha, but anyway you're supposed to use BIOS calls under DOS and the like 
+so it doesn't really matter.  You can't poke at the APIC in the legacy 
+space either.
 
-Note that we do have such a system: regmap.
-
-> Clearly the 'dev' parameter could be compiled out for non-DEBUG
-> build on x86 - leaving the current(ish) object code.
-
-Assumed all devices are PCI devices.
-E.g. USB devices would still need the indirection.
-
-> You don't want an indirect call (this year), but maybe real
-> function call and a few tests won't make that much difference.
-> They might affect PCIe writes, but PCIe reads are so slow you
-> need to avoid them whenever possible.
-> I've not timed reads into something like an ethernet chip,
-> but into our fpga they are probably 1000 clocks+.
->
-> OTOH I wouldn't want any overhead on the PIO fifo reads
-> on one of our small ppc devices.
-> We push a lot of data though that fifo and anything extra
-> would kill performance.
-
-Right.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+  Maciej
