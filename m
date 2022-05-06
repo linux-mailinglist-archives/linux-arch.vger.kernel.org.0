@@ -2,114 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F09551D9F0
-	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 16:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3436351DBBB
+	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 17:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381640AbiEFOLo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 May 2022 10:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S1442734AbiEFPT6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 May 2022 11:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231739AbiEFOLn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 10:11:43 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD7C5A2DF;
-        Fri,  6 May 2022 07:07:56 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id 126so5939014qkm.4;
-        Fri, 06 May 2022 07:07:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HLS1owR3CUUM/pxIukdO3Yvx2ZZOeSpZS2VuYEsMpRM=;
-        b=Z247zpROugve+xccj1mnDqoSRDmWrS7IWjEOtk9VS9GM5cLRjoubnC0NSdY93eDmX4
-         q4KzWOLYKwHChJ/R4FsGLq2i7+zhI5MrUk8JIpNpxHG0z5SWS5BQqFsOitZwr3bVdFe5
-         SC3W8p3GtmHHsGSmcJQt+D3GEAwjN2n0L36wH6SKonwNiQ3SMkqUtKCZ6ZjZVL8fYdKY
-         AtLPCn8WEtmQjqlDpavK2Wad8InHJassoAvR8eHhF7ciB/2HAdNQusnsbCz6Havq/kg6
-         0GXkomAaKuhQHC3cHM4Q7647YloD/eHKgomqdPnIrfvWt4fBw2rOAbHFEAOkiyVjyiD4
-         HYlQ==
-X-Gm-Message-State: AOAM531zVuJ0S+P7Rtk2XWvoJBMgSXM61gWTdyiyW8wOtPwMEFUhm9q9
-        +yfXauaZoOCPQUsqkY/7bdCq2ffMsrR5gg==
-X-Google-Smtp-Source: ABdhPJzmpBReCv37qqtfOf8Imzp9MGGDEq/Ufzp603XZWxvx5nIRaOd6RMNBNV8Y0JqOU/4mlOaHBw==
-X-Received: by 2002:a37:a743:0:b0:69f:e64c:74c9 with SMTP id q64-20020a37a743000000b0069fe64c74c9mr2455682qke.432.1651846075717;
-        Fri, 06 May 2022 07:07:55 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id u12-20020ac8750c000000b002f39b99f69csm2580370qtq.54.2022.05.06.07.07.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 07:07:55 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id w187so13077449ybe.2;
-        Fri, 06 May 2022 07:07:55 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr2392502ybb.202.1651846074895; Fri, 06
- May 2022 07:07:54 -0700 (PDT)
+        with ESMTP id S1347956AbiEFPT5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 11:19:57 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8031A66203;
+        Fri,  6 May 2022 08:16:13 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:52514)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmygm-009mY8-CM; Fri, 06 May 2022 08:12:12 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37200 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmygj-007Bpk-Tg; Fri, 06 May 2022 08:12:11 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     <linux-arch@vger.kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+References: <CANpfEhOnNZa5d_G3e0dzzbbEtSuqxWY-fUCqzSiFpiQ2k0hJyw@mail.gmail.com>
+        <CAHk-=wjfecvcUk2vNQM1GiUz_G=WQEJ8i8JS7yjnxjq_f-OgKw@mail.gmail.com>
+        <87a6czifo7.fsf@email.froward.int.ebiederm.org>
+        <CAHk-=wj=EHvH-DEUHbkoB3vDZJ1xRzrk44JibtNOepNkachxPw@mail.gmail.com>
+        <87ilrn1drx.ffs@tglx> <877d7zk1cf.ffs@tglx>
+        <CAHk-=wiJPeANKYU4imYaeEuV6sNP+EDR=rWURSKv=y4Mhcn1hA@mail.gmail.com>
+        <87y20fid4d.ffs@tglx>
+        <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Fri, 06 May 2022 09:11:36 -0500
+In-Reply-To: <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Tue, 12 Apr 2022 18:31:03 -0500")
+Message-ID: <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <Yib9F5SqKda/nH9c@infradead.org>
-In-Reply-To: <Yib9F5SqKda/nH9c@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 May 2022 16:07:43 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXVS6ROvp4rkZzBOBJBkQYjtdL0-m0ok=8UvTkwp-X4bw@mail.gmail.com>
-Message-ID: <CAMuHMdXVS6ROvp4rkZzBOBJBkQYjtdL0-m0ok=8UvTkwp-X4bw@mail.gmail.com>
-Subject: Re: [RFC PULL] remove arch/h8300
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nmygj-007Bpk-Tg;;;mid=<87mtfu4up3.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX19t4gV9Zdd4oP1qG3l/gRiLHnzIm5vjIGg=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;<linux-arch@vger.kernel.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1843 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 13 (0.7%), b_tie_ro: 11 (0.6%), parse: 1.21
+        (0.1%), extract_message_metadata: 4.4 (0.2%), get_uri_detail_list:
+        1.57 (0.1%), tests_pri_-1000: 7 (0.4%), tests_pri_-950: 1.86 (0.1%),
+        tests_pri_-900: 1.71 (0.1%), tests_pri_-90: 503 (27.3%), check_bayes:
+        501 (27.2%), b_tokenize: 9 (0.5%), b_tok_get_all: 9 (0.5%),
+        b_comp_prob: 2.8 (0.2%), b_tok_touch_all: 475 (25.8%), b_finish: 1.22
+        (0.1%), tests_pri_0: 1290 (70.0%), check_dkim_signature: 0.69 (0.0%),
+        check_dkim_adsp: 3.1 (0.2%), poll_dns_idle: 1.08 (0.1%), tests_pri_10:
+        2.4 (0.1%), tests_pri_500: 8 (0.5%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 0/7] fork: Make init and umh ordinary tasks
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Chrisoph,
 
-On Tue, Mar 8, 2022 at 12:04 PM Christoph Hellwig <hch@infradead.org> wrote:
-> h8300 hasn't been maintained for quite a while, with even years old
-> pull request lingering in the old repo.  Given that it always was
-> rather fringe to start with I'd suggest to go ahead and remove the
-> port:
->
-> The following changes since commit 5c1ee569660d4a205dced9cb4d0306b907fb7599:
->
->   Merge branch 'for-5.17-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup (2022-02-22 16:14:35 -0800)
->
-> are available in the Git repository at:
->
->   git://git.infradead.org/users/hch/misc.git remove-h8300
->
-> for you to fetch changes up to 1c4b5ecb7ea190fa3e9f9d6891e6c90b60e04f24:
->
->   remove the h8300 architecture (2022-02-23 08:52:50 +0100)
->
-> ----------------------------------------------------------------
-> Christoph Hellwig (1):
->       remove the h8300 architecture
->
->  .../bindings/clock/renesas,h8300-div-clock.txt     |  24 --
->  Documentation/devicetree/bindings/h8300/cpu.txt    |  13 -
->  .../interrupt-controller/renesas,h8300h-intc.txt   |  22 --
->  .../interrupt-controller/renesas,h8s-intc.txt      |  22 --
->  .../memory-controllers/renesas,h8300-bsc.yaml      |  35 --
+In commit 40966e316f86 ("kthread: Ensure struct kthread is present for
+all kthreads") caused init and the user mode helper threads that call
+kernel_execve to have struct kthread allocated for them.
 
-More DT bindings to garbage-collect:
-Documentation/devicetree/bindings/clock/renesas,h8s2678-pll-clock.txt
-Documentation/devicetree/bindings/timer/renesas,16bit-timer.txt
-Documentation/devicetree/bindings/timer/renesas,8bit-timer.txt
+I believe my first patch in this series is enough to fix the bug
+and is simple enough and obvious enough to be backportable.
 
-Gr{oetje,eeting}s,
+The rest of the changes pass struct kernel_clone_args to clean things
+up and cause the code to make sense.
 
-                        Geert
+There is one rough spot in this change.  In the init process before the
+user space init process is exec'd there is a lot going on.  I have found
+when async_schedule_domain is low on memory or has more than 32K callers
+executing do_populate_rootfs will now run in a user space thread making
+flush_delayed_fput meaningless, and __fput_sync is unusable.  I solved
+this as I did in usermode_driver.c with an added explicit task_work_run.
+I point this out as I have seen some talk about making flushing file
+handles more explicit.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Eric W. Biederman (7):
+      kthread: Don't allocate kthread_struct for init and umh
+      fork: Pass struct kernel_clone_args into copy_thread
+      fork: Explicity test for idle tasks in copy_thread
+      fork: Generalize PF_IO_WORKER handling
+      init: Deal with the init process being a user mode process
+      fork: Explicitly set PF_KTHREAD
+      fork: Stop allowing kthreads to call execve
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ arch/alpha/kernel/process.c      | 13 ++++++------
+ arch/arc/kernel/process.c        | 13 ++++++------
+ arch/arm/kernel/process.c        | 12 ++++++-----
+ arch/arm64/kernel/process.c      | 12 ++++++-----
+ arch/csky/kernel/process.c       | 15 ++++++-------
+ arch/h8300/kernel/process.c      | 10 ++++-----
+ arch/hexagon/kernel/process.c    | 12 ++++++-----
+ arch/ia64/kernel/process.c       | 15 +++++++------
+ arch/m68k/kernel/process.c       | 12 ++++++-----
+ arch/microblaze/kernel/process.c | 12 ++++++-----
+ arch/mips/kernel/process.c       | 13 ++++++------
+ arch/nios2/kernel/process.c      | 12 ++++++-----
+ arch/openrisc/kernel/process.c   | 12 ++++++-----
+ arch/parisc/kernel/process.c     | 18 +++++++++-------
+ arch/powerpc/kernel/process.c    | 15 +++++++------
+ arch/riscv/kernel/process.c      | 12 ++++++-----
+ arch/s390/kernel/process.c       | 12 ++++++-----
+ arch/sh/kernel/process_32.c      | 12 ++++++-----
+ arch/sparc/kernel/process_32.c   | 12 ++++++-----
+ arch/sparc/kernel/process_64.c   | 12 ++++++-----
+ arch/um/kernel/process.c         | 15 +++++++------
+ arch/x86/include/asm/fpu/sched.h |  2 +-
+ arch/x86/include/asm/switch_to.h |  8 +++----
+ arch/x86/kernel/fpu/core.c       |  4 ++--
+ arch/x86/kernel/process.c        | 18 +++++++++-------
+ arch/xtensa/kernel/process.c     | 17 ++++++++-------
+ fs/exec.c                        |  8 ++++---
+ include/linux/sched/task.h       |  8 +++++--
+ init/initramfs.c                 |  2 ++
+ init/main.c                      |  2 +-
+ kernel/fork.c                    | 46 +++++++++++++++++++++++++++++++++-------
+ kernel/umh.c                     |  6 +++---
+ 32 files changed, 233 insertions(+), 159 deletions(-)
+
+Eric
