@@ -2,97 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3A351E0B9
-	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 23:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9621951E172
+	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 23:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358746AbiEFVKr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 May 2022 17:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S1444600AbiEFV7a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 May 2022 17:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444198AbiEFVKp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 17:10:45 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7886F482
-        for <linux-arch@vger.kernel.org>; Fri,  6 May 2022 14:07:02 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id bo5so7215587pfb.4
-        for <linux-arch@vger.kernel.org>; Fri, 06 May 2022 14:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=iE9UxHskNYHOO3H6FjKnavEf/Vjcp2jY3sbm6CS/ddTi0T1p6m5/UtB6ZYUa6tFOB2
-         Ig8MnUmvdShFqU/t2V3sf0VxI8F53A5RIByqyjJykSn8ieXmDiZN6wT5vQH17OT9KbV4
-         Wh6XO1gXfmv4kNjTEU5onYMXqtZZ759010DMiwUoke6171scdH4NQYAQ2WJmXpXeG4Hx
-         8WzegUtGwAYUuhUrXXfSp/zkWruEJ7Z5A5TDKpIT1zEJL+9Sg719xYm6kAzxSW7LmgU3
-         rMPBwREKO585DxQEooB8vVmb1j5yZMIcxbhHz4sA3NqN5AJHa06hHhGOrrSvcrwggGhf
-         VOhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=o1iYgVgL2yGaod1YP9JDHeCYzmdeSGPcVPgqW5o/CnUAycvrPNlWy2VOet9mO9T+2/
-         vun9tWYJFioCIIomLoegHGG0uSLsQyyJFJae5UoAwbxaMbM0IMNQrMUktIojHRPZSBiE
-         d+h4l3sdGSNx9Dvde8tCmD3Tz9zTpv4rgg0pbqTjnwkCAY9oRPytOtREoMIBoPwiulS/
-         Qkz+YjjLphYWN7e1+OFJ/3aRLqam31Q/mY3zZwP7PLg1HR9DixG8hLHy6xBivE8dlsSy
-         Ru8MD8VtWYuonID5mCjI99R1H5hbzQqOBO+SzpYPs5COBru3DtrEYbg/zhoqBhjAbmS9
-         zsuA==
-X-Gm-Message-State: AOAM531hpWzyjSLoVPtfVYSkvlPPLUkFhr+//Ly0gH3AgoD6bt3iuNJJ
-        9GGnjRDjlwcieO2bAAKmsm5jo0F+hO2Qcprrlg==
-X-Google-Smtp-Source: ABdhPJxA4tMTEq7P/0jtu2Ff22tn6HCkzNtMoobPUYPQu2Irf9FYCU0bHU5vCBrv2yRsX8AKw6Ct5aygp3lg0aibY4c=
-X-Received: by 2002:a63:6984:0:b0:398:8db9:7570 with SMTP id
- e126-20020a636984000000b003988db97570mr4188221pgc.373.1651871221680; Fri, 06
- May 2022 14:07:01 -0700 (PDT)
+        with ESMTP id S1388588AbiEFV73 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 17:59:29 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106BCFD2E;
+        Fri,  6 May 2022 14:55:45 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:51392)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nn5vI-002qGu-RE; Fri, 06 May 2022 15:55:40 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37284 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nn5vH-009fTk-Lj; Fri, 06 May 2022 15:55:40 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-arch@vger.kernel.org, kbuild-all@lists.01.org,
+        Tejun Heo <tj@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jens Axboe <axboe@kernel.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+References: <20220506141512.516114-2-ebiederm@xmission.com>
+        <202205070451.wstjDYm7-lkp@intel.com>
+Date:   Fri, 06 May 2022 16:52:14 -0500
+In-Reply-To: <202205070451.wstjDYm7-lkp@intel.com> (kernel test robot's
+        message of "Sat, 7 May 2022 04:38:03 +0800")
+Message-ID: <87r156z5v5.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
- 14:07:00 -0700 (PDT)
-Reply-To: warren001buffett@gmail.com
-In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-From:   Warren Buffett <guidayema@gmail.com>
-Date:   Fri, 6 May 2022 21:07:00 +0000
-Message-ID: <CAD_xG_rvFPU0i04q43u4Eqz-KE8g9V=rM_WOZ+=1a4JauU5OEQ@mail.gmail.com>
-Subject: Fwd: My name is Warren Buffett, an American businessman.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:443 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4990]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [guidayema[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-XM-SPF: eid=1nn5vH-009fTk-Lj;;;mid=<87r156z5v5.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18wpx3bMD1y5ayFn901iqPauFSXlIozA08=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;kernel test robot <lkp@intel.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 597 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 13 (2.2%), b_tie_ro: 12 (1.9%), parse: 1.14
+        (0.2%), extract_message_metadata: 31 (5.1%), get_uri_detail_list: 2.9
+        (0.5%), tests_pri_-1000: 24 (4.0%), tests_pri_-950: 1.61 (0.3%),
+        tests_pri_-900: 1.21 (0.2%), tests_pri_-90: 190 (31.9%), check_bayes:
+        171 (28.7%), b_tokenize: 11 (1.8%), b_tok_get_all: 13 (2.1%),
+        b_comp_prob: 3.1 (0.5%), b_tok_touch_all: 139 (23.3%), b_finish: 1.29
+        (0.2%), tests_pri_0: 319 (53.4%), check_dkim_signature: 0.61 (0.1%),
+        check_dkim_adsp: 6 (0.9%), poll_dns_idle: 0.28 (0.0%), tests_pri_10:
+        2.1 (0.4%), tests_pri_500: 9 (1.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 2/7] fork: Pass struct kernel_clone_args into copy_thread
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-My name is Warren Buffett, an American businessman and investor I have
-something important to discuss with you.
+kernel test robot <lkp@intel.com> writes:
 
-Mr. Warren Buffett
-warren001buffett@gmail.com
-Chief Executive Officer: Berkshire Hathaway
-aphy/Warren-Edward-Buffett
+> Hi "Eric,
+>
+> Thank you for the patch! Yet something to improve:
+
+Fixed in my tree now.  Thank you.
+
+Eric
+
+>
+> [auto build test ERROR on deller-parisc/for-next]
+> [also build test ERROR on linus/master v5.18-rc5]
+> [cannot apply to tip/x86/core next-20220506]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Eric-W-Biederman/kthread-Don-t-allocate-kthread_struct-for-init-and-umh/20220506-221832
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
+> config: h8300-randconfig-r025-20220506 (https://download.01.org/0day-ci/archive/20220507/202205070451.wstjDYm7-lkp@intel.com/config)
+> compiler: h8300-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/22689080e2beece6919f918620e4c780cf7320eb
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Eric-W-Biederman/kthread-Don-t-allocate-kthread_struct-for-init-and-umh/20220506-221832
+>         git checkout 22689080e2beece6919f918620e4c780cf7320eb
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    arch/h8300/kernel/process.c:58:6: warning: no previous prototype for 'arch_cpu_idle' [-Wmissing-prototypes]
+>       58 | void arch_cpu_idle(void)
+>          |      ^~~~~~~~~~~~~
+>>> arch/h8300/kernel/process.c:108:46: error: unknown type name 'kernel_cloen_args'
+>      108 | int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
+>          |                                              ^~~~~~~~~~~~~~~~~
+>>> arch/h8300/kernel/process.c:108:5: error: conflicting types for 'copy_thread'; have 'int(struct task_struct *, const int *)'
+>      108 | int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
+>          |     ^~~~~~~~~~~
+>    In file included from arch/h8300/kernel/process.c:30:
+>    include/linux/sched/task.h:71:12: note: previous declaration of 'copy_thread' with type 'int(struct task_struct *, const struct kernel_clone_args *)'
+>       71 | extern int copy_thread(struct task_struct *, const struct kernel_clone_args *);
+>          |            ^~~~~~~~~~~
+>    arch/h8300/kernel/process.c: In function 'copy_thread':
+>>> arch/h8300/kernel/process.c:110:33: error: request for member 'stack' in something not a structure or union
+>      110 |         unsigned long usp = args->stack;
+>          |                                 ^~
+>    arch/h8300/kernel/process.c:111:36: error: request for member 'stack_size' in something not a structure or union
+>      111 |         unsigned long topstk = args->stack_size;
+>          |                                    ^~
+>    arch/h8300/kernel/process.c: At top level:
+>    arch/h8300/kernel/process.c:153:16: warning: no previous prototype for 'sys_clone' [-Wmissing-prototypes]
+>      153 | asmlinkage int sys_clone(unsigned long __user *args)
+>          |                ^~~~~~~~~
+>
+>
+> vim +/kernel_cloen_args +108 arch/h8300/kernel/process.c
+>
+>    107	
+>  > 108	int copy_thread(struct task_struct *p, const kernel_cloen_args *args)
+>    109	{
+>  > 110		unsigned long usp = args->stack;
+>    111		unsigned long topstk = args->stack_size;
+>    112		struct pt_regs *childregs;
+>    113	
+>    114		childregs = (struct pt_regs *) (THREAD_SIZE + task_stack_page(p)) - 1;
+>    115	
+>    116		if (unlikely(p->flags & (PF_KTHREAD | PF_IO_WORKER))) {
+>    117			memset(childregs, 0, sizeof(struct pt_regs));
+>    118			childregs->retpc = (unsigned long) ret_from_kernel_thread;
+>    119			childregs->er4 = topstk; /* arg */
+>    120			childregs->er5 = usp; /* fn */
+>    121		}  else {
+>    122			*childregs = *current_pt_regs();
+>    123			childregs->er0 = 0;
+>    124			childregs->retpc = (unsigned long) ret_from_fork;
+>    125			p->thread.usp = usp ?: rdusp();
+>    126		}
+>    127		p->thread.ksp = (unsigned long)childregs;
+>    128	
+>    129		return 0;
+>    130	}
+>    131	
