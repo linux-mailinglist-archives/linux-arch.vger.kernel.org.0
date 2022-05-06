@@ -2,61 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31C051DB46
-	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 16:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8687551DB59
+	for <lists+linux-arch@lfdr.de>; Fri,  6 May 2022 17:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442527AbiEFPA4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 6 May 2022 11:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
+        id S1442565AbiEFPGF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 6 May 2022 11:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347797AbiEFPAy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 11:00:54 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6855D66D;
-        Fri,  6 May 2022 07:57:11 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id o18so6148249qtk.7;
-        Fri, 06 May 2022 07:57:11 -0700 (PDT)
+        with ESMTP id S1344485AbiEFPGE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 6 May 2022 11:06:04 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA313396B6;
+        Fri,  6 May 2022 08:02:20 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id js14so5584893qvb.12;
+        Fri, 06 May 2022 08:02:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TFKDqxAl8kAhgchSspFlV1jC/a94gKje1e9uHi6vXps=;
-        b=Sxg80agDa7tTqUp3W7rKa3hzSGeUm0htCDCMpdxBfSW0Sl6vkmAldg8nkZeY+t+3Qw
-         Td/DgDcz6zLCnOJd0yh8vgClck/yq5IggwtZvuTvHDZ47dC27m5GSKZichMdjR7TxiGd
-         1ukA5wVzWnyDoJ+4gput1p1ZUfzV92SaHyMhBQf0TiFt73clt/7q3vj0Olv4dPaoAHej
-         r80vHBT02YVWB6Wie5tECcwOp7jfuHkvszD4FdwE9KPSd+VEVZTgLob5zt5NWUktU3O9
-         GpHRbAy9ot+bdATuL/Cgb378IejVLTVfZNkDjRgB2IvwQdY3Pfb2EoR9FWtH2SSLRYGp
-         TMKA==
-X-Gm-Message-State: AOAM530FkhTo3eQXUQwXcQTBWzoZecZ2RoLv3DUj68jTR7w5GJPhkh4m
-        k/Y+jnv1uvtXHxZWFxHacveZfP6ig/XtWQ==
-X-Google-Smtp-Source: ABdhPJyl9inILtiiUaqhn5+Zn+N7rFGA5s6hayF71VOrk/V+P992tPXwAN2jICQyiuOzEoI1mGTdcQ==
-X-Received: by 2002:a05:622a:3c8:b0:2f3:7231:913e with SMTP id k8-20020a05622a03c800b002f37231913emr3168671qtx.212.1651849030333;
-        Fri, 06 May 2022 07:57:10 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id h4-20020ac87764000000b002f39b99f6a2sm2504428qtu.60.2022.05.06.07.57.08
+        bh=T95DKyI860o0Ni6h4dJD+E7diEEpmm2y8EkaKK0YMZc=;
+        b=LIEt+Hj0vorrPId2XXAkIzYrafDHh4aGVFsTJERz19t6ZBEGg4QqxOeWZIiZm1IzdA
+         TP9/Gzt6OcBeCGJrc5ptrAoRAptT87/ed4fEOYP5rjMkxZ08BRCzZdUivGPaflqOrxid
+         UdUX9guNF636lqAAqf2X6uu7i5yfhqe2peiWMfrHN17BblyZntp85mXqSYolGtsOeahP
+         Bqhw8nXJb6yqqbGYgDVz49P6My1uYqB1fumdV7cjG5TbC6cor52Dz28WyGQi30JeLABb
+         BwvMlRhRT0caLQGmbZHgEmqY572uMTBhKKCF09qxgDuhQCaEESY+w7YTVJqhTkeqT76H
+         ghGQ==
+X-Gm-Message-State: AOAM532tB31TEiA294rcJNQ3ykT0zHFdc8p261lVpD/VsfCDQiBtEcEQ
+        J6moxrX2XxBrpszDFBVA1FtpGT0qW2d+VQ==
+X-Google-Smtp-Source: ABdhPJynUG3F533fte8dV60hdIv+ozcQx1diqhjWoKACMR0xOo9dFfthI5Vt9H+fq9TJ1Fj5nJKqwQ==
+X-Received: by 2002:a05:6214:29c1:b0:45a:e0e5:7b2b with SMTP id gh1-20020a05621429c100b0045ae0e57b2bmr2778900qvb.44.1651849339531;
+        Fri, 06 May 2022 08:02:19 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id bm25-20020a05620a199900b0069fc13ce22asm2625608qkb.91.2022.05.06.08.02.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 07:57:09 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id w17so13293397ybh.9;
-        Fri, 06 May 2022 07:57:08 -0700 (PDT)
-X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
- e18-20020a056902035200b0063e094c883cmr2500583ybs.365.1651849027963; Fri, 06
- May 2022 07:57:07 -0700 (PDT)
+        Fri, 06 May 2022 08:02:19 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id w187so13355019ybe.2;
+        Fri, 06 May 2022 08:02:18 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr2817893ybu.604.1651849338111; Fri, 06
+ May 2022 08:02:18 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAK8P3a0sJgMSpZB_Butx2gO0hapYZy-Dm_QH-hG5rOaq_ZgsXg@mail.gmail.com>
  <20220505161028.GA492600@bhelgaas> <CAK8P3a3fmPExr70+fVb564hZdGAuPtYa-QxgMMe5KLpnY_sTrQ@mail.gmail.com>
  <alpine.DEB.2.21.2205061058540.52331@angie.orcam.me.uk> <CAK8P3a0NzG=3tDLCdPj2=A__2r_+xiiUTW=WJCBNp29x_A63Og@mail.gmail.com>
  <alpine.DEB.2.21.2205061314110.52331@angie.orcam.me.uk> <5239892986c94239a122ab2f7a18a7a5@AcuMS.aculab.com>
- <alpine.DEB.2.21.2205061412080.52331@angie.orcam.me.uk> <3669a28a055344a792b51439c953fd30@AcuMS.aculab.com>
- <alpine.DEB.2.21.2205061440260.52331@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2205061440260.52331@angie.orcam.me.uk>
+ <CAMuHMdWj5rmrP941DF7bsUXbiiemE-o2=8XqnAS-chgmpFFPQg@mail.gmail.com> <62c1bf6687ac4abc98d4015852930241@AcuMS.aculab.com>
+In-Reply-To: <62c1bf6687ac4abc98d4015852930241@AcuMS.aculab.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 May 2022 16:56:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVsjRUKYqS0nkKsT08A4a4ipuhn7AG+ZqcHBqZvVX02OQ@mail.gmail.com>
-Message-ID: <CAMuHMdVsjRUKYqS0nkKsT08A4a4ipuhn7AG+ZqcHBqZvVX02OQ@mail.gmail.com>
+Date:   Fri, 6 May 2022 17:02:06 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV1HpUNKdZDqd0e5BKfr-FqGrwGJJ_xTKw5Z55bdEJa+Q@mail.gmail.com>
+Message-ID: <CAMuHMdV1HpUNKdZDqd0e5BKfr-FqGrwGJJ_xTKw5Z55bdEJa+Q@mail.gmail.com>
 Subject: Re: [RFC v2 01/39] Kconfig: introduce HAS_IOPORT option and select it
  as necessary
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     David Laight <David.Laight@aculab.com>,
+To:     David Laight <David.Laight@aculab.com>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
         Arnd Bergmann <arnd@kernel.org>, Rich Felker <dalias@libc.org>,
         "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
         "open list:SUPERH" <linux-sh@vger.kernel.org>,
@@ -100,53 +99,60 @@ Cc:     David Laight <David.Laight@aculab.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Maciej,
+Hi David
 
-On Fri, May 6, 2022 at 4:44 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
-> On Fri, 6 May 2022, David Laight wrote:
-> > >  It was retrofitted in that x86 systems already existed for ~15 years when
-> > > PCI came into picture.  Therefore the makers of the CPU ISA couldn't have
-> > > envisaged the need for config access instructions like they did for memory
-> > > and port access.
+On Fri, May 6, 2022 at 4:05 PM David Laight <David.Laight@aculab.com> wrote:
+> From: Geert Uytterhoeven
+> > Sent: 06 May 2022 14:09
+> > > The same is really true for other bus type - including ISA and EISA.
+> > > (Ignoring the horrid of probing ISI bus devices - hopefully they
+> > > are in the ACPI tables??_
+> > > If a driver is probed on a ISA bus there ought to be functions
+> > > equivalent to pci_ioremap() (for both memory and IO addresses)
+> > > that return tokens appropriate for the specific bus.
+> > >
+> > > That is all a different load of churn.
 > >
-> > Rev 2.0 of the PCI spec (1993) defines two mechanisms for config cycles.
-> > #2 is probably the first one and maps all of PCI config space into
-> > 4k of IO space (PCI bridges aren't supported).
+> > A loooong time ago,  it was suggested to add register accessor
+> > functions to struct device, so e.g. readl(dev, offset) would call
+> > into these accessors, which would implement the bus-specific behavior.
+> > No more worries about readl(), __raw_readl(), ioread32b(), or whatever
+> > quirk is needed, at the (small on nowadays' machines) expense of
+> > some indirection...
 >
->  This one is even more horrid than #1 in that it requires two separate
-> preparatory I/O writes rather than just one, one to the Forward Register
-> (at 0xcfa) to set the bus number, and another to the Configuration Space
-> Enable Register (at 0xcf8) to set the function number, before you can
-> issue a configuration read or write to a device.  So you need MP locking
-> too.
->
->  NB only peer bridges aren't supported with this mechanism, normal PCI-PCI
-> bridges are, via the Forward Register.
->
-> > #1 requires a pair of accesses (and SMP locking).
-> >
-> > Neither is really horrid.
->
->  Both are.  First neither is MP-safe and second both are indirect in that
-> you need to poke at some chipset registers before you can issue the actual
-> read or write.
->
->  Sane access would require a single CPU instruction to read or write from
-> the configuration space.  To access the conventional PCI configuration
-> space in a direct linear manner you need 256 * 21 * 8 * 256 = 10.5MiB of
-> address space.  Such amount of address space seems affordable even with
-> 32-bit systems.
+> I was just thinking that the access functions might need a 'device'.
+> Although you also need the BAR (or equivalent).
+> So readl(dev, bar_token, offset) or readl(dev, bar_token + offset).
 
-Won't have fit in the legacy 1 MiB space ("640 KiB...").
+Note that we do have such a system: regmap.
+
+> Clearly the 'dev' parameter could be compiled out for non-DEBUG
+> build on x86 - leaving the current(ish) object code.
+
+Assumed all devices are PCI devices.
+E.g. USB devices would still need the indirection.
+
+> You don't want an indirect call (this year), but maybe real
+> function call and a few tests won't make that much difference.
+> They might affect PCIe writes, but PCIe reads are so slow you
+> need to avoid them whenever possible.
+> I've not timed reads into something like an ethernet chip,
+> but into our fpga they are probably 1000 clocks+.
+>
+> OTOH I wouldn't want any overhead on the PIO fifo reads
+> on one of our small ppc devices.
+> We push a lot of data though that fifo and anything extra
+> would kill performance.
+
+Right.
 
 Gr{oetje,eeting}s,
 
