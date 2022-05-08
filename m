@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EE951ED4B
-	for <lists+linux-arch@lfdr.de>; Sun,  8 May 2022 14:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A39F351ED5C
+	for <lists+linux-arch@lfdr.de>; Sun,  8 May 2022 14:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiEHMFr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 May 2022 08:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S232476AbiEHMPy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 May 2022 08:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiEHMFr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 May 2022 08:05:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F9E22F;
-        Sun,  8 May 2022 05:01:56 -0700 (PDT)
+        with ESMTP id S229798AbiEHMPx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 May 2022 08:15:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041D6DEEA;
+        Sun,  8 May 2022 05:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652011316; x=1683547316;
+  t=1652011916; x=1683547916;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=B29fm9Qc12WmthZtrBe2ibvFN8obi9nil9m3sX/y7iE=;
-  b=AkBpyqXZU+4MjpGA56CJhuOkL0k2Mt+B36tuUOsb5KaXZwjtbiCOSbip
-   24Gn0e/MPgRSRxECBX2GqfxqNdvtTHsHM66RgETaBOb/eglqVefOgkhlO
-   R6Ew8XFDT9DL8G9gK7HuazaUDTIw4EJuZ/dE2JHbEvnWypCE/o8tmhjjx
-   pP31Js/RvijVhbcU97/AjMAnJ2Yq5LeWMtclLUTY8Gdnr9bPMFb1e/Fw7
-   Ghs3fM8ZqMzTQIfZnO8rCh/wBbhtCN54S8iWylAW2c0rXNbnHeqW5oawP
-   dUk07EABFYvv575OIV0ISxUhyHhkFK4+cHa4A91EvrySIfIgfRUI4cUb1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="331841187"
+  bh=R4DAXyuGs9glGY930Yuuv0OPb/qcHtgFsYO0YLL/VWc=;
+  b=B3/2golYh6Ej08Qcmz1JItIcplzomj/8tfmCHbj6H7GHozvJ6csafte/
+   pBW7tltOk0MTFB3mbsSWj/3XfZQwEO/qz4CJxp3fcGg4Gp4OgiLcbziTp
+   NFzKh6m+z/NiMFX2esBjbaZaA/Edkv+2X0m+zykwSaB/Dk9OYnUzTs6NP
+   xt1yZGLlyGnqL4o+tQHbKFThX6IJi2RXjoW2OxLBL2edqkL9IsXEVig2f
+   8reAPCgfW/79HoqgAQVvuRTmZvN8RgoEj95Oe4YePyP9Ya5EKmMn1PEjT
+   ybpL9amTQeEh5MCeUQLHWJFGs9QWwO83fb6dexDg/zemasf5HSzNn4W4d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="267672621"
 X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="331841187"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 05:01:55 -0700
+   d="scan'208";a="267672621"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 05:11:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="737688168"
+   d="scan'208";a="622549952"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 08 May 2022 05:01:48 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 08 May 2022 05:11:48 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nnfbf-000FSd-Os;
-        Sun, 08 May 2022 12:01:47 +0000
-Date:   Sun, 8 May 2022 20:01:09 +0800
+        id 1nnflM-000FTB-5l;
+        Sun, 08 May 2022 12:11:48 +0000
+Date:   Sun, 8 May 2022 20:11:24 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
         akpm@linux-foundation.org, mike.kravetz@oracle.com,
         catalin.marinas@arm.com, will@kernel.org
-Cc:     kbuild-all@lists.01.org, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        arnd@arndb.de, baolin.wang@linux.alibaba.com,
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de, baolin.wang@linux.alibaba.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
@@ -60,7 +60,7 @@ Cc:     kbuild-all@lists.01.org, tsbogend@alpha.franken.de,
         sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
 Subject: Re: [PATCH v2 2/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue
  when migration
-Message-ID: <202205081910.mStoC5rj-lkp@intel.com>
+Message-ID: <202205081950.IpKFNYip-lkp@intel.com>
 References: <1ec8a987be1a5400e077260a300d0079564b1472.1652002221.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -89,36 +89,44 @@ https://git-scm.com/docs/git-format-patch]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220508/202205081910.mStoC5rj-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220508/202205081950.IpKFNYip-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project a385645b470e2d3a1534aae618ea56b31177639f)
 reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
         # https://github.com/intel-lab-lkp/linux/commit/907981b27213707fdb2f8a24c107d6752a09a773
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Baolin-Wang/Fix-CONT-PTE-PMD-size-hugetlb-issue-when-unmapping-or-migrating/20220508-174036
         git checkout 907981b27213707fdb2f8a24c107d6752a09a773
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   mm/rmap.c: In function 'try_to_migrate_one':
->> mm/rmap.c:1931:34: error: implicit declaration of function 'huge_ptep_clear_flush'; did you mean 'ptep_clear_flush'? [-Werror=implicit-function-declaration]
-    1931 |                         pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
-         |                                  ^~~~~~~~~~~~~~~~~~~~~
-         |                                  ptep_clear_flush
->> mm/rmap.c:1931:34: error: incompatible types when assigning to type 'pte_t' from type 'int'
->> mm/rmap.c:2023:41: error: implicit declaration of function 'set_huge_pte_at'; did you mean 'set_huge_swap_pte_at'? [-Werror=implicit-function-declaration]
-    2023 |                                         set_huge_pte_at(mm, address, pvmw.pte, pteval);
-         |                                         ^~~~~~~~~~~~~~~
-         |                                         set_huge_swap_pte_at
-   cc1: some warnings being treated as errors
+>> mm/rmap.c:1931:13: error: call to undeclared function 'huge_ptep_clear_flush'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                           pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+                                    ^
+   mm/rmap.c:1931:13: note: did you mean 'ptep_clear_flush'?
+   include/linux/pgtable.h:431:14: note: 'ptep_clear_flush' declared here
+   extern pte_t ptep_clear_flush(struct vm_area_struct *vma,
+                ^
+>> mm/rmap.c:1931:11: error: assigning to 'pte_t' from incompatible type 'int'
+                           pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+                                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> mm/rmap.c:2023:6: error: call to undeclared function 'set_huge_pte_at'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                           set_huge_pte_at(mm, address, pvmw.pte, pteval);
+                                           ^
+   mm/rmap.c:2035:6: error: call to undeclared function 'set_huge_pte_at'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                                           set_huge_pte_at(mm, address, pvmw.pte, pteval);
+                                           ^
+   4 errors generated.
 
 
-vim +1931 mm/rmap.c
+vim +/huge_ptep_clear_flush +1931 mm/rmap.c
 
   1883	
   1884			/* Unexpected PMD-mapped THP? */
