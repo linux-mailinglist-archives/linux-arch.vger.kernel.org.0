@@ -2,130 +2,163 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634CA51F2C2
-	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 04:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF5D51F2DF
+	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 05:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiEIDBn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 May 2022 23:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35944 "EHLO
+        id S229707AbiEIDX0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 May 2022 23:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiEIC56 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 May 2022 22:57:58 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBC7814BD
-        for <linux-arch@vger.kernel.org>; Sun,  8 May 2022 19:54:05 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d17so12635807plg.0
-        for <linux-arch@vger.kernel.org>; Sun, 08 May 2022 19:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZTTQaK1MCP0Shiup/o7qs7DSoxAGZcC20JNp/8zusXE=;
-        b=lvu0tqEAYL4lMpXHlUzMzuGrVzNiSN1F7GkTpaXG15DPrHT1CKlKmPTSyxU7h/NV/j
-         kUWsTNFP/67CPMC2uOZi3lJkE0lLp5sDkHR5Vg4ZoLQibwozZlVvVrWAmrcTfYRpX//B
-         IUvdewS9yYA2LSGRsdHGz3Vy9in8L82rvGFwD3Zc8rtXp9G3nFfXed3dmePb2uW74wWS
-         gjRGNoAkLLOEaS+JIVqDdXS8Khp2rr6+h+bGKqkjlK7OSgl+ubpQebutmaP5tiQRi8Kq
-         5jTLundScFrLcZoaaz36HUq3ybV0gU6aQtsrRhtprHTBJRtzsvzNZ5USFQbLHaHia+ap
-         v4wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZTTQaK1MCP0Shiup/o7qs7DSoxAGZcC20JNp/8zusXE=;
-        b=5vP7qfyDwLMgwY0DjZ0hYlSvOQ0wymz6iMQeOhA8myA6Fbqx7/24675s58cOiAMbIr
-         P4SXSFgDiUvOInhkozBXue6PwJZiNkfremShQynr9eo7oGK4FUWGhRgphvfRJoegVKXU
-         ENirM6JFGMzQLyX9wXhJGQMqPVes6aLhUv2Yak8lhrEmIRlyX8ojnqFn9aX9ALzK43ov
-         qkYbhBh6oNSCyJ4pt5UjmgvMl1szoK/QwMyG4HVmkzLSk5TrgMpkbc14ctzNRMDaIQnD
-         RKAYIRoJ4a5Ps281asn/bXnU4sAOByL+xRnK+VZIUJeZlkIDJEr9fIGWXu8rD1CAcxD/
-         fwkw==
-X-Gm-Message-State: AOAM532zijCSQiIVqbA+mqeIQ9BXkmTeCBBJiceK6IP8fD+aLfM/V23z
-        9VQJ/1Pu985wFuHm6JNrtSy3Fg==
-X-Google-Smtp-Source: ABdhPJy7zWNcQupxAcYMUNYtQ/R40mo+W7VEUJcoJcHH9ByfyOdtqYbfEKoLlg6WSLCwLEQ+8OB54A==
-X-Received: by 2002:a17:902:d2c9:b0:15e:b28d:8ad2 with SMTP id n9-20020a170902d2c900b0015eb28d8ad2mr14262241plc.94.1652064845269;
-        Sun, 08 May 2022 19:54:05 -0700 (PDT)
-Received: from localhost ([139.177.225.250])
-        by smtp.gmail.com with ESMTPSA id o18-20020a170902e29200b0015e8d4eb258sm5783241plc.162.2022.05.08.19.54.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 19:54:04 -0700 (PDT)
-Date:   Mon, 9 May 2022 10:54:00 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org, sj@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH 0/3] Introduce new huge_ptep_get_access_flags()
- interface
-Message-ID: <YniCSGvBeUq3yxCg@FVFYT0MHHV2J.usts.net>
-References: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
- <Ynf5Aje8FXlPdOSl@casper.infradead.org>
+        with ESMTP id S232795AbiEIDSO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 May 2022 23:18:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8614712FC;
+        Sun,  8 May 2022 20:14:21 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxR5n6RftzGpfg;
+        Mon,  9 May 2022 11:11:25 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 9 May 2022 11:14:12 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
+ 2022 11:14:12 +0800
+Message-ID: <e8715911-f835-059d-27f8-cc5f5ad30a07@huawei.com>
+Date:   Mon, 9 May 2022 11:14:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ynf5Aje8FXlPdOSl@casper.infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.10 v3] locking/csd_lock: fix csdlock_debug cause arm64
+ boot panic
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arch@vger.kernel.org>, <stable@vger.kernel.org>,
+        <peterz@infradead.org>, <tglx@linutronix.de>, <namit@vmware.com>,
+        <gor@linux.ibm.com>, <rdunlap@infradead.org>, <sashal@kernel.org>
+References: <20220507084510.14761-1-chenzhongjin@huawei.com>
+ <YnZAO+3Rhj0gwq38@kroah.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <YnZAO+3Rhj0gwq38@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, May 08, 2022 at 06:08:18PM +0100, Matthew Wilcox wrote:
-> On Sun, May 08, 2022 at 04:58:51PM +0800, Baolin Wang wrote:
-> > As Mike pointed out [1], the huge_ptep_get() will only return one specific
-> > pte value for the CONT-PTE or CONT-PMD size hugetlb on ARM64 system, which
-> > will not take into account the subpages' dirty or young bits of a CONT-PTE/PMD
-> > size hugetlb page. That will make us miss dirty or young flags of a CONT-PTE/PMD
-> > size hugetlb page for those functions that want to check the dirty or
-> > young flags of a hugetlb page. For example, the gather_hugetlb_stats() will
-> > get inaccurate dirty hugetlb page statistics, and the DAMON for hugetlb monitoring
-> > will also get inaccurate access statistics.
-> > 
-> > To fix this issue, one approach is that we can define an ARM64 specific huge_ptep_get()
-> > implementation, which will take into account any subpages' dirty or young bits.
-> > However we should add a new parameter for ARM64 specific huge_ptep_get() to check
-> > how many continuous PTEs or PMDs in this CONT-PTE/PMD size hugetlb, that means we
-> > should convert all the places using huge_ptep_get(), meanwhile most places using
-> > huge_ptep_get() did not care about the dirty or young flags at all.
-> > 
-> > So instead of changing the prototype of huge_ptep_get(), this patch set introduces
-> > a new huge_ptep_get_access_flags() interface and define an ARM64 specific implementation,
-> > that will take into account any subpages' dirty or young bits for CONT-PTE/PMD size
-> > hugetlb page. And we can only change to use huge_ptep_get_access_flags() for those
-> > functions that care about the dirty or young flags of a hugetlb page.
+Hi Greg,
+
+Since the patch:
+https://lore.kernel.org/all/20210420093559.23168-1-catalin.marinas@arm.com/
+has forced CONFIG_SPARSEMEM_VMEMMAP=y from 5.12, it's not necessary to include
+this patch on master.
+
+However this problem still exist on 5.10 stable, so either we can backport the
+above patch to 5.10, or independently apply mine.
+
+I'm not sure if backporting one exist patch is better, but that patch only
+changed configs without any fix for old builds.
+
+If you have any advice please tell me.
+
+Thanks!
+Chen
+
+On 2022/5/7 17:47, Greg KH wrote:
+> On Sat, May 07, 2022 at 04:45:10PM +0800, Chen Zhongjin wrote:
+>> csdlock_debug is a early_param to enable csd_lock_wait
+>> feature.
+>>
+>> It uses static_branch_enable in early_param which triggers
+>> a panic on arm64 with config:
+>> CONFIG_SPARSEMEM=y
+>> CONFIG_SPARSEMEM_VMEMMAP=n
+>>
+>> The log shows:
+>> Unable to handle kernel NULL pointer dereference at
+>> virtual address ", '0' <repeats 16 times>, "
+>> ...
+>> Call trace:
+>> __aarch64_insn_write+0x9c/0x18c
+>> ...
+>> static_key_enable+0x1c/0x30
+>> csdlock_debug+0x4c/0x78
+>> do_early_param+0x9c/0xcc
+>> parse_args+0x26c/0x3a8
+>> parse_early_options+0x34/0x40
+>> parse_early_param+0x80/0xa4
+>> setup_arch+0x150/0x6c8
+>> start_kernel+0x8c/0x720
+>> ...
+>> Kernel panic - not syncing: Oops: Fatal exception
+>>
+>> Call trace inside __aarch64_insn_write:
+>> __nr_to_section
+>> __pfn_to_page
+>> phys_to_page
+>> patch_map
+>> __aarch64_insn_write
+>>
+>> Here, with CONFIG_SPARSEMEM_VMEMMAP=n, __nr_to_section returns
+>> NULL and makes the NULL dereference because mem_section is
+>> initialized in sparse_init after parse_early_param stage.
+>>
+>> So, static_branch_enable shouldn't be used inside early_param.
+>> To avoid this, I changed it to __setup and fixed this.
+>>
+>> Reported-by: Chen jingwen <chenjingwen6@huawei.com>
+>> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+>> ---
+>> Change v2 -> v3:
+>> Add module name in title
+>>
+>> Change v1 -> v2:
+>> Fix return 1 for __setup
+>> ---
+>>
+>>  kernel/smp.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/smp.c b/kernel/smp.c
+>> index 65a630f62363..381eb15cd28f 100644
+>> --- a/kernel/smp.c
+>> +++ b/kernel/smp.c
+>> @@ -174,9 +174,9 @@ static int __init csdlock_debug(char *str)
+>>  	if (val)
+>>  		static_branch_enable(&csdlock_debug_enabled);
+>>  
+>> -	return 0;
+>> +	return 1;
+>>  }
+>> -early_param("csdlock_debug", csdlock_debug);
+>> +__setup("csdlock_debug=", csdlock_debug);
+>>  
+>>  static DEFINE_PER_CPU(call_single_data_t *, cur_csd);
+>>  static DEFINE_PER_CPU(smp_call_func_t, cur_csd_func);
+>> -- 
+>> 2.17.1
+>>
 > 
-> I question whether this is the right approach.  I understand that
-> different hardware implementations have different requirements here,
-> but at least one that I'm aware of (AMD Zen 2/3) requires that all
-> PTEs that are part of a contig PTE must have identical A/D bits.  Now,
-> you could say that's irrelevant because it's x86 and we don't currently
-> support contPTE on x86, but I wouldn't be surprised to see that other
-> hardware has the same requirement.
 > 
-> So what if we make that a Linux requirement?  Setting a contPTE dirty or
-> accessed becomes a bit more expensive (although still one/two cachelines,
-> so not really much more expensive than a single write).  Then there's no
-> need to change the "get" side of things because they're always identical.
+> <formletter>
 > 
-> It does mean that we can't take advantage of hardware setting A/D bits,
-> unless hardware can be persuaded to behave this way.  I don't have any
-> ARM specs in front of me to check.
->
+> This is not the correct way to submit patches for inclusion in the
+> stable kernel tree.  Please read:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> for how to do this properly.
+> 
+> </formletter>
+> .
 
-I have looked at the comments in get_clear_flush() (in arch/arm64/mm/hugetlbpage.c).
-That says:
-
-	/*
-	 * If HW_AFDBM is enabled, then the HW could turn on
-	 * the dirty or accessed bit for any page in the set,
-	 * so check them all.
-	 */
-
-Unfortunately, the AD bits are not identical in all subpages.
-
-Thanks.
