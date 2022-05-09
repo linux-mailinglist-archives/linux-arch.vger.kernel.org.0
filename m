@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B425207C9
-	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 00:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882BF5207BA
+	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 00:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiEIWhx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 May 2022 18:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S231757AbiEIWgY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 May 2022 18:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiEIWgV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 18:36:21 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7425F2B94FB
-        for <linux-arch@vger.kernel.org>; Mon,  9 May 2022 15:32:26 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id x88so2798215pjj.1
-        for <linux-arch@vger.kernel.org>; Mon, 09 May 2022 15:32:26 -0700 (PDT)
+        with ESMTP id S231758AbiEIWgW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 18:36:22 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02AD2B94FE
+        for <linux-arch@vger.kernel.org>; Mon,  9 May 2022 15:32:27 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id j6so13409615pfe.13
+        for <linux-arch@vger.kernel.org>; Mon, 09 May 2022 15:32:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
         h=subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding:cc:from:to;
-        bh=08o9m5Hkc1DwgHXwEhIgYa1O84W5gO7UU5kFrcD0IRY=;
-        b=Ivfni2BR3drjv+XoR/hBXUrgG62qyubSK3Ofq7nGB2uI3j7DeKiw7jRrhjYIPRgbiL
-         fX9foK05Y7Jog/gVmvwsgPmkiISwecG0vWlaNbZPsib7PJe/U0FrjNlpjZeqJTMnA4Ud
-         xD2a5Ri7G1reYFJHWM8J0ABchfZtYYpFEJm7EacP6oMYWcpyn/f0Z1zDck1YxAxeMMcF
-         un3MVzMWYPTLkAP7W6QyxETK9WwzzVdbB+7M0G8w56mYUpSu+iAgFJ/e7C0edwi86i0F
-         9CtnFPdWIKaX25L03L6TPjghHJhiIfuQAKj24e211/mTSajbwfjFHu6V4QDWxV3ozgp7
-         ADmw==
+        bh=pWbw2Mwy88SDSkfpA4D7g/Rmsq9eS9lL/9r9k9KvO7g=;
+        b=aKb0kPhWVd5eMpmlkl9NknitMxg8gh5oazT3otM1H7wNssSLITeEgVYd3fLrFpqhAN
+         6lW7y7N8edPrk+YAtulN/xaP8NiOVNXKZAi6KA0NNveYzfnxDp9ggPIafs2mYWMuEWpF
+         yisEk6Vl9il9YEGMryMzMjf2wBlPJtypJNMiXj/O7kxrK4628fYPSch836eJYFLJD5Wl
+         OrKTh30iRJgEMKA4TvqbYiX+DIHWjjGEmbm+VHeiIrDIZkzUjvIVMUmJT2O64m4s1rq4
+         s75jC01yaX0ljYX5/96b4XICWLQpDnMGWrtzgp0A1FvhK7kRpUekOBDbUefjzvvkL2IY
+         V5Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding:cc:from:to;
-        bh=08o9m5Hkc1DwgHXwEhIgYa1O84W5gO7UU5kFrcD0IRY=;
-        b=vALaKOyRAwYemBBd8WrAKAMuudqtC03DDJvbKNubqo4n5RdPNbu/Fh4HFiAj/w2aD1
-         3tH86Ln0y4Rrese3+WCxhxBw1W/Isqca8tyHTJAJjj3HWLOJEV/b58pngxb10c9y6yLC
-         PUNIL0S/shIP9XWd47lwbYeXe6NXTtqmih0LYBwzVld0fDyS/U84Zq4e/IaCgQXVjmKf
-         XCoWZ9h226VbmdMNeL3top2No9S/84+CxBGFCnoUk3E49ptBI1HFDQjLdrkVnqTJKAHs
-         C7hsTsOekdLTM2RrLp5w8ZKJySyXITgFEGkXjgphDLcHsYQnIPPjcDPhFen35yZI5q1P
-         ZeBg==
-X-Gm-Message-State: AOAM533PlpY6JGtbxv1HMBvFfXFfFDBsAUjzmUTFg/pfzN2ozvjMQuFt
-        tG5NyOFSU5IHXhuJwOgEF8MquQ==
-X-Google-Smtp-Source: ABdhPJwfKDrkaUHJSNgn6XFJOuCcJbR4otch9RHfl10t4H02hdxl8ivFVYd6BH4xCpPZNyXowDk67w==
-X-Received: by 2002:a17:903:1205:b0:15e:804c:fab4 with SMTP id l5-20020a170903120500b0015e804cfab4mr18051563plh.112.1652135545965;
-        Mon, 09 May 2022 15:32:25 -0700 (PDT)
+        bh=pWbw2Mwy88SDSkfpA4D7g/Rmsq9eS9lL/9r9k9KvO7g=;
+        b=138B/3BhWqcen/NBjOyQqig6SJeENwO/DYEnTKHpVLtSYJfcM2x5BXiE4Kj3ulVfXP
+         Tp9ou2IucwliBA0TyS5ypgIn8PzzLUa03C4jCiTWirJjS3JJS/fJ1TPM+1cvTldYvwyV
+         eUmZQOLj4Pi/wj8Vy+iShTH7QeJm/M1zlInPMUOKN4hXK1wuX+nEl+QkI0jj4zst4/2h
+         WlzeN98OrmbHi9dC9a2Eg8w9ylGvf/hi2l0kad+fC8qkZBwElH+EOvXjFeXkPrvjDuc0
+         Luc14EwKfImxl/bgUQmsQ4Xx6jAiHdlPLeYW/5bEEuFCR+6mwQVx2XUDI7vn1my2/Rl+
+         xrOQ==
+X-Gm-Message-State: AOAM530FGNtffZlJNoKeJ5u2X1602oeS2rlPoCQjl9FtTRC+MAVL/cx8
+        uA1ctmn8zKVD+3TaPY4/oA/Vpg==
+X-Google-Smtp-Source: ABdhPJxUc/qGM9x1mbDewFdh0f2iSebcv/MH281VDWnsTPJAYa63hm5brMdaLkqzPiol6IuhZdvYkA==
+X-Received: by 2002:a05:6a02:10d:b0:381:f4c8:ad26 with SMTP id bg13-20020a056a02010d00b00381f4c8ad26mr14585787pgb.135.1652135546996;
+        Mon, 09 May 2022 15:32:26 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id oa7-20020a17090b1bc700b001dcc0cb262asm224098pjb.17.2022.05.09.15.32.25
+        by smtp.gmail.com with ESMTPSA id w19-20020a1709029a9300b0015e8d4eb1ddsm407885plp.39.2022.05.09.15.32.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 15:32:25 -0700 (PDT)
-Subject: [PATCH v5 2/7] asm-generic: qspinlock: Indicate the use of mixed-size atomics
-Date:   Mon,  9 May 2022 15:29:51 -0700
-Message-Id: <20220509222956.2886-3-palmer@rivosinc.com>
+        Mon, 09 May 2022 15:32:26 -0700 (PDT)
+Subject: [PATCH v5 3/7] asm-generic: qrwlock: Document the spinlock fairness requirements
+Date:   Mon,  9 May 2022 15:29:52 -0700
+Message-Id: <20220509222956.2886-4-palmer@rivosinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220509222956.2886-1-palmer@rivosinc.com>
 References: <20220509222956.2886-1-palmer@rivosinc.com>
@@ -79,64 +79,32 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-The qspinlock implementation depends on having well behaved mixed-size
-atomics.  This is true on the more widely-used platforms, but these
-requirements are somewhat subtle and may not be satisfied by all the
-platforms that qspinlock is used on.
+I could only find the fairness requirements documented as the C code,
+this calls them out in a comment just to be a bit more explicit.
 
-Document these requirements, so ports that use qspinlock can more easily
-determine if they meet these requirements.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Waiman Long <longman@redhat.com>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- include/asm-generic/qspinlock.h | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ include/asm-generic/qrwlock.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/asm-generic/qspinlock.h b/include/asm-generic/qspinlock.h
-index d74b13825501..995513fa2690 100644
---- a/include/asm-generic/qspinlock.h
-+++ b/include/asm-generic/qspinlock.h
-@@ -2,6 +2,35 @@
+diff --git a/include/asm-generic/qrwlock.h b/include/asm-generic/qrwlock.h
+index 7ae0ece07b4e..24ae09c1db9f 100644
+--- a/include/asm-generic/qrwlock.h
++++ b/include/asm-generic/qrwlock.h
+@@ -2,6 +2,10 @@
  /*
-  * Queued spinlock
+  * Queue read/write lock
   *
-+ * A 'generic' spinlock implementation that is based on MCS locks. For an
-+ * architecture that's looking for a 'generic' spinlock, please first consider
-+ * ticket-lock.h and only come looking here when you've considered all the
-+ * constraints below and can show your hardware does actually perform better
-+ * with qspinlock.
++ * These use generic atomic and locking routines, but depend on a fair spinlock
++ * implementation in order to be fair themselves.  The implementation in
++ * asm-generic/spinlock.h meets these requirements.
 + *
-+ * qspinlock relies on atomic_*_release()/atomic_*_acquire() to be RCsc (or no
-+ * weaker than RCtso if you're power), where regular code only expects atomic_t
-+ * to be RCpc.
-+ *
-+ * qspinlock relies on a far greater (compared to asm-generic/spinlock.h) set
-+ * of atomic operations to behave well together, please audit them carefully to
-+ * ensure they all have forward progress. Many atomic operations may default to
-+ * cmpxchg() loops which will not have good forward progress properties on
-+ * LL/SC architectures.
-+ *
-+ * One notable example is atomic_fetch_or_acquire(), which x86 cannot (cheaply)
-+ * do. Carefully read the patches that introduced
-+ * queued_fetch_set_pending_acquire().
-+ *
-+ * qspinlock also heavily relies on mixed size atomic operations, in specific
-+ * it requires architectures to have xchg16; something which many LL/SC
-+ * architectures need to implement as a 32bit and+or in order to satisfy the
-+ * forward progress guarantees mentioned above.
-+ *
-+ * Further reading on mixed size atomics that might be relevant:
-+ *
-+ *   http://www.cl.cam.ac.uk/~pes20/popl17/mixed-size.pdf
-+ *
-  * (C) Copyright 2013-2015 Hewlett-Packard Development Company, L.P.
-  * (C) Copyright 2015 Hewlett-Packard Enterprise Development LP
+  * (C) Copyright 2013-2014 Hewlett-Packard Development Company, L.P.
   *
+  * Authors: Waiman Long <waiman.long@hp.com>
 -- 
 2.34.1
 
