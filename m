@@ -2,182 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B6551FB8B
-	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 13:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADF251FB97
+	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 13:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233267AbiEILra (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 May 2022 07:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S233303AbiEILwu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 May 2022 07:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233281AbiEILrZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 07:47:25 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D396A1ECBBB;
-        Mon,  9 May 2022 04:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652096591; x=1683632591;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=ZTyA1HS8jeWS2uplJonrsTVm9m3xk+zuXOASyRBer64=;
-  b=k79c/UL7bS5xE6bgFELpDjZw91MSdmyf2SNf4MUHE8y9gFAvXrj6TNe/
-   gw82oy0tpfd3nMQSyeN8wgKdAMXP0foCg7exBi8roBxStp4Hiv2Gtbjn6
-   0+XmMS/4hzbAo2pr38kpXZjIFl0gWzEFfeJdAT858lW9PGVUNMPrSY15p
-   1eBeZ2T4lFjzmIRaYPaeTfdI+Cjw62EHLHOfxWsMwm5dYSoLkvpQQvupQ
-   FDaIvWbSJHnnDH1CFS6MqFc7NeFAuQAln4KsDeAiLB/FA6D0klQxn6+oS
-   N/HGnp+vBkZfPX6vTdsCicERTN+YoSQxtdFGW2Rt5VmdMfuUr8bk4UydT
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10341"; a="251069137"
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="251069137"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 04:43:10 -0700
-X-IronPort-AV: E=Sophos;i="5.91,211,1647327600"; 
-   d="scan'208";a="591991357"
-Received: from mfuent2x-mobl1.amr.corp.intel.com ([10.251.220.67])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2022 04:43:05 -0700
-Date:   Mon, 9 May 2022 14:42:59 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Helge Deller <deller@gmx.de>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH 1/3] termbits.h: create termbits-common.h for identical
- bits
-In-Reply-To: <97b0e932-1309-edfd-3886-fee1498bff7d@gmx.de>
-Message-ID: <8b407358-294-74ee-5659-f51d4598998@linux.intel.com>
-References: <20220509093446.6677-1-ilpo.jarvinen@linux.intel.com> <20220509093446.6677-2-ilpo.jarvinen@linux.intel.com> <97b0e932-1309-edfd-3886-fee1498bff7d@gmx.de>
+        with ESMTP id S233306AbiEILwt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 07:52:49 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390B7227048;
+        Mon,  9 May 2022 04:48:54 -0700 (PDT)
+Received: from [127.0.0.1] (unknown [46.183.103.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 601E71EC0529;
+        Mon,  9 May 2022 13:48:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1652096927;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OBcNvdGojA+kgezS1jEjzLjyoytYIqi04DLdwTBilBk=;
+        b=jS4tFDIHbr7C3Uu/RAAiy+WGqeZJHXRjw/EI6aNobbXRodJ0Tb4PfSNpoOHW+KbqVJeaHw
+        cv0CqgBMT/MbupN4iHymfPvSKpYZkSx6O42ICf+XF0of+KIBHBQgjFpRjluZ0Nz7tlLUS1
+        0hHrdCu2/GVq2VEhhdnUoA07R5Levug=
+Date:   Mon, 09 May 2022 13:48:44 +0200
+From:   Boris Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        x86@kernel.org, linux-s390@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+CC:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Oleksandr Tyshchenko <olekstysh@gmail.com>
+Subject: Re: [PATCH v3 1/2] kernel: add platform_has() infrastructure
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220504155703.13336-2-jgross@suse.com>
+References: <20220504155703.13336-1-jgross@suse.com> <20220504155703.13336-2-jgross@suse.com>
+Message-ID: <FBBBF0AE-05CD-4DE2-B656-C09C976600DA@alien8.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1244401664-1652096590=:1620"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1244401664-1652096590=:1620
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
 
-On Mon, 9 May 2022, Helge Deller wrote:
+On May 4, 2022 5:57:02 PM GMT+02:00, Juergen Gross <jgross@suse=2Ecom> wro=
+te:
+>Add a simple infrastructure for setting, resetting and querying
+>platform feature flags=2E
+>
+>Flags can be either global or architecture specific=2E
+>
+>Signed-off-by: Juergen Gross <jgross@suse=2Ecom>
+>---
+>V2:
+>- rename set/reset functions to platform_[set|clear]() (Boris Petkov,
+>  Heiko Carstens)
+>- move function implementations to c file (Boris Petkov)
+>---
+> MAINTAINERS                            |  8 ++++++++
+> include/asm-generic/Kbuild             |  1 +
+> include/asm-generic/platform-feature=2Eh |  8 ++++++++
+> include/linux/platform-feature=2Eh       | 15 ++++++++++++++
+> kernel/Makefile                        |  2 +-
+> kernel/platform-feature=2Ec              | 27 ++++++++++++++++++++++++++
+> 6 files changed, 60 insertions(+), 1 deletion(-)
+> create mode 100644 include/asm-generic/platform-feature=2Eh
+> create mode 100644 include/linux/platform-feature=2Eh
+> create mode 100644 kernel/platform-feature=2Ec
 
-> Hello Ilpo,
-> 
-> On 5/9/22 11:34, Ilpo Järvinen wrote:
-> > Some defines are the same across all archs. Move the most obvious
-> > intersection to termbits-common.h.
-> 
-> I like your cleanup patches, but in this specific one, does it makes sense
-> to split up together-belonging constants, e.g.
-> 
-> > diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
-> > index 6017ee08f099..7f74a822b7ea 100644
-> > --- a/arch/parisc/include/uapi/asm/termbits.h
-> > +++ b/arch/parisc/include/uapi/asm/termbits.h
-> > @@ -61,31 +61,15 @@ struct ktermios {
-> >
-> >
-> >  /* c_iflag bits */
-> > -#define IGNBRK	0x00001
-> > -#define BRKINT	0x00002
-> > -#define IGNPAR	0x00004
-> > -#define PARMRK	0x00008
-> > -#define INPCK	0x00010
-> > -#define ISTRIP	0x00020
-> > -#define INLCR	0x00040
-> > -#define IGNCR	0x00080
-> > -#define ICRNL	0x00100
-> >  #define IUCLC	0x00200
-> >  #define IXON	0x00400
-> > -#define IXANY	0x00800
-> >  #define IXOFF	0x01000
-> >  #define IMAXBEL	0x04000
-> >  #define IUTF8	0x08000
-> 
-> In the hunk above you leave IUCLC, IXON, IXOFF... because they seem unique to parisc.
-> The other defines are then taken from generic header.
-> Although this is correct, it leaves single values alone, which make it hard to verify
-> because you don't see the full list of values in one place.
+Nice and simple, I like=2E
 
-While I too am fine either way, I don't think these are as strongly 
-grouped as you seem to imply. There's no big advantage in having as much 
-as possible within the same file. If somebody is looking for the meaning 
-of these, these headers are no match when compared e.g. with stty manpage.
-
-For c_iflag, the break, parity and cr related "groups" within c_iflag are 
-moving completely to common header.
-
-IXANY is probably only one close to borderline whether it kind of belongs 
-to the same group as IXON/IXOFF (which both by chance both remained on the 
-same side in the split). I don't think it does strongly enough to warrant 
-keeping them next to each other but I'm open what opinions others have on 
-it.
-
-The rest in c_iflag don't seem to be strongly tied/grouped to the other 
-defines within c_iflag. They're just bits that appear next/close to each 
-other but are not tied by any significant meaning-based connection.
-
-C_oflag is more messy. I exercised grouping based judgement with c_oflag 
-where only the defines with all bits as zero would have moved to the 
-common header breaking the groups very badly. That is, only CR0 would have 
-moved and CR1-3 remained in arch headers, etc. which made no sense to do. 
-One could argue, that since ONLCR (and perhaps CRDLY) are not moving, no 
-other cr related defines should move either.
-
-> > @@ -112,24 +96,6 @@ struct ktermios {
-> >
-> >  /* c_cflag bit meaning */
-> >  #define CBAUD		0x0000100f
-> > -#define  B0		0x00000000	/* hang up */
-> > -#define  B50		0x00000001
-> > -#define  B75		0x00000002
-> > -#define  B110		0x00000003
-> > -#define  B134		0x00000004
-> > -#define  B150		0x00000005
-> > -#define  B200		0x00000006
-> > -#define  B300		0x00000007
-> > -#define  B600		0x00000008
-> > -#define  B1200		0x00000009
-> > -#define  B1800		0x0000000a
-> > -#define  B2400		0x0000000b
-> > -#define  B4800		0x0000000c
-> > -#define  B9600		0x0000000d
-> > -#define  B19200		0x0000000e
-> > -#define  B38400		0x0000000f
-> > -#define EXTA B19200
-> > -#define EXTB B38400
-> 
-> Here all baud values are dropped and will be taken from generic header, 
-> which is good. 
-> 
-> That said, I think it's good to move away the second hunk,
-> but maybe we should keep the first as is?
-> 
-> It's just a thought. Either way, I'm fine your patch if that's the
-> way which is decided to go for all platforms.
-
-Yes, lets wait and see what the others think.
-
-Thanks for taking a look!
-
--- 
- i.
-
---8323329-1244401664-1652096590=:1620--
+Acked-by: Borislav Petkov <bp@suse=2Ede>
+--=20
+Sent from a device which is good for reading mail but awful for writing=2E=
+ Please excuse any shortcomings=2E
