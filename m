@@ -2,34 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADF251FB97
-	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 13:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B83851FBF6
+	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 14:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233303AbiEILwu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 May 2022 07:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        id S233570AbiEIMEC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 May 2022 08:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233306AbiEILwt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 07:52:49 -0400
+        with ESMTP id S233560AbiEIMEA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 08:04:00 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390B7227048;
-        Mon,  9 May 2022 04:48:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE4418B95B;
+        Mon,  9 May 2022 05:00:05 -0700 (PDT)
 Received: from [127.0.0.1] (unknown [46.183.103.17])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 601E71EC0529;
-        Mon,  9 May 2022 13:48:47 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 56BFE1EC0529;
+        Mon,  9 May 2022 13:59:59 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1652096927;
+        t=1652097600;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OBcNvdGojA+kgezS1jEjzLjyoytYIqi04DLdwTBilBk=;
-        b=jS4tFDIHbr7C3Uu/RAAiy+WGqeZJHXRjw/EI6aNobbXRodJ0Tb4PfSNpoOHW+KbqVJeaHw
-        cv0CqgBMT/MbupN4iHymfPvSKpYZkSx6O42ICf+XF0of+KIBHBQgjFpRjluZ0Nz7tlLUS1
-        0hHrdCu2/GVq2VEhhdnUoA07R5Levug=
-Date:   Mon, 09 May 2022 13:48:44 +0200
+        bh=SZ0FUxK106JbsF1xbRYLQqCEry+KRNYRswr1LpAp2pE=;
+        b=VxzKXdJGegayDkmVXDvQFwrNls2RPi2YfuiEOm93VxrDV7gOSr5Sr6E2eqQXUDudljUWm2
+        naM86eaoC/NmDPrzV3lyAs+o3FssqBbS9HxGYrGrmlxM95YCGfpfObKvrMb/fxKltUycds
+        KZlVEiMd3cmC5Uyz/n2jiE3kMh2rc2M=
+Date:   Mon, 09 May 2022 11:59:49 +0000
 From:   Boris Petkov <bp@alien8.de>
 To:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -50,11 +50,10 @@ CC:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
         Jason Wang <jasowang@redhat.com>,
         Christoph Hellwig <hch@infradead.org>,
         Oleksandr Tyshchenko <olekstysh@gmail.com>
-Subject: Re: [PATCH v3 1/2] kernel: add platform_has() infrastructure
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220504155703.13336-2-jgross@suse.com>
-References: <20220504155703.13336-1-jgross@suse.com> <20220504155703.13336-2-jgross@suse.com>
-Message-ID: <FBBBF0AE-05CD-4DE2-B656-C09C976600DA@alien8.de>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v3_2/2=5D_virtio=3A_replace_arc?= =?US-ASCII?Q?h=5Fhas=5Frestricted=5Fvirtio=5Fmemory=5Faccess=28=29?=
+In-Reply-To: <20220504155703.13336-3-jgross@suse.com>
+References: <20220504155703.13336-1-jgross@suse.com> <20220504155703.13336-3-jgross@suse.com>
+Message-ID: <1376936D-E067-430C-A02D-565959F83BE0@alien8.de>
 MIME-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
@@ -72,34 +71,36 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-On May 4, 2022 5:57:02 PM GMT+02:00, Juergen Gross <jgross@suse=2Ecom> wro=
-te:
->Add a simple infrastructure for setting, resetting and querying
->platform feature flags=2E
->
->Flags can be either global or architecture specific=2E
+On May 4, 2022 3:57:03 PM UTC, Juergen Gross <jgross@suse=2Ecom> wrote:
+>Instead of using arch_has_restricted_virtio_memory_access() together
+>with CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS, replace those
+>with platform_has() and a new platform feature
+>PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS=2E
 >
 >Signed-off-by: Juergen Gross <jgross@suse=2Ecom>
 >---
 >V2:
->- rename set/reset functions to platform_[set|clear]() (Boris Petkov,
->  Heiko Carstens)
->- move function implementations to c file (Boris Petkov)
+>- move setting of PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS in SEV case
+>  to sev_setup_arch()=2E
+>V3:
+>- remove Hyper-V chunk (Michael Kelley)
+>- remove include virtio_config=2Eh from mem_encrypt=2Ec (Oleksandr Tyshch=
+enko)
+>- add comment for PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS (Oleksandr Tyshch=
+enko)
 >---
-> MAINTAINERS                            |  8 ++++++++
-> include/asm-generic/Kbuild             |  1 +
-> include/asm-generic/platform-feature=2Eh |  8 ++++++++
-> include/linux/platform-feature=2Eh       | 15 ++++++++++++++
-> kernel/Makefile                        |  2 +-
-> kernel/platform-feature=2Ec              | 27 ++++++++++++++++++++++++++
-> 6 files changed, 60 insertions(+), 1 deletion(-)
-> create mode 100644 include/asm-generic/platform-feature=2Eh
-> create mode 100644 include/linux/platform-feature=2Eh
-> create mode 100644 kernel/platform-feature=2Ec
-
-Nice and simple, I like=2E
+> arch/s390/Kconfig                |  1 -
+> arch/s390/mm/init=2Ec              | 13 +++----------
+> arch/x86/Kconfig                 |  1 -
+> arch/x86/mm/mem_encrypt=2Ec        |  7 -------
+> arch/x86/mm/mem_encrypt_amd=2Ec    |  4 ++++
+> drivers/virtio/Kconfig           |  6 ------
+> drivers/virtio/virtio=2Ec          |  5 ++---
+> include/linux/platform-feature=2Eh |  6 +++++-
+> include/linux/virtio_config=2Eh    |  9 ---------
+> 9 files changed, 14 insertions(+), 38 deletions(-)
 
 Acked-by: Borislav Petkov <bp@suse=2Ede>
 --=20
-Sent from a device which is good for reading mail but awful for writing=2E=
- Please excuse any shortcomings=2E
+Sent from a device which is ok for reading mail but awful for writing=2E P=
+lease excuse any shortcomings=2E
