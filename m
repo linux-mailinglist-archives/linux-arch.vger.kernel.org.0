@@ -2,124 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16D451F7E1
-	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 11:25:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2B151F91D
+	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 12:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiEIJXO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 May 2022 05:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S232126AbiEIJvd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 May 2022 05:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236554AbiEII5g (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 04:57:36 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304AE202B26;
-        Mon,  9 May 2022 01:53:36 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 9125E21B3D;
-        Mon,  9 May 2022 08:53:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1652086413; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dfcvUUdqksgvYc8rVDLHC5DOBo/kU2XO+VX1eeG4aV8=;
-        b=A34L+qWnS4KTuUIJIOdn/Oy0lRYM0k4tu6TprpUGGmO4q2IG6PgANqhT26b8ERa1UPxmL3
-        +i1ltyuQDR6b3JXdcEzOXVh1KYWhR2Zwt+tTJHHP3RNo/us6IFdzvOCkW7gcDMpTyzgCvx
-        xJwG93EwlvMl01wRmSewhq2A5QaBHXU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1652086413;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dfcvUUdqksgvYc8rVDLHC5DOBo/kU2XO+VX1eeG4aV8=;
-        b=UKYq4/y/oVRFARjOiTG0UlZFJ7CNosy5fO4czqcNJLtcbGcYGz4OJwlbgEGhzVQm3iPfhB
-        Fx+12pZoeT2rmkDQ==
-Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id 79C5C2C141;
-        Mon,  9 May 2022 08:53:33 +0000 (UTC)
-Date:   Mon, 09 May 2022 10:53:33 +0200
-Message-ID: <s5hczgnm6ia.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S235033AbiEIJYr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 05:24:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90486102BB3;
+        Mon,  9 May 2022 02:20:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41DC6B80D3A;
+        Mon,  9 May 2022 09:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1730C385B1;
+        Mon,  9 May 2022 09:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652088050;
+        bh=34I44iElGDvsO9vc/1qouhwKhN0J+6JwjUlz5LWtXAI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=eno68cp5BdLmo+JTajkGm38tQmu+Eu/sq4rus3H3PeZDczMGh25dLxlkSQhTCYwgQ
+         bRSLqPg8rs4UxHU6e7yF1XLfcomJY4t0M7NMNiC9YtBbODRwVUTlx6SW6lDf0enn7E
+         9T9hamdgtefEwrz8+kx7empoAncF4wZJu/I5T1Hjl1mb2ZQEe72n8XmzgBvOAR4FsF
+         4QojwyHucRdJFVdQrU9P2vZjh98K5479MIIg8a5HnWmlKqwdDQVV0uS/nEg6JHs7sL
+         SWvP2H4iaApf/cjEfM2MMVxMergCCfxcFrfDgR/c+QhRf9pO7X20IS+nIspNDiA9e7
+         v1X+v2ctmzR9A==
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2f83983782fso137203507b3.6;
+        Mon, 09 May 2022 02:20:50 -0700 (PDT)
+X-Gm-Message-State: AOAM530tFO+0vMwt+MVACNPqL1sy1PK48sBbQlPhguw4jkOm/w7HXEqg
+        kZFEHVNCQdAMD/nBxzAFJIE4+T1V8+jV1dsq9vA=
+X-Google-Smtp-Source: ABdhPJypbDFv1BZy0AnqQqgdzqwp622v39ahPgaEWut11CbwJXiKPfgoUvAUkAv6K8MS2PyK6H3dw0atDtfrf+Gmhno=
+X-Received: by 2002:a0d:cd06:0:b0:2f8:f39c:4cfc with SMTP id
+ p6-20020a0dcd06000000b002f8f39c4cfcmr11712705ywd.495.1652088049944; Mon, 09
+ May 2022 02:20:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
+ <20220429135108.2781579-57-schnelle@linux.ibm.com> <s5hczgnm6ia.wl-tiwai@suse.de>
+In-Reply-To: <s5hczgnm6ia.wl-tiwai@suse.de>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 9 May 2022 11:20:33 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3_ppFRY7y4TL21kXfthcbFJmjMivfmH2r4Cqy_vAiesA@mail.gmail.com>
+Message-ID: <CAK8P3a3_ppFRY7y4TL21kXfthcbFJmjMivfmH2r4Cqy_vAiesA@mail.gmail.com>
+Subject: Re: [RFC v2 31/39] sound: add HAS_IOPORT dependencies
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND)
-Subject: Re: [RFC v2 31/39] sound: add HAS_IOPORT dependencies
-In-Reply-To: <20220429135108.2781579-57-schnelle@linux.ibm.com>
-References: <20220429135108.2781579-1-schnelle@linux.ibm.com>
-        <20220429135108.2781579-57-schnelle@linux.ibm.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
- FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
- (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        "moderated list:SOUND" <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 29 Apr 2022 15:50:54 +0200,
-Niklas Schnelle wrote:
-> 
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them. For SND_OPL3_LIB this adds its first
-> dependency so drivers currently selecting it unconditionally need to
-> depend on it instead.
-> 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  sound/drivers/Kconfig |  5 ++++
->  sound/isa/Kconfig     | 44 ++++++++++++++---------------
->  sound/pci/Kconfig     | 64 +++++++++++++++++++++++++++++--------------
->  3 files changed, 70 insertions(+), 43 deletions(-)
-> 
-> diff --git a/sound/drivers/Kconfig b/sound/drivers/Kconfig
-> index ca4cdf666f82..4d250e619786 100644
-> --- a/sound/drivers/Kconfig
-> +++ b/sound/drivers/Kconfig
-> @@ -1,10 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  config SND_MPU401_UART
->  	tristate
-> +	depends on HAS_IOPORT
->  	select SND_RAWMIDI
->  
->  config SND_OPL3_LIB
->  	tristate
-> +	depends on HAS_IOPPORT
->  	select SND_TIMER
->  	select SND_HWDEP
->  	select SND_SEQ_DEVICE if SND_SEQUENCER != n
+On Mon, May 9, 2022 at 10:53 AM Takashi Iwai <tiwai@suse.de> wrote:
+> On Fri, 29 Apr 2022 15:50:54 +0200, Niklas Schnelle wrote:
 
-Both of those are the items to be reverse-selected, so cannot fulfill
-the dependency with depends-on.  That is, the items that select those
-should have the dependency on HAS_IOPORT instead.
+> >
+> >  config SND_OPL3_LIB
+> >       tristate
+> > +     depends on HAS_IOPPORT
+> >       select SND_TIMER
+> >       select SND_HWDEP
+> >       select SND_SEQ_DEVICE if SND_SEQUENCER != n
+>
+> Both of those are the items to be reverse-selected, so cannot fulfill
+> the dependency with depends-on.  That is, the items that select those
+> should have the dependency on HAS_IOPORT instead.
+>
+> That is, a change like below:
+>
+> > --- a/sound/isa/Kconfig
+> > +++ b/sound/isa/Kconfig
+> > @@ -31,7 +31,7 @@ if SND_ISA
+> >
+> >  config SND_ADLIB
+> >       tristate "AdLib FM card"
+> > -     select SND_OPL3_LIB
+> > +     depends on SND_OPL3_LIB
+>
+> ... won't work.  CONFIG_SND_OPL3_LIB is not enabled by itself but only
+> to be selected.
 
-That is, a change like below:
+Right, I missed that in my review. Not sure if this was a mistake in
+my original patch or if it started in a later version.
 
-> --- a/sound/isa/Kconfig
-> +++ b/sound/isa/Kconfig
-> @@ -31,7 +31,7 @@ if SND_ISA
->  
->  config SND_ADLIB
->  	tristate "AdLib FM card"
-> -	select SND_OPL3_LIB
-> +	depends on SND_OPL3_LIB
+I think for the ISA drivers, I would still add 'depends on HAS_IOPORT'
+to both CONFIG_SND_ISA and CONFIG_SND_OPL3_LIB if only to
+make it easier to understand, even though CONFIG_ISA requires
+HAS_IOPORT already, and CONFIG_SND_OPL3_LIB cannot be
+selected by itself.
 
-... won't work.  CONFIG_SND_OPL3_LIB is not enabled by itself but only
-to be selected.
+For the PCI drivers, I think we need to add the same dependency
+on anything that either selects SND_OPL3_LIB or calls inb()/outb()
+directly.
 
-
-thanks,
-
-Takashi
+       Arnd
