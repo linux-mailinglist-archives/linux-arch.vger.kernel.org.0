@@ -2,95 +2,193 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0469851EF8F
-	for <lists+linux-arch@lfdr.de>; Sun,  8 May 2022 21:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A9551F277
+	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 03:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240528AbiEHSAO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 8 May 2022 14:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S229460AbiEIBdn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 8 May 2022 21:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237379AbiEHRM1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 May 2022 13:12:27 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3B3B7EC;
-        Sun,  8 May 2022 10:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rCdXSvZjp6F8gmuuM1Bzn/n/1RjrsEENuke5qJWo6Ik=; b=ZITLMC7DKkB4Trwc7bNWRzlWiR
-        uT0nYzvCip831JpgQyklirM6W5ZtBvwI/rbUgZG25OXn37GktTQvcDVwZvekFIFN3RlwQjbeMxQNZ
-        t8svRibUKtQ5pSma7ZHwD4rhYKKSKUMuCXUudxB/lKBTjcYTiXuIP90H0LBavuHykOSLAYZBR0n+N
-        xlbmj9fmytKxcHJHrhHJQrB6rfhARHN0rdqB7mMnuDA1ZrH+oqN64jvGi1P+6adiJ4DRVajMHBRqD
-        xcUx+jC59ig3ERAVQ/K3bOHlarpWldz6ZU9Jf6bS+1+KW5lZVKfkttKna9E0jBro6nPjtg4Fm6//P
-        zy6sUqmw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nnkOI-002foo-RN; Sun, 08 May 2022 17:08:18 +0000
-Date:   Sun, 8 May 2022 18:08:18 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org, sj@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S236282AbiEIBWR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 8 May 2022 21:22:17 -0400
+Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F044DEAA;
+        Sun,  8 May 2022 18:18:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VCc6ZLn_1652059099;
+Received: from 30.32.96.14(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCc6ZLn_1652059099)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 09 May 2022 09:18:20 +0800
+Message-ID: <5e33cf5e-2c48-89fe-3447-2f29c7844928@linux.alibaba.com>
+Date:   Mon, 9 May 2022 09:19:00 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [RFC PATCH 1/3] arm64/hugetlb: Introduce new
+ huge_ptep_get_access_flags() interface
+To:     nh26223@qq.com, catalin.marinas@arm.com, will@kernel.org,
+        arnd@arndb.de, mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        sj@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-mm@kvack.org
-Subject: Re: [RFC PATCH 0/3] Introduce new huge_ptep_get_access_flags()
- interface
-Message-ID: <Ynf5Aje8FXlPdOSl@casper.infradead.org>
 References: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1651998586.git.baolin.wang@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <a73f07314e79299b85fa4d7612d6ac22548f58c1.1651998586.git.baolin.wang@linux.alibaba.com>
+ <tencent_E3DE18C8CFE150F1EDCF887146BA374E6706@qq.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <tencent_E3DE18C8CFE150F1EDCF887146BA374E6706@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, May 08, 2022 at 04:58:51PM +0800, Baolin Wang wrote:
-> As Mike pointed out [1], the huge_ptep_get() will only return one specific
-> pte value for the CONT-PTE or CONT-PMD size hugetlb on ARM64 system, which
-> will not take into account the subpages' dirty or young bits of a CONT-PTE/PMD
-> size hugetlb page. That will make us miss dirty or young flags of a CONT-PTE/PMD
-> size hugetlb page for those functions that want to check the dirty or
-> young flags of a hugetlb page. For example, the gather_hugetlb_stats() will
-> get inaccurate dirty hugetlb page statistics, and the DAMON for hugetlb monitoring
-> will also get inaccurate access statistics.
+
+
+On 5/8/2022 9:14 PM, nh26223@qq.com wrote:
+> On 2022年5月8日星期日 CST 下午4:58:52 Baolin Wang wrote:
+>> Now we use huge_ptep_get() to get the pte value of a hugetlb page,
+>> however it will only return one specific pte value for the CONT-PTE
+>> or CONT-PMD size hugetlb on ARM64 system, which can contain seravel
+>> continuous pte or pmd entries with same page table attributes. And it
+>> will not take into account the subpages' dirty or young bits of a
+>> CONT-PTE/PMD size hugetlb page.
+>>
+>> So the huge_ptep_get() is inconsistent with huge_ptep_get_and_clear(),
+>> which already takes account the dirty or young bits for any subpages
+>> in this CONT-PTE/PMD size hugetlb [1]. Meanwhile we can miss dirty or
+>> young flags statistics for hugetlb pages with current huge_ptep_get(),
+>> such as the gather_hugetlb_stats() function.
+>>
+>> Thus introduce a new huge_ptep_get_access_flags() interface and define
+>> an ARM64 specific implementation, that will take into account any subpages'
+>> dirty or young bits for CONT-PTE/PMD size hugetlb page, for those functions
+>> that want to check the dirty and young flags of a hugetlb page.
+>>
+>> [1]
+>> https://lore.kernel.org/linux-mm/85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracl
+>> e.com/
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   arch/arm64/include/asm/hugetlb.h |  2 ++
+>>   arch/arm64/mm/hugetlbpage.c      | 24 ++++++++++++++++++++++++
+>>   include/asm-generic/hugetlb.h    |  7 +++++++
+>>   3 files changed, 33 insertions(+)
+>>
+>> diff --git a/arch/arm64/include/asm/hugetlb.h
+>> b/arch/arm64/include/asm/hugetlb.h index 616b2ca..a473544 100644
+>> --- a/arch/arm64/include/asm/hugetlb.h
+>> +++ b/arch/arm64/include/asm/hugetlb.h
+>> @@ -44,6 +44,8 @@ extern pte_t huge_ptep_clear_flush(struct vm_area_struct
+>> *vma, #define __HAVE_ARCH_HUGE_PTE_CLEAR
+>>   extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
+>>   			   pte_t *ptep, unsigned long sz);
+>> +#define __HAVE_ARCH_HUGE_PTEP_GET_ACCESS_FLAGS
+>> +extern pte_t huge_ptep_get_access_flags(pte_t *ptep, unsigned long sz);
+>>   extern void set_huge_swap_pte_at(struct mm_struct *mm, unsigned long addr,
+>>   				 pte_t *ptep, pte_t pte, unsigned long
+> sz);
+>>   #define set_huge_swap_pte_at set_huge_swap_pte_at
+>> diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+>> index ca8e65c..ce39699 100644
+>> --- a/arch/arm64/mm/hugetlbpage.c
+>> +++ b/arch/arm64/mm/hugetlbpage.c
+>> @@ -158,6 +158,30 @@ static inline int num_contig_ptes(unsigned long size,
+>> size_t *pgsize) return contig_ptes;
+>>   }
+>>
+>> +pte_t huge_ptep_get_access_flags(pte_t *ptep, unsigned long sz)
+> The function name looks to me that it returns access flags of PTE.
+
+Yes, not a good name. That's why this is a RFC patch set to get more 
+suggestion :)
+
+Maybe huge_ptep_get_with_access_flags()? or do you have some better idea?
+
 > 
-> To fix this issue, one approach is that we can define an ARM64 specific huge_ptep_get()
-> implementation, which will take into account any subpages' dirty or young bits.
-> However we should add a new parameter for ARM64 specific huge_ptep_get() to check
-> how many continuous PTEs or PMDs in this CONT-PTE/PMD size hugetlb, that means we
-> should convert all the places using huge_ptep_get(), meanwhile most places using
-> huge_ptep_get() did not care about the dirty or young flags at all.
+>> +{
+>> +	int ncontig, i;
+>> +	size_t pgsize;
+>> +	pte_t orig_pte = ptep_get(ptep);
+>> +
+>> +	if (!pte_cont(orig_pte))
+>> +		return orig_pte;
+>> +
+>> +	ncontig = num_contig_ptes(sz, &pgsize);
+>> +
+>> +	for (i = 0; i < ncontig; i++, ptep++) {
+>> +		pte_t pte = ptep_get(ptep);
+>> +
+>> +		if (pte_dirty(pte))
+>> +			orig_pte = pte_mkdirty(orig_pte);
+>> +
+>> +		if (pte_young(pte))
+>> +			orig_pte = pte_mkyoung(orig_pte);
+>> +	}
+>> +
+>> +	return orig_pte;
+>> +}
+> Not sure whether it's worthy being changed to:
 > 
-> So instead of changing the prototype of huge_ptep_get(), this patch set introduces
-> a new huge_ptep_get_access_flags() interface and define an ARM64 specific implementation,
-> that will take into account any subpages' dirty or young bits for CONT-PTE/PMD size
-> hugetlb page. And we can only change to use huge_ptep_get_access_flags() for those
-> functions that care about the dirty or young flags of a hugetlb page.
+>          bool dirty = false, young = false;
+> 
+>          for (i = 0; i < ncontig; i++, ptep++) {
+>                  pte_t pte = ptep_get(ptep);
+> 
+>                  if (pte_dirty(pte))
+>                          dirty = true;
+> 
+>                  if (pte_young(pte))
+>                          young = true;
+> 
+>                  if (dirty && young)
+>                          break;
+>          }
+> 
+>          if (dirty)
+>                  orig_pte = pte_mkdirty(orig_pte);
+> 
+>          if (young)
+>                  orig_pte = pte_mkyoung(orit_pte);
+> 
+>          return orig_pte;
 
-I question whether this is the right approach.  I understand that
-different hardware implementations have different requirements here,
-but at least one that I'm aware of (AMD Zen 2/3) requires that all
-PTEs that are part of a contig PTE must have identical A/D bits.  Now,
-you could say that's irrelevant because it's x86 and we don't currently
-support contPTE on x86, but I wouldn't be surprised to see that other
-hardware has the same requirement.
+I followed the same logics in get_clear_flush(), which is more readable 
+I think. Yes, your approach can save some cycles, I can change to use it 
+in next version if arm64 maintainers have no objection.
 
-So what if we make that a Linux requirement?  Setting a contPTE dirty or
-accessed becomes a bit more expensive (although still one/two cachelines,
-so not really much more expensive than a single write).  Then there's no
-need to change the "get" side of things because they're always identical.
+>> +
+>>   /*
+>>    * Changing some bits of contiguous entries requires us to follow a
+>>    * Break-Before-Make approach, breaking the whole contiguous set
+>> diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
+>> index a57d667..bb77fb0 100644
+>> --- a/include/asm-generic/hugetlb.h
+>> +++ b/include/asm-generic/hugetlb.h
+>> @@ -150,6 +150,13 @@ static inline pte_t huge_ptep_get(pte_t *ptep)
+>>   }
+>>   #endif
+>>
+>> +#ifndef __HAVE_ARCH_HUGE_PTEP_GET_ACCESS_FLAGS
+>> +static inline pte_t huge_ptep_get_access_flags(pte_t *ptep, unsigned long
+>> sz) +{
+>> +	return ptep_get(ptep);
+> Should be:
+> 	return huge_ptep_get(ptep) ?
 
-It does mean that we can't take advantage of hardware setting A/D bits,
-unless hardware can be persuaded to behave this way.  I don't have any
-ARM specs in front of me to check.
+I don't think so. If no ARCH-specific definition, the 
+huge_ptep_get_access_flags() implementation should be same as 
+huge_ptep_get(). Thanks for your comments.
 
-I don't have a hard objection to your approach, I just want to discuss
-other possibilities.
+#ifndef __HAVE_ARCH_HUGE_PTEP_GET
+static inline pte_t huge_ptep_get(pte_t *ptep)
+{
+         return ptep_get(ptep);
+}
+#endif
