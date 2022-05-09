@@ -2,148 +2,231 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2496B520734
-	for <lists+linux-arch@lfdr.de>; Mon,  9 May 2022 23:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E43520798
+	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 00:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231432AbiEIV7R (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 May 2022 17:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S231551AbiEIWa4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 May 2022 18:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiEIV7G (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 17:59:06 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE441274A01;
-        Mon,  9 May 2022 14:53:03 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:60566)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1noBJN-00HXb7-2U; Mon, 09 May 2022 15:53:01 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37562 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1noBJM-009Wa9-0i; Mon, 09 May 2022 15:53:00 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Qian Cai <quic_qiancai@quicinc.com>
-Cc:     <linux-arch@vger.kernel.org>, Tejun Heo <tj@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-References: <CANpfEhOnNZa5d_G3e0dzzbbEtSuqxWY-fUCqzSiFpiQ2k0hJyw@mail.gmail.com>
-        <CAHk-=wjfecvcUk2vNQM1GiUz_G=WQEJ8i8JS7yjnxjq_f-OgKw@mail.gmail.com>
-        <87a6czifo7.fsf@email.froward.int.ebiederm.org>
-        <CAHk-=wj=EHvH-DEUHbkoB3vDZJ1xRzrk44JibtNOepNkachxPw@mail.gmail.com>
-        <87ilrn1drx.ffs@tglx> <877d7zk1cf.ffs@tglx>
-        <CAHk-=wiJPeANKYU4imYaeEuV6sNP+EDR=rWURSKv=y4Mhcn1hA@mail.gmail.com>
-        <87y20fid4d.ffs@tglx>
-        <87bkx5q3pk.fsf_-_@email.froward.int.ebiederm.org>
-        <87mtfu4up3.fsf@email.froward.int.ebiederm.org>
-        <20220509204654.GA200@qian>
-Date:   Mon, 09 May 2022 16:52:07 -0500
-In-Reply-To: <20220509204654.GA200@qian> (Qian Cai's message of "Mon, 9 May
-        2022 16:46:54 -0400")
-Message-ID: <87r152xtko.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S231548AbiEIWaz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 18:30:55 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E1F218FF1;
+        Mon,  9 May 2022 15:26:58 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 249Jv9bE024483;
+        Mon, 9 May 2022 22:26:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=Gr+MlNTbqPHQffrlEBXcP72frYYZ2qVaGOFnR02GtgE=;
+ b=jOEWiTfgXCf2fa4sSyTrdfmNgXdISevyBfqZqSJV34Xtr30MkoxGTrI83orrmHEH62ws
+ 5ZmWrcHZFjMQAmIeG0C/VqmbV15Wddax9t3/TRLtEHMQANtEsaENSfph/vFizBRhLMJw
+ KvOTct5+ebqPKzYEBUxyVfiFHS2jfrahuIdszFkpoH8zBOp9YwAV2rGGFvx+cbCh95kb
+ z64Ykhqd2xbMI9Ka5hXGNccuw98kJA9O8KExY8L3QS5fjmGYXr8c7ikSQCtKmKx+YUjI
+ d6rjX/djYtgxsTosZpd2oFFWDjUF/00iKCFyRT6elugcj9BC+ojFi18OBD8NvYqlsqGo YQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3fwfj2d3bp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 09 May 2022 22:26:04 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 249MLbj6037514;
+        Mon, 9 May 2022 22:26:03 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fwf729q35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 09 May 2022 22:26:03 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FE9DJtKvWupr5/VtWd8eLDUg1WepJSN0Lc4lDgUDv/2d19+09p5Rb7jeTcryM8Bb8ePms6uPvLTq63ls4atOsjSibJjqF+HwdNE26KKNzbBQ0ipA7vmSoxppfA471zPen3O6KhCbs+pSg/MXZ7WCw/puY1tFTUUanubyaVLrTYv60asy4STE5iQKTTMQ6SZP2oz8cnYbPnePur6cVCUkYaf+0eNygSRJ86SBQGhE/tQ3meu7oI/tiXRflORFBrPePhpfzihNA3DadUidMekkQzZUUmi4+OPck19dVd6YDrTzNX5Eoj7PtXyNwYexkfGXr9okJamkzZokktFXzdnuPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gr+MlNTbqPHQffrlEBXcP72frYYZ2qVaGOFnR02GtgE=;
+ b=aDTQ/yhfa787muyVQEzaEenWFRsvh+RLdokj2CKjVkrVHraaKfWUzo39AI3MsIs5LBcRDVDiXG6R5YqzuYp7nS1+0SxauwyX05vioVpbFuTPBGZy+BkSPEDW8QnXqVKMKlV9X1vVYxsWeG6ofuollCUUu1z5VskwYBfoGAxGaspTNOU5bAS4pnoKZ0B5pYKquwvqMx4VeiTYobTZhD5TN38cQQcHlfILla1fB0wlHFb12jMsv1u4qVh1Ky2ronLR1tu7y7ZKtaaFIhQsXxlfLZfdlcQ0yK1HNlu+sz68dfolrU/cLb4WMU0w7ppPtnLyOswz4vP0oveW+YuPbOrGQw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Gr+MlNTbqPHQffrlEBXcP72frYYZ2qVaGOFnR02GtgE=;
+ b=Os744Cd2BNX7bZoqFdft8Qgjfasy9IsS52JRQvztp2+7yrSuy/wyZmiJT3AQCXBEDLfwA1uyHJBvnC1m2tmrCpD53V1J8nffBhT4Ra9xEMcXbcEp/85sWKvN0z6YNN+0Rjc0fyRtQd4Srnyhm94SCdDqCnaO6LeUbZu1lcLf6zE=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BN6PR10MB1601.namprd10.prod.outlook.com (2603:10b6:405:11::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.20; Mon, 9 May
+ 2022 22:26:00 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::9d76:7926:9b76:f461]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::9d76:7926:9b76:f461%9]) with mapi id 15.20.5227.023; Mon, 9 May 2022
+ 22:26:00 +0000
+Message-ID: <918c0479-4d1a-3f3c-346c-051de4b26d30@oracle.com>
+Date:   Mon, 9 May 2022 15:25:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+Content-Language: en-US
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org, catalin.marinas@arm.com, will@kernel.org
+Cc:     tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+References: <cover.1652002221.git.baolin.wang@linux.alibaba.com>
+ <43b11b69e9f0d9d7e7960b86661db27cc404d0c7.1652002221.git.baolin.wang@linux.alibaba.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <43b11b69e9f0d9d7e7960b86661db27cc404d0c7.1652002221.git.baolin.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4P222CA0011.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:303:114::16) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1noBJM-009Wa9-0i;;;mid=<87r152xtko.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19hk9ZS6WavQatP9fRgufeJVz+cvKHeEus=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 20886a61-503c-4e02-16f5-08da320ae523
+X-MS-TrafficTypeDiagnostic: BN6PR10MB1601:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR10MB16017E5F4163DE6E647E6E3FE2C69@BN6PR10MB1601.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HPzzybCLniKTrc5GfXOa0MvZvpM0HX6TQ5TzLHn1n9F75bDjY58GQ92mm6jMJIqpObslo3d8qaFtmD1CAmu4Oh1hHf1xzbxDUR+UCy+yIbbLiv4Xnx3dvem4pkkapbvhb0UxW3qWM0NAjs37zOTHwA5ljJVvEgMIO4HE+BeEmwYgD7AodLxOxAtW4ngyMuLaTP5zvaZbsil5mbQj06ykrDPSderu7E1XA8k5ioHSKT4G0MzFYGwrIRUJfcQY0qPCdd4WNqj+VSE7Mm+CD4rTVgWQQFoXuDFrX2MD6ZLsu39LwezWd8RS8Nix1mfRpNpWfdc3hwGES4SxpNFQlOxa6GtEmSnEGuNjL1H8Kl9fFxgkWuiftMDSDh5wIWJKaOWW8RG5cSbFLxa8MLedR5FqspQcziAyt6AGK32YRpOhQ1lUpNfguxC/poBAWv7l62bso0FAYT35LxDpAMraR2PVbXC/L0UgER7jsKBreAcFH6LJ6y8NUj+xYCoEytMmrUC4w6Ug3YROynE5Zx6lk/AiosQj+4bz5IzPI6YNgm+8HjG3mARpuVm0e+TfWcTDse7EOpfMHWckAQ1Tsf7zMUUzSleUmE//WJ98qbf2B8rYS8bnidBZny4kq6GY2LFr2Srivq2WPmrYDulBrA/qhCR3JRKPHLvRZjZmyP+pJhsRZQ9o68WX5hJxCpegsl/OgGVN9oKdRVId+U45hXmqWtLhXPJ7CuoUFCnQbcnfR3+bdF0x/5SIiLfhtjP4Kasz+iel8i7rfMv1bT5AcpGJUcwWBw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(66556008)(66946007)(31696002)(8936002)(66476007)(8676002)(4326008)(316002)(86362001)(53546011)(6666004)(6512007)(6506007)(52116002)(26005)(508600001)(38350700002)(6486002)(38100700002)(2906002)(36756003)(31686004)(83380400001)(5660300002)(7406005)(7416002)(44832011)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Uyt6clI4NmdNQlpYc3J5R1NZYWwzcmwwc3A4TEl5V2VqZ3ZkNjJ4UmJoZGVv?=
+ =?utf-8?B?K0pVaHhvbnlOVFN5Z0hPY1BLTit4REZRNHlsdTZPS0FpTUZGVVVDNEkybzdB?=
+ =?utf-8?B?d2hCei9PWGY3WjkwOXdvOCtZTVBiVGtheXIxemdDaTROYjV3TnVBb0Q5Z3BL?=
+ =?utf-8?B?L0ZqRStDYmFtNWZoY2w5cno5SC9mSS8zT0c3UWJhSGpLcGxaWFR4NHVEV1I1?=
+ =?utf-8?B?azFiNWRQMnUwM0ZDdktzM3VMQ2JpajRJdzJwN3VrWVlXUkorNzZYR1FiZlJM?=
+ =?utf-8?B?d0JmVnNGdDVSL01BUXdTaXpDQTVzcFNCRTRvbE1Wb2lXeVVjRDFUaStnTnR1?=
+ =?utf-8?B?Zm9FQjZGREFraGZCWVBCM0xtdkNXbStwSVlQVmJ0YjRsOVhjV0tweGUzUGYy?=
+ =?utf-8?B?dVpFS0NMaHM4RExUZ3dIZktNUFNqQ0RVQXRXMVkyL1JDbE1yUXE3SjRFb241?=
+ =?utf-8?B?RXQyUU1Tc2ZBK2huWXVQM205OE03cU9hWU1jMHE4UGVsQXBOZjB6YnVrekxJ?=
+ =?utf-8?B?NDVtODdzbWJ5YXEvWDNYcEpiOVc1WXNKU29NcDBiWllxVkE3Uk9ZY3BsTFBM?=
+ =?utf-8?B?YkY3ZUZheHZVS1lQMUN1eGtzaGtXYUdwMTZpdDBSWm1rUXh5ajdFTklMYjJs?=
+ =?utf-8?B?ZHdjSStkRGV1Mm9iTlBZUk0xR21zb2RWTThibWxNSWI4Z3A5MkovYTBrOEZK?=
+ =?utf-8?B?Q0xTRkM0MStCQm5KUmE5bzQxcVJYcC9IVWlvMVNBeVk1c1NCcWxhQ0o1M0xl?=
+ =?utf-8?B?WDFBOUNybEpaOGlUWG5EQmM5YlZkaVpGaFhUbE01ZGRHakdhRm80eFEwU0wz?=
+ =?utf-8?B?ZmVlQTZTSUNrZGF4RkpuTE91bFN5ejd1bU1RbU83WFg3SWRVR2M4WTNGUTEr?=
+ =?utf-8?B?NFFaUFdBR0V3d1RMWG0rMFR3bWZXK0xUYjRCazlTVVVxWVNxRURUUnljTlJU?=
+ =?utf-8?B?MEprU01OSWQxT1A5dEp0bUEyTmVjZndrYlNlTUZnK01MeXIwSm5tL3NoUlFa?=
+ =?utf-8?B?RUVCZHJjL0VUL1AxckIxSlViVEpSU1prOVlGczR0OUliYUxSdXAyNCtsU1pZ?=
+ =?utf-8?B?ckVWV2xLRUZFU3Frc0NZeWk4b2hhdzlyZk9HMzRFdE80SVI5VEdLYlVpekJ1?=
+ =?utf-8?B?Z0I4MXIxTXVva1NhRlpIcjRXSmw5V3JMWUpFUjZvblRJRGFsc0NUdU9MWnU0?=
+ =?utf-8?B?WVRHZFUwSkxvajUvbWVSQ01LQTZrZlVCQnRJbnhoeUlIb0ZJd0NxTUtYM2xY?=
+ =?utf-8?B?TjJpbml5cTV2RDRBSW00R3lUQVZkZWNJZ0ovUGY0Q0FUTGJuVVZGWDJjVHdP?=
+ =?utf-8?B?eDZneWNIMUx6Ry90cXJpY2lXdlhpWG9hbHdEaTlWWnJPbG9wQTV1VEZxYTYz?=
+ =?utf-8?B?Q3dhWVZIVHh6SEhCblhCTjFkVlRjWW9VSGJ2RE1CUVRKcXJ4MWk0UWJScW1t?=
+ =?utf-8?B?ZCtxcFFrYWFiaVpPVytBZ2k4K2JQZTE1dXU3Z05TaGVodzdka09uZ3FLNGYy?=
+ =?utf-8?B?clhFYUN3Y08vVUhtakhocjJMbmNWNFEwVWZQSzI5MDlXVE10V3Zyd0ZUUTlT?=
+ =?utf-8?B?MFgxa2x6VzBDZGxWMkVnc2NKbXYzaHFuWS9xejVPV1VvUVlvaUJ5a0FUdVpv?=
+ =?utf-8?B?WUlndFZsekY1Q3h6bW50QVRPV0ZITzhLUk1laFdVVGhYdjdPTnA0clF0WkZX?=
+ =?utf-8?B?NXR4RTF5ZFpkMHROU2NsV29hS2tBMWJramlqSDVoak5jenhmOXZkem9CdUQ2?=
+ =?utf-8?B?RGZuc0lJNnBFUnF5blVCeURDcmVwTzU3ekFWRnowOEZxdDlYYWV0SC9mOHlm?=
+ =?utf-8?B?UlJLNkVTYnA5Uzk2M2VqbDg2Ni9paEQzZUZFaThUdkZEY3NrMnEwYmQ5R05w?=
+ =?utf-8?B?Z3ZvSXFtcE9DOGZsMFRxT0J1L1VoQnJ3Y20rd2pNZjlPZ1lJWXZSTWRwTkFy?=
+ =?utf-8?B?MUR5VHZrYStJNnd3d3pEWjArSFlVcE9Bd1hXckNwclVNSzBBTGhRNnZrNEZw?=
+ =?utf-8?B?YU5IVVJOck1jbXlBbjB5WGlXTU10R0QxSkJQelB3VTBNcHFRdGRUeS8wOU4w?=
+ =?utf-8?B?TnZwZWNqRkhkSjVTMWxzTnZORXVhU2QxODNucGp6TGg0Q1F1SVlVSU1IQWhp?=
+ =?utf-8?B?NUtyeGJLZzE4U2FFZDNmSlNQMjdTS2pTcDhZMmFOeW1HL21kdHl3YnFKOGNT?=
+ =?utf-8?B?a1FzRy9ya1pCcDFSTXMvR01ZNTlja0p4Z0JySmU1SXN6NG9jWCtvRzRvS2Jy?=
+ =?utf-8?B?dUtmTWk3YWJQK1dKSGhXYk5HT0hTM3FJQkw2L2ZNV292endObk80VTBjZFVl?=
+ =?utf-8?B?MTUxNmRaNkx3WnhQQjU5MDZOczVyRUFJWkxoMXRsOGpxQk4wQ0xlU3pPc2N5?=
+ =?utf-8?Q?f3afW6e3J7BW4Yrw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20886a61-503c-4e02-16f5-08da320ae523
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2022 22:26:00.5127
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: At4OBimoywK1N0GB8TEoTF/DQsJFGFDsPZP02jh5uZkHefjoQe5sxE5b/YG8Y35obKiQ2WbL/G7cwqm+PDSg/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR10MB1601
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-05-09_06:2022-05-09,2022-05-09 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ suspectscore=0 phishscore=0 spamscore=0 bulkscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2205090110
+X-Proofpoint-ORIG-GUID: nQajJNnnSKOEfl5HIz-k2pZLPF8LwQf5
+X-Proofpoint-GUID: nQajJNnnSKOEfl5HIz-k2pZLPF8LwQf5
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Qian Cai <quic_qiancai@quicinc.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 474 ms - load_scoreonly_sql: 0.09 (0.0%),
-        signal_user_changed: 12 (2.5%), b_tie_ro: 10 (2.1%), parse: 1.02
-        (0.2%), extract_message_metadata: 12 (2.6%), get_uri_detail_list: 1.54
-        (0.3%), tests_pri_-1000: 14 (2.9%), tests_pri_-950: 1.33 (0.3%),
-        tests_pri_-900: 1.00 (0.2%), tests_pri_-90: 90 (18.9%), check_bayes:
-        88 (18.6%), b_tokenize: 8 (1.6%), b_tok_get_all: 10 (2.0%),
-        b_comp_prob: 2.6 (0.5%), b_tok_touch_all: 65 (13.6%), b_finish: 1.01
-        (0.2%), tests_pri_0: 321 (67.8%), check_dkim_signature: 0.84 (0.2%),
-        check_dkim_adsp: 4.1 (0.9%), poll_dns_idle: 0.87 (0.2%), tests_pri_10:
-        2.6 (0.6%), tests_pri_500: 16 (3.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 0/7] fork: Make init and umh ordinary tasks
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Qian Cai <quic_qiancai@quicinc.com> writes:
+On 5/8/22 02:36, Baolin Wang wrote:
+> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> hugetlb, which means it can support not only PMD/PUD size hugetlb:
+> 2M and 1G, but also CONT-PTE/PMD size: 64K and 32M if a 4K page
+> size specified.
+> 
+> When unmapping a hugetlb page, we will get the relevant page table
+> entry by huge_pte_offset() only once to nuke it. This is correct
+> for PMD or PUD size hugetlb, since they always contain only one
+> pmd entry or pud entry in the page table.
+> 
+> However this is incorrect for CONT-PTE and CONT-PMD size hugetlb,
+> since they can contain several continuous pte or pmd entry with
+> same page table attributes, so we will nuke only one pte or pmd
+> entry for this CONT-PTE/PMD size hugetlb page.
+> 
+> And now try_to_unmap() is only passed a hugetlb page in the case
+> where the hugetlb page is poisoned. Which means now we will unmap
+> only one pte entry for a CONT-PTE or CONT-PMD size poisoned hugetlb
+> page, and we can still access other subpages of a CONT-PTE or CONT-PMD
+> size poisoned hugetlb page, which will cause serious issues possibly.
+> 
+> So we should change to use huge_ptep_clear_flush() to nuke the
+> hugetlb page table to fix this issue, which already considered
+> CONT-PTE and CONT-PMD size hugetlb.
+> 
+> We've already used set_huge_swap_pte_at() to set a poisoned
+> swap entry for a poisoned hugetlb page. Meanwhile adding a VM_BUG_ON()
+> to make sure the passed hugetlb page is poisoned in try_to_unmap().
+> 
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>  mm/rmap.c | 39 ++++++++++++++++++++++-----------------
+>  1 file changed, 22 insertions(+), 17 deletions(-)
+> 
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index 7cf2408..37c8fd2 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -1530,6 +1530,11 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+>  
+>  		if (folio_test_hugetlb(folio)) {
+>  			/*
+> +			 * The try_to_unmap() is only passed a hugetlb page
+> +			 * in the case where the hugetlb page is poisoned.
+> +			 */
+> +			VM_BUG_ON_PAGE(!PageHWPoison(subpage), subpage);
+> +			/*
 
-> On Fri, May 06, 2022 at 09:11:36AM -0500, Eric W. Biederman wrote:
->> 
->> In commit 40966e316f86 ("kthread: Ensure struct kthread is present for
->> all kthreads") caused init and the user mode helper threads that call
->> kernel_execve to have struct kthread allocated for them.
->> 
->> I believe my first patch in this series is enough to fix the bug
->> and is simple enough and obvious enough to be backportable.
->> 
->> The rest of the changes pass struct kernel_clone_args to clean things
->> up and cause the code to make sense.
->> 
->> There is one rough spot in this change.  In the init process before the
->> user space init process is exec'd there is a lot going on.  I have found
->> when async_schedule_domain is low on memory or has more than 32K callers
->> executing do_populate_rootfs will now run in a user space thread making
->> flush_delayed_fput meaningless, and __fput_sync is unusable.  I solved
->> this as I did in usermode_driver.c with an added explicit task_work_run.
->> I point this out as I have seen some talk about making flushing file
->> handles more explicit.
->
-> Reverting the last 3 commits of the series fixed a boot crash.
->
-> 1b2552cbdbe0 fork: Stop allowing kthreads to call execve
-> 753550eb0ce1 fork: Explicitly set PF_KTHREAD
-> 68d85f0a33b0 init: Deal with the init process being a user mode process
+It is unfortunate that this could not easily be added to the first
+if (folio_test_hugetlb(folio)) block in this routine.  However, it
+is fine to add here.
 
-Hmm.  It looks like I missed a little detail.
+Looks good.  Thanks for all these changes,
 
-task_tick_fair
-  task_tick_numa
-    task_scan_start
-      task_scan_min
-        task_nr_scan_windows
-          p->mm
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-If I read this code right task_tick_numa makes the assumption that only
-tasks with PF_KTHREAD set don't have an mm.
-
-This should fix the failure.  For init we could possibly populate .mm
-and not just .active_mm.  For user mode helpers cloned from kernel
-threads I don't think that is a realistic option.  So I think this
-is going to be the proper fix.
-
-I believe this only happens when numa rebalancing happens at an
-unfortunate moment.
-
-Qian Cai can you test this?
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d4bd299d67ab..db6f0df9d43e 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -2915,7 +2915,7 @@ static void task_tick_numa(struct rq *rq, struct task_struct *curr)
-        /*
-         * We don't care about NUMA placement if we don't have memory.
-         */
--       if ((curr->flags & (PF_EXITING | PF_KTHREAD)) || work->next != work)
-+       if (!curr->mm || (curr->flags & (PF_EXITING | PF_KTHREAD)) || work->next != work)
-                return;
- 
-        /*
-
-
-Eric
+-- 
+Mike Kravetz
