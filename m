@@ -2,243 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC5E5207C4
-	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 00:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71247520AA3
+	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 03:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbiEIWgs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 May 2022 18:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
+        id S234181AbiEJBbi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 May 2022 21:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbiEIWg2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 18:36:28 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FC52B94FE
-        for <linux-arch@vger.kernel.org>; Mon,  9 May 2022 15:32:32 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id n8so15193700plh.1
-        for <linux-arch@vger.kernel.org>; Mon, 09 May 2022 15:32:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=Z3KkgMzaCsKED3+22qU0jRs/X/gxCeKEBc73aw1loXs=;
-        b=5vPCveToxUi4ttmh8DPCDy3ak9rPZYrBa1vVaCCIrmS6NeHkVk5bHBq8IVjFktNkNG
-         AvYErCFvU0+hXObXVqDU8qyV4bDHC4+o8GCF5qmDERdGC4UhP8jFXa9zTk7wsrCBS3Ur
-         hYBnHEgjZeYUJO6BBpoZJiINRKpgW38BN9zIXLfpOOD6MVlW+Mj9iXUaiyV7h5ASvLqZ
-         hVURqRgWeSjGJCcO3SUgK9XiJKniI+25OVH+/6Lr3S1gUjbadvAJMRYa/PDQ436HjsAT
-         QrveNwpwVx4a+V1WgcLhb2cl1ZogdB/YI2keetilTCYkVwt47kvVoj8unXjX9rKFjbkg
-         CWsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding:cc:from:to;
-        bh=Z3KkgMzaCsKED3+22qU0jRs/X/gxCeKEBc73aw1loXs=;
-        b=bsz08WiTmc8YYvnJ7w8VvETHG1jVPrj4uowNvhO5pVy+x0s1pgY3hrb5kG2it5eIIa
-         QlQEQ/uO3NbjWitR1ieMMTRmKsoOHi75HBDTi6PUiys4JTTjyBIBl3T9UqfoRlYCVnRG
-         KQbopOegkaUtdgLY7Pk1dCDeM70w5th00OixtGG1/GdTdCu0YCMbRVZp4XKEmxw5IcXZ
-         e6cM70u6b5GMGHPXoLq0wZxHV4HLosmSKXYdmZlFYsT6Q3f+7mUabOMzYnPeRp36e5jI
-         oahYUyTwZGK+7maxwjm2/YUv+5aOU7PrMmur0twrmrbupdXZ5/2wmXyKv81ZSIBKZ8ME
-         EboA==
-X-Gm-Message-State: AOAM533vVYrzmHFj6FOTLCVZQMwz37n9rT7LW+YHp3ieIrqRdFIfDbdW
-        QqAbSxy3gj/tTm6Q707WIi+kRg==
-X-Google-Smtp-Source: ABdhPJw7JCborLgVxycE/OcVHLhZbdmXu7Ia1T+hDGVVlKqCVv1PQUH1RupjT9FzRxe0AXir7lMqhA==
-X-Received: by 2002:a17:90a:a385:b0:1cb:bfa8:ae01 with SMTP id x5-20020a17090aa38500b001cbbfa8ae01mr19875610pjp.116.1652135551812;
-        Mon, 09 May 2022 15:32:31 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id r5-20020a170902ea4500b0015eddb8e450sm412122plg.25.2022.05.09.15.32.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 15:32:31 -0700 (PDT)
-Subject: [PATCH v5 7/7] csky: Move to generic ticket-spinlock
-Date:   Mon,  9 May 2022 15:29:56 -0700
-Message-Id: <20220509222956.2886-8-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220509222956.2886-1-palmer@rivosinc.com>
-References: <20220509222956.2886-1-palmer@rivosinc.com>
+        with ESMTP id S234178AbiEJBbh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 21:31:37 -0400
+Received: from out199-14.us.a.mail.aliyun.com (out199-14.us.a.mail.aliyun.com [47.90.199.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8F9154B0C;
+        Mon,  9 May 2022 18:27:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R231e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VCo8GaE_1652146048;
+Received: from 30.15.214.13(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCo8GaE_1652146048)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 10 May 2022 09:27:31 +0800
+Message-ID: <86671cb8-51e7-0e8e-430a-a325887391b3@linux.alibaba.com>
+Date:   Tue, 10 May 2022 09:28:08 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     guoren@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        Will Deacon <will@kernel.org>, longman@redhat.com,
-        boqun.feng@gmail.com, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, macro@orcam.me.uk,
-        Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, jszhang@kernel.org,
-        linux-csky@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-riscv@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 3/3] mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when
+ unmapping
+To:     Peter Xu <peterx@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        akpm@linux-foundation.org, catalin.marinas@arm.com,
+        will@kernel.org, tsbogend@alpha.franken.de,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org
+References: <cover.1651216964.git.baolin.wang@linux.alibaba.com>
+ <c91e04ebb792ef7b72966edea8bd6fa2dfa5bfa7.1651216964.git.baolin.wang@linux.alibaba.com>
+ <20220429220214.4cfc5539@thinkpad>
+ <bcb4a3b0-4fcd-af3a-2a2c-fd662d9eaba9@linux.alibaba.com>
+ <20220502160232.589a6111@thinkpad>
+ <48a05075-a323-e7f1-9e99-6c0d106eb2cb@linux.alibaba.com>
+ <20220503120343.6264e126@thinkpad>
+ <927dfbf4-c899-b88a-4d58-36a637d611f9@oracle.com>
+ <YnlEQvipCM6hnIYT@xz-m1.local>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <YnlEQvipCM6hnIYT@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
 
-There is no benefit from custom implementation for ticket-spinlock,
-so move to generic ticket-spinlock for easy maintenance.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- arch/csky/include/asm/Kbuild           |  3 +
- arch/csky/include/asm/spinlock.h       | 89 --------------------------
- arch/csky/include/asm/spinlock_types.h | 27 --------
- 3 files changed, 3 insertions(+), 116 deletions(-)
- delete mode 100644 arch/csky/include/asm/spinlock.h
- delete mode 100644 arch/csky/include/asm/spinlock_types.h
+On 5/10/2022 12:41 AM, Peter Xu wrote:
+> On Fri, May 06, 2022 at 12:07:13PM -0700, Mike Kravetz wrote:
+>> On 5/3/22 03:03, Gerald Schaefer wrote:
+>>> On Tue, 3 May 2022 10:19:46 +0800
+>>> Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+>>>> On 5/2/2022 10:02 PM, Gerald Schaefer wrote:
+> 
+> [...]
+> 
+>>>> Please see previous code, we'll use the original pte value to check if
+>>>> it is uffd-wp armed, and if need to mark it dirty though the hugetlbfs
+>>>> is set noop_dirty_folio().
+>>>>
+>>>> pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
+>>>
+>>> Uh, ok, that wouldn't work on s390, but we also don't have
+>>> CONFIG_PTE_MARKER_UFFD_WP / HAVE_ARCH_USERFAULTFD_WP set, so
+>>> I guess we will be fine (for now).
+>>>
+>>> Still, I find it a bit unsettling that pte_install_uffd_wp_if_needed()
+>>> would work on a potential hugetlb *pte, directly de-referencing it
+>>> instead of using huge_ptep_get().
+>>>
+>>> The !pte_none(*pte) check at the beginning would be broken in the
+>>> hugetlb case for s390 (not sure about other archs, but I think s390
+>>> might be the only exception strictly requiring huge_ptep_get()
+>>> for de-referencing hugetlb *pte pointers).
+> 
+> We could have used is_vm_hugetlb_page(vma) within the helper so as to
+> properly use either generic pte or hugetlb version of pte fetching.  We may
+> want to conditionally do set_[huge_]pte_at() too at the end.
+> 
+> I could prepare a patch for that even if it's not really anything urgently
+> needed. I assume that won't need to block this patchset since we need the
+> pteval for pte_dirty() check anyway and uffd-wp definitely needs it too.
 
-diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
-index 888248235c23..103207a58f97 100644
---- a/arch/csky/include/asm/Kbuild
-+++ b/arch/csky/include/asm/Kbuild
-@@ -3,7 +3,10 @@ generic-y += asm-offsets.h
- generic-y += extable.h
- generic-y += gpio.h
- generic-y += kvm_para.h
-+generic-y += spinlock.h
-+generic-y += spinlock_types.h
- generic-y += qrwlock.h
-+generic-y += qrwlock_types.h
- generic-y += parport.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
-deleted file mode 100644
-index 69f5aa249c5f..000000000000
---- a/arch/csky/include/asm/spinlock.h
-+++ /dev/null
-@@ -1,89 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--
--#ifndef __ASM_CSKY_SPINLOCK_H
--#define __ASM_CSKY_SPINLOCK_H
--
--#include <linux/spinlock_types.h>
--#include <asm/barrier.h>
--
--/*
-- * Ticket-based spin-locking.
-- */
--static inline void arch_spin_lock(arch_spinlock_t *lock)
--{
--	arch_spinlock_t lockval;
--	u32 ticket_next = 1 << TICKET_NEXT;
--	u32 *p = &lock->lock;
--	u32 tmp;
--
--	asm volatile (
--		"1:	ldex.w		%0, (%2) \n"
--		"	mov		%1, %0	 \n"
--		"	add		%0, %3	 \n"
--		"	stex.w		%0, (%2) \n"
--		"	bez		%0, 1b   \n"
--		: "=&r" (tmp), "=&r" (lockval)
--		: "r"(p), "r"(ticket_next)
--		: "cc");
--
--	while (lockval.tickets.next != lockval.tickets.owner)
--		lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
--
--	smp_mb();
--}
--
--static inline int arch_spin_trylock(arch_spinlock_t *lock)
--{
--	u32 tmp, contended, res;
--	u32 ticket_next = 1 << TICKET_NEXT;
--	u32 *p = &lock->lock;
--
--	do {
--		asm volatile (
--		"	ldex.w		%0, (%3)   \n"
--		"	movi		%2, 1	   \n"
--		"	rotli		%1, %0, 16 \n"
--		"	cmpne		%1, %0     \n"
--		"	bt		1f         \n"
--		"	movi		%2, 0	   \n"
--		"	add		%0, %0, %4 \n"
--		"	stex.w		%0, (%3)   \n"
--		"1:				   \n"
--		: "=&r" (res), "=&r" (tmp), "=&r" (contended)
--		: "r"(p), "r"(ticket_next)
--		: "cc");
--	} while (!res);
--
--	if (!contended)
--		smp_mb();
--
--	return !contended;
--}
--
--static inline void arch_spin_unlock(arch_spinlock_t *lock)
--{
--	smp_mb();
--	WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
--}
--
--static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
--{
--	return lock.tickets.owner == lock.tickets.next;
--}
--
--static inline int arch_spin_is_locked(arch_spinlock_t *lock)
--{
--	return !arch_spin_value_unlocked(READ_ONCE(*lock));
--}
--
--static inline int arch_spin_is_contended(arch_spinlock_t *lock)
--{
--	struct __raw_tickets tickets = READ_ONCE(lock->tickets);
--
--	return (tickets.next - tickets.owner) > 1;
--}
--#define arch_spin_is_contended	arch_spin_is_contended
--
--#include <asm/qrwlock.h>
--
--#endif /* __ASM_CSKY_SPINLOCK_H */
-diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
-deleted file mode 100644
-index db87a12c3827..000000000000
---- a/arch/csky/include/asm/spinlock_types.h
-+++ /dev/null
-@@ -1,27 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--
--#ifndef __ASM_CSKY_SPINLOCK_TYPES_H
--#define __ASM_CSKY_SPINLOCK_TYPES_H
--
--#ifndef __LINUX_SPINLOCK_TYPES_RAW_H
--# error "please don't include this file directly"
--#endif
--
--#define TICKET_NEXT	16
--
--typedef struct {
--	union {
--		u32 lock;
--		struct __raw_tickets {
--			/* little endian */
--			u16 owner;
--			u16 next;
--		} tickets;
--	};
--} arch_spinlock_t;
--
--#define __ARCH_SPIN_LOCK_UNLOCKED	{ { 0 } }
--
--#include <asm-generic/qrwlock_types.h>
--
--#endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
--- 
-2.34.1
-
+OK. Thanks Peter.
