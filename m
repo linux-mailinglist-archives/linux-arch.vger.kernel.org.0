@@ -2,146 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F18C520B4D
-	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 04:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EA8520C42
+	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 05:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbiEJChe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 9 May 2022 22:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S235607AbiEJDua (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 9 May 2022 23:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiEJChc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 22:37:32 -0400
-X-Greylist: delayed 357 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 19:33:35 PDT
-Received: from server.jpvtrading.co.uk (server.jpvtrading.co.uk [77.68.83.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3643822D619
-        for <linux-arch@vger.kernel.org>; Mon,  9 May 2022 19:33:35 -0700 (PDT)
-Received: from server.jpvtrading.co.uk (localhost.localdomain [127.0.0.1])
-        by server.jpvtrading.co.uk (Postfix) with ESMTP id DBB3310627C4
-        for <linux-arch@vger.kernel.org>; Tue, 10 May 2022 02:27:36 +0000 (UTC)
-Authentication-Results: server.jpvtrading.co.uk;
-        spf=pass (sender IP is 127.0.0.1) smtp.mailfrom= smtp.helo=server.jpvtrading.co.uk
-Received-SPF: pass (server.jpvtrading.co.uk: localhost is always allowed.) client-ip=127.0.0.1; envelope-from=postmaster@server.jpvtrading.co.uk; helo=server.jpvtrading.co.uk;
-Content-Type: multipart/report; report-type=delivery-status;
- boundary="----------=_1652149656-31536-2"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-Subject: BANNED contents from you (.exe,.exe-ms,pmlyg.bat)
-Message-ID: <VSZ9FY344gbQdH@server.jpvtrading.co.uk>
-From:   "Content-filter at server.jpvtrading.co.uk" 
-        <postmaster@server.jpvtrading.co.uk>
-To:     <linux-arch@vger.kernel.org>
-Date:   Tue, 10 May 2022 02:27:36 +0000 (UTC)
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229500AbiEJDu3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 9 May 2022 23:50:29 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8781838C;
+        Mon,  9 May 2022 20:46:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VCohuDm_1652154383;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCohuDm_1652154383)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 10 May 2022 11:46:24 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     songmuchun@bytedance.com, tsbogend@alpha.franken.de,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        arnd@arndb.de, baolin.wang@linux.alibaba.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v3 0/3] Fix CONT-PTE/PMD size hugetlb issue when unmapping or migrating
+Date:   Tue, 10 May 2022 11:45:57 +0800
+Message-Id: <cover.1652147571.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is a multi-part message in MIME format...
+Hi,
 
-------------=_1652149656-31536-2
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-Content-Transfer-Encoding: 7bit
+Now migrating a hugetlb page or unmapping a poisoned hugetlb page, we'll
+use ptep_clear_flush() and set_pte_at() to nuke the page table entry
+and remap it, and this is incorrect for CONT-PTE or CONT-PMD size hugetlb
+page, which will cause potential data consistent issue. This patch set
+will change to use hugetlb related APIs to fix this issue, please find
+details in each patch. Thanks.
 
-BANNED CONTENTS ALERT
+Note: Mike pointed out the huge_ptep_get() will only return the one specific
+value, and it would not take into account the dirty or young bits of CONT-PTE/PMDs
+like the huge_ptep_get_and_clear() [1]. This inconsistent issue is not introduced
+by this patch set, and will address this issue in another thread [2]. Meanwhile
+the uffd for hugetlb case [3] pointed by Gerald also need another patch to address.
 
-Our content checker found
-    banned name: .exe,.exe-ms,pmlyg.bat
+[1] https://lore.kernel.org/linux-mm/85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com/
+[2] https://lore.kernel.org/all/cover.1651998586.git.baolin.wang@linux.alibaba.com/
+[3] https://lore.kernel.org/linux-mm/20220503120343.6264e126@thinkpad/
 
-in email presumably from you <linux-arch@vger.kernel.org>
-to the following recipient:
--> customs@cms-logistics.co.uk
+Changes from v2:
+ - Collect reviewed tags from Muchun and Mike.
+ - Drop the unnecessary casting in hugetlb.c.
+ - Fix building errors with adding dummy functions for !CONFIG_HUGETLB_PAGE.
 
-Our internal reference code for your message is 31536-15/Z9FY344gbQdH
+Changes from v1:
+ - Add acked tag from Mike.
+ - Update some commit message.
+ - Add VM_BUG_ON in try_to_unmap() for hugetlb case.
+ - Add an explict void casting for huge_ptep_clear_flush() in hugetlb.c.
 
-First upstream SMTP client IP address: [121.34.33.227]:14221 
+Baolin Wang (3):
+  mm: change huge_ptep_clear_flush() to return the original pte
+  mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when migration
+  mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when unmapping
 
-Received trace: ESMTP://[121.34.33.227]:14221
+ arch/arm64/include/asm/hugetlb.h   |  4 +--
+ arch/arm64/mm/hugetlbpage.c        | 12 +++-----
+ arch/ia64/include/asm/hugetlb.h    |  4 +--
+ arch/mips/include/asm/hugetlb.h    |  9 ++++--
+ arch/parisc/include/asm/hugetlb.h  |  4 +--
+ arch/powerpc/include/asm/hugetlb.h |  9 ++++--
+ arch/s390/include/asm/hugetlb.h    |  6 ++--
+ arch/sh/include/asm/hugetlb.h      |  4 +--
+ arch/sparc/include/asm/hugetlb.h   |  4 +--
+ include/asm-generic/hugetlb.h      |  4 +--
+ include/linux/hugetlb.h            | 11 +++++++
+ mm/rmap.c                          | 63 ++++++++++++++++++++++++--------------
+ 12 files changed, 83 insertions(+), 51 deletions(-)
 
-Return-Path: <linux-arch@vger.kernel.org>
-From: linux-arch@vger.kernel.org
-Subject: Delivery reports about your e-mail
+-- 
+1.8.3.1
 
-Delivery of the email was stopped!
-
-The message has been blocked because it contains a component
-(as a MIME part or nested within) with declared name
-or MIME type or contents type violating our access policy.
-
-To transfer contents that may be considered risky or unwanted
-by site policies, or simply too large for mailing, please consider
-publishing your content on the web, and only sending a URL of the
-document to the recipient.
-
-Depending on the recipient and sender site policies, with a little
-effort it might still be possible to send any contents (including
-viruses) using one of the following methods:
-
-- encrypted using pgp, gpg or other encryption methods;
-
-- wrapped in a password-protected or scrambled container or archive
-  (e.g.: zip -e, arj -g, arc g, rar -p, or other methods)
-
-Note that if the contents is not intended to be secret, the
-encryption key or password may be included in the same message
-for recipient's convenience.
-
-We are sorry for inconvenience if the contents was not malicious.
-
-The purpose of these restrictions is to avoid the most common
-propagation methods used by viruses and other malware. These often
-exploit automatic mechanisms and security holes in more popular
-mail readers. By requiring an explicit and decisive action from a
-recipient to decode mail, a danger of automatic malware propagation
-is largely reduced.
-
-
-------------=_1652149656-31536-2
-Content-Type: message/delivery-status; name="dsn_status.dsn"
-Content-Disposition: inline; filename="dsn_status.dsn"
-Content-Transfer-Encoding: 7bit
-Content-Description: Delivery error report
-
-Reporting-MTA: dns; server.jpvtrading.co.uk
-Received-From-MTA: dns; server.jpvtrading.co.uk ([127.0.0.1])
-Arrival-Date: Tue, 10 May 2022 02:27:36 +0000 (UTC)
-
-Original-Recipient: rfc822;customs@cms-logistics.co.uk
-Final-Recipient: rfc822;customs@cms-logistics.co.uk
-Action: failed
-Status: 5.7.0
-Diagnostic-Code: smtp; 554-5.7.0 Bounce, id=31536-15 - BANNED:
- 554 5.7.0 .exe,.exe-ms,pmlyg.bat
-Last-Attempt-Date: Tue, 10 May 2022 02:27:36 +0000 (UTC)
-Final-Log-ID: 31536-15/Z9FY344gbQdH
-
-------------=_1652149656-31536-2
-Content-Type: text/rfc822-headers; name="header.hdr"
-Content-Disposition: inline; filename="header.hdr"
-Content-Transfer-Encoding: 7bit
-Content-Description: Message header section
-
-Return-Path: <linux-arch@vger.kernel.org>
-Received: from vger.kernel.org (unknown [121.34.33.227])
-	by server.jpvtrading.co.uk (Postfix) with ESMTP id 137DC10EB129
-	for <customs@cms-logistics.co.uk>; Tue, 10 May 2022 02:27:08 +0000 (UTC)
-Authentication-Results: server.jpvtrading.co.uk;
-	spf=temperror (sender IP is 121.34.33.227) smtp.mailfrom=linux-arch@vger.kernel.org smtp.helo=vger.kernel.org
-Received-SPF: none (server.jpvtrading.co.uk: no valid SPF record)
-From: linux-arch@vger.kernel.org
-To: customs@cms-logistics.co.uk
-Subject: Delivery reports about your e-mail
-Date: Tue, 10 May 2022 10:27:03 +0800
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0002_FD47E436.8E205FE6"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-
-------------=_1652149656-31536-2--
