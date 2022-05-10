@@ -2,53 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C1B520CD6
-	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 06:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464E5520DE8
+	for <lists+linux-arch@lfdr.de>; Tue, 10 May 2022 08:32:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236537AbiEJEc6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 10 May 2022 00:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S237123AbiEJGgj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 10 May 2022 02:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbiEJEbf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 May 2022 00:31:35 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FF43526D;
-        Mon,  9 May 2022 21:26:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=31;SR=0;TI=SMTPD_---0VCp29EM_1652156751;
-Received: from 30.15.214.13(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCp29EM_1652156751)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 10 May 2022 12:25:53 +0800
-Message-ID: <0db300f4-8a91-b330-5c6f-bbc63cf2f151@linux.alibaba.com>
-Date:   Tue, 10 May 2022 12:26:32 +0800
+        with ESMTP id S237145AbiEJGgi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 10 May 2022 02:36:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D7D2300FE;
+        Mon,  9 May 2022 23:32:40 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ky7SG0p7RzGpfb;
+        Tue, 10 May 2022 14:29:50 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 10 May 2022 14:32:06 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 10 May
+ 2022 14:32:06 +0800
+Message-ID: <f52be1d0-dbfe-2177-8a4c-1d4e1470d908@huawei.com>
+Date:   Tue, 10 May 2022 14:32:03 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 0/3] Fix CONT-PTE/PMD size hugetlb issue when unmapping
- or migrating
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     mike.kravetz@oracle.com, catalin.marinas@arm.com, will@kernel.org,
-        songmuchun@bytedance.com, tsbogend@alpha.franken.de,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.osdn.me, dalias@libc.org, davem@davemloft.net,
-        arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-References: <cover.1652147571.git.baolin.wang@linux.alibaba.com>
- <20220509210404.6a43aff15d0d6b3af0741001@linux-foundation.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20220509210404.6a43aff15d0d6b3af0741001@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.10 v3] locking/csd_lock: fix csdlock_debug cause arm64
+ boot panic
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arch@vger.kernel.org>, <stable@vger.kernel.org>,
+        <peterz@infradead.org>, <tglx@linutronix.de>, <namit@vmware.com>,
+        <gor@linux.ibm.com>, <rdunlap@infradead.org>, <sashal@kernel.org>
+References: <20220507084510.14761-1-chenzhongjin@huawei.com>
+ <YnZAO+3Rhj0gwq38@kroah.com>
+ <e8715911-f835-059d-27f8-cc5f5ad30a07@huawei.com>
+ <YnjpljvWncezV0G0@kroah.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <YnjpljvWncezV0G0@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,34 +62,54 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 
 
-On 5/10/2022 12:04 PM, Andrew Morton wrote:
-> On Tue, 10 May 2022 11:45:57 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+On 2022/5/9 18:14, Greg KH wrote:
 > 
->> Hi,
+> A: http://en.wikipedia.org/wiki/Top_post
+> Q: Were do I find info about this thing called top-posting?
+> A: Because it messes up the order in which people normally read text.
+> Q: Why is top-posting such a bad thing?
+> A: Top-posting.
+> Q: What is the most annoying thing in e-mail?
+> 
+> A: No.
+> Q: Should I include quotations after my reply?
+> 
+> http://daringfireball.net/2007/07/on_top
+
+Sorry for this. Thanks so much you point it out before I make more mistakes.
+
+> 
+> On Mon, May 09, 2022 at 11:14:12AM +0800, Chen Zhongjin wrote:
+>> Hi Greg,
 >>
->> Now migrating a hugetlb page or unmapping a poisoned hugetlb page, we'll
->> use ptep_clear_flush() and set_pte_at() to nuke the page table entry
->> and remap it, and this is incorrect for CONT-PTE or CONT-PMD size hugetlb
->> page,
+>> Since the patch:
+>> https://lore.kernel.org/all/20210420093559.23168-1-catalin.marinas@arm.com/
+>> has forced CONFIG_SPARSEMEM_VMEMMAP=y from 5.12, it's not necessary to include
+>> this patch on master.
+>>
+>> However this problem still exist on 5.10 stable, so either we can backport the
+>> above patch to 5.10, or independently apply mine.
+>>
+>> I'm not sure if backporting one exist patch is better, but that patch only
+>> changed configs without any fix for old builds.
+>>
+>> If you have any advice please tell me.
 > 
-> It would be helpful to describe why it's wrong.  Something like "should
-> use huge_ptep_clear_flush() and huge_ptep_clear_flush() for this
-> purpose"?
-
-Sorry for the confusing description. I described the problem explicitly 
-in each patch's commit message.
-
-https://lore.kernel.org/all/ea5abf529f0997b5430961012bfda6166c1efc8c.1652147571.git.baolin.wang@linux.alibaba.com/
-https://lore.kernel.org/all/730ea4b6d292f32fb10b7a4e87dad49b0eb30474.1652147571.git.baolin.wang@linux.alibaba.com/
-
+> If you want to include a patch in the stable tree that is NOT in Linus's
+> tree, then you need to document it very very well as to why this is not
+> the case.
 > 
->> which will cause potential data consistent issue. This patch set
->> will change to use hugetlb related APIs to fix this issue, please find
->> details in each patch. Thanks.
-> 
-> Is a cc:stable needed here?  And are we able to identify a target for a
-> Fixes: tag?
+> If backporting the above commit is better, I would much rather do that,
+> please ask the maintainers and developers of it if they will do that.
 
-I think need a cc:stable tag, however I am not sure the target fixes 
-tag, since we should trace back to the introduction of CONT-PTE/PMD 
-hugetlb? 66b3923a1a0f ("arm64: hugetlb: add support for PTE contiguous bit")
+I'll try to send this patch to master because I found it is broken on ppc64 for
+this problem as well. Also I'll add CC to stable so after it is accepted by
+master we can backport it to stable.
+
+Thanks!
+
+> thanks,
+> 
+> greg k-h
+> .
+
