@@ -2,67 +2,103 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552D5522FED
-	for <lists+linux-arch@lfdr.de>; Wed, 11 May 2022 11:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA7D52326C
+	for <lists+linux-arch@lfdr.de>; Wed, 11 May 2022 14:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiEKJvv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 11 May 2022 05:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S238908AbiEKMEm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 11 May 2022 08:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbiEKJvL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 May 2022 05:51:11 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407231400D
-        for <linux-arch@vger.kernel.org>; Wed, 11 May 2022 02:50:47 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id s14so1365194plk.8
-        for <linux-arch@vger.kernel.org>; Wed, 11 May 2022 02:50:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=4kP1SrlImVQvijZfLa/DYuaMhF1rtRMbLjnfGPAkB7g=;
-        b=RXupbJGrKrVK+07lLoIgk+QNFAotclhDgv72fAYZdb3kY7E5z8fBVlhBNivBmE/C9k
-         MvSoZxp6RhX83o+G0SqAEWVzLRVnu+HqiYIL3JCCD3ofMyFaR0PqW9arWA53Hp73WQ7z
-         tLiZG5cqsMgRGOMy82rdrp9FHOPziUgNKs4uh0akXzGmgt4BuVK96eNiXeZQtrHx9VBz
-         /dhuBjh+LsCb0u1ihISrhtVGsSyzxgWd+ceR8DOQoMHYzSZ+CwNF1FjpMnmONb/yyjdW
-         Duz88giS1TZGDTX56pgsLdy6tWLCu5sR2JlEn9C79q7dR9CQUDmP2O8A53CMLOo5ztqC
-         bQRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=4kP1SrlImVQvijZfLa/DYuaMhF1rtRMbLjnfGPAkB7g=;
-        b=i7TKY01vkLM/t19/zlC5T+75X35c8UoSKtXgN41JzVUZULYI/UtIEZeMMGV6REQ6bh
-         pEoLTMq+30qMo3/Vx3+yonh/YLeGgzOCmeHgdnDXggp6sXQsHmLvtadZF8woAr5IxzUq
-         wg+I0cGVTgJPodxJXVPM2L/QmYiyQVd/2Zy7KxAH0RT2rUgsr46/TkFb8U8uNfs/K8QE
-         EBXyeFKqbEaSIlV+vwH55mLaVH+DhPRYH4YnzjsREjSNB8YzK8o7/mm34hYGTeIgYha3
-         sCL41DrMaS8t9q9qcaChHPxu8RJFXwEvUeVcs6VJqsEd3R4DR4QTPtzKnskLvPbAJJMN
-         jI/A==
-X-Gm-Message-State: AOAM530yxG3u8mETz66E4XSq6dp6INH52LlpDdZFOL6G8DDQ+lMoDSMt
-        lDEh72k8sug5T+TEzZxu3Kil570GMmcCah9NJQ==
-X-Google-Smtp-Source: ABdhPJz6CyqNbI4Z8ml0klbVkoOwH+qyb9Oljtk4Kd4sPEBUc/9gCOiO/egLUb+LVYuVhyKiR3MxsfXGeXjN1xUikbA=
-X-Received: by 2002:a17:90a:2f84:b0:1dd:940:50e7 with SMTP id
- t4-20020a17090a2f8400b001dd094050e7mr4442309pjd.210.1652262646828; Wed, 11
- May 2022 02:50:46 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6a10:9b45:0:0:0:0 with HTTP; Wed, 11 May 2022 02:50:46
- -0700 (PDT)
-Reply-To: janerobles434@gmail.com
-From:   Jane Robles <mikeuk124@gmail.com>
-Date:   Wed, 11 May 2022 09:50:46 +0000
-Message-ID: <CALhK1+WydC_u-2pTprPhvJbzX8PCZGNjiHK5dVox=APDsj+gnA@mail.gmail.com>
-Subject: Hi,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        with ESMTP id S233223AbiEKMEl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 11 May 2022 08:04:41 -0400
+Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8A592318;
+        Wed, 11 May 2022 05:04:38 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VCw.G9V_1652270670;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VCw.G9V_1652270670)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 11 May 2022 20:04:31 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org, mike.kravetz@oracle.com
+Cc:     catalin.marinas@arm.com, will@kernel.org, songmuchun@bytedance.com,
+        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, arnd@arndb.de, baolin.wang@linux.alibaba.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v4 0/3] Fix CONT-PTE/PMD size hugetlb issue when unmapping or migrating
+Date:   Wed, 11 May 2022 20:04:16 +0800
+Message-Id: <cover.1652270205.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello?
+Hi,
+
+Now migrating a hugetlb page or unmapping a poisoned hugetlb page, we'll
+use ptep_clear_flush() and set_pte_at() to nuke the page table entry
+and remap it, and this is incorrect for CONT-PTE or CONT-PMD size hugetlb
+page, which will cause potential data consistent issue. This patch set
+will change to use hugetlb related APIs to fix this issue, please find
+details in each patch. Thanks.
+
+Note: Mike pointed out the huge_ptep_get() will only return the one specific
+value, and it would not take into account the dirty or young bits of CONT-PTE/PMDs
+like the huge_ptep_get_and_clear() [1]. This inconsistent issue is not introduced
+by this patch set, and will address this issue in another thread [2]. Meanwhile
+the uffd for hugetlb case [3] pointed by Gerald also need another patch to address.
+
+[1] https://lore.kernel.org/linux-mm/85bd80b4-b4fd-0d3f-a2e5-149559f2f387@oracle.com/
+[2] https://lore.kernel.org/all/cover.1651998586.git.baolin.wang@linux.alibaba.com/
+[3] https://lore.kernel.org/linux-mm/20220503120343.6264e126@thinkpad/
+
+Changes from v3:
+ - Fix building errors for !CONFIG_MMU.
+
+Changes from v2:
+ - Collect reviewed tags from Muchun and Mike.
+ - Drop the unnecessary casting in hugetlb.c.
+ - Fix building errors with adding dummy functions for !CONFIG_HUGETLB_PAGE.
+
+Changes from v1:
+ - Add acked tag from Mike.
+ - Update some commit message.
+ - Add VM_BUG_ON in try_to_unmap() for hugetlb case.
+ - Add an explict void casting for huge_ptep_clear_flush() in hugetlb.c.
+
+Baolin Wang (3):
+  mm: change huge_ptep_clear_flush() to return the original pte
+  mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when migration
+  mm: rmap: Fix CONT-PTE/PMD size hugetlb issue when unmapping
+
+ arch/arm64/include/asm/hugetlb.h   |  4 +--
+ arch/arm64/mm/hugetlbpage.c        | 12 +++-----
+ arch/ia64/include/asm/hugetlb.h    |  5 +--
+ arch/mips/include/asm/hugetlb.h    |  9 ++++--
+ arch/parisc/include/asm/hugetlb.h  |  5 +--
+ arch/powerpc/include/asm/hugetlb.h |  9 ++++--
+ arch/s390/include/asm/hugetlb.h    |  6 ++--
+ arch/sh/include/asm/hugetlb.h      |  5 +--
+ arch/sparc/include/asm/hugetlb.h   |  5 +--
+ include/asm-generic/hugetlb.h      |  4 +--
+ include/linux/hugetlb.h            | 11 +++++++
+ mm/rmap.c                          | 63 ++++++++++++++++++++++++--------------
+ 12 files changed, 87 insertions(+), 51 deletions(-)
+
+-- 
+1.8.3.1
+
