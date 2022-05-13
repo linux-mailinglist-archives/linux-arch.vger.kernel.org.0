@@ -2,82 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4AE5260A9
-	for <lists+linux-arch@lfdr.de>; Fri, 13 May 2022 13:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79CBF526A69
+	for <lists+linux-arch@lfdr.de>; Fri, 13 May 2022 21:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379737AbiEMLGR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 13 May 2022 07:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
+        id S232397AbiEMTdE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 13 May 2022 15:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379759AbiEMLGJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 May 2022 07:06:09 -0400
-X-Greylist: delayed 1845 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 May 2022 04:06:06 PDT
-Received: from bosmailout02.eigbox.net (bosmailout02.eigbox.net [66.96.186.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21634641A
-        for <linux-arch@vger.kernel.org>; Fri, 13 May 2022 04:06:04 -0700 (PDT)
-Received: from bosmailscan04.eigbox.net ([10.20.15.4])
-        by bosmailout02.eigbox.net with esmtp (Exim)
-        id 1npSdh-0001eT-ST
-        for linux-arch@vger.kernel.org; Fri, 13 May 2022 06:35:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=jerusalemmap.com; s=dkim; h=Sender:Date:Subject:From:cc:To:Message-Id:
-        Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IJ0TSmb0BP+mP9httuCyzADwUNJy9FPysxU0TrUAhpY=; b=bpWlJro28eOfawaQ5Cdd3hT6jX
-        78EHQILUP++OHczAdxVfqUM1huAZlIP9hpqj4h/qOrnZvxRW7X1wLJx/wJYb4bLHmGnmHRI3yt7X8
-        vl1XChMW4h73xHGwAqHqM99NmA16hjV7zoGbFaXulzAVFgLAXTN9KPeDOkqadWqRoQOVxPdFRc/iQ
-        +JP4VvEku8AhCPrtQ3SLmIRVQNYf+8qsgomV1GpJO2fNlDAt/ZuT4xQjoB4k2I66CyPj/B/bn0xSW
-        B0WY0Dycapuyly8AkeOq2/kBHIpiJtjMhoCgbTnsJz0Yjcway+cy5xUfUZx90O9Q8UpEKmgB41qI4
-        R7j3260w==;
-Received: from [10.115.3.33] (helo=bosimpout13)
-        by bosmailscan04.eigbox.net with esmtp (Exim)
-        id 1npSdh-0002GT-ID; Fri, 13 May 2022 06:35:17 -0400
-Received: from boscustweb3605.eigbox.net ([10.20.112.4])
-        by bosimpout13 with 
-        id WAbE2700E05khgS01AbHSy; Fri, 13 May 2022 06:35:17 -0400
-X-EN-SP-DIR: OUT
-X-EN-SP-SQ: 1
-Received: from nf.ramesystechnologies by boscustweb3605.eigbox.net with local (Exim)
-        id 1npSdJ-0001cE-BB; Fri, 13 May 2022 06:34:53 -0400
-X-EN-Info: U=nf.ramesystechnologies P=/cgi-bin/map/quik4.cgi
-X-EN-CGIUser: nf.ramesystechnologies
-X-EN-CGIPath: /cgi-bin/map/quik4.cgi
-X-EN-OrigIP: 199.249.230.146
-Message-Id: <1652438093-369-nf.ramesystechnologies@boscustweb3605.eigbox.net>
-To:     linux-arch@vger.kernel.org
-cc:     buyamap@jerusalemmap.com
-From:   buyamap@jerusalemmap.com
-Subject:  Map
-X-EN-Timestamp: Fri, 13 May 2022 06:34:53 -0400
-Date:   Fri, 13 May 2022 06:34:53 -0400
-Sender:  buyamap@jerusalemmap.com
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_TINYSUBJ_URISHRT,T_SCC_BODY_TEXT_LINE,
-        T_SHORT_SHORTNER,URIBL_DBL_ABUSE_REDIR autolearn=no autolearn_force=no
-        version=3.4.6
+        with ESMTP id S1380583AbiEMTdE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 13 May 2022 15:33:04 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2805BE7B;
+        Fri, 13 May 2022 12:33:01 -0700 (PDT)
+Received: from mail-yw1-f170.google.com ([209.85.128.170]) by
+ mrelayeu.kundenserver.de (mreue109 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MV6G0-1nNaHd3SGk-00S9SR; Fri, 13 May 2022 21:33:00 +0200
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2ebf4b91212so100487807b3.8;
+        Fri, 13 May 2022 12:32:59 -0700 (PDT)
+X-Gm-Message-State: AOAM533EJnvtWJNshrUMN/cMhiHTKD+qmQW0y38xtp7AymAdmJyKwRUF
+        BChQ3yLjkZro08kZmNILqrvfUXCBv3IGlbPmdmo=
+X-Google-Smtp-Source: ABdhPJwCL00R0GBeDe7JbP4gBwr+dNH6R9L3x9Kf4PexSUlAVHRfICUM51HKbOE6+snkPmIgf0vzFiRTTaBIYyJk+Eo=
+X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
+ m125-20020a0dfc83000000b002e5b0f4c125mr7612521ywf.347.1652470378438; Fri, 13
+ May 2022 12:32:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220430090518.3127980-1-chenhuacai@loongson.cn>
+ <20220430090518.3127980-21-chenhuacai@loongson.cn> <CAK8P3a2SPTLLrZtSz0LT0LqMpq4SKCScD4vLvr+DJn+u5W_CdA@mail.gmail.com>
+ <CAMj1kXEDpJwLDD4ZGLwzdo1KcJG_90iD9MnBVamCK06YKF7BdA@mail.gmail.com>
+ <CAAhV-H4eR5YvhABp9L4FBmofWwH+XM3V_nOjatQTV_M7Gihs7g@mail.gmail.com>
+ <CAMj1kXFD8_CuijJFgQbrxvY4MVBLmKQKFKmYhD1NBFLn3v=+FQ@mail.gmail.com>
+ <a6afaa3f-cb9f-2086-0e02-5ec21ba535d4@xen0n.name> <CAK8P3a0xuh1aAM7iwE-jiBbR-OOF5YVfhmU0Nygbpviso3tmbQ@mail.gmail.com>
+ <CAAhV-H5FbA5DJvPwygiUyBrzq9M5R=Fr06rHAHLR31uu6ZLmkQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H5FbA5DJvPwygiUyBrzq9M5R=Fr06rHAHLR31uu6ZLmkQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 13 May 2022 21:32:41 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1_2DJVjZtk9XGYvH0TSbNQwST0YXD4A+rfFELBOxpDEA@mail.gmail.com>
+Message-ID: <CAK8P3a1_2DJVjZtk9XGYvH0TSbNQwST0YXD4A+rfFELBOxpDEA@mail.gmail.com>
+Subject: Re: [PATCH V9 20/24] LoongArch: Add efistub booting support
+To:     Huacai Chen <chenhuacai@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:sxjlWFQFhZs3joRNaNiPtLzwBQaw3DZiNtMZyNdZL4N9Nkjw+mE
+ iy6k/NWrt1xZ9nSdoWCB1AIT/KW91SjYpgFeR6Lj7a9RXZnQZx/sAeR/BDUMHzX28hvOOHN
+ l7m5VNIxPjWs5OKoNGqOw27BIBGQd1EHic9ZskKZGppT8OZW7B1VdUPQxMOkQzrXQjm+ZGg
+ NorQQ2fUOehivtcs9Q85A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:IhdJcJuUJZY=:DKZDFjsDhyzTTZ4MolSQwL
+ NP6YkDnm9jyTegRc22QX6EXUJO1De+OD3AHVRJrJRUbsbfb9Gr8QKRsiVN980aMCaQ+Gf4nY8
+ TmG/AqKTGtO0RumJaO+/Hz7bOizpP+cxJuPTSCpdkErMFoBcEOFe0bMtABYA+RWPZY053Rzm1
+ fRcSTPhUgSqZXpSDhGdwJBJo0frncIREpsmQAz92igcHQlHiR+ggHeDMepLi5Iz1RffiQdm99
+ TlOEYoP0APl2FxYsRkVGsVrVwrauth5RFl9pgJlmO8vwH95tmPkrkNsoHX4GCCUfBd87Gh5Cd
+ 96x6KCowIHrTVv/PWkYRr5XK2z0iEq48Kz51lv5I90NfxP/yx7pgssHtgCpRRigqEPQuofT3a
+ utfOCV75CzBwhBnhluz40PMrqIEaWFYGurBnp/wk8mi2MQk8rk3FYDSrOc/LmGwa5NSJ/Qhaj
+ g9uKAS2ShijASCArBk436/0lEIuqO+i+dWhv2Bup5IbGiPQSIYMof6HiS+hkD5UUhcUSRDNh3
+ FS4OV4GROLbRf0P+tDlKtrbQ9j5/nOoJ/VCB5ub6oYgn1LOXZz2i3RBatdiSdTQLZQHQFOIbN
+ 3XxnU0Sb9zezkrwwFuh2OlVoJipprS7YFrGpBZlRg91Tdvf1sxniblOURmL4KQt5lORs0Robh
+ M0TMOHvH2rYsVwEOnxs3gJLnCBZuyPbJW0kbSeqD1Y9Qx/kYztgewv/O8HwB/ULxgrBI=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hallo 🔥 Have you ever tried this sex game before? GIVE IT A TRY: http://bit.do/fUefL 🔥 8bkfus,
+On Fri, May 6, 2022 at 3:20 PM Huacai Chen <chenhuacai@gmail.com> wrote:
+> On Fri, May 6, 2022 at 7:41 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >
+> > Agreed. I think there can be limited compatibility support for old
+> > firmware though, at least to help with the migration: As long as
+> > the interface between grub and linux has a proper definition following
+> > the normal UEFI standard, there can be both a modern grub
+> > that is booted using the same protocol and a backwards-compatible
+> > grub that can be booted from existing firmware and that is able
+> > to boot the kernel.
+> >
+> > The compatibility version of grub can be retired after the firmware
+> > itself is able to speak the normal boot protocol.
+> After an internal discussion, we decide to use the generic stub, and
+> we have a draft version of generic stub now[1]. I hope V10 can solve
+> all problems. :)
+> [1] https://github.com/loongson/linux/tree/loongarch-next-generic-stub
 
-We are very pleased to have your order:
-Jerusalem Map
+Can you post v19 to the list? As we have resolved the question on clone()
+now (I hope), and you have a prototype for the boot protocol, it sounds
+like this can make it into v5.19 after all, but we need to be sure that the
+remaining points that Xuerui Wang and Ard Biesheuvel raised are
+all addressed, and there is not much time before the merge window.
 
-NAME    : 🔥 Have you ever tried this sex game before? GIVE IT A TRY: http://bit.do/fUefL 🔥 8bkfus
-Adress  : uwfazg, 629i5m, e85mas
-Comments: fjvjri
+I have built a gcc-12.1 based toochain at
+https://mirrors.edge.kernel.org/pub/tools/crosstool/ that now includes
+loongarch64 suport, please point to that in the cover letter for v10
+in case someone wants to start test building.
 
-But we are sorry to tell you that our first edition has run out. We are working now on a second one.
+I will be travelling next week, and won't be able to pull your tree
+into the asm-generic tree during that time, as I had originally planned.
 
+However, you can ask Stephen Rothwell (added to Cc) to add your
+git tree to linux-next once you think that you have addressed all of the
+remaining review comments, and posted the same version to the
+list. This will allow others to more easily test your tree in combination
+with the other work that has been queued for the 5.19 release.
 
-jerusalemmap.com,
+If there are no new show-stoppers, I can help you coordinate
+the pull request during the merge window.
 
-http://www.jerusalemmap.com/
-Email :buyamap@jerusalemmap.com
+         Arnd
