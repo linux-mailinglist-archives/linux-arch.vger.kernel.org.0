@@ -2,61 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4085252776D
-	for <lists+linux-arch@lfdr.de>; Sun, 15 May 2022 14:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7F352779B
+	for <lists+linux-arch@lfdr.de>; Sun, 15 May 2022 15:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235373AbiEOMlh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 15 May 2022 08:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S234777AbiEONAe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 15 May 2022 09:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234838AbiEOMlh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 15 May 2022 08:41:37 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B414011C0C;
-        Sun, 15 May 2022 05:41:32 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id q7so609717plx.3;
-        Sun, 15 May 2022 05:41:32 -0700 (PDT)
+        with ESMTP id S231362AbiEONAc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 15 May 2022 09:00:32 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDCA3A739;
+        Sun, 15 May 2022 06:00:31 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id d22so12929116vsf.2;
+        Sun, 15 May 2022 06:00:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kA3N244HR0B/WxpzUM2TTlWPU7qXJvhWmssUtsOSc8U=;
-        b=b5AgYbLXyfXl/XWctvOvnhun+2qT68pBmWthVew4xn7RRPcUxm5I7PMrs//Hq/Rs0W
-         V/8h5snrhCxZuRskZ5XivTgOqz0ZXoz21xJge3rV4bLITSV8YxLslgH2wXSCkONgwNrZ
-         IiJbwqiK96t3y233KApUYvsL+2FksUWH5tD8G3/pQo9cuRHCPrAlX9kqmDxWzcunTKQc
-         s0QEz6TZKWB9xtok/oC/LKSi1mwZLhvE6ngQ3dNaapFtKwd4xCTTsVcF2LAT4Olou/qc
-         2pFErHg7itKm/PdmkHVMzhepbGYTeE2Qb+ac0SQJPMjtvlMRJiJf0VWhshohevusQ6k+
-         HYOw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PSy7SVOOPjjL89AySe1SBO4eK6rYNR97e0xo4siY6g8=;
+        b=XDfXWkOkHaAg5Kjx3xnIrf/r5WNAOtlYWieUtdjKEm0WohQRp1nygYBYXIcbMsNJVk
+         Eg/9776ovUlyTc3O6PnFnY2GSqUnWHh64a+e12PD6xHI59jdGEho2V0+aqqxBka+hObw
+         XeUQsQOVo55F+ay166wF9pFZFybzZEyRUvvGVaGKfsN1wB5C/hiJw5d08zGfOR6P4y8E
+         fKDScyqyUzGOvrOzOYa7ifQWGVfdQnCtZlF1vE5WFwwHGDlzSXWxRtlOBQeKHgeVhvBm
+         k2EZYY/InVo0EoqnPC1e2SamonwS7w+mKOXdvX/FNsqeJ/Sqclio5lMydoib+u33wnLk
+         KXtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kA3N244HR0B/WxpzUM2TTlWPU7qXJvhWmssUtsOSc8U=;
-        b=bQrNYEh81n4TQ8EdZSK9mN/Z3U+0l1YflwpMsGFuQueMEpzm7rclrXlZ3mLQBfsnHG
-         lh0NmOuqSxrksTQSnCs3O9ZDam1oSCrMAmsdgUqJGnQ2e5CG0Ht7BYbegrP20F7//qza
-         rWS7NGe5EVxq99hOyoo9jXML3K5nUZTyQEt1ip3DINLGK8xUBpboVyYi6cOpTqmrUe5N
-         poM0xEpFgK1i3IVLsnxxGSQec/QjQsyt7NO4/8gFoComTqEc/X9OzA+OuzYhb24T7eht
-         8yAkQnqH3dLkgGQOF4Jgax86Q7P9VjXcWUmUbiAs+62beIN2cr/6nfUjzUQBDYAbEjYq
-         XAvA==
-X-Gm-Message-State: AOAM531NMeBhxoHI2N2Yheqde+aiB43iNrW55Owb4QNMV4w39QW5JkbK
-        HLcqOVrC5E7JV224LdUMtfo=
-X-Google-Smtp-Source: ABdhPJw9AJs02Kuf9vGh0FbjVkrWA/U3EDrwslzHW6wPe/EbCBUrBP7JSaEudGvNFD4wZClR1k5rRw==
-X-Received: by 2002:a17:902:bc8c:b0:15e:c103:940c with SMTP id bb12-20020a170902bc8c00b0015ec103940cmr12745187plb.154.1652618492188;
-        Sun, 15 May 2022 05:41:32 -0700 (PDT)
-Received: from [192.168.43.80] (subs09a-223-255-225-69.three.co.id. [223.255.225.69])
-        by smtp.gmail.com with ESMTPSA id o22-20020a17090ac09600b001d9acbc3b4esm4574655pjs.47.2022.05.15.05.41.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 May 2022 05:41:31 -0700 (PDT)
-Message-ID: <64fdb3fc-87bb-53e8-52b5-36288de85cb3@gmail.com>
-Date:   Sun, 15 May 2022 19:41:25 +0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PSy7SVOOPjjL89AySe1SBO4eK6rYNR97e0xo4siY6g8=;
+        b=Ku7mHrlND0G4WMva067lI8lkWOL5CF3Zz377+UykyEaTmiL2Laq+XnWpciY39I+o8D
+         x8XRRiYH5ztosiAVMennDCxcJsM7OQpWTRSlGhno8/tBQGm/SCYzp9rMqWyRhoIljCu5
+         O3fg2xKAgawdoTUKu71QfNbATysUp2eTC1z8e4IaGgZVEMFKDV7+4+2OMOw58s04UMFC
+         DrUhDWb77juZ9NuuwL9U5uU1xXdFtlyDBa+5jisgz4JASDJN8eSU3FtMs1KOJAnTcPd2
+         qIYJ1HwWqysm053RbEIhnFhg2EIrK/y9covzfEJM5HNbQtNXJAwQoiwQZFMiyikZ4Jsm
+         koyA==
+X-Gm-Message-State: AOAM533dLqeb8u76G7PPBQp5Md0kLmoYllaM7urD6e4T2hO0BPnVcqXi
+        Tw+BfRaWYqoWDZTKLiEOxHWW3XoU7t0yxVkLTnk=
+X-Google-Smtp-Source: ABdhPJyEuGdilnSA6H4tu1wV6WwFa+yha0yrLwqayW/WR1OFwPoq26CeaAvOnGc3jes8yBPIcTAVkMT7XoPpv3/h+aw=
+X-Received: by 2002:a67:ea4f:0:b0:328:1db4:d85c with SMTP id
+ r15-20020a67ea4f000000b003281db4d85cmr4544293vso.20.1652619630427; Sun, 15
+ May 2022 06:00:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V10 01/22] Documentation: LoongArch: Add basic
- documentations
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
+References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
+ <20220514080402.2650181-11-chenhuacai@loongson.cn> <3982e7e7-f98e-8d8b-f13b-2bfa10a69b95@xen0n.name>
+In-Reply-To: <3982e7e7-f98e-8d8b-f13b-2bfa10a69b95@xen0n.name>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Sun, 15 May 2022 21:00:19 +0800
+Message-ID: <CAAhV-H4FDk42Ci_PMjn5BSaaUy-X8aVHWMEOj5_np8K8peTd0w@mail.gmail.com>
+Subject: Re: [PATCH V10 10/22] LoongArch: Add exception/interrupt handling
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -64,98 +61,123 @@ To:     Huacai Chen <chenhuacai@loongson.cn>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
         Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Guo Ren <guoren@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-2-chenhuacai@loongson.cn>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220514080402.2650181-2-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/14/22 15:03, Huacai Chen wrote:
-> +1. Arithmetic Operation Instructions::
-> +
-> +    ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
-> +    SLT SLTU SLTI SLTUI
-> +    AND OR NOR XOR ANDN ORN ANDI ORI XORI
-> +    MUL.W MULH.W MULH.WU DIV.W DIV.WU MOD.W MOD.WU
-> +    MUL.D MULH.D MULH.DU DIV.D DIV.DU MOD.D MOD.DU
-> +    PCADDI PCADDU12I PCADDU18I
-> +    LU12I.W LU32I.D LU52I.D ADDU16I.D
-> +
-> +2. Bit-shift Instructions::
-> +
-> +    SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
-> +    SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
-> +
-> +3. Bit-manipulation Instructions::
-> +
-> +    EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
-> +    BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
-> +    REVB.2H REVB.4H REVB.2W REVB.D REVH.2W REVH.D BITREV.4B BITREV.8B BITREV.W BITREV.D
-> +    MASKEQZ MASKNEZ
-> +
-> +4. Branch Instructions::
-> +
-> +    BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
-> +
-> +5. Load/Store Instructions::
-> +
-> +    LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
-> +    LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W STX.D
-> +    LDPTR.W LDPTR.D STPTR.W STPTR.D
-> +    PRELD PRELDX
-> +
-> +6. Atomic Operation Instructions::
-> +
-> +    LL.W SC.W LL.D SC.D
-> +    AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D AMXOR.W AMXOR.D
-> +    AMMAX.W AMMAX.D AMMIN.W AMMIN.D
-> +
-> +7. Barrier Instructions::
-> +
-> +    IBAR DBAR
-> +
-> +8. Special Instructions::
-> +
-> +    SYSCALL BREAK CPUCFG NOP IDLE ERTN DBCL RDTIMEL.W RDTIMEH.W RDTIME.D ASRTLE.D ASRTGT.D
-> +
-> +9. Privileged Instructions::
-> +
-> +    CSRRD CSRWR CSRXCHG
-> +    IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H IOCSRWR.W IOCSRWR.D
-> +    CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB LDDIR LDPTE
-> +
+Hi, Xuerui,
 
-I haven't addressed this in v9 [1], so I'm discussing it now.
+On Sun, May 15, 2022 at 5:07 PM WANG Xuerui <kernel@xen0n.name> wrote:
+>
+> Hi,
+>
+> On 5/14/22 16:03, Huacai Chen wrote:
+> > Add the exception and interrupt handling machanism for basic LoongArch
+> > support.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/loongarch/include/asm/branch.h       |  21 +
+> >   arch/loongarch/include/asm/bug.h          |  23 +
+> >   arch/loongarch/include/asm/entry-common.h |  13 +
+> >   arch/loongarch/include/asm/hardirq.h      |  24 +
+> >   arch/loongarch/include/asm/hw_irq.h       |  17 +
+> >   arch/loongarch/include/asm/irq.h          | 130 ++++
+> >   arch/loongarch/include/asm/irq_regs.h     |  27 +
+> >   arch/loongarch/include/asm/irqflags.h     |  78 +++
+> >   arch/loongarch/include/asm/kdebug.h       |  23 +
+> >   arch/loongarch/include/asm/stackframe.h   | 212 ++++++
+> >   arch/loongarch/include/asm/stacktrace.h   |  74 +++
+> >   arch/loongarch/include/uapi/asm/break.h   |  23 +
+> >   arch/loongarch/kernel/access-helper.h     |  13 +
+> >   arch/loongarch/kernel/genex.S             |  95 +++
+> >   arch/loongarch/kernel/irq.c               | 131 ++++
+> >   arch/loongarch/kernel/traps.c             | 755 ++++++++++++++++++++++
+> >   16 files changed, 1659 insertions(+)
+> >   create mode 100644 arch/loongarch/include/asm/branch.h
+> >   create mode 100644 arch/loongarch/include/asm/bug.h
+> >   create mode 100644 arch/loongarch/include/asm/entry-common.h
+> >   create mode 100644 arch/loongarch/include/asm/hardirq.h
+> >   create mode 100644 arch/loongarch/include/asm/hw_irq.h
+> >   create mode 100644 arch/loongarch/include/asm/irq.h
+> >   create mode 100644 arch/loongarch/include/asm/irq_regs.h
+> >   create mode 100644 arch/loongarch/include/asm/irqflags.h
+> >   create mode 100644 arch/loongarch/include/asm/kdebug.h
+> >   create mode 100644 arch/loongarch/include/asm/stackframe.h
+> >   create mode 100644 arch/loongarch/include/asm/stacktrace.h
+> >   create mode 100644 arch/loongarch/include/uapi/asm/break.h
+> >   create mode 100644 arch/loongarch/kernel/access-helper.h
+> >   create mode 100644 arch/loongarch/kernel/genex.S
+> >   create mode 100644 arch/loongarch/kernel/irq.c
+> >   create mode 100644 arch/loongarch/kernel/traps.c
+> This patch mostly looks good, except...
+> > (snip)
+> >
+> > +asmlinkage void cache_parity_error(void)
+> > +{
+> > +     const int field = 2 * sizeof(unsigned long);
+> > +     unsigned int reg_val;
+> > +
+> > +     /* For the moment, report the problem and hang. */
+> > +     pr_err("Cache error exception:\n");
+> > +     pr_err("csr_merrera == %0*llx\n", field, csr_readq(LOONGARCH_CSR_MERRERA));
+> > +     reg_val = csr_readl(LOONGARCH_CSR_MERRCTL);
+> > +     pr_err("csr_merrctl == %08x\n", reg_val);
+> > +
+> > +     pr_err("Decoded c0_cacheerr: %s cache fault in %s reference.\n",
+> > +            reg_val & (1<<30) ? "secondary" : "primary",
+> > +            reg_val & (1<<31) ? "data" : "insn");
+> > +     if (((current_cpu_data.processor_id & 0xff0000) == PRID_COMP_LOONGSON)) {
+> > +             pr_err("Error bits: %s%s%s%s%s%s%s%s\n",
+> > +                     reg_val & (1<<29) ? "ED " : "",
+> > +                     reg_val & (1<<28) ? "ET " : "",
+> > +                     reg_val & (1<<27) ? "ES " : "",
+> > +                     reg_val & (1<<26) ? "EE " : "",
+> > +                     reg_val & (1<<25) ? "EB " : "",
+> > +                     reg_val & (1<<24) ? "EI " : "",
+> > +                     reg_val & (1<<23) ? "E1 " : "",
+> > +                     reg_val & (1<<22) ? "E0 " : "");
+> > +     } else {
+> > +             pr_err("Error bits: %s%s%s%s%s%s%s\n",
+> > +                     reg_val & (1<<29) ? "ED " : "",
+> > +                     reg_val & (1<<28) ? "ET " : "",
+> > +                     reg_val & (1<<26) ? "EE " : "",
+> > +                     reg_val & (1<<25) ? "EB " : "",
+> > +                     reg_val & (1<<24) ? "EI " : "",
+> > +                     reg_val & (1<<23) ? "E1 " : "",
+> > +                     reg_val & (1<<22) ? "E0 " : "");
+> > +     }
+> > +     pr_err("IDX: 0x%08x\n", reg_val & ((1<<22)-1));
+> > +
+> > +     panic("Can't handle the cache error!");
+> > +}
+>
+> ... this function. This implementation is completely wrong, as it's the
+> same logic on MIPS, but LoongArch's MERRCTL CSR is not arranged in the
+> same way. There are no individual error bits, for example.
+>
+> You can simply replace this with a direct panic for now, for correctness.
+Thank you very much, this is my fault.
 
-I think for grouping similar instructions lower-level list numbering can
-be used, like:
-
-1. Arithmetic Operation Instructions
-   a. ADD.W...
-   b. SLT...
-...
-
-Why is literal blocks used instead?
-
-[1]: https://lore.kernel.org/linux-doc/Ym47ZAuwEA9as98h@debian.me/
--- 
-An old man doll... just what I always wanted! - Clara
+Huacai
+>
+> With this fixed:
+>
+> Reviewed-by: WANG Xuerui <git@xen0n.name>
+>
