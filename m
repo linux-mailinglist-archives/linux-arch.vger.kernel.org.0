@@ -2,38 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F29E5277F8
-	for <lists+linux-arch@lfdr.de>; Sun, 15 May 2022 16:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9417527803
+	for <lists+linux-arch@lfdr.de>; Sun, 15 May 2022 16:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbiEOOQj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 15 May 2022 10:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S237070AbiEOOWO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 15 May 2022 10:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbiEOOQi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 15 May 2022 10:16:38 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1EDDFB9;
-        Sun, 15 May 2022 07:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652624186; bh=FBrcr1Nu4emZDFYbxyiFLqqwXAXzgiH509knP1AoLus=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NtZ18U+cR89eKz7Tlii6oELCnRUoRAs7PYWbP6BrAmZKJRSB8vKSK2ICBUNyqJDWG
-         oYEXbixKdV1AfPF8HyrfFyjcMnNUyWLA8a2SfkHe5yCESekQEfaGPNyHYwZ1i1+wNG
-         +76QLLlVW1qeZUnLVCVSQbxomwhJ0QqN5fNd8Mks=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 10192600B5;
-        Sun, 15 May 2022 22:16:26 +0800 (CST)
-Message-ID: <88092b34-89ac-10e6-381c-982c5e244432@xen0n.name>
-Date:   Sun, 15 May 2022 22:16:25 +0800
+        with ESMTP id S237068AbiEOOWN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 15 May 2022 10:22:13 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2259DF4A;
+        Sun, 15 May 2022 07:22:10 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id a127so13054096vsa.3;
+        Sun, 15 May 2022 07:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JRcUVukoKxXgLwlooiS9O+urGBtPA+DXWr6FkRu/KNw=;
+        b=gtbBXSW8/wnC6xq7bYN+55NV7t5wjt4WzoBC49Y3saejNga3xLlbMElYKyadePkYC2
+         Vaxlz6rjThf+IBvQXcb3VRPDzz6ioN9HELbTTBIJXviOnxMEBayMOpaGWa+mhWSkdpoD
+         xKf4t0d5Gk1kpPbJdO8e5yEWEU973AbcjP3eJqgeEQ/pSZbxVmih37IC1Gz2+T9fLt7S
+         BEtUkzFUDkjP7vUhES33qbGsy1CS7yeisFLcepFuxBhDPymO2UEmr4HeCOFaabbdpIuY
+         Tl0vbEKHZWmw96NRyz98tXJsRhTbzgX4Mf39pxNPMfXLyRCQ93eQpxZa80TNPrGJvHXr
+         j0BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JRcUVukoKxXgLwlooiS9O+urGBtPA+DXWr6FkRu/KNw=;
+        b=zhEdUWf2ituYr1YXQHSINcOtfak0jorq/+K4rGjsfSZ5CLq6Ya8THR+KyckH7eXiSW
+         QiVNtzrIn7c9NMOp2Zzzn5cWFSrNPqGle3/v2s1rrskVlBJiR0xHoWe13oOeSG9Z9Gt4
+         Agn7QJOelym+xC4LK4569AodKkCO+4YagUc31CnmgKdRh6NqpUV2z73DvfpYQhbY2Te/
+         Ig4lRvGMYhcnNqDLLPlZd+Mjf0ytX1pW70puhzJZIVcEhIIryuVxDAQXCJtoUylkRZZD
+         LNA3b95fj9N4eobwA01Wrwp4lIiXckc2FZBHQClKNti1KDWomTDtTZz9LTLCi+E85XaR
+         Ijwg==
+X-Gm-Message-State: AOAM530ORmGuqDzOUfGuGj49AdH6T527g8mwuXSOqtIYGedOCpBhMw5w
+        zgeDvHkmqHTWfqTx3L96i19cq/HT6rRQoFWHasY=
+X-Google-Smtp-Source: ABdhPJyxySgj/QeAaXQdEgBNGclp5eIokEXmnC0gkGhH7RntvdbnNDzZz7JSRtlT9jgUXfJgM7NqxaXyymSHNoBEups=
+X-Received: by 2002:a67:ea4f:0:b0:328:1db4:d85c with SMTP id
+ r15-20020a67ea4f000000b003281db4d85cmr4643793vso.20.1652624529627; Sun, 15
+ May 2022 07:22:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V10 20/22] LoongArch: Add multi-processor (SMP) support
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
+References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
+ <20220514080402.2650181-17-chenhuacai@loongson.cn> <80d3d49b-bacc-6a8e-f0b6-c360c56e2bde@xen0n.name>
+In-Reply-To: <80d3d49b-bacc-6a8e-f0b6-c360c56e2bde@xen0n.name>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Sun, 15 May 2022 22:21:58 +0800
+Message-ID: <CAAhV-H40Hp6jHnBugdAJuaQRbwrLQnMjED0V2gLGj_bcvExZAg@mail.gmail.com>
+Subject: Re: [PATCH V10 16/22] LoongArch: Add misc common routines
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -41,2176 +61,960 @@ To:     Huacai Chen <chenhuacai@loongson.cn>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
         Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Guo Ren <guoren@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-21-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220514080402.2650181-21-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+Hi, Xuerui,
 
-On 5/14/22 16:04, Huacai Chen wrote:
-> LoongArch-based procesors have 4, 8 or 16 cores per package. This patch
-> adds multi-processor (SMP) support for LoongArch.
+On Sun, May 15, 2022 at 9:04 PM WANG Xuerui <kernel@xen0n.name> wrote:
 >
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/Kconfig                  |  44 +-
->   arch/loongarch/include/asm/atomic.h     |   4 +
->   arch/loongarch/include/asm/barrier.h    | 108 ++++
->   arch/loongarch/include/asm/cmpxchg.h    |   1 +
->   arch/loongarch/include/asm/futex.h      |   1 +
->   arch/loongarch/include/asm/hardirq.h    |   2 +
->   arch/loongarch/include/asm/irq.h        |   3 +
->   arch/loongarch/include/asm/percpu.h     | 194 ++++++
->   arch/loongarch/include/asm/pgtable.h    |  21 +
->   arch/loongarch/include/asm/smp.h        | 124 ++++
->   arch/loongarch/include/asm/stackframe.h |  17 +-
->   arch/loongarch/include/asm/tlbflush.h   |  13 +
->   arch/loongarch/include/asm/topology.h   |   7 +-
->   arch/loongarch/kernel/Makefile          |   2 +
->   arch/loongarch/kernel/acpi.c            |  70 ++-
->   arch/loongarch/kernel/asm-offsets.c     |  10 +
->   arch/loongarch/kernel/head.S            |  30 +
->   arch/loongarch/kernel/irq.c             |  13 +-
->   arch/loongarch/kernel/proc.c            |   5 +
->   arch/loongarch/kernel/process.c         |   7 +
->   arch/loongarch/kernel/reset.c           |  12 +
->   arch/loongarch/kernel/setup.c           |  26 +
->   arch/loongarch/kernel/smp.c             | 744 ++++++++++++++++++++++++
->   arch/loongarch/kernel/topology.c        |  43 +-
->   arch/loongarch/kernel/vmlinux.lds.S     |   4 +
->   arch/loongarch/mm/tlbex.S               |  69 +++
->   include/linux/cpuhotplug.h              |   1 +
->   27 files changed, 1564 insertions(+), 11 deletions(-)
->   create mode 100644 arch/loongarch/include/asm/smp.h
->   create mode 100644 arch/loongarch/kernel/smp.c
+> Hi,
 >
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 564bd6d2c2b9..f1053d77f06e 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -65,6 +65,7 @@ config LOONGARCH
->   	select GENERIC_LIB_UCMPDI2
->   	select GENERIC_PCI_IOMAP
->   	select GENERIC_SCHED_CLOCK
-> +	select GENERIC_SMP_IDLE_THREAD
->   	select GENERIC_TIME_VSYSCALL
->   	select GPIOLIB
->   	select HAVE_ARCH_AUDITSYSCALL
-> @@ -95,7 +96,7 @@ config LOONGARCH
->   	select HAVE_RSEQ
->   	select HAVE_SYSCALL_TRACEPOINTS
->   	select HAVE_TIF_NOHZ
-> -	select HAVE_VIRT_CPU_ACCOUNTING_GEN
-> +	select HAVE_VIRT_CPU_ACCOUNTING_GEN if !SMP
->   	select IRQ_FORCED_THREADING
->   	select IRQ_LOONGARCH_CPU
->   	select MODULES_USE_ELF_RELA if MODULES
-> @@ -312,6 +313,47 @@ config EFI_STUB
->   	  This kernel feature allows the kernel to be loaded directly by
->   	  EFI firmware without the use of a bootloader.
->   
-> +config SMP
-> +	bool "Multi-Processing support"
-> +	help
-> +	  This enables support for systems with more than one CPU. If you have
-> +	  a system with only one CPU, say N. If you have a system with more
-> +	  than one CPU, say Y.
-> +
-> +	  If you say N here, the kernel will run on uni- and multiprocessor
-> +	  machines, but will use only one CPU of a multiprocessor machine. If
-> +	  you say Y here, the kernel will run on many, but not all,
-> +	  uniprocessor machines. On a uniprocessor machine, the kernel
-> +	  will run faster if you say N here.
-> +
-> +	  People using multiprocessor machines who say Y here should also say
-> +	  Y to "Enhanced Real Time Clock Support", below.
-This paragraph could be removed as it's not applicable to us. (We don't 
-have an "Enhanced RTC support" config option.)
-> +
-> +	  See also the SMP-HOWTO available at
-> +	  <http://www.tldp.org/docs.html#howto>.
-> +
-> +	  If you don't know what to do here, say N.
-> +
-> +config HOTPLUG_CPU
-> +	bool "Support for hot-pluggable CPUs"
-> +	depends on SMP
-> +	select GENERIC_IRQ_MIGRATION
-> +	help
-> +	  Say Y here to allow turning CPUs off and on. CPUs can be
-> +	  controlled through /sys/devices/system/cpu.
-> +	  (Note: power management support will enable this option
-> +	    automatically on SMP systems. )
-> +	  Say N if you want to disable CPU hotplug.
-> +
-> +config NR_CPUS
-> +	int "Maximum number of CPUs (2-256)"
-> +	range 2 256
-> +	depends on SMP
-> +	default "16"
-> +	help
-> +	  This allows you to specify the maximum number of CPUs which this
-> +	  kernel will support.
-> +
->   config FORCE_MAX_ZONEORDER
->   	int "Maximum zone order"
->   	range 14 64 if PAGE_SIZE_64KB
-> diff --git a/arch/loongarch/include/asm/atomic.h b/arch/loongarch/include/asm/atomic.h
-> index 932352342b12..979367ad4e2c 100644
-> --- a/arch/loongarch/include/asm/atomic.h
-> +++ b/arch/loongarch/include/asm/atomic.h
-> @@ -162,6 +162,7 @@ static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
->   		"	sc.w	%1, %2					\n"
->   		"	beq	$zero, %1, 1b				\n"
->   		"2:							\n"
-> +		__WEAK_LLSC_MB
->   		: "=&r" (result), "=&r" (temp),
->   		  "+" GCC_OFF_SMALL_ASM() (v->counter)
->   		: "I" (-i));
-> @@ -174,6 +175,7 @@ static inline int arch_atomic_sub_if_positive(int i, atomic_t *v)
->   		"	sc.w	%1, %2					\n"
->   		"	beq	$zero, %1, 1b				\n"
->   		"2:							\n"
-> +		__WEAK_LLSC_MB
->   		: "=&r" (result), "=&r" (temp),
->   		  "+" GCC_OFF_SMALL_ASM() (v->counter)
->   		: "r" (i));
-> @@ -323,6 +325,7 @@ static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
->   		"	sc.d	%1, %2					\n"
->   		"	beq	%1, $zero, 1b				\n"
->   		"2:							\n"
-> +		__WEAK_LLSC_MB
->   		: "=&r" (result), "=&r" (temp),
->   		  "+" GCC_OFF_SMALL_ASM() (v->counter)
->   		: "I" (-i));
-> @@ -335,6 +338,7 @@ static inline long arch_atomic64_sub_if_positive(long i, atomic64_t *v)
->   		"	sc.d	%1, %2					\n"
->   		"	beq	%1, $zero, 1b				\n"
->   		"2:							\n"
-> +		__WEAK_LLSC_MB
->   		: "=&r" (result), "=&r" (temp),
->   		  "+" GCC_OFF_SMALL_ASM() (v->counter)
->   		: "r" (i));
-> diff --git a/arch/loongarch/include/asm/barrier.h b/arch/loongarch/include/asm/barrier.h
-> index cc6c7e3f5ce6..6c567c750d04 100644
-> --- a/arch/loongarch/include/asm/barrier.h
-> +++ b/arch/loongarch/include/asm/barrier.h
-> @@ -18,6 +18,19 @@
->   #define mb()		fast_mb()
->   #define iob()		fast_iob()
->   
-> +#define __smp_mb()	__asm__ __volatile__("dbar 0" : : : "memory")
-> +#define __smp_rmb()	__asm__ __volatile__("dbar 0" : : : "memory")
-> +#define __smp_wmb()	__asm__ __volatile__("dbar 0" : : : "memory")
+> On 5/14/22 16:03, Huacai Chen wrote:
+> > Add some misc common routines for LoongArch, including: asm-offsets
+> > routines, cmpxchg and futex functions, i/o memory access functions,
+> > rtc functions, frame-buffer functions, procfs information display, etc.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/loongarch/include/asm/asm-offsets.h |   5 +
+> >   arch/loongarch/include/asm/fb.h          |  23 ++
+> >   arch/loongarch/include/asm/futex.h       | 107 ++++++++++
+> >   arch/loongarch/include/asm/io.h          | 129 ++++++++++++
+> >   arch/loongarch/include/uapi/asm/swab.h   |  52 +++++
+> >   arch/loongarch/kernel/asm-offsets.c      | 254 +++++++++++++++++++++++
+> >   arch/loongarch/kernel/io.c               |  94 +++++++++
+> >   arch/loongarch/kernel/proc.c             | 122 +++++++++++
+> >   arch/loongarch/kernel/rtc.c              |  36 ++++
+> >   9 files changed, 822 insertions(+)
+> >   create mode 100644 arch/loongarch/include/asm/asm-offsets.h
+> >   create mode 100644 arch/loongarch/include/asm/fb.h
+> >   create mode 100644 arch/loongarch/include/asm/futex.h
+> >   create mode 100644 arch/loongarch/include/asm/io.h
+> >   create mode 100644 arch/loongarch/include/uapi/asm/swab.h
+> >   create mode 100644 arch/loongarch/kernel/asm-offsets.c
+> >   create mode 100644 arch/loongarch/kernel/io.c
+> >   create mode 100644 arch/loongarch/kernel/proc.c
+> >   create mode 100644 arch/loongarch/kernel/rtc.c
+> >
+> > diff --git a/arch/loongarch/include/asm/asm-offsets.h b/arch/loongarch/include/asm/asm-offsets.h
+> > new file mode 100644
+> > index 000000000000..d9ad88d293e7
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/asm/asm-offsets.h
+> > @@ -0,0 +1,5 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#include <generated/asm-offsets.h>
+> > diff --git a/arch/loongarch/include/asm/fb.h b/arch/loongarch/include/asm/fb.h
+> > new file mode 100644
+> > index 000000000000..3116bde8772d
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/asm/fb.h
+> > @@ -0,0 +1,23 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef _ASM_FB_H_
+> > +#define _ASM_FB_H_
+> > +
+> > +#include <linux/fb.h>
+> > +#include <linux/fs.h>
+> > +#include <asm/page.h>
+> > +
+> > +static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
+> > +                             unsigned long off)
+> > +{
+> > +     vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
+> > +}
+> > +
+> > +static inline int fb_is_primary_device(struct fb_info *info)
+> > +{
+> > +     return 0;
+> > +}
+> So our behavior seems to be in line with arm64. Nice. At least that's
+> what diff says. ;-)
+> > +
+> > +#endif /* _ASM_FB_H_ */
+> > diff --git a/arch/loongarch/include/asm/futex.h b/arch/loongarch/include/asm/futex.h
+> > new file mode 100644
+> > index 000000000000..b27d55f92db7
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/asm/futex.h
+> > @@ -0,0 +1,107 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef _ASM_FUTEX_H
+> > +#define _ASM_FUTEX_H
+> > +
+> > +#include <linux/futex.h>
+> > +#include <linux/uaccess.h>
+> > +#include <asm/barrier.h>
+> > +#include <asm/compiler.h>
+> > +#include <asm/errno.h>
+> > +
+> > +#define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)           \
+> > +{                                                                    \
+> > +     __asm__ __volatile__(                                           \
+> > +     "1:     ll.w    %1, %4 # __futex_atomic_op\n"           \
+> > +     "       " insn  "                               \n"     \
+> > +     "2:     sc.w    $t0, %2                         \n"     \
+> > +     "       beq     $t0, $zero, 1b                  \n"     \
+> > +     "3:                                             \n"     \
+> > +     "       .section .fixup,\"ax\"                  \n"     \
+> > +     "4:     li.w    %0, %6                          \n"     \
+> > +     "       b       3b                              \n"     \
+> > +     "       .previous                               \n"     \
+> > +     "       .section __ex_table,\"a\"               \n"     \
+> > +     "       "__UA_ADDR "\t1b, 4b                    \n"     \
+> > +     "       "__UA_ADDR "\t2b, 4b                    \n"     \
+> > +     "       .previous                               \n"     \
+> > +     : "=r" (ret), "=&r" (oldval),                           \
+> > +       "=ZC" (*uaddr)                                        \
+> > +     : "0" (0), "ZC" (*uaddr), "Jr" (oparg),                 \
+> > +       "i" (-EFAULT)                                         \
+> > +     : "memory", "t0");                                      \
+> > +}
+> > +
+> > +static inline int
+> > +arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+> > +{
+> > +     int oldval = 0, ret = 0;
+> > +
+> > +     pagefault_disable();
+> > +
+> > +     switch (op) {
+> > +     case FUTEX_OP_SET:
+> > +             __futex_atomic_op("move $t0, %z5", ret, oldval, uaddr, oparg);
+> > +             break;
+> > +     case FUTEX_OP_ADD:
+> > +             __futex_atomic_op("add.w $t0, %1, %z5", ret, oldval, uaddr, oparg);
+> > +             break;
+> > +     case FUTEX_OP_OR:
+> > +             __futex_atomic_op("or   $t0, %1, %z5", ret, oldval, uaddr, oparg);
+> > +             break;
+> > +     case FUTEX_OP_ANDN:
+> > +             __futex_atomic_op("and  $t0, %1, %z5", ret, oldval, uaddr, ~oparg);
+> > +             break;
+> > +     case FUTEX_OP_XOR:
+> > +             __futex_atomic_op("xor  $t0, %1, %z5", ret, oldval, uaddr, oparg);
+> > +             break;
+> > +     default:
+> > +             ret = -ENOSYS;
+> > +     }
+> > +
+> > +     pagefault_enable();
+> > +
+> > +     if (!ret)
+> > +             *oval = oldval;
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +static inline int
+> > +futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr, u32 oldval, u32 newval)
+> > +{
+> > +     int ret = 0;
+> > +     u32 val = 0;
+> > +
+> > +     if (!access_ok(uaddr, sizeof(u32)))
+> > +             return -EFAULT;
+> > +
+> > +     __asm__ __volatile__(
+> > +     "# futex_atomic_cmpxchg_inatomic                        \n"
+> > +     "1:     ll.w    %1, %3                                  \n"
+> > +     "       bne     %1, %z4, 3f                             \n"
+> > +     "       or      $t0, %z5, $zero                         \n"
+> > +     "2:     sc.w    $t0, %2                                 \n"
+> > +     "       beq     $zero, $t0, 1b                          \n"
+> > +     "3:                                                     \n"
+> > +     "       .section .fixup,\"ax\"                          \n"
+> > +     "4:     li.d    %0, %6                                  \n"
+> > +     "       b       3b                                      \n"
+> > +     "       .previous                                       \n"
+> > +     "       .section __ex_table,\"a\"                       \n"
+> > +     "       "__UA_ADDR "\t1b, 4b                            \n"
+> > +     "       "__UA_ADDR "\t2b, 4b                            \n"
+> > +     "       .previous                                       \n"
+> > +     : "+r" (ret), "=&r" (val), "=" GCC_OFF_SMALL_ASM() (*uaddr)
+> > +     : GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oldval), "Jr" (newval),
+> > +       "i" (-EFAULT)
+> > +     : "memory", "t0");
+> > +
+> > +     *uval = val;
+> > +
+> > +     return ret;
+> > +}
+> > +
+> > +#endif /* _ASM_FUTEX_H */
+> > diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
+> > new file mode 100644
+> > index 000000000000..7de50a6c3100
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/asm/io.h
+> > @@ -0,0 +1,129 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef _ASM_IO_H
+> > +#define _ASM_IO_H
+> > +
+> > +#define ARCH_HAS_IOREMAP_WC
+> > +
+> > +#include <linux/compiler.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/types.h>
+> > +
+> > +#include <asm/addrspace.h>
+> > +#include <asm/bug.h>
+> > +#include <asm/byteorder.h>
+> > +#include <asm/cpu.h>
+> > +#include <asm/page.h>
+> > +#include <asm/pgtable-bits.h>
+> > +#include <asm/string.h>
+> > +
+> > +/*
+> > + * On LoongArch, I/O ports mappring is following:
+> > + *
+> > + *           |         ....          |
+> > + *           |-----------------------|
+> > + *           | pci io ports(64K~32M) |
+> > + *           |-----------------------|
+> > + *           | isa io ports(0  ~16K) |
+> > + * PCI_IOBASE ->|-----------------------|
+> > + *           |         ....          |
+> Please use spaces for ASCII art, so they don't get mangled when shown
+> with different tab sizes or in diffs.
+OK, thanks.
 
-It's always unfortunate to see full barriers used in place of more 
-fine-grained barriers, but that's all we have in LoongArch v1.00... This 
-is life, I think, but make sure to tell the hardware engineers, that 
-users will be thankful for the additional barriers. ;-)
+> > + */
+> > +#define PCI_IOBASE   ((void __iomem *)(vm_map_base + (2 * PAGE_SIZE)))
+> > +#define PCI_IOSIZE   SZ_32M
+> > +#define ISA_IOSIZE   SZ_16K
+> > +#define IO_SPACE_LIMIT       (PCI_IOSIZE - 1)
+> > +
+> > +/*
+> > + * Change "struct page" to physical address.
+> > + */
+> > +#define page_to_phys(page)   ((phys_addr_t)page_to_pfn(page) << PAGE_SHIFT)
+> > +
+> > +extern void __init __iomem *early_ioremap(u64 phys_addr, unsigned long size);
+> > +extern void __init early_iounmap(void __iomem *addr, unsigned long size);
+> > +
+> > +#define early_memremap early_ioremap
+> > +#define early_memunmap early_iounmap
+> > +
+> > +static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+> > +                                      unsigned long prot_val)
+> > +{
+> > +     if (prot_val == _CACHE_CC)
+> > +             return (void __iomem *)(unsigned long)(CACHE_BASE + offset);
+> > +     else
+> > +             return (void __iomem *)(unsigned long)(UNCACHE_BASE + offset);
+> > +}
+> > +
+> > +/*
+> > + * ioremap -   map bus memory into CPU space
+> > + * @offset:    bus address of the memory
+> > + * @size:      size of the resource to map
+> > + *
+> > + * ioremap performs a platform specific sequence of operations to
+> > + * make bus memory CPU accessible via the readb/readw/readl/writeb/
+> > + * writew/writel functions and the other mmio helpers. The returned
+> > + * address is not guaranteed to be usable directly as a virtual
+> > + * address.
+> > + */
+> > +#define ioremap(offset, size)                                        \
+> > +     ioremap_prot((offset), (size), _CACHE_SUC)
+> > +
+> > +/*
+> > + * ioremap_wc - map bus memory into CPU space
+> > + * @offset:     bus address of the memory
+> > + * @size:       size of the resource to map
+> > + *
+> > + * ioremap_wc performs a platform specific sequence of operations to
+> > + * make bus memory CPU accessible via the readb/readw/readl/writeb/
+> > + * writew/writel functions and the other mmio helpers. The returned
+> > + * address is not guaranteed to be usable directly as a virtual
+> > + * address.
+> > + *
+> > + * This version of ioremap ensures that the memory is marked uncachable
+> > + * but accelerated by means of write-combining feature. It is specifically
+> > + * useful for PCIe prefetchable windows, which may vastly improve a
+> > + * communications performance. If it was determined on boot stage, what
+> > + * CPU CCA doesn't support WUC, the method shall fall-back to the
+> > + * _CACHE_SUC option (see cpu_probe() method).
+> > + */
+> > +#define ioremap_wc(offset, size)                             \
+> > +     ioremap_prot((offset), (size), _CACHE_WUC)
+> > +
+> > +/*
+> > + * ioremap_cache -  map bus memory into CPU space
+> > + * @offset:      bus address of the memory
+> > + * @size:        size of the resource to map
+> > + *
+> > + * ioremap_cache performs a platform specific sequence of operations to
+> > + * make bus memory CPU accessible via the readb/readw/readl/writeb/
+> > + * writew/writel functions and the other mmio helpers. The returned
+> > + * address is not guaranteed to be usable directly as a virtual
+> > + * address.
+> > + *
+> > + * This version of ioremap ensures that the memory is marked cachable by
+> > + * the CPU.  Also enables full write-combining.       Useful for some
+> > + * memory-like regions on I/O busses.
+> > + */
+> > +#define ioremap_cache(offset, size)                          \
+> > +     ioremap_prot((offset), (size), _CACHE_CC)
+> > +
+> > +static inline void iounmap(const volatile void __iomem *addr)
+> > +{
+> > +}
+> > +
+> > +#define mmiowb() asm volatile ("dbar 0" ::: "memory")
+> > +
+> > +/*
+> > + * String version of I/O memory access operations.
+> > + */
+> > +extern void __memset_io(volatile void __iomem *dst, int c, size_t count);
+> > +extern void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count);
+> > +extern void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count);
+> > +#define memset_io(c, v, l)     __memset_io((c), (v), (l))
+> > +#define memcpy_fromio(a, c, l) __memcpy_fromio((a), (c), (l))
+> > +#define memcpy_toio(c, a, l)   __memcpy_toio((c), (a), (l))
+> > +
+> > +#include <asm-generic/io.h>
+> > +
+> > +#endif /* _ASM_IO_H */
+> > diff --git a/arch/loongarch/include/uapi/asm/swab.h b/arch/loongarch/include/uapi/asm/swab.h
+> > new file mode 100644
+> I've tested with gcc 12.1.0, the asm-generic version of swab expressions
+> can be compiled into the optimal insn sequence both under -O2 and -Os.
+> So this file could be removed while not affecting performance of related
+> operations.
+OK, remove it.
 
-> +
-> +#ifdef CONFIG_SMP
-> +#define __WEAK_LLSC_MB		"	dbar 0  \n"
-> +#else
-> +#define __WEAK_LLSC_MB		"		\n"
-> +#endif
-> +
-> +#define __smp_mb__before_atomic()	barrier()
-> +#define __smp_mb__after_atomic()	barrier()
-> +
->   /**
->    * array_index_mask_nospec() - generate a ~0 mask when index < size, 0 otherwise
->    * @index: array element index
-> @@ -46,6 +59,101 @@ static inline unsigned long array_index_mask_nospec(unsigned long index,
->   	return mask;
->   }
->   
-> +#define __smp_load_acquire(p)							\
-> +({										\
-> +	union { typeof(*p) __val; char __c[1]; } __u;				\
-> +	unsigned long __tmp = 0;							\
-> +	compiletime_assert_atomic_type(*p);					\
-> +	switch (sizeof(*p)) {							\
-> +	case 1:									\
-> +		*(__u8 *)__u.__c = *(volatile __u8 *)p;				\
-> +		__smp_mb();							\
-> +		break;								\
-> +	case 2:									\
-> +		*(__u16 *)__u.__c = *(volatile __u16 *)p;			\
-> +		__smp_mb();							\
-> +		break;								\
-> +	case 4:									\
-> +		__asm__ __volatile__(						\
-> +		"amor_db.w %[val], %[tmp], %[mem]	\n"				\
-> +		: [val] "=&r" (*(__u32 *)__u.__c)				\
-> +		: [mem] "ZB" (*(u32 *) p), [tmp] "r" (__tmp)			\
-> +		: "memory");							\
-> +		break;								\
-> +	case 8:									\
-> +		__asm__ __volatile__(						\
-> +		"amor_db.d %[val], %[tmp], %[mem]	\n"				\
-> +		: [val] "=&r" (*(__u64 *)__u.__c)				\
-> +		: [mem] "ZB" (*(u64 *) p), [tmp] "r" (__tmp)			\
-> +		: "memory");							\
-> +		break;								\
-This is a little bit scary; while it's working right now it's perhaps 
-better to, if possible, rewrite these with generic helpers such as 
-READ_ONCE/WRITE_ONCE, like what arch/riscv has done. Cleanups can always 
-come later...
-> +	}									\
-> +	(typeof(*p))__u.__val;								\
-> +})
-> +
-> +#define __smp_store_release(p, v)						\
-> +do {										\
-> +	union { typeof(*p) __val; char __c[1]; } __u =				\
-> +		{ .__val = (__force typeof(*p)) (v) };				\
-> +	unsigned long __tmp;							\
-> +	compiletime_assert_atomic_type(*p);					\
-> +	switch (sizeof(*p)) {							\
-> +	case 1:									\
-> +		__smp_mb();							\
-> +		*(volatile __u8 *)p = *(__u8 *)__u.__c;				\
-> +		break;								\
-> +	case 2:									\
-> +		__smp_mb();							\
-> +		*(volatile __u16 *)p = *(__u16 *)__u.__c;			\
-> +		break;								\
-> +	case 4:									\
-> +		__asm__ __volatile__(						\
-> +		"amswap_db.w %[tmp], %[val], %[mem]	\n"			\
-> +		: [mem] "+ZB" (*(u32 *)p), [tmp] "=&r" (__tmp)			\
-> +		: [val] "r" (*(__u32 *)__u.__c)					\
-> +		: );								\
-> +		break;								\
-> +	case 8:									\
-> +		__asm__ __volatile__(						\
-> +		"amswap_db.d %[tmp], %[val], %[mem]	\n"			\
-> +		: [mem] "+ZB" (*(u64 *)p), [tmp] "=&r" (__tmp)			\
-> +		: [val] "r" (*(__u64 *)__u.__c)					\
-> +		: );								\
-> +		break;								\
-> +	}									\
-> +} while (0)
-> +
-> +#define __smp_store_mb(p, v)							\
-> +do {										\
-> +	union { typeof(p) __val; char __c[1]; } __u =				\
-> +		{ .__val = (__force typeof(p)) (v) };				\
-> +	unsigned long __tmp;							\
-> +	switch (sizeof(p)) {							\
-> +	case 1:									\
-> +		*(volatile __u8 *)&p = *(__u8 *)__u.__c;			\
-> +		__smp_mb();							\
-> +		break;								\
-> +	case 2:									\
-> +		*(volatile __u16 *)&p = *(__u16 *)__u.__c;			\
-> +		__smp_mb();							\
-> +		break;								\
-> +	case 4:									\
-> +		__asm__ __volatile__(						\
-> +		"amswap_db.w %[tmp], %[val], %[mem]	\n"			\
-> +		: [mem] "+ZB" (*(u32 *)&p), [tmp] "=&r" (__tmp)			\
-> +		: [val] "r" (*(__u32 *)__u.__c)					\
-> +		: );								\
-> +		break;								\
-> +	case 8:									\
-> +		__asm__ __volatile__(						\
-> +		"amswap_db.d %[tmp], %[val], %[mem]	\n"			\
-> +		: [mem] "+ZB" (*(u64 *)&p), [tmp] "=&r" (__tmp)			\
-> +		: [val] "r" (*(__u64 *)__u.__c)					\
-> +		: );								\
-> +		break;								\
-> +	}									\
-> +} while (0)
-> +
->   #include <asm-generic/barrier.h>
->   
->   #endif /* __ASM_BARRIER_H */
-> diff --git a/arch/loongarch/include/asm/cmpxchg.h b/arch/loongarch/include/asm/cmpxchg.h
-> index 699925b8ff27..7a880651161b 100644
-> --- a/arch/loongarch/include/asm/cmpxchg.h
-> +++ b/arch/loongarch/include/asm/cmpxchg.h
-> @@ -58,6 +58,7 @@ static inline unsigned long __xchg(volatile void *ptr, unsigned long x,
->   	"	" st "	$t0, %1				\n"		\
->   	"	beq	$zero, $t0, 1b			\n"		\
->   	"2:						\n"		\
-> +	__WEAK_LLSC_MB							\
->   	: "=&r" (__ret), "=ZB"(*m)					\
->   	: "ZB"(*m), "Jr" (old), "Jr" (new)				\
->   	: "t0", "memory");						\
-> diff --git a/arch/loongarch/include/asm/futex.h b/arch/loongarch/include/asm/futex.h
-> index b27d55f92db7..9de8231694ec 100644
-> --- a/arch/loongarch/include/asm/futex.h
-> +++ b/arch/loongarch/include/asm/futex.h
-> @@ -86,6 +86,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr, u32 oldval, u32 newv
->   	"2:	sc.w	$t0, %2					\n"
->   	"	beq	$zero, $t0, 1b				\n"
->   	"3:							\n"
-> +	__WEAK_LLSC_MB
->   	"	.section .fixup,\"ax\"				\n"
->   	"4:	li.d	%0, %6					\n"
->   	"	b	3b					\n"
-> diff --git a/arch/loongarch/include/asm/hardirq.h b/arch/loongarch/include/asm/hardirq.h
-> index d32f83938880..befe8184aa08 100644
-> --- a/arch/loongarch/include/asm/hardirq.h
-> +++ b/arch/loongarch/include/asm/hardirq.h
-> @@ -21,4 +21,6 @@ typedef struct {
->   
->   DECLARE_PER_CPU_ALIGNED(irq_cpustat_t, irq_stat);
->   
-> +#define __ARCH_IRQ_STAT
-> +
->   #endif /* _ASM_HARDIRQ_H */
-> diff --git a/arch/loongarch/include/asm/irq.h b/arch/loongarch/include/asm/irq.h
-> index cd95d0d4e10f..ca3a68767b54 100644
-> --- a/arch/loongarch/include/asm/irq.h
-> +++ b/arch/loongarch/include/asm/irq.h
-> @@ -125,6 +125,9 @@ extern struct irq_domain *pch_lpc_domain;
->   extern struct irq_domain *pch_msi_domain[MAX_IO_PICS];
->   extern struct irq_domain *pch_pic_domain[MAX_IO_PICS];
->   
-> +extern void fixup_irqs(void);
-> +extern irqreturn_t loongson3_ipi_interrupt(int irq, void *dev);
-> +
->   #include <asm-generic/irq.h>
->   
->   #endif /* _ASM_IRQ_H */
-> diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
-> index 7d5b22ebd834..6f0d6e6fde10 100644
-> --- a/arch/loongarch/include/asm/percpu.h
-> +++ b/arch/loongarch/include/asm/percpu.h
-> @@ -5,6 +5,8 @@
->   #ifndef __ASM_PERCPU_H
->   #define __ASM_PERCPU_H
->   
-> +#include <asm/cmpxchg.h>
-> +
->   /* Use r21 for fast access */
->   register unsigned long __my_cpu_offset __asm__("$r21");
->   
-> @@ -15,6 +17,198 @@ static inline void set_my_cpu_offset(unsigned long off)
->   }
->   #define __my_cpu_offset __my_cpu_offset
->   
-> +#define PERCPU_OP(op, asm_op, c_op)					\
-> +static inline unsigned long __percpu_##op(void *ptr,			\
-> +			unsigned long val, int size)			\
-> +{									\
-> +	unsigned long ret;						\
-> +									\
-> +	switch (size) {							\
-> +	case 4:								\
-> +		__asm__ __volatile__(					\
-> +		"am"#asm_op".w"	" %[ret], %[val], %[ptr]	\n"		\
-> +		: [ret] "=&r" (ret), [ptr] "+ZB"(*(u32 *)ptr)		\
-> +		: [val] "r" (val));					\
-> +		break;							\
-> +	case 8:								\
-> +		__asm__ __volatile__(					\
-> +		"am"#asm_op".d" " %[ret], %[val], %[ptr]	\n"		\
-> +		: [ret] "=&r" (ret), [ptr] "+ZB"(*(u64 *)ptr)		\
-> +		: [val] "r" (val));					\
-> +		break;							\
-> +	default:							\
-> +		ret = 0;						\
-> +		BUILD_BUG();						\
-> +	}								\
-> +									\
-> +	return ret c_op val;						\
-> +}
-> +
-> +PERCPU_OP(add, add, +)
-> +PERCPU_OP(and, and, &)
-> +PERCPU_OP(or, or, |)
-> +#undef PERCPU_OP
-> +
-> +static inline unsigned long __percpu_read(void *ptr, int size)
-> +{
-> +	unsigned long ret;
-> +
-> +	switch (size) {
-> +	case 1:
-> +		__asm__ __volatile__ ("ldx.b %[ret], $r21, %[ptr]	\n"
-> +		: [ret] "=&r"(ret)
-> +		: [ptr] "r"(ptr)
-> +		: "memory");
-> +		break;
-> +	case 2:
-> +		__asm__ __volatile__ ("ldx.h %[ret], $r21, %[ptr]	\n"
-> +		: [ret] "=&r"(ret)
-> +		: [ptr] "r"(ptr)
-> +		: "memory");
-> +		break;
-> +	case 4:
-> +		__asm__ __volatile__ ("ldx.w %[ret], $r21, %[ptr]	\n"
-> +		: [ret] "=&r"(ret)
-> +		: [ptr] "r"(ptr)
-> +		: "memory");
-> +		break;
-> +	case 8:
-> +		__asm__ __volatile__ ("ldx.d %[ret], $r21, %[ptr]	\n"
-> +		: [ret] "=&r"(ret)
-> +		: [ptr] "r"(ptr)
-> +		: "memory");
-> +		break;
-> +	default:
-> +		ret = 0;
-> +		BUILD_BUG();
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static inline void __percpu_write(void *ptr, unsigned long val, int size)
-> +{
-> +	switch (size) {
-> +	case 1:
-> +		__asm__ __volatile__("stx.b %[val], $r21, %[ptr]	\n"
-> +		:
-> +		: [val] "r" (val), [ptr] "r" (ptr)
-> +		: "memory");
-> +		break;
-> +	case 2:
-> +		__asm__ __volatile__("stx.h %[val], $r21, %[ptr]	\n"
-> +		:
-> +		: [val] "r" (val), [ptr] "r" (ptr)
-> +		: "memory");
-> +		break;
-> +	case 4:
-> +		__asm__ __volatile__("stx.w %[val], $r21, %[ptr]	\n"
-> +		:
-> +		: [val] "r" (val), [ptr] "r" (ptr)
-> +		: "memory");
-> +		break;
-> +	case 8:
-> +		__asm__ __volatile__("stx.d %[val], $r21, %[ptr]	\n"
-> +		:
-> +		: [val] "r" (val), [ptr] "r" (ptr)
-> +		: "memory");
-> +		break;
-> +	default:
-> +		BUILD_BUG();
-> +	}
-> +}
-> +
-> +static inline unsigned long __percpu_xchg(void *ptr, unsigned long val,
-> +						int size)
-> +{
-> +	switch (size) {
-> +	case 4:
-> +		return __xchg_asm("amswap.w", (volatile u32 *)ptr, (u32)val);
-> +
-> +	case 8:
-> +		return __xchg_asm("amswap.d", (volatile u64 *)ptr, (u64)val);
-> +
-> +	default:
-> +		BUILD_BUG();
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/* this_cpu_cmpxchg */
-> +#define _protect_cmpxchg_local(pcp, o, n)			\
-> +({								\
-> +	typeof(*raw_cpu_ptr(&(pcp))) __ret;			\
-> +	preempt_disable_notrace();				\
-> +	__ret = cmpxchg_local(raw_cpu_ptr(&(pcp)), o, n);	\
-> +	preempt_enable_notrace();				\
-> +	__ret;							\
-> +})
-> +
-> +#define _percpu_read(pcp)						\
-> +({									\
-> +	typeof(pcp) __retval;						\
-> +	__retval = (typeof(pcp))__percpu_read(&(pcp), sizeof(pcp));	\
-> +	__retval;							\
-> +})
-> +
-> +#define _percpu_write(pcp, val)						\
-> +do {									\
-> +	__percpu_write(&(pcp), (unsigned long)(val), sizeof(pcp));	\
-> +} while (0)								\
-> +
-> +#define _pcp_protect(operation, pcp, val)			\
-> +({								\
-> +	typeof(pcp) __retval;					\
-> +	preempt_disable_notrace();				\
-> +	__retval = (typeof(pcp))operation(raw_cpu_ptr(&(pcp)),	\
-> +					  (val), sizeof(pcp));	\
-> +	preempt_enable_notrace();				\
-> +	__retval;						\
-> +})
-> +
-> +#define _percpu_add(pcp, val) \
-> +	_pcp_protect(__percpu_add, pcp, val)
-> +
-> +#define _percpu_add_return(pcp, val) _percpu_add(pcp, val)
-> +
-> +#define _percpu_and(pcp, val) \
-> +	_pcp_protect(__percpu_and, pcp, val)
-> +
-> +#define _percpu_or(pcp, val) \
-> +	_pcp_protect(__percpu_or, pcp, val)
-> +
-> +#define _percpu_xchg(pcp, val) ((typeof(pcp)) \
-> +	_pcp_protect(__percpu_xchg, pcp, (unsigned long)(val)))
-> +
-> +#define this_cpu_add_4(pcp, val) _percpu_add(pcp, val)
-> +#define this_cpu_add_8(pcp, val) _percpu_add(pcp, val)
-> +
-> +#define this_cpu_add_return_4(pcp, val) _percpu_add_return(pcp, val)
-> +#define this_cpu_add_return_8(pcp, val) _percpu_add_return(pcp, val)
-> +
-> +#define this_cpu_and_4(pcp, val) _percpu_and(pcp, val)
-> +#define this_cpu_and_8(pcp, val) _percpu_and(pcp, val)
-> +
-> +#define this_cpu_or_4(pcp, val) _percpu_or(pcp, val)
-> +#define this_cpu_or_8(pcp, val) _percpu_or(pcp, val)
-> +
-> +#define this_cpu_read_1(pcp) _percpu_read(pcp)
-> +#define this_cpu_read_2(pcp) _percpu_read(pcp)
-> +#define this_cpu_read_4(pcp) _percpu_read(pcp)
-> +#define this_cpu_read_8(pcp) _percpu_read(pcp)
-> +
-> +#define this_cpu_write_1(pcp, val) _percpu_write(pcp, val)
-> +#define this_cpu_write_2(pcp, val) _percpu_write(pcp, val)
-> +#define this_cpu_write_4(pcp, val) _percpu_write(pcp, val)
-> +#define this_cpu_write_8(pcp, val) _percpu_write(pcp, val)
-> +
-> +#define this_cpu_xchg_4(pcp, val) _percpu_xchg(pcp, val)
-> +#define this_cpu_xchg_8(pcp, val) _percpu_xchg(pcp, val)
-> +
-> +#define this_cpu_cmpxchg_4(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
-> +#define this_cpu_cmpxchg_8(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
-> +
->   #include <asm-generic/percpu.h>
->   
->   #endif /* __ASM_PERCPU_H */
-> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> index 8920dd8b297b..5e33987d0a13 100644
-> --- a/arch/loongarch/include/asm/pgtable.h
-> +++ b/arch/loongarch/include/asm/pgtable.h
-> @@ -279,8 +279,29 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
->   		 * Make sure the buddy is global too (if it's !none,
->   		 * it better already be global)
->   		 */
-> +#ifdef CONFIG_SMP
-> +		/*
-> +		 * For SMP, multiple CPUs can race, so we need to do
-> +		 * this atomically.
-> +		 */
-> +		unsigned long page_global = _PAGE_GLOBAL;
-> +		unsigned long tmp;
-> +
-> +		__asm__ __volatile__ (
-> +		"1:"	__LL	"%[tmp], %[buddy]		\n"
-> +		"	bnez	%[tmp], 2f			\n"
-> +		"	 or	%[tmp], %[tmp], %[global]	\n"
-> +			__SC	"%[tmp], %[buddy]		\n"
-> +		"	beqz	%[tmp], 1b			\n"
-> +		"	nop					\n"
-> +		"2:						\n"
-> +		__WEAK_LLSC_MB
-> +		: [buddy] "+m" (buddy->pte), [tmp] "=&r" (tmp)
-> +		: [global] "r" (page_global));
-> +#else /* !CONFIG_SMP */
->   		if (pte_none(*buddy))
->   			pte_val(*buddy) = pte_val(*buddy) | _PAGE_GLOBAL;
-> +#endif /* CONFIG_SMP */
->   	}
->   }
->   
-> diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/asm/smp.h
-> new file mode 100644
-> index 000000000000..551e1f37c705
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/smp.h
-> @@ -0,0 +1,124 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Author: Huacai Chen <chenhuacai@loongson.cn>
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef __ASM_SMP_H
-> +#define __ASM_SMP_H
-> +
-> +#include <linux/atomic.h>
-> +#include <linux/bitops.h>
-> +#include <linux/linkage.h>
-> +#include <linux/smp.h>
-> +#include <linux/threads.h>
-> +#include <linux/cpumask.h>
-> +
-> +void loongson3_smp_setup(void);
-> +void loongson3_prepare_cpus(unsigned int max_cpus);
-> +void loongson3_boot_secondary(int cpu, struct task_struct *idle);
-> +void loongson3_init_secondary(void);
-> +void loongson3_smp_finish(void);
-> +void loongson3_send_ipi_single(int cpu, unsigned int action);
-> +void loongson3_send_ipi_mask(const struct cpumask *mask, unsigned int action);
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +int loongson3_cpu_disable(void);
-> +void loongson3_cpu_die(unsigned int cpu);
-> +#endif
-> +
-> +#ifdef CONFIG_SMP
-> +
-> +static inline void plat_smp_setup(void)
-> +{
-> +	loongson3_smp_setup();
-> +}
-> +
-> +#else /* !CONFIG_SMP */
-> +
-> +static inline void plat_smp_setup(void) { }
-> +
-> +#endif /* !CONFIG_SMP */
-> +
-> +extern int smp_num_siblings;
-> +extern int num_processors;
-> +extern int disabled_cpus;
-> +extern cpumask_t cpu_sibling_map[];
-> +extern cpumask_t cpu_core_map[];
-> +extern cpumask_t cpu_foreign_map[];
-> +
-> +static inline int raw_smp_processor_id(void)
-> +{
-> +#if defined(__VDSO__)
-> +	extern int vdso_smp_processor_id(void)
-> +		__compiletime_error("VDSO should not call smp_processor_id()");
-> +	return vdso_smp_processor_id();
-> +#else
-> +	return current_thread_info()->cpu;
-> +#endif
-> +}
-> +#define raw_smp_processor_id raw_smp_processor_id
-> +
-> +/* Map from cpu id to sequential logical cpu number.  This will only
-> + * not be idempotent when cpus failed to come on-line.	*/
-> +extern int __cpu_number_map[NR_CPUS];
-> +#define cpu_number_map(cpu)  __cpu_number_map[cpu]
-> +
-> +/* The reverse map from sequential logical cpu number to cpu id.  */
-> +extern int __cpu_logical_map[NR_CPUS];
-> +#define cpu_logical_map(cpu)  __cpu_logical_map[cpu]
-> +
-> +#define cpu_physical_id(cpu)	cpu_logical_map(cpu)
-> +
-> +#define SMP_BOOT_CPU		0x1
-> +#define SMP_RESCHEDULE		0x2
-> +#define SMP_CALL_FUNCTION	0x4
-> +
-> +struct secondary_data {
-> +	unsigned long stack;
-> +	unsigned long thread_info;
-> +};
-> +extern struct secondary_data cpuboot_data;
-> +
-> +extern asmlinkage void smpboot_entry(void);
-> +
-> +extern void calculate_cpu_foreign_map(void);
-> +
-> +/*
-> + * Generate IPI list text
-> + */
-> +extern void show_ipi_list(struct seq_file *p, int prec);
-> +
-> +/*
-> + * This function sends a 'reschedule' IPI to another CPU.
-> + * it goes straight through and wastes no time serializing
-> + * anything. Worst case is that we lose a reschedule ...
-> + */
-> +static inline void smp_send_reschedule(int cpu)
-> +{
-> +	loongson3_send_ipi_single(cpu, SMP_RESCHEDULE);
-> +}
-> +
-> +static inline void arch_send_call_function_single_ipi(int cpu)
-> +{
-> +	loongson3_send_ipi_single(cpu, SMP_CALL_FUNCTION);
-> +}
-> +
-> +static inline void arch_send_call_function_ipi_mask(const struct cpumask *mask)
-> +{
-> +	loongson3_send_ipi_mask(mask, SMP_CALL_FUNCTION);
-> +}
-> +
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +static inline int __cpu_disable(void)
-> +{
-> +	return loongson3_cpu_disable();
-> +}
-> +
-> +static inline void __cpu_die(unsigned int cpu)
-> +{
-> +	loongson3_cpu_die(cpu);
-> +}
-> +
-> +extern void play_dead(void);
-> +#endif
-> +
-> +#endif /* __ASM_SMP_H */
-> diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-> index 44151b878d00..4ca953062b5b 100644
-> --- a/arch/loongarch/include/asm/stackframe.h
-> +++ b/arch/loongarch/include/asm/stackframe.h
-> @@ -77,17 +77,24 @@
->    * new value in sp.
->    */
->   	.macro	get_saved_sp docfi=0
-> -	la.abs	t1, kernelsp
-> -	move	t0, sp
-> +	la.abs	  t1, kernelsp
-> +#ifdef CONFIG_SMP
-> +	csrrd	  t0, PERCPU_BASE_KS
-> +	LONG_ADD  t1, t1, t0
-> +#endif
-> +	move	  t0, sp
->   	.if \docfi
->   	.cfi_register sp, t0
->   	.endif
-> -	LONG_L	sp, t1, 0
-> +	LONG_L	  sp, t1, 0
->   	.endm
->   
->   	.macro	set_saved_sp stackp temp temp2
-> -	la.abs	\temp, kernelsp
-> -	LONG_S	\stackp, \temp, 0
-> +	la.abs	  \temp, kernelsp
-> +#ifdef CONFIG_SMP
-> +	LONG_ADD  \temp, \temp, u0
-> +#endif
-> +	LONG_S	  \stackp, \temp, 0
->   	.endm
->   
->   	.macro	SAVE_SOME docfi=0
-> diff --git a/arch/loongarch/include/asm/tlbflush.h b/arch/loongarch/include/asm/tlbflush.h
-> index 36bd6d11dc2d..a0785e590681 100644
-> --- a/arch/loongarch/include/asm/tlbflush.h
-> +++ b/arch/loongarch/include/asm/tlbflush.h
-> @@ -25,6 +25,17 @@ extern void local_flush_tlb_kernel_range(unsigned long start, unsigned long end)
->   extern void local_flush_tlb_page(struct vm_area_struct *vma, unsigned long page);
->   extern void local_flush_tlb_one(unsigned long vaddr);
->   
-> +#ifdef CONFIG_SMP
-> +
-> +extern void flush_tlb_all(void);
-> +extern void flush_tlb_mm(struct mm_struct *);
-> +extern void flush_tlb_range(struct vm_area_struct *vma, unsigned long, unsigned long);
-> +extern void flush_tlb_kernel_range(unsigned long, unsigned long);
-> +extern void flush_tlb_page(struct vm_area_struct *, unsigned long);
-> +extern void flush_tlb_one(unsigned long vaddr);
-> +
-> +#else /* CONFIG_SMP */
-> +
->   #define flush_tlb_all()			local_flush_tlb_all()
->   #define flush_tlb_mm(mm)		local_flush_tlb_mm(mm)
->   #define flush_tlb_range(vma, vmaddr, end)	local_flush_tlb_range(vma, vmaddr, end)
-> @@ -32,4 +43,6 @@ extern void local_flush_tlb_one(unsigned long vaddr);
->   #define flush_tlb_page(vma, page)	local_flush_tlb_page(vma, page)
->   #define flush_tlb_one(vaddr)		local_flush_tlb_one(vaddr)
->   
-> +#endif /* CONFIG_SMP */
-> +
->   #endif /* __ASM_TLBFLUSH_H */
-> diff --git a/arch/loongarch/include/asm/topology.h b/arch/loongarch/include/asm/topology.h
-> index 9ac71a25207a..da135841e5b1 100644
-> --- a/arch/loongarch/include/asm/topology.h
-> +++ b/arch/loongarch/include/asm/topology.h
-> @@ -7,7 +7,12 @@
->   
->   #include <linux/smp.h>
->   
-> -#define cpu_logical_map(cpu)  0
-> +#ifdef CONFIG_SMP
-> +#define topology_physical_package_id(cpu)	(cpu_data[cpu].package)
-> +#define topology_core_id(cpu)			(cpu_data[cpu].core)
-> +#define topology_core_cpumask(cpu)		(&cpu_core_map[cpu])
-> +#define topology_sibling_cpumask(cpu)		(&cpu_sibling_map[cpu])
-> +#endif
->   
->   #include <asm-generic/topology.h>
->   
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index 211f12b3781c..08ddd8c90eae 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -19,4 +19,6 @@ obj-$(CONFIG_MODULES)		+= module.o module-sections.o
->   
->   obj-$(CONFIG_PROC_FS)		+= proc.o
->   
-> +obj-$(CONFIG_SMP)		+= smp.o
-> +
->   CPPFLAGS_vmlinux.lds		:= $(KBUILD_CFLAGS)
-> diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
-> index 506ab9912c51..0c7f2d1077a1 100644
-> --- a/arch/loongarch/kernel/acpi.c
-> +++ b/arch/loongarch/kernel/acpi.c
-> @@ -139,6 +139,35 @@ void __init acpi_boot_table_init(void)
->   	}
->   }
->   
-> +static int set_processor_mask(u32 id, u32 flags)
-> +{
-> +
-> +	int cpu, cpuid = id;
-> +
-> +	if (num_processors >= nr_cpu_ids) {
-> +		pr_warn("acpi: nr_cpus/possible_cpus limit of %i reached."
-pr_warn(PREFIX "nr_cpus ..."); -- make use of the common PREFIX declaration.
-> +			" processor 0x%x ignored.\n", nr_cpu_ids, cpuid);
-> +
-> +		return -ENODEV;
-> +
-> +	}
-> +	if (cpuid == loongson_sysconf.boot_cpu_id)
-> +		cpu = 0;
-> +	else
-> +		cpu = cpumask_next_zero(-1, cpu_present_mask);
-> +
-> +	if (flags & ACPI_MADT_ENABLED) {
-> +		num_processors++;
-> +		set_cpu_possible(cpu, true);
-> +		set_cpu_present(cpu, true);
-> +		__cpu_number_map[cpuid] = cpu;
-> +		__cpu_logical_map[cpu] = cpuid;
-> +	} else
-> +		disabled_cpus++;
-> +
-> +	return cpu;
-> +}
-> +
->   static int __init
->   acpi_parse_cpuintc(union acpi_subtable_headers *header, const unsigned long end)
->   {
-> @@ -149,6 +178,7 @@ acpi_parse_cpuintc(union acpi_subtable_headers *header, const unsigned long end)
->   		return -EINVAL;
->   
->   	acpi_table_print_madt_entry(&header->common);
-> +	set_processor_mask(processor->core_id, processor->flags);
->   
->   	return 0;
->   }
-> @@ -250,7 +280,12 @@ acpi_parse_pch_lpc(union acpi_subtable_headers *header, const unsigned long end)
->   
->   static void __init acpi_process_madt(void)
->   {
-> -	int error;
-> +	int i, error;
-> +
-> +	for (i = 0; i < NR_CPUS; i++) {
-> +		__cpu_number_map[i] = -1;
-> +		__cpu_logical_map[i] = -1;
-> +	}
->   
->   	/* Parse MADT CPUINTC entries */
->   	error = acpi_table_parse_madt(ACPI_MADT_TYPE_CORE_PIC, acpi_parse_cpuintc, MAX_CORE_PIC);
-> @@ -336,3 +371,36 @@ void __init arch_reserve_mem_area(acpi_physical_address addr, size_t size)
->   {
->   	memblock_reserve(addr, size);
->   }
-> +
-> +#ifdef CONFIG_ACPI_HOTPLUG_CPU
-> +
-> +#include <acpi/processor.h>
-> +
-> +int acpi_map_cpu(acpi_handle handle, phys_cpuid_t physid, u32 acpi_id, int *pcpu)
-> +{
-> +	int cpu;
-> +
-> +	cpu = set_processor_mask(physid, ACPI_MADT_ENABLED);
-> +	if (cpu < 0) {
-> +		pr_info(PREFIX "Unable to map lapic to logical cpu number\n");
-> +		return cpu;
-> +	}
-> +
-> +	*pcpu = cpu;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(acpi_map_cpu);
-> +
-> +int acpi_unmap_cpu(int cpu)
-> +{
-> +	set_cpu_present(cpu, false);
-> +	num_processors--;
-> +
-> +	pr_info("cpu%d hot remove!\n", cpu);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(acpi_unmap_cpu);
-> +
-> +#endif /* CONFIG_ACPI_HOTPLUG_CPU */
-> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-> index 3531e3c60a6e..bfb65eb2844f 100644
-> --- a/arch/loongarch/kernel/asm-offsets.c
-> +++ b/arch/loongarch/kernel/asm-offsets.c
-> @@ -252,3 +252,13 @@ void output_signal_defines(void)
->   	DEFINE(_SIGXFSZ, SIGXFSZ);
->   	BLANK();
->   }
-> +
-> +#ifdef CONFIG_SMP
-> +void output_smpboot_defines(void)
-> +{
-> +	COMMENT("Linux smp cpu boot offsets.");
-> +	OFFSET(CPU_BOOT_STACK, secondary_data, stack);
-> +	OFFSET(CPU_BOOT_TINFO, secondary_data, thread_info);
-> +	BLANK();
-> +}
-> +#endif
-> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-> index f0b3e76bb762..9f6c9f3182a5 100644
-> --- a/arch/loongarch/kernel/head.S
-> +++ b/arch/loongarch/kernel/head.S
-> @@ -94,4 +94,34 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
->   
->   SYM_CODE_END(kernel_entry)
->   
-> +#ifdef CONFIG_SMP
-> +
-> +/*
-> + * SMP slave cpus entry point.	Board specific code for bootstrap calls this
-> + * function after setting up the stack and tp registers.
-> + */
-> +SYM_CODE_START(smpboot_entry)
-> +	li.d		t0, CSR_DMW0_INIT	# UC, PLV0
-> +	csrwr		t0, LOONGARCH_CSR_DMWIN0
-> +	li.d		t0, CSR_DMW1_INIT	# CA, PLV0
-> +	csrwr		t0, LOONGARCH_CSR_DMWIN1
-> +	li.w		t0, 0xb0		# PLV=0, IE=0, PG=1
-> +	csrwr		t0, LOONGARCH_CSR_CRMD
-> +	li.w		t0, 0x04		# PLV=0, PIE=1, PWE=0
-> +	csrwr		t0, LOONGARCH_CSR_PRMD
-> +	li.w		t0, 0x00		# FPE=0, SXE=0, ASXE=0, BTE=0
-> +	csrwr		t0, LOONGARCH_CSR_EUEN
-> +
-> +	la.abs		t0, cpuboot_data
-> +	ld.d		sp, t0, CPU_BOOT_STACK
-> +	ld.d		tp, t0, CPU_BOOT_TINFO
-> +
-> +	la.abs	t0, 0f
-> +	jirl	zero, t0, 0
-> +0:
-> +	bl		start_secondary
-> +SYM_CODE_END(smpboot_entry)
-> +
-> +#endif /* CONFIG_SMP */
-> +
->   SYM_ENTRY(kernel_entry_end, SYM_L_GLOBAL, SYM_A_NONE)
-> diff --git a/arch/loongarch/kernel/irq.c b/arch/loongarch/kernel/irq.c
-> index 48032ffd9331..fbb7ad1d1ac0 100644
-> --- a/arch/loongarch/kernel/irq.c
-> +++ b/arch/loongarch/kernel/irq.c
-> @@ -73,6 +73,9 @@ asmlinkage void spurious_interrupt(void)
->   
->   int arch_show_interrupts(struct seq_file *p, int prec)
->   {
-> +#ifdef CONFIG_SMP
-> +	show_ipi_list(p, prec);
-> +#endif
->   	seq_printf(p, "%*s: %10u\n", prec, "ERR", atomic_read(&irq_err_count));
->   	return 0;
->   }
-> @@ -108,13 +111,21 @@ void __init setup_IRQ(void)
->   
->   void __init init_IRQ(void)
->   {
-> -	int i;
-> +	int i, r, ipi_irq;
-> +	static int ipi_dummy_dev;
->   	unsigned int order = get_order(IRQ_STACK_SIZE);
->   
->   	clear_csr_ecfg(ECFG0_IM);
->   	clear_csr_estat(ESTATF_IP);
->   
->   	setup_IRQ();
-> +#ifdef CONFIG_SMP
-> +	ipi_irq = get_ipi_irq();
-> +	irq_set_percpu_devid(ipi_irq);
-> +	r = request_percpu_irq(ipi_irq, loongson3_ipi_interrupt, "IPI", &ipi_dummy_dev);
-> +	if (r < 0)
-> +		panic("IPI IRQ request failed\n");
-> +#endif
->   
->   	for (i = 0; i < NR_IRQS; i++)
->   		irq_set_noprobe(i);
-> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
-> index d1f36b510297..e5772b65f956 100644
-> --- a/arch/loongarch/kernel/proc.c
-> +++ b/arch/loongarch/kernel/proc.c
-> @@ -35,6 +35,11 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->   	unsigned int fp_version = cpu_data[n].fpu_vers;
->   	struct proc_cpuinfo_notifier_args proc_cpuinfo_notifier_args;
->   
-> +#ifdef CONFIG_SMP
-> +	if (!cpu_online(n))
-> +		return 0;
-> +#endif
-> +
->   	/*
->   	 * For the first processor also print the system type
->   	 */
-> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-> index 667b365d909d..8f74985f8782 100644
-> --- a/arch/loongarch/kernel/process.c
-> +++ b/arch/loongarch/kernel/process.c
-> @@ -53,6 +53,13 @@
->   unsigned long boot_option_idle_override = IDLE_NO_OVERRIDE;
->   EXPORT_SYMBOL(boot_option_idle_override);
->   
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +void arch_cpu_idle_dead(void)
-> +{
-> +	play_dead();
-> +}
-> +#endif
-> +
->   asmlinkage void ret_from_fork(void);
->   asmlinkage void ret_from_kernel_thread(void);
->   
-> diff --git a/arch/loongarch/kernel/reset.c b/arch/loongarch/kernel/reset.c
-> index ef484ce43c5c..2b86469e4718 100644
-> --- a/arch/loongarch/kernel/reset.c
-> +++ b/arch/loongarch/kernel/reset.c
-> @@ -65,16 +65,28 @@ EXPORT_SYMBOL(pm_power_off);
->   
->   void machine_halt(void)
->   {
-> +#ifdef CONFIG_SMP
-> +	preempt_disable();
-> +	smp_send_stop();
-> +#endif
->   	default_halt();
->   }
->   
->   void machine_power_off(void)
->   {
-> +#ifdef CONFIG_SMP
-> +	preempt_disable();
-> +	smp_send_stop();
-> +#endif
->   	pm_power_off();
->   }
->   
->   void machine_restart(char *command)
->   {
-> +#ifdef CONFIG_SMP
-> +	preempt_disable();
-> +	smp_send_stop();
-> +#endif
->   	do_kernel_restart(command);
->   	pm_restart();
->   }
-> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-> index 827d07204e62..c314c22cdb22 100644
-> --- a/arch/loongarch/kernel/setup.c
-> +++ b/arch/loongarch/kernel/setup.c
-> @@ -38,6 +38,7 @@
->   #include <asm/pgalloc.h>
->   #include <asm/sections.h>
->   #include <asm/setup.h>
-> +#include <asm/smp.h>
->   #include <asm/time.h>
->   
->   #define SMBIOS_BIOSSIZE_OFFSET		0x09
-> @@ -317,6 +318,29 @@ static int __init reserve_memblock_reserved_regions(void)
->   }
->   arch_initcall(reserve_memblock_reserved_regions);
->   
-> +#ifdef CONFIG_SMP
-> +static void __init prefill_possible_map(void)
-> +{
-> +	int i, possible;
-> +
-> +	possible = num_processors + disabled_cpus;
-> +	if (possible > nr_cpu_ids)
-> +		possible = nr_cpu_ids;
-> +
-> +	pr_info("SMP: Allowing %d CPUs, %d hotplug CPUs\n",
-> +			possible, max((possible - num_processors), 0));
-> +
-> +	for (i = 0; i < possible; i++)
-> +		set_cpu_possible(i, true);
-> +	for (; i < NR_CPUS; i++)
-> +		set_cpu_possible(i, false);
-> +
-> +	nr_cpu_ids = possible;
-> +}
-> +#else
-> +static inline void prefill_possible_map(void) {}
-> +#endif
-> +
->   void __init setup_arch(char **cmdline_p)
->   {
->   	cpu_probe();
-> @@ -331,6 +355,8 @@ void __init setup_arch(char **cmdline_p)
->   	arch_mem_init(cmdline_p);
->   
->   	resource_init();
-> +	plat_smp_setup();
-> +	prefill_possible_map();
->   
->   	paging_init();
->   }
-> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> new file mode 100644
-> index 000000000000..4211025c79d3
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/smp.c
-> @@ -0,0 +1,744 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + *
-> + * Derived from MIPS:
-> + * Copyright (C) 2000, 2001 Kanoj Sarcar
-> + * Copyright (C) 2000, 2001 Ralf Baechle
-> + * Copyright (C) 2000, 2001 Silicon Graphics, Inc.
-> + * Copyright (C) 2000, 2001, 2003 Broadcom Corporation
-> + */
-> +#include <linux/cpu.h>
-> +#include <linux/cpumask.h>
-> +#include <linux/init.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/seq_file.h>
-> +#include <linux/smp.h>
-> +#include <linux/threads.h>
-> +#include <linux/export.h>
-> +#include <linux/time.h>
-> +#include <linux/tracepoint.h>
-> +#include <linux/sched/hotplug.h>
-> +#include <linux/sched/task_stack.h>
-> +
-> +#include <asm/cpu.h>
-> +#include <asm/idle.h>
-> +#include <asm/loongson.h>
-> +#include <asm/mmu_context.h>
-> +#include <asm/processor.h>
-> +#include <asm/setup.h>
-> +#include <asm/time.h>
-> +
-> +int __cpu_number_map[NR_CPUS];   /* Map physical to logical */
-> +EXPORT_SYMBOL(__cpu_number_map);
-> +
-> +int __cpu_logical_map[NR_CPUS];		/* Map logical to physical */
-> +EXPORT_SYMBOL(__cpu_logical_map);
-> +
-> +/* Number of threads (siblings) per CPU core */
-> +int smp_num_siblings = 1;
-> +EXPORT_SYMBOL(smp_num_siblings);
-> +
-> +/* Representing the threads (siblings) of each logical CPU */
-> +cpumask_t cpu_sibling_map[NR_CPUS] __read_mostly;
-> +EXPORT_SYMBOL(cpu_sibling_map);
-> +
-> +/* Representing the core map of multi-core chips of each logical CPU */
-> +cpumask_t cpu_core_map[NR_CPUS] __read_mostly;
-> +EXPORT_SYMBOL(cpu_core_map);
-> +
-> +static DECLARE_COMPLETION(cpu_starting);
-> +static DECLARE_COMPLETION(cpu_running);
-> +
-> +/*
-> + * A logcal cpu mask containing only one VPE per core to
-> + * reduce the number of IPIs on large MT systems.
-> + */
-> +cpumask_t cpu_foreign_map[NR_CPUS] __read_mostly;
-> +EXPORT_SYMBOL(cpu_foreign_map);
-> +
-> +/* representing cpus for which sibling maps can be computed */
-> +static cpumask_t cpu_sibling_setup_map;
-> +
-> +/* representing cpus for which core maps can be computed */
-> +static cpumask_t cpu_core_setup_map;
-> +
-> +struct secondary_data cpuboot_data;
-> +static DEFINE_PER_CPU(int, cpu_state);
-> +DEFINE_PER_CPU_SHARED_ALIGNED(irq_cpustat_t, irq_stat);
-> +EXPORT_PER_CPU_SYMBOL(irq_stat);
-> +
-> +enum ipi_msg_type {
-> +	IPI_RESCHEDULE,
-> +	IPI_CALL_FUNCTION,
-> +};
-> +
-> +static const char *ipi_types[NR_IPI] __tracepoint_string = {
-> +	[IPI_RESCHEDULE] = "Rescheduling interrupts",
-> +	[IPI_CALL_FUNCTION] = "Call Function interrupts",
-"Function call interrupts" would sound more natural. Plus it's what all 
-other arches call it.
-> +};
-> +
-> +void show_ipi_list(struct seq_file *p, int prec)
-> +{
-> +	unsigned int cpu, i;
-> +
-> +	for (i = 0; i < NR_IPI; i++) {
-> +		seq_printf(p, "%*s%u:%s", prec - 1, "IPI", i, prec >= 4 ? " " : "");
-> +		for_each_online_cpu(cpu)
-> +			seq_printf(p, "%10u ", per_cpu(irq_stat, cpu).ipi_irqs[i]);
-> +		seq_printf(p, " LoongArch  %d  %s\n", i + 1, ipi_types[i]);
-> +	}
-> +}
-> +
-> +/* Send mailbox buffer via Mail_Send */
-> +static void csr_mail_send(uint64_t data, int cpu, int mailbox)
-> +{
-> +	uint64_t val;
-> +
-> +	/* Send high 32 bits */
-> +	val = IOCSR_MBUF_SEND_BLOCKING;
-> +	val |= (IOCSR_MBUF_SEND_BOX_HI(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
-> +	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
-> +	val |= (data & IOCSR_MBUF_SEND_H32_MASK);
-> +	iocsr_writeq(val, LOONGARCH_IOCSR_MBUF_SEND);
-> +
-> +	/* Send low 32 bits */
-> +	val = IOCSR_MBUF_SEND_BLOCKING;
-> +	val |= (IOCSR_MBUF_SEND_BOX_LO(mailbox) << IOCSR_MBUF_SEND_BOX_SHIFT);
-> +	val |= (cpu << IOCSR_MBUF_SEND_CPU_SHIFT);
-> +	val |= (data << IOCSR_MBUF_SEND_BUF_SHIFT);
-> +	iocsr_writeq(val, LOONGARCH_IOCSR_MBUF_SEND);
-> +};
-> +
-> +static u32 ipi_read_clear(int cpu)
-> +{
-> +	u32 action;
-> +
-> +	/* Load the ipi register to figure out what we're supposed to do */
-> +	action = iocsr_readl(LOONGARCH_IOCSR_IPI_STATUS);
-> +	/* Clear the ipi register to clear the interrupt */
-> +	iocsr_writel(action, LOONGARCH_IOCSR_IPI_CLEAR);
-> +	smp_mb();
-> +
-> +	return action;
-> +}
-> +
-> +static void ipi_write_action(int cpu, u32 action)
-> +{
-> +	unsigned int irq = 0;
-> +
-> +	while ((irq = ffs(action))) {
-> +		uint32_t val = IOCSR_IPI_SEND_BLOCKING;
-> +
-> +		val |= (irq - 1);
-> +		val |= (cpu << IOCSR_IPI_SEND_CPU_SHIFT);
-> +		iocsr_writel(val, LOONGARCH_IOCSR_IPI_SEND);
-> +		action &= ~BIT(irq - 1);
-> +	}
-> +}
-> +
-> +void loongson3_send_ipi_single(int cpu, unsigned int action)
-> +{
-> +	ipi_write_action(cpu_logical_map(cpu), (u32)action);
-> +}
-> +
-> +void loongson3_send_ipi_mask(const struct cpumask *mask, unsigned int action)
-> +{
-> +	unsigned int i;
-> +
-> +	for_each_cpu(i, mask)
-> +		ipi_write_action(cpu_logical_map(i), (u32)action);
-> +}
-> +
-> +irqreturn_t loongson3_ipi_interrupt(int irq, void *dev)
-> +{
-> +	unsigned int action;
-> +	unsigned int cpu = smp_processor_id();
-> +
-> +	action = ipi_read_clear(cpu_logical_map(cpu));
-> +
-> +	if (action & SMP_RESCHEDULE) {
-> +		scheduler_ipi();
-> +		per_cpu(irq_stat, cpu).ipi_irqs[IPI_RESCHEDULE]++;
-> +	}
-> +
-> +	if (action & SMP_CALL_FUNCTION) {
-> +		generic_smp_call_function_interrupt();
-> +		per_cpu(irq_stat, cpu).ipi_irqs[IPI_CALL_FUNCTION]++;
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +void __init loongson3_smp_setup(void)
-> +{
-> +	cpu_data[0].core = cpu_logical_map(0) % loongson_sysconf.cores_per_package;
-> +	cpu_data[0].package = cpu_logical_map(0) / loongson_sysconf.cores_per_package;
-> +
-> +	iocsr_writel(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
-> +	pr_info("Detected %i available CPU(s)\n", loongson_sysconf.nr_cpus);
-> +}
-> +
-> +void __init loongson3_prepare_cpus(unsigned int max_cpus)
-> +{
-> +	int i = 0;
-> +
-> +	for (i = 0; i < loongson_sysconf.nr_cpus; i++) {
-> +		set_cpu_present(i, true);
-> +		csr_mail_send(0, __cpu_logical_map[i], 0);
-> +	}
-> +
-> +	per_cpu(cpu_state, smp_processor_id()) = CPU_ONLINE;
-> +}
-> +
-> +/*
-> + * Setup the PC, SP, and TP of a secondary processor and start it running!
-> + */
-> +void loongson3_boot_secondary(int cpu, struct task_struct *idle)
-> +{
-> +	unsigned long entry;
-> +
-> +	pr_info("Booting CPU#%d...\n", cpu);
-> +
-> +	entry = __pa_symbol((unsigned long)&smpboot_entry);
-> +	cpuboot_data.stack = (unsigned long)__KSTK_TOS(idle);
-> +	cpuboot_data.thread_info = (unsigned long)task_thread_info(idle);
-> +
-> +	csr_mail_send(entry, cpu_logical_map(cpu), 0);
-> +
-> +	loongson3_send_ipi_single(cpu, SMP_BOOT_CPU);
-> +}
-> +
-> +/*
-> + * SMP init and finish on secondary CPUs
-> + */
-> +void loongson3_init_secondary(void)
-> +{
-> +	unsigned int cpu = smp_processor_id();
-> +	unsigned int imask = ECFGF_IP0 | ECFGF_IP1 | ECFGF_IP2 |
-> +			     ECFGF_IPI | ECFGF_PMC | ECFGF_TIMER;
-> +
-> +	change_csr_ecfg(ECFG0_IM, imask);
-> +
-> +	iocsr_writel(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
-> +
-> +	per_cpu(cpu_state, cpu) = CPU_ONLINE;
-> +	cpu_data[cpu].core =
-> +		     cpu_logical_map(cpu) % loongson_sysconf.cores_per_package;
-> +	cpu_data[cpu].package =
-> +		     cpu_logical_map(cpu) / loongson_sysconf.cores_per_package;
-> +}
-> +
-> +void loongson3_smp_finish(void)
-> +{
-> +	local_irq_enable();
-> +	iocsr_writeq(0, LOONGARCH_IOCSR_MBUF0);
-> +	pr_info("CPU#%d finished\n", smp_processor_id());
-> +}
-> +
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +
-> +static bool io_master(int cpu)
-> +{
-> +	int i, node, master;
-> +
-> +	if (cpu == 0)
-> +		return true;
-> +
-> +	for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
-> +		node = eiointc_get_node(i);
-> +		master = cpu_number_map(node * CORES_PER_EIO_NODE);
-> +		if (cpu == master)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +int loongson3_cpu_disable(void)
-> +{
-> +	unsigned long flags;
-> +	unsigned int cpu = smp_processor_id();
-> +
-> +	if (io_master(cpu))
-> +		return -EBUSY;
-> +
-> +	set_cpu_online(cpu, false);
-> +	calculate_cpu_foreign_map();
-> +	local_irq_save(flags);
-> +	irq_migrate_all_off_this_cpu();
-> +	clear_csr_ecfg(ECFG0_IM);
-> +	local_irq_restore(flags);
-> +	local_flush_tlb_all();
-> +
-> +	return 0;
-> +}
-> +
-> +void loongson3_cpu_die(unsigned int cpu)
-> +{
-> +	while (per_cpu(cpu_state, cpu) != CPU_DEAD)
-> +		cpu_relax();
-> +
-> +	mb();
-> +}
-> +
-> +/*
-> + * The target CPU should go to XKPRANGE (uncached area) and flush
-> + * ICache/DCache/VCache before the control CPU can safely disable its clock.
-> + */
-> +static void loongson3_play_dead(int *state_addr)
-> +{
-> +	register int val;
-> +	register void *addr;
-> +	register void (*init_fn)(void);
-> +
-> +	__asm__ __volatile__(
-> +		"   li.d %[addr], 0x8000000000000000\n"
-> +		"1: cacop 0x8, %[addr], 0           \n" /* flush ICache */
-> +		"   cacop 0x8, %[addr], 1           \n"
-> +		"   cacop 0x8, %[addr], 2           \n"
-> +		"   cacop 0x8, %[addr], 3           \n"
-> +		"   cacop 0x9, %[addr], 0           \n" /* flush DCache */
-> +		"   cacop 0x9, %[addr], 1           \n"
-> +		"   cacop 0x9, %[addr], 2           \n"
-> +		"   cacop 0x9, %[addr], 3           \n"
-> +		"   addi.w %[sets], %[sets], -1     \n"
-> +		"   addi.d %[addr], %[addr], 0x40   \n"
-> +		"   bnez %[sets], 1b                \n"
-> +		"   li.d %[addr], 0x8000000000000000\n"
-> +		"2: cacop 0xa, %[addr], 0           \n" /* flush VCache */
-> +		"   cacop 0xa, %[addr], 1           \n"
-> +		"   cacop 0xa, %[addr], 2           \n"
-> +		"   cacop 0xa, %[addr], 3           \n"
-> +		"   cacop 0xa, %[addr], 4           \n"
-> +		"   cacop 0xa, %[addr], 5           \n"
-> +		"   cacop 0xa, %[addr], 6           \n"
-> +		"   cacop 0xa, %[addr], 7           \n"
-> +		"   cacop 0xa, %[addr], 8           \n"
-> +		"   cacop 0xa, %[addr], 9           \n"
-> +		"   cacop 0xa, %[addr], 10          \n"
-> +		"   cacop 0xa, %[addr], 11          \n"
-> +		"   cacop 0xa, %[addr], 12          \n"
-> +		"   cacop 0xa, %[addr], 13          \n"
-> +		"   cacop 0xa, %[addr], 14          \n"
-> +		"   cacop 0xa, %[addr], 15          \n"
-> +		"   addi.w %[vsets], %[vsets], -1   \n"
-> +		"   addi.d %[addr], %[addr], 0x40   \n"
-> +		"   bnez   %[vsets], 2b             \n"
-> +		"   li.w   %[val], 0x7              \n" /* *state_addr = CPU_DEAD; */
-> +		"   st.w   %[val], %[state_addr], 0 \n"
-> +		"   dbar 0                          \n"
-> +		"   cacop 0x11, %[state_addr], 0    \n" /* flush entry of *state_addr */
-> +		: [addr] "=&r" (addr), [val] "=&r" (val)
-> +		: [state_addr] "r" (state_addr),
-> +		  [sets] "r" (cpu_data[smp_processor_id()].dcache.sets),
-> +		  [vsets] "r" (cpu_data[smp_processor_id()].vcache.sets));
-> +
-> +	local_irq_enable();
-> +	change_csr_ecfg(ECFG0_IM, ECFGF_IPI);
-> +
-> +	__asm__ __volatile__(
-> +		"   idle      0			    \n"
-> +		"   li.w      $t0, 0x1020	    \n"
-> +		"   iocsrrd.d %[init_fn], $t0	    \n" /* Get init PC */
-> +		: [init_fn] "=&r" (addr)
-> +		: /* No Input */
-> +		: "a0");
-> +	init_fn = __va(addr);
-> +
-> +	init_fn();
-> +	unreachable();
-> +}
-> +
-> +void play_dead(void)
-> +{
-> +	int *state_addr;
-> +	unsigned int cpu = smp_processor_id();
-> +	void (*play_dead_uncached)(int *s);
-> +
-> +	idle_task_exit();
-> +	play_dead_uncached = (void *)TO_UNCACHE(__pa((unsigned long)loongson3_play_dead));
-> +	state_addr = &per_cpu(cpu_state, cpu);
-> +	mb();
-> +	play_dead_uncached(state_addr);
-> +}
-> +
-> +static int loongson3_enable_clock(unsigned int cpu)
-> +{
-> +	uint64_t core_id = cpu_data[cpu].core;
-> +	uint64_t package_id = cpu_data[cpu].package;
-> +
-> +	LOONGSON_FREQCTRL(package_id) |= 1 << (core_id * 4 + 3);
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson3_disable_clock(unsigned int cpu)
-> +{
-> +	uint64_t core_id = cpu_data[cpu].core;
-> +	uint64_t package_id = cpu_data[cpu].package;
-> +
-> +	LOONGSON_FREQCTRL(package_id) &= ~(1 << (core_id * 4 + 3));
-> +
-> +	return 0;
-> +}
-> +
-> +static int register_loongson3_notifier(void)
-> +{
-> +	return cpuhp_setup_state_nocalls(CPUHP_LOONGARCH_SOC_PREPARE,
-> +					 "loongarch/loongson:prepare",
-> +					 loongson3_enable_clock,
-> +					 loongson3_disable_clock);
-> +}
-> +early_initcall(register_loongson3_notifier);
-> +
-> +#endif
-> +
-> +/*
-> + * Power management
-> + */
-> +#ifdef CONFIG_PM
-> +
-> +static int loongson3_ipi_suspend(void)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void loongson3_ipi_resume(void)
-> +{
-> +	iocsr_writel(0xffffffff, LOONGARCH_IOCSR_IPI_EN);
-> +}
-> +
-> +static struct syscore_ops loongson3_ipi_syscore_ops = {
-> +	.resume         = loongson3_ipi_resume,
-> +	.suspend        = loongson3_ipi_suspend,
-> +};
-> +
-> +/*
-> + * Enable boot cpu ipi before enabling nonboot cpus
-> + * during syscore_resume.
-> + */
-> +static int __init ipi_pm_init(void)
-> +{
-> +	register_syscore_ops(&loongson3_ipi_syscore_ops);
-> +	return 0;
-> +}
-> +
-> +core_initcall(ipi_pm_init);
-> +#endif
-> +
-> +static inline void set_cpu_sibling_map(int cpu)
-> +{
-> +	int i;
-> +
-> +	cpumask_set_cpu(cpu, &cpu_sibling_setup_map);
-> +
-> +	if (smp_num_siblings <= 1)
-> +		cpumask_set_cpu(cpu, &cpu_sibling_map[cpu]);
-> +	else {
-> +		for_each_cpu(i, &cpu_sibling_setup_map) {
-> +			if (cpus_are_siblings(cpu, i)) {
-> +				cpumask_set_cpu(i, &cpu_sibling_map[cpu]);
-> +				cpumask_set_cpu(cpu, &cpu_sibling_map[i]);
-> +			}
-> +		}
-> +	}
-> +}
-> +
-> +static inline void set_cpu_core_map(int cpu)
-> +{
-> +	int i;
-> +
-> +	cpumask_set_cpu(cpu, &cpu_core_setup_map);
-> +
-> +	for_each_cpu(i, &cpu_core_setup_map) {
-> +		if (cpu_data[cpu].package == cpu_data[i].package) {
-> +			cpumask_set_cpu(i, &cpu_core_map[cpu]);
-> +			cpumask_set_cpu(cpu, &cpu_core_map[i]);
-> +		}
-> +	}
-> +}
-> +
-> +/*
-> + * Calculate a new cpu_foreign_map mask whenever a
-> + * new cpu appears or disappears.
-> + */
-> +void calculate_cpu_foreign_map(void)
-> +{
-> +	int i, k, core_present;
-> +	cpumask_t temp_foreign_map;
-> +
-> +	/* Re-calculate the mask */
-> +	cpumask_clear(&temp_foreign_map);
-> +	for_each_online_cpu(i) {
-> +		core_present = 0;
-> +		for_each_cpu(k, &temp_foreign_map)
-> +			if (cpus_are_siblings(i, k))
-> +				core_present = 1;
-> +		if (!core_present)
-> +			cpumask_set_cpu(i, &temp_foreign_map);
-> +	}
-> +
-> +	for_each_online_cpu(i)
-> +		cpumask_andnot(&cpu_foreign_map[i],
-> +			       &temp_foreign_map, &cpu_sibling_map[i]);
-> +}
-> +
-> +/* Preload SMP state for boot cpu */
-> +void smp_prepare_boot_cpu(void)
-> +{
-> +	unsigned int cpu;
-> +
-> +	set_cpu_possible(0, true);
-> +	set_cpu_online(0, true);
-> +	set_my_cpu_offset(per_cpu_offset(0));
-> +
-> +	for_each_possible_cpu(cpu)
-> +		set_cpu_numa_node(cpu, 0);
-> +}
-> +
-> +/* called from main before smp_init() */
-> +void __init smp_prepare_cpus(unsigned int max_cpus)
-> +{
-> +	init_new_context(current, &init_mm);
-> +	current_thread_info()->cpu = 0;
-> +	loongson3_prepare_cpus(max_cpus);
-> +	set_cpu_sibling_map(0);
-> +	set_cpu_core_map(0);
-> +	calculate_cpu_foreign_map();
-> +#ifndef CONFIG_HOTPLUG_CPU
-> +	init_cpu_present(cpu_possible_mask);
-> +#endif
-> +}
-> +
-> +int __cpu_up(unsigned int cpu, struct task_struct *tidle)
-> +{
-> +	loongson3_boot_secondary(cpu, tidle);
-> +
-> +	/* Wait for CPU to start and be ready to sync counters */
-> +	if (!wait_for_completion_timeout(&cpu_starting,
-> +					 msecs_to_jiffies(5000))) {
-> +		pr_crit("CPU%u: failed to start\n", cpu);
-> +		return -EIO;
-> +	}
-> +
-> +	/* Wait for CPU to finish startup & mark itself online before return */
-> +	wait_for_completion(&cpu_running);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * First C code run on the secondary CPUs after being started up by
-> + * the master.
-> + */
-> +asmlinkage void start_secondary(void)
-> +{
-> +	unsigned int cpu;
-> +
-> +	sync_counter();
-> +	cpu = smp_processor_id();
-> +	set_my_cpu_offset(per_cpu_offset(cpu));
-> +
-> +	cpu_probe();
-> +	constant_clockevent_init();
-> +	loongson3_init_secondary();
-> +
-> +	set_cpu_sibling_map(cpu);
-> +	set_cpu_core_map(cpu);
-> +
-> +	notify_cpu_starting(cpu);
-> +
-> +	/* Notify boot CPU that we're starting */
-> +	complete(&cpu_starting);
-> +
-> +	/* The CPU is running, now mark it online */
-> +	set_cpu_online(cpu, true);
-> +
-> +	calculate_cpu_foreign_map();
-> +
-> +	/*
-> +	 * Notify boot CPU that we're up & online and it can safely return
-> +	 * from __cpu_up()
-> +	 */
-> +	complete(&cpu_running);
-> +
-> +	/*
-> +	 * irq will be enabled in loongson3_smp_finish(), enabling it too
-> +	 * early is dangerous.
-> +	 */
-> +	WARN_ON_ONCE(!irqs_disabled());
-> +	loongson3_smp_finish();
-> +
-> +	cpu_startup_entry(CPUHP_AP_ONLINE_IDLE);
-> +}
-> +
-> +void __init smp_cpus_done(unsigned int max_cpus)
-> +{
-> +}
-> +
-> +static void stop_this_cpu(void *dummy)
-> +{
-> +	set_cpu_online(smp_processor_id(), false);
-> +	calculate_cpu_foreign_map();
-> +	local_irq_disable();
-> +	while (true);
-> +}
-> +
-> +void smp_send_stop(void)
-> +{
-> +	smp_call_function(stop_this_cpu, NULL, 0);
-> +}
-> +
-> +int setup_profiling_timer(unsigned int multiplier)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void flush_tlb_all_ipi(void *info)
-> +{
-> +	local_flush_tlb_all();
-> +}
-> +
-> +void flush_tlb_all(void)
-> +{
-> +	on_each_cpu(flush_tlb_all_ipi, NULL, 1);
-> +}
-> +
-> +static void flush_tlb_mm_ipi(void *mm)
-> +{
-> +	local_flush_tlb_mm((struct mm_struct *)mm);
-> +}
-> +
-> +void flush_tlb_mm(struct mm_struct *mm)
-> +{
-> +	if (atomic_read(&mm->mm_users) == 0)
-> +		return;		/* happens as a result of exit_mmap() */
-> +
-> +	preempt_disable();
-> +
-> +	if ((atomic_read(&mm->mm_users) != 1) || (current->mm != mm)) {
-> +		on_each_cpu_mask(mm_cpumask(mm), flush_tlb_mm_ipi, mm, 1);
-> +	} else {
-> +		unsigned int cpu;
-> +
-> +		for_each_online_cpu(cpu) {
-> +			if (cpu != smp_processor_id() && cpu_context(cpu, mm))
-> +				cpu_context(cpu, mm) = 0;
-> +		}
-> +		local_flush_tlb_mm(mm);
-> +	}
-> +
-> +	preempt_enable();
-> +}
-> +
-> +struct flush_tlb_data {
-> +	struct vm_area_struct *vma;
-> +	unsigned long addr1;
-> +	unsigned long addr2;
-> +};
-> +
-> +static void flush_tlb_range_ipi(void *info)
-> +{
-> +	struct flush_tlb_data *fd = info;
-> +
-> +	local_flush_tlb_range(fd->vma, fd->addr1, fd->addr2);
-> +}
-> +
-> +void flush_tlb_range(struct vm_area_struct *vma, unsigned long start, unsigned long end)
-> +{
-> +	struct mm_struct *mm = vma->vm_mm;
-> +
-> +	preempt_disable();
-> +	if ((atomic_read(&mm->mm_users) != 1) || (current->mm != mm)) {
-> +		struct flush_tlb_data fd = {
-> +			.vma = vma,
-> +			.addr1 = start,
-> +			.addr2 = end,
-> +		};
-> +
-> +		on_each_cpu_mask(mm_cpumask(mm), flush_tlb_range_ipi, &fd, 1);
-> +	} else {
-> +		unsigned int cpu;
-> +		int exec = vma->vm_flags & VM_EXEC;
-> +
-> +		for_each_online_cpu(cpu) {
-> +			/*
-> +			 * flush_cache_range() will only fully flush icache if
-> +			 * the VMA is executable, otherwise we must invalidate
-> +			 * ASID without it appearing to has_valid_asid() as if
-> +			 * mm has been completely unused by that CPU.
-> +			 */
-> +			if (cpu != smp_processor_id() && cpu_context(cpu, mm))
-> +				cpu_context(cpu, mm) = !exec;
-> +		}
-> +		local_flush_tlb_range(vma, start, end);
-> +	}
-> +	preempt_enable();
-> +}
-> +
-> +static void flush_tlb_kernel_range_ipi(void *info)
-> +{
-> +	struct flush_tlb_data *fd = info;
-> +
-> +	local_flush_tlb_kernel_range(fd->addr1, fd->addr2);
-> +}
-> +
-> +void flush_tlb_kernel_range(unsigned long start, unsigned long end)
-> +{
-> +	struct flush_tlb_data fd = {
-> +		.addr1 = start,
-> +		.addr2 = end,
-> +	};
-> +
-> +	on_each_cpu(flush_tlb_kernel_range_ipi, &fd, 1);
-> +}
-> +
-> +static void flush_tlb_page_ipi(void *info)
-> +{
-> +	struct flush_tlb_data *fd = info;
-> +
-> +	local_flush_tlb_page(fd->vma, fd->addr1);
-> +}
-> +
-> +void flush_tlb_page(struct vm_area_struct *vma, unsigned long page)
-> +{
-> +	preempt_disable();
-> +	if ((atomic_read(&vma->vm_mm->mm_users) != 1) || (current->mm != vma->vm_mm)) {
-> +		struct flush_tlb_data fd = {
-> +			.vma = vma,
-> +			.addr1 = page,
-> +		};
-> +
-> +		on_each_cpu_mask(mm_cpumask(vma->vm_mm), flush_tlb_page_ipi, &fd, 1);
-> +	} else {
-> +		unsigned int cpu;
-> +
-> +		for_each_online_cpu(cpu) {
-> +			/*
-> +			 * flush_cache_page() only does partial flushes, so
-> +			 * invalidate ASID without it appearing to
-> +			 * has_valid_asid() as if mm has been completely unused
-> +			 * by that CPU.
-> +			 */
-> +			if (cpu != smp_processor_id() && cpu_context(cpu, vma->vm_mm))
-> +				cpu_context(cpu, vma->vm_mm) = 1;
-> +		}
-> +		local_flush_tlb_page(vma, page);
-> +	}
-> +	preempt_enable();
-> +}
-> +EXPORT_SYMBOL(flush_tlb_page);
-> +
-> +static void flush_tlb_one_ipi(void *info)
-> +{
-> +	unsigned long vaddr = (unsigned long) info;
-> +
-> +	local_flush_tlb_one(vaddr);
-> +}
-> +
-> +void flush_tlb_one(unsigned long vaddr)
-> +{
-> +	on_each_cpu(flush_tlb_one_ipi, (void *)vaddr, 1);
-> +}
-> +EXPORT_SYMBOL(flush_tlb_one);
-> diff --git a/arch/loongarch/kernel/topology.c b/arch/loongarch/kernel/topology.c
-> index 3b2cbb95875b..ab1a75c0b5a6 100644
-> --- a/arch/loongarch/kernel/topology.c
-> +++ b/arch/loongarch/kernel/topology.c
-> @@ -1,13 +1,52 @@
->   // SPDX-License-Identifier: GPL-2.0
->   #include <linux/cpu.h>
-> +#include <linux/cpumask.h>
->   #include <linux/init.h>
-> +#include <linux/node.h>
-> +#include <linux/nodemask.h>
->   #include <linux/percpu.h>
->   
-> -static struct cpu cpu_device;
-> +static DEFINE_PER_CPU(struct cpu, cpu_devices);
-> +
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +int arch_register_cpu(int cpu)
-> +{
-> +	int ret;
-> +	struct cpu *c = &per_cpu(cpu_devices, cpu);
-> +
-> +	c->hotpluggable = 1;
-> +	ret = register_cpu(c, cpu);
-> +	if (ret < 0)
-> +		pr_warn("register_cpu %d failed (%d)\n", cpu, ret);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(arch_register_cpu);
-> +
-> +void arch_unregister_cpu(int cpu)
-> +{
-> +	struct cpu *c = &per_cpu(cpu_devices, cpu);
-> +
-> +	c->hotpluggable = 0;
-> +	unregister_cpu(c);
-> +}
-> +EXPORT_SYMBOL(arch_unregister_cpu);
-> +#endif
->   
->   static int __init topology_init(void)
->   {
-> -	return register_cpu(&cpu_device, 0);
-> +	int i, ret;
-> +
-> +	for_each_present_cpu(i) {
-> +		struct cpu *c = &per_cpu(cpu_devices, i);
-> +
-> +		c->hotpluggable = !!i;
-> +		ret = register_cpu(c, i);
-> +		if (ret < 0)
-> +			pr_warn("topology_init: register_cpu %d failed (%d)\n", i, ret);
-> +	}
-> +
-> +	return 0;
->   }
->   
->   subsys_initcall(topology_init);
-> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-> index 7da4c4d7c50d..006cbb1bd5c6 100644
-> --- a/arch/loongarch/kernel/vmlinux.lds.S
-> +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> @@ -73,6 +73,10 @@ SECTIONS
->   		EXIT_DATA
->   	}
->   
-> +#ifdef CONFIG_SMP
-> +	PERCPU_SECTION(1 << CONFIG_L1_CACHE_SHIFT)
-> +#endif
-> +
->   	.init.bss : {
->   		*(.init.bss)
->   	}
-> diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
-> index a4ca4e507ee8..606b7800edc6 100644
-> --- a/arch/loongarch/mm/tlbex.S
-> +++ b/arch/loongarch/mm/tlbex.S
-> @@ -88,7 +88,14 @@ vmalloc_done_load:
->   	slli.d	t0, t0, _PTE_T_LOG2
->   	add.d	t1, ra, t0
->   
-> +#ifdef CONFIG_SMP
-> +smp_pgtable_change_load:
-> +#endif
-> +#ifdef CONFIG_SMP
-> +	ll.d	t0, t1, 0
-> +#else
->   	ld.d	t0, t1, 0
-> +#endif
->   	tlbsrch
->   
->   	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
-> @@ -96,7 +103,12 @@ vmalloc_done_load:
->   	beq	ra, $r0, nopage_tlb_load
->   
->   	ori	t0, t0, _PAGE_VALID
-> +#ifdef CONFIG_SMP
-> +	sc.d	t0, t1, 0
-> +	beq	t0, $r0, smp_pgtable_change_load
-> +#else
->   	st.d	t0, t1, 0
-> +#endif
->   	ori	t1, t1, 8
->   	xori	t1, t1, 8
->   	ld.d	t0, t1, 0
-> @@ -120,14 +132,24 @@ vmalloc_load:
->   	 * spots a huge page.
->   	 */
->   tlb_huge_update_load:
-> +#ifdef CONFIG_SMP
-> +	ll.d	t0, t1, 0
-> +#else
->   	ld.d	t0, t1, 0
-> +#endif
->   	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
->   	andi	ra, ra, 1
->   	beq	ra, $r0, nopage_tlb_load
->   	tlbsrch
->   
->   	ori	t0, t0, _PAGE_VALID
-> +#ifdef CONFIG_SMP
-> +	sc.d	t0, t1, 0
-> +	beq	t0, $r0, tlb_huge_update_load
-> +	ld.d	t0, t1, 0
-> +#else
->   	st.d	t0, t1, 0
-> +#endif
->   	addu16i.d	t1, $r0, -(CSR_TLBIDX_EHINV >> 16)
->   	addi.d	ra, t1, 0
->   	csrxchg	ra, t1, LOONGARCH_CSR_TLBIDX
-> @@ -173,6 +195,7 @@ tlb_huge_update_load:
->   	csrxchg		t1, t0, LOONGARCH_CSR_TLBIDX
->   
->   nopage_tlb_load:
-> +	dbar	0
->   	csrrd	ra, EXCEPTION_KS2
->   	la.abs	t0, tlb_do_page_fault_0
->   	jirl	$r0, t0, 0
-> @@ -229,7 +252,14 @@ vmalloc_done_store:
->   	slli.d	t0, t0, _PTE_T_LOG2
->   	add.d	t1, ra, t0
->   
-> +#ifdef CONFIG_SMP
-> +smp_pgtable_change_store:
-> +#endif
-> +#ifdef CONFIG_SMP
-> +	ll.d	t0, t1, 0
-> +#else
->   	ld.d	t0, t1, 0
-> +#endif
->   	tlbsrch
->   
->   	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
-> @@ -238,7 +268,12 @@ vmalloc_done_store:
->   	bne	ra, $r0, nopage_tlb_store
->   
->   	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
-> +#ifdef CONFIG_SMP
-> +	sc.d	t0, t1, 0
-> +	beq	t0, $r0, smp_pgtable_change_store
-> +#else
->   	st.d	t0, t1, 0
-> +#endif
->   
->   	ori	t1, t1, 8
->   	xori	t1, t1, 8
-> @@ -263,7 +298,11 @@ vmalloc_store:
->   	 * spots a huge page.
->   	 */
->   tlb_huge_update_store:
-> +#ifdef CONFIG_SMP
-> +	ll.d	t0, t1, 0
-> +#else
->   	ld.d	t0, t1, 0
-> +#endif
->   	srli.d	ra, t0, _PAGE_PRESENT_SHIFT
->   	andi	ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
->   	xori	ra, ra, ((_PAGE_PRESENT | _PAGE_WRITE) >> _PAGE_PRESENT_SHIFT)
-> @@ -272,7 +311,13 @@ tlb_huge_update_store:
->   	tlbsrch
->   	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->   
-> +#ifdef CONFIG_SMP
-> +	sc.d	t0, t1, 0
-> +	beq	t0, $r0, tlb_huge_update_store
-> +	ld.d	t0, t1, 0
-> +#else
->   	st.d	t0, t1, 0
-> +#endif
->   	addu16i.d	t1, $r0, -(CSR_TLBIDX_EHINV >> 16)
->   	addi.d	ra, t1, 0
->   	csrxchg	ra, t1, LOONGARCH_CSR_TLBIDX
-> @@ -318,6 +363,7 @@ tlb_huge_update_store:
->   	csrxchg		t1, t0, LOONGARCH_CSR_TLBIDX
->   
->   nopage_tlb_store:
-> +	dbar	0
->   	csrrd	ra, EXCEPTION_KS2
->   	la.abs	t0, tlb_do_page_fault_1
->   	jirl	$r0, t0, 0
-> @@ -373,7 +419,14 @@ vmalloc_done_modify:
->   	slli.d	t0, t0, _PTE_T_LOG2
->   	add.d	t1, ra, t0
->   
-> +#ifdef CONFIG_SMP
-> +smp_pgtable_change_modify:
-> +#endif
-> +#ifdef CONFIG_SMP
-> +	ll.d	t0, t1, 0
-> +#else
->   	ld.d	t0, t1, 0
-> +#endif
->   	tlbsrch
->   
->   	srli.d	ra, t0, _PAGE_WRITE_SHIFT
-> @@ -381,7 +434,12 @@ vmalloc_done_modify:
->   	beq	ra, $r0, nopage_tlb_modify
->   
->   	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
-> +#ifdef CONFIG_SMP
-> +	sc.d	t0, t1, 0
-> +	beq	t0, $r0, smp_pgtable_change_modify
-> +#else
->   	st.d	t0, t1, 0
-> +#endif
->   	ori	t1, t1, 8
->   	xori	t1, t1, 8
->   	ld.d	t0, t1, 0
-> @@ -405,7 +463,11 @@ vmalloc_modify:
->   	 * build_tlbchange_handler_head spots a huge page.
->   	 */
->   tlb_huge_update_modify:
-> +#ifdef CONFIG_SMP
-> +	ll.d	t0, t1, 0
-> +#else
->   	ld.d	t0, t1, 0
-> +#endif
->   
->   	srli.d	ra, t0, _PAGE_WRITE_SHIFT
->   	andi	ra, ra, 1
-> @@ -414,7 +476,13 @@ tlb_huge_update_modify:
->   	tlbsrch
->   	ori	t0, t0, (_PAGE_VALID | _PAGE_DIRTY | _PAGE_MODIFIED)
->   
-> +#ifdef CONFIG_SMP
-> +	sc.d	t0, t1, 0
-> +	beq	t0, $r0, tlb_huge_update_modify
-> +	ld.d	t0, t1, 0
-> +#else
->   	st.d	t0, t1, 0
-> +#endif
->   	/*
->   	 * A huge PTE describes an area the size of the
->   	 * configured huge page size. This is twice the
-> @@ -454,6 +522,7 @@ tlb_huge_update_modify:
->   	csrxchg	t1, t0, LOONGARCH_CSR_TLBIDX
->   
->   nopage_tlb_modify:
-> +	dbar	0
->   	csrrd	ra, EXCEPTION_KS2
->   	la.abs	t0, tlb_do_page_fault_1
->   	jirl	$r0, t0, 0
-> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-> index 2af7c6587875..8abd28c4f32b 100644
-> --- a/include/linux/cpuhotplug.h
-> +++ b/include/linux/cpuhotplug.h
-> @@ -130,6 +130,7 @@ enum cpuhp_state {
->   	CPUHP_ZCOMP_PREPARE,
->   	CPUHP_TIMERS_PREPARE,
->   	CPUHP_MIPS_SOC_PREPARE,
-> +	CPUHP_LOONGARCH_SOC_PREPARE,
->   	CPUHP_BP_PREPARE_DYN,
->   	CPUHP_BP_PREPARE_DYN_END		= CPUHP_BP_PREPARE_DYN + 20,
->   	CPUHP_BRINGUP_CPU,
+> > index 000000000000..95e02676b6fa
+> > --- /dev/null
+> > +++ b/arch/loongarch/include/uapi/asm/swab.h
+> > @@ -0,0 +1,52 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> > +/*
+> > + * Authors: Jun Yi <yijun@loongson.cn>
+> > + *          Huacai Chen <chenhuacai@loongson.cn>
+> > + *
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef _ASM_SWAB_H
+> > +#define _ASM_SWAB_H
+> > +
+> > +#include <linux/compiler.h>
+> > +#include <linux/types.h>
+> > +
+> > +#define __SWAB_64_THRU_32__
+> > +
+> > +static inline __attribute_const__ __u16 __arch_swab16(__u16 x)
+> > +{
+> > +     __asm__(
+> > +     "       revb.2h %0, %1                  \n"
+> > +     : "=r" (x)
+> > +     : "r" (x));
+> > +
+> > +     return x;
+> > +}
+> > +#define __arch_swab16 __arch_swab16
+> > +
+> > +static inline __attribute_const__ __u32 __arch_swab32(__u32 x)
+> > +{
+> > +     __asm__(
+> > +     "       revb.2h %0, %1                  \n"
+> > +     "       rotri.w %0, %0, 16              \n"
+> > +     : "=r" (x)
+> > +     : "r" (x));
+> > +
+> > +     return x;
+> > +}
+> > +#define __arch_swab32 __arch_swab32
+> > +
+> > +#ifdef __loongarch64
+> > +static inline __attribute_const__ __u64 __arch_swab64(__u64 x)
+> > +{
+> > +     __asm__(
+> > +     "       revb.4h %0, %1                  \n"
+> > +     "       revh.d  %0, %0                  \n"
+> > +     : "=r" (x)
+> > +     : "r" (x));
+> > +
+> > +     return x;
+> > +}
+> > +#define __arch_swab64 __arch_swab64
+> > +#endif /* __loongarch64 */
+> > +#endif /* _ASM_SWAB_H */
+> > diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
+> > new file mode 100644
+> > index 000000000000..3531e3c60a6e
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/asm-offsets.c
+> > @@ -0,0 +1,254 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * asm-offsets.c: Calculate pt_regs and task_struct offsets.
+> > + *
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#include <linux/types.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/mm.h>
+> > +#include <linux/kbuild.h>
+> > +#include <linux/suspend.h>
+> > +#include <asm/cpu-info.h>
+> > +#include <asm/ptrace.h>
+> > +#include <asm/processor.h>
+> > +
+> > +void output_ptreg_defines(void)
+> > +{
+> > +     COMMENT("LoongArch pt_regs offsets.");
+> > +     OFFSET(PT_R0, pt_regs, regs[0]);
+> > +     OFFSET(PT_R1, pt_regs, regs[1]);
+> > +     OFFSET(PT_R2, pt_regs, regs[2]);
+> > +     OFFSET(PT_R3, pt_regs, regs[3]);
+> > +     OFFSET(PT_R4, pt_regs, regs[4]);
+> > +     OFFSET(PT_R5, pt_regs, regs[5]);
+> > +     OFFSET(PT_R6, pt_regs, regs[6]);
+> > +     OFFSET(PT_R7, pt_regs, regs[7]);
+> > +     OFFSET(PT_R8, pt_regs, regs[8]);
+> > +     OFFSET(PT_R9, pt_regs, regs[9]);
+> > +     OFFSET(PT_R10, pt_regs, regs[10]);
+> > +     OFFSET(PT_R11, pt_regs, regs[11]);
+> > +     OFFSET(PT_R12, pt_regs, regs[12]);
+> > +     OFFSET(PT_R13, pt_regs, regs[13]);
+> > +     OFFSET(PT_R14, pt_regs, regs[14]);
+> > +     OFFSET(PT_R15, pt_regs, regs[15]);
+> > +     OFFSET(PT_R16, pt_regs, regs[16]);
+> > +     OFFSET(PT_R17, pt_regs, regs[17]);
+> > +     OFFSET(PT_R18, pt_regs, regs[18]);
+> > +     OFFSET(PT_R19, pt_regs, regs[19]);
+> > +     OFFSET(PT_R20, pt_regs, regs[20]);
+> > +     OFFSET(PT_R21, pt_regs, regs[21]);
+> > +     OFFSET(PT_R22, pt_regs, regs[22]);
+> > +     OFFSET(PT_R23, pt_regs, regs[23]);
+> > +     OFFSET(PT_R24, pt_regs, regs[24]);
+> > +     OFFSET(PT_R25, pt_regs, regs[25]);
+> > +     OFFSET(PT_R26, pt_regs, regs[26]);
+> > +     OFFSET(PT_R27, pt_regs, regs[27]);
+> > +     OFFSET(PT_R28, pt_regs, regs[28]);
+> > +     OFFSET(PT_R29, pt_regs, regs[29]);
+> > +     OFFSET(PT_R30, pt_regs, regs[30]);
+> > +     OFFSET(PT_R31, pt_regs, regs[31]);
+> > +     OFFSET(PT_CRMD, pt_regs, csr_crmd);
+> > +     OFFSET(PT_PRMD, pt_regs, csr_prmd);
+> > +     OFFSET(PT_EUEN, pt_regs, csr_euen);
+> > +     OFFSET(PT_ECFG, pt_regs, csr_ecfg);
+> > +     OFFSET(PT_ESTAT, pt_regs, csr_estat);
+> > +     OFFSET(PT_ERA, pt_regs, csr_era);
+> > +     OFFSET(PT_BVADDR, pt_regs, csr_badvaddr);
+> > +     OFFSET(PT_ORIG_A0, pt_regs, orig_a0);
+> > +     DEFINE(PT_SIZE, sizeof(struct pt_regs));
+> > +     BLANK();
+> > +}
+> > +
+> > +void output_task_defines(void)
+> > +{
+> > +     COMMENT("LoongArch task_struct offsets.");
+> > +     OFFSET(TASK_STATE, task_struct, __state);
+> > +     OFFSET(TASK_THREAD_INFO, task_struct, stack);
+> > +     OFFSET(TASK_FLAGS, task_struct, flags);
+> > +     OFFSET(TASK_MM, task_struct, mm);
+> > +     OFFSET(TASK_PID, task_struct, pid);
+> > +     DEFINE(TASK_STRUCT_SIZE, sizeof(struct task_struct));
+> > +     BLANK();
+> > +}
+> > +
+> > +void output_thread_info_defines(void)
+> > +{
+> > +     COMMENT("LoongArch thread_info offsets.");
+> > +     OFFSET(TI_TASK, thread_info, task);
+> > +     OFFSET(TI_FLAGS, thread_info, flags);
+> > +     OFFSET(TI_TP_VALUE, thread_info, tp_value);
+> > +     OFFSET(TI_CPU, thread_info, cpu);
+> > +     OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
+> > +     OFFSET(TI_REGS, thread_info, regs);
+> > +     DEFINE(_THREAD_SIZE, THREAD_SIZE);
+> > +     DEFINE(_THREAD_MASK, THREAD_MASK);
+> > +     DEFINE(_IRQ_STACK_SIZE, IRQ_STACK_SIZE);
+> > +     DEFINE(_IRQ_STACK_START, IRQ_STACK_START);
+> > +     BLANK();
+> > +}
+> > +
+> > +void output_thread_defines(void)
+> > +{
+> > +     COMMENT("LoongArch specific thread_struct offsets.");
+> > +     OFFSET(THREAD_REG01, task_struct, thread.reg01);
+> > +     OFFSET(THREAD_REG03, task_struct, thread.reg03);
+> > +     OFFSET(THREAD_REG22, task_struct, thread.reg22);
+> > +     OFFSET(THREAD_REG23, task_struct, thread.reg23);
+> > +     OFFSET(THREAD_REG24, task_struct, thread.reg24);
+> > +     OFFSET(THREAD_REG25, task_struct, thread.reg25);
+> > +     OFFSET(THREAD_REG26, task_struct, thread.reg26);
+> > +     OFFSET(THREAD_REG27, task_struct, thread.reg27);
+> > +     OFFSET(THREAD_REG28, task_struct, thread.reg28);
+> > +     OFFSET(THREAD_REG29, task_struct, thread.reg29);
+> > +     OFFSET(THREAD_REG30, task_struct, thread.reg30);
+> > +     OFFSET(THREAD_REG31, task_struct, thread.reg31);
+> > +     OFFSET(THREAD_CSRCRMD, task_struct,
+> > +            thread.csr_crmd);
+> > +     OFFSET(THREAD_CSRPRMD, task_struct,
+> > +            thread.csr_prmd);
+> > +     OFFSET(THREAD_CSREUEN, task_struct,
+> > +            thread.csr_euen);
+> > +     OFFSET(THREAD_CSRECFG, task_struct,
+> > +            thread.csr_ecfg);
+> > +
+> > +     OFFSET(THREAD_SCR0, task_struct, thread.scr0);
+> > +     OFFSET(THREAD_SCR1, task_struct, thread.scr1);
+> > +     OFFSET(THREAD_SCR2, task_struct, thread.scr2);
+> > +     OFFSET(THREAD_SCR3, task_struct, thread.scr3);
+> > +
+> > +     OFFSET(THREAD_EFLAGS, task_struct, thread.eflags);
+> > +
+> > +     OFFSET(THREAD_FPU, task_struct, thread.fpu);
+> > +
+> > +     OFFSET(THREAD_BVADDR, task_struct, \
+> > +            thread.csr_badvaddr);
+> > +     OFFSET(THREAD_ECODE, task_struct, \
+> > +            thread.error_code);
+> > +     OFFSET(THREAD_TRAPNO, task_struct, thread.trap_nr);
+> > +     BLANK();
+> > +}
+> > +
+> > +void output_thread_fpu_defines(void)
+> > +{
+> > +     OFFSET(THREAD_FPR0, loongarch_fpu, fpr[0]);
+> > +     OFFSET(THREAD_FPR1, loongarch_fpu, fpr[1]);
+> > +     OFFSET(THREAD_FPR2, loongarch_fpu, fpr[2]);
+> > +     OFFSET(THREAD_FPR3, loongarch_fpu, fpr[3]);
+> > +     OFFSET(THREAD_FPR4, loongarch_fpu, fpr[4]);
+> > +     OFFSET(THREAD_FPR5, loongarch_fpu, fpr[5]);
+> > +     OFFSET(THREAD_FPR6, loongarch_fpu, fpr[6]);
+> > +     OFFSET(THREAD_FPR7, loongarch_fpu, fpr[7]);
+> > +     OFFSET(THREAD_FPR8, loongarch_fpu, fpr[8]);
+> > +     OFFSET(THREAD_FPR9, loongarch_fpu, fpr[9]);
+> > +     OFFSET(THREAD_FPR10, loongarch_fpu, fpr[10]);
+> > +     OFFSET(THREAD_FPR11, loongarch_fpu, fpr[11]);
+> > +     OFFSET(THREAD_FPR12, loongarch_fpu, fpr[12]);
+> > +     OFFSET(THREAD_FPR13, loongarch_fpu, fpr[13]);
+> > +     OFFSET(THREAD_FPR14, loongarch_fpu, fpr[14]);
+> > +     OFFSET(THREAD_FPR15, loongarch_fpu, fpr[15]);
+> > +     OFFSET(THREAD_FPR16, loongarch_fpu, fpr[16]);
+> > +     OFFSET(THREAD_FPR17, loongarch_fpu, fpr[17]);
+> > +     OFFSET(THREAD_FPR18, loongarch_fpu, fpr[18]);
+> > +     OFFSET(THREAD_FPR19, loongarch_fpu, fpr[19]);
+> > +     OFFSET(THREAD_FPR20, loongarch_fpu, fpr[20]);
+> > +     OFFSET(THREAD_FPR21, loongarch_fpu, fpr[21]);
+> > +     OFFSET(THREAD_FPR22, loongarch_fpu, fpr[22]);
+> > +     OFFSET(THREAD_FPR23, loongarch_fpu, fpr[23]);
+> > +     OFFSET(THREAD_FPR24, loongarch_fpu, fpr[24]);
+> > +     OFFSET(THREAD_FPR25, loongarch_fpu, fpr[25]);
+> > +     OFFSET(THREAD_FPR26, loongarch_fpu, fpr[26]);
+> > +     OFFSET(THREAD_FPR27, loongarch_fpu, fpr[27]);
+> > +     OFFSET(THREAD_FPR28, loongarch_fpu, fpr[28]);
+> > +     OFFSET(THREAD_FPR29, loongarch_fpu, fpr[29]);
+> > +     OFFSET(THREAD_FPR30, loongarch_fpu, fpr[30]);
+> > +     OFFSET(THREAD_FPR31, loongarch_fpu, fpr[31]);
+> > +
+> > +     OFFSET(THREAD_FCSR, loongarch_fpu, fcsr);
+> > +     OFFSET(THREAD_FCC,  loongarch_fpu, fcc);
+> > +     OFFSET(THREAD_VCSR, loongarch_fpu, vcsr);
+> > +     BLANK();
+> > +}
+> > +
+> > +void output_mm_defines(void)
+> > +{
+> > +     COMMENT("Size of struct page");
+> > +     DEFINE(STRUCT_PAGE_SIZE, sizeof(struct page));
+> > +     BLANK();
+> > +     COMMENT("Linux mm_struct offsets.");
+> > +     OFFSET(MM_USERS, mm_struct, mm_users);
+> > +     OFFSET(MM_PGD, mm_struct, pgd);
+> > +     OFFSET(MM_CONTEXT, mm_struct, context);
+> > +     BLANK();
+> > +     DEFINE(_PGD_T_SIZE, sizeof(pgd_t));
+> > +     DEFINE(_PMD_T_SIZE, sizeof(pmd_t));
+> > +     DEFINE(_PTE_T_SIZE, sizeof(pte_t));
+> > +     BLANK();
+> > +     DEFINE(_PGD_T_LOG2, PGD_T_LOG2);
+> > +#ifndef __PAGETABLE_PMD_FOLDED
+> > +     DEFINE(_PMD_T_LOG2, PMD_T_LOG2);
+> > +#endif
+> > +     DEFINE(_PTE_T_LOG2, PTE_T_LOG2);
+> > +     BLANK();
+> > +     DEFINE(_PGD_ORDER, PGD_ORDER);
+> > +#ifndef __PAGETABLE_PMD_FOLDED
+> > +     DEFINE(_PMD_ORDER, PMD_ORDER);
+> > +#endif
+> > +     DEFINE(_PTE_ORDER, PTE_ORDER);
+> > +     BLANK();
+> > +     DEFINE(_PMD_SHIFT, PMD_SHIFT);
+> > +     DEFINE(_PGDIR_SHIFT, PGDIR_SHIFT);
+> > +     BLANK();
+> > +     DEFINE(_PTRS_PER_PGD, PTRS_PER_PGD);
+> > +     DEFINE(_PTRS_PER_PMD, PTRS_PER_PMD);
+> > +     DEFINE(_PTRS_PER_PTE, PTRS_PER_PTE);
+> > +     BLANK();
+> > +     DEFINE(_PAGE_SHIFT, PAGE_SHIFT);
+> > +     DEFINE(_PAGE_SIZE, PAGE_SIZE);
+> > +     BLANK();
+> > +}
+> > +
+> > +void output_sc_defines(void)
+> > +{
+> > +     COMMENT("Linux sigcontext offsets.");
+> > +     OFFSET(SC_REGS, sigcontext, sc_regs);
+> > +     OFFSET(SC_PC, sigcontext, sc_pc);
+> > +     BLANK();
+> > +}
+> > +
+> > +void output_signal_defines(void)
+> > +{
+> > +     COMMENT("Linux signal numbers.");
+> > +     DEFINE(_SIGHUP, SIGHUP);
+> > +     DEFINE(_SIGINT, SIGINT);
+> > +     DEFINE(_SIGQUIT, SIGQUIT);
+> > +     DEFINE(_SIGILL, SIGILL);
+> > +     DEFINE(_SIGTRAP, SIGTRAP);
+> > +     DEFINE(_SIGIOT, SIGIOT);
+> > +     DEFINE(_SIGABRT, SIGABRT);
+> > +     DEFINE(_SIGFPE, SIGFPE);
+> > +     DEFINE(_SIGKILL, SIGKILL);
+> > +     DEFINE(_SIGBUS, SIGBUS);
+> > +     DEFINE(_SIGSEGV, SIGSEGV);
+> > +     DEFINE(_SIGSYS, SIGSYS);
+> > +     DEFINE(_SIGPIPE, SIGPIPE);
+> > +     DEFINE(_SIGALRM, SIGALRM);
+> > +     DEFINE(_SIGTERM, SIGTERM);
+> > +     DEFINE(_SIGUSR1, SIGUSR1);
+> > +     DEFINE(_SIGUSR2, SIGUSR2);
+> > +     DEFINE(_SIGCHLD, SIGCHLD);
+> > +     DEFINE(_SIGPWR, SIGPWR);
+> > +     DEFINE(_SIGWINCH, SIGWINCH);
+> > +     DEFINE(_SIGURG, SIGURG);
+> > +     DEFINE(_SIGIO, SIGIO);
+> > +     DEFINE(_SIGSTOP, SIGSTOP);
+> > +     DEFINE(_SIGTSTP, SIGTSTP);
+> > +     DEFINE(_SIGCONT, SIGCONT);
+> > +     DEFINE(_SIGTTIN, SIGTTIN);
+> > +     DEFINE(_SIGTTOU, SIGTTOU);
+> > +     DEFINE(_SIGVTALRM, SIGVTALRM);
+> > +     DEFINE(_SIGPROF, SIGPROF);
+> > +     DEFINE(_SIGXCPU, SIGXCPU);
+> > +     DEFINE(_SIGXFSZ, SIGXFSZ);
+> > +     BLANK();
+> > +}
+> > diff --git a/arch/loongarch/kernel/io.c b/arch/loongarch/kernel/io.c
+> > new file mode 100644
+> > index 000000000000..cb85bda5a6ad
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/io.c
+> > @@ -0,0 +1,94 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#include <linux/export.h>
+> > +#include <linux/types.h>
+> > +#include <linux/io.h>
+> > +
+> > +/*
+> > + * Copy data from IO memory space to "real" memory space.
+> > + */
+> > +void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
+> > +{
+> > +     while (count && !IS_ALIGNED((unsigned long)from, 8)) {
+> > +             *(u8 *)to = __raw_readb(from);
+> > +             from++;
+> > +             to++;
+> > +             count--;
+> > +     }
+> > +
+> > +     while (count >= 8) {
+> > +             *(u64 *)to = __raw_readq(from);
+> > +             from += 8;
+> > +             to += 8;
+> > +             count -= 8;
+> > +     }
+> > +
+> > +     while (count) {
+> > +             *(u8 *)to = __raw_readb(from);
+> > +             from++;
+> > +             to++;
+> > +             count--;
+> > +     }
+> > +}
+> > +EXPORT_SYMBOL(__memcpy_fromio);
+> > +
+> > +/*
+> > + * Copy data from "real" memory space to IO memory space.
+> > + */
+> > +void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
+> > +{
+> > +     while (count && !IS_ALIGNED((unsigned long)to, 8)) {
+> > +             __raw_writeb(*(u8 *)from, to);
+> > +             from++;
+> > +             to++;
+> > +             count--;
+> > +     }
+> > +
+> > +     while (count >= 8) {
+> > +             __raw_writeq(*(u64 *)from, to);
+> > +             from += 8;
+> > +             to += 8;
+> > +             count -= 8;
+> > +     }
+> > +
+> > +     while (count) {
+> > +             __raw_writeb(*(u8 *)from, to);
+> > +             from++;
+> > +             to++;
+> > +             count--;
+> > +     }
+> > +}
+> > +EXPORT_SYMBOL(__memcpy_toio);
+> > +
+> > +/*
+> > + * "memset" on IO memory space.
+> > + */
+> > +void __memset_io(volatile void __iomem *dst, int c, size_t count)
+> > +{
+> > +     u64 qc = (u8)c;
+> > +
+> > +     qc |= qc << 8;
+> > +     qc |= qc << 16;
+> > +     qc |= qc << 32;
+> > +
+> > +     while (count && !IS_ALIGNED((unsigned long)dst, 8)) {
+> > +             __raw_writeb(c, dst);
+> > +             dst++;
+> > +             count--;
+> > +     }
+> > +
+> > +     while (count >= 8) {
+> > +             __raw_writeq(qc, dst);
+> > +             dst += 8;
+> > +             count -= 8;
+> > +     }
+> > +
+> > +     while (count) {
+> > +             __raw_writeb(c, dst);
+> > +             dst++;
+> > +             count--;
+> > +     }
+> > +}
+> > +EXPORT_SYMBOL(__memset_io);
+> > diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.c
+> > new file mode 100644
+> > index 000000000000..d1f36b510297
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/proc.c
+> > @@ -0,0 +1,122 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#include <linux/delay.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/seq_file.h>
+> > +#include <asm/bootinfo.h>
+> > +#include <asm/cpu.h>
+> > +#include <asm/cpu-features.h>
+> > +#include <asm/idle.h>
+> > +#include <asm/processor.h>
+> > +#include <asm/time.h>
+> > +
+> > +/*
+> > + * No lock; only written during early bootup by CPU 0.
+> > + */
+> > +static RAW_NOTIFIER_HEAD(proc_cpuinfo_chain);
+> > +
+> > +int __ref register_proc_cpuinfo_notifier(struct notifier_block *nb)
+> > +{
+> > +     return raw_notifier_chain_register(&proc_cpuinfo_chain, nb);
+> > +}
+> > +
+> > +int proc_cpuinfo_notifier_call_chain(unsigned long val, void *v)
+> > +{
+> > +     return raw_notifier_call_chain(&proc_cpuinfo_chain, val, v);
+> > +}
+> > +
+> > +static int show_cpuinfo(struct seq_file *m, void *v)
+> > +{
+> > +     unsigned long n = (unsigned long) v - 1;
+> > +     unsigned int version = cpu_data[n].processor_id & 0xff;
+> > +     unsigned int fp_version = cpu_data[n].fpu_vers;
+> > +     struct proc_cpuinfo_notifier_args proc_cpuinfo_notifier_args;
+> > +
+> > +     /*
+> > +      * For the first processor also print the system type
+> > +      */
+> > +     if (n == 0)
+> > +             seq_printf(m, "system type\t\t: %s\n", get_system_type());
+> We could output an additional newline to break the "global" section from
+> the following blocks describing processors.
+> > +
+> > +     seq_printf(m, "processor\t\t: %ld\n", n);
+> > +     seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
+> > +     seq_printf(m, "core\t\t\t: %d\n", cpu_data[n].core);
+> > +     seq_printf(m, "CPU Family\t\t: %s\n", __cpu_family[n]);
+> > +     seq_printf(m, "Model Name\t\t: %s\n", __cpu_full_name[n]);
+> > +     seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
+> > +     seq_printf(m, "FPU Revision\t\t: 0x%02x\n", fp_version);
+> > +     seq_printf(m, "CPU MHz\t\t\t: %llu.%02llu\n",
+> > +                   cpu_clock_freq / 1000000, (cpu_clock_freq / 10000) % 100);
+> > +     seq_printf(m, "BogoMIPS\t\t: %llu.%02llu\n",
+> > +                   (lpj_fine * cpu_clock_freq / const_clock_freq) / (500000/HZ),
+> > +                   ((lpj_fine * cpu_clock_freq / const_clock_freq) / (5000/HZ)) % 100);
+> > +     seq_printf(m, "TLB Entries\t\t: %d\n", cpu_data[n].tlbsize);
+> > +     seq_printf(m, "Address Sizes\t\t: %d bits physical, %d bits virtual\n",
+> > +                   cpu_pabits + 1, cpu_vabits + 1);
+> > +
+> > +     seq_printf(m, "ISA\t\t\t:");
+> > +     if (cpu_has_loongarch32)
+> > +             seq_printf(m, "%s", " loongarch32");
+> > +     if (cpu_has_loongarch64)
+> > +             seq_printf(m, "%s", " loongarch64");
+> Those printf's could simply be like seq_printf(m, " loongarch32"),
+> without the "%s". Same for all occurrences below.
+OK, thanks.
 
-All of this looks reasonable, not that I write kernel code day and 
-night, but maybe I just read too much arch/mips code in the past years 
-and the changes here look natural to me. And the names and code flows 
-are sensible enough that people moderately familiar with the kernel 
-(such as me) could easily follow.
+> > +     seq_printf(m, "\n");
+> > +
+> > +     seq_printf(m, "Features\t\t:");
+> > +     if (cpu_has_cpucfg)     seq_printf(m, "%s", " cpucfg");
+> > +     if (cpu_has_lam)        seq_printf(m, "%s", " lam");
+> > +     if (cpu_has_ual)        seq_printf(m, "%s", " ual");
+> > +     if (cpu_has_fpu)        seq_printf(m, "%s", " fpu");
+> > +     if (cpu_has_lsx)        seq_printf(m, "%s", " lsx");
+> > +     if (cpu_has_lasx)       seq_printf(m, "%s", " lasx");
+> > +     if (cpu_has_complex)    seq_printf(m, "%s", " complex");
+> > +     if (cpu_has_crypto)     seq_printf(m, "%s", " crypto");
+> > +     if (cpu_has_lvz)        seq_printf(m, "%s", " lvz");
+> > +     if (cpu_has_lbt_x86)    seq_printf(m, "%s", " lbt_x86");
+> > +     if (cpu_has_lbt_arm)    seq_printf(m, "%s", " lbt_arm");
+> > +     if (cpu_has_lbt_mips)   seq_printf(m, "%s", " lbt_mips");
+> > +     seq_printf(m, "\n");
+> > +
+> > +     seq_printf(m, "Hardware Watchpoint\t: %s",
+> > +                   cpu_has_watch ? "yes, " : "no\n");
+> > +     if (cpu_has_watch) {
+> > +             seq_printf(m, "iwatch count: %d, dwatch count: %d\n",
+> > +                   cpu_data[n].watch_ireg_count, cpu_data[n].watch_dreg_count);
+> > +     }
+> > +
+> > +     proc_cpuinfo_notifier_args.m = m;
+> > +     proc_cpuinfo_notifier_args.n = n;
+> > +
+> > +     raw_notifier_call_chain(&proc_cpuinfo_chain, 0,
+> > +                             &proc_cpuinfo_notifier_args);
+> > +
+> > +     seq_printf(m, "\n");
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void *c_start(struct seq_file *m, loff_t *pos)
+> > +{
+> > +     unsigned long i = *pos;
+> > +
+> > +     return i < NR_CPUS ? (void *)(i + 1) : NULL;
+> > +}
+> > +
+> > +static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+> > +{
+> > +     ++*pos;
+> > +     return c_start(m, pos);
+> > +}
+> > +
+> > +static void c_stop(struct seq_file *m, void *v)
+> > +{
+> > +}
+> > +
+> > +const struct seq_operations cpuinfo_op = {
+> > +     .start  = c_start,
+> > +     .next   = c_next,
+> > +     .stop   = c_stop,
+> > +     .show   = show_cpuinfo,
+> > +};
+> > diff --git a/arch/loongarch/kernel/rtc.c b/arch/loongarch/kernel/rtc.c
+> > new file mode 100644
+> > index 000000000000..d7568385219f
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/rtc.c
+> > @@ -0,0 +1,36 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#include <linux/init.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/platform_device.h>
+> > +#include <asm/loongson.h>
+> > +
+> > +#define RTC_TOYREAD0    0x2C
+> > +#define RTC_YEAR        0x30
+> > +
+> > +unsigned long loongson_get_rtc_time(void)
+> > +{
+> > +     unsigned int year, mon, day, hour, min, sec;
+> > +     unsigned int value;
+> > +
+> > +     value = ls7a_readl(LS7A_RTC_REG_BASE + RTC_TOYREAD0);
+> > +     sec = (value >> 4) & 0x3f;
+> > +     min = (value >> 10) & 0x3f;
+> > +     hour = (value >> 16) & 0x1f;
+> > +     day = (value >> 21) & 0x1f;
+> > +     mon = (value >> 26) & 0x3f;
+> > +     year = ls7a_readl(LS7A_RTC_REG_BASE + RTC_YEAR);
+> > +
+> > +     year = 1900 + year;
+> > +
+> > +     return mktime64(year, mon, day, hour, min, sec);
+> > +}
+> > +
+> > +void read_persistent_clock64(struct timespec64 *ts)
+> > +{
+> > +     ts->tv_sec = loongson_get_rtc_time();
+> > +     ts->tv_nsec = 0;
+> > +}
+>
+> As Alexandre pointed out, just remove this rtc.c file.
+OK, thanks.
 
-So, like with some earlier patches, a rather weak:
-
-Reviewed-by: WANG Xuerui <git@xen0n.name>
-
+Huacai
+>
+> With the other points addressed:
+>
+> Reviewed-by: WANG Xuerui <git@xen0n.name>
+>
