@@ -2,155 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358C952FA62
-	for <lists+linux-arch@lfdr.de>; Sat, 21 May 2022 11:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E3952FF02
+	for <lists+linux-arch@lfdr.de>; Sat, 21 May 2022 21:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347243AbiEUJoH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 May 2022 05:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S1345284AbiEUTm4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 May 2022 15:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346489AbiEUJoD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 May 2022 05:44:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 898735C678
-        for <linux-arch@vger.kernel.org>; Sat, 21 May 2022 02:44:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653126238;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dQakkrlXQRKntd0RRpdtvvmaPsTow/BNKvunF/X2S4o=;
-        b=Drs+euNcA9RhCcViZLBlKNLhg0oRcZm6yLx8wth9kUO2xZZZJVQ2s5D5NlFL5RbnCB8R9g
-        Pc0bVmM2w93QDd3fFZv8DtuJOmtMphvCsoadbdh/IVxXBXZllX/vTa5wLo7asfZojP6nBY
-        0nibLRg9yXGS8y/mJSBSCNsAt6fv7VI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-427-LkL9ShD1MbmDYbK75-oCIw-1; Sat, 21 May 2022 05:43:51 -0400
-X-MC-Unique: LkL9ShD1MbmDYbK75-oCIw-1
-Received: by mail-wm1-f70.google.com with SMTP id e9-20020a05600c4e4900b00394779649b1so7466360wmq.3
-        for <linux-arch@vger.kernel.org>; Sat, 21 May 2022 02:43:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dQakkrlXQRKntd0RRpdtvvmaPsTow/BNKvunF/X2S4o=;
-        b=hcOGPHxD0LifzLeF2N0pAMhX9S2BSOw1zsPlgIDHONdfHl3s/h8KlI6oUHNvrJemaA
-         d4Yxlp7QIt0fkHIZ9q0h5XaVV4CWBoJYpRDBlpIr/Ghzz4MZygNucI3+SOkOTJ9MyQlx
-         mqgv9s1PtinVmiheUHW7DS6HxJQViWdbDcsrp2AWH9ZDyJNvywEn2t/FLhV9ui17qhcQ
-         1DRl8lsk9fZmimJviP9D0rLcMAo+vf6v7swaXxdQhF32zPna/QhkxY4608cgpnb3bx7L
-         svLCY4+XgSZaLHHObNiZafNCjH28flbwuWSgcgw92763pXzfv/YQq5lo+xCVlL+Vb104
-         HYxA==
-X-Gm-Message-State: AOAM533301IVrQ6wTm6xv/ADHtPN/JS7cQe9ySP4/cEk1fN128GAZuE4
-        Knuj0qmTnlf3dZo3JafDFC9V2V763XMfVeTQq1klWFAcbQf0pYKjgRA47COwNeH8OucXNgPTYfG
-        RyC2/5nCO8BpnY8GhOFJivw==
-X-Received: by 2002:a05:6000:144e:b0:20e:6719:c376 with SMTP id v14-20020a056000144e00b0020e6719c376mr11371530wrx.715.1653126230201;
-        Sat, 21 May 2022 02:43:50 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyNY4l0J3NU0fU5ldjpTVsJKjUF0HOYrRkkJ7veXmwkg/db0qArtoiGUueey/Ksa0YlGIw9oQ==
-X-Received: by 2002:a05:6000:144e:b0:20e:6719:c376 with SMTP id v14-20020a056000144e00b0020e6719c376mr11371508wrx.715.1653126229992;
-        Sat, 21 May 2022 02:43:49 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id d21-20020adf9b95000000b0020d06e7c16fsm4529325wrc.84.2022.05.21.02.43.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 02:43:49 -0700 (PDT)
-Message-ID: <20bde9a2-592d-30a8-8cdc-03bdf1bf3e93@redhat.com>
-Date:   Sat, 21 May 2022 11:43:48 +0200
+        with ESMTP id S238301AbiEUTmy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 May 2022 15:42:54 -0400
+X-Greylist: delayed 5820 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 May 2022 12:42:53 PDT
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02hn2236.outbound.protection.partner.outlook.cn [139.219.146.236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCD762103;
+        Sat, 21 May 2022 12:42:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aGbB7qSt294KY0C3Xe48IOfj1O3h0r+yNuhmXGkPQZk45Wnl7VCQ1YuLAuIj0VroGqK5ajuxe7VN+KPokLsBRZFIKHY3rDwofjl37wQrKVAsgd0CFR5AfqDeu7IcD2LErvo3huCEJU+B4gvQWZQWvXN4wu3Ld+nRIEicjq5X7/KPMLfCmK4M1I0DrYL5jKtizEAX7PvHWA4I6H/cWzdwYgIErMmdSoXgtVXzuZf5iltlp1UHpIvTMf6hb7v1/v/FVxoyc4iaWCOpPTKMTfIj/eykqybGzGn9eY9PmGdfpiSvdC+Gi/2Gh6bxGJPGY5d7/BO2qgL/XCzpwDsWKbAqKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
+ b=KtcYvJpSs9MztnPjpxTJFep4texRJaaJnT9GRJBu3cUzF9P73n/xzZtYOt9fHxBwrfHI9FW0ZuNwqf3q/35bi5eMpvgNZBQwKEYuO1jmTSnWB6DmyzDByT5zbML8l8OPRS+cjy3KSKVZF1S8xCQzt7Kd6dF6VtOXe3mrfMd192CQaatQVtS2UnXGysv3mE+QXYgj0jQPzNXoTEeThoS/bKjLJB0h1qqpngbQGqZrmwWWN5G8BL4EeCtNOr0nw2fTOJ+4Wyhgn0+uYh38PP+dJKpiKw7AgqRqRmrE9rC6lMez6MagE4lniuQlV/4iQu1YpYJxmO5GomQi/Tiu3LdWvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=gientech.com; dmarc=pass action=none header.from=gientech.com;
+ dkim=pass header.d=gientech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gientech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
+ b=0UcuLXQeFr/spn1VxtQB3zwcZuwTPkQSoGlkWHLHWTOieugSZNVizOVMaWfVK0+GMb9+qwvmRauPDYPRqHyLqJREUjVF+dCkY8hebHSPgBasZySH3u0BbuScdno79CAgazWYSMMLpfIjtozbByOkve7dZ8g7MVW8jfLyy280uOmrh6uC7rtjq69FqNrbPz5Ik9o/7aTx20Fb3a7aBUitQNgKunkJWwVQe/kJGz19jTURPMoQrVRa9poWjEbTKtXcxF8AsKIUqtDUl9Zr4XPcBHtmp5T92N7c0Jk+PtP60h5RtcmtUm/SRnLXueI5jVPYMAVVW3bWOfWNaFfOxG8+/w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=gientech.com;
+Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85) by
+ SH0PR01MB0506.CHNPR01.prod.partner.outlook.cn (10.43.108.151) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5273.14; Sat, 21 May 2022 18:05:48 +0000
+Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85])
+ by SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85]) with mapi
+ id 15.20.5273.019; Sat, 21 May 2022 18:05:48 +0000
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE..
+To:     Recipients <tianjiao.yang@gientech.com>
+From:   "J Wu" <tianjiao.yang@gientech.com>
+Date:   Sun, 15 May 2022 12:39:09 +0000
+Reply-To: contact@jimmywu.online
+X-ClientProxiedBy: SH2PR01CA006.CHNPR01.prod.partner.outlook.cn (10.41.247.16)
+ To SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85)
+Message-ID: <SH0PR01MB0729B155F31AC2CE0AFC44BE8ACC9@SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@gmail.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi <linux-efi@vger.kernel.org>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn>
- <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
- <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
- <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
- <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com>
- <CAAhV-H7yKVWaiU_VKnc2YnCSeZPOwedRWMY8ZTS-VWwk+vE0AA@mail.gmail.com>
- <256e0b82-5d0f-cf40-87c6-c2505d2a6d3b@redhat.com>
- <CAAhV-H7bJv5V5UKJCWgEbOdOWZhnma3_3eAXbbY1MX_uKodjgg@mail.gmail.com>
- <859d5489-9361-3db0-1da4-1417ed2fad6c@redhat.com>
- <CAAhV-H4UxkyHr=NQGFAAjCXwXHXDLsN_CV-tSCn6oonOSSjb0A@mail.gmail.com>
- <7caec251-20e7-4a8c-93ee-b28558ec580f@redhat.com>
- <CAAhV-H6pfv4OQ5PhSfzG9YM_q5DYdgZ0DHVT7Aac9sppXGgnaA@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAAhV-H6pfv4OQ5PhSfzG9YM_q5DYdgZ0DHVT7Aac9sppXGgnaA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2a8f2070-4407-431e-c0e9-08da366ff5f4
+X-MS-TrafficTypeDiagnostic: SH0PR01MB0506:EE_
+X-Microsoft-Antispam-PRVS: <SH0PR01MB0506E163F1B5509E32BA7B608AD29@SH0PR01MB0506.CHNPR01.prod.partner.outlook.cn>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?Da5invq79gN76MrTZtNzfLcdxvmUAtpPR7attIMfvRK/l8z+RrPFTHgqIY?=
+ =?iso-8859-1?Q?OcUyuBQDbeHjPJyF22kwgz4HygJCdZMcw5uK4kyTPuAvSyRyYuMKvdzDL+?=
+ =?iso-8859-1?Q?4ddZY04bVMDWX8Usxh9u2hdtKRb94DCCfL0stDMHmEyfPWMh5Abj7z5P2O?=
+ =?iso-8859-1?Q?JgkKQQeASOeE+UjAKv5R6Zx6Hh9c1+n96AjR4n3qAaJ7MZdylHSznP9pvw?=
+ =?iso-8859-1?Q?n/FpOFWe3BXjP6XlsAJrZmGNIFiyqdChV2aMwS6nLUIJye1POZ+uF4XwjR?=
+ =?iso-8859-1?Q?qrUTxbrnbHnwwrtxFMCVEddrRCADfib+GuZ8W7gZBsLbygvLqIcQixQCtG?=
+ =?iso-8859-1?Q?r1LM2IxpNJhcUA4xkXQPnW00YkKYS+YISPUIdqPL1orxXV0+epNWyDFrQB?=
+ =?iso-8859-1?Q?X8rAo3mB8rQ72TUfbyY7+i2sPesSH8XCbpB2N5Uerjx6+1WfJf6fqm+yKl?=
+ =?iso-8859-1?Q?4PY+GvfOuws1x+0uGhJIQphJpIrPbv6NhkIprjPKSNxG1bzV3PfHqVY1JF?=
+ =?iso-8859-1?Q?tRUlpWtNftc0Zm4TZ0B471v/ClhPhZs07ZxyI8O10U8p6Vjvw9sQvhQLzQ?=
+ =?iso-8859-1?Q?PXQOvU84Xivrot2KqrYu1sBn8ginp+RUDSMShfEuGLSj9KlHoTmWObMh6x?=
+ =?iso-8859-1?Q?9z4Co8sJxenQXGjzFEyjowjEcfHoEVNbPQgPGIbfmEsoHL6xXmpp0+FUzB?=
+ =?iso-8859-1?Q?AJ7SEepEW8h0le7QXeQo6UCracaVTIiOLYAUfITI81/vijfnLc6zaZvmm7?=
+ =?iso-8859-1?Q?ArH0c4nZ/ANpm5N5F2wHaNklq7bnOng5TCz7MrkxSBRjeZJtamg+py5O8K?=
+ =?iso-8859-1?Q?yzrbTgIyLLdxpTU4oWnNRx8QI1kgk5o3dcCewY55UMQZN/gZGaHDlV4tRR?=
+ =?iso-8859-1?Q?lq4Z+k49nh4nvtUD6wtzdWmXuCTLnQ8lP56FKQCPmIOSut3md+JUBGAdRU?=
+ =?iso-8859-1?Q?9sSauLgBFxn7p92d5HA/zcW6UvNl8G+qqG+D42bHmgFIoYdS9dQnbxnotl?=
+ =?iso-8859-1?Q?qUvCJ3wv8L4qFsoI4QS/9T2guEHcrdFzk8e2NaPIU9aK2WjhtpuQp9T4Bu?=
+ =?iso-8859-1?Q?qA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:OSPM;SFS:(13230001)(366004)(3480700007)(52116002)(9686003)(6200100001)(508600001)(7696005)(6666004)(86362001)(38350700002)(55016003)(38100700002)(26005)(40180700001)(19618925003)(66556008)(66946007)(66476007)(6862004)(7116003)(33656002)(558084003)(2906002)(186003)(8676002)(7366002)(7406005)(7416002)(8936002)(4270600006)(40160700002)(62346012);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?1MrQ24WbCu/6DCMOZBKUKmiOOC+kY0aubPZ+61I5g8SIoR3SFnCn0ZhCJX?=
+ =?iso-8859-1?Q?dm1pF9nldaCOJDjZQJ5+Zh8dsWvNbC6N4BIWx+92EzZTUSjtwjBakj2Kha?=
+ =?iso-8859-1?Q?KfDoSv6Yctq2ef1MPPwp7IV1x4A2bWMCEG2iX9BktLwNx2pK5l04JXhiPl?=
+ =?iso-8859-1?Q?7Ostv5AWi+gTtp7dJnn9p05vrtB8/Tmt9bwIwUgnxJCDOEVn1vFU/3pj/q?=
+ =?iso-8859-1?Q?fhZucC96RUl9pl0OS6OtjTiDO97Wk36yMtSQDgzrqZeCH9rs0wshBe9bsO?=
+ =?iso-8859-1?Q?iCIBaV/0bonpM3IJD1ld88qFY+P7MK8+pJPMjKoxvFWzllgtgAnWhSrdBK?=
+ =?iso-8859-1?Q?OsZn3O1fEKpBzUfb+SeBCT+wljut5cqEHJ92DWvVcj+JXSi/nSYCvdKT1P?=
+ =?iso-8859-1?Q?bCu54LB3YCVss6FfJFDLY2RnpNt9CC1Gg/XpXQFTICR9lAAOzk4HTuRn3+?=
+ =?iso-8859-1?Q?xJ5AHezTeELpnyTNSSQ2oysZwWzm/3GsLI7BstRJYuZaSjW+zCFXcbWdkm?=
+ =?iso-8859-1?Q?E/fU4Jzs3aZgaHTYIglWGfn75aFMLqYSsML8aqNE8VuiSwjn98tYECt7r9?=
+ =?iso-8859-1?Q?VfMy30MBiHYJM/r5D3Z1Yyr+OZsZ4F1cHX89NeR2PBv6B8A4F/bXhTudCn?=
+ =?iso-8859-1?Q?Rb14LFuUqNOYdmq6Fl8F99n0M8d15IFYgI1dqLPAm8BXjjX5c4HphZgQ5Y?=
+ =?iso-8859-1?Q?mLLukhc1D6cESvEHrwI3jacQkoJqMT+a2/rxavZzyIjvOSQU14y9U0K9gz?=
+ =?iso-8859-1?Q?dO52qylGUVkYTEGnW9IRFDiYmXp3tTGDEZdp3RYsmq+hqQOrI54RdG67Xk?=
+ =?iso-8859-1?Q?N5AtskQ1tUQTzqS4UN3nkN/gQLs0RTEhjAYOtGTA8S9uLuzZUSYwv5x6NY?=
+ =?iso-8859-1?Q?NBcDcuTZABBVvQh8B5fBr57b01gF++0n+yr5+vOcTd8stVmOYm/mL/W7hw?=
+ =?iso-8859-1?Q?hRPs7eUlJstR8Ma77nVBLJZqYN+e3sspDypP5JPlp1rG8F0VzUdON8pvc+?=
+ =?iso-8859-1?Q?nDa2NTxeG/k/ssZnLJVDhFf9o38yC7uD3VAUQBYhbQsyX4/qggczsq0+Us?=
+ =?iso-8859-1?Q?It+ezmGc6UefAWfLQbwgUYZhxrRB77dP0Ar4vYRnFfwo22+5XZD+/PNXjE?=
+ =?iso-8859-1?Q?Hy88Ty6Ys5IUOQNZAAwQ71n2HbH3utXNKW/OShLrcmy3jSqpP10JJ3uo7x?=
+ =?iso-8859-1?Q?PkCtleO7y1TA6Gd2lnpfyFAwF64PpY1pxkFsSJgTnY8g6StpwdjeNjgsLv?=
+ =?iso-8859-1?Q?i8f1eLfMFIotN0lS3cpwzY46UHKIy0JIvA6lq6/n3f9vpo8La446A+4qXY?=
+ =?iso-8859-1?Q?G9ZMnkm2K0Y4nwwY3ExyENgOuhBm+3dGDlJb7HSg+UkeAQvU3jrsEPx/LZ?=
+ =?iso-8859-1?Q?/wlEfcEG9VLxUKnag2Z/G7aAK5QTLCGdzO4uI5h2DmrOrPP3t3XvDVEB9u?=
+ =?iso-8859-1?Q?qmhI5ypg3blWN8Rd3d33aOagSau1gz/XWjxR72Dxe58PkbipN7OAzSmUJf?=
+ =?iso-8859-1?Q?9yjkRxv58bl8x2hFOI1+lG7cJRuZ57Yp+giNQJjq1ICqbEcBNSBT1Wtn7f?=
+ =?iso-8859-1?Q?1QKvXikKULtX2oLV3ypsgC9KfAzAmgawUcFdGZiPnNm8MLoV6F4u4bdUnM?=
+ =?iso-8859-1?Q?XdUz9zW0KTpT56UvkuewuzfAB7oZwd2bfngqu6H1xsX2clt1wL5lRsLK+Q?=
+ =?iso-8859-1?Q?dMmfxoeK0KPlvxMbu95BnepcbHQ4syMIWt+7jCkqyBmmjWcFYVTn3BUy9Z?=
+ =?iso-8859-1?Q?rFqLisd0w2jMqzgL3qQ1srV8w=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a8f2070-4407-431e-c0e9-08da366ff5f4
+X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 12:39:32.3168
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 89592e53-6f9d-4b93-82b1-9f8da689f1b4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BpZX+UcjSvphz8S219P/Wrbei0WPxNw7PzTmqTzWC8kOVwh/Sr6N017LMpJ+0SHE4w3Zo4GRxzG2V9PzPw7Z37tdZQAyfAy6zohUSeIXB5A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0506
+X-OriginatorOrg: gientech.com
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_96_XX,
+        DKIM_INVALID,DKIM_SIGNED,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4657]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        *  3.4 DATE_IN_PAST_96_XX Date: is 96 hours or more before Received:
+        *      date
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Huacai,
-
-On 5/21/22 11:13, Huacai Chen wrote:
-> Hi, Javier,
-> 
-> On Sat, May 21, 2022 at 5:06 PM Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
->>
->> Hello Huacai,
->>
->> On 5/21/22 09:37, Huacai Chen wrote:
->>
->> [snip]
->>
->>>>
->>>> A problem with moving to subsys_initcall_sync() is that this will delay
->>>> more when a display is available in the system, and just to cope up with
->>>> a corner case (as mentioned the common case is native drivers as module).
->>> OK, your method seems better, but I think moving to
->>> subsys_initcall_sync() can make the screen display as early as
->>> possible.
->>>
->>
->> But it doesn't cover all cases. For example, you will get the same error
->> if for example your native driver is built-in and efifb built as module.
->>
->> So my opinion is that instead of playing with the init call levels, is
->> just better for you to build your native driver as a module instead of
->> making it built-in.
-> I mean moving to subsys_initcall_sync() on top of your patchset, not
-> replacing them (Just for display earlier).
->
-
-Ah, I see what you mean. Yes, that makes sense indeed.
-
-Feel free to post a patch proposing that. If you do, please also include
-Thomas Zimmermann <tzimmermann@suse.de> to the Cc list. Thanks!
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Can we do this together
