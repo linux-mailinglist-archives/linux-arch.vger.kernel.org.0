@@ -2,42 +2,41 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75ED95274B7
-	for <lists+linux-arch@lfdr.de>; Sun, 15 May 2022 02:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47908527550
+	for <lists+linux-arch@lfdr.de>; Sun, 15 May 2022 06:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233028AbiEOABo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 14 May 2022 20:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S235200AbiEOENr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 15 May 2022 00:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiEOABn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 14 May 2022 20:01:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E96624F34;
-        Sat, 14 May 2022 17:01:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229670AbiEOENq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 15 May 2022 00:13:46 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB2024F30;
+        Sat, 14 May 2022 21:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1652588019; bh=lc3ngU5nSuKbe6EtREIVXc2ZMyuln1EUfr40RDHFWBA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=es5Iv0rA29f3lk6MuVEmPmVGLyL+h85kELo5lxwD+S2cqIFGuRd3k/rrhOxbNARhd
+         tsSHji69dvNdqM0pzK2H7p30IuJoUPPRpXfaXrJCNAOeaen3KBq+EStRu5y7yySWBF
+         Bzb44x2ZIm2jM7OzaJ8Wkp0ykPQ959Q67aeA8WIA=
+Received: from [192.168.9.172] (unknown [101.88.28.48])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ED7360C77;
-        Sun, 15 May 2022 00:01:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ED8C340EE;
-        Sun, 15 May 2022 00:01:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LF2BHC23"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1652572895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lbeJpfAzZqKlcW2gnPn7UeQQW5Vthh4v2JU+1Y3Do4I=;
-        b=LF2BHC23HiZypFaW4/oFFz3rtooK0g3A0x0ESrklX/UPaMHFSf5n5TZlBzYdpIJ/YF1qZG
-        KPvuYzVJlTID9PqF9aIhy6BNXVTqmogF11Cr2ko9+w3MkzxycBCycpP4t51xeVnZKyJQqR
-        nKDPiErAdUSPZO8QLBxzIfy2wSIHa3o=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1e89a44e (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 15 May 2022 00:01:35 +0000 (UTC)
-Date:   Sun, 15 May 2022 02:01:31 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 43BED600B5;
+        Sun, 15 May 2022 12:13:39 +0800 (CST)
+Message-ID: <689e103a-07f0-a55c-9b34-073cf81f84c0@xen0n.name>
+Date:   Sun, 15 May 2022 12:13:38 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0a1
+Subject: Re: [PATCH V3 03/22] LoongArch: Add elf-related definitions
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@gmail.com>, WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -47,67 +46,58 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Guo Ren <guoren@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH V10 08/22] LoongArch: Add other common headers
-Message-ID: <YoBC2+2fvmNtcftr@zx2c4.com>
 References: <20220514080402.2650181-1-chenhuacai@loongson.cn>
- <20220514080402.2650181-9-chenhuacai@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220514080402.2650181-9-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20220514080402.2650181-4-chenhuacai@loongson.cn>
+ <25efb0c1-f2e7-0052-c925-08dd778d7ad7@xen0n.name>
+ <CAAhV-H6rBtmTQTpxdZtk26sP9SJui5dpv2e-2ZUyWTtpxpf9FQ@mail.gmail.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAAhV-H6rBtmTQTpxdZtk26sP9SJui5dpv2e-2ZUyWTtpxpf9FQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, May 14, 2022 at 04:03:48PM +0800, Huacai Chen wrote:
-> diff --git a/arch/loongarch/include/asm/timex.h b/arch/loongarch/include/asm/timex.h
-> new file mode 100644
-> index 000000000000..3f8db082f00d
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/timex.h
-> @@ -0,0 +1,31 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef _ASM_TIMEX_H
-> +#define _ASM_TIMEX_H
-> +
-> +#ifdef __KERNEL__
-> +
-> +#include <linux/compiler.h>
-> +
-> +#include <asm/cpu.h>
-> +#include <asm/cpu-features.h>
-> +
-> +/*
-> + * Standard way to access the cycle counter.
-> + * Currently only used on SMP for scheduling.
-> + *
-> + * We know that all SMP capable CPUs have cycle counters.
-> + */
-> +
-> +typedef unsigned long cycles_t;
-> +
-> +static inline cycles_t get_cycles(void)
-> +{
-> +	return drdtime();
-> +}
+On 5/14/22 22:11, Huacai Chen wrote:
 
-Please add:
+> Hi, Xuerui,
+>
+> On Sat, May 14, 2022 at 9:29 PM WANG Xuerui <kernel@xen0n.name> wrote:
+>> Hi,
+>>
+>> Why this patch is from V3? I guess it's by mistake so would you re-send
+>> a proper v10?
+> This is just a typo, it is really V10.
+Okay, got it.
+>
+> Huacai
+>> On 5/14/22 16:03, Huacai Chen wrote:
+>>> Add elf-related definitions for LoongArch, including: EM_LOONGARCH,
+>>> KEXEC_ARCH_LOONGARCH, AUDIT_ARCH_LOONGARCH32, AUDIT_ARCH_LOONGARCH64
+>>> and NT_LOONGARCH_*.
+>>>
+>>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>>> ---
+>>>    include/uapi/linux/audit.h  | 2 ++
+>>>    include/uapi/linux/elf-em.h | 1 +
+>>>    include/uapi/linux/elf.h    | 5 +++++
+>>>    include/uapi/linux/kexec.h  | 1 +
+>>>    scripts/sorttable.c         | 5 +++++
+>>>    5 files changed, 14 insertions(+)
 
-    #define get_cycles get_cycles
+The code changes all look good to me, only minor typographic nit: please 
+change "elf" to "ELF".
 
-which is what other archs are getting for 5.19.
+With that:
 
-Jason
+Reviewed-by: WANG Xuerui <git@xen0n.name>
+
