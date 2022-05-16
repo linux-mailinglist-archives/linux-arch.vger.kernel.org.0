@@ -2,123 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD722527EB4
-	for <lists+linux-arch@lfdr.de>; Mon, 16 May 2022 09:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF4D528387
+	for <lists+linux-arch@lfdr.de>; Mon, 16 May 2022 13:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241275AbiEPHlS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 16 May 2022 03:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S239877AbiEPLty (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 16 May 2022 07:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241243AbiEPHlM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 May 2022 03:41:12 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3712261C;
-        Mon, 16 May 2022 00:41:10 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id e19so14582843vsu.12;
-        Mon, 16 May 2022 00:41:10 -0700 (PDT)
+        with ESMTP id S240401AbiEPLtx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 16 May 2022 07:49:53 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001DBE0F4
+        for <linux-arch@vger.kernel.org>; Mon, 16 May 2022 04:49:52 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2fed823dd32so39469177b3.12
+        for <linux-arch@vger.kernel.org>; Mon, 16 May 2022 04:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=da0tSqTpoZccXNC6Mon6l1Je9BJX/v1Bpiwu4fXyLMQ=;
-        b=MN1SfpWtfgHZisIRElpcWhlOvw1hNBSnFuOn6GxqAoHNiqWAP+xjY4LJFLvdBIlqs4
-         feqjLC/vRblVTe6p5VqKxIKMbdCRPvbxiIVumSo9aPEeiegmwaZysWj07xAA+5c+xr1I
-         3aldzCwPPLPJPD9TeS8HXWUIFEqYictOfhlHrBk3vMIpsqci7LTd8PV3zxt5wrO0cNkp
-         HN3sA1u/ByVZwfxRIw0clGdONDzzq4jsXrdEFXIm0nvqKIHzZOghxcrUl2vyd0tY3kik
-         cXWFjffR95p+kRsRBjdXURg6F27B879a9uVv6QhsCM7KZtAG/RjUPInC/6GVqTVsyaYo
-         SqvQ==
+         :cc:content-transfer-encoding;
+        bh=4XtkkgDY70ODUGHGl87xJIvARSTddMeTRl5MzriSEag=;
+        b=tR2WwLJQK3Xoss/NvMGDcRkuGYbpCWjlIeAtJ2fMqal3hOIOFZxrBYz4T3pkmi/5kT
+         xOi7S5z5/vP/VDnpXIh/1M/WpZFpS7X0u2UxPcfYL1JNySJvNfEhgTBkhsB2nKlXP7Mk
+         5geihxNdDq6mP/nnE6vaApD43Vf6/weNRQ1fu0uahCM/tEdy6VtTQAZXmdjn/xwRRoYn
+         edjtIBHuvBjPE8Y+in06a0p5q676OvBJrn+QyU/SAjN2GjXxa99D2NFhhgHWNuaIOzPz
+         hFUT6cp0oaGBfZnXr2VMLvy5FGl1uepzcbU2YZFEotz2VOmdudnUBEfWuJUPTytfniQk
+         /caw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=da0tSqTpoZccXNC6Mon6l1Je9BJX/v1Bpiwu4fXyLMQ=;
-        b=N3lr3VJQ9z3tXglUxIKuRlYjYxn7GMKlFM3H6roU4IIe4TNixZUxoQ2KEGBqwd5JTf
-         t3Er/0BNeXtEI99tt+pn2rXePumCcNQXdZHQXWvJRsxToslV0m0CvWwB2lCyIpBaA1nX
-         gZHB+jB5vPo6PFQyEE/QDO84OA1kyU54gMoYq71XMbzQUmpYubNI2yBdqqxNgzZUVW+7
-         2EUgcPQD6EDj0INnrzgiOEwlLpaTXmWYDVnozf+b75YBdu7JtUU17SXKSv/PFN+PMWci
-         PHUperQBqY2Fcp9srg46YFN/0pYWBF7gxYUhmvSzaeLhrUzKEJsh5DJppJUZ6C/Iaun7
-         0jow==
-X-Gm-Message-State: AOAM531Uh6R16Ljjii1/x7I6DKAmMWGA9b6kuzceFC+lx8nZsn4hnMVT
-        ddGHP3iLCBKedlAl4LULjmeJLtn0XOTMarGts00=
-X-Google-Smtp-Source: ABdhPJwuWz80i/I8hD+856n9c8YC3uWj0GrQfY1p2XZMv4zghrLtnob8d/4S6HgnHY7H8AamoB81dntwIiiFApBBmww=
-X-Received: by 2002:a67:be0b:0:b0:32c:d82f:6723 with SMTP id
- x11-20020a67be0b000000b0032cd82f6723mr6170771vsq.67.1652686869723; Mon, 16
- May 2022 00:41:09 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=4XtkkgDY70ODUGHGl87xJIvARSTddMeTRl5MzriSEag=;
+        b=ZAE0ANg7K0W+V6KO3rFgO1Fkp9gRWxZiRFouV3b/8OJ7W20T9CERi9FGU+vvA838hf
+         eLbPWpAkGhf4Db+PZr6+LadmPagT+r9N1w6pwdBD2Qj7eJ+HvEtYjZMFq2SMf+pA3YYp
+         dRH/8NsgN1yEIIjOaS7xHomzKNZ6U0n+FKuPhCOd6FOzY4NVf6w3fUSkYyS7648GSg+D
+         yjO0QYMyj48n0FByJiHBtHfIyLbqRiivlOtT5uJWdlIbiqOHZcKhd7Efl3myTNYm3rcZ
+         n5BxJwgD4BfROgAew/R4i4+83Rm9nIXPQZpy4F4oUBfJ63xVUeMIYWMnJ62Qe2awQ5xM
+         Lq2w==
+X-Gm-Message-State: AOAM533oI8f2770qbBAzt3E3GGBbnvWKCUCfnIcjDOedQKnYbzsf7jTs
+        8TonkLSojJvVDam6MwZ3ZlxCGv9+k7nrf7FQUWD5JA==
+X-Google-Smtp-Source: ABdhPJx2Q9of50T64pn6+gSbgtYcKkZGPXW6zopRcYz9chzp4PzVO+UL/Je9mgpUQg0Ktv0NtxHiV3crHzWpPx9s5Gw=
+X-Received: by 2002:a0d:f0c3:0:b0:2f4:d291:9dde with SMTP id
+ z186-20020a0df0c3000000b002f4d2919ddemr19141054ywe.437.1652701791936; Mon, 16
+ May 2022 04:49:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220514080402.2650181-1-chenhuacai@loongson.cn> <CAK8P3a2Xu79zzJ=c3WJJEXAmcL2RT6NBZy-dd7s-Kz3Yk4yJzw@mail.gmail.com>
-In-Reply-To: <CAK8P3a2Xu79zzJ=c3WJJEXAmcL2RT6NBZy-dd7s-Kz3Yk4yJzw@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Mon, 16 May 2022 15:41:01 +0800
-Message-ID: <CAAhV-H5xSUoLv1rtrZTwEsd+yn8msHFFJ8eGRitzoxJ_XQDNNw@mail.gmail.com>
-Subject: Re: [PATCH V10 00/22] arch: Add basic LoongArch support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
+References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-28-glider@google.com>
+ <87bkwmy7t4.ffs@tglx>
+In-Reply-To: <87bkwmy7t4.ffs@tglx>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 16 May 2022 13:49:16 +0200
+Message-ID: <CAG_fn=WhNZ8+7RXvr_2nGa-mCpLYxBK=cw3wFg6bxOqgXTOH0A@mail.gmail.com>
+Subject: Re: [PATCH v3 27/46] kmsan: instrumentation.h: add instrumentation_begin_with_regs()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+On Wed, Apr 27, 2022 at 3:28 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Tue, Apr 26 2022 at 18:42, Alexander Potapenko wrote:
+> > +void kmsan_instrumentation_begin(struct pt_regs *regs)
+> > +{
+> > +     struct kmsan_context_state *state =3D &kmsan_get_context()->cstat=
+e;
+> > +
+> > +     if (state)
+> > +             __memset(state, 0, sizeof(struct kmsan_context_state));
+>
+>   sizeof(*state) please
+>
+> > +     if (!kmsan_enabled || !regs)
+> > +             return;
+>
+> Why has state to be cleared when kmsan is not enabled and how do you end =
+up
+> with regs =3D=3D NULL here?
+>
+> Thanks,
+>
+>         tglx
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "kasan-dev" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kasan-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kasan-dev/87bkwmy7t4.ffs%40tglx.
 
-On Sun, May 15, 2022 at 4:55 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sat, May 14, 2022 at 10:03 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > Cross-compile tool chain to build kernel:
-> > https://github.com/loongson/build-tools/releases/download/2021.12.21/loongarch64-clfs-2022-03-03-cross-tools-gcc-glibc.tar.xz
->
-> I also uploaded a clean build of gcc-12.1 with loongarch64 in the
-> https://mirrors.edge.kernel.org/pub/tools/crosstool/ builds.
-> I have not tried it yet.
->
-> > This patchset is adding basic LoongArch support in mainline kernel, we
-> > can see a complete snapshot here:
-> > https://github.com/loongson/linux/tree/loongarch-next
->
-> Note: I have pulled in the generic ticket lock series into the asm-generic tree.
-> Please rebase your series on top of
-> git://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux
-> generic-ticket-spinlocks-v6
-> to avoid duplicating the commits. As long as you are based on top of the
-> 9282d0996936 commit, that should be fine.
->
-> > V9 -> V10:
-> > 1, Rebased on 5.18-rc6;
-> > 2, Use generic efi stub;
-> > 3, Use generic string library;
-> > 4, Use generic ticket spinlock;
-> > 5, Use more meaningful macro naming;
-> > 6, Remove the zboot patch;
-> > 7, Fix commit message and documentations;
-> > 8, Some other minor fixes and improvements.
->
-> I think with this you have addressed the comments that I had in the past.
-> Xuerui Wang and some others had additional comments that of course
-> need to be addressed, but this is looking good to me.
-Thanks, I will solve the problems and send V11 ASAP.
+As discussed in another thread, I'll be dropping this patch in favor
+of the new kmsan_unpoison_entry_regs().
 
-Huacai
->
->        Arnd
+I'll also ensure I consistently use sizeof(*pointer) where applicable.
+
+Regarding regs=3D=3DNULL, this is actually not a thing.
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.
