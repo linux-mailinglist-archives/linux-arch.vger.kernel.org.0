@@ -2,147 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C7952C659
-	for <lists+linux-arch@lfdr.de>; Thu, 19 May 2022 00:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AA852C71A
+	for <lists+linux-arch@lfdr.de>; Thu, 19 May 2022 01:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiERWgf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 May 2022 18:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S229925AbiERW54 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 May 2022 18:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiERWge (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 May 2022 18:36:34 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBC64ECCB;
-        Wed, 18 May 2022 15:36:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4L3SWr2vmXz4xVM;
-        Thu, 19 May 2022 08:36:23 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1652913387;
-        bh=caT6jEYUNwfBW50T3+33ARca6ETe9j5GqS/aXUUr1AE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qQMSfNC30Tq3ei9+dT1sAmYh0aHvuUlcvO5IOuH75E5U94d09oiaMeYu0cybtv2m0
-         T1u75Dg0z9eCpdnzNEuV5NKXDTEigZeWEPVw2IQdUJV/T/Nkf1FQz0N/2KKBoauvPm
-         GVfXjzaAHbJCEEj+D49SscX5u3nt0VpOL/qTgJJbP+YWT0VVjCPuYA1zfJlDbvB7JR
-         ul4kzXIeE9fxBkkqQRnhflNMDiRjcKyB0Aw7ewo95189vaMpuALonAg2fZtXvjxpQr
-         Dp10x8H7QhF6xe0/OqtmCxqFla5nmN1IWbh80KI6xK50rXYiZsSQCBLocYfXA5hZh9
-         u05/efLpuXAcQ==
-Date:   Thu, 19 May 2022 08:36:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH V11 00/22] arch: Add basic LoongArch support
-Message-ID: <20220519083621.4f81cac9@canb.auug.org.au>
-In-Reply-To: <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
-        <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
+        with ESMTP id S231720AbiERW4k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 May 2022 18:56:40 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C80E75
+        for <linux-arch@vger.kernel.org>; Wed, 18 May 2022 15:56:39 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id v71so6153909ybi.4
+        for <linux-arch@vger.kernel.org>; Wed, 18 May 2022 15:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=P7btzPR/Vle5l5s7elmWUZ9LbIEztS0Dc/XWoKmbneMBSsyDUMsuJq4Ylhmt8/MC5e
+         pJc+Ha/GSmxPyR+JdYHJoUFxOoYk9ieaAqtMS8Ad/Z8FFnk0SBrbeexgNWCx1mNra3gM
+         hGv2lOHT2ygyJecm9zs3u60rq/z5V46Mv149dQsnD7sOkOVJHrEcjIOxJdOJZzvp2cLC
+         b4vuntUJt9jllUw+dktv9HiMdX4t/0QcdotI8yofG7S/s1xzgxKTaTrGFOqfrHiuZaW8
+         DOvgPDu3PJm+EZZi2hyjzVQUQQjR4DzqQE3uk3PxTqI0Z4GbZin4x77hgi0oOTRWiqb1
+         GaRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=JF5yAvdJgi8FPz/0+SzTbO8LZESUoBGqOrj2a9XyQzdJLx2r8TmU9iA+9360gF/Tzq
+         E5e/W21oI0xNfj8lHEPR57dcsIHwdy146PCNyikh0FqeYt1I0UOE7nwx2WMDPommELPy
+         qk6KXpK+G6g+BN4ZpzyLu064vLakda3lC7C/FnWbVFeEL/O2/YZHQvBJRZTQ0OJsdDJ6
+         3QDxWg99tRc4COg0PnLDgIZI3dVmWP3US/yhidSMKt43BQ5Uh67NvnFoDPzYJa9KVdos
+         oPfXsQcOy45SbiG/LY/SD4fHZHNl3DSi+LSeVNwZbTOidlF3xLmvacYIDhqK/ra3rHYO
+         xyAA==
+X-Gm-Message-State: AOAM531gpUVHS0m3nsraYsOC2vE3ke5ES0NsURLYvo/95lOG+0ks9eMb
+        yNaCTiPLB0nkT7q/HTObRvMDz3HM1e2H8Ipaons=
+X-Google-Smtp-Source: ABdhPJwY8YOdHYUX96JiSxTq5wchI8FXYyVWKhCwVLyfcYrHLYm89em2SVFzx0M4tBmQDsZA/tugAFPK0TzA5I8AB4Y=
+X-Received: by 2002:a25:3746:0:b0:64c:4ab2:8277 with SMTP id
+ e67-20020a253746000000b0064c4ab28277mr1756177yba.631.1652914598250; Wed, 18
+ May 2022 15:56:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+ysQkiTEflTmaoBUlaX9AyU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:37
+ -0700 (PDT)
+Reply-To: tonywenn@asia.com
+From:   Tony Wen <weboutloock4@gmail.com>
+Date:   Thu, 19 May 2022 06:56:37 +0800
+Message-ID: <CAE2_YrBTNWLgT7Gwd_cY5oXmwwHz8Y2=Hv+EONJDgQpe8gV-5w@mail.gmail.com>
+Subject: engage
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b35 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4867]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [weboutloock4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [weboutloock4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---Sig_/+ysQkiTEflTmaoBUlaX9AyU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Arnd,
-
-On Wed, 18 May 2022 14:42:07 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, May 18, 2022 at 10:25 AM Huacai Chen <chenhuacai@loongson.cn> wro=
-te:
-> >
-> > LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
-> > LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
-> > version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
-> > boot protocol LoongArch-specific interrupt controllers (similar to APIC)
-> > are already added in the next revision of ACPI Specification (current
-> > revision is 6.4).
-> >
-> > This patchset is adding basic LoongArch support in mainline kernel, we
-> > can see a complete snapshot here:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongs=
-on.git/log/?h=3Dloongarch-next =20
->=20
-> Stephen, can you add this branch to the linux-next tree?
-
-Added from today.  I have called it "loongarch" and it will be merged
-among the other architecture trees after the asm-generic tree.
-Currently Huacai Chen is the only contact listed.
-
-I note that there is no new entry in MAINTAINERS in this tree.
-
-> I see there are still comments coming in, but at some point this has
-> to just be considered good enough that any further changes can be address=
-ed
-> with patches on top rather than rebasing.
-
-That should be fine.
-
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
-
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
-
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
-
---=20
-Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+ysQkiTEflTmaoBUlaX9AyU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKFdOYACgkQAVBC80lX
-0Gxj6AgAih0bFdl2KpBa8AsehwFxTb/5dJyOjHgyZfF8LC5pOt1Qp7KNd18c+iXk
-hB8/hl0SHl3TRUb1k2YKxjYIb1pG0KDkZcPysDBNKYleOSMbhyvpHSTLAJQ2zZHb
-m0x922HSgva7cX/xrEqL3XZCVzOYBsfXzVfn/Mm6+5PT+SaniI7sv5wMuVS1vs2O
-yjlmyHSz9/RENRFmbjJoHvILB2WDgR4MGry4X+CrpsAe5kWB17JpyNnUid01HYib
-ViKwomFBgAEL3T+GC/UTXgtWJEAJWlRlewneSoGh51aMGdQFYTM82++CBjVi5WSP
-kD0cIIMLHRvJMzL2GHWHijQnuRcx2w==
-=w4jJ
------END PGP SIGNATURE-----
-
---Sig_/+ysQkiTEflTmaoBUlaX9AyU--
+Can I engage your services?
