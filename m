@@ -2,41 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE46952C188
-	for <lists+linux-arch@lfdr.de>; Wed, 18 May 2022 19:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56D152C143
+	for <lists+linux-arch@lfdr.de>; Wed, 18 May 2022 19:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240786AbiERRR0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 18 May 2022 13:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S240819AbiERRTI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 18 May 2022 13:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240773AbiERRRZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 May 2022 13:17:25 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B812A1A076C;
-        Wed, 18 May 2022 10:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1652894240; bh=yVInD2ur8lshXLO5aqsUYWbjdUNfxk5T6cUDSenQZ3I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lZK46HNW4fJXLujCWUhLHT+kiSe/ZidY50cfUAUUDAHliDzwGoesdBndz3PXWbnzB
-         qpzwN8AdlFv5eabPkHgztrrxQifxYbuzEEC5ghng/ZEs3Kl5AsOB8r0OUWXuDMS4cD
-         9nVNUaEQyyYJ4q0alshFYulLAf8Uk+KSzeIcrhNg=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 4947960691;
-        Thu, 19 May 2022 01:17:20 +0800 (CST)
-Message-ID: <36f11c19-0cc5-cf56-b41d-6cad4878ddb3@xen0n.name>
-Date:   Thu, 19 May 2022 01:17:19 +0800
+        with ESMTP id S240806AbiERRTH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 18 May 2022 13:19:07 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C5820E089;
+        Wed, 18 May 2022 10:19:06 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id q136so1489054vke.10;
+        Wed, 18 May 2022 10:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/f4APx/MmD2R61Oq/wBqbBZa049BgS6jzCZYyWux6uw=;
+        b=CRqJwsiNKT4sZEtqe3T41FiSRcnJ1GsrN97IRQZ6MZkmYh8ZdRyxXmtb/J94D0H61o
+         UXlXak6BwEHPqc2i+M+cNvc+wf3aNRyAOIpBmDN/fIjJEV8pftJl6kSgPYBN3pEbXwLm
+         bHZfYOVXsV1IfzwhXAWwHXg3ukhgzhZIRxWz8win7ObqSWummoAxcmSlondFXp08DZJ4
+         36/jI0h+mLOLIm+PhHabN6wQrZiXMkSwrSOeuYDSMkhROPYdHF0MW6UVpWeuZPpCZvlr
+         IbfiGH1c3JqN/a2fSTNLxa4MWt7gRYQIbq3e/pyR3zd/D8QZT2xw/TM/14tLWOaQ765P
+         KwNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/f4APx/MmD2R61Oq/wBqbBZa049BgS6jzCZYyWux6uw=;
+        b=O1aPuB+yzs2SpMcIC6TnpWK1K3aSz2LvmHJyOSJWG5tqUp4fHRnbytELoelCawhPQF
+         Y3DohQucUtiSZahGa4OTZ3zWfh0ar74EAKsuuwMUSr83TER2Ge65BnFIIHbBmQcpB2y9
+         R26j7tHY5NdZuFdCGmmU+aFyHeGOfIb3hC7HoMiYuJj7T0QSGOy9f4EaMWM83PpZGZ5T
+         R7T6fchovkBBh1i92x5Qqle2hJ9zZqwDJ18glJAwV+MRt2AUi9qB+xPDwkFIZ4o2gdCr
+         glTqblW0NE510bXkJVm6sd9ANsh+KmoDYKFBPffpy9J0oOJY/sNFXJ243ATgcsToPVzB
+         uU9g==
+X-Gm-Message-State: AOAM5332MF2ifTMHYhBnaX5EiukODiFi0qtqmbHDU8iTPXQSBz1idSo5
+        EsN8ahHjE2WGg79ziOq+LtmBcMlRQ64r2pNqvJ8czkNMIak=
+X-Google-Smtp-Source: ABdhPJzf4sXua4bct76Oyku4J/3wXX8VMl6ys/ENNwkiwS8pSsja0y2cQ4G4/bZEmsVFbs/m4R20xIdtzkR0sQhil10=
+X-Received: by 2002:a05:6122:818:b0:357:26f8:5e73 with SMTP id
+ 24-20020a056122081800b0035726f85e73mr243934vkj.5.1652894345690; Wed, 18 May
+ 2022 10:19:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.0a1
-Subject: Re: [PATCH V11 14/22] LoongArch: Add signal handling support
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn> <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
+In-Reply-To: <CAK8P3a15oQNZvST56v0AvtC1oZP4iDHy-QMLwZuDAg30gq-+4A@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Thu, 19 May 2022 01:18:53 +0800
+Message-ID: <CAAhV-H73Ymi6HVoEoYx6UbfZFeS+VtxUwTVvNzhiyycjVocYOQ@mail.gmail.com>
+Subject: Re: [PATCH V11 00/22] arch: Add basic LoongArch support
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -46,120 +62,60 @@ Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Al Viro <viro@zeniv.linux.org.uk>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-15-chenhuacai@loongson.cn>
- <87ilq294mg.fsf@email.froward.int.ebiederm.org>
- <CAAhV-H5Aov1NVsbNWZa9psPhBiNssYWWEzNOyLooeXGKsYxN+w@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAAhV-H5Aov1NVsbNWZa9psPhBiNssYWWEzNOyLooeXGKsYxN+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 5/19/22 00:54, Huacai Chen wrote:
-> Hi, Eric,
->
-> On Thu, May 19, 2022 at 12:40 AM Eric W. Biederman
-> <ebiederm@xmission.com> wrote:
->> Huacai Chen <chenhuacai@loongson.cn> writes:
->>
->>> Add ucontext/sigcontext definition and signal handling support for
->>> LoongArch.
->>>
->>> Cc: Eric Biederman <ebiederm@xmission.com>
->>> Cc: Al Viro <viro@zeniv.linux.org.uk>
->>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->>> ---
->>>   arch/loongarch/include/uapi/asm/sigcontext.h |  44 ++
->>>   arch/loongarch/include/uapi/asm/signal.h     |  13 +
->>>   arch/loongarch/include/uapi/asm/ucontext.h   |  35 ++
->>>   arch/loongarch/kernel/signal.c               | 566 +++++++++++++++++++
->>>   4 files changed, 658 insertions(+)
->>>   create mode 100644 arch/loongarch/include/uapi/asm/sigcontext.h
->>>   create mode 100644 arch/loongarch/include/uapi/asm/signal.h
->>>   create mode 100644 arch/loongarch/include/uapi/asm/ucontext.h
->>>   create mode 100644 arch/loongarch/kernel/signal.c
->>>
->>> diff --git a/arch/loongarch/include/uapi/asm/sigcontext.h b/arch/loongarch/include/uapi/asm/sigcontext.h
->>> new file mode 100644
->>> index 000000000000..be3d3c6ac83e
->>> --- /dev/null
->>> +++ b/arch/loongarch/include/uapi/asm/sigcontext.h
->>> @@ -0,0 +1,44 @@
->>> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
->>> +/*
->>> + * Author: Hanlu Li <lihanlu@loongson.cn>
->>> + *         Huacai Chen <chenhuacai@loongson.cn>
->>> + *
->>> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
->>> + */
->>> +#ifndef _UAPI_ASM_SIGCONTEXT_H
->>> +#define _UAPI_ASM_SIGCONTEXT_H
->>> +
->>> +#include <linux/types.h>
->>> +#include <linux/posix_types.h>
->>> +
->>> +/* FP context was used */
->>> +#define SC_USED_FP           (1 << 0)
->>> +/* Address error was due to memory load */
->>> +#define SC_ADDRERR_RD                (1 << 30)
->>> +/* Address error was due to memory store */
->>> +#define SC_ADDRERR_WR                (1 << 31)
->>> +
->>> +struct sigcontext {
->>> +     __u64   sc_pc;
->>> +     __u64   sc_regs[32];
->>> +     __u32   sc_flags;
->>> +     __u64   sc_extcontext[0] __attribute__((__aligned__(16)));
->>> +};
->>> +
->>> +#define CONTEXT_INFO_ALIGN   16
->>> +struct _ctxinfo {
->>> +     __u32   magic;
->>> +     __u32   size;
->>> +     __u64   padding;        /* padding to 16 bytes */
->>> +};
->> This is probably something I a missing but what is struct _ctxinfo and
->> why is it in a uapi header?
->>
->> I don't see anything else in the uapi implementation using it.
-> This is used by get_ctx_through_ctxinfo() in signal.c and I think
-> similar function is also needed by userspace.
->
-> Its name is once before called context_info but conflict with another
-> software, then I want to use ctx_info but conflict with another kernel
-> struct. :(
->> Symbols that start with an underscore "_" are reserved and should not
->> be used in general, and especially not in uapi header files.
-> Then, maybe we can use sctx_info here?
+Hi, Arnd,
 
-Actually it seems to me that this struct is the header of each 
-sc_extcontext; i.e. one struct sigcontext with 0~N trailing 
-"sc_extcontext", and each "sc_extcontext" consists of one "struct 
-_ctxinfo" header plus the real content. For now there's only the FPU 
-context but the LSX/LASX/LBT contexts will come later. The "magic" and 
-"size" fields also matches the definitions following.
-
-So I'd suggest something like "struct sc_extcontext_head" while naming 
-the individual contexts like "struct sc_extcontext_foo", e.g. "struct 
-sc_extcontext_fpu". The "sc_extcontext" part could use some further 
-abbreviation but the end result should be something intuitive.
-
+On Wed, May 18, 2022 at 9:42 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Huacai
->> Eric
+> On Wed, May 18, 2022 at 10:25 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> > LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> > version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> > boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> > are already added in the next revision of ACPI Specification (current
+> > revision is 6.4).
+> >
+> > This patchset is adding basic LoongArch support in mainline kernel, we
+> > can see a complete snapshot here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
+>
+> Stephen, can you add this branch to the linux-next tree?
+>
+> I see there are still comments coming in, but at some point this has
+> to just be considered good enough that any further changes can be addressed
+> with patches on top rather than rebasing.
+>
+> > V10 -> V11:
+> > 1, Rebased on asm-generic tree;
+>
+> I was expecting that you'd base this on just the spinlock changes from Palmer's
+> tree that are part of the asm-generic tree rather than all of what I have.
+>
+> Can you rebase it once more? If there are conflicts against the h8300 removal
+> series that is also in asm-generic, leaving it on top of that may be
+> easier though.
+Thank you very much, I have rebased the below tree on asm-generic
+tree's spinlock commit 9282d0996936c5fbf877c0d096a3feb45 again, and
+fixed some small problems from Eric and WANG Xuerui's comments in V11.
+https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
+
+Huacai
+>
+>         Arnd
