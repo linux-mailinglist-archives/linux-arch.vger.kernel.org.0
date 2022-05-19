@@ -2,336 +2,517 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F297F52D6FD
-	for <lists+linux-arch@lfdr.de>; Thu, 19 May 2022 17:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C48052DBF3
+	for <lists+linux-arch@lfdr.de>; Thu, 19 May 2022 19:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240605AbiESPIZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 19 May 2022 11:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33962 "EHLO
+        id S243410AbiESRwi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 19 May 2022 13:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240583AbiESPHW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 May 2022 11:07:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602285AA5A;
-        Thu, 19 May 2022 08:07:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9A7871FD38;
-        Thu, 19 May 2022 15:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652972837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IWH8FsPC8/ygpHOHonzeBfxn5Hz3dIsT3esa4BuohSw=;
-        b=L1wnzQCN98EtULwo7rWgMsVWrGpIqw1OEFykq7S4VaSrHUN417Nvy+MuyV0bJroSRmzy3M
-        5xSbrtjNYJSnHWF9siwjJsICkEhIPlFD71CmIA3krAFrlir2Ib9wQP1D9MNLN+WE8+GBNw
-        z1SnCL+8POea8sqpsg/MK603z03iuNU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D534113AF8;
-        Thu, 19 May 2022 15:07:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XYt5MSRdhmJpWAAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 19 May 2022 15:07:16 +0000
-Message-ID: <bda2d3cb-7472-28ff-eb4e-a30458460c84@suse.com>
-Date:   Thu, 19 May 2022 17:07:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 2/2] virtio: replace
- arch_has_restricted_virtio_memory_access()
-Content-Language: en-US
-To:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, x86@kernel.org,
-        linux-s390@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Oleksandr Tyshchenko <olekstysh@gmail.com>
-References: <20220504155703.13336-1-jgross@suse.com>
- <20220504155703.13336-3-jgross@suse.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220504155703.13336-3-jgross@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------X2JEafOWLT00pgbXX5l1hgWW"
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S243417AbiESRwa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 19 May 2022 13:52:30 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BF1EA7
+        for <linux-arch@vger.kernel.org>; Thu, 19 May 2022 10:50:48 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id c14so5781045pfn.2
+        for <linux-arch@vger.kernel.org>; Thu, 19 May 2022 10:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KDc2KQA49VDIBNAWGE/kJJsnJ8fse1j9DSeVFeZlH7k=;
+        b=wQKqfyXxUVxn5+b97tCQOra0tW11BwcQ0E5uIpu4PwO1Tw/JawVLR2LUFgcCMeteJE
+         YEO0/CUHGkHFtj083XIHrFC1I0dUavPEnc5e7qOeAayzlON0+U3eIcCRTuoUaDxQyW49
+         YVFWXttXWq326VjSuyGZJKH01bLHWW0HZV7o4j1Dc9UCevoGRlZAmP3ZYCakyMKzvPY1
+         ced/PNJ+0cnOougpHs/3x7g5q/hfHcodrC2/FrXMavv8HpaArFsuPCyWVXQuvSX84As8
+         buPX5IeU5fcyDe25rOSMR85r3kpcalEBzjsxlPs5zRFEMhxzjawdNOvZNvo2ew17694P
+         tjtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=KDc2KQA49VDIBNAWGE/kJJsnJ8fse1j9DSeVFeZlH7k=;
+        b=G9VnGlNURYJARrAgxzpzqKTyGGra5Bv4LT9tYzg5eK87r2TpqkenC5L1gvqFlyo9Xu
+         pC//Xg7HgY1CzkdWr146kVbEOF7WMLI6KBJLyJ1afzY3wr9dlCr6f49vMxFVWytylEbG
+         vPWyk29Ya2pq0PO09Lu6thvbh6+jzYFttoEh2AD44IUfNqy++imhkQidMO8Z6aYVdqbt
+         JQmeIFmc1aGqkgDlvoGAorJqIk24/XC4mQ6HvFNpuUwgVUMmyMko46Z6WoyCstj2aph3
+         H5vnju+xg5SYXBatT2uLNS6xTL2fAmdB4HCY33fYJRmr8HOx7veXmukYpVB9K1cS6QvS
+         C9QQ==
+X-Gm-Message-State: AOAM5308Nufc8GhotN7liyf+AR8lTv1sgre7oFxwLduauw4uYv1M2vuj
+        caH8UXwhwij2tRPd+dIsla88jA==
+X-Google-Smtp-Source: ABdhPJwG4GGdxx4DYauVtBbD/Ndxcvwqd8c3zwkMCuH9Xw/Z2bjkEcJ5csWT53uj35hQx59jTBf6kg==
+X-Received: by 2002:a63:83c6:0:b0:3f5:d766:9c5d with SMTP id h189-20020a6383c6000000b003f5d7669c5dmr4930608pge.65.1652982647293;
+        Thu, 19 May 2022 10:50:47 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id x30-20020aa79a5e000000b00518142f8c37sm4603866pfj.171.2022.05.19.10.50.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 10:50:46 -0700 (PDT)
+Date:   Thu, 19 May 2022 10:50:46 -0700 (PDT)
+X-Google-Original-Date: Thu, 19 May 2022 10:50:41 PDT (-0700)
+Subject:     Re: [PATCH V12 00/20] riscv: Add COMPAT mode support for 64BIT
+In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
+CC:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>, nathan@kernel.org,
+        naresh.kamboju@linaro.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        x86@kernel.org, heiko@sntech.de, guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     guoren@kernel.org
+Message-ID: <mhng-18c947be-e3f4-49eb-adec-47f5e7eb372b@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------X2JEafOWLT00pgbXX5l1hgWW
-Content-Type: multipart/mixed; boundary="------------1I1ZTSyF7lu6th38xRuLvtF5";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, x86@kernel.org, linux-s390@vger.kernel.org,
- virtualization@lists.linux-foundation.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Christoph Hellwig <hch@infradead.org>,
- Oleksandr Tyshchenko <olekstysh@gmail.com>
-Message-ID: <bda2d3cb-7472-28ff-eb4e-a30458460c84@suse.com>
-Subject: Re: [PATCH v3 2/2] virtio: replace
- arch_has_restricted_virtio_memory_access()
-References: <20220504155703.13336-1-jgross@suse.com>
- <20220504155703.13336-3-jgross@suse.com>
-In-Reply-To: <20220504155703.13336-3-jgross@suse.com>
+On Tue, 05 Apr 2022 00:12:54 PDT (-0700), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Currently, most 64-bit architectures (x86, parisc, powerpc, arm64,
+> s390, mips, sparc) have supported COMPAT mode. But they all have
+> history issues and can't use standard linux unistd.h. RISC-V would
+> be first standard __SYSCALL_COMPAT user of include/uapi/asm-generic
+> /unistd.h.
+>
+> The patchset are based on v5.18-rc1, you can compare rv64-compat
+> v.s. rv32-native in qemu with following steps:
+>
+>  - Prepare rv32 rootfs & fw_jump.bin by buildroot.org
+>    $ git clone git://git.busybox.net/buildroot
+>    $ cd buildroot
+>    $ make qemu_riscv32_virt_defconfig O=qemu_riscv32_virt_defconfig
+>    $ make -C qemu_riscv32_virt_defconfig
+>    $ make qemu_riscv64_virt_defconfig O=qemu_riscv64_virt_defconfig
+>    $ make -C qemu_riscv64_virt_defconfig
+>    (Got fw_jump.bin & rootfs.ext2 in qemu_riscvXX_virt_defconfig/images)
+>
+>  - Prepare Linux rv32 & rv64 Image
+>    $ git clone git@github.com:c-sky/csky-linux.git -b riscv_compat_v12 linux
+>    $ cd linux
+>    $ echo "CONFIG_STRICT_KERNEL_RWX=n" >> arch/riscv/configs/defconfig
+>    $ echo "CONFIG_STRICT_MODULE_RWX=n" >> arch/riscv/configs/defconfig
+>    $ make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu- O=../build-rv32/ rv32_defconfig
+>    $ make ARCH=riscv CROSS_COMPILE=riscv32-buildroot-linux-gnu- O=../build-rv32/ Image
+>    $ make ARCH=riscv CROSS_COMPILE=riscv64-buildroot-linux-gnu- O=../build-rv64/ defconfig
+>    $ make ARCH=riscv CROSS_COMPILE=riscv64-buildroot-linux-gnu- O=../build-rv64/ Image
+>
+>  - Prepare Qemu:
+>    $ git clone https://gitlab.com/qemu-project/qemu.git -b master linux
+>    $ cd qemu
+>    $ ./configure --target-list="riscv64-softmmu riscv32-softmmu"
+>    $ make
+>
+> Now let's compare rv64-compat with rv32-native memory footprint with almost the same
+> defconfig, rootfs, opensbi in one qemu.
+>
+>  - Run rv64 with rv32 rootfs in compat mode:
+>    $ ./build/qemu-system-riscv64 -cpu rv64 -M virt -m 64m -nographic -bios qemu_riscv64_virt_defconfig/images/fw_jump.bin -kernel build-rv64/Image -drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -append "rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi" -netdev user,id=net0 -device virtio-net-device,netdev=net0
+>
+> QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
+> OpenSBI v0.9
+> [    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (guoren@guoren-Z87-HD3) (riscv64-unknown-linux-gnu-gcc (GCC) 10.2.0, GNU ld (GNU Binutils) 2.37) #96 SMP Tue Dec 28 21:01:55 CST 2021
+> [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
+> [    0.000000] Machine model: riscv-virtio,qemu
+> [    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
+> [    0.000000] printk: bootconsole [sbi0] enabled
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA32    [mem 0x0000000080200000-0x0000000083ffffff]
+> [    0.000000]   Normal   empty
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000080200000-0x0000000083ffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000080200000-0x0000000083ffffff]
+> [    0.000000] SBI specification v0.2 detected
+> [    0.000000] SBI implementation ID=0x1 Version=0x9
+> [    0.000000] SBI TIME extension detected
+> [    0.000000] SBI IPI extension detected
+> [    0.000000] SBI RFENCE extension detected
+> [    0.000000] SBI v0.2 HSM extension detected
+> [    0.000000] riscv: ISA extensions acdfhimsu
+> [    0.000000] riscv: ELF capabilities acdfim
+> [    0.000000] percpu: Embedded 17 pages/cpu s30696 r8192 d30744 u69632
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 15655
+> [    0.000000] Kernel command line: rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi
+> [    0.000000] Dentry cache hash table entries: 8192 (order: 4, 65536 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 4096 (order: 3, 32768 bytes, linear)
+> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> [    0.000000] Virtual kernel memory layout:
+> [    0.000000]       fixmap : 0xffffffcefee00000 - 0xffffffceff000000   (2048 kB)
+> [    0.000000]       pci io : 0xffffffceff000000 - 0xffffffcf00000000   (  16 MB)
+> [    0.000000]      vmemmap : 0xffffffcf00000000 - 0xffffffcfffffffff   (4095 MB)
+> [    0.000000]      vmalloc : 0xffffffd000000000 - 0xffffffdfffffffff   (65535 MB)
+> [    0.000000]       lowmem : 0xffffffe000000000 - 0xffffffe003e00000   (  62 MB)
+> [    0.000000]       kernel : 0xffffffff80000000 - 0xffffffffffffffff   (2047 MB)
+> [    0.000000] Memory: 52788K/63488K available (6184K kernel code, 888K rwdata, 1917K rodata, 294K init, 297K bss, 10700K reserved, 0K cma-reserved)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+> [    0.000000] rcu: Hierarchical RCU implementation.
+> [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
+> [    0.000000] rcu:     RCU debug extended QS entry/exit.
+> [    0.000000]  Tracing variant of Tasks RCU enabled.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+> [    0.000000] riscv-intc: 64 local interrupts mapped
+> [    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handlers for 2 contexts.
+> ...
+> Welcome to Buildroot
+> buildroot login: root
+> # cat /proc/cpuinfo
+> processor       : 0
+> hart            : 0
+> isa             : rv64imafdcsuh
+> mmu             : sv48
+>
+> # file /bin/busybox
+> /bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+> # ca[   78.386630] random: fast init done
+> # cat /proc/meminfo
+> MemTotal:          53076 kB
+> MemFree:           40264 kB
+> MemAvailable:      40244 kB
+> Buffers:             236 kB
+> Cached:             1560 kB
+> SwapCached:            0 kB
+> Active:             1700 kB
+> Inactive:            516 kB
+> Active(anon):         40 kB
+> Inactive(anon):      424 kB
+> Active(file):       1660 kB
+> Inactive(file):       92 kB
+> Unevictable:           0 kB
+> Mlocked:               0 kB
+> SwapTotal:             0 kB
+> SwapFree:              0 kB
+> Dirty:                 0 kB
+> Writeback:             0 kB
+> AnonPages:           444 kB
+> Mapped:             1188 kB
+> Shmem:                44 kB
+> KReclaimable:        952 kB
+> Slab:               5744 kB
+> SReclaimable:        952 kB
+> SUnreclaim:         4792 kB
+> KernelStack:         624 kB
+> PageTables:          156 kB
+> NFS_Unstable:          0 kB
+> Bounce:                0 kB
+> WritebackTmp:          0 kB
+> CommitLimit:       26536 kB
+> Committed_AS:       1748 kB
+> VmallocTotal:   67108863 kB
+> VmallocUsed:         652 kB
+> VmallocChunk:          0 kB
+> Percpu:               80 kB
+> #
+>
+>  - Run rv32 with rv32 rootfs:
+>    $ ./build/qemu-system-riscv32 -cpu rv32 -M virt -m 64m -nographic -bios qemu_riscv32_virt_defconfig/images/fw_jump.bin -kernel build-rv32/Image -drive file qemu_riscv32_virt_defconfig/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -append "rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi" -netdev user,id=net0 -device virtio-net-device,netdev=net0
+>
+> QEMU emulator version 6.2.50 (v6.2.0-29-g196d7182c8)
+> OpenSBI v0.9
+> [    0.000000] Linux version 5.16.0-rc6-00017-g750f87086bdd-dirty (guoren@guoren-Z87-HD3) (riscv32-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-201-g7600ca7960-dirty) 10.3.0, GNU ld (GNU Binutils) 2.36.1) #7 SMP Tue Dec 28 21:02:21 CST 2021
+> [    0.000000] OF: fdt: Ignoring memory range 0x80000000 - 0x80400000
+> [    0.000000] Machine model: riscv-virtio,qemu
+> [    0.000000] earlycon: sbi0 at I/O port 0x0 (options '')
+> [    0.000000] printk: bootconsole [sbi0] enabled
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] Zone ranges:
+> [    0.000000]   Normal   [mem 0x0000000080400000-0x0000000083ffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000080400000-0x0000000083ffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000080400000-0x0000000083ffffff]
+> [    0.000000] SBI specification v0.2 detected
+> [    0.000000] SBI implementation ID=0x1 Version=0x9
+> [    0.000000] SBI TIME extension detected
+> [    0.000000] SBI IPI extension detected
+> [    0.000000] SBI RFENCE extension detected
+> [    0.000000] SBI v0.2 HSM extension detected
+> [    0.000000] riscv: ISA extensions acdfhimsu
+> [    0.000000] riscv: ELF capabilities acdfim
+> [    0.000000] percpu: Embedded 12 pages/cpu s16600 r8192 d24360 u49152
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 15240
+> [    0.000000] Kernel command line: rootwait root=/dev/vda ro console=ttyS0 earlycon=sbi
+> [    0.000000] Dentry cache hash table entries: 8192 (order: 3, 32768 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
+> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> [    0.000000] Virtual kernel memory layout:
+> [    0.000000]       fixmap : 0x9dc00000 - 0x9e000000   (4096 kB)
+> [    0.000000]       pci io : 0x9e000000 - 0x9f000000   (  16 MB)
+> [    0.000000]      vmemmap : 0x9f000000 - 0x9fffffff   (  15 MB)
+> [    0.000000]      vmalloc : 0xa0000000 - 0xbfffffff   ( 511 MB)
+> [    0.000000]       lowmem : 0xc0000000 - 0xc3c00000   (  60 MB)
+> [    0.000000] Memory: 51924K/61440K available (6117K kernel code, 695K rwdata, 1594K rodata, 255K init, 241K bss, 9516K reserved, 0K cma-reserved)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+> [    0.000000] rcu: Hierarchical RCU implementation.
+> [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=8 to nr_cpu_ids=1.
+> [    0.000000] rcu:     RCU debug extended QS entry/exit.
+> [    0.000000]  Tracing variant of Tasks RCU enabled.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+> [    0.000000] riscv-intc: 32 local interrupts mapped
+> [    0.000000] plic: plic@c000000: mapped 53 interrupts with 1 handlers for 2 contexts.
+> ...
+> Welcome to Buildroot
+> buildroot login: root
+> # cat /proc/cpuinfo
+> processor       : 0
+> hart            : 0
+> isa             : rv32imafdcsuh
+> mmu             : sv32
+>
+> # file /bin/busybox
+> /bin/busybox: setuid ELF 32-bit LSB shared object, UCB RISC-V, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-riscv32-ilp32d.so.1, for GNU/Linux 5.15.0, stripped
+> [   79.320589] random: fast init done
+> # cat /proc/meminfo
+> MemTotal:          52176 kB
+> MemFree:           41012 kB
+> MemAvailable:      42176 kB
+> Buffers:             644 kB
+> Cached:             2724 kB
+> SwapCached:            0 kB
+> Active:             3128 kB
+> Inactive:            752 kB
+> Active(anon):         40 kB
+> Inactive(anon):      516 kB
+> Active(file):       3088 kB
+> Inactive(file):      236 kB
+> Unevictable:           0 kB
+> Mlocked:               0 kB
+> SwapTotal:             0 kB
+> SwapFree:              0 kB
+> Dirty:                 4 kB
+> Writeback:             0 kB
+> AnonPages:           556 kB
+> Mapped:             2172 kB
+> Shmem:                44 kB
+> KReclaimable:        656 kB
+> Slab:               3684 kB
+> SReclaimable:        656 kB
+> SUnreclaim:         3028 kB
+> KernelStack:         312 kB
+> PageTables:           88 kB
+> NFS_Unstable:          0 kB
+> Bounce:                0 kB
+> WritebackTmp:          0 kB
+> CommitLimit:       26088 kB
+> Committed_AS:       2088 kB
+> VmallocTotal:     524287 kB
+> VmallocUsed:          12 kB
+> VmallocChunk:          0 kB
+> Percpu:               60 kB
+> #
+>
+>  Some conclusions:
+>  - kernel statics:
+>    64: Memory: 52788K/63488K available (6184K kernel code, 888K rwdata, 1917K rodata, 294K init, 297K bss, 10700K reserved)
+>    32: Memory: 51924K/61440K available (6117K kernel code, 695K rwdata, 1594K rodata, 255K init, 241K bss,  9516K reserved)
+>    rv32 better than rv64:                  1%               22%           17%          13%        19%         11%
+>    The code size is very similar, but data size rv32 would be better.
+>
+>  - rv32 kernel runtime KernelStack, Slab... are smaller,
+>    rv64: MemTotal: 53076 kB,        MemFree: 40264 kB
+>    rv32: MemTotal: 52176 + 2048 kB, MemFree: 41012  + 2048 kB
+>    rv32 better than rv64:       2%                         6%
+>
+>    (Because opensbi problem, we could add another 2MB for rv32.)
+>    Overall in 64MB memory situation, rv64-compat is 6% worse than rv32-native
+>    at memory footprint. If the userspace memory usage increases, I think
+>    the gap will be further reduced.
+>
+> Changes in v12:
+>  - Rebase on 5.18-rc1
+>  - Fixup compile conflicts with 5.18-rc1
+>  - Fixup $(srctree) == $(objtree) compile error reported by Nathan
+>
+> Changes in v11:
+>  - Using arch instead of kconfig for commit subject by Masahiro Yamada
+>
+> Changes in v10:
+>  - Fixup arm64 compile error with compat_statfs definition
+>  - Fixup compat_sys_fadvise64_64 function arguments error cause ltp failure
+>
+> Changes in v9:
+>  - Fixup rv32 call rv64 segment fault
+>  - Ready for 5.18
+>
+> Changes in v8:
+>  - Enhanced elf_check_arch with EI_CLASS
+>  - Fixup SR_UXL doesn't exist in CONFIG_32BIT
+>  - Add Tested-by with Heiko
+>  - Update qemu compile tips with upstream repo
+>
+> Changes in v7:
+>  - Re-construct compat_vdso/Makefile
+>  - Fixup disable COMPAT compile error by csr.h's macro.
+>  - Optimize coding convention for lo/hi in compat.h
+>
+> Changes in v6:
+>  - Rebase on linux-5.17-rc5
+>  - Optimize hw capability check for elf
+>  - Optimize comment in thread_info.h
+>  - Optimize start_thread with SR_UXL setting
+>  - Optimize vdso.c with direct panic
+>
+> Changes in v5:
+>  - Rebase on linux-5.17-rc2
+>  - Include consolidate the fcntl patches by Christoph Hellwig
+>  - Remove F_GETLK64/F_SETLK64/F_SETLKW64 from asm/compat.h
+>  - Change COMPAT_RLIM_INFINITY from 0x7fffffff to 0xffffffff
+>  - Bring back "Add hw-cap detect in setup_arch patch" in v1
+>
+> Changes in v4:
+>  - Rebase on linux-5.17-rc1
+>  - Optimize compat_sys_call_table implementation with Arnd's advice
+>  - Add reviewed-by for Arnd. Thx :)
+>  - Remove FIXME comment in elf.h
+>  - Optimize Cleanup duplicate definitions in compat.h with Arnd's advice
+>
+> Changes in v3:
+>  - Rebase on newest master (pre linux-5.17-rc1)
+>  - Using newest qemu version v7 for test
+>  - Remove fcntl common modification
+>  - Fixup SET_PERSONALITY in elf.h by Arnd
+>  - Fixup KVM Kconfig
+>  - Update Acked-by & Reviewed-by
+>
+> Changes in v2:
+>  - Add __ARCH_WANT_COMPAT_STAT suggested
+>  - Cleanup fcntl compatduplicate definitions
+>  - Cleanup compat.h
+>  - Move rv32_defconfig into Makefile
+>  - Fixup rv64 rootfs boot failed, remove hw_compat_mode_detect
+>  - Move SYSVIPC_COMPAT into init/Kconfig
+>  - Simplify compat_elf_check
+>
+> Christoph Hellwig (3):
+>   uapi: simplify __ARCH_FLOCK{,64}_PAD a little
+>   uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+>   compat: consolidate the compat_flock{,64} definition
+>
+> Guo Ren (17):
+>   arch: Add SYSVIPC_COMPAT for all architectures
+>   fs: stat: compat: Add __ARCH_WANT_COMPAT_STAT
+>   asm-generic: compat: Cleanup duplicate definitions
+>   syscalls: compat: Fix the missing part for __SYSCALL_COMPAT
+>   riscv: Fixup difference with defconfig
+>   riscv: compat: Add basic compat data type implementation
+>   riscv: compat: Support TASK_SIZE for compat mode
+>   riscv: compat: syscall: Add compat_sys_call_table implementation
+>   riscv: compat: syscall: Add entry.S implementation
+>   riscv: compat: process: Add UXL_32 support in start_thread
+>   riscv: compat: Add elf.h implementation
+>   riscv: compat: Add hw capability check for elf
+>   riscv: compat: vdso: Add COMPAT_VDSO base code implementation
+>   riscv: compat: vdso: Add setup additional pages implementation
+>   riscv: compat: signal: Add rt_frame implementation
+>   riscv: compat: ptrace: Add compat_arch_ptrace implement
+>   riscv: compat: Add COMPAT Kbuild skeletal support
+>
+>  arch/arm64/Kconfig                            |   4 -
+>  arch/arm64/include/asm/compat.h               |  93 +------
+>  arch/arm64/include/asm/unistd.h               |   1 +
+>  arch/mips/Kconfig                             |   5 -
+>  arch/mips/include/asm/compat.h                |  41 +--
+>  arch/mips/include/asm/unistd.h                |   2 +
+>  arch/mips/include/uapi/asm/fcntl.h            |  30 +--
+>  arch/parisc/Kconfig                           |   4 -
+>  arch/parisc/include/asm/compat.h              |  45 +---
+>  arch/parisc/include/asm/unistd.h              |   1 +
+>  arch/powerpc/Kconfig                          |   5 -
+>  arch/powerpc/include/asm/compat.h             |  50 +---
+>  arch/powerpc/include/asm/unistd.h             |   1 +
+>  arch/riscv/Kconfig                            |  19 ++
+>  arch/riscv/Makefile                           |   9 +
+>  arch/riscv/include/asm/compat.h               | 129 ++++++++++
+>  arch/riscv/include/asm/csr.h                  |   7 +
+>  arch/riscv/include/asm/elf.h                  |  50 +++-
+>  arch/riscv/include/asm/mmu.h                  |   1 +
+>  arch/riscv/include/asm/pgtable.h              |  13 +-
+>  arch/riscv/include/asm/processor.h            |   6 +-
+>  arch/riscv/include/asm/syscall.h              |   1 +
+>  arch/riscv/include/asm/thread_info.h          |   1 +
+>  arch/riscv/include/asm/unistd.h               |  11 +
+>  arch/riscv/include/asm/vdso.h                 |   9 +
+>  arch/riscv/include/uapi/asm/unistd.h          |   2 +-
+>  arch/riscv/kernel/Makefile                    |   3 +
+>  arch/riscv/kernel/compat_signal.c             | 242 ++++++++++++++++++
+>  arch/riscv/kernel/compat_syscall_table.c      |  19 ++
+>  arch/riscv/kernel/compat_vdso/.gitignore      |   2 +
+>  arch/riscv/kernel/compat_vdso/Makefile        |  78 ++++++
+>  arch/riscv/kernel/compat_vdso/compat_vdso.S   |   8 +
+>  .../kernel/compat_vdso/compat_vdso.lds.S      |   3 +
+>  arch/riscv/kernel/compat_vdso/flush_icache.S  |   3 +
+>  .../compat_vdso/gen_compat_vdso_offsets.sh    |   5 +
+>  arch/riscv/kernel/compat_vdso/getcpu.S        |   3 +
+>  arch/riscv/kernel/compat_vdso/note.S          |   3 +
+>  arch/riscv/kernel/compat_vdso/rt_sigreturn.S  |   3 +
+>  arch/riscv/kernel/entry.S                     |  18 +-
+>  arch/riscv/kernel/process.c                   |  37 +++
+>  arch/riscv/kernel/ptrace.c                    |  87 ++++++-
+>  arch/riscv/kernel/signal.c                    |  13 +-
+>  arch/riscv/kernel/sys_riscv.c                 |   6 +-
+>  arch/riscv/kernel/vdso.c                      | 105 +++++---
+>  arch/riscv/kernel/vdso/vdso.S                 |   6 +-
+>  arch/s390/Kconfig                             |   3 -
+>  arch/s390/include/asm/compat.h                |  99 +------
+>  arch/s390/include/asm/unistd.h                |   1 +
+>  arch/sparc/Kconfig                            |   5 -
+>  arch/sparc/include/asm/compat.h               |  61 ++---
+>  arch/sparc/include/asm/unistd.h               |   1 +
+>  arch/x86/Kconfig                              |   4 -
+>  arch/x86/include/asm/compat.h                 | 104 ++------
+>  arch/x86/include/asm/unistd.h                 |   1 +
+>  fs/open.c                                     |  24 ++
+>  fs/read_write.c                               |  16 ++
+>  fs/stat.c                                     |   2 +-
+>  fs/sync.c                                     |   9 +
+>  include/asm-generic/compat.h                  | 113 ++++++++
+>  include/linux/compat.h                        |  68 +++++
+>  include/uapi/asm-generic/fcntl.h              |  23 +-
+>  include/uapi/asm-generic/unistd.h             |   4 +-
+>  init/Kconfig                                  |   4 +
+>  mm/fadvise.c                                  |  11 +
+>  mm/readahead.c                                |   7 +
+>  tools/include/uapi/asm-generic/fcntl.h        |  21 +-
+>  tools/include/uapi/asm-generic/unistd.h       |   4 +-
+>  67 files changed, 1206 insertions(+), 563 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/compat.h
+>  create mode 100644 arch/riscv/kernel/compat_signal.c
+>  create mode 100644 arch/riscv/kernel/compat_syscall_table.c
+>  create mode 100644 arch/riscv/kernel/compat_vdso/.gitignore
+>  create mode 100644 arch/riscv/kernel/compat_vdso/Makefile
+>  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.S
+>  create mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
+>  create mode 100644 arch/riscv/kernel/compat_vdso/flush_icache.S
+>  create mode 100755 arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
+>  create mode 100644 arch/riscv/kernel/compat_vdso/getcpu.S
+>  create mode 100644 arch/riscv/kernel/compat_vdso/note.S
+>  create mode 100644 arch/riscv/kernel/compat_vdso/rt_sigreturn.S
 
---------------1I1ZTSyF7lu6th38xRuLvtF5
-Content-Type: multipart/mixed; boundary="------------q0Ma1pV467Hqz8bFVYRGEh6g"
+Thanks.
 
---------------q0Ma1pV467Hqz8bFVYRGEh6g
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+This touches a bunch of other trees, which I try to avoid without the 
+relevant acks and such.  In this case I'm OK taking it because Arnd and 
+Christoph have written/reviewed/ack'd so much of it, and because some 
+autobuilders found build issues (and thus I'm assuming there aren't any 
+more).
 
-T24gMDQuMDUuMjIgMTc6NTcsIEp1ZXJnZW4gR3Jvc3Mgd3JvdGU6DQo+IEluc3RlYWQgb2Yg
-dXNpbmcgYXJjaF9oYXNfcmVzdHJpY3RlZF92aXJ0aW9fbWVtb3J5X2FjY2VzcygpIHRvZ2V0
-aGVyDQo+IHdpdGggQ09ORklHX0FSQ0hfSEFTX1JFU1RSSUNURURfVklSVElPX01FTU9SWV9B
-Q0NFU1MsIHJlcGxhY2UgdGhvc2UNCj4gd2l0aCBwbGF0Zm9ybV9oYXMoKSBhbmQgYSBuZXcg
-cGxhdGZvcm0gZmVhdHVyZQ0KPiBQTEFURk9STV9WSVJUSU9fUkVTVFJJQ1RFRF9NRU1fQUND
-RVNTLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogSnVlcmdlbiBHcm9zcyA8amdyb3NzQHN1c2Uu
-Y29tPg0KDQpDb3VsZCBJIGdldCBzb21lIGZlZWRiYWNrIGZyb20gdGhlIHMzOTAgc2lkZSwg
-cGxlYXNlPw0KDQoNCkp1ZXJnZW4NCg0KPiAtLS0NCj4gVjI6DQo+IC0gbW92ZSBzZXR0aW5n
-IG9mIFBMQVRGT1JNX1ZJUlRJT19SRVNUUklDVEVEX01FTV9BQ0NFU1MgaW4gU0VWIGNhc2UN
-Cj4gICAgdG8gc2V2X3NldHVwX2FyY2goKS4NCj4gVjM6DQo+IC0gcmVtb3ZlIEh5cGVyLVYg
-Y2h1bmsgKE1pY2hhZWwgS2VsbGV5KQ0KPiAtIHJlbW92ZSBpbmNsdWRlIHZpcnRpb19jb25m
-aWcuaCBmcm9tIG1lbV9lbmNyeXB0LmMgKE9sZWtzYW5kciBUeXNoY2hlbmtvKQ0KPiAtIGFk
-ZCBjb21tZW50IGZvciBQTEFURk9STV9WSVJUSU9fUkVTVFJJQ1RFRF9NRU1fQUNDRVNTIChP
-bGVrc2FuZHIgVHlzaGNoZW5rbykNCj4gLS0tDQo+ICAgYXJjaC9zMzkwL0tjb25maWcgICAg
-ICAgICAgICAgICAgfCAgMSAtDQo+ICAgYXJjaC9zMzkwL21tL2luaXQuYyAgICAgICAgICAg
-ICAgfCAxMyArKystLS0tLS0tLS0tDQo+ICAgYXJjaC94ODYvS2NvbmZpZyAgICAgICAgICAg
-ICAgICAgfCAgMSAtDQo+ICAgYXJjaC94ODYvbW0vbWVtX2VuY3J5cHQuYyAgICAgICAgfCAg
-NyAtLS0tLS0tDQo+ICAgYXJjaC94ODYvbW0vbWVtX2VuY3J5cHRfYW1kLmMgICAgfCAgNCAr
-KysrDQo+ICAgZHJpdmVycy92aXJ0aW8vS2NvbmZpZyAgICAgICAgICAgfCAgNiAtLS0tLS0N
-Cj4gICBkcml2ZXJzL3ZpcnRpby92aXJ0aW8uYyAgICAgICAgICB8ICA1ICsrLS0tDQo+ICAg
-aW5jbHVkZS9saW51eC9wbGF0Zm9ybS1mZWF0dXJlLmggfCAgNiArKysrKy0NCj4gICBpbmNs
-dWRlL2xpbnV4L3ZpcnRpb19jb25maWcuaCAgICB8ICA5IC0tLS0tLS0tLQ0KPiAgIDkgZmls
-ZXMgY2hhbmdlZCwgMTQgaW5zZXJ0aW9ucygrKSwgMzggZGVsZXRpb25zKC0pDQo+IA0KPiBk
-aWZmIC0tZ2l0IGEvYXJjaC9zMzkwL0tjb25maWcgYi9hcmNoL3MzOTAvS2NvbmZpZw0KPiBp
-bmRleCBlMDg0YzcyMTA0ZjguLmY5N2EyMmFlNjlhOCAxMDA2NDQNCj4gLS0tIGEvYXJjaC9z
-MzkwL0tjb25maWcNCj4gKysrIGIvYXJjaC9zMzkwL0tjb25maWcNCj4gQEAgLTc3Miw3ICs3
-NzIsNiBAQCBtZW51ICJWaXJ0dWFsaXphdGlvbiINCj4gICBjb25maWcgUFJPVEVDVEVEX1ZJ
-UlRVQUxJWkFUSU9OX0dVRVNUDQo+ICAgCWRlZl9ib29sIG4NCj4gICAJcHJvbXB0ICJQcm90
-ZWN0ZWQgdmlydHVhbGl6YXRpb24gZ3Vlc3Qgc3VwcG9ydCINCj4gLQlzZWxlY3QgQVJDSF9I
-QVNfUkVTVFJJQ1RFRF9WSVJUSU9fTUVNT1JZX0FDQ0VTUw0KPiAgIAloZWxwDQo+ICAgCSAg
-U2VsZWN0IHRoaXMgb3B0aW9uLCBpZiB5b3Ugd2FudCB0byBiZSBhYmxlIHRvIHJ1biB0aGlz
-DQo+ICAgCSAga2VybmVsIGFzIGEgcHJvdGVjdGVkIHZpcnR1YWxpemF0aW9uIEtWTSBndWVz
-dC4NCj4gZGlmZiAtLWdpdCBhL2FyY2gvczM5MC9tbS9pbml0LmMgYi9hcmNoL3MzOTAvbW0v
-aW5pdC5jDQo+IGluZGV4IDg2ZmZkMGQ1MWZkNS4uMmMzYjQ1MTgxM2VkIDEwMDY0NA0KPiAt
-LS0gYS9hcmNoL3MzOTAvbW0vaW5pdC5jDQo+ICsrKyBiL2FyY2gvczM5MC9tbS9pbml0LmMN
-Cj4gQEAgLTMxLDYgKzMxLDcgQEANCj4gICAjaW5jbHVkZSA8bGludXgvY21hLmg+DQo+ICAg
-I2luY2x1ZGUgPGxpbnV4L2dmcC5oPg0KPiAgICNpbmNsdWRlIDxsaW51eC9kbWEtZGlyZWN0
-Lmg+DQo+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm0tZmVhdHVyZS5oPg0KPiAgICNpbmNs
-dWRlIDxhc20vcHJvY2Vzc29yLmg+DQo+ICAgI2luY2x1ZGUgPGxpbnV4L3VhY2Nlc3MuaD4N
-Cj4gICAjaW5jbHVkZSA8YXNtL3BnYWxsb2MuaD4NCj4gQEAgLTE2OCwyMiArMTY5LDE0IEBA
-IGJvb2wgZm9yY2VfZG1hX3VuZW5jcnlwdGVkKHN0cnVjdCBkZXZpY2UgKmRldikNCj4gICAJ
-cmV0dXJuIGlzX3Byb3RfdmlydF9ndWVzdCgpOw0KPiAgIH0NCj4gICANCj4gLSNpZmRlZiBD
-T05GSUdfQVJDSF9IQVNfUkVTVFJJQ1RFRF9WSVJUSU9fTUVNT1JZX0FDQ0VTUw0KPiAtDQo+
-IC1pbnQgYXJjaF9oYXNfcmVzdHJpY3RlZF92aXJ0aW9fbWVtb3J5X2FjY2Vzcyh2b2lkKQ0K
-PiAtew0KPiAtCXJldHVybiBpc19wcm90X3ZpcnRfZ3Vlc3QoKTsNCj4gLX0NCj4gLUVYUE9S
-VF9TWU1CT0woYXJjaF9oYXNfcmVzdHJpY3RlZF92aXJ0aW9fbWVtb3J5X2FjY2Vzcyk7DQo+
-IC0NCj4gLSNlbmRpZg0KPiAtDQo+ICAgLyogcHJvdGVjdGVkIHZpcnR1YWxpemF0aW9uICov
-DQo+ICAgc3RhdGljIHZvaWQgcHZfaW5pdCh2b2lkKQ0KPiAgIHsNCj4gICAJaWYgKCFpc19w
-cm90X3ZpcnRfZ3Vlc3QoKSkNCj4gICAJCXJldHVybjsNCj4gICANCj4gKwlwbGF0Zm9ybV9z
-ZXQoUExBVEZPUk1fVklSVElPX1JFU1RSSUNURURfTUVNX0FDQ0VTUyk7DQo+ICsNCj4gICAJ
-LyogbWFrZSBzdXJlIGJvdW5jZSBidWZmZXJzIGFyZSBzaGFyZWQgKi8NCj4gICAJc3dpb3Rs
-Yl9mb3JjZSA9IFNXSU9UTEJfRk9SQ0U7DQo+ICAgCXN3aW90bGJfaW5pdCgxKTsNCj4gZGlm
-ZiAtLWdpdCBhL2FyY2gveDg2L0tjb25maWcgYi9hcmNoL3g4Ni9LY29uZmlnDQo+IGluZGV4
-IDRiZWQzYWJmNDQ0ZC4uZWViN2M2YzhlZWM1IDEwMDY0NA0KPiAtLS0gYS9hcmNoL3g4Ni9L
-Y29uZmlnDQo+ICsrKyBiL2FyY2gveDg2L0tjb25maWcNCj4gQEAgLTE1MTUsNyArMTUxNSw2
-IEBAIGNvbmZpZyBYODZfQ1BBX1NUQVRJU1RJQ1MNCj4gICBjb25maWcgWDg2X01FTV9FTkNS
-WVBUDQo+ICAgCXNlbGVjdCBBUkNIX0hBU19GT1JDRV9ETUFfVU5FTkNSWVBURUQNCj4gICAJ
-c2VsZWN0IERZTkFNSUNfUEhZU0lDQUxfTUFTSw0KPiAtCXNlbGVjdCBBUkNIX0hBU19SRVNU
-UklDVEVEX1ZJUlRJT19NRU1PUllfQUNDRVNTDQo+ICAgCWRlZl9ib29sIG4NCj4gICANCj4g
-ICBjb25maWcgQU1EX01FTV9FTkNSWVBUDQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9tbS9t
-ZW1fZW5jcnlwdC5jIGIvYXJjaC94ODYvbW0vbWVtX2VuY3J5cHQuYw0KPiBpbmRleCA1MGQy
-MDk5MzljNjYuLjE4YTU1YTBmMWNhMiAxMDA2NDQNCj4gLS0tIGEvYXJjaC94ODYvbW0vbWVt
-X2VuY3J5cHQuYw0KPiArKysgYi9hcmNoL3g4Ni9tbS9tZW1fZW5jcnlwdC5jDQo+IEBAIC0x
-Miw3ICsxMiw2IEBADQo+ICAgI2luY2x1ZGUgPGxpbnV4L3N3aW90bGIuaD4NCj4gICAjaW5j
-bHVkZSA8bGludXgvY2NfcGxhdGZvcm0uaD4NCj4gICAjaW5jbHVkZSA8bGludXgvbWVtX2Vu
-Y3J5cHQuaD4NCj4gLSNpbmNsdWRlIDxsaW51eC92aXJ0aW9fY29uZmlnLmg+DQo+ICAgDQo+
-ICAgLyogT3ZlcnJpZGUgZm9yIERNQSBkaXJlY3QgYWxsb2NhdGlvbiBjaGVjayAtIEFSQ0hf
-SEFTX0ZPUkNFX0RNQV9VTkVOQ1JZUFRFRCAqLw0KPiAgIGJvb2wgZm9yY2VfZG1hX3VuZW5j
-cnlwdGVkKHN0cnVjdCBkZXZpY2UgKmRldikNCj4gQEAgLTc2LDkgKzc1LDMgQEAgdm9pZCBf
-X2luaXQgbWVtX2VuY3J5cHRfaW5pdCh2b2lkKQ0KPiAgIA0KPiAgIAlwcmludF9tZW1fZW5j
-cnlwdF9mZWF0dXJlX2luZm8oKTsNCj4gICB9DQo+IC0NCj4gLWludCBhcmNoX2hhc19yZXN0
-cmljdGVkX3ZpcnRpb19tZW1vcnlfYWNjZXNzKHZvaWQpDQo+IC17DQo+IC0JcmV0dXJuIGNj
-X3BsYXRmb3JtX2hhcyhDQ19BVFRSX0dVRVNUX01FTV9FTkNSWVBUKTsNCj4gLX0NCj4gLUVY
-UE9SVF9TWU1CT0xfR1BMKGFyY2hfaGFzX3Jlc3RyaWN0ZWRfdmlydGlvX21lbW9yeV9hY2Nl
-c3MpOw0KPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYvbW0vbWVtX2VuY3J5cHRfYW1kLmMgYi9h
-cmNoL3g4Ni9tbS9tZW1fZW5jcnlwdF9hbWQuYw0KPiBpbmRleCA2MTY5MDUzYzI4NTQuLjM5
-YjcxMDg0ZDM2YiAxMDA2NDQNCj4gLS0tIGEvYXJjaC94ODYvbW0vbWVtX2VuY3J5cHRfYW1k
-LmMNCj4gKysrIGIvYXJjaC94ODYvbW0vbWVtX2VuY3J5cHRfYW1kLmMNCj4gQEAgLTIxLDYg
-KzIxLDcgQEANCj4gICAjaW5jbHVkZSA8bGludXgvZG1hLW1hcHBpbmcuaD4NCj4gICAjaW5j
-bHVkZSA8bGludXgvdmlydGlvX2NvbmZpZy5oPg0KPiAgICNpbmNsdWRlIDxsaW51eC9jY19w
-bGF0Zm9ybS5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L3BsYXRmb3JtLWZlYXR1cmUuaD4NCj4g
-ICANCj4gICAjaW5jbHVkZSA8YXNtL3RsYmZsdXNoLmg+DQo+ICAgI2luY2x1ZGUgPGFzbS9m
-aXhtYXAuaD4NCj4gQEAgLTIwNiw2ICsyMDcsOSBAQCB2b2lkIF9faW5pdCBzZXZfc2V0dXBf
-YXJjaCh2b2lkKQ0KPiAgIAlzaXplID0gdG90YWxfbWVtICogNiAvIDEwMDsNCj4gICAJc2l6
-ZSA9IGNsYW1wX3ZhbChzaXplLCBJT19UTEJfREVGQVVMVF9TSVpFLCBTWl8xRyk7DQo+ICAg
-CXN3aW90bGJfYWRqdXN0X3NpemUoc2l6ZSk7DQo+ICsNCj4gKwkvKiBTZXQgcmVzdHJpY3Rl
-ZCBtZW1vcnkgYWNjZXNzIGZvciB2aXJ0aW8uICovDQo+ICsJcGxhdGZvcm1fc2V0KFBMQVRG
-T1JNX1ZJUlRJT19SRVNUUklDVEVEX01FTV9BQ0NFU1MpOw0KPiAgIH0NCj4gICANCj4gICBz
-dGF0aWMgdW5zaWduZWQgbG9uZyBwZ19sZXZlbF90b19wZm4oaW50IGxldmVsLCBwdGVfdCAq
-a3B0ZSwgcGdwcm90X3QgKnJldF9wcm90KQ0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy92aXJ0
-aW8vS2NvbmZpZyBiL2RyaXZlcnMvdmlydGlvL0tjb25maWcNCj4gaW5kZXggYjVhZGY2YWJk
-MjQxLi5hNmRjOGI1ODQ2ZmUgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmlydGlvL0tjb25m
-aWcNCj4gKysrIGIvZHJpdmVycy92aXJ0aW8vS2NvbmZpZw0KPiBAQCAtNiwxMiArNiw2IEBA
-IGNvbmZpZyBWSVJUSU8NCj4gICAJICBidXMsIHN1Y2ggYXMgQ09ORklHX1ZJUlRJT19QQ0ks
-IENPTkZJR19WSVJUSU9fTU1JTywgQ09ORklHX1JQTVNHDQo+ICAgCSAgb3IgQ09ORklHX1Mz
-OTBfR1VFU1QuDQo+ICAgDQo+IC1jb25maWcgQVJDSF9IQVNfUkVTVFJJQ1RFRF9WSVJUSU9f
-TUVNT1JZX0FDQ0VTUw0KPiAtCWJvb2wNCj4gLQloZWxwDQo+IC0JICBUaGlzIG9wdGlvbiBp
-cyBzZWxlY3RlZCBpZiB0aGUgYXJjaGl0ZWN0dXJlIG1heSBuZWVkIHRvIGVuZm9yY2UNCj4g
-LQkgIFZJUlRJT19GX0FDQ0VTU19QTEFURk9STQ0KPiAtDQo+ICAgY29uZmlnIFZJUlRJT19Q
-Q0lfTElCDQo+ICAgCXRyaXN0YXRlDQo+ICAgCWhlbHANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvdmlydGlvL3ZpcnRpby5jIGIvZHJpdmVycy92aXJ0aW8vdmlydGlvLmMNCj4gaW5kZXgg
-MjJmMTVmNDQ0Zjc1Li4zNzFlMTZiMTgzODEgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmly
-dGlvL3ZpcnRpby5jDQo+ICsrKyBiL2RyaXZlcnMvdmlydGlvL3ZpcnRpby5jDQo+IEBAIC01
-LDYgKzUsNyBAQA0KPiAgICNpbmNsdWRlIDxsaW51eC9tb2R1bGUuaD4NCj4gICAjaW5jbHVk
-ZSA8bGludXgvaWRyLmg+DQo+ICAgI2luY2x1ZGUgPGxpbnV4L29mLmg+DQo+ICsjaW5jbHVk
-ZSA8bGludXgvcGxhdGZvcm0tZmVhdHVyZS5oPg0KPiAgICNpbmNsdWRlIDx1YXBpL2xpbnV4
-L3ZpcnRpb19pZHMuaD4NCj4gICANCj4gICAvKiBVbmlxdWUgbnVtYmVyaW5nIGZvciB2aXJ0
-aW8gZGV2aWNlcy4gKi8NCj4gQEAgLTE3MCwxMiArMTcxLDEwIEBAIEVYUE9SVF9TWU1CT0xf
-R1BMKHZpcnRpb19hZGRfc3RhdHVzKTsNCj4gICBzdGF0aWMgaW50IHZpcnRpb19mZWF0dXJl
-c19vayhzdHJ1Y3QgdmlydGlvX2RldmljZSAqZGV2KQ0KPiAgIHsNCj4gICAJdW5zaWduZWQg
-c3RhdHVzOw0KPiAtCWludCByZXQ7DQo+ICAgDQo+ICAgCW1pZ2h0X3NsZWVwKCk7DQo+ICAg
-DQo+IC0JcmV0ID0gYXJjaF9oYXNfcmVzdHJpY3RlZF92aXJ0aW9fbWVtb3J5X2FjY2Vzcygp
-Ow0KPiAtCWlmIChyZXQpIHsNCj4gKwlpZiAocGxhdGZvcm1faGFzKFBMQVRGT1JNX1ZJUlRJ
-T19SRVNUUklDVEVEX01FTV9BQ0NFU1MpKSB7DQo+ICAgCQlpZiAoIXZpcnRpb19oYXNfZmVh
-dHVyZShkZXYsIFZJUlRJT19GX1ZFUlNJT05fMSkpIHsNCj4gICAJCQlkZXZfd2FybigmZGV2
-LT5kZXYsDQo+ICAgCQkJCSAiZGV2aWNlIG11c3QgcHJvdmlkZSBWSVJUSU9fRl9WRVJTSU9O
-XzFcbiIpOw0KPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9wbGF0Zm9ybS1mZWF0dXJl
-LmggYi9pbmNsdWRlL2xpbnV4L3BsYXRmb3JtLWZlYXR1cmUuaA0KPiBpbmRleCA2ZWQ4NTk5
-MjhiOTcuLmIyZjQ4YmU5OTlmYSAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC9wbGF0
-Zm9ybS1mZWF0dXJlLmgNCj4gKysrIGIvaW5jbHVkZS9saW51eC9wbGF0Zm9ybS1mZWF0dXJl
-LmgNCj4gQEAgLTYsNyArNiwxMSBAQA0KPiAgICNpbmNsdWRlIDxhc20vcGxhdGZvcm0tZmVh
-dHVyZS5oPg0KPiAgIA0KPiAgIC8qIFRoZSBwbGF0Zm9ybSBmZWF0dXJlcyBhcmUgc3RhcnRp
-bmcgd2l0aCB0aGUgYXJjaGl0ZWN0dXJlIHNwZWNpZmljIG9uZXMuICovDQo+IC0jZGVmaW5l
-IFBMQVRGT1JNX0ZFQVRfTgkJCQkoMCArIFBMQVRGT1JNX0FSQ0hfRkVBVF9OKQ0KPiArDQo+
-ICsvKiBVc2VkIHRvIGVuYWJsZSBwbGF0Zm9ybSBzcGVjaWZpYyBETUEgaGFuZGxpbmcgZm9y
-IHZpcnRpbyBkZXZpY2VzLiAqLw0KPiArI2RlZmluZSBQTEFURk9STV9WSVJUSU9fUkVTVFJJ
-Q1RFRF9NRU1fQUNDRVNTCSgwICsgUExBVEZPUk1fQVJDSF9GRUFUX04pDQo+ICsNCj4gKyNk
-ZWZpbmUgUExBVEZPUk1fRkVBVF9OCQkJCSgxICsgUExBVEZPUk1fQVJDSF9GRUFUX04pDQo+
-ICAgDQo+ICAgdm9pZCBwbGF0Zm9ybV9zZXQodW5zaWduZWQgaW50IGZlYXR1cmUpOw0KPiAg
-IHZvaWQgcGxhdGZvcm1fY2xlYXIodW5zaWduZWQgaW50IGZlYXR1cmUpOw0KPiBkaWZmIC0t
-Z2l0IGEvaW5jbHVkZS9saW51eC92aXJ0aW9fY29uZmlnLmggYi9pbmNsdWRlL2xpbnV4L3Zp
-cnRpb19jb25maWcuaA0KPiBpbmRleCBiMzQxZGQ2MmFhNGQuLjc5NDk4Mjk4NTE5ZCAxMDA2
-NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51eC92aXJ0aW9fY29uZmlnLmgNCj4gKysrIGIvaW5j
-bHVkZS9saW51eC92aXJ0aW9fY29uZmlnLmgNCj4gQEAgLTU1OSwxMyArNTU5LDQgQEAgc3Rh
-dGljIGlubGluZSB2b2lkIHZpcnRpb19jd3JpdGU2NChzdHJ1Y3QgdmlydGlvX2RldmljZSAq
-dmRldiwNCj4gICAJCV9yOwkJCQkJCQlcDQo+ICAgCX0pDQo+ICAgDQo+IC0jaWZkZWYgQ09O
-RklHX0FSQ0hfSEFTX1JFU1RSSUNURURfVklSVElPX01FTU9SWV9BQ0NFU1MNCj4gLWludCBh
-cmNoX2hhc19yZXN0cmljdGVkX3ZpcnRpb19tZW1vcnlfYWNjZXNzKHZvaWQpOw0KPiAtI2Vs
-c2UNCj4gLXN0YXRpYyBpbmxpbmUgaW50IGFyY2hfaGFzX3Jlc3RyaWN0ZWRfdmlydGlvX21l
-bW9yeV9hY2Nlc3Modm9pZCkNCj4gLXsNCj4gLQlyZXR1cm4gMDsNCj4gLX0NCj4gLSNlbmRp
-ZiAvKiBDT05GSUdfQVJDSF9IQVNfUkVTVFJJQ1RFRF9WSVJUSU9fTUVNT1JZX0FDQ0VTUyAq
-Lw0KPiAtDQo+ICAgI2VuZGlmIC8qIF9MSU5VWF9WSVJUSU9fQ09ORklHX0ggKi8NCg0K
---------------q0Ma1pV467Hqz8bFVYRGEh6g
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------q0Ma1pV467Hqz8bFVYRGEh6g--
-
---------------1I1ZTSyF7lu6th38xRuLvtF5--
-
---------------X2JEafOWLT00pgbXX5l1hgWW
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKGXSQFAwAAAAAACgkQsN6d1ii/Ey/L
-egf+PtIFC+UL1k00i5cGXLAvvs8VuzFwHOSoHas4lsathJJpwXrhkABtwPx7118RhEE5UodV/pOg
-tOMhBAiqg9sPi1tySOLdX/C642vn09hQfE37CWd9rL2Pzp48T8bsCjBeWm0FnXRGUrWWxqceswmH
-m0Ko5/OFTom3atSI8NfET94COzEq9Jy/QAb1fMap7tmeaUXvtXyYJckYl/ZLtzzUYq42OZG9Ths0
-XXlNqa1wSRBzf82jZl2lGMQpXLW3617IIbZ1ERkrSubU7VeDnp1PMKBrj5cqwwdVDk8dv80dHz5i
-wUPBNaxyygC20eqhpF27w+qmz+P96j7cvBSPeOucqA==
-=zzt7
------END PGP SIGNATURE-----
-
---------------X2JEafOWLT00pgbXX5l1hgWW--
+There's been a bunch of versions of this and I'm pretty sure I've said 
+this a handful of times without any comments.  Now that it's passing all 
+my tests and I'm not getting any autobuilding breakages I've put it on 
+for-next, but happy to try and spin up some sort of multi-tree merge if 
+that's an issue for anyone.
