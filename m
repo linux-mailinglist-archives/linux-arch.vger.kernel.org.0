@@ -2,67 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E6952EE0C
-	for <lists+linux-arch@lfdr.de>; Fri, 20 May 2022 16:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B6E52EEEC
+	for <lists+linux-arch@lfdr.de>; Fri, 20 May 2022 17:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350233AbiETOXP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 May 2022 10:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
+        id S1350716AbiETPUJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 May 2022 11:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350230AbiETOXO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 May 2022 10:23:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DCCE166D58
-        for <linux-arch@vger.kernel.org>; Fri, 20 May 2022 07:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653056592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YJC1yK9IYkMDQ2u1869gK2NvV1iKqVWIKXw6SqG9e5g=;
-        b=ZhKreSA486nntNPN1kSNfsOim/uMqk9XOp756U+h5Wot7DJEUtgH4WHGJR7Km9YZ5VGYBV
-        b2DpTzqmSgDKHgDEQh4djjKQzh8gaI/0SEBVXoRJlgeru560tXomKrLxlw4gnoaR36mR6S
-        EIZSWU24AwP4W9nWE6ZkOoGySJP09aY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-583-Qb7NEY66OMW60FppBmd69A-1; Fri, 20 May 2022 10:23:10 -0400
-X-MC-Unique: Qb7NEY66OMW60FppBmd69A-1
-Received: by mail-wr1-f72.google.com with SMTP id e17-20020adfe391000000b0020e64e7dd15so2193974wrm.4
-        for <linux-arch@vger.kernel.org>; Fri, 20 May 2022 07:23:10 -0700 (PDT)
+        with ESMTP id S234738AbiETPUI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 May 2022 11:20:08 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2170177892;
+        Fri, 20 May 2022 08:20:06 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id o2so8442571vsd.13;
+        Fri, 20 May 2022 08:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ldYu4uEd9EUTgULDcpam0C8yau3sO4b+CjjUvv2d4OQ=;
+        b=E7Oa2UTH/aQ9fbr2uLMmgrKJCUty+fZ/ANDeR317sVrNQK+NnFTYsNAhpMdech16Eb
+         z5yLxC0w59nnpKFh4Vpsejh+Ob+KZG4o7Z/ZsDoDvvnp2q5oQu3Hgwwyb0nh5GctICx5
+         F/NLJmoHdUmCnJcNomziJOqdsnhCFBGw/N2VUMlP6vzEbT1WlnSY0qArzdFf8AP98k5N
+         dfdw9HEbmHLyJhyK74PWyIKZJk1DRq9h4Qwia707cfVwk63DzoqHYFfA2aUqNxmadCmX
+         Ncf7+Wfb3nGjrOMd42QKGbamRvP+jDs9wMLN6WC0qdNQAMC5JetWFk0OlHMuVi76pQD8
+         tgRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YJC1yK9IYkMDQ2u1869gK2NvV1iKqVWIKXw6SqG9e5g=;
-        b=HsQGsMhkuFrClwhJEyB6/OKUDeq1MhTNAM9bD9CrYzJNFQRhZFBDn1TqTE2/mFzqIQ
-         6SBPGnoGkAN/IMf7baNnhyqCR18KuPDR5mwv8VFSkLZdLyjGrk+HeN/bcsvxxXAr2fAm
-         uPIWWwrZqszpWYDKQMAKAJBC6XEfmM5rathcj0+h4Th9tptijJQ3bwvI4X9lOfPlAT7h
-         e0pCLKSfhH/Tk05D/flFfoTbkHUzYE1QsFImIT0TUrX7ox0vkFuDhxFzWlqgdTGMiw18
-         m/GoO0oipX3sTO4+nu7VuzwyVPY9dmfK3qOa4HSEy5WIkrKxS/a1N7/Th2czBcR3PaFH
-         OTFg==
-X-Gm-Message-State: AOAM533nMcF4EMmWjcw3LBajy6hC6cRzMU7jGqfhegbY4a5F/JIeEeto
-        uGsZ28Wq9hy6U/X2GcBWWsmIaQoPCqQF8JuzfJqEDV2OQNWKT9oXtgmAkYRnDaD4nV+RmKzVuSD
-        16dVpxANTOVV0mLgV33EZlA==
-X-Received: by 2002:adf:f584:0:b0:20d:431:27f8 with SMTP id f4-20020adff584000000b0020d043127f8mr8650005wro.577.1653056589486;
-        Fri, 20 May 2022 07:23:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwjZMXOW3Se1xcwWM1GByTHWAdauwNMswM1vYef9PHHlEOhrXQN4r8cthb7UZYLjMT4wI6OcA==
-X-Received: by 2002:adf:f584:0:b0:20d:431:27f8 with SMTP id f4-20020adff584000000b0020d043127f8mr8649980wro.577.1653056589274;
-        Fri, 20 May 2022 07:23:09 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id t16-20020adfa2d0000000b0020d0a070c80sm2683251wra.35.2022.05.20.07.23.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:23:08 -0700 (PDT)
-Message-ID: <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com>
-Date:   Fri, 20 May 2022 16:23:07 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ldYu4uEd9EUTgULDcpam0C8yau3sO4b+CjjUvv2d4OQ=;
+        b=C5lhm7xn2M8GaKGPxYn1l9GILtmONrEao9+paiO9oSoigrkfAwv3xLuBPXwVZFFkMv
+         vZkqRBQa/wP/3fp2RTby/H0zwnagj59RN+SzaoDauy7U0zW57oBltQTUhxPBbP8kgHPD
+         0ojYAVtyXVsp76rFGybBPc7llbucjlpaRBrSC4ahW/0ZXm1DKlqmr4zj26X8zEJhC2+n
+         2zeV3rfkCRYpnX6qAQKpGxorCxvk2pj09utAL2ppft8nE1KbTEAZQNkpqWIjfj9tcUMO
+         w0coNWyzeKUmEm1RfoZjEIAZV6Sd1Sq59xGMbmDVB6iPDqW/EXSO5x6wA1GwwKocQlXp
+         IoAw==
+X-Gm-Message-State: AOAM5332pJ5oZTP1lHsmF+G4nDDDIeUZOyOLzk/KSNvnrQMldSvrB+pT
+        4eUCQEQKDGQML26PbrzRDaTd0UDDJMVqyiAA/b4=
+X-Google-Smtp-Source: ABdhPJzm46aRGTJE5xdyxgtvxKN1pS2wNrW6p1Z/Gh8TEIUJ5v0Wc3zHvtxjN0Jg/TWwHkPgvD8c+6T9hgfXuVbIzzE=
+X-Received: by 2002:a67:e899:0:b0:337:932a:2fc5 with SMTP id
+ x25-20020a67e899000000b00337932a2fc5mr823786vsn.40.1653060006120; Fri, 20 May
+ 2022 08:20:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+ <20220518092619.1269111-10-chenhuacai@loongson.cn> <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
+ <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com> <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
+ <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com>
+In-Reply-To: <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Fri, 20 May 2022 23:19:54 +0800
+Message-ID: <CAAhV-H7yKVWaiU_VKnc2YnCSeZPOwedRWMY8ZTS-VWwk+vE0AA@mail.gmail.com>
 Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@gmail.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -82,18 +74,10 @@ Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         linux-efi <linux-efi@vger.kernel.org>
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn>
- <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
- <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
- <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,50 +85,61 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hello Huacai,
+Hi, Javier,
 
-On 5/20/22 16:09, Huacai Chen wrote:
-
-[snip]
-
->>
->> In summary, just enable the following to use the firmware framebuffer:
->>
->> CONFIG_DRM_SIMPLEDRM=y
->> CONFIG_DRM_FBDEV_EMULATION=y
->> CONFIG_SYSFB=y
->> CONFIG_SYSFB_SIMPLEFB=y
-> Thank you very much, since 5.15 sysfb_init() do all things of
-> register_gop_device(), so register_gop_device() here can be removed.
-
-Correct.
-
-> But there is another small problem: if simpledrm or efifb driver is
-> built-in, there is no display. The reason is both sysfb_init() and
-> display driver are in the same initcall level (device_initcall()).
-> From the comments I know that sysfb_init() should after PCI
-> enumeration which is in subsys_initcall(), so, could we make
-> sysfb_init() to be a subsys_initcall_sync()?
+On Fri, May 20, 2022 at 10:23 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
 >
+> Hello Huacai,
+>
+> On 5/20/22 16:09, Huacai Chen wrote:
+>
+> [snip]
+>
+> >>
+> >> In summary, just enable the following to use the firmware framebuffer:
+> >>
+> >> CONFIG_DRM_SIMPLEDRM=y
+> >> CONFIG_DRM_FBDEV_EMULATION=y
+> >> CONFIG_SYSFB=y
+> >> CONFIG_SYSFB_SIMPLEFB=y
+> > Thank you very much, since 5.15 sysfb_init() do all things of
+> > register_gop_device(), so register_gop_device() here can be removed.
+>
+> Correct.
+>
+> > But there is another small problem: if simpledrm or efifb driver is
+> > built-in, there is no display. The reason is both sysfb_init() and
+> > display driver are in the same initcall level (device_initcall()).
+> > From the comments I know that sysfb_init() should after PCI
+> > enumeration which is in subsys_initcall(), so, could we make
+> > sysfb_init() to be a subsys_initcall_sync()?
+> >
+>
+> I don't understand why we would need that... it shouldn't matter the order
+> in which the driver's init and sysfb_init() are done. If the driver's init
+> is executed first, then the driver will be registered and later when the
+> sysfb_init() registers the device, it will match the driver and probe.
+>
+> Conversely, if the sysfb_init() is executed first then the platform device
+> will be registered and latter when the driver's init register the driver
+> this will match the already registered device.
+Yes, you are right, my consideration is too complex. The only real
+problem is a harmless error "efifb: a framebuffer is already
+registered" when both efifb and the native display driver are
+built-in.
 
-I don't understand why we would need that... it shouldn't matter the order
-in which the driver's init and sysfb_init() are done. If the driver's init
-is executed first, then the driver will be registered and later when the
-sysfb_init() registers the device, it will match the driver and probe.
-
-Conversely, if the sysfb_init() is executed first then the platform device
-will be registered and latter when the driver's init register the driver
-this will match the already registered device.
-
-In other words, it will be handled by the Linux device model and we should
-not attempt to hand pick the initcall level for each. That's quite fragile.
-
-Or am I missing something here ?
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+Huacai
+>
+> In other words, it will be handled by the Linux device model and we should
+> not attempt to hand pick the initcall level for each. That's quite fragile.
+>
+> Or am I missing something here ?
+>
+> --
+> Best regards,
+>
+> Javier Martinez Canillas
+> Linux Engineering
+> Red Hat
+>
