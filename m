@@ -2,58 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF2C52EDD6
-	for <lists+linux-arch@lfdr.de>; Fri, 20 May 2022 16:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E6952EE0C
+	for <lists+linux-arch@lfdr.de>; Fri, 20 May 2022 16:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350130AbiETOKW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 May 2022 10:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
+        id S1350233AbiETOXP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 May 2022 10:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233069AbiETOKU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 May 2022 10:10:20 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813C91668A6;
-        Fri, 20 May 2022 07:10:18 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id c26so8477058vsl.6;
-        Fri, 20 May 2022 07:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7xlJ0095zgB0c2Vb8evf5eblS7KNjFsBRz7hA5cc4xk=;
-        b=F2adFm0dsksybi2rC6k+PIt076DVcea/Bd3N45htU6EsZqv1MmC95+sCQDslUJqtp+
-         1UTtP8FAs/s2Hr4RRaiXr/CW6VuR07LJ5aNDn1kTlxpIISVvJbQvigLbPcpb+/VsKuw7
-         t8lw4FfVrlH7WwYXRSwvgX32weXdKkRLbCvGFHD7rBDXVr1Q5WSvC8Otj8IZ5Fvelxuk
-         bhYnmp3KEixDXCDc9b+YK+wXR8uC+7yGs4dJiokFQ+Om0+GlC1YFr6dq3qj/4wTsZ5J+
-         mlJ8w0+XTB7cP4DnskE2lLCFPEc4Gumwy9vN4cxHh25yhvzu/xDmcYcZ/fFixXNC4BkC
-         XW4A==
+        with ESMTP id S1350230AbiETOXO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 May 2022 10:23:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DCCE166D58
+        for <linux-arch@vger.kernel.org>; Fri, 20 May 2022 07:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653056592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YJC1yK9IYkMDQ2u1869gK2NvV1iKqVWIKXw6SqG9e5g=;
+        b=ZhKreSA486nntNPN1kSNfsOim/uMqk9XOp756U+h5Wot7DJEUtgH4WHGJR7Km9YZ5VGYBV
+        b2DpTzqmSgDKHgDEQh4djjKQzh8gaI/0SEBVXoRJlgeru560tXomKrLxlw4gnoaR36mR6S
+        EIZSWU24AwP4W9nWE6ZkOoGySJP09aY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-Qb7NEY66OMW60FppBmd69A-1; Fri, 20 May 2022 10:23:10 -0400
+X-MC-Unique: Qb7NEY66OMW60FppBmd69A-1
+Received: by mail-wr1-f72.google.com with SMTP id e17-20020adfe391000000b0020e64e7dd15so2193974wrm.4
+        for <linux-arch@vger.kernel.org>; Fri, 20 May 2022 07:23:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7xlJ0095zgB0c2Vb8evf5eblS7KNjFsBRz7hA5cc4xk=;
-        b=JhFd6mc7OKAa27vkqeAgVJCVtyvASf5iCQqgVG4WRUn8vMYuMs6ARYX2CPglMAoJHf
-         J+yXkorhp/6cB3JKEh8t3C9cOUzzvVEKhQ6/RwKtf/uTdjd7C5jBuRc/PqrtoJ/C6pdh
-         V85MKimDBiFjOpakatRfqP0fXPJsblcx9gjR0nLUxive9eEgnkkecUPHaaW+OH9Dytzi
-         fspASuqiA418aTq2aWCXMvA118RRye8nwI+iJvmWS73hxHsdxffxV7FNm8qhHcSlnQ+v
-         /02rpmDFPja2HsMxCy4OyK5dF1vOa3lEx4Q1rHoUxArerPhiwXq+9NBSVaTTU9crxzgY
-         QBNw==
-X-Gm-Message-State: AOAM530HyJlY7xSRmMVoKjs5rqMQrE3NP+4xFYKbQalXB0/csJK/ztd1
-        8HfItTSnNNLj95BEPLkXljoH5yh0qMQLOjRyRuJb5EUkNVOak1ot
-X-Google-Smtp-Source: ABdhPJwMOpVVngVB9TKYcsUkabtpLsRVzOSIqPkMg89E3lfuVoGU22wXBvVzfFrEzkIrrUjt/KLQjQYOViE2Oykxv6s=
-X-Received: by 2002:a67:e1c4:0:b0:335:cdc4:395f with SMTP id
- p4-20020a67e1c4000000b00335cdc4395fmr4220006vsl.71.1653055817568; Fri, 20 May
- 2022 07:10:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YJC1yK9IYkMDQ2u1869gK2NvV1iKqVWIKXw6SqG9e5g=;
+        b=HsQGsMhkuFrClwhJEyB6/OKUDeq1MhTNAM9bD9CrYzJNFQRhZFBDn1TqTE2/mFzqIQ
+         6SBPGnoGkAN/IMf7baNnhyqCR18KuPDR5mwv8VFSkLZdLyjGrk+HeN/bcsvxxXAr2fAm
+         uPIWWwrZqszpWYDKQMAKAJBC6XEfmM5rathcj0+h4Th9tptijJQ3bwvI4X9lOfPlAT7h
+         e0pCLKSfhH/Tk05D/flFfoTbkHUzYE1QsFImIT0TUrX7ox0vkFuDhxFzWlqgdTGMiw18
+         m/GoO0oipX3sTO4+nu7VuzwyVPY9dmfK3qOa4HSEy5WIkrKxS/a1N7/Th2czBcR3PaFH
+         OTFg==
+X-Gm-Message-State: AOAM533nMcF4EMmWjcw3LBajy6hC6cRzMU7jGqfhegbY4a5F/JIeEeto
+        uGsZ28Wq9hy6U/X2GcBWWsmIaQoPCqQF8JuzfJqEDV2OQNWKT9oXtgmAkYRnDaD4nV+RmKzVuSD
+        16dVpxANTOVV0mLgV33EZlA==
+X-Received: by 2002:adf:f584:0:b0:20d:431:27f8 with SMTP id f4-20020adff584000000b0020d043127f8mr8650005wro.577.1653056589486;
+        Fri, 20 May 2022 07:23:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwjZMXOW3Se1xcwWM1GByTHWAdauwNMswM1vYef9PHHlEOhrXQN4r8cthb7UZYLjMT4wI6OcA==
+X-Received: by 2002:adf:f584:0:b0:20d:431:27f8 with SMTP id f4-20020adff584000000b0020d043127f8mr8649980wro.577.1653056589274;
+        Fri, 20 May 2022 07:23:09 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id t16-20020adfa2d0000000b0020d0a070c80sm2683251wra.35.2022.05.20.07.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 07:23:08 -0700 (PDT)
+Message-ID: <cdbb002a-9f0a-caa9-445e-4ba20328171a@redhat.com>
+Date:   Fri, 20 May 2022 16:23:07 +0200
 MIME-Version: 1.0
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn> <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
- <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
-In-Reply-To: <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 20 May 2022 22:09:18 +0800
-Message-ID: <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
 Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-To:     Javier Martinez Canillas <javierm@redhat.com>
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@gmail.com>
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -73,10 +82,18 @@ Cc:     Ard Biesheuvel <ardb@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+ <20220518092619.1269111-10-chenhuacai@loongson.cn>
+ <CAMj1kXEBVWi2ZdR5Le5-G0DA43u-AMxmSO=pVt39qwN=PkzQfw@mail.gmail.com>
+ <0bae0df1-48ae-d02f-bce4-d1f69acf269e@redhat.com>
+ <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAAhV-H5dqNiecER3fChkBjQUGGszj6gwcpOFM1b4Kaax5vz27g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,78 +101,50 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Javier,
+Hello Huacai,
 
-On Fri, May 20, 2022 at 5:41 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Hello Ard and Huacai,
->
-> On 5/20/22 11:17, Ard Biesheuvel wrote:
->
-> [snip]
->
-> >> +
-> >> +static int __init register_gop_device(void)
-> >> +{
-> >> +       void *pd;
-> >> +
-> >> +       if (screen_info.orig_video_isVGA != VIDEO_TYPE_EFI)
-> >> +               return 0;
-> >> +       pd = platform_device_register_data(NULL, "efi-framebuffer", 0,
-> >> +                       &screen_info, sizeof(screen_info));
-> >> +       return PTR_ERR_OR_ZERO(pd);
-> >> +}
-> >> +subsys_initcall(register_gop_device);
-> >
-> > Not sure this is now the correct way to do this - cc'ing Javier.
-> >
->
-> Is not the correct way to do it indeed, that can just be dropped.
->
-> We have unified now all the system framebuffer platform device
-> registration under drivers/firmware/sysfb.c (and the EFI quirks
-> if needed under drivers/firmware/efi/sysfb_efi.c).
->
-> So the only thing that a platform should do, is to enable the
-> the CONFIG_SYSFB config option. The screen_info should be set
-> correctly from the EFI GOP, but it seems that's already working
-> since you were already using it in register_gop_device().
->
-> But also, the "efi-framebuffer" platform device matches against
-> the legacy efifb fbdev driver. And now there's a simpledrm driver
-> that is also able to use the firmware-provided framebuffer.
->
-> You can enable that driver with CONFIG_DRM_SIMPLEDRM.
->
-> That driver though doesn't match against "efi-framebuffer" but with
-> a "simple-framebuffer", to make sysfb register that instead of the
-> "efi-framebuffer" device, you need to set CONFIG_SYSFB_SIMPLEFB too.
->
-> If for some reasons you need to provide a fbdev interface to the
-> user-space, you can enable CONFIG_DRM_FBDEV_EMULATION to have that.
->
-> In summary, just enable the following to use the firmware framebuffer:
->
-> CONFIG_DRM_SIMPLEDRM=y
-> CONFIG_DRM_FBDEV_EMULATION=y
-> CONFIG_SYSFB=y
-> CONFIG_SYSFB_SIMPLEFB=y
-Thank you very much, since 5.15 sysfb_init() do all things of
-register_gop_device(), so register_gop_device() here can be removed.
-But there is another small problem: if simpledrm or efifb driver is
-built-in, there is no display. The reason is both sysfb_init() and
-display driver are in the same initcall level (device_initcall()).
-From the comments I know that sysfb_init() should after PCI
-enumeration which is in subsys_initcall(), so, could we make
-sysfb_init() to be a subsys_initcall_sync()?
+On 5/20/22 16:09, Huacai Chen wrote:
 
-Huacai
+[snip]
+
+>>
+>> In summary, just enable the following to use the firmware framebuffer:
+>>
+>> CONFIG_DRM_SIMPLEDRM=y
+>> CONFIG_DRM_FBDEV_EMULATION=y
+>> CONFIG_SYSFB=y
+>> CONFIG_SYSFB_SIMPLEFB=y
+> Thank you very much, since 5.15 sysfb_init() do all things of
+> register_gop_device(), so register_gop_device() here can be removed.
+
+Correct.
+
+> But there is another small problem: if simpledrm or efifb driver is
+> built-in, there is no display. The reason is both sysfb_init() and
+> display driver are in the same initcall level (device_initcall()).
+> From the comments I know that sysfb_init() should after PCI
+> enumeration which is in subsys_initcall(), so, could we make
+> sysfb_init() to be a subsys_initcall_sync()?
 >
-> --
-> Best regards,
->
-> Javier Martinez Canillas
-> Linux Engineering
-> Red Hat
->
+
+I don't understand why we would need that... it shouldn't matter the order
+in which the driver's init and sysfb_init() are done. If the driver's init
+is executed first, then the driver will be registered and later when the
+sysfb_init() registers the device, it will match the driver and probe.
+
+Conversely, if the sysfb_init() is executed first then the platform device
+will be registered and latter when the driver's init register the driver
+this will match the already registered device.
+
+In other words, it will be handled by the Linux device model and we should
+not attempt to hand pick the initcall level for each. That's quite fragile.
+
+Or am I missing something here ?
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+
