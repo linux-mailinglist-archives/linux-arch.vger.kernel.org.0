@@ -2,51 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC9052E63D
-	for <lists+linux-arch@lfdr.de>; Fri, 20 May 2022 09:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A5C52E659
+	for <lists+linux-arch@lfdr.de>; Fri, 20 May 2022 09:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346492AbiETHZu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 20 May 2022 03:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S1344102AbiETHhl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 20 May 2022 03:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346564AbiETHZp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 May 2022 03:25:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7A414CDDA;
-        Fri, 20 May 2022 00:25:33 -0700 (PDT)
+        with ESMTP id S238923AbiETHhk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 20 May 2022 03:37:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15627149AB4;
+        Fri, 20 May 2022 00:37:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEBEEB82957;
-        Fri, 20 May 2022 07:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6E9AC3411C;
-        Fri, 20 May 2022 07:25:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F800B82955;
+        Fri, 20 May 2022 07:37:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35489C34119;
+        Fri, 20 May 2022 07:37:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653031530;
-        bh=JrpbCyF9Qy0+kvUnzc27tT2qRW8vExSodE2PG4sIdrM=;
+        s=k20201202; t=1653032251;
+        bh=ULK2wYvUqgyM76v/9P3Y/jVZObOqd9qeXnikTjRhNRg=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XOCa7aROi+z2zn9xYGXO5ciql387L9kmTMBx4sA9yeDDEhfaxdwjeVpkuRR2s2Oai
-         1zhFmdPv7izl8xMIPDJLhy4NVTAS1hGSnla+59ogdCdq8jWFay3/k9I0iO56f+8u3v
-         Uugt/1ZSdpQjI0+1Ede1Pl4mrxoLJhx0fWFuiViixgBnQx2mN3Z/ySFS6I0vnO5XHk
-         XHYprgKtrHJsItvR/SbAgywYwpprFD+M8lXCXU4UxpljeJ9uYV4MJx+IOV6tfE8oyY
-         6Pp066IiboYzJUAqRXs3kCB6fCdKs4hZcCo8gp4RtdDOd2D3K6JxQjWbAmtFVBi2r+
-         6Is5+Ox1mk4mA==
-Received: by mail-vs1-f41.google.com with SMTP id c62so7537162vsc.10;
-        Fri, 20 May 2022 00:25:30 -0700 (PDT)
-X-Gm-Message-State: AOAM531lEImQoFTN77YlTWMU7kcgNd3IxFNu95+PH3ayvBjKf16fNvkB
-        Jzju33fKAIM6Wdktg3PPqGUOpvCYBYsWvjEATQM=
-X-Google-Smtp-Source: ABdhPJz7I27fVIWcjeY3lYk5gxoHkaTd9QI3VrQmGTIfa3G5OenMUW8xSPJLGgAtuigWFuiUZdgYuAkHm5gMLWWf2RQ=
-X-Received: by 2002:a05:6102:a49:b0:335:fd3b:7ab8 with SMTP id
- i9-20020a0561020a4900b00335fd3b7ab8mr2444665vss.2.1653031529309; Fri, 20 May
- 2022 00:25:29 -0700 (PDT)
+        b=aikVGOtJgNVPg0kb+iAPoWQpBksoj33GgsjWyZxyzKqEBn3a2ce490OrFko97jhIw
+         5gfibQL5+Xv5zFwM4VbJzY8yQGLFEX6wmMBvV0+3vg2pmwrhjcgpGWa00grLcgPOwI
+         ZH+WocAEGBT1jxY8hkGMoAxkB5JT88glMdY/OQnoReGPa0YCGHV0SxgRuIMFOyB5ex
+         peor2TrM6RuuQOvH0C4STjt78PbBvhn6AsOEGWbgywlAJviMpcuyJGaZbUYk4eO7pL
+         waR/Ik5uASMVG3pWCChL1gIZjJxXq3MIdPpWJLU8AZ7sZUb39qC5GCDaCFoUG+IrZ7
+         +QqqcOqCKzw4Q==
+Received: by mail-vk1-f177.google.com with SMTP id v126so2442000vkv.6;
+        Fri, 20 May 2022 00:37:31 -0700 (PDT)
+X-Gm-Message-State: AOAM533/NFelwBUlJitc5jD7QhPvqZjGMQTB+YUY8uJkSeGZlz2KjRmD
+        5JX1xvVAaSbv5i135v1hJAz/yE34NjgEwfBOOWU=
+X-Google-Smtp-Source: ABdhPJztfmZMhoFyB0dQh1YegQX6mH9Heyv8SOYntWTsVDAAzoU/PVOF7lx380GTENjiXnksAtwfZf/HRA5yyAg5q3M=
+X-Received: by 2002:a1f:9fc4:0:b0:345:5848:4f44 with SMTP id
+ i187-20020a1f9fc4000000b0034558484f44mr3678340vke.2.1653032249773; Fri, 20
+ May 2022 00:37:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn> <20220518092619.1269111-6-chenhuacai@loongson.cn>
-In-Reply-To: <20220518092619.1269111-6-chenhuacai@loongson.cn>
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn> <20220518092619.1269111-3-chenhuacai@loongson.cn>
+In-Reply-To: <20220518092619.1269111-3-chenhuacai@loongson.cn>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 20 May 2022 15:25:17 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQpjMSA-B0+y8oZXEbJo_8sRHV-KMufGmR84QTMQ8ca-Q@mail.gmail.com>
-Message-ID: <CAJF2gTQpjMSA-B0+y8oZXEbJo_8sRHV-KMufGmR84QTMQ8ca-Q@mail.gmail.com>
-Subject: Re: [PATCH V11 05/22] LoongArch: Add build infrastructure
+Date:   Fri, 20 May 2022 15:37:18 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSO0DA2tv+MhdygRZ2JDDS8mPTGpSFAugutVNH-+Usv4w@mail.gmail.com>
+Message-ID: <CAJF2gTSO0DA2tv+MhdygRZ2JDDS8mPTGpSFAugutVNH-+Usv4w@mail.gmail.com>
+Subject: Re: [PATCH V11 02/22] Documentation/zh_CN: Add basic LoongArch documentations
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -63,8 +63,10 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Huacai Chen <chenhuacai@gmail.com>,
         Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Alex Shi <alexs@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,888 +77,527 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Reviewed-by: Guo Ren <guoren@kernel.org>
-
-On Wed, May 18, 2022 at 5:32 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> Add Kbuild, Makefile, Kconfig and link script for LoongArch build
-> infrastructure.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/loongarch/Kbuild                  |   6 +
->  arch/loongarch/Kconfig                 | 395 +++++++++++++++++++++++++
->  arch/loongarch/Kconfig.debug           |   0
->  arch/loongarch/Makefile                | 105 +++++++
->  arch/loongarch/boot/.gitignore         |   2 +
->  arch/loongarch/boot/Makefile           |  20 ++
->  arch/loongarch/boot/dts/Makefile       |   4 +
->  arch/loongarch/include/asm/Kbuild      |  30 ++
->  arch/loongarch/include/uapi/asm/Kbuild |   2 +
->  arch/loongarch/kernel/.gitignore       |   2 +
->  arch/loongarch/kernel/Makefile         |  21 ++
->  arch/loongarch/kernel/vmlinux.lds.S    | 117 ++++++++
->  arch/loongarch/lib/Makefile            |   6 +
->  arch/loongarch/mm/Makefile             |   9 +
->  arch/loongarch/pci/Makefile            |   7 +
->  arch/loongarch/vdso/.gitignore         |   2 +
->  scripts/subarch.include                |   2 +-
->  17 files changed, 729 insertions(+), 1 deletion(-)
->  create mode 100644 arch/loongarch/Kbuild
->  create mode 100644 arch/loongarch/Kconfig
->  create mode 100644 arch/loongarch/Kconfig.debug
->  create mode 100644 arch/loongarch/Makefile
->  create mode 100644 arch/loongarch/boot/.gitignore
->  create mode 100644 arch/loongarch/boot/Makefile
->  create mode 100644 arch/loongarch/boot/dts/Makefile
->  create mode 100644 arch/loongarch/include/asm/Kbuild
->  create mode 100644 arch/loongarch/include/uapi/asm/Kbuild
->  create mode 100644 arch/loongarch/kernel/.gitignore
->  create mode 100644 arch/loongarch/kernel/Makefile
->  create mode 100644 arch/loongarch/kernel/vmlinux.lds.S
->  create mode 100644 arch/loongarch/lib/Makefile
->  create mode 100644 arch/loongarch/mm/Makefile
->  create mode 100644 arch/loongarch/pci/Makefile
->  create mode 100644 arch/loongarch/vdso/.gitignore
->
-> diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
-> new file mode 100644
-> index 000000000000..ab5373d0a24f
-> --- /dev/null
-> +++ b/arch/loongarch/Kbuild
-> @@ -0,0 +1,6 @@
-> +obj-y += kernel/
-> +obj-y += mm/
-> +obj-y += vdso/
-> +
-> +# for cleaning
-> +subdir- += boot
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> new file mode 100644
-> index 000000000000..09902903bba8
-> --- /dev/null
-> +++ b/arch/loongarch/Kconfig
-> @@ -0,0 +1,395 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +config LOONGARCH
-> +       bool
-> +       default y
-> +       select ACPI_MCFG if ACPI
-> +       select ACPI_SYSTEM_POWER_STATES_SUPPORT if ACPI
-> +       select ARCH_BINFMT_ELF_STATE
-> +       select ARCH_ENABLE_MEMORY_HOTPLUG
-> +       select ARCH_ENABLE_MEMORY_HOTREMOVE
-> +       select ARCH_HAS_ACPI_TABLE_UPGRADE      if ACPI
-> +       select ARCH_HAS_PTE_SPECIAL
-> +       select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
-> +       select ARCH_INLINE_READ_LOCK if !PREEMPTION
-> +       select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-> +       select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
-> +       select ARCH_INLINE_READ_LOCK_IRQSAVE if !PREEMPTION
-> +       select ARCH_INLINE_READ_UNLOCK if !PREEMPTION
-> +       select ARCH_INLINE_READ_UNLOCK_BH if !PREEMPTION
-> +       select ARCH_INLINE_READ_UNLOCK_IRQ if !PREEMPTION
-> +       select ARCH_INLINE_READ_UNLOCK_IRQRESTORE if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_LOCK if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_LOCK_BH if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_LOCK_IRQ if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_LOCK_IRQSAVE if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_UNLOCK if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_UNLOCK_BH if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_UNLOCK_IRQ if !PREEMPTION
-> +       select ARCH_INLINE_WRITE_UNLOCK_IRQRESTORE if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_TRYLOCK if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_TRYLOCK_BH if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_LOCK if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_LOCK_BH if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_LOCK_IRQ if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_LOCK_IRQSAVE if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_UNLOCK if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
-> +       select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
-> +       select ARCH_MIGHT_HAVE_PC_PARPORT
-> +       select ARCH_MIGHT_HAVE_PC_SERIO
-> +       select ARCH_SPARSEMEM_ENABLE
-> +       select ARCH_SUPPORTS_ACPI
-> +       select ARCH_SUPPORTS_ATOMIC_RMW
-> +       select ARCH_SUPPORTS_HUGETLBFS
-> +       select ARCH_USE_BUILTIN_BSWAP
-> +       select ARCH_USE_CMPXCHG_LOCKREF
-> +       select ARCH_USE_QUEUED_RWLOCKS
-> +       select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> +       select ARCH_WANTS_NO_INSTR
-> +       select BUILDTIME_TABLE_SORT
-> +       select COMMON_CLK
-> +       select GENERIC_CLOCKEVENTS
-> +       select GENERIC_CMOS_UPDATE
-> +       select GENERIC_CPU_AUTOPROBE
-> +       select GENERIC_ENTRY
-> +       select GENERIC_FIND_FIRST_BIT
-> +       select GENERIC_GETTIMEOFDAY
-> +       select GENERIC_IRQ_MULTI_HANDLER
-> +       select GENERIC_IRQ_PROBE
-> +       select GENERIC_IRQ_SHOW
-> +       select GENERIC_LIB_ASHLDI3
-> +       select GENERIC_LIB_ASHRDI3
-> +       select GENERIC_LIB_CMPDI2
-> +       select GENERIC_LIB_LSHRDI3
-> +       select GENERIC_LIB_UCMPDI2
-> +       select GENERIC_PCI_IOMAP
-> +       select GENERIC_SCHED_CLOCK
-> +       select GENERIC_TIME_VSYSCALL
-> +       select GPIOLIB
-> +       select HAVE_ARCH_AUDITSYSCALL
-> +       select HAVE_ARCH_COMPILER_H
-> +       select HAVE_ARCH_MMAP_RND_BITS if MMU
-> +       select HAVE_ARCH_SECCOMP_FILTER
-> +       select HAVE_ARCH_TRACEHOOK
-> +       select HAVE_ARCH_TRANSPARENT_HUGEPAGE
-> +       select HAVE_ASM_MODVERSIONS
-> +       select HAVE_CONTEXT_TRACKING
-> +       select HAVE_COPY_THREAD_TLS
-> +       select HAVE_DEBUG_KMEMLEAK
-> +       select HAVE_DEBUG_STACKOVERFLOW
-> +       select HAVE_DMA_CONTIGUOUS
-> +       select HAVE_EXIT_THREAD
-> +       select HAVE_FAST_GUP
-> +       select HAVE_GENERIC_VDSO
-> +       select HAVE_IOREMAP_PROT
-> +       select HAVE_IRQ_EXIT_ON_IRQ_STACK
-> +       select HAVE_IRQ_TIME_ACCOUNTING
-> +       select HAVE_MEMBLOCK
-> +       select HAVE_MEMBLOCK_NODE_MAP
-> +       select HAVE_MOD_ARCH_SPECIFIC
-> +       select HAVE_NMI
-> +       select HAVE_PCI
-> +       select HAVE_PERF_EVENTS
-> +       select HAVE_REGS_AND_STACK_ACCESS_API
-> +       select HAVE_RSEQ
-> +       select HAVE_SYSCALL_TRACEPOINTS
-> +       select HAVE_TIF_NOHZ
-> +       select HAVE_VIRT_CPU_ACCOUNTING_GEN
-> +       select IRQ_FORCED_THREADING
-> +       select IRQ_LOONGARCH_CPU
-> +       select MODULES_USE_ELF_RELA if MODULES
-> +       select OF
-> +       select OF_EARLY_FLATTREE
-> +       select PCI
-> +       select PCI_DOMAINS_GENERIC
-> +       select PCI_ECAM if ACPI
-> +       select PCI_MSI_ARCH_FALLBACKS
-> +       select PERF_USE_VMALLOC
-> +       select RTC_LIB
-> +       select SPARSE_IRQ
-> +       select SYSCTL_EXCEPTION_TRACE
-> +       select SWIOTLB
-> +       select TRACE_IRQFLAGS_SUPPORT
-> +       select ZONE_DMA32
-> +
-> +config 32BIT
-> +       bool
-> +
-> +config 64BIT
-> +       def_bool y
-> +
-> +config CPU_HAS_FPU
-> +       bool
-> +       default y
-> +
-> +config CPU_HAS_PREFETCH
-> +       bool
-> +       default y
-> +
-> +config GENERIC_CALIBRATE_DELAY
-> +       def_bool y
-> +
-> +config GENERIC_CSUM
-> +       def_bool y
-> +
-> +config GENERIC_HWEIGHT
-> +       def_bool y
-> +
-> +config L1_CACHE_SHIFT
-> +       int
-> +       default "6"
-> +
-> +config LOCKDEP_SUPPORT
-> +       bool
-> +       default y
-> +
-> +# MACH_LOONGSON32 and MACH_LOONGSON64 are delibrately carried over from the
-> +# MIPS Loongson code, to preserve Loongson-specific code paths in drivers that
-> +# are shared between architectures, and specifically expecting the symbols.
-> +config MACH_LOONGSON32
-> +       def_bool 32BIT
-> +
-> +config MACH_LOONGSON64
-> +       def_bool 64BIT
-> +
-> +config PAGE_SIZE_4KB
-> +       bool
-> +
-> +config PAGE_SIZE_16KB
-> +       bool
-> +
-> +config PAGE_SIZE_64KB
-> +       bool
-> +
-> +config PGTABLE_2LEVEL
-> +       bool
-> +
-> +config PGTABLE_3LEVEL
-> +       bool
-> +
-> +config PGTABLE_4LEVEL
-> +       bool
-> +
-> +config PGTABLE_LEVELS
-> +       int
-> +       default 2 if PGTABLE_2LEVEL
-> +       default 3 if PGTABLE_3LEVEL
-> +       default 4 if PGTABLE_4LEVEL
-> +
-> +config SCHED_OMIT_FRAME_POINTER
-> +       bool
-> +       default y
-> +
-> +menu "Kernel type and options"
-> +
-> +source "kernel/Kconfig.hz"
-> +
-> +choice
-> +       prompt "Page Table Layout"
-> +       default 16KB_2LEVEL if 32BIT
-> +       default 16KB_3LEVEL if 64BIT
-> +       help
-> +         Allows choosing the page table layout, which is a combination
-> +         of page size and page table levels. The size of virtual memory
-> +         address space are determined by the page table layout.
-> +
-> +config 4KB_3LEVEL
-> +       bool "4KB with 3 levels"
-> +       select PAGE_SIZE_4KB
-> +       select PGTABLE_3LEVEL
-> +       help
-> +         This option selects 4KB page size with 3 level page tables, which
-> +         support a maximum of 39 bits of application virtual memory.
-> +
-> +config 4KB_4LEVEL
-> +       bool "4KB with 4 levels"
-> +       select PAGE_SIZE_4KB
-> +       select PGTABLE_4LEVEL
-> +       help
-> +         This option selects 4KB page size with 4 level page tables, which
-> +         support a maximum of 48 bits of application virtual memory.
-> +
-> +config 16KB_2LEVEL
-> +       bool "16KB with 2 levels"
-> +       select PAGE_SIZE_16KB
-> +       select PGTABLE_2LEVEL
-> +       help
-> +         This option selects 16KB page size with 2 level page tables, which
-> +         support a maximum of 36 bits of application virtual memory.
-> +
-> +config 16KB_3LEVEL
-> +       bool "16KB with 3 levels"
-> +       select PAGE_SIZE_16KB
-> +       select PGTABLE_3LEVEL
-> +       help
-> +         This option selects 16KB page size with 3 level page tables, which
-> +         support a maximum of 47 bits of application virtual memory.
-> +
-> +config 64KB_2LEVEL
-> +       bool "64KB with 2 levels"
-> +       select PAGE_SIZE_64KB
-> +       select PGTABLE_2LEVEL
-> +       help
-> +         This option selects 64KB page size with 2 level page tables, which
-> +         support a maximum of 42 bits of application virtual memory.
-> +
-> +config 64KB_3LEVEL
-> +       bool "64KB with 3 levels"
-> +       select PAGE_SIZE_64KB
-> +       select PGTABLE_3LEVEL
-> +       help
-> +         This option selects 64KB page size with 3 level page tables, which
-> +         support a maximum of 55 bits of application virtual memory.
-> +
-> +endchoice
-> +
-> +config CMDLINE
-> +       string "Built-in kernel command line"
-> +       help
-> +         For most platforms, the arguments for the kernel's command line
-> +         are provided at run-time, during boot. However, there are cases
-> +         where either no arguments are being provided or the provided
-> +         arguments are insufficient or even invalid.
-> +
-> +         When that occurs, it is possible to define a built-in command
-> +         line here and choose how the kernel should use it later on.
-> +
-> +choice
-> +       prompt "Kernel command line type"
-> +       default CMDLINE_BOOTLOADER
-> +       help
-> +         Choose how the kernel will handle the provided built-in command
-> +         line.
-> +
-> +config CMDLINE_BOOTLOADER
-> +       bool "Use bootloader kernel arguments if available"
-> +       help
-> +         Prefer the command-line passed by the boot loader if available.
-> +         Use the built-in command line as fallback in case we get nothing
-> +         during boot. This is the default behaviour.
-> +
-> +config CMDLINE_EXTEND
-> +       bool "Use built-in to extend bootloader kernel arguments"
-> +       help
-> +         The command-line arguments provided during boot will be
-> +         appended to the built-in command line. This is useful in
-> +         cases where the provided arguments are insufficient and
-> +         you don't want to or cannot modify them.
-> +
-> +config CMDLINE_FORCE
-> +       bool "Always use the built-in kernel command string"
-> +       help
-> +         Always use the built-in command line, even if we get one during
-> +         boot. This is useful in case you need to override the provided
-> +         command line on systems where you don't have or want control
-> +         over it.
-> +
-> +endchoice
-> +
-> +config DMI
-> +       bool "Enable DMI scanning"
-> +       select DMI_SCAN_MACHINE_NON_EFI_FALLBACK
-> +       default y
-> +       help
-> +         This enables SMBIOS/DMI feature for systems, and scanning of
-> +         DMI to identify machine quirks.
-> +
-> +config EFI
-> +       bool "EFI runtime service support"
-> +       select UCS2_STRING
-> +       select EFI_PARAMS_FROM_FDT
-> +       select EFI_RUNTIME_WRAPPERS
-> +       help
-> +         This enables the kernel to use EFI runtime services that are
-> +         available (such as the EFI variable services).
-> +
-> +config EFI_STUB
-> +       bool "EFI boot stub support"
-> +       default y
-> +       depends on EFI
-> +       select EFI_GENERIC_STUB
-> +       help
-> +         This kernel feature allows the kernel to be loaded directly by
-> +         EFI firmware without the use of a bootloader.
-> +
-> +config FORCE_MAX_ZONEORDER
-> +       int "Maximum zone order"
-> +       range 14 64 if PAGE_SIZE_64KB
-> +       default "14" if PAGE_SIZE_64KB
-> +       range 12 64 if PAGE_SIZE_16KB
-> +       default "12" if PAGE_SIZE_16KB
-> +       range 11 64
-> +       default "11"
-> +       help
-> +         The kernel memory allocator divides physically contiguous memory
-> +         blocks into "zones", where each zone is a power of two number of
-> +         pages.  This option selects the largest power of two that the kernel
-> +         keeps in the memory allocator.  If you need to allocate very large
-> +         blocks of physically contiguous memory, then you may need to
-> +         increase this value.
-> +
-> +         This config option is actually maximum order plus one. For example,
-> +         a value of 11 means that the largest free memory block is 2^10 pages.
-> +
-> +         The page size is not necessarily 4KB.  Keep this in mind
-> +         when choosing a value for this option.
-> +
-> +config SECCOMP
-> +       bool "Enable seccomp to safely compute untrusted bytecode"
-> +       depends on PROC_FS
-> +       default y
-> +       help
-> +         This kernel feature is useful for number crunching applications
-> +         that may need to compute untrusted bytecode during their
-> +         execution. By using pipes or other transports made available to
-> +         the process as file descriptors supporting the read/write
-> +         syscalls, it's possible to isolate those applications in
-> +         their own address space using seccomp. Once seccomp is
-> +         enabled via /proc/<pid>/seccomp, it cannot be disabled
-> +         and the task is only allowed to execute a few safe syscalls
-> +         defined by each seccomp mode.
-> +
-> +         If unsure, say Y. Only embedded should say N here.
-> +
-> +endmenu
-> +
-> +config ARCH_SELECT_MEMORY_MODEL
-> +       def_bool y
-> +
-> +config ARCH_FLATMEM_ENABLE
-> +       def_bool y
-> +
-> +config ARCH_SPARSEMEM_ENABLE
-> +       def_bool y
-> +       help
-> +         Say Y to support efficient handling of sparse physical memory,
-> +         for architectures which are either NUMA (Non-Uniform Memory Access)
-> +         or have huge holes in the physical address space for other reasons.
-> +         See <file:Documentation/vm/numa.rst> for more.
-> +
-> +config ARCH_ENABLE_THP_MIGRATION
-> +       def_bool y
-> +       depends on TRANSPARENT_HUGEPAGE
-> +
-> +config ARCH_MEMORY_PROBE
-> +       def_bool y
-> +       depends on MEMORY_HOTPLUG
-> +
-> +config MMU
-> +       bool
-> +       default y
-> +
-> +config ARCH_MMAP_RND_BITS_MIN
-> +       default 12
-> +
-> +config ARCH_MMAP_RND_BITS_MAX
-> +       default 18
-> +
-> +menu "Power management options"
-> +
-> +source "drivers/acpi/Kconfig"
-> +
-> +endmenu
-> +
-> +source "drivers/firmware/Kconfig"
-> diff --git a/arch/loongarch/Kconfig.debug b/arch/loongarch/Kconfig.debug
-> new file mode 100644
-> index 000000000000..e69de29bb2d1
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> new file mode 100644
-> index 000000000000..6dcc0495bec9
-> --- /dev/null
-> +++ b/arch/loongarch/Makefile
-> @@ -0,0 +1,105 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Author: Huacai Chen <chenhuacai@loongson.cn>
-> +# Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> +
-> +boot   := arch/loongarch/boot
-> +
-> +ifndef CONFIG_EFI_STUB
-> +KBUILD_IMAGE   = $(boot)/vmlinux
-> +else
-> +KBUILD_IMAGE   = $(boot)/vmlinux.efi
-> +endif
-> +
-> +#
-> +# Select the object file format to substitute into the linker script.
-> +#
-> +64bit-tool-archpref    = loongarch64
-> +32bit-bfd              = elf32-loongarch
-> +64bit-bfd              = elf64-loongarch
-> +32bit-emul             = elf32loongarch
-> +64bit-emul             = elf64loongarch
-> +
-> +ifdef CONFIG_64BIT
-> +tool-archpref          = $(64bit-tool-archpref)
-> +UTS_MACHINE            := loongarch64
-> +endif
-> +
-> +ifneq ($(SUBARCH),$(ARCH))
-> +  ifeq ($(CROSS_COMPILE),)
-> +    CROSS_COMPILE := $(call cc-cross-prefix, $(tool-archpref)-linux-  $(tool-archpref)-linux-gnu-  $(tool-archpref)-unknown-linux-gnu-)
-> +  endif
-> +endif
-> +
-> +ifdef CONFIG_64BIT
-> +ld-emul                        = $(64bit-emul)
-> +cflags-y               += -mabi=lp64s
-> +endif
-> +
-> +cflags-y                       += -G0 -pipe -msoft-float
-> +LDFLAGS_vmlinux                        += -G0 -static -n -nostdlib
-> +KBUILD_AFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
-> +KBUILD_CFLAGS_KERNEL           += -Wa,-mla-global-with-pcrel
-> +KBUILD_AFLAGS_MODULE           += -Wa,-mla-global-with-abs
-> +KBUILD_CFLAGS_MODULE           += -fplt -Wa,-mla-global-with-abs,-mla-local-with-abs
-> +
-> +cflags-y += -ffreestanding
-> +cflags-y += $(call cc-option, -mno-check-zero-division)
-> +
-> +load-y         = 0x9000000000200000
-> +bootvars-y     = VMLINUX_LOAD_ADDRESS=$(load-y)
-> +
-> +drivers-$(CONFIG_PCI)          += arch/loongarch/pci/
-> +
-> +KBUILD_AFLAGS  += $(cflags-y)
-> +KBUILD_CFLAGS  += $(cflags-y)
-> +KBUILD_CPPFLAGS += -DVMLINUX_LOAD_ADDRESS=$(load-y)
-> +
-> +# This is required to get dwarf unwinding tables into .debug_frame
-> +# instead of .eh_frame so we don't discard them.
-> +KBUILD_CFLAGS += -fno-asynchronous-unwind-tables
-> +
-> +# Don't emit unaligned accesses.
-> +# Not all LoongArch cores support unaligned access, and as kernel we can't
-> +# rely on others to provide emulation for these accesses.
-> +KBUILD_CFLAGS += $(call cc-option,-mstrict-align)
-> +
-> +KBUILD_CFLAGS += -isystem $(shell $(CC) -print-file-name=include)
-> +
-> +KBUILD_LDFLAGS += -m $(ld-emul)
-> +
-> +ifdef CONFIG_LOONGARCH
-> +CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
-> +       egrep -vw '__GNUC_(MINOR_|PATCHLEVEL_)?_' | \
-> +       sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
-> +endif
-> +
-> +head-y := arch/loongarch/kernel/head.o
-> +
-> +libs-y += arch/loongarch/lib/
-> +libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
-> +
-> +ifeq ($(KBUILD_EXTMOD),)
-> +prepare: vdso_prepare
-> +vdso_prepare: prepare0
-> +       $(Q)$(MAKE) $(build)=arch/loongarch/vdso include/generated/vdso-offsets.h
-> +endif
-> +
-> +PHONY += vdso_install
-> +vdso_install:
-> +       $(Q)$(MAKE) $(build)=arch/loongarch/vdso $@
-> +
-> +all:   $(KBUILD_IMAGE)
-> +
-> +$(KBUILD_IMAGE): vmlinux
-> +       $(Q)$(MAKE) $(build)=$(boot) $(bootvars-y) $@
-> +
-> +install:
-> +       $(Q)install -D -m 755 $(KBUILD_IMAGE) $(INSTALL_PATH)/vmlinux-$(KERNELRELEASE)
-> +       $(Q)install -D -m 644 .config $(INSTALL_PATH)/config-$(KERNELRELEASE)
-> +       $(Q)install -D -m 644 System.map $(INSTALL_PATH)/System.map-$(KERNELRELEASE)
-> +
-> +define archhelp
-> +       echo '  install              - install kernel into $(INSTALL_PATH)'
-> +       echo
-> +endef
-> diff --git a/arch/loongarch/boot/.gitignore b/arch/loongarch/boot/.gitignore
-> new file mode 100644
-> index 000000000000..49423ee96ef3
-> --- /dev/null
-> +++ b/arch/loongarch/boot/.gitignore
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +vmlinux*
-> diff --git a/arch/loongarch/boot/Makefile b/arch/loongarch/boot/Makefile
-> new file mode 100644
-> index 000000000000..b39d50a7a3df
-> --- /dev/null
-> +++ b/arch/loongarch/boot/Makefile
-> @@ -0,0 +1,20 @@
-> +#
-> +# arch/loongarch/boot/Makefile
-> +#
-> +# Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> +#
-> +
-> +drop-sections := .comment .note .options .note.gnu.build-id
-> +strip-flags   := $(addprefix --remove-section=,$(drop-sections)) -S
-> +OBJCOPYFLAGS_vmlinux.efi := -O binary $(strip-flags)
-> +
-> +targets := vmlinux
-> +quiet_cmd_strip = STRIP          $@
-> +      cmd_strip = $(STRIP) -s -o $@ $<
-> +
-> +$(obj)/vmlinux: vmlinux FORCE
-> +       $(call if_changed,strip)
-> +
-> +targets += vmlinux.efi
-> +$(obj)/vmlinux.efi: $(obj)/vmlinux FORCE
-> +       $(call if_changed,objcopy)
-> diff --git a/arch/loongarch/boot/dts/Makefile b/arch/loongarch/boot/dts/Makefile
-> new file mode 100644
-> index 000000000000..5f1f55e911ad
-> --- /dev/null
-> +++ b/arch/loongarch/boot/dts/Makefile
-> @@ -0,0 +1,4 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +dtstree        := $(srctree)/$(src)
-> +
-> +dtb-y := $(patsubst $(dtstree)/%.dts,%.dtb, $(wildcard $(dtstree)/*.dts))
-> diff --git a/arch/loongarch/include/asm/Kbuild b/arch/loongarch/include/asm/Kbuild
-> new file mode 100644
-> index 000000000000..83bc0681e72b
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/Kbuild
-> @@ -0,0 +1,30 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +generic-y += dma-contiguous.h
-> +generic-y += export.h
-> +generic-y += parport.h
-> +generic-y += early_ioremap.h
-> +generic-y += qrwlock.h
-> +generic-y += qrwlock_types.h
-> +generic-y += spinlock.h
-> +generic-y += spinlock_types.h
-> +generic-y += rwsem.h
-> +generic-y += segment.h
-> +generic-y += user.h
-> +generic-y += stat.h
-> +generic-y += fcntl.h
-> +generic-y += ioctl.h
-> +generic-y += ioctls.h
-> +generic-y += mman.h
-> +generic-y += msgbuf.h
-> +generic-y += sembuf.h
-> +generic-y += shmbuf.h
-> +generic-y += statfs.h
-> +generic-y += socket.h
-> +generic-y += sockios.h
-> +generic-y += termios.h
-> +generic-y += termbits.h
-> +generic-y += poll.h
-> +generic-y += param.h
-> +generic-y += posix_types.h
-> +generic-y += resource.h
-> +generic-y += kvm_para.h
-> diff --git a/arch/loongarch/include/uapi/asm/Kbuild b/arch/loongarch/include/uapi/asm/Kbuild
-> new file mode 100644
-> index 000000000000..4aa680ca2e5f
-> --- /dev/null
-> +++ b/arch/loongarch/include/uapi/asm/Kbuild
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +generic-y += kvm_para.h
-> diff --git a/arch/loongarch/kernel/.gitignore b/arch/loongarch/kernel/.gitignore
-> new file mode 100644
-> index 000000000000..bbb90f92d051
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/.gitignore
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +vmlinux.lds
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> new file mode 100644
-> index 000000000000..e5a3b2fb9961
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -0,0 +1,21 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Makefile for the Linux/LoongArch kernel.
-> +#
-> +
-> +extra-y                := head.o vmlinux.lds
-> +
-> +obj-y          += cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
-> +                  traps.o irq.o idle.o process.o dma.o mem.o io.o reset.o switch.o \
-> +                  elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o
-> +
-> +obj-$(CONFIG_ACPI)             += acpi.o
-> +obj-$(CONFIG_EFI)              += efi.o
-> +
-> +obj-$(CONFIG_CPU_HAS_FPU)      += fpu.o
-> +
-> +obj-$(CONFIG_MODULES)          += module.o module-sections.o
-> +
-> +obj-$(CONFIG_PROC_FS)          += proc.o
-> +
-> +CPPFLAGS_vmlinux.lds           := $(KBUILD_CFLAGS)
-> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-> new file mode 100644
-> index 000000000000..7da4c4d7c50d
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> @@ -0,0 +1,117 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#include <linux/sizes.h>
-> +#include <asm/asm-offsets.h>
-> +#include <asm/thread_info.h>
-> +
-> +#define PAGE_SIZE _PAGE_SIZE
-> +
-> +/*
-> + * Put .bss..swapper_pg_dir as the first thing in .bss. This will
-> + * ensure that it has .bss alignment (64K).
-> + */
-> +#define BSS_FIRST_SECTIONS *(.bss..swapper_pg_dir)
-> +
-> +#include <asm-generic/vmlinux.lds.h>
-> +#include "image-vars.h"
-> +
-> +/*
-> + * Max avaliable Page Size is 64K, so we set SectionAlignment
-> + * field of EFI application to 64K.
-> + */
-> +PECOFF_FILE_ALIGN = 0x200;
-> +PECOFF_SEGMENT_ALIGN = 0x10000;
-> +
-> +OUTPUT_ARCH(loongarch)
-> +ENTRY(kernel_entry)
-> +PHDRS {
-> +       text PT_LOAD FLAGS(7);  /* RWX */
-> +       note PT_NOTE FLAGS(4);  /* R__ */
-> +}
-> +
-> +jiffies         = jiffies_64;
-> +
-> +SECTIONS
-> +{
-> +       . = VMLINUX_LOAD_ADDRESS;
-> +
-> +       _text = .;
-> +       HEAD_TEXT_SECTION
-> +
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
-> +       .text : {
-> +               TEXT_TEXT
-> +               SCHED_TEXT
-> +               CPUIDLE_TEXT
-> +               LOCK_TEXT
-> +               KPROBES_TEXT
-> +               IRQENTRY_TEXT
-> +               SOFTIRQENTRY_TEXT
-> +               *(.fixup)
-> +               *(.gnu.warning)
-> +       } :text = 0
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
-> +       _etext = .;
-> +
-> +       EXCEPTION_TABLE(16)
-> +
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
-> +       __init_begin = .;
-> +       __inittext_begin = .;
-> +
-> +       INIT_TEXT_SECTION(PAGE_SIZE)
-> +       .exit.text : {
-> +               EXIT_TEXT
-> +       }
-> +
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
-> +       __inittext_end = .;
-> +
-> +       __initdata_begin = .;
-> +
-> +       INIT_DATA_SECTION(16)
-> +       .exit.data : {
-> +               EXIT_DATA
-> +       }
-> +
-> +       .init.bss : {
-> +               *(.init.bss)
-> +       }
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
-> +       __initdata_end = .;
-> +
-> +       __init_end = .;
-> +
-> +       _sdata = .;
-> +       RO_DATA(4096)
-> +       RW_DATA(1 << CONFIG_L1_CACHE_SHIFT, PAGE_SIZE, THREAD_SIZE)
-> +
-> +       .sdata : {
-> +               *(.sdata)
-> +       }
-> +       .edata_padding : { BYTE(0); . = ALIGN(PECOFF_FILE_ALIGN); }
-> +       _edata =  .;
-> +
-> +       BSS_SECTION(0, SZ_64K, 8)
-> +       . = ALIGN(PECOFF_SEGMENT_ALIGN);
-> +
-> +       _end = .;
-> +
-> +       STABS_DEBUG
-> +       DWARF_DEBUG
-> +
-> +       .gptab.sdata : {
-> +               *(.gptab.data)
-> +               *(.gptab.sdata)
-> +       }
-> +       .gptab.sbss : {
-> +               *(.gptab.bss)
-> +               *(.gptab.sbss)
-> +       }
-> +
-> +       DISCARDS
-> +       /DISCARD/ : {
-> +               *(.gnu.attributes)
-> +               *(.options)
-> +               *(.eh_frame)
-> +       }
-> +}
-> diff --git a/arch/loongarch/lib/Makefile b/arch/loongarch/lib/Makefile
-> new file mode 100644
-> index 000000000000..e36635fccb69
-> --- /dev/null
-> +++ b/arch/loongarch/lib/Makefile
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Makefile for LoongArch-specific library files.
-> +#
-> +
-> +lib-y  += delay.o clear_user.o copy_user.o dump_tlb.o
-> diff --git a/arch/loongarch/mm/Makefile b/arch/loongarch/mm/Makefile
-> new file mode 100644
-> index 000000000000..8ffc6383f836
-> --- /dev/null
-> +++ b/arch/loongarch/mm/Makefile
-> @@ -0,0 +1,9 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Makefile for the Linux/LoongArch-specific parts of the memory manager.
-> +#
-> +
-> +obj-y                          += init.o cache.o tlb.o tlbex.o extable.o \
-> +                                  fault.o ioremap.o maccess.o mmap.o pgtable.o page.o
-> +
-> +obj-$(CONFIG_HUGETLB_PAGE)     += hugetlbpage.o
-> diff --git a/arch/loongarch/pci/Makefile b/arch/loongarch/pci/Makefile
-> new file mode 100644
-> index 000000000000..8101ef3df71c
-> --- /dev/null
-> +++ b/arch/loongarch/pci/Makefile
-> @@ -0,0 +1,7 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Makefile for the PCI specific kernel interface routines under Linux.
-> +#
-> +
-> +obj-y                          += pci.o
-> +obj-$(CONFIG_ACPI)             += acpi.o
-> diff --git a/arch/loongarch/vdso/.gitignore b/arch/loongarch/vdso/.gitignore
-> new file mode 100644
-> index 000000000000..652e31d82582
-> --- /dev/null
-> +++ b/arch/loongarch/vdso/.gitignore
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +vdso.lds
-> diff --git a/scripts/subarch.include b/scripts/subarch.include
-> index 776849a3c500..4bd327d0ae42 100644
-> --- a/scripts/subarch.include
-> +++ b/scripts/subarch.include
-> @@ -10,4 +10,4 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->                                   -e s/s390x/s390/ \
->                                   -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->                                   -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ \
-> -                                 -e s/riscv.*/riscv/)
-> +                                 -e s/riscv.*/riscv/ -e s/loongarch.*/loongarch/)
-> --
-> 2.27.0
->
-
-
--- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+T24gV2VkLCBNYXkgMTgsIDIwMjIgYXQgNToyNyBQTSBIdWFjYWkgQ2hlbiA8Y2hlbmh1YWNhaUBs
+b29uZ3Nvbi5jbj4gd3JvdGU6DQo+DQo+IEFkZCBzb21lIGJhc2ljIGRvY3VtZW50YXRpb24gKHpo
+X0NOIHZlcnNpb24pIGZvciBMb29uZ0FyY2guIExvb25nQXJjaCBpcw0KPiBhIG5ldyBSSVNDIElT
+QSwgd2hpY2ggaXMgYSBiaXQgbGlrZSBNSVBTIG9yIFJJU0MtVi4gTG9vbmdBcmNoIGluY2x1ZGVz
+IGENCj4gcmVkdWNlZCAzMi1iaXQgdmVyc2lvbiAoTEEzMlIpLCBhIHN0YW5kYXJkIDMyLWJpdCB2
+ZXJzaW9uIChMQTMyUykgYW5kIGENCj4gNjQtYml0IHZlcnNpb24gKExBNjQpLg0KPg0KPiBSZXZp
+ZXdlZC1ieTogQWxleCBTaGkgPGFsZXhzQGtlcm5lbC5vcmc+DQo+IFJldmlld2VkLWJ5OiBZYW50
+ZW5nIFNpIDxzaXlhbnRlbmdAbG9vbmdzb24uY24+DQo+IFNpZ25lZC1vZmYtYnk6IEh1YWNhaSBD
+aGVuIDxjaGVuaHVhY2FpQGxvb25nc29uLmNuPg0KPiAtLS0NCj4gIERvY3VtZW50YXRpb24vdHJh
+bnNsYXRpb25zL3poX0NOL2luZGV4LnJzdCAgICB8ICAgMSArDQo+ICAuLi4vdHJhbnNsYXRpb25z
+L3poX0NOL2xvb25nYXJjaC9mZWF0dXJlcy5yc3QgfCAgIDggKw0KPiAgLi4uL3RyYW5zbGF0aW9u
+cy96aF9DTi9sb29uZ2FyY2gvaW5kZXgucnN0ICAgIHwgIDI2ICsrDQo+ICAuLi4vemhfQ04vbG9v
+bmdhcmNoL2ludHJvZHVjdGlvbi5yc3QgICAgICAgICAgfCAzNTEgKysrKysrKysrKysrKysrKysr
+DQo+ICAuLi4vemhfQ04vbG9vbmdhcmNoL2lycS1jaGlwLW1vZGVsLnJzdCAgICAgICAgfCAxNjcg
+KysrKysrKysrDQo+ICA1IGZpbGVzIGNoYW5nZWQsIDU1MyBpbnNlcnRpb25zKCspDQo+ICBjcmVh
+dGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vbG9vbmdhcmNo
+L2ZlYXR1cmVzLnJzdA0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vdHJhbnNs
+YXRpb25zL3poX0NOL2xvb25nYXJjaC9pbmRleC5yc3QNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBE
+b2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9sb29uZ2FyY2gvaW50cm9kdWN0aW9uLnJz
+dA0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NO
+L2xvb25nYXJjaC9pcnEtY2hpcC1tb2RlbC5yc3QNCj4NCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50
+YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL2luZGV4LnJzdCBiL0RvY3VtZW50YXRpb24vdHJhbnNs
+YXRpb25zL3poX0NOL2luZGV4LnJzdA0KPiBpbmRleCA4OGQ4ZGY5NTdhNzguLjQxYzU5OTUwNTIz
+YyAxMDA2NDQNCj4gLS0tIGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vaW5kZXgu
+cnN0DQo+ICsrKyBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL2luZGV4LnJzdA0K
+PiBAQCAtMTcxLDYgKzE3MSw3IEBAIFRPRE9MaXN0Og0KPiAgICAgcmlzY3YvaW5kZXgNCj4gICAg
+IG9wZW5yaXNjL2luZGV4DQo+ICAgICBwYXJpc2MvaW5kZXgNCj4gKyAgIGxvb25nYXJjaC9pbmRl
+eA0KPg0KPiAgVE9ET0xpc3Q6DQo+DQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5z
+bGF0aW9ucy96aF9DTi9sb29uZ2FyY2gvZmVhdHVyZXMucnN0IGIvRG9jdW1lbnRhdGlvbi90cmFu
+c2xhdGlvbnMvemhfQ04vbG9vbmdhcmNoL2ZlYXR1cmVzLnJzdA0KPiBuZXcgZmlsZSBtb2RlIDEw
+MDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLjM4ODZlNjM1ZWMwNg0KPiAtLS0gL2Rldi9udWxs
+DQo+ICsrKyBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL2xvb25nYXJjaC9mZWF0
+dXJlcy5yc3QNCj4gQEAgLTAsMCArMSw4IEBADQo+ICsuLiBTUERYLUxpY2Vuc2UtSWRlbnRpZmll
+cjogR1BMLTIuMA0KPiArDQo+ICsuLiBpbmNsdWRlOjogLi4vZGlzY2xhaW1lci16aF9DTi5yc3QN
+Cj4gKw0KPiArOk9yaWdpbmFsOiBEb2N1bWVudGF0aW9uL2xvb25nYXJjaC9mZWF0dXJlcy5yc3QN
+Cj4gKzpUcmFuc2xhdG9yOiBIdWFjYWkgQ2hlbiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5jbj4NCj4g
+Kw0KPiArLi4ga2VybmVsLWZlYXQ6OiAkc3JjdHJlZS9Eb2N1bWVudGF0aW9uL2ZlYXR1cmVzIGxv
+b25nYXJjaA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04v
+bG9vbmdhcmNoL2luZGV4LnJzdCBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL2xv
+b25nYXJjaC9pbmRleC5yc3QNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAw
+MDAwMDAwLi43ZDIzZWI3ODM3OWQNCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi9Eb2N1bWVudGF0
+aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9sb29uZ2FyY2gvaW5kZXgucnN0DQo+IEBAIC0wLDAgKzEs
+MjYgQEANCj4gKy4uIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICsNCj4gKy4u
+IGluY2x1ZGU6OiAuLi9kaXNjbGFpbWVyLXpoX0NOLnJzdA0KPiArDQo+ICs6T3JpZ2luYWw6IERv
+Y3VtZW50YXRpb24vbG9vbmdhcmNoL2luZGV4LnJzdA0KPiArOlRyYW5zbGF0b3I6IEh1YWNhaSBD
+aGVuIDxjaGVuaHVhY2FpQGxvb25nc29uLmNuPg0KPiArDQo+ICs9PT09PT09PT09PT09PT09PQ0K
+PiArTG9vbmdBcmNo5L2T57O757uT5p6EDQo+ICs9PT09PT09PT09PT09PT09PQ0KPiArDQo+ICsu
+LiB0b2N0cmVlOjoNCj4gKyAgIDptYXhkZXB0aDogMg0KPiArICAgOm51bWJlcmVkOg0KPiArDQo+
+ICsgICBpbnRyb2R1Y3Rpb24NCj4gKyAgIGlycS1jaGlwLW1vZGVsDQo+ICsNCj4gKyAgIGZlYXR1
+cmVzDQo+ICsNCj4gKy4uIG9ubHk6OiAgc3VicHJvamVjdCBhbmQgaHRtbA0KPiArDQo+ICsgICBJ
+bmRpY2VzDQo+ICsgICA9PT09PT09DQo+ICsNCj4gKyAgICogOnJlZjpgZ2VuaW5kZXhgDQo+IGRp
+ZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9sb29uZ2FyY2gvaW50
+cm9kdWN0aW9uLnJzdCBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL2xvb25nYXJj
+aC9pbnRyb2R1Y3Rpb24ucnN0DQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAwMDAw
+MDAwMDAwMC4uZTMxYTFhOTI4YzQ4DQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvRG9jdW1lbnRh
+dGlvbi90cmFuc2xhdGlvbnMvemhfQ04vbG9vbmdhcmNoL2ludHJvZHVjdGlvbi5yc3QNCj4gQEAg
+LTAsMCArMSwzNTEgQEANCj4gKy4uIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+
+ICsNCj4gKy4uIGluY2x1ZGU6OiAuLi9kaXNjbGFpbWVyLXpoX0NOLnJzdA0KPiArDQo+ICs6T3Jp
+Z2luYWw6IERvY3VtZW50YXRpb24vbG9vbmdhcmNoL2ludHJvZHVjdGlvbi5yc3QNCj4gKzpUcmFu
+c2xhdG9yOiBIdWFjYWkgQ2hlbiA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5jbj4NCj4gKw0KPiArPT09
+PT09PT09PT09PQ0KPiArTG9vbmdBcmNo5LuL57uNDQo+ICs9PT09PT09PT09PT09DQo+ICsNCj4g
+K0xvb25nQXJjaOaYr+S4gOenjeaWsOeahFJJU0MgSVNB77yM5Zyo5LiA5a6a56iL5bqm5LiK57G7
+5Ly85LqOTUlQU+WSjFJJU0MtVuOAgkxvb25nQXJjaOaMh+S7pOmbhg0KPiAr5YyF5ous5LiA5Liq
+57K+566AMzLkvY3niYjvvIhMQTMyUu+8ieOAgeS4gOS4quagh+WHhjMy5L2N54mI77yITEEzMlPv
+vInjgIHkuIDkuKo2NOS9jeeJiO+8iExBNjTvvInjgIINCj4gK0xvb25nQXJjaOWumuS5ieS6huWb
+m+S4queJueadg+e6p++8iFBMVjB+UExWM++8ie+8jOWFtuS4rVBMVjDmmK/mnIDpq5jnibnmnYPn
+uqfvvIznlKjkuo7lhoXmoLjvvJvogIxQTFYzDQo+ICvmmK/mnIDkvY7nibnmnYPnuqfvvIznlKjk
+uo7lupTnlKjnqIvluo/jgILmnKzmlofmoaPku4vnu43kuoZMb29uZ0FyY2jnmoTlr4TlrZjlmajj
+gIHln7rnoYDmjIfku6Tpm4bjgIHomZrmi5/lhoUNCj4gK+WtmOS7peWPiuWFtuS7luS4gOS6m+S4
+u+mimOOAgg0KPiArDQo+ICvlr4TlrZjlmagNCj4gKz09PT09PQ0KPiArDQo+ICtMb29uZ0FyY2jn
+moTlr4TlrZjlmajljIXmi6zpgJrnlKjlr4TlrZjlmajvvIhHUFJz77yJ44CB5rWu54K55a+E5a2Y
+5Zmo77yIRlBSc++8ieOAgeWQkemHj+WvhOWtmOWZqO+8iFZSc++8iQ0KPiAr5ZKM55So5LqO54m5
+5p2D5qih5byP77yIUExWMO+8ieeahOaOp+WItueKtuaAgeWvhOWtmOWZqO+8iENTUnPvvInjgIIN
+Cj4gKw0KPiAr6YCa55So5a+E5a2Y5ZmoDQo+ICstLS0tLS0tLS0tDQo+ICsNCj4gK0xvb25nQXJj
+aOWMheaLrDMy5Liq6YCa55So5a+E5a2Y5Zmo77yIIGBgJHIwYGAgfiBgYCRyMzFgYCDvvInvvIxM
+QTMy5Lit5q+P5Liq5a+E5a2Y5Zmo5Li6MzLkvY3lrr3vvIwNCj4gK0xBNjTkuK3mr4/kuKrlr4Tl
+rZjlmajkuLo2NOS9jeWuveOAgiBgYCRyMGBgIOeahOWGheWuueaAu+aYr+WbuuWumuS4ujDvvIzo
+gIzlhbbku5blr4TlrZjlmajlnKjkvZPns7vnu5PmnoTlsYLpnaINCj4gK+ayoeacieeJueauiuWK
+n+iDveOAgu+8iCBgYCRyMWBgIOeul+aYr+S4gOS4quS+i+Wklu+8jOWcqEJM5oyH5Luk5Lit5Zu6
+5a6a55So5L2c6ZO+5o6l6L+U5Zue5a+E5a2Y5Zmo44CC77yJDQo+ICsNCj4gK+WGheaguOS9v+eU
+qOS6huS4gOWll0xvb25nQXJjaOWvhOWtmOWZqOe6puWumu+8jOWumuS5ieWcqExvb25nQXJjaCBF
+TEYgcHNBQknop4TojIPkuK3vvIzor6bnu4bmj4/ov7Dlj4Lop4ENCj4gKzpyZWY6YOWPguiAg+aW
+h+eMriA8bG9vbmdhcmNoLXJlZmVyZW5jZXMtemhfQ04+YDoNCj4gKw0KPiArPT09PT09PT09PT09
+PT09PT0gPT09PT09PT09PT09PT09ID09PT09PT09PT09PT09PT09PT0gPT09PT09PT09PQ0KPiAr
+5a+E5a2Y5Zmo5ZCNICAgICAgICAgIOWIq+WQjSAgICAgICAgICAgIOeUqOmAlCAgICAgICAgICAg
+ICAgICDot6josIPnlKjkv53mjIENCj4gKz09PT09PT09PT09PT09PT09ID09PT09PT09PT09PT09
+PSA9PT09PT09PT09PT09PT09PT09ID09PT09PT09PT0NCj4gK2BgJHIwYGAgICAgICAgICAgIGBg
+JHplcm9gYCAgICAgICDluLjph48wICAgICAgICAgICAgICAg5LiN5L2/55SoDQo+ICtgYCRyMWBg
+ICAgICAgICAgICBgYCRyYWBgICAgICAgICAg6L+U5Zue5Zyw5Z2AICAgICAgICAgICAg5ZCmDQo+
+ICtgYCRyMmBgICAgICAgICAgICBgYCR0cGBgICAgICAgICAgVExTL+e6v+eoi+S/oeaBr+aMh+mS
+iCAgICDkuI3kvb/nlKgNCj4gK2BgJHIzYGAgICAgICAgICAgIGBgJHNwYGAgICAgICAgICDmoIjm
+jIfpkoggICAgICAgICAgICAgIOaYrw0KPiArYGAkcjRgYC1gYCRyMTFgYCAgYGAkYTBgYC1gYCRh
+N2BgIOWPguaVsOWvhOWtmOWZqCAgICAgICAgICDlkKYNCj4gK2BgJHI0YGAtYGAkcjVgYCAgIGBg
+JHYwYGAtYGAkdjFgYCDov5Tlm57lgLwgICAgICAgICAgICAgIOWQpg0KPiArYGAkcjEyYGAtYGAk
+cjIwYGAgYGAkdDBgYC1gYCR0OGBgIOS4tOaXtuWvhOWtmOWZqCAgICAgICAgICDlkKYNCj4gK2Bg
+JHIyMWBgICAgICAgICAgIGBgJHUwYGAgICAgICAgICDmr49DUFXlj5jph4/ln7rlnLDlnYAgICAg
+IOS4jeS9v+eUqA0KPiArYGAkcjIyYGAgICAgICAgICAgYGAkZnBgYCAgICAgICAgIOW4p+aMh+mS
+iCAgICAgICAgICAgICAg5pivDQo+ICtgYCRyMjNgYC1gYCRyMzFgYCBgYCRzMGBgLWBgJHM4YGAg
+6Z2Z5oCB5a+E5a2Y5ZmoICAgICAgICAgIOaYrw0KPiArPT09PT09PT09PT09PT09PT0gPT09PT09
+PT09PT09PT09ID09PT09PT09PT09PT09PT09PT0gPT09PT09PT09PQ0KPiArDQo+ICvms6jmhI/v
+vJpgYCRyMjFgYOWvhOWtmOWZqOWcqEVMRiBwc0FCSeS4reS/neeVmeacquS9v+eUqO+8jOS9huaY
+r+WcqExpbnV45YaF5qC455So5LqO5L+d5a2Y5q+PQ1BVDQo+ICvlj5jph4/ln7rlnLDlnYDjgILo
+r6Xlr4TlrZjlmajmsqHmnIlBQknlkb3lkI3vvIzkuI3ov4flnKjlhoXmoLjkuK3np7DkuLpgYCR1
+MGBg44CC5Zyo5LiA5Lqb6YGX55WZ5Luj56CBDQo+ICvkuK3mnInml7blj6/og73op4HliLBgYCR2
+MGBg5ZKMYGAkdjFgYO+8jOWug+S7rOaYr2BgJGEwYGDlkoxgYCRhMWBg55qE5Yir5ZCN77yM5bGe
+5LqO5bey57uP5bqf5byDDQo+ICvnmoTnlKjms5XjgIINCj4gKw0KPiAr5rWu54K55a+E5a2Y5Zmo
+DQo+ICstLS0tLS0tLS0tDQo+ICsNCj4gK+W9k+ezu+e7n+S4reWtmOWcqEZQVeaXtu+8jExvb25n
+QXJjaOaciTMy5Liq5rWu54K55a+E5a2Y5Zmo77yIIGBgJGYwYGAgfiBgYCRmMzFgYCDvvInjgILl
+nKhMQTY0DQo+ICvnmoRDUFXmoLjkuIrvvIzmr4/kuKrlr4TlrZjlmajlnYfkuLo2NOS9jeWuveOA
+gg0KPiArDQo+ICvmta7ngrnlr4TlrZjlmajnmoTkvb/nlKjnuqblrprkuI5Mb29uZ0FyY2ggRUxG
+IHBzQUJJ6KeE6IyD55qE5o+P6L+w55u45ZCM77yaDQo+ICsNCj4gKz09PT09PT09PT09PT09PT09
+ID09PT09PT09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09ID09PT09PT09PT0NCj4gK+Wv
+hOWtmOWZqOWQjSAgICAgICAgICDliKvlkI0gICAgICAgICAgICAgICDnlKjpgJQgICAgICAgICAg
+ICAgICAg6Leo6LCD55So5L+d5oyBDQo+ICs9PT09PT09PT09PT09PT09PSA9PT09PT09PT09PT09
+PT09PT0gPT09PT09PT09PT09PT09PT09PSA9PT09PT09PT09DQo+ICtgYCRmMGBgLWBgJGY3YGAg
+ICBgYCRmYTBgYC1gYCRmYTdgYCAg5Y+C5pWw5a+E5a2Y5ZmoICAgICAgICAgIOWQpg0KPiArYGAk
+ZjBgYC1gYCRmMWBgICAgYGAkZnYwYGAtYGAkZnYxYGAgIOi/lOWbnuWAvCAgICAgICAgICAgICAg
+5ZCmDQo+ICtgYCRmOGBgLWBgJGYyM2BgICBgYCRmdDBgYC1gYCRmdDE1YGAg5Li05pe25a+E5a2Y
+5ZmoICAgICAgICAgIOWQpg0KPiArYGAkZjI0YGAtYGAkZjMxYGAgYGAkZnMwYGAtYGAkZnM3YGAg
+IOmdmeaAgeWvhOWtmOWZqCAgICAgICAgICDmmK8NCj4gKz09PT09PT09PT09PT09PT09ID09PT09
+PT09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09ID09PT09PT09PT0NCj4gKw0KPiAr5rOo
+5oSP77ya5Zyo5LiA5Lqb6YGX55WZ5Luj56CB5Lit5pyJ5pe25Y+v6IO96KeB5YiwIGBgJHYwYGAg
+5ZKMIGBgJHYxYGAg77yM5a6D5Lus5pivIGBgJGEwYGANCj4gK+WSjCBgYCRhMWBgIOeahOWIq+WQ
+je+8jOWxnuS6juW3sue7j+W6n+W8g+eahOeUqOazleOAgg0KPiArDQo+ICsNCj4gK+WQkemHj+Wv
+hOWtmOWZqA0KPiArLS0tLS0tLS0tLQ0KPiArDQo+ICtMb29uZ0FyY2jnjrDmnInkuKTnp43lkJHp
+h4/mianlsZXvvJoNCj4gKw0KPiArLSAxMjjkvY3lkJHph4/mianlsZVMU1jvvIjlhajnp7BMb29u
+Z3NvbiBTSU1EIGVYdGVudGlvbu+8ie+8jA0KPiArLSAyNTbkvY3lkJHph4/mianlsZVMQVNY77yI
+5YWo56ewTG9vbmdzb24gQWR2YW5jZWQgU0lNRCBlWHRlbnRpb27vvInjgIINCj4gKw0KPiArTFNY
+5L2/55SoIGBgJHYwYGAgfiBgYCR2MzFgYCDlkJHph4/lr4TlrZjlmajvvIzogIxMQVNY5YiZ5L2/
+55SoIGBgJHgwYGAgfiBgYCR4MzFgYCDjgIINCj4gKw0KPiAr5rWu54K55a+E5a2Y5Zmo5ZKM5ZCR
+6YeP5a+E5a2Y5Zmo5piv5aSN55So55qE77yM5q+U5aaC77ya5Zyo5LiA5Liq5a6e546w5LqGTFNY
+5ZKMTEFTWOeahOaguOS4iu+8jCBgYCR4MGBgIOeahA0KPiAr5L2OMTI45L2N5LiOIGBgJHYwYGAg
+5YWx55So77yMIGBgJHYwYGAg55qE5L2ONjTkvY3kuI4gYGAkZjBgYCDlhbHnlKjvvIzlhbbku5bl
+r4TlrZjlmajkvp3mraTnsbvmjqjjgIINCj4gKw0KPiAr5o6n5Yi254q25oCB5a+E5a2Y5ZmoDQo+
+ICstLS0tLS0tLS0tLS0tLQ0KPiArDQo+ICvmjqfliLbnirbmgIHlr4TlrZjlmajlj6rog73lnKjn
+ibnmnYPmqKHlvI/vvIhQTFYw77yJ5LiL6K6/6ZeuOg0KPiArDQo+ICs9PT09PT09PT09PT09PT09
+PSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0gPT09PT09PT09PQ0KPiAr5Zyw
+5Z2AICAgICAgICAgICAgICDlhajnp7Dmj4/ov7AgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IOeugOensA0KPiArPT09PT09PT09PT09PT09PT0gPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09ID09PT09PT09PT0NCj4gKzB4MCAgICAgICAgICAgICAgIOW9k+WJjeaooeW8j+S/
+oeaBryAgICAgICAgICAgICAgICAgICAgICAgICBDUk1EDQo+ICsweDEgICAgICAgICAgICAgICDl
+vILluLjliY3mqKHlvI/kv6Hmga8gICAgICAgICAgICAgICAgICAgICAgIFBSTUQNCj4gKzB4MiAg
+ICAgICAgICAgICAgIOaJqeWxlemDqOS7tuS9v+iDvSAgICAgICAgICAgICAgICAgICAgICAgICBF
+VUVODQo+ICsweDMgICAgICAgICAgICAgICDmnYLpobnmjqfliLYgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIE1JU0MNCj4gKzB4NCAgICAgICAgICAgICAgIOW8guW4uOmFjee9riAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgRUNGRw0KPiArMHg1ICAgICAgICAgICAgICAg5byC5bi454q2
+5oCBICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFU1RBVA0KPiArMHg2ICAgICAgICAgICAg
+ICAg5byC5bi46L+U5Zue5Zyw5Z2AICAgICAgICAgICAgICAgICAgICAgICAgIEVSQQ0KPiArMHg3
+ICAgICAgICAgICAgICAg5Ye66ZSZKEZhdWx0aW5nKeiZmuaLn+WcsOWdgCAgICAgICAgICAgICAg
+IEJBRFYNCj4gKzB4OCAgICAgICAgICAgICAgIOWHuumUmShGYXVsdGluZynmjIfku6TlrZcgICAg
+ICAgICAgICAgICAgIEJBREkNCj4gKzB4QyAgICAgICAgICAgICAgIOW8guW4uOWFpeWPo+WcsOWd
+gCAgICAgICAgICAgICAgICAgICAgICAgICBFRU5UUlkNCj4gKzB4MTAgICAgICAgICAgICAgIFRM
+Que0ouW8lSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFRMQklEWA0KPiArMHgxMSAgICAg
+ICAgICAgICAgVExC6KGo6aG56auY5L2NICAgICAgICAgICAgICAgICAgICAgICAgICBUTEJFSEkN
+Cj4gKzB4MTIgICAgICAgICAgICAgIFRMQuihqOmhueS9juS9jTAgICAgICAgICAgICAgICAgICAg
+ICAgICAgVExCRUxPMA0KPiArMHgxMyAgICAgICAgICAgICAgVExC6KGo6aG55L2O5L2NMSAgICAg
+ICAgICAgICAgICAgICAgICAgICBUTEJFTE8xDQo+ICsweDE4ICAgICAgICAgICAgICDlnLDlnYDn
+qbrpl7TmoIfor4bnrKYgICAgICAgICAgICAgICAgICAgICAgIEFTSUQNCj4gKzB4MTkgICAgICAg
+ICAgICAgIOS9juWNiuWcsOWdgOepuumXtOmhteWFqOWxgOebruW9leWfuuWdgCAgICAgICAgICAg
+UEdETA0KPiArMHgxQSAgICAgICAgICAgICAg6auY5Y2K5Zyw5Z2A56m66Ze06aG15YWo5bGA55uu
+5b2V5Z+65Z2AICAgICAgICAgICBQR0RIDQo+ICsweDFCICAgICAgICAgICAgICDpobXlhajlsYDn
+m67lvZXln7rlnYAgICAgICAgICAgICAgICAgICAgICAgIFBHRA0KPiArMHgxQyAgICAgICAgICAg
+ICAg6aG16KGo6YGN5Y6G5o6n5Yi25L2O5Y2K6YOo5YiGICAgICAgICAgICAgICAgICBQV0NMDQo+
+ICsweDFEICAgICAgICAgICAgICDpobXooajpgY3ljobmjqfliLbpq5jljYrpg6jliIYgICAgICAg
+ICAgICAgICAgIFBXQ0gNCj4gKzB4MUUgICAgICAgICAgICAgIFNUTELpobXlpKflsI8gICAgICAg
+ICAgICAgICAgICAgICAgICAgICBTVExCUFMNCj4gKzB4MUYgICAgICAgICAgICAgIOe8qeWHj+iZ
+muWcsOWdgOmFjee9riAgICAgICAgICAgICAgICAgICAgICAgUlZBQ0ZHDQo+ICsweDIwICAgICAg
+ICAgICAgICBDUFXnvJblj7cgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBDUFVJRA0KPiAr
+MHgyMSAgICAgICAgICAgICAg54m55p2D6LWE5rqQ6YWN572u5L+h5oGvMSAgICAgICAgICAgICAg
+ICAgICAgUFJDRkcxDQo+ICsweDIyICAgICAgICAgICAgICDnibnmnYPotYTmupDphY3nva7kv6Hm
+ga8yICAgICAgICAgICAgICAgICAgICBQUkNGRzINCj4gKzB4MjMgICAgICAgICAgICAgIOeJuead
+g+i1hOa6kOmFjee9ruS/oeaBrzMgICAgICAgICAgICAgICAgICAgIFBSQ0ZHMw0KPiArMHgzMCtu
+ICgw4omkbuKJpDE1KSAgIOaVsOaNruS/neWtmOWvhOWtmOWZqCAgICAgICAgICAgICAgICAgICAg
+ICAgU0FWRW4NCj4gKzB4NDAgICAgICAgICAgICAgIOWumuaXtuWZqOe8luWPtyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIFRJRA0KPiArMHg0MSAgICAgICAgICAgICAg5a6a5pe25Zmo6YWN572u
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgVENGRw0KPiArMHg0MiAgICAgICAgICAgICAg5a6a
+5pe25Zmo5YC8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBUVkFMDQo+ICsweDQzICAgICAg
+ICAgICAgICDorqHml7blmajooaXlgb8gICAgICAgICAgICAgICAgICAgICAgICAgICBDTlRDDQo+
+ICsweDQ0ICAgICAgICAgICAgICDlrprml7blmajkuK3mlq3muIXpmaQgICAgICAgICAgICAgICAg
+ICAgICAgIFRJQ0xSDQo+ICsweDYwICAgICAgICAgICAgICBMTEJpdOebuOWFs+aOp+WItiAgICAg
+ICAgICAgICAgICAgICAgICAgIExMQkNUTA0KPiArMHg4MCAgICAgICAgICAgICAg5a6e546w55u4
+5YWz5o6n5Yi2MSAgICAgICAgICAgICAgICAgICAgICAgIElNUENUTDENCj4gKzB4ODEgICAgICAg
+ICAgICAgIOWunueOsOebuOWFs+aOp+WItjIgICAgICAgICAgICAgICAgICAgICAgICBJTVBDVEwy
+DQo+ICsweDg4ICAgICAgICAgICAgICBUTELph43loavlvILluLjlhaXlj6PlnLDlnYAgICAgICAg
+ICAgICAgICAgICBUTEJSRU5UUlkNCj4gKzB4ODkgICAgICAgICAgICAgIFRMQumHjeWhq+W8guW4
+uOWHuumUmShGYXVsdGluZynomZrlnLDlnYAgICAgICBUTEJSQkFEVg0KPiArMHg4QSAgICAgICAg
+ICAgICAgVExC6YeN5aGr5byC5bi46L+U5Zue5Zyw5Z2AICAgICAgICAgICAgICAgICAgVExCUkVS
+QQ0KPiArMHg4QiAgICAgICAgICAgICAgVExC6YeN5aGr5byC5bi45pWw5o2u5L+d5a2YICAgICAg
+ICAgICAgICAgICAgVExCUlNBVkUNCj4gKzB4OEMgICAgICAgICAgICAgIFRMQumHjeWhq+W8guW4
+uOihqOmhueS9juS9jTAgICAgICAgICAgICAgICAgIFRMQlJFTE8wDQo+ICsweDhEICAgICAgICAg
+ICAgICBUTELph43loavlvILluLjooajpobnkvY7kvY0xICAgICAgICAgICAgICAgICBUTEJSRUxP
+MQ0KPiArMHg4RSAgICAgICAgICAgICAgVExC6YeN5aGr5byC5bi46KGo6aG56auY5L2NICAgICAg
+ICAgICAgICAgICAgVExCRUhJDQo+ICsweDhGICAgICAgICAgICAgICBUTELph43loavlvILluLjl
+iY3mqKHlvI/kv6Hmga8gICAgICAgICAgICAgICAgVExCUlBSTUQNCj4gKzB4OTAgICAgICAgICAg
+ICAgIOacuuWZqOmUmeivr+aOp+WItiAgICAgICAgICAgICAgICAgICAgICAgICBNRVJSQ1RMDQo+
+ICsweDkxICAgICAgICAgICAgICDmnLrlmajplJnor6/kv6Hmga8xICAgICAgICAgICAgICAgICAg
+ICAgICAgTUVSUklORk8xDQo+ICsweDkyICAgICAgICAgICAgICDmnLrlmajplJnor6/kv6Hmga8y
+ICAgICAgICAgICAgICAgICAgICAgICAgTUVSUklORk8yDQo+ICsweDkzICAgICAgICAgICAgICDm
+nLrlmajplJnor6/lvILluLjlhaXlj6PlnLDlnYAgICAgICAgICAgICAgICAgIE1FUlJFTlRSWQ0K
+PiArMHg5NCAgICAgICAgICAgICAg5py65Zmo6ZSZ6K+v5byC5bi46L+U5Zue5Zyw5Z2AICAgICAg
+ICAgICAgICAgICBNRVJSRVJBDQo+ICsweDk1ICAgICAgICAgICAgICDmnLrlmajplJnor6/lvILl
+uLjmlbDmja7kv53lrZggICAgICAgICAgICAgICAgIE1FUlJTQVZFDQo+ICsweDk4ICAgICAgICAg
+ICAgICDpq5jpgJ/nvJPlrZjmoIfnrb4gICAgICAgICAgICAgICAgICAgICAgICAgQ1RBRw0KPiAr
+MHgxODArbiAoMOKJpG7iiaQzKSAgIOebtOaOpeaYoOWwhOmFjee9rueql+WPo24gICAgICAgICAg
+ICAgICAgICAgIERNV24NCj4gKzB4MjAwKzJuICgw4omkbuKJpDMxKSDmgKfog73nm5HmtYvphY3n
+va5uICAgICAgICAgICAgICAgICAgICAgICAgUE1DRkduDQo+ICsweDIwMSsybiAoMOKJpG7iiaQz
+MSkg5oCn6IO955uR5rWL6K6h5pWw5ZmobiAgICAgICAgICAgICAgICAgICAgICBQTUNOVG4NCj4g
+KzB4MzAwICAgICAgICAgICAgIOWGheWtmOivu+WGmeebkeinhueCueaVtOS9k+aOp+WItiAgICAg
+ICAgICAgICAgIE1XUEMNCj4gKzB4MzAxICAgICAgICAgICAgIOWGheWtmOivu+WGmeebkeinhueC
+ueaVtOS9k+eKtuaAgSAgICAgICAgICAgICAgIE1XUFMNCj4gKzB4MzEwKzhuICgw4omkbuKJpDcp
+ICDlhoXlrZjor7vlhpnnm5Hop4bngrlu6YWN572uMSAgICAgICAgICAgICAgICAgTVdQbkNGRzEN
+Cj4gKzB4MzExKzhuICgw4omkbuKJpDcpICDlhoXlrZjor7vlhpnnm5Hop4bngrlu6YWN572uMiAg
+ICAgICAgICAgICAgICAgTVdQbkNGRzINCj4gKzB4MzEyKzhuICgw4omkbuKJpDcpICDlhoXlrZjo
+r7vlhpnnm5Hop4bngrlu6YWN572uMyAgICAgICAgICAgICAgICAgTVdQbkNGRzMNCj4gKzB4MzEz
+KzhuICgw4omkbuKJpDcpICDlhoXlrZjor7vlhpnnm5Hop4bngrlu6YWN572uNCAgICAgICAgICAg
+ICAgICAgTVdQbkNGRzQNCj4gKzB4MzgwICAgICAgICAgICAgIOWPluaMh+ebkeinhueCueaVtOS9
+k+aOp+WItiAgICAgICAgICAgICAgICAgICBGV1BDDQo+ICsweDM4MSAgICAgICAgICAgICDlj5bm
+jIfnm5Hop4bngrnmlbTkvZPnirbmgIEgICAgICAgICAgICAgICAgICAgRldQUw0KPiArMHgzOTAr
+OG4gKDDiiaRu4omkNykgIOWPluaMh+ebkeinhueCuW7phY3nva4xICAgICAgICAgICAgICAgICAg
+ICAgRldQbkNGRzENCj4gKzB4MzkxKzhuICgw4omkbuKJpDcpICDlj5bmjIfnm5Hop4bngrlu6YWN
+572uMiAgICAgICAgICAgICAgICAgICAgIEZXUG5DRkcyDQo+ICsweDM5Mis4biAoMOKJpG7iiaQ3
+KSAg5Y+W5oyH55uR6KeG54K5bumFjee9rjMgICAgICAgICAgICAgICAgICAgICBGV1BuQ0ZHMw0K
+PiArMHgzOTMrOG4gKDDiiaRu4omkNykgIOWPluaMh+ebkeinhueCuW7phY3nva40ICAgICAgICAg
+ICAgICAgICAgICAgRldQbkNGRzQNCj4gKzB4NTAwICAgICAgICAgICAgIOiwg+ivleWvhOWtmOWZ
+qCAgICAgICAgICAgICAgICAgICAgICAgICAgIERCRw0KPiArMHg1MDEgICAgICAgICAgICAg6LCD
+6K+V5byC5bi46L+U5Zue5Zyw5Z2AICAgICAgICAgICAgICAgICAgICAgREVSQQ0KPiArMHg1MDIg
+ICAgICAgICAgICAg6LCD6K+V5pWw5o2u5L+d5a2YICAgICAgICAgICAgICAgICAgICAgICAgIERT
+QVZFDQo+ICs9PT09PT09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT0gPT09PT09PT09PQ0KPiArDQo+ICtFUkHvvIxUTEJSRVJB77yMTUVSUkVSQeWSjERFUkHm
+nInml7bkuZ/liIbliKvnp7DkuLpFUEPvvIxUTEJSRVBD77yMTUVSUkVQQ+WSjERFUEPjgIINCj4g
+Kw0KPiAr5Z+656GA5oyH5Luk6ZuGDQo+ICs9PT09PT09PT09DQo+ICsNCj4gK+aMh+S7pOagvOW8
+jw0KPiArLS0tLS0tLS0NCj4gKw0KPiArTG9vbmdBcmNo55qE5oyH5Luk5a2X6ZW/5Li6MzLkvY3v
+vIzkuIDlhbHmnIk556eN5Z+65pys5oyH5Luk5qC85byP77yI5Lul5Y+K5LiA5Lqb5Y+Y5L2T77yJ
+Og0KPiArDQo+ICs9PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPiAr5qC8
+5byP5ZCN56ewICAgIOaMh+S7pOaehOaIkA0KPiArPT09PT09PT09PT0gPT09PT09PT09PT09PT09
+PT09PT09PT09PT0NCj4gKzJSICAgICAgICAgIE9wY29kZSArIFJqICsgUmQNCj4gKzNSICAgICAg
+ICAgIE9wY29kZSArIFJrICsgUmogKyBSZA0KPiArNFIgICAgICAgICAgT3Bjb2RlICsgUmEgKyBS
+ayArIFJqICsgUmQNCj4gKzJSSTggICAgICAgIE9wY29kZSArIEk4ICsgUmogKyBSZA0KPiArMlJJ
+MTIgICAgICAgT3Bjb2RlICsgSTEyICsgUmogKyBSZA0KPiArMlJJMTQgICAgICAgT3Bjb2RlICsg
+STE0ICsgUmogKyBSZA0KPiArMlJJMTYgICAgICAgT3Bjb2RlICsgSTE2ICsgUmogKyBSZA0KPiAr
+MVJJMjEgICAgICAgT3Bjb2RlICsgSTIxTCArIFJqICsgSTIxSA0KPiArSTI2ICAgICAgICAgT3Bj
+b2RlICsgSTI2TCArIEkyNkgNCj4gKz09PT09PT09PT09ID09PT09PT09PT09PT09PT09PT09PT09
+PT09DQo+ICsNCj4gK09wY29kZeaYr+aMh+S7pOaTjeS9nOegge+8jFJq5ZKMUmvmmK/mupDmk43k
+vZzmlbDvvIjlr4TlrZjlmajvvInvvIxSZOaYr+ebruagh+aTjeS9nOaVsO+8iOWvhOWtmOWZqO+8
+ie+8jFJh5pivDQo+ICs0Ui10eXBl5qC85byP54m55pyJ55qE6ZmE5Yqg5pON5L2c5pWw77yI5a+E
+5a2Y5Zmo77yJ44CCSTgvSTEyL0kxNi9JMjEvSTI25YiG5Yir5pivOOS9jS8xMuS9jS8xNuS9jS8N
+Cj4gKzIx5L2NLzI25L2N55qE56uL5Y2z5pWw44CC5YW25Lit6L6D6ZW/55qEMjHkvY3lkowyNuS9
+jeeri+WNs+aVsOWcqOaMh+S7pOWtl+S4reiiq+WIhuWJsuS4uumrmOS9jemDqOWIhuS4juS9juS9
+jQ0KPiAr6YOo5YiG77yM5omA5Lul5L2g5Lus5Zyo6L+Z6YeM55qE5qC85byP5o+P6L+w5Lit6IO9
+5aSf55yL5YiwSTIxTC9JMjFI5ZKMSTI2TC9JMjZI6L+Z5qC35bim5ZCO57yA55qE6KGo6L+w44CC
+DQo+ICsNCj4gK+aMh+S7pOWIl+ihqA0KPiArLS0tLS0tLS0NCj4gKw0KPiAr5Li65LqG566A5L6/
+6LW36KeB77yM5oiR5Lus5Zyo5q2k5Y+q572X5YiX5LiA5LiL5oyH5Luk5ZCN56ew77yI5Yqp6K6w
+56ym77yJ77yM6ZyA6KaB6K+m57uG5L+h5oGv6K+36ZiF6K+7DQo+ICs6cmVmOmDlj4LogIPmlofn
+jK4gPGxvb25nYXJjaC1yZWZlcmVuY2VzLXpoX0NOPmAg5Lit55qE5paH5qGj44CCDQo+ICsNCj4g
+KzEuIOeul+acr+i/kOeul+aMh+S7pDo6DQo+ICsNCj4gKyAgICBBREQuVyBTVUIuVyBBRERJLlcg
+QURELkQgU1VCLkQgQURESS5EDQo+ICsgICAgU0xUIFNMVFUgU0xUSSBTTFRVSQ0KPiArICAgIEFO
+RCBPUiBOT1IgWE9SIEFORE4gT1JOIEFOREkgT1JJIFhPUkkNCj4gKyAgICBNVUwuVyBNVUxILlcg
+TVVMSC5XVSBESVYuVyBESVYuV1UgTU9ELlcgTU9ELldVDQo+ICsgICAgTVVMLkQgTVVMSC5EIE1V
+TEguRFUgRElWLkQgRElWLkRVIE1PRC5EIE1PRC5EVQ0KPiArICAgIFBDQURESSBQQ0FERFUxMkkg
+UENBRERVMThJDQo+ICsgICAgTFUxMkkuVyBMVTMySS5EIExVNTJJLkQgQUREVTE2SS5EDQo+ICsN
+Cj4gKzIuIOenu+S9jei/kOeul+aMh+S7pDo6DQo+ICsNCj4gKyAgICBTTEwuVyBTUkwuVyBTUkEu
+VyBST1RSLlcgU0xMSS5XIFNSTEkuVyBTUkFJLlcgUk9UUkkuVw0KPiArICAgIFNMTC5EIFNSTC5E
+IFNSQS5EIFJPVFIuRCBTTExJLkQgU1JMSS5EIFNSQUkuRCBST1RSSS5EDQo+ICsNCj4gKzMuIOS9
+jeWfn+aTjeS9nOaMh+S7pDo6DQo+ICsNCj4gKyAgICBFWFQuVy5CIEVYVC5XLkggQ0xPLlcgQ0xP
+LkQgU0xaLlcgQ0xaLkQgQ1RPLlcgQ1RPLkQgQ1RaLlcgQ1RaLkQNCj4gKyAgICBCWVRFUElDSy5X
+IEJZVEVQSUNLLkQgQlNUUklOUy5XIEJTVFJJTlMuRCBCU1RSUElDSy5XIEJTVFJQSUNLLkQNCj4g
+KyAgICBSRVZCLjJIIFJFVkIuNEggUkVWQi4yVyBSRVZCLkQgUkVWSC4yVyBSRVZILkQgQklUUkVW
+LjRCIEJJVFJFVi44QiBCSVRSRVYuVyBCSVRSRVYuRA0KPiArICAgIE1BU0tFUVogTUFTS05FWg0K
+PiArDQo+ICs0LiDliIbmlK/ovaznp7vmjIfku6Q6Og0KPiArDQo+ICsgICAgQkVRIEJORSBCTFQg
+QkdFIEJMVFUgQkdFVSBCRVFaIEJORVogQiBCTCBKSVJMDQo+ICsNCj4gKzUuIOiuv+WtmOivu+WG
+meaMh+S7pDo6DQo+ICsNCj4gKyAgICBMRC5CIExELkJVIExELkggTEQuSFUgTEQuVyBMRC5XVSBM
+RC5EIFNULkIgU1QuSCBTVC5XIFNULkQNCj4gKyAgICBMRFguQiBMRFguQlUgTERYLkggTERYLkhV
+IExEWC5XIExEWC5XVSBMRFguRCBTVFguQiBTVFguSCBTVFguVyBTVFguRA0KPiArICAgIExEUFRS
+LlcgTERQVFIuRCBTVFBUUi5XIFNUUFRSLkQNCj4gKyAgICBQUkVMRCBQUkVMRFgNCj4gKw0KPiAr
+Ni4g5Y6f5a2Q5pON5L2c5oyH5LukOjoNCj4gKw0KPiArICAgIExMLlcgU0MuVyBMTC5EIFNDLkQN
+Cj4gKyAgICBBTVNXQVAuVyBBTVNXQVAuRCBBTUFERC5XIEFNQURELkQgQU1BTkQuVyBBTUFORC5E
+IEFNT1IuVyBBTU9SLkQgQU1YT1IuVyBBTVhPUi5EDQo+ICsgICAgQU1NQVguVyBBTU1BWC5EIEFN
+TUlOLlcgQU1NSU4uRA0KPiArDQo+ICs3LiDmoIXpmpzmjIfku6Q6Og0KPiArDQo+ICsgICAgSUJB
+UiBEQkFSDQpJcyBJQkFSIGlzIHBpcGVsaW5lIGZsdXNoPyBJIHRoaW5rIERCQVIgaXMgZm9yIExT
+VSBmZW5jZS4gbG9vbmdhcmNoIGlzDQp3ZWFrIGNvbnNpc3RlbmN5LCByaWdodD8NCg0KSSB0aGlu
+ayB3ZSBqdXN0IGxlYXZlIERCQVIgaGVyZSwgYW5kIHB1dCBJQkFSIGludG8gOC4gRmx1c2ggcGlw
+ZWxpbmUNCmlzIG5vdCBmb3IgbWVtb3J5IGNvbnNpc3RlbmN5Lg0KDQpPdmVyYWxsLCBJIGdpdmU6
+DQpSZXZpZXdlZC1ieTogR3VvIFJlbiA8Z3VvcmVuQGtlcm5lbC5vcmc+DQoNCj4gKw0KPiArOC4g
+54m55q6K5oyH5LukOjoNCj4gKw0KPiArICAgIFNZU0NBTEwgQlJFQUsgQ1BVQ0ZHIE5PUCBJRExF
+IEVSVE4oRVJFVCkgREJDTChEQkdDQUxMKSBSRFRJTUVMLlcgUkRUSU1FSC5XIFJEVElNRS5EDQo+
+ICsgICAgQVNSVExFLkQgQVNSVEdULkQNCj4gKw0KPiArOS4g54m55p2D5oyH5LukOjoNCj4gKw0K
+PiArICAgIENTUlJEIENTUldSIENTUlhDSEcNCj4gKyAgICBJT0NTUlJELkIgSU9DU1JSRC5IIElP
+Q1NSUkQuVyBJT0NTUlJELkQgSU9DU1JXUi5CIElPQ1NSV1IuSCBJT0NTUldSLlcgSU9DU1JXUi5E
+DQo+ICsgICAgQ0FDT1AgVExCUChUTEJTUkNIKSBUTEJSRCBUTEJXUiBUTEJGSUxMIFRMQkNMUiBU
+TEJGTFVTSCBJTlZUTEIgTERESVIgTERQVEUNCj4gKw0KPiAr6Jma5ouf5YaF5a2YDQo+ICs9PT09
+PT09PQ0KPiArDQo+ICtMb29uZ0FyY2jlj6/ku6Xkvb/nlKjnm7TmjqXmmKDlsITomZrmi5/lhoXl
+rZjlkozliIbpobXmmKDlsITomZrmi5/lhoXlrZjjgIINCj4gKw0KPiAr55u05o6l5pig5bCE6Jma
+5ouf5YaF5a2Y6YCa6L+HQ1NSLkRNV27vvIhuPTB+M++8ieadpei/m+ihjOmFjee9ru+8jOiZmuaL
+n+WcsOWdgO+8iFZB77yJ5ZKM54mp55CG5Zyw5Z2A77yIUEHvvIkNCj4gK+S5i+mXtOacieeugOWN
+leeahOaYoOWwhOWFs+ezuzo6DQo+ICsNCj4gKyBWQSA9IFBBICsg5Zu65a6a5YGP56e7DQo+ICsN
+Cj4gK+WIhumhteaYoOWwhOeahOiZmuaLn+WcsOWdgO+8iFZB77yJ5ZKM54mp55CG5Zyw5Z2A77yI
+UEHvvInmnInku7vmhI/nmoTmmKDlsITlhbPns7vvvIzov5nnp43lhbPns7vorrDlvZXlnKhUTELl
+kozpobUNCj4gK+ihqOS4reOAgkxvb25nQXJjaOeahFRMQuWMheaLrOS4gOS4quWFqOebuOiBlOea
+hE1UTELvvIhNdWx0aXBsZSBQYWdlIFNpemUgVExC77yM5aSa5qC36aG15aSn5bCPVExC77yJDQo+
+ICvlkozkuIDkuKrnu4Tnm7jogZTnmoRTVExC77yIU2luZ2xlIFBhZ2UgU2l6ZSBUTELvvIzljZXk
+uIDpobXlpKflsI9UTELvvInjgIINCj4gKw0KPiAr57y655yB54q25oCB5LiL77yMTEEzMueahOaV
+tOS4quiZmuaLn+WcsOWdgOepuumXtOmFjee9ruWmguS4i++8mg0KPiArDQo+ICs9PT09PT09PT09
+PT0gPT09PT09PT09PT09PT09PT09PT09PT09PT09ID09PT09PT09PT09PT09PT09PT09PT09PT09
+PQ0KPiAr5Yy65q615ZCNICAgICAgIOWcsOWdgOiMg+WbtCAgICAgICAgICAgICAgICAgICAg5bGe
+5oCnDQo+ICs9PT09PT09PT09PT0gPT09PT09PT09PT09PT09PT09PT09PT09PT09ID09PT09PT09
+PT09PT09PT09PT09PT09PT09PQ0KPiArYGBVVlJBTkdFYGAgIGBgMHgwMDAwMDAwMCAtIDB4N0ZG
+RkZGRkZgYCDliIbpobXmmKDlsIQsIOWPr+e8k+WtmCwgUExWMH4zDQo+ICtgYEtQUkFOR0UwYGAg
+YGAweDgwMDAwMDAwIC0gMHg5RkZGRkZGRmBgIOebtOaOpeaYoOWwhCwg6Z2e57yT5a2YLCBQTFYw
+DQo+ICtgYEtQUkFOR0UxYGAgYGAweEEwMDAwMDAwIC0gMHhCRkZGRkZGRmBgIOebtOaOpeaYoOWw
+hCwg5Y+v57yT5a2YLCBQTFYwDQo+ICtgYEtWUkFOR0VgYCAgYGAweEMwMDAwMDAwIC0gMHhGRkZG
+RkZGRmBgIOWIhumhteaYoOWwhCwg5Y+v57yT5a2YLCBQTFYwDQo+ICs9PT09PT09PT09PT0gPT09
+PT09PT09PT09PT09PT09PT09PT09PT09ID09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPiAr
+DQo+ICvnlKjmiLfmgIHvvIhQTFYz77yJ5Y+q6IO96K6/6ZeuVVZSQU5HRe+8jOWvueS6juebtOaO
+peaYoOWwhOeahEtQUkFOR0Uw5ZKMS1BSQU5HRTHvvIzlsIbomZrmi5/lnLDlnYDnmoTnrKwNCj4g
+KzMwfjMx5L2N5riF6Zu25bCx562J5LqO54mp55CG5Zyw5Z2A44CC5L6L5aaC77ya54mp55CG5Zyw
+5Z2AMHgwMDAwMTAwMOWvueW6lOeahOmdnue8k+WtmOebtOaOpeaYoOWwhOiZmuaLn+WcsOWdgA0K
+PiAr5pivMHg4MDAwMTAwMO+8jOiAjOWFtuWPr+e8k+WtmOebtOaOpeaYoOWwhOiZmuaLn+WcsOWd
+gOaYrzB4QTAwMDEwMDDjgIINCj4gKw0KPiAr57y655yB54q25oCB5LiL77yMTEE2NOeahOaVtOS4
+quiZmuaLn+WcsOWdgOepuumXtOmFjee9ruWmguS4i++8mg0KPiArDQo+ICs9PT09PT09PT09PT0g
+PT09PT09PT09PT09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+DQo+ICvljLrmrrXlkI0gICAgICAg5Zyw5Z2A6IyD5Zu0ICAgICAgICAgICAgICAg5bGe5oCnDQo+
+ICs9PT09PT09PT09PT0gPT09PT09PT09PT09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09DQo+ICtgYFhVVlJBTkdFYGAgYGAweDAwMDAwMDAwMDAwMDAwMDAgLSDl
+iIbpobXmmKDlsIQsIOWPr+e8k+WtmCwgUExWMH4zDQo+ICsgICAgICAgICAgICAgMHgzRkZGRkZG
+RkZGRkZGRkZGYGANCj4gK2BgWFNQUkFOR0VgYCBgYDB4NDAwMDAwMDAwMDAwMDAwMCAtIOebtOaO
+peaYoOWwhCwg5Y+v57yT5a2YIC8g6Z2e57yT5a2YLCBQTFYwDQo+ICsgICAgICAgICAgICAgMHg3
+RkZGRkZGRkZGRkZGRkZGYGANCj4gK2BgWEtQUkFOR0VgYCBgYDB4ODAwMDAwMDAwMDAwMDAwMCAt
+IOebtOaOpeaYoOWwhCwg5Y+v57yT5a2YIC8g6Z2e57yT5a2YLCBQTFYwDQo+ICsgICAgICAgICAg
+ICAgMHhCRkZGRkZGRkZGRkZGRkZGYGANCj4gK2BgWEtWUkFOR0VgYCBgYDB4QzAwMDAwMDAwMDAw
+MDAwMCAtIOWIhumhteaYoOWwhCwg5Y+v57yT5a2YLCBQTFYwDQo+ICsgICAgICAgICAgICAgMHhG
+RkZGRkZGRkZGRkZGRkZGYGANCj4gKz09PT09PT09PT09PSA9PT09PT09PT09PT09PT09PT09PT09
+ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NCj4gKw0KPiAr55So5oi35oCB77yI
+UExWM++8ieWPquiDveiuv+mXrlhVVlJBTkdF77yM5a+55LqO55u05o6l5pig5bCE55qEWFNQUkFO
+R0XlkoxYS1BSQU5HRe+8jOWwhuiZmuaLn+WcsOWdgOeahOesrA0KPiArNjB+NjPkvY3muIXpm7bl
+sLHnrYnkuo7niannkIblnLDlnYDvvIzogIzlhbbnvJPlrZjlsZ7mgKfmmK/pgJrov4fomZrmi5/l
+nLDlnYDnmoTnrKw2MH42MeS9jemFjee9rueahO+8iDDooajnpLrlvLrluo8NCj4gK+mdnue8k+Wt
+mO+8jDHooajnpLrkuIDoh7Tlj6/nvJPlrZjvvIwy6KGo56S65byx5bqP6Z2e57yT5a2Y77yJ44CC
+DQo+ICsNCj4gK+ebruWJje+8jOaIkeS7rOS7heeUqFhLUFJBTkdF5p2l6L+b6KGM55u05o6l5pig
+5bCE77yMWFNQUkFOR0Xkv53nlZnnu5nku6XlkI7nlKjjgIINCj4gKw0KPiAr5q2k5aSE57uZ5Ye6
+5LiA5Liq55u05o6l5pig5bCE55qE5L6L5a2Q77ya54mp55CG5Zyw5Z2AMHgwMDAwMDAwMF8wMDAw
+MTAwMOeahOW8uuW6j+mdnue8k+WtmOebtOaOpeaYoOWwhOiZmuaLn+WcsOWdgA0KPiAr77yI5Zyo
+WEtQUkFOR0XkuK3vvInmmK8weDgwMDAwMDAwXzAwMDAxMDAw77yM5YW25LiA6Ie05Y+v57yT5a2Y
+55u05o6l5pig5bCE6Jma5ouf5Zyw5Z2A77yI5ZyoWEtQUkFOR0XkuK3vvIkNCj4gK+aYrzB4OTAw
+MDAwMDBfMDAwMDEwMDDvvIzogIzlhbblvLHluo/pnZ7nvJPlrZjnm7TmjqXmmKDlsITomZrmi5/l
+nLDlnYDvvIjlnKhYS1BSQU5HReS4re+8ieaYrzB4QTAwMDAwMDBfDQo+ICswMDAwMTAwMOOAgg0K
+PiArDQo+ICtMb29uZ3NvbuS4jkxvb25nQXJjaOeahOWFs+ezuw0KPiArPT09PT09PT09PT09PT09
+PT09PT09PT09PQ0KPiArDQo+ICtMb29uZ0FyY2jmmK/kuIDnp41SSVND5oyH5Luk6ZuG5p625p6E
+77yISVNB77yJ77yM5LiN5ZCM5LqO546w5a2Y55qE5Lu75L2V5LiA56eNSVNB77yM6ICMTG9vbmdz
+b27vvIjljbPpvpkNCj4gK+iKr++8ieaYr+S4gOS4quWkhOeQhuWZqOWutuaXj+OAgum+meiKr+WM
+heaLrOS4ieS4quezu+WIl++8mkxvb25nc29uLTHvvIjpvpnoiq8x5Y+377yJ5pivMzLkvY3lpITn
+kIblmajns7vliJfvvIwNCj4gK0xvb25nc29uLTLvvIjpvpnoiq8y5Y+377yJ5piv5L2O56uvNjTk
+vY3lpITnkIblmajns7vliJfvvIzogIxMb29uZ3Nvbi0z77yI6b6Z6IqvM+WPt++8ieaYr+mrmOer
+rzY05L2N5aSE55CGDQo+ICvlmajns7vliJfjgILml6fnmoTpvpnoiq/lpITnkIblmajln7rkuo5N
+SVBT5p625p6E77yM6ICM5paw55qE6b6Z6Iqv5aSE55CG5Zmo5Z+65LqOTG9vbmdBcmNo5p625p6E
+44CC5Lul6b6Z6IqvM+WPtw0KPiAr5Li65L6L77ya6b6Z6IqvM0ExMDAwLzNCMTUwMC8zQTIwMDAv
+M0EzMDAwLzNBNDAwMOmDveaYr+WFvOWuuU1JUFPnmoTvvIzogIzpvpnoiq8zQTUwMDDvvIjku6Xl
+j4rlsIYNCj4gK+adpeeahOWei+WPt++8iemDveaYr+WfuuS6jkxvb25nQXJjaOeahOOAgg0KPiAr
+DQo+ICsuLiBfbG9vbmdhcmNoLXJlZmVyZW5jZXMtemhfQ046DQo+ICsNCj4gK+WPguiAg+aWh+eM
+rg0KPiArPT09PT09PT0NCj4gKw0KPiArTG9vbmdzb27lrpjmlrnnvZHnq5nvvIjpvpnoiq/kuK3n
+p5HmioDmnK/ogqHku73mnInpmZDlhazlj7jvvInvvJoNCj4gKw0KPiArICBodHRwOi8vd3d3Lmxv
+b25nc29uLmNuLw0KPiArDQo+ICtMb29uZ3NvbuS4jkxvb25nQXJjaOeahOW8gOWPkeiAhee9keer
+me+8iOi9r+S7tuS4juaWh+aho+i1hOa6kO+8ie+8mg0KPiArDQo+ICsgIGh0dHA6Ly93d3cubG9v
+bmduaXguY24vDQo+ICsNCj4gKyAgaHR0cHM6Ly9naXRodWIuY29tL2xvb25nc29uLw0KPiArDQo+
+ICsgIGh0dHBzOi8vbG9vbmdzb24uZ2l0aHViLmlvL0xvb25nQXJjaC1Eb2N1bWVudGF0aW9uLw0K
+PiArDQo+ICtMb29uZ0FyY2jmjIfku6Tpm4bmnrbmnoTnmoTmlofmoaPvvJoNCj4gKw0KPiArICBo
+dHRwczovL2dpdGh1Yi5jb20vbG9vbmdzb24vTG9vbmdBcmNoLURvY3VtZW50YXRpb24vcmVsZWFz
+ZXMvbGF0ZXN0L2Rvd25sb2FkL0xvb25nQXJjaC1Wb2wxLXYxLjAwLUNOLnBkZiDvvIjkuK3mlofn
+iYjvvIkNCj4gKw0KPiArICBodHRwczovL2dpdGh1Yi5jb20vbG9vbmdzb24vTG9vbmdBcmNoLURv
+Y3VtZW50YXRpb24vcmVsZWFzZXMvbGF0ZXN0L2Rvd25sb2FkL0xvb25nQXJjaC1Wb2wxLXYxLjAw
+LUVOLnBkZiDvvIjoi7HmlofniYjvvIkNCj4gKw0KPiArTG9vbmdBcmNo55qERUxGIHBzQUJJ5paH
+5qGj77yaDQo+ICsNCj4gKyAgaHR0cHM6Ly9naXRodWIuY29tL2xvb25nc29uL0xvb25nQXJjaC1E
+b2N1bWVudGF0aW9uL3JlbGVhc2VzL2xhdGVzdC9kb3dubG9hZC9Mb29uZ0FyY2gtRUxGLUFCSS12
+MS4wMC1DTi5wZGYg77yI5Lit5paH54mI77yJDQo+ICsNCj4gKyAgaHR0cHM6Ly9naXRodWIuY29t
+L2xvb25nc29uL0xvb25nQXJjaC1Eb2N1bWVudGF0aW9uL3JlbGVhc2VzL2xhdGVzdC9kb3dubG9h
+ZC9Mb29uZ0FyY2gtRUxGLUFCSS12MS4wMC1FTi5wZGYg77yI6Iux5paH54mI77yJDQo+ICsNCj4g
+K0xvb25nc29u5LiOTG9vbmdBcmNo55qETGludXjlhoXmoLjmupDnoIHku5PlupPvvJoNCj4gKw0K
+PiArICBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9jaGVu
+aHVhY2FpL2xpbnV4LWxvb25nc29uLmdpdA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90
+cmFuc2xhdGlvbnMvemhfQ04vbG9vbmdhcmNoL2lycS1jaGlwLW1vZGVsLnJzdCBiL0RvY3VtZW50
+YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL2xvb25nYXJjaC9pcnEtY2hpcC1tb2RlbC5yc3QNCj4g
+bmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAwMDAwMDAwLi45ZjZjMzJmM2JhZDAN
+Cj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9D
+Ti9sb29uZ2FyY2gvaXJxLWNoaXAtbW9kZWwucnN0DQo+IEBAIC0wLDAgKzEsMTY3IEBADQo+ICsu
+LiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiArDQo+ICsuLiBpbmNsdWRlOjog
+Li4vZGlzY2xhaW1lci16aF9DTi5yc3QNCj4gKw0KPiArOk9yaWdpbmFsOiBEb2N1bWVudGF0aW9u
+L2xvb25nYXJjaC9pcnEtY2hpcC1tb2RlbC5yc3QNCj4gKzpUcmFuc2xhdG9yOiBIdWFjYWkgQ2hl
+biA8Y2hlbmh1YWNhaUBsb29uZ3Nvbi5jbj4NCj4gKw0KPiArPT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PQ0KPiArTG9vbmdBcmNo55qESVJR6Iqv54mH5qih5Z6L77yI5bGC57qn5YWz
+57O777yJDQo+ICs9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQo+ICsNCj4gK+eb
+ruWJje+8jOWfuuS6jkxvb25nQXJjaOeahOWkhOeQhuWZqO+8iOWmgum+meiKrzNBNTAwMO+8ieWP
+quiDveS4jkxTN0Hoiq/niYfnu4TphY3lkIjlt6XkvZzjgIJMb29uZ0FyY2jorqHnrpfmnLoNCj4g
+K+S4reeahOS4reaWreaOp+WItuWZqO+8iOWNs0lSUeiKr+eJh++8ieWMheaLrENQVUlOVEPvvIhD
+UFUgQ29yZSBJbnRlcnJ1cHQgQ29udHJvbGxlcu+8ieOAgUxJT0lOVEPvvIgNCj4gK0xlZ2FjeSBJ
+L08gSW50ZXJydXB0IENvbnRyb2xsZXLvvInjgIFFSU9JTlRD77yIRXh0ZW5kZWQgSS9PIEludGVy
+cnVwdCBDb250cm9sbGVy77yJ44CBDQo+ICtIVFZFQ0lOVEPvvIhIeXBlci1UcmFuc3BvcnQgVmVj
+dG9yIEludGVycnVwdCBDb250cm9sbGVy77yJ44CBUENILVBJQ++8iExTN0Hoiq/niYfnu4TnmoTk
+uLvkuK0NCj4gK+aWreaOp+WItuWZqO+8ieOAgVBDSC1MUEPvvIhMUzdB6Iqv54mH57uE55qETFBD
+5Lit5pat5o6n5Yi25Zmo77yJ5ZKMUENILU1TSe+8iE1TSeS4reaWreaOp+WItuWZqO+8ieOAgg0K
+PiArDQo+ICtDUFVJTlRD5piv5LiA56eNQ1BV5YaF6YOo55qE5q+P5Liq5qC45pys5Zyw55qE5Lit
+5pat5o6n5Yi25Zmo77yMTElPSU5UQy9FSU9JTlRDL0hUVkVDSU5UQ+aYr0NQVeWGhemDqOeahA0K
+PiAr5YWo5bGA5Lit5pat5o6n5Yi25Zmo77yI5q+P5Liq6Iqv54mH5LiA5Liq77yM5omA5pyJ5qC4
+5YWx5Lqr77yJ77yM6ICMUENILVBJQy9QQ0gtTFBDL1BDSC1NU0nmmK9DUFXlpJbpg6jnmoTkuK0N
+Cj4gK+aWreaOp+WItuWZqO+8iOWcqOmFjeWll+iKr+eJh+e7hOmHjOmdou+8ieOAgui/meS6m+S4
+reaWreaOp+WItuWZqO+8iOaIluiAheivtElSUeiKr+eJh++8ieS7peS4gOenjeWxguasoeagkeea
+hOe7hOe7h+W9ouW8jw0KPiAr57qn6IGU5Zyo5LiA6LW377yM5LiA5YWx5pyJ5Lik56eN5bGC57qn
+5YWz57O75qih5Z6L77yI5Lyg57ufSVJR5qih5Z6L5ZKM5omp5bGVSVJR5qih5Z6L77yJ44CCDQo+
+ICsNCj4gK+S8oOe7n0lSUeaooeWeiw0KPiArPT09PT09PT09PT0NCj4gKw0KPiAr5Zyo6L+Z56eN
+5qih5Z6L6YeM6Z2i77yMSVBJ77yISW50ZXItUHJvY2Vzc29yIEludGVycnVwdO+8ieWSjENQVeac
+rOWcsOaXtumSn+S4reaWreebtOaOpeWPkemAgeWIsENQVUlOVEPvvIwNCj4gK0NQVeS4suWPo++8
+iFVBUlRz77yJ5Lit5pat5Y+R6YCB5YiwTElPSU5UQ++8jOiAjOWFtuS7luaJgOacieiuvuWkh+ea
+hOS4reaWreWImeWIhuWIq+WPkemAgeWIsOaJgOi/nuaOpeeahFBDSC1QSUMvDQo+ICtQQ0gtTFBD
+L1BDSC1NU0nvvIznhLblkI7ooqtIVFZFQ0lOVEPnu5/kuIDmlLbpm4bvvIzlho3lj5HpgIHliLBM
+SU9JTlRD77yM5pyA5ZCO5Yiw6L6+Q1BVSU5UQ+OAgg0KPiArDQo+ICsgKy0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSsNCj4gKyB8OjogICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICArLS0tLS0rICAgICArLS0tLS0tLS0t
+KyAgICAgKy0tLS0tLS0rICAgIHwNCj4gKyB8ICAgIHwgSVBJIHwgLS0+IHwgQ1BVSU5UQyB8IDwt
+LSB8IFRpbWVyIHwgICAgfA0KPiArIHwgICAgKy0tLS0tKyAgICAgKy0tLS0tLS0tLSsgICAgICst
+LS0tLS0tKyAgICB8DQo+ICsgfCAgICAgICAgICAgICAgICAgICAgIF4gICAgICAgICAgICAgICAg
+ICAgICAgIHwNCj4gKyB8ICAgICAgICAgICAgICAgICAgICAgfCAgICAgICAgICAgICAgICAgICAg
+ICAgfA0KPiArIHwgICAgICAgICAgICAgICAgKy0tLS0tLS0tLSsgICAgICstLS0tLS0tKyAgICB8
+DQo+ICsgfCAgICAgICAgICAgICAgICB8IExJT0lOVEMgfCA8LS0gfCBVQVJUcyB8ICAgIHwNCj4g
+KyB8ICAgICAgICAgICAgICAgICstLS0tLS0tLS0rICAgICArLS0tLS0tLSsgICAgfA0KPiArIHwg
+ICAgICAgICAgICAgICAgICAgICBeICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICAg
+ICAgICAgICAgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gKyB8ICAgICAgICAg
+ICAgICAgKy0tLS0tLS0tLS0tKyAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICAgICAg
+ICB8IEhUVkVDSU5UQyB8ICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICAgICAgICAgICAgICst
+LS0tLS0tLS0tLSsgICAgICAgICAgICAgICAgIHwNCj4gKyB8ICAgICAgICAgICAgICAgIF4gICAg
+ICAgICBeICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICAgICAgICAgfCAgICAgICAg
+IHwgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICAgICAgICArLS0tLS0tLS0tKyArLS0tLS0t
+LS0tKyAgICAgICAgICAgIHwNCj4gKyB8ICAgICAgICAgIHwgUENILVBJQyB8IHwgUENILU1TSSB8
+ICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICAgKy0tLS0tLS0tLSsgKy0tLS0tLS0tLSsgICAg
+ICAgICAgICB8DQo+ICsgfCAgICAgICAgICAgIF4gICAgIF4gICAgICAgICAgIF4gICAgICAgICAg
+ICAgIHwNCj4gKyB8ICAgICAgICAgICAgfCAgICAgfCAgICAgICAgICAgfCAgICAgICAgICAgICAg
+fA0KPiArIHwgICAgKy0tLS0tLS0tLSsgKy0tLS0tLS0tLSsgKy0tLS0tLS0tLSsgICAgICB8DQo+
+ICsgfCAgICB8IFBDSC1MUEMgfCB8IERldmljZXMgfCB8IERldmljZXMgfCAgICAgIHwNCj4gKyB8
+ICAgICstLS0tLS0tLS0rICstLS0tLS0tLS0rICstLS0tLS0tLS0rICAgICAgfA0KPiArIHwgICAg
+ICAgICBeICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICAgICAg
+IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gKyB8ICAgICstLS0tLS0t
+LS0rICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgfCBEZXZpY2VzIHwg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICArLS0tLS0tLS0tKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gKyB8ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8DQo+ICsgKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLSsNCj4gKw0KPiAr5omp5bGVSVJR5qih5Z6LDQo+ICs9PT09PT09PT09PQ0K
+PiArDQo+ICvlnKjov5nnp43mqKHlnovph4zpnaLvvIxJUEnvvIhJbnRlci1Qcm9jZXNzb3IgSW50
+ZXJydXB077yJ5ZKMQ1BV5pys5Zyw5pe26ZKf5Lit5pat55u05o6l5Y+R6YCB5YiwQ1BVSU5UQ++8
+jA0KPiArQ1BV5Liy5Y+j77yIVUFSVHPvvInkuK3mlq3lj5HpgIHliLBMSU9JTlRD77yM6ICM5YW2
+5LuW5omA5pyJ6K6+5aSH55qE5Lit5pat5YiZ5YiG5Yir5Y+R6YCB5Yiw5omA6L+e5o6l55qEUENI
+LVBJQy8NCj4gK1BDSC1MUEMvUENILU1TSe+8jOeEtuWQjuiiq0VJT0lOVEPnu5/kuIDmlLbpm4bv
+vIzlho3nm7TmjqXliLDovr5DUFVJTlRD44CCDQo+ICsNCj4gKyArLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0rDQo+ICsgfDo6ICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4g
+KyB8ICAgICAgICAgKy0tLS0tKyAgICAgKy0tLS0tLS0tLSsgICAgICstLS0tLS0tKyAgICAgICAg
+ICB8DQo+ICsgfCAgICAgICAgIHwgSVBJIHwgLS0+IHwgQ1BVSU5UQyB8IDwtLSB8IFRpbWVyIHwg
+ICAgICAgICAgfA0KPiArIHwgICAgICAgICArLS0tLS0rICAgICArLS0tLS0tLS0tKyAgICAgKy0t
+LS0tLS0rICAgICAgICAgIHwNCj4gKyB8ICAgICAgICAgICAgICAgICAgICAgIF4gICAgICAgXiAg
+ICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICAgICAgICAgICAgICAgICAgICB8ICAg
+ICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICAgICAgICArLS0t
+LS0tLS0tKyArLS0tLS0tLS0tKyAgICAgKy0tLS0tLS0rICAgIHwNCj4gKyB8ICAgICAgICAgICAg
+ICAgfCBFSU9JTlRDIHwgfCBMSU9JTlRDIHwgPC0tIHwgVUFSVHMgfCAgICB8DQo+ICsgfCAgICAg
+ICAgICAgICAgICstLS0tLS0tLS0rICstLS0tLS0tLS0rICAgICArLS0tLS0tLSsgICAgfA0KPiAr
+IHwgICAgICAgICAgICAgICAgXiAgICAgICBeICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwNCj4gKyB8ICAgICAgICAgICAgICAgIHwgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICB8DQo+ICsgfCAgICAgICAgICstLS0tLS0tLS0rICstLS0tLS0tLS0rICAgICAgICAg
+ICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICB8IFBDSC1QSUMgfCB8IFBDSC1NU0kgfCAg
+ICAgICAgICAgICAgICAgICAgICAgIHwNCj4gKyB8ICAgICAgICAgKy0tLS0tLS0tLSsgKy0tLS0t
+LS0tLSsgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICAgICAgICAgXiAgICAgXiAg
+ICAgICAgICAgXiAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAgICAgIHwg
+ICAgIHwgICAgICAgICAgIHwgICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gKyB8ICAgKy0t
+LS0tLS0tLSsgKy0tLS0tLS0tLSsgKy0tLS0tLS0tLSsgICAgICAgICAgICAgICAgICB8DQo+ICsg
+fCAgIHwgUENILUxQQyB8IHwgRGV2aWNlcyB8IHwgRGV2aWNlcyB8ICAgICAgICAgICAgICAgICAg
+fA0KPiArIHwgICArLS0tLS0tLS0tKyArLS0tLS0tLS0tKyArLS0tLS0tLS0tKyAgICAgICAgICAg
+ICAgICAgIHwNCj4gKyB8ICAgICAgICBeICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8DQo+ICsgfCAgICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICArLS0tLS0tLS0tKyAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gKyB8ICAgfCBEZXZpY2VzIHwgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8DQo+ICsgfCAgICstLS0tLS0tLS0r
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfA0KPiArIHwgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwNCj4gKyB8
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8
+DQo+ICsgKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tKw0KPiArDQo+ICtBQ1BJ55u45YWz55qE5a6a5LmJDQo+ICs9PT09PT09PT09PT09PQ0K
+PiArDQo+ICtDUFVJTlRDOjoNCj4gKw0KPiArICBBQ1BJX01BRFRfVFlQRV9DT1JFX1BJQzsNCj4g
+KyAgc3RydWN0IGFjcGlfbWFkdF9jb3JlX3BpYzsNCj4gKyAgZW51bSBhY3BpX21hZHRfY29yZV9w
+aWNfdmVyc2lvbjsNCj4gKw0KPiArTElPSU5UQzo6DQo+ICsNCj4gKyAgQUNQSV9NQURUX1RZUEVf
+TElPX1BJQzsNCj4gKyAgc3RydWN0IGFjcGlfbWFkdF9saW9fcGljOw0KPiArICBlbnVtIGFjcGlf
+bWFkdF9saW9fcGljX3ZlcnNpb247DQo+ICsNCj4gK0VJT0lOVEM6Og0KPiArDQo+ICsgIEFDUElf
+TUFEVF9UWVBFX0VJT19QSUM7DQo+ICsgIHN0cnVjdCBhY3BpX21hZHRfZWlvX3BpYzsNCj4gKyAg
+ZW51bSBhY3BpX21hZHRfZWlvX3BpY192ZXJzaW9uOw0KPiArDQo+ICtIVFZFQ0lOVEM6Og0KPiAr
+DQo+ICsgIEFDUElfTUFEVF9UWVBFX0hUX1BJQzsNCj4gKyAgc3RydWN0IGFjcGlfbWFkdF9odF9w
+aWM7DQo+ICsgIGVudW0gYWNwaV9tYWR0X2h0X3BpY192ZXJzaW9uOw0KPiArDQo+ICtQQ0gtUElD
+OjoNCj4gKw0KPiArICBBQ1BJX01BRFRfVFlQRV9CSU9fUElDOw0KPiArICBzdHJ1Y3QgYWNwaV9t
+YWR0X2Jpb19waWM7DQo+ICsgIGVudW0gYWNwaV9tYWR0X2Jpb19waWNfdmVyc2lvbjsNCj4gKw0K
+PiArUENILU1TSTo6DQo+ICsNCj4gKyAgQUNQSV9NQURUX1RZUEVfTVNJX1BJQzsNCj4gKyAgc3Ry
+dWN0IGFjcGlfbWFkdF9tc2lfcGljOw0KPiArICBlbnVtIGFjcGlfbWFkdF9tc2lfcGljX3ZlcnNp
+b247DQo+ICsNCj4gK1BDSC1MUEM6Og0KPiArDQo+ICsgIEFDUElfTUFEVF9UWVBFX0xQQ19QSUM7
+DQo+ICsgIHN0cnVjdCBhY3BpX21hZHRfbHBjX3BpYzsNCj4gKyAgZW51bSBhY3BpX21hZHRfbHBj
+X3BpY192ZXJzaW9uOw0KPiArDQo+ICvlj4LogIPmlofnjK4NCj4gKz09PT09PT09DQo+ICsNCj4g
+K+m+meiKrzNBNTAwMOeahOaWh+aho++8mg0KPiArDQo+ICsgIGh0dHBzOi8vZ2l0aHViLmNvbS9s
+b29uZ3Nvbi9Mb29uZ0FyY2gtRG9jdW1lbnRhdGlvbi9yZWxlYXNlcy9sYXRlc3QvZG93bmxvYWQv
+TG9vbmdzb24tM0E1MDAwLXVzZXJtYW51YWwtMS4wMi1DTi5wZGYgKOS4reaWh+eJiCkNCj4gKw0K
+PiArICBodHRwczovL2dpdGh1Yi5jb20vbG9vbmdzb24vTG9vbmdBcmNoLURvY3VtZW50YXRpb24v
+cmVsZWFzZXMvbGF0ZXN0L2Rvd25sb2FkL0xvb25nc29uLTNBNTAwMC11c2VybWFudWFsLTEuMDIt
+RU4ucGRmICjoi7HmlofniYgpDQo+ICsNCj4gK+m+meiKr0xTN0Hoiq/niYfnu4TnmoTmlofmoaPv
+vJoNCj4gKw0KPiArICBodHRwczovL2dpdGh1Yi5jb20vbG9vbmdzb24vTG9vbmdBcmNoLURvY3Vt
+ZW50YXRpb24vcmVsZWFzZXMvbGF0ZXN0L2Rvd25sb2FkL0xvb25nc29uLTdBMTAwMC11c2VybWFu
+dWFsLTIuMDAtQ04ucGRmICjkuK3mlofniYgpDQo+ICsNCj4gKyAgaHR0cHM6Ly9naXRodWIuY29t
+L2xvb25nc29uL0xvb25nQXJjaC1Eb2N1bWVudGF0aW9uL3JlbGVhc2VzL2xhdGVzdC9kb3dubG9h
+ZC9Mb29uZ3Nvbi03QTEwMDAtdXNlcm1hbnVhbC0yLjAwLUVOLnBkZiAo6Iux5paH54mIKQ0KPiAr
+DQo+ICvms6jvvJpDUFVJTlRD5Y2z44CK6b6Z6Iqv5p625p6E5Y+C6ICD5omL5YaM5Y235LiA44CL
+56ysNy406IqC5omA5o+P6L+w55qEQ1NSLkVDRkcvQ1NSLkVTVEFU5a+E5a2Y5Zmo5Y+K5YW25Lit
+5patDQo+ICvmjqfliLbpgLvovpHvvJtMSU9JTlRD5Y2z44CK6b6Z6IqvM0E1MDAw5aSE55CG5Zmo
+5L2/55So5omL5YaM44CL56ysMTEuMeiKguaJgOaPj+i/sOeahOKAnOS8oOe7n0kvT+S4reaWreKA
+ne+8m0VJT0lOVEMNCj4gK+WNs+OAium+meiKrzNBNTAwMOWkhOeQhuWZqOS9v+eUqOaJi+WGjOOA
+i+esrDExLjLoioLmiYDmj4/ov7DnmoTigJzmianlsZVJL0/kuK3mlq3igJ3vvJtIVFZFQ0lOVEPl
+jbPjgIrpvpnoiq8zQTUwMDANCj4gK+WkhOeQhuWZqOS9v+eUqOaJi+WGjOOAi+esrDE0LjPoioLm
+iYDmj4/ov7DnmoTigJxIeXBlclRyYW5zcG9ydOS4reaWreKAne+8m1BDSC1QSUMvUENILU1TSeWN
+s+OAium+meiKrzdBMTAwMOahpQ0KPiAr54mH55So5oi35omL5YaM44CL56ysNeeroOaJgOaPj+i/
+sOeahOKAnOS4reaWreaOp+WItuWZqOKAne+8m1BDSC1MUEPljbPjgIrpvpnoiq83QTEwMDDmoaXn
+iYfnlKjmiLfmiYvlhozjgIvnrKwyNC4z6IqC5omADQo+ICvmj4/ov7DnmoTigJxMUEPkuK3mlq3i
+gJ3jgIINCj4gLS0NCj4gMi4yNy4wDQo+DQoNCg0KLS0gDQpCZXN0IFJlZ2FyZHMNCiBHdW8gUmVu
+DQoNCk1MOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1jc2t5Lw0K
