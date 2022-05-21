@@ -2,143 +2,350 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E3952FF02
-	for <lists+linux-arch@lfdr.de>; Sat, 21 May 2022 21:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320EC52FF7B
+	for <lists+linux-arch@lfdr.de>; Sat, 21 May 2022 22:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345284AbiEUTm4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 21 May 2022 15:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S245561AbiEUUqn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 21 May 2022 16:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238301AbiEUTmy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 May 2022 15:42:54 -0400
-X-Greylist: delayed 5820 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 21 May 2022 12:42:53 PDT
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02hn2236.outbound.protection.partner.outlook.cn [139.219.146.236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCD762103;
-        Sat, 21 May 2022 12:42:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aGbB7qSt294KY0C3Xe48IOfj1O3h0r+yNuhmXGkPQZk45Wnl7VCQ1YuLAuIj0VroGqK5ajuxe7VN+KPokLsBRZFIKHY3rDwofjl37wQrKVAsgd0CFR5AfqDeu7IcD2LErvo3huCEJU+B4gvQWZQWvXN4wu3Ld+nRIEicjq5X7/KPMLfCmK4M1I0DrYL5jKtizEAX7PvHWA4I6H/cWzdwYgIErMmdSoXgtVXzuZf5iltlp1UHpIvTMf6hb7v1/v/FVxoyc4iaWCOpPTKMTfIj/eykqybGzGn9eY9PmGdfpiSvdC+Gi/2Gh6bxGJPGY5d7/BO2qgL/XCzpwDsWKbAqKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
- b=KtcYvJpSs9MztnPjpxTJFep4texRJaaJnT9GRJBu3cUzF9P73n/xzZtYOt9fHxBwrfHI9FW0ZuNwqf3q/35bi5eMpvgNZBQwKEYuO1jmTSnWB6DmyzDByT5zbML8l8OPRS+cjy3KSKVZF1S8xCQzt7Kd6dF6VtOXe3mrfMd192CQaatQVtS2UnXGysv3mE+QXYgj0jQPzNXoTEeThoS/bKjLJB0h1qqpngbQGqZrmwWWN5G8BL4EeCtNOr0nw2fTOJ+4Wyhgn0+uYh38PP+dJKpiKw7AgqRqRmrE9rC6lMez6MagE4lniuQlV/4iQu1YpYJxmO5GomQi/Tiu3LdWvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=gientech.com; dmarc=pass action=none header.from=gientech.com;
- dkim=pass header.d=gientech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gientech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3z5uhVUtqN5OyplYkKXQ17d4OAmlRJ8nVcEl3nfclrI=;
- b=0UcuLXQeFr/spn1VxtQB3zwcZuwTPkQSoGlkWHLHWTOieugSZNVizOVMaWfVK0+GMb9+qwvmRauPDYPRqHyLqJREUjVF+dCkY8hebHSPgBasZySH3u0BbuScdno79CAgazWYSMMLpfIjtozbByOkve7dZ8g7MVW8jfLyy280uOmrh6uC7rtjq69FqNrbPz5Ik9o/7aTx20Fb3a7aBUitQNgKunkJWwVQe/kJGz19jTURPMoQrVRa9poWjEbTKtXcxF8AsKIUqtDUl9Zr4XPcBHtmp5T92N7c0Jk+PtP60h5RtcmtUm/SRnLXueI5jVPYMAVVW3bWOfWNaFfOxG8+/w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=gientech.com;
-Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85) by
- SH0PR01MB0506.CHNPR01.prod.partner.outlook.cn (10.43.108.151) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5273.14; Sat, 21 May 2022 18:05:48 +0000
-Received: from SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85])
- by SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn ([10.43.106.85]) with mapi
- id 15.20.5273.019; Sat, 21 May 2022 18:05:48 +0000
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: RE..
-To:     Recipients <tianjiao.yang@gientech.com>
-From:   "J Wu" <tianjiao.yang@gientech.com>
-Date:   Sun, 15 May 2022 12:39:09 +0000
-Reply-To: contact@jimmywu.online
-X-ClientProxiedBy: SH2PR01CA006.CHNPR01.prod.partner.outlook.cn (10.41.247.16)
- To SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn (10.43.106.85)
-Message-ID: <SH0PR01MB0729B155F31AC2CE0AFC44BE8ACC9@SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2a8f2070-4407-431e-c0e9-08da366ff5f4
-X-MS-TrafficTypeDiagnostic: SH0PR01MB0506:EE_
-X-Microsoft-Antispam-PRVS: <SH0PR01MB0506E163F1B5509E32BA7B608AD29@SH0PR01MB0506.CHNPR01.prod.partner.outlook.cn>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?Da5invq79gN76MrTZtNzfLcdxvmUAtpPR7attIMfvRK/l8z+RrPFTHgqIY?=
- =?iso-8859-1?Q?OcUyuBQDbeHjPJyF22kwgz4HygJCdZMcw5uK4kyTPuAvSyRyYuMKvdzDL+?=
- =?iso-8859-1?Q?4ddZY04bVMDWX8Usxh9u2hdtKRb94DCCfL0stDMHmEyfPWMh5Abj7z5P2O?=
- =?iso-8859-1?Q?JgkKQQeASOeE+UjAKv5R6Zx6Hh9c1+n96AjR4n3qAaJ7MZdylHSznP9pvw?=
- =?iso-8859-1?Q?n/FpOFWe3BXjP6XlsAJrZmGNIFiyqdChV2aMwS6nLUIJye1POZ+uF4XwjR?=
- =?iso-8859-1?Q?qrUTxbrnbHnwwrtxFMCVEddrRCADfib+GuZ8W7gZBsLbygvLqIcQixQCtG?=
- =?iso-8859-1?Q?r1LM2IxpNJhcUA4xkXQPnW00YkKYS+YISPUIdqPL1orxXV0+epNWyDFrQB?=
- =?iso-8859-1?Q?X8rAo3mB8rQ72TUfbyY7+i2sPesSH8XCbpB2N5Uerjx6+1WfJf6fqm+yKl?=
- =?iso-8859-1?Q?4PY+GvfOuws1x+0uGhJIQphJpIrPbv6NhkIprjPKSNxG1bzV3PfHqVY1JF?=
- =?iso-8859-1?Q?tRUlpWtNftc0Zm4TZ0B471v/ClhPhZs07ZxyI8O10U8p6Vjvw9sQvhQLzQ?=
- =?iso-8859-1?Q?PXQOvU84Xivrot2KqrYu1sBn8ginp+RUDSMShfEuGLSj9KlHoTmWObMh6x?=
- =?iso-8859-1?Q?9z4Co8sJxenQXGjzFEyjowjEcfHoEVNbPQgPGIbfmEsoHL6xXmpp0+FUzB?=
- =?iso-8859-1?Q?AJ7SEepEW8h0le7QXeQo6UCracaVTIiOLYAUfITI81/vijfnLc6zaZvmm7?=
- =?iso-8859-1?Q?ArH0c4nZ/ANpm5N5F2wHaNklq7bnOng5TCz7MrkxSBRjeZJtamg+py5O8K?=
- =?iso-8859-1?Q?yzrbTgIyLLdxpTU4oWnNRx8QI1kgk5o3dcCewY55UMQZN/gZGaHDlV4tRR?=
- =?iso-8859-1?Q?lq4Z+k49nh4nvtUD6wtzdWmXuCTLnQ8lP56FKQCPmIOSut3md+JUBGAdRU?=
- =?iso-8859-1?Q?9sSauLgBFxn7p92d5HA/zcW6UvNl8G+qqG+D42bHmgFIoYdS9dQnbxnotl?=
- =?iso-8859-1?Q?qUvCJ3wv8L4qFsoI4QS/9T2guEHcrdFzk8e2NaPIU9aK2WjhtpuQp9T4Bu?=
- =?iso-8859-1?Q?qA=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:OSPM;SFS:(13230001)(366004)(3480700007)(52116002)(9686003)(6200100001)(508600001)(7696005)(6666004)(86362001)(38350700002)(55016003)(38100700002)(26005)(40180700001)(19618925003)(66556008)(66946007)(66476007)(6862004)(7116003)(33656002)(558084003)(2906002)(186003)(8676002)(7366002)(7406005)(7416002)(8936002)(4270600006)(40160700002)(62346012);DIR:OUT;SFP:1501;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?1MrQ24WbCu/6DCMOZBKUKmiOOC+kY0aubPZ+61I5g8SIoR3SFnCn0ZhCJX?=
- =?iso-8859-1?Q?dm1pF9nldaCOJDjZQJ5+Zh8dsWvNbC6N4BIWx+92EzZTUSjtwjBakj2Kha?=
- =?iso-8859-1?Q?KfDoSv6Yctq2ef1MPPwp7IV1x4A2bWMCEG2iX9BktLwNx2pK5l04JXhiPl?=
- =?iso-8859-1?Q?7Ostv5AWi+gTtp7dJnn9p05vrtB8/Tmt9bwIwUgnxJCDOEVn1vFU/3pj/q?=
- =?iso-8859-1?Q?fhZucC96RUl9pl0OS6OtjTiDO97Wk36yMtSQDgzrqZeCH9rs0wshBe9bsO?=
- =?iso-8859-1?Q?iCIBaV/0bonpM3IJD1ld88qFY+P7MK8+pJPMjKoxvFWzllgtgAnWhSrdBK?=
- =?iso-8859-1?Q?OsZn3O1fEKpBzUfb+SeBCT+wljut5cqEHJ92DWvVcj+JXSi/nSYCvdKT1P?=
- =?iso-8859-1?Q?bCu54LB3YCVss6FfJFDLY2RnpNt9CC1Gg/XpXQFTICR9lAAOzk4HTuRn3+?=
- =?iso-8859-1?Q?xJ5AHezTeELpnyTNSSQ2oysZwWzm/3GsLI7BstRJYuZaSjW+zCFXcbWdkm?=
- =?iso-8859-1?Q?E/fU4Jzs3aZgaHTYIglWGfn75aFMLqYSsML8aqNE8VuiSwjn98tYECt7r9?=
- =?iso-8859-1?Q?VfMy30MBiHYJM/r5D3Z1Yyr+OZsZ4F1cHX89NeR2PBv6B8A4F/bXhTudCn?=
- =?iso-8859-1?Q?Rb14LFuUqNOYdmq6Fl8F99n0M8d15IFYgI1dqLPAm8BXjjX5c4HphZgQ5Y?=
- =?iso-8859-1?Q?mLLukhc1D6cESvEHrwI3jacQkoJqMT+a2/rxavZzyIjvOSQU14y9U0K9gz?=
- =?iso-8859-1?Q?dO52qylGUVkYTEGnW9IRFDiYmXp3tTGDEZdp3RYsmq+hqQOrI54RdG67Xk?=
- =?iso-8859-1?Q?N5AtskQ1tUQTzqS4UN3nkN/gQLs0RTEhjAYOtGTA8S9uLuzZUSYwv5x6NY?=
- =?iso-8859-1?Q?NBcDcuTZABBVvQh8B5fBr57b01gF++0n+yr5+vOcTd8stVmOYm/mL/W7hw?=
- =?iso-8859-1?Q?hRPs7eUlJstR8Ma77nVBLJZqYN+e3sspDypP5JPlp1rG8F0VzUdON8pvc+?=
- =?iso-8859-1?Q?nDa2NTxeG/k/ssZnLJVDhFf9o38yC7uD3VAUQBYhbQsyX4/qggczsq0+Us?=
- =?iso-8859-1?Q?It+ezmGc6UefAWfLQbwgUYZhxrRB77dP0Ar4vYRnFfwo22+5XZD+/PNXjE?=
- =?iso-8859-1?Q?Hy88Ty6Ys5IUOQNZAAwQ71n2HbH3utXNKW/OShLrcmy3jSqpP10JJ3uo7x?=
- =?iso-8859-1?Q?PkCtleO7y1TA6Gd2lnpfyFAwF64PpY1pxkFsSJgTnY8g6StpwdjeNjgsLv?=
- =?iso-8859-1?Q?i8f1eLfMFIotN0lS3cpwzY46UHKIy0JIvA6lq6/n3f9vpo8La446A+4qXY?=
- =?iso-8859-1?Q?G9ZMnkm2K0Y4nwwY3ExyENgOuhBm+3dGDlJb7HSg+UkeAQvU3jrsEPx/LZ?=
- =?iso-8859-1?Q?/wlEfcEG9VLxUKnag2Z/G7aAK5QTLCGdzO4uI5h2DmrOrPP3t3XvDVEB9u?=
- =?iso-8859-1?Q?qmhI5ypg3blWN8Rd3d33aOagSau1gz/XWjxR72Dxe58PkbipN7OAzSmUJf?=
- =?iso-8859-1?Q?9yjkRxv58bl8x2hFOI1+lG7cJRuZ57Yp+giNQJjq1ICqbEcBNSBT1Wtn7f?=
- =?iso-8859-1?Q?1QKvXikKULtX2oLV3ypsgC9KfAzAmgawUcFdGZiPnNm8MLoV6F4u4bdUnM?=
- =?iso-8859-1?Q?XdUz9zW0KTpT56UvkuewuzfAB7oZwd2bfngqu6H1xsX2clt1wL5lRsLK+Q?=
- =?iso-8859-1?Q?dMmfxoeK0KPlvxMbu95BnepcbHQ4syMIWt+7jCkqyBmmjWcFYVTn3BUy9Z?=
- =?iso-8859-1?Q?rFqLisd0w2jMqzgL3qQ1srV8w=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a8f2070-4407-431e-c0e9-08da366ff5f4
-X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0729.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2022 12:39:32.3168
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 89592e53-6f9d-4b93-82b1-9f8da689f1b4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BpZX+UcjSvphz8S219P/Wrbei0WPxNw7PzTmqTzWC8kOVwh/Sr6N017LMpJ+0SHE4w3Zo4GRxzG2V9PzPw7Z37tdZQAyfAy6zohUSeIXB5A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0506
-X-OriginatorOrg: gientech.com
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,DATE_IN_PAST_96_XX,
-        DKIM_INVALID,DKIM_SIGNED,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4657]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  3.4 DATE_IN_PAST_96_XX Date: is 96 hours or more before Received:
-        *      date
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *******
+        with ESMTP id S232211AbiEUUqm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 21 May 2022 16:46:42 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AD573CA4F
+        for <linux-arch@vger.kernel.org>; Sat, 21 May 2022 13:46:40 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id p8so10439412pfh.8
+        for <linux-arch@vger.kernel.org>; Sat, 21 May 2022 13:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zlWqB5MyIreQkH9j+kkYXZk6dwZqYqeaw6AlELt9B4o=;
+        b=E44v0AuUeYoRSlY2iH+XvxjVr0c0EIR5hAkMSycOuyMJPr3jSBu4ns3e03wJKOxSY4
+         YJeyDLb1pY0bRCPArVX4C7ljgDbMcjG8rPwlCdlssExjhnOyi2pmzDkCZJNG0+vD/Z4y
+         NnCUgogYkC28PGSiHP2cyP4j+rKuDuqH89nvo7jPSUk20zK5Z2hXlVal5o1T/yDNG7pj
+         nowdQvKdgfCFtno7ARCuVtyAq9IV3lXvMT0bJpiJg3uLkscbZHWCjr1fXP5qmR50qq7+
+         vMRzHDibDvg6IfNj7rdjU2JcKJ5c5iYBssp1zgqOK6OdyItV1NG3fwngcmhFD7v4TVC3
+         hQHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=zlWqB5MyIreQkH9j+kkYXZk6dwZqYqeaw6AlELt9B4o=;
+        b=yzTvYaXEIKZ6JoanMRBoAftOqYZ4HO25UXqNWYdotOWQqptmN/gP70jzTzM4WRyj85
+         W1Xdim6h160nOnge/OmPezgx9SwqHpYi2sz29v412LgoTQ8383u3u5gepXDw86O3xeqE
+         V0bb4S75wK6NDhJb1mMkdBK2PO4ooK/XMVp5ZP8CIiOy2STVwqzJLJNfv+ySMNWZNOlE
+         8ZIJpY3r7yOZEoe+4GvBNThmDdzLp3ddM/PGX48cIn1dPdz5kSiAZztSDiGWeimGyTRX
+         yut5Gaav/Sjlf83ran7f2jYudZOTNi5l8oAqtTy2yNZp8K0qiAkanzIVTPJKybDUF9/H
+         T4lQ==
+X-Gm-Message-State: AOAM531f52/5TTM+1uR+ScP9PqEae9XQJ5OLlBdeNm76b2tAEa8i0gST
+        mf9hFgLAZUD0Q/h8J6LzoHEmKA==
+X-Google-Smtp-Source: ABdhPJzfdp/vaVS0qHAFhLrfUNDtcvDUmpdqVxuF0Szt24Yy8egw0kxuXYTnTriaRjIGjP9HXNNxVQ==
+X-Received: by 2002:a63:2c3:0:b0:3f4:e639:fec9 with SMTP id 186-20020a6302c3000000b003f4e639fec9mr13867862pgc.478.1653166000007;
+        Sat, 21 May 2022 13:46:40 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id g1-20020a62f941000000b0051853e6617fsm4057808pfm.89.2022.05.21.13.46.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 May 2022 13:46:39 -0700 (PDT)
+Date:   Sat, 21 May 2022 13:46:39 -0700 (PDT)
+X-Google-Original-Date: Sat, 21 May 2022 11:33:09 PDT (-0700)
+Subject:     Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops with .aqrl annotation
+In-Reply-To: <20220505035526.2974382-6-guoren@kernel.org>
+CC:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        mark.rutland@arm.com, Will Deacon <will@kernel.org>,
+        peterz@infradead.org, boqun.feng@gmail.com,
+        Daniel Lustig <dlustig@nvidia.com>, parri.andrea@gmail.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     guoren@kernel.org, parri.andrea@gmail.com
+Message-ID: <mhng-7ebff936-b0d8-4f65-bd51-46bcd7e0d5c8@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Can we do this together
+On Wed, 04 May 2022 20:55:26 PDT (-0700), guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> The current implementation is the same with 8e86f0b409a4
+> ("arm64: atomics: fix use of acquire + release for full barrier
+> semantics"). RISC-V could combine acquire and release into the SC
+> instructions and it could reduce a fence instruction to gain better
+> performance. Here is related descriptio from RISC-V ISA 10.2
+> Load-Reserved/Store-Conditional Instructions:
+>
+>  - .aq:   The LR/SC sequence can be given acquire semantics by
+>           setting the aq bit on the LR instruction.
+>  - .rl:   The LR/SC sequence can be given release semantics by
+>           setting the rl bit on the SC instruction.
+>  - .aqrl: Setting the aq bit on the LR instruction, and setting
+>           both the aq and the rl bit on the SC instruction makes
+>           the LR/SC sequence sequentially consistent, meaning that
+>           it cannot be reordered with earlier or later memory
+>           operations from the same hart.
+>
+>  Software should not set the rl bit on an LR instruction unless
+>  the aq bit is also set, nor should software set the aq bit on an
+>  SC instruction unless the rl bit is also set. LR.rl and SC.aq
+>  instructions are not guaranteed to provide any stronger ordering
+>  than those with both bits clear, but may result in lower
+>  performance.
+>
+> The only difference is when sc.w/d.aqrl failed, it would cause .aq
+> effect than before. But it's okay for sematic because overlap
+> address LR couldn't beyond relating SC.
+
+IIUC that's not accurate, or at least wasn't in 2018.  The ISA tends to 
+drift around a bit, so it's possible things have changed since then.  
+5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences") 
+describes the issue more specifically, that's when we added these 
+fences.  There have certainly been complains that these fences are too 
+heavyweight for the HW to go fast, but IIUC it's the best option we have 
+given the current set of memory model primitives we implement in the 
+ISA (ie, there's more in RVWMO but no way to encode that).
+
+The others all look good, though, and as these are really all 
+independent cleanups I'm going to go ahead and put those three on 
+for-next.
+
+There's also a bunch of checkpatch errors.  The ones about "*" seem 
+spurious, but the alignment ones aren't.  Here's my fixups:
+
+    diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+    index 34f757dfc8f2..0bde499fa8bc 100644
+    --- a/arch/riscv/include/asm/atomic.h
+    +++ b/arch/riscv/include/asm/atomic.h
+    @@ -86,9 +86,9 @@ ATOMIC_OPS(xor, xor,  i)
+      * versions, while the logical ops only have fetch versions.
+      */
+     #define ATOMIC_FETCH_OP(op, asm_op, I, asm_type, c_type, prefix)	\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,		\
+    -					     atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,			\
+    +					   atomic##prefix##_t *v)	\
+     {									\
+     	register c_type ret;						\
+     	__asm__ __volatile__ (						\
+    @@ -98,9 +98,9 @@ c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,		\
+     		: "memory");						\
+     	return ret;							\
+     }									\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_fetch_##op##_acquire(c_type i,		\
+    -					     atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_fetch_##op##_acquire(c_type i,			\
+    +					   atomic##prefix##_t *v)	\
+     {									\
+     	register c_type ret;						\
+     	__asm__ __volatile__ (						\
+    @@ -110,9 +110,9 @@ c_type arch_atomic##prefix##_fetch_##op##_acquire(c_type i,		\
+     		: "memory");						\
+     	return ret;							\
+     }									\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_fetch_##op##_release(c_type i,		\
+    -					     atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_fetch_##op##_release(c_type i,			\
+    +					   atomic##prefix##_t *v)	\
+     {									\
+     	register c_type ret;						\
+     	__asm__ __volatile__ (						\
+    @@ -122,8 +122,8 @@ c_type arch_atomic##prefix##_fetch_##op##_release(c_type i,		\
+     		: "memory");						\
+     	return ret;							\
+     }									\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
+     {									\
+     	register c_type ret;						\
+     	__asm__ __volatile__ (						\
+    @@ -135,28 +135,28 @@ c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)	\
+     }
+    
+     #define ATOMIC_OP_RETURN(op, asm_op, c_op, I, asm_type, c_type, prefix)	\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_##op##_return_relaxed(c_type i,		\
+    -					      atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_##op##_return_relaxed(c_type i,			\
+    +					    atomic##prefix##_t *v)	\
+     {									\
+    -        return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
+    +	return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;	\
+     }									\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_##op##_return_acquire(c_type i,		\
+    -					      atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_##op##_return_acquire(c_type i,			\
+    +					    atomic##prefix##_t *v)	\
+     {									\
+    -        return arch_atomic##prefix##_fetch_##op##_acquire(i, v) c_op I;	\
+    +	return arch_atomic##prefix##_fetch_##op##_acquire(i, v) c_op I;	\
+     }									\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_##op##_return_release(c_type i,		\
+    -					      atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_##op##_return_release(c_type i,			\
+    +					    atomic##prefix##_t *v)	\
+     {									\
+    -        return arch_atomic##prefix##_fetch_##op##_release(i, v) c_op I;	\
+    +	return arch_atomic##prefix##_fetch_##op##_release(i, v) c_op I;	\
+     }									\
+    -static __always_inline							\
+    -c_type arch_atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
+    +static __always_inline c_type						\
+    +arch_atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)	\
+     {									\
+    -        return arch_atomic##prefix##_fetch_##op(i, v) c_op I;		\
+    +	return arch_atomic##prefix##_fetch_##op(i, v) c_op I;		\
+     }
+    
+     #ifdef CONFIG_GENERIC_ATOMIC64
+
+
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Dan Lustig <dlustig@nvidia.com>
+> Cc: Andrea Parri <parri.andrea@gmail.com>
+> ---
+>  arch/riscv/include/asm/atomic.h  | 24 ++++++++----------------
+>  arch/riscv/include/asm/cmpxchg.h |  6 ++----
+>  2 files changed, 10 insertions(+), 20 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+> index 34f757dfc8f2..aef8aa9ac4f4 100644
+> --- a/arch/riscv/include/asm/atomic.h
+> +++ b/arch/riscv/include/asm/atomic.h
+> @@ -269,9 +269,8 @@ static __always_inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int
+>  		"0:	lr.w     %[p],  %[c]\n"
+>  		"	beq      %[p],  %[u], 1f\n"
+>  		"	add      %[rc], %[p], %[a]\n"
+> -		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+> +		"	sc.w.aqrl  %[rc], %[rc], %[c]\n"
+>  		"	bnez     %[rc], 0b\n"
+> -		"	fence    rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		: [a]"r" (a), [u]"r" (u)
+> @@ -290,9 +289,8 @@ static __always_inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a,
+>  		"0:	lr.d     %[p],  %[c]\n"
+>  		"	beq      %[p],  %[u], 1f\n"
+>  		"	add      %[rc], %[p], %[a]\n"
+> -		"	sc.d.rl  %[rc], %[rc], %[c]\n"
+> +		"	sc.d.aqrl  %[rc], %[rc], %[c]\n"
+>  		"	bnez     %[rc], 0b\n"
+> -		"	fence    rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		: [a]"r" (a), [u]"r" (u)
+> @@ -382,9 +380,8 @@ static __always_inline bool arch_atomic_inc_unless_negative(atomic_t *v)
+>  		"0:	lr.w      %[p],  %[c]\n"
+>  		"	bltz      %[p],  1f\n"
+>  		"	addi      %[rc], %[p], 1\n"
+> -		"	sc.w.rl   %[rc], %[rc], %[c]\n"
+> +		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
+>  		"	bnez      %[rc], 0b\n"
+> -		"	fence     rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		:
+> @@ -402,9 +399,8 @@ static __always_inline bool arch_atomic_dec_unless_positive(atomic_t *v)
+>  		"0:	lr.w      %[p],  %[c]\n"
+>  		"	bgtz      %[p],  1f\n"
+>  		"	addi      %[rc], %[p], -1\n"
+> -		"	sc.w.rl   %[rc], %[rc], %[c]\n"
+> +		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
+>  		"	bnez      %[rc], 0b\n"
+> -		"	fence     rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		:
+> @@ -422,9 +418,8 @@ static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
+>  		"0:	lr.w     %[p],  %[c]\n"
+>  		"	addi     %[rc], %[p], -1\n"
+>  		"	bltz     %[rc], 1f\n"
+> -		"	sc.w.rl  %[rc], %[rc], %[c]\n"
+> +		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
+>  		"	bnez     %[rc], 0b\n"
+> -		"	fence    rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		:
+> @@ -444,9 +439,8 @@ static __always_inline bool arch_atomic64_inc_unless_negative(atomic64_t *v)
+>  		"0:	lr.d      %[p],  %[c]\n"
+>  		"	bltz      %[p],  1f\n"
+>  		"	addi      %[rc], %[p], 1\n"
+> -		"	sc.d.rl   %[rc], %[rc], %[c]\n"
+> +		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
+>  		"	bnez      %[rc], 0b\n"
+> -		"	fence     rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		:
+> @@ -465,9 +459,8 @@ static __always_inline bool arch_atomic64_dec_unless_positive(atomic64_t *v)
+>  		"0:	lr.d      %[p],  %[c]\n"
+>  		"	bgtz      %[p],  1f\n"
+>  		"	addi      %[rc], %[p], -1\n"
+> -		"	sc.d.rl   %[rc], %[rc], %[c]\n"
+> +		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
+>  		"	bnez      %[rc], 0b\n"
+> -		"	fence     rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		:
+> @@ -486,9 +479,8 @@ static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
+>  		"0:	lr.d     %[p],  %[c]\n"
+>  		"	addi      %[rc], %[p], -1\n"
+>  		"	bltz     %[rc], 1f\n"
+> -		"	sc.d.rl  %[rc], %[rc], %[c]\n"
+> +		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
+>  		"	bnez     %[rc], 0b\n"
+> -		"	fence    rw, rw\n"
+>  		"1:\n"
+>  		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+>  		:
+> diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> index 1af8db92250b..9269fceb86e0 100644
+> --- a/arch/riscv/include/asm/cmpxchg.h
+> +++ b/arch/riscv/include/asm/cmpxchg.h
+> @@ -307,9 +307,8 @@
+>  		__asm__ __volatile__ (					\
+>  			"0:	lr.w %0, %2\n"				\
+>  			"	bne  %0, %z3, 1f\n"			\
+> -			"	sc.w.rl %1, %z4, %2\n"			\
+> +			"	sc.w.aqrl %1, %z4, %2\n"		\
+>  			"	bnez %1, 0b\n"				\
+> -			"	fence rw, rw\n"				\
+>  			"1:\n"						\
+>  			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+>  			: "rJ" ((long)__old), "rJ" (__new)		\
+> @@ -319,9 +318,8 @@
+>  		__asm__ __volatile__ (					\
+>  			"0:	lr.d %0, %2\n"				\
+>  			"	bne %0, %z3, 1f\n"			\
+> -			"	sc.d.rl %1, %z4, %2\n"			\
+> +			"	sc.d.aqrl %1, %z4, %2\n"		\
+>  			"	bnez %1, 0b\n"				\
+> -			"	fence rw, rw\n"				\
+>  			"1:\n"						\
+>  			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
+>  			: "rJ" (__old), "rJ" (__new)			\
