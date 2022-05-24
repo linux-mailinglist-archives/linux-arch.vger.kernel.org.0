@@ -2,122 +2,175 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A09D53286D
-	for <lists+linux-arch@lfdr.de>; Tue, 24 May 2022 13:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396D653291A
+	for <lists+linux-arch@lfdr.de>; Tue, 24 May 2022 13:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236446AbiEXK77 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 May 2022 06:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S236715AbiEXLep (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 May 2022 07:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233493AbiEXK76 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 May 2022 06:59:58 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FF76FA39;
-        Tue, 24 May 2022 03:59:57 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id k13so3578976uad.0;
-        Tue, 24 May 2022 03:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OyNGMzB8eRzvXkgcGkGr6qv15WPNXqDuFiVrIoJC1xE=;
-        b=hl+MbcoLRG5p6f0tyPfx9hEebKnCInbyfKFlgIhrxiMaZxGo75slJlOpukMI+qmtY4
-         vKs6XkrY6enhD9LKHO5yaO5a0YSYrFD8s/80jGcTSCC7zmgoGrXDXaJNVa4gpvJ/DQvk
-         DB0DDXIkGH3Oc5mRDsPmISjVD6gCQ0S2fZXivHEKGv/ccLLdlQ6CoX/2cASy2OKUOMoi
-         z0LF9lDmcO39Z7WoVQTxyPUk0SMPgoo4VZj0YbXMDaGNwyLLQvqIc1xH5UNs8Gt8TJPw
-         PImI4UvFCmWNvCjQbvPp0d0c802Bq6aHQpZ4xcpuupIgfwrXENlxhvuCQjAywT2pxv/A
-         3cWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OyNGMzB8eRzvXkgcGkGr6qv15WPNXqDuFiVrIoJC1xE=;
-        b=0XnFRP9du1+hNVfTPdU+uei3hKlS+DHjOKZqSLxDwqZfuAw5BVTMg2VbyA1IW9Ex7M
-         dSyg62ZljkKGnmsX01TofECUFHE4fxUA9FU4GPjebegxclDu2RCvktYaXD5hTwy5IXWC
-         8027Pwt9VJCikJvHnxpyx1qmAfYJTO37Hov2lmyuxpJX6zZ9X1v9Sbt04h5cTJtA31ml
-         ReZCLJQjKidbpgsL5mPeRfB4ebijXaodedbP2H+t0v1H6vbEX2/8fFhB/8EVcbvpKrhD
-         5lyZ6EV86QqOVsGwKWGlZ+gRsfmI/AqslB+gWK3wRwxI66Pu6W8k9kwfDIYhg1ANpor2
-         k8kQ==
-X-Gm-Message-State: AOAM530m1N4+gQpfgZ5I3B0W3hlITLYxFgTg++2JSmtCSUJvunndMhAZ
-        qL0Knt1xDGmSje8kaa6bMGIAp6D1pujVvdtPEWg8tfAl8IC9t/RH
-X-Google-Smtp-Source: ABdhPJzjHep8EeU03Bdx8UMpAopw7ydL9VNQPgVLtJw/4rEwY7HBf0Z0i+/xdekLJoG+9rVYRDr7nM0cHPOyFMNEYeg=
-X-Received: by 2002:ab0:6999:0:b0:368:a1e8:74c9 with SMTP id
- t25-20020ab06999000000b00368a1e874c9mr8496825uaq.21.1653389996991; Tue, 24
- May 2022 03:59:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
- <20220518092619.1269111-10-chenhuacai@loongson.cn> <14f922495a09898017e4db3baed5b434acadac12.camel@xry111.site>
-In-Reply-To: <14f922495a09898017e4db3baed5b434acadac12.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Tue, 24 May 2022 18:59:50 +0800
-Message-ID: <CAAhV-H4BHUTshe2w-KnJ3hLveaFWRJihyDwnOnAbSYWDV_18LA@mail.gmail.com>
-Subject: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
-To:     Xi Ruoyao <xry111@xry111.site>, lichao@loongson.cn
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
+        with ESMTP id S236604AbiEXLeo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 May 2022 07:34:44 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D448BD36;
+        Tue, 24 May 2022 04:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653392084; x=1684928084;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dqryofZxF2pFV6kkTP1H9GJ1NQVHZ92x9MysfmWCcAg=;
+  b=DX5QLJUoPEx7bCULQnV0/9GVDT09IhzQeBVBcXeEe96kpLzNxYachsxH
+   S74UiPiooFqdm71f+Fr3TMgZkeWADg83vBu6POg5sslap6Z/BENze8X0Z
+   GUGTiGwYNEeHPPoitHLvB/tPNQ/U9y8EPScROq9LRsXsqTiUktTyz8T9p
+   N/A5gz8cfc3BanNt+I1DGJlr8RZVG0d+tPphKKK+XZdax5jldxsFmSfKH
+   lizNufrUKNl4gedhmf2Iq4mTTPCdcaXiXm4MuvVXM62Sq9Xrepdog2M4k
+   Jrha3YVwG3bH76WJZZHwAWmRs9CTRrz4U2gPcP99TudZk9xZzoIMm+QP1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253378256"
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="253378256"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:34:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
+   d="scan'208";a="559086967"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 24 May 2022 04:34:34 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 24OBYVcZ004315;
+        Tue, 24 May 2022 12:34:31 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Kristen Carlson Accardi <kristen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Bruce Schlobohm <bruce.schlobohm@intel.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Marios Pomonis <pomonis@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
+        live-patching@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
+Date:   Tue, 24 May 2022 13:33:37 +0200
+Message-Id: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
+References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Ruoyao,
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 24 May 2022 03:04:00 +0900
 
-On Tue, May 24, 2022 at 4:27 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> On Wed, 2022-05-18 at 17:26 +0800, Huacai Chen wrote:
-> > Currently an existing interface between the kernel and the bootloader
-> > is  implemented. Kernel gets 2 values from the bootloader, passed in
-> > registers a0 and a1; a0 is an "EFI boot flag" distinguishing UEFI and
-> > non-UEFI firmware, while a1 is a pointer to an FDT with systable,
-> > memmap, cmdline and initrd information.
->
-> If I understand this correctly, we can:
->
-> - set a0 to 0
-> - set a1 a pointer (virtual address or physical address?) to the FDT
-> with these information
->
-> in the bootloader before invoking the kernel, then it will be possible
-> to boot this kernel w/o firmware update?
-Unfortunately, there is no released firmware for you since we recently
-changed the interface again and again. :(
-You can contact with Li Chao (lichao@loongson.cn), I think he can
-provide help as much as possible (at least provide temporary firmwares
-for developers).
-We will also provide qemu-system and virtual machine's firmware as
-soon as possible.
+> On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
+> <alexandr.lobakin@intel.com> wrote:
+> >
+> > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
+> > to simplify livepatching (hopefully globally later on) triggers the
+> > following:
+> >
+> > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
+> >
+> > The reason is that for now the condition from remove_dot():
+> >
+> > if (m && (s[n + m] == '.' || s[n + m] == 0))
+> >
+> > which was designed to test if it's a dot or a '\0' after the suffix
+> > is never satisfied.
+> > This is due to that `s[n + m]` always points to the last digit of a
+> > numeric suffix, not on the symbol next to it (from a custom debug
+> > print added to modpost):
+> >
+> > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+> >
+> > So it's off-by-one and was like that since 2014.
+> > Fix this for the sake of upcoming features, but don't bother
+> > stable-backporting, as it's well hidden -- apart from that LD flag,
+> > can be triggered only by GCC LTO which never landed upstream.
+> >
+> > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > ---
+> >  scripts/mod/modpost.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index 6bfa33217914..4648b7afe5cc 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
+> >
+> >         if (n && s[n]) {
+> >                 size_t m = strspn(s + n + 1, "0123456789");
+> > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
+> > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+> >                         s[n] = 0;
+> >
+> >                 /* strip trailing .lto */
+> > --
+> > 2.34.1
+> >
+> 
+> This trivial patch has not been picked up yet.
+> 
+> I can apply this to my tree, if you want.
 
-Huacai
+It's a good idea, I'd like to!
+I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
+is not directly related to it and can be taken independently.
+Should I change the commit message or it's ok to take it as it is?
 
->
-> I'd prefer to receive a firmware update anyway, but we need an
-> alternative if some vendor just say "no way, our customized distro works
-> fine and you should use it".  (I'm not accusing LoongArch: such annoying
-> behavior is common among vendors of all architectures, and even worse
-> with x86 because they often say "just use Windoge".)
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
+> 
+> Please let me know your thoughts.
+> 
+> 
+> -- 
+> Best Regards
+> Masahiro Yamada
+
+* I'm planning to submit a new rev of FG-KASLR series soon, but
+since I'm too busy with XDP for now, it will happen no sooner than
+in a couple months =\
+
+Thanks!
+Al
