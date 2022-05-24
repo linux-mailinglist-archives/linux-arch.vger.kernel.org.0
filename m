@@ -2,175 +2,158 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396D653291A
-	for <lists+linux-arch@lfdr.de>; Tue, 24 May 2022 13:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D897C532AAF
+	for <lists+linux-arch@lfdr.de>; Tue, 24 May 2022 14:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236715AbiEXLep (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 24 May 2022 07:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S235955AbiEXMte (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 24 May 2022 08:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236604AbiEXLeo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 May 2022 07:34:44 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D448BD36;
-        Tue, 24 May 2022 04:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653392084; x=1684928084;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dqryofZxF2pFV6kkTP1H9GJ1NQVHZ92x9MysfmWCcAg=;
-  b=DX5QLJUoPEx7bCULQnV0/9GVDT09IhzQeBVBcXeEe96kpLzNxYachsxH
-   S74UiPiooFqdm71f+Fr3TMgZkeWADg83vBu6POg5sslap6Z/BENze8X0Z
-   GUGTiGwYNEeHPPoitHLvB/tPNQ/U9y8EPScROq9LRsXsqTiUktTyz8T9p
-   N/A5gz8cfc3BanNt+I1DGJlr8RZVG0d+tPphKKK+XZdax5jldxsFmSfKH
-   lizNufrUKNl4gedhmf2Iq4mTTPCdcaXiXm4MuvVXM62Sq9Xrepdog2M4k
-   Jrha3YVwG3bH76WJZZHwAWmRs9CTRrz4U2gPcP99TudZk9xZzoIMm+QP1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="253378256"
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="253378256"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2022 04:34:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,248,1647327600"; 
-   d="scan'208";a="559086967"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 24 May 2022 04:34:34 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 24OBYVcZ004315;
-        Tue, 24 May 2022 12:34:31 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-hardening@vger.kernel.org, X86 ML <x86@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Kristen Carlson Accardi <kristen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Bruce Schlobohm <bruce.schlobohm@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Evgenii Shatokhin <eshatokhin@virtuozzo.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Marios Pomonis <pomonis@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Nicolas Pitre <nico@fluxnic.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        with ESMTP id S234425AbiEXMtd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 24 May 2022 08:49:33 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1049A205F6;
+        Tue, 24 May 2022 05:49:30 -0700 (PDT)
+Received: by ajax-webmail-mail.loongson.cn (Coremail) ; Tue, 24 May 2022
+ 20:48:49 +0800 (GMT+08:00)
+X-Originating-IP: [123.113.115.138]
+Date:   Tue, 24 May 2022 20:48:49 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5p2O6LaF?= <lichao@loongson.cn>
+To:     "Huacai Chen" <chenhuacai@gmail.com>
+Cc:     "Xi Ruoyao" <xry111@xry111.site>,
+        "Huacai Chen" <chenhuacai@loongson.cn>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "David Airlie" <airlied@linux.ie>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        live-patching@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH v10 01/15] modpost: fix removing numeric suffixes
-Date:   Tue, 24 May 2022 13:33:37 +0200
-Message-Id: <20220524113337.4128239-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
-References: <20220209185752.1226407-1-alexandr.lobakin@intel.com> <20220209185752.1226407-2-alexandr.lobakin@intel.com> <CAK7LNAT3QTfkYLFTBKLxghY_gBQZmud3-4UJMK3tA9eOV4UeTg@mail.gmail.com>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Xuefeng Li" <lixuefeng@loongson.cn>,
+        "Yanteng Si" <siyanteng@loongson.cn>,
+        "Guo Ren" <guoren@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>,
+        "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        "Ard Biesheuvel" <ardb@kernel.org>
+Subject: Re: Re: [PATCH V11 09/22] LoongArch: Add boot and setup routines
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.10a build 20191018(4c4f6d15)
+ Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
+In-Reply-To: <CAAhV-H4BHUTshe2w-KnJ3hLveaFWRJihyDwnOnAbSYWDV_18LA@mail.gmail.com>
+References: <20220518092619.1269111-1-chenhuacai@loongson.cn>
+ <20220518092619.1269111-10-chenhuacai@loongson.cn>
+ <14f922495a09898017e4db3baed5b434acadac12.camel@xry111.site>
+ <CAAhV-H4BHUTshe2w-KnJ3hLveaFWRJihyDwnOnAbSYWDV_18LA@mail.gmail.com>
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: xi5Sa2Zvb3Rlcl90eHQ9NDAyMDo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <7254fade.54d5.180f61ce0ca.Coremail.lichao@loongson.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAf9CxP+Yx1IxiMScAAA--.132W
+X-CM-SenderInfo: xolfxt3r6o00pqjv00gofq/1tbiAQAQCF3QvPbgHAAAsi
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 24 May 2022 03:04:00 +0900
-
-> On Thu, Feb 10, 2022 at 3:59 AM Alexander Lobakin
-> <alexandr.lobakin@intel.com> wrote:
-> >
-> > `-z unique-symbol` linker flag which is planned to use with FG-KASLR
-> > to simplify livepatching (hopefully globally later on) triggers the
-> > following:
-> >
-> > ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
-> >
-> > The reason is that for now the condition from remove_dot():
-> >
-> > if (m && (s[n + m] == '.' || s[n + m] == 0))
-> >
-> > which was designed to test if it's a dot or a '\0' after the suffix
-> > is never satisfied.
-> > This is due to that `s[n + m]` always points to the last digit of a
-> > numeric suffix, not on the symbol next to it (from a custom debug
-> > print added to modpost):
-> >
-> > param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
-> >
-> > So it's off-by-one and was like that since 2014.
-> > Fix this for the sake of upcoming features, but don't bother
-> > stable-backporting, as it's well hidden -- apart from that LD flag,
-> > can be triggered only by GCC LTO which never landed upstream.
-> >
-> > Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > ---
-> >  scripts/mod/modpost.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 6bfa33217914..4648b7afe5cc 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -1986,7 +1986,7 @@ static char *remove_dot(char *s)
-> >
-> >         if (n && s[n]) {
-> >                 size_t m = strspn(s + n + 1, "0123456789");
-> > -               if (m && (s[n + m] == '.' || s[n + m] == 0))
-> > +               if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
-> >                         s[n] = 0;
-> >
-> >                 /* strip trailing .lto */
-> > --
-> > 2.34.1
-> >
-> 
-> This trivial patch has not been picked up yet.
-> 
-> I can apply this to my tree, if you want.
-
-It's a good idea, I'd like to!
-I don't use `-z unique-symbol` for FG-KALSR anymore*, but this fix
-is not directly related to it and can be taken independently.
-Should I change the commit message or it's ok to take it as it is?
-
-> 
-> Please let me know your thoughts.
-> 
-> 
-> -- 
-> Best Regards
-> Masahiro Yamada
-
-* I'm planning to submit a new rev of FG-KASLR series soon, but
-since I'm too busy with XDP for now, it will happen no sooner than
-in a couple months =\
-
-Thanks!
-Al
+SGkgUnVveWFvLAoKSSBnb3QgYSBtZXNzYWdlIGZyb20gSHVhY2FpIHRoYXQgeW91IHdhbnQgdG8g
+Z2V0IHRoZSBmaXJtd2FyZSB0aGF0IGNhbiBib290IHRoaXMga2VybmVsLCBzbyB3aGF0IGtpbmQg
+b2YgbWFjaGluZSBkbyB5b3UgaGF2ZT8gQ2FuIHlvdSBwcm92aWRlIGluZm9ybWF0aW9uIG9uIFNN
+QklPUyB0eXBlMCwgdHlwZTEgYW5kIHR5cGUyIG9mIHRoZSBtYWNoaW5lIGF0IGhhbmQ/IEkgdGhp
+bmsgaXQgd291bGQgYmUgYmV0dGVyIGlmIHlvdSBjb3VsZCBwcm92aWQgdGhlIGltYWdlIG9mIG1h
+Y2hpbmUgYW5kIG1vdGhlcmJvYXJkLgoKUmVmZXJyaW5nIHRvIEh1YWNhaSwgd2UgYXJlIGdvaW5n
+IGNyZWF0ZSBhIHdlYnBhZ2Ugb24gdGhlIEdpdGh1YiB0aGF0IGNhbiBwcm92aWRlIHRoZSBmaXJt
+d2FyZSB3aGljaCBjYW4gYm9vdCB0aGUgbmV3IGludGVyZmFjZSBrZXJuZWxzLCB3ZSB3aWxsIHBy
+b3ZpZGUgYXMgbWFueSBraW5kcyBvZiBtYWNoaW5lIGZpcm13YXJlIGFzIHBvc3NpYmxlLCBpbmNs
+dWRpbmcgcWVtdSBmaXJtd2FyZS4gSSBiZWxldmUgaXQgd2lsbCBzZWUgeW91IHNvb24uIDopCgpU
+aGFua3MsCkNoYW8KCiZndDsgLS0tLS3ljp/lp4vpgq7ku7YtLS0tLQomZ3Q7IOWPkeS7tuS6ujog
+Ikh1YWNhaSBDaGVuIiA8Y2hlbmh1YWNhaUBnbWFpbC5jb20+CiZndDsg5Y+R6YCB5pe26Ze0OiAy
+MDIyLTA1LTI0IDE4OjU5OjUwICjmmJ/mnJ/kuowpCiZndDsg5pS25Lu25Lq6OiAiWGkgUnVveWFv
+IiA8eHJ5MTExQHhyeTExMS5zaXRlPiwgbGljaGFvQGxvb25nc29uLmNuCiZndDsg5oqE6YCBOiAi
+SHVhY2FpIENoZW4iIDxjaGVuaHVhY2FpQGxvb25nc29uLmNuPiwgIkFybmQgQmVyZ21hbm4iIDxh
+cm5kQGFybmRiLmRlPiwgIkFuZHkgTHV0b21pcnNraSIgPGx1dG9Aa2VybmVsLm9yZz4sICJUaG9t
+YXMgR2xlaXhuZXIiIDx0Z2x4QGxpbnV0cm9uaXguZGU+LCAiUGV0ZXIgWmlqbHN0cmEiIDxwZXRl
+cnpAaW5mcmFkZWFkLm9yZz4sICJBbmRyZXcgTW9ydG9uIiA8YWtwbUBsaW51eC1mb3VuZGF0aW9u
+Lm9yZz4sICJEYXZpZCBBaXJsaWUiIDxhaXJsaWVkQGxpbnV4LmllPiwgIkpvbmF0aGFuIENvcmJl
+dCIgPGNvcmJldEBsd24ubmV0PiwgIkxpbnVzIFRvcnZhbGRzIiA8dG9ydmFsZHNAbGludXgtZm91
+bmRhdGlvbi5vcmc+LCBsaW51eC1hcmNoIDxsaW51eC1hcmNoQHZnZXIua2VybmVsLm9yZz4sICJv
+cGVuIGxpc3Q6RE9DVU1FTlRBVElPTiIgPGxpbnV4LWRvY0B2Z2VyLmtlcm5lbC5vcmc+LCBMS01M
+IDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPiwgIlh1ZWZlbmcgTGkiIDxsaXh1ZWZlbmdA
+bG9vbmdzb24uY24+LCAiWWFudGVuZyBTaSIgPHNpeWFudGVuZ0Bsb29uZ3Nvbi5jbj4sICJHdW8g
+UmVuIiA8Z3VvcmVuQGtlcm5lbC5vcmc+LCAiWHVlcnVpIFdhbmciIDxrZXJuZWxAeGVuMG4ubmFt
+ZT4sICJKaWF4dW4gWWFuZyIgPGppYXh1bi55YW5nQGZseWdvYXQuY29tPiwgIlN0ZXBoZW4gUm90
+aHdlbGwiIDxzZnJAY2FuYi5hdXVnLm9yZy5hdT4sIGxpbnV4LWVmaSA8bGludXgtZWZpQHZnZXIu
+a2VybmVsLm9yZz4sICJBcmQgQmllc2hldXZlbCIgPGFyZGJAa2VybmVsLm9yZz4KJmd0OyDkuLvp
+opg6IFJlOiBbUEFUQ0ggVjExIDA5LzIyXSBMb29uZ0FyY2g6IEFkZCBib290IGFuZCBzZXR1cCBy
+b3V0aW5lcwomZ3Q7IAomZ3Q7IEhpLCBSdW95YW8sCiZndDsgCiZndDsgT24gVHVlLCBNYXkgMjQs
+IDIwMjIgYXQgNDoyNyBQTSBYaSBSdW95YW8gPHhyeTExMUB4cnkxMTEuc2l0ZT4gd3JvdGU6CiZn
+dDsgJmd0OwomZ3Q7ICZndDsgT24gV2VkLCAyMDIyLTA1LTE4IGF0IDE3OjI2ICswODAwLCBIdWFj
+YWkgQ2hlbiB3cm90ZToKJmd0OyAmZ3Q7ICZndDsgQ3VycmVudGx5IGFuIGV4aXN0aW5nIGludGVy
+ZmFjZSBiZXR3ZWVuIHRoZSBrZXJuZWwgYW5kIHRoZSBib290bG9hZGVyCiZndDsgJmd0OyAmZ3Q7
+IGlzICBpbXBsZW1lbnRlZC4gS2VybmVsIGdldHMgMiB2YWx1ZXMgZnJvbSB0aGUgYm9vdGxvYWRl
+ciwgcGFzc2VkIGluCiZndDsgJmd0OyAmZ3Q7IHJlZ2lzdGVycyBhMCBhbmQgYTE7IGEwIGlzIGFu
+ICJFRkkgYm9vdCBmbGFnIiBkaXN0aW5ndWlzaGluZyBVRUZJIGFuZAomZ3Q7ICZndDsgJmd0OyBu
+b24tVUVGSSBmaXJtd2FyZSwgd2hpbGUgYTEgaXMgYSBwb2ludGVyIHRvIGFuIEZEVCB3aXRoIHN5
+c3RhYmxlLAomZ3Q7ICZndDsgJmd0OyBtZW1tYXAsIGNtZGxpbmUgYW5kIGluaXRyZCBpbmZvcm1h
+dGlvbi4KJmd0OyAmZ3Q7CiZndDsgJmd0OyBJZiBJIHVuZGVyc3RhbmQgdGhpcyBjb3JyZWN0bHks
+IHdlIGNhbjoKJmd0OyAmZ3Q7CiZndDsgJmd0OyAtIHNldCBhMCB0byAwCiZndDsgJmd0OyAtIHNl
+dCBhMSBhIHBvaW50ZXIgKHZpcnR1YWwgYWRkcmVzcyBvciBwaHlzaWNhbCBhZGRyZXNzPykgdG8g
+dGhlIEZEVAomZ3Q7ICZndDsgd2l0aCB0aGVzZSBpbmZvcm1hdGlvbgomZ3Q7ICZndDsKJmd0OyAm
+Z3Q7IGluIHRoZSBib290bG9hZGVyIGJlZm9yZSBpbnZva2luZyB0aGUga2VybmVsLCB0aGVuIGl0
+IHdpbGwgYmUgcG9zc2libGUKJmd0OyAmZ3Q7IHRvIGJvb3QgdGhpcyBrZXJuZWwgdy9vIGZpcm13
+YXJlIHVwZGF0ZT8KJmd0OyBVbmZvcnR1bmF0ZWx5LCB0aGVyZSBpcyBubyByZWxlYXNlZCBmaXJt
+d2FyZSBmb3IgeW91IHNpbmNlIHdlIHJlY2VudGx5CiZndDsgY2hhbmdlZCB0aGUgaW50ZXJmYWNl
+IGFnYWluIGFuZCBhZ2Fpbi4gOigKJmd0OyBZb3UgY2FuIGNvbnRhY3Qgd2l0aCBMaSBDaGFvIChs
+aWNoYW9AbG9vbmdzb24uY24pLCBJIHRoaW5rIGhlIGNhbgomZ3Q7IHByb3ZpZGUgaGVscCBhcyBt
+dWNoIGFzIHBvc3NpYmxlIChhdCBsZWFzdCBwcm92aWRlIHRlbXBvcmFyeSBmaXJtd2FyZXMKJmd0
+OyBmb3IgZGV2ZWxvcGVycykuCiZndDsgV2Ugd2lsbCBhbHNvIHByb3ZpZGUgcWVtdS1zeXN0ZW0g
+YW5kIHZpcnR1YWwgbWFjaGluZSdzIGZpcm13YXJlIGFzCiZndDsgc29vbiBhcyBwb3NzaWJsZS4K
+Jmd0OyAKJmd0OyBIdWFjYWkKJmd0OyAKJmd0OyAmZ3Q7CiZndDsgJmd0OyBJJ2QgcHJlZmVyIHRv
+IHJlY2VpdmUgYSBmaXJtd2FyZSB1cGRhdGUgYW55d2F5LCBidXQgd2UgbmVlZCBhbgomZ3Q7ICZn
+dDsgYWx0ZXJuYXRpdmUgaWYgc29tZSB2ZW5kb3IganVzdCBzYXkgIm5vIHdheSwgb3VyIGN1c3Rv
+bWl6ZWQgZGlzdHJvIHdvcmtzCiZndDsgJmd0OyBmaW5lIGFuZCB5b3Ugc2hvdWxkIHVzZSBpdCIu
+ICAoSSdtIG5vdCBhY2N1c2luZyBMb29uZ0FyY2g6IHN1Y2ggYW5ub3lpbmcKJmd0OyAmZ3Q7IGJl
+aGF2aW9yIGlzIGNvbW1vbiBhbW9uZyB2ZW5kb3JzIG9mIGFsbCBhcmNoaXRlY3R1cmVzLCBhbmQg
+ZXZlbiB3b3JzZQomZ3Q7ICZndDsgd2l0aCB4ODYgYmVjYXVzZSB0aGV5IG9mdGVuIHNheSAianVz
+dCB1c2UgV2luZG9nZSIuKQomZ3Q7ICZndDsgLS0KJmd0OyAmZ3Q7IFhpIFJ1b3lhbyA8eHJ5MTEx
+QHhyeTExMS5zaXRlPgomZ3Q7ICZndDsgU2Nob29sIG9mIEFlcm9zcGFjZSBTY2llbmNlIGFuZCBU
+ZWNobm9sb2d5LCBYaWRpYW4gVW5pdmVyc2l0eQo8L3hyeTExMUB4cnkxMTEuc2l0ZT48L3hyeTEx
+MUB4cnkxMTEuc2l0ZT48L2FyZGJAa2VybmVsLm9yZz48L2xpbnV4LWVmaUB2Z2VyLmtlcm5lbC5v
+cmc+PC9zZnJAY2FuYi5hdXVnLm9yZy5hdT48L2ppYXh1bi55YW5nQGZseWdvYXQuY29tPjwva2Vy
+bmVsQHhlbjBuLm5hbWU+PC9ndW9yZW5Aa2VybmVsLm9yZz48L3NpeWFudGVuZ0Bsb29uZ3Nvbi5j
+bj48L2xpeHVlZmVuZ0Bsb29uZ3Nvbi5jbj48L2xpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+
+PC9saW51eC1kb2NAdmdlci5rZXJuZWwub3JnPjwvbGludXgtYXJjaEB2Z2VyLmtlcm5lbC5vcmc+
+PC90b3J2YWxkc0BsaW51eC1mb3VuZGF0aW9uLm9yZz48L2NvcmJldEBsd24ubmV0PjwvYWlybGll
+ZEBsaW51eC5pZT48L2FrcG1AbGludXgtZm91bmRhdGlvbi5vcmc+PC9wZXRlcnpAaW5mcmFkZWFk
+Lm9yZz48L3RnbHhAbGludXRyb25peC5kZT48L2x1dG9Aa2VybmVsLm9yZz48L2FybmRAYXJuZGIu
+ZGU+PC9jaGVuaHVhY2FpQGxvb25nc29uLmNuPjwveHJ5MTExQHhyeTExMS5zaXRlPjwvY2hlbmh1
+YWNhaUBnbWFpbC5jb20+DQoNCuacrOmCruS7tuWPiuWFtumZhOS7tuWQq+aciem+meiKr+S4reen
+keeahOWVhuS4muenmOWvhuS/oeaBr++8jOS7hemZkOS6juWPkemAgee7meS4iumdouWcsOWdgOS4
+reWIl+WHuueahOS4quS6uuaIlue+pOe7hOOAguemgeatouS7u+S9leWFtuS7luS6uuS7peS7u+S9
+leW9ouW8j+S9v+eUqO+8iOWMheaLrOS9huS4jemZkOS6juWFqOmDqOaIlumDqOWIhuWcsOazhOmc
+suOAgeWkjeWItuaIluaVo+WPke+8ieacrOmCruS7tuWPiuWFtumZhOS7tuS4reeahOS/oeaBr+OA
+guWmguaenOaCqOmUmeaUtuacrOmCruS7tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumA
+muefpeWPkeS7tuS6uuW5tuWIoOmZpOacrOmCruS7tuOAgiANClRoaXMgZW1haWwgYW5kIGl0cyBh
+dHRhY2htZW50cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIExvb25nc29u
+IFRlY2hub2xvZ3kgLCB3aGljaCBpcyBpbnRlbmRlZCBvbmx5IGZvciB0aGUgcGVyc29uIG9yIGVu
+dGl0eSB3aG9zZSBhZGRyZXNzIGlzIGxpc3RlZCBhYm92ZS4gQW55IHVzZSBvZiB0aGUgaW5mb3Jt
+YXRpb24gY29udGFpbmVkIGhlcmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGlt
+aXRlZCB0bywgdG90YWwgb3IgcGFydGlhbCBkaXNjbG9zdXJlLCByZXByb2R1Y3Rpb24gb3IgZGlz
+c2VtaW5hdGlvbikgYnkgcGVyc29ucyBvdGhlciB0aGFuIHRoZSBpbnRlbmRlZCByZWNpcGllbnQo
+cykgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBlbWFpbCBpbiBlcnJvciwgcGxl
+YXNlIG5vdGlmeSB0aGUgc2VuZGVyIGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBk
+ZWxldGUgaXQuIA==
