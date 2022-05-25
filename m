@@ -2,50 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EBB0533B4F
-	for <lists+linux-arch@lfdr.de>; Wed, 25 May 2022 13:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382F55340F9
+	for <lists+linux-arch@lfdr.de>; Wed, 25 May 2022 18:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237192AbiEYLKZ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 25 May 2022 07:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
+        id S235695AbiEYQES (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 25 May 2022 12:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiEYLKZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 May 2022 07:10:25 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E54784A15;
-        Wed, 25 May 2022 04:10:22 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1ntou5-0005Nh-BQ; Wed, 25 May 2022 13:10:13 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Guo Ren <guoren@kernel.org>, Guenter Roeck <linux@roeck-us.net>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V9 20/20] riscv: compat: Add COMPAT Kbuild skeletal support
-Date:   Wed, 25 May 2022 13:10:12 +0200
-Message-ID: <3418219.V25eIC5XRa@diego>
-In-Reply-To: <6435704.4vTCxPXJkl@diego>
-References: <20220322144003.2357128-1-guoren@kernel.org> <20220524220646.GA3990738@roeck-us.net> <6435704.4vTCxPXJkl@diego>
+        with ESMTP id S238899AbiEYQES (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 25 May 2022 12:04:18 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA12FAF1EB;
+        Wed, 25 May 2022 09:04:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DB5DFCE2004;
+        Wed, 25 May 2022 16:04:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF2EEC385B8;
+        Wed, 25 May 2022 16:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653494652;
+        bh=9SsmUxRspR26RN2LNvw0etslFl1c4fkjQCM9Ey0idec=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SugjF9n+aZoxi+E3o/AOBu3PmbEXcq2JYOU+7DP2xhuvWJD5WCyvChXVA/9SSctCV
+         +fwRuJ58O4VXbgZ+iX4yCVi4zm0TE7XLQVo973sWHAf6Vooj1gGl+zaQ6ymWvH291b
+         JsCcAwuS/6ofu5SHzgRXom/y1HoBsXAfQwSxhoxV2XUL4RYrKZtWwZ6ufyT86scMwn
+         hM2TojGU0hi/W8/QZKuCGqSko965sfkMaAo1enGMVkHkU2kduNtwhZWIQoPJP0VerJ
+         Iem0GPGqoBIRxkQlpVkLOntzZlZkvTeELsziD1DErGw/cU9cUQPd6hFRW1CbneX+uJ
+         wLj7qxzTCmJgg==
+From:   guoren@kernel.org
+To:     palmer@rivosinc.com, arnd@arndb.de, linux@roeck-us.net,
+        palmer@dabbelt.com, heiko@sntech.de
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Guo Ren <guoren@kernel.org>
+Subject: [PATCH] riscv: compat: Using seperated vdso_maps for compat_vdso_info
+Date:   Wed, 25 May 2022 12:04:04 -0400
+Message-Id: <20220525160404.2930984-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,51 +54,83 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Am Mittwoch, 25. Mai 2022, 12:57:30 CEST schrieb Heiko St¸bner:
-> Am Mittwoch, 25. Mai 2022, 00:06:46 CEST schrieb Guenter Roeck:
-> > On Wed, May 25, 2022 at 01:46:38AM +0800, Guo Ren wrote:
-> > [ ... ]
-> > 
-> > > > The problem is come from "__dls3's vdso decode part in musl's
-> > > > ldso/dynlink.c". The ehdr->e_phnum & ehdr->e_phentsize are wrong.
-> > > >
-> > > > I think the root cause is from musl's implementation with the wrong
-> > > > elf parser. I would fix that soon.
-> > > Not elf parser, it's "aux vector just past environ[]". I think I could
-> > > solve this, but anyone who could help dig in is welcome.
-> > > 
-> > 
-> > I am not sure I understand what you are saying here. Point is that my
-> > root file system, generated with musl a year or so ago, crashes with
-> > your patch set applied. That is a regression, even if there is a bug
-> > in musl.
-> 
-> Also as I said in the other part of the thread, the rootfs seems innocent,
-> as my completely-standard Debian riscv64 rootfs is also affected.
-> 
-> The merged version seems to be v12 [0] - not sure how we this discussion
-> ended up in v9, but I just tested this revision in two variants:
-> 
-> - v5.17 + this v9 -> works nicely
+From: Guo Ren <guoren@linux.alibaba.com>
 
-I take that back ... now going back to that build I somehow also run into
-that issue here ... will investigate more.
+This is a fixup for vdso implementation which caused musl to
+fail.
 
+[   11.600082] Run /sbin/init as init process
+[   11.628561] init[1]: unhandled signal 11 code 0x1 at
+0x0000000000000000 in libc.so[ffffff8ad39000+a4000]
+[   11.629398] CPU: 0 PID: 1 Comm: init Not tainted
+5.18.0-rc7-next-20220520 #1
+[   11.629462] Hardware name: riscv-virtio,qemu (DT)
+[   11.629546] epc : 00ffffff8ada1100 ra : 00ffffff8ada13c8 sp :
+00ffffffc58199f0
+[   11.629586]  gp : 00ffffff8ad39000 tp : 00ffffff8ade0998 t0 :
+ffffffffffffffff
+[   11.629598]  t1 : 00ffffffc5819fd0 t2 : 0000000000000000 s0 :
+00ffffff8ade0cc0
+[   11.629610]  s1 : 00ffffff8ade0cc0 a0 : 0000000000000000 a1 :
+00ffffffc5819a00
+[   11.629622]  a2 : 0000000000000001 a3 : 000000000000001e a4 :
+00ffffffc5819b00
+[   11.629634]  a5 : 00ffffffc5819b00 a6 : 0000000000000000 a7 :
+0000000000000000
+[   11.629645]  s2 : 00ffffff8ade0ac8 s3 : 00ffffff8ade0ec8 s4 :
+00ffffff8ade0728
+[   11.629656]  s5 : 00ffffff8ade0a90 s6 : 0000000000000000 s7 :
+00ffffffc5819e40
+[   11.629667]  s8 : 00ffffff8ade0ca0 s9 : 00ffffff8addba50 s10:
+0000000000000000
+[   11.629678]  s11: 0000000000000000 t3 : 0000000000000002 t4 :
+0000000000000001
+[   11.629688]  t5 : 0000000000020000 t6 : ffffffffffffffff
+[   11.629699] status: 0000000000004020 badaddr: 0000000000000000
+cause: 000000000000000d
 
-> - v5.18-rc6 + this v9 (rebased onto it) -> breaks the boot
->   The only rebase-conflict was with the introduction of restartable
->   sequences and removal of the tracehook include, but turning CONFIG_RSEQ
->   off doesn't seem to affect the breakage.
-> 
-> So it looks like something changed between 5.17 and 5.18 that causes the issue.
-> 
-> 
-> Heiko
-> 
-> 
-> [0] https://lore.kernel.org/all/20220405071314.3225832-1-guoren@kernel.org/
-> 
+The last __vdso_init(&compat_vdso_info) replaces the data in normal
+vdso_info. This is an obvious bug.
 
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Heiko St√ºbner <heiko@sntech.de>
+---
+ arch/riscv/kernel/vdso.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-
+diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
+index 50fe4c877603..69b05b6c181b 100644
+--- a/arch/riscv/kernel/vdso.c
++++ b/arch/riscv/kernel/vdso.c
+@@ -206,12 +206,23 @@ static struct __vdso_info vdso_info __ro_after_init = {
+ };
+ 
+ #ifdef CONFIG_COMPAT
++static struct vm_special_mapping rv_compat_vdso_maps[] __ro_after_init = {
++	[RV_VDSO_MAP_VVAR] = {
++		.name   = "[vvar]",
++		.fault = vvar_fault,
++	},
++	[RV_VDSO_MAP_VDSO] = {
++		.name   = "[vdso]",
++		.mremap = vdso_mremap,
++	},
++};
++
+ static struct __vdso_info compat_vdso_info __ro_after_init = {
+ 	.name = "compat_vdso",
+ 	.vdso_code_start = compat_vdso_start,
+ 	.vdso_code_end = compat_vdso_end,
+-	.dm = &rv_vdso_maps[RV_VDSO_MAP_VVAR],
+-	.cm = &rv_vdso_maps[RV_VDSO_MAP_VDSO],
++	.dm = &rv_compat_vdso_maps[RV_VDSO_MAP_VVAR],
++	.cm = &rv_compat_vdso_maps[RV_VDSO_MAP_VDSO],
+ };
+ #endif
+ 
+-- 
+2.36.1
 
