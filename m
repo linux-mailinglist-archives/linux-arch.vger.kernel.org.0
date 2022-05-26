@@ -2,99 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336A8535214
-	for <lists+linux-arch@lfdr.de>; Thu, 26 May 2022 18:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA011535343
+	for <lists+linux-arch@lfdr.de>; Thu, 26 May 2022 20:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347368AbiEZQai (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 26 May 2022 12:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        id S1348510AbiEZSUO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 26 May 2022 14:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240956AbiEZQah (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 May 2022 12:30:37 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8881C9D4CF
-        for <linux-arch@vger.kernel.org>; Thu, 26 May 2022 09:30:35 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id x2-20020a17090a1f8200b001e07a64c461so4843134pja.4
-        for <linux-arch@vger.kernel.org>; Thu, 26 May 2022 09:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=hft3pFQ744fSdTwXHt92bZsNzbWCW8EWdxZRGP0yF3I=;
-        b=S3SVBC2ysXlMtAljWuti2+MJ2SbWfff+KOU4HhGqrzi0RbdMyzXzMmvBn7gb3HgKQr
-         BMtoEZ7mWkm59aNJ1EqcWVCSyrSoTJSVX0lvCeCGLJKVQSJgonY4yoxlq+5Xq345bF/L
-         Rm0iSs9O1MO0X+0rD2iCVSJq0sslpYlZEje2oxFWQaAmJupGbOyEq9E5TYTx6hKZkZ8x
-         HNaFpVxPwlDjASbhajUejKlHBIaIJkYURunTeT89GaFbILAPmKygbXCA3epFnjiw0R4P
-         jDou3CC8X02jKmxLCE00UmoiWqETaoHzhteSKTQylmwqrPoMkT7FTRF31zQ4IzSlQdWJ
-         sXtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=hft3pFQ744fSdTwXHt92bZsNzbWCW8EWdxZRGP0yF3I=;
-        b=evBF+fCbDYu2GXn5GeVjPI62QxtkzbXuAcqz+AJyceLOyxLLFOcercpHuE7JYkv84N
-         VqOCQIwCNRwE8e7Hmk7nJinniamy3trN2CtOiFMFHZQiLX82A7zbNLPsjHdpxbMGtEz0
-         9pgUeLHVXSdXGYUx4ZyV1PxOoPGaWnPLgJz3dxyD/4WZ25turbsz/YEL4JXhQuB84HCb
-         Le8JqJ95YTH2Alqc7RHbp1peZann7y2F+8lvlObGl93i7FY85IAWC0Kxit8KHeAiiADr
-         PKIEw0vtWA1YKEwmbJjE3yQo2lUs6etU5HZ0gn3XyMU1IHdoXBu6amwZGJaxlD6XRZ+a
-         2aew==
-X-Gm-Message-State: AOAM531omY9LuTeWDpsI9YSi0eYMv//RQdXnf10CKjyaM1sWxdsCWglw
-        9toDLP/fl60McmcuOoe5amNDawbwrz3RDJcY+aI=
-X-Google-Smtp-Source: ABdhPJyarPV38Il+LphIisoxEIdJDNN6+UOc8dXR3pLQ3pJMsa0NMLiUGNPoKSZueOimkwk2d/06o7i2O7Uhy9ve1Nw=
-X-Received: by 2002:a17:90b:4ace:b0:1df:cb33:5e7e with SMTP id
- mh14-20020a17090b4ace00b001dfcb335e7emr3415455pjb.5.1653582634792; Thu, 26
- May 2022 09:30:34 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: mr.a.manga99@gmail.com
-Sender: mrsannahbruun605@gmail.com
-Received: by 2002:a17:90b:4a10:0:0:0:0 with HTTP; Thu, 26 May 2022 09:30:34
- -0700 (PDT)
-From:   "Mr. Amos Manga" <mr.a.manga99@gmail.com>
-Date:   Thu, 26 May 2022 09:30:34 -0700
-X-Google-Sender-Auth: relk0xRbkWGB1Z0LR5py3McFfLg
-Message-ID: <CAEyYVPH-h98Wpcds+gW4-cdKwfKsBLJYPMK4Atc_tNRcqrY0zQ@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORM_FRAUD_5,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
-        LOTS_OF_MONEY,MONEY_FORM_SHORT,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
-        T_HK_NAME_FM_MR_MRS,T_MONEY_PERCENT,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+        with ESMTP id S1349334AbiEZSUO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 26 May 2022 14:20:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B7BB82C9;
+        Thu, 26 May 2022 11:20:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BCB161668;
+        Thu, 26 May 2022 18:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 150AEC34116;
+        Thu, 26 May 2022 18:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653589213;
+        bh=39Y3sv5nWEbgAeRC/3J+ZbpJcaVWD5lTK0uQH430+W4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=J+a5HT+gAX43jgQe1TWdDIgYRYBoe3VArS/Wny6M8ia3OPtCBbnyymtQoCLDsDaGQ
+         nNiyCMYbCIdCHqqkn/wePq5Uj2I05DiTRyS++pk66oTtjxxrSvjctNIELwMaiUhcYQ
+         32Wazppbo7EsKFJPj3iu5Wc4ojSRRoK7Gu1C26TP92MNfShJyUESJ0CQX0G2TFcIVJ
+         lxyA9cwA4bywet5akMLzRacD9iw2MOo1M7Lba8oE4YDuFXc5UzcN/atA/c1lNRBbYB
+         Sj8V81rOhu4SKhhVOYI0jfKGyvRaEQ7ZLzZQggoTx1n/L/I9lM6UflDXHxxQg1jp6w
+         Y6hQM1Uo6KUlQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02655F03938;
+        Thu, 26 May 2022 18:20:13 +0000 (UTC)
+Subject: Re: [GIT PULL] asm-generic changes for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
+References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-arch.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-5.19
+X-PR-Tracked-Commit-Id: b2441b3bdce6c02cb96278d98c620d7ba1d41b7b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 16477cdfefdb494235a675cc80563d736991d833
+Message-Id: <165358921300.17369.14070091108956545607.pr-tracker-bot@kernel.org>
+Date:   Thu, 26 May 2022 18:20:13 +0000
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Good day,
+The pull request you sent on Thu, 26 May 2022 17:00:04 +0200:
 
-I know this means of communication may not be morally right to you as
-a person but I also have had a great thought about it and I have come
-to conclusion which I am about to share with you.
+> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-5.19
 
-I am a banker; I hope you will cooperate with me as a partner in a
-project of transferring an abandoned fund of late customer of the bank
-worth $18,000,000 (Eighteen Million Dollars only).
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/16477cdfefdb494235a675cc80563d736991d833
 
-This will be disbursed or shared between the both of us in these
-percentages, 55% for me and 45% for you. Contact me immediately if
-that is alright for you so that we can enter into an agreement before
-we start processing for the transfer of the funds. If you are
-satisfied with this proposal, please provide the below details for the
-Mutual Confidentiality Agreement
+Thank you!
 
-1. Full Name and Address
-
-2. Occupation and Country of Origin
-
-3. Telephone Number
-
-I wait for your response so that we can commence on this transaction
-as soon as possible.
-
-Regards,
-
-Mr.Amos Manga.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
