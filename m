@@ -2,119 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF122537AF0
-	for <lists+linux-arch@lfdr.de>; Mon, 30 May 2022 15:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9845384B1
+	for <lists+linux-arch@lfdr.de>; Mon, 30 May 2022 17:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236287AbiE3NBq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 30 May 2022 09:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S235552AbiE3PWA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 30 May 2022 11:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233847AbiE3NBn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 May 2022 09:01:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A885F94;
-        Mon, 30 May 2022 06:01:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 333C060DD8;
-        Mon, 30 May 2022 13:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9256DC3411F;
-        Mon, 30 May 2022 13:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653915698;
-        bh=P31uo602B0Lw3sp32uTNYyaSbPsuU19TeHSt9/MJjyI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fAaR0zTawFiHbHpKN5pzKPk+m99MGmCVzLz5sm2Oe043iPI2mRlzm19OnVfUGJQ+q
-         hjxqRzlOaEDqfGDhQFcQEOhENj41lCAx82me6SDWpaH0BBVWcSrZWGtRvkaSIE5PsN
-         Nta3N/ZMKjhueE68+BCp74+MUB3+Sz/0D9vicpRX8np6E/nv1P/fZIntobbe62/bDz
-         GNMqfnu6OgS2CZ3bQ4/+OEayxmysUqlvUSLHvrfIhkzGcB0M/om5Av6hWX0OM+DGWw
-         O91gx/9RQjXjm5n+F1tpfSNGqXhMI8NvX3nxxE9zXgNjd0Ux8Ig3YntNQcdmg3rBg7
-         2lrCDG/rRUW7g==
-Received: by mail-ua1-f54.google.com with SMTP id q1so3804844uao.1;
-        Mon, 30 May 2022 06:01:38 -0700 (PDT)
-X-Gm-Message-State: AOAM533s12IQrVDKYy3h8/CHc6vkZO6URorwOlORD3S/W1VULj8JazVN
-        FKCduYhwEhwkXh/7OdAUTJ31rBapEyqeR36qEho=
-X-Google-Smtp-Source: ABdhPJyhqQ9qgd1r5/qcNoED52QOHpIhyWBhd2usCvKUVn8AsyE5OajEl3nhKMAILqXIBpnc17BmTEG5fiUwQuc9EqE=
-X-Received: by 2002:ab0:2bc9:0:b0:362:8750:8032 with SMTP id
- s9-20020ab02bc9000000b0036287508032mr19067906uar.118.1653915697481; Mon, 30
- May 2022 06:01:37 -0700 (PDT)
+        with ESMTP id S242702AbiE3PUo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 30 May 2022 11:20:44 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E1C113A38
+        for <linux-arch@vger.kernel.org>; Mon, 30 May 2022 07:22:35 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id 2so11467606iou.5
+        for <linux-arch@vger.kernel.org>; Mon, 30 May 2022 07:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
+        b=qKp9S3u6d4f5TEN5jhuy7WIYH1EVaz6Q4QHh9bdZ28VKoSNkMpctdiK5yl7HRyXvEb
+         llYmuW3/eOyS7+NZPAr7hwcxhcPEjJJyttFUlRPOfeiJF5l3EWI4/1zHgOixeQ36a5lD
+         CuK5prGxb/lkDZDWRFwnA62ErigUvSuk4LA+N1QxXAlP+mDHxz83nCR/4s9ToUC1Xpg6
+         UEgttcYY2bkX/pPhuN4top3XhfEj1PWi3lnMugYkJb2BQtWmipvBOgQxpcynKR9aeIXc
+         6Ub9RFRs+VtjCqXM/v6bc/ODLVXZ0hINUfK1dyGWQPEv3zWRb6uxzEPx5xAl5yT+b5Hr
+         7MoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
+        b=R3d9XSVq4Y5O1liwgYzBrW7w31dEfXDUUsFLiTX8e9AC+RJnCJL3pvgRXeI7of7uAe
+         CAunD9aFQKjHYs+HTpSIXJq+vazvXGti/4LUmr7KgOakloGyE35iYKB/KpiIjCk5OMPS
+         8OefJPSv8KAl+2PjEWnbg9Pf5nfankANYwArUkoerKrA/ljpdSj352WDa/0tDpSjlOCq
+         TLMiI/7Z827XbKejlf/AVt/1yon0BxecL4hiiuGYNPwoIfDy3d2OYzMq2eMyRCRUJ/Vu
+         aqMttzAn7przV26KLFDKiDCqZ6weMx6Wf5jF7VGNr2zvglogBVsGRon1h+6RwanC0cRy
+         1p1w==
+X-Gm-Message-State: AOAM532xKnGSZw4n4NCjPqu4of9Y4+xFjZ2u6uh6Y6IYVC9sgk3GiTbN
+        fiAdsEp7L8yuZbpaTrxsMflUX8yapCv7JscGy5w=
+X-Google-Smtp-Source: ABdhPJwc8rLyNW7Em0/jVe/pHtoKDyTVaZXWUTUquAQGYQl6yIktTEJQQLGYR0h54N466jsQxTZLgVt2wPFwUK1B7/I=
+X-Received: by 2002:a05:6602:26ce:b0:649:5967:ca14 with SMTP id
+ g14-20020a05660226ce00b006495967ca14mr24922770ioo.97.1653920545139; Mon, 30
+ May 2022 07:22:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
- <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
- <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name> <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 30 May 2022 21:01:25 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
-Message-ID: <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
-Subject: Re: [GIT PULL] asm-generic changes for 5.19
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        libc-alpha@sourceware.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        musl@lists.openwall.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
+Received: by 2002:a05:6622:f06:0:0:0:0 with HTTP; Mon, 30 May 2022 07:22:24
+ -0700 (PDT)
+Reply-To: barristerbenjamin221@gmail.com
+From:   Attorney Amadou <koadaidrissa1@gmail.com>
+Date:   Mon, 30 May 2022 07:22:24 -0700
+Message-ID: <CAOh7+P9efDeS0kG2DgVEtOSOdn7-PLL2Bi=Kbs5n6A6iu8xObQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d43 listed in]
+        [list.dnswl.org]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [koadaidrissa1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [barristerbenjamin221[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [koadaidrissa1[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
-
-On Mon, May 30, 2022 at 4:21 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> On Sun, May 29, 2022 at 3:10 PM WANG Xuerui <kernel@xen0n.name> wrote:
-> > But what for the users and downstream projects? Do the users owning
-> > LoongArch hardware (me included) and projects/companies porting their
-> > offerings have to pay for Loongson's mistakes and wait another [2mo,
-> > 1yr], "ideally" also missing the glibc 2.36 release too?
-> ...
-> > Lastly, I'd like to clarify, that this is by no means a
-> > passive-aggressive statement to make the community look like "the bad
-> > guy", or to make Loongson "look bad"; I just intend to provide a
-> > hopefully fresh perspective from a/an {end user, hobbyist kernel
-> > developer, distro developer, native Chinese speaker with a hopefully
-> > decent grasp of English}'s view.
->
-> Your feedback has been extremely valuable, as always. I definitely
-> don't want to hold up merging the port for the glibc-2.36 release. If
-> that is a risk, and if merging the architecture port without the drivers
-> helps with that, I agree we should just do that. This will also help
-> with build testing and any treewide changes that are going to be
-> done on top of v5.19-rc1.
->
-> For the continuous maintenance, would you be available as an
-> additional Reviewer or co-maintainer to be listed in the maintainers
-> file? I think in general it is a good idea to have at least one maintainer
-> that is not directly part of the organization that owns the product,
-> and you are clearly the best person outside of loongson technology
-> for this.
-Yes, Xuerui is very suitable as a Reviewer.
-
-Huacai
->
-> Regarding the irqchip driver, merging those is entirely up to Marc and
-> Thomas. Marc already brought up the precedent of merging arch/arm64
-> without the required irqchip driver support, and if it turns out that he
-> find the latest driver submission acceptable, that might still make it in
-> through the irqchip tree.
->
->         Arnd
+SGVsbG8gZGVhciBmcmllbmQuDQoNClBsZWFzZSBJIHdpbGwgbG92ZSB0byBkaXNjdXNzIHNvbWV0
+aGluZyB2ZXJ5IGltcG9ydGFudCB3aXRoIHlvdSwgSQ0Kd2lsbCBhcHByZWNpYXRlIGl0IGlmIHlv
+dSBncmFudCBtZSBhdWRpZW5jZS4NCg0KU2luY2VyZWx5Lg0KQmFycmlzdGVyIEFtYWRvdSBCZW5q
+YW1pbiBFc3EuDQouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCuimquaEm+OB
+quOCi+WPi+S6uuOAgeOBk+OCk+OBq+OBoeOBr+OAgg0KDQrnp4Hjga/jgYLjgarjgZ/jgajpnZ7l
+uLjjgavph43opoHjgarjgZPjgajjgavjgaTjgYTjgaboqbHjgZflkIjjgYbjga7jgYzlpKflpb3j
+gY3jgafjgZnjgIHjgYLjgarjgZ/jgYznp4HjgavogbTooYbjgpLkuI7jgYjjgabjgY/jgozjgozj
+gbDnp4Hjga/jgZ3jgozjgpLmhJ/orJ3jgZfjgb7jgZnjgIINCg0K5b+D44GL44KJ44CCDQrjg5Dj
+g6rjgrnjgr/jg7zjgqLjg57jg4njgqXjg5njg7Pjgrjjg6Pjg5/jg7NFc3HjgIINCg==
