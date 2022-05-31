@@ -2,191 +2,109 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE25F5395CA
-	for <lists+linux-arch@lfdr.de>; Tue, 31 May 2022 20:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEED5397C2
+	for <lists+linux-arch@lfdr.de>; Tue, 31 May 2022 22:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343794AbiEaSAs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 May 2022 14:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
+        id S1347593AbiEaUH6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 May 2022 16:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237702AbiEaSAr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 May 2022 14:00:47 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AF38AE68;
-        Tue, 31 May 2022 11:00:46 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f4so13507422pgf.4;
-        Tue, 31 May 2022 11:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BbUxo4yAz2zldbWEi0GluCNfOnin3cth9gUswEAqzU8=;
-        b=hynBTbzO9rYY0qHxLkPOCSAV7PkFkMuKMQVwaYDYARYuWnM9o4kW+6rxRIYdspG+DS
-         J/rTMUxu4nnsZKopHh7CclvjRd+Z/b82662SEdMCD65Cd39uYVAGCiz7JRhBmcVVzQPI
-         QDeGJ+IBQiVFYn6Kzx7UMnvT4azS4kAVvyImB+arcqQ6/pihcplCHDY3QyiTllbucoFN
-         s+tofLkTZcKnWf2Wl+ZXzM76fOuLvkSS7kcLWWcadnYm+2q0cNkQYAh+4VhLz/wHaBTx
-         Ih6Bha6yH+VQl9q2yp7SlKX2ZvfKv5svKSOuMRR/wSv5RH2t4xvwUmZLACrz2ZwjXtqJ
-         w9IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BbUxo4yAz2zldbWEi0GluCNfOnin3cth9gUswEAqzU8=;
-        b=OxTvBpXQK2b2q4lqUFeCZ3BUEs8VOTMJm1+29sMYqcy7iZOSehVvrWfI3cdNrlkGFO
-         VwW7rXoGVR7e2QvVHtTx6zPqpp4JWRPkH4XDWT1R/5+aUVaKj61oLnCV8bgz2Uyg6LYx
-         s+LAlLrvU8XfxixokoxOwQHcEzFwCyxw7LmDHBRymJZ/ACm2JML6Sewd5vgIruEzsVhZ
-         bwFujBGYwMZltKXhj0c38s+uy+CC4/3gHRhGijXjXVdFrSAlsIblzo+Qi7aKvxCf/zMp
-         apV4kqnP+3jPxBVy7cbZCtheVfdSduTsIvl4+y2yieKW0/90QhOFYcJ3WdFiVHUmqUp3
-         SlHg==
-X-Gm-Message-State: AOAM5302ifVDr+/pa46HJf4xUH4JALRZsvWkn6QJ2Cxcpf1MJEA1crSk
-        /XsBOdDsyeKmFXXmNfZnhLAEM9JQ2Xx+psXId8U=
-X-Google-Smtp-Source: ABdhPJw72huO/7ofZw41/IrdbsJVshRqpIuB7v6o/MbZmah6cvF05hc9Bj6ASGuXAbQ+cjixMHZrrtyd3POkZdxlnbM=
-X-Received: by 2002:a63:2ad6:0:b0:3f9:d9fa:2713 with SMTP id
- q205-20020a632ad6000000b003f9d9fa2713mr44235809pgq.512.1654020046159; Tue, 31
- May 2022 11:00:46 -0700 (PDT)
+        with ESMTP id S233062AbiEaUH5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 May 2022 16:07:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBD557B16;
+        Tue, 31 May 2022 13:07:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A89BC612AC;
+        Tue, 31 May 2022 20:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F684C341C4;
+        Tue, 31 May 2022 20:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654027675;
+        bh=/1wVto7J+rSqm/l8RRWgQmztiSvDwgDUiwq+ybY++qk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nnOyM2vetkXO5nF+8WqAxhOHfGINwlvwqwk9ahclsj42ZB/cNeb9Wrykiyuz9BOiF
+         rp51wWgT0fC/bLa2AvHdpvMYh7EykJAYtGNmTw1O0BWxmlDLtNoL6NQqbaXTNj8H4G
+         g2EfMFyPev/1FNqPq/KInLD82OuI5MuFI8q849ILP7EhJDI9v+OowCoaOvXNzXLzU+
+         ajmDwDChPLvU2hnRGCdN+CV6PO4zM7vh9z/xEXShsWXJVRf4/FrMKQ4ItR73DNihVY
+         mPii7EC77EcAvyYxpIZO8UvX520hJnP2C5yGa1bpp2y05/3BC3NI83Ls3vgpi0OCI5
+         Hhi6Dnytdb6Sw==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f83983782fso152022407b3.6;
+        Tue, 31 May 2022 13:07:54 -0700 (PDT)
+X-Gm-Message-State: AOAM532lOavoeGY1NRnD0quJTpznbHE4jfNbTAM5aW06Yv9lG3jviqWG
+        wvy6ptFVWFgpi3n99qm65MTbr/tF+We1NRHPHS8=
+X-Google-Smtp-Source: ABdhPJynwUPoxY4t1hEYSHRrYE+UitoNiBfNg7p61MOvqW2Sflpn/6hG0o4DNgEIJG28nrjOsQjHJgiqqS1BijW2AEc=
+X-Received: by 2002:a81:28b:0:b0:30c:5e57:fac3 with SMTP id
+ 133-20020a81028b000000b0030c5e57fac3mr11684988ywc.249.1654027673950; Tue, 31
+ May 2022 13:07:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yh0+9cFyAfnsXqxI@kernel.org> <05df964f-552e-402e-981c-a8bea11c555c@www.fastmail.com>
- <YiEZyTT/UBFZd6Am@kernel.org> <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
- <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
- <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org> <YiZVbPwlgSFnhadv@kernel.org>
- <CAMe9rOrSLPKdL2gL=yx84zrs-u6ch1AVvjk3oqUe3thR5ZD=dQ@mail.gmail.com>
- <YpYDKVjMEYVlV6Ya@kernel.org> <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
- <YpZEDjxSPxUfMxDZ@kernel.org> <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
-In-Reply-To: <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Tue, 31 May 2022 11:00:10 -0700
-Message-ID: <CAMe9rOpctH-FQZH_5e=f17Ma7Ev0u9jiXap5bgqFyhLfsx102g@mail.gmail.com>
-Subject: Re: [PATCH 00/35] Shadow stacks for userspace
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "rppt@kernel.org" <rppt@kernel.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "adrian@lisas.de" <adrian@lisas.de>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "avagin@gmail.com" <avagin@gmail.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "Moreira, Joao" <joao.moreira@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "dave.martin@arm.com" <dave.martin@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
+ <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
+ <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name> <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
+ <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
+ <358025d1-28e6-708b-d23d-3f22ae12a800@xen0n.name> <CAK8P3a1ge2bZS13ahm_LdO3jEcbtR4w3do-gLjggKvppqnBDkw@mail.gmail.com>
+ <CAAhV-H5NCUpR6aBtR9d7c9vW2KiHpk3iFQxj7BeTSS0boMz8PQ@mail.gmail.com>
+ <CAK8P3a2JgrW5a7_udCUWen-gOnJgVeRV2oAd-uq4VSuYkFUqNQ@mail.gmail.com>
+ <CAAhV-H6wfmdcV=a4L43dcabsvO+JbOebCX3_6PV+p85NjA9qhQ@mail.gmail.com>
+ <CAK8P3a0c_tbHov_b6cz-_Tj6VD3OWLwpGJf_2rj-nitipSKdYQ@mail.gmail.com> <CAAhV-H4_qqQtTp2=mJF=OV+qcKzA0j8SPWKRMR-LJgC0zNfatQ@mail.gmail.com>
+In-Reply-To: <CAAhV-H4_qqQtTp2=mJF=OV+qcKzA0j8SPWKRMR-LJgC0zNfatQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 31 May 2022 22:07:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3UfDJkoAkA6an2kXyAYSzz2vt__19JoQmum8LZehXrgg@mail.gmail.com>
+Message-ID: <CAK8P3a3UfDJkoAkA6an2kXyAYSzz2vt__19JoQmum8LZehXrgg@mail.gmail.com>
+Subject: Re: [musl] Re: [GIT PULL] asm-generic changes for 5.19
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     musl@lists.openwall.com, WANG Xuerui <kernel@xen0n.name>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        GNU C Library <libc-alpha@sourceware.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, May 31, 2022 at 10:34 AM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Tue, 2022-05-31 at 19:36 +0300, Mike Rapoport wrote:
-> > > WRSS is a feature where you would usually want to lock it as
-> > > disabled,
-> > > but WRSS cannot be enabled if shadow stack is not enabled. Locking
-> > > shadow stack and WRSS off together doesn't have any security
-> > > benefits
-> > > in theory. so I'm thinking glibc doesn't need to do this. The
-> > > kernel
-> > > could even refuse to lock WRSS without shadow stack being enabled.
-> > > Could we avoid the extra ptrace functionality then?
-> >
-> > What I see for is that a program can support shadow stack, glibc
-> > enables
-> > shadow stack, does not enable WRSS and than calls
-> >
-> >         arch_prctl(ARCH_X86_FEATURE_LOCK,
-> >                    LINUX_X86_FEATURE_SHSTK | LINUX_X86_FEATURE_WRSS);
->
-> I see the logic is glibc will lock SHSTK|IBT if either is enabled in
-> the elf header. I guess that is why I didn't see the locking happening
-> for me, because my manual enablement test doesn't have either set in
-> the header.
->
-> It can't see where that glibc knows about WRSS though...
->
-> The glibc logic seems wrong to me also, because shadow stack or IBT
-> could be force-disabled via glibc tunables. I don't see why the elf
-> header bit should exclusively control the feature locking. Or why both
-> should be locked if only one is in the header.
+On Tue, May 31, 2022 at 6:01 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> On Tue, May 31, 2022 at 7:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> > On Tue, May 31, 2022 at 10:17 AM Huacai Chen <chenhuacai@kernel.org> wrote:
 
-glibc locks SHSTK and IBT only if they are enabled at run-time. It doesn't
-enable/disable/lock WRSS at the moment.  If WRSS can be enabled
-via arch_prctl at any time, we can't lock it.  If WRSS should be locked early,
-how should it be enabled in application?  Also can WRSS be enabled
-from a dlopened object?
+> https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
+> has been updated. Now this branch droped irqchip drivers and pci
+> drivers. But the existing irqchip drivers need some small adjustment
+> to avoid build errors [1], and I hope Marc can give an Acked-by.
 
-> >
-> > so that WRSS cannot be re-enabled.
-> >
-> > For the programs that do not support shadow stack, both SHSTK and
-> > WRSS are
-> > disabled, but still there is the same call to
-> > arch_prctl(ARCH_X86_FEATURE_LOCK, ...) and then neither shadow stack
-> > nor
-> > WRSS can be enabled.
-> >
-> > My original plan was to run CRIU with no shadow stack, enable shadow
-> > stack
-> > and WRSS in the restored tasks using arch_prct() and after the shadow
-> > stack
-> > contents is restored disable WRSS.
-> >
-> > Obviously, this didn't work with glibc I have :)
->
-> Were you disabling shadow stack via glibc tunnable? Or was the elf
-> header marked for IBT? If it was a plain old binary, the code looks to
-> me like it should not lock any features.
->
-> >
-> > On the bright side, having a ptrace call to unlock shadow stack and
-> > wrss
-> > allows running CRIU itself with shadow stack.
-> >
->
-> Yea, having something working is really great. My only hesitancy is
-> that, per a discussion on the LAM patchset, we are going to make this
-> enabling API CET only (same semantics for though). I suppose the
-> locking API arch_prctl() could still be support other arch features,
-> but it might be a second CET only regset. It's not the end of the
-> world.
->
-> I guess the other consideration is tieing CRIU to glibc peculiarities.
-> Like even if we fix glibc, then CRIU may not work with some other libc
-> or app that force disables for some weird reason. Is it supposed to be
-> libc-agnostic?
->
+Ok, glad you got that working.
 
+ What about the ACPI changes? I see that these are needed to get a clean build,
+and as I understood it, they are supposed to get merged through the
+acpica tree.
 
--- 
-H.J.
+> This branch can be built with defconfig and allmodconfig (except
+> drivers/platform/surface/aggregator/controller.c, because it requires
+> 8bit/16bit cmpxchg, which I was told to remove their support).
+
+Right, that is ok to keep in there, we should fix that by adding a Kconfig
+dependency for the driver. It looks like it has a CONFIG_ACPI dependency,
+so it is currently limited to x86/arm64/ia64, which all have the short
+cmpxchg(),
+but in reality this driver can only work on x86 and arm64.
+
+       Arnd
