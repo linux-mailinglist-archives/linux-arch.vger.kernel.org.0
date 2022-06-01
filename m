@@ -2,73 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4926553A509
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 14:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E969B53A50D
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 14:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352873AbiFAMba (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Jun 2022 08:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42836 "EHLO
+        id S1352882AbiFAMbu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Jun 2022 08:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352876AbiFAMbV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 08:31:21 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F368A334;
-        Wed,  1 Jun 2022 05:31:16 -0700 (PDT)
+        with ESMTP id S1352921AbiFAMbr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 08:31:47 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293D9B4C;
+        Wed,  1 Jun 2022 05:31:42 -0700 (PDT)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 82C1258056A;
-        Wed,  1 Jun 2022 08:31:15 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 685705C026C;
+        Wed,  1 Jun 2022 08:31:41 -0400 (EDT)
 Received: from imap44 ([10.202.2.94])
-  by compute4.internal (MEProxy); Wed, 01 Jun 2022 08:31:15 -0400
+  by compute4.internal (MEProxy); Wed, 01 Jun 2022 08:31:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654086675; x=
-        1654093875; bh=IkdDnjZhsTVKN1U9NON2sW0ylT+CKD8iY36dbYxpd1U=; b=W
-        AWZiSQwHoosbcSwmAtIon0o0t3FqJCJFPj8QXIztCD54dsXfSxGwrkQIfLsSVmZJ
-        ICHQIgt49gcshOWm7SChEpW+KvH9f83uhVBT1792bRAi42yzXQ4lYVL1KNwhSH9I
-        G6Tb4xf+ephtnnusyS7YsuqPfvQ5d7xv3NpZWJYokAmjXiBo/O3MtXwn8VIzprD8
-        YysHugiuqpRe1N1+OlKX9INGw0If5zglPAu5HqWobSaJGlcjTJyVNRBxEpLvUExe
-        z3WcYoAqXj4n+LK0muhIZdlC7wEmm2OrXkszWKgZw177bYJjM6AubtX7J7qlJnTs
-        GbQK//cgTHa41KIsPbisw==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654086701; x=
+        1654173101; bh=ghDzRFLE4McY1g+Cvd+/LVHAFq/Lw6zZCgUwfq1b2nQ=; b=t
+        8UzcaCybzP/nQJRd6gPyZTBfW4TMaQT+KMRn/E5TbgtdakPvxy0AJVwGYN6XWGZT
+        C6GaLTZDVBQdE0Fdv62ktaY5N+L74kmWYrypWqs9j/q24sEsWFqQnk/7OLUkxdOz
+        vNfGPO5O+zjHWuhgSd0/4NuWj0Z5ZB+FPn61D7ZSyg4lCT+kg1GNYD+sWhQ+XckI
+        Dtdb67rOFAwv+Rd7U7jxNwZbKmB78zzRkTqUJYPfCHD40wjBu6YtLfs5xipIk/Ej
+        NB7xrfCvHeaHKlGXhkSKR9RkDAqJVB4/ail2KnB5EdaXdnBZE8CeclnvwAcB9PZo
+        L8xzvtv7+9jHWEeULp77w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654086675; x=
-        1654093875; bh=IkdDnjZhsTVKN1U9NON2sW0ylT+CKD8iY36dbYxpd1U=; b=m
-        T66utg0cmfdyUkwlXmW/82Vhqe7eQHS12bdNJ8jf9zqJJ3lr6LPKrY9hp/4ynWVx
-        4dOpf/ggNVv3w0rbo8WcJyBl70RAy0uuX1JB7tSDwMTQwwPC+iDc835Sm01GWkZH
-        O6LC9xVbZvvShvVnHMgYnSic143UFnVxAGHOvin5V+KeoUFpyxfsorB1DU020DNj
-        Q7TCpMpOV0vN+KCuLvAq5z+6eJ+tGx8izorzBKtxGzEoScEqAasqIBPeE0fLuSyM
-        E0aqiHyXY++rJWyJ71DqvfU3Nm5BWNUMnhTt+04QcVJbJOxXMo7aiNygLbKOiw/X
-        zF+YHzsR1/BORyInQ+C8Q==
-X-ME-Sender: <xms:ElyXYgeGak4Q_pL3eWtMOgT7VD_53LPmIl3XQQZTO9GjQ3ACLjHO_Q>
-    <xme:ElyXYiN3LwD-oK5KGQ1V85myPwZz4zV9f5AXBujloKwRVqUSFjvo2qth_fJaZaZNa
-    g1uEYiBg4PrL54J0gE>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654086701; x=
+        1654173101; bh=ghDzRFLE4McY1g+Cvd+/LVHAFq/Lw6zZCgUwfq1b2nQ=; b=V
+        F3ArCtlZ2lCwn5VWXw8oUowirW2XIg8nmouQvQw7B1FizL8Brx2PM2zo77m7IYPU
+        x7a997x80TuRaPemkvSCTq5XbZua6WLNXfVzWkHLbue+w554YuodDcedl9sXX9/v
+        up/9hBXNllSlPYc5ogRZZSyHYZke4YTkYW99kSa4l/ao5khS1MH1g/LjNcZCpfhE
+        koi26Mf14JTYRUD+7L0PSmOpXLqZrFrp5DVGTeH6Rh0Q0nnzPyEUbuROdJ30Bi+H
+        Xfa1wp+VQLGl/xdX1CeAANpYCH/58pS431KHZY/pKJDuydisJh1YJyS7VHwFqLPS
+        BD10jj82ZNhx3JKUyh8KQ==
+X-ME-Sender: <xms:LFyXYpt8DYjVHIeGEcimIzJaBHvXgmaZfg2_ql_eCak-MivKP0dT0g>
+    <xme:LFyXYidsi5yLPMtv5ZWbuaKoE2HjugKjR8WYREXDrCh6QNfkEbYrGCaBdYNRIEgc2
+    RCO8vDbZ75j3hRz4Cw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledtgdehudcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedflfhi
     rgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
     eqnecuggftrfgrthhtvghrnhepudefgeeftedugeehffdtheefgfevffelfefghefhjeeu
-    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    geevtefhudduvdeihefgnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrg
     hilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:ElyXYhiE4970TCzFh_YreNAOeJAaUXv6asOJ_heK72_luLqgIPX2Ag>
-    <xmx:ElyXYl86kCqKHRHXXwlRODWfDYAKAO8CYrCMCI-sPJAG9xvRMYOtGw>
-    <xmx:ElyXYsv4sSGmRK4KjP1S4PgTejyrFcY0MqeMFxaqqWUs-VMEKe_kvg>
-    <xmx:E1yXYnmHRKVYZAmVEbo1fZ8fJtDp6E-PajxvJvW4F2irGMeCAB95fw>
+X-ME-Proxy: <xmx:LFyXYsxu3Gdb0gwzqmSVl5nLpbWmS71xJ5x9R8q9sg752fbSPAgBhQ>
+    <xmx:LFyXYgPhWZUxEoiLhZgrUXLG9wwUAyU5-JBUfsbIwNTSucypt-FcLA>
+    <xmx:LFyXYp9EdZxGE1p1hsvpfhaNRAtgI4_UR_ajW2tgtXLlR_wUrnZz4A>
+    <xmx:LVyXYhODJXdotp203jcwD3fq-uBrMZ8GhFuIoBkujUBbmtCKTAKWIQ>
 Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9C13936A006D; Wed,  1 Jun 2022 08:31:14 -0400 (EDT)
+        id CEFD136A006D; Wed,  1 Jun 2022 08:31:40 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
 Mime-Version: 1.0
-Message-Id: <e1bf7cb8-6f4e-4d5f-b6ad-88835fccf1b5@www.fastmail.com>
-In-Reply-To: <20220601100005.2989022-18-chenhuacai@loongson.cn>
+Message-Id: <f0771251-98a3-4325-8a3e-a6fef4bdda71@www.fastmail.com>
+In-Reply-To: <20220601100005.2989022-19-chenhuacai@loongson.cn>
 References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
- <20220601100005.2989022-18-chenhuacai@loongson.cn>
-Date:   Wed, 01 Jun 2022 13:30:53 +0100
+ <20220601100005.2989022-19-chenhuacai@loongson.cn>
+Date:   Wed, 01 Jun 2022 13:31:19 +0100
 From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
 To:     "Huacai Chen" <chenhuacai@loongson.cn>,
         "Arnd Bergmann" <arnd@arndb.de>,
@@ -85,9 +85,8 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         "Huacai Chen" <chenhuacai@gmail.com>,
         "Guo Ren" <guoren@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>,
         "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Jessica Yu" <jeyu@kernel.org>, "WANG Xuerui" <git@xen0n.name>,
-        "Luis Chamberlain" <mcgrof@kernel.org>
-Subject: Re: [PATCH V12 17/24] LoongArch: Add ELF and module support
+        "WANG Xuerui" <git@xen0n.name>
+Subject: Re: [PATCH V12 18/24] LoongArch: Add misc common routines
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -104,1231 +103,837 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 =E5=9C=A82022=E5=B9=B46=E6=9C=881=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
 =8D=8810:59=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
-> Add ELF-related definition and module relocation code for basic
-> LoongArch support.
+> Add some misc common routines for LoongArch, including: asm-offsets
+> routines, futex functions, i/o memory access functions, frame-buffer
+> functions, procfs information display, etc.
 >
-> Cc: Jessica Yu <jeyu@kernel.org>
 > Reviewed-by: WANG Xuerui <git@xen0n.name>
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
 Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
 > ---
->  arch/loongarch/include/asm/cpufeature.h  |  24 ++
->  arch/loongarch/include/asm/elf.h         | 301 ++++++++++++++++++
->  arch/loongarch/include/asm/exec.h        |  10 +
->  arch/loongarch/include/asm/module.h      |  80 +++++
->  arch/loongarch/include/asm/module.lds.h  |   7 +
->  arch/loongarch/include/asm/vermagic.h    |  19 ++
->  arch/loongarch/include/uapi/asm/auxvec.h |  17 ++
->  arch/loongarch/include/uapi/asm/hwcap.h  |  20 ++
->  arch/loongarch/kernel/elf.c              |  30 ++
->  arch/loongarch/kernel/inst.c             |  40 +++
->  arch/loongarch/kernel/module-sections.c  | 121 ++++++++
->  arch/loongarch/kernel/module.c           | 374 +++++++++++++++++++++++
->  12 files changed, 1043 insertions(+)
->  create mode 100644 arch/loongarch/include/asm/cpufeature.h
->  create mode 100644 arch/loongarch/include/asm/elf.h
->  create mode 100644 arch/loongarch/include/asm/exec.h
->  create mode 100644 arch/loongarch/include/asm/module.h
->  create mode 100644 arch/loongarch/include/asm/module.lds.h
->  create mode 100644 arch/loongarch/include/asm/vermagic.h
->  create mode 100644 arch/loongarch/include/uapi/asm/auxvec.h
->  create mode 100644 arch/loongarch/include/uapi/asm/hwcap.h
->  create mode 100644 arch/loongarch/kernel/elf.c
->  create mode 100644 arch/loongarch/kernel/inst.c
->  create mode 100644 arch/loongarch/kernel/module-sections.c
->  create mode 100644 arch/loongarch/kernel/module.c
+>  arch/loongarch/include/asm/asm-offsets.h |   5 +
+>  arch/loongarch/include/asm/fb.h          |  23 ++
+>  arch/loongarch/include/asm/futex.h       | 107 ++++++++++
+>  arch/loongarch/include/asm/io.h          | 129 ++++++++++++
+>  arch/loongarch/kernel/asm-offsets.c      | 254 +++++++++++++++++++++++
+>  arch/loongarch/kernel/io.c               |  94 +++++++++
+>  arch/loongarch/kernel/proc.c             | 122 +++++++++++
+>  7 files changed, 734 insertions(+)
+>  create mode 100644 arch/loongarch/include/asm/asm-offsets.h
+>  create mode 100644 arch/loongarch/include/asm/fb.h
+>  create mode 100644 arch/loongarch/include/asm/futex.h
+>  create mode 100644 arch/loongarch/include/asm/io.h
+>  create mode 100644 arch/loongarch/kernel/asm-offsets.c
+>  create mode 100644 arch/loongarch/kernel/io.c
+>  create mode 100644 arch/loongarch/kernel/proc.c
 >
-> diff --git a/arch/loongarch/include/asm/cpufeature.h=20
-> b/arch/loongarch/include/asm/cpufeature.h
+> diff --git a/arch/loongarch/include/asm/asm-offsets.h=20
+> b/arch/loongarch/include/asm/asm-offsets.h
 > new file mode 100644
-> index 000000000000..4da22a8e63de
+> index 000000000000..d9ad88d293e7
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/cpufeature.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * CPU feature definitions for module loading, used by
-> + * module_cpu_feature_match(), see uapi/asm/hwcap.h for LoongArch CPU=20
-> features.
-> + *
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#ifndef __ASM_CPUFEATURE_H
-> +#define __ASM_CPUFEATURE_H
-> +
-> +#include <uapi/asm/hwcap.h>
-> +#include <asm/elf.h>
-> +
-> +#define MAX_CPU_FEATURES (8 * sizeof(elf_hwcap))
-> +
-> +#define cpu_feature(x)		ilog2(HWCAP_ ## x)
-> +
-> +static inline bool cpu_have_feature(unsigned int num)
-> +{
-> +	return elf_hwcap & (1UL << num);
-> +}
-> +
-> +#endif /* __ASM_CPUFEATURE_H */
-> diff --git a/arch/loongarch/include/asm/elf.h=20
-> b/arch/loongarch/include/asm/elf.h
-> new file mode 100644
-> index 000000000000..f3960b18a90e
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/elf.h
-> @@ -0,0 +1,301 @@
+> +++ b/arch/loongarch/include/asm/asm-offsets.h
+> @@ -0,0 +1,5 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 > + */
-> +#ifndef _ASM_ELF_H
-> +#define _ASM_ELF_H
+> +#include <generated/asm-offsets.h>
+> diff --git a/arch/loongarch/include/asm/fb.h=20
+> b/arch/loongarch/include/asm/fb.h
+> new file mode 100644
+> index 000000000000..3116bde8772d
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/fb.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_FB_H_
+> +#define _ASM_FB_H_
 > +
-> +#include <linux/auxvec.h>
+> +#include <linux/fb.h>
 > +#include <linux/fs.h>
-> +#include <uapi/linux/elf.h>
+> +#include <asm/page.h>
 > +
-> +#include <asm/current.h>
-> +#include <asm/vdso.h>
-> +
-> +/* The ABI of a file. */
-> +#define EF_LOONGARCH_ABI_LP64_SOFT_FLOAT	0x1
-> +#define EF_LOONGARCH_ABI_LP64_SINGLE_FLOAT	0x2
-> +#define EF_LOONGARCH_ABI_LP64_DOUBLE_FLOAT	0x3
-> +
-> +#define EF_LOONGARCH_ABI_ILP32_SOFT_FLOAT	0x5
-> +#define EF_LOONGARCH_ABI_ILP32_SINGLE_FLOAT	0x6
-> +#define EF_LOONGARCH_ABI_ILP32_DOUBLE_FLOAT	0x7
-> +
-> +/* LoongArch relocation types used by the dynamic linker */
-> +#define R_LARCH_NONE				0
-> +#define R_LARCH_32				1
-> +#define R_LARCH_64				2
-> +#define R_LARCH_RELATIVE			3
-> +#define R_LARCH_COPY				4
-> +#define R_LARCH_JUMP_SLOT			5
-> +#define R_LARCH_TLS_DTPMOD32			6
-> +#define R_LARCH_TLS_DTPMOD64			7
-> +#define R_LARCH_TLS_DTPREL32			8
-> +#define R_LARCH_TLS_DTPREL64			9
-> +#define R_LARCH_TLS_TPREL32			10
-> +#define R_LARCH_TLS_TPREL64			11
-> +#define R_LARCH_IRELATIVE			12
-> +#define R_LARCH_MARK_LA				20
-> +#define R_LARCH_MARK_PCREL			21
-> +#define R_LARCH_SOP_PUSH_PCREL			22
-> +#define R_LARCH_SOP_PUSH_ABSOLUTE		23
-> +#define R_LARCH_SOP_PUSH_DUP			24
-> +#define R_LARCH_SOP_PUSH_GPREL			25
-> +#define R_LARCH_SOP_PUSH_TLS_TPREL		26
-> +#define R_LARCH_SOP_PUSH_TLS_GOT		27
-> +#define R_LARCH_SOP_PUSH_TLS_GD			28
-> +#define R_LARCH_SOP_PUSH_PLT_PCREL		29
-> +#define R_LARCH_SOP_ASSERT			30
-> +#define R_LARCH_SOP_NOT				31
-> +#define R_LARCH_SOP_SUB				32
-> +#define R_LARCH_SOP_SL				33
-> +#define R_LARCH_SOP_SR				34
-> +#define R_LARCH_SOP_ADD				35
-> +#define R_LARCH_SOP_AND				36
-> +#define R_LARCH_SOP_IF_ELSE			37
-> +#define R_LARCH_SOP_POP_32_S_10_5		38
-> +#define R_LARCH_SOP_POP_32_U_10_12		39
-> +#define R_LARCH_SOP_POP_32_S_10_12		40
-> +#define R_LARCH_SOP_POP_32_S_10_16		41
-> +#define R_LARCH_SOP_POP_32_S_10_16_S2		42
-> +#define R_LARCH_SOP_POP_32_S_5_20		43
-> +#define R_LARCH_SOP_POP_32_S_0_5_10_16_S2	44
-> +#define R_LARCH_SOP_POP_32_S_0_10_10_16_S2	45
-> +#define R_LARCH_SOP_POP_32_U			46
-> +#define R_LARCH_ADD8				47
-> +#define R_LARCH_ADD16				48
-> +#define R_LARCH_ADD24				49
-> +#define R_LARCH_ADD32				50
-> +#define R_LARCH_ADD64				51
-> +#define R_LARCH_SUB8				52
-> +#define R_LARCH_SUB16				53
-> +#define R_LARCH_SUB24				54
-> +#define R_LARCH_SUB32				55
-> +#define R_LARCH_SUB64				56
-> +#define R_LARCH_GNU_VTINHERIT			57
-> +#define R_LARCH_GNU_VTENTRY			58
-> +
-> +#ifndef ELF_ARCH
-> +
-> +/* ELF register definitions */
-> +
-> +/*
-> + * General purpose have the following registers:
-> + *	Register	Number
-> + *	GPRs		32
-> + *	ORIG_A0		1
-> + *	ERA		1
-> + *	BADVADDR	1
-> + *	CRMD		1
-> + *	PRMD		1
-> + *	EUEN		1
-> + *	ECFG		1
-> + *	ESTAT		1
-> + *	Reserved	5
-> + */
-> +#define ELF_NGREG	45
-> +
-> +/*
-> + * Floating point have the following registers:
-> + *	Register	Number
-> + *	FPR		32
-> + *	FCC		1
-> + *	FCSR		1
-> + */
-> +#define ELF_NFPREG	34
-> +
-> +typedef unsigned long elf_greg_t;
-> +typedef elf_greg_t elf_gregset_t[ELF_NGREG];
-> +
-> +typedef double elf_fpreg_t;
-> +typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
-> +
-> +void loongarch_dump_regs64(u64 *uregs, const struct pt_regs *regs);
-> +
-> +#ifdef CONFIG_32BIT
-> +/*
-> + * This is used to ensure we don't load something for the wrong=20
-> architecture.
-> + */
-> +#define elf_check_arch elf32_check_arch
-> +
-> +/*
-> + * These are used to set parameters in the core dumps.
-> + */
-> +#define ELF_CLASS	ELFCLASS32
-> +
-> +#define ELF_CORE_COPY_REGS(dest, regs) \
-> +	loongarch_dump_regs32((u32 *)&(dest), (regs));
-> +
-> +#endif /* CONFIG_32BIT */
-> +
-> +#ifdef CONFIG_64BIT
-> +/*
-> + * This is used to ensure we don't load something for the wrong=20
-> architecture.
-> + */
-> +#define elf_check_arch elf64_check_arch
-> +
-> +/*
-> + * These are used to set parameters in the core dumps.
-> + */
-> +#define ELF_CLASS	ELFCLASS64
-> +
-> +#define ELF_CORE_COPY_REGS(dest, regs) \
-> +	loongarch_dump_regs64((u64 *)&(dest), (regs));
-> +
-> +#endif /* CONFIG_64BIT */
-> +
-> +/*
-> + * These are used to set parameters in the core dumps.
-> + */
-> +#define ELF_DATA	ELFDATA2LSB
-> +#define ELF_ARCH	EM_LOONGARCH
-> +
-> +#endif /* !defined(ELF_ARCH) */
-> +
-> +#define loongarch_elf_check_machine(x) ((x)->e_machine =3D=3D EM_LOON=
-GARCH)
-> +
-> +#define vmcore_elf32_check_arch loongarch_elf_check_machine
-> +#define vmcore_elf64_check_arch loongarch_elf_check_machine
-> +
-> +/*
-> + * Return non-zero if HDR identifies an 32bit ELF binary.
-> + */
-> +#define elf32_check_arch(hdr)						\
-> +({									\
-> +	int __res =3D 1;							\
-> +	struct elfhdr *__h =3D (hdr);					\
-> +									\
-> +	if (!loongarch_elf_check_machine(__h))				\
-> +		__res =3D 0;						\
-> +	if (__h->e_ident[EI_CLASS] !=3D ELFCLASS32)			\
-> +		__res =3D 0;						\
-> +									\
-> +	__res;								\
-> +})
-> +
-> +/*
-> + * Return non-zero if HDR identifies an 64bit ELF binary.
-> + */
-> +#define elf64_check_arch(hdr)						\
-> +({									\
-> +	int __res =3D 1;							\
-> +	struct elfhdr *__h =3D (hdr);					\
-> +									\
-> +	if (!loongarch_elf_check_machine(__h))				\
-> +		__res =3D 0;						\
-> +	if (__h->e_ident[EI_CLASS] !=3D ELFCLASS64)			\
-> +		__res =3D 0;						\
-> +									\
-> +	__res;								\
-> +})
-> +
-> +#ifdef CONFIG_32BIT
-> +
-> +#define SET_PERSONALITY2(ex, state)					\
-> +do {									\
-> +	current->thread.vdso =3D &vdso_info;				\
-> +									\
-> +	loongarch_set_personality_fcsr(state);				\
-> +									\
-> +	if (personality(current->personality) !=3D PER_LINUX)		\
-> +		set_personality(PER_LINUX);				\
-> +} while (0)
-> +
-> +#endif /* CONFIG_32BIT */
-> +
-> +#ifdef CONFIG_64BIT
-> +
-> +#define SET_PERSONALITY2(ex, state)					\
-> +do {									\
-> +	unsigned int p;							\
-> +									\
-> +	clear_thread_flag(TIF_32BIT_REGS);				\
-> +	clear_thread_flag(TIF_32BIT_ADDR);				\
-> +									\
-> +	current->thread.vdso =3D &vdso_info;				\
-> +	loongarch_set_personality_fcsr(state);				\
-> +									\
-> +	p =3D personality(current->personality);				\
-> +	if (p !=3D PER_LINUX32 && p !=3D PER_LINUX)				\
-> +		set_personality(PER_LINUX);				\
-> +} while (0)
-> +
-> +#endif /* CONFIG_64BIT */
-> +
-> +#define CORE_DUMP_USE_REGSET
-> +#define ELF_EXEC_PAGESIZE	PAGE_SIZE
-> +
-> +/*
-> + * This yields a mask that user programs can use to figure out what
-> + * instruction set this cpu supports. This could be done in userspace,
-> + * but it's not easy, and we've already done it here.
-> + */
-> +
-> +#define ELF_HWCAP	(elf_hwcap)
-> +extern unsigned int elf_hwcap;
-> +#include <asm/hwcap.h>
-> +
-> +/*
-> + * This yields a string that ld.so will use to load implementation
-> + * specific libraries for optimization.	 This is more specific in
-> + * intent than poking at uname or /proc/cpuinfo.
-> + */
-> +
-> +#define ELF_PLATFORM  __elf_platform
-> +extern const char *__elf_platform;
-> +
-> +#define ELF_PLAT_INIT(_r, load_addr)	do { \
-> +	_r->regs[1] =3D _r->regs[2] =3D _r->regs[3] =3D _r->regs[4] =3D 0;	\
-> +	_r->regs[5] =3D _r->regs[6] =3D _r->regs[7] =3D _r->regs[8] =3D 0;	\
-> +	_r->regs[9] =3D _r->regs[10] =3D _r->regs[11] =3D _r->regs[12] =3D 0=
-;	\
-> +	_r->regs[13] =3D _r->regs[14] =3D _r->regs[15] =3D _r->regs[16] =3D =
-0;	\
-> +	_r->regs[17] =3D _r->regs[18] =3D _r->regs[19] =3D _r->regs[20] =3D =
-0;	\
-> +	_r->regs[21] =3D _r->regs[22] =3D _r->regs[23] =3D _r->regs[24] =3D =
-0;	\
-> +	_r->regs[25] =3D _r->regs[26] =3D _r->regs[27] =3D _r->regs[28] =3D =
-0;	\
-> +	_r->regs[29] =3D _r->regs[30] =3D _r->regs[31] =3D 0;			\
-> +} while (0)
-> +
-> +/*
-> + * This is the location that an ET_DYN program is loaded if exec'ed.=20
-> Typical
-> + * use of this is to invoke "./ld.so someprog" to test out a new=20
-> version of
-> + * the loader. We need to make sure that it is out of the way of the=20
-> program
-> + * that it will "exec", and that there is sufficient room for the brk.
-> + */
-> +
-> +#define ELF_ET_DYN_BASE		(TASK_SIZE / 3 * 2)
-> +
-> +/* update AT_VECTOR_SIZE_ARCH if the number of NEW_AUX_ENT entries=20
-> changes */
-> +#define ARCH_DLINFO							\
-> +do {									\
-> +	NEW_AUX_ENT(AT_SYSINFO_EHDR,					\
-> +		    (unsigned long)current->mm->context.vdso);		\
-> +} while (0)
-> +
-> +#define ARCH_HAS_SETUP_ADDITIONAL_PAGES 1
-> +struct linux_binprm;
-> +extern int arch_setup_additional_pages(struct linux_binprm *bprm,
-> +				       int uses_interp);
-> +
-> +struct arch_elf_state {
-> +	int fp_abi;
-> +	int interp_fp_abi;
-> +};
-> +
-> +#define LOONGARCH_ABI_FP_ANY	(0)
-> +
-> +#define INIT_ARCH_ELF_STATE {			\
-> +	.fp_abi =3D LOONGARCH_ABI_FP_ANY,		\
-> +	.interp_fp_abi =3D LOONGARCH_ABI_FP_ANY,	\
+> +static inline void fb_pgprotect(struct file *file, struct=20
+> vm_area_struct *vma,
+> +				unsigned long off)
+> +{
+> +	vma->vm_page_prot =3D pgprot_writecombine(vma->vm_page_prot);
 > +}
 > +
-> +#define elf_read_implies_exec(ex, exec_stk) (exec_stk =3D=3D=20
-> EXSTACK_DEFAULT)
+> +static inline int fb_is_primary_device(struct fb_info *info)
+> +{
+> +	return 0;
+> +}
 > +
-> +extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
-> +			    bool is_interp, struct arch_elf_state *state);
-> +
-> +extern int arch_check_elf(void *ehdr, bool has_interpreter, void=20
-> *interp_ehdr,
-> +			  struct arch_elf_state *state);
-> +
-> +extern void loongarch_set_personality_fcsr(struct arch_elf_state=20
-> *state);
-> +
-> +#endif /* _ASM_ELF_H */
-> diff --git a/arch/loongarch/include/asm/exec.h=20
-> b/arch/loongarch/include/asm/exec.h
+> +#endif /* _ASM_FB_H_ */
+> diff --git a/arch/loongarch/include/asm/futex.h=20
+> b/arch/loongarch/include/asm/futex.h
 > new file mode 100644
-> index 000000000000..ba0220812ebb
+> index 000000000000..b27d55f92db7
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/exec.h
-> @@ -0,0 +1,10 @@
+> +++ b/arch/loongarch/include/asm/futex.h
+> @@ -0,0 +1,107 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 > + */
-> +#ifndef _ASM_EXEC_H
-> +#define _ASM_EXEC_H
+> +#ifndef _ASM_FUTEX_H
+> +#define _ASM_FUTEX_H
 > +
-> +extern unsigned long arch_align_stack(unsigned long sp);
+> +#include <linux/futex.h>
+> +#include <linux/uaccess.h>
+> +#include <asm/barrier.h>
+> +#include <asm/compiler.h>
+> +#include <asm/errno.h>
 > +
-> +#endif /* _ASM_EXEC_H */
-> diff --git a/arch/loongarch/include/asm/module.h=20
-> b/arch/loongarch/include/asm/module.h
-> new file mode 100644
-> index 000000000000..9f6718df1854
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/module.h
-> @@ -0,0 +1,80 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef _ASM_MODULE_H
-> +#define _ASM_MODULE_H
-> +
-> +#include <asm/inst.h>
-> +#include <asm-generic/module.h>
-> +
-> +#define RELA_STACK_DEPTH 16
-> +
-> +struct mod_section {
-> +	Elf_Shdr *shdr;
-> +	int num_entries;
-> +	int max_entries;
-> +};
-> +
-> +struct mod_arch_specific {
-> +	struct mod_section plt;
-> +	struct mod_section plt_idx;
-> +};
-> +
-> +struct plt_entry {
-> +	u32 inst_lu12iw;
-> +	u32 inst_lu32id;
-> +	u32 inst_lu52id;
-> +	u32 inst_jirl;
-> +};
-> +
-> +struct plt_idx_entry {
-> +	unsigned long symbol_addr;
-> +};
-> +
-> +Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val);
-> +
-> +static inline struct plt_entry emit_plt_entry(unsigned long val)
-> +{
-> +	u32 lu12iw, lu32id, lu52id, jirl;
-> +
-> +	lu12iw =3D (lu12iw_op << 25 | (((val >> 12) & 0xfffff) << 5) |=20
-> LOONGARCH_GPR_T1);
-> +	lu32id =3D larch_insn_gen_lu32id(LOONGARCH_GPR_T1, ADDR_IMM(val,=20
-> LU32ID));
-> +	lu52id =3D larch_insn_gen_lu52id(LOONGARCH_GPR_T1, LOONGARCH_GPR_T1,=20
-> ADDR_IMM(val, LU52ID));
-> +	jirl =3D larch_insn_gen_jirl(0, LOONGARCH_GPR_T1, 0, (val & 0xfff));
-> +
-> +	return (struct plt_entry) { lu12iw, lu32id, lu52id, jirl };
+> +#define __futex_atomic_op(insn, ret, oldval, uaddr, oparg)		\
+> +{									\
+> +	__asm__ __volatile__(						\
+> +	"1:	ll.w	%1, %4 # __futex_atomic_op\n"		\
+> +	"	" insn	"				\n"	\
+> +	"2:	sc.w	$t0, %2				\n"	\
+> +	"	beq	$t0, $zero, 1b			\n"	\
+> +	"3:						\n"	\
+> +	"	.section .fixup,\"ax\"			\n"	\
+> +	"4:	li.w	%0, %6				\n"	\
+> +	"	b	3b				\n"	\
+> +	"	.previous				\n"	\
+> +	"	.section __ex_table,\"a\"		\n"	\
+> +	"	"__UA_ADDR "\t1b, 4b			\n"	\
+> +	"	"__UA_ADDR "\t2b, 4b			\n"	\
+> +	"	.previous				\n"	\
+> +	: "=3Dr" (ret), "=3D&r" (oldval),				\
+> +	  "=3DZC" (*uaddr)					\
+> +	: "0" (0), "ZC" (*uaddr), "Jr" (oparg),			\
+> +	  "i" (-EFAULT)						\
+> +	: "memory", "t0");					\
 > +}
 > +
-> +static inline struct plt_idx_entry emit_plt_idx_entry(unsigned long=20
-> val)
+> +static inline int
+> +arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user=20
+> *uaddr)
 > +{
-> +	return (struct plt_idx_entry) { val };
-> +}
+> +	int oldval =3D 0, ret =3D 0;
 > +
-> +static inline int get_plt_idx(unsigned long val, const struct=20
-> mod_section *sec)
-> +{
-> +	int i;
-> +	struct plt_idx_entry *plt_idx =3D (struct plt_idx_entry=20
-> *)sec->shdr->sh_addr;
+> +	pagefault_disable();
 > +
-> +	for (i =3D 0; i < sec->num_entries; i++) {
-> +		if (plt_idx[i].symbol_addr =3D=3D val)
-> +			return i;
+> +	switch (op) {
+> +	case FUTEX_OP_SET:
+> +		__futex_atomic_op("move $t0, %z5", ret, oldval, uaddr, oparg);
+> +		break;
+> +	case FUTEX_OP_ADD:
+> +		__futex_atomic_op("add.w $t0, %1, %z5", ret, oldval, uaddr, oparg);
+> +		break;
+> +	case FUTEX_OP_OR:
+> +		__futex_atomic_op("or	$t0, %1, %z5", ret, oldval, uaddr, oparg);
+> +		break;
+> +	case FUTEX_OP_ANDN:
+> +		__futex_atomic_op("and	$t0, %1, %z5", ret, oldval, uaddr, ~oparg);
+> +		break;
+> +	case FUTEX_OP_XOR:
+> +		__futex_atomic_op("xor	$t0, %1, %z5", ret, oldval, uaddr, oparg);
+> +		break;
+> +	default:
+> +		ret =3D -ENOSYS;
 > +	}
 > +
-> +	return -1;
+> +	pagefault_enable();
+> +
+> +	if (!ret)
+> +		*oval =3D oldval;
+> +
+> +	return ret;
 > +}
 > +
-> +static inline struct plt_entry *get_plt_entry(unsigned long val,
-> +				      const struct mod_section *sec_plt,
-> +				      const struct mod_section *sec_plt_idx)
+> +static inline int
+> +futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr, u32=20
+> oldval, u32 newval)
 > +{
-> +	int plt_idx =3D get_plt_idx(val, sec_plt_idx);
-> +	struct plt_entry *plt =3D (struct plt_entry *)sec_plt->shdr->sh_addr;
+> +	int ret =3D 0;
+> +	u32 val =3D 0;
 > +
-> +	if (plt_idx < 0)
-> +		return NULL;
+> +	if (!access_ok(uaddr, sizeof(u32)))
+> +		return -EFAULT;
 > +
-> +	return plt + plt_idx;
+> +	__asm__ __volatile__(
+> +	"# futex_atomic_cmpxchg_inatomic			\n"
+> +	"1:	ll.w	%1, %3					\n"
+> +	"	bne	%1, %z4, 3f				\n"
+> +	"	or	$t0, %z5, $zero				\n"
+> +	"2:	sc.w	$t0, %2					\n"
+> +	"	beq	$zero, $t0, 1b				\n"
+> +	"3:							\n"
+> +	"	.section .fixup,\"ax\"				\n"
+> +	"4:	li.d	%0, %6					\n"
+> +	"	b	3b					\n"
+> +	"	.previous					\n"
+> +	"	.section __ex_table,\"a\"			\n"
+> +	"	"__UA_ADDR "\t1b, 4b				\n"
+> +	"	"__UA_ADDR "\t2b, 4b				\n"
+> +	"	.previous					\n"
+> +	: "+r" (ret), "=3D&r" (val), "=3D" GCC_OFF_SMALL_ASM() (*uaddr)
+> +	: GCC_OFF_SMALL_ASM() (*uaddr), "Jr" (oldval), "Jr" (newval),
+> +	  "i" (-EFAULT)
+> +	: "memory", "t0");
+> +
+> +	*uval =3D val;
+> +
+> +	return ret;
 > +}
 > +
-> +#endif /* _ASM_MODULE_H */
-> diff --git a/arch/loongarch/include/asm/module.lds.h=20
-> b/arch/loongarch/include/asm/module.lds.h
+> +#endif /* _ASM_FUTEX_H */
+> diff --git a/arch/loongarch/include/asm/io.h=20
+> b/arch/loongarch/include/asm/io.h
 > new file mode 100644
-> index 000000000000..31c1c0db11a3
+> index 000000000000..884599739b36
 > --- /dev/null
-> +++ b/arch/loongarch/include/asm/module.lds.h
-> @@ -0,0 +1,7 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (C) 2020-2022 Loongson Technology Corporation Limited */
-> +SECTIONS {
-> +	. =3D ALIGN(4);
-> +	.plt : { BYTE(0) }
-> +	.plt.idx : { BYTE(0) }
-> +}
-> diff --git a/arch/loongarch/include/asm/vermagic.h=20
-> b/arch/loongarch/include/asm/vermagic.h
-> new file mode 100644
-> index 000000000000..8b47ccfe3aad
-> --- /dev/null
-> +++ b/arch/loongarch/include/asm/vermagic.h
-> @@ -0,0 +1,19 @@
+> +++ b/arch/loongarch/include/asm/io.h
+> @@ -0,0 +1,129 @@
 > +/* SPDX-License-Identifier: GPL-2.0 */
 > +/*
 > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 > + */
-> +#ifndef _ASM_VERMAGIC_H
-> +#define _ASM_VERMAGIC_H
+> +#ifndef _ASM_IO_H
+> +#define _ASM_IO_H
 > +
-> +#define MODULE_PROC_FAMILY "LOONGARCH "
+> +#define ARCH_HAS_IOREMAP_WC
 > +
-> +#ifdef CONFIG_32BIT
-> +#define MODULE_KERNEL_TYPE "32BIT "
-> +#elif defined CONFIG_64BIT
-> +#define MODULE_KERNEL_TYPE "64BIT "
-> +#endif
+> +#include <linux/compiler.h>
+> +#include <linux/kernel.h>
+> +#include <linux/types.h>
 > +
-> +#define MODULE_ARCH_VERMAGIC \
-> +	MODULE_PROC_FAMILY MODULE_KERNEL_TYPE
+> +#include <asm/addrspace.h>
+> +#include <asm/bug.h>
+> +#include <asm/byteorder.h>
+> +#include <asm/cpu.h>
+> +#include <asm/page.h>
+> +#include <asm/pgtable-bits.h>
+> +#include <asm/string.h>
 > +
-> +#endif /* _ASM_VERMAGIC_H */
-> diff --git a/arch/loongarch/include/uapi/asm/auxvec.h=20
-> b/arch/loongarch/include/uapi/asm/auxvec.h
-> new file mode 100644
-> index 000000000000..922d9e6b5058
-> --- /dev/null
-> +++ b/arch/loongarch/include/uapi/asm/auxvec.h
-> @@ -0,0 +1,17 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
 > +/*
-> + * Author: Hanlu Li <lihanlu@loongson.cn>
-> + *         Huacai Chen <chenhuacai@loongson.cn>
+> + * On LoongArch, I/O ports mappring is following:
+> + *
+> + *              |         ....          |
+> + *              |-----------------------|
+> + *              | pci io ports(64K~32M) |
+> + *              |-----------------------|
+> + *              | isa io ports(0  ~16K) |
+> + * PCI_IOBASE ->|-----------------------|
+> + *              |         ....          |
+> + */
+> +#define PCI_IOBASE	((void __iomem *)(vm_map_base + (2 * PAGE_SIZE)))
+> +#define PCI_IOSIZE	SZ_32M
+> +#define ISA_IOSIZE	SZ_16K
+> +#define IO_SPACE_LIMIT	(PCI_IOSIZE - 1)
+> +
+> +/*
+> + * Change "struct page" to physical address.
+> + */
+> +#define page_to_phys(page)	((phys_addr_t)page_to_pfn(page) <<=20
+> PAGE_SHIFT)
+> +
+> +extern void __init __iomem *early_ioremap(u64 phys_addr, unsigned lon=
+g=20
+> size);
+> +extern void __init early_iounmap(void __iomem *addr, unsigned long=20
+> size);
+> +
+> +#define early_memremap early_ioremap
+> +#define early_memunmap early_iounmap
+> +
+> +static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned=20
+> long size,
+> +					 unsigned long prot_val)
+> +{
+> +	if (prot_val =3D=3D _CACHE_CC)
+> +		return (void __iomem *)(unsigned long)(CACHE_BASE + offset);
+> +	else
+> +		return (void __iomem *)(unsigned long)(UNCACHE_BASE + offset);
+> +}
+> +
+> +/*
+> + * ioremap -   map bus memory into CPU space
+> + * @offset:    bus address of the memory
+> + * @size:      size of the resource to map
+> + *
+> + * ioremap performs a platform specific sequence of operations to
+> + * make bus memory CPU accessible via the readb/readw/readl/writeb/
+> + * writew/writel functions and the other mmio helpers. The returned
+> + * address is not guaranteed to be usable directly as a virtual
+> + * address.
+> + */
+> +#define ioremap(offset, size)					\
+> +	ioremap_prot((offset), (size), _CACHE_SUC)
+> +
+> +/*
+> + * ioremap_wc - map bus memory into CPU space
+> + * @offset:     bus address of the memory
+> + * @size:       size of the resource to map
+> + *
+> + * ioremap_wc performs a platform specific sequence of operations to
+> + * make bus memory CPU accessible via the readb/readw/readl/writeb/
+> + * writew/writel functions and the other mmio helpers. The returned
+> + * address is not guaranteed to be usable directly as a virtual
+> + * address.
+> + *
+> + * This version of ioremap ensures that the memory is marked uncachab=
+le
+> + * but accelerated by means of write-combining feature. It is=20
+> specifically
+> + * useful for PCIe prefetchable windows, which may vastly improve a
+> + * communications performance. If it was determined on boot stage, wh=
+at
+> + * CPU CCA doesn't support WUC, the method shall fall-back to the
+> + * _CACHE_SUC option (see cpu_probe() method).
+> + */
+> +#define ioremap_wc(offset, size)				\
+> +	ioremap_prot((offset), (size), _CACHE_WUC)
+> +
+> +/*
+> + * ioremap_cache -  map bus memory into CPU space
+> + * @offset:	    bus address of the memory
+> + * @size:	    size of the resource to map
+> + *
+> + * ioremap_cache performs a platform specific sequence of operations =
+to
+> + * make bus memory CPU accessible via the readb/readw/readl/writeb/
+> + * writew/writel functions and the other mmio helpers. The returned
+> + * address is not guaranteed to be usable directly as a virtual
+> + * address.
+> + *
+> + * This version of ioremap ensures that the memory is marked cachable=20
+> by
+> + * the CPU.  Also enables full write-combining.	 Useful for some
+> + * memory-like regions on I/O busses.
+> + */
+> +#define ioremap_cache(offset, size)				\
+> +	ioremap_prot((offset), (size), _CACHE_CC)
+> +
+> +static inline void iounmap(const volatile void __iomem *addr)
+> +{
+> +}
+> +
+> +#define mmiowb() asm volatile ("dbar 0" ::: "memory")
+> +
+> +/*
+> + * String version of I/O memory access operations.
+> + */
+> +extern void __memset_io(volatile void __iomem *dst, int c, size_t=20
+> count);
+> +extern void __memcpy_toio(volatile void __iomem *to, const void *from=
+,=20
+> size_t count);
+> +extern void __memcpy_fromio(void *to, const volatile void __iomem=20
+> *from, size_t count);
+> +#define memset_io(c, v, l)     __memset_io((c), (v), (l))
+> +#define memcpy_fromio(a, c, l) __memcpy_fromio((a), (c), (l))
+> +#define memcpy_toio(c, a, l)   __memcpy_toio((c), (a), (l))
+> +
+> +#include <asm-generic/io.h>
+> +
+> +#endif /* _ASM_IO_H */
+> diff --git a/arch/loongarch/kernel/asm-offsets.c=20
+> b/arch/loongarch/kernel/asm-offsets.c
+> new file mode 100644
+> index 000000000000..3531e3c60a6e
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/asm-offsets.c
+> @@ -0,0 +1,254 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * asm-offsets.c: Calculate pt_regs and task_struct offsets.
 > + *
 > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 > + */
+> +#include <linux/types.h>
+> +#include <linux/sched.h>
+> +#include <linux/mm.h>
+> +#include <linux/kbuild.h>
+> +#include <linux/suspend.h>
+> +#include <asm/cpu-info.h>
+> +#include <asm/ptrace.h>
+> +#include <asm/processor.h>
 > +
-> +#ifndef __ASM_AUXVEC_H
-> +#define __ASM_AUXVEC_H
+> +void output_ptreg_defines(void)
+> +{
+> +	COMMENT("LoongArch pt_regs offsets.");
+> +	OFFSET(PT_R0, pt_regs, regs[0]);
+> +	OFFSET(PT_R1, pt_regs, regs[1]);
+> +	OFFSET(PT_R2, pt_regs, regs[2]);
+> +	OFFSET(PT_R3, pt_regs, regs[3]);
+> +	OFFSET(PT_R4, pt_regs, regs[4]);
+> +	OFFSET(PT_R5, pt_regs, regs[5]);
+> +	OFFSET(PT_R6, pt_regs, regs[6]);
+> +	OFFSET(PT_R7, pt_regs, regs[7]);
+> +	OFFSET(PT_R8, pt_regs, regs[8]);
+> +	OFFSET(PT_R9, pt_regs, regs[9]);
+> +	OFFSET(PT_R10, pt_regs, regs[10]);
+> +	OFFSET(PT_R11, pt_regs, regs[11]);
+> +	OFFSET(PT_R12, pt_regs, regs[12]);
+> +	OFFSET(PT_R13, pt_regs, regs[13]);
+> +	OFFSET(PT_R14, pt_regs, regs[14]);
+> +	OFFSET(PT_R15, pt_regs, regs[15]);
+> +	OFFSET(PT_R16, pt_regs, regs[16]);
+> +	OFFSET(PT_R17, pt_regs, regs[17]);
+> +	OFFSET(PT_R18, pt_regs, regs[18]);
+> +	OFFSET(PT_R19, pt_regs, regs[19]);
+> +	OFFSET(PT_R20, pt_regs, regs[20]);
+> +	OFFSET(PT_R21, pt_regs, regs[21]);
+> +	OFFSET(PT_R22, pt_regs, regs[22]);
+> +	OFFSET(PT_R23, pt_regs, regs[23]);
+> +	OFFSET(PT_R24, pt_regs, regs[24]);
+> +	OFFSET(PT_R25, pt_regs, regs[25]);
+> +	OFFSET(PT_R26, pt_regs, regs[26]);
+> +	OFFSET(PT_R27, pt_regs, regs[27]);
+> +	OFFSET(PT_R28, pt_regs, regs[28]);
+> +	OFFSET(PT_R29, pt_regs, regs[29]);
+> +	OFFSET(PT_R30, pt_regs, regs[30]);
+> +	OFFSET(PT_R31, pt_regs, regs[31]);
+> +	OFFSET(PT_CRMD, pt_regs, csr_crmd);
+> +	OFFSET(PT_PRMD, pt_regs, csr_prmd);
+> +	OFFSET(PT_EUEN, pt_regs, csr_euen);
+> +	OFFSET(PT_ECFG, pt_regs, csr_ecfg);
+> +	OFFSET(PT_ESTAT, pt_regs, csr_estat);
+> +	OFFSET(PT_ERA, pt_regs, csr_era);
+> +	OFFSET(PT_BVADDR, pt_regs, csr_badvaddr);
+> +	OFFSET(PT_ORIG_A0, pt_regs, orig_a0);
+> +	DEFINE(PT_SIZE, sizeof(struct pt_regs));
+> +	BLANK();
+> +}
 > +
-> +/* Location of VDSO image. */
-> +#define AT_SYSINFO_EHDR		33
+> +void output_task_defines(void)
+> +{
+> +	COMMENT("LoongArch task_struct offsets.");
+> +	OFFSET(TASK_STATE, task_struct, __state);
+> +	OFFSET(TASK_THREAD_INFO, task_struct, stack);
+> +	OFFSET(TASK_FLAGS, task_struct, flags);
+> +	OFFSET(TASK_MM, task_struct, mm);
+> +	OFFSET(TASK_PID, task_struct, pid);
+> +	DEFINE(TASK_STRUCT_SIZE, sizeof(struct task_struct));
+> +	BLANK();
+> +}
 > +
-> +#define AT_VECTOR_SIZE_ARCH 1 /* entries in ARCH_DLINFO */
+> +void output_thread_info_defines(void)
+> +{
+> +	COMMENT("LoongArch thread_info offsets.");
+> +	OFFSET(TI_TASK, thread_info, task);
+> +	OFFSET(TI_FLAGS, thread_info, flags);
+> +	OFFSET(TI_TP_VALUE, thread_info, tp_value);
+> +	OFFSET(TI_CPU, thread_info, cpu);
+> +	OFFSET(TI_PRE_COUNT, thread_info, preempt_count);
+> +	OFFSET(TI_REGS, thread_info, regs);
+> +	DEFINE(_THREAD_SIZE, THREAD_SIZE);
+> +	DEFINE(_THREAD_MASK, THREAD_MASK);
+> +	DEFINE(_IRQ_STACK_SIZE, IRQ_STACK_SIZE);
+> +	DEFINE(_IRQ_STACK_START, IRQ_STACK_START);
+> +	BLANK();
+> +}
 > +
-> +#endif /* __ASM_AUXVEC_H */
-> diff --git a/arch/loongarch/include/uapi/asm/hwcap.h=20
-> b/arch/loongarch/include/uapi/asm/hwcap.h
+> +void output_thread_defines(void)
+> +{
+> +	COMMENT("LoongArch specific thread_struct offsets.");
+> +	OFFSET(THREAD_REG01, task_struct, thread.reg01);
+> +	OFFSET(THREAD_REG03, task_struct, thread.reg03);
+> +	OFFSET(THREAD_REG22, task_struct, thread.reg22);
+> +	OFFSET(THREAD_REG23, task_struct, thread.reg23);
+> +	OFFSET(THREAD_REG24, task_struct, thread.reg24);
+> +	OFFSET(THREAD_REG25, task_struct, thread.reg25);
+> +	OFFSET(THREAD_REG26, task_struct, thread.reg26);
+> +	OFFSET(THREAD_REG27, task_struct, thread.reg27);
+> +	OFFSET(THREAD_REG28, task_struct, thread.reg28);
+> +	OFFSET(THREAD_REG29, task_struct, thread.reg29);
+> +	OFFSET(THREAD_REG30, task_struct, thread.reg30);
+> +	OFFSET(THREAD_REG31, task_struct, thread.reg31);
+> +	OFFSET(THREAD_CSRCRMD, task_struct,
+> +	       thread.csr_crmd);
+> +	OFFSET(THREAD_CSRPRMD, task_struct,
+> +	       thread.csr_prmd);
+> +	OFFSET(THREAD_CSREUEN, task_struct,
+> +	       thread.csr_euen);
+> +	OFFSET(THREAD_CSRECFG, task_struct,
+> +	       thread.csr_ecfg);
+> +
+> +	OFFSET(THREAD_SCR0, task_struct, thread.scr0);
+> +	OFFSET(THREAD_SCR1, task_struct, thread.scr1);
+> +	OFFSET(THREAD_SCR2, task_struct, thread.scr2);
+> +	OFFSET(THREAD_SCR3, task_struct, thread.scr3);
+> +
+> +	OFFSET(THREAD_EFLAGS, task_struct, thread.eflags);
+> +
+> +	OFFSET(THREAD_FPU, task_struct, thread.fpu);
+> +
+> +	OFFSET(THREAD_BVADDR, task_struct, \
+> +	       thread.csr_badvaddr);
+> +	OFFSET(THREAD_ECODE, task_struct, \
+> +	       thread.error_code);
+> +	OFFSET(THREAD_TRAPNO, task_struct, thread.trap_nr);
+> +	BLANK();
+> +}
+> +
+> +void output_thread_fpu_defines(void)
+> +{
+> +	OFFSET(THREAD_FPR0, loongarch_fpu, fpr[0]);
+> +	OFFSET(THREAD_FPR1, loongarch_fpu, fpr[1]);
+> +	OFFSET(THREAD_FPR2, loongarch_fpu, fpr[2]);
+> +	OFFSET(THREAD_FPR3, loongarch_fpu, fpr[3]);
+> +	OFFSET(THREAD_FPR4, loongarch_fpu, fpr[4]);
+> +	OFFSET(THREAD_FPR5, loongarch_fpu, fpr[5]);
+> +	OFFSET(THREAD_FPR6, loongarch_fpu, fpr[6]);
+> +	OFFSET(THREAD_FPR7, loongarch_fpu, fpr[7]);
+> +	OFFSET(THREAD_FPR8, loongarch_fpu, fpr[8]);
+> +	OFFSET(THREAD_FPR9, loongarch_fpu, fpr[9]);
+> +	OFFSET(THREAD_FPR10, loongarch_fpu, fpr[10]);
+> +	OFFSET(THREAD_FPR11, loongarch_fpu, fpr[11]);
+> +	OFFSET(THREAD_FPR12, loongarch_fpu, fpr[12]);
+> +	OFFSET(THREAD_FPR13, loongarch_fpu, fpr[13]);
+> +	OFFSET(THREAD_FPR14, loongarch_fpu, fpr[14]);
+> +	OFFSET(THREAD_FPR15, loongarch_fpu, fpr[15]);
+> +	OFFSET(THREAD_FPR16, loongarch_fpu, fpr[16]);
+> +	OFFSET(THREAD_FPR17, loongarch_fpu, fpr[17]);
+> +	OFFSET(THREAD_FPR18, loongarch_fpu, fpr[18]);
+> +	OFFSET(THREAD_FPR19, loongarch_fpu, fpr[19]);
+> +	OFFSET(THREAD_FPR20, loongarch_fpu, fpr[20]);
+> +	OFFSET(THREAD_FPR21, loongarch_fpu, fpr[21]);
+> +	OFFSET(THREAD_FPR22, loongarch_fpu, fpr[22]);
+> +	OFFSET(THREAD_FPR23, loongarch_fpu, fpr[23]);
+> +	OFFSET(THREAD_FPR24, loongarch_fpu, fpr[24]);
+> +	OFFSET(THREAD_FPR25, loongarch_fpu, fpr[25]);
+> +	OFFSET(THREAD_FPR26, loongarch_fpu, fpr[26]);
+> +	OFFSET(THREAD_FPR27, loongarch_fpu, fpr[27]);
+> +	OFFSET(THREAD_FPR28, loongarch_fpu, fpr[28]);
+> +	OFFSET(THREAD_FPR29, loongarch_fpu, fpr[29]);
+> +	OFFSET(THREAD_FPR30, loongarch_fpu, fpr[30]);
+> +	OFFSET(THREAD_FPR31, loongarch_fpu, fpr[31]);
+> +
+> +	OFFSET(THREAD_FCSR, loongarch_fpu, fcsr);
+> +	OFFSET(THREAD_FCC,  loongarch_fpu, fcc);
+> +	OFFSET(THREAD_VCSR, loongarch_fpu, vcsr);
+> +	BLANK();
+> +}
+> +
+> +void output_mm_defines(void)
+> +{
+> +	COMMENT("Size of struct page");
+> +	DEFINE(STRUCT_PAGE_SIZE, sizeof(struct page));
+> +	BLANK();
+> +	COMMENT("Linux mm_struct offsets.");
+> +	OFFSET(MM_USERS, mm_struct, mm_users);
+> +	OFFSET(MM_PGD, mm_struct, pgd);
+> +	OFFSET(MM_CONTEXT, mm_struct, context);
+> +	BLANK();
+> +	DEFINE(_PGD_T_SIZE, sizeof(pgd_t));
+> +	DEFINE(_PMD_T_SIZE, sizeof(pmd_t));
+> +	DEFINE(_PTE_T_SIZE, sizeof(pte_t));
+> +	BLANK();
+> +	DEFINE(_PGD_T_LOG2, PGD_T_LOG2);
+> +#ifndef __PAGETABLE_PMD_FOLDED
+> +	DEFINE(_PMD_T_LOG2, PMD_T_LOG2);
+> +#endif
+> +	DEFINE(_PTE_T_LOG2, PTE_T_LOG2);
+> +	BLANK();
+> +	DEFINE(_PGD_ORDER, PGD_ORDER);
+> +#ifndef __PAGETABLE_PMD_FOLDED
+> +	DEFINE(_PMD_ORDER, PMD_ORDER);
+> +#endif
+> +	DEFINE(_PTE_ORDER, PTE_ORDER);
+> +	BLANK();
+> +	DEFINE(_PMD_SHIFT, PMD_SHIFT);
+> +	DEFINE(_PGDIR_SHIFT, PGDIR_SHIFT);
+> +	BLANK();
+> +	DEFINE(_PTRS_PER_PGD, PTRS_PER_PGD);
+> +	DEFINE(_PTRS_PER_PMD, PTRS_PER_PMD);
+> +	DEFINE(_PTRS_PER_PTE, PTRS_PER_PTE);
+> +	BLANK();
+> +	DEFINE(_PAGE_SHIFT, PAGE_SHIFT);
+> +	DEFINE(_PAGE_SIZE, PAGE_SIZE);
+> +	BLANK();
+> +}
+> +
+> +void output_sc_defines(void)
+> +{
+> +	COMMENT("Linux sigcontext offsets.");
+> +	OFFSET(SC_REGS, sigcontext, sc_regs);
+> +	OFFSET(SC_PC, sigcontext, sc_pc);
+> +	BLANK();
+> +}
+> +
+> +void output_signal_defines(void)
+> +{
+> +	COMMENT("Linux signal numbers.");
+> +	DEFINE(_SIGHUP, SIGHUP);
+> +	DEFINE(_SIGINT, SIGINT);
+> +	DEFINE(_SIGQUIT, SIGQUIT);
+> +	DEFINE(_SIGILL, SIGILL);
+> +	DEFINE(_SIGTRAP, SIGTRAP);
+> +	DEFINE(_SIGIOT, SIGIOT);
+> +	DEFINE(_SIGABRT, SIGABRT);
+> +	DEFINE(_SIGFPE, SIGFPE);
+> +	DEFINE(_SIGKILL, SIGKILL);
+> +	DEFINE(_SIGBUS, SIGBUS);
+> +	DEFINE(_SIGSEGV, SIGSEGV);
+> +	DEFINE(_SIGSYS, SIGSYS);
+> +	DEFINE(_SIGPIPE, SIGPIPE);
+> +	DEFINE(_SIGALRM, SIGALRM);
+> +	DEFINE(_SIGTERM, SIGTERM);
+> +	DEFINE(_SIGUSR1, SIGUSR1);
+> +	DEFINE(_SIGUSR2, SIGUSR2);
+> +	DEFINE(_SIGCHLD, SIGCHLD);
+> +	DEFINE(_SIGPWR, SIGPWR);
+> +	DEFINE(_SIGWINCH, SIGWINCH);
+> +	DEFINE(_SIGURG, SIGURG);
+> +	DEFINE(_SIGIO, SIGIO);
+> +	DEFINE(_SIGSTOP, SIGSTOP);
+> +	DEFINE(_SIGTSTP, SIGTSTP);
+> +	DEFINE(_SIGCONT, SIGCONT);
+> +	DEFINE(_SIGTTIN, SIGTTIN);
+> +	DEFINE(_SIGTTOU, SIGTTOU);
+> +	DEFINE(_SIGVTALRM, SIGVTALRM);
+> +	DEFINE(_SIGPROF, SIGPROF);
+> +	DEFINE(_SIGXCPU, SIGXCPU);
+> +	DEFINE(_SIGXFSZ, SIGXFSZ);
+> +	BLANK();
+> +}
+> diff --git a/arch/loongarch/kernel/io.c b/arch/loongarch/kernel/io.c
 > new file mode 100644
-> index 000000000000..8840b72fa8e8
+> index 000000000000..cb85bda5a6ad
 > --- /dev/null
-> +++ b/arch/loongarch/include/uapi/asm/hwcap.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_ASM_HWCAP_H
-> +#define _UAPI_ASM_HWCAP_H
-> +
-> +/* HWCAP flags */
-> +#define HWCAP_LOONGARCH_CPUCFG		(1 << 0)
-> +#define HWCAP_LOONGARCH_LAM		(1 << 1)
-> +#define HWCAP_LOONGARCH_UAL		(1 << 2)
-> +#define HWCAP_LOONGARCH_FPU		(1 << 3)
-> +#define HWCAP_LOONGARCH_LSX		(1 << 4)
-> +#define HWCAP_LOONGARCH_LASX		(1 << 5)
-> +#define HWCAP_LOONGARCH_CRC32		(1 << 6)
-> +#define HWCAP_LOONGARCH_COMPLEX		(1 << 7)
-> +#define HWCAP_LOONGARCH_CRYPTO		(1 << 8)
-> +#define HWCAP_LOONGARCH_LVZ		(1 << 9)
-> +#define HWCAP_LOONGARCH_LBT_X86		(1 << 10)
-> +#define HWCAP_LOONGARCH_LBT_ARM		(1 << 11)
-> +#define HWCAP_LOONGARCH_LBT_MIPS	(1 << 12)
-> +
-> +#endif /* _UAPI_ASM_HWCAP_H */
-> diff --git a/arch/loongarch/kernel/elf.c b/arch/loongarch/kernel/elf.c
-> new file mode 100644
-> index 000000000000..183e94fc9c69
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/elf.c
-> @@ -0,0 +1,30 @@
+> +++ b/arch/loongarch/kernel/io.c
+> @@ -0,0 +1,94 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Author: Huacai Chen <chenhuacai@loongson.cn>
 > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 > + */
-> +
-> +#include <linux/binfmts.h>
-> +#include <linux/elf.h>
 > +#include <linux/export.h>
-> +#include <linux/sched.h>
+> +#include <linux/types.h>
+> +#include <linux/io.h>
 > +
-> +#include <asm/cpu-features.h>
-> +#include <asm/cpu-info.h>
-> +
-> +int arch_elf_pt_proc(void *_ehdr, void *_phdr, struct file *elf,
-> +		     bool is_interp, struct arch_elf_state *state)
+> +/*
+> + * Copy data from IO memory space to "real" memory space.
+> + */
+> +void __memcpy_fromio(void *to, const volatile void __iomem *from,=20
+> size_t count)
 > +{
-> +	return 0;
-> +}
+> +	while (count && !IS_ALIGNED((unsigned long)from, 8)) {
+> +		*(u8 *)to =3D __raw_readb(from);
+> +		from++;
+> +		to++;
+> +		count--;
+> +	}
 > +
-> +int arch_check_elf(void *_ehdr, bool has_interpreter, void=20
-> *_interp_ehdr,
-> +		   struct arch_elf_state *state)
-> +{
-> +	return 0;
-> +}
+> +	while (count >=3D 8) {
+> +		*(u64 *)to =3D __raw_readq(from);
+> +		from +=3D 8;
+> +		to +=3D 8;
+> +		count -=3D 8;
+> +	}
 > +
-> +void loongarch_set_personality_fcsr(struct arch_elf_state *state)
-> +{
-> +	current->thread.fpu.fcsr =3D boot_cpu_data.fpu_csr0;
+> +	while (count) {
+> +		*(u8 *)to =3D __raw_readb(from);
+> +		from++;
+> +		to++;
+> +		count--;
+> +	}
 > +}
-> diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst=
+> +EXPORT_SYMBOL(__memcpy_fromio);
+> +
+> +/*
+> + * Copy data from "real" memory space to IO memory space.
+> + */
+> +void __memcpy_toio(volatile void __iomem *to, const void *from, size_=
+t=20
+> count)
+> +{
+> +	while (count && !IS_ALIGNED((unsigned long)to, 8)) {
+> +		__raw_writeb(*(u8 *)from, to);
+> +		from++;
+> +		to++;
+> +		count--;
+> +	}
+> +
+> +	while (count >=3D 8) {
+> +		__raw_writeq(*(u64 *)from, to);
+> +		from +=3D 8;
+> +		to +=3D 8;
+> +		count -=3D 8;
+> +	}
+> +
+> +	while (count) {
+> +		__raw_writeb(*(u8 *)from, to);
+> +		from++;
+> +		to++;
+> +		count--;
+> +	}
+> +}
+> +EXPORT_SYMBOL(__memcpy_toio);
+> +
+> +/*
+> + * "memset" on IO memory space.
+> + */
+> +void __memset_io(volatile void __iomem *dst, int c, size_t count)
+> +{
+> +	u64 qc =3D (u8)c;
+> +
+> +	qc |=3D qc << 8;
+> +	qc |=3D qc << 16;
+> +	qc |=3D qc << 32;
+> +
+> +	while (count && !IS_ALIGNED((unsigned long)dst, 8)) {
+> +		__raw_writeb(c, dst);
+> +		dst++;
+> +		count--;
+> +	}
+> +
+> +	while (count >=3D 8) {
+> +		__raw_writeq(qc, dst);
+> +		dst +=3D 8;
+> +		count -=3D 8;
+> +	}
+> +
+> +	while (count) {
+> +		__raw_writeb(c, dst);
+> +		dst++;
+> +		count--;
+> +	}
+> +}
+> +EXPORT_SYMBOL(__memset_io);
+> diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc=
 .c
 > new file mode 100644
-> index 000000000000..b1df0ec34bd1
+> index 000000000000..d25592a29196
 > --- /dev/null
-> +++ b/arch/loongarch/kernel/inst.c
-> @@ -0,0 +1,40 @@
+> +++ b/arch/loongarch/kernel/proc.c
+> @@ -0,0 +1,122 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
 > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
 > + */
-> +#include <asm/inst.h>
-> +
-> +u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm)
-> +{
-> +	union loongarch_instruction insn;
-> +
-> +	insn.reg1i20_format.opcode =3D lu32id_op;
-> +	insn.reg1i20_format.rd =3D rd;
-> +	insn.reg1i20_format.immediate =3D imm;
-> +
-> +	return insn.word;
-> +}
-> +
-> +u32 larch_insn_gen_lu52id(enum loongarch_gpr rd, enum loongarch_gpr=20
-> rj, int imm)
-> +{
-> +	union loongarch_instruction insn;
-> +
-> +	insn.reg2i12_format.opcode =3D lu52id_op;
-> +	insn.reg2i12_format.rd =3D rd;
-> +	insn.reg2i12_format.rj =3D rj;
-> +	insn.reg2i12_format.immediate =3D imm;
-> +
-> +	return insn.word;
-> +}
-> +
-> +u32 larch_insn_gen_jirl(enum loongarch_gpr rd, enum loongarch_gpr rj,=20
-> unsigned long pc, unsigned long dest)
-> +{
-> +	union loongarch_instruction insn;
-> +
-> +	insn.reg2i16_format.opcode =3D jirl_op;
-> +	insn.reg2i16_format.rd =3D rd;
-> +	insn.reg2i16_format.rj =3D rj;
-> +	insn.reg2i16_format.immediate =3D (dest - pc) >> 2;
-> +
-> +	return insn.word;
-> +}
-> diff --git a/arch/loongarch/kernel/module-sections.c=20
-> b/arch/loongarch/kernel/module-sections.c
-> new file mode 100644
-> index 000000000000..6d498288977d
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/module-sections.c
-> @@ -0,0 +1,121 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/elf.h>
+> +#include <linux/delay.h>
 > +#include <linux/kernel.h>
-> +#include <linux/module.h>
+> +#include <linux/sched.h>
+> +#include <linux/seq_file.h>
+> +#include <asm/bootinfo.h>
+> +#include <asm/cpu.h>
+> +#include <asm/cpu-features.h>
+> +#include <asm/idle.h>
+> +#include <asm/processor.h>
+> +#include <asm/time.h>
 > +
-> +Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val)
+> +/*
+> + * No lock; only written during early bootup by CPU 0.
+> + */
+> +static RAW_NOTIFIER_HEAD(proc_cpuinfo_chain);
+> +
+> +int __ref register_proc_cpuinfo_notifier(struct notifier_block *nb)
 > +{
-> +	int nr;
-> +	struct mod_section *plt_sec =3D &mod->arch.plt;
-> +	struct mod_section *plt_idx_sec =3D &mod->arch.plt_idx;
-> +	struct plt_entry *plt =3D get_plt_entry(val, plt_sec, plt_idx_sec);
-> +	struct plt_idx_entry *plt_idx;
-> +
-> +	if (plt)
-> +		return (Elf_Addr)plt;
-> +
-> +	nr =3D plt_sec->num_entries;
-> +
-> +	/* There is no duplicate entry, create a new one */
-> +	plt =3D (struct plt_entry *)plt_sec->shdr->sh_addr;
-> +	plt[nr] =3D emit_plt_entry(val);
-> +	plt_idx =3D (struct plt_idx_entry *)plt_idx_sec->shdr->sh_addr;
-> +	plt_idx[nr] =3D emit_plt_idx_entry(val);
-> +
-> +	plt_sec->num_entries++;
-> +	plt_idx_sec->num_entries++;
-> +	BUG_ON(plt_sec->num_entries > plt_sec->max_entries);
-> +
-> +	return (Elf_Addr)&plt[nr];
+> +	return raw_notifier_chain_register(&proc_cpuinfo_chain, nb);
 > +}
 > +
-> +static int is_rela_equal(const Elf_Rela *x, const Elf_Rela *y)
+> +int proc_cpuinfo_notifier_call_chain(unsigned long val, void *v)
 > +{
-> +	return x->r_info =3D=3D y->r_info && x->r_addend =3D=3D y->r_addend;
+> +	return raw_notifier_call_chain(&proc_cpuinfo_chain, val, v);
 > +}
 > +
-> +static bool duplicate_rela(const Elf_Rela *rela, int idx)
+> +static int show_cpuinfo(struct seq_file *m, void *v)
 > +{
-> +	int i;
-> +
-> +	for (i =3D 0; i < idx; i++) {
-> +		if (is_rela_equal(&rela[i], &rela[idx]))
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +static void count_max_entries(Elf_Rela *relas, int num, unsigned int=20
-> *plts)
-> +{
-> +	unsigned int i, type;
-> +
-> +	for (i =3D 0; i < num; i++) {
-> +		type =3D ELF_R_TYPE(relas[i].r_info);
-> +		if (type =3D=3D R_LARCH_SOP_PUSH_PLT_PCREL) {
-> +			if (!duplicate_rela(relas, i))
-> +				(*plts)++;
-> +		}
-> +	}
-> +}
-> +
-> +int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
-> +			      char *secstrings, struct module *mod)
-> +{
-> +	unsigned int i, num_plts =3D 0;
+> +	unsigned long n =3D (unsigned long) v - 1;
+> +	unsigned int version =3D cpu_data[n].processor_id & 0xff;
+> +	unsigned int fp_version =3D cpu_data[n].fpu_vers;
+> +	struct proc_cpuinfo_notifier_args proc_cpuinfo_notifier_args;
 > +
 > +	/*
-> +	 * Find the empty .plt sections.
+> +	 * For the first processor also print the system type
 > +	 */
-> +	for (i =3D 0; i < ehdr->e_shnum; i++) {
-> +		if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt"))
-> +			mod->arch.plt.shdr =3D sechdrs + i;
-> +		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt.idx"))
-> +			mod->arch.plt_idx.shdr =3D sechdrs + i;
+> +	if (n =3D=3D 0)
+> +		seq_printf(m, "system type\t\t: %s\n\n", get_system_type());
+> +
+> +	seq_printf(m, "processor\t\t: %ld\n", n);
+> +	seq_printf(m, "package\t\t\t: %d\n", cpu_data[n].package);
+> +	seq_printf(m, "core\t\t\t: %d\n", cpu_data[n].core);
+> +	seq_printf(m, "CPU Family\t\t: %s\n", __cpu_family[n]);
+> +	seq_printf(m, "Model Name\t\t: %s\n", __cpu_full_name[n]);
+> +	seq_printf(m, "CPU Revision\t\t: 0x%02x\n", version);
+> +	seq_printf(m, "FPU Revision\t\t: 0x%02x\n", fp_version);
+> +	seq_printf(m, "CPU MHz\t\t\t: %llu.%02llu\n",
+> +		      cpu_clock_freq / 1000000, (cpu_clock_freq / 10000) % 100);
+> +	seq_printf(m, "BogoMIPS\t\t: %llu.%02llu\n",
+> +		      (lpj_fine * cpu_clock_freq / const_clock_freq) / (500000/HZ),
+> +		      ((lpj_fine * cpu_clock_freq / const_clock_freq) / (5000/HZ)) =
+%=20
+> 100);
+> +	seq_printf(m, "TLB Entries\t\t: %d\n", cpu_data[n].tlbsize);
+> +	seq_printf(m, "Address Sizes\t\t: %d bits physical, %d bits=20
+> virtual\n",
+> +		      cpu_pabits + 1, cpu_vabits + 1);
+> +
+> +	seq_printf(m, "ISA\t\t\t:");
+> +	if (cpu_has_loongarch32)
+> +		seq_printf(m, " loongarch32");
+> +	if (cpu_has_loongarch64)
+> +		seq_printf(m, " loongarch64");
+> +	seq_printf(m, "\n");
+> +
+> +	seq_printf(m, "Features\t\t:");
+> +	if (cpu_has_cpucfg)	seq_printf(m, " cpucfg");
+> +	if (cpu_has_lam)	seq_printf(m, " lam");
+> +	if (cpu_has_ual)	seq_printf(m, " ual");
+> +	if (cpu_has_fpu)	seq_printf(m, " fpu");
+> +	if (cpu_has_lsx)	seq_printf(m, " lsx");
+> +	if (cpu_has_lasx)	seq_printf(m, " lasx");
+> +	if (cpu_has_complex)	seq_printf(m, " complex");
+> +	if (cpu_has_crypto)	seq_printf(m, " crypto");
+> +	if (cpu_has_lvz)	seq_printf(m, " lvz");
+> +	if (cpu_has_lbt_x86)	seq_printf(m, " lbt_x86");
+> +	if (cpu_has_lbt_arm)	seq_printf(m, " lbt_arm");
+> +	if (cpu_has_lbt_mips)	seq_printf(m, " lbt_mips");
+> +	seq_printf(m, "\n");
+> +
+> +	seq_printf(m, "Hardware Watchpoint\t: %s",
+> +		      cpu_has_watch ? "yes, " : "no\n");
+> +	if (cpu_has_watch) {
+> +		seq_printf(m, "iwatch count: %d, dwatch count: %d\n",
+> +		      cpu_data[n].watch_ireg_count, cpu_data[n].watch_dreg_count);
 > +	}
 > +
-> +	if (!mod->arch.plt.shdr) {
-> +		pr_err("%s: module PLT section(s) missing\n", mod->name);
-> +		return -ENOEXEC;
-> +	}
-> +	if (!mod->arch.plt_idx.shdr) {
-> +		pr_err("%s: module PLT.IDX section(s) missing\n", mod->name);
-> +		return -ENOEXEC;
-> +	}
+> +	proc_cpuinfo_notifier_args.m =3D m;
+> +	proc_cpuinfo_notifier_args.n =3D n;
 > +
-> +	/* Calculate the maxinum number of entries */
-> +	for (i =3D 0; i < ehdr->e_shnum; i++) {
-> +		int num_rela =3D sechdrs[i].sh_size / sizeof(Elf_Rela);
-> +		Elf_Rela *relas =3D (void *)ehdr + sechdrs[i].sh_offset;
-> +		Elf_Shdr *dst_sec =3D sechdrs + sechdrs[i].sh_info;
+> +	raw_notifier_call_chain(&proc_cpuinfo_chain, 0,
+> +				&proc_cpuinfo_notifier_args);
 > +
-> +		if (sechdrs[i].sh_type !=3D SHT_RELA)
-> +			continue;
-> +
-> +		/* ignore relocations that operate on non-exec sections */
-> +		if (!(dst_sec->sh_flags & SHF_EXECINSTR))
-> +			continue;
-> +
-> +		count_max_entries(relas, num_rela, &num_plts);
-> +	}
-> +
-> +	mod->arch.plt.shdr->sh_type =3D SHT_NOBITS;
-> +	mod->arch.plt.shdr->sh_flags =3D SHF_EXECINSTR | SHF_ALLOC;
-> +	mod->arch.plt.shdr->sh_addralign =3D L1_CACHE_BYTES;
-> +	mod->arch.plt.shdr->sh_size =3D (num_plts + 1) * sizeof(struct=20
-> plt_entry);
-> +	mod->arch.plt.num_entries =3D 0;
-> +	mod->arch.plt.max_entries =3D num_plts;
-> +
-> +	mod->arch.plt_idx.shdr->sh_type =3D SHT_NOBITS;
-> +	mod->arch.plt_idx.shdr->sh_flags =3D SHF_ALLOC;
-> +	mod->arch.plt_idx.shdr->sh_addralign =3D L1_CACHE_BYTES;
-> +	mod->arch.plt_idx.shdr->sh_size =3D (num_plts + 1) * sizeof(struct=20
-> plt_idx_entry);
-> +	mod->arch.plt_idx.num_entries =3D 0;
-> +	mod->arch.plt_idx.max_entries =3D num_plts;
-> +
-> +	return 0;
-> +}
-> diff --git a/arch/loongarch/kernel/module.c=20
-> b/arch/loongarch/kernel/module.c
-> new file mode 100644
-> index 000000000000..87b3768f1eef
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/module.c
-> @@ -0,0 +1,374 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Author: Hanlu Li <lihanlu@loongson.cn>
-> + *         Huacai Chen <chenhuacai@loongson.cn>
-> + *
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#define pr_fmt(fmt) "kmod: " fmt
-> +
-> +#include <linux/moduleloader.h>
-> +#include <linux/elf.h>
-> +#include <linux/mm.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/slab.h>
-> +#include <linux/fs.h>
-> +#include <linux/string.h>
-> +#include <linux/kernel.h>
-> +
-> +static inline bool signed_imm_check(long val, unsigned int bit)
-> +{
-> +	return -(1L << (bit - 1)) <=3D val && val < (1L << (bit - 1));
-> +}
-> +
-> +static inline bool unsigned_imm_check(unsigned long val, unsigned int=20
-> bit)
-> +{
-> +	return val < (1UL << bit);
-> +}
-> +
-> +static int rela_stack_push(s64 stack_value, s64 *rela_stack, size_t=20
-> *rela_stack_top)
-> +{
-> +	if (*rela_stack_top >=3D RELA_STACK_DEPTH)
-> +		return -ENOEXEC;
-> +
-> +	rela_stack[(*rela_stack_top)++] =3D stack_value;
-> +	pr_debug("%s stack_value =3D 0x%llx\n", __func__, stack_value);
+> +	seq_printf(m, "\n");
 > +
 > +	return 0;
 > +}
 > +
-> +static int rela_stack_pop(s64 *stack_value, s64 *rela_stack, size_t=20
-> *rela_stack_top)
+> +static void *c_start(struct seq_file *m, loff_t *pos)
 > +{
-> +	if (*rela_stack_top =3D=3D 0)
-> +		return -ENOEXEC;
+> +	unsigned long i =3D *pos;
 > +
-> +	*stack_value =3D rela_stack[--(*rela_stack_top)];
-> +	pr_debug("%s stack_value =3D 0x%llx\n", __func__, *stack_value);
-> +
-> +	return 0;
+> +	return i < NR_CPUS ? (void *)(i + 1) : NULL;
 > +}
 > +
-> +static int apply_r_larch_none(struct module *mod, u32 *location,=20
-> Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
+> +static void *c_next(struct seq_file *m, void *v, loff_t *pos)
 > +{
-> +	return 0;
+> +	++*pos;
+> +	return c_start(m, pos);
 > +}
 > +
-> +static int apply_r_larch_error(struct module *me, u32 *location,=20
-> Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
+> +static void c_stop(struct seq_file *m, void *v)
 > +{
-> +	pr_err("%s: Unsupport relocation type %u, please add its support.\n"=
-,=20
-> me->name, type);
-> +	return -EINVAL;
 > +}
 > +
-> +static int apply_r_larch_32(struct module *mod, u32 *location,=20
-> Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	*location =3D v;
-> +	return 0;
-> +}
-> +
-> +static int apply_r_larch_64(struct module *mod, u32 *location,=20
-> Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	*(Elf_Addr *)location =3D v;
-> +	return 0;
-> +}
-> +
-> +static int apply_r_larch_sop_push_pcrel(struct module *mod, u32=20
-> *location, Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	return rela_stack_push(v - (u64)location, rela_stack, rela_stack_top=
-);
-> +}
-> +
-> +static int apply_r_larch_sop_push_absolute(struct module *mod, u32=20
-> *location, Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	return rela_stack_push(v, rela_stack, rela_stack_top);
-> +}
-> +
-> +static int apply_r_larch_sop_push_dup(struct module *mod, u32=20
-> *location, Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	int err =3D 0;
-> +	s64 opr1;
-> +
-> +	err =3D rela_stack_pop(&opr1, rela_stack, rela_stack_top);
-> +	if (err)
-> +		return err;
-> +	err =3D rela_stack_push(opr1, rela_stack, rela_stack_top);
-> +	if (err)
-> +		return err;
-> +	err =3D rela_stack_push(opr1, rela_stack, rela_stack_top);
-> +	if (err)
-> +		return err;
-> +
-> +	return 0;
-> +}
-> +
-> +static int apply_r_larch_sop_push_plt_pcrel(struct module *mod, u32=20
-> *location, Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	ptrdiff_t offset =3D (void *)v - (void *)location;
-> +
-> +	if (offset >=3D SZ_128M)
-> +		v =3D module_emit_plt_entry(mod, v);
-> +
-> +	if (offset < -SZ_128M)
-> +		v =3D module_emit_plt_entry(mod, v);
-> +
-> +	return apply_r_larch_sop_push_pcrel(mod, location, v, rela_stack,=20
-> rela_stack_top, type);
-> +}
-> +
-> +static int apply_r_larch_sop(struct module *mod, u32 *location,=20
-> Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	int err =3D 0;
-> +	s64 opr1, opr2, opr3;
-> +
-> +	if (type =3D=3D R_LARCH_SOP_IF_ELSE) {
-> +		err =3D rela_stack_pop(&opr3, rela_stack, rela_stack_top);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	err =3D rela_stack_pop(&opr2, rela_stack, rela_stack_top);
-> +	if (err)
-> +		return err;
-> +	err =3D rela_stack_pop(&opr1, rela_stack, rela_stack_top);
-> +	if (err)
-> +		return err;
-> +
-> +	switch (type) {
-> +	case R_LARCH_SOP_AND:
-> +		err =3D rela_stack_push(opr1 & opr2, rela_stack, rela_stack_top);
-> +		break;
-> +	case R_LARCH_SOP_ADD:
-> +		err =3D rela_stack_push(opr1 + opr2, rela_stack, rela_stack_top);
-> +		break;
-> +	case R_LARCH_SOP_SUB:
-> +		err =3D rela_stack_push(opr1 - opr2, rela_stack, rela_stack_top);
-> +		break;
-> +	case R_LARCH_SOP_SL:
-> +		err =3D rela_stack_push(opr1 << opr2, rela_stack, rela_stack_top);
-> +		break;
-> +	case R_LARCH_SOP_SR:
-> +		err =3D rela_stack_push(opr1 >> opr2, rela_stack, rela_stack_top);
-> +		break;
-> +	case R_LARCH_SOP_IF_ELSE:
-> +		err =3D rela_stack_push(opr1 ? opr2 : opr3, rela_stack,=20
-> rela_stack_top);
-> +		break;
-> +	default:
-> +		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +static int apply_r_larch_sop_imm_field(struct module *mod, u32=20
-> *location, Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	int err =3D 0;
-> +	s64 opr1;
-> +	union loongarch_instruction *insn =3D (union loongarch_instruction=20
-> *)location;
-> +
-> +	err =3D rela_stack_pop(&opr1, rela_stack, rela_stack_top);
-> +	if (err)
-> +		return err;
-> +
-> +	switch (type) {
-> +	case R_LARCH_SOP_POP_32_U_10_12:
-> +		if (!unsigned_imm_check(opr1, 12))
-> +			goto overflow;
-> +
-> +		/* (*(uint32_t *) PC) [21 ... 10] =3D opr [11 ... 0] */
-> +		insn->reg2i12_format.immediate =3D opr1 & 0xfff;
-> +		return 0;
-> +	case R_LARCH_SOP_POP_32_S_10_12:
-> +		if (!signed_imm_check(opr1, 12))
-> +			goto overflow;
-> +
-> +		insn->reg2i12_format.immediate =3D opr1 & 0xfff;
-> +		return 0;
-> +	case R_LARCH_SOP_POP_32_S_10_16:
-> +		if (!signed_imm_check(opr1, 16))
-> +			goto overflow;
-> +
-> +		insn->reg2i16_format.immediate =3D opr1 & 0xffff;
-> +		return 0;
-> +	case R_LARCH_SOP_POP_32_S_10_16_S2:
-> +		if (opr1 % 4)
-> +			goto unaligned;
-> +
-> +		if (!signed_imm_check(opr1, 18))
-> +			goto overflow;
-> +
-> +		insn->reg2i16_format.immediate =3D (opr1 >> 2) & 0xffff;
-> +		return 0;
-> +	case R_LARCH_SOP_POP_32_S_5_20:
-> +		if (!signed_imm_check(opr1, 20))
-> +			goto overflow;
-> +
-> +		insn->reg1i20_format.immediate =3D (opr1) & 0xfffff;
-> +		return 0;
-> +	case R_LARCH_SOP_POP_32_S_0_5_10_16_S2:
-> +		if (opr1 % 4)
-> +			goto unaligned;
-> +
-> +		if (!signed_imm_check(opr1, 23))
-> +			goto overflow;
-> +
-> +		opr1 >>=3D 2;
-> +		insn->reg1i21_format.immediate_l =3D opr1 & 0xffff;
-> +		insn->reg1i21_format.immediate_h =3D (opr1 >> 16) & 0x1f;
-> +		return 0;
-> +	case R_LARCH_SOP_POP_32_S_0_10_10_16_S2:
-> +		if (opr1 % 4)
-> +			goto unaligned;
-> +
-> +		if (!signed_imm_check(opr1, 28))
-> +			goto overflow;
-> +
-> +		opr1 >>=3D 2;
-> +		insn->reg0i26_format.immediate_l =3D opr1 & 0xffff;
-> +		insn->reg0i26_format.immediate_h =3D (opr1 >> 16) & 0x3ff;
-> +		return 0;
-> +	case R_LARCH_SOP_POP_32_U:
-> +		if (!unsigned_imm_check(opr1, 32))
-> +			goto overflow;
-> +
-> +		/* (*(uint32_t *) PC) =3D opr */
-> +		*location =3D (u32)opr1;
-> +		return 0;
-> +	default:
-> +		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
-> +		return -EINVAL;
-> +	}
-> +
-> +overflow:
-> +	pr_err("module %s: opr1 =3D 0x%llx overflow! dangerous %s (%u)=20
-> relocation\n",
-> +		mod->name, opr1, __func__, type);
-> +	return -ENOEXEC;
-> +
-> +unaligned:
-> +	pr_err("module %s: opr1 =3D 0x%llx unaligned! dangerous %s (%u)=20
-> relocation\n",
-> +		mod->name, opr1, __func__, type);
-> +	return -ENOEXEC;
-> +}
-> +
-> +static int apply_r_larch_add_sub(struct module *mod, u32 *location,=20
-> Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
-> +{
-> +	switch (type) {
-> +	case R_LARCH_ADD32:
-> +		*(s32 *)location +=3D v;
-> +		return 0;
-> +	case R_LARCH_ADD64:
-> +		*(s64 *)location +=3D v;
-> +		return 0;
-> +	case R_LARCH_SUB32:
-> +		*(s32 *)location -=3D v;
-> +		return 0;
-> +	case R_LARCH_SUB64:
-> +		*(s64 *)location -=3D v;
-> +		return 0;
-> +	default:
-> +		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
-> +		return -EINVAL;
-> +	}
-> +}
-> +
-> +/*
-> + * reloc_handlers_rela() - Apply a particular relocation to a module
-> + * @mod: the module to apply the reloc to
-> + * @location: the address at which the reloc is to be applied
-> + * @v: the value of the reloc, with addend for RELA-style
-> + * @rela_stack: the stack used for store relocation info, LOCAL to=20
-> THIS module
-> + * @rela_stac_top: where the stack operation(pop/push) applies to
-> + *
-> + * Return: 0 upon success, else -ERRNO
-> + */
-> +typedef int (*reloc_rela_handler)(struct module *mod, u32 *location,=20
-> Elf_Addr v,
-> +			s64 *rela_stack, size_t *rela_stack_top, unsigned int type);
-> +
-> +/* The handlers for known reloc types */
-> +static reloc_rela_handler reloc_rela_handlers[] =3D {
-> +	[R_LARCH_NONE ... R_LARCH_SUB64]		     =3D apply_r_larch_error,
-> +
-> +	[R_LARCH_NONE]					     =3D apply_r_larch_none,
-> +	[R_LARCH_32]					     =3D apply_r_larch_32,
-> +	[R_LARCH_64]					     =3D apply_r_larch_64,
-> +	[R_LARCH_MARK_LA]				     =3D apply_r_larch_none,
-> +	[R_LARCH_MARK_PCREL]				     =3D apply_r_larch_none,
-> +	[R_LARCH_SOP_PUSH_PCREL]			     =3D apply_r_larch_sop_push_pcrel,
-> +	[R_LARCH_SOP_PUSH_ABSOLUTE]			     =3D apply_r_larch_sop_push_absolu=
-te,
-> +	[R_LARCH_SOP_PUSH_DUP]				     =3D apply_r_larch_sop_push_dup,
-> +	[R_LARCH_SOP_PUSH_PLT_PCREL]			     =3D=20
-> apply_r_larch_sop_push_plt_pcrel,
-> +	[R_LARCH_SOP_SUB ... R_LARCH_SOP_IF_ELSE] 	     =3D apply_r_larch_so=
-p,
-> +	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] =3D=20
-> apply_r_larch_sop_imm_field,
-> +	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     =3D apply_r_larch_add_sub,
+> +const struct seq_operations cpuinfo_op =3D {
+> +	.start	=3D c_start,
+> +	.next	=3D c_next,
+> +	.stop	=3D c_stop,
+> +	.show	=3D show_cpuinfo,
 > +};
-> +
-> +int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
-> +		       unsigned int symindex, unsigned int relsec,
-> +		       struct module *mod)
-> +{
-> +	int i, err;
-> +	unsigned int type;
-> +	s64 rela_stack[RELA_STACK_DEPTH];
-> +	size_t rela_stack_top =3D 0;
-> +	reloc_rela_handler handler;
-> +	void *location;
-> +	Elf_Addr v;
-> +	Elf_Sym *sym;
-> +	Elf_Rela *rel =3D (void *) sechdrs[relsec].sh_addr;
-> +
-> +	pr_debug("%s: Applying relocate section %u to %u\n", __func__, relse=
-c,
-> +	       sechdrs[relsec].sh_info);
-> +
-> +	rela_stack_top =3D 0;
-> +	for (i =3D 0; i < sechdrs[relsec].sh_size / sizeof(*rel); i++) {
-> +		/* This is where to make the change */
-> +		location =3D (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr +=20
-> rel[i].r_offset;
-> +		/* This is the symbol it is referring to */
-> +		sym =3D (Elf_Sym *)sechdrs[symindex].sh_addr +=20
-> ELF_R_SYM(rel[i].r_info);
-> +		if (IS_ERR_VALUE(sym->st_value)) {
-> +			/* Ignore unresolved weak symbol */
-> +			if (ELF_ST_BIND(sym->st_info) =3D=3D STB_WEAK)
-> +				continue;
-> +			pr_warn("%s: Unknown symbol %s\n", mod->name, strtab +=20
-> sym->st_name);
-> +			return -ENOENT;
-> +		}
-> +
-> +		type =3D ELF_R_TYPE(rel[i].r_info);
-> +
-> +		if (type < ARRAY_SIZE(reloc_rela_handlers))
-> +			handler =3D reloc_rela_handlers[type];
-> +		else
-> +			handler =3D NULL;
-> +
-> +		if (!handler) {
-> +			pr_err("%s: Unknown relocation type %u\n", mod->name, type);
-> +			return -EINVAL;
-> +		}
-> +
-> +		pr_debug("type %d st_value %llx r_addend %llx loc %llx\n",
-> +		       (int)ELF_R_TYPE(rel[i].r_info),
-> +		       sym->st_value, rel[i].r_addend, (u64)location);
-> +
-> +		v =3D sym->st_value + rel[i].r_addend;
-> +		err =3D handler(mod, location, v, rela_stack, &rela_stack_top, type=
-);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +void *module_alloc(unsigned long size)
-> +{
-> +	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
-> +			GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE,=20
-> __builtin_return_address(0));
-> +}
 > --=20
 > 2.27.0
 
