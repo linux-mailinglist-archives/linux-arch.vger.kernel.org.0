@@ -2,36 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D79F539A72
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 02:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2E3539AAD
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 03:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348416AbiFAAlu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 31 May 2022 20:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52660 "EHLO
+        id S1344508AbiFABOG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 31 May 2022 21:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiFAAlt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 May 2022 20:41:49 -0400
+        with ESMTP id S240650AbiFABOG (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 31 May 2022 21:14:06 -0400
 Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B540D110B;
-        Tue, 31 May 2022 17:41:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4669795A18;
+        Tue, 31 May 2022 18:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1654044103; bh=gAA/T6RmFtJ8e1KmZkGo7oW84DFSEfMlvKn6/ylyuf0=;
+        t=1654046039; bh=pMq9NS9OSPMIUB60xzKZhXnr5K83nxwQ8BT9E2zyna8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=uhjVYNRyqBoD6KwGoMOam9BA2X3FFe4lh4HVCU56n5uxcuDR8qAjGPmL87LsIT0Qc
-         W0+AUC8UNdzT31FvW+2zBxeC7+eJTsyV/VHrypPQhnc3qNSc+ORdo/bR0vVYuNYh4j
-         0CK2jp+rnLLoUsef2u6AaRh9KuelLXGg/BK8K9cI=
+        b=IUcZH4S0FgPYhAx2CZ5cPrcna6qZkVxpbP32f4XEImxLpPADWip7X9LJ8dDjXwi9Y
+         gkPH7D3zlvQuVPlKaicnTInLT3w4VG2NHPEtkQFFKfxq5U+JP0FEx4/5V+icuOjiWM
+         ekOBReg5J/qWSZPuVDlqu9VGeGrroQXf3lf9VR+M=
 Received: from [192.168.9.172] (unknown [101.88.28.48])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id B8D83600FF;
-        Wed,  1 Jun 2022 08:41:42 +0800 (CST)
-Message-ID: <1dbaed5d-fb83-be70-85fc-4b819fa7d47c@xen0n.name>
-Date:   Wed, 1 Jun 2022 08:41:42 +0800
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 90345600FF;
+        Wed,  1 Jun 2022 09:13:58 +0800 (CST)
+Message-ID: <cbe2d050-5b28-f913-9f3b-8ddabe861eae@xen0n.name>
+Date:   Wed, 1 Jun 2022 09:13:58 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
  Thunderbird/103.0a1
 Subject: Re: [musl] Re: [GIT PULL] asm-generic changes for 5.19
+Content-Language: en-US
 To:     Arnd Bergmann <arnd@kernel.org>,
         Huacai Chen <chenhuacai@kernel.org>
 Cc:     musl@lists.openwall.com, WANG Xuerui <kernel@xen0n.name>,
@@ -62,10 +63,8 @@ References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
  <CAK8P3a0c_tbHov_b6cz-_Tj6VD3OWLwpGJf_2rj-nitipSKdYQ@mail.gmail.com>
  <CAAhV-H4_qqQtTp2=mJF=OV+qcKzA0j8SPWKRMR-LJgC0zNfatQ@mail.gmail.com>
  <CAK8P3a3UfDJkoAkA6an2kXyAYSzz2vt__19JoQmum8LZehXrgg@mail.gmail.com>
- <CAK8P3a0tu4ZANdxY-beVb4C1hKrn2VJqpfwBemhqHkr6760b7A@mail.gmail.com>
-Content-Language: en-US
 From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAK8P3a0tu4ZANdxY-beVb4C1hKrn2VJqpfwBemhqHkr6760b7A@mail.gmail.com>
+In-Reply-To: <CAK8P3a3UfDJkoAkA6an2kXyAYSzz2vt__19JoQmum8LZehXrgg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,37 +77,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/1/22 04:40, Arnd Bergmann wrote:
-> lib/test_printf.c:215: warning: "PTR" redefined
->    215 | #define PTR ((void *)0xffff0123456789abUL)
->        |
-> In file included from /git/arm-soc/arch/loongarch/include/asm/vdso/vdso.h:9,
->                   from
-> /git/arm-soc/arch/loongarch/include/asm/vdso/gettimeofday.h:13,
->                   from /git/arm-soc/include/vdso/datapage.h:137,
->                   from /git/arm-soc/arch/loongarch/include/asm/vdso.h:11,
->                   from /git/arm-soc/arch/loongarch/include/asm/elf.h:13,
->                   from /git/arm-soc/include/linux/elf.h:6,
->                   from /git/arm-soc/include/linux/module.h:19,
->                   from /git/arm-soc/lib/test_printf.c:10:
-> /git/arm-soc/arch/loongarch/include/asm/asm.h:182: note: this is the
-> location of the previous definition
->    182 | #define PTR             .dword
->        |
+On 6/1/22 04:07, Arnd Bergmann wrote:
+> On Tue, May 31, 2022 at 6:01 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>> On Tue, May 31, 2022 at 7:15 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>>> On Tue, May 31, 2022 at 10:17 AM Huacai Chen <chenhuacai@kernel.org> wrote:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
+>> has been updated. Now this branch droped irqchip drivers and pci
+>> drivers. But the existing irqchip drivers need some small adjustment
+>> to avoid build errors [1], and I hope Marc can give an Acked-by.
+> Ok, glad you got that working.
 >
-> Not sure what the best fix is for this, maybe the contents of asm/asm.h could
-> just be hidden in an "#idef __ASSEMBLER__" check. This can be a follow-up
-> patch when the branch is merged.
+>   What about the ACPI changes? I see that these are needed to get a clean build,
+> and as I understood it, they are supposed to get merged through the
+> acpica tree.
 
-Ah, the dreaded PTR... This has plagued Loongson users since antiquity 
-(i.e. the MIPS era).
+I think the acpica bits could be dropped with some effort too; the main 
+dependency on the various ACPI 6.5 tables are the SMP bits, which relies 
+on the new MADT CPUINTC tables. While the others also provide 
+information, they're not as fundamental as this, and even this CPUINTC 
+piece can be taken out given we can't run this branch on any real 
+LoongArch hardware after all (due to the irqchip changes being backed 
+out), I think we can just leave the remaining bits dummy-initialized 
+with some simple comment. We can review once the new branch with only 
+arch/loongarch changes is out.
 
-It must have been the case that the arch/loongarch was based on an 
-earlier version of arch/mips, that didn't have the commit fa62f39dc7e25 
-("MIPS: Fix build error due to PTR used in more places"). So the fix 
-would be simple: just rename the PTR to something else. MIPS changed 
-that to PTR_WD and maybe we could re-use that name.
+>> This branch can be built with defconfig and allmodconfig (except
+>> drivers/platform/surface/aggregator/controller.c, because it requires
+>> 8bit/16bit cmpxchg, which I was told to remove their support).
+> Right, that is ok to keep in there, we should fix that by adding a Kconfig
+> dependency for the driver. It looks like it has a CONFIG_ACPI dependency,
+> so it is currently limited to x86/arm64/ia64, which all have the short
+> cmpxchg(),
+> but in reality this driver can only work on x86 and arm64.
 
-But I agree that wrapping the whole asm/asm.h with an #ifdef 
-__ASSEMBLY__ is very reasonable regardless. Maybe both could be done.
+In case this isn't obvious to any non-native English speaker: the driver 
+is written for the Microsoft Surface, which only has x86 and arm64 
+variants to this date and the list is probably not going to expand in 
+the foreseeable future, so the word "work" here takes a quite literal 
+sense. ;-)
+
+I agree a tiny fix for that driver could be added later that limits the 
+driver to X86 || ARM64. As a popular product line, adding support for 
+yet another architecture would be a news visible enough for the crowd 
+that they'll come and tweak the Kconfig themselves.
 
