@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF5953A4AB
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 14:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0F153A4B1
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 14:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351904AbiFAMQa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Jun 2022 08:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S1350506AbiFAMRg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Jun 2022 08:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348712AbiFAMQ3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 08:16:29 -0400
+        with ESMTP id S1348712AbiFAMRd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 08:17:33 -0400
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ADE5D1AC;
-        Wed,  1 Jun 2022 05:16:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86FC5002C;
+        Wed,  1 Jun 2022 05:17:29 -0700 (PDT)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id A494E5C012C;
-        Wed,  1 Jun 2022 08:16:24 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id 5177E5C02B1;
+        Wed,  1 Jun 2022 08:17:29 -0400 (EDT)
 Received: from imap44 ([10.202.2.94])
-  by compute4.internal (MEProxy); Wed, 01 Jun 2022 08:16:24 -0400
+  by compute4.internal (MEProxy); Wed, 01 Jun 2022 08:17:29 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
         cc:cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654085784; x=
-        1654172184; bh=y2U8Le8CIHYnPh9HSXzsC7zhQcTy1of33ajb9uj2/qc=; b=1
-        5ECkuVoBAiLy7kpFhSPFfTz06B81ry3MhFZv/mLolrIV8EGvrjn4WWsLQefVjHgv
-        3JFlqfSMUqhkQRnNj30R25yVGxXA5qIpKaD/OawieiGeTh7W/N9lJyy71NcLGbyV
-        wge97Yv60md7Joj25RAnmDM+EvRy5kZyby9m73geo7J0Ir3ArZ4Ol+LKuPakdGl2
-        Le51MFA2d6wNpZiUxAjvjAnernHe1daBMf/y1TEr0unEMdsKD1c7U4zk01QxokuO
-        hHCBJoIF6FWqFTLbveXWrJnSArPDW8nvvc1A/c1GrQVgYIeBP/HevfocZdDqOoro
-        aDQ4nQMMJI+rmrjI5yCVQ==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1654085849; x=
+        1654172249; bh=NmcQVjutZvdTN75SNPwIsltqoItlYgd1ENRlUXjP0Xc=; b=M
+        w/q59FbckTrWhQwZQ6nHFcy8TRaSe9A/GX93S1MD51F1lnSIWylq3Gppsz6UkmCP
+        ayihOeMnOVj694QnTInuxTFGOwE38W3+QbkcFiOX0myj7POp2G65pVfNRcvuSjds
+        UW1NXteaJHHqb1vSomiPNHAMPXRrPndZYBMzBvnVBxVwsPOeWaWbpHkIWrgxmrvJ
+        3ILvM57G3jfwaRPor4TY5Xby4CH9Vez33TJfjIl8louB12Sxwmd0syKQOTW2Q/Td
+        Fwvbw8pTVu8QiBAjvkd22rBICwx9T2EbiSYuXlMzRAl3BU5+VBJU30rhIkVDsBm+
+        lLF/PCEfEy7/hrgyxhDvg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654085784; x=
-        1654172184; bh=y2U8Le8CIHYnPh9HSXzsC7zhQcTy1of33ajb9uj2/qc=; b=V
-        DELvJPUTlSPP2lrD4z5XRngEIfLTc8/bYrLxw9Kk5aU/7dEJlhnnbIeyT/xfGWAs
-        zTAdZyER5mMlAc25kdIc+/dkZb601BhUgaGV/CsgLiJBExpZgkE9ZCZd31IWRRLF
-        BYrgBa8qMFkYexfVoBglkLzQUdpMPGiqY6dLPpa8an2iyCi5jD5OA9sWSYPv7JRs
-        K6VxhVLiDe2DsvPY38K/QS8MUsxYsTUxnuf8nnmdwnduikfNkDQ39quRVn77LUGe
-        YvKdJn3QF6L3j4OvwJHWndOzgSkW/b1ynY2TRNi2a7UPITT0EUg6tfd8m88b2Yf+
-        UfcaCHbaSgqQYWkaHN5VA==
-X-ME-Sender: <xms:l1iXYkJ-nIV1VTtIe_zNm6ysHD1bP40K82Lbjomton6V9yydlFLOWw>
-    <xme:l1iXYkIq32VD8O7n9DcmHu-d3VSrB2ZVhVFiPUy4BnWXeqsMxY7PuwxVJOwv9NMza
-    hZai1Beo5NFf8YnM78>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1654085849; x=
+        1654172249; bh=NmcQVjutZvdTN75SNPwIsltqoItlYgd1ENRlUXjP0Xc=; b=J
+        Kcz0kRBI4e1tQIq3Yt2xaWmELZowpHuraJ49oeuzR9Hi/9FKcLyaXMJhaVwdKp2W
+        ACou6Y4CIXCqVRFAkHOGhJJsVOYTGEFeGjEbkBW9qUtOn8kthH76DRpOR4enRlmk
+        3RLtfZaR2A9rdbQJMoky5b5wgA9gXZewHLQRCCwdwWlkZcUVSnS51Z65wbl4BeET
+        4sHA1LzX8xRnwjc43ksckW+vAipjVOZZtHLElIMow7OruA0zQPybbF8ojDnxDosG
+        7B1ZdT9O2SXxyp1poOb12H/AgTfHOiBVURxZVEvsvuQttxqiHdHFHTZqSQBtRCu0
+        oVIEU4EorhGw1Nd+bsIaw==
+X-ME-Sender: <xms:2FiXYvIHfNhoHGSbhv4I7Ov-FHguLsPKnGmN2Mghtru_UeFNnA0thw>
+    <xme:2FiXYjLqABPLZjHKg7vd70hBrsPhJWvQd3JfcUwDL4HxKNzXoGvseRlKYD-n_kb5i
+    Q1emA_CgEXRUNGeAFE>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledtgdegkecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenog
@@ -55,23 +55,23 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrledtgdegkecutefuodetggdote
     gefhuedtffeffefguddtveejleevueefffetvdfhgeeutedtteeghfehfeeinecuffhomh
     grihhnpehlohhonhhgshhonhdrtghnpdhlohhonhhgnhhigidrtghnpdhgihhthhhusgdr
     tghomhdpghhithhhuhgsrdhiohdpkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
+    iivgepudenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhl
     hihgohgrthdrtghomh
-X-ME-Proxy: <xmx:l1iXYkuiNAheg3CW5qKEz0jmsKJtwZRLXEMnc4MT_yWiAvtYumVSQw>
-    <xmx:l1iXYhboP7R2rFHtWdxefw-wHRZyi-B_SJiII2WypRCfJ8m417XTkQ>
-    <xmx:l1iXYrZZRW5mwV34fMHlzaZSdUNgqNrN3s0CoeznZcpRucZd1Qxd-w>
-    <xmx:mFiXYjLdULA152VoUYuaMA_tSKYMxGyI81FWc0r6amFIm6aOZLpoRA>
+X-ME-Proxy: <xmx:2ViXYnv7RCPN1N3rBKbvOS-wWQFGd2V3bmwCt4MjEFgkjw9GsCJO2g>
+    <xmx:2ViXYoYBl8J4UtHQQDEPe_qUuhqvo8zErGdpC_HCGiAxMrbVwrleNA>
+    <xmx:2ViXYmbOdV24z0qspnbkmOW_ILrUqIbf2FtmZYAhHPXLpBxem6OPMA>
+    <xmx:2ViXYou7hnYiPNd0vD8Si-ilcX1G0PmUxQjoJzHmjXPzaYnHYvV-bQ>
 Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B3FF536A006D; Wed,  1 Jun 2022 08:16:23 -0400 (EDT)
+        id E62AD36A006D; Wed,  1 Jun 2022 08:17:28 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-591-gfe6c3a2700-fm-20220427.001-gfe6c3a27
 Mime-Version: 1.0
-Message-Id: <db505508-f19e-437f-96c8-a6ff48c7870c@www.fastmail.com>
-In-Reply-To: <20220601100005.2989022-4-chenhuacai@loongson.cn>
+Message-Id: <c79d142c-07f9-4c29-bf00-a446f87d2dcb@www.fastmail.com>
+In-Reply-To: <20220601100005.2989022-5-chenhuacai@loongson.cn>
 References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
- <20220601100005.2989022-4-chenhuacai@loongson.cn>
-Date:   Wed, 01 Jun 2022 13:16:03 +0100
+ <20220601100005.2989022-5-chenhuacai@loongson.cn>
+Date:   Wed, 01 Jun 2022 13:17:07 +0100
 From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
 To:     "Huacai Chen" <chenhuacai@loongson.cn>,
         "Arnd Bergmann" <arnd@arndb.de>,
@@ -88,8 +88,8 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         "Huacai Chen" <chenhuacai@gmail.com>,
         "Guo Ren" <guoren@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>,
         "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "WANG Xuerui" <git@xen0n.name>
-Subject: Re: [PATCH V12 03/24] Documentation: LoongArch: Add basic documentations
+        "Alex Shi" <alexs@kernel.org>, "WANG Xuerui" <git@xen0n.name>
+Subject: Re: [PATCH V12 04/24] Documentation/zh_CN: Add basic LoongArch documentations
 Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -106,67 +106,89 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 =E5=9C=A82022=E5=B9=B46=E6=9C=881=E6=97=A5=E5=85=AD=E6=9C=88 =E4=B8=8A=E5=
 =8D=8810:59=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
-> Add some basic documentation for LoongArch. LoongArch is a new RISC IS=
-A,
-> which is a bit like MIPS or RISC-V. LoongArch includes a reduced 32-bit
-> version (LA32R), a standard 32-bit version (LA32S) and a 64-bit version
-> (LA64).
+> Add some basic documentation (zh_CN version) for LoongArch. LoongArch =
+is
+> a new RISC ISA, which is a bit like MIPS or RISC-V. LoongArch includes=
+ a
+> reduced 32-bit version (LA32R), a standard 32-bit version (LA32S) and a
+> 64-bit version (LA64).
 >
+> Reviewed-by: Alex Shi <alexs@kernel.org>
+> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+> Reviewed-by: Guo Ren <guoren@kernel.org>
 > Co-developed-by: WANG Xuerui <git@xen0n.name>
 > Signed-off-by: WANG Xuerui <git@xen0n.name>
 > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
 Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Did proofread, perfect!
-Thanks.
+It=E2=80=99s nice to see Chinese documents can be aligned at a timely ma=
+nner.
+
+Thanks
+- Jiaxun
 
 > ---
->  Documentation/arch.rst                     |   1 +
->  Documentation/loongarch/features.rst       |   3 +
->  Documentation/loongarch/index.rst          |  21 ++
->  Documentation/loongarch/introduction.rst   | 387 +++++++++++++++++++++
->  Documentation/loongarch/irq-chip-model.rst | 168 +++++++++
->  5 files changed, 580 insertions(+)
->  create mode 100644 Documentation/loongarch/features.rst
->  create mode 100644 Documentation/loongarch/index.rst
->  create mode 100644 Documentation/loongarch/introduction.rst
->  create mode 100644 Documentation/loongarch/irq-chip-model.rst
+>  Documentation/translations/zh_CN/index.rst    |   1 +
+>  .../translations/zh_CN/loongarch/features.rst |   8 +
+>  .../translations/zh_CN/loongarch/index.rst    |  26 ++
+>  .../zh_CN/loongarch/introduction.rst          | 351 ++++++++++++++++++
+>  .../zh_CN/loongarch/irq-chip-model.rst        | 167 +++++++++
+>  5 files changed, 553 insertions(+)
+>  create mode 100644=20
+> Documentation/translations/zh_CN/loongarch/features.rst
+>  create mode 100644 Documentation/translations/zh_CN/loongarch/index.r=
+st
+>  create mode 100644=20
+> Documentation/translations/zh_CN/loongarch/introduction.rst
+>  create mode 100644=20
+> Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
 >
-> diff --git a/Documentation/arch.rst b/Documentation/arch.rst
-> index 14bcd8294b93..41a66a8b38e4 100644
-> --- a/Documentation/arch.rst
-> +++ b/Documentation/arch.rst
-> @@ -13,6 +13,7 @@ implementation.
->     arm/index
->     arm64/index
->     ia64/index
+> diff --git a/Documentation/translations/zh_CN/index.rst=20
+> b/Documentation/translations/zh_CN/index.rst
+> index ac32d8e306ac..ad7bb8c17562 100644
+> --- a/Documentation/translations/zh_CN/index.rst
+> +++ b/Documentation/translations/zh_CN/index.rst
+> @@ -171,6 +171,7 @@ TODOList:
+>     riscv/index
+>     openrisc/index
+>     parisc/index
 > +   loongarch/index
->     m68k/index
->     mips/index
->     nios2/index
-> diff --git a/Documentation/loongarch/features.rst=20
-> b/Documentation/loongarch/features.rst
+>=20
+>  TODOList:
+>=20
+> diff --git a/Documentation/translations/zh_CN/loongarch/features.rst=20
+> b/Documentation/translations/zh_CN/loongarch/features.rst
 > new file mode 100644
-> index 000000000000..ebacade3ea45
+> index 000000000000..3886e635ec06
 > --- /dev/null
-> +++ b/Documentation/loongarch/features.rst
-> @@ -0,0 +1,3 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/features.rst
+> @@ -0,0 +1,8 @@
 > +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/loongarch/features.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
 > +
 > +.. kernel-feat:: $srctree/Documentation/features loongarch
-> diff --git a/Documentation/loongarch/index.rst=20
-> b/Documentation/loongarch/index.rst
+> diff --git a/Documentation/translations/zh_CN/loongarch/index.rst=20
+> b/Documentation/translations/zh_CN/loongarch/index.rst
 > new file mode 100644
-> index 000000000000..aaba648db907
+> index 000000000000..7d23eb78379d
 > --- /dev/null
-> +++ b/Documentation/loongarch/index.rst
-> @@ -0,0 +1,21 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/index.rst
+> @@ -0,0 +1,26 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +LoongArch Architecture
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/loongarch/index.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +LoongArch=E4=BD=93=E7=B3=BB=E7=BB=93=E6=9E=84
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
 > +.. toctree::
 > +   :maxdepth: 2
@@ -183,280 +205,370 @@ Thanks.
 > +   =3D=3D=3D=3D=3D=3D=3D
 > +
 > +   * :ref:`genindex`
-> diff --git a/Documentation/loongarch/introduction.rst=20
-> b/Documentation/loongarch/introduction.rst
+> diff --git=20
+> a/Documentation/translations/zh_CN/loongarch/introduction.rst=20
+> b/Documentation/translations/zh_CN/loongarch/introduction.rst
 > new file mode 100644
-> index 000000000000..b4df5b459677
+> index 000000000000..e31a1a928c48
 > --- /dev/null
-> +++ b/Documentation/loongarch/introduction.rst
-> @@ -0,0 +1,387 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/introduction.rst
+> @@ -0,0 +1,351 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
-> +Introduction to LoongArch
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D
+> +.. include:: ../disclaimer-zh_CN.rst
 > +
-> +LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V. Ther=
-e=20
-> are
-> +currently 3 variants: a reduced 32-bit version (LA32R), a standard=20
-> 32-bit
-> +version (LA32S) and a 64-bit version (LA64). There are 4 privilege=20
-> levels
-> +(PLVs) defined in LoongArch: PLV0~PLV3, from high to low. Kernel runs=20
-> at PLV0
-> +while applications run at PLV3. This document introduces the=20
-> registers, basic
-> +instruction set, virtual memory and some other topics of LoongArch.
+> +:Original: Documentation/loongarch/introduction.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
 > +
-> +Registers
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +LoongArch=E4=BB=8B=E7=BB=8D
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +LoongArch registers include general purpose registers (GPRs), floatin=
-g=20
-> point
-> +registers (FPRs), vector registers (VRs) and control status registers=20
-> (CSRs)
-> +used in privileged mode (PLV0).
+> +LoongArch=E6=98=AF=E4=B8=80=E7=A7=8D=E6=96=B0=E7=9A=84RISC ISA=EF=BC=8C=
+=E5=9C=A8=E4=B8=80=E5=AE=9A=E7=A8=8B=E5=BA=A6=E4=B8=8A=E7=B1=BB=E4=BC=BC=
+=E4=BA=8EMIPS=E5=92=8CRISC-V=E3=80=82LoongArch=E6=8C=87=E4=BB=A4=E9=9B=86
+> +=E5=8C=85=E6=8B=AC=E4=B8=80=E4=B8=AA=E7=B2=BE=E7=AE=8032=E4=BD=8D=E7=89=
+=88=EF=BC=88LA32R=EF=BC=89=E3=80=81=E4=B8=80=E4=B8=AA=E6=A0=87=E5=87=863=
+2=E4=BD=8D=E7=89=88=EF=BC=88LA32S=EF=BC=89=E3=80=81=E4=B8=80=E4=B8=AA64=E4=
+=BD=8D=E7=89=88=EF=BC=88LA64=EF=BC=89=E3=80=82
+> +LoongArch=E5=AE=9A=E4=B9=89=E4=BA=86=E5=9B=9B=E4=B8=AA=E7=89=B9=E6=9D=
+=83=E7=BA=A7=EF=BC=88PLV0~PLV3=EF=BC=89=EF=BC=8C=E5=85=B6=E4=B8=ADPLV0=E6=
+=98=AF=E6=9C=80=E9=AB=98=E7=89=B9=E6=9D=83=E7=BA=A7=EF=BC=8C=E7=94=A8=E4=
+=BA=8E=E5=86=85=E6=A0=B8=EF=BC=9B=E8=80=8CPLV3
+> +=E6=98=AF=E6=9C=80=E4=BD=8E=E7=89=B9=E6=9D=83=E7=BA=A7=EF=BC=8C=E7=94=
+=A8=E4=BA=8E=E5=BA=94=E7=94=A8=E7=A8=8B=E5=BA=8F=E3=80=82=E6=9C=AC=E6=96=
+=87=E6=A1=A3=E4=BB=8B=E7=BB=8D=E4=BA=86LoongArch=E7=9A=84=E5=AF=84=E5=AD=
+=98=E5=99=A8=E3=80=81=E5=9F=BA=E7=A1=80=E6=8C=87=E4=BB=A4=E9=9B=86=E3=80=
+=81=E8=99=9A=E6=8B=9F=E5=86=85
+> +=E5=AD=98=E4=BB=A5=E5=8F=8A=E5=85=B6=E4=BB=96=E4=B8=80=E4=BA=9B=E4=B8=
+=BB=E9=A2=98=E3=80=82
 > +
-> +GPRs
-> +----
+> +=E5=AF=84=E5=AD=98=E5=99=A8
+> +=3D=3D=3D=3D=3D=3D
 > +
-> +LoongArch has 32 GPRs ( ``$r0`` ~ ``$r31`` ); each one is 32-bit wide=20
-> in LA32
-> +and 64-bit wide in LA64. ``$r0`` is hard-wired to zero, and the other=20
-> registers
-> +are not architecturally special. (Except ``$r1``, which is hard-wired=20
-> as the
-> +link register of the BL instruction.)
+> +LoongArch=E7=9A=84=E5=AF=84=E5=AD=98=E5=99=A8=E5=8C=85=E6=8B=AC=E9=80=
+=9A=E7=94=A8=E5=AF=84=E5=AD=98=E5=99=A8=EF=BC=88GPRs=EF=BC=89=E3=80=81=E6=
+=B5=AE=E7=82=B9=E5=AF=84=E5=AD=98=E5=99=A8=EF=BC=88FPRs=EF=BC=89=E3=80=81=
+=E5=90=91=E9=87=8F=E5=AF=84=E5=AD=98=E5=99=A8=EF=BC=88VRs=EF=BC=89
+> +=E5=92=8C=E7=94=A8=E4=BA=8E=E7=89=B9=E6=9D=83=E6=A8=A1=E5=BC=8F=EF=BC=
+=88PLV0=EF=BC=89=E7=9A=84=E6=8E=A7=E5=88=B6=E7=8A=B6=E6=80=81=E5=AF=84=E5=
+=AD=98=E5=99=A8=EF=BC=88CSRs=EF=BC=89=E3=80=82
 > +
-> +The kernel uses a variant of the LoongArch register convention, as=20
-> described in
-> +the LoongArch ELF psABI spec, in :ref:`References=20
-> <loongarch-references>`:
+> +=E9=80=9A=E7=94=A8=E5=AF=84=E5=AD=98=E5=99=A8
+> +----------
+> +
+> +LoongArch=E5=8C=85=E6=8B=AC32=E4=B8=AA=E9=80=9A=E7=94=A8=E5=AF=84=E5=AD=
+=98=E5=99=A8=EF=BC=88 ``$r0`` ~ ``$r31`` =EF=BC=89=EF=BC=8CLA32=E4=B8=AD=
+=E6=AF=8F=E4=B8=AA=E5=AF=84=E5=AD=98=E5=99=A8=E4=B8=BA32=E4=BD=8D=E5=AE=BD=
+=EF=BC=8C
+> +LA64=E4=B8=AD=E6=AF=8F=E4=B8=AA=E5=AF=84=E5=AD=98=E5=99=A8=E4=B8=BA64=
+=E4=BD=8D=E5=AE=BD=E3=80=82 ``$r0`` =E7=9A=84=E5=86=85=E5=AE=B9=E6=80=BB=
+=E6=98=AF=E5=9B=BA=E5=AE=9A=E4=B8=BA0=EF=BC=8C=E8=80=8C=E5=85=B6=E4=BB=96=
+=E5=AF=84=E5=AD=98=E5=99=A8=E5=9C=A8=E4=BD=93=E7=B3=BB=E7=BB=93=E6=9E=84=
+=E5=B1=82=E9=9D=A2
+> +=E6=B2=A1=E6=9C=89=E7=89=B9=E6=AE=8A=E5=8A=9F=E8=83=BD=E3=80=82=EF=BC=
+=88 ``$r1`` =E7=AE=97=E6=98=AF=E4=B8=80=E4=B8=AA=E4=BE=8B=E5=A4=96=EF=BC=
+=8C=E5=9C=A8BL=E6=8C=87=E4=BB=A4=E4=B8=AD=E5=9B=BA=E5=AE=9A=E7=94=A8=E4=BD=
+=9C=E9=93=BE=E6=8E=A5=E8=BF=94=E5=9B=9E=E5=AF=84=E5=AD=98=E5=99=A8=E3=80=
+=82=EF=BC=89
+> +
+> +=E5=86=85=E6=A0=B8=E4=BD=BF=E7=94=A8=E4=BA=86=E4=B8=80=E5=A5=97LoongA=
+rch=E5=AF=84=E5=AD=98=E5=99=A8=E7=BA=A6=E5=AE=9A=EF=BC=8C=E5=AE=9A=E4=B9=
+=89=E5=9C=A8LoongArch ELF psABI=E8=A7=84=E8=8C=83=E4=B8=AD=EF=BC=8C=E8=AF=
+=A6=E7=BB=86=E6=8F=8F=E8=BF=B0=E5=8F=82=E8=A7=81
+> +:ref:`=E5=8F=82=E8=80=83=E6=96=87=E7=8C=AE <loongarch-references-zh_C=
+N>`:
 > +
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Name              Alias           Usage               Preserved
-> +                                                      across calls
+=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E5=AF=84=E5=AD=98=E5=99=A8=E5=90=8D          =E5=88=AB=E5=90=8D     =
+       =E7=94=A8=E9=80=94                =E8=B7=A8=E8=B0=83=E7=94=A8=E4=BF=
+=9D=E6=8C=81
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +``$r0``           ``$zero``       Constant zero       Unused
-> +``$r1``           ``$ra``         Return address      No
-> +``$r2``           ``$tp``         TLS/Thread pointer  Unused
-> +``$r3``           ``$sp``         Stack pointer       Yes
-> +``$r4``-``$r11``  ``$a0``-``$a7`` Argument registers  No
-> +``$r4``-``$r5``   ``$v0``-``$v1`` Return value        No
-> +``$r12``-``$r20`` ``$t0``-``$t8`` Temp registers      No
-> +``$r21``          ``$u0``         Percpu base address Unused
-> +``$r22``          ``$fp``         Frame pointer       Yes
-> +``$r23``-``$r31`` ``$s0``-``$s8`` Static registers    Yes
+=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +``$r0``           ``$zero``       =E5=B8=B8=E9=87=8F0               =E4=
+=B8=8D=E4=BD=BF=E7=94=A8
+> +``$r1``           ``$ra``         =E8=BF=94=E5=9B=9E=E5=9C=B0=E5=9D=80=
+            =E5=90=A6
+> +``$r2``           ``$tp``         TLS/=E7=BA=BF=E7=A8=8B=E4=BF=A1=E6=81=
+=AF=E6=8C=87=E9=92=88    =E4=B8=8D=E4=BD=BF=E7=94=A8
+> +``$r3``           ``$sp``         =E6=A0=88=E6=8C=87=E9=92=88        =
+      =E6=98=AF
+> +``$r4``-``$r11``  ``$a0``-``$a7`` =E5=8F=82=E6=95=B0=E5=AF=84=E5=AD=98=
+=E5=99=A8          =E5=90=A6
+> +``$r4``-``$r5``   ``$v0``-``$v1`` =E8=BF=94=E5=9B=9E=E5=80=BC        =
+      =E5=90=A6
+> +``$r12``-``$r20`` ``$t0``-``$t8`` =E4=B8=B4=E6=97=B6=E5=AF=84=E5=AD=98=
+=E5=99=A8          =E5=90=A6
+> +``$r21``          ``$u0``         =E6=AF=8FCPU=E5=8F=98=E9=87=8F=E5=9F=
+=BA=E5=9C=B0=E5=9D=80     =E4=B8=8D=E4=BD=BF=E7=94=A8
+> +``$r22``          ``$fp``         =E5=B8=A7=E6=8C=87=E9=92=88        =
+      =E6=98=AF
+> +``$r23``-``$r31`` ``$s0``-``$s8`` =E9=9D=99=E6=80=81=E5=AF=84=E5=AD=98=
+=E5=99=A8          =E6=98=AF
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +Note: The register ``$r21`` is reserved in the ELF psABI, but used by=20
-> the Linux
-> +kernel for storing the percpu base address. It normally has no ABI=20
-> name, but is
-> +called ``$u0`` in the kernel. You may also see ``$v0`` or ``$v1`` in=20
-> some old code,
-> +they are deprecated aliases of ``$a0`` and ``$a1`` respectively.
+> +=E6=B3=A8=E6=84=8F=EF=BC=9A``$r21``=E5=AF=84=E5=AD=98=E5=99=A8=E5=9C=A8=
+ELF psABI=E4=B8=AD=E4=BF=9D=E7=95=99=E6=9C=AA=E4=BD=BF=E7=94=A8=EF=BC=8C=
+=E4=BD=86=E6=98=AF=E5=9C=A8Linux=E5=86=85=E6=A0=B8=E7=94=A8=E4=BA=8E=E4=BF=
+=9D=E5=AD=98=E6=AF=8FCPU
+> +=E5=8F=98=E9=87=8F=E5=9F=BA=E5=9C=B0=E5=9D=80=E3=80=82=E8=AF=A5=E5=AF=
+=84=E5=AD=98=E5=99=A8=E6=B2=A1=E6=9C=89ABI=E5=91=BD=E5=90=8D=EF=BC=8C=E4=
+=B8=8D=E8=BF=87=E5=9C=A8=E5=86=85=E6=A0=B8=E4=B8=AD=E7=A7=B0=E4=B8=BA``$=
+u0``=E3=80=82=E5=9C=A8=E4=B8=80=E4=BA=9B=E9=81=97=E7=95=99=E4=BB=A3=E7=A0=81
+> +=E4=B8=AD=E6=9C=89=E6=97=B6=E5=8F=AF=E8=83=BD=E8=A7=81=E5=88=B0``$v0`=
+`=E5=92=8C``$v1``=EF=BC=8C=E5=AE=83=E4=BB=AC=E6=98=AF``$a0``=E5=92=8C``$=
+a1``=E7=9A=84=E5=88=AB=E5=90=8D=EF=BC=8C=E5=B1=9E=E4=BA=8E=E5=B7=B2=E7=BB=
+=8F=E5=BA=9F=E5=BC=83
+> +=E7=9A=84=E7=94=A8=E6=B3=95=E3=80=82
 > +
-> +FPRs
-> +----
+> +=E6=B5=AE=E7=82=B9=E5=AF=84=E5=AD=98=E5=99=A8
+> +----------
 > +
-> +LoongArch has 32 FPRs ( ``$f0`` ~ ``$f31`` ) when FPU is present. Eac=
-h=20
-> one is
-> +64-bit wide on the LA64 cores.
+> +=E5=BD=93=E7=B3=BB=E7=BB=9F=E4=B8=AD=E5=AD=98=E5=9C=A8FPU=E6=97=B6=EF=
+=BC=8CLoongArch=E6=9C=8932=E4=B8=AA=E6=B5=AE=E7=82=B9=E5=AF=84=E5=AD=98=E5=
+=99=A8=EF=BC=88 ``$f0`` ~ ``$f31`` =EF=BC=89=E3=80=82=E5=9C=A8LA64
+> +=E7=9A=84CPU=E6=A0=B8=E4=B8=8A=EF=BC=8C=E6=AF=8F=E4=B8=AA=E5=AF=84=E5=
+=AD=98=E5=99=A8=E5=9D=87=E4=B8=BA64=E4=BD=8D=E5=AE=BD=E3=80=82
 > +
-> +The floating-point register convention is the same as described in the
-> +LoongArch ELF psABI spec:
+> +=E6=B5=AE=E7=82=B9=E5=AF=84=E5=AD=98=E5=99=A8=E7=9A=84=E4=BD=BF=E7=94=
+=A8=E7=BA=A6=E5=AE=9A=E4=B8=8ELoongArch ELF psABI=E8=A7=84=E8=8C=83=E7=9A=
+=84=E6=8F=8F=E8=BF=B0=E7=9B=B8=E5=90=8C=EF=BC=9A
 > +
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Name              Alias              Usage               Preserved
-> +                                                         across calls
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E5=AF=84=E5=AD=98=E5=99=A8=E5=90=8D          =E5=88=AB=E5=90=8D     =
+          =E7=94=A8=E9=80=94                =E8=B7=A8=E8=B0=83=E7=94=A8=E4=
+=BF=9D=E6=8C=81
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +``$f0``-``$f7``   ``$fa0``-``$fa7``  Argument registers  No
-> +``$f0``-``$f1``   ``$fv0``-``$fv1``  Return value        No
-> +``$f8``-``$f23``  ``$ft0``-``$ft15`` Temp registers      No
-> +``$f24``-``$f31`` ``$fs0``-``$fs7``  Static registers    Yes
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +``$f0``-``$f7``   ``$fa0``-``$fa7``  =E5=8F=82=E6=95=B0=E5=AF=84=E5=AD=
+=98=E5=99=A8          =E5=90=A6
+> +``$f0``-``$f1``   ``$fv0``-``$fv1``  =E8=BF=94=E5=9B=9E=E5=80=BC     =
+         =E5=90=A6
+> +``$f8``-``$f23``  ``$ft0``-``$ft15`` =E4=B8=B4=E6=97=B6=E5=AF=84=E5=AD=
+=98=E5=99=A8          =E5=90=A6
+> +``$f24``-``$f31`` ``$fs0``-``$fs7``  =E9=9D=99=E6=80=81=E5=AF=84=E5=AD=
+=98=E5=99=A8          =E6=98=AF
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +Note: You may see ``$fv0`` or ``$fv1`` in some old code, they are=20
-> deprecated
-> +aliases of ``$fa0`` and ``$fa1`` respectively.
+> +=E6=B3=A8=E6=84=8F=EF=BC=9A=E5=9C=A8=E4=B8=80=E4=BA=9B=E9=81=97=E7=95=
+=99=E4=BB=A3=E7=A0=81=E4=B8=AD=E6=9C=89=E6=97=B6=E5=8F=AF=E8=83=BD=E8=A7=
+=81=E5=88=B0 ``$v0`` =E5=92=8C ``$v1`` =EF=BC=8C=E5=AE=83=E4=BB=AC=E6=98=
+=AF ``$a0``
+> +=E5=92=8C ``$a1`` =E7=9A=84=E5=88=AB=E5=90=8D=EF=BC=8C=E5=B1=9E=E4=BA=
+=8E=E5=B7=B2=E7=BB=8F=E5=BA=9F=E5=BC=83=E7=9A=84=E7=94=A8=E6=B3=95=E3=80=82
 > +
-> +VRs
-> +----
 > +
-> +There are currently 2 vector extensions to LoongArch:
+> +=E5=90=91=E9=87=8F=E5=AF=84=E5=AD=98=E5=99=A8
+> +----------
 > +
-> +- LSX (Loongson SIMD eXtension) with 128-bit vectors,
-> +- LASX (Loongson Advanced SIMD eXtension) with 256-bit vectors.
+> +LoongArch=E7=8E=B0=E6=9C=89=E4=B8=A4=E7=A7=8D=E5=90=91=E9=87=8F=E6=89=
+=A9=E5=B1=95=EF=BC=9A
 > +
-> +LSX brings ``$v0`` ~ ``$v31`` while LASX brings ``$x0`` ~ ``$x31`` as=20
-> the vector
-> +registers.
+> +- 128=E4=BD=8D=E5=90=91=E9=87=8F=E6=89=A9=E5=B1=95LSX=EF=BC=88=E5=85=A8=
+=E7=A7=B0Loongson SIMD eXtention=EF=BC=89=EF=BC=8C
+> +- 256=E4=BD=8D=E5=90=91=E9=87=8F=E6=89=A9=E5=B1=95LASX=EF=BC=88=E5=85=
+=A8=E7=A7=B0Loongson Advanced SIMD eXtention=EF=BC=89=E3=80=82
 > +
-> +The VRs overlap with FPRs: for example, on a core implementing LSX an=
-d=20
-> LASX,
-> +the lower 128 bits of ``$x0`` is shared with ``$v0``, and the lower 6=
-4=20
-> bits of
-> +``$v0`` is shared with ``$f0``; same with all other VRs.
+> +LSX=E4=BD=BF=E7=94=A8 ``$v0`` ~ ``$v31`` =E5=90=91=E9=87=8F=E5=AF=84=E5=
+=AD=98=E5=99=A8=EF=BC=8C=E8=80=8CLASX=E5=88=99=E4=BD=BF=E7=94=A8 ``$x0``=
+ ~ ``$x31`` =E3=80=82
 > +
-> +CSRs
-> +----
+> +=E6=B5=AE=E7=82=B9=E5=AF=84=E5=AD=98=E5=99=A8=E5=92=8C=E5=90=91=E9=87=
+=8F=E5=AF=84=E5=AD=98=E5=99=A8=E6=98=AF=E5=A4=8D=E7=94=A8=E7=9A=84=EF=BC=
+=8C=E6=AF=94=E5=A6=82=EF=BC=9A=E5=9C=A8=E4=B8=80=E4=B8=AA=E5=AE=9E=E7=8E=
+=B0=E4=BA=86LSX=E5=92=8CLASX=E7=9A=84=E6=A0=B8=E4=B8=8A=EF=BC=8C ``$x0``=
+ =E7=9A=84
+> +=E4=BD=8E128=E4=BD=8D=E4=B8=8E ``$v0`` =E5=85=B1=E7=94=A8=EF=BC=8C ``=
+$v0`` =E7=9A=84=E4=BD=8E64=E4=BD=8D=E4=B8=8E ``$f0`` =E5=85=B1=E7=94=A8=EF=
+=BC=8C=E5=85=B6=E4=BB=96=E5=AF=84=E5=AD=98=E5=99=A8=E4=BE=9D=E6=AD=A4=E7=
+=B1=BB=E6=8E=A8=E3=80=82
 > +
-> +CSRs can only be accessed from privileged mode (PLV0):
+> +=E6=8E=A7=E5=88=B6=E7=8A=B6=E6=80=81=E5=AF=84=E5=AD=98=E5=99=A8
+> +--------------
+> +
+> +=E6=8E=A7=E5=88=B6=E7=8A=B6=E6=80=81=E5=AF=84=E5=AD=98=E5=99=A8=E5=8F=
+=AA=E8=83=BD=E5=9C=A8=E7=89=B9=E6=9D=83=E6=A8=A1=E5=BC=8F=EF=BC=88PLV0=EF=
+=BC=89=E4=B8=8B=E8=AE=BF=E9=97=AE:
 > +
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Address           Full Name                             Abbrev Name
+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E5=9C=B0=E5=9D=80              =E5=85=A8=E7=A7=B0=E6=8F=8F=E8=BF=B0 =
+                            =E7=AE=80=E7=A7=B0
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +0x0               Current Mode Information              CRMD
-> +0x1               Pre-exception Mode Information        PRMD
-> +0x2               Extension Unit Enable                 EUEN
-> +0x3               Miscellaneous Control                 MISC
-> +0x4               Exception Configuration               ECFG
-> +0x5               Exception Status                      ESTAT
-> +0x6               Exception Return Address              ERA
-> +0x7               Bad (Faulting) Virtual Address        BADV
-> +0x8               Bad (Faulting) Instruction Word       BADI
-> +0xC               Exception Entrypoint Address          EENTRY
-> +0x10              TLB Index                             TLBIDX
-> +0x11              TLB Entry High-order Bits             TLBEHI
-> +0x12              TLB Entry Low-order Bits 0            TLBELO0
-> +0x13              TLB Entry Low-order Bits 1            TLBELO1
-> +0x18              Address Space Identifier              ASID
-> +0x19              Page Global Directory Address for     PGDL
-> +                  Lower-half Address Space
-> +0x1A              Page Global Directory Address for     PGDH
-> +                  Higher-half Address Space
-> +0x1B              Page Global Directory Address         PGD
-> +0x1C              Page Walk Control for Lower-          PWCL
-> +                  half Address Space
-> +0x1D              Page Walk Control for Higher-         PWCH
-> +                  half Address Space
-> +0x1E              STLB Page Size                        STLBPS
-> +0x1F              Reduced Virtual Address Configuration RVACFG
-> +0x20              CPU Identifier                        CPUID
-> +0x21              Privileged Resource Configuration 1   PRCFG1
-> +0x22              Privileged Resource Configuration 2   PRCFG2
-> +0x23              Privileged Resource Configuration 3   PRCFG3
-> +0x30+n (0=E2=89=A4n=E2=89=A415)   Saved Data register                =
-   SAVEn
-> +0x40              Timer Identifier                      TID
-> +0x41              Timer Configuration                   TCFG
-> +0x42              Timer Value                           TVAL
-> +0x43              Compensation of Timer Count           CNTC
-> +0x44              Timer Interrupt Clearing              TICLR
-> +0x60              LLBit Control                         LLBCTL
-> +0x80              Implementation-specific Control 1     IMPCTL1
-> +0x81              Implementation-specific Control 2     IMPCTL2
-> +0x88              TLB Refill Exception Entrypoint       TLBRENTRY
-> +                  Address
-> +0x89              TLB Refill Exception BAD (Faulting)   TLBRBADV
-> +                  Virtual Address
-> +0x8A              TLB Refill Exception Return Address   TLBRERA
-> +0x8B              TLB Refill Exception Saved Data       TLBRSAVE
-> +                  Register
-> +0x8C              TLB Refill Exception Entry Low-order  TLBRELO0
-> +                  Bits 0
-> +0x8D              TLB Refill Exception Entry Low-order  TLBRELO1
-> +                  Bits 1
-> +0x8E              TLB Refill Exception Entry High-order TLBEHI
-> +                  Bits
-> +0x8F              TLB Refill Exception Pre-exception    TLBRPRMD
-> +                  Mode Information
-> +0x90              Machine Error Control                 MERRCTL
-> +0x91              Machine Error Information 1           MERRINFO1
-> +0x92              Machine Error Information 2           MERRINFO2
-> +0x93              Machine Error Exception Entrypoint    MERRENTRY
-> +                  Address
-> +0x94              Machine Error Exception Return        MERRERA
-> +                  Address
-> +0x95              Machine Error Exception Saved Data    MERRSAVE
-> +                  Register
-> +0x98              Cache TAGs                            CTAG
-> +0x180+n (0=E2=89=A4n=E2=89=A43)   Direct Mapping Configuration Window=
- n DMWn
-> +0x200+2n (0=E2=89=A4n=E2=89=A431) Performance Monitor Configuration n=
-   PMCFGn
-> +0x201+2n (0=E2=89=A4n=E2=89=A431) Performance Monitor Overall Counter=
- n PMCNTn
-> +0x300             Memory Load/Store WatchPoint          MWPC
-> +                  Overall Control
-> +0x301             Memory Load/Store WatchPoint          MWPS
-> +                  Overall Status
-> +0x310+8n (0=E2=89=A4n=E2=89=A47)  Memory Load/Store WatchPoint n     =
-   MWPnCFG1
-> +                  Configuration 1
-> +0x311+8n (0=E2=89=A4n=E2=89=A47)  Memory Load/Store WatchPoint n     =
-   MWPnCFG2
-> +                  Configuration 2
-> +0x312+8n (0=E2=89=A4n=E2=89=A47)  Memory Load/Store WatchPoint n     =
-   MWPnCFG3
-> +                  Configuration 3
-> +0x313+8n (0=E2=89=A4n=E2=89=A47)  Memory Load/Store WatchPoint n     =
-   MWPnCFG4
-> +                  Configuration 4
-> +0x380             Instruction Fetch WatchPoint          FWPC
-> +                  Overall Control
-> +0x381             Instruction Fetch WatchPoint          FWPS
-> +                  Overall Status
-> +0x390+8n (0=E2=89=A4n=E2=89=A47)  Instruction Fetch WatchPoint n     =
-   FWPnCFG1
-> +                  Configuration 1
-> +0x391+8n (0=E2=89=A4n=E2=89=A47)  Instruction Fetch WatchPoint n     =
-   FWPnCFG2
-> +                  Configuration 2
-> +0x392+8n (0=E2=89=A4n=E2=89=A47)  Instruction Fetch WatchPoint n     =
-   FWPnCFG3
-> +                  Configuration 3
-> +0x393+8n (0=E2=89=A4n=E2=89=A47)  Instruction Fetch WatchPoint n     =
-   FWPnCFG4
-> +                  Configuration 4
-> +0x500             Debug Register                        DBG
-> +0x501             Debug Exception Return Address        DERA
-> +0x502             Debug Exception Saved Data Register   DSAVE
+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +0x0               =E5=BD=93=E5=89=8D=E6=A8=A1=E5=BC=8F=E4=BF=A1=E6=81=
+=AF                         CRMD
+> +0x1               =E5=BC=82=E5=B8=B8=E5=89=8D=E6=A8=A1=E5=BC=8F=E4=BF=
+=A1=E6=81=AF                       PRMD
+> +0x2               =E6=89=A9=E5=B1=95=E9=83=A8=E4=BB=B6=E4=BD=BF=E8=83=
+=BD                         EUEN
+> +0x3               =E6=9D=82=E9=A1=B9=E6=8E=A7=E5=88=B6               =
+              MISC
+> +0x4               =E5=BC=82=E5=B8=B8=E9=85=8D=E7=BD=AE               =
+              ECFG
+> +0x5               =E5=BC=82=E5=B8=B8=E7=8A=B6=E6=80=81               =
+              ESTAT
+> +0x6               =E5=BC=82=E5=B8=B8=E8=BF=94=E5=9B=9E=E5=9C=B0=E5=9D=
+=80                         ERA
+> +0x7               =E5=87=BA=E9=94=99(Faulting)=E8=99=9A=E6=8B=9F=E5=9C=
+=B0=E5=9D=80               BADV
+> +0x8               =E5=87=BA=E9=94=99(Faulting)=E6=8C=87=E4=BB=A4=E5=AD=
+=97                 BADI
+> +0xC               =E5=BC=82=E5=B8=B8=E5=85=A5=E5=8F=A3=E5=9C=B0=E5=9D=
+=80                         EENTRY
+> +0x10              TLB=E7=B4=A2=E5=BC=95                              =
+TLBIDX
+> +0x11              TLB=E8=A1=A8=E9=A1=B9=E9=AB=98=E4=BD=8D            =
+              TLBEHI
+> +0x12              TLB=E8=A1=A8=E9=A1=B9=E4=BD=8E=E4=BD=8D0           =
+              TLBELO0
+> +0x13              TLB=E8=A1=A8=E9=A1=B9=E4=BD=8E=E4=BD=8D1           =
+              TLBELO1
+> +0x18              =E5=9C=B0=E5=9D=80=E7=A9=BA=E9=97=B4=E6=A0=87=E8=AF=
+=86=E7=AC=A6                       ASID
+> +0x19              =E4=BD=8E=E5=8D=8A=E5=9C=B0=E5=9D=80=E7=A9=BA=E9=97=
+=B4=E9=A1=B5=E5=85=A8=E5=B1=80=E7=9B=AE=E5=BD=95=E5=9F=BA=E5=9D=80      =
+     PGDL
+> +0x1A              =E9=AB=98=E5=8D=8A=E5=9C=B0=E5=9D=80=E7=A9=BA=E9=97=
+=B4=E9=A1=B5=E5=85=A8=E5=B1=80=E7=9B=AE=E5=BD=95=E5=9F=BA=E5=9D=80      =
+     PGDH
+> +0x1B              =E9=A1=B5=E5=85=A8=E5=B1=80=E7=9B=AE=E5=BD=95=E5=9F=
+=BA=E5=9D=80                       PGD
+> +0x1C              =E9=A1=B5=E8=A1=A8=E9=81=8D=E5=8E=86=E6=8E=A7=E5=88=
+=B6=E4=BD=8E=E5=8D=8A=E9=83=A8=E5=88=86                 PWCL
+> +0x1D              =E9=A1=B5=E8=A1=A8=E9=81=8D=E5=8E=86=E6=8E=A7=E5=88=
+=B6=E9=AB=98=E5=8D=8A=E9=83=A8=E5=88=86                 PWCH
+> +0x1E              STLB=E9=A1=B5=E5=A4=A7=E5=B0=8F                    =
+       STLBPS
+> +0x1F              =E7=BC=A9=E5=87=8F=E8=99=9A=E5=9C=B0=E5=9D=80=E9=85=
+=8D=E7=BD=AE                       RVACFG
+> +0x20              CPU=E7=BC=96=E5=8F=B7                              =
+CPUID
+> +0x21              =E7=89=B9=E6=9D=83=E8=B5=84=E6=BA=90=E9=85=8D=E7=BD=
+=AE=E4=BF=A1=E6=81=AF1                    PRCFG1
+> +0x22              =E7=89=B9=E6=9D=83=E8=B5=84=E6=BA=90=E9=85=8D=E7=BD=
+=AE=E4=BF=A1=E6=81=AF2                    PRCFG2
+> +0x23              =E7=89=B9=E6=9D=83=E8=B5=84=E6=BA=90=E9=85=8D=E7=BD=
+=AE=E4=BF=A1=E6=81=AF3                    PRCFG3
+> +0x30+n (0=E2=89=A4n=E2=89=A415)   =E6=95=B0=E6=8D=AE=E4=BF=9D=E5=AD=98=
+=E5=AF=84=E5=AD=98=E5=99=A8                       SAVEn
+> +0x40              =E5=AE=9A=E6=97=B6=E5=99=A8=E7=BC=96=E5=8F=B7      =
+                     TID
+> +0x41              =E5=AE=9A=E6=97=B6=E5=99=A8=E9=85=8D=E7=BD=AE      =
+                     TCFG
+> +0x42              =E5=AE=9A=E6=97=B6=E5=99=A8=E5=80=BC               =
+              TVAL
+> +0x43              =E8=AE=A1=E6=97=B6=E5=99=A8=E8=A1=A5=E5=81=BF      =
+                     CNTC
+> +0x44              =E5=AE=9A=E6=97=B6=E5=99=A8=E4=B8=AD=E6=96=AD=E6=B8=
+=85=E9=99=A4                       TICLR
+> +0x60              LLBit=E7=9B=B8=E5=85=B3=E6=8E=A7=E5=88=B6          =
+              LLBCTL
+> +0x80              =E5=AE=9E=E7=8E=B0=E7=9B=B8=E5=85=B3=E6=8E=A7=E5=88=
+=B61                        IMPCTL1
+> +0x81              =E5=AE=9E=E7=8E=B0=E7=9B=B8=E5=85=B3=E6=8E=A7=E5=88=
+=B62                        IMPCTL2
+> +0x88              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E5=85=A5=E5=
+=8F=A3=E5=9C=B0=E5=9D=80                  TLBRENTRY
+> +0x89              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E5=87=BA=E9=
+=94=99(Faulting)=E8=99=9A=E5=9C=B0=E5=9D=80      TLBRBADV
+> +0x8A              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E8=BF=94=E5=
+=9B=9E=E5=9C=B0=E5=9D=80                  TLBRERA
+> +0x8B              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E6=95=B0=E6=
+=8D=AE=E4=BF=9D=E5=AD=98                  TLBRSAVE
+> +0x8C              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E8=A1=A8=E9=
+=A1=B9=E4=BD=8E=E4=BD=8D0                 TLBRELO0
+> +0x8D              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E8=A1=A8=E9=
+=A1=B9=E4=BD=8E=E4=BD=8D1                 TLBRELO1
+> +0x8E              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E8=A1=A8=E9=
+=A1=B9=E9=AB=98=E4=BD=8D                  TLBEHI
+> +0x8F              TLB=E9=87=8D=E5=A1=AB=E5=BC=82=E5=B8=B8=E5=89=8D=E6=
+=A8=A1=E5=BC=8F=E4=BF=A1=E6=81=AF                TLBRPRMD
+> +0x90              =E6=9C=BA=E5=99=A8=E9=94=99=E8=AF=AF=E6=8E=A7=E5=88=
+=B6                         MERRCTL
+> +0x91              =E6=9C=BA=E5=99=A8=E9=94=99=E8=AF=AF=E4=BF=A1=E6=81=
+=AF1                        MERRINFO1
+> +0x92              =E6=9C=BA=E5=99=A8=E9=94=99=E8=AF=AF=E4=BF=A1=E6=81=
+=AF2                        MERRINFO2
+> +0x93              =E6=9C=BA=E5=99=A8=E9=94=99=E8=AF=AF=E5=BC=82=E5=B8=
+=B8=E5=85=A5=E5=8F=A3=E5=9C=B0=E5=9D=80                 MERRENTRY
+> +0x94              =E6=9C=BA=E5=99=A8=E9=94=99=E8=AF=AF=E5=BC=82=E5=B8=
+=B8=E8=BF=94=E5=9B=9E=E5=9C=B0=E5=9D=80                 MERRERA
+> +0x95              =E6=9C=BA=E5=99=A8=E9=94=99=E8=AF=AF=E5=BC=82=E5=B8=
+=B8=E6=95=B0=E6=8D=AE=E4=BF=9D=E5=AD=98                 MERRSAVE
+> +0x98              =E9=AB=98=E9=80=9F=E7=BC=93=E5=AD=98=E6=A0=87=E7=AD=
+=BE                         CTAG
+> +0x180+n (0=E2=89=A4n=E2=89=A43)   =E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=84=
+=E9=85=8D=E7=BD=AE=E7=AA=97=E5=8F=A3n                    DMWn
+> +0x200+2n (0=E2=89=A4n=E2=89=A431) =E6=80=A7=E8=83=BD=E7=9B=91=E6=B5=8B=
+=E9=85=8D=E7=BD=AEn                        PMCFGn
+> +0x201+2n (0=E2=89=A4n=E2=89=A431) =E6=80=A7=E8=83=BD=E7=9B=91=E6=B5=8B=
+=E8=AE=A1=E6=95=B0=E5=99=A8n                      PMCNTn
+> +0x300             =E5=86=85=E5=AD=98=E8=AF=BB=E5=86=99=E7=9B=91=E8=A7=
+=86=E7=82=B9=E6=95=B4=E4=BD=93=E6=8E=A7=E5=88=B6               MWPC
+> +0x301             =E5=86=85=E5=AD=98=E8=AF=BB=E5=86=99=E7=9B=91=E8=A7=
+=86=E7=82=B9=E6=95=B4=E4=BD=93=E7=8A=B6=E6=80=81               MWPS
+> +0x310+8n (0=E2=89=A4n=E2=89=A47)  =E5=86=85=E5=AD=98=E8=AF=BB=E5=86=99=
+=E7=9B=91=E8=A7=86=E7=82=B9n=E9=85=8D=E7=BD=AE1                 MWPnCFG1
+> +0x311+8n (0=E2=89=A4n=E2=89=A47)  =E5=86=85=E5=AD=98=E8=AF=BB=E5=86=99=
+=E7=9B=91=E8=A7=86=E7=82=B9n=E9=85=8D=E7=BD=AE2                 MWPnCFG2
+> +0x312+8n (0=E2=89=A4n=E2=89=A47)  =E5=86=85=E5=AD=98=E8=AF=BB=E5=86=99=
+=E7=9B=91=E8=A7=86=E7=82=B9n=E9=85=8D=E7=BD=AE3                 MWPnCFG3
+> +0x313+8n (0=E2=89=A4n=E2=89=A47)  =E5=86=85=E5=AD=98=E8=AF=BB=E5=86=99=
+=E7=9B=91=E8=A7=86=E7=82=B9n=E9=85=8D=E7=BD=AE4                 MWPnCFG4
+> +0x380             =E5=8F=96=E6=8C=87=E7=9B=91=E8=A7=86=E7=82=B9=E6=95=
+=B4=E4=BD=93=E6=8E=A7=E5=88=B6                   FWPC
+> +0x381             =E5=8F=96=E6=8C=87=E7=9B=91=E8=A7=86=E7=82=B9=E6=95=
+=B4=E4=BD=93=E7=8A=B6=E6=80=81                   FWPS
+> +0x390+8n (0=E2=89=A4n=E2=89=A47)  =E5=8F=96=E6=8C=87=E7=9B=91=E8=A7=86=
+=E7=82=B9n=E9=85=8D=E7=BD=AE1                     FWPnCFG1
+> +0x391+8n (0=E2=89=A4n=E2=89=A47)  =E5=8F=96=E6=8C=87=E7=9B=91=E8=A7=86=
+=E7=82=B9n=E9=85=8D=E7=BD=AE2                     FWPnCFG2
+> +0x392+8n (0=E2=89=A4n=E2=89=A47)  =E5=8F=96=E6=8C=87=E7=9B=91=E8=A7=86=
+=E7=82=B9n=E9=85=8D=E7=BD=AE3                     FWPnCFG3
+> +0x393+8n (0=E2=89=A4n=E2=89=A47)  =E5=8F=96=E6=8C=87=E7=9B=91=E8=A7=86=
+=E7=82=B9n=E9=85=8D=E7=BD=AE4                     FWPnCFG4
+> +0x500             =E8=B0=83=E8=AF=95=E5=AF=84=E5=AD=98=E5=99=A8      =
+                     DBG
+> +0x501             =E8=B0=83=E8=AF=95=E5=BC=82=E5=B8=B8=E8=BF=94=E5=9B=
+=9E=E5=9C=B0=E5=9D=80                     DERA
+> +0x502             =E8=B0=83=E8=AF=95=E6=95=B0=E6=8D=AE=E4=BF=9D=E5=AD=
+=98                         DSAVE
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +ERA, TLBRERA, MERRERA and DERA are sometimes also known as EPC,=20
-> TLBREPC, MERREPC
-> +and DEPC respectively.
+> +ERA=EF=BC=8CTLBRERA=EF=BC=8CMERRERA=E5=92=8CDERA=E6=9C=89=E6=97=B6=E4=
+=B9=9F=E5=88=86=E5=88=AB=E7=A7=B0=E4=B8=BAEPC=EF=BC=8CTLBREPC=EF=BC=8CME=
+RREPC=E5=92=8CDEPC=E3=80=82
 > +
-> +Basic Instruction Set
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E5=9F=BA=E7=A1=80=E6=8C=87=E4=BB=A4=E9=9B=86
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +Instruction formats
-> +-------------------
+> +=E6=8C=87=E4=BB=A4=E6=A0=BC=E5=BC=8F
+> +--------
 > +
-> +LoongArch instructions are 32 bits wide, belonging to 9 basic=20
-> instruction
-> +formats (and variants of them):
+> +LoongArch=E7=9A=84=E6=8C=87=E4=BB=A4=E5=AD=97=E9=95=BF=E4=B8=BA32=E4=BD=
+=8D=EF=BC=8C=E4=B8=80=E5=85=B1=E6=9C=899=E7=A7=8D=E5=9F=BA=E6=9C=AC=E6=8C=
+=87=E4=BB=A4=E6=A0=BC=E5=BC=8F=EF=BC=88=E4=BB=A5=E5=8F=8A=E4=B8=80=E4=BA=
+=9B=E5=8F=98=E4=BD=93=EF=BC=89:
 > +
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Format name Composition
+> +=E6=A0=BC=E5=BC=8F=E5=90=8D=E7=A7=B0    =E6=8C=87=E4=BB=A4=E6=9E=84=E6=
+=88=90
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +2R          Opcode + Rj + Rd
@@ -471,25 +583,37 @@ d=20
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +Rd is the destination register operand, while Rj, Rk and Ra ("a"=20
-> stands for
-> +"additional") are the source register operands. I8/I12/I16/I21/I26 are
-> +immediate operands of respective width. The longer I21 and I26 are=20
-> stored
-> +in separate higher and lower parts in the instruction word, denoted b=
-y=20
-> the "L"
-> +and "H" suffixes.
+> +Opcode=E6=98=AF=E6=8C=87=E4=BB=A4=E6=93=8D=E4=BD=9C=E7=A0=81=EF=BC=8C=
+Rj=E5=92=8CRk=E6=98=AF=E6=BA=90=E6=93=8D=E4=BD=9C=E6=95=B0=EF=BC=88=E5=AF=
+=84=E5=AD=98=E5=99=A8=EF=BC=89=EF=BC=8CRd=E6=98=AF=E7=9B=AE=E6=A0=87=E6=93=
+=8D=E4=BD=9C=E6=95=B0=EF=BC=88=E5=AF=84=E5=AD=98=E5=99=A8=EF=BC=89=EF=BC=
+=8CRa=E6=98=AF
+> +4R-type=E6=A0=BC=E5=BC=8F=E7=89=B9=E6=9C=89=E7=9A=84=E9=99=84=E5=8A=A0=
+=E6=93=8D=E4=BD=9C=E6=95=B0=EF=BC=88=E5=AF=84=E5=AD=98=E5=99=A8=EF=BC=89=
+=E3=80=82I8/I12/I16/I21/I26=E5=88=86=E5=88=AB=E6=98=AF8=E4=BD=8D/12=E4=BD=
+=8D/16=E4=BD=8D/
+> +21=E4=BD=8D/26=E4=BD=8D=E7=9A=84=E7=AB=8B=E5=8D=B3=E6=95=B0=E3=80=82=E5=
+=85=B6=E4=B8=AD=E8=BE=83=E9=95=BF=E7=9A=8421=E4=BD=8D=E5=92=8C26=E4=BD=8D=
+=E7=AB=8B=E5=8D=B3=E6=95=B0=E5=9C=A8=E6=8C=87=E4=BB=A4=E5=AD=97=E4=B8=AD=
+=E8=A2=AB=E5=88=86=E5=89=B2=E4=B8=BA=E9=AB=98=E4=BD=8D=E9=83=A8=E5=88=86=
+=E4=B8=8E=E4=BD=8E=E4=BD=8D
+> +=E9=83=A8=E5=88=86=EF=BC=8C=E6=89=80=E4=BB=A5=E4=BD=A0=E4=BB=AC=E5=9C=
+=A8=E8=BF=99=E9=87=8C=E7=9A=84=E6=A0=BC=E5=BC=8F=E6=8F=8F=E8=BF=B0=E4=B8=
+=AD=E8=83=BD=E5=A4=9F=E7=9C=8B=E5=88=B0I21L/I21H=E5=92=8CI26L/I26H=E8=BF=
+=99=E6=A0=B7=E5=B8=A6=E5=90=8E=E7=BC=80=E7=9A=84=E8=A1=A8=E8=BF=B0=E3=80=82
 > +
-> +List of Instructions
-> +--------------------
+> +=E6=8C=87=E4=BB=A4=E5=88=97=E8=A1=A8
+> +--------
 > +
-> +For brevity, only instruction names (mnemonics) are listed here;=20
-> please see the
-> +:ref:`References <loongarch-references>` for details.
+> +=E4=B8=BA=E4=BA=86=E7=AE=80=E4=BE=BF=E8=B5=B7=E8=A7=81=EF=BC=8C=E6=88=
+=91=E4=BB=AC=E5=9C=A8=E6=AD=A4=E5=8F=AA=E7=BD=97=E5=88=97=E4=B8=80=E4=B8=
+=8B=E6=8C=87=E4=BB=A4=E5=90=8D=E7=A7=B0=EF=BC=88=E5=8A=A9=E8=AE=B0=E7=AC=
+=A6=EF=BC=89=EF=BC=8C=E9=9C=80=E8=A6=81=E8=AF=A6=E7=BB=86=E4=BF=A1=E6=81=
+=AF=E8=AF=B7=E9=98=85=E8=AF=BB
+> +:ref:`=E5=8F=82=E8=80=83=E6=96=87=E7=8C=AE <loongarch-references-zh_C=
+N>` =E4=B8=AD=E7=9A=84=E6=96=87=E6=A1=A3=E3=80=82
 > +
-> +
-> +1. Arithmetic Instructions::
+> +1. =E7=AE=97=E6=9C=AF=E8=BF=90=E7=AE=97=E6=8C=87=E4=BB=A4::
 > +
 > +    ADD.W SUB.W ADDI.W ADD.D SUB.D ADDI.D
 > +    SLT SLTU SLTI SLTUI
@@ -499,12 +623,12 @@ y=20
 > +    PCADDI PCADDU12I PCADDU18I
 > +    LU12I.W LU32I.D LU52I.D ADDU16I.D
 > +
-> +2. Bit-shift Instructions::
+> +2. =E7=A7=BB=E4=BD=8D=E8=BF=90=E7=AE=97=E6=8C=87=E4=BB=A4::
 > +
 > +    SLL.W SRL.W SRA.W ROTR.W SLLI.W SRLI.W SRAI.W ROTRI.W
 > +    SLL.D SRL.D SRA.D ROTR.D SLLI.D SRLI.D SRAI.D ROTRI.D
 > +
-> +3. Bit-manipulation Instructions::
+> +3. =E4=BD=8D=E5=9F=9F=E6=93=8D=E4=BD=9C=E6=8C=87=E4=BB=A4::
 > +
 > +    EXT.W.B EXT.W.H CLO.W CLO.D SLZ.W CLZ.D CTO.W CTO.D CTZ.W CTZ.D
 > +    BYTEPICK.W BYTEPICK.D BSTRINS.W BSTRINS.D BSTRPICK.W BSTRPICK.D
@@ -512,11 +636,11 @@ y=20
 > BITREV.W BITREV.D
 > +    MASKEQZ MASKNEZ
 > +
-> +4. Branch Instructions::
+> +4. =E5=88=86=E6=94=AF=E8=BD=AC=E7=A7=BB=E6=8C=87=E4=BB=A4::
 > +
 > +    BEQ BNE BLT BGE BLTU BGEU BEQZ BNEZ B BL JIRL
 > +
-> +5. Load/Store Instructions::
+> +5. =E8=AE=BF=E5=AD=98=E8=AF=BB=E5=86=99=E6=8C=87=E4=BB=A4::
 > +
 > +    LD.B LD.BU LD.H LD.HU LD.W LD.WU LD.D ST.B ST.H ST.W ST.D
 > +    LDX.B LDX.BU LDX.H LDX.HU LDX.W LDX.WU LDX.D STX.B STX.H STX.W=20
@@ -524,24 +648,24 @@ y=20
 > +    LDPTR.W LDPTR.D STPTR.W STPTR.D
 > +    PRELD PRELDX
 > +
-> +6. Atomic Operation Instructions::
+> +6. =E5=8E=9F=E5=AD=90=E6=93=8D=E4=BD=9C=E6=8C=87=E4=BB=A4::
 > +
 > +    LL.W SC.W LL.D SC.D
 > +    AMSWAP.W AMSWAP.D AMADD.W AMADD.D AMAND.W AMAND.D AMOR.W AMOR.D=20
 > AMXOR.W AMXOR.D
 > +    AMMAX.W AMMAX.D AMMIN.W AMMIN.D
 > +
-> +7. Barrier Instructions::
+> +7. =E6=A0=85=E9=9A=9C=E6=8C=87=E4=BB=A4::
 > +
 > +    IBAR DBAR
 > +
-> +8. Special Instructions::
+> +8. =E7=89=B9=E6=AE=8A=E6=8C=87=E4=BB=A4::
 > +
 > +    SYSCALL BREAK CPUCFG NOP IDLE ERTN(ERET) DBCL(DBGCALL) RDTIMEL.W=20
 > RDTIMEH.W RDTIME.D
 > +    ASRTLE.D ASRTGT.D
 > +
-> +9. Privileged Instructions::
+> +9. =E7=89=B9=E6=9D=83=E6=8C=87=E4=BB=A4::
 > +
 > +    CSRRD CSRWR CSRXCHG
 > +    IOCSRRD.B IOCSRRD.H IOCSRRD.W IOCSRRD.D IOCSRWR.B IOCSRWR.H=20
@@ -549,133 +673,175 @@ y=20
 > +    CACOP TLBP(TLBSRCH) TLBRD TLBWR TLBFILL TLBCLR TLBFLUSH INVTLB=20
 > LDDIR LDPTE
 > +
-> +Virtual Memory
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E8=99=9A=E6=8B=9F=E5=86=85=E5=AD=98
+> +=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +LoongArch supports direct-mapped virtual memory and page-mapped=20
-> virtual memory.
+> +LoongArch=E5=8F=AF=E4=BB=A5=E4=BD=BF=E7=94=A8=E7=9B=B4=E6=8E=A5=E6=98=
+=A0=E5=B0=84=E8=99=9A=E6=8B=9F=E5=86=85=E5=AD=98=E5=92=8C=E5=88=86=E9=A1=
+=B5=E6=98=A0=E5=B0=84=E8=99=9A=E6=8B=9F=E5=86=85=E5=AD=98=E3=80=82
 > +
-> +Direct-mapped virtual memory is configured by CSR.DMWn (n=3D0~3), it =
-has=20
-> a simple
-> +relationship between virtual address (VA) and physical address (PA)::
+> +=E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=84=E8=99=9A=E6=8B=9F=E5=86=85=E5=AD=
+=98=E9=80=9A=E8=BF=87CSR.DMWn=EF=BC=88n=3D0~3=EF=BC=89=E6=9D=A5=E8=BF=9B=
+=E8=A1=8C=E9=85=8D=E7=BD=AE=EF=BC=8C=E8=99=9A=E6=8B=9F=E5=9C=B0=E5=9D=80=
+=EF=BC=88VA=EF=BC=89=E5=92=8C=E7=89=A9=E7=90=86=E5=9C=B0=E5=9D=80=EF=BC=88=
+PA=EF=BC=89
+> +=E4=B9=8B=E9=97=B4=E6=9C=89=E7=AE=80=E5=8D=95=E7=9A=84=E6=98=A0=E5=B0=
+=84=E5=85=B3=E7=B3=BB::
 > +
-> + VA =3D PA + FixedOffset
+> + VA =3D PA + =E5=9B=BA=E5=AE=9A=E5=81=8F=E7=A7=BB
 > +
-> +Page-mapped virtual memory has arbitrary relationship between VA and=20
-> PA, which
-> +is recorded in TLB and page tables. LoongArch's TLB includes a=20
-> fully-associative
-> +MTLB (Multiple Page Size TLB) and set-associative STLB (Single Page=20
-> Size TLB).
+> +=E5=88=86=E9=A1=B5=E6=98=A0=E5=B0=84=E7=9A=84=E8=99=9A=E6=8B=9F=E5=9C=
+=B0=E5=9D=80=EF=BC=88VA=EF=BC=89=E5=92=8C=E7=89=A9=E7=90=86=E5=9C=B0=E5=9D=
+=80=EF=BC=88PA=EF=BC=89=E6=9C=89=E4=BB=BB=E6=84=8F=E7=9A=84=E6=98=A0=E5=B0=
+=84=E5=85=B3=E7=B3=BB=EF=BC=8C=E8=BF=99=E7=A7=8D=E5=85=B3=E7=B3=BB=E8=AE=
+=B0=E5=BD=95=E5=9C=A8TLB=E5=92=8C=E9=A1=B5
+> +=E8=A1=A8=E4=B8=AD=E3=80=82LoongArch=E7=9A=84TLB=E5=8C=85=E6=8B=AC=E4=
+=B8=80=E4=B8=AA=E5=85=A8=E7=9B=B8=E8=81=94=E7=9A=84MTLB=EF=BC=88Multiple=
+ Page Size TLB=EF=BC=8C=E5=A4=9A=E6=A0=B7=E9=A1=B5=E5=A4=A7=E5=B0=8FTLB=EF=
+=BC=89
+> +=E5=92=8C=E4=B8=80=E4=B8=AA=E7=BB=84=E7=9B=B8=E8=81=94=E7=9A=84STLB=EF=
+=BC=88Single Page Size TLB=EF=BC=8C=E5=8D=95=E4=B8=80=E9=A1=B5=E5=A4=A7=E5=
+=B0=8FTLB=EF=BC=89=E3=80=82
 > +
-> +By default, the whole virtual address space of LA32 is configured lik=
-e=20
-> this:
+> +=E7=BC=BA=E7=9C=81=E7=8A=B6=E6=80=81=E4=B8=8B=EF=BC=8CLA32=E7=9A=84=E6=
+=95=B4=E4=B8=AA=E8=99=9A=E6=8B=9F=E5=9C=B0=E5=9D=80=E7=A9=BA=E9=97=B4=E9=
+=85=8D=E7=BD=AE=E5=A6=82=E4=B8=8B=EF=BC=9A
 > +
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Name         Address Range               Attributes
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E5=8C=BA=E6=AE=B5=E5=90=8D       =E5=9C=B0=E5=9D=80=E8=8C=83=E5=9B=B4=
+                    =E5=B1=9E=E6=80=A7
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +``UVRANGE``  ``0x00000000 - 0x7FFFFFFF`` Page-mapped, Cached, PLV0~3
-> +``KPRANGE0`` ``0x80000000 - 0x9FFFFFFF`` Direct-mapped, Uncached, PLV0
-> +``KPRANGE1`` ``0xA0000000 - 0xBFFFFFFF`` Direct-mapped, Cached, PLV0
-> +``KVRANGE``  ``0xC0000000 - 0xFFFFFFFF`` Page-mapped, Cached, PLV0
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +``UVRANGE``  ``0x00000000 - 0x7FFFFFFF`` =E5=88=86=E9=A1=B5=E6=98=A0=E5=
+=B0=84, =E5=8F=AF=E7=BC=93=E5=AD=98, PLV0~3
+> +``KPRANGE0`` ``0x80000000 - 0x9FFFFFFF`` =E7=9B=B4=E6=8E=A5=E6=98=A0=E5=
+=B0=84, =E9=9D=9E=E7=BC=93=E5=AD=98, PLV0
+> +``KPRANGE1`` ``0xA0000000 - 0xBFFFFFFF`` =E7=9B=B4=E6=8E=A5=E6=98=A0=E5=
+=B0=84, =E5=8F=AF=E7=BC=93=E5=AD=98, PLV0
+> +``KVRANGE``  ``0xC0000000 - 0xFFFFFFFF`` =E5=88=86=E9=A1=B5=E6=98=A0=E5=
+=B0=84, =E5=8F=AF=E7=BC=93=E5=AD=98, PLV0
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +=E7=94=A8=E6=88=B7=E6=80=81=EF=BC=88PLV3=EF=BC=89=E5=8F=AA=E8=83=BD=E8=
+=AE=BF=E9=97=AEUVRANGE=EF=BC=8C=E5=AF=B9=E4=BA=8E=E7=9B=B4=E6=8E=A5=E6=98=
+=A0=E5=B0=84=E7=9A=84KPRANGE0=E5=92=8CKPRANGE1=EF=BC=8C=E5=B0=86=E8=99=9A=
+=E6=8B=9F=E5=9C=B0=E5=9D=80=E7=9A=84=E7=AC=AC
+> +30~31=E4=BD=8D=E6=B8=85=E9=9B=B6=E5=B0=B1=E7=AD=89=E4=BA=8E=E7=89=A9=E7=
+=90=86=E5=9C=B0=E5=9D=80=E3=80=82=E4=BE=8B=E5=A6=82=EF=BC=9A=E7=89=A9=E7=
+=90=86=E5=9C=B0=E5=9D=800x00001000=E5=AF=B9=E5=BA=94=E7=9A=84=E9=9D=9E=E7=
+=BC=93=E5=AD=98=E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=84=E8=99=9A=E6=8B=9F=E5=
+=9C=B0=E5=9D=80
+> +=E6=98=AF0x80001000=EF=BC=8C=E8=80=8C=E5=85=B6=E5=8F=AF=E7=BC=93=E5=AD=
+=98=E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=84=E8=99=9A=E6=8B=9F=E5=9C=B0=E5=9D=
+=80=E6=98=AF0xA0001000=E3=80=82
+> +
+> +=E7=BC=BA=E7=9C=81=E7=8A=B6=E6=80=81=E4=B8=8B=EF=BC=8CLA64=E7=9A=84=E6=
+=95=B4=E4=B8=AA=E8=99=9A=E6=8B=9F=E5=9C=B0=E5=9D=80=E7=A9=BA=E9=97=B4=E9=
+=85=8D=E7=BD=AE=E5=A6=82=E4=B8=8B=EF=BC=9A
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +User mode (PLV3) can only access UVRANGE. For direct-mapped KPRANGE0=20
-> and
-> +KPRANGE1, PA is equal to VA with bit30~31 cleared. For example, the=20
-> uncached
-> +direct-mapped VA of 0x00001000 is 0x80001000, and the cached=20
-> direct-mapped
-> +VA of 0x00001000 is 0xA0001000.
-> +
-> +By default, the whole virtual address space of LA64 is configured lik=
-e=20
-> this:
-> +
+> +=E5=8C=BA=E6=AE=B5=E5=90=8D       =E5=9C=B0=E5=9D=80=E8=8C=83=E5=9B=B4=
+               =E5=B1=9E=E6=80=A7
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Name         Address Range          Attributes
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +``XUVRANGE`` ``0x0000000000000000 - Page-mapped, Cached, PLV0~3
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +``XUVRANGE`` ``0x0000000000000000 - =E5=88=86=E9=A1=B5=E6=98=A0=E5=B0=
+=84, =E5=8F=AF=E7=BC=93=E5=AD=98, PLV0~3
 > +             0x3FFFFFFFFFFFFFFF``
-> +``XSPRANGE`` ``0x4000000000000000 - Direct-mapped, Cached / Uncached,=20
-> PLV0
+> +``XSPRANGE`` ``0x4000000000000000 - =E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=
+=84, =E5=8F=AF=E7=BC=93=E5=AD=98 / =E9=9D=9E=E7=BC=93=E5=AD=98, PLV0
 > +             0x7FFFFFFFFFFFFFFF``
-> +``XKPRANGE`` ``0x8000000000000000 - Direct-mapped, Cached / Uncached,=20
-> PLV0
+> +``XKPRANGE`` ``0x8000000000000000 - =E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=
+=84, =E5=8F=AF=E7=BC=93=E5=AD=98 / =E9=9D=9E=E7=BC=93=E5=AD=98, PLV0
 > +             0xBFFFFFFFFFFFFFFF``
-> +``XKVRANGE`` ``0xC000000000000000 - Page-mapped, Cached, PLV0
+> +``XKVRANGE`` ``0xC000000000000000 - =E5=88=86=E9=A1=B5=E6=98=A0=E5=B0=
+=84, =E5=8F=AF=E7=BC=93=E5=AD=98, PLV0
 > +             0xFFFFFFFFFFFFFFFF``
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +User mode (PLV3) can only access XUVRANGE. For direct-mapped XSPRANGE=20
-> and
-> +XKPRANGE, PA is equal to VA with bits 60~63 cleared, and the cache=20
-> attribute
-> +is configured by bits 60~61 in VA: 0 is for strongly-ordered uncached=
-,=20
-> 1 is
-> +for coherent cached, and 2 is for weakly-ordered uncached.
+> +=E7=94=A8=E6=88=B7=E6=80=81=EF=BC=88PLV3=EF=BC=89=E5=8F=AA=E8=83=BD=E8=
+=AE=BF=E9=97=AEXUVRANGE=EF=BC=8C=E5=AF=B9=E4=BA=8E=E7=9B=B4=E6=8E=A5=E6=98=
+=A0=E5=B0=84=E7=9A=84XSPRANGE=E5=92=8CXKPRANGE=EF=BC=8C=E5=B0=86=E8=99=9A=
+=E6=8B=9F=E5=9C=B0=E5=9D=80=E7=9A=84=E7=AC=AC
+> +60~63=E4=BD=8D=E6=B8=85=E9=9B=B6=E5=B0=B1=E7=AD=89=E4=BA=8E=E7=89=A9=E7=
+=90=86=E5=9C=B0=E5=9D=80=EF=BC=8C=E8=80=8C=E5=85=B6=E7=BC=93=E5=AD=98=E5=
+=B1=9E=E6=80=A7=E6=98=AF=E9=80=9A=E8=BF=87=E8=99=9A=E6=8B=9F=E5=9C=B0=E5=
+=9D=80=E7=9A=84=E7=AC=AC60~61=E4=BD=8D=E9=85=8D=E7=BD=AE=E7=9A=84=EF=BC=88=
+0=E8=A1=A8=E7=A4=BA=E5=BC=BA=E5=BA=8F
+> +=E9=9D=9E=E7=BC=93=E5=AD=98=EF=BC=8C1=E8=A1=A8=E7=A4=BA=E4=B8=80=E8=87=
+=B4=E5=8F=AF=E7=BC=93=E5=AD=98=EF=BC=8C2=E8=A1=A8=E7=A4=BA=E5=BC=B1=E5=BA=
+=8F=E9=9D=9E=E7=BC=93=E5=AD=98=EF=BC=89=E3=80=82
 > +
-> +Currently we only use XKPRANGE for direct mapping and XSPRANGE is=20
-> reserved.
+> +=E7=9B=AE=E5=89=8D=EF=BC=8C=E6=88=91=E4=BB=AC=E4=BB=85=E7=94=A8XKPRAN=
+GE=E6=9D=A5=E8=BF=9B=E8=A1=8C=E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=84=EF=BC=8C=
+XSPRANGE=E4=BF=9D=E7=95=99=E7=BB=99=E4=BB=A5=E5=90=8E=E7=94=A8=E3=80=82
 > +
-> +To put this in action: the strongly-ordered uncached direct-mapped VA=20
-> (in
-> +XKPRANGE) of 0x00000000_00001000 is 0x80000000_00001000, the coherent=20
-> cached
-> +direct-mapped VA (in XKPRANGE) of 0x00000000_00001000 is=20
-> 0x90000000_00001000,
-> +and the weakly-ordered uncached direct-mapped VA (in XKPRANGE) of=20
-> 0x00000000
-> +_00001000 is 0xA0000000_00001000.
+> +=E6=AD=A4=E5=A4=84=E7=BB=99=E5=87=BA=E4=B8=80=E4=B8=AA=E7=9B=B4=E6=8E=
+=A5=E6=98=A0=E5=B0=84=E7=9A=84=E4=BE=8B=E5=AD=90=EF=BC=9A=E7=89=A9=E7=90=
+=86=E5=9C=B0=E5=9D=800x00000000_00001000=E7=9A=84=E5=BC=BA=E5=BA=8F=E9=9D=
+=9E=E7=BC=93=E5=AD=98=E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=84=E8=99=9A=E6=8B=
+=9F=E5=9C=B0=E5=9D=80
+> +=EF=BC=88=E5=9C=A8XKPRANGE=E4=B8=AD=EF=BC=89=E6=98=AF0x80000000_00001=
+000=EF=BC=8C=E5=85=B6=E4=B8=80=E8=87=B4=E5=8F=AF=E7=BC=93=E5=AD=98=E7=9B=
+=B4=E6=8E=A5=E6=98=A0=E5=B0=84=E8=99=9A=E6=8B=9F=E5=9C=B0=E5=9D=80=EF=BC=
+=88=E5=9C=A8XKPRANGE=E4=B8=AD=EF=BC=89
+> +=E6=98=AF0x90000000_00001000=EF=BC=8C=E8=80=8C=E5=85=B6=E5=BC=B1=E5=BA=
+=8F=E9=9D=9E=E7=BC=93=E5=AD=98=E7=9B=B4=E6=8E=A5=E6=98=A0=E5=B0=84=E8=99=
+=9A=E6=8B=9F=E5=9C=B0=E5=9D=80=EF=BC=88=E5=9C=A8XKPRANGE=E4=B8=AD=EF=BC=89=
+=E6=98=AF0xA0000000_
+> +00001000=E3=80=82
 > +
-> +Relationship of Loongson and LoongArch
+> +Loongson=E4=B8=8ELoongArch=E7=9A=84=E5=85=B3=E7=B3=BB
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=3D=3D
 > +
-> +LoongArch is a RISC ISA which is different from any other existing=20
-> ones, while
-> +Loongson is a family of processors. Loongson includes 3 series:=20
-> Loongson-1 is
-> +the 32-bit processor series, Loongson-2 is the low-end 64-bit=20
-> processor series,
-> +and Loongson-3 is the high-end 64-bit processor series. Old Loongson=20
-> is based on
-> +MIPS, while New Loongson is based on LoongArch. Take Loongson-3 as an=20
-> example:
-> +Loongson-3A1000/3B1500/3A2000/3A3000/3A4000 are MIPS-compatible, whil=
-e=20
-> Loongson-
-> +3A5000 (and future revisions) are all based on LoongArch.
+> +LoongArch=E6=98=AF=E4=B8=80=E7=A7=8DRISC=E6=8C=87=E4=BB=A4=E9=9B=86=E6=
+=9E=B6=E6=9E=84=EF=BC=88ISA=EF=BC=89=EF=BC=8C=E4=B8=8D=E5=90=8C=E4=BA=8E=
+=E7=8E=B0=E5=AD=98=E7=9A=84=E4=BB=BB=E4=BD=95=E4=B8=80=E7=A7=8DISA=EF=BC=
+=8C=E8=80=8CLoongson=EF=BC=88=E5=8D=B3=E9=BE=99
+> +=E8=8A=AF=EF=BC=89=E6=98=AF=E4=B8=80=E4=B8=AA=E5=A4=84=E7=90=86=E5=99=
+=A8=E5=AE=B6=E6=97=8F=E3=80=82=E9=BE=99=E8=8A=AF=E5=8C=85=E6=8B=AC=E4=B8=
+=89=E4=B8=AA=E7=B3=BB=E5=88=97=EF=BC=9ALoongson-1=EF=BC=88=E9=BE=99=E8=8A=
+=AF1=E5=8F=B7=EF=BC=89=E6=98=AF32=E4=BD=8D=E5=A4=84=E7=90=86=E5=99=A8=E7=
+=B3=BB=E5=88=97=EF=BC=8C
+> +Loongson-2=EF=BC=88=E9=BE=99=E8=8A=AF2=E5=8F=B7=EF=BC=89=E6=98=AF=E4=BD=
+=8E=E7=AB=AF64=E4=BD=8D=E5=A4=84=E7=90=86=E5=99=A8=E7=B3=BB=E5=88=97=EF=BC=
+=8C=E8=80=8CLoongson-3=EF=BC=88=E9=BE=99=E8=8A=AF3=E5=8F=B7=EF=BC=89=E6=98=
+=AF=E9=AB=98=E7=AB=AF64=E4=BD=8D=E5=A4=84=E7=90=86
+> +=E5=99=A8=E7=B3=BB=E5=88=97=E3=80=82=E6=97=A7=E7=9A=84=E9=BE=99=E8=8A=
+=AF=E5=A4=84=E7=90=86=E5=99=A8=E5=9F=BA=E4=BA=8EMIPS=E6=9E=B6=E6=9E=84=EF=
+=BC=8C=E8=80=8C=E6=96=B0=E7=9A=84=E9=BE=99=E8=8A=AF=E5=A4=84=E7=90=86=E5=
+=99=A8=E5=9F=BA=E4=BA=8ELoongArch=E6=9E=B6=E6=9E=84=E3=80=82=E4=BB=A5=E9=
+=BE=99=E8=8A=AF3=E5=8F=B7
+> +=E4=B8=BA=E4=BE=8B=EF=BC=9A=E9=BE=99=E8=8A=AF3A1000/3B1500/3A2000/3A3=
+000/3A4000=E9=83=BD=E6=98=AF=E5=85=BC=E5=AE=B9MIPS=E7=9A=84=EF=BC=8C=E8=80=
+=8C=E9=BE=99=E8=8A=AF3A5000=EF=BC=88=E4=BB=A5=E5=8F=8A=E5=B0=86
+> +=E6=9D=A5=E7=9A=84=E5=9E=8B=E5=8F=B7=EF=BC=89=E9=83=BD=E6=98=AF=E5=9F=
+=BA=E4=BA=8ELoongArch=E7=9A=84=E3=80=82
 > +
-> +.. _loongarch-references:
+> +.. _loongarch-references-zh_CN:
 > +
-> +References
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E5=8F=82=E8=80=83=E6=96=87=E7=8C=AE
+> +=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +Official web site of Loongson Technology Corp. Ltd.:
+> +Loongson=E5=AE=98=E6=96=B9=E7=BD=91=E7=AB=99=EF=BC=88=E9=BE=99=E8=8A=AF=
+=E4=B8=AD=E7=A7=91=E6=8A=80=E6=9C=AF=E8=82=A1=E4=BB=BD=E6=9C=89=E9=99=90=
+=E5=85=AC=E5=8F=B8=EF=BC=89=EF=BC=9A
 > +
 > +  http://www.loongson.cn/
 > +
-> +Developer web site of Loongson and LoongArch (Software and=20
-> Documentation):
+> +Loongson=E4=B8=8ELoongArch=E7=9A=84=E5=BC=80=E5=8F=91=E8=80=85=E7=BD=91=
+=E7=AB=99=EF=BC=88=E8=BD=AF=E4=BB=B6=E4=B8=8E=E6=96=87=E6=A1=A3=E8=B5=84=
+=E6=BA=90=EF=BC=89=EF=BC=9A
 > +
 > +  http://www.loongnix.cn/
 > +
@@ -683,82 +849,111 @@ e=20
 > +
 > +  https://loongson.github.io/LoongArch-Documentation/
 > +
-> +Documentation of LoongArch ISA:
+> +LoongArch=E6=8C=87=E4=BB=A4=E9=9B=86=E6=9E=B6=E6=9E=84=E7=9A=84=E6=96=
+=87=E6=A1=A3=EF=BC=9A
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/LoongArch-Vol1-v1.00-CN.pdf=20
-> (in Chinese)
+> =EF=BC=88=E4=B8=AD=E6=96=87=E7=89=88=EF=BC=89
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/LoongArch-Vol1-v1.00-EN.pdf=20
-> (in English)
+> =EF=BC=88=E8=8B=B1=E6=96=87=E7=89=88=EF=BC=89
 > +
-> +Documentation of LoongArch ELF psABI:
+> +LoongArch=E7=9A=84ELF psABI=E6=96=87=E6=A1=A3=EF=BC=9A
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/LoongArch-ELF-ABI-v1.00-CN.pdf=20
-> (in Chinese)
+> =EF=BC=88=E4=B8=AD=E6=96=87=E7=89=88=EF=BC=89
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/LoongArch-ELF-ABI-v1.00-EN.pdf=20
-> (in English)
+> =EF=BC=88=E8=8B=B1=E6=96=87=E7=89=88=EF=BC=89
 > +
-> +Linux kernel repository of Loongson and LoongArch:
+> +Loongson=E4=B8=8ELoongArch=E7=9A=84Linux=E5=86=85=E6=A0=B8=E6=BA=90=E7=
+=A0=81=E4=BB=93=E5=BA=93=EF=BC=9A
 > +
 > + =20
 > https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loong=
 son.git
-> diff --git a/Documentation/loongarch/irq-chip-model.rst=20
-> b/Documentation/loongarch/irq-chip-model.rst
+> diff --git=20
+> a/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst=20
+> b/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
 > new file mode 100644
-> index 000000000000..35c962991283
+> index 000000000000..9f6c32f3bad0
 > --- /dev/null
-> +++ b/Documentation/loongarch/irq-chip-model.rst
-> @@ -0,0 +1,168 @@
+> +++ b/Documentation/translations/zh_CN/loongarch/irq-chip-model.rst
+> @@ -0,0 +1,167 @@
 > +.. SPDX-License-Identifier: GPL-2.0
 > +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/loongarch/irq-chip-model.rst
+> +:Translator: Huacai Chen <chenhuacai@loongson.cn>
+> +
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +IRQ chip model (hierarchy) of LoongArch
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +LoongArch=E7=9A=84IRQ=E8=8A=AF=E7=89=87=E6=A8=A1=E5=9E=8B=EF=BC=88=E5=
+=B1=82=E7=BA=A7=E5=85=B3=E7=B3=BB=EF=BC=89
 > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +Currently, LoongArch based processors (e.g. Loongson-3A5000) can only=20
-> work together
-> +with LS7A chipsets. The irq chips in LoongArch computers include=20
-> CPUINTC (CPU Core
-> +Interrupt Controller), LIOINTC (Legacy I/O Interrupt Controller),=20
-> EIOINTC (Extended
-> +I/O Interrupt Controller), HTVECINTC (Hyper-Transport Vector Interrup=
-t=20
-> Controller),
-> +PCH-PIC (Main Interrupt Controller in LS7A chipset), PCH-LPC (LPC=20
-> Interrupt Controller
-> +in LS7A chipset) and PCH-MSI (MSI Interrupt Controller).
+> +=E7=9B=AE=E5=89=8D=EF=BC=8C=E5=9F=BA=E4=BA=8ELoongArch=E7=9A=84=E5=A4=
+=84=E7=90=86=E5=99=A8=EF=BC=88=E5=A6=82=E9=BE=99=E8=8A=AF3A5000=EF=BC=89=
+=E5=8F=AA=E8=83=BD=E4=B8=8ELS7A=E8=8A=AF=E7=89=87=E7=BB=84=E9=85=8D=E5=90=
+=88=E5=B7=A5=E4=BD=9C=E3=80=82LoongArch=E8=AE=A1=E7=AE=97=E6=9C=BA
+> +=E4=B8=AD=E7=9A=84=E4=B8=AD=E6=96=AD=E6=8E=A7=E5=88=B6=E5=99=A8=EF=BC=
+=88=E5=8D=B3IRQ=E8=8A=AF=E7=89=87=EF=BC=89=E5=8C=85=E6=8B=ACCPUINTC=EF=BC=
+=88CPU Core Interrupt Controller=EF=BC=89=E3=80=81LIOINTC=EF=BC=88
+> +Legacy I/O Interrupt Controller=EF=BC=89=E3=80=81EIOINTC=EF=BC=88Exte=
+nded I/O Interrupt=20
+> Controller=EF=BC=89=E3=80=81
+> +HTVECINTC=EF=BC=88Hyper-Transport Vector Interrupt=20
+> Controller=EF=BC=89=E3=80=81PCH-PIC=EF=BC=88LS7A=E8=8A=AF=E7=89=87=E7=BB=
+=84=E7=9A=84=E4=B8=BB=E4=B8=AD
+> +=E6=96=AD=E6=8E=A7=E5=88=B6=E5=99=A8=EF=BC=89=E3=80=81PCH-LPC=EF=BC=88=
+LS7A=E8=8A=AF=E7=89=87=E7=BB=84=E7=9A=84LPC=E4=B8=AD=E6=96=AD=E6=8E=A7=E5=
+=88=B6=E5=99=A8=EF=BC=89=E5=92=8CPCH-MSI=EF=BC=88MSI=E4=B8=AD=E6=96=AD=E6=
+=8E=A7=E5=88=B6=E5=99=A8=EF=BC=89=E3=80=82
 > +
-> +CPUINTC is a per-core controller (in CPU), LIOINTC/EIOINTC/HTVECINTC=20
-> are per-package
-> +controllers (in CPU), while PCH-PIC/PCH-LPC/PCH-MSI are controllers=20
-> out of CPU (i.e.,
-> +in chipsets). These controllers (in other words, irqchips) are linked=20
-> in a hierarchy,
-> +and there are two models of hierarchy (legacy model and extended=20
-> model).
+> +CPUINTC=E6=98=AF=E4=B8=80=E7=A7=8DCPU=E5=86=85=E9=83=A8=E7=9A=84=E6=AF=
+=8F=E4=B8=AA=E6=A0=B8=E6=9C=AC=E5=9C=B0=E7=9A=84=E4=B8=AD=E6=96=AD=E6=8E=
+=A7=E5=88=B6=E5=99=A8=EF=BC=8CLIOINTC/EIOINTC/HTVECINTC=E6=98=AFCPU=E5=86=
+=85=E9=83=A8=E7=9A=84
+> +=E5=85=A8=E5=B1=80=E4=B8=AD=E6=96=AD=E6=8E=A7=E5=88=B6=E5=99=A8=EF=BC=
+=88=E6=AF=8F=E4=B8=AA=E8=8A=AF=E7=89=87=E4=B8=80=E4=B8=AA=EF=BC=8C=E6=89=
+=80=E6=9C=89=E6=A0=B8=E5=85=B1=E4=BA=AB=EF=BC=89=EF=BC=8C=E8=80=8CPCH-PI=
+C/PCH-LPC/PCH-MSI=E6=98=AFCPU=E5=A4=96=E9=83=A8=E7=9A=84=E4=B8=AD
+> +=E6=96=AD=E6=8E=A7=E5=88=B6=E5=99=A8=EF=BC=88=E5=9C=A8=E9=85=8D=E5=A5=
+=97=E8=8A=AF=E7=89=87=E7=BB=84=E9=87=8C=E9=9D=A2=EF=BC=89=E3=80=82=E8=BF=
+=99=E4=BA=9B=E4=B8=AD=E6=96=AD=E6=8E=A7=E5=88=B6=E5=99=A8=EF=BC=88=E6=88=
+=96=E8=80=85=E8=AF=B4IRQ=E8=8A=AF=E7=89=87=EF=BC=89=E4=BB=A5=E4=B8=80=E7=
+=A7=8D=E5=B1=82=E6=AC=A1=E6=A0=91=E7=9A=84=E7=BB=84=E7=BB=87=E5=BD=A2=E5=
+=BC=8F
+> +=E7=BA=A7=E8=81=94=E5=9C=A8=E4=B8=80=E8=B5=B7=EF=BC=8C=E4=B8=80=E5=85=
+=B1=E6=9C=89=E4=B8=A4=E7=A7=8D=E5=B1=82=E7=BA=A7=E5=85=B3=E7=B3=BB=E6=A8=
+=A1=E5=9E=8B=EF=BC=88=E4=BC=A0=E7=BB=9FIRQ=E6=A8=A1=E5=9E=8B=E5=92=8C=E6=
+=89=A9=E5=B1=95IRQ=E6=A8=A1=E5=9E=8B=EF=BC=89=E3=80=82
 > +
-> +Legacy IRQ model
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E4=BC=A0=E7=BB=9FIRQ=E6=A8=A1=E5=9E=8B
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer=20
-> interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all=20
-> other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC,=20
-> and then go
-> +to LIOINTC, and then CPUINTC.
+> +=E5=9C=A8=E8=BF=99=E7=A7=8D=E6=A8=A1=E5=9E=8B=E9=87=8C=E9=9D=A2=EF=BC=
+=8CIPI=EF=BC=88Inter-Processor Interrupt=EF=BC=89=E5=92=8CCPU=E6=9C=AC=E5=
+=9C=B0=E6=97=B6=E9=92=9F=E4=B8=AD=E6=96=AD=E7=9B=B4=E6=8E=A5=E5=8F=91=E9=
+=80=81=E5=88=B0CPUINTC=EF=BC=8C
+> +CPU=E4=B8=B2=E5=8F=A3=EF=BC=88UARTs=EF=BC=89=E4=B8=AD=E6=96=AD=E5=8F=91=
+=E9=80=81=E5=88=B0LIOINTC=EF=BC=8C=E8=80=8C=E5=85=B6=E4=BB=96=E6=89=80=E6=
+=9C=89=E8=AE=BE=E5=A4=87=E7=9A=84=E4=B8=AD=E6=96=AD=E5=88=99=E5=88=86=E5=
+=88=AB=E5=8F=91=E9=80=81=E5=88=B0=E6=89=80=E8=BF=9E=E6=8E=A5=E7=9A=84PCH=
+-PIC/
+> +PCH-LPC/PCH-MSI=EF=BC=8C=E7=84=B6=E5=90=8E=E8=A2=ABHTVECINTC=E7=BB=9F=
+=E4=B8=80=E6=94=B6=E9=9B=86=EF=BC=8C=E5=86=8D=E5=8F=91=E9=80=81=E5=88=B0=
+LIOINTC=EF=BC=8C=E6=9C=80=E5=90=8E=E5=88=B0=E8=BE=BECPUINTC=E3=80=82
 > +
 > + +---------------------------------------------+
 > + |::                                           |
@@ -795,16 +990,21 @@ t=20
 > + |                                             |
 > + +---------------------------------------------+
 > +
-> +Extended IRQ model
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E6=89=A9=E5=B1=95IRQ=E6=A8=A1=E5=9E=8B
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer=20
-> interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all=20
-> other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and=20
-> then go to
-> +to CPUINTC directly.
+> +=E5=9C=A8=E8=BF=99=E7=A7=8D=E6=A8=A1=E5=9E=8B=E9=87=8C=E9=9D=A2=EF=BC=
+=8CIPI=EF=BC=88Inter-Processor Interrupt=EF=BC=89=E5=92=8CCPU=E6=9C=AC=E5=
+=9C=B0=E6=97=B6=E9=92=9F=E4=B8=AD=E6=96=AD=E7=9B=B4=E6=8E=A5=E5=8F=91=E9=
+=80=81=E5=88=B0CPUINTC=EF=BC=8C
+> +CPU=E4=B8=B2=E5=8F=A3=EF=BC=88UARTs=EF=BC=89=E4=B8=AD=E6=96=AD=E5=8F=91=
+=E9=80=81=E5=88=B0LIOINTC=EF=BC=8C=E8=80=8C=E5=85=B6=E4=BB=96=E6=89=80=E6=
+=9C=89=E8=AE=BE=E5=A4=87=E7=9A=84=E4=B8=AD=E6=96=AD=E5=88=99=E5=88=86=E5=
+=88=AB=E5=8F=91=E9=80=81=E5=88=B0=E6=89=80=E8=BF=9E=E6=8E=A5=E7=9A=84PCH=
+-PIC/
+> +PCH-LPC/PCH-MSI=EF=BC=8C=E7=84=B6=E5=90=8E=E8=A2=ABEIOINTC=E7=BB=9F=E4=
+=B8=80=E6=94=B6=E9=9B=86=EF=BC=8C=E5=86=8D=E7=9B=B4=E6=8E=A5=E5=88=B0=E8=
+=BE=BECPUINTC=E3=80=82
 > +
 > + +--------------------------------------------------------+
 > + |::                                                      |
@@ -836,8 +1036,8 @@ t=20
 > + |                                                        |
 > + +--------------------------------------------------------+
 > +
-> +ACPI-related definitions
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +ACPI=E7=9B=B8=E5=85=B3=E7=9A=84=E5=AE=9A=E4=B9=89
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > +
 > +CPUINTC::
 > +
@@ -881,50 +1081,59 @@ t=20
 > +  struct acpi_madt_lpc_pic;
 > +  enum acpi_madt_lpc_pic_version;
 > +
-> +References
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=E5=8F=82=E8=80=83=E6=96=87=E7=8C=AE
+> +=3D=3D=3D=3D=3D=3D=3D=3D
 > +
-> +Documentation of Loongson-3A5000:
+> +=E9=BE=99=E8=8A=AF3A5000=E7=9A=84=E6=96=87=E6=A1=A3=EF=BC=9A
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/Loongson-3A5000-usermanual-1.02-CN.pdf=20
-> (in Chinese)
+> (=E4=B8=AD=E6=96=87=E7=89=88)
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/Loongson-3A5000-usermanual-1.02-EN.pdf=20
-> (in English)
+> (=E8=8B=B1=E6=96=87=E7=89=88)
 > +
-> +Documentation of Loongson's LS7A chipset:
+> +=E9=BE=99=E8=8A=AFLS7A=E8=8A=AF=E7=89=87=E7=BB=84=E7=9A=84=E6=96=87=E6=
+=A1=A3=EF=BC=9A
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/Loongson-7A1000-usermanual-2.00-CN.pdf=20
-> (in Chinese)
+> (=E4=B8=AD=E6=96=87=E7=89=88)
 > +
 > + =20
 > https://github.com/loongson/LoongArch-Documentation/releases/latest/do=
 wnload/Loongson-7A1000-usermanual-2.00-EN.pdf=20
-> (in English)
+> (=E8=8B=B1=E6=96=87=E7=89=88)
 > +
-> +Note: CPUINTC is CSR.ECFG/CSR.ESTAT and its interrupt controller=20
-> described
-> +in Section 7.4 of "LoongArch Reference Manual, Vol 1"; LIOINTC is=20
-> "Legacy I/O
-> +Interrupts" described in Section 11.1 of "Loongson 3A5000 Processor=20
-> Reference
-> +Manual"; EIOINTC is "Extended I/O Interrupts" described in Section=20
-> 11.2 of
-> +"Loongson 3A5000 Processor Reference Manual"; HTVECINTC is=20
-> "HyperTransport
-> +Interrupts" described in Section 14.3 of "Loongson 3A5000 Processor=20
-> Reference
-> +Manual"; PCH-PIC/PCH-MSI is "Interrupt Controller" described in=20
-> Section 5 of
-> +"Loongson 7A1000 Bridge User Manual"; PCH-LPC is "LPC Interrupts"=20
-> described in
-> +Section 24.3 of "Loongson 7A1000 Bridge User Manual".
+> +=E6=B3=A8=EF=BC=9ACPUINTC=E5=8D=B3=E3=80=8A=E9=BE=99=E8=8A=AF=E6=9E=B6=
+=E6=9E=84=E5=8F=82=E8=80=83=E6=89=8B=E5=86=8C=E5=8D=B7=E4=B8=80=E3=80=8B=
+=E7=AC=AC7.4=E8=8A=82=E6=89=80=E6=8F=8F=E8=BF=B0=E7=9A=84CSR.ECFG/CSR.ES=
+TAT=E5=AF=84=E5=AD=98=E5=99=A8=E5=8F=8A=E5=85=B6=E4=B8=AD=E6=96=AD
+> +=E6=8E=A7=E5=88=B6=E9=80=BB=E8=BE=91=EF=BC=9BLIOINTC=E5=8D=B3=E3=80=8A=
+=E9=BE=99=E8=8A=AF3A5000=E5=A4=84=E7=90=86=E5=99=A8=E4=BD=BF=E7=94=A8=E6=
+=89=8B=E5=86=8C=E3=80=8B=E7=AC=AC11.1=E8=8A=82=E6=89=80=E6=8F=8F=E8=BF=B0=
+=E7=9A=84=E2=80=9C=E4=BC=A0=E7=BB=9FI/O=E4=B8=AD=E6=96=AD=E2=80=9D=EF=BC=
+=9BEIOINTC
+> +=E5=8D=B3=E3=80=8A=E9=BE=99=E8=8A=AF3A5000=E5=A4=84=E7=90=86=E5=99=A8=
+=E4=BD=BF=E7=94=A8=E6=89=8B=E5=86=8C=E3=80=8B=E7=AC=AC11.2=E8=8A=82=E6=89=
+=80=E6=8F=8F=E8=BF=B0=E7=9A=84=E2=80=9C=E6=89=A9=E5=B1=95I/O=E4=B8=AD=E6=
+=96=AD=E2=80=9D=EF=BC=9BHTVECINTC=E5=8D=B3=E3=80=8A=E9=BE=99=E8=8A=AF3A5=
+000
+> +=E5=A4=84=E7=90=86=E5=99=A8=E4=BD=BF=E7=94=A8=E6=89=8B=E5=86=8C=E3=80=
+=8B=E7=AC=AC14.3=E8=8A=82=E6=89=80=E6=8F=8F=E8=BF=B0=E7=9A=84=E2=80=9CHy=
+perTransport=E4=B8=AD=E6=96=AD=E2=80=9D=EF=BC=9BPCH-PIC/PCH-MSI=E5=8D=B3=
+=E3=80=8A=E9=BE=99=E8=8A=AF7A1000=E6=A1=A5
+> +=E7=89=87=E7=94=A8=E6=88=B7=E6=89=8B=E5=86=8C=E3=80=8B=E7=AC=AC5=E7=AB=
+=A0=E6=89=80=E6=8F=8F=E8=BF=B0=E7=9A=84=E2=80=9C=E4=B8=AD=E6=96=AD=E6=8E=
+=A7=E5=88=B6=E5=99=A8=E2=80=9D=EF=BC=9BPCH-LPC=E5=8D=B3=E3=80=8A=E9=BE=99=
+=E8=8A=AF7A1000=E6=A1=A5=E7=89=87=E7=94=A8=E6=88=B7=E6=89=8B=E5=86=8C=E3=
+=80=8B=E7=AC=AC24.3=E8=8A=82=E6=89=80
+> +=E6=8F=8F=E8=BF=B0=E7=9A=84=E2=80=9CLPC=E4=B8=AD=E6=96=AD=E2=80=9D=E3=
+=80=82
 > --=20
 > 2.27.0
 
