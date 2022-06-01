@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B9753A171
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 11:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D762C53A174
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 11:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351519AbiFAJ7B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Jun 2022 05:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37228 "EHLO
+        id S239915AbiFAJ7W (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Jun 2022 05:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351540AbiFAJ66 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 05:58:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1961F85ECC;
-        Wed,  1 Jun 2022 02:58:53 -0700 (PDT)
+        with ESMTP id S1351567AbiFAJ7T (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 05:59:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD76687205;
+        Wed,  1 Jun 2022 02:59:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A27260C43;
-        Wed,  1 Jun 2022 09:58:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6848DC385A5;
-        Wed,  1 Jun 2022 09:58:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F799B8187B;
+        Wed,  1 Jun 2022 09:59:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D584C385A5;
+        Wed,  1 Jun 2022 09:59:00 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -37,9 +37,9 @@ Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V12 01/24] irqchip: Adjust Kconfig for Loongson
-Date:   Wed,  1 Jun 2022 17:59:42 +0800
-Message-Id: <20220601100005.2989022-2-chenhuacai@loongson.cn>
+Subject: [PATCH V12 02/24] irqchip/loongson-liointc: Fix build error for LoongArch
+Date:   Wed,  1 Jun 2022 17:59:43 +0800
+Message-Id: <20220601100005.2989022-3-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220601100005.2989022-1-chenhuacai@loongson.cn>
 References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
@@ -54,43 +54,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-HTVEC will be shared by both MIPS-based and LoongArch-based Loongson
-processors (not only Loongson-3), so we adjust its description. HTPIC is
-only used by MIPS-based Loongson, so we add a MIPS dependency.
+liointc driver is shared by MIPS and LoongArch, this patch adjust the
+code to fix build error for LoongArch.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- drivers/irqchip/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/irqchip/irq-loongson-liointc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 44fb8843e80e..1cb3967fe798 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -557,7 +557,7 @@ config LOONGSON_LIOINTC
+diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
+index 649c58391618..aed88857d90f 100644
+--- a/drivers/irqchip/irq-loongson-liointc.c
++++ b/drivers/irqchip/irq-loongson-liointc.c
+@@ -16,7 +16,11 @@
+ #include <linux/smp.h>
+ #include <linux/irqchip/chained_irq.h>
  
- config LOONGSON_HTPIC
- 	bool "Loongson3 HyperTransport PIC Controller"
--	depends on MACH_LOONGSON64
-+	depends on (MACH_LOONGSON64 && MIPS)
- 	default y
- 	select IRQ_DOMAIN
- 	select GENERIC_IRQ_CHIP
-@@ -565,12 +565,12 @@ config LOONGSON_HTPIC
- 	  Support for the Loongson-3 HyperTransport PIC Controller.
++#ifdef CONFIG_MIPS
+ #include <loongson.h>
++#else
++#include <asm/loongson.h>
++#endif
  
- config LOONGSON_HTVEC
--	bool "Loongson3 HyperTransport Interrupt Vector Controller"
-+	bool "Loongson HyperTransport Interrupt Vector Controller"
- 	depends on MACH_LOONGSON64
- 	default MACH_LOONGSON64
- 	select IRQ_DOMAIN_HIERARCHY
- 	help
--	  Support for the Loongson3 HyperTransport Interrupt Vector Controller.
-+	  Support for the Loongson HyperTransport Interrupt Vector Controller.
+ #define LIOINTC_CHIP_IRQ	32
+ #define LIOINTC_NUM_PARENT 4
+@@ -53,7 +57,7 @@ static void liointc_chained_handle_irq(struct irq_desc *desc)
+ 	struct liointc_handler_data *handler = irq_desc_get_handler_data(desc);
+ 	struct irq_chip *chip = irq_desc_get_chip(desc);
+ 	struct irq_chip_generic *gc = handler->priv->gc;
+-	int core = get_ebase_cpunum() % LIOINTC_NUM_CORES;
++	int core = cpu_logical_map(smp_processor_id()) % LIOINTC_NUM_CORES;
+ 	u32 pending;
  
- config LOONGSON_PCH_PIC
- 	bool "Loongson PCH PIC Controller"
+ 	chained_irq_enter(chip, desc);
 -- 
 2.27.0
 
