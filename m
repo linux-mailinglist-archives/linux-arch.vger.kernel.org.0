@@ -2,202 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834A753A40E
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 13:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AE053A413
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 13:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352664AbiFAL2g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Jun 2022 07:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S1352693AbiFALaP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Jun 2022 07:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352656AbiFAL2f (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 07:28:35 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1A95C865
-        for <linux-arch@vger.kernel.org>; Wed,  1 Jun 2022 04:28:33 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-300628e76f3so14700337b3.12
-        for <linux-arch@vger.kernel.org>; Wed, 01 Jun 2022 04:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tDA6PuH6NICvxSpkxUN08aIv7E1lLbWtwbYMOmp3DFc=;
-        b=qZ4wk7dYHXk+svmWhmtwD5F01nOrHanF/nZcd2rNt/sATC0umgD7nFxlyirkk7t7yt
-         /5NSe+GKx657K37eu29ixICiLnZ+U5EhmxLGckjho8BnQPOSc1PytOmMl6dueOaOkRfp
-         DK5IdYHqNZRD8IyzEHTH+X04qE9G9cXrdrwM7Gd2ldpCMdWe/bhKK0FJ+oJcIm+1NXnd
-         1c5MqLPnhnJ3tz9ErQexOBcfjZPLSbQweY61tDKiErca+u+a4dbYtfvmsF3W9dTrjtkf
-         9GPnypBdkQvxxu/eYpcMAJS42Y+VITDDdkbpWf4+uiNiaR6Na/D7SpKNUJAX1i+IgkSv
-         VNvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tDA6PuH6NICvxSpkxUN08aIv7E1lLbWtwbYMOmp3DFc=;
-        b=Mj5ut7CM77eXL6qtJAzxq5gn/pCJYfgLJz4B3DDV55smBvUNeD8lRHBBomPPQx/1Rq
-         xmNOPLGk2Ubiw952Fy/kST+KVxeOVfaSgJJQ7fGUGX0dnc8Q+wCEVakmBzHqK8LaAa4k
-         MXS1kkX5iDdfVaMY1IqGtCHOaULZx2hR2op+SYyb8e1azDpFh8UBDMUtFVJEhUIadg0o
-         NMhLZprJDmEZEo+oFkEGHZ/9qm9duDsx8FHwpMlDyMrlQTtxwjooVcWwUTQDZb5xOayV
-         CFF0HyAAloTLi45rZ5QE3EezPdth/+/iyjTuPhNz9fDeIiVqEIq6DkD2DP0lDs7K5FXz
-         hOnw==
-X-Gm-Message-State: AOAM533L6LngwYGL23gUm3W2M3U0ph4FN/mE8Sx6jiNQdXVPD+SdDPN8
-        tQGzsELuNyRHI6WOd+c0tVKBhtPqgZzum8Q+WdM7aw==
-X-Google-Smtp-Source: ABdhPJyo22i6mb4t9rd8RWOXkFixboX4VLMr4JB+/qGQCmpcDVlUNjyMNUrEjFthhS3/evNm77t2vXH8qRIY3ppOfOY=
-X-Received: by 2002:a81:1f8b:0:b0:2f8:5846:445e with SMTP id
- f133-20020a811f8b000000b002f85846445emr69247959ywf.50.1654082912126; Wed, 01
- Jun 2022 04:28:32 -0700 (PDT)
+        with ESMTP id S1351526AbiFALaO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 07:30:14 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBD16FA02;
+        Wed,  1 Jun 2022 04:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1654083010; bh=c3qS0n8n88+tT/EbA//3xsAM4TxufqzUUQRbFEJfV+w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=EywJLnYe7A8R/LTmgK3yGO7e6PNUeSyCjGLs1zzawBDPsZMKW/8UH5ABYC91HPm6h
+         IpcFYqkr/Qr2DnAv99qf6UVCE3CBdZuKWPtweb5POzDav/njGFp0wWL0czl7CQ9RLo
+         qDSDMdommChrpsrNhpJL4PZGLt1I2wjki+xbPPME=
+Received: from [192.168.9.172] (unknown [101.88.28.48])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 69B7B60104;
+        Wed,  1 Jun 2022 19:30:10 +0800 (CST)
+Message-ID: <fe537ea1-01a0-d963-ec8b-f73788e049b3@xen0n.name>
+Date:   Wed, 1 Jun 2022 19:30:10 +0800
 MIME-Version: 1.0
-References: <20220426164315.625149-1-glider@google.com> <20220426164315.625149-29-glider@google.com>
- <87a6c6y7mg.ffs@tglx> <CAG_fn=U7PPBmmkgxFcWFQUCqZitzMizr1e69D9f26sGGzeitLQ@mail.gmail.com>
- <87y1zjlhmj.ffs@tglx> <CAG_fn=XxAhBEBP2KJvahinbaxLAd1xvqTfRJdAu1Tk5r8=01jw@mail.gmail.com>
- <878rrfiqyr.ffs@tglx> <CAG_fn=XVchXCcOhFt+rP=vinRhkyrXJSP46cyvcZeHJWaDquGg@mail.gmail.com>
- <87k0ayhc43.ffs@tglx> <CAG_fn=UpcXMqJiZvho6_G3rjvjQA-3Ax6X8ONVO0D+4Pttc9dA@mail.gmail.com>
- <87h762h5c2.ffs@tglx> <CAG_fn=UroTgp0jt77X_E-b1DPJ+32Cye6dRL4DOZ8MRf+XSokg@mail.gmail.com>
- <871qx2r09k.ffs@tglx> <CAG_fn=VtQw1gL_UVONHi=OJakOuMa3wKfkzP0jWcuvGQEmV9Vw@mail.gmail.com>
- <87h75uvi7s.ffs@tglx> <87ee0yvgrd.ffs@tglx>
-In-Reply-To: <87ee0yvgrd.ffs@tglx>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 1 Jun 2022 13:27:56 +0200
-Message-ID: <CAG_fn=XP9uFKA+zvCp_txBO_xGwH10=hhF9FDQL107b4YUh6sA@mail.gmail.com>
-Subject: Re: [PATCH v3 28/46] kmsan: entry: handle register passing from
- uninstrumented code
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
+ Thunderbird/103.0a1
+Subject: Re: [PATCH V12 00/24] arch: Add basic LoongArch support
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+References: <20220601100005.2989022-1-chenhuacai@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20220601100005.2989022-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, May 12, 2022 at 6:48 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On 6/1/22 17:59, Huacai Chen wrote:
+> <snip>
 >
-> On Thu, May 12 2022 at 18:17, Thomas Gleixner wrote:
-> > On Thu, May 12 2022 at 14:24, Alexander Potapenko wrote:
-> >> We could try to figure out the places in idtentry code where normal
-> >> kmsan_unpoison_memory() can be called in IRQ context, but as far as I
-> >> can see it will depend on the type of the entry point.
-> >
-> > NMI is covered as it increments before it invokes the unpoison().
-> >
-> > Let me figure out why we increment the preempt count late for
-> > interrupts. IIRC it's for symmetry reasons related to softirq processing
-> > on return, but let me double check.
+> Huacai Chen(24):
+>   irqchip: Adjust Kconfig for Loongson.
+>   irqchip/loongson-liointc: Fix build error for LoongArch.
+>   Documentation: LoongArch: Add basic documentations.
+>   Documentation/zh_CN: Add basic LoongArch documentations.
+>   LoongArch: Add elf-related definitions.
+>   LoongArch: Add writecombine support for drm.
+>   LoongArch: Add build infrastructure.
+>   LoongArch: Add CPU definition headers.
+>   LoongArch: Add atomic/locking headers.
+>   LoongArch: Add other common headers.
+>   LoongArch: Add boot and setup routines.
+>   LoongArch: Add exception/interrupt handling.
+>   LoongArch: Add process management.
+>   LoongArch: Add memory management.
+>   LoongArch: Add system call support.
+>   LoongArch: Add signal handling support.
+>   LoongArch: Add elf and module support.
+>   LoongArch: Add misc common routines.
+>   LoongArch: Add some library functions.
+>   LoongArch: Add PCI controller support.
+>   LoongArch: Add VDSO and VSYSCALL support.
+>   LoongArch: Add multi-processor (SMP) support.
+>   LoongArch: Add Non-Uniform Memory Access (NUMA) support.
+>   LoongArch: Add Loongson-3 default config file.
 >
-> It's even documented:
->
->  https://www.kernel.org/doc/html/latest/core-api/entry.html#interrupts-and-regular-exceptions
->
-> But who reads documentation? :)
->
-> So, I think the simplest and least intrusive solution is to have special
-> purpose unpoison functions. See the patch below for illustration.
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-This patch works well and I am going to adopt it for my series.
-But the problem with occasional calls of instrumented functions from
-noinstr still persists: if there is a noinstr function foo() and an
-instrumented function bar() called from foo() with one or more
-arguments, bar() must wipe its kmsan_context_state before using the
-arguments.
+I have gone through every of these patches, and they now all look good 
+to me. Thanks for all the revisions and cooperation!
 
-I have a solution for this problem described in https://reviews.llvm.org/D126385
-The plan is to pass __builtin_return_address(0) to
-__msan_get_context_state_caller() at the beginning of each
-instrumented function.
-Then KMSAN runtime can check the passed return address and wipe the
-context if it belongs to the .noinstr code section.
+I remember several more people have left comments on the v11 code; Eric 
+commented on the signal handling bits and Ard may have something to say 
+on the UEFI part. The first two cleanup patches to irqchip are 
+previously sent in a separate series, and they are already trivial 
+enough, but Marc may want to give the ack here too, for the patches to 
+go in via the asm-generic tree.
 
-Alternatively, we could employ MSan's -fsanitize-memory-param-retval
-flag, that will report supplying uninitialized parameters when calling
-functions.
-Doing so is currently allowed in the kernel, but Clang aggressively
-applies the noundef attribute (see https://llvm.org/docs/LangRef.html)
-to function arguments, which effectively makes passing uninit values
-as function parameters an UB.
-So if we make KMSAN detect such cases as well, we can ultimately get
-rid of all cases when uninits are passed to functions.
-As a result, kmsan_context_state will become unnecessary, because it
-will never contain nonzero values.
+At this time, although the port currently cannot work on any real 
+hardware, the value is mostly for unblocking downstream development 
+starting from the libc's, as the userspace ABI has been stable for 
+several months already and there's probably no point in delaying even 
+further. I've been working on the Gentoo/LoongArch port since August 
+2021 and experienced every ABI break since then, so I probably know 
+enough to make this statement.
 
+I think, with the userspace ABI effectively stable already, and other 
+implementation details available for continued improvement, we could 
+make it into this merge window after all. People, please take a final 
+quick look at this; your opinions and/or review and acks are appreciated.
 
-> The reasons why I used specific ones:
->
->   1) User entry
->
->      Whether that's a syscall or interrupt/exception does not
->      matter. It's always on the task stack and your machinery cannot be
->      running at that point because it came from user space.
->
->   2) Interrupt/exception/NMI entry kernel
->
->      Those can nest into an already active context, so you really want
->      to unpoison @regs.
->
->      Also while regular interrupts cannot nest because of interrupts
->      staying disabled, exceptions triggered in the interrupt handler and
->      NMIs can nest.
->
->      -> device interrupt()
->            irqentry_enter(regs)
->
->         -> NMI()
->            irqentry_nmi_enter(regs)
->
->            -> fault()
->               irqentry_enter(regs)
->
->               --> debug_exception()
->                   irqentry_nmi_enter(regs)
->
->      Soft interrupt processing on return from interrupt makes it more
->      interesting:
->
->      interrupt()
->        handler()
->        do_softirq()
->          local_irq_enable()
->             interrupt()
->               NMI
->                 ....
->
->      And everytime you get a new @regs pointer to deal with.
->
-> Wonderful, isn't it?
->
-> Thanks,
->
->         tglx
->
