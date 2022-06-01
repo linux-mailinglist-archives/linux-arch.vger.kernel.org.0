@@ -2,78 +2,92 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E2F539E99
-	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 09:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AA8539EF9
+	for <lists+linux-arch@lfdr.de>; Wed,  1 Jun 2022 10:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350348AbiFAHmC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 1 Jun 2022 03:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
+        id S1348043AbiFAIGZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 1 Jun 2022 04:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346393AbiFAHly (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 03:41:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423EC65B9;
-        Wed,  1 Jun 2022 00:41:52 -0700 (PDT)
+        with ESMTP id S234295AbiFAIGY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 1 Jun 2022 04:06:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD2A45AD5;
+        Wed,  1 Jun 2022 01:06:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0504CB8184A;
-        Wed,  1 Jun 2022 07:41:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90A7FC36AE2;
-        Wed,  1 Jun 2022 07:41:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7876261457;
+        Wed,  1 Jun 2022 08:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2B1C385A5;
+        Wed,  1 Jun 2022 08:06:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654069309;
-        bh=x4AIh+8q3rwHWHDzV5VGJkJYLLDH7ynhZZhfLnEb+8g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f38QWAmT3Lba2A3sBJrOOy+sbERvR52YnVrVyOkc70a+cykluMt/EwKYPWff9s4Q7
-         fQb/vRHE7IhLBYWrF4Usip+yBpvWX5/ORzxQtuAb+tO+Ne3eAhJ1tdUojRy+fUqRPg
-         3U2kltQxqVSIIt4GjUq8U8/lO2FOapPQCBsQDNPgDRYael1JXUlQ+iYOEzaWtTUVwD
-         8Nm7VufhCXSC3v3giaD9D8v08nhbhzlICHQjufyUzGNPjA5Whbb8OJvMgxDJBTzCe9
-         2XKbLDTOozmfFVp4SrJw0LqKPSQBG+RzNmRevVR8J4WoJD28DG3PBt9y1yjig3m1Ba
-         B3ZkVzVvXhK0Q==
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2ec42eae76bso9118007b3.10;
-        Wed, 01 Jun 2022 00:41:49 -0700 (PDT)
-X-Gm-Message-State: AOAM5309uqVIFwxbfTPDYvjqvJBugjzv7RPlQYus9Sy+FhSlDc5IOVEz
-        yshUDsDikQ/xXC8U6fcyivEQ5WM/kPkjYPdXbT0=
-X-Google-Smtp-Source: ABdhPJyjOONnyJpMnxwuZX80GyUim9f3pxgvQNDhKxagtl+rn8W3Zcqx8LrJG4sPZuMnrG1jw0k3rHUJoO3UT+XkIcs=
-X-Received: by 2002:a81:6d8c:0:b0:30f:777:3eab with SMTP id
- i134-20020a816d8c000000b0030f07773eabmr1979670ywc.135.1654069308563; Wed, 01
- Jun 2022 00:41:48 -0700 (PDT)
+        s=k20201202; t=1654070781;
+        bh=Pe+xqjlEZkEvfqPm0TvyzYDROtRhOytTmfU9fiGZws8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fffsVtEMEyvvzETBbzbLRANw5qSpp7g2hTxlgYQz+92zoX1gJ4zXLlEruzzqTTYSf
+         N2BAoyYsXpTHyVPmtOwTYApytoYIJPfrTIBwv2gyDHOq/5r47nwIHZPTWZzz9zoHk9
+         HIW68lMuS6J2BG6fNBdQzDZqpTs5jqdA1xRDTgQvl/O0vFZsBgZr0IZcc+8/f7VoHM
+         mBF2JE0x8Ik5pv3aB1Imh9Gv7aUytp6d1jtbut/qaDi9XZTuqB7BqQSbE4OFZACvzW
+         oy5d4OXtHdvuB+Q9kGqn/gRGVFqYIR5IuOvAiNdNdhEzfcmmRJPg/FEZRFrjXI8zOL
+         HJ48ltR8tywIg==
+Date:   Wed, 1 Jun 2022 11:06:08 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "adrian@lisas.de" <adrian@lisas.de>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "avagin@gmail.com" <avagin@gmail.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "dave.martin@arm.com" <dave.martin@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Subject: Re: [PATCH 00/35] Shadow stacks for userspace
+Message-ID: <Ypcd8HQtrn7T41LF@kernel.org>
+References: <YiEZyTT/UBFZd6Am@kernel.org>
+ <CALCETrWacW8SC2tpPxQSaLtxsOXfXHueyuwLcXpNF4aG-0ZvhA@mail.gmail.com>
+ <fb7d6e4da58ae77be2c6321ee3f3487485b2886c.camel@intel.com>
+ <40a3500c-835a-60b0-15bf-40c6622ad013@kernel.org>
+ <YiZVbPwlgSFnhadv@kernel.org>
+ <CAMe9rOrSLPKdL2gL=yx84zrs-u6ch1AVvjk3oqUe3thR5ZD=dQ@mail.gmail.com>
+ <YpYDKVjMEYVlV6Ya@kernel.org>
+ <d0c94eed6e3c7f35b78bab3f00aadebd960ee0d8.camel@intel.com>
+ <YpZEDjxSPxUfMxDZ@kernel.org>
+ <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
 MIME-Version: 1.0
-References: <CAK8P3a2_52JPnBWNvTTkFVwLxPAa7=NaQ4whwC1UeH_NYHeUKQ@mail.gmail.com>
- <CAK8P3a0SpU1n+29KQxzKnPRvzmDE=L0V9RUpKxhemv=74kevcQ@mail.gmail.com>
- <df5c406c-eec6-c340-2847-49670b7fe8bf@xen0n.name> <CAK8P3a3awFdB1-G65DC38NBuSTvo6SvFTaS0m9YBxunHjHjQvQ@mail.gmail.com>
- <CAAhV-H6sNr-yo8brBFtzziH6k9Tby0dFp7yehK55SfH5HjZ8hQ@mail.gmail.com>
- <358025d1-28e6-708b-d23d-3f22ae12a800@xen0n.name> <CAK8P3a1ge2bZS13ahm_LdO3jEcbtR4w3do-gLjggKvppqnBDkw@mail.gmail.com>
- <CAAhV-H5NCUpR6aBtR9d7c9vW2KiHpk3iFQxj7BeTSS0boMz8PQ@mail.gmail.com>
- <CAK8P3a2JgrW5a7_udCUWen-gOnJgVeRV2oAd-uq4VSuYkFUqNQ@mail.gmail.com>
- <CAAhV-H6wfmdcV=a4L43dcabsvO+JbOebCX3_6PV+p85NjA9qhQ@mail.gmail.com>
- <CAK8P3a0c_tbHov_b6cz-_Tj6VD3OWLwpGJf_2rj-nitipSKdYQ@mail.gmail.com>
- <CAAhV-H4_qqQtTp2=mJF=OV+qcKzA0j8SPWKRMR-LJgC0zNfatQ@mail.gmail.com> <832c3ae8-6c68-db2c-2c7f-0a5cd3071543@xen0n.name>
-In-Reply-To: <832c3ae8-6c68-db2c-2c7f-0a5cd3071543@xen0n.name>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 1 Jun 2022 09:41:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1Mg=Mr6aig25Kk9+Qf_E6DPMs0Yd-ozcvmY11kvCU74Q@mail.gmail.com>
-Message-ID: <CAK8P3a1Mg=Mr6aig25Kk9+Qf_E6DPMs0Yd-ozcvmY11kvCU74Q@mail.gmail.com>
-Subject: Re: [musl] Re: [GIT PULL] asm-generic changes for 5.19
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        musl@lists.openwall.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7c637f729e14f03d0df744568800fc986542e33d.camel@intel.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -84,77 +98,96 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 7:52 AM WANG Xuerui <kernel@xen0n.name> wrote:
-> On 6/1/22 00:01, Huacai Chen wrote:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git/log/?h=loongarch-next
-> > has been updated. Now this branch droped irqchip drivers and pci
-> > drivers. But the existing irqchip drivers need some small adjustment
-> > to avoid build errors [1], and I hope Marc can give an Acked-by.
-> > Thanks.
-> >
-> > This branch can be built with defconfig and allmodconfig (except
-> > drivers/platform/surface/aggregator/controller.c, because it requires
-> > 8bit/16bit cmpxchg, which I was told to remove their support).
-> >
-> > [1] https://lore.kernel.org/lkml/e7cf33a170d0b4e98e53744f60dbf922@kernel.org/T/#t
->
-> I see the loongarch-next HEAD has been updated and it's now purely arch
-> changes aside from the two trivial irqchip cleanups. Some other changes
-> to the v11 patchset [1] are included, but arguably minor enough to not
-> invalidate previous Reviewed-by tags.
+On Tue, May 31, 2022 at 05:34:50PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2022-05-31 at 19:36 +0300, Mike Rapoport wrote:
+> > > WRSS is a feature where you would usually want to lock it as
+> > > disabled,
+> > > but WRSS cannot be enabled if shadow stack is not enabled. Locking
+> > > shadow stack and WRSS off together doesn't have any security
+> > > benefits
+> > > in theory. so I'm thinking glibc doesn't need to do this. The
+> > > kernel
+> > > could even refuse to lock WRSS without shadow stack being enabled.
+> > > Could we avoid the extra ptrace functionality then?
+> > 
+> > What I see for is that a program can support shadow stack, glibc
+> > enables
+> > shadow stack, does not enable WRSS and than calls
+> > 
+> >         arch_prctl(ARCH_X86_FEATURE_LOCK,
+> >                    LINUX_X86_FEATURE_SHSTK | LINUX_X86_FEATURE_WRSS);
+> 
+> I see the logic is glibc will lock SHSTK|IBT if either is enabled in
+> the elf header. I guess that is why I didn't see the locking happening
+> for me, because my manual enablement test doesn't have either set in
+> the header.
 
-Very nice! I don't see exactly how the previous build bugs were addressed,
-but I can confirm that this version builds. Regarding the two irqchip patches,
-621e7015b529 ("irqchip/loongson-liointc: Fix build error for LoongArch") is
-a good way to work around the mips oddity, and I have no problem taking
-that through the asm-generic tree. The other one, f54b4a166023 ("irqchip:
- Adjust Kconfig for Loongson"), looks mostly unnecessary, and I think only
-the LOONGSON_HTPIC change should be included here, while I would
-leave out the COMPILE_TEST changes and instead have the driver
-changes take care of making it possible to keep building it on x86, possibly
-doing
+The locking was quite a surprise for me when I moved from standalone test
+to a system with CET-enabled glibc :)
+ 
+> It can't see where that glibc knows about WRSS though...
 
-        depends on MACH_LOONGSON64 || (COMPILE_TEST && ACPI)
+Right, it was my mistake, as H.J. said glibc locks SHSTK and IBT.
+ 
+> The glibc logic seems wrong to me also, because shadow stack or IBT
+> could be force-disabled via glibc tunables. I don't see why the elf
+> header bit should exclusively control the feature locking. Or why both
+> should be locked if only one is in the header.
+> 
+> > 
+> > so that WRSS cannot be re-enabled.
+> > 
+> > For the programs that do not support shadow stack, both SHSTK and
+> > WRSS are
+> > disabled, but still there is the same call to
+> > arch_prctl(ARCH_X86_FEATURE_LOCK, ...) and then neither shadow stack
+> > nor
+> > WRSS can be enabled.
+> > 
+> > My original plan was to run CRIU with no shadow stack, enable shadow
+> > stack
+> > and WRSS in the restored tasks using arch_prct() and after the shadow
+> > stack
+> > contents is restored disable WRSS.
+> > 
+> > Obviously, this didn't work with glibc I have :)
+> 
+> Were you disabling shadow stack via glibc tunnable? Or was the elf
+> header marked for IBT? If it was a plain old binary, the code looks to
+> me like it should not lock any features.
 
-in the future, after the loongarch64 ACPI support is merged.
+I built criu as a plain old binary, there were no SHSTK or IBT markers. And
+I've seen that there was a call to arch_prctl that locked the features as
+disabled. 
+ 
+> > On the bright side, having a ptrace call to unlock shadow stack and
+> > wrss
+> > allows running CRIU itself with shadow stack.
+> 
+> Yea, having something working is really great. My only hesitancy is
+> that, per a discussion on the LAM patchset, we are going to make this
+> enabling API CET only (same semantics for though). I suppose the
+> locking API arch_prctl() could still be support other arch features,
+> but it might be a second CET only regset. It's not the end of the
+> world.
 
-> After some small tweaks:
->
-> - adding "#include <asm/irqflags.h>" to arch/loongarch/include/asm/ptrace.h,
-> - adding an arch/loongarch/include/uapi/asm/bpf_perf_event.h with the
-> same content as arch/arm64's, and
-> - adding "depends on ARM64 || X86" to
-> drivers/platform/surface/aggregator/Kconfig,
->
-> the current loongarch-next HEAD (commit
-> 36552a24f70d21b7d63d9ef490561dbdc13798d7) now passes allmodconfig build
-> (with CONFIG_WERROR disabled; my Gentoo-flavored gcc-12 seems to emit
-> warnings on a few drivers).
+The support for CET in criu is anyway experimental for now, if the kernel
+API will be slightly different in the end, we'll update criu.
+The important things are the ability to control tracee shadow stack
+from ptrace, the ability to map the shadow stack at fixed address and the
+ability to control the features at least from ptrace.
+As long as we have APIs that provide those, it should be Ok.
+ 
+> I guess the other consideration is tieing CRIU to glibc peculiarities.
+> Like even if we fix glibc, then CRIU may not work with some other libc
+> or app that force disables for some weird reason. Is it supposed to be
+> libc-agnostic?
 
-The only one of these issues that I see is the surface aggregator one.
-I think we can address all three as follow-up fixes after -rc1 if the port
-gets merged and these are still required.
+Actually using the ptrace to control the CET features does not tie criu to
+glibc. The current proposal for the arch_prctl() allows libc to lock CET
+features and having a ptrace call to control the lock makes criu agnostic
+to libc behaviour.
 
-> The majority of userspace ABI has been stable for a few months already,
-> after the addition of orig_a0 and removal of newfstatat; the necessary
-> changes to switch to statx are already reviewed [2] / merged [3], and
-> have been integrated into the LoongArch port of Gentoo for a while. Eric
-> looked at the v11 and gave comments, and changes were made according to
-> the suggestions, but it'd probably better to get a proper Reviewed-by.
-
-Right.
-
-> Among the rest of patches, I think maybe the EFI/boot protocol part
-> still need approval/ack from the EFI maintainer. However because the
-> current port isn't going to be able to run on any real hardware, maybe
-> that part could be done later; I'm not sure if the unacknowledged EFI
-> bits should be removed as well.
-
-Ard, do you have any last comments on this?
-
-> Arnd, what do you think about the current branch's status? Do Huacai
-> need to send a quick final v12 to gather tags?
-
-I think that would be good, yes.
-
-        Arnd
+-- 
+Sincerely yours,
+Mike.
