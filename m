@@ -2,64 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF49E53BC9F
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jun 2022 18:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD4F53C06C
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jun 2022 23:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237127AbiFBQe4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jun 2022 12:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S235514AbiFBViy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jun 2022 17:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbiFBQe4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jun 2022 12:34:56 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1C513CA3E;
-        Thu,  2 Jun 2022 09:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=svPrOg1UVwIs7S0rtpWPp9k1K9FF0OCGxIhcYj8TkIQ=; b=VJc18BtxygRpXKEn5jq8wa3gzs
-        Tb1bKMXzyrjOyJ00zBlPnoMmSynEG87rNHrmR26ANwkd45ZpMzYMT77Eyk9xHLNV43/SnSVPy8m8t
-        WaHKGjAIiTNpW5cIUC1VgV5fqi0MP0x3QLSoX0lxFZe+IVCRN+uHx0sgtrykwmAdpQ7yqNVdP1rWy
-        NWUD3gUNmbUVlEGbvFFhib7vh7sTsnqm1QIsccZP+uvYOmQLpYc67lbJwwP/lsWch5c7dy7EhCuVH
-        fMIlJowdLIMGSZ6JYvXBFyq/uWTFMgaPTF/d7xCYVM16NurM2Stgy8B3IS68GuOECVf6Dk+/emBFF
-        BX2GPKkQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nwnmM-0049mu-9X; Thu, 02 Jun 2022 16:34:34 +0000
-Message-ID: <e68000bf-a271-d1f2-56a5-a9ddce2bbb7c@infradead.org>
-Date:   Thu, 2 Jun 2022 09:34:27 -0700
+        with ESMTP id S229742AbiFBViy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jun 2022 17:38:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E0B13F4B;
+        Thu,  2 Jun 2022 14:38:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A265618B9;
+        Thu,  2 Jun 2022 21:38:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4A15C385A5;
+        Thu,  2 Jun 2022 21:38:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654205931;
+        bh=amMY/A91YaEthDSlXJaPTNFGE4KBXfHPi7FX11QWa/A=;
+        h=From:Date:Subject:To:Cc:From;
+        b=Hgs+5nL8sDtkESwBJsrsyDqel+dO4V4lSdaXraX6Bb6VCfscPCY1SR6vGlWmKsIjU
+         gqRm8/zrFzbhYqFTIPX7m2ZVLxsXJ05PaQCGsneWqRDA2tgeEtVJfU445Xf3ROkPAE
+         7KQUjx4KC5vwWiJ3IP9D64h+gnMPViIhG4iWoA2wAucWuvFBFWD5I0iN+ch+bgG3Kd
+         27P5HvsPeBEqn3G7k1Dy0a+z1aLtsD5waMqLGsmCqEV9ST/odO26FOe0Xj0WME+rZ0
+         ngyvCcPP+pTUCRV443wXUP8GUFA47w9xDe2IMTtvytXMZCV3vL16b2W/JDvAR4zrnk
+         0jIuZaIcgw4hw==
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-30c2f288f13so64968517b3.7;
+        Thu, 02 Jun 2022 14:38:51 -0700 (PDT)
+X-Gm-Message-State: AOAM532uQ8rfE6nFmqiHdBUmxeX2nVnp8VruXz0lIyIt5S7Nj2wfm7zf
+        V1+mLcCRbVvCSNEsHZnndlUYkgKv9XGOSaBPTII=
+X-Google-Smtp-Source: ABdhPJyJ+baE/qLC48mWV+MXSK5c0wtuOPmTikbDw4WusgGptxYQ2d1f+Huq3hHPgw5DfMkFij4FafqIjHvrfmFC2z8=
+X-Received: by 2002:a0d:efc2:0:b0:2fe:d2b7:da8 with SMTP id
+ y185-20020a0defc2000000b002fed2b70da8mr7785647ywe.42.1654205930734; Thu, 02
+ Jun 2022 14:38:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V14 01/24] irqchip: Adjust Kconfig for Loongson
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Marc Zyngier <maz@kernel.org>, WANG Xuerui <git@xen0n.name>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-2-chenhuacai@loongson.cn>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220602115141.3962749-2-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 2 Jun 2022 23:38:34 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Pi6qjx=7=363DvCCqMb-b=b9BtD+FMByopAwymC+2fA@mail.gmail.com>
+Message-ID: <CAK8P3a1Pi6qjx=7=363DvCCqMb-b=b9BtD+FMByopAwymC+2fA@mail.gmail.com>
+Subject: [GIT PULL] asm-generic fixes for 5.19, part 1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,29 +60,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+The following changes since commit b2441b3bdce6c02cb96278d98c620d7ba1d41b7b:
 
-On 6/2/22 04:51, Huacai Chen wrote:
-> diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-> index 44fb8843e80e..1cb3967fe798 100644
-> --- a/drivers/irqchip/Kconfig
-> +++ b/drivers/irqchip/Kconfig
-> @@ -557,7 +557,7 @@ config LOONGSON_LIOINTC
->  
->  config LOONGSON_HTPIC
->  	bool "Loongson3 HyperTransport PIC Controller"
-> -	depends on MACH_LOONGSON64
-> +	depends on (MACH_LOONGSON64 && MIPS)
+  h8300: remove stale bindings and symlink (2022-05-20 22:40:56 +0200)
 
-If you ever have another patch version, please drop the unnecessary left and
-right parentheses above.
+are available in the Git repository at:
 
-	depends on MACH_LOONGSON64 && MIPS
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+tags/asm-generic-fixes-5.19
 
->  	default y
->  	select IRQ_DOMAIN
->  	select GENERIC_IRQ_CHIP
+for you to fetch changes up to 8cc5b032240ae5220b62c689c20459d3e1825b2d:
 
-thanks.
--- 
-~Randy
+  binder: fix sender_euid type in uapi header (2022-06-02 17:47:25 +0200)
+
+----------------------------------------------------------------
+asm-generic fixes for 5.19, part 1
+
+The header cleanup series from Masahiro Yamada ended up causing
+some regressions in the ABI because of an ambiguous uid_t type.
+
+This was only caught after the original patches got merged, but
+at least the fixes are trivial and hopefully complete.
+
+----------------------------------------------------------------
+Carlos Llamas (1):
+      binder: fix sender_euid type in uapi header
+
+Masahiro Yamada (3):
+      mips: use __kernel_{uid,gid}32_t in uapi/asm/stat.h
+      powerpc: use __kernel_{uid,gid}32_t in uapi/asm/stat.h
+      sparc: fix mis-use of __kernel_{uid,gid}_t in uapi/asm/stat.h
+
+ arch/mips/include/uapi/asm/stat.h    | 12 ++++++------
+ arch/powerpc/include/uapi/asm/stat.h |  4 ++--
+ arch/sparc/include/uapi/asm/stat.h   |  4 ++--
+ include/uapi/linux/android/binder.h  |  2 +-
+ 4 files changed, 11 insertions(+), 11 deletions(-)
