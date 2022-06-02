@@ -2,64 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15B353B97E
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jun 2022 15:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0225753B999
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jun 2022 15:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235264AbiFBNL4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jun 2022 09:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        id S235255AbiFBNYt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jun 2022 09:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235267AbiFBNLz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jun 2022 09:11:55 -0400
-X-Greylist: delayed 475 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Jun 2022 06:11:53 PDT
-Received: from sym2.noone.org (sym.noone.org [IPv6:2a01:4f8:120:4161::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF351EB6
-        for <linux-arch@vger.kernel.org>; Thu,  2 Jun 2022 06:11:53 -0700 (PDT)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 4LDR6N62M9zvjhW; Thu,  2 Jun 2022 15:03:56 +0200 (CEST)
-Date:   Thu, 2 Jun 2022 15:03:56 +0200
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        rppt@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] riscv: Wire up memfd_secret in UAPI header
-Message-ID: <20220602130355.y4npvxm3wegnwjpp@distanz.ch>
-References: <20220505084611.tut66faep5r37r6c@distanz.ch>
- <mhng-671a8d6b-c318-431b-b209-c6bde465a420@palmer-ri-x1c9>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-671a8d6b-c318-431b-b209-c6bde465a420@palmer-ri-x1c9>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231722AbiFBNYs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jun 2022 09:24:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF952823EE;
+        Thu,  2 Jun 2022 06:24:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEDD561798;
+        Thu,  2 Jun 2022 13:24:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20811C385A5;
+        Thu,  2 Jun 2022 13:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654176286;
+        bh=fU4izTnniSuUqS/AHA9JhXVh4+iVt0aMQ71RhD/773M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bUg/mcCiV5FK9/E2qFI9zZBXVx2sxT9ajAaHYWJEh5nXArYefrel6BoM94XoH3hKn
+         i6grwgpxQ7SBqjCoxYXepaMgSyVIRexRunaAo6p0ABWUkT363GQyqgMoUzuhFzP6uX
+         z7BibL7o7/pdUNisxUpnji9GjBaKKFx+l9TzaOB6/C37O9+zh5CG4fNGvkijegl5Bt
+         oYY+BQNx3G7lu/N3wSXAoaHjjvjo+QGb44f4+9Hwrn4BlyovUCvDQuxs0pVKthnQwt
+         M55OTLv470/TfORBbB2O1UG2/kjbVxnhNefa+RcQ6igOxLbf8BvuOapqU0V2ibyFpa
+         BXmkhyv2Dn1Nw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nwkod-00FClK-Iy; Thu, 02 Jun 2022 14:24:43 +0100
+Date:   Thu, 02 Jun 2022 14:24:37 +0100
+Message-ID: <87zgivkxka.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        WANG Xuerui <git@xen0n.name>
+Subject: Re: [PATCH V14 02/24] irqchip/loongson-liointc: Fix build error for LoongArch
+In-Reply-To: <20220602115141.3962749-3-chenhuacai@loongson.cn>
+References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
+        <20220602115141.3962749-3-chenhuacai@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, arnd@arndb.de, luto@kernel.org, tglx@linutronix.de, peterz@infradead.org, akpm@linux-foundation.org, airlied@linux.ie, corbet@lwn.net, torvalds@linux-foundation.org, linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, lixuefeng@loongson.cn, siyanteng@loongson.cn, chenhuacai@gmail.com, guoren@kernel.org, kernel@xen0n.name, jiaxun.yang@flygoat.com, sfr@canb.auug.org.au, git@xen0n.name
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2022-06-02 at 07:57:21 +0200, Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> On Thu, 05 May 2022 01:46:11 PDT (-0700), tklauser@distanz.ch wrote:
-> > On 2022-05-05 at 10:18:15 +0200, Tobias Klauser <tklauser@distanz.ch> wrote:
-> > > Move the __ARCH_WANT_MEMFD_SECRET define added in commit 7bb7f2ac24a0
-> > > ("arch, mm: wire up memfd_secret system call where relevant") to
-> > > <uapi/asm/unistd.h> so __NR_memfd_secret is defined when including
-> > > <unistd.h> in userspace.
-> > > 
-> > > This allows the memds_secret selftest to pass on riscv.
-> >                   ^- this should say memfd_secret
-> > 
-> > I can fix it up in a v2 if needed.
+On Thu, 02 Jun 2022 12:51:19 +0100,
+Huacai Chen <chenhuacai@loongson.cn> wrote:
 > 
-> No big deal, I don't mind squashing stuff like that.  This is on for-next
-> (no fixes, I'm still on 5.19).  I added
+> liointc driver is shared by MIPS and LoongArch, this patch adjust the
+> code to fix build error for LoongArch.
 > 
-> Fixes: 7bb7f2ac24a0 ("arch, mm: wire up memfd_secret system call where relevant")
-> Cc: stable@vger.kernel.org
-> 
-> but LMK if you think that's wrong for some reason.
+> Cc: Marc Zyngier <maz@kernel.org>
+> Reviewed-by: WANG Xuerui <git@xen0n.name>
+> Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-All of the above sounds good to me. Thank you!
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
