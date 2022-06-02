@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0225753B999
-	for <lists+linux-arch@lfdr.de>; Thu,  2 Jun 2022 15:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC6753B99A
+	for <lists+linux-arch@lfdr.de>; Thu,  2 Jun 2022 15:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbiFBNYt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jun 2022 09:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S231722AbiFBNZO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 2 Jun 2022 09:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiFBNYs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jun 2022 09:24:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF952823EE;
-        Thu,  2 Jun 2022 06:24:47 -0700 (PDT)
+        with ESMTP id S231926AbiFBNZN (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jun 2022 09:25:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092052823FC;
+        Thu,  2 Jun 2022 06:25:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CEDD561798;
-        Thu,  2 Jun 2022 13:24:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20811C385A5;
-        Thu,  2 Jun 2022 13:24:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A15ABB81F2B;
+        Thu,  2 Jun 2022 13:25:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D342C385A5;
+        Thu,  2 Jun 2022 13:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654176286;
-        bh=fU4izTnniSuUqS/AHA9JhXVh4+iVt0aMQ71RhD/773M=;
+        s=k20201202; t=1654176310;
+        bh=hA71D4OUpiJsOxNOo6laQL+CKomCZqzUTbybaEjH/KA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bUg/mcCiV5FK9/E2qFI9zZBXVx2sxT9ajAaHYWJEh5nXArYefrel6BoM94XoH3hKn
-         i6grwgpxQ7SBqjCoxYXepaMgSyVIRexRunaAo6p0ABWUkT363GQyqgMoUzuhFzP6uX
-         z7BibL7o7/pdUNisxUpnji9GjBaKKFx+l9TzaOB6/C37O9+zh5CG4fNGvkijegl5Bt
-         oYY+BQNx3G7lu/N3wSXAoaHjjvjo+QGb44f4+9Hwrn4BlyovUCvDQuxs0pVKthnQwt
-         M55OTLv470/TfORBbB2O1UG2/kjbVxnhNefa+RcQ6igOxLbf8BvuOapqU0V2ibyFpa
-         BXmkhyv2Dn1Nw==
+        b=f8fRXsAvQL+x7UyDkT/8Ml7d4lk69NdykCcs/iRtOQVR26hIr2FioWwMc4POeaATO
+         0OekHkEG0aJye2MpJYy1q34g9oOsMBELdBBYQ86oWA8VMO46a7m+zkvZHb1pqVksd7
+         4NDocxqxNpKq1NaW1I+csqj4xcpoqWl9YhaQ+trLMLRaAqHf6PPLFh1a9ZzDEifNEh
+         St8Z9DJrm9ChXYZWDglRArnh5UlpX1anyJyZ4iVJNvVOpGgX6xSVPstEMtRTSDoYtX
+         ULOoQgG22L9yuj4dLrqNbIOqr8XAeYXVxvZ3Q2N4BouG2hA1nztwjVJRISioCcB0X4
+         /Ne//pJQ+JOdg==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <maz@kernel.org>)
-        id 1nwkod-00FClK-Iy; Thu, 02 Jun 2022 14:24:43 +0100
-Date:   Thu, 02 Jun 2022 14:24:37 +0100
-Message-ID: <87zgivkxka.wl-maz@kernel.org>
+        id 1nwkp2-00FClc-4X; Thu, 02 Jun 2022 14:25:08 +0100
+Date:   Thu, 02 Jun 2022 14:25:05 +0100
+Message-ID: <87y1yfkxji.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
@@ -55,10 +55,10 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH V14 02/24] irqchip/loongson-liointc: Fix build error for LoongArch
-In-Reply-To: <20220602115141.3962749-3-chenhuacai@loongson.cn>
+Subject: Re: [PATCH V14 01/24] irqchip: Adjust Kconfig for Loongson
+In-Reply-To: <20220602115141.3962749-2-chenhuacai@loongson.cn>
 References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
-        <20220602115141.3962749-3-chenhuacai@loongson.cn>
+        <20220602115141.3962749-2-chenhuacai@loongson.cn>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -78,11 +78,12 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, 02 Jun 2022 12:51:19 +0100,
+On Thu, 02 Jun 2022 12:51:18 +0100,
 Huacai Chen <chenhuacai@loongson.cn> wrote:
 > 
-> liointc driver is shared by MIPS and LoongArch, this patch adjust the
-> code to fix build error for LoongArch.
+> HTVEC will be shared by both MIPS-based and LoongArch-based Loongson
+> processors (not only Loongson-3), so we adjust its description. HTPIC is
+> only used by MIPS-based Loongson, so we add a MIPS dependency.
 > 
 > Cc: Marc Zyngier <maz@kernel.org>
 > Reviewed-by: WANG Xuerui <git@xen0n.name>
