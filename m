@@ -2,115 +2,135 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1F153C7E0
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 11:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3EF53C811
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 12:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243200AbiFCJsN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jun 2022 05:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S243347AbiFCKC3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jun 2022 06:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243182AbiFCJsM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 05:48:12 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B191613D1F;
-        Fri,  3 Jun 2022 02:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1654249686; bh=yrg9on8zb+NApRYtS5qBL8mX8F/7jBwdIdZxHyDYbOg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jRWyTZmCNV/pqzL9Eg+ZxwLUSRI9QggIjDRMCfMrbky0lqSLxFkJtfEZUGVyyUYRg
-         89X1nwC1YAmllYkpH0RvCQ201k1hKMjSdHc0Op5LLuhNnls78FnzObQU7HsVRJeXBr
-         tQ2czc6m7bTnTxGA7okwYgtWi3dI1Urc/giRlB1M=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id EB0F560104;
-        Fri,  3 Jun 2022 17:48:05 +0800 (CST)
-Message-ID: <f7b53d2b-759c-bc5b-e2ed-a251b879f450@xen0n.name>
-Date:   Fri, 3 Jun 2022 17:48:05 +0800
+        with ESMTP id S242870AbiFCKCZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 06:02:25 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1169860E5;
+        Fri,  3 Jun 2022 03:02:20 -0700 (PDT)
+Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MkIEJ-1nU5A3417J-00kczo; Fri, 03 Jun 2022 12:02:19 +0200
+Received: by mail-yb1-f171.google.com with SMTP id p13so12887698ybm.1;
+        Fri, 03 Jun 2022 03:02:18 -0700 (PDT)
+X-Gm-Message-State: AOAM530DNDQQjAlRlN5CRoyQAnG4L8ASTtbh+7o2aMm16A2Sk89/W3OL
+        xENGT24wgcOoddKWgWxALYxQCYdLX+Vr58i2ogA=
+X-Google-Smtp-Source: ABdhPJwdrQ9PeeqeAjOnu3Suepya4kKybxhJDDsVtaCXf8vl4n8O7u1eitnL1Q1q/6TljwDBvrp/rGj7o3szs4WDOfw=
+X-Received: by 2002:a25:bd8b:0:b0:657:8392:55c3 with SMTP id
+ f11-20020a25bd8b000000b00657839255c3mr10076933ybh.452.1654250537444; Fri, 03
+ Jun 2022 03:02:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
- Thunderbird/103.0a1
-Subject: Re: Steps forward for the LoongArch UEFI bringup patch? (was: Re:
- [PATCH V14 11/24] LoongArch: Add boot and setup routines)
-Content-Language: en-US
-To:     Xi Ruoyao <xry111@xry111.site>, WANG Xuerui <kernel@xen0n.name>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi@vger.kernel.org, WANG Xuerui <git@xen0n.name>,
-        Yun Liu <liuyun@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+References: <20220603072053.35005-1-chenhuacai@loongson.cn>
+ <20220603072053.35005-12-chenhuacai@loongson.cn> <4213df91-c762-ae56-f08d-8c925759fa63@xen0n.name>
+In-Reply-To: <4213df91-c762-ae56-f08d-8c925759fa63@xen0n.name>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 3 Jun 2022 12:02:00 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2mW7KmgxqWsaf76Q4V++B+0e6bH=tb4w4cA0XkZYuSLA@mail.gmail.com>
+Message-ID: <CAK8P3a2mW7KmgxqWsaf76Q4V++B+0e6bH=tb4w4cA0XkZYuSLA@mail.gmail.com>
+Subject: Re: [PATCH V15 11/24] LoongArch: Add boot and setup routines
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-12-chenhuacai@loongson.cn>
- <d88ede74-b7a5-e568-1863-107c6c7f5fe0@xen0n.name>
- <dab96b787bef91240c719ea1a100396350135f99.camel@xry111.site>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <dab96b787bef91240c719ea1a100396350135f99.camel@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        WANG Xuerui <git@xen0n.name>, Yun Liu <liuyun@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:s1NvRPCau0Hkty6Nm4xzlAtXdfIepDi+dFoTNUFwt24NqJmwVVU
+ 7rD3h4+KwztsLVXD98ikXQqWVcU+KjvI76ly+j73c8uAxO8s9soQscJGi+s37zERGXG7JDz
+ /f9thbrgD5KSYkTlq4b2OhndTZ2aqNJha2Pot5LNNsnSRl3zsgCoooOECkKtJNHIQgfLMgH
+ Ti6PLPVPR0+wZKH8N4y/A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gNG8HCuRlfo=:R3uUzthMouM63SxpyLQP/b
+ Lq95MJd5iFIGOdKfEXrz8zK+7TbMYxPfMzSuPXWDDHBZatdspdeRVRw/n2pLpDLJNNXXcRQ2l
+ 87lSAjmTQu1z6sMg6fD4IjZawPKEUDv84bVa0RyBRxnuY1BFkEUR3H+f1Ege0WQKWXDhaObRG
+ ehAgQgfcVb2oFArMvYFQ64KmVZTjCX4ODRLP/Qo1e8hg2y3K50Ce3rNVyvJv/U1DnUAuzUVcz
+ pnSpuUCholeTRYQd02lFHBjdq/6Vbi7DOP2cl+A3SHjKjrjrztJ7cIQ/W3ANPPcbbG/XX6wwl
+ KBPq2Mdp89UrWjxYikAFHAbgbPZeWEOB6cvTaq2Hu2oUV7P8HykMmMt8FmSwYViKxwVHmu4dV
+ ODu3z1BE40C2Cznhm+e3yFOXWwRlP0Wcv2R2M3QDkxmYrX911R50qtP0Ngec7tbTlBN6w3V4F
+ zEl++w3dbq5M1tJ9B592GRNmiHtAdOAdd80umRUCoBYR/EcmK5i6AVqVV1P2z3miG3/abC8zA
+ kXcs71t+zDUMVoEApjjidyu43HDyRKvH3hMHYU3AcQIROWck7MWVO0tdC/U/m5cR72MChwOUS
+ af4pYQRPh3/tDaSfHHb9l+pcjTzRunEhqGl+QB3Jgktc3KlwWnU7GfRL1KDQGf6GxsLQPsLfs
+ mhwbRoPBYz5Jq3/osOHmfXBn7ODGIBd4hkzbLucRItxPuspEk905i0gXD17HmZQAwgMBb98+M
+ BFWiV887wDoofpz5nnL9gc9Llv+KzDEwG5B5I3n6hFdr/MMSPgIcjjZYgqvhIuDkmOHL3C/nS
+ V+3dvqAmZr8yEUWwBLNfBWP7YJMgp6fyO3kqkK1xjLTPRbfRysaXnSGE4kCTgrRZaizvzfWuL
+ mw6BeymzWYPglXk3SyhO8NGseL+GpY9HsxkIwbxOY=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/3/22 17:32, Xi Ruoyao wrote:
-> On Thu, 2022-06-02 at 22:09 +0800, WANG Xuerui wrote:
+On Fri, Jun 3, 2022 at 11:27 AM WANG Xuerui <kernel@xen0n.name> wrote:
+> On 6/3/22 15:20, Huacai Chen wrote:
+> > Add basic boot, setup and reset routines for LoongArch. Now, LoongArch
+> > machines use UEFI-based firmware. The firmware passes configuration
+> > information to the kernel via ACPI and DMI/SMBIOS.
+> >
+> > Currently an existing interface between the kernel and the bootloader
+> > is implemented. Kernel gets 2 values from the bootloader, passed in
+> > registers a0 and a1; a0 is an "EFI boot flag" distinguishing UEFI and
+> > non-UEFI firmware, while a1 is a pointer to an FDT with systable,
+> > memmap, cmdline and initrd information.
+> >
+> > The standard UEFI boot protocol (EFISTUB) will be added later.
+> >
+> > Cc: linux-efi@vger.kernel.org
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Reviewed-by: WANG Xuerui <git@xen0n.name>
+> > Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Co-developed-by: Yun Liu <liuyun@loongson.cn>
+> > Signed-off-by: Yun Liu <liuyun@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 >
->> For this, I don't know if Huacai should really just leave those
->> modification in the downstream fork to keep the upstream Linux clean of
->> such hacks, because to some degree dealing with such notoriety is life,
->> it seems to me. I think at this point Huacai would cooperate and tweak
->> the patch to get rid of the SVAM and other nonstandard bits as much as
->> possible, and I'll help him where necessary too.
-> To me any new firmware for PC-like platforms should implement UEFI.  For
-> embedded platforms device tree support will be added later.
+> Would you please look at this patch, which has all the arch-independent
+> changes backed out, and Ack if it is fit for mainlining?
 >
-> For those guys impossible or unwilling to upgrade the firmware, it may
-> be possible to implement a compatibility layer and the booting procedure
-> will be like:
+> I communicated a little with Huacai about the approach for supporting
+> alternative boot protocols down the road, and we agreed to carry the
+> respective changes downstream. And if needs truly arise for modifying
+> common EFI logic, we can do so in a non-rushed manner later.
 >
-> old firmware -> bootloongarch.efi -> customized u-boot -> bootloongarch64.efi (grub) -> efi stub (kernel)
->                  --------- compatibility layer --------    ^^^^^^^^ normal UEFI compatible stuff ^^^^^^^^^
->
-> new firmware -> bootloongarch64.efi (grub) -> efi stub (kernel)
->
-> The old firmware route would be similar to the booting procedure of
-> Asahi Linux.  I think this can be implemented because it's already
-> implemented on M1 even while Apple is almost completely uncooperative.
+> For the current status of the code, apparently it just accepts the
+> standard efistub-shape FDT pointer from (whatever booting the image),
+> and everything onwards are fully using the common code without
+> modification as you can see from the diffstat. I rebased my BPI support
+> patch on top of this (basically translating Loongson BPI data structures
+> into the expected FDT form), and can confirm the boot can progress to
+> the same point as before -- indeed the SVAM changes etc. are not
+> necessary for a working system, and the code remains working.
 
-This is a bit off-topic (we're basically hurrying up to get the port 
-into v5.19-rc1 and discussing ways to achieve that), but yeah 
-definitely. I've had the same idea right after knowing the LoongArch 
-firmware would also have "new-world" variant, then I contacted some 
-firmware engineers working on LoongArch boards, I think they agreed on 
-the approach overall.
+I'm a bit lost here: Does this mean the v15 version is back to the old
+pre-efistub interface and allows booting with existing firmware, or
+is it now left out completely? I still see a kernel_entry() function
+in head.S, and I see references to loongson_sysconf, but I don't
+see if that is what gets passed in from the bootloader.
 
-However, making the kernel itself capable of booting on both BPI and 
-new-world UEFI firmware flavors may have its merits after all; one 
-scenario I could come up with is that user reboots and upgrades their 
-firmware, *before* updating their old-world kernel, and bang! system 
-soft-bricked. All such cases involve old-world distros that already 
-deviate a little bit from vanilla upstream code, so such BPI support 
-needn't be mainlined for avoiding this scenario.
+I really want to make sure that without the EFI stub, there is no
+other way to boot the kernel that would have to get maintained
+in the long run.
 
->
-> Just my 2 cents. I know almost nothing about booting.
-That's fine, we all know nothing in the beginning ;-)
+        Arnd
