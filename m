@@ -2,319 +2,204 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAE853C2C5
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 04:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD8853C3E8
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 06:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240471AbiFCBp1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 2 Jun 2022 21:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S231318AbiFCE6x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jun 2022 00:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240975AbiFCBp0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 2 Jun 2022 21:45:26 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513CF24086;
-        Thu,  2 Jun 2022 18:45:23 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id h1so5835077plf.11;
-        Thu, 02 Jun 2022 18:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ykexnotmnCEPoI5Oth3kNZn8Re9RXxRddiJBLrLWIBA=;
-        b=glhKnCIao23XEkXQATLZXMVvZO+5umzisEWt5K4eEWqTXZb+jZpia8bGHlKmiu44DU
-         M0CRLXBiX+RmhTNjZ/tJfyGUya0aP6tYXif87iKHnto+wiquodWSVDLr76/3cbw9BVpZ
-         YQbJjhulDJuBkphx80ANkgad209aaT2VvpzL8JuSIycIgh1jop3w7ivErMmMOG8VI7Le
-         ygrddEQfGY5HbpVifa1RhFnF2qiwPlvfOGDKy1FiOrNdiXA5m6BLiDVOhVMoqkbUBLQW
-         KzgK0Ke3fF2MkGyDyKWraHCg8bfBtUfBqABJSH/gOTaAzJ8ZBd8aYjGVMHQKXRs0rPg1
-         20Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ykexnotmnCEPoI5Oth3kNZn8Re9RXxRddiJBLrLWIBA=;
-        b=QaokvplYBA+PTN905t92YPj9T6yEjWreOn91cGEYJWfy04M7h55xdUICm7JaBXzceT
-         RHjCBbfIIOgDmuvMQqicHWhllGnlMyVNNzVEqu6u9PK75gVGDataF2HhBV0w+zErZlSz
-         K7SZ3XJfe/Q6UMSa6D3sIU7+q/96Dfdyv2baw6GUoPHeG3RMy9RS77EnhTpEiQs/o7dn
-         QY8yo+5iUz0N+nZ9loTJt47XffZfOjvpsFZw7aknCCC1HNTSl4j4qD5SBC1hVt5ju4dQ
-         3sHXkybAAOhJ3BI6GsFji+4e1c8GI7/OOsTzU/mnerDZjSCRIHkMoe4NVSyFlrA9lHIr
-         yW0w==
-X-Gm-Message-State: AOAM533NRVPchBR985XsokTjU0QBXTq1K/dOSrOW6p+o/dpfJ2djT+g0
-        W9KmAmYsAqQ379UC38/LUME=
-X-Google-Smtp-Source: ABdhPJwQKvCtpbEUxQ5HEb2Ha2zJG7oPPAptQTp2CQVAwj13XBwCP7OPpRBf9oVy1CTq/pm8DmSuzg==
-X-Received: by 2002:a17:903:230e:b0:166:3781:1e50 with SMTP id d14-20020a170903230e00b0016637811e50mr7863272plh.20.1654220722734;
-        Thu, 02 Jun 2022 18:45:22 -0700 (PDT)
-Received: from localhost (subs28-116-206-12-38.three.co.id. [116.206.12.38])
-        by smtp.gmail.com with ESMTPSA id r12-20020a17090b050c00b001e0c1044ceasm3937393pjz.43.2022.06.02.18.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 18:45:21 -0700 (PDT)
-Date:   Fri, 3 Jun 2022 08:45:18 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH V14 03/24] Documentation: LoongArch: Add basic
- documentations
-Message-ID: <YplnruNz++gABlU0@debian.me>
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-4-chenhuacai@loongson.cn>
+        with ESMTP id S239407AbiFCE6v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 00:58:51 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074512D1DD
+        for <linux-arch@vger.kernel.org>; Thu,  2 Jun 2022 21:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654232331; x=1685768331;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yHcoRzAqzEzKTiIxbp7ocfuiQRSJl67vBRrwa5q3Nc0=;
+  b=mFBg4gLGoBFnr80Mggee40J9ZWwE9utzT3gpwq3kZQD1f8tqdQIOdfL1
+   Mc3Sjnbj1lGiqB23RrVJ7imBJNgt6AVC0GgmKZ8IOwKceNl/3YdVD4zKf
+   3+hlwYX2aZaG1Ug3zFyEUdfr6SHr5dw5UbtNQEEMYyADI7x5A5TZ+CBIK
+   le44Nuo6AREOuiU21r0PMvEmG50cAFArwGMC/Gw9AaVE+nKA18N1Z1CYf
+   kLc3wZI5Norh5xuTZZhZh3W1y+SCBmo8rUzPhO0g7DhmQJ9whXj0S651i
+   EobXCH/YHjYIqdPx2aIvhCBgmFX/c06XOk9mihHNlTPSNoFv5C8XBU+7Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="258240615"
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="258240615"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 21:58:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="553176532"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 02 Jun 2022 21:58:46 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwzOX-0006JR-R1;
+        Fri, 03 Jun 2022 04:58:45 +0000
+Date:   Fri, 03 Jun 2022 12:57:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 8cc5b032240ae5220b62c689c20459d3e1825b2d
+Message-ID: <629994c9.0VznuWefvHXF6whG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220602115141.3962749-4-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 02, 2022 at 07:51:20PM +0800, Huacai Chen wrote:
-> +Legacy IRQ model
-> +================
-> +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
-> +to LIOINTC, and then CPUINTC.
-> +
-> + +---------------------------------------------+
-> + |::                                           |
-> + |                                             |
-> + |    +-----+     +---------+     +-------+    |
-> + |    | IPI | --> | CPUINTC | <-- | Timer |    |
-> + |    +-----+     +---------+     +-------+    |
-> + |                     ^                       |
-> + |                     |                       |
-> + |                +---------+     +-------+    |
-> + |                | LIOINTC | <-- | UARTs |    |
-> + |                +---------+     +-------+    |
-> + |                     ^                       |
-> + |                     |                       |
-> + |               +-----------+                 |
-> + |               | HTVECINTC |                 |
-> + |               +-----------+                 |
-> + |                ^         ^                  |
-> + |                |         |                  |
-> + |          +---------+ +---------+            |
-> + |          | PCH-PIC | | PCH-MSI |            |
-> + |          +---------+ +---------+            |
-> + |            ^     ^           ^              |
-> + |            |     |           |              |
-> + |    +---------+ +---------+ +---------+      |
-> + |    | PCH-LPC | | Devices | | Devices |      |
-> + |    +---------+ +---------+ +---------+      |
-> + |         ^                                   |
-> + |         |                                   |
-> + |    +---------+                              |
-> + |    | Devices |                              |
-> + |    +---------+                              |
-> + |                                             |
-> + |                                             |
-> + +---------------------------------------------+
-> +
-> +Extended IRQ model
-> +==================
-> +
-> +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
-> +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
-> +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
-> +to CPUINTC directly.
-> +
-> + +--------------------------------------------------------+
-> + |::                                                      |
-> + |                                                        |
-> + |         +-----+     +---------+     +-------+          |
-> + |         | IPI | --> | CPUINTC | <-- | Timer |          |
-> + |         +-----+     +---------+     +-------+          |
-> + |                      ^       ^                         |
-> + |                      |       |                         |
-> + |               +---------+ +---------+     +-------+    |
-> + |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-> + |               +---------+ +---------+     +-------+    |
-> + |                ^       ^                               |
-> + |                |       |                               |
-> + |         +---------+ +---------+                        |
-> + |         | PCH-PIC | | PCH-MSI |                        |
-> + |         +---------+ +---------+                        |
-> + |           ^     ^           ^                          |
-> + |           |     |           |                          |
-> + |   +---------+ +---------+ +---------+                  |
-> + |   | PCH-LPC | | Devices | | Devices |                  |
-> + |   +---------+ +---------+ +---------+                  |
-> + |        ^                                               |
-> + |        |                                               |
-> + |   +---------+                                          |
-> + |   | Devices |                                          |
-> + |   +---------+                                          |
-> + |                                                        |
-> + |                                                        |
-> + +--------------------------------------------------------+
-> +
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 8cc5b032240ae5220b62c689c20459d3e1825b2d  binder: fix sender_euid type in uapi header
 
-I think for consistency with other diagrams in Documentation/, just use
-literal code block, like:
+elapsed time: 724m
 
-diff --git a/Documentation/loongarch/irq-chip-model.rst b/Documentation/loongarch/irq-chip-model.rst
-index 35c962991283ff..3cfd528021de05 100644
---- a/Documentation/loongarch/irq-chip-model.rst
-+++ b/Documentation/loongarch/irq-chip-model.rst
-@@ -24,40 +24,38 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
- interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
- to LIOINTC, and then CPUINTC.
- 
-- +---------------------------------------------+
-- |::                                           |
-- |                                             |
-- |    +-----+     +---------+     +-------+    |
-- |    | IPI | --> | CPUINTC | <-- | Timer |    |
-- |    +-----+     +---------+     +-------+    |
-- |                     ^                       |
-- |                     |                       |
-- |                +---------+     +-------+    |
-- |                | LIOINTC | <-- | UARTs |    |
-- |                +---------+     +-------+    |
-- |                     ^                       |
-- |                     |                       |
-- |               +-----------+                 |
-- |               | HTVECINTC |                 |
-- |               +-----------+                 |
-- |                ^         ^                  |
-- |                |         |                  |
-- |          +---------+ +---------+            |
-- |          | PCH-PIC | | PCH-MSI |            |
-- |          +---------+ +---------+            |
-- |            ^     ^           ^              |
-- |            |     |           |              |
-- |    +---------+ +---------+ +---------+      |
-- |    | PCH-LPC | | Devices | | Devices |      |
-- |    +---------+ +---------+ +---------+      |
-- |         ^                                   |
-- |         |                                   |
-- |    +---------+                              |
-- |    | Devices |                              |
-- |    +---------+                              |
-- |                                             |
-- |                                             |
-- +---------------------------------------------+
-+ ::                                           
-+                                              
-+     +-----+     +---------+     +-------+    
-+     | IPI | --> | CPUINTC | <-- | Timer |    
-+     +-----+     +---------+     +-------+    
-+                      ^                       
-+                      |                       
-+                 +---------+     +-------+    
-+                 | LIOINTC | <-- | UARTs |    
-+                 +---------+     +-------+    
-+                      ^                       
-+                      |                       
-+                +-----------+                 
-+                | HTVECINTC |                 
-+                +-----------+                 
-+                 ^         ^                  
-+                 |         |                  
-+           +---------+ +---------+            
-+           | PCH-PIC | | PCH-MSI |            
-+           +---------+ +---------+            
-+             ^     ^           ^              
-+             |     |           |              
-+     +---------+ +---------+ +---------+      
-+     | PCH-LPC | | Devices | | Devices |      
-+     +---------+ +---------+ +---------+      
-+          ^                                   
-+          |                                   
-+     +---------+                              
-+     | Devices |                              
-+     +---------+                              
-+                                              
-+                                              
- 
- Extended IRQ model
- ==================
-@@ -67,35 +65,33 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
- interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
- to CPUINTC directly.
- 
-- +--------------------------------------------------------+
-- |::                                                      |
-- |                                                        |
-- |         +-----+     +---------+     +-------+          |
-- |         | IPI | --> | CPUINTC | <-- | Timer |          |
-- |         +-----+     +---------+     +-------+          |
-- |                      ^       ^                         |
-- |                      |       |                         |
-- |               +---------+ +---------+     +-------+    |
-- |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
-- |               +---------+ +---------+     +-------+    |
-- |                ^       ^                               |
-- |                |       |                               |
-- |         +---------+ +---------+                        |
-- |         | PCH-PIC | | PCH-MSI |                        |
-- |         +---------+ +---------+                        |
-- |           ^     ^           ^                          |
-- |           |     |           |                          |
-- |   +---------+ +---------+ +---------+                  |
-- |   | PCH-LPC | | Devices | | Devices |                  |
-- |   +---------+ +---------+ +---------+                  |
-- |        ^                                               |
-- |        |                                               |
-- |   +---------+                                          |
-- |   | Devices |                                          |
-- |   +---------+                                          |
-- |                                                        |
-- |                                                        |
-- +--------------------------------------------------------+
-+ ::                                                      
-+                                                         
-+          +-----+     +---------+     +-------+          
-+          | IPI | --> | CPUINTC | <-- | Timer |          
-+          +-----+     +---------+     +-------+          
-+                       ^       ^                         
-+                       |       |                         
-+                +---------+ +---------+     +-------+    
-+                | EIOINTC | | LIOINTC | <-- | UARTs |    
-+                +---------+ +---------+     +-------+    
-+                 ^       ^                               
-+                 |       |                               
-+          +---------+ +---------+                        
-+          | PCH-PIC | | PCH-MSI |                        
-+          +---------+ +---------+                        
-+            ^     ^           ^                          
-+            |     |           |                          
-+    +---------+ +---------+ +---------+                  
-+    | PCH-LPC | | Devices | | Devices |                  
-+    +---------+ +---------+ +---------+                  
-+         ^                                               
-+         |                                               
-+    +---------+                                          
-+    | Devices |                                          
-+    +---------+                                          
-+                                                         
-+                                                         
- 
- ACPI-related definitions
- ========================
+configs tested: 120
+configs skipped: 4
 
-Otherwise, htmldocs builds successfully without any new warnings related
-to this patch series.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+arc                          axs101_defconfig
+arm                          gemini_defconfig
+arm                         vf610m4_defconfig
+arm                           viper_defconfig
+nios2                               defconfig
+sh                   secureedge5410_defconfig
+arm64                            alldefconfig
+sh                         microdev_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                      cm5200_defconfig
+m68k                         apollo_defconfig
+powerpc                     ep8248e_defconfig
+sh                           se7780_defconfig
+sh                          kfr2r09_defconfig
+sh                ecovec24-romimage_defconfig
+arm                       aspeed_g5_defconfig
+arm                           sama5_defconfig
+powerpc                    amigaone_defconfig
+m68k                         amcore_defconfig
+mips                         mpc30x_defconfig
+openrisc                 simple_smp_defconfig
+arm                        mini2440_defconfig
+sh                           se7343_defconfig
+arm                       imx_v6_v7_defconfig
+sh                     magicpanelr2_defconfig
+ia64                                defconfig
+x86_64                        randconfig-c001
+i386                          randconfig-c001
+arm                  randconfig-c002-20220531
+riscv                             allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220531
+s390                 randconfig-r044-20220531
+riscv                randconfig-r042-20220531
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+mips                 randconfig-c004-20220531
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+s390                 randconfig-c005-20220531
+arm                  randconfig-c002-20220531
+powerpc              randconfig-c003-20220531
+riscv                randconfig-c006-20220531
+powerpc                     tqm5200_defconfig
+riscv                    nommu_virt_defconfig
+powerpc                      acadia_defconfig
+arm                         hackkit_defconfig
+mips                malta_qemu_32r6_defconfig
+mips                        workpad_defconfig
+arm                             mxs_defconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                     tqm8540_defconfig
+arm                       cns3420vb_defconfig
+arm                       netwinder_defconfig
+arm                         lpc32xx_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220531
+hexagon              randconfig-r045-20220531
 
 -- 
-An old man doll... just what I always wanted! - Clara
+0-DAY CI Kernel Test Service
+https://01.org/lkp
