@@ -2,80 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE3B53CA50
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 15:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E5F53CAC4
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 15:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243272AbiFCNBn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jun 2022 09:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S244714AbiFCNlN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jun 2022 09:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbiFCNBn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 09:01:43 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958EF33E00;
-        Fri,  3 Jun 2022 06:01:42 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id y17so6402901ilj.11;
-        Fri, 03 Jun 2022 06:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rgrulR9sWDCPB8J3w8134fSxmlMlybKB98GjFOYddPM=;
-        b=nZB/9Tim4HYP+RhLMDzSxYWSOsxlOt7c/zQOESbRHdxdNgnVJTtf94ATrxncZN4kD3
-         i11tzP7/xhpdjjmzkRpPfOIbYWnfu8VcelF+AMt30/pnlz1b/fBcaH96JUTz0dvmSwvR
-         yBaTYF0Qcz9Uuh9lLWrHHMtlG6oKj7pZUgIFdgwNH7ihpMCEYz4dQzHoZItFxpesI4zj
-         xVm0/mxZGsiO/MhduXeM45jZE9V+La/hlgesJqDWFNmMqdSgB8gH4MHH2rLmoMJnP9t1
-         AaMPFdDdU997v8W9YkDhoneZzLOrx7pXVUfFxJi+bbjXAsqpMZRd8DGWno6vLVQ0CfSn
-         SU+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rgrulR9sWDCPB8J3w8134fSxmlMlybKB98GjFOYddPM=;
-        b=WOZkqgTWgQcvIU75M2Ohi1T4qfH0Wc/011nL9ilHvOb79a9/SO0lz+77Kv0nNpCjef
-         WxLtYOP+QyN6ggvkB/1+jxrnA8jjZH8tC5IiCEFRXwfyQVTOCBEoUik6yL27HRwkjkSH
-         mP8T34pnSryfC6+TYaeoC2vUl4dqYf7YVvwGVrKkn6mKQ4y9KS+FGruqcBMlIWfsrNCA
-         7rycZlns0YMN24mlfN07/tlmJDpAE+SFvbEYLozwV+co4XSzd9XmFyY8NK6mg8kwCrF2
-         ex7L3KGI7RZp7bcMvE4xCT27HlYFbGZIBrnxVuF5VxaPr3/vfQzrmwyv8qpSLyHZscNo
-         oQ3A==
-X-Gm-Message-State: AOAM533gYsbKYXyGW/iwVOa3iDwWpapBvyD27/j5yzcWgEFzHyOASU5y
-        RE0y9Zx/LPtp0iYudWB9UmLv0nbr2Cywjy1nk08qez4kSG2XAGNTz1w=
-X-Google-Smtp-Source: ABdhPJyO+Wy90k2d7bT9meJht2LMrT2KMmjl3ZbZHYIX42IrUTb483qKosBX0l5mNBSohko5/wmN7WiKuJk6RZCTo6Y=
-X-Received: by 2002:a05:6e02:12b4:b0:2d3:a822:3a16 with SMTP id
- f20-20020a056e0212b400b002d3a8223a16mr5629446ilr.279.1654261301972; Fri, 03
- Jun 2022 06:01:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-4-chenhuacai@loongson.cn> <YplnruNz++gABlU0@debian.me>
- <CAAhV-H5Hi_gYvrO6DAGGA=OVExunCubNpDBdkRBxFxiP1APAKw@mail.gmail.com> <de31731a-5cb5-ece1-6b7f-895d9c04fa95@gmail.com>
-In-Reply-To: <de31731a-5cb5-ece1-6b7f-895d9c04fa95@gmail.com>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 3 Jun 2022 21:01:31 +0800
-Message-ID: <CAAhV-H53=9=qsmasoZ6efeiCez4vo0P2Eg-itTvNh3zerCtJsg@mail.gmail.com>
-Subject: Re: [PATCH V14 03/24] Documentation: LoongArch: Add basic documentations
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
+        with ESMTP id S234405AbiFCNlL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 09:41:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A266F33375;
+        Fri,  3 Jun 2022 06:41:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F3D8B82336;
+        Fri,  3 Jun 2022 13:41:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE3FC385B8;
+        Fri,  3 Jun 2022 13:41:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="phyVwxW+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1654263663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K1HzLPo4qxiHGh3bnL/3IKmiTPz5L0lYhMPjd5oJuMk=;
+        b=phyVwxW+C5XVYbh/egIVh2lGmIhFJNWX0LVc7lgz05w2u3RJVS1QE9Vv08PPgGfPfyjO60
+        Nlp3vTR9tMr7luUx/90pZIf0DMqjO+Dc07A2sZoYhw3qhbVXphtWihAeP9PS6k02PYUOTD
+        7Kbbc/WxM82tjm72SgwFHBy4XERVMpw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f75f6eda (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 3 Jun 2022 13:41:02 +0000 (UTC)
+Date:   Fri, 3 Jun 2022 15:40:54 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
         Jonathan Corbet <corbet@lwn.net>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
         Yanteng Si <siyanteng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         WANG Xuerui <git@xen0n.name>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Subject: Re: [PATCH V15 10/24] LoongArch: Add other common headers
+Message-ID: <YpoPZjJ/Adfu3uH9@zx2c4.com>
+References: <20220603072053.35005-1-chenhuacai@loongson.cn>
+ <20220603072053.35005-11-chenhuacai@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220603072053.35005-11-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,34 +70,80 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Bagas,
+Hi Huacai,
 
-On Fri, Jun 3, 2022 at 3:35 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On 6/3/22 12:27, Huacai Chen wrote:
-> > Thank you for your testing. In my environment (sphinx_2.4.4), with or
-> > without the border both have no warnings. :)
-> > And I think these are more pretty if we keep the border, especially
-> > when formatted into PDF. How do you think?
-> >
->
-> I think what you mean is reST table border, right?
->
-> By comparison, in Documentation/arm/booting.rst, there is a diagram
-> in "Setup the kernel tagged list". The diagram is written just inside
-> the literal code block and works fine, albeit the code block
-> spans fully. The diagram is small, however.
->
-> Otherwise, I see unequal padding in rendered IRQ diagrams. If I
-> remember correctly, the bottom and left padding are larger than top
-> and right padding. IDK why.
->
-> So please apply my suggestion diff.
-Your suggestion has been accepted now, thanks.
+On Fri, Jun 03, 2022 at 03:20:39PM +0800, Huacai Chen wrote:
+> diff --git a/arch/loongarch/include/asm/timex.h b/arch/loongarch/include/asm/timex.h
+> new file mode 100644
+> index 000000000000..d3ed99a4fdbd
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/timex.h
+> @@ -0,0 +1,33 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> + */
+> +#ifndef _ASM_TIMEX_H
+> +#define _ASM_TIMEX_H
+> +
+> +#ifdef __KERNEL__
+> +
+> +#include <linux/compiler.h>
+> +
+> +#include <asm/cpu.h>
+> +#include <asm/cpu-features.h>
+> +
+> +/*
+> + * Standard way to access the cycle counter.
+> + * Currently only used on SMP for scheduling.
+> + *
+> + * We know that all SMP capable CPUs have cycle counters.
+> + */
+> +
+> +typedef unsigned long cycles_t;
+> +
+> +#define get_cycles get_cycles
+> +
+> +static inline cycles_t get_cycles(void)
+> +{
+> +	return drdtime();
+> +}
+> +
+> +#endif /* __KERNEL__ */
+> +
+> +#endif /*  _ASM_TIMEX_H */
 
-Huacai
->
-> Thanks.
->
-> --
-> An old man doll... just what I always wanted! - Clara
+"Currently only used on SMP for scheduling" isn't quite correct. It's
+also used by random_get_entropy(). And anything else that uses
+get_cycles() for, e.g., benchmarking, might use it too.
+
+You wrote also, "we know that all SMP capable CPUs have cycle counters",
+so if I gather from this statement that some !SMP CPUs don't have a
+cycle counter, though some do. If that's a correct supposition, then
+you may need to rewrite this file to be something like:
+
+    static inline bool cpu_has_rdtime(void)
+    {
+        return IS_ENABLED(CONFIG_SMP) ? true : { ... some magic to determine on !SMP ... };
+    }
+
+    typedef unsigned long cycles_t;
+    static inline cycles_t get_cycles(void)
+    {
+    	return cpu_has_rdtime() ? drdtime() : 0;
+    }
+    #define get_cycles get_cycles
+
+    static inline unsigned long random_get_entropy(void)
+    {
+        return cpu_has_rdtime() ? drdtime() : random_get_entropy_fallback();
+    }
+    #define random_get_entropy random_get_entropy
+
+Does that make sense? More importantly, is my presumption about !SMP
+correct?
+
+In any case, please do CC me on this patch for v+1.
+
+Regards,
+Jason
