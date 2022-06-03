@@ -2,78 +2,75 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9970953C40A
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 07:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221CD53C42F
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 07:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237987AbiFCFN5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jun 2022 01:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S240413AbiFCF1P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jun 2022 01:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbiFCFNv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 01:13:51 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3EB51E3CF;
-        Thu,  2 Jun 2022 22:13:50 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id b17so668971ilh.6;
-        Thu, 02 Jun 2022 22:13:50 -0700 (PDT)
+        with ESMTP id S239345AbiFCF1N (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 01:27:13 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DBF17E02;
+        Thu,  2 Jun 2022 22:27:11 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id f7so5022571ilr.5;
+        Thu, 02 Jun 2022 22:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=6nwj+N0btcAhrlduVQaHIJkNfwj6bOjYkg8VFFJB53w=;
-        b=HBHfhqzqLLypExTd6ahy302xLg7IurmMbEDCcYnorkVnh9POPCvzobQHDdBapvg2U8
-         W8ps2Z/dl+expoVMqGjQEY9Ns5EBWf6hqakUyBKv3ukd3nFUYf7+fv7xO7EWln2/O3aX
-         /ixbWBEaxQjOlHv55SgOz/kK7v7OBUf51zcz8dmsQxusrfP+XH7SkjFIvYNrk5633C/A
-         xM0RgrKFeWzug8KbSIzlyCQ5SRlU8hernD1BMKgUbodyy/TraaUNWq4eTj3AHLDOVOLq
-         Rg41Zda1b22+tjHq4PzGQLv7sca/vvCyVrzFjknE511WWTvlEjwjCiun4Drk/v5V3jYH
-         VDug==
+        bh=oGb27Ak0z2Rkt5N/UACfnN99nvmSQ69B5OG+/UGAQLM=;
+        b=qjUHwWtDO6aI7Fmssc++fi3v4jwxDc0kJYEk1vDRyhGSso7W1ZkZFSkqajhql3wNEA
+         M5hmNYlaxDWWcrdcotJ+aZvuYIgBgoNZnbJqss8yvTjzrr5UHsYCVWIbgQjNyjKS9yN6
+         XSKnbUokIFEYVUfpi3gmuc6AO5GGBQNmpL6wcya0hBiCkvePk92MFbN9gnDfCn2W3k4f
+         vq1rvXMWPW0B7BL7G933m6hgdw0D7VNfTLmJlN4fW75Y10i/xYRMQNCu97jekuzCDAqs
+         cca8vUxo3bCj1ChZ5wzKSgv4o3wQ5IImVCu8YJHpNeNh9fhcVjXcEIZZgSfmXv42OxgH
+         Ya/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6nwj+N0btcAhrlduVQaHIJkNfwj6bOjYkg8VFFJB53w=;
-        b=Z5DVIgLKyjdD8EI/PFNUqAviyYygCcBTQo49pQUkZaFpqV6O7sGw6t4Zf3kHKDHrde
-         slDP2IZXZJqJS6qZtG7v1FIF0Xv6pn7ySj2UK8YPINFSXRByFn65/Huupkd9b2ty+F5d
-         urFM15Sk8uXM19qUWrhWoLOapJzo+aqJuE3hiirWZyZ007G0IDz+aVo8HndY4LEGraZY
-         0ioAiq2rQRnGbmSU3ZOQ1ugrGkjOm+t3/JmRvW1iIdepKLDqmY7CcL7yuMDTh4Vkc/2J
-         jnPdAtxLu5jZ8w/zuBkKktsq6t39KiWkptTaP7XHu0xxS7ZQSborp+VU6scTKFALgEIe
-         hRQg==
-X-Gm-Message-State: AOAM531YVOsO9OmUVTcpC3F4wKdxGqznPGcgoMLdpF3ftxFKN5DJ7OrF
-        5aVuDIINY0SNvwqvFeK6PhNAWjLHD4y0FSvHenE=
-X-Google-Smtp-Source: ABdhPJzLV3/h9JnimRUMzzPBUrj78Wu/O1S+cL3jrwWVQaadkihCHqwN8D4zsdFvDJsERNstWwPos9zXeCV5mJbs9vc=
-X-Received: by 2002:a92:194c:0:b0:2c8:2a07:74e7 with SMTP id
- e12-20020a92194c000000b002c82a0774e7mr4979140ilm.272.1654233230074; Thu, 02
- Jun 2022 22:13:50 -0700 (PDT)
+        bh=oGb27Ak0z2Rkt5N/UACfnN99nvmSQ69B5OG+/UGAQLM=;
+        b=dTclK/5SghxYRy4NUYOCYrqjwD6uMqX03rOGiV/knH9pbP6Yvpyl/T37LaNJ0GXEgR
+         cGr4KgLSvfKhAinDYdFyFDoLnV2d932BaPpHDuYvwK+OpHwUl1m0nFTZcs/hwp7/9wSK
+         MOE2r0caDKICCda8u+NoNrkE43TpdbGVzE17nlsJc/A4YaRKSykeMlixhkfskXUIFz6O
+         HguW8Wvl5oLiyl0iNvX0TruGLH7dDGb9Rpi4wP+q9XGxK7YSbPLBlXyuio10TNjFkxF6
+         BiNk1jqmL6ZIG2h/UG2P++u3xDoTkLg6HIzBU6enB64rB2VcxejymuP9HIJQnRm1ePWr
+         wNig==
+X-Gm-Message-State: AOAM532yI0k6vOVh1bV6dlaXV6jYbxqmLsOU+OeEIVjn/RuDOf2QcN2G
+        G7MiKlgA4dssPWdYqigs4FUyV1w71RxCJdELujM=
+X-Google-Smtp-Source: ABdhPJxTxG2jY7cybAXHG6BSEzYABkT93h++rypNIN3GXMjB+z1lq7/A/l4005ZP15S5fZveJqS40vrOm/RZYuEXguM=
+X-Received: by 2002:a05:6638:4407:b0:331:692c:1d5f with SMTP id
+ bp7-20020a056638440700b00331692c1d5fmr3236731jab.208.1654234030909; Thu, 02
+ Jun 2022 22:27:10 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220602115141.3962749-1-chenhuacai@loongson.cn>
- <20220602115141.3962749-12-chenhuacai@loongson.cn> <d88ede74-b7a5-e568-1863-107c6c7f5fe0@xen0n.name>
- <CAMj1kXE1Gg+jN0yGZCi86HQBPrtX=-EHjMW9Z9XxsobH=RS0LA@mail.gmail.com> <CAK8P3a2dv1_vtg2k8ifxD+XAJX6SZEYRsCt0W065yDA9gmssmg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2dv1_vtg2k8ifxD+XAJX6SZEYRsCt0W065yDA9gmssmg@mail.gmail.com>
+ <20220602115141.3962749-4-chenhuacai@loongson.cn> <YplnruNz++gABlU0@debian.me>
+In-Reply-To: <YplnruNz++gABlU0@debian.me>
 From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Fri, 3 Jun 2022 13:13:40 +0800
-Message-ID: <CAAhV-H4jLqrVJnMNY6j35pUAbmGkTAAP0X6SCBa8zTj9kRQg+Q@mail.gmail.com>
-Subject: Re: Steps forward for the LoongArch UEFI bringup patch? (was: Re:
- [PATCH V14 11/24] LoongArch: Add boot and setup routines)
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        WANG Xuerui <git@xen0n.name>, Yun Liu <liuyun@loongson.cn>,
-        Jonathan Corbet <corbet@lwn.net>,
+Date:   Fri, 3 Jun 2022 13:27:00 +0800
+Message-ID: <CAAhV-H5Hi_gYvrO6DAGGA=OVExunCubNpDBdkRBxFxiP1APAKw@mail.gmail.com>
+Subject: Re: [PATCH V14 03/24] Documentation: LoongArch: Add basic documentations
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
         Andy Lutomirski <luto@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Peter Zijlstra <peterz@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         David Airlie <airlied@linux.ie>,
-        Linus Torvalds <torvalds@linux-foundation.org>
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        WANG Xuerui <git@xen0n.name>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -85,53 +82,247 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Ard and Arnd,
+Hi, Bagas,
 
-On Fri, Jun 3, 2022 at 12:29 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Fri, Jun 3, 2022 at 9:45 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 >
-> On Thu, Jun 2, 2022 at 6:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > On Thu, 2 Jun 2022 at 16:09, WANG Xuerui <kernel@xen0n.name> wrote:
-> >
-> > > For this, I don't know if Huacai should really just leave those
-> > > modification in the downstream fork to keep the upstream Linux clean of
-> > > such hacks, because to some degree dealing with such notoriety is life,
-> > > it seems to me. I think at this point Huacai would cooperate and tweak
-> > > the patch to get rid of the SVAM and other nonstandard bits as much as
-> > > possible, and I'll help him where necessary too.
-> > >
-> >
-> > I don't want to be the one standing in your way, and I understand the
-> > desire to get this merged for the user space side of things. So
-> > perhaps it is better to merge this without the EFI support, and take
-> > another cycle to implement this properly across all the other
-> > components as well.
+> On Thu, Jun 02, 2022 at 07:51:20PM +0800, Huacai Chen wrote:
+> > +Legacy IRQ model
+> > +================
+> > +
+> > +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
+> > +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
+> > +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
+> > +to LIOINTC, and then CPUINTC.
+> > +
+> > + +---------------------------------------------+
+> > + |::                                           |
+> > + |                                             |
+> > + |    +-----+     +---------+     +-------+    |
+> > + |    | IPI | --> | CPUINTC | <-- | Timer |    |
+> > + |    +-----+     +---------+     +-------+    |
+> > + |                     ^                       |
+> > + |                     |                       |
+> > + |                +---------+     +-------+    |
+> > + |                | LIOINTC | <-- | UARTs |    |
+> > + |                +---------+     +-------+    |
+> > + |                     ^                       |
+> > + |                     |                       |
+> > + |               +-----------+                 |
+> > + |               | HTVECINTC |                 |
+> > + |               +-----------+                 |
+> > + |                ^         ^                  |
+> > + |                |         |                  |
+> > + |          +---------+ +---------+            |
+> > + |          | PCH-PIC | | PCH-MSI |            |
+> > + |          +---------+ +---------+            |
+> > + |            ^     ^           ^              |
+> > + |            |     |           |              |
+> > + |    +---------+ +---------+ +---------+      |
+> > + |    | PCH-LPC | | Devices | | Devices |      |
+> > + |    +---------+ +---------+ +---------+      |
+> > + |         ^                                   |
+> > + |         |                                   |
+> > + |    +---------+                              |
+> > + |    | Devices |                              |
+> > + |    +---------+                              |
+> > + |                                             |
+> > + |                                             |
+> > + +---------------------------------------------+
+> > +
+> > +Extended IRQ model
+> > +==================
+> > +
+> > +In this model, IPI (Inter-Processor Interrupt) and CPU Local Timer interrupt go
+> > +to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
+> > +interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
+> > +to CPUINTC directly.
+> > +
+> > + +--------------------------------------------------------+
+> > + |::                                                      |
+> > + |                                                        |
+> > + |         +-----+     +---------+     +-------+          |
+> > + |         | IPI | --> | CPUINTC | <-- | Timer |          |
+> > + |         +-----+     +---------+     +-------+          |
+> > + |                      ^       ^                         |
+> > + |                      |       |                         |
+> > + |               +---------+ +---------+     +-------+    |
+> > + |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+> > + |               +---------+ +---------+     +-------+    |
+> > + |                ^       ^                               |
+> > + |                |       |                               |
+> > + |         +---------+ +---------+                        |
+> > + |         | PCH-PIC | | PCH-MSI |                        |
+> > + |         +---------+ +---------+                        |
+> > + |           ^     ^           ^                          |
+> > + |           |     |           |                          |
+> > + |   +---------+ +---------+ +---------+                  |
+> > + |   | PCH-LPC | | Devices | | Devices |                  |
+> > + |   +---------+ +---------+ +---------+                  |
+> > + |        ^                                               |
+> > + |        |                                               |
+> > + |   +---------+                                          |
+> > + |   | Devices |                                          |
+> > + |   +---------+                                          |
+> > + |                                                        |
+> > + |                                                        |
+> > + +--------------------------------------------------------+
+> > +
 >
-> I think that's ok. As of today, there is still no working interrupt controller
-> driver because it hasn't passed review yet, so there is little value in
-> merging the boot support.
+> I think for consistency with other diagrams in Documentation/, just use
+> literal code block, like:
 >
-> The main point of merging the port at all is of course to allow compile
-> testing and building userspace, and both can be done without being
-> able to boot it.
+> diff --git a/Documentation/loongarch/irq-chip-model.rst b/Documentation/loongarch/irq-chip-model.rst
+> index 35c962991283ff..3cfd528021de05 100644
+> --- a/Documentation/loongarch/irq-chip-model.rst
+> +++ b/Documentation/loongarch/irq-chip-model.rst
+> @@ -24,40 +24,38 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
+>  interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by HTVECINTC, and then go
+>  to LIOINTC, and then CPUINTC.
 >
-> If Huacai is able to produce a tree by tomorrow that still builds and
-> leaves out the boot support, I can send a pull request to Linus and
-> let him make the final decision about it, but at this point I think there
-> is a good chance that he prefers to let it all sit for another release.
+> - +---------------------------------------------+
+> - |::                                           |
+> - |                                             |
+> - |    +-----+     +---------+     +-------+    |
+> - |    | IPI | --> | CPUINTC | <-- | Timer |    |
+> - |    +-----+     +---------+     +-------+    |
+> - |                     ^                       |
+> - |                     |                       |
+> - |                +---------+     +-------+    |
+> - |                | LIOINTC | <-- | UARTs |    |
+> - |                +---------+     +-------+    |
+> - |                     ^                       |
+> - |                     |                       |
+> - |               +-----------+                 |
+> - |               | HTVECINTC |                 |
+> - |               +-----------+                 |
+> - |                ^         ^                  |
+> - |                |         |                  |
+> - |          +---------+ +---------+            |
+> - |          | PCH-PIC | | PCH-MSI |            |
+> - |          +---------+ +---------+            |
+> - |            ^     ^           ^              |
+> - |            |     |           |              |
+> - |    +---------+ +---------+ +---------+      |
+> - |    | PCH-LPC | | Devices | | Devices |      |
+> - |    +---------+ +---------+ +---------+      |
+> - |         ^                                   |
+> - |         |                                   |
+> - |    +---------+                              |
+> - |    | Devices |                              |
+> - |    +---------+                              |
+> - |                                             |
+> - |                                             |
+> - +---------------------------------------------+
+> + ::
+> +
+> +     +-----+     +---------+     +-------+
+> +     | IPI | --> | CPUINTC | <-- | Timer |
+> +     +-----+     +---------+     +-------+
+> +                      ^
+> +                      |
+> +                 +---------+     +-------+
+> +                 | LIOINTC | <-- | UARTs |
+> +                 +---------+     +-------+
+> +                      ^
+> +                      |
+> +                +-----------+
+> +                | HTVECINTC |
+> +                +-----------+
+> +                 ^         ^
+> +                 |         |
+> +           +---------+ +---------+
+> +           | PCH-PIC | | PCH-MSI |
+> +           +---------+ +---------+
+> +             ^     ^           ^
+> +             |     |           |
+> +     +---------+ +---------+ +---------+
+> +     | PCH-LPC | | Devices | | Devices |
+> +     +---------+ +---------+ +---------+
+> +          ^
+> +          |
+> +     +---------+
+> +     | Devices |
+> +     +---------+
+> +
+> +
 >
-> If the port doesn't make the cut for 5.19, we can still debate with the
-> libc maintainers whether they want to merge their side of it anyway,
-> given that the user ABI at least is now as stable as one plan for,
-> regardless of the upstream state.
-Thank you very much. It seems that the majority of our efistub design
-is completed (drop bootparamsinterface and use generic stub), but
-there are still some details that need further discussion. E.g whether
-to map the runtime in kernel address space, and where to call the SVAM
-routine. So, I agree that we should temporarily remove the efistub &
-efi runtime parts, in order to make other "good parts" be upstream
-first. I will send V15 today,  as soon as possible.
+>  Extended IRQ model
+>  ==================
+> @@ -67,35 +65,33 @@ to CPUINTC directly, CPU UARTS interrupts go to LIOINTC, while all other devices
+>  interrupts go to PCH-PIC/PCH-LPC/PCH-MSI and gathered by EIOINTC, and then go to
+>  to CPUINTC directly.
+>
+> - +--------------------------------------------------------+
+> - |::                                                      |
+> - |                                                        |
+> - |         +-----+     +---------+     +-------+          |
+> - |         | IPI | --> | CPUINTC | <-- | Timer |          |
+> - |         +-----+     +---------+     +-------+          |
+> - |                      ^       ^                         |
+> - |                      |       |                         |
+> - |               +---------+ +---------+     +-------+    |
+> - |               | EIOINTC | | LIOINTC | <-- | UARTs |    |
+> - |               +---------+ +---------+     +-------+    |
+> - |                ^       ^                               |
+> - |                |       |                               |
+> - |         +---------+ +---------+                        |
+> - |         | PCH-PIC | | PCH-MSI |                        |
+> - |         +---------+ +---------+                        |
+> - |           ^     ^           ^                          |
+> - |           |     |           |                          |
+> - |   +---------+ +---------+ +---------+                  |
+> - |   | PCH-LPC | | Devices | | Devices |                  |
+> - |   +---------+ +---------+ +---------+                  |
+> - |        ^                                               |
+> - |        |                                               |
+> - |   +---------+                                          |
+> - |   | Devices |                                          |
+> - |   +---------+                                          |
+> - |                                                        |
+> - |                                                        |
+> - +--------------------------------------------------------+
+> + ::
+> +
+> +          +-----+     +---------+     +-------+
+> +          | IPI | --> | CPUINTC | <-- | Timer |
+> +          +-----+     +---------+     +-------+
+> +                       ^       ^
+> +                       |       |
+> +                +---------+ +---------+     +-------+
+> +                | EIOINTC | | LIOINTC | <-- | UARTs |
+> +                +---------+ +---------+     +-------+
+> +                 ^       ^
+> +                 |       |
+> +          +---------+ +---------+
+> +          | PCH-PIC | | PCH-MSI |
+> +          +---------+ +---------+
+> +            ^     ^           ^
+> +            |     |           |
+> +    +---------+ +---------+ +---------+
+> +    | PCH-LPC | | Devices | | Devices |
+> +    +---------+ +---------+ +---------+
+> +         ^
+> +         |
+> +    +---------+
+> +    | Devices |
+> +    +---------+
+> +
+> +
+>
+>  ACPI-related definitions
+>  ========================
+>
+> Otherwise, htmldocs builds successfully without any new warnings related
+> to this patch series.
+Thank you for your testing. In my environment (sphinx_2.4.4), with or
+without the border both have no warnings. :)
+And I think these are more pretty if we keep the border, especially
+when formatted into PDF. How do you think?
 
 Huacai
-
 >
->       Arnd
+> Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>
+> --
+> An old man doll... just what I always wanted! - Clara
