@@ -2,72 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB23E53CB3C
-	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 16:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC9453CB62
+	for <lists+linux-arch@lfdr.de>; Fri,  3 Jun 2022 16:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241285AbiFCOCE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 3 Jun 2022 10:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S244978AbiFCONE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 3 Jun 2022 10:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245021AbiFCOCC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 10:02:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECEFA10542;
-        Fri,  3 Jun 2022 07:02:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 153556177A;
-        Fri,  3 Jun 2022 14:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E7DC385A9;
-        Fri,  3 Jun 2022 14:01:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FnGsu3AD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1654264915;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M3AlnY3e9ROkgCCHACNvB1p24Fh7Aq+0ymhTrccZd+A=;
-        b=FnGsu3ADiIdBu/1DDX/PYzV9xuZu7X4bROJ1HZ+YmTt7uquHiwenuOqBwk51QBO6C1CMMD
-        qhMcm99VmhlclgwXyZphQqSFDuV4m0TkmSe2ZDSDN6zp+VGRce+hxd6Pz5Prdvxy0GQ9BS
-        RB9Ts6Klcgj7icUsZJ3V8Gz3oPsx5iI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5d17e220 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Fri, 3 Jun 2022 14:01:55 +0000 (UTC)
-Date:   Fri, 3 Jun 2022 16:01:43 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        with ESMTP id S237239AbiFCOND (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 3 Jun 2022 10:13:03 -0400
+Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3233B280;
+        Fri,  3 Jun 2022 07:12:46 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 128D4B0F;
+        Fri,  3 Jun 2022 16:12:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1654265564;
+        bh=ZpW3H/xbyfM4w1mopp7lcoc+iJJUqmE9TJDSlh7rVIQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=md+BKngkvMLwdcwW4W+gUTaEWzVlsJ3RjiNBcPO/OwIGgeHrc5QPlVuIOKmtT9BgY
+         vHuqoZ3z2aMSteMa5w7UIh9/bcuYnncFADhio5OXQrG5RymnYLgPZl7j0YHeH2/Cjv
+         3ZovTzodgXgqnI/hovwo2Mv+V1hicaWcWF6k9eqvEeJSnPdbZHvNJ6RpiSNuPYa/fP
+         hJa7AahwxMCwhDKjHpkgwY99Fjxg4z/QyDxI9i1pEBAobz9BmCpH07g9VpqkkAIKAj
+         W8APNA2FHkaYqUup/duGvRmTUy4jHFbtKLTDABByTK5i2MzuxvgUr1KBfmhhiwIZp0
+         xH/VUPGzU0y8A==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 0CC1928B; Fri,  3 Jun 2022 16:12:44 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id DFA9728A;
+        Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id DC79A286;
+        Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id D54884A02E6; Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 826104A02B0;
+        Fri,  3 Jun 2022 16:12:43 +0200 (CEST)
+        (Extended-Queue-bit xtech_fq@fff.in.tum.de)
+Date:   Fri, 3 Jun 2022 16:12:37 +0200
+From:   Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        WANG Xuerui <git@xen0n.name>
-Subject: Re: [PATCH V15 10/24] LoongArch: Add other common headers
-Message-ID: <YpoURwkAbqRlr7Yi@zx2c4.com>
-References: <20220603072053.35005-1-chenhuacai@loongson.cn>
- <20220603072053.35005-11-chenhuacai@loongson.cn>
- <YpoPZjJ/Adfu3uH9@zx2c4.com>
- <CAK8P3a0iASLd768imA8pG32Cc2RsqG8-ZyN+Obcg+PksVj1FJg@mail.gmail.com>
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Marco Elver <elver@google.com>
+Subject: (Non-) Ctrl Dependency in litmus-tests.txt?
+Message-ID: <YpoW1deb/QeeszO1@ethstick13.dse.in.tum.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a0iASLd768imA8pG32Cc2RsqG8-ZyN+Obcg+PksVj1FJg@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,30 +72,62 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
+Hi all,
 
-On Fri, Jun 03, 2022 at 03:55:27PM +0200, Arnd Bergmann wrote:
-> On Fri, Jun 3, 2022 at 3:40 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> > On Fri, Jun 03, 2022 at 03:20:39PM +0800, Huacai Chen wrote:
-> > > diff --git a/arch/loongarch/include/asm/timex.h b/arch/loongarch/include/asm/timex.h
-> >
-> > "Currently only used on SMP for scheduling" isn't quite correct. It's
-> > also used by random_get_entropy(). And anything else that uses
-> > get_cycles() for, e.g., benchmarking, might use it too.
-> >
-> > You wrote also, "we know that all SMP capable CPUs have cycle counters",
-> > so if I gather from this statement that some !SMP CPUs don't have a
-> > cycle counter, though some do. If that's a correct supposition, then
-> > you may need to rewrite this file to be something like:
+I was going through litmus-tests.txt and came across the following:
+
+> LIMITATIONS
+> ===========
 > 
-> The file is based on the mips version that deals with a variety of
-> implementations
-> and has the same comment.
+> Limitations of the Linux-kernel memory model (LKMM) include:
 > 
-> I assume the loongarch chips all behave the same way here, and won't need
-> a special case for non-SMP.
+> 1.Compiler optimizations are not accurately modeled.  Of course,
+> 	the use of READ_ONCE() and WRITE_ONCE() limits the compiler's
+> 	ability to optimize, but under some circumstances it is possible
+> 	for the compiler to undermine the memory model.  For more
+> 	information, see Documentation/explanation.txt (in particular,
+> 	the "THE PROGRAM ORDER RELATION: po AND po-loc" and "A WARNING"
+> 	sections).
+> 
+> 	Note that this limitation in turn limits LKMM's ability to
+> 	accurately model address, control, and data dependencies.
+> 	For example, if the compiler can deduce the value of some variable
+> 	carrying a dependency, then the compiler can break that dependency
+> 	by substituting a constant of that value.
+> 
+> 	Conversely, LKMM sometimes doesn't recognize that a particular
+> 	optimization is not allowed, and as a result, thinks that a
+> 	dependency is not present (because the optimization would break it).
+> 	The memory model misses some pretty obvious control dependencies
+> 	because of this limitation.  A simple example is:
+> 
+> 		r1 = READ_ONCE(x);
+> 		if (r1 == 0)
+> 			smp_mb();
+> 		WRITE_ONCE(y, 1);
+> 
+> 	There is a control dependency from the READ_ONCE to the WRITE_ONCE,
+> 	even when r1 is nonzero, but LKMM doesn't realize this and thinks
+> 	that the write may execute before the read if r1 != 0.  (Yes, that
+> 	doesn't make sense if you think about it, but the memory model's
+> 	intelligence is limited.)
 
-Oh good. In that case, the code is fine and I suppose the comment could
-just be removed.
+I'm unclear as to why the documentation sees a control dependency from
+the READ_ONCE() to the WRITE_ONCE() here.
 
-Jason
+Quoting from explanation.txt:
+> Finally, a read event and another memory access event are linked by a
+> control dependency if the value obtained by the read affects whether
+> the second event is executed at all.
+
+Architectures might consider this control-dependent, yes, but since the
+value of the if condition does not affect whether the WRITE_ONCE() is
+executed at all, I'm not sure why this should be considered
+control-dependent in LKMM? 
+
+I might have another question about explanation.txt's definition of
+control dependencies as per above, but will address it more thoroughly
+in another email :-)
+
+Many thanks,
+Paul 
