@@ -2,113 +2,217 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E93B653D632
-	for <lists+linux-arch@lfdr.de>; Sat,  4 Jun 2022 11:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364B353D766
+	for <lists+linux-arch@lfdr.de>; Sat,  4 Jun 2022 17:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233823AbiFDJG4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 4 Jun 2022 05:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53168 "EHLO
+        id S237341AbiFDPE7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 4 Jun 2022 11:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234065AbiFDJFJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Jun 2022 05:05:09 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA092CCB9
-        for <linux-arch@vger.kernel.org>; Sat,  4 Jun 2022 02:05:07 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id s23so7772896iog.13
-        for <linux-arch@vger.kernel.org>; Sat, 04 Jun 2022 02:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jYaLFEWOclihFzS4U6IplAacKFcgmJCfQWRbC9TywlA=;
-        b=DFbzDDxzzgjke7pdno7CWB4tuZpk+kXbMoki0TZvjjHhBTWaV3zAGYNmLLb7vFloEE
-         O+aGUyFZ/+StgH327dmNb93EzZECVzDM/iVpZb/JtbgrsbUmhvyUQpkVmswciBGyXVcH
-         x1amxkts5wSnsJNlAN/lMrjAVfLTRNnTJ6aobE3eGIVswmcKsTW0mYXmmiyX7ENTp7aT
-         ua0LypeaCyhP+IFQ34GtXSpqQBQOAey+Tek1CPruwQWSLB5ieICAGRrF98c9Vq62C83J
-         p+YWNGn5pYDMnt/E5EXOW3WEbwGqrpAvWMF8hmhSHeWQqqLEEswcLHA1/wUu6hzSdzm7
-         xIUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jYaLFEWOclihFzS4U6IplAacKFcgmJCfQWRbC9TywlA=;
-        b=sxPUmkLFL2atzUGySaqSPBkfcq8lAAbalsyPPQp6P8dS6ES7sCAaqEhg5bT7kJ3N7k
-         N4YPlyRuhE25C+3ImU1WdIxvaPcVQ+hsrb768FtgtTTeCH+7GNjgF+hopAvVUNd1PbSF
-         Hz7sFVHvoNfglqPxNpGvLFnA11oCl/3RQsKKSBWR3vtraISA0qaBl0W/84irkO2IDBp+
-         NbI2yQP7FHN36JA7j/5WvXSYmfZftRGP/1s1xtKBf1TtTXbTdrDNIS9wW8z+ztayHGsr
-         ijsclZA2jc9bimsQEo2U6PUQs3mtlbBXLDSc3xO9Aq9oOY8OkYQkT444c68umajyP5f9
-         0hAQ==
-X-Gm-Message-State: AOAM5316GHL8piWrM1V1kcqrsQiNOs2u+IHDjlf0swnpF1L5lwseA49a
-        nUmQKoGgqINwf0BMNqEIMNRmyGpi0o1wk6POokoMefq7KV82Yg==
-X-Google-Smtp-Source: ABdhPJyjKi15HbGLMlhq7JQ6Y/8NMlIOgXotxyeIUuKyYf3hF7LZyHrZ286RyhiuDHPZ7D83gaWhkTbWHiZU9ZNQhcU=
-X-Received: by 2002:a02:860d:0:b0:32b:2210:95c with SMTP id
- e13-20020a02860d000000b0032b2210095cmr7707895jai.175.1654333507329; Sat, 04
- Jun 2022 02:05:07 -0700 (PDT)
+        with ESMTP id S237288AbiFDPE6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 4 Jun 2022 11:04:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF3531221
+        for <linux-arch@vger.kernel.org>; Sat,  4 Jun 2022 08:04:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8A8560DB6
+        for <linux-arch@vger.kernel.org>; Sat,  4 Jun 2022 15:04:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04554C385B8;
+        Sat,  4 Jun 2022 15:04:52 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Fix the !CONFIG_SMP build
+Date:   Sat,  4 Jun 2022 23:06:29 +0800
+Message-Id: <20220604150629.691836-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220604080614.268078-1-chenhuacai@loongson.cn> <fefe35c1-4bcc-b8e8-6f3f-8d71209a2c13@xen0n.name>
-In-Reply-To: <fefe35c1-4bcc-b8e8-6f3f-8d71209a2c13@xen0n.name>
-From:   Huacai Chen <chenhuacai@gmail.com>
-Date:   Sat, 4 Jun 2022 17:04:57 +0800
-Message-ID: <CAAhV-H4Dr2xJBiQr6tjkpSj+uDEJbKMCXPG0DPZrxAcVYE6G_A@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Fix copy_thread() build error
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Xuerui,
+1, We assume arch/loongarch/include/asm/smp.h be included in include/
+   linux/smp.h is valid and the reverse inclusion isn't. So remove the
+   <linux/smp.h> in arch/loongarch/include/asm/smp.h.
+2, arch/loongarch/include/asm/smp.h is only needed when CONFIG_SMP,
+   and setup.c include it only because it need plat_smp_setup(). So,
+   reorganize setup.c & smp.h, and then remove <asm/smp.h> in setup.c.
+3, Fix cacheinfo.c and percpu.h build error by adding the missing header
+   files when !CONFIG_SMP.
+4, Fix acpi.c build error by adding CONFIG_SMP guards.
+5, Select CONFIG_SMP for CONFIG_NUMA, similar as other architectures do.
 
-On Sat, Jun 4, 2022 at 4:39 PM WANG Xuerui <kernel@xen0n.name> wrote:
->
-> On 6/4/22 16:06, Huacai Chen wrote:
-> > Commit c5febea0956fd387 ("fork: Pass struct kernel_clone_args into
-> > copy_thread") change the prototype of copy_thread() and cause build
-> > error, fix it.
-> >
-> > Fixes: c5febea0956fd387 ("fork: Pass struct kernel_clone_args into copy_thread")
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/loongarch/kernel/process.c | 7 +++++--
-> >   include/linux/efi.h             | 1 +
-> >   include/linux/pe.h              | 2 ++
-> >   3 files changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-> > index 6d944d65f600..5e090ffd16b9 100644
-> > --- a/arch/loongarch/kernel/process.c
-> > +++ b/arch/loongarch/kernel/process.c
-> > @@ -120,10 +120,13 @@ int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src)
-> >   /*
-> >    * Copy architecture-specific thread state
-> >    */
-> > -int copy_thread(unsigned long clone_flags, unsigned long usp,
-> > -     unsigned long kthread_arg, struct task_struct *p, unsigned long tls)
-> > +int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
-> >   {
-> >       unsigned long childksp;
-> > +     unsigned long tls = args->tls;
-> > +     unsigned long usp = args->stack;
-> > +     unsigned long clone_flags = args->flags;
-> > +     unsigned long kthread_arg = args->stack_size;
-> >       struct pt_regs *childregs, *regs = current_pt_regs();
-> >
-> >       childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE - 32;
-> Please confirm if the patch is inadvertently truncated? I see there are
-> 3 files in the diffstat, yet only one hunk below.
-I'm sorry, this is my fault.
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/Kconfig              |  1 +
+ arch/loongarch/include/asm/percpu.h |  1 +
+ arch/loongarch/include/asm/smp.h    | 23 +++++++----------------
+ arch/loongarch/kernel/acpi.c        |  4 ++++
+ arch/loongarch/kernel/cacheinfo.c   |  1 +
+ arch/loongarch/kernel/setup.c       |  5 ++---
+ 6 files changed, 16 insertions(+), 19 deletions(-)
 
-Huacai
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 80657bf83b05..1920d52653b4 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -343,6 +343,7 @@ config NR_CPUS
+ 
+ config NUMA
+ 	bool "NUMA Support"
++	select SMP
+ 	select ACPI_NUMA if ACPI
+ 	help
+ 	  Say Y to compile the kernel with NUMA (Non-Uniform Memory Access)
+diff --git a/arch/loongarch/include/asm/percpu.h b/arch/loongarch/include/asm/percpu.h
+index 34f15a6fb1e7..e6569f18c6dd 100644
+--- a/arch/loongarch/include/asm/percpu.h
++++ b/arch/loongarch/include/asm/percpu.h
+@@ -6,6 +6,7 @@
+ #define __ASM_PERCPU_H
+ 
+ #include <asm/cmpxchg.h>
++#include <asm/loongarch.h>
+ 
+ /* Use r21 for fast access */
+ register unsigned long __my_cpu_offset __asm__("$r21");
+diff --git a/arch/loongarch/include/asm/smp.h b/arch/loongarch/include/asm/smp.h
+index 551e1f37c705..71189b28bfb2 100644
+--- a/arch/loongarch/include/asm/smp.h
++++ b/arch/loongarch/include/asm/smp.h
+@@ -9,10 +9,16 @@
+ #include <linux/atomic.h>
+ #include <linux/bitops.h>
+ #include <linux/linkage.h>
+-#include <linux/smp.h>
+ #include <linux/threads.h>
+ #include <linux/cpumask.h>
+ 
++extern int smp_num_siblings;
++extern int num_processors;
++extern int disabled_cpus;
++extern cpumask_t cpu_sibling_map[];
++extern cpumask_t cpu_core_map[];
++extern cpumask_t cpu_foreign_map[];
++
+ void loongson3_smp_setup(void);
+ void loongson3_prepare_cpus(unsigned int max_cpus);
+ void loongson3_boot_secondary(int cpu, struct task_struct *idle);
+@@ -25,26 +31,11 @@ int loongson3_cpu_disable(void);
+ void loongson3_cpu_die(unsigned int cpu);
+ #endif
+ 
+-#ifdef CONFIG_SMP
+-
+ static inline void plat_smp_setup(void)
+ {
+ 	loongson3_smp_setup();
+ }
+ 
+-#else /* !CONFIG_SMP */
+-
+-static inline void plat_smp_setup(void) { }
+-
+-#endif /* !CONFIG_SMP */
+-
+-extern int smp_num_siblings;
+-extern int num_processors;
+-extern int disabled_cpus;
+-extern cpumask_t cpu_sibling_map[];
+-extern cpumask_t cpu_core_map[];
+-extern cpumask_t cpu_foreign_map[];
+-
+ static inline int raw_smp_processor_id(void)
+ {
+ #if defined(__VDSO__)
+diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+index b16c3dea5eeb..bb729ee8a237 100644
+--- a/arch/loongarch/kernel/acpi.c
++++ b/arch/loongarch/kernel/acpi.c
+@@ -138,6 +138,7 @@ void __init acpi_boot_table_init(void)
+ 	}
+ }
+ 
++#ifdef CONFIG_SMP
+ static int set_processor_mask(u32 id, u32 flags)
+ {
+ 
+@@ -166,15 +167,18 @@ static int set_processor_mask(u32 id, u32 flags)
+ 
+ 	return cpu;
+ }
++#endif
+ 
+ static void __init acpi_process_madt(void)
+ {
++#ifdef CONFIG_SMP
+ 	int i;
+ 
+ 	for (i = 0; i < NR_CPUS; i++) {
+ 		__cpu_number_map[i] = -1;
+ 		__cpu_logical_map[i] = -1;
+ 	}
++#endif
+ 
+ 	loongson_sysconf.nr_cpus = num_processors;
+ }
+diff --git a/arch/loongarch/kernel/cacheinfo.c b/arch/loongarch/kernel/cacheinfo.c
+index 8c9fe29e98f0..b38f5489d094 100644
+--- a/arch/loongarch/kernel/cacheinfo.c
++++ b/arch/loongarch/kernel/cacheinfo.c
+@@ -4,6 +4,7 @@
+  *
+  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+  */
++#include <asm/cpu-info.h>
+ #include <linux/cacheinfo.h>
+ 
+ /* Populates leaf and increments to next leaf */
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index 185e4035811a..c74860b53375 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -39,7 +39,6 @@
+ #include <asm/pgalloc.h>
+ #include <asm/sections.h>
+ #include <asm/setup.h>
+-#include <asm/smp.h>
+ #include <asm/time.h>
+ 
+ #define SMBIOS_BIOSSIZE_OFFSET		0x09
+@@ -349,8 +348,6 @@ static void __init prefill_possible_map(void)
+ 
+ 	nr_cpu_ids = possible;
+ }
+-#else
+-static inline void prefill_possible_map(void) {}
+ #endif
+ 
+ void __init setup_arch(char **cmdline_p)
+@@ -367,8 +364,10 @@ void __init setup_arch(char **cmdline_p)
+ 	arch_mem_init(cmdline_p);
+ 
+ 	resource_init();
++#ifdef CONFIG_SMP
+ 	plat_smp_setup();
+ 	prefill_possible_map();
++#endif
+ 
+ 	paging_init();
+ }
+-- 
+2.27.0
+
