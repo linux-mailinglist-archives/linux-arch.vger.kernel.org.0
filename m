@@ -2,62 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A8053E9C6
-	for <lists+linux-arch@lfdr.de>; Mon,  6 Jun 2022 19:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FA4753F14C
+	for <lists+linux-arch@lfdr.de>; Mon,  6 Jun 2022 23:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241850AbiFFQlG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 6 Jun 2022 12:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38194 "EHLO
+        id S234847AbiFFU7z (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 6 Jun 2022 16:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241861AbiFFQk7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jun 2022 12:40:59 -0400
-X-Greylist: delayed 323 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Jun 2022 09:40:55 PDT
-Received: from mailout.easymail.ca (mailout.easymail.ca [64.68.200.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9F914642F;
-        Mon,  6 Jun 2022 09:40:54 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mailout.easymail.ca (Postfix) with ESMTP id F0673E0E57;
-        Mon,  6 Jun 2022 16:35:29 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at emo08-pco.easydns.vpn
-Received: from mailout.easymail.ca ([127.0.0.1])
-        by localhost (emo08-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hhyNN48mX6Hb; Mon,  6 Jun 2022 16:35:29 +0000 (UTC)
-Received: from mail.gonehiking.org (unknown [38.15.45.1])
-        by mailout.easymail.ca (Postfix) with ESMTPA id 87721E0E2D;
-        Mon,  6 Jun 2022 16:35:29 +0000 (UTC)
-Received: from [192.168.1.4] (internal [192.168.1.4])
-        by mail.gonehiking.org (Postfix) with ESMTP id 689583EF5B;
-        Mon,  6 Jun 2022 10:35:28 -0600 (MDT)
-Message-ID: <d39fc9bb-07c1-ad74-1e89-d2aa80578cd4@gonehiking.org>
-Date:   Mon, 6 Jun 2022 10:35:28 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Reply-To: khalid@gonehiking.org
-Subject: Re: [PATCH 5/6] scsi: remove stale BusLogic driver
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org, linux-scsi@vger.kernel.org,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
+        with ESMTP id S230140AbiFFU7t (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 6 Jun 2022 16:59:49 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF469419D;
+        Mon,  6 Jun 2022 13:48:58 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id 68so3359620qkk.9;
+        Mon, 06 Jun 2022 13:48:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g2dcvEx5ujIfq/vGwsQoEKMbkEYSqcC+pGjcA0dBu1c=;
+        b=f7b0v5dv8hmLnBlzL8WyYq5cOW64Y5WX7Dmpl69JKaPauL++ld78WKF8ntff7E3FD9
+         /EFPnKoGaHbNkPIgpiRh5FlgefHuwLc1yxNkOW+bHut9SVnVZCbu/JkykiPElo5zPWjp
+         nCuHLbsnuv21eFXD2iNnywm2Hbn427FK25GFy6T1JFuumczjXmgtp3nChf3HO/XhNBhM
+         NXjSU4JD0/Av3t8AAMTU1yL794U7NXS8pa6qxIcfy7ouTJCp/SF65MboQcoKMXA5+/fk
+         R0q5tIVK+/ksEV405xlxflOCs1qdnp/FFVTP6I8k8VtwErnFZfCokgUB0civbDGx+Ib2
+         7GIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g2dcvEx5ujIfq/vGwsQoEKMbkEYSqcC+pGjcA0dBu1c=;
+        b=IT4u7CmoWi6HX3yhfCZqnTHklKmxYH70Mp+prygtX+X6iGXyqlLSeFvgwYgtWeyCIe
+         zukDYBHOhQpWQ1q4hlEkCBpFtMsevyKSdhfgx7Z+rthrdfpneV1EgNvq6t8I6Rgldw0i
+         jcclSJPD3P8m6fnA8vXzh3wBBCb1TJ6obXLFPH0KtRlEjFuc6gEJo5qI4Q0H6hCxpGTL
+         msZiPybmC9OmoG/4Ze8naFtdxZLmus0O6Ss3HsawvXDIX9t9LOKyQPjgY0S4qtLOT//E
+         cTkdZR/ZoWNoUrPTtdl0YBCwQJcifH8LmS00KuogVNBk0PGGz4c4JRxPrN6uVO7WeJus
+         b3pA==
+X-Gm-Message-State: AOAM5324/lN02Hp6ppOB50edRazNGpcO8OmeBT+t9dHI8l47wpIwyJVC
+        aez+24OtinCucnef5Re+mzw=
+X-Google-Smtp-Source: ABdhPJy6iWrSjhT1+WPfkKbI1gHvATNgUCtpwq8y3JhsiD76yT4Gvelb8RZZw4VB5N3/itiqM6ja8g==
+X-Received: by 2002:a05:620a:14ad:b0:6a6:b8ab:9c3f with SMTP id x13-20020a05620a14ad00b006a6b8ab9c3fmr5227234qkj.410.1654548537353;
+        Mon, 06 Jun 2022 13:48:57 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:be9c:b2d9:3353:7a73])
+        by smtp.gmail.com with ESMTPSA id bm32-20020a05620a19a000b006a6d20386f6sm900223qkb.42.2022.06.06.13.48.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 13:48:56 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 13:48:50 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Richard Henderson <rth@twiddle.net>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>
-References: <20220606084109.4108188-1-arnd@kernel.org>
- <20220606084109.4108188-6-arnd@kernel.org>
-From:   Khalid Aziz <khalid@gonehiking.org>
-In-Reply-To: <20220606084109.4108188-6-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/6] bitops: unify non-atomic bitops prototypes across
+ architectures
+Message-ID: <Yp5oMmzNlq+Ut4So@yury-laptop>
+References: <20220606114908.962562-1-alexandr.lobakin@intel.com>
+ <20220606114908.962562-5-alexandr.lobakin@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606114908.962562-5-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,53 +87,64 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/6/22 02:41, Arnd Bergmann wrote:
-> From: Arnd Bergmann<arnd@arndb.de>
+On Mon, Jun 06, 2022 at 01:49:05PM +0200, Alexander Lobakin wrote:
+> Currently, there is a mess with the prototypes of the non-atomic
+> bitops across the different architectures:
 > 
-> The BusLogic driver is the last remaining driver that relies on the
-> deprecated bus_to_virt() function, which in turn only works on a few
-> architectures, and is incompatible with both swiotlb and iommu support.
+> ret	bool, int, unsigned long
+> nr	int, long, unsigned int, unsigned long
+> addr	volatile unsigned long *, volatile void *
 > 
-> Before commit 391e2f25601e ("[SCSI] BusLogic: Port driver to 64-bit."),
-> the driver had a dependency on x86-32, presumably because of this
-> problem. However, the change introduced another bug that made it still
-> impossible to use the driver on any 64-bit machine.
+> Thankfully, it doesn't provoke any bugs, but can sometimes make
+> the compiler angry when it's not handy at all.
+> Adjust all the prototypes to the following standard:
 > 
-> This was in turn fixed in commit 56f396146af2 ("scsi: BusLogic: Fix
-> 64-bit system enumeration error for Buslogic"), 8 years later.
+> ret	bool				retval can be only 0 or 1
+> nr	unsigned long			native; signed makes no sense
+> addr	volatile unsigned long *	bitmaps are arrays of ulongs
 > 
-> The fact that this was found at all is an indication that there are
-> users, and it seems that Maciej, Matt and Khalid all have access to
-> this hardware, but if it took eight years to find the problem,
-> it's likely that nobody actually relies on it.
+> Finally, add some static assertions in order to prevent people from
+> making a mess in this room again.
+> I also used the %__always_inline attribute consistently they always
+> get resolved to the actual operations.
 > 
-> Remove it as part of the global virt_to_bus()/bus_to_virt() removal.
-> If anyone is still interested in keeping this driver, the alternative
-> is to stop it from using bus_to_virt(), possibly along the lines of
-> how dpt_i2o gets around the same issue.
-> 
-> Cc: Maciej W. Rozycki<macro@orcam.me.uk>
-> Cc: Matt Wang<wwentao@vmware.com>
-> Cc: Khalid Aziz<khalid@gonehiking.org>
-> Signed-off-by: Arnd Bergmann<arnd@arndb.de>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 > ---
->   Documentation/scsi/BusLogic.rst   |  581 ---
->   Documentation/scsi/FlashPoint.rst |  176 -
->   MAINTAINERS                       |    7 -
->   drivers/scsi/BusLogic.c           | 3727 --------------
->   drivers/scsi/BusLogic.h           | 1284 -----
->   drivers/scsi/FlashPoint.c         | 7560 -----------------------------
->   drivers/scsi/Kconfig              |   24 -
->   7 files changed, 13359 deletions(-)
->   delete mode 100644 Documentation/scsi/BusLogic.rst
->   delete mode 100644 Documentation/scsi/FlashPoint.rst
->   delete mode 100644 drivers/scsi/BusLogic.c
->   delete mode 100644 drivers/scsi/BusLogic.h
->   delete mode 100644 drivers/scsi/FlashPoint.c
 
-I would say no to removing BusLogic driver. Virtualbox is another 
-consumer of this driver. This driver is very old but I would rather fix 
-the issues than remove it until we do not have any users.
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+
+[...]
+
+> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+> index 7aaed501f768..5520ac9b1c24 100644
+> --- a/include/linux/bitops.h
+> +++ b/include/linux/bitops.h
+> @@ -26,12 +26,25 @@ extern unsigned int __sw_hweight16(unsigned int w);
+>  extern unsigned int __sw_hweight32(unsigned int w);
+>  extern unsigned long __sw_hweight64(__u64 w);
+>  
+> +#include <asm-generic/bitops/generic-non-atomic.h>
+> +
+>  /*
+>   * Include this here because some architectures need generic_ffs/fls in
+>   * scope
+>   */
+>  #include <asm/bitops.h>
+>  
+> +/* Check that the bitops prototypes are sane */
+> +#define __check_bitop_pr(name)	static_assert(__same_type(name, gen_##name))
+> +__check_bitop_pr(__set_bit);
+> +__check_bitop_pr(__clear_bit);
+> +__check_bitop_pr(__change_bit);
+> +__check_bitop_pr(__test_and_set_bit);
+> +__check_bitop_pr(__test_and_clear_bit);
+> +__check_bitop_pr(__test_and_change_bit);
+> +__check_bitop_pr(test_bit);
+> +#undef __check_bitop_pr
+
+This one is amazing trick! And the series is good overall. Do you want me to
+take it in bitmap tree, when it's ready, or you'll move it somehow else?
 
 Thanks,
-Khalid
+Yury
