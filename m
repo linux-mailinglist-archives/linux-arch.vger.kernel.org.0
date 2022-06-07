@@ -2,120 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBDF53F737
-	for <lists+linux-arch@lfdr.de>; Tue,  7 Jun 2022 09:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553ED53F9FE
+	for <lists+linux-arch@lfdr.de>; Tue,  7 Jun 2022 11:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237666AbiFGHaT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 7 Jun 2022 03:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S239815AbiFGJky (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 7 Jun 2022 05:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237673AbiFGH37 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Jun 2022 03:29:59 -0400
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C589753E33;
-        Tue,  7 Jun 2022 00:29:52 -0700 (PDT)
-Received: by mail-qt1-f173.google.com with SMTP id hf10so12032907qtb.7;
-        Tue, 07 Jun 2022 00:29:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/vvSp91df5DXi30Fd3pExmyOkjiZTMAg5zYSvB9bVbM=;
-        b=eiLVg12zzPiX72BjdOPhRaANtE+XgsbxcszNXFToB/g+H0ddcx5Kv7z31zVrPMQvC5
-         34JoXFomujkj3W7R19Z68M8H8ykwBW5rwf7MOPq5LBKmKw7woSlay3VbOGD5VDDlNOnJ
-         GCj3cG97x7xbZ9nMftvX6Oca2yeFk85W1AGH1nPTLTZr7UycofpqYMzKaurrE14YVaB8
-         rJ8RycPKTxyZjGnkNiMbPIHFXFn9yrbUNctajckt780aBp0xgdmGGUGJoAmLTeeD6g18
-         w7DiyzfUwBNMAtmYGEw9jwoF/OTI+KeBJrlUkMBX+rpt3xMOzvTRe6j5vf0rTc4CvQ7m
-         3m3g==
-X-Gm-Message-State: AOAM531hkkBCDypBgorofVpvwAgqmZEEAuXldx40jzwuvr0F5wSAKH6R
-        4mY1FW8bQpe3kqjTfIePlvjR08JyKZRvCQ==
-X-Google-Smtp-Source: ABdhPJy6/LxYiJvYw6lGXpLiwInrJxNS2/wS/j/jDf1hCzWVUK1aU4p+sy/+LTZGnAZILTzM8KYJ+g==
-X-Received: by 2002:a05:622a:1903:b0:2f3:ddac:436d with SMTP id w3-20020a05622a190300b002f3ddac436dmr20876961qtc.25.1654586990718;
-        Tue, 07 Jun 2022 00:29:50 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id v1-20020a05620a0f0100b006a6a6f148e6sm8902896qkl.17.2022.06.07.00.29.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jun 2022 00:29:50 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id e184so29684808ybf.8;
-        Tue, 07 Jun 2022 00:29:49 -0700 (PDT)
-X-Received: by 2002:a25:7307:0:b0:65c:b98a:f592 with SMTP id
- o7-20020a257307000000b0065cb98af592mr28407064ybc.380.1654586989616; Tue, 07
- Jun 2022 00:29:49 -0700 (PDT)
+        with ESMTP id S232685AbiFGJkx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 7 Jun 2022 05:40:53 -0400
+X-Greylist: delayed 1850 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Jun 2022 02:40:52 PDT
+Received: from mx1.mythic-beasts.com (mx1.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03690CEBA8;
+        Tue,  7 Jun 2022 02:40:51 -0700 (PDT)
+Received: from [209.85.167.51] (port=37853 helo=mail-lf1-f51.google.com)
+        by mailhub-cam-d.mythic-beasts.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <martyn@welchs.me.uk>)
+        id 1nyVE1-003zlp-WA; Tue, 07 Jun 2022 10:10:10 +0100
+Received: by mail-lf1-f51.google.com with SMTP id h23so27287734lfe.4;
+        Tue, 07 Jun 2022 02:10:00 -0700 (PDT)
+X-Gm-Message-State: AOAM532IEu8m6h76Q3U0jyT9u2nSVPrti0oQ/VpwLjzu5g3xaKE+2MSU
+        +djjrWk6VeKBuI71qAAjdtM1jskWQQie0p1QjAM=
+X-Google-Smtp-Source: ABdhPJyULPIdIsKuXm4CBLs/lpx9OuZtHR1zOwsK0gfemBq6DPfmp1b12GD3NCSmZN55f3UVzaaZOjEGtnFIMz9tvoo=
+X-Received: by 2002:a05:6512:13a1:b0:448:887e:da38 with SMTP id
+ p33-20020a05651213a100b00448887eda38mr18154426lfa.298.1654593000256; Tue, 07
+ Jun 2022 02:10:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220606084109.4108188-1-arnd@kernel.org> <20220606084109.4108188-7-arnd@kernel.org>
-In-Reply-To: <20220606084109.4108188-7-arnd@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Jun 2022 09:29:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXi2LkrWSs9=D9tSfhz+YDHB+638F6JdmgQ7V8Gj1ehqQ@mail.gmail.com>
-Message-ID: <CAMuHMdXi2LkrWSs9=D9tSfhz+YDHB+638F6JdmgQ7V8Gj1ehqQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] arch/*/: remove CONFIG_VIRT_TO_BUS
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+References: <20220606084109.4108188-1-arnd@kernel.org> <Yp3ID86TBFxl7qyL@kroah.com>
+In-Reply-To: <Yp3ID86TBFxl7qyL@kroah.com>
+From:   Martyn Welch <martyn@welchs.me.uk>
+Date:   Tue, 7 Jun 2022 10:09:49 +0100
+X-Gmail-Original-Message-ID: <CAEccXecB=rkZ1Kejmzcfay6qMMVo7Kb7SovSq+Xs1zWMnJOxnQ@mail.gmail.com>
+Message-ID: <CAEccXecB=rkZ1Kejmzcfay6qMMVo7Kb7SovSq+Xs1zWMnJOxnQ@mail.gmail.com>
+Subject: Re: [PATCH 0/6] phase out CONFIG_VIRT_TO_BUS
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
         Christoph Hellwig <hch@infradead.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Robin Murphy <robin.murphy@arm.com>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        iommu@lists.linux-foundation.org,
         Khalid Aziz <khalid@gonehiking.org>,
-        scsi <linux-scsi@vger.kernel.org>,
+        linux-scsi@vger.kernel.org,
         Manohar Vanga <manohar.vanga@gmail.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-BlackCat-Spam-Score: 14
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 11:10 AM Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, 6 Jun 2022 at 10:25, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> All architecture-independent users of virt_to_bus() and bus_to_virt()
-> have been fixed to use the dma mapping interfaces or have been
-> removed now.  This means the definitions on most architectures, and the
-> CONFIG_VIRT_TO_BUS symbol are now obsolete and can be removed.
+> On Mon, Jun 06, 2022 at 10:41:03AM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > The virt_to_bus/bus_to_virt interface has been deprecated for
+> > decades. After Jakub Kicinski put a lot of work into cleaning out the
+> > network drivers using them, there are only a couple of other drivers
+> > left, which can all be removed or otherwise cleaned up, to remove the
+> > old interface for good.
+> >
+> > Any out of tree drivers using virt_to_bus() should be converted to
+> > using the dma-mapping interfaces, typically dma_alloc_coherent()
+> > or dma_map_single()).
+> >
+> > There are a few m68k and ppc32 specific drivers that keep using the
+> > interfaces, but these are all guarded with architecture-specific
+> > Kconfig dependencies, and are not actually broken.
+> >
+> > There are still a number of drivers that are using virt_to_phys()
+> > and phys_to_virt() in place of dma-mapping operations, and these
+> > are often broken, but they are out of scope for this series.
 >
-> The only exceptions to this are a few network and scsi drivers for m68k
-> Amiga and VME machines and ppc32 Macintosh. These drivers work correctly
-> with the old interfaces and are probably not worth changing.
+> I'll take patches 1 and 2 right now through my staging tree if that's
+> ok.
 >
-> On alpha and parisc, virt_to_bus() were still used in asm/floppy.h.
-> alpha can use isa_virt_to_bus() like x86 does, and parisc can just
-> open-code the virt_to_phys() here, as this is architecture specific
-> code.
+
+Hi,
+
+I'd love to say that I could fix this stuff up, however I've lacked access to
+suitable hardware for a long time now and don't foresee that changing any
+time soon...
+
+Martyn
+
+> thanks,
 >
-> I tried updating the bus-virt-phys-mapping.rst documentation, which
-> started as an email from Linus to explain some details of the Linux-2.0
-> driver interfaces. The bits about virt_to_bus() were declared obsolete
-> backin 2000, and the rest is not all that relevant any more, so in the
-> end I just decided to remove the file completely.
+> greg k-h
 >
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
->  arch/m68k/Kconfig                             |   1 -
->  arch/m68k/include/asm/virtconvert.h           |   4 +-
-
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
