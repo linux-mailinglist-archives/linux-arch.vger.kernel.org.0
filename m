@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF49543370
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F295434DF
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242443AbiFHOrM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 10:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S243711AbiFHOvS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 10:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242292AbiFHOrF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:47:05 -0400
+        with ESMTP id S242155AbiFHOq6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:46:58 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152B725383F;
-        Wed,  8 Jun 2022 07:46:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E0D20043A;
+        Wed,  8 Jun 2022 07:46:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=pxqjaMyXYMAIciLaWxKe0qnmRXZim+cyW3iOuZrk594=; b=ViqRPs1VYf9fGaMwnUeukkQR8N
-        4opAWUOASRD0k91h5KRfUzfNbwG02AJ5Xy4ihvtgf4z4TOkhwOaDRlGMoAIRUP1SNcvvyYZ2Mwcv7
-        4Ltpok9uBduW3gGExmHzi6EjO9GzvTNTOKtgESzadI4fkPrUhC/WcKqOtw9nTOxeTTVythZifYw33
-        J4z2qhSxWyq1sMYyvtUWAYI+3X7ANKjgCZA7XdkM5jjmcfyZzRbN4fef2tgKyJebOICY7Gy8HEqc/
-        8T/1JwzpYcJa1IHMGfOFIy6BvvrLy608z/jtZq34wyDltGhqbi/mMUUcaZ65tA4CjugxA9Q6l2jLe
-        pA7tgBww==;
+        bh=/sqr2RkpmWV4/QsFh9IpMWbDQxRkD/xb8LFsX6prmG0=; b=fttOpZWYtrJa4B8SLCXyBVrTc2
+        fl6YVVwc8xP1cHHbXapFaEfhdJnZF0K4NT8bE9+chOEyQd10Eq+7i+sV4D0BixVlKFY+u89vX/LFR
+        r8Q1CXkyMgVJl76TRN9eoW9in/ugMOxoXt1UDy+BKcGaBLIjEDHRq1tassR2zwoi0pHW87PoSk2o2
+        2AHGtHM/Qd85AwbnxHsND8wUmR2XLeboLmULqAqByLa2wOMNGjQC5W23YPE9Lh2gRR0SyE5kgp4Xx
+        l0VdnbmzBIL9baoMo/sOHBdjCL7nyGqxSvPYNg0k7M0GqOMh3q1/KcoqWIhnytWpeoYUh9O6Fc2ga
+        EiPgixdA==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywx3-0066Cn-NI; Wed, 08 Jun 2022 14:46:30 +0000
+        id 1nywx4-0066Cs-8Y; Wed, 08 Jun 2022 14:46:30 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CD0AB302F28;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CF443302F2B;
         Wed,  8 Jun 2022 16:46:23 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id A74D220C119A3; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
-Message-ID: <20220608144517.633293983@infradead.org>
+        id ACED020C119A6; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
+Message-ID: <20220608144517.696962976@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Jun 2022 16:27:50 +0200
+Date:   Wed, 08 Jun 2022 16:27:51 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -98,7 +98,7 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: [PATCH 27/36] cpuidle,mwait: Make noinstr clean
+Subject: [PATCH 28/36] cpuidle,tdx: Make tdx noinstr clean
 References: <20220608142723.103523089@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,77 +112,48 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-vmlinux.o: warning: objtool: intel_idle_s2idle+0x6e: call to __monitor.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: intel_idle_irq+0x8c: call to __monitor.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: intel_idle+0x73: call to __monitor.constprop.0() leaves .noinstr.text section
-
-vmlinux.o: warning: objtool: mwait_idle+0x88: call to clflush() leaves .noinstr.text section
+vmlinux.o: warning: objtool: __halt+0x2c: call to hcall_func.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: __halt+0x3f: call to __tdx_hypercall() leaves .noinstr.text section
+vmlinux.o: warning: objtool: __tdx_hypercall+0x66: call to __tdx_hypercall_failed() leaves .noinstr.text section
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/mwait.h         |   12 ++++++------
- arch/x86/include/asm/special_insns.h |    2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ arch/x86/coco/tdx/tdcall.S |    2 ++
+ arch/x86/coco/tdx/tdx.c    |    5 +++--
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
---- a/arch/x86/include/asm/mwait.h
-+++ b/arch/x86/include/asm/mwait.h
-@@ -25,7 +25,7 @@
- #define TPAUSE_C01_STATE		1
- #define TPAUSE_C02_STATE		0
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -31,6 +31,8 @@
+ 					  TDX_R12 | TDX_R13 | \
+ 					  TDX_R14 | TDX_R15 )
  
--static inline void __monitor(const void *eax, unsigned long ecx,
-+static __always_inline void __monitor(const void *eax, unsigned long ecx,
- 			     unsigned long edx)
- {
- 	/* "monitor %eax, %ecx, %edx;" */
-@@ -33,7 +33,7 @@ static inline void __monitor(const void
- 		     :: "a" (eax), "c" (ecx), "d"(edx));
++.section .noinstr.text, "ax"
++
+ /*
+  * __tdx_module_call()  - Used by TDX guests to request services from
+  * the TDX module (does not include VMM services) using TDCALL instruction.
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -53,8 +53,9 @@ static inline u64 _tdx_hypercall(u64 fn,
  }
  
--static inline void __monitorx(const void *eax, unsigned long ecx,
-+static __always_inline void __monitorx(const void *eax, unsigned long ecx,
- 			      unsigned long edx)
+ /* Called from __tdx_hypercall() for unrecoverable failure */
+-void __tdx_hypercall_failed(void)
++noinstr void __tdx_hypercall_failed(void)
  {
- 	/* "monitorx %eax, %ecx, %edx;" */
-@@ -41,7 +41,7 @@ static inline void __monitorx(const void
- 		     :: "a" (eax), "c" (ecx), "d"(edx));
++	instrumentation_begin();
+ 	panic("TDVMCALL failed. TDX module bug?");
  }
  
--static inline void __mwait(unsigned long eax, unsigned long ecx)
-+static __always_inline void __mwait(unsigned long eax, unsigned long ecx)
- {
- 	mds_idle_clear_cpu_buffers();
- 
-@@ -76,8 +76,8 @@ static inline void __mwait(unsigned long
-  * EAX                     (logical) address to monitor
-  * ECX                     #GP if not zero
+@@ -64,7 +65,7 @@ void __tdx_hypercall_failed(void)
+  * Reusing the KVM EXIT_REASON macros makes it easier to connect the host and
+  * guest sides of these calls.
   */
--static inline void __mwaitx(unsigned long eax, unsigned long ebx,
--			    unsigned long ecx)
-+static __always_inline void __mwaitx(unsigned long eax, unsigned long ebx,
-+				     unsigned long ecx)
+-static u64 hcall_func(u64 exit_reason)
++static __always_inline u64 hcall_func(u64 exit_reason)
  {
- 	/* No MDS buffer clear as this is AMD/HYGON only */
- 
-@@ -86,7 +86,7 @@ static inline void __mwaitx(unsigned lon
- 		     :: "a" (eax), "b" (ebx), "c" (ecx));
- }
- 
--static inline void __sti_mwait(unsigned long eax, unsigned long ecx)
-+static __always_inline void __sti_mwait(unsigned long eax, unsigned long ecx)
- {
- 	mds_idle_clear_cpu_buffers();
- 	/* "mwait %eax, %ecx;" */
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -196,7 +196,7 @@ static inline void load_gs_index(unsigne
- 
- #endif /* CONFIG_PARAVIRT_XXL */
- 
--static inline void clflush(volatile void *__p)
-+static __always_inline void clflush(volatile void *__p)
- {
- 	asm volatile("clflush %0" : "+m" (*(volatile char __force *)__p));
+ 	return exit_reason;
  }
 
 
