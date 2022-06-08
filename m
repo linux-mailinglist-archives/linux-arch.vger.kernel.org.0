@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7301C543518
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186EF543308
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243335AbiFHOvK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 10:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56854 "EHLO
+        id S241998AbiFHOqv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 10:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242119AbiFHOq4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:46:56 -0400
+        with ESMTP id S241651AbiFHOqs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:46:48 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BDD2B185;
-        Wed,  8 Jun 2022 07:46:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFD11D519F;
+        Wed,  8 Jun 2022 07:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=aqLG9Lqq+GxkmTG8UwvHapEbGSsmV7F2cXGrE5BS5NY=; b=rPiUyMGWkK4HyA4MoXkM+UgqQ6
-        VaXgt6RcOydOxoUnaRfCfMbAtBJ/29g86kj1c39TrjyrRRw5LNAXi6xAiwbQsca2Qg3+3equHWL8Q
-        BhQmKdDrNUwB5m2NMymYGWNyhw4vbbfRaNwVesyIacBXyasPDLHjRfwj2fnza/c1itcSej3QP8np4
-        N1THP4hm8m55mZuiz8nir3RlMX7ANrUAqVzLqiDWZ5C5oo3J/NLzmvKS2fSk9/Gc2Jc7QCKQQFsyN
-        BKw9k4A5B+34GthUiYDWMzBwEJ7C7YClTrI/O4L3ITlq7VQuCJHusFMO2qIDniFPVC3uGQ2ZKKFb/
-        QUHvCXdQ==;
+        bh=Nqou5pdyyCauM7UPuuZujxiA/xlRh3RuPNWmJQy6NBI=; b=Y/kmEUk1uBRTEm9h6EYVoclAZw
+        jVlCNhS11j//scwUiABPphP9XYrfhX1CyrxlxDhN7IAheCtp5dB+0Un97eGS3vj7xXM1FVKoz3qV9
+        vFswsdltHT7wS6PxbFUu/FEXq4KZSQkOQTIrKpNdPiszcqC3H/lrdHY6zn8GrKRxpQRJcimBgQbb/
+        gAUY3BDz83b0c+1WYAxIkFE/JS5RIbSajUZcwWXNk7xWz0YIRAALmUsWuoGEyojX0CEdoNtbNFWlW
+        hmOaO7hM5PRkG5iTjtyDQ5tucQtrEpltpDJD7qrc6iBQAtwqThah6tqeioh0udODSGDuTetFCv4DH
+        FaOHVTMQ==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywx2-00ChX6-2S; Wed, 08 Jun 2022 14:46:28 +0000
+        id 1nywx2-00ChX8-40; Wed, 08 Jun 2022 14:46:28 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9C4CE302E87;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9C45C302E7E;
         Wed,  8 Jun 2022 16:46:23 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 84CF720C10ECC; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
-Message-ID: <20220608144517.124597382@infradead.org>
+        id 8875D20C10ECE; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
+Message-ID: <20220608144517.188449351@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Jun 2022 16:27:42 +0200
+Date:   Wed, 08 Jun 2022 16:27:43 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -98,7 +98,7 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: [PATCH 19/36] objtool/idle: Validate __cpuidle code as noinstr
+Subject: [PATCH 20/36] arch/idle: Change arch_cpu_idle() IRQ behaviour
 References: <20220608142723.103523089@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,457 +112,420 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Idle code is very like entry code in that RCU isn't available. As
-such, add a little validation.
+Current arch_cpu_idle() is called with IRQs disabled, but will return
+with IRQs enabled.
+
+However, the very first thing the generic code does after calling
+arch_cpu_idle() is raw_local_irq_disable(). This means that
+architectures that can idle with IRQs disabled end up doing a
+pointless 'enable-disable' dance.
+
+Therefore, push this IRQ disabling into the idle function, meaning
+that those architectures can avoid the pointless IRQ state flipping.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/alpha/kernel/vmlinux.lds.S      |    1 -
- arch/arc/kernel/vmlinux.lds.S        |    1 -
- arch/arm/include/asm/vmlinux.lds.h   |    1 -
- arch/arm64/kernel/vmlinux.lds.S      |    1 -
- arch/csky/kernel/vmlinux.lds.S       |    1 -
- arch/hexagon/kernel/vmlinux.lds.S    |    1 -
- arch/ia64/kernel/vmlinux.lds.S       |    1 -
- arch/loongarch/kernel/vmlinux.lds.S  |    1 -
- arch/m68k/kernel/vmlinux-nommu.lds   |    1 -
- arch/m68k/kernel/vmlinux-std.lds     |    1 -
- arch/m68k/kernel/vmlinux-sun3.lds    |    1 -
- arch/microblaze/kernel/vmlinux.lds.S |    1 -
- arch/mips/kernel/vmlinux.lds.S       |    1 -
- arch/nios2/kernel/vmlinux.lds.S      |    1 -
- arch/openrisc/kernel/vmlinux.lds.S   |    1 -
- arch/parisc/kernel/vmlinux.lds.S     |    1 -
- arch/powerpc/kernel/vmlinux.lds.S    |    1 -
- arch/riscv/kernel/vmlinux-xip.lds.S  |    1 -
- arch/riscv/kernel/vmlinux.lds.S      |    1 -
- arch/s390/kernel/vmlinux.lds.S       |    1 -
- arch/sh/kernel/vmlinux.lds.S         |    1 -
- arch/sparc/kernel/vmlinux.lds.S      |    1 -
- arch/um/kernel/dyn.lds.S             |    1 -
- arch/um/kernel/uml.lds.S             |    1 -
- arch/x86/include/asm/irqflags.h      |   11 ++++-------
- arch/x86/include/asm/mwait.h         |    2 +-
- arch/x86/kernel/vmlinux.lds.S        |    1 -
- arch/xtensa/kernel/vmlinux.lds.S     |    1 -
- include/asm-generic/vmlinux.lds.h    |    9 +++------
- include/linux/compiler_types.h       |    8 ++++++--
- include/linux/cpu.h                  |    3 ---
- kernel/module/main.c                 |    2 ++
- kernel/sched/idle.c                  |   15 +++++++++++++--
- tools/objtool/check.c                |   15 ++++++++++++++-
- 34 files changed, 43 insertions(+), 48 deletions(-)
+ arch/alpha/kernel/process.c      |    1 -
+ arch/arc/kernel/process.c        |    3 +++
+ arch/arm/kernel/process.c        |    1 -
+ arch/arm/mach-gemini/board-dt.c  |    3 ++-
+ arch/arm64/kernel/idle.c         |    1 -
+ arch/csky/kernel/process.c       |    1 -
+ arch/csky/kernel/smp.c           |    2 +-
+ arch/hexagon/kernel/process.c    |    1 -
+ arch/ia64/kernel/process.c       |    1 +
+ arch/microblaze/kernel/process.c |    1 -
+ arch/mips/kernel/idle.c          |    8 +++-----
+ arch/nios2/kernel/process.c      |    1 -
+ arch/openrisc/kernel/process.c   |    1 +
+ arch/parisc/kernel/process.c     |    2 --
+ arch/powerpc/kernel/idle.c       |    5 ++---
+ arch/riscv/kernel/process.c      |    1 -
+ arch/s390/kernel/idle.c          |    1 -
+ arch/sh/kernel/idle.c            |    1 +
+ arch/sparc/kernel/leon_pmc.c     |    4 ++++
+ arch/sparc/kernel/process_32.c   |    1 -
+ arch/sparc/kernel/process_64.c   |    3 ++-
+ arch/um/kernel/process.c         |    1 -
+ arch/x86/coco/tdx/tdx.c          |    3 +++
+ arch/x86/kernel/process.c        |   15 ++++-----------
+ arch/xtensa/kernel/process.c     |    1 +
+ kernel/sched/idle.c              |    2 --
+ 26 files changed, 28 insertions(+), 37 deletions(-)
 
---- a/arch/alpha/kernel/vmlinux.lds.S
-+++ b/arch/alpha/kernel/vmlinux.lds.S
-@@ -27,7 +27,6 @@ SECTIONS
- 		HEAD_TEXT
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		*(.fixup)
- 		*(.gnu.warning)
---- a/arch/arc/kernel/vmlinux.lds.S
-+++ b/arch/arc/kernel/vmlinux.lds.S
-@@ -85,7 +85,6 @@ SECTIONS
- 		_stext = .;
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/arm/include/asm/vmlinux.lds.h
-+++ b/arch/arm/include/asm/vmlinux.lds.h
-@@ -96,7 +96,6 @@
- 		SOFTIRQENTRY_TEXT					\
- 		TEXT_TEXT						\
- 		SCHED_TEXT						\
--		CPUIDLE_TEXT						\
- 		LOCK_TEXT						\
- 		KPROBES_TEXT						\
- 		ARM_STUBS_TEXT						\
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -163,7 +163,6 @@ SECTIONS
- 			ENTRY_TEXT
- 			TEXT_TEXT
- 			SCHED_TEXT
--			CPUIDLE_TEXT
- 			LOCK_TEXT
- 			KPROBES_TEXT
- 			HYPERVISOR_TEXT
---- a/arch/csky/kernel/vmlinux.lds.S
-+++ b/arch/csky/kernel/vmlinux.lds.S
-@@ -38,7 +38,6 @@ SECTIONS
- 		SOFTIRQENTRY_TEXT
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		*(.fixup)
---- a/arch/hexagon/kernel/vmlinux.lds.S
-+++ b/arch/hexagon/kernel/vmlinux.lds.S
-@@ -41,7 +41,6 @@ SECTIONS
- 		IRQENTRY_TEXT
- 		SOFTIRQENTRY_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		*(.fixup)
---- a/arch/ia64/kernel/vmlinux.lds.S
-+++ b/arch/ia64/kernel/vmlinux.lds.S
-@@ -51,7 +51,6 @@ SECTIONS {
- 		__end_ivt_text = .;
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/loongarch/kernel/vmlinux.lds.S
-+++ b/arch/loongarch/kernel/vmlinux.lds.S
-@@ -40,7 +40,6 @@ SECTIONS
- 	.text : {
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/m68k/kernel/vmlinux-nommu.lds
-+++ b/arch/m68k/kernel/vmlinux-nommu.lds
-@@ -48,7 +48,6 @@ SECTIONS {
- 		IRQENTRY_TEXT
- 		SOFTIRQENTRY_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		*(.fixup)
- 		. = ALIGN(16);
---- a/arch/m68k/kernel/vmlinux-std.lds
-+++ b/arch/m68k/kernel/vmlinux-std.lds
-@@ -19,7 +19,6 @@ SECTIONS
- 	IRQENTRY_TEXT
- 	SOFTIRQENTRY_TEXT
- 	SCHED_TEXT
--	CPUIDLE_TEXT
- 	LOCK_TEXT
- 	*(.fixup)
- 	*(.gnu.warning)
---- a/arch/m68k/kernel/vmlinux-sun3.lds
-+++ b/arch/m68k/kernel/vmlinux-sun3.lds
-@@ -19,7 +19,6 @@ SECTIONS
- 	IRQENTRY_TEXT
- 	SOFTIRQENTRY_TEXT
- 	SCHED_TEXT
--	CPUIDLE_TEXT
- 	LOCK_TEXT
- 	*(.fixup)
- 	*(.gnu.warning)
---- a/arch/microblaze/kernel/vmlinux.lds.S
-+++ b/arch/microblaze/kernel/vmlinux.lds.S
-@@ -36,7 +36,6 @@ SECTIONS {
- 		EXIT_TEXT
- 		EXIT_CALL
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/mips/kernel/vmlinux.lds.S
-+++ b/arch/mips/kernel/vmlinux.lds.S
-@@ -61,7 +61,6 @@ SECTIONS
- 	.text : {
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/nios2/kernel/vmlinux.lds.S
-+++ b/arch/nios2/kernel/vmlinux.lds.S
-@@ -24,7 +24,6 @@ SECTIONS
- 	.text : {
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		IRQENTRY_TEXT
- 		SOFTIRQENTRY_TEXT
---- a/arch/openrisc/kernel/vmlinux.lds.S
-+++ b/arch/openrisc/kernel/vmlinux.lds.S
-@@ -52,7 +52,6 @@ SECTIONS
-           _stext = .;
- 	  TEXT_TEXT
- 	  SCHED_TEXT
--	  CPUIDLE_TEXT
- 	  LOCK_TEXT
- 	  KPROBES_TEXT
- 	  IRQENTRY_TEXT
---- a/arch/parisc/kernel/vmlinux.lds.S
-+++ b/arch/parisc/kernel/vmlinux.lds.S
-@@ -86,7 +86,6 @@ SECTIONS
- 		TEXT_TEXT
- 		LOCK_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
- 		SOFTIRQENTRY_TEXT
---- a/arch/powerpc/kernel/vmlinux.lds.S
-+++ b/arch/powerpc/kernel/vmlinux.lds.S
-@@ -107,7 +107,6 @@ SECTIONS
+--- a/arch/alpha/kernel/process.c
++++ b/arch/alpha/kernel/process.c
+@@ -57,7 +57,6 @@ EXPORT_SYMBOL(pm_power_off);
+ void arch_cpu_idle(void)
+ {
+ 	wtint(0);
+-	raw_local_irq_enable();
+ }
+ 
+ void arch_cpu_idle_dead(void)
+--- a/arch/arc/kernel/process.c
++++ b/arch/arc/kernel/process.c
+@@ -114,6 +114,8 @@ void arch_cpu_idle(void)
+ 		"sleep %0	\n"
+ 		:
+ 		:"I"(arg)); /* can't be "r" has to be embedded const */
++
++	raw_local_irq_disable();
+ }
+ 
+ #else	/* ARC700 */
+@@ -122,6 +124,7 @@ void arch_cpu_idle(void)
+ {
+ 	/* sleep, but enable both set E1/E2 (levels of interrupts) before committing */
+ 	__asm__ __volatile__("sleep 0x3	\n");
++	raw_local_irq_disable();
+ }
+ 
  #endif
- 		NOINSTR_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/riscv/kernel/vmlinux-xip.lds.S
-+++ b/arch/riscv/kernel/vmlinux-xip.lds.S
-@@ -39,7 +39,6 @@ SECTIONS
- 		_stext = .;
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		ENTRY_TEXT
---- a/arch/riscv/kernel/vmlinux.lds.S
-+++ b/arch/riscv/kernel/vmlinux.lds.S
-@@ -42,7 +42,6 @@ SECTIONS
- 		_stext = .;
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		ENTRY_TEXT
---- a/arch/s390/kernel/vmlinux.lds.S
-+++ b/arch/s390/kernel/vmlinux.lds.S
-@@ -42,7 +42,6 @@ SECTIONS
- 		HEAD_TEXT
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/sh/kernel/vmlinux.lds.S
-+++ b/arch/sh/kernel/vmlinux.lds.S
-@@ -29,7 +29,6 @@ SECTIONS
- 		HEAD_TEXT
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/sparc/kernel/vmlinux.lds.S
-+++ b/arch/sparc/kernel/vmlinux.lds.S
-@@ -50,7 +50,6 @@ SECTIONS
- 		HEAD_TEXT
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		IRQENTRY_TEXT
---- a/arch/um/kernel/dyn.lds.S
-+++ b/arch/um/kernel/dyn.lds.S
-@@ -74,7 +74,6 @@ SECTIONS
-     _stext = .;
-     TEXT_TEXT
-     SCHED_TEXT
--    CPUIDLE_TEXT
-     LOCK_TEXT
-     IRQENTRY_TEXT
-     SOFTIRQENTRY_TEXT
---- a/arch/um/kernel/uml.lds.S
-+++ b/arch/um/kernel/uml.lds.S
-@@ -35,7 +35,6 @@ SECTIONS
-     _stext = .;
-     TEXT_TEXT
-     SCHED_TEXT
--    CPUIDLE_TEXT
-     LOCK_TEXT
-     IRQENTRY_TEXT
-     SOFTIRQENTRY_TEXT
---- a/arch/x86/include/asm/irqflags.h
-+++ b/arch/x86/include/asm/irqflags.h
-@@ -8,9 +8,6 @@
- 
- #include <asm/nospec-branch.h>
- 
--/* Provide __cpuidle; we can't safely include <linux/cpu.h> */
--#define __cpuidle __section(".cpuidle.text")
--
- /*
-  * Interrupt control:
-  */
-@@ -45,13 +42,13 @@ static __always_inline void native_irq_e
- 	asm volatile("sti": : :"memory");
+--- a/arch/arm/kernel/process.c
++++ b/arch/arm/kernel/process.c
+@@ -78,7 +78,6 @@ void arch_cpu_idle(void)
+ 		arm_pm_idle();
+ 	else
+ 		cpu_do_idle();
+-	raw_local_irq_enable();
  }
  
--static inline __cpuidle void native_safe_halt(void)
-+static __always_inline void native_safe_halt(void)
- {
- 	mds_idle_clear_cpu_buffers();
- 	asm volatile("sti; hlt": : :"memory");
+ void arch_cpu_idle_prepare(void)
+--- a/arch/arm/mach-gemini/board-dt.c
++++ b/arch/arm/mach-gemini/board-dt.c
+@@ -42,8 +42,9 @@ static void gemini_idle(void)
+ 	 */
+ 
+ 	/* FIXME: Enabling interrupts here is racy! */
+-	local_irq_enable();
++	raw_local_irq_enable();
+ 	cpu_do_idle();
++	raw_local_irq_disable();
  }
  
--static inline __cpuidle void native_halt(void)
-+static __always_inline void native_halt(void)
- {
- 	mds_idle_clear_cpu_buffers();
- 	asm volatile("hlt": : :"memory");
-@@ -84,7 +81,7 @@ static __always_inline void arch_local_i
-  * Used in the idle loop; sti takes one instruction cycle
-  * to complete:
-  */
--static inline __cpuidle void arch_safe_halt(void)
-+static __always_inline void arch_safe_halt(void)
- {
- 	native_safe_halt();
+ static void __init gemini_init_machine(void)
+--- a/arch/arm64/kernel/idle.c
++++ b/arch/arm64/kernel/idle.c
+@@ -42,5 +42,4 @@ void noinstr arch_cpu_idle(void)
+ 	 * tricks
+ 	 */
+ 	cpu_do_idle();
+-	raw_local_irq_enable();
  }
-@@ -93,7 +90,7 @@ static inline __cpuidle void arch_safe_h
-  * Used when interrupts are already enabled or to
-  * shutdown the processor:
-  */
--static inline __cpuidle void halt(void)
-+static __always_inline void halt(void)
- {
- 	native_halt();
+--- a/arch/csky/kernel/process.c
++++ b/arch/csky/kernel/process.c
+@@ -101,6 +101,5 @@ void arch_cpu_idle(void)
+ #ifdef CONFIG_CPU_PM_STOP
+ 	asm volatile("stop\n");
+ #endif
+-	raw_local_irq_enable();
  }
---- a/arch/x86/include/asm/mwait.h
-+++ b/arch/x86/include/asm/mwait.h
-@@ -104,7 +104,7 @@ static inline void __sti_mwait(unsigned
-  * New with Core Duo processors, MWAIT can take some hints based on CPU
-  * capability.
-  */
--static inline void mwait_idle_with_hints(unsigned long eax, unsigned long ecx)
-+static __always_inline void mwait_idle_with_hints(unsigned long eax, unsigned long ecx)
+ #endif
+--- a/arch/csky/kernel/smp.c
++++ b/arch/csky/kernel/smp.c
+@@ -314,7 +314,7 @@ void arch_cpu_idle_dead(void)
+ 	while (!secondary_stack)
+ 		arch_cpu_idle();
+ 
+-	local_irq_disable();
++	raw_local_irq_disable();
+ 
+ 	asm volatile(
+ 		"mov	sp, %0\n"
+--- a/arch/hexagon/kernel/process.c
++++ b/arch/hexagon/kernel/process.c
+@@ -44,7 +44,6 @@ void arch_cpu_idle(void)
  {
- 	if (static_cpu_has_bug(X86_BUG_MONITOR) || !current_set_polling_and_test()) {
- 		if (static_cpu_has_bug(X86_BUG_CLFLUSH_MONITOR)) {
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -129,7 +129,6 @@ SECTIONS
- 		HEAD_TEXT
- 		TEXT_TEXT
- 		SCHED_TEXT
--		CPUIDLE_TEXT
- 		LOCK_TEXT
- 		KPROBES_TEXT
- 		ALIGN_ENTRY_TEXT_BEGIN
---- a/arch/xtensa/kernel/vmlinux.lds.S
-+++ b/arch/xtensa/kernel/vmlinux.lds.S
-@@ -125,7 +125,6 @@ SECTIONS
-     ENTRY_TEXT
-     TEXT_TEXT
-     SCHED_TEXT
--    CPUIDLE_TEXT
-     LOCK_TEXT
-     *(.fixup)
-   }
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -559,6 +559,9 @@
- 		ALIGN_FUNCTION();					\
- 		__noinstr_text_start = .;				\
- 		*(.noinstr.text)					\
-+		__cpuidle_text_start = .;				\
-+		*(.cpuidle.text)					\
-+		__cpuidle_text_end = .;					\
- 		__noinstr_text_end = .;
+ 	__vmwait();
+ 	/*  interrupts wake us up, but irqs are still disabled */
+-	raw_local_irq_enable();
+ }
  
  /*
-@@ -600,12 +603,6 @@
- 		*(.spinlock.text)					\
- 		__lock_text_end = .;
+--- a/arch/ia64/kernel/process.c
++++ b/arch/ia64/kernel/process.c
+@@ -241,6 +241,7 @@ void arch_cpu_idle(void)
+ 		(*mark_idle)(1);
  
--#define CPUIDLE_TEXT							\
--		ALIGN_FUNCTION();					\
--		__cpuidle_text_start = .;				\
--		*(.cpuidle.text)					\
--		__cpuidle_text_end = .;
+ 	raw_safe_halt();
++	raw_local_irq_disable();
+ 
+ 	if (mark_idle)
+ 		(*mark_idle)(0);
+--- a/arch/microblaze/kernel/process.c
++++ b/arch/microblaze/kernel/process.c
+@@ -138,5 +138,4 @@ int dump_fpu(struct pt_regs *regs, elf_f
+ 
+ void arch_cpu_idle(void)
+ {
+-       raw_local_irq_enable();
+ }
+--- a/arch/mips/kernel/idle.c
++++ b/arch/mips/kernel/idle.c
+@@ -33,13 +33,13 @@ static void __cpuidle r3081_wait(void)
+ {
+ 	unsigned long cfg = read_c0_conf();
+ 	write_c0_conf(cfg | R30XX_CONF_HALT);
+-	raw_local_irq_enable();
+ }
+ 
+ void __cpuidle r4k_wait(void)
+ {
+ 	raw_local_irq_enable();
+ 	__r4k_wait();
++	raw_local_irq_disable();
+ }
+ 
+ /*
+@@ -57,7 +57,6 @@ void __cpuidle r4k_wait_irqoff(void)
+ 		"	.set	arch=r4000	\n"
+ 		"	wait			\n"
+ 		"	.set	pop		\n");
+-	raw_local_irq_enable();
+ }
+ 
+ /*
+@@ -77,7 +76,6 @@ static void __cpuidle rm7k_wait_irqoff(v
+ 		"	wait						\n"
+ 		"	mtc0	$1, $12		# stalls until W stage	\n"
+ 		"	.set	pop					\n");
+-	raw_local_irq_enable();
+ }
+ 
+ /*
+@@ -103,6 +101,8 @@ static void __cpuidle au1k_wait(void)
+ 	"	nop				\n"
+ 	"	.set	pop			\n"
+ 	: : "r" (au1k_wait), "r" (c0status));
++
++	raw_local_irq_disable();
+ }
+ 
+ static int __initdata nowait;
+@@ -245,8 +245,6 @@ void arch_cpu_idle(void)
+ {
+ 	if (cpu_wait)
+ 		cpu_wait();
+-	else
+-		raw_local_irq_enable();
+ }
+ 
+ #ifdef CONFIG_CPU_IDLE
+--- a/arch/nios2/kernel/process.c
++++ b/arch/nios2/kernel/process.c
+@@ -33,7 +33,6 @@ EXPORT_SYMBOL(pm_power_off);
+ 
+ void arch_cpu_idle(void)
+ {
+-	raw_local_irq_enable();
+ }
+ 
+ /*
+--- a/arch/openrisc/kernel/process.c
++++ b/arch/openrisc/kernel/process.c
+@@ -102,6 +102,7 @@ void arch_cpu_idle(void)
+ 	raw_local_irq_enable();
+ 	if (mfspr(SPR_UPR) & SPR_UPR_PMP)
+ 		mtspr(SPR_PMR, mfspr(SPR_PMR) | SPR_PMR_DME);
++	raw_local_irq_disable();
+ }
+ 
+ void (*pm_power_off)(void) = NULL;
+--- a/arch/parisc/kernel/process.c
++++ b/arch/parisc/kernel/process.c
+@@ -187,8 +187,6 @@ void arch_cpu_idle_dead(void)
+ 
+ void __cpuidle arch_cpu_idle(void)
+ {
+-	raw_local_irq_enable();
 -
- #define KPROBES_TEXT							\
- 		ALIGN_FUNCTION();					\
- 		__kprobes_text_start = .;				\
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -225,10 +225,14 @@ struct ftrace_likely_data {
- #endif
+ 	/* nop on real hardware, qemu will idle sleep. */
+ 	asm volatile("or %%r10,%%r10,%%r10\n":::);
+ }
+--- a/arch/powerpc/kernel/idle.c
++++ b/arch/powerpc/kernel/idle.c
+@@ -51,10 +51,9 @@ void arch_cpu_idle(void)
+ 		 * Some power_save functions return with
+ 		 * interrupts enabled, some don't.
+ 		 */
+-		if (irqs_disabled())
+-			raw_local_irq_enable();
++		if (!irqs_disabled())
++			raw_local_irq_disable();
+ 	} else {
+-		raw_local_irq_enable();
+ 		/*
+ 		 * Go into low thread priority and possibly
+ 		 * low power mode.
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -39,7 +39,6 @@ extern asmlinkage void ret_from_kernel_t
+ void arch_cpu_idle(void)
+ {
+ 	cpu_do_idle();
+-	raw_local_irq_enable();
+ }
  
- /* Section for code which can't be instrumented at all */
--#define noinstr								\
--	noinline notrace __attribute((__section__(".noinstr.text")))	\
-+#define __noinstr_section(section)					\
-+	noinline notrace __attribute((__section__(section)))		\
- 	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+ void __show_regs(struct pt_regs *regs)
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@ -66,7 +66,6 @@ void arch_cpu_idle(void)
+ 	idle->idle_count++;
+ 	account_idle_time(cputime_to_nsecs(idle_time));
+ 	raw_write_seqcount_end(&idle->seqcount);
+-	raw_local_irq_enable();
+ }
  
-+#define noinstr __noinstr_section(".noinstr.text")
+ static ssize_t show_idle_count(struct device *dev,
+--- a/arch/sh/kernel/idle.c
++++ b/arch/sh/kernel/idle.c
+@@ -25,6 +25,7 @@ void default_idle(void)
+ 	raw_local_irq_enable();
+ 	/* Isn't this racy ? */
+ 	cpu_sleep();
++	raw_local_irq_disable();
+ 	clear_bl_bit();
+ }
+ 
+--- a/arch/sparc/kernel/leon_pmc.c
++++ b/arch/sparc/kernel/leon_pmc.c
+@@ -57,6 +57,8 @@ static void pmc_leon_idle_fixup(void)
+ 		"lda	[%0] %1, %%g0\n"
+ 		:
+ 		: "r"(address), "i"(ASI_LEON_BYPASS));
 +
-+#define __cpuidle __noinstr_section(".cpuidle.text")
++	raw_local_irq_disable();
+ }
+ 
+ /*
+@@ -70,6 +72,8 @@ static void pmc_leon_idle(void)
+ 
+ 	/* For systems without power-down, this will be no-op */
+ 	__asm__ __volatile__ ("wr	%g0, %asr19\n\t");
 +
- #endif /* __KERNEL__ */
++	raw_local_irq_disable();
+ }
  
- #endif /* __ASSEMBLY__ */
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -171,9 +171,6 @@ void __noreturn cpu_startup_entry(enum c
+ /* Install LEON Power Down function */
+--- a/arch/sparc/kernel/process_32.c
++++ b/arch/sparc/kernel/process_32.c
+@@ -71,7 +71,6 @@ void arch_cpu_idle(void)
+ {
+ 	if (sparc_idle)
+ 		(*sparc_idle)();
+-	raw_local_irq_enable();
+ }
  
- void cpu_idle_poll_ctrl(bool enable);
+ /* XXX cli/sti -> local_irq_xxx here, check this works once SMP is fixed. */
+--- a/arch/sparc/kernel/process_64.c
++++ b/arch/sparc/kernel/process_64.c
+@@ -59,7 +59,6 @@ void arch_cpu_idle(void)
+ {
+ 	if (tlb_type != hypervisor) {
+ 		touch_nmi_watchdog();
+-		raw_local_irq_enable();
+ 	} else {
+ 		unsigned long pstate;
  
--/* Attach to any functions which should be considered cpuidle. */
--#define __cpuidle	__section(".cpuidle.text")
--
- bool cpu_in_idle(unsigned long pc);
- 
- void arch_cpu_idle(void);
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -376,7 +376,8 @@ static int decode_instructions(struct ob
- 			sec->text = true;
- 
- 		if (!strcmp(sec->name, ".noinstr.text") ||
--		    !strcmp(sec->name, ".entry.text"))
-+		    !strcmp(sec->name, ".entry.text") ||
-+		    !strcmp(sec->name, ".cpuidle.text"))
- 			sec->noinstr = true;
- 
- 		for (offset = 0; offset < sec->sh.sh_size; offset += insn->len) {
-@@ -3080,6 +3081,12 @@ static inline bool noinstr_call_dest(str
- 		return true;
- 
- 	/*
-+	 * If the symbol is a static_call trampoline, we can't tell.
-+	 */
-+	if (func->static_call_tramp)
-+		return true;
+@@ -90,6 +89,8 @@ void arch_cpu_idle(void)
+ 			"wrpr %0, %%g0, %%pstate"
+ 			: "=&r" (pstate)
+ 			: "i" (PSTATE_IE));
 +
-+	/*
- 	 * The __ubsan_handle_*() calls are like WARN(), they only happen when
- 	 * something 'BAD' happened. At the risk of taking the machine down,
- 	 * let them proceed to get the message out.
-@@ -3648,6 +3655,12 @@ static int validate_noinstr_sections(str
- 	if (sec) {
- 		warnings += validate_section(file, sec);
- 		warnings += validate_unwind_hints(file, sec);
-+	}
-+
-+	sec = find_section_by_name(file->elf, ".cpuidle.text");
-+	if (sec) {
-+		warnings += validate_section(file, sec);
-+		warnings += validate_unwind_hints(file, sec);
++		raw_local_irq_disable();
  	}
+ }
  
- 	return warnings;
+--- a/arch/um/kernel/process.c
++++ b/arch/um/kernel/process.c
+@@ -216,7 +216,6 @@ void arch_cpu_idle(void)
+ {
+ 	cpu_tasks[current_thread_info()->cpu].pid = os_getpid();
+ 	um_idle_sleep();
+-	raw_local_irq_enable();
+ }
+ 
+ int __cant_sleep(void) {
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -178,6 +178,9 @@ void __cpuidle tdx_safe_halt(void)
+ 	 */
+ 	if (__halt(irq_disabled, do_sti))
+ 		WARN_ONCE(1, "HLT instruction emulation failed\n");
++
++	/* XXX I can't make sense of what @do_sti actually does */
++	raw_local_irq_disable();
+ }
+ 
+ static bool read_msr(struct pt_regs *regs)
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -699,6 +699,7 @@ EXPORT_SYMBOL(boot_option_idle_override)
+ void __cpuidle default_idle(void)
+ {
+ 	raw_safe_halt();
++	raw_local_irq_disable();
+ }
+ #if defined(CONFIG_APM_MODULE) || defined(CONFIG_HALTPOLL_CPUIDLE_MODULE)
+ EXPORT_SYMBOL(default_idle);
+@@ -804,13 +805,7 @@ static void amd_e400_idle(void)
+ 
+ 	default_idle();
+ 
+-	/*
+-	 * The switch back from broadcast mode needs to be called with
+-	 * interrupts disabled.
+-	 */
+-	raw_local_irq_disable();
+ 	tick_broadcast_exit();
+-	raw_local_irq_enable();
+ }
+ 
+ /*
+@@ -849,12 +844,10 @@ static __cpuidle void mwait_idle(void)
+ 		}
+ 
+ 		__monitor((void *)&current_thread_info()->flags, 0, 0);
+-		if (!need_resched())
++		if (!need_resched()) {
+ 			__sti_mwait(0, 0);
+-		else
+-			raw_local_irq_enable();
+-	} else {
+-		raw_local_irq_enable();
++			raw_local_irq_disable();
++		}
+ 	}
+ 	__current_clr_polling();
+ }
+--- a/arch/xtensa/kernel/process.c
++++ b/arch/xtensa/kernel/process.c
+@@ -183,6 +183,7 @@ void coprocessor_flush_release_all(struc
+ void arch_cpu_idle(void)
+ {
+ 	platform_idle();
++	raw_local_irq_disable();
+ }
+ 
+ /*
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -79,7 +79,6 @@ void __weak arch_cpu_idle_dead(void) { }
+ void __weak arch_cpu_idle(void)
+ {
+ 	cpu_idle_force_poll = 1;
+-	raw_local_irq_enable();
+ }
+ 
+ /**
+@@ -96,7 +95,6 @@ void __cpuidle default_idle_call(void)
+ 
+ 		cpuidle_rcu_enter();
+ 		arch_cpu_idle();
+-		raw_local_irq_disable();
+ 		cpuidle_rcu_exit();
+ 
+ 		start_critical_timings();
 
 
