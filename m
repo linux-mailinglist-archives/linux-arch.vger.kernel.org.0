@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7270054350B
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AEA5434D9
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242126AbiFHOvD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 10:51:03 -0400
+        id S243700AbiFHOvP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 10:51:15 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242391AbiFHOrJ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:47:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D5AE1E7AF5;
-        Wed,  8 Jun 2022 07:46:56 -0700 (PDT)
+        with ESMTP id S242353AbiFHOrI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:47:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFFC49F00;
+        Wed,  8 Jun 2022 07:46:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=OtI5HbrqLesCtm4u4WFjeviiqkcvkrIAtN470m5UDAY=; b=XbDSSCT7V6qaOXqltSIPK3imnd
-        T9/IFn1KLJ6JB3ImVabgJhwFvKrYTBhKuyguAQ6iGw1EeJTpwNd8N7rA4xWz/hUczSnc5EesNhOw2
-        wKenGxdjyHq0fAT6LH91zIlM1GdMqcjImkgIDaRRJrutIuK5hMomi1iGDTFrhOAm1vwRIEzZQO8EE
-        jwqwh1czYumTsOS41/0gqa/Jj9RlSk2bFJ2YA8sKULBoUftX/7ZAYTIeoLrmoAlNfBs8iXHE4Ej+E
-        ifixBb2EMP2XraY3Gi8r7ZH9u5Pju5/ytG4KNgqVDZLlED6J80hizKXGgJ4MpqMJwxA8aGEVN3stH
-        Plcp++VQ==;
+        bh=Gj+eSw46X5SDCGNw8cDv0ubviLBcGEVy5VW0lj+ATKg=; b=N77RkI+QTaxDMs240pQaEKT6dP
+        4VgjixhsERFCAhqks8uUKYnPmgaasveu2D0er8qSsZ8usH68kBhYOFIT2yrd9wsE9EnUYwKD6vJFn
+        YrCqldOcFxaXkSm4md4Vmu8hIzcIEOupQGBDlSNznBz2Y5P+odjiBnErl61uy2dx6q+UOqet17BYz
+        YRYnLabyMm8DrqBCCxXS/evp2i38LSWPNGIlCoCVIiahKLBEt4buZJSAugJ95CGT+rwrcjJrgfDvy
+        7iWP6pqixLlyQSDUsBLus3ti7xSHLVPaECcwxD3le6NZmXfGe4TsQ4UGNm/smN8NdfrNJt3gzGoLJ
+        2l4659PA==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywx5-00ChZ6-58; Wed, 08 Jun 2022 14:46:31 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nywx6-0066Dl-Fu; Wed, 08 Jun 2022 14:46:33 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D5A2C302F42;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E20D8302F49;
         Wed,  8 Jun 2022 16:46:23 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id B77DB20C119AE; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
-Message-ID: <20220608144517.885263942@infradead.org>
+        id BC41C20C119B1; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
+Message-ID: <20220608144517.948600553@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Jun 2022 16:27:54 +0200
+Date:   Wed, 08 Jun 2022 16:27:55 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -98,7 +98,7 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: [PATCH 31/36] cpuidle,acpi: Make noinstr clean
+Subject: [PATCH 32/36] ftrace: WARN on rcuidle
 References: <20220608142723.103523089@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,59 +112,59 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-vmlinux.o: warning: objtool: io_idle+0xc: call to __inb.isra.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: acpi_idle_enter+0xfe: call to num_online_cpus() leaves .noinstr.text section
-vmlinux.o: warning: objtool: acpi_idle_enter+0x115: call to acpi_idle_fallback_to_c1.isra.0() leaves .noinstr.text section
+CONFIG_GENERIC_ENTRY disallows any and all tracing when RCU isn't
+enabled.
+
+XXX if s390 (the only other GENERIC_ENTRY user as of this writing)
+isn't comfortable with this, we could switch to
+HAVE_NOINSTR_VALIDATION which is x86_64 only atm.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/x86/include/asm/shared/io.h |    4 ++--
- drivers/acpi/processor_idle.c    |    2 +-
- include/linux/cpumask.h          |    4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ include/linux/tracepoint.h |   13 ++++++++++++-
+ kernel/trace/trace.c       |    3 +++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
---- a/arch/x86/include/asm/shared/io.h
-+++ b/arch/x86/include/asm/shared/io.h
-@@ -5,13 +5,13 @@
- #include <linux/types.h>
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -178,6 +178,16 @@ static inline struct tracepoint *tracepo
+ #endif /* CONFIG_HAVE_STATIC_CALL */
  
- #define BUILDIO(bwl, bw, type)						\
--static inline void __out##bwl(type value, u16 port)			\
-+static __always_inline void __out##bwl(type value, u16 port)		\
- {									\
- 	asm volatile("out" #bwl " %" #bw "0, %w1"			\
- 		     : : "a"(value), "Nd"(port));			\
- }									\
- 									\
--static inline type __in##bwl(u16 port)					\
-+static __always_inline type __in##bwl(u16 port)				\
- {									\
- 	type value;							\
- 	asm volatile("in" #bwl " %w1, %" #bw "0"			\
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -593,7 +593,7 @@ static int acpi_idle_play_dead(struct cp
- 	return 0;
- }
- 
--static bool acpi_idle_fallback_to_c1(struct acpi_processor *pr)
-+static __always_inline bool acpi_idle_fallback_to_c1(struct acpi_processor *pr)
- {
- 	return IS_ENABLED(CONFIG_HOTPLUG_CPU) && !pr->flags.has_cst &&
- 		!(acpi_gbl_FADT.flags & ACPI_FADT_C2_MP_SUPPORTED);
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -908,9 +908,9 @@ static inline const struct cpumask *get_
-  * concurrent CPU hotplug operations unless invoked from a cpuhp_lock held
-  * region.
+ /*
++ * CONFIG_GENERIC_ENTRY archs are expected to have sanitized entry and idle
++ * code that disallow any/all tracing/instrumentation when RCU isn't watching.
++ */
++#ifdef CONFIG_GENERIC_ENTRY
++#define RCUIDLE_COND(rcuidle)	(rcuidle)
++#else
++#define RCUIDLE_COND(rcuidle)	(rcuidle && in_nmi())
++#endif
++
++/*
+  * it_func[0] is never NULL because there is at least one element in the array
+  * when the array itself is non NULL.
   */
--static inline unsigned int num_online_cpus(void)
-+static __always_inline unsigned int num_online_cpus(void)
- {
--	return atomic_read(&__num_online_cpus);
-+	return arch_atomic_read(&__num_online_cpus);
- }
- #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
- #define num_present_cpus()	cpumask_weight(cpu_present_mask)
+@@ -189,7 +199,8 @@ static inline struct tracepoint *tracepo
+ 			return;						\
+ 									\
+ 		/* srcu can't be used from NMI */			\
+-		WARN_ON_ONCE(rcuidle && in_nmi());			\
++		if (WARN_ON_ONCE(RCUIDLE_COND(rcuidle)))		\
++			return;						\
+ 									\
+ 		/* keep srcu and sched-rcu usage consistent */		\
+ 		preempt_disable_notrace();				\
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -3104,6 +3104,9 @@ void __trace_stack(struct trace_array *t
+ 		return;
+ 	}
+ 
++	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_GENERIC_ENTRY)))
++		return;
++
+ 	/*
+ 	 * When an NMI triggers, RCU is enabled via rcu_nmi_enter(),
+ 	 * but if the above rcu_is_watching() failed, then the NMI
 
 
