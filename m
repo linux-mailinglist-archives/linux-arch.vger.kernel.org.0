@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31555543357
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E1A543378
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242117AbiFHOq4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 10:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56488 "EHLO
+        id S242476AbiFHOrP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 10:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242004AbiFHOqv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:46:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878E120181;
-        Wed,  8 Jun 2022 07:46:40 -0700 (PDT)
+        with ESMTP id S242338AbiFHOrH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:47:07 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9F9253306;
+        Wed,  8 Jun 2022 07:46:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=rveYe0whW8HL+t/HGSaazkf4IJzq2XAc7vdeRKjh+gA=; b=cpKCmyhyv7OuEJMBrNQU4CnHNj
-        GnUCgs7XSOxkFha/sPdTsxeTS+e9qjtwJrPFHfUSepmSzQvRHqWJ38pWwyP7CmKl7WsF5ifJzwn8I
-        KgcYBvLkrDSlv9M2MdiJ1ToWAySQoRg4+zQfyu6Q6UOoUhyP16vlSGNMW8FRmKgzk6H/TOalA6UnM
-        2dQx2jKA7llK73O+p7WvYuYBEr0UYXjBd0MyFHzz2ajO12weAftc5aMVdLFZY5KBowFC3EUic0nAb
-        Ua8Il7Isw4DFhFw47bHPIFnvHlD9Gmhxxc/vlsT8NNGa/EFOaC4CUBfTzrFKLdx4VhHOvfmU/Hr+j
-        qShSPhlg==;
+        bh=RgIlqtYjjJdUiI+7wCmxTrS6x1kOK6pzGpl8Q80bmr4=; b=bQitAo3/bhX/7hzGI4T3yibna4
+        0mQZeyH26/9uEQoQ3a1aX3sWfKMfQ781vDvBiZrQN/0MSfReYdabg0FWrYVzcM/S2rUEv6t6LGksa
+        2BQ/eFu8BDIKfzmcsKUyYvSei/0kIkIiswTsPUZTWuqJ9hrWBbHm9564E7DCbUTazE3QYRIUcrjOI
+        aJk5EhnlwCnKYq27DXu1QA/DW1E8sCiSYr9HyBmEjLdFA0HQokSNPY9mowQlBRNW8L1t9Mv4j9GoO
+        6NWPHqFFtnihkP9nxLcUiaNc5tX0iEfigOT06QdTK6KDKX5Ebp0k3LNleCw9IlDGN1ZUtCQIxVuOF
+        W43+1Cjg==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywx2-00ChXE-Jq; Wed, 08 Jun 2022 14:46:28 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nywx2-0066CI-F0; Wed, 08 Jun 2022 14:46:30 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A0926302EA2;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A3C6C302EF4;
         Wed,  8 Jun 2022 16:46:23 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 90A2620C10ED8; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
-Message-ID: <20220608144517.313931267@infradead.org>
+        id 9441920C10EDA; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
+Message-ID: <20220608144517.380962958@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Jun 2022 16:27:45 +0200
+Date:   Wed, 08 Jun 2022 16:27:46 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -98,7 +98,7 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: [PATCH 22/36] arm,smp: Remove trace_.*_rcuidle() usage
+Subject: [PATCH 23/36] arm64,smp: Remove trace_.*_rcuidle() usage
 References: <20220608142723.103523089@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,25 +112,17 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-None of these functions should ever be ran with RCU disabled anymore.
-
-Specifically, do_handle_IPI() is only called from handle_IPI() which
-explicitly does irq_enter()/irq_exit() which ensures RCU is watching.
-
-The problem with smp_cross_call() was, per commit 7c64cc0531fa ("arm: Use
-_rcuidle for smp_cross_call() tracepoints"), that
-cpuidle_enter_state_coupled() already had RCU disabled, but that's
-long been fixed by commit 1098582a0f6c ("sched,idle,rcu: Push rcu_idle
-deeper into the idle path").
+Ever since commit d3afc7f12987 ("arm64: Allow IPIs to be handled as
+normal interrupts") this function is called in regular IRQ context.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/arm/kernel/smp.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm64/kernel/smp.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/arm/kernel/smp.c
-+++ b/arch/arm/kernel/smp.c
-@@ -639,7 +639,7 @@ static void do_handle_IPI(int ipinr)
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -865,7 +865,7 @@ static void do_handle_IPI(int ipinr)
  	unsigned int cpu = smp_processor_id();
  
  	if ((unsigned)ipinr < NR_IPI)
@@ -138,8 +130,8 @@ Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 +		trace_ipi_entry(ipi_types[ipinr]);
  
  	switch (ipinr) {
- 	case IPI_WAKEUP:
-@@ -686,7 +686,7 @@ static void do_handle_IPI(int ipinr)
+ 	case IPI_RESCHEDULE:
+@@ -914,7 +914,7 @@ static void do_handle_IPI(int ipinr)
  	}
  
  	if ((unsigned)ipinr < NR_IPI)
@@ -147,15 +139,6 @@ Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 +		trace_ipi_exit(ipi_types[ipinr]);
  }
  
- /* Legacy version, should go away once all irqchips have been converted */
-@@ -709,7 +709,7 @@ static irqreturn_t ipi_handler(int irq,
- 
- static void smp_cross_call(const struct cpumask *target, unsigned int ipinr)
- {
--	trace_ipi_raise_rcuidle(target, ipi_types[ipinr]);
-+	trace_ipi_raise(target, ipi_types[ipinr]);
- 	__ipi_send_mask(ipi_desc[ipinr], target);
- }
- 
+ static irqreturn_t ipi_handler(int irq, void *data)
 
 
