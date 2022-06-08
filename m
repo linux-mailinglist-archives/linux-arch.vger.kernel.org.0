@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1DC543317
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72768543462
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241894AbiFHOqt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 10:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S242344AbiFHOrH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 10:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241796AbiFHOqr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:46:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AEF42A1E;
-        Wed,  8 Jun 2022 07:46:37 -0700 (PDT)
+        with ESMTP id S242192AbiFHOrA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:47:00 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A829F251957;
+        Wed,  8 Jun 2022 07:46:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=y6I/0XZeW+SwdAeAR3t2m034incS08IQBnZfBcNKYzA=; b=pV/EkEgKRIpeKvq5HN3+CCEy73
-        r8xSxfvRwX0Hp/RbmQEkGGqgtSQmt2V7wVKm/Dgh7gCxT8VN3Zd3ykv33oYJXDZhFrsOiZzgqwZwN
-        mYfnoNbn4mkY4D0X7knpoC+PXyRY28u9ZWLLFNEC02wY4oKlFNPo5yScw7t5dA1Upkyps4KrRMpkG
-        hdfHf70HVdGxmq1amZj2pji0fv+Uuwf5Bh2HdSJMzH66/m6rsKuia+FhR3TxjdKwxLuBcApt1D03J
-        veIlHyJOTL69bf8GkRxQ0BEOGIuKD5pe0mKmy/Kj0wSR+O/rPyAwmL/tyBM+mm2nltdjhcArwd3n8
-        F0v7I28w==;
+        bh=vvLwebALuO06Z1aX8J6kQrwqaL5iBz0X7E8LlI1b2uQ=; b=OzJRupxihA5v/wFcoj8aYmwvCK
+        zJtLSG5lJ5r1jF34NYklO98u2A4BEU68+t6WAkZfhCAx1FEvIE+STbnMtGpkGM9UmriE/IBRP38f8
+        8Rir0Y6MSKyRo3hu7NX2qlBRLE+7mkO9ayrkGMghvM/zbkTxRMaXlZee7jCP7eSxEG/NoQqZ2Creu
+        SeCF54vW/bzEOp42uSPZ20+dac9Y7frHBPWD1KyTRKs97F4N7r//SLXxDz7qYS0hpvdheMmGi9BVG
+        0/llsWm1hKrIDNS3yfMlESfftpKjFNmJs1vvcknJzjZUuEQ8wxt6o+regca4c9SP9i3174pfRKEZX
+        AqjhnJtg==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywwz-00ChWF-4S; Wed, 08 Jun 2022 14:46:25 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nywwz-0066BU-4n; Wed, 08 Jun 2022 14:46:26 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B1E3A302DCB;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B6326302DFA;
         Wed,  8 Jun 2022 16:46:22 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 598CC20C0FC8A; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
-Message-ID: <20220608144516.426117259@infradead.org>
+        id 5E0D320C0FC99; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
+Message-ID: <20220608144516.489126887@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Jun 2022 16:27:31 +0200
+Date:   Wed, 08 Jun 2022 16:27:32 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -98,7 +98,7 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: [PATCH 08/36] cpuidle,psci: Push RCU-idle into driver
+Subject: [PATCH 09/36] cpuidle,imx6: Push RCU-idle into driver
 References: <20220608142723.103523089@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -117,48 +117,30 @@ again, at least twice, before going idle is daft.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- drivers/cpuidle/cpuidle-psci.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ arch/arm/mach-imx/cpuidle-imx6sx.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -69,12 +69,12 @@ static int __psci_enter_domain_idle_stat
- 		return -1;
+--- a/arch/arm/mach-imx/cpuidle-imx6sx.c
++++ b/arch/arm/mach-imx/cpuidle-imx6sx.c
+@@ -47,7 +47,9 @@ static int imx6sx_enter_wait(struct cpui
+ 		cpu_pm_enter();
+ 		cpu_cluster_pm_enter();
  
- 	/* Do runtime PM to manage a hierarchical CPU toplogy. */
--	rcu_irq_enter_irqson();
- 	if (s2idle)
- 		dev_pm_genpd_suspend(pd_dev);
- 	else
- 		pm_runtime_put_sync_suspend(pd_dev);
--	rcu_irq_exit_irqson();
-+
-+	rcu_idle_enter();
++		rcu_idle_enter();
+ 		cpu_suspend(0, imx6sx_idle_finish);
++		rcu_idle_exit();
  
- 	state = psci_get_domain_state();
- 	if (!state)
-@@ -82,12 +82,12 @@ static int __psci_enter_domain_idle_stat
- 
- 	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
- 
--	rcu_irq_enter_irqson();
-+	rcu_idle_exit();
-+
- 	if (s2idle)
- 		dev_pm_genpd_resume(pd_dev);
- 	else
- 		pm_runtime_get_sync(pd_dev);
--	rcu_irq_exit_irqson();
- 
- 	cpu_pm_exit();
- 
-@@ -240,6 +240,7 @@ static int psci_dt_cpu_init_topology(str
- 	 * of a shared state for the domain, assumes the domain states are all
- 	 * deeper states.
- 	 */
-+	drv->states[state_count - 1].flags |= CPUIDLE_FLAG_RCU_IDLE;
- 	drv->states[state_count - 1].enter = psci_enter_domain_idle_state;
- 	drv->states[state_count - 1].enter_s2idle = psci_enter_s2idle_domain_idle_state;
- 	psci_cpuidle_use_cpuhp = true;
+ 		cpu_cluster_pm_exit();
+ 		cpu_pm_exit();
+@@ -87,7 +89,8 @@ static struct cpuidle_driver imx6sx_cpui
+ 			 */
+ 			.exit_latency = 300,
+ 			.target_residency = 500,
+-			.flags = CPUIDLE_FLAG_TIMER_STOP,
++			.flags = CPUIDLE_FLAG_TIMER_STOP |
++				 CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter = imx6sx_enter_wait,
+ 			.name = "LOW-POWER-IDLE",
+ 			.desc = "ARM power off",
 
 
