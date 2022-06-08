@@ -2,99 +2,82 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C47542A30
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 11:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDA4542B7D
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 11:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbiFHJBY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 05:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S232846AbiFHJZu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 05:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiFHJBI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 05:01:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11C39181A;
-        Wed,  8 Jun 2022 01:20:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C170615CE;
-        Wed,  8 Jun 2022 08:20:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C275FC341C8;
-        Wed,  8 Jun 2022 08:20:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654676402;
-        bh=rDMX5BalcedoM4G0RTFNbUxPOQoghsgu/8OBAke+GR0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W/h6WxvlBEsPXQ7LLxZr5QO/u8vafOvVrOKwRNodyKrcwdtYx8uewJ8cCA65YcEMg
-         alacQ3aEaCFnYucv14vBpxrln7eE0w+IUl9Ml0Q/7LYCRVNvGSHDuVNBRGtIoi0BHD
-         Qr5ufM1dsDnPItR2irIQVGVoxerv51UkVHYmpLW+0WsyY7wVvJ+J6YNWoxtfegtWYz
-         FamoyOjC7VQXl4xIUHow5CF1p1P7Wxh0bzVc5DDARXrzB/D9DtH7DJLq2uy7QMFIxO
-         8gV+qq78/NW5yn20jf56zStPrE0wosJLKD6MRBsnwDN5kNQhLX1HrDNepJvQufi2cH
-         3p2+fMos1M1jw==
-Received: by mail-yb1-f178.google.com with SMTP id i39so7216895ybj.9;
-        Wed, 08 Jun 2022 01:20:02 -0700 (PDT)
-X-Gm-Message-State: AOAM531wI2heu6yNv41f62rWPN0YV807Sr2dgw09++hKPk0eJygCQpXX
-        b1xqkxMlmKdXFI6c/C1frVIZfl6a5q9NAIsFztg=
-X-Google-Smtp-Source: ABdhPJw5adnNWBE7ztmmPDIsnyIjJmMrgIr8fa8e/0DIxEnxDLg4p0rx65KL8vLCz2hbQ8e4xmPnl5Ru880ilknwmmg=
-X-Received: by 2002:a25:d6d7:0:b0:663:efa3:3fd2 with SMTP id
- n206-20020a25d6d7000000b00663efa33fd2mr4459955ybg.480.1654676401784; Wed, 08
- Jun 2022 01:20:01 -0700 (PDT)
+        with ESMTP id S234731AbiFHJZ1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 05:25:27 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2E4D9205
+        for <linux-arch@vger.kernel.org>; Wed,  8 Jun 2022 01:48:51 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 9500668AA6; Wed,  8 Jun 2022 10:48:42 +0200 (CEST)
+Date:   Wed, 8 Jun 2022 10:48:41 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arch@vger.kernel.org, catalin.marinas@arm.com,
+        maz@kernel.org, mark.rutland@arm.com, robin.murphy@arm.com,
+        hch@lst.de, vgupta@kernel.org, linux@armlinux.org.uk,
+        arnd@arndb.de, bcain@quicinc.com, geert@linux-m68k.org,
+        monstr@monstr.eu, dinguyen@kernel.org, shorne@gmail.com,
+        mpe@ellerman.id.au, dalias@libc.org
+Subject: Re: Cache maintenance for non-coherent DMA in
+ arch_sync_dma_for_device()
+Message-ID: <20220608084841.GA17806@lst.de>
+References: <20220606152150.GA31568@willie-the-truck>
 MIME-Version: 1.0
-References: <20220606084109.4108188-1-arnd@kernel.org> <20220606084109.4108188-6-arnd@kernel.org>
- <d39fc9bb-07c1-ad74-1e89-d2aa80578cd4@gonehiking.org>
-In-Reply-To: <d39fc9bb-07c1-ad74-1e89-d2aa80578cd4@gonehiking.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 8 Jun 2022 10:19:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3dfTNS4m-SVa1UH+ncT7ZOcMBRaEc7TiO9R19J3KNSxg@mail.gmail.com>
-Message-ID: <CAK8P3a3dfTNS4m-SVa1UH+ncT7ZOcMBRaEc7TiO9R19J3KNSxg@mail.gmail.com>
-Subject: Re: [PATCH 5/6] scsi: remove stale BusLogic driver
-To:     Khalid Aziz <khalid@gonehiking.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        Denis Efremov <efremov@linux.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220606152150.GA31568@willie-the-truck>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 6:35 PM Khalid Aziz <khalid@gonehiking.org> wrote:
-> On 6/6/22 02:41, Arnd Bergmann wrote: From: Arnd Bergmann<arnd@arndb.de>
->
-> I would say no to removing BusLogic driver. Virtualbox is another
-> consumer of this driver. This driver is very old but I would rather fix
-> the issues than remove it until we do not have any users.
+On Mon, Jun 06, 2022 at 04:21:50PM +0100, Will Deacon wrote:
+> The simplest fix (diff for arm64 below) seems to be changing the
+> invalidation in this case to be a "clean" in arm(64)-speak so that any
+> dirty lines are written back, therefore limiting the stale data to the
+> initial buffer contents. In doing so, this makes the FROM_DEVICE and
+> BIDIRECTIONAL cases identical which makes some intuitive sense if you
+> think of FROM_DEVICE as first doing a TO_DEVICE of any dirty CPU cache
+> lines. One interesting thing I noticed is that the csky implementation
+> additionally zeroes the buffer prior to the clean, but this seems to be
+> overkill.
 
-Maciej already offered to help fix the driver, so I think it will be ok.
+Btw, one thing I'd love to (and might need some help from the arch
+maintainers) is to change how the dma cache maintainance hooks work.
 
-On the other hand, it sounds like VirtualBox users should not actually try to
-use the BusLogic driver with modern Linux guests. From what I can tell
-from the documentation [1], VirtualBox only provides this emulation because it
-was shipped with early versions of VMware and is supported by Windows 2000
-and earlier, but not actually on any modern Windows guest. The VMware
-documentation in turn explicitly says that BusLogic does not work with 64-bit
-guests [2], presumably this applies to both Windows and Linux guests.
+Right now they are high-level and these kinds of decisions need to
+be take in the arch code.  I'd prefer to move over to the architectures
+providing very low-level helpers to:
 
-        Arnd
+  - writeback
+  - invalidate
+  - invalidate+writeback
 
-[1] https://www.virtualbox.org/manual/ch05.html#harddiskcontrollers
-[2] https://kb.vmware.com/s/article/2010470
+Note arch/arc/mm/dma.c has a ver nice documentation of what we need to
+based on a mail from Russell, and we should keep it uptodate with any
+changes to the status quo and probably move it to common documentation
+at leat.
+
+> Finally, on arm(64), the DMA mapping code tries to deal with buffers
+> that are not cacheline aligned by issuing clean-and-invalidate
+> operations for the overlapping portions at each end of the buffer. I
+> don't think this makes a tonne of sense, as inevitably one of the
+> writers (either the CPU or the DMA) is going to win and somebody is
+> going to run into silent data loss. Having the caller receive
+> DMA_MAPPING_ERROR in this case would probably be better.
+
+Yes, the mapping are supposed to be cache line aligned or at least
+have padding around them.  But due to the later case we can't really
+easily verify this in dma-debug.
