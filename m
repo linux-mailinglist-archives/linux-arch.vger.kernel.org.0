@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72768543462
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C933C54334B
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242344AbiFHOrH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 10:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S242305AbiFHOrF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 10:47:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242192AbiFHOrA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:47:00 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A829F251957;
-        Wed,  8 Jun 2022 07:46:50 -0700 (PDT)
+        with ESMTP id S242174AbiFHOq6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:46:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FD71D5A86;
+        Wed,  8 Jun 2022 07:46:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=vvLwebALuO06Z1aX8J6kQrwqaL5iBz0X7E8LlI1b2uQ=; b=OzJRupxihA5v/wFcoj8aYmwvCK
-        zJtLSG5lJ5r1jF34NYklO98u2A4BEU68+t6WAkZfhCAx1FEvIE+STbnMtGpkGM9UmriE/IBRP38f8
-        8Rir0Y6MSKyRo3hu7NX2qlBRLE+7mkO9ayrkGMghvM/zbkTxRMaXlZee7jCP7eSxEG/NoQqZ2Creu
-        SeCF54vW/bzEOp42uSPZ20+dac9Y7frHBPWD1KyTRKs97F4N7r//SLXxDz7qYS0hpvdheMmGi9BVG
-        0/llsWm1hKrIDNS3yfMlESfftpKjFNmJs1vvcknJzjZUuEQ8wxt6o+regca4c9SP9i3174pfRKEZX
-        AqjhnJtg==;
+        bh=F6PB1BepzhzXddHr1ut7n1kgQmvFEr/OgkB1cnk1WPs=; b=M1tCXyGnbstCdvvtQ6/mZ12wfv
+        +hr+FYDVrB35l8sZT0TTdCikLVIUmFfj6NCuF5T8qgOzzSP3eAZudz5T6mIBNivroM+BT4eJldpE9
+        7+Nnin03YehIhXL00k8dYiLlUce04mN5y6Ve+yhirYQRYF7ZJS7t2XyylndNROV2N8dfM1PpTU/jz
+        C1KdUd9/P80+q0ZbUHi4gev9nD3XryZhgPN6/lHDLu9WiEScUhG3xTkiznMw9GW8m2H5YeEzUF4I7
+        K4pDvTrIND321JNLvo0AQr3NAc7PiLRPH3zuBWzcqsQzz70MHALRsvHj1fvGnpMkOMw7xp7tYxu8W
+        voqbkDkQ==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywwz-0066BU-4n; Wed, 08 Jun 2022 14:46:26 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nywwz-00ChWJ-8n; Wed, 08 Jun 2022 14:46:25 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B6326302DFA;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BCE92302E08;
         Wed,  8 Jun 2022 16:46:22 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 5E0D320C0FC99; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
-Message-ID: <20220608144516.489126887@infradead.org>
+        id 625B720C10EA1; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
+Message-ID: <20220608144516.552202452@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Jun 2022 16:27:32 +0200
+Date:   Wed, 08 Jun 2022 16:27:33 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -98,7 +98,7 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: [PATCH 09/36] cpuidle,imx6: Push RCU-idle into driver
+Subject: [PATCH 10/36] cpuidle,omap3: Push RCU-idle into driver
 References: <20220608142723.103523089@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,35 +112,137 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Doing RCU-idle outside the driver, only to then temporarily enable it
-again, at least twice, before going idle is daft.
+Doing RCU-idle outside the driver, only to then teporarily enable it
+again before going idle is daft.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/arm/mach-imx/cpuidle-imx6sx.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm/mach-omap2/cpuidle34xx.c |   16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
---- a/arch/arm/mach-imx/cpuidle-imx6sx.c
-+++ b/arch/arm/mach-imx/cpuidle-imx6sx.c
-@@ -47,7 +47,9 @@ static int imx6sx_enter_wait(struct cpui
- 		cpu_pm_enter();
- 		cpu_cluster_pm_enter();
+--- a/arch/arm/mach-omap2/cpuidle34xx.c
++++ b/arch/arm/mach-omap2/cpuidle34xx.c
+@@ -133,7 +133,9 @@ static int omap3_enter_idle(struct cpuid
+ 	}
  
-+		rcu_idle_enter();
- 		cpu_suspend(0, imx6sx_idle_finish);
-+		rcu_idle_exit();
+ 	/* Execute ARM wfi */
++	rcu_idle_enter();
+ 	omap_sram_idle();
++	rcu_idle_exit();
  
- 		cpu_cluster_pm_exit();
- 		cpu_pm_exit();
-@@ -87,7 +89,8 @@ static struct cpuidle_driver imx6sx_cpui
- 			 */
- 			.exit_latency = 300,
- 			.target_residency = 500,
--			.flags = CPUIDLE_FLAG_TIMER_STOP,
-+			.flags = CPUIDLE_FLAG_TIMER_STOP |
-+				 CPUIDLE_FLAG_RCU_IDLE,
- 			.enter = imx6sx_enter_wait,
- 			.name = "LOW-POWER-IDLE",
- 			.desc = "ARM power off",
+ 	/*
+ 	 * Call idle CPU PM enter notifier chain to restore
+@@ -265,6 +267,7 @@ static struct cpuidle_driver omap3_idle_
+ 	.owner            = THIS_MODULE,
+ 	.states = {
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 2 + 2,
+ 			.target_residency = 5,
+@@ -272,6 +275,7 @@ static struct cpuidle_driver omap3_idle_
+ 			.desc		  = "MPU ON + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 10 + 10,
+ 			.target_residency = 30,
+@@ -279,6 +283,7 @@ static struct cpuidle_driver omap3_idle_
+ 			.desc		  = "MPU ON + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 50 + 50,
+ 			.target_residency = 300,
+@@ -286,6 +291,7 @@ static struct cpuidle_driver omap3_idle_
+ 			.desc		  = "MPU RET + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 1500 + 1800,
+ 			.target_residency = 4000,
+@@ -293,6 +299,7 @@ static struct cpuidle_driver omap3_idle_
+ 			.desc		  = "MPU OFF + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 2500 + 7500,
+ 			.target_residency = 12000,
+@@ -300,6 +307,7 @@ static struct cpuidle_driver omap3_idle_
+ 			.desc		  = "MPU RET + CORE RET",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 3000 + 8500,
+ 			.target_residency = 15000,
+@@ -307,6 +315,7 @@ static struct cpuidle_driver omap3_idle_
+ 			.desc		  = "MPU OFF + CORE RET",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 10000 + 30000,
+ 			.target_residency = 30000,
+@@ -328,6 +337,7 @@ static struct cpuidle_driver omap3430_id
+ 	.owner            = THIS_MODULE,
+ 	.states = {
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 110 + 162,
+ 			.target_residency = 5,
+@@ -335,6 +345,7 @@ static struct cpuidle_driver omap3430_id
+ 			.desc		  = "MPU ON + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 106 + 180,
+ 			.target_residency = 309,
+@@ -342,6 +353,7 @@ static struct cpuidle_driver omap3430_id
+ 			.desc		  = "MPU ON + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 107 + 410,
+ 			.target_residency = 46057,
+@@ -349,6 +361,7 @@ static struct cpuidle_driver omap3430_id
+ 			.desc		  = "MPU RET + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 121 + 3374,
+ 			.target_residency = 46057,
+@@ -356,6 +369,7 @@ static struct cpuidle_driver omap3430_id
+ 			.desc		  = "MPU OFF + CORE ON",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 855 + 1146,
+ 			.target_residency = 46057,
+@@ -363,6 +377,7 @@ static struct cpuidle_driver omap3430_id
+ 			.desc		  = "MPU RET + CORE RET",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 7580 + 4134,
+ 			.target_residency = 484329,
+@@ -370,6 +385,7 @@ static struct cpuidle_driver omap3430_id
+ 			.desc		  = "MPU OFF + CORE RET",
+ 		},
+ 		{
++			.flags		  = CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter		  = omap3_enter_idle_bm,
+ 			.exit_latency	  = 7505 + 15274,
+ 			.target_residency = 484329,
 
 
