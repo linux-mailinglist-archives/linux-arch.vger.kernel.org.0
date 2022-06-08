@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 186EF543308
-	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4CC5434EA
+	for <lists+linux-arch@lfdr.de>; Wed,  8 Jun 2022 16:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241998AbiFHOqv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 8 Jun 2022 10:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        id S243749AbiFHOvS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 8 Jun 2022 10:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241651AbiFHOqs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:46:48 -0400
+        with ESMTP id S242642AbiFHOrW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 8 Jun 2022 10:47:22 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFD11D519F;
-        Wed,  8 Jun 2022 07:46:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239172533F0;
+        Wed,  8 Jun 2022 07:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=Nqou5pdyyCauM7UPuuZujxiA/xlRh3RuPNWmJQy6NBI=; b=Y/kmEUk1uBRTEm9h6EYVoclAZw
-        jVlCNhS11j//scwUiABPphP9XYrfhX1CyrxlxDhN7IAheCtp5dB+0Un97eGS3vj7xXM1FVKoz3qV9
-        vFswsdltHT7wS6PxbFUu/FEXq4KZSQkOQTIrKpNdPiszcqC3H/lrdHY6zn8GrKRxpQRJcimBgQbb/
-        gAUY3BDz83b0c+1WYAxIkFE/JS5RIbSajUZcwWXNk7xWz0YIRAALmUsWuoGEyojX0CEdoNtbNFWlW
-        hmOaO7hM5PRkG5iTjtyDQ5tucQtrEpltpDJD7qrc6iBQAtwqThah6tqeioh0udODSGDuTetFCv4DH
-        FaOHVTMQ==;
+        bh=n+8kbD5k3joQL4tu1DQuka314sY5HtbiPc/MGM3uXCw=; b=jw4TwDmyl0kTYSCugapOboyvFt
+        l7u+2MwOkIDDfwEYhz+kVcSLr6ed0DAexVxesoxoXeJI6zgAjlsnuseqRA8YMfKpXesu9nZKUGG5N
+        tZBB1Sy3MqpS0ZwBcfksrZWV8KweBxp5dfNuLJ+jL4j3yqlYbOsZ5V4mmrWi12VSljq6d05DZ0RjD
+        /WK3pfNZYHkBSY2MPV1AmqLsA2StIXk6qZywGWP1AP7x0tS+ScWqEwGEKHfmYPwNeKrZSXGOHsAFl
+        DyYw2fFlGVZdqgioksMVuJO2U+xVQpY0sU451X2b0zL/4kkUs6F0ccQsq14rEgbL4P4ji9lmbwQ+T
+        iT1gTN+g==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nywx2-00ChX8-40; Wed, 08 Jun 2022 14:46:28 +0000
+        id 1nywx2-00ChXO-V1; Wed, 08 Jun 2022 14:46:29 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9C45C302E7E;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A06F1302E99;
         Wed,  8 Jun 2022 16:46:23 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 8875D20C10ECE; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
-Message-ID: <20220608144517.188449351@infradead.org>
+        id 8D44D20C10ED6; Wed,  8 Jun 2022 16:46:18 +0200 (CEST)
+Message-ID: <20220608144517.251109029@infradead.org>
 User-Agent: quilt/0.66
-Date:   Wed, 08 Jun 2022 16:27:43 +0200
+Date:   Wed, 08 Jun 2022 16:27:44 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -97,8 +97,9 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: [PATCH 20/36] arch/idle: Change arch_cpu_idle() IRQ behaviour
+        rcu@vger.kernel.org, Isaku Yamahata <isaku.yamahata@gmail.com>,
+        kirill.shutemov@linux.intel.com
+Subject: [PATCH 21/36] x86/tdx: Remove TDX_HCALL_ISSUE_STI
 References: <20220608142723.103523089@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,420 +113,110 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Current arch_cpu_idle() is called with IRQs disabled, but will return
-with IRQs enabled.
+Now that arch_cpu_idle() is expected to return with IRQs disabled,
+avoid the useless STI/CLI dance.
 
-However, the very first thing the generic code does after calling
-arch_cpu_idle() is raw_local_irq_disable(). This means that
-architectures that can idle with IRQs disabled end up doing a
-pointless 'enable-disable' dance.
+Per the specs this is supposed to work, but nobody has yet relied up
+this behaviour so broken implementations are possible.
 
-Therefore, push this IRQ disabling into the idle function, meaning
-that those architectures can avoid the pointless IRQ state flipping.
-
+Cc: Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc: kirill.shutemov@linux.intel.com
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- arch/alpha/kernel/process.c      |    1 -
- arch/arc/kernel/process.c        |    3 +++
- arch/arm/kernel/process.c        |    1 -
- arch/arm/mach-gemini/board-dt.c  |    3 ++-
- arch/arm64/kernel/idle.c         |    1 -
- arch/csky/kernel/process.c       |    1 -
- arch/csky/kernel/smp.c           |    2 +-
- arch/hexagon/kernel/process.c    |    1 -
- arch/ia64/kernel/process.c       |    1 +
- arch/microblaze/kernel/process.c |    1 -
- arch/mips/kernel/idle.c          |    8 +++-----
- arch/nios2/kernel/process.c      |    1 -
- arch/openrisc/kernel/process.c   |    1 +
- arch/parisc/kernel/process.c     |    2 --
- arch/powerpc/kernel/idle.c       |    5 ++---
- arch/riscv/kernel/process.c      |    1 -
- arch/s390/kernel/idle.c          |    1 -
- arch/sh/kernel/idle.c            |    1 +
- arch/sparc/kernel/leon_pmc.c     |    4 ++++
- arch/sparc/kernel/process_32.c   |    1 -
- arch/sparc/kernel/process_64.c   |    3 ++-
- arch/um/kernel/process.c         |    1 -
- arch/x86/coco/tdx/tdx.c          |    3 +++
- arch/x86/kernel/process.c        |   15 ++++-----------
- arch/xtensa/kernel/process.c     |    1 +
- kernel/sched/idle.c              |    2 --
- 26 files changed, 28 insertions(+), 37 deletions(-)
+ arch/x86/coco/tdx/tdcall.S        |   13 -------------
+ arch/x86/coco/tdx/tdx.c           |   23 ++++-------------------
+ arch/x86/include/asm/shared/tdx.h |    1 -
+ 3 files changed, 4 insertions(+), 33 deletions(-)
 
---- a/arch/alpha/kernel/process.c
-+++ b/arch/alpha/kernel/process.c
-@@ -57,7 +57,6 @@ EXPORT_SYMBOL(pm_power_off);
- void arch_cpu_idle(void)
- {
- 	wtint(0);
--	raw_local_irq_enable();
- }
+--- a/arch/x86/coco/tdx/tdcall.S
++++ b/arch/x86/coco/tdx/tdcall.S
+@@ -139,19 +139,6 @@ SYM_FUNC_START(__tdx_hypercall)
  
- void arch_cpu_idle_dead(void)
---- a/arch/arc/kernel/process.c
-+++ b/arch/arc/kernel/process.c
-@@ -114,6 +114,8 @@ void arch_cpu_idle(void)
- 		"sleep %0	\n"
- 		:
- 		:"I"(arg)); /* can't be "r" has to be embedded const */
-+
-+	raw_local_irq_disable();
- }
+ 	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
  
- #else	/* ARC700 */
-@@ -122,6 +124,7 @@ void arch_cpu_idle(void)
- {
- 	/* sleep, but enable both set E1/E2 (levels of interrupts) before committing */
- 	__asm__ __volatile__("sleep 0x3	\n");
-+	raw_local_irq_disable();
- }
+-	/*
+-	 * For the idle loop STI needs to be called directly before the TDCALL
+-	 * that enters idle (EXIT_REASON_HLT case). STI instruction enables
+-	 * interrupts only one instruction later. If there is a window between
+-	 * STI and the instruction that emulates the HALT state, there is a
+-	 * chance for interrupts to happen in this window, which can delay the
+-	 * HLT operation indefinitely. Since this is the not the desired
+-	 * result, conditionally call STI before TDCALL.
+-	 */
+-	testq $TDX_HCALL_ISSUE_STI, %rsi
+-	jz .Lskip_sti
+-	sti
+-.Lskip_sti:
+ 	tdcall
  
- #endif
---- a/arch/arm/kernel/process.c
-+++ b/arch/arm/kernel/process.c
-@@ -78,7 +78,6 @@ void arch_cpu_idle(void)
- 		arm_pm_idle();
- 	else
- 		cpu_do_idle();
--	raw_local_irq_enable();
- }
- 
- void arch_cpu_idle_prepare(void)
---- a/arch/arm/mach-gemini/board-dt.c
-+++ b/arch/arm/mach-gemini/board-dt.c
-@@ -42,8 +42,9 @@ static void gemini_idle(void)
- 	 */
- 
- 	/* FIXME: Enabling interrupts here is racy! */
--	local_irq_enable();
-+	raw_local_irq_enable();
- 	cpu_do_idle();
-+	raw_local_irq_disable();
- }
- 
- static void __init gemini_init_machine(void)
---- a/arch/arm64/kernel/idle.c
-+++ b/arch/arm64/kernel/idle.c
-@@ -42,5 +42,4 @@ void noinstr arch_cpu_idle(void)
- 	 * tricks
- 	 */
- 	cpu_do_idle();
--	raw_local_irq_enable();
- }
---- a/arch/csky/kernel/process.c
-+++ b/arch/csky/kernel/process.c
-@@ -101,6 +101,5 @@ void arch_cpu_idle(void)
- #ifdef CONFIG_CPU_PM_STOP
- 	asm volatile("stop\n");
- #endif
--	raw_local_irq_enable();
- }
- #endif
---- a/arch/csky/kernel/smp.c
-+++ b/arch/csky/kernel/smp.c
-@@ -314,7 +314,7 @@ void arch_cpu_idle_dead(void)
- 	while (!secondary_stack)
- 		arch_cpu_idle();
- 
--	local_irq_disable();
-+	raw_local_irq_disable();
- 
- 	asm volatile(
- 		"mov	sp, %0\n"
---- a/arch/hexagon/kernel/process.c
-+++ b/arch/hexagon/kernel/process.c
-@@ -44,7 +44,6 @@ void arch_cpu_idle(void)
- {
- 	__vmwait();
- 	/*  interrupts wake us up, but irqs are still disabled */
--	raw_local_irq_enable();
- }
- 
- /*
---- a/arch/ia64/kernel/process.c
-+++ b/arch/ia64/kernel/process.c
-@@ -241,6 +241,7 @@ void arch_cpu_idle(void)
- 		(*mark_idle)(1);
- 
- 	raw_safe_halt();
-+	raw_local_irq_disable();
- 
- 	if (mark_idle)
- 		(*mark_idle)(0);
---- a/arch/microblaze/kernel/process.c
-+++ b/arch/microblaze/kernel/process.c
-@@ -138,5 +138,4 @@ int dump_fpu(struct pt_regs *regs, elf_f
- 
- void arch_cpu_idle(void)
- {
--       raw_local_irq_enable();
- }
---- a/arch/mips/kernel/idle.c
-+++ b/arch/mips/kernel/idle.c
-@@ -33,13 +33,13 @@ static void __cpuidle r3081_wait(void)
- {
- 	unsigned long cfg = read_c0_conf();
- 	write_c0_conf(cfg | R30XX_CONF_HALT);
--	raw_local_irq_enable();
- }
- 
- void __cpuidle r4k_wait(void)
- {
- 	raw_local_irq_enable();
- 	__r4k_wait();
-+	raw_local_irq_disable();
- }
- 
- /*
-@@ -57,7 +57,6 @@ void __cpuidle r4k_wait_irqoff(void)
- 		"	.set	arch=r4000	\n"
- 		"	wait			\n"
- 		"	.set	pop		\n");
--	raw_local_irq_enable();
- }
- 
- /*
-@@ -77,7 +76,6 @@ static void __cpuidle rm7k_wait_irqoff(v
- 		"	wait						\n"
- 		"	mtc0	$1, $12		# stalls until W stage	\n"
- 		"	.set	pop					\n");
--	raw_local_irq_enable();
- }
- 
- /*
-@@ -103,6 +101,8 @@ static void __cpuidle au1k_wait(void)
- 	"	nop				\n"
- 	"	.set	pop			\n"
- 	: : "r" (au1k_wait), "r" (c0status));
-+
-+	raw_local_irq_disable();
- }
- 
- static int __initdata nowait;
-@@ -245,8 +245,6 @@ void arch_cpu_idle(void)
- {
- 	if (cpu_wait)
- 		cpu_wait();
--	else
--		raw_local_irq_enable();
- }
- 
- #ifdef CONFIG_CPU_IDLE
---- a/arch/nios2/kernel/process.c
-+++ b/arch/nios2/kernel/process.c
-@@ -33,7 +33,6 @@ EXPORT_SYMBOL(pm_power_off);
- 
- void arch_cpu_idle(void)
- {
--	raw_local_irq_enable();
- }
- 
- /*
---- a/arch/openrisc/kernel/process.c
-+++ b/arch/openrisc/kernel/process.c
-@@ -102,6 +102,7 @@ void arch_cpu_idle(void)
- 	raw_local_irq_enable();
- 	if (mfspr(SPR_UPR) & SPR_UPR_PMP)
- 		mtspr(SPR_PMR, mfspr(SPR_PMR) | SPR_PMR_DME);
-+	raw_local_irq_disable();
- }
- 
- void (*pm_power_off)(void) = NULL;
---- a/arch/parisc/kernel/process.c
-+++ b/arch/parisc/kernel/process.c
-@@ -187,8 +187,6 @@ void arch_cpu_idle_dead(void)
- 
- void __cpuidle arch_cpu_idle(void)
- {
--	raw_local_irq_enable();
--
- 	/* nop on real hardware, qemu will idle sleep. */
- 	asm volatile("or %%r10,%%r10,%%r10\n":::);
- }
---- a/arch/powerpc/kernel/idle.c
-+++ b/arch/powerpc/kernel/idle.c
-@@ -51,10 +51,9 @@ void arch_cpu_idle(void)
- 		 * Some power_save functions return with
- 		 * interrupts enabled, some don't.
- 		 */
--		if (irqs_disabled())
--			raw_local_irq_enable();
-+		if (!irqs_disabled())
-+			raw_local_irq_disable();
- 	} else {
--		raw_local_irq_enable();
- 		/*
- 		 * Go into low thread priority and possibly
- 		 * low power mode.
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -39,7 +39,6 @@ extern asmlinkage void ret_from_kernel_t
- void arch_cpu_idle(void)
- {
- 	cpu_do_idle();
--	raw_local_irq_enable();
- }
- 
- void __show_regs(struct pt_regs *regs)
---- a/arch/s390/kernel/idle.c
-+++ b/arch/s390/kernel/idle.c
-@@ -66,7 +66,6 @@ void arch_cpu_idle(void)
- 	idle->idle_count++;
- 	account_idle_time(cputime_to_nsecs(idle_time));
- 	raw_write_seqcount_end(&idle->seqcount);
--	raw_local_irq_enable();
- }
- 
- static ssize_t show_idle_count(struct device *dev,
---- a/arch/sh/kernel/idle.c
-+++ b/arch/sh/kernel/idle.c
-@@ -25,6 +25,7 @@ void default_idle(void)
- 	raw_local_irq_enable();
- 	/* Isn't this racy ? */
- 	cpu_sleep();
-+	raw_local_irq_disable();
- 	clear_bl_bit();
- }
- 
---- a/arch/sparc/kernel/leon_pmc.c
-+++ b/arch/sparc/kernel/leon_pmc.c
-@@ -57,6 +57,8 @@ static void pmc_leon_idle_fixup(void)
- 		"lda	[%0] %1, %%g0\n"
- 		:
- 		: "r"(address), "i"(ASI_LEON_BYPASS));
-+
-+	raw_local_irq_disable();
- }
- 
- /*
-@@ -70,6 +72,8 @@ static void pmc_leon_idle(void)
- 
- 	/* For systems without power-down, this will be no-op */
- 	__asm__ __volatile__ ("wr	%g0, %asr19\n\t");
-+
-+	raw_local_irq_disable();
- }
- 
- /* Install LEON Power Down function */
---- a/arch/sparc/kernel/process_32.c
-+++ b/arch/sparc/kernel/process_32.c
-@@ -71,7 +71,6 @@ void arch_cpu_idle(void)
- {
- 	if (sparc_idle)
- 		(*sparc_idle)();
--	raw_local_irq_enable();
- }
- 
- /* XXX cli/sti -> local_irq_xxx here, check this works once SMP is fixed. */
---- a/arch/sparc/kernel/process_64.c
-+++ b/arch/sparc/kernel/process_64.c
-@@ -59,7 +59,6 @@ void arch_cpu_idle(void)
- {
- 	if (tlb_type != hypervisor) {
- 		touch_nmi_watchdog();
--		raw_local_irq_enable();
- 	} else {
- 		unsigned long pstate;
- 
-@@ -90,6 +89,8 @@ void arch_cpu_idle(void)
- 			"wrpr %0, %%g0, %%pstate"
- 			: "=&r" (pstate)
- 			: "i" (PSTATE_IE));
-+
-+		raw_local_irq_disable();
- 	}
- }
- 
---- a/arch/um/kernel/process.c
-+++ b/arch/um/kernel/process.c
-@@ -216,7 +216,6 @@ void arch_cpu_idle(void)
- {
- 	cpu_tasks[current_thread_info()->cpu].pid = os_getpid();
- 	um_idle_sleep();
--	raw_local_irq_enable();
- }
- 
- int __cant_sleep(void) {
+ 	/*
 --- a/arch/x86/coco/tdx/tdx.c
 +++ b/arch/x86/coco/tdx/tdx.c
-@@ -178,6 +178,9 @@ void __cpuidle tdx_safe_halt(void)
+@@ -124,7 +124,7 @@ static u64 get_cc_mask(void)
+ 	return BIT_ULL(gpa_width - 1);
+ }
+ 
+-static u64 __cpuidle __halt(const bool irq_disabled, const bool do_sti)
++static u64 __cpuidle __halt(const bool irq_disabled)
+ {
+ 	struct tdx_hypercall_args args = {
+ 		.r10 = TDX_HYPERCALL_STANDARD,
+@@ -144,20 +144,14 @@ static u64 __cpuidle __halt(const bool i
+ 	 * can keep the vCPU in virtual HLT, even if an IRQ is
+ 	 * pending, without hanging/breaking the guest.
  	 */
- 	if (__halt(irq_disabled, do_sti))
+-	return __tdx_hypercall(&args, do_sti ? TDX_HCALL_ISSUE_STI : 0);
++	return __tdx_hypercall(&args, 0);
+ }
+ 
+ static bool handle_halt(void)
+ {
+-	/*
+-	 * Since non safe halt is mainly used in CPU offlining
+-	 * and the guest will always stay in the halt state, don't
+-	 * call the STI instruction (set do_sti as false).
+-	 */
+ 	const bool irq_disabled = irqs_disabled();
+-	const bool do_sti = false;
+ 
+-	if (__halt(irq_disabled, do_sti))
++	if (__halt(irq_disabled))
+ 		return false;
+ 
+ 	return true;
+@@ -165,22 +159,13 @@ static bool handle_halt(void)
+ 
+ void __cpuidle tdx_safe_halt(void)
+ {
+-	 /*
+-	  * For do_sti=true case, __tdx_hypercall() function enables
+-	  * interrupts using the STI instruction before the TDCALL. So
+-	  * set irq_disabled as false.
+-	  */
+ 	const bool irq_disabled = false;
+-	const bool do_sti = true;
+ 
+ 	/*
+ 	 * Use WARN_ONCE() to report the failure.
+ 	 */
+-	if (__halt(irq_disabled, do_sti))
++	if (__halt(irq_disabled))
  		WARN_ONCE(1, "HLT instruction emulation failed\n");
-+
-+	/* XXX I can't make sense of what @do_sti actually does */
-+	raw_local_irq_disable();
+-
+-	/* XXX I can't make sense of what @do_sti actually does */
+-	raw_local_irq_disable();
  }
  
  static bool read_msr(struct pt_regs *regs)
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -699,6 +699,7 @@ EXPORT_SYMBOL(boot_option_idle_override)
- void __cpuidle default_idle(void)
- {
- 	raw_safe_halt();
-+	raw_local_irq_disable();
- }
- #if defined(CONFIG_APM_MODULE) || defined(CONFIG_HALTPOLL_CPUIDLE_MODULE)
- EXPORT_SYMBOL(default_idle);
-@@ -804,13 +805,7 @@ static void amd_e400_idle(void)
+--- a/arch/x86/include/asm/shared/tdx.h
++++ b/arch/x86/include/asm/shared/tdx.h
+@@ -8,7 +8,6 @@
+ #define TDX_HYPERCALL_STANDARD  0
  
- 	default_idle();
+ #define TDX_HCALL_HAS_OUTPUT	BIT(0)
+-#define TDX_HCALL_ISSUE_STI	BIT(1)
  
--	/*
--	 * The switch back from broadcast mode needs to be called with
--	 * interrupts disabled.
--	 */
--	raw_local_irq_disable();
- 	tick_broadcast_exit();
--	raw_local_irq_enable();
- }
- 
- /*
-@@ -849,12 +844,10 @@ static __cpuidle void mwait_idle(void)
- 		}
- 
- 		__monitor((void *)&current_thread_info()->flags, 0, 0);
--		if (!need_resched())
-+		if (!need_resched()) {
- 			__sti_mwait(0, 0);
--		else
--			raw_local_irq_enable();
--	} else {
--		raw_local_irq_enable();
-+			raw_local_irq_disable();
-+		}
- 	}
- 	__current_clr_polling();
- }
---- a/arch/xtensa/kernel/process.c
-+++ b/arch/xtensa/kernel/process.c
-@@ -183,6 +183,7 @@ void coprocessor_flush_release_all(struc
- void arch_cpu_idle(void)
- {
- 	platform_idle();
-+	raw_local_irq_disable();
- }
- 
- /*
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -79,7 +79,6 @@ void __weak arch_cpu_idle_dead(void) { }
- void __weak arch_cpu_idle(void)
- {
- 	cpu_idle_force_poll = 1;
--	raw_local_irq_enable();
- }
- 
- /**
-@@ -96,7 +95,6 @@ void __cpuidle default_idle_call(void)
- 
- 		cpuidle_rcu_enter();
- 		arch_cpu_idle();
--		raw_local_irq_disable();
- 		cpuidle_rcu_exit();
- 
- 		start_critical_timings();
+ #define TDX_CPUID_LEAF_ID	0x21
+ #define TDX_IDENT		"IntelTDX    "
 
 
