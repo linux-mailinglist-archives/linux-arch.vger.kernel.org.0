@@ -2,51 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AD8544CE1
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jun 2022 15:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E8A544D06
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jun 2022 15:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238750AbiFINCa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jun 2022 09:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S245483AbiFINGe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jun 2022 09:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbiFINC3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jun 2022 09:02:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87B527A;
-        Thu,  9 Jun 2022 06:02:27 -0700 (PDT)
+        with ESMTP id S236268AbiFINGc (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jun 2022 09:06:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724408215A;
+        Thu,  9 Jun 2022 06:06:30 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id A52461FE71;
-        Thu,  9 Jun 2022 13:02:26 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id EE7B921F31;
+        Thu,  9 Jun 2022 13:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1654779746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1654779989; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=WNgY7GyrprNl76LhtyM4yyAr1//LVOR4uCT8xLqGCE8=;
-        b=ojtY10eQLedQ1p8W7bkgtPGLkS2AZjpFLq6Jm7M5r6QmnKTONMm4DEE4c/QdWiGdnShevp
-        eIN6ALkkVVj/WhUF02Ld8MHz00y8tRrFQ0iNR/EUdLO4UR9+Vq8VAuuJcSid16nMNGAGa3
-        XvOmhnJPAVDKUKq8/PtY3J2tLln4dQU=
+        bh=fQ7/fX+AXX7RSe4KqEkRum0uc4vC19BTUP6nq2wTOec=;
+        b=o28ZaXYpRsbDNeH7DdY3dJH3Fnc3dlxZT8L+x/2aFmo5tE4BAEDzQGW4+i3DDhNGrDHekt
+        G23+f/oOyTepRO03yIh1gixSASehX2C07pg1fm0i3R3KDgn22PhYw8V9jvCq8nE2YIN+/O
+        p3FQSqV1HR0kVCZZzDry3RvUltYRjYI=
 Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6EA862C141;
-        Thu,  9 Jun 2022 13:02:21 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 15:02:20 +0200
+        by relay2.suse.de (Postfix) with ESMTPS id CEE382C141;
+        Thu,  9 Jun 2022 13:06:27 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 15:06:00 +0200
 From:   Petr Mladek <pmladek@suse.com>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
         aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
         agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
         svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
@@ -68,13 +67,13 @@ Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
         jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
         yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
         linux@rasmusvillemoes.dk, rostedt@goodmis.org,
-        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jpoimboe@kernel.org,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
         linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
@@ -92,19 +91,18 @@ Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
 Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
-Message-ID: <YqHvXFdIJfvUDI6e@alley>
+Message-ID: <YqHwOFg/WlMqe8/Z@alley>
 References: <20220608142723.103523089@infradead.org>
  <20220608144517.444659212@infradead.org>
  <YqG6URbihTNCk9YR@alley>
  <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
- <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
+In-Reply-To: <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -112,27 +110,43 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu 2022-06-09 20:30:58, Sergey Senozhatsky wrote:
-> My emails are getting rejected... Let me try web-interface
-
-Bad day for mail sending. I have problems as well ;-)
-
-> Kudos to Petr for the questions and thanks to PeterZ for the answers.
+On Thu 2022-06-09 12:02:04, Peter Zijlstra wrote:
+> On Thu, Jun 09, 2022 at 11:16:46AM +0200, Petr Mladek wrote:
+> > On Wed 2022-06-08 16:27:47, Peter Zijlstra wrote:
+> > > The problem, per commit fc98c3c8c9dc ("printk: use rcuidle console
+> > > tracepoint"), was printk usage from the cpuidle path where RCU was
+> > > already disabled.
+> > > 
+> > Does this "prevent" calling printk() a safe way in code with
+> > RCU disabled?
 > 
-> On Thu, Jun 9, 2022 at 7:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > This is the tracepoint used to spool all of printk into ftrace, I
-> > suspect there's users, but I haven't used it myself.
+> On x86_64, yes. Other architectures, less so.
 > 
-> I'm somewhat curious whether we can actually remove that trace event.
+> Specifically, the objtool noinstr validation pass will warn at build
+> time (DEBUG_ENTRY=y) if any noinstr/cpuidle code does a call to
+> non-vetted code like printk().
+> 
+> At the same time; there's a few hacks that allow WARN to work, but
+> mostly if you hit WARN in entry/noinstr you get to keep the pieces in
+> any case.
+> 
+> On other architecture we'll need to rely on runtime coverage with
+> PROVE_RCU. That is, if a splat like in the above mentioned commit
+> happens again, we'll need to fix it by adjusting the callchain, not by
+> mucking about with RCU state.
 
-Good question.
+Makes sense. Feel free to use for this patch:
 
-Well, I think that it might be useful. It allows to see trace and
-printk messages together.
+Acked-by: Petr Mladek <pmladek@suse.com>
 
-It was ugly when it was in the console code. The new location
-in vprintk_store() allows to have it even "correctly" sorted
-(timestamp) against other tracing messages.
+> > Therefore if this patch allows to remove some tricky tracing
+> > code then it might be worth it. But if trace_console_rcuidle()
+> > variant is still going to be available then I would keep using it.
+> 
+> My ultimate goal is to delete trace_.*_rcuidle() and RCU_NONIDLE()
+> entirely. We're close, but not quite there yet.
+
+I keep my fingers crossed.
 
 Best Regards,
 Petr
