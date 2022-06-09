@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2E35447CA
-	for <lists+linux-arch@lfdr.de>; Thu,  9 Jun 2022 11:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB355447F5
+	for <lists+linux-arch@lfdr.de>; Thu,  9 Jun 2022 11:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242758AbiFIJlU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 9 Jun 2022 05:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
+        id S235519AbiFIJsb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 9 Jun 2022 05:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242254AbiFIJlT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jun 2022 05:41:19 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3F14B40B;
-        Thu,  9 Jun 2022 02:41:16 -0700 (PDT)
+        with ESMTP id S242882AbiFIJsU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 9 Jun 2022 05:48:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F3E23A3D8;
+        Thu,  9 Jun 2022 02:48:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jxhFyRA7gcpqWtRQyvyD3abswc2PbVc4FSoswUV5Ukc=; b=eTVis02Li1gUMyvYNvhtQOfPjM
-        7jPK+tlnMQu8YlONdKYuGGzg5f4OtA6n+DLuvaVtWLmmwBKEcjK3gJJFZyuUsx9s+WrgcdXDtEGo5
-        n/0BitYa/9Tv9a5PHDy4FBaJ0usEOIIGYMMcR/SAKx38GPSteGLT2qjJKdgzgVt9Wb+/EeSMk/GCj
-        o7MIldwwpKDLAKlNGDE/FUzTM2RKPEJfDUWHFxb549VYWV718uWBpBWrwfwVc4Y51nI2XmOQdPNke
-        dbtUv13RdN1xprVJqbJ/lLZKhjUqu4j3NGqJXLsSZjtm/Jap7nXVhvEByTNVwWiNq35HcNs4n5id9
-        tqC7XoNQ==;
+        bh=9jA4mchnYQoJ5XaXo73/qgoc6iaW5C3P1k7XaYKsS1U=; b=cB9XFjQVxWqfDyzeN0qaxTZuLD
+        YLcvVXkDGRGNOtMLtEgH+zL1QwGa+jRQrKiDu6o+KwcqUIios781clMIKdQSQtEcXojjpXyjmvj46
+        euyjd4m+n/z+pXAWpiww5AHKVJISuO8dbwfn2kdK+vnbm4iQMh9u58KvobfYp6DKnGfTofnM78Yt0
+        Jz76LJDB6p5dvl91aPCez/Dj+sFAkswEne+HjI0PWGc0G7Uh6QasF9s0y9AlvQ8RjyVaUQ4ilXQ62
+        Z4qivKfe5pGVxrpCjV/g6X6ndctS6ICj5/6oYIabFd8D02kUsNuFDdK3DNDO+pifvTslSQOhwvIep
+        NfI5oq7A==;
 Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nzEen-006Kx6-EP; Thu, 09 Jun 2022 09:40:50 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nzEli-00DR5Q-VZ; Thu, 09 Jun 2022 09:47:59 +0000
 Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B092F981287; Thu,  9 Jun 2022 11:40:46 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 11:40:46 +0200
+        id 100CA981287; Thu,  9 Jun 2022 11:47:58 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 11:47:57 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Richard Henderson <rth@twiddle.net>,
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Richard Henderson <rth@twiddle.net>,
         Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
         Matt Turner <mattst88@gmail.com>,
         Vineet Gupta <vgupta@kernel.org>,
@@ -44,7 +44,6 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         Sascha Hauer <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Tony Lindgren <tony@atomide.com>,
         Kevin Hilman <khilman@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
@@ -154,14 +153,15 @@ Cc:     Richard Henderson <rth@twiddle.net>,
         "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>, rcu@vger.kernel.org
 Subject: Re: [PATCH 33/36] cpuidle,omap3: Use WFI for omap3_pm_idle()
-Message-ID: <YqHAHpGVe10I8O1z@worktop.programming.kicks-ass.net>
+Message-ID: <YqHBzbAiqaZeoipw@worktop.programming.kicks-ass.net>
 References: <20220608142723.103523089@infradead.org>
  <20220608144518.010587032@infradead.org>
  <CAK8P3a0g-fNu9=BUECSXcNeWT7XWHQMnSXZE-XYE+5eakHxKxA@mail.gmail.com>
+ <YqGjqgSrTRseJW6M@atomide.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a0g-fNu9=BUECSXcNeWT7XWHQMnSXZE-XYE+5eakHxKxA@mail.gmail.com>
+In-Reply-To: <YqGjqgSrTRseJW6M@atomide.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -172,26 +172,26 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 06:28:33PM +0200, Arnd Bergmann wrote:
-> On Wed, Jun 8, 2022 at 4:27 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > arch_cpu_idle() is a very simple idle interface and exposes only a
-> > single idle state and is expected to not require RCU and not do any
-> > tracing/instrumentation.
-> >
-> > As such, omap_sram_idle() is not a valid implementation. Replace it
-> > with the simple (shallow) omap3_do_wfi() call. Leaving the more
-> > complicated idle states for the cpuidle driver.
-> >
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Thu, Jun 09, 2022 at 10:39:22AM +0300, Tony Lindgren wrote:
+> * Arnd Bergmann <arnd@arndb.de> [220608 18:18]:
+> > On Wed, Jun 8, 2022 at 4:27 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > arch_cpu_idle() is a very simple idle interface and exposes only a
+> > > single idle state and is expected to not require RCU and not do any
+> > > tracing/instrumentation.
+> > >
+> > > As such, omap_sram_idle() is not a valid implementation. Replace it
+> > > with the simple (shallow) omap3_do_wfi() call. Leaving the more
+> > > complicated idle states for the cpuidle driver.
 > 
-> I see similar code in omap2:
-> 
-> omap2_pm_idle()
->  -> omap2_enter_full_retention()
->      -> omap2_sram_suspend()
-> 
-> Is that code path safe to use without RCU or does it need a similar change?
+> Agreed it makes sense to limit deeper idle states to cpuidle. Hopefully
+> there is some informative splat for attempting to use arch_cpu_ide()
+> for deeper idle states :)
 
-It needs a similar change, clearly I was running on fumes to not have
-found that when grepping around the omap code :/
+The arch_cpu_idle() interface doesn't allow one to express a desire for
+deeper states. I'm not sure how anyone could even attempt this.
+
+But given what OMAP needs to go deeper, this would involve things that
+require RCU, combine that with the follow up patches that rip out all
+the trace_.*_rcuidle() hackery from the power and clock domain code,
+PROVE_RCU should scream if anybody were to attempt it.
