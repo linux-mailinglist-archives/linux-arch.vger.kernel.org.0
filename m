@@ -2,91 +2,86 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032CC546679
-	for <lists+linux-arch@lfdr.de>; Fri, 10 Jun 2022 14:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0794754678F
+	for <lists+linux-arch@lfdr.de>; Fri, 10 Jun 2022 15:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348689AbiFJMSN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Fri, 10 Jun 2022 08:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S231667AbiFJNqe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 10 Jun 2022 09:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345027AbiFJMSL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jun 2022 08:18:11 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C47B6272379
-        for <linux-arch@vger.kernel.org>; Fri, 10 Jun 2022 05:18:08 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-317-aDi4xA9AOVCCz2X-8OmFHQ-1; Fri, 10 Jun 2022 13:18:05 +0100
-X-MC-Unique: aDi4xA9AOVCCz2X-8OmFHQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Fri, 10 Jun 2022 13:18:03 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Fri, 10 Jun 2022 13:18:03 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Alexander Lobakin' <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        with ESMTP id S229542AbiFJNqd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 10 Jun 2022 09:46:33 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9AE22B35;
+        Fri, 10 Jun 2022 06:46:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654868792; x=1686404792;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ravTgUnKG4C+bKIq95tFE0q0c60bszYzURjmYJ4owCY=;
+  b=K7AyFHdPnXsk0KEWuJAxX7QZT133eEFKuejLuhSP4XcKmarPFG2JzYHx
+   sLO8v4Dve6m07IAY2r4OUBjsgGLgC5n4FGaHB4U7pWlfMvY1HsI80G7YL
+   Yi5cB2vTAMPycmSQyaerOQe+y/gEeUCTrqKQjZBekkYnlS3cvy3h5p/gT
+   Qj4GfnBjhjKsrVGSXh/UfyJZZdH8R4mc/PmhqEB8Q7QF0CuzKYuscx6Ly
+   t5jLOSQDb4y/Um+aZo9Fkd3JaMhn0NahioElwSXtoSmSfl389lcVYIOSn
+   NHuS/7CZhZX3GCNrmb+9RO/9pdDWLZt8Thk+ybxU7fFCAqqFpB/HFEcmD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275165390"
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="275165390"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 06:46:32 -0700
+X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
+   d="scan'208";a="649839598"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 06:46:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nzexy-000YpF-0z;
+        Fri, 10 Jun 2022 16:46:22 +0300
+Date:   Fri, 10 Jun 2022 16:46:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Matt Turner <mattst88@gmail.com>,
         Brian Cain <bcain@quicinc.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
         "David S. Miller" <davem@davemloft.net>,
         Kees Cook <keescook@chromium.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
         Tony Luck <tony.luck@intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Subject: RE: [PATCH v2 1/6] ia64, processor: fix -Wincompatible-pointer-types
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 1/6] ia64, processor: fix -Wincompatible-pointer-types
  in ia64_get_irr()
-Thread-Topic: [PATCH v2 1/6] ia64, processor: fix -Wincompatible-pointer-types
- in ia64_get_irr()
-Thread-Index: AQHYfL5z40oI9Qjgz0qz+n7lpkip7a1Ijjiw
-Date:   Fri, 10 Jun 2022 12:18:03 +0000
-Message-ID: <8711f7d6bdc148bd916d87515e71b3c2@AcuMS.aculab.com>
+Message-ID: <YqNLLTAY0t62Jxq4@smile.fi.intel.com>
 References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
  <20220610113427.908751-2-alexandr.lobakin@intel.com>
-In-Reply-To: <20220610113427.908751-2-alexandr.lobakin@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610113427.908751-2-alexandr.lobakin@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Alexander Lobakin
-> Sent: 10 June 2022 12:34
-> 
+On Fri, Jun 10, 2022 at 01:34:22PM +0200, Alexander Lobakin wrote:
 > test_bit(), as any other bitmap op, takes `unsigned long *` as a
 > second argument (pointer to the actual bitmap), as any bitmap
 > itself is an array of unsigned longs. However, the ia64_get_irr()
@@ -99,13 +94,8 @@ From: Alexander Lobakin
 > Define @irr as `unsigned long` to fix that. That implies no
 > functional changes. Has been hidden for 16 years!
 
-Wouldn't it be better to just test the bit?
-As in:
-	return irr & (1ull << bit);
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-    David
-
-> 
 > Fixes: a58786917ce2 ("[IA64] avoid broken SAL_CACHE_FLUSH implementations")
 > Cc: stable@vger.kernel.org # 2.6.16+
 > Reported-by: kernel test robot <lkp@intel.com>
@@ -124,13 +114,15 @@ As in:
 >  	unsigned int bit = vector % 64;
 > -	u64 irr;
 > +	unsigned long irr;
-> 
+>  
 >  	switch (reg) {
 >  	case 0: irr = ia64_getreg(_IA64_REG_CR_IRR0); break;
-> --
+> -- 
 > 2.36.1
+> 
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
