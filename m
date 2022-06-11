@@ -2,81 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F125473A5
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Jun 2022 12:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCAD54772C
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Jun 2022 20:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiFKKPl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Jun 2022 06:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S230382AbiFKSsc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Jun 2022 14:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiFKKPk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Jun 2022 06:15:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF541209F;
-        Sat, 11 Jun 2022 03:15:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5CAC60C14;
-        Sat, 11 Jun 2022 10:15:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975C4C34116;
-        Sat, 11 Jun 2022 10:15:35 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [GIT PULL] LoongArch fixes for v5.19-rc2
-Date:   Sat, 11 Jun 2022 18:17:14 +0800
-Message-Id: <20220611101714.2623823-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S229672AbiFKSs3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Jun 2022 14:48:29 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B8F46672;
+        Sat, 11 Jun 2022 11:48:25 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 25BIm5kL003581;
+        Sun, 12 Jun 2022 03:48:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 25BIm5kL003581
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1654973286;
+        bh=OJU24WbqmimMYRsIh1ewIsGhAVbQLx3txvyBGLHeO1k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=yPWnpNrh1S682UMdCy2xRKV0nrfelc88TI16XUiek8cvMXVCNlTxhriiqQO+5ADC1
+         dg6rQzE95S0VmLCo3BAi+37VggRNO3qFuQOYznZiQ1C6WUOuoWrM3B5XcHWwxyQSBi
+         56lNT0/EEJwIClXLSEMv0e1JOTdzqZUoPKOJVDYO6325v8W4ETHVohlGhccGOYVXST
+         nsOYnfuN9hFINEuEoxEDpOMb2MGq9/0/1cezB/hYqTP7l62zbTytCoYFNcanmOOo1w
+         3G5bjTr1dxR6EO0ewir9ONz54qAFMyAmoZtie4zDQ0hmU7iWdP41qsvLni41w90wtu
+         NCC8bubAl31ww==
+X-Nifty-SrcIP: [209.85.221.54]
+Received: by mail-wr1-f54.google.com with SMTP id c21so2437729wrb.1;
+        Sat, 11 Jun 2022 11:48:05 -0700 (PDT)
+X-Gm-Message-State: AOAM530EDqZ9bqx6bFmc7UXJccoCaY6KJto6bpuQZ/mBcXPUa9aN+ZT3
+        v10+F3qbAf9DChkSfxFI2t2z34IX4vTDoUQpQ/k=
+X-Google-Smtp-Source: ABdhPJxbHanpX6AbHetOK3rMz1pMBQZREhQ/9hwWAadZPeVmpGmRxmrP9S3VU2JRwZBzpQMKmxbHB5lWZJPn+RgOjgM=
+X-Received: by 2002:a05:6000:156d:b0:210:3135:ce1c with SMTP id
+ 13-20020a056000156d00b002103135ce1cmr50144120wrz.409.1654973284279; Sat, 11
+ Jun 2022 11:48:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610183236.1272216-1-masahiroy@kernel.org> <20220610183236.1272216-4-masahiroy@kernel.org>
+In-Reply-To: <20220610183236.1272216-4-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 12 Jun 2022 03:47:27 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS-VYZ3G3-TmmTQSNuanGsufkoWTv32HNKdDkE+7-6mcg@mail.gmail.com>
+Message-ID: <CAK7LNAS-VYZ3G3-TmmTQSNuanGsufkoWTv32HNKdDkE+7-6mcg@mail.gmail.com>
+Subject: Re: [PATCH 3/7] kbuild: generate struct kernel_symbol by modpost
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules <linux-modules@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+On Sat, Jun 11, 2022 at 3:34 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
+> CONFIG_MODULE_REL_CRCS") made the module versioning implementation
+> arch-agnostic; now all the version CRCs are generated by modpost as C
+> code whether the EXPORT_SYMBOL() is placed in *.c or *.S.
+>
+> Doing similar for the entire data structure of EXPORT_SYMBOL() makes
+> further cleanups possible.
+>
+> This commit splits EXPORT_SYMBOL() compilation into two stages.
+>
+> When a source file is compiled, EXPORT_SYMBOL() is converted into a
+> dummy symbol in the .discard.export_symbol section.
+>
+> For example,
+>
+>     EXPORT_SYMBOL(foo);
+>     EXPORT_SYMBOL_NS_GPL(bar, BAR_NAMESPACE);
+>
+> will be expanded into the following assembly code:
+>
+>     .section .discard.export_symbol
+>     __export_symbol.foo:
+>         .asciz ""
+>     .previous
+>
+>     .section .discard.export_symbol
+>     __export_symbol_gpl.bar:
+>         .asciz "BAR_NAMESPACE"
+>     .previous
+>
+> They are just markers to tell modpost the name, license, and namespace
+> of the symbols. They will be dropped from the final vmlinux and modules
+> because the section name starts with ".discard.".
+>
+> Then, modpost extracts all the information of EXPORT_SYMBOL() from the
+> .discard.export_symbol section, then generates C code:
+>
+>     KSYMTAB_ENTRY(foo, "", "");
+>     KSYMTAB_ENTRY(bar, "_gpl", "BAR_NAMESPACE");
+>
+> KSYMTAB_ENTRY() is expanded to struct kernel_symbol that will be linked
+> to the vmlinux or a module.
+>
+> With this change, EXPORT_SYMBOL() works in the same way for *.c and *.S
+> files, providing the following benefits.
+>
+> [1] Deprecate EXPORT_DATA_SYMBOL()
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
-are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-5.19-1
+Sorry, please let me take back this.
 
-for you to fetch changes up to 5c95fe8b02011c3b69173e0d86aff6d4c2798601:
+I completely missed how linkage for ia64 works.
+I used inline assembly in C, so it would break ia64.
 
-  LoongArch: Remove MIPS comment about cycle counter (2022-06-08 11:00:40 +0800)
+Please ignore this patch.
 
-----------------------------------------------------------------
-LoongArch fixes for v5.19-rc2
 
-----------------------------------------------------------------
-Huacai Chen (2):
-      LoongArch: Fix the !CONFIG_SMP build
-      LoongArch: Fix copy_thread() build errors
 
-Jason A. Donenfeld (1):
-      LoongArch: Remove MIPS comment about cycle counter
 
- arch/loongarch/Kconfig               |  1 +
- arch/loongarch/include/asm/hardirq.h |  2 +-
- arch/loongarch/include/asm/percpu.h  |  1 +
- arch/loongarch/include/asm/smp.h     | 23 +++++++----------------
- arch/loongarch/include/asm/timex.h   |  7 -------
- arch/loongarch/kernel/acpi.c         |  4 ++++
- arch/loongarch/kernel/cacheinfo.c    |  1 +
- arch/loongarch/kernel/irq.c          |  7 ++++++-
- arch/loongarch/kernel/process.c      | 14 ++++++++------
- arch/loongarch/kernel/setup.c        |  5 ++---
- arch/loongarch/kernel/smp.c          |  2 --
- 11 files changed, 31 insertions(+), 36 deletions(-)
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
