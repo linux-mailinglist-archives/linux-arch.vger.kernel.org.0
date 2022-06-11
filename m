@@ -2,35 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2B65473A4
-	for <lists+linux-arch@lfdr.de>; Sat, 11 Jun 2022 12:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F125473A5
+	for <lists+linux-arch@lfdr.de>; Sat, 11 Jun 2022 12:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiFKKNC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 11 Jun 2022 06:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S230367AbiFKKPl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 11 Jun 2022 06:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbiFKKNB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Jun 2022 06:13:01 -0400
+        with ESMTP id S230372AbiFKKPk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 11 Jun 2022 06:15:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7A8C4
-        for <linux-arch@vger.kernel.org>; Sat, 11 Jun 2022 03:12:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF541209F;
+        Sat, 11 Jun 2022 03:15:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FF9D60C15
-        for <linux-arch@vger.kernel.org>; Sat, 11 Jun 2022 10:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF689C34116;
-        Sat, 11 Jun 2022 10:12:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5CAC60C14;
+        Sat, 11 Jun 2022 10:15:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975C4C34116;
+        Sat, 11 Jun 2022 10:15:35 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-arch@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@gmail.com>,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
 Subject: [GIT PULL] LoongArch fixes for v5.19-rc2
-Date:   Sat, 11 Jun 2022 18:14:35 +0800
-Message-Id: <20220611101435.2620996-1-chenhuacai@loongson.cn>
+Date:   Sat, 11 Jun 2022 18:17:14 +0800
+Message-Id: <20220611101714.2623823-1-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
