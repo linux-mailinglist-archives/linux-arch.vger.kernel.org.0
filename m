@@ -2,61 +2,85 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BF654A150
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 23:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0680F54A180
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 23:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349315AbiFMVZo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jun 2022 17:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        id S243935AbiFMVbr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Mon, 13 Jun 2022 17:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347782AbiFMVZ2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 17:25:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1B11133
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022 14:14:08 -0700 (PDT)
-Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MA7b8-1ntfaW3rMQ-00BeiQ for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022
- 23:14:07 +0200
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3137eb64b67so10704927b3.12
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022 14:14:06 -0700 (PDT)
-X-Gm-Message-State: AJIora8MvsAwwXpA+cqN1WDnpLw3uNNa0D64KS8lsg4b7yOPu3GLLQmM
-        vfn1k4gC97Q4IP25Vf73pE+0cW7AhUa+Mt1eAlI=
-X-Google-Smtp-Source: AGRyM1tJd2MWHVKh9bBI9MTkHj5Hly3SOeNtXxo33Ok5nK0q+OTF3XVZjp1WNtDmPOMJnLFuQnTasLZFfTef8lCAdzM=
-X-Received: by 2002:a0d:d84d:0:b0:314:2bfd:ddf3 with SMTP id
- a74-20020a0dd84d000000b003142bfdddf3mr1905526ywe.347.1655154845811; Mon, 13
- Jun 2022 14:14:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613182746.114115-1-bigeasy@linutronix.de>
-In-Reply-To: <20220613182746.114115-1-bigeasy@linutronix.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 13 Jun 2022 23:13:49 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a18cCESYki+4_3UgALRUq1MKmjSZvfXEyKHxgSENYfnXw@mail.gmail.com>
-Message-ID: <CAK8P3a18cCESYki+4_3UgALRUq1MKmjSZvfXEyKHxgSENYfnXw@mail.gmail.com>
-Subject: Re: [PATCH] generic/softirq: Disable softirq stacks on PREEMPT_RT
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        with ESMTP id S232678AbiFMVaF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 17:30:05 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF75918D
+        for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022 14:29:50 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-170-9N43S4nTPaqalKCbtLkcWA-1; Mon, 13 Jun 2022 22:29:47 +0100
+X-MC-Unique: 9N43S4nTPaqalKCbtLkcWA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Mon, 13 Jun 2022 22:29:46 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Mon, 13 Jun 2022 22:29:46 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Luck, Tony'" <tony.luck@intel.com>,
+        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
+        Marco Elver <elver@google.com>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9AokjQMjOQVdd6Oe//tu501YPKrYgJpQ03mhTeyqoV0xa2xKins
- kV8+YX5G7F71fLVXjF3c+P9AjJKbSxaMjHMemzsqNnslJQARJd3j/ssJilT2cuQ7NlXps8J
- dwdVsYu6xuipgxm6x2R5BOpScewPT29FT1KSQPMDXsrG3yF2peIeTNvEOtze1h7c2aXnLzu
- p1GG6XrC05+za32wK2ntg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tvFP+55AyQ4=:k1/Srt6iEpJAKV7hbQtRtm
- ypIPlwWCMKPd3tegoflWKrFwbRKxuo8VfIEjBNHd8kxm8PP9u5qbfhmILs1n/3lqFi6OIcEgd
- uqQoOmALa2ORXBhbZgxFmsXGOcYkrMFFrXSTbyR/Z/+YMFqSqvKeYwnoPDkOoJ/0C5CY4FT2f
- enSCnp5iFdGjgzwPXEykHG5tVhqG2YlMxarhZk5KHvPAc9v2wAxjjgUTZk0+7kD5yzAzwFT/V
- fQAZbuc0NBhgoPEu9/Zzmit6IsXUDy46ltlM6wgk4r/Qk79pzt7mUL2zkJZXXhEWFD/CsBIdm
- pdlnvBoIQJWkbgZay1HJfatNWXAcMgxjxn6y3XdzIkeiaFTqR8/xjNdfHiff4/1flx0QIWy6w
- PPFOyzVVOrJOv9dBn+TB9hs+csE/K1prggQuNkd8YNbN3AvoKL1eFjlHjCx3V+UqY65hKu8qt
- DaoSZ5xQ/yaociY5qhk07g1BdjuKM6lQuogbvrzY45sPOu6xcljHTE6UGR2Keom3EPAfn/oXr
- fvEZkrMCjaThWoYGbih+0xV/Q2j9cDifIv9R/npYUMhCTDRJXIQkGmUjU8dyE/iM1ScOyqV9x
- tr51KDdp7TuuueD5BIz8W9nU87TgNRPh13tNaXPMvqmLWky6YaCPYb9nNSzTvDECDI33GSn0f
- eAsLRpJ3iimTqyWEP4laY+eWYfH35Sc2Wz3O05jteuQXcCGD650HXDRMzF/7bAIwjZLBQjTgX
- SxAILda7lgzFUUlMBqcb8lxrc8MstQBukkXrLQ==
+        Yury Norov <yury.norov@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
+ bitops
+Thread-Topic: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
+ bitops
+Thread-Index: AQHYfL4xWJEoq3eTcEeKREBjFjjrHK1JHg2A//+t5kCAAH9LAIAEkeOA//+tDzCAAFKXkA==
+Date:   Mon, 13 Jun 2022 21:29:46 +0000
+Message-ID: <5d65491caf6249c8b72c7a6ced95614c@AcuMS.aculab.com>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-3-alexandr.lobakin@intel.com>
+ <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
+ <22042c14bc6a437d9c6b235fbfa32c8a@intel.com>
+ <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
+ <20220613141947.1176100-1-alexandr.lobakin@intel.com>
+ <c82877aa7cc244f2bf0f65dfb2b617e7@intel.com>
+In-Reply-To: <c82877aa7cc244f2bf0f65dfb2b617e7@intel.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +88,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 8:27 PM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
->
-> From: Thomas Gleixner <tglx@linutronix.de>
->
-> PREEMPT_RT preempts softirqs and the current implementation avoids
-> do_softirq_own_stack() and only uses __do_softirq().
->
-> Disable the unused softirqs stacks on PREEMPT_RT to safe some memory and
-> ensure that do_softirq_own_stack() is not used which is not expected.
->
-> [bigeasy: commit description.]
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+From: Luck, Tony
+> Sent: 13 June 2022 17:27
+> 
+> >> It's listed in Documentation/atomic_bitops.txt.
+> >
+> > Oh, so my memory was actually correct that I saw it in the docs
+> > somewhere.
+> > WDYT, should I mention this here in the code (block comment) as well
+> > that it's atomic and must not lose `volatile` as Andy suggested or
+> > it's sufficient to have it in the docs (+ it's not underscored)?
+> 
+> I think a comment that the "volatile" is required to prevent re-ordering
+> is enough.
+> 
+> But maybe others are sufficiently clear on the meaning? I once wasted
+> time looking for the non-atomic __test_bit() version (to use in some code
+> that was already protected by a spin lock, so didn't need the overhead
+> of an "atomic" version) before realizing there wasn't a non-atomic one.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Does it make any sense for 'test bit' to be atomic?
 
-It's probably best to keep this together with the corresponding architecture
-specific changes. I was a bit worried about bisection at first, but
-then realized
-that this is not a problem for mainline since ARCH_SUPPORTS_RT is not
-yet enabled on any architecture.
+I'm not even sure is needs any ordering constraints either.
+The result is always stale - the value can be changed by
+another cpu at any time.
 
-How are softirqs called on preempt_rt? Does this result in higher stack usage
-for the normal task stacks again, or are they run in separate threads anyway?
+The set/clear atomic bit-ops require a RMW bus cycle - which has
+to be locked (or similar) to avoid corruption.
 
-          Arnd
+The atomic 'test and set' (etc) are RMW and return a valid state.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
