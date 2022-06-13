@@ -2,137 +2,127 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A43549C62
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 20:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88732549CA4
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 21:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243786AbiFMS5v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jun 2022 14:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S1346930AbiFMTBl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jun 2022 15:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244696AbiFMS5O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 14:57:14 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0039C29CA9
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022 09:03:35 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso3346056pjg.1
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022 09:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=gPqm/HENPUr4/IG5FIju+yXQ31rETL85DWSGKXq62SU=;
-        b=cVPsBAoxMTeUENPS5CDh9E+a19n9EPjeKyDA8gfZPhyvDoqKH31W9JVKZWOSSath2N
-         tT/xiGKHCRbDNq0OIoA3Rd1JBaAU0XEIcgpaoJhYrmiJKILE5PTPC2wC5frpmGC/sV75
-         qkpbigTwqNT83655tf+8qWmY83Z1KWOsC5SmHP6gyi0hrK9kSnDmO5AwYHG/C2z5Foqq
-         eQ9SgI5L0qoYYRvMVdcunBFTKXdmqVgbOAS5VaS0Vlie73dh1bIyozNDi3Kb4UlzdYed
-         n9FLo3cUp2eT5MRKwT0s+pxxzWaSeIHtQi7/Y5pGp1U1lhRAeLidyZTvl3bo3aJ0rvlt
-         ngdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=gPqm/HENPUr4/IG5FIju+yXQ31rETL85DWSGKXq62SU=;
-        b=Bmv6mYL15+kHHzjNIYBzBSYC0MvHQIxI1Q/Fxngp9SnDssOrd7X/lfj6ViDEPxW6nE
-         z5Inqu6ewsU4zPAgAb3eLhwsHKJIG9SJLsuQQ3X/sVmKk4zh1+0zji0Y1Ki7DvvcjROD
-         bP9kCwGvSVaTS3w6dH1gbYNAP1BGJgCpjuRpHmEEnsBQJSBlVrpqjlm6zYtnbNqIvyMm
-         2P9Xa+gdRYP/my0JdYrCCKdhtbE0KJpAscBy5MSlxZhMhNgtdwaMOCm+1JWDM/GGchh5
-         E3D1qKrTnYffH1mPgiU4IiH6VjVyYjnUM3arnT9OLPFhJiRuseGMfcvktlsBAygPT98t
-         UFIg==
-X-Gm-Message-State: AJIora+qOsqzIH1Z5WCXDSVvzRnoHWWP/Fx2YvQmbSbllcX+akPeELzp
-        h+pRiwi7Uze/O8INfsid2jBq5cF6AJbrrcczpSE=
-X-Google-Smtp-Source: AGRyM1tCOJ/SzQITiQTpF5e31JJmqAUt9kdJLNWFTj/h4x6VnTUGFVhI8/MkyYjdaAdkJQmKjS1/4KbOqaXHfhT5c3o=
-X-Received: by 2002:a17:902:74c3:b0:167:6811:40 with SMTP id
- f3-20020a17090274c300b0016768110040mr358673plt.120.1655136215530; Mon, 13 Jun
- 2022 09:03:35 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6a10:ce97:b0:2a5:a3d4:9ead with HTTP; Mon, 13 Jun 2022
- 09:03:34 -0700 (PDT)
-Reply-To: drwarren.e.buffettfoundations@gmail.com
-From:   "Dr. Warren Edward Buffett" <abdullahiauwal001@gmail.com>
-Date:   Mon, 13 Jun 2022 17:03:34 +0100
-Message-ID: <CALNO1vY37bDayQdZ-EOOXwCK+Ux18sAoSDrsyZJSUMmjkDTz-w@mail.gmail.com>
-Subject: Spende
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S1346540AbiFMTAy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 15:00:54 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588794D9C1;
+        Mon, 13 Jun 2022 09:26:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655137612; x=1686673612;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=XxsfHurYfgtl5B8eDXs3NdPaSjArXVczaB+F2Bn9Ek4=;
+  b=HkYwqi5rbxVLCa9DjzarYkrq7QLAZ9qJ+s2gNJJwnWp97qJXWFbwlbvj
+   IgCLX29aH7yIYuWMl01dpUNPIDxsoDHK4/eQASqiKWGDvI7LVFYFOfpoZ
+   g8qKp7GTjIwLLvVwojxp+7wVKL0jJf3q5LYQL07wmecV23KQqc7jHX9mj
+   FEcLj7QyRIoInFaPDChRUQRrILOt9Vq3z6+jiYvoFTjl2qp74Svl0d3kW
+   qsR2JrznwCwY6XBuyr1iQ89ASkG0udTU0SoUX6lbIM6ZwLEMi1NB0RSz8
+   uZYyXaT9sqqRa1ZQkBo7IDws7JCuI55fqO+uj+L+shaJqgZTeOOenbFo3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="303733996"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="303733996"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 09:26:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="611858233"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga008.jf.intel.com with ESMTP; 13 Jun 2022 09:26:50 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 13 Jun 2022 09:26:49 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 13 Jun 2022 09:26:49 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Mon, 13 Jun 2022 09:26:49 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
+        Marco Elver <elver@google.com>
+CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
+ bitops
+Thread-Topic: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
+ bitops
+Thread-Index: AQHYfL4xWJEoq3eTcEeKREBjFjjrHK1JHg2A//+t5kCAAH9LAIAEkeOA//+tDzA=
+Date:   Mon, 13 Jun 2022 16:26:49 +0000
+Message-ID: <c82877aa7cc244f2bf0f65dfb2b617e7@intel.com>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-3-alexandr.lobakin@intel.com>
+ <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
+ <22042c14bc6a437d9c6b235fbfa32c8a@intel.com>
+ <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
+ <20220613141947.1176100-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20220613141947.1176100-1-alexandr.lobakin@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.500.17
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1043 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8947]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdullahiauwal001[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdullahiauwal001[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+MIME-Version: 1.0
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Gr=C3=BC=C3=9Fe
+>> It's listed in Documentation/atomic_bitops.txt.
+>
+> Oh, so my memory was actually correct that I saw it in the docs
+> somewhere.
+> WDYT, should I mention this here in the code (block comment) as well
+> that it's atomic and must not lose `volatile` as Andy suggested or
+> it's sufficient to have it in the docs (+ it's not underscored)?
 
-Herzlichen Gl=C3=BCckwunsch, Dies ist Dr. Warren Edward Buffett, ein
-amerikanischer Wirtschaftsmagnat, Investor und Philanthrop.
-Erfreuliche Nachrichten vom Chairman und CEO von Berkshire Hathaway.
-Ich habe 25 Prozent meines pers=C3=B6nlichen Verm=C3=B6gens daf=C3=BCr ausg=
-egeben.
-Wohlt=C3=A4tigkeit? Ich leite derzeit die (Letters Foundation) und habe den
-Rest meines 25-Prozent-Einkommens versprochen, indem ich 17,5
-Milliarden US-Dollar online an 60 gl=C3=BCckliche Menschen auf der ganzen
-Welt spende.
+I think a comment that the "volatile" is required to prevent re-ordering
+is enough.
 
-Der Auswahlprozess erfolgte jedoch stichprobenartig Auswahl in unserer
-computergest=C3=BCtzten E-Mail-Auswahlmaschine aus einer Datenbank aus =C3=
-=BCber
-250.000 E-Mail-Adressen aus allen Kontinenten weltweit. M=C3=B6glicherweise
-wurden Sie als gl=C3=BCcklicher Partner ausgew=C3=A4hlt und erhalten eine
-Entsch=C3=A4digung von (3,5 Millionen Euro). Bitte f=C3=BCllen Sie die folg=
-enden
-Informationen aus, wenn Sie an meiner Spende interessiert sind. Bitte
-kontaktieren Sie meinen pers=C3=B6nlichen Assistenten f=C3=BCr weitere
-Informationen mit Ihren korrekten Informationen. Bitte kontaktieren
-Sie die untenstehende E-Mail, um Ihr Geld zu erhalten
-(drwarren.e.buffettfoundations@gmail.com).
+But maybe others are sufficiently clear on the meaning? I once wasted
+time looking for the non-atomic __test_bit() version (to use in some code
+that was already protected by a spin lock, so didn't need the overhead
+of an "atomic" version) before realizing there wasn't a non-atomic one.
 
-Hier sind die Informationen, die Sie ben=C3=B6tigen.
-
-Vollst=C3=A4ndiger Name:
-Land:
-Bundesland / Stadt:
-Das Alter:
-Beruf / Arbeit:
-Handy Nummer:
-Adresse:
-
-Kontakt-E-Mail: drwarren.e.buffettfoundations@gmail.com
-
-Mit freundlichen Gr=C3=BC=C3=9Fe
-Dr. Warren Buffett
+-Tony
