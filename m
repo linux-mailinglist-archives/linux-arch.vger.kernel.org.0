@@ -2,151 +2,421 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B0854820A
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 10:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2737548669
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 17:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239704AbiFMIpY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jun 2022 04:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
+        id S1384393AbiFMOlL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jun 2022 10:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240320AbiFMIpG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 04:45:06 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7CB20192;
-        Mon, 13 Jun 2022 01:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pN3d4KEFcv2ptnSv0mvCj6MvUML0g63O/kngZ8T7P5U=; b=jHY41velXm5OfTDUZVWOgGoGBS
-        3XcfJnIs2Kw4MnQzhXHXXp0NuTvYgWNNcy9H8ZMc64VSaMQLttlBqVnSkycnBSdvSyy0Jak2Oc/oh
-        vvGayo0C9yY99bqhrLdUZmtWJXcMrqnljzCxzdeOwv7I5/kT19cRmZ3SrWtebHTgXMFdZAZxKh/LD
-        FLvZqYIpmAvjq1lnM+gSi7696QvqdD2nf0hqYc6h4USx92PA9LVEoUSL3WQM5ig7zhrj1+/gECYeb
-        R1xWNHwwSLm1F21Q9Cu7wJn7J1PofxmN5bqxHgiOokEGCrOE72TMA7ta7eHf7Pxf1c+Q+Jc6wUzzF
-        Why4PJmw==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o0fgQ-007VfF-TN; Mon, 13 Jun 2022 08:44:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D9091302DA8;
-        Mon, 13 Jun 2022 10:44:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BB85B200C72F2; Mon, 13 Jun 2022 10:44:22 +0200 (CEST)
-Date:   Mon, 13 Jun 2022 10:44:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        rostedt@goodmis.org, pmladek@suse.com, senozhatsky@chromium.org,
-        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-Message-ID: <Yqb45vclY2KVL0wZ@hirez.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144516.172460444@infradead.org>
- <20220609164921.5e61711d@jacob-builder>
+        with ESMTP id S1385454AbiFMOkI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 10:40:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1504D270;
+        Mon, 13 Jun 2022 04:50:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEE9B61487;
+        Mon, 13 Jun 2022 11:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3249DC3411B;
+        Mon, 13 Jun 2022 11:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655121003;
+        bh=byfFgpOE/t15kM3s+ecOwCnbDmH5NQDsE+j0LndFSJg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GmG0L8JKSZ8IHfI5tlyVepXjrIDvIpzcICYWCGkEqDI4dZ58Zs1fQDYV0WUis4WLU
+         FV8wGpW+LhU7+T/YwRH3Z0ZtIo2YJy1g3Z63Gf2L3shQBmsXcbzDnJFdZFS7ZxLT86
+         j+g1fqcEufG30CsZ+3q/lp3Vh4t4DH7Xsc1eEqxXdkFgM3kpP5Fkrh3bMLea7iADIN
+         xtzZ0SATbrgvv2T8oUEGRD91nrRUL4jAZHARbt7rXuHxGOxzmaaTsIWgNCw9mJ1Uvv
+         sXVJBbM0W4qU2ynrLo8BsSsJoGsYdHHVEtm4FxytkJBtt3hsnbVtfMQ+tY0rrSRuZ/
+         2jYQoKrisoytg==
+Received: by mail-vk1-f180.google.com with SMTP id e7so2485332vkh.2;
+        Mon, 13 Jun 2022 04:50:03 -0700 (PDT)
+X-Gm-Message-State: AOAM531Lbi5I7Wkh/14TpY1Myyodc8jr7/LZtVMeS5s3IfUkfy6FSibw
+        pEX2UX35QLLWn3yLtpWw8WH4vLUduSlt2BR18zw=
+X-Google-Smtp-Source: ABdhPJxq/0/4q1oeGpprMw4bGAPq+XAL0VxAyaViNgfOWFWXYliK/L1n9hhN1g6AglavHrR/Oze6rV8Mcr6HPjLTGNQ=
+X-Received: by 2002:a05:6122:200f:b0:368:990b:3ffc with SMTP id
+ l15-20020a056122200f00b00368990b3ffcmr703460vkd.2.1655121002098; Mon, 13 Jun
+ 2022 04:50:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609164921.5e61711d@jacob-builder>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAJF2gTQoSQq_S4UvAiXgMviT040Ls8+VkDszQSke1a0zbXZ82A@mail.gmail.com>
+ <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
+In-Reply-To: <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 13 Jun 2022 19:49:50 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
+Message-ID: <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
+Subject: Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops with
+ .aqrl annotation
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Daniel Lustig <dlustig@nvidia.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 04:49:21PM -0700, Jacob Pan wrote:
-> Hi Peter,
-> 
-> On Wed, 08 Jun 2022 16:27:27 +0200, Peter Zijlstra <peterz@infradead.org>
-> wrote:
-> 
-> > Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
-> > Xeons") wrecked intel_idle in two ways:
-> > 
-> >  - must not have tracing in idle functions
-> >  - must return with IRQs disabled
-> > 
-> > Additionally, it added a branch for no good reason.
-> > 
-> > Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  drivers/idle/intel_idle.c |   48
-> > +++++++++++++++++++++++++++++++++++----------- 1 file changed, 37
-> > insertions(+), 11 deletions(-)
-> > 
-> > --- a/drivers/idle/intel_idle.c
-> > +++ b/drivers/idle/intel_idle.c
-> > @@ -129,21 +137,37 @@ static unsigned int mwait_substates __in
-> >   *
-> >   * Must be called under local_irq_disable().
-> >   */
-> nit: this comment is no long true, right?
+On Thu, Jun 2, 2022 at 1:59 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Sun, 22 May 2022 06:12:56 PDT (-0700), guoren@kernel.org wrote:
+> > On Sun, May 22, 2022 at 4:46 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+> >>
+> >> On Wed, 04 May 2022 20:55:26 PDT (-0700), guoren@kernel.org wrote:
+> >> > From: Guo Ren <guoren@linux.alibaba.com>
+> >> >
+> >> > The current implementation is the same with 8e86f0b409a4
+> >> > ("arm64: atomics: fix use of acquire + release for full barrier
+> >> > semantics"). RISC-V could combine acquire and release into the SC
+> >> > instructions and it could reduce a fence instruction to gain better
+> >> > performance. Here is related descriptio from RISC-V ISA 10.2
+> >> > Load-Reserved/Store-Conditional Instructions:
+> >> >
+> >> >  - .aq:   The LR/SC sequence can be given acquire semantics by
+> >> >           setting the aq bit on the LR instruction.
+> >> >  - .rl:   The LR/SC sequence can be given release semantics by
+> >> >           setting the rl bit on the SC instruction.
+> >> >  - .aqrl: Setting the aq bit on the LR instruction, and setting
+> >> >           both the aq and the rl bit on the SC instruction makes
+> >> >           the LR/SC sequence sequentially consistent, meaning that
+> >> >           it cannot be reordered with earlier or later memory
+> >> >           operations from the same hart.
+> >> >
+> >> >  Software should not set the rl bit on an LR instruction unless
+> >> >  the aq bit is also set, nor should software set the aq bit on an
+> >> >  SC instruction unless the rl bit is also set. LR.rl and SC.aq
+> >> >  instructions are not guaranteed to provide any stronger ordering
+> >> >  than those with both bits clear, but may result in lower
+> >> >  performance.
+> >> >
+> >> > The only difference is when sc.w/d.aqrl failed, it would cause .aq
+> >> > effect than before. But it's okay for sematic because overlap
+> >> > address LR couldn't beyond relating SC.
+> >>
+> >> IIUC that's not accurate, or at least wasn't in 2018.  The ISA tends to
+> >> drift around a bit, so it's possible things have changed since then.
+> >> 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
+> > Thx for explaining, that why I suspected with the sentence in the comment:
+> > "which do not give full-ordering with .aqrl"
+>
+> Sorry, I'm not quite sure what you're saying here.  My understanding is
+> that this change results in mappings that violate LKMM, based on the
+> rationale in that previous commit.  IIUC that all still holds, but I'm
+> not really a memory model person so I frequently miss stuff around
+> there.
+5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
+is about fixup wrong spinlock/unlock implementation and not relate to
+this patch.
 
-It still is, all the idle routines are called with interrupts disabled,
-but must also exit with interrupts disabled.
+Actually, sc.w.aqrl is very strong and the same with:
+fence rw, rw
+sc.w
+fence rw,rw
 
-If the idle method requires interrupts to be enabled, it must be sure to
-disable them again before returning. Given all the RCU/tracing concerns
-it must use raw_local_irq_*() for this though.
+So "which do not give full-ordering with .aqrl" is not writen in
+RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
+
+>
+> >> describes the issue more specifically, that's when we added these
+> >> fences.  There have certainly been complains that these fences are too
+> >> heavyweight for the HW to go fast, but IIUC it's the best option we have
+> > Yeah, it would reduce the performance on D1 and our next-generation
+> > processor has optimized fence performance a lot.
+>
+> Definately a bummer that the fences make the HW go slow, but I don't
+> really see any other way to go about this.  If you think these mappings
+> are valid for LKMM and RVWMO then we should figure this out, but trying
+> to drop fences to make HW go faster in ways that violate the memory
+> model is going to lead to insanity.
+Actually, this patch is okay with the ISA spec, and Dan also thought
+it was valid.
+
+ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
+------
+> 2. Using .aqrl to replace the fence rw, rw is okay to ISA manual,
+> right? And reducing a fence instruction to gain better performance:
+>                 "0:     lr.w     %[p],  %[c]\n"
+>                  "       sub      %[rc], %[p], %[o]\n"
+>                  "       bltz     %[rc], 1f\n".
+>  -               "       sc.w.rl  %[rc], %[rc], %[c]\n"
+>  +              "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+>                  "       bnez     %[rc], 0b\n"
+>  -               "       fence    rw, rw\n"
+
+Yes, using .aqrl is valid.
+
+Dan
+------
+
+
+>
+> I can definately buy the argument that we have mappings of various
+> application memory models that are difficult to make fast given the ISA
+> encodings of RVWMO we have, but that's not really an issue we can fix in
+> the atomic mappings.
+>
+> >> given the current set of memory model primitives we implement in the
+> >> ISA (ie, there's more in RVWMO but no way to encode that).
+> >>
+> >> The others all look good, though, and as these are really all
+> >> independent cleanups I'm going to go ahead and put those three on
+> >> for-next.
+> >>
+> >> There's also a bunch of checkpatch errors.  The ones about "*" seem
+> >> spurious, but the alignment ones aren't.  Here's my fixups:
+> > Thx for the fixup.
+> >
+> >>
+> >>     diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+> >>     index 34f757dfc8f2..0bde499fa8bc 100644
+> >>     --- a/arch/riscv/include/asm/atomic.h
+> >>     +++ b/arch/riscv/include/asm/atomic.h
+> >>     @@ -86,9 +86,9 @@ ATOMIC_OPS(xor, xor,  i)
+> >>       * versions, while the logical ops only have fetch versions.
+> >>       */
+> >>      #define ATOMIC_FETCH_OP(op, asm_op, I, asm_type, c_type, prefix)   \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,                \
+> >>     -                                        atomic##prefix##_t *v)     \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,                       \
+> >>     +                                      atomic##prefix##_t *v)       \
+> >>      {                                                                  \
+> >>         register c_type ret;                                            \
+> >>         __asm__ __volatile__ (                                          \
+> >>     @@ -98,9 +98,9 @@ c_type arch_atomic##prefix##_fetch_##op##_relaxed(c_type i,               \
+> >>                 : "memory");                                            \
+> >>         return ret;                                                     \
+> >>      }                                                                  \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_fetch_##op##_acquire(c_type i,                \
+> >>     -                                        atomic##prefix##_t *v)     \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_fetch_##op##_acquire(c_type i,                       \
+> >>     +                                      atomic##prefix##_t *v)       \
+> >>      {                                                                  \
+> >>         register c_type ret;                                            \
+> >>         __asm__ __volatile__ (                                          \
+> >>     @@ -110,9 +110,9 @@ c_type arch_atomic##prefix##_fetch_##op##_acquire(c_type i,             \
+> >>                 : "memory");                                            \
+> >>         return ret;                                                     \
+> >>      }                                                                  \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_fetch_##op##_release(c_type i,                \
+> >>     -                                        atomic##prefix##_t *v)     \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_fetch_##op##_release(c_type i,                       \
+> >>     +                                      atomic##prefix##_t *v)       \
+> >>      {                                                                  \
+> >>         register c_type ret;                                            \
+> >>         __asm__ __volatile__ (                                          \
+> >>     @@ -122,8 +122,8 @@ c_type arch_atomic##prefix##_fetch_##op##_release(c_type i,             \
+> >>                 : "memory");                                            \
+> >>         return ret;                                                     \
+> >>      }                                                                  \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)   \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)  \
+> >>      {                                                                  \
+> >>         register c_type ret;                                            \
+> >>         __asm__ __volatile__ (                                          \
+> >>     @@ -135,28 +135,28 @@ c_type arch_atomic##prefix##_fetch_##op(c_type i, atomic##prefix##_t *v)      \
+> >>      }
+> >>
+> >>      #define ATOMIC_OP_RETURN(op, asm_op, c_op, I, asm_type, c_type, prefix)    \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_##op##_return_relaxed(c_type i,               \
+> >>     -                                         atomic##prefix##_t *v)    \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_##op##_return_relaxed(c_type i,                      \
+> >>     +                                       atomic##prefix##_t *v)      \
+> >>      {                                                                  \
+> >>     -        return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I;    \
+> >>     +   return arch_atomic##prefix##_fetch_##op##_relaxed(i, v) c_op I; \
+> >>      }                                                                  \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_##op##_return_acquire(c_type i,               \
+> >>     -                                         atomic##prefix##_t *v)    \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_##op##_return_acquire(c_type i,                      \
+> >>     +                                       atomic##prefix##_t *v)      \
+> >>      {                                                                  \
+> >>     -        return arch_atomic##prefix##_fetch_##op##_acquire(i, v) c_op I;    \
+> >>     +   return arch_atomic##prefix##_fetch_##op##_acquire(i, v) c_op I; \
+> >>      }                                                                  \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_##op##_return_release(c_type i,               \
+> >>     -                                         atomic##prefix##_t *v)    \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_##op##_return_release(c_type i,                      \
+> >>     +                                       atomic##prefix##_t *v)      \
+> >>      {                                                                  \
+> >>     -        return arch_atomic##prefix##_fetch_##op##_release(i, v) c_op I;    \
+> >>     +   return arch_atomic##prefix##_fetch_##op##_release(i, v) c_op I; \
+> >>      }                                                                  \
+> >>     -static __always_inline                                                     \
+> >>     -c_type arch_atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)        \
+> >>     +static __always_inline c_type                                              \
+> >>     +arch_atomic##prefix##_##op##_return(c_type i, atomic##prefix##_t *v)       \
+> >>      {                                                                  \
+> >>     -        return arch_atomic##prefix##_fetch_##op(i, v) c_op I;              \
+> >>     +   return arch_atomic##prefix##_fetch_##op(i, v) c_op I;           \
+> >>      }
+> >>
+> >>      #ifdef CONFIG_GENERIC_ATOMIC64
+> >>
+> >>
+> >> >
+> >> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> >> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> >> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> >> > Cc: Mark Rutland <mark.rutland@arm.com>
+> >> > Cc: Dan Lustig <dlustig@nvidia.com>
+> >> > Cc: Andrea Parri <parri.andrea@gmail.com>
+> >> > ---
+> >> >  arch/riscv/include/asm/atomic.h  | 24 ++++++++----------------
+> >> >  arch/riscv/include/asm/cmpxchg.h |  6 ++----
+> >> >  2 files changed, 10 insertions(+), 20 deletions(-)
+> >> >
+> >> > diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
+> >> > index 34f757dfc8f2..aef8aa9ac4f4 100644
+> >> > --- a/arch/riscv/include/asm/atomic.h
+> >> > +++ b/arch/riscv/include/asm/atomic.h
+> >> > @@ -269,9 +269,8 @@ static __always_inline int arch_atomic_fetch_add_unless(atomic_t *v, int a, int
+> >> >               "0:     lr.w     %[p],  %[c]\n"
+> >> >               "       beq      %[p],  %[u], 1f\n"
+> >> >               "       add      %[rc], %[p], %[a]\n"
+> >> > -             "       sc.w.rl  %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.w.aqrl  %[rc], %[rc], %[c]\n"
+> >> >               "       bnez     %[rc], 0b\n"
+> >> > -             "       fence    rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               : [a]"r" (a), [u]"r" (u)
+> >> > @@ -290,9 +289,8 @@ static __always_inline s64 arch_atomic64_fetch_add_unless(atomic64_t *v, s64 a,
+> >> >               "0:     lr.d     %[p],  %[c]\n"
+> >> >               "       beq      %[p],  %[u], 1f\n"
+> >> >               "       add      %[rc], %[p], %[a]\n"
+> >> > -             "       sc.d.rl  %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.d.aqrl  %[rc], %[rc], %[c]\n"
+> >> >               "       bnez     %[rc], 0b\n"
+> >> > -             "       fence    rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               : [a]"r" (a), [u]"r" (u)
+> >> > @@ -382,9 +380,8 @@ static __always_inline bool arch_atomic_inc_unless_negative(atomic_t *v)
+> >> >               "0:     lr.w      %[p],  %[c]\n"
+> >> >               "       bltz      %[p],  1f\n"
+> >> >               "       addi      %[rc], %[p], 1\n"
+> >> > -             "       sc.w.rl   %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+> >> >               "       bnez      %[rc], 0b\n"
+> >> > -             "       fence     rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               :
+> >> > @@ -402,9 +399,8 @@ static __always_inline bool arch_atomic_dec_unless_positive(atomic_t *v)
+> >> >               "0:     lr.w      %[p],  %[c]\n"
+> >> >               "       bgtz      %[p],  1f\n"
+> >> >               "       addi      %[rc], %[p], -1\n"
+> >> > -             "       sc.w.rl   %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+> >> >               "       bnez      %[rc], 0b\n"
+> >> > -             "       fence     rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               :
+> >> > @@ -422,9 +418,8 @@ static __always_inline int arch_atomic_dec_if_positive(atomic_t *v)
+> >> >               "0:     lr.w     %[p],  %[c]\n"
+> >> >               "       addi     %[rc], %[p], -1\n"
+> >> >               "       bltz     %[rc], 1f\n"
+> >> > -             "       sc.w.rl  %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+> >> >               "       bnez     %[rc], 0b\n"
+> >> > -             "       fence    rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               :
+> >> > @@ -444,9 +439,8 @@ static __always_inline bool arch_atomic64_inc_unless_negative(atomic64_t *v)
+> >> >               "0:     lr.d      %[p],  %[c]\n"
+> >> >               "       bltz      %[p],  1f\n"
+> >> >               "       addi      %[rc], %[p], 1\n"
+> >> > -             "       sc.d.rl   %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.d.aqrl %[rc], %[rc], %[c]\n"
+> >> >               "       bnez      %[rc], 0b\n"
+> >> > -             "       fence     rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               :
+> >> > @@ -465,9 +459,8 @@ static __always_inline bool arch_atomic64_dec_unless_positive(atomic64_t *v)
+> >> >               "0:     lr.d      %[p],  %[c]\n"
+> >> >               "       bgtz      %[p],  1f\n"
+> >> >               "       addi      %[rc], %[p], -1\n"
+> >> > -             "       sc.d.rl   %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.d.aqrl %[rc], %[rc], %[c]\n"
+> >> >               "       bnez      %[rc], 0b\n"
+> >> > -             "       fence     rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               :
+> >> > @@ -486,9 +479,8 @@ static __always_inline s64 arch_atomic64_dec_if_positive(atomic64_t *v)
+> >> >               "0:     lr.d     %[p],  %[c]\n"
+> >> >               "       addi      %[rc], %[p], -1\n"
+> >> >               "       bltz     %[rc], 1f\n"
+> >> > -             "       sc.d.rl  %[rc], %[rc], %[c]\n"
+> >> > +             "       sc.d.aqrl %[rc], %[rc], %[c]\n"
+> >> >               "       bnez     %[rc], 0b\n"
+> >> > -             "       fence    rw, rw\n"
+> >> >               "1:\n"
+> >> >               : [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
+> >> >               :
+> >> > diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
+> >> > index 1af8db92250b..9269fceb86e0 100644
+> >> > --- a/arch/riscv/include/asm/cmpxchg.h
+> >> > +++ b/arch/riscv/include/asm/cmpxchg.h
+> >> > @@ -307,9 +307,8 @@
+> >> >               __asm__ __volatile__ (                                  \
+> >> >                       "0:     lr.w %0, %2\n"                          \
+> >> >                       "       bne  %0, %z3, 1f\n"                     \
+> >> > -                     "       sc.w.rl %1, %z4, %2\n"                  \
+> >> > +                     "       sc.w.aqrl %1, %z4, %2\n"                \
+> >> >                       "       bnez %1, 0b\n"                          \
+> >> > -                     "       fence rw, rw\n"                         \
+> >> >                       "1:\n"                                          \
+> >> >                       : "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)    \
+> >> >                       : "rJ" ((long)__old), "rJ" (__new)              \
+> >> > @@ -319,9 +318,8 @@
+> >> >               __asm__ __volatile__ (                                  \
+> >> >                       "0:     lr.d %0, %2\n"                          \
+> >> >                       "       bne %0, %z3, 1f\n"                      \
+> >> > -                     "       sc.d.rl %1, %z4, %2\n"                  \
+> >> > +                     "       sc.d.aqrl %1, %z4, %2\n"                \
+> >> >                       "       bnez %1, 0b\n"                          \
+> >> > -                     "       fence rw, rw\n"                         \
+> >> >                       "1:\n"                                          \
+> >> >                       : "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)    \
+> >> >                       : "rJ" (__old), "rJ" (__new)                    \
+
+
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
