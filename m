@@ -2,56 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04025481AF
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 10:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A858E54827D
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 10:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239082AbiFMI0S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jun 2022 04:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S230313AbiFMIl6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jun 2022 04:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239358AbiFMI0R (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 04:26:17 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1225E1EED7;
-        Mon, 13 Jun 2022 01:26:14 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id m125-20020a1ca383000000b0039c63fe5f64so2647384wme.0;
-        Mon, 13 Jun 2022 01:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3JSggHLDbkXyuZCKaU+uQ7H5KVpBjE3ZWWl/F0t3JyI=;
-        b=hln/7KIUboOODQa9/Iv7zWAXFI8kFLhiLL+AWnA7ZL0itAJaB93eguKFQupB8Lv94a
-         mnMuLqlfVsMy6aSBFmNweaacWKXWw7aT6TScazfBGhspJqqH/PMOPWdnnnaxNLaf842d
-         D+3NPCattkXMe8VyippSy6AVlz1Q90Igxi/lQII1yr2hkIK0YZRpsj0TKs2Px7tXlVgY
-         915w6r1r+N9IHNGMPf7O4C6rOlcjLzR4xSEqc3Zfq8tMbY0ayFsU19Cug+0HkT25Saig
-         zkxTdXbzsbpEfsV6HhW0WtRME3JJZVdyKx57BtFZ0WE2gh0TSNH76QSkgUTVIoEuHNxT
-         f/gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3JSggHLDbkXyuZCKaU+uQ7H5KVpBjE3ZWWl/F0t3JyI=;
-        b=YRQJp1GBM3OcBer6Bp1WG/lVEMPbsdDfQzMPh5cIijwX90UumIifd1W7M9eZ9tOszB
-         5TKl/a0hV5ldDpz7+f9oV27/cDUZv0Xa/xnwc9fZw9n7CCQCMyb/FtECSzWxIrDXppb/
-         Ye09YW/mZOxpI8n0iwJx5ZMNrEHAvOQb/r/j7oW93vahxjzvyBWWcSxwlkuv2u7wVWQG
-         X5sbWQOGc+JHZxzPSk30elqMZx3J9FHvagdN7/rHVt00R1pTvFtyMh3iUaYo2OSFI5aC
-         k8hMkMwMG9o7FdJHCG6Dxaet7U9Y+D5HPReKeLWn0oj1EOQb+nInIl70eEfpdQYzMesu
-         3K+Q==
-X-Gm-Message-State: AOAM5308RPuyABds5tbz4EScO3Ovyc2GgLPib84QRdAipfTp7gj5CkO5
-        /7msG24JNLD8C5BKoOQn0Qg1EAN/JWJ5bTQ75cw=
-X-Google-Smtp-Source: ABdhPJxgJ3qlsWHXb4q5Q9LeHOXh1hQWbFNdZBk/6atfvyd1YyWRPGtuhT6/ZUDmb0vG1CLuyzfEgHlG2xi/itwptM8=
-X-Received: by 2002:a05:600c:1c9a:b0:39c:7db4:90c3 with SMTP id
- k26-20020a05600c1c9a00b0039c7db490c3mr13053942wms.161.1655108772491; Mon, 13
- Jun 2022 01:26:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220608142723.103523089@infradead.org> <20220608144517.251109029@infradead.org>
-In-Reply-To: <20220608144517.251109029@infradead.org>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Mon, 13 Jun 2022 16:26:01 +0800
-Message-ID: <CAJhGHyCnu_BsKf5STMMJKMWm0NVZ8qXT8Qh=BhhCjSSgwchL3Q@mail.gmail.com>
-Subject: Re: [PATCH 21/36] x86/tdx: Remove TDX_HCALL_ISSUE_STI
-To:     Peter Zijlstra <peterz@infradead.org>
+        with ESMTP id S230061AbiFMIl5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 04:41:57 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6B1193E3;
+        Mon, 13 Jun 2022 01:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TBu1hM1Fbte1hrb329bc3ivTNLPSxYZoE9gYu5eRiHg=; b=KxzripGEv6RXnFm15+8ZNtwXqY
+        Y0JQlZmUiuwVauVjo8mNReXrjzu7dWBx//TAFwSPTKyr6Zo77tWh01rzDl7XPFXl1EJF1ttjF28Oa
+        Y26cGarHrml+WTzUDghfHXbs5buhMtFUXZKnD8izBxoX/odIuIn/MS3zL+yigJd7n7oUAZgV4ByN7
+        p6X3IE5tp4AkqXkq6o5D71vN0FpfLBNWJd/uWUgeZWDMiUNKEwdAFHXa2Yb8/dwobM0HWB5ZW2n2y
+        erfG8/B2Ujcs2fyWLmikq2G1n9ndEAxh8tSaS3kLIgdEhCz5PunbXVo7FDX4cQ6brXM4ITD5NqgrB
+        fH7JUAsQ==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o0fde-007VcR-Ap; Mon, 13 Jun 2022 08:41:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 73DD13005B7;
+        Mon, 13 Jun 2022 10:41:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 42FA02849859B; Mon, 13 Jun 2022 10:41:27 +0200 (CEST)
+Date:   Mon, 13 Jun 2022 10:41:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
 Cc:     Richard Henderson <rth@twiddle.net>, ink@jurassic.park.msu.ru,
         mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
         ulli.kroll@googlemail.com, linus.walleij@linaro.org,
@@ -119,45 +105,57 @@ Cc:     Richard Henderson <rth@twiddle.net>, ink@jurassic.park.msu.ru,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org, Isaku Yamahata <isaku.yamahata@gmail.com>,
         kirill.shutemov@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 21/36] x86/tdx: Remove TDX_HCALL_ISSUE_STI
+Message-ID: <Yqb4N3iwh1X7378o@hirez.programming.kicks-ass.net>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144517.251109029@infradead.org>
+ <CAJhGHyCnu_BsKf5STMMJKMWm0NVZ8qXT8Qh=BhhCjSSgwchL3Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJhGHyCnu_BsKf5STMMJKMWm0NVZ8qXT8Qh=BhhCjSSgwchL3Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 10:48 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Now that arch_cpu_idle() is expected to return with IRQs disabled,
-> avoid the useless STI/CLI dance.
->
-> Per the specs this is supposed to work, but nobody has yet relied up
-> this behaviour so broken implementations are possible.
+On Mon, Jun 13, 2022 at 04:26:01PM +0800, Lai Jiangshan wrote:
+> On Wed, Jun 8, 2022 at 10:48 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > Now that arch_cpu_idle() is expected to return with IRQs disabled,
+> > avoid the useless STI/CLI dance.
+> >
+> > Per the specs this is supposed to work, but nobody has yet relied up
+> > this behaviour so broken implementations are possible.
+> 
+> I'm totally newbie here.
+> 
+> The point of safe_halt() is that STI must be used and be used
+> directly before HLT to enable IRQ during the halting and stop
+> the halting if there is any IRQ.
 
-I'm totally newbie here.
+Correct; on real hardware. But this is virt...
 
-The point of safe_halt() is that STI must be used and be used
-directly before HLT to enable IRQ during the halting and stop
-the halting if there is any IRQ.
+> In TDX case, STI must be used directly before the hypercall.
+> Otherwise, no IRQ can come and the vcpu would be stalled forever.
+> 
+> Although the hypercall has an "irq_disabled" argument.
+> But the hypervisor doesn't (and can't) touch the IRQ flags no matter
+> what the "irq_disabled" argument is.  The IRQ is not enabled during
+> the halting if the IRQ is disabled before the hypercall even if
+> irq_disabled=false.
 
-In TDX case, STI must be used directly before the hypercall.
-Otherwise, no IRQ can come and the vcpu would be stalled forever.
+All we need the VMM to do is wake the vCPU, and it can do that,
+irrespective of the guest's IF.
 
-Although the hypercall has an "irq_disabled" argument.
-But the hypervisor doesn't (and can't) touch the IRQ flags no matter
-what the "irq_disabled" argument is.  The IRQ is not enabled during
-the halting if the IRQ is disabled before the hypercall even if
-irq_disabled=false.
+So the VMM can (and does) know if there's an interrupt pending, and
+that's all that's needed to wake from this hypercall. Once the vCPU is
+back up and running again, we'll eventually set IF again and the pending
+interrupt will get delivered and all's well.
 
-The "irq_disabled" argument is used for workaround purposes:
-https://lore.kernel.org/kvm/c020ee0b90c424a7010e979c9b32a28e9c488a51.1651774251.git.isaku.yamahata@intel.com/
-
-Hope my immature/incorrect reply elicits a real response from
-others.
-
-Thanks
-Lai
+Think of this like MWAIT with ECX[0] set if you will.
