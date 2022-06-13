@@ -2,22 +2,22 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823585488C5
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 18:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE05B549125
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 18:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242548AbiFMPPT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jun 2022 11:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S1347254AbiFMPRT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 13 Jun 2022 11:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387537AbiFMPOg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 11:14:36 -0400
+        with ESMTP id S1387594AbiFMPPM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 11:15:12 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 432BB11E4BA;
-        Mon, 13 Jun 2022 05:33:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 963C713DFD;
+        Mon, 13 Jun 2022 05:33:56 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id B3AA88125;
-        Mon, 13 Jun 2022 12:28:30 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 15:33:10 +0300
+        by muru.com (Postfix) with ESMTPS id 07F638191;
+        Mon, 13 Jun 2022 12:29:14 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 15:33:54 +0300
 From:   Tony Lindgren <tony@atomide.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
@@ -77,16 +77,16 @@ Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
         linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
         rcu@vger.kernel.org
-Subject: Re: [PATCH 10/36] cpuidle,omap3: Push RCU-idle into driver
-Message-ID: <YqcuhiPVqktEpZxy@atomide.com>
+Subject: Re: [PATCH 12/36] cpuidle,omap2: Push RCU-idle into driver
+Message-ID: <YqcusjKzpN/d0qFf@atomide.com>
 References: <20220608142723.103523089@infradead.org>
- <20220608144516.552202452@infradead.org>
+ <20220608144516.677524509@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220608144516.552202452@infradead.org>
+In-Reply-To: <20220608144516.677524509@infradead.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,8 +95,10 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 * Peter Zijlstra <peterz@infradead.org> [220608 14:42]:
-> Doing RCU-idle outside the driver, only to then teporarily enable it
-> again before going idle is daft.
+> Doing RCU-idle outside the driver, only to then temporarily enable it
+> again, some *four* times, before going idle is daft.
+
+Maybe update the subject line with s/omap2/omap4/, other than that:
 
 Reviewed-by: Tony Lindgren <tony@atomide.com>
 Tested-by: Tony Lindgren <tony@atomide.com>
