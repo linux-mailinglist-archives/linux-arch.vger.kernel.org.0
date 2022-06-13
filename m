@@ -2,122 +2,137 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77E054993D
-	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 18:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D965549B24
+	for <lists+linux-arch@lfdr.de>; Mon, 13 Jun 2022 20:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240102AbiFMQpY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 13 Jun 2022 12:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S244537AbiFMSKO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Mon, 13 Jun 2022 14:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240176AbiFMQpA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 12:45:00 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6011E1E4BE3
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022 07:33:56 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id e184so10156683ybf.8
-        for <linux-arch@vger.kernel.org>; Mon, 13 Jun 2022 07:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KQCwIkwNzwt5T2z3wlATn5QZJXZyj8/g94B/Y2n7Ov8=;
-        b=RsztUVvqZtKDuLU8Lf83jCg2FonaZq3j7tha/V+O/QezKPXwlEvSEPOQX3hz9T78C3
-         3I6j6z1A/Cq6rSJmdFgt0oN6wG+e9xT+Ae9I57CN7NuNV7UAGESXGdpL/0qjMFr6J1AO
-         j5S+6qJRX5emBJ2bfvZ0aKKWa1x9S44BcdWCp78aC5PfePta2erze8nysaY1ttyVO7kx
-         fWJ7ZvaryKTY+6zAJ5UhVNSOJgi3zgc40qe+mrW1Ay0ECDOBytM0OUitt40J2PFHczlR
-         Z86EN3athSadQP2xV0dv7LzAY+7OnBLrfmhcH8PuFvJX/KIQYWgquzO8svWkc7MbNA5h
-         H1mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KQCwIkwNzwt5T2z3wlATn5QZJXZyj8/g94B/Y2n7Ov8=;
-        b=UTJlEHoGWjpJLHh4AwTyDxA5aFqAwBQtsEt6aFrE3YLs8HIfwfgYQfbJbdG0KSGT4D
-         LdMtK5RpSW0Yf7mqDzjGQGIVh6zdEJAvWEDh+HkMBg0m83IzeMjV6bGNM4U3NZ5z6jyu
-         NyGNu/MN4pr5YngbRf3kM1ohVCd8dS5UT72Ocd+n588tffHHhajNhwuM8Akyd2fslirK
-         /7t7EYxhTb7kvuwYcW0a5cVp26SalbIDuP+B1pQR8D6AxSYCGL4uzdciYC+9i4QjDGhu
-         tM2z8aHlsvPASIzf31PJwbc6FnNUMiVm+RRfKaYjq2YLoqw5ycvTVoieir9uwUCgWPfR
-         86Rw==
-X-Gm-Message-State: AOAM531eF7VdlQG8JX86hcYBw+duYAzWlml5EI16ofGY0pDUN6cCF0JY
-        uv4/IBpqi76NzrG20D6vgQHxzhR8/1cNj8tECw/XIQ==
-X-Google-Smtp-Source: ABdhPJy/F93/bynfvfsm40lPj+sfF6IUeml0u74B5+XSTwKjdBKHGF9ssO+g80HeXa4n5Q7iWRh0IVOUfUGuwu/D1DY=
-X-Received: by 2002:a05:6902:102c:b0:663:32b8:4b24 with SMTP id
- x12-20020a056902102c00b0066332b84b24mr51076390ybt.1.1655130835059; Mon, 13
- Jun 2022 07:33:55 -0700 (PDT)
+        with ESMTP id S243322AbiFMSJ6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 13 Jun 2022 14:09:58 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA2311A06;
+        Mon, 13 Jun 2022 06:58:35 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o0kaB-0000lz-EM; Mon, 13 Jun 2022 15:58:19 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     palmer@rivosinc.com, arnd@arndb.de, linux@roeck-us.net,
+        palmer@dabbelt.com, guoren@kernel.org
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] uapi: Fixup strace compile error
+Date:   Mon, 13 Jun 2022 15:58:18 +0200
+Message-ID: <5835624.lOV4Wx5bFT@diego>
+In-Reply-To: <20220613013051.1741434-1-guoren@kernel.org>
+References: <20220613013051.1741434-1-guoren@kernel.org>
 MIME-Version: 1.0
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
- <20220610113427.908751-3-alexandr.lobakin@intel.com> <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
- <22042c14bc6a437d9c6b235fbfa32c8a@intel.com> <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
- <20220613141947.1176100-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220613141947.1176100-1-alexandr.lobakin@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 13 Jun 2022 16:33:17 +0200
-Message-ID: <CANpmjNM0noP8ieQztyEvijz+MG-cDxxmfwaX_QTpnyT5G33EGA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] bitops: always define asm-generic non-atomic bitops
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 16:21, Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> From: Marco Elver <elver@google.com>
-> Date: Fri, 10 Jun 2022 18:32:36 +0200
->
-> > On Fri, 10 Jun 2022 at 18:02, Luck, Tony <tony.luck@intel.com> wrote:
-> > >
-> > > > > +/**
-> > > > > + * generic_test_bit - Determine whether a bit is set
-> > > > > + * @nr: bit number to test
-> > > > > + * @addr: Address to start counting from
-> > > > > + */
-> > > >
-> > > > Shouldn't we add in this or in separate patch a big NOTE to explain that this
-> > > > is actually atomic and must be kept as a such?
-> > >
-> > > "atomic" isn't really the right word. The volatile access makes sure that the
-> > > compiler does the test at the point that the source code asked, and doesn't
-> > > move it before/after other operations.
-> >
-> > It's listed in Documentation/atomic_bitops.txt.
->
-> Oh, so my memory was actually correct that I saw it in the docs
-> somewhere.
-> WDYT, should I mention this here in the code (block comment) as well
-> that it's atomic and must not lose `volatile` as Andy suggested or
-> it's sufficient to have it in the docs (+ it's not underscored)?
+Am Montag, 13. Juni 2022, 03:30:51 CEST schrieb guoren@kernel.org:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> There is no CONFIG_64BIT in userspace, we shouldn't limit it with
+> __BITS_PER_LONG == 32 to break the compatibility. Just export F_*64
+> definitions to userspace permanently.
+> 
+> gcc-11 -DHAVE_CONFIG_H   -I./linux/x86_64 -I../../../src/linux/x86_64
+> -I./linux/generic -I../../../src/linux/generic -I. -I../../../src
+> -DIN_STRACE=1      -isystem /opt/kernel/include -Wall -Wextra
+> -Wno-missing-field-initializers -Wno-unused-parameter -Wdate-time
+> -Wformat-security -Wimplicit-fallthrough=5 -Winit-self -Wlogical-op
+> -Wmissing-prototypes -Wnested-externs -Wold-style-definition
+> -Wtrampolines -Wundef -Wwrite-strings -Werror   -g -O2 -c -o
+> libstrace_a-fetch_bpf_fprog.o `test -f 'fetch_bpf_fprog.c' || echo
+> '../../../src/'`fetch_bpf_fprog.c
+> In file included from ../../../src/defs.h:404,
+>                  from ../../../src/fcntl.c:12:
+> ../../../src/xlat/fcntlcmds.h:54:7: error: ‘F_GETLK64’ undeclared here
+> (not in a function); did you mean ‘F_GETLK’?
+>    54 |  XLAT(F_GETLK64),
+>       |       ^~~~~~~~~
+> ../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
+>    64 | # define XLAT(val)                      { (unsigned)(val), #val
+>       }
+>       |                                                      ^~~
+> ../../../src/xlat/fcntlcmds.h:57:7: error: ‘F_SETLK64’ undeclared here
+> (not in a function); did you mean ‘F_SETLK’?
+>    57 |  XLAT(F_SETLK64),
+>       |       ^~~~~~~~~
+> ../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
+>    64 | # define XLAT(val)                      { (unsigned)(val), #val
+>       }
+>       |                                                      ^~~
+> ../../../src/xlat/fcntlcmds.h:60:7: error: ‘F_SETLKW64’ undeclared here
+> (not in a function); did you mean ‘F_SETLKW’?
+>    60 |  XLAT(F_SETLKW64),
+>       |       ^~~~~~~~~~
+> ../../../src/xlat.h:64:54: note: in definition of macro ‘XLAT’
+>    64 | # define XLAT(val)                      { (unsigned)(val), #val
+>       }
+>       |                                                      ^~~
+> make[4]: *** [Makefile:5017: libstrace_a-fcntl.o] Error 1
+> 
+> comment by Eugene:
+> Actually, it's quite the opposite: "ifndef" usage made it vailable at all
+> times to the userspace, and this change has actually broken building strace
+> with the latest kernel headers[1][2].  There could be some debate whether
+> having these F_*64 definitions exposed to the user space 64-bit
+> applications, but it seems that were no harm (as they were exposed already
+> for quite some time), and they are useful at least for strace for compat
+> application tracing purposes.
+> 
+> Fixes: 306f7cc1e9061 "uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h"
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Reported-by: Eugene Syromiatnikov <esyr@redhat.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  include/uapi/asm-generic/fcntl.h | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+> index f13d37b60775..cd6bd65ec25d 100644
+> --- a/include/uapi/asm-generic/fcntl.h
+> +++ b/include/uapi/asm-generic/fcntl.h
+> @@ -116,13 +116,11 @@
+>  #define F_GETSIG	11	/* for sockets. */
+>  #endif
+>  
+> -#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+>  #ifndef F_GETLK64
+>  #define F_GETLK64	12	/*  using 'struct flock64' */
+>  #define F_SETLK64	13
+>  #define F_SETLKW64	14
+>  #endif
+> -#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
 
-Perhaps a quick comment in the code (not kerneldoc above) will be
-sufficient, with reference to Documentation/atomic_bitops.txt.
+Looks like prviously there were a number of ways these constants
+were ifdef'd - or not. A number of platforms already had no ifdef of
+any sort around them before, so this looks like the sane way to do it.
+
+Though in the original patch the special-mips-variant also gained the
+	#if __BITS_PER_LONG == 32 ...
+conditional in arch/mips/include/uapi/asm/fcntl.h .
+So, is it also affected by this issue?
+
+
+Heiko
+
+
