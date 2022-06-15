@@ -2,212 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942A054C7A8
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jun 2022 13:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7224C54C8F4
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jun 2022 14:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbiFOLoG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jun 2022 07:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
+        id S1347171AbiFOMtB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jun 2022 08:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347117AbiFOLno (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jun 2022 07:43:44 -0400
-Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5927CF6;
-        Wed, 15 Jun 2022 04:43:43 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout3.rbg.tum.de (Postfix) with ESMTPS id 3D867100241;
-        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1655293421;
-        bh=2kjF4oxVy3r0fd0SR9Tiy0/qNbtSE87Bz7BjdDbE1WQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NQ3JEMN2ZHuNO/jk9Av7B/H/0KpYlcVLlKXKDbQyjFUGHSs9eA9lMK8Lb5Slu6MdY
-         HcTOP24C86scrmcGGk01sFNf5waZuYfo0K92v+lEx6j2EFBxU6rqq3RmGOzrcfu0m3
-         hA/W9Q7JcCktMgWsoA4AP/p4CRaZz1jgznKU8IAd6uN9NTQwaHKiKLXZAoGFXruKg+
-         7vbzwsy69l+TbNglfkS+nBbSJPe2tw3NYT13otO1+Ca4Dn6otyByXM0zhnI1rqfS4W
-         kWyMb7r4EliCIh4QwQdEJS00rR1dWRg/4hM1staWVoKKc2EAFsRIF1x0aygVIyunKK
-         pX9cOhuqMCCtw==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 3D0B1DD; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 198DED6;
-        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 14250CE;
-        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 087424A0220; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id A477F4A01E7;
-        Wed, 15 Jun 2022 13:43:40 +0200 (CEST)
-        (Extended-Queue-bit xtech_ko@fff.in.tum.de)
-From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
-To:     llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-Date:   Wed, 15 Jun 2022 11:43:29 +0000
-Message-Id: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S1345882AbiFOMs7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jun 2022 08:48:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A7618388;
+        Wed, 15 Jun 2022 05:48:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655297338; x=1686833338;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1LeS1Y26/DPWMeFDEpo81CHFZxsFn7K1q5Nm4vENnvY=;
+  b=aHAIcPEmBSwj6wthbLSY4XRgTSRSZbWkh2McHCdtfd2aGGeMRV4vFzDc
+   1KQu/UlwfOP1ov4RnZIjAzi9A5qWmtZtZNZXJK7NEa3FDJPMn7VJQ1QLU
+   FJ7CNnbquoQmGPf185AbgjqZwoTQAnszWwMVUMlC2r7w+76wuaxE64y8A
+   O8A7duGoLOjlNRTXen71dLkVsCXU8vbjts4mjjzhNmS1Zx+RKKnSTmCEf
+   yKd2oQAFb/ncSOGg0iy/anyN94JDVkcEIPTJol0z9pLmV4kDONpsfcdt9
+   oI60Fh1e+c9XsFFI99fl8kty7qjaGohEnK9AICVowXvbgAQUosdzvmK+F
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="261973569"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="261973569"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:48:46 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="687288095"
+Received: from mgrymel-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.34])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:48:43 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v7 0/6] Add RS485 9th bit addressing mode support to DW UART
+Date:   Wed, 15 Jun 2022 15:48:23 +0300
+Message-Id: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi all,
+This patchset adds RS-485 9th bit addressing mode support to the DW
+UART driver and the necessary serial core bits to handle it. The
+addressing mode is configured through .rs485_config() as was requested
+during the review of the earlier versions. The line configuration
+related ADDRB is still kept in ktermios->c_cflag to be able to take
+account the extra addressing bit while calculating timing, etc. but it
+is set/cleared by .rs485_config().
 
-I have been confused by explanation.txt's definition of control
-dependencies:
+PLEASE CHECK that the serial_rs485 .padding change looks OK (mainly
+that it won't add hole under some odd condition which would alter
+serial_rs485's sizeof)!
 
-> Finally, a read event and another memory access event are linked by a
-> control dependency if the value obtained by the read affects whether
-> the second event is executed at all.
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
 
-I'll go into the following:
+v6 -> v7:
+- Fixed typos in documentation & comment
+- Changes lsr typing from unsigned int to u16
 
-====
-1. "At all", to me, is misleading
-  1.1 The code which confused me
-  1.2 The traditional definition via post-dominance doesn't work either
-2. Solution
-====
+v5 -> v6:
+- Reorder remaining patches
+- LSR changes are simpler due to helper added by LSR fix series
+- Depend on rs485_struct sanitization on catching much of invalid config
+- In order to be able to alter ADDRB in termios .c_cflag within
+  .rs485_config(), take termios_rwsem and pass ktermios to it.
+- Moved addressing mode setup entirely into .rs485_config()
+- Use ndelay() instead of udelay() (uart_port->frame_time is in nsecs)
 
-1. "At all", to me, is misleading:
 
-"At all" to me suggests a question for which we require a definitive
-"yes" or "no" answer: given a programme and an input, can a certain
-piece of code be executed? Can we always answer this this question?
-Doesn't this sound similar to the halting problem?
+Ilpo Järvinen (6):
+  serial: 8250: make saved LSR larger
+  serial: 8250: create lsr_save_mask
+  serial: 8250_lpss: Use 32-bit reads
+  serial: take termios_rwsem for .rs485_config() & pass termios as param
+  serial: Support for RS-485 multipoint addresses
+  serial: 8250_dwlib: Support for 9th bit multipoint addressing
 
-1.1 The Example which confused me:
+ Documentation/driver-api/serial/driver.rst    |   2 +
+ .../driver-api/serial/serial-rs485.rst        |  26 ++++-
+ drivers/tty/serial/8250/8250.h                |   9 +-
+ drivers/tty/serial/8250/8250_core.c           |   4 +
+ drivers/tty/serial/8250/8250_dw.c             |   2 +-
+ drivers/tty/serial/8250/8250_dwlib.c          | 105 +++++++++++++++++-
+ drivers/tty/serial/8250/8250_exar.c           |  11 +-
+ drivers/tty/serial/8250/8250_fintek.c         |   2 +-
+ drivers/tty/serial/8250/8250_fsl.c            |   2 +-
+ drivers/tty/serial/8250/8250_ingenic.c        |   2 +-
+ drivers/tty/serial/8250/8250_lpc18xx.c        |   2 +-
+ drivers/tty/serial/8250/8250_lpss.c           |   2 +-
+ drivers/tty/serial/8250/8250_omap.c           |   7 +-
+ drivers/tty/serial/8250/8250_pci.c            |   2 +-
+ drivers/tty/serial/8250/8250_port.c           |  20 ++--
+ drivers/tty/serial/amba-pl011.c               |   2 +-
+ drivers/tty/serial/ar933x_uart.c              |   2 +-
+ drivers/tty/serial/atmel_serial.c             |   2 +-
+ drivers/tty/serial/fsl_lpuart.c               |   4 +-
+ drivers/tty/serial/imx.c                      |   2 +-
+ drivers/tty/serial/max310x.c                  |   2 +-
+ drivers/tty/serial/mcf.c                      |   3 +-
+ drivers/tty/serial/omap-serial.c              |   3 +-
+ drivers/tty/serial/sc16is7xx.c                |   2 +-
+ drivers/tty/serial/serial_core.c              |  26 ++++-
+ drivers/tty/serial/stm32-usart.c              |   2 +-
+ drivers/tty/tty_ioctl.c                       |   4 +
+ include/linux/serial_8250.h                   |   7 +-
+ include/linux/serial_core.h                   |   3 +-
+ include/uapi/asm-generic/termbits-common.h    |   1 +
+ include/uapi/linux/serial.h                   |  12 +-
+ 31 files changed, 222 insertions(+), 53 deletions(-)
 
-For the dependency checker project [1], I've been thinking about
-tracking dependency chains in code, and I stumbled upon the following
-edge case, which made me question the "at all" part of the current
-definition. The below C-code is derived from some optimised kernel code
-in LLVM intermediate representation (IR) I encountered:
-
-> int *x, *y;
->
-> int foo()
-> {
-> /* More code */
->
-> 	 loop:
-> 		/* More code */
->
-> 	 	if(READ_ONCE(x)) {
-> 	 		WRITE_ONCE(y, 42);
-> 	 		return 0;
-> 	 	}
->
-> 		/* More code */
->
-> 	 	goto loop;
->
->       /* More code */
-> }
-
-Assuming that foo() will return, the READ_ONCE() does not determine
-whether the WRITE_ONCE() will be executed __at all__, as it will be
-executed exactly when the function returns, instead, it determines
-__when__ the WRITE_ONCE() will be executed.
-
-1.2. The definition via post-dominance doesn't work either:
-
-I have seen control dependencies being defined in terms of the first
-basic block that post-dominates the basic block of the if-condition,
-that is the first basic block control flow must take to reach the
-function return regardless of what the if condition returned.
-
-E.g. [2] defines control dependencies as follows:
-
-> A statement y is said to be control dependent on another statement x
-> if (1) there exists a nontrivial path from x to y such that every
-> statement z != x in the path is post-dominated by y, and (2) x is not
-> post-dominated by y.
-
-Again, this definition doesn't work for the example above. As the basic
-block of the if branch trivially post-dominates any other basic block,
-because it contains the function return.
-
-2. Solution:
-
-The definition I came up with instead is the following:
-
-> A basic block B is control-dependent on a basic block A if
-> B is reachable from A, but control flow can take a path through A
-> which avoids B. The scope of a control dependency ends at the first
-> basic block where all control flow paths running through A meet.
-
-Note that this allows control dependencies to remain "unresolved".
-
-I'm happy to submit a patch which covers more of what I mentioned above
-as part of explanation.txt, but figured that in the spirit of keeping
-things simple, leaving out "at all" might be enough?
-
-What do you think?
-
-Many thanks,
-Paul
-
-[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#u
-[2]: Optimizing Compilers for Modern Architectures: A Dependence-Based
-Approach, Randy Allen, Ken Kennedy, 2002, p. 350
-
-Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-Cc: Marco Elver <elver@google.com>
-Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-Cc: Martin Fink <martin.fink@in.tum.de>
----
- tools/memory-model/Documentation/explanation.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-index ee819a402b69..42af7ed91313 100644
---- a/tools/memory-model/Documentation/explanation.txt
-+++ b/tools/memory-model/Documentation/explanation.txt
-@@ -466,7 +466,7 @@ pointer.
- 
- Finally, a read event and another memory access event are linked by a
- control dependency if the value obtained by the read affects whether
--the second event is executed at all.  Simple example:
-+the second event is executed.  Simple example:
- 
- 	int x, y;
- 
 -- 
-2.35.1
+2.30.2
 
