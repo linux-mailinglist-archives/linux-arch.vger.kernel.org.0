@@ -2,123 +2,231 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7898854CAF1
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jun 2022 16:14:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9FF54CB04
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jun 2022 16:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245596AbiFOOOO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jun 2022 10:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S237586AbiFOOQX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jun 2022 10:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346085AbiFOONr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jun 2022 10:13:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA65128E34;
-        Wed, 15 Jun 2022 07:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655302426; x=1686838426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=B8TiHIv5Q07n74NXSDQu97TnsKK0fjGHsjxfyj1wpiY=;
-  b=j7s2LQCiH9CKxMSDH7iK001hej/is0TvhiFUsIDii4844ClqkgD1K5Sq
-   T4JY0+935qE90NBYUmLzfqYjlIO5JNE98WaI4s3lDMn0hAJwcTaQFiEc5
-   8fBNXHG13OPkxqDx8PpnQ1H+se38knaOYn0TmrqnktyzhsFZVxDBBvYan
-   KL+KWnQnVkPeXSyGJzSWiKmwilaIzvbYv2Sae4+o1sfZo4S8c6j4ozWsc
-   CcwcPBnB8XmwG50cUr7zMApYucDAXYomLHS5WSAfENO48NOi5EOqbEOYC
-   bkus4cvuDpCxnar1o/PHXpgl+LGtzl5aNgx8w1THZAr0ae9KLYD5RAxpO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="267662562"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="267662562"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 07:13:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="536053581"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 07:13:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o1Tlh-000dUY-Vg;
-        Wed, 15 Jun 2022 17:13:13 +0300
-Date:   Wed, 15 Jun 2022 17:13:13 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        with ESMTP id S234350AbiFOOQU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jun 2022 10:16:20 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7DFDD37AAF
+        for <linux-arch@vger.kernel.org>; Wed, 15 Jun 2022 07:16:19 -0700 (PDT)
+Received: (qmail 674306 invoked by uid 1000); 15 Jun 2022 10:16:18 -0400
+Date:   Wed, 15 Jun 2022 10:16:18 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH v7 5/6] serial: Support for RS-485 multipoint addresses
-Message-ID: <Yqno+b/+W2RP8rnh@smile.fi.intel.com>
-References: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
- <20220615124829.34516-6-ilpo.jarvinen@linux.intel.com>
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
+Message-ID: <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
+References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220615124829.34516-6-ilpo.jarvinen@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 03:48:28PM +0300, Ilpo Järvinen wrote:
-> Add support for RS-485 multipoint addressing using 9th bit [*]. The
-> addressing mode is configured through .rs485_config().
+On Wed, Jun 15, 2022 at 11:43:29AM +0000, Paul Heidekrüger wrote:
+> Hi all,
 > 
-> ADDRB in termios indicates 9th bit addressing mode is enabled. In this
-> mode, 9th bit is used to indicate an address (byte) within the
-> communication line. ADDRB can only be enabled/disabled through
-> .rs485_config() that is also responsible for setting the destination and
-> receiver (filter) addresses.
+> I have been confused by explanation.txt's definition of control
+> dependencies:
 > 
-> [*] Technically, RS485 is just an electronic spec and does not itself
-> specify the 9th bit addressing mode but 9th bit seems at least
-> "semi-standard" way to do addressing with RS485.
+> > Finally, a read event and another memory access event are linked by a
+> > control dependency if the value obtained by the read affects whether
+> > the second event is executed at all.
 > 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-api@vger.kernel.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
+> I'll go into the following:
+> 
+> ====
+> 1. "At all", to me, is misleading
+>   1.1 The code which confused me
+>   1.2 The traditional definition via post-dominance doesn't work either
+> 2. Solution
+> ====
+> 
+> 1. "At all", to me, is misleading:
+> 
+> "At all" to me suggests a question for which we require a definitive
+> "yes" or "no" answer: given a programme and an input, can a certain
+> piece of code be executed? Can we always answer this this question?
+> Doesn't this sound similar to the halting problem?
 
-Hmm... In order to reduce commit messages you can move these Cc:s after the
-cutter line ('---').
+No.  You're not thinking about this the right way.
 
-...
+The point of view we take in this document and in the LKMM is not like 
+the view in a static analysis of a program.  It is a dynamic analysis of 
+one particular execution of a program.  The halting problem does not 
+apply.  Note for instance that explanation.txt talks about "events" 
+rather than instructions or pieces of code.
 
-> -	__u32	padding[5];		/* Memory is cheap, new structs
-> -					   are a royal PITA .. */
-> +	__u8	addr_recv;
-> +	__u8	addr_dest;
-> +	__u8	padding[2 + 4 * sizeof(__u32)];		/* Memory is cheap, new structs
-> +							 * are a royal PITA .. */
+(The single-execution-at-a-time point of view has its own limitations, 
+which do have some adverse affects on the LKMM.  But we don't want to 
+exceed the capabilities of the herd7 tool.)
 
-I'm not sure it's an equivalent. I would leave u32 members  untouched, so
-something like
+> 1.1 The Example which confused me:
+> 
+> For the dependency checker project [1], I've been thinking about
+> tracking dependency chains in code, and I stumbled upon the following
+> edge case, which made me question the "at all" part of the current
+> definition. The below C-code is derived from some optimised kernel code
+> in LLVM intermediate representation (IR) I encountered:
+> 
+> > int *x, *y;
+> >
+> > int foo()
+> > {
+> > /* More code */
+> >
+> > 	 loop:
+> > 		/* More code */
+> >
+> > 	 	if(READ_ONCE(x)) {
+> > 	 		WRITE_ONCE(y, 42);
+> > 	 		return 0;
+> > 	 	}
+> >
+> > 		/* More code */
+> >
+> > 	 	goto loop;
+> >
+> >       /* More code */
+> > }
+> 
+> Assuming that foo() will return, the READ_ONCE() does not determine
+> whether the WRITE_ONCE() will be executed __at all__, as it will be
+> executed exactly when the function returns, instead, it determines
+> __when__ the WRITE_ONCE() will be executed.
 
-	__u8	addr_recv;
-	__u8	addr_dest;
-	__u8	padding0[2];		/* Memory is cheap, new structs
-	__u32	padding1[4];		 * are a royal PITA .. */
+But what if your assumption is wrong?
 
-And repeating about `pahole` tool which may be useful here to check for ABI
-potential changes.
+In any case, your question displays an incorrect viewpoint.  For 
+instance, the READ_ONCE() does not count as a single event.  Rather, 
+each iteration through the loop executes a separate instance of the 
+READ_ONCE(), and each instance counts as its own event.  Think of events 
+not as static entities in the program source but instead as the items in 
+the queue that gets fed into the CPU's execution unit at run time.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Strictly speaking, one could say there is a control dependency from each 
+of these READ_ONCE() events to the final WRITE_ONCE().  However the LKMM 
+takes a more limited viewpoint, saying that a dependency from a load to 
+the controlling expression of an "if" statement only affects the 
+execution of the events corresponding to statements lying statically in 
+the two arms of the "if".  In your example the "if" has a single arm, 
+and so only the access in that arm is considered to have a control 
+dependency from the preceding instance of the READ_ONCE().  And it 
+doesn't have a control dependency from any of the earlier iterations of 
+the READ_ONCE(), because it doesn't lie in any of the arms of the 
+earlier iterations of the "if".
 
+> 1.2. The definition via post-dominance doesn't work either:
+> 
+> I have seen control dependencies being defined in terms of the first
+> basic block that post-dominates the basic block of the if-condition,
+> that is the first basic block control flow must take to reach the
+> function return regardless of what the if condition returned.
+> 
+> E.g. [2] defines control dependencies as follows:
+> 
+> > A statement y is said to be control dependent on another statement x
+> > if (1) there exists a nontrivial path from x to y such that every
+> > statement z != x in the path is post-dominated by y, and (2) x is not
+> > post-dominated by y.
+> 
+> Again, this definition doesn't work for the example above. As the basic
+> block of the if branch trivially post-dominates any other basic block,
+> because it contains the function return.
 
+Again, not applicable as basic blocks, multiple paths, and so on belong 
+to static analysis.
+
+> 2. Solution:
+> 
+> The definition I came up with instead is the following:
+> 
+> > A basic block B is control-dependent on a basic block A if
+> > B is reachable from A, but control flow can take a path through A
+> > which avoids B. The scope of a control dependency ends at the first
+> > basic block where all control flow paths running through A meet.
+> 
+> Note that this allows control dependencies to remain "unresolved".
+> 
+> I'm happy to submit a patch which covers more of what I mentioned above
+> as part of explanation.txt, but figured that in the spirit of keeping
+> things simple, leaving out "at all" might be enough?
+> 
+> What do you think?
+
+Not so good.  A better description would be that there is a control 
+dependency from a read event X to a memory access event Y if there is a 
+dependency (data or address) from X to the conditional branch event of 
+an "if" statement which contains Y in one of its arms.  And similarly 
+for "switch" statements.
+
+Alan
+
+> Many thanks,
+> Paul
+> 
+> [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#u
+> [2]: Optimizing Compilers for Modern Architectures: A Dependence-Based
+> Approach, Randy Allen, Ken Kennedy, 2002, p. 350
+> 
+> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> Cc: Martin Fink <martin.fink@in.tum.de>
+> ---
+>  tools/memory-model/Documentation/explanation.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> index ee819a402b69..42af7ed91313 100644
+> --- a/tools/memory-model/Documentation/explanation.txt
+> +++ b/tools/memory-model/Documentation/explanation.txt
+> @@ -466,7 +466,7 @@ pointer.
+>  
+>  Finally, a read event and another memory access event are linked by a
+>  control dependency if the value obtained by the read affects whether
+> -the second event is executed at all.  Simple example:
+> +the second event is executed.  Simple example:
+>  
+>  	int x, y;
+>  
+> -- 
+> 2.35.1
+> 
