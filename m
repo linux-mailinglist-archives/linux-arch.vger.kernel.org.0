@@ -2,177 +2,123 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F9D54CACA
-	for <lists+linux-arch@lfdr.de>; Wed, 15 Jun 2022 16:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7898854CAF1
+	for <lists+linux-arch@lfdr.de>; Wed, 15 Jun 2022 16:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355685AbiFOODl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 15 Jun 2022 10:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47748 "EHLO
+        id S245596AbiFOOOO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 15 Jun 2022 10:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355665AbiFOODR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jun 2022 10:03:17 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDD110F1;
-        Wed, 15 Jun 2022 07:03:02 -0700 (PDT)
+        with ESMTP id S1346085AbiFOONr (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 15 Jun 2022 10:13:47 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA65128E34;
+        Wed, 15 Jun 2022 07:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655301782; x=1686837782;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wB8IdGjwWR4VpCGztcdlKcCnZSDfsh9h9lU6StlhX6Q=;
-  b=UTr6lSsJRpus2LDPO6wGYyoQPDnj63DfpYTp06CToFZe9dB19GwXBBD7
-   qL5qhZqd32deyUf0KlgaPLGA/M6OPUyMwCM9jW+9eQI1SPd9+3ybIFfjp
-   dMSJYN2b66ddHRg7JVWT0qb7zbmhbsbZnmiKYAsmR/cTu3bnS0DFFkXiN
-   yi2Nf0rwfpsKZN+a2gIGlut03Ww2c6KQ+DtMgjOHFynz3JgoRoZWaWc0Y
-   uPFxzh8QdzBCs6OJtgT4/ia1NExN8RotTa+YaqPPMoCT2cg+jIfoLYNhN
-   ce5p+6KNCOPdN+Qjf9K9mXWu4xkXzhc+d3uMJyvcih3NVoTqTfR0lTuDC
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="258822117"
+  t=1655302426; x=1686838426;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=B8TiHIv5Q07n74NXSDQu97TnsKK0fjGHsjxfyj1wpiY=;
+  b=j7s2LQCiH9CKxMSDH7iK001hej/is0TvhiFUsIDii4844ClqkgD1K5Sq
+   T4JY0+935qE90NBYUmLzfqYjlIO5JNE98WaI4s3lDMn0hAJwcTaQFiEc5
+   8fBNXHG13OPkxqDx8PpnQ1H+se38knaOYn0TmrqnktyzhsFZVxDBBvYan
+   KL+KWnQnVkPeXSyGJzSWiKmwilaIzvbYv2Sae4+o1sfZo4S8c6j4ozWsc
+   CcwcPBnB8XmwG50cUr7zMApYucDAXYomLHS5WSAfENO48NOi5EOqbEOYC
+   bkus4cvuDpCxnar1o/PHXpgl+LGtzl5aNgx8w1THZAr0ae9KLYD5RAxpO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="267662562"
 X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="258822117"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 07:02:22 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="267662562"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 07:13:20 -0700
 X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="572033359"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga002.jf.intel.com with ESMTP; 15 Jun 2022 07:02:16 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25FE2EOf020988;
-        Wed, 15 Jun 2022 15:02:14 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] bitops: let optimize out non-atomic bitops on compile-time constants
-Date:   Wed, 15 Jun 2022 16:00:30 +0200
-Message-Id: <20220615140030.1265068-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <YqlRfoB5+VBIw8gJ@yury-laptop>
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com> <20220610113427.908751-7-alexandr.lobakin@intel.com> <YqlRfoB5+VBIw8gJ@yury-laptop>
+   d="scan'208";a="536053581"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 07:13:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o1Tlh-000dUY-Vg;
+        Wed, 15 Jun 2022 17:13:13 +0300
+Date:   Wed, 15 Jun 2022 17:13:13 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH v7 5/6] serial: Support for RS-485 multipoint addresses
+Message-ID: <Yqno+b/+W2RP8rnh@smile.fi.intel.com>
+References: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
+ <20220615124829.34516-6-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220615124829.34516-6-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
-Date: Tue, 14 Jun 2022 20:26:54 -0700
-
-> Hi Alexander,
+On Wed, Jun 15, 2022 at 03:48:28PM +0300, Ilpo Järvinen wrote:
+> Add support for RS-485 multipoint addressing using 9th bit [*]. The
+> addressing mode is configured through .rs485_config().
 > 
-> On Fri, Jun 10, 2022 at 01:34:27PM +0200, Alexander Lobakin wrote:
-> > Currently, many architecture-specific non-atomic bitop
-> > implementations use inline asm or other hacks which are faster or
-> > more robust when working with "real" variables (i.e. fields from
-> > the structures etc.), but the compilers have no clue how to optimize
-> > them out when called on compile-time constants. That said, the
-> > following code:
-> > 
-> > 	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
-> > 	unsigned long bar = BIT(BAR_BIT);
-> > 	unsigned long baz = 0;
-> > 
-> > 	__set_bit(FOO_BIT, foo);
-> > 	baz |= BIT(BAZ_BIT);
-> > 
-> > 	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
-> > 	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
-> > 	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
+> ADDRB in termios indicates 9th bit addressing mode is enabled. In this
+> mode, 9th bit is used to indicate an address (byte) within the
+> communication line. ADDRB can only be enabled/disabled through
+> .rs485_config() that is also responsible for setting the destination and
+> receiver (filter) addresses.
 > 
-> Can you put this snippet into lib/test_bitops.c?
-
-Great idea, sure!
-
+> [*] Technically, RS485 is just an electronic spec and does not itself
+> specify the 9th bit addressing mode but 9th bit seems at least
+> "semi-standard" way to do addressing with RS485.
 > 
-> Thanks,
-> Yury
-> 
-> > triggers the first assertion on x86_64, which means that the
-> > compiler is unable to evaluate it to a compile-time initializer
-> > when the architecture-specific bitop is used even if it's obvious.
-> > In order to let the compiler optimize out such cases, expand the
-> > bitop() macro to use the "constant" C non-atomic bitop
-> > implementations when all of the arguments passed are compile-time
-> > constants, which means that the result will be a compile-time
-> > constant as well, so that it produces more efficient and simple
-> > code in 100% cases, comparing to the architecture-specific
-> > counterparts.
-> > 
-> > The savings are architecture, compiler and compiler flags dependent,
-> > for example, on x86_64 -O2:
-> > 
-> > GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
-> > LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
-> > LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
-> > 
-> > and ARM64 (courtesy of Mark):
-> > 
-> > GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
-> > LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
-> > 
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > ---
-> >  include/linux/bitops.h | 18 +++++++++++++++++-
-> >  1 file changed, 17 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> > index 753f98e0dcf5..364bdc3606b4 100644
-> > --- a/include/linux/bitops.h
-> > +++ b/include/linux/bitops.h
-> > @@ -33,8 +33,24 @@ extern unsigned long __sw_hweight64(__u64 w);
-> >  
-> >  #include <asm-generic/bitops/generic-non-atomic.h>
-> >  
-> > +/*
-> > + * Many architecture-specific non-atomic bitops contain inline asm code and due
-> > + * to that the compiler can't optimize them to compile-time expressions or
-> > + * constants. In contrary, gen_*() helpers are defined in pure C and compilers
-> > + * optimize them just well.
-> > + * Therefore, to make `unsigned long foo = 0; __set_bit(BAR, &foo)` effectively
-> > + * equal to `unsigned long foo = BIT(BAR)`, pick the generic C alternative when
-> > + * the arguments can be resolved at compile time. That expression itself is a
-> > + * constant and doesn't bring any functional changes to the rest of cases.
-> > + * The casts to `uintptr_t` are needed to mitigate `-Waddress` warnings when
-> > + * passing a bitmap from .bss or .data (-> `!!addr` is always true).
-> > + */
-> >  #define bitop(op, nr, addr)						\
-> > -	op(nr, addr)
-> > +	((__builtin_constant_p(nr) &&					\
-> > +	  __builtin_constant_p((uintptr_t)(addr) != (uintptr_t)NULL) &&	\
-> > +	  (uintptr_t)(addr) != (uintptr_t)NULL &&			\
-> > +	  __builtin_constant_p(*(const unsigned long *)(addr))) ?	\
-> > +	 const##op(nr, addr) : op(nr, addr))
-> >  
-> >  #define __set_bit(nr, addr)		bitop(___set_bit, nr, addr)
-> >  #define __clear_bit(nr, addr)		bitop(___clear_bit, nr, addr)
-> > -- 
-> 2.36.1
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-api@vger.kernel.org
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
 
-Thanks,
-Olek
+Hmm... In order to reduce commit messages you can move these Cc:s after the
+cutter line ('---').
+
+...
+
+> -	__u32	padding[5];		/* Memory is cheap, new structs
+> -					   are a royal PITA .. */
+> +	__u8	addr_recv;
+> +	__u8	addr_dest;
+> +	__u8	padding[2 + 4 * sizeof(__u32)];		/* Memory is cheap, new structs
+> +							 * are a royal PITA .. */
+
+I'm not sure it's an equivalent. I would leave u32 members  untouched, so
+something like
+
+	__u8	addr_recv;
+	__u8	addr_dest;
+	__u8	padding0[2];		/* Memory is cheap, new structs
+	__u32	padding1[4];		 * are a royal PITA .. */
+
+And repeating about `pahole` tool which may be useful here to check for ABI
+potential changes.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
