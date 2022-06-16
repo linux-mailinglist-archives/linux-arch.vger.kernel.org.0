@@ -2,79 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACF1B54DEDA
-	for <lists+linux-arch@lfdr.de>; Thu, 16 Jun 2022 12:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B6754E09C
+	for <lists+linux-arch@lfdr.de>; Thu, 16 Jun 2022 14:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359700AbiFPKZI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 16 Jun 2022 06:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S230122AbiFPMNl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 16 Jun 2022 08:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiFPKZH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jun 2022 06:25:07 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2175AA76
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jun 2022 03:25:06 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id h36so1503857lfv.9
-        for <linux-arch@vger.kernel.org>; Thu, 16 Jun 2022 03:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=nwNGYHzxN/bUy/LhhY1G9hxq8XPo44RP7GtZOKHRucGu7O1UOZtoXae+ES5ie2Wv3H
-         Lo89e2SldpSTOW3ijMxaXmOS/qllUgneOZ3OQxLOVyBbmjhOQkCkTRInol4qm0zBp9u5
-         FkcMWCswycYRPifzxLy3Cn8Ki/jSQepv2sRTKZKG27vx8s0v/d7Jsus9JWyjU7qS+/hC
-         ZgYqjb3k9zyKexUHBcl6lALWGACgSWSwDIiPi7wZLS1gocZxtftXJdocUICGUIknOFpH
-         UUKTAN/rwTVZ2SM8nzHW1kfV93J7czdV9uaVcRMCOnwRC+Y63ivA+ttnNvkPk1bOWOFT
-         gebA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=lLG88JCPgF7Yhflf4FNi4GQedsSNMbwmPtgneUr9Mu0=;
-        b=nSpWQP/xBuDwH19c8A4DHimJAlRirH1OeQoADHskimiQPdFBd/l5fYVKdSmWBbhIXh
-         ekz0wpmGnYP6TBa7ZTWF7bUprgJbCz6ODCRvg43nC7vr8hCYbHyvalfyEogBoLcteyzw
-         qAbsd3ChWXs7Hi3+oZK6m3N8fuUiFUnyIxSE9mBbJBdaCYJ8uxU6YT0KAGuYb7DzucF2
-         IRSpfkouVyKMyyRdDbV39Mmbp6aV/oTwdOv3G9LcRfThBiNgdIkQgSN48xix11xyVG9M
-         ErgaQrYpm3Ow/HlXybvc2lug2v2n2wDVe8e2Ep7XqDHsfKiua5qUwzQMRoTveQi4zCUD
-         YUyQ==
-X-Gm-Message-State: AJIora+UtD8fExw4Ls3EH8XRKaFIsu0rJfqIgfj9w2t7ja0I4oYHbctt
-        q0/1iW8M8Nu2UJx8yhfBUZjw7ddg+rKBi9yOOLw=
-X-Google-Smtp-Source: AGRyM1tNW3UsYMxEBW54HEFuL2fwpT1fn01AjX8xeAkrn5nV9MFL58V4qR4BhR+zLd5S/1+uqnFaeqenB9KJKE4KBHk=
-X-Received: by 2002:a05:6512:2e7:b0:478:f55e:f490 with SMTP id
- m7-20020a05651202e700b00478f55ef490mr2215732lfq.486.1655375104853; Thu, 16
- Jun 2022 03:25:04 -0700 (PDT)
+        with ESMTP id S229740AbiFPMNk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 16 Jun 2022 08:13:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E1519C01
+        for <linux-arch@vger.kernel.org>; Thu, 16 Jun 2022 05:13:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D12B61B11
+        for <linux-arch@vger.kernel.org>; Thu, 16 Jun 2022 12:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10113C34114;
+        Thu, 16 Jun 2022 12:13:36 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH] MAINTAINERS: Add maillist information for LoongArch
+Date:   Thu, 16 Jun 2022 20:14:56 +0800
+Message-Id: <20220616121456.3613470-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Received: by 2002:a05:6520:28c2:b0:1f3:cf5:e20d with HTTP; Thu, 16 Jun 2022
- 03:25:03 -0700 (PDT)
-Reply-To: clmloans9@gmail.com
-From:   MR ANTHONY EDWARD <bashirusman02021@gmail.com>
-Date:   Thu, 16 Jun 2022 11:25:03 +0100
-Message-ID: <CAGOBX5asvO0EBOo=K4hvhUW0x8Z4mTwZNUBowaExgqNYkd0EEg@mail.gmail.com>
-Subject: DARLEHENSANGEBOT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---=20
-Ben=C3=B6tigen Sie ein Gesch=C3=A4ftsdarlehen oder ein Darlehen jeglicher A=
-rt?
-Wenn ja, kontaktieren Sie uns
+Now there is a dedicated maillist (loongarch@lists.linux.dev) for
+LoongArch, add it for better development.
 
-*Vollst=C3=A4ndiger Name:
-* Ben=C3=B6tigte Menge:
-*Leihdauer:
-*Mobiltelefon:
-*Land:
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 1fc9ead83d2a..dba5e89527a2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11590,6 +11590,7 @@ F:	drivers/gpu/drm/bridge/lontium-lt8912b.c
+ LOONGARCH
+ M:	Huacai Chen <chenhuacai@kernel.org>
+ R:	WANG Xuerui <kernel@xen0n.name>
++L:	loongarch@lists.linux.dev
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git
+ F:	arch/loongarch/
+-- 
+2.27.0
+
