@@ -2,119 +2,155 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E267D54F747
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jun 2022 14:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4B054F7EA
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jun 2022 14:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381628AbiFQMNR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jun 2022 08:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S1381999AbiFQM6G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jun 2022 08:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239096AbiFQMNQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jun 2022 08:13:16 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F85E3D;
-        Fri, 17 Jun 2022 05:13:15 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id i81-20020a1c3b54000000b0039c76434147so4269153wma.1;
-        Fri, 17 Jun 2022 05:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hnlyRioGpxx+rbPm2S0jS6ADUAhgKmqzSuVKtSCygKE=;
-        b=DtNHpfpHlFlaeqXduwx0230ymigZwE3YzhrDwapDz6K7xjYWim1sOMYwnNqiFUtIdO
-         LtRUjjUdSifY8JlG/rs5SUmn3NvK1rDYkFwODdcErzXrabvUSYS6mj4qWre9UNA3jsQK
-         xmj00Gg7lW4qkYffU+wUvpcHXY0opEJwW1UU+pRlFBzqK6r7gXx+2mrjZ7dHbiln8iau
-         aA4Zxc0DzqPAg1WlyEPnvDkBb3KXdViTCXE2bjYWMqb00WQlM4W9FibqQv4HJ8ttXTET
-         MHmzHNaZFdWHVCRulhu6KHWpPB1ewT73HoTPmPZwu6AvVbcPeALy6jsLwbHzpT6at+0U
-         YiDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hnlyRioGpxx+rbPm2S0jS6ADUAhgKmqzSuVKtSCygKE=;
-        b=enFkf3sOmvcejbNwl+4Q8xiXB1ldCQkAac1KzcBnEdGlPl+Lal5XkZVkBK4EJiDxmj
-         D7jBfOEsYXY27NrHfPd2NUjkBNxpqLWIWZrkItL/+miB00swyvcBEME0O/N1eeLf4tzK
-         ri0P4GSKiPq/wUUyzR7NzFmjuQgtH/og2gNGYloPDGawFg0qjs5nZctIuXgMjk0jyPKg
-         kHBtBaHv9YoZn2gTF7zRROiylSNdnexwoE/PEzbztyAHEtg8ekfSk1LfP1FNhQkhei9+
-         1T9K9dnBObisreVt/PMsUuouCpFR+BU0hu8PylvXNjYYF9fStVvYf8gJ2DnUNmvbfGuZ
-         76Kg==
-X-Gm-Message-State: AJIora8ChZXnxCAmKtu1f0u5N6Oa94zwDuOJj05D0i755pH3pLWdaBh/
-        CBw0o2ndZAMvTqVRTNr82NXfJ54RhRs=
-X-Google-Smtp-Source: AGRyM1tQeLWeg+xDGUA28c6lmAfKslWy7OeQwCiqFA+VwETfyXI6hxyyCo/pbQbUgFGCRx13Tp54qw==
-X-Received: by 2002:a05:600c:190b:b0:39c:7704:74a4 with SMTP id j11-20020a05600c190b00b0039c770474a4mr9806897wmq.92.1655467994150;
-        Fri, 17 Jun 2022 05:13:14 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id d8-20020adfc088000000b00213ba0cab3asm4526185wrf.44.2022.06.17.05.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jun 2022 05:13:13 -0700 (PDT)
-Message-ID: <fe7c52f9-5ff3-95a5-2692-20f81d6decf7@gmail.com>
-Date:   Fri, 17 Jun 2022 14:13:12 +0200
+        with ESMTP id S232578AbiFQM6F (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jun 2022 08:58:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB291A832;
+        Fri, 17 Jun 2022 05:58:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 781BF61FA8;
+        Fri, 17 Jun 2022 12:58:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3CBDC3411B;
+        Fri, 17 Jun 2022 12:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655470682;
+        bh=cLraNpkEnCzF/4zKCRGjwHG57BoDqUlRiy0OHq9zjK0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oH4x2PycGtrhhz35364UaeAzZu23iN71evljdxuntEZ1VsVln0947L4kgXWuEzLrC
+         OLWEWoJhN8r14vT4yHg3QQ8tQZDKO4OIba+kSPV417/BH7s5oxSh7c9Yljg6Gr1afz
+         xj6FbXz6U/9X2aXj04KSLFiOeD9C/zZoF0JfQi5Xj9zHHyGlm4nv/8XJxqnfGaiKhC
+         xU+lb1e94omoeQ0C4aaO2uCUV9m066p1W0G5moNKShM55uVOSpn4kV7bLBshwrY4Rp
+         NgxDokayeZJhS/Gn+T5DZpIazOVqwZSNsiUx9537mSMzxTSIGDTQ6H1nn5bxhvpiW3
+         g1++SMPFn7Evg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
+Subject: [PATCH v2 0/3] phase out CONFIG_VIRT_TO_BUS
+Date:   Fri, 17 Jun 2022 14:57:47 +0200
+Message-Id: <20220617125750.728590-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Ping: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Language: en-US
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        libc-alpha@sourceware.org,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Laight <David.Laight@aculab.com>,
-        Zack Weinberg <zack@owlfolio.org>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>,
-        David Howells <dhowells@redhat.com>
-References: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
- <YZvIlz7J6vOEY+Xu@yuki> <1618289.1637686052@warthog.procyon.org.uk>
- <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com> <YaTAffbvzxGGsVIv@yuki>
- <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
- <913509.1638457313@warthog.procyon.org.uk> <YbDQW6uakG3XD8jV@yuki>
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <YbDQW6uakG3XD8jV@yuki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Cyril,
+From: Arnd Bergmann <arnd@arndb.de>
 
-On 12/8/21 16:33, Cyril Hrubis wrote:
-> Hi!
->>> I could be persuaded otherwise with an example of a program for which
->>> changing __s64 from 'long long' to 'long' would break *binary* backward
->>> compatibility, or similarly for __u64.
->>
->> C++ could break.
-> 
-> Thinking of this again we can detect C++ as well so it can be safely
-> enabled just for C with:
-> 
-> #if !defined(__KERNEL__) && !defined(__cplusplus) && __BITSPERLONG == 64
-> # include <asm-generic/int-l64.h>
-> #else
-> # include <asm-generic/int-ll64.h>
-> #endif
-> 
+The virt_to_bus/bus_to_virt interface has been deprecated for
+decades. After Jakub Kicinski put a lot of work into cleaning out the
+network drivers using them, there are only a couple of other drivers
+left, which can all be removed or otherwise cleaned up, to remove the
+old interface for good.
 
-I'm very interested in seeing this merged, as that would allow 
-simplifying the man-pages by removing unnecessary kernel details such as 
-u64[1].  How is the state of this patch?
+Any out of tree drivers using virt_to_bus() should be converted to
+using the dma-mapping interfaces, typically dma_alloc_coherent()
+or dma_map_single()).
 
-Cheers,
+There are a few m68k and ppc32 specific drivers that keep using the
+interfaces, but these are all guarded with architecture-specific
+Kconfig dependencies, and are not actually broken.
 
-Alex
+There are still a number of drivers that are using virt_to_phys()
+and phys_to_virt() in place of dma-mapping operations, and these
+are often broken, but they are out of scope for this series.
 
+I would like the first two patches to either get merged through
+the SCSI tree, or get an Ack from the SCSI maintainers so I can
+merge them through the asm-generic tree
 
-[1]: 
-<https://lore.kernel.org/linux-man/20210423230609.13519-1-alx.manpages@gmail.com/T/#u>
+      Arnd
+
+---
+Changes since v1:
+ - dropped VME patches that are already in staging-next
+ - dropped media patch that gets merged independently
+ - added a networking patch and dropped it again after it got merged
+ - replace BusLogic removal with a workaround
+
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org> # dma-mapping
+Cc: Marek Szyprowski <m.szyprowski@samsung.com> # dma-mapping
+Cc: Robin Murphy <robin.murphy@arm.com> # dma-mapping
+Cc: iommu@lists.linux-foundation.org
+Cc: Khalid Aziz <khalid@gonehiking.org> # buslogic
+Cc: Maciej W. Rozycki <macro@orcam.me.uk> # buslogic
+Cc: Matt Wang <wwentao@vmware.com> # buslogic
+Cc: Miquel van Smoorenburg <mikevs@xs4all.net> # dpt_i2o
+Cc: Mark Salyzyn <salyzyn@android.com> # dpt_i2o
+Cc: linux-scsi@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-parisc@vger.kernel.org
+Cc: Denis Efremov <efremov@linux.com> # floppy
+
+Arnd Bergmann (3):
+  scsi: dpt_i2o: drop stale VIRT_TO_BUS dependency
+  scsi: BusLogic remove bus_to_virt
+  arch/*/: remove CONFIG_VIRT_TO_BUS
+
+ .../core-api/bus-virt-phys-mapping.rst        | 220 ------------------
+ Documentation/core-api/dma-api-howto.rst      |  14 --
+ Documentation/core-api/index.rst              |   1 -
+ .../translations/zh_CN/core-api/index.rst     |   1 -
+ arch/alpha/Kconfig                            |   1 -
+ arch/alpha/include/asm/floppy.h               |   2 +-
+ arch/alpha/include/asm/io.h                   |   8 +-
+ arch/ia64/Kconfig                             |   1 -
+ arch/ia64/include/asm/io.h                    |   8 -
+ arch/m68k/Kconfig                             |   1 -
+ arch/m68k/include/asm/virtconvert.h           |   4 +-
+ arch/microblaze/Kconfig                       |   1 -
+ arch/microblaze/include/asm/io.h              |   2 -
+ arch/mips/Kconfig                             |   1 -
+ arch/mips/include/asm/io.h                    |   9 -
+ arch/parisc/Kconfig                           |   1 -
+ arch/parisc/include/asm/floppy.h              |   4 +-
+ arch/parisc/include/asm/io.h                  |   2 -
+ arch/powerpc/Kconfig                          |   1 -
+ arch/powerpc/include/asm/io.h                 |   2 -
+ arch/riscv/include/asm/page.h                 |   1 -
+ arch/x86/Kconfig                              |   1 -
+ arch/x86/include/asm/io.h                     |   9 -
+ arch/xtensa/Kconfig                           |   1 -
+ arch/xtensa/include/asm/io.h                  |   3 -
+ drivers/scsi/BusLogic.c                       |  27 ++-
+ drivers/scsi/Kconfig                          |   4 +-
+ drivers/scsi/dpt_i2o.c                        |   4 +-
+ include/asm-generic/io.h                      |  14 --
+ mm/Kconfig                                    |   8 -
+ 30 files changed, 30 insertions(+), 326 deletions(-)
+ delete mode 100644 Documentation/core-api/bus-virt-phys-mapping.rst
 
 -- 
-Alejandro Colomar
-<http://www.alejandro-colomar.es/>
+2.29.2
+
