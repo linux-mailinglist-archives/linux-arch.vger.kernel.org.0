@@ -2,35 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEDE54F9B5
-	for <lists+linux-arch@lfdr.de>; Fri, 17 Jun 2022 16:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6377054F9B9
+	for <lists+linux-arch@lfdr.de>; Fri, 17 Jun 2022 16:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbiFQO5G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jun 2022 10:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
+        id S233098AbiFQO5f (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jun 2022 10:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbiFQO5G (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jun 2022 10:57:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE93F1C901
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 07:57:04 -0700 (PDT)
+        with ESMTP id S1382930AbiFQO5e (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jun 2022 10:57:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E671F620
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 07:57:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C52461778
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 14:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730BBC3411B;
-        Fri, 17 Jun 2022 14:57:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D998B82AD5
+        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 14:57:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0BE0C3411B;
+        Fri, 17 Jun 2022 14:57:25 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Add vDSO syscall __vdso_getcpu()
-Date:   Fri, 17 Jun 2022 22:58:28 +0800
-Message-Id: <20220617145828.582117-1-chenhuacai@loongson.cn>
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Min Zhou <zhoumin@loongson.cn>
+Subject: [PATCH] LoongArch: Add sparse memory vmemmap support
+Date:   Fri, 17 Jun 2022 22:58:59 +0800
+Message-Id: <20220617145859.582176-1-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,207 +45,269 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-We test 20 million times of getcpu(), the real syscall version take 25
-seconds, while the vsyscall version take only 2.4 seconds.
+Add sparse memory vmemmap support for LoongArch. SPARSEMEM_VMEMMAP
+uses a virtually mapped memmap to optimise pfn_to_page and page_to_pfn
+operations. This is the most efficient option when sufficient kernel
+resources are available.
 
+Signed-off-by: Min Zhou <zhoumin@loongson.cn>
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/vdso.h      |  4 +++
- arch/loongarch/include/asm/vdso/vdso.h | 10 +++++-
- arch/loongarch/kernel/vdso.c           | 23 +++++++++-----
- arch/loongarch/vdso/Makefile           |  3 +-
- arch/loongarch/vdso/vdso.lds.S         |  1 +
- arch/loongarch/vdso/vgetcpu.c          | 43 ++++++++++++++++++++++++++
- 6 files changed, 74 insertions(+), 10 deletions(-)
- create mode 100644 arch/loongarch/vdso/vgetcpu.c
+ arch/loongarch/Kconfig                 |   1 +
+ arch/loongarch/include/asm/pgtable.h   |   5 +-
+ arch/loongarch/include/asm/sparsemem.h |   8 ++
+ arch/loongarch/mm/init.c               | 184 ++++++++++++++++++++++++-
+ 4 files changed, 196 insertions(+), 2 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/vdso.h b/arch/loongarch/include/asm/vdso.h
-index 8f8a0f9a4953..e76d5e37480d 100644
---- a/arch/loongarch/include/asm/vdso.h
-+++ b/arch/loongarch/include/asm/vdso.h
-@@ -12,6 +12,10 @@
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index dc19cf3071ea..55ab84fd70e5 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -422,6 +422,7 @@ config ARCH_FLATMEM_ENABLE
  
- #include <asm/barrier.h>
- 
-+typedef struct vdso_pcpu_data {
-+	u32 node;
-+} ____cacheline_aligned_in_smp vdso_pcpu_data;
+ config ARCH_SPARSEMEM_ENABLE
+ 	def_bool y
++	select SPARSEMEM_VMEMMAP_ENABLE
+ 	help
+ 	  Say Y to support efficient handling of sparse physical memory,
+ 	  for architectures which are either NUMA (Non-Uniform Memory Access)
+diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+index 5dc84d8f18d6..3b8725fc6693 100644
+--- a/arch/loongarch/include/asm/pgtable.h
++++ b/arch/loongarch/include/asm/pgtable.h
+@@ -92,7 +92,10 @@ extern unsigned long zero_page_mask;
+ #define VMALLOC_START	MODULES_END
+ #define VMALLOC_END	\
+ 	(vm_map_base +	\
+-	 min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE)
++	 min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
 +
- /*
-  * struct loongarch_vdso_info - Details of a VDSO image.
-  * @vdso: Pointer to VDSO image (page-aligned).
-diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
-index 5a01643a65b3..94055f7c54b7 100644
---- a/arch/loongarch/include/asm/vdso/vdso.h
-+++ b/arch/loongarch/include/asm/vdso/vdso.h
-@@ -8,6 +8,13 @@
++#define vmemmap		((struct page *)((VMALLOC_END + PMD_SIZE) & PMD_MASK))
++#define VMEMMAP_END	((unsigned long)vmemmap + VMEMMAP_SIZE - 1)
  
- #include <asm/asm.h>
- #include <asm/page.h>
-+#include <asm/vdso.h>
-+
-+#if PAGE_SIZE < SZ_16K
-+#define VDSO_DATA_SIZE SZ_16K
+ #define pte_ERROR(e) \
+ 	pr_err("%s:%d: bad pte %016lx.\n", __FILE__, __LINE__, pte_val(e))
+diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
+index 3d18cdf1b069..a1e440f6bec7 100644
+--- a/arch/loongarch/include/asm/sparsemem.h
++++ b/arch/loongarch/include/asm/sparsemem.h
+@@ -11,6 +11,14 @@
+ #define SECTION_SIZE_BITS	29 /* 2^29 = Largest Huge Page Size */
+ #define MAX_PHYSMEM_BITS	48
+ 
++#ifndef CONFIG_SPARSEMEM_VMEMMAP
++#define VMEMMAP_SIZE	0
 +#else
-+#define VDSO_DATA_SIZE PAGE_SIZE
++#define VMEMMAP_SIZE	(sizeof(struct page) * (1UL << (cpu_pabits + 1 - PAGE_SHIFT)))
 +#endif
- 
- static inline unsigned long get_vdso_base(void)
- {
-@@ -24,7 +31,8 @@ static inline unsigned long get_vdso_base(void)
- 
- static inline const struct vdso_data *get_vdso_data(void)
- {
--	return (const struct vdso_data *)(get_vdso_base() - PAGE_SIZE);
-+	return (const struct vdso_data *)(get_vdso_base()
-+			- VDSO_DATA_SIZE + SMP_CACHE_BYTES * NR_CPUS);
- }
- 
- #endif /* __ASSEMBLY__ */
-diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
-index e20c8ca87473..6ce322a1bf8b 100644
---- a/arch/loongarch/kernel/vdso.c
-+++ b/arch/loongarch/kernel/vdso.c
-@@ -26,11 +26,15 @@ extern char vdso_start[], vdso_end[];
- 
- /* Kernel-provided data used by the VDSO. */
- static union loongarch_vdso_data {
--	u8 page[PAGE_SIZE];
--	struct vdso_data data[CS_BASES];
-+	u8 page[VDSO_DATA_SIZE];
-+	struct {
-+		vdso_pcpu_data pdata[NR_CPUS];
-+		struct vdso_data data[CS_BASES];
-+	};
- } loongarch_vdso_data __page_aligned_data;
--struct vdso_data *vdso_data = loongarch_vdso_data.data;
 +
- static struct page *vdso_pages[] = { NULL };
-+struct vdso_data *vdso_data = loongarch_vdso_data.data;
- 
- static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struct *new_vma)
- {
-@@ -55,11 +59,14 @@ struct loongarch_vdso_info vdso_info = {
- 
- static int __init init_vdso(void)
- {
--	unsigned long i, pfn;
-+	unsigned long i, cpu, pfn;
- 
- 	BUG_ON(!PAGE_ALIGNED(vdso_info.vdso));
- 	BUG_ON(!PAGE_ALIGNED(vdso_info.size));
- 
-+	for_each_possible_cpu(cpu)
-+		loongarch_vdso_data.pdata[cpu].node = cpu_to_node(cpu);
++#include <linux/mm_types.h>
 +
- 	pfn = __phys_to_pfn(__pa_symbol(vdso_info.vdso));
- 	for (i = 0; i < vdso_info.size / PAGE_SIZE; i++)
- 		vdso_info.code_mapping.pages[i] = pfn_to_page(pfn + i);
-@@ -93,9 +100,9 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ #endif /* CONFIG_SPARSEMEM */
  
- 	/*
- 	 * Determine total area size. This includes the VDSO data itself
--	 * and the data page.
-+	 * and the data pages.
- 	 */
--	vvar_size = PAGE_SIZE;
-+	vvar_size = VDSO_DATA_SIZE;
- 	size = vvar_size + info->size;
+ #ifdef CONFIG_MEMORY_HOTPLUG
+diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
+index 7094a68c9b83..9b65deab6f14 100644
+--- a/arch/loongarch/mm/init.c
++++ b/arch/loongarch/mm/init.c
+@@ -22,7 +22,7 @@
+ #include <linux/pfn.h>
+ #include <linux/hardirq.h>
+ #include <linux/gfp.h>
+-#include <linux/initrd.h>
++#include <linux/hugetlb.h>
+ #include <linux/mmzone.h>
  
- 	data_addr = get_unmapped_area(NULL, vdso_base(), size, 0, 0);
-@@ -115,8 +122,8 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ #include <asm/asm-offsets.h>
+@@ -157,6 +157,188 @@ void arch_remove_memory(u64 start, u64 size, struct vmem_altmap *altmap)
+ #endif
+ #endif
  
- 	/* Map VDSO data page. */
- 	ret = remap_pfn_range(vma, data_addr,
--			      virt_to_phys(vdso_data) >> PAGE_SHIFT,
--			      PAGE_SIZE, PAGE_READONLY);
-+			      virt_to_phys(&loongarch_vdso_data) >> PAGE_SHIFT,
-+			      vvar_size, PAGE_READONLY);
- 	if (ret)
- 		goto out;
- 
-diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
-index 6b6e16732c60..d89e2ac75f7b 100644
---- a/arch/loongarch/vdso/Makefile
-+++ b/arch/loongarch/vdso/Makefile
-@@ -6,7 +6,7 @@
- ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
- include $(srctree)/lib/vdso/Makefile
- 
--obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
-+obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
- 
- # Common compiler flags between ABIs.
- ccflags-vdso := \
-@@ -21,6 +21,7 @@ ccflags-vdso += $(filter --target=%,$(KBUILD_CFLAGS))
- endif
- 
- cflags-vdso := $(ccflags-vdso) \
-+	-isystem $(shell $(CC) -print-file-name=include) \
- 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
- 	-O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
- 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
-diff --git a/arch/loongarch/vdso/vdso.lds.S b/arch/loongarch/vdso/vdso.lds.S
-index 955f02de4a2d..56ad855896de 100644
---- a/arch/loongarch/vdso/vdso.lds.S
-+++ b/arch/loongarch/vdso/vdso.lds.S
-@@ -58,6 +58,7 @@ VERSION
- {
- 	LINUX_5.10 {
- 	global:
-+		__vdso_getcpu;
- 		__vdso_clock_getres;
- 		__vdso_clock_gettime;
- 		__vdso_gettimeofday;
-diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.c
-new file mode 100644
-index 000000000000..23fe2362f4e0
---- /dev/null
-+++ b/arch/loongarch/vdso/vgetcpu.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Fast user context implementation of getcpu()
-+ */
-+
-+#include <asm/vdso.h>
-+#include <linux/getcpu.h>
-+
-+static __always_inline int read_cpu_id(void)
++#ifdef CONFIG_SPARSEMEM_VMEMMAP
++void __meminit arch_vmemmap_verify(pte_t *pte, int node,
++				unsigned long start, unsigned long end)
 +{
-+	int cpu_id;
++	unsigned long pfn = pte_pfn(*pte);
++	int actual_node = early_pfn_to_nid(pfn);
 +
-+	__asm__ __volatile__(
-+	"	rdtime.d $zero, %0\n"
-+	: "=r" (cpu_id)
-+	:
-+	: "memory");
-+
-+	return cpu_id;
++	if (node_distance(actual_node, node) > LOCAL_DISTANCE)
++		pr_warn("[%lx-%lx] potential offnode page_structs\n",
++			start, end - 1);
 +}
 +
-+static __always_inline const vdso_pcpu_data *get_pcpu_data(void)
++void * __meminit arch_vmemmap_alloc_block_zero(unsigned long size, int node)
 +{
-+	return (vdso_pcpu_data *)(get_vdso_base() - VDSO_DATA_SIZE);
++	void *p = vmemmap_alloc_block(size, node);
++
++	if (!p)
++		return NULL;
++	memset(p, 0, size);
++
++	return p;
 +}
 +
-+int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
++pte_t * __meminit arch_vmemmap_pte_populate(pmd_t *pmd, unsigned long addr, int node)
 +{
-+	int cpu_id;
-+	const vdso_pcpu_data *data;
++	pte_t *pte = pte_offset_kernel(pmd, addr);
++	if (pte_none(*pte)) {
++		pte_t entry;
++		void *p = arch_vmemmap_alloc_block_zero(PAGE_SIZE, node);
++		if (!p)
++			return NULL;
++		entry = pfn_pte(__pa(p) >> PAGE_SHIFT, PAGE_KERNEL);
++		set_pte_at(&init_mm, addr, pte, entry);
++	}
++	return pte;
++}
 +
-+	cpu_id = read_cpu_id();
++pmd_t * __meminit arch_vmemmap_pmd_populate(pud_t *pud, unsigned long addr, int node)
++{
++	pmd_t *pmd = pmd_offset(pud, addr);
++	if (pmd_none(*pmd)) {
++		void *p = arch_vmemmap_alloc_block_zero(PAGE_SIZE, node);
++		if (!p)
++			return NULL;
++		pmd_populate_kernel(&init_mm, pmd, p);
++	}
++	return pmd;
++}
 +
-+	if (cpu)
-+		*cpu = cpu_id;
++pud_t * __meminit arch_vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
++{
++	pud_t *pud = pud_offset(p4d, addr);
++	if (pud_none(*pud)) {
++		void *p = arch_vmemmap_alloc_block_zero(PAGE_SIZE, node);
++		if (!p)
++			return NULL;
++#ifndef __PAGETABLE_PMD_FOLDED
++		pmd_init((unsigned long)p, (unsigned long)invalid_pte_table);
++#endif
++		pud_populate(&init_mm, pud, p);
++	}
++	return pud;
++}
 +
-+	if (node) {
-+		data = get_pcpu_data();
-+		*node = data[cpu_id].node;
++p4d_t * __meminit arch_vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
++{
++	p4d_t *p4d = p4d_offset(pgd, addr);
++	if (p4d_none(*p4d)) {
++		void *p = arch_vmemmap_alloc_block_zero(PAGE_SIZE, node);
++		if (!p)
++			return NULL;
++#ifndef __PAGETABLE_PUD_FOLDED
++		pud_init((unsigned long)p, (unsigned long)invalid_pmd_table);
++#endif
++		p4d_populate(&init_mm, p4d, p);
++	}
++	return p4d;
++}
++
++pgd_t * __meminit arch_vmemmap_pgd_populate(unsigned long addr, int node)
++{
++	pgd_t *pgd = pgd_offset_k(addr);
++	if (pgd_none(*pgd)) {
++		void *p = arch_vmemmap_alloc_block_zero(PAGE_SIZE, node);
++		if (!p)
++			return NULL;
++		pgd_populate(&init_mm, pgd, p);
++	}
++	return pgd;
++}
++
++int __meminit arch_vmemmap_populate_basepages(unsigned long start,
++					 unsigned long end, int node)
++{
++	unsigned long addr = start;
++	pgd_t *pgd;
++	p4d_t *p4d;
++	pud_t *pud;
++	pmd_t *pmd;
++	pte_t *pte;
++
++	for (; addr < end; addr += PAGE_SIZE) {
++		pgd = arch_vmemmap_pgd_populate(addr, node);
++		if (!pgd)
++			return -ENOMEM;
++		p4d = arch_vmemmap_p4d_populate(pgd, addr, node);
++		if (!p4d)
++			return -ENOMEM;
++		pud = arch_vmemmap_pud_populate(p4d, addr, node);
++		if (!pud)
++			return -ENOMEM;
++		pmd = arch_vmemmap_pmd_populate(pud, addr, node);
++		if (!pmd)
++			return -ENOMEM;
++		pte = arch_vmemmap_pte_populate(pmd, addr, node);
++		if (!pte)
++			return -ENOMEM;
++		arch_vmemmap_verify(pte, node, addr, addr + PAGE_SIZE);
 +	}
 +
 +	return 0;
 +}
++
++int __meminit arch_vmemmap_populate_hugepages(unsigned long start,
++					 unsigned long end, int node)
++{
++	unsigned long addr = start;
++	unsigned long next;
++	pgd_t *pgd;
++	p4d_t *p4d;
++	pud_t *pud;
++	pmd_t *pmd;
++
++	for (addr = start; addr < end; addr = next) {
++		next = pmd_addr_end(addr, end);
++
++		pgd = arch_vmemmap_pgd_populate(addr, node);
++		if (!pgd)
++			return -ENOMEM;
++		p4d = arch_vmemmap_p4d_populate(pgd, addr, node);
++		if (!p4d)
++			return -ENOMEM;
++		pud = arch_vmemmap_pud_populate(p4d, addr, node);
++		if (!pud)
++			return -ENOMEM;
++
++		pmd = pmd_offset(pud, addr);
++		if (pmd_none(*pmd)) {
++			void *p = NULL;
++
++			p = arch_vmemmap_alloc_block_zero(PMD_SIZE, node);
++			if (p) {
++				pmd_t entry;
++
++				entry = pfn_pmd(virt_to_pfn(p), PAGE_KERNEL);
++				entry = pmd_mkhuge(entry);
++				set_pmd_at(&init_mm, addr, pmd, entry);
++
++				continue;
++			}
++		} else if (pmd_huge(*pmd)) {
++			arch_vmemmap_verify((pte_t *)pmd, node, addr, next);
++			continue;
++		}
++		if (arch_vmemmap_populate_basepages(addr, next, node))
++			return -ENOMEM;
++	}
++
++	return 0;
++}
++
++int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
++		struct vmem_altmap *altmap)
++{
++	return arch_vmemmap_populate_hugepages(start, end, node);
++}
++void vmemmap_free(unsigned long start, unsigned long end,
++		struct vmem_altmap *altmap)
++{
++}
++#endif
++
+ /*
+  * Align swapper_pg_dir in to 64K, allows its address to be loaded
+  * with a single LUI instruction in the TLB handlers.  If we used
 -- 
 2.27.0
 
