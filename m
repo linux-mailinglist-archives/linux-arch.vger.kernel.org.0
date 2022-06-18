@@ -2,54 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BA285504E7
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Jun 2022 14:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03F8550697
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Jun 2022 21:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236061AbiFRM4p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 18 Jun 2022 08:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
+        id S229762AbiFRTlO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 18 Jun 2022 15:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236026AbiFRM4p (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Jun 2022 08:56:45 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC0812AB7
-        for <linux-arch@vger.kernel.org>; Sat, 18 Jun 2022 05:56:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1655557001; bh=+ZJhD3kslwcqzlLuusGRIAUNOBNdrfPLk7bgsPvmgyM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O/A93laNcFVV9qGufGs1kJsjLBgInl9e5JS/qk3tY1bDWaqXvA/vi+x4Oio4FwkRn
-         149Je0XuSCm6ICArEB9ezUDv0oEkzUsPZbYDNFZKwjMTUhgcQz020c+L1lAHSzjB5p
-         D8eHt1xo+SE7BTX9qiZXayfWdB6jyluZVQNX6PqU=
-Received: from [192.168.9.172] (unknown [101.88.28.48])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id ABEF96011F;
-        Sat, 18 Jun 2022 20:56:41 +0800 (CST)
-Message-ID: <94bebe28-5988-d6b6-bf82-03ef5901cd69@xen0n.name>
-Date:   Sat, 18 Jun 2022 20:56:41 +0800
+        with ESMTP id S229680AbiFRTlM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 18 Jun 2022 15:41:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCBC13D1C;
+        Sat, 18 Jun 2022 12:41:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=a0bL49uOiCfKwT3pkrVPnT1ka4/B28/6uyQ2X04Z2uE=; b=v7sWJzFOGdSYdZIqrUgltulDvB
+        4OYLCiBKpTU/gxVWoe7+5BZDCThsZIpeVflFB2hKb9xef5S9oR1IzVv/TIPNZ8352DZ7L4y2H9bjc
+        Jmm3lucQ5r46W+jh0YPPdpufOhL0oc+6u/z1/HnxocLAcrLExQk/tV+r89h7h2rJBW7HkWMzNVF0q
+        +WIbMin/lIE9rFhhyDjKdL9OzkPDDLx9So6dRWroeqd+o2BLMeRQMd+jBz8OKtZA/L9fXvpViA0ij
+        3FOXifV7VGCmCrmPC9jPkGMAJgjGydG1JnS8N8FfoYeqV3urXj5BnPigDS9O7tvXEKOSK4e67Qkxt
+        5/OlBqAw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o2eIt-003s30-RQ; Sat, 18 Jun 2022 19:40:19 +0000
+Date:   Sat, 18 Jun 2022 20:40:19 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Ralph Corderoy <ralph@inputplus.co.uk>
+Cc:     Nate Karstens <nate.karstens@garmin.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-parisc@vger.kernel.org,
+        sparclinux@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Changli Gao <xiaosuo@gmail.com>
+Subject: Re: [PATCH v2] Implement close-on-fork
+Message-ID: <Yq4qIxh5QnhQZ0SJ@casper.infradead.org>
+References: <20200515152321.9280-1-nate.karstens@garmin.com>
+ <20220618114111.61EC71F981@orac.inputplus.co.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:103.0) Gecko/20100101
- Thunderbird/103.0a1
-Subject: Re: [PATCH] LoongArch: Add vDSO syscall __vdso_getcpu()
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>, hev <r@hev.cc>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20220617145828.582117-1-chenhuacai@loongson.cn>
- <CAHirt9hRs_iTvAZ=UxBBK448j7p+pYxKsMVise=Jj2qCtNky2Q@mail.gmail.com>
- <CAAhV-H4=04qygAFqm36RBM-ktXhO7M8HMBeCPBOnB8xYz268Zw@mail.gmail.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <CAAhV-H4=04qygAFqm36RBM-ktXhO7M8HMBeCPBOnB8xYz268Zw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220618114111.61EC71F981@orac.inputplus.co.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,69 +66,27 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/18/22 17:10, Huacai Chen wrote:
-> Hi,
->
-> On Fri, Jun 17, 2022 at 11:35 PM hev <r@hev.cc> wrote:
->> Hello,
->>
->> On Fri, Jun 17, 2022 at 10:57 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->>> We test 20 million times of getcpu(), the real syscall version take 25
->>> seconds, while the vsyscall version take only 2.4 seconds.
->>>
->>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->>> ---
->>>   arch/loongarch/include/asm/vdso.h      |  4 +++
->>>   arch/loongarch/include/asm/vdso/vdso.h | 10 +++++-
->>>   arch/loongarch/kernel/vdso.c           | 23 +++++++++-----
->>>   arch/loongarch/vdso/Makefile           |  3 +-
->>>   arch/loongarch/vdso/vdso.lds.S         |  1 +
->>>   arch/loongarch/vdso/vgetcpu.c          | 43 ++++++++++++++++++++++++++
->>>   6 files changed, 74 insertions(+), 10 deletions(-)
->>>   create mode 100644 arch/loongarch/vdso/vgetcpu.c
->>>
->>> diff --git a/arch/loongarch/include/asm/vdso.h b/arch/loongarch/include/asm/vdso.h
->>> index 8f8a0f9a4953..e76d5e37480d 100644
->>> --- a/arch/loongarch/include/asm/vdso.h
->>> +++ b/arch/loongarch/include/asm/vdso.h
->>> @@ -12,6 +12,10 @@
->>>
->>>   #include <asm/barrier.h>
->>>
->>> +typedef struct vdso_pcpu_data {
->>> +       u32 node;
->>> +} ____cacheline_aligned_in_smp vdso_pcpu_data;
->>> +
->>>   /*
->>>    * struct loongarch_vdso_info - Details of a VDSO image.
->>>    * @vdso: Pointer to VDSO image (page-aligned).
->>> diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
->>> index 5a01643a65b3..94055f7c54b7 100644
->>> --- a/arch/loongarch/include/asm/vdso/vdso.h
->>> +++ b/arch/loongarch/include/asm/vdso/vdso.h
->>> @@ -8,6 +8,13 @@
->>>
->>>   #include <asm/asm.h>
->>>   #include <asm/page.h>
->>> +#include <asm/vdso.h>
->>> +
->>> +#if PAGE_SIZE < SZ_16K
->>> +#define VDSO_DATA_SIZE SZ_16K
->> Whether we add members to the vdso data structure or extend
->> SMP_CACHE_BYTES/NR_CPUS, the static VDSO_DATA_SIZE may not match, and
->> there is no assertion checking to help us catch bugs early. So I
->> suggest defining VDSO_DATA_SIZE as ALIGN_UP(sizeof (struct vdso_data),
->> PAGE_SIZE).
-> VSYSCALL usage is very limited (you know, VSYSCALL appears for so many
-> years, but the number nearly doesn't increase until now), so I think
-> 16KB is enough in the future.
+On Sat, Jun 18, 2022 at 12:41:11PM +0100, Ralph Corderoy wrote:
+> Hi Nate,
+> 
+> > One manifestation of this is a race conditions in system(), which
+> > (depending on the implementation) is non-atomic in that it first calls
+> > a fork() and then an exec().
+> 
+> The need for O_CLOFORK might be made more clear by looking at a
+> long-standing Go issue, i.e. unrelated to system(3), which was started
+> in 2017 by Russ Cox when he summed up the current race-condition
+> behaviour of trying to execve(2) a newly created file:
+> https://github.com/golang/go/issues/22315.  I raised it on linux-kernel
+> in 2017, https://marc.info/?l=linux-kernel&m=150834137201488, and linked
+> to a proposed patch from 2011, ‘[PATCH] fs: add FD_CLOFORK and
+> O_CLOFORK’ by Changli Gao.  As I said, long-standing.
 
-I don't think omitting compile-time assertions for *correctness* is 
-worth the negligible improvement in brevity and ease of maintenance. In 
-fact, static checks for correctness actually *lightens* maintenance 
-burden, by explicitly calling out the assumptions so that newcomers 
-(i.e. me or some other random linux/arch developer refactoring code) 
-would find them very helpful.
+The problem is that people advocating for O_CLOFORK understand its
+value, but not its cost.  Other google employees have a system which has
+literally millions of file descriptors in a single process.  Having to
+maintain this extra state per-fd is a cost they don't want to pay
+(and have been quite vocal about earlier in this thread).
 
-So I'm in support for declaring the VDSO_DATA_SIZE explicitly in terms 
-of sizeof(struct vdso_data) and PAGE_SIZE.
+Fundamentally, fork()+exec() is a terrible model.  Mind you, so is
+spawn().  I haven't seen a good model yet.
