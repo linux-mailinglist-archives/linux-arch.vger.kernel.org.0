@@ -2,122 +2,121 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1075500A0
-	for <lists+linux-arch@lfdr.de>; Sat, 18 Jun 2022 01:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEBD55018A
+	for <lists+linux-arch@lfdr.de>; Sat, 18 Jun 2022 03:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236606AbiFQXUE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 17 Jun 2022 19:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S1383705AbiFRBGz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 17 Jun 2022 21:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383708AbiFQXTt (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jun 2022 19:19:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48EB66CAF
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 16:19:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E283B82C0C
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 23:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209EBC341C4
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 23:19:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655507981;
-        bh=KGht/uubc0rpDhT7K4rkZ3NblZRjf4Gm7IDY6LQr4k0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WPdchb5Pqdz/Tysbxo41FSNx/yCuDpYUI/6ZFgrLDSR8FXwNBSyvmXImNMsLWoZo5
-         uLPqXO4Q396QLfIxlU+gph91m7vz96mEQGNA2Z1llwxs21yfv4LvQ5hYV1GADfTDR0
-         BWWxcY91PeirCxayrHPWiGDdDtHmXXo/b1c9pzmGPcBddJzC5XRNgLCs/yu3Vg9CFe
-         RC7JIAehIxkw3yt8BDHy43uKdypgV9QpWlTTxZ3KN6XAtRmPAEhc5RS6Ddj3y3K+QO
-         ZfWM74dI8H0VHnnopbjMcYYepaG8rEci9evALghMch/VpjffABO8KWv4lUvesZzEVg
-         af85PwN2dyhKg==
-Received: by mail-ua1-f54.google.com with SMTP id m10so2036063uao.11
-        for <linux-arch@vger.kernel.org>; Fri, 17 Jun 2022 16:19:41 -0700 (PDT)
-X-Gm-Message-State: AJIora+6yribW2paQjO33QgLhn7xgMn0ChW3jVHuX+L/W5tZn+EV2AwZ
-        qmYH8ydcqVn2auQmi9UQuOOiGJ4xCz7Jyy5P0tk=
-X-Google-Smtp-Source: AGRyM1vwgww4kNuJOLV6KW0trAY9XEj49LS5rDDHKOxvX5atVSPG+h9Ean/wlZKiHJsALSc2betqeDcCX3G2po0D8H0=
-X-Received: by 2002:ab0:2747:0:b0:373:5408:d086 with SMTP id
- c7-20020ab02747000000b003735408d086mr5333967uap.12.1655507980045; Fri, 17 Jun
- 2022 16:19:40 -0700 (PDT)
+        with ESMTP id S237824AbiFRBGy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 17 Jun 2022 21:06:54 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0C447AF0;
+        Fri, 17 Jun 2022 18:06:54 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id x1-20020a17090abc8100b001ec7f8a51f5so1926932pjr.0;
+        Fri, 17 Jun 2022 18:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=KRIeihzYwpT99jVYyWrBvkWlYlvrvIZJfg260Yku6Lc=;
+        b=mYCiRA6jX3TZBBpH5i1bdKxf86pnFybirRcUnA7+QegXGbzOVw+vVyBSconShTfcN0
+         cCwY9Lg+Wp1DUlN7ZuDKZXZp+Lq9oTrhj5Egt9NASpHMRY0WFnq2TqiOXmxGI5seYlbP
+         q0BPpHgaiqex7reMZd7eeiSPLbAesZfnXOSNpNddBnH0OtREDZ0fHr/GsKwCbGO2CEAh
+         0hN2+Q0eH6pq4ZYITkDSH3pFg/hKtXahXOuIosfi8Y0II3BWuxt8tZ5GTulif6PPtR6w
+         mWvi9cySEswvHdKCNsD70zRyxq32NFDfKs677RtcCSsSo3yIFNheD9lUFe9of5dO2FCw
+         T3OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=KRIeihzYwpT99jVYyWrBvkWlYlvrvIZJfg260Yku6Lc=;
+        b=EORI6MAvMD6kGOhV1mvUYiNIhU/4mhkeWdawxiqUahXOJxRRF8vRmVvtEs102WIuvJ
+         jziivnj1IRCXpa2aDjdZm7wM34Rof976a8kZzUqx7o6cJGB2fNLCMzmY0u992o7XSTcR
+         7xXf2mMr9QZU78wpFwcQL3WMsytbs29IK99gAwFF3tyYFmjIOLLfjqkyDaM3+rch0kb4
+         jCnB4IjxuCPk69uskLqUJMwALdD97KT7fKGdQ8xbbY3gD7OqPjy+cqhGEG0ilWtaOVft
+         h6w9ccWj/PnUA9PCVUNahhG3iG3zGFxkLP7UTcsRNCgYWXvgf/Vm8eLU5q+kky+qBcyN
+         yQvg==
+X-Gm-Message-State: AJIora/U2jFhW8Cz9bvxYXCYxI76rtUzy7vphHu5yjtk+zqmL9vxiW/E
+        iKJ5BXkZikqBivWrSNIag3E=
+X-Google-Smtp-Source: AGRyM1u1j6XUfwl32yRCm+A4vEBywEwNGmaCfY9KqlZE6/HghD6w2fj/KwvqmOMndnHwj1ctiT07Vw==
+X-Received: by 2002:a17:90b:4ac9:b0:1e3:1dca:d995 with SMTP id mh9-20020a17090b4ac900b001e31dcad995mr13457922pjb.111.1655514413476;
+        Fri, 17 Jun 2022 18:06:53 -0700 (PDT)
+Received: from [10.1.1.24] (222-155-0-244-adsl.sparkbb.co.nz. [222.155.0.244])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170903024300b00161947ecc82sm4126766plh.199.2022.06.17.18.06.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Jun 2022 18:06:52 -0700 (PDT)
+Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+To:     Arnd Bergmann <arnd@kernel.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220617125750.728590-1-arnd@kernel.org>
+ <20220617125750.728590-4-arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux-foundation.org,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
+Date:   Sat, 18 Jun 2022 13:06:40 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-References: <20220617145705.581985-1-chenhuacai@loongson.cn>
- <CAK8P3a2nD_Zxv5X_LB7AbO=kxHQyk3vz09fQZ-TTX4PL0b3g1g@mail.gmail.com>
- <CAJF2gTT_etFg7-N4f=A4LMOYvd3+H505e0xt8NyxK4uPtkuEXg@mail.gmail.com> <CAK8P3a078r6zkZYYeV7Qg3AEOvFxgG+eRN9bFE_3DNwHq=_1ZA@mail.gmail.com>
-In-Reply-To: <CAK8P3a078r6zkZYYeV7Qg3AEOvFxgG+eRN9bFE_3DNwHq=_1ZA@mail.gmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 18 Jun 2022 07:19:28 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQL+ysc+juQfNVxz1QtXgrLAYe=CyA9L_c3fzd4F8aFxQ@mail.gmail.com>
-Message-ID: <CAJF2gTQL+ysc+juQfNVxz1QtXgrLAYe=CyA9L_c3fzd4F8aFxQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add qspinlock support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220617125750.728590-4-arnd@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 18, 2022 at 2:59 AM Arnd Bergmann <arnd@arndb.de> wrote:
+Arnd,
+
+Am 18.06.2022 um 00:57 schrieb Arnd Bergmann:
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> On Fri, Jun 17, 2022 at 7:45 PM Guo Ren <guoren@kernel.org> wrote:
-> > On Sat, Jun 18, 2022 at 12:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > >+
-> > >
-> > > Do you actually need the size 1 as well?
-> > >
-> > > Generally speaking, I would like to rework the xchg()/cmpxchg() logic
-> > > to only cover the 32-bit and word-sized (possibly 64-bit) case, while
-> > > having separate optional 8-bit and 16-bit functions. I had a patch for
-> > Why not prevent 8-bit and 16-bit xchg()/cmpxchg() directly? eg: move
-> > qspinlock xchg_tail to per arch_xchg_tail.
-> > That means Linux doesn't provide a mixed-size atomic operation primitive.
-> >
-> > What does your "separate optional 8-bit and 16-bit functions" mean here?
+> All architecture-independent users of virt_to_bus() and bus_to_virt()
+> have been fixed to use the dma mapping interfaces or have been
+> removed now.  This means the definitions on most architectures, and the
+> CONFIG_VIRT_TO_BUS symbol are now obsolete and can be removed.
 >
-> What I have in mind is something like
->
-> static inline  u8 arch_xchg8(u8 *ptr, u8 x) {...}
-> static inline u16 arch_xchg16(u16 *ptr, u16 x) {...}
-Yes, inline is very important. We should prevent procedure call like
-this patch. My preparing qspinlock patch for riscv only deal with
-xchg16 with inline.
+> The only exceptions to this are a few network and scsi drivers for m68k
+> Amiga and VME machines and ppc32 Macintosh. These drivers work correctly
+> with the old interfaces and are probably not worth changing.
 
+The Amiga SCSI drivers are all old WD33C93 ones, and replacing 
+virt_to_bus by virt_to_phys in the dma_setup() function there would 
+cause no functional change at all.
 
-> static inline u32 arch_xchg32(u32 *ptr, u32 x) {...}
-> static inline u64 arch_xchg64(u64 *ptr, u64 x) {...}
->
-> #ifdef CONFIG_64BIT
-> #define xchg(ptr, x) (sizeof(*ptr) == 8) ? \
->             arch_xchg64((u64*)ptr, (uintptr_t)x)  \
->             arch_xchg32((u32*)ptr, x)
-> #else
-> #define xchg(ptr, x) arch_xchg32((u32*)ptr, (uintptr_t)x)
-> #endif
-The above primitive implies only long & int type args are permitted, right?
+drivers/vme/bridges/vme_ca91cx42.c hasn't been used at all on m68k (it 
+is a PCI-to-VME bridge chipset driver that would be needed on 
+architectures that natively use a PCI bus). I haven't found anything 
+that selects that driver, so not sure it is even still in use??
 
->
-> This means most of the helpers can actually be normal
-> inline functions, and only 64-bit architectures need the special
-> case of dealing with non-u32-sized pointers and 'long' values.
->
->          Arnd
+That would allow you to drop the remaining virt_to_bus define from 
+arch/m68k/include/asm/virtconvert.h.
 
+I could submit a patch to convert the Amiga SCSI drivers to use 
+virt_to_phys if Geert and the SCSI maintainers think it's worth the churn.
 
+32bit powerpc is a different matter though.
 
--- 
-Best Regards
- Guo Ren
+Cheers,
 
-ML: https://lore.kernel.org/linux-csky/
+	Michael
