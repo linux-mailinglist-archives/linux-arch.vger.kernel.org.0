@@ -2,60 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3179550B60
-	for <lists+linux-arch@lfdr.de>; Sun, 19 Jun 2022 17:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2979F550BDB
+	for <lists+linux-arch@lfdr.de>; Sun, 19 Jun 2022 17:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbiFSPGl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 19 Jun 2022 11:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S229883AbiFSPXs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 19 Jun 2022 11:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232585AbiFSPG1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Jun 2022 11:06:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9D2DF11
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 08:06:18 -0700 (PDT)
+        with ESMTP id S236485AbiFSPXa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 19 Jun 2022 11:23:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C20B7D8
+        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 08:23:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88D24611A7
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 15:06:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0B7C341C4
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 15:06:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A68AA611BD
+        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 15:23:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA6EC341C8
+        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 15:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655651178;
-        bh=01d4l6tQwv77wOeuBusDbIYSdWLSXvLBD+21bfJ+bSY=;
+        s=k20201202; t=1655652208;
+        bh=lpB2seL78AL9Gppq2ukCw0DYT90jfIlYtTYOGyDJjzU=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Clh8jfflpZdHwJBG1EbNhxTOYEnmycZopbt99suJwqdlRc9Qqw6VUvu/NyYFz+byr
-         ML3Q5vFmOzU8fTSeQT2/yJePP3axtn4C+G6fmItUjEqUSppbrUJoHGBuWOxrQH+8nI
-         2dSDe+JNd5rNC1VoE1XF2KFsuLwkOqNSjqqaRCxX5xlIuGg6XWBudCBJ2B5aRUSoe3
-         Uwa/U+sUqkmZ7hSeciWiuorksLmkMoWbwcYtyElbulzWl4OO9hjTlSibGMtS2nhFTc
-         UVZ8VkjX1juohKAQwFtW/GyOVO834LRWN4lXbJdNpfbxhoTCET+TyVs1E+75trqwYj
-         200R3JGmIN9TA==
-Received: by mail-vs1-f44.google.com with SMTP id r4so8379958vsf.10
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 08:06:17 -0700 (PDT)
-X-Gm-Message-State: AJIora8xybPLzO+ajPZAhJnTckOijZMLRS72fJSRklWcEKEdrN+206t3
-        GpJOB7wr1d32uMsqSq4330GqCWbPoOW+83pbQ2A=
-X-Google-Smtp-Source: AGRyM1vfJlW16JK1GVzGwwUb0oqCQKVGkvgwrmPHPr6cxbiodihnwxW6UgeY3UVUetm5ZcctVZLienjFkZ12ziqIaSE=
-X-Received: by 2002:a05:6102:3562:b0:34b:9e99:1bfa with SMTP id
- bh2-20020a056102356200b0034b9e991bfamr7413502vsb.51.1655651176897; Sun, 19
- Jun 2022 08:06:16 -0700 (PDT)
+        b=GOY2geNXLr3+pQW+wDUle8NOnDqgtSZBfSrSqUxfAHxmB77+VUgMI+ncjZf/OGmGd
+         GFq0R61E8BNqaxhoJS8lANlt7yZIUNx5ivuzLneu7znv2Uof3FIIafed/KR93e9o3A
+         /EcCMZbfAGBuM3qFWJEv+3msi7u1z2jslO4DqELv0PW7ekfv2eocOlIxQn9XhXSnkZ
+         0IqpimvUYfFCNX2IjvpN0ssPM4tJQSBGScCmje7qr0Y1LLjfXDuzlHarfOkVH7hTbW
+         tVXEW8Ffzewkmw/TFyN8DzxjPYBQye5ar/5YUBQGA75kg2o1KxHUrz6JLA+EAaXsrb
+         31dhlavcAlJVQ==
+Received: by mail-vs1-f51.google.com with SMTP id l28so267025vsb.1
+        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 08:23:28 -0700 (PDT)
+X-Gm-Message-State: AJIora9EcnucAJeEbc+Xj2mMEyBmzRakOgwJ7NgdYg0wiABFncDj0i91
+        0NEJMGAWuZtV4iY3LPDV9ipKOMO0gha3laYt5Dc=
+X-Google-Smtp-Source: AGRyM1v04gAnak7EW9stRv263QT2NvfDjsZ2r/sMLXWQW2uRJ7VJ+3lsQPKHKJNlsCR8t9Ge/RNuaLl69CkFejukvcQ=
+X-Received: by 2002:a05:6102:22c2:b0:34b:9163:c6ab with SMTP id
+ a2-20020a05610222c200b0034b9163c6abmr7997139vsh.8.1655652206996; Sun, 19 Jun
+ 2022 08:23:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220617145705.581985-1-chenhuacai@loongson.cn>
- <CAK8P3a2nD_Zxv5X_LB7AbO=kxHQyk3vz09fQZ-TTX4PL0b3g1g@mail.gmail.com>
- <CAJF2gTT_etFg7-N4f=A4LMOYvd3+H505e0xt8NyxK4uPtkuEXg@mail.gmail.com>
- <bcc38a55-30dc-98a8-cbfc-5a51924b9373@xen0n.name> <CAHirt9goPWs-_EpSpUOY4DWpK1nbaJxM2rSM3oLUqnCh5fVi4Q@mail.gmail.com>
-In-Reply-To: <CAHirt9goPWs-_EpSpUOY4DWpK1nbaJxM2rSM3oLUqnCh5fVi4Q@mail.gmail.com>
+References: <20220617145705.581985-1-chenhuacai@loongson.cn> <CAK8P3a2nD_Zxv5X_LB7AbO=kxHQyk3vz09fQZ-TTX4PL0b3g1g@mail.gmail.com>
+In-Reply-To: <CAK8P3a2nD_Zxv5X_LB7AbO=kxHQyk3vz09fQZ-TTX4PL0b3g1g@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 19 Jun 2022 23:06:05 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQbb_RmF6Hn5E91waamecRZ+B7FRxo_GT23wkc0ydN4ug@mail.gmail.com>
-Message-ID: <CAJF2gTQbb_RmF6Hn5E91waamecRZ+B7FRxo_GT23wkc0ydN4ug@mail.gmail.com>
+Date:   Sun, 19 Jun 2022 23:23:15 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSkb8qi4SfumpkHeGVPAa7njOJp0dC1OuxE6eSJOWDVLQ@mail.gmail.com>
+Message-ID: <CAJF2gTSkb8qi4SfumpkHeGVPAa7njOJp0dC1OuxE6eSJOWDVLQ@mail.gmail.com>
 Subject: Re: [PATCH] LoongArch: Add qspinlock support
-To:     hev <r@hev.cc>
-Cc:     Arnd Bergmann <arnd@arndb.de>, WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
         Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
         linux-arch <linux-arch@vger.kernel.org>,
         Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>
@@ -70,64 +67,49 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jun 19, 2022 at 12:28 PM hev <r@hev.cc> wrote:
+On Sat, Jun 18, 2022 at 12:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Hello,
->
-> On Sat, Jun 18, 2022 at 8:59 PM WANG Xuerui <kernel@xen0n.name> wrote:
+> On Fri, Jun 17, 2022 at 4:57 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
 > >
-> > On 6/18/22 01:45, Guo Ren wrote:
-> > >
-> > >> I see that the qspinlock() code actually calls a 'relaxed' version of xchg16(),
-> > >> but you only implement the one with the full barrier. Is it possible to
-> > >> directly provide a relaxed version that has something less than the
-> > >> __WEAK_LLSC_MB?
-> > > I am also curious that __WEAK_LLSC_MB is very magic. How does it
-> > > prevent preceded accesses from happening after sc for a strong
-> > > cmpxchg?
-> > >
-> > > #define __cmpxchg_asm(ld, st, m, old, new)                              \
-> > > ({                                                                      \
-> > >          __typeof(old) __ret;                                            \
-> > >                                                                          \
-> > >          __asm__ __volatile__(                                           \
-> > >          "1:     " ld "  %0, %2          # __cmpxchg_asm \n"             \
-> > >          "       bne     %0, %z3, 2f                     \n"             \
-> > >          "       or      $t0, %z4, $zero                 \n"             \
-> > >          "       " st "  $t0, %1                         \n"             \
-> > >          "       beq     $zero, $t0, 1b                  \n"             \
-> > >          "2:                                             \n"             \
-> > >          __WEAK_LLSC_MB                                                  \
-> > >
-> > > And its __smp_mb__xxx are just defined as a compiler barrier()?
-> > > #define __smp_mb__before_atomic()       barrier()
-> > > #define __smp_mb__after_atomic()        barrier()
-> > I know this one. There is only one type of barrier defined in the v1.00
-> > of LoongArch, that is the full barrier, but this is going to change.
-> > Huacai hinted in the bringup patchset that 3A6000 and later models would
-> > have finer-grained barriers. So these indeed could be relaxed in the
-> > future, just that Huacai has to wait for their embargo to expire.
+> > On NUMA system, the performance of qspinlock is better than generic
+> > spinlock. Below is the UnixBench test results on a 8 nodes (4 cores
+> > per node, 32 cores in total) machine.
 > >
 >
-> IIRC, The Loongson LL/SC behaves differently than others:
+> The performance increase is nice, but this is only half the story we need here.
 >
-> Loongson:
-> LL: Full barrier + Load exclusive
-> SC: Store conditional + Full barrier
-How about your "am"#asm_op"_db."?
+> I think the more important bit is how you can guarantee that the xchg16()
+> implementation is correct and always allows forward progress.
+>
+> >@@ -123,6 +123,10 @@ static inline unsigned long __percpu_xchg(void *ptr, unsigned long val,
+> >                                                int size)
+> > {
+> >        switch (size) {
+> >+       case 1:
+> >+       case 2:
+> >+               return __xchg_small((volatile void *)ptr, val, size);
+> >+
+>
+> Do you actually need the size 1 as well?
+>
+> Generally speaking, I would like to rework the xchg()/cmpxchg() logic
+> to only cover the 32-bit and word-sized (possibly 64-bit) case, while
+> having separate optional 8-bit and 16-bit functions. I had a patch for
+> this in the past, and can try to dig that out, this may be the time to
+> finally do that.
+>
+> I see that the qspinlock() code actually calls a 'relaxed' version of xchg16(),
+> but you only implement the one with the full barrier. Is it possible to
+> directly provide a relaxed version that has something less than the
+> __WEAK_LLSC_MB?
+There is no __WEAK_LLSC_MB in __xchg_small, and it's Full-fence +
+xchg16_relaxed() + Full-fence (by hev explained).
 
-Full barrier + AMO + Full barrier ?
+The __cmpxchg_small isn't related to qspinlock, we could drop it from
+this patch.
 
 >
-> Others:
-> LL: Load exclusive + Acquire barrier
-> SC: Release barrier + Store conditional
->
-> So we just need to prevent compiler reorder before/after atomic.
-> And this is why we need __WEAK_LLSC_MB to prevent runtime reorder for
-> loads after LL.
->
-> hev
+>        Arnd
 
 
 
