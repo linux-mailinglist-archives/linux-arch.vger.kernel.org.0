@@ -2,146 +2,551 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8E65514D0
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 11:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 340CB5514D9
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 11:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239701AbiFTJuR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jun 2022 05:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S240001AbiFTJvb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jun 2022 05:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239109AbiFTJuO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 05:50:14 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A03513E00
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:50:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9D687CE1153
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 09:50:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89DBC3411C
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 09:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655718609;
-        bh=Fr0ix5EjKeIi2iLMs/BddEnbNzT+Ffa1oytTOGedzwE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZtLWQaCGxyDeiyzSl067qaTebE7hO3c0CA4rZhDm7N/Jqe6N3Ife2IY5iOTBzNA5B
-         T/K85aWEKSMFg2VirBOMTh416Y53TnyQNEesyYktxFIks1njwqhbfbo4JjzH4aeYXD
-         69bRlEREj53fp80p76Q0IDl5dn6Gc3wu7E3DMY663Dntt22Hwzh7f7qH800TGcGYjO
-         molJfiwtXmNxs1t40w9OYbxPHYqxdbhKyLcTVqM9FBi8DwxEs2qfxuQjKPWN7d60G0
-         RIkdQF4VSAiSCaJCu8iubZE4eS6cOM6UEypZ+lURdj3LcMaChNLCm07vlnUDmxN9Xf
-         xUT89mDoje6zg==
-Received: by mail-lj1-f173.google.com with SMTP id a11so2493276ljb.5
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:50:09 -0700 (PDT)
-X-Gm-Message-State: AJIora/oojyj+c3xGHhH/AbSfX1Ie4ODoeLmFjsaS9GHkRh2nwWNs8Zb
-        ewzCG5rSa5iejGdYLYlLKIQEjUdZ9CXSRZD1p7c=
-X-Google-Smtp-Source: AGRyM1u26ZTxYYwp6BW03Vv9IYXi2WFR5VcYdjY22Y8n/MuB9XsnBOuNlJp6bjGBF2txoIIO2DXn7JbMPW1np5BsB8g=
-X-Received: by 2002:a05:651c:506:b0:257:c12:b941 with SMTP id
- o6-20020a05651c050600b002570c12b941mr11442398ljp.429.1655718607867; Mon, 20
- Jun 2022 02:50:07 -0700 (PDT)
+        with ESMTP id S239954AbiFTJvZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 05:51:25 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF6713E04
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:51:21 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-3177f4ce3e2so71064797b3.5
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zqbrOskWUAJuP1UkV73VAijZjwNvP1VuBehHqHDXhf8=;
+        b=At/LGPiDaNktrxBXgmMq7y32kbEILWz1zSQDrFRFQFG+W5ufhGylXB2uH6P1YPmENV
+         rbC2RSc1DigHfZH2CcVoJQOw50l7Vur4SdHcYHFd382LB2sVVw5LlmD2YJJ+c4/36aSI
+         xVO10Ut+6Sor5XpcOHYqvjjX0d1UQAdB8oq6XiWlg6r/Y1myLPvfH8mnX1DbwOi0hORD
+         PQAT4THytwBUJHAFuL5vDo+xqfbd0Y6szXhfM6BdVWx13bA/GB+rqdhzt0BqVN867fW/
+         huiuXad1YJ3CmbU0UiJEwcyKBPEwFSLCUe3s1IeOojXAWjUJUqcKdluuFp9SHAGKp4jC
+         4dVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zqbrOskWUAJuP1UkV73VAijZjwNvP1VuBehHqHDXhf8=;
+        b=0foeLfsWiBpcjFNVeqrxC5o0c0nSbjf8GfLQORAMd6FIsfthGZi3w/G2TElv8YptPr
+         gOF9mhCSHQhhoqwRoPKJSdL84HJQOMJ6rE9rVR+vF4kdsoUtIOf+Lh8lK4U8fJrkkxK6
+         f3apeWDkzOU74bnzckJsbl7u2wlt3z1GHR0yuhQOo21mgdfA6nPvI1f+beTlYaLFxj7+
+         HZtnxB7jWiU6pNF/ViVkSjLrVKbwXmbWYfuS0nBwIjPKlskyC7OMHC8wXhxJ1fHVIdOq
+         9E+pw3z9LPuANWU+s6PGqAiaS0r8aUHdpy1g/qd1wcCYtjM0PG8hsIH3SfhJ0NOxS+E8
+         r3Sg==
+X-Gm-Message-State: AJIora9k2jxH2thcoYGhAefNqm0V/VJxjbbEknnpppqZsuZmO5dzaUnm
+        AZb3ZBr6XLBQHcqzCC3Kt3EnW6TUW4sVdSSRjf2gtg==
+X-Google-Smtp-Source: AGRyM1smlUqWCLkSmby5dA6G7h560QU5G/3TUPIpKGPz+n2PHkyO8BpZ9f9Jw1b1w5SnfuiO4hrjZG+kmgLDK2Hi3iQ=
+X-Received: by 2002:a81:18c1:0:b0:317:648e:eec8 with SMTP id
+ 184-20020a8118c1000000b00317648eeec8mr25510672ywy.327.1655718680015; Mon, 20
+ Jun 2022 02:51:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220617145705.581985-1-chenhuacai@loongson.cn>
- <CAK8P3a2nD_Zxv5X_LB7AbO=kxHQyk3vz09fQZ-TTX4PL0b3g1g@mail.gmail.com>
- <CAJF2gTT_etFg7-N4f=A4LMOYvd3+H505e0xt8NyxK4uPtkuEXg@mail.gmail.com>
- <CAK8P3a078r6zkZYYeV7Qg3AEOvFxgG+eRN9bFE_3DNwHq=_1ZA@mail.gmail.com>
- <CAJF2gTQL+ysc+juQfNVxz1QtXgrLAYe=CyA9L_c3fzd4F8aFxQ@mail.gmail.com>
- <CAK8P3a3wRqLAvywX2zbD0kdt19m2pKazqA2Y6_sNL1L=_4N3vQ@mail.gmail.com>
- <CAJF2gTQG0SBninPg7MsCFP=60p8u5KT+HaLNBzgjxM_fTMr+Dg@mail.gmail.com> <CAK8P3a1LgmZDssQoCciZ0YRy3UHWV3yK99UHTCdvahCFBG+u+Q@mail.gmail.com>
-In-Reply-To: <CAK8P3a1LgmZDssQoCciZ0YRy3UHWV3yK99UHTCdvahCFBG+u+Q@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 20 Jun 2022 17:49:56 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6-K_mHSm9CWRB+v2a_Zqy-Z9x3XmQPuF7XT3yiTB=rbw@mail.gmail.com>
-Message-ID: <CAAhV-H6-K_mHSm9CWRB+v2a_Zqy-Z9x3XmQPuF7XT3yiTB=rbw@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add qspinlock support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@loongson.cn>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com> <20220617144031.2549432-6-alexandr.lobakin@intel.com>
+In-Reply-To: <20220617144031.2549432-6-alexandr.lobakin@intel.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 20 Jun 2022 11:50:44 +0200
+Message-ID: <CANpmjNMfBceSv+RXQuqS+=n2wLULSn5dMYz-9qGt=Yes4xobUg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/7] bitops: wrap non-atomic bitops with a transparent macro
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+On Fri, 17 Jun 2022 at 19:19, Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
+>
+> In preparation for altering the non-atomic bitops with a macro, wrap
+> them in a transparent definition. This requires prepending one more
+> '_' to their names in order to be able to do that seamlessly. It is
+> a simple change, given that all the non-prefixed definitions are now
+> in asm-generic.
+> sparc32 already has several triple-underscored functions, so I had
+> to rename them ('___' -> 'sp32_').
+>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-On Mon, Jun 20, 2022 at 12:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Sun, Jun 19, 2022 at 5:48 PM Guo Ren <guoren@kernel.org> wrote:
-> >
-> > On Sat, Jun 18, 2022 at 1:40 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > >
-> > > On Sat, Jun 18, 2022 at 1:19 AM Guo Ren <guoren@kernel.org> wrote:
-> > > >
-> > > > > static inline u32 arch_xchg32(u32 *ptr, u32 x) {...}
-> > > > > static inline u64 arch_xchg64(u64 *ptr, u64 x) {...}
-> > > > >
-> > > > > #ifdef CONFIG_64BIT
-> > > > > #define xchg(ptr, x) (sizeof(*ptr) == 8) ? \
-> > > > >             arch_xchg64((u64*)ptr, (uintptr_t)x)  \
-> > > > >             arch_xchg32((u32*)ptr, x)
-> > > > > #else
-> > > > > #define xchg(ptr, x) arch_xchg32((u32*)ptr, (uintptr_t)x)
-> > > > > #endif
-> > > >
-> > > > The above primitive implies only long & int type args are permitted, right?
-> > >
-> > > The idea is to allow any scalar or pointer type, but not structures or
-> > > unions. If we need to deal with those as well, the macro could be extended
-> > > accordingly, but I would prefer to limit it as much as possible.
-> > >
-> > > There is already cmpxchg64(), which is used for types that are fixed to
-> > > 64 bit integers even on 32-bit architectures, but it is rarely used except
-> > > to implement the atomic64_t helpers.
-> > A lot of 32bit arches couldn't provide cmpxchg64 (like arm's ldrexd/strexd).
->
-> Most 32-bit architectures also lack SMP support, so they can fall back to
-> the generic version from include/asm-generic/cmpxchg-local.h
->
-> > Another question: Do you know why arm32 didn't implement
-> > HAVE_CMPXCHG_DOUBLE with ldrexd/strexd?
->
-> I think it's just fairly obscure, the slub code appears to be the only
-> code that would use it.
->
-> > >
-> > > 80% of the uses of cmpxchg() and xchg() deal with word-sized
-> > > quantities like 'unsigned long', or 'void *', but the others are almost
-> > > all fixed 32-bit quantities. We could change those to use cmpxchg32()
-> > > directly and simplify the cmpxchg() function further to only deal
-> > > with word-sized arguments, but I would not do that in the first step.
-> > Don't forget cmpxchg_double for this cleanup, when do you want to
-> > restart the work?
->
-> I have no specific plans at the moment. If you or someone else likes
-> to look into it, I can dig out my old patch though.
->
-> The cmpxchg_double() call seems to already fit in, since it is an
-> inline function and does not expect arbitrary argument types.
-Thank all of you. :)
+Reviewed-by: Marco Elver <elver@google.com>
 
-As Rui and Xuerui said, ll and sc in LoongArch both have implicit full
-barriers, so there is no "relaxed" version.
-
-The __WEAK_LLSC_MB in __cmpxchg_small() have nothing to do with ll and
- sc themselves, we need a barrier at the branch target just because
-Loongson-3A5000 has a hardware flaw (and will be fixed in
-Loongson-3A6000).
-
-qspinlock just needs xchg_small(), but cmpxchg_small() is also useful
-for percpu operations. So I plan to split this patch to two: the first
-add xchg_small() and cmpxchg_small(), the second enable qspinlock.
-
-Huacai
-
+> ---
+>  arch/sparc/include/asm/bitops_32.h            | 18 ++++++------
+>  arch/sparc/lib/atomic32.c                     | 12 ++++----
+>  .../bitops/instrumented-non-atomic.h          | 28 +++++++++----------
+>  .../bitops/non-instrumented-non-atomic.h      | 14 +++++-----
+>  include/linux/bitops.h                        | 18 +++++++++++-
+>  tools/include/asm-generic/bitops/non-atomic.h | 24 ++++++++--------
+>  tools/include/linux/bitops.h                  | 16 +++++++++++
+>  7 files changed, 81 insertions(+), 49 deletions(-)
 >
->        Arnd
+> diff --git a/arch/sparc/include/asm/bitops_32.h b/arch/sparc/include/asm/bitops_32.h
+> index 889afa9f990f..3448c191b484 100644
+> --- a/arch/sparc/include/asm/bitops_32.h
+> +++ b/arch/sparc/include/asm/bitops_32.h
+> @@ -19,9 +19,9 @@
+>  #error only <linux/bitops.h> can be included directly
+>  #endif
+>
+> -unsigned long ___set_bit(unsigned long *addr, unsigned long mask);
+> -unsigned long ___clear_bit(unsigned long *addr, unsigned long mask);
+> -unsigned long ___change_bit(unsigned long *addr, unsigned long mask);
+> +unsigned long sp32___set_bit(unsigned long *addr, unsigned long mask);
+> +unsigned long sp32___clear_bit(unsigned long *addr, unsigned long mask);
+> +unsigned long sp32___change_bit(unsigned long *addr, unsigned long mask);
+>
+>  /*
+>   * Set bit 'nr' in 32-bit quantity at address 'addr' where bit '0'
+> @@ -36,7 +36,7 @@ static inline int test_and_set_bit(unsigned long nr, volatile unsigned long *add
+>         ADDR = ((unsigned long *) addr) + (nr >> 5);
+>         mask = 1 << (nr & 31);
+>
+> -       return ___set_bit(ADDR, mask) != 0;
+> +       return sp32___set_bit(ADDR, mask) != 0;
+>  }
+>
+>  static inline void set_bit(unsigned long nr, volatile unsigned long *addr)
+> @@ -46,7 +46,7 @@ static inline void set_bit(unsigned long nr, volatile unsigned long *addr)
+>         ADDR = ((unsigned long *) addr) + (nr >> 5);
+>         mask = 1 << (nr & 31);
+>
+> -       (void) ___set_bit(ADDR, mask);
+> +       (void) sp32___set_bit(ADDR, mask);
+>  }
+>
+>  static inline int test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
+> @@ -56,7 +56,7 @@ static inline int test_and_clear_bit(unsigned long nr, volatile unsigned long *a
+>         ADDR = ((unsigned long *) addr) + (nr >> 5);
+>         mask = 1 << (nr & 31);
+>
+> -       return ___clear_bit(ADDR, mask) != 0;
+> +       return sp32___clear_bit(ADDR, mask) != 0;
+>  }
+>
+>  static inline void clear_bit(unsigned long nr, volatile unsigned long *addr)
+> @@ -66,7 +66,7 @@ static inline void clear_bit(unsigned long nr, volatile unsigned long *addr)
+>         ADDR = ((unsigned long *) addr) + (nr >> 5);
+>         mask = 1 << (nr & 31);
+>
+> -       (void) ___clear_bit(ADDR, mask);
+> +       (void) sp32___clear_bit(ADDR, mask);
+>  }
+>
+>  static inline int test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+> @@ -76,7 +76,7 @@ static inline int test_and_change_bit(unsigned long nr, volatile unsigned long *
+>         ADDR = ((unsigned long *) addr) + (nr >> 5);
+>         mask = 1 << (nr & 31);
+>
+> -       return ___change_bit(ADDR, mask) != 0;
+> +       return sp32___change_bit(ADDR, mask) != 0;
+>  }
+>
+>  static inline void change_bit(unsigned long nr, volatile unsigned long *addr)
+> @@ -86,7 +86,7 @@ static inline void change_bit(unsigned long nr, volatile unsigned long *addr)
+>         ADDR = ((unsigned long *) addr) + (nr >> 5);
+>         mask = 1 << (nr & 31);
+>
+> -       (void) ___change_bit(ADDR, mask);
+> +       (void) sp32___change_bit(ADDR, mask);
+>  }
+>
+>  #include <asm-generic/bitops/non-atomic.h>
+> diff --git a/arch/sparc/lib/atomic32.c b/arch/sparc/lib/atomic32.c
+> index 8b81d0f00c97..cf80d1ae352b 100644
+> --- a/arch/sparc/lib/atomic32.c
+> +++ b/arch/sparc/lib/atomic32.c
+> @@ -120,7 +120,7 @@ void arch_atomic_set(atomic_t *v, int i)
+>  }
+>  EXPORT_SYMBOL(arch_atomic_set);
+>
+> -unsigned long ___set_bit(unsigned long *addr, unsigned long mask)
+> +unsigned long sp32___set_bit(unsigned long *addr, unsigned long mask)
+>  {
+>         unsigned long old, flags;
+>
+> @@ -131,9 +131,9 @@ unsigned long ___set_bit(unsigned long *addr, unsigned long mask)
+>
+>         return old & mask;
+>  }
+> -EXPORT_SYMBOL(___set_bit);
+> +EXPORT_SYMBOL(sp32___set_bit);
+>
+> -unsigned long ___clear_bit(unsigned long *addr, unsigned long mask)
+> +unsigned long sp32___clear_bit(unsigned long *addr, unsigned long mask)
+>  {
+>         unsigned long old, flags;
+>
+> @@ -144,9 +144,9 @@ unsigned long ___clear_bit(unsigned long *addr, unsigned long mask)
+>
+>         return old & mask;
+>  }
+> -EXPORT_SYMBOL(___clear_bit);
+> +EXPORT_SYMBOL(sp32___clear_bit);
+>
+> -unsigned long ___change_bit(unsigned long *addr, unsigned long mask)
+> +unsigned long sp32___change_bit(unsigned long *addr, unsigned long mask)
+>  {
+>         unsigned long old, flags;
+>
+> @@ -157,7 +157,7 @@ unsigned long ___change_bit(unsigned long *addr, unsigned long mask)
+>
+>         return old & mask;
+>  }
+> -EXPORT_SYMBOL(___change_bit);
+> +EXPORT_SYMBOL(sp32___change_bit);
+>
+>  unsigned long __cmpxchg_u32(volatile u32 *ptr, u32 old, u32 new)
+>  {
+> diff --git a/include/asm-generic/bitops/instrumented-non-atomic.h b/include/asm-generic/bitops/instrumented-non-atomic.h
+> index b019f77ef21c..988a3bbfba34 100644
+> --- a/include/asm-generic/bitops/instrumented-non-atomic.h
+> +++ b/include/asm-generic/bitops/instrumented-non-atomic.h
+> @@ -14,7 +14,7 @@
+>  #include <linux/instrumented.h>
+>
+>  /**
+> - * __set_bit - Set a bit in memory
+> + * ___set_bit - Set a bit in memory
+>   * @nr: the bit to set
+>   * @addr: the address to start counting from
+>   *
+> @@ -23,14 +23,14 @@
+>   * succeeds.
+>   */
+>  static __always_inline void
+> -__set_bit(unsigned long nr, volatile unsigned long *addr)
+> +___set_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         instrument_write(addr + BIT_WORD(nr), sizeof(long));
+>         arch___set_bit(nr, addr);
+>  }
+>
+>  /**
+> - * __clear_bit - Clears a bit in memory
+> + * ___clear_bit - Clears a bit in memory
+>   * @nr: the bit to clear
+>   * @addr: the address to start counting from
+>   *
+> @@ -39,14 +39,14 @@ __set_bit(unsigned long nr, volatile unsigned long *addr)
+>   * succeeds.
+>   */
+>  static __always_inline void
+> -__clear_bit(unsigned long nr, volatile unsigned long *addr)
+> +___clear_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         instrument_write(addr + BIT_WORD(nr), sizeof(long));
+>         arch___clear_bit(nr, addr);
+>  }
+>
+>  /**
+> - * __change_bit - Toggle a bit in memory
+> + * ___change_bit - Toggle a bit in memory
+>   * @nr: the bit to change
+>   * @addr: the address to start counting from
+>   *
+> @@ -55,7 +55,7 @@ __clear_bit(unsigned long nr, volatile unsigned long *addr)
+>   * succeeds.
+>   */
+>  static __always_inline void
+> -__change_bit(unsigned long nr, volatile unsigned long *addr)
+> +___change_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         instrument_write(addr + BIT_WORD(nr), sizeof(long));
+>         arch___change_bit(nr, addr);
+> @@ -86,7 +86,7 @@ static __always_inline void __instrument_read_write_bitop(long nr, volatile unsi
+>  }
+>
+>  /**
+> - * __test_and_set_bit - Set a bit and return its old value
+> + * ___test_and_set_bit - Set a bit and return its old value
+>   * @nr: Bit to set
+>   * @addr: Address to count from
+>   *
+> @@ -94,14 +94,14 @@ static __always_inline void __instrument_read_write_bitop(long nr, volatile unsi
+>   * can appear to succeed but actually fail.
+>   */
+>  static __always_inline bool
+> -__test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
+> +___test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         __instrument_read_write_bitop(nr, addr);
+>         return arch___test_and_set_bit(nr, addr);
+>  }
+>
+>  /**
+> - * __test_and_clear_bit - Clear a bit and return its old value
+> + * ___test_and_clear_bit - Clear a bit and return its old value
+>   * @nr: Bit to clear
+>   * @addr: Address to count from
+>   *
+> @@ -109,14 +109,14 @@ __test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
+>   * can appear to succeed but actually fail.
+>   */
+>  static __always_inline bool
+> -__test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
+> +___test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         __instrument_read_write_bitop(nr, addr);
+>         return arch___test_and_clear_bit(nr, addr);
+>  }
+>
+>  /**
+> - * __test_and_change_bit - Change a bit and return its old value
+> + * ___test_and_change_bit - Change a bit and return its old value
+>   * @nr: Bit to change
+>   * @addr: Address to count from
+>   *
+> @@ -124,19 +124,19 @@ __test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
+>   * can appear to succeed but actually fail.
+>   */
+>  static __always_inline bool
+> -__test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+> +___test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         __instrument_read_write_bitop(nr, addr);
+>         return arch___test_and_change_bit(nr, addr);
+>  }
+>
+>  /**
+> - * test_bit - Determine whether a bit is set
+> + * _test_bit - Determine whether a bit is set
+>   * @nr: bit number to test
+>   * @addr: Address to start counting from
+>   */
+>  static __always_inline bool
+> -test_bit(unsigned long nr, const volatile unsigned long *addr)
+> +_test_bit(unsigned long nr, const volatile unsigned long *addr)
+>  {
+>         instrument_atomic_read(addr + BIT_WORD(nr), sizeof(long));
+>         return arch_test_bit(nr, addr);
+> diff --git a/include/asm-generic/bitops/non-instrumented-non-atomic.h b/include/asm-generic/bitops/non-instrumented-non-atomic.h
+> index e0fd7bf72a56..bdb9b1ffaee9 100644
+> --- a/include/asm-generic/bitops/non-instrumented-non-atomic.h
+> +++ b/include/asm-generic/bitops/non-instrumented-non-atomic.h
+> @@ -3,14 +3,14 @@
+>  #ifndef __ASM_GENERIC_BITOPS_NON_INSTRUMENTED_NON_ATOMIC_H
+>  #define __ASM_GENERIC_BITOPS_NON_INSTRUMENTED_NON_ATOMIC_H
+>
+> -#define __set_bit              arch___set_bit
+> -#define __clear_bit            arch___clear_bit
+> -#define __change_bit           arch___change_bit
+> +#define ___set_bit             arch___set_bit
+> +#define ___clear_bit           arch___clear_bit
+> +#define ___change_bit          arch___change_bit
+>
+> -#define __test_and_set_bit     arch___test_and_set_bit
+> -#define __test_and_clear_bit   arch___test_and_clear_bit
+> -#define __test_and_change_bit  arch___test_and_change_bit
+> +#define ___test_and_set_bit    arch___test_and_set_bit
+> +#define ___test_and_clear_bit  arch___test_and_clear_bit
+> +#define ___test_and_change_bit arch___test_and_change_bit
+>
+> -#define test_bit               arch_test_bit
+> +#define _test_bit              arch_test_bit
+>
+>  #endif /* __ASM_GENERIC_BITOPS_NON_INSTRUMENTED_NON_ATOMIC_H */
+> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+> index d393297287d5..3c3afbae1533 100644
+> --- a/include/linux/bitops.h
+> +++ b/include/linux/bitops.h
+> @@ -26,8 +26,24 @@ extern unsigned int __sw_hweight16(unsigned int w);
+>  extern unsigned int __sw_hweight32(unsigned int w);
+>  extern unsigned long __sw_hweight64(__u64 w);
+>
+> +/*
+> + * Defined here because those may be needed by architecture-specific static
+> + * inlines.
+> + */
+> +
+>  #include <asm-generic/bitops/generic-non-atomic.h>
+>
+> +#define bitop(op, nr, addr)                                            \
+> +       op(nr, addr)
+> +
+> +#define __set_bit(nr, addr)            bitop(___set_bit, nr, addr)
+> +#define __clear_bit(nr, addr)          bitop(___clear_bit, nr, addr)
+> +#define __change_bit(nr, addr)         bitop(___change_bit, nr, addr)
+> +#define __test_and_set_bit(nr, addr)   bitop(___test_and_set_bit, nr, addr)
+> +#define __test_and_clear_bit(nr, addr) bitop(___test_and_clear_bit, nr, addr)
+> +#define __test_and_change_bit(nr, addr)        bitop(___test_and_change_bit, nr, addr)
+> +#define test_bit(nr, addr)             bitop(_test_bit, nr, addr)
+> +
+>  /*
+>   * Include this here because some architectures need generic_ffs/fls in
+>   * scope
+> @@ -38,7 +54,7 @@ extern unsigned long __sw_hweight64(__u64 w);
+>  #define __check_bitop_pr(name)                                         \
+>         static_assert(__same_type(arch_##name, generic_##name) &&       \
+>                       __same_type(const_##name, generic_##name) &&      \
+> -                     __same_type(name, generic_##name))
+> +                     __same_type(_##name, generic_##name))
+>
+>  __check_bitop_pr(__set_bit);
+>  __check_bitop_pr(__clear_bit);
+> diff --git a/tools/include/asm-generic/bitops/non-atomic.h b/tools/include/asm-generic/bitops/non-atomic.h
+> index e5e78e42e57b..0c472a833408 100644
+> --- a/tools/include/asm-generic/bitops/non-atomic.h
+> +++ b/tools/include/asm-generic/bitops/non-atomic.h
+> @@ -5,7 +5,7 @@
+>  #include <linux/bits.h>
+>
+>  /**
+> - * __set_bit - Set a bit in memory
+> + * ___set_bit - Set a bit in memory
+>   * @nr: the bit to set
+>   * @addr: the address to start counting from
+>   *
+> @@ -14,7 +14,7 @@
+>   * may be that only one operation succeeds.
+>   */
+>  static __always_inline void
+> -__set_bit(unsigned long nr, volatile unsigned long *addr)
+> +___set_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         unsigned long mask = BIT_MASK(nr);
+>         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> @@ -23,7 +23,7 @@ __set_bit(unsigned long nr, volatile unsigned long *addr)
+>  }
+>
+>  static __always_inline void
+> -__clear_bit(unsigned long nr, volatile unsigned long *addr)
+> +___clear_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         unsigned long mask = BIT_MASK(nr);
+>         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> @@ -32,7 +32,7 @@ __clear_bit(unsigned long nr, volatile unsigned long *addr)
+>  }
+>
+>  /**
+> - * __change_bit - Toggle a bit in memory
+> + * ___change_bit - Toggle a bit in memory
+>   * @nr: the bit to change
+>   * @addr: the address to start counting from
+>   *
+> @@ -41,7 +41,7 @@ __clear_bit(unsigned long nr, volatile unsigned long *addr)
+>   * may be that only one operation succeeds.
+>   */
+>  static __always_inline void
+> -__change_bit(unsigned long nr, volatile unsigned long *addr)
+> +___change_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         unsigned long mask = BIT_MASK(nr);
+>         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> @@ -50,7 +50,7 @@ __change_bit(unsigned long nr, volatile unsigned long *addr)
+>  }
+>
+>  /**
+> - * __test_and_set_bit - Set a bit and return its old value
+> + * ___test_and_set_bit - Set a bit and return its old value
+>   * @nr: Bit to set
+>   * @addr: Address to count from
+>   *
+> @@ -59,7 +59,7 @@ __change_bit(unsigned long nr, volatile unsigned long *addr)
+>   * but actually fail.  You must protect multiple accesses with a lock.
+>   */
+>  static __always_inline bool
+> -__test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
+> +___test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         unsigned long mask = BIT_MASK(nr);
+>         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> @@ -70,7 +70,7 @@ __test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
+>  }
+>
+>  /**
+> - * __test_and_clear_bit - Clear a bit and return its old value
+> + * ___test_and_clear_bit - Clear a bit and return its old value
+>   * @nr: Bit to clear
+>   * @addr: Address to count from
+>   *
+> @@ -79,7 +79,7 @@ __test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
+>   * but actually fail.  You must protect multiple accesses with a lock.
+>   */
+>  static __always_inline bool
+> -__test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
+> +___test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         unsigned long mask = BIT_MASK(nr);
+>         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> @@ -91,7 +91,7 @@ __test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
+>
+>  /* WARNING: non atomic and it can be reordered! */
+>  static __always_inline bool
+> -__test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+> +___test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+>  {
+>         unsigned long mask = BIT_MASK(nr);
+>         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> @@ -102,12 +102,12 @@ __test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
+>  }
+>
+>  /**
+> - * test_bit - Determine whether a bit is set
+> + * _test_bit - Determine whether a bit is set
+>   * @nr: bit number to test
+>   * @addr: Address to start counting from
+>   */
+>  static __always_inline bool
+> -test_bit(unsigned long nr, const volatile unsigned long *addr)
+> +_test_bit(unsigned long nr, const volatile unsigned long *addr)
+>  {
+>         return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+>  }
+> diff --git a/tools/include/linux/bitops.h b/tools/include/linux/bitops.h
+> index 5fca38fe1ba8..f18683b95ea6 100644
+> --- a/tools/include/linux/bitops.h
+> +++ b/tools/include/linux/bitops.h
+> @@ -25,6 +25,22 @@ extern unsigned int __sw_hweight16(unsigned int w);
+>  extern unsigned int __sw_hweight32(unsigned int w);
+>  extern unsigned long __sw_hweight64(__u64 w);
+>
+> +/*
+> + * Defined here because those may be needed by architecture-specific static
+> + * inlines.
+> + */
+> +
+> +#define bitop(op, nr, addr)                                            \
+> +       op(nr, addr)
+> +
+> +#define __set_bit(nr, addr)            bitop(___set_bit, nr, addr)
+> +#define __clear_bit(nr, addr)          bitop(___clear_bit, nr, addr)
+> +#define __change_bit(nr, addr)         bitop(___change_bit, nr, addr)
+> +#define __test_and_set_bit(nr, addr)   bitop(___test_and_set_bit, nr, addr)
+> +#define __test_and_clear_bit(nr, addr) bitop(___test_and_clear_bit, nr, addr)
+> +#define __test_and_change_bit(nr, addr)        bitop(___test_and_change_bit, nr, addr)
+> +#define test_bit(nr, addr)             bitop(_test_bit, nr, addr)
+> +
+>  /*
+>   * Include this here because some architectures need generic_ffs/fls in
+>   * scope
+> --
+> 2.36.1
+>
