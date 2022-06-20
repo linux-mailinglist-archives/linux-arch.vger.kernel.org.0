@@ -2,259 +2,381 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB6C551090
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 08:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BA55514C5
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 11:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238791AbiFTGlQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jun 2022 02:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S238525AbiFTJuH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jun 2022 05:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238762AbiFTGlM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 02:41:12 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D946EDF50;
-        Sun, 19 Jun 2022 23:41:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655707271; x=1687243271;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hpHQEL0bY2235Xf8dLhHi9xQeV0+rIWxi3BbCRA7j5M=;
-  b=iShlKnAvLc9LQv92CKWpcR2BaqrCFGK91dw55jqRbE43t9rZfBoa9LSn
-   89JLz+LCxgkfNmTLDUcP9CNy0PYw39Re4R2JJPjAx8egTU6jwZdXYEZav
-   m9OMdyvAsJr1ddLE83WgSpkHrW0tWmYe0P3m0z2rNVPThJd866j69Q1EY
-   Dn16jSDOdwR37Mt588PjgKSi6uO/hPrJu9LP9QgxZ7EguYljFleYtlRiY
-   9OV9/4AU2dZvxKwNwHVsdPLFeSZSMDPF0l6Cg4M5R+jmnWB3AXBmqFw7C
-   4XKvD8DUJTbv6zuIvnzXoF3U3YSYhRZZImodJD3J4nI38aLA/+/ntgtKc
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260247020"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="260247020"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:41:11 -0700
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="642967791"
-Received: from lspinell-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.215.169])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:41:08 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-api@vger.kernel.org
-Subject: [PATCH v8 5/6] serial: Support for RS-485 multipoint addresses
-Date:   Mon, 20 Jun 2022 09:40:29 +0300
-Message-Id: <20220620064030.7938-6-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
-References: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S233824AbiFTJtt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 05:49:49 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823F813E01
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:49:47 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id u9so7845338ybq.3
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=InWhdMf1/1em6G6O59SWmdHx+HjozBGTG/fUpLSL4zs=;
+        b=L8P3UDB0r+kAWE8ATh497BZTGQg81XYY0qj0SbphWTu5GommNgfmi9tnHEGwhe2ecS
+         UsCbkZ8Rn8SpfKxA4li41PVrwHH4gH7IOZAm4EizS/AOv5qTHrOozfVoWa0Tf4ge3ytO
+         b4tHyimm4DVyec3OSdbeITsYTvzITBkxCXTCiwJSzIGVi9V248iEt1owGPupRTb9fx94
+         WOTdxRWqtzf77IJWFApiDAt8U1P/RLa6aG5CmxmmTS281Oo288QRiFKr5FjTlSD4NFzI
+         u0wfm8eV8DtoAK1YYJlreAQK2NKHP/VH1Bx2dH7j4QDbz1MpNP14DRsDhp8zdyrbfNu/
+         Tymg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=InWhdMf1/1em6G6O59SWmdHx+HjozBGTG/fUpLSL4zs=;
+        b=zgsycM4k8a5GB0iA+aZTJ/D9wo7kZ1NJcokHs7GU/FNiYWFv5xhWnFFr73+iaLiM9v
+         gKWLT5XrnzjqD5WuzEmXyeJktr/m+NfoehLmuoRq/s2KQmFso+ZeS4IXBvEgwvmyF6b0
+         QNhcc+IMrk6YuVoJXR3RRBTPumdWgpQbHiZpoXK7gGy5Z1EJzM/1Q8H3L9hPTy5a9sfi
+         n1iumAS1gis3dpK2fXyMgS5uWM+azXDXQXVGRAx3bXlXlULfkCOy9DjBELvPplPCxPmn
+         VpDXc8ty70+UNrl7Xb4Th0IlvCJSZodELi7eBw+RYk/YD2k5qDoXt2HZQeyUeuabqvHi
+         0PGg==
+X-Gm-Message-State: AJIora9kBM1XdvFUsdoYXsvy76dLNYrsxqfASD45Y0Z5IY717a9mfnX5
+        fZw/y2DlNil8l5OMl0C25SYHasjqvjLEv0UOGcLEsQ==
+X-Google-Smtp-Source: AGRyM1tvbAo9S4uHlP+A69f2j4SA6cJ/Xh/ZyowhsHkksgYqo5tQeU+Y/t9sprsxLv9Zx30mZP53j+np0Uo/GIDn0Ss=
+X-Received: by 2002:a25:3242:0:b0:668:ce6d:b820 with SMTP id
+ y63-20020a253242000000b00668ce6db820mr12388945yby.87.1655718586439; Mon, 20
+ Jun 2022 02:49:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com> <20220617144031.2549432-3-alexandr.lobakin@intel.com>
+In-Reply-To: <20220617144031.2549432-3-alexandr.lobakin@intel.com>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 20 Jun 2022 11:49:10 +0200
+Message-ID: <CANpmjNMoM1K1GhWpiHu+WvEeOqOW1NMw0ii7Npup2PD-y+Ratw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/7] bitops: always define asm-generic non-atomic bitops
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Add support for RS-485 multipoint addressing using 9th bit [*]. The
-addressing mode is configured through ->rs485_config().
+On Fri, 17 Jun 2022 at 19:19, Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
+>
+> Move generic non-atomic bitops from the asm-generic header which
+> gets included only when there are no architecture-specific
+> alternatives, to a separate independent file to make them always
+> available.
+> Almost no actual code changes, only one comment added to
+> generic_test_bit() saying that it's an atomic operation itself
+> and thus `volatile` must always stay there with no cast-aways.
+>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com> # comment
+> Suggested-by: Marco Elver <elver@google.com> # reference to kernel-doc
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-ADDRB in termios indicates 9th bit addressing mode is enabled. In this
-mode, 9th bit is used to indicate an address (byte) within the
-communication line. ADDRB can only be enabled/disabled through
-->rs485_config() that is also responsible for setting the destination and
-receiver (filter) addresses.
+Reviewed-by: Marco Elver <elver@google.com>
 
-The changes to serial_rs485 struct were test built with a few traps to
-detect mislayouting on archs lkp/0day builts for (all went fine):
-  BUILD_BUG_ON(((&rs485.delay_rts_after_send) + 1) != &rs485.padding[0]);
-  BUILD_BUG_ON(&rs485.padding[1] != &rs485.padding1[0]);
-  BUILD_BUG_ON(sizeof(rs485) != ((u8 *)(&rs485.padding[4]) -
-				 ((u8 *)&rs485.flags) + sizeof(__u32)));
-
-[*] Technically, RS485 is just an electronic spec and does not itself
-specify the 9th bit addressing mode but 9th bit seems at least
-"semi-standard" way to do addressing with RS485.
-
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
----
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-api@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-arch@vger.kernel.org
----
- Documentation/driver-api/serial/driver.rst    |  2 ++
- .../driver-api/serial/serial-rs485.rst        | 26 ++++++++++++++++++-
- drivers/tty/serial/serial_core.c              | 14 +++++++++-
- drivers/tty/tty_ioctl.c                       |  4 +++
- include/uapi/asm-generic/termbits-common.h    |  1 +
- include/uapi/linux/serial.h                   | 20 ++++++++++++--
- 6 files changed, 63 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
-index 7ef83fd3917b..35fb3866bb3d 100644
---- a/Documentation/driver-api/serial/driver.rst
-+++ b/Documentation/driver-api/serial/driver.rst
-@@ -261,6 +261,8 @@ hardware.
- 			- parity enable
- 		PARODD
- 			- odd parity (when PARENB is in force)
-+		ADDRB
-+			- address bit (changed through .rs485_config()).
- 		CREAD
- 			- enable reception of characters (if not set,
- 			  still receive characters from the port, but
-diff --git a/Documentation/driver-api/serial/serial-rs485.rst b/Documentation/driver-api/serial/serial-rs485.rst
-index 00b5d333acba..6ebad75c74ed 100644
---- a/Documentation/driver-api/serial/serial-rs485.rst
-+++ b/Documentation/driver-api/serial/serial-rs485.rst
-@@ -99,7 +99,31 @@ RS485 Serial Communications
- 		/* Error handling. See errno. */
- 	}
- 
--5. References
-+5. Multipoint Addressing
-+========================
-+
-+   The Linux kernel provides addressing mode for multipoint RS-485 serial
-+   communications line. The addressing mode is enabled with SER_RS485_ADDRB
-+   flag in serial_rs485. Struct serial_rs485 has two additional flags and
-+   fields for enabling receive and destination addresses.
-+
-+   Address mode flags:
-+	- SER_RS485_ADDRB: Enabled addressing mode (sets also ADDRB in termios).
-+	- SER_RS485_ADDR_RECV: Receive (filter) address enabled.
-+	- SER_RS485_ADDR_DEST: Set destination address.
-+
-+   Address fields (enabled with corresponding SER_RS485_ADDR_* flag):
-+	- addr_recv: Receive address.
-+	- addr_dest: Destination address.
-+
-+   Once a receive address is set, the communication can occur only with the
-+   particular device and other peers are filtered out. It is left up to the
-+   receiver side to enforce the filtering. Receive address will be cleared
-+   if SER_RS485_ADDR_RECV is not set.
-+
-+   Note: not all devices supporting RS485 support multipoint addressing.
-+
-+6. References
- =============
- 
-  [1]	include/uapi/linux/serial.h
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 44c3785445e3..414099e3262a 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -1294,6 +1294,17 @@ static int uart_check_rs485_flags(struct uart_port *port, struct serial_rs485 *r
- 	if (flags & ~port->rs485_supported->flags)
- 		return -EINVAL;
- 
-+	/* Asking for address w/o addressing mode? */
-+	if (!(rs485->flags & SER_RS485_ADDRB) &&
-+	    (rs485->flags & (SER_RS485_ADDR_RECV|SER_RS485_ADDR_DEST)))
-+		return -EINVAL;
-+
-+	/* Address given but not enabled? */
-+	if (!(rs485->flags & SER_RS485_ADDR_RECV) && rs485->addr_recv)
-+		return -EINVAL;
-+	if (!(rs485->flags & SER_RS485_ADDR_DEST) && rs485->addr_dest)
-+		return -EINVAL;
-+
- 	return 0;
- }
- 
-@@ -1349,7 +1360,8 @@ static void uart_sanitize_serial_rs485(struct uart_port *port, struct serial_rs4
- 	rs485->flags &= supported_flags;
- 
- 	/* Return clean padding area to userspace */
--	memset(rs485->padding, 0, sizeof(rs485->padding));
-+	memset(rs485->padding0, 0, sizeof(rs485->padding0));
-+	memset(rs485->padding1, 0, sizeof(rs485->padding1));
- }
- 
- int uart_rs485_config(struct uart_port *port)
-diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
-index adae687f654b..ed253f2337a7 100644
---- a/drivers/tty/tty_ioctl.c
-+++ b/drivers/tty/tty_ioctl.c
-@@ -319,6 +319,8 @@ unsigned char tty_get_frame_size(unsigned int cflag)
- 		bits++;
- 	if (cflag & PARENB)
- 		bits++;
-+	if (cflag & ADDRB)
-+		bits++;
- 
- 	return bits;
- }
-@@ -353,6 +355,8 @@ int tty_set_termios(struct tty_struct *tty, struct ktermios *new_termios)
- 	old_termios = tty->termios;
- 	tty->termios = *new_termios;
- 	unset_locked_termios(tty, &old_termios);
-+	/* Reset any ADDRB changes, ADDRB is changed through ->rs485_config() */
-+	tty->termios.c_cflag ^= (tty->termios.c_cflag ^ old_termios.c_cflag) & ADDRB;
- 
- 	if (tty->ops->set_termios)
- 		tty->ops->set_termios(tty, &old_termios);
-diff --git a/include/uapi/asm-generic/termbits-common.h b/include/uapi/asm-generic/termbits-common.h
-index 4d084fe8def5..4a6a79f28b21 100644
---- a/include/uapi/asm-generic/termbits-common.h
-+++ b/include/uapi/asm-generic/termbits-common.h
-@@ -46,6 +46,7 @@ typedef unsigned int	speed_t;
- #define EXTA		B19200
- #define EXTB		B38400
- 
-+#define ADDRB		0x20000000	/* address bit */
- #define CMSPAR		0x40000000	/* mark or space (stick) parity */
- #define CRTSCTS		0x80000000	/* flow control */
- 
-diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
-index fa6b16e5fdd8..c4c75fd7037e 100644
---- a/include/uapi/linux/serial.h
-+++ b/include/uapi/linux/serial.h
-@@ -126,10 +126,26 @@ struct serial_rs485 {
- #define SER_RS485_TERMINATE_BUS		(1 << 5)	/* Enable bus
- 							   termination
- 							   (if supported) */
-+
-+/* RS-485 addressing mode */
-+#define SER_RS485_ADDRB			(1 << 6)	/* Enable addressing mode */
-+#define SER_RS485_ADDR_RECV		(1 << 7)	/* Receive address filter */
-+#define SER_RS485_ADDR_DEST		(1 << 8)	/* Destination address */
-+
- 	__u32	delay_rts_before_send;	/* Delay before send (milliseconds) */
- 	__u32	delay_rts_after_send;	/* Delay after send (milliseconds) */
--	__u32	padding[5];		/* Memory is cheap, new structs
--					   are a royal PITA .. */
-+	union {
-+		/* v1 */
-+		__u32	padding[5];		/* Memory is cheap, new structs are a pain */
-+
-+		/* v2 (adds addressing mode fields) */
-+		struct {
-+			__u8	addr_recv;
-+			__u8	addr_dest;
-+			__u8	padding0[2];
-+			__u32	padding1[4];
-+		};
-+	};
- };
- 
- /*
--- 
-2.30.2
-
+> ---
+>  .../asm-generic/bitops/generic-non-atomic.h   | 130 ++++++++++++++++++
+>  include/asm-generic/bitops/non-atomic.h       | 110 ++-------------
+>  2 files changed, 138 insertions(+), 102 deletions(-)
+>  create mode 100644 include/asm-generic/bitops/generic-non-atomic.h
+>
+> diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
+> new file mode 100644
+> index 000000000000..7226488810e5
+> --- /dev/null
+> +++ b/include/asm-generic/bitops/generic-non-atomic.h
+> @@ -0,0 +1,130 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H
+> +#define __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H
+> +
+> +#include <linux/bits.h>
+> +
+> +#ifndef _LINUX_BITOPS_H
+> +#error only <linux/bitops.h> can be included directly
+> +#endif
+> +
+> +/*
+> + * Generic definitions for bit operations, should not be used in regular code
+> + * directly.
+> + */
+> +
+> +/**
+> + * generic___set_bit - Set a bit in memory
+> + * @nr: the bit to set
+> + * @addr: the address to start counting from
+> + *
+> + * Unlike set_bit(), this function is non-atomic and may be reordered.
+> + * If it's called on the same region of memory simultaneously, the effect
+> + * may be that only one operation succeeds.
+> + */
+> +static __always_inline void
+> +generic___set_bit(unsigned int nr, volatile unsigned long *addr)
+> +{
+> +       unsigned long mask = BIT_MASK(nr);
+> +       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> +
+> +       *p  |= mask;
+> +}
+> +
+> +static __always_inline void
+> +generic___clear_bit(unsigned int nr, volatile unsigned long *addr)
+> +{
+> +       unsigned long mask = BIT_MASK(nr);
+> +       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> +
+> +       *p &= ~mask;
+> +}
+> +
+> +/**
+> + * generic___change_bit - Toggle a bit in memory
+> + * @nr: the bit to change
+> + * @addr: the address to start counting from
+> + *
+> + * Unlike change_bit(), this function is non-atomic and may be reordered.
+> + * If it's called on the same region of memory simultaneously, the effect
+> + * may be that only one operation succeeds.
+> + */
+> +static __always_inline
+> +void generic___change_bit(unsigned int nr, volatile unsigned long *addr)
+> +{
+> +       unsigned long mask = BIT_MASK(nr);
+> +       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> +
+> +       *p ^= mask;
+> +}
+> +
+> +/**
+> + * generic___test_and_set_bit - Set a bit and return its old value
+> + * @nr: Bit to set
+> + * @addr: Address to count from
+> + *
+> + * This operation is non-atomic and can be reordered.
+> + * If two examples of this operation race, one can appear to succeed
+> + * but actually fail.  You must protect multiple accesses with a lock.
+> + */
+> +static __always_inline int
+> +generic___test_and_set_bit(unsigned int nr, volatile unsigned long *addr)
+> +{
+> +       unsigned long mask = BIT_MASK(nr);
+> +       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> +       unsigned long old = *p;
+> +
+> +       *p = old | mask;
+> +       return (old & mask) != 0;
+> +}
+> +
+> +/**
+> + * generic___test_and_clear_bit - Clear a bit and return its old value
+> + * @nr: Bit to clear
+> + * @addr: Address to count from
+> + *
+> + * This operation is non-atomic and can be reordered.
+> + * If two examples of this operation race, one can appear to succeed
+> + * but actually fail.  You must protect multiple accesses with a lock.
+> + */
+> +static __always_inline int
+> +generic___test_and_clear_bit(unsigned int nr, volatile unsigned long *addr)
+> +{
+> +       unsigned long mask = BIT_MASK(nr);
+> +       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> +       unsigned long old = *p;
+> +
+> +       *p = old & ~mask;
+> +       return (old & mask) != 0;
+> +}
+> +
+> +/* WARNING: non atomic and it can be reordered! */
+> +static __always_inline int
+> +generic___test_and_change_bit(unsigned int nr, volatile unsigned long *addr)
+> +{
+> +       unsigned long mask = BIT_MASK(nr);
+> +       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> +       unsigned long old = *p;
+> +
+> +       *p = old ^ mask;
+> +       return (old & mask) != 0;
+> +}
+> +
+> +/**
+> + * generic_test_bit - Determine whether a bit is set
+> + * @nr: bit number to test
+> + * @addr: Address to start counting from
+> + */
+> +static __always_inline int
+> +generic_test_bit(unsigned int nr, const volatile unsigned long *addr)
+> +{
+> +       /*
+> +        * Unlike the bitops with the '__' prefix above, this one *is* atomic,
+> +        * so `volatile` must always stay here with no cast-aways. See
+> +        * `Documentation/atomic_bitops.txt` for the details.
+> +        */
+> +       return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+> +}
+> +
+> +#endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
+> diff --git a/include/asm-generic/bitops/non-atomic.h b/include/asm-generic/bitops/non-atomic.h
+> index 078cc68be2f1..23d3abc1e10d 100644
+> --- a/include/asm-generic/bitops/non-atomic.h
+> +++ b/include/asm-generic/bitops/non-atomic.h
+> @@ -2,121 +2,27 @@
+>  #ifndef _ASM_GENERIC_BITOPS_NON_ATOMIC_H_
+>  #define _ASM_GENERIC_BITOPS_NON_ATOMIC_H_
+>
+> -#include <asm/types.h>
+> +#include <asm-generic/bitops/generic-non-atomic.h>
+>
+> -/**
+> - * arch___set_bit - Set a bit in memory
+> - * @nr: the bit to set
+> - * @addr: the address to start counting from
+> - *
+> - * Unlike set_bit(), this function is non-atomic and may be reordered.
+> - * If it's called on the same region of memory simultaneously, the effect
+> - * may be that only one operation succeeds.
+> - */
+> -static __always_inline void
+> -arch___set_bit(unsigned int nr, volatile unsigned long *addr)
+> -{
+> -       unsigned long mask = BIT_MASK(nr);
+> -       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> -
+> -       *p  |= mask;
+> -}
+> +#define arch___set_bit generic___set_bit
+>  #define __set_bit arch___set_bit
+>
+> -static __always_inline void
+> -arch___clear_bit(unsigned int nr, volatile unsigned long *addr)
+> -{
+> -       unsigned long mask = BIT_MASK(nr);
+> -       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> -
+> -       *p &= ~mask;
+> -}
+> +#define arch___clear_bit generic___clear_bit
+>  #define __clear_bit arch___clear_bit
+>
+> -/**
+> - * arch___change_bit - Toggle a bit in memory
+> - * @nr: the bit to change
+> - * @addr: the address to start counting from
+> - *
+> - * Unlike change_bit(), this function is non-atomic and may be reordered.
+> - * If it's called on the same region of memory simultaneously, the effect
+> - * may be that only one operation succeeds.
+> - */
+> -static __always_inline
+> -void arch___change_bit(unsigned int nr, volatile unsigned long *addr)
+> -{
+> -       unsigned long mask = BIT_MASK(nr);
+> -       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> -
+> -       *p ^= mask;
+> -}
+> +#define arch___change_bit generic___change_bit
+>  #define __change_bit arch___change_bit
+>
+> -/**
+> - * arch___test_and_set_bit - Set a bit and return its old value
+> - * @nr: Bit to set
+> - * @addr: Address to count from
+> - *
+> - * This operation is non-atomic and can be reordered.
+> - * If two examples of this operation race, one can appear to succeed
+> - * but actually fail.  You must protect multiple accesses with a lock.
+> - */
+> -static __always_inline int
+> -arch___test_and_set_bit(unsigned int nr, volatile unsigned long *addr)
+> -{
+> -       unsigned long mask = BIT_MASK(nr);
+> -       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> -       unsigned long old = *p;
+> -
+> -       *p = old | mask;
+> -       return (old & mask) != 0;
+> -}
+> +#define arch___test_and_set_bit generic___test_and_set_bit
+>  #define __test_and_set_bit arch___test_and_set_bit
+>
+> -/**
+> - * arch___test_and_clear_bit - Clear a bit and return its old value
+> - * @nr: Bit to clear
+> - * @addr: Address to count from
+> - *
+> - * This operation is non-atomic and can be reordered.
+> - * If two examples of this operation race, one can appear to succeed
+> - * but actually fail.  You must protect multiple accesses with a lock.
+> - */
+> -static __always_inline int
+> -arch___test_and_clear_bit(unsigned int nr, volatile unsigned long *addr)
+> -{
+> -       unsigned long mask = BIT_MASK(nr);
+> -       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> -       unsigned long old = *p;
+> -
+> -       *p = old & ~mask;
+> -       return (old & mask) != 0;
+> -}
+> +#define arch___test_and_clear_bit generic___test_and_clear_bit
+>  #define __test_and_clear_bit arch___test_and_clear_bit
+>
+> -/* WARNING: non atomic and it can be reordered! */
+> -static __always_inline int
+> -arch___test_and_change_bit(unsigned int nr, volatile unsigned long *addr)
+> -{
+> -       unsigned long mask = BIT_MASK(nr);
+> -       unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
+> -       unsigned long old = *p;
+> -
+> -       *p = old ^ mask;
+> -       return (old & mask) != 0;
+> -}
+> +#define arch___test_and_change_bit generic___test_and_change_bit
+>  #define __test_and_change_bit arch___test_and_change_bit
+>
+> -/**
+> - * arch_test_bit - Determine whether a bit is set
+> - * @nr: bit number to test
+> - * @addr: Address to start counting from
+> - */
+> -static __always_inline int
+> -arch_test_bit(unsigned int nr, const volatile unsigned long *addr)
+> -{
+> -       return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+> -}
+> +#define arch_test_bit generic_test_bit
+>  #define test_bit arch_test_bit
+>
+>  #endif /* _ASM_GENERIC_BITOPS_NON_ATOMIC_H_ */
+> --
+> 2.36.1
+>
