@@ -2,92 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307715515B8
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 12:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C14B551670
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 12:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239286AbiFTKZS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jun 2022 06:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S241174AbiFTK6v (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jun 2022 06:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239409AbiFTKZQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 06:25:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1E313E8B
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 03:25:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CC510CE116E
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 10:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0AAC341C4
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 10:25:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655720712;
-        bh=N19vMaifx2Cx25OIpEGDNkuy/pFDFa7xiOg2ncfsnuU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QA9u39/LmLLdrfK7xTlg5R7Jdp/SdqqOqfjiEErOhOk8d6XH7OVB9Hhu97ozOJgVv
-         gvcIqc6AZP7wFaJM1aFfIfnja1W+ZyitABLJM+/mnTSarwZeqO8nl0SC9rsSv/ZzT6
-         yKuINWP0nyHTzVz0Et6suKyAFmlqwbazxrRLnGmj5WWahaB3WmC+l10XkEKClhybGv
-         ed2onwn7HYFkwsreAkFz025YXuWX+SUXbTo3q1weC4Daa/+9zxC3Qj0GE7iWrbTntI
-         g2PNjqIBaEDj5eppfOfapDBECebjLkjwWeIxoU7Ea6G23Ebm+BLrcUG6Xacds5WJet
-         uBBwE1BEP6fdQ==
-Received: by mail-lj1-f172.google.com with SMTP id o23so4242640ljg.13
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 03:25:11 -0700 (PDT)
-X-Gm-Message-State: AJIora98bX0oT9VNKYxI/bMgb5FvWBpbcKM6LcicxL0MIU1HKXNR6PQm
-        kpgw74dc0cxH8bK8Dcanf/siign1pwPBy8q09vI=
-X-Google-Smtp-Source: AGRyM1sXsuRv6jWKN7rLyi3u2sdEL6N9Z8dSCWko9wHPJ5B4Vut6/qbcY3PvEaHtIEqGwmVbYEiVgfPn4C94j2F9EKQ=
-X-Received: by 2002:a2e:95c8:0:b0:255:abb5:d0e7 with SMTP id
- y8-20020a2e95c8000000b00255abb5d0e7mr11071552ljh.23.1655720710073; Mon, 20
- Jun 2022 03:25:10 -0700 (PDT)
+        with ESMTP id S241323AbiFTK6f (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 06:58:35 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6F5DD7;
+        Mon, 20 Jun 2022 03:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655722713; x=1687258713;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=vpL39t3xJejS0Bc6qv3jVN1E/qqa66dF3rn6N+6Zg0U=;
+  b=VCOAYqRVZ09Ip/tllDIfGdc+GRGKH2LkpVnWe3jeBhJxzBMQzq1uY4Ks
+   K0hEUtnp/uOmlVzjjLJd0c436GNup5bSaXKsh5vC8JC+QODGKwUO42Jwx
+   Pktel0Cez4aAFELcm//EYbDliCqUfrAhtiDv2tLSsZuN/SJ52eD6NP9dh
+   sok5bK1iRk98cxECEWYAS3uEjPYVlWi5ebxp6jcCzYmZX4jT2xmKzF8g0
+   lGlWmaEeWY2h+Q2Atc+8U1bnOmmhK3W89aXQducCnPIcJDntdVBfobXKw
+   9Gl5XM3blgFXvAMlwv3CF/hzMyEXTePS9wpB7LveFeR0a5AL2d1puo1io
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="260297379"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="260297379"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:58:33 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="689402203"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 03:58:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o3F6x-000kHu-Dx;
+        Mon, 20 Jun 2022 13:58:27 +0300
+Date:   Mon, 20 Jun 2022 13:58:27 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH v8 5/6] serial: Support for RS-485 multipoint addresses
+Message-ID: <YrBS03ymAWVajy7e@smile.fi.intel.com>
+References: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
+ <20220620064030.7938-6-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-References: <20220617145859.582176-1-chenhuacai@loongson.cn> <CAK8P3a1L40=P8GnuyK--K7URyrdAb4XcPJ-+HxwY4_+siA25oQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a1L40=P8GnuyK--K7URyrdAb4XcPJ-+HxwY4_+siA25oQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 20 Jun 2022 18:24:58 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4AO3friSYrpAN_VM6aLO7yfV2svKg=7w_3F3HpV7Dq4Q@mail.gmail.com>
-Message-ID: <CAAhV-H4AO3friSYrpAN_VM6aLO7yfV2svKg=7w_3F3HpV7Dq4Q@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add sparse memory vmemmap support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>, Min Zhou <zhoumin@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220620064030.7938-6-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Arnd,
+On Mon, Jun 20, 2022 at 09:40:29AM +0300, Ilpo Järvinen wrote:
+> Add support for RS-485 multipoint addressing using 9th bit [*]. The
+> addressing mode is configured through ->rs485_config().
+> 
+> ADDRB in termios indicates 9th bit addressing mode is enabled. In this
+> mode, 9th bit is used to indicate an address (byte) within the
+> communication line. ADDRB can only be enabled/disabled through
+> ->rs485_config() that is also responsible for setting the destination and
+> receiver (filter) addresses.
 
-On Fri, Jun 17, 2022 at 11:42 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Fri, Jun 17, 2022 at 4:58 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > Add sparse memory vmemmap support for LoongArch. SPARSEMEM_VMEMMAP
-> > uses a virtually mapped memmap to optimise pfn_to_page and page_to_pfn
-> > operations. This is the most efficient option when sufficient kernel
-> > resources are available.
->
-> I have not looked at this in detail, but from a high-level perspective, it
-> seems very similar to the corresponding code in arch/arm64 and arch/x86.
->
-> Can you try to merge the three copies into a generic helper and add that
-> to mm/sparse-vmemmap.c? If this does not work, can you describe in the
-> changelog text why these have to be architecture specific?
-It is difficult to merge, because LoongArch needs to call pud_init(),
-pmd_init() and other similar things which are unnecessary on ARM64 and
-X86.
+> The changes to serial_rs485 struct were test built with a few traps to
+> detect mislayouting on archs lkp/0day builts for (all went fine):
+>   BUILD_BUG_ON(((&rs485.delay_rts_after_send) + 1) != &rs485.padding[0]);
+>   BUILD_BUG_ON(&rs485.padding[1] != &rs485.padding1[0]);
+>   BUILD_BUG_ON(sizeof(rs485) != ((u8 *)(&rs485.padding[4]) -
+> 				 ((u8 *)&rs485.flags) + sizeof(__u32)));
 
-Huacai
+You may add static_asserts() for the above mentioned cases.
 
->
->        Arnd
+> [*] Technically, RS485 is just an electronic spec and does not itself
+> specify the 9th bit addressing mode but 9th bit seems at least
+> "semi-standard" way to do addressing with RS485.
+
+...
+
+> -	__u32	padding[5];		/* Memory is cheap, new structs
+> -					   are a royal PITA .. */
+> +	union {
+> +		/* v1 */
+> +		__u32	padding[5];		/* Memory is cheap, new structs are a pain */
+> +
+> +		/* v2 (adds addressing mode fields) */
+
+How user space will inform a kernel that it's trying v2?
+
+Usually when we have a union, it should be accompanied with the enum or version
+or something to tell which part of it is in use. I can imagine that in this case
+it's implied by the IOCTL parameters that never should be used on a garbage.
+
+Either add a commit message / UAPI comment or add a version field or ...?
+
+> +		struct {
+> +			__u8	addr_recv;
+> +			__u8	addr_dest;
+> +			__u8	padding0[2];
+> +			__u32	padding1[4];
+> +		};
+> +	};
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
