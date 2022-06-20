@@ -2,162 +2,146 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8065514CD
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 11:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8E65514D0
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 11:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239963AbiFTJu3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jun 2022 05:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S239701AbiFTJuR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jun 2022 05:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239109AbiFTJu2 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 05:50:28 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7C313E01
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:50:27 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-3177e60d980so73013547b3.12
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c5v3S7Zkd9PrYC84ZzumNRLfIqFWNrQTW2/cBzQcLYg=;
-        b=mIpWvLd42Zk3qDlC1lJPcvqz7M92/WQXcIoyM0LykA88iAo+rdgJDoHazph31kdSjO
-         VUG7i/8HNZaOHLdu3N7nDqHPuwIY9fq9FvuOy2YX4EQM5bkG55ZAVqX3dyMqhKkf3Zrp
-         wdgsnCqcf5yU/1gR7FrWP0Ud1NWBTI4TQjIzmZlty8pgPxfb7xHnM8DyqjB9t4bddRHR
-         O64X//fr0z/4HxfkqMa1L+YEzzaQ9IobIbQsg9BgYcppkG2JYM76WtyvjDHFXlKlUAJ0
-         15NorsK1RaWXrUbZhIe7SdlsQlOhJzxaaCKzH9GSm4bD8dAmvyeOcvf0LOG2jFT9DYh9
-         yfrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c5v3S7Zkd9PrYC84ZzumNRLfIqFWNrQTW2/cBzQcLYg=;
-        b=lWlyxo0fEP30FoMQEzndyg4G9usFkZJ2Vacn3IdA82zbDxJeXUIBUCojfT7xrWDLRr
-         UFklFX1R7ePqOyomAyiPAWSdeqEzWplrcITyIfTlICjtskYWrNeg693Fgt2YVWBPJjIq
-         NpzQJceRNyyS/xioZtXeSNE6HIOwK/X+U+EdT0kyZGtON6ltPvnUb6YGmPTavNBsUTtx
-         48QxCxchOL+Lwl+atoAHEfsTLzj1SudtOunXVyxBQNu64VOP+vXwopEVmGB6U9dm89S6
-         LbjyajB6eMIxkAPtNLknbShM19b0mBRWRNX8+BHxfFzRVX8IzBGaEqNwUZuOmzwx0/c7
-         p9cw==
-X-Gm-Message-State: AJIora/UrKPArVC/owNCR5OQLaY7N8oL/dzfrsXJTk5pk96tf/+zJt4C
-        HefixG4B4eNRO19aKIF4h4bhsclg+jkyGECgFYrI6A==
-X-Google-Smtp-Source: AGRyM1uqwPv5EEm+1mfuSKwMODskeRwUAmI9vr2ZogkAKlsFAi/E6OQyVuET36WKVD2vqMmJlAF716hcyW0OfDGtk5M=
-X-Received: by 2002:a05:690c:681:b0:317:e92b:7f8d with SMTP id
- bp1-20020a05690c068100b00317e92b7f8dmr1282353ywb.264.1655718625831; Mon, 20
- Jun 2022 02:50:25 -0700 (PDT)
+        with ESMTP id S239109AbiFTJuO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 05:50:14 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A03513E00
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:50:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9D687CE1153
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 09:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89DBC3411C
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 09:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655718609;
+        bh=Fr0ix5EjKeIi2iLMs/BddEnbNzT+Ffa1oytTOGedzwE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ZtLWQaCGxyDeiyzSl067qaTebE7hO3c0CA4rZhDm7N/Jqe6N3Ife2IY5iOTBzNA5B
+         T/K85aWEKSMFg2VirBOMTh416Y53TnyQNEesyYktxFIks1njwqhbfbo4JjzH4aeYXD
+         69bRlEREj53fp80p76Q0IDl5dn6Gc3wu7E3DMY663Dntt22Hwzh7f7qH800TGcGYjO
+         molJfiwtXmNxs1t40w9OYbxPHYqxdbhKyLcTVqM9FBi8DwxEs2qfxuQjKPWN7d60G0
+         RIkdQF4VSAiSCaJCu8iubZE4eS6cOM6UEypZ+lURdj3LcMaChNLCm07vlnUDmxN9Xf
+         xUT89mDoje6zg==
+Received: by mail-lj1-f173.google.com with SMTP id a11so2493276ljb.5
+        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 02:50:09 -0700 (PDT)
+X-Gm-Message-State: AJIora/oojyj+c3xGHhH/AbSfX1Ie4ODoeLmFjsaS9GHkRh2nwWNs8Zb
+        ewzCG5rSa5iejGdYLYlLKIQEjUdZ9CXSRZD1p7c=
+X-Google-Smtp-Source: AGRyM1u26ZTxYYwp6BW03Vv9IYXi2WFR5VcYdjY22Y8n/MuB9XsnBOuNlJp6bjGBF2txoIIO2DXn7JbMPW1np5BsB8g=
+X-Received: by 2002:a05:651c:506:b0:257:c12:b941 with SMTP id
+ o6-20020a05651c050600b002570c12b941mr11442398ljp.429.1655718607867; Mon, 20
+ Jun 2022 02:50:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220617144031.2549432-1-alexandr.lobakin@intel.com> <20220617144031.2549432-5-alexandr.lobakin@intel.com>
-In-Reply-To: <20220617144031.2549432-5-alexandr.lobakin@intel.com>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 20 Jun 2022 11:49:50 +0200
-Message-ID: <CANpmjNMU86pKB37OcnZ34Avd8+gBn-Ekz_6uYvF94zFZY0itCw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/7] bitops: define const_*() versions of the non-atomics
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220617145705.581985-1-chenhuacai@loongson.cn>
+ <CAK8P3a2nD_Zxv5X_LB7AbO=kxHQyk3vz09fQZ-TTX4PL0b3g1g@mail.gmail.com>
+ <CAJF2gTT_etFg7-N4f=A4LMOYvd3+H505e0xt8NyxK4uPtkuEXg@mail.gmail.com>
+ <CAK8P3a078r6zkZYYeV7Qg3AEOvFxgG+eRN9bFE_3DNwHq=_1ZA@mail.gmail.com>
+ <CAJF2gTQL+ysc+juQfNVxz1QtXgrLAYe=CyA9L_c3fzd4F8aFxQ@mail.gmail.com>
+ <CAK8P3a3wRqLAvywX2zbD0kdt19m2pKazqA2Y6_sNL1L=_4N3vQ@mail.gmail.com>
+ <CAJF2gTQG0SBninPg7MsCFP=60p8u5KT+HaLNBzgjxM_fTMr+Dg@mail.gmail.com> <CAK8P3a1LgmZDssQoCciZ0YRy3UHWV3yK99UHTCdvahCFBG+u+Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a1LgmZDssQoCciZ0YRy3UHWV3yK99UHTCdvahCFBG+u+Q@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 20 Jun 2022 17:49:56 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6-K_mHSm9CWRB+v2a_Zqy-Z9x3XmQPuF7XT3yiTB=rbw@mail.gmail.com>
+Message-ID: <CAAhV-H6-K_mHSm9CWRB+v2a_Zqy-Z9x3XmQPuF7XT3yiTB=rbw@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Add qspinlock support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Guo Ren <guoren@kernel.org>, Huacai Chen <chenhuacai@loongson.cn>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 17 Jun 2022 at 19:21, Alexander Lobakin
-<alexandr.lobakin@intel.com> wrote:
->
-> Define const_*() variants of the non-atomic bitops to be used when
-> the input arguments are compile-time constants, so that the compiler
-> will be always able to resolve those to compile-time constants as
-> well. Those are mostly direct aliases for generic_*() with one
-> exception for const_test_bit(): the original one is declared
-> atomic-safe and thus doesn't discard the `volatile` qualifier, so
-> in order to let optimize code, define it separately disregarding
-> the qualifier.
-> Add them to the compile-time type checks as well just in case.
->
-> Suggested-by: Marco Elver <elver@google.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Hi,
 
-Reviewed-by: Marco Elver <elver@google.com>
+On Mon, Jun 20, 2022 at 12:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Sun, Jun 19, 2022 at 5:48 PM Guo Ren <guoren@kernel.org> wrote:
+> >
+> > On Sat, Jun 18, 2022 at 1:40 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > >
+> > > On Sat, Jun 18, 2022 at 1:19 AM Guo Ren <guoren@kernel.org> wrote:
+> > > >
+> > > > > static inline u32 arch_xchg32(u32 *ptr, u32 x) {...}
+> > > > > static inline u64 arch_xchg64(u64 *ptr, u64 x) {...}
+> > > > >
+> > > > > #ifdef CONFIG_64BIT
+> > > > > #define xchg(ptr, x) (sizeof(*ptr) == 8) ? \
+> > > > >             arch_xchg64((u64*)ptr, (uintptr_t)x)  \
+> > > > >             arch_xchg32((u32*)ptr, x)
+> > > > > #else
+> > > > > #define xchg(ptr, x) arch_xchg32((u32*)ptr, (uintptr_t)x)
+> > > > > #endif
+> > > >
+> > > > The above primitive implies only long & int type args are permitted, right?
+> > >
+> > > The idea is to allow any scalar or pointer type, but not structures or
+> > > unions. If we need to deal with those as well, the macro could be extended
+> > > accordingly, but I would prefer to limit it as much as possible.
+> > >
+> > > There is already cmpxchg64(), which is used for types that are fixed to
+> > > 64 bit integers even on 32-bit architectures, but it is rarely used except
+> > > to implement the atomic64_t helpers.
+> > A lot of 32bit arches couldn't provide cmpxchg64 (like arm's ldrexd/strexd).
+>
+> Most 32-bit architectures also lack SMP support, so they can fall back to
+> the generic version from include/asm-generic/cmpxchg-local.h
+>
+> > Another question: Do you know why arm32 didn't implement
+> > HAVE_CMPXCHG_DOUBLE with ldrexd/strexd?
+>
+> I think it's just fairly obscure, the slub code appears to be the only
+> code that would use it.
+>
+> > >
+> > > 80% of the uses of cmpxchg() and xchg() deal with word-sized
+> > > quantities like 'unsigned long', or 'void *', but the others are almost
+> > > all fixed 32-bit quantities. We could change those to use cmpxchg32()
+> > > directly and simplify the cmpxchg() function further to only deal
+> > > with word-sized arguments, but I would not do that in the first step.
+> > Don't forget cmpxchg_double for this cleanup, when do you want to
+> > restart the work?
+>
+> I have no specific plans at the moment. If you or someone else likes
+> to look into it, I can dig out my old patch though.
+>
+> The cmpxchg_double() call seems to already fit in, since it is an
+> inline function and does not expect arbitrary argument types.
+Thank all of you. :)
 
-> ---
->  .../asm-generic/bitops/generic-non-atomic.h   | 31 +++++++++++++++++++
->  include/linux/bitops.h                        |  1 +
->  2 files changed, 32 insertions(+)
+As Rui and Xuerui said, ll and sc in LoongArch both have implicit full
+barriers, so there is no "relaxed" version.
+
+The __WEAK_LLSC_MB in __cmpxchg_small() have nothing to do with ll and
+ sc themselves, we need a barrier at the branch target just because
+Loongson-3A5000 has a hardware flaw (and will be fixed in
+Loongson-3A6000).
+
+qspinlock just needs xchg_small(), but cmpxchg_small() is also useful
+for percpu operations. So I plan to split this patch to two: the first
+add xchg_small() and cmpxchg_small(), the second enable qspinlock.
+
+Huacai
+
 >
-> diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
-> index b85b8a2ac239..3d5ebd24652b 100644
-> --- a/include/asm-generic/bitops/generic-non-atomic.h
-> +++ b/include/asm-generic/bitops/generic-non-atomic.h
-> @@ -127,4 +127,35 @@ generic_test_bit(unsigned long nr, const volatile unsigned long *addr)
->         return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
->  }
->
-> +/*
-> + * const_*() definitions provide good compile-time optimizations when
-> + * the passed arguments can be resolved at compile time.
-> + */
-> +#define const___set_bit                        generic___set_bit
-> +#define const___clear_bit              generic___clear_bit
-> +#define const___change_bit             generic___change_bit
-> +#define const___test_and_set_bit       generic___test_and_set_bit
-> +#define const___test_and_clear_bit     generic___test_and_clear_bit
-> +#define const___test_and_change_bit    generic___test_and_change_bit
-> +
-> +/**
-> + * const_test_bit - Determine whether a bit is set
-> + * @nr: bit number to test
-> + * @addr: Address to start counting from
-> + *
-> + * A version of generic_test_bit() which discards the `volatile` qualifier to
-> + * allow a compiler to optimize code harder. Non-atomic and to be called only
-> + * for testing compile-time constants, e.g. by the corresponding macros, not
-> + * directly from "regular" code.
-> + */
-> +static __always_inline bool
-> +const_test_bit(unsigned long nr, const volatile unsigned long *addr)
-> +{
-> +       const unsigned long *p = (const unsigned long *)addr + BIT_WORD(nr);
-> +       unsigned long mask = BIT_MASK(nr);
-> +       unsigned long val = *p;
-> +
-> +       return !!(val & mask);
-> +}
-> +
->  #endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index 87087454a288..d393297287d5 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -37,6 +37,7 @@ extern unsigned long __sw_hweight64(__u64 w);
->  /* Check that the bitops prototypes are sane */
->  #define __check_bitop_pr(name)                                         \
->         static_assert(__same_type(arch_##name, generic_##name) &&       \
-> +                     __same_type(const_##name, generic_##name) &&      \
->                       __same_type(name, generic_##name))
->
->  __check_bitop_pr(__set_bit);
-> --
-> 2.36.1
->
+>        Arnd
