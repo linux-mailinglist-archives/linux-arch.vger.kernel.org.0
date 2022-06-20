@@ -2,52 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52A1551EFE
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 16:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF55D551F86
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 16:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245334AbiFTOh2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jun 2022 10:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S237936AbiFTO55 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jun 2022 10:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243890AbiFTOhP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 10:37:15 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDB55132A;
-        Mon, 20 Jun 2022 06:52:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655733124; x=1687269124;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PUT5CK/O9Y7UPcpvAOlSgvIIEYYbeJdLfqrP84iYTYY=;
-  b=j3Dxtu2zAywFiLCs9thH2bf/KFV3dhbQiNw75/iyZnlWRWeyoL6mwDST
-   BbC1lNfO7yc30TVLLigTkyRC5aMo4G7byLapc+g30u+BZwwQfgPb8Txfm
-   Cj6NHAvMG8NweYgT9vHtHdRFmA+DeQCOCENDqox0Qbvz4W74KxI+KPtwC
-   czfdLxiel58qgo7wCcMDZQVMZsS27Z2YjWkbMwLZXHW/M7vg0GTOTE/j8
-   RGTwpVPRnUDEyy5ZGX2JO3xDwSkN2bDvvHaFDKkq7gl7Fzdg+HJoeOMoY
-   Pc6VRs6tIQEOil2eOJhpJ/5wXLpHlnyXdYJ6UYS9bDfYgOrO03Mgu/P1S
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="280956337"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="280956337"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2022 06:52:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="714632355"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga004.jf.intel.com with ESMTP; 20 Jun 2022 06:51:57 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25KDptUA005326;
-        Mon, 20 Jun 2022 14:51:55 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        with ESMTP id S232579AbiFTO5k (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 10:57:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C928102C;
+        Mon, 20 Jun 2022 07:19:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C859113E;
+        Mon, 20 Jun 2022 07:19:55 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.70.167])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43E8E3F534;
+        Mon, 20 Jun 2022 07:19:51 -0700 (PDT)
+Date:   Mon, 20 Jun 2022 15:19:42 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
         Matt Turner <mattst88@gmail.com>,
         Brian Cain <bcain@quicinc.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rich Felker <dalias@libc.org>,
         "David S. Miller" <davem@davemloft.net>,
@@ -55,25 +35,22 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
         Tony Luck <tony.luck@intel.com>,
-        "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Jesse Brandeburg <jesse.brandeburg@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
         linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>
-Subject: Re: [alobakin:bitops 3/7] block/elevator.c:222:9: sparse: sparse: cast from restricted req_flags_t
-Date:   Mon, 20 Jun 2022 15:51:46 +0200
-Message-Id: <20220620135146.2628908-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
-References: <202206191726.wq70mbMK-lkp@intel.com> <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+Message-ID: <YrCB/rz3RM6TCjij@FVFF77S0Q05N>
+References: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220617144031.2549432-1-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,118 +59,68 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
-Date: Sun, 19 Jun 2022 17:20:05 +0800
+On Fri, Jun 17, 2022 at 04:40:24PM +0200, Alexander Lobakin wrote:
+> So, in order to let the compiler optimize out such cases, expand the
+> test_bit() and __*_bit() definitions with a compile-time condition
+> check, so that they will pick the generic C non-atomic bitop
+> implementations when all of the arguments passed are compile-time
+> constants, which means that the result will be a compile-time
+> constant as well and the compiler will produce more efficient and
+> simple code in 100% cases (no changes when there's at least one
+> non-compile-time-constant argument).
 
-Also, could someone please help me with this? I don't get what went
-wrong with sparse, it's not even some new code, just moving old
-stuff.
+> The savings are architecture, compiler and compiler flags dependent,
+> for example, on x86_64 -O2:
+> 
+> GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
+> LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
+> LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
+> 
+> and ARM64 (courtesy of Mark[0]):
+> 
+> GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
+> LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
 
-> tree:   https://github.com/alobakin/linux bitops
-> head:   9bd39b17ce49d350eed93a031e0da6389067013e
-> commit: 521611f961a7dda92eefa26e1afd3914c06af64e [3/7] bitops: unify non-atomic bitops prototypes across architectures
-> config: mips-randconfig-s031-20220619 (https://download.01.org/0day-ci/archive/20220619/202206191726.wq70mbMK-lkp@intel.com/config)
-> compiler: mips64el-linux-gcc (GCC) 11.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.4-30-g92122700-dirty
->         # https://github.com/alobakin/linux/commit/521611f961a7dda92eefa26e1afd3914c06af64e
->         git remote add alobakin https://github.com/alobakin/linux
->         git fetch --no-tags alobakin bitops
->         git checkout 521611f961a7dda92eefa26e1afd3914c06af64e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> 
-> sparse warnings: (new ones prefixed by >>)
->    command-line: note: in included file:
->    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
->    builtin:0:0: sparse: this was the original definition
->    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
->    builtin:0:0: sparse: this was the original definition
->    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
->    builtin:0:0: sparse: this was the original definition
->    builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
->    builtin:0:0: sparse: this was the original definition
->    block/elevator.c: note: in included file (through include/linux/bitops.h, include/linux/kernel.h):
->    include/asm-generic/bitops/generic-non-atomic.h:29:9: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:30:9: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:32:10: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:32:16: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:27:1: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:38:9: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:39:9: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:41:10: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:41:16: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:36:1: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:56:9: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:57:9: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:59:10: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:59:15: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:54:1: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:74:9: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:75:9: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:76:9: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:78:10: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:78:14: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:78:20: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:79:17: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:79:23: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:79:9: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:72:1: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:94:9: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:95:9: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:96:9: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:98:10: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:98:14: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:98:21: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:99:17: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:99:23: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:99:9: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:92:1: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:106:9: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:107:9: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:108:9: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:110:10: sparse: sparse: unreplaced symbol 'p'
->    include/asm-generic/bitops/generic-non-atomic.h:110:14: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:110:20: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:111:17: sparse: sparse: unreplaced symbol 'old'
->    include/asm-generic/bitops/generic-non-atomic.h:111:23: sparse: sparse: unreplaced symbol 'mask'
->    include/asm-generic/bitops/generic-non-atomic.h:111:9: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:104:1: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:127:9: sparse: sparse: unreplaced symbol 'return'
->    include/asm-generic/bitops/generic-non-atomic.h:120:1: sparse: sparse: unreplaced symbol 'return'
-> >> block/elevator.c:222:9: sparse: sparse: cast from restricted req_flags_t
-> 
-> vim +222 block/elevator.c
-> 
-> 9817064b68fef7 Jens Axboe        2006-07-28  217  
-> 70b3ea056f3074 Jens Axboe        2016-12-07  218  void elv_rqhash_add(struct request_queue *q, struct request *rq)
-> 9817064b68fef7 Jens Axboe        2006-07-28  219  {
-> b374d18a4bfce7 Jens Axboe        2008-10-31  220  	struct elevator_queue *e = q->elevator;
-> 9817064b68fef7 Jens Axboe        2006-07-28  221  
-> 9817064b68fef7 Jens Axboe        2006-07-28 @222  	BUG_ON(ELV_ON_HASH(rq));
-> 242d98f077ac0a Sasha Levin       2012-12-17  223  	hash_add(e->hash, &rq->hash, rq_hash_key(rq));
-> e806402130c9c4 Christoph Hellwig 2016-10-20  224  	rq->rq_flags |= RQF_HASHED;
-> 9817064b68fef7 Jens Axboe        2006-07-28  225  }
-> bd166ef183c263 Jens Axboe        2017-01-17  226  EXPORT_SYMBOL_GPL(elv_rqhash_add);
-> 9817064b68fef7 Jens Axboe        2006-07-28  227  
-> 
-> :::::: The code at line 222 was first introduced by commit
-> :::::: 9817064b68fef7e4580c6df1ea597e106b9ff88b [PATCH] elevator: move the backmerging logic into the elevator core
-> 
-> :::::: TO: Jens Axboe <axboe@suse.de>
-> :::::: CC: Jens Axboe <axboe@nelson.home.kernel.dk>
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Hmm... with *this version* of the series, I'm not getting results nearly as
+good as that when building defconfig atop v5.19-rc3:
+
+  GCC 8.5.0:   add/remove: 83/49 grow/shrink: 973/1147 up/down: 32020/-47824 (-15804)
+  GCC 9.3.0:   add/remove: 68/51 grow/shrink: 1167/592 up/down: 30720/-31352 (-632)
+  GCC 10.3.0:  add/remove: 84/37 grow/shrink: 1711/1003 up/down: 45392/-41844 (3548)
+  GCC 11.1.0:  add/remove: 88/31 grow/shrink: 1635/963 up/down: 51540/-46096 (5444)
+  GCC 11.3.0:  add/remove: 89/32 grow/shrink: 1629/966 up/down: 51456/-46056 (5400)
+  GCC 12.1.0:  add/remove: 84/31 grow/shrink: 1540/829 up/down: 48772/-43164 (5608)
+
+  LLVM 12.0.1: add/remove: 118/58 grow/shrink: 437/381 up/down: 45312/-65668 (-20356)
+  LLVM 13.0.1: add/remove: 35/19 grow/shrink: 416/243 up/down: 14408/-22200 (-7792)
+  LLVM 14.0.0: add/remove: 42/16 grow/shrink: 415/234 up/down: 15296/-21008 (-5712)
+
+... and that now seems to be regressing codegen with recent versions of GCC as
+much as it improves it LLVM.
+
+I'm not sure if we've improved some other code and removed the benefit between
+v5.19-rc1 and v5.19-rc3, or whether something else it at play, but this doesn't
+look as compelling as it did.
+
+Overall that's mostly hidden in the Image size, due to 64K alignment and
+padding requirements:
+
+  Toolchain      Before      After       Difference
+
+  GCC 8.5.0      36178432    36178432    0
+  GCC 9.3.0      36112896    36112896    0
+  GCC 10.3.0     36442624    36377088    -65536
+  GCC 11.1.0     36311552    36377088    +65536
+  GCC 11.3.0     36311552    36311552    0
+  GCC 12.1.0     36377088    36377088    0
+
+  LLVM 12.0.1    31418880    31418880    0
+  LLVM 13.0.1    31418880    31418880    0
+  LLVM 14.0.0    31218176    31218176    0
+
+... so aside from the blip around GCC 10.3.0 and 11.1.0, there's not a massive
+change overall (due to 64KiB alignment restrictions for portions of the kernel
+Image).
 
 Thanks,
-Olek
+Mark.
