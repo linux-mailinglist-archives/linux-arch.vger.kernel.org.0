@@ -2,141 +2,90 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19547550F6A
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 06:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE735551074
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 08:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiFTE06 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 20 Jun 2022 00:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        id S238584AbiFTGig convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Mon, 20 Jun 2022 02:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229998AbiFTE05 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 00:26:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3463263E1
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 21:26:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B77BC6100C
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 04:26:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E6D4C341C7
-        for <linux-arch@vger.kernel.org>; Mon, 20 Jun 2022 04:26:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655699216;
-        bh=OAthta1phLKkQIKQW9+J+eds3olo6VBueIgwDcoHNwI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FrzhF+9UTHmUMgHjqx/dRyRX9v4jSHYXTV6rgRGubVNnp/9PIz/LEzY1GHDoYwMCT
-         FWDUTQ1Haww04lDAalm0aAREZQK6+7tuMes3kf//vRJK8UIi69sKIDcpoj2eGceSwL
-         SxcB4IUOq0DUBUQuy6pCKC0B3TaGlHr1DeEpBbsCVtq9hBwcp+KuZM2kAxCxQiRJyK
-         RtShmDPVnQf/ElkbcDvgUxzgyDqqvUGkfOt4HLHYWgP833UzvQn+jhIb78izB/dblP
-         Ybw8i92I0afUvL/BAMbt+uYooaP6VodJHDOQZ3JLzfl05BO6neUMKNhXMax558Fz1C
-         Mu4z1XKOHyN7Q==
-Received: by mail-lf1-f42.google.com with SMTP id w20so15269666lfa.11
-        for <linux-arch@vger.kernel.org>; Sun, 19 Jun 2022 21:26:56 -0700 (PDT)
-X-Gm-Message-State: AJIora9I0EQIsCBXJpAPhx7chgfsu6I/xt3oT0IZOnYYKLZED9blCqE4
-        lyihHIkhS3oNoRdZK+BAdodybSrXg1+Kf+5YTSU=
-X-Google-Smtp-Source: AGRyM1uYyyQjf9Decjv0WPr7mJzVYnU+TOsVlPnJvM4Za2MdmoVcQWzOB7ITLBdGYmYg7Kh2IT1KTqP3MSGzl+OkCHc=
-X-Received: by 2002:a05:6512:258a:b0:47d:bb62:910f with SMTP id
- bf10-20020a056512258a00b0047dbb62910fmr12198749lfb.447.1655699214150; Sun, 19
- Jun 2022 21:26:54 -0700 (PDT)
+        with ESMTP id S238740AbiFTGi1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 02:38:27 -0400
+X-Greylist: delayed 858 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Jun 2022 23:38:21 PDT
+Received: from mail.pgj.campeche.gob.mx (unknown [187.157.28.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748F81173;
+        Sun, 19 Jun 2022 23:38:19 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 4AFCA1BC0CB3;
+        Mon, 20 Jun 2022 01:18:41 -0500 (CDT)
+Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
+        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id H-9SJIqV6nE5; Mon, 20 Jun 2022 01:18:33 -0500 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 670E31BC0CB5;
+        Mon, 20 Jun 2022 01:18:29 -0500 (CDT)
+X-Virus-Scanned: amavisd-new at pgj.campeche.gob.mx
+Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
+        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1YSDgk3MrDxn; Mon, 20 Jun 2022 01:18:23 -0500 (CDT)
+Received: from mail.pgj.campeche.gob.mx (mail.pgj.campeche.gob.mx [172.24.1.108])
+        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 2DBF81BC0C9D;
+        Mon, 20 Jun 2022 01:18:15 -0500 (CDT)
+Date:   Mon, 20 Jun 2022 01:18:14 -0500 (CDT)
+From:   =?utf-8?B?0YHQuNGB0YLQtdC80L3QuNC5INCw0LTQvNGW0L3RltGB0YLRgNCw0YLQvtGA?= 
+        <vfgcontrolinterno@pgj.campeche.gob.mx>
+Reply-To: sistemassadmins@mail2engineer.com
+Message-ID: <2077113903.96537.1655705894599.JavaMail.zimbra@pgj.campeche.gob.mx>
+Subject: 
 MIME-Version: 1.0
-References: <20220617145828.582117-1-chenhuacai@loongson.cn>
- <CAHirt9hRs_iTvAZ=UxBBK448j7p+pYxKsMVise=Jj2qCtNky2Q@mail.gmail.com>
- <CAAhV-H4=04qygAFqm36RBM-ktXhO7M8HMBeCPBOnB8xYz268Zw@mail.gmail.com> <94bebe28-5988-d6b6-bf82-03ef5901cd69@xen0n.name>
-In-Reply-To: <94bebe28-5988-d6b6-bf82-03ef5901cd69@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 20 Jun 2022 12:26:42 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4-=T5hA1UwFq2uN=PU0L9KV9jU9jkDQh9UuyyuUr=zEQ@mail.gmail.com>
-Message-ID: <CAAhV-H4-=T5hA1UwFq2uN=PU0L9KV9jU9jkDQh9UuyyuUr=zEQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add vDSO syscall __vdso_getcpu()
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     hev <r@hev.cc>, Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+X-Originating-IP: [172.24.1.254]
+X-Mailer: Zimbra 8.8.15_GA_4304 (zclient/8.8.15_GA_4304)
+Thread-Index: 4Ew2CQhC+eGtKTdqcoCXQXVPd5NZpg==
+Thread-Topic: 
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,KHOP_HELO_FCRDNS,MISSING_HEADERS,
+        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5559]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [187.157.28.107 listed in wl.mailspike.net]
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.0 MISSING_HEADERS Missing To: header
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
+        *      dynamic-looking rDNS
+        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Xuerui,
+увага;
 
-On Sat, Jun 18, 2022 at 8:56 PM WANG Xuerui <kernel@xen0n.name> wrote:
->
-> On 6/18/22 17:10, Huacai Chen wrote:
-> > Hi,
-> >
-> > On Fri, Jun 17, 2022 at 11:35 PM hev <r@hev.cc> wrote:
-> >> Hello,
-> >>
-> >> On Fri, Jun 17, 2022 at 10:57 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >>> We test 20 million times of getcpu(), the real syscall version take 25
-> >>> seconds, while the vsyscall version take only 2.4 seconds.
-> >>>
-> >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> >>> ---
-> >>>   arch/loongarch/include/asm/vdso.h      |  4 +++
-> >>>   arch/loongarch/include/asm/vdso/vdso.h | 10 +++++-
-> >>>   arch/loongarch/kernel/vdso.c           | 23 +++++++++-----
-> >>>   arch/loongarch/vdso/Makefile           |  3 +-
-> >>>   arch/loongarch/vdso/vdso.lds.S         |  1 +
-> >>>   arch/loongarch/vdso/vgetcpu.c          | 43 ++++++++++++++++++++++++++
-> >>>   6 files changed, 74 insertions(+), 10 deletions(-)
-> >>>   create mode 100644 arch/loongarch/vdso/vgetcpu.c
-> >>>
-> >>> diff --git a/arch/loongarch/include/asm/vdso.h b/arch/loongarch/include/asm/vdso.h
-> >>> index 8f8a0f9a4953..e76d5e37480d 100644
-> >>> --- a/arch/loongarch/include/asm/vdso.h
-> >>> +++ b/arch/loongarch/include/asm/vdso.h
-> >>> @@ -12,6 +12,10 @@
-> >>>
-> >>>   #include <asm/barrier.h>
-> >>>
-> >>> +typedef struct vdso_pcpu_data {
-> >>> +       u32 node;
-> >>> +} ____cacheline_aligned_in_smp vdso_pcpu_data;
-> >>> +
-> >>>   /*
-> >>>    * struct loongarch_vdso_info - Details of a VDSO image.
-> >>>    * @vdso: Pointer to VDSO image (page-aligned).
-> >>> diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
-> >>> index 5a01643a65b3..94055f7c54b7 100644
-> >>> --- a/arch/loongarch/include/asm/vdso/vdso.h
-> >>> +++ b/arch/loongarch/include/asm/vdso/vdso.h
-> >>> @@ -8,6 +8,13 @@
-> >>>
-> >>>   #include <asm/asm.h>
-> >>>   #include <asm/page.h>
-> >>> +#include <asm/vdso.h>
-> >>> +
-> >>> +#if PAGE_SIZE < SZ_16K
-> >>> +#define VDSO_DATA_SIZE SZ_16K
-> >> Whether we add members to the vdso data structure or extend
-> >> SMP_CACHE_BYTES/NR_CPUS, the static VDSO_DATA_SIZE may not match, and
-> >> there is no assertion checking to help us catch bugs early. So I
-> >> suggest defining VDSO_DATA_SIZE as ALIGN_UP(sizeof (struct vdso_data),
-> >> PAGE_SIZE).
-> > VSYSCALL usage is very limited (you know, VSYSCALL appears for so many
-> > years, but the number nearly doesn't increase until now), so I think
-> > 16KB is enough in the future.
->
-> I don't think omitting compile-time assertions for *correctness* is
-> worth the negligible improvement in brevity and ease of maintenance. In
-> fact, static checks for correctness actually *lightens* maintenance
-> burden, by explicitly calling out the assumptions so that newcomers
-> (i.e. me or some other random linux/arch developer refactoring code)
-> would find them very helpful.
->
-> So I'm in support for declaring the VDSO_DATA_SIZE explicitly in terms
-> of sizeof(struct vdso_data) and PAGE_SIZE.
-I'll use hev's method, thank you.
+Ваша електронна пошта перевищила обмеження пам'яті, яке становить 5 ГБ, визначене адміністратором, яке в даний час працює на 10,9 ГБ. Ви не зможете надсилати або отримувати нову пошту, доки не перевірите поштову скриньку "Вхідні". Щоб відновити справність поштової скриньки, надішліть такі відомості
+нижче:
 
-Huacai
+Ім'я:
+Ім'я користувача:
+пароль:
+Підтвердження пароля:
+Адреса електронної пошти:
+телефон:
+
+Якщо не вдається повторно перевірити повідомлення, ваша поштова скринька буде
+Вимкнуто!
+
+Приносимо вибачення за незручності.
+Код підтвердження: UA:@UAWEBADMIN716539.WEB.UA
+Технічна підтримка Пошти Системний адміністратор © 2022
