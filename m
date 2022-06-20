@@ -2,90 +2,142 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE735551074
-	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 08:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6AB55107F
+	for <lists+linux-arch@lfdr.de>; Mon, 20 Jun 2022 08:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238584AbiFTGig convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Mon, 20 Jun 2022 02:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
+        id S238702AbiFTGks (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 20 Jun 2022 02:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238740AbiFTGi1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 02:38:27 -0400
-X-Greylist: delayed 858 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 19 Jun 2022 23:38:21 PDT
-Received: from mail.pgj.campeche.gob.mx (unknown [187.157.28.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748F81173;
-        Sun, 19 Jun 2022 23:38:19 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 4AFCA1BC0CB3;
-        Mon, 20 Jun 2022 01:18:41 -0500 (CDT)
-Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
-        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id H-9SJIqV6nE5; Mon, 20 Jun 2022 01:18:33 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 670E31BC0CB5;
-        Mon, 20 Jun 2022 01:18:29 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at pgj.campeche.gob.mx
-Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
-        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1YSDgk3MrDxn; Mon, 20 Jun 2022 01:18:23 -0500 (CDT)
-Received: from mail.pgj.campeche.gob.mx (mail.pgj.campeche.gob.mx [172.24.1.108])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 2DBF81BC0C9D;
-        Mon, 20 Jun 2022 01:18:15 -0500 (CDT)
-Date:   Mon, 20 Jun 2022 01:18:14 -0500 (CDT)
-From:   =?utf-8?B?0YHQuNGB0YLQtdC80L3QuNC5INCw0LTQvNGW0L3RltGB0YLRgNCw0YLQvtGA?= 
-        <vfgcontrolinterno@pgj.campeche.gob.mx>
-Reply-To: sistemassadmins@mail2engineer.com
-Message-ID: <2077113903.96537.1655705894599.JavaMail.zimbra@pgj.campeche.gob.mx>
-Subject: 
+        with ESMTP id S238194AbiFTGks (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 20 Jun 2022 02:40:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1B4DF27;
+        Sun, 19 Jun 2022 23:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655707247; x=1687243247;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5mekSjBkORCxAhZcYvy+hMLNNPOvdep66Hj/tNUgE/k=;
+  b=FBpUActGS8lWEsiBnj4bghdd3tVr3oNlpAzdwh96C/hY4waEZiacwNYN
+   DccvMXuIxKadziw+qSXJpz2X4isheWv1c7gAf1eFERUvNuwGUhJnuD6Cr
+   J0vZyO2QcT5rD4KhvzVgseIZbOml0LOIMEE7/gkoR2264GF2nusXeWB1+
+   K/aeFQ1zik2sJJoUckWADKSt0hSzUvymi1er2IWzKLNM/azjDvj+ncFP3
+   5dikE6xDDtTtKzDm3TzqdDdg/vWNyde4edDBWlpcsdIwJH5m63d2apS5L
+   TkMLKwiRohZfHA51Sts90PV1Gr3sKriYVDr2ho1X0sWp9S8fLtIS1RoX1
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="277365649"
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="277365649"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:40:46 -0700
+X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
+   d="scan'208";a="642967684"
+Received: from lspinell-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.215.169])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 23:40:43 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH v8 0/6] Add RS485 9th bit addressing mode support to DW UART
+Date:   Mon, 20 Jun 2022 09:40:24 +0300
+Message-Id: <20220620064030.7938-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-Originating-IP: [172.24.1.254]
-X-Mailer: Zimbra 8.8.15_GA_4304 (zclient/8.8.15_GA_4304)
-Thread-Index: 4Ew2CQhC+eGtKTdqcoCXQXVPd5NZpg==
-Thread-Topic: 
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,KHOP_HELO_FCRDNS,MISSING_HEADERS,
-        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5559]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [187.157.28.107 listed in wl.mailspike.net]
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
-        *      dynamic-looking rDNS
-        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-X-Spam-Level: ******
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-увага;
+This patchset adds RS-485 9th bit addressing mode support to the DW
+UART driver and the necessary serial core bits to handle it. The
+addressing mode is configured through ->rs485_config() as was requested
+during the review of the earlier versions. The line configuration
+related ADDRB is still kept in ktermios->c_cflag to be able to take
+account the extra addressing bit while calculating timing, etc. but it
+is set/cleared by ->rs485_config().
 
-Ваша електронна пошта перевищила обмеження пам'яті, яке становить 5 ГБ, визначене адміністратором, яке в даний час працює на 10,9 ГБ. Ви не зможете надсилати або отримувати нову пошту, доки не перевірите поштову скриньку "Вхідні". Щоб відновити справність поштової скриньки, надішліть такі відомості
-нижче:
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-api@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
 
-Ім'я:
-Ім'я користувача:
-пароль:
-Підтвердження пароля:
-Адреса електронної пошти:
-телефон:
+v7 -> v8:
+- Use anonymous union/struct in serial_rs485 to create "v2" of it
+- Remove a stray newline change
+- Reorder local var declarations
+- Put ktermios param before serial_rs485 for rs485_config
 
-Якщо не вдається повторно перевірити повідомлення, ваша поштова скринька буде
-Вимкнуто!
+v6 -> v7:
+- Fixed typos in documentation & comment
+- Changes lsr typing from unsigned int to u16
 
-Приносимо вибачення за незручності.
-Код підтвердження: UA:@UAWEBADMIN716539.WEB.UA
-Технічна підтримка Пошти Системний адміністратор © 2022
+v5 -> v6:
+- Reorder remaining patches
+- LSR changes are simpler due to helper added by LSR fix series
+- Depend on rs485_struct sanitization on catching much of invalid config
+- In order to be able to alter ADDRB in termios .c_cflag within
+  .rs485_config(), take termios_rwsem and pass ktermios to it.
+- Moved addressing mode setup entirely into .rs485_config()
+- Use ndelay() instead of udelay() (uart_port->frame_time is in nsecs)
+
+
+Ilpo Järvinen (6):
+  serial: 8250: make saved LSR larger
+  serial: 8250: create lsr_save_mask
+  serial: 8250_lpss: Use 32-bit reads
+  serial: take termios_rwsem for ->rs485_config() & pass termios as
+    param
+  serial: Support for RS-485 multipoint addresses
+  serial: 8250_dwlib: Support for 9th bit multipoint addressing
+
+ Documentation/driver-api/serial/driver.rst    |   2 +
+ .../driver-api/serial/serial-rs485.rst        |  26 ++++-
+ drivers/tty/serial/8250/8250.h                |   9 +-
+ drivers/tty/serial/8250/8250_core.c           |   4 +
+ drivers/tty/serial/8250/8250_dw.c             |   2 +-
+ drivers/tty/serial/8250/8250_dwlib.c          | 105 +++++++++++++++++-
+ drivers/tty/serial/8250/8250_exar.c           |  11 +-
+ drivers/tty/serial/8250/8250_fintek.c         |   2 +-
+ drivers/tty/serial/8250/8250_fsl.c            |   2 +-
+ drivers/tty/serial/8250/8250_ingenic.c        |   2 +-
+ drivers/tty/serial/8250/8250_lpc18xx.c        |   2 +-
+ drivers/tty/serial/8250/8250_lpss.c           |   2 +-
+ drivers/tty/serial/8250/8250_omap.c           |   7 +-
+ drivers/tty/serial/8250/8250_pci.c            |   2 +-
+ drivers/tty/serial/8250/8250_port.c           |  20 ++--
+ drivers/tty/serial/amba-pl011.c               |   2 +-
+ drivers/tty/serial/ar933x_uart.c              |   2 +-
+ drivers/tty/serial/atmel_serial.c             |   2 +-
+ drivers/tty/serial/fsl_lpuart.c               |   4 +-
+ drivers/tty/serial/imx.c                      |   2 +-
+ drivers/tty/serial/max310x.c                  |   2 +-
+ drivers/tty/serial/mcf.c                      |   3 +-
+ drivers/tty/serial/omap-serial.c              |   3 +-
+ drivers/tty/serial/sc16is7xx.c                |   2 +-
+ drivers/tty/serial/serial_core.c              |  28 ++++-
+ drivers/tty/serial/stm32-usart.c              |   2 +-
+ drivers/tty/tty_ioctl.c                       |   4 +
+ include/linux/serial_8250.h                   |   7 +-
+ include/linux/serial_core.h                   |   1 +
+ include/uapi/asm-generic/termbits-common.h    |   1 +
+ include/uapi/linux/serial.h                   |  20 +++-
+ 31 files changed, 230 insertions(+), 53 deletions(-)
+
+-- 
+2.30.2
+
