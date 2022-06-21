@@ -2,62 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE9A553E41
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 00:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD35553E46
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 00:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354919AbiFUWEO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 21 Jun 2022 18:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S1349676AbiFUWFa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 21 Jun 2022 18:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235648AbiFUWEN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jun 2022 18:04:13 -0400
-X-Greylist: delayed 431 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 21 Jun 2022 15:04:12 PDT
-Received: from mailout.easymail.ca (mailout.easymail.ca [64.68.200.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1FE2D1D0;
-        Tue, 21 Jun 2022 15:04:11 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mailout.easymail.ca (Postfix) with ESMTP id C97F261DF6;
-        Tue, 21 Jun 2022 21:56:59 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at emo09-pco.easydns.vpn
-Received: from mailout.easymail.ca ([127.0.0.1])
-        by localhost (emo09-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FLc2uL2Ic0RZ; Tue, 21 Jun 2022 21:56:59 +0000 (UTC)
-Received: from mail.gonehiking.org (unknown [38.15.45.1])
-        by mailout.easymail.ca (Postfix) with ESMTPA id 45ED161DF5;
-        Tue, 21 Jun 2022 21:56:59 +0000 (UTC)
-Received: from [192.168.1.4] (internal [192.168.1.4])
-        by mail.gonehiking.org (Postfix) with ESMTP id C716D3EF14;
-        Tue, 21 Jun 2022 15:56:58 -0600 (MDT)
-Message-ID: <7a6df2da-95e8-b2fd-7565-e4b7a51c5b63@gonehiking.org>
-Date:   Tue, 21 Jun 2022 15:56:58 -0600
+        with ESMTP id S1354458AbiFUWF2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 21 Jun 2022 18:05:28 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054962E9EB
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jun 2022 15:05:26 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id d19so17067259lji.10
+        for <linux-arch@vger.kernel.org>; Tue, 21 Jun 2022 15:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qk9wW2plDRuZUfEbH5Ob9wJ8MzMD7oQ2u+YwN1EZlno=;
+        b=PksK/pvVejHaPuJXQTH64r9lAa+BSxcqKlrp/YdZR0LE3hMPpWsFWMmQlN59uGmqpC
+         NGtOHmEng/i/D9QbisoA6LN/yBGK4iJJU/k3KEURwdY+ntci4FCk3uFB9wCf3zkTyyph
+         ujW4+5Ew683yYv1nlMz+a1NfvCpJtah5v1ZIP9FAYrl/OBRwO35C0h4y6vt/5DidZ0aA
+         VDgDJZB5O2+5JjDtUDq97kAzxKFMzbHUTgi+BlLmCK8Vaoeh9ARNa840AGaHLk8g7jiE
+         HhIIQ5x6G6w07sWsUsLL5/c4nKukLWjXG7Og10dAonWaQ2gTR4W0jlT/QAo+ZavHaGtb
+         stUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qk9wW2plDRuZUfEbH5Ob9wJ8MzMD7oQ2u+YwN1EZlno=;
+        b=jUlQqjO+sI4SVRBfw2ly5hsV6CyreOiNHGCwdLR62D56LCdA5sEDUDASQiQKA7zOdE
+         /h0aAy/NL70SnhFtLx4vXDtPd0BRmK0w0UOxxSXOgUQQ5a5dnzTGEny8aDWmPu9i72Y7
+         qpecS0IOvlOdqG/XyeaWxvcWC36qDwfkHEQ9qaA7ALkl/hXbCbmsR0Ijo/PDHveEVtVx
+         AGZlh/1fjJRqb5iRdcM+p2hapN8u+gvR5dI218rzTnrRG6Wn5WCVo5MaWaz1yP+Pea2Z
+         ifHr4KgnlGICKae2y4X4VvWB9Z/sMsmlzBypmGftGBSQxhrVkmMo9hy1beQFe3H6B+NU
+         QPvw==
+X-Gm-Message-State: AJIora9iIdbh4NE9bnYEr06jEn3ZbElEl82s63r6DqMcafyr+9haz7qj
+        Moi3GZQrZ0O43gUOCIdveOg4AJb6de7ct5ur6oiQcg==
+X-Google-Smtp-Source: AGRyM1s8ItdZNicXgy4vfEI31Rcdko+391VPjrdp8750VHiNV/XVuGohJzT8zmLpof5YTXJPo8fI2yLlcamrBqB4reA=
+X-Received: by 2002:a05:651c:23b:b0:259:fee:cc2a with SMTP id
+ z27-20020a05651c023b00b002590feecc2amr130672ljn.400.1655849123759; Tue, 21
+ Jun 2022 15:05:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Reply-To: khalid@gonehiking.org
-Subject: Re: [PATCH v2 2/3] scsi: BusLogic remove bus_to_virt
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Jakub Kicinski <kuba@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        iommu@lists.linux-foundation.org,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Matt Wang <wwentao@vmware.com>,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-parisc@vger.kernel.org, Denis Efremov <efremov@linux.com>
-References: <20220617125750.728590-1-arnd@kernel.org>
- <20220617125750.728590-3-arnd@kernel.org>
-From:   Khalid Aziz <khalid@gonehiking.org>
-In-Reply-To: <20220617125750.728590-3-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local> <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
+ <YmKF5tiH4W8AVdXe@Pauls-MacBook-Pro.local> <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
+In-Reply-To: <CAKwvOd=yLgY_0SwfBuOAzo=+zeWNMu4FMp65y0bi_RM+1G3NWQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 21 Jun 2022 15:05:12 -0700
+Message-ID: <CAKwvOdkrZbRTfrK_cFRseoONGi7qQ-_4vB=Zm9KH3Bb2KZ5tww@mail.gmail.com>
+Subject: Re: Dangerous addr to ctrl dependency transformation in fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+To:     =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,146 +86,78 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 6/17/22 06:57, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The BusLogic driver is the last remaining driver that relies on the
-> deprecated bus_to_virt() function, which in turn only works on a few
-> architectures, and is incompatible with both swiotlb and iommu support.
-> 
-> Before commit 391e2f25601e ("[SCSI] BusLogic: Port driver to 64-bit."),
-> the driver had a dependency on x86-32, presumably because of this
-> problem. However, the change introduced another bug that made it still
-> impossible to use the driver on any 64-bit machine.
-> 
-> This was in turn fixed in commit 56f396146af2 ("scsi: BusLogic: Fix
-> 64-bit system enumeration error for Buslogic"), 8 years later, which
-> shows that there are not a lot of users.
-> 
-> Maciej is still using the driver on 32-bit hardware, and Khalid mentioned
-> that the driver works with the device emulation used in VirtualBox
-> and VMware. Both of those only emulate it for Windows 2000 and older
-> operating systems that did not ship with the better LSI logic driver.
-> 
-> Do a minimum fix that searches through the list of descriptors to find
-> one that matches the bus address. This is clearly as inefficient as
-> was indicated in the code comment about the lack of a bus_to_virt()
-> replacement. A better fix would likely involve changing out the entire
-> descriptor allocation for a simpler one, but that would be much
-> more invasive.
-> 
-> Cc: Maciej W. Rozycki <macro@orcam.me.uk>
-> Cc: Matt Wang <wwentao@vmware.com>
-> Cc: Khalid Aziz <khalid@gonehiking.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->   drivers/scsi/BusLogic.c | 27 ++++++++++++++++-----------
->   drivers/scsi/Kconfig    |  2 +-
->   2 files changed, 17 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-> index a897c8f914cf..d057abfcdd5c 100644
-> --- a/drivers/scsi/BusLogic.c
-> +++ b/drivers/scsi/BusLogic.c
-> @@ -2515,12 +2515,26 @@ static int blogic_resultcode(struct blogic_adapter *adapter,
->   	return (hoststatus << 16) | tgt_status;
->   }
->   
-> +/*
-> + * turn the dma address from an inbox into a ccb pointer
-> + * This is rather inefficient.
-> + */
-> +static struct blogic_ccb *
-> +blogic_inbox_to_ccb(struct blogic_adapter *adapter, struct blogic_inbox *inbox)
-> +{
-> +	struct blogic_ccb *ccb;
-> +
-> +	for (ccb = adapter->all_ccbs; ccb; ccb = ccb->next_all)
-> +		if (inbox->ccb == ccb->dma_handle)
-> +			break;
-> +
-> +	return ccb;
-> +}
->   
->   /*
->     blogic_scan_inbox scans the Incoming Mailboxes saving any
->     Incoming Mailbox entries for completion processing.
->   */
-> -
->   static void blogic_scan_inbox(struct blogic_adapter *adapter)
->   {
->   	/*
-> @@ -2540,16 +2554,7 @@ static void blogic_scan_inbox(struct blogic_adapter *adapter)
->   	enum blogic_cmplt_code comp_code;
->   
->   	while ((comp_code = next_inbox->comp_code) != BLOGIC_INBOX_FREE) {
-> -		/*
-> -		   We are only allowed to do this because we limit our
-> -		   architectures we run on to machines where bus_to_virt(
-> -		   actually works.  There *needs* to be a dma_addr_to_virt()
-> -		   in the new PCI DMA mapping interface to replace
-> -		   bus_to_virt() or else this code is going to become very
-> -		   innefficient.
-> -		 */
-> -		struct blogic_ccb *ccb =
-> -			(struct blogic_ccb *) bus_to_virt(next_inbox->ccb);
-> +		struct blogic_ccb *ccb = blogic_inbox_to_ccb(adapter, adapter->next_inbox);
+On Tue, May 17, 2022 at 3:29 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Fri, Apr 22, 2022 at 3:39 AM Paul Heidekr=C3=BCger
+> <paul.heidekrueger@in.tum.de> wrote:
+> >
+> > On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
+> > > On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekr=C3=BCger
+> > > <paul.heidekrueger@in.tum.de> wrote:
+> > > >
+> > > > Hi all,
+> > > >
+> > > > work on my dependency checker tool is progressing nicely, and it is
+> > > > flagging, what I believe is, a harmful addr to ctrl dependency
+> > > > transformation. For context, see [1] and [2]. I'm using the Clang
+> > > > compiler.
+> > > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attach=
+ments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-=
+Pro/T/#u
+> > >
+> > > Hi Paul,
+> > > Thanks for the report and your (and your team's) work on this tool.
+> > > Orthogonal to your report, Jose (cc'ed) and I are currently in the
+> > > planning process to put together a Kernel+Toolchain microconference
+> > > track at Linux Plumbers Conference [0] this year (Sept 12-14) in
+> > > Dublin, Ireland.  Would you or someone from your group be able and
+> > > interested in presenting more information about your work to an
+> > > audience of kernel and toolchain developers at such an event?
+> > >
+> > > Would others be interested in such a topic? (What do they say in
+> > > Starship Troopers...?...Would you like to know more?)
+> > >
+> > > [0] https://lpc.events/event/16/
+> > > --
+> > > Thanks,
+> > > ~Nick Desaulniers
+> >
+> > Hi Nick and Jose,
+> >
+> > Many thanks for inviting us! I would love to do a talk at LPC! Hopefull=
+y
+> > in person too.
+> >
+> > Given that there have been several talks around this topic at LPC
+> > already, it seems very fitting, and we'll hopefully have more to share
+> > by then. Actually we have more to share already :-)
+> >
+> > https://lore.kernel.org/all/YmKE%2FXgmRnGKrBbB@Pauls-MacBook-Pro.local/=
+T/#u
+> >
+> > I assume we will have to submit an abstract soon?
+>
+> Yes, if you go to: https://lpc.events/event/16/abstracts/
+>
+> click "Submit new abstract" in the bottom right.
+>
+> Under the "Track" dropdown, please select "Toolchains Track."
 
-This change looks good enough as workaround to not use bus_to_virt() for 
-now. There are two problems I see though. One, I do worry about 
-blogic_inbox_to_ccb() returning NULL for ccb which should not happen 
-unless the mailbox pointer was corrupted which would indicate a bigger 
-problem. Nevertheless a NULL pointer causing kernel panic concerns me. 
-How about adding a check before we dereference ccb?
+Hi Paul, we'll need all proposals soon.
+If you're still considering attending Linux Plumbers conf, please
+submit a proposal:
+https://lpc.events/event/16/abstracts/
+Please make sure to select "Toolchains Track" as the "Track" after
+clicking on "Submit new abstract."
 
-Second, with this patch applied, I am seeing errors from the driver:
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-=====================
-[ 1623.902685]  sdb: sdb1 sdb2
-[ 1623.903245] sd 2:0:0:0: [sdb] Attached SCSI disk
-[ 1623.911000] scsi2: Illegal CCB #76 status 2 in Incoming Mailbox
-[ 1623.911005] scsi2: Illegal CCB #76 status 2 in Incoming Mailbox
-[ 1623.911070] scsi2: Illegal CCB #79 status 2 in Incoming Mailbox
-[ 1651.458008] scsi2: Warning: Partition Table appears to have Geometry 
-256/63 which is
-[ 1651.458013] scsi2: not compatible with current BusLogic Host Adapter 
-Geometry 255/63
-[ 1658.797609] scsi2: Resetting BusLogic BT-958D Failed
-[ 1659.533208] sd 2:0:0:0: Device offlined - not ready after error recovery
-[ 1659.533331] sd 2:0:0:0: Device offlined - not ready after error recovery
-[ 1659.533333] sd 2:0:0:0: Device offlined - not ready after error recovery
-[ 1659.533342] sd 2:0:0:0: [sdb] tag#101 FAILED Result: 
-hostbyte=DID_TIME_OUT driverbyte=DRIVER_OK cmd_age=35s
-[ 1659.533345] sd 2:0:0:0: [sdb] tag#101 CDB: Read(10) 28 00 00 00 00 28 
-00 00 10 00
-[ 1659.533346] I/O error, dev sdb, sector 40 op 0x0:(READ) flags 0x80700 
-phys_seg 1 prio class 0
 
-=================
 
-This is on VirtualBox using emulated BusLogic adapter.
-
-This patch needs more refinement.
-
+--=20
 Thanks,
-Khalid
-
-
-
->   		if (comp_code != BLOGIC_Cn erroneousMD_NOTFOUND) {
->   			if (ccb->status == BLOGIC_CCB_ACTIVE ||
->   					ccb->status == BLOGIC_CCB_RESET) {
-> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-> index cf75588a2587..56bdc08d0b77 100644
-> --- a/drivers/scsi/Kconfig
-> +++ b/drivers/scsi/Kconfig
-> @@ -513,7 +513,7 @@ config SCSI_HPTIOP
->   
->   config SCSI_BUSLOGIC
->   	tristate "BusLogic SCSI support"
-> -	depends on PCI && SCSI && VIRT_TO_BUS
-> +	depends on PCI && SCSI
->   	help
->   	  This is support for BusLogic MultiMaster and FlashPoint SCSI Host
->   	  Adapters. Consult the SCSI-HOWTO, available from
-
+~Nick Desaulniers
