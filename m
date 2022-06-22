@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9615547D1
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 14:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1E65549BD
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 14:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350659AbiFVKQP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 06:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S1350709AbiFVKQQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 06:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350362AbiFVKQG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 06:16:06 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2383B287;
+        with ESMTP id S1350435AbiFVKQH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 06:16:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB0F3B28D;
         Wed, 22 Jun 2022 03:15:58 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LSfQg17f4zDsL4;
-        Wed, 22 Jun 2022 18:15:23 +0800 (CST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSfPM3htjzkWVS;
+        Wed, 22 Jun 2022 18:14:15 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Wed, 22 Jun 2022 18:15:56 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -33,9 +33,9 @@ To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
 CC:     <tglx@linutronix.de>, <mingo@redhat.com>,
         <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
         <arnd@arndb.de>
-Subject: [PATCH v2 1/5] objtool: Make ORC type code arch-specific
-Date:   Wed, 22 Jun 2022 18:13:40 +0800
-Message-ID: <20220622101344.38002-2-chenzhongjin@huawei.com>
+Subject: [PATCH v2 2/5] objtool: Make ORC init and lookup code arch-generic
+Date:   Wed, 22 Jun 2022 18:13:41 +0800
+Message-ID: <20220622101344.38002-3-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220622101344.38002-1-chenzhongjin@huawei.com>
 References: <20220622101344.38002-1-chenzhongjin@huawei.com>
@@ -56,390 +56,730 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-The ORC code needs to be reorganized into arch-specific and generic
-parts so that architectures other than X86 can use the generic parts
-in orc_dump and orc_gen.
+All of the ORC code in the kernel is currently under arch/x86. The
+following parts of that code can be shared by other architectures that
+wish to use ORC.
 
-Create the following two files:
+	(1) ORC lookup initialization for vmlinux
 
-	- tools/objtool/include/objtool/orc.h
-	- tools/objtool/arch/x86/orc.c
+	(2) ORC lookup initialization for modules
 
-Make the following function arch-specific:
+	(3) ORC lookup functions
 
-	- init_orc_entry()
-	- reg_name()
-	- orc_type_name()
+Move arch/x86/include/asm/orc_lookup.h to include/asm-generic/orc_lookup.h.
 
-Then the orc_gen and orc_dump don't involve any x86 specific content.
+Move the ORC lookup code into kernel/orc_lookup.c.
+
+Rename the following init functions:
+
+	unwind_module_init	==> orc_lookup_module_init
+	unwind_init		==> orc_lookup_init
+
+since that is exactly what they do.
+
+orc_find() is the function that locates the ORC entry for a given PC.
+Currently, it contains an architecture-specific part to locate ftrace
+entries. Introduce a new arch-specific function called arch_orc_find()
+and move the ftrace-related lookup there. If orc_find() is unable to
+locate the ORC entry for a given PC in vmlinux or in the modules, it can
+call arch_orc_find() to find architecture-specific entries.
 
 Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- tools/objtool/arch/x86/Build        |   1 +
- tools/objtool/arch/x86/orc.c        | 137 ++++++++++++++++++++++++++++
- tools/objtool/include/objtool/orc.h |  17 ++++
- tools/objtool/orc_dump.c            |  59 +-----------
- tools/objtool/orc_gen.c             |  76 +--------------
- 5 files changed, 159 insertions(+), 131 deletions(-)
- create mode 100644 tools/objtool/arch/x86/orc.c
- create mode 100644 tools/objtool/include/objtool/orc.h
+ arch/x86/include/asm/unwind.h                 |   5 -
+ arch/x86/kernel/module.c                      |   7 +-
+ arch/x86/kernel/unwind_orc.c                  | 256 +----------------
+ arch/x86/kernel/vmlinux.lds.S                 |   2 +-
+ .../asm => include/asm-generic}/orc_lookup.h  |  42 +++
+ kernel/Makefile                               |   2 +
+ kernel/orc_lookup.c                           | 261 ++++++++++++++++++
+ 7 files changed, 316 insertions(+), 259 deletions(-)
+ rename {arch/x86/include/asm => include/asm-generic}/orc_lookup.h (51%)
+ create mode 100644 kernel/orc_lookup.c
 
-diff --git a/tools/objtool/arch/x86/Build b/tools/objtool/arch/x86/Build
-index 9f7869b5c5e0..3dedb2fd8f3a 100644
---- a/tools/objtool/arch/x86/Build
-+++ b/tools/objtool/arch/x86/Build
-@@ -1,5 +1,6 @@
- objtool-y += special.o
- objtool-y += decode.o
-+objtool-y += orc.o
+diff --git a/arch/x86/include/asm/unwind.h b/arch/x86/include/asm/unwind.h
+index 7cede4dc21f0..71af8246c69e 100644
+--- a/arch/x86/include/asm/unwind.h
++++ b/arch/x86/include/asm/unwind.h
+@@ -94,13 +94,8 @@ static inline struct pt_regs *unwind_get_entry_regs(struct unwind_state *state,
  
- inat_tables_script = ../arch/x86/tools/gen-insn-attr-x86.awk
- inat_tables_maps = ../arch/x86/lib/x86-opcode-map.txt
-diff --git a/tools/objtool/arch/x86/orc.c b/tools/objtool/arch/x86/orc.c
-new file mode 100644
-index 000000000000..8543074d0b9e
---- /dev/null
-+++ b/tools/objtool/arch/x86/orc.c
-@@ -0,0 +1,137 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (C) 2017 Josh Poimboeuf <jpoimboe@redhat.com>
-+ */
-+
-+#include <stdlib.h>
-+
-+#include <linux/objtool.h>
-+
-+#include <objtool/orc.h>
-+#include <objtool/warn.h>
-+
-+int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
-+		   struct instruction *insn)
+ #ifdef CONFIG_UNWINDER_ORC
+ void unwind_init(void);
+-void unwind_module_init(struct module *mod, void *orc_ip, size_t orc_ip_size,
+-			void *orc, size_t orc_size);
+ #else
+ static inline void unwind_init(void) {}
+-static inline
+-void unwind_module_init(struct module *mod, void *orc_ip, size_t orc_ip_size,
+-			void *orc, size_t orc_size) {}
+ #endif
+ 
+ static inline
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index b98ffcf4d250..4ebc9eddcb6b 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -23,7 +23,7 @@
+ #include <asm/text-patching.h>
+ #include <asm/page.h>
+ #include <asm/setup.h>
+-#include <asm/unwind.h>
++#include <asm-generic/orc_lookup.h>
+ 
+ #if 0
+ #define DEBUGP(fmt, ...)				\
+@@ -308,8 +308,9 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 	jump_label_apply_nops(me);
+ 
+ 	if (orc && orc_ip)
+-		unwind_module_init(me, (void *)orc_ip->sh_addr, orc_ip->sh_size,
+-				   (void *)orc->sh_addr, orc->sh_size);
++		orc_lookup_module_init(me,
++				       (void *)orc_ip->sh_addr, orc_ip->sh_size,
++				       (void *)orc->sh_addr, orc->sh_size);
+ 
+ 	return 0;
+ }
+diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
+index 38185aedf7d1..b7425855feda 100644
+--- a/arch/x86/kernel/unwind_orc.c
++++ b/arch/x86/kernel/unwind_orc.c
+@@ -6,80 +6,9 @@
+ #include <asm/stacktrace.h>
+ #include <asm/unwind.h>
+ #include <asm/orc_types.h>
+-#include <asm/orc_lookup.h>
+-
+-#define orc_warn(fmt, ...) \
+-	printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
+-
+-#define orc_warn_current(args...)					\
+-({									\
+-	if (state->task == current && !state->error)			\
+-		orc_warn(args);						\
+-})
+-
+-extern int __start_orc_unwind_ip[];
+-extern int __stop_orc_unwind_ip[];
+-extern struct orc_entry __start_orc_unwind[];
+-extern struct orc_entry __stop_orc_unwind[];
+-
+-static bool orc_init __ro_after_init;
+-static unsigned int lookup_num_blocks __ro_after_init;
+-
+-static inline unsigned long orc_ip(const int *ip)
+-{
+-	return (unsigned long)ip + *ip;
+-}
+-
+-static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
+-				    unsigned int num_entries, unsigned long ip)
+-{
+-	int *first = ip_table;
+-	int *last = ip_table + num_entries - 1;
+-	int *mid = first, *found = first;
+-
+-	if (!num_entries)
+-		return NULL;
+-
+-	/*
+-	 * Do a binary range search to find the rightmost duplicate of a given
+-	 * starting address.  Some entries are section terminators which are
+-	 * "weak" entries for ensuring there are no gaps.  They should be
+-	 * ignored when they conflict with a real entry.
+-	 */
+-	while (first <= last) {
+-		mid = first + ((last - first) / 2);
+-
+-		if (orc_ip(mid) <= ip) {
+-			found = mid;
+-			first = mid + 1;
+-		} else
+-			last = mid - 1;
+-	}
+-
+-	return u_table + (found - ip_table);
+-}
+-
+-#ifdef CONFIG_MODULES
+-static struct orc_entry *orc_module_find(unsigned long ip)
+-{
+-	struct module *mod;
+-
+-	mod = __module_address(ip);
+-	if (!mod || !mod->arch.orc_unwind || !mod->arch.orc_unwind_ip)
+-		return NULL;
+-	return __orc_find(mod->arch.orc_unwind_ip, mod->arch.orc_unwind,
+-			  mod->arch.num_orcs, ip);
+-}
+-#else
+-static struct orc_entry *orc_module_find(unsigned long ip)
+-{
+-	return NULL;
+-}
+-#endif
++#include <asm-generic/orc_lookup.h>
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+-static struct orc_entry *orc_find(unsigned long ip);
+-
+ /*
+  * Ftrace dynamic trampolines do not have orc entries of their own.
+  * But they are copies of the ftrace entries that are static and
+@@ -117,19 +46,10 @@ static struct orc_entry *orc_ftrace_find(unsigned long ip)
+ }
+ #endif
+ 
+-/*
+- * If we crash with IP==0, the last successfully executed instruction
+- * was probably an indirect function call with a NULL function pointer,
+- * and we don't have unwind information for NULL.
+- * This hardcoded ORC entry for IP==0 allows us to unwind from a NULL function
+- * pointer into its parent and then continue normally from there.
+- */
+-static struct orc_entry null_orc_entry = {
+-	.sp_offset = sizeof(long),
+-	.sp_reg = ORC_REG_SP,
+-	.bp_reg = ORC_REG_UNDEFINED,
+-	.type = UNWIND_HINT_TYPE_CALL
+-};
++struct orc_entry *arch_orc_find(unsigned long ip)
 +{
-+	struct cfi_reg *bp = &cfi->regs[CFI_BP];
-+
-+	memset(orc, 0, sizeof(*orc));
-+
-+	if (!cfi) {
-+		orc->end = 0;
-+		orc->sp_reg = ORC_REG_UNDEFINED;
-+		return 0;
-+	}
-+
-+	orc->end = cfi->end;
-+
-+	if (cfi->cfa.base == CFI_UNDEFINED) {
-+		orc->sp_reg = ORC_REG_UNDEFINED;
-+		return 0;
-+	}
-+
-+	switch (cfi->cfa.base) {
-+	case CFI_SP:
-+		orc->sp_reg = ORC_REG_SP;
-+		break;
-+	case CFI_SP_INDIRECT:
-+		orc->sp_reg = ORC_REG_SP_INDIRECT;
-+		break;
-+	case CFI_BP:
-+		orc->sp_reg = ORC_REG_BP;
-+		break;
-+	case CFI_BP_INDIRECT:
-+		orc->sp_reg = ORC_REG_BP_INDIRECT;
-+		break;
-+	case CFI_R10:
-+		orc->sp_reg = ORC_REG_R10;
-+		break;
-+	case CFI_R13:
-+		orc->sp_reg = ORC_REG_R13;
-+		break;
-+	case CFI_DI:
-+		orc->sp_reg = ORC_REG_DI;
-+		break;
-+	case CFI_DX:
-+		orc->sp_reg = ORC_REG_DX;
-+		break;
-+	default:
-+		WARN_FUNC("unknown CFA base reg %d",
-+			  insn->sec, insn->offset, cfi->cfa.base);
-+		return -1;
-+	}
-+
-+	switch (bp->base) {
-+	case CFI_UNDEFINED:
-+		orc->bp_reg = ORC_REG_UNDEFINED;
-+		break;
-+	case CFI_CFA:
-+		orc->bp_reg = ORC_REG_PREV_SP;
-+		break;
-+	case CFI_BP:
-+		orc->bp_reg = ORC_REG_BP;
-+		break;
-+	default:
-+		WARN_FUNC("unknown BP base reg %d",
-+			  insn->sec, insn->offset, bp->base);
-+		return -1;
-+	}
-+
-+	orc->sp_offset = cfi->cfa.offset;
-+	orc->bp_offset = bp->offset;
-+	orc->type = cfi->type;
-+
-+	return 0;
++	return orc_ftrace_find(ip);
 +}
+ 
+ /* Fake frame pointer entry -- used as a fallback for generated code */
+ static struct orc_entry orc_fp_entry = {
+@@ -141,173 +61,9 @@ static struct orc_entry orc_fp_entry = {
+ 	.end		= 0,
+ };
+ 
+-static struct orc_entry *orc_find(unsigned long ip)
+-{
+-	static struct orc_entry *orc;
+-
+-	if (ip == 0)
+-		return &null_orc_entry;
+-
+-	/* For non-init vmlinux addresses, use the fast lookup table: */
+-	if (ip >= LOOKUP_START_IP && ip < LOOKUP_STOP_IP) {
+-		unsigned int idx, start, stop;
+-
+-		idx = (ip - LOOKUP_START_IP) / LOOKUP_BLOCK_SIZE;
+-
+-		if (unlikely((idx >= lookup_num_blocks-1))) {
+-			orc_warn("WARNING: bad lookup idx: idx=%u num=%u ip=%pB\n",
+-				 idx, lookup_num_blocks, (void *)ip);
+-			return NULL;
+-		}
+-
+-		start = orc_lookup[idx];
+-		stop = orc_lookup[idx + 1] + 1;
+-
+-		if (unlikely((__start_orc_unwind + start >= __stop_orc_unwind) ||
+-			     (__start_orc_unwind + stop > __stop_orc_unwind))) {
+-			orc_warn("WARNING: bad lookup value: idx=%u num=%u start=%u stop=%u ip=%pB\n",
+-				 idx, lookup_num_blocks, start, stop, (void *)ip);
+-			return NULL;
+-		}
+-
+-		return __orc_find(__start_orc_unwind_ip + start,
+-				  __start_orc_unwind + start, stop - start, ip);
+-	}
+-
+-	/* vmlinux .init slow lookup: */
+-	if (is_kernel_inittext(ip))
+-		return __orc_find(__start_orc_unwind_ip, __start_orc_unwind,
+-				  __stop_orc_unwind_ip - __start_orc_unwind_ip, ip);
+-
+-	/* Module lookup: */
+-	orc = orc_module_find(ip);
+-	if (orc)
+-		return orc;
+-
+-	return orc_ftrace_find(ip);
+-}
+-
+-#ifdef CONFIG_MODULES
+-
+-static DEFINE_MUTEX(sort_mutex);
+-static int *cur_orc_ip_table = __start_orc_unwind_ip;
+-static struct orc_entry *cur_orc_table = __start_orc_unwind;
+-
+-static void orc_sort_swap(void *_a, void *_b, int size)
+-{
+-	struct orc_entry *orc_a, *orc_b;
+-	struct orc_entry orc_tmp;
+-	int *a = _a, *b = _b, tmp;
+-	int delta = _b - _a;
+-
+-	/* Swap the .orc_unwind_ip entries: */
+-	tmp = *a;
+-	*a = *b + delta;
+-	*b = tmp - delta;
+-
+-	/* Swap the corresponding .orc_unwind entries: */
+-	orc_a = cur_orc_table + (a - cur_orc_ip_table);
+-	orc_b = cur_orc_table + (b - cur_orc_ip_table);
+-	orc_tmp = *orc_a;
+-	*orc_a = *orc_b;
+-	*orc_b = orc_tmp;
+-}
+-
+-static int orc_sort_cmp(const void *_a, const void *_b)
+-{
+-	struct orc_entry *orc_a;
+-	const int *a = _a, *b = _b;
+-	unsigned long a_val = orc_ip(a);
+-	unsigned long b_val = orc_ip(b);
+-
+-	if (a_val > b_val)
+-		return 1;
+-	if (a_val < b_val)
+-		return -1;
+-
+-	/*
+-	 * The "weak" section terminator entries need to always be on the left
+-	 * to ensure the lookup code skips them in favor of real entries.
+-	 * These terminator entries exist to handle any gaps created by
+-	 * whitelisted .o files which didn't get objtool generation.
+-	 */
+-	orc_a = cur_orc_table + (a - cur_orc_ip_table);
+-	return orc_a->sp_reg == ORC_REG_UNDEFINED && !orc_a->end ? -1 : 1;
+-}
+-
+-void unwind_module_init(struct module *mod, void *_orc_ip, size_t orc_ip_size,
+-			void *_orc, size_t orc_size)
+-{
+-	int *orc_ip = _orc_ip;
+-	struct orc_entry *orc = _orc;
+-	unsigned int num_entries = orc_ip_size / sizeof(int);
+-
+-	WARN_ON_ONCE(orc_ip_size % sizeof(int) != 0 ||
+-		     orc_size % sizeof(*orc) != 0 ||
+-		     num_entries != orc_size / sizeof(*orc));
+-
+-	/*
+-	 * The 'cur_orc_*' globals allow the orc_sort_swap() callback to
+-	 * associate an .orc_unwind_ip table entry with its corresponding
+-	 * .orc_unwind entry so they can both be swapped.
+-	 */
+-	mutex_lock(&sort_mutex);
+-	cur_orc_ip_table = orc_ip;
+-	cur_orc_table = orc;
+-	sort(orc_ip, num_entries, sizeof(int), orc_sort_cmp, orc_sort_swap);
+-	mutex_unlock(&sort_mutex);
+-
+-	mod->arch.orc_unwind_ip = orc_ip;
+-	mod->arch.orc_unwind = orc;
+-	mod->arch.num_orcs = num_entries;
+-}
+-#endif
+-
+ void __init unwind_init(void)
+ {
+-	size_t orc_ip_size = (void *)__stop_orc_unwind_ip - (void *)__start_orc_unwind_ip;
+-	size_t orc_size = (void *)__stop_orc_unwind - (void *)__start_orc_unwind;
+-	size_t num_entries = orc_ip_size / sizeof(int);
+-	struct orc_entry *orc;
+-	int i;
+-
+-	if (!num_entries || orc_ip_size % sizeof(int) != 0 ||
+-	    orc_size % sizeof(struct orc_entry) != 0 ||
+-	    num_entries != orc_size / sizeof(struct orc_entry)) {
+-		orc_warn("WARNING: Bad or missing .orc_unwind table.  Disabling unwinder.\n");
+-		return;
+-	}
+-
+-	/*
+-	 * Note, the orc_unwind and orc_unwind_ip tables were already
+-	 * sorted at build time via the 'sorttable' tool.
+-	 * It's ready for binary search straight away, no need to sort it.
+-	 */
+-
+-	/* Initialize the fast lookup table: */
+-	lookup_num_blocks = orc_lookup_end - orc_lookup;
+-	for (i = 0; i < lookup_num_blocks-1; i++) {
+-		orc = __orc_find(__start_orc_unwind_ip, __start_orc_unwind,
+-				 num_entries,
+-				 LOOKUP_START_IP + (LOOKUP_BLOCK_SIZE * i));
+-		if (!orc) {
+-			orc_warn("WARNING: Corrupt .orc_unwind table.  Disabling unwinder.\n");
+-			return;
+-		}
+-
+-		orc_lookup[i] = orc - __start_orc_unwind;
+-	}
+-
+-	/* Initialize the ending block: */
+-	orc = __orc_find(__start_orc_unwind_ip, __start_orc_unwind, num_entries,
+-			 LOOKUP_STOP_IP);
+-	if (!orc) {
+-		orc_warn("WARNING: Corrupt .orc_unwind table.  Disabling unwinder.\n");
+-		return;
+-	}
+-	orc_lookup[lookup_num_blocks-1] = orc - __start_orc_unwind;
+-
+-	orc_init = true;
++	orc_lookup_init();
+ }
+ 
+ unsigned long unwind_get_return_address(struct unwind_state *state)
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 7fda7f27e762..1b0c6b4eafae 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -29,7 +29,7 @@
+ #include <asm/asm-offsets.h>
+ #include <asm/thread_info.h>
+ #include <asm/page_types.h>
+-#include <asm/orc_lookup.h>
++#include <asm-generic/orc_lookup.h>
+ #include <asm/cache.h>
+ #include <asm/boot.h>
+ 
+diff --git a/arch/x86/include/asm/orc_lookup.h b/include/asm-generic/orc_lookup.h
+similarity index 51%
+rename from arch/x86/include/asm/orc_lookup.h
+rename to include/asm-generic/orc_lookup.h
+index 241631282e43..4a476269d151 100644
+--- a/arch/x86/include/asm/orc_lookup.h
++++ b/include/asm-generic/orc_lookup.h
+@@ -23,6 +23,8 @@
+ 
+ #ifndef LINKER_SCRIPT
+ 
++#include <asm-generic/sections.h>
 +
-+static const char *reg_name(unsigned int reg)
-+{
-+	switch (reg) {
-+	case ORC_REG_PREV_SP:
-+		return "prevsp";
-+	case ORC_REG_DX:
-+		return "dx";
-+	case ORC_REG_DI:
-+		return "di";
-+	case ORC_REG_BP:
-+		return "bp";
-+	case ORC_REG_SP:
-+		return "sp";
-+	case ORC_REG_R10:
-+		return "r10";
-+	case ORC_REG_R13:
-+		return "r13";
-+	case ORC_REG_BP_INDIRECT:
-+		return "bp(ind)";
-+	case ORC_REG_SP_INDIRECT:
-+		return "sp(ind)";
-+	default:
-+		return "?";
-+	}
-+}
-+
-+const char *orc_type_name(unsigned int type)
-+{
-+	switch (type) {
-+	case UNWIND_HINT_TYPE_CALL:
-+		return "call";
-+	case UNWIND_HINT_TYPE_REGS:
-+		return "regs";
-+	case UNWIND_HINT_TYPE_REGS_PARTIAL:
-+		return "regs (partial)";
-+	default:
-+		return "?";
-+	}
-+}
-+
-+void orc_print_reg(unsigned int reg, int offset)
-+{
-+	if (reg == ORC_REG_BP_INDIRECT)
-+		printf("(bp%+d)", offset);
-+	else if (reg == ORC_REG_SP_INDIRECT)
-+		printf("(sp)%+d", offset);
-+	else if (reg == ORC_REG_UNDEFINED)
-+		printf("(und)");
-+	else
-+		printf("%s%+d", reg_name(reg), offset);
-+}
-diff --git a/tools/objtool/include/objtool/orc.h b/tools/objtool/include/objtool/orc.h
-new file mode 100644
-index 000000000000..4604c15ba07b
---- /dev/null
-+++ b/tools/objtool/include/objtool/orc.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ * Copyright (C) 2015-2017 Josh Poimboeuf <jpoimboe@redhat.com>
-+ */
-+
-+#ifndef _OBJTOOL_ORC_H
-+#define _OBJTOOL_ORC_H
+ extern unsigned int orc_lookup[];
+ extern unsigned int orc_lookup_end[];
+ 
+@@ -31,4 +33,44 @@ extern unsigned int orc_lookup_end[];
+ 
+ #endif /* LINKER_SCRIPT */
+ 
++#ifndef __ASSEMBLY__
 +
 +#include <asm/orc_types.h>
-+#include <objtool/check.h>
 +
-+int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
-+		   struct instruction *insn);
-+const char *orc_type_name(unsigned int type);
-+void orc_print_reg(unsigned int reg, int offset);
++#ifdef CONFIG_UNWINDER_ORC
++void orc_lookup_init(void);
++void orc_lookup_module_init(struct module *mod,
++			    void *orc_ip, size_t orc_ip_size,
++			    void *orc, size_t orc_size);
++#else
++static inline void orc_lookup_init(void) {}
++static inline
++void orc_lookup_module_init(struct module *mod,
++			    void *orc_ip, size_t orc_ip_size,
++			    void *orc, size_t orc_size)
++{
++}
++#endif
 +
-+#endif /* _OBJTOOL_ORC_H */
-diff --git a/tools/objtool/orc_dump.c b/tools/objtool/orc_dump.c
-index f5a8508c42d6..9bdda23f33c3 100644
---- a/tools/objtool/orc_dump.c
-+++ b/tools/objtool/orc_dump.c
-@@ -5,63 +5,11 @@
++struct orc_entry *arch_orc_find(unsigned long ip);
++
++#define orc_warn(fmt, ...) \
++	printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
++
++#define orc_warn_current(args...)					\
++({									\
++	if (state->task == current && !state->error)			\
++		orc_warn(args);						\
++})
++
++struct orc_entry *orc_find(unsigned long ip);
++
++extern bool orc_init;
++extern int __start_orc_unwind_ip[];
++extern int __stop_orc_unwind_ip[];
++extern struct orc_entry __start_orc_unwind[];
++extern struct orc_entry __stop_orc_unwind[];
++
++#endif /* __ASSEMBLY__ */
++
+ #endif /* _ORC_LOOKUP_H */
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 847a82bfe0e3..e5330aacb5b4 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -134,6 +134,8 @@ obj-$(CONFIG_WATCH_QUEUE) += watch_queue.o
+ obj-$(CONFIG_RESOURCE_KUNIT_TEST) += resource_kunit.o
+ obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
  
- #include <unistd.h>
- #include <linux/objtool.h>
--#include <asm/orc_types.h>
- #include <objtool/objtool.h>
-+#include <objtool/orc.h>
- #include <objtool/warn.h>
- #include <objtool/endianness.h>
- 
--static const char *reg_name(unsigned int reg)
--{
--	switch (reg) {
--	case ORC_REG_PREV_SP:
--		return "prevsp";
--	case ORC_REG_DX:
--		return "dx";
--	case ORC_REG_DI:
--		return "di";
--	case ORC_REG_BP:
--		return "bp";
--	case ORC_REG_SP:
--		return "sp";
--	case ORC_REG_R10:
--		return "r10";
--	case ORC_REG_R13:
--		return "r13";
--	case ORC_REG_BP_INDIRECT:
--		return "bp(ind)";
--	case ORC_REG_SP_INDIRECT:
--		return "sp(ind)";
--	default:
--		return "?";
--	}
--}
--
--static const char *orc_type_name(unsigned int type)
--{
--	switch (type) {
--	case UNWIND_HINT_TYPE_CALL:
--		return "call";
--	case UNWIND_HINT_TYPE_REGS:
--		return "regs";
--	case UNWIND_HINT_TYPE_REGS_PARTIAL:
--		return "regs (partial)";
--	default:
--		return "?";
--	}
--}
--
--static void print_reg(unsigned int reg, int offset)
--{
--	if (reg == ORC_REG_BP_INDIRECT)
--		printf("(bp%+d)", offset);
--	else if (reg == ORC_REG_SP_INDIRECT)
--		printf("(sp)%+d", offset);
--	else if (reg == ORC_REG_UNDEFINED)
--		printf("(und)");
--	else
--		printf("%s%+d", reg_name(reg), offset);
--}
--
- int orc_dump(const char *_objname)
- {
- 	int fd, nr_entries, i, *orc_ip = NULL, orc_size = 0;
-@@ -195,14 +143,13 @@ int orc_dump(const char *_objname)
- 			printf("%llx:", (unsigned long long)(orc_ip_addr + (i * sizeof(int)) + orc_ip[i]));
- 		}
- 
--
- 		printf(" sp:");
- 
--		print_reg(orc[i].sp_reg, bswap_if_needed(orc[i].sp_offset));
-+		orc_print_reg(orc[i].sp_reg, bswap_if_needed(orc[i].sp_offset));
- 
- 		printf(" bp:");
- 
--		print_reg(orc[i].bp_reg, bswap_if_needed(orc[i].bp_offset));
-+		orc_print_reg(orc[i].bp_reg, bswap_if_needed(orc[i].bp_offset));
- 
- 		printf(" type:%s end:%d\n",
- 		       orc_type_name(orc[i].type), orc[i].end);
-diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
-index dd3c64af9db2..a7d060ba14d0 100644
---- a/tools/objtool/orc_gen.c
-+++ b/tools/objtool/orc_gen.c
-@@ -7,86 +7,12 @@
- #include <string.h>
- 
- #include <linux/objtool.h>
--#include <asm/orc_types.h>
- 
- #include <objtool/check.h>
-+#include <objtool/orc.h>
- #include <objtool/warn.h>
- #include <objtool/endianness.h>
- 
--static int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
--			  struct instruction *insn)
--{
--	struct cfi_reg *bp = &cfi->regs[CFI_BP];
--
--	memset(orc, 0, sizeof(*orc));
--
--	if (!cfi) {
--		orc->end = 0;
--		orc->sp_reg = ORC_REG_UNDEFINED;
--		return 0;
--	}
--
--	orc->end = cfi->end;
--
--	if (cfi->cfa.base == CFI_UNDEFINED) {
--		orc->sp_reg = ORC_REG_UNDEFINED;
--		return 0;
--	}
--
--	switch (cfi->cfa.base) {
--	case CFI_SP:
--		orc->sp_reg = ORC_REG_SP;
--		break;
--	case CFI_SP_INDIRECT:
--		orc->sp_reg = ORC_REG_SP_INDIRECT;
--		break;
--	case CFI_BP:
--		orc->sp_reg = ORC_REG_BP;
--		break;
--	case CFI_BP_INDIRECT:
--		orc->sp_reg = ORC_REG_BP_INDIRECT;
--		break;
--	case CFI_R10:
--		orc->sp_reg = ORC_REG_R10;
--		break;
--	case CFI_R13:
--		orc->sp_reg = ORC_REG_R13;
--		break;
--	case CFI_DI:
--		orc->sp_reg = ORC_REG_DI;
--		break;
--	case CFI_DX:
--		orc->sp_reg = ORC_REG_DX;
--		break;
--	default:
--		WARN_FUNC("unknown CFA base reg %d",
--			  insn->sec, insn->offset, cfi->cfa.base);
--		return -1;
--	}
--
--	switch (bp->base) {
--	case CFI_UNDEFINED:
--		orc->bp_reg = ORC_REG_UNDEFINED;
--		break;
--	case CFI_CFA:
--		orc->bp_reg = ORC_REG_PREV_SP;
--		break;
--	case CFI_BP:
--		orc->bp_reg = ORC_REG_BP;
--		break;
--	default:
--		WARN_FUNC("unknown BP base reg %d",
--			  insn->sec, insn->offset, bp->base);
--		return -1;
--	}
--
--	orc->sp_offset = cfi->cfa.offset;
--	orc->bp_offset = bp->offset;
--	orc->type = cfi->type;
--
--	return 0;
--}
--
- static int write_orc_entry(struct elf *elf, struct section *orc_sec,
- 			   struct section *ip_sec, unsigned int idx,
- 			   struct section *insn_sec, unsigned long insn_off,
++obj-$(CONFIG_UNWINDER_ORC) += orc_lookup.o
++
+ CFLAGS_stackleak.o += $(DISABLE_STACKLEAK_PLUGIN)
+ obj-$(CONFIG_GCC_PLUGIN_STACKLEAK) += stackleak.o
+ KASAN_SANITIZE_stackleak.o := n
+diff --git a/kernel/orc_lookup.c b/kernel/orc_lookup.c
+new file mode 100644
+index 000000000000..2e04a5e2be45
+--- /dev/null
++++ b/kernel/orc_lookup.c
+@@ -0,0 +1,261 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <linux/objtool.h>
++#include <linux/module.h>
++#include <linux/sort.h>
++#include <asm/orc_types.h>
++#include <asm-generic/orc_lookup.h>
++
++bool orc_init __ro_after_init;
++static unsigned int lookup_num_blocks __ro_after_init;
++
++static inline unsigned long orc_ip(const int *ip)
++{
++	return (unsigned long)ip + *ip;
++}
++
++static struct orc_entry *__orc_find(int *ip_table, struct orc_entry *u_table,
++				    unsigned int num_entries, unsigned long ip)
++{
++	int *first = ip_table;
++	int *last = ip_table + num_entries - 1;
++	int *mid = first, *found = first;
++
++	if (!num_entries)
++		return NULL;
++
++	/*
++	 * Do a binary range search to find the rightmost duplicate of a given
++	 * starting address.  Some entries are section terminators which are
++	 * "weak" entries for ensuring there are no gaps.  They should be
++	 * ignored when they conflict with a real entry.
++	 */
++	while (first <= last) {
++		mid = first + ((last - first) / 2);
++
++		if (orc_ip(mid) <= ip) {
++			found = mid;
++			first = mid + 1;
++		} else
++			last = mid - 1;
++	}
++
++	return u_table + (found - ip_table);
++}
++
++#ifdef CONFIG_MODULES
++static struct orc_entry *orc_module_find(unsigned long ip)
++{
++	struct module *mod;
++
++	mod = __module_address(ip);
++	if (!mod || !mod->arch.orc_unwind || !mod->arch.orc_unwind_ip)
++		return NULL;
++	return __orc_find(mod->arch.orc_unwind_ip, mod->arch.orc_unwind,
++			  mod->arch.num_orcs, ip);
++}
++#else
++static struct orc_entry *orc_module_find(unsigned long ip)
++{
++	return NULL;
++}
++#endif
++
++/*
++ * If we crash with IP==0, the last successfully executed instruction
++ * was probably an indirect function call with a NULL function pointer,
++ * and we don't have unwind information for NULL.
++ * This hardcoded ORC entry for IP==0 allows us to unwind from a NULL function
++ * pointer into its parent and then continue normally from there.
++ */
++static struct orc_entry null_orc_entry = {
++	.sp_offset = sizeof(long),
++	.sp_reg = ORC_REG_SP,
++	.bp_reg = ORC_REG_UNDEFINED,
++	.type = UNWIND_HINT_TYPE_CALL
++};
++
++struct orc_entry *orc_find(unsigned long ip)
++{
++	static struct orc_entry *orc;
++
++	if (ip == 0)
++		return &null_orc_entry;
++
++	/* For non-init vmlinux addresses, use the fast lookup table: */
++	if (ip >= LOOKUP_START_IP && ip < LOOKUP_STOP_IP) {
++		unsigned int idx, start, stop;
++
++		if (!orc_init) {
++			/*
++			 * Take the slow path if the fast lookup tables have
++			 * not yet been initialized.
++			 */
++			return __orc_find(__start_orc_unwind_ip,
++					  __start_orc_unwind,
++					  __stop_orc_unwind_ip -
++					  __start_orc_unwind_ip, ip);
++		}
++
++		idx = (ip - LOOKUP_START_IP) / LOOKUP_BLOCK_SIZE;
++
++		if (unlikely((idx >= lookup_num_blocks-1))) {
++			orc_warn("WARNING: bad lookup idx: idx=%u num=%u ip=%pB\n",
++				 idx, lookup_num_blocks, (void *)ip);
++			return NULL;
++		}
++
++		start = orc_lookup[idx];
++		stop = orc_lookup[idx + 1] + 1;
++
++		if (unlikely((__start_orc_unwind + start >= __stop_orc_unwind) ||
++			     (__start_orc_unwind + stop > __stop_orc_unwind))) {
++			orc_warn("WARNING: bad lookup value: idx=%u num=%u start=%u stop=%u ip=%pB\n",
++				 idx, lookup_num_blocks, start, stop, (void *)ip);
++			return NULL;
++		}
++
++		return __orc_find(__start_orc_unwind_ip + start,
++				  __start_orc_unwind + start, stop - start, ip);
++	}
++
++	/* vmlinux .init slow lookup: */
++	if (is_kernel_inittext(ip))
++		return __orc_find(__start_orc_unwind_ip, __start_orc_unwind,
++				  __stop_orc_unwind_ip - __start_orc_unwind_ip, ip);
++
++	/* Module lookup: */
++	orc = orc_module_find(ip);
++	if (orc)
++		return orc;
++
++	return arch_orc_find(ip);
++}
++
++#ifdef CONFIG_MODULES
++
++static DEFINE_MUTEX(sort_mutex);
++static int *cur_orc_ip_table = __start_orc_unwind_ip;
++static struct orc_entry *cur_orc_table = __start_orc_unwind;
++
++static void orc_sort_swap(void *_a, void *_b, int size)
++{
++	struct orc_entry *orc_a, *orc_b;
++	struct orc_entry orc_tmp;
++	int *a = _a, *b = _b, tmp;
++	int delta = _b - _a;
++
++	/* Swap the .orc_unwind_ip entries: */
++	tmp = *a;
++	*a = *b + delta;
++	*b = tmp - delta;
++
++	/* Swap the corresponding .orc_unwind entries: */
++	orc_a = cur_orc_table + (a - cur_orc_ip_table);
++	orc_b = cur_orc_table + (b - cur_orc_ip_table);
++	orc_tmp = *orc_a;
++	*orc_a = *orc_b;
++	*orc_b = orc_tmp;
++}
++
++static int orc_sort_cmp(const void *_a, const void *_b)
++{
++	struct orc_entry *orc_a;
++	const int *a = _a, *b = _b;
++	unsigned long a_val = orc_ip(a);
++	unsigned long b_val = orc_ip(b);
++
++	if (a_val > b_val)
++		return 1;
++	if (a_val < b_val)
++		return -1;
++
++	/*
++	 * The "weak" section terminator entries need to always be on the left
++	 * to ensure the lookup code skips them in favor of real entries.
++	 * These terminator entries exist to handle any gaps created by
++	 * whitelisted .o files which didn't get objtool generation.
++	 */
++	orc_a = cur_orc_table + (a - cur_orc_ip_table);
++	return orc_a->sp_reg == ORC_REG_UNDEFINED && !orc_a->end ? -1 : 1;
++}
++
++void orc_lookup_module_init(struct module *mod,
++			    void *_orc_ip, size_t orc_ip_size,
++			    void *_orc, size_t orc_size)
++{
++	int *orc_ip = _orc_ip;
++	struct orc_entry *orc = _orc;
++	unsigned int num_entries = orc_ip_size / sizeof(int);
++
++	WARN_ON_ONCE(orc_ip_size % sizeof(int) != 0 ||
++		     orc_size % sizeof(*orc) != 0 ||
++		     num_entries != orc_size / sizeof(*orc));
++
++	/*
++	 * The 'cur_orc_*' globals allow the orc_sort_swap() callback to
++	 * associate an .orc_unwind_ip table entry with its corresponding
++	 * .orc_unwind entry so they can both be swapped.
++	 */
++	mutex_lock(&sort_mutex);
++	cur_orc_ip_table = orc_ip;
++	cur_orc_table = orc;
++	sort(orc_ip, num_entries, sizeof(int), orc_sort_cmp, orc_sort_swap);
++	mutex_unlock(&sort_mutex);
++
++	mod->arch.orc_unwind_ip = orc_ip;
++	mod->arch.orc_unwind = orc;
++	mod->arch.num_orcs = num_entries;
++}
++#endif
++
++void __init orc_lookup_init(void)
++{
++	size_t orc_ip_size = (void *)__stop_orc_unwind_ip - (void *)__start_orc_unwind_ip;
++	size_t orc_size = (void *)__stop_orc_unwind - (void *)__start_orc_unwind;
++	size_t num_entries = orc_ip_size / sizeof(int);
++	struct orc_entry *orc;
++	int i;
++
++	if (!num_entries || orc_ip_size % sizeof(int) != 0 ||
++	    orc_size % sizeof(struct orc_entry) != 0 ||
++	    num_entries != orc_size / sizeof(struct orc_entry)) {
++		orc_warn("WARNING: Bad or missing .orc_unwind table.  Disabling unwinder.\n");
++		return;
++	}
++
++	/*
++	 * Note, the orc_unwind and orc_unwind_ip tables were already
++	 * sorted at build time via the 'sorttable' tool.
++	 * It's ready for binary search straight away, no need to sort it.
++	 */
++
++	/* Initialize the fast lookup table: */
++	lookup_num_blocks = orc_lookup_end - orc_lookup;
++	for (i = 0; i < lookup_num_blocks-1; i++) {
++		orc = __orc_find(__start_orc_unwind_ip, __start_orc_unwind,
++				 num_entries,
++				 LOOKUP_START_IP + (LOOKUP_BLOCK_SIZE * i));
++		if (!orc) {
++			orc_warn("WARNING: Corrupt .orc_unwind table.  Disabling unwinder.\n");
++			return;
++		}
++
++		orc_lookup[i] = orc - __start_orc_unwind;
++	}
++
++	/* Initialize the ending block: */
++	orc = __orc_find(__start_orc_unwind_ip, __start_orc_unwind, num_entries,
++			 LOOKUP_STOP_IP);
++	if (!orc) {
++		orc_warn("WARNING: Corrupt .orc_unwind table.  Disabling unwinder.\n");
++		return;
++	}
++	orc_lookup[lookup_num_blocks-1] = orc - __start_orc_unwind;
++
++	orc_init = true;
++}
++
++__weak struct orc_entry *arch_orc_find(unsigned long ip)
++{
++	return NULL;
++}
 -- 
 2.17.1
 
