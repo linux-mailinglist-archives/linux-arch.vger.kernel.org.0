@@ -2,204 +2,105 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7135550CC
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 18:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DDC55523E
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 19:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376422AbiFVQFR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 12:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
+        id S1377009AbiFVRTz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 13:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376435AbiFVQEz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 12:04:55 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0696134BA1;
-        Wed, 22 Jun 2022 09:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655913873; x=1687449873;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eG4q6c4UvYGtzxug36fSTUwHXCGqtjeRSHre942YGGg=;
-  b=llCY6TcTc2B4dCCWVQhv81yKwEdAtn5yadjhiwtGPA2l/qyoghHhxrd1
-   58Z4Na2DLG2+ZhTMrx76BJo0TP7j0a3agC8bITw6touar09aTBRlbgNfQ
-   ZqQsT96X7p/X4CTRPUj3B/yjdCm89Kik0CtOIJdghFGVmbhl5jLPNKFwM
-   NJ4tuZJN9CafMU2Bb/w4e/3MGkZj6YVUmNTXWL7rfnkyqzpyKV+ZqcUSK
-   3PpfnYj2mdU2IEd8nxFggTf+BCCmgscpB80AhNrSu6U/KuqigKxY/6vv3
-   hbw+poKqsbtk6Y+gjsoW9KL2XpyeZiPFIWDSpyvqVf+3nMn12NPH+fy+i
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281191468"
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="281191468"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 09:04:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
-   d="scan'208";a="764940851"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jun 2022 09:04:20 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25MG4Ip9006187;
-        Wed, 22 Jun 2022 17:04:18 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-alpha@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 8/8] lib: test_bitmap: add compile-time optimization/evaluations assertions
-Date:   Wed, 22 Jun 2022 18:04:15 +0200
-Message-Id: <20220622160415.589430-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220621191553.69455-9-alexandr.lobakin@intel.com>
-References: <20220621191553.69455-1-alexandr.lobakin@intel.com> <20220621191553.69455-9-alexandr.lobakin@intel.com>
+        with ESMTP id S1376717AbiFVRTy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 13:19:54 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F291F2CB
+        for <linux-arch@vger.kernel.org>; Wed, 22 Jun 2022 10:19:52 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id e5so9633601wma.0
+        for <linux-arch@vger.kernel.org>; Wed, 22 Jun 2022 10:19:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g7rgKaNRu6VI+rL2tcZJVezyj5b7Lszc6RDU2QcG3NQ=;
+        b=Dsp3eLP695OxhLmAxgCpTladrks0d9cl3c4pqEG8IsiuYRxlbmyT9zMcfK+VdJOEhP
+         vqcEAnywIUG3D4hOvDO4vgW7mTKDWa4FOUacvv0rZZ1u/SO4iaTUMJT1YLVZARqV4UnP
+         VVaOZc6pGpqsRfWobvfoyII6hejsz2rE4brC494B2LoC31jIRjDfn1jZaLdHctRIJGTs
+         eYVx6Mr13FW6Ezg18RcNdgljwra6zUmgwIfkDvEWL26pByjsiHrTuzgpz4XG6qL9VH6q
+         2R9XZ6ufukStzJFEMcZ2MrXmX7/nzP3kY80P4OPxqAvqF9i9lBRjwSybCsaRqRMoajR9
+         c2mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g7rgKaNRu6VI+rL2tcZJVezyj5b7Lszc6RDU2QcG3NQ=;
+        b=Z1v+fVHPv2WZ7XEaxb4/QX140V4HbevTnqzuVAdVoAR7PE9tvcxJQO3jLuVnjKFqmI
+         ka3NsXPwDVPHCgs65wEPa+MULdrE/Sj+efTHnoqkYtMQH9FiTBaKaVKoQty8N0dMIIdW
+         ntq8XA1AxwoXpyYLhAI5iUmXdFhA+fhMrJp6jmfQN097oPlnOrQ6WNOlFCXo6mr31dBi
+         9/R2gMGGFimqwUjnSxqBWW7IfRySDYsw1cS2AL4wuctEsXj0IW4O5jJe15Pu/kjPQfzW
+         SRn/j/xc19C/HAcDYJcrtV/TacOMEpdXVL7LT/QdPKZ58DJrlN3QYQdJkP3PXdpSUVYf
+         pdew==
+X-Gm-Message-State: AOAM533YiRwzSe7WiZoS9OD4k4Mi17A3S4oDVRiOX/ZielqWDaO5Du2a
+        dHoO56HZ7u7MddPJbxXyisxVpA==
+X-Google-Smtp-Source: ABdhPJzonljILXzP/YeUVGmI5wxNQjklVcp+NVX87qobxoQHEtny1OoVzedlkPsbhH9Zvj4Jv4dkKA==
+X-Received: by 2002:a05:600c:3229:b0:39c:65b2:8935 with SMTP id r41-20020a05600c322900b0039c65b28935mr48023528wmp.155.1655918390841;
+        Wed, 22 Jun 2022 10:19:50 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id j18-20020a05600c42d200b003a02b9c47e4sm26041wme.27.2022.06.22.10.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 10:19:49 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 18:19:46 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        live-patching@vger.kernel.org, jpoimboe@kernel.org,
+        peterz@infradead.org, catalin.marinas@arm.com, will@kernel.org,
+        masahiroy@kernel.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, mark.rutland@arm.com,
+        pasha.tatashin@soleen.com, broonie@kernel.org,
+        rmk+kernel@armlinux.org.uk, madvenka@linux.microsoft.com,
+        christophe.leroy@csgroup.eu
+Subject: Re: [PATCH v5 00/33] objtool: add base support for arm64
+Message-ID: <20220622171946.mc3cd375fy4fou3b@maple.lan>
+References: <20220622154920.95075-1-chenzhongjin@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Tue, 21 Jun 2022 21:15:53 +0200
-
-> Add a function to the bitmap test suite, which will ensure that
-> compilers are able to evaluate operations performed by the
-> bitops/bitmap helpers to compile-time constants when all of the
-> arguments are compile-time constants as well, or trigger a build
-> bug otherwise. This should work on all architectures and all the
-> optimization levels supported by Kbuild.
-> The function doesn't perform any runtime tests and gets optimized
-> out to nothing after passing the build assertions.
+On Wed, Jun 22, 2022 at 11:48:47PM +0800, Chen Zhongjin wrote:
+> This series enables objtool to start doing stack validation and orc
+> generation on arm64 kernel builds.
 > 
-> Suggested-by: Yury Norov <yury.norov@gmail.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  lib/test_bitmap.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 45 insertions(+)
+> Based on Julien's previous work(1)(2), Now I have finished most of work
+> for objtool enable on arm64. This series includes objtool part [1-13]
+> and arm64 support part [14-33], the second part is to make objtool run
+> correctly with no warning on arm64 so if necessary it can be taken apart
+> as two series.
 > 
-> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
-> index d5923a640457..3a7b09b82794 100644
-> --- a/lib/test_bitmap.c
-> +++ b/lib/test_bitmap.c
-> @@ -869,6 +869,50 @@ static void __init test_bitmap_print_buf(void)
->  	}
->  }
->  
-> +static void __init test_bitmap_const_eval(void)
-> +{
-> +	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-> +	unsigned long initvar = BIT(2);
-> +	unsigned long bitopvar = 0;
-> +	unsigned long var = 0;
-> +	int res;
-> +
-> +	/*
-> +	 * Compilers must be able to optimize all of those to compile-time
-> +	 * constants on any supported optimization level (-O2, -Os) and any
-> +	 * architecture. Otherwise, trigger a build bug.
-> +	 * The whole function gets optimized out then, there's nothing to do
-> +	 * in runtime.
-> +	 */
-> +
-> +	/* Equals to `unsigned long bitmap[1] = { BIT(5), }` */
-> +	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-> +	if (!test_bit(7, bitmap))
-> +		bitmap_set(bitmap, 5, 1);
+> ORC generation feature is implemented but not used because we don't have
+> an unwinder_orc on arm64, now it only be used to check whether objtool
+> has correct validation.
+> 
+> This series depends on (https://lkml.org/lkml/2022/6/22/463)
+> I moved some changes which work for all architectures to that series
+> because this one becomes too big now.
+> And it is rebased to tip/objtool/core branch.
 
-So for now, when building for s390, Clang (up to the latest Git
-snapshot) generates some incorrect code here.
-It does expand both test_bit() and bitmap_set() to const_test_bit()
-and const___set_bit(), but at the same time thinks that starting
-from this point, @bitmap and @bitopvar (???) are *not* constants
-and fails the assertions below, which is not true and weird.
-Any other architecture + compiler couples work fine, including
-s390 on GCC.
-So would it be acceptable for now to do:
+What is the sha1 of the base?
 
-	/* Equals to `unsigned long bitmap[1] = { BIT(5), }` */
-	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-	/*
-	 * Some comment saying that this is currently broken
-	 * on s390 + Clang
-	 */
-#if !(defined(__s390__) && defined(__clang__))
-	if (!test_bit(7, bitmap))
-		bitmap_set(bitmap, 5, 1);
-#endif
+With b4 and git am the patch series is derailing at patch 6 and I'm even
+after a bit of fixup (had to use rediff) I'm still getting a cascade of
+errors in later patches to decode.c .
 
-	/* Equals to `unsigned long bitopvar = BIT(20)` */
-	__change_bit(31, &bitopvar);
-	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
 
-[...]
-
-or there could be any better solutions?
-
-(+Cc LLVM folks)
-
-> +
-> +	/* Equals to `unsigned long bitopvar = BIT(20)` */
-> +	__change_bit(31, &bitopvar);
-> +	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-> +
-> +	/* Equals to `unsigned long var = BIT(25)` */
-> +	var |= BIT(25);
-> +	if (var & BIT(0))
-> +		var ^= GENMASK(9, 6);
-> +
-> +	/* __const_hweight<32|64>(BIT(5)) == 1 */
-> +	res = bitmap_weight(bitmap, 20);
-> +	BUILD_BUG_ON(!__builtin_constant_p(res));
-> +
-> +	/* !(BIT(31) & BIT(18)) == 1 */
-> +	res = !test_bit(18, &bitopvar);
-> +	BUILD_BUG_ON(!__builtin_constant_p(res));
-> +
-> +	/* BIT(2) & GENMASK(14, 8) == 0 */
-> +	BUILD_BUG_ON(!__builtin_constant_p(initvar & GENMASK(14, 8)));
-> +	/* ~BIT(25) */
-> +	BUILD_BUG_ON(!__builtin_constant_p(~var));
-> +}
-> +
->  static void __init selftest(void)
->  {
->  	test_zero_clear();
-> @@ -884,6 +928,7 @@ static void __init selftest(void)
->  	test_for_each_set_clump8();
->  	test_bitmap_cut();
->  	test_bitmap_print_buf();
-> +	test_bitmap_const_eval();
->  }
->  
->  KSTM_MODULE_LOADERS(test_bitmap);
-> -- 
-> 2.36.1
-
-Thanks,
-Olek
+Daniel.
