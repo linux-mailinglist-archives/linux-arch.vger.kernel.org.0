@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46640554FF0
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBAA554FFC
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359668AbiFVPxC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 11:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S1358309AbiFVPxI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 11:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359642AbiFVPwu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:52:50 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBBBE09C;
-        Wed, 22 Jun 2022 08:52:46 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSnsz1NGzzkWNw;
-        Wed, 22 Jun 2022 23:51:03 +0800 (CST)
+        with ESMTP id S1359656AbiFVPxA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:53:00 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCF310D4;
+        Wed, 22 Jun 2022 08:52:47 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LSnsT3M3Fz1KC4b;
+        Wed, 22 Jun 2022 23:50:37 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Wed, 22 Jun 2022 23:52:44 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -37,9 +37,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 14/33] objtool: arm64: Add annotate_reachable() for objtools
-Date:   Wed, 22 Jun 2022 23:49:01 +0800
-Message-ID: <20220622154920.95075-15-chenzhongjin@huawei.com>
+Subject: [PATCH v5 15/33] arm64: bug: Add reachable annotation to warning macros
+Date:   Wed, 22 Jun 2022 23:49:02 +0800
+Message-ID: <20220622154920.95075-16-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
 References: <20220622154920.95075-1-chenzhongjin@huawei.com>
@@ -58,44 +58,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-x86 removed annotate_reachable and replaced it with ASM_REACHABLE
-which is not suitable for arm64 micro because there are some cases
-GCC will merge duplicate inline asm.
+WARN* and BUG* both use brk #0x800 opcodes and the distinction is
+provided by the contents of the bug table. This table is not accessible
+to objtool, so add an annotation to WARN* macros to let objtool know
+that brk handler will return an resume the execution of the instructions
+following the WARN's brk.
 
-Re-add annotation_reachable() for arm64.
-
+Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- include/linux/compiler.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm64/include/asm/bug.h | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index 01ce94b58b42..c8bce9421fa7 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -117,6 +117,14 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
-  */
- #define __stringify_label(n) #n
+diff --git a/arch/arm64/include/asm/bug.h b/arch/arm64/include/asm/bug.h
+index 28be048db3f6..9917429971d4 100644
+--- a/arch/arm64/include/asm/bug.h
++++ b/arch/arm64/include/asm/bug.h
+@@ -19,7 +19,11 @@
+ 	unreachable();					\
+ } while (0)
  
-+#define __annotate_reachable(c) ({					\
-+	asm volatile(__stringify_label(c) ":\n\t"			\
-+			".pushsection .discard.reachable\n\t"		\
-+			".long " __stringify_label(c) "b - .\n\t"		\
-+			".popsection\n\t");				\
-+})
-+#define annotate_reachable() __annotate_reachable(__COUNTER__)
-+
- #define __annotate_unreachable(c) ({					\
- 	asm volatile(__stringify_label(c) ":\n\t"			\
- 		     ".pushsection .discard.unreachable\n\t"		\
-@@ -129,6 +137,7 @@ void ftrace_likely_update(struct ftrace_likely_data *f, int val,
- #define __annotate_jump_table __section(".rodata..c_jump_table")
+-#define __WARN_FLAGS(flags) __BUG_FLAGS(BUGFLAG_WARNING|(flags))
++#define __WARN_FLAGS(flags)			\
++do {						\
++	__BUG_FLAGS(BUGFLAG_WARNING|(flags));	\
++	annotate_reachable();			\
++} while (0)
  
- #else /* !CONFIG_OBJTOOL */
-+#define annotate_reachable()
- #define annotate_unreachable()
- #define __annotate_jump_table
- #endif /* CONFIG_OBJTOOL */
+ #define HAVE_ARCH_BUG
+ 
 -- 
 2.17.1
 
