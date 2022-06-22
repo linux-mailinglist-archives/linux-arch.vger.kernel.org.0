@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C32554FFE
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A540655501C
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358848AbiFVPxJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 11:53:09 -0400
+        id S1358304AbiFVPyI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 11:54:08 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359657AbiFVPxA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:53:00 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30D51123;
-        Wed, 22 Jun 2022 08:52:47 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSnqz30SVzSh51;
-        Wed, 22 Jun 2022 23:49:19 +0800 (CST)
+        with ESMTP id S1359661AbiFVPxC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:53:02 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F83B2DEE;
+        Wed, 22 Jun 2022 08:52:49 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LSnvH4T5czDsJm;
+        Wed, 22 Jun 2022 23:52:11 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:43 +0800
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:44 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -37,9 +37,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 10/33] objtool: arm64: Handle supported relocations in alternatives
-Date:   Wed, 22 Jun 2022 23:48:57 +0800
-Message-ID: <20220622154920.95075-11-chenzhongjin@huawei.com>
+Subject: [PATCH v5 11/33] objtool: arm64: Ignore replacement section for alternative callback
+Date:   Wed, 22 Jun 2022 23:48:58 +0800
+Message-ID: <20220622154920.95075-12-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
 References: <20220622154920.95075-1-chenzhongjin@huawei.com>
@@ -58,33 +58,52 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Based on get_alt_insn() in arch/arm64/kernel/alternative.c, arm64
-alternative code adapts offsets for static branches and adrp
-instructions.
+ARM64_CB_PATCH doesn't have static replacement instructions. Skip
+trying to validate the alternative section.
 
 Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- tools/objtool/arch/arm64/special.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ tools/objtool/arch/arm64/special.c | 11 +++++++++++
+ tools/objtool/check.c              |  3 +++
+ 2 files changed, 14 insertions(+)
 
 diff --git a/tools/objtool/arch/arm64/special.c b/tools/objtool/arch/arm64/special.c
-index 45f283283091..a70b91e8bd7d 100644
+index a70b91e8bd7d..8bb1ebd2132a 100644
 --- a/tools/objtool/arch/arm64/special.c
 +++ b/tools/objtool/arch/arm64/special.c
-@@ -10,7 +10,11 @@ bool arch_support_alt_relocation(struct special_alt *special_alt,
- 				 struct instruction *insn,
- 				 struct reloc *reloc)
+@@ -4,6 +4,17 @@
+ 
+ void arch_handle_alternative(unsigned short feature, struct special_alt *alt)
  {
--	return false;
-+	u32 opcode = *(u32 *)(insn->sec->data->d_buf + insn->offset);
-+
-+	return aarch64_insn_is_branch_imm(opcode) ||
-+	       aarch64_insn_is_adrp(opcode) ||
-+	       !aarch64_insn_uses_literal(opcode);
++	/*
++	 * ARM64_CB_PATCH has no alternative instruction.
++	 * a callback is called at alternative replacement time
++	 * to dynamically change the original instructions.
++	 *
++	 * ARM64_CB_PATCH is the last ARM64 feature, it's value changes
++	 * every time a new feature is added. So the orig/alt region
++	 * length are used to detect those alternatives
++	 */
++	if (alt->orig_len && !alt->new_len)
++		alt->skip_alt = true;
  }
  
+ bool arch_support_alt_relocation(struct special_alt *special_alt,
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 77911ca9cfff..54b736e94ede 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1686,6 +1686,9 @@ static int add_special_section_alts(struct objtool_file *file)
+ 				continue;
+ 			}
  
++			if (special_alt->skip_alt && !special_alt->new_len)
++				continue;
++
+ 			ret = handle_group_alt(file, special_alt, orig_insn,
+ 					       &new_insn);
+ 			if (ret)
 -- 
 2.17.1
 
