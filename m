@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1293555046
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B84555025
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiFVPyV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 11:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
+        id S1358870AbiFVPyK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 11:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359725AbiFVPxX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:53:23 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0671095;
-        Wed, 22 Jun 2022 08:52:54 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LSnsX3NGgz1KC7D;
+        with ESMTP id S1359663AbiFVPxC (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:53:02 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0933A2FFD7;
+        Wed, 22 Jun 2022 08:52:49 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSnsX20h7zhYch;
         Wed, 22 Jun 2022 23:50:40 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:47 +0800
+ 15.1.2375.24; Wed, 22 Jun 2022 23:52:48 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -37,9 +37,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 30/33] arm64: entry: Align stack size for alternative
-Date:   Wed, 22 Jun 2022 23:49:17 +0800
-Message-ID: <20220622154920.95075-31-chenzhongjin@huawei.com>
+Subject: [PATCH v5 31/33] arm64: kernel: Skip validation of proton-pack.c
+Date:   Wed, 22 Jun 2022 23:49:18 +0800
+Message-ID: <20220622154920.95075-32-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
 References: <20220622154920.95075-1-chenzhongjin@huawei.com>
@@ -58,42 +58,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In kernel_exit there is a alternative branch for KPTI which causes
-stack size conflict for two instruction boundaries.
+qcom_link_stack_sanitisation() repeatly calls itself, but we can't
+mark the asm code as intra-call so it should be marked as non_standard.
 
-To fix that, make both branch move the sp and then revert it in
-tramp_exit branch.
-
+Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/kernel/entry.S | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/proton-pack.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index d49bfbe81a0d..677e3be471bb 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -430,7 +430,11 @@ alternative_if_not ARM64_UNMAP_KERNEL_AT_EL0
- 	ldr	lr, [sp, #S_LR]
- 	add	sp, sp, #PT_REGS_SIZE		// restore sp
- 	eret
--alternative_else_nop_endif
-+alternative_else
-+	nop
-+	add sp, sp, #PT_REGS_SIZE       // restore sp
-+	nop
-+alternative_endif
- #ifdef CONFIG_UNMAP_KERNEL_AT_EL0
- 	bne	4f
- 	msr	far_el1, x29
-@@ -729,6 +733,7 @@ alternative_else_nop_endif
+diff --git a/arch/arm64/kernel/proton-pack.c b/arch/arm64/kernel/proton-pack.c
+index 40be3a7c2c53..9439e62d4b57 100644
+--- a/arch/arm64/kernel/proton-pack.c
++++ b/arch/arm64/kernel/proton-pack.c
+@@ -22,6 +22,7 @@
+ #include <linux/cpu.h>
+ #include <linux/device.h>
+ #include <linux/nospec.h>
++#include <linux/objtool.h>
+ #include <linux/prctl.h>
+ #include <linux/sched/task_stack.h>
  
- 	.macro tramp_exit, regsize = 64
- 	UNWIND_HINT_EMPTY
-+	sub sp, sp, #PT_REGS_SIZE       // revert sp
- 	tramp_data_read_var	x30, this_cpu_vector
- 	get_this_cpu_offset x29
- 	ldr	x30, [x30, x29]
+@@ -257,6 +258,7 @@ static noinstr void qcom_link_stack_sanitisation(void)
+ 		     "mov	x30, %0		\n"
+ 		     : "=&r" (tmp));
+ }
++STACK_FRAME_NON_STANDARD(qcom_link_stack_sanitisation);
+ 
+ static bp_hardening_cb_t spectre_v2_get_sw_mitigation_cb(void)
+ {
 -- 
 2.17.1
 
