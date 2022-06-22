@@ -2,124 +2,204 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4592555045
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7135550CC
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 18:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376485AbiFVPyU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 11:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
+        id S1376422AbiFVQFR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 12:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359685AbiFVPxG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:53:06 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B3639685;
-        Wed, 22 Jun 2022 08:52:50 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LSntb4cNMzkWg4;
-        Wed, 22 Jun 2022 23:51:35 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:48 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 22 Jun 2022 23:52:48 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kbuild@vger.kernel.org>, <live-patching@vger.kernel.org>
-CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <masahiroy@kernel.org>, <michal.lkml@markovi.net>,
-        <ndesaulniers@google.com>, <mark.rutland@arm.com>,
-        <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
-        <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
-        <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 33/33] objtool: revert c_file fallthrough detection for arm64
-Date:   Wed, 22 Jun 2022 23:49:20 +0800
-Message-ID: <20220622154920.95075-34-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
-References: <20220622154920.95075-1-chenzhongjin@huawei.com>
+        with ESMTP id S1376435AbiFVQEz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 12:04:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0696134BA1;
+        Wed, 22 Jun 2022 09:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655913873; x=1687449873;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eG4q6c4UvYGtzxug36fSTUwHXCGqtjeRSHre942YGGg=;
+  b=llCY6TcTc2B4dCCWVQhv81yKwEdAtn5yadjhiwtGPA2l/qyoghHhxrd1
+   58Z4Na2DLG2+ZhTMrx76BJo0TP7j0a3agC8bITw6touar09aTBRlbgNfQ
+   ZqQsT96X7p/X4CTRPUj3B/yjdCm89Kik0CtOIJdghFGVmbhl5jLPNKFwM
+   NJ4tuZJN9CafMU2Bb/w4e/3MGkZj6YVUmNTXWL7rfnkyqzpyKV+ZqcUSK
+   3PpfnYj2mdU2IEd8nxFggTf+BCCmgscpB80AhNrSu6U/KuqigKxY/6vv3
+   hbw+poKqsbtk6Y+gjsoW9KL2XpyeZiPFIWDSpyvqVf+3nMn12NPH+fy+i
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="281191468"
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="281191468"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2022 09:04:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,212,1650956400"; 
+   d="scan'208";a="764940851"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga005.jf.intel.com with ESMTP; 22 Jun 2022 09:04:20 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25MG4Ip9006187;
+        Wed, 22 Jun 2022 17:04:18 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "Maciej Fijalkowski" <maciej.fijalkowski@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-alpha@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 8/8] lib: test_bitmap: add compile-time optimization/evaluations assertions
+Date:   Wed, 22 Jun 2022 18:04:15 +0200
+Message-Id: <20220622160415.589430-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220621191553.69455-9-alexandr.lobakin@intel.com>
+References: <20220621191553.69455-1-alexandr.lobakin@intel.com> <20220621191553.69455-9-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-'commit 08feafe8d195 ("objtool: Fix function fallthrough detection for vmlinux")'
-This commit canceled c_file which used to make fallthrough detection
-only works on C objects.
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
+Date: Tue, 21 Jun 2022 21:15:53 +0200
 
-However in arm64/crypto/aes-mods.S, there are cases that JUMP at the
-end of function which make objtool wrongly detected them as fall through.
+> Add a function to the bitmap test suite, which will ensure that
+> compilers are able to evaluate operations performed by the
+> bitops/bitmap helpers to compile-time constants when all of the
+> arguments are compile-time constants as well, or trigger a build
+> bug otherwise. This should work on all architectures and all the
+> optimization levels supported by Kbuild.
+> The function doesn't perform any runtime tests and gets optimized
+> out to nothing after passing the build assertions.
+> 
+> Suggested-by: Yury Norov <yury.norov@gmail.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  lib/test_bitmap.c | 45 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+> 
+> diff --git a/lib/test_bitmap.c b/lib/test_bitmap.c
+> index d5923a640457..3a7b09b82794 100644
+> --- a/lib/test_bitmap.c
+> +++ b/lib/test_bitmap.c
+> @@ -869,6 +869,50 @@ static void __init test_bitmap_print_buf(void)
+>  	}
+>  }
+>  
+> +static void __init test_bitmap_const_eval(void)
+> +{
+> +	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+> +	unsigned long initvar = BIT(2);
+> +	unsigned long bitopvar = 0;
+> +	unsigned long var = 0;
+> +	int res;
+> +
+> +	/*
+> +	 * Compilers must be able to optimize all of those to compile-time
+> +	 * constants on any supported optimization level (-O2, -Os) and any
+> +	 * architecture. Otherwise, trigger a build bug.
+> +	 * The whole function gets optimized out then, there's nothing to do
+> +	 * in runtime.
+> +	 */
+> +
+> +	/* Equals to `unsigned long bitmap[1] = { BIT(5), }` */
+> +	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+> +	if (!test_bit(7, bitmap))
+> +		bitmap_set(bitmap, 5, 1);
 
-Revert c_file before this is fixed.
+So for now, when building for s390, Clang (up to the latest Git
+snapshot) generates some incorrect code here.
+It does expand both test_bit() and bitmap_set() to const_test_bit()
+and const___set_bit(), but at the same time thinks that starting
+from this point, @bitmap and @bitopvar (???) are *not* constants
+and fails the assertions below, which is not true and weird.
+Any other architecture + compiler couples work fine, including
+s390 on GCC.
+So would it be acceptable for now to do:
 
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- tools/objtool/check.c                   | 3 +--
- tools/objtool/include/objtool/objtool.h | 2 +-
- tools/objtool/objtool.c                 | 1 +
- 3 files changed, 3 insertions(+), 3 deletions(-)
+	/* Equals to `unsigned long bitmap[1] = { BIT(5), }` */
+	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+	/*
+	 * Some comment saying that this is currently broken
+	 * on s390 + Clang
+	 */
+#if !(defined(__s390__) && defined(__clang__))
+	if (!test_bit(7, bitmap))
+		bitmap_set(bitmap, 5, 1);
+#endif
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 54b736e94ede..8b8a4ef81d96 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -540,7 +540,6 @@ static struct instruction *find_last_insn(struct objtool_file *file,
- 	struct instruction *insn = NULL;
- 	unsigned int offset;
- 	unsigned int end = (sec->sh.sh_size > 10) ? sec->sh.sh_size - 10 : 0;
--
- 	for (offset = sec->sh.sh_size - 1; offset >= end && !insn; offset--)
- 		insn = find_insn(file, sec, offset);
- 
-@@ -3219,7 +3218,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 	while (1) {
- 		next_insn = next_insn_to_validate(file, insn);
- 
--		if (func && insn->func && func != insn->func->pfunc) {
-+		if (file->c_file && func && insn->func && func != insn->func->pfunc) {
- 			WARN("%s() falls through to next function %s()",
- 			     func->name, insn->func->name);
- 			return 1;
-diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
-index a6e72d916807..7a5c13a78f87 100644
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -27,7 +27,7 @@ struct objtool_file {
- 	struct list_head static_call_list;
- 	struct list_head mcount_loc_list;
- 	struct list_head endbr_list;
--	bool ignore_unreachables, hints, rodata;
-+	bool ignore_unreachables, c_file, hints, rodata;
- 
- 	unsigned int nr_endbr;
- 	unsigned int nr_endbr_int;
-diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
-index 512669ce064c..d33620b1392d 100644
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -105,6 +105,7 @@ struct objtool_file *objtool_open_read(const char *_objname)
- 	INIT_LIST_HEAD(&file.static_call_list);
- 	INIT_LIST_HEAD(&file.mcount_loc_list);
- 	INIT_LIST_HEAD(&file.endbr_list);
-+	file.c_file = !opts.link && find_section_by_name(file.elf, ".comment");
- 	file.ignore_unreachables = opts.no_unreachable;
- 	file.hints = false;
- 
--- 
-2.17.1
+	/* Equals to `unsigned long bitopvar = BIT(20)` */
+	__change_bit(31, &bitopvar);
+	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
 
+[...]
+
+or there could be any better solutions?
+
+(+Cc LLVM folks)
+
+> +
+> +	/* Equals to `unsigned long bitopvar = BIT(20)` */
+> +	__change_bit(31, &bitopvar);
+> +	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
+> +
+> +	/* Equals to `unsigned long var = BIT(25)` */
+> +	var |= BIT(25);
+> +	if (var & BIT(0))
+> +		var ^= GENMASK(9, 6);
+> +
+> +	/* __const_hweight<32|64>(BIT(5)) == 1 */
+> +	res = bitmap_weight(bitmap, 20);
+> +	BUILD_BUG_ON(!__builtin_constant_p(res));
+> +
+> +	/* !(BIT(31) & BIT(18)) == 1 */
+> +	res = !test_bit(18, &bitopvar);
+> +	BUILD_BUG_ON(!__builtin_constant_p(res));
+> +
+> +	/* BIT(2) & GENMASK(14, 8) == 0 */
+> +	BUILD_BUG_ON(!__builtin_constant_p(initvar & GENMASK(14, 8)));
+> +	/* ~BIT(25) */
+> +	BUILD_BUG_ON(!__builtin_constant_p(~var));
+> +}
+> +
+>  static void __init selftest(void)
+>  {
+>  	test_zero_clear();
+> @@ -884,6 +928,7 @@ static void __init selftest(void)
+>  	test_for_each_set_clump8();
+>  	test_bitmap_cut();
+>  	test_bitmap_print_buf();
+> +	test_bitmap_const_eval();
+>  }
+>  
+>  KSTM_MODULE_LOADERS(test_bitmap);
+> -- 
+> 2.36.1
+
+Thanks,
+Olek
