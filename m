@@ -2,23 +2,23 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AEA555062
-	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFBD55503C
+	for <lists+linux-arch@lfdr.de>; Wed, 22 Jun 2022 17:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359728AbiFVPzR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 11:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S1359362AbiFVPyS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 11:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359726AbiFVPxX (ORCPT
+        with ESMTP id S1359721AbiFVPxX (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 11:53:23 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C96F4C;
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55993EAF;
         Wed, 22 Jun 2022 08:52:53 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LSnvK6LxWzDsLZ;
-        Wed, 22 Jun 2022 23:52:13 +0800 (CST)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LSnt21Mv0zkWPy;
+        Wed, 22 Jun 2022 23:51:06 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Wed, 22 Jun 2022 23:52:47 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
@@ -37,9 +37,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <pasha.tatashin@soleen.com>, <broonie@kernel.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>
-Subject: [PATCH v5 28/33] arm64: sleep: Properly set frame pointer before call
-Date:   Wed, 22 Jun 2022 23:49:15 +0800
-Message-ID: <20220622154920.95075-29-chenzhongjin@huawei.com>
+Subject: [PATCH v5 29/33] arm64: compat: Move VDSO code to .rodata section
+Date:   Wed, 22 Jun 2022 23:49:16 +0800
+Message-ID: <20220622154920.95075-30-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220622154920.95075-1-chenzhongjin@huawei.com>
 References: <20220622154920.95075-1-chenzhongjin@huawei.com>
@@ -58,29 +58,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In __cpu_suspend_enter, the FP and LR are properly saved on the stack to
-form a stack frame, but the frame pointer is not set afterwards.
+VDSO code should be inside .rodata.
 
-Have the frame pointer point to the new frame.
+Now code in kuser32.S and sigreturn32.S are inside .text section and never
+executed.
+Move them to .rodata.
 
-Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/kernel/sleep.S | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/kernel/kuser32.S     | 1 +
+ arch/arm64/kernel/sigreturn32.S | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/arch/arm64/kernel/sleep.S b/arch/arm64/kernel/sleep.S
-index 799ec01b0649..7fd276f3c532 100644
---- a/arch/arm64/kernel/sleep.S
-+++ b/arch/arm64/kernel/sleep.S
-@@ -92,6 +92,7 @@ SYM_FUNC_START(__cpu_suspend_enter)
- 	str	x0, [x1]
- 	add	x0, x0, #SLEEP_STACK_DATA_SYSTEM_REGS
- 	stp	x29, lr, [sp, #-16]!
-+	mov	x29, sp
- 	bl	cpu_do_suspend
- 	ldp	x29, lr, [sp], #16
- 	mov	x0, #1
+diff --git a/arch/arm64/kernel/kuser32.S b/arch/arm64/kernel/kuser32.S
+index 42bd8c0c60e0..692e9d2e31e5 100644
+--- a/arch/arm64/kernel/kuser32.S
++++ b/arch/arm64/kernel/kuser32.S
+@@ -15,6 +15,7 @@
+ 
+ #include <asm/unistd.h>
+ 
++	.section .rodata
+ 	.align	5
+ 	.globl	__kuser_helper_start
+ __kuser_helper_start:
+diff --git a/arch/arm64/kernel/sigreturn32.S b/arch/arm64/kernel/sigreturn32.S
+index 475d30d471ac..ccbd4aab4ba4 100644
+--- a/arch/arm64/kernel/sigreturn32.S
++++ b/arch/arm64/kernel/sigreturn32.S
+@@ -15,6 +15,7 @@
+ 
+ #include <asm/unistd.h>
+ 
++	.section .rodata
+ 	.globl __aarch32_sigret_code_start
+ __aarch32_sigret_code_start:
+ 
 -- 
 2.17.1
 
