@@ -2,21 +2,21 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE2B55708E
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 03:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D202557090
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 03:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378117AbiFWBxX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 21:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S1378127AbiFWBxZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 21:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377637AbiFWBwb (ORCPT
+        with ESMTP id S1377644AbiFWBwb (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 21:52:31 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD4843EC5;
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C720343AEA;
         Wed, 22 Jun 2022 18:51:54 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LT37J1xxkzShCC;
-        Thu, 23 Jun 2022 09:48:28 +0800 (CST)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LT39q6k6hzkWkG;
+        Thu, 23 Jun 2022 09:50:39 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
  dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -38,9 +38,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>,
         <daniel.thompson@linaro.org>
-Subject: [PATCH v6 32/33] arm64: irq-gic: Replace unreachable() with -EINVAL
-Date:   Thu, 23 Jun 2022 09:49:16 +0800
-Message-ID: <20220623014917.199563-33-chenzhongjin@huawei.com>
+Subject: [PATCH v6 33/33] objtool: revert c_file fallthrough detection for arm64
+Date:   Thu, 23 Jun 2022 09:49:17 +0800
+Message-ID: <20220623014917.199563-34-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220623014917.199563-1-chenzhongjin@huawei.com>
 References: <20220623014917.199563-1-chenzhongjin@huawei.com>
@@ -59,73 +59,67 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Using unreachable() at default of switch generates an extra branch at
-end of the function, and compiler won't generate a ret to close this
-branch because it knows it's unreachable.
+'commit 08feafe8d195 ("objtool: Fix function fallthrough detection for vmlinux")'
+This commit canceled c_file which used to make fallthrough detection
+only works on C objects.
 
-If there's no instruction in this branch, compiler will generate a NOP,
-And it will confuse objtool to warn this NOP as a fall through branch.
+However in arm64/crypto/aes-mods.S, there are cases that JUMP at the
+end of function which make objtool wrongly detected them as fall through.
 
-In fact these branches are actually unreachable, so we can replace
-unreachable() with returning a -EINVAL value.
+Revert c_file before this is fixed.
 
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/kvm/hyp/vgic-v3-sr.c | 7 +++----
- drivers/irqchip/irq-gic-v3.c    | 2 +-
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ tools/objtool/check.c                   | 3 +--
+ tools/objtool/include/objtool/objtool.h | 2 +-
+ tools/objtool/objtool.c                 | 1 +
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/kvm/hyp/vgic-v3-sr.c b/arch/arm64/kvm/hyp/vgic-v3-sr.c
-index 4fb419f7b8b6..f3cee92c3038 100644
---- a/arch/arm64/kvm/hyp/vgic-v3-sr.c
-+++ b/arch/arm64/kvm/hyp/vgic-v3-sr.c
-@@ -6,7 +6,6 @@
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 8ff7c30df513..95cb88da4ed5 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -541,7 +541,6 @@ static struct instruction *find_last_insn(struct objtool_file *file,
+ 	struct instruction *insn = NULL;
+ 	unsigned int offset;
+ 	unsigned int end = (sec->sh.sh_size > 10) ? sec->sh.sh_size - 10 : 0;
+-
+ 	for (offset = sec->sh.sh_size - 1; offset >= end && !insn; offset--)
+ 		insn = find_insn(file, sec, offset);
  
- #include <hyp/adjust_pc.h>
+@@ -3220,7 +3219,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
+ 	while (1) {
+ 		next_insn = next_insn_to_validate(file, insn);
  
--#include <linux/compiler.h>
- #include <linux/irqchip/arm-gic-v3.h>
- #include <linux/kvm_host.h>
+-		if (func && insn->func && func != insn->func->pfunc) {
++		if (file->c_file && func && insn->func && func != insn->func->pfunc) {
+ 			WARN("%s() falls through to next function %s()",
+ 			     func->name, insn->func->name);
+ 			return 1;
+diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
+index a6e72d916807..7a5c13a78f87 100644
+--- a/tools/objtool/include/objtool/objtool.h
++++ b/tools/objtool/include/objtool/objtool.h
+@@ -27,7 +27,7 @@ struct objtool_file {
+ 	struct list_head static_call_list;
+ 	struct list_head mcount_loc_list;
+ 	struct list_head endbr_list;
+-	bool ignore_unreachables, hints, rodata;
++	bool ignore_unreachables, c_file, hints, rodata;
  
-@@ -55,7 +54,7 @@ static u64 __gic_v3_get_lr(unsigned int lr)
- 		return read_gicreg(ICH_LR15_EL2);
- 	}
- 
--	unreachable();
-+	return -EINVAL;
- }
- 
- static void __gic_v3_set_lr(u64 val, int lr)
-@@ -166,7 +165,7 @@ static u32 __vgic_v3_read_ap0rn(int n)
- 		val = read_gicreg(ICH_AP0R3_EL2);
- 		break;
- 	default:
--		unreachable();
-+		val = -EINVAL;
- 	}
- 
- 	return val;
-@@ -190,7 +189,7 @@ static u32 __vgic_v3_read_ap1rn(int n)
- 		val = read_gicreg(ICH_AP1R3_EL2);
- 		break;
- 	default:
--		unreachable();
-+		val = -EINVAL;
- 	}
- 
- 	return val;
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index b252d5534547..2ef98e32d257 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -475,7 +475,7 @@ static u32 __gic_get_ppi_index(irq_hw_number_t hwirq)
- 	case EPPI_RANGE:
- 		return hwirq - EPPI_BASE_INTID + 16;
- 	default:
--		unreachable();
-+		return -EINVAL;
- 	}
- }
+ 	unsigned int nr_endbr;
+ 	unsigned int nr_endbr_int;
+diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
+index 512669ce064c..d33620b1392d 100644
+--- a/tools/objtool/objtool.c
++++ b/tools/objtool/objtool.c
+@@ -105,6 +105,7 @@ struct objtool_file *objtool_open_read(const char *_objname)
+ 	INIT_LIST_HEAD(&file.static_call_list);
+ 	INIT_LIST_HEAD(&file.mcount_loc_list);
+ 	INIT_LIST_HEAD(&file.endbr_list);
++	file.c_file = !opts.link && find_section_by_name(file.elf, ".comment");
+ 	file.ignore_unreachables = opts.no_unreachable;
+ 	file.hints = false;
  
 -- 
 2.17.1
