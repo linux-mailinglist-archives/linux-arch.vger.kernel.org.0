@@ -2,115 +2,160 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BD1557D77
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 16:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD06D557E13
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 16:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiFWOEe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jun 2022 10:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        id S231157AbiFWOr6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jun 2022 10:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbiFWOEe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jun 2022 10:04:34 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1316A3617E
-        for <linux-arch@vger.kernel.org>; Thu, 23 Jun 2022 07:04:32 -0700 (PDT)
-Received: from mail-yb1-f172.google.com ([209.85.219.172]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1N5lvf-1nccyq0Ry7-017Ha9 for <linux-arch@vger.kernel.org>; Thu, 23 Jun 2022
- 16:04:31 +0200
-Received: by mail-yb1-f172.google.com with SMTP id i15so31178033ybp.1
-        for <linux-arch@vger.kernel.org>; Thu, 23 Jun 2022 07:04:30 -0700 (PDT)
-X-Gm-Message-State: AJIora9182+a9crVZuHQA+7TzNfbui8aeMwnLkOQBOXG6zjiiJThEkIJ
-        hmqF1rSS/vcy4gIocA0b3i9cTm3KIrrOhrQQiUE=
-X-Google-Smtp-Source: AGRyM1tw/ZrdY5RwWUm1pztJEAHWQ1L6KKYYxboRYaYgMVmltY4YiYheBN1gwVLXj/BpJFxHyTJ+EjL3M88UtE0HXJA=
+        with ESMTP id S229768AbiFWOr6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jun 2022 10:47:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE9DB4B9;
+        Thu, 23 Jun 2022 07:47:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8F3B61E61;
+        Thu, 23 Jun 2022 14:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4615AC341CC;
+        Thu, 23 Jun 2022 14:47:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655995675;
+        bh=au8iIbHJe6C0t5TRQVq0kBytOZGBWB60SJOjT91kNOY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TXilrHjwW0ul/jGd3QfygDh1CU4HiF0PU/EzK46nAvJvTnB7XphH5wugAHMs1fdlT
+         NAqqU76jOfKTik60xczB0waviSzFdqWuwhXl1/AJhpUVqBXnxgXh+rXRWUZbyIAIfT
+         MXY+AAkp/4isrf3wbF/41a4O47pIx0lhHdXXqUpgU3G/wIwHtQ9t7Z0SBnWqXB2wSB
+         iVcAM5tuh7hr5MsxeuvRowsH5pMrEP17+mia0+1+NCIgkbthZnCKNQsM5UYKAXvnlK
+         6Z4gx88v1vU1izvEInQc+fAMFcfSjnqLgreLl5trAdnQyTagdfqFujQuJEru0fKMmB
+         zdJiyNlat54Ng==
+Received: by mail-yb1-f170.google.com with SMTP id p69so24515307ybc.5;
+        Thu, 23 Jun 2022 07:47:55 -0700 (PDT)
+X-Gm-Message-State: AJIora/VpLiuVOdYZ9lBsN//S6hmZuKCpktmeebNhFmtw7cyONVC/SjA
+        taw3uF57vBykX2Rbb7/4+PEk5MrA12TTjZeL9IU=
+X-Google-Smtp-Source: AGRyM1ts0XQnj28PXnyZfJ+lmwDmSBI5jCCoOoZ4U4DnpJA2vL/8Iy7f05Xa3tSfeBpkphX7+GgcnVPiJZGvgoh27MU=
 X-Received: by 2002:a25:e808:0:b0:669:7fcf:5f82 with SMTP id
- k8-20020a25e808000000b006697fcf5f82mr9236133ybd.550.1655993069914; Thu, 23
- Jun 2022 07:04:29 -0700 (PDT)
+ k8-20020a25e808000000b006697fcf5f82mr9435202ybd.550.1655995674287; Thu, 23
+ Jun 2022 07:47:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220623044752.2074066-1-chenhuacai@loongson.cn>
- <20220623044752.2074066-2-chenhuacai@loongson.cn> <CAJF2gTR1ksvWWT1tec1QnOt6rzDucx5qzWO44nA_vHFhqMtG_g@mail.gmail.com>
- <CAAhV-H7p=zr7vjzENLgByqRUsH1mNQb8fFxNBkQu2YsWp1gMWA@mail.gmail.com>
- <CAK8P3a0pKc7=iLcFY028HqJXmGupacm=tV7Wqgx0+bYSqczoog@mail.gmail.com> <CAAhV-H6MDm_jDFhcT-QBzJ-fLRc6VKoNbsoJC_BGN66sozdqfA@mail.gmail.com>
-In-Reply-To: <CAAhV-H6MDm_jDFhcT-QBzJ-fLRc6VKoNbsoJC_BGN66sozdqfA@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 23 Jun 2022 16:04:12 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0pyLgFXq5Wrwi9BBgNnZkEdLYXm9dOaOci2ouTnEAqGQ@mail.gmail.com>
-Message-ID: <CAK8P3a0pyLgFXq5Wrwi9BBgNnZkEdLYXm9dOaOci2ouTnEAqGQ@mail.gmail.com>
-Subject: Re: [PATCH V2 2/2] LoongArch: Add qspinlock support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Rui Wang <wangrui@loongson.cn>
+References: <20220617125750.728590-1-arnd@kernel.org> <20220617125750.728590-3-arnd@kernel.org>
+ <7a6df2da-95e8-b2fd-7565-e4b7a51c5b63@gonehiking.org>
+In-Reply-To: <7a6df2da-95e8-b2fd-7565-e4b7a51c5b63@gonehiking.org>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 23 Jun 2022 16:47:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0t_0scofn_2N1Q8wgJ4panKCN58AgnsJSVEj28K614oQ@mail.gmail.com>
+Message-ID: <CAK8P3a0t_0scofn_2N1Q8wgJ4panKCN58AgnsJSVEj28K614oQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] scsi: BusLogic remove bus_to_virt
+To:     Khalid Aziz <khalid@gonehiking.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:DNWrzOVsuCmXQ/OaSR4tVquy8QXSedlwqVa/hU8PzD1GlAOT0l9
- cgyNZaEyzOZeb/SMhMJSWkuHJrQTwsLF0PxmQhlpnRf9795NZXTbmjmhg+gnufffLAWxqN5
- 3u4xPMinu/JIXhmgLsfkMyVcePehX3b1R0PPjM3xVUScRWPU3BrJ9kOtGSokof0P2TsGBeC
- 4ts5KV6WslMK0ePxJj0uQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:50UwbmsLXVo=:8yvRyT2Acsz2CLW/PWPFhG
- 8n+4x6zA/6iOzbsDHyXmoHtBBQ1nPFHBBN57TKx6Ba6LNvlp5jtnqE+yl1TRDhH8jntRDglMa
- NANMtajo6U7PGXdJgRwyYTTwo40j2Wm4Ql7yEVpmgtGiOZhCkeKeBZYgA/oBD+SuqhSLNtpac
- gC3yT4gO7uANj46bAEfnejt/PwgW3SAVhk3dfGlaEovfXZ0BMDWAISRn73v3BTl2CjLHs0QXd
- Mniy5QrTl85+zOq7eWosQ8XzsS2ZmoXslXSElcKgOVg1b5NWgrxnWUrz8HOYf39I2NYoL6l0M
- hw+PnUVotogEdP1frgbLztg4n2sj9NF5Bje4mxJad7ElUkRjFCQaENtzOsX31QE8lQxsD3D6e
- QjVMHoGu4SBrmrvBnycNa76d55olBCTji4ZFYF8IZz7Su4TTpwmank/IihGqFKoyLtQEAx3wi
- OhLgI7Fi9YE7ud4DmKVgxleUvdhb715ogMZlmCN/GObT0yYrEDPDqO33+cdmLxjLqcEYt6ffM
- ewSEQPQcHJXEAdk9793X/yhKRIWdnE1iaRFhnlpY3IpB3jbgIperUlXyyYDznD9+Uq8c6I07H
- +ifEalcj2Hc7mV+ks2SuGoYJuahSSsTY1/5ZdMIInIWZWOG/9U4zjOvSx5adyC9OyblNOL2JR
- axKZrKgQ6BVEaGdnPw+i2e03U9jDvowWimhUAkK3WeguFk+LEUiPZMx707MeBFkMEnmFCzBwB
- 3ZwTuLhpjYSNJHun9gCfnsQrEPIWDPTncXQg2Evswgesg4w/Bnfo/OoV952iVtcMo1VvZhbBd
- 5Yki9vm700R7aNI2JRMjg4E7nX7UFoJbbcwMTkjKxhrMcsmrC/rJy5tedYRs41WSkPVrGBub/
- Aj/v2gdqi46nxS1J2rEw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jun 23, 2022 at 3:05 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> On Thu, Jun 23, 2022 at 4:26 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Thu, Jun 23, 2022 at 9:56 AM Huacai Chen <chenhuacai@kernel.org> wrote:
-> > > On Thu, Jun 23, 2022 at 1:45 PM Guo Ren <guoren@kernel.org> wrote:
-> > > >
-> > > > On Thu, Jun 23, 2022 at 12:46 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > >
-> > > > > On NUMA system, the performance of qspinlock is better than generic
-> > > > > spinlock. Below is the UnixBench test results on a 8 nodes (4 cores
-> > > > > per node, 32 cores in total) machine.
-> >
-> > You are still missing an explanation here about why this is safe to
-> > do. Is there are
-> > architectural guarantee for forward progress, or do you rely on
-> > specific microarchitectural
-> > behavior?
-> In my understanding, "guarantee for forward progress" means to avoid
-> many ll/sc happening at the same time and no one succeeds.
-> LoongArch uses "exclusive access (with timeout) of ll" to avoid
-> simultaneous ll (it also blocks other memory load/store on the same
-> address), and uses "random delay of sc" to avoid simultaneous sc
-> (introduced in CPUCFG3, bit 3 and bit 4 [1]). This mechanism can
-> guarantee forward progress in practice.
+On Tue, Jun 21, 2022 at 11:56 PM Khalid Aziz <khalid@gonehiking.org> wrote:
+> >       while ((comp_code = next_inbox->comp_code) != BLOGIC_INBOX_FREE) {
+> > -             /*
+> > -                We are only allowed to do this because we limit our
+> > -                architectures we run on to machines where bus_to_virt(
+> > -                actually works.  There *needs* to be a dma_addr_to_virt()
+> > -                in the new PCI DMA mapping interface to replace
+> > -                bus_to_virt() or else this code is going to become very
+> > -                innefficient.
+> > -              */
+> > -             struct blogic_ccb *ccb =
+> > -                     (struct blogic_ccb *) bus_to_virt(next_inbox->ccb);
+> > +             struct blogic_ccb *ccb = blogic_inbox_to_ccb(adapter, adapter->next_inbox);
 >
-> [1] https://loongson.github.io/LoongArch-Documentation/LoongArch-Vol1-EN.html#_cpucfg
+> This change looks good enough as workaround to not use bus_to_virt() for
+> now. There are two problems I see though. One, I do worry about
+> blogic_inbox_to_ccb() returning NULL for ccb which should not happen
+> unless the mailbox pointer was corrupted which would indicate a bigger
+> problem. Nevertheless a NULL pointer causing kernel panic concerns me.
+> How about adding a check before we dereference ccb?
 
-If there is an architected feature bit for the delay, does that mean that there
-is a chance of CPUs getting released that set this to zero?
+Right, makes sense
 
-In that case, you probably need a boot-time check for this feature bit
-to refuse booting a kernel with qspinlock enabled when it has more than
-one active CPU but does not support the random backoff, and you need
-to make the choice user-visible, so users are able to configure their
-kernels using the ticket spinlock. The ticket lock may also be the best
-choice for smaller configurations such as a single-socket 3A5000 with
-four cores and no NUMA.
+> Second, with this patch applied, I am seeing errors from the driver:
+>
+> =====================
+> [ 1623.902685]  sdb: sdb1 sdb2
+> [ 1623.903245] sd 2:0:0:0: [sdb] Attached SCSI disk
+> [ 1623.911000] scsi2: Illegal CCB #76 status 2 in Incoming Mailbox
+> [ 1623.911005] scsi2: Illegal CCB #76 status 2 in Incoming Mailbox
+> [ 1623.911070] scsi2: Illegal CCB #79 status 2 in Incoming Mailbox
+> [ 1651.458008] scsi2: Warning: Partition Table appears to have Geometry
+> 256/63 which is
+> [ 1651.458013] scsi2: not compatible with current BusLogic Host Adapter
+> Geometry 255/63
+> [ 1658.797609] scsi2: Resetting BusLogic BT-958D Failed
+> [ 1659.533208] sd 2:0:0:0: Device offlined - not ready after error recovery
+> [ 1659.533331] sd 2:0:0:0: Device offlined - not ready after error recovery
+> [ 1659.533333] sd 2:0:0:0: Device offlined - not ready after error recovery
+> [ 1659.533342] sd 2:0:0:0: [sdb] tag#101 FAILED Result:
+> hostbyte=DID_TIME_OUT driverbyte=DRIVER_OK cmd_age=35s
+> [ 1659.533345] sd 2:0:0:0: [sdb] tag#101 CDB: Read(10) 28 00 00 00 00 28
+> 00 00 10 00
+> [ 1659.533346] I/O error, dev sdb, sector 40 op 0x0:(READ) flags 0x80700
+> phys_seg 1 prio class 0
+>
+> =================
+>
+> This is on VirtualBox using emulated BusLogic adapter.
+>
+> This patch needs more refinement.
 
-       Arnd
+Thanks for testing the patch, too bad it didn't work. At least I quickly found
+one stupid mistake on my end, hope it's the only one.
+
+Can you test it again with this patch on top?
+
+diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+index d057abfcdd5c..9e67f2ee25ee 100644
+--- a/drivers/scsi/BusLogic.c
++++ b/drivers/scsi/BusLogic.c
+@@ -2554,8 +2554,14 @@ static void blogic_scan_inbox(struct
+blogic_adapter *adapter)
+        enum blogic_cmplt_code comp_code;
+
+        while ((comp_code = next_inbox->comp_code) != BLOGIC_INBOX_FREE) {
+-               struct blogic_ccb *ccb = blogic_inbox_to_ccb(adapter,
+adapter->next_inbox);
+-               if (comp_code != BLOGIC_CMD_NOTFOUND) {
++               struct blogic_ccb *ccb = blogic_inbox_to_ccb(adapter,
+next_inbox);
++               if (!ccb) {
++                       /*
++                        * This should never happen, unless the CCB list is
++                        * corrupted in memory.
++                        */
++                       blogic_warn("Could not find CCB for dma
+address 0x%x\n", adapter, next_inbox->ccb);
++               } else if (comp_code != BLOGIC_CMD_NOTFOUND) {
+                        if (ccb->status == BLOGIC_CCB_ACTIVE ||
+                                        ccb->status == BLOGIC_CCB_RESET) {
