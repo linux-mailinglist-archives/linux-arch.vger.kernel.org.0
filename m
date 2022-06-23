@@ -2,227 +2,261 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E30557210
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 06:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C8655726E
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 07:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiFWEoT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 23 Jun 2022 00:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
+        id S229659AbiFWFCN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jun 2022 01:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239377AbiFWDbm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 23:31:42 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CB23584F;
-        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id p21so2098177qki.7;
-        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=feedback-id:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
-        b=XKQr60hHEpIr7iE2oQMJHBd/HDGQCZhaSPpmeuw6TyKQkYL2MF+8jdtsqUCz7uL090
-         Rc90KAFbCLt0JwHQ7vCIyEX0mj9/duP+7TF6SlIMyM86A8tJXhvp6mW5g1QMYcFMm06q
-         OZhDv9iwxJwHYCl8D05Sv3M3yI+gUsqDtuKv/FhshrgMg3aaZz2lgZeLKguk6uF7IRXr
-         cNriRKL9+D3vNavHkaKAfctj+1iVXUr8uNGq3KbwjLdVPWLWbnlMjLar4aOtzfnqqsG1
-         IsuxOEdrqkfV7FuJV0wVV7InjeaCmRhOkIonyeI7vJokQaKzp0nLlHjjfWTw37p0n1hs
-         m3Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
-        b=kdRh89l19FS7/sg2UmPC1+PIRxpnLY5vK9YK75uJJXDANv+XHqCCsYbV+nn18IdCIB
-         Wbiwk5Dcs7MgchFiRiA/7Psf2YzQNQEJUyew+mn5mvdxxH0Rm+EmEG6H/9Kkg57h48f6
-         nT9jLFpXdj9AWYxc8g4RpIJfrB4d+EwhrPlJiOCNXhdKuwag4cD5VFDiaLI7p6dGoCjt
-         HNh/Hp9VS3h4WYuv6GrVaB28PBB5UOuScvRXcEBIM9YIW5MT9jyXGcl4luDhyIe51gp4
-         s+z5DnawSjmTFW3Yh8uYpVVerwHfquIXa29nSeNHGawumf7fbdgQkUI5mj+UX/7zDa2T
-         Bz+A==
-X-Gm-Message-State: AJIora9lLR/l7tCpUUwqijNWEIa5YZvD73KnK1J28sX0rLcmVBRSLIIg
-        m0dxmDIzKxsx2j5r/6dsoPXVvFOgk84=
-X-Google-Smtp-Source: AGRyM1tog79QF/BM4XYNYwOk5JDAVQGSrmJOA/BPSicl6+PpfP5C/VU3C9rh50h8yJ2wwtZJnXowiQ==
-X-Received: by 2002:a05:620a:410:b0:6a6:abbe:2018 with SMTP id 16-20020a05620a041000b006a6abbe2018mr4736397qkp.645.1655955098873;
-        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id w8-20020a05620a444800b006a6f68c8a87sm19125307qkp.126.2022.06.22.20.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9792927C005A;
-        Wed, 22 Jun 2022 23:31:37 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 22 Jun 2022 23:31:37 -0400
-X-ME-Sender: <xms:mN6zYnQKaLySnOd9VxDXjDwnGZmLTZp5pcoBSLC14CVRiYD-4dkwPw>
-    <xme:mN6zYozHljR1xtO0TqSrgYgIzlLhQmxyZxq-d-vd8Ei8eOXyjVJa_tZojuQ7z_4o6
-    _v48XaZ7RZMfdGxPw>
-X-ME-Received: <xmr:mN6zYs0W6y8qNOg5L2xB5Yu6taF9iYJdInFUKKN7W13mLFGdaxvUbx6732EQ7g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefiedgjedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvfevuffkfhggtggu
-    jgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfh
-    gvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpeffkeevvdejhedutdet
-    hfejiedttddthfetffdufeduleektddvgfduvdfhjeelueenucffohhmrghinhepkhgvrh
-    hnvghlrdhorhhgpdhgohhoghhlvgdrtghomhdprhhishgtvhdrohhrghdpghhithhhuhgs
-    rdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:mN6zYnBPdK3t52BMAfRz2zUIZllzPyUBJ7JsU8Y-7lOZuHAn8dqQow>
-    <xmx:mN6zYgg3aPGAOi1epe1R9Xa01Nw-9_ZY9KGDjke08_7ALt_XuFsALw>
-    <xmx:mN6zYro6F5dpRtrEpiVoyiFeKvd60ifj5XAEsR_CwzN6Y-SSRVXdow>
-    <xmx:md6zYvpvOSZfhora_uKsjFdbpAJiFHSus5asheFt3AsquhBWIzp1ug>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Jun 2022 23:31:36 -0400 (EDT)
-Date:   Wed, 22 Jun 2022 20:31:23 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Andrea Parri <parri.andrea@gmail.com>
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops
- with .aqrl annotation
-Message-ID: <YrPei6q4rIAx6Ymf@boqun-archlinux>
-References: <CAJF2gTQoSQq_S4UvAiXgMviT040Ls8+VkDszQSke1a0zbXZ82A@mail.gmail.com>
- <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
- <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
- <20220614110258.GA32157@anparri>
+        with ESMTP id S229652AbiFWFBx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 23 Jun 2022 01:01:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200734475D
+        for <linux-arch@vger.kernel.org>; Wed, 22 Jun 2022 21:46:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7432B821B9
+        for <linux-arch@vger.kernel.org>; Thu, 23 Jun 2022 04:45:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E9BDC3411B;
+        Thu, 23 Jun 2022 04:45:54 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Rui Wang <wangrui@loongson.cn>
+Subject: [PATCH V2] LoongArch: Add vDSO syscall __vdso_getcpu()
+Date:   Thu, 23 Jun 2022 12:47:15 +0800
+Message-Id: <20220623044715.2072428-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614110258.GA32157@anparri>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi,
+We test 20 million times of getcpu(), the real syscall version take 25
+seconds, while the vsyscall version take only 2.4 seconds.
 
-On Tue, Jun 14, 2022 at 01:03:47PM +0200, Andrea Parri wrote:
-[...]
-> > 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
-> > is about fixup wrong spinlock/unlock implementation and not relate to
-> > this patch.
->
-> No.  The commit in question is evidence of the fact that the changes
-> you are presenting here (as an optimization) were buggy/incorrect at
-> the time in which that commit was worked out.
-> 
-> 
-> > Actually, sc.w.aqrl is very strong and the same with:
-> > fence rw, rw
-> > sc.w
-> > fence rw,rw
-> > 
-> > So "which do not give full-ordering with .aqrl" is not writen in
-> > RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
-> > 
-> > >
-> > > >> describes the issue more specifically, that's when we added these
-> > > >> fences.  There have certainly been complains that these fences are too
-> > > >> heavyweight for the HW to go fast, but IIUC it's the best option we have
-> > > > Yeah, it would reduce the performance on D1 and our next-generation
-> > > > processor has optimized fence performance a lot.
-> > >
-> > > Definately a bummer that the fences make the HW go slow, but I don't
-> > > really see any other way to go about this.  If you think these mappings
-> > > are valid for LKMM and RVWMO then we should figure this out, but trying
-> > > to drop fences to make HW go faster in ways that violate the memory
-> > > model is going to lead to insanity.
-> > Actually, this patch is okay with the ISA spec, and Dan also thought
-> > it was valid.
-> > 
-> > ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
-> 
-> "Thoughts" on this regard have _changed_.  Please compare that quote
-> with, e.g.
-> 
->   https://lore.kernel.org/linux-riscv/ddd5ca34-805b-60c4-bf2a-d6a9d95d89e7@nvidia.com/
-> 
-> So here's a suggestion:
-> 
-> Reviewers of your patches have asked:  How come that code we used to
-> consider as buggy is now considered "an optimization" (correct)?
-> 
-> Denying the evidence or going around it is not making their job (and
-> this upstreaming) easier, so why don't you address it?  Take time to
-> review previous works and discussions in this area, understand them,
-> and integrate such knowledge in future submissions.
-> 
+Signed-off-by: Rui Wang <wangrui@loongson.cn>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/loongarch/include/asm/vdso.h      |  1 +
+ arch/loongarch/include/asm/vdso/vdso.h | 15 ++++++++-
+ arch/loongarch/kernel/vdso.c           | 25 +++++++++------
+ arch/loongarch/vdso/Makefile           |  3 +-
+ arch/loongarch/vdso/vdso.lds.S         |  1 +
+ arch/loongarch/vdso/vgetcpu.c          | 43 ++++++++++++++++++++++++++
+ 6 files changed, 76 insertions(+), 12 deletions(-)
+ create mode 100644 arch/loongarch/vdso/vgetcpu.c
 
-I agree with Andrea.
+diff --git a/arch/loongarch/include/asm/vdso.h b/arch/loongarch/include/asm/vdso.h
+index 8f8a0f9a4953..d3ba35eb23e7 100644
+--- a/arch/loongarch/include/asm/vdso.h
++++ b/arch/loongarch/include/asm/vdso.h
+@@ -7,6 +7,7 @@
+ #ifndef __ASM_VDSO_H
+ #define __ASM_VDSO_H
+ 
++#include <linux/mm.h>
+ #include <linux/mm_types.h>
+ #include <vdso/datapage.h>
+ 
+diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/include/asm/vdso/vdso.h
+index 5a01643a65b3..3b55d32a0619 100644
+--- a/arch/loongarch/include/asm/vdso/vdso.h
++++ b/arch/loongarch/include/asm/vdso/vdso.h
+@@ -8,6 +8,18 @@
+ 
+ #include <asm/asm.h>
+ #include <asm/page.h>
++#include <asm/vdso.h>
++
++struct vdso_pcpu_data {
++	u32 node;
++} ____cacheline_aligned_in_smp;
++
++struct loongarch_vdso_data {
++	struct vdso_pcpu_data pdata[NR_CPUS];
++	struct vdso_data data[CS_BASES]; /* Arch-independent data */
++};
++
++#define VDSO_DATA_SIZE PAGE_ALIGN(sizeof(struct loongarch_vdso_data))
+ 
+ static inline unsigned long get_vdso_base(void)
+ {
+@@ -24,7 +36,8 @@ static inline unsigned long get_vdso_base(void)
+ 
+ static inline const struct vdso_data *get_vdso_data(void)
+ {
+-	return (const struct vdso_data *)(get_vdso_base() - PAGE_SIZE);
++	return (const struct vdso_data *)(get_vdso_base()
++			- VDSO_DATA_SIZE + SMP_CACHE_BYTES * NR_CPUS);
+ }
+ 
+ #endif /* __ASSEMBLY__ */
+diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+index e20c8ca87473..f32c38abd791 100644
+--- a/arch/loongarch/kernel/vdso.c
++++ b/arch/loongarch/kernel/vdso.c
+@@ -25,12 +25,14 @@
+ extern char vdso_start[], vdso_end[];
+ 
+ /* Kernel-provided data used by the VDSO. */
+-static union loongarch_vdso_data {
+-	u8 page[PAGE_SIZE];
+-	struct vdso_data data[CS_BASES];
++static union {
++	u8 page[VDSO_DATA_SIZE];
++	struct loongarch_vdso_data vdata;
+ } loongarch_vdso_data __page_aligned_data;
+-struct vdso_data *vdso_data = loongarch_vdso_data.data;
++
+ static struct page *vdso_pages[] = { NULL };
++struct vdso_data *vdso_data = loongarch_vdso_data.vdata.data;
++struct vdso_pcpu_data *vdso_pdata = loongarch_vdso_data.vdata.pdata;
+ 
+ static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_area_struct *new_vma)
+ {
+@@ -55,11 +57,14 @@ struct loongarch_vdso_info vdso_info = {
+ 
+ static int __init init_vdso(void)
+ {
+-	unsigned long i, pfn;
++	unsigned long i, cpu, pfn;
+ 
+ 	BUG_ON(!PAGE_ALIGNED(vdso_info.vdso));
+ 	BUG_ON(!PAGE_ALIGNED(vdso_info.size));
+ 
++	for_each_possible_cpu(cpu)
++		vdso_pdata[cpu].node = cpu_to_node(cpu);
++
+ 	pfn = __phys_to_pfn(__pa_symbol(vdso_info.vdso));
+ 	for (i = 0; i < vdso_info.size / PAGE_SIZE; i++)
+ 		vdso_info.code_mapping.pages[i] = pfn_to_page(pfn + i);
+@@ -93,9 +98,9 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 
+ 	/*
+ 	 * Determine total area size. This includes the VDSO data itself
+-	 * and the data page.
++	 * and the data pages.
+ 	 */
+-	vvar_size = PAGE_SIZE;
++	vvar_size = VDSO_DATA_SIZE;
+ 	size = vvar_size + info->size;
+ 
+ 	data_addr = get_unmapped_area(NULL, vdso_base(), size, 0, 0);
+@@ -103,7 +108,7 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 		ret = data_addr;
+ 		goto out;
+ 	}
+-	vdso_addr = data_addr + PAGE_SIZE;
++	vdso_addr = data_addr + VDSO_DATA_SIZE;
+ 
+ 	vma = _install_special_mapping(mm, data_addr, vvar_size,
+ 				       VM_READ | VM_MAYREAD,
+@@ -115,8 +120,8 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+ 
+ 	/* Map VDSO data page. */
+ 	ret = remap_pfn_range(vma, data_addr,
+-			      virt_to_phys(vdso_data) >> PAGE_SHIFT,
+-			      PAGE_SIZE, PAGE_READONLY);
++			      virt_to_phys(&loongarch_vdso_data) >> PAGE_SHIFT,
++			      vvar_size, PAGE_READONLY);
+ 	if (ret)
+ 		goto out;
+ 
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index 6b6e16732c60..d89e2ac75f7b 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -6,7 +6,7 @@
+ ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
+ include $(srctree)/lib/vdso/Makefile
+ 
+-obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
++obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
+ 
+ # Common compiler flags between ABIs.
+ ccflags-vdso := \
+@@ -21,6 +21,7 @@ ccflags-vdso += $(filter --target=%,$(KBUILD_CFLAGS))
+ endif
+ 
+ cflags-vdso := $(ccflags-vdso) \
++	-isystem $(shell $(CC) -print-file-name=include) \
+ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+ 	-O2 -g -fno-strict-aliasing -fno-common -fno-builtin -G0 \
+ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
+diff --git a/arch/loongarch/vdso/vdso.lds.S b/arch/loongarch/vdso/vdso.lds.S
+index 955f02de4a2d..56ad855896de 100644
+--- a/arch/loongarch/vdso/vdso.lds.S
++++ b/arch/loongarch/vdso/vdso.lds.S
+@@ -58,6 +58,7 @@ VERSION
+ {
+ 	LINUX_5.10 {
+ 	global:
++		__vdso_getcpu;
+ 		__vdso_clock_getres;
+ 		__vdso_clock_gettime;
+ 		__vdso_gettimeofday;
+diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.c
+new file mode 100644
+index 000000000000..43a0078e4418
+--- /dev/null
++++ b/arch/loongarch/vdso/vgetcpu.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Fast user context implementation of getcpu()
++ */
++
++#include <asm/vdso.h>
++#include <linux/getcpu.h>
++
++static __always_inline int read_cpu_id(void)
++{
++	int cpu_id;
++
++	__asm__ __volatile__(
++	"	rdtime.d $zero, %0\n"
++	: "=r" (cpu_id)
++	:
++	: "memory");
++
++	return cpu_id;
++}
++
++static __always_inline const struct vdso_pcpu_data *get_pcpu_data(void)
++{
++	return (struct vdso_pcpu_data *)(get_vdso_base() - VDSO_DATA_SIZE);
++}
++
++int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
++{
++	int cpu_id;
++	const struct vdso_pcpu_data *data;
++
++	cpu_id = read_cpu_id();
++
++	if (cpu)
++		*cpu = cpu_id;
++
++	if (node) {
++		data = get_pcpu_data();
++		*node = data[cpu_id].node;
++	}
++
++	return 0;
++}
+-- 
+2.27.0
 
-And I actually took a look into this, and I think I find some
-explanation. There are two versions of RISV memory model here:
-
-Model 2017: released at Dec 1, 2017 as a draft
-
-	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/hKywNHBkAXM/m/QzUtxEWLBQAJ
-
-Model 2018: released at May 2, 2018
-
-	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/xW03vmfmPuA/m/bMPk3UCWAgAJ
-
-Noted that previous conversation about commit 5ce6c1f3535f happened at
-March 2018. So the timeline is roughly:
-
-	Model 2017 -> commit 5ce6c1f3535f -> Model 2018
-
-And in the email thread of Model 2018, the commit related to model
-changes also got mentioned:
-
-	https://github.com/riscv/riscv-isa-manual/commit/b875fe417948635ed68b9644ffdf718cb343a81a
-
-in that commit, we can see the changes related to sc.aqrl are:
-
-	 to have occurred between the LR and a successful SC.  The LR/SC
-	 sequence can be given acquire semantics by setting the {\em aq} bit on
-	-the SC instruction.  The LR/SC sequence can be given release semantics
-	-by setting the {\em rl} bit on the LR instruction.  Setting both {\em
-	-  aq} and {\em rl} bits on the LR instruction, and setting the {\em
-	-  aq} bit on the SC instruction makes the LR/SC sequence sequentially
-	-consistent with respect to other sequentially consistent atomic
-	-operations.
-	+the LR instruction.  The LR/SC sequence can be given release semantics
-	+by setting the {\em rl} bit on the SC instruction.  Setting the {\em
-	+  aq} bit on the LR instruction, and setting both the {\em aq} and the {\em
-	+  rl} bit on the SC instruction makes the LR/SC sequence sequentially
-	+consistent, meaning that it cannot be reordered with earlier or
-	+later memory operations from the same hart.
-
-note that Model 2018 explicitly says that "ld.aq+sc.aqrl" is ordered
-against "earlier or later memory operations from the same hart", and
-this statement was not in Model 2017.
-
-So my understanding of the story is that at some point between March and
-May 2018, RISV memory model folks decided to add this rule, which does
-look more consistent with other parts of the model and is useful.
-
-And this is why (and when) "ld.aq+sc.aqrl" can be used as a fully-ordered
-barrier ;-)
-
-Now if my understanding is correct, to move forward, it's better that 1)
-this patch gets resend with the above information (better rewording a
-bit), and 2) gets an Acked-by from Dan to confirm this is a correct
-history ;-)
-
-Regards,
-Boqun
-
->   Andrea
-> 
-> 
-[...]
