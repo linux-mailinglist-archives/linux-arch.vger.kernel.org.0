@@ -2,95 +2,227 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4F155712D
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 04:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E30557210
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 06:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237829AbiFWCvB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 22:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S232202AbiFWEoT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 23 Jun 2022 00:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbiFWCu7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 22:50:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EB13F32C
-        for <linux-arch@vger.kernel.org>; Wed, 22 Jun 2022 19:50:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80A1961D42
-        for <linux-arch@vger.kernel.org>; Thu, 23 Jun 2022 02:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B35C34114;
-        Thu, 23 Jun 2022 02:50:55 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Fix sleeping in atomic context in setup_tlb_handler()
-Date:   Thu, 23 Jun 2022 10:52:15 +0800
-Message-Id: <20220623025215.1824726-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S239377AbiFWDbm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 23:31:42 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CB23584F;
+        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id p21so2098177qki.7;
+        Wed, 22 Jun 2022 20:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=feedback-id:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
+        b=XKQr60hHEpIr7iE2oQMJHBd/HDGQCZhaSPpmeuw6TyKQkYL2MF+8jdtsqUCz7uL090
+         Rc90KAFbCLt0JwHQ7vCIyEX0mj9/duP+7TF6SlIMyM86A8tJXhvp6mW5g1QMYcFMm06q
+         OZhDv9iwxJwHYCl8D05Sv3M3yI+gUsqDtuKv/FhshrgMg3aaZz2lgZeLKguk6uF7IRXr
+         cNriRKL9+D3vNavHkaKAfctj+1iVXUr8uNGq3KbwjLdVPWLWbnlMjLar4aOtzfnqqsG1
+         IsuxOEdrqkfV7FuJV0wVV7InjeaCmRhOkIonyeI7vJokQaKzp0nLlHjjfWTw37p0n1hs
+         m3Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=iETqc+0lijFZ14zCNnfCSiDsY3yxYpnuYnsCd/H37sM=;
+        b=kdRh89l19FS7/sg2UmPC1+PIRxpnLY5vK9YK75uJJXDANv+XHqCCsYbV+nn18IdCIB
+         Wbiwk5Dcs7MgchFiRiA/7Psf2YzQNQEJUyew+mn5mvdxxH0Rm+EmEG6H/9Kkg57h48f6
+         nT9jLFpXdj9AWYxc8g4RpIJfrB4d+EwhrPlJiOCNXhdKuwag4cD5VFDiaLI7p6dGoCjt
+         HNh/Hp9VS3h4WYuv6GrVaB28PBB5UOuScvRXcEBIM9YIW5MT9jyXGcl4luDhyIe51gp4
+         s+z5DnawSjmTFW3Yh8uYpVVerwHfquIXa29nSeNHGawumf7fbdgQkUI5mj+UX/7zDa2T
+         Bz+A==
+X-Gm-Message-State: AJIora9lLR/l7tCpUUwqijNWEIa5YZvD73KnK1J28sX0rLcmVBRSLIIg
+        m0dxmDIzKxsx2j5r/6dsoPXVvFOgk84=
+X-Google-Smtp-Source: AGRyM1tog79QF/BM4XYNYwOk5JDAVQGSrmJOA/BPSicl6+PpfP5C/VU3C9rh50h8yJ2wwtZJnXowiQ==
+X-Received: by 2002:a05:620a:410:b0:6a6:abbe:2018 with SMTP id 16-20020a05620a041000b006a6abbe2018mr4736397qkp.645.1655955098873;
+        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05620a444800b006a6f68c8a87sm19125307qkp.126.2022.06.22.20.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 20:31:38 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 9792927C005A;
+        Wed, 22 Jun 2022 23:31:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 22 Jun 2022 23:31:37 -0400
+X-ME-Sender: <xms:mN6zYnQKaLySnOd9VxDXjDwnGZmLTZp5pcoBSLC14CVRiYD-4dkwPw>
+    <xme:mN6zYozHljR1xtO0TqSrgYgIzlLhQmxyZxq-d-vd8Ei8eOXyjVJa_tZojuQ7z_4o6
+    _v48XaZ7RZMfdGxPw>
+X-ME-Received: <xmr:mN6zYs0W6y8qNOg5L2xB5Yu6taF9iYJdInFUKKN7W13mLFGdaxvUbx6732EQ7g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudefiedgjedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvfevuffkfhggtggu
+    jgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfh
+    gvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpeffkeevvdejhedutdet
+    hfejiedttddthfetffdufeduleektddvgfduvdfhjeelueenucffohhmrghinhepkhgvrh
+    hnvghlrdhorhhgpdhgohhoghhlvgdrtghomhdprhhishgtvhdrohhrghdpghhithhhuhgs
+    rdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:mN6zYnBPdK3t52BMAfRz2zUIZllzPyUBJ7JsU8Y-7lOZuHAn8dqQow>
+    <xmx:mN6zYgg3aPGAOi1epe1R9Xa01Nw-9_ZY9KGDjke08_7ALt_XuFsALw>
+    <xmx:mN6zYro6F5dpRtrEpiVoyiFeKvd60ifj5XAEsR_CwzN6Y-SSRVXdow>
+    <xmx:md6zYvpvOSZfhora_uKsjFdbpAJiFHSus5asheFt3AsquhBWIzp1ug>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 22 Jun 2022 23:31:36 -0400 (EDT)
+Date:   Wed, 22 Jun 2022 20:31:23 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Andrea Parri <parri.andrea@gmail.com>
+Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops
+ with .aqrl annotation
+Message-ID: <YrPei6q4rIAx6Ymf@boqun-archlinux>
+References: <CAJF2gTQoSQq_S4UvAiXgMviT040Ls8+VkDszQSke1a0zbXZ82A@mail.gmail.com>
+ <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
+ <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
+ <20220614110258.GA32157@anparri>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614110258.GA32157@anparri>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Since setup_tlb_handler() is executed in atomic context, we should use
-GFP_ATOMIC instead of GFP_KERNEL to alloc pages. Otherwise we will get
-a "sleeping in atomic context" error:
+Hi,
 
-[    0.013118] BUG: sleeping function called from invalid context at mm/page_alloc.c:5158
-[    0.013126] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
-[    0.013131] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.19-rc3+ #1008 1a223086d14d07967cc427f15d52139422271360
-[    0.013136] Hardware name: Loongson Loongson-3A5000-7A1000-1w-V0.1-CRB/Loongson-LS3A5000-7A1000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V2.0.04082-beta7 04/27
-[    0.013140] Stack : 90000000015fc990 9000000100493c18 9000000000df3370 9000000100490000
-[    0.013151]         9000000100493b50 0000000000000000 9000000100493b58 9000000001417ef0
-[    0.013160]         900000000199e54e 0000000000000040 9000000100493c18 90000000015f7a98
-[    0.013168]         ffffffffffffffff 6de72f8b42179d1e 9000000100403b80 90000000015f7890
-[    0.013176]         0000000000000001 00000000fffff175 9000000000eb9860 9000000001530b4b
-[    0.013184]         9000000000e99e60 0000000000000013 0000000006ecc000 0000000000000001
-[    0.013193]         90000000015f7a98 9000000001417ef0 0000000000000004 0000000000000000
-[    0.013201]         0000000000000cc0 0000000000000000 0000000000000001 90000000015fc990
-[    0.013209]         9000000000217e74 9000000001603b6b 9000000000208640 0000000000000000
-[    0.013217]         00000000000000b0 0000000000000004 0000000000000000 0000000000070000
-[    0.013225]         ...
-[    0.013229] Call Trace:
-[    0.013230] [<9000000000208640>] show_stack+0x4c/0x14c
-[    0.013240] [<9000000000df3370>] dump_stack_lvl+0x70/0xac
-[    0.013246] [<9000000000270c8c>] ___might_sleep+0x104/0x124
-[    0.013253] [<9000000000477e84>] __alloc_pages+0x240/0x464
-[    0.013260] [<9000000000214214>] setup_tlb_handler+0x104/0x1e8
-[    0.013265] [<9000000000214324>] tlb_init+0x2c/0x3c
-[    0.013270] [<9000000000208b74>] per_cpu_trap_init+0xec/0x108
-[    0.013275] [<9000000000202850>] cpu_probe+0x400/0x8a4
-[    0.013279] [<900000000020d160>] start_secondary+0x5c/0x3d4
+On Tue, Jun 14, 2022 at 01:03:47PM +0200, Andrea Parri wrote:
+[...]
+> > 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
+> > is about fixup wrong spinlock/unlock implementation and not relate to
+> > this patch.
+>
+> No.  The commit in question is evidence of the fact that the changes
+> you are presenting here (as an optimization) were buggy/incorrect at
+> the time in which that commit was worked out.
+> 
+> 
+> > Actually, sc.w.aqrl is very strong and the same with:
+> > fence rw, rw
+> > sc.w
+> > fence rw,rw
+> > 
+> > So "which do not give full-ordering with .aqrl" is not writen in
+> > RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
+> > 
+> > >
+> > > >> describes the issue more specifically, that's when we added these
+> > > >> fences.  There have certainly been complains that these fences are too
+> > > >> heavyweight for the HW to go fast, but IIUC it's the best option we have
+> > > > Yeah, it would reduce the performance on D1 and our next-generation
+> > > > processor has optimized fence performance a lot.
+> > >
+> > > Definately a bummer that the fences make the HW go slow, but I don't
+> > > really see any other way to go about this.  If you think these mappings
+> > > are valid for LKMM and RVWMO then we should figure this out, but trying
+> > > to drop fences to make HW go faster in ways that violate the memory
+> > > model is going to lead to insanity.
+> > Actually, this patch is okay with the ISA spec, and Dan also thought
+> > it was valid.
+> > 
+> > ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
+> 
+> "Thoughts" on this regard have _changed_.  Please compare that quote
+> with, e.g.
+> 
+>   https://lore.kernel.org/linux-riscv/ddd5ca34-805b-60c4-bf2a-d6a9d95d89e7@nvidia.com/
+> 
+> So here's a suggestion:
+> 
+> Reviewers of your patches have asked:  How come that code we used to
+> consider as buggy is now considered "an optimization" (correct)?
+> 
+> Denying the evidence or going around it is not making their job (and
+> this upstreaming) easier, so why don't you address it?  Take time to
+> review previous works and discussions in this area, understand them,
+> and integrate such knowledge in future submissions.
+> 
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/mm/tlb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I agree with Andrea.
 
-diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
-index e272f8ac57d1..6d050973241c 100644
---- a/arch/loongarch/mm/tlb.c
-+++ b/arch/loongarch/mm/tlb.c
-@@ -281,7 +281,7 @@ void setup_tlb_handler(int cpu)
- 		if (pcpu_handlers[cpu])
- 			return;
- 
--		page = alloc_pages_node(cpu_to_node(cpu), GFP_KERNEL, get_order(vec_sz));
-+		page = alloc_pages_node(cpu_to_node(cpu), GFP_ATOMIC, get_order(vec_sz));
- 		if (!page)
- 			return;
- 
--- 
-2.27.0
+And I actually took a look into this, and I think I find some
+explanation. There are two versions of RISV memory model here:
 
+Model 2017: released at Dec 1, 2017 as a draft
+
+	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/hKywNHBkAXM/m/QzUtxEWLBQAJ
+
+Model 2018: released at May 2, 2018
+
+	https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/xW03vmfmPuA/m/bMPk3UCWAgAJ
+
+Noted that previous conversation about commit 5ce6c1f3535f happened at
+March 2018. So the timeline is roughly:
+
+	Model 2017 -> commit 5ce6c1f3535f -> Model 2018
+
+And in the email thread of Model 2018, the commit related to model
+changes also got mentioned:
+
+	https://github.com/riscv/riscv-isa-manual/commit/b875fe417948635ed68b9644ffdf718cb343a81a
+
+in that commit, we can see the changes related to sc.aqrl are:
+
+	 to have occurred between the LR and a successful SC.  The LR/SC
+	 sequence can be given acquire semantics by setting the {\em aq} bit on
+	-the SC instruction.  The LR/SC sequence can be given release semantics
+	-by setting the {\em rl} bit on the LR instruction.  Setting both {\em
+	-  aq} and {\em rl} bits on the LR instruction, and setting the {\em
+	-  aq} bit on the SC instruction makes the LR/SC sequence sequentially
+	-consistent with respect to other sequentially consistent atomic
+	-operations.
+	+the LR instruction.  The LR/SC sequence can be given release semantics
+	+by setting the {\em rl} bit on the SC instruction.  Setting the {\em
+	+  aq} bit on the LR instruction, and setting both the {\em aq} and the {\em
+	+  rl} bit on the SC instruction makes the LR/SC sequence sequentially
+	+consistent, meaning that it cannot be reordered with earlier or
+	+later memory operations from the same hart.
+
+note that Model 2018 explicitly says that "ld.aq+sc.aqrl" is ordered
+against "earlier or later memory operations from the same hart", and
+this statement was not in Model 2017.
+
+So my understanding of the story is that at some point between March and
+May 2018, RISV memory model folks decided to add this rule, which does
+look more consistent with other parts of the model and is useful.
+
+And this is why (and when) "ld.aq+sc.aqrl" can be used as a fully-ordered
+barrier ;-)
+
+Now if my understanding is correct, to move forward, it's better that 1)
+this patch gets resend with the above information (better rewording a
+bit), and 2) gets an Acked-by from Dan to confirm this is a correct
+history ;-)
+
+Regards,
+Boqun
+
+>   Andrea
+> 
+> 
+[...]
