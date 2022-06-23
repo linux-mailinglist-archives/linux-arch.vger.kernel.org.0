@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860165570B7
-	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 03:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09CD557074
+	for <lists+linux-arch@lfdr.de>; Thu, 23 Jun 2022 03:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378069AbiFWBxR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 22 Jun 2022 21:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
+        id S1378026AbiFWBxO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 22 Jun 2022 21:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377422AbiFWBwH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 21:52:07 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC3343AE9;
-        Wed, 22 Jun 2022 18:51:51 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LT3BX0LctzDsNM;
-        Thu, 23 Jun 2022 09:51:16 +0800 (CST)
+        with ESMTP id S1377467AbiFWBwI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 22 Jun 2022 21:52:08 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2299C43AED;
+        Wed, 22 Jun 2022 18:51:52 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LT38k20bzz1KC8s;
+        Thu, 23 Jun 2022 09:49:42 +0800 (CST)
 Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 23 Jun 2022 09:51:49 +0800
+ 15.1.2375.24; Thu, 23 Jun 2022 09:51:50 +0800
 Received: from ubuntu1804.huawei.com (10.67.175.36) by
  dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
@@ -38,9 +38,9 @@ CC:     <jpoimboe@kernel.org>, <peterz@infradead.org>,
         <chenzhongjin@huawei.com>, <rmk+kernel@armlinux.org.uk>,
         <madvenka@linux.microsoft.com>, <christophe.leroy@csgroup.eu>,
         <daniel.thompson@linaro.org>
-Subject: [PATCH v6 20/33] arm64: entry: Annotate unwind_hint for entry
-Date:   Thu, 23 Jun 2022 09:49:04 +0800
-Message-ID: <20220623014917.199563-21-chenzhongjin@huawei.com>
+Subject: [PATCH v6 21/33] arm64: kvm: Annotate unwind_hint for hyp entry
+Date:   Thu, 23 Jun 2022 09:49:05 +0800
+Message-ID: <20220623014917.199563-22-chenzhongjin@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220623014917.199563-1-chenzhongjin@huawei.com>
 References: <20220623014917.199563-1-chenzhongjin@huawei.com>
@@ -59,54 +59,92 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-When taking an exception/interrupt, add UNWIND_HINT_REGS to indicate
-from which point the pt_regs is on stack.
+Symbol __guest_enter and kvm_hyp_vector saved x0, x1 on stack.
 
-Whether returning to userland or creating a new task, sp is
-pointing to a pt_regs frame, add UNWIND_HINT_REGS after that.
+Symbol __guest_exit and __guest_exit_panic is reached when resuming
+EL2 execution, and the previous stack pointer gets restored.
+
+Add adequate unwind hints.
 
 Signed-off-by: Julien Thierry <jthierry@redhat.com>
 Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm64/kernel/entry.S | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/kvm/hyp/entry.S     | 5 +++++
+ arch/arm64/kvm/hyp/hyp-entry.S | 3 +++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/arch/arm64/kernel/entry.S b/arch/arm64/kernel/entry.S
-index 3bd11101e79d..bbc440379304 100644
---- a/arch/arm64/kernel/entry.S
-+++ b/arch/arm64/kernel/entry.S
-@@ -120,6 +120,7 @@
- alternative_cb	spectre_v4_patch_fw_mitigation_enable
- 	b	.L__asm_ssbd_skip\@		// Patched to NOP
- alternative_cb_end
-+	UNWIND_HINT_REGS
- 	ldr_this_cpu	\tmp2, arm64_ssbd_callback_required, \tmp1
- 	cbz	\tmp2,	.L__asm_ssbd_skip\@
- 	ldr	\tmp2, [tsk, #TSK_TI_FLAGS]
-@@ -218,6 +219,7 @@ alternative_cb_end
- 	stp	x24, x25, [sp, #16 * 12]
- 	stp	x26, x27, [sp, #16 * 13]
- 	stp	x28, x29, [sp, #16 * 14]
-+	UNWIND_HINT_REGS
+diff --git a/arch/arm64/kvm/hyp/entry.S b/arch/arm64/kvm/hyp/entry.S
+index 045d4481c820..81e30d56bf28 100644
+--- a/arch/arm64/kvm/hyp/entry.S
++++ b/arch/arm64/kvm/hyp/entry.S
+@@ -15,6 +15,7 @@
+ #include <asm/kvm_mmu.h>
+ #include <asm/kvm_mte.h>
+ #include <asm/kvm_ptrauth.h>
++#include <asm/unwind_hints.h>
  
- 	.if	\el == 0
- 	clear_gp_regs
-@@ -601,6 +603,7 @@ SYM_CODE_START_LOCAL(ret_to_kernel)
- SYM_CODE_END(ret_to_kernel)
+ 	.text
  
- SYM_CODE_START_LOCAL(ret_to_user)
-+	UNWIND_HINT_REGS
- 	ldr	x19, [tsk, #TSK_TI_FLAGS]	// re-check for single-step
- 	enable_step_tsk x19, x2
- #ifdef CONFIG_GCC_PLUGIN_STACKLEAK
-@@ -872,6 +875,7 @@ NOKPROBE(cpu_switch_to)
-  * This is how we return from a fork.
+@@ -22,6 +23,7 @@
+  * u64 __guest_enter(struct kvm_vcpu *vcpu);
   */
- SYM_CODE_START(ret_from_fork)
-+	UNWIND_HINT_REGS
- 	bl	schedule_tail
- 	cbz	x19, 1f				// not a kernel thread
- 	mov	x0, x20
+ SYM_CODE_START(__guest_enter)
++	UNWIND_HINT_FUNC
+ 	// x0: vcpu
+ 	// x1-x17: clobbered by macros
+ 	// x29: guest context
+@@ -88,6 +90,7 @@ SYM_INNER_LABEL(__guest_exit_panic, SYM_L_GLOBAL)
+ 	// vcpu x0-x1 on the stack
+ 
+ 	// If the hyp context is loaded, go straight to hyp_panic
++	UNWIND_HINT_FUNC
+ 	get_loaded_vcpu x0, x1
+ 	cbnz	x0, 1f
+ 	b	hyp_panic
+@@ -110,6 +113,7 @@ SYM_INNER_LABEL(__guest_exit, SYM_L_GLOBAL)
+ 	// x1: vcpu
+ 	// x2-x29,lr: vcpu regs
+ 	// vcpu x0-x1 on the stack
++	UNWIND_HINT_FUNC sp_offset=16
+ 
+ 	add	x1, x1, #VCPU_CONTEXT
+ 
+@@ -199,6 +203,7 @@ abort_guest_exit_end:
+ 	msr	daifset, #4	// Mask aborts
+ 	ret
+ 
++	UNWIND_HINT_FUNC
+ 	_kvm_extable	abort_guest_exit_start, 9997f
+ 	_kvm_extable	abort_guest_exit_end, 9997f
+ 9997:
+diff --git a/arch/arm64/kvm/hyp/hyp-entry.S b/arch/arm64/kvm/hyp/hyp-entry.S
+index 4a65262a4f3a..d72143c59707 100644
+--- a/arch/arm64/kvm/hyp/hyp-entry.S
++++ b/arch/arm64/kvm/hyp/hyp-entry.S
+@@ -151,6 +151,7 @@ SYM_CODE_END(\label)
+ 
+ .macro valid_vect target
+ 	.align 7
++	UNWIND_HINT_FUNC
+ 661:
+ 	esb
+ 	stp	x0, x1, [sp, #-16]!
+@@ -162,6 +163,7 @@ check_preamble_length 661b, 662b
+ 
+ .macro invalid_vect target
+ 	.align 7
++	UNWIND_HINT_FUNC
+ 661:
+ 	nop
+ 	stp	x0, x1, [sp, #-16]!
+@@ -209,6 +211,7 @@ SYM_CODE_END(__kvm_hyp_vector)
+ .macro hyp_ventry	indirect, spectrev2
+ 	.align	7
+ 1:	esb
++	UNWIND_HINT_FUNC
+ 	.if \spectrev2 != 0
+ 	spectrev2_smccc_wa1_smc
+ 	.else
 -- 
 2.17.1
 
