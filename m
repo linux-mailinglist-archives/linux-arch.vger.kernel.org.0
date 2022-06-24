@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A009455998C
-	for <lists+linux-arch@lfdr.de>; Fri, 24 Jun 2022 14:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE6F555995C
+	for <lists+linux-arch@lfdr.de>; Fri, 24 Jun 2022 14:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbiFXMPM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 24 Jun 2022 08:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        id S231265AbiFXMOG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 24 Jun 2022 08:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232125AbiFXMOB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jun 2022 08:14:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004194EF5C;
-        Fri, 24 Jun 2022 05:13:50 -0700 (PDT)
+        with ESMTP id S232073AbiFXMN6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 24 Jun 2022 08:13:58 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A317822510;
+        Fri, 24 Jun 2022 05:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656072831; x=1687608831;
+  t=1656072815; x=1687608815;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=d4n4bpeLU/xxyAn3xewKoNW5SgouPORmr+EyOlcGZbU=;
-  b=b1EsjnomMDAufzm1yskrD5qvXjReHNNnaQZTM/KAPqkxsXanrK5S7laK
-   xDrNdiIDW2t6q8P+46N8MpGrV1lJQcLuUF46/PQI54Ev22PN9dlPAzzVh
-   iTpbAOcZBxP9qxa4spuG/HfKs9Se82FKpRqgllMFqk2j7yuTnjqlO+ldX
-   bxQYvE7uhVJp2+D4m0scFnQm4AKOFTUV3MlvVA3MHUh7VRKMYcbu5XDOu
-   jik4W0wnco4+e/63GhduI/mQ7pwP8KEGgDZIpxgJ99wfJ66Y6UfpgdhEW
-   reGPqsVyzJZHFbAzTEt3E2PN4EVPfWmVLshRf3CHp+z4cqvSW60KuxjHs
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="282072563"
+  bh=A1zzpdfJLbGPP5uEwMaw/RHBA/HUWtG2WXRsHiWWAyc=;
+  b=iM0G0IgcsTuIu4t/KJnpoKyc4/6oXNyrPZ1JrXtQbJo5MyAdsUNkVlU6
+   SUKiarlqOKWnGYke2QgDXsUmN3m+0OBmYMIDv6hAJKhAqfMQT17SO9FXv
+   71hOzslsE7UZS57eGI6wbtf3hfSBX5aDWj4tdE/Pi+dMfg7Xdn8OiJsSB
+   dVAM1687BsiG8oT5OsH5uKIwPSUU6u4zMkE0wBqSdGJ5sz28RkK+bCYG3
+   g4n2n+y6RGM4bPeA8HcvJqnfmXcWnw7r8YiUCq/ruC2ZwKjs9yDWhT4uv
+   XjQQ63YveR7kcuBiPA7hZ9W5D3TsKSDO1kPFqYXJEudwS0RhUDb491eIc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10387"; a="342676783"
 X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="282072563"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:13:35 -0700
+   d="scan'208";a="342676783"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2022 05:13:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.92,218,1650956400"; 
-   d="scan'208";a="731297740"
+   d="scan'208";a="678522227"
 Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jun 2022 05:13:28 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jun 2022 05:13:28 -0700
 Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25OCDEo6014999;
-        Fri, 24 Jun 2022 13:13:25 +0100
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25OCDEo7014999;
+        Fri, 24 Jun 2022 13:13:26 +0100
 From:   Alexander Lobakin <alexandr.lobakin@intel.com>
 To:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>
 Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
@@ -66,9 +66,9 @@ Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-arch@vger.kernel.org, llvm@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v5 6/9] bitops: let optimize out non-atomic bitops on compile-time constants
-Date:   Fri, 24 Jun 2022 14:13:10 +0200
-Message-Id: <20220624121313.2382500-7-alexandr.lobakin@intel.com>
+Subject: [PATCH v5 7/9] net/ice: fix initializing the bitmap in the switch code
+Date:   Fri, 24 Jun 2022 14:13:11 +0200
+Message-Id: <20220624121313.2382500-8-alexandr.lobakin@intel.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
 References: <20220624121313.2382500-1-alexandr.lobakin@intel.com>
@@ -76,7 +76,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,84 +84,60 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently, many architecture-specific non-atomic bitop
-implementations use inline asm or other hacks which are faster or
-more robust when working with "real" variables (i.e. fields from
-the structures etc.), but the compilers have no clue how to optimize
-them out when called on compile-time constants. That said, the
-following code:
+Kbuild spotted the following bug during the testing of one of
+the optimizations:
 
-	DECLARE_BITMAP(foo, BITS_PER_LONG) = { }; // -> unsigned long foo[1];
-	unsigned long bar = BIT(BAR_BIT);
-	unsigned long baz = 0;
+In file included from include/linux/cpumask.h:12,
+[...]
+                from drivers/net/ethernet/intel/ice/ice_switch.c:4:
+drivers/net/ethernet/intel/ice/ice_switch.c: In function 'ice_find_free_recp_res_idx.constprop':
+include/linux/bitmap.h:447:22: warning: 'possible_idx[0]' is used uninitialized [-Wuninitialized]
+  447 |                 *map |= GENMASK(start + nbits - 1, start);
+      |                      ^~
+In file included from drivers/net/ethernet/intel/ice/ice.h:7,
+                 from drivers/net/ethernet/intel/ice/ice_lib.h:7,
+                 from drivers/net/ethernet/intel/ice/ice_switch.c:4:
+drivers/net/ethernet/intel/ice/ice_switch.c:4929:24: note: 'possible_idx[0]' was declared here
+ 4929 |         DECLARE_BITMAP(possible_idx, ICE_MAX_FV_WORDS);
+      |                        ^~~~~~~~~~~~
+include/linux/types.h:11:23: note: in definition of macro 'DECLARE_BITMAP'
+   11 |         unsigned long name[BITS_TO_LONGS(bits)]
+      |                       ^~~~
 
-	__set_bit(FOO_BIT, foo);
-	baz |= BIT(BAZ_BIT);
+%ICE_MAX_FV_WORDS is 48, so bitmap_set() here was initializing only
+48 bits, leaving a junk in the rest 16.
+It was previously hidden due to that filling 48 bits makes
+bitmap_set() call external __bitmap_set(), but after making it use
+plain bit arithmetics on small bitmaps, compilers started seeing
+the issue. It was still working because those 16 weren't used
+anywhere anyhow.
+bitmap_{clear,set}() are not really intended to initialize bitmaps,
+rather to modify already initialized ones, as they don't do anything
+past the passed number of bits. The correct function to do this in
+that particular case is bitmap_fill(), so use it here. It will do
+`*possible_idx = ~0UL` instead of `*possible_idx |= GENMASK(47, 0)`,
+not leaving anything in an undefined state.
 
-	BUILD_BUG_ON(!__builtin_constant_p(test_bit(FOO_BIT, foo));
-	BUILD_BUG_ON(!__builtin_constant_p(bar & BAR_BIT));
-	BUILD_BUG_ON(!__builtin_constant_p(baz & BAZ_BIT));
-
-triggers the first assertion on x86_64, which means that the
-compiler is unable to evaluate it to a compile-time initializer
-when the architecture-specific bitop is used even if it's obvious.
-In order to let the compiler optimize out such cases, expand the
-bitop() macro to use the "constant" C non-atomic bitop
-implementations when all of the arguments passed are compile-time
-constants, which means that the result will be a compile-time
-constant as well, so that it produces more efficient and simple
-code in 100% cases, comparing to the architecture-specific
-counterparts.
-
-The savings are architecture, compiler and compiler flags dependent,
-for example, on x86_64 -O2:
-
-GCC 12: add/remove: 78/29 grow/shrink: 332/525 up/down: 31325/-61560 (-30235)
-LLVM 13: add/remove: 79/76 grow/shrink: 184/537 up/down: 55076/-141892 (-86816)
-LLVM 14: add/remove: 10/3 grow/shrink: 93/138 up/down: 3705/-6992 (-3287)
-
-and ARM64 (courtesy of Mark):
-
-GCC 11: add/remove: 92/29 grow/shrink: 933/2766 up/down: 39340/-82580 (-43240)
-LLVM 14: add/remove: 21/11 grow/shrink: 620/651 up/down: 12060/-15824 (-3764)
-
-Cc: Mark Rutland <mark.rutland@arm.com>
+Fixes: fd2a6b71e300 ("ice: create advanced switch recipe")
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Marco Elver <elver@google.com>
 ---
- include/linux/bitops.h | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_switch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-index 3c3afbae1533..cf9bf65039f2 100644
---- a/include/linux/bitops.h
-+++ b/include/linux/bitops.h
-@@ -33,8 +33,24 @@ extern unsigned long __sw_hweight64(__u64 w);
+diff --git a/drivers/net/ethernet/intel/ice/ice_switch.c b/drivers/net/ethernet/intel/ice/ice_switch.c
+index 8d8f3eec79ee..9b2872e89151 100644
+--- a/drivers/net/ethernet/intel/ice/ice_switch.c
++++ b/drivers/net/ethernet/intel/ice/ice_switch.c
+@@ -4934,7 +4934,7 @@ ice_find_free_recp_res_idx(struct ice_hw *hw, const unsigned long *profiles,
+ 	bitmap_zero(recipes, ICE_MAX_NUM_RECIPES);
+ 	bitmap_zero(used_idx, ICE_MAX_FV_WORDS);
  
- #include <asm-generic/bitops/generic-non-atomic.h>
+-	bitmap_set(possible_idx, 0, ICE_MAX_FV_WORDS);
++	bitmap_fill(possible_idx, ICE_MAX_FV_WORDS);
  
-+/*
-+ * Many architecture-specific non-atomic bitops contain inline asm code and due
-+ * to that the compiler can't optimize them to compile-time expressions or
-+ * constants. In contrary, generic_*() helpers are defined in pure C and
-+ * compilers optimize them just well.
-+ * Therefore, to make `unsigned long foo = 0; __set_bit(BAR, &foo)` effectively
-+ * equal to `unsigned long foo = BIT(BAR)`, pick the generic C alternative when
-+ * the arguments can be resolved at compile time. That expression itself is a
-+ * constant and doesn't bring any functional changes to the rest of cases.
-+ * The casts to `uintptr_t` are needed to mitigate `-Waddress` warnings when
-+ * passing a bitmap from .bss or .data (-> `!!addr` is always true).
-+ */
- #define bitop(op, nr, addr)						\
--	op(nr, addr)
-+	((__builtin_constant_p(nr) &&					\
-+	  __builtin_constant_p((uintptr_t)(addr) != (uintptr_t)NULL) &&	\
-+	  (uintptr_t)(addr) != (uintptr_t)NULL &&			\
-+	  __builtin_constant_p(*(const unsigned long *)(addr))) ?	\
-+	 const##op(nr, addr) : op(nr, addr))
- 
- #define __set_bit(nr, addr)		bitop(___set_bit, nr, addr)
- #define __clear_bit(nr, addr)		bitop(___clear_bit, nr, addr)
+ 	/* For each profile we are going to associate the recipe with, add the
+ 	 * recipes that are associated with that profile. This will give us
 -- 
 2.36.1
 
