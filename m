@@ -2,114 +2,133 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CCF55CE08
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 15:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C768255CAF7
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 14:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbiF0O4N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jun 2022 10:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37162 "EHLO
+        id S235431AbiF0T0A (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jun 2022 15:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235478AbiF0O4L (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jun 2022 10:56:11 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 66F0B167D6
-        for <linux-arch@vger.kernel.org>; Mon, 27 Jun 2022 07:56:10 -0700 (PDT)
-Received: (qmail 121219 invoked by uid 1000); 27 Jun 2022 10:56:09 -0400
-Date:   Mon, 27 Jun 2022 10:56:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
-Cc:     clang-built-linux <llvm@lists.linux.dev>,
-        linux-toolchains@vger.kernel.org,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-Message-ID: <YrnFCSjESpeQdciv@rowland.harvard.edu>
-References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
- <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
- <50B9D7C1-B11D-4583-9814-BFFF2C80D8CA@in.tum.de>
- <YrHUkfDWsexHRUKj@rowland.harvard.edu>
- <04B4DBD6-1262-4905-9E85-9466FC104895@in.tum.de>
+        with ESMTP id S239540AbiF0TZ6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jun 2022 15:25:58 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940AF63F5
+        for <linux-arch@vger.kernel.org>; Mon, 27 Jun 2022 12:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1656357957; x=1687893957;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0K1v4rQMlqomishJczUpkGF6eoi1V3KMJOV/jL2IR1k=;
+  b=VdqDWo9/swUW7AU/Zww9ClrAJcjQQNiOXrsL9PdQsmP2ifmHrYXmm4fd
+   96rn/ZSRx+g0oaC0YWsLx5mWwyH5RYxcApCebg6zh6PXLPCb5JHuM4W6U
+   l1qaTiNEMrmk8SgvifJF05Jh8ztnZ41nDBgu2W+GknDujaiITj9LgCXGE
+   SHy1Yf3skin8gMJ53kHu/L7x7tOYq68U64kZw6zFX06mP0ARWF1BlkSqT
+   0E0TIYlq3mNZhLk5kxIF9BdNPm6/NvOGSoID8CVrXu6+7HM8b/2T+MqSq
+   tdvso8nE1xd+pdMinM279RcqbS3MewRZUuc2tY/Kn4dJBjs58zMucPTJe
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10391"; a="280304855"
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="280304855"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2022 12:25:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,227,1650956400"; 
+   d="scan'208";a="657819352"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jun 2022 12:25:47 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o5uMj-0008vL-OD;
+        Mon, 27 Jun 2022 19:25:45 +0000
+Date:   Tue, 28 Jun 2022 03:25:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
+ 8327b9f472a80ec973290e950323d214c7ead58e
+Message-ID: <62ba0435.xlgH6OBXYXcpwzGc%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <04B4DBD6-1262-4905-9E85-9466FC104895@in.tum.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 11:47:43AM +0200, Paul Heidekrüger wrote:
-> 
-> > On 21. Jun 2022, at 16:24, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > 
-> > On Tue, Jun 21, 2022 at 01:59:27PM +0200, Paul Heidekrüger wrote:
-> >> OK. So, LKMM limits the scope of control dependencies to its arm(s), hence
-> >> there is a control dependency from the last READ_ONCE() before the loop
-> >> exists to the WRITE_ONCE().
-> >> 
-> >> But then what about the following:
-> >> 
-> >>> int *x, *y;
-> >>> 
-> >>> int foo()
-> >>> {
-> >>> 	/* More code */
-> >>> 
-> >>> 	if(READ_ONCE(x))
-> >>> 		return 42;
-> >>> 
-> >>> 	/* More code */
-> >>> 
-> >>> 	WRITE_ONCE(y, 42);
-> >>> 
-> >>> 	/* More code */
-> >>> 
-> >>> 	return 0;
-> >>> }
-> >> 
-> >> The READ_ONCE() determines whether the WRITE_ONCE() will be executed at all,
-> >> but the WRITE_ONCE() doesn't lie in the if condition's arm.
-> > 
-> > So in this case the LKMM would not recognize that there's a control 
-> > dependency, even though it clearly exists.
-> 
-> Oh, that's unfortunate.
-> 
-> Then I would still argue that the "at all" definition is misleading. This
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
+branch HEAD: 8327b9f472a80ec973290e950323d214c7ead58e  Merge branch 'asm-generic-virt_to_bus' into asm-generic
 
-I agree, and I would welcome a patch improving the definition.  Perhaps 
-something along the lines of what I wrote earlier in this email thread.
+elapsed time: 725m
 
-> time in the other direction as I had initially proposed though, as the above
-> example is a case where "at all" holds true, but LKMM doesn't cover it. Or
-> do you think that caveating this in litmus-tests.txt, e.g. via the patch we
-> had recently worked out [1], is enough?
+configs tested: 52
+configs skipped: 2
 
-No, the explanation should be improved.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Alan
+gcc tested configs:
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+powerpc                           allnoconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                                defconfig
+i386                             allyesconfig
+x86_64               randconfig-a012-20220627
+x86_64               randconfig-a016-20220627
+x86_64               randconfig-a011-20220627
+x86_64               randconfig-a013-20220627
+x86_64               randconfig-a014-20220627
+x86_64               randconfig-a015-20220627
+i386                 randconfig-a012-20220627
+i386                 randconfig-a011-20220627
+i386                 randconfig-a013-20220627
+i386                 randconfig-a015-20220627
+i386                 randconfig-a016-20220627
+i386                 randconfig-a014-20220627
+arc                  randconfig-r043-20220627
+s390                 randconfig-r044-20220627
+riscv                randconfig-r042-20220627
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+x86_64               randconfig-a002-20220627
+x86_64               randconfig-a003-20220627
+x86_64               randconfig-a001-20220627
+x86_64               randconfig-a004-20220627
+i386                 randconfig-a006-20220627
+i386                 randconfig-a002-20220627
+i386                 randconfig-a004-20220627
+i386                 randconfig-a003-20220627
+i386                 randconfig-a001-20220627
+i386                 randconfig-a005-20220627
+x86_64               randconfig-a006-20220627
+x86_64               randconfig-a005-20220627
+hexagon              randconfig-r041-20220627
+hexagon              randconfig-r045-20220627
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
