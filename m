@@ -2,60 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A46655F06E
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 23:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FBB55F088
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 23:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiF1ViN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Jun 2022 17:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
+        id S229997AbiF1Vu5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jun 2022 17:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiF1ViN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jun 2022 17:38:13 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B00B7B;
-        Tue, 28 Jun 2022 14:38:10 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 68so13393957pgb.10;
-        Tue, 28 Jun 2022 14:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=WjW+6GW3ETFm2JU8jE79XhUoTv6z3/GSxYftllUP/xs=;
-        b=Hl4POJee6IPPulGeCkhFVzmaewHFoLW/+/aEoDQjxUpbODhZ1oymIgaTqZ81qNcby5
-         tayUWDYOl9MImX18J8dQD7IqMr+zmUU1bqZHU+pNimB587Iq3zDvd9733Lpd08PJ3ZqN
-         hCcDuWiBdimpZlnAS7LXz+VIQLfHxUzeRmXR/DhhOL+83rGT7oCb0qCs+I3LD5qbJUOY
-         Z7gwLbNztnnB2BuHaZLhgR2hoazBRvaRufJfP7NUdv99H5O/s5nLD+ERJ1SZjBEJ5o3/
-         g1yNYiH51zSIYiit2licB5Pp4Mw6FaB2n5sZmRFysJGeMTkqmhnQmnjN1azWYVr/4Saz
-         dDKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=WjW+6GW3ETFm2JU8jE79XhUoTv6z3/GSxYftllUP/xs=;
-        b=f2wa68tdcB1EJBEBD9egwCf85hVewX+aAvW4ic7N5atk2Y15nx8sE0dCnEggoImUph
-         UjeA5Qfo75sW+NdsIvD9EHY9LD7i1VxY+Ojou7YfMvG2CGetEeDnYKAQylQ6ONDUc8CX
-         nbfZRfwBbxEK5r8i14BoG4fvuGEU5bMN3B4woW2aXc3VjoB4sCGFN+S+RGdMmwxl9QCk
-         T5Z1mG2Uzd5zpoAD2StT+ybn1l4KKokkT+3GQAEMoMhYCbr6uonCTgq5NdFMFJ8GGKEq
-         9uR6NOA9lVo3XdNVRVo4rAye2EcpdnkDRkUAdsP10atJSo+BPCDRgkJEtZZyriPg9Sfv
-         gLXw==
-X-Gm-Message-State: AJIora/blAk/JCjNaQ5M0dMbtnRj2u0RFEYAl/dBeDoUIFyelW2w7+KR
-        zuezxLizQmQ4McYE2EMiO+k=
-X-Google-Smtp-Source: AGRyM1sFO6YgYAr9GnaRe8/Ve8aBPD9B79jMLNzzxljl0q+mxUt4Mwk0qg0QIVqzTJY3FgSvSPWrFw==
-X-Received: by 2002:a63:3545:0:b0:40c:95f7:d114 with SMTP id c66-20020a633545000000b0040c95f7d114mr5443pga.150.1656452290295;
-        Tue, 28 Jun 2022 14:38:10 -0700 (PDT)
-Received: from ?IPV6:2001:df0:0:200c:75aa:d6ca:4354:6033? ([2001:df0:0:200c:75aa:d6ca:4354:6033])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170902650800b00168a651316csm9770467plk.270.2022.06.28.14.38.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 14:38:09 -0700 (PDT)
-Message-ID: <b1edec96-ccb2-49d6-323b-1abc0dc37a50@gmail.com>
-Date:   Wed, 29 Jun 2022 09:38:00 +1200
+        with ESMTP id S229610AbiF1Vu4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jun 2022 17:50:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D812E686;
+        Tue, 28 Jun 2022 14:50:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE6D7618B3;
+        Tue, 28 Jun 2022 21:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3A5C341C8;
+        Tue, 28 Jun 2022 21:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656453055;
+        bh=Eulr4Y0cWb7qjc6CpxCm3Vct1+OoFSfv0gPahuMP8H0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=elEeeKUDea9hk5aQmAteuIyRdHZZsKhLl3Vgkrf0ebuHMVDyxzs1owwkAc5icxtXR
+         Tv3y3Ypg5BZfSAA4fm/1du/h9YT9oUMVvzdwBxhJY45v0cynFE7MH/FGecsgnZV2dk
+         iPm6ogOEDIT42r9PUlRQz9dQNjh6tOzSwvfw+orYrQP8DJdAcBTb8Txl9TLsSqkRI5
+         7J7GSf1511sS2KBwajo4lNLtrnzx6YNYJIcRb3aJarxomVr3XyXRVQbc5LQe6sATzH
+         Szilv/6OGgYptkfbHHlymMEVoWlRUtOrH4DB1kh3spBftyplxnSoqxW2EfM72iufIW
+         dnOIf5/XmvBRg==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3178acf2a92so130916397b3.6;
+        Tue, 28 Jun 2022 14:50:55 -0700 (PDT)
+X-Gm-Message-State: AJIora8t+Tbp0ONZp1rsopAHnWHF4ZtgcARhu00sjUOo9OWfh5FHrdMN
+        iOowDmIdqZf0/seXxsuCn+4f1ZlUFPeUG2TB790=
+X-Google-Smtp-Source: AGRyM1uiK3Jm9EI3ugNHld4Mw8359HNpN0AV60gdNeVzfnYPf20oZVN1walPYmvUh7o4VEBL7hhWBeeKgOlyyZ+Nc1k=
+X-Received: by 2002:a0d:df0f:0:b0:31b:e000:7942 with SMTP id
+ i15-20020a0ddf0f000000b0031be0007942mr283034ywe.320.1656453054172; Tue, 28
+ Jun 2022 14:50:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
+References: <20220617125750.728590-1-arnd@kernel.org> <20220617125750.728590-4-arnd@kernel.org>
+ <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com> <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
+ <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com> <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
+ <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com> <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
+In-Reply-To: <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Tue, 28 Jun 2022 23:50:37 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
+Message-ID: <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
 Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>
+To:     Michael Schmitz <schmitzmic@gmail.com>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         scsi <linux-scsi@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -78,89 +73,27 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Denis Efremov <efremov@linux.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-References: <20220617125750.728590-1-arnd@kernel.org>
- <20220617125750.728590-4-arnd@kernel.org>
- <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
- <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
- <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
- <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
- <CAK8P3a1ivqYB38c_QTjG8e85ZBnCB6HEa-6LR1HDc8shG1Pwmw@mail.gmail.com>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-In-Reply-To: <CAK8P3a1ivqYB38c_QTjG8e85ZBnCB6HEa-6LR1HDc8shG1Pwmw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
+On Tue, Jun 28, 2022 at 11:03 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
+> On 28/06/22 19:03, Geert Uytterhoeven wrote:
+> >> The driver allocates bounce buffers using kmalloc if it hits an
+> >> unaligned data buffer - can such buffers still even happen these days?
+> > No idea.
+> Hmmm - I think I'll stick a WARN_ONCE() in there so we know whether this
+> code path is still being used.
 
-On 28/06/22 19:08, Arnd Bergmann wrote:
-> On Tue, Jun 28, 2022 at 5:25 AM Michael Schmitz <schmitzmic@gmail.com> wrote:
->> Am 28.06.2022 um 09:12 schrieb Michael Schmitz:
->>
->> Leaving the bounce buffer handling in place, and taking a few other
->> liberties - this is what converting the easiest case (a3000 SCSI) might
->> look like. Any obvious mistakes? The mvme147 driver would be very
->> similar to handle (after conversion to a platform device).
->>
->> The driver allocates bounce buffers using kmalloc if it hits an
->> unaligned data buffer - can such buffers still even happen these days?
->> If I understand dma_map_single() correctly, the resulting dma handle
->> would be equally misaligned?
->>
->> To allocate a bounce buffer, would it be OK to use dma_alloc_coherent()
->> even though AFAIU memory used for DMA buffers generally isn't consistent
->> on m68k?
-> I think it makes sense to skip the bounce buffering as you do here:
-> the only standardized way we have for integrating that part is to
-> use the swiotlb infrastructure, but as you mentioned earlier that
-> part is probably too resource-heavy here for Amiga.
-OK, leaving the old custom logic in place allows to convert the 24 bit 
-DMA drivers more easily.
->
-> I see two other problems with your patch though:
->
-> a) you still duplicate the cache handling: the cache_clear()/cache_push()
-> is supposed to already be done by dma_map_single() when the device
-> is not cache-coherent.
+kmalloc() guarantees alignment to the next power-of-two size or
+KMALLOC_MIN_ALIGN, whichever is bigger. On m68k this means it
+is cacheline aligned.
 
-That's one of the 'liberties' I alluded to. The reason I left these in 
-is that I'm none too certain what device feature the DMA API uses to 
-decide a device isn't cache-coherent. If it's dev->coherent_dma_mask, 
-the way I set up the device in the a3000 driver should leave the 
-coherent mask unchanged. For the Zorro drivers, devices are set up to 
-use the same storage to store normal and coherent masks - something we 
-most likely want to change. I need to think about the ramifications of 
-that.
-
-Note that zorro_esp.c uses dma_sync_single_for_device() and uses a 32 
-bit coherent DMA mask which does work OK. I might  ask Adrian to test a 
-change to only set dev->dma_mask, and drop the 
-dma_sync_single_for_device() calls if there's any doubt on this aspect.
-
-> b) The bounce buffer is never mapped here, instead you have the
-> virt_to_phys() here, which is not the same. I think you need to map
-> the pointer that actually gets passed down to the device after deciding
-> to use a bouce buffer or not.
-
-I hadn't realized that I can map the bounce buffer just as it's done for 
-the SCp data buffer. Should have been obvious, but I'm still learning 
-about the DMA API.
-
-I've updated the patch now, will re-send as part of a complete series 
-once done.
-
-Cheers,
-
-     Michael
-
-
->
->       Arnd
+      Arnd
