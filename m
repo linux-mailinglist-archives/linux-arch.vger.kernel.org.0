@@ -2,315 +2,268 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F73655C204
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 14:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAA355DB63
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 15:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiF1DWw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 27 Jun 2022 23:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S232303AbiF1D1I (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 27 Jun 2022 23:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbiF1DWc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jun 2022 23:22:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0BD2529E;
-        Mon, 27 Jun 2022 20:22:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23DA1615BC;
-        Tue, 28 Jun 2022 03:22:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C638C341CE;
-        Tue, 28 Jun 2022 03:22:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656386546;
-        bh=IX9GpJCf5zFk83qLHuc5OtFoLqfpiJ8Lh1FdnhW9AN8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VQrIYAO6vwg+696izoP5SrdL119ptxuLxDTzlMy5952K7SVAji6NzqdfgeYKpO57Q
-         Be2+pA3wgSkglkl1si+HjfhLb2sx8Z89pnuJsoe6YdX0xyqIoeIp4jZ8fXvLgoQ4rw
-         PtBN3woDHU2blgSxAFrIjEjaL9+U9zHkmXqbxo1dul56S+5hzgZfuJ3m0y6BPcEk+p
-         3mA5xVn4OYmK3xC92hv3mcftMjiqmsjALEGEwFGKs8XjGvstBkv/E9m/nkXNB7eOWJ
-         NS169tFOgOZRQ5G+8UrwZIlb8LGuYbc3zFyEGH0VgCB44a5+7zKmopaKI/y2gStc0c
-         ddrPGp7EbHZPw==
-Received: by mail-ua1-f54.google.com with SMTP id x24so4110666uaf.11;
-        Mon, 27 Jun 2022 20:22:26 -0700 (PDT)
-X-Gm-Message-State: AJIora8xyXajS3bt9y7Jeq0shDR5Dtzx4gI+Uu9CrzhLHb6w/xAOPPTR
-        0vVdsFM6GjZv0aqbyglB8bqulzCz0AgQMubAw6A=
-X-Google-Smtp-Source: AGRyM1sjidVZYwRvP3tNHlyivh9KqOslGHyvzIkw0RPJ6Lxv4Z7nL1Y3kfPSPQa8e7yoJah9FVuf86MK62jV+u504Gw=
-X-Received: by 2002:a9f:2c9a:0:b0:381:c1c7:82a6 with SMTP id
- w26-20020a9f2c9a000000b00381c1c782a6mr4752539uaj.23.1656386545380; Mon, 27
- Jun 2022 20:22:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220625095459.3786827-1-chenhuacai@loongson.cn>
- <20220625095459.3786827-2-chenhuacai@loongson.cn> <CAMZfGtV+xJ_FLooUPhZDcBOae_VnRHwGZqc3Ae1a0oNoLKk=iA@mail.gmail.com>
-In-Reply-To: <CAMZfGtV+xJ_FLooUPhZDcBOae_VnRHwGZqc3Ae1a0oNoLKk=iA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 28 Jun 2022 11:22:14 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7hY7BJVvfNNXWKvkM+CUjjP84cY=90VVuZP5=Y0r974g@mail.gmail.com>
-Message-ID: <CAAhV-H7hY7BJVvfNNXWKvkM+CUjjP84cY=90VVuZP5=Y0r974g@mail.gmail.com>
-Subject: Re: [PATCH 2/3] LoongArch: Add sparse memory vmemmap support
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        with ESMTP id S234483AbiF1D0d (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 27 Jun 2022 23:26:33 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931CD26557;
+        Mon, 27 Jun 2022 20:26:11 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so14470128pjl.5;
+        Mon, 27 Jun 2022 20:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to;
+        bh=98ncMEofZ3ypmUWB7oKUkuT/bpmjStGksJuUcGKTVGc=;
+        b=fMfCg/HOqcbPVSdVNElbV526+23+XdN3LylNezJqkrHb6fVXmxpkunVG3rLT9XcFXw
+         HpCMyB7KDRKw245t+OJHw3FQL2gH2icNy1tzXFhyTeE+J9RLZswjB9T1T9XiFFpbERR5
+         lCNa01DtHAYHMiVGjinDg8S0v2LUYuJPChTK5IuIdjUFD4GA99cW8qKKeB++ss8Vw+os
+         RLW9bmiojBFFCdkwOuQe/CgRlLJtBdmK9G50X0mwzZYxHK7Dxb7Wga9rrrBIp9c5MIyG
+         9Sx9MkBVwQuwC4cT7mj+YhgLxFUe+8+CDN6etZdDn0xnYNIAkilvA9GHP+xPdmO3Dj67
+         /XjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to;
+        bh=98ncMEofZ3ypmUWB7oKUkuT/bpmjStGksJuUcGKTVGc=;
+        b=EcWVGBCmlA3WZgUyDpUCKrnx1k3+EnJ+7OAACYFG4QOUbp0+tvJT3NkuUBLTsgqe0G
+         XqwmHXz84MIVYBWDpPQWfUVD2Za0TIMKQZYiMgdN+qCKBIM/riMU2r0jYOV+AMYl8STD
+         CvPyIHDdoY27KCWfSSBn7oJh0ZYgSFKZMZM947w3mAJVaCagDjqgeqBR1uJxIcRZWSUz
+         nmKPYLLpSd1yobLzYcgWi9LpPTj6gkvIEjBlxJSD8nfR2r3bzyM7AC4EP2kDq/A0e6xT
+         ptEFv4lZJS5LtKXLIV5qE01W85TtCO7AcexX0W2MrIhI9DiMOrvTmTeu6Hn2FZyvnBRF
+         6h7g==
+X-Gm-Message-State: AJIora8y46PJnmx4boilrxCuHw6OQGs50xIbx/eUuki0Rf/NzKPGy05Y
+        1UhGE2oDU8qNMCOu+qkhlSM=
+X-Google-Smtp-Source: AGRyM1uIBHaYKcir3w/b3B00SjBhXm7WkQIigMVOjBeds6D7ImU2LcUjsBGcJ8ZGhoTIiYdSDKQhjw==
+X-Received: by 2002:a17:903:283:b0:16a:6db9:3f02 with SMTP id j3-20020a170903028300b0016a6db93f02mr2700935plr.173.1656386771103;
+        Mon, 27 Jun 2022 20:26:11 -0700 (PDT)
+Received: from [10.1.1.24] (222-155-0-244-adsl.sparkbb.co.nz. [222.155.0.244])
+        by smtp.gmail.com with ESMTPSA id 13-20020a17090a08cd00b001ec932d7592sm8040238pjn.9.2022.06.27.20.26.00
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 Jun 2022 20:26:10 -0700 (PDT)
+Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220617125750.728590-1-arnd@kernel.org>
+ <20220617125750.728590-4-arnd@kernel.org>
+ <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
+ <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
+ <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Min Zhou <zhoumin@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
+Date:   Tue, 28 Jun 2022 15:25:58 +1200
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
+Content-Type: multipart/mixed;
+ boundary="------------EF1F8A9B021AD1B88577153E"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Muchun,
+This is a multi-part message in MIME format.
+--------------EF1F8A9B021AD1B88577153E
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jun 27, 2022 at 6:33 PM Muchun Song <songmuchun@bytedance.com> wrote:
->
-> On Sat, Jun 25, 2022 at 5:54 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > From: Feiyang Chen <chenfeiyang@loongson.cn>
-> >
-> > Add sparse memory vmemmap support for LoongArch. SPARSEMEM_VMEMMAP
-> > uses a virtually mapped memmap to optimise pfn_to_page and page_to_pfn
-> > operations. This is the most efficient option when sufficient kernel
-> > resources are available.
-> >
-> > Signed-off-by: Min Zhou <zhoumin@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > ---
-> >  arch/loongarch/Kconfig                 |  2 +
-> >  arch/loongarch/include/asm/pgtable.h   |  5 +-
-> >  arch/loongarch/include/asm/sparsemem.h |  8 +++
-> >  arch/loongarch/mm/init.c               | 71 +++++++++++++++++++++++++-
-> >  include/linux/mm.h                     |  2 +
-> >  mm/sparse-vmemmap.c                    | 10 ++++
-> >  6 files changed, 96 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > index dc19cf3071ea..8e56ca28165e 100644
-> > --- a/arch/loongarch/Kconfig
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -49,6 +49,7 @@ config LOONGARCH
-> >         select ARCH_USE_QUEUED_RWLOCKS
-> >         select ARCH_USE_QUEUED_SPINLOCKS
-> >         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-> > +       select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
->
-> I think this should be a separate patch to enable HVO (HugeTLB Vmemmap
-> Optimization) since it is irrelevant to this patch.
-It seems I have misunderstood HVO, then I will remove HVO parts from
-this patch. Thank you.
+Hii Geert
 
-Huacai
+Am 28.06.2022 um 09:12 schrieb Michael Schmitz:
+> Hi Geert,
 >
-> Thanks.
+> On 27/06/22 20:26, Geert Uytterhoeven wrote:
+>> Hi Michael,
+>>
+>> On Sat, Jun 18, 2022 at 3:06 AM Michael Schmitz <schmitzmic@gmail.com>
+>> wrote:
+>>> Am 18.06.2022 um 00:57 schrieb Arnd Bergmann:
+>>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>>
+>>>> All architecture-independent users of virt_to_bus() and bus_to_virt()
+>>>> have been fixed to use the dma mapping interfaces or have been
+>>>> removed now.  This means the definitions on most architectures, and the
+>>>> CONFIG_VIRT_TO_BUS symbol are now obsolete and can be removed.
+>>>>
+>>>> The only exceptions to this are a few network and scsi drivers for m68k
+>>>> Amiga and VME machines and ppc32 Macintosh. These drivers work
+>>>> correctly
+>>>> with the old interfaces and are probably not worth changing.
+>>> The Amiga SCSI drivers are all old WD33C93 ones, and replacing
+>>> virt_to_bus by virt_to_phys in the dma_setup() function there would
+>>> cause no functional change at all.
+>> FTR, the sgiwd93 driver use dma_map_single().
 >
-> >         select ARCH_WANTS_NO_INSTR
-> >         select BUILDTIME_TABLE_SORT
-> >         select COMMON_CLK
-> > @@ -422,6 +423,7 @@ config ARCH_FLATMEM_ENABLE
-> >
-> >  config ARCH_SPARSEMEM_ENABLE
-> >         def_bool y
-> > +       select SPARSEMEM_VMEMMAP_ENABLE
-> >         help
-> >           Say Y to support efficient handling of sparse physical memory,
-> >           for architectures which are either NUMA (Non-Uniform Memory Access)
-> > diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-> > index 9c811c3f7572..b701ec7a0309 100644
-> > --- a/arch/loongarch/include/asm/pgtable.h
-> > +++ b/arch/loongarch/include/asm/pgtable.h
-> > @@ -92,7 +92,10 @@ extern unsigned long zero_page_mask;
-> >  #define VMALLOC_START  MODULES_END
-> >  #define VMALLOC_END    \
-> >         (vm_map_base +  \
-> > -        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE)
-> > +        min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
-> > +
-> > +#define vmemmap                ((struct page *)((VMALLOC_END + PMD_SIZE) & PMD_MASK))
-> > +#define VMEMMAP_END    ((unsigned long)vmemmap + VMEMMAP_SIZE - 1)
-> >
-> >  #define pte_ERROR(e) \
-> >         pr_err("%s:%d: bad pte %016lx.\n", __FILE__, __LINE__, pte_val(e))
-> > diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
-> > index 3d18cdf1b069..a1e440f6bec7 100644
-> > --- a/arch/loongarch/include/asm/sparsemem.h
-> > +++ b/arch/loongarch/include/asm/sparsemem.h
-> > @@ -11,6 +11,14 @@
-> >  #define SECTION_SIZE_BITS      29 /* 2^29 = Largest Huge Page Size */
-> >  #define MAX_PHYSMEM_BITS       48
-> >
-> > +#ifndef CONFIG_SPARSEMEM_VMEMMAP
-> > +#define VMEMMAP_SIZE   0
-> > +#else
-> > +#define VMEMMAP_SIZE   (sizeof(struct page) * (1UL << (cpu_pabits + 1 - PAGE_SHIFT)))
-> > +#endif
-> > +
-> > +#include <linux/mm_types.h>
-> > +
-> >  #endif /* CONFIG_SPARSEMEM */
-> >
-> >  #ifdef CONFIG_MEMORY_HOTPLUG
-> > diff --git a/arch/loongarch/mm/init.c b/arch/loongarch/mm/init.c
-> > index 7094a68c9b83..35128229fe46 100644
-> > --- a/arch/loongarch/mm/init.c
-> > +++ b/arch/loongarch/mm/init.c
-> > @@ -22,7 +22,7 @@
-> >  #include <linux/pfn.h>
-> >  #include <linux/hardirq.h>
-> >  #include <linux/gfp.h>
-> > -#include <linux/initrd.h>
-> > +#include <linux/hugetlb.h>
-> >  #include <linux/mmzone.h>
-> >
-> >  #include <asm/asm-offsets.h>
-> > @@ -157,6 +157,75 @@ void arch_remove_memory(u64 start, u64 size, struct vmem_altmap *altmap)
-> >  #endif
-> >  #endif
-> >
-> > +#ifdef CONFIG_SPARSEMEM_VMEMMAP
-> > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
-> > +                                        int node, struct vmem_altmap *altmap)
-> > +{
-> > +       unsigned long addr = start;
-> > +       unsigned long next;
-> > +       pgd_t *pgd;
-> > +       p4d_t *p4d;
-> > +       pud_t *pud;
-> > +       pmd_t *pmd;
-> > +
-> > +       for (addr = start; addr < end; addr = next) {
-> > +               next = pmd_addr_end(addr, end);
-> > +
-> > +               pgd = vmemmap_pgd_populate(addr, node);
-> > +               if (!pgd)
-> > +                       return -ENOMEM;
-> > +               p4d = vmemmap_p4d_populate(pgd, addr, node);
-> > +               if (!p4d)
-> > +                       return -ENOMEM;
-> > +               pud = vmemmap_pud_populate(p4d, addr, node);
-> > +               if (!pud)
-> > +                       return -ENOMEM;
-> > +
-> > +               pmd = pmd_offset(pud, addr);
-> > +               if (pmd_none(*pmd)) {
-> > +                       void *p = NULL;
-> > +
-> > +                       p = vmemmap_alloc_block_buf(PMD_SIZE, node, NULL);
-> > +                       if (p) {
-> > +                               pmd_t entry;
-> > +
-> > +                               entry = pfn_pmd(virt_to_pfn(p), PAGE_KERNEL);
-> > +                               pmd_val(entry) |= _PAGE_HUGE | _PAGE_HGLOBAL;
-> > +                               set_pmd_at(&init_mm, addr, pmd, entry);
-> > +
-> > +                               continue;
-> > +                       }
-> > +               } else if (pmd_val(*pmd) & _PAGE_HUGE) {
-> > +                       vmemmap_verify((pte_t *)pmd, node, addr, next);
-> > +                       continue;
-> > +               }
-> > +               if (vmemmap_populate_basepages(addr, next, node, NULL))
-> > +                       return -ENOMEM;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +#if CONFIG_PGTABLE_LEVELS == 2
-> > +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
-> > +               struct vmem_altmap *altmap)
-> > +{
-> > +       return vmemmap_populate_basepages(start, end, node, NULL);
-> > +}
-> > +#else
-> > +int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
-> > +               struct vmem_altmap *altmap)
-> > +{
-> > +       return vmemmap_populate_hugepages(start, end, node, NULL);
-> > +}
-> > +#endif
-> > +
-> > +void vmemmap_free(unsigned long start, unsigned long end,
-> > +               struct vmem_altmap *altmap)
-> > +{
-> > +}
-> > +#endif
-> > +
-> >  /*
-> >   * Align swapper_pg_dir in to 64K, allows its address to be loaded
-> >   * with a single LUI instruction in the TLB handlers.  If we used
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index bc8f326be0ce..3472b924a1ea 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -3203,6 +3203,8 @@ void *sparse_buffer_alloc(unsigned long size);
-> >  struct page * __populate_section_memmap(unsigned long pfn,
-> >                 unsigned long nr_pages, int nid, struct vmem_altmap *altmap,
-> >                 struct dev_pagemap *pgmap);
-> > +void pmd_init(void *addr);
-> > +void pud_init(void *addr);
-> >  pgd_t *vmemmap_pgd_populate(unsigned long addr, int node);
-> >  p4d_t *vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node);
-> >  pud_t *vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node);
-> > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> > index f4fa61dbbee3..33e2a1ceee72 100644
-> > --- a/mm/sparse-vmemmap.c
-> > +++ b/mm/sparse-vmemmap.c
-> > @@ -587,6 +587,10 @@ pmd_t * __meminit vmemmap_pmd_populate(pud_t *pud, unsigned long addr, int node)
-> >         return pmd;
-> >  }
-> >
-> > +void __weak __meminit pmd_init(void *addr)
-> > +{
-> > +}
-> > +
-> >  pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
-> >  {
-> >         pud_t *pud = pud_offset(p4d, addr);
-> > @@ -594,11 +598,16 @@ pud_t * __meminit vmemmap_pud_populate(p4d_t *p4d, unsigned long addr, int node)
-> >                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
-> >                 if (!p)
-> >                         return NULL;
-> > +               pmd_init(p);
-> >                 pud_populate(&init_mm, pud, p);
-> >         }
-> >         return pud;
-> >  }
-> >
-> > +void __weak __meminit pud_init(void *addr)
-> > +{
-> > +}
-> > +
-> >  p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
-> >  {
-> >         p4d_t *p4d = p4d_offset(pgd, addr);
-> > @@ -606,6 +615,7 @@ p4d_t * __meminit vmemmap_p4d_populate(pgd_t *pgd, unsigned long addr, int node)
-> >                 void *p = vmemmap_alloc_block_zero(PAGE_SIZE, node);
-> >                 if (!p)
-> >                         return NULL;
-> > +               pud_init(p);
-> >                 p4d_populate(&init_mm, p4d, p);
-> >         }
-> >         return p4d;
-> > --
-> > 2.27.0
-> >
+> Thanks! From what I see, it doesn't have to deal with bounce buffers
+> though?
+
+Leaving the bounce buffer handling in place, and taking a few other 
+liberties - this is what converting the easiest case (a3000 SCSI) might 
+look like. Any obvious mistakes? The mvme147 driver would be very 
+similar to handle (after conversion to a platform device).
+
+The driver allocates bounce buffers using kmalloc if it hits an 
+unaligned data buffer - can such buffers still even happen these days? 
+If I understand dma_map_single() correctly, the resulting dma handle 
+would be equally misaligned?
+
+To allocate a bounce buffer, would it be OK to use dma_alloc_coherent() 
+even though AFAIU memory used for DMA buffers generally isn't consistent 
+on m68k?
+
+Thinking ahead to the other two Amiga drivers - I wonder whether 
+allocating a static bounce buffer or a DMA pool at driver init is likely 
+to succeed if the kernel runs from the low 16 MB RAM chunk? It certainly 
+won't succeed if the kernel runs from a higher memory address, so the 
+present bounce buffer logic around amiga_chip_alloc() might still need 
+to be used here.
+
+Leaves the question whether converting the gvp11 and a2091 drivers is 
+actually worth it, if bounce buffers still have to be handled explicitly.
+
+Untested (except for compile testing), un-checkpatched, don't try this 
+on any disk with valuable data ...
+
+Cheers,
+
+	Michael
+
+--------------EF1F8A9B021AD1B88577153E
+Content-Type: text/x-diff;
+ name="0001-scsi-convert-m68k-WD33C93-drivers-to-DMA-API.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="0001-scsi-convert-m68k-WD33C93-drivers-to-DMA-API.patch"
+
+From e8c6aa068d27901c49dfb7442d4200cc966350a5 Mon Sep 17 00:00:00 2001
+From: Michael Schmitz <schmitzmic@gmail.com>
+Date: Tue, 28 Jun 2022 12:45:08 +1200
+Subject: [PATCH] scsi - convert m68k WD33C93 drivers to DMA API
+
+Use dma_map_single() for gvp11 driver (leave bounce buffer logic unchanged).
+
+Compile-tested only.
+
+Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
+---
+ drivers/scsi/a3000.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/a3000.c b/drivers/scsi/a3000.c
+index dd161885eed1..3c62e8bafb8f 100644
+--- a/drivers/scsi/a3000.c
++++ b/drivers/scsi/a3000.c
+@@ -7,6 +7,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/interrupt.h>
+ #include <linux/platform_device.h>
++#include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ 
+ #include <asm/page.h>
+@@ -25,8 +26,11 @@
+ struct a3000_hostdata {
+ 	struct WD33C93_hostdata wh;
+ 	struct a3000_scsiregs *regs;
++	struct device *dev;
+ };
+ 
++#define DMA_DIR(d)   ((d == DATA_OUT_DIR) ? DMA_TO_DEVICE : DMA_FROM_DEVICE)
++
+ static irqreturn_t a3000_intr(int irq, void *data)
+ {
+ 	struct Scsi_Host *instance = data;
+@@ -49,12 +53,16 @@ static irqreturn_t a3000_intr(int irq, void *data)
+ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
+ {
+ 	struct scsi_pointer *scsi_pointer = WD33C93_scsi_pointer(cmd);
++	unsigned long len = scsi_pointer->this_residual;
+ 	struct Scsi_Host *instance = cmd->device->host;
+ 	struct a3000_hostdata *hdata = shost_priv(instance);
+ 	struct WD33C93_hostdata *wh = &hdata->wh;
+ 	struct a3000_scsiregs *regs = hdata->regs;
+ 	unsigned short cntr = CNTR_PDMD | CNTR_INTEN;
+-	unsigned long addr = virt_to_bus(scsi_pointer->ptr);
++	dma_addr_t addr;
++
++	addr = dma_map_single(hdata->dev, scsi_pointer->ptr, len, DMA_DIR(dir_in));
++	scsi_pointer->dma_handle = addr;
+ 
+ 	/*
+ 	 * if the physical address has the wrong alignment, or if
+@@ -79,7 +87,7 @@ static int dma_setup(struct scsi_cmnd *cmd, int dir_in)
+ 			       scsi_pointer->this_residual);
+ 		}
+ 
+-		addr = virt_to_bus(wh->dma_bounce_buffer);
++		addr = virt_to_phys(wh->dma_bounce_buffer);
+ 	}
+ 
+ 	/* setup dma direction */
+@@ -166,6 +174,10 @@ static void dma_stop(struct Scsi_Host *instance, struct scsi_cmnd *SCpnt,
+ 			wh->dma_bounce_len = 0;
+ 		}
+ 	}
++	dma_unmap_single(hdata->dev, scsi_pointer->dma_handle,
++			 scsi_pointer->this_residual,
++			 DMA_DIR(wh->dma_dir));
++
+ }
+ 
+ static struct scsi_host_template amiga_a3000_scsi_template = {
+@@ -193,6 +205,11 @@ static int __init amiga_a3000_scsi_probe(struct platform_device *pdev)
+ 	wd33c93_regs wdregs;
+ 	struct a3000_hostdata *hdata;
+ 
++	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(32))) {
++		dev_warn(&pdev->dev, "cannot use 32 bit DMA\n");
++		return -ENODEV;
++	}
++
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!res)
+ 		return -ENODEV;
+@@ -216,6 +233,7 @@ static int __init amiga_a3000_scsi_probe(struct platform_device *pdev)
+ 	wdregs.SCMD = &regs->SCMD;
+ 
+ 	hdata = shost_priv(instance);
++	hdata->dev = &pdev->dev;
+ 	hdata->wh.no_sync = 0xff;
+ 	hdata->wh.fast = 0;
+ 	hdata->wh.dma_mode = CTRL_DMA;
+-- 
+2.17.1
+
+
+--------------EF1F8A9B021AD1B88577153E--
