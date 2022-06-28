@@ -2,133 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAC655E8C0
-	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 18:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305E455EBFA
+	for <lists+linux-arch@lfdr.de>; Tue, 28 Jun 2022 20:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346843AbiF1Nne (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Jun 2022 09:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S233879AbiF1SGW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jun 2022 14:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346848AbiF1Nnd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jun 2022 09:43:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1151CB09;
-        Tue, 28 Jun 2022 06:43:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233344AbiF1SGE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jun 2022 14:06:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29FB51D31A
+        for <linux-arch@vger.kernel.org>; Tue, 28 Jun 2022 11:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656439560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5GEsiZ5pfkbMA5kewtyoQDVS/PBlIbuW5xmHg+1qqHA=;
+        b=AzTJqAMvZjTJ0cPd9c0C3lRIXHbJ3nSVwgb7CWzmfx1NfIrL72v7ukI0DDTgaQZWTZVJw9
+        014ZETS255YO8b2ADhuvTJRAPxrC0aeXb79Hj7mNhErJrpse1Ynq0LIkNTb/QZWEykElxT
+        5h5w8IwEBss4R91GlM9pQGwj20h5z40=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-oUIR4xKhNb2y20GilZVQww-1; Tue, 28 Jun 2022 14:05:56 -0400
+X-MC-Unique: oUIR4xKhNb2y20GilZVQww-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B55DB81E16;
-        Tue, 28 Jun 2022 13:43:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93634C3411D;
-        Tue, 28 Jun 2022 13:43:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656423806;
-        bh=Mu07+NkAeIWQxqDrSfWHBkagAH3qiS5hRkhUS/KEB+8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J26wAUkMEANntFYIvZPSyjRIRDBcF+0CYhgasflX/sFmF3R2jSZgCYNFz3Ynufqqz
-         nzeG/jqshDGe3knqrMZ6LXcKAICeN8pbhTN0uX0rgz8dRC1YlEMk7ISAYbSEGNsozr
-         vMxbVtI/cVWlsFmtm6PBsVByLIwnivkOj1AJrkxj/wXQRhS/ln9VsFhQnbbn/n2PIn
-         QzAw/V4dQkJ41Sn1oOGwbBEr5dwHr6L6ETynGtdZIr8NvIdrA2IOpy2Ggx+LW85NkG
-         M7m209vEq9dxSuBiAncmEIgn4Mvu51957qmvXRBAQRo+OwPw3t5gNRgFO+Buf2FD6s
-         0aBj8RlvROlWA==
-Date:   Tue, 28 Jun 2022 15:43:17 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Ralph Corderoy <ralph@inputplus.co.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nate Karstens <nate.karstens@garmin.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Changli Gao <xiaosuo@gmail.com>
-Subject: Re: [PATCH v2] Implement close-on-fork
-Message-ID: <20220628134317.heagqm6dplf5vk7u@wittgenstein>
-References: <20200515152321.9280-1-nate.karstens@garmin.com>
- <20220618114111.61EC71F981@orac.inputplus.co.uk>
- <Yq4qIxh5QnhQZ0SJ@casper.infradead.org>
- <20220619104228.A9789201F7@orac.inputplus.co.uk>
- <20220628131304.gbiqqxamg6pmvsxf@wittgenstein>
- <35d0facc934748f995c2e7ab695301f7@AcuMS.aculab.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4018389B841;
+        Tue, 28 Jun 2022 18:05:56 +0000 (UTC)
+Received: from [10.22.34.187] (unknown [10.22.34.187])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AC80140334D;
+        Tue, 28 Jun 2022 18:05:55 +0000 (UTC)
+Message-ID: <218522c9-97b9-7659-ce31-2dbc4b0c6a60@redhat.com>
+Date:   Tue, 28 Jun 2022 14:05:55 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <35d0facc934748f995c2e7ab695301f7@AcuMS.aculab.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V7 1/5] asm-generic: ticket-lock: Remove unnecessary
+ atomic_read
+Content-Language: en-US
+To:     guoren@kernel.org, palmer@rivosinc.com, arnd@arndb.de,
+        mingo@redhat.com, will@kernel.org, boqun.feng@gmail.com
+Cc:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220628081707.1997728-1-guoren@kernel.org>
+ <20220628081707.1997728-2-guoren@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220628081707.1997728-2-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jun 28, 2022 at 01:38:07PM +0000, David Laight wrote:
-> From: Christian Brauner
-> > Sent: 28 June 2022 14:13
-> > 
-> > On Sun, Jun 19, 2022 at 11:42:28AM +0100, Ralph Corderoy wrote:
-> > > Hi Matthew, thanks for replying.
-> > >
-> > > > > The need for O_CLOFORK might be made more clear by looking at a
-> > > > > long-standing Go issue, i.e. unrelated to system(3), which was started
-> > > > > in 2017 by Russ Cox when he summed up the current race-condition
-> > > > > behaviour of trying to execve(2) a newly created file:
-> > > > > https://github.com/golang/go/issues/22315.
-> > > >
-> > > > The problem is that people advocating for O_CLOFORK understand its
-> > > > value, but not its cost.  Other google employees have a system which
-> > > > has literally millions of file descriptors in a single process.
-> > > > Having to maintain this extra state per-fd is a cost they don't want
-> > > > to pay (and have been quite vocal about earlier in this thread).
-> > >
-> > > So do you agree the userspace issue is best solved by *_CLOFORK and the
-> > > problem is how to implement *_CLOFORK at an acceptable cost?
-> > >
-> > > OTOH David Laight was making suggestions on moving the load to the
-> > > fork/exec path earlier in the thread, but OTOH Al Viro mentioned a
-> > > ‘portable solution’, though that could have been to a specific issue
-> > > rather than the more general case.
-> > >
-> > > How would you recommend approaching an acceptable cost is progressed?
-> > > Iterate on patch versions?  Open a bugzilla.kernel.org for central
-> > > tracking and linking from the other projects?  ..?
-> > 
-> > Quoting from that go thread
-> > 
-> > "If the OS had a "close all fds above x", we could use that. (I don't know of any that do, but it sure
-> > would help.)"
-> > 
-> > So why can't this be solved with:
-> > close_range(fd_first, fd_last, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
-> > e.g.
-> > close_range(100, ~0U, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
-> 
-> That is a relatively recent linux system call.
-> Although it can be (mostly) emulated by reading /proc/fd
-> - but that may not be mounted.
-> 
-> In any case another thread can open an fd between the close_range()
-> and fork() calls.
+On 6/28/22 04:17, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>
+> Remove unnecessary atomic_read in arch_spin_value_unlocked(lock),
+> because the value has been in lock. This patch could prevent
+> arch_spin_value_unlocked contend spin_lock data again.
+>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>   include/asm-generic/spinlock.h | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+> index fdfebcb050f4..f1e4fa100f5a 100644
+> --- a/include/asm-generic/spinlock.h
+> +++ b/include/asm-generic/spinlock.h
+> @@ -84,7 +84,9 @@ static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>   
+>   static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+>   {
+> -	return !arch_spin_is_locked(&lock);
+> +	u32 val = lock.counter;
+> +
+> +	return ((val >> 16) == (val & 0xffff));
+>   }
+>   
+>   #include <asm/qrwlock.h>
 
-The CLOSE_RANGE_UNSHARE gives the calling thread a private file
-descriptor table before marking fs close-on-exec.
+lockref.c is the only current user of arch_spin_value_unlocked(). This 
+change is probably OK with this particular use case. Do you have any 
+performance data about the improvement due to this change?
 
-close_range(100, ~0U, CLOSE_RANGE_CLOEXEC | CLOSE_RANGE_UNSHARE)?
+You may have to document that we have to revisit that if another use 
+case shows up.
+
+Cheers,
+Longman
+
