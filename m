@@ -2,44 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B970655FA8A
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Jun 2022 10:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A5F560086
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Jun 2022 14:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbiF2I37 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 29 Jun 2022 04:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S232432AbiF2MxW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 29 Jun 2022 08:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiF2I36 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Jun 2022 04:29:58 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1AEF59C;
-        Wed, 29 Jun 2022 01:29:57 -0700 (PDT)
-Received: from mail-yb1-f169.google.com ([209.85.219.169]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MXXZf-1o8VBM1Jsd-00Z2jt; Wed, 29 Jun 2022 10:29:55 +0200
-Received: by mail-yb1-f169.google.com with SMTP id d5so26638252yba.5;
-        Wed, 29 Jun 2022 01:29:55 -0700 (PDT)
-X-Gm-Message-State: AJIora8A75f59M/K0j+nJBVBH4NCK1OqyzJa/yQcAQM1CkenBjQDYWCz
-        vrKmThaczcsqW1yjrhFDwIpCZDEPXBho/AD8H8A=
-X-Google-Smtp-Source: AGRyM1s+0Vdgu6k29DCyj5luRoc2GU/O+zNZO7vZnJQkpulyhuYloGJMkGI6qdeLOKZPe+Xqib0p73hV9hsIc7OQwVE=
-X-Received: by 2002:a25:8b8b:0:b0:669:b37d:f9cd with SMTP id
- j11-20020a258b8b000000b00669b37df9cdmr2039004ybl.394.1656491393923; Wed, 29
- Jun 2022 01:29:53 -0700 (PDT)
+        with ESMTP id S232246AbiF2MxV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 29 Jun 2022 08:53:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 506B626AE1
+        for <linux-arch@vger.kernel.org>; Wed, 29 Jun 2022 05:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656507198;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WawQclrD5oXLJMHnyF+hbLilMGfaF/QFoHaiLc0vsok=;
+        b=MnW8q9vLimK0eCOK0gpyxqS4OsNJpArkL2fLkCd8JelZaNUQabrI6FJ6isXEz+MhCdBILk
+        AkFKjfws8WpgzA+jWb3iFC3mD7xacXjHNZqKNvY01DOAngl1nQPryDFJf9saJCA5bccxxA
+        i60kSukvoTb4cZSoN3gqxK/GkIg7Os0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-357-xDH1LqjePcWGr5D--bAMXA-1; Wed, 29 Jun 2022 08:53:12 -0400
+X-MC-Unique: xDH1LqjePcWGr5D--bAMXA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 072FC801233;
+        Wed, 29 Jun 2022 12:53:12 +0000 (UTC)
+Received: from [10.22.17.197] (unknown [10.22.17.197])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 87B5C492C3B;
+        Wed, 29 Jun 2022 12:53:11 +0000 (UTC)
+Message-ID: <1a6f3163-02af-0235-b212-b72c7db6865b@redhat.com>
+Date:   Wed, 29 Jun 2022 08:53:11 -0400
 MIME-Version: 1.0
-References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-5-guoren@kernel.org>
- <09abc75e-2ffb-1ab5-d0fc-1c15c943948d@redhat.com> <CAJF2gTQZzOtOsq0DV48Gi76UtBSa+vdY7dLZmoPD_OFUZ0Wbrg@mail.gmail.com>
- <5166750c-3dc6-9b09-4a1e-cd53141cdde8@redhat.com> <CAK8P3a2jQ+UQ54=QcpyVt91vXRyZrvUtOygFYOHWTBzse3q3rg@mail.gmail.com>
- <CAJF2gTTtKiMZJLWBEcRz-4CmNojH0cOgpUYGupLyCXXFjQD_FQ@mail.gmail.com>
-In-Reply-To: <CAJF2gTTtKiMZJLWBEcRz-4CmNojH0cOgpUYGupLyCXXFjQD_FQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 29 Jun 2022 10:29:37 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3GiMgEJdBg5QQHHD0bDnpR0XwPkAw7=zT7ETzf6-sCmg@mail.gmail.com>
-Message-ID: <CAK8P3a3GiMgEJdBg5QQHHD0bDnpR0XwPkAw7=zT7ETzf6-sCmg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
  & queued)
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Waiman Long <longman@redhat.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>,
         Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>,
         linux-riscv <linux-riscv@lists.infradead.org>,
@@ -47,25 +54,20 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Waiman Long <longman@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Guo Ren <guoren@linux.alibaba.com>,
         Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:EvcXF/YPtxhEo6ZQIN24NwoJVIM8u0DcYlhjQoAS7Z9YOHzI6GY
- BnI0vZd5alKCc2Uq46bjM5eX7Px0ly1Kds7ETYJoNI1t+cbhKL/+gQAzJBOzrVoN2fT8SL2
- GsI0zI5gSjOW/1m8Nyz+h48HoInMnbINXPF4uVbmCeLQTequ1zDSE+hEMcH5EZXllk1aiS4
- A/BN5q8m2ui42sNQbZiMQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:c875qPA3kBI=:oc0VeV3s6SB4C7TwtGiC59
- saFt9JUU38TgdUowu9dTsSWiiAD+oqRAMQ4zrP7vOJz7TBts8bIo7pHf9dJ80EEW5iSDfEPFz
- 8Fcg3I71eZ3R1rWEVWeymi4z253O4CAhhR2YbldPVeYperP1bUsXQAVjSUo5TNFEFypTPSIye
- 78SrgKUNvxSGocb4aQhtYzNFE3TsF0dDwZAL0Kc55/Ls003MHP2e6ce61he+W6w/8m2f2/+Ce
- 6MEx0Xi+Y8d2P+ZB67xwzSLlOiAzk6eNGIcs/4Ps+gT4nSg2DllsRkJ4s8KQuBZFwVMJvrkML
- VYQqsKY3U7CrVd1Hg93GQvHsLW0A79WmcseQ5xPfgOx7ZKbjg4QGKykDW2aeCz/h/Ww8Xtvru
- 6jY5UhOIya8PyezlW0epmKP/FS6hl79Wlt3Fgt7NnKzyDU63F09YgSS3jGgRzZYU8iswmO6kj
- 0IxZ+4IzgYNKDcWfHnCgOBDwCZD2d+NG1SLNf3fZXFr+PQjusNyMBM8VyrNrRc2sPvmdjkyL9
- +sfG8z/wib+TfxJXXK7TdfRQA2rzHM94vJJl44TwBKDDw3MGtPzgixnqosBdGMngzVGZHlx3e
- ookpZQJ+oMzpzSKAq1r5lRbB5Rzow7W6OP5mHCai9POZCQp8P3sIvCOxaBYI28hsbi+2IwO7k
- CAH5E0b8bgqS9wpvpCTbkL7zzXw+/yT13nT8k+Cm1sYVVE+IuQXD6gT6313dWqW4jMyHZtfRZ
- 8xkEDKpf0giDqWgd+7M25WCTtgU6fphkLet/zg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220628081707.1997728-1-guoren@kernel.org>
+ <20220628081707.1997728-5-guoren@kernel.org>
+ <09abc75e-2ffb-1ab5-d0fc-1c15c943948d@redhat.com>
+ <CAJF2gTQZzOtOsq0DV48Gi76UtBSa+vdY7dLZmoPD_OFUZ0Wbrg@mail.gmail.com>
+ <5166750c-3dc6-9b09-4a1e-cd53141cdde8@redhat.com>
+ <CAK8P3a2jQ+UQ54=QcpyVt91vXRyZrvUtOygFYOHWTBzse3q3rg@mail.gmail.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <CAK8P3a2jQ+UQ54=QcpyVt91vXRyZrvUtOygFYOHWTBzse3q3rg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,21 +75,54 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jun 29, 2022 at 10:24 AM Guo Ren <guoren@kernel.org> wrote:
-> On Wed, Jun 29, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > On Wed, Jun 29, 2022 at 3:34 AM Waiman Long <longman@redhat.com> wrote:
-> >
-> > From looking at the header file dependencies on arm64, I know that
-> > putting jump labels into core infrastructure like the arch_spin_lock()
-> > makes a big mess of indirect includes and measurably slows down
-> > the kernel build.
-> arm64 needn't combo spinlock, it could use pure qspinlock with keeping
-> current header files included.
+On 6/29/22 03:08, Arnd Bergmann wrote:
+> On Wed, Jun 29, 2022 at 3:34 AM Waiman Long <longman@redhat.com> wrote:
+>> On 6/28/22 21:17, Guo Ren wrote:
+>>> On Wed, Jun 29, 2022 at 2:13 AM Waiman Long <longman@redhat.com> wrote:
+>>>> On 6/28/22 04:17, guoren@kernel.org wrote:
+>>>>
+>>>> So the current config setting determines if qspinlock will be used, not
+>>>> some boot time parameter that user needs to specify. This patch will
+>>>> just add useless code to lock/unlock sites. I don't see any benefit of
+>>>> doing that.
+>>> This is a startup patch for riscv. next, we could let vendors make choices.
+>>> I'm not sure they like cmdline or vendor-specific errata style.
+>>>
+>>> Eventually, we would let one riscv Image support all machines, some
+>>> use ticket-lock, and some use qspinlock.
+>> OK. Maybe you can postpone this combo spinlock until there is a good use
+>> case for it. Upstream usually don't accept patches that have no good use
+>> case yet.
+> I think the usecase on risc-v is this: there are cases where the qspinlock
+> is preferred for performance reasons, but there are also CPU cores on
+> which it is not safe to use. risc-v like most modern architectures has a
+> strict rule about being able to build kernels that work on all machines,
+> so without something like this, it would not be able to use qspinlock at all.
 
-arm64 has a different problem: there are two separate sets of atomic
-instructions, and the decision between those is similarly done using
-jump labels. I definitely like the ability to choose between qspinlock
-and ticket spinlock on arm64 as well. This can be done as a
-compile-time choice, but both of them still depend on jump labels.
+My objection for the current patch is really on the fact that everything 
+is determined at compiled time. So there is no point to use static key 
+if it cannot be changed at the boot time. Adding a boot time switch do 
+make the use of static key more reasonable.
 
-        Arnd
+
+>
+> On the other hand, I don't really like the idea of putting the static-key
+> wrapper into the asm-generic header. Especially the ticket spinlock
+> implementation should be simple and not depend on jump labels.
+>
+>  From looking at the header file dependencies on arm64, I know that
+> putting jump labels into core infrastructure like the arch_spin_lock()
+> makes a big mess of indirect includes and measurably slows down
+> the kernel build.
+>
+> I think this can still be done in the riscv asm/spinlock.h header with
+> minimal impact on the asm-generic file if the riscv maintainers see
+> a significant enough advantage, but I don't want it in the common code.
+
+I have a similar feeling. In addition, I don't like the idea of adding a 
+static key to qspinlock.c that have nothing to do with the qspinlock 
+logic. I would like to see it put elsewhere.
+
+Cheers,
+Longman
+
