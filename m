@@ -2,154 +2,129 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E96055F231
-	for <lists+linux-arch@lfdr.de>; Wed, 29 Jun 2022 02:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FAE55F244
+	for <lists+linux-arch@lfdr.de>; Wed, 29 Jun 2022 02:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiF2ADo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 28 Jun 2022 20:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40820 "EHLO
+        id S229690AbiF2AOy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 28 Jun 2022 20:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiF2ADn (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jun 2022 20:03:43 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A7EB7E8
-        for <linux-arch@vger.kernel.org>; Tue, 28 Jun 2022 17:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1656461022; x=1687997022;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AkhL1qarJ7uRcWbPCvOqJRq1JXTBxhnx9ParOHQ5oGE=;
-  b=jUe6oQ88pC8ULIaq3UH5QnJKs8+F8J9cTrKpui4khtrpyXx5bmoWXjIt
-   WkcS/lg9hiI5/wZpXP0iFJWhSSHVrwKjlXIsFHNGmGH4MAnIjMht3yK2e
-   wA5u2sTygKkThCmj17fGmXSbJLsSpoD+M9eAb2W8nnV74y63CzwIDA10M
-   4duOx2lsTK16GnVTBg4MLOEY192or5i7FHOiL9RLjp/qzyPL3MDEunXMw
-   HIoj0swt2Ws/Tte5ZS3dURhvgexmXhJ0MiMf3uZalaUNcMMcFuwQ+pqkO
-   CMGXqaXcDJeS7Yf7UWgyeoi6oLt2a4sGa4N05Oj+Y1jn1kO33Po8M/I+c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10392"; a="264918976"
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="264918976"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2022 17:03:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,230,1650956400"; 
-   d="scan'208";a="836887822"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 28 Jun 2022 17:03:40 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o6LBE-000AlC-5i;
-        Wed, 29 Jun 2022 00:03:40 +0000
-Date:   Wed, 29 Jun 2022 08:03:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 4313a24985f00340eeb591fd66aa2b257b9e0a69
-Message-ID: <62bb96d0.InZDtNeE9fN3BuUf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229490AbiF2AOx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 28 Jun 2022 20:14:53 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6C522516;
+        Tue, 28 Jun 2022 17:14:52 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id o18so12546375plg.2;
+        Tue, 28 Jun 2022 17:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=05ASLe35KlS/635AYkr9ttdQBevoBXGVkR7t9AbxzS8=;
+        b=dzzx4WtXS/WkHpvykE0Ug4pI7IQoDYpxYcwT22eGTgXydtRyVau06KToMULz4WZ85p
+         grc9sV1BmBI096bjPV6AYIg+FD5hBe5gj3092gLAqIoDR6Usno3qkCUxW0him8f4Kt+7
+         5Uf02V1S6CU9QXgRzjHroyahVKDiR/lHNsV044fz9JWOwGa1zg1AbzobwrAmZjbW8zFF
+         NJWZj5bNSbN92/C5/1fpmT4IbOePFpLv8AN2psJq3YvTqAwnlZ6jrlyHQy1YHFlzFM4V
+         6GGIoWoQqCmV+YlWQVYdo/a8/uHvejllTjqLg43Sy9OxgGuiI2LvtGtvLWOWEwxpHjVI
+         SvDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=05ASLe35KlS/635AYkr9ttdQBevoBXGVkR7t9AbxzS8=;
+        b=Vehktr0tLQ/RatkkMM7U7Ezp4A+PPnWPsGkhNKzqPNYTLYGCS7kgvqjJpmsA/mT7Zj
+         yuvSRCJdX0rZ8jf8bltL227l5vJ5TnKH3BQLN2o9JdXK6z45ItHIN9QIlh8poaVXVOly
+         LVfiDLKolykD+2394olkL8jBGXg/xczVDuQQqDzvgULle9V5d1O8q3IFOqpf4pDJGAvf
+         uneGraK+opAVRalhv+KFTUXaNcaRz1rdaOiy6BDwk/F1u/KWbSHluPh4mn1bi2p4gOrh
+         wf/VWgnZJ4l9pPskCDuV+LM2Qmp82QXwiHAvt0hW8NMHH0IO9O+QFRWdNeSrSjhMX/gF
+         kFuw==
+X-Gm-Message-State: AJIora9K8YNA9F+SXHUMwVRNw/fqek8+4LScMtZBjYoRbWtTgOHTJ8xC
+        bBLhSUjNLmVTB2HYDqVKA0A=
+X-Google-Smtp-Source: AGRyM1s6BvhKknOd3DGT0QQr5uB83fgcSZ645ndGItCzAFy4UPsuv2Gt9Oy4n8CrGTj/IyliMMkT6Q==
+X-Received: by 2002:a17:903:240e:b0:168:ea13:f9e0 with SMTP id e14-20020a170903240e00b00168ea13f9e0mr7684101plo.6.1656461692074;
+        Tue, 28 Jun 2022 17:14:52 -0700 (PDT)
+Received: from ?IPV6:2001:df0:0:200c:75aa:d6ca:4354:6033? ([2001:df0:0:200c:75aa:d6ca:4354:6033])
+        by smtp.gmail.com with ESMTPSA id c13-20020a170902c1cd00b0016a276aada7sm9950167plc.20.2022.06.28.17.14.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Jun 2022 17:14:51 -0700 (PDT)
+Message-ID: <2402062b-aae6-a247-06a8-3775c2909bdb@gmail.com>
+Date:   Wed, 29 Jun 2022 12:14:42 +1200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 3/3] arch/*/: remove CONFIG_VIRT_TO_BUS
+Content-Language: en-US
+From:   Michael Schmitz <schmitzmic@gmail.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Khalid Aziz <khalid@gonehiking.org>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        Matt Wang <wwentao@vmware.com>,
+        Miquel van Smoorenburg <mikevs@xs4all.net>,
+        Mark Salyzyn <salyzyn@android.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+References: <20220617125750.728590-1-arnd@kernel.org>
+ <20220617125750.728590-4-arnd@kernel.org>
+ <6ba86afe-bf9f-1aca-7af1-d0d348d75ffc@gmail.com>
+ <CAMuHMdVewn0OYA9oJfStk0-+vCKAUou+4Mvd5H2kmrSks1p5jg@mail.gmail.com>
+ <b4e5a1c9-e375-63fb-ec7c-abb7384a6d59@gmail.com>
+ <9289fd82-285c-035f-5355-4d70ce4f87b0@gmail.com>
+ <CAMuHMdXUihTPD9A9hs__Xr2ErfOqkZ5KgCHqm+9HvRf39uS5kA@mail.gmail.com>
+ <c30bc9b6-6ccd-8856-dc6b-4e16450dad6f@gmail.com>
+ <CAK8P3a1rxEVwVF5U-PO6pQkfURU5Tro1Qp8SPUfHEV9jjWOmCQ@mail.gmail.com>
+ <9f812d3d-0fcd-46e6-6d7e-6d4bf66f24ab@gmail.com>
+ <fc47e8da-81d3-e563-0a17-4eb23db015cc@acm.org>
+ <859c2adc-d3cb-64e8-faba-06e1ac5eddaf@gmail.com>
+In-Reply-To: <859c2adc-d3cb-64e8-faba-06e1ac5eddaf@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 4313a24985f00340eeb591fd66aa2b257b9e0a69  arch/*/: remove CONFIG_VIRT_TO_BUS
+Hi Bart,
 
-elapsed time: 723m
+On 29/06/22 12:01, Michael Schmitz wrote:
+>
+>> An example of a user space application that passes an SG I/O data 
+>> buffer to the kernel that is aligned to a four byte boundary but not 
+>> to an eight byte boundary if the -s (scattered) command line option 
+>> is used: 
+>> https://github.com/osandov/blktests/blob/master/src/discontiguous-io.cpp
+>
+> Thanks - four byte alignment actually wouldn't be an issue for me. 
+> It's two byte or smaller that would trip up the SCSI DMA.
+>
+> While I'm sure such an even more pathological test case could be 
+> written, I was rather worried about st.c and sr.c input ...
+Nevermind - I just see m68k defines ARCH_DMA_MINALIGN to be four bytes. 
+Should be safe for all that matters, then.
 
-configs tested: 73
-configs skipped: 2
+Cheers,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+     Michael
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-sh                               j2_defconfig
-sh                           se7343_defconfig
-parisc64                         alldefconfig
-powerpc                      ppc40x_defconfig
-arm                        realview_defconfig
-arm                            pleb_defconfig
-parisc64                            defconfig
-arm                          pxa910_defconfig
-arm                            hisi_defconfig
-arc                     nsimosci_hs_defconfig
-arm                        cerfcube_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                 mpc837x_mds_defconfig
-sh                           se7712_defconfig
-arm                      jornada720_defconfig
-ia64                             allmodconfig
-x86_64               randconfig-k001-20220627
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64               randconfig-a013-20220627
-x86_64               randconfig-a012-20220627
-x86_64               randconfig-a016-20220627
-x86_64               randconfig-a015-20220627
-x86_64               randconfig-a011-20220627
-x86_64               randconfig-a014-20220627
-i386                 randconfig-a014-20220627
-i386                 randconfig-a012-20220627
-i386                 randconfig-a015-20220627
-i386                 randconfig-a011-20220627
-i386                 randconfig-a016-20220627
-i386                 randconfig-a013-20220627
-riscv                randconfig-r042-20220627
-arc                  randconfig-r043-20220627
-s390                 randconfig-r044-20220627
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
 
-clang tested configs:
-arm                      pxa255-idp_defconfig
-arm                            dove_defconfig
-x86_64               randconfig-a006-20220627
-x86_64               randconfig-a004-20220627
-x86_64               randconfig-a001-20220627
-x86_64               randconfig-a005-20220627
-x86_64               randconfig-a002-20220627
-x86_64               randconfig-a003-20220627
-i386                 randconfig-a002-20220627
-i386                 randconfig-a001-20220627
-i386                 randconfig-a003-20220627
-i386                 randconfig-a004-20220627
-i386                 randconfig-a005-20220627
-i386                 randconfig-a006-20220627
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220627
-hexagon              randconfig-r045-20220627
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
