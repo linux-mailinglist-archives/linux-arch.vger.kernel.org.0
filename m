@@ -2,37 +2,37 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEEB561234
-	for <lists+linux-arch@lfdr.de>; Thu, 30 Jun 2022 08:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463FF56123A
+	for <lists+linux-arch@lfdr.de>; Thu, 30 Jun 2022 08:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiF3GF2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 30 Jun 2022 02:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S232234AbiF3GHC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 30 Jun 2022 02:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiF3GF1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jun 2022 02:05:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83F3E9C;
-        Wed, 29 Jun 2022 23:05:25 -0700 (PDT)
-Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MDykM-1nwr8Z15L2-009u4R; Thu, 30 Jun 2022 08:05:23 +0200
-Received: by mail-yb1-f180.google.com with SMTP id v38so21245765ybi.3;
-        Wed, 29 Jun 2022 23:05:22 -0700 (PDT)
-X-Gm-Message-State: AJIora9mLhIkWMU2pw0+qpEOolnlhrptNeZMdvQLOvLxTO90T/tXSL5O
-        zFetecC19nQkamKR5oVGPtfJuS7QEDEtWLhuApw=
-X-Google-Smtp-Source: AGRyM1vtT3pzk3IDIUdnI7V5TjBcb4k7QQp50McXs21ca3emcSDlR6eKLW5igXc4ObexSkfmEIzbtJFUPtpYReNpT5o=
-X-Received: by 2002:a05:6902:120f:b0:668:2228:9627 with SMTP id
- s15-20020a056902120f00b0066822289627mr7959756ybu.134.1656569121704; Wed, 29
- Jun 2022 23:05:21 -0700 (PDT)
+        with ESMTP id S230146AbiF3GHB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 30 Jun 2022 02:07:01 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58FBE9C;
+        Wed, 29 Jun 2022 23:07:00 -0700 (PDT)
+Received: from mail-yw1-f180.google.com ([209.85.128.180]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1M9nhF-1o0zuJ380D-005t6Q; Thu, 30 Jun 2022 08:06:58 +0200
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2ef5380669cso168880597b3.9;
+        Wed, 29 Jun 2022 23:06:58 -0700 (PDT)
+X-Gm-Message-State: AJIora8E4iPU24jKIAaCkfHY82+uODOzfo+pws1HGDvfa6ODJfOk3Dep
+        D+nF5nHBL3yCwAuQ5mXakO5+pkzxUc4XFF6vVA0=
+X-Google-Smtp-Source: AGRyM1si8Xct+Du/ZHF969rBnPY4ejd78bmjSd2IBZVFQkb9/WgScc4xVPKj47Mi/RxJU38P5FHTJWTl4A4/3M+aGx4=
+X-Received: by 2002:a81:230c:0:b0:31b:f368:d0b0 with SMTP id
+ j12-20020a81230c000000b0031bf368d0b0mr8380804ywj.249.1656569217193; Wed, 29
+ Jun 2022 23:06:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220630043237.2059576-1-chenhuacai@loongson.cn> <20220630043237.2059576-4-chenhuacai@loongson.cn>
-In-Reply-To: <20220630043237.2059576-4-chenhuacai@loongson.cn>
+References: <20220630043237.2059576-1-chenhuacai@loongson.cn> <20220630043237.2059576-5-chenhuacai@loongson.cn>
+In-Reply-To: <20220630043237.2059576-5-chenhuacai@loongson.cn>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 30 Jun 2022 08:05:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1f94z4oSnMr73PuiXkMR7uGhthzY_EWVniB+G4KXBcBQ@mail.gmail.com>
-Message-ID: <CAK8P3a1f94z4oSnMr73PuiXkMR7uGhthzY_EWVniB+G4KXBcBQ@mail.gmail.com>
-Subject: Re: [PATCH V2 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
+Date:   Thu, 30 Jun 2022 08:06:39 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1x=ZX+W0XL-=MkZebHdbvB0Ngam5LxXJUnm7USpMaFMA@mail.gmail.com>
+Message-ID: <CAK8P3a1x=ZX+W0XL-=MkZebHdbvB0Ngam5LxXJUnm7USpMaFMA@mail.gmail.com>
+Subject: Re: [PATCH V2 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
 To:     Huacai Chen <chenhuacai@loongson.cn>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -52,27 +52,27 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Feiyang Chen <chenfeiyang@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:isWkHM0zBfXkwCpnGWGutHkS/c7PTfYL+kPwzmCZnPTaur1N43j
- trEAds4ISXh8H43i7dfbkWSQ4tq8gEWi9JKyY4iCJb/J4SD5dAW9u4Qx4iGNM7YwKyKMbuL
- edDZoYeSJyIN+4bVRBDeeiiE2nDFLNfA/uaQ4aVs590jrjV1km5pJEbwcYcCL8jzX0/xM/1
- mMSS5KFxjXx25Cx8ptu9Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:K/dru+AXhPE=:25UZ8NKGZcBrkp36/wp5Gn
- 0GqcT8r3sqJsAykWyp2uHh4zhJ0NgQQFNNldEGODKTiGV1wnvD3CULKr10UmH1OwtBlJcEoNg
- pXTa1PyWq9+nTiK9JnSh/+zWV3UmpkaQtnoFuzV9UvbsPaZw12uotwhR+zGqbs4oMuaBpPqdd
- eSkWZiPn5yT12e+1++b7pwmHdPhMjHizyTefRfKfx+5BVva82sfqZp0ksS2jqU4wcXx5fiGb7
- MSMMiUQy6hDUdIySZZIG3NfBLXSZzvoJFxcwp+9picXPP0RdYVSeCqNfBbp9EC6cHSqGANztP
- oUypRoKgLbGZiEgpLGUu1k7l+bz2vU+RbR2kNkZ+V137r30NXpN1VDQmXdToQxUNXNN1DKImz
- EpOnGE8mqN0Yyk6xCTtofapJ+ytJyOGT2mCHeNTpzZV9sZvUkiq+377Bh3LUNLbHoUPi25rE2
- 0A0Ul+KtW71sOhOtTQiZxjJa+nXe+dV9QXUI58YVVjE2yRIpHebVmxPk3lPStnFzoK1zU+KJx
- F840O+8k7kQqeL3p+B1W0n1RnLARAgN2VbSapitu43we4+FkpcQg9+7J2TobO2UTq3yBSDrcl
- R5bXusXaKOIRMkA8kkdUplPn/3SA4LalgAQLFQcWoNLN43FYrcfbfDc8YNFpp8IbdTzYxvObt
- QswESTXgyebxy22XJI9SJ7zQYSMgr36k15TrPEAL+dUqPP2RaZ6lU0Pu+fLNCg/GcVJj2szbD
- tJybH4N+QGrusm9GOU6xKSpwGYv8lMNsoDBvZV9r9DyCLYkgHVXZb9M0dycDkyfhLbmyY7YPI
- YEgfnDZFdyOJnvycE4OxQJ32FpQViCqt3oYEZ4DTjw5CKfmZozsekrwz31uSHYLDm3TCE2KQE
- jAma2Qnb4k9xIC6ZY+DQTFlC4nxLJMVyBclhq11Bc=
+X-Provags-ID: V03:K1:EqufN3JL2pynIVinIv30vDp/9hKO6kuVwaT2r/RqjU44rejbmPr
+ TVBI+96t/cAIQ88fsIgR52MaCIiVWNhQUtVJJh2pofinDQnr+N6asTdFS2kTqiyIsQPSr2w
+ Y6x9267us0LNGa+gkGHN2j+FhU6c0Zn3yBmhJyA+CGAaMdxonZV54KLRL7c3ofikLkQI4l3
+ 0yFOk2VOUgOdQFL2tXbSQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:q2wajwpiJFk=:5lYrLbbaJeLJd/nnzcawf6
+ /bNi8LfS9I4hY5ubK8Iw2g7Xl9BC6Kas5G8L/GwjdV1qmPbpb7VKGmFC8K7a2WUnPwTkK60ub
+ jAbcsuCOiy8GxaNfDzYGqZOgKqpdvk78zD9DLtNMrBYSXL5heXG9vNRelFLBBOVyFqapTs9Of
+ lR6ObsGa88h7Cf5aVH4/AShssqr64olZNQf8SaHrvy8dNZWx2eq7VeTrnJ1eLF0pvhPKaAKxP
+ UPztPq2rMtd2ssLWw0FqckVDiCAk9NSG6cLp0fjP8y+GPA4pcahCtiWnQNyYCCrYKOjVZnsR9
+ fOl93O8g6YEJxFlN6UGLfg3OOhVPaVv9pCl9cA+HuCKvHbM10ejNkUxk7KOPfcu98jzZXafif
+ 5ff+SvzbtPVNJZ0vY6bam9JtR0JmqlPiY4S/m/4TG/0ftuxYVUKT5sm1dbIYdJDbUkuShbF5+
+ WIG5t/HYL4kzgThjdZ1rYvpYYhMN2xmTIOXyg9ZGk9qxh0RXSKFKPZsX30L78bfjsb1Pt2fS4
+ 51YsjagDMHNZ8HMvEvc2f8+7pPJCU5TYbE+DxVeAVQirGapv7Z74pOr4+iBzKgEeBPC46/Fw1
+ rJZyQZBl9CrTtacYUZd++PPGqVl92PWc+wrhN+zCYTmvqOCDGseJjYxYN4LuD4eEdCcAolvRC
+ /bwgxcuAImtGcBhgMnJ+0L466948XSmZ9fJmNBHkV6vtS2aPvvnyqSPW36xvc9KiZ5wGE8XQ5
+ 0+c2GR/lMbLsXgWw1IFAHKgqzynm1LZfQI+TC3Ef6g/WJSSUTXsucvxzXa+aWRv7aCeAb4nKi
+ Ajjyl4SKrOKR/uVshVRddv+9fGuTpj/s2cJTboMeEGhv6mGGOvBBH5C9qwX7kYYm0r0vD/ib9
+ JadLleHU8SGAVunx7Q8vmZ4Ls+61x5+vm88EpbwbQ=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,42 +81,11 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Thu, Jun 30, 2022 at 6:32 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
 >
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
->
-> Generalise vmemmap_populate_hugepages() so ARM64 & X86 & LoongArch can
-> share its implementation.
+> To avoid build error on LoongArch we should include linux/static_key.h
+> in page-flags.h.
 
-Sharing this function is good, thanks for consolidating this
+This is an expensive change in terms of compile speed, as static_key.h has
+lots of dependencies, and page-flags.h is included in a lot of places. What
+it is actually needed for?
 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-
-The Signed-off-by lines are in the wrong order, it should start with the author
-and end with the final submitter.
-
-> index 33e2a1ceee72..6f2e40bb695d 100644
-> --- a/mm/sparse-vmemmap.c
-> +++ b/mm/sparse-vmemmap.c
-> @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
->         return vmemmap_populate_range(start, end, node, altmap, NULL);
->  }
->
-> +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> +                                     unsigned long addr, unsigned long next)
-> +{
-> +}
-> +
-> +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> +                                      unsigned long next)
-> +{
-> +       return 0;
-> +}
-> +
-
-I think inline functions would be better here, both for compiler optimization
-and to make it easier to track the code flow. The normal way we do these
-in architecture specific headers is to override the functions by defining a
-macro of the same name.
-
-
-        Arnd
+         Arnd
