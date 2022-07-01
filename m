@@ -2,56 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D167B56358E
+	by mail.lfdr.de (Postfix) with ESMTP id 6578D56358D
 	for <lists+linux-arch@lfdr.de>; Fri,  1 Jul 2022 16:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbiGAOaW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Jul 2022 10:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
+        id S229632AbiGAOaY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Jul 2022 10:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbiGAO3Z (ORCPT
+        with ESMTP id S231316AbiGAO3Z (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Jul 2022 10:29:25 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6566D55B
-        for <linux-arch@vger.kernel.org>; Fri,  1 Jul 2022 07:25:22 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id c20-20020a05640227d400b004369cf00c6bso1890263ede.22
-        for <linux-arch@vger.kernel.org>; Fri, 01 Jul 2022 07:25:22 -0700 (PDT)
+Received: from mail-lf1-x14a.google.com (mail-lf1-x14a.google.com [IPv6:2a00:1450:4864:20::14a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200726D55F
+        for <linux-arch@vger.kernel.org>; Fri,  1 Jul 2022 07:25:24 -0700 (PDT)
+Received: by mail-lf1-x14a.google.com with SMTP id b2-20020a0565120b8200b00477a4532448so1188440lfv.22
+        for <linux-arch@vger.kernel.org>; Fri, 01 Jul 2022 07:25:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=/n5egAWhgjqHJF7YploSYMAs3TFFsaM1JiTS0Bn58vA=;
-        b=Q64KAy7Oa2nU5QEGyiPc+WuoNDDnAlGeuwj9Gnp4CxbUOEi4OI3mY3DVAxjpBiKgfy
-         oa7qyOyW4RhD6IyTiejiC7YtXEPcWRYAw5gxMRCHiOP9br49u9DBYFU0wT8izXo989yb
-         SsJ683z3889b7saADkdB2NmfOQkA9W3PR5kSJXdTK6rlAIAn/matyXusT0WxYIYR1PdC
-         nsJAkTFlORzo0vstvDMrGlx6qd2DiIZ3JP81lA81CBvxEItVe4LQpcoX5OTFruunfhnn
-         6Il7stXu45y2U2bIykk0AFttgTTdTXs+YT4Idf4maBbQ8qhqqM+TVsUW/CeEtqqLOi3k
-         x6Qw==
+        bh=iGvD4mfjvjSWX+nv6535woTSPAyHTTcU/sEMimyHpxI=;
+        b=P7QKDp3hV6WoKSuU7RWtHYNnUzKsYPMuoVFYGC5CAEPmJ0nl1tQiRY+9OYfXLY42wB
+         nFSOJB8BBflVDmdDuWSkOCm55g6bwX9dQkpXj4xCR6s6JCEls/jHSMNPkv+lVDZh5nKs
+         hUARMca5KeTe+Ir0fpc6ZOi4Uq5KQZl/WLZTZOatCEOeYcao1NRgQlKKrm6iBVPu3X1Z
+         JYhJ2HBgIVmRPYmPgcVuYdtvK/4rJXCJLuWe7FZ63qgHZC3DxwnGi+wOpBYOkbuzJh/f
+         yrpShYElychLxpVWGpPbFszkIP0ovqs29G1ENpHftNUWpa2XkYBhGLzu4Zi+nYeVFrno
+         cQCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=/n5egAWhgjqHJF7YploSYMAs3TFFsaM1JiTS0Bn58vA=;
-        b=SXRreUbuszIn8QqNNv1+0rHmeLXp/bhV8IrCt3NeGyKODdmjsUoQww9A30XDcVl2Lx
-         r3WCfzlMuH7MBVAoefBtduq6XexftQuxnGx3Oc3O/PYrajeTa0tyF+Con2ZZAYlr+0X/
-         e6n//euMkErog/7W1t6ihdTfo+scdN3Vf93lTpmHoQjqxNARd7sORgTV/T+2C9/cWx4z
-         2VAFytLduoILGNeTONaRfAVKdhD3azRJAGXGeVtW7Wwa1R5tCp8sa9n2plBj7cSqomOP
-         tFRqbTL7evjlXrAx0BCSvv6BqK2cXcXpOlLl9Piu/ZUWZyD9O/gHd9q+v3Wdg7FHKKJ0
-         8ZVg==
-X-Gm-Message-State: AJIora/jjRaTbDtC4Kvmh5n1GzY4WH6VgUjaynspxwKcd/Ys+yCYc/kF
-        tq5jUq7S0ERf8Uv4bz8qy/jg8AuCUrM=
-X-Google-Smtp-Source: AGRyM1vUh8ZooMqVrhXc2xeGCFSNfOoXJqVl3ZPA1oCNI4qUloUIWKz76DRGg3RXhdunivVizxxEE/eITwE=
+        bh=iGvD4mfjvjSWX+nv6535woTSPAyHTTcU/sEMimyHpxI=;
+        b=W/bjruO9GyPHAoriEqzLSAeOyIgkU3u/QfxtTa6LnbKq6af25iSU+aYqqfV3fM3jfg
+         jQ9jKXbyjU2k7oOUcpFpe7Tm1PZqYn9UmdMUmvTXUJVYIalZsZJHbDdhkJKdKblXE/Gd
+         58OWO5p4GFYwrJ5D5lic+JbvNSuyqk8EV1VGuy4MAEm+QMg+sOdHOZONLcLHfKuwva0a
+         ggc+VL4cLMp44tkxwIPdVP30ox4r74fXrU9M7t+Gdn40IGOle/uv+Se2T+t7WVizdWWX
+         Tbmx5CsAOD6/s9JjseN2WgQGNFJwIkHBxOmPAY5It109iwL3QMQ5cWFEmLHxYiWCW5VK
+         ZtOA==
+X-Gm-Message-State: AJIora8EuEgrdaD8SLp+QzlgSIK6yKy+ixmRt04wCRB2hoC1WHodVEoL
+        mQBDn5nRftZE5RYj7dfkuxOaEtjplyQ=
+X-Google-Smtp-Source: AGRyM1s7QtTcOviesKYVgedtf1csh4E3jTJYd2DFNUsU1Lb1euL9e2M1gyfvpy9SPS5aVSID3ksrqFaDH6I=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:a6f5:f713:759c:abb6])
- (user=glider job=sendgmr) by 2002:a05:6402:51ca:b0:437:79a9:4dd with SMTP id
- r10-20020a05640251ca00b0043779a904ddmr19173589edd.319.1656685515729; Fri, 01
- Jul 2022 07:25:15 -0700 (PDT)
-Date:   Fri,  1 Jul 2022 16:23:08 +0200
+ (user=glider job=sendgmr) by 2002:a05:6512:4c3:b0:47f:6f6e:a7e7 with SMTP id
+ w3-20020a05651204c300b0047f6f6ea7e7mr9859006lfq.674.1656685518270; Fri, 01
+ Jul 2022 07:25:18 -0700 (PDT)
+Date:   Fri,  1 Jul 2022 16:23:09 +0200
 In-Reply-To: <20220701142310.2188015-1-glider@google.com>
-Message-Id: <20220701142310.2188015-44-glider@google.com>
+Message-Id: <20220701142310.2188015-45-glider@google.com>
 Mime-Version: 1.0
 References: <20220701142310.2188015-1-glider@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
+Subject: [PATCH v4 44/45] mm: fs: initialize fsdata passed to
+ write_begin/write_end interface
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -84,85 +85,96 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Evgenii Stepanov <eugenis@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-toolchains@vger.kernel.org
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Under certain circumstances initialization of `unsigned seq` and
-`struct inode *inode` passed into step_into() may be skipped.
-In particular, if the call to lookup_fast() in walk_component()
-returns NULL, and lookup_slow() returns a valid dentry, then the
-`seq` and `inode` will remain uninitialized until the call to
-step_into() (see [1] for more info).
+Functions implementing the a_ops->write_end() interface accept the
+`void *fsdata` parameter that is supposed to be initialized by the
+corresponding a_ops->write_begin() (which accepts `void **fsdata`).
 
-Right now step_into() does not use these uninitialized values,
-yet passing uninitialized values to functions is considered undefined
-behavior (see [2]). To fix that, we initialize `seq` and `inode` at
-definition.
+However not all a_ops->write_begin() implementations initialize `fsdata`
+unconditionally, so it may get passed uninitialized to a_ops->write_end(),
+resulting in undefined behavior.
 
-[1] https://github.com/ClangBuiltLinux/linux/issues/1648#issuecomment-1146608063
-[2] https://lore.kernel.org/linux-toolchains/CAHk-=whjz3wO8zD+itoerphWem+JZz4uS3myf6u1Wd6epGRgmQ@mail.gmail.com/
+Fix this by initializing fsdata with NULL before the call to
+write_begin(), rather than doing so in all possible a_ops
+implementations.
 
-Cc: Evgenii Stepanov <eugenis@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Marco Elver <elver@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Vitaly Buka <vitalybuka@google.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-toolchains@vger.kernel.org
+This patch covers only the following cases found by running x86 KMSAN
+under syzkaller:
+
+ - generic_perform_write()
+ - cont_expand_zero() and generic_cont_expand_simple()
+ - page_symlink()
+
+Other cases of passing uninitialized fsdata may persist in the codebase.
+
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I94d4e8cc1f0ecc7174659e9506ce96aaf2201d0a
+Link: https://linux-review.googlesource.com/id/I414f0ee3a164c9c335d91d82ce4558f6f2841471
 ---
- fs/namei.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ fs/buffer.c  | 4 ++--
+ fs/namei.c   | 2 +-
+ mm/filemap.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/fs/buffer.c b/fs/buffer.c
+index 898c7f301b1b9..d014009cff941 100644
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -2349,7 +2349,7 @@ int generic_cont_expand_simple(struct inode *inode, loff_t size)
+ 	struct address_space *mapping = inode->i_mapping;
+ 	const struct address_space_operations *aops = mapping->a_ops;
+ 	struct page *page;
+-	void *fsdata;
++	void *fsdata = NULL;
+ 	int err;
+ 
+ 	err = inode_newsize_ok(inode, size);
+@@ -2375,7 +2375,7 @@ static int cont_expand_zero(struct file *file, struct address_space *mapping,
+ 	const struct address_space_operations *aops = mapping->a_ops;
+ 	unsigned int blocksize = i_blocksize(inode);
+ 	struct page *page;
+-	void *fsdata;
++	void *fsdata = NULL;
+ 	pgoff_t index, curidx;
+ 	loff_t curpos;
+ 	unsigned zerofrom, offset, len;
 diff --git a/fs/namei.c b/fs/namei.c
-index 1f28d3f463c3b..6b39dfd3b41bc 100644
+index 6b39dfd3b41bc..5e3ff9d65f502 100644
 --- a/fs/namei.c
 +++ b/fs/namei.c
-@@ -1995,8 +1995,8 @@ static const char *handle_dots(struct nameidata *nd, int type)
- static const char *walk_component(struct nameidata *nd, int flags)
- {
- 	struct dentry *dentry;
--	struct inode *inode;
--	unsigned seq;
-+	struct inode *inode = NULL;
-+	unsigned seq = 0;
- 	/*
- 	 * "." and ".." are special - ".." especially so because it has
- 	 * to be able to know about the current root directory and
-@@ -3393,8 +3393,8 @@ static const char *open_last_lookups(struct nameidata *nd,
- 	struct dentry *dir = nd->path.dentry;
- 	int open_flag = op->open_flag;
- 	bool got_write = false;
--	unsigned seq;
--	struct inode *inode;
-+	unsigned seq = 0;
-+	struct inode *inode = NULL;
- 	struct dentry *dentry;
- 	const char *res;
+@@ -5051,7 +5051,7 @@ int page_symlink(struct inode *inode, const char *symname, int len)
+ 	const struct address_space_operations *aops = mapping->a_ops;
+ 	bool nofs = !mapping_gfp_constraint(mapping, __GFP_FS);
+ 	struct page *page;
+-	void *fsdata;
++	void *fsdata = NULL;
+ 	int err;
+ 	unsigned int flags;
  
+diff --git a/mm/filemap.c b/mm/filemap.c
+index ffdfbc8b0e3ca..72467f00f1916 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -3753,7 +3753,7 @@ ssize_t generic_perform_write(struct kiocb *iocb, struct iov_iter *i)
+ 		unsigned long offset;	/* Offset into pagecache page */
+ 		unsigned long bytes;	/* Bytes to write to page */
+ 		size_t copied;		/* Bytes copied from user */
+-		void *fsdata;
++		void *fsdata = NULL;
+ 
+ 		offset = (pos & (PAGE_SIZE - 1));
+ 		bytes = min_t(unsigned long, PAGE_SIZE - offset,
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
