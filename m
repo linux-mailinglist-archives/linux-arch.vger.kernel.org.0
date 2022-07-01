@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B01756351C
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Jul 2022 16:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E454E563528
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Jul 2022 16:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiGAOXi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Jul 2022 10:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38486 "EHLO
+        id S231872AbiGAOX6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Jul 2022 10:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232000AbiGAOXg (ORCPT
+        with ESMTP id S232080AbiGAOXg (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Jul 2022 10:23:36 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B832F3A1
-        for <linux-arch@vger.kernel.org>; Fri,  1 Jul 2022 07:23:25 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id s4-20020a170906500400b006feaccb3a0eso842886ejj.11
-        for <linux-arch@vger.kernel.org>; Fri, 01 Jul 2022 07:23:25 -0700 (PDT)
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A421332077
+        for <linux-arch@vger.kernel.org>; Fri,  1 Jul 2022 07:23:28 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id r12-20020a05640251cc00b00435afb01d7fso1869700edd.18
+        for <linux-arch@vger.kernel.org>; Fri, 01 Jul 2022 07:23:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=DM2lItfZBVLN/C7PGBgjPtkXFa/DP0+N1ALBTGezmzM=;
-        b=BrwjnieB1ihiMJjhT7I5u//E7HjI1WLLjlXBmbnDhgMb7SpTYsEuazuBiSutpdswxC
-         5pvB8SRUOYAiKuMPD3S9k8yYpGxtgwA4cZZf6JHUocr1/F0k13itXtMMpFzSqF04Alsp
-         chy+0E2s4SsndfHwLVSyYJzYMcaxAhoa6oqKJOe11TNjTNr10CeQHAcSf+2V5GU9ne2/
-         XLFDmkZaS+nan9HDxgfTnVYnCoqy44FIEOMq2nA0ViTNF2vno2mvx43ZLEeDlEnkJ1qy
-         mGeEtfCFTEFHfRnQWwnwzmz9FeJeVkjle7Ho0tF4WBjphb+reY+Lt6qdvhMZ0CVbxkQi
-         c7Yw==
+        bh=g6pC2DAwiUBeK1TSxgdl5U3IOE2AcDc9FK6KiXQeXic=;
+        b=AHKrqjSKbIhFOsa2VQSybdRJw40/76dIOouQ3LxiX50cNdW9EKH77HHDfNAcImNKZf
+         GeMQtHcRemc/Cl5NUHQ8aiLcNwc8TpgRsU6Ln8BGBoNJ4WhY8e4fJesF8eINu4Q1m6rE
+         894rX+GOm0y1pWTY+02nHyNLuCMkwHH0SiMztDb+tBivwkIU2GyInzjk7TGEmVGfgXT7
+         ikUy1pi4Zeduvw3a5o1EtaeInq31rAlsXTucAeSAezlmwAdOugIN+Mt9tp5v0YNDJcZ8
+         rg9kw8pUI9ailA5iyfhYRap74iZrdGMioHk8KCDVS57lmwlU8Cc/kwuLKwtlSc7RZkg8
+         qAyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=DM2lItfZBVLN/C7PGBgjPtkXFa/DP0+N1ALBTGezmzM=;
-        b=HNbWPnkG+Ac2pR28z1D7sA8aEXAxSWY/MMMpANXDtA5LnyBbFiIpSdsroFHOr8uiY8
-         /r06Uk2QrWuCzkHOFnw16oNoCGR4Rs6+Ihr0QQRu0+OcC0/BkVX0Og85aa1KcXUNZ0J/
-         TegnjXpLtpEs+oEq6Zy9NbWlANw1TmJKqLvy0+v7M7vw2vPLS387a38OxEq1/ex/2czY
-         C2hBOv8jLGXyg6ofTlmKM6pwFl1R/pCti28rlQNnSXfans8V52ADMkeklG/DRPoUxM4s
-         ZwpxjPlqhZAP/j1RPGzi2JiP5oum7UHcQhUFB50wsm9nATQaSxyX4VM4eMn155ciOzht
-         Xrbw==
-X-Gm-Message-State: AJIora+kdD4PGq3xjnJG5xj3UjzLpsZJYpARnaYSW3c/M+ZLJIiJqf+T
-        wgg5LPUqcjxkdHxVOR3gXUIpNwtHs2s=
-X-Google-Smtp-Source: AGRyM1uQju4QFNdvGz9cfWoWELsmxEhkDZif288LkxUpLP859+uBjIeNd+i+MrlITpHeO3F2JnA8CnG2JDk=
+        bh=g6pC2DAwiUBeK1TSxgdl5U3IOE2AcDc9FK6KiXQeXic=;
+        b=W/SQZtCrKv0/pNB2DZngMV4gIYtEYeBYurDR5LMCJxPOOXm2k0OqgDXBlkcnGMiyfu
+         B8LhMc9gEpJAUB4JW19Wa6p/xZQTO+HLVyQKmiE/QV5QLy0zrflAAEutnDtlEktAEVb5
+         WuacJ8v0CWLw1GZ7d6uo41LimAN0IphUr0+Gf+676aceEGQ31OvN/394NcdJPe4YLRBn
+         +Clqq1B5vCG3acLZAsd41Ee2cLtSXeJ6pOE5s19dU4QM6pGg1k4BJtPJ7uii3FCQCp4h
+         n6VDMx3t/km1xA1POtT5XibfZc+AJZMQ/n+YE7T5sw6mqdp0jitfZzLKMflFFoFJ5atQ
+         MDgA==
+X-Gm-Message-State: AJIora8rw8wX2csspJdEhwYYW6X6GVNBDQxCLrGtZ//ZJW7T2GK4gsy9
+        dFvxfl7lj9GM0KzalZeOqZiNvB06Fng=
+X-Google-Smtp-Source: AGRyM1uxLYmWR//LYr+qyE7iiW3wADsN021yfuxu7jUqUOU6cZfOOtwpDxxr6LrgXLqxLicromQ2HETc9Qk=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:a6f5:f713:759c:abb6])
- (user=glider job=sendgmr) by 2002:aa7:c2cf:0:b0:435:6576:b7c0 with SMTP id
- m15-20020aa7c2cf000000b004356576b7c0mr19716710edp.18.1656685404238; Fri, 01
- Jul 2022 07:23:24 -0700 (PDT)
-Date:   Fri,  1 Jul 2022 16:22:28 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:97d1:b0:722:e6fc:a04 with SMTP id
+ js17-20020a17090797d100b00722e6fc0a04mr14570630ejc.217.1656685406971; Fri, 01
+ Jul 2022 07:23:26 -0700 (PDT)
+Date:   Fri,  1 Jul 2022 16:22:29 +0200
 In-Reply-To: <20220701142310.2188015-1-glider@google.com>
-Message-Id: <20220701142310.2188015-4-glider@google.com>
+Message-Id: <20220701142310.2188015-5-glider@google.com>
 Mime-Version: 1.0
 References: <20220701142310.2188015-1-glider@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4 03/45] instrumented.h: allow instrumenting both sides of copy_from_user()
+Subject: [PATCH v4 04/45] x86: asm: instrument usercopy in get_user() and __put_user_size()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -96,172 +96,71 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce instrument_copy_from_user_before() and
-instrument_copy_from_user_after() hooks to be invoked before and after
-the call to copy_from_user().
+Use hooks from instrumented.h to notify bug detection tools about
+usercopy events in get_user() and put_user_size().
 
-KASAN and KCSAN will be only using instrument_copy_from_user_before(),
-but for KMSAN we'll need to insert code after copy_from_user().
+It's still unclear how to instrument put_user(), which assumes that
+instrumentation code doesn't clobber RAX.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-v4:
- -- fix _copy_from_user_key() in arch/s390/lib/uaccess.c (Reported-by:
-    kernel test robot <lkp@intel.com>)
-
-Link: https://linux-review.googlesource.com/id/I855034578f0b0f126734cbd734fb4ae1d3a6af99
+Link: https://linux-review.googlesource.com/id/Ia9f12bfe5832623250e20f1859fdf5cc485a2fce
 ---
- arch/s390/lib/uaccess.c      |  3 ++-
- include/linux/instrumented.h | 21 +++++++++++++++++++--
- include/linux/uaccess.h      | 19 ++++++++++++++-----
- lib/iov_iter.c               |  9 ++++++---
- lib/usercopy.c               |  3 ++-
- 5 files changed, 43 insertions(+), 12 deletions(-)
+ arch/x86/include/asm/uaccess.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/s390/lib/uaccess.c b/arch/s390/lib/uaccess.c
-index d7b3b193d1088..58033dfcb6d45 100644
---- a/arch/s390/lib/uaccess.c
-+++ b/arch/s390/lib/uaccess.c
-@@ -81,8 +81,9 @@ unsigned long _copy_from_user_key(void *to, const void __user *from,
- 
- 	might_fault();
- 	if (!should_fail_usercopy()) {
--		instrument_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
- 		res = raw_copy_from_user_key(to, from, n, key);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
- 	if (unlikely(res))
- 		memset(to + (n - res), 0, res);
-diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index 42faebbaa202a..ee8f7d17d34f5 100644
---- a/include/linux/instrumented.h
-+++ b/include/linux/instrumented.h
-@@ -120,7 +120,7 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
- }
- 
- /**
-- * instrument_copy_from_user - instrument writes of copy_from_user
-+ * instrument_copy_from_user_before - add instrumentation before copy_from_user
-  *
-  * Instrument writes to kernel memory, that are due to copy_from_user (and
-  * variants). The instrumentation should be inserted before the accesses.
-@@ -130,10 +130,27 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
-  * @n number of bytes to copy
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 913e593a3b45f..1a8b5a234474f 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -5,6 +5,7 @@
+  * User space memory access functions
   */
- static __always_inline void
--instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
-+instrument_copy_from_user_before(const void *to, const void __user *from, unsigned long n)
- {
- 	kasan_check_write(to, n);
- 	kcsan_check_write(to, n);
- }
+ #include <linux/compiler.h>
++#include <linux/instrumented.h>
+ #include <linux/kasan-checks.h>
+ #include <linux/string.h>
+ #include <asm/asm.h>
+@@ -99,11 +100,13 @@ extern int __get_user_bad(void);
+ 	int __ret_gu;							\
+ 	register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);		\
+ 	__chk_user_ptr(ptr);						\
++	instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(ptr))); \
+ 	asm volatile("call __" #fn "_%P4"				\
+ 		     : "=a" (__ret_gu), "=r" (__val_gu),		\
+ 			ASM_CALL_CONSTRAINT				\
+ 		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
+ 	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
++	instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr)), 0); \
+ 	__builtin_expect(__ret_gu, 0);					\
+ })
  
-+/**
-+ * instrument_copy_from_user_after - add instrumentation after copy_from_user
-+ *
-+ * Instrument writes to kernel memory, that are due to copy_from_user (and
-+ * variants). The instrumentation should be inserted after the accesses.
-+ *
-+ * @to destination address
-+ * @from source address
-+ * @n number of bytes to copy
-+ * @left number of bytes not copied (as returned by copy_from_user)
-+ */
-+static __always_inline void
-+instrument_copy_from_user_after(const void *to, const void __user *from,
-+				unsigned long n, unsigned long left)
-+{
-+}
-+
- #endif /* _LINUX_INSTRUMENTED_H */
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index 5a328cf02b75e..da16e96680cf1 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -58,20 +58,28 @@
- static __always_inline __must_check unsigned long
- __copy_from_user_inatomic(void *to, const void __user *from, unsigned long n)
- {
--	instrument_copy_from_user(to, from, n);
-+	unsigned long res;
-+
-+	instrument_copy_from_user_before(to, from, n);
- 	check_object_size(to, n, false);
--	return raw_copy_from_user(to, from, n);
-+	res = raw_copy_from_user(to, from, n);
-+	instrument_copy_from_user_after(to, from, n, res);
-+	return res;
- }
+@@ -248,7 +251,9 @@ extern void __put_user_nocheck_8(void);
  
- static __always_inline __must_check unsigned long
- __copy_from_user(void *to, const void __user *from, unsigned long n)
- {
-+	unsigned long res;
-+
- 	might_fault();
-+	instrument_copy_from_user_before(to, from, n);
- 	if (should_fail_usercopy())
- 		return n;
--	instrument_copy_from_user(to, from, n);
- 	check_object_size(to, n, false);
--	return raw_copy_from_user(to, from, n);
-+	res = raw_copy_from_user(to, from, n);
-+	instrument_copy_from_user_after(to, from, n, res);
-+	return res;
- }
+ #define __put_user_size(x, ptr, size, label)				\
+ do {									\
++	__typeof__(*(ptr)) __pus_val = x;				\
+ 	__chk_user_ptr(ptr);						\
++	instrument_copy_to_user(ptr, &(__pus_val), size);		\
+ 	switch (size) {							\
+ 	case 1:								\
+ 		__put_user_goto(x, ptr, "b", "iq", label);		\
+@@ -286,6 +291,7 @@ do {									\
+ #define __get_user_size(x, ptr, size, label)				\
+ do {									\
+ 	__chk_user_ptr(ptr);						\
++	instrument_copy_from_user_before((void *)&(x), ptr, size);	\
+ 	switch (size) {							\
+ 	case 1:	{							\
+ 		unsigned char x_u8__;					\
+@@ -305,6 +311,7 @@ do {									\
+ 	default:							\
+ 		(x) = __get_user_bad();					\
+ 	}								\
++	instrument_copy_from_user_after((void *)&(x), ptr, size, 0);	\
+ } while (0)
  
- /**
-@@ -115,8 +123,9 @@ _copy_from_user(void *to, const void __user *from, unsigned long n)
- 	unsigned long res = n;
- 	might_fault();
- 	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
--		instrument_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
- 		res = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
- 	if (unlikely(res))
- 		memset(to + (n - res), 0, res);
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 0b64695ab632f..fe5d169314dbf 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -159,13 +159,16 @@ static int copyout(void __user *to, const void *from, size_t n)
- 
- static int copyin(void *to, const void __user *from, size_t n)
- {
-+	size_t res = n;
-+
- 	if (should_fail_usercopy())
- 		return n;
- 	if (access_ok(from, n)) {
--		instrument_copy_from_user(to, from, n);
--		n = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
-+		res = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
--	return n;
-+	return res;
- }
- 
- static size_t copy_page_to_iter_iovec(struct page *page, size_t offset, size_t bytes,
-diff --git a/lib/usercopy.c b/lib/usercopy.c
-index 7413dd300516e..1505a52f23a01 100644
---- a/lib/usercopy.c
-+++ b/lib/usercopy.c
-@@ -12,8 +12,9 @@ unsigned long _copy_from_user(void *to, const void __user *from, unsigned long n
- 	unsigned long res = n;
- 	might_fault();
- 	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
--		instrument_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
- 		res = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
- 	if (unlikely(res))
- 		memset(to + (n - res), 0, res);
+ #define __get_user_asm(x, addr, itype, ltype, label)			\
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
