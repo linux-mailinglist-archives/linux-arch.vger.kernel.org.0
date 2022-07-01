@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC35A56352B
-	for <lists+linux-arch@lfdr.de>; Fri,  1 Jul 2022 16:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C6B56353B
+	for <lists+linux-arch@lfdr.de>; Fri,  1 Jul 2022 16:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiGAOYO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 1 Jul 2022 10:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38606 "EHLO
+        id S231916AbiGAOYf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 1 Jul 2022 10:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiGAOXi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Jul 2022 10:23:38 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8898C19C28
-        for <linux-arch@vger.kernel.org>; Fri,  1 Jul 2022 07:23:36 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id g8-20020a056402090800b00433940d207eso1896136edz.1
-        for <linux-arch@vger.kernel.org>; Fri, 01 Jul 2022 07:23:36 -0700 (PDT)
+        with ESMTP id S231844AbiGAOYJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 1 Jul 2022 10:24:09 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C5248E8
+        for <linux-arch@vger.kernel.org>; Fri,  1 Jul 2022 07:23:39 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id hd35-20020a17090796a300b0072a707cfac4so840004ejc.8
+        for <linux-arch@vger.kernel.org>; Fri, 01 Jul 2022 07:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=gkw9YA7vb5ti0YajzjGN1OXbVHAqDO+SEh0OPXXltUo=;
-        b=DJbRcfFJX1wyQKX8l1FZMyPmyPhiG8QaxtSYEHL+jg9LVV4C2ZYVwI87iVYJ5A4E5H
-         sNiz7RovSUX82iKvetSTT3ivRgXe5SpIKUpLrVUzsQuWrPS2jZdEVUvd0d8c9xpIi90R
-         qYQHmigg/c73A/xfmHKA2YHRRIAqFEe1j/TS5WTo13oUcktHSiV8OM6WEW0kvknYU24w
-         qmZDUmfFklZTJQaCpjJHDgMF8cHmn9jm2Clttqa12yyLWz5x4d/+8IezIzi4zJyCX3cm
-         qbQ7Z3421wCmEB8O7JvaGEmI1uQEvIdKykYZFz7qXILVLVkF14Shh8wwyANYIgOrQMXI
-         WcWg==
+        bh=os0Zx5VZv6p+Rm8I/hkYFMfJuZRHr+O61ed8WspeRIk=;
+        b=OV7vbBjecQ+2aw/zjF5UI7FBbnLXSdlTtfDvhPtucRYMTl+svaPlqkq36KZQsvGhP/
+         ne8e4l8I3/0GRvxegtfKUO6cwS2qPksp9NrQQ5lnpQwHWvK+HWlKJBwNEAVhhJIwF7u5
+         Ns847PNFYy8k60pdHRyM2PsMAizAqLlGYbkafF+wOEnPqhwIwE4aYtsL1hd1Jq6fCqFz
+         ce+lc///QcEti81QlLr7Y54ODBIMH5AChXdc7cPCvHBnFhpkGjgRkrjcUhJb8u74OZGE
+         PCvurUMEpDHYof925nelBMEr785dzxSUlTT5q2hRH/q3uOyGgTsSk9NCo4066mule3qb
+         +5Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=gkw9YA7vb5ti0YajzjGN1OXbVHAqDO+SEh0OPXXltUo=;
-        b=hH1g6TDlZaGWGLrocMPQhAieRl/FJwoCeiKaIZZbTCaONGQO0XDkvSeL1ZRZoKITDU
-         nSsuk6pi+zAwwZNq4BNBsDutWIpYoLnHC35+LR1NdYHChR/ki/02vS+sAfgNayVFeshk
-         BBIxdJ/WFjQVZgkIdwO6LOmjjxOJCPur8W3noGuPfJ3SGPcmH8hgJJdr9BpD+wS5ZJCO
-         UBf6joRgGIYQug+r35Agb+BfbDCaI0dpM9sQLkeXMBSgEXVttVAvXT0Y7fMPn/dfYOrN
-         nOO+FBImD6701InDXuRdznnuD3GLAFid5bElAvkjsIaFVgw9agQrPBBaGGUc9gvqPO1a
-         Qj0Q==
-X-Gm-Message-State: AJIora8KvhatW2ez6t2iGX5Z0SUdASTJM2y7cF2lHiALk4/4F+CP4loE
-        Bb7Bz/9P+64ia0lPNftTcTwtt0XJyg8=
-X-Google-Smtp-Source: AGRyM1uCNIkqQBwTVhpOJ3Y5EwonQhFZw2dysbIFTeg8qz1++vtqH5YHyoXPS6hxY4s/hJxG0C172twlxOY=
+        bh=os0Zx5VZv6p+Rm8I/hkYFMfJuZRHr+O61ed8WspeRIk=;
+        b=t2liJ1FlxcbMeL/VB9J99eIbRuXjv/RdkOp1ruio3DJQQxq6iutTQ7MlntRh0fz4b2
+         KsI7TuDMnwJ7tnjA4mao2PFN0coZAPPzy09F7Y4hVQEFQ+JyGD/U4Oyl61ZV8E6+MG7w
+         Mzw4RUl8S9mxFgPdeHY5s0Z+2RhRtqBCWpQa6utOq8yCMHZEGwR9X+5F5NKas7D3NvJt
+         ItyD7lthZWZKVAhCyUhstM+lV2fgWrq5C8WmhsYPOruo26V0nzpDYlVVK/oTZRX/E25M
+         RBU4/BMLDAb4zUG7QvYjPvFFMlsiXjUGFj/CkXje6on6PzayQH2bPrdd6jPZYbyc8VZC
+         p3Cg==
+X-Gm-Message-State: AJIora8Gg30at7ttRE/2r/DOWncHGXaPq/xQLKs4DybwVpRqnu35ElvB
+        DSHbRnzpixpjjbvgNxLYIzIGG1DB738=
+X-Google-Smtp-Source: AGRyM1sWpivMRCzyWBt2NMDYpIZXoVXItcZn0l1qEGR/DeU09TxwkO65LsmcVUOum8/EZGKYMgfViYv/FwA=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:a6f5:f713:759c:abb6])
- (user=glider job=sendgmr) by 2002:a05:6402:518b:b0:435:c1ed:3121 with SMTP id
- q11-20020a056402518b00b00435c1ed3121mr19002047edd.405.1656685414953; Fri, 01
- Jul 2022 07:23:34 -0700 (PDT)
-Date:   Fri,  1 Jul 2022 16:22:32 +0200
+ (user=glider job=sendgmr) by 2002:a05:6402:4244:b0:437:726c:e1a with SMTP id
+ g4-20020a056402424400b00437726c0e1amr19866573edb.107.1656685417915; Fri, 01
+ Jul 2022 07:23:37 -0700 (PDT)
+Date:   Fri,  1 Jul 2022 16:22:33 +0200
 In-Reply-To: <20220701142310.2188015-1-glider@google.com>
-Message-Id: <20220701142310.2188015-8-glider@google.com>
+Message-Id: <20220701142310.2188015-9-glider@google.com>
 Mime-Version: 1.0
 References: <20220701142310.2188015-1-glider@google.com>
 X-Mailer: git-send-email 2.37.0.rc0.161.g10f37bed90-goog
-Subject: [PATCH v4 07/45] kmsan: introduce __no_sanitize_memory and __no_kmsan_checks
+Subject: [PATCH v4 08/45] kmsan: mark noinstr as __no_sanitize_memory
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -96,81 +96,33 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-__no_sanitize_memory is a function attribute that instructs KMSAN to
-skip a function during instrumentation. This is needed to e.g. implement
-the noinstr functions.
-
-__no_kmsan_checks is a function attribute that makes KMSAN
-ignore the uninitialized values coming from the function's
-inputs, and initialize the function's outputs.
-
-Functions marked with this attribute can't be inlined into functions
-not marked with it, and vice versa. This behavior is overridden by
-__always_inline.
-
-__SANITIZE_MEMORY__ is a macro that's defined iff the file is
-instrumented with KMSAN. This is not the same as CONFIG_KMSAN, which is
-defined for every file.
+noinstr functions should never be instrumented, so make KMSAN skip them
+by applying the __no_sanitize_memory attribute.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I004ff0360c918d3cd8b18767ddd1381c6d3281be
----
- include/linux/compiler-clang.h | 23 +++++++++++++++++++++++
- include/linux/compiler-gcc.h   |  6 ++++++
- 2 files changed, 29 insertions(+)
+v2:
+ -- moved this patch earlier in the series per Mark Rutland's request
 
-diff --git a/include/linux/compiler-clang.h b/include/linux/compiler-clang.h
-index c84fec767445d..4fa0cc4cbd2c8 100644
---- a/include/linux/compiler-clang.h
-+++ b/include/linux/compiler-clang.h
-@@ -51,6 +51,29 @@
- #define __no_sanitize_undefined
- #endif
+Link: https://linux-review.googlesource.com/id/I3c9abe860b97b49bc0c8026918b17a50448dec0d
+---
+ include/linux/compiler_types.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index d08dfcb0ac687..fb5777e5228e7 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -227,7 +227,8 @@ struct ftrace_likely_data {
+ /* Section for code which can't be instrumented at all */
+ #define noinstr								\
+ 	noinline notrace __attribute((__section__(".noinstr.text")))	\
+-	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
++	__no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage \
++	__no_sanitize_memory
  
-+#if __has_feature(memory_sanitizer)
-+#define __SANITIZE_MEMORY__
-+/*
-+ * Unlike other sanitizers, KMSAN still inserts code into functions marked with
-+ * no_sanitize("kernel-memory"). Using disable_sanitizer_instrumentation
-+ * provides the behavior consistent with other __no_sanitize_ attributes,
-+ * guaranteeing that __no_sanitize_memory functions remain uninstrumented.
-+ */
-+#define __no_sanitize_memory __disable_sanitizer_instrumentation
-+
-+/*
-+ * The __no_kmsan_checks attribute ensures that a function does not produce
-+ * false positive reports by:
-+ *  - initializing all local variables and memory stores in this function;
-+ *  - skipping all shadow checks;
-+ *  - passing initialized arguments to this function's callees.
-+ */
-+#define __no_kmsan_checks __attribute__((no_sanitize("kernel-memory")))
-+#else
-+#define __no_sanitize_memory
-+#define __no_kmsan_checks
-+#endif
-+
- /*
-  * Support for __has_feature(coverage_sanitizer) was added in Clang 13 together
-  * with no_sanitize("coverage"). Prior versions of Clang support coverage
-diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-index a0c55eeaeaf16..63eb90eddad77 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -125,6 +125,12 @@
- #define __SANITIZE_ADDRESS__
- #endif
+ #endif /* __KERNEL__ */
  
-+/*
-+ * GCC does not support KMSAN.
-+ */
-+#define __no_sanitize_memory
-+#define __no_kmsan_checks
-+
- /*
-  * Turn individual warnings and errors on and off locally, depending
-  * on version.
 -- 
 2.37.0.rc0.161.g10f37bed90-goog
 
