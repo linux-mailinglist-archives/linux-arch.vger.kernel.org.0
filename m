@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4E6564802
-	for <lists+linux-arch@lfdr.de>; Sun,  3 Jul 2022 16:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC055647F6
+	for <lists+linux-arch@lfdr.de>; Sun,  3 Jul 2022 16:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbiGCOOZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 3 Jul 2022 10:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S233181AbiGCOOl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 3 Jul 2022 10:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232875AbiGCON7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 3 Jul 2022 10:13:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D18262F3;
-        Sun,  3 Jul 2022 07:13:38 -0700 (PDT)
+        with ESMTP id S232911AbiGCOOK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 3 Jul 2022 10:14:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6766241;
+        Sun,  3 Jul 2022 07:13:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73D5460EA7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01C69B80934;
+        Sun,  3 Jul 2022 14:13:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D5AAC341CD;
         Sun,  3 Jul 2022 14:13:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CACAC341CB;
-        Sun,  3 Jul 2022 14:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656857616;
-        bh=oXZW+dUjDDPpDV6V5KTSTxOrdigIFbUT4mUe7nec500=;
+        s=k20201202; t=1656857622;
+        bh=KLRO24VwSLVIulcSBrEsq68hsqfeXNzy27r4Yp11+QA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o6CjB0J11WxgCdNY+KJBZq6cPCrF0uiW8afxPX6gF0HFKA4RMMDTiYl+ggu6gVgp3
-         QEhcUCw8yexCinnJo51BP3xFsZBkvQdnAkhdFlxdTUK3j/tqoo5TB7Plise33XB6PX
-         cW3Ua/PoG00+osKgXds6MoZg+ZjFWUjw/ClFWu34WoKygnApMETD1ojNIOaQK1MXZo
-         nkQMW4Gui4bhFyB7tTpdWp3/xHRf4ud6yzoUEvFM8CBsKu2vZdRURoiF0GSu6fD96/
-         bWsZP5O9zqC/3tCh5MOwg2ceqs0LdT/aK/js0xlPy7XY+u94c8qZD/cNcG/k6c5q/F
-         IlCAAgFu9qHIQ==
+        b=sKbuVa8nJocjDSLME19wodPND/eY3ci7mQaF2VF0RkS16prNJC/Rx+KipYzlLUbam
+         2wQ+uslUOousId9kaRS1+QWGhkDYQywa++8rU0JKfY2gJkAckNQusF7YPzgSQ+mEk2
+         QchHMdRcdcmh99r/g4QLh0PJMLUztvRFIVTVjBx7GxTSCcljhdGSAneGc/d4iCfH3x
+         V90hUAAZO/8WAjzKftMl55V30VyAI73t+KTfUFTLOcxted0sWUDR5CE5N9qNy1M1IO
+         zw3p8ZDEJ+vrUCctdipz2oetV89iAHqZWjZAjuJ3nUEpHTQLFqra8Nd4JSPI9MqlGS
+         jfN6ddFVC5OTg==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
@@ -47,9 +47,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
         linux-mips@vger.kernel.org, linux-mm@kvack.org,
         linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         loongarch@lists.linux.dev
-Subject: [PATCH 13/14] parisc: Rename PGD_ORDER to PGD_TABLE_ORDER
-Date:   Sun,  3 Jul 2022 17:12:02 +0300
-Message-Id: <20220703141203.147893-14-rppt@kernel.org>
+Subject: [PATCH 14/14] xtensa: drop definition of PGD_ORDER
+Date:   Sun,  3 Jul 2022 17:12:03 +0300
+Message-Id: <20220703141203.147893-15-rppt@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220703141203.147893-1-rppt@kernel.org>
 References: <20220703141203.147893-1-rppt@kernel.org>
@@ -68,68 +68,39 @@ X-Mailing-List: linux-arch@vger.kernel.org
 From: Mike Rapoport <rppt@linux.ibm.com>
 
 This is the order of the page table allocation, not the order of a PGD.
+Since its always hardwired to 0, simply drop it.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 ---
- arch/parisc/include/asm/pgalloc.h | 6 +++---
- arch/parisc/include/asm/pgtable.h | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ arch/xtensa/include/asm/pgalloc.h | 2 +-
+ arch/xtensa/include/asm/pgtable.h | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/parisc/include/asm/pgalloc.h b/arch/parisc/include/asm/pgalloc.h
-index 54b63374579b..e3e142b1c5c5 100644
---- a/arch/parisc/include/asm/pgalloc.h
-+++ b/arch/parisc/include/asm/pgalloc.h
-@@ -20,18 +20,18 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+diff --git a/arch/xtensa/include/asm/pgalloc.h b/arch/xtensa/include/asm/pgalloc.h
+index eeb2de3a89e5..7fc0f9126dd3 100644
+--- a/arch/xtensa/include/asm/pgalloc.h
++++ b/arch/xtensa/include/asm/pgalloc.h
+@@ -29,7 +29,7 @@
+ static inline pgd_t*
+ pgd_alloc(struct mm_struct *mm)
  {
- 	pgd_t *pgd;
- 
--	pgd = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_ORDER);
-+	pgd = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_TABLE_ORDER);
- 	if (unlikely(pgd == NULL))
- 		return NULL;
- 
--	memset(pgd, 0, PAGE_SIZE << PGD_ORDER);
-+	memset(pgd, 0, PAGE_SIZE << PGD_TABLE_ORDER);
- 
- 	return pgd;
+-	return (pgd_t*) __get_free_pages(GFP_KERNEL | __GFP_ZERO, PGD_ORDER);
++	return (pgd_t*) __get_free_page(GFP_KERNEL | __GFP_ZERO);
  }
  
- static inline void pgd_free(struct mm_struct *mm, pgd_t *pgd)
- {
--	free_pages((unsigned long)pgd, PGD_ORDER);
-+	free_pages((unsigned long)pgd, PGD_TABLE_ORDER);
- }
+ static inline void ptes_clear(pte_t *ptep)
+diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
+index 0a91376131c5..4bd77d2b6715 100644
+--- a/arch/xtensa/include/asm/pgtable.h
++++ b/arch/xtensa/include/asm/pgtable.h
+@@ -57,7 +57,6 @@
+ #define PTRS_PER_PTE		1024
+ #define PTRS_PER_PTE_SHIFT	10
+ #define PTRS_PER_PGD		1024
+-#define PGD_ORDER		0
+ #define USER_PTRS_PER_PGD	(TASK_SIZE/PGDIR_SIZE)
+ #define FIRST_USER_PGD_NR	(FIRST_USER_ADDRESS >> PGDIR_SHIFT)
  
- #if CONFIG_PGTABLE_LEVELS == 3
-diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
-index 69765a6dbe89..6790b554bdfd 100644
---- a/arch/parisc/include/asm/pgtable.h
-+++ b/arch/parisc/include/asm/pgtable.h
-@@ -118,9 +118,9 @@ extern void __update_cache(pte_t pte);
- 
- #if CONFIG_PGTABLE_LEVELS == 3
- #define PMD_TABLE_ORDER	1
--#define PGD_ORDER	0
-+#define PGD_TABLE_ORDER	0
- #else
--#define PGD_ORDER	1
-+#define PGD_TABLE_ORDER	1
- #endif
- 
- /* Definitions for 3rd level (we use PLD here for Page Lower directory
-@@ -144,10 +144,10 @@ extern void __update_cache(pte_t pte);
- 
- /* Definitions for 1st level */
- #define PGDIR_SHIFT	(PLD_SHIFT + BITS_PER_PTE + BITS_PER_PMD)
--#if (PGDIR_SHIFT + PAGE_SHIFT + PGD_ORDER - BITS_PER_PGD_ENTRY) > BITS_PER_LONG
-+#if (PGDIR_SHIFT + PAGE_SHIFT + PGD_TABLE_ORDER - BITS_PER_PGD_ENTRY) > BITS_PER_LONG
- #define BITS_PER_PGD	(BITS_PER_LONG - PGDIR_SHIFT)
- #else
--#define BITS_PER_PGD	(PAGE_SHIFT + PGD_ORDER - BITS_PER_PGD_ENTRY)
-+#define BITS_PER_PGD	(PAGE_SHIFT + PGD_TABLE_ORDER - BITS_PER_PGD_ENTRY)
- #endif
- #define PGDIR_SIZE	(1UL << PGDIR_SHIFT)
- #define PGDIR_MASK	(~(PGDIR_SIZE-1))
 -- 
 2.34.1
 
