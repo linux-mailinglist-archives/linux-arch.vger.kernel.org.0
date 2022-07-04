@@ -2,60 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45701565C66
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 18:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B522565D20
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 19:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbiGDQtw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 12:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S234717AbiGDRhM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 13:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234716AbiGDQs7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 12:48:59 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E5F1104
-        for <linux-arch@vger.kernel.org>; Mon,  4 Jul 2022 09:48:22 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id e80so10537486ybb.4
-        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 09:48:22 -0700 (PDT)
+        with ESMTP id S234879AbiGDRg4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 13:36:56 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F0712AA0
+        for <linux-arch@vger.kernel.org>; Mon,  4 Jul 2022 10:36:34 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id fi2so17811917ejb.9
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 10:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=L5bopA3LB1XHVOlLQfcH6XEn+sIBVPJTuLNRtswn9CI=;
-        b=c/CZzhgWMX3bbr5O6IqvVMfoZnAyutFGHBtOJxvRVUCpPzJ6Vh/OEsX9ddjDryLKuA
-         JXrDh2Q0dZwecqh0Bc1ZmIHbvHv5ZYlF/3Cy4pp59N/hZZc+g6AzKwqaEjKE9n+w0L4P
-         SGtbVNdzX60In90tk3zR5kKxLS65szG0+ctLVOkHwz7kJpsy0qBpVQiDktlwX2NIU037
-         thbcpaGonmo+7T5qn/XqJZ7ApfK4ca3IKZojcWMlCA/qfHccaJFH1GvI7//8OsazLSHT
-         DXnwVJ0N1MqLa9SonmmKK11lHhIqIejowfQl2WAJ84B2obL74Vlq/wGy/lbvhUw3aJva
-         YrJA==
+         :cc;
+        bh=YJyesbik3li+nd7lTgRBI8S9OD6JxlDs1GIHpVzW1PQ=;
+        b=fwlp1HglFHpX7O+wTF2XFvDWUo4ymN7/Rg1c4kPC5Eo6huCSyB0caRrsz6TFxUX8uX
+         qHBcGYMvaNyvVCGIUL8QHtTWVIH0IUT+rGAL3vVJRHDlPNjZBZEB7KnXg7NwJI8bS3PZ
+         v4KpFB9uFWPZ7wy3+FjBv+XuIC8U8KIqUqUIU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=L5bopA3LB1XHVOlLQfcH6XEn+sIBVPJTuLNRtswn9CI=;
-        b=lrHtwJ3zoNcULPFimIXIRl28+p64KNW8zvytMk4ZH0bm7CHbQ7KvBfJLVom2Dt5xWw
-         LnlPhilJBwe8W8LBAYhFOsymmBBU3jlesJtUCMoqWR3IS1zrCD1V5+rHxeMVkoOyw0yc
-         i1F1Tzbg5hOL/iO+lXrseGUiPEQBExrffH9W20M6YduaCTpkNnHgJyWp19b+Mt/STVb/
-         RI/92RLpc4mneq/lMth9rW/uuWl95Qy7gPp5MBX1tq4XU2RCZWjYMyoqguCYRd1Xz7dG
-         jUq25AhHT5v6WYIQXjRro3CvllvixNCJyCQgtpzbSv0GJETOnqmM455KKkrU+MgTOZK+
-         oplQ==
-X-Gm-Message-State: AJIora/WGiHY8SgBaZyqmMRSeSfpp6Jst/LCkII6y+4o123JkhyZOQE0
-        J3B8Rpe3pdZv4izMtH9Pu85LZ8nQwZNc6YMnBHbvLA==
-X-Google-Smtp-Source: AGRyM1tLdo0rneMsHOCy50i0zEQc7jDRMizVYynxVyfcFXLv8SFU3m/8JPgrZi7jMpqg3yqU/ifuk0aRSs6UyJ9TJfg=
-X-Received: by 2002:a25:a345:0:b0:66c:c670:6d13 with SMTP id
- d63-20020a25a345000000b0066cc6706d13mr33311155ybi.307.1656953301274; Mon, 04
- Jul 2022 09:48:21 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=YJyesbik3li+nd7lTgRBI8S9OD6JxlDs1GIHpVzW1PQ=;
+        b=O7ArEMNYxE4F9580hc3NQH4kQPUUcdeDUod0aBthirbmEc8UKGU2LGNeHTjiWsENpM
+         +0z9AMhNICBem+w5LiiKsR15mtl+DJ1JtOfQnGwBY9djawXyrMPLTFQL2WnS3Dlfl4AI
+         DBQpr5+3b/WINGegXpDwsVQqWf9jttTZvuofe8IPD/WBUsCuaQzPLYa4Ag3gLh13imF4
+         uh02wh9bzzOTpyRbTLSkECexnJ3zJi/Ux8N6bXLqS+3cVUhAcB7JbsNdX+8Rsydq0gat
+         TGrA5P7K50tQluQsHIoB0lkRroG0u/lxRK/Smku6i0mVph5/8SbTTc849sYReeUSLD+s
+         ANnQ==
+X-Gm-Message-State: AJIora/jF+CKdtgv1Py/PXu1/f6TtnQgOkk42P3ud0UqiY0cphcXaYtx
+        F24Kc7njTaC7PKk/XQt+fdPeezyUWRdLcEMZ
+X-Google-Smtp-Source: AGRyM1tq7zTWN+iJBU5qVC29Daaeeomub76UkNdeAwedgxB6jaHhE4dDa9oe5GP23rNL17ywhtSO1w==
+X-Received: by 2002:a17:907:2ce4:b0:722:df67:12cc with SMTP id hz4-20020a1709072ce400b00722df6712ccmr29985277ejc.715.1656956193012;
+        Mon, 04 Jul 2022 10:36:33 -0700 (PDT)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id y21-20020a170906559500b00726dbb16b8dsm8833987ejp.65.2022.07.04.10.36.32
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 10:36:32 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id c65so12520068edf.4
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 10:36:32 -0700 (PDT)
+X-Received: by 2002:a05:6000:1251:b0:21a:efae:6cbe with SMTP id
+ j17-20020a056000125100b0021aefae6cbemr27345923wrx.281.1656956181432; Mon, 04
+ Jul 2022 10:36:21 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV> <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
- <YsLuoFtki01gbmYB@ZenIV> <YsMOkXpp2HaOnVJN@ZenIV>
-In-Reply-To: <YsMOkXpp2HaOnVJN@ZenIV>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 4 Jul 2022 18:47:45 +0200
-Message-ID: <CAG_fn=Vbq59-zDG=JdOi3DXh29tXNRNQhPJ3PxTZBiY7Ph=Jug@mail.gmail.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com> <YsJWCREA5xMfmmqx@ZenIV>
+In-Reply-To: <YsJWCREA5xMfmmqx@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 4 Jul 2022 10:36:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
+Message-ID: <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
 Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
 To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Alexander Potapenko <glider@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Andrey Konovalov <andreyknvl@google.com>,
@@ -95,91 +100,57 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 6:00 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Sun, Jul 3, 2022 at 7:53 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 >
-> On Mon, Jul 04, 2022 at 02:44:00PM +0100, Al Viro wrote:
-> > On Mon, Jul 04, 2022 at 10:20:53AM +0200, Alexander Potapenko wrote:
-> >
-> > > What makes you think they are false positives? Is the scenario I
-> > > described above:
-> > >
-> > > """
-> > > In particular, if the call to lookup_fast() in walk_component()
-> > > returns NULL, and lookup_slow() returns a valid dentry, then the
-> > > `seq` and `inode` will remain uninitialized until the call to
-> > > step_into()
-> > > """
-> > >
-> > > impossible?
-> >
-> > Suppose step_into() has been called in non-RCU mode.  The first
-> > thing it does is
-> >       int err =3D handle_mounts(nd, dentry, &path, &seq);
-> >       if (err < 0)
-> >               return ERR_PTR(err);
-> >
-> > And handle_mounts() in non-RCU mode is
-> >       path->mnt =3D nd->path.mnt;
-> >       path->dentry =3D dentry;
-> >       if (nd->flags & LOOKUP_RCU) {
-> >               [unreachable code]
-> >       }
-> >       [code not touching seqp]
-> >       if (unlikely(ret)) {
-> >               [code not touching seqp]
-> >       } else {
-> >               *seqp =3D 0; /* out of RCU mode, so the value doesn't mat=
-ter */
-> >       }
-> >       return ret;
-> >
-> > In other words, the value seq argument of step_into() used to have ends=
- up
-> > being never fetched and, in case step_into() gets past that if (err < 0=
-)
-> > that value is replaced with zero before any further accesses.
-> >
-> > So it's a false positive; yes, strictly speaking compiler is allowd
-> > to do anything whatsoever if it manages to prove that the value is
-> > uninitialized.  Realistically, though, especially since unsigned int
-> > is not allowed any trapping representations...
->
-> FWIW, update (and yet untested) branch is in #work.namei.  Compared to th=
-e
-> previous, we store sampled ->d_seq of the next dentry in nd->next_seq,
-> rather than bothering with local variables.  AFAICS, it ends up with
-> better code that way.  And both ->seq and ->next_seq are zeroed at the
-> moments when we switch to non-RCU mode (as well as non-RCU path_init()).
->
-> IMO it looks saner that way.  NOTE: it still needs to be tested and proba=
-bly
-> reordered and massaged; it's not for merge at the moment.  Current cumula=
-tive
-> diff follows:
+> FWIW, trying to write a coherent documentation had its usual effect...
+> The thing is, we don't really need to fetch the inode that early.
 
-I confirm all KMSAN reports are gone as a result of applying this patch.
+Hmm. I like the patch, but as I was reading through it, I had a question...
 
+In particular, I'd like it even more if each step when the sequence
+number is updated also had a comment about what then protects the
+previous sequence number up to and over that new sequence point.
 
---=20
-Alexander Potapenko
-Software Engineer
+For example, in __follow_mount_rcu(), when we jump to a new mount
+point, and that sequence has
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+                *seqp = read_seqcount_begin(&dentry->d_seq);
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+to reset the sequence number to the new path we jumped into.
+
+But I don't actually see what checks the previous sequence number in
+that path. We just reset it to the new one.
+
+In contrast, in lookup_fast(), we get the new sequence number from
+__d_lookup_rcu(), and then after getting the new one and before
+"instantiating" it, we will revalidate the parent sequence number.
+
+So lookup_fast() has that "chain of sequence numbers".
+
+For __follow_mount_rcu it looks like validating the previous sequence
+number is left to the caller, which then does try_to_unlazy_next().
+
+So when reading this code, my reaction was that it really would have
+been much nicer to have that kind of clear "handoff" of one sequence
+number domain to the next that lookup_fast() has.
+
+IOW, I think it would be lovely to clarify the sequence number handoff.
+
+I only quickly scanned your second patch for this, it does seem to at
+least collect it all into try_to_unlazy_next().
+
+So maybe you already looked at exactly this, but it would be good to
+be quite explicit about the sequence number logic because it's "a bit
+opaque" to say the least.
+
+                   Linus
