@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BEB565FAA
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 01:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCAC9565FB1
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 01:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233988AbiGDXRM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 19:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S230149AbiGDXSH (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 19:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233806AbiGDXRK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 19:17:10 -0400
+        with ESMTP id S234081AbiGDXRm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 19:17:42 -0400
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CDCFD34;
-        Mon,  4 Jul 2022 16:17:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB0B10577;
+        Mon,  4 Jul 2022 16:17:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3Krii5I77Jw+hei/sBgWu8KHpDCvwQjbHpsrcFH98j0=; b=uElzEPYgfvz4HqmD+jumc9o+co
-        4FBZ1pk6PQNTVkvgkjC3MG/06CMseIjjitUto8/QeQHUXagTnvCAb8W+wHbp1y+0PE25vMAraPymx
-        pBAJ4BMdkPHC4yk0lGril6Ldu8tC5JGT0Ml+TECjtL6OilAzpuMUAyPtb9cJUdoUTEvBCQtpjFquv
-        0ntqwDI+dNPzFIbuATQVwTTHzP/8gnaQgebhuvBNkx+pXafGftvZA1vS2d0sUaRd03mRrbJ/zdcOl
-        A9gsBQXfx0pOAYR+qkLXUUl3bc7YsHFODJwB0eH4w3dZ3PfPoU5deV+z1cNtvWmo/zpxgRyi7OsVt
-        1tUxiT6A==;
+        bh=NqVApc9I2DDH/ifQWSRH221HRDI5UWBJClZrnVtHcvg=; b=XMq6en3D1K42NPJrNPt3lNiGHU
+        6m4VZEYHJsKw2KJ8FEER0qK8oNGCVOWcuDgjwh8WQDSnCv3uQR6L+1i3enPxKWoWnbVOH3z6CEie3
+        nAp9cJJDd2p+yBlssUPpEpXlwKJbc2p27ShaRo5hao7QkcNFe3prUfJ6W5u0gQWZQnbKrS5pR1Tdf
+        egeY54C3ZyVr7W9Zdixd+0O1ckAB19QGVGrBNLoZWZcqmBVvuhjabPDBCUO+bxM+6STEGYDHx9FyS
+        toKCReTROXqjfeOSHKWpf/dSfOftFLkoYOpfUHq4w3tP7uXrpyQGmCSK5nAd/yJzARh/75JRzMNP4
+        bDBFQeCA==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o8VIs-008AbM-Q3;
-        Mon, 04 Jul 2022 23:16:31 +0000
-Date:   Tue, 5 Jul 2022 00:16:30 +0100
+        id 1o8VJP-008AcR-HB;
+        Mon, 04 Jul 2022 23:17:03 +0000
+Date:   Tue, 5 Jul 2022 00:17:03 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Alexander Potapenko <glider@google.com>,
@@ -69,8 +69,8 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: [PATCH 6/7] lookup_fast(): don't bother with inode
-Message-ID: <YsN0zovcB+d26OcT@ZenIV>
+Subject: [PATCH 7/7] step_into(): move fetching ->d_inode past handle_mounts()
+Message-ID: <YsN07/fVcHSbDDlm@ZenIV>
 References: <YsJWCREA5xMfmmqx@ZenIV>
  <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
  <YsM5XHy4RZUDF8cR@ZenIV>
@@ -95,87 +95,97 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Note that validation of ->d_seq after ->d_inode fetch is gone, along
-with fetching of ->d_inode itself.
+... and lose messing with it in __follow_mount_rcu()
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c | 24 +++++-------------------
- 1 file changed, 5 insertions(+), 19 deletions(-)
+ fs/namei.c | 31 +++++++++++--------------------
+ 1 file changed, 11 insertions(+), 20 deletions(-)
 
 diff --git a/fs/namei.c b/fs/namei.c
-index fe95fe39634c..cdb61d09df79 100644
+index cdb61d09df79..f2c99e75b578 100644
 --- a/fs/namei.c
 +++ b/fs/namei.c
-@@ -1617,8 +1617,7 @@ static struct dentry *__lookup_hash(const struct qstr *name,
- 	return dentry;
+@@ -1470,8 +1470,7 @@ EXPORT_SYMBOL(follow_down);
+  * Try to skip to top of mountpoint pile in rcuwalk mode.  Fail if
+  * we meet a managed dentry that would need blocking.
+  */
+-static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
+-			       struct inode **inode)
++static bool __follow_mount_rcu(struct nameidata *nd, struct path *path)
+ {
+ 	struct dentry *dentry = path->dentry;
+ 	unsigned int flags = dentry->d_flags;
+@@ -1501,13 +1500,6 @@ static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
+ 				dentry = path->dentry = mounted->mnt.mnt_root;
+ 				nd->state |= ND_JUMPED;
+ 				nd->next_seq = read_seqcount_begin(&dentry->d_seq);
+-				*inode = dentry->d_inode;
+-				/*
+-				 * We don't need to re-check ->d_seq after this
+-				 * ->d_inode read - there will be an RCU delay
+-				 * between mount hash removal and ->mnt_root
+-				 * becoming unpinned.
+-				 */
+ 				flags = dentry->d_flags;
+ 				// makes sure that non-RCU pathwalk could reach
+ 				// this state.
+@@ -1523,7 +1515,7 @@ static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
  }
  
--static struct dentry *lookup_fast(struct nameidata *nd,
--				  struct inode **inode)
-+static struct dentry *lookup_fast(struct nameidata *nd)
+ static inline int handle_mounts(struct nameidata *nd, struct dentry *dentry,
+-			  struct path *path, struct inode **inode)
++			  struct path *path)
  {
- 	struct dentry *dentry, *parent = nd->path.dentry;
- 	int status = 1;
-@@ -1636,22 +1635,11 @@ static struct dentry *lookup_fast(struct nameidata *nd,
- 			return NULL;
- 		}
- 
--		/*
--		 * This sequence count validates that the inode matches
--		 * the dentry name information from lookup.
--		 */
--		*inode = d_backing_inode(dentry);
--		if (unlikely(read_seqcount_retry(&dentry->d_seq, nd->next_seq)))
--			return ERR_PTR(-ECHILD);
--
--		/*
-+	        /*
- 		 * This sequence count validates that the parent had no
- 		 * changes while we did the lookup of the dentry above.
--		 *
--		 * The memory barrier in read_seqcount_begin of child is
--		 *  enough, we can use __read_seqcount_retry here.
- 		 */
--		if (unlikely(__read_seqcount_retry(&parent->d_seq, nd->seq)))
-+		if (unlikely(read_seqcount_retry(&parent->d_seq, nd->seq)))
- 			return ERR_PTR(-ECHILD);
- 
- 		status = d_revalidate(dentry, nd->flags);
-@@ -1993,7 +1981,6 @@ static const char *handle_dots(struct nameidata *nd, int type)
- static const char *walk_component(struct nameidata *nd, int flags)
- {
- 	struct dentry *dentry;
--	struct inode *inode;
- 	/*
- 	 * "." and ".." are special - ".." especially so because it has
- 	 * to be able to know about the current root directory and
-@@ -2004,7 +1991,7 @@ static const char *walk_component(struct nameidata *nd, int flags)
- 			put_link(nd);
- 		return handle_dots(nd, nd->last_type);
+ 	bool jumped;
+ 	int ret;
+@@ -1532,12 +1524,7 @@ static inline int handle_mounts(struct nameidata *nd, struct dentry *dentry,
+ 	path->dentry = dentry;
+ 	if (nd->flags & LOOKUP_RCU) {
+ 		unsigned int seq = nd->next_seq;
+-		*inode = dentry->d_inode;
+-		if (read_seqcount_retry(&dentry->d_seq, seq))
+-			return -ECHILD;
+-		if (unlikely(!*inode))
+-			return -ENOENT;
+-		if (likely(__follow_mount_rcu(nd, path, inode)))
++		if (likely(__follow_mount_rcu(nd, path)))
+ 			return 0;
+ 		// *path and nd->next_seq might've been clobbered
+ 		path->mnt = nd->path.mnt;
+@@ -1557,8 +1544,6 @@ static inline int handle_mounts(struct nameidata *nd, struct dentry *dentry,
+ 		dput(path->dentry);
+ 		if (path->mnt != nd->path.mnt)
+ 			mntput(path->mnt);
+-	} else {
+-		*inode = d_backing_inode(path->dentry);
  	}
--	dentry = lookup_fast(nd, &inode);
-+	dentry = lookup_fast(nd);
- 	if (IS_ERR(dentry))
- 		return ERR_CAST(dentry);
- 	if (unlikely(!dentry)) {
-@@ -3392,7 +3379,6 @@ static const char *open_last_lookups(struct nameidata *nd,
- 	struct dentry *dir = nd->path.dentry;
- 	int open_flag = op->open_flag;
- 	bool got_write = false;
--	struct inode *inode;
- 	struct dentry *dentry;
- 	const char *res;
+ 	return ret;
+ }
+@@ -1839,15 +1824,21 @@ static const char *step_into(struct nameidata *nd, int flags,
+ {
+ 	struct path path;
+ 	struct inode *inode;
+-	int err = handle_mounts(nd, dentry, &path, &inode);
++	int err = handle_mounts(nd, dentry, &path);
  
-@@ -3408,7 +3394,7 @@ static const char *open_last_lookups(struct nameidata *nd,
- 		if (nd->last.name[nd->last.len])
- 			nd->flags |= LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
- 		/* we _can_ be in RCU mode here */
--		dentry = lookup_fast(nd, &inode);
-+		dentry = lookup_fast(nd);
- 		if (IS_ERR(dentry))
- 			return ERR_CAST(dentry);
- 		if (likely(dentry))
+ 	if (err < 0)
+ 		return ERR_PTR(err);
++	inode = path.dentry->d_inode;
+ 	if (likely(!d_is_symlink(path.dentry)) ||
+ 	   ((flags & WALK_TRAILING) && !(nd->flags & LOOKUP_FOLLOW)) ||
+ 	   (flags & WALK_NOFOLLOW)) {
+ 		/* not a symlink or should not follow */
+-		if (!(nd->flags & LOOKUP_RCU)) {
++		if (nd->flags & LOOKUP_RCU) {
++			if (read_seqcount_retry(&path.dentry->d_seq, nd->next_seq))
++				return ERR_PTR(-ECHILD);
++			if (unlikely(!inode))
++				return ERR_PTR(-ENOENT);
++		} else {
+ 			dput(nd->path.dentry);
+ 			if (nd->path.mnt != path.mnt)
+ 				mntput(nd->path.mnt);
 -- 
 2.30.2
 
