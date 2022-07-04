@@ -2,34 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78FB3565EA0
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 22:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB6E565EA3
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 22:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiGDUrX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 16:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S233501AbiGDUsV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 16:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiGDUrV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 16:47:21 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1C22630;
-        Mon,  4 Jul 2022 13:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Q731IdPTtbWT2I3vbiClRvKMIPfhcPeg7PDkz8ljupo=; b=JqCpfM5+ZnF4a2bPP1EP4QyFNP
-        vBpzm4BVvaQCCnYWRX8171Gowyemw8skAK8mPjRXvlzaaGh7Qj2Id0ZiPBjOa1vpVzgMbcuIykFDo
-        qlylUJo63UjcuLdTUuGnkvsrAQc0lbWj0xeYJn9CQoGCE8Oxi4z2sLBwYaAMdqkI/Ns6u2zYuXkks
-        CPoGuTCYI+djgFZEkMKPcsXljk3yzHFHQH5p/Ki60sIk4qTLbL3JC1ynxCUPK4V9PodU/uOMjzQe7
-        vv4YcJk2eePA/Dj3w3dh29o/KVeQvqvGjXgSWDmlOn9uJ4p1MKO665SwTXHUM0W09dauEtWsVjf1Z
-        MESUVrYg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o8Sxv-0088VZ-0F;
-        Mon, 04 Jul 2022 20:46:43 +0000
-Date:   Mon, 4 Jul 2022 21:46:42 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        with ESMTP id S233770AbiGDUsU (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 16:48:20 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EBCDF33
+        for <linux-arch@vger.kernel.org>; Mon,  4 Jul 2022 13:48:19 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id u12so18393409eja.8
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 13:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/yAZeAbMlA0MlzGxn2hN3/XK5qxO5T7qF19l5UEr4Zc=;
+        b=W2hmMHZIlVX17hX5ZnI6HTuqm3ZJ5p54D5d8aHf5QuKGwRZw6Y8EIH14PLiK5scdIY
+         S9pthMsINqNnHDQkpKpYyIuOQlL07OnPavYF6D5xWccffjl/XEumDJl0Z3l2tdCrOtCA
+         Dnuf6bnFzN/s3d72H3m8z7XBSeLvJTx0CJSdg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/yAZeAbMlA0MlzGxn2hN3/XK5qxO5T7qF19l5UEr4Zc=;
+        b=z5P1OHypIiQBT8h6AMuUHxZuZdSS+pHNhvSenXNC23mXEvJvUHDMvB5C0TMHOZck0u
+         vu8msKRK62X52nx6/fS1EzvUKI+jJymAOHuS0Poh7uVHTN6W42x0iSUPLNkn+9y3qyjB
+         7bzv7JbPbXhxElXze1QInx2cs831bQB8Yhf38hwSGt4sSOiZop1RaJNrCL482SODrbky
+         3HqYON/+dYm0P/n6O5ZCKcCehwkeGAqkaErurQaez0nF9KEInX+jejqGZAfcMhy+rLxN
+         IL8dQjuHwbhILKAPCRA077W2cbEMhm45p0U/OZEfn2jPO3A7cXcG0SPHzFlapamERdyw
+         9ooA==
+X-Gm-Message-State: AJIora+TiWMnqrHzq6E/rj3ExvFsNS7euP/haALTymXMU7/nw0V8ybEx
+        4vyLnGFcxSu8TeIs7oXL9lcfuEUOLLCYbtAB5+A=
+X-Google-Smtp-Source: AGRyM1vsz4/X5qbK1u5avAP15IptccSCQ/LZOo/nfDXT/y13B8VmO1GdDQ4XsL/hs/VCDct5wyFLAg==
+X-Received: by 2002:a17:906:4ccc:b0:6fe:9155:47ae with SMTP id q12-20020a1709064ccc00b006fe915547aemr29661016ejt.246.1656967697789;
+        Mon, 04 Jul 2022 13:48:17 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id ee34-20020a056402292200b0043a554818afsm2818352edb.42.2022.07.04.13.48.16
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 13:48:17 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id mf9so18535748ejb.0
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 13:48:16 -0700 (PDT)
+X-Received: by 2002:a5d:59a5:0:b0:21d:205b:3c5b with SMTP id
+ p5-20020a5d59a5000000b0021d205b3c5bmr28828449wrr.97.1656967686356; Mon, 04
+ Jul 2022 13:48:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
+ <YsM5XHy4RZUDF8cR@ZenIV> <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+ <YsNFoH0+N+KCt5kg@ZenIV> <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+In-Reply-To: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 4 Jul 2022 13:47:50 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whQ2ijKVv8eV_P3c3cNaH8B4iKU0=GgwObzsJQM6cYtDg@mail.gmail.com>
+Message-ID: <CAHk-=whQ2ijKVv8eV_P3c3cNaH8B4iKU0=GgwObzsJQM6cYtDg@mail.gmail.com>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     Alexander Potapenko <glider@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -69,69 +102,49 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to
- step_into()
-Message-ID: <YsNRsgOl04r/RCNe@ZenIV>
-References: <20220701142310.2188015-1-glider@google.com>
- <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV>
- <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
- <YsM5XHy4RZUDF8cR@ZenIV>
- <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
- <YsNFoH0+N+KCt5kg@ZenIV>
- <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 01:24:48PM -0700, Linus Torvalds wrote:
-> On Mon, Jul 4, 2022 at 12:55 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > You are checking the wrong thing here.  It's really about mount_lock -
-> > ->d_seq is *not* bumped when we or attach in some namespace.
-> 
-> I think we're talking past each other.
+On Mon, Jul 4, 2022 at 1:24 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> The mount point check should go around the "check dentry mount point",
+> but it's a separate issue from the whole "we are now jumping to a
+> different dentry, we should check that the previous dentry hasn't
+> changed".
 
-We might be.
- 
-> Yes, we need to check the mount sequence lock too, because we're doing
-> that mount traversal.
-> 
-> But I think we *also* need to check the dentry sequence count, because
-> the dentry itself could have been moved to another parent.
+Maybe it doesn't really matter, because we never actually end up
+dereferencing the previous dentry (exactly since we're following the
+mount point on it).
 
-Why is that a problem?  It could have been moved to another parent,
-but so it could after we'd crossed to the mounted and we wouldn't have
-noticed (or cared).
+It feels like the sequence point checks are basically tied to the
+"we're looking at the inode that the dentry pointed to", and because
+the mount-point traversal doesn't need to look at the inode, the
+sequence point check also isn't done.
 
-What the chain of seqcount checks gives us is that with some timings
-it would be possible to traverse that path, not that it had remained
-valid through the entire pathwalk.
+But it feels wrong to traverse a dentry under RCU - even if we don't
+then look at the inode itself - without having verified that the
+dentry is still valid.
 
-What I'm suggesting is to treat transition from mountpoint to mount
-as happening instantly, with transition from mount to root sealed by
-mount_lock check.
+Yes, the d_seq lock protects against the inode going away (aka
+"unlink()") and that cannot happen when it's a mount-point.
 
-If that succeeds, there had been possible history in which refwalk
-would have passed through the same dentry/mount/dentry and arrived
-to the root dentry when it had the sampled ->d_seq value.
+But it _also_ ends up changing for __d_move() when the name of the
+dentry changes.
 
-Sure, mountpoint might be moved since we'd reached it.  And the mount
-would move with it, so we can pretend that we'd won the race and got
-into the mount before it had the mountpoint had been moved.
+And I think that name change is relevant even to "look up a mount
+point", exactly because we used that name to look up the dentry in the
+first place, so if the name is changing, we shouldn't traverse that
+mount point.
 
-Am I missing something fundamental about the things the sequence of
-sampling and verifications gives us?  I'd always thought it's about
-verifying that resulting history would be possible for a non-RCU
-pathwalk with the right timings.  What am I missing?
+But I may have just confused myself terminally here.
+
+             Linus
