@@ -2,34 +2,66 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4CA565DBB
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 21:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A98565DE4
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 21:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234366AbiGDTER (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 15:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55130 "EHLO
+        id S229874AbiGDTQ4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 15:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234737AbiGDTD7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 15:03:59 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FEB11C29;
-        Mon,  4 Jul 2022 12:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=StWcqGItZutY3CkZqZp4EajG2FBl6ewxUbX21EaiIa0=; b=gION5JVUSctjEA3iGVyhgDOwB8
-        /cIoBlprCjdoAmu+i56RbxnuMuL4IKHr7XgAS37kiaaF4oZ1UP6Cw6APsQOce+xxaXzKDsY66devu
-        sokw+Zjn7Va1VU574s0V9995iYgFWRSsgvDKJYYBEaZM+zFhtFOIEZqa2ed4WycftRArPMeF0UrEC
-        NS3ZibrqrAgjlSoyiT84HEu0f9G07c6zeYA8TeenVF0dYmRU5sfuySzh3JQ3QfHGuHIaEzRGdYXqJ
-        TxAAGr2j4E89bonfbrnO/p8QxTRGrgGkafzSkKhQwMVnXwFLLymD4z2DKEPHZl567ilxQiHg3gQiD
-        yxdElB1Q==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o8RLQ-0086lx-NV;
-        Mon, 04 Jul 2022 19:02:52 +0000
-Date:   Mon, 4 Jul 2022 20:02:52 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        with ESMTP id S229703AbiGDTQz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 15:16:55 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3667B6351
+        for <linux-arch@vger.kernel.org>; Mon,  4 Jul 2022 12:16:54 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id x10so5409082edd.13
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 12:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MM4ez9sq6uBjf7T2AcL2UYNl+8nxT4N2iGuYkE53QQE=;
+        b=hM6KgRdJckBe4bzC+IcRSC7lVdxBNHuWzTR9qbdyHQUEx0yLi33qBKXpEulNeapiqS
+         laTzHjtCEdg71do6SFrzgzbtUfLzBDw03llXfnRTZmsFTWrIjKyDT8wyKG57tf5X4led
+         nsoUHxFpJGeHUekjMViMmo8mgjNaTgaoZFXcI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MM4ez9sq6uBjf7T2AcL2UYNl+8nxT4N2iGuYkE53QQE=;
+        b=ja3ow9ZwelonfxgWixhnw6X8Xk2zMLu63AcGz9mJpYG/2HGAGEh4H2gslA5BOskwgX
+         7tLoJ/ugoaOj2ps4mntyKPSuNLCVkXn9KbMnmdCzBh3bGhnd3O/V5x80oHqY5nx38ZOV
+         YjVatGYfm94TOxflxzOprKccvzpGn7J9On/IoEv/mDgjifaIm443yFe09nvl4MpHfcXW
+         hmy/+XLEQHZEa7lrTOouzUQkYDGRYdlvXQwxsKLTzyVsLBhdVv86VtM3OkrYMyLKSCew
+         UFgy2NtLr6R9UFqZMOnVuAALmYdcWMpyljMcHQGEfjPU8R7aPWMsx1s9aV37hWTthhJv
+         MGCg==
+X-Gm-Message-State: AJIora82vxbN/VaHaxyrjn5kDNahjwnceouix/tSmsnpXYFbw4uidulw
+        BCfAg68oMhsNLGhFmOKmdWknIwW2TOw05QtS9BA=
+X-Google-Smtp-Source: AGRyM1teCB36ytR+PaM2Sgal+FNoZKnffP5S490etj2jB+kbBKTNJUQy1e6hMuOufqRaJKqUfLnU3A==
+X-Received: by 2002:aa7:cd64:0:b0:43a:4d43:7077 with SMTP id ca4-20020aa7cd64000000b0043a4d437077mr10052200edb.302.1656962212873;
+        Mon, 04 Jul 2022 12:16:52 -0700 (PDT)
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
+        by smtp.gmail.com with ESMTPSA id x21-20020aa7dad5000000b0043a2338ca10sm3854807eds.92.2022.07.04.12.16.51
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 12:16:52 -0700 (PDT)
+Received: by mail-wr1-f47.google.com with SMTP id o4so14677666wrh.3
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 12:16:51 -0700 (PDT)
+X-Received: by 2002:a5d:64e7:0:b0:21b:ad72:5401 with SMTP id
+ g7-20020a5d64e7000000b0021bad725401mr27236387wri.442.1656962200967; Mon, 04
+ Jul 2022 12:16:40 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
+ <YsM5XHy4RZUDF8cR@ZenIV>
+In-Reply-To: <YsM5XHy4RZUDF8cR@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 4 Jul 2022 12:16:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+Message-ID: <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to step_into()
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     Alexander Potapenko <glider@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -69,70 +101,56 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to
- step_into()
-Message-ID: <YsM5XHy4RZUDF8cR@ZenIV>
-References: <20220701142310.2188015-1-glider@google.com>
- <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV>
- <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 10:36:05AM -0700, Linus Torvalds wrote:
+On Mon, Jul 4, 2022 at 12:03 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> Anyway, I've thrown a mount_lock check in there, running xfstests to
+> see how it goes...
 
-> For example, in __follow_mount_rcu(), when we jump to a new mount
-> point, and that sequence has
-> 
->                 *seqp = read_seqcount_begin(&dentry->d_seq);
-> 
-> to reset the sequence number to the new path we jumped into.
-> 
-> But I don't actually see what checks the previous sequence number in
-> that path. We just reset it to the new one.
+So my reaction had been that it would be good to just do something like this:
 
-Theoretically it could be a problem.  We have /mnt/foo/bar and
-/mnt/baz/bar.  Something's mounted on /mnt/foo, hiding /mnt/foo/bar.
-We start a pathwalk for /mnt/baz/bar,
-someone umounts /mnt/foo and swaps /mnt/foo to /mnt/baz before
-we get there.  We are doomed to get -ECHILD from an attempt to
-legitimize in the end, no matter what.  However, we might get
-a hard error (-ENOENT, for example) before that, if we pick up
-the old mount that used to be on top of /mnt/foo (now /mnt/baz)
-and had been detached before the damn thing had become /mnt/baz
-and notice that there's no "bar" in its root.
+  diff --git a/fs/namei.c b/fs/namei.c
+  index 1f28d3f463c3..25c4bcc91142 100644
+  --- a/fs/namei.c
+  +++ b/fs/namei.c
+  @@ -1493,11 +1493,18 @@ static bool __follow_mount_rcu(struct n...
+      if (flags & DCACHE_MOUNTED) {
+          struct mount *mounted = __lookup_mnt(path->mnt, dentry);
+          if (mounted) {
+  +           struct dentry *old_dentry = dentry;
+  +           unsigned old_seq = *seqp;
+  +
+              path->mnt = &mounted->mnt;
+              dentry = path->dentry = mounted->mnt.mnt_root;
+              nd->state |= ND_JUMPED;
+              *seqp = read_seqcount_begin(&dentry->d_seq);
+              *inode = dentry->d_inode;
+  +
+  +           if (read_seqcount_retry(&old_dentry->d_seq, old_seq))
+  +               return false;
+  +
+              /*
+               * We don't need to re-check ->d_seq after this
+               * ->d_inode read - there will be an RCU delay
 
-It used to be impossible (rename would've failed if the target had
-been non-empty and had we managed to empty it first, well, there's
-your point when -ENOENT would've been accurate).  With exchange...
-Yes, it's a possible race.
+but the above is just whitespace-damaged random monkey-scribbling by
+yours truly.
 
-Might need to add
-                                if (read_seqretry(&mount_lock, nd->m_seq))
-					return false;
-in there.  And yes, it's a nice demonstration of how subtle and
-brittle RCU pathwalk is - nobody noticed this bit of fun back when
-RENAME_EXCHANGE had been added...  It got a lot more readable these
-days, but...
+More like a "shouldn't we do something like this" than a serious
+patch, in other words.
 
-> For __follow_mount_rcu it looks like validating the previous sequence
-> number is left to the caller, which then does try_to_unlazy_next().
+IOW, it has *NOT* had a lot of real thought behind it. Purely a
+"shouldn't we always clearly check the old sequence number after we've
+picked up the new one?"
 
-Not really - the caller goes there only if we have __follow_mount_rcu()
-say "it's too tricky for me, get out of RCU mode and deal with it
-there".
-
-Anyway, I've thrown a mount_lock check in there, running xfstests to
-see how it goes...
+                   Linus
