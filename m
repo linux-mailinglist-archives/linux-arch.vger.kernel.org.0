@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00399565F9A
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 01:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0CE565F9D
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 01:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233770AbiGDXO1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 19:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
+        id S233769AbiGDXOq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 19:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233769AbiGDXO0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 19:14:26 -0400
+        with ESMTP id S229725AbiGDXOq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 19:14:46 -0400
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64DFD2A;
-        Mon,  4 Jul 2022 16:14:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A8FF5A2;
+        Mon,  4 Jul 2022 16:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QDUaP7j+G+WPLXwk1QBlWXofxxUo5BaNc7z5+9RX4yU=; b=icrM6bJz3wbQfxMbdA8qlU+e39
-        fPiSRE5Z8oNpGGsPoLLeaRckneZd3+jP8s8GS7Rwh1qA+2QDR+wqf/HPjTt/fxh42hy6hOkmFhvOX
-        I2DfeLa6S+HKC5+xOPOdPLzM1nJ0X6oAFQ71HahrNq+mfWfIZh8mydyB7YEhw1EPjMxtA4hrg+uEw
-        Ggpnnv2AppA2y4gBlibMSjI9ppUPUlji59C4TBGLOa431ipFR83PbleNOfUSFOfkV8B/RWdoHpNK7
-        zU0QiG/DFxZWebcck592vkGHauKyBzk+qu1h4p7OtyBjDZjqAWIvM1c3rTEIGgzzOOd/QgDkwKMTo
-        YUaAHrTQ==;
+        bh=yVde6OT5Ehv5tuk0crezw61+e6oS2AMOyyAHAkO3zT4=; b=sWOTLQXmpJ5PfJPX0D6RfCVV8H
+        y3xvhrfTU2W/13c3jKVExU64lREaPCNI3kLc87vy8xbN53d6RWOm7HLmvowNV6yO9umwHHEAxLltY
+        g2fm+8ci7srGfVRTbgBwK/yZQXOgy3zEFEDvsGtjfdWGQoLQwIOshkKMw/1Kl9PU/RVxAYHUiWxNZ
+        Mr9lfga8Boj5cohoAiN5fnfAx/unPr6CJUFNRlggKGbOWN085O604eoaLlqaIXnbM5inZ36arEOnz
+        hbuh9jANU1BzNfmrKbsuK7nALZC7ZsGGbtXshIOeCy/+I8XqbB9DmkUwjfoHo6GSSZPD/NgZip9rM
+        leAOLVMw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o8VFx-008AVO-KU;
-        Mon, 04 Jul 2022 23:13:29 +0000
-Date:   Tue, 5 Jul 2022 00:13:29 +0100
+        id 1o8VGd-008AW9-Ka;
+        Mon, 04 Jul 2022 23:14:11 +0000
+Date:   Tue, 5 Jul 2022 00:14:11 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Alexander Potapenko <glider@google.com>,
@@ -69,11 +69,9 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains
- unchanged
-Message-ID: <YsN0GURKuaAqXB/e@ZenIV>
-References: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
- <YsJWCREA5xMfmmqx@ZenIV>
+Subject: [PATCH 2/7] follow_dotdot{,_rcu}(): change calling conventions
+Message-ID: <YsN0Qy5d69q6YWhS@ZenIV>
+References: <YsJWCREA5xMfmmqx@ZenIV>
  <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
  <YsM5XHy4RZUDF8cR@ZenIV>
  <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
@@ -82,10 +80,11 @@ References: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
  <YsNRsgOl04r/RCNe@ZenIV>
  <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
  <YsNVyLxrNRFpufn8@ZenIV>
+ <YsN0GURKuaAqXB/e@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YsNVyLxrNRFpufn8@ZenIV>
+In-Reply-To: <YsN0GURKuaAqXB/e@ZenIV>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -96,44 +95,56 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Validate mount_lock seqcount as soon as we cross into mount in RCU
-mode.  Sure, ->mnt_root is pinned and will remain so until we
-do rcu_read_unlock() anyway, and we will eventually fail to unlazy if
-the mount_lock had been touched, but we might run into a hard error
-(e.g. -ENOENT) before trying to unlazy.  And it's possible to end
-up with RCU pathwalk racing with rename() and umount() in a way
-that would fail with -ENOENT while non-RCU pathwalk would've
-succeeded with any timings.
+Instead of returning NULL when we are in root, just make it return
+the current position (and set *seqp and *inodep accordingly).
+That collapses the calls of step_into() in handle_dots()
 
-Once upon a time we hadn't needed that, but analysis had been subtle,
-brittle and went out of window as soon as RENAME_EXCHANGE had been
-added.
-
-It's narrow, hard to hit and won't get you anything other than
-stray -ENOENT that could be arranged in much easier way with the
-same priveleges, but it's a bug all the same.
-
-Cc: stable@kernel.org
-X-sky-is-falling: unlikely
-Fixes: da1ce0670c14 "vfs: add cross-rename"
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/namei.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
 diff --git a/fs/namei.c b/fs/namei.c
-index 1f28d3f463c3..4dbf55b37ec6 100644
+index 4dbf55b37ec6..ecdb9ac21ece 100644
 --- a/fs/namei.c
 +++ b/fs/namei.c
-@@ -1505,6 +1505,8 @@ static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
- 				 * becoming unpinned.
- 				 */
- 				flags = dentry->d_flags;
-+				if (read_seqretry(&mount_lock, nd->m_seq))
-+					return false;
- 				continue;
- 			}
- 			if (read_seqretry(&mount_lock, nd->m_seq))
+@@ -1909,7 +1909,9 @@ static struct dentry *follow_dotdot_rcu(struct nameidata *nd,
+ 		return ERR_PTR(-ECHILD);
+ 	if (unlikely(nd->flags & LOOKUP_BENEATH))
+ 		return ERR_PTR(-ECHILD);
+-	return NULL;
++	*seqp = nd->seq;
++	*inodep = nd->path.dentry->d_inode;
++	return nd->path.dentry;
+ }
+ 
+ static struct dentry *follow_dotdot(struct nameidata *nd,
+@@ -1945,8 +1947,9 @@ static struct dentry *follow_dotdot(struct nameidata *nd,
+ in_root:
+ 	if (unlikely(nd->flags & LOOKUP_BENEATH))
+ 		return ERR_PTR(-EXDEV);
+-	dget(nd->path.dentry);
+-	return NULL;
++	*seqp = 0;
++	*inodep = nd->path.dentry->d_inode;
++	return dget(nd->path.dentry);
+ }
+ 
+ static const char *handle_dots(struct nameidata *nd, int type)
+@@ -1968,12 +1971,7 @@ static const char *handle_dots(struct nameidata *nd, int type)
+ 			parent = follow_dotdot(nd, &inode, &seq);
+ 		if (IS_ERR(parent))
+ 			return ERR_CAST(parent);
+-		if (unlikely(!parent))
+-			error = step_into(nd, WALK_NOFOLLOW,
+-					 nd->path.dentry, nd->inode, nd->seq);
+-		else
+-			error = step_into(nd, WALK_NOFOLLOW,
+-					 parent, inode, seq);
++		error = step_into(nd, WALK_NOFOLLOW, parent, inode, seq);
+ 		if (unlikely(error))
+ 			return error;
+ 
 -- 
 2.30.2
 
