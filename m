@@ -2,241 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1428D5656B0
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 15:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA4556579E
+	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 15:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiGDNN6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 09:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
+        id S233189AbiGDNox (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 09:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234727AbiGDNN4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 09:13:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CA8F19;
-        Mon,  4 Jul 2022 06:13:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97D5BB80EEB;
-        Mon,  4 Jul 2022 13:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49578C341C7;
-        Mon,  4 Jul 2022 13:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1656940432;
-        bh=CnKu3pTL9ZV3Laktxm3fz0s92pUc309Wza4i12uMZA0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EaaC/y+r08Ug4xq29Xnk/jjaBHSJIPDNoaCHC0b/bAx+JVx+f6YzaqsG8YO83diLS
-         SFPYAoVDfMfXJQJD/W0LOBBXmwmJ3jrrjjaLojBlkNg1fEXBr/3IY6eghs3NMv6lkp
-         z8NkcUWQDBMIBJp0HnyYDQTuKk/rLTWDumEsc8EJXMGYBWqYdBWk1esVPkRU0LUwSl
-         zTWobsK706iNXOcqoaIANgtvgS859Raf4+f+hrFhfoPuyTQIG/jieterfpUTViPfIp
-         zE9jYjjlHi0Repf0ncUxtmQ8Ec1naa9T9avVRirfX130JYXgQpXc1sS3d7YjNpT4qT
-         SqmqvEFiPDG6g==
-Received: by mail-vs1-f52.google.com with SMTP id o190so8981228vsc.5;
-        Mon, 04 Jul 2022 06:13:52 -0700 (PDT)
-X-Gm-Message-State: AJIora+s8hlUp1YsS/bFAWx2bdRwfr16xgbjdi9QGM4TYSuEcn5MJBjX
-        R9B06H7jZ4d2QF9bs1f4XWfYfrpGVoAAP3YJkAc=
-X-Google-Smtp-Source: AGRyM1tD+SQ1O1/eCXYDM8ZsBci+DT3mFEDYXzJs0l8d77mK4FOk06vvvdrUL72SOGsiGSdxG0ZUKNYexmkzw5KcMLI=
-X-Received: by 2002:a67:ae0e:0:b0:356:c48b:401d with SMTP id
- x14-20020a67ae0e000000b00356c48b401dmr2244055vse.51.1656940431259; Mon, 04
- Jul 2022 06:13:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220628081707.1997728-1-guoren@kernel.org> <20220628081707.1997728-5-guoren@kernel.org>
- <YsK5o8eiVHeS+7Iw@hirez.programming.kicks-ass.net>
-In-Reply-To: <YsK5o8eiVHeS+7Iw@hirez.programming.kicks-ass.net>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 4 Jul 2022 21:13:40 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQ0cmGJHPR=TzeDJDigiEgBL5-KabbR2WkS=dGJV7jSJA@mail.gmail.com>
-Message-ID: <CAJF2gTQ0cmGJHPR=TzeDJDigiEgBL5-KabbR2WkS=dGJV7jSJA@mail.gmail.com>
-Subject: Re: [PATCH V7 4/5] asm-generic: spinlock: Add combo spinlock (ticket
- & queued)
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
+        with ESMTP id S232773AbiGDNox (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 09:44:53 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40464271C;
+        Mon,  4 Jul 2022 06:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L6wSaDv21i8IBXuOCFtPFoc5AHwc9orKajt9IjPXWew=; b=nQ/NIdPXtNBa1KvneVnc6Ud5sy
+        AWLprlY/lSUgAqO/wXcXY7jfFsKYSz3fHXyccL9RtCWjtEfSm/s389xh5h+jkRKIi1FdiCXhliL0f
+        8sz0JSaY9hIoeOYx+y5zBxWytVcq9KL7lCgnnw9faFOMcHEwPXGsB/i5Nty53v4nQ/imEIX8YU+K8
+        1st3oS9326bC1Q/y4IN6KDj9ND8o2Dcrclvc9TRD+Yf0/Y2NjQ2J6VpfAeIVwIEEKtKUGP/FJiDmR
+        LxPuicJhlwu/sL0iqNdztvcSN2PT86QPnT85mshLE0+o7ec+5Xb83LQmN8e7I+IlqHyY67Q7B1jfs
+        bmA/A14g==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o8MMq-0081dA-Ie;
+        Mon, 04 Jul 2022 13:44:00 +0000
+Date:   Mon, 4 Jul 2022 14:44:00 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux-MM <linux-mm@kvack.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Evgenii Stepanov <eugenis@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Vitaly Buka <vitalybuka@google.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to
+ step_into()
+Message-ID: <YsLuoFtki01gbmYB@ZenIV>
+References: <20220701142310.2188015-1-glider@google.com>
+ <20220701142310.2188015-44-glider@google.com>
+ <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+ <YsJWCREA5xMfmmqx@ZenIV>
+ <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=V_vDVFNSJTOErNhzk7n=GRjZ_6U6Z=M-Jdmi=ekbS5+g@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 5:58 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Tue, Jun 28, 2022 at 04:17:06AM -0400, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Some architecture has a flexible requirement on the type of spinlock.
-> > Some LL/SC architectures of ISA don't force micro-arch to give a strong
-> > forward guarantee. Thus different kinds of memory model micro-arch would
-> > come out in one ISA. The ticket lock is suitable for exclusive monitor
-> > designed LL/SC micro-arch with limited cores and "!NUMA". The
-> > queue-spinlock could deal with NUMA/large-scale scenarios with a strong
-> > forward guarantee designed LL/SC micro-arch.
-> >
-> > So, make the spinlock a combo with feature.
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> > ---
-> >  include/asm-generic/spinlock.h | 43 ++++++++++++++++++++++++++++++++--
-> >  kernel/locking/qspinlock.c     |  2 ++
-> >  2 files changed, 43 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-> > index f41dc7c2b900..a9b43089bf99 100644
-> > --- a/include/asm-generic/spinlock.h
-> > +++ b/include/asm-generic/spinlock.h
-> > @@ -28,34 +28,73 @@
-> >  #define __ASM_GENERIC_SPINLOCK_H
-> >
-> >  #include <asm-generic/ticket_spinlock.h>
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +#include <linux/jump_label.h>
-> > +#include <asm-generic/qspinlock.h>
-> > +
-> > +DECLARE_STATIC_KEY_TRUE(use_qspinlock_key);
-> > +#endif
-> > +
-> > +#undef arch_spin_is_locked
-> > +#undef arch_spin_is_contended
-> > +#undef arch_spin_value_unlocked
-> > +#undef arch_spin_lock
-> > +#undef arch_spin_trylock
-> > +#undef arch_spin_unlock
-> >
-> >  static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
-> >  {
-> > -     ticket_spin_lock(lock);
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +     if (static_branch_likely(&use_qspinlock_key))
-> > +             queued_spin_lock(lock);
-> > +     else
-> > +#endif
-> > +             ticket_spin_lock(lock);
-> >  }
-> >
-> >  static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
-> >  {
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +     if (static_branch_likely(&use_qspinlock_key))
-> > +             return queued_spin_trylock(lock);
-> > +#endif
-> >       return ticket_spin_trylock(lock);
-> >  }
-> >
-> >  static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
-> >  {
-> > -     ticket_spin_unlock(lock);
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +     if (static_branch_likely(&use_qspinlock_key))
-> > +             queued_spin_unlock(lock);
-> > +     else
-> > +#endif
-> > +             ticket_spin_unlock(lock);
-> >  }
-> >
-> >  static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
-> >  {
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +     if (static_branch_likely(&use_qspinlock_key))
-> > +             return queued_spin_is_locked(lock);
-> > +#endif
-> >       return ticket_spin_is_locked(lock);
-> >  }
-> >
-> >  static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
-> >  {
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +     if (static_branch_likely(&use_qspinlock_key))
-> > +             return queued_spin_is_contended(lock);
-> > +#endif
-> >       return ticket_spin_is_contended(lock);
-> >  }
-> >
-> >  static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
-> >  {
-> > +#ifdef CONFIG_ARCH_USE_QUEUED_SPINLOCKS
-> > +     if (static_branch_likely(&use_qspinlock_key))
-> > +             return queued_spin_value_unlocked(lock);
-> > +#endif
-> >       return ticket_spin_value_unlocked(lock);
-> >  }
->
-> Urggghhhh....
->
-> I really don't think you want this in generic code. Also, I'm thinking
-> any arch that does this wants to make sure it doesn't inline any of this
-Your advice is the same with Arnd, I would move static_branch out of generic.
+On Mon, Jul 04, 2022 at 10:20:53AM +0200, Alexander Potapenko wrote:
 
-> stuff. That is, said arch must not have ARCH_INLINE_SPIN_*
-What do you mean? I've tested with ARCH_INLINE_SPIN_* and it's okay
-with EXPORT_SYMBOL(use_qspinlock_key).
+> What makes you think they are false positives? Is the scenario I
+> described above:
+> 
+> """
+> In particular, if the call to lookup_fast() in walk_component()
+> returns NULL, and lookup_slow() returns a valid dentry, then the
+> `seq` and `inode` will remain uninitialized until the call to
+> step_into()
+> """
+> 
+> impossible?
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 47e12ab9c822..4587fb544326 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -32,6 +32,32 @@ config RISCV
-        select ARCH_HAS_STRICT_MODULE_RWX if MMU && !XIP_KERNEL
-        select ARCH_HAS_TICK_BROADCAST if GENERIC_CLOCKEVENTS_BROADCAST
-        select ARCH_HAS_UBSAN_SANITIZE_ALL
-+       select ARCH_INLINE_READ_LOCK if !PREEMPTION
-+       select ARCH_INLINE_READ_LOCK_BH if !PREEMPTION
-+       select ARCH_INLINE_READ_LOCK_IRQ if !PREEMPTION
-+       select ARCH_INLINE_READ_LOCK_IRQSAVE if !PREEMPTION
-+       select ARCH_INLINE_READ_UNLOCK if !PREEMPTION
-+       select ARCH_INLINE_READ_UNLOCK_BH if !PREEMPTION
-+       select ARCH_INLINE_READ_UNLOCK_IRQ if !PREEMPTION
-+       select ARCH_INLINE_READ_UNLOCK_IRQRESTORE if !PREEMPTION
-+       select ARCH_INLINE_WRITE_LOCK if !PREEMPTION
-+       select ARCH_INLINE_WRITE_LOCK_BH if !PREEMPTION
-+       select ARCH_INLINE_WRITE_LOCK_IRQ if !PREEMPTION
-+       select ARCH_INLINE_WRITE_LOCK_IRQSAVE if !PREEMPTION
-+       select ARCH_INLINE_WRITE_UNLOCK if !PREEMPTION
-+       select ARCH_INLINE_WRITE_UNLOCK_BH if !PREEMPTION
-+       select ARCH_INLINE_WRITE_UNLOCK_IRQ if !PREEMPTION
-+       select ARCH_INLINE_WRITE_UNLOCK_IRQRESTORE if !PREEMPTION
-+       select ARCH_INLINE_SPIN_TRYLOCK if !PREEMPTION
-+       select ARCH_INLINE_SPIN_TRYLOCK_BH if !PREEMPTION
-+       select ARCH_INLINE_SPIN_LOCK if !PREEMPTION
-+       select ARCH_INLINE_SPIN_LOCK_BH if !PREEMPTION
-+       select ARCH_INLINE_SPIN_LOCK_IRQ if !PREEMPTION
-+       select ARCH_INLINE_SPIN_LOCK_IRQSAVE if !PREEMPTION
-+       select ARCH_INLINE_SPIN_UNLOCK if !PREEMPTION
-+       select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
-+       select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
-+       select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
-        select ARCH_OPTIONAL_KERNEL_RWX if ARCH_HAS_STRICT_KERNEL_RWX
-        select ARCH_OPTIONAL_KERNEL_RWX_DEFAULT
-        select ARCH_STACKWALK
+Suppose step_into() has been called in non-RCU mode.  The first
+thing it does is
+	int err = handle_mounts(nd, dentry, &path, &seq);
+	if (err < 0) 
+		return ERR_PTR(err);
 
-Shall I add the above diff in the next version of the patch series?
+And handle_mounts() in non-RCU mode is
+	path->mnt = nd->path.mnt;
+	path->dentry = dentry;
+	if (nd->flags & LOOKUP_RCU) {
+		[unreachable code]
+	}
+	[code not touching seqp]
+	if (unlikely(ret)) {
+		[code not touching seqp]
+	} else {
+		*seqp = 0; /* out of RCU mode, so the value doesn't matter */
+	}
+	return ret;
 
->
-> And if you're going to force things out of line, then I think you can
-> get better code using static_call().
-Good point, thx.
+In other words, the value seq argument of step_into() used to have ends up
+being never fetched and, in case step_into() gets past that if (err < 0)
+that value is replaced with zero before any further accesses.
 
->
-> *shudder*...
+So it's a false positive; yes, strictly speaking compiler is allowd
+to do anything whatsoever if it manages to prove that the value is
+uninitialized.  Realistically, though, especially since unsigned int
+is not allowed any trapping representations...
 
+If you want an test stripped of VFS specifics, consider this:
 
+int g(int n, _Bool flag)
+{
+	if (!flag)
+		n = 0;
+	return n + 1;
+}
 
---
-Best Regards
- Guo Ren
+int f(int n, _Bool flag)
+{
+	int x;
 
-ML: https://lore.kernel.org/linux-csky/
+	if (flag)
+		x = n + 2;
+	return g(x, flag);
+}
+
+Do your tools trigger on it?
