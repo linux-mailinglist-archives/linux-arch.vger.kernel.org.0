@@ -2,32 +2,32 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7C2F565EB9
-	for <lists+linux-arch@lfdr.de>; Mon,  4 Jul 2022 23:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00399565F9A
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 01:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiGDVEr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 17:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S233770AbiGDXO1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 19:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiGDVEr (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 17:04:47 -0400
+        with ESMTP id S233769AbiGDXO0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 19:14:26 -0400
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7ED55AB;
-        Mon,  4 Jul 2022 14:04:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D64DFD2A;
+        Mon,  4 Jul 2022 16:14:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=T4NEq+eMSGAkYEOA0B+r4pdVqAgo1X2D4OJSO7fEkNY=; b=AQZXT4X26RLQ+tZazISD4HjcHj
-        uY43HvoKZBqSRJnUKTH2W+dL9c2FSeIpL0aPm++Jao5qMRkopG7Jw78ME/C9ubLOhmUX+Xe7dSXYQ
-        Y4FAtgFK9dsEA66ZijK/hRjM+EGhXfzM0WZiFkcx1oNYvhS6AJBKQc5wmRfGCUBsBMX/1JsDNApIz
-        YBywIfgH9bOTV56kOM/DAJAd+721Hutx1uqwOZ01LB6wtndOMYcaI3ulgDRCfq9YpymEaNwddqg+d
-        rieM3tFld/azhG0yquNoj12g5gKcvOdTmSk3OfOJ8i9qf1cUd7Sz2LDQqiSnIeNKzaW0yUC3aW2YX
-        O9uT8OhQ==;
+        bh=QDUaP7j+G+WPLXwk1QBlWXofxxUo5BaNc7z5+9RX4yU=; b=icrM6bJz3wbQfxMbdA8qlU+e39
+        fPiSRE5Z8oNpGGsPoLLeaRckneZd3+jP8s8GS7Rwh1qA+2QDR+wqf/HPjTt/fxh42hy6hOkmFhvOX
+        I2DfeLa6S+HKC5+xOPOdPLzM1nJ0X6oAFQ71HahrNq+mfWfIZh8mydyB7YEhw1EPjMxtA4hrg+uEw
+        Ggpnnv2AppA2y4gBlibMSjI9ppUPUlji59C4TBGLOa431ipFR83PbleNOfUSFOfkV8B/RWdoHpNK7
+        zU0QiG/DFxZWebcck592vkGHauKyBzk+qu1h4p7OtyBjDZjqAWIvM1c3rTEIGgzzOOd/QgDkwKMTo
+        YUaAHrTQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o8TEm-0088kl-TL;
-        Mon, 04 Jul 2022 21:04:09 +0000
-Date:   Mon, 4 Jul 2022 22:04:08 +0100
+        id 1o8VFx-008AVO-KU;
+        Mon, 04 Jul 2022 23:13:29 +0000
+Date:   Tue, 5 Jul 2022 00:13:29 +0100
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Alexander Potapenko <glider@google.com>,
@@ -69,11 +69,10 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH v4 43/45] namei: initialize parameters passed to
- step_into()
-Message-ID: <YsNVyLxrNRFpufn8@ZenIV>
-References: <20220701142310.2188015-44-glider@google.com>
- <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
+Subject: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains
+ unchanged
+Message-ID: <YsN0GURKuaAqXB/e@ZenIV>
+References: <CAHk-=wgbpot7nt966qvnSR25iea3ueO90RwC2DwHH=7ZyeZzvQ@mail.gmail.com>
  <YsJWCREA5xMfmmqx@ZenIV>
  <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
  <YsM5XHy4RZUDF8cR@ZenIV>
@@ -82,10 +81,11 @@ References: <20220701142310.2188015-44-glider@google.com>
  <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
  <YsNRsgOl04r/RCNe@ZenIV>
  <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
+ <YsNVyLxrNRFpufn8@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
+In-Reply-To: <YsNVyLxrNRFpufn8@ZenIV>
 Sender: Al Viro <viro@ftp.linux.org.uk>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
@@ -96,27 +96,44 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 04, 2022 at 01:51:16PM -0700, Linus Torvalds wrote:
-> On Mon, Jul 4, 2022 at 1:46 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > Why is that a problem?  It could have been moved to another parent,
-> > but so it could after we'd crossed to the mounted and we wouldn't have
-> > noticed (or cared).
-> 
-> Yeah, see my other email.
-> 
-> I agree that it might be a "we don't actually care" situation, where
-> all we care about that the name was valid at one point (when we picked
-> up that sequence point). So maybe we don't care about closing it.
-> 
-> But even if so, I think it might warrant a comment, because I still
-> feel like we're basically "throwing away" our previous sequence point
-> information without ever checking it.
-> 
-> Maybe all we ever care about is basically "this sequence point
-> protects the dentry inode pointer for the next lookup", and when it
-> comes to mount points that ends up being immaterial.
+Validate mount_lock seqcount as soon as we cross into mount in RCU
+mode.  Sure, ->mnt_root is pinned and will remain so until we
+do rcu_read_unlock() anyway, and we will eventually fail to unlazy if
+the mount_lock had been touched, but we might run into a hard error
+(e.g. -ENOENT) before trying to unlazy.  And it's possible to end
+up with RCU pathwalk racing with rename() and umount() in a way
+that would fail with -ENOENT while non-RCU pathwalk would've
+succeeded with any timings.
 
-	There is a problem, actually, but it's in a different place...
-OK, let me try to write something resembling a formal proof and see
-what falls out.
+Once upon a time we hadn't needed that, but analysis had been subtle,
+brittle and went out of window as soon as RENAME_EXCHANGE had been
+added.
+
+It's narrow, hard to hit and won't get you anything other than
+stray -ENOENT that could be arranged in much easier way with the
+same priveleges, but it's a bug all the same.
+
+Cc: stable@kernel.org
+X-sky-is-falling: unlikely
+Fixes: da1ce0670c14 "vfs: add cross-rename"
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/namei.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/fs/namei.c b/fs/namei.c
+index 1f28d3f463c3..4dbf55b37ec6 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -1505,6 +1505,8 @@ static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
+ 				 * becoming unpinned.
+ 				 */
+ 				flags = dentry->d_flags;
++				if (read_seqretry(&mount_lock, nd->m_seq))
++					return false;
+ 				continue;
+ 			}
+ 			if (read_seqretry(&mount_lock, nd->m_seq))
+-- 
+2.30.2
+
