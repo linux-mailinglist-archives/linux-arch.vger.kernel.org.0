@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4185856734D
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 17:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C52B567350
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 17:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiGEPtp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Jul 2022 11:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45704 "EHLO
+        id S232840AbiGEPuJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Jul 2022 11:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232563AbiGEPtR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 11:49:17 -0400
+        with ESMTP id S232584AbiGEPtm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 11:49:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBC35F51;
-        Tue,  5 Jul 2022 08:48:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F67365EF;
+        Tue,  5 Jul 2022 08:48:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14198B8181F;
-        Tue,  5 Jul 2022 15:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C877C341CF;
-        Tue,  5 Jul 2022 15:48:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E3E8B81825;
+        Tue,  5 Jul 2022 15:48:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67223C341CA;
+        Tue,  5 Jul 2022 15:48:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657036105;
-        bh=vmTfGAnp2FA4UINeVAHTyZ6gYc9GVzKEgKs8+VE/qfM=;
+        s=k20201202; t=1657036111;
+        bh=XUFB6Va8O4VOUoTqeJ/SzqmIGXceAjPUgZz79vTlh1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UA1PmHVqS7Doq3kkORGYOX9UWI9bk6hGxGCLQYpri8OgNWP05TQ1oO+xTKMSoyp11
-         rzFs3HWzzuispS+NfpdEtTBvDnPC3Mjh6i1U95VUltb+YPafh/fN/qhVtYZN/ez7Ip
-         dKtni/M8QvWXYcNkWAX98Y2nRFRWoc8vcpRMG+yMMNErodQFZ/eCleT1Eo2GTwIgMJ
-         1LrN3HZfSyCmSOTkTvPNZyaNqkGNU3x2VG0ibVFUUY9+fL5NY2bSZvzwHhBk6G7PLb
-         SFVEtuPP4xHzgLIwy4ZXJM/TF9nufuolZ7b2xKjbqOQtwEzcCobFAub96SQ7jwjhxM
-         gk6PQAnpBoLNQ==
+        b=G94szT3+bFQ+wpJnBwp0DBOJnWEkyAC9OpsGfwqaaGXZ52mMM1e0fQTTrRr23p6XO
+         WLqUsWA12m7vCBEqvq1B9sfE/8cirwRjD2dMNaWZLserQN76JvFOx4vxkXpBu7UKXX
+         uiONMQD/rbRfNPoolaXP1Etwh0rj356yp+hlBaes6mIZwiv2i7TemISbRgKFzAmN+H
+         blCQUYLDtRYUfHM+mZx/NL4F8zp+3NXgNnhqtaerlx+MFrKRHn5Bftnh+3NHU9waAK
+         ABvPXtRin8neCNzfKG/9p6oxUmjb5QVTLbsl+ToTfxvdYrMaUIk6l6kVlUbFAyNGZs
+         EZG52hwrmYQiw==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
         linux-mips@vger.kernel.org, linux-mm@kvack.org,
         linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         loongarch@lists.linux.dev
-Subject: [PATCH v2 10/15] loongarch: drop definition of PMD_ORDER
-Date:   Tue,  5 Jul 2022 18:47:03 +0300
-Message-Id: <20220705154708.181258-11-rppt@kernel.org>
+Subject: [PATCH v2 11/15] loongarch: drop definition of PUD_ORDER
+Date:   Tue,  5 Jul 2022 18:47:04 +0300
+Message-Id: <20220705154708.181258-12-rppt@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220705154708.181258-1-rppt@kernel.org>
 References: <20220705154708.181258-1-rppt@kernel.org>
@@ -68,86 +68,59 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-This is the order of the page table allocation, not the order of a PMD.
+This is the order of the page table allocation, not the order of a PUD.
 Since its always hardwired to 0, simply drop it.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 Acked-by: Huacai Chen <chenhuacai@kernel.org>
 ---
- arch/loongarch/include/asm/pgalloc.h | 4 ++--
- arch/loongarch/include/asm/pgtable.h | 7 +++----
- arch/loongarch/kernel/asm-offsets.c  | 3 ---
- 3 files changed, 5 insertions(+), 9 deletions(-)
+ arch/loongarch/include/asm/pgalloc.h | 2 +-
+ arch/loongarch/include/asm/pgtable.h | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/include/asm/pgalloc.h
-index b0a57b25c131..93e785f46639 100644
+index 93e785f46639..4bfeb3c9c9ac 100644
 --- a/arch/loongarch/include/asm/pgalloc.h
 +++ b/arch/loongarch/include/asm/pgalloc.h
-@@ -66,12 +66,12 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
- 	pmd_t *pmd;
- 	struct page *pg;
+@@ -90,7 +90,7 @@ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+ {
+ 	pud_t *pud;
  
--	pg = alloc_pages(GFP_KERNEL_ACCOUNT, PMD_ORDER);
-+	pg = alloc_page(GFP_KERNEL_ACCOUNT);
- 	if (!pg)
- 		return NULL;
- 
- 	if (!pgtable_pmd_page_ctor(pg)) {
--		__free_pages(pg, PMD_ORDER);
-+		__free_page(pg);
- 		return NULL;
- 	}
- 
+-	pud = (pud_t *) __get_free_pages(GFP_KERNEL, PUD_ORDER);
++	pud = (pud_t *) __get_free_page(GFP_KERNEL);
+ 	if (pud)
+ 		pud_init((unsigned long)pud, (unsigned long)invalid_pmd_table);
+ 	return pud;
 diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-index e0bbfc31fe72..f926537d2233 100644
+index f926537d2233..a97996fefaed 100644
 --- a/arch/loongarch/include/asm/pgtable.h
 +++ b/arch/loongarch/include/asm/pgtable.h
-@@ -23,7 +23,6 @@
+@@ -22,7 +22,6 @@
+ #endif
  
  #define PGD_ORDER		0
- #define PUD_ORDER		0
--#define PMD_ORDER		0
+-#define PUD_ORDER		0
  
  #if CONFIG_PGTABLE_LEVELS == 2
  #define PGDIR_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT - 3))
-@@ -31,12 +30,12 @@
- #define PMD_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT - 3))
- #define PMD_SIZE	(1UL << PMD_SHIFT)
- #define PMD_MASK	(~(PMD_SIZE-1))
--#define PGDIR_SHIFT	(PMD_SHIFT + (PAGE_SHIFT + PMD_ORDER - 3))
-+#define PGDIR_SHIFT	(PMD_SHIFT + (PAGE_SHIFT - 3))
- #elif CONFIG_PGTABLE_LEVELS == 4
- #define PMD_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT - 3))
- #define PMD_SIZE	(1UL << PMD_SHIFT)
- #define PMD_MASK	(~(PMD_SIZE-1))
--#define PUD_SHIFT	(PMD_SHIFT + (PAGE_SHIFT + PMD_ORDER - 3))
-+#define PUD_SHIFT	(PMD_SHIFT + (PAGE_SHIFT - 3))
+@@ -38,7 +37,7 @@
+ #define PUD_SHIFT	(PMD_SHIFT + (PAGE_SHIFT - 3))
  #define PUD_SIZE	(1UL << PUD_SHIFT)
  #define PUD_MASK	(~(PUD_SIZE-1))
- #define PGDIR_SHIFT	(PUD_SHIFT + (PAGE_SHIFT + PUD_ORDER - 3))
-@@ -52,7 +51,7 @@
- #define PTRS_PER_PUD	((PAGE_SIZE << PUD_ORDER) >> 3)
+-#define PGDIR_SHIFT	(PUD_SHIFT + (PAGE_SHIFT + PUD_ORDER - 3))
++#define PGDIR_SHIFT	(PUD_SHIFT + (PAGE_SHIFT - 3))
+ #endif
+ 
+ #define PGDIR_SIZE	(1UL << PGDIR_SHIFT)
+@@ -48,7 +47,7 @@
+ 
+ #define PTRS_PER_PGD	((PAGE_SIZE << PGD_ORDER) >> 3)
+ #if CONFIG_PGTABLE_LEVELS > 3
+-#define PTRS_PER_PUD	((PAGE_SIZE << PUD_ORDER) >> 3)
++#define PTRS_PER_PUD	(PAGE_SIZE >> 3)
  #endif
  #if CONFIG_PGTABLE_LEVELS > 2
--#define PTRS_PER_PMD	((PAGE_SIZE << PMD_ORDER) >> 3)
-+#define PTRS_PER_PMD	(PAGE_SIZE >> 3)
- #endif
- #define PTRS_PER_PTE	(PAGE_SIZE >> 3)
- 
-diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-index 1a1166a7e61c..aa4ef42d759f 100644
---- a/arch/loongarch/kernel/asm-offsets.c
-+++ b/arch/loongarch/kernel/asm-offsets.c
-@@ -191,9 +191,6 @@ void output_mm_defines(void)
- 	DEFINE(_PTE_T_LOG2, PTE_T_LOG2);
- 	BLANK();
- 	DEFINE(_PGD_ORDER, PGD_ORDER);
--#ifndef __PAGETABLE_PMD_FOLDED
--	DEFINE(_PMD_ORDER, PMD_ORDER);
--#endif
- 	BLANK();
- 	DEFINE(_PMD_SHIFT, PMD_SHIFT);
- 	DEFINE(_PGDIR_SHIFT, PGDIR_SHIFT);
+ #define PTRS_PER_PMD	(PAGE_SIZE >> 3)
 -- 
 2.34.1
 
