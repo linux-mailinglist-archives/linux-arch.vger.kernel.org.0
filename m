@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60BA56736F
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 17:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 689D5567373
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 17:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbiGEPtQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Jul 2022 11:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
+        id S232619AbiGEPtn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Jul 2022 11:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiGEPsg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 11:48:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76271ADB9;
-        Tue,  5 Jul 2022 08:48:14 -0700 (PDT)
+        with ESMTP id S232753AbiGEPtP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 11:49:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DABBDB;
+        Tue,  5 Jul 2022 08:48:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42D4361B4A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2163CB81829;
+        Tue,  5 Jul 2022 15:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38971C36AFD;
         Tue,  5 Jul 2022 15:48:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AFC7C36AF5;
-        Tue,  5 Jul 2022 15:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657036093;
-        bh=Vue7H8LCr+M1pj6DZ3BvkAhUx8ulVRB7UqrqmOhXw0c=;
+        s=k20201202; t=1657036099;
+        bh=HB79TgDejynjwXx+ze+zwa0sbce+L9enN9kanFNzV5U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KUuAjX3ls21sld82+qncE1IqLvb+UaJbLEzg+zR4FHBiItcxPyQI9YPQPiPrexqHK
-         rFngIr/HU/ZA0Ev4D41wN+HP076RxleRBt/L69xJ/B8r16G4gDNVgEG6/nl62cN3l5
-         CVHVfgu25+HyKSo8bauTWNkf0JIw2IXiMDVlrUvOiCbBa2i+meVIloBk3mrraZlKaV
-         iFg6LI+OPWIHIgnO3SdFXCOUW/cVI6HpVoGQuYww7GJC2D8zjTX4BASR34IGXkg/fG
-         Wy4mtYDz1nqMgrCdSnu4I5NG++Nh9pYJ1t4EHgncfXjBqZLyxEIUQspta5O/gphKJ9
-         hjOLZDMDfCkMw==
+        b=LaaPXiob0ep82//FrVUkugWoeOi0PJIcd+2Wbo9XNGm1SekBlXYWrxP28Hyy3Ct+F
+         3j256FeKuXjKqDndi3j5r4uoPUZA9vuctkx5BAv5XadhJHOrQ3gGtfOhmv1aZIshms
+         HbRNleco7/24QbDai+y+n/PMFj+C9hDB/++B+MUELlJvTd5JfzI2JaZ6Ebj4oYQ7Yr
+         bO8XcshzPNDGxtCK2M+cQt/WnraJIwsYYk+KYR9iRZ5Oh4hlmdM9SAxI6UwY2Dwe5r
+         SUcWXZDvT86R7ndr2QmwpbAWL4NaZuYEu5ppyv+8yH8fZpYouW044iP0y+4m/qTxyq
+         oYEp+vLG55QgA==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
         linux-mips@vger.kernel.org, linux-mm@kvack.org,
         linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         loongarch@lists.linux.dev
-Subject: [PATCH v2 08/15] nios2: drop definition of PGD_ORDER
-Date:   Tue,  5 Jul 2022 18:47:01 +0300
-Message-Id: <20220705154708.181258-9-rppt@kernel.org>
+Subject: [PATCH v2 09/15] loongarch: drop definition of PTE_ORDER
+Date:   Tue,  5 Jul 2022 18:47:02 +0300
+Message-Id: <20220705154708.181258-10-rppt@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220705154708.181258-1-rppt@kernel.org>
 References: <20220705154708.181258-1-rppt@kernel.org>
@@ -68,58 +68,94 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-This is the order of the page table allocation, not the order of a PGD.
+This is the order of the page table allocation, not the order of a PTE.
 Since its always hardwired to 0, simply drop it.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+Acked-by: Huacai Chen <chenhuacai@kernel.org>
 ---
- arch/nios2/include/asm/pgtable.h | 4 +---
- arch/nios2/mm/init.c             | 3 +--
- arch/nios2/mm/pgtable.c          | 2 +-
- 3 files changed, 3 insertions(+), 6 deletions(-)
+ arch/loongarch/include/asm/pgtable.h | 9 ++++-----
+ arch/loongarch/kernel/asm-offsets.c  | 1 -
+ arch/loongarch/mm/tlbex.S            | 6 +++---
+ 3 files changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-index eaf8f28baa8b..74af16dafe86 100644
---- a/arch/nios2/include/asm/pgtable.h
-+++ b/arch/nios2/include/asm/pgtable.h
-@@ -68,9 +68,7 @@ struct mm_struct;
+diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+index d9e86cfa53e2..e0bbfc31fe72 100644
+--- a/arch/loongarch/include/asm/pgtable.h
++++ b/arch/loongarch/include/asm/pgtable.h
+@@ -24,17 +24,16 @@
+ #define PGD_ORDER		0
+ #define PUD_ORDER		0
+ #define PMD_ORDER		0
+-#define PTE_ORDER		0
  
- #define PAGE_COPY MKP(0, 0, 1)
+ #if CONFIG_PGTABLE_LEVELS == 2
+-#define PGDIR_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT + PTE_ORDER - 3))
++#define PGDIR_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT - 3))
+ #elif CONFIG_PGTABLE_LEVELS == 3
+-#define PMD_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT + PTE_ORDER - 3))
++#define PMD_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT - 3))
+ #define PMD_SIZE	(1UL << PMD_SHIFT)
+ #define PMD_MASK	(~(PMD_SIZE-1))
+ #define PGDIR_SHIFT	(PMD_SHIFT + (PAGE_SHIFT + PMD_ORDER - 3))
+ #elif CONFIG_PGTABLE_LEVELS == 4
+-#define PMD_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT + PTE_ORDER - 3))
++#define PMD_SHIFT	(PAGE_SHIFT + (PAGE_SHIFT - 3))
+ #define PMD_SIZE	(1UL << PMD_SHIFT)
+ #define PMD_MASK	(~(PMD_SIZE-1))
+ #define PUD_SHIFT	(PMD_SHIFT + (PAGE_SHIFT + PMD_ORDER - 3))
+@@ -55,7 +54,7 @@
+ #if CONFIG_PGTABLE_LEVELS > 2
+ #define PTRS_PER_PMD	((PAGE_SIZE << PMD_ORDER) >> 3)
+ #endif
+-#define PTRS_PER_PTE	((PAGE_SIZE << PTE_ORDER) >> 3)
++#define PTRS_PER_PTE	(PAGE_SIZE >> 3)
  
--#define PGD_ORDER	0
--
--#define PTRS_PER_PGD	((PAGE_SIZE << PGD_ORDER) / sizeof(pgd_t))
-+#define PTRS_PER_PGD	(PAGE_SIZE / sizeof(pgd_t))
- #define PTRS_PER_PTE	(PAGE_SIZE / sizeof(pte_t))
+ #define USER_PTRS_PER_PGD       ((TASK_SIZE64 / PGDIR_SIZE)?(TASK_SIZE64 / PGDIR_SIZE):1)
  
- #define USER_PTRS_PER_PGD	\
-diff --git a/arch/nios2/mm/init.c b/arch/nios2/mm/init.c
-index 2d6dbf7701f6..eab65e8ea69c 100644
---- a/arch/nios2/mm/init.c
-+++ b/arch/nios2/mm/init.c
-@@ -78,8 +78,7 @@ void __init mmu_init(void)
- 	flush_tlb_all();
- }
+diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
+index bfb65eb2844f..1a1166a7e61c 100644
+--- a/arch/loongarch/kernel/asm-offsets.c
++++ b/arch/loongarch/kernel/asm-offsets.c
+@@ -194,7 +194,6 @@ void output_mm_defines(void)
+ #ifndef __PAGETABLE_PMD_FOLDED
+ 	DEFINE(_PMD_ORDER, PMD_ORDER);
+ #endif
+-	DEFINE(_PTE_ORDER, PTE_ORDER);
+ 	BLANK();
+ 	DEFINE(_PMD_SHIFT, PMD_SHIFT);
+ 	DEFINE(_PGDIR_SHIFT, PGDIR_SHIFT);
+diff --git a/arch/loongarch/mm/tlbex.S b/arch/loongarch/mm/tlbex.S
+index 7eee40271577..e36c2c07dee3 100644
+--- a/arch/loongarch/mm/tlbex.S
++++ b/arch/loongarch/mm/tlbex.S
+@@ -83,7 +83,7 @@ vmalloc_done_load:
+ 	bne	t0, $r0, tlb_huge_update_load
  
--#define __page_aligned(order) __aligned(PAGE_SIZE << (order))
--pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned(PGD_ORDER);
-+pgd_t swapper_pg_dir[PTRS_PER_PGD] __aligned(PAGE_SIZE);
- pte_t invalid_pte_table[PTRS_PER_PTE] __aligned(PAGE_SIZE);
- static struct page *kuser_page[1];
+ 	csrrd	t0, LOONGARCH_CSR_BADV
+-	srli.d	t0, t0, (PAGE_SHIFT + PTE_ORDER)
++	srli.d	t0, t0, PAGE_SHIFT
+ 	andi	t0, t0, (PTRS_PER_PTE - 1)
+ 	slli.d	t0, t0, _PTE_T_LOG2
+ 	add.d	t1, ra, t0
+@@ -247,7 +247,7 @@ vmalloc_done_store:
+ 	bne	t0, $r0, tlb_huge_update_store
  
-diff --git a/arch/nios2/mm/pgtable.c b/arch/nios2/mm/pgtable.c
-index 9b587fd592dd..7c76e8a7447a 100644
---- a/arch/nios2/mm/pgtable.c
-+++ b/arch/nios2/mm/pgtable.c
-@@ -54,7 +54,7 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
- {
- 	pgd_t *ret, *init;
+ 	csrrd	t0, LOONGARCH_CSR_BADV
+-	srli.d	t0, t0, (PAGE_SHIFT + PTE_ORDER)
++	srli.d	t0, t0, PAGE_SHIFT
+ 	andi	t0, t0, (PTRS_PER_PTE - 1)
+ 	slli.d	t0, t0, _PTE_T_LOG2
+ 	add.d	t1, ra, t0
+@@ -414,7 +414,7 @@ vmalloc_done_modify:
+ 	bne	t0, $r0, tlb_huge_update_modify
  
--	ret = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_ORDER);
-+	ret = (pgd_t *) __get_free_page(GFP_KERNEL);
- 	if (ret) {
- 		init = pgd_offset(&init_mm, 0UL);
- 		pgd_init(ret);
+ 	csrrd	t0, LOONGARCH_CSR_BADV
+-	srli.d	t0, t0, (PAGE_SHIFT + PTE_ORDER)
++	srli.d	t0, t0, PAGE_SHIFT
+ 	andi	t0, t0, (PTRS_PER_PTE - 1)
+ 	slli.d	t0, t0, _PTE_T_LOG2
+ 	add.d	t1, ra, t0
 -- 
 2.34.1
 
