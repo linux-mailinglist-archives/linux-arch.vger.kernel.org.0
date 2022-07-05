@@ -2,67 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE19565FFF
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 02:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38F95661FE
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 05:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbiGEAGt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 20:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S231394AbiGEDt4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 23:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiGEAGs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 20:06:48 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B5DB4A6
-        for <linux-arch@vger.kernel.org>; Mon,  4 Jul 2022 17:06:47 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id q8so174518ljj.10
-        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 17:06:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qmr+F6QyjrWZ2ZNhmVLeAUEKN7hzojbkjvHu88aEdVo=;
-        b=DIX8InJ6+wbF8trPlzF4+I2SecOagwTWWWojE8MrUcdpyHa/pRG6jbX6znc3kN0wwY
-         meZsX/cYHAia9UGV3E6pOMc+RLJkbdCCC5GHWJIC5ovXbkt+u1S6rePiMZINTfJyYWAf
-         La2KI8ZnqJltrRgKiua/JxCOBBzGPIGfHCgC4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qmr+F6QyjrWZ2ZNhmVLeAUEKN7hzojbkjvHu88aEdVo=;
-        b=Z+uEVYzh+kcSQ7SVycKYufE9z0lyRONDUhMBVNZ4MmULc6nB23EejyghMd9anNaau8
-         wSnQtI+DLU3/TqKGK82usSsYprA34REs3XoEPY/WmGCx9bZVK6ZIyD2AxDaIfnyxaBa/
-         ufv9gIVr3zcZyfUfazsKEZ0bw5rlHmzzI2E3R961egaP/6ALq1nJhQf4vF0Al/TM/0nO
-         0UtV5vJ45++be/9vvL7eOyMEpojq+M5CbCLOkNusBFetKQ9Ulk6YWfzS8CtXdPMLKKW1
-         ANdYoTXBaBxzo7d6ts+8Ve9ibNs5GBbAEZkJcwyGpbBSYl+lucNYnIezVPpXCQWLaAWG
-         RWsQ==
-X-Gm-Message-State: AJIora8C33BbAu7UFH8w9vfWN6X66XTAwB4qbC6XudSSGmf9kiRJi5lB
-        EJhh9xfBBAdFYV85yEocByUfmzqmjKWNZFQZT54=
-X-Google-Smtp-Source: AGRyM1ubyzXDapbT3hKl+S+M7YsXB0uFA/Risi1XV/vHQ8lQNz/LjUTax+WCPs1ZOoXoxlrF0IK0Lw==
-X-Received: by 2002:a05:651c:1246:b0:25a:9a7c:680c with SMTP id h6-20020a05651c124600b0025a9a7c680cmr18862779ljh.79.1656979605681;
-        Mon, 04 Jul 2022 17:06:45 -0700 (PDT)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
-        by smtp.gmail.com with ESMTPSA id cf3-20020a056512280300b0047fa8ffe92csm5370823lfb.233.2022.07.04.17.06.44
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Jul 2022 17:06:45 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id l7so11878293ljj.4
-        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 17:06:44 -0700 (PDT)
-X-Received: by 2002:a5d:64e7:0:b0:21b:ad72:5401 with SMTP id
- g7-20020a5d64e7000000b0021bad725401mr27990729wri.442.1656979593298; Mon, 04
- Jul 2022 17:06:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
- <YsM5XHy4RZUDF8cR@ZenIV> <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
- <YsNFoH0+N+KCt5kg@ZenIV> <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
- <YsNRsgOl04r/RCNe@ZenIV> <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
- <YsNVyLxrNRFpufn8@ZenIV> <YsN0GURKuaAqXB/e@ZenIV> <YsN1kfBsfMdH+eiU@ZenIV>
-In-Reply-To: <YsN1kfBsfMdH+eiU@ZenIV>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 4 Jul 2022 17:06:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
-Message-ID: <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
-Subject: Re: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains unchanged
-To:     Al Viro <viro@zeniv.linux.org.uk>
+        with ESMTP id S234235AbiGEDtz (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 23:49:55 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7C012AB7;
+        Mon,  4 Jul 2022 20:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=WiklvS9k0el8XhEQTp2AsFsJfZTmp2j5g87JdjG5LuY=; b=A6t/lG34n3OcVFs5zHW4rDAgZU
+        dB25v6MxiCdWY7bmdH/wWMwaUIjPEoO1NWhXrC7y6CSmgLDL6bimS/XngJ2GfM7RDrgo98UN/Hj5w
+        phxCr6dVDxHMO5OyImVJNe+pBY/kpdH+uHILtmM5FEJN5dminDlfCj7TB7tUgjynMeYgPLR9ZJLg6
+        5iq4kIYJ9iFtlCfW/XX9hM6JjSG8RfvMehgbWUy1/mO7jhrbxMHwv6wuVdX66t8kIJebaxLKtFSpY
+        JUWGP8LidNDDQzx7AI81vdD7vBuNViIZtGOuVxRemJ+Jh/b9pHi+7NtjZp1cROsoB+T5lnwoKjDFA
+        yiZQuu/A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o8ZYY-008EUH-Gz;
+        Tue, 05 Jul 2022 03:48:58 +0000
+Date:   Tue, 5 Jul 2022 04:48:58 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Alexander Potapenko <glider@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -102,82 +69,96 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains
+ unchanged
+Message-ID: <YsO0qu97PYZos2G1@ZenIV>
+References: <YsM5XHy4RZUDF8cR@ZenIV>
+ <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+ <YsNFoH0+N+KCt5kg@ZenIV>
+ <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+ <YsNRsgOl04r/RCNe@ZenIV>
+ <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
+ <YsNVyLxrNRFpufn8@ZenIV>
+ <YsN0GURKuaAqXB/e@ZenIV>
+ <YsN1kfBsfMdH+eiU@ZenIV>
+ <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 4, 2022 at 4:19 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+On Mon, Jul 04, 2022 at 05:06:17PM -0700, Linus Torvalds wrote:
+
+> I wonder if the solution might not be to create a new structure like
+> 
+>         struct rcu_dentry {
+>                 struct dentry *dentry;
+>                 unsigned seq;
+>         };
+> 
+> and in fact then we could make __d_lookup_rcu() return one of these
+> things (we already rely on that "returning a two-word structure is
+> efficient" elsewhere).
 >
-> -       unsigned        seq, m_seq, r_seq;
-> +       unsigned        seq, next_seq, m_seq, r_seq;
+> That would then make that "this dentry goes with this sequence number"
+> be a very clear thing, and I actually thjink that it would make
+> __d_lookup_rcu() have a cleaner calling convention too, ie we'd go
+> from
+> 
+>         dentry = __d_lookup_rcu(parent, &nd->last, &nd->next_seq);
+> 
+> rto
+> 
+>        dseq = __d_lookup_rcu(parent, &nd->last);
+> 
+> and it would even improve code generation because it now returns the
+> dentry and the sequence number in registers, instead of returning one
+> in a register and one in memory.
+> 
+> I did *not* look at how it would change some of the other places, but
+> I do like the notion of "keep the dentry and the sequence number that
+> goes with it together".
+> 
+> That "keep dentry as a local, keep the sequence number that goes with
+> it as a field in the 'nd'" really does seem an odd thing. So I'm
+> throwing the above out as a "maybe we could do this instead..".
 
-So the main thing I react to here is how "next_seq" is in the "struct
-nameidata", but then it always goes together with a "struct dentry"
-that you end up having to pass separately (and that is *not* in that
-"struct nameidata").
+I looked into that; turns out to be quite messy, unfortunately.  For one
+thing, the distance between the places where we get the seq count and
+the place where we consume it is large; worse, there's a bunch of paths
+where we are in non-RCU mode converging to the same consumer and those
+need a 0/1/-1/whatever paired with dentry.  Gets very clumsy...
 
-Now, saving the associated dentry (as "next_dentry") in the nd would
-solve that, but ends up benign ugly since everything then wants to
-look at the dentry anyway, so while it would solve the inconsistency,
-it would be ugly.
+There might be a clever way to deal with pairs cleanly, but I don't see it
+at the moment.  I'll look into that some more, but...
 
-I wonder if the solution might not be to create a new structure like
+BTW, how good gcc and clang are at figuring out that e.g.
 
-        struct rcu_dentry {
-                struct dentry *dentry;
-                unsigned seq;
-        };
+static int foo(int n)
+{
+	if (likely(n >= 0))
+		return 0;
+	....
+}
 
-and in fact then we could make __d_lookup_rcu() return one of these
-things (we already rely on that "returning a two-word structure is
-efficient" elsewhere).
+....
+	if (foo(n))
+		whatever();
 
-That would then make that "this dentry goes with this sequence number"
-be a very clear thing, and I actually thjink that it would make
-__d_lookup_rcu() have a cleaner calling convention too, ie we'd go
-from
+should be treated as
+	if (unlikely(foo(n)))
+		whatever();
 
-        dentry = __d_lookup_rcu(parent, &nd->last, &nd->next_seq);
-
-rto
-
-       dseq = __d_lookup_rcu(parent, &nd->last);
-
-and it would even improve code generation because it now returns the
-dentry and the sequence number in registers, instead of returning one
-in a register and one in memory.
-
-I did *not* look at how it would change some of the other places, but
-I do like the notion of "keep the dentry and the sequence number that
-goes with it together".
-
-That "keep dentry as a local, keep the sequence number that goes with
-it as a field in the 'nd'" really does seem an odd thing. So I'm
-throwing the above out as a "maybe we could do this instead..".
-
-Not a huge deal. That oddity or not, I think the patch series is an improvement.
-
-I do have a minor gripe with this too:
-
-> +       nd->seq = nd->next_seq = 0;
-
-I'm not convinced "0" is a good value.
-
-It's not supposed to match anything, but it *could* match a valid
-sequence number. Wouldn't it be better to pick something that is
-explicitly invalid and has the low bit set (ie 1 or -1).
-
-We don't seem to have a SEQ_INVAL or anything like that, but it does
-seem that if the intent is to make it clear it's not a real sequence
-number any more at that point, then 0 isn't great.
-
-But again, this is more of a stylistic detail thing than a real complaint.
-
-             Linus
+They certainly do it just fine if the damn thing is inlined (e.g.
+all those unlikely(read_seqcount_retry(....)) can and should lose
+unlikely), but do they manage that for non-inlined functions in
+the same compilation unit?  Relatively recent gcc seems to...
