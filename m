@@ -2,91 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528ED5662D2
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 07:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B75F056630C
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 08:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiGEFg6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Tue, 5 Jul 2022 01:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S229598AbiGEGWK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Jul 2022 02:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiGEFg4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 01:36:56 -0400
-Received: from mail.pgj.campeche.gob.mx (unknown [187.157.28.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDA7101DE;
-        Mon,  4 Jul 2022 22:36:56 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id 7E44D1BC261C;
-        Tue,  5 Jul 2022 00:36:24 -0500 (CDT)
-Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
-        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id G4c8TOVhpc2E; Tue,  5 Jul 2022 00:36:21 -0500 (CDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id CC1B21BC2615;
-        Tue,  5 Jul 2022 00:36:20 -0500 (CDT)
-X-Virus-Scanned: amavisd-new at pgj.campeche.gob.mx
-Received: from mail.pgj.campeche.gob.mx ([127.0.0.1])
-        by localhost (mail.pgj.campeche.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ghH6gQQkEy_T; Tue,  5 Jul 2022 00:36:19 -0500 (CDT)
-Received: from mail.pgj.campeche.gob.mx (mail.pgj.campeche.gob.mx [172.24.1.108])
-        by mail.pgj.campeche.gob.mx (Postfix) with ESMTP id CE4B91BC260C;
-        Tue,  5 Jul 2022 00:36:16 -0500 (CDT)
-Date:   Tue, 5 Jul 2022 00:36:16 -0500 (CDT)
-From:   =?utf-8?B?0YHQuNGB0YLQtdC80L3QuNC5INCw0LTQvNGW0L3RltGB0YLRgNCw0YLQvtGA?= 
-        <vfgcontrolinterno@pgj.campeche.gob.mx>
-Reply-To: sistemassadmins@mail2engineer.com
-Message-ID: <965779657.10836.1656999376808.JavaMail.zimbra@pgj.campeche.gob.mx>
-Subject: 
+        with ESMTP id S229448AbiGEGWJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 02:22:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB52BCA5;
+        Mon,  4 Jul 2022 23:22:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FAAD61426;
+        Tue,  5 Jul 2022 06:22:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E04EC341D7;
+        Tue,  5 Jul 2022 06:22:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657002128;
+        bh=Zaf7DjhcD3ZxfJHUz1tOGgDGa4JYJfrWSDwsbtdTNwI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=a6923plIqslsbqyEgJGkAr8COlwhQHlzqDOMUImf0zNEq9HfBY7kyJ31P00pKVrG7
+         y7sOCX7KFkZaKbXr1TBsB4bdPWDPbdUss/s+YWLl5peIIfTQnNr2M9MJNM8bwnRZW4
+         pBP1mWfqbYSTfbLQr0IfiTFeIF0vLC+jWt2IFvckuj94X5lLXreY0OPKMdqj4JP0Ql
+         smnsWL54j9bAu/0Q6bfOaMqEB5kKVAhMB4U0bMIbAk2LT3svlb0Axbi55/JXgywmOj
+         gLpT9G8YpXf0KUjDyEO/m/I2r9HiqXWMGXjvdGjetJDbeHeFEekkqecyZHbQLOGFi+
+         XCBAa5kvP21lg==
+Received: by mail-vs1-f54.google.com with SMTP id h184so8559vsc.3;
+        Mon, 04 Jul 2022 23:22:08 -0700 (PDT)
+X-Gm-Message-State: AJIora8X3yQoioVtRiEwhFu6BMNxFuI66FFq4PuuPsdJy+YonYSJ3S7w
+        3MJnwATXj1IvnxZrPwXOwTEwgenwzm+1qlsaZjM=
+X-Google-Smtp-Source: AGRyM1uR3kDpQ/MbyXcNWqnHFpFRoA+f7XpzR2mn61Kf/oGLc1bqoMRFlPTGI0x9k49ir5CWsNuWr5PQo6T9BiLh8ww=
+X-Received: by 2002:a67:6fc3:0:b0:356:18:32ba with SMTP id k186-20020a676fc3000000b00356001832bamr18421067vsc.43.1657002126922;
+ Mon, 04 Jul 2022 23:22:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-Originating-IP: [172.24.1.254]
-X-Mailer: Zimbra 8.8.15_GA_4304 (zclient/8.8.15_GA_4304)
-Thread-Index: d92JZ22dbxhpjczsobuE062h14d0ng==
-Thread-Topic: 
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,KHOP_HELO_FCRDNS,MAY_BE_FORGED,MISSING_HEADERS,
-        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,
-        SPF_NONE,TVD_SPACE_RATIO_MINFP,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [187.157.28.107 listed in wl.mailspike.net]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4466]
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  1.0 RDNS_DYNAMIC Delivered to internal network by host with
-        *      dynamic-looking rDNS
-        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-        *  1.0 MAY_BE_FORGED Relay IP's reverse DNS does not resolve to IP
-        *  0.0 KHOP_HELO_FCRDNS Relay HELO differs from its IP's reverse DNS
-        *  0.0 TVD_SPACE_RATIO_MINFP Space ratio (vertical text obfuscation?)
-X-Spam-Level: *******
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-5-chenhuacai@loongson.cn> <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a2XBGtJMB=Z-W56MLREAr3sAYKqDHo3yg=4hJ4T6x+QdQ@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 5 Jul 2022 14:21:56 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+Message-ID: <CAAhV-H5djQOzRsW-JaRPzaAnh64WgHiGvHxc1UdAUV43tirukg@mail.gmail.com>
+Subject: Re: [PATCH V4 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Muchun Song <songmuchun@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-увага;
+Hi, Arnd,
 
-Ваша електронна пошта перевищила обмеження пам'яті, яке становить 5 ГБ, визначене адміністратором, яке в даний час працює на 10,9 ГБ. Ви не зможете надсилати або отримувати нову пошту, доки не перевірите поштову скриньку "Вхідні". Щоб відновити справність поштової скриньки, надішліть такі відомості
-нижче:
+On Mon, Jul 4, 2022 at 8:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Jul 4, 2022 at 1:25 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > To avoid the following build error on LoongArch we should include linux/
+> > static_key.h in page-flags.h.
+> >
+> > In file included from ./include/linux/mmzone.h:22,
+> > from ./include/linux/gfp.h:6,
+> > from ./include/linux/mm.h:7,
+> > from arch/loongarch/kernel/asm-offsets.c:9:
+> > ./include/linux/page-flags.h:208:1: warning: data definition has no
+> > type or storage class
+> > 208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
+> > | ^~~~~~~~~~~~~~~~~~~~~~~~
+> > ./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
+> > declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
+> > ./include/linux/page-flags.h:209:26: warning: parameter names (without
+> > types) in function declaration
+>
+> I wonder if page_fixed_fake_head() should be moved out of line to avoid
+> this, it's already nontrivial here, and that would avoid the static key
+> in a central header.
+I have some consideration here. I think both inline function and
+static key are instruments to make things faster, in other words,
+page_fixed_fake_head() is a performance critical function. If so, it
+is not suitable to move it out of line.
 
-Ім'я:
-Ім'я користувача:
-пароль:
-Підтвердження пароля:
-Адреса електронної пошти:
-телефон:
-
-Якщо не вдається повторно перевірити повідомлення, ваша поштова скринька буде
-Вимкнуто!
-
-Приносимо вибачення за незручності.
-Код підтвердження: UA:@UAWEBADMIN72134539.WEB.UA
-Технічна підтримка Пошти Системний адміністратор © 2022
+Huacai
+>
+>        Arnd
+>
