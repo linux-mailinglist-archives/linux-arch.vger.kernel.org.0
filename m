@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4898756732F
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 17:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3AB567328
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 17:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbiGEPsN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Jul 2022 11:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S230129AbiGEPsL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 5 Jul 2022 11:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbiGEPre (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 11:47:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C8C1BE91;
-        Tue,  5 Jul 2022 08:47:33 -0700 (PDT)
+        with ESMTP id S232770AbiGEPri (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 11:47:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F2317E22;
+        Tue,  5 Jul 2022 08:47:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3754FB8181B;
-        Tue,  5 Jul 2022 15:47:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7A7C341CE;
-        Tue,  5 Jul 2022 15:47:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A41FC61B49;
+        Tue,  5 Jul 2022 15:47:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77D15C341CB;
+        Tue,  5 Jul 2022 15:47:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657036050;
-        bh=W1o4tQ4Mz3yoPsyKuae5TVdq4NrS0aa2i1+psL/+Jzo=;
+        s=k20201202; t=1657036057;
+        bh=yII5UNWZKGsbdktmuyJMDCcQNmFGi0PKtAPWkTX44+o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DEfK8Os2RNMFDVBTWjxNgDTEPS8wthdO66zbpawEt8SntE3Gem+uOfoOVr1jP2d7G
-         f/+L5+3qkfuwfOtVOkOK2iql5WDDuGalOI9a6yP7sallTvGc+gEKVW1lSd1d0y/Ge3
-         5WWv4FT+kjQhWlHc2E9QAh+W0dPydj21sRt9ExoLFSn9bKzKrBvdaqbM24DFa6y4jw
-         mxAPtkl0UzXEmzdGHBq1otPtO9TjqGJusv/EBXZiS+gRTB8pqpwgJ+ChLKJ3SbP2Cl
-         d5WIiwoBNelFfQKQvGe1DwdURYY1/7tMsrWUgPXmyqwlel9eyAb1Uz5bRvO6UyRw+k
-         dGBgMuJFIJMqQ==
+        b=qaLjiQFhyHDfW36wq/6nru8GfWGyEzg5fUbs6v3lYDItFli5Crx68fyYHWaAvFRBO
+         ScGG3r5m7DMl3AOG0GlxFiJbuso46mLCVQnEaQ4IpuS3yMEufTX2OIU097bun08x3k
+         0cyw59FyQOczQqoaaGYSN9BdFYCUfNN6/2gKjlALGUQiR0811lIjNWtHy5IDY9Lg+m
+         HjW4DHtYSoaNDb15Ojv7TeVeKbJqfPzFyPa2HL5upxQQ5RhTxASWA4S50LzQ4mtDpm
+         3kFTtVBy6FnCijV6aL4WJ8bGa9252Wo24hPE0wWTjkIDSOZuvLwE3tKfHL/MoMq0Vc
+         676sVFBmG4zOQ==
 From:   Mike Rapoport <rppt@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
@@ -48,9 +48,9 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Dinh Nguyen <dinguyen@kernel.org>,
         linux-mips@vger.kernel.org, linux-mm@kvack.org,
         linux-parisc@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         loongarch@lists.linux.dev
-Subject: [PATCH v2 01/15] csky: drop definition of PTE_ORDER
-Date:   Tue,  5 Jul 2022 18:46:54 +0300
-Message-Id: <20220705154708.181258-2-rppt@kernel.org>
+Subject: [PATCH v2 02/15] csky: drop definition of PGD_ORDER
+Date:   Tue,  5 Jul 2022 18:46:55 +0300
+Message-Id: <20220705154708.181258-3-rppt@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220705154708.181258-1-rppt@kernel.org>
 References: <20220705154708.181258-1-rppt@kernel.org>
@@ -68,32 +68,44 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Mike Rapoport <rppt@linux.ibm.com>
 
-This is the order of the page table allocation, not the order of a PTE.
+This is the order of the page table allocation, not the order of a PGD.
 Since its always hardwired to 0, simply drop it.
 
 Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
 Acked-by: Guo Ren <guoren@kernel.org>
 ---
+ arch/csky/include/asm/pgalloc.h | 2 +-
  arch/csky/include/asm/pgtable.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
+diff --git a/arch/csky/include/asm/pgalloc.h b/arch/csky/include/asm/pgalloc.h
+index bbbd0698b397..7d57e5da0914 100644
+--- a/arch/csky/include/asm/pgalloc.h
++++ b/arch/csky/include/asm/pgalloc.h
+@@ -44,7 +44,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
+ 	pgd_t *ret;
+ 	pgd_t *init;
+ 
+-	ret = (pgd_t *) __get_free_pages(GFP_KERNEL, PGD_ORDER);
++	ret = (pgd_t *) __get_free_page(GFP_KERNEL);
+ 	if (ret) {
+ 		init = pgd_offset(&init_mm, 0UL);
+ 		pgd_init((unsigned long *)ret);
 diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-index bbe245117777..f8bb1e12334b 100644
+index f8bb1e12334b..0f1e2eda1601 100644
 --- a/arch/csky/include/asm/pgtable.h
 +++ b/arch/csky/include/asm/pgtable.h
-@@ -19,11 +19,10 @@
+@@ -18,9 +18,8 @@
+ /*
   * C-SKY is two-level paging structure:
   */
- #define PGD_ORDER	0
--#define PTE_ORDER	0
+-#define PGD_ORDER	0
  
- #define PTRS_PER_PGD	((PAGE_SIZE << PGD_ORDER) / sizeof(pgd_t))
+-#define PTRS_PER_PGD	((PAGE_SIZE << PGD_ORDER) / sizeof(pgd_t))
++#define PTRS_PER_PGD	(PAGE_SIZE / sizeof(pgd_t))
  #define PTRS_PER_PMD	1
--#define PTRS_PER_PTE	((PAGE_SIZE << PTE_ORDER) / sizeof(pte_t))
-+#define PTRS_PER_PTE	(PAGE_SIZE / sizeof(pte_t))
+ #define PTRS_PER_PTE	(PAGE_SIZE / sizeof(pte_t))
  
- #define pte_ERROR(e) \
- 	pr_err("%s:%d: bad pte %08lx.\n", __FILE__, __LINE__, (e).pte_low)
 -- 
 2.34.1
 
