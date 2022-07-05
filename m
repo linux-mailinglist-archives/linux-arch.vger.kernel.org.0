@@ -2,34 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD681565FB4
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 01:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE19565FFF
+	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 02:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiGDXUf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 4 Jul 2022 19:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S231582AbiGEAGt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 4 Jul 2022 20:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiGDXUe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 19:20:34 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56ABDF40;
-        Mon,  4 Jul 2022 16:20:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZXbvLYuQek+nCVjr7grEEvJKDaLQpWJKjOeNxyQtcLo=; b=n5GfKHxkwN7kWm6XzcxTHyHG8y
-        viGvSxvbmD74m9UqZCi6VUZSMgjcoblbDg6B84Ybs9jvKTaOHBfEHqLVQwX8K3GiRtGt+NQghgnPZ
-        7nLVpVazEZrX0qKIyYVMMRQ6LKylvZeExFVEa54tt0sETNGFGpHE1sXsO8ePuEXHJcToPDBM6ga/W
-        pUL+kl5AQ5bKQ1nXXVcDOuFKLjAnaplT+lPEmQCUlruj/0InJDBvOq0oEtQf7HkBhSTvfhX/6av2c
-        JS/uw1e3yd0j5gZeM5uZgOc5ixjVjRlndSqAVoEOdsvbtTiaHG273VGJdGrElUE4e1YaovCnxmMCv
-        TK6OaCsg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o8VM1-008Aid-7w;
-        Mon, 04 Jul 2022 23:19:45 +0000
-Date:   Tue, 5 Jul 2022 00:19:45 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        with ESMTP id S230240AbiGEAGs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 4 Jul 2022 20:06:48 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B5DB4A6
+        for <linux-arch@vger.kernel.org>; Mon,  4 Jul 2022 17:06:47 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id q8so174518ljj.10
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 17:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qmr+F6QyjrWZ2ZNhmVLeAUEKN7hzojbkjvHu88aEdVo=;
+        b=DIX8InJ6+wbF8trPlzF4+I2SecOagwTWWWojE8MrUcdpyHa/pRG6jbX6znc3kN0wwY
+         meZsX/cYHAia9UGV3E6pOMc+RLJkbdCCC5GHWJIC5ovXbkt+u1S6rePiMZINTfJyYWAf
+         La2KI8ZnqJltrRgKiua/JxCOBBzGPIGfHCgC4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qmr+F6QyjrWZ2ZNhmVLeAUEKN7hzojbkjvHu88aEdVo=;
+        b=Z+uEVYzh+kcSQ7SVycKYufE9z0lyRONDUhMBVNZ4MmULc6nB23EejyghMd9anNaau8
+         wSnQtI+DLU3/TqKGK82usSsYprA34REs3XoEPY/WmGCx9bZVK6ZIyD2AxDaIfnyxaBa/
+         ufv9gIVr3zcZyfUfazsKEZ0bw5rlHmzzI2E3R961egaP/6ALq1nJhQf4vF0Al/TM/0nO
+         0UtV5vJ45++be/9vvL7eOyMEpojq+M5CbCLOkNusBFetKQ9Ulk6YWfzS8CtXdPMLKKW1
+         ANdYoTXBaBxzo7d6ts+8Ve9ibNs5GBbAEZkJcwyGpbBSYl+lucNYnIezVPpXCQWLaAWG
+         RWsQ==
+X-Gm-Message-State: AJIora8C33BbAu7UFH8w9vfWN6X66XTAwB4qbC6XudSSGmf9kiRJi5lB
+        EJhh9xfBBAdFYV85yEocByUfmzqmjKWNZFQZT54=
+X-Google-Smtp-Source: AGRyM1ubyzXDapbT3hKl+S+M7YsXB0uFA/Risi1XV/vHQ8lQNz/LjUTax+WCPs1ZOoXoxlrF0IK0Lw==
+X-Received: by 2002:a05:651c:1246:b0:25a:9a7c:680c with SMTP id h6-20020a05651c124600b0025a9a7c680cmr18862779ljh.79.1656979605681;
+        Mon, 04 Jul 2022 17:06:45 -0700 (PDT)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
+        by smtp.gmail.com with ESMTPSA id cf3-20020a056512280300b0047fa8ffe92csm5370823lfb.233.2022.07.04.17.06.44
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 17:06:45 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id l7so11878293ljj.4
+        for <linux-arch@vger.kernel.org>; Mon, 04 Jul 2022 17:06:44 -0700 (PDT)
+X-Received: by 2002:a5d:64e7:0:b0:21b:ad72:5401 with SMTP id
+ g7-20020a5d64e7000000b0021bad725401mr27990729wri.442.1656979593298; Mon, 04
+ Jul 2022 17:06:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <YsJWCREA5xMfmmqx@ZenIV> <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
+ <YsM5XHy4RZUDF8cR@ZenIV> <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
+ <YsNFoH0+N+KCt5kg@ZenIV> <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
+ <YsNRsgOl04r/RCNe@ZenIV> <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
+ <YsNVyLxrNRFpufn8@ZenIV> <YsN0GURKuaAqXB/e@ZenIV> <YsN1kfBsfMdH+eiU@ZenIV>
+In-Reply-To: <YsN1kfBsfMdH+eiU@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 4 Jul 2022 17:06:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
+Message-ID: <CAHk-=wjmD7BgykuZYDOH-fmvfE3VMXm3qSoRjGShjKKdiiPDtA@mail.gmail.com>
+Subject: Re: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains unchanged
+To:     Al Viro <viro@zeniv.linux.org.uk>
 Cc:     Alexander Potapenko <glider@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -69,492 +102,82 @@ Cc:     Alexander Potapenko <glider@google.com>,
         Segher Boessenkool <segher@kernel.crashing.org>,
         Vitaly Buka <vitalybuka@google.com>,
         linux-toolchains <linux-toolchains@vger.kernel.org>
-Subject: Re: [PATCH 1/7] __follow_mount_rcu(): verify that mount_lock remains
- unchanged
-Message-ID: <YsN1kfBsfMdH+eiU@ZenIV>
-References: <YsJWCREA5xMfmmqx@ZenIV>
- <CAHk-=wjxqKYHu2-m1Y1EKVpi5bvrD891710mMichfx_EjAjX4A@mail.gmail.com>
- <YsM5XHy4RZUDF8cR@ZenIV>
- <CAHk-=wjeEre7eeWSwCRy2+ZFH8js4u22+3JTm6n+pY-QHdhbYw@mail.gmail.com>
- <YsNFoH0+N+KCt5kg@ZenIV>
- <CAHk-=whp8Npc+vMcgbpM9mrPEXkhV4YnhsPxbPXSu9gfEhKWmA@mail.gmail.com>
- <YsNRsgOl04r/RCNe@ZenIV>
- <CAHk-=wih_JHVPvp1qyW4KNK0ctTc6e+bDj4wdTgNkyND6tuFoQ@mail.gmail.com>
- <YsNVyLxrNRFpufn8@ZenIV>
- <YsN0GURKuaAqXB/e@ZenIV>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YsN0GURKuaAqXB/e@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-	Just in case - this series is RFC only; it's very lightly
-tested.  Might be carved into too many steps, at that.  Cumulative
-delta follows; might or might not be more convenient for review.
+On Mon, Jul 4, 2022 at 4:19 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> -       unsigned        seq, m_seq, r_seq;
+> +       unsigned        seq, next_seq, m_seq, r_seq;
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 1f28d3f463c3..f2c99e75b578 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -567,7 +567,7 @@ struct nameidata {
- 	struct path	root;
- 	struct inode	*inode; /* path.dentry.d_inode */
- 	unsigned int	flags, state;
--	unsigned	seq, m_seq, r_seq;
-+	unsigned	seq, next_seq, m_seq, r_seq;
- 	int		last_type;
- 	unsigned	depth;
- 	int		total_link_count;
-@@ -772,6 +772,7 @@ static bool try_to_unlazy(struct nameidata *nd)
- 		goto out;
- 	if (unlikely(!legitimize_root(nd)))
- 		goto out;
-+	nd->seq = nd->next_seq = 0;
- 	rcu_read_unlock();
- 	BUG_ON(nd->inode != parent->d_inode);
- 	return true;
-@@ -780,6 +781,7 @@ static bool try_to_unlazy(struct nameidata *nd)
- 	nd->path.mnt = NULL;
- 	nd->path.dentry = NULL;
- out:
-+	nd->seq = nd->next_seq = 0;
- 	rcu_read_unlock();
- 	return false;
- }
-@@ -788,7 +790,6 @@ static bool try_to_unlazy(struct nameidata *nd)
-  * try_to_unlazy_next - try to switch to ref-walk mode.
-  * @nd: nameidata pathwalk data
-  * @dentry: next dentry to step into
-- * @seq: seq number to check @dentry against
-  * Returns: true on success, false on failure
-  *
-  * Similar to try_to_unlazy(), but here we have the next dentry already
-@@ -797,7 +798,7 @@ static bool try_to_unlazy(struct nameidata *nd)
-  * Nothing should touch nameidata between try_to_unlazy_next() failure and
-  * terminate_walk().
-  */
--static bool try_to_unlazy_next(struct nameidata *nd, struct dentry *dentry, unsigned seq)
-+static bool try_to_unlazy_next(struct nameidata *nd, struct dentry *dentry)
- {
- 	BUG_ON(!(nd->flags & LOOKUP_RCU));
- 
-@@ -818,7 +819,7 @@ static bool try_to_unlazy_next(struct nameidata *nd, struct dentry *dentry, unsi
- 	 */
- 	if (unlikely(!lockref_get_not_dead(&dentry->d_lockref)))
- 		goto out;
--	if (unlikely(read_seqcount_retry(&dentry->d_seq, seq)))
-+	if (unlikely(read_seqcount_retry(&dentry->d_seq, nd->next_seq)))
- 		goto out_dput;
- 	/*
- 	 * Sequence counts matched. Now make sure that the root is
-@@ -826,6 +827,7 @@ static bool try_to_unlazy_next(struct nameidata *nd, struct dentry *dentry, unsi
- 	 */
- 	if (unlikely(!legitimize_root(nd)))
- 		goto out_dput;
-+	nd->seq = nd->next_seq = 0;
- 	rcu_read_unlock();
- 	return true;
- 
-@@ -834,9 +836,11 @@ static bool try_to_unlazy_next(struct nameidata *nd, struct dentry *dentry, unsi
- out1:
- 	nd->path.dentry = NULL;
- out:
-+	nd->seq = nd->next_seq = 0;
- 	rcu_read_unlock();
- 	return false;
- out_dput:
-+	nd->seq = nd->next_seq = 0;
- 	rcu_read_unlock();
- 	dput(dentry);
- 	return false;
-@@ -1466,8 +1470,7 @@ EXPORT_SYMBOL(follow_down);
-  * Try to skip to top of mountpoint pile in rcuwalk mode.  Fail if
-  * we meet a managed dentry that would need blocking.
-  */
--static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
--			       struct inode **inode, unsigned *seqp)
-+static bool __follow_mount_rcu(struct nameidata *nd, struct path *path)
- {
- 	struct dentry *dentry = path->dentry;
- 	unsigned int flags = dentry->d_flags;
-@@ -1496,15 +1499,12 @@ static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
- 				path->mnt = &mounted->mnt;
- 				dentry = path->dentry = mounted->mnt.mnt_root;
- 				nd->state |= ND_JUMPED;
--				*seqp = read_seqcount_begin(&dentry->d_seq);
--				*inode = dentry->d_inode;
--				/*
--				 * We don't need to re-check ->d_seq after this
--				 * ->d_inode read - there will be an RCU delay
--				 * between mount hash removal and ->mnt_root
--				 * becoming unpinned.
--				 */
-+				nd->next_seq = read_seqcount_begin(&dentry->d_seq);
- 				flags = dentry->d_flags;
-+				// makes sure that non-RCU pathwalk could reach
-+				// this state.
-+				if (read_seqretry(&mount_lock, nd->m_seq))
-+					return false;
- 				continue;
- 			}
- 			if (read_seqretry(&mount_lock, nd->m_seq))
-@@ -1515,8 +1515,7 @@ static bool __follow_mount_rcu(struct nameidata *nd, struct path *path,
- }
- 
- static inline int handle_mounts(struct nameidata *nd, struct dentry *dentry,
--			  struct path *path, struct inode **inode,
--			  unsigned int *seqp)
-+			  struct path *path)
- {
- 	bool jumped;
- 	int ret;
-@@ -1524,16 +1523,15 @@ static inline int handle_mounts(struct nameidata *nd, struct dentry *dentry,
- 	path->mnt = nd->path.mnt;
- 	path->dentry = dentry;
- 	if (nd->flags & LOOKUP_RCU) {
--		unsigned int seq = *seqp;
--		if (unlikely(!*inode))
--			return -ENOENT;
--		if (likely(__follow_mount_rcu(nd, path, inode, seqp)))
-+		unsigned int seq = nd->next_seq;
-+		if (likely(__follow_mount_rcu(nd, path)))
- 			return 0;
--		if (!try_to_unlazy_next(nd, dentry, seq))
--			return -ECHILD;
--		// *path might've been clobbered by __follow_mount_rcu()
-+		// *path and nd->next_seq might've been clobbered
- 		path->mnt = nd->path.mnt;
- 		path->dentry = dentry;
-+		nd->next_seq = seq;
-+		if (!try_to_unlazy_next(nd, dentry))
-+			return -ECHILD;
- 	}
- 	ret = traverse_mounts(path, &jumped, &nd->total_link_count, nd->flags);
- 	if (jumped) {
-@@ -1546,9 +1544,6 @@ static inline int handle_mounts(struct nameidata *nd, struct dentry *dentry,
- 		dput(path->dentry);
- 		if (path->mnt != nd->path.mnt)
- 			mntput(path->mnt);
--	} else {
--		*inode = d_backing_inode(path->dentry);
--		*seqp = 0; /* out of RCU mode, so the value doesn't matter */
- 	}
- 	return ret;
- }
-@@ -1607,9 +1602,7 @@ static struct dentry *__lookup_hash(const struct qstr *name,
- 	return dentry;
- }
- 
--static struct dentry *lookup_fast(struct nameidata *nd,
--				  struct inode **inode,
--			          unsigned *seqp)
-+static struct dentry *lookup_fast(struct nameidata *nd)
- {
- 	struct dentry *dentry, *parent = nd->path.dentry;
- 	int status = 1;
-@@ -1620,37 +1613,24 @@ static struct dentry *lookup_fast(struct nameidata *nd,
- 	 * going to fall back to non-racy lookup.
- 	 */
- 	if (nd->flags & LOOKUP_RCU) {
--		unsigned seq;
--		dentry = __d_lookup_rcu(parent, &nd->last, &seq);
-+		dentry = __d_lookup_rcu(parent, &nd->last, &nd->next_seq);
- 		if (unlikely(!dentry)) {
- 			if (!try_to_unlazy(nd))
- 				return ERR_PTR(-ECHILD);
- 			return NULL;
- 		}
- 
--		/*
--		 * This sequence count validates that the inode matches
--		 * the dentry name information from lookup.
--		 */
--		*inode = d_backing_inode(dentry);
--		if (unlikely(read_seqcount_retry(&dentry->d_seq, seq)))
--			return ERR_PTR(-ECHILD);
--
--		/*
-+	        /*
- 		 * This sequence count validates that the parent had no
- 		 * changes while we did the lookup of the dentry above.
--		 *
--		 * The memory barrier in read_seqcount_begin of child is
--		 *  enough, we can use __read_seqcount_retry here.
- 		 */
--		if (unlikely(__read_seqcount_retry(&parent->d_seq, nd->seq)))
-+		if (unlikely(read_seqcount_retry(&parent->d_seq, nd->seq)))
- 			return ERR_PTR(-ECHILD);
- 
--		*seqp = seq;
- 		status = d_revalidate(dentry, nd->flags);
- 		if (likely(status > 0))
- 			return dentry;
--		if (!try_to_unlazy_next(nd, dentry, seq))
-+		if (!try_to_unlazy_next(nd, dentry))
- 			return ERR_PTR(-ECHILD);
- 		if (status == -ECHILD)
- 			/* we'd been told to redo it in non-rcu mode */
-@@ -1731,7 +1711,7 @@ static inline int may_lookup(struct user_namespace *mnt_userns,
- 	return inode_permission(mnt_userns, nd->inode, MAY_EXEC);
- }
- 
--static int reserve_stack(struct nameidata *nd, struct path *link, unsigned seq)
-+static int reserve_stack(struct nameidata *nd, struct path *link)
- {
- 	if (unlikely(nd->total_link_count++ >= MAXSYMLINKS))
- 		return -ELOOP;
-@@ -1746,7 +1726,7 @@ static int reserve_stack(struct nameidata *nd, struct path *link, unsigned seq)
- 	if (nd->flags & LOOKUP_RCU) {
- 		// we need to grab link before we do unlazy.  And we can't skip
- 		// unlazy even if we fail to grab the link - cleanup needs it
--		bool grabbed_link = legitimize_path(nd, link, seq);
-+		bool grabbed_link = legitimize_path(nd, link, nd->next_seq);
- 
- 		if (!try_to_unlazy(nd) || !grabbed_link)
- 			return -ECHILD;
-@@ -1760,11 +1740,11 @@ static int reserve_stack(struct nameidata *nd, struct path *link, unsigned seq)
- enum {WALK_TRAILING = 1, WALK_MORE = 2, WALK_NOFOLLOW = 4};
- 
- static const char *pick_link(struct nameidata *nd, struct path *link,
--		     struct inode *inode, unsigned seq, int flags)
-+		     struct inode *inode, int flags)
- {
- 	struct saved *last;
- 	const char *res;
--	int error = reserve_stack(nd, link, seq);
-+	int error = reserve_stack(nd, link);
- 
- 	if (unlikely(error)) {
- 		if (!(nd->flags & LOOKUP_RCU))
-@@ -1774,7 +1754,7 @@ static const char *pick_link(struct nameidata *nd, struct path *link,
- 	last = nd->stack + nd->depth++;
- 	last->link = *link;
- 	clear_delayed_call(&last->done);
--	last->seq = seq;
-+	last->seq = nd->next_seq;
- 
- 	if (flags & WALK_TRAILING) {
- 		error = may_follow_link(nd, inode);
-@@ -1836,43 +1816,50 @@ static const char *pick_link(struct nameidata *nd, struct path *link,
-  * to do this check without having to look at inode->i_op,
-  * so we keep a cache of "no, this doesn't need follow_link"
-  * for the common case.
-+ *
-+ * NOTE: dentry must be what nd->next_seq had been sampled from.
-  */
- static const char *step_into(struct nameidata *nd, int flags,
--		     struct dentry *dentry, struct inode *inode, unsigned seq)
-+		     struct dentry *dentry)
- {
- 	struct path path;
--	int err = handle_mounts(nd, dentry, &path, &inode, &seq);
-+	struct inode *inode;
-+	int err = handle_mounts(nd, dentry, &path);
- 
- 	if (err < 0)
- 		return ERR_PTR(err);
-+	inode = path.dentry->d_inode;
- 	if (likely(!d_is_symlink(path.dentry)) ||
- 	   ((flags & WALK_TRAILING) && !(nd->flags & LOOKUP_FOLLOW)) ||
- 	   (flags & WALK_NOFOLLOW)) {
- 		/* not a symlink or should not follow */
--		if (!(nd->flags & LOOKUP_RCU)) {
-+		if (nd->flags & LOOKUP_RCU) {
-+			if (read_seqcount_retry(&path.dentry->d_seq, nd->next_seq))
-+				return ERR_PTR(-ECHILD);
-+			if (unlikely(!inode))
-+				return ERR_PTR(-ENOENT);
-+		} else {
- 			dput(nd->path.dentry);
- 			if (nd->path.mnt != path.mnt)
- 				mntput(nd->path.mnt);
- 		}
- 		nd->path = path;
- 		nd->inode = inode;
--		nd->seq = seq;
-+		nd->seq = nd->next_seq;
- 		return NULL;
- 	}
- 	if (nd->flags & LOOKUP_RCU) {
- 		/* make sure that d_is_symlink above matches inode */
--		if (read_seqcount_retry(&path.dentry->d_seq, seq))
-+		if (read_seqcount_retry(&path.dentry->d_seq, nd->next_seq))
- 			return ERR_PTR(-ECHILD);
- 	} else {
- 		if (path.mnt == nd->path.mnt)
- 			mntget(path.mnt);
- 	}
--	return pick_link(nd, &path, inode, seq, flags);
-+	return pick_link(nd, &path, inode, flags);
- }
- 
--static struct dentry *follow_dotdot_rcu(struct nameidata *nd,
--					struct inode **inodep,
--					unsigned *seqp)
-+static struct dentry *follow_dotdot_rcu(struct nameidata *nd)
- {
- 	struct dentry *parent, *old;
- 
-@@ -1889,14 +1876,15 @@ static struct dentry *follow_dotdot_rcu(struct nameidata *nd,
- 		nd->path = path;
- 		nd->inode = path.dentry->d_inode;
- 		nd->seq = seq;
-+		// makes sure that non-RCU pathwalk could reach this state
- 		if (unlikely(read_seqretry(&mount_lock, nd->m_seq)))
- 			return ERR_PTR(-ECHILD);
- 		/* we know that mountpoint was pinned */
- 	}
- 	old = nd->path.dentry;
- 	parent = old->d_parent;
--	*inodep = parent->d_inode;
--	*seqp = read_seqcount_begin(&parent->d_seq);
-+	nd->next_seq = read_seqcount_begin(&parent->d_seq);
-+	// makes sure that non-RCU pathwalk could reach this state
- 	if (unlikely(read_seqcount_retry(&old->d_seq, nd->seq)))
- 		return ERR_PTR(-ECHILD);
- 	if (unlikely(!path_connected(nd->path.mnt, parent)))
-@@ -1907,12 +1895,11 @@ static struct dentry *follow_dotdot_rcu(struct nameidata *nd,
- 		return ERR_PTR(-ECHILD);
- 	if (unlikely(nd->flags & LOOKUP_BENEATH))
- 		return ERR_PTR(-ECHILD);
--	return NULL;
-+	nd->next_seq = nd->seq;
-+	return nd->path.dentry;
- }
- 
--static struct dentry *follow_dotdot(struct nameidata *nd,
--				 struct inode **inodep,
--				 unsigned *seqp)
-+static struct dentry *follow_dotdot(struct nameidata *nd)
- {
- 	struct dentry *parent;
- 
-@@ -1936,15 +1923,12 @@ static struct dentry *follow_dotdot(struct nameidata *nd,
- 		dput(parent);
- 		return ERR_PTR(-ENOENT);
- 	}
--	*seqp = 0;
--	*inodep = parent->d_inode;
- 	return parent;
- 
- in_root:
- 	if (unlikely(nd->flags & LOOKUP_BENEATH))
- 		return ERR_PTR(-EXDEV);
--	dget(nd->path.dentry);
--	return NULL;
-+	return dget(nd->path.dentry);
- }
- 
- static const char *handle_dots(struct nameidata *nd, int type)
-@@ -1952,8 +1936,6 @@ static const char *handle_dots(struct nameidata *nd, int type)
- 	if (type == LAST_DOTDOT) {
- 		const char *error = NULL;
- 		struct dentry *parent;
--		struct inode *inode;
--		unsigned seq;
- 
- 		if (!nd->root.mnt) {
- 			error = ERR_PTR(set_root(nd));
-@@ -1961,17 +1943,12 @@ static const char *handle_dots(struct nameidata *nd, int type)
- 				return error;
- 		}
- 		if (nd->flags & LOOKUP_RCU)
--			parent = follow_dotdot_rcu(nd, &inode, &seq);
-+			parent = follow_dotdot_rcu(nd);
- 		else
--			parent = follow_dotdot(nd, &inode, &seq);
-+			parent = follow_dotdot(nd);
- 		if (IS_ERR(parent))
- 			return ERR_CAST(parent);
--		if (unlikely(!parent))
--			error = step_into(nd, WALK_NOFOLLOW,
--					 nd->path.dentry, nd->inode, nd->seq);
--		else
--			error = step_into(nd, WALK_NOFOLLOW,
--					 parent, inode, seq);
-+		error = step_into(nd, WALK_NOFOLLOW, parent);
- 		if (unlikely(error))
- 			return error;
- 
-@@ -1995,8 +1972,6 @@ static const char *handle_dots(struct nameidata *nd, int type)
- static const char *walk_component(struct nameidata *nd, int flags)
- {
- 	struct dentry *dentry;
--	struct inode *inode;
--	unsigned seq;
- 	/*
- 	 * "." and ".." are special - ".." especially so because it has
- 	 * to be able to know about the current root directory and
-@@ -2007,7 +1982,7 @@ static const char *walk_component(struct nameidata *nd, int flags)
- 			put_link(nd);
- 		return handle_dots(nd, nd->last_type);
- 	}
--	dentry = lookup_fast(nd, &inode, &seq);
-+	dentry = lookup_fast(nd);
- 	if (IS_ERR(dentry))
- 		return ERR_CAST(dentry);
- 	if (unlikely(!dentry)) {
-@@ -2017,7 +1992,7 @@ static const char *walk_component(struct nameidata *nd, int flags)
- 	}
- 	if (!(flags & WALK_MORE) && nd->depth)
- 		put_link(nd);
--	return step_into(nd, flags, dentry, inode, seq);
-+	return step_into(nd, flags, dentry);
- }
- 
- /*
-@@ -2372,6 +2347,8 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
- 		flags &= ~LOOKUP_RCU;
- 	if (flags & LOOKUP_RCU)
- 		rcu_read_lock();
-+	else
-+		nd->seq = nd->next_seq = 0;
- 
- 	nd->flags = flags;
- 	nd->state |= ND_JUMPED;
-@@ -2473,8 +2450,8 @@ static int handle_lookup_down(struct nameidata *nd)
- {
- 	if (!(nd->flags & LOOKUP_RCU))
- 		dget(nd->path.dentry);
--	return PTR_ERR(step_into(nd, WALK_NOFOLLOW,
--			nd->path.dentry, nd->inode, nd->seq));
-+	nd->next_seq = nd->seq;
-+	return PTR_ERR(step_into(nd, WALK_NOFOLLOW, nd->path.dentry));
- }
- 
- /* Returns 0 and nd will be valid on success; Retuns error, otherwise. */
-@@ -3393,8 +3370,6 @@ static const char *open_last_lookups(struct nameidata *nd,
- 	struct dentry *dir = nd->path.dentry;
- 	int open_flag = op->open_flag;
- 	bool got_write = false;
--	unsigned seq;
--	struct inode *inode;
- 	struct dentry *dentry;
- 	const char *res;
- 
-@@ -3410,7 +3385,7 @@ static const char *open_last_lookups(struct nameidata *nd,
- 		if (nd->last.name[nd->last.len])
- 			nd->flags |= LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
- 		/* we _can_ be in RCU mode here */
--		dentry = lookup_fast(nd, &inode, &seq);
-+		dentry = lookup_fast(nd);
- 		if (IS_ERR(dentry))
- 			return ERR_CAST(dentry);
- 		if (likely(dentry))
-@@ -3464,7 +3439,7 @@ static const char *open_last_lookups(struct nameidata *nd,
- finish_lookup:
- 	if (nd->depth)
- 		put_link(nd);
--	res = step_into(nd, WALK_TRAILING, dentry, inode, seq);
-+	res = step_into(nd, WALK_TRAILING, dentry);
- 	if (unlikely(res))
- 		nd->flags &= ~(LOOKUP_OPEN|LOOKUP_CREATE|LOOKUP_EXCL);
- 	return res;
+So the main thing I react to here is how "next_seq" is in the "struct
+nameidata", but then it always goes together with a "struct dentry"
+that you end up having to pass separately (and that is *not* in that
+"struct nameidata").
+
+Now, saving the associated dentry (as "next_dentry") in the nd would
+solve that, but ends up benign ugly since everything then wants to
+look at the dentry anyway, so while it would solve the inconsistency,
+it would be ugly.
+
+I wonder if the solution might not be to create a new structure like
+
+        struct rcu_dentry {
+                struct dentry *dentry;
+                unsigned seq;
+        };
+
+and in fact then we could make __d_lookup_rcu() return one of these
+things (we already rely on that "returning a two-word structure is
+efficient" elsewhere).
+
+That would then make that "this dentry goes with this sequence number"
+be a very clear thing, and I actually thjink that it would make
+__d_lookup_rcu() have a cleaner calling convention too, ie we'd go
+from
+
+        dentry = __d_lookup_rcu(parent, &nd->last, &nd->next_seq);
+
+rto
+
+       dseq = __d_lookup_rcu(parent, &nd->last);
+
+and it would even improve code generation because it now returns the
+dentry and the sequence number in registers, instead of returning one
+in a register and one in memory.
+
+I did *not* look at how it would change some of the other places, but
+I do like the notion of "keep the dentry and the sequence number that
+goes with it together".
+
+That "keep dentry as a local, keep the sequence number that goes with
+it as a field in the 'nd'" really does seem an odd thing. So I'm
+throwing the above out as a "maybe we could do this instead..".
+
+Not a huge deal. That oddity or not, I think the patch series is an improvement.
+
+I do have a minor gripe with this too:
+
+> +       nd->seq = nd->next_seq = 0;
+
+I'm not convinced "0" is a good value.
+
+It's not supposed to match anything, but it *could* match a valid
+sequence number. Wouldn't it be better to pick something that is
+explicitly invalid and has the low bit set (ie 1 or -1).
+
+We don't seem to have a SEQ_INVAL or anything like that, but it does
+seem that if the intent is to make it clear it's not a real sequence
+number any more at that point, then 0 isn't great.
+
+But again, this is more of a stylistic detail thing than a real complaint.
+
+             Linus
