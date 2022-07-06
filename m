@@ -2,109 +2,100 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCD25673C3
-	for <lists+linux-arch@lfdr.de>; Tue,  5 Jul 2022 18:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2F4568242
+	for <lists+linux-arch@lfdr.de>; Wed,  6 Jul 2022 10:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiGEQDG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 5 Jul 2022 12:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S231811AbiGFI7c (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 6 Jul 2022 04:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiGEQDF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 5 Jul 2022 12:03:05 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E721839A;
-        Tue,  5 Jul 2022 09:03:04 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id lw20so22462065ejb.4;
-        Tue, 05 Jul 2022 09:03:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=XluqUvEc2FFAEeUVR9EHhmnZ4fduhRT7w/m9u0J2BO7tZOwSBo7mn8BaOQgqzoSDjh
-         X0pO9Rj7sIcvIuoe/ROCFriYf+jU1vOTUfqvfCtN125Ylu3zQgqKqEbKSpZrITIomEan
-         BZAau+BMtL5HOpzppw5a+e3jGUrgHgPPfbGc5bsU3OpFMoGuJuoBj847iLPHKCzZpauf
-         jf+2378y/+37186yQm4a00uEwBFAvMwZm17YIt+qATt8ZYGJLJ4pWsc0U3fKbmLSOXLk
-         5+3oyqmZyrGCj6g5F5sm3U2otbom9tA/Hnz9GFjdlZ5PnMVgvCa13m+Igy3HH86a48ZB
-         o7ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/PzUf+FWtruBA74xPia/zJ0RuCFti96ThSU9HTzIsqY=;
-        b=DdvilV/O8btxcG22IQrFkpZXndg76aZS1DxrHUOQz5yLhLas05SQjsyJD6Jedz6F1g
-         OtUnymw0f+e39RpgJsk42xVFN9iS1odhhbo+dH1I3IyYiGm8OjEb0xsNI1iR5ms+xL5o
-         oEDLyfiztSrr528qwANDg0sEkrU8DYPHIP381AYISiFK6Qh/r9DavbueywtbYZ/UzuZe
-         2piydJZMsGBbjjh0c+1FKC/thEYvWbZ8Qc0vZ7SPss9jkgBpySNHMJwJnAuvKSB2VZNb
-         ng/otydBW7kzdegmGYExFzjEh8DeYsq/8XN08wP++1wTpxbhGuKRDk5iyYWH9Z6sPQdU
-         2AYg==
-X-Gm-Message-State: AJIora+R1CULmGpXCTQjGE6KigdiCazBWoouH6s8nHp6Zmk56FlLPWcO
-        5XPpC96AU0aTPXl/FtZJpEjvGCjhLfprb1/Xeak=
-X-Google-Smtp-Source: AGRyM1s2bR2/fTLYxh4UjqmPZv6LUB0HejEOyCZJAkhG5FfXs1uf2EFDs1t2xo1dxtAeQiITYADdpH1zQ6Q1UVRLsF0=
-X-Received: by 2002:a17:907:2d8c:b0:726:2b37:6d44 with SMTP id
- gt12-20020a1709072d8c00b007262b376d44mr34529009ejc.224.1657036982875; Tue, 05
- Jul 2022 09:03:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220705154708.181258-1-rppt@kernel.org> <20220705154708.181258-15-rppt@kernel.org>
-In-Reply-To: <20220705154708.181258-15-rppt@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 5 Jul 2022 09:03:01 -0700
-Message-ID: <CAMo8Bf+5cN4TYNGs=PXsZuunyZX2xQAdk+nGd5wARP8MuZVXuA@mail.gmail.com>
-Subject: Re: [PATCH v2 14/15] xtensa: drop definition of PGD_ORDER
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dinh Nguyen <dinguyen@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-csky@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-mips@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, loongarch@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S230428AbiGFI7b (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Jul 2022 04:59:31 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E612C397;
+        Wed,  6 Jul 2022 01:59:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VIXd7j9_1657097961;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIXd7j9_1657097961)
+          by smtp.aliyun-inc.com;
+          Wed, 06 Jul 2022 16:59:22 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     rppt@linux.ibm.com, willy@infradead.org, will@kernel.org,
+        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
+        peterz@infradead.org, catalin.marinas@arm.com,
+        chenhuacai@kernel.org, kernel@xen0n.name,
+        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
+        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
+        monstr@monstr.eu, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        baolin.wang@linux.alibaba.com, x86@kernel.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-csky@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Add PUD and kernel PTE level pagetable account
+Date:   Wed,  6 Jul 2022 16:59:14 +0800
+Message-Id: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 5, 2022 at 8:48 AM Mike Rapoport <rppt@kernel.org> wrote:
->
-> From: Mike Rapoport <rppt@linux.ibm.com>
->
-> This is the order of the page table allocation, not the order of a PGD.
-> Since its always hardwired to 0, simply drop it.
+Hi,
 
-it's
+Now we will miss to account the PUD level pagetable and kernel PTE level
+pagetable, as well as missing to set the PG_table flags for these pagetable
+pages, which will get an inaccurate pagetable accounting, and miss
+PageTable() validation in some cases. So this patch set introduces new
+helpers to help to account PUD and kernel PTE pagetable pages.
 
->
-> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
-> ---
->  arch/xtensa/include/asm/pgalloc.h | 2 +-
->  arch/xtensa/include/asm/pgtable.h | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/arch/xtensa/include/asm/pgalloc.h b/arch/xtensa/include/asm/pgalloc.h
-> index eeb2de3a89e5..7fc0f9126dd3 100644
-> --- a/arch/xtensa/include/asm/pgalloc.h
-> +++ b/arch/xtensa/include/asm/pgalloc.h
+Note there are still some architectures specific pagetable allocation
+that need to account the pagetable pages, which need more investigation
+and cleanup in future.
 
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Changes from RFC v3:
+ - Rebased on 20220706 linux-next.
+ - Introduce new pgtable_pud_page_ctor/dtor() and rename the helpers.
+ - Change back to use inc_lruvec_page_state()/dec_lruvec_page_state().
+ - Update some commit message.
+link: https://lore.kernel.org/all/cover.1656586863.git.baolin.wang@linux.alibaba.com/
+
+Changes from RFC v2:
+ - Convert to use mod_lruvec_page_state() for non-order-0 case.
+ - Rename the helpers.
+ - Update some commit messages.
+ - Remove unnecessary __GFP_HIGHMEM clear.
+link: https://lore.kernel.org/all/cover.1655887440.git.baolin.wang@linux.alibaba.com/
+
+Changes from RFC v1:
+ - Update some commit message.
+ - Add missing pgtable_clear_and_dec() on X86 arch.
+ - Use __free_page() to free pagetable which can avoid duplicated virt_to_page().
+link: https://lore.kernel.org/all/cover.1654271618.git.baolin.wang@linux.alibaba.com/
+
+Baolin Wang (3):
+  mm: Factor out the pagetable pages account into new helper function
+  mm: Add PUD level pagetable account
+  mm: Add kernel PTE level pagetable pages account
+
+ arch/arm64/include/asm/tlb.h         |  5 ++++-
+ arch/csky/include/asm/pgalloc.h      |  2 +-
+ arch/loongarch/include/asm/pgalloc.h | 12 +++++++++---
+ arch/microblaze/mm/pgtable.c         |  2 +-
+ arch/mips/include/asm/pgalloc.h      | 12 +++++++++---
+ arch/openrisc/mm/ioremap.c           |  2 +-
+ arch/x86/mm/pgtable.c                |  7 +++++--
+ include/asm-generic/pgalloc.h        | 26 ++++++++++++++++++++++----
+ include/linux/mm.h                   | 34 ++++++++++++++++++++++++++--------
+ 9 files changed, 78 insertions(+), 24 deletions(-)
 
 -- 
-Thanks.
--- Max
+1.8.3.1
+
