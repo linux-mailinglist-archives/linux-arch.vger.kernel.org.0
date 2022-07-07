@@ -2,53 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E31E56A13F
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Jul 2022 13:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1A856A1C3
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Jul 2022 14:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbiGGLpe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Jul 2022 07:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
+        id S233808AbiGGMN2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Jul 2022 08:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbiGGLpd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 07:45:33 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07194F65D;
-        Thu,  7 Jul 2022 04:45:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=32;SR=0;TI=SMTPD_---0VIcuH0b_1657194323;
-Received: from 30.97.48.62(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VIcuH0b_1657194323)
-          by smtp.aliyun-inc.com;
-          Thu, 07 Jul 2022 19:45:25 +0800
-Message-ID: <12227412-1d79-4ff6-b4e6-0d438dac7359@linux.alibaba.com>
-Date:   Thu, 7 Jul 2022 19:45:29 +0800
+        with ESMTP id S231343AbiGGMN1 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 08:13:27 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30D65721A;
+        Thu,  7 Jul 2022 05:13:22 -0700 (PDT)
+Received: from mail-yw1-f177.google.com ([209.85.128.177]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MHXWL-1oMwu94Ak5-00DVYb; Thu, 07 Jul 2022 14:13:21 +0200
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-317a66d62dfso167940137b3.7;
+        Thu, 07 Jul 2022 05:13:20 -0700 (PDT)
+X-Gm-Message-State: AJIora8CQlfh5jzBkohQCquTnvDQtwpNZZ/PLumOtErfs0nKblNAkwTG
+        h5MvPjdU8EPWAaXI3o/N4/cmr2oTfcTdtcwEfFo=
+X-Google-Smtp-Source: AGRyM1tV/DrF7ycXM3ug40hQQx3lr8bWg0MpBEk4G23+AfClxifxNOoCzy63rJK/JM88aL8UcFxTAzCzt8zqWWCvBBY=
+X-Received: by 2002:a81:f82:0:b0:31c:f1ae:1ed6 with SMTP id
+ 124-20020a810f82000000b0031cf1ae1ed6mr8719242ywp.249.1657195999598; Thu, 07
+ Jul 2022 05:13:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] mm: Add kernel PTE level pagetable pages account
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, rppt@linux.ibm.com, will@kernel.org,
-        aneesh.kumar@linux.ibm.com, npiggin@gmail.com,
-        peterz@infradead.org, catalin.marinas@arm.com,
-        chenhuacai@kernel.org, kernel@xen0n.name,
-        tsbogend@alpha.franken.de, dave.hansen@linux.intel.com,
-        luto@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, arnd@arndb.de, guoren@kernel.org,
-        monstr@monstr.eu, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        x86@kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linux-csky@vger.kernel.org,
-        openrisc@lists.librecores.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1657096412.git.baolin.wang@linux.alibaba.com>
- <398ead25695e530f766849be5edafaf62c1c864d.1657096412.git.baolin.wang@linux.alibaba.com>
- <YsWuC9+b3JaEAr0Q@casper.infradead.org>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <YsWuC9+b3JaEAr0Q@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
+ <mhng-f5938c9b-7fc1-4b0c-9449-7dd1431f5446@palmerdabbelt-glaptop> <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
+In-Reply-To: <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 7 Jul 2022 14:13:02 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
+Message-ID: <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:y52jjYOeb8evCJVCb5GPlS8PD3mNk7Rl/98+o9yukeYkRQmbpvw
+ ix5q9v9/qPmrzHFoc4szA2n5Nwqrt2jtQzoFaD3RvO9nn/Jum2GdQHZFDBUohnq5JvnC9f8
+ uLIlczj4Y9SsfAF+yG6m5wfDm/3fxm+SFhRx+6a5T0bWQS0J+Uf2ETppa8c0nJjQVGTaSvE
+ iQrvZE1HxvxSoPXzKG88A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:izA6gWP3DDQ=:4/Ax1o5QZ1i74hAOv3jMfN
+ SI2GsWbL4XI9xYsiIk4/dcHrPRdXz3F//fh7kiijBjnt5pxpoYvFeukfs574SSjkNG2TuXadf
+ pvulI1yKVzFS7E8jbzmbf5/OWuoRLvewRWhTSpyFMcRtZHA217dW9/ImnA5qkN44iMGsoPcPc
+ 77i7n+V4di2PZ3wFP2gBADcExaAXUxRCLh+z9ix0/tpKZ/gV41Zz/gl1T6dV+0cD+Ca5zpcNr
+ NfEToICEBmshRxpICf0keZaCHmhLXun5SD/7i8Nwrc53tyDdyhO5GVh2hp3gK74/g0dzqLdvC
+ CLy50aYdZ194D/UAjxZE6sP3OdWWXEDqs1SxxqV8yK0XWpxuhWtgDEZp4yH57bd7y0yb+uCLL
+ ZLLzEN6+nm/kA8OI3aLGPjDYoAdPsIcQfErZXZD1i2BcwMXPwaEdVYuQbpZ293WKBo2CTuG3m
+ IQ+ryzTug5Moq3tDVi9M28ofqbCqWW+5ftQbtJnQOE8fdbWf6WTE451SytS5z5wgtvGwT8O0W
+ 7u8rfnWX8rIl9tdZS9Yo2QgzrNi74isPCpYeGp70XnCs5/IZHkzGAGO3L17RJnKlbcyn9N7Yb
+ IWpnxqECb6bIicuA6ulBKmioil9zIIxZ5zejIvLxqWfU0wly2FPVgilm7d+rfsnihVHHiB8Mi
+ +4BTG4Xt3EsddpgC4lQFD9xaaz4uG2fRBRsvMmPhOzsh00mgP+1ZblvY7O+27AXXpQdSuPsKn
+ WuK9fVm0neJA90vx6Xr/rAUZkp+Wu0eQ7s8TgQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,36 +67,55 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Thu, Jul 7, 2022 at 1:40 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> On Wed, Oct 6, 2021 at 6:52 PM Palmer Dabbelt <palmerdabbelt@google.com> wrote:
+> >
+> > On Wed, 06 Oct 2021 08:17:38 PDT (-0700), Arnd Bergmann wrote:
+> > > On Wed, Oct 6, 2021 at 5:00 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> > >>
+> > >> Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+> > >> introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
+> > >> falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
+> > >> in the reference) in ./include/asm-generic/io.h.
+> > >>
+> > >> Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
+> > >>
+> > >> GENERIC_DEVMEM_IS_ALLOWED
+> > >> Referencing files: include/asm-generic/io.h
+> > >>
+> > >> Correct the name of the config to the intended one.
+> > >>
+> > >> Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+> > >> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > >
+> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Reviewed-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> > Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> >
+> > Thanks.  I'm going to assume this is going in through some other tree,
+> > but IIUC I sent the buggy patch up so LMK if you're expecting it to go
+> > through mine.
+>
+> Palmer, Arnd,
+>
+> the patch in this mail thread got lost and was not picked up yet.
+>
+> MAINTAINERS suggests that Arnd takes patches to include/asm-generic/,
+> since commit 1527aab617af ("asm-generic: list Arnd as asm-generic
+> maintainer") in 2009, but maybe the responsibility for those files has
+> actually moved on to somebody (or nobody) else and we just did not
+> record that yet in MAINTAINERS.
+>
+> Arnd, will you pick this patch and provide it further to Linus Torvalds?
+>
+> Otherwise, Palmer already suggested picking it up himself.
+>
 
+I've applied it to the asm-generic tree and can send it as a bugfix
+pull request. I don't have any other fixer for that branch at the moment,
+so if Palmer has other fixes for the riscv tree already, it would
+save me making a pull request if he picks it up there.
 
-On 7/6/2022 11:45 PM, Matthew Wilcox wrote:
-> On Wed, Jul 06, 2022 at 04:59:17PM +0800, Baolin Wang wrote:
->> Now the kernel PTE level ptes are always protected by mm->page_table_lock
->> instead of split pagetable lock, so the kernel PTE level pagetable pages
->> are not accounted. Especially the vmalloc()/vmap() can consume lots of
->> kernel pagetable, so to get an accurate pagetable accounting, calling new
->> helpers page_{set,clear}_pgtable() when allocating or freeing a kernel
->> PTE level pagetable page.
->>
->> Meanwhile converting architectures to use corresponding generic PTE pagetable
->> allocation and freeing functions.
->>
->> Note this patch only adds accounting to the page tables allocated after boot.
->>
->> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->> Reported-by: kernel test robot <oliver.sang@intel.com>
-> 
-> What does this Reported-by: even mean?  the kernel test robot told you
-> that the page tables weren't being accounted?
-
-I fixed an issue reported by this robot. OK, I can remove the tag.
-
-> I don't understand why we want to start accounting kernel page tables.
-> an we have a *discussion* about that with a sensible thread name instead
-> of just trying to sneak it in as patch 3/3?
-
-I think I have replied to you in below link [1]. The reason is we should 
-keep consistent with PMD or PUD pagetable allocation.
-
-[1] 
-https://lore.kernel.org/all/68a5286b-7ff3-2c4e-1ab2-305e7860a2f3@linux.alibaba.com/
+       Arnd
