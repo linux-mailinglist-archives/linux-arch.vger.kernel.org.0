@@ -2,105 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EBB56ADE9
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Jul 2022 23:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1321156AE21
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Jul 2022 00:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236438AbiGGVsB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Jul 2022 17:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S236246AbiGGWLN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Jul 2022 18:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236312AbiGGVsA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 17:48:00 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA3230F63;
-        Thu,  7 Jul 2022 14:47:59 -0700 (PDT)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 267KCRZY003652;
-        Thu, 7 Jul 2022 21:47:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=corp-2021-07-09;
- bh=mYUReDqAAtD2Mc/Slejp/JsQFVi9e1ncghZX3Vavmh0=;
- b=xnJ9jBf8Ufq6J0JVjaiWi0JryS/PVZ3dV0d11TbTkdML8UPIRmyHYhNMlt6sUKGAbpGU
- k64Gx9anLLCmwum/I538ASOgU7UbRmo0/u29MVFnQku7yXhDpqdJGknQJgZIIC+7PFfP
- 6qYda/BRPr3r6+vj493eF+dScvU9YM4s8t2JLgWLYQl/zXR8xZlQ8D3ZS3wKx1kMJb2F
- Wuvi0Du4suhANFR9tbfeGAiD3ULI9Pz2yiGidy2GDPuTmHeR5W5sEf3iPLZfq0hS05mS
- g2ODR6pqBet/WF8GYQOzJ13vdtCxaIsKTlR+/B8gSHDywC5rA0KruYY4lScx0RauYNvz yQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3h4ubye73u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 07 Jul 2022 21:47:28 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 267LjM4l030275;
-        Thu, 7 Jul 2022 21:47:27 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h4ud7c5bw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 07 Jul 2022 21:47:27 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 267LlRsY033607;
-        Thu, 7 Jul 2022 21:47:27 GMT
-Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3h4ud7c5ag-1;
-        Thu, 07 Jul 2022 21:47:27 +0000
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-parisc@vger.kernel.org,
-        Miquel van Smoorenburg <mikevs@xs4all.net>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Matt Wang <wwentao@vmware.com>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        linux-alpha@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-arch@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "Maciej W . Rozycki" <macro@orcam.me.uk>,
-        Jakub Kicinski <kuba@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Denis Efremov <efremov@linux.com>,
-        Mark Salyzyn <salyzyn@android.com>,
-        linux-m68k@lists.linux-m68k.org
-Subject: Re: [PATCH v3 0/3] phase out CONFIG_VIRT_TO_BUS
-Date:   Thu,  7 Jul 2022 17:47:20 -0400
-Message-Id: <165723020283.18731.6642678816129479253.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220624155226.2889613-1-arnd@kernel.org>
-References: <20220624155226.2889613-1-arnd@kernel.org>
+        with ESMTP id S235942AbiGGWLK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 18:11:10 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B6D1F2C0
+        for <linux-arch@vger.kernel.org>; Thu,  7 Jul 2022 15:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1657231868; x=1688767868;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0ZyfBP5VbWE199fXScQnBmk8WDKbSp3PmyUauJNuNyU=;
+  b=ArXAUj78ctYv7qIvVbuThrZ9HpAuM3vBWhehDLsh0oQTZgd0fQg24zKt
+   1Xfk1NbThCSr9rN81z5PUA8iHtPSvRRjaPLYVDNeTBWHPImiThONwL9eY
+   lzlL30Mcy0RH9LRc2p6s1Z9u7yBXGKORNig6+7V+1vZDhL2Go7WOfWvjW
+   /7Dbew4mu3SkHpv2Iguj560Mw6GLjAlQ+T+wlYiS19L3Rfg4hl7dijNqH
+   zy+mxhGTqVh91l0yFSHaWzSlfkeYuqimOdJBntr/opSo14BE682WpgoPs
+   0kE+JZoWdPm+WnJn3QWhuObArhxiyq445YoIQVoGF3ddd+BUiwZncbrDb
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="309693710"
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="309693710"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 15:11:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
+   d="scan'208";a="736125644"
+Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 07 Jul 2022 15:11:06 -0700
+Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o9ZiE-000MWY-2S;
+        Thu, 07 Jul 2022 22:11:06 +0000
+Date:   Fri, 8 Jul 2022 06:10:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+Subject: [arnd-asm-generic:asm-generic-fixes 1/1] drivers/char/mem.c:66:9:
+ error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202207080606.J3uB2s10-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: HrfrZsc4HaH6Tm6et7M--Pti1gCHS_F-
-X-Proofpoint-ORIG-GUID: HrfrZsc4HaH6Tm6et7M--Pti1gCHS_F-
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 24 Jun 2022 17:52:23 +0200, Arnd Bergmann wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-fixes
+head:   cdfde8f61a004fa5797d40581077603c142adca1
+commit: cdfde8f61a004fa5797d40581077603c142adca1 [1/1] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
+config: riscv-randconfig-r035-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080606.J3uB2s10-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=cdfde8f61a004fa5797d40581077603c142adca1
+        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
+        git fetch --no-tags arnd-asm-generic asm-generic-fixes
+        git checkout cdfde8f61a004fa5797d40581077603c142adca1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/char/ drivers/hwmon/pmbus/
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The virt_to_bus/bus_to_virt interface has been deprecated for
-> decades. After Jakub Kicinski put a lot of work into cleaning out the
-> network drivers using them, there are only a couple of other drivers
-> left, which can all be removed or otherwise cleaned up, to remove the
-> old interface for good.
-> 
-> [...]
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Applied to 5.20/scsi-queue, thanks!
+All errors (new ones prefixed by >>):
 
-[1/3] scsi: BusLogic remove bus_to_virt
-      https://git.kernel.org/mkp/scsi/c/9f7c2232e131
-[2/3] scsi: dpt_i2o: remove obsolete driver
-      https://git.kernel.org/mkp/scsi/c/b04e75a4a8a8
+>> drivers/char/mem.c:66:9: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           return devmem_is_allowed(pfn);
+                  ^
+   drivers/char/mem.c:66:9: note: did you mean 'page_is_allowed'?
+   drivers/char/mem.c:64:19: note: 'page_is_allowed' declared here
+   static inline int page_is_allowed(unsigned long pfn)
+                     ^
+   drivers/char/mem.c:75:8: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   if (!devmem_is_allowed(pfn))
+                        ^
+   2 errors generated.
+
+
+vim +/devmem_is_allowed +66 drivers/char/mem.c
+
+^1da177e4c3f415 Linus Torvalds   2005-04-16  62  
+d092633bff3b19f Ingo Molnar      2008-07-18  63  #ifdef CONFIG_STRICT_DEVMEM
+a4866aa812518ed Kees Cook        2017-04-05  64  static inline int page_is_allowed(unsigned long pfn)
+a4866aa812518ed Kees Cook        2017-04-05  65  {
+a4866aa812518ed Kees Cook        2017-04-05 @66  	return devmem_is_allowed(pfn);
+a4866aa812518ed Kees Cook        2017-04-05  67  }
+e2beb3eae627211 Venki Pallipadi  2008-03-06  68  static inline int range_is_allowed(unsigned long pfn, unsigned long size)
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  69  {
+e2beb3eae627211 Venki Pallipadi  2008-03-06  70  	u64 from = ((u64)pfn) << PAGE_SHIFT;
+e2beb3eae627211 Venki Pallipadi  2008-03-06  71  	u64 to = from + size;
+e2beb3eae627211 Venki Pallipadi  2008-03-06  72  	u64 cursor = from;
+e2beb3eae627211 Venki Pallipadi  2008-03-06  73  
+e2beb3eae627211 Venki Pallipadi  2008-03-06  74  	while (cursor < to) {
+39380b80d727232 Jiri Kosina      2016-07-08  75  		if (!devmem_is_allowed(pfn))
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  76  			return 0;
+e2beb3eae627211 Venki Pallipadi  2008-03-06  77  		cursor += PAGE_SIZE;
+e2beb3eae627211 Venki Pallipadi  2008-03-06  78  		pfn++;
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  79  	}
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  80  	return 1;
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  81  }
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  82  #else
+a4866aa812518ed Kees Cook        2017-04-05  83  static inline int page_is_allowed(unsigned long pfn)
+a4866aa812518ed Kees Cook        2017-04-05  84  {
+a4866aa812518ed Kees Cook        2017-04-05  85  	return 1;
+a4866aa812518ed Kees Cook        2017-04-05  86  }
+e2beb3eae627211 Venki Pallipadi  2008-03-06  87  static inline int range_is_allowed(unsigned long pfn, unsigned long size)
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  88  {
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  89  	return 1;
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  90  }
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  91  #endif
+ae531c26c5c2a28 Arjan van de Ven 2008-04-24  92  
+
+:::::: The code at line 66 was first introduced by commit
+:::::: a4866aa812518ed1a37d8ea0c881dc946409de94 mm: Tighten x86 /dev/mem with zeroing reads
+
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Kees Cook <keescook@chromium.org>
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+0-DAY CI Kernel Test Service
+https://01.org/lkp
