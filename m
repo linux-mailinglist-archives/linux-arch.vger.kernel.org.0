@@ -2,110 +2,91 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330BF5696B7
-	for <lists+linux-arch@lfdr.de>; Thu,  7 Jul 2022 02:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE21569F4B
+	for <lists+linux-arch@lfdr.de>; Thu,  7 Jul 2022 12:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbiGGAEJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 6 Jul 2022 20:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S234163AbiGGKNz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Jul 2022 06:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiGGAEH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 6 Jul 2022 20:04:07 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8BA1902B;
-        Wed,  6 Jul 2022 17:04:06 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id b24so12281155qkn.4;
-        Wed, 06 Jul 2022 17:04:06 -0700 (PDT)
+        with ESMTP id S235152AbiGGKNy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 06:13:54 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF2D4F64C
+        for <linux-arch@vger.kernel.org>; Thu,  7 Jul 2022 03:13:53 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31caffa4a45so93489037b3.3
+        for <linux-arch@vger.kernel.org>; Thu, 07 Jul 2022 03:13:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=feedback-id:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=egYv15cXkA5RpPdPdInxwHuoYF9xGZOxfekqWFe0C9c=;
-        b=GwM0NHat2U8pX71R1qnS62+slU9mefwq/s9YBnSLXYw4DRADz2gf7HZHLtcHa9acgK
-         CiOX+j/LqJPvg8DLU32IqVEi8a8U0O98IGzzPO4dxyRsXmFtGOdfs+UgizGbu28s99KF
-         EhQx/JUjrd21/jzwfg6ea25gOa6nkzRPjuE4TsLqhnItj/H53yEjW/y8Y4o9OSGULtRE
-         g5Z4a7shQR9ZPkiCECNGiEDghqVIG8RAXCYPt9zPhVrhi+Vq3X87XBzeNHbOCScAFTbX
-         NcR23wuT1z9OX9tGR5x2f5pGJBL2Xi3DMXhwwfKQHkWyblpVflAHkoAJF/HpG7klvv8A
-         0GPA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kPWo2TmGl+9OHVe70g4XsibJyi/n5Q+LOKMuqK03HYA=;
+        b=NQ9bRvc9vYE+J89XD7PO1q7mkA13sA71QpWW5mmA90B7A5ldxeO5Pue7F+raM4qwVK
+         7PTHolsnOA/QyktohmZhPj4QG3UIvIpNp6w9MLNizTeJjag2aCzvouMmjQ9Dozewakdc
+         p4i/vm4y5Nmon2hCM/O7ALNrjqnKceKFdes1VyKc/SalQalLTfdWnmAh7Vwzs1r7ruCh
+         OUfVLilKCmffj87sOoCilovelYVOLN3BusHLwHcUPsRgZhy97AzywVaFtQwi1DidwQIA
+         X12W1N7SYNR1CXBtk3ROP3Pi0XB9JcdnT6cLBwsgEJdcJY7RXrVrnlkBNVXz8wM9DCz5
+         jhBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=egYv15cXkA5RpPdPdInxwHuoYF9xGZOxfekqWFe0C9c=;
-        b=1Ka0vDvzETCpuEiCCmT/lQD7XmYt7gXUIEjNEdnyapZwTjfRNk6KvlIHp0rJ7nDRdH
-         SVHc+Hh5znmYYPsRaHEr099pkkTjrYxBrWU839fgk4E8w48FszOEcBS6D8YU8KfiZ3iZ
-         lwCr+wF/sZv7fdkLeddWSwVscJJNx/cfmS9I18WNcNGtnvHw1ecu31SgecMAaYvOtoeC
-         iW+8+3KgvrF3f8TQvZyUFxrCya0C9QuEUsBKnu1gk/gUneMNCbLx+U0WVK84U+oMgctA
-         f/ifXfehhEwMCSgDKgvQ2iuD0wk4JV3l156DsZH0ayBDzygFQHgpeBDHdyj2jId9FXbn
-         SH8Q==
-X-Gm-Message-State: AJIora9i2NEyqnSLT8VIRkhrTM/IHNN0NdWOk4fJrPqNtQKI67r9V/yB
-        zYkrrqjEsyM7ZrW9V2uxsO4=
-X-Google-Smtp-Source: AGRyM1s8wlVaTUmg4hECDVOwDwbH2eEUQQYqtVJ75ghJoTPH5GVm7OZyfjfQ0GBQyfR71wYpmPlxLA==
-X-Received: by 2002:a05:620a:1b8f:b0:6af:337a:5067 with SMTP id dv15-20020a05620a1b8f00b006af337a5067mr28799459qkb.343.1657152245657;
-        Wed, 06 Jul 2022 17:04:05 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id bs24-20020ac86f18000000b00304fa21762csm17824263qtb.53.2022.07.06.17.04.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 17:04:04 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 3BC1127C0054;
-        Wed,  6 Jul 2022 20:04:04 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 06 Jul 2022 20:04:04 -0400
-X-ME-Sender: <xms:8yLGYqt5mcXP06hhWtOGg6SmrTwOOyDrLdl4pa4yqBaZ8GW5s4K5qA>
-    <xme:8yLGYveLQsGc0b2yS-NTHDAHDnsfiZJ6IWYLL6jrwA2z-Ec3-6hJsOMcfu2bZEb08
-    4Cd1Lpw8uM18IDBTg>
-X-ME-Received: <xmr:8yLGYlzaKUT2FQgS1DBmykpVtChQxFQO9ezy_3fRVngvhwU6Ll6Ml4QTXtVd0g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudeigedgfeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvfevuffkfhggtggu
-    jgesthdtrodttddtvdenucfhrhhomhepuehoqhhunhcuhfgvnhhguceosghoqhhunhdrfh
-    gvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtthgvrhhnpedugfeghfekveekveet
-    tddtgeehieefledttdegudeuledthfdvheeileeftdfffeenucffohhmrghinhepkhgvrh
-    hnvghlrdhorhhgpdhgohhoghhlvgdrtghomhdprhhishgtvhdrohhrghdpghhithhhuhgs
-    rdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:8yLGYlMNtPmqK-WsxqwawZ_NmeqUAR1VS44l5mIuUrBHVEUlWgKwnA>
-    <xmx:8yLGYq8CapQHbyONWIdey2L4v02EOjk_wtjbQfvWQzhZxCKgSUf5yw>
-    <xmx:8yLGYtX6xiuLTGsmuTvr6rJlo5t_U2nuDqIoiR1sw7Te4m2H8lysPg>
-    <xmx:9CLGYtVslXJQuBgzT5qENf1h1gVoapA-OJAEQ3Xy8TS8Qre29_8HoQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 6 Jul 2022 20:04:02 -0400 (EDT)
-Date:   Wed, 6 Jul 2022 17:03:09 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Dan Lustig <dlustig@nvidia.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH V4 5/5] riscv: atomic: Optimize LRSC-pairs atomic ops
- with .aqrl annotation
-Message-ID: <YsYivaDEksXPQPaH@boqun-archlinux>
-References: <CAJF2gTQoSQq_S4UvAiXgMviT040Ls8+VkDszQSke1a0zbXZ82A@mail.gmail.com>
- <mhng-7a274375-0d99-41c8-98a3-853d110f62e9@palmer-ri-x1c9>
- <CAJF2gTTXO42_TsZudaQuB9Re0teu__EZ11JZ96nktMqsQkMYNA@mail.gmail.com>
- <20220614110258.GA32157@anparri>
- <YrPei6q4rIAx6Ymf@boqun-archlinux>
- <fd664673-c4cc-be8f-9824-5272c5c79b40@nvidia.com>
- <CAJF2gTSEBQd75VWyyMwKuSDsLFoiBqB0WJfYsiEHVQbJgAgBvA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kPWo2TmGl+9OHVe70g4XsibJyi/n5Q+LOKMuqK03HYA=;
+        b=ZpyF+l9hV2vycFl2jybTL6eVqnbGKIDfnZQrVX71La20YJ80PHDAFexintcUQ6suNK
+         /RWjfWwHW5umLSVV0aCIrHM7jw2mjgX2p16SuDsiDHx1ZXbN8H8x9tcQBRiNczMowSsa
+         VsheoGz9giIqSBN98TQtJ6D1GywWttvUMYwwJi7NYJ8mlv7/QsIICBWY8i65Tsi3voyv
+         dK/3u/3odHQcf314ezoSlZp3WENyVLGPBQXjue/ND8B/kGMYnqXlR06RNRg3xt2I1Swa
+         mC9HWwAG1sEwZYetxCk3ezMDTZqex36ivnkGcLe7tV4OUdgfc17fALfNgr8kN934f1sq
+         manQ==
+X-Gm-Message-State: AJIora82X8f8TlvtfsUFDhPnfjqDiBiK7/xoJg/9DdDN/Q+fXHvld2pK
+        LSnJ0MNOXmGBPsF8/tZ9yqBWamEPQE4v8LO/HJEZqA==
+X-Google-Smtp-Source: AGRyM1vadqM77gQ/U73N1rxYJChYky+4QRezCslan02cQ8qsw+iLZ89lKnRN4bUYz8lDps/Q7HOvTFEAYhyq8/bzdD0=
+X-Received: by 2002:a81:e17:0:b0:31c:a24c:9ee6 with SMTP id
+ 23-20020a810e17000000b0031ca24c9ee6mr21067667ywo.362.1657188832898; Thu, 07
+ Jul 2022 03:13:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJF2gTSEBQd75VWyyMwKuSDsLFoiBqB0WJfYsiEHVQbJgAgBvA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-5-glider@google.com>
+In-Reply-To: <20220701142310.2188015-5-glider@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 7 Jul 2022 12:13:17 +0200
+Message-ID: <CANpmjNN28k3B1-nX=gtdJxZ4MS=bF+CuPG1EFp5fC2TDQUU=4Q@mail.gmail.com>
+Subject: Re: [PATCH v4 04/45] x86: asm: instrument usercopy in get_user() and __put_user_size()
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,184 +94,80 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Jun 25, 2022 at 01:29:50PM +0800, Guo Ren wrote:
-> On Fri, Jun 24, 2022 at 1:09 AM Dan Lustig <dlustig@nvidia.com> wrote:
-> >
-> > On 6/22/2022 11:31 PM, Boqun Feng wrote:
-> > > Hi,
-> > >
-> > > On Tue, Jun 14, 2022 at 01:03:47PM +0200, Andrea Parri wrote:
-> > > [...]
-> > >>> 5ce6c1f3535f ("riscv/atomic: Strengthen implementations with fences")
-> > >>> is about fixup wrong spinlock/unlock implementation and not relate to
-> > >>> this patch.
-> > >>
-> > >> No.  The commit in question is evidence of the fact that the changes
-> > >> you are presenting here (as an optimization) were buggy/incorrect at
-> > >> the time in which that commit was worked out.
-> > >>
-> > >>
-> > >>> Actually, sc.w.aqrl is very strong and the same with:
-> > >>> fence rw, rw
-> > >>> sc.w
-> > >>> fence rw,rw
-> > >>>
-> > >>> So "which do not give full-ordering with .aqrl" is not writen in
-> > >>> RISC-V ISA and we could use sc.w/d.aqrl with LKMM.
-> > >>>
-> > >>>>
-> > >>>>>> describes the issue more specifically, that's when we added these
-> > >>>>>> fences.  There have certainly been complains that these fences are too
-> > >>>>>> heavyweight for the HW to go fast, but IIUC it's the best option we have
-> > >>>>> Yeah, it would reduce the performance on D1 and our next-generation
-> > >>>>> processor has optimized fence performance a lot.
-> > >>>>
-> > >>>> Definately a bummer that the fences make the HW go slow, but I don't
-> > >>>> really see any other way to go about this.  If you think these mappings
-> > >>>> are valid for LKMM and RVWMO then we should figure this out, but trying
-> > >>>> to drop fences to make HW go faster in ways that violate the memory
-> > >>>> model is going to lead to insanity.
-> > >>> Actually, this patch is okay with the ISA spec, and Dan also thought
-> > >>> it was valid.
-> > >>>
-> > >>> ref: https://lore.kernel.org/lkml/41e01514-74ca-84f2-f5cc-2645c444fd8e@nvidia.com/raw
-> > >>
-> > >> "Thoughts" on this regard have _changed_.  Please compare that quote
-> > >> with, e.g.
-> > >>
-> > >>   https://lore.kernel.org/linux-riscv/ddd5ca34-805b-60c4-bf2a-d6a9d95d89e7@nvidia.com/
-> > >>
-> > >> So here's a suggestion:
-> > >>
-> > >> Reviewers of your patches have asked:  How come that code we used to
-> > >> consider as buggy is now considered "an optimization" (correct)?
-> > >>
-> > >> Denying the evidence or going around it is not making their job (and
-> > >> this upstreaming) easier, so why don't you address it?  Take time to
-> > >> review previous works and discussions in this area, understand them,
-> > >> and integrate such knowledge in future submissions.
-> > >>
-> > >
-> > > I agree with Andrea.
-> > >
-> > > And I actually took a look into this, and I think I find some
-> > > explanation. There are two versions of RISV memory model here:
-> > >
-> > > Model 2017: released at Dec 1, 2017 as a draft
-> > >
-> > >       https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/hKywNHBkAXM/m/QzUtxEWLBQAJ
-> > >
-> > > Model 2018: released at May 2, 2018
-> > >
-> > >       https://groups.google.com/a/groups.riscv.org/g/isa-dev/c/xW03vmfmPuA/m/bMPk3UCWAgAJ
-> > >
-> > > Noted that previous conversation about commit 5ce6c1f3535f happened at
-> > > March 2018. So the timeline is roughly:
-> > >
-> > >       Model 2017 -> commit 5ce6c1f3535f -> Model 2018
-> > >
-> > > And in the email thread of Model 2018, the commit related to model
-> > > changes also got mentioned:
-> > >
-> > >       https://github.com/riscv/riscv-isa-manual/commit/b875fe417948635ed68b9644ffdf718cb343a81a
-> > >
-> > > in that commit, we can see the changes related to sc.aqrl are:
-> > >
-> > >        to have occurred between the LR and a successful SC.  The LR/SC
-> > >        sequence can be given acquire semantics by setting the {\em aq} bit on
-> > >       -the SC instruction.  The LR/SC sequence can be given release semantics
-> > >       -by setting the {\em rl} bit on the LR instruction.  Setting both {\em
-> > >       -  aq} and {\em rl} bits on the LR instruction, and setting the {\em
-> > >       -  aq} bit on the SC instruction makes the LR/SC sequence sequentially
-> > >       -consistent with respect to other sequentially consistent atomic
-> > >       -operations.
-> > >       +the LR instruction.  The LR/SC sequence can be given release semantics
-> > >       +by setting the {\em rl} bit on the SC instruction.  Setting the {\em
-> > >       +  aq} bit on the LR instruction, and setting both the {\em aq} and the {\em
-> > >       +  rl} bit on the SC instruction makes the LR/SC sequence sequentially
-> > >       +consistent, meaning that it cannot be reordered with earlier or
-> > >       +later memory operations from the same hart.
-> > >
-> > > note that Model 2018 explicitly says that "ld.aq+sc.aqrl" is ordered
-> > > against "earlier or later memory operations from the same hart", and
-> > > this statement was not in Model 2017.
-> > >
-> > > So my understanding of the story is that at some point between March and
-> > > May 2018, RISV memory model folks decided to add this rule, which does
-> > > look more consistent with other parts of the model and is useful.
-> > >
-> > > And this is why (and when) "ld.aq+sc.aqrl" can be used as a fully-ordered
-> > > barrier ;-)
-> > >
-> > > Now if my understanding is correct, to move forward, it's better that 1)
-> > > this patch gets resend with the above information (better rewording a
-> > > bit), and 2) gets an Acked-by from Dan to confirm this is a correct
-> > > history ;-)
-> >
-> > I'm a bit lost as to why digging into RISC-V mailing list history is
-> > relevant here...what's relevant is what was ratified in the RVWMO
-> > chapter of the RISC-V spec, and whether the code you're proposing
-> > is the most optimized code that is correct wrt RVWMO.
-> >
-> > Is your claim that the code you're proposing to fix was based on a
-> > pre-RVWMO RISC-V memory model definition, and you're updating it to
-> > be more RVWMO-compliant?
-> Could "lr + beq + sc.aqrl" provides a conditional RCsc here with
-> current spec? I only found "lr.aq + sc.aqrl" despcriton which is
-> un-conditional RCsc.
-> 
+On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
+>
+> Use hooks from instrumented.h to notify bug detection tools about
+> usercopy events in get_user() and put_user_size().
+>
+> It's still unclear how to instrument put_user(), which assumes that
+> instrumentation code doesn't clobber RAX.
 
-/me put the temporary RISCV memory model hat on and pretend to be a
-RISCV memory expert.
+do_put_user_call() has a comment about KASAN clobbering %ax, doesn't
+this also apply to KMSAN? If not, could we have a <asm/instrumented.h>
+that provides helpers to push registers on the stack and pop them back
+on return?
 
-I think the answer is yes, it's actually quite straightforwards given
-that RISCV treats PPO (Preserved Program Order) as part of GMO (Global
-Memory Order), considering the following (A and B are memory accesses):
+Also it seems the test robot complained about this patch.
 
-	A
-	..
-	sc.aqrl // M
-	..
-	B
-
-, A has a ->ppo ordering to M since "sc.aqrl" is a RELEASE, and M has
-a ->ppo ordeing to B since "sc.aqrl" is an AQUIRE, so
-
-	A ->ppo M ->ppo B
-
-And since RISCV describes that PPO is part of GMO:
-
-"""
-The subset of program order that must be respected by the global memory
-order is known as preserved program order.
-"""
-
-also in the herd model:
-
-	(* Main model axiom *)
-	acyclic co | rfe | fr | ppo as Model
-
-, therefore the ordering between A and B is GMO and GMO should be
-respected by all harts.
-
-Regards,
-Boqun
-
-> >
-> > Dan
-> >
-> > > Regards,
-> > > Boqun
-> > >
-> > >>   Andrea
-> > >>
-> > >>
-> > > [...]
-> 
-> 
-> 
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> ---
+> Link: https://linux-review.googlesource.com/id/Ia9f12bfe5832623250e20f1859fdf5cc485a2fce
+> ---
+>  arch/x86/include/asm/uaccess.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+> index 913e593a3b45f..1a8b5a234474f 100644
+> --- a/arch/x86/include/asm/uaccess.h
+> +++ b/arch/x86/include/asm/uaccess.h
+> @@ -5,6 +5,7 @@
+>   * User space memory access functions
+>   */
+>  #include <linux/compiler.h>
+> +#include <linux/instrumented.h>
+>  #include <linux/kasan-checks.h>
+>  #include <linux/string.h>
+>  #include <asm/asm.h>
+> @@ -99,11 +100,13 @@ extern int __get_user_bad(void);
+>         int __ret_gu;                                                   \
+>         register __inttype(*(ptr)) __val_gu asm("%"_ASM_DX);            \
+>         __chk_user_ptr(ptr);                                            \
+> +       instrument_copy_from_user_before((void *)&(x), ptr, sizeof(*(ptr))); \
+>         asm volatile("call __" #fn "_%P4"                               \
+>                      : "=a" (__ret_gu), "=r" (__val_gu),                \
+>                         ASM_CALL_CONSTRAINT                             \
+>                      : "0" (ptr), "i" (sizeof(*(ptr))));                \
+>         (x) = (__force __typeof__(*(ptr))) __val_gu;                    \
+> +       instrument_copy_from_user_after((void *)&(x), ptr, sizeof(*(ptr)), 0); \
+>         __builtin_expect(__ret_gu, 0);                                  \
+>  })
+>
+> @@ -248,7 +251,9 @@ extern void __put_user_nocheck_8(void);
+>
+>  #define __put_user_size(x, ptr, size, label)                           \
+>  do {                                                                   \
+> +       __typeof__(*(ptr)) __pus_val = x;                               \
+>         __chk_user_ptr(ptr);                                            \
+> +       instrument_copy_to_user(ptr, &(__pus_val), size);               \
+>         switch (size) {                                                 \
+>         case 1:                                                         \
+>                 __put_user_goto(x, ptr, "b", "iq", label);              \
+> @@ -286,6 +291,7 @@ do {                                                                        \
+>  #define __get_user_size(x, ptr, size, label)                           \
+>  do {                                                                   \
+>         __chk_user_ptr(ptr);                                            \
+> +       instrument_copy_from_user_before((void *)&(x), ptr, size);      \
+>         switch (size) {                                                 \
+>         case 1: {                                                       \
+>                 unsigned char x_u8__;                                   \
+> @@ -305,6 +311,7 @@ do {                                                                        \
+>         default:                                                        \
+>                 (x) = __get_user_bad();                                 \
+>         }                                                               \
+> +       instrument_copy_from_user_after((void *)&(x), ptr, size, 0);    \
+>  } while (0)
+>
+>  #define __get_user_asm(x, addr, itype, ltype, label)                   \
 > --
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
+> 2.37.0.rc0.161.g10f37bed90-goog
+>
