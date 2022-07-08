@@ -2,166 +2,184 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C3356B605
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Jul 2022 11:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452EC56B8C5
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Jul 2022 13:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237801AbiGHJsO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 8 Jul 2022 05:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S237684AbiGHLop (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Jul 2022 07:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237745AbiGHJsM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Jul 2022 05:48:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915257E014;
-        Fri,  8 Jul 2022 02:48:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF65D621B3;
-        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42467C341C0;
-        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1657273690;
-        bh=jh5gWjN504oG2VIQVhjUJ6awryeK4kG9bLyyFcKUZb8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J0mN0kb8BszGexKgP2TR/Konu1FNhSKLfU1dFk8MjbV9m7dxbBYbF7wwZZqxMrDOr
-         F2lUZZbiAoibyzsScrc+PqTDnUNQtvqgiIQRLx+9QXwEy71uIlZvZibgVknoklSdR3
-         N5ej6+Cm1mxWT82xms9zIjE+kIojLNBIi/syuWuMiojBoq8gL4lbqP2fdR4MIRR5aC
-         C3otI4srlob2HKRGqzFgtB+NkDdngWbUpx5Yan/H9nA5wO5bog/qQzNIgkjEnalQT/
-         OhQHVVnJ4iu0TKhX6ULYi7/yPg+BKcMgFSIBiwxtrlrtdvCYjxTJwBxwY398mZfvn4
-         ctAgmZK0ZrrCw==
-Received: by mail-vs1-f49.google.com with SMTP id f68so5959428vsc.11;
-        Fri, 08 Jul 2022 02:48:10 -0700 (PDT)
-X-Gm-Message-State: AJIora96dsnmFzU0r+taN40ryFlyuRZC2ysrZymnKnUpyGH7oUVmtaS/
-        WJe3wZB9wBVMyUjEuyR8DZkolymU3c2KFdgwpDA=
-X-Google-Smtp-Source: AGRyM1trh8V62HAkUcCKd0tDx5d1m4TVW3lDdgWUkgyB2uid/kYHUhgnGZyGqTvYMyG8IlCpF+vPKmaWyo2itMFkJxg=
-X-Received: by 2002:a05:6102:3543:b0:357:3ae7:bbd0 with SMTP id
- e3-20020a056102354300b003573ae7bbd0mr431000vss.84.1657273689209; Fri, 08 Jul
- 2022 02:48:09 -0700 (PDT)
+        with ESMTP id S237678AbiGHLoo (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Jul 2022 07:44:44 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5797D1F8
+        for <linux-arch@vger.kernel.org>; Fri,  8 Jul 2022 04:44:43 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-31c9b70c382so133386267b3.6
+        for <linux-arch@vger.kernel.org>; Fri, 08 Jul 2022 04:44:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=tm11KlnnIXGr7nvHs0RfeJdMMwEgYtIpJrEKcFo1S38=;
+        b=rWcYb2tPMqjko19vnw97Xy75z7EjAz6RBmh89eGBLfmWyDs5ModNXPj7JLs08ESwti
+         +P9qMDacx9NPWCzo1qvPCcqALe3Tv8TG17MwtGf6CntF5sNU/oO9fVYBahbKsEZFpdn/
+         3AS1PfZBvgy7ZBGgTy1/yqKSA7oyPxZwxPOU0tGQjIuvhCtoHFl4LtEQ2iNATROVVHTr
+         zc716yBryWj2deyUOFPTs3AZ8BY/DxP0SJNsbaLEMVmLxMPYHtWYvmJzahK+txzIFcdm
+         ig7msRn8p3hWMA71b1/Vy6rhwS8zYwUWpf2L0NWvBveIFCAfaKzCilTFZ62+sD76TbOw
+         MfSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tm11KlnnIXGr7nvHs0RfeJdMMwEgYtIpJrEKcFo1S38=;
+        b=BqKDRquY+ao6YKbD8m8sN+tVb0DATgYEYBcLQBoYE6kzjPY59W561glbbhoEAEGbxw
+         MS39DPtZAVzp7WcFaxFYSkG2cqKPWnbF4KRJa+0g8gr7Pie2pq8LW92utDv1VPTofHgX
+         Ou+MbR6kd3L58R+S7hxrvIxLfqXTGEi6hpanTu1FXZTAFId7t9q8pF+v9WeDnXfdxTPA
+         kU3YOTeNZnl5M+QaYg3dXuNlCDyXnpeML+YZfU0bOl7pN4D6nJbCJSaLrqY/SAVDZlrb
+         mVlSbHcDqYNzynZ2XTcgBmDLUTZzru7bOyy/ZR/2q3A3+NtT1LWi1CNZYHTETJVgWyIP
+         wuMA==
+X-Gm-Message-State: AJIora9XX+DltMMQERiUpN1De62c97jHZhcOZWgMO6JfRIXcyF8ItF//
+        DTZ8TY1v3bpNS4duB8h1Gpg9BYtxvKtJmTbNqrFhew==
+X-Google-Smtp-Source: AGRyM1vNSF6NE/lZtc1z0M3sVvfrVTwAwR04SbZxKdFyRoo8T5UGNKIPoyecbY5QwNtAgfJCrEYUC0i8y41EMg9uDSo=
+X-Received: by 2002:a0d:cf07:0:b0:31d:17cb:ec11 with SMTP id
+ r7-20020a0dcf07000000b0031d17cbec11mr3579407ywd.264.1657280682042; Fri, 08
+ Jul 2022 04:44:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
- <20220704112526.2492342-4-chenhuacai@loongson.cn> <20220705092937.GA552@willie-the-truck>
- <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com> <20220706161736.GC3204@willie-the-truck>
-In-Reply-To: <20220706161736.GC3204@willie-the-truck>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 8 Jul 2022 17:47:56 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
-Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
-Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
-To:     Will Deacon <will@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Sudarshan Rajagopalan <sudaraja@codeaurora.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+References: <Yqdb3CZ8bKtbWZ+z@rowland.harvard.edu> <20220614154812.1870099-1-paul.heidekrueger@in.tum.de>
+In-Reply-To: <20220614154812.1870099-1-paul.heidekrueger@in.tum.de>
+From:   Marco Elver <elver@google.com>
+Date:   Fri, 8 Jul 2022 13:44:06 +0200
+Message-ID: <CANpmjNOkXz=+221i70CWJexQWwfA_By3+7Cnimwgjmwn7RQdBg@mail.gmail.com>
+Subject: Re: [PATCH v2] tools/memory-model: Clarify LKMM's limitations in litmus-tests.txt
+To:     =?UTF-8?Q?Paul_Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-+Dan Williams
-+Sudarshan Rajagopalan
-
-On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
+On Tue, 14 Jun 2022 at 17:49, Paul Heidekr=C3=BCger
+<paul.heidekrueger@in.tum.de> wrote:
 >
-> On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
-> > On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
-> > > On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
-> > > > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
-> > > > index 33e2a1ceee72..6f2e40bb695d 100644
-> > > > --- a/mm/sparse-vmemmap.c
-> > > > +++ b/mm/sparse-vmemmap.c
-> > > > @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
-> > > >       return vmemmap_populate_range(start, end, node, altmap, NULL);
-> > > >  }
-> > > >
-> > > > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
-> > > > +                                   unsigned long addr, unsigned long next)
-> > > > +{
-> > > > +}
-> > > > +
-> > > > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
-> > > > +                                    unsigned long next)
-> > > > +{
-> > > > +     return 0;
-> > > > +}
-> > > > +
-> > > > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
-> > > > +                                      int node, struct vmem_altmap *altmap)
-> > > > +{
-> > > > +     unsigned long addr;
-> > > > +     unsigned long next;
-> > > > +     pgd_t *pgd;
-> > > > +     p4d_t *p4d;
-> > > > +     pud_t *pud;
-> > > > +     pmd_t *pmd;
-> > > > +
-> > > > +     for (addr = start; addr < end; addr = next) {
-> > > > +             next = pmd_addr_end(addr, end);
-> > > > +
-> > > > +             pgd = vmemmap_pgd_populate(addr, node);
-> > > > +             if (!pgd)
-> > > > +                     return -ENOMEM;
-> > > > +
-> > > > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
-> > > > +             if (!p4d)
-> > > > +                     return -ENOMEM;
-> > > > +
-> > > > +             pud = vmemmap_pud_populate(p4d, addr, node);
-> > > > +             if (!pud)
-> > > > +                     return -ENOMEM;
-> > > > +
-> > > > +             pmd = pmd_offset(pud, addr);
-> > > > +             if (pmd_none(READ_ONCE(*pmd))) {
-> > > > +                     void *p;
-> > > > +
-> > > > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
-> > > > +                     if (p) {
-> > > > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
-> > > > +                             continue;
-> > > > +                     } else if (altmap)
-> > > > +                             return -ENOMEM; /* no fallback */
-> > >
-> > > Why do you return -ENOMEM if 'altmap' here? That seems to be different to
-> > > what we currently have on arm64 and it's not clear to me why we're happy
-> > > with an altmap for the pmd case, but not for the pte case.
-> > The generic version is the same as X86. It seems that ARM64 always
-> > fallback whether there is an altmap, but X86 only fallback in the no
-> > altmap case. I don't know the reason of X86, can Dan Williams give
-> > some explaination?
+> As discussed, clarify LKMM not recognizing certain kinds of orderings.
+> In particular, highlight the fact that LKMM might deliberately make
+> weaker guarantees than compilers and architectures.
 >
-> Right, I think we need to understand the new behaviour here before we adopt
-> it on arm64.
-Hi, Dan,
-Could you please tell us the reason? Thanks.
+> Link: https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tu=
+m.de/T/#u
+> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
+> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
 
-And Sudarshan,
-You are the author of adding a fallback mechanism to ARM64,  do you
-know why ARM64 is different from X86 (only fallback in no altmap
-case)?
+Reviewed-by: Marco Elver <elver@google.com>
 
-Huacai
+However with the Co-developed-by, this is missing Alan's SOB.
 
+> Cc: Marco Elver <elver@google.com>
+> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> Cc: Martin Fink <martin.fink@in.tum.de>
+> ---
 >
-> Will
+> v2:
+> - Incorporate Alan Stern's feedback.
+> - Add suggested text by Alan Stern to clearly state how the branch and th=
+e
+>   smp_mb() affect ordering.
+> - Add "Co-developed-by: Alan Stern <stern@rowland.harvard.edu>" based on =
+the
+>   above.
+>
+>  .../Documentation/litmus-tests.txt            | 37 ++++++++++++++-----
+>  1 file changed, 27 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/me=
+mory-model/Documentation/litmus-tests.txt
+> index 8a9d5d2787f9..cc355999815c 100644
+> --- a/tools/memory-model/Documentation/litmus-tests.txt
+> +++ b/tools/memory-model/Documentation/litmus-tests.txt
+> @@ -946,22 +946,39 @@ Limitations of the Linux-kernel memory model (LKMM)=
+ include:
+>         carrying a dependency, then the compiler can break that dependenc=
+y
+>         by substituting a constant of that value.
+>
+> -       Conversely, LKMM sometimes doesn't recognize that a particular
+> -       optimization is not allowed, and as a result, thinks that a
+> -       dependency is not present (because the optimization would break i=
+t).
+> -       The memory model misses some pretty obvious control dependencies
+> -       because of this limitation.  A simple example is:
+> +       Conversely, LKMM will sometimes overestimate the amount of
+> +       reordering compilers and CPUs can carry out, leading it to miss
+> +       some pretty obvious cases of ordering.  A simple example is:
+>
+>                 r1 =3D READ_ONCE(x);
+>                 if (r1 =3D=3D 0)
+>                         smp_mb();
+>                 WRITE_ONCE(y, 1);
+>
+> -       There is a control dependency from the READ_ONCE to the WRITE_ONC=
+E,
+> -       even when r1 is nonzero, but LKMM doesn't realize this and thinks
+> -       that the write may execute before the read if r1 !=3D 0.  (Yes, t=
+hat
+> -       doesn't make sense if you think about it, but the memory model's
+> -       intelligence is limited.)
+> +       The WRITE_ONCE() does not depend on the READ_ONCE(), and as a
+> +       result, LKMM does not claim ordering.  However, even though no
+> +       dependency is present, the WRITE_ONCE() will not be executed befo=
+re
+> +       the READ_ONCE().  There are two reasons for this:
+> +
+> +                The presence of the smp_mb() in one of the branches
+> +                prevents the compiler from moving the WRITE_ONCE()
+> +                up before the "if" statement, since the compiler has
+> +                to assume that r1 will sometimes be 0 (but see the
+> +                comment below);
+> +
+> +                CPUs do not execute stores before po-earlier conditional
+> +                branches, even in cases where the store occurs after the
+> +                two arms of the branch have recombined.
+> +
+> +       It is clear that it is not dangerous in the slightest for LKMM to
+> +       make weaker guarantees than architectures.  In fact, it is
+> +       desirable, as it gives compilers room for making optimizations.
+> +       For instance, suppose that a 0 value in r1 would trigger undefine=
+d
+> +       behavior elsewhere.  Then a clever compiler might deduce that r1
+> +       can never be 0 in the if condition.  As a result, said clever
+> +       compiler might deem it safe to optimize away the smp_mb(),
+> +       eliminating the branch and any ordering an architecture would
+> +       guarantee otherwise.
+>
+>  2.     Multiple access sizes for a single variable are not supported,
+>         and neither are misaligned or partially overlapping accesses.
+> --
+> 2.35.1
+>
