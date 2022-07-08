@@ -2,141 +2,232 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D2C56AF69
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Jul 2022 02:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D6556B071
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Jul 2022 04:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236995AbiGHANR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Jul 2022 20:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S235825AbiGHCJW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 7 Jul 2022 22:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236749AbiGHANQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 20:13:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38846EE9A
-        for <linux-arch@vger.kernel.org>; Thu,  7 Jul 2022 17:13:15 -0700 (PDT)
+        with ESMTP id S230229AbiGHCJV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 22:09:21 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDAE1EEC3
+        for <linux-arch@vger.kernel.org>; Thu,  7 Jul 2022 19:09:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657239195; x=1688775195;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kHhNQQ1pcG1319c7Uxr7FzaMzLB0M5407ND+aU7n/Ps=;
-  b=efkBMMGvu0c3ZO+vcidxGykaaEoC2DhvYje9eAOw7z4gs19hptQl893D
-   rPt+RUmdFu4/kLliiN2VelJ5R90m9bXd3f9v4ky7PQHuuckNfV4JpVowY
-   xNBxK+n7g4QVdI9gXOcgsr+G6HOtKWS0ryLBkojoipW3gP5EDcbgNd4C9
-   c7tNevNWrnHi7HbxX8myPvp0o1CM8EBMoHO7rCOG179jHfA/+O39QEeiL
-   4pkSLk/6tPnSebnzEXIFRRVP5R0zLRxteO3ZnvZ/MVMsJSvAUQeKryuay
-   lGTqd6rE6eBCqYbZEaTbJ/OT2ichxwZtsUwiFEzJvk/PrfMOYdTysBveU
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="263929918"
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="263929918"
+  t=1657246160; x=1688782160;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B/KMugMWzqxZ+CdFqdAqWbEIOWulXN9jho+wH1UQ5Kc=;
+  b=d12D6ze3xZ0JbDHZNNGRVcEKEt0iYLDy7zAI7CgUR5Y3XpFjTK+O/pp/
+   Qe5Z1gnprId04rvlzrhuDGwhulJilB/rpls8Dxu3HQJycW7RaIr0RQj3M
+   VBGtvpPWTPbFAOWSn/dKvtauvlRj98M8OtA/5RWe1kw84bnMAuKiDIYCi
+   HUqGetPjxCx2k1W+i8qz41MmLK6+0/svuG8gGViIW5xU1o7FwAgJ14+rJ
+   LsnFqK2MHDeb8eAnfmQpNLHXBY2vgojLkQ0jlxhmCNwwwpF0GB0BXZR9/
+   5RRyiGzxqt+dNehqpBCAsvYRgf8wkVv3858j/LsBwjGPf4KVaLhK53Q7Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284190389"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="284190389"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 17:13:15 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 19:09:20 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="920794538"
+X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
+   d="scan'208";a="920825016"
 Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Jul 2022 17:13:13 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 07 Jul 2022 19:09:18 -0700
 Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o9bcO-000Mec-St;
-        Fri, 08 Jul 2022 00:13:12 +0000
-Date:   Fri, 8 Jul 2022 08:12:42 +0800
+        id 1o9dQk-000MlA-39;
+        Fri, 08 Jul 2022 02:09:18 +0000
+Date:   Fri, 08 Jul 2022 10:08:24 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: [arnd-asm-generic:asm-generic-fixes 1/1] kernel/resource.c:1124:6:
- error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <202207080855.lobMzAgr-lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:asm-generic-fixes] BUILD REGRESSION
+ cdfde8f61a004fa5797d40581077603c142adca1
+Message-ID: <62c79198.cku0WcPDJTfoxFq2%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-fixes
-head:   cdfde8f61a004fa5797d40581077603c142adca1
-commit: cdfde8f61a004fa5797d40581077603c142adca1 [1/1] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
-config: arm-buildonly-randconfig-r003-20220707 (https://download.01.org/0day-ci/archive/20220708/202207080855.lobMzAgr-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 66ae1d60bb278793fd651cece264699d522bab84)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=cdfde8f61a004fa5797d40581077603c142adca1
-        git remote add arnd-asm-generic https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-        git fetch --no-tags arnd-asm-generic asm-generic-fixes
-        git checkout cdfde8f61a004fa5797d40581077603c142adca1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-fixes
+branch HEAD: cdfde8f61a004fa5797d40581077603c142adca1  asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Error/Warning reports:
 
-All errors (new ones prefixed by >>):
+https://lore.kernel.org/linux-arch/202207080744.tSGEdxng-lkp@intel.com
+https://lore.kernel.org/llvm/202207080606.J3uB2s10-lkp@intel.com
+https://lore.kernel.org/llvm/202207080855.lobMzAgr-lkp@intel.com
 
->> kernel/resource.c:1124:6: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           if (devmem_is_allowed(PHYS_PFN(res->start)) &&
-               ^
-   1 error generated.
+Error/Warning: (recently discovered and may have been fixed)
 
+drivers/char/mem.c:66:16: error: implicit declaration of function 'devmem_is_allowed'; did you mean 'page_is_allowed'? [-Werror=implicit-function-declaration]
+drivers/char/mem.c:66:9: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+kernel/resource.c:1124:6: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
 
-vim +/devmem_is_allowed +1124 kernel/resource.c
+Error/Warning ids grouped by kconfigs:
 
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1102  
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1103  #ifdef CONFIG_IO_STRICT_DEVMEM
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1104  static void revoke_iomem(struct resource *res)
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1105  {
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1106  	/* pairs with smp_store_release() in iomem_init_inode() */
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1107  	struct inode *inode = smp_load_acquire(&iomem_inode);
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1108  
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1109  	/*
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1110  	 * Check that the initialization has completed. Losing the race
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1111  	 * is ok because it means drivers are claiming resources before
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1112  	 * the fs_initcall level of init and prevent iomem_get_mapping users
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1113  	 * from establishing mappings.
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1114  	 */
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1115  	if (!inode)
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1116  		return;
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1117  
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1118  	/*
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1119  	 * The expectation is that the driver has successfully marked
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1120  	 * the resource busy by this point, so devmem_is_allowed()
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1121  	 * should start returning false, however for performance this
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1122  	 * does not iterate the entire resource range.
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1123  	 */
-71a1d8ed900f8c Daniel Vetter 2020-11-27 @1124  	if (devmem_is_allowed(PHYS_PFN(res->start)) &&
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1125  	    devmem_is_allowed(PHYS_PFN(res->end))) {
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1126  		/*
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1127  		 * *cringe* iomem=relaxed says "go ahead, what's the
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1128  		 * worst that can happen?"
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1129  		 */
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1130  		return;
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1131  	}
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1132  
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1133  	unmap_mapping_range(inode->i_mapping, res->start, resource_size(res), 1);
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1134  }
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1135  #else
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1136  static void revoke_iomem(struct resource *res) {}
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1137  #endif
-71a1d8ed900f8c Daniel Vetter 2020-11-27  1138  
+gcc_recent_errors
+|-- arm-allyesconfig
+|   `-- drivers-char-mem.c:error:implicit-declaration-of-function-devmem_is_allowed
+`-- arm64-allyesconfig
+    `-- drivers-char-mem.c:error:implicit-declaration-of-function-devmem_is_allowed
+clang_recent_errors
+|-- arm-buildonly-randconfig-r003-20220707
+|   |-- drivers-char-mem.c:error:call-to-undeclared-function-devmem_is_allowed-ISO-C99-and-later-do-not-support-implicit-function-declarations
+|   `-- kernel-resource.c:error:call-to-undeclared-function-devmem_is_allowed-ISO-C99-and-later-do-not-support-implicit-function-declarations
+`-- riscv-randconfig-r035-20220707
+    `-- drivers-char-mem.c:error:call-to-undeclared-function-devmem_is_allowed-ISO-C99-and-later-do-not-support-implicit-function-declarations
 
-:::::: The code at line 1124 was first introduced by commit
-:::::: 71a1d8ed900f8cf53151beff17e3e2ff8e9283a1 resource: Move devmem revoke code to resource framework
+elapsed time: 825m
 
-:::::: TO: Daniel Vetter <daniel.vetter@ffwll.ch>
-:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
+configs tested: 129
+configs skipped: 3
+
+gcc tested configs:
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+m68k                        mvme147_defconfig
+m68k                             alldefconfig
+xtensa                       common_defconfig
+sh                                  defconfig
+sh                          rsk7269_defconfig
+alpha                            alldefconfig
+openrisc                            defconfig
+arm                          badge4_defconfig
+powerpc                  storcenter_defconfig
+arc                         haps_hs_defconfig
+mips                             allmodconfig
+arm                        cerfcube_defconfig
+powerpc                     asp8347_defconfig
+arm                          pxa910_defconfig
+arc                      axs103_smp_defconfig
+powerpc                      mgcoge_defconfig
+sh                             shx3_defconfig
+mips                           xway_defconfig
+powerpc                 mpc8540_ads_defconfig
+nios2                            allyesconfig
+sh                           se7705_defconfig
+powerpc                     tqm8548_defconfig
+m68k                       m5249evb_defconfig
+arc                        nsimosci_defconfig
+powerpc                mpc7448_hpc2_defconfig
+arm                           stm32_defconfig
+sh                   sh7770_generic_defconfig
+mips                         tb0226_defconfig
+arm                        mvebu_v7_defconfig
+sh                         ap325rxa_defconfig
+arm                        spear6xx_defconfig
+sh                      rts7751r2d1_defconfig
+riscv                               defconfig
+sh                           se7722_defconfig
+xtensa                              defconfig
+powerpc                     tqm8555_defconfig
+powerpc                    adder875_defconfig
+sh                              ul2_defconfig
+arm                        keystone_defconfig
+sh                   secureedge5410_defconfig
+arm                           u8500_defconfig
+arc                     nsimosci_hs_defconfig
+mips                 decstation_r4k_defconfig
+sh                           se7712_defconfig
+sh                        edosk7705_defconfig
+m68k                            q40_defconfig
+powerpc                      ppc6xx_defconfig
+arm                      jornada720_defconfig
+powerpc                     ep8248e_defconfig
+m68k                           sun3_defconfig
+sh                          r7780mp_defconfig
+x86_64                           alldefconfig
+xtensa                generic_kc705_defconfig
+microblaze                      mmu_defconfig
+s390                          debug_defconfig
+sh                           sh2007_defconfig
+sh                         ecovec24_defconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+ia64                             allmodconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220707
+arc                  randconfig-r043-20220707
+s390                 randconfig-r044-20220707
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+powerpc                  mpc885_ads_defconfig
+powerpc                    mvme5100_defconfig
+arm                      pxa255-idp_defconfig
+powerpc                     tqm8540_defconfig
+mips                         tb0287_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                        multi_v5_defconfig
+powerpc                 mpc8315_rdb_defconfig
+x86_64                        randconfig-k001
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+i386                          randconfig-a013
+i386                          randconfig-a015
+hexagon              randconfig-r045-20220707
+hexagon              randconfig-r041-20220707
 
 -- 
 0-DAY CI Kernel Test Service
