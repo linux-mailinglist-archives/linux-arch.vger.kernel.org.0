@@ -2,59 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D6556B071
-	for <lists+linux-arch@lfdr.de>; Fri,  8 Jul 2022 04:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C3356B605
+	for <lists+linux-arch@lfdr.de>; Fri,  8 Jul 2022 11:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235825AbiGHCJW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 7 Jul 2022 22:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S237801AbiGHJsO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 8 Jul 2022 05:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiGHCJV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 7 Jul 2022 22:09:21 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDAE1EEC3
-        for <linux-arch@vger.kernel.org>; Thu,  7 Jul 2022 19:09:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1657246160; x=1688782160;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=B/KMugMWzqxZ+CdFqdAqWbEIOWulXN9jho+wH1UQ5Kc=;
-  b=d12D6ze3xZ0JbDHZNNGRVcEKEt0iYLDy7zAI7CgUR5Y3XpFjTK+O/pp/
-   Qe5Z1gnprId04rvlzrhuDGwhulJilB/rpls8Dxu3HQJycW7RaIr0RQj3M
-   VBGtvpPWTPbFAOWSn/dKvtauvlRj98M8OtA/5RWe1kw84bnMAuKiDIYCi
-   HUqGetPjxCx2k1W+i8qz41MmLK6+0/svuG8gGViIW5xU1o7FwAgJ14+rJ
-   LsnFqK2MHDeb8eAnfmQpNLHXBY2vgojLkQ0jlxhmCNwwwpF0GB0BXZR9/
-   5RRyiGzxqt+dNehqpBCAsvYRgf8wkVv3858j/LsBwjGPf4KVaLhK53Q7Y
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10401"; a="284190389"
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="284190389"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2022 19:09:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,254,1650956400"; 
-   d="scan'208";a="920825016"
-Received: from lkp-server01.sh.intel.com (HELO 68b931ab7ac1) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Jul 2022 19:09:18 -0700
-Received: from kbuild by 68b931ab7ac1 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o9dQk-000MlA-39;
-        Fri, 08 Jul 2022 02:09:18 +0000
-Date:   Fri, 08 Jul 2022 10:08:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic-fixes] BUILD REGRESSION
- cdfde8f61a004fa5797d40581077603c142adca1
-Message-ID: <62c79198.cku0WcPDJTfoxFq2%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S237745AbiGHJsM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 8 Jul 2022 05:48:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915257E014;
+        Fri,  8 Jul 2022 02:48:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF65D621B3;
+        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42467C341C0;
+        Fri,  8 Jul 2022 09:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657273690;
+        bh=jh5gWjN504oG2VIQVhjUJ6awryeK4kG9bLyyFcKUZb8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J0mN0kb8BszGexKgP2TR/Konu1FNhSKLfU1dFk8MjbV9m7dxbBYbF7wwZZqxMrDOr
+         F2lUZZbiAoibyzsScrc+PqTDnUNQtvqgiIQRLx+9QXwEy71uIlZvZibgVknoklSdR3
+         N5ej6+Cm1mxWT82xms9zIjE+kIojLNBIi/syuWuMiojBoq8gL4lbqP2fdR4MIRR5aC
+         C3otI4srlob2HKRGqzFgtB+NkDdngWbUpx5Yan/H9nA5wO5bog/qQzNIgkjEnalQT/
+         OhQHVVnJ4iu0TKhX6ULYi7/yPg+BKcMgFSIBiwxtrlrtdvCYjxTJwBxwY398mZfvn4
+         ctAgmZK0ZrrCw==
+Received: by mail-vs1-f49.google.com with SMTP id f68so5959428vsc.11;
+        Fri, 08 Jul 2022 02:48:10 -0700 (PDT)
+X-Gm-Message-State: AJIora96dsnmFzU0r+taN40ryFlyuRZC2ysrZymnKnUpyGH7oUVmtaS/
+        WJe3wZB9wBVMyUjEuyR8DZkolymU3c2KFdgwpDA=
+X-Google-Smtp-Source: AGRyM1trh8V62HAkUcCKd0tDx5d1m4TVW3lDdgWUkgyB2uid/kYHUhgnGZyGqTvYMyG8IlCpF+vPKmaWyo2itMFkJxg=
+X-Received: by 2002:a05:6102:3543:b0:357:3ae7:bbd0 with SMTP id
+ e3-20020a056102354300b003573ae7bbd0mr431000vss.84.1657273689209; Fri, 08 Jul
+ 2022 02:48:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-4-chenhuacai@loongson.cn> <20220705092937.GA552@willie-the-truck>
+ <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com> <20220706161736.GC3204@willie-the-truck>
+In-Reply-To: <20220706161736.GC3204@willie-the-truck>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 8 Jul 2022 17:47:56 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+Message-ID: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
+To:     Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sudarshan Rajagopalan <sudaraja@codeaurora.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,173 +80,88 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-fixes
-branch HEAD: cdfde8f61a004fa5797d40581077603c142adca1  asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
++Dan Williams
++Sudarshan Rajagopalan
 
-Error/Warning reports:
+On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
+>
+> On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
+> > On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
+> > > On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
+> > > > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> > > > index 33e2a1ceee72..6f2e40bb695d 100644
+> > > > --- a/mm/sparse-vmemmap.c
+> > > > +++ b/mm/sparse-vmemmap.c
+> > > > @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+> > > >       return vmemmap_populate_range(start, end, node, altmap, NULL);
+> > > >  }
+> > > >
+> > > > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> > > > +                                   unsigned long addr, unsigned long next)
+> > > > +{
+> > > > +}
+> > > > +
+> > > > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> > > > +                                    unsigned long next)
+> > > > +{
+> > > > +     return 0;
+> > > > +}
+> > > > +
+> > > > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> > > > +                                      int node, struct vmem_altmap *altmap)
+> > > > +{
+> > > > +     unsigned long addr;
+> > > > +     unsigned long next;
+> > > > +     pgd_t *pgd;
+> > > > +     p4d_t *p4d;
+> > > > +     pud_t *pud;
+> > > > +     pmd_t *pmd;
+> > > > +
+> > > > +     for (addr = start; addr < end; addr = next) {
+> > > > +             next = pmd_addr_end(addr, end);
+> > > > +
+> > > > +             pgd = vmemmap_pgd_populate(addr, node);
+> > > > +             if (!pgd)
+> > > > +                     return -ENOMEM;
+> > > > +
+> > > > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
+> > > > +             if (!p4d)
+> > > > +                     return -ENOMEM;
+> > > > +
+> > > > +             pud = vmemmap_pud_populate(p4d, addr, node);
+> > > > +             if (!pud)
+> > > > +                     return -ENOMEM;
+> > > > +
+> > > > +             pmd = pmd_offset(pud, addr);
+> > > > +             if (pmd_none(READ_ONCE(*pmd))) {
+> > > > +                     void *p;
+> > > > +
+> > > > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> > > > +                     if (p) {
+> > > > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
+> > > > +                             continue;
+> > > > +                     } else if (altmap)
+> > > > +                             return -ENOMEM; /* no fallback */
+> > >
+> > > Why do you return -ENOMEM if 'altmap' here? That seems to be different to
+> > > what we currently have on arm64 and it's not clear to me why we're happy
+> > > with an altmap for the pmd case, but not for the pte case.
+> > The generic version is the same as X86. It seems that ARM64 always
+> > fallback whether there is an altmap, but X86 only fallback in the no
+> > altmap case. I don't know the reason of X86, can Dan Williams give
+> > some explaination?
+>
+> Right, I think we need to understand the new behaviour here before we adopt
+> it on arm64.
+Hi, Dan,
+Could you please tell us the reason? Thanks.
 
-https://lore.kernel.org/linux-arch/202207080744.tSGEdxng-lkp@intel.com
-https://lore.kernel.org/llvm/202207080606.J3uB2s10-lkp@intel.com
-https://lore.kernel.org/llvm/202207080855.lobMzAgr-lkp@intel.com
+And Sudarshan,
+You are the author of adding a fallback mechanism to ARM64,  do you
+know why ARM64 is different from X86 (only fallback in no altmap
+case)?
 
-Error/Warning: (recently discovered and may have been fixed)
+Huacai
 
-drivers/char/mem.c:66:16: error: implicit declaration of function 'devmem_is_allowed'; did you mean 'page_is_allowed'? [-Werror=implicit-function-declaration]
-drivers/char/mem.c:66:9: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-kernel/resource.c:1124:6: error: call to undeclared function 'devmem_is_allowed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm-allyesconfig
-|   `-- drivers-char-mem.c:error:implicit-declaration-of-function-devmem_is_allowed
-`-- arm64-allyesconfig
-    `-- drivers-char-mem.c:error:implicit-declaration-of-function-devmem_is_allowed
-clang_recent_errors
-|-- arm-buildonly-randconfig-r003-20220707
-|   |-- drivers-char-mem.c:error:call-to-undeclared-function-devmem_is_allowed-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-resource.c:error:call-to-undeclared-function-devmem_is_allowed-ISO-C99-and-later-do-not-support-implicit-function-declarations
-`-- riscv-randconfig-r035-20220707
-    `-- drivers-char-mem.c:error:call-to-undeclared-function-devmem_is_allowed-ISO-C99-and-later-do-not-support-implicit-function-declarations
-
-elapsed time: 825m
-
-configs tested: 129
-configs skipped: 3
-
-gcc tested configs:
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-m68k                        mvme147_defconfig
-m68k                             alldefconfig
-xtensa                       common_defconfig
-sh                                  defconfig
-sh                          rsk7269_defconfig
-alpha                            alldefconfig
-openrisc                            defconfig
-arm                          badge4_defconfig
-powerpc                  storcenter_defconfig
-arc                         haps_hs_defconfig
-mips                             allmodconfig
-arm                        cerfcube_defconfig
-powerpc                     asp8347_defconfig
-arm                          pxa910_defconfig
-arc                      axs103_smp_defconfig
-powerpc                      mgcoge_defconfig
-sh                             shx3_defconfig
-mips                           xway_defconfig
-powerpc                 mpc8540_ads_defconfig
-nios2                            allyesconfig
-sh                           se7705_defconfig
-powerpc                     tqm8548_defconfig
-m68k                       m5249evb_defconfig
-arc                        nsimosci_defconfig
-powerpc                mpc7448_hpc2_defconfig
-arm                           stm32_defconfig
-sh                   sh7770_generic_defconfig
-mips                         tb0226_defconfig
-arm                        mvebu_v7_defconfig
-sh                         ap325rxa_defconfig
-arm                        spear6xx_defconfig
-sh                      rts7751r2d1_defconfig
-riscv                               defconfig
-sh                           se7722_defconfig
-xtensa                              defconfig
-powerpc                     tqm8555_defconfig
-powerpc                    adder875_defconfig
-sh                              ul2_defconfig
-arm                        keystone_defconfig
-sh                   secureedge5410_defconfig
-arm                           u8500_defconfig
-arc                     nsimosci_hs_defconfig
-mips                 decstation_r4k_defconfig
-sh                           se7712_defconfig
-sh                        edosk7705_defconfig
-m68k                            q40_defconfig
-powerpc                      ppc6xx_defconfig
-arm                      jornada720_defconfig
-powerpc                     ep8248e_defconfig
-m68k                           sun3_defconfig
-sh                          r7780mp_defconfig
-x86_64                           alldefconfig
-xtensa                generic_kc705_defconfig
-microblaze                      mmu_defconfig
-s390                          debug_defconfig
-sh                           sh2007_defconfig
-sh                         ecovec24_defconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-ia64                             allmodconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220707
-arc                  randconfig-r043-20220707
-s390                 randconfig-r044-20220707
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-
-clang tested configs:
-powerpc                  mpc885_ads_defconfig
-powerpc                    mvme5100_defconfig
-arm                      pxa255-idp_defconfig
-powerpc                     tqm8540_defconfig
-mips                         tb0287_defconfig
-powerpc                 xes_mpc85xx_defconfig
-arm                        multi_v5_defconfig
-powerpc                 mpc8315_rdb_defconfig
-x86_64                        randconfig-k001
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220707
-hexagon              randconfig-r041-20220707
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Will
