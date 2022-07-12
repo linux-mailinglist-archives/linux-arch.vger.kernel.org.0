@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBC557196D
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 14:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47F85719C7
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 14:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbiGLMHO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Jul 2022 08:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
+        id S232314AbiGLMVY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Jul 2022 08:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiGLMHM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 08:07:12 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264F363B0
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 05:07:12 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id n74so13560227yba.3
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 05:07:12 -0700 (PDT)
+        with ESMTP id S229924AbiGLMVW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 08:21:22 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D3776EB2
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 05:21:21 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-31c8a1e9e33so78933947b3.5
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 05:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=NcaZoHxkoPLNKyXoHKEwHY+W+ThXitk+W0hG8LqbLf0=;
-        b=ZDVWr+p3NhVr1CUq8shddxuGCK2UkbwMmLU0MPPLLcgV1gyFhjFy/LuAMbhGdLBK9U
-         gVa5CY2dbm8U1I1Cb0lasNhq0ds1T8i2glhK90L5AI66WbjXmmZ/yLGLqsdIwPuCGeUH
-         /cZFTo86BWYirH/iv0tZwJuU3Z3hk0FJBVFgNv1L38JnsJHjDNYiixpofuqmhNFdEXnb
-         n+KwomL2Zc8MaFo6/ELYjK8Xn6nP0ADAVFrtmgXNrky56/z97dv/4PXW2ywGCbjPxrBz
-         p/5K+XZYvOKrWRPgJtSmEoTUWVjgylIyUBlEYXJu0kBJJLxLQvyJZs/ITliIQ/ue4SQR
-         iwwg==
+        bh=UaSHri8uX8QzRonJXk/9Ev1ksxotFizg9AxbyPG4jRk=;
+        b=AdA9qT8whnij0+KR+xYBYzsjojFQe6acCMTqkTici9ybil/uXKlgNpGU4ccpVCEIhz
+         9lstl2oAgiyy3zfDj8omvZMXE2HfC9BztuasX9rV3FAtelrWEST4nMElNJrEIUbHg6xz
+         vLBb8YSGSfV6wwGP//JqkXtQWBzWnS6IQnt0H/AhukwKmCy+De2sO+LsQj6CPfc47DEP
+         GPy1Qc9iOVk/8rq20s4g9LqjTdYELDMJmbd3WnYzVj9FTIda6MtL0VuZXtIj4K0Lxzhq
+         mXgFDNw0qg6K2V5/KOq8itfFBvS3GWdiVr7JMEdKlZRGv/i9f+m7rMBo/pDfaPsFN5yP
+         NkQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NcaZoHxkoPLNKyXoHKEwHY+W+ThXitk+W0hG8LqbLf0=;
-        b=Ao7+LBiMwtoh9qVfV+0L8M1x2cQXXN1aL+z+O4jw7t53dZv1GRnSK9tlgLxWlky200
-         0gAxVAJP4DWMycm+EBv2jnYdc+EPsMCY9/njmCzToDvUC+2W2qj6E0AL1niRt/6z/vnG
-         7oB36Jv7UrW+6aVX17F9P+Du+cJ3pBLcjmw2CgoNsc9vbUuMTWZ9xm6EHnoDO8giYt7x
-         viKyx0gON3zcdAZvuGZaqC6i8rqZz/x2HSdhIyafd5fB/NoflxKI/u1nmwICd1VISGkf
-         MdvBY3CK0dJC+xexl0FTMhfufzXkoIKh71TY6Y9Hzd9qKvD5EMqFzBq6A72XNyeUnSW8
-         Az2g==
-X-Gm-Message-State: AJIora/+ttEuIcA6oUrHVO5LDkw/eIOLinSCFpx8hBCcjPJ7vF1bzLzJ
-        HEBYD5/X/COHnlGR6f9M1HVq/+/o06ntszTDDeMZGw==
-X-Google-Smtp-Source: AGRyM1vgnu0W2fiEJKnjwlHfY7wgi70C1jHvVG/0VbfE1gkD/ENEshXQc1CpSzd8c7XRHei1mrUiEPVDQ0lSLshBiY8=
-X-Received: by 2002:a5b:10a:0:b0:66d:d8e3:9da2 with SMTP id
- 10-20020a5b010a000000b0066dd8e39da2mr22329810ybx.87.1657627631236; Tue, 12
- Jul 2022 05:07:11 -0700 (PDT)
+        bh=UaSHri8uX8QzRonJXk/9Ev1ksxotFizg9AxbyPG4jRk=;
+        b=seiVeEpJAxS/wTlHnGyCsgmQsZYN1N6LE2Ujt/gA93hYHLDmfQdSkBKjsjfOghD0hW
+         MYaGIw92fgwXMoYusYWtwa3lv8jWkXCoXx0VaoLp0QbV6qgegAvk4+CRjAVc+MAX5paz
+         1Jko+ZXJfYmtW3DnoQ6o2bv/wyOKqnjA6Hkr1gFqMoooEnozPgKC2LER+DGtZYn8r05M
+         Swe2iDYdYTzbQxlGe8LpN/HjNxsZIbym8a2oqxkP/yj6244zX9nNFhJTFyoLKAjDO8UQ
+         AKzw6IAcUaFaBXZobBQTM7Hz6MGnaO6BU4SIRdkJud2xpCV6VFq/2ypKgqut3TA5kJ17
+         nWTw==
+X-Gm-Message-State: AJIora9IYmSlMEOIgQttqi8fnDPCJ9FMBjnyZltom6hstz2pnIRnsViY
+        CPafKk29ZIRYtVMDOfBLadeXzQkwK3NTE6cga4FsQg==
+X-Google-Smtp-Source: AGRyM1tNTqqD1WJS4VX6QxCOJmIA4NZigO0ohBTbUAMEjXFjLnHlS2MHRgJF6cAyN0c2yj/38K4PnLL3yJAEs4Jhs+g=
+X-Received: by 2002:a81:1492:0:b0:31c:a1ff:9ec with SMTP id
+ 140-20020a811492000000b0031ca1ff09ecmr23857082ywu.327.1657628480468; Tue, 12
+ Jul 2022 05:21:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-14-glider@google.com>
-In-Reply-To: <20220701142310.2188015-14-glider@google.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-15-glider@google.com>
+In-Reply-To: <20220701142310.2188015-15-glider@google.com>
 From:   Marco Elver <elver@google.com>
-Date:   Tue, 12 Jul 2022 14:06:35 +0200
-Message-ID: <CANpmjNN1KVteEi4HPTqa_V78iQ1e2iNZ=rguLSE6aqyca7w_zA@mail.gmail.com>
-Subject: Re: [PATCH v4 13/45] MAINTAINERS: add entry for KMSAN
+Date:   Tue, 12 Jul 2022 14:20:44 +0200
+Message-ID: <CANpmjNP8kmZYRsdpHCni33W-Yjgy-ajCAuTE94zwUniyYt7WQw@mail.gmail.com>
+Subject: Re: [PATCH v4 14/45] mm: kmsan: maintain KMSAN metadata for page operations
 To:     Alexander Potapenko <glider@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -94,39 +94,78 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 16:23, 'Alexander Potapenko' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
+On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
 >
-> Add entry for KMSAN maintainers/reviewers.
+> Insert KMSAN hooks that make the necessary bookkeeping changes:
+>  - poison page shadow and origins in alloc_pages()/free_page();
+>  - clear page shadow and origins in clear_page(), copy_user_highpage();
+>  - copy page metadata in copy_highpage(), wp_page_copy();
+>  - handle vmap()/vunmap()/iounmap();
 >
 > Signed-off-by: Alexander Potapenko <glider@google.com>
 > ---
-> Link: https://linux-review.googlesource.com/id/Ic5836c2bceb6b63f71a60d3327d18af3aa3dab77
+> v2:
+>  -- move page metadata hooks implementation here
+>  -- remove call to kmsan_memblock_free_pages()
+>
+> v3:
+>  -- use PAGE_SHIFT in kmsan_ioremap_page_range()
+>
+> v4:
+>  -- change sizeof(type) to sizeof(*ptr)
+>  -- replace occurrences of |var| with @var
+>  -- swap mm: and kmsan: in the subject
+>  -- drop __no_sanitize_memory from clear_page()
+>
+> Link: https://linux-review.googlesource.com/id/I6d4f53a0e7eab46fa29f0348f3095d9f2e326850
 > ---
->  MAINTAINERS | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+>  arch/x86/include/asm/page_64.h |  12 ++++
+>  arch/x86/mm/ioremap.c          |   3 +
+>  include/linux/highmem.h        |   3 +
+>  include/linux/kmsan.h          | 123 +++++++++++++++++++++++++++++++++
+>  mm/internal.h                  |   6 ++
+>  mm/kmsan/hooks.c               |  87 +++++++++++++++++++++++
+>  mm/kmsan/shadow.c              | 114 ++++++++++++++++++++++++++++++
+>  mm/memory.c                    |   2 +
+>  mm/page_alloc.c                |  11 +++
+>  mm/vmalloc.c                   |  20 +++++-
+>  10 files changed, 379 insertions(+), 2 deletions(-)
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index fe5daf1415013..f56281df30284 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11106,6 +11106,18 @@ F:     kernel/kmod.c
->  F:     lib/test_kmod.c
->  F:     tools/testing/selftests/kmod/
+> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+> index baa70451b8df5..227dd33eb4efb 100644
+> --- a/arch/x86/include/asm/page_64.h
+> +++ b/arch/x86/include/asm/page_64.h
+> @@ -45,14 +45,26 @@ void clear_page_orig(void *page);
+>  void clear_page_rep(void *page);
+>  void clear_page_erms(void *page);
 >
-> +KMSAN
-> +M:     Alexander Potapenko <glider@google.com>
-> +R:     Marco Elver <elver@google.com>
-> +R:     Dmitry Vyukov <dvyukov@google.com>
-> +L:     kasan-dev@googlegroups.com
-> +S:     Maintained
-> +F:     Documentation/dev-tools/kmsan.rst
-> +F:     include/linux/kmsan*.h
-> +F:     lib/Kconfig.kmsan
-> +F:     mm/kmsan/
-> +F:     scripts/Makefile.kmsan
-> +
+> +/* This is an assembly header, avoid including too much of kmsan.h */
 
-It's missing:
+All of this code is under an "#ifndef __ASSEMBLY__" guard, does it matter?
 
-  arch/*/include/asm/kmsan.h
+> +#ifdef CONFIG_KMSAN
+> +void kmsan_unpoison_memory(const void *addr, size_t size);
+> +#endif
+>  static inline void clear_page(void *page)
+>  {
+> +#ifdef CONFIG_KMSAN
+> +       /* alternative_call_2() changes @page. */
+> +       void *page_copy = page;
+> +#endif
+>         alternative_call_2(clear_page_orig,
+>                            clear_page_rep, X86_FEATURE_REP_GOOD,
+>                            clear_page_erms, X86_FEATURE_ERMS,
+>                            "=D" (page),
+>                            "0" (page)
+>                            : "cc", "memory", "rax", "rcx");
+> +#ifdef CONFIG_KMSAN
+> +       /* Clear KMSAN shadow for the pages that have it. */
+> +       kmsan_unpoison_memory(page_copy, PAGE_SIZE);
+
+What happens if this is called before the alternative-call? Could this
+(in the interest of simplicity) be moved above it? And if you used the
+kmsan-checks.h header, it also doesn't need any "ifdef CONFIG_KMSAN"
+anymore.
+
+> +#endif
+>  }
