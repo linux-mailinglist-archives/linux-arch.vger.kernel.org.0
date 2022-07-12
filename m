@@ -2,55 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47229571AFE
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 15:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3317571B93
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 15:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiGLNSb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Jul 2022 09:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S232048AbiGLNoP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Jul 2022 09:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiGLNSa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 09:18:30 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF1E283
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:18:29 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-31c9b70c382so80577887b3.6
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:18:29 -0700 (PDT)
+        with ESMTP id S233280AbiGLNoL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 09:44:11 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59772181
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:44:08 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id y195so14051887yby.0
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:44:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yN+yeyjG1qKP+1Pj2TR7+x/fenSy0T+ddQvCTNkV1Ls=;
-        b=fBcmdT6+YMs4piRTz5Sr7ynpMyL/p7DjbGuZ32eCTQYuReOs5CBMA9O4CMKpsWxxLq
-         3ARnZYA98gIdNGUdEd4KYhAGBnyq/p9gGBL5uN+C1AIJzxZK1InLNicvc59GIMrng+Q/
-         mPq+tov5jKhbhkLIeAD3XimDlFt/PoeFxsAaSa7/3YlLb071e3aMV+ptS1cUwSIXwVmj
-         uDZTVr90c74Z+e3VDhhut0h1ktJVstt5fmb8xeamtEgp4vamysStf7XG/wYS+XUvJpDF
-         C4ebjAljczwVhtJiWIWNcvPMLwKXxuoKmdAB3zaTbTvVB5tJC9RblrxUxif/gprsiJ7u
-         Kgyg==
+        bh=MyQuL5EzG5eMdd3tjqHgbmALZQ6QoMWn3xa4SlD7s1A=;
+        b=XsmwdUhnV9Nrh1SGSj3JOV2MR95zR+WwDM8KHyqTK6nHKRO0cezI02yyceFlwPZoGf
+         LD9hFog+Z5JS+mZ9fFL2w/Ykf6nXujJFNCtizbi6oqD1uCF9yqBSB8/MHRkkvvEDdyDU
+         I3o5KHJ4r9ziBNn2dgCp2K5rjLiCyIM+WlUOiQyuM078Q8jJrwxq7cktVsi42HspunWN
+         TAGH4SZCzymam+0/ttGe45EPW7yHZMPm/1FIpA/kzCIQRFMrVyyuL0gR4qVqjjuD9NLH
+         ifM7a1uFz8TXyJoivkCURiXWYCFNRU3TydpTR5nKVX4hBL3m9C/5ri4ubLU+E01uShRG
+         jdVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yN+yeyjG1qKP+1Pj2TR7+x/fenSy0T+ddQvCTNkV1Ls=;
-        b=VQzX9DzcZDgOFptt2eXJbMy3D/5gZg9JmmVEb9seWTwep5kPKOccj2D83b3K+IidE/
-         dleMWdcuMG2vTd7dqGKRirKYv9kBq162oF/euCRjsD1BRWMIyvBg2HWRrO/FvpxWiYR/
-         gSWgp7NDfET6+mUKFswnzCVCsa8SqF9J0whLOsRUyB0UMmpFajpZYJXVhQdI8ikQKJqN
-         P/xzzizRtrOjApQFEpENpCCy/Kvg8GoKA+dFV/5FcGzpiAqCoMWBB2kx6RKrVCa1kNPB
-         e6dMbVxE94O+A/cybJTzdUD+Q3tAYWLNN2g00YiADAauz+Sh/hELNqiW0y3DCK/seFrS
-         zcZw==
-X-Gm-Message-State: AJIora8F2DFD2D6o9sdN52Sd5xQqaQpjh9TLwQQEBBXrV8aNaHo939LX
-        ILc5O2lFcXxwOKQK2UnknNHCwIiEPtV6mD74qI0w4g==
-X-Google-Smtp-Source: AGRyM1tgsq0Rbbz7l2T+zkElBbmdhgsmeESq4xi/ePNMZnuYjmX+i7wxg7Pmaa67LvwsMvx7HpYYd87U070XIBP7KVQ=
-X-Received: by 2002:a81:4685:0:b0:31c:1bd1:56c7 with SMTP id
- t127-20020a814685000000b0031c1bd156c7mr24638722ywa.333.1657631908790; Tue, 12
- Jul 2022 06:18:28 -0700 (PDT)
+        bh=MyQuL5EzG5eMdd3tjqHgbmALZQ6QoMWn3xa4SlD7s1A=;
+        b=pruhNd8EkiAw4iqAPI0CKlXr5w4z5mOcFN9TwJ1mJmbbtX9pJ7I8pIsGghpHPthPFb
+         kCBn7BUeYgK2eMi/EYI6zI7IRKk5LQzdfjgAq5x6x/HmFBY2yy1sgkcG7RzS8A8G7LWU
+         60kZjZv6zs+NqYjc7aOFAYD86OUUIJXkb5NEAikZ+pPekZIBeuSyflyhhWjpib4dHoch
+         x8iQmEVoQa9ToYw6118xZDwjM05Qo20mv66XtI+aFDgm+QcV6I1f0bh4so+klMN6j8xr
+         hIJp1e+5C/uTLWLltxv1zHHa4jhYzO5tGDV2UvWzJicf00yUMwaY1bkFQe9a+VoGdkK7
+         rX1w==
+X-Gm-Message-State: AJIora/1uTA+YhNQsmrx2F0k2c8sGgkPt1nGqtzQikhN3GM6Ceg3MWYQ
+        QxjDsCSi+q+HSijGBoOdcdRC7lHuCRSxhtO79fjmLA==
+X-Google-Smtp-Source: AGRyM1tJAHsdZLmYiI5P+T53CpbIO2hs/5gCoOEJtbFHqMVTgNWTq1cDtAtMQvatMTbVUxcRky7bRa+o9m1YQjjdVwc=
+X-Received: by 2002:a25:1583:0:b0:668:e74a:995f with SMTP id
+ 125-20020a251583000000b00668e74a995fmr23207491ybv.1.1657633447949; Tue, 12
+ Jul 2022 06:44:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-17-glider@google.com>
-In-Reply-To: <20220701142310.2188015-17-glider@google.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-34-glider@google.com>
+In-Reply-To: <20220701142310.2188015-34-glider@google.com>
 From:   Marco Elver <elver@google.com>
-Date:   Tue, 12 Jul 2022 15:17:52 +0200
-Message-ID: <CANpmjNOM8RdTPF_JeoiJahkLPPj6jH2s=hyTOSQpXzTBSDqeAQ@mail.gmail.com>
-Subject: Re: [PATCH v4 16/45] kmsan: handle task creation and exiting
+Date:   Tue, 12 Jul 2022 15:43:31 +0200
+Message-ID: <CANpmjNMpCow-pwqQnw8aHRUZKuBcOUU4On=JgEgysT8SBTrz6g@mail.gmail.com>
+Subject: Re: [PATCH v4 33/45] x86: kmsan: disable instrumentation of
+ unsupported code
 To:     Alexander Potapenko <glider@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -96,156 +97,26 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Fri, 1 Jul 2022 at 16:24, 'Alexander Potapenko' via kasan-dev
 <kasan-dev@googlegroups.com> wrote:
->
-> Tell KMSAN that a new task is created, so the tool creates a backing
-> metadata structure for that task.
->
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+[...]
 > ---
-> v2:
->  -- move implementation of kmsan_task_create() and kmsan_task_exit() here
->
-> v4:
->  -- change sizeof(type) to sizeof(*ptr)
->
-> Link: https://linux-review.googlesource.com/id/I0f41c3a1c7d66f7e14aabcfdfc7c69addb945805
-> ---
->  include/linux/kmsan.h | 17 +++++++++++++++++
->  kernel/exit.c         |  2 ++
->  kernel/fork.c         |  2 ++
->  mm/kmsan/core.c       | 10 ++++++++++
->  mm/kmsan/hooks.c      | 19 +++++++++++++++++++
->  mm/kmsan/kmsan.h      |  2 ++
->  6 files changed, 52 insertions(+)
->
-> diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-> index fd76cea338878..b71e2032222e9 100644
-> --- a/include/linux/kmsan.h
-> +++ b/include/linux/kmsan.h
-> @@ -16,6 +16,7 @@
->
->  struct page;
->  struct kmem_cache;
-> +struct task_struct;
->
->  #ifdef CONFIG_KMSAN
->
-> @@ -42,6 +43,14 @@ struct kmsan_ctx {
->         bool allow_reporting;
->  };
->
-> +void kmsan_task_create(struct task_struct *task);
-> +
-> +/**
-> + * kmsan_task_exit() - Notify KMSAN that a task has exited.
-> + * @task: task about to finish.
-> + */
-> +void kmsan_task_exit(struct task_struct *task);
-> +
->  /**
->   * kmsan_alloc_page() - Notify KMSAN about an alloc_pages() call.
->   * @page:  struct page pointer returned by alloc_pages().
-> @@ -163,6 +172,14 @@ void kmsan_iounmap_page_range(unsigned long start, unsigned long end);
->
->  #else
->
-> +static inline void kmsan_task_create(struct task_struct *task)
-> +{
-> +}
-> +
-> +static inline void kmsan_task_exit(struct task_struct *task)
-> +{
-> +}
-> +
->  static inline int kmsan_alloc_page(struct page *page, unsigned int order,
->                                    gfp_t flags)
->  {
-> diff --git a/kernel/exit.c b/kernel/exit.c
-> index f072959fcab7f..1784b7a741ddd 100644
-> --- a/kernel/exit.c
-> +++ b/kernel/exit.c
-> @@ -60,6 +60,7 @@
->  #include <linux/writeback.h>
->  #include <linux/shm.h>
->  #include <linux/kcov.h>
-> +#include <linux/kmsan.h>
->  #include <linux/random.h>
->  #include <linux/rcuwait.h>
->  #include <linux/compat.h>
-> @@ -741,6 +742,7 @@ void __noreturn do_exit(long code)
->         WARN_ON(tsk->plug);
->
->         kcov_task_exit(tsk);
-> +       kmsan_task_exit(tsk);
->
->         coredump_task_exit(tsk);
->         ptrace_event(PTRACE_EVENT_EXIT, code);
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 9d44f2d46c696..6dfca6f00ec82 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -37,6 +37,7 @@
->  #include <linux/fdtable.h>
->  #include <linux/iocontext.h>
->  #include <linux/key.h>
-> +#include <linux/kmsan.h>
->  #include <linux/binfmts.h>
->  #include <linux/mman.h>
->  #include <linux/mmu_notifier.h>
-> @@ -1026,6 +1027,7 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
->         tsk->worker_private = NULL;
->
->         kcov_task_init(tsk);
-> +       kmsan_task_create(tsk);
->         kmap_local_fork(tsk);
->
->  #ifdef CONFIG_FAULT_INJECTION
-> diff --git a/mm/kmsan/core.c b/mm/kmsan/core.c
-> index 16fb8880a9c6d..7eabed03ed10b 100644
-> --- a/mm/kmsan/core.c
-> +++ b/mm/kmsan/core.c
-> @@ -44,6 +44,16 @@ bool kmsan_enabled __read_mostly;
->   */
->  DEFINE_PER_CPU(struct kmsan_ctx, kmsan_percpu_ctx);
->
-> +void kmsan_internal_task_create(struct task_struct *task)
-> +{
-> +       struct kmsan_ctx *ctx = &task->kmsan_ctx;
-> +       struct thread_info *info = current_thread_info();
-> +
-> +       __memset(ctx, 0, sizeof(*ctx));
-> +       ctx->allow_reporting = true;
-> +       kmsan_internal_unpoison_memory(info, sizeof(*info), false);
-> +}
-> +
->  void kmsan_internal_poison_memory(void *address, size_t size, gfp_t flags,
->                                   unsigned int poison_flags)
->  {
-> diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-> index 052e17b7a717d..43a529569053d 100644
-> --- a/mm/kmsan/hooks.c
-> +++ b/mm/kmsan/hooks.c
-> @@ -26,6 +26,25 @@
->   * skipping effects of functions like memset() inside instrumented code.
->   */
->
-> +void kmsan_task_create(struct task_struct *task)
-> +{
-> +       kmsan_enter_runtime();
-> +       kmsan_internal_task_create(task);
-> +       kmsan_leave_runtime();
-> +}
-> +EXPORT_SYMBOL(kmsan_task_create);
-> +
-> +void kmsan_task_exit(struct task_struct *task)
-> +{
-> +       struct kmsan_ctx *ctx = &task->kmsan_ctx;
-> +
-> +       if (!kmsan_enabled || kmsan_in_runtime())
-> +               return;
-> +
-> +       ctx->allow_reporting = false;
-> +}
-> +EXPORT_SYMBOL(kmsan_task_exit);
+>  arch/x86/boot/Makefile            | 1 +
+>  arch/x86/boot/compressed/Makefile | 1 +
+>  arch/x86/entry/vdso/Makefile      | 3 +++
+>  arch/x86/kernel/Makefile          | 2 ++
+>  arch/x86/kernel/cpu/Makefile      | 1 +
+>  arch/x86/mm/Makefile              | 2 ++
+>  arch/x86/realmode/rm/Makefile     | 1 +
+>  lib/Makefile                      | 2 ++
+[...]
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -272,6 +272,8 @@ obj-$(CONFIG_POLYNOMIAL) += polynomial.o
+>  CFLAGS_stackdepot.o += -fno-builtin
+>  obj-$(CONFIG_STACKDEPOT) += stackdepot.o
+>  KASAN_SANITIZE_stackdepot.o := n
+> +# In particular, instrumenting stackdepot.c with KMSAN will result in infinite
+> +# recursion.
+>  KMSAN_SANITIZE_stackdepot.o := n
+>  KCOV_INSTRUMENT_stackdepot.o := n
 
-Why are these EXPORT_SYMBOL? Will they be used from some kernel module?
+This is generic code and not x86, should it have been in the earlier patch?
