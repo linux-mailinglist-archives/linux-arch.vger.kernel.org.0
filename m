@@ -2,248 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD10A571269
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 08:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A63157137A
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 09:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbiGLGp5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Jul 2022 02:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S232461AbiGLHwY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Jul 2022 03:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiGLGp4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 02:45:56 -0400
-Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD2663DF1D;
-        Mon, 11 Jul 2022 23:45:54 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout3.rbg.tum.de (Postfix) with ESMTPS id 12757101223;
-        Tue, 12 Jul 2022 08:45:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1657608353;
-        bh=L5z0BKhZwBpamcT5arrYS2KRI63KC15oA+S8b1j4SMg=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=QBRhqAxas4IG1fxQv/MvRjH/BMxY20t/HbGA7X8ZxqyB5ckEiF4mFvpSEW02mRhSz
-         otNcnC1HooIAjLRxhgEDv+6SVVrBel7RNtfyzN363OvgM7wgIJtAOoTY8MCrEjlRyr
-         mW1iTldHbMwsTY7g5OkmNyTeOZraRC+C/x0X0hT/nzCme1gv+UXMTKsb6l1YJM/Vh5
-         dINUDh4XF/8AaltlLQRmQuY+Uh+wlzOGqUAMJe05u4r4ancDtTtPH9UJzvG79b21KU
-         u1ZuxZjSbLNPcSvz0wZjQOCnUkNgBDK2dtZbUGbH9sDTi1679emMitvAj24fenB6PI
-         4JjSjTNEVIuCg==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 0E5D1D6; Tue, 12 Jul 2022 08:45:53 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id DF028D2;
-        Tue, 12 Jul 2022 08:45:52 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id DAB1DCE;
-        Tue, 12 Jul 2022 08:45:52 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id D6B054A0226; Tue, 12 Jul 2022 08:45:52 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id F37204A0033;
-        Tue, 12 Jul 2022 08:45:51 +0200 (CEST)
-        (Extended-Queue-bit xtech_ma@fff.in.tum.de)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.100.31\))
-Subject: Re: [PATCH v2] tools/memory-model: Clarify LKMM's limitations in
- litmus-tests.txt
-From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
-In-Reply-To: <20220711163011.GN1790663@paulmck-ThinkPad-P17-Gen-1>
-Date:   Tue, 12 Jul 2022 08:45:51 +0200
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Marco Elver <elver@google.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F9BC91E3-5B01-4BDE-B0C0-4A567473B1D2@in.tum.de>
-References: <Yqdb3CZ8bKtbWZ+z@rowland.harvard.edu>
- <20220614154812.1870099-1-paul.heidekrueger@in.tum.de>
- <CANpmjNOkXz=+221i70CWJexQWwfA_By3+7Cnimwgjmwn7RQdBg@mail.gmail.com>
- <YshC8sJ4dZq3m2wy@rowland.harvard.edu>
- <20220708184749.GW1790663@paulmck-ThinkPad-P17-Gen-1>
- <EE1854E3-C33D-4A4E-AC31-4194A701052B@in.tum.de>
- <20220711163011.GN1790663@paulmck-ThinkPad-P17-Gen-1>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-X-Mailer: Apple Mail (2.3696.100.31)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232388AbiGLHwV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 03:52:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8099D502;
+        Tue, 12 Jul 2022 00:52:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF0FDB81614;
+        Tue, 12 Jul 2022 07:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCD2EC3411E;
+        Tue, 12 Jul 2022 07:52:12 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@gmail.com>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>, stable@vger.kernel.org
+Subject: [PATCH 1/6] MIPS: cpuinfo: Fix a warning for CONFIG_CPUMASK_OFFSTACK
+Date:   Tue, 12 Jul 2022 15:52:50 +0800
+Message-Id: <20220712075255.1345991-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Paul E. McKenney <paulmck@kernel.org> wrote:
+When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
+cpu_max_bits_warn() generates a runtime warning similar as below while
+we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
+instead of NR_CPUS to iterate CPUs.
 
-> On Mon, Jul 11, 2022 at 05:14:55PM +0200, Paul Heidekr=C3=BCger wrote:
->>> On 8. Jul 2022, at 20:47, Paul E. McKenney <paulmck@kernel.org> =
-wrote:
->>>=20
->>> On Fri, Jul 08, 2022 at 10:45:06AM -0400, Alan Stern wrote:
->>>> On Fri, Jul 08, 2022 at 01:44:06PM +0200, Marco Elver wrote:
->>>>> On Tue, 14 Jun 2022 at 17:49, Paul Heidekr=C3=BCger
->>>>> <paul.heidekrueger@in.tum.de> wrote:
->>>>>> As discussed, clarify LKMM not recognizing certain kinds of =
-orderings.
->>>>>> In particular, highlight the fact that LKMM might deliberately =
-make
->>>>>> weaker guarantees than compilers and architectures.
->>>>>>=20
->>>>>> Link: =
-https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tum.de/T/=
-#u
->>>>>> Signed-off-by: Paul Heidekr=C3=BCger =
-<paul.heidekrueger@in.tum.de>
->>>>>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->>>>>=20
->>>>> Reviewed-by: Marco Elver <elver@google.com>
->>>>>=20
->>>>> However with the Co-developed-by, this is missing Alan's SOB.
->>>>=20
->>>> For the record:
->>>>=20
->>>> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->>>>=20
->>>> (Note that according to =
-Documentation/process/submitting-patches.rst,=20
->>>> the submitting author's SOB is supposed to come last.)
->>>=20
->>> And this is what I ended up with. Please provide additional feedback
->>> as needed, and in the meantime, thank you all!
->>>=20
->>> 							Thanx, Paul
->>=20
->> Looks great - my first commit in the Linux kernel!
->=20
-> Congratulations!!! ;-)
+[    3.052463] ------------[ cut here ]------------
+[    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
+[    3.070072] Modules linked in: efivarfs autofs4
+[    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
+[    3.084034] Hardware name: Loongson Loongson-3A4000-7A1000-1w-V0.1-CRB/Loongson-LS3A4000-7A1000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V2.0.04082-beta7 04/27
+[    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
+[    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
+[    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
+[    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
+[    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
+[    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
+[    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
+[    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
+[    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
+[    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
+[    3.195868]         ...
+[    3.199917] Call Trace:
+[    3.203941] [<98000000002086d8>] show_stack+0x38/0x14c
+[    3.210666] [<9800000000cf846c>] dump_stack_lvl+0x60/0x88
+[    3.217625] [<980000000023d268>] __warn+0xd0/0x100
+[    3.223958] [<9800000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
+[    3.231150] [<9800000000210220>] show_cpuinfo+0x5e8/0x5f0
+[    3.238080] [<98000000004f578c>] seq_read_iter+0x354/0x4b4
+[    3.245098] [<98000000004c2e90>] new_sync_read+0x17c/0x1c4
+[    3.252114] [<98000000004c5174>] vfs_read+0x138/0x1d0
+[    3.258694] [<98000000004c55f8>] ksys_read+0x70/0x100
+[    3.265265] [<9800000000cfde9c>] do_syscall+0x7c/0x94
+[    3.271820] [<9800000000202fe4>] handle_syscall+0xc4/0x160
+[    3.281824] ---[ end trace 8b484262b4b8c24c ]---
 
-Thanks! Hopefully many more to come :-)
+Cc: stable@vger.kernel.org
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ arch/mips/kernel/proc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> My commits for the upcoming merge window, which is probably 2-3 weeks
-> from now, are already set. So this is targeted at the merge window
-> after that, which is likely to be in late September or early October.
->=20
-> So it is well on its way!
-
-Awesome!
-
-Many thanks,
-Paul
-
-> 							Thanx, Paul
->=20
->> Thanks everyone!
->>=20
->> Paul
->>=20
->>> =
-------------------------------------------------------------------------
->>>=20
->>> commit 3c7753e959706f39e1ee183ef8dcde3b4cfbb4c7
->>> Author: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->>> Date: Tue Jun 14 15:48:11 2022 +0000
->>>=20
->>> tools/memory-model: Clarify LKMM's limitations in litmus-tests.txt
->>>=20
->>> As discussed, clarify LKMM not recognizing certain kinds of =
-orderings.
->>> In particular, highlight the fact that LKMM might deliberately make
->>> weaker guarantees than compilers and architectures.
->>>=20
->>> Link: =
-https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tum.de/T/=
-#u
->>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->>> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->>> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
->>> Reviewed-by: Marco Elver <elver@google.com>
->>> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->>> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->>> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->>> Cc: Martin Fink <martin.fink@in.tum.de>
->>> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
->>>=20
->>> diff --git a/tools/memory-model/Documentation/litmus-tests.txt =
-b/tools/memory-model/Documentation/litmus-tests.txt
->>> index 8a9d5d2787f9e..cc355999815cb 100644
->>> --- a/tools/memory-model/Documentation/litmus-tests.txt
->>> +++ b/tools/memory-model/Documentation/litmus-tests.txt
->>> @@ -946,22 +946,39 @@ Limitations of the Linux-kernel memory model =
-(LKMM) include:
->>> 	carrying a dependency, then the compiler can break that =
-dependency
->>> 	by substituting a constant of that value.
->>>=20
->>> -	Conversely, LKMM sometimes doesn't recognize that a particular
->>> -	optimization is not allowed, and as a result, thinks that a
->>> -	dependency is not present (because the optimization would break =
-it).
->>> -	The memory model misses some pretty obvious control dependencies
->>> -	because of this limitation. A simple example is:
->>> +	Conversely, LKMM will sometimes overestimate the amount of
->>> +	reordering compilers and CPUs can carry out, leading it to miss
->>> +	some pretty obvious cases of ordering. A simple example is:
->>>=20
->>> 		r1 =3D READ_ONCE(x);
->>> 		if (r1 =3D=3D 0)
->>> 			smp_mb();
->>> 		WRITE_ONCE(y, 1);
->>>=20
->>> -	There is a control dependency from the READ_ONCE to the =
-WRITE_ONCE,
->>> -	even when r1 is nonzero, but LKMM doesn't realize this and =
-thinks
->>> -	that the write may execute before the read if r1 !=3D 0. (Yes, =
-that
->>> -	doesn't make sense if you think about it, but the memory model's
->>> -	intelligence is limited.)
->>> +	The WRITE_ONCE() does not depend on the READ_ONCE(), and as a
->>> +	result, LKMM does not claim ordering. However, even though no
->>> +	dependency is present, the WRITE_ONCE() will not be executed =
-before
->>> +	the READ_ONCE(). There are two reasons for this:
->>> +
->>> + The presence of the smp_mb() in one of the branches
->>> + prevents the compiler from moving the WRITE_ONCE()
->>> + up before the "if" statement, since the compiler has
->>> + to assume that r1 will sometimes be 0 (but see the
->>> + comment below);
->>> +
->>> + CPUs do not execute stores before po-earlier conditional
->>> + branches, even in cases where the store occurs after the
->>> + two arms of the branch have recombined.
->>> +
->>> +	It is clear that it is not dangerous in the slightest for LKMM =
-to
->>> +	make weaker guarantees than architectures. In fact, it is
->>> +	desirable, as it gives compilers room for making optimizations.=20=
-
->>> +	For instance, suppose that a 0 value in r1 would trigger =
-undefined
->>> +	behavior elsewhere. Then a clever compiler might deduce that r1
->>> +	can never be 0 in the if condition. As a result, said clever
->>> +	compiler might deem it safe to optimize away the smp_mb(),
->>> +	eliminating the branch and any ordering an architecture would
->>> +	guarantee otherwise.
->>>=20
->>> 2.	Multiple access sizes for a single variable are not supported,
->>> 	and neither are misaligned or partially overlapping accesses.
-
+diff --git a/arch/mips/kernel/proc.c b/arch/mips/kernel/proc.c
+index 4184d641f05e..33a02f3814f5 100644
+--- a/arch/mips/kernel/proc.c
++++ b/arch/mips/kernel/proc.c
+@@ -172,7 +172,7 @@ static void *c_start(struct seq_file *m, loff_t *pos)
+ {
+ 	unsigned long i = *pos;
+ 
+-	return i < NR_CPUS ? (void *) (i + 1) : NULL;
++	return i < nr_cpu_ids ? (void *) (i + 1) : NULL;
+ }
+ 
+ static void *c_next(struct seq_file *m, void *v, loff_t *pos)
+-- 
+2.31.1
 
