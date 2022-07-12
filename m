@@ -2,55 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C2CB571C1A
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 16:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA691571C24
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 16:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiGLORZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Jul 2022 10:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S233333AbiGLORw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Jul 2022 10:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbiGLORM (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 10:17:12 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48F5B1CDD
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 07:17:09 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-31c8bb90d09so82317457b3.8
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 07:17:09 -0700 (PDT)
+        with ESMTP id S233439AbiGLORj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 10:17:39 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7585CB3D58
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 07:17:37 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso82274987b3.9
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 07:17:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=l4GUvbGLjvnpkFWbexrKoGMQGV0OrZF271TYQZ6JqLk=;
-        b=fHYf0v6VJSKzjBY8Uj5NTA/vtt692kh4IZBhMS9R8LhA1HI4dvzYZyOLQEeUNuhOm/
-         XWoMTAb16tHYGZuKsaR+w2p8FZQsphRdQCM364eReEOK50J+Bxi0tmW0p9zSdDpz+Qmm
-         X3jl7+mOrfAZQQiHiM09TweKnEHExxwrRX75xuKsoDO623mxw0nBGz0npDxnahFMuXwX
-         S5loT5NraCh4jAD5Q35iKCA/aORrEbcddPTbK3KcRLUPNx7twAsqU3qkD93B6ZXFnFn7
-         MY7xB55wmAZOaNxJivkrYFF+gPLTw44j8fKeJdfFdJQpHk1i2ovatajgFu6la8MM0BCz
-         XYFA==
+        bh=fEuio4lP8DLja3+6yBSWoacIG45qoddRrq8lnL8+qJY=;
+        b=A0yawrSyuBD1BrwqS6XcHwx7HkNd0M32tyf3plN3UdAYm30JPg6qQngknmH04thTbJ
+         01pYsA15md6pUA3C11uIz2irvTBZSdPs7zdizz+Aum6XH6V5I5bu+UiwYKvovCdHMDhY
+         cCTn72UsXaPzlUEh+LalWHMPc1hi/zDNwfeGbIoJFuD5rYP10OnBSTa8QkIWy/kcIxOP
+         jX+u42g5fYdEGJExuQBn2AMnycuF9sCpZ3v3/kakGZuz6NiSs0qxmuVIanloI5ObVSFR
+         cBsdFV9KC60+VkN+0U2LN1JxoveviS8QUXyZW8fQdZv5Ga1AI9NHYySSL5skT1gUxkTG
+         hf8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=l4GUvbGLjvnpkFWbexrKoGMQGV0OrZF271TYQZ6JqLk=;
-        b=YX8X2c3GBP7KT19bRsQ/YayLmLZ2TAjcIn5v0LS+IRAWzp3ndVO47qxia7barfkszA
-         stfLaEPVSmdrpy1vLt6hh+AzH07Ixz40fC2xI6olt55DUM+01WON0Ksok/vXrnJRL52+
-         To0/XijW46ZEne6scQJSd9jd/voyqQvT11pOQEFU25Uhe6HRCxivd33db6ABr5zwU6Oo
-         1QJJ2yuyQPu7tLjxrcaR37b5xbVn5fO9pcIkV1OsHsKvOhFxgYPKWzBTwIqB0Upr0l+0
-         QLKkjsOGqPQsyYz38jwsMC1xWafMzaBZ+o7ytyC0UadwmazhoP+ixZJPuNgZyQAqSafV
-         EaYw==
-X-Gm-Message-State: AJIora/ktepLV/vOWLXDhGeV5V2qBb3HdF3q8rhP466w1AElPMNKOdF4
-        +GdsCE3iYMXD3Dfm5cvwa13O2MqH1gfQbxvyVVTyEA==
-X-Google-Smtp-Source: AGRyM1u5o5kdvLF26N0SpxxHJqvN3RJx3GQiPNYLauOpuT6tfE7/RpqTY9hc8Qh9UKvb4dNAADrDyarnuGpuvZ4+5Gs=
-X-Received: by 2002:a81:5a0a:0:b0:31d:ad7c:8fa5 with SMTP id
- o10-20020a815a0a000000b0031dad7c8fa5mr1740204ywb.512.1657635428513; Tue, 12
- Jul 2022 07:17:08 -0700 (PDT)
+        bh=fEuio4lP8DLja3+6yBSWoacIG45qoddRrq8lnL8+qJY=;
+        b=25GTRfkOfvCYNSET1fl4vkgQg+Mq1QxOgv/u3N/PvGedXD7ANhAaS1Uz+qgYggFjRS
+         pkoVid1QdX1ma4l/DdEgpddIx7hYCwuUYpDLxm485SktGqA1MWCQbaMF1r3CL6F5DkO1
+         ftnpJZUhkiVtow5a/LYPvb2/xi99a5dGGmZoqvCmp6croY1TH7Kh9bddh9aev5wT6GMT
+         U0NrMXimgQtqIDwJKBNRS3/doYlNy+d7ypFURWJvF4yFR6s7bMQBaOVf/fffIjhtPjpY
+         CffQWyKWt3vQ0kSbN1xWHYUxj8pujShgzrwxFXMMno4+EQnLi7wH4kuRG6uRN3h3YvkC
+         IjpA==
+X-Gm-Message-State: AJIora8UfY69faD2vGVdBM+rGoAZoV/YlbmtJvEKQVo0+lUXJX96Ydn0
+        irOOWsuf/ajKH7fCH9t9jqVFUfFWYYvC0So+R5IWFw==
+X-Google-Smtp-Source: AGRyM1uQtghvNUKgdsR3kXQMmbgVawdVDZj57u52IyZ42Le1Qp7LffGVDk5K2rPGxqdKdxST/O5XSgOcyPO8vCvxbr8=
+X-Received: by 2002:a0d:cf07:0:b0:31d:17cb:ec11 with SMTP id
+ r7-20020a0dcf07000000b0031d17cbec11mr26264367ywd.264.1657635456390; Tue, 12
+ Jul 2022 07:17:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-26-glider@google.com>
-In-Reply-To: <20220701142310.2188015-26-glider@google.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-3-glider@google.com>
+In-Reply-To: <20220701142310.2188015-3-glider@google.com>
 From:   Marco Elver <elver@google.com>
-Date:   Tue, 12 Jul 2022 16:16:32 +0200
-Message-ID: <CANpmjNPeW=pQ_rU5ACTpBX8W4TH4vdcDn=hqPhHGtYU96iHF0A@mail.gmail.com>
-Subject: Re: [PATCH v4 25/45] kmsan: add tests for KMSAN
+Date:   Tue, 12 Jul 2022 16:17:00 +0200
+Message-ID: <CANpmjNNuys+-OZj5f_5qc9dH3=+gYADJT4uxzsAPQjhPd-QCSQ@mail.gmail.com>
+Subject: Re: [PATCH v4 02/45] stackdepot: reserve 5 extra bits in depot_stack_handle_t
 To:     Alexander Potapenko <glider@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -94,637 +94,175 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-)
-
-On Fri, 1 Jul 2022 at 16:24, 'Alexander Potapenko' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
+On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
 >
-> The testing module triggers KMSAN warnings in different cases and checks
-> that the errors are properly reported, using console probes to capture
-> the tool's output.
+> Some users (currently only KMSAN) may want to use spare bits in
+> depot_stack_handle_t. Let them do so by adding @extra_bits to
+> __stack_depot_save() to store arbitrary flags, and providing
+> stack_depot_get_extra_bits() to retrieve those flags.
+>
+> Also adapt KASAN to the new prototype by passing extra_bits=0, as KASAN
+> does not intend to store additional information in the stack handle.
 >
 > Signed-off-by: Alexander Potapenko <glider@google.com>
+
+Reviewed-by: Marco Elver <elver@google.com>
+
+
 > ---
-> v2:
->  -- add memcpy tests
->
 > v4:
->  -- change sizeof(type) to sizeof(*ptr)
->  -- add test expectations for CONFIG_KMSAN_CHECK_PARAM_RETVAL
+>  -- per Marco Elver's request, fold "kasan: common: adapt to the new
+>     prototype of __stack_depot_save()" into this patch to prevent
+>     bisection breakages.
 >
-> Link: https://linux-review.googlesource.com/id/I49c3f59014cc37fd13541c80beb0b75a75244650
+> Link: https://linux-review.googlesource.com/id/I0587f6c777667864768daf07821d594bce6d8ff9
 > ---
->  lib/Kconfig.kmsan     |  12 +
->  mm/kmsan/Makefile     |   4 +
->  mm/kmsan/kmsan_test.c | 552 ++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 568 insertions(+)
->  create mode 100644 mm/kmsan/kmsan_test.c
+>  include/linux/stackdepot.h |  8 ++++++++
+>  lib/stackdepot.c           | 29 ++++++++++++++++++++++++-----
+>  mm/kasan/common.c          |  2 +-
+>  3 files changed, 33 insertions(+), 6 deletions(-)
 >
-> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
-> index 8f768d4034e3c..f56ed7f7c7090 100644
-> --- a/lib/Kconfig.kmsan
-> +++ b/lib/Kconfig.kmsan
-> @@ -47,4 +47,16 @@ config KMSAN_CHECK_PARAM_RETVAL
->           may potentially report errors in corner cases when non-instrumented
->           functions call instrumented ones.
+> diff --git a/include/linux/stackdepot.h b/include/linux/stackdepot.h
+> index bc2797955de90..9ca7798d7a318 100644
+> --- a/include/linux/stackdepot.h
+> +++ b/include/linux/stackdepot.h
+> @@ -14,9 +14,15 @@
+>  #include <linux/gfp.h>
 >
-> +config KMSAN_KUNIT_TEST
-> +       tristate "KMSAN integration test suite" if !KUNIT_ALL_TESTS
-> +       default KUNIT_ALL_TESTS
-> +       depends on TRACEPOINTS && KUNIT
-> +       help
-> +         Test suite for KMSAN, testing various error detection scenarios,
-> +         and checking that reports are correctly output to console.
-> +
-> +         Say Y here if you want the test to be built into the kernel and run
-> +         during boot; say M if you want the test to build as a module; say N
-> +         if you are unsure.
-> +
->  endif
-> diff --git a/mm/kmsan/Makefile b/mm/kmsan/Makefile
-> index 401acb1a491ce..98eab2856626f 100644
-> --- a/mm/kmsan/Makefile
-> +++ b/mm/kmsan/Makefile
-> @@ -22,3 +22,7 @@ CFLAGS_init.o := $(CC_FLAGS_KMSAN_RUNTIME)
->  CFLAGS_instrumentation.o := $(CC_FLAGS_KMSAN_RUNTIME)
->  CFLAGS_report.o := $(CC_FLAGS_KMSAN_RUNTIME)
->  CFLAGS_shadow.o := $(CC_FLAGS_KMSAN_RUNTIME)
-> +
-> +obj-$(CONFIG_KMSAN_KUNIT_TEST) += kmsan_test.o
-> +KMSAN_SANITIZE_kmsan_test.o := y
-> +CFLAGS_kmsan_test.o += $(call cc-disable-warning, uninitialized)
-> diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
-> new file mode 100644
-> index 0000000000000..1b8da71ae0d4f
-> --- /dev/null
-> +++ b/mm/kmsan/kmsan_test.c
-> @@ -0,0 +1,552 @@
-> +// SPDX-License-Identifier: GPL-2.0
+>  typedef u32 depot_stack_handle_t;
 > +/*
-> + * Test cases for KMSAN.
-> + * For each test case checks the presence (or absence) of generated reports.
-> + * Relies on 'console' tracepoint to capture reports as they appear in the
-> + * kernel log.
+> + * Number of bits in the handle that stack depot doesn't use. Users may store
+> + * information in them.
+> + */
+> +#define STACK_DEPOT_EXTRA_BITS 5
+>
+>  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>                                         unsigned int nr_entries,
+> +                                       unsigned int extra_bits,
+>                                         gfp_t gfp_flags, bool can_alloc);
+>
+>  /*
+> @@ -59,6 +65,8 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+>  unsigned int stack_depot_fetch(depot_stack_handle_t handle,
+>                                unsigned long **entries);
+>
+> +unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle);
+> +
+>  int stack_depot_snprint(depot_stack_handle_t handle, char *buf, size_t size,
+>                        int spaces);
+>
+> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> index 5ca0d086ef4a3..3d1dbdd5a87f6 100644
+> --- a/lib/stackdepot.c
+> +++ b/lib/stackdepot.c
+> @@ -42,7 +42,8 @@
+>  #define STACK_ALLOC_OFFSET_BITS (STACK_ALLOC_ORDER + PAGE_SHIFT - \
+>                                         STACK_ALLOC_ALIGN)
+>  #define STACK_ALLOC_INDEX_BITS (DEPOT_STACK_BITS - \
+> -               STACK_ALLOC_NULL_PROTECTION_BITS - STACK_ALLOC_OFFSET_BITS)
+> +               STACK_ALLOC_NULL_PROTECTION_BITS - \
+> +               STACK_ALLOC_OFFSET_BITS - STACK_DEPOT_EXTRA_BITS)
+>  #define STACK_ALLOC_SLABS_CAP 8192
+>  #define STACK_ALLOC_MAX_SLABS \
+>         (((1LL << (STACK_ALLOC_INDEX_BITS)) < STACK_ALLOC_SLABS_CAP) ? \
+> @@ -55,6 +56,7 @@ union handle_parts {
+>                 u32 slabindex : STACK_ALLOC_INDEX_BITS;
+>                 u32 offset : STACK_ALLOC_OFFSET_BITS;
+>                 u32 valid : STACK_ALLOC_NULL_PROTECTION_BITS;
+> +               u32 extra : STACK_DEPOT_EXTRA_BITS;
+>         };
+>  };
+>
+> @@ -76,6 +78,14 @@ static int next_slab_inited;
+>  static size_t depot_offset;
+>  static DEFINE_RAW_SPINLOCK(depot_lock);
+>
+> +unsigned int stack_depot_get_extra_bits(depot_stack_handle_t handle)
+> +{
+> +       union handle_parts parts = { .handle = handle };
+> +
+> +       return parts.extra;
+> +}
+> +EXPORT_SYMBOL(stack_depot_get_extra_bits);
+> +
+>  static bool init_stack_slab(void **prealloc)
+>  {
+>         if (!*prealloc)
+> @@ -139,6 +149,7 @@ depot_alloc_stack(unsigned long *entries, int size, u32 hash, void **prealloc)
+>         stack->handle.slabindex = depot_index;
+>         stack->handle.offset = depot_offset >> STACK_ALLOC_ALIGN;
+>         stack->handle.valid = 1;
+> +       stack->handle.extra = 0;
+>         memcpy(stack->entries, entries, flex_array_size(stack, entries, size));
+>         depot_offset += required_size;
+>
+> @@ -343,6 +354,7 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+>   *
+>   * @entries:           Pointer to storage array
+>   * @nr_entries:                Size of the storage array
+> + * @extra_bits:                Flags to store in unused bits of depot_stack_handle_t
+>   * @alloc_flags:       Allocation gfp flags
+>   * @can_alloc:         Allocate stack slabs (increased chance of failure if false)
+>   *
+> @@ -354,6 +366,10 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+>   * If the stack trace in @entries is from an interrupt, only the portion up to
+>   * interrupt entry is saved.
+>   *
+> + * Additional opaque flags can be passed in @extra_bits, stored in the unused
+> + * bits of the stack handle, and retrieved using stack_depot_get_extra_bits()
+> + * without calling stack_depot_fetch().
 > + *
-> + * Copyright (C) 2021-2022, Google LLC.
-> + * Author: Alexander Potapenko <glider@google.com>
-> + *
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include "kmsan.h"
-> +
-> +#include <linux/jiffies.h>
-> +#include <linux/kernel.h>
-> +#include <linux/kmsan.h>
-> +#include <linux/mm.h>
-> +#include <linux/random.h>
-> +#include <linux/slab.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/string.h>
-> +#include <linux/tracepoint.h>
-> +#include <trace/events/printk.h>
-> +
-> +static DEFINE_PER_CPU(int, per_cpu_var);
-> +
-> +/* Report as observed from console. */
-> +static struct {
-> +       spinlock_t lock;
-> +       bool available;
-> +       bool ignore; /* Stop console output collection. */
-> +       char header[256];
-> +} observed = {
-> +       .lock = __SPIN_LOCK_UNLOCKED(observed.lock),
-> +};
-> +
-> +/* Probe for console output: obtains observed lines of interest. */
-> +static void probe_console(void *ignore, const char *buf, size_t len)
-> +{
-> +       unsigned long flags;
-> +
-> +       if (observed.ignore)
-> +               return;
-> +       spin_lock_irqsave(&observed.lock, flags);
-> +
-> +       if (strnstr(buf, "BUG: KMSAN: ", len)) {
-> +               /*
-> +                * KMSAN report and related to the test.
-> +                *
-> +                * The provided @buf is not NUL-terminated; copy no more than
-> +                * @len bytes and let strscpy() add the missing NUL-terminator.
-> +                */
-> +               strscpy(observed.header, buf,
-> +                       min(len + 1, sizeof(observed.header)));
-> +               WRITE_ONCE(observed.available, true);
-> +               observed.ignore = true;
-> +       }
-> +       spin_unlock_irqrestore(&observed.lock, flags);
-> +}
-> +
-> +/* Check if a report related to the test exists. */
-> +static bool report_available(void)
-> +{
-> +       return READ_ONCE(observed.available);
-> +}
-> +
-> +/* Information we expect in a report. */
-> +struct expect_report {
-> +       const char *error_type; /* Error type. */
-> +       /*
-> +        * Kernel symbol from the error header, or NULL if no report is
-> +        * expected.
-> +        */
-> +       const char *symbol;
-> +};
-> +
-> +/* Check observed report matches information in @r. */
-> +static bool report_matches(const struct expect_report *r)
-> +{
-> +       typeof(observed.header) expected_header;
-> +       unsigned long flags;
-> +       bool ret = false;
-> +       const char *end;
-> +       char *cur;
-> +
-> +       /* Doubled-checked locking. */
-> +       if (!report_available() || !r->symbol)
-> +               return (!report_available() && !r->symbol);
-> +
-> +       /* Generate expected report contents. */
-> +
-> +       /* Title */
-> +       cur = expected_header;
-> +       end = &expected_header[sizeof(expected_header) - 1];
-> +
-> +       cur += scnprintf(cur, end - cur, "BUG: KMSAN: %s", r->error_type);
-> +
-> +       scnprintf(cur, end - cur, " in %s", r->symbol);
-> +       /* The exact offset won't match, remove it; also strip module name. */
-> +       cur = strchr(expected_header, '+');
-> +       if (cur)
-> +               *cur = '\0';
-> +
-> +       spin_lock_irqsave(&observed.lock, flags);
-> +       if (!report_available())
-> +               goto out; /* A new report is being captured. */
-> +
-> +       /* Finally match expected output to what we actually observed. */
-> +       ret = strstr(observed.header, expected_header);
-> +out:
-> +       spin_unlock_irqrestore(&observed.lock, flags);
-> +
-> +       return ret;
-> +}
-> +
-> +/* ===== Test cases ===== */
-> +
-> +/* Prevent replacing branch with select in LLVM. */
-> +static noinline void check_true(char *arg)
-> +{
-> +       pr_info("%s is true\n", arg);
-> +}
-> +
-> +static noinline void check_false(char *arg)
-> +{
-> +       pr_info("%s is false\n", arg);
-> +}
-> +
-> +#define USE(x)                                                                 \
-> +       do {                                                                   \
-> +               if (x)                                                         \
-> +                       check_true(#x);                                        \
-> +               else                                                           \
-> +                       check_false(#x);                                       \
-> +       } while (0)
-> +
-> +#define EXPECTATION_ETYPE_FN(e, reason, fn)                                    \
-> +       struct expect_report e = {                                             \
-> +               .error_type = reason,                                          \
-> +               .symbol = fn,                                                  \
-> +       }
-> +
-> +#define EXPECTATION_NO_REPORT(e) EXPECTATION_ETYPE_FN(e, NULL, NULL)
-> +#define EXPECTATION_UNINIT_VALUE_FN(e, fn)                                     \
-> +       EXPECTATION_ETYPE_FN(e, "uninit-value", fn)
-> +#define EXPECTATION_UNINIT_VALUE(e) EXPECTATION_UNINIT_VALUE_FN(e, __func__)
-> +#define EXPECTATION_USE_AFTER_FREE(e)                                          \
-> +       EXPECTATION_ETYPE_FN(e, "use-after-free", __func__)
-> +
-> +/* Test case: ensure that kmalloc() returns uninitialized memory. */
-> +static void test_uninit_kmalloc(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE(expect);
-> +       int *ptr;
-> +
-> +       kunit_info(test, "uninitialized kmalloc test (UMR report)\n");
-> +       ptr = kmalloc(sizeof(*ptr), GFP_KERNEL);
-> +       USE(*ptr);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: ensure that kmalloc'ed memory becomes initialized after memset().
-> + */
-> +static void test_init_kmalloc(struct kunit *test)
-> +{
-> +       EXPECTATION_NO_REPORT(expect);
-> +       int *ptr;
-> +
-> +       kunit_info(test, "initialized kmalloc test (no reports)\n");
-> +       ptr = kmalloc(sizeof(*ptr), GFP_KERNEL);
-> +       memset(ptr, 0, sizeof(*ptr));
-> +       USE(*ptr);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/* Test case: ensure that kzalloc() returns initialized memory. */
-> +static void test_init_kzalloc(struct kunit *test)
-> +{
-> +       EXPECTATION_NO_REPORT(expect);
-> +       int *ptr;
-> +
-> +       kunit_info(test, "initialized kzalloc test (no reports)\n");
-> +       ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
-> +       USE(*ptr);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/* Test case: ensure that local variables are uninitialized by default. */
-> +static void test_uninit_stack_var(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE(expect);
-> +       volatile int cond;
-> +
-> +       kunit_info(test, "uninitialized stack variable (UMR report)\n");
-> +       USE(cond);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/* Test case: ensure that local variables with initializers are initialized. */
-> +static void test_init_stack_var(struct kunit *test)
-> +{
-> +       EXPECTATION_NO_REPORT(expect);
-> +       volatile int cond = 1;
-> +
-> +       kunit_info(test, "initialized stack variable (no reports)\n");
-> +       USE(cond);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +static noinline void two_param_fn_2(int arg1, int arg2)
-> +{
-> +       USE(arg1);
-> +       USE(arg2);
-> +}
-> +
-> +static noinline void one_param_fn(int arg)
-> +{
-> +       two_param_fn_2(arg, arg);
-> +       USE(arg);
-> +}
-> +
-> +static noinline void two_param_fn(int arg1, int arg2)
-> +{
-> +       int init = 0;
-> +
-> +       one_param_fn(init);
-> +       USE(arg1);
-> +       USE(arg2);
-> +}
-> +
-> +static void test_params(struct kunit *test)
-> +{
-> +#ifdef CONFIG_KMSAN_CHECK_PARAM_RETVAL
-
-if (IS_ENABLED(...))
-
-> +       /*
-> +        * With eager param/retval checking enabled, KMSAN will report an error
-> +        * before the call to two_param_fn().
-> +        */
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "test_params");
-> +#else
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "two_param_fn");
-> +#endif
-> +       volatile int uninit, init = 1;
-> +
-> +       kunit_info(test,
-> +                  "uninit passed through a function parameter (UMR report)\n");
-> +       two_param_fn(uninit, init);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +static int signed_sum3(int a, int b, int c)
-> +{
-> +       return a + b + c;
-> +}
-> +
-> +/*
-> + * Test case: ensure that uninitialized values are tracked through function
-> + * arguments.
-> + */
-> +static void test_uninit_multiple_params(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE(expect);
-> +       volatile char b = 3, c;
-> +       volatile int a;
-> +
-> +       kunit_info(test, "uninitialized local passed to fn (UMR report)\n");
-> +       USE(signed_sum3(a, b, c));
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/* Helper function to make an array uninitialized. */
-> +static noinline void do_uninit_local_array(char *array, int start, int stop)
-> +{
-> +       volatile char uninit;
-> +       int i;
-> +
-> +       for (i = start; i < stop; i++)
-> +               array[i] = uninit;
-> +}
-> +
-> +/*
-> + * Test case: ensure kmsan_check_memory() reports an error when checking
-> + * uninitialized memory.
-> + */
-> +static void test_uninit_kmsan_check_memory(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "test_uninit_kmsan_check_memory");
-> +       volatile char local_array[8];
-> +
-> +       kunit_info(
-> +               test,
-> +               "kmsan_check_memory() called on uninit local (UMR report)\n");
-> +       do_uninit_local_array((char *)local_array, 5, 7);
-> +
-> +       kmsan_check_memory((char *)local_array, 8);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: check that a virtual memory range created with vmap() from
-> + * initialized pages is still considered as initialized.
-> + */
-> +static void test_init_kmsan_vmap_vunmap(struct kunit *test)
-> +{
-> +       EXPECTATION_NO_REPORT(expect);
-> +       const int npages = 2;
-> +       struct page **pages;
-> +       void *vbuf;
-> +       int i;
-> +
-> +       kunit_info(test, "pages initialized via vmap (no reports)\n");
-> +
-> +       pages = kmalloc_array(npages, sizeof(*pages), GFP_KERNEL);
-> +       for (i = 0; i < npages; i++)
-> +               pages[i] = alloc_page(GFP_KERNEL);
-> +       vbuf = vmap(pages, npages, VM_MAP, PAGE_KERNEL);
-> +       memset(vbuf, 0xfe, npages * PAGE_SIZE);
-> +       for (i = 0; i < npages; i++)
-> +               kmsan_check_memory(page_address(pages[i]), PAGE_SIZE);
-> +
-> +       if (vbuf)
-> +               vunmap(vbuf);
-> +       for (i = 0; i < npages; i++)
-
-add { }
-
-> +               if (pages[i])
-> +                       __free_page(pages[i]);
-> +       kfree(pages);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: ensure that memset() can initialize a buffer allocated via
-> + * vmalloc().
-> + */
-> +static void test_init_vmalloc(struct kunit *test)
-> +{
-> +       EXPECTATION_NO_REPORT(expect);
-> +       int npages = 8, i;
-> +       char *buf;
-> +
-> +       kunit_info(test, "vmalloc buffer can be initialized (no reports)\n");
-> +       buf = vmalloc(PAGE_SIZE * npages);
-> +       buf[0] = 1;
-> +       memset(buf, 0xfe, PAGE_SIZE * npages);
-> +       USE(buf[0]);
-> +       for (i = 0; i < npages; i++)
-> +               kmsan_check_memory(&buf[PAGE_SIZE * i], PAGE_SIZE);
-> +       vfree(buf);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/* Test case: ensure that use-after-free reporting works. */
-> +static void test_uaf(struct kunit *test)
-> +{
-> +       EXPECTATION_USE_AFTER_FREE(expect);
-> +       volatile int value;
-> +       volatile int *var;
-> +
-> +       kunit_info(test, "use-after-free in kmalloc-ed buffer (UMR report)\n");
-> +       var = kmalloc(80, GFP_KERNEL);
-> +       var[3] = 0xfeedface;
-> +       kfree((int *)var);
-> +       /* Copy the invalid value before checking it. */
-> +       value = var[3];
-> +       USE(value);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: ensure that uninitialized values are propagated through per-CPU
-> + * memory.
-> + */
-> +static void test_percpu_propagate(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE(expect);
-> +       volatile int uninit, check;
-> +
-> +       kunit_info(test,
-> +                  "uninit local stored to per_cpu memory (UMR report)\n");
-> +
-> +       this_cpu_write(per_cpu_var, uninit);
-> +       check = this_cpu_read(per_cpu_var);
-> +       USE(check);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: ensure that passing uninitialized values to printk() leads to an
-> + * error report.
-> + */
-> +static void test_printk(struct kunit *test)
-> +{
-> +#ifdef CONFIG_KMSAN_CHECK_PARAM_RETVAL
-
-if (IS_ENABLED(CONFIG_KMSAN_CHECK_PARAM_RETVAL))
-
-> +       /*
-> +        * With eager param/retval checking enabled, KMSAN will report an error
-> +        * before the call to pr_info().
-> +        */
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "test_printk");
-> +#else
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "number");
-> +#endif
-> +       volatile int uninit;
-> +
-> +       kunit_info(test, "uninit local passed to pr_info() (UMR report)\n");
-> +       pr_info("%px contains %d\n", &uninit, uninit);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: ensure that memcpy() correctly copies uninitialized values between
-> + * aligned `src` and `dst`.
-> + */
-> +static void test_memcpy_aligned_to_aligned(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "test_memcpy_aligned_to_aligned");
-> +       volatile int uninit_src;
-> +       volatile int dst = 0;
-> +
-> +       kunit_info(test, "memcpy()ing aligned uninit src to aligned dst (UMR report)\n");
-> +       memcpy((void *)&dst, (void *)&uninit_src, sizeof(uninit_src));
-> +       kmsan_check_memory((void *)&dst, sizeof(dst));
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: ensure that memcpy() correctly copies uninitialized values between
-> + * aligned `src` and unaligned `dst`.
-> + *
-> + * Copying aligned 4-byte value to an unaligned one leads to touching two
-> + * aligned 4-byte values. This test case checks that KMSAN correctly reports an
-> + * error on the first of the two values.
-> + */
-> +static void test_memcpy_aligned_to_unaligned(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "test_memcpy_aligned_to_unaligned");
-> +       volatile int uninit_src;
-> +       volatile char dst[8] = {0};
-> +
-> +       kunit_info(test, "memcpy()ing aligned uninit src to unaligned dst (UMR report)\n");
-> +       memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
-> +       kmsan_check_memory((void *)dst, 4);
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +/*
-> + * Test case: ensure that memcpy() correctly copies uninitialized values between
-> + * aligned `src` and unaligned `dst`.
-> + *
-> + * Copying aligned 4-byte value to an unaligned one leads to touching two
-> + * aligned 4-byte values. This test case checks that KMSAN correctly reports an
-> + * error on the second of the two values.
-> + */
-> +static void test_memcpy_aligned_to_unaligned2(struct kunit *test)
-> +{
-> +       EXPECTATION_UNINIT_VALUE_FN(expect, "test_memcpy_aligned_to_unaligned2");
-> +       volatile int uninit_src;
-> +       volatile char dst[8] = {0};
-> +
-> +       kunit_info(test, "memcpy()ing aligned uninit src to unaligned dst - part 2 (UMR report)\n");
-> +       memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
-> +       kmsan_check_memory((void *)&dst[4], sizeof(uninit_src));
-> +       KUNIT_EXPECT_TRUE(test, report_matches(&expect));
-> +}
-> +
-> +static struct kunit_case kmsan_test_cases[] = {
-> +       KUNIT_CASE(test_uninit_kmalloc),
-> +       KUNIT_CASE(test_init_kmalloc),
-> +       KUNIT_CASE(test_init_kzalloc),
-> +       KUNIT_CASE(test_uninit_stack_var),
-> +       KUNIT_CASE(test_init_stack_var),
-> +       KUNIT_CASE(test_params),
-> +       KUNIT_CASE(test_uninit_multiple_params),
-> +       KUNIT_CASE(test_uninit_kmsan_check_memory),
-> +       KUNIT_CASE(test_init_kmsan_vmap_vunmap),
-> +       KUNIT_CASE(test_init_vmalloc),
-> +       KUNIT_CASE(test_uaf),
-> +       KUNIT_CASE(test_percpu_propagate),
-> +       KUNIT_CASE(test_printk),
-> +       KUNIT_CASE(test_memcpy_aligned_to_aligned),
-> +       KUNIT_CASE(test_memcpy_aligned_to_unaligned),
-> +       KUNIT_CASE(test_memcpy_aligned_to_unaligned2),
-> +       {},
-> +};
-> +
-> +/* ===== End test cases ===== */
-> +
-> +static int test_init(struct kunit *test)
-> +{
-> +       unsigned long flags;
-> +
-> +       spin_lock_irqsave(&observed.lock, flags);
-> +       observed.header[0] = '\0';
-> +       observed.ignore = false;
-> +       observed.available = false;
-> +       spin_unlock_irqrestore(&observed.lock, flags);
-> +
-> +       return 0;
-> +}
-> +
-> +static void test_exit(struct kunit *test)
-> +{
-> +}
-> +
-> +static struct kunit_suite kmsan_test_suite = {
-> +       .name = "kmsan",
-> +       .test_cases = kmsan_test_cases,
-> +       .init = test_init,
-> +       .exit = test_exit,
-> +};
-> +static struct kunit_suite *kmsan_test_suites[] = { &kmsan_test_suite, NULL };
-> +
-> +static void register_tracepoints(struct tracepoint *tp, void *ignore)
-> +{
-> +       check_trace_callback_type_console(probe_console);
-> +       if (!strcmp(tp->name, "console"))
-> +               WARN_ON(tracepoint_probe_register(tp, probe_console, NULL));
-> +}
-> +
-> +static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
-> +{
-> +       if (!strcmp(tp->name, "console"))
-> +               tracepoint_probe_unregister(tp, probe_console, NULL);
-> +}
-> +
-> +/*
-> + * We only want to do tracepoints setup and teardown once, therefore we have to
-> + * customize the init and exit functions and cannot rely on kunit_test_suite().
-> + */
-
-This is no longer true. See a recent version of
-mm/kfence/kfence_test.c which uses the new suite_init/exit.
-
-> +static int __init kmsan_test_init(void)
-> +{
-> +       /*
-> +        * Because we want to be able to build the test as a module, we need to
-> +        * iterate through all known tracepoints, since the static registration
-> +        * won't work here.
-> +        */
-> +       for_each_kernel_tracepoint(register_tracepoints, NULL);
-> +       return __kunit_test_suites_init(kmsan_test_suites);
-> +}
-> +
-> +static void kmsan_test_exit(void)
-> +{
-> +       __kunit_test_suites_exit(kmsan_test_suites);
-> +       for_each_kernel_tracepoint(unregister_tracepoints, NULL);
-> +       tracepoint_synchronize_unregister();
-> +}
-> +
-> +late_initcall_sync(kmsan_test_init);
-> +module_exit(kmsan_test_exit);
-> +
-> +MODULE_LICENSE("GPL v2");
-
-A recent version of checkpatch should complain about this, wanting
-only "GPL" instead of "GPL v2".
-
-> +MODULE_AUTHOR("Alexander Potapenko <glider@google.com>");
+>   * Context: Any context, but setting @can_alloc to %false is required if
+>   *          alloc_pages() cannot be used from the current context. Currently
+>   *          this is the case from contexts where neither %GFP_ATOMIC nor
+> @@ -363,10 +379,11 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+>   */
+>  depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>                                         unsigned int nr_entries,
+> +                                       unsigned int extra_bits,
+>                                         gfp_t alloc_flags, bool can_alloc)
+>  {
+>         struct stack_record *found = NULL, **bucket;
+> -       depot_stack_handle_t retval = 0;
+> +       union handle_parts retval = { .handle = 0 };
+>         struct page *page = NULL;
+>         void *prealloc = NULL;
+>         unsigned long flags;
+> @@ -450,9 +467,11 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>                 free_pages((unsigned long)prealloc, STACK_ALLOC_ORDER);
+>         }
+>         if (found)
+> -               retval = found->handle.handle;
+> +               retval.handle = found->handle.handle;
+>  fast_exit:
+> -       return retval;
+> +       retval.extra = extra_bits;
+> +
+> +       return retval.handle;
+>  }
+>  EXPORT_SYMBOL_GPL(__stack_depot_save);
+>
+> @@ -472,6 +491,6 @@ depot_stack_handle_t stack_depot_save(unsigned long *entries,
+>                                       unsigned int nr_entries,
+>                                       gfp_t alloc_flags)
+>  {
+> -       return __stack_depot_save(entries, nr_entries, alloc_flags, true);
+> +       return __stack_depot_save(entries, nr_entries, 0, alloc_flags, true);
+>  }
+>  EXPORT_SYMBOL_GPL(stack_depot_save);
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index c40c0e7b3b5f1..ba4fceeec173c 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -36,7 +36,7 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+>         unsigned int nr_entries;
+>
+>         nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+> -       return __stack_depot_save(entries, nr_entries, flags, can_alloc);
+> +       return __stack_depot_save(entries, nr_entries, 0, flags, can_alloc);
+>  }
+>
+>  void kasan_set_track(struct kasan_track *track, gfp_t flags)
+> --
+> 2.37.0.rc0.161.g10f37bed90-goog
+>
