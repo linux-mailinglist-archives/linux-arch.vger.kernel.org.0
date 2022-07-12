@@ -2,56 +2,55 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3317571B93
-	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 15:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4084E571BBB
+	for <lists+linux-arch@lfdr.de>; Tue, 12 Jul 2022 15:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiGLNoP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 12 Jul 2022 09:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S232562AbiGLNwJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 12 Jul 2022 09:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233280AbiGLNoL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 09:44:11 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59772181
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:44:08 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id y195so14051887yby.0
-        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:44:08 -0700 (PDT)
+        with ESMTP id S229992AbiGLNwI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 12 Jul 2022 09:52:08 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24234B62BC
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:52:08 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id e69so14048868ybh.2
+        for <linux-arch@vger.kernel.org>; Tue, 12 Jul 2022 06:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MyQuL5EzG5eMdd3tjqHgbmALZQ6QoMWn3xa4SlD7s1A=;
-        b=XsmwdUhnV9Nrh1SGSj3JOV2MR95zR+WwDM8KHyqTK6nHKRO0cezI02yyceFlwPZoGf
-         LD9hFog+Z5JS+mZ9fFL2w/Ykf6nXujJFNCtizbi6oqD1uCF9yqBSB8/MHRkkvvEDdyDU
-         I3o5KHJ4r9ziBNn2dgCp2K5rjLiCyIM+WlUOiQyuM078Q8jJrwxq7cktVsi42HspunWN
-         TAGH4SZCzymam+0/ttGe45EPW7yHZMPm/1FIpA/kzCIQRFMrVyyuL0gR4qVqjjuD9NLH
-         ifM7a1uFz8TXyJoivkCURiXWYCFNRU3TydpTR5nKVX4hBL3m9C/5ri4ubLU+E01uShRG
-         jdVA==
+        bh=hWp5/64or+mP5imIMCPIUbpfNaM35wXtmKXqwrNhd14=;
+        b=fLRarT5d7pJmh7A50/oCtJdSEsMl6AUE3JJAWBUs5VRHku5TfmA2ZaNuN9yxSHaiIN
+         uwtuacBFDfHbwF6Bm+jjGZvODksVkWM5jxN3OkliOz894DxvftnJTqBwbIKjL3a5Jg7O
+         aD/FvQUvMXwFSfDXS95BPdRaSu7iLOPKW1iUcwu/8mbh2rgEJYfXBSvs5rJCN+tbCW5B
+         j9nesILDH3K0YJDH31eTwvUt6JTHN6f/36ZkIpJmZn5kpG6CapCdvx0JiOFJWYt0Wlhp
+         +g0M1lIyMMzrKYY4H+JmEQ3F9zNBW040MDY9TBTTgYfY69+SrLs4HRdOEbdtzaKYoX2a
+         DFuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MyQuL5EzG5eMdd3tjqHgbmALZQ6QoMWn3xa4SlD7s1A=;
-        b=pruhNd8EkiAw4iqAPI0CKlXr5w4z5mOcFN9TwJ1mJmbbtX9pJ7I8pIsGghpHPthPFb
-         kCBn7BUeYgK2eMi/EYI6zI7IRKk5LQzdfjgAq5x6x/HmFBY2yy1sgkcG7RzS8A8G7LWU
-         60kZjZv6zs+NqYjc7aOFAYD86OUUIJXkb5NEAikZ+pPekZIBeuSyflyhhWjpib4dHoch
-         x8iQmEVoQa9ToYw6118xZDwjM05Qo20mv66XtI+aFDgm+QcV6I1f0bh4so+klMN6j8xr
-         hIJp1e+5C/uTLWLltxv1zHHa4jhYzO5tGDV2UvWzJicf00yUMwaY1bkFQe9a+VoGdkK7
-         rX1w==
-X-Gm-Message-State: AJIora/1uTA+YhNQsmrx2F0k2c8sGgkPt1nGqtzQikhN3GM6Ceg3MWYQ
-        QxjDsCSi+q+HSijGBoOdcdRC7lHuCRSxhtO79fjmLA==
-X-Google-Smtp-Source: AGRyM1tJAHsdZLmYiI5P+T53CpbIO2hs/5gCoOEJtbFHqMVTgNWTq1cDtAtMQvatMTbVUxcRky7bRa+o9m1YQjjdVwc=
-X-Received: by 2002:a25:1583:0:b0:668:e74a:995f with SMTP id
- 125-20020a251583000000b00668e74a995fmr23207491ybv.1.1657633447949; Tue, 12
- Jul 2022 06:44:07 -0700 (PDT)
+        bh=hWp5/64or+mP5imIMCPIUbpfNaM35wXtmKXqwrNhd14=;
+        b=pLGn4l7eBjx2L4qtiW6DpBkZ8bzooXmyYIOdY59WXqI9s1SlHijSRSolEX9BmukTM1
+         GTCVW8gPpyLTRbJ3wVU/xXgHUkCLFhhZFOwrILMWmGSTi7BgEBwYIkBHk1aOZMIY4fLq
+         hiUmJjFnJwgIUftwuR+LlCJyNDd9pGgZW3ty7EY6FxKueqa3vxaMoDeTnWEjyLshIIvZ
+         X7UvwE+fJz1lBUjamZa3GgWkWXwf5RVkZhKzglcX2g/Az7vm93nJgnUR6jnl6PoZR/rU
+         Go7esTnNzL8ets15974MTCysoZHzkXHXV6RtZrb4zFXYYZTcodNBpg1/Vy0kkiHlTg3t
+         nE7g==
+X-Gm-Message-State: AJIora//9aC/mU9s56uk3zOXkcwlgNAq+ZBzARZX7sj4QpPxb/pN5MAE
+        K1HMJtsXA4mIsL+y61E4VnzIeSihRMxAUrQFNirFfw==
+X-Google-Smtp-Source: AGRyM1vaXhDrW9SzgGVGnQeO3sKZbN8zrYy0RbeU0jBi1M5Io3ShqhFaENqRfTiUKywPAI3ytd02a4hWcGbWqnCnWlg=
+X-Received: by 2002:a5b:10a:0:b0:66d:d8e3:9da2 with SMTP id
+ 10-20020a5b010a000000b0066dd8e39da2mr22834061ybx.87.1657633927213; Tue, 12
+ Jul 2022 06:52:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-34-glider@google.com>
-In-Reply-To: <20220701142310.2188015-34-glider@google.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-19-glider@google.com>
+In-Reply-To: <20220701142310.2188015-19-glider@google.com>
 From:   Marco Elver <elver@google.com>
-Date:   Tue, 12 Jul 2022 15:43:31 +0200
-Message-ID: <CANpmjNMpCow-pwqQnw8aHRUZKuBcOUU4On=JgEgysT8SBTrz6g@mail.gmail.com>
-Subject: Re: [PATCH v4 33/45] x86: kmsan: disable instrumentation of
- unsupported code
+Date:   Tue, 12 Jul 2022 15:51:31 +0200
+Message-ID: <CANpmjNOPJL7WAUh5CUZOYO8hY-dHTHMUMJzd9OGbmWES+smtrQ@mail.gmail.com>
+Subject: Re: [PATCH v4 18/45] instrumented.h: add KMSAN support
 To:     Alexander Potapenko <glider@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -95,28 +94,64 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 1 Jul 2022 at 16:24, 'Alexander Potapenko' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
-[...]
-> ---
->  arch/x86/boot/Makefile            | 1 +
->  arch/x86/boot/compressed/Makefile | 1 +
->  arch/x86/entry/vdso/Makefile      | 3 +++
->  arch/x86/kernel/Makefile          | 2 ++
->  arch/x86/kernel/cpu/Makefile      | 1 +
->  arch/x86/mm/Makefile              | 2 ++
->  arch/x86/realmode/rm/Makefile     | 1 +
->  lib/Makefile                      | 2 ++
-[...]
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -272,6 +272,8 @@ obj-$(CONFIG_POLYNOMIAL) += polynomial.o
->  CFLAGS_stackdepot.o += -fno-builtin
->  obj-$(CONFIG_STACKDEPOT) += stackdepot.o
->  KASAN_SANITIZE_stackdepot.o := n
-> +# In particular, instrumenting stackdepot.c with KMSAN will result in infinite
-> +# recursion.
->  KMSAN_SANITIZE_stackdepot.o := n
->  KCOV_INSTRUMENT_stackdepot.o := n
+On Fri, 1 Jul 2022 at 16:24, Alexander Potapenko <glider@google.com> wrote:
+>
+> To avoid false positives, KMSAN needs to unpoison the data copied from
+> the userspace. To detect infoleaks - check the memory buffer passed to
+> copy_to_user().
+>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
 
-This is generic code and not x86, should it have been in the earlier patch?
+Reviewed-by: Marco Elver <elver@google.com>
+
+With the code simplification below.
+
+[...]
+> --- a/mm/kmsan/hooks.c
+> +++ b/mm/kmsan/hooks.c
+> @@ -212,6 +212,44 @@ void kmsan_iounmap_page_range(unsigned long start, unsigned long end)
+>  }
+>  EXPORT_SYMBOL(kmsan_iounmap_page_range);
+>
+> +void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
+> +                       size_t left)
+> +{
+> +       unsigned long ua_flags;
+> +
+> +       if (!kmsan_enabled || kmsan_in_runtime())
+> +               return;
+> +       /*
+> +        * At this point we've copied the memory already. It's hard to check it
+> +        * before copying, as the size of actually copied buffer is unknown.
+> +        */
+> +
+> +       /* copy_to_user() may copy zero bytes. No need to check. */
+> +       if (!to_copy)
+> +               return;
+> +       /* Or maybe copy_to_user() failed to copy anything. */
+> +       if (to_copy <= left)
+> +               return;
+> +
+> +       ua_flags = user_access_save();
+> +       if ((u64)to < TASK_SIZE) {
+> +               /* This is a user memory access, check it. */
+> +               kmsan_internal_check_memory((void *)from, to_copy - left, to,
+> +                                           REASON_COPY_TO_USER);
+
+This could just do "} else {" and the stuff below, and would result in
+simpler code with no explicit "return" and no duplicated
+user_access_restore().
+
+> +               user_access_restore(ua_flags);
+> +               return;
+> +       }
+> +       /* Otherwise this is a kernel memory access. This happens when a compat
+> +        * syscall passes an argument allocated on the kernel stack to a real
+> +        * syscall.
+> +        * Don't check anything, just copy the shadow of the copied bytes.
+> +        */
+> +       kmsan_internal_memmove_metadata((void *)to, (void *)from,
+> +                                       to_copy - left);
+> +       user_access_restore(ua_flags);
+> +}
+> +EXPORT_SYMBOL(kmsan_copy_to_user);
