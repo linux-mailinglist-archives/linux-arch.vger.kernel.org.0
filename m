@@ -2,46 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E687D5749C7
-	for <lists+linux-arch@lfdr.de>; Thu, 14 Jul 2022 11:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A43574DBD
+	for <lists+linux-arch@lfdr.de>; Thu, 14 Jul 2022 14:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237815AbiGNJ5M (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Jul 2022 05:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S239356AbiGNMe2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Jul 2022 08:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbiGNJ5I (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jul 2022 05:57:08 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29F814C607;
-        Thu, 14 Jul 2022 02:57:07 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1oBvaj-0006rx-00; Thu, 14 Jul 2022 11:57:05 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 4A3C8C047F; Thu, 14 Jul 2022 11:54:40 +0200 (CEST)
-Date:   Thu, 14 Jul 2022 11:54:40 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@gmail.com>,
+        with ESMTP id S239346AbiGNMe0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jul 2022 08:34:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8049352462;
+        Thu, 14 Jul 2022 05:34:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4509CB824E2;
+        Thu, 14 Jul 2022 12:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C15ACC34115;
+        Thu, 14 Jul 2022 12:34:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657802061;
+        bh=qBirXXWP2MvpS4lCr+loYwR+cC50dveyyNNYEAD0Bqs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=knaJXlPNMLbIxCYOYMKHQqEMkMwL8qRRGZXzl/1Qohf6zRJ4xd5gHTnKhqZGWjL5z
+         IE3X3Bjl8UC8cPhRzT8Lo1Z77YCok4yj9Li87twVXITrGIy5y0GSYPTriXuzrL1ZRd
+         So5VG7MxrP7o5O2V7W9WewYzwer1iy2NrPvjAe+fJ+BQlJcSROjm4xmXwPYlK9qtjL
+         N9MlAm+IdGj8Lrx/MtDnSYWoQX2tVJlDZBeQbkBOwGGPU9MwhV3RYTqhi+0Sni30X3
+         VfzICXYjlk9lNLCwb4yVi+zsq16JVeK8ufwSXNeZ1D1dXediYjTaoI56H6W/usVSjy
+         pHwz+P4RBhSFw==
+Received: by mail-vs1-f42.google.com with SMTP id d187so1292168vsd.10;
+        Thu, 14 Jul 2022 05:34:21 -0700 (PDT)
+X-Gm-Message-State: AJIora84cXHFvQIsYwxi+I7hIj6cA0bjL7Tu2WfZZ0gZgDZPfptCnPzO
+        9zd5OuLT5i+Gv7AGkQUMMpHWTBsC1JFbRMchrUg=
+X-Google-Smtp-Source: AGRyM1ty5yRBbaVRJ8PJWbtdv5Dy7XJuthHHzmRMybTtmDUVI2vw0cugeBgictCY0ND5UquBP9+bozDTgNcHp02K6aM=
+X-Received: by 2002:a67:6fc3:0:b0:356:18:32ba with SMTP id k186-20020a676fc3000000b00356001832bamr3253584vsc.43.1657802060763;
+ Thu, 14 Jul 2022 05:34:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-4-chenhuacai@loongson.cn> <20220705092937.GA552@willie-the-truck>
+ <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com>
+ <20220706161736.GC3204@willie-the-truck> <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+In-Reply-To: <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 14 Jul 2022 20:34:08 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
+Message-ID: <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
+Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages()
+To:     Will Deacon <will@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH V2 1/3] MIPS: cpuinfo: Fix a warning for
- CONFIG_CPUMASK_OFFSTACK
-Message-ID: <20220714095440.GA10086@alpha.franken.de>
-References: <20220714084136.570176-1-chenhuacai@loongson.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220714084136.570176-1-chenhuacai@loongson.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,52 +80,94 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 04:41:34PM +0800, Huacai Chen wrote:
-> When CONFIG_CPUMASK_OFFSTACK and CONFIG_DEBUG_PER_CPU_MAPS is selected,
-> cpu_max_bits_warn() generates a runtime warning similar as below while
-> we show /proc/cpuinfo. Fix this by using nr_cpu_ids (the runtime limit)
-> instead of NR_CPUS to iterate CPUs.
-> 
-> [    3.052463] ------------[ cut here ]------------
-> [    3.059679] WARNING: CPU: 3 PID: 1 at include/linux/cpumask.h:108 show_cpuinfo+0x5e8/0x5f0
-> [    3.070072] Modules linked in: efivarfs autofs4
-> [    3.076257] CPU: 0 PID: 1 Comm: systemd Not tainted 5.19-rc5+ #1052
-> [    3.084034] Hardware name: Loongson Loongson-3A4000-7A1000-1w-V0.1-CRB/Loongson-LS3A4000-7A1000-1w-EVB-V1.21, BIOS Loongson-UDK2018-V2.0.04082-beta7 04/27
-> [    3.099465] Stack : 9000000100157b08 9000000000f18530 9000000000cf846c 9000000100154000
-> [    3.109127]         9000000100157a50 0000000000000000 9000000100157a58 9000000000ef7430
-> [    3.118774]         90000001001578e8 0000000000000040 0000000000000020 ffffffffffffffff
-> [    3.128412]         0000000000aaaaaa 1ab25f00eec96a37 900000010021de80 900000000101c890
-> [    3.138056]         0000000000000000 0000000000000000 0000000000000000 0000000000aaaaaa
-> [    3.147711]         ffff8000339dc220 0000000000000001 0000000006ab4000 0000000000000000
-> [    3.157364]         900000000101c998 0000000000000004 9000000000ef7430 0000000000000000
-> [    3.167012]         0000000000000009 000000000000006c 0000000000000000 0000000000000000
-> [    3.176641]         9000000000d3de08 9000000001639390 90000000002086d8 00007ffff0080286
-> [    3.186260]         00000000000000b0 0000000000000004 0000000000000000 0000000000071c1c
-> [    3.195868]         ...
-> [    3.199917] Call Trace:
-> [    3.203941] [<98000000002086d8>] show_stack+0x38/0x14c
-> [    3.210666] [<9800000000cf846c>] dump_stack_lvl+0x60/0x88
-> [    3.217625] [<980000000023d268>] __warn+0xd0/0x100
-> [    3.223958] [<9800000000cf3c90>] warn_slowpath_fmt+0x7c/0xcc
-> [    3.231150] [<9800000000210220>] show_cpuinfo+0x5e8/0x5f0
-> [    3.238080] [<98000000004f578c>] seq_read_iter+0x354/0x4b4
-> [    3.245098] [<98000000004c2e90>] new_sync_read+0x17c/0x1c4
-> [    3.252114] [<98000000004c5174>] vfs_read+0x138/0x1d0
-> [    3.258694] [<98000000004c55f8>] ksys_read+0x70/0x100
-> [    3.265265] [<9800000000cfde9c>] do_syscall+0x7c/0x94
-> [    3.271820] [<9800000000202fe4>] handle_syscall+0xc4/0x160
-> [    3.281824] ---[ end trace 8b484262b4b8c24c ]---
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/mips/kernel/proc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Oh, Sudarshan Rajagopalan's Email has changed, Let's update.
 
-applied to mips-next.
+Huacai
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+On Fri, Jul 8, 2022 at 5:47 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> +Dan Williams
+> +Sudarshan Rajagopalan
+>
+> On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
+> >
+> > On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
+> > > On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
+> > > > On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
+> > > > > diff --git a/mm/sparse-vmemmap.c b/mm/sparse-vmemmap.c
+> > > > > index 33e2a1ceee72..6f2e40bb695d 100644
+> > > > > --- a/mm/sparse-vmemmap.c
+> > > > > +++ b/mm/sparse-vmemmap.c
+> > > > > @@ -686,6 +686,60 @@ int __meminit vmemmap_populate_basepages(unsigned long start, unsigned long end,
+> > > > >       return vmemmap_populate_range(start, end, node, altmap, NULL);
+> > > > >  }
+> > > > >
+> > > > > +void __weak __meminit vmemmap_set_pmd(pmd_t *pmd, void *p, int node,
+> > > > > +                                   unsigned long addr, unsigned long next)
+> > > > > +{
+> > > > > +}
+> > > > > +
+> > > > > +int __weak __meminit vmemmap_check_pmd(pmd_t *pmd, int node, unsigned long addr,
+> > > > > +                                    unsigned long next)
+> > > > > +{
+> > > > > +     return 0;
+> > > > > +}
+> > > > > +
+> > > > > +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> > > > > +                                      int node, struct vmem_altmap *altmap)
+> > > > > +{
+> > > > > +     unsigned long addr;
+> > > > > +     unsigned long next;
+> > > > > +     pgd_t *pgd;
+> > > > > +     p4d_t *p4d;
+> > > > > +     pud_t *pud;
+> > > > > +     pmd_t *pmd;
+> > > > > +
+> > > > > +     for (addr = start; addr < end; addr = next) {
+> > > > > +             next = pmd_addr_end(addr, end);
+> > > > > +
+> > > > > +             pgd = vmemmap_pgd_populate(addr, node);
+> > > > > +             if (!pgd)
+> > > > > +                     return -ENOMEM;
+> > > > > +
+> > > > > +             p4d = vmemmap_p4d_populate(pgd, addr, node);
+> > > > > +             if (!p4d)
+> > > > > +                     return -ENOMEM;
+> > > > > +
+> > > > > +             pud = vmemmap_pud_populate(p4d, addr, node);
+> > > > > +             if (!pud)
+> > > > > +                     return -ENOMEM;
+> > > > > +
+> > > > > +             pmd = pmd_offset(pud, addr);
+> > > > > +             if (pmd_none(READ_ONCE(*pmd))) {
+> > > > > +                     void *p;
+> > > > > +
+> > > > > +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> > > > > +                     if (p) {
+> > > > > +                             vmemmap_set_pmd(pmd, p, node, addr, next);
+> > > > > +                             continue;
+> > > > > +                     } else if (altmap)
+> > > > > +                             return -ENOMEM; /* no fallback */
+> > > >
+> > > > Why do you return -ENOMEM if 'altmap' here? That seems to be different to
+> > > > what we currently have on arm64 and it's not clear to me why we're happy
+> > > > with an altmap for the pmd case, but not for the pte case.
+> > > The generic version is the same as X86. It seems that ARM64 always
+> > > fallback whether there is an altmap, but X86 only fallback in the no
+> > > altmap case. I don't know the reason of X86, can Dan Williams give
+> > > some explaination?
+> >
+> > Right, I think we need to understand the new behaviour here before we adopt
+> > it on arm64.
+> Hi, Dan,
+> Could you please tell us the reason? Thanks.
+>
+> And Sudarshan,
+> You are the author of adding a fallback mechanism to ARM64,  do you
+> know why ARM64 is different from X86 (only fallback in no altmap
+> case)?
+>
+> Huacai
+>
+> >
+> > Will
