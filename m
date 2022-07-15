@@ -2,351 +2,186 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7941E575C8D
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 09:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12589575CE8
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 10:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbiGOHnQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jul 2022 03:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S231895AbiGOIBo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jul 2022 04:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231494AbiGOHnP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jul 2022 03:43:15 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA067C1A3
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jul 2022 00:43:14 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l11so7130990ybu.13
-        for <linux-arch@vger.kernel.org>; Fri, 15 Jul 2022 00:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wow5GwZUq1ephtzdcsWQKNRsHibDh8Of4LJkNVIGZKs=;
-        b=Ke0eisTSZGPbvx05SZjplrvc8C0ps+HhylKVr+trNqEhKwHq+FokvjgLJvRoKLkAuH
-         RD2HYioVCFb24lhQ3XcFHhusrC5pH5T7Qj0KZP8v8x1rprcWNS0c6WzBy+Nf5rTMGtpK
-         TeL6rUbgbp52mBHpAZsxK+zJro+L7RGvte7pTNctGhTQTJBr2NlJmL9/FkHsRcKAvXEB
-         tFNAHIKrBq7jWQqcdb9SJ6Qh9qsshjr5Smwo0Y8fNPp+StwDYbSlwGv0kGslv2fgJ9C9
-         cVt4zngbnfJ9x8wrWx+K0j5AmmPw8IFf/FPHi6jmlGRf0y62N9BNz5KNjSMBeQtKXvLw
-         fJoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wow5GwZUq1ephtzdcsWQKNRsHibDh8Of4LJkNVIGZKs=;
-        b=NOKEO7DwuEb32+npZaWMElVNWOLjt93dINjVCADJ8QU7YJ5ab46PX5mW1XKOSfoJJu
-         usO7+Ra1zSO25PaOTvh8MdV8xYfSozcBbIiCIMWjHFvnnVS53WHFwlNlRjuTuXHUi//x
-         HGFywlNtfDjjAAZsgGL5QPZ+Xc0Vnc7g94L8uVYmXA31P0G+uS93aDw/AGLzlBgCvo22
-         IB+U415K8zc4t8knU56xHQ8KkX8XmeAizR4ajbPW2idG+U9vLaTzP+WfDj+ykrxClUUC
-         CYGrPQcHec2Hi9aOCtAZWttS2N3gS0iEUsqRafA1400+tVsKOVXsdx3hgADPfpV7WxYQ
-         Rphw==
-X-Gm-Message-State: AJIora8teMVwTpEdhs1EQmtS/NmrLnB0igq5gMLoZ49oWRLlyBj8Im+9
-        BwS6FC+VFoiGHeS5by+fqLujpENiOhy4HeQOs1+H6w==
-X-Google-Smtp-Source: AGRyM1tscrvzEdkwMdJTGf/7hU0rpmIPG1IpGhQ3bkblbX9MB1wpw8oOOH54vUDQHR0mEaBRLxiUvqdvy/KJh//vzBU=
-X-Received: by 2002:a25:d78c:0:b0:66f:5acb:d3bf with SMTP id
- o134-20020a25d78c000000b0066f5acbd3bfmr12396195ybg.307.1657870993486; Fri, 15
- Jul 2022 00:43:13 -0700 (PDT)
+        with ESMTP id S229782AbiGOIBn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jul 2022 04:01:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87877E00F;
+        Fri, 15 Jul 2022 01:01:42 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LkkHS3sP7zVg3M;
+        Fri, 15 Jul 2022 15:57:56 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 16:01:11 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Jul 2022 16:01:11 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
+CC:     <linux@armlinux.org.uk>, <arnd@arndb.de>,
+        <linus.walleij@linaro.org>, <ardb@kernel.org>,
+        <rmk+kernel@armlinux.org.uk>, <rostedt@goodmis.org>,
+        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>,
+        <chenzhongjin@huawei.com>
+Subject: [PATCH] ARM: Recover kretprobes return address for EABI stack unwinder
+Date:   Fri, 15 Jul 2022 15:58:04 +0800
+Message-ID: <20220715075804.93756-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-7-glider@google.com>
- <CANpmjNN=XO=6rpV-KS2xq=3fiV1L3wCL1DFwLes-CJsi=6ZmcQ@mail.gmail.com>
-In-Reply-To: <CANpmjNN=XO=6rpV-KS2xq=3fiV1L3wCL1DFwLes-CJsi=6ZmcQ@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 15 Jul 2022 09:42:37 +0200
-Message-ID: <CAG_fn=X5w5F1rwHuQqQ9GRYT4MiNGQLh71FRN16Wy3rGJLX_AA@mail.gmail.com>
-Subject: Re: [PATCH v4 06/45] kmsan: add ReST documentation
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> To be consistent with other tools, I think we have settled on "The
-> Kernel <...> Sanitizer (K?SAN)", see
-> Documentation/dev-tools/k[ac]san.rst. So this will be "The Kernel
-> Memory Sanitizer (KMSAN)".
+'fed240d9c974 ("ARM: Recover kretprobe modified return address in stacktrace")'
+has implemented kretprobes return address recovery for FP
+unwinder, this patch makes it works for EABI unwinder.
 
-Done (will appear in v5).
+It saves __kretprobe_trampoline address in LR on stack to identify
+and recover the correct return address in EABI unwinder.
 
+Since EABI doesn't use r11 as frame pointer, we need to use SP to
+identify different kretprobes addresses. Here the value of SP has fixed
+distance to conventional FP position so it's fine to use it.
 
-> -> "The third stack trace ..."
-> (Because it looks like there's also another stack trace in the middle
-> and "lower" is ambiguous)
+Passed kunit kprobes_test on QEMU.
 
-Done
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ arch/arm/Kconfig               |  2 +-
+ arch/arm/kernel/unwind.c       | 12 ++++++++++++
+ arch/arm/probes/kprobes/core.c | 20 +++++++++++++++++---
+ 3 files changed, 30 insertions(+), 4 deletions(-)
 
->
-> > +where this variable was created.
-> > +
-> > +The upper stack shows where the uninit value was used - in
->
-> -> "The first stack trace shows where the uninit value was used (in
-> ``test_uninit_kmsan_check_memory()``)."
-Done
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 7630ba9cb6cc..2bd987aa938d 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -3,7 +3,7 @@ config ARM
+ 	bool
+ 	default y
+ 	select ARCH_32BIT_OFF_T
+-	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES && FRAME_POINTER && !ARM_UNWIND
++	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE if HAVE_KRETPROBES
+ 	select ARCH_HAS_BINFMT_FLAT
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
+diff --git a/arch/arm/kernel/unwind.c b/arch/arm/kernel/unwind.c
+index a37ea6c772cd..51e34fa4a4b3 100644
+--- a/arch/arm/kernel/unwind.c
++++ b/arch/arm/kernel/unwind.c
+@@ -28,6 +28,7 @@
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include <linux/list.h>
++#include <linux/kprobes.h>
+ 
+ #include <asm/stacktrace.h>
+ #include <asm/traps.h>
+@@ -482,6 +483,12 @@ int unwind_frame(struct stackframe *frame)
+ 	frame->pc = ctrl.vrs[PC];
+ 	frame->lr_addr = ctrl.lr_addr;
+ 
++#ifdef CONFIG_KRETPROBES
++	if (is_kretprobe_trampoline(frame->pc))
++		frame->pc = kretprobe_find_ret_addr(frame->tsk,
++					(void *)frame->sp, &frame->kr_cur);
++#endif
++
+ 	return URC_OK;
+ }
+ 
+@@ -522,6 +529,11 @@ void unwind_backtrace(struct pt_regs *regs, struct task_struct *tsk,
+ 		frame.pc = thread_saved_pc(tsk);
+ 	}
+ 
++#ifdef CONFIG_KRETPROBES
++	frame.kr_cur = NULL;
++	frame.tsk = tsk;
++#endif
++
+ 	while (1) {
+ 		int urc;
+ 		unsigned long where = frame.pc;
+diff --git a/arch/arm/probes/kprobes/core.c b/arch/arm/probes/kprobes/core.c
+index 9090c3a74dcc..1435b508aa36 100644
+--- a/arch/arm/probes/kprobes/core.c
++++ b/arch/arm/probes/kprobes/core.c
+@@ -41,6 +41,16 @@
+ 			   (unsigned long)(addr) +	\
+ 			   (size))
+ 
++/*
++ * Since EABI unwinder doesn't use ARM_fp as conventional fp
++ * use ARM_sp as hint register for kretprobes.
++ */
++#ifdef CONFIG_ARM_UNWIND
++#define TRAMP_FP ARM_sp
++#else /* CONFIG_FRAME_POINTER */
++#define TRAMP_FP ARM_fp
++#endif
++
+ DEFINE_PER_CPU(struct kprobe *, current_kprobe) = NULL;
+ DEFINE_PER_CPU(struct kprobe_ctlblk, kprobe_ctlblk);
+ 
+@@ -376,8 +386,8 @@ int __kprobes kprobe_exceptions_notify(struct notifier_block *self,
+ void __naked __kprobes __kretprobe_trampoline(void)
+ {
+ 	__asm__ __volatile__ (
+-#ifdef CONFIG_FRAME_POINTER
+ 		"ldr	lr, =__kretprobe_trampoline	\n\t"
++#ifdef CONFIG_FRAME_POINTER
+ 	/* __kretprobe_trampoline makes a framepointer on pt_regs. */
+ #ifdef CONFIG_CC_IS_CLANG
+ 		"stmdb	sp, {sp, lr, pc}	\n\t"
+@@ -395,8 +405,12 @@ void __naked __kprobes __kretprobe_trampoline(void)
+ 		"add	fp, sp, #60		\n\t"
+ #endif /* CONFIG_CC_IS_CLANG */
+ #else /* !CONFIG_FRAME_POINTER */
++		/* store SP, LR on stack and add EABI unwind hint */
++		"stmdb  sp, {sp, lr, pc}	\n\t"
++		".save	{sp, lr, pc}	\n\t"
+ 		"sub	sp, sp, #16		\n\t"
+ 		"stmdb	sp!, {r0 - r11}		\n\t"
++		".pad	#52				\n\t"
+ #endif /* CONFIG_FRAME_POINTER */
+ 		"mov	r0, sp			\n\t"
+ 		"bl	trampoline_handler	\n\t"
+@@ -414,14 +428,14 @@ void __naked __kprobes __kretprobe_trampoline(void)
+ /* Called from __kretprobe_trampoline */
+ static __used __kprobes void *trampoline_handler(struct pt_regs *regs)
+ {
+-	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->ARM_fp);
++	return (void *)kretprobe_trampoline_handler(regs, (void *)regs->TRAMP_FP);
+ }
+ 
+ void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+ 				      struct pt_regs *regs)
+ {
+ 	ri->ret_addr = (kprobe_opcode_t *)regs->ARM_lr;
+-	ri->fp = (void *)regs->ARM_fp;
++	ri->fp = (void *)regs->TRAMP_FP;
+ 
+ 	/* Replace the return addr with trampoline addr. */
+ 	regs->ARM_lr = (unsigned long)&__kretprobe_trampoline;
+-- 
+2.17.1
 
-> > +KMSAN and Clang
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> The KASAN documentation has a section on "Support" which lists
-> architectures and compilers supported. I'd try to mirror (or improve
-> on) that.
-
-Renamed this section to "Support", added a line about supported
-architectures (x86_64)
-
->
-> > +In order for KMSAN to work the kernel must be built with Clang, which =
-so far is
-> > +the only compiler that has KMSAN support. The kernel instrumentation p=
-ass is
-> > +based on the userspace `MemorySanitizer tool`_.
-> > +
-> > +How to build
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> I'd call it "Usage", like in the KASAN and KCSAN documentation.
-Done
-
->
-> > +In order to build a kernel with KMSAN you will need a fresh Clang (14.=
-0.0+).
-> > +Please refer to `LLVM documentation`_ for the instructions on how to b=
-uild Clang.
-> > +
-> > +Now configure and build the kernel with CONFIG_KMSAN enabled.
->
-> I would move build/usage instructions right after introduction as
-> that's most likely what users of KMSAN will want to know about first.
-
-Done
-
-> > +How KMSAN works
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +KMSAN shadow memory
-> > +-------------------
-> > +
-> > +KMSAN associates a metadata byte (also called shadow byte) with every =
-byte of
-> > +kernel memory. A bit in the shadow byte is set iff the corresponding b=
-it of the
-> > +kernel memory byte is uninitialized. Marking the memory uninitialized =
-(i.e.
-> > +setting its shadow bytes to ``0xff``) is called poisoning, marking it
-> > +initialized (setting the shadow bytes to ``0x00``) is called unpoisoni=
-ng.
-> > +
-> > +When a new variable is allocated on the stack, it is poisoned by defau=
-lt by
-> > +instrumentation code inserted by the compiler (unless it is a stack va=
-riable
-> > +that is immediately initialized). Any new heap allocation done without
-> > +``__GFP_ZERO`` is also poisoned.
-> > +
-> > +Compiler instrumentation also tracks the shadow values with the help f=
-rom the
-> > +runtime library in ``mm/kmsan/``.
->
-> This sentence might still be confusing. I think it should highlight
-> that runtime and compiler go together, but depending on the scope of
-> the value, the compiler invokes the runtime to persist the shadow.
-
-Changed to:
-"""
-Compiler instrumentation also tracks the shadow values as they are used alo=
-ng
-the code. When needed, instrumentation code invokes the runtime library in
-``mm/kmsan/`` to persist shadow values.
-"""
-
-> > +
-> > +
->
-> There are 2 blank lines here, which is inconsistent with the rest of
-> the document.
-
-Fixed
-
-> > +Origin tracking
-> > +---------------
-> > +
-> > +Every four bytes of kernel memory also have a so-called origin assigne=
-d to
->
-> Is "assigned" or "mapped" more appropriate here?
-
-I think initially this was more about origin values that exist in SSA
-as well as memory, so not all of them were "mapped".
-On the other hand, we're talking about bytes in the memory, so "mapped" is =
-fine.
-
-> > +them. This origin describes the point in program execution at which th=
-e
-> > +uninitialized value was created. Every origin is associated with eithe=
-r the
-> > +full allocation stack (for heap-allocated memory), or the function con=
-taining
-> > +the uninitialized variable (for locals).
-> > +
-> > +When an uninitialized variable is allocated on stack or heap, a new or=
-igin
-> > +value is created, and that variable's origin is filled with that value=
-.
-> > +When a value is read from memory, its origin is also read and kept tog=
-ether
-> > +with the shadow. For every instruction that takes one or more values t=
-he origin
->
-> s/values the origin/values, the origin/
-Done, thanks!
-
-
-> > +
-> > +If ``a`` is initialized and ``b`` is not, the shadow of the result wou=
-ld be
-> > +0xffff0000, and the origin of the result would be the origin of ``b``.
-> > +``ret.s[0]`` would have the same origin, but it will be never used, be=
-cause
->
-> s/be never/never be/
-Done
-
-> > +Passing uninitialized values to functions
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +KMSAN instrumentation pass has an option, ``-fsanitize-memory-param-re=
-tval``,
->
-> "KMSAN instrumentation pass" -> "Clang's instrumentation support" ?
-> Because it seems wrong to say that KMSAN has the instrumentation pass.
-How about "Clang's MSan instrumentation pass"?
-
-> > +
-> > +Sometimes the pointers passed into inline assembly do not point to val=
-id memory.
-> > +In such cases they are ignored at runtime.
-> > +
-> > +Disabling the instrumentation
-> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->
-> It would be useful to move this section somewhere to the beginning,
-> closer to usage and the example, as this is information that a user of
-> KMSAN might want to know (but they might not want to know much about
-> how KMSAN works).
-
-I restructured the TOC as follows:
-
-=3D=3D The Kernel Memory Sanitizer (KMSAN)
-=3D=3D Usage
---- Building the kernel
---- Example report
---- Disabling the instrumentation
-=3D=3D Support
-=3D=3D How KMSAN works
---- KMSAN shadow memory
---- Origin tracking
-~~~~ Origin chaining
---- Clang instrumentation API
-~~~~ Shadow manipulation
-~~~~ Handling locals
-~~~~ Access to per-task data
-~~~~ Passing uninitialized values to functions
-~~~~ String functions
-~~~~ Error reporting
-~~~~ Inline assembly instrumentation
---- Runtime library
-~~~~ Per-task KMSAN state
-~~~~ KMSAN contexts
-~~~~ Metadata allocation
-=3D=3D References
-
-
-> > +Another function attribute supported by KMSAN is ``__no_sanitize_memor=
-y``.
-> > +Applying this attribute to a function will result in KMSAN not instrum=
-enting it,
-> > +which can be helpful if we do not want the compiler to mess up some lo=
-w-level
->
-> s/mess up/interfere with/
-Done
-
-> > +code (e.g. that marked with ``noinstr``).
->
-> maybe "... (e.g. that marked with ``noinstr``, which implicitly adds
-> ``__no_sanitize_memory``)."
-
-Done
-
-> otherwise people might think that it's necessary to add
-> __no_sanitize_memory explicitly to noinstr.
-
-Good point!
-
-> > +    ...
-> > +    struct kmsan_context kmsan;
-> > +    ...
-> > +  }
-> > +
-> > +
->
-> 1 blank line instead of 2?
-Done
-
-> > +This means that in general for two contiguous memory pages their shado=
-w/origin
-> > +pages may not be contiguous. So, if a memory access crosses the bounda=
-ry
->
-> s/So, /Consequently, /
-Done
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
