@@ -2,135 +2,148 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090FD5759DB
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 05:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB5C575C83
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 09:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbiGODNQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Jul 2022 23:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
+        id S231442AbiGOHkc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jul 2022 03:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiGODNQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jul 2022 23:13:16 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A052CC91;
-        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 23so3273293pgc.8;
-        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
-        b=d6rOttoave+cYYycQLZVtn7+6/EvvZMoC4KlEKnu5+Iy0CvIZB6RZvM+yDNYgjVsg2
-         zExWP1Kt2mvHL2caS42uLQwLfFdIGT+vt+VNkOv6EFVEz1IJ1Ei1z/SUwomvWvL9yqs/
-         LsfjR3vwcHDm1bfvDdBsjVXVCIzYFoJ6KMcatcAC61WXc2/vMcOjiKCXnv0z+ZYpPW1D
-         29300GYk48m1QvWYlTwrWUJ2ga8Ap1QJw6DN92YdxZnF6aT4PwJr+48L7OzWyifSHnIo
-         bBliGjA2A7iI1JHvd2yG0VTITazqxx3xOm38zhCb9ZIUiYeXEPs2TlvdcILgJvPCljIq
-         R2+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
-        b=QN1KHrm48rAJD5fzBNOgZjhfCzLL8XI17G9WwVqedi0xmXJr+o4BaGjxNFXWcshhUC
-         CmHS6PrTCfGBrnbZ9z4vGHmXJ+SL//YgSGSzEtX6lBI19hHyXLtjSBs9HctMfkGtO8ml
-         0X9hX9AlLkBpQXtn1QQ5jdSmNs+WGL0Jk1Lk3arotJV5+ANfLEgRLd7sS7cRoK04QdK5
-         b3hxuKptjV7JNBQnFwgpsHI5UcaJeOqyfLIA1IDX2EmNzpCp490SxVhvM69ihquIZeOd
-         rPXrHv86Nkbp/d28j3C/DMopZHJJHhmRfkIGHsxWayrIdb6LHd94G3taAg8koCq+59N7
-         L0+Q==
-X-Gm-Message-State: AJIora/SCLgVhagKduoZ2Bldj4py96FUWu4qtip08JTEn/nvRD2iAyXq
-        /rHgr7ZE3NSmYeZkhSv0VcQ+s5MPcxY=
-X-Google-Smtp-Source: AGRyM1vK5uqkhNs5DYoiUnUKiOfj2RRKOpP4xHProAEOYr/w1Br1ZQPpNcitPwDkSe+/qgFCXMCFZg==
-X-Received: by 2002:a63:2051:0:b0:412:6d61:ab0a with SMTP id r17-20020a632051000000b004126d61ab0amr10627004pgm.52.1657854794876;
-        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c6a6d8967sm2236563plh.83.2022.07.14.20.13.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
-Message-ID: <d95d1afe-655c-3526-0c7e-949dfad8c6ba@gmail.com>
-Date:   Thu, 14 Jul 2022 20:13:12 -0700
+        with ESMTP id S229693AbiGOHkb (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jul 2022 03:40:31 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FE1753BE;
+        Fri, 15 Jul 2022 00:40:30 -0700 (PDT)
+Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MA7Ss-1oNpiA3254-00BfVX; Fri, 15 Jul 2022 09:40:28 +0200
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31cf1adbf92so39648387b3.4;
+        Fri, 15 Jul 2022 00:40:27 -0700 (PDT)
+X-Gm-Message-State: AJIora/fTKTlEaQ6ForIwp6vaAUn/b1dpffbCpl9ZZp7EW7eVUyBRrY+
+        OOlAwzzHtCrJhUczSWFnSA3F0hO+0qnHf0ghyiY=
+X-Google-Smtp-Source: AGRyM1uqN7hbJWu1Kc45V1df/TuEhLpRBy0jFrUgJKDcJEoO7ehMJuFR6t3QFdid1eQbrmQCLxECRTpajxA3X2Ob8Ys=
+X-Received: by 2002:a81:1e4d:0:b0:31c:86f1:95b1 with SMTP id
+ e74-20020a811e4d000000b0031c86f195b1mr14141207ywe.42.1657870826723; Fri, 15
+ Jul 2022 00:40:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH V12 01/20] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
-Content-Language: en-US
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
-        naresh.kamboju@linaro.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        heiko@sntech.de
-References: <20220405071314.3225832-1-guoren@kernel.org>
- <20220405071314.3225832-2-guoren@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220405071314.3225832-2-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220714214657.2402250-1-shorne@gmail.com> <20220714214657.2402250-2-shorne@gmail.com>
+ <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
+In-Reply-To: <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 15 Jul 2022 09:40:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3S5crDdUcO0kAgOLVGYgXnkU9D3uo44Wrcu5LdAWCGoQ@mail.gmail.com>
+Message-ID: <CAK8P3a3S5crDdUcO0kAgOLVGYgXnkU9D3uo44Wrcu5LdAWCGoQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] asm-generic: Remove pci.h copying code out to architectures
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Stafford Horne <shorne@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE..." <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nick Child <nick.child@ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
+        "open list:IA64 (Itanium) PL..." <linux-ia64@vger.kernel.org>,
+        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        "open list:SPARC + UltraSPAR..." <sparclinux@vger.kernel.org>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:xBt1Buqz4uz21xjgRTcz1sB5ZZm4RpSgjeDdgjcJqTVZpbgGxE9
+ nD1Zu4Ge/pN+IeJ5he3jwNMmhWT/KQ3Tih2/6CVgZId1G/PwWsU/qowRmpQOyfQoQmRELAt
+ O10L1cjPx95JNrnrugzLqkMFdBASwkg7W3Y7jkVvUZ2Vh4E6XJobZnUTDU1xZGnR6J8Ks3c
+ d7BkFYX1WbWfFA63SEFXQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:seUnc9f1U8s=:S9bJx32885XPj3UntqciIn
+ ryJq6wlXd/INdO3qLpKv+zCWHiUjDZHNmdPUsxhqmWEa6ZmnX3NvQ6MeLIbAd7o+CAlnsafus
+ i6abMxSuJr9BGrFHXiAxrKZsCbGYlKWDaeBu0foqLJvV32PORbOHK8cus2vZRSGLElHIF+V47
+ pvCZWmjE1I9A4hSILa+lvmBteOWavAMvo4PuzH3bl+SJGR9gYLOWU76tKbbO1ev+0wg1dkfJ5
+ jOkbcykeZEbY7bJ4JT3Kz8xo4oc93rUUELLafzbIWwCdOln8ovo4DIlrFkLawnUqdn41KTZta
+ cFPNuJW3CvbABFv8dsogeL7fN12yN4Kkgw/TPHMIVVrBBmhxRo0d/TZTJqcrs1biQHTOUG9dZ
+ qm+D02lYx5lTen6fDRIlPt2K7ob7TKdEOzBhR0v+/91FZZCGY1t0MD4mUaXTa9CzdnE2MxJ8B
+ YJWBF61C1YkdlKt1pVua25I1BXCzAFjCn1PjGmdBbGS2LFNTnqOikH1V0oxOf7zRDz/IXOjuH
+ czUNZlrKFoEKu4X0Ui99YyM0CqG3o2h7CmsLh1sdC9NmN7r2Fokzucsn4it15JPSVSY5SFGUP
+ LRyKGnUfuYWNKhpkJLqEINJ9de8p6aWvBjdfBllf+cZ/FJujV62i2d1HUj9UYmqlUhyJq1Rsi
+ itoNBMjEm6QsNefBh/wXaPPABqzFahvNiJ0qTDow2Ei7rKvAlSkA49IX1DnPzE6GLN82Y9oEs
+ F4pvQjtLbS4jo0FS7R2xfwsOEXeIZ/mXlHNC6LHMWI+lBUgpWEfJ4GktmCkEXYZyYI3np/PBw
+ BqfiRAVc9YXGgJDvTumU2YsGpgrAOXJcSE+XeecOUGLMAlQo51d20sGA78I9SDjWn1YQgsyBM
+ UBE4CRWuJ9+H8oksXb0w==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, Jul 15, 2022 at 3:45 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
+> On Thu, Jul 14, 2022 at 2:47 PM Stafford Horne <shorne@gmail.com> wrote:
+>
+> > +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
+> > +{
+> > +       return channel ? 15 : 14;
+> > +}
+>
+> This addition does not make sense for the xtensa as it isn't even possible
+> to enable PNP support (the only user of this function) on xtensa.
 
+Nice catch! I had looked at this function earlier and only tried to infer
+which architectures might have this based on who has those interrupt
+numbers reserved for ISA devices, but looking at CONFIG_PNP is clearly
+better here.
 
-On 4/5/2022 12:12 AM, guoren@kernel.org wrote:
-> From: Christoph Hellwig <hch@lst.de>
-> 
-> Don't bother to define the symbols empty, just don't use them.
-> That makes the intent a little more clear.
-> 
-> Remove the unused HAVE_ARCH_STRUCT_FLOCK64 define and merge the
-> 32-bit mips struct flock into the generic one.
-> 
-> Add a new __ARCH_FLOCK_EXTRA_SYSID macro following the style of
-> __ARCH_FLOCK_PAD to avoid having a separate definition just for
-> one architecture.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
+PNP depends on "ISA || ACPI", and this already rules out most
+architectures. The remaining ones are:
 
-Being late to this, but this breaks the perf build for me using a MIPS 
-toolchain with the following:
+* x86, ia64, alpha: These clearly use PNP based on-board devices on
+   common machines, and use PC-style interrupts
 
-   CC 
-/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
-In file included from 
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
-                  from ../include/uapi/linux/fcntl.h:5,
-                  from trace/beauty/fcntl.c:10:
-../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of 
-'struct flock'
-  struct flock {
-         ^~~~~
-In file included from ../include/uapi/linux/fcntl.h:5,
-                  from trace/beauty/fcntl.c:10:
-../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8: 
-note: originally defined here
-  struct flock {
-         ^~~~~
-make[6]: *** 
-[/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/build/Makefile.build:97: 
-/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o] 
-Error 1
+* arm64, loongarch: These select PNP when ACPI is enabled. I don't
+   think they actually use PNP, but for the moment the function needs to
+  be defined, probably returning 0. Loongarch still lacks PCI support
+  though, so asm/pci.h is not yet there.
 
-the kernel headers are set to 4.1.31 which is arguably old but 
-toolchains using newer kernel headers do not fare much better either 
-unfortunately as I tried a toolchain with kernel headers 4.9.x.
+* arm, mips, powerpc: Only a few older machines in each of these
+  support ISA devices, and the function is probably machine specific.
+  These all have a custom pci.h already and don't use the asm-generic
+  version.
 
-I will start doing more regular MIPS builds of the perf tools since that 
-seems to escape our testing.
+* m68k: there are two that enable CONFIG_ISA and one that enables
+  CONFIG_PCI, but nothing that has both, so we don't need this
+  function.
 
-Thanks!
--- 
-Florian
+In summary, I think only x86 actually uses this function, and it is
+correct there, everything else either has its own implementation
+or does not need it, so the existing asm-generic/pci.h file can
+just be folded into the x86 asm/pci.h. That is a great cleanup.
+
+        Arnd
