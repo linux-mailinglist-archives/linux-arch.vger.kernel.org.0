@@ -2,105 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8433575994
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 04:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090FD5759DB
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 05:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241190AbiGOC1p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 14 Jul 2022 22:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S232974AbiGODNQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 14 Jul 2022 23:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiGOC1o (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jul 2022 22:27:44 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70757538B;
-        Thu, 14 Jul 2022 19:27:43 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 70so3500387pfx.1;
-        Thu, 14 Jul 2022 19:27:43 -0700 (PDT)
+        with ESMTP id S229945AbiGODNQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 14 Jul 2022 23:13:16 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A052CC91;
+        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 23so3273293pgc.8;
+        Thu, 14 Jul 2022 20:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2PHQEHiPUK5/kMXd0Tiaa/2KkMXqEO7YBVcbpRdWkzU=;
-        b=IEJMJOhzDLt+yfASXyPdeXR1oGGTsGDx3vl/pKDJYU0fM7xGoEYifRYmndgoDBn8V+
-         8KaH2UOTKaWNm2bcmSVrDZgCQRS5bZdc/JErVv0oiKI4D779tqf8qqqo8Y4iLSedLKu6
-         KJvBrd7MyyR0lBJJ++sR+EsLWE8c5/Kb5Z0fTJPJtZS1NwarGIQrRHk8mNKtsfmdVnsk
-         DdHkjkVUI3Go5QJOuWJ7tFYeVZyOTWJ1DVFRKCXBlPEbNV+fVinpn4yVP5n1HJQodgh9
-         gnwtaOMTLLw/5pbt9rN0/tXbYqausx/cGWYNWZ3PmgEiWfJZrxEj2bcNKssaqRx0mKTs
-         9LaA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
+        b=d6rOttoave+cYYycQLZVtn7+6/EvvZMoC4KlEKnu5+Iy0CvIZB6RZvM+yDNYgjVsg2
+         zExWP1Kt2mvHL2caS42uLQwLfFdIGT+vt+VNkOv6EFVEz1IJ1Ei1z/SUwomvWvL9yqs/
+         LsfjR3vwcHDm1bfvDdBsjVXVCIzYFoJ6KMcatcAC61WXc2/vMcOjiKCXnv0z+ZYpPW1D
+         29300GYk48m1QvWYlTwrWUJ2ga8Ap1QJw6DN92YdxZnF6aT4PwJr+48L7OzWyifSHnIo
+         bBliGjA2A7iI1JHvd2yG0VTITazqxx3xOm38zhCb9ZIUiYeXEPs2TlvdcILgJvPCljIq
+         R2+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2PHQEHiPUK5/kMXd0Tiaa/2KkMXqEO7YBVcbpRdWkzU=;
-        b=anzorEmxO85UsEOGY79quda28Vup/O9mu/0P2oIsBhYfxOUJPiVm5chHxphIUi+qG8
-         4JKlUTYDfFuNQ2NdgKL7kYaFgHDjNzvTWC5SPjdUkoc7IK7oy4kcH7iMkaO0zqc19Ov6
-         hEebLt4VbY2sACEh5DmypErbaGEDKMBy4gjp9JnDMGrQ/Jj85i6pIOeVGDj3GkGptVle
-         hWNJ4bjSksMCBcYYStGk9+gXIKB4HVU7U5iqbIG/X7qYXz9/D7dUu2eeEfJNP0HpFm2p
-         mGQ1NyDrUwmqzIrqCUkQMX+c+u8jZJ/nkh6eRtPnlINY5r+zs4qkH0dUbANz428TkgjW
-         u73g==
-X-Gm-Message-State: AJIora8lPZykhRvvBAWD4qPP2kEntgbVxTreeZ7C766wrU0aAjiVrjT1
-        ZbEJ8hknm2iWb1TTMIHV398=
-X-Google-Smtp-Source: AGRyM1tFpAPO14ibbARmvlyA7Dm2i3y8ihIra24Y5oG5D9v2V9oCrT80IZwFQQ8AdtfnaIGZOBL3gA==
-X-Received: by 2002:a63:9547:0:b0:408:be53:b599 with SMTP id t7-20020a639547000000b00408be53b599mr10179125pgn.463.1657852063244;
-        Thu, 14 Jul 2022 19:27:43 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id v22-20020a631516000000b0040caab35e5bsm1998257pgl.89.2022.07.14.19.27.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Jul 2022 19:27:42 -0700 (PDT)
-Date:   Fri, 15 Jul 2022 11:27:41 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE..." <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "open list:IA64 (Itanium) PL..." <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "open list:SPARC + UltraSPAR..." <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, linux-pci@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [RFC PATCH 1/2] asm-generic: Remove pci.h copying code out to
- architectures
-Message-ID: <YtDQnQOeDF6RID4g@antec>
-References: <20220714214657.2402250-1-shorne@gmail.com>
- <20220714214657.2402250-2-shorne@gmail.com>
- <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0kNvzHNczTALecfT9wto6CsS50awskOSoxCbfvaNPgc=;
+        b=QN1KHrm48rAJD5fzBNOgZjhfCzLL8XI17G9WwVqedi0xmXJr+o4BaGjxNFXWcshhUC
+         CmHS6PrTCfGBrnbZ9z4vGHmXJ+SL//YgSGSzEtX6lBI19hHyXLtjSBs9HctMfkGtO8ml
+         0X9hX9AlLkBpQXtn1QQ5jdSmNs+WGL0Jk1Lk3arotJV5+ANfLEgRLd7sS7cRoK04QdK5
+         b3hxuKptjV7JNBQnFwgpsHI5UcaJeOqyfLIA1IDX2EmNzpCp490SxVhvM69ihquIZeOd
+         rPXrHv86Nkbp/d28j3C/DMopZHJJHhmRfkIGHsxWayrIdb6LHd94G3taAg8koCq+59N7
+         L0+Q==
+X-Gm-Message-State: AJIora/SCLgVhagKduoZ2Bldj4py96FUWu4qtip08JTEn/nvRD2iAyXq
+        /rHgr7ZE3NSmYeZkhSv0VcQ+s5MPcxY=
+X-Google-Smtp-Source: AGRyM1vK5uqkhNs5DYoiUnUKiOfj2RRKOpP4xHProAEOYr/w1Br1ZQPpNcitPwDkSe+/qgFCXMCFZg==
+X-Received: by 2002:a63:2051:0:b0:412:6d61:ab0a with SMTP id r17-20020a632051000000b004126d61ab0amr10627004pgm.52.1657854794876;
+        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c6a6d8967sm2236563plh.83.2022.07.14.20.13.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 20:13:14 -0700 (PDT)
+Message-ID: <d95d1afe-655c-3526-0c7e-949dfad8c6ba@gmail.com>
+Date:   Thu, 14 Jul 2022 20:13:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH V12 01/20] uapi: simplify __ARCH_FLOCK{,64}_PAD a little
+Content-Language: en-US
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
+        naresh.kamboju@linaro.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        heiko@sntech.de
+References: <20220405071314.3225832-1-guoren@kernel.org>
+ <20220405071314.3225832-2-guoren@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220405071314.3225832-2-guoren@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -109,57 +80,57 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 06:45:27PM -0700, Max Filippov wrote:
-> On Thu, Jul 14, 2022 at 2:47 PM Stafford Horne <shorne@gmail.com> wrote:
-> >
-> > The generic pci.h header provides a definition of pci_get_legacy_ide_irq
-> > which is used by architectures that use PC-style interrupt numbers.
-> >
-> > This patch removes the old pci.h in order to make room for a new
-> > pci.h to be used by arm64, riscv, openrisc, etc.
-> >
-> > The existing code in pci.h is moved out to architectures.
-> >
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Link: https://lore.kernel.org/lkml/CAK8P3a0JmPeczfmMBE__vn=Jbvf=nkbpVaZCycyv40pZNCJJXQ@mail.gmail.com/
-> > Signed-off-by: Stafford Horne <shorne@gmail.com>
-> > ---
-> >  arch/alpha/include/asm/pci.h   |  1 -
-> >  arch/ia64/include/asm/pci.h    |  1 -
-> >  arch/m68k/include/asm/pci.h    |  7 +++++--
-> >  arch/powerpc/include/asm/pci.h |  1 -
-> >  arch/s390/include/asm/pci.h    |  6 +++++-
-> >  arch/sparc/include/asm/pci.h   |  5 ++++-
-> >  arch/x86/include/asm/pci.h     |  6 ++++--
-> >  arch/xtensa/include/asm/pci.h  |  6 ++++--
-> >  include/asm-generic/pci.h      | 17 -----------------
-> >  9 files changed, 22 insertions(+), 28 deletions(-)
-> >  delete mode 100644 include/asm-generic/pci.h
-> 
-> [...]
-> 
-> > diff --git a/arch/xtensa/include/asm/pci.h b/arch/xtensa/include/asm/pci.h
-> > index 8e2b48a268db..f57ede61f5db 100644
-> > --- a/arch/xtensa/include/asm/pci.h
-> > +++ b/arch/xtensa/include/asm/pci.h
-> > @@ -43,7 +43,9 @@
-> >  #define ARCH_GENERIC_PCI_MMAP_RESOURCE 1
-> >  #define arch_can_pci_mmap_io()         1
-> >
-> > -/* Generic PCI */
-> > -#include <asm-generic/pci.h>
-> 
-> Ok.
-> 
-> > +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > +{
-> > +       return channel ? 15 : 14;
-> > +}
-> 
-> This addition does not make sense for the xtensa as it isn't even possible
-> to enable PNP support (the only user of this function) on xtensa.
 
-Thanks for your feedback, this is the kind of feedback I was hoping to fish out
-with this patch.  I will look into completely removing this then.
 
--Stafford
+On 4/5/2022 12:12 AM, guoren@kernel.org wrote:
+> From: Christoph Hellwig <hch@lst.de>
+> 
+> Don't bother to define the symbols empty, just don't use them.
+> That makes the intent a little more clear.
+> 
+> Remove the unused HAVE_ARCH_STRUCT_FLOCK64 define and merge the
+> 32-bit mips struct flock into the generic one.
+> 
+> Add a new __ARCH_FLOCK_EXTRA_SYSID macro following the style of
+> __ARCH_FLOCK_PAD to avoid having a separate definition just for
+> one architecture.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
+
+Being late to this, but this breaks the perf build for me using a MIPS 
+toolchain with the following:
+
+   CC 
+/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o
+In file included from 
+../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:77,
+                  from ../include/uapi/linux/fcntl.h:5,
+                  from trace/beauty/fcntl.c:10:
+../include/uapi/asm-generic/fcntl.h:188:8: error: redefinition of 
+'struct flock'
+  struct flock {
+         ^~~~~
+In file included from ../include/uapi/linux/fcntl.h:5,
+                  from trace/beauty/fcntl.c:10:
+../../../../host/mipsel-buildroot-linux-gnu/sysroot/usr/include/asm/fcntl.h:63:8: 
+note: originally defined here
+  struct flock {
+         ^~~~~
+make[6]: *** 
+[/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/build/Makefile.build:97: 
+/home/fainelli/work/buildroot/output/bmips/build/linux-custom/tools/perf/trace/beauty/fcntl.o] 
+Error 1
+
+the kernel headers are set to 4.1.31 which is arguably old but 
+toolchains using newer kernel headers do not fare much better either 
+unfortunately as I tried a toolchain with kernel headers 4.9.x.
+
+I will start doing more regular MIPS builds of the perf tools since that 
+seems to escape our testing.
+
+Thanks!
+-- 
+Florian
