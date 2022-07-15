@@ -2,76 +2,101 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36D3575DA1
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 10:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432AD575E14
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 11:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiGOIjU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jul 2022 04:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
+        id S233005AbiGOIyG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jul 2022 04:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiGOIjL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jul 2022 04:39:11 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BFE51416;
-        Fri, 15 Jul 2022 01:39:09 -0700 (PDT)
-Received: from mail-ot1-f51.google.com ([209.85.210.51]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mhl4Q-1nYpMx1O9A-00dosM; Fri, 15 Jul 2022 10:39:07 +0200
-Received: by mail-ot1-f51.google.com with SMTP id k8-20020a9d4b88000000b0061c7f8c4f77so2095004otf.10;
-        Fri, 15 Jul 2022 01:39:06 -0700 (PDT)
-X-Gm-Message-State: AJIora9ZfrV3bdROid6AD8wQL3PFzt++iQ2xe4ScwhMuGWO2zhZ88xap
-        t260M3+xVdEyWttA+X/tktJ88qKp3/feYInthCI=
-X-Google-Smtp-Source: AGRyM1tHW75qCujFy97ODmosD9Zq5/ZJz8LFlR+pPafKBIRkIjZ9IOLEvm6nWkFKYL4KxpjirK2nvE70QWAIuDMflXk=
-X-Received: by 2002:a25:73d1:0:b0:66e:aee4:feb3 with SMTP id
- o200-20020a2573d1000000b0066eaee4feb3mr13106300ybc.452.1657872578352; Fri, 15
- Jul 2022 01:09:38 -0700 (PDT)
+        with ESMTP id S233714AbiGOIxy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jul 2022 04:53:54 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB54683F25
+        for <linux-arch@vger.kernel.org>; Fri, 15 Jul 2022 01:52:58 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id a18-20020a05600c349200b003a30de68697so368975wmq.0
+        for <linux-arch@vger.kernel.org>; Fri, 15 Jul 2022 01:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lnbKwcn88f6NuJinTbm+K+QRokDztEAvNGDk/1bg6OE=;
+        b=EPbgaSiEgC0y6d0plpABJbe4WhG92iJsdO7dU4p4mGED6SykJ/QDLH8/N2MxjUYHLX
+         qVDpoVZVSrTIEGtj5KQFMHqpe9JYWRRZDrXn2v3rXeazNEUOWy1DUOcrai9kkXEGTF6r
+         Zorc70RXImp1DoNbN7gOVkLYiKKr0zAgFDhslcXhBW1frZb9YL6LGtquavH5ImbiumLf
+         HUjYzzAfkRf7I3yGNLmsMogn7wQTzJWPX+9gDPv59k8FDoh+Ws/bvhFWFmYkGhTrDud6
+         qS5XqssX+c/dSGecigcLJNoTijBqR9PRcLFbV7SqARVFen9kuXNNiMutKStWZWzooUJD
+         jaHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lnbKwcn88f6NuJinTbm+K+QRokDztEAvNGDk/1bg6OE=;
+        b=i45gNqYMDCMFmO+Rlk8W4I0QYkh6E9G5z79tNKTNiCk6+YRH3N5+vrk+kRvFK+tpJT
+         Afgs3Q8jtmaS0TYKZY9O/HRhMDAcN/y/+ftI+A/yDNMABz79A3Es84VMwG1j1L7zUqnv
+         pwzGOSZJrKRUCvjHnzxhQHQvS/4GEqXZ/+Lxrk52+dU6uV2PMRzbdUQVDSj1brwCGsoZ
+         5IkCPMpXYBrgD9YQIvCJMQROwPHAcztqx29uZ0iGaj+syyDU7VyeZ9leQkghTCf1DrGt
+         7jC15ojQ/pQZf3VZH2WJWd2cWTaHabRjNLHqBtDeve5kzJ60ub2y58jtgwiJcQJlLs4r
+         Mngw==
+X-Gm-Message-State: AJIora8f11a7YheqxfadQ1bWYuaGtTAWV2epyVpVP4ob4pdI3oorfLqL
+        xBtFibf4lV6Xx7rAB7DaKNQjAw==
+X-Google-Smtp-Source: AGRyM1tkG0LUmTaEynDGXTm4Zb2UyVqfYMmac0HS4kuDLCGKKbrryKEGrHBi6pSIk5JB5Rsgrgifsw==
+X-Received: by 2002:a05:600c:354e:b0:3a1:9ddf:468d with SMTP id i14-20020a05600c354e00b003a19ddf468dmr18784274wmq.145.1657875177165;
+        Fri, 15 Jul 2022 01:52:57 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:b388:52a3:7014:22f5])
+        by smtp.gmail.com with ESMTPSA id i15-20020a5d438f000000b0021d4d6355efsm3285703wrq.109.2022.07.15.01.52.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Jul 2022 01:52:56 -0700 (PDT)
+Date:   Fri, 15 Jul 2022 10:52:49 +0200
+From:   Marco Elver <elver@google.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 06/45] kmsan: add ReST documentation
+Message-ID: <YtEq4dFk/NvE43iM@elver.google.com>
+References: <20220701142310.2188015-1-glider@google.com>
+ <20220701142310.2188015-7-glider@google.com>
+ <CANpmjNN=XO=6rpV-KS2xq=3fiV1L3wCL1DFwLes-CJsi=6ZmcQ@mail.gmail.com>
+ <CAG_fn=X5w5F1rwHuQqQ9GRYT4MiNGQLh71FRN16Wy3rGJLX_AA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220714214657.2402250-1-shorne@gmail.com> <20220714214657.2402250-3-shorne@gmail.com>
-In-Reply-To: <20220714214657.2402250-3-shorne@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 15 Jul 2022 10:09:21 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2_HKMf8nMcSkK1_jyCEHEdzz=YiRmPvN+ACbPTafXJzA@mail.gmail.com>
-Message-ID: <CAK8P3a2_HKMf8nMcSkK1_jyCEHEdzz=YiRmPvN+ACbPTafXJzA@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] asm-generic: Add new pci.h and use it
-To:     Stafford Horne <shorne@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Nt52xjsJzLfJbx6bRziB8rKjrlCwthE2G6HtbRBCsNBt/zs2mo2
- R+zxCpzWBn+E9PRIJX9sfMfdZ2jE2MFo0nx40nPnt/KwgS5rY+jNF8OTtCszYlSR+DvY55Q
- N8/Q53v9N0+VyQGEsBoArO6QqUcFEg0pTflRtXN7VtD5MerfYTdmUDGldG1AzUHDwPbTmi3
- 2XGtKEqTZPyfR9FDnGlLQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rYyucx0ZdqI=:rPmF0o7ogy9z6EtFl7IA7Q
- j/McKn5R/FIJ0+0/sN20bcGfqmONXGRRmTvP7LVDrzKVPveFiTULe2gkPGKzEkIMczsZ5RZvl
- 2qYhOPZUmtYqEuJuabNpBpo6Ciykp0/kmTYiAjaYljvlLqGx/sjmDJv6HdULJUAsWMxpjYTEw
- wsLC6xmeEzESPYpluUHhPsnR2XwmvqmcUUAubC9D+3MChqbfdxuHk4O5bTF7Kcoj5dsg3NW3H
- jHhynwT7qRT4p6eF/tfG9aMTSbVtRJp4x+MaVitnAiRiaXFYXPYu+9qPIoPbQy2VMUN3EPipF
- mWqHH6dB3xR1Ae8RZSNT+F0fbyCVM1a2FEHANAUzCa0MnyKl0Q7/hjpXMWrQCwYwc6UjiN89N
- 1CEL9hsDTTUS3U1b6iEXEDqL69G6UjtteEhaVhR1FVPXL1PlBJTzbzohRUUE/jOsyfUU37+YX
- ABfFnIC4BlyUxk89Q911u0a7585RD+s8UKrdT8gJRs+UlwDoxRsmY1ZBS5APZHoitpwjKX4II
- GVkpT6RNrvY+dpS5Hk3vxeQKAKEof3tBzwMwECk2HCNk2V/JPZbi0aW/6RMnLo/8VlfcBx8YO
- llwJmiSN2P/fnVe5RAJV7QnjUAHzqoammocfEl+BqQgxSeafNHxGrps7iNU/McitKPXbY+clj
- 8Z17D1VcrZK6CvDi/nvZn2Ka/uwr1IAOc5wLsojfRnxu5oagPNk3X8CUVxQCdkbzOxkVa3qbJ
- y2uMIRgmjD8TOC8qLtcSVSXhEyKPZl7XihFDKfea7sRGSYcX/tzvtJAaOBvtOrf5so5j9NZ0B
- Yrnhjjk/dXEqVvWfvTphGhuO9rc1KnZpNW3RqdRW/oxg5dKKzmgd/l40PX0Od75ZSo2X/CTKH
- hS4ccGAbxSsDH/Ehbh4Q==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=X5w5F1rwHuQqQ9GRYT4MiNGQLh71FRN16Wy3rGJLX_AA@mail.gmail.com>
+User-Agent: Mutt/2.2.4 (2022-04-30)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,58 +104,68 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 11:46 PM Stafford Horne <shorne@gmail.com> wrote:
->
-> The asm/pci.h used for many newer architectures share similar
-> definitions.  Move the common parts to asm-generic/pci.h to allow for
-> sharing code.
+On Fri, Jul 15, 2022 at 09:42AM +0200, Alexander Potapenko wrote:
+[...]
+> > This sentence might still be confusing. I think it should highlight
+> > that runtime and compiler go together, but depending on the scope of
+> > the value, the compiler invokes the runtime to persist the shadow.
+> 
+> Changed to:
+> """
+> Compiler instrumentation also tracks the shadow values as they are used along
+> the code. When needed, instrumentation code invokes the runtime library in
+> ``mm/kmsan/`` to persist shadow values.
+> """
 
-This looks very nice, thanks for doing it!
+Ack.
 
-> Two things to note are:
->
->  - isa_dma_bridge_buggy, traditionally this is defined in asm/dma.h but
->    these architectures avoid creating that file and add the definition
->    to asm/pci.h.
+[...]
+> > > +Passing uninitialized values to functions
+> > > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > +
+> > > +KMSAN instrumentation pass has an option, ``-fsanitize-memory-param-retval``,
+> >
+> > "KMSAN instrumentation pass" -> "Clang's instrumentation support" ?
+> > Because it seems wrong to say that KMSAN has the instrumentation pass.
+> How about "Clang's MSan instrumentation pass"?
 
-I would prefer if we could just kill off this variable for non-x86, as it's
-only set to a nonzero value in two implementations that are both
-x86-specific and most of the references are gone. That does not have
-to be part of this series though, if you don't want to address it here, just
-add a comment to the new pci.h file.
+Maybe just "Clang's MemorySanitizer instrumentation" - no abbreviation,
+and "pass" is very compiler-implementation specific and not everyone
+might know what "pass" even means in this context, so I'd leave it out.
 
->  - ARCH_GENERIC_PCI_MMAP_RESOURCE, csky does not define this so we
->    undefine it after including asm-generic/pci.h.  Why doesn't csky
->    define it?
+[...]
+> > It would be useful to move this section somewhere to the beginning,
+> > closer to usage and the example, as this is information that a user of
+> > KMSAN might want to know (but they might not want to know much about
+> > how KMSAN works).
+> 
+> I restructured the TOC as follows:
+> 
+> == The Kernel Memory Sanitizer (KMSAN)
+> == Usage
+> --- Building the kernel
+> --- Example report
+> --- Disabling the instrumentation
+> == Support
+> == How KMSAN works
+> --- KMSAN shadow memory
+> --- Origin tracking
+> ~~~~ Origin chaining
+> --- Clang instrumentation API
+> ~~~~ Shadow manipulation
+> ~~~~ Handling locals
+> ~~~~ Access to per-task data
+> ~~~~ Passing uninitialized values to functions
+> ~~~~ String functions
+> ~~~~ Error reporting
+> ~~~~ Inline assembly instrumentation
+> --- Runtime library
+> ~~~~ Per-task KMSAN state
+> ~~~~ KMSAN contexts
+> ~~~~ Metadata allocation
+> == References
 
-Adding David Woodhouse to Cc, as he introduced this interface. As I
-understand it, this was meant as a replacement for the old
-architecture specific pci_mmap_page_range interface, and is ideally
-used everywhere.
+LGTM.
 
-It's probably something that slipped through the review of csky and
-should have been there.
-
-As an aside, it seems the pci_mmap_page_range() cleanup was
-left almost complete, with sparc being the only one left after
-David Miller found a problem with the generic code. Not sure if
-this was ever resolved:
-https://lore.kernel.org/lkml/1519887203.622.3.camel@infradead.org/t/#u
-
-> +#ifndef PCIBIOS_MIN_IO
-> +#define PCIBIOS_MIN_IO         0
-> +#endif
-> +
-> +#define PCIBIOS_MIN_MEM                0
-
-We should probably #ifdef both of these for consistency.
-
-> +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> +{
-> +       /* no legacy ide irq support */
-> +       return -ENODEV;
-> +}
-
-And this can just go away now, according to what we found.
-
-        Arnd
+Thanks,
+-- Marco
