@@ -2,148 +2,351 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB5C575C83
-	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 09:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7941E575C8D
+	for <lists+linux-arch@lfdr.de>; Fri, 15 Jul 2022 09:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiGOHkc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 15 Jul 2022 03:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S231867AbiGOHnQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 15 Jul 2022 03:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiGOHkb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jul 2022 03:40:31 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FE1753BE;
-        Fri, 15 Jul 2022 00:40:30 -0700 (PDT)
-Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MA7Ss-1oNpiA3254-00BfVX; Fri, 15 Jul 2022 09:40:28 +0200
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-31cf1adbf92so39648387b3.4;
-        Fri, 15 Jul 2022 00:40:27 -0700 (PDT)
-X-Gm-Message-State: AJIora/fTKTlEaQ6ForIwp6vaAUn/b1dpffbCpl9ZZp7EW7eVUyBRrY+
-        OOlAwzzHtCrJhUczSWFnSA3F0hO+0qnHf0ghyiY=
-X-Google-Smtp-Source: AGRyM1uqN7hbJWu1Kc45V1df/TuEhLpRBy0jFrUgJKDcJEoO7ehMJuFR6t3QFdid1eQbrmQCLxECRTpajxA3X2Ob8Ys=
-X-Received: by 2002:a81:1e4d:0:b0:31c:86f1:95b1 with SMTP id
- e74-20020a811e4d000000b0031c86f195b1mr14141207ywe.42.1657870826723; Fri, 15
- Jul 2022 00:40:26 -0700 (PDT)
+        with ESMTP id S231494AbiGOHnP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 15 Jul 2022 03:43:15 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA067C1A3
+        for <linux-arch@vger.kernel.org>; Fri, 15 Jul 2022 00:43:14 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id l11so7130990ybu.13
+        for <linux-arch@vger.kernel.org>; Fri, 15 Jul 2022 00:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=wow5GwZUq1ephtzdcsWQKNRsHibDh8Of4LJkNVIGZKs=;
+        b=Ke0eisTSZGPbvx05SZjplrvc8C0ps+HhylKVr+trNqEhKwHq+FokvjgLJvRoKLkAuH
+         RD2HYioVCFb24lhQ3XcFHhusrC5pH5T7Qj0KZP8v8x1rprcWNS0c6WzBy+Nf5rTMGtpK
+         TeL6rUbgbp52mBHpAZsxK+zJro+L7RGvte7pTNctGhTQTJBr2NlJmL9/FkHsRcKAvXEB
+         tFNAHIKrBq7jWQqcdb9SJ6Qh9qsshjr5Smwo0Y8fNPp+StwDYbSlwGv0kGslv2fgJ9C9
+         cVt4zngbnfJ9x8wrWx+K0j5AmmPw8IFf/FPHi6jmlGRf0y62N9BNz5KNjSMBeQtKXvLw
+         fJoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=wow5GwZUq1ephtzdcsWQKNRsHibDh8Of4LJkNVIGZKs=;
+        b=NOKEO7DwuEb32+npZaWMElVNWOLjt93dINjVCADJ8QU7YJ5ab46PX5mW1XKOSfoJJu
+         usO7+Ra1zSO25PaOTvh8MdV8xYfSozcBbIiCIMWjHFvnnVS53WHFwlNlRjuTuXHUi//x
+         HGFywlNtfDjjAAZsgGL5QPZ+Xc0Vnc7g94L8uVYmXA31P0G+uS93aDw/AGLzlBgCvo22
+         IB+U415K8zc4t8knU56xHQ8KkX8XmeAizR4ajbPW2idG+U9vLaTzP+WfDj+ykrxClUUC
+         CYGrPQcHec2Hi9aOCtAZWttS2N3gS0iEUsqRafA1400+tVsKOVXsdx3hgADPfpV7WxYQ
+         Rphw==
+X-Gm-Message-State: AJIora8teMVwTpEdhs1EQmtS/NmrLnB0igq5gMLoZ49oWRLlyBj8Im+9
+        BwS6FC+VFoiGHeS5by+fqLujpENiOhy4HeQOs1+H6w==
+X-Google-Smtp-Source: AGRyM1tscrvzEdkwMdJTGf/7hU0rpmIPG1IpGhQ3bkblbX9MB1wpw8oOOH54vUDQHR0mEaBRLxiUvqdvy/KJh//vzBU=
+X-Received: by 2002:a25:d78c:0:b0:66f:5acb:d3bf with SMTP id
+ o134-20020a25d78c000000b0066f5acbd3bfmr12396195ybg.307.1657870993486; Fri, 15
+ Jul 2022 00:43:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220714214657.2402250-1-shorne@gmail.com> <20220714214657.2402250-2-shorne@gmail.com>
- <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
-In-Reply-To: <CAMo8BfKkGRHiFq1vu1ZKkURkUqC+Ee7D42yuKrCeDF+578s9cw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 15 Jul 2022 09:40:10 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3S5crDdUcO0kAgOLVGYgXnkU9D3uo44Wrcu5LdAWCGoQ@mail.gmail.com>
-Message-ID: <CAK8P3a3S5crDdUcO0kAgOLVGYgXnkU9D3uo44Wrcu5LdAWCGoQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] asm-generic: Remove pci.h copying code out to architectures
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     Stafford Horne <shorne@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE..." <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-7-glider@google.com>
+ <CANpmjNN=XO=6rpV-KS2xq=3fiV1L3wCL1DFwLes-CJsi=6ZmcQ@mail.gmail.com>
+In-Reply-To: <CANpmjNN=XO=6rpV-KS2xq=3fiV1L3wCL1DFwLes-CJsi=6ZmcQ@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 15 Jul 2022 09:42:37 +0200
+Message-ID: <CAG_fn=X5w5F1rwHuQqQ9GRYT4MiNGQLh71FRN16Wy3rGJLX_AA@mail.gmail.com>
+Subject: Re: [PATCH v4 06/45] kmsan: add ReST documentation
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
         Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
-        "open list:IA64 (Itanium) PL..." <linux-ia64@vger.kernel.org>,
-        "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        "open list:SPARC + UltraSPAR..." <sparclinux@vger.kernel.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xBt1Buqz4uz21xjgRTcz1sB5ZZm4RpSgjeDdgjcJqTVZpbgGxE9
- nD1Zu4Ge/pN+IeJ5he3jwNMmhWT/KQ3Tih2/6CVgZId1G/PwWsU/qowRmpQOyfQoQmRELAt
- O10L1cjPx95JNrnrugzLqkMFdBASwkg7W3Y7jkVvUZ2Vh4E6XJobZnUTDU1xZGnR6J8Ks3c
- d7BkFYX1WbWfFA63SEFXQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:seUnc9f1U8s=:S9bJx32885XPj3UntqciIn
- ryJq6wlXd/INdO3qLpKv+zCWHiUjDZHNmdPUsxhqmWEa6ZmnX3NvQ6MeLIbAd7o+CAlnsafus
- i6abMxSuJr9BGrFHXiAxrKZsCbGYlKWDaeBu0foqLJvV32PORbOHK8cus2vZRSGLElHIF+V47
- pvCZWmjE1I9A4hSILa+lvmBteOWavAMvo4PuzH3bl+SJGR9gYLOWU76tKbbO1ev+0wg1dkfJ5
- jOkbcykeZEbY7bJ4JT3Kz8xo4oc93rUUELLafzbIWwCdOln8ovo4DIlrFkLawnUqdn41KTZta
- cFPNuJW3CvbABFv8dsogeL7fN12yN4Kkgw/TPHMIVVrBBmhxRo0d/TZTJqcrs1biQHTOUG9dZ
- qm+D02lYx5lTen6fDRIlPt2K7ob7TKdEOzBhR0v+/91FZZCGY1t0MD4mUaXTa9CzdnE2MxJ8B
- YJWBF61C1YkdlKt1pVua25I1BXCzAFjCn1PjGmdBbGS2LFNTnqOikH1V0oxOf7zRDz/IXOjuH
- czUNZlrKFoEKu4X0Ui99YyM0CqG3o2h7CmsLh1sdC9NmN7r2Fokzucsn4it15JPSVSY5SFGUP
- LRyKGnUfuYWNKhpkJLqEINJ9de8p6aWvBjdfBllf+cZ/FJujV62i2d1HUj9UYmqlUhyJq1Rsi
- itoNBMjEm6QsNefBh/wXaPPABqzFahvNiJ0qTDow2Ei7rKvAlSkA49IX1DnPzE6GLN82Y9oEs
- F4pvQjtLbS4jo0FS7R2xfwsOEXeIZ/mXlHNC6LHMWI+lBUgpWEfJ4GktmCkEXYZyYI3np/PBw
- BqfiRAVc9YXGgJDvTumU2YsGpgrAOXJcSE+XeecOUGLMAlQo51d20sGA78I9SDjWn1YQgsyBM
- UBE4CRWuJ9+H8oksXb0w==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 3:45 AM Max Filippov <jcmvbkbc@gmail.com> wrote:
-> On Thu, Jul 14, 2022 at 2:47 PM Stafford Horne <shorne@gmail.com> wrote:
+> To be consistent with other tools, I think we have settled on "The
+> Kernel <...> Sanitizer (K?SAN)", see
+> Documentation/dev-tools/k[ac]san.rst. So this will be "The Kernel
+> Memory Sanitizer (KMSAN)".
+
+Done (will appear in v5).
+
+
+> -> "The third stack trace ..."
+> (Because it looks like there's also another stack trace in the middle
+> and "lower" is ambiguous)
+
+Done
+
 >
-> > +static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > +{
-> > +       return channel ? 15 : 14;
-> > +}
+> > +where this variable was created.
+> > +
+> > +The upper stack shows where the uninit value was used - in
 >
-> This addition does not make sense for the xtensa as it isn't even possible
-> to enable PNP support (the only user of this function) on xtensa.
+> -> "The first stack trace shows where the uninit value was used (in
+> ``test_uninit_kmsan_check_memory()``)."
+Done
 
-Nice catch! I had looked at this function earlier and only tried to infer
-which architectures might have this based on who has those interrupt
-numbers reserved for ISA devices, but looking at CONFIG_PNP is clearly
-better here.
+> > +KMSAN and Clang
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> The KASAN documentation has a section on "Support" which lists
+> architectures and compilers supported. I'd try to mirror (or improve
+> on) that.
 
-PNP depends on "ISA || ACPI", and this already rules out most
-architectures. The remaining ones are:
+Renamed this section to "Support", added a line about supported
+architectures (x86_64)
 
-* x86, ia64, alpha: These clearly use PNP based on-board devices on
-   common machines, and use PC-style interrupts
+>
+> > +In order for KMSAN to work the kernel must be built with Clang, which =
+so far is
+> > +the only compiler that has KMSAN support. The kernel instrumentation p=
+ass is
+> > +based on the userspace `MemorySanitizer tool`_.
+> > +
+> > +How to build
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> I'd call it "Usage", like in the KASAN and KCSAN documentation.
+Done
 
-* arm64, loongarch: These select PNP when ACPI is enabled. I don't
-   think they actually use PNP, but for the moment the function needs to
-  be defined, probably returning 0. Loongarch still lacks PCI support
-  though, so asm/pci.h is not yet there.
+>
+> > +In order to build a kernel with KMSAN you will need a fresh Clang (14.=
+0.0+).
+> > +Please refer to `LLVM documentation`_ for the instructions on how to b=
+uild Clang.
+> > +
+> > +Now configure and build the kernel with CONFIG_KMSAN enabled.
+>
+> I would move build/usage instructions right after introduction as
+> that's most likely what users of KMSAN will want to know about first.
 
-* arm, mips, powerpc: Only a few older machines in each of these
-  support ISA devices, and the function is probably machine specific.
-  These all have a custom pci.h already and don't use the asm-generic
-  version.
+Done
 
-* m68k: there are two that enable CONFIG_ISA and one that enables
-  CONFIG_PCI, but nothing that has both, so we don't need this
-  function.
+> > +How KMSAN works
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +KMSAN shadow memory
+> > +-------------------
+> > +
+> > +KMSAN associates a metadata byte (also called shadow byte) with every =
+byte of
+> > +kernel memory. A bit in the shadow byte is set iff the corresponding b=
+it of the
+> > +kernel memory byte is uninitialized. Marking the memory uninitialized =
+(i.e.
+> > +setting its shadow bytes to ``0xff``) is called poisoning, marking it
+> > +initialized (setting the shadow bytes to ``0x00``) is called unpoisoni=
+ng.
+> > +
+> > +When a new variable is allocated on the stack, it is poisoned by defau=
+lt by
+> > +instrumentation code inserted by the compiler (unless it is a stack va=
+riable
+> > +that is immediately initialized). Any new heap allocation done without
+> > +``__GFP_ZERO`` is also poisoned.
+> > +
+> > +Compiler instrumentation also tracks the shadow values with the help f=
+rom the
+> > +runtime library in ``mm/kmsan/``.
+>
+> This sentence might still be confusing. I think it should highlight
+> that runtime and compiler go together, but depending on the scope of
+> the value, the compiler invokes the runtime to persist the shadow.
 
-In summary, I think only x86 actually uses this function, and it is
-correct there, everything else either has its own implementation
-or does not need it, so the existing asm-generic/pci.h file can
-just be folded into the x86 asm/pci.h. That is a great cleanup.
+Changed to:
+"""
+Compiler instrumentation also tracks the shadow values as they are used alo=
+ng
+the code. When needed, instrumentation code invokes the runtime library in
+``mm/kmsan/`` to persist shadow values.
+"""
 
-        Arnd
+> > +
+> > +
+>
+> There are 2 blank lines here, which is inconsistent with the rest of
+> the document.
+
+Fixed
+
+> > +Origin tracking
+> > +---------------
+> > +
+> > +Every four bytes of kernel memory also have a so-called origin assigne=
+d to
+>
+> Is "assigned" or "mapped" more appropriate here?
+
+I think initially this was more about origin values that exist in SSA
+as well as memory, so not all of them were "mapped".
+On the other hand, we're talking about bytes in the memory, so "mapped" is =
+fine.
+
+> > +them. This origin describes the point in program execution at which th=
+e
+> > +uninitialized value was created. Every origin is associated with eithe=
+r the
+> > +full allocation stack (for heap-allocated memory), or the function con=
+taining
+> > +the uninitialized variable (for locals).
+> > +
+> > +When an uninitialized variable is allocated on stack or heap, a new or=
+igin
+> > +value is created, and that variable's origin is filled with that value=
+.
+> > +When a value is read from memory, its origin is also read and kept tog=
+ether
+> > +with the shadow. For every instruction that takes one or more values t=
+he origin
+>
+> s/values the origin/values, the origin/
+Done, thanks!
+
+
+> > +
+> > +If ``a`` is initialized and ``b`` is not, the shadow of the result wou=
+ld be
+> > +0xffff0000, and the origin of the result would be the origin of ``b``.
+> > +``ret.s[0]`` would have the same origin, but it will be never used, be=
+cause
+>
+> s/be never/never be/
+Done
+
+> > +Passing uninitialized values to functions
+> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > +
+> > +KMSAN instrumentation pass has an option, ``-fsanitize-memory-param-re=
+tval``,
+>
+> "KMSAN instrumentation pass" -> "Clang's instrumentation support" ?
+> Because it seems wrong to say that KMSAN has the instrumentation pass.
+How about "Clang's MSan instrumentation pass"?
+
+> > +
+> > +Sometimes the pointers passed into inline assembly do not point to val=
+id memory.
+> > +In such cases they are ignored at runtime.
+> > +
+> > +Disabling the instrumentation
+> > +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> It would be useful to move this section somewhere to the beginning,
+> closer to usage and the example, as this is information that a user of
+> KMSAN might want to know (but they might not want to know much about
+> how KMSAN works).
+
+I restructured the TOC as follows:
+
+=3D=3D The Kernel Memory Sanitizer (KMSAN)
+=3D=3D Usage
+--- Building the kernel
+--- Example report
+--- Disabling the instrumentation
+=3D=3D Support
+=3D=3D How KMSAN works
+--- KMSAN shadow memory
+--- Origin tracking
+~~~~ Origin chaining
+--- Clang instrumentation API
+~~~~ Shadow manipulation
+~~~~ Handling locals
+~~~~ Access to per-task data
+~~~~ Passing uninitialized values to functions
+~~~~ String functions
+~~~~ Error reporting
+~~~~ Inline assembly instrumentation
+--- Runtime library
+~~~~ Per-task KMSAN state
+~~~~ KMSAN contexts
+~~~~ Metadata allocation
+=3D=3D References
+
+
+> > +Another function attribute supported by KMSAN is ``__no_sanitize_memor=
+y``.
+> > +Applying this attribute to a function will result in KMSAN not instrum=
+enting it,
+> > +which can be helpful if we do not want the compiler to mess up some lo=
+w-level
+>
+> s/mess up/interfere with/
+Done
+
+> > +code (e.g. that marked with ``noinstr``).
+>
+> maybe "... (e.g. that marked with ``noinstr``, which implicitly adds
+> ``__no_sanitize_memory``)."
+
+Done
+
+> otherwise people might think that it's necessary to add
+> __no_sanitize_memory explicitly to noinstr.
+
+Good point!
+
+> > +    ...
+> > +    struct kmsan_context kmsan;
+> > +    ...
+> > +  }
+> > +
+> > +
+>
+> 1 blank line instead of 2?
+Done
+
+> > +This means that in general for two contiguous memory pages their shado=
+w/origin
+> > +pages may not be contiguous. So, if a memory access crosses the bounda=
+ry
+>
+> s/So, /Consequently, /
+Done
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
