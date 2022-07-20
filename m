@@ -2,146 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DAA57B453
-	for <lists+linux-arch@lfdr.de>; Wed, 20 Jul 2022 12:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3759957B4C4
+	for <lists+linux-arch@lfdr.de>; Wed, 20 Jul 2022 12:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiGTKO1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 20 Jul 2022 06:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S237547AbiGTKvC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 20 Jul 2022 06:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbiGTKO1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Jul 2022 06:14:27 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBF457216
-        for <linux-arch@vger.kernel.org>; Wed, 20 Jul 2022 03:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1658312066; x=1689848066;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dRSM5jR52KAq/jubFaVko3r2v7MBMeYMIHNfklif2Xo=;
-  b=CXAG6l+j0DzqGhMOR/VfDHusfMqOlrnb3Qg9J5tcKlTCJd6S8VQxHsq7
-   MDKA7+qsIvfqHDss58qhIOPb+Ills7+IbknvG8j3Cu9vLBIe4Z3eftgZ8
-   u8dg50c33C7N/BnL69BIIje/+7ybX8OUzyTImieNdmghyS06E1RBgy+pm
-   seJKChC5TdcqpuDvA8giNoxC/lJ4P475nPT8YcegesoWbpdYCJ3qrLZME
-   NDEUhkuwg1qmCNeRgIi3TXVa9/iOvhM6u6H7AsGSZTKfjc9q8tlTYMFeU
-   +I7R7BZ8Fz6C6NhqSIJu3V4N6QYnokeL00ErSSNjVP5BpNonNk1GhdFp/
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10413"; a="284296596"
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="284296596"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2022 03:14:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,286,1650956400"; 
-   d="scan'208";a="665804861"
-Received: from lkp-server01.sh.intel.com (HELO 7dfbdc7c7900) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 20 Jul 2022 03:14:25 -0700
-Received: from kbuild by 7dfbdc7c7900 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1oE6im-0000ND-GF;
-        Wed, 20 Jul 2022 10:14:24 +0000
-Date:   Wed, 20 Jul 2022 18:14:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic-fixes] BUILD REGRESSION
- 2d0eabc8971edae11cf6f8ed9571a158b75996eb
-Message-ID: <62d7d568.CctD1HqnB+o/lU0x%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S234060AbiGTKvB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 20 Jul 2022 06:51:01 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68E325E90;
+        Wed, 20 Jul 2022 03:50:59 -0700 (PDT)
+Received: from mail-yb1-f180.google.com ([209.85.219.180]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MHWvH-1oIGA43Cs5-00Dafe; Wed, 20 Jul 2022 12:50:57 +0200
+Received: by mail-yb1-f180.google.com with SMTP id r3so31448676ybr.6;
+        Wed, 20 Jul 2022 03:50:57 -0700 (PDT)
+X-Gm-Message-State: AJIora+rwUUhLfsdlNMZTpRQq11LFFPG82naYolx5uDazs1RlnRXiYsT
+        qtK4LzSUF5JGwLn6tFNp5ZqdSbTpXcXbqY+D/3w=
+X-Google-Smtp-Source: AGRyM1tBRMTZAOLkCSrWeM9lOgL7tKWZk8rYWNHxclKHzsaDcuczmA0/1wZXc39YCwugw2C0ZMWGEXKaZjRPuqvwfh8=
+X-Received: by 2002:a25:808c:0:b0:670:7d94:f2a with SMTP id
+ n12-20020a25808c000000b006707d940f2amr8739178ybk.452.1658314256329; Wed, 20
+ Jul 2022 03:50:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
+ <mhng-f5938c9b-7fc1-4b0c-9449-7dd1431f5446@palmerdabbelt-glaptop>
+ <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
+ <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
+ <4ff47e50-8702-1177-612b-73d9700e47c5@microchip.com> <CAK8P3a01x_ETchX2Vwm9oNaFJDhVZEu+G-2vRwegqKkMe54m6g@mail.gmail.com>
+ <CAKXUXMxOUs31SkGb0JD=nmHxgFy4tQ5vn6yD6ivgRpbSAxm7mA@mail.gmail.com>
+In-Reply-To: <CAKXUXMxOUs31SkGb0JD=nmHxgFy4tQ5vn6yD6ivgRpbSAxm7mA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 20 Jul 2022 12:50:39 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3K8PnPF7KEEVb=hquZsjXiatCkyXe9B_RLBcse2jU5LQ@mail.gmail.com>
+Message-ID: <CAK8P3a3K8PnPF7KEEVb=hquZsjXiatCkyXe9B_RLBcse2jU5LQ@mail.gmail.com>
+Subject: Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:jsHCyT7O6w8Ky7eqhBbCVdvUyGL4mEFwt0463REio7LBL3eCrQF
+ nIuxtY/OYl630VCjUk7E9bdirZVUQSK2aXFGssXGvQx3yw8E7ixhENIwvuSY2CK927AplQL
+ jWnfdr/7G/RWq99tCUxGzqjDnmAFXjT0PnABZKuf61vZtGx8wkbJQIWuNCsDX7JrpZx7kxx
+ EvMjSjj//sq94QcTtIkyw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:agORFtKC/Jo=:drMgcuJRGEM+NRWS5yLfgh
+ sK0xOLbpTV/2skp90XEyrNxcISsXa0mT+QPOKVEksjpYCpiBMaALBrZjbW6ZUED2qRX44fhzd
+ 3XK45uCo6rj0VAaExcoAtOnLSk8dd+B1Gn96uNnmocBV35O+/2MrBwTj5leDPH8TAqVdj22Bz
+ eKjJv5Judc3OYblnmAKXKEO8TD3o2WXqBO66kmVodS4fyqcpa/24vRLARyyRCUP0VE2YwkaaU
+ 4mUjshmdPpAsM5w/rcL7PFU4E3gYxh/jG91yTEVr/gGJgGbmPL1FpCZzG3e7+LaaOOqpOs1Tz
+ VuPfECflF5R1OGPGH07ghZbpDk+Kk67WHnLZ5R6IZvefmXaP9+G1amjL8lLmBM2JuSLpk/5th
+ J7R1Nnob+MPdhUuIAhQzpO1Hxtyf2h0lBukm2G4EfuzJtR/Pwrf/ci8W91r5zl42169cQ2md0
+ r24hF/4YZWnw73Zj0wbWW9B1spHgT+7dUVEEtaBuk/i2uKjcitRgz2NhMU+AQgCnIjL+cYknr
+ Ug+mXuA7yyz6HY60hKKpyzmnRKnQEdvC1jtVmeFFM6V2IFy0L7p/0AuwPqrc1bt225q7oikGs
+ 20aIvcCpEuhKwy3HirUpB1RoUtA+z3epfq2LsfUa6TURrpgOtT0ulAlriTxnrEf8DMGlfsIFz
+ TlFwP/ITNyfwNy4QAjNd1MA/5hPnvZzFbiaoJJPeeLJ5+sWs6rdq74UIL62c3DdjmraaI3SEi
+ TThFrxQGTJuyNk1WcPEwDyIh4f6Wj3Blf0kRWg==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic-fixes
-branch HEAD: 2d0eabc8971edae11cf6f8ed9571a158b75996eb  tools: Fixed MIPS builds due to struct flock re-definition
+On Thu, Jul 7, 2022 at 4:41 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> On Thu, Jul 7, 2022 at 3:07 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Thu, Jul 7, 2022 at 2:20 PM <Conor.Dooley@microchip.com> wrote:
 
-Error/Warning: (recently discovered and may have been fixed)
+> > lkft just found a build failure:
+> >
+> > https://gitlab.com/Linaro/lkft/users/arnd.bergmann/asm-generic/-/jobs/2691154818
+> >
+> > I have not investigated what went wrong, but it does look like an actual
+> > regression, so I'll wait for Lukas to follow up with a new version of the patch.
+>
+> Thanks for your testing. I will look into it. Probably it is due to
+> some more rigor during builds (-Werror and new warning types in the
+> default build) since I proposed the patch in October 2021. That should
+> be easy to fix, but let us see. I will send a PATCH v2 soon.
 
-drivers/char/mem.c:66:16: error: implicit declaration of function 'devmem_is_allowed'; did you mean 'page_is_allowed'? [-Werror=implicit-function-declaration]
-kernel/resource.c:1124:13: error: implicit declaration of function 'devmem_is_allowed'; did you mean 'do_set_cpus_allowed'? [-Werror=implicit-function-declaration]
+Any update on this? I have another bugfix for asm-generic now and was planning
+to send a pull request with both. If you don't have the updated patch
+ready yet, this
+will have to go into 5.21 instead.
 
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm-allyesconfig
-|   |-- drivers-char-mem.c:error:implicit-declaration-of-function-devmem_is_allowed
-|   `-- kernel-resource.c:error:implicit-declaration-of-function-devmem_is_allowed
-|-- arm64-allyesconfig
-|   |-- drivers-char-mem.c:error:implicit-declaration-of-function-devmem_is_allowed
-|   `-- kernel-resource.c:error:implicit-declaration-of-function-devmem_is_allowed
-`-- riscv-randconfig-r011-20220718
-    `-- drivers-char-mem.c:error:implicit-declaration-of-function-devmem_is_allowed
-
-elapsed time: 730m
-
-configs tested: 52
-configs skipped: 2
-
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-ia64                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-sh                               allmodconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-i386                                defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64               randconfig-a013-20220718
-x86_64               randconfig-a012-20220718
-x86_64               randconfig-a015-20220718
-x86_64               randconfig-a014-20220718
-x86_64               randconfig-a011-20220718
-x86_64               randconfig-a016-20220718
-i386                 randconfig-a011-20220718
-i386                 randconfig-a013-20220718
-i386                 randconfig-a012-20220718
-i386                 randconfig-a015-20220718
-i386                 randconfig-a014-20220718
-i386                 randconfig-a016-20220718
-arc                  randconfig-r043-20220718
-riscv                randconfig-r042-20220718
-s390                 randconfig-r044-20220718
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                 randconfig-a001-20220718
-i386                 randconfig-a003-20220718
-i386                 randconfig-a002-20220718
-i386                 randconfig-a004-20220718
-i386                 randconfig-a006-20220718
-i386                 randconfig-a005-20220718
-hexagon              randconfig-r041-20220718
-hexagon              randconfig-r045-20220718
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+      Arnd
