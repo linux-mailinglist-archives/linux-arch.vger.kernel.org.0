@@ -2,121 +2,162 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DC757C4B7
-	for <lists+linux-arch@lfdr.de>; Thu, 21 Jul 2022 08:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3EA57C838
+	for <lists+linux-arch@lfdr.de>; Thu, 21 Jul 2022 11:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiGUGwa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 21 Jul 2022 02:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
+        id S232851AbiGUJzk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 21 Jul 2022 05:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbiGUGwa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Jul 2022 02:52:30 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A69645986;
-        Wed, 20 Jul 2022 23:52:29 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2ef5380669cso7485717b3.9;
-        Wed, 20 Jul 2022 23:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Jgg9rGf43HqONHkXh2HTUDVIWowHE0j+MEj4elq8HBU=;
-        b=YhYtUggpWoK5/IgnxwPRU86N/OA28sUtY1zsyxQnrWzTtUvthi1I+SuuIcKBxnTpWF
-         7l4/WtdGjmEyQaVJi/lAQ35ISoAKX6USn6QaKtIqjfHUrVCjhOcf/8K0xgUtocKqOJzw
-         R/0NeOjUXy0FF0l9gcIGXTWMZ6Cr8emocvdJfZp74A2yeNawFgKWAvD4Vt1dqemCnnX2
-         ZzwpOGbMAfOhcZpEGJC8r6RLB5lacXSRUpX2RifCMqBp1AJFIdvp694/77bHzr++vp7j
-         WV0Y1psdPbceOFSg7jYe4af16RoFkxb7InoQa3ga3WNjznruhPypz4+9QwtdKDwwGlW0
-         4TVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Jgg9rGf43HqONHkXh2HTUDVIWowHE0j+MEj4elq8HBU=;
-        b=fiyqMNehT5fTo6qNWDTGPerZnXCwlVNG85tRteMYt1k+nmloibxgfkpaYeocl5CXVk
-         BNQD8iZlR7F4bu6GrzjhtAR0mzaTNZ2l4F738CloEXNsQp+Ci8JctcM5wexusN/2BzU4
-         B9V0gVAvpTP7InKqoOxo+qTYjyD7SkR9PX83EOSt5a2d2PHD071LJYELIBmnUaj7nsgy
-         N1CKueVa16YtuHX0n/rUbm+HYjYaML1R5rXBa2+g7GoGmg47hExlHCZIALxXIh3W9DMU
-         UEJAdh0rXha5Qhu3GqDB0lrvTzIA/Qk+LhdIn1jT9oiBNjpGKi95+qShWdNpZWMeRxF+
-         92gQ==
-X-Gm-Message-State: AJIora8cNTg1hGNk1n8FjhrfYfIdf+PWpvaawOTiiRsVbKHXaQ77bQkV
-        D841bCnv0HDRDY2MvounODib+JDvamxBo87IRis=
-X-Google-Smtp-Source: AGRyM1voSX2Y3Y6IgHU5wEb0mgCtOm2aFWUUnYKRxA/BGm1rsVVoyVkGm3nRRMlIxXh8fssuiL8DLA2yON/devKvcIA=
-X-Received: by 2002:a81:1905:0:b0:31e:6a62:ebe6 with SMTP id
- 5-20020a811905000000b0031e6a62ebe6mr6905604ywz.237.1658386348221; Wed, 20 Jul
- 2022 23:52:28 -0700 (PDT)
+        with ESMTP id S232582AbiGUJzj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 21 Jul 2022 05:55:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A558A2CC9B;
+        Thu, 21 Jul 2022 02:55:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AD2161F82;
+        Thu, 21 Jul 2022 09:55:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EF00C3411E;
+        Thu, 21 Jul 2022 09:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1658397336;
+        bh=OXWed5vpkzsz0jYpBxkXQrbeEPRaqZHtgrQjnkoQfp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NC8h0OOaZSdyUOlE3739Y6vphXUDOgoHE3XwrBc918ss0UlL9dXGVHA25hGA+YvJe
+         XDyM1G5B4/gIgjuL9yHAfq50wfWyrsue7EAa4hzVgkc8J49XYm4oZsTRCnT/Iup/bb
+         6qswWRDqunoZYVGbDCv5P2i0fsHAStNaFkeDGzL54j8uFSnLgic3tnDtT9Vpgn7hkJ
+         oYBzPUqjW3zMG1+9f+PZKQOVaD8m8uLO8Ni0YWpdWYY5mPbAr9nhVAAG1HiGqHeUK3
+         zheBGryvqfamq9a5biiKz1jcuE5YG4pdpY0sgA+a6dU49ZxY8WaZjt7JtIsO1uoUZD
+         xtdX/Hb/ah02w==
+Date:   Thu, 21 Jul 2022 10:55:28 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        loongarch@lists.linux.dev, linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH V4 3/4] mm/sparse-vmemmap: Generalise
+ vmemmap_populate_hugepages()
+Message-ID: <20220721095527.GB17088@willie-the-truck>
+References: <20220704112526.2492342-1-chenhuacai@loongson.cn>
+ <20220704112526.2492342-4-chenhuacai@loongson.cn>
+ <20220705092937.GA552@willie-the-truck>
+ <CAAhV-H5r8HDaxt8fkO97in5-eH8X9gokVNervmUWn6km4S0e-w@mail.gmail.com>
+ <20220706161736.GC3204@willie-the-truck>
+ <CAAhV-H7uY_KiLJRRjj4+8mewcWbuhvC=zDp5VAs03=BLdSMKLw@mail.gmail.com>
+ <CAAhV-H6EziBQ=3SveRvaPxHfbsGpmYrhVHfuBkpLJXn-t-uTZA@mail.gmail.com>
+ <4216f48f-fdf1-ec1e-b963-6f7fe6ba0f63@redhat.com>
+ <CAAhV-H5chctqBLayAJZOker_Li1db2NTcT9qwMCUYK44tBHVSg@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAK8P3a12-atmqjtjqi-RhFXH2Kwa-hxYcxy3Ftz2YjY5yyPHqg@mail.gmail.com>
- <mhng-f5938c9b-7fc1-4b0c-9449-7dd1431f5446@palmerdabbelt-glaptop>
- <CAKXUXMzpWsdKYbcu5MxvrAEMLHv4_2OGv2bRYEsQaze5trUSiQ@mail.gmail.com>
- <CAK8P3a32m42gT9qz+Ldvr8okYGOc=kKeoJTGNWyYT71N8tJfEA@mail.gmail.com>
- <4ff47e50-8702-1177-612b-73d9700e47c5@microchip.com> <CAK8P3a01x_ETchX2Vwm9oNaFJDhVZEu+G-2vRwegqKkMe54m6g@mail.gmail.com>
- <CAKXUXMxOUs31SkGb0JD=nmHxgFy4tQ5vn6yD6ivgRpbSAxm7mA@mail.gmail.com> <CAK8P3a3K8PnPF7KEEVb=hquZsjXiatCkyXe9B_RLBcse2jU5LQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3K8PnPF7KEEVb=hquZsjXiatCkyXe9B_RLBcse2jU5LQ@mail.gmail.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 21 Jul 2022 08:52:17 +0200
-Message-ID: <CAKXUXMyEG1Sc18NuhONWHuQWvTfFHNPrn4wJf=v9jMSpLGfP+Q@mail.gmail.com>
-Subject: Re: [PATCH] asm-generic: correct reference to GENERIC_LIB_DEVMEM_IS_ALLOWED
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Conor Dooley <Conor.Dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H5chctqBLayAJZOker_Li1db2NTcT9qwMCUYK44tBHVSg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 20, 2022 at 12:50 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, Jul 7, 2022 at 4:41 PM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> > On Thu, Jul 7, 2022 at 3:07 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > On Thu, Jul 7, 2022 at 2:20 PM <Conor.Dooley@microchip.com> wrote:
->
-> > > lkft just found a build failure:
-> > >
-> > > https://gitlab.com/Linaro/lkft/users/arnd.bergmann/asm-generic/-/jobs/2691154818
-> > >
-> > > I have not investigated what went wrong, but it does look like an actual
-> > > regression, so I'll wait for Lukas to follow up with a new version of the patch.
+On Thu, Jul 21, 2022 at 10:08:10AM +0800, Huacai Chen wrote:
+> On Wed, Jul 20, 2022 at 5:34 PM David Hildenbrand <david@redhat.com> wrote:
+> > On 14.07.22 14:34, Huacai Chen wrote:
+> > > On Fri, Jul 8, 2022 at 5:47 PM Huacai Chen <chenhuacai@kernel.org> wrote:
+> > >> On Thu, Jul 7, 2022 at 12:17 AM Will Deacon <will@kernel.org> wrote:
+> > >>> On Tue, Jul 05, 2022 at 09:07:59PM +0800, Huacai Chen wrote:
+> > >>>> On Tue, Jul 5, 2022 at 5:29 PM Will Deacon <will@kernel.org> wrote:
+> > >>>>> On Mon, Jul 04, 2022 at 07:25:25PM +0800, Huacai Chen wrote:
+> > >>>>>> +int __meminit vmemmap_populate_hugepages(unsigned long start, unsigned long end,
+> > >>>>>> +                                      int node, struct vmem_altmap *altmap)
+> > >>>>>> +{
+> > >>>>>> +     unsigned long addr;
+> > >>>>>> +     unsigned long next;
+> > >>>>>> +     pgd_t *pgd;
+> > >>>>>> +     p4d_t *p4d;
+> > >>>>>> +     pud_t *pud;
+> > >>>>>> +     pmd_t *pmd;
+> > >>>>>> +
+> > >>>>>> +     for (addr = start; addr < end; addr = next) {
+> > >>>>>> +             next = pmd_addr_end(addr, end);
+> > >>>>>> +
+> > >>>>>> +             pgd = vmemmap_pgd_populate(addr, node);
+> > >>>>>> +             if (!pgd)
+> > >>>>>> +                     return -ENOMEM;
+> > >>>>>> +
+> > >>>>>> +             p4d = vmemmap_p4d_populate(pgd, addr, node);
+> > >>>>>> +             if (!p4d)
+> > >>>>>> +                     return -ENOMEM;
+> > >>>>>> +
+> > >>>>>> +             pud = vmemmap_pud_populate(p4d, addr, node);
+> > >>>>>> +             if (!pud)
+> > >>>>>> +                     return -ENOMEM;
+> > >>>>>> +
+> > >>>>>> +             pmd = pmd_offset(pud, addr);
+> > >>>>>> +             if (pmd_none(READ_ONCE(*pmd))) {
+> > >>>>>> +                     void *p;
+> > >>>>>> +
+> > >>>>>> +                     p = vmemmap_alloc_block_buf(PMD_SIZE, node, altmap);
+> > >>>>>> +                     if (p) {
+> > >>>>>> +                             vmemmap_set_pmd(pmd, p, node, addr, next);
+> > >>>>>> +                             continue;
+> > >>>>>> +                     } else if (altmap)
+> > >>>>>> +                             return -ENOMEM; /* no fallback */
+> > >>>>>
+> > >>>>> Why do you return -ENOMEM if 'altmap' here? That seems to be different to
+> > >>>>> what we currently have on arm64 and it's not clear to me why we're happy
+> > >>>>> with an altmap for the pmd case, but not for the pte case.
+> > >>>> The generic version is the same as X86. It seems that ARM64 always
+> > >>>> fallback whether there is an altmap, but X86 only fallback in the no
+> > >>>> altmap case. I don't know the reason of X86, can Dan Williams give
+> > >>>> some explaination?
+> > >>>
+> > >>> Right, I think we need to understand the new behaviour here before we adopt
+> > >>> it on arm64.
+> > >> Hi, Dan,
+> > >> Could you please tell us the reason? Thanks.
+> > >>
+> > >> And Sudarshan,
+> > >> You are the author of adding a fallback mechanism to ARM64,  do you
+> > >> know why ARM64 is different from X86 (only fallback in no altmap
+> > >> case)?
 > >
-> > Thanks for your testing. I will look into it. Probably it is due to
-> > some more rigor during builds (-Werror and new warning types in the
-> > default build) since I proposed the patch in October 2021. That should
-> > be easy to fix, but let us see. I will send a PATCH v2 soon.
->
-> Any update on this? I have another bugfix for asm-generic now and was planning
-> to send a pull request with both. If you don't have the updated patch
-> ready yet, this
-> will have to go into 5.21 instead.
->
+> > I think that's a purely theoretical issue: I assume that in any case we
+> > care about, the altmap should be reasonably sized and aligned such that
+> > this will always succeed.
+> >
+> > To me it even sounds like the best idea to *consistently* fail if there
+> > is no more space in the altmap, even if we'd have to fallback to PTE
+> > (again, highly unlikely that this is relevant in practice). Could
+> > indicate an altmap-size configuration issue.
+> 
+> Does David's explanation make things clear? Moreover, I think Dan's
+> dedicated comments "no fallback" implies that his design is carefully
+> considered. So I think the generic version using the X86 logic is just
+> OK.
 
-It is still on my TODO list for revisiting, but I had other work on
-patches taking me longer than originally expected. I now moved this
-patch revisiting to the top of my TODO list; so, I will certainly look
-into this today. So far, I have not set up an arm64 build on my local
-machine and have not used tuxbuild (which should simplify all this
-setup)---the typical challenges for a "part-time kernel
-contributor/janitor"...
+I think the comment isn't worth the metaphorical paper that it's written
+on! If you can bulk it up a bit based on David's reasoning, then that would
+help. But yes, I'm happy with the code now, thanks both.
 
-Arnd, I will certainly let you know by this evening (European time
-zone) how far I got. If that is already too late, it is also perfectly
-fine if this goes in 5.21 instead, but I will try my best to make it
-5.20 material.
-
-Thanks for the patience so far.
-
-
-Best regards,
-
-Lukas
-
->       Arnd
+Will
