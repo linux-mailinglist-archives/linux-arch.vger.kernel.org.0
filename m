@@ -2,98 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D331F57E6E6
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Jul 2022 20:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF5457E74B
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Jul 2022 21:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiGVS6C (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Jul 2022 14:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S234879AbiGVTXk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Jul 2022 15:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235668AbiGVS6B (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Jul 2022 14:58:01 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFD58EEF7
-        for <linux-arch@vger.kernel.org>; Fri, 22 Jul 2022 11:58:00 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id l23so10092242ejr.5
-        for <linux-arch@vger.kernel.org>; Fri, 22 Jul 2022 11:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CFtWv8cujsml9Nm915ayXL51uD/obgxi8OyaZQUdDOE=;
-        b=EoUYvGEmiLqZvCHAadV8xm3zldGQR/AXQXlplxHKyoH+GrNylYMUcu/cP++VqO2kQj
-         Jn6jLRt8ddpSkCTTFV05lNnMWPFZbYpaE1l9/iaVHhsqS04FE30XEhi5KRPIpzUecWk7
-         ln4SJtufGrukvBkolkbObTwkHMbWnl355APQo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CFtWv8cujsml9Nm915ayXL51uD/obgxi8OyaZQUdDOE=;
-        b=YnJk4PmBH7pR+YbG0dPTU6IXhOL7AyYkucbJQBBL8/jZjShJqQYHiBh4/cpoU5iJ8W
-         3Ju8tzsEZLgVTgDy3CMuRKcWIIrGnA9al8aq+lnIURqZF54vqYTCwXDrndDd92rRPmCy
-         FRjZYX9cbYU97Qqu+IwjFtTod+mxJ2yxEqbpXTia6x1w7zfT+wgdwKAjPFzx33tzeki8
-         PHyB41sXqrL9bGuvQQwTgga4+M0s7WOabynjfdSw2XIW3wMt1Sj519V2dyCCPfuXmKoX
-         T0wKdLtn5fbA0sG0TnCd3KFWOR80ik4IPK93Vzzz0eHlHEHI4ElbuelX9W4I8cnjnKMk
-         C23g==
-X-Gm-Message-State: AJIora9FKqznUHAAGCH4MA3wQPpPIHIRXfQp9g1ZTO3ZCoGNPzO4s+Ze
-        e3QmDel/xYmuff4GOB/gccM0w+RNEDmeRnDr
-X-Google-Smtp-Source: AGRyM1tyMgxOBRk/R7ces1rm/xpttFOHCnAl6eCos5nihlvUn9xMezswEQxiUUwmjVJ4nNnRdwIs5g==
-X-Received: by 2002:a17:907:b04:b0:72b:5cf4:4631 with SMTP id h4-20020a1709070b0400b0072b5cf44631mr1031927ejl.180.1658516278259;
-        Fri, 22 Jul 2022 11:57:58 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170906528200b0072aeaa1bb5esm2256717ejm.211.2022.07.22.11.57.57
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Jul 2022 11:57:57 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id b26so7718043wrc.2
-        for <linux-arch@vger.kernel.org>; Fri, 22 Jul 2022 11:57:57 -0700 (PDT)
-X-Received: by 2002:a05:6000:1049:b0:21e:584f:3574 with SMTP id
- c9-20020a056000104900b0021e584f3574mr838736wrx.274.1658516276828; Fri, 22 Jul
- 2022 11:57:56 -0700 (PDT)
+        with ESMTP id S230486AbiGVTXj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Jul 2022 15:23:39 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A35EE5F13D;
+        Fri, 22 Jul 2022 12:23:38 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 94A7192009C; Fri, 22 Jul 2022 21:23:36 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 8971D92009B;
+        Fri, 22 Jul 2022 20:23:36 +0100 (BST)
+Date:   Fri, 22 Jul 2022 20:23:36 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Rob Herring <robh@kernel.org>
+cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stafford Horne <shorne@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-csky@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-um@lists.infradead.org, PCI <linux-pci@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
+In-Reply-To: <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2207222006140.48997@angie.orcam.me.uk>
+References: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com> <mhng-7e3146ca-79b8-4e16-98a9-e354fb6d03ba@palmer-mbp2014> <CAL_JsqJHZEcnJi+UHQbYWVoy1okQjHSc9T377P1q8oOJnHBWFw@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <YtpXh0QHWwaEWVAY@debian> <CAHk-=wipavrPuNPqiZ_zMP8EdbLKnnTkFukVCWm8FmCTUth4gQ@mail.gmail.com>
- <CADVatmPkXQ3mJpdTvaHxN4qmacYBhvzz=nxduQn-y+QUz4Pu2Q@mail.gmail.com>
-In-Reply-To: <CADVatmPkXQ3mJpdTvaHxN4qmacYBhvzz=nxduQn-y+QUz4Pu2Q@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 22 Jul 2022 11:57:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whjFd-2j1qCsqdsakwcH=QML2BJBCpN2+rg10Y+PMGOOg@mail.gmail.com>
-Message-ID: <CAHk-=whjFd-2j1qCsqdsakwcH=QML2BJBCpN2+rg10Y+PMGOOg@mail.gmail.com>
-Subject: Re: mainline build failure due to b67fbebd4cf9 ("mmu_gather: Force
- tlb-flush VM_PFNMAP vmas")
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 10:20 AM Sudip Mukherjee
-<sudipm.mukherjee@gmail.com> wrote:
->
-> That fixes the alpha build failure.
-> If you commit it today then my nightly builds can test other
-> combinations of all other arch also.
+On Fri, 22 Jul 2022, Rob Herring wrote:
 
-Thanks.
+> > Maybe the right thing to do here is actually to make the default
+> > definitions of these macros non-zero, or to add some sort of ARCH_
+> > flavor of them and move that non-zero requirement closer to where it
+> > comes from?  From the look of it any port that uses the generic port I/O
+> > functions and has 0 for these will be broken in the same way.
+> >
+> > That said, I'm not really a PCI guy so maybe Bjorn or Maciej has a
+> > better idea?
+> 
+> >From fu740:
+>                        ranges = <0x81000000  0x0 0x60080000  0x0
+> 0x60080000 0x0 0x10000>,      /* I/O */
+>                                  <0x82000000  0x0 0x60090000  0x0
+> 0x60090000 0x0 0xff70000>,    /* mem */
+>                                  <0x82000000  0x0 0x70000000  0x0
+> 0x70000000 0x0 0x1000000>,    /* mem */
+>                                  <0xc3000000 0x20 0x00000000 0x20
+> 0x00000000 0x20 0x00000000>;  /* mem prefetchable */
+> 
+> So again, how does one get a 0 address handed out when that's not even
+> a valid region according to DT? Is there some legacy stuff that
+> ignores the bridge windows?
 
-It's commit 7fb5e5083190 ("mmu_gather: fix the
-CONFIG_MMU_GATHER_NO_RANGE case") in my tree now.
+ It doesn't matter as <asm/pci.h> just sets it as a generic parameter for 
+the platform, reflecting the limitation of PCI core, which in the course 
+of the discussion referred was found rather infeasible to remove.  The 
+FU740 does not decode to PCI at 0, but another RISC-V device could.  And I 
+think that DT should faithfully describe hardware and not our software 
+limitations.
 
-I decided to not amend the commit, so it doesn't have your tested-by,
-only your reported-by, but I put the link your report (this thread),
-so it's kind of there.
+ Mind that PCI has originated from the x86 world where decoding low 24-bit 
+memory space to ISA has been implied (implicitly decoded on PCI systems by 
+the southbridge) for areas not decoded to DRAM by the memory controller. 
+So the inability of our PCI core to handle MMIO at 0 did not matter at the 
+time it was introduced as the value of 0 would never be used for a memory 
+BAR.
 
-                   Linus
+  Maciej
