@@ -2,79 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656D257E04D
-	for <lists+linux-arch@lfdr.de>; Fri, 22 Jul 2022 12:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF34B57E07B
+	for <lists+linux-arch@lfdr.de>; Fri, 22 Jul 2022 13:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiGVKyE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Jul 2022 06:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S229839AbiGVLHa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 22 Jul 2022 07:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiGVKyD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Jul 2022 06:54:03 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5281BB5CE;
-        Fri, 22 Jul 2022 03:54:02 -0700 (PDT)
-Received: from mail-oi1-f177.google.com ([209.85.167.177]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MJmX3-1nvOWu050r-00K5gp; Fri, 22 Jul 2022 12:54:01 +0200
-Received: by mail-oi1-f177.google.com with SMTP id i126so5220642oih.4;
-        Fri, 22 Jul 2022 03:54:00 -0700 (PDT)
-X-Gm-Message-State: AJIora+xpurf2KILrysRy7oGYUpuRPSdAu4QMiJ9Nb6hq6LmT+Vae1av
-        UuPrUeeuSNKJJCc6OllWh5GfBSa09svJwBVKJwA=
-X-Google-Smtp-Source: AGRyM1vy78FVr9qHehqDiblEj3V70Xauesbczc+NWbVsp5PyEl2CXocctR2Sg0IIOFpYE1nv6PajH1Yeg0LPhB77W8o=
-X-Received: by 2002:a05:6808:1511:b0:33a:b4f1:5247 with SMTP id
- u17-20020a056808151100b0033ab4f15247mr1728223oiw.188.1658487239317; Fri, 22
- Jul 2022 03:53:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220718004114.3925745-3-shorne@gmail.com> <mhng-3ae42214-abe0-4fad-9fa9-8f19809fa4d9@palmer-mbp2014>
- <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+_5-fhXddhxG2mr-4HD_brcKZExkZqvME1yEpa6dOGGg@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 22 Jul 2022 12:53:43 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0FwLmFO6Ew6kkJv=rOGRdQ+cyXok4b1kRr1RQP499wKA@mail.gmail.com>
-Message-ID: <CAK8P3a0FwLmFO6Ew6kkJv=rOGRdQ+cyXok4b1kRr1RQP499wKA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] asm-generic: Add new pci.h and use it
-To:     Rob Herring <robh@kernel.org>
+        with ESMTP id S229880AbiGVLHa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Jul 2022 07:07:30 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3E2501B6;
+        Fri, 22 Jul 2022 04:07:29 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id z13so6006021wro.13;
+        Fri, 22 Jul 2022 04:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=va9r0QVLDrzUBKfwOlAVVXjIk9+Gr+10/tXbE/MbkSw=;
+        b=QJPSqQeNeUS/qsGSgTA78nYzcxlb9VFNzBc0ISV8jX262S799ScyRSkmFq3qyWKJd8
+         Gkry15oWAYgGLktPECDR7KMNKw4AcYK1uUnC3Rf9se0aIuLJ/aUEAcuGtb5b6Mgb8t7F
+         /q8g873gkB9cxZ5tgtlQ8poBpo4hNk8ht5AA0m3/OGy1JKO06w+zynAyaHpR5faO/whW
+         acuyfJTlc71qKjZIWAehu5g1u/siHaTxJdvxr+xMHx3upMv/RAb7EpA285saZXr8BtXZ
+         UPR7ampwTkXuxmuI323H2IR5KhcD3VujGAhMZ+4YyqG33NPUAWtq8FG8WQV9lrYOKJAM
+         T8FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=va9r0QVLDrzUBKfwOlAVVXjIk9+Gr+10/tXbE/MbkSw=;
+        b=eAINoVQK19DGXIkAP1xdQh60C9gOWSoVDXHWjVu1PbAp3uoC24UVKR7D9KSMlSvrqC
+         Ek/2iLaP+On3S0R55P4ZdyexwlmpmIlP/b9J2WzDtsQZ63s03E/Cb1bCDwY8QcHwIOA4
+         5XS79G63HnlQ82vvg5RyH6srLEf6awnY3pUlgx4tB4FNY8GFFl3oxp6DkbRXEwlwEMEg
+         X7ARCNaNQN664QwNvepksoFx0sS1q70BLTeRzqi+ZdZ+SCjjTQHjkhLnf5tzfxDySd7g
+         bcBKAbg82l8JnSl8z1jtaId+MKefHjQWqD75sNsPQisnmxTzILbEOPLPDRTHzfo5DPGy
+         jDoA==
+X-Gm-Message-State: AJIora+i7oqPCuwwrGN7l0kK2n37cf8E6PM2PLOI3HYQ/wZIkGS+PquX
+        zlQ3sYmo2X1epjojaajgm/gpvObzLEU=
+X-Google-Smtp-Source: AGRyM1s1DyyQ730C8rTg4zM/Mx1fOod5LKx8nGSMzVjlSyMZyzOz3bay+m3QhU/YTH+4pBys4tClHQ==
+X-Received: by 2002:a05:6000:1888:b0:21d:beeb:785c with SMTP id a8-20020a056000188800b0021dbeeb785cmr2188576wri.34.1658488047525;
+        Fri, 22 Jul 2022 04:07:27 -0700 (PDT)
+Received: from felia.fritz.box (200116b826e64200edeeb77a6a94b0d2.dip.versatel-1u1.de. [2001:16b8:26e6:4200:edee:b77a:6a94:b0d2])
+        by smtp.gmail.com with ESMTPSA id g3-20020a5d5543000000b0021e4bc9edbfsm4248964wrw.112.2022.07.22.04.07.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Jul 2022 04:07:25 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org
 Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Stafford Horne <shorne@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-csky@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:FoFxno0xkIhsDoFbIXSNi5cy7WTtphRUBIdOPzBUUA+/0M/CLQr
- O/NKi2oROZus9z4FMWnAvJSjIE2YbqbkhwR+O3xIfDe+wG4o5jNX6SsgVWXvNDlHSRtgAZC
- gw12tgqNJnL0cZBxH/59FmWMdi1ncKWBC7tTE1fhLpdPj2+DOmfeUOgtKKlbG0cYJM2bxrx
- XoPuRydAlWWqYqe0iGZAQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8cr+Qc0vdfQ=:mGbVvIfnyOe3OhpyX+V784
- s9ruaf4OlU6C4JY5HmrWud7cD+/UKeuSExkcb0Sz8P35uHg13A+zuaqdCOKl0eFzo9p7HPA/0
- jF0cuN7kUyyLFz5M/ipTM78LS8uNslnA37qP1cYAWPhZ1Cr19k7+Z+p2U8nlI9cIMg/hNq0+D
- VIzBjmnjmai3/zXEi975/fXlDMFXd9eoQA7cYw9puno8BYryWlIthfIYMsFgTz1sEa/3dwL36
- 3bJfKuqM8eZppIQJCfdV5CcJig7dmCKRLDkAQRMcDG8YNHGxei7SBRovbm873pfHYFlO2dYAK
- z98tkK0Z2xS+7yD28wm4LlHbBGThES8lC76OZIwECJXlRfjxZPa8uQlPLmpi8XWOIXfXn13yI
- wcUrvOhduPPovSRTR0Kv9N7w+PFmF4dqx5oYwmCJ2Iua9kARthu9UwVySDMpSH+cvjAvh6Uii
- IB2tblQSuVAPAr8NySF4XolYvK4M8PVsZn3Lo7/YxZRphO+dF0s4c9Vfnzm63wU/X/3yN6hvA
- gxHSPTfO4+T3tfttFQdf90lCla89UWc9+3WoDjo0lo1JsjuX4FeZcG5kgBlZJgT1d1oHGpRq+
- xrvcDi85h6vU3A3pT9DzvLRH9JFz1QYWdOz71S9+BdJJXxvVYNAmp5YNMOfdqUL5j20EczRpT
- jhMRjPGm4mb/DA7Zh/Ga2L/Gbg6swNhuHr9lDxAWI/lqxAtUI3LNizmnDZ3CGi/r3ZxZaPULw
- r9wZ5bZUn3ltSWsocBZ5YIUPD6wp5b8BFf6/2eAJdLeiZ3logYJczJAMsw1IpLMV+FR9cvYHb
- u4biSvKmXnyIDe+8kbU/WjxaLzUwIe1bjFZUNLjPQQDvnVhuO1hY+tLbAchTkd5ZqnE6NmNDX
- hPEopyH285qyXR51gVVA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Luis Chamberlain <mcgrof@kernel.org>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH v2] asm-generic: remove a broken and needless ifdef conditional
+Date:   Fri, 22 Jul 2022 13:07:11 +0200
+Message-Id: <20220722110711.16569-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,45 +65,53 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 1:06 AM Rob Herring <robh@kernel.org> wrote:
-> On Tue, Jul 19, 2022 at 9:59 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
-> > On Sun, 17 Jul 2022 17:41:14 PDT (-0700), shorne@gmail.com wrote:
+Commit 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+introduces the config symbol GENERIC_LIB_DEVMEM_IS_ALLOWED, but then
+falsely refers to CONFIG_GENERIC_DEVMEM_IS_ALLOWED (note the missing LIB
+in the reference) in ./include/asm-generic/io.h.
 
-> > > diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
-> > > index 7fd52a30e605..12ce8150cfb0 100644
-> > > --- a/arch/riscv/include/asm/pci.h
-> > > +++ b/arch/riscv/include/asm/pci.h
-> > > @@ -12,29 +12,7 @@
-> > >
-> > >  #include <asm/io.h>
-> > >
-> > > -#define PCIBIOS_MIN_IO               0
-> > > -#define PCIBIOS_MIN_MEM              0
-> >
-> > My for-next changes these in bb356ddb78b2 ("RISC-V: PCI: Avoid handing
-> > out address 0 to devices").  Do you mind either splitting out the
-> > arch/riscv bits or having this in via some sort of shared tag?
->
-> Shouldn't the values not matter here if the IO and mem resources are
-> described in the DT (and don't use 0)? The values of 4 and 16 look
-> odd.
+Luckily, ./scripts/checkkconfigsymbols.py warns on non-existing configs:
 
-I think it's different for the two types: For memory resources, this only
-matters if the bus actually contains MMIO address zero. In most cases
-the MMIO addresses are the same as the address seen by the CPU
-and already nonzero based on the SoC design.
+GENERIC_DEVMEM_IS_ALLOWED
+Referencing files: include/asm-generic/io.h
 
-For the I/O port numbers, the port numbers tend to be more dynamic,
-but you'd normally have addresses 0 through 0xffff on each PCI host
-bridge with memory mapped I/O ports, so this can clearly happen.
+The actual fix, though, is simply to not to make this function declaration
+dependent on any kernel config. For architectures that intend to use
+the generic version, the arch's 'select GENERIC_LIB_DEVMEM_IS_ALLOWED' will
+lead to picking the function definition, and for other architectures, this
+function is simply defined elsewhere.
 
-Still, it seems better to not address the port zero issue in architecture
-specific code but instead do it in the PCI core code. Ideally
-we'd just use the 0x1000 minimum, which also helps stay out of
-the ISA port numbers that may be used by things like
-VGA or SATA adapters in legacy mode. The only reason I can
-see for allowed smaller port numbers is for machines that have
-a very limited I/O port window and do not have ports over
-0x1000 at all.
+The wrong '#ifndef' on a non-existing config symbol also always had the
+same effect (although more by mistake than by intent). So, there is no
+functional change.
 
-        Arnd
+Remove this broken and needless ifdef conditional.
+
+Fixes: 527701eda5f1 ("lib: Add a generic version of devmem_is_allowed()")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+v1: https://lore.kernel.org/all/20211006145859.9564-1-lukas.bulwahn@gmail.com/
+
+Arnd, please pick this v2 for your asm-generic branch. 
+
+
+ include/asm-generic/io.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
+index ce4c90601300..a68f8fbf423b 100644
+--- a/include/asm-generic/io.h
++++ b/include/asm-generic/io.h
+@@ -1221,9 +1221,7 @@ static inline void memcpy_toio(volatile void __iomem *addr, const void *buffer,
+ }
+ #endif
+ 
+-#ifndef CONFIG_GENERIC_DEVMEM_IS_ALLOWED
+ extern int devmem_is_allowed(unsigned long pfn);
+-#endif
+ 
+ #endif /* __KERNEL__ */
+ 
+-- 
+2.17.1
+
