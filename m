@@ -2,497 +2,310 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D604057EA78
-	for <lists+linux-arch@lfdr.de>; Sat, 23 Jul 2022 01:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3E257F2D8
+	for <lists+linux-arch@lfdr.de>; Sun, 24 Jul 2022 06:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236506AbiGVXvj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 22 Jul 2022 19:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S235250AbiGXEIe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 24 Jul 2022 00:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235033AbiGVXvi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 22 Jul 2022 19:51:38 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4E6BB8FE;
-        Fri, 22 Jul 2022 16:51:37 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id w7so5746642ply.12;
-        Fri, 22 Jul 2022 16:51:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w+8PO2Q3IFsYNNP0kUU0KaNtZ78h823PNgqQFLlVexg=;
-        b=n4J0qrH4csDPtgxB6KHkyBAsV2Viqr79XgcEFR/ThRmSpmX2H/eS2pap5DY8i+y49+
-         Mm9S80gy3KYzubhcTJ8SXzjrXBQfeytRG5fJnMHJT8o+PtwsYJyeaqNq5pKAP1sOkZ/l
-         61VO83vT3jnxYqG8oif66avgBFTQgRfcaGMYuJksw0f8sKr5Td+e9aRKhwdXuInji2Gr
-         /iFAeP2YC+RWP1HmTZJxV1eKf7KpjUQqJfNKqP1+dAuZn7lDg2LjOVZVaUq+HQMIKp2M
-         nnAuNqSLafCbA9912Z9e145XY3xYNLJeiPfbf6ZPB3OGjWdZYtqPhtAiCvrpuU0wu6sB
-         j2KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w+8PO2Q3IFsYNNP0kUU0KaNtZ78h823PNgqQFLlVexg=;
-        b=CJQxpvvv1bQG+0jC9NtWG6eNOPCXH4lQikbx/+7HyiBKdB6M0bf5MYH8BPoQ3I5kv9
-         bSrcuDx49ip0ckZIwRqpSnVsM27a6F9p+lPw6N/25wce5shj2Ny0VcCItU+AfqEZ1UoV
-         Lzk6HVcF97TOnhVf8BvXOOLFRmjiNDJgSE4sKaMAh2Fbe7anWR77F1eYk9tZRwPv80lv
-         h3kQEaEJasZAs4kP4D7oTJapuBg3gqMN1kFlPfp4hSvHoyGhabm8gDdtgk4IZUJZQ6bG
-         094gcZSurLMarywxTBvXNNUc7IjzNMbX+SUmF1rWMvW1pZ8uYjqndpO/MuUGUE41sZks
-         SXWQ==
-X-Gm-Message-State: AJIora8LPLqN4dgFjY8DOoXHdfDESiNq3rP5u4pqIXzOkiie3rVq1Po4
-        4HjBkABL9jj2JnFcXUy4IyA=
-X-Google-Smtp-Source: AGRyM1sVVkF52pkHqNnIRTlyIosnhllpk0gk+MnsC17B0O3z7zttbwtNXjFjW1WE3h8ZD6t5f61fQQ==
-X-Received: by 2002:a17:902:d508:b0:16d:4f47:9d65 with SMTP id b8-20020a170902d50800b0016d4f479d65mr669240plg.149.1658533896476;
-        Fri, 22 Jul 2022 16:51:36 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id cp17-20020a170902e79100b0016c0c82e85csm4274749plb.75.2022.07.22.16.51.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Jul 2022 16:51:36 -0700 (PDT)
-Date:   Sat, 23 Jul 2022 08:51:34 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        with ESMTP id S229453AbiGXEId (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 24 Jul 2022 00:08:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D31AA478;
+        Sat, 23 Jul 2022 21:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658635712; x=1690171712;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KlaCr93h2cHkrhlcXaJEJvCc/bHmdCLnUwsrSjluqpg=;
+  b=PIM6a0reWcP4yMA8dORMpuUCwRdV3yIpnTup8XF66VyfDiyjOrjMdhbW
+   mmr4pEzJEajMsi0SJdHnXzdqVjVEBnucJTkKZFyHPGms0awBkObc0+bay
+   bPBac5wkxF8h3y9ksdP7X0gboleVbNDjMpWeEhYnRLqFbgg+dVekwJQg6
+   K93Ec4zNt2qMCR6TvoPyOM9i8Z7arjTSZbnezC+6jGF/3/mnxnJoD6ffA
+   YJV+A70zz4EuP+YaXvHXNnmzTYjWq7u4wVfi0PyRH14wnztI1nPUP7tT2
+   mElfPU+9lqgBcErYUU1THkf8ZhM6RK3omSeX5BLCQc/AnSVrPlbwUoZGZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10417"; a="270549128"
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="270549128"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2022 21:08:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,189,1654585200"; 
+   d="scan'208";a="688687566"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2022 21:08:26 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oFSun-0003Wn-1L;
+        Sun, 24 Jul 2022 04:08:25 +0000
+Date:   Sun, 24 Jul 2022 12:07:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Nick Child <nick.child@ibm.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] PCI: Remove pci_get_legacy_ide_irq and
- asm-generic/pci.h
-Message-ID: <Yts4BjEk6VQvOOdg@antec>
-References: <20220722214944.831438-2-shorne@gmail.com>
- <20220722233821.GA1979844@bhelgaas>
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Min Zhou <zhoumin@loongson.cn>
+Subject: Re: [PATCH V5 2/4] LoongArch: Add sparse memory vmemmap support
+Message-ID: <202207241100.dTmn1Js6-lkp@intel.com>
+References: <20220721130419.1904711-3-chenhuacai@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220722233821.GA1979844@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220721130419.1904711-3-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 06:38:21PM -0500, Bjorn Helgaas wrote:
-> On Sat, Jul 23, 2022 at 06:49:41AM +0900, Stafford Horne wrote:
-> > The definition of the pci header function pci_get_legacy_ide_irq is only
-> > used in platforms that support PNP.  So many of the architecutres where
-> > it is defined do not use it.  This also means we can remove
-> > asm-generic/pci.h as all it provides is a definition of
-> > pci_get_legacy_ide_irq.
-> > 
-> > Where referenced, replace the usage of pci_get_legacy_ide_irq with the
-> > libata.h macros ATA_PRIMARY_IRQ and ATA_SECONDARY_IRQ which provide the
-> > same functionality.  This allows removing pci_get_legacy_ide_irq from
-> > headers where it is no longer used.
-> > 
-> > Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Acked-by: Pierre Morel <pmorel@linux.ibm.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Reviewed-by: Christoph Hellwig <hch@lst.de>
-> > Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Stafford Horne <shorne@gmail.com>
-> 
-> I applied all 4 patches in this series to pci/header-cleanup-immutable
-> for v5.20.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/log/?h=pci/header-cleanup-immutable
+Hi Huacai,
 
-Thank you,
+Thank you for the patch! Yet something to improve:
 
-Sorry, the 0/4 cover letter is here.
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on linus/master v5.19-rc7 next-20220722]
+[cannot apply to akpm-mm/mm-everything tip/x86/mm]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  https://lore.kernel.org/lkml/20220722214944.831438-1-shorne@gmail.com/
+url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/mm-sparse-vmemmap-Generalise-helpers-and-enable-for-LoongArch/20220721-211006
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20220724/202207241100.dTmn1Js6-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/46a065b827f834b046cffafc7fa165b6fadd9c5c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Huacai-Chen/mm-sparse-vmemmap-Generalise-helpers-and-enable-for-LoongArch/20220721-211006
+        git checkout 46a065b827f834b046cffafc7fa165b6fadd9c5c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash
 
-I hadn't had you CC'd as I was using ./script/get_maintainer.pl to maintain the
-CCs.  Maybe patch MAINTAINERS like the following could help keep you CC'd on all
-things PCI?  But maybe that would be too much, never-the-less I'll make sure you
-are CC'd on pci related patches including cover-letters in the future.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-    diff --git a/MAINTAINERS b/MAINTAINERS
-    index f313862b2929..b64cd6bbb34f 100644
-    --- a/MAINTAINERS
-    +++ b/MAINTAINERS
-    @@ -15552,6 +15552,8 @@ F:      include/linux/of_pci.h
-     F:     include/linux/pci*
-     F:     include/uapi/linux/pci*
-     F:     lib/pci*
-    +K:     pci
-    +N:     pci
+All errors (new ones prefixed by >>):
 
-Palmer, we now have a branch you can use for your RISC-V for-next.  Does, that
-work?
+   fs/proc/meminfo.c:22:28: warning: no previous prototype for 'arch_report_meminfo' [-Wmissing-prototypes]
+      22 | void __attribute__((weak)) arch_report_meminfo(struct seq_file *m)
+         |                            ^~~~~~~~~~~~~~~~~~~
+   In file included from arch/loongarch/include/asm/uaccess.h:17,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from fs/proc/meminfo.c:2:
+   fs/proc/meminfo.c: In function 'meminfo_proc_show':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   include/linux/vmalloc.h:286:24: note: in expansion of macro 'VMALLOC_END'
+     286 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
+         |                        ^~~~~~~~~~~
+   fs/proc/meminfo.c:127:35: note: in expansion of macro 'VMALLOC_TOTAL'
+     127 |                    (unsigned long)VMALLOC_TOTAL >> 10);
+         |                                   ^~~~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:95:119: note: each undeclared identifier is reported only once for each function it appears in
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   include/linux/vmalloc.h:286:24: note: in expansion of macro 'VMALLOC_END'
+     286 | #define VMALLOC_TOTAL (VMALLOC_END - VMALLOC_START)
+         |                        ^~~~~~~~~~~
+   fs/proc/meminfo.c:127:35: note: in expansion of macro 'VMALLOC_TOTAL'
+     127 |                    (unsigned long)VMALLOC_TOTAL >> 10);
+         |                                   ^~~~~~~~~~~~~
+--
+   In file included from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from mm/util.c:2:
+   mm/util.c: In function 'kvmalloc_node':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/util.c:634:61: note: in expansion of macro 'VMALLOC_END'
+     634 |         return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+         |                                                             ^~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:95:119: note: each undeclared identifier is reported only once for each function it appears in
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/util.c:634:61: note: in expansion of macro 'VMALLOC_END'
+     634 |         return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+         |                                                             ^~~~~~~~~~~
+   mm/util.c:637:1: error: control reaches end of non-void function [-Werror=return-type]
+     637 | }
+         | ^
+   cc1: some warnings being treated as errors
+--
+   In file included from include/linux/pgtable.h:6,
+                    from include/linux/mm.h:29,
+                    from mm/vmalloc.c:12:
+   mm/vmalloc.c: In function 'is_vmalloc_addr':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:79:48: note: in expansion of macro 'VMALLOC_END'
+      79 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
+         |                                                ^~~~~~~~~~~
+   arch/loongarch/include/asm/pgtable.h:95:119: note: each undeclared identifier is reported only once for each function it appears in
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:79:48: note: in expansion of macro 'VMALLOC_END'
+      79 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
+         |                                                ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'new_vmap_block':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:1915:56: note: in expansion of macro 'VMALLOC_END'
+    1915 |                                         VMALLOC_START, VMALLOC_END,
+         |                                                        ^~~~~~~~~~~
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/preempt.h:11,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/vmalloc.h:5,
+                    from mm/vmalloc.c:11:
+   mm/vmalloc.c: In function 'vm_unmap_ram':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   mm/vmalloc.c:2166:9: note: in expansion of macro 'BUG_ON'
+    2166 |         BUG_ON(addr > VMALLOC_END);
+         |         ^~~~~~
+   mm/vmalloc.c:2166:23: note: in expansion of macro 'VMALLOC_END'
+    2166 |         BUG_ON(addr > VMALLOC_END);
+         |                       ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'vm_map_ram':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:2213:48: note: in expansion of macro 'VMALLOC_END'
+    2213 |                                 VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
+         |                                                ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'vm_area_register_early':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   mm/vmalloc.c:2309:9: note: in expansion of macro 'BUG_ON'
+    2309 |         BUG_ON(addr > VMALLOC_END - vm->size);
+         |         ^~~~~~
+   mm/vmalloc.c:2309:23: note: in expansion of macro 'VMALLOC_END'
+    2309 |         BUG_ON(addr > VMALLOC_END - vm->size);
+         |                       ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'get_vm_area':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:2498:50: note: in expansion of macro 'VMALLOC_END'
+    2498 |                                   VMALLOC_START, VMALLOC_END,
+         |                                                  ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'get_vm_area_caller':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:2507:50: note: in expansion of macro 'VMALLOC_END'
+    2507 |                                   VMALLOC_START, VMALLOC_END,
+         |                                                  ^~~~~~~~~~~
+   mm/vmalloc.c: In function '__vmalloc_node':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:3230:65: note: in expansion of macro 'VMALLOC_END'
+    3230 |         return __vmalloc_node_range(size, align, VMALLOC_START, VMALLOC_END,
+         |                                                                 ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'vmalloc_huge':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:3282:61: note: in expansion of macro 'VMALLOC_END'
+    3282 |         return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+         |                                                             ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'vmalloc_user':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:3319:67: note: in expansion of macro 'VMALLOC_END'
+    3319 |         return __vmalloc_node_range(size, SHMLBA,  VMALLOC_START, VMALLOC_END,
+         |                                                                   ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'vmalloc_32_user':
+>> arch/loongarch/include/asm/pgtable.h:95:119: error: 'VMEMMAP_SIZE' undeclared (first use in this function); did you mean 'VMEMMAP_END'?
+      95 |          min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+         |                                                                                                                       ^~~~~~~~~~~~
+   mm/vmalloc.c:3403:67: note: in expansion of macro 'VMALLOC_END'
+    3403 |         return __vmalloc_node_range(size, SHMLBA,  VMALLOC_START, VMALLOC_END,
+         |                                                                   ^~~~~~~~~~~
+   mm/vmalloc.c: In function 'is_vmalloc_addr':
+   mm/vmalloc.c:80:1: error: control reaches end of non-void function [-Werror=return-type]
+      80 | }
+         | ^
+   mm/vmalloc.c: In function 'get_vm_area':
+   mm/vmalloc.c:2501:1: error: control reaches end of non-void function [-Werror=return-type]
+    2501 | }
+         | ^
+   mm/vmalloc.c: In function 'get_vm_area_caller':
+   mm/vmalloc.c:2509:1: error: control reaches end of non-void function [-Werror=return-type]
+    2509 | }
+         | ^
+   mm/vmalloc.c: In function '__vmalloc_node':
+   mm/vmalloc.c:3232:1: error: control reaches end of non-void function [-Werror=return-type]
+    3232 | }
+         | ^
+   mm/vmalloc.c: In function 'vmalloc_huge':
+   mm/vmalloc.c:3285:1: error: control reaches end of non-void function [-Werror=return-type]
+    3285 | }
+         | ^
+   mm/vmalloc.c: In function 'vmalloc_user':
+   mm/vmalloc.c:3323:1: error: control reaches end of non-void function [-Werror=return-type]
+    3323 | }
+         | ^
+   mm/vmalloc.c: In function 'vmalloc_32_user':
+   mm/vmalloc.c:3407:1: error: control reaches end of non-void function [-Werror=return-type]
+    3407 | }
+         | ^
+   cc1: some warnings being treated as errors
 
--Stafford
 
-> > ---
-> >  arch/alpha/include/asm/pci.h   |  6 ------
-> >  arch/arm/include/asm/pci.h     |  5 -----
-> >  arch/arm64/include/asm/pci.h   |  6 ------
-> >  arch/csky/include/asm/pci.h    |  6 ------
-> >  arch/ia64/include/asm/pci.h    |  6 ------
-> >  arch/m68k/include/asm/pci.h    |  2 --
-> >  arch/mips/include/asm/pci.h    |  6 ------
-> >  arch/parisc/include/asm/pci.h  |  5 -----
-> >  arch/powerpc/include/asm/pci.h |  1 -
-> >  arch/riscv/include/asm/pci.h   |  6 ------
-> >  arch/s390/include/asm/pci.h    |  1 -
-> >  arch/sh/include/asm/pci.h      |  6 ------
-> >  arch/sparc/include/asm/pci.h   |  9 ---------
-> >  arch/um/include/asm/pci.h      |  8 --------
-> >  arch/x86/include/asm/pci.h     |  3 ---
-> >  arch/xtensa/include/asm/pci.h  |  3 ---
-> >  drivers/pnp/resource.c         |  5 +++--
-> >  include/asm-generic/pci.h      | 17 -----------------
-> >  18 files changed, 3 insertions(+), 98 deletions(-)
-> >  delete mode 100644 include/asm-generic/pci.h
-> > 
-> > diff --git a/arch/alpha/include/asm/pci.h b/arch/alpha/include/asm/pci.h
-> > index cf6bc1e64d66..6312656279d7 100644
-> > --- a/arch/alpha/include/asm/pci.h
-> > +++ b/arch/alpha/include/asm/pci.h
-> > @@ -56,12 +56,6 @@ struct pci_controller {
-> >  
-> >  /* IOMMU controls.  */
-> >  
-> > -/* TODO: integrate with include/asm-generic/pci.h ? */
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return channel ? 15 : 14;
-> > -}
-> > -
-> >  #define pci_domain_nr(bus) ((struct pci_controller *)(bus)->sysdata)->index
-> >  
-> >  static inline int pci_proc_domain(struct pci_bus *bus)
-> > diff --git a/arch/arm/include/asm/pci.h b/arch/arm/include/asm/pci.h
-> > index 68e6f25784a4..5916b88d4c94 100644
-> > --- a/arch/arm/include/asm/pci.h
-> > +++ b/arch/arm/include/asm/pci.h
-> > @@ -22,11 +22,6 @@ static inline int pci_proc_domain(struct pci_bus *bus)
-> >  #define HAVE_PCI_MMAP
-> >  #define ARCH_GENERIC_PCI_MMAP_RESOURCE
-> >  
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return channel ? 15 : 14;
-> > -}
-> > -
-> >  extern void pcibios_report_status(unsigned int status_mask, int warn);
-> >  
-> >  #endif /* __KERNEL__ */
-> > diff --git a/arch/arm64/include/asm/pci.h b/arch/arm64/include/asm/pci.h
-> > index b33ca260e3c9..0aebc3488c32 100644
-> > --- a/arch/arm64/include/asm/pci.h
-> > +++ b/arch/arm64/include/asm/pci.h
-> > @@ -23,12 +23,6 @@
-> >  extern int isa_dma_bridge_buggy;
-> >  
-> >  #ifdef CONFIG_PCI
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	/* no legacy IRQ on arm64 */
-> > -	return -ENODEV;
-> > -}
-> > -
-> >  static inline int pci_proc_domain(struct pci_bus *bus)
-> >  {
-> >  	return 1;
-> > diff --git a/arch/csky/include/asm/pci.h b/arch/csky/include/asm/pci.h
-> > index ebc765b1f78b..0535f1aaae38 100644
-> > --- a/arch/csky/include/asm/pci.h
-> > +++ b/arch/csky/include/asm/pci.h
-> > @@ -18,12 +18,6 @@
-> >  extern int isa_dma_bridge_buggy;
-> >  
-> >  #ifdef CONFIG_PCI
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	/* no legacy IRQ on csky */
-> > -	return -ENODEV;
-> > -}
-> > -
-> >  static inline int pci_proc_domain(struct pci_bus *bus)
-> >  {
-> >  	/* always show the domain in /proc */
-> > diff --git a/arch/ia64/include/asm/pci.h b/arch/ia64/include/asm/pci.h
-> > index 8c163d1d0189..fa8f545c24c9 100644
-> > --- a/arch/ia64/include/asm/pci.h
-> > +++ b/arch/ia64/include/asm/pci.h
-> > @@ -63,10 +63,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
-> >  	return (pci_domain_nr(bus) != 0);
-> >  }
-> >  
-> > -#define HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return channel ? isa_irq_to_vector(15) : isa_irq_to_vector(14);
-> > -}
-> > -
-> >  #endif /* _ASM_IA64_PCI_H */
-> > diff --git a/arch/m68k/include/asm/pci.h b/arch/m68k/include/asm/pci.h
-> > index 5a4bc223743b..ccdfa0dc8413 100644
-> > --- a/arch/m68k/include/asm/pci.h
-> > +++ b/arch/m68k/include/asm/pci.h
-> > @@ -2,8 +2,6 @@
-> >  #ifndef _ASM_M68K_PCI_H
-> >  #define _ASM_M68K_PCI_H
-> >  
-> > -#include <asm-generic/pci.h>
-> > -
-> >  #define	pcibios_assign_all_busses()	1
-> >  
-> >  #define	PCIBIOS_MIN_IO		0x00000100
-> > diff --git a/arch/mips/include/asm/pci.h b/arch/mips/include/asm/pci.h
-> > index 9ffc8192adae..3fd6e22c108b 100644
-> > --- a/arch/mips/include/asm/pci.h
-> > +++ b/arch/mips/include/asm/pci.h
-> > @@ -139,10 +139,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
-> >  /* Do platform specific device initialization at pci_enable_device() time */
-> >  extern int pcibios_plat_dev_init(struct pci_dev *dev);
-> >  
-> > -/* Chances are this interrupt is wired PC-style ...  */
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return channel ? 15 : 14;
-> > -}
-> > -
-> >  #endif /* _ASM_PCI_H */
-> > diff --git a/arch/parisc/include/asm/pci.h b/arch/parisc/include/asm/pci.h
-> > index f14465b84de4..127ed5021ae3 100644
-> > --- a/arch/parisc/include/asm/pci.h
-> > +++ b/arch/parisc/include/asm/pci.h
-> > @@ -162,11 +162,6 @@ extern void pcibios_init_bridge(struct pci_dev *);
-> >  #define PCIBIOS_MIN_IO          0x10
-> >  #define PCIBIOS_MIN_MEM         0x1000 /* NBPG - but pci/setup-res.c dies */
-> >  
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return channel ? 15 : 14;
-> > -}
-> > -
-> >  #define HAVE_PCI_MMAP
-> >  #define ARCH_GENERIC_PCI_MMAP_RESOURCE
-> >  
-> > diff --git a/arch/powerpc/include/asm/pci.h b/arch/powerpc/include/asm/pci.h
-> > index 915d6ee4b40a..f9da506751bb 100644
-> > --- a/arch/powerpc/include/asm/pci.h
-> > +++ b/arch/powerpc/include/asm/pci.h
-> > @@ -39,7 +39,6 @@
-> >  #define pcibios_assign_all_busses() \
-> >  	(pci_has_flag(PCI_REASSIGN_ALL_BUS))
-> >  
-> > -#define HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
-> >  static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> >  {
-> >  	if (ppc_md.pci_get_legacy_ide_irq)
-> > diff --git a/arch/riscv/include/asm/pci.h b/arch/riscv/include/asm/pci.h
-> > index 7fd52a30e605..a7b8f0d0df7f 100644
-> > --- a/arch/riscv/include/asm/pci.h
-> > +++ b/arch/riscv/include/asm/pci.h
-> > @@ -23,12 +23,6 @@
-> >  extern int isa_dma_bridge_buggy;
-> >  
-> >  #ifdef CONFIG_PCI
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	/* no legacy IRQ on risc-v */
-> > -	return -ENODEV;
-> > -}
-> > -
-> >  static inline int pci_proc_domain(struct pci_bus *bus)
-> >  {
-> >  	/* always show the domain in /proc */
-> > diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
-> > index fdb9745ee998..5889ddcbc374 100644
-> > --- a/arch/s390/include/asm/pci.h
-> > +++ b/arch/s390/include/asm/pci.h
-> > @@ -6,7 +6,6 @@
-> >  #include <linux/mutex.h>
-> >  #include <linux/iommu.h>
-> >  #include <linux/pci_hotplug.h>
-> > -#include <asm-generic/pci.h>
-> >  #include <asm/pci_clp.h>
-> >  #include <asm/pci_debug.h>
-> >  #include <asm/sclp.h>
-> > diff --git a/arch/sh/include/asm/pci.h b/arch/sh/include/asm/pci.h
-> > index ad22e88c6657..54c30126ea17 100644
-> > --- a/arch/sh/include/asm/pci.h
-> > +++ b/arch/sh/include/asm/pci.h
-> > @@ -88,10 +88,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
-> >  	return hose->need_domain_info;
-> >  }
-> >  
-> > -/* Chances are this interrupt is wired PC-style ...  */
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return channel ? 15 : 14;
-> > -}
-> > -
-> >  #endif /* __ASM_SH_PCI_H */
-> > diff --git a/arch/sparc/include/asm/pci.h b/arch/sparc/include/asm/pci.h
-> > index 4deddf430e5d..0c58f65bd172 100644
-> > --- a/arch/sparc/include/asm/pci.h
-> > +++ b/arch/sparc/include/asm/pci.h
-> > @@ -40,13 +40,4 @@ static inline int pci_proc_domain(struct pci_bus *bus)
-> >  #define get_pci_unmapped_area get_fb_unmapped_area
-> >  #endif /* CONFIG_SPARC64 */
-> >  
-> > -#if defined(CONFIG_SPARC64) || defined(CONFIG_LEON_PCI)
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return PCI_IRQ_NONE;
-> > -}
-> > -#else
-> > -#include <asm-generic/pci.h>
-> > -#endif
-> > -
-> >  #endif /* ___ASM_SPARC_PCI_H */
-> > diff --git a/arch/um/include/asm/pci.h b/arch/um/include/asm/pci.h
-> > index da13fd5519ef..26b96c02ef61 100644
-> > --- a/arch/um/include/asm/pci.h
-> > +++ b/arch/um/include/asm/pci.h
-> > @@ -11,14 +11,6 @@
-> >  
-> >  extern int isa_dma_bridge_buggy;
-> >  
-> > -#ifdef CONFIG_PCI
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	/* no legacy IRQs */
-> > -	return -ENODEV;
-> > -}
-> > -#endif
-> > -
-> >  #ifdef CONFIG_PCI_DOMAINS
-> >  static inline int pci_proc_domain(struct pci_bus *bus)
-> >  {
-> > diff --git a/arch/x86/include/asm/pci.h b/arch/x86/include/asm/pci.h
-> > index f3fd5928bcbb..736793d65bcb 100644
-> > --- a/arch/x86/include/asm/pci.h
-> > +++ b/arch/x86/include/asm/pci.h
-> > @@ -105,9 +105,6 @@ static inline void early_quirks(void) { }
-> >  
-> >  extern void pci_iommu_alloc(void);
-> >  
-> > -/* generic pci stuff */
-> > -#include <asm-generic/pci.h>
-> > -
-> >  #ifdef CONFIG_NUMA
-> >  /* Returns the node based on pci bus */
-> >  static inline int __pcibus_to_node(const struct pci_bus *bus)
-> > diff --git a/arch/xtensa/include/asm/pci.h b/arch/xtensa/include/asm/pci.h
-> > index 8e2b48a268db..b56de9635b6c 100644
-> > --- a/arch/xtensa/include/asm/pci.h
-> > +++ b/arch/xtensa/include/asm/pci.h
-> > @@ -43,7 +43,4 @@
-> >  #define ARCH_GENERIC_PCI_MMAP_RESOURCE	1
-> >  #define arch_can_pci_mmap_io()		1
-> >  
-> > -/* Generic PCI */
-> > -#include <asm-generic/pci.h>
-> > -
-> >  #endif	/* _XTENSA_PCI_H */
-> > diff --git a/drivers/pnp/resource.c b/drivers/pnp/resource.c
-> > index 2fa0f7d55259..8f7695624c8c 100644
-> > --- a/drivers/pnp/resource.c
-> > +++ b/drivers/pnp/resource.c
-> > @@ -17,6 +17,7 @@
-> >  #include <asm/dma.h>
-> >  #include <asm/irq.h>
-> >  #include <linux/pci.h>
-> > +#include <linux/libata.h>
-> >  #include <linux/ioport.h>
-> >  #include <linux/init.h>
-> >  
-> > @@ -322,8 +323,8 @@ static int pci_dev_uses_irq(struct pnp_dev *pnp, struct pci_dev *pci,
-> >  		 * treat the compatibility IRQs as busy.
-> >  		 */
-> >  		if ((progif & 0x5) != 0x5)
-> > -			if (pci_get_legacy_ide_irq(pci, 0) == irq ||
-> > -			    pci_get_legacy_ide_irq(pci, 1) == irq) {
-> > +			if (ATA_PRIMARY_IRQ(pci) == irq ||
-> > +			    ATA_SECONDARY_IRQ(pci) == irq) {
-> >  				pnp_dbg(&pnp->dev, "  legacy IDE device %s "
-> >  					"using irq %d\n", pci_name(pci), irq);
-> >  				return 1;
-> > diff --git a/include/asm-generic/pci.h b/include/asm-generic/pci.h
-> > deleted file mode 100644
-> > index 6bb3cd3d695a..000000000000
-> > --- a/include/asm-generic/pci.h
-> > +++ /dev/null
-> > @@ -1,17 +0,0 @@
-> > -/* SPDX-License-Identifier: GPL-2.0 */
-> > -/*
-> > - * linux/include/asm-generic/pci.h
-> > - *
-> > - *  Copyright (C) 2003 Russell King
-> > - */
-> > -#ifndef _ASM_GENERIC_PCI_H
-> > -#define _ASM_GENERIC_PCI_H
-> > -
-> > -#ifndef HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ
-> > -static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
-> > -{
-> > -	return channel ? 15 : 14;
-> > -}
-> > -#endif /* HAVE_ARCH_PCI_GET_LEGACY_IDE_IRQ */
-> > -
-> > -#endif /* _ASM_GENERIC_PCI_H */
-> > -- 
-> > 2.36.1
-> > 
-> > 
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+vim +95 arch/loongarch/include/asm/pgtable.h
+
+    91	
+    92	#define VMALLOC_START	MODULES_END
+    93	#define VMALLOC_END	\
+    94		(vm_map_base +	\
+  > 95		 min(PTRS_PER_PGD * PTRS_PER_PUD * PTRS_PER_PMD * PTRS_PER_PTE * PAGE_SIZE, (1UL << cpu_vabits)) - PMD_SIZE - VMEMMAP_SIZE)
+    96	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
