@@ -2,25 +2,25 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9723C5813BE
-	for <lists+linux-arch@lfdr.de>; Tue, 26 Jul 2022 15:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA50A5813C1
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Jul 2022 15:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233650AbiGZNCa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 26 Jul 2022 09:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S233426AbiGZNEQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jul 2022 09:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbiGZNC3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Jul 2022 09:02:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30D415FF7
-        for <linux-arch@vger.kernel.org>; Tue, 26 Jul 2022 06:02:28 -0700 (PDT)
+        with ESMTP id S233343AbiGZNEP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Jul 2022 09:04:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C95A15FF7
+        for <linux-arch@vger.kernel.org>; Tue, 26 Jul 2022 06:04:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A47B6B8161F
-        for <linux-arch@vger.kernel.org>; Tue, 26 Jul 2022 13:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD44C385A2;
-        Tue, 26 Jul 2022 13:02:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BFF96154C
+        for <linux-arch@vger.kernel.org>; Tue, 26 Jul 2022 13:04:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F09FC341C8;
+        Tue, 26 Jul 2022 13:04:11 +0000 (UTC)
 From:   Huacai Chen <chenhuacai@loongson.cn>
 To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
 Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
@@ -28,9 +28,9 @@ Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
         Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
         Jiaxun Yang <jiaxun.yang@flygoat.com>,
         Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Disable executable stack by default
-Date:   Tue, 26 Jul 2022 21:02:24 +0800
-Message-Id: <20220726130224.3987623-1-chenhuacai@loongson.cn>
+Subject: [PATCH] LoongArch: Fix shared cache size calculation
+Date:   Tue, 26 Jul 2022 21:04:40 +0800
+Message-Id: <20220726130440.3997832-1-chenhuacai@loongson.cn>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -43,27 +43,57 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Disable executable stack for LoongArch by default, as all modern
-architectures do.
+Current calculation of shared cache size is from the node (die) scope,
+but we hope 'lscpu' to show the shared cache size of the whole package
+for multi-die chips (e.g., Loongson-3C5000L, which contains 4 dies in
+one package). So fix it by multiplying nodes_per_package.
 
 Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 ---
- arch/loongarch/include/asm/elf.h | 2 --
- 1 file changed, 2 deletions(-)
+ arch/loongarch/kernel/cacheinfo.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
-index f3960b18a90e..5f3ff4781fda 100644
---- a/arch/loongarch/include/asm/elf.h
-+++ b/arch/loongarch/include/asm/elf.h
-@@ -288,8 +288,6 @@ struct arch_elf_state {
- 	.interp_fp_abi = LOONGARCH_ABI_FP_ANY,	\
- }
+diff --git a/arch/loongarch/kernel/cacheinfo.c b/arch/loongarch/kernel/cacheinfo.c
+index b38f5489d094..4662b06269f4 100644
+--- a/arch/loongarch/kernel/cacheinfo.c
++++ b/arch/loongarch/kernel/cacheinfo.c
+@@ -4,8 +4,9 @@
+  *
+  * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+  */
+-#include <asm/cpu-info.h>
+ #include <linux/cacheinfo.h>
++#include <asm/bootinfo.h>
++#include <asm/cpu-info.h>
  
--#define elf_read_implies_exec(ex, exec_stk) (exec_stk == EXSTACK_DEFAULT)
--
- extern int arch_elf_pt_proc(void *ehdr, void *phdr, struct file *elf,
- 			    bool is_interp, struct arch_elf_state *state);
+ /* Populates leaf and increments to next leaf */
+ #define populate_cache(cache, leaf, c_level, c_type)		\
+@@ -17,6 +18,8 @@ do {								\
+ 	leaf->ways_of_associativity = c->cache.ways;		\
+ 	leaf->size = c->cache.linesz * c->cache.sets *		\
+ 		c->cache.ways;					\
++	if (leaf->level > 2)					\
++		leaf->size *= nodes_per_package;		\
+ 	leaf++;							\
+ } while (0)
  
+@@ -95,11 +98,15 @@ static void cache_cpumap_setup(unsigned int cpu)
+ 
+ int populate_cache_leaves(unsigned int cpu)
+ {
+-	int level = 1;
++	int level = 1, nodes_per_package = 1;
+ 	struct cpuinfo_loongarch *c = &current_cpu_data;
+ 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
+ 	struct cacheinfo *this_leaf = this_cpu_ci->info_list;
+ 
++	if (loongson_sysconf.nr_nodes > 1)
++		nodes_per_package = loongson_sysconf.cores_per_package
++					/ loongson_sysconf.cores_per_node;
++
+ 	if (c->icache.waysize) {
+ 		populate_cache(dcache, this_leaf, level, CACHE_TYPE_DATA);
+ 		populate_cache(icache, this_leaf, level++, CACHE_TYPE_INST);
 -- 
 2.31.1
 
