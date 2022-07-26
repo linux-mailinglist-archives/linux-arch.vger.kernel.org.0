@@ -2,103 +2,84 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE44580677
-	for <lists+linux-arch@lfdr.de>; Mon, 25 Jul 2022 23:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E4E8580F01
+	for <lists+linux-arch@lfdr.de>; Tue, 26 Jul 2022 10:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237137AbiGYVZq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 25 Jul 2022 17:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S238616AbiGZI3S (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 26 Jul 2022 04:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiGYVZq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 25 Jul 2022 17:25:46 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C3622BFB;
-        Mon, 25 Jul 2022 14:25:45 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id y141so11520222pfb.7;
-        Mon, 25 Jul 2022 14:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qRdczfwqTE1ClSc+nVMd7FDIiV42abVCNkRv2IL8Lek=;
-        b=L6AKMM6K4trb2vONHbs3hxILEtF+2UgNvTe16SDRmYlKVhAG67nRJYhPOPNlejNU9k
-         e3pqftybhinP1UmAAjwe4lAvrRhqOOlTYhZZDByfIDWIL5QunSTgfqoZZnBmIN5Uikdn
-         RPB0p2npCp0f2lnS31YBgavWOG3ReU2zxNJ1DX8upUd7GWJBCbqfL/fZGabxJNwQWIZ3
-         pvDbMfIp07dcp0vFPjTGQk8oKTyb2WhYwpNbIixgYAyaDtF14E3MyxbjNevn1qD4azBu
-         EsG/W7w4mHpxY6csvkkBX1FMHozd2JAkh1IpTJLXnYEmQOo3qhIuHpNaBWSxaOG/hibm
-         5xeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qRdczfwqTE1ClSc+nVMd7FDIiV42abVCNkRv2IL8Lek=;
-        b=VL35w5fdnGMuY3iG2s443uEiyKVFSQ5qYxErsMgrY9RXVoNhhHH+a5zxglmwE9nKr8
-         WlfSsM+Y19Zn8YFWcvkrO/lCBVrA3CYnf0OPAKkYGg5uR6I3vmZ5fg66KBZKy5zl+9N/
-         7bshkr43RENpyXuTLNCJwyv8mCCPPug6P2oFmwmGiGB2KqeVN4sBkFIqpq1U9zJHpZx7
-         bn8RbLANjvrh1C03Xj5pgRaRLqcXItZocauJyObVh9n3iOpGXmCxT4Re8AIRo1njilZU
-         YfzssKWeoCUqaFCP/XkIyMpZTZyYL4rpdcR/ry6lnMWrPgKTboCMsSwKZ9kw2Q1PP20B
-         X0NA==
-X-Gm-Message-State: AJIora81vgoiYge1s+gUUfSgDG1Nv83WjOXD9PtvbSIMW+O1GjtGPmEY
-        Ll4CpV8SLF/oBnPBHdlw8Q0LuKUG7qcQRg==
-X-Google-Smtp-Source: AGRyM1sd1c1I+EYc9ZvSrnDP1TC7QERjPcDblbVBFnbkdez9paKN37PMRziYxYw3G13XnAyGRU2PGg==
-X-Received: by 2002:a63:d711:0:b0:415:c581:2aff with SMTP id d17-20020a63d711000000b00415c5812affmr12701105pgg.278.1658784344817;
-        Mon, 25 Jul 2022 14:25:44 -0700 (PDT)
-Received: from localhost ([2409:10:24a0:4700:e8ad:216a:2a9d:6d0c])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170903230500b0016c3b0042d0sm9735220plh.14.2022.07.25.14.25.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Jul 2022 14:25:43 -0700 (PDT)
-Date:   Tue, 26 Jul 2022 06:25:42 +0900
-From:   Stafford Horne <shorne@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v3 1/3] asm-generic: Support NO_IOPORT_MAP in pci_iomap.h
-Message-ID: <Yt8KVnwgzHFZbtQv@antec>
-References: <20220725020737.1221739-2-shorne@gmail.com>
- <20220725171059.GA5779@bhelgaas>
+        with ESMTP id S238545AbiGZI3J (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 26 Jul 2022 04:29:09 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0973130574;
+        Tue, 26 Jul 2022 01:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1658824143; x=1690360143;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xip+SiKxfrbgvn/EPR0jc0BKZZ5YrIpbvJIba3YLDGc=;
+  b=TyVRnagBRlB+961dxxNXDGsXg4YA57EFxQAU/2yfJ/P8bKVlxY2CC6iU
+   4w+SqstkepsdyBcITd3pLp2Y9WxUwNuZlw4kYzmEHfM1ET+IuvdaLogxD
+   xNEeBBeE8bnpY4BWYVXawDQmdR7T4UxEPOeYllOvFiYYNkRojaSbnPjR4
+   nMJEAOVyEF2NOd02eMcj9AZUqB9dFxiajuMhiZ0iI9mIe1uM1lxWrnq+s
+   jIoiDgl99+LLU2mREpMzZxvNtkY9cowqEOPbg27Jmaf6LgsDxJ7P6b4GF
+   cp2IWVEj7VbOz4vcD9CW9M3d3zZdrGD/kvnfOWDTpfAZ7XCgTXe76GV1r
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10419"; a="351889228"
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="351889228"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2022 01:29:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,193,1654585200"; 
+   d="scan'208";a="627803966"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 26 Jul 2022 01:28:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 511523ED; Tue, 26 Jul 2022 11:29:09 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Keith Busch <kbusch@kernel.org>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jens Axboe <axboe@kernel.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] asm-generic: Make parameter types consisten in _unaligned_be48()
+Date:   Tue, 26 Jul 2022 11:29:08 +0300
+Message-Id: <20220726082908.71341-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220725171059.GA5779@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 12:10:59PM -0500, Bjorn Helgaas wrote:
-> On Mon, Jul 25, 2022 at 11:07:35AM +0900, Stafford Horne wrote:
-> > When building OpenRISC PCI which has no ioport_map we get the following build
-> > error.
-> > 
-> >     lib/pci_iomap.c: In function 'pci_iomap_range':
-> >       CC      drivers/i2c/i2c-core-base.o
-> >     ./include/asm-generic/pci_iomap.h:29:41: error: implicit declaration of function 'ioport_map'; did you mean 'ioremap'? [-Werror=implicit-function-declaration]
-> >        29 | #define __pci_ioport_map(dev, port, nr) ioport_map((port), (nr))
-> >           |                                         ^~~~~~~~~~
-> >     lib/pci_iomap.c:44:24: note: in expansion of macro '__pci_ioport_map'
-> >        44 |                 return __pci_ioport_map(dev, start, len);
-> >           |                        ^~~~~~~~~~~~~~~~
-> > 
-> > This patch adds a NULL definition of __pci_ioport_map for architetures
-> > which do not support ioport_map.
-> > 
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Signed-off-by: Stafford Horne <shorne@gmail.com>
-> 
-> FWIW,
-> 
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+There is a convention to use internal kernel types, hence replace
+__u8 by u8.
 
-Thank you,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ include/asm-generic/unaligned.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I assume this will go via some other tree; let me know if otherwise.
+diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligned.h
+index df30f11b4a46..699650f81970 100644
+--- a/include/asm-generic/unaligned.h
++++ b/include/asm-generic/unaligned.h
+@@ -126,7 +126,7 @@ static inline void put_unaligned_le24(const u32 val, void *p)
+ 	__put_unaligned_le24(val, p);
+ }
+ 
+-static inline void __put_unaligned_be48(const u64 val, __u8 *p)
++static inline void __put_unaligned_be48(const u64 val, u8 *p)
+ {
+ 	*p++ = val >> 40;
+ 	*p++ = val >> 32;
+-- 
+2.35.1
 
-Yes I plan to send this along with the other patches via the OpenRISC tree.
-
--Stafford
