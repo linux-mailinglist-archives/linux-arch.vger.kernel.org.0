@@ -2,55 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419EE58297B
-	for <lists+linux-arch@lfdr.de>; Wed, 27 Jul 2022 17:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512FB58314D
+	for <lists+linux-arch@lfdr.de>; Wed, 27 Jul 2022 19:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbiG0PVb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 27 Jul 2022 11:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60630 "EHLO
+        id S242003AbiG0R4T (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 27 Jul 2022 13:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233642AbiG0PV1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jul 2022 11:21:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D1EDE9C;
-        Wed, 27 Jul 2022 08:21:26 -0700 (PDT)
+        with ESMTP id S243115AbiG0R4B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 27 Jul 2022 13:56:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288708B490;
+        Wed, 27 Jul 2022 10:00:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23ECD6191A;
-        Wed, 27 Jul 2022 15:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85982C433D6;
-        Wed, 27 Jul 2022 15:21:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19AD461884;
+        Wed, 27 Jul 2022 17:00:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 793BFC433C1;
+        Wed, 27 Jul 2022 17:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1658935285;
-        bh=PTGpZZnmXzxe20uHjDrH7NKOWIbim/FkPV1h7SW2u+A=;
-        h=From:Date:Subject:To:Cc:From;
-        b=L9sn2Ms4yoDltiyuzUHS4Dm2EXNXzulccKkWawR8/ZUY7A3PjLXNfc7QVcGuh4CvA
-         LVvNHO0ZywVU9wa7ofeJ2vAHxXOVGijr63k+6GYwUOcpRxCjoJQTqUN9Mj7JuaxpKW
-         Zqyac7nL8wndZamtEKaeXFNOFjFbNDVhM/FZKxTSwyHN0NV8l45co/y0YHBSs5ttAe
-         oOESPSgfQdv9FfKziRpexWwT2Q1LIjh3bhA6szdYUUUgT7eufQWyjGBdwEE91jsDaX
-         OsS0zA4ed1FHoOMEngPq5kh3RK2jrrcy+gSRWu2v9SWT49Ns0hGGMKgmZUuLywfzIj
-         fWKi/qQlFsXFg==
-Received: by mail-wr1-f48.google.com with SMTP id bn9so13981423wrb.9;
-        Wed, 27 Jul 2022 08:21:25 -0700 (PDT)
-X-Gm-Message-State: AJIora9fERP+1gNfkiFHg8VE7nKi2JFpwtzH87+cx20aZMraHuYhJBab
-        COK88V+qw1yzaOBKdoRv3BVlLxHrV2KgytSgogY=
-X-Google-Smtp-Source: AGRyM1t/RxxhiPUSJ2Td8BQcYWSbO+epKS3o6KxZhc40U3TiZKiZFxkhRGm/a+3wrlZZy6eFn/ZCLauo1xzfx1mYjx4=
-X-Received: by 2002:a5d:52d0:0:b0:21e:4923:fa09 with SMTP id
- r16-20020a5d52d0000000b0021e4923fa09mr15040811wrv.244.1658935283836; Wed, 27
- Jul 2022 08:21:23 -0700 (PDT)
-MIME-Version: 1.0
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 27 Jul 2022 17:21:07 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
-Message-ID: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
-Subject: [GIT PULL] asm-generic fixes for 5.19, part 2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        s=k20201202; t=1658941230;
+        bh=rbXQhemBM2OLPzGRQYNjnah19PIzWC0ECugQ8LsL3ig=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=bngjNI9K35lmJwM9BluslKPLPogVzrKqQfTXo17dojylJxVqaS6qC3Wx0PfRrMvf5
+         sNsS7cgI8oTRNgZb1fQ8xhsQmCnEF23r+DH2Kt4TqVcP6LoVv92arF/X8phZ9ge8B6
+         QNzLSDwSyqLuUU7rMmtM8u2yT9xTkbKAO77dUOCmr3DMe5PGp36ruE78rjxRnTPYhv
+         ObEZ0RTNXzsRZNxUVvIU6Kev6UC3KM8PGsSqbbUbMNJ2OWmAhiF+m5QYSma+QECmj8
+         qQSSXU60dbNUtVABbSyOTbh2fy3QhexLf22jHC8Tt47YEda23fqu94wcWJvYkJyRoq
+         FC54qmA4OnL3g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 67A1EC43140;
+        Wed, 27 Jul 2022 17:00:30 +0000 (UTC)
+Subject: Re: [GIT PULL] asm-generic fixes for 5.19, part 2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
+References: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAK8P3a13Z96qf7O=94XkfWsq8yC3QTzFv0by7i180DSn10b-CA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-5.19-2
+X-PR-Tracked-Commit-Id: e2a619ca0b38f2114347b7078b8a67d72d457a3d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6e7765cb477a9753670d4351d14de93f1e9dbbd4
+Message-Id: <165894123042.29306.8592359334851153853.pr-tracker-bot@kernel.org>
+Date:   Wed, 27 Jul 2022 17:00:30 +0000
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,35 +62,15 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3:
+The pull request you sent on Wed, 27 Jul 2022 17:21:07 +0200:
 
-  Linux 5.19-rc2 (2022-06-12 16:11:37 -0700)
+> git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-5.19-2
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6e7765cb477a9753670d4351d14de93f1e9dbbd4
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git
-tags/asm-generic-fixes-5.19-2
+Thank you!
 
-for you to fetch changes up to e2a619ca0b38f2114347b7078b8a67d72d457a3d:
-
-  asm-generic: remove a broken and needless ifdef conditional
-(2022-07-22 15:00:00 +0200)
-
-----------------------------------------------------------------
-asm-generic fixes for 5.19, part 2
-
-Two more bug fixes for asm-generic, one addressing an incorrect
-Kconfig symbol reference and another one fixing a build failure
-for the perf tool on mips and possibly others.
-
-----------------------------------------------------------------
-Florian Fainelli (1):
-      tools: Fixed MIPS builds due to struct flock re-definition
-
-Lukas Bulwahn (1):
-      asm-generic: remove a broken and needless ifdef conditional
-
- include/asm-generic/io.h               |  2 --
- include/uapi/asm-generic/fcntl.h       |  2 ++
- tools/include/uapi/asm-generic/fcntl.h | 11 ++++++++++-
- 3 files changed, 12 insertions(+), 3 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
