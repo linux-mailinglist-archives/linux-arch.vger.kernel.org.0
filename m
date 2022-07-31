@@ -2,169 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A74B585F68
-	for <lists+linux-arch@lfdr.de>; Sun, 31 Jul 2022 17:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B801A585F95
+	for <lists+linux-arch@lfdr.de>; Sun, 31 Jul 2022 17:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237273AbiGaPIP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 31 Jul 2022 11:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
+        id S232516AbiGaPtB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 31 Jul 2022 11:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbiGaPIO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 11:08:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 829EFE036
-        for <linux-arch@vger.kernel.org>; Sun, 31 Jul 2022 08:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659280092;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qwgOflw1XbrvVIGX1NtZYJq0Zdca6rMcXu+6e4uFK6A=;
-        b=Gc7cIwN7A5kT0Cj3VzBh2NJLIxikbYlPIHICV3g9RpoltcNgJ3wwEXjIoQHKXQF8de9JJW
-        dcIwgxhgv7/vMo3Z+N+1hFbALin4cg+1LniGP/E15Uq0dN44Bx6NwVfhhBMUDK7HkZdqZW
-        VQD8x9SSuxK7Br4fYzMKToI+8fW390Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-661-cSECzgojN3ayQWbNcLgCaA-1; Sun, 31 Jul 2022 11:08:07 -0400
-X-MC-Unique: cSECzgojN3ayQWbNcLgCaA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S231424AbiGaPtA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 11:49:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BED9E0DA;
+        Sun, 31 Jul 2022 08:48:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D0DF3C02B7D;
-        Sun, 31 Jul 2022 15:08:06 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5D8DE492C3B;
-        Sun, 31 Jul 2022 15:08:06 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 26VF86R8016557;
-        Sun, 31 Jul 2022 11:08:06 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 26VF846u016553;
-        Sun, 31 Jul 2022 11:08:04 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Sun, 31 Jul 2022 11:08:04 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Ard Biesheuvel <ardb@kernel.org>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2] make buffer_locked provide an acquire semantics
-In-Reply-To: <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
-Message-ID: <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32C8860AE5;
+        Sun, 31 Jul 2022 15:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A855CC433D6;
+        Sun, 31 Jul 2022 15:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659282538;
+        bh=BpVa9XKiTUOgz9LsKONU0g8nIyCwFAdKHoQkKOfJZG0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ezrAupgkv1KT72574l5osh6l5yi3NzrFxWmQrBAx9UstB4YHCONW1fFz8yFAV0saC
+         B9+OERGYa+EPlvvjHFIUUbPQgPaoml64eG6icHsFPeU74HxsZ5izPdeuzzC2p/UKXx
+         /0rAyJevGiPvBiEajNnxgxELO3JUMD2APZdSXABzMkH8pMKLfqkfPPsSlXbFqw3nlZ
+         RXF2PfAjKLH0Vm9+wWVCXbpOPPkRpY2ESn47bvf+S82AJ8jOrJQ/OKJpH8YruFnmwF
+         7YLjnv8X5NFNoZq2U8x6xP51UPWsryFZCHI+CP+X4nGOwigZWWEjbw3ZSSeSCy7Svp
+         dREEN86bbTm5Q==
+Date:   Mon, 1 Aug 2022 00:48:54 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Chen Zhongjin <chenzhongjin@huawei.com>
+Cc:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <naveen.n.rao@linux.ibm.com>, <anil.s.keshavamurthy@intel.com>,
+        <davem@davemloft.net>, <mhiramat@kernel.org>
+Subject: Re: [PATCH] kprobes: Forbid probing on kprobe_insn_slot
+Message-Id: <20220801004854.9c2b36f38fe5ad19b2271196@kernel.org>
+In-Reply-To: <20220727032058.60444-1-chenzhongjin@huawei.com>
+References: <20220727032058.60444-1-chenzhongjin@huawei.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> The only problem is that test_bit doesn't provide any memory barriers. 
-> Should we add the barrier to buffer_locked() instead of wait_on_buffer()? 
-> Perhaps it would fix more bugs - in reiserfs, there's this piece of code:
+On Wed, 27 Jul 2022 11:20:58 +0800
+Chen Zhongjin <chenzhongjin@huawei.com> wrote:
 
-Her I'm sending the second version of the patch that changes buffer_locked 
-to provide an acquire semantics.
+> Syzkaller reported a BUG on arm64:
+> Unrecoverable kprobe detected.
+> Dumping kprobe:
+> Name: (null)
+> Offset: 0
+> Address: 0xffffa00010019000
+> ------------[ cut here ]------------
+> kernel BUG at arch/arm64/kernel/probes/kprobes.c:235!
+> Internal error: Oops - BUG: 0 [#1] SMP
+> Modules linked in:
+> CPU: 1 PID: 31060 Comm: syz-executor.6 Not tainted 5.10.0 #11
+> ...
+> Call trace:
+>  reenter_kprobe arch/arm64/kernel/probes/kprobes.c:234 [inline]
+>  kprobe_handler+0x23c/0x26c arch/arm64/kernel/probes/kprobes.c:339
+>  kprobe_breakpoint_handler+0x24/0x34 arch/arm64/kernel/probes/kprobes.c:406
+>  call_break_hook+0xf4/0x13c arch/arm64/kernel/debug-monitors.c:322
+>  brk_handler+0x2c/0xa0 arch/arm64/kernel/debug-monitors.c:329
+>  do_debug_exception+0x140/0x230 arch/arm64/mm/fault.c:867
+>  el1_dbg+0x38/0x50 arch/arm64/kernel/entry-common.c:182
+>  el1_sync_handler+0xf4/0x150 arch/arm64/kernel/entry-common.c:219
+>  el1_sync+0x74/0x100 arch/arm64/kernel/entry.S:665
+>  0xffffa00010019000
+>  do_futex+0x2f4/0x370 kernel/futex.c:3735
+>  __do_sys_futex kernel/futex.c:3798 [inline]
+>  __se_sys_futex kernel/futex.c:3764 [inline]
+>  __arm64_sys_futex+0x168/0x3a0 kernel/futex.c:3764
+>  __invoke_syscall arch/arm64/kernel/syscall.c:36 [inline]
+>  invoke_syscall arch/arm64/kernel/syscall.c:48 [inline]
+>  el0_svc_common.constprop.0+0xf4/0x414 arch/arm64/kernel/syscall.c:155
+>  do_el0_svc+0x50/0x11c arch/arm64/kernel/syscall.c:217
+>  el0_svc+0x20/0x30 arch/arm64/kernel/entry-common.c:353
+>  el0_sync_handler+0xe4/0x1e0 arch/arm64/kernel/entry-common.c:369
+>  el0_sync+0x148/0x180 arch/arm64/kernel/entry.S:683
+> Code: 91018360 97ff1838 aa1703e0 97ff1fdf (d4210000)
+> ---[ end trace 767503e946e01b15 ]---
+> 
+> Syzbot tried to porbe on a kprobe_insn_slot.
+> 
+> kprobe will replace instruciton with a break and store the origin one
+> on kprobe_insn_slot. However these slots are not in .kprobes.text and
+> exported by perf_event_ksymbol so can be probed by perf interface.
+> 
+> Probing these slots will triggers kprobe handler inside single step
+> process and for some architectures such as arm64 this will causes a
+> bug().
+> 
+> These slots are kprobe process so they should not be probed anyway.
+> Add kprobe_insn_slot check when register_kprobe to forbid probing on
+> these slots.
 
-Mikulas
+Oops, good catch!
+
+Previously this was not counted as text area, but now the kernel_text_address()
+returns true for these trampoline buffers.
+
+In this case, I think kprobes should be limited to probe only
+core_kernel_text and module_text.
+Can you use is_module_text_address() and core_kernel_text() instead?
+Below can allow kprobes probing on other trampolines like ftrace and
+bpf.
+Also, you may need this tag;
+
+Fixes: 5b485629ba0d ("kprobes, extable: Identify kprobes trampolines as kernel text area")
+
+Thank you,
+
+> 
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>  kernel/kprobes.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index f214f8c088ed..3e798b62db70 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1562,6 +1562,8 @@ static int check_kprobe_address_safe(struct kprobe *p,
+>  	/* Ensure it is not in reserved area nor out of text */
+>  	if (!kernel_text_address((unsigned long) p->addr) ||
+>  	    within_kprobe_blacklist((unsigned long) p->addr) ||
+> +	    is_kprobe_insn_slot((unsigned long) p->addr) ||
+> +	    is_kprobe_optinsn_slot((unsigned long) p->addr) ||
+>  	    jump_label_text_reserved(p->addr, p->addr) ||
+>  	    static_call_text_reserved(p->addr, p->addr) ||
+>  	    find_bug((unsigned long)p->addr)) {
+> -- 
+> 2.17.1
+> 
 
 
-
-
-From: Mikulas Patocka <mpatocka@redhat.com>
-
-Let's have a look at this piece of code in __bread_slow:
-	get_bh(bh);
-	bh->b_end_io = end_buffer_read_sync;
-	submit_bh(REQ_OP_READ, 0, bh);
-	wait_on_buffer(bh);
-	if (buffer_uptodate(bh))
-		return bh;
-Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
-Consequently, if someone calls sb_bread and then reads the buffer data,
-the read of buffer data may be executed before wait_on_buffer(bh) on
-architectures with weak memory ordering and it may return invalid data.
-
-Also, there is this pattern present several times:
-	wait_on_buffer(bh);
-	if (!buffer_uptodate(bh))
-		err = -EIO;
-It may be possible that buffer_uptodate is executed before wait_on_buffer
-and it may return spurious error.
-
-Fix these bugs by chaning the function buffer_locked to have the acquire
-semantics - so that code that follows buffer_locked cannot be moved before
-it. We must also add a read barrier after wait_on_bit_io because
-wait_on_bit_io doesn't provide any barrier. (perhaps, should this
-smp_rmb() be moved into wait_on_bit_io?)
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
-
-Index: linux-2.6/include/linux/buffer_head.h
-===================================================================
---- linux-2.6.orig/include/linux/buffer_head.h
-+++ linux-2.6/include/linux/buffer_head.h
-@@ -120,7 +120,6 @@ static __always_inline int test_clear_bu
- BUFFER_FNS(Uptodate, uptodate)
- BUFFER_FNS(Dirty, dirty)
- TAS_BUFFER_FNS(Dirty, dirty)
--BUFFER_FNS(Lock, locked)
- BUFFER_FNS(Req, req)
- TAS_BUFFER_FNS(Req, req)
- BUFFER_FNS(Mapped, mapped)
-@@ -135,6 +134,17 @@ BUFFER_FNS(Meta, meta)
- BUFFER_FNS(Prio, prio)
- BUFFER_FNS(Defer_Completion, defer_completion)
- 
-+static __always_inline void set_buffer_locked(struct buffer_head *bh)
-+{
-+	set_bit(BH_Lock, &bh->b_state);
-+}
-+
-+static __always_inline int buffer_locked(const struct buffer_head *bh)
-+{
-+	unsigned long state = smp_load_acquire(&bh->b_state);
-+	return test_bit(BH_Lock, &state);
-+}
-+
- #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
- 
- /* If we *know* page->private refers to buffer_heads */
-Index: linux-2.6/fs/buffer.c
-===================================================================
---- linux-2.6.orig/fs/buffer.c
-+++ linux-2.6/fs/buffer.c
-@@ -120,6 +120,7 @@ EXPORT_SYMBOL(buffer_check_dirty_writeba
- void __wait_on_buffer(struct buffer_head * bh)
- {
- 	wait_on_bit_io(&bh->b_state, BH_Lock, TASK_UNINTERRUPTIBLE);
-+	smp_rmb();
- }
- EXPORT_SYMBOL(__wait_on_buffer);
- 
-
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
