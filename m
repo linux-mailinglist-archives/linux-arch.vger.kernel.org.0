@@ -2,42 +2,53 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D579158601C
-	for <lists+linux-arch@lfdr.de>; Sun, 31 Jul 2022 19:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC70758615A
+	for <lists+linux-arch@lfdr.de>; Sun, 31 Jul 2022 22:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiGaRaP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 31 Jul 2022 13:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38234 "EHLO
+        id S237966AbiGaUjg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 31 Jul 2022 16:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiGaRaO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 13:30:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BFD5F8A;
-        Sun, 31 Jul 2022 10:30:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230074AbiGaUjf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 16:39:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7DE9A468
+        for <linux-arch@vger.kernel.org>; Sun, 31 Jul 2022 13:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659299973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r8N6mOR4eh4HYhZleYP/ElZD6zJ57nbHlhorHDpdL2o=;
+        b=PDORoS/VCN06fLPO8gsFKLAbVJtI8okMxqjZfuLqw9jj2O9+gO8XaLaiaKN9cVChgASmNA
+        tGiLCy4hELW+MiqajiDgDsbpQ/1NgWj1cAtCRM/bbUC//iHolb7jK7WV+d2+HMBulGQbSc
+        QA1qeRwyd6MyXagAwMr+IzN5XrmHg+A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-28-h-HHsLhWPmufZYIPa7O8ZA-1; Sun, 31 Jul 2022 16:39:28 -0400
+X-MC-Unique: h-HHsLhWPmufZYIPa7O8ZA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B3D260F1F;
-        Sun, 31 Jul 2022 17:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB9DDC433C1;
-        Sun, 31 Jul 2022 17:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659288611;
-        bh=FH0blCyVvfudwL8ce3BTQJUuYsbrfBaewHrHEz9SgsU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=P8416Z2Yh37otidwE8Z7NVDq7lcvqpRNoWfUOua9IveI8aEUOJ52Nlt/CNTT7wMF2
-         2IQ+XlCnziFRSmUT41WYd3b8Bf8aS6D61RTcDsydT8licqRQQVY5psT7Eg3Uc2+PP+
-         DajKlQ/1UwQyTEquO8QYUNvlJul+JwnzfQ0YVhO/jCDVnYpzNtH1TAFN3k+N+AAvHv
-         IPK1GKzuoTpiwZQuBThZkghdQUhwU6dTh8MWT/qTJy4jrQsVJprRkaEjcyaMVV1W1Y
-         1t2KGjeiV7vuhZZSLA5mRlcuQsrIMr2qCHYwlV75I97xPzWwNsInYkUMi6yBQnRWbW
-         On4VzjDbmLQbg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3CBD75C03E0; Sun, 31 Jul 2022 10:30:11 -0700 (PDT)
-Date:   Sun, 31 Jul 2022 10:30:11 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48C2285A581;
+        Sun, 31 Jul 2022 20:39:27 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 15871492C3B;
+        Sun, 31 Jul 2022 20:39:27 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 26VKdRbp006781;
+        Sun, 31 Jul 2022 16:39:27 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 26VKdQgX006778;
+        Sun, 31 Jul 2022 16:39:26 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Sun, 31 Jul 2022 16:39:26 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mikulas Patocka <mpatocka@redhat.com>,
-        Will Deacon <will@kernel.org>,
+cc:     Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -55,27 +66,27 @@ Cc:     Mikulas Patocka <mpatocka@redhat.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-fsdevel@vger.kernel.org
 Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
-Message-ID: <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
- <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
+
+
+On Sun, 31 Jul 2022, Linus Torvalds wrote:
+
 > [ Will and Paul, question for you below ]
 > 
 > On Sun, Jul 31, 2022 at 8:08 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
@@ -93,97 +104,41 @@ On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
 > memory ordering model allows for _that_ to be out-of-order. Memory
 > barriers are for accesses to different memory locations.
 
-Yes, aligned same-sized marked accesses to a given location are always
-executed so as to be consistent with some global order.  Please note the
-"marked accesses".  The compiler can rearrange unmarked reads and in
-some cases can discard unmarked writes.  For more information, please
-see tools/memory-model/Documentation/recipes.txt's "Single CPU or single
-memory location" section.
+You are right. And the bit tests are volatile, so the compiler can't 
+reorder them.
 
-> Even alpha is specified to be locally ordered wrt *one* memory
-> location, including for reads (See table 5-1: "Processor issue order",
-> and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
-> new value, a subsequent read is not allowed to see an older one - even
-> without a memory barrier.
-> 
-> Will, Paul? Maybe that's only for overlapping loads/stores, not for
-> loads/loads. Because maybe alpha for once isn't the weakest possible
-> ordering.
-
-The "bad boy" in this case is Itanium, which can do some VLIW reordering
-of accesses.  Or could, I am not sure that newer Itanium hardware
-does this.  But this is why Itanium compilers made volatile loads use
-the ld,acq instruction.
-
-Which means that aligned same-sized marked accesses to a single location
-really do execute consistently with some global ordering, even on Itanium.
-
-That said, I confess that I am having a hard time finding the
-buffer_locked() definition.  So if buffer_locked() uses normal C-language
-accesses to sample the BH_Lock bit of the ->b_state field, then yes,
-there could be a problem.  The compiler would then be free to reorder
-calls to buffer_locked() because it could then assume that no other
-thread was touching that ->b_state field.
-
-> I didn't find this actually in our documentation, so maybe other
-> architectures allow it? Our docs talk about "overlapping loads and
-> stores", and maybe that was meant to imply that "load overlaps with
-> load" case, but it really reads like load-vs-store, not load-vs-load.
-
-I placed the relevant text from recipes.txt at the end of this email.
+But the compiler can reorder non-volatile accesses around volatile 
+accesses (gcc does this, clang afaik doesn't), so the bit tests need at 
+least a compiler barrier after them.
 
 > But the patch looks fine, though I agree that the ordering in
 > __wait_on_buffer should probably be moved into
 > wait_on_bit/wait_on_bit_io.
-> 
+
+Yes, there are more bugs where the code does wait_on_bit and then reads 
+some data without any barrier. Adding the barrier to wait_on_bit fixes 
+that.
+
+I'll send two patches, one for wait_on_bit and the other for 
+buffer_locked.
+
+Do you think that wait_event also needs a read memory barrier? It is 
+defined as:
+#define wait_event(wq_head, condition)                                          \
+do {                                                                            \
+        might_sleep();                                                          \
+        if (condition)                                                          \
+                break;                                                          \
+        __wait_event(wq_head, condition);                                       \
+} while (0)
+
+Mikulas
+
 > And would we perhaps want the bitops to have the different ordering
 > versions? Like "set_bit_release()" and "test_bit_acquire()"? That
 > would seem to be (a) cleaner and (b) possibly generate better code for
 > architectures where that makes a difference?
+> 
+>                Linus
+> 
 
-As always, I defer to the architecture maintainers on this one.
-
-							Thanx, Paul
-
-------------------------------------------------------------------------
-
-Single CPU or single memory location
-------------------------------------
-
-If there is only one CPU on the one hand or only one variable
-on the other, the code will execute in order.  There are (as
-usual) some things to be careful of:
-
-1.	Some aspects of the C language are unordered.  For example,
-	in the expression "f(x) + g(y)", the order in which f and g are
-	called is not defined; the object code is allowed to use either
-	order or even to interleave the computations.
-
-2.	Compilers are permitted to use the "as-if" rule.  That is, a
-	compiler can emit whatever code it likes for normal accesses,
-	as long as the results of a single-threaded execution appear
-	just as if the compiler had followed all the relevant rules.
-	To see this, compile with a high level of optimization and run
-	the debugger on the resulting binary.
-
-3.	If there is only one variable but multiple CPUs, that variable
-	must be properly aligned and all accesses to that variable must
-	be full sized.	Variables that straddle cachelines or pages void
-	your full-ordering warranty, as do undersized accesses that load
-	from or store to only part of the variable.
-
-4.	If there are multiple CPUs, accesses to shared variables should
-	use READ_ONCE() and WRITE_ONCE() or stronger to prevent load/store
-	tearing, load/store fusing, and invented loads and stores.
-	There are exceptions to this rule, including:
-
-	i.	When there is no possibility of a given shared variable
-		being updated by some other CPU, for example, while
-		holding the update-side lock, reads from that variable
-		need not use READ_ONCE().
-
-	ii.	When there is no possibility of a given shared variable
-		being either read or updated by other CPUs, for example,
-		when running during early boot, reads from that variable
-		need not use READ_ONCE() and writes to that variable
-		need not use WRITE_ONCE().
