@@ -2,42 +2,43 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DB75862BF
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 04:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86B05862C5
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 04:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239278AbiHACmn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 31 Jul 2022 22:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S239361AbiHACmx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 31 Jul 2022 22:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbiHACmm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 22:42:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F82113D0E;
-        Sun, 31 Jul 2022 19:42:42 -0700 (PDT)
+        with ESMTP id S239316AbiHACms (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 22:42:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E565A13D2D;
+        Sun, 31 Jul 2022 19:42:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFA346123C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 791E6B80DCC;
+        Mon,  1 Aug 2022 02:42:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03BBC433D7;
         Mon,  1 Aug 2022 02:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B19C433B5;
-        Mon,  1 Aug 2022 02:42:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659321761;
-        bh=aUkod9ap6lals+as1v1yhEx9/EywmGgaYtecOunYJFw=;
+        s=k20201202; t=1659321764;
+        bh=Jgmay4Wp8fySBQ0xkLEHDoGHR4fdNJxu7+B9UiG4oaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kn+8Aa0tETYarA5fdBTcXyltNRjWoMCGGJ//yFNIEtIdOpiloybQLuL7STnP36M3T
-         fRGxLjEgqlmTH0HJOEFGFVhc46mxJcrP2JHs6DA4aL4v3tOEmDJfU64ofUl/pSIJpE
-         yc9WVSJ/zGTR19QuN4pg+Qnz6deqG9icYccdEJdxjRTkYfS6A9f6Z3qS9dm7nCcz/k
-         Wxl5dZbtT0zGgtdWkiqT1S1pIQFwr7awb6v24yz67LhrpbOd9VfoFgjGewZJ/WyHIW
-         PrhtdHKUdQXv/5xzNBdzgQS+QqmtH/Y7IkJBx0wnjcGaJmFH6e79hPPzn8kH+acpLZ
-         qEAtQ1SOWHSaw==
+        b=nfyTwg3NjIeYyCPXBgJ5BwOJ5/w+uUN/llI5m0HgbVwuWNr1MzKRo0kZipx5dyZLx
+         eNq55CIfq8YrntsPldAaV8InUntvko66Dhmw61capP2X97kliqUX2/FW/PhUwEbj9j
+         J6RtUqPHYLaM7gfgkNCvHes6ADZjJRW1jwVkjD8gxlATnQ9cQDwNyPS1KeO6PB9V8j
+         1CnLXZad1p+KyY2ui5vqtoNq39Jst/Scx28h9nnv7LbRtRD8/OaKJKAZhNCiizSwqr
+         koDRr6OK0z9+6HhAxaVJD5D0Lnk1yAJBE6DjES/MOmvhTHyFVfWj80YOlSuiyOXW5u
+         0+xzgKXT1BvgA==
 From:   guoren@kernel.org
 To:     guoren@kernel.org, arnd@arndb.de
 Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 1/2] csky: cmpxchg: Coding convention for BUILD_BUG()
-Date:   Sun, 31 Jul 2022 22:42:28 -0400
-Message-Id: <20220801024229.567397-2-guoren@kernel.org>
+        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 2/2] csky: abiv1: Fixup compile error
+Date:   Sun, 31 Jul 2022 22:42:29 -0400
+Message-Id: <20220801024229.567397-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220801024229.567397-1-guoren@kernel.org>
 References: <20220801024229.567397-1-guoren@kernel.org>
@@ -54,66 +55,39 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Use BUILD_BUG() instead of the custom bad_xchg.
+  LD      vmlinux.o
+arch/csky/lib/string.o: In function `memmove':
+string.c:(.text+0x108): multiple definition of `memmove'
+lib/string.o:string.c:(.text+0x7e8): first defined here
+arch/csky/lib/string.o: In function `memset':
+string.c:(.text+0x148): multiple definition of `memset'
+lib/string.o:string.c:(.text+0x2ac): first defined here
+scripts/Makefile.vmlinux_o:68: recipe for target 'vmlinux.o' failed
+make[4]: *** [vmlinux.o] Error 1
 
+Fixes: e4df2d5e852a ("csky: Add C based string functions")
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: <stable@vger.kernel.org>
 ---
- arch/csky/include/asm/cmpxchg.h | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ arch/csky/abiv1/inc/abi/string.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/csky/include/asm/cmpxchg.h b/arch/csky/include/asm/cmpxchg.h
-index 5f693fadb56c..916043b845f1 100644
---- a/arch/csky/include/asm/cmpxchg.h
-+++ b/arch/csky/include/asm/cmpxchg.h
-@@ -4,10 +4,9 @@
- #define __ASM_CSKY_CMPXCHG_H
+diff --git a/arch/csky/abiv1/inc/abi/string.h b/arch/csky/abiv1/inc/abi/string.h
+index 9d95594b0feb..de50117b904d 100644
+--- a/arch/csky/abiv1/inc/abi/string.h
++++ b/arch/csky/abiv1/inc/abi/string.h
+@@ -6,4 +6,10 @@
+ #define __HAVE_ARCH_MEMCPY
+ extern void *memcpy(void *, const void *, __kernel_size_t);
  
- #ifdef CONFIG_SMP
-+#include <linux/bug.h>
- #include <asm/barrier.h>
- 
--extern void __bad_xchg(void);
--
- #define __xchg_relaxed(new, ptr, size)				\
- ({								\
- 	__typeof__(ptr) __ptr = (ptr);				\
-@@ -46,7 +45,7 @@ extern void __bad_xchg(void);
- 			:);					\
- 		break;						\
- 	default:						\
--		__bad_xchg();					\
-+		BUILD_BUG();					\
- 	}							\
- 	__ret;							\
- })
-@@ -76,7 +75,7 @@ extern void __bad_xchg(void);
- 			:);					\
- 		break;						\
- 	default:						\
--		__bad_xchg();					\
-+		BUILD_BUG();					\
- 	}							\
- 	__ret;							\
- })
-@@ -107,7 +106,7 @@ extern void __bad_xchg(void);
- 			:);					\
- 		break;						\
- 	default:						\
--		__bad_xchg();					\
-+		BUILD_BUG();					\
- 	}							\
- 	__ret;							\
- })
-@@ -139,7 +138,7 @@ extern void __bad_xchg(void);
- 			:);					\
- 		break;						\
- 	default:						\
--		__bad_xchg();					\
-+		BUILD_BUG();					\
- 	}							\
- 	__ret;							\
- })
++#define __HAVE_ARCH_MEMMOVE
++extern void *memmove(void *, const void *, __kernel_size_t);
++
++#define __HAVE_ARCH_MEMSET
++extern void *memset(void *, int,  __kernel_size_t);
++
+ #endif /* __ABI_CSKY_STRING_H */
 -- 
 2.36.1
 
