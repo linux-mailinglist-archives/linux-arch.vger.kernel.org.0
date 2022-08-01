@@ -2,123 +2,150 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6548586D5B
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 17:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8259586D94
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 17:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbiHAPBy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Aug 2022 11:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S233245AbiHAPU1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Aug 2022 11:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbiHAPBx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 11:01:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BE7523151
-        for <linux-arch@vger.kernel.org>; Mon,  1 Aug 2022 08:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659366111;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iiba4+W7jZLYO1ySi5qFdgb2HBH/IsPBRLKYnq1fXIY=;
-        b=E/9uFwkjVi1U4SKMJ21bEGHNlvd8piJUUjxtp/nkv3fxJP++YJEbz5BOQDIIknWcnYmr7Y
-        J61F7V7Cj/MrRu058FtthTiZQ6xf4mheYkpQ8jVE7JXe8R0SZWZpkA1kGfflDvRGL8HPwn
-        z4QyIvZN1jYVQE4Ob9zVXUoircMqRyM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-399--nIrmDyMNk-h82Qyrwe4lQ-1; Mon, 01 Aug 2022 11:01:47 -0400
-X-MC-Unique: -nIrmDyMNk-h82Qyrwe4lQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3B02F801585;
-        Mon,  1 Aug 2022 15:01:41 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 257C1C27D95;
-        Mon,  1 Aug 2022 15:01:41 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 271F1f8v028288;
-        Mon, 1 Aug 2022 11:01:41 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 271F1eJk028270;
-        Mon, 1 Aug 2022 11:01:40 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 1 Aug 2022 11:01:40 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] change buffer_locked, so that it has acquire
- semantics
-In-Reply-To: <YuflGG60pHiXp2z/@casper.infradead.org>
-Message-ID: <alpine.LRH.2.02.2208011040190.27101@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com> <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com> <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com> <YuflGG60pHiXp2z/@casper.infradead.org>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        with ESMTP id S233436AbiHAPUW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 11:20:22 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5166564C7;
+        Mon,  1 Aug 2022 08:20:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659367217;
+        bh=pmPjh/lA87Z5W2nyaW7ihvFXNYv9bkrPbRGc5PPQH8A=;
+        h=X-UI-Sender-Class:From:To:Subject:Date;
+        b=lE549N2gSiLnnfNA1wunzQTZ+ah4tpEP5Bky62c5DTnXldiU1lPMBHJrBwe3+9Qnu
+         J5RxSVvWxIULnM47pbVjyQ5x7+9wS4ZGdM31tFENgA3SCUZ3OFBhf4EfpqK84u9ISp
+         RF+X9JScAdU/5u1cu9wPuwY0+39At0MaOJZFm5AI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from p100.fritz.box ([92.116.150.19]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1McYCl-1nk0kP3d8P-00d1GX; Mon, 01
+ Aug 2022 17:20:16 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] Dump command line of faulting process to syslog
+Date:   Mon,  1 Aug 2022 17:20:13 +0200
+Message-Id: <20220801152016.36498-1-deller@gmx.de>
+X-Mailer: git-send-email 2.37.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:W8hcioovE+Z+4+5r9LvNT3xnxYPDcNyVIT36mxBOBAsVYnianR1
+ Fk0uyBo+lIsSbJ/nZIXitqJA1/uzvLwohmND4IIR7ZWkVtOugqDY0npB7Dnkx+e/nAS0Fp8
+ k1Hfd6gXQglgB2oTxS83+hzgwJEHFCC+fOLLODfL84+hBXHNLAtD5moH83E/9ukNtflxtjF
+ bphXKtzcRjuE9otnQSFWw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1Oq5XVvyQtI=:QCeDmdf+soI5wZ/NjoG3tL
+ OEWeTxDe5F0McjEZSPiLyG2dbFOr/wIeNlbJpB24bAi4kPMl1jqhnEWALm48vaYp1Q7t7NvIw
+ nd8zS4fO7GYDTWSEbx/pligOafIk+tcGJ4Kwx5eRlkO4VwqK6OttsfzOrD7ZHpMvteGCcvaAd
+ bdf35qmgowe0LpIPpfsVolhHl0AspewS6RBAY0R38GmVe9xhJ/L4Vv5FyY/hYTwv7S0LcIJ3N
+ x673oHs1Cr0y/oSrC/+zS5DLzo3qztivG40vur3UHxTN7rCSrV8f+iVaNmGXyRt4p/F3K9Qlp
+ I1n5/s+rs5vSbWXc0k7twGmtoflnud5YhO7PF2eA2OldYpMus6LH8xa2wYPLzMATZI9sQmX1k
+ 8/RSGTzLv2Q2HOrG4gAdWL4O/iUqHuNz5btRBa11rzU3pd1rLfROt0RdZ9+JESZdI5/tbh6aJ
+ woB/lYFsAzZWpgvT3Kft19m8amaNLWoa7Hy5s+IZ7kRLSMwgwI2y0oK1A1RHHnrM/USl9n3bP
+ 1hHvAZFpJbh95ytPkzpZFOMrPg+g5XlTfUvHBVBn7796m8lHELmDy8S9MtY1UiyCj+KaHr2LC
+ cwGC5HbpDbW823pjTv9uooQ6sOO70J9W06SqSQS4P08Mllq52Pg78rMxdxf3wSPEALNgD76jt
+ Z2OnIKsyT92n4eStQSgpIgOdAzWXnl6m5q3/IDm1v2qiT4rj6To4EFqjnYs4kuelMaSISNhNu
+ YlP8yf3DQ+nYNdb4RfWK5N5RVir/EvsJ1uZMIHjy+HHIAlf1NjeT6wNgAI/Uw6YZb3HTdm4t1
+ 2NYtLBGhH2jRA8vChuUxmnrpyqj4GbNmbzUjzTa3iDhzqQtg1piHjjqrFc63maGdKMJa31pxH
+ pKhZZGyihhCnYBVKuGu7kQt8D6iNLyOKNi/8bIWWE5/IwjJtLQJCvRf2nfi8l5yKRkMMtSRUL
+ 3Vv+WyLKDZ2iFFf6WisdHeAN48jPPbzIJDMWd7Ya/OoXDxkCdfY1prFycUxLNp+F/7BngSeZp
+ uQRr7JidIoxduuLgNmwPrp6DV88i+33vY0sZbHZkE7VWkJKEJSK+chpf/alnwAn73VwK+tq9j
+ Q/JF/neJOyTw1m2WGCgDHzYR9v29Cpd56toBn5g5ayRE6VlcXXlD9RD6g==
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+This patch series allows the arch-specific kernel fault handlers to dump
+in addition to the typical info (IP address, fault type, backtrace and so =
+on)
+the command line of the faulting process.
 
+The motivation for this patch is that it's sometimes quite hard to find ou=
+t and
+annoying to not know which program *exactly* faulted when looking at the s=
+yslog.
 
-On Mon, 1 Aug 2022, Matthew Wilcox wrote:
+Some examples from the syslog are:
 
-> On Mon, Aug 01, 2022 at 06:43:55AM -0400, Mikulas Patocka wrote:
-> > Let's have a look at this piece of code in __bread_slow:
-> > 	get_bh(bh);
-> > 	bh->b_end_io = end_buffer_read_sync;
-> > 	submit_bh(REQ_OP_READ, 0, bh);
-> > 	wait_on_buffer(bh);
-> > 	if (buffer_uptodate(bh))
-> > 		return bh;
-> > Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
-> > Consequently, if someone calls sb_bread and then reads the buffer data,
-> > the read of buffer data may be executed before wait_on_buffer(bh) on
-> > architectures with weak memory ordering and it may return invalid data.
-> > 
-> > Fix this bug by changing the function buffer_locked to have the acquire
-> > semantics - so that code that follows buffer_locked cannot be moved before
-> > it.
-> 
-> I think this is the wrong approach.  Instead, buffer_set_uptodate()
-> should have the smp_wmb() and buffer_uptodate should have the smp_rmb().
-> Just like the page flags.  As I said last night.
+On parisc:
+   do_page_fault() command=3D'cc1' type=3D15 address=3D0x00000000 in libc-=
+2.33.so[f6abb000+184000]
+   CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #45
+   Hardware name: 9000/785/C8000
 
-Linus said that he prefers acquire/release to smp_rmb/smp_wmb. So, sort it 
-out with him :)
+-> We see the "cc1" compiler crashed, but it would be useful to know which=
+ file was compiled.
 
-In most cases, the buffer is set uptodate while it is locked, so that 
-there is no race on the uptodate flag (the race exists on the locked 
-flag). Are there any cases where the uptodate flag is modified on unlocked 
-buffer, so that it needs special treatment too?
+With this patch series, the kernel now prints in addition:
+   cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccR=
+kFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D NO=
+_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-9.0=
+.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface -qu=
+iet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -Wim=
+plicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13413=
+_0/ghc_5.s
 
-Mikulas
+-> now we know that cc1 crashed while compiling some haskell code.
+
+Another parisc example:
+   do_page_fault() command=3D'ld.so.1' type=3D15 address=3D0x565921d8 in l=
+ibc.so[f7339000+1bb000]
+   CPU: 1 PID: 1151 Comm: cc1 Tainted: G            E     5.10.133+ #45
+   Hardware name: 9000/785/C8000
+
+-> apparently here a program from the glibc testsuite segfaulted.
+
+With this patch we now additionally get:
+   ld.so.1[1151] cmdline: /home/gnu/glibc/objdir/elf/ld.so.1 --library-pat=
+h /home/gnu/glibc/objdir:/home/gnu/glibc/objdir/math:/home/gnu/
+        /home/gnu/glibc/objdir/malloc/tst-safe-linking-malloc-hugetlb1
+
+-> it was the tst-safe-linking-malloc-hugetlb1 testcase which faulted.
+
+An example of a typical x86 fault shows up as:
+   crash[2326]: segfault at 0 ip 0000561a7969c12e sp 00007ffe97a05630 erro=
+r 6 in crash[561a7969c000+1000]
+   Code: 68 ff ff ff c6 05 19 2f 00 00 01 5d c3 0f 1f 80 00 00 00 00 c3 0f=
+ 1f 80 00 00 00 00 e9 7b ff ff ff 55 48 89 e5 b8 00 00 00 00 <c7> 00 01 00=
+ 00 00 b8 00 00 00 00 5d c3 0f 1f 44 00 00 41 57 4c 8d
+
+-> with this patch we now will see the whole command line:
+   crash[2326] cmdline: ./crash test_write_to_page_0
+
+The patches are relatively small, and reuses functions which are used
+to create the output for the /proc/<pid>/cmdline files.
+
+This is the version 1 of the patch series.
+I'm interested if people find this useful too, and if so, I'm
+happy for any feedback on those patches.
+
+Thanks!
+Helge
+
+Helge Deller (3):
+  proc: Add get_task_cmdline_kernel() function
+  lib/dump_stack: Add dump_stack_print_cmdline() and wire up in
+    dump_stack_print_info()
+  x86/fault: Dump command line of faulting process to syslog
+
+ arch/x86/mm/fault.c     |  2 ++
+ fs/proc/base.c          | 68 +++++++++++++++++++++++++++--------------
+ include/linux/printk.h  |  5 +++
+ include/linux/proc_fs.h |  5 +++
+ lib/dump_stack.c        | 17 +++++++++++
+ 5 files changed, 74 insertions(+), 23 deletions(-)
+
+=2D-
+2.37.1
 
