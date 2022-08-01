@@ -2,48 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86B05862C5
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 04:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AAB586306
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 05:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239361AbiHACmx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 31 Jul 2022 22:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
+        id S239513AbiHADUw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 31 Jul 2022 23:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239316AbiHACms (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 22:42:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E565A13D2D;
-        Sun, 31 Jul 2022 19:42:46 -0700 (PDT)
+        with ESMTP id S239521AbiHADUu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 23:20:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A3F6451;
+        Sun, 31 Jul 2022 20:20:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 791E6B80DCC;
-        Mon,  1 Aug 2022 02:42:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03BBC433D7;
-        Mon,  1 Aug 2022 02:42:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EC460FF8;
+        Mon,  1 Aug 2022 03:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45A2C433C1;
+        Mon,  1 Aug 2022 03:20:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659321764;
-        bh=Jgmay4Wp8fySBQ0xkLEHDoGHR4fdNJxu7+B9UiG4oaU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nfyTwg3NjIeYyCPXBgJ5BwOJ5/w+uUN/llI5m0HgbVwuWNr1MzKRo0kZipx5dyZLx
-         eNq55CIfq8YrntsPldAaV8InUntvko66Dhmw61capP2X97kliqUX2/FW/PhUwEbj9j
-         J6RtUqPHYLaM7gfgkNCvHes6ADZjJRW1jwVkjD8gxlATnQ9cQDwNyPS1KeO6PB9V8j
-         1CnLXZad1p+KyY2ui5vqtoNq39Jst/Scx28h9nnv7LbRtRD8/OaKJKAZhNCiizSwqr
-         koDRr6OK0z9+6HhAxaVJD5D0Lnk1yAJBE6DjES/MOmvhTHyFVfWj80YOlSuiyOXW5u
-         0+xzgKXT1BvgA==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] csky: abiv1: Fixup compile error
-Date:   Sun, 31 Jul 2022 22:42:29 -0400
-Message-Id: <20220801024229.567397-3-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220801024229.567397-1-guoren@kernel.org>
-References: <20220801024229.567397-1-guoren@kernel.org>
+        s=k20201202; t=1659324045;
+        bh=XcVtSPHVyz9TCIWPL/CT3cYLdvOGA6J9UpEZKi9CB1A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=nsrKs+ys2S25dcwsjC8ako9YHKLFBcjGWqrL2ZwsOgq3SUCdyq9E3FBS5biNuOxlz
+         d6/BclXitukK1K/SsGd3InWgEeSPbe2F8ldOkx12ijVHPe7YxCvivh2hxiJ6uDKklN
+         VmUzder6K/DS2y+dv93Jsjl2eGtUu7F7w/Y/w8pIBFY1I/yyDTADnP900YnDi/kN3J
+         lrlxCYEDS+cdW8CPjeIOK7LzbohoYIE44FJxlK76isCIxDruJlOFxxdFH9KUtHKS4I
+         yH+Htssn8Rvh9+0NqzKHFpcEIHOci29ys7B586tQxjUcN0p/VE9NLqEtO7/yezQ9NV
+         ZTxYslP/bHiUQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 433805C03E0; Sun, 31 Jul 2022 20:20:45 -0700 (PDT)
+Date:   Sun, 31 Jul 2022 20:20:45 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
+Message-ID: <20220801032045.GZ2860372@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+ <YucGwGr4KTPPxbYJ@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YucGwGr4KTPPxbYJ@casper.infradead.org>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,41 +78,51 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+On Sun, Jul 31, 2022 at 11:48:32PM +0100, Matthew Wilcox wrote:
+> On Sun, Jul 31, 2022 at 10:30:11AM -0700, Paul E. McKenney wrote:
+> > That said, I confess that I am having a hard time finding the
+> > buffer_locked() definition.  So if buffer_locked() uses normal C-language
+> > accesses to sample the BH_Lock bit of the ->b_state field, then yes,
+> > there could be a problem.  The compiler would then be free to reorder
+> > calls to buffer_locked() because it could then assume that no other
+> > thread was touching that ->b_state field.
+> 
+> You're having a hard time finding it because it's constructed with the C
+> preprocessor.  I really wish we generated header files using CPP once
+> and then included the generated/ file.  That would make them greppable.
+> 
+> You're looking for include/linux/buffer_head.h and it's done like this:
+> 
+> enum bh_state_bits {
+> ...
+>         BH_Lock,        /* Is locked */
+> ...
+> 
+> #define BUFFER_FNS(bit, name)                                           \
+> ...
+> static __always_inline int buffer_##name(const struct buffer_head *bh)  \
+> {                                                                       \
+>         return test_bit(BH_##bit, &(bh)->b_state);                      \
+> }
+> 
+> BUFFER_FNS(Lock, locked)
+> 
+> (fwiw, the page/folio versions of these functions don't autogenerate
+> the lock or uptodate ones because they need extra functions called)
 
-  LD      vmlinux.o
-arch/csky/lib/string.o: In function `memmove':
-string.c:(.text+0x108): multiple definition of `memmove'
-lib/string.o:string.c:(.text+0x7e8): first defined here
-arch/csky/lib/string.o: In function `memset':
-string.c:(.text+0x148): multiple definition of `memset'
-lib/string.o:string.c:(.text+0x2ac): first defined here
-scripts/Makefile.vmlinux_o:68: recipe for target 'vmlinux.o' failed
-make[4]: *** [vmlinux.o] Error 1
+Thank you!
 
-Fixes: e4df2d5e852a ("csky: Add C based string functions")
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: <stable@vger.kernel.org>
----
- arch/csky/abiv1/inc/abi/string.h | 6 ++++++
- 1 file changed, 6 insertions(+)
+Another thing that would have helped me find it would have been to leave
+the "BH_" prefix on the bit name in the BUFFER_FNS() invocation, as in
+ditch the "BH_##" in the definition and then just say "BUFFER_FNS(BH_Lock,
+locked)".
 
-diff --git a/arch/csky/abiv1/inc/abi/string.h b/arch/csky/abiv1/inc/abi/string.h
-index 9d95594b0feb..de50117b904d 100644
---- a/arch/csky/abiv1/inc/abi/string.h
-+++ b/arch/csky/abiv1/inc/abi/string.h
-@@ -6,4 +6,10 @@
- #define __HAVE_ARCH_MEMCPY
- extern void *memcpy(void *, const void *, __kernel_size_t);
- 
-+#define __HAVE_ARCH_MEMMOVE
-+extern void *memmove(void *, const void *, __kernel_size_t);
-+
-+#define __HAVE_ARCH_MEMSET
-+extern void *memset(void *, int,  __kernel_size_t);
-+
- #endif /* __ABI_CSKY_STRING_H */
--- 
-2.36.1
+But what is life without a challenge?  ;-/
 
+Anyway, on x86 this will use the constant_test_bit() function, which
+uses a volatile declaration for its parameter.  So it should avoid
+vulnerability to the vicissitudes of the compiler.
+
+So I feel much better now.
+
+							Thanx, Paul
