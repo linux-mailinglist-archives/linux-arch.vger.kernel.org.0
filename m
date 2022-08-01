@@ -2,52 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488C05867BE
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 12:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14AA586CF5
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 16:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiHAKoD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Aug 2022 06:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S232099AbiHAOhi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Aug 2022 10:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiHAKoC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 06:44:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEDA3CC5
-        for <linux-arch@vger.kernel.org>; Mon,  1 Aug 2022 03:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1659350641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AlQxFUH0VbGf7ysRiP07rHbskpU3q3i2vOryL8lB/2Y=;
-        b=PBT4zrtsXgMEHoAoZ2L/NqCHxsZwrB2HfmoMyzJVYW2BeKhita6NSGVV1P0DkmES7bKYOV
-        M7vIp5jJR6LdGbf2XpmrgxTm0CN2Z5X1viN9fB/Fv1iPPYl4kvkEJwbZAwj0LqMv9/lIKy
-        alhfEa9I/8Yh2ivh/6ePLyGnmGaptHc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-_iSCFO_uOoWLL4Vb4FS1ug-1; Mon, 01 Aug 2022 06:43:57 -0400
-X-MC-Unique: _iSCFO_uOoWLL4Vb4FS1ug-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0105C85A581;
-        Mon,  1 Aug 2022 10:43:56 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E9F48492C3B;
-        Mon,  1 Aug 2022 10:43:55 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 271AhtU7024246;
-        Mon, 1 Aug 2022 06:43:55 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 271Ahtdk024242;
-        Mon, 1 Aug 2022 06:43:55 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Mon, 1 Aug 2022 06:43:55 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Will Deacon <will@kernel.org>,
+        with ESMTP id S230387AbiHAOhh (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 10:37:37 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2D833368;
+        Mon,  1 Aug 2022 07:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FaVkEakWw5UkhKC0z7612iz8Sezsq/DZXrhQ3cY+yUw=; b=SAVLI21ATZ0FBXs5JGrzgiY8kR
+        D3nAfI+mwkN2X3CVciMzhnRNeK0fE1T1BijkZDqOIIwU0O/QYFDZtbXIJcb68dwsEzKLH/wo3JgWH
+        X0OGrqQJfPULEwbVEqXf4fWxoMNjHdFeN+cYMMZbPOw4GKwhgow0ux5Ewv9t5aBSZhemfTw/+rl5j
+        jJMURX+yBxTbNqX/fJ7ja0ZdWzc4g188df9V61KvjCsflUbJkHZ5mnjQun2tpud6G111k8GPM39K6
+        zT7phs7VVtYeujVZJdpPjHXizMAEzvGPv1kvaYCJDKKqXvvjq/rs02cvLyRXnG0ml/SIq2RmbGqDa
+        Ei7zY8xw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oIWXg-007Aot-Ki; Mon, 01 Aug 2022 14:37:12 +0000
+Date:   Mon, 1 Aug 2022 15:37:12 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -65,74 +48,49 @@ cc:     Will Deacon <will@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-fsdevel@vger.kernel.org
-Subject: [PATCH v4 2/2] change buffer_locked, so that it has acquire
+Subject: Re: [PATCH v4 2/2] change buffer_locked, so that it has acquire
  semantics
-In-Reply-To: <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
-Message-ID: <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com> <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com> <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+Message-ID: <YuflGG60pHiXp2z/@casper.infradead.org>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
+ <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Let's have a look at this piece of code in __bread_slow:
-	get_bh(bh);
-	bh->b_end_io = end_buffer_read_sync;
-	submit_bh(REQ_OP_READ, 0, bh);
-	wait_on_buffer(bh);
-	if (buffer_uptodate(bh))
-		return bh;
-Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
-Consequently, if someone calls sb_bread and then reads the buffer data,
-the read of buffer data may be executed before wait_on_buffer(bh) on
-architectures with weak memory ordering and it may return invalid data.
+On Mon, Aug 01, 2022 at 06:43:55AM -0400, Mikulas Patocka wrote:
+> Let's have a look at this piece of code in __bread_slow:
+> 	get_bh(bh);
+> 	bh->b_end_io = end_buffer_read_sync;
+> 	submit_bh(REQ_OP_READ, 0, bh);
+> 	wait_on_buffer(bh);
+> 	if (buffer_uptodate(bh))
+> 		return bh;
+> Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
+> Consequently, if someone calls sb_bread and then reads the buffer data,
+> the read of buffer data may be executed before wait_on_buffer(bh) on
+> architectures with weak memory ordering and it may return invalid data.
+> 
+> Fix this bug by changing the function buffer_locked to have the acquire
+> semantics - so that code that follows buffer_locked cannot be moved before
+> it.
 
-Fix this bug by changing the function buffer_locked to have the acquire
-semantics - so that code that follows buffer_locked cannot be moved before
-it.
-
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
-
-Index: linux-2.6/include/linux/buffer_head.h
-===================================================================
---- linux-2.6.orig/include/linux/buffer_head.h
-+++ linux-2.6/include/linux/buffer_head.h
-@@ -120,7 +120,6 @@ static __always_inline int test_clear_bu
- BUFFER_FNS(Uptodate, uptodate)
- BUFFER_FNS(Dirty, dirty)
- TAS_BUFFER_FNS(Dirty, dirty)
--BUFFER_FNS(Lock, locked)
- BUFFER_FNS(Req, req)
- TAS_BUFFER_FNS(Req, req)
- BUFFER_FNS(Mapped, mapped)
-@@ -135,6 +134,17 @@ BUFFER_FNS(Meta, meta)
- BUFFER_FNS(Prio, prio)
- BUFFER_FNS(Defer_Completion, defer_completion)
- 
-+static __always_inline void set_buffer_locked(struct buffer_head *bh)
-+{
-+	set_bit(BH_Lock, &bh->b_state);
-+}
-+
-+static __always_inline int buffer_locked(const struct buffer_head *bh)
-+{
-+	/* pairs with smp_mb__after_atomic() in unlock_buffer() */
-+	return test_bit_acquire(BH_Lock, &bh->b_state);
-+}
-+
- #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
- 
- /* If we *know* page->private refers to buffer_heads */
-
+I think this is the wrong approach.  Instead, buffer_set_uptodate()
+should have the smp_wmb() and buffer_uptodate should have the smp_rmb().
+Just like the page flags.  As I said last night.
