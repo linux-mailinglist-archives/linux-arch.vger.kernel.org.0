@@ -2,188 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBC058704C
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 20:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FD35870BA
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 21:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbiHASSb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Aug 2022 14:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
+        id S233586AbiHATCs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Aug 2022 15:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbiHASSa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 14:18:30 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BFA286D7;
-        Mon,  1 Aug 2022 11:18:29 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id b25so9008669qka.11;
-        Mon, 01 Aug 2022 11:18:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=feedback-id:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aZNeN9+MdPNWv/80FGv0B2+b6ix8m0rC1xLUVxAPEro=;
-        b=P+THs3+hpOJj+W+aciYujyHr6zELzS0hhs6oUwu7apuyILX9I22KmTnSiZ+EoKbo6y
-         MrDFUl9QJ+IAUqsyUINEvFrHVhBHYQtKLtpTojRJ7TSLBXblJKGmz2HRQZhl6jlWtIjg
-         ev+zL5tQIQ7FKMEqw7M5vMM2y73ETVKbs5xzAPxgwPjuieIDNWM27gOPu1WQVrwA5Mat
-         O9YZ9ZNfr+Eel8VT8ihN3PRWAZddYhwTY5co1a5tiv5QKCCva4JQApbxgqMx19PhLinG
-         HMoLWVKxFNY/JYqeoot8eQt42VsUNerx+EP7tnJlqX4a6wTgUQ+2iBzYQbaGfGkwIrxN
-         oSWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=aZNeN9+MdPNWv/80FGv0B2+b6ix8m0rC1xLUVxAPEro=;
-        b=1K/gQcKiv5lSPsmgVdPHGYhFts5LAHQfW8X9j7/2lhDf1xVKsDTESbx4dkLfrTw6FH
-         CUTWB2s3sgEzM+plPU5gCNQP+RnBBK/IFDprQWSlomVTbbJgv121QxV+dRtQcK/9l8ke
-         eiBrsuH4U/x0F70K4lHDkLkJhkFRHrBnF7OCGRgPiAgasL8us+JofGcqVCdllf6b1J0Z
-         zw6w790MiM6Brbja8CpKW2zldy+gEYbLdFtMdqmsZ4dFC1QEkHPXNQa6d2ae9O74rxb6
-         Qc0HDrneh3pi7gas6GYtjz2SzvgU1Uu3saBRvMdCncf2477Cl+vPyO6Y+g6D8CQVDCEs
-         SmbQ==
-X-Gm-Message-State: AJIora+ZyB1JS0yyMMO7WsLzus9AoY9FVz1ZdJkdvBjrLUAzhn6xfWDz
-        mkt3j2JCV901Bk0iPcbfFjM=
-X-Google-Smtp-Source: AGRyM1tRvPLYzYlohmH7aiLSI1DvpK62DzmPttb0nhGWKoIwXgQ23iQSZDvpMI4HO1DM0fZcVrhnwg==
-X-Received: by 2002:a37:42d6:0:b0:6b5:7da4:4cb2 with SMTP id p205-20020a3742d6000000b006b57da44cb2mr12620716qka.588.1659377908976;
-        Mon, 01 Aug 2022 11:18:28 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id ay18-20020a05620a179200b006a8b6848556sm8886496qkb.7.2022.08.01.11.18.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Aug 2022 11:18:28 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailauth.nyi.internal (Postfix) with ESMTP id A8D3F27C0077;
-        Mon,  1 Aug 2022 14:18:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 01 Aug 2022 14:18:27 -0400
-X-ME-Sender: <xms:8hjoYp1SpVnlRtrnWMRO_i-sF_HV9DN58SB9aRhkF50_ClRrqaT-rg>
-    <xme:8hjoYgFXT0o6WjWaVW9V2lrSEpUW2_bidKKqRisd7bQvQZiLTTXSXto5JckDxw1VZ
-    DbbNtWMOGBRSnBq0g>
-X-ME-Received: <xmr:8hjoYp5JP_aDk1qu-zjLTeASNgMnmfxOB_4MRZjTE5WSJNU8dBvQUTlY_Em5PA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedguddvfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:8hjoYm24oduREDGW2mEXN2905tyI-qkBaHL5rLwcvq9FNK1QhOX7bw>
-    <xmx:8hjoYsE4TZbicSoAxF7bVBtrfdrToeaJXqqhPuQmlfPUPyiN1fL7LA>
-    <xmx:8hjoYn8ssZDOZKOE5LXOQTBT5X-4Rf1vjinlAfFNWxTMDeqVgq-zSw>
-    <xmx:8xjoYq8p2z0yqg5-tTjNLHaZc7ATswj9i3xC2EjsiMvq-R7-K7K4lA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 1 Aug 2022 14:18:26 -0400 (EDT)
-Date:   Mon, 1 Aug 2022 11:17:28 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Will Deacon <will@kernel.org>,
+        with ESMTP id S233217AbiHATCi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 15:02:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E7CE2ED71;
+        Mon,  1 Aug 2022 12:02:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A096121C;
+        Mon,  1 Aug 2022 19:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A23C433C1;
+        Mon,  1 Aug 2022 19:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659380555;
+        bh=Bj0wVDsSnZRsEnQn0a5XbJSomxQzw+EhnKcIW2H2auk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vEDa9VWz8SYJEqcLVYPy4szy4HmfX8EJW1s2RK1gQXUB4VpJWHCK9FOYrtqD86yiN
+         kZY5usdKov8NgjXMJ2sjd+haFY5EUC1Pd51Cs5pzrN9/syowugdC9Msqc4DRnWSISm
+         /WgIQV3pNZEcM7Cq/ewtaXgL5+T8Jh2OPTKnMcXyg4xWKCvm2/APdgq0T53JQ0RP4H
+         rk5wbHYa/wRWWbsVscxcYd+LzUx+aW4UhuptqYNNBye+iANEMvy2v8N196XWicNlIW
+         3j5MLgrfXhY9ihuVfBv1tQ9IYsntntz8lEMqOh8sIyJLRQvkmadPy13HFvghWDKck4
+         waUhqAK+sG3qg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] introduce test_bit_acquire and use it in
- wait_on_bit
-Message-ID: <YugYuBzIkr+gN5Vi@boqun-archlinux>
-References: <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
- <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
- <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
- <20220801155421.GB26280@willie-the-truck>
- <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
+        Sasha Levin <sashal@kernel.org>, aneesh.kumar@linux.ibm.com,
+        npiggin@gmail.com, linux-arch@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH AUTOSEL 5.18 06/10] mmu_gather: Let there be one tlb_{start,end}_vma() implementation
+Date:   Mon,  1 Aug 2022 15:02:18 -0400
+Message-Id: <20220801190222.3818378-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220801190222.3818378-1-sashal@kernel.org>
+References: <20220801190222.3818378-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 12:12:47PM -0400, Mikulas Patocka wrote:
-> 
-> 
-> On Mon, 1 Aug 2022, Will Deacon wrote:
-> 
-> > On Mon, Aug 01, 2022 at 06:42:15AM -0400, Mikulas Patocka wrote:
-> > 
-> > > Index: linux-2.6/arch/x86/include/asm/bitops.h
-> > > ===================================================================
-> > > --- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
-> > > +++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
-> > > @@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
-> > >  
-> > >  static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
-> > >  {
-> > > -	return ((1UL << (nr & (BITS_PER_LONG-1))) &
-> > > +	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
-> > >  		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
-> > > +	barrier();
-> > > +	return r;
-> > 
-> > Hmm, I find it a bit weird to have a barrier() here given that 'addr' is
-> > volatile and we don't need a barrier() like this in the definition of
-> > READ_ONCE(), for example.
-> 
-> gcc doesn't reorder two volatile accesses, but it can reorder non-volatile
-> accesses around volatile accesses.
-> 
-> The purpose of the compiler barrier is to make sure that the non-volatile 
-> accesses that follow test_bit are not reordered by the compiler before the 
-> volatile access to addr.
-> 
+From: Peter Zijlstra <peterz@infradead.org>
 
-Better to have a constant_test_bit_acquire()? I don't think all
-test_bit() call sites need the ordering?
+[ Upstream commit 18ba064e42df3661e196ab58a23931fc732a420b ]
 
-Regards,
-Boqun
+Now that architectures are no longer allowed to override
+tlb_{start,end}_vma() re-arrange code so that there is only one
+implementation for each of these functions.
 
-> > > Index: linux-2.6/include/linux/wait_bit.h
-> > > ===================================================================
-> > > --- linux-2.6.orig/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
-> > > +++ linux-2.6/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
-> > > @@ -71,7 +71,7 @@ static inline int
-> > >  wait_on_bit(unsigned long *word, int bit, unsigned mode)
-> > >  {
-> > >  	might_sleep();
-> > > -	if (!test_bit(bit, word))
-> > > +	if (!test_bit_acquire(bit, word))
-> > >  		return 0;
-> > >  	return out_of_line_wait_on_bit(word, bit,
-> > >  				       bit_wait,
-> > 
-> > Yet another approach here would be to leave test_bit as-is and add a call to
-> > smp_acquire__after_ctrl_dep() since that exists already -- I don't have
-> > strong opinions about it, but it saves you having to add another stub to
-> > x86.
-> 
-> It would be the same as my previous patch with smp_rmb() that Linus didn't 
-> like. But I think smp_rmb (or smp_acquire__after_ctrl_dep) would be 
-> correct here.
-> 
-> > Will
-> 
-> Mikulas
-> 
+This much simplifies trying to figure out what they actually do.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Will Deacon <will@kernel.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/asm-generic/tlb.h | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
+
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index eee6f7763a39..11ad549b5014 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -334,8 +334,8 @@ static inline void __tlb_reset_range(struct mmu_gather *tlb)
+ 
+ #ifdef CONFIG_MMU_GATHER_NO_RANGE
+ 
+-#if defined(tlb_flush) || defined(tlb_start_vma) || defined(tlb_end_vma)
+-#error MMU_GATHER_NO_RANGE relies on default tlb_flush(), tlb_start_vma() and tlb_end_vma()
++#if defined(tlb_flush)
++#error MMU_GATHER_NO_RANGE relies on default tlb_flush()
+ #endif
+ 
+ /*
+@@ -355,17 +355,10 @@ static inline void tlb_flush(struct mmu_gather *tlb)
+ static inline void
+ tlb_update_vma_flags(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
+ 
+-#define tlb_end_vma tlb_end_vma
+-static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma) { }
+-
+ #else /* CONFIG_MMU_GATHER_NO_RANGE */
+ 
+ #ifndef tlb_flush
+ 
+-#if defined(tlb_start_vma) || defined(tlb_end_vma)
+-#error Default tlb_flush() relies on default tlb_start_vma() and tlb_end_vma()
+-#endif
+-
+ /*
+  * When an architecture does not provide its own tlb_flush() implementation
+  * but does have a reasonably efficient flush_vma_range() implementation
+@@ -486,7 +479,6 @@ static inline unsigned long tlb_get_unmap_size(struct mmu_gather *tlb)
+  * case where we're doing a full MM flush.  When we're doing a munmap,
+  * the vmas are adjusted to only cover the region to be torn down.
+  */
+-#ifndef tlb_start_vma
+ static inline void tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
+ {
+ 	if (tlb->fullmm)
+@@ -495,9 +487,7 @@ static inline void tlb_start_vma(struct mmu_gather *tlb, struct vm_area_struct *
+ 	tlb_update_vma_flags(tlb, vma);
+ 	flush_cache_range(vma, vma->vm_start, vma->vm_end);
+ }
+-#endif
+ 
+-#ifndef tlb_end_vma
+ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vma)
+ {
+ 	if (tlb->fullmm)
+@@ -511,7 +501,6 @@ static inline void tlb_end_vma(struct mmu_gather *tlb, struct vm_area_struct *vm
+ 	 */
+ 	tlb_flush_mmu_tlbonly(tlb);
+ }
+-#endif
+ 
+ /*
+  * tlb_flush_{pte|pmd|pud|p4d}_range() adjust the tlb->start and tlb->end,
+-- 
+2.35.1
+
