@@ -2,65 +2,27 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183D55861E6
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 00:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFDF586208
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 02:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238555AbiGaWtB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 31 Jul 2022 18:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
+        id S233705AbiHAA14 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 31 Jul 2022 20:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238044AbiGaWtA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 18:49:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734516361;
-        Sun, 31 Jul 2022 15:48:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27D91B80D8E;
-        Sun, 31 Jul 2022 22:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4571C43143;
-        Sun, 31 Jul 2022 22:48:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659307736;
-        bh=YCJg1T5L2gtsSKvb29nkDzYmguDljGhTKqZBnXztbUw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Am8P842Jli/qcbYJs89BeLmGM+0KEazI51lMmVeQTymQyQ/qsNR8l7uHogirFLRSN
-         AqOg1FODlAnbQVYyQKyRdPTaOeAheqAG8OpbqVMuTSH1yYOuUZ8UCo7Ip6Wke5eudw
-         uqQ43uITBqRCnLuLeJQNV6UQdmgGjXmdXKrIYihIpvWR0LtNq3urzJNLx7jLIKKZko
-         Kx9EG1R1MBYRZ8CjaFxPYQocuR+9sMvFHlWO2p3rUlgUfQlHx6Jl9fy3+Ic65VqJ3q
-         ubmpEXC/a2czhHpCutQF18oc44H4UuDzvKeW8j+bHuWwaPfjf3c2ONdbj+ccmuQ9BJ
-         B7peZhLRedv7Q==
-Received: by mail-oi1-f169.google.com with SMTP id s204so11355058oif.5;
-        Sun, 31 Jul 2022 15:48:56 -0700 (PDT)
-X-Gm-Message-State: AJIora8lS6W/Og/Reg4hOVdmaBRf1Wh4NGaa/wnHdFx8uzEvgITHjK4r
-        ahTmA0qsoxfH/zibfNghhAfbXdlrUR048+DOBbM=
-X-Google-Smtp-Source: AGRyM1sZACQ9aAC+MFmBHszV8d/QH2iryi5ATw3k8c4+g+PJM4MKvLsh6n9mjA++xiKh+QoBgJFSHv8Yyl3KOd0htMY=
-X-Received: by 2002:a05:6808:1489:b0:33a:861c:838e with SMTP id
- e9-20020a056808148900b0033a861c838emr5348286oiw.228.1659307735903; Sun, 31
- Jul 2022 15:48:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
- <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
- <alpine.LRH.2.02.2207311641060.21350@file01.intranet.prod.int.rdu2.redhat.com>
- <Yub+vPb53zt6dDpn@casper.infradead.org> <CAMj1kXE-TpUGgFxBOaZbsF7k3rdHdjBoqoxZ1bvDz5AoTGADxQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXE-TpUGgFxBOaZbsF7k3rdHdjBoqoxZ1bvDz5AoTGADxQ@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 1 Aug 2022 00:48:44 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXE2kYCn906qpvc7guK8BTNeEXsbCyTwiomaBqtbWfe_qg@mail.gmail.com>
-Message-ID: <CAMj1kXE2kYCn906qpvc7guK8BTNeEXsbCyTwiomaBqtbWfe_qg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] make buffer_locked provide an acquire semantics
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mikulas Patocka <mpatocka@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        with ESMTP id S229710AbiHAA1y (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 31 Jul 2022 20:27:54 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C9104D122
+        for <linux-arch@vger.kernel.org>; Sun, 31 Jul 2022 17:27:52 -0700 (PDT)
+Received: (qmail 554189 invoked by uid 1000); 31 Jul 2022 20:27:51 -0400
+Date:   Sun, 31 Jul 2022 20:27:51 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Will Deacon <will@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alan Stern <stern@rowland.harvard.edu>,
         Andrea Parri <parri.andrea@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Boqun Feng <boqun.feng@gmail.com>,
@@ -74,25 +36,116 @@ Cc:     Mikulas Patocka <mpatocka@redhat.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 1/2] wait_bit: do read barrier after testing a bit
+Message-ID: <YuceB1x8twgpM7Bl@rowland.harvard.edu>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, 1 Aug 2022 at 00:31, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-...
->
-> I was cc'ed only on patch #1 of your v3, so I'm not sure where this is
-...
+On Sun, Jul 31, 2022 at 04:40:59PM -0400, Mikulas Patocka wrote:
+> wait_on_bit tests the bit without any memory barriers, consequently the
+> code that follows wait_on_bit may be moved before testing the bit on
+> architectures with weak memory ordering. When the code tests for some
+> event using wait_on_bit and then performs a load operation, the load may
+> be unexpectedly moved before wait_on_bit and it may return data that
+> existed before the event occurred.
+> 
+> Such bugs exist in fs/buffer.c:__wait_on_buffer,
+> drivers/md/dm-bufio.c:new_read,
+> drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:dvb_usb_start_feed,
+> drivers/bluetooth/btusb.c:btusb_mtk_hci_wmt_sync
+> and perhaps in other places.
+> 
+> We fix this class of bugs by adding a read barrier after test_bit().
+> 
+> Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+> Cc: stable@vger.kernel.org
+> 
+> Index: linux-2.6/include/linux/wait_bit.h
+> ===================================================================
+> --- linux-2.6.orig/include/linux/wait_bit.h
+> +++ linux-2.6/include/linux/wait_bit.h
+> @@ -71,8 +71,10 @@ static inline int
+>  wait_on_bit(unsigned long *word, int bit, unsigned mode)
+>  {
+>  	might_sleep();
+> -	if (!test_bit(bit, word))
+> +	if (!test_bit(bit, word)) {
+> +		smp_rmb();
 
-Apologies for causing confusion here by replying to [PATCH v3 2/2]
-that I was not cc'ed on [PATCH v3 2/2], which is of course nonsense.
-Gmail's threading gets a bit wonky sometimes, and the patch was
-threaded under v2 as their subject lines are sufficiently similar, and
-I assumed I was replying to v2.
+Any new code using smp_rmb or an acquire access should always include a 
+comment that explains where the matching smp_wmb or release access is.
+
+Alan Stern
+
+>  		return 0;
+> +	}
+>  	return out_of_line_wait_on_bit(word, bit,
+>  				       bit_wait,
+>  				       mode);
+> @@ -96,8 +98,10 @@ static inline int
+>  wait_on_bit_io(unsigned long *word, int bit, unsigned mode)
+>  {
+>  	might_sleep();
+> -	if (!test_bit(bit, word))
+> +	if (!test_bit(bit, word)) {
+> +		smp_rmb();
+>  		return 0;
+> +	}
+>  	return out_of_line_wait_on_bit(word, bit,
+>  				       bit_wait_io,
+>  				       mode);
+> @@ -123,8 +127,10 @@ wait_on_bit_timeout(unsigned long *word,
+>  		    unsigned long timeout)
+>  {
+>  	might_sleep();
+> -	if (!test_bit(bit, word))
+> +	if (!test_bit(bit, word)) {
+> +		smp_rmb();
+>  		return 0;
+> +	}
+>  	return out_of_line_wait_on_bit_timeout(word, bit,
+>  					       bit_wait_timeout,
+>  					       mode, timeout);
+> @@ -151,8 +157,10 @@ wait_on_bit_action(unsigned long *word,
+>  		   unsigned mode)
+>  {
+>  	might_sleep();
+> -	if (!test_bit(bit, word))
+> +	if (!test_bit(bit, word)) {
+> +		smp_rmb();
+>  		return 0;
+> +	}
+>  	return out_of_line_wait_on_bit(word, bit, action, mode);
+>  }
+>  
+> Index: linux-2.6/kernel/sched/wait_bit.c
+> ===================================================================
+> --- linux-2.6.orig/kernel/sched/wait_bit.c
+> +++ linux-2.6/kernel/sched/wait_bit.c
+> @@ -51,6 +51,8 @@ __wait_on_bit(struct wait_queue_head *wq
+>  
+>  	finish_wait(wq_head, &wbq_entry->wq_entry);
+>  
+> +	smp_rmb();
+> +
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL(__wait_on_bit);
+> 
