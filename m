@@ -2,129 +2,188 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC47586F15
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 18:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBC058704C
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 20:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiHAQ6D (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Aug 2022 12:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S233106AbiHASSb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Aug 2022 14:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiHAQ6C (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 12:58:02 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438FB6385;
-        Mon,  1 Aug 2022 09:58:01 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1D9375C018A;
-        Mon,  1 Aug 2022 12:57:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 01 Aug 2022 12:57:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1659373078; x=
-        1659459478; bh=PwwN5504JpT9KHcDb60BwHye95H5oaCrlINKkI5OJ8g=; b=t
-        Y2YBXRI24x3/9/oJyx1X66+TpNZnq8AxYeXjM7HBx8Snbbx5l6MGLHuwi81SpUid
-        zdwF1M9/OHobo04lrql6uyEe6tgBOgILqIwnuIhCbBKVogc7uiHGX9PS7it9KMLF
-        OyNs8g8UxmwZmd4iane0xBOOSaFGNsaY//UmLpWfqlh8wXdIe/oAGFTP0KGWaLXK
-        FANVGEiZsyRaMXltMGKSSKVZOnxRw3jxdkWAe2xuGblNBX4W6s7qxJxV9fs+wfsI
-        kBO40oM37cNcvYrzAqnFmrE8NZncTZbqvpsd/6i4BroDb4q5UOLFGBdqHnTRHADp
-        BPs/dqi4kkFENOuVmO+ew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1659373078; x=1659459478; bh=PwwN5504JpT9KHcDb60BwHye95H5
-        oaCrlINKkI5OJ8g=; b=aK+GuoqHJFVPrEhMUVCNorQmB7AXILjO4f8J9rUFnXl5
-        0zZXiWPFvCoWmTxfFYNbKjfai5wkG+MPrnAqYA5zn4qBDho/f202pgWiwqIgQh+3
-        zAkBby4K0thW+CefUEHv/Mp2E9iBvd9x+gFLxxeuNR7WmD6k1opkXjVZ5sJwbQT9
-        fuN0VvX8WwBWw2JMN+yTCa0wofz54YoMujillSw09X/PfIu+XuuYmPussYKLcxNn
-        YYsSY0AigS40cXDs2Sz6m200hTYYREauiRhO76QAGvFxMLwCYFh6DLqTtqDOl+BW
-        bUIRGIOWtdscpzX+WwC4LTgc+b/7Z3bVdrXp9PFQ9Q==
-X-ME-Sender: <xms:FQboYiJHOZeUrWF0WRD-VPcFXDmqGKeXBzNdbnIg2FHi0qpeJxrhTA>
-    <xme:FQboYqLxmTDwAHWcv6r_0YD2QpA5KpOctpTvqdbUyXVmpP_42JufNSnW4BQhCDdtF
-    AciumIHwzv6L-mti5Y>
-X-ME-Received: <xmr:FQboYivGWzXF3lCuL9HxXSvAThXhBLRUB9ZspczBD_33fG897cKp1KK6XwA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedguddtjecutefuodetggdotefrod
+        with ESMTP id S232431AbiHASSa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 14:18:30 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BFA286D7;
+        Mon,  1 Aug 2022 11:18:29 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id b25so9008669qka.11;
+        Mon, 01 Aug 2022 11:18:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=feedback-id:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aZNeN9+MdPNWv/80FGv0B2+b6ix8m0rC1xLUVxAPEro=;
+        b=P+THs3+hpOJj+W+aciYujyHr6zELzS0hhs6oUwu7apuyILX9I22KmTnSiZ+EoKbo6y
+         MrDFUl9QJ+IAUqsyUINEvFrHVhBHYQtKLtpTojRJ7TSLBXblJKGmz2HRQZhl6jlWtIjg
+         ev+zL5tQIQ7FKMEqw7M5vMM2y73ETVKbs5xzAPxgwPjuieIDNWM27gOPu1WQVrwA5Mat
+         O9YZ9ZNfr+Eel8VT8ihN3PRWAZddYhwTY5co1a5tiv5QKCCva4JQApbxgqMx19PhLinG
+         HMoLWVKxFNY/JYqeoot8eQt42VsUNerx+EP7tnJlqX4a6wTgUQ+2iBzYQbaGfGkwIrxN
+         oSWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:feedback-id:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=aZNeN9+MdPNWv/80FGv0B2+b6ix8m0rC1xLUVxAPEro=;
+        b=1K/gQcKiv5lSPsmgVdPHGYhFts5LAHQfW8X9j7/2lhDf1xVKsDTESbx4dkLfrTw6FH
+         CUTWB2s3sgEzM+plPU5gCNQP+RnBBK/IFDprQWSlomVTbbJgv121QxV+dRtQcK/9l8ke
+         eiBrsuH4U/x0F70K4lHDkLkJhkFRHrBnF7OCGRgPiAgasL8us+JofGcqVCdllf6b1J0Z
+         zw6w790MiM6Brbja8CpKW2zldy+gEYbLdFtMdqmsZ4dFC1QEkHPXNQa6d2ae9O74rxb6
+         Qc0HDrneh3pi7gas6GYtjz2SzvgU1Uu3saBRvMdCncf2477Cl+vPyO6Y+g6D8CQVDCEs
+         SmbQ==
+X-Gm-Message-State: AJIora+ZyB1JS0yyMMO7WsLzus9AoY9FVz1ZdJkdvBjrLUAzhn6xfWDz
+        mkt3j2JCV901Bk0iPcbfFjM=
+X-Google-Smtp-Source: AGRyM1tRvPLYzYlohmH7aiLSI1DvpK62DzmPttb0nhGWKoIwXgQ23iQSZDvpMI4HO1DM0fZcVrhnwg==
+X-Received: by 2002:a37:42d6:0:b0:6b5:7da4:4cb2 with SMTP id p205-20020a3742d6000000b006b57da44cb2mr12620716qka.588.1659377908976;
+        Mon, 01 Aug 2022 11:18:28 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id ay18-20020a05620a179200b006a8b6848556sm8886496qkb.7.2022.08.01.11.18.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Aug 2022 11:18:28 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id A8D3F27C0077;
+        Mon,  1 Aug 2022 14:18:27 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 01 Aug 2022 14:18:27 -0400
+X-ME-Sender: <xms:8hjoYp1SpVnlRtrnWMRO_i-sF_HV9DN58SB9aRhkF50_ClRrqaT-rg>
+    <xme:8hjoYgFXT0o6WjWaVW9V2lrSEpUW2_bidKKqRisd7bQvQZiLTTXSXto5JckDxw1VZ
+    DbbNtWMOGBRSnBq0g>
+X-ME-Received: <xmr:8hjoYp5JP_aDk1qu-zjLTeASNgMnmfxOB_4MRZjTE5WSJNU8dBvQUTlY_Em5PA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvfedguddvfecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeflohhs
-    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
-    cuggftrfgrthhtvghrnhepleeljeduiefguedtffejledttdehvdefhffhgfdvieelvddu
-    teefkeeuvdelhffhnecuffhomhgrihhnpeeffedrshhonecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvght
-    thdrohhrgh
-X-ME-Proxy: <xmx:FQboYnZupWoLG6ZGtaZir5bAR4yH3-XEafe-3lm6G2rjGqgMCvm-6w>
-    <xmx:FQboYpbQuW43SPld-Tkdpe5dSANM-TnTbn59-Ih56BqUbq44Xj2_sA>
-    <xmx:FQboYjAws_VlQhBBlPF3EUKZ5jsUyvNFU6h7pUUxXDnaCNSye4TLng>
-    <xmx:FgboYoka-rrd0kw93ZNxDURDapg-EwkGTSfW1nFu7WG-U1DJuhdUgw>
-Feedback-ID: i83e94755:Fastmail
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:8hjoYm24oduREDGW2mEXN2905tyI-qkBaHL5rLwcvq9FNK1QhOX7bw>
+    <xmx:8hjoYsE4TZbicSoAxF7bVBtrfdrToeaJXqqhPuQmlfPUPyiN1fL7LA>
+    <xmx:8hjoYn8ssZDOZKOE5LXOQTBT5X-4Rf1vjinlAfFNWxTMDeqVgq-zSw>
+    <xmx:8xjoYq8p2z0yqg5-tTjNLHaZc7ATswj9i3xC2EjsiMvq-R7-K7K4lA>
+Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 1 Aug 2022 12:57:57 -0400 (EDT)
-Date:   Mon, 1 Aug 2022 09:57:56 -0700
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Helge Deller <deller@gmx.de>
-Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
-Message-ID: <YugGFEjJvIwzifq7@localhost>
-References: <20220801152016.36498-1-deller@gmx.de>
+ 1 Aug 2022 14:18:26 -0400 (EDT)
+Date:   Mon, 1 Aug 2022 11:17:28 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] introduce test_bit_acquire and use it in
+ wait_on_bit
+Message-ID: <YugYuBzIkr+gN5Vi@boqun-archlinux>
+References: <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
+ <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220801155421.GB26280@willie-the-truck>
+ <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220801152016.36498-1-deller@gmx.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 01, 2022 at 05:20:13PM +0200, Helge Deller wrote:
-> This patch series allows the arch-specific kernel fault handlers to dump
-> in addition to the typical info (IP address, fault type, backtrace and so on)
-> the command line of the faulting process.
+On Mon, Aug 01, 2022 at 12:12:47PM -0400, Mikulas Patocka wrote:
 > 
-> The motivation for this patch is that it's sometimes quite hard to find out and
-> annoying to not know which program *exactly* faulted when looking at the syslog.
 > 
-> Some examples from the syslog are:
+> On Mon, 1 Aug 2022, Will Deacon wrote:
 > 
-> On parisc:
->    do_page_fault() command='cc1' type=15 address=0x00000000 in libc-2.33.so[f6abb000+184000]
->    CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #45
->    Hardware name: 9000/785/C8000
+> > On Mon, Aug 01, 2022 at 06:42:15AM -0400, Mikulas Patocka wrote:
+> > 
+> > > Index: linux-2.6/arch/x86/include/asm/bitops.h
+> > > ===================================================================
+> > > --- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > +++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > @@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
+> > >  
+> > >  static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
+> > >  {
+> > > -	return ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > +	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > >  		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+> > > +	barrier();
+> > > +	return r;
+> > 
+> > Hmm, I find it a bit weird to have a barrier() here given that 'addr' is
+> > volatile and we don't need a barrier() like this in the definition of
+> > READ_ONCE(), for example.
 > 
-> -> We see the "cc1" compiler crashed, but it would be useful to know which file was compiled.
+> gcc doesn't reorder two volatile accesses, but it can reorder non-volatile
+> accesses around volatile accesses.
 > 
-> With this patch series, the kernel now prints in addition:
->    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D NO_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-9.0.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface -quiet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -Wimplicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13413_0/ghc_5.s
+> The purpose of the compiler barrier is to make sure that the non-volatile 
+> accesses that follow test_bit are not reordered by the compiler before the 
+> volatile access to addr.
 > 
-> -> now we know that cc1 crashed while compiling some haskell code.
 
-This does seem really useful for debugging.
+Better to have a constant_test_bit_acquire()? I don't think all
+test_bit() call sites need the ordering?
 
-However, it's also an information disclosure in various ways. The
-arguments of a program are often more sensitive than the name, and logs
-have a tendency to end up in various places, such as bug reports.
+Regards,
+Boqun
 
-An example of how this can be an issue:
-- You receive an email or other message with a sensitive link to follow
-- You open the link, which launches `firefox https://...`
-- You continue browsing from that window
-- Firefox crashes (and recovers and restarts, so you don't think
-  anything of it)
-- Later, you report a bug on a different piece of software, and the bug
-  reporting process includes a copy of the kernel log
-
-I am *not* saying that we shouldn't do this; it seems quite helpful.
-However, I think we need to arrange to treat this as sensitive
-information, similar to kptr_restrict. (It would also be helpful if
-there was a way to tell `dmesg` "please give me the redacted version of
-the log", and bug reporting software used that by default.)
-
-- Josh Triplett
+> > > Index: linux-2.6/include/linux/wait_bit.h
+> > > ===================================================================
+> > > --- linux-2.6.orig/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
+> > > +++ linux-2.6/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
+> > > @@ -71,7 +71,7 @@ static inline int
+> > >  wait_on_bit(unsigned long *word, int bit, unsigned mode)
+> > >  {
+> > >  	might_sleep();
+> > > -	if (!test_bit(bit, word))
+> > > +	if (!test_bit_acquire(bit, word))
+> > >  		return 0;
+> > >  	return out_of_line_wait_on_bit(word, bit,
+> > >  				       bit_wait,
+> > 
+> > Yet another approach here would be to leave test_bit as-is and add a call to
+> > smp_acquire__after_ctrl_dep() since that exists already -- I don't have
+> > strong opinions about it, but it saves you having to add another stub to
+> > x86.
+> 
+> It would be the same as my previous patch with smp_rmb() that Linus didn't 
+> like. But I think smp_rmb (or smp_acquire__after_ctrl_dep) would be 
+> correct here.
+> 
+> > Will
+> 
+> Mikulas
+> 
