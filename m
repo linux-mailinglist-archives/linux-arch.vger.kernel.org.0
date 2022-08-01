@@ -2,63 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD94586D96
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 17:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46702586DEB
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 17:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiHAPU2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Aug 2022 11:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S232224AbiHAPlT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Aug 2022 11:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233448AbiHAPUW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 11:20:22 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D7A6541;
-        Mon,  1 Aug 2022 08:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1659367217;
-        bh=UovwDaLyuTgPejCzTK254N9IC9/vqRLIfV2J6pi3cos=;
-        h=X-UI-Sender-Class:From:To:Subject:Date:In-Reply-To:References;
-        b=gDZ6ap1GhRW3wDRPzYWXITLNEYJSxGMUzAMNiH8T/AbLtQzF38Zrcifu+D92uD+FE
-         N60nsyQ6KS0v++CMaVCslO6pEopN1sk0ii7QufidIA8s8KN8kdbPEvq1NiroP27YV2
-         zPQl1cI6nEyzl70MD/jSjzS6rWhZ/+QqdKFHXr6I=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from p100.fritz.box ([92.116.150.19]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MuUj2-1nQyrD17Zq-00rWmA; Mon, 01
- Aug 2022 17:20:17 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] x86/fault: Dump command line of faulting process to syslog
-Date:   Mon,  1 Aug 2022 17:20:16 +0200
-Message-Id: <20220801152016.36498-4-deller@gmx.de>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220801152016.36498-1-deller@gmx.de>
-References: <20220801152016.36498-1-deller@gmx.de>
+        with ESMTP id S231173AbiHAPlS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 11:41:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3C828702;
+        Mon,  1 Aug 2022 08:41:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A09C760B84;
+        Mon,  1 Aug 2022 15:41:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC09C433D6;
+        Mon,  1 Aug 2022 15:41:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659368477;
+        bh=McQjB7B9+v6P6Vwsyy7FekofjGEdZ7yr6p3TwkW422k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G/nizH6z4oa2MFgq4rDBoMlCCjcUelTNIm48N5xxMvOpwrvypb0hLAAiDoZoX8Fis
+         gM8FG/bdT1Gf34pKc+iQaH0gmhTJHRRvDcWXfxlcsTwilbW8YRcJQpDXVZrLNBvitZ
+         vGC8IlZnklxu1jty5KQCaxtoNxW4ZIYcCB/sgnr3BKJMmeWP3PFx64AHFV2zCd+OKL
+         RBQVZKu0o7T9bJ6vE2PAk4ef2gagrtXOywMx3frPCbQUeKaLXXeyHzQI+8wlcVDEC+
+         PkKklTA1+araS+GHQrRIXYFCNjk/GIdf+1EItsoDxUTLeSksBXcdu0LTEuE85Bz67I
+         pUP6BQV42Wc5g==
+Date:   Mon, 1 Aug 2022 16:41:09 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
+Message-ID: <20220801154108.GA26280@willie-the-truck>
+References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KxWWu6d4Mf/HNZfb1iWzcFG+92jgDSJNUGRPzZjgSQlUKy2+Tkm
- BjxgNCup3o7EzTK7JqLhVfq4Sgenz2XfBiGqB6kKOHAgDJ7dkSfUVDWhXcJ59ogtQVDLxXe
- giv3v+nVJB6hw1OWd9TurCZK3OEUUW4kMzAke+wax9s4dZN7+WX1VTiHzqUFL0XWg7sYG0v
- d47uwu4Ar5S0FjSFZmWpg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:e6dDOJQOd/E=:ae8KEjXxSSY8z7qEgqLoRT
- 9Oy2SV3hu8ax6rhtx6rqY9L7/Xd/gnUXV+n76xOskY6c+RzHFw/jVm9AxVZ7d8mEPHornlUYb
- +v7b1p/MH9pPNVRs+T/t4NRR7brQy9mBMpYs8nKzmJIj/2gldv7eYw7urPxQJilWTTwsLyA26
- 15mgvYsmTMEmIYWXbizskHtDNlGclsV/qgVLjp6OdT9jcCU3bzgg42PI5huC6uDgYGWyoGDB7
- kJBAYGInO6igzVfF1VN95K6p5pZiERslxpQxA+x9XQ1IrUVqBkCybdM2cwMleR1pPZm93OAan
- 5Zi07HzQa1r8qab5AIwDg2+dxtHhzUtA6m7qXdzgxdXt3Gh1sdktHzsFp5pFWRNNsFTqMryIL
- xtF0apeRQXn6X+/2hYO+//FTbFZSFiZoN3LXAYCPQ9cZwH7NshZWbaftWA3E9th/e13RlCgZ2
- D5mK9t3cxIT1lFVH2HDoQtr2U9w5lfDAsGz2M3MBatiHQ9h5eostzwsarBapZsTL8JCCydbFw
- 4qKhqqQqnP4PeW7B5a/TctuEvvYLpQbr+1PGV/m3RC026MTC0ZG7B65PdKwUPqy+nHwkU2twg
- 4j3d/G75e/Qg17DGNCKh3woIdkIz91MhTwma08hHjC66t2+IW+iKQYMeHqmJRHOKa4yfzlGEW
- yC7VJVhbzPqEXOo4qM5XLWOApLu07oDYyxeBjopY7bJLR9b52PsA4evrRq8SvWS5ic7ByzgFU
- 942EZgn6tZrmsGg/jxZs7n/sNV2Ob/jmm/V64WWdiISheNFqK9dXwVS9wN8DdWs2ChsXn4Jxk
- vkP5J3b4ZkfBKmUAfX8nrdUuYOXPtqDGCLgCY5BI1JpAJ9vL965TGxfnTbWFSftqpTIHPHPfh
- BwpAF4P9y6A7MNtsmz6/wAXPpZ9/FFcyuI+IbmvSiBQhCJzMYZWeK8safXiSVDmuFTv0Nh+Gj
- 6T+CAVea0kodv1I2hQmk/AAHfGlkqERRTB+1XrErpLXLHfHvfaA/eYToJ4eetZ5Uspl/XfEfR
- bL7lxciRIK4V1uzdtfkGTyGqZNmtkzjcpVyiu6Ucbhu3AqtzEYEmBjjrMNWrf5dENlCjFZvkp
- EKFfMI98Ru/W6uO47qC6L/w3kLEhugldjNtJRcfg2OA2Rj4a7DZM+wzHQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,39 +74,115 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-If a process segfaults, include the command line of the faulting process
-in the syslog.
+Hi Linus, Paul,
 
-In the example below, the "crash" program (which simply writes zero to add=
-ress 0)
-was called with the parameters "this is a test":
+Apologies for the slow response here; believe it or not, I was attending
+a workshop about memory ordering.
 
- crash[2326]: segfault at 0 ip 0000561a7969c12e sp 00007ffe97a05630 error =
-6 in crash[561a7969c000+1000]
- crash[2326] cmdline: ./crash this is a test
- Code: 68 ff ff ff c6 05 19 2f 00 00 01 5d c3 0f 1f 80 00 00 00 00 c3 0f 1=
-f 80 00 00 00 00 e9 7b ff ff ff 55 48 89 e5 b8 00 00 00 00 <c7> 00 01 00 0=
-0 00 b8 00 00 00 00 5d c3 0f 1f 44 00 00 41 57 4c 8d
+On Sun, Jul 31, 2022 at 10:30:11AM -0700, Paul E. McKenney wrote:
+> On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
+> > Even alpha is specified to be locally ordered wrt *one* memory
+> > location, including for reads (See table 5-1: "Processor issue order",
+> > and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
+> > new value, a subsequent read is not allowed to see an older one - even
+> > without a memory barrier.
+> > 
+> > Will, Paul? Maybe that's only for overlapping loads/stores, not for
+> > loads/loads. Because maybe alpha for once isn't the weakest possible
+> > ordering.
+> 
+> The "bad boy" in this case is Itanium, which can do some VLIW reordering
+> of accesses.  Or could, I am not sure that newer Itanium hardware
+> does this.  But this is why Itanium compilers made volatile loads use
+> the ld,acq instruction.
+> 
+> Which means that aligned same-sized marked accesses to a single location
+> really do execute consistently with some global ordering, even on Itanium.
 
-Signed-off-by: Helge Deller <deller@gmx.de>
-=2D--
- arch/x86/mm/fault.c | 2 ++
- 1 file changed, 2 insertions(+)
+Although this is true, there's a really subtle issue which crops up if you
+try to compose this read-after-read ordering with dependencies in the case
+where the two reads read the same value (which is encapsulated by the
+unusual RSW litmus test that I've tried to convert to C below):
 
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index fad8faa29d04..d4e21c402e29 100644
-=2D-- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -784,6 +784,8 @@ show_signal_msg(struct pt_regs *regs, unsigned long er=
-ror_code,
 
- 	printk(KERN_CONT "\n");
+/* Global definitions; assume everything zero-initialised */
+struct foo {
+	int *x;
+};
 
-+	dump_stack_print_cmdline(loglvl);
-+
- 	show_opcodes(regs, loglvl);
- }
+int x;
+struct foo foo;
+struct foo *ptr;
 
-=2D-
-2.37.1
 
+/* CPU 0 */
+WRITE_ONCE(x, 1);
+WRITE_ONCE(foo.x, &x);
+
+/*
+ * Release ordering to ensure that somebody following a non-NULL ptr will
+ * see a fully-initialised 'foo'. smp_[w]mb() would work as well.
+ */
+smp_store_release(&ptr, &foo);
+
+
+/* CPU 1 */
+int *xp1, *xp2, val;
+struct foo *foop;
+
+/* Load the global pointer and check that it's not NULL. */
+foop = READ_ONCE(ptr);
+if (!foop)
+	return;
+
+/*
+ * Load 'foo.x' via the pointer we just loaded. This is ordered after the
+ * previous READ_ONCE() because of the address dependency.
+ */
+xp1 = READ_ONCE(foop->x);
+
+/*
+ * Load 'foo.x' directly via the global 'foo'.
+ * _This is loading the same address as the previous READ_ONCE() and
+ *  therefore cannot return a stale (NULL) value!_
+ */
+xp2 = READ_ONCE(foo.x);
+
+/*
+ * Load 'x' via the pointer we just loaded.
+ * _We may see zero here!_
+ */
+val = READ_ONCE(*xp2);
+
+
+So in this case, the two same-location reads on CPU1 are actually executed
+out of order, but you can't tell just by looking at them in isolation
+because they returned the same value (i.e. xp1 == xp2 == &x). However, you
+*can* tell when you compose them in funny situations such as above (and I
+believe that this is demonstrably true on PPC and Arm; effectively the
+read-after-read ordering machinery only triggers in response to incoming
+snoops).
+
+There's probably a more-compelling variant using an (RCpc) load acquire
+instead of the last address dependency on CPU 1 as well.
+
+Anyway, I think all I'm trying to say is that I'd tend to shy away from
+relying on read-after-read ordering if it forms part of a more involved
+ordering relationship.
+
+> > But the patch looks fine, though I agree that the ordering in
+> > __wait_on_buffer should probably be moved into
+> > wait_on_bit/wait_on_bit_io.
+> > 
+> > And would we perhaps want the bitops to have the different ordering
+> > versions? Like "set_bit_release()" and "test_bit_acquire()"? That
+> > would seem to be (a) cleaner and (b) possibly generate better code for
+> > architectures where that makes a difference?
+> 
+> As always, I defer to the architecture maintainers on this one.
+
+FWIW, that makes sense to me. We already have release/acquire/releaxed
+variants of the bitops in the atomic_t API so it seems natural to have
+a counterpart in the actual bitops API as well.
+
+Will
