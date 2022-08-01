@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46702586DEB
-	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 17:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E3A586E1D
+	for <lists+linux-arch@lfdr.de>; Mon,  1 Aug 2022 17:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbiHAPlT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 1 Aug 2022 11:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
+        id S233053AbiHAPyt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 1 Aug 2022 11:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiHAPlS (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 11:41:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3C828702;
-        Mon,  1 Aug 2022 08:41:18 -0700 (PDT)
+        with ESMTP id S233122AbiHAPye (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 1 Aug 2022 11:54:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847AF3DF1F;
+        Mon,  1 Aug 2022 08:54:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A09C760B84;
-        Mon,  1 Aug 2022 15:41:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC09C433D6;
-        Mon,  1 Aug 2022 15:41:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3709AB81252;
+        Mon,  1 Aug 2022 15:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4E7C433D7;
+        Mon,  1 Aug 2022 15:54:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659368477;
-        bh=McQjB7B9+v6P6Vwsyy7FekofjGEdZ7yr6p3TwkW422k=;
+        s=k20201202; t=1659369270;
+        bh=wETN0skpqza1G2a1AdifFLbckspm2eShjFjwhavetjw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G/nizH6z4oa2MFgq4rDBoMlCCjcUelTNIm48N5xxMvOpwrvypb0hLAAiDoZoX8Fis
-         gM8FG/bdT1Gf34pKc+iQaH0gmhTJHRRvDcWXfxlcsTwilbW8YRcJQpDXVZrLNBvitZ
-         vGC8IlZnklxu1jty5KQCaxtoNxW4ZIYcCB/sgnr3BKJMmeWP3PFx64AHFV2zCd+OKL
-         RBQVZKu0o7T9bJ6vE2PAk4ef2gagrtXOywMx3frPCbQUeKaLXXeyHzQI+8wlcVDEC+
-         PkKklTA1+araS+GHQrRIXYFCNjk/GIdf+1EItsoDxUTLeSksBXcdu0LTEuE85Bz67I
-         pUP6BQV42Wc5g==
-Date:   Mon, 1 Aug 2022 16:41:09 +0100
+        b=MzJVvG5h2GNIc1ys4vKYkGPP3l+3267DHrNX4BuxanV9KbqAyjyxn+l0CVZ4lTOEa
+         eZvnjjtomrwFK7j8a/66B8sFrLl37v7+Brzcf4zyWVtYA92o7ziSPdzCJepzVXtbNP
+         HaeczdgwxLGZY+jCQ6StvVPXuiK9c0L/px6lLIXWU9u8gV/rfWLkPOszS1TdvcsRrQ
+         9M0R5wwiADT8BGDWRzf3Ss8XuuKiNsgp3aLk8YLaDYTXGBkdGJBjIC6mkFGZjfQBru
+         U1DO0aQ4lKcZsYzKKerYRJcWjY2t1ZR3f8nnZjEZNPSVX7Lllb/9nNTJCmwhMSRwXO
+         skXkDeIUQOLDQ==
+Date:   Mon, 1 Aug 2022 16:54:22 +0100
 From:   Will Deacon <will@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
+To:     Mikulas Patocka <mpatocka@redhat.com>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -52,18 +52,22 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2] make buffer_locked provide an acquire semantics
-Message-ID: <20220801154108.GA26280@willie-the-truck>
+Subject: Re: [PATCH v4 1/2] introduce test_bit_acquire and use it in
+ wait_on_bit
+Message-ID: <20220801155421.GB26280@willie-the-truck>
 References: <alpine.LRH.2.02.2207310703170.14394@file01.intranet.prod.int.rdu2.redhat.com>
  <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
  <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
  <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
  <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
- <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
+ <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220731173011.GX2860372@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -74,115 +78,70 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Linus, Paul,
-
-Apologies for the slow response here; believe it or not, I was attending
-a workshop about memory ordering.
-
-On Sun, Jul 31, 2022 at 10:30:11AM -0700, Paul E. McKenney wrote:
-> On Sun, Jul 31, 2022 at 09:51:47AM -0700, Linus Torvalds wrote:
-> > Even alpha is specified to be locally ordered wrt *one* memory
-> > location, including for reads (See table 5-1: "Processor issue order",
-> > and also 5.6.2.2: "Litmus test 2"). So if a previous read has seen a
-> > new value, a subsequent read is not allowed to see an older one - even
-> > without a memory barrier.
-> > 
-> > Will, Paul? Maybe that's only for overlapping loads/stores, not for
-> > loads/loads. Because maybe alpha for once isn't the weakest possible
-> > ordering.
+On Mon, Aug 01, 2022 at 06:42:15AM -0400, Mikulas Patocka wrote:
+> wait_on_bit tests the bit without any memory barriers, consequently the
+> code that follows wait_on_bit may be moved before testing the bit on
+> architectures with weak memory ordering. When the code tests for some
+> event using wait_on_bit and then performs a load operation, the load may
+> be unexpectedly moved before wait_on_bit and it may return data that
+> existed before the event occurred.
 > 
-> The "bad boy" in this case is Itanium, which can do some VLIW reordering
-> of accesses.  Or could, I am not sure that newer Itanium hardware
-> does this.  But this is why Itanium compilers made volatile loads use
-> the ld,acq instruction.
+> Such bugs exist in fs/buffer.c:__wait_on_buffer,
+> drivers/md/dm-bufio.c:new_read,
+> drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:dvb_usb_start_feed,
+> drivers/bluetooth/btusb.c:btusb_mtk_hci_wmt_sync
+> and perhaps in other places.
 > 
-> Which means that aligned same-sized marked accesses to a single location
-> really do execute consistently with some global ordering, even on Itanium.
-
-Although this is true, there's a really subtle issue which crops up if you
-try to compose this read-after-read ordering with dependencies in the case
-where the two reads read the same value (which is encapsulated by the
-unusual RSW litmus test that I've tried to convert to C below):
-
-
-/* Global definitions; assume everything zero-initialised */
-struct foo {
-	int *x;
-};
-
-int x;
-struct foo foo;
-struct foo *ptr;
-
-
-/* CPU 0 */
-WRITE_ONCE(x, 1);
-WRITE_ONCE(foo.x, &x);
-
-/*
- * Release ordering to ensure that somebody following a non-NULL ptr will
- * see a fully-initialised 'foo'. smp_[w]mb() would work as well.
- */
-smp_store_release(&ptr, &foo);
-
-
-/* CPU 1 */
-int *xp1, *xp2, val;
-struct foo *foop;
-
-/* Load the global pointer and check that it's not NULL. */
-foop = READ_ONCE(ptr);
-if (!foop)
-	return;
-
-/*
- * Load 'foo.x' via the pointer we just loaded. This is ordered after the
- * previous READ_ONCE() because of the address dependency.
- */
-xp1 = READ_ONCE(foop->x);
-
-/*
- * Load 'foo.x' directly via the global 'foo'.
- * _This is loading the same address as the previous READ_ONCE() and
- *  therefore cannot return a stale (NULL) value!_
- */
-xp2 = READ_ONCE(foo.x);
-
-/*
- * Load 'x' via the pointer we just loaded.
- * _We may see zero here!_
- */
-val = READ_ONCE(*xp2);
-
-
-So in this case, the two same-location reads on CPU1 are actually executed
-out of order, but you can't tell just by looking at them in isolation
-because they returned the same value (i.e. xp1 == xp2 == &x). However, you
-*can* tell when you compose them in funny situations such as above (and I
-believe that this is demonstrably true on PPC and Arm; effectively the
-read-after-read ordering machinery only triggers in response to incoming
-snoops).
-
-There's probably a more-compelling variant using an (RCpc) load acquire
-instead of the last address dependency on CPU 1 as well.
-
-Anyway, I think all I'm trying to say is that I'd tend to shy away from
-relying on read-after-read ordering if it forms part of a more involved
-ordering relationship.
-
-> > But the patch looks fine, though I agree that the ordering in
-> > __wait_on_buffer should probably be moved into
-> > wait_on_bit/wait_on_bit_io.
-> > 
-> > And would we perhaps want the bitops to have the different ordering
-> > versions? Like "set_bit_release()" and "test_bit_acquire()"? That
-> > would seem to be (a) cleaner and (b) possibly generate better code for
-> > architectures where that makes a difference?
+> We fix this class of bugs by adding a new function test_bit_acquire that
+> reads the bit and provides acquire memory ordering semantics.
 > 
-> As always, I defer to the architecture maintainers on this one.
+> Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+> Cc: stable@vger.kernel.org
+> 
+> ---
+>  arch/s390/include/asm/bitops.h                       |   10 ++++++++++
+>  arch/x86/include/asm/bitops.h                        |    7 ++++++-
+>  include/asm-generic/bitops/instrumented-non-atomic.h |   11 +++++++++++
+>  include/asm-generic/bitops/non-atomic.h              |   13 +++++++++++++
+>  include/linux/wait_bit.h                             |    8 ++++----
+>  kernel/sched/wait_bit.c                              |    6 +++---
+>  6 files changed, 47 insertions(+), 8 deletions(-)
+> 
+> Index: linux-2.6/arch/x86/include/asm/bitops.h
+> ===================================================================
+> --- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> +++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> @@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
+>  
+>  static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
+>  {
+> -	return ((1UL << (nr & (BITS_PER_LONG-1))) &
+> +	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
+>  		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+> +	barrier();
+> +	return r;
 
-FWIW, that makes sense to me. We already have release/acquire/releaxed
-variants of the bitops in the atomic_t API so it seems natural to have
-a counterpart in the actual bitops API as well.
+Hmm, I find it a bit weird to have a barrier() here given that 'addr' is
+volatile and we don't need a barrier() like this in the definition of
+READ_ONCE(), for example.
+
+> Index: linux-2.6/include/linux/wait_bit.h
+> ===================================================================
+> --- linux-2.6.orig/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
+> +++ linux-2.6/include/linux/wait_bit.h	2022-08-01 12:27:43.000000000 +0200
+> @@ -71,7 +71,7 @@ static inline int
+>  wait_on_bit(unsigned long *word, int bit, unsigned mode)
+>  {
+>  	might_sleep();
+> -	if (!test_bit(bit, word))
+> +	if (!test_bit_acquire(bit, word))
+>  		return 0;
+>  	return out_of_line_wait_on_bit(word, bit,
+>  				       bit_wait,
+
+Yet another approach here would be to leave test_bit as-is and add a call to
+smp_acquire__after_ctrl_dep() since that exists already -- I don't have
+strong opinions about it, but it saves you having to add another stub to
+x86.
 
 Will
