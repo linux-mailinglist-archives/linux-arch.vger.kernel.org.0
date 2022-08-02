@@ -2,90 +2,144 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F20058778A
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 09:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97F1587892
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 10:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiHBHKB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Aug 2022 03:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S233867AbiHBIAz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Tue, 2 Aug 2022 04:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbiHBHKA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 03:10:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16011EC44;
-        Tue,  2 Aug 2022 00:09:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42E0E6131A;
-        Tue,  2 Aug 2022 07:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95D0C433D7;
-        Tue,  2 Aug 2022 07:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659424198;
-        bh=0jhHYyhCK+3Qhtr9ig01rDqez0BJmbBa8YmmaJMFHwQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=e9djQ/IGu8D5BlBmzQCVPktfYtADj9VUlvUc4wHOUshL2ItJTmLGk5XxGmp7LTamK
-         7sQPbPmnl3hD0qR7Yejsjk4DIZCAU6TKTWpf4MKZw7WSqk3DfPQaXo+jQDohTCjNPV
-         wd36oWM8YDqnp9+tgHfBSih4lpv9TKMQXnVjokkHjcLAeL5587NlqlbTwbqnfFT2T1
-         OEdU+zlJejCKZI9AkOTchr4956mPzmMfaluKddsvngFBiS3sEpMtROBhXPudl9mc6V
-         kRj7uZqBVHKB4clcoeybVZE7KqTzzEy7paU+lhmuGQbC08+MteqiGgDo+dKyQtwFSM
-         hsYMDV0RDnyeg==
-Received: by mail-ua1-f43.google.com with SMTP id f10so5468699uap.2;
-        Tue, 02 Aug 2022 00:09:58 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3EqEobFFoqgRYAlWySymh+XzAiagh90Px/kkia3iK1bt5ZccZ7
-        AEnMoqnv2JtAYWmXGUeBnihlk+scn3gnePycmyg=
-X-Google-Smtp-Source: AA6agR6grG2wQ5RJQ1Vef384HnoTVHvPAk/6u5j5UAg5aRz5bLpJE+22XfZgTZMFTDku5HsFuN1bkDeWgrYDh5cNfKk=
-X-Received: by 2002:ab0:2359:0:b0:387:2dff:87d5 with SMTP id
- h25-20020ab02359000000b003872dff87d5mr7720498uao.104.1659424197668; Tue, 02
- Aug 2022 00:09:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220802053818.18051-1-zhangqing@loongson.cn> <20220802053818.18051-4-zhangqing@loongson.cn>
- <CAAhV-H4qWTbjb45VNbA0is_2w1sgSW54kSngVhVpac5VehwoEg@mail.gmail.com> <e3df8c34-806c-e4ea-2fcb-df8efd0af610@loongson.cn>
-In-Reply-To: <e3df8c34-806c-e4ea-2fcb-df8efd0af610@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 2 Aug 2022 15:09:39 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H59tqWEFMPJ5=01qtYjd3P7xbA=Exgz2pU1nfq4ejiKGg@mail.gmail.com>
-Message-ID: <CAAhV-H59tqWEFMPJ5=01qtYjd3P7xbA=Exgz2pU1nfq4ejiKGg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] LoongArch: Add stacktrace support
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
+        with ESMTP id S232747AbiHBIAy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 04:00:54 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D348BC9E
+        for <linux-arch@vger.kernel.org>; Tue,  2 Aug 2022 01:00:53 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-308-TQG7PYX_M7ubdYwPcl-8wA-1; Tue, 02 Aug 2022 09:00:50 +0100
+X-MC-Unique: TQG7PYX_M7ubdYwPcl-8wA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Tue, 2 Aug 2022 09:00:48 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Tue, 2 Aug 2022 09:00:48 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Boqun Feng' <boqun.feng@gmail.com>,
+        Mikulas Patocka <mpatocka@redhat.com>
+CC:     Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        "Luc Maranget" <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        "Daniel Lustig" <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
         linux-arch <linux-arch@vger.kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Youling Tang <tangyouling@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+Subject: RE: [PATCH v4 1/2] introduce test_bit_acquire and use it in
+ wait_on_bit
+Thread-Topic: [PATCH v4 1/2] introduce test_bit_acquire and use it in
+ wait_on_bit
+Thread-Index: AQHYpdMdL3R9dRhMTUG852+RirbLDa2bPhCA
+Date:   Tue, 2 Aug 2022 08:00:48 +0000
+Message-ID: <31eb3681cfcf4b238a12a82c175457bc@AcuMS.aculab.com>
+References: <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com>
+ <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com>
+ <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com>
+ <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220801155421.GB26280@willie-the-truck>
+ <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
+ <YugYuBzIkr+gN5Vi@boqun-archlinux>
+In-Reply-To: <YugYuBzIkr+gN5Vi@boqun-archlinux>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
+MIME-Version: 1.0
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Qing,
-
-On Tue, Aug 2, 2022 at 2:39 PM Qing Zhang <zhangqing@loongson.cn> wrote:
->
->
->
-> On 2022/8/2 =E4=B8=8B=E5=8D=882:03, Huacai Chen wrote:
-> > Hi, Qing,
+From: Boqun Feng
+> Sent: 01 August 2022 19:17
+> 
+> On Mon, Aug 01, 2022 at 12:12:47PM -0400, Mikulas Patocka wrote:
 > >
-> > Though we had an offline discussion, I still think adding get_wchan()
-> > support is worthy. :)
 > >
-> ok, I will adding get_wchan() support in v4 and modify the abbreviation
-> of commit messages. :)
-Maybe you can wait for some time to see if others have more comments.
+> > On Mon, 1 Aug 2022, Will Deacon wrote:
+> >
+> > > On Mon, Aug 01, 2022 at 06:42:15AM -0400, Mikulas Patocka wrote:
+> > >
+> > > > Index: linux-2.6/arch/x86/include/asm/bitops.h
+> > > > ===================================================================
+> > > > --- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > > +++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > > @@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
+> > > >
+> > > >  static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
+> > > >  {
+> > > > -	return ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > > +	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > >  		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+> > > > +	barrier();
+> > > > +	return r;
+> > >
+> > > Hmm, I find it a bit weird to have a barrier() here given that 'addr' is
+> > > volatile and we don't need a barrier() like this in the definition of
+> > > READ_ONCE(), for example.
+> >
+> > gcc doesn't reorder two volatile accesses, but it can reorder non-volatile
+> > accesses around volatile accesses.
+> >
+> > The purpose of the compiler barrier is to make sure that the non-volatile
+> > accesses that follow test_bit are not reordered by the compiler before the
+> > volatile access to addr.
+> >
+> 
+> Better to have a constant_test_bit_acquire()? I don't think all
+> test_bit() call sites need the ordering?
 
-Huacai
->
-> Thanks,
-> -Qing
-> > Huacai
->
+It is also unlikely that the compiler will 'usefully' move a read
+across the test_bit() call - which is likely to be in a conditional.
+So barrier() is unlikely to significantly affect the generated code.
+
+Indeed, perhaps test_bit() should always enforce read ordering
+even one weakly ordered cpu?
+It is used with set_bit() and clear_bit() which are expensive
+locked operations - so a slightly more expensive test_bit()
+probably doesn't matter.
+
+Remember these aren't functions to replace &= and |=.
+(In spite of some code paths.)
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
