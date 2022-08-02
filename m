@@ -2,69 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E7A5882B6
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 21:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7925882F2
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 22:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiHBTlA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Aug 2022 15:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        id S232816AbiHBUIX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Aug 2022 16:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231317AbiHBTlA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 15:41:00 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E76E474D5;
-        Tue,  2 Aug 2022 12:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1659469252;
-        bh=DaxnZzWlq8rdNZPIkNudbL/86e9yCrTsubkwK7be3mQ=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=GIBhC/ac30CYs9ql8nRJkGG7KZzm+AMbtwTMyBRfaeqnu/gkLSwLwOxojKAbyjQ37
-         8WU5+tu3/tlh920uL/fEmF9p+wLgX3+QwwQSB5VdKly69f+RNVJTnva8OYwGjA8+V/
-         SRr7yGGoTgnd2EbuM6rkIhRBNckHEgdT42Sz4spg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.166.88]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1M5QJJ-1oJmZV0Dmn-001VLX; Tue, 02
- Aug 2022 21:40:52 +0200
-Message-ID: <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
-Date:   Tue, 2 Aug 2022 21:40:50 +0200
+        with ESMTP id S232051AbiHBUIV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 16:08:21 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E6552458
+        for <linux-arch@vger.kernel.org>; Tue,  2 Aug 2022 13:08:19 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 7so25304317ybw.0
+        for <linux-arch@vger.kernel.org>; Tue, 02 Aug 2022 13:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=0+45JLGnZfMHQQnDGOsiLF2twVwamYBrdFCbJu2NgIA=;
+        b=jpPabckjsg0UsINT16ut9CdYerI58dLxrYvNEnswsOppm4SLNq927fz87yfpCaH5ax
+         KCdBZVYZC28pn0Xy8fByE9dMhE8wzQotEbagoddzKwnhmnvTYqWbLwoaqdiRvLKYznys
+         CDLFtlDEGzvhUJHY3YQ4kD6DifvKKLm9tOWmjDF+AGteoYwqr8Gj9xSmKj0lQf94Dano
+         Puw4nNrcbkvpOKbaNJx5xdJXYf8omQ37KoH6c170mgLLZqbp5mz0WBiwi4EYEeWreMm1
+         OZXxLAx2HCduvRAgAu+IL/1sB/WSkbDh8Yb6i+wC9qhoOFawUusYA9OF2v2VSChbKYhR
+         WwWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=0+45JLGnZfMHQQnDGOsiLF2twVwamYBrdFCbJu2NgIA=;
+        b=ZIDpZEixrWauOkrISK9ZA+0Qz/EqP3ZTEx6d9u3Uem9NYETBhE/s2K3LWX11CjnkLW
+         GuH7rzbTMz8AwB0Dt+aqjaunRRrkCQjujrmF/NsZ3IYKO1uqLLGE8tNfMnJS7z88JkK/
+         CBidKaQOomTiCIOCOOkHYBVk1VOwBgL2dKTpzhmkgLH6eE+CP+wKMYIxpYEMBZ4P1iIG
+         JLHmh1NQ1HKlFzYvtBmuC65jcEgUb+v62OcmB9BD82ZVTO27YqoAfJZ02m1Tqfete22G
+         6mQewsvP/qO8tksZjV2ifqo8p1senhPkihUOSZrQPF2jZwW0xabzgyOyzuFIpk43HOAk
+         PDww==
+X-Gm-Message-State: ACgBeo1bJ3e2EoEPexInJvXni9YyXXOR/miWLMwpXP+qdFhQidpzsuMr
+        TxpYVXE9O/wujt+bQNOMC8W7vL846VVzUajBe8UwHw==
+X-Google-Smtp-Source: AA6agR6Xa8GLqLWKTmOgcXYKSoHfDZeq+GqS1CWYb5caYG2+9D4u6ak/0xp4JW7TREtw//VymY38BERkomb7kpPmXOI=
+X-Received: by 2002:a25:bc3:0:b0:673:bc78:c095 with SMTP id
+ 186-20020a250bc3000000b00673bc78c095mr16344277ybl.376.1659470898706; Tue, 02
+ Aug 2022 13:08:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
-Content-Language: en-US
-To:     Josh Triplett <josh@joshtriplett.org>
-Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220801152016.36498-1-deller@gmx.de>
- <YugGFEjJvIwzifq7@localhost>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <YugGFEjJvIwzifq7@localhost>
-Content-Type: text/plain; charset=UTF-8
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-18-glider@google.com>
+ <CANpmjNNh0SP53s0kg_Lj2HUVnY_9k_grm==q4w6Bbq4hLmKtHA@mail.gmail.com>
+In-Reply-To: <CANpmjNNh0SP53s0kg_Lj2HUVnY_9k_grm==q4w6Bbq4hLmKtHA@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 2 Aug 2022 22:07:42 +0200
+Message-ID: <CAG_fn=ViHiYCWj0jmm1R=gSX0880-rQ-CA3VaEjiLnGkDN1G4w@mail.gmail.com>
+Subject: Re: [PATCH v4 17/45] init: kmsan: call KMSAN initialization routines
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:FK3A4RrVucDG0RPGQTysWhv0Er6T1qGSn62a38i7ukOkyBGyDqg
- Mx3hgk/RPivHxofiGJwZ0lF5izU8i8lHOnobDn4NVuolYJezQgc+vjLaOJJ8HZtZtkuUjjt
- 40a+SJoJwdntr6wcuXz0Ny+pPxRvRxQzflIjAmKUDXTtFmczlY1V5fe4Jct/kY2BHi1K9mv
- 4wZb//IVELfxXAlYwK9Dg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BzOzkgKJDko=:9X7pA8a8B6gL0F958q5xt8
- x0WG2yaZLzToa9wORd2Jau6bh/68jdofWljMKuyxrvq2TZxRCvCUqC6qyQcSxFzXrhVZZGuTJ
- 9+rgPLvY9xb3KxEJ32kOoeSaFMaelPFiRLmmlKvM5o1SbiDHS6mR4REtg4BPNIFoA9zrH6n4q
- 9ZDF3H2DBEGIh0VEOaU+QQRqVM6deL4F0PCq8ej0womJKiXVPBXrJT6g9TAivE5g57a/AnSHt
- 9UrY0Qg/9XeBoXVKH/WpTYtOY0GDn5wrfjD4YWLNji2oBxsQWZmQd5ADKADYE18dAp0FDaxU1
- WzF2fXsZz3xQJfIkSU5HwQ4wQ9HEIZmT7NKdzyvoHnq/DhdxFxy8Jnwr/fnX6KJsf0iWTQz7m
- hYqYh+YDiUxrcF4oqaagF1FtXOo2LGp7bDjwm9IpU4CvFRny+8fd8wcJCwyE1CGDpYyAcQrlX
- EScqLBIQY0xMQrTrt/KWUJecF0axWtKNKYedi8hZ/FOShl7O//isWjvfp5RXrr7atF+9pda5F
- Q8mm3XGHIzi/AqGYknOjdXjx3hfqH2dGodSLv4XA8z9Ahh83AFDBxhokPZDb5aRqz1ImAJocV
- HfVYbVuGT45HojNLc6GGU9pkILKp0HvR1G2XRF3j9i3vn55pC+XUGGiyEZ78nA9qK3ppJ15EA
- OMp/bIDkihf2eXtZD37Cp9L87YFYg4MRpLrV2Iel3tcgYXA031DEabh6zUKB/7h8h7RRoFE+6
- xfMoMfdLfztt3ak0QzZczePvVhaQiqf1NC1qpC22M4+n+r8D3uHroLKOfd1R7sJaBIJilhrqO
- +7UkOEISSjuE93VZ4Rd7YbfqTxllZijSZhvACVUgS8qiVrAHX5zxEgdWekGiflNVUTnSZfdtn
- weEYRrWd6zYpiICGH0TXYKQDAQK8WVCfz9fTpM6vKX0faREftc8gKNrHlClKa5hFzsyUJefSd
- d/gCpSKQ09uA7x+NMbZ+u5E/WTd2Y7IuNi6XwGADiThSw4DW1DSjf1sT2qIrTKAJisAkma+1H
- oxJD9rtNv/M+ER2AqYkTILj9DwacojK2Zip1HD4oS4ZiGnX/T2NbJrWUc0/qo8iCN7r5HsdIE
- bd5ycVUKMS161JCq/ncEVTu2At41BN7H0BXEne5bT4xdTeikIVoGE97PQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,93 +98,73 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 8/1/22 18:57, Josh Triplett wrote:
-> On Mon, Aug 01, 2022 at 05:20:13PM +0200, Helge Deller wrote:
->> This patch series allows the arch-specific kernel fault handlers to dum=
-p
->> in addition to the typical info (IP address, fault type, backtrace and =
-so on)
->> the command line of the faulting process.
->>
->> The motivation for this patch is that it's sometimes quite hard to find=
- out and
->> annoying to not know which program *exactly* faulted when looking at th=
-e syslog.
->>
->> Some examples from the syslog are:
->>
->> On parisc:
->>    do_page_fault() command=3D'cc1' type=3D15 address=3D0x00000000 in li=
-bc-2.33.so[f6abb000+184000]
->>    CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #4=
-5
->>    Hardware name: 9000/785/C8000
->>
->> -> We see the "cc1" compiler crashed, but it would be useful to know wh=
-ich file was compiled.
->>
->> With this patch series, the kernel now prints in addition:
->>    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/=
-ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D=
- NO_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-=
-9.0.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface =
--quiet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -=
-Wimplicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13=
-413_0/ghc_5.s
->>
->> -> now we know that cc1 crashed while compiling some haskell code.
+On Tue, Jul 12, 2022 at 4:05 PM Marco Elver <elver@google.com> wrote:
 >
-> This does seem really useful for debugging.
 
-Yes.
-
-> However, it's also an information disclosure in various ways. The
-> arguments of a program are often more sensitive than the name, and logs
-> have a tendency to end up in various places, such as bug reports.
+> > +/**
+> > + * kmsan_task_exit() - Notify KMSAN that a task has exited.
+> > + * @task: task about to finish.
+> > + */
+> > +void kmsan_task_exit(struct task_struct *task);
 >
-> An example of how this can be an issue:
-> - You receive an email or other message with a sensitive link to follow
-> - You open the link, which launches `firefox https://...`
-> - You continue browsing from that window
-> - Firefox crashes (and recovers and restarts, so you don't think
->   anything of it)
-> - Later, you report a bug on a different piece of software, and the bug
->   reporting process includes a copy of the kernel log
+> Something went wrong with patch shuffling here I think,
+> kmsan_task_create + kmsan_task_exit decls are duplicated by this
+> patch.
+Right, I've messed it up. Will fix.
 
-Yes, that's a possible way how such information can leak.
+> > +
+> > +struct page_pair {
+>
+> 'struct shadow_origin_pages' for a more descriptive name?
+How about "metadata_page_pair"?
 
-> I am *not* saying that we shouldn't do this; it seems quite helpful.
-> However, I think we need to arrange to treat this as sensitive
-> information, similar to kptr_restrict.
+> > + * At the very end there may be leftover blocks in held_back[]. They a=
+re
+> > + * collected later by kmsan_memblock_discard().
+> > + */
+> > +bool kmsan_memblock_free_pages(struct page *page, unsigned int order)
+> > +{
+> > +       struct page *shadow, *origin;
+>
+> Can this just be 'struct page_pair'?
 
-I wonder what the best solution could be.
+Not sure this is worth it. We'll save one line by assigning this
+struct to held_back[order], but the call to kmsan_setup_meta() will
+become more verbose.
+(and passing a struct page_pair to kmsan_setup_meta() looks excessive).
 
-A somewhat trivial solution is to combine it with the dmesg_restrict sysct=
-l, e.g.:
 
-* When ``dmesg_restrict`` is set to 0 there are no restrictions for users =
-to read
-dmesg. In this case my patch would limit the information (based on example=
- above):
-    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 [note: other pa=
-rameters hidden due to dmesg_restrict=3D0 sysctl]
-So it would show the full argv[0] with a hint that people would need to ch=
-ange dmesg_restrict.
+> > +                     struct page *origin, int order)
+> > +{
+> > +       int i;
+> > +
+> > +       for (i =3D 0; i < (1 << order); i++) {
+>
+> Noticed this in many places, but we can just make these "for (int i =3D..=
+" now.
+Fixed here and all over the runtime.
 
-* When ``dmesg_restrict`` is set to 1, users must have ``CAP_SYSLOG`` to u=
-se dmesg(8)
-and the patch could output all parameters:
-     cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/c=
-cRkFSfY -imultilib . -imultiarch hppa-linux-gnu ....
+> > @@ -1731,6 +1731,9 @@ void __init memblock_free_pages(struct page *page=
+, unsigned long pfn,
+> >  {
+> >         if (early_page_uninitialised(pfn))
+> >                 return;
+> > +       if (!kmsan_memblock_free_pages(page, order))
+> > +               /* KMSAN will take care of these pages. */
+> > +               return;
+>
+> Add {} because the then-statement is not right below the if.
 
-That would of course still leave few possible corner-cases where informati=
-on
-could leak, but since usually programs shouldn't crash and that
-people usually shouldn't put sensitive information into the parameter
-list directly, it's somewhat unlikely to happen.
+Done.
 
-Another different solution would be to add another sysctl.
+--=20
+Alexander Potapenko
+Software Engineer
 
-Any other ideas?
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-Helge
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
