@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C940758810B
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 19:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE340588150
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 19:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234989AbiHBR3l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Aug 2022 13:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
+        id S230092AbiHBRsA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Aug 2022 13:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234815AbiHBR3k (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 13:29:40 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED0A4AD4E
-        for <linux-arch@vger.kernel.org>; Tue,  2 Aug 2022 10:29:39 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id o15so24528689yba.10
-        for <linux-arch@vger.kernel.org>; Tue, 02 Aug 2022 10:29:39 -0700 (PDT)
+        with ESMTP id S229498AbiHBRr7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 13:47:59 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCBA13E34
+        for <linux-arch@vger.kernel.org>; Tue,  2 Aug 2022 10:47:58 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31f445bd486so148182527b3.13
+        for <linux-arch@vger.kernel.org>; Tue, 02 Aug 2022 10:47:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=MvRBkFzdQaYaXfpQTRaszNRJA99lxIjSlE2BIJqxf/w=;
-        b=QRi9qghYw00C8ncMgz03GPp5X4XZwYBjLhTst+txxvrrxIKQSUmvN0iydfY7XxTRPZ
-         FljvcSTp2ADimYd7Symv/nntq6KpZiWp6d//C2GypYu/OlpHeLOtYJAAvDcymW7JC3z0
-         vFmHS4EctNa1FeEfaDLNxOsvpogUFSLuXoQkFy1gkjcrY42Fcsk3slvwkX0sSHWa2PA+
-         tx4YnR0p+wucGibEbwhrHFYXYZI38NDi3qKYYQnitOrDk170nf3Jt8K81Ues6I017fas
-         rtIy9n7wsldT5qtbZc3Up54mQyY1/O/xbkmoCTmJ7Qwc73uY29KBeFOWyQvihRzUNGNx
-         LxaA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=CyPUbDaavl0pxtUchWqOoJ+rGYNrTSx7Qsh7yOX4nqk=;
+        b=Vi4b18H4ruvdsnsfKL+xHB8JIstAaWj9GfTkdEHEJfP6HGkV2K7VRqfDfHV17mNn9+
+         YfDABrmK4w3SaPqVBh5bXyQbe6x3QXHpoIU4WzT8xxgoUcS5ml2XHVtfsuJ2zqcQFhAd
+         J8s0AZuAHn9KYK0oFgegc6so4j9E30I7XfPuVoFbmhCmTQvId+u5/XCreKdsxSA5N46X
+         SzXnSQqra+iDjPn1Yh+9dDucGZnRiNvonatXvefk8NrHF+gnwxvG5okVRbt49+/VrHxu
+         aM9r26REYHwDUJwLqat8Mxrb/RWmuMfHajj/WVBheWk/3pUXKjHQbhf0W8qkPy+w2fDD
+         sXkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=MvRBkFzdQaYaXfpQTRaszNRJA99lxIjSlE2BIJqxf/w=;
-        b=ajCfnHJ20fL7lM369iB3MKAEqtmjDCJXewDZjebI1c6ObYl9VlYpelV03q95Ara5d1
-         6Jca/FGQlEAFgxi6LnEvoUPAWd/3q1bOqZBUAumUJXhzkijxHzv3GflgmKZaHaQ25ysW
-         H+kdweNdbfy6Bgb6yi3qqt0bGUP8g2SIfelio1bibxE8RVGiUhnwsQIgo0wvnhFSxZ5e
-         nG+2uYZb7X/si92gHdiqpWHlEqcYgScGK7vSQE1TFP5KZQhqMLH93H8pA6RbyhEPIrn0
-         P3FRrrqrX7DhCNVn+dmJ+lxHZomQ3TC2Tni4ULbwQSAggETZEgag687tBuiX37JykYec
-         fP7w==
-X-Gm-Message-State: ACgBeo1E6oubACgn6WB8e4ScRJ3HaM0NuWSTEYn8zTjVrs4XXHth5PVQ
-        y4fW7MdBoq1UTyRnIdSVeYWegnlrEHXdxFRkAgZnqg==
-X-Google-Smtp-Source: AA6agR7VtR+Gv6MIRMZVXbACWuJKrFK4u921sU30CJ51jY/b/Dg4+iYwU/syVU8A9VvADNQ3PrTrNZmZWMU0fOSHqlA=
-X-Received: by 2002:a25:bc3:0:b0:673:bc78:c095 with SMTP id
- 186-20020a250bc3000000b00673bc78c095mr15729538ybl.376.1659461379014; Tue, 02
- Aug 2022 10:29:39 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=CyPUbDaavl0pxtUchWqOoJ+rGYNrTSx7Qsh7yOX4nqk=;
+        b=GAv/deHAxyUU2u9widqLOZvbePMebv6HEkR3JmAyw/5t5J55gjAn1nan6NmmOYWJm1
+         euepw5qfM2VqvChFWn2wZ40GCwxEov3BGvBeOh1r2m3NphHR3CeKbMqm9NN+Nhv7ArSm
+         t3M/KuJgRylreB5KY0WbV+pSw8Cm34IYQA+0pyBnfmDPJNKhjVHkcJRTp/4eY5TdBF/a
+         U6teXGfOtz0gj5m9s7ASM3rrkV/6Em1MTQ68eQTFmvTuQzC+KMMRS3PN2Yyd/1HDHQ5w
+         x09R4oaCB8jXkv3Cw5w+LHhbAOj9k9jBpiPapAdK7nlaT+xLVcp23kK9csyNnF7kRvcF
+         z8Sw==
+X-Gm-Message-State: ACgBeo1lY3WqAA1NFjo/t+QR9xp2vRKxsTKbqe6OWzCGX17wKaMZG3WR
+        VyrcjMOJYWYpTcdAXAkI/hi+40KCIyeUP/zp7cRQqA==
+X-Google-Smtp-Source: AA6agR5ff/2YTaiH0o2yaXcd9Vb4iGB8rk5BtGV2WejE90cyd/4A41JUybbJAmYoeDw71I0Y93ZyFnAevmMFLK5vkyw=
+X-Received: by 2002:a81:5ca:0:b0:31f:38d6:f59f with SMTP id
+ 193-20020a8105ca000000b0031f38d6f59fmr18721968ywf.324.1659462477479; Tue, 02
+ Aug 2022 10:47:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-26-glider@google.com>
- <CANpmjNPeW=pQ_rU5ACTpBX8W4TH4vdcDn=hqPhHGtYU96iHF0A@mail.gmail.com>
-In-Reply-To: <CANpmjNPeW=pQ_rU5ACTpBX8W4TH4vdcDn=hqPhHGtYU96iHF0A@mail.gmail.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-30-glider@google.com>
+ <Ys6c/JYJlQjIfZtH@elver.google.com>
+In-Reply-To: <Ys6c/JYJlQjIfZtH@elver.google.com>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 2 Aug 2022 19:29:02 +0200
-Message-ID: <CAG_fn=V343yojjvuU6zxHKm+SgFJ2jAb7G_aKEwaqLqtqSeiYQ@mail.gmail.com>
-Subject: Re: [PATCH v4 25/45] kmsan: add tests for KMSAN
+Date:   Tue, 2 Aug 2022 19:47:21 +0200
+Message-ID: <CAG_fn=V_0Jw_mKpj0P5-hUeCUZZzC2u1LCD8Nvp8FvCy_x=wqg@mail.gmail.com>
+Subject: Re: [PATCH v4 29/45] block: kmsan: skip bio block merging logic for KMSAN
 To:     Marco Elver <elver@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -84,8 +84,10 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         kasan-dev <kasan-dev@googlegroups.com>,
         Linux Memory Management List <linux-mm@kvack.org>,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -97,53 +99,42 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:17 PM Marco Elver <elver@google.com> wrote:
+On Wed, Jul 13, 2022 at 12:23 PM Marco Elver <elver@google.com> wrote:
 >
-
-> > +static void test_params(struct kunit *test)
-> > +{
-> > +#ifdef CONFIG_KMSAN_CHECK_PARAM_RETVAL
+> On Fri, Jul 01, 2022 at 04:22PM +0200, 'Alexander Potapenko' via kasan-de=
+v wrote:
+> [...]
+> > --- a/block/bio.c
+> > +++ b/block/bio.c
+> > @@ -867,6 +867,8 @@ static inline bool page_is_mergeable(const struct b=
+io_vec *bv,
+> >               return false;
+> >
+> >       *same_page =3D ((vec_end_addr & PAGE_MASK) =3D=3D page_addr);
+> > +     if (!*same_page && IS_ENABLED(CONFIG_KMSAN))
+> > +             return false;
+> >       if (*same_page)
+> >               return true;
 >
-> if (IS_ENABLED(...))
->
-Not sure this is valid C, given that EXPECTATION_UNINIT_VALUE_FN
-introduces a variable declaration.
-
-> > +       if (vbuf)
-> > +               vunmap(vbuf);
-> > +       for (i = 0; i < npages; i++)
->
-> add { }
+>         if (*same_page)
+>                 return true;
+>         else if (IS_ENABLED(CONFIG_KMSAN))
+>                 return false;
 >
 Done.
+> >       return (bv->bv_page + bv_end / PAGE_SIZE) =3D=3D (page + off / PA=
+GE_SIZE);
 
 
-> if (IS_ENABLED(CONFIG_KMSAN_CHECK_PARAM_RETVAL))
->
-Same as above.
 
-> > +static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
-> > +{
-> > +       if (!strcmp(tp->name, "console"))
-> > +               tracepoint_probe_unregister(tp, probe_console, NULL);
-> > +}
-> > +
-> > +/*
-> > + * We only want to do tracepoints setup and teardown once, therefore we have to
-> > + * customize the init and exit functions and cannot rely on kunit_test_suite().
-> > + */
->
-> This is no longer true. See a recent version of
-> mm/kfence/kfence_test.c which uses the new suite_init/exit.
+--=20
+Alexander Potapenko
+Software Engineer
 
-Done.
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-> > +late_initcall_sync(kmsan_test_init);
-> > +module_exit(kmsan_test_exit);
-> > +
-> > +MODULE_LICENSE("GPL v2");
->
-> A recent version of checkpatch should complain about this, wanting
-> only "GPL" instead of "GPL v2".
->
-Fixed.
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
