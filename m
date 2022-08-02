@@ -2,136 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510AC587A55
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 12:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1935C587BAD
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 13:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236483AbiHBKI0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Aug 2022 06:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50224 "EHLO
+        id S236511AbiHBLi1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Aug 2022 07:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236490AbiHBKIZ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 06:08:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A88530F55;
-        Tue,  2 Aug 2022 03:08:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S236546AbiHBLi0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 07:38:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC6C64AD7A
+        for <linux-arch@vger.kernel.org>; Tue,  2 Aug 2022 04:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1659440303;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aZR8bP/6vfFe2ZtFsHhxNrpc5QQ5iUzaeMIrD3s/QxI=;
+        b=SKW/vJd1L8Hhjf52ljIO6PKg/kJ2Lazw2C30SzVeKcSJD2ijDEV4M4bNrYMSjbi5Ijgruq
+        D1GUhLJrx2ZH1rrUXr5J3YHgiSAjHwNo0yWlHJKqmNrnZRpwwQv/e9IXH/4+Hr0SF0hqpA
+        vTdQ9D/x3eG/hTQRX2hpL9fuOxsV7h8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-43-KVXa-6jDOh-4-IuGat-U4A-1; Tue, 02 Aug 2022 07:38:19 -0400
+X-MC-Unique: KVXa-6jDOh-4-IuGat-U4A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A9B3B819EF;
-        Tue,  2 Aug 2022 10:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7382C433C1;
-        Tue,  2 Aug 2022 10:08:14 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A08283C01DFF;
+        Tue,  2 Aug 2022 11:38:18 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7870818EA8;
+        Tue,  2 Aug 2022 11:38:18 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 272BcI3l009514;
+        Tue, 2 Aug 2022 07:38:18 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 272BcHWP009510;
+        Tue, 2 Aug 2022 07:38:17 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Tue, 2 Aug 2022 07:38:17 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Will Deacon <will@kernel.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V7 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Tue,  2 Aug 2022 18:05:13 +0800
-Message-Id: <20220802100513.1303717-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220802100513.1303717-1-chenhuacai@loongson.cn>
-References: <20220802100513.1303717-1-chenhuacai@loongson.cn>
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] introduce test_bit_acquire and use it in
+ wait_on_bit
+In-Reply-To: <20220802084015.GB26962@willie-the-truck>
+Message-ID: <alpine.LRH.2.02.2208020726220.6971@file01.intranet.prod.int.rdu2.redhat.com>
+References: <CAMj1kXFYRNrP2k8yppgfdKg+CxWeYfHTbzLBuyBqJ9UVAR_vaQ@mail.gmail.com> <alpine.LRH.2.02.2207310920390.6506@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2207311104020.16444@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wiC_oidYZeMD7p0E-=TAuLgrNQ86-sB99=hRqFM8fVLDQ@mail.gmail.com> <alpine.LRH.2.02.2207311542280.21273@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2207311639360.21350@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wjA8HBrVqAqAetUvwNr=hcvhfnO7oMrOAd4V8bbSqokNA@mail.gmail.com> <alpine.LRH.2.02.2208010640260.22006@file01.intranet.prod.int.rdu2.redhat.com> <20220801155421.GB26280@willie-the-truck> <alpine.LRH.2.02.2208011206430.31960@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220802084015.GB26962@willie-the-truck>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
 
-To avoid the following build error on LoongArch we should include linux/
-static_key.h in page-flags.h.
+On Tue, 2 Aug 2022, Will Deacon wrote:
 
-In file included from ./include/linux/mmzone.h:22,
-from ./include/linux/gfp.h:6,
-from ./include/linux/mm.h:7,
-from arch/loongarch/kernel/asm-offsets.c:9:
-./include/linux/page-flags.h:208:1: warning: data definition has no
-type or storage class
-208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-./include/linux/page-flags.h:209:26: warning: parameter names (without
-types) in function declaration
-209 | hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-./include/linux/page-flags.h:213:16: error: implicit declaration of
-function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:213:36: error:
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-use in this function); did you mean
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-./include/linux/page-flags.h:213:36: note: each undeclared identifier
-is reported only once for each function it appears in
-./include/linux/page-flags.h:214:37: error:
-'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-214 | &hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| hugetlb_optimize_vmemmap_enabled
+> On Mon, Aug 01, 2022 at 12:12:47PM -0400, Mikulas Patocka wrote:
+> > On Mon, 1 Aug 2022, Will Deacon wrote:
+> > > On Mon, Aug 01, 2022 at 06:42:15AM -0400, Mikulas Patocka wrote:
+> > > 
+> > > > Index: linux-2.6/arch/x86/include/asm/bitops.h
+> > > > ===================================================================
+> > > > --- linux-2.6.orig/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > > +++ linux-2.6/arch/x86/include/asm/bitops.h	2022-08-01 12:27:43.000000000 +0200
+> > > > @@ -203,8 +203,10 @@ arch_test_and_change_bit(long nr, volati
+> > > >  
+> > > >  static __always_inline bool constant_test_bit(long nr, const volatile unsigned long *addr)
+> > > >  {
+> > > > -	return ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > > +	bool r = ((1UL << (nr & (BITS_PER_LONG-1))) &
+> > > >  		(addr[nr >> _BITOPS_LONG_SHIFT])) != 0;
+> > > > +	barrier();
+> > > > +	return r;
+> > > 
+> > > Hmm, I find it a bit weird to have a barrier() here given that 'addr' is
+> > > volatile and we don't need a barrier() like this in the definition of
+> > > READ_ONCE(), for example.
+> > 
+> > gcc doesn't reorder two volatile accesses, but it can reorder non-volatile
+> > accesses around volatile accesses.
+> > 
+> > The purpose of the compiler barrier is to make sure that the non-volatile 
+> > accesses that follow test_bit are not reordered by the compiler before the 
+> > volatile access to addr.
+> 
+> If we need these accesses to be ordered reliably, then we need a CPU barrier
+> and that will additionally prevent the compiler reordering. So I still don't
+> think we need the barrier() here.
 
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
+This is x86-specific code. x86 has strong memory ordering, so we only care 
+about compiler reordering.
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index cff781d92c81..de78c86a205c 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -49,6 +49,7 @@ config LOONGARCH
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
- 	select COMMON_CLK
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa3191d..28a53ac7aa3e 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
--- 
-2.31.1
+We could use smp_rmb() (or smp_load_acquire()) instead of barrier() here, 
+but smp_rmb() and smp_load_acquire() on x86 is identical to barrier() 
+anyway.
+
+Mikulas
 
