@@ -2,50 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24005876F1
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 08:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B9A5876F9
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 08:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiHBGDr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Aug 2022 02:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S232576AbiHBGJX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Aug 2022 02:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiHBGDq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 02:03:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5107C27CE4;
-        Mon,  1 Aug 2022 23:03:45 -0700 (PDT)
+        with ESMTP id S232447AbiHBGJW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 02:09:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B75BD100;
+        Mon,  1 Aug 2022 23:09:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B561D61298;
-        Tue,  2 Aug 2022 06:03:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C8AC433B5;
-        Tue,  2 Aug 2022 06:03:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46A12B8188E;
+        Tue,  2 Aug 2022 06:09:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6FA0C43140;
+        Tue,  2 Aug 2022 06:09:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659420224;
-        bh=qeYh9cQBoOkbdAHtdqnjh8k8Af2Ywy/TvdgrSgMCD5E=;
+        s=k20201202; t=1659420557;
+        bh=EtnTwiGnu4HXQ9Ajm3QFxagD2pw2qahfshy7dOh36ls=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tE0MoTcfFtIduOQj1oKi05WFgRndh8qZAs43PWH4pWFjKUebecCEceikWRXDt4wb3
-         QfX2767vQVxJ2F2ZygH+zXtxiOISYwX7pnhyhvSH0UjJdc7tTm3A+pOfDF6kHeE30p
-         7LFt+iX5+hBdPVPja/1+P8xdZR3GGevJFG8T9xD0G3epT5thrYOWhf900FH5FOx1aO
-         W742w0M+Ibml0/2keJz5BcgJHhVtp36TBPEEEiPbvYmqjgckaThFz3P303ZKw/CMgp
-         16j/0bqkQ+jtzDgxjeGGJhb4dk03zKpnsNYiQjsAp81jRneW1or+g5AwhtJHfstj/S
-         O/p/Q4XxDKyfg==
-Received: by mail-vk1-f170.google.com with SMTP id e3so4548445vkg.4;
-        Mon, 01 Aug 2022 23:03:44 -0700 (PDT)
-X-Gm-Message-State: AJIora+AzqcapjhpdBOr+fwIH+cXz2jrQTMmmrfgAT6kCdKwJN8MbQ3F
-        cBbFW+HTYf9GIohPTSromTTgIMhgaGn/f5ZcQh8=
-X-Google-Smtp-Source: AGRyM1vXaVAi55NVrpTrammO6b5ZOG99hTs2taAEfIv2SUTFNXcsTn3VfbdYcG4x2nG76/q7rZ9cmYXNn+xBqzVdtQg=
-X-Received: by 2002:a1f:aa8b:0:b0:376:e14b:c10e with SMTP id
- t133-20020a1faa8b000000b00376e14bc10emr6972720vke.19.1659420222979; Mon, 01
- Aug 2022 23:03:42 -0700 (PDT)
+        b=XuJv1FjJJhESBQNK/rbwjWz1hSf46Jyy/N98IPoFZuLePEz+Qbofv2pnjUlbj1RxB
+         jx3hcRpJWZUn6bwLgrBlwIfKYehV4s8uDDj66OFFO1EGVvByw1R8dZDRnnaGB/LEAN
+         n6WXmQZh7aj9GJ2hyc1i8TsUeajXrDV3QhGtk6u0kTE9Bm8rRxYXxXMnfkQg4VNB/p
+         hnfzSj8TI9vK+lqkqRsWjS64BHqmbCrQ9K5SZi08DRqcy9tYNkQMUu4jyqP8ktVVNS
+         3SXvDZK2vOpG7NQuVZmz04slz8m7Z8mYDs2SkR7kFuyNi7wdQYBsVqf1qfsreFLMh5
+         xhytxNTBPsnbQ==
+Received: by mail-vs1-f48.google.com with SMTP id j2so7035076vsp.1;
+        Mon, 01 Aug 2022 23:09:17 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3iMh4u41bf1aDJcuqst/bnzgr1RF7fZokR2fMKqe8HPuHFLqlI
+        cwaSkFaJuoeMgcklYe2E9fFQ6opAv06aH8IRkQM=
+X-Google-Smtp-Source: AA6agR6j61B+NJ3XBdxdJflIlHm8f5slQ+DzX3WG0PxUB1DsIcuiKtnbh3IMcK1OYrz/i6ueMTYs7kZf0FDxw8QgX74=
+X-Received: by 2002:a67:d487:0:b0:385:1a6b:6f33 with SMTP id
+ g7-20020a67d487000000b003851a6b6f33mr3002902vsj.59.1659420556640; Mon, 01 Aug
+ 2022 23:09:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220802053818.18051-1-zhangqing@loongson.cn> <20220802053818.18051-4-zhangqing@loongson.cn>
 In-Reply-To: <20220802053818.18051-4-zhangqing@loongson.cn>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 2 Aug 2022 14:03:28 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4qWTbjb45VNbA0is_2w1sgSW54kSngVhVpac5VehwoEg@mail.gmail.com>
-Message-ID: <CAAhV-H4qWTbjb45VNbA0is_2w1sgSW54kSngVhVpac5VehwoEg@mail.gmail.com>
+Date:   Tue, 2 Aug 2022 14:09:03 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7NLgM4zWkhsmMtx8uL1AwC28=YxFvQPo1LbppHHHHRtQ@mail.gmail.com>
+Message-ID: <CAAhV-H7NLgM4zWkhsmMtx8uL1AwC28=YxFvQPo1LbppHHHHRtQ@mail.gmail.com>
 Subject: Re: [PATCH v3 3/4] LoongArch: Add stacktrace support
 To:     Qing Zhang <zhangqing@loongson.cn>
 Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
@@ -67,16 +67,14 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 Hi, Qing,
 
-Though we had an offline discussion, I still think adding get_wchan()
-support is worthy. :)
-
-Huacai
-
 On Tue, Aug 2, 2022 at 1:38 PM Qing Zhang <zhangqing@loongson.cn> wrote:
 >
 > Use common arch_stack_walk infrastructure to avoid duplicated code and
 > avoid taking care of the stack storage and filtering.
 > Add sra (means __schedule return address) and scfa (means __schedule call
+I think you want to say sched_ra and sched_cfa here. :)
+
+Huacai
 > frame address) to thread_info and store it in switch_to().
 >
 > Now we can print the process stack by cat /proc/*/stack and can better
