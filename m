@@ -2,96 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE340588150
-	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 19:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E7A5882B6
+	for <lists+linux-arch@lfdr.de>; Tue,  2 Aug 2022 21:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiHBRsA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 2 Aug 2022 13:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S231523AbiHBTlA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 2 Aug 2022 15:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiHBRr7 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 13:47:59 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCBA13E34
-        for <linux-arch@vger.kernel.org>; Tue,  2 Aug 2022 10:47:58 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31f445bd486so148182527b3.13
-        for <linux-arch@vger.kernel.org>; Tue, 02 Aug 2022 10:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=CyPUbDaavl0pxtUchWqOoJ+rGYNrTSx7Qsh7yOX4nqk=;
-        b=Vi4b18H4ruvdsnsfKL+xHB8JIstAaWj9GfTkdEHEJfP6HGkV2K7VRqfDfHV17mNn9+
-         YfDABrmK4w3SaPqVBh5bXyQbe6x3QXHpoIU4WzT8xxgoUcS5ml2XHVtfsuJ2zqcQFhAd
-         J8s0AZuAHn9KYK0oFgegc6so4j9E30I7XfPuVoFbmhCmTQvId+u5/XCreKdsxSA5N46X
-         SzXnSQqra+iDjPn1Yh+9dDucGZnRiNvonatXvefk8NrHF+gnwxvG5okVRbt49+/VrHxu
-         aM9r26REYHwDUJwLqat8Mxrb/RWmuMfHajj/WVBheWk/3pUXKjHQbhf0W8qkPy+w2fDD
-         sXkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=CyPUbDaavl0pxtUchWqOoJ+rGYNrTSx7Qsh7yOX4nqk=;
-        b=GAv/deHAxyUU2u9widqLOZvbePMebv6HEkR3JmAyw/5t5J55gjAn1nan6NmmOYWJm1
-         euepw5qfM2VqvChFWn2wZ40GCwxEov3BGvBeOh1r2m3NphHR3CeKbMqm9NN+Nhv7ArSm
-         t3M/KuJgRylreB5KY0WbV+pSw8Cm34IYQA+0pyBnfmDPJNKhjVHkcJRTp/4eY5TdBF/a
-         U6teXGfOtz0gj5m9s7ASM3rrkV/6Em1MTQ68eQTFmvTuQzC+KMMRS3PN2Yyd/1HDHQ5w
-         x09R4oaCB8jXkv3Cw5w+LHhbAOj9k9jBpiPapAdK7nlaT+xLVcp23kK9csyNnF7kRvcF
-         z8Sw==
-X-Gm-Message-State: ACgBeo1lY3WqAA1NFjo/t+QR9xp2vRKxsTKbqe6OWzCGX17wKaMZG3WR
-        VyrcjMOJYWYpTcdAXAkI/hi+40KCIyeUP/zp7cRQqA==
-X-Google-Smtp-Source: AA6agR5ff/2YTaiH0o2yaXcd9Vb4iGB8rk5BtGV2WejE90cyd/4A41JUybbJAmYoeDw71I0Y93ZyFnAevmMFLK5vkyw=
-X-Received: by 2002:a81:5ca:0:b0:31f:38d6:f59f with SMTP id
- 193-20020a8105ca000000b0031f38d6f59fmr18721968ywf.324.1659462477479; Tue, 02
- Aug 2022 10:47:57 -0700 (PDT)
+        with ESMTP id S231317AbiHBTlA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 2 Aug 2022 15:41:00 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E76E474D5;
+        Tue,  2 Aug 2022 12:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1659469252;
+        bh=DaxnZzWlq8rdNZPIkNudbL/86e9yCrTsubkwK7be3mQ=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=GIBhC/ac30CYs9ql8nRJkGG7KZzm+AMbtwTMyBRfaeqnu/gkLSwLwOxojKAbyjQ37
+         8WU5+tu3/tlh920uL/fEmF9p+wLgX3+QwwQSB5VdKly69f+RNVJTnva8OYwGjA8+V/
+         SRr7yGGoTgnd2EbuM6rkIhRBNckHEgdT42Sz4spg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.166.88]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M5QJJ-1oJmZV0Dmn-001VLX; Tue, 02
+ Aug 2022 21:40:52 +0200
+Message-ID: <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
+Date:   Tue, 2 Aug 2022 21:40:50 +0200
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-30-glider@google.com>
- <Ys6c/JYJlQjIfZtH@elver.google.com>
-In-Reply-To: <Ys6c/JYJlQjIfZtH@elver.google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 2 Aug 2022 19:47:21 +0200
-Message-ID: <CAG_fn=V_0Jw_mKpj0P5-hUeCUZZzC2u1LCD8Nvp8FvCy_x=wqg@mail.gmail.com>
-Subject: Re: [PATCH v4 29/45] block: kmsan: skip bio block merging logic for KMSAN
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Eric Biggers <ebiggers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
+Content-Language: en-US
+To:     Josh Triplett <josh@joshtriplett.org>
+Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220801152016.36498-1-deller@gmx.de>
+ <YugGFEjJvIwzifq7@localhost>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <YugGFEjJvIwzifq7@localhost>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Provags-ID: V03:K1:FK3A4RrVucDG0RPGQTysWhv0Er6T1qGSn62a38i7ukOkyBGyDqg
+ Mx3hgk/RPivHxofiGJwZ0lF5izU8i8lHOnobDn4NVuolYJezQgc+vjLaOJJ8HZtZtkuUjjt
+ 40a+SJoJwdntr6wcuXz0Ny+pPxRvRxQzflIjAmKUDXTtFmczlY1V5fe4Jct/kY2BHi1K9mv
+ 4wZb//IVELfxXAlYwK9Dg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BzOzkgKJDko=:9X7pA8a8B6gL0F958q5xt8
+ x0WG2yaZLzToa9wORd2Jau6bh/68jdofWljMKuyxrvq2TZxRCvCUqC6qyQcSxFzXrhVZZGuTJ
+ 9+rgPLvY9xb3KxEJ32kOoeSaFMaelPFiRLmmlKvM5o1SbiDHS6mR4REtg4BPNIFoA9zrH6n4q
+ 9ZDF3H2DBEGIh0VEOaU+QQRqVM6deL4F0PCq8ej0womJKiXVPBXrJT6g9TAivE5g57a/AnSHt
+ 9UrY0Qg/9XeBoXVKH/WpTYtOY0GDn5wrfjD4YWLNji2oBxsQWZmQd5ADKADYE18dAp0FDaxU1
+ WzF2fXsZz3xQJfIkSU5HwQ4wQ9HEIZmT7NKdzyvoHnq/DhdxFxy8Jnwr/fnX6KJsf0iWTQz7m
+ hYqYh+YDiUxrcF4oqaagF1FtXOo2LGp7bDjwm9IpU4CvFRny+8fd8wcJCwyE1CGDpYyAcQrlX
+ EScqLBIQY0xMQrTrt/KWUJecF0axWtKNKYedi8hZ/FOShl7O//isWjvfp5RXrr7atF+9pda5F
+ Q8mm3XGHIzi/AqGYknOjdXjx3hfqH2dGodSLv4XA8z9Ahh83AFDBxhokPZDb5aRqz1ImAJocV
+ HfVYbVuGT45HojNLc6GGU9pkILKp0HvR1G2XRF3j9i3vn55pC+XUGGiyEZ78nA9qK3ppJ15EA
+ OMp/bIDkihf2eXtZD37Cp9L87YFYg4MRpLrV2Iel3tcgYXA031DEabh6zUKB/7h8h7RRoFE+6
+ xfMoMfdLfztt3ak0QzZczePvVhaQiqf1NC1qpC22M4+n+r8D3uHroLKOfd1R7sJaBIJilhrqO
+ +7UkOEISSjuE93VZ4Rd7YbfqTxllZijSZhvACVUgS8qiVrAHX5zxEgdWekGiflNVUTnSZfdtn
+ weEYRrWd6zYpiICGH0TXYKQDAQK8WVCfz9fTpM6vKX0faREftc8gKNrHlClKa5hFzsyUJefSd
+ d/gCpSKQ09uA7x+NMbZ+u5E/WTd2Y7IuNi6XwGADiThSw4DW1DSjf1sT2qIrTKAJisAkma+1H
+ oxJD9rtNv/M+ER2AqYkTILj9DwacojK2Zip1HD4oS4ZiGnX/T2NbJrWUc0/qo8iCN7r5HsdIE
+ bd5ycVUKMS161JCq/ncEVTu2At41BN7H0BXEne5bT4xdTeikIVoGE97PQ==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,42 +72,93 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 12:23 PM Marco Elver <elver@google.com> wrote:
+On 8/1/22 18:57, Josh Triplett wrote:
+> On Mon, Aug 01, 2022 at 05:20:13PM +0200, Helge Deller wrote:
+>> This patch series allows the arch-specific kernel fault handlers to dum=
+p
+>> in addition to the typical info (IP address, fault type, backtrace and =
+so on)
+>> the command line of the faulting process.
+>>
+>> The motivation for this patch is that it's sometimes quite hard to find=
+ out and
+>> annoying to not know which program *exactly* faulted when looking at th=
+e syslog.
+>>
+>> Some examples from the syslog are:
+>>
+>> On parisc:
+>>    do_page_fault() command=3D'cc1' type=3D15 address=3D0x00000000 in li=
+bc-2.33.so[f6abb000+184000]
+>>    CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #4=
+5
+>>    Hardware name: 9000/785/C8000
+>>
+>> -> We see the "cc1" compiler crashed, but it would be useful to know wh=
+ich file was compiled.
+>>
+>> With this patch series, the kernel now prints in addition:
+>>    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/=
+ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D=
+ NO_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-=
+9.0.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface =
+-quiet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -=
+Wimplicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13=
+413_0/ghc_5.s
+>>
+>> -> now we know that cc1 crashed while compiling some haskell code.
 >
-> On Fri, Jul 01, 2022 at 04:22PM +0200, 'Alexander Potapenko' via kasan-de=
-v wrote:
-> [...]
-> > --- a/block/bio.c
-> > +++ b/block/bio.c
-> > @@ -867,6 +867,8 @@ static inline bool page_is_mergeable(const struct b=
-io_vec *bv,
-> >               return false;
-> >
-> >       *same_page =3D ((vec_end_addr & PAGE_MASK) =3D=3D page_addr);
-> > +     if (!*same_page && IS_ENABLED(CONFIG_KMSAN))
-> > +             return false;
-> >       if (*same_page)
-> >               return true;
+> This does seem really useful for debugging.
+
+Yes.
+
+> However, it's also an information disclosure in various ways. The
+> arguments of a program are often more sensitive than the name, and logs
+> have a tendency to end up in various places, such as bug reports.
 >
->         if (*same_page)
->                 return true;
->         else if (IS_ENABLED(CONFIG_KMSAN))
->                 return false;
->
-Done.
-> >       return (bv->bv_page + bv_end / PAGE_SIZE) =3D=3D (page + off / PA=
-GE_SIZE);
+> An example of how this can be an issue:
+> - You receive an email or other message with a sensitive link to follow
+> - You open the link, which launches `firefox https://...`
+> - You continue browsing from that window
+> - Firefox crashes (and recovers and restarts, so you don't think
+>   anything of it)
+> - Later, you report a bug on a different piece of software, and the bug
+>   reporting process includes a copy of the kernel log
 
+Yes, that's a possible way how such information can leak.
 
+> I am *not* saying that we shouldn't do this; it seems quite helpful.
+> However, I think we need to arrange to treat this as sensitive
+> information, similar to kptr_restrict.
 
---=20
-Alexander Potapenko
-Software Engineer
+I wonder what the best solution could be.
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+A somewhat trivial solution is to combine it with the dmesg_restrict sysct=
+l, e.g.:
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+* When ``dmesg_restrict`` is set to 0 there are no restrictions for users =
+to read
+dmesg. In this case my patch would limit the information (based on example=
+ above):
+    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 [note: other pa=
+rameters hidden due to dmesg_restrict=3D0 sysctl]
+So it would show the full argv[0] with a hint that people would need to ch=
+ange dmesg_restrict.
+
+* When ``dmesg_restrict`` is set to 1, users must have ``CAP_SYSLOG`` to u=
+se dmesg(8)
+and the patch could output all parameters:
+     cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/c=
+cRkFSfY -imultilib . -imultiarch hppa-linux-gnu ....
+
+That would of course still leave few possible corner-cases where informati=
+on
+could leak, but since usually programs shouldn't crash and that
+people usually shouldn't put sensitive information into the parameter
+list directly, it's somewhat unlikely to happen.
+
+Another different solution would be to add another sysctl.
+
+Any other ideas?
+
+Helge
