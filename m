@@ -2,58 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1735588998
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Aug 2022 11:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBA5588AA3
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Aug 2022 12:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237505AbiHCJpE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Aug 2022 05:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S234515AbiHCKdL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Aug 2022 06:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237459AbiHCJo4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 05:44:56 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8763C16E
-        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 02:44:55 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-32269d60830so165937517b3.2
-        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 02:44:55 -0700 (PDT)
+        with ESMTP id S234501AbiHCKb2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 06:31:28 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1185732D9A
+        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 03:30:59 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 204so26503636yba.1
+        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 03:30:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc;
-        bh=Y5TvyICc8d9t41nnsu7puTvMuWTSp2+6bN2hR6XdoD8=;
-        b=FPrKKTFmIIrhXCK1a8bx0Gn0ZQdsswBQaJ6AcU4bdHhAv3FjPdWHeD6gFyulCFqoQf
-         8Ev6qu/iHol/CbvKBcjHgoIJRJzq3MUTFoZsXmwDMcsi+Qzb+ioohmiHkQMiO584Xqcm
-         3ufSvymy+GTp+Z/M7xxzl41Pr+8hzIqnNyWpVZwIQQnS8NGGru1KNkQquKQ9DH8ODztz
-         nLkMaxwXBlaAiLiX+04wqiuxR8hikX1dzbdwP4lQQX314JMeqfcI9MDPPXug+QfyppfG
-         a6grl/lOUGAxn6LNav8AW61Kc4S7JUpJqkDasX1rVL7l1cRykE+XrDWarl+uwQVvWPrv
-         xvlw==
+        bh=BnCISkt/rTW8As5S0Z1/CmUKmWtp6KufxVc54xAHFLs=;
+        b=bTMMrVHLEXsaZsPJ4ir9RlmOn/kRdosyeadx3rkmGXU4lflYbV46JM5DZksUMtzIVN
+         U/XEZSrcnqjbOBxVyOOXZVWlx0hp9Fu5nKxWv12BNG1XktevXZFB3m/Y6U7AR+1tVcE2
+         moSCPz5d5L9dbdRbJMQnG2/CX8KHw3/wr6ghKVtubKYXwknqG+9T92FwxaKne2npOKfO
+         fDB0cU62aoS1208GpKYOLg5LwYk5buP/sgF+RjfJpmGKtXJeAinS5Jzr3wLXQdoHpwkg
+         lGa+9i5+l/igcHME3dLynxA3WXk5TN5TBIaxPE4oeCTUDNBsXUUsFu1mf5QJV6HhkRE8
+         9BPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Y5TvyICc8d9t41nnsu7puTvMuWTSp2+6bN2hR6XdoD8=;
-        b=p07LFr85pbktp2elyJnJ+IL4UBCh8vremRqKcDiA9LcZ5G+CyqZ8Cnn8hp+cnjIRd2
-         1rJ0oFLa1X89xcrkpvx3jA1b9i3NaAcbnL1u65JgZQUsc8lTZjrgvM8e1l7pVzjoW6HH
-         rW6GiaHCE7slBRkHsnaWxIK3iAkjulTw9Ff7aCXdfFnTd6iv8rEofqPENXD6Z0euoIEQ
-         1Dnou2KLrEwhT1Uzwv9lVe5paZ3QPelAbA2o5hjYBp45XlhGyK+auk4JrBJCV/h80fAy
-         Pjzb7/iaABxKTWuc4+K2N3iInKYlRXTdy0lIkrmdnxemPMJL/LYqiGMc46TxDu/jZYSm
-         Lb6g==
-X-Gm-Message-State: ACgBeo2FyOL9M+0MZZCqRteHWbzc3jrDdh7F2Awgdli0x75BI6zD6rtp
-        HDub3sBMa6ZM39U+mDlnLcZh8B20uU8bBdDEmwvvmw==
-X-Google-Smtp-Source: AA6agR5d01Pm6wu3vbijZCaWwzO5G1sfm5AIHiHcJvlQ6r93IvYqNVc/zAhJ9di6/dSYm6ZI88xapY6TE2XXsAWQ/Ms=
-X-Received: by 2002:a0d:d40d:0:b0:322:d4c0:c6f6 with SMTP id
- w13-20020a0dd40d000000b00322d4c0c6f6mr23100302ywd.428.1659519894650; Wed, 03
- Aug 2022 02:44:54 -0700 (PDT)
+        bh=BnCISkt/rTW8As5S0Z1/CmUKmWtp6KufxVc54xAHFLs=;
+        b=p7czOAIBoEqaD1069aV0cdd40f0NARkmKLiBcVtwHlgkCgmn6t7EEkYS83bfhvHjSU
+         2eN0l7gzfYQEDhIk0b3IZ5nrEuHP3eLh2Y6eBAU8/jilOlEafoIPvK0htAGFSg93ZJ6Y
+         u/sY3pkUtMDzj47yjT5aaz0suTALgBHWFexsgJri32vIWkC7kIQ4PqV74EsFm/8GN07W
+         w6RMQL/qNMgf3icuHYfKfeCKbJk4qJlOFX31vilGEXm7Caa0NKL224v+55kdIZpuHQ9p
+         h658GVWt0fCgO7LfvXfe6m1mB26+rxs20Xx28dZVvfQhEMU54+9Hij8XeNxbMIbWSK5i
+         gL7Q==
+X-Gm-Message-State: ACgBeo385A5pLEXebpqqAN9CP0GYv7uA/ZnA+dQI6gFg0WHVvJALcxWq
+        O8+7tOTGWmdGIGktcjxwuM6FrHy/nj1H2YTBTYblfw==
+X-Google-Smtp-Source: AA6agR7fdKTqJ79i3lBMbE47XG4iizoPXTEVMh+XjGTeEPP0Bf+PZ8XOj+9lhkdsDhh+hXPLRsJykxdjz32sjCymNEA=
+X-Received: by 2002:a05:6902:1348:b0:671:78a4:471f with SMTP id
+ g8-20020a056902134800b0067178a4471fmr19280596ybu.242.1659522658125; Wed, 03
+ Aug 2022 03:30:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
- <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
-In-Reply-To: <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-15-glider@google.com>
+ <CANpmjNP8kmZYRsdpHCni33W-Yjgy-ajCAuTE94zwUniyYt7WQw@mail.gmail.com>
+In-Reply-To: <CANpmjNP8kmZYRsdpHCni33W-Yjgy-ajCAuTE94zwUniyYt7WQw@mail.gmail.com>
 From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 3 Aug 2022 11:44:18 +0200
-Message-ID: <CAG_fn=W2EUjS8AX1Odunq1==dV178s_-w3hQpyrFBr=Auo-Q-A@mail.gmail.com>
-Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
-To:     Marco Elver <elver@google.com>,
-        Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 3 Aug 2022 12:30:21 +0200
+Message-ID: <CAG_fn=X8zV2j9aPviz23UH8tsbRTqefGoZOCRgJeVtcivdhKVA@mail.gmail.com>
+Subject: Re: [PATCH v4 14/45] mm: kmsan: maintain KMSAN metadata for page operations
+To:     Marco Elver <elver@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -91,7 +90,7 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,77 +98,91 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-(+ Dan Williams)
-(resending with patch context included)
-
-On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
+On Tue, Jul 12, 2022 at 2:21 PM Marco Elver <elver@google.com> wrote:
 >
 > On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrot=
 e:
 > >
-> > KMSAN adds extra metadata fields to struct page, so it does not fit int=
-o
-> > 64 bytes anymore.
->
-> Does this somehow cause extra space being used in all kernel configs?
-> If not, it would be good to note this in the commit message.
->
-I actually couldn't verify this on QEMU, because the driver never got loade=
-d.
-Looks like this increases the amount of memory used by the nvdimm
-driver in all kernel configs that enable it (including those that
-don't use KMSAN), but I am not sure how much is that.
-
-Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
-
->
+> > Insert KMSAN hooks that make the necessary bookkeeping changes:
+> >  - poison page shadow and origins in alloc_pages()/free_page();
+> >  - clear page shadow and origins in clear_page(), copy_user_highpage();
+> >  - copy page metadata in copy_highpage(), wp_page_copy();
+> >  - handle vmap()/vunmap()/iounmap();
+> >
 > > Signed-off-by: Alexander Potapenko <glider@google.com>
->
-> Reviewed-by: Marco Elver <elver@google.com>
->
 > > ---
-> > Link: https://linux-review.googlesource.com/id/I353796acc6a850bfd7bb342=
-aa1b63e616fc614f1
+> > v2:
+> >  -- move page metadata hooks implementation here
+> >  -- remove call to kmsan_memblock_free_pages()
+> >
+> > v3:
+> >  -- use PAGE_SHIFT in kmsan_ioremap_page_range()
+> >
+> > v4:
+> >  -- change sizeof(type) to sizeof(*ptr)
+> >  -- replace occurrences of |var| with @var
+> >  -- swap mm: and kmsan: in the subject
+> >  -- drop __no_sanitize_memory from clear_page()
+> >
+> > Link: https://linux-review.googlesource.com/id/I6d4f53a0e7eab46fa29f034=
+8f3095d9f2e326850
 > > ---
-> >  drivers/nvdimm/nd.h       | 2 +-
-> >  drivers/nvdimm/pfn_devs.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >  arch/x86/include/asm/page_64.h |  12 ++++
+> >  arch/x86/mm/ioremap.c          |   3 +
+> >  include/linux/highmem.h        |   3 +
+> >  include/linux/kmsan.h          | 123 +++++++++++++++++++++++++++++++++
+> >  mm/internal.h                  |   6 ++
+> >  mm/kmsan/hooks.c               |  87 +++++++++++++++++++++++
+> >  mm/kmsan/shadow.c              | 114 ++++++++++++++++++++++++++++++
+> >  mm/memory.c                    |   2 +
+> >  mm/page_alloc.c                |  11 +++
+> >  mm/vmalloc.c                   |  20 +++++-
+> >  10 files changed, 379 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/drivers/nvdimm/nd.h b/drivers/nvdimm/nd.h
-> > index ec5219680092d..85ca5b4da3cf3 100644
-> > --- a/drivers/nvdimm/nd.h
-> > +++ b/drivers/nvdimm/nd.h
-> > @@ -652,7 +652,7 @@ void devm_namespace_disable(struct device *dev,
-> >                 struct nd_namespace_common *ndns);
-> >  #if IS_ENABLED(CONFIG_ND_CLAIM)
-> >  /* max struct page size independent of kernel config */
-> > -#define MAX_STRUCT_PAGE_SIZE 64
-> > +#define MAX_STRUCT_PAGE_SIZE 128
-> >  int nvdimm_setup_pfn(struct nd_pfn *nd_pfn, struct dev_pagemap *pgmap)=
-;
-> >  #else
-> >  static inline int nvdimm_setup_pfn(struct nd_pfn *nd_pfn,
-> > diff --git a/drivers/nvdimm/pfn_devs.c b/drivers/nvdimm/pfn_devs.c
-> > index 0e92ab4b32833..61af072ac98f9 100644
-> > --- a/drivers/nvdimm/pfn_devs.c
-> > +++ b/drivers/nvdimm/pfn_devs.c
-> > @@ -787,7 +787,7 @@ static int nd_pfn_init(struct nd_pfn *nd_pfn)
-> >                  * when populating the vmemmap. This *should* be equal =
-to
-> >                  * PMD_SIZE for most architectures.
-> >                  *
-> > -                * Also make sure size of struct page is less than 64. =
-We
-> > +                * Also make sure size of struct page is less than 128.=
- We
-> >                  * want to make sure we use large enough size here so t=
-hat
-> >                  * we don't have a dynamic reserve space depending on
-> >                  * struct page size. But we also want to make sure we n=
-otice
-> > --
-> > 2.37.0.rc0.161.g10f37bed90-goog
+> > diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page=
+_64.h
+> > index baa70451b8df5..227dd33eb4efb 100644
+> > --- a/arch/x86/include/asm/page_64.h
+> > +++ b/arch/x86/include/asm/page_64.h
+> > @@ -45,14 +45,26 @@ void clear_page_orig(void *page);
+> >  void clear_page_rep(void *page);
+> >  void clear_page_erms(void *page);
 > >
+> > +/* This is an assembly header, avoid including too much of kmsan.h */
+>
+> All of this code is under an "#ifndef __ASSEMBLY__" guard, does it matter=
+?
+Actually, the comment is a bit outdated. kmsan-checks.h doesn't
+introduce any unnecessary declarations and can be used here.
+
+> > +#ifdef CONFIG_KMSAN
+> > +void kmsan_unpoison_memory(const void *addr, size_t size);
+> > +#endif
+> >  static inline void clear_page(void *page)
+> >  {
+> > +#ifdef CONFIG_KMSAN
+> > +       /* alternative_call_2() changes @page. */
+> > +       void *page_copy =3D page;
+> > +#endif
+> >         alternative_call_2(clear_page_orig,
+> >                            clear_page_rep, X86_FEATURE_REP_GOOD,
+> >                            clear_page_erms, X86_FEATURE_ERMS,
+> >                            "=3DD" (page),
+> >                            "0" (page)
+> >                            : "cc", "memory", "rax", "rcx");
+> > +#ifdef CONFIG_KMSAN
+> > +       /* Clear KMSAN shadow for the pages that have it. */
+> > +       kmsan_unpoison_memory(page_copy, PAGE_SIZE);
+>
+> What happens if this is called before the alternative-call? Could this
+> (in the interest of simplicity) be moved above it? And if you used the
+> kmsan-checks.h header, it also doesn't need any "ifdef CONFIG_KMSAN"
+> anymore.
+
+Good idea, that'll work.
+
+> > +#endif
+> >  }
 
 
 
