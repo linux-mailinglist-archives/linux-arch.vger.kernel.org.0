@@ -2,57 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 949BF588918
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Aug 2022 11:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2989588991
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Aug 2022 11:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235785AbiHCJJa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Aug 2022 05:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S237470AbiHCJmZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Aug 2022 05:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235127AbiHCJJ3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 05:09:29 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5680C12762
-        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 02:09:28 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3238de26fb1so146495397b3.8
-        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 02:09:28 -0700 (PDT)
+        with ESMTP id S231898AbiHCJmY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 05:42:24 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE771CB11
+        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 02:42:23 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 123so27520895ybv.7
+        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 02:42:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tfepPGt63PhV/uLLZC6OjKAhHWfosw2a1cPbmZc1NF4=;
-        b=qQJ0HEUz0Pbo9PZQz9N+b7AVup9WJLyZy0+Q5/QhWDYTyMj94g5UCI9Sl2+SKxnEC6
-         q0Vz4F/ciqKXbjQ8uLh/bbAWYstkWGar/drjybpyqLweQqHPIPU2h6zEX4QxDiMoQh4G
-         RQmOzwWKw5eCKXcOwQ4ZXVMsBnaePjpl70J8vPMAlcToMnkK79ueRdoDxnJ1c+DhPw0x
-         XoOJqbdMHQrtXBWL755hMN2PByuXz4Vvz87BdFNYfGrr+xnNFrWQxWYgml8UxbxjQQRA
-         bCJZOhU17atQn2NXO00pt+IiWBBmqQP/USNMop41XuP4j8r6uvFNvxORE7BUz0Tg8AB2
-         30Tw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/5J/hTicAQKvIdTCsN8vIr3eGdVqz6oWNgR8PbCUFZ0=;
+        b=UW16xIvrWocqAhSPd2fuZKeM91zaflQgPYWDJgcud8Cri8Ym2URa03dCI1zYrFIezW
+         fICUhA0MZ7uec2/HuZSKY8g8uGB5q9N7Au4XQr5K6FFHmZ0hO8ktztxtkSHEE/vb6IJn
+         KEbgA906UOjZ2Rsii9K4/vyPRuud1tCOtgEnGKmFhWYZsrm+DJlhbb1l0W8029yPcEw/
+         8c52Bmse7AJhuI4irdCL1QGGKXLNRBxfMKaBMuCSsl1oJGfOPZbVh8tpZKDkfDCUULtN
+         JQPCee3tCjakxMT3yWiBiUPIVoXDmFby7RIPPsTaDJd+7IqvhfoTZn6FAP+2a7YrsBk5
+         gNYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tfepPGt63PhV/uLLZC6OjKAhHWfosw2a1cPbmZc1NF4=;
-        b=xVogZqOvSJgIC8q3cBG19Lt19fGxSXjmC/Dr7T0r/MCKY+cVVUiYuGonE/pHRANP2s
-         triO7Lu1Jdv1+juCCoLn0YGEzKG3dJnL/8Ivg2NWZ3eN42cz/w0tYUe2FefCpdJQQowO
-         YihLkpaXBCgEW4iH/0JJAj+4hgVALJMniiamsB3ej/ch9mjXpQlboW2yJFtXp+fNaSf4
-         TS7mYpp+TILZrZnLsetjJcutv1CsopewZbPDBIkAZmWiJ0AGkO1R3z36CMA6W567IpgZ
-         EX5+hI7xS/Vk58HsmXoBtCZalQPSikddaf1STZYgZK5mWoori2p4CgIexLu7tE5oz/YW
-         AFcw==
-X-Gm-Message-State: ACgBeo3OVc5WP2fnbW+TBHAkyCZ0EaTsDJzfZXopujf+B4WObNFQ89J6
-        My5nZ8bx6Cco2xkNZKJEqjxcCTKWUo9ZBXZ/kENS+g==
-X-Google-Smtp-Source: AA6agR7P7msRUAWuDn0gmK0kuhQJ6PG98FKKnSeaZAG+GDjiiVe0eSa1tcMloSt7cyCKEdKpooMdekL9jDDzo0/g3sk=
-X-Received: by 2002:a81:4892:0:b0:31f:9933:9cb with SMTP id
- v140-20020a814892000000b0031f993309cbmr23285753ywa.86.1659517767408; Wed, 03
- Aug 2022 02:09:27 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/5J/hTicAQKvIdTCsN8vIr3eGdVqz6oWNgR8PbCUFZ0=;
+        b=UwE7fAqdNcajwDsIN0MeC484SSn6e+q4XDfeF/MFGesOzrPiBr/9e9cTSuHG8DqYb4
+         PvJV64aoNe0fosFYkjQb7i2hUDF4vjvkrezAc/+O+ZYZy2/c/wam6bgv/7Tnshz90/9t
+         ePbGQ0COZi8euFJt5h4ZSJrpmcixw/IKB46tAyK6Mt0jkmnNeAkHghpx/U46v2XPFRoe
+         Yw94LBE4sFz7KtLljM5tkW4B61eJxSUvO3yUojzA1XQ955lTcVHhupx5WtGk3CBLtRyb
+         AMDB9j/tO0zmk+QaR2Gd459NZlQuHY2KvzD3Hn3rhMzg68LEDviDIWc1U6xWNo1my289
+         BWpQ==
+X-Gm-Message-State: ACgBeo2tDfFnyWALHePbWlHZ6sXdpJ2lGySmH5ZXAMsDM0L2NjegRTb0
+        poE0QQGeiYAxE8Imw3OsXvKDlN6XVpPDO/1nepuzkg==
+X-Google-Smtp-Source: AA6agR7WMDXiL70b6NLngI/XHKFbP2/r+w7WmXN1qYL7/w1ywK0n4OfWAmZKsLbnW7QxKw6oUWpd6k7KLsAW0q+NLBo=
+X-Received: by 2002:a25:d7d3:0:b0:671:899b:eafc with SMTP id
+ o202-20020a25d7d3000000b00671899beafcmr18510665ybg.485.1659519742790; Wed, 03
+ Aug 2022 02:42:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-18-glider@google.com>
- <CANpmjNNh0SP53s0kg_Lj2HUVnY_9k_grm==q4w6Bbq4hLmKtHA@mail.gmail.com> <CAG_fn=ViHiYCWj0jmm1R=gSX0880-rQ-CA3VaEjiLnGkDN1G4w@mail.gmail.com>
-In-Reply-To: <CAG_fn=ViHiYCWj0jmm1R=gSX0880-rQ-CA3VaEjiLnGkDN1G4w@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 3 Aug 2022 11:08:51 +0200
-Message-ID: <CANpmjNNSYgYHeA91QB8dU=_n73Ut3azY6EZT8cd6D-FcWZGw0w@mail.gmail.com>
-Subject: Re: [PATCH v4 17/45] init: kmsan: call KMSAN initialization routines
-To:     Alexander Potapenko <glider@google.com>
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-11-glider@google.com>
+ <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
+In-Reply-To: <CANpmjNOYqXSw5+Sxt0+=oOUQ1iQKVtEYHv20=sh_9nywxXUyWw@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 3 Aug 2022 11:41:46 +0200
+Message-ID: <CAG_fn=UToPvi8-1puuCS95o1V36MkAwFyQKFgp0AxBROcNgfKg@mail.gmail.com>
+Subject: Re: [PATCH v4 10/45] libnvdimm/pfn_dev: increase MAX_STRUCT_PAGE_SIZE
+To:     Marco Elver <elver@google.com>,
+        Dan Williams <dan.j.williams@intel.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Alexei Starovoitov <ast@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -97,26 +98,26 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 2 Aug 2022 at 22:08, Alexander Potapenko <glider@google.com> wrote:
->
-> On Tue, Jul 12, 2022 at 4:05 PM Marco Elver <elver@google.com> wrote:
-> >
->
-> > > +/**
-> > > + * kmsan_task_exit() - Notify KMSAN that a task has exited.
-> > > + * @task: task about to finish.
-> > > + */
-> > > +void kmsan_task_exit(struct task_struct *task);
-> >
-> > Something went wrong with patch shuffling here I think,
-> > kmsan_task_create + kmsan_task_exit decls are duplicated by this
-> > patch.
-> Right, I've messed it up. Will fix.
->
-> > > +
-> > > +struct page_pair {
-> >
-> > 'struct shadow_origin_pages' for a more descriptive name?
-> How about "metadata_page_pair"?
+(+ Dan Williams)
 
-Sure - this is local anyway, but page_pair was too generic.
+On Mon, Jul 11, 2022 at 6:27 PM Marco Elver <elver@google.com> wrote:
+>
+> On Fri, 1 Jul 2022 at 16:23, Alexander Potapenko <glider@google.com> wrote:
+> >
+> > KMSAN adds extra metadata fields to struct page, so it does not fit into
+> > 64 bytes anymore.
+>
+> Does this somehow cause extra space being used in all kernel configs?
+> If not, it would be good to note this in the commit message.
+
+I actually couldn't verify this on QEMU, because the driver never got loaded.
+Looks like this increases the amount of memory used by the nvdimm
+driver in all kernel configs that enable it (including those that
+don't use KMSAN), but I am not sure how much is that.
+
+Dan, do you know how bad increasing MAX_STRUCT_PAGE_SIZE can be?
+
+>
+> > Signed-off-by: Alexander Potapenko <glider@google.com>
+>
+> Reviewed-by: Marco Elver <elver@google.com>
