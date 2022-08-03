@@ -2,101 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62715588AAF
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Aug 2022 12:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6284D588AC8
+	for <lists+linux-arch@lfdr.de>; Wed,  3 Aug 2022 12:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiHCKjc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Aug 2022 06:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        id S234887AbiHCKxA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Aug 2022 06:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiHCKjb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 06:39:31 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9D1E0EF
-        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 03:39:30 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id x39so16208681lfu.7
-        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 03:39:30 -0700 (PDT)
+        with ESMTP id S234522AbiHCKw7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 06:52:59 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7FF1B79C
+        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 03:52:58 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-324293f1414so132679927b3.0
+        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 03:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc;
-        bh=9Q86IpDBWLEP7oSSTnvQ9orLNIQkjNwJszaZE/TDKss=;
-        b=JVHtIyYq3jeEkgoqpylqzvonldqjXqV0z38vf3CXW0vhvzqNewSMUA7l9AiNmyPQNX
-         Iwmtu5Y9VGvFardbh0JAbs9RXROpaO7/H26gPoAhfetCz/zg7dhn3qFRALiTgI2HZipo
-         d4HEqrJi4770nYfu0uOXIMnrobrdO2I99ATfBdk73lk+gYrV3liZgxdbVN7lLDD38HYp
-         va5C2MnWf9HQRjLlvFEK60AiZFaVj8rca5NWet0ZW8Xdg+15CuvZCAzB/FcVWla3s8Ef
-         SMYiJF+j3KAJfSmck2TZIH6IdXdCa/uLedPyk+t8pHRrG4IOZC2nkpibldoiT5MbqIMo
-         VGyw==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=LqDMaGMw0T+ovR4GLNrEVT1Q3GLoKKe4dcxLcnnMrZA=;
+        b=YKAJ6QXbZIhkT3Xmd6FWvDPkFho7Hjuv/Wh58jcWd+I9G2elpkGAgN4forWLLDQRy4
+         QPdPlGnQ5e5hlv3bEG8vZsrzYAtkMLhw75chtHIrnki8zO1lbRhWYL7hB4JbKCGwkUHa
+         8gGr8QlAfaY9Os415IOARJlFy7NJKZxjv7aicl0cobhRLd3POHojWXbJWf9EucirB+Ca
+         IL4700Mkm2XUSEH/yqV4fnafLcPE414CO9RDkAz1Wwv5aSJo4xEstCmnnz+PdTERyaTU
+         ksuehVQ/NWbNNtZwBmVJ6Q8pRB4gpeB9ijAqdYJAopGxK9geWEKNwQpT9zSrGk6Mdpsp
+         hPXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=9Q86IpDBWLEP7oSSTnvQ9orLNIQkjNwJszaZE/TDKss=;
-        b=0ryTw8rNHysXMvH75E4tpsJVBWGobRvx3jShPJjaivB617UIZLx+Q8GxDMiAlRARuw
-         c3mn1JAYPvDUuWkF5ZL9jy9CF9gFbSoqhRFiZUA4V5jcBAam8NAy1D/FeEiIEXl6kQB3
-         zo64q/bMCCSHkxWsVUIuwjmWW6Vmlsx7loRX9WCOdqmI1jYwzunnVMDdmvjwhZfR4NHr
-         QsFlpExhZqf25RKh/+m9M/Pl/QD1P+hNkZ9eJENdZAV+eJHSK91uei3X+xb18etDqMcC
-         QrA6Jg7RA+mqRl7TzkBuj9zsr0LwhRunxQ6+oAmJ2GWLj5TCDT7thDqCvA/fEVzTKTuB
-         WnqA==
-X-Gm-Message-State: ACgBeo2B/CPnZzU6I8O7F3hdI67+jEc8Va0QT0nEo9l3udzS1TwT4dON
-        ylr0xFiHBTZOzMwye5OihgJKCVoKxDMWr2WBpKU=
-X-Google-Smtp-Source: AA6agR40TisgFZndY4SAvA+BSx1WoUPmwri028yLGF/en1iJllpE7y74IyyZudQikNSafVesOsUsgq9cEkW8fuHJuZY=
-X-Received: by 2002:ac2:4c82:0:b0:48b:23:726b with SMTP id d2-20020ac24c82000000b0048b0023726bmr4016821lfl.24.1659523168941;
- Wed, 03 Aug 2022 03:39:28 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=LqDMaGMw0T+ovR4GLNrEVT1Q3GLoKKe4dcxLcnnMrZA=;
+        b=ix+FlW67Xs5+paOQBWPz4ZyRoiXnWs2CAnv+BtSht8vm/srnyN4yMHWY1peAUN0vFl
+         oi4nSdLryauE+VVjS5JGYnhJrRcu17kIyOYXFFEzpfYNwp5UMsRqPvnBlzYaCY9CJo8t
+         MnjlfKZItn1O4GtC5k7phyHt4pBk5MwcB+XFRsKn2TBsxgIJmIz2MUTf//2Dr1W6zWe/
+         bcQoPyEhZeqBM7Hx32iTSs6iavuKGuj9MCxHOBRXGHtYPp6OdL5TVnr78y+P5NfcTIBC
+         BTve/ubg+b2Lb6WJTZ0koQ1EOC6XP7SRLqDi/4T3D5JB8m+KQL0eV5MSAHKnxzSZrB4H
+         80xA==
+X-Gm-Message-State: ACgBeo3cwCId6JJ0yTsCRBM2UOjKf+iY1lVlRav+Nf/ZO3+1BwftOlxG
+        LxXuuiPgUP+Ko+M789YB58IbdDWvAZdWWhcXv1JuEw==
+X-Google-Smtp-Source: AA6agR5WAGq9D89DtPNI5QF8vsk8Az038NQPg4OdgRIxIEyXWMSOCAA7pV513VpmDmKIEks58MaUiTi/I61PQxYwaRU=
+X-Received: by 2002:a0d:c7c3:0:b0:31e:9622:c4f6 with SMTP id
+ j186-20020a0dc7c3000000b0031e9622c4f6mr22504287ywd.144.1659523978073; Wed, 03
+ Aug 2022 03:52:58 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ab3:6309:0:0:0:0:0 with HTTP; Wed, 3 Aug 2022 03:39:28 -0700 (PDT)
-Reply-To: OLSONFINANCIAL.DE@gmail.com
-From:   OLSON FINANCIAL GROUP <amadip120@gmail.com>
-Date:   Wed, 3 Aug 2022 03:39:28 -0700
-Message-ID: <CAHb0K2Epmik0znhGY4k5inV8Ucn=6X-J-DVM6Y+rHGrT3YqZhQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-34-glider@google.com>
+ <CANpmjNMpCow-pwqQnw8aHRUZKuBcOUU4On=JgEgysT8SBTrz6g@mail.gmail.com>
+In-Reply-To: <CANpmjNMpCow-pwqQnw8aHRUZKuBcOUU4On=JgEgysT8SBTrz6g@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 3 Aug 2022 12:52:21 +0200
+Message-ID: <CAG_fn=Xf_VTgYPk8Bnk2Kc9JCArnaRUO-kKFREh6rDpqC3t1eg@mail.gmail.com>
+Subject: Re: [PATCH v4 33/45] x86: kmsan: disable instrumentation of
+ unsupported code
+To:     Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:143 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [amadip120[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [amadip120[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Jul 12, 2022 at 3:44 PM Marco Elver <elver@google.com> wrote:
+>
+> On Fri, 1 Jul 2022 at 16:24, 'Alexander Potapenko' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+> [...]
+> > ---
+> >  arch/x86/boot/Makefile            | 1 +
+> >  arch/x86/boot/compressed/Makefile | 1 +
+> >  arch/x86/entry/vdso/Makefile      | 3 +++
+> >  arch/x86/kernel/Makefile          | 2 ++
+> >  arch/x86/kernel/cpu/Makefile      | 1 +
+> >  arch/x86/mm/Makefile              | 2 ++
+> >  arch/x86/realmode/rm/Makefile     | 1 +
+> >  lib/Makefile                      | 2 ++
+> [...]
+> > --- a/lib/Makefile
+> > +++ b/lib/Makefile
+> > @@ -272,6 +272,8 @@ obj-$(CONFIG_POLYNOMIAL) +=3D polynomial.o
+> >  CFLAGS_stackdepot.o +=3D -fno-builtin
+> >  obj-$(CONFIG_STACKDEPOT) +=3D stackdepot.o
+> >  KASAN_SANITIZE_stackdepot.o :=3D n
+> > +# In particular, instrumenting stackdepot.c with KMSAN will result in =
+infinite
+> > +# recursion.
+> >  KMSAN_SANITIZE_stackdepot.o :=3D n
+> >  KCOV_INSTRUMENT_stackdepot.o :=3D n
+>
+> This is generic code and not x86, should it have been in the earlier patc=
+h?
+Ack.
+
+
 --=20
-Hallo guten Morgen,
-Ben=C3=B6tigen Sie dringend einen Kredit f=C3=BCr den Hauskauf? oder ben=C3=
-=B6tigen
-Sie ein Gesch=C3=A4fts- oder Privatdarlehen, um zu investieren? ein neues
-Gesch=C3=A4ft er=C3=B6ffnen, Rechnungen bezahlen? Und zahlen Sie uns
-Installationen zur=C3=BCck? Wir sind ein zertifiziertes Finanzunternehmen.
-Wir bieten Privatpersonen und Unternehmen Kredite an. Wir bieten
-zuverl=C3=A4ssige Kredite zu einem sehr niedrigen Zinssatz von 2 %. F=C3=BC=
-r
-weitere Informationen
-mailen Sie uns an: olsonfinancial.de@gmail.com......
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
