@@ -2,182 +2,159 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A68589854
-	for <lists+linux-arch@lfdr.de>; Thu,  4 Aug 2022 09:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C837589902
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Aug 2022 10:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiHDH1t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 4 Aug 2022 03:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S239281AbiHDIJ7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 4 Aug 2022 04:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiHDH1s (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Aug 2022 03:27:48 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6430D22B05;
-        Thu,  4 Aug 2022 00:27:46 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Lz0br4pGXz19G3M;
-        Thu,  4 Aug 2022 15:24:40 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 4 Aug 2022 15:27:44 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 4 Aug
- 2022 15:27:43 +0800
-Message-ID: <5ee1dfb5-fa70-d412-43c2-3e90ee057eec@huawei.com>
-Date:   Thu, 4 Aug 2022 15:27:39 +0800
+        with ESMTP id S231777AbiHDIJ6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 4 Aug 2022 04:09:58 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB5461DA4;
+        Thu,  4 Aug 2022 01:09:56 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0AC4C5C01C1;
+        Thu,  4 Aug 2022 04:09:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 04 Aug 2022 04:09:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        joshtriplett.org; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1659600594; x=
+        1659686994; bh=dPVd4gV1h4qR91/25oTaDRGFw63vpCO4NGp4fr1eceQ=; b=L
+        4C5zAJ5GJihpjtPjr+i70KY92QwrHIPm60/rqiDBhOetsO8vTQnPJ4bmUi01qusM
+        xe6oKGQRb6tzXNU9Eh+wDY8OSRhNbOC41yLizM1+lP1TBWQqTq+UhBCCpxUdCX9+
+        /KYXLHBMNN7oNXWa/SCgRblPuBuC3UasqylTI+thLb4tKsPrGBZMA0WiE5fVICv4
+        RWOpPe5PEnTLmPVeuiOodoUShiU91jsbbIUtApJybz36jXo18kHkbm2LMI6DVvxd
+        nUDVvSHzUNj2TyW72hivREMsw5h5L7dFEkAOY27aX5+60n926wW6hC6JS/iirE1t
+        Tyfi+hVgnY8KWjIFez3vQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1659600594; x=1659686994; bh=dPVd4gV1h4qR91/25oTaDRGFw63v
+        pCO4NGp4fr1eceQ=; b=v7gNwiGp2euhBWd7JCNVz8DAbEteA3Y2KfleVSzfFU8b
+        WJDkdspIxWE0JuvNqaC/2UbWji8JAmopZOlTg7d8C6vdd2ym3GBFxzKhekK+WbAl
+        mxMa/BuZ3OMPLyzNktTnJHlAb4RDObzNBcHQWBypIdwfhuOpIXSM6sHBL1yANIe/
+        fztaH8IAA+zITURn37gLXKt93QYVE0YF1YDd3iFVmOkuTtEvp/8ooc8snBbuRUAZ
+        IH+4wLT2fF62lQbibdY3fF/N3NVzzNL2IINLrcBqUDELN7vdwczeKXGojNU2laES
+        //07+dWI2cIR1ejbxhJzVcfUqQTaf1N/JKWkyFL0oQ==
+X-ME-Sender: <xms:0X7rYsUD7RT-JtCYj0mEIGszbzNjwPLTJ_ZVx0CAd8sHvPrVqImMzw>
+    <xme:0X7rYgm133FVbNiY2v-EQ_5m92jX_pYiEBBV2FLO3XVdWo4eHuN5OoKP4oIv7JXfm
+    udo-fy7ntMoTZarWjI>
+X-ME-Received: <xmr:0X7rYgaDkiKErWlNj4j2qdUEc0Zb4NODb5gHvsDLq4uPJxdsNV7icGH8TEw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvddvkedgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeflohhs
+    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
+    cuggftrfgrthhtvghrnhepleeljeduiefguedtffejledttdehvdefhffhgfdvieelvddu
+    teefkeeuvdelhffhnecuffhomhgrihhnpeeffedrshhonecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhoshhhsehjohhshhhtrhhiphhlvght
+    thdrohhrgh
+X-ME-Proxy: <xmx:0X7rYrWZhJxJyP82-X2_eCJdO2kmZA00aguZJJ4XLxPvUUYJx-N17A>
+    <xmx:0X7rYmnUrau23hsiPMrZMEU83qhrJiVAKIm4jCjZ9KEQ-fRkkB31Lg>
+    <xmx:0X7rYgdjjKUIrevfOBnKTgGyyj4wi0HT9r7kwMCB3gn7jkIRLfdgdQ>
+    <xmx:0n7rYrylTb8OaFlub4CgFSZW64moEryMmfCOou0x9XcHtbAzeSV1BQ>
+Feedback-ID: i83e94755:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 4 Aug 2022 04:09:53 -0400 (EDT)
+Date:   Thu, 4 Aug 2022 01:09:52 -0700
+From:   Josh Triplett <josh@joshtriplett.org>
+To:     Helge Deller <deller@gmx.de>
+Cc:     linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Dump command line of faulting process to syslog
+Message-ID: <Yut+0Fg7F99MI48J@localhost>
+References: <20220801152016.36498-1-deller@gmx.de>
+ <YugGFEjJvIwzifq7@localhost>
+ <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] Revert "x86/unwind/orc: Don't skip the first frame for
- inactive tasks"
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        <linux-arch@vger.kernel.org>, <peterz@infradead.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>, <mbenes@suse.cz>
-References: <20220727031506.59322-1-chenzhongjin@huawei.com>
- <20220804045518.bfhe3rxhpkxzn4hk@treble>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220804045518.bfhe3rxhpkxzn4hk@treble>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0bf15a2-2f9c-5603-3adb-ffa705572a92@gmx.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Tue, Aug 02, 2022 at 09:40:50PM +0200, Helge Deller wrote:
+> On 8/1/22 18:57, Josh Triplett wrote:
+> > On Mon, Aug 01, 2022 at 05:20:13PM +0200, Helge Deller wrote:
+> >> This patch series allows the arch-specific kernel fault handlers to dump
+> >> in addition to the typical info (IP address, fault type, backtrace and so on)
+> >> the command line of the faulting process.
+> >>
+> >> The motivation for this patch is that it's sometimes quite hard to find out and
+> >> annoying to not know which program *exactly* faulted when looking at the syslog.
+> >>
+> >> Some examples from the syslog are:
+> >>
+> >> On parisc:
+> >>    do_page_fault() command='cc1' type=15 address=0x00000000 in libc-2.33.so[f6abb000+184000]
+> >>    CPU: 1 PID: 13472 Comm: cc1 Tainted: G            E     5.10.133+ #45
+> >>    Hardware name: 9000/785/C8000
+> >>
+> >> -> We see the "cc1" compiler crashed, but it would be useful to know which file was compiled.
+> >>
+> >> With this patch series, the kernel now prints in addition:
+> >>    cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu -D USE_MINIINTERPRETER -D NO_REGS -D _HPUX_SOURCE -D NOSMP -D THREADED_RTS -include /build/ghc/ghc-9.0.2/includes/dist-install/build/ghcversion.h -iquote compiler/GHC/Iface -quiet -dumpdir /tmp/ghc13413_0/ -dumpbase ghc_5.hc -dumpbase-ext .hc -O -Wimplicit -fno-PIC -fwrapv -fno-builtin -fno-strict-aliasing -o /tmp/ghc13413_0/ghc_5.s
+> >>
+> >> -> now we know that cc1 crashed while compiling some haskell code.
+> >
+> > This does seem really useful for debugging.
+> 
+> Yes.
+> 
+> > However, it's also an information disclosure in various ways. The
+> > arguments of a program are often more sensitive than the name, and logs
+> > have a tendency to end up in various places, such as bug reports.
+> >
+> > An example of how this can be an issue:
+> > - You receive an email or other message with a sensitive link to follow
+> > - You open the link, which launches `firefox https://...`
+> > - You continue browsing from that window
+> > - Firefox crashes (and recovers and restarts, so you don't think
+> >   anything of it)
+> > - Later, you report a bug on a different piece of software, and the bug
+> >   reporting process includes a copy of the kernel log
+> 
+> Yes, that's a possible way how such information can leak.
+> 
+> > I am *not* saying that we shouldn't do this; it seems quite helpful.
+> > However, I think we need to arrange to treat this as sensitive
+> > information, similar to kptr_restrict.
+> 
+> I wonder what the best solution could be.
+> 
+> A somewhat trivial solution is to combine it with the dmesg_restrict sysctl, e.g.:
+> 
+> * When ``dmesg_restrict`` is set to 0 there are no restrictions for users to read
+> dmesg. In this case my patch would limit the information (based on example above):
+>     cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 [note: other parameters hidden due to dmesg_restrict=0 sysctl]
+> So it would show the full argv[0] with a hint that people would need to change dmesg_restrict.
+> 
+> * When ``dmesg_restrict`` is set to 1, users must have ``CAP_SYSLOG`` to use dmesg(8)
+> and the patch could output all parameters:
+>      cc1[13472] cmdline: /usr/lib/gcc/hppa-linux-gnu/12/cc1 -quiet @/tmp/ccRkFSfY -imultilib . -imultiarch hppa-linux-gnu ....
+> 
+> That would of course still leave few possible corner-cases where information
+> could leak, but since usually programs shouldn't crash and that
+> people usually shouldn't put sensitive information into the parameter
+> list directly, it's somewhat unlikely to happen.
+> 
+> Another different solution would be to add another sysctl.
+> 
+> Any other ideas?
 
-On 2022/8/4 12:55, Josh Poimboeuf wrote:
-> On Wed, Jul 27, 2022 at 11:15:06AM +0800, Chen Zhongjin wrote:
->> This reverts commit f1d9a2abff66aa8156fbc1493abed468db63ea48.
->>
->> When CONFIG_GCOV_PROFILE_ALL is enabled, show_stack() and related
->> functions (e.g. dump_stack) will break for x86 ORC unwinder.
->>
->> Call Trace:
->>   <TASK>
->>   ? dump_stack_lvl+0x83/0xb7
->>   ? schedule+0x1/0x190
->>   ? dump_stack+0x13/0x1f
->>   ? handler_pre0+0x3f/0x53 [kp_unwind]
->>   ...
->>
->> show_trace_log_lvl() searches text address on stack to validate
->> whether unwind results are reliable. The code:
-> Hi,
->
-> Thanks for the patch.  The change itself makes sense, though I'm having
-> trouble recreating the bug described in the patch description.
->
-> I enabled CONFIG_GCOV_PROFILE_ALL and did 'echo l >
-> /proc/sysrq-trigger', but I got a valid stack trace:
->
->    # echo l > /proc/sysrq-trigger
->    [  343.916728] sysrq: Show backtrace of all active CPUs
->    [  343.917459] NMI backtrace for cpu 2
->    [  343.917884] CPU: 2 PID: 1007 Comm: bash Not tainted 5.19.0-rc8+ #68
->    [  343.918562] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-1.fc36 04/01/2014
->    [  343.919534] Call Trace:
->    [  343.919904]  <TASK>
->    [  343.920226]  dump_stack_lvl+0xcc/0x11b
->    [  343.920742]  dump_stack+0x17/0x24
->    [  343.921199]  nmi_cpu_backtrace.cold+0xb5/0x10d
->    [  343.921795]  ? lapic_can_unplug_cpu+0xa0/0xa0
->    [  343.922375]  nmi_trigger_cpumask_backtrace+0x171/0x200
->    [  343.923053]  arch_trigger_cpumask_backtrace+0x21/0x30
->    [  343.923599]  sysrq_handle_showallcpus+0x1f/0x30
->    [  343.924104]  __handle_sysrq.cold+0x81/0x234
->    [  343.924576]  write_sysrq_trigger+0x6a/0x90
->    [  343.925098]  proc_reg_write+0x99/0x120
->    [  343.925587]  vfs_write+0x16c/0x350
->    [  343.926093]  ksys_write+0x8c/0x180
->    [  343.926597]  __x64_sys_write+0x21/0x30
->    [  343.927144]  do_syscall_64+0x76/0x100
->    [  343.927676]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->    [  343.928343] RIP: 0033:0x7f555e8f7b50
->    [  343.928822] Code: 73 01 c3 48 8b 0d 38 83 2c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 79 db 2c 00 00 75 10 b8 01 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e e3 01 00 48 89 04 24
->    [  343.930801] RSP: 002b:00007ffdd20d0978 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
->    [  343.931761] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f555e8f7b50
->    [  343.932551] RDX: 0000000000000002 RSI: 000055ff471bfe20 RDI: 0000000000000001
->    [  343.933347] RBP: 000055ff471bfe20 R08: 00007f555ebc2740 R09: 00007f555f80f700
->    [  343.934155] R10: 0000000000000073 R11: 0000000000000246 R12: 0000000000000002
->    [  343.934962] R13: 0000000000000001 R14: 00007f555ebc15e0 R15: 00007f555ebbd3c0
->    [  343.935798]  </TASK>
->    [  343.936341] Sending NMI from CPU 2 to CPUs 0-1,3:
->    [  343.937163] NMI backtrace for cpu 3
->    [  343.937167] CPU: 3 PID: 600 Comm: systemd-journal Not tainted 5.19.0-rc8+ #68
->
-> Was this with an upstream kernel?  Can you share the config and
-> toolchain versions?
-Hi,
-
-My kernel is upstream and config is defconfig with only 
-CONFIG_GCOV_PROFILE_ALL=y then make menuconfig.
-
-CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0"
-
-And I got:
-
-[   29.745728] NMI backtrace for cpu 1
-[   29.745728] CPU: 1 PID: 135 Comm: sh Not tainted 
-5.19.0-02858-ge2b542100719 #58
-[   29.745728] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
-BIOS rel-1.15.0-0-g2dd4b9b3f8404
-[   29.745728] Call Trace:
-[   29.745728]  <TASK>
-[   29.745728]  ? dump_stack_lvl+0x72/0xa1
-[   29.745728]  ? dump_stack+0x13/0x1f
-[   29.745728]  ? nmi_cpu_backtrace+0x19f/0x1d0
-[   29.745728]  ? lapic_can_unplug_cpu+0xf0/0xf0
-[   29.745728]  ? nmi_trigger_cpumask_backtrace+0x15e/0x210
-[   29.745728]  ? arch_trigger_cpumask_backtrace+0x18/0x30
-[   29.745728]  ? sysrq_handle_showallcpus+0x16/0x30
-[   29.745728]  ? __handle_sysrq+0xc4/0x250
-[   29.745728]  ? write_sysrq_trigger+0x46/0x60
-[   29.745728]  ? proc_reg_write+0xbc/0x120
-[   29.745728]  ? preempt_count_add+0x8e/0x130
-[   29.745728]  ? vfs_write+0xfe/0x460
-[   29.745728]  ? ksys_write+0xdc/0x170
-[   29.745728]  ? fpregs_assert_state_consistent+0x2d/0x90
-[   29.745728]  ? __x64_sys_write+0x19/0x30
-[   29.745728]  ? do_syscall_64+0x3a/0x90
-[   29.745728]  ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   29.745728]  </TASK>
-
-
-It also happened with CONFIG_CC_VERSION_TEXT="gcc-8 (Ubuntu 
-8.4.0-1ubuntu1~18.04) 8.4.0".
-
-I believe disassemble show_stack in vmlinux and if we have:
-
-     push   %rbp
-
-     mov    %rsp,%rbp
-
-     ... (no regs pushed to stack)
-
-     callq  <show_trace_log_lvl>
-
-This can be reproduced.
-
-Your stacktrace looks just as normal as the one in my commit message 
-(show_stack is optimized out).
-
-
-Best,
-
-Chen
-
-
-
+I don't think we should overload the meaning of dmesg_restrict. But
+overloading kptr_restrict seems reasonable to me. (Including respecting
+kptr_restrict==2 by not showing this at all.)
