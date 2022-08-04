@@ -2,94 +2,68 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D59E589216
-	for <lists+linux-arch@lfdr.de>; Wed,  3 Aug 2022 20:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2810E589563
+	for <lists+linux-arch@lfdr.de>; Thu,  4 Aug 2022 02:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235127AbiHCSPL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 3 Aug 2022 14:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S238678AbiHDAkG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 3 Aug 2022 20:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbiHCSPK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 14:15:10 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8044E60F
-        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 11:15:09 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 21so6932631ybf.4
-        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 11:15:09 -0700 (PDT)
+        with ESMTP id S236105AbiHDAkF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 3 Aug 2022 20:40:05 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7229C5C358
+        for <linux-arch@vger.kernel.org>; Wed,  3 Aug 2022 17:40:03 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so3927099pjl.0
+        for <linux-arch@vger.kernel.org>; Wed, 03 Aug 2022 17:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=y92UH4xk+JPW8aVK6dnuw9Im2HL19mMdvEh4kg2bK0g=;
-        b=sRaUcFSt01Ks/YKwz49XSN4/OQvEBUtHn7sYd8Oa0W+RPqKMQsv/ah+4XJrjoNKK3V
-         4j2I7Tajo+oVO9Q5WTtI1QuoXeODixWCLa23b1InrLOJyPU02L4/Yr/tENmLzArPe26j
-         DK/m40vsysHm36fjz9hf0ijAdwjkgSVHSYPSPrwNgUOUiUdSCi/oAaZBdDTnc3g9xuGq
-         839WQoZ4HI7Kmwe7vY647SSHzsYhD5fTboEBRfpWYIj7aavapmuws2kEMYFnX6Lr5mN0
-         kUnF3AqZajcHFLMKTBSEskpbdf3rLx6io9gRFy6nwuHCHATyl7jADUHe9UMBgC+VpADx
-         mzHA==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc;
+        bh=jvKWTVIxcauh9PFk41tQ+LyMLwxAATFaP9MhP7PSwT8=;
+        b=bYgsxccATxr5gR70WihR7eSZ+FddLWnPtqWukNcii1SubcxY9or8IkShvtxnkxFPWL
+         jsyFc5+7CD5VErCGJZg/Ayjp51iFzoOaL43FTkZtSP99CX/5h6/370/w9+uEdSQHv2lC
+         ZVXmAQ1Ez9olfEoxq/FlnbA4wAvW6ItqIXqVNuYuRDtKy1MXlbYUvrFtFjkdA9WlwGEB
+         CnKQOO8MxsHAKeUJm8nFfK3GFkoRbiRL1ZBmQ6x+mqNtAxiRmvz2pR+PTiBlX6Kz7Aay
+         XGZaUkHqeBCF2GK/YKsR6uFlpySA0VAVCepBbobvJuEbs5EdBfFg8UyUfR14qhz+B382
+         OzyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=y92UH4xk+JPW8aVK6dnuw9Im2HL19mMdvEh4kg2bK0g=;
-        b=kX8WZpMzSlX8f9p+iOBqjAdePunayl22xgwWfnwPU5aPZNT4jaBLMnjoFNwDgLyc7L
-         DJXKFJuRGRHZwhoUh0sZu6zCxUpCpQJAFVvuSA9E1/Vai5JkBZmGltUZ67S7z1STqKUs
-         8B6aWgSPFWjRdBbtKt2kVbywv/P3uMktcvcc1jYqTKKVrYcp5W3gB0NB5BeOuz09F5l6
-         o6WZ1M2zZGOujrkXdpwBalRDdLWnqyIfEZMOvW5qoPeXcwc8EjkVs1UXI5wYNuiMmXqH
-         o7SzBLi0ENNF0PtuFNSTi2LqhVbyWry3EwJ6gkKZfxsTupxrNr8f4xFy8MJX8fIVlVND
-         DL4Q==
-X-Gm-Message-State: ACgBeo3yvripGoh1o8G7yqttpWa3AXSqLO/lCgj+MB1ivdz1uiXOfV/X
-        mc9gShlCSZCAUh9GHlKt1oL0qpC5kfi4ax/c7iAVNA==
-X-Google-Smtp-Source: AA6agR7w1Awhe+owXzXOZf/Iib4idl+Q2nTlhXV4EvXq+vsWRav1PlQBwpamgAi8i+PhP+JOsEl+kLahLKT5WDsOYvk=
-X-Received: by 2002:a5b:982:0:b0:63e:7d7e:e2f2 with SMTP id
- c2-20020a5b0982000000b0063e7d7ee2f2mr20837859ybq.549.1659550508989; Wed, 03
- Aug 2022 11:15:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-12-glider@google.com>
- <CANpmjNMrEdNdsz6rxkrpiJNREB+GSkx4B=LwPLWYmwVhdjVA4g@mail.gmail.com>
-In-Reply-To: <CANpmjNMrEdNdsz6rxkrpiJNREB+GSkx4B=LwPLWYmwVhdjVA4g@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Wed, 3 Aug 2022 20:14:31 +0200
-Message-ID: <CAG_fn=UZ9MLLu9zos2Daba+DB__HidgYRT-27CxB2PwV_t=KnQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/45] kmsan: add KMSAN runtime core
-To:     Marco Elver <elver@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
+        bh=jvKWTVIxcauh9PFk41tQ+LyMLwxAATFaP9MhP7PSwT8=;
+        b=BzHs8g6SbrjGv9ksj5Quf0WdlkEVN0f2WLvVWGFvUsEoxH3X5bSA5YlO/iRDimiG7O
+         o4VB9URBVJjE0To2s5Zj9z2sB7sWU8mXk/y3pV3j28bmt2XJ+fS7cWE4Y3sUGUf47T3a
+         q1l/gEc38AwVjIhSz22vVxoyw4Aki/9NSaYsweKSfYACQBJDfeqgLQkrpZh6FozPZu/s
+         4E8MHvfe9r2Oj3Zx9XVM2XU6989uUc/ynzX5725fw/TYswgVdQrEwb+dKg41ybaK6HGA
+         evjFC3RMowPRF86ivgVSiRId5wAk7o8T3539Wp4/ZISdEAGUjJLosJRRS9rE7MJdg9YG
+         gqlg==
+X-Gm-Message-State: ACgBeo2WyvA/uWH0I3NkFMU+k5ti/b3mR1WW4zNeSwe8kKjvYVr+M3t6
+        DrX89EM3YYwIuFQ4U7vpQk5I6g==
+X-Google-Smtp-Source: AA6agR7qe/jIK8QLsJ/+BcJEqvmad1YhMJZyrA8YpWoICly0GeGVlRrQWb5n9vnPqpMYWzFm9R3/tg==
+X-Received: by 2002:a17:902:e750:b0:16f:3f32:6f5c with SMTP id p16-20020a170902e75000b0016f3f326f5cmr459502plf.106.1659573602844;
+        Wed, 03 Aug 2022 17:40:02 -0700 (PDT)
+Received: from localhost ([50.221.140.186])
+        by smtp.gmail.com with ESMTPSA id a5-20020a170902710500b0016d987d7f76sm2538265pll.11.2022.08.03.17.40.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Aug 2022 17:40:02 -0700 (PDT)
+Date:   Wed, 03 Aug 2022 17:40:02 -0700 (PDT)
+X-Google-Original-Date: Wed, 03 Aug 2022 17:40:00 PDT (-0700)
+Subject:     Re: [PATCH] uapi: Fixup strace compile error
+In-Reply-To: <20220613142947.GA4110@lst.de>
+CC:     guoren@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux@roeck-us.net, heiko@sntech.de,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com,
+        esyr@redhat.com, Christoph Hellwig <hch@lst.de>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Christoph Hellwig <hch@lst.de>
+Message-ID: <mhng-f091aa29-2a87-4d82-9bab-f35533de7161@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,11 +71,16 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-"
-> > +struct page;
->
-> Either I'm not looking hard enough, but I can't see where this is used
-> in this file.
+On Mon, 13 Jun 2022 07:29:47 PDT (-0700), Christoph Hellwig wrote:
+> The change looks fine, but the commit log could use some work, please
+> move the notes from the back to the front and make them a standalone
+> commit log and just drop the rest.
 
-You are right, this declaration should belong to "init: kmsan: call
-KMSAN initialization routines". I'll move it accordingly.
+I'm digging through old stuff and don't see a v2, not sure if I just 
+missed it.  Either way I don't think it's really a RISC-V thing so
+
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+
+in case that helps.
+
+Thanks!
