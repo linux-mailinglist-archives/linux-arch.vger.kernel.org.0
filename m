@@ -2,729 +2,172 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D6458ABC9
-	for <lists+linux-arch@lfdr.de>; Fri,  5 Aug 2022 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F231458AEEB
+	for <lists+linux-arch@lfdr.de>; Fri,  5 Aug 2022 19:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236932AbiHENpq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 5 Aug 2022 09:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54960 "EHLO
+        id S236448AbiHERaT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 5 Aug 2022 13:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbiHENpo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Aug 2022 09:45:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4031D4B0C2;
-        Fri,  5 Aug 2022 06:45:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C220D60C08;
-        Fri,  5 Aug 2022 13:45:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148F6C433B5;
-        Fri,  5 Aug 2022 13:45:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659707140;
-        bh=6uf4gFBt4Dvh6aZzkN39qoIwuldY7VIMXvwTlGtxOGs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YpW5wU1o6kNQqoPPn6bCYNYBjDsyt/T9HEKdMAGHpH1Q/G1lVQUI7RU/0mzg4LHoG
-         OhUYTy0Kw65jI8pvzF1ZMsCJI8LPFc2ANAt7H5mQ4uXs4fBusTVmg0eS2/gK+sjNNP
-         XXV6a3lz97UeuktoFGz06etXrAD4EnAVnoJCPia0zU/G4HmsRXqdkRMSP5KthLUCHS
-         c7p8Fc/g2B4CuQaBRe42FklurBc8ubxJISzTaUzxibQc0qhY+LkkaqGH/BR8QrSuDA
-         4ztXb7H8qWfqZGqwBG5f3qHXMYcz88WXqMJxJjB+sXAR1u+kf9amf4LYkSZZneinTg
-         BSQgoiGrNt2cg==
-Received: by mail-vk1-f180.google.com with SMTP id b81so1269517vkf.1;
-        Fri, 05 Aug 2022 06:45:40 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3HNHP2N5n3DTsXHyN5499sNOHJ9ccsXfSut9wfw4xWpk7BKY8Z
-        KW6k9TuyN4rRdcXo2pfGik7NUZQVdPEbxs2W/CE=
-X-Google-Smtp-Source: AA6agR7XGJXGI2EzlYhtXm2c23lmTIcYNW9rmeRzd9TrOMTc80W8dj6vi5rdsMjaA+8tvSFUa7BLcawwuwcbNngQp5M=
-X-Received: by 2002:a1f:9b90:0:b0:374:f09c:876f with SMTP id
- d138-20020a1f9b90000000b00374f09c876fmr3007501vke.12.1659707138750; Fri, 05
- Aug 2022 06:45:38 -0700 (PDT)
+        with ESMTP id S241168AbiHERaO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 5 Aug 2022 13:30:14 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEEF3A2
+        for <linux-arch@vger.kernel.org>; Fri,  5 Aug 2022 10:30:12 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id b96so4311103edf.0
+        for <linux-arch@vger.kernel.org>; Fri, 05 Aug 2022 10:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ONebu+4QLRptJ6A+Ou0an3ofnAwu546ZMSAcmQOzkVY=;
+        b=IWmWAJxYsy3IA4Cg/AofIaZIQu5z2QPcTD8IKLllL/eWUVmIqjemQRBI8751Gav7zj
+         eEKQzkAkZK6Gehr3Ikl7Y7fdWkSSAgArdgJVV3ae7bL7M5nvXGvUQ5GYGjlAI7xgGz/s
+         kI4jX93SFRIST1Y8CKlfAGLpScBIaYeX43zm0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ONebu+4QLRptJ6A+Ou0an3ofnAwu546ZMSAcmQOzkVY=;
+        b=tvFFfAmy/oKmscNOjr+48iuiLDMpkcqwC9qbeyUxlUdXSPhcSTqmQYO5iqKeNhoZBu
+         ke/Tidv3rICmIaPyPzRv9MV21aq8XhltUIPdi0o9RgJpLT3BAvK0yiQZpUEdzh//6gya
+         cfuyHXqYuft2f7mW9KCdr4A68guHJB/R5AOfQlJwEynmW1lxgocLkcCNmUCYcg14VixE
+         N6ftaQWmALGDuBJdDfR11t+5P9CsZeASY6UkKaCxbNP8o1vOVZAgTyUPqy9RFb9WpHMQ
+         Osg1qgN1FXQqf+Twvxyri2G+8fD85bJtgt9VN5j14sf3o48Ca1Il9m7nWqjZzyVhZM3J
+         XqDg==
+X-Gm-Message-State: ACgBeo1IFE/e6XDT8k/lN0KjikJa54L/cjj/k4yxq0cGfFgQ2pKAmHJ4
+        7kCSeFJwRg8tH0X+5mGZmm/9zhhaWPS3EVho
+X-Google-Smtp-Source: AA6agR4npC5rgKI8Iv+qHOJ3daB7tK5IeRZWF/NG1BNWJdA/7MCSsQT2g84wbNObDhklQp30PDKAKg==
+X-Received: by 2002:a05:6402:1389:b0:43a:ceea:93fd with SMTP id b9-20020a056402138900b0043aceea93fdmr7524223edv.64.1659720610685;
+        Fri, 05 Aug 2022 10:30:10 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id h14-20020a50ed8e000000b0043a2b8ab377sm177245edr.88.2022.08.05.10.30.09
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Aug 2022 10:30:10 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id z12so3948280wrs.9
+        for <linux-arch@vger.kernel.org>; Fri, 05 Aug 2022 10:30:09 -0700 (PDT)
+X-Received: by 2002:a5d:64c1:0:b0:220:8590:3809 with SMTP id
+ f1-20020a5d64c1000000b0022085903809mr5008022wri.97.1659720609554; Fri, 05 Aug
+ 2022 10:30:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220617145754.582056-1-chenhuacai@loongson.cn>
-In-Reply-To: <20220617145754.582056-1-chenhuacai@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 5 Aug 2022 21:45:23 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7N7-XH79=N5tTtphZ_EHygPSANjHcBTZ37zWSd2sy7AA@mail.gmail.com>
-Message-ID: <CAAhV-H7N7-XH79=N5tTtphZ_EHygPSANjHcBTZ37zWSd2sy7AA@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add efistub booting support
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi <linux-efi@vger.kernel.org>
+References: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
+In-Reply-To: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 5 Aug 2022 10:29:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
+Message-ID: <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
+Subject: Re: [GIT PULL] asm-generic: updates for 6.0
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Ard,
+On Fri, Aug 5, 2022 at 3:25 AM Arnd Bergmann <arnd@kernel.org> wrote:
+>
+>  - A patch from Sebastian Siewior to rework the handling of
+>    IRQ stacks in softirqs across architectures, which is
+>    needed for enabling PREEMPT_RT.
 
-Friendly ping: is there anything remaining for this patch to get
-mainlined in this cycle?
+I am quite fed up with the chaos and garbage that PREEMPT_RT has
+caused this release.
 
-Huacai
+Once again, this pull request contains senseless code because of a
+PREEMPT_RT patch that was merged based on some bogus "the RT code
+needs this".
 
+First off, the RT code isn't currently enabled in upstream kernels, so
+none of this merits any kind of big hurry and mindless "need to apply
+because it's a bug".
 
+Secondly, that patch is HORRENDOUSLY UGLY.
 
-Huacai
+I hereby ask every single maintainer to immediately stop taking these
+bogus patches that contain variations on random
 
-On Fri, Jun 17, 2022 at 10:56 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
->
-> This patch adds efistub booting support, which is the standard UEFI boot
-> protocol for us to use.
->
-> We use generic efistub, which means we can pass boot information (i.e.,
-> system table, memory map, kernel command line, initrd) via a light FDT
-> and drop a lot of non-standard code.
->
-> We use a flat mapping to map the efi runtime in the kernel's address
-> space. In efi, VA = PA; in kernel, VA = PA + PAGE_OFFSET. As a result,
-> flat mapping is not identity mapping, SetVirtualAddressMap() is still
-> needed for the efi runtime.
->
-> Currently, generic efistub doesn't support mapping efi runtime in the
-> kernel. So we set efi_novamap to not call SetVirtualAddressMap() in the
-> stub. Instead, we call it in the core kernel. This also makes the raw
-> elf kernel booting be possible, which is needed by non-UEFI firmware
-> (e.g., PMON which is widely used by Loongson for historic reasons).
->
-> Then how the elf kernel and the efi kernel co-exist? When building, the
-> raw vmlinux is naturally in elf format, the efi kernel is generated from
-> vmlinux by objcopy via removing the elf header.
->
-> Note: The magic number in MSDOS header is used by Grub [1], which is the
-> same as RISC-V and ARM64.
->
-> [1] https://lists.gnu.org/archive/html/grub-devel/2021-10/msg00215.html
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  arch/loongarch/Kconfig                        |   9 ++
->  arch/loongarch/Makefile                       |   5 +
->  arch/loongarch/boot/Makefile                  |   4 +
->  arch/loongarch/kernel/efi-header.S            | 101 ++++++++++++++
->  arch/loongarch/kernel/efi.c                   | 126 +++++++++++++++++-
->  arch/loongarch/kernel/head.S                  |  26 ++++
->  arch/loongarch/kernel/image-vars.h            |  29 ++++
->  arch/loongarch/kernel/vmlinux.lds.S           |   1 +
->  drivers/firmware/efi/Kconfig                  |   2 +-
->  drivers/firmware/efi/libstub/Makefile         |  10 ++
->  .../firmware/efi/libstub/efi-stub-helper.c    |   2 +-
->  drivers/firmware/efi/libstub/efi-stub.c       |   4 +-
->  drivers/firmware/efi/libstub/loongarch-stub.c |  88 ++++++++++++
->  include/linux/efi.h                           |   1 +
->  include/linux/pe.h                            |   2 +
->  15 files changed, 405 insertions(+), 5 deletions(-)
->  create mode 100644 arch/loongarch/kernel/efi-header.S
->  create mode 100644 arch/loongarch/kernel/image-vars.h
->  create mode 100644 drivers/firmware/efi/libstub/loongarch-stub.c
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 1ec220df751d..faee7fa4c004 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -305,6 +305,15 @@ config EFI
->           This enables the kernel to use EFI runtime services that are
->           available (such as the EFI variable services).
->
-> +config EFI_STUB
-> +       bool "EFI boot stub support"
-> +       default y
-> +       depends on EFI
-> +       select EFI_GENERIC_STUB
-> +       help
-> +         This kernel feature allows the kernel to be loaded directly by
-> +         EFI firmware without the use of a bootloader.
-> +
->  config SMP
->         bool "Multi-Processing support"
->         help
-> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> index fbe4277e6404..c1bda54893ec 100644
-> --- a/arch/loongarch/Makefile
-> +++ b/arch/loongarch/Makefile
-> @@ -7,7 +7,11 @@ boot   := arch/loongarch/boot
->
->  KBUILD_DEFCONFIG := loongson3_defconfig
->
-> +ifndef CONFIG_EFI_STUB
->  KBUILD_IMAGE   = $(boot)/vmlinux
-> +else
-> +KBUILD_IMAGE   = $(boot)/vmlinux.efi
-> +endif
->
->  #
->  # Select the object file format to substitute into the linker script.
-> @@ -73,6 +77,7 @@ endif
->  head-y := arch/loongarch/kernel/head.o
->
->  libs-y += arch/loongarch/lib/
-> +libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
->
->  ifeq ($(KBUILD_EXTMOD),)
->  prepare: vdso_prepare
-> diff --git a/arch/loongarch/boot/Makefile b/arch/loongarch/boot/Makefile
-> index 0125b17edc98..b39d50a7a3df 100644
-> --- a/arch/loongarch/boot/Makefile
-> +++ b/arch/loongarch/boot/Makefile
-> @@ -14,3 +14,7 @@ quiet_cmd_strip = STRIP         $@
->
->  $(obj)/vmlinux: vmlinux FORCE
->         $(call if_changed,strip)
-> +
-> +targets += vmlinux.efi
-> +$(obj)/vmlinux.efi: $(obj)/vmlinux FORCE
-> +       $(call if_changed,objcopy)
-> diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/efi-header.S
-> new file mode 100644
-> index 000000000000..ef48dc72455b
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/efi-header.S
-> @@ -0,0 +1,101 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/pe.h>
-> +#include <linux/sizes.h>
-> +
-> +       .macro  __EFI_PE_HEADER
-> +       .long   PE_MAGIC
-> +.Lcoff_header:
-> +#ifdef CONFIG_32BIT
-> +       .short  IMAGE_FILE_MACHINE_LOONGARCH32          /* Machine */
-> +#else
-> +       .short  IMAGE_FILE_MACHINE_LOONGARCH64          /* Machine */
-> +#endif
-> +       .short  .Lsection_count                         /* NumberOfSections */
-> +       .long   0                                       /* TimeDateStamp */
-> +       .long   0                                       /* PointerToSymbolTable */
-> +       .long   0                                       /* NumberOfSymbols */
-> +       .short  .Lsection_table - .Loptional_header     /* SizeOfOptionalHeader */
-> +       .short  IMAGE_FILE_DEBUG_STRIPPED | \
-> +               IMAGE_FILE_EXECUTABLE_IMAGE | \
-> +               IMAGE_FILE_LINE_NUMS_STRIPPED           /* Characteristics */
-> +
-> +.Loptional_header:
-> +       .short  PE_OPT_MAGIC_PE32PLUS                   /* PE32+ format */
-> +       .byte   0x02                                    /* MajorLinkerVersion */
-> +       .byte   0x14                                    /* MinorLinkerVersion */
-> +       .long   __inittext_end - .Lefi_header_end       /* SizeOfCode */
-> +       .long   _end - __initdata_begin                 /* SizeOfInitializedData */
-> +       .long   0                                       /* SizeOfUninitializedData */
-> +       .long   __efistub_efi_pe_entry - _head          /* AddressOfEntryPoint */
-> +       .long   .Lefi_header_end - _head                /* BaseOfCode */
-> +
-> +.Lextra_header_fields:
-> +       .quad   0                                       /* ImageBase */
-> +       .long   PECOFF_SEGMENT_ALIGN                    /* SectionAlignment */
-> +       .long   PECOFF_FILE_ALIGN                       /* FileAlignment */
-> +       .short  0                                       /* MajorOperatingSystemVersion */
-> +       .short  0                                       /* MinorOperatingSystemVersion */
-> +       .short  LINUX_EFISTUB_MAJOR_VERSION             /* MajorImageVersion */
-> +       .short  LINUX_EFISTUB_MINOR_VERSION             /* MinorImageVersion */
-> +       .short  0                                       /* MajorSubsystemVersion */
-> +       .short  0                                       /* MinorSubsystemVersion */
-> +       .long   0                                       /* Win32VersionValue */
-> +
-> +       .long   _end - _head                            /* SizeOfImage */
-> +
-> +       /* Everything before the kernel image is considered part of the header */
-> +       .long   .Lefi_header_end - _head                /* SizeOfHeaders */
-> +       .long   0                                       /* CheckSum */
-> +       .short  IMAGE_SUBSYSTEM_EFI_APPLICATION         /* Subsystem */
-> +       .short  0                                       /* DllCharacteristics */
-> +       .quad   0                                       /* SizeOfStackReserve */
-> +       .quad   0                                       /* SizeOfStackCommit */
-> +       .quad   0                                       /* SizeOfHeapReserve */
-> +       .quad   0                                       /* SizeOfHeapCommit */
-> +       .long   0                                       /* LoaderFlags */
-> +       .long   (.Lsection_table - .) / 8               /* NumberOfRvaAndSizes */
-> +
-> +       .quad   0                                       /* ExportTable */
-> +       .quad   0                                       /* ImportTable */
-> +       .quad   0                                       /* ResourceTable */
-> +       .quad   0                                       /* ExceptionTable */
-> +       .quad   0                                       /* CertificationTable */
-> +       .quad   0                                       /* BaseRelocationTable */
-> +
-> +       /* Section table */
-> +.Lsection_table:
-> +       .ascii  ".text\0\0\0"
-> +       .long   __inittext_end - .Lefi_header_end       /* VirtualSize */
-> +       .long   .Lefi_header_end - _head                /* VirtualAddress */
-> +       .long   __inittext_end - .Lefi_header_end       /* SizeOfRawData */
-> +       .long   .Lefi_header_end - _head                /* PointerToRawData */
-> +
-> +       .long   0                                       /* PointerToRelocations */
-> +       .long   0                                       /* PointerToLineNumbers */
-> +       .short  0                                       /* NumberOfRelocations */
-> +       .short  0                                       /* NumberOfLineNumbers */
-> +       .long   IMAGE_SCN_CNT_CODE | \
-> +               IMAGE_SCN_MEM_READ | \
-> +               IMAGE_SCN_MEM_EXECUTE                   /* Characteristics */
-> +
-> +       .ascii  ".data\0\0\0"
-> +       .long   _end - __initdata_begin                 /* VirtualSize */
-> +       .long   __initdata_begin - _head                /* VirtualAddress */
-> +       .long   _edata - __initdata_begin               /* SizeOfRawData */
-> +       .long   __initdata_begin - _head                /* PointerToRawData */
-> +
-> +       .long   0                                       /* PointerToRelocations */
-> +       .long   0                                       /* PointerToLineNumbers */
-> +       .short  0                                       /* NumberOfRelocations */
-> +       .short  0                                       /* NumberOfLineNumbers */
-> +       .long   IMAGE_SCN_CNT_INITIALIZED_DATA | \
-> +               IMAGE_SCN_MEM_READ | \
-> +               IMAGE_SCN_MEM_WRITE                     /* Characteristics */
-> +
-> +       .set    .Lsection_count, (. - .Lsection_table) / 40
-> +.Lefi_header_end:
-> +       .endm
-> diff --git a/arch/loongarch/kernel/efi.c b/arch/loongarch/kernel/efi.c
-> index a50b60c587fa..42f7cfe9ab03 100644
-> --- a/arch/loongarch/kernel/efi.c
-> +++ b/arch/loongarch/kernel/efi.c
-> @@ -22,19 +22,141 @@
->
->  #include <asm/early_ioremap.h>
->  #include <asm/efi.h>
-> +#include <asm/tlb.h>
->  #include <asm/loongson.h>
->
->  static unsigned long efi_nr_tables;
->  static unsigned long efi_config_table;
-> +static unsigned long screen_info_table __initdata = EFI_INVALID_TABLE_ADDR;
->
->  static efi_system_table_t *efi_systab;
-> -static efi_config_table_type_t arch_tables[] __initdata = {{},};
-> +static efi_config_table_type_t arch_tables[] __initdata = {
-> +       {LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID, &screen_info_table, "SINFO"},
-> +       {},
-> +};
-> +
-> +static void __init init_screen_info(void)
-> +{
-> +       struct screen_info *si;
-> +
-> +       if (screen_info_table == EFI_INVALID_TABLE_ADDR)
-> +               return;
-> +
-> +       si = early_memremap_ro(screen_info_table, sizeof(*si));
-> +       if (!si) {
-> +               pr_err("Could not map screen_info config table\n");
-> +               return;
-> +       }
-> +       screen_info = *si;
-> +       early_memunmap(si, sizeof(*si));
-> +
-> +       if (screen_info.orig_video_isVGA == VIDEO_TYPE_EFI)
-> +               memblock_reserve(screen_info.lfb_base, screen_info.lfb_size);
-> +}
-> +
-> +static void __init create_tlb(u32 index, u64 vppn, u32 ps, u32 mat)
-> +{
-> +       unsigned long tlblo0, tlblo1;
-> +
-> +       write_csr_pagesize(ps);
-> +
-> +       tlblo0 = vppn | CSR_TLBLO0_V | CSR_TLBLO0_WE |
-> +               CSR_TLBLO0_GLOBAL | (mat << CSR_TLBLO0_CCA_SHIFT);
-> +       tlblo1 = tlblo0 + (1 << ps);
-> +
-> +       csr_write64(vppn, LOONGARCH_CSR_TLBEHI);
-> +       csr_write64(tlblo0, LOONGARCH_CSR_TLBELO0);
-> +       csr_write64(tlblo1, LOONGARCH_CSR_TLBELO1);
-> +       csr_xchg32(0, CSR_TLBIDX_EHINV, LOONGARCH_CSR_TLBIDX);
-> +       csr_xchg32(index, CSR_TLBIDX_IDX, LOONGARCH_CSR_TLBIDX);
-> +
-> +       tlb_write_indexed();
-> +}
-> +
-> +#define MTLB_ENTRY_INDEX       0x800
-> +
-> +/* Create VA == PA mapping as UEFI */
-> +static void __init fix_efi_mapping(void)
-> +{
-> +       unsigned int index = MTLB_ENTRY_INDEX;
-> +       unsigned int tlbnr = boot_cpu_data.tlbsizemtlb - 2;
-> +       unsigned long i, vppn;
-> +
-> +       /* Low Memory, Cached */
-> +       create_tlb(index++, 0x00000000, PS_128M, 1);
-> +       /* MMIO Registers, Uncached */
-> +       create_tlb(index++, 0x10000000, PS_128M, 0);
-> +
-> +       /* High Memory, Cached */
-> +       for (i = 0; i < tlbnr; i++) {
-> +               vppn = 0x80000000ULL + (i * SZ_2G);
-> +               create_tlb(index++, vppn, PS_1G, 1);
-> +       }
-> +}
-> +
-> +/*
-> + * set_virtual_map() - create a virtual mapping for the EFI memory map and call
-> + * efi_set_virtual_address_map enter virtual for runtime service
-> + *
-> + * This function populates the virt_addr fields of all memory region descriptors
-> + * in @memory_map whose EFI_MEMORY_RUNTIME attribute is set. Those descriptors
-> + * are also copied to @runtime_map, and their total count is returned in @count.
-> + */
-> +static int __init set_virtual_map(void)
-> +{
-> +       int count = 0;
-> +       unsigned int size;
-> +       unsigned long attr;
-> +       efi_status_t status;
-> +       efi_runtime_services_t *rt;
-> +       efi_set_virtual_address_map_t *svam;
-> +       efi_memory_desc_t *in, runtime_map[32];
-> +
-> +       size = sizeof(efi_memory_desc_t);
-> +
-> +       for_each_efi_memory_desc(in) {
-> +               attr = in->attribute;
-> +               if (!(attr & EFI_MEMORY_RUNTIME))
-> +                       continue;
-> +
-> +               if (attr & (EFI_MEMORY_WB | EFI_MEMORY_WT))
-> +                       in->virt_addr = TO_CACHE(in->phys_addr);
-> +               else
-> +                       in->virt_addr = TO_UNCACHE(in->phys_addr);
-> +
-> +               memcpy(&runtime_map[count++], in, size);
-> +       }
-> +
-> +       rt = early_memremap_ro((unsigned long)efi_systab->runtime, sizeof(*rt));
-> +
-> +       /* Install the new virtual address map */
-> +       svam = rt->set_virtual_address_map;
-> +
-> +       fix_efi_mapping();
-> +
-> +       status = svam(size * count, size, efi.memmap.desc_version,
-> +                       (efi_memory_desc_t *)TO_PHYS((unsigned long)runtime_map));
-> +
-> +       local_flush_tlb_all();
-> +       write_csr_pagesize(PS_DEFAULT_SIZE);
-> +
-> +       return 0;
-> +}
->
->  void __init efi_runtime_init(void)
->  {
-> +       int status;
-> +
->         if (!efi_enabled(EFI_BOOT))
->                 return;
->
-> +       if (!efi_systab->runtime)
-> +               return;
-> +
-> +       status = set_virtual_map();
-> +       if (status < 0)
-> +               return;
-> +
->         if (efi_runtime_disabled()) {
->                 pr_info("EFI runtime services will be disabled.\n");
->                 return;
-> @@ -69,4 +191,6 @@ void __init efi_init(void)
->         config_tables = early_memremap(efi_config_table, efi_nr_tables * size);
->         efi_config_parse_tables(config_tables, efi_systab->nr_tables, arch_tables);
->         early_memunmap(config_tables, efi_nr_tables * size);
-> +
-> +       init_screen_info();
->  }
-> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-> index e596dfcd924b..ccc425027553 100644
-> --- a/arch/loongarch/kernel/head.S
-> +++ b/arch/loongarch/kernel/head.S
-> @@ -12,6 +12,32 @@
->  #include <asm/loongarch.h>
->  #include <asm/stackframe.h>
->
-> +#ifdef CONFIG_EFI_STUB
-> +
-> +#include "efi-header.S"
-> +
-> +       __HEAD
-> +
-> +_head:
-> +       .word   MZ_MAGIC                /* "MZ", MS-DOS header */
-> +       .org    0x38
-> +#ifdef CONFIG_32BIT
-> +       .ascii  "LA32"                  /* Magic number for BootLoader */
-> +#else
-> +       .ascii  "LA64"                  /* Magic number for BootLoader */
-> +#endif
-> +       .org    0x3c
-> +       .long   pe_header - _head       /* Offset to the PE header */
-> +
-> +pe_header:
-> +       __EFI_PE_HEADER
-> +
-> +SYM_DATA(kernel_asize, .long _end - _text);
-> +SYM_DATA(kernel_fsize, .long _edata - _text);
-> +SYM_DATA(kernel_offset, .long kernel_offset - _text);
-> +
-> +#endif
-> +
->         __REF
->
->  SYM_ENTRY(_stext, SYM_L_GLOBAL, SYM_A_NONE)
-> diff --git a/arch/loongarch/kernel/image-vars.h b/arch/loongarch/kernel/image-vars.h
-> new file mode 100644
-> index 000000000000..104e9f0e97fe
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/image-vars.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#ifndef __LOONGARCH_KERNEL_IMAGE_VARS_H
-> +#define __LOONGARCH_KERNEL_IMAGE_VARS_H
-> +
-> +#ifdef CONFIG_EFI_STUB
-> +
-> +__efistub_memcmp               = memcmp;
-> +__efistub_memchr               = memchr;
-> +__efistub_memcpy               = memcpy;
-> +__efistub_memmove              = memmove;
-> +__efistub_memset               = memset;
-> +__efistub_strcat               = strcat;
-> +__efistub_strcmp               = strcmp;
-> +__efistub_strlen               = strlen;
-> +__efistub_strncat              = strncat;
-> +__efistub_strnstr              = strnstr;
-> +__efistub_strnlen              = strnlen;
-> +__efistub_strrchr              = strrchr;
-> +__efistub_kernel_entry         = kernel_entry;
-> +__efistub_kernel_asize         = kernel_asize;
-> +__efistub_kernel_fsize         = kernel_fsize;
-> +__efistub_kernel_offset                = kernel_offset;
-> +
-> +#endif
-> +
-> +#endif /* __LOONGARCH_KERNEL_IMAGE_VARS_H */
-> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-> index 78311a6101a3..9dfa5b886c09 100644
-> --- a/arch/loongarch/kernel/vmlinux.lds.S
-> +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> @@ -12,6 +12,7 @@
->  #define BSS_FIRST_SECTIONS *(.bss..swapper_pg_dir)
->
->  #include <asm-generic/vmlinux.lds.h>
-> +#include "image-vars.h"
->
->  /*
->   * Max avaliable Page Size is 64K, so we set SectionAlignment
-> diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-> index 7aa4717cdcac..9e4645e5a5c0 100644
-> --- a/drivers/firmware/efi/Kconfig
-> +++ b/drivers/firmware/efi/Kconfig
-> @@ -118,7 +118,7 @@ config EFI_GENERIC_STUB
->
->  config EFI_ARMSTUB_DTB_LOADER
->         bool "Enable the DTB loader"
-> -       depends on EFI_GENERIC_STUB && !RISCV
-> +       depends on EFI_GENERIC_STUB && !RISCV && !LOONGARCH
->         default y
->         help
->           Select this config option to add support for the dtb= command
-> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> index d0537573501e..1588c61939e7 100644
-> --- a/drivers/firmware/efi/libstub/Makefile
-> +++ b/drivers/firmware/efi/libstub/Makefile
-> @@ -26,6 +26,8 @@ cflags-$(CONFIG_ARM)          := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
->                                    $(call cc-option,-mno-single-pic-base)
->  cflags-$(CONFIG_RISCV)         := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
->                                    -fpic
-> +cflags-$(CONFIG_LOONGARCH)     := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> +                                  -fpic
->
->  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
->
-> @@ -70,6 +72,8 @@ lib-$(CONFIG_ARM)             += arm32-stub.o
->  lib-$(CONFIG_ARM64)            += arm64-stub.o
->  lib-$(CONFIG_X86)              += x86-stub.o
->  lib-$(CONFIG_RISCV)            += riscv-stub.o
-> +lib-$(CONFIG_LOONGARCH)                += loongarch-stub.o
-> +
->  CFLAGS_arm32-stub.o            := -DTEXT_OFFSET=$(TEXT_OFFSET)
->
->  # Even when -mbranch-protection=none is set, Clang will generate a
-> @@ -125,6 +129,12 @@ STUBCOPY_FLAGS-$(CONFIG_RISCV)     += --prefix-alloc-sections=.init \
->                                    --prefix-symbols=__efistub_
->  STUBCOPY_RELOC-$(CONFIG_RISCV) := R_RISCV_HI20
->
-> +# For LoongArch, keep all the symbols in .init section and make sure that no
-> +# absolute symbols references doesn't exist.
-> +STUBCOPY_FLAGS-$(CONFIG_LOONGARCH)     += --prefix-alloc-sections=.init \
-> +                                          --prefix-symbols=__efistub_
-> +STUBCOPY_RELOC-$(CONFIG_LOONGARCH)     := R_LARCH_MARK_LA
-> +
->  $(obj)/%.stub.o: $(obj)/%.o FORCE
->         $(call if_changed,stubcopy)
->
-> diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> index 3d972061c1b0..f612cfceda22 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
-> @@ -21,7 +21,7 @@
->  bool efi_nochunk;
->  bool efi_nokaslr = !IS_ENABLED(CONFIG_RANDOMIZE_BASE);
->  int efi_loglevel = CONSOLE_LOGLEVEL_DEFAULT;
-> -bool efi_novamap;
-> +bool efi_novamap = IS_ENABLED(CONFIG_LOONGARCH); /* LoongArch call svam() in kernel */
->
->  static bool efi_noinitrd;
->  static bool efi_nosoftreserve;
-> diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
-> index f515394cce6e..730b7bd21776 100644
-> --- a/drivers/firmware/efi/libstub/efi-stub.c
-> +++ b/drivers/firmware/efi/libstub/efi-stub.c
-> @@ -40,9 +40,9 @@
->
->  #ifdef CONFIG_ARM64
->  # define EFI_RT_VIRTUAL_LIMIT  DEFAULT_MAP_WINDOW_64
-> -#elif defined(CONFIG_RISCV)
-> +#elif defined(CONFIG_RISCV) || defined(CONFIG_LOONGARCH)
->  # define EFI_RT_VIRTUAL_LIMIT  TASK_SIZE_MIN
-> -#else
-> +#else /* Only if TASK_SIZE is a constant */
->  # define EFI_RT_VIRTUAL_LIMIT  TASK_SIZE
->  #endif
->
-> diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
-> new file mode 100644
-> index 000000000000..beee086d9950
-> --- /dev/null
-> +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-> @@ -0,0 +1,88 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Author: Yun Liu <liuyun@loongson.cn>
-> + *         Huacai Chen <chenhuacai@loongson.cn>
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/efi.h>
-> +#include <asm/efi.h>
-> +#include <asm/addrspace.h>
-> +#include "efistub.h"
-> +
-> +typedef void __noreturn (*kernel_entry_t)(bool efi, unsigned long fdt);
-> +
-> +extern int kernel_asize;
-> +extern int kernel_fsize;
-> +extern int kernel_offset;
-> +extern kernel_entry_t kernel_entry;
-> +
-> +static efi_guid_t screen_info_guid = LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID;
-> +
-> +struct screen_info *alloc_screen_info(void)
-> +{
-> +       efi_status_t status;
-> +       struct screen_info *si;
-> +
-> +       status = efi_bs_call(allocate_pool,
-> +                       EFI_RUNTIME_SERVICES_DATA, sizeof(*si), (void **)&si);
-> +       if (status != EFI_SUCCESS)
-> +               return NULL;
-> +
-> +       status = efi_bs_call(install_configuration_table, &screen_info_guid, si);
-> +       if (status == EFI_SUCCESS)
-> +               return si;
-> +
-> +       efi_bs_call(free_pool, si);
-> +
-> +       return NULL;
-> +}
-> +
-> +void free_screen_info(struct screen_info *si)
-> +{
-> +       if (!si)
-> +               return;
-> +
-> +       efi_bs_call(install_configuration_table, &screen_info_guid, NULL);
-> +       efi_bs_call(free_pool, si);
-> +}
-> +
-> +efi_status_t check_platform_features(void)
-> +{
-> +       /* Config Direct Mapping */
-> +       csr_write64(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
-> +       csr_write64(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
-> +
-> +       return EFI_SUCCESS;
-> +}
-> +
-> +efi_status_t handle_kernel_image(unsigned long *image_addr,
-> +                                unsigned long *image_size,
-> +                                unsigned long *reserve_addr,
-> +                                unsigned long *reserve_size,
-> +                                efi_loaded_image_t *image,
-> +                                efi_handle_t image_handle)
-> +{
-> +       efi_status_t status;
-> +       unsigned long kernel_addr = 0;
-> +
-> +       kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
-> +
-> +       status = efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
-> +                                    PHYSADDR(VMLINUX_LOAD_ADDRESS), SZ_2M, 0x0);
-> +
-> +       *image_addr = kernel_addr;
-> +       *image_size = kernel_asize;
-> +
-> +       return status;
-> +}
-> +
-> +void __noreturn efi_enter_kernel(unsigned long entrypoint, unsigned long fdt, unsigned long fdt_size)
-> +{
-> +       kernel_entry_t real_kernel_entry;
-> +
-> +       real_kernel_entry = (kernel_entry_t)
-> +               ((unsigned long)&kernel_entry - entrypoint + VMLINUX_LOAD_ADDRESS);
-> +
-> +       real_kernel_entry(true, fdt);
-> +}
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index 7d9b0bb47eb3..adc43641ef8c 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -401,6 +401,7 @@ void efi_native_runtime_setup(void);
->   * associated with ConOut
->   */
->  #define LINUX_EFI_ARM_SCREEN_INFO_TABLE_GUID   EFI_GUID(0xe03fc20a, 0x85dc, 0x406e,  0xb9, 0x0e, 0x4a, 0xb5, 0x02, 0x37, 0x1d, 0x95)
-> +#define LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID EFI_GUID(0x07fd51a6, 0x9532, 0x926f,  0x51, 0xdc, 0x6a, 0x63, 0x60, 0x2f, 0x84, 0xb4)
->  #define LINUX_EFI_ARM_CPU_STATE_TABLE_GUID     EFI_GUID(0xef79e4aa, 0x3c3d, 0x4989,  0xb9, 0x02, 0x07, 0xa9, 0x43, 0xe5, 0x50, 0xd2)
->  #define LINUX_EFI_LOADER_ENTRY_GUID            EFI_GUID(0x4a67b082, 0x0a4c, 0x41cf,  0xb6, 0xc7, 0x44, 0x0b, 0x29, 0xbb, 0x8c, 0x4f)
->  #define LINUX_EFI_RANDOM_SEED_TABLE_GUID       EFI_GUID(0x1ce1e5bc, 0x7ceb, 0x42f2,  0x81, 0xe5, 0x8a, 0xad, 0xf1, 0x80, 0xf5, 0x7b)
-> diff --git a/include/linux/pe.h b/include/linux/pe.h
-> index daf09ffffe38..1d3836ef9d92 100644
-> --- a/include/linux/pe.h
-> +++ b/include/linux/pe.h
-> @@ -65,6 +65,8 @@
->  #define        IMAGE_FILE_MACHINE_SH5          0x01a8
->  #define        IMAGE_FILE_MACHINE_THUMB        0x01c2
->  #define        IMAGE_FILE_MACHINE_WCEMIPSV2    0x0169
-> +#define        IMAGE_FILE_MACHINE_LOONGARCH32  0x6232
-> +#define        IMAGE_FILE_MACHINE_LOONGARCH64  0x6264
->
->  /* flags */
->  #define IMAGE_FILE_RELOCS_STRIPPED           0x0001
-> --
-> 2.27.0
->
+  #ifdef CONFIG_PREEMPT_RT
+
+because they are clearly left-over turds from the RT tree that were
+unbelievably ugly hacks, and should never have been merged upstream.
+
+Why am I so upset?
+
+WE ALREADY HAVE A DIFFERENT CONFIG VARIABLE EXPLICITLY FOR THIS!
+
+In fact, you can *see* that config variable in the patch.
+
+There's a very specific HAVE_SOFTIRQ_ON_OWN_STACK variable that has
+the following help message (even if that help will never be shown
+because it's not an actual question, it's a helper config variable
+that gets selected):
+
+   config HAVE_SOFTIRQ_ON_OWN_STACK
+        bool
+        help
+          Architecture provides a function to run __do_softirq() on a
+          separate stack.
+
+and that config variable ALREADY PROTECTS the do_softirq_own_stack()
+declaration in asm-generic. The very one you just added the
+CONFIG_PREEMPT_RT thing around.
+
+In other words, the RT patch is just mindless and ugly, and the right
+thing to do would have been
+
+ (a) make HAVE_SOFTIRQ_ON_OWN_STACK have a
+
+        depends on !PREEMPT_RT
+
+ (b) as PREEMPT_RT is enabled one architecture at a time, you can make
+the architecture header files also use that HAVE_SOFTIRQ_ON_OWN_STACK
+thing, which makes a whole lot more sense than sprinkling random
+CONFIG_REEMPT_RT things around.
+
+I have pulled this, but I'm really *really* fed up with these
+PREEMPT_RT patches that add code that MAKES NO SENSE.
+
+In just this merge window:
+
+ We had it in the dentry tree.
+
+ Then we had it in the printk tree to the point where I refused to even pull it.
+
+ And now we have it in the asm-generic tree too.
+
+The rule about RT patches has *always* been that we merge them as they
+become clean enough to make sense. That rule seems to have entirely
+flown out the window here, and suddenly it has become a sport to add
+random senseless #ifdef CONFIG_PREEMPT_RT lines to code.
+
+At least the dentry case had a nice big comment (which really was
+required exactly because the code made no sense on its own). This
+patch had nothing of the sort.
+
+PREEMPT_RT is special enough that it really needs to spend a _lot_
+more time making the code sensible, rather than add random hacks like
+this. And when we have a config parameter that is *explicitly* about
+this very issue, we should use that one, not some PREEMPT_RT hack.
+
+And the RT tree has had literally decades where people tried very hard
+to do exactly that - make proper abstractions, and make sure that
+merging the RT patches made sense even outside the context of the RT
+code.
+
+Now suddenly all that "this code has to make sense" seems to be history.
+
+And it really shouldn't be.
+
+              Linus
