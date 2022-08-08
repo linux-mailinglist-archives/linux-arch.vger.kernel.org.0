@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D166F58C3CF
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Aug 2022 09:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC99958C3D1
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Aug 2022 09:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbiHHHPv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Aug 2022 03:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S236817AbiHHHPw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Aug 2022 03:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237603AbiHHHOz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Aug 2022 03:14:55 -0400
+        with ESMTP id S229684AbiHHHPH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Aug 2022 03:15:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8FF9FC5;
-        Mon,  8 Aug 2022 00:14:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9093412605;
+        Mon,  8 Aug 2022 00:14:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84398B80DCF;
-        Mon,  8 Aug 2022 07:14:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44801C433D7;
-        Mon,  8 Aug 2022 07:14:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F516B80DCF;
+        Mon,  8 Aug 2022 07:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1AAFC4347C;
+        Mon,  8 Aug 2022 07:14:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659942881;
-        bh=5VBNACFhtl+dfvQZEMTzFThf7ylgX+7g/Yydm6EJovs=;
+        s=k20201202; t=1659942887;
+        bh=SslN+97o/8qmyOuJZlGXnP7AnJZ3FRG2xQfQjrtJ2LE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CtrfPxx/xVpdB9R30rfocfphFAEMUx3nf+KX3iZblbbX5nMZgnf3kBX9q/T8x3+Du
-         7iSWsHWQCRLLSy5lzm41xxYNUAKpeHhGgnSKMyf2ktQ36tR98vW8EODRofQt7+ixkB
-         XtS5zw4A/y1B/Iac3AG9JoTgyww0b+BoRxWhYEMbmKTZLUSw2cqYgK/sQ2z/VBK4Og
-         ov2XnFQWLvq86LR8ySmjFTzWyqJ4davEhT3pTtMoyXdb+muPsw/yi9CXumjf1/Jo4i
-         nECo2Gl1ZBlS5XwPCS5AGjQVQarW+bQrWstZiMiGTKQTqKuNgM3ahOF1BHvcSYZc5O
-         LukfVJ+avrWIg==
+        b=CG69qtZNcF3mL/S1wrqa9r5BjmaHJ/VCHxS560epiQFdTQc54EjGfA273we1XJp76
+         auXMWdtz3AF0zhhO/4arAOOShDVMBsClvBZJ7GC+hmzm+EvFjNHrohYQwDf2+d8FLE
+         mWPKCoB6Dn053BSkumSPVsjD950N1GlpTWbisoTjNA1NeMkqnF0DVRGoO6jNGWRlTj
+         I/rDHxEIC7u/dP1VDx3l9OSryGNlATuJwLtyRbGwCuugxrg2IVbHQUMWeFxIWUOfZt
+         GWWlFaXQuFI0PTZv8BVwbccuB3m4gRSDOElPOLP3DUGgM5pL/zn+lmKGcwGXReMyCt
+         WCUUb57w6HSIA==
 From:   guoren@kernel.org
 To:     palmer@rivosinc.com, heiko@sntech.de, hch@infradead.org,
         arnd@arndb.de, peterz@infradead.org, will@kernel.org,
@@ -39,9 +39,9 @@ To:     palmer@rivosinc.com, heiko@sntech.de, hch@infradead.org,
 Cc:     linux-csky@vger.kernel.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
-Subject: [PATCH V9 11/15] riscv: Add qspinlock support
-Date:   Mon,  8 Aug 2022 03:13:14 -0400
-Message-Id: <20220808071318.3335746-12-guoren@kernel.org>
+Subject: [PATCH V9 12/15] riscv: Add combo spinlock support
+Date:   Mon,  8 Aug 2022 03:13:15 -0400
+Message-Id: <20220808071318.3335746-13-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220808071318.3335746-1-guoren@kernel.org>
 References: <20220808071318.3335746-1-guoren@kernel.org>
@@ -59,116 +59,216 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Enable qspinlock by the requirements mentioned in a8ad07e5240c9
-("asm-generic: qspinlock: Indicate the use of mixed-size atomics").
+Combo spinlock could support queued and ticket in one Linux Image and
+select them during boot time with command line option. Here is the
+func-size(Bytes) comparison table below:
 
- - RISC-V atomic_*_release()/atomic_*_acquire() are implemented with
-   own relaxed version plus acquire/release_fence for RCsc
-   synchronization.
+TYPE			: COMBO | TICKET | QUEUED
+arch_spin_lock		: 106	| 60     | 50
+arch_spin_unlock	: 54    | 36     | 26
+arch_spin_trylock	: 110   | 72     | 54
+arch_spin_is_locked	: 48    | 34     | 20
+arch_spin_is_contended	: 56    | 40     | 24
+rch_spin_value_unlocked	: 48    | 34     | 24
 
- - RISC-V LR/SC pairs could provide a strong/weak forward guarantee
-   that depends on micro-architecture. And RISC-V ISA spec has given
-   out several limitations to let hardware support strict forward
-   guarantee (RISC-V User ISA - 8.3 Eventual Success of
-   Store-Conditional Instructions). Some riscv cores such as BOOMv3
-   & XiangShan could provide strict & strong forward guarantee (The
-   cache line would be kept in an exclusive state for Backoff cycles,
-   and only this core's interrupt could break the LR/SC pair).
+One example of disassemble combo arch_spin_unlock:
+   0xffffffff8000409c <+14>:    nop # jump label slot
+   0xffffffff800040a0 <+18>:    fence   rw,w # queued spinlock start
+   0xffffffff800040a4 <+22>:    sb      zero,0(a4) # queued spinlock end
+   0xffffffff800040a8 <+26>:    ld      s0,8(sp)
+   0xffffffff800040aa <+28>:    addi    sp,sp,16
+   0xffffffff800040ac <+30>:    ret
+   0xffffffff800040ae <+32>:    lw      a5,0(a4) # ticket spinlock start
+   0xffffffff800040b0 <+34>:    sext.w  a5,a5
+   0xffffffff800040b2 <+36>:    fence   rw,w
+   0xffffffff800040b6 <+40>:    addiw   a5,a5,1
+   0xffffffff800040b8 <+42>:    slli    a5,a5,0x30
+   0xffffffff800040ba <+44>:    srli    a5,a5,0x30
+   0xffffffff800040bc <+46>:    sh      a5,0(a4) # ticket spinlock end
+   0xffffffff800040c0 <+50>:    ld      s0,8(sp)
+   0xffffffff800040c2 <+52>:    addi    sp,sp,16
+   0xffffffff800040c4 <+54>:    ret
 
- - RISC-V provides cheap atomic_fetch_or_acquire() with RCsc.
-
- - RISC-V only provides relaxed xchg16 to support qspinlock.
+The qspinlock is smaller and faster than ticket-lock when all is in
+fast-path, and combo spinlock could provide a compatible Linux Image for
+different micro-arch design (weak/strict fwd guarantee) processors.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/Kconfig               | 16 ++++++++++++++++
- arch/riscv/include/asm/Kbuild    |  2 ++
- arch/riscv/include/asm/cmpxchg.h | 24 ++++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
+ arch/riscv/Kconfig                |  9 +++-
+ arch/riscv/include/asm/Kbuild     |  1 -
+ arch/riscv/include/asm/spinlock.h | 77 +++++++++++++++++++++++++++++++
+ arch/riscv/kernel/setup.c         | 22 +++++++++
+ 4 files changed, 107 insertions(+), 2 deletions(-)
+ create mode 100644 arch/riscv/include/asm/spinlock.h
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index c3ca23bc6352..8b36a4307d03 100644
+index 8b36a4307d03..6645f04c7da4 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -359,6 +359,22 @@ config NODES_SHIFT
- 	  Specify the maximum number of NUMA Nodes available on the target
- 	  system.  Increases memory reserved to accommodate various tables.
+@@ -361,7 +361,7 @@ config NODES_SHIFT
  
-+choice
-+	prompt "RISC-V spinlock type"
-+	default RISCV_TICKET_SPINLOCKS
+ choice
+ 	prompt "RISC-V spinlock type"
+-	default RISCV_TICKET_SPINLOCKS
++	default RISCV_COMBO_SPINLOCKS
+ 
+ config RISCV_TICKET_SPINLOCKS
+ 	bool "Using ticket spinlock"
+@@ -373,6 +373,13 @@ config RISCV_QUEUED_SPINLOCKS
+ 	help
+ 	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
+ 	  Otherwise, stay at ticket-lock.
 +
-+config RISCV_TICKET_SPINLOCKS
-+	bool "Using ticket spinlock"
-+
-+config RISCV_QUEUED_SPINLOCKS
-+	bool "Using queued spinlock"
++config RISCV_COMBO_SPINLOCKS
++	bool "Using combo spinlock"
 +	depends on SMP && MMU
 +	select ARCH_USE_QUEUED_SPINLOCKS
 +	help
-+	  Make sure your micro arch LL/SC has a strong forward progress guarantee.
-+	  Otherwise, stay at ticket-lock.
-+endchoice
-+
++	  Select queued spinlock or ticket-lock with jump_label.
+ endchoice
+ 
  config RISCV_ALTERNATIVE
- 	bool
- 	depends on !XIP_KERNEL
 diff --git a/arch/riscv/include/asm/Kbuild b/arch/riscv/include/asm/Kbuild
-index 504f8b7e72d4..2cce98c7b653 100644
+index 2cce98c7b653..59d5ea7390ea 100644
 --- a/arch/riscv/include/asm/Kbuild
 +++ b/arch/riscv/include/asm/Kbuild
-@@ -2,7 +2,9 @@
- generic-y += early_ioremap.h
- generic-y += flat.h
- generic-y += kvm_para.h
-+generic-y += mcs_spinlock.h
+@@ -5,7 +5,6 @@ generic-y += kvm_para.h
+ generic-y += mcs_spinlock.h
  generic-y += parport.h
-+generic-y += qspinlock.h
- generic-y += spinlock.h
+ generic-y += qspinlock.h
+-generic-y += spinlock.h
  generic-y += spinlock_types.h
  generic-y += qrwlock.h
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 4b5fa25f4336..2ba88057db52 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -11,12 +11,36 @@
- #include <asm/barrier.h>
- #include <asm/fence.h>
- 
-+static inline ulong __xchg16_relaxed(ulong new, void *ptr)
+ generic-y += qrwlock_types.h
+diff --git a/arch/riscv/include/asm/spinlock.h b/arch/riscv/include/asm/spinlock.h
+new file mode 100644
+index 000000000000..b079462d818b
+--- /dev/null
++++ b/arch/riscv/include/asm/spinlock.h
+@@ -0,0 +1,77 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __ASM_RISCV_SPINLOCK_H
++#define __ASM_RISCV_SPINLOCK_H
++
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++#include <asm-generic/ticket_spinlock.h>
++
++#undef arch_spin_is_locked
++#undef arch_spin_is_contended
++#undef arch_spin_value_unlocked
++#undef arch_spin_lock
++#undef arch_spin_trylock
++#undef arch_spin_unlock
++
++#include <asm-generic/qspinlock.h>
++#include <linux/jump_label.h>
++
++#undef arch_spin_is_locked
++#undef arch_spin_is_contended
++#undef arch_spin_value_unlocked
++#undef arch_spin_lock
++#undef arch_spin_trylock
++#undef arch_spin_unlock
++
++DECLARE_STATIC_KEY_TRUE(qspinlock_key);
++
++static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
 +{
-+	ulong ret, tmp;
-+	ulong shif = ((ulong)ptr & 2) ? 16 : 0;
-+	ulong mask = 0xffff << shif;
-+	ulong *__ptr = (ulong *)((ulong)ptr & ~2);
-+
-+	__asm__ __volatile__ (
-+		"0:	lr.w %0, %2\n"
-+		"	and  %1, %0, %z3\n"
-+		"	or   %1, %1, %z4\n"
-+		"	sc.w %1, %1, %2\n"
-+		"	bnez %1, 0b\n"
-+		: "=&r" (ret), "=&r" (tmp), "+A" (*__ptr)
-+		: "rJ" (~mask), "rJ" (new << shif)
-+		: "memory");
-+
-+	return (ulong)((ret & mask) >> shif);
++	if (static_branch_likely(&qspinlock_key))
++		queued_spin_lock(lock);
++	else
++		ticket_spin_lock(lock);
 +}
 +
- #define __xchg_relaxed(ptr, new, size)					\
- ({									\
- 	__typeof__(ptr) __ptr = (ptr);					\
- 	__typeof__(new) __new = (new);					\
- 	__typeof__(*(ptr)) __ret;					\
- 	switch (size) {							\
-+	case 2:	{							\
-+		__ret = (__typeof__(*(ptr)))				\
-+			__xchg16_relaxed((ulong)__new, __ptr);		\
-+		break;}							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
- 			"	amoswap.w %0, %2, %1\n"			\
++static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
++{
++	if (static_branch_likely(&qspinlock_key))
++		return queued_spin_trylock(lock);
++	return ticket_spin_trylock(lock);
++}
++
++static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
++{
++	if (static_branch_likely(&qspinlock_key))
++		queued_spin_unlock(lock);
++	else
++		ticket_spin_unlock(lock);
++}
++
++static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
++{
++	if (static_branch_likely(&qspinlock_key))
++		return queued_spin_value_unlocked(lock);
++	else
++		return ticket_spin_value_unlocked(lock);
++}
++
++static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
++{
++	if (static_branch_likely(&qspinlock_key))
++		return queued_spin_is_locked(lock);
++	return ticket_spin_is_locked(lock);
++}
++
++static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
++{
++	if (static_branch_likely(&qspinlock_key))
++		return queued_spin_is_contended(lock);
++	return ticket_spin_is_contended(lock);
++}
++#include <asm/qrwlock.h>
++#else
++#include <asm-generic/spinlock.h>
++#endif /* CONFIG_RISCV_COMBO_SPINLOCKS */
++
++#endif /* __ASM_RISCV_SPINLOCK_H */
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index f0f36a4a0e9b..b763039bf49b 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -261,6 +261,13 @@ static void __init parse_dtb(void)
+ #endif
+ }
+ 
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++DEFINE_STATIC_KEY_TRUE_RO(qspinlock_key);
++EXPORT_SYMBOL(qspinlock_key);
++
++static bool qspinlock_flag __initdata = false;
++#endif
++
+ void __init setup_arch(char **cmdline_p)
+ {
+ 	parse_dtb();
+@@ -295,10 +302,25 @@ void __init setup_arch(char **cmdline_p)
+ 	setup_smp();
+ #endif
+ 
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++	if (!qspinlock_flag)
++		static_branch_disable(&qspinlock_key);
++#endif
++
+ 	riscv_fill_hwcap();
+ 	apply_boot_alternatives();
+ }
+ 
++#ifdef CONFIG_RISCV_COMBO_SPINLOCKS
++static int __init enable_qspinlock(char *p)
++{
++	qspinlock_flag = true;
++
++	return 0;
++}
++early_param("qspinlock", enable_qspinlock);
++#endif
++
+ static int __init topology_init(void)
+ {
+ 	int i, ret;
 -- 
 2.36.1
 
