@@ -2,43 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8B458CB4F
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Aug 2022 17:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CA658CB63
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Aug 2022 17:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236351AbiHHPbR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Aug 2022 11:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        id S235696AbiHHPjg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Aug 2022 11:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiHHPbP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Aug 2022 11:31:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A0F1402F;
-        Mon,  8 Aug 2022 08:31:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A9D2B80EE6;
-        Mon,  8 Aug 2022 15:31:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19AB9C433C1;
-        Mon,  8 Aug 2022 15:31:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659972672;
-        bh=qOvwZkGh7HLkeEg6nfF9Kxo7AMoAIc1CMELa4sVqOWw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OjgXoJ3ODIV4FhwtawMvRiSA1XIShisIr5GMZZuVyNrQxt4KpyssI2/uLrc1orCuy
-         Svkf/B0iShPLaSbV82yN7Ol3ZYdbAcUQ5MS0T4PkDKAnzHOQGx5XANm0Prs4qoJN55
-         pyuoEjiuTo2CdgqOHMTajprcXMksE6z+ExETh/tRxTxOpzL0333WhwBBZP65wt8J4F
-         orGjgJDGvFKZA/78KmmQRGQXAtgMYozYfDVzphMyurxmMuEH5WL+FQJWToxd4Ljm4u
-         Hco8bsHSvyCyq2Jebct9eDE+V7F/ClI4gzSqPWBwxiw3/b3PQlIkGOnZtwuinRtfJV
-         Jbm2wQ3X4DJ0w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AE1FF5C128A; Mon,  8 Aug 2022 08:31:11 -0700 (PDT)
-Date:   Mon, 8 Aug 2022 08:31:11 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
+        with ESMTP id S233652AbiHHPjf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Aug 2022 11:39:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3267A6599;
+        Mon,  8 Aug 2022 08:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XPl7JeNLjk9TMLNSixLvsZ+qQ4KPho8175mhT8bLnNk=; b=v4A/aroBq0LryFSV4/Iuj+CePP
+        m/2j3fglEbks9mGRfNYBKV1iPkq4IN5rhOjpm0HbxzULHD5jnaFMgRAPHKslHdSoLpNu/EeMoSlPh
+        Fiw8j16eHxehCM4fUs4fmZGWoIPT3QBwfDIb7mf4jTpi6wNzh8WeYqnPPA6Q2cobwzksPSMHlfISN
+        qHg7OoKxEAGDU0SJwE2PYxHs17+jtZDyfXK8/VXUM29uMieBz7YRX7kUsh0R05Y+oJUMnWGeomNSL
+        aWdkuecqof+I8HtG9vXkzgVxrpfVXl9vA4YCIsmMFWiHr6TKpDaD8qOtWmJ5gRH2VXxPQA3W5Nc9L
+        GDJWprLA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oL4qY-00E1Vg-4F; Mon, 08 Aug 2022 15:39:14 +0000
+Date:   Mon, 8 Aug 2022 16:39:14 +0100
+From:   Matthew Wilcox <willy@infradead.org>
 To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -56,8 +49,7 @@ Cc:     Matthew Wilcox <willy@infradead.org>,
         linux-arch <linux-arch@vger.kernel.org>,
         linux-fsdevel@vger.kernel.org
 Subject: Re: [PATCH v5] add barriers to buffer functions
-Message-ID: <20220808153111.GE2125313@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+Message-ID: <YvEuIg3669UeSwjD@casper.infradead.org>
 References: <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com>
  <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com>
  <YuflGG60pHiXp2z/@casper.infradead.org>
@@ -72,10 +64,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <alpine.LRH.2.02.2208081050330.8160@file01.intranet.prod.int.rdu2.redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,8 +75,6 @@ List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
 On Mon, Aug 08, 2022 at 10:57:45AM -0400, Mikulas Patocka wrote:
-> 
-> 
 > On Mon, 8 Aug 2022, Matthew Wilcox wrote:
 > 
 > > On Mon, Aug 08, 2022 at 10:26:10AM -0400, Mikulas Patocka wrote:
@@ -130,26 +120,13 @@ On Mon, Aug 08, 2022 at 10:57:45AM -0400, Mikulas Patocka wrote:
 > 
 > So, do you think that we don't need a barrier in buffer_locked()?
 
-The question to ask here is "What prevents another call to buffer_locked()
-from returning false?"
+That's my feeling.  Of course, you might not be the only one confused,
+and if fs authors in general have made the mistake of thinking that
+buffer_locked is serialising, then it might be better to live up to
+that expectation.
 
 > There is also this (where the BUG_ON(!buffer_uptodate(bh)) saves it).
 >                 if (buffer_locked(bh)) {
-
-Right here, for example.  If something prevents any change that might
-cause buffer_locked() to return false here, we don't need a barrier.
-If there is nothing preventing such a change, how is a barrier going
-to help?
-
-One way this code could be correct is if the above check is a heuristic,
-so that a false positive just consumes a bit more CPU and a false negative
-just delays this action.
-
-I must leave final judgment to those having better understanding of this
-code than do I.
-
-							Thanx, Paul
-
 >                         int depth;
 >                         PROC_INFO_INC(sb, scan_bitmap.wait);
 >                         depth = reiserfs_write_unlock_nested(sb);
@@ -161,6 +138,15 @@ code than do I.
 > 
 >                 if (info->free_count == UINT_MAX)
 >                         reiserfs_cache_bitmap_metadata(sb, bh, info); <--- this could be moved before buffer_locked if there were no BUG_ONs
-> 
-> Mikulas
-> 
+
+It could be moved before buffer_locked(), but I don't see the harm in
+that.  Look at how reiserfs_read_bitmap_block() gets the bh:
+
+        bh = sb_bread(sb, block);
+
+__bread_gfp() has either already read the buffer (and it's uptodate),
+in which case it returns it.  Or it calls __bread_slow() which will do
+the read and check uptodate before returning it.  I wouldn't be surprised
+to find that this buffer_locked() check is actually dead code, but I have
+no desire to dive into reiserfs far enough to find out whether it's dead
+code or not.
