@@ -2,44 +2,44 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2661658C4A0
-	for <lists+linux-arch@lfdr.de>; Mon,  8 Aug 2022 10:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEC458C4A2
+	for <lists+linux-arch@lfdr.de>; Mon,  8 Aug 2022 10:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241832AbiHHIGY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 8 Aug 2022 04:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
+        id S242111AbiHHIGg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 8 Aug 2022 04:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242092AbiHHIGU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Aug 2022 04:06:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F14B11472;
-        Mon,  8 Aug 2022 01:06:19 -0700 (PDT)
+        with ESMTP id S242016AbiHHIGd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 8 Aug 2022 04:06:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1DA13D4C;
+        Mon,  8 Aug 2022 01:06:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2756260EA5;
-        Mon,  8 Aug 2022 08:06:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8661C43470;
-        Mon,  8 Aug 2022 08:06:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5499FB80DD7;
+        Mon,  8 Aug 2022 08:06:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B85C433D6;
+        Mon,  8 Aug 2022 08:06:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1659945978;
-        bh=E9+7aC4Yw8oq+CFp7IBpO6wuIDD2IWECqn1vNuAh4Gg=;
+        s=k20201202; t=1659945983;
+        bh=88SuZrvyL3jeJFfiTyPwnClk88QEzLMNBQPdHR9UyV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z0qSkbBljX/OZVI0viXnuLml2pfStiIeGHBuHL3siHSedGE3HFxJdpmfkjTY9a4o2
-         f5NMfXHQKQHILSlbZ1zG2pisBhbG7vz014u3Y8Sp2Oz9cu+qVCv7crr5i34VxSOz/8
-         XdZ+Ln/igjZG2mQylv4rBO7mxi0r7j8Nf/S4X9deoEe+uC5XXgDh6+sP2fRdNioMi5
-         UCeotd8qCbNhW8Si/WhecVACDm2EMuIWOPIm+Bc3nUYy2bw0BBOwjV1WAVbKfLD+Pp
-         e4bTQ01W5hKN5m7clD3wp5pv+E0xom6T3Qym7q5pccVtQRktYW7+v+vDOS3scds5ch
-         W3IXChEmQpSkQ==
+        b=l4y7FiXxZ/3MlZLfl2cFaqKyz++tjbho4X9H2WHIaHFWDO4xvCWc/zx2pMZCTmn1s
+         ckSQaw7NQ6Pqz1tTx6Tj19+TmTFv7OFhio/a29OboGFsDXyep7pzvjqsiQNxyO9FF8
+         p2aDspkgMOSU5FhziAy1LKzLPD2ko78xk4r2x57YV9o0MIoXHwXL96EdPbdabgQeAS
+         EdUXQszkHktiCCDhkjmXnsppif1V4ZcWpmuIL4c0cvc4Hj6+/4REakl2Cpfo583b+7
+         9UEzb9BTXhYAvRoSLdFQpCxHzQSmUyE+M/pct1EIEP/461VqY22RUwFR861/Tn25c0
+         mmkj+T+xM93yA==
 From:   guoren@kernel.org
 To:     tj@kernel.org, cl@linux.com, palmer@dabbelt.com, will@kernel.org,
         catalin.marinas@arm.com, peterz@infradead.org, arnd@arndb.de
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>
-Subject: [RFC PATCH 1/4] vmstat: percpu: Rename HAVE_CMPXCHG_LOCAL to HAVE_CMPXCHG_PERCPU_BYTE
-Date:   Mon,  8 Aug 2022 04:05:57 -0400
-Message-Id: <20220808080600.3346843-2-guoren@kernel.org>
+Subject: [RFC PATCH 2/4] arm64: percpu: Use generic PERCPU_RW_OPS
+Date:   Mon,  8 Aug 2022 04:05:58 -0400
+Message-Id: <20220808080600.3346843-3-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220808080600.3346843-1-guoren@kernel.org>
 References: <20220808080600.3346843-1-guoren@kernel.org>
@@ -57,105 +57,73 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The name HAVE_CMPXCHG_LOCAL is confused with using cmpxchg_local, but
-vmstat needs this_cpu_cmpxchg_1. Rename would clarify the meaning, and
-maybe we could remove cmpxchg(64)_local API (Only drivers/iommu/intel
-used) in the future.
+The generic percpu implementation also using READ_ONCE()/WRITE_ONCE().
+And the generic even give a better __native_word() check.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- .../features/locking/cmpxchg-local/arch-support.txt         | 6 +++---
- arch/Kconfig                                                | 2 +-
- arch/arm64/Kconfig                                          | 2 +-
- arch/s390/Kconfig                                           | 2 +-
- arch/x86/Kconfig                                            | 2 +-
- mm/vmstat.c                                                 | 4 ++--
- 6 files changed, 9 insertions(+), 9 deletions(-)
+ arch/arm64/include/asm/percpu.h | 33 ---------------------------------
+ 1 file changed, 33 deletions(-)
 
-diff --git a/Documentation/features/locking/cmpxchg-local/arch-support.txt b/Documentation/features/locking/cmpxchg-local/arch-support.txt
-index 8b1a8d9e1c79..4d4c5c2fa66d 100644
---- a/Documentation/features/locking/cmpxchg-local/arch-support.txt
-+++ b/Documentation/features/locking/cmpxchg-local/arch-support.txt
-@@ -1,7 +1,7 @@
- #
--# Feature name:          cmpxchg-local
--#         Kconfig:       HAVE_CMPXCHG_LOCAL
--#         description:   arch supports the this_cpu_cmpxchg() API
-+# Feature name:          cmpxchg-percpu-byte
-+#         Kconfig:       HAVE_CMPXCHG_PERCPU_BYTE
-+#         description:   arch supports the this_cpu_cmpxchg_1() API
- #
-     -----------------------
-     |         arch |status|
-diff --git a/arch/Kconfig b/arch/Kconfig
-index f330410da63a..81800cdfe161 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -471,7 +471,7 @@ config HAVE_ALIGNED_STRUCT_PAGE
- 	  on a struct page for better performance. However selecting this
- 	  might increase the size of a struct page by a word.
+diff --git a/arch/arm64/include/asm/percpu.h b/arch/arm64/include/asm/percpu.h
+index b9ba19dbdb69..a58de20d742a 100644
+--- a/arch/arm64/include/asm/percpu.h
++++ b/arch/arm64/include/asm/percpu.h
+@@ -52,17 +52,6 @@ static inline unsigned long __kern_my_cpu_offset(void)
+ #define __my_cpu_offset __kern_my_cpu_offset()
+ #endif
  
--config HAVE_CMPXCHG_LOCAL
-+config HAVE_CMPXCHG_PERCPU_BYTE
- 	bool
+-#define PERCPU_RW_OPS(sz)						\
+-static inline unsigned long __percpu_read_##sz(void *ptr)		\
+-{									\
+-	return READ_ONCE(*(u##sz *)ptr);				\
+-}									\
+-									\
+-static inline void __percpu_write_##sz(void *ptr, unsigned long val)	\
+-{									\
+-	WRITE_ONCE(*(u##sz *)ptr, (u##sz)val);				\
+-}
+-
+ #define __PERCPU_OP_CASE(w, sfx, name, sz, op_llsc, op_lse)		\
+ static inline void							\
+ __percpu_##name##_case_##sz(void *ptr, unsigned long val)		\
+@@ -120,10 +109,6 @@ __percpu_##name##_return_case_##sz(void *ptr, unsigned long val)	\
+ 	__PERCPU_RET_OP_CASE(w,  , name, 32, op_llsc, op_lse)		\
+ 	__PERCPU_RET_OP_CASE( ,  , name, 64, op_llsc, op_lse)
  
- config HAVE_CMPXCHG_DOUBLE
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 571cc234d0b3..24a82bdc766a 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -175,7 +175,7 @@ config ARM64
- 	select HAVE_EBPF_JIT
- 	select HAVE_C_RECORDMCOUNT
- 	select HAVE_CMPXCHG_DOUBLE
--	select HAVE_CMPXCHG_LOCAL
-+	select HAVE_CMPXCHG_PERCPU_BYTE
- 	select HAVE_CONTEXT_TRACKING_USER
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 318fce77601d..ac03af800bf7 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -151,7 +151,7 @@ config S390
- 	select HAVE_ARCH_VMAP_STACK
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_CMPXCHG_DOUBLE
--	select HAVE_CMPXCHG_LOCAL
-+	select HAVE_CMPXCHG_PERCPU_BYTE
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index f9920f1341c8..5f4f6df7b89f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -184,7 +184,7 @@ config X86
- 	select HAVE_ARCH_WITHIN_STACK_FRAMES
- 	select HAVE_ASM_MODVERSIONS
- 	select HAVE_CMPXCHG_DOUBLE
--	select HAVE_CMPXCHG_LOCAL
-+	select HAVE_CMPXCHG_PERCPU_BYTE
- 	select HAVE_CONTEXT_TRACKING_USER		if X86_64
- 	select HAVE_CONTEXT_TRACKING_USER_OFFSTACK	if HAVE_CONTEXT_TRACKING_USER
- 	select HAVE_C_RECORDMCOUNT
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index 373d2730fcf2..b2fc6d28d3b2 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -554,9 +554,9 @@ void __dec_node_page_state(struct page *page, enum node_stat_item item)
- }
- EXPORT_SYMBOL(__dec_node_page_state);
+-PERCPU_RW_OPS(8)
+-PERCPU_RW_OPS(16)
+-PERCPU_RW_OPS(32)
+-PERCPU_RW_OPS(64)
+ PERCPU_OP(add, add, stadd)
+ PERCPU_OP(andnot, bic, stclr)
+ PERCPU_OP(or, orr, stset)
+@@ -168,24 +153,6 @@ PERCPU_RET_OP(add, add, ldadd)
+ 	__retval;							\
+ })
  
--#ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-+#ifdef CONFIG_HAVE_CMPXCHG_PERCPU_BYTE
- /*
-- * If we have cmpxchg_local support then we do not need to incur the overhead
-+ * If we have this_cpu_cmpxchg_1 arch support then we do not need to incur the overhead
-  * that comes with local_irq_save/restore if we use this_cpu_cmpxchg.
-  *
-  * mod_state() modifies the zone counter state through atomic per cpu
+-#define this_cpu_read_1(pcp)		\
+-	_pcp_protect_return(__percpu_read_8, pcp)
+-#define this_cpu_read_2(pcp)		\
+-	_pcp_protect_return(__percpu_read_16, pcp)
+-#define this_cpu_read_4(pcp)		\
+-	_pcp_protect_return(__percpu_read_32, pcp)
+-#define this_cpu_read_8(pcp)		\
+-	_pcp_protect_return(__percpu_read_64, pcp)
+-
+-#define this_cpu_write_1(pcp, val)	\
+-	_pcp_protect(__percpu_write_8, pcp, (unsigned long)val)
+-#define this_cpu_write_2(pcp, val)	\
+-	_pcp_protect(__percpu_write_16, pcp, (unsigned long)val)
+-#define this_cpu_write_4(pcp, val)	\
+-	_pcp_protect(__percpu_write_32, pcp, (unsigned long)val)
+-#define this_cpu_write_8(pcp, val)	\
+-	_pcp_protect(__percpu_write_64, pcp, (unsigned long)val)
+-
+ #define this_cpu_add_1(pcp, val)	\
+ 	_pcp_protect(__percpu_add_case_8, pcp, val)
+ #define this_cpu_add_2(pcp, val)	\
 -- 
 2.36.1
 
