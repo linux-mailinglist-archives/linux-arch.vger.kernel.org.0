@@ -2,158 +2,214 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7837E58D784
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Aug 2022 12:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6443858D78B
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Aug 2022 12:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242545AbiHIKje (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Aug 2022 06:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S242608AbiHIKlr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Aug 2022 06:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiHIKjc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Aug 2022 06:39:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FE51C130;
-        Tue,  9 Aug 2022 03:39:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67789B81065;
-        Tue,  9 Aug 2022 10:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B220C433D7;
-        Tue,  9 Aug 2022 10:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660041568;
-        bh=BRCiwnRrrEj+6rsHKi7i9FY2FVq0CuJ6TVmIwaj4nKc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RIWMRw/pUkE5FT2ixI8auoI2/R3naj/TqPtCeMvEbgyo2wDaTPQgqjCsD8L2FL3Us
-         jhz0o7Kuq6muGWeG9gOPCFbkWm2NgIAg7EV/lZttYHpp/bqu9Kkj6xM4951YhdAHvY
-         G7jL0rXBKelePdSsReSJf61tbvXtyW83z5fl2flimjYTGFh2213DrEZ0Tzrua1NUe+
-         mDQN0zb76QOOd4wKLQtk13lm9K1uaDDb6uD6gwgIW4IApzuVUQfoghFQRlxKSJqSEl
-         kZZl16vVs6h2YNeI0VLsFSEVhJEhQyADbNwGL5AjDXuDH//G66Ykytw1WZYz4lziI1
-         Xes4YAaktZ6vg==
-Received: by mail-vs1-f49.google.com with SMTP id 66so11438754vse.4;
-        Tue, 09 Aug 2022 03:39:28 -0700 (PDT)
-X-Gm-Message-State: ACgBeo19tfNJ0hZ2BhY0Bl+n/bTT59kcFvlWIwIWDjvSHOtCISqBrTpC
-        Pt5dZZYxV6rKxNA+YPpPA1LrzwPN9P4pYTw4G10=
-X-Google-Smtp-Source: AA6agR4wnbjusAhLZE7GHxSqIj6E44MSRxZCmQYgbMJfjWdg+7AxhfqWOko9JWnnMUrahCErmoGrgS7TO8/iDYxezR8=
-X-Received: by 2002:a67:fb82:0:b0:388:6cf6:2d17 with SMTP id
- n2-20020a67fb82000000b003886cf62d17mr9519484vsr.84.1660041567056; Tue, 09 Aug
- 2022 03:39:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220809074522.2444672-1-chenhuacai@loongson.cn>
- <874jylx0ad.wl-maz@kernel.org> <CAAhV-H50HERxjrmfDkSaHAVY7Q_ufpZP-e+qdZWVd=qEuQVXBg@mail.gmail.com>
- <871qtpwwem.wl-maz@kernel.org>
-In-Reply-To: <871qtpwwem.wl-maz@kernel.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 9 Aug 2022 18:39:15 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4ZCmenrPvzLCaZZn57NoiGpQfVGpXg42DE2JevF4Tf9w@mail.gmail.com>
-Message-ID: <CAAhV-H4ZCmenrPvzLCaZZn57NoiGpQfVGpXg42DE2JevF4Tf9w@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Don't disable EIOINTC master core
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        with ESMTP id S242671AbiHIKlp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Aug 2022 06:41:45 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F3F240B0;
+        Tue,  9 Aug 2022 03:41:42 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4M28kq4Mkpz9sj9;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bwunTC9zQdnT; Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4M28kq3KFwz9sTf;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 618598B778;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id OgfyrO3Jg3AT; Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.234.255])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1C0FF8B763;
+        Tue,  9 Aug 2022 12:41:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 279AfUiP098284
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 9 Aug 2022 12:41:30 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 279AfSLO098283;
+        Tue, 9 Aug 2022 12:41:28 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
+        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
+Subject: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Date:   Tue,  9 Aug 2022 12:40:38 +0200
+Message-Id: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1660041632; l=4893; s=20211009; h=from:subject:message-id; bh=ejR9oy9Pzrb8cgNZizsVlepvN45Ei2h0wt6+agIKtnw=; b=iINNvBE7QtjOKvB5PfN++erBtPsIhPMmqt/Z3lpvNjlBik2I3AaHxITPd0hsvJrpISp2eGMVSXs7 k8V7YsxYANQW8OT/GDp2OZUhMBB4TXFze5pWuYa7YMXL3wOm+uOE
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Marc,
+At the time being, the default maximum number of GPIOs is set to 512
+and can only get customised via an architecture specific
+CONFIG_ARCH_NR_GPIO.
 
-On Tue, Aug 9, 2022 at 6:20 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 09 Aug 2022 10:19:31 +0100,
-> Huacai Chen <chenhuacai@kernel.org> wrote:
-> >
-> > Hi, Marc,
-> >
-> > On Tue, Aug 9, 2022 at 4:56 PM Marc Zyngier <maz@kernel.org> wrote:
-> > >
-> > > On Tue, 09 Aug 2022 08:45:22 +0100,
-> > > Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > >
-> > > > This patch fix a CPU hotplug issue. The EIOINTC master core (the first
-> > > > core of an EIOINTC node) should not be disabled at runtime, since it has
-> > > > the responsibility of dispatching I/O interrupts.
-> > > >
-> > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > > > ---
-> > > >  arch/loongarch/kernel/smp.c            | 9 +++++++++
-> > > >  drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
-> > > >  2 files changed, 14 insertions(+)
-> > > >
-> > > > diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
-> > > > index 09743103d9b3..54901716f8de 100644
-> > > > --- a/arch/loongarch/kernel/smp.c
-> > > > +++ b/arch/loongarch/kernel/smp.c
-> > > > @@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
-> > > >
-> > > >  static bool io_master(int cpu)
-> > > >  {
-> > > > +     int i, node, master;
-> > > > +
-> > > >       if (cpu == 0)
-> > > >               return true;
-> > > >
-> > > > +     for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
-> > > > +             node = eiointc_get_node(i);
-> > > > +             master = cpu_number_map(node * CORES_PER_EIO_NODE);
-> > > > +             if (cpu == master)
-> > > > +                     return true;
-> > > > +     }
-> > > > +
-> > > >       return false;
-> > > >  }
-> > > >
-> > > > diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
-> > > > index 170dbc96c7d3..6c99a2ff95f5 100644
-> > > > --- a/drivers/irqchip/irq-loongson-eiointc.c
-> > > > +++ b/drivers/irqchip/irq-loongson-eiointc.c
-> > > > @@ -56,6 +56,11 @@ static void eiointc_enable(void)
-> > > >       iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
-> > > >  }
-> > > >
-> > > > +int eiointc_get_node(int id)
-> > > > +{
-> > > > +     return eiointc_priv[id]->node;
-> > > > +}
-> > > > +
-> > > >  static int cpu_to_eio_node(int cpu)
-> > > >  {
-> > > >       return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
-> > >
-> > >
-> > > I don't understand why it has to be this complex and make any use of
-> > > the node number.
-> > >
-> > > As I understand it, CPU-0 in any EIOINTC block is a master. So all you
-> > > need to find out is whether the CPU number is a multiple of
-> > > CORES_PER_EIO_NODE.
-> > CPU-0 in any EIOINTC block may be a master, but not absolutely be a
-> > master to dispatch I/O interrupts. If there is no bridge under a
-> > EIOINTC, then this EIOINTC doesn't handle I/O interrupts, and it can
-> > be disabled at runtime.
->
-> But that's not what your code is checking, is it? You're only
-> reporting the node number, irrespective of whether there is anything
-> behind the EIOINTC.
-The return value of eiointc_get_node() means "this eio-node has a
-downstream bridge, so the master core of this eio-node cannot be
-disabled". :)
+The maximum number of GPIOs might be dependent on the number of
+interface boards and is somewhat independent of architecture.
 
-Huacai
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Allow the user to select that maximum number outside of any
+architecture configuration. To enable that, re-define a
+core CONFIG_ARCH_NR_GPIO for architectures which don't already
+define one. Guard it with a new hidden CONFIG_ARCH_HAS_NR_GPIO.
+
+Only two architectures will need CONFIG_ARCH_HAS_NR_GPIO: x86 and arm.
+
+On arm, do like x86 and set 512 as the default instead of 0, that
+allows simplifying the logic in asm-generic/gpio.h
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ Documentation/driver-api/gpio/legacy.rst |  2 +-
+ arch/arm/Kconfig                         |  3 ++-
+ arch/arm/include/asm/gpio.h              |  1 -
+ arch/x86/Kconfig                         |  1 +
+ drivers/gpio/Kconfig                     | 14 ++++++++++++++
+ include/asm-generic/gpio.h               |  6 ------
+ 6 files changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
+index 9b12eeb89170..566b06a584cf 100644
+--- a/Documentation/driver-api/gpio/legacy.rst
++++ b/Documentation/driver-api/gpio/legacy.rst
+@@ -558,7 +558,7 @@ Platform Support
+ To force-enable this framework, a platform's Kconfig will "select" GPIOLIB,
+ else it is up to the user to configure support for GPIO.
+ 
+-It may also provide a custom value for ARCH_NR_GPIOS, so that it better
++It may also provide a custom value for CONFIG_ARCH_NR_GPIO, so that it better
+ reflects the number of GPIOs in actual use on that platform, without
+ wasting static table space.  (It should count both built-in/SoC GPIOs and
+ also ones on GPIO expanders.
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 53e6a1da9af5..e55b6560fe4f 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -14,6 +14,7 @@ config ARM
+ 	select ARCH_HAS_KCOV
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
++	select ARCH_HAS_NR_GPIO
+ 	select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
+ 	select ARCH_HAS_PHYS_TO_DMA
+ 	select ARCH_HAS_SETUP_DMA_OPS
+@@ -1243,7 +1244,7 @@ config ARCH_NR_GPIO
+ 	default 352 if ARCH_VT8500
+ 	default 288 if ARCH_ROCKCHIP
+ 	default 264 if MACH_H4700
+-	default 0
++	default 512
+ 	help
+ 	  Maximum number of GPIOs in the system.
+ 
+diff --git a/arch/arm/include/asm/gpio.h b/arch/arm/include/asm/gpio.h
+index f3bb8a2bf788..4ebbb58f06ea 100644
+--- a/arch/arm/include/asm/gpio.h
++++ b/arch/arm/include/asm/gpio.h
+@@ -2,7 +2,6 @@
+ #ifndef _ARCH_ARM_GPIO_H
+ #define _ARCH_ARM_GPIO_H
+ 
+-/* Note: this may rely upon the value of ARCH_NR_GPIOS set in mach/gpio.h */
+ #include <asm-generic/gpio.h>
+ 
+ /* The trivial gpiolib dispatchers */
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..a8c956abc21e 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -82,6 +82,7 @@ config X86
+ 	select ARCH_HAS_MEM_ENCRYPT
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
++	select ARCH_HAS_NR_GPIO
+ 	select ARCH_HAS_PMEM_API		if X86_64
+ 	select ARCH_HAS_PTE_DEVMAP		if X86_64
+ 	select ARCH_HAS_PTE_SPECIAL
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 0642f579196f..250b50ed44e1 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -11,6 +11,9 @@ config ARCH_HAVE_CUSTOM_GPIO_H
+ 	  overriding the default implementations.  New uses of this are
+ 	  strongly discouraged.
+ 
++config ARCH_HAS_NR_GPIO
++	bool
++
+ menuconfig GPIOLIB
+ 	bool "GPIO Support"
+ 	help
+@@ -22,6 +25,17 @@ menuconfig GPIOLIB
+ 
+ if GPIOLIB
+ 
++config ARCH_NR_GPIO
++	int "Maximum number of GPIOs" if EXPERT
++	depends on !ARCH_HAS_NR_GPIO
++	default 512
++	help
++	  This allows the user to select the maximum number of GPIOs the
++	  kernel must support. When the architecture defines a number
++	  through CONFIG_ARCH_NR_GPIO, that value is taken and the user
++	  cannot change it. Otherwise it defaults to 512 and the user
++	  can change it when CONFIG_EXPERT is set.
++
+ config GPIOLIB_FASTPATH_LIMIT
+ 	int "Maximum number of GPIOs for fast path"
+ 	range 32 512
+diff --git a/include/asm-generic/gpio.h b/include/asm-generic/gpio.h
+index aea9aee1f3e9..ee090f534ab8 100644
+--- a/include/asm-generic/gpio.h
++++ b/include/asm-generic/gpio.h
+@@ -24,13 +24,7 @@
+  * actually an estimate of a board-specific value.
+  */
+ 
+-#ifndef ARCH_NR_GPIOS
+-#if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
+ #define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
+-#else
+-#define ARCH_NR_GPIOS		512
+-#endif
+-#endif
+ 
+ /*
+  * "valid" GPIO numbers are nonnegative and may be passed to
+-- 
+2.37.1
+
