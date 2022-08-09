@@ -2,136 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC8758D5ED
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Aug 2022 11:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D085258D5E2
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Aug 2022 10:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241485AbiHIJAP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Aug 2022 05:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
+        id S241979AbiHII5P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Aug 2022 04:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241486AbiHIJAN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Aug 2022 05:00:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8075F1C5;
-        Tue,  9 Aug 2022 02:00:12 -0700 (PDT)
+        with ESMTP id S241485AbiHII4t (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Aug 2022 04:56:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADEF2252D;
+        Tue,  9 Aug 2022 01:56:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A79260E9C;
-        Tue,  9 Aug 2022 09:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37840C433D6;
-        Tue,  9 Aug 2022 09:00:06 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id D55C5B80E11;
+        Tue,  9 Aug 2022 08:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85606C433C1;
+        Tue,  9 Aug 2022 08:56:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660035404;
+        bh=5UfhFW8R3mc4/i0CbqCEm7Z2hfhkjOqWFTVdTW1KEos=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iE2wEKtr2NR09x9UoLHFPRZGUQ08Lt79ntrYBu+nF9VtEnjnlbD7/TyeQoDquiKxF
+         DAn79ymhs0TCZDQ68KrMb3y9TVi34kaFMYHp5AzZOwVdoB9HQm6alFSVbGzRIHY1Bl
+         f/5B7zPdEDvqhExncNQq7Te++/PyKJEMtlBF3KpAk5H7vH1jEY0kvTZV7MxGKf9a8Y
+         f9UoR+ixdDTDQ6dK+i9Gsv/CN0P3kmdCOWak1wtLNKnZascfRnXJnhOD4RY+jj4bbI
+         kOPUKl6p3s5vauLsZ3fUroFxVXROtCTv2vWPKvdFgPNc9PAjOhKrqJp0KJKljUkbdG
+         1hci70Fl1x9Og==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLL2Y-001sCa-C4;
+        Tue, 09 Aug 2022 09:56:42 +0100
+Date:   Tue, 09 Aug 2022 09:56:42 +0100
+Message-ID: <874jylx0ad.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuerui Wang <kernel@xen0n.name>,
         Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V9 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Tue,  9 Aug 2022 16:52:53 +0800
-Message-Id: <20220809085253.2916982-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220809085253.2916982-1-chenhuacai@loongson.cn>
-References: <20220809085253.2916982-1-chenhuacai@loongson.cn>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] LoongArch: Don't disable EIOINTC master core
+In-Reply-To: <20220809074522.2444672-1-chenhuacai@loongson.cn>
+References: <20220809074522.2444672-1-chenhuacai@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, chenhuacai@kernel.org, tglx@linutronix.de, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@xen0n.name, lixuefeng@loongson.cn, jiaxun.yang@flygoat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
+On Tue, 09 Aug 2022 08:45:22 +0100,
+Huacai Chen <chenhuacai@loongson.cn> wrote:
+> 
+> This patch fix a CPU hotplug issue. The EIOINTC master core (the first
+> core of an EIOINTC node) should not be disabled at runtime, since it has
+> the responsibility of dispatching I/O interrupts.
+> 
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  arch/loongarch/kernel/smp.c            | 9 +++++++++
+>  drivers/irqchip/irq-loongson-eiointc.c | 5 +++++
+>  2 files changed, 14 insertions(+)
+> 
+> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+> index 09743103d9b3..54901716f8de 100644
+> --- a/arch/loongarch/kernel/smp.c
+> +++ b/arch/loongarch/kernel/smp.c
+> @@ -242,9 +242,18 @@ void loongson3_smp_finish(void)
+>  
+>  static bool io_master(int cpu)
+>  {
+> +	int i, node, master;
+> +
+>  	if (cpu == 0)
+>  		return true;
+>  
+> +	for (i = 1; i < loongson_sysconf.nr_io_pics; i++) {
+> +		node = eiointc_get_node(i);
+> +		master = cpu_number_map(node * CORES_PER_EIO_NODE);
+> +		if (cpu == master)
+> +			return true;
+> +	}
+> +
+>  	return false;
+>  }
+>  
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq-loongson-eiointc.c
+> index 170dbc96c7d3..6c99a2ff95f5 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -56,6 +56,11 @@ static void eiointc_enable(void)
+>  	iocsr_write64(misc, LOONGARCH_IOCSR_MISC_FUNC);
+>  }
+>  
+> +int eiointc_get_node(int id)
+> +{
+> +	return eiointc_priv[id]->node;
+> +}
+> +
+>  static int cpu_to_eio_node(int cpu)
+>  {
+>  	return cpu_logical_map(cpu) / CORES_PER_EIO_NODE;
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
 
-To avoid the following build error on LoongArch we should include linux/
-static_key.h in page-flags.h.
+I don't understand why it has to be this complex and make any use of
+the node number.
 
-In file included from ./include/linux/mmzone.h:22,
-from ./include/linux/gfp.h:6,
-from ./include/linux/mm.h:7,
-from arch/loongarch/kernel/asm-offsets.c:9:
-./include/linux/page-flags.h:208:1: warning: data definition has no
-type or storage class
-208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-./include/linux/page-flags.h:209:26: warning: parameter names (without
-types) in function declaration
-209 | hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-./include/linux/page-flags.h:213:16: error: implicit declaration of
-function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:213:36: error:
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-use in this function); did you mean
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-./include/linux/page-flags.h:213:36: note: each undeclared identifier
-is reported only once for each function it appears in
-./include/linux/page-flags.h:214:37: error:
-'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-214 | &hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| hugetlb_optimize_vmemmap_enabled
+As I understand it, CPU-0 in any EIOINTC block is a master. So all you
+need to find out is whether the CPU number is a multiple of
+CORES_PER_EIO_NODE.
 
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
+Something like:
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index cff781d92c81..de78c86a205c 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -49,6 +49,7 @@ config LOONGARCH
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
- 	select COMMON_CLK
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa3191d..28a53ac7aa3e 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
+	return (cpu_logical_map(cpu) % CORES_PER_EIO_NODE) == 0;
+
+which doesn't require exporting anything from anywhere?
+
+	M.
+
 -- 
-2.31.1
-
+Without deviation from the norm, progress is not possible.
