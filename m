@@ -2,228 +2,224 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6238A58DB71
-	for <lists+linux-arch@lfdr.de>; Tue,  9 Aug 2022 17:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D453958DF96
+	for <lists+linux-arch@lfdr.de>; Tue,  9 Aug 2022 21:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244713AbiHIP5h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 9 Aug 2022 11:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53432 "EHLO
+        id S1345238AbiHITAT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 9 Aug 2022 15:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244785AbiHIP5e (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Aug 2022 11:57:34 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C961EAD8;
-        Tue,  9 Aug 2022 08:57:25 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 17:57:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660060643;
+        with ESMTP id S1345144AbiHIS7v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 9 Aug 2022 14:59:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7776726579
+        for <linux-arch@vger.kernel.org>; Tue,  9 Aug 2022 11:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660069942;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GubbiwUJvNBdFSjuYJdN+rOiXh1SU5ITYieK1/sI9cQ=;
-        b=kckf7Eubyl97DN9aFbx3BHVW22wozyeBdzuZ4L71VVUvvrnsyI2oswNZ3fnbFoCm6zx03I
-        zZJTtaOW2ulrQ5dQWHDbTywKwDM8dS14rejL8pDMGB4YJUIGbXOe8KDCuGHvjhGmsd2xLr
-        yVlvS57LFn9QtRzGYCTgfTChOro1vjZyuy9xFyVg1cIZUFFkU2pHgMgwghAxpCFNFkr7iB
-        DcEp/KOcSchMzii01uEdTV6LLOMT2Qk5bGBn7mknf9vK73BnRor4C/dlPhL+/8QjFQ0UY5
-        EkyZXlIdk48H31iog52zm6lt5MPH4rG2TOFqZJXER/r0iZPPVoGsccdawK8+bg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660060643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GubbiwUJvNBdFSjuYJdN+rOiXh1SU5ITYieK1/sI9cQ=;
-        b=llCch5t2RIbNFZOUcGW/cFbAJ5cqY56yv2x1Dkfv11Fakk92thtJBPkgBy/DPHYaoNr/I9
-        KeBpJFuO829LnkDw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        bh=k+BeaTfVMUnsn/KH0avfSZ9dOxb93xKAhJDQYTFb27o=;
+        b=LrRM6kw0CGVHYARhhCVuFVwvtL+88C7mxqEjUasZN65EBOf4vpkMm0DniWILNeCTWHEiom
+        eC0IFUN348mEb0xdoM7kHfDOESGKiPdN9w+d/dII9aX79GmsQh8kjd32FUBZYn/zeRZfVO
+        n4KIL82ASNr3uhdg3BThyuyJeWQ0q7M=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-361-K9PfdN9eOnipk3nuBQkONg-1; Tue, 09 Aug 2022 14:32:17 -0400
+X-MC-Unique: K9PfdN9eOnipk3nuBQkONg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 20F2B3C10226;
+        Tue,  9 Aug 2022 18:32:15 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CC6B9492C3B;
+        Tue,  9 Aug 2022 18:32:14 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 279IWE3A015903;
+        Tue, 9 Aug 2022 14:32:14 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 279IWDHD015899;
+        Tue, 9 Aug 2022 14:32:14 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Tue, 9 Aug 2022 14:32:13 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: [PATCH] asm-generic: Conditionally enable do_softirq_own_stack() via
- Kconfig.
-Message-ID: <YvKD4hkZ3erf54DG@linutronix.de>
-References: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
- <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
+        linux-arch <linux-arch@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v6] add barriers to buffer_uptodate and set_buffer_uptodate
+In-Reply-To: <YvEuIg3669UeSwjD@casper.infradead.org>
+Message-ID: <alpine.LRH.2.02.2208091359220.5899@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2208010628510.22006@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2208010642220.22006@file01.intranet.prod.int.rdu2.redhat.com> <YuflGG60pHiXp2z/@casper.infradead.org> <alpine.LRH.2.02.2208011040190.27101@file01.intranet.prod.int.rdu2.redhat.com>
+ <YuyNE5c06WStxQ2z@casper.infradead.org> <alpine.LRH.2.02.2208070732160.30857@file01.intranet.prod.int.rdu2.redhat.com> <Yu/RJtoJPhkWXIdP@casper.infradead.org> <alpine.LRH.2.02.2208080928580.8160@file01.intranet.prod.int.rdu2.redhat.com>
+ <YvEgZuSdv8XHtkJg@casper.infradead.org> <alpine.LRH.2.02.2208081050330.8160@file01.intranet.prod.int.rdu2.redhat.com> <YvEuIg3669UeSwjD@casper.infradead.org>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Remove the CONFIG_PREEMPT_RT symbol from the ifdef around
-do_softirq_own_stack() and move it to Kconfig instead.
 
-Enable softirq stacks based on SOFTIRQ_ON_OWN_STACK which depends on
-HAVE_SOFTIRQ_ON_OWN_STACK and its default value is set to !PREEMPT_RT.
-This ensures that softirq stacks are not used on PREEMPT_RT and avoids
-a 'select' statement on an option which has a 'depends' statement.
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- arch/Kconfig                          | 4 ++++
- arch/arm/kernel/irq.c                 | 2 +-
- arch/parisc/kernel/irq.c              | 2 +-
- arch/powerpc/kernel/irq.c             | 4 ++--
- arch/s390/include/asm/softirq_stack.h | 2 +-
- arch/sh/kernel/irq.c                  | 2 +-
- arch/sparc/kernel/irq_64.c            | 2 +-
- arch/x86/include/asm/irq_stack.h      | 2 +-
- arch/x86/kernel/irq_32.c              | 2 +-
- include/asm-generic/softirq_stack.h   | 2 +-
- 10 files changed, 14 insertions(+), 10 deletions(-)
+On Mon, 8 Aug 2022, Matthew Wilcox wrote:
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index f330410da63a6..966aa6f82a5b9 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -924,6 +924,10 @@ config HAVE_SOFTIRQ_ON_OWN_STACK
- 	  Architecture provides a function to run __do_softirq() on a
- 	  separate stack.
+> On Mon, Aug 08, 2022 at 10:57:45AM -0400, Mikulas Patocka wrote:
+> > On Mon, 8 Aug 2022, Matthew Wilcox wrote:
+> > 
+> > > On Mon, Aug 08, 2022 at 10:26:10AM -0400, Mikulas Patocka wrote:
+> > > > On Sun, 7 Aug 2022, Matthew Wilcox wrote:
+> > > > > > +static __always_inline void set_buffer_locked(struct buffer_head *bh)
+> > > > > > +{
+> > > > > > +	set_bit(BH_Lock, &bh->b_state);
+> > > > > > +}
+> > > > > > +
+> > > > > > +static __always_inline int buffer_locked(const struct buffer_head *bh)
+> > > > > > +{
+> > > > > > +	bool ret = test_bit(BH_Lock, &bh->b_state);
+> > > > > > +	/*
+> > > > > > +	 * pairs with smp_mb__after_atomic in unlock_buffer
+> > > > > > +	 */
+> > > > > > +	if (!ret)
+> > > > > > +		smp_acquire__after_ctrl_dep();
+> > > > > > +	return ret;
+> > > > > > +}
+> > > > > 
+> > > > > Are there places that think that lock/unlock buffer implies a memory
+> > > > > barrier?
+> > > > 
+> > > > There's this in fs/reiserfs:
+> > > > 
+> > > > if (!buffer_dirty(bh) && !buffer_locked(bh)) {
+> > > > 	reiserfs_free_jh(bh); <--- this could be moved before buffer_locked
+> > > 
+> > > It might be better to think of buffer_locked() as
+> > > buffer_someone_has_exclusive_access().  I can't see the problem with
+> > > moving the reads in reiserfs_free_jh() before the read of buffer_locked.
+> > > 
+> > > > if (buffer_locked((journal->j_header_bh))) {
+> > > > 	...
+> > > > }
+> > > > journal->j_last_flush_trans_id = trans_id;
+> > > > journal->j_first_unflushed_offset = offset;
+> > > > jh = (struct reiserfs_journal_header *)(journal->j_header_bh->b_data); <--- this could be moved before buffer_locked
+> > > 
+> > > I don't think b_data is going to be changed while someone else holds
+> > > the buffer locked.  That's initialised by set_bh_page(), which is an
+> > > initialisation-time thing, before the BH is visible to any other thread.
+> > 
+> > So, do you think that we don't need a barrier in buffer_locked()?
+> 
+> That's my feeling.  Of course, you might not be the only one confused,
+> and if fs authors in general have made the mistake of thinking that
+> buffer_locked is serialising, then it might be better to live up to
+> that expectation.
+
+In my spadfs filesystem, I used lock_buffer/unlock_buffer to prevent the 
+system from seeing or writing back incomplete data. The patterns is
+	lock_buffer(bh);
+	... do several changes to the buffer that should appear atomically
+	unlock_buffer(bh);
+	mark_buffer_dirty(bh);
+but it seems to be ok, because both lock_buffer and unlock_buffer have 
+acquire/release semantics. I'm not sure about buffer_locked - perhaps it 
+really doesn't need the barriers - spin_is_locked, mutex_is_locked and 
+rwsem_is_locked also don't have any barriers.
+
+Here I'm sending the patch without the change to buffer_locked.
+
+Mikulas
+
+
+
+From: Mikulas Patocka <mpatocka@redhat.com>
+
+Let's have a look at this piece of code in __bread_slow:
+	get_bh(bh);
+	bh->b_end_io = end_buffer_read_sync;
+	submit_bh(REQ_OP_READ, 0, bh);
+	wait_on_buffer(bh);
+	if (buffer_uptodate(bh))
+		return bh;
+Neither wait_on_buffer nor buffer_uptodate contain any memory barrier.
+Consequently, if someone calls sb_bread and then reads the buffer data,
+the read of buffer data may be executed before wait_on_buffer(bh) on
+architectures with weak memory ordering and it may return invalid data.
+
+Fix this bug by adding a memory barrier to set_buffer_uptodate and an
+acquire barrier to buffer_uptodate (in a similar way as
+folio_test_uptodate and folio_mark_uptodate).
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+Cc: stable@vger.kernel.org
+
+Index: linux-2.6/include/linux/buffer_head.h
+===================================================================
+--- linux-2.6.orig/include/linux/buffer_head.h
++++ linux-2.6/include/linux/buffer_head.h
+@@ -117,7 +117,6 @@ static __always_inline int test_clear_bu
+  * of the form "mark_buffer_foo()".  These are higher-level functions which
+  * do something in addition to setting a b_state bit.
+  */
+-BUFFER_FNS(Uptodate, uptodate)
+ BUFFER_FNS(Dirty, dirty)
+ TAS_BUFFER_FNS(Dirty, dirty)
+ BUFFER_FNS(Lock, locked)
+@@ -135,6 +134,30 @@ BUFFER_FNS(Meta, meta)
+ BUFFER_FNS(Prio, prio)
+ BUFFER_FNS(Defer_Completion, defer_completion)
  
-+config SOFTIRQ_ON_OWN_STACK
-+	def_bool !PREEMPT_RT
-+	depends on HAVE_SOFTIRQ_ON_OWN_STACK
++static __always_inline void set_buffer_uptodate(struct buffer_head *bh)
++{
++	/*
++	 * make it consistent with folio_mark_uptodate
++	 * pairs with smp_load_acquire in buffer_uptodate
++	 */
++	smp_mb__before_atomic();
++	set_bit(BH_Uptodate, &bh->b_state);
++}
 +
- config ALTERNATE_USER_ADDRESS_SPACE
- 	bool
- 	help
-diff --git a/arch/arm/kernel/irq.c b/arch/arm/kernel/irq.c
-index 034cb48c9eeb8..fe28fc1f759d9 100644
---- a/arch/arm/kernel/irq.c
-+++ b/arch/arm/kernel/irq.c
-@@ -70,7 +70,7 @@ static void __init init_irq_stacks(void)
- 	}
- }
++static __always_inline void clear_buffer_uptodate(struct buffer_head *bh)
++{
++	clear_bit(BH_Uptodate, &bh->b_state);
++}
++
++static __always_inline int buffer_uptodate(const struct buffer_head *bh)
++{
++	/*
++	 * make it consistent with folio_test_uptodate
++	 * pairs with smp_mb__before_atomic in set_buffer_uptodate
++	 */
++	return (smp_load_acquire(&bh->b_state) & (1UL << BH_Uptodate)) != 0;
++}
++
+ #define bh_offset(bh)		((unsigned long)(bh)->b_data & ~PAGE_MASK)
  
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static void ____do_softirq(void *arg)
- {
- 	__do_softirq();
-diff --git a/arch/parisc/kernel/irq.c b/arch/parisc/kernel/irq.c
-index fbb882cb8dbb5..b05055f3ba4b8 100644
---- a/arch/parisc/kernel/irq.c
-+++ b/arch/parisc/kernel/irq.c
-@@ -480,7 +480,7 @@ static void execute_on_irq_stack(void *func, unsigned long param1)
- 	*irq_stack_in_use = 1;
- }
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	execute_on_irq_stack(__do_softirq, 0);
-diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
-index 0f17268c1f0bb..9ede61a5a469e 100644
---- a/arch/powerpc/kernel/irq.c
-+++ b/arch/powerpc/kernel/irq.c
-@@ -199,7 +199,7 @@ static inline void check_stack_overflow(unsigned long sp)
- 	}
- }
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static __always_inline void call_do_softirq(const void *sp)
- {
- 	/* Temporarily switch r1 to sp, call __do_softirq() then restore r1. */
-@@ -335,7 +335,7 @@ void *mcheckirq_ctx[NR_CPUS] __read_mostly;
- void *softirq_ctx[NR_CPUS] __read_mostly;
- void *hardirq_ctx[NR_CPUS] __read_mostly;
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	call_do_softirq(softirq_ctx[smp_processor_id()]);
-diff --git a/arch/s390/include/asm/softirq_stack.h b/arch/s390/include/asm/softirq_stack.h
-index af68d6c1d5840..1ac5115d3115e 100644
---- a/arch/s390/include/asm/softirq_stack.h
-+++ b/arch/s390/include/asm/softirq_stack.h
-@@ -5,7 +5,7 @@
- #include <asm/lowcore.h>
- #include <asm/stacktrace.h>
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static inline void do_softirq_own_stack(void)
- {
- 	call_on_stack(0, S390_lowcore.async_stack, void, __do_softirq);
-diff --git a/arch/sh/kernel/irq.c b/arch/sh/kernel/irq.c
-index 9092767380780..4e6835de54cf8 100644
---- a/arch/sh/kernel/irq.c
-+++ b/arch/sh/kernel/irq.c
-@@ -149,7 +149,7 @@ void irq_ctx_exit(int cpu)
- 	hardirq_ctx[cpu] = NULL;
- }
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	struct thread_info *curctx;
-diff --git a/arch/sparc/kernel/irq_64.c b/arch/sparc/kernel/irq_64.c
-index 41fa1be980a33..72da2e10e2559 100644
---- a/arch/sparc/kernel/irq_64.c
-+++ b/arch/sparc/kernel/irq_64.c
-@@ -855,7 +855,7 @@ void __irq_entry handler_irq(int pil, struct pt_regs *regs)
- 	set_irq_regs(old_regs);
- }
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	void *orig_sp, *sp = softirq_stack[smp_processor_id()];
-diff --git a/arch/x86/include/asm/irq_stack.h b/arch/x86/include/asm/irq_stack.h
-index 63f818aedf770..147cb8fdda92e 100644
---- a/arch/x86/include/asm/irq_stack.h
-+++ b/arch/x86/include/asm/irq_stack.h
-@@ -203,7 +203,7 @@
- 			      IRQ_CONSTRAINTS, regs, vector);		\
- }
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- /*
-  * Macro to invoke __do_softirq on the irq stack. This is only called from
-  * task context when bottom halves are about to be reenabled and soft
-diff --git a/arch/x86/kernel/irq_32.c b/arch/x86/kernel/irq_32.c
-index e5dd6da78713b..01833ebf5e8e3 100644
---- a/arch/x86/kernel/irq_32.c
-+++ b/arch/x86/kernel/irq_32.c
-@@ -132,7 +132,7 @@ int irq_init_percpu_irqstack(unsigned int cpu)
- 	return 0;
- }
- 
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	struct irq_stack *irqstk;
-diff --git a/include/asm-generic/softirq_stack.h b/include/asm-generic/softirq_stack.h
-index d3e2d81656e04..2a67aed9ac528 100644
---- a/include/asm-generic/softirq_stack.h
-+++ b/include/asm-generic/softirq_stack.h
-@@ -2,7 +2,7 @@
- #ifndef __ASM_GENERIC_SOFTIRQ_STACK_H
- #define __ASM_GENERIC_SOFTIRQ_STACK_H
- 
--#if defined(CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK) && !defined(CONFIG_PREEMPT_RT)
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void);
- #else
- static inline void do_softirq_own_stack(void)
--- 
-2.36.1
+ /* If we *know* page->private refers to buffer_heads */
 
