@@ -2,259 +2,251 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E13E58E983
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Aug 2022 11:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C045158E989
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Aug 2022 11:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbiHJJXW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Aug 2022 05:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S230182AbiHJJXq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Aug 2022 05:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiHJJXV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Aug 2022 05:23:21 -0400
-Received: from mx07-001d1705.pphosted.com (mx07-001d1705.pphosted.com [185.132.183.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87F26B16D;
-        Wed, 10 Aug 2022 02:23:20 -0700 (PDT)
-Received: from pps.filterd (m0209324.ppops.net [127.0.0.1])
-        by mx08-001d1705.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A2tV1J003119;
-        Wed, 10 Aug 2022 09:22:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=S1;
- bh=3OEl0I++nHc2+2XVohZ8lh2mpkW8eO8M/rzBSratZvE=;
- b=lmDbk8XxDwExd2WMoJOhryl18MF+sia7ATYm/B5YLJI6bu1KO4gVk6H+RnOPgfaQ5H8f
- h+oz899mzHtfKNo5Mubmei0+A0Md8hP4tuwDeDcyV/YwIWeNBDYz/cvUZ99ATmjdvNRM
- p466f2sDd4c9nEbIP24QYi5CfCT7HroAzP9xLXmfrUYH2npaBReb4PfGatMj8RmAe9VI
- yv/+5tW6BidISB7K+Qhrt6EP1bZA//yUi2zKbiHS89DfUonbkEIFDV0Cdh+heLkHNDU+
- znj86f6XBCGmlcr0SHusBwII5OvEakIj8jaX5/8IJgHsVwZLkXgg+YILAxZNvZd5Jdqb Uw== 
-Received: from eur01-ve1-obe.outbound.protection.outlook.com (mail-ve1eur01lp2050.outbound.protection.outlook.com [104.47.1.50])
-        by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3huwrmgq99-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Aug 2022 09:22:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H2xLcbBL0usKCdD6jHnzX3gz1EtcT3/zwAz9ofAUOqg+E7s0FwI1dWFEPKZN3ABCi5hx4fybm9COc3s/fvqlGCz34ewzVR/tBosZk74mUJ+yh1TxPi9Ju3KO0SaP+cEXN+ADoJt7y1ThngczncBvJ83VUGTdN5BO5d8+LkfYXArZnrF2/lCMsrmaCrChWHEtGZZlEf7SozlUPQmtejYoCiyf8FNNn6d+Br1g0ueFMNCzjVkFq7sJwo5+qyP9urwg1lcQS2e2YQPafK65kiS7CssnuJB9/2HDWYz0Gohy4CjRhMHCveZB0yQW13UV3vdFqIKf34PWP9Qn6k4nuBEpfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3OEl0I++nHc2+2XVohZ8lh2mpkW8eO8M/rzBSratZvE=;
- b=V8IeFTtkk9fl0vt9nhLUoSI2Xr02bCwU9owbAYCEUCu7VAurLmqHYn7dPx5rxFqvLuYMSaJOMIFL/uYXF/wOTeg67YJQIQrRBpv+xDlRExQEEvYU6f0zW5dLrvnVyxCkI/gMRDOlRQ5MLCelliYypt6mRLCLZJi2ZHNHfv8HxF85NCH7sDRedPBSsh8i5aCpOmnZDgzld4ENrjjTRNYmnMXX76jE5hKtSw8xcJ2c9JaTSR5ZrQV0tpLy1yxg817UI5pE1YBX6wJVz738J+ePZxarw8Arke418pyIxGa9SkKKmvbi4ymOAkpb74QR0kYBvG2ShoshzqG0nRwOKks4Jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-Received: from AS8P193MB1687.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:3fb::21)
- by PAXP193MB1310.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:156::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Wed, 10 Aug
- 2022 09:22:02 +0000
-Received: from AS8P193MB1687.EURP193.PROD.OUTLOOK.COM
- ([fe80::e4e5:10d5:d7f2:d80c]) by AS8P193MB1687.EURP193.PROD.OUTLOOK.COM
- ([fe80::e4e5:10d5:d7f2:d80c%8]) with mapi id 15.20.5504.021; Wed, 10 Aug 2022
- 09:22:02 +0000
-From:   "Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:ABI/API" <linux-api@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "krisman@collabora.com" <krisman@collabora.com>
-CC:     "kernel@collabora.com" <kernel@collabora.com>
-Subject: Re: [PATCH 0/5] Add process_memwatch syscall
-Thread-Topic: [PATCH 0/5] Add process_memwatch syscall
-Thread-Index: AQHYrJqmgetJxJlXAE68JBxn7woHdg==
-Date:   Wed, 10 Aug 2022 09:22:02 +0000
-Message-ID: <456a8052-dfd2-e00c-6da7-fb5aa0c35f2c@sony.com>
-References: <20220726161854.276359-1-usama.anjum@collabora.com>
-In-Reply-To: <20220726161854.276359-1-usama.anjum@collabora.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5e66ad2a-06c3-4529-0a0f-08da7ab1c8b3
-x-ms-traffictypediagnostic: PAXP193MB1310:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3WFY8KKfUBuntXflc68U9McsNuXnwxoAN8FzYDRTe5UikMhoPDdbR0FDrBMF9T71DpfZEzdp7TmIMRHEYcE+xXDouq8nVNp/IimKBiwNBKoxQlWf89UFGxm8NYx6MgI8Ch91RiaMdM+62+sTlvRIODHc7Q9MY3HBRGHRHLbLHLKUdhho6T9LGCQupC7SiRmqSOJ2vwXcO2VYOXjYFsA60ms27SORhoQdayaok/Vn2zul0Nrz3psrc15PYb2AyVMPYx1VjeHrUooyzVVEyE6s/BpA0dHNhm4Ng5FR22uS/01G187bYp9P+i3Af39cD/8eulL62vH348+8Z/ZK5d3c4QhsnlNsrGbAjT3jKhm853px0KmfBmPTesxnEEB7OeKaAO9/cphBNZhlqGF/k+ozb3RgvKi3MnNK/vps0zob6RvtcrBX/RGWS6kFPSm5yyiw3o8ltHZiURSPxYTIkGiF7OVE/TEDz+8k1qqxSMBt6T0iNfUTMPVq+rFjwVjVEwCBFC/Q/dlAVYLvuwErkCc/0Pz9E8oH1RI2vDzqldqUXe3uLqRLfY+PKOHvnv/iYG4drEb66xhOlL94jhaZ0GGkp1PolOtSPcx/+4ylDueUEUaX9KSIRLnsobrIL319gAnnQQD8Lv/dqjczpF2nJBQuTRwoTosGhJO+mS5Yx0MflBxdZBp2bzEdhRlBqNodtdQwnMbrQtK5zHYmGsMBNqaEJ04/aQewa0A9AM6Ca5f/Vkt8Cazl/1TiYNzd7+ve+14EzhUgbaJ0oiQR6cMreQvsQvVGj1mUtMlnFp/RoWQCjx+7MN5YIZB37ovxrDCffcHIeXfXMQP4NK/9E8Nv/08FzNlP4o4IsYYz4KNuwdUXipwgeo6moOKZzgoKE57PTlgqxQFS2dvkXMTDBIorMeAQ9w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P193MB1687.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(346002)(396003)(376002)(39860400002)(366004)(76116006)(36756003)(316002)(110136005)(66476007)(91956017)(66446008)(66556008)(31696002)(38070700005)(8936002)(82960400001)(38100700002)(921005)(64756008)(71200400001)(86362001)(7416002)(5660300002)(66946007)(478600001)(6486002)(6512007)(26005)(122000001)(2906002)(4326008)(53546011)(6506007)(8676002)(31686004)(2616005)(186003)(41300700001)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ajZDL2EvMHBmY0VFVVFzRzdvWHlqUm9iU25aMHJKNnJBdmNvb2F4a1kwVTQ4?=
- =?utf-8?B?Y3lvTHFwMzAvMmcxTGhVMThxSTI0NjMzTHpBVDAzSlJJSTJpUkhFWit6elgw?=
- =?utf-8?B?QnByUFd1QXFBaW9ZMXhONVR1WXYxSnNXZVBoWDBGRzUybFJWbUNLejNTNVI3?=
- =?utf-8?B?YnFSZk9wbmNDL3pDdkdIeE9reUhwY01JSnFQRDA5VklRWkFiWFUwZUVIQXBJ?=
- =?utf-8?B?emo5enl0OWFodHo1NHA3UXJ3bmRFaDh4ZTFYM1BaR3FyaTU1alNQWXRkTWly?=
- =?utf-8?B?MWExNTZkQnJjM1lEMW5rdFkrcjcrUytXSkpMRjY1U0JPM0drbzJiM0wxbXJD?=
- =?utf-8?B?MmJPMFl6KzRXYUNReG1vTlFteFcxc3NSMHBqbzRvWWlWZHpPUkxsVzg5TEg2?=
- =?utf-8?B?WFh3b21DdFpsQmZMNzB6Y0JxTElZSkJtd1Q2anRaQkhjV1FWdnV6VHZtczlP?=
- =?utf-8?B?SGNWVkc3a29QKzZTa0NaaWhuQkZxZ2FEZkFoSFlsbUVTMWhSVzBJeWZTTzcw?=
- =?utf-8?B?RTRxSHl2Y2lta1ZrQ2FlL2Q0UWQ2NEhqY0hueXlEaytmajJlcGxGV21Ub3Jt?=
- =?utf-8?B?cXBrdThiZmhlRkRwMGVRbGFRdDFiRkN6b0xKU3lHVlZYWVYvbGlSL1ZRREk3?=
- =?utf-8?B?cElRSXBYdjNLNUFMc0c4RU8vWXlpb0tZT0luakliTnV0UGFtZ2NFenZXRGQr?=
- =?utf-8?B?R0NqZVNnMGtkUkhJNVM0bkZwNGQ2anMzV0NSNjhOOGdsb2d1M3hqSUlGNkFY?=
- =?utf-8?B?MzFyNEI0Titsa0Y2RXRBWVl3SmRjQnhBWXhqZHhWTlVGc05pR2R1Si9IMlNn?=
- =?utf-8?B?S0FvT0ZieUFROVhMV0llZ2pIWlFBZkY1ajJyeEhzRFh3NWJCWUxlWVUyQ0Rz?=
- =?utf-8?B?YW9XTXozVGpXNFpKNVQ0Sm9RbXF6MmovWnR0Q2ZaTmduSEdzaWZUTTFlUlQv?=
- =?utf-8?B?Y1pqT1BHTk5FUE1jczEzTU9tQnNoaFZuUlpnT3Y0VUZITVQxRklvWGk5eHor?=
- =?utf-8?B?MVNVcHpDNmRSaTJBWm84dXdMb3NHN1ZwY1E3OFc0TjJ5UmZBTjYwa0p4OC95?=
- =?utf-8?B?Qm9aYzVYcUR4Q00zYkpxa1pGem12bExFVUl3RUJZYVpZeGhoa3dPejJQdkhM?=
- =?utf-8?B?ZnlGTnZNTkREaVZTU1IvYUpyMTNwYWIvbjdXdlhKZngyNWRtazhtMUxUSTYx?=
- =?utf-8?B?Z0FDTnpQdUVsMWlqWFRRU0J6aitNNXhvam1pVm9YZGFJWVdLOE1qU290M2Zm?=
- =?utf-8?B?b2ZVUnRNWjRzV1RLL2hLYmtXNUc2aUtpTTFOckxSZnh1RFRMd3BBdGViVUVj?=
- =?utf-8?B?dlpuMkNRRGRjY3dES09IVytVVWRTa1VNQ0Z6cE5sNHZGMmRJUERhSm9vdTd4?=
- =?utf-8?B?R3RSMWNSdDAxQTJTYU5SL0xDdEQ2cHdXSk91V2k5R3lFNms2Y3c3U0FGbWtp?=
- =?utf-8?B?bnRLUHhxMzVKajJKa2J1Q3JDS2w2bTMrV1l5eGx0UW8zZGFoaXNiTS9MUUx3?=
- =?utf-8?B?ZlpuRjd5ZXk5cUl6aVFBajZzM0pDV3Zubm0yOG5RckxuYkNVZUZZRDFFSGhT?=
- =?utf-8?B?dlFMR2YzQ2RZTnlORXNGaDBiTlhjc1F5OE1Wakp0bXJxdk9mTm8xb0tvSk5i?=
- =?utf-8?B?WUU2Vk8zT3dVZUE4NzU5VkNlY3lmOWxpcTl0WWc5enRKR0t2TGErZUlza01k?=
- =?utf-8?B?ZngrMFB4WUpra0gvZW1HckhlVDZXUzZpcnAvNnRhQkdMOFNGR01LTURaR1BV?=
- =?utf-8?B?bjBCN2s4ek5sTnBvOWoya3V4K3hPVHFnV1hUOWordUova1h6a3k3YWtRVExo?=
- =?utf-8?B?cSsyT2lmcElMK2p3WTltTy9XOHRNdFJMaWZqVlluTzUwR0t5WHRvSnphQWpI?=
- =?utf-8?B?VlcrNlV5TUVzejFtMW94SEtPVFRxNVkwaGVrSTBiY1A4Tm9LaWR2WHNhTnVv?=
- =?utf-8?B?a3UxMmR6cXBiajh6bjdlNW1teVp1R252a2ZlV0Q4WmlpUk9NU3ljOE9kQTN3?=
- =?utf-8?B?WW9DVEwyeTNvUEplN0RIUXdKeEorQ0FYZXVJbGU2d1ZWanQzdXlLWHUwS1Ji?=
- =?utf-8?B?dUFlYk9jaU84TE9MTGViU3dqcWQvTGJTU3RmV1FEN3dOWkREOVZoUDFvSUpL?=
- =?utf-8?B?VTM1K25HMkQ1WmVIRGpYV09GSG9wY2lIZnRqOUJwakt1eDdXaWhtT0hrdzVH?=
- =?utf-8?B?ZkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B174C3CACCFFCD439CA7F1DA42B33B96@EURP193.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        with ESMTP id S232073AbiHJJXj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Aug 2022 05:23:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090D6AE23A;
+        Wed, 10 Aug 2022 02:23:34 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 11:23:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660123412;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6HWN3MBEuCVFX8UKlJj6PwdpMdFjg0O5CvJcE3JmtvM=;
+        b=W34XICQTVr4AnT5zOfE1kS3VYwQoUZo2WxMrKRZbPkbN7ar0EMut6zarANq8I3rlkbuLJn
+        ZT1bVnsKw1uH/y6cm+41b/xi1tZy/04QDR8bBph/UDMJa5X23utqmFN5v3lnYJFcqmh7o7
+        k4c4Pk01P19RKtSfb9Ml+QHAa5zCpPQxQ/FixfDybpfIhbllxqSQuVlPcYa+a85XtPRVYi
+        m6CAmSPXmrTJyng6lG6vuDTaODWEVHatTA/PYJDE6u17BQBaakLS/3gI+nijtBUo/gNhWj
+        GKD6VbrvP3OP3WFWupueNMSH/LR74IqeKPKmtGurOei5BbbIlZXDsfblAqbBbA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660123412;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6HWN3MBEuCVFX8UKlJj6PwdpMdFjg0O5CvJcE3JmtvM=;
+        b=MiSnta9s2QurxZXWkf35yqvfSbeo1OsMDOjjGCUh/jMxOcV68XhI3pqnZJAogUWNzXVjPI
+        xmFf9tC59gpODFCg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Arnd Bergmann <arnd@kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Subject: [PATCH v2] asm-generic: Conditionally enable do_softirq_own_stack()
+ via Kconfig.
+Message-ID: <YvN5E/PrHfUhggr7@linutronix.de>
+References: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
+ <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
+ <YvKD4hkZ3erf54DG@linutronix.de>
+ <8735e4v7yk.ffs@tglx>
 MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8P193MB1687.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e66ad2a-06c3-4529-0a0f-08da7ab1c8b3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2022 09:22:02.0854
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FOpo3gWZz+YZ3zJIzW5/ONgwQRwPgsNuGeYDYAaf8uO7rTiBnqM82wB7LPMO2yFQCOjllxEvwdJwk7i+yD5Gb8PWJWWg0pSS04/edJ3rm6w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXP193MB1310
-X-Proofpoint-ORIG-GUID: i4ZAWnrK7m9Ygyr8lpvZv6RHk0X827xR
-X-Proofpoint-GUID: i4ZAWnrK7m9Ygyr8lpvZv6RHk0X827xR
-X-Sony-Outbound-GUID: i4ZAWnrK7m9Ygyr8lpvZv6RHk0X827xR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_03,2022-08-09_02,2022-06-22_01
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8735e4v7yk.ffs@tglx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-T24gNy8yNi8yMiAxODoxOCwgTXVoYW1tYWQgVXNhbWEgQW5qdW0gd3JvdGU6DQo+IEhlbGxvLA0K
-PiANCj4gVGhpcyBwYXRjaCBzZXJpZXMgaW1wbGVtZW50cyBhIG5ldyBzeXNjYWxsLCBwcm9jZXNz
-X21lbXdhdGNoLiBDdXJyZW50bHksDQo+IG9ubHkgdGhlIHN1cHBvcnQgdG8gd2F0Y2ggc29mdC1k
-aXJ0eSBQVEUgYml0IGlzIGFkZGVkLiBUaGlzIHN5c2NhbGwgaXMNCj4gZ2VuZXJpYyB0byB3YXRj
-aCB0aGUgbWVtb3J5IG9mIHRoZSBwcm9jZXNzLiBUaGVyZSBpcyBlbm91Z2ggcm9vbSB0byBhZGQN
-Cj4gbW9yZSBvcGVyYXRpb25zIGxpa2UgdGhpcyB0byB3YXRjaCBtZW1vcnkgaW4gdGhlIGZ1dHVy
-ZS4NCj4gDQo+IFNvZnQtZGlydHkgUFRFIGJpdCBvZiB0aGUgbWVtb3J5IHBhZ2VzIGNhbiBiZSB2
-aWV3ZWQgYnkgdXNpbmcgcGFnZW1hcA0KPiBwcm9jZnMgZmlsZS4gVGhlIHNvZnQtZGlydHkgUFRF
-IGJpdCBmb3IgdGhlIG1lbW9yeSBpbiBhIHByb2Nlc3MgY2FuIGJlDQo+IGNsZWFyZWQgYnkgd3Jp
-dGluZyB0byB0aGUgY2xlYXJfcmVmcyBmaWxlLiBUaGlzIHNlcmllcyBhZGRzIGZlYXR1cmVzIHRo
-YXQNCj4gd2VyZW4ndCBwb3NzaWJsZSB0aHJvdWdoIHRoZSBQcm9jIEZTIGludGVyZmFjZS4NCj4g
-LSBUaGVyZSBpcyBubyBhdG9taWMgZ2V0IHNvZnQtZGlydHkgUFRFIGJpdCBzdGF0dXMgYW5kIGNs
-ZWFyIG9wZXJhdGlvbg0KPiAgIHBvc3NpYmxlLg0KPiAtIFRoZSBzb2Z0LWRpcnR5IFBURSBiaXQg
-b2Ygb25seSBhIHBhcnQgb2YgbWVtb3J5IGNhbm5vdCBiZSBjbGVhcmVkLg0KPiANCj4gSGlzdG9y
-aWNhbGx5LCBzb2Z0LWRpcnR5IFBURSBiaXQgdHJhY2tpbmcgaGFzIGJlZW4gdXNlZCBpbiB0aGUg
-Q1JJVQ0KPiBwcm9qZWN0LiBUaGUgUHJvYyBGUyBpbnRlcmZhY2UgaXMgZW5vdWdoIGZvciB0aGF0
-IGFzIEkgdGhpbmsgdGhlIHByb2Nlc3MNCj4gaXMgZnJvemVuLiBXZSBoYXZlIHRoZSB1c2UgY2Fz
-ZSB3aGVyZSB3ZSBuZWVkIHRvIHRyYWNrIHRoZSBzb2Z0LWRpcnR5DQo+IFBURSBiaXQgZm9yIHJ1
-bm5pbmcgcHJvY2Vzc2VzLiBXZSBuZWVkIHRoaXMgdHJhY2tpbmcgYW5kIGNsZWFyIG1lY2hhbmlz
-bQ0KPiBvZiBhIHJlZ2lvbiBvZiBtZW1vcnkgd2hpbGUgdGhlIHByb2Nlc3MgaXMgcnVubmluZyB0
-byBlbXVsYXRlIHRoZQ0KPiBnZXRXcml0ZVdhdGNoKCkgc3lzY2FsbCBvZiBXaW5kb3dzLiBUaGlz
-IHN5c2NhbGwgaXMgdXNlZCBieSBnYW1lcyB0byBrZWVwDQo+IHRyYWNrIG9mIGRpcnR5IHBhZ2Vz
-IGFuZCBrZWVwIHByb2Nlc3Npbmcgb25seSB0aGUgZGlydHkgcGFnZXMuIFRoaXMNCj4gc3lzY2Fs
-bCBjYW4gYmUgdXNlZCBieSB0aGUgQ1JJVSBwcm9qZWN0IGFuZCBvdGhlciBhcHBsaWNhdGlvbnMg
-d2hpY2gNCj4gcmVxdWlyZSBzb2Z0LWRpcnR5IFBURSBiaXQgaW5mb3JtYXRpb24uDQo+IA0KPiBB
-cyBpbiB0aGUgY3VycmVudCBrZXJuZWwgdGhlcmUgaXMgbm8gd2F5IHRvIGNsZWFyIGEgcGFydCBv
-ZiBtZW1vcnkgKGluc3RlYWQNCj4gb2YgY2xlYXJpbmcgdGhlIFNvZnQtRGlydHkgYml0cyBmb3Ig
-dGhlIGVudGlyZSBwcm9jZXNzaSkgYW5kIGdldCtjbGVhcg0KPiBvcGVyYXRpb24gY2Fubm90IGJl
-IHBlcmZvcm1lZCBhdG9taWNhbGx5LCB0aGVyZSBhcmUgb3RoZXIgbWV0aG9kcyB0byBtaW1pYw0K
-PiB0aGlzIGluZm9ybWF0aW9uIGVudGlyZWx5IGluIHVzZXJzcGFjZSB3aXRoIHBvb3IgcGVyZm9y
-bWFuY2U6DQo+IC0gVGhlIG1wcm90ZWN0IHN5c2NhbGwgYW5kIFNJR1NFR1YgaGFuZGxlciBmb3Ig
-Ym9va2tlZXBpbmcNCj4gLSBUaGUgdXNlcmZhdWx0ZmQgc3lzY2FsbCB3aXRoIHRoZSBoYW5kbGVy
-IGZvciBib29ra2VlcGluZw0KPiANCj4gICAgICAgICBsb25nIHByb2Nlc3NfbWVtd2F0Y2goaW50
-IHBpZGZkLCB1bnNpZ25lZCBsb25nIHN0YXJ0LCBpbnQgbGVuLA0KPiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICB1bnNpZ25lZCBpbnQgZmxhZ3MsIHZvaWQgKnZlYywgaW50IHZlY19sZW4p
-Ow0KPiANCj4gVGhpcyBzeXNjYWxsIGNhbiBiZSB1c2VkIGJ5IHRoZSBDUklVIHByb2plY3QgYW5k
-IG90aGVyIGFwcGxpY2F0aW9ucyB3aGljaA0KPiByZXF1aXJlIHNvZnQtZGlydHkgUFRFIGJpdCBp
-bmZvcm1hdGlvbi4gVGhlIGZvbGxvd2luZyBvcGVyYXRpb25zIGFyZQ0KPiBzdXBwb3J0ZWQgaW4g
-dGhpcyBzeXNjYWxsOg0KPiAtIEdldCB0aGUgcGFnZXMgdGhhdCBhcmUgc29mdC1kaXJ0eS4NCj4g
-LSBDbGVhciB0aGUgcGFnZXMgd2hpY2ggYXJlIHNvZnQtZGlydHkuDQo+IC0gVGhlIG9wdGlvbmFs
-IGZsYWcgdG8gaWdub3JlIHRoZSBWTV9TT0ZURElSVFkgYW5kIG9ubHkgdHJhY2sgcGVyIHBhZ2UN
-Cj4gc29mdC1kaXJ0eSBQVEUgYml0DQo+IA0KDQpXaHkgY2FuIGl0IG5vdCBiZSBkb25lIGFzIGEg
-SU9DVEw/DQoNCg0KPiBUaGVyZSBhcmUgdHdvIGRlY2lzaW9ucyB3aGljaCBoYXZlIGJlZW4gdGFr
-ZW4gYWJvdXQgaG93IHRvIGdldCB0aGUgb3V0cHV0DQo+IGZyb20gdGhlIHN5c2NhbGwuDQo+IC0g
-UmV0dXJuIG9mZnNldHMgb2YgdGhlIHBhZ2VzIGZyb20gdGhlIHN0YXJ0IGluIHRoZSB2ZWMNCj4g
-LSBTdG9wIGV4ZWN1dGlvbiB3aGVuIHZlYyBpcyBmaWxsZWQgd2l0aCBkaXJ0eSBwYWdlcw0KPiBU
-aGVzZSB0d28gYXJndW1lbnRzIGRvZXNuJ3QgZm9sbG93IHRoZSBtaW5jb3JlKCkgcGhpbG9zb3Bo
-eSB3aGVyZSB0aGUNCj4gb3V0cHV0IGFycmF5IGNvcnJlc3BvbmRzIHRvIHRoZSBhZGRyZXNzIHJh
-bmdlIGluIG9uZSB0byBvbmUgZmFzaGlvbiwgaGVuY2UNCj4gdGhlIG91dHB1dCBidWZmZXIgbGVu
-Z3RoIGlzbid0IHBhc3NlZCBhbmQgb25seSBhIGZsYWcgaXMgc2V0IGlmIHRoZSBwYWdlDQo+IGlz
-IHByZXNlbnQuIFRoaXMgbWFrZXMgbWluY29yZSgpIGVhc3kgdG8gdXNlIHdpdGggbGVzcyBjb250
-cm9sLiBXZSBhcmUNCj4gcGFzc2luZyB0aGUgc2l6ZSBvZiB0aGUgb3V0cHV0IGFycmF5IGFuZCBw
-dXR0aW5nIHJldHVybiBkYXRhIGNvbnNlY3V0aXZlbHkNCj4gd2hpY2ggaXMgb2Zmc2V0IG9mIGRp
-cnR5IHBhZ2VzIGZyb20gdGhlIHN0YXJ0LiBUaGUgdXNlciBjYW4gY29udmVydCB0aGVzZQ0KPiBv
-ZmZzZXRzIGJhY2sgaW50byB0aGUgZGlydHkgcGFnZSBhZGRyZXNzZXMgZWFzaWx5LiBTdXBwb3Nl
-LCB0aGUgdXNlciB3YW50DQo+IHRvIGdldCBmaXJzdCAxMCBkaXJ0eSBwYWdlcyBmcm9tIGEgdG90
-YWwgbWVtb3J5IG9mIDEwMCBwYWdlcy4gSGUnbGwNCj4gYWxsb2NhdGUgb3V0cHV0IGJ1ZmZlciBv
-ZiBzaXplIDEwIGFuZCBwcm9jZXNzX21lbXdhdGNoKCkgc3lzY2FsbCB3aWxsDQo+IGFib3J0IGFm
-dGVyIGZpbmRpbmcgdGhlIDEwIHBhZ2VzLiBUaGlzIGJlaGF2aW91ciBpcyBuZWVkZWQgdG8gc3Vw
-cG9ydA0KPiBXaW5kb3dzJyBnZXRXcml0ZVdhdGNoKCkuIFRoZSBiZWhhdmlvdXIgbGlrZSBtaW5j
-b3JlKCkgY2FuIGJlIGFjaGlldmVkIGJ5DQo+IHBhc3Npbmcgb3V0cHV0IGJ1ZmZlciBvZiAxMDAg
-c2l6ZS4gVGhpcyBpbnRlcmZhY2UgY2FuIGJlIHVzZWQgZm9yIGFueQ0KPiBkZXNpcmVkIGJlaGF2
-aW91ci4NCj4gDQo+IFJlZ2FyZHMsDQo+IE11aGFtbWFkIFVzYW1hIEFuanVtDQo+IA0KPiBNdWhh
-bW1hZCBVc2FtYSBBbmp1bSAoNSk6DQo+ICAgZnMvcHJvYy90YXNrX21tdTogbWFrZSBmdW5jdGlv
-bnMgZ2xvYmFsIHRvIGJlIHVzZWQgaW4gb3RoZXIgZmlsZXMNCj4gICBtbTogSW1wbGVtZW50IHBy
-b2Nlc3NfbWVtd2F0Y2ggc3lzY2FsbA0KPiAgIG1tOiB3aXJlIHVwIHByb2Nlc3NfbWVtd2F0Y2gg
-c3lzY2FsbCBmb3IgeDg2DQo+ICAgc2VsZnRlc3RzOiB2bTogYWRkIHByb2Nlc3NfbWVtd2F0Y2gg
-c3lzY2FsbCB0ZXN0cw0KPiAgIG1tOiBhZGQgcHJvY2Vzc19tZW13YXRjaCBzeXNjYWxsIGRvY3Vt
-ZW50YXRpb24NCj4gDQo+ICBEb2N1bWVudGF0aW9uL2FkbWluLWd1aWRlL21tL3NvZnQtZGlydHku
-cnN0ICAgfCAgNDggKy0NCj4gIGFyY2gveDg2L2VudHJ5L3N5c2NhbGxzL3N5c2NhbGxfMzIudGJs
-ICAgICAgICB8ICAgMSArDQo+ICBhcmNoL3g4Ni9lbnRyeS9zeXNjYWxscy9zeXNjYWxsXzY0LnRi
-bCAgICAgICAgfCAgIDEgKw0KPiAgZnMvcHJvYy90YXNrX21tdS5jICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIHwgIDg0ICstLQ0KPiAgaW5jbHVkZS9saW51eC9tbV9pbmxpbmUuaCAgICAgICAg
-ICAgICAgICAgICAgIHwgIDk5ICsrKw0KPiAgaW5jbHVkZS9saW51eC9zeXNjYWxscy5oICAgICAg
-ICAgICAgICAgICAgICAgIHwgICAzICstDQo+ICBpbmNsdWRlL3VhcGkvYXNtLWdlbmVyaWMvdW5p
-c3RkLmggICAgICAgICAgICAgfCAgIDUgKy0NCj4gIGluY2x1ZGUvdWFwaS9saW51eC9tZW13YXRj
-aC5oICAgICAgICAgICAgICAgICB8ICAxMiArDQo+ICBrZXJuZWwvc3lzX25pLmMgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KPiAgbW0vTWFrZWZpbGUgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstDQo+ICBtbS9tZW13YXRjaC5jICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAyODUgKysrKysrKysNCj4gIHRvb2xzL2luY2x1ZGUv
-dWFwaS9hc20tZ2VuZXJpYy91bmlzdGQuaCAgICAgICB8ICAgNSArLQ0KPiAgLi4uL2FyY2gveDg2
-L2VudHJ5L3N5c2NhbGxzL3N5c2NhbGxfNjQudGJsICAgIHwgICAxICsNCj4gIHRvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL3ZtLy5naXRpZ25vcmUgICAgICAgICB8ICAgMSArDQo+ICB0b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy92bS9NYWtlZmlsZSAgICAgICAgICAgfCAgIDIgKw0KPiAgdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvdm0vbWVtd2F0Y2hfdGVzdC5jICAgIHwgNjM1ICsrKysrKysrKysrKysr
-KysrKw0KPiAgMTYgZmlsZXMgY2hhbmdlZCwgMTA5OCBpbnNlcnRpb25zKCspLCA4NyBkZWxldGlv
-bnMoLSkNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBpbmNsdWRlL3VhcGkvbGludXgvbWVtd2F0Y2gu
-aA0KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IG1tL21lbXdhdGNoLmMNCj4gIGNyZWF0ZSBtb2RlIDEw
-MDY0NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy92bS9tZW13YXRjaF90ZXN0LmMNCj4gDQo=
+Remove the CONFIG_PREEMPT_RT symbol from the ifdef around
+do_softirq_own_stack() and move it to Kconfig instead.
+
+Enable softirq stacks based on SOFTIRQ_ON_OWN_STACK which depends on
+HAVE_SOFTIRQ_ON_OWN_STACK and its default value is set to !PREEMPT_RT.
+This ensures that softirq stacks are not used on PREEMPT_RT and avoids
+a 'select' statement on an option which has a 'depends' statement.
+
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+v1=E2=80=A6v2:
+On 2022-08-10 10:06:11 [+0200], Thomas Gleixner wrote:
+> > +config SOFTIRQ_ON_OWN_STACK
+> > +	def_bool !PREEMPT_RT
+> > +	depends on HAVE_SOFTIRQ_ON_OWN_STACK
+>=20
+>         def_bool !PREEMPT_RT && HAVE_SOFTIRQ_ON_OWN_STACK
+>=20
+> No?
+
+works, too. Let me compress it then.
+
+ arch/Kconfig                          | 3 +++
+ arch/arm/kernel/irq.c                 | 2 +-
+ arch/parisc/kernel/irq.c              | 2 +-
+ arch/powerpc/kernel/irq.c             | 4 ++--
+ arch/s390/include/asm/softirq_stack.h | 2 +-
+ arch/sh/kernel/irq.c                  | 2 +-
+ arch/sparc/kernel/irq_64.c            | 2 +-
+ arch/x86/include/asm/irq_stack.h      | 2 +-
+ arch/x86/kernel/irq_32.c              | 2 +-
+ include/asm-generic/softirq_stack.h   | 2 +-
+ 10 files changed, 13 insertions(+), 10 deletions(-)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index f330410da63a6..dc2dce2120a0b 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -924,6 +924,9 @@ config HAVE_SOFTIRQ_ON_OWN_STACK
+ 	  Architecture provides a function to run __do_softirq() on a
+ 	  separate stack.
+=20
++config SOFTIRQ_ON_OWN_STACK
++	def_bool HAVE_SOFTIRQ_ON_OWN_STACK && !PREEMPT_RT
++
+ config ALTERNATE_USER_ADDRESS_SPACE
+ 	bool
+ 	help
+diff --git a/arch/arm/kernel/irq.c b/arch/arm/kernel/irq.c
+index 034cb48c9eeb8..fe28fc1f759d9 100644
+--- a/arch/arm/kernel/irq.c
++++ b/arch/arm/kernel/irq.c
+@@ -70,7 +70,7 @@ static void __init init_irq_stacks(void)
+ 	}
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ static void ____do_softirq(void *arg)
+ {
+ 	__do_softirq();
+diff --git a/arch/parisc/kernel/irq.c b/arch/parisc/kernel/irq.c
+index fbb882cb8dbb5..b05055f3ba4b8 100644
+--- a/arch/parisc/kernel/irq.c
++++ b/arch/parisc/kernel/irq.c
+@@ -480,7 +480,7 @@ static void execute_on_irq_stack(void *func, unsigned l=
+ong param1)
+ 	*irq_stack_in_use =3D 1;
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	execute_on_irq_stack(__do_softirq, 0);
+diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
+index 0f17268c1f0bb..9ede61a5a469e 100644
+--- a/arch/powerpc/kernel/irq.c
++++ b/arch/powerpc/kernel/irq.c
+@@ -199,7 +199,7 @@ static inline void check_stack_overflow(unsigned long s=
+p)
+ 	}
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ static __always_inline void call_do_softirq(const void *sp)
+ {
+ 	/* Temporarily switch r1 to sp, call __do_softirq() then restore r1. */
+@@ -335,7 +335,7 @@ void *mcheckirq_ctx[NR_CPUS] __read_mostly;
+ void *softirq_ctx[NR_CPUS] __read_mostly;
+ void *hardirq_ctx[NR_CPUS] __read_mostly;
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	call_do_softirq(softirq_ctx[smp_processor_id()]);
+diff --git a/arch/s390/include/asm/softirq_stack.h b/arch/s390/include/asm/=
+softirq_stack.h
+index af68d6c1d5840..1ac5115d3115e 100644
+--- a/arch/s390/include/asm/softirq_stack.h
++++ b/arch/s390/include/asm/softirq_stack.h
+@@ -5,7 +5,7 @@
+ #include <asm/lowcore.h>
+ #include <asm/stacktrace.h>
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ static inline void do_softirq_own_stack(void)
+ {
+ 	call_on_stack(0, S390_lowcore.async_stack, void, __do_softirq);
+diff --git a/arch/sh/kernel/irq.c b/arch/sh/kernel/irq.c
+index 9092767380780..4e6835de54cf8 100644
+--- a/arch/sh/kernel/irq.c
++++ b/arch/sh/kernel/irq.c
+@@ -149,7 +149,7 @@ void irq_ctx_exit(int cpu)
+ 	hardirq_ctx[cpu] =3D NULL;
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	struct thread_info *curctx;
+diff --git a/arch/sparc/kernel/irq_64.c b/arch/sparc/kernel/irq_64.c
+index 41fa1be980a33..72da2e10e2559 100644
+--- a/arch/sparc/kernel/irq_64.c
++++ b/arch/sparc/kernel/irq_64.c
+@@ -855,7 +855,7 @@ void __irq_entry handler_irq(int pil, struct pt_regs *r=
+egs)
+ 	set_irq_regs(old_regs);
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	void *orig_sp, *sp =3D softirq_stack[smp_processor_id()];
+diff --git a/arch/x86/include/asm/irq_stack.h b/arch/x86/include/asm/irq_st=
+ack.h
+index 63f818aedf770..147cb8fdda92e 100644
+--- a/arch/x86/include/asm/irq_stack.h
++++ b/arch/x86/include/asm/irq_stack.h
+@@ -203,7 +203,7 @@
+ 			      IRQ_CONSTRAINTS, regs, vector);		\
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ /*
+  * Macro to invoke __do_softirq on the irq stack. This is only called from
+  * task context when bottom halves are about to be reenabled and soft
+diff --git a/arch/x86/kernel/irq_32.c b/arch/x86/kernel/irq_32.c
+index e5dd6da78713b..01833ebf5e8e3 100644
+--- a/arch/x86/kernel/irq_32.c
++++ b/arch/x86/kernel/irq_32.c
+@@ -132,7 +132,7 @@ int irq_init_percpu_irqstack(unsigned int cpu)
+ 	return 0;
+ }
+=20
+-#ifndef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void)
+ {
+ 	struct irq_stack *irqstk;
+diff --git a/include/asm-generic/softirq_stack.h b/include/asm-generic/soft=
+irq_stack.h
+index d3e2d81656e04..2a67aed9ac528 100644
+--- a/include/asm-generic/softirq_stack.h
++++ b/include/asm-generic/softirq_stack.h
+@@ -2,7 +2,7 @@
+ #ifndef __ASM_GENERIC_SOFTIRQ_STACK_H
+ #define __ASM_GENERIC_SOFTIRQ_STACK_H
+=20
+-#if defined(CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK) && !defined(CONFIG_PREEMPT_R=
+T)
++#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
+ void do_softirq_own_stack(void);
+ #else
+ static inline void do_softirq_own_stack(void)
+--=20
+2.36.1
+
