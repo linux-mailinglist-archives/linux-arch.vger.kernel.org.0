@@ -2,251 +2,311 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C045158E989
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Aug 2022 11:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E553758EDFF
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Aug 2022 16:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiHJJXq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Aug 2022 05:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
+        id S229797AbiHJOPT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Aug 2022 10:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiHJJXj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Aug 2022 05:23:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090D6AE23A;
-        Wed, 10 Aug 2022 02:23:34 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 11:23:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660123412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6HWN3MBEuCVFX8UKlJj6PwdpMdFjg0O5CvJcE3JmtvM=;
-        b=W34XICQTVr4AnT5zOfE1kS3VYwQoUZo2WxMrKRZbPkbN7ar0EMut6zarANq8I3rlkbuLJn
-        ZT1bVnsKw1uH/y6cm+41b/xi1tZy/04QDR8bBph/UDMJa5X23utqmFN5v3lnYJFcqmh7o7
-        k4c4Pk01P19RKtSfb9Ml+QHAa5zCpPQxQ/FixfDybpfIhbllxqSQuVlPcYa+a85XtPRVYi
-        m6CAmSPXmrTJyng6lG6vuDTaODWEVHatTA/PYJDE6u17BQBaakLS/3gI+nijtBUo/gNhWj
-        GKD6VbrvP3OP3WFWupueNMSH/LR74IqeKPKmtGurOei5BbbIlZXDsfblAqbBbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660123412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6HWN3MBEuCVFX8UKlJj6PwdpMdFjg0O5CvJcE3JmtvM=;
-        b=MiSnta9s2QurxZXWkf35yqvfSbeo1OsMDOjjGCUh/jMxOcV68XhI3pqnZJAogUWNzXVjPI
-        xmFf9tC59gpODFCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: [PATCH v2] asm-generic: Conditionally enable do_softirq_own_stack()
- via Kconfig.
-Message-ID: <YvN5E/PrHfUhggr7@linutronix.de>
-References: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
- <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
- <YvKD4hkZ3erf54DG@linutronix.de>
- <8735e4v7yk.ffs@tglx>
+        with ESMTP id S229636AbiHJOPS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Aug 2022 10:15:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8F98193F2;
+        Wed, 10 Aug 2022 07:15:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 35FBF1FB;
+        Wed, 10 Aug 2022 07:15:17 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.44.164])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BE0F3F67D;
+        Wed, 10 Aug 2022 07:15:13 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 15:15:03 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Dave Jiang <dave.jiang@intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dan.j.williams@intel.com,
+        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+        alison.schofield@intel.com, a.manzanares@samsung.com,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC 10/15] x86: add an arch helper function to invalidate
+ all cache for nvdimm
+Message-ID: <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
+References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
+ <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
+ <20220718053039.5whjdcxynukildlo@offworld>
+ <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
+ <20220803183729.00002183@huawei.com>
+ <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <8735e4v7yk.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Remove the CONFIG_PREEMPT_RT symbol from the ifdef around
-do_softirq_own_stack() and move it to Kconfig instead.
+On Tue, Aug 09, 2022 at 02:47:06PM -0700, Dave Jiang wrote:
+> 
+> On 8/3/2022 10:37 AM, Jonathan Cameron wrote:
+> > On Tue, 19 Jul 2022 12:07:03 -0700
+> > Dave Jiang <dave.jiang@intel.com> wrote:
+> > 
+> > > On 7/17/2022 10:30 PM, Davidlohr Bueso wrote:
+> > > > On Fri, 15 Jul 2022, Dave Jiang wrote:
+> > > > > The original implementation to flush all cache after unlocking the
+> > > > > nvdimm
+> > > > > resides in drivers/acpi/nfit/intel.c. This is a temporary stop gap until
+> > > > > nvdimm with security operations arrives on other archs. With support CXL
+> > > > > pmem supporting security operations, specifically "unlock" dimm, the
+> > > > > need
+> > > > > for an arch supported helper function to invalidate all CPU cache for
+> > > > > nvdimm has arrived. Remove original implementation from acpi/nfit and
+> > > > > add
+> > > > > cross arch support for this operation.
+> > > > > 
+> > > > > Add CONFIG_ARCH_HAS_NVDIMM_INVAL_CACHE Kconfig and allow x86_64 to
+> > > > > opt in
+> > > > > and provide the support via wbinvd_on_all_cpus() call.
+> > > > So the 8.2.9.5.5 bits will also need wbinvd - and I guess arm64 will need
+> > > > its own semantics (iirc there was a flush all call in the past). Cc'ing
+> > > > Jonathan as well.
+> > > > 
+> > > > Anyway, I think this call should not be defined in any place other
+> > > > than core
+> > > > kernel headers, and not in pat/nvdimm. I was trying to make it fit in
+> > > > smp.h,
+> > > > for example, but conviniently we might be able to hijack
+> > > > flush_cache_all()
+> > > > for our purposes as of course neither x86-64 arm64 uses it :)
+> > > > 
+> > > > And I see this as safe (wrt not adding a big hammer on unaware
+> > > > drivers) as
+> > > > the 32bit archs that define the call are mostly contained thin their
+> > > > arch/,
+> > > > and the few in drivers/ are still specific to those archs.
+> > > > 
+> > > > Maybe something like the below.
+> > > Ok. I'll replace my version with yours.
+> > Careful with flush_cache_all(). The stub version in
+> > include/asm-generic/cacheflush.h has a comment above it that would
+> > need updating at very least (I think).
+> > Note there 'was' a flush_cache_all() for ARM64, but:
+> > https://patchwork.kernel.org/project/linux-arm-kernel/patch/1429521875-16893-1-git-send-email-mark.rutland@arm.com/
+> 
+> 
+> flush_and_invalidate_cache_all() instead given it calls wbinvd on x86? I
+> think other archs, at least ARM, those are separate instructions aren't
+> they?
 
-Enable softirq stacks based on SOFTIRQ_ON_OWN_STACK which depends on
-HAVE_SOFTIRQ_ON_OWN_STACK and its default value is set to !PREEMPT_RT.
-This ensures that softirq stacks are not used on PREEMPT_RT and avoids
-a 'select' statement on an option which has a 'depends' statement.
+On arm and arm64 there is no way to perform maintenance on *all* caches; it has
+to be done in cacheline increments by address. It's not realistic to do that
+for the entire address space, so we need to know the relevant address ranges
+(as per the commit referenced above).
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-v1=E2=80=A6v2:
-On 2022-08-10 10:06:11 [+0200], Thomas Gleixner wrote:
-> > +config SOFTIRQ_ON_OWN_STACK
-> > +	def_bool !PREEMPT_RT
-> > +	depends on HAVE_SOFTIRQ_ON_OWN_STACK
->=20
->         def_bool !PREEMPT_RT && HAVE_SOFTIRQ_ON_OWN_STACK
->=20
-> No?
+So we probably need to think a bit harder about the geenric interface, since
+"all" isn't possible to implement. :/
 
-works, too. Let me compress it then.
+Thanks,
+Mark.
 
- arch/Kconfig                          | 3 +++
- arch/arm/kernel/irq.c                 | 2 +-
- arch/parisc/kernel/irq.c              | 2 +-
- arch/powerpc/kernel/irq.c             | 4 ++--
- arch/s390/include/asm/softirq_stack.h | 2 +-
- arch/sh/kernel/irq.c                  | 2 +-
- arch/sparc/kernel/irq_64.c            | 2 +-
- arch/x86/include/asm/irq_stack.h      | 2 +-
- arch/x86/kernel/irq_32.c              | 2 +-
- include/asm-generic/softirq_stack.h   | 2 +-
- 10 files changed, 13 insertions(+), 10 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index f330410da63a6..dc2dce2120a0b 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -924,6 +924,9 @@ config HAVE_SOFTIRQ_ON_OWN_STACK
- 	  Architecture provides a function to run __do_softirq() on a
- 	  separate stack.
-=20
-+config SOFTIRQ_ON_OWN_STACK
-+	def_bool HAVE_SOFTIRQ_ON_OWN_STACK && !PREEMPT_RT
-+
- config ALTERNATE_USER_ADDRESS_SPACE
- 	bool
- 	help
-diff --git a/arch/arm/kernel/irq.c b/arch/arm/kernel/irq.c
-index 034cb48c9eeb8..fe28fc1f759d9 100644
---- a/arch/arm/kernel/irq.c
-+++ b/arch/arm/kernel/irq.c
-@@ -70,7 +70,7 @@ static void __init init_irq_stacks(void)
- 	}
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static void ____do_softirq(void *arg)
- {
- 	__do_softirq();
-diff --git a/arch/parisc/kernel/irq.c b/arch/parisc/kernel/irq.c
-index fbb882cb8dbb5..b05055f3ba4b8 100644
---- a/arch/parisc/kernel/irq.c
-+++ b/arch/parisc/kernel/irq.c
-@@ -480,7 +480,7 @@ static void execute_on_irq_stack(void *func, unsigned l=
-ong param1)
- 	*irq_stack_in_use =3D 1;
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	execute_on_irq_stack(__do_softirq, 0);
-diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
-index 0f17268c1f0bb..9ede61a5a469e 100644
---- a/arch/powerpc/kernel/irq.c
-+++ b/arch/powerpc/kernel/irq.c
-@@ -199,7 +199,7 @@ static inline void check_stack_overflow(unsigned long s=
-p)
- 	}
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static __always_inline void call_do_softirq(const void *sp)
- {
- 	/* Temporarily switch r1 to sp, call __do_softirq() then restore r1. */
-@@ -335,7 +335,7 @@ void *mcheckirq_ctx[NR_CPUS] __read_mostly;
- void *softirq_ctx[NR_CPUS] __read_mostly;
- void *hardirq_ctx[NR_CPUS] __read_mostly;
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	call_do_softirq(softirq_ctx[smp_processor_id()]);
-diff --git a/arch/s390/include/asm/softirq_stack.h b/arch/s390/include/asm/=
-softirq_stack.h
-index af68d6c1d5840..1ac5115d3115e 100644
---- a/arch/s390/include/asm/softirq_stack.h
-+++ b/arch/s390/include/asm/softirq_stack.h
-@@ -5,7 +5,7 @@
- #include <asm/lowcore.h>
- #include <asm/stacktrace.h>
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static inline void do_softirq_own_stack(void)
- {
- 	call_on_stack(0, S390_lowcore.async_stack, void, __do_softirq);
-diff --git a/arch/sh/kernel/irq.c b/arch/sh/kernel/irq.c
-index 9092767380780..4e6835de54cf8 100644
---- a/arch/sh/kernel/irq.c
-+++ b/arch/sh/kernel/irq.c
-@@ -149,7 +149,7 @@ void irq_ctx_exit(int cpu)
- 	hardirq_ctx[cpu] =3D NULL;
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	struct thread_info *curctx;
-diff --git a/arch/sparc/kernel/irq_64.c b/arch/sparc/kernel/irq_64.c
-index 41fa1be980a33..72da2e10e2559 100644
---- a/arch/sparc/kernel/irq_64.c
-+++ b/arch/sparc/kernel/irq_64.c
-@@ -855,7 +855,7 @@ void __irq_entry handler_irq(int pil, struct pt_regs *r=
-egs)
- 	set_irq_regs(old_regs);
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	void *orig_sp, *sp =3D softirq_stack[smp_processor_id()];
-diff --git a/arch/x86/include/asm/irq_stack.h b/arch/x86/include/asm/irq_st=
-ack.h
-index 63f818aedf770..147cb8fdda92e 100644
---- a/arch/x86/include/asm/irq_stack.h
-+++ b/arch/x86/include/asm/irq_stack.h
-@@ -203,7 +203,7 @@
- 			      IRQ_CONSTRAINTS, regs, vector);		\
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- /*
-  * Macro to invoke __do_softirq on the irq stack. This is only called from
-  * task context when bottom halves are about to be reenabled and soft
-diff --git a/arch/x86/kernel/irq_32.c b/arch/x86/kernel/irq_32.c
-index e5dd6da78713b..01833ebf5e8e3 100644
---- a/arch/x86/kernel/irq_32.c
-+++ b/arch/x86/kernel/irq_32.c
-@@ -132,7 +132,7 @@ int irq_init_percpu_irqstack(unsigned int cpu)
- 	return 0;
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	struct irq_stack *irqstk;
-diff --git a/include/asm-generic/softirq_stack.h b/include/asm-generic/soft=
-irq_stack.h
-index d3e2d81656e04..2a67aed9ac528 100644
---- a/include/asm-generic/softirq_stack.h
-+++ b/include/asm-generic/softirq_stack.h
-@@ -2,7 +2,7 @@
- #ifndef __ASM_GENERIC_SOFTIRQ_STACK_H
- #define __ASM_GENERIC_SOFTIRQ_STACK_H
-=20
--#if defined(CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK) && !defined(CONFIG_PREEMPT_R=
-T)
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void);
- #else
- static inline void do_softirq_own_stack(void)
---=20
-2.36.1
-
+> 
+> > 
+> > Also, I'm far from sure it will be the right choice on all CXL supporting
+> > architectures.
+> > +CC linux-arch, linux-arm and Arnd.
+> > 
+> > > 
+> > > > Thanks,
+> > > > Davidlohr
+> > > > 
+> > > > ------8<----------------------------------------
+> > > > Subject: [PATCH] arch/x86: define flush_cache_all as global wbinvd
+> > > > 
+> > > > With CXL security features, global CPU cache flushing nvdimm
+> > > > requirements are no longer specific to that subsystem, even
+> > > > beyond the scope of security_ops. CXL will need such semantics
+> > > > for features not necessarily limited to persistent memory.
+> > > > 
+> > > > So use the flush_cache_all() for the wbinvd across all
+> > > > CPUs on x86. arm64, which is another platform to have CXL
+> > > > support can also define its own semantics here.
+> > > > 
+> > > > Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
+> > > > ---
+> > > >   arch/x86/Kconfig                  |  1 -
+> > > >   arch/x86/include/asm/cacheflush.h |  5 +++++
+> > > >   arch/x86/mm/pat/set_memory.c      |  8 --------
+> > > >   drivers/acpi/nfit/intel.c         | 11 ++++++-----
+> > > >   drivers/cxl/security.c            |  5 +++--
+> > > >   include/linux/libnvdimm.h         |  9 ---------
+> > > >   6 files changed, 14 insertions(+), 25 deletions(-)
+> > > > 
+> > > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > > > index 8dbe89eba639..be0b95e51df6 100644
+> > > > --- a/arch/x86/Kconfig
+> > > > +++ b/arch/x86/Kconfig
+> > > > @@ -83,7 +83,6 @@ config X86
+> > > >      select ARCH_HAS_MEMBARRIER_SYNC_CORE
+> > > >      select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+> > > >      select ARCH_HAS_PMEM_API        if X86_64
+> > > > -    select ARCH_HAS_NVDIMM_INVAL_CACHE    if X86_64
+> > > >      select ARCH_HAS_PTE_DEVMAP        if X86_64
+> > > >      select ARCH_HAS_PTE_SPECIAL
+> > > >      select ARCH_HAS_UACCESS_FLUSHCACHE    if X86_64
+> > > > diff --git a/arch/x86/include/asm/cacheflush.h
+> > > > b/arch/x86/include/asm/cacheflush.h
+> > > > index b192d917a6d0..05c79021665d 100644
+> > > > --- a/arch/x86/include/asm/cacheflush.h
+> > > > +++ b/arch/x86/include/asm/cacheflush.h
+> > > > @@ -10,4 +10,9 @@
+> > > > 
+> > > >   void clflush_cache_range(void *addr, unsigned int size);
+> > > > 
+> > > > +#define flush_cache_all()        \
+> > > > +do {                    \
+> > > > +    wbinvd_on_all_cpus();        \
+> > > > +} while (0)
+> > > > +
+> > > >   #endif /* _ASM_X86_CACHEFLUSH_H */
+> > > > diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> > > > index e4cd1286deef..1abd5438f126 100644
+> > > > --- a/arch/x86/mm/pat/set_memory.c
+> > > > +++ b/arch/x86/mm/pat/set_memory.c
+> > > > @@ -330,14 +330,6 @@ void arch_invalidate_pmem(void *addr, size_t size)
+> > > >   EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+> > > >   #endif
+> > > > 
+> > > > -#ifdef CONFIG_ARCH_HAS_NVDIMM_INVAL_CACHE
+> > > > -void arch_invalidate_nvdimm_cache(void)
+> > > > -{
+> > > > -    wbinvd_on_all_cpus();
+> > > > -}
+> > > > -EXPORT_SYMBOL_GPL(arch_invalidate_nvdimm_cache);
+> > > > -#endif
+> > > > -
+> > > >   static void __cpa_flush_all(void *arg)
+> > > >   {
+> > > >      unsigned long cache = (unsigned long)arg;
+> > > > diff --git a/drivers/acpi/nfit/intel.c b/drivers/acpi/nfit/intel.c
+> > > > index 242d2e9203e9..1b0ecb4d67e6 100644
+> > > > --- a/drivers/acpi/nfit/intel.c
+> > > > +++ b/drivers/acpi/nfit/intel.c
+> > > > @@ -1,6 +1,7 @@
+> > > >   // SPDX-License-Identifier: GPL-2.0
+> > > >   /* Copyright(c) 2018 Intel Corporation. All rights reserved. */
+> > > >   #include <linux/libnvdimm.h>
+> > > > +#include <linux/cacheflush.h>
+> > > >   #include <linux/ndctl.h>
+> > > >   #include <linux/acpi.h>
+> > > >   #include <asm/smp.h>
+> > > > @@ -226,7 +227,7 @@ static int __maybe_unused
+> > > > intel_security_unlock(struct nvdimm *nvdimm,
+> > > >      }
+> > > > 
+> > > >      /* DIMM unlocked, invalidate all CPU caches before we read it */
+> > > > -    arch_invalidate_nvdimm_cache();
+> > > > +    flush_cache_all();
+> > > > 
+> > > >      return 0;
+> > > >   }
+> > > > @@ -296,7 +297,7 @@ static int __maybe_unused
+> > > > intel_security_erase(struct nvdimm *nvdimm,
+> > > >          return -ENOTTY;
+> > > > 
+> > > >      /* flush all cache before we erase DIMM */
+> > > > -    arch_invalidate_nvdimm_cache();
+> > > > +    flush_cache_all();
+> > > >      memcpy(nd_cmd.cmd.passphrase, key->data,
+> > > >              sizeof(nd_cmd.cmd.passphrase));
+> > > >      rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
+> > > > @@ -316,7 +317,7 @@ static int __maybe_unused
+> > > > intel_security_erase(struct nvdimm *nvdimm,
+> > > >      }
+> > > > 
+> > > >      /* DIMM erased, invalidate all CPU caches before we read it */
+> > > > -    arch_invalidate_nvdimm_cache();
+> > > > +    flush_cache_all();
+> > > >      return 0;
+> > > >   }
+> > > > 
+> > > > @@ -353,7 +354,7 @@ static int __maybe_unused
+> > > > intel_security_query_overwrite(struct nvdimm *nvdimm)
+> > > >      }
+> > > > 
+> > > >      /* flush all cache before we make the nvdimms available */
+> > > > -    arch_invalidate_nvdimm_cache();
+> > > > +    flush_cache_all();
+> > > >      return 0;
+> > > >   }
+> > > > 
+> > > > @@ -379,7 +380,7 @@ static int __maybe_unused
+> > > > intel_security_overwrite(struct nvdimm *nvdimm,
+> > > >          return -ENOTTY;
+> > > > 
+> > > >      /* flush all cache before we erase DIMM */
+> > > > -    arch_invalidate_nvdimm_cache();
+> > > > +    flush_cache_all();
+> > > >      memcpy(nd_cmd.cmd.passphrase, nkey->data,
+> > > >              sizeof(nd_cmd.cmd.passphrase));
+> > > >      rc = nvdimm_ctl(nvdimm, ND_CMD_CALL, &nd_cmd, sizeof(nd_cmd), NULL);
+> > > > diff --git a/drivers/cxl/security.c b/drivers/cxl/security.c
+> > > > index 3dc04b50afaf..e2977872bf2f 100644
+> > > > --- a/drivers/cxl/security.c
+> > > > +++ b/drivers/cxl/security.c
+> > > > @@ -6,6 +6,7 @@
+> > > >   #include <linux/ndctl.h>
+> > > >   #include <linux/async.h>
+> > > >   #include <linux/slab.h>
+> > > > +#include <linux/cacheflush.h>
+> > > >   #include "cxlmem.h"
+> > > >   #include "cxl.h"
+> > > > 
+> > > > @@ -137,7 +138,7 @@ static int cxl_pmem_security_unlock(struct nvdimm
+> > > > *nvdimm,
+> > > >          return rc;
+> > > > 
+> > > >      /* DIMM unlocked, invalidate all CPU caches before we read it */
+> > > > -    arch_invalidate_nvdimm_cache();
+> > > > +    flush_cache_all();
+> > > >      return 0;
+> > > >   }
+> > > > 
+> > > > @@ -165,7 +166,7 @@ static int
+> > > > cxl_pmem_security_passphrase_erase(struct nvdimm *nvdimm,
+> > > >          return rc;
+> > > > 
+> > > >      /* DIMM erased, invalidate all CPU caches before we read it */
+> > > > -    arch_invalidate_nvdimm_cache();
+> > > > +    flush_cache_all();
+> > > >      return 0;
+> > > >   }
+> > > > 
+> > > > diff --git a/include/linux/libnvdimm.h b/include/linux/libnvdimm.h
+> > > > index 07e4e7572089..0769afb73380 100644
+> > > > --- a/include/linux/libnvdimm.h
+> > > > +++ b/include/linux/libnvdimm.h
+> > > > @@ -309,13 +309,4 @@ static inline void arch_invalidate_pmem(void
+> > > > *addr, size_t size)
+> > > >   {
+> > > >   }
+> > > >   #endif
+> > > > -
+> > > > -#ifdef CONFIG_ARCH_HAS_NVDIMM_INVAL_CACHE
+> > > > -void arch_invalidate_nvdimm_cache(void);
+> > > > -#else
+> > > > -static inline void arch_invalidate_nvdimm_cache(void)
+> > > > -{
+> > > > -}
+> > > > -#endif
+> > > > -
+> > > >   #endif /* __LIBNVDIMM_H__ */
+> > > > -- 
+> > > > 2.36.1
