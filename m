@@ -2,186 +2,153 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8288E58F125
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Aug 2022 19:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFCB58F224
+	for <lists+linux-arch@lfdr.de>; Wed, 10 Aug 2022 20:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbiHJRFX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Aug 2022 13:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S231286AbiHJSJj (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 10 Aug 2022 14:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiHJRFW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Aug 2022 13:05:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B46E20F5A;
-        Wed, 10 Aug 2022 10:05:21 -0700 (PDT)
-Received: from localhost (modemcable141.102-20-96.mc.videotron.ca [96.20.102.141])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: krisman)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 227CD66019C1;
-        Wed, 10 Aug 2022 18:05:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660151120;
-        bh=4xdK5anslBOIhnkqGW81pncrZ4JdPy+zW5SIE/JLnRY=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=h3/E9F9xuu0PQBdbIIIowMiztInzpGA0Sr0/+ERtIQ9Vaj8xol3qxBdNobdQ5OFOQ
-         lAbYHUygoM5LQQ5pucfxCdpxQTPn06tCWpoSfjKHlvwjjlSxcMj8Ew2NicpOm1AvJ3
-         roEcd73rt3wd9yGwbKMRSMKfTRLj6KFgYIfZ2F4vNor+cpy8eB6hytQGEFPfzNo5Md
-         msk+2xH6Fdmd57XrQPJRtVBSL67QF0eySoRR2reLPDjb1MJQU/w+xrfqcTVAbkf3vT
-         XqEyOLcJ5t7UXVh9WHIGLYw/NAFIeHfZKTVCtl5iayQ/V09KExOQ4SdIqXZDjGHMtJ
-         +LprGiO7NYsdA==
-From:   Gabriel Krisman Bertazi <krisman@collabora.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:ABI/API" <linux-api@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernel@collabora.com
-Subject: Re: [PATCH 0/5] Add process_memwatch syscall
-References: <20220726161854.276359-1-usama.anjum@collabora.com>
-        <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com>
-Date:   Wed, 10 Aug 2022 13:05:13 -0400
-In-Reply-To: <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com> (David
-        Hildenbrand's message of "Wed, 10 Aug 2022 11:03:11 +0200")
-Message-ID: <87pmh8ghbq.fsf@collabora.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        with ESMTP id S231213AbiHJSJi (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Aug 2022 14:09:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAB944B4AC;
+        Wed, 10 Aug 2022 11:09:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56A4311FB;
+        Wed, 10 Aug 2022 11:09:38 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.42.73])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A5213F5A1;
+        Wed, 10 Aug 2022 11:09:33 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 19:09:27 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Eliot Moss <moss@cs.umass.edu>
+Cc:     Dave Jiang <dave.jiang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Davidlohr Bueso <dave@stgolabs.net>, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dan.j.williams@intel.com,
+        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+        alison.schofield@intel.com, a.manzanares@samsung.com,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC 10/15] x86: add an arch helper function to invalidate
+ all cache for nvdimm
+Message-ID: <YvP0V04uhSM0WzX4@FVFF77S0Q05N>
+References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
+ <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
+ <20220718053039.5whjdcxynukildlo@offworld>
+ <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
+ <20220803183729.00002183@huawei.com>
+ <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
+ <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
+ <cf519783-ec21-b3c9-37db-7504b2279d43@cs.umass.edu>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf519783-ec21-b3c9-37db-7504b2279d43@cs.umass.edu>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+On Wed, Aug 10, 2022 at 10:31:12AM -0400, Eliot Moss wrote:
+> On 8/10/2022 10:15 AM, Mark Rutland wrote:
+> > On Tue, Aug 09, 2022 at 02:47:06PM -0700, Dave Jiang wrote:
+> > > 
+> > > On 8/3/2022 10:37 AM, Jonathan Cameron wrote:
+> > > > On Tue, 19 Jul 2022 12:07:03 -0700
+> > > > Dave Jiang <dave.jiang@intel.com> wrote:
+> > > > 
+> > > > > On 7/17/2022 10:30 PM, Davidlohr Bueso wrote:
+> > > > > > On Fri, 15 Jul 2022, Dave Jiang wrote:
+> > > > > > > The original implementation to flush all cache after unlocking the
+> > > > > > > nvdimm
+> > > > > > > resides in drivers/acpi/nfit/intel.c. This is a temporary stop gap until
+> > > > > > > nvdimm with security operations arrives on other archs. With support CXL
+> > > > > > > pmem supporting security operations, specifically "unlock" dimm, the
+> > > > > > > need
+> > > > > > > for an arch supported helper function to invalidate all CPU cache for
+> > > > > > > nvdimm has arrived. Remove original implementation from acpi/nfit and
+> > > > > > > add
+> > > > > > > cross arch support for this operation.
+> > > > > > > 
+> > > > > > > Add CONFIG_ARCH_HAS_NVDIMM_INVAL_CACHE Kconfig and allow x86_64 to
+> > > > > > > opt in
+> > > > > > > and provide the support via wbinvd_on_all_cpus() call.
+> > > > > > So the 8.2.9.5.5 bits will also need wbinvd - and I guess arm64 will need
+> > > > > > its own semantics (iirc there was a flush all call in the past). Cc'ing
+> > > > > > Jonathan as well.
+> > > > > > 
+> > > > > > Anyway, I think this call should not be defined in any place other
+> > > > > > than core
+> > > > > > kernel headers, and not in pat/nvdimm. I was trying to make it fit in
+> > > > > > smp.h,
+> > > > > > for example, but conviniently we might be able to hijack
+> > > > > > flush_cache_all()
+> > > > > > for our purposes as of course neither x86-64 arm64 uses it :)
+> > > > > > 
+> > > > > > And I see this as safe (wrt not adding a big hammer on unaware
+> > > > > > drivers) as
+> > > > > > the 32bit archs that define the call are mostly contained thin their
+> > > > > > arch/,
+> > > > > > and the few in drivers/ are still specific to those archs.
+> > > > > > 
+> > > > > > Maybe something like the below.
+> > > > > Ok. I'll replace my version with yours.
+> > > > Careful with flush_cache_all(). The stub version in
+> > > > include/asm-generic/cacheflush.h has a comment above it that would
+> > > > need updating at very least (I think).
+> > > > Note there 'was' a flush_cache_all() for ARM64, but:
+> > > > https://patchwork.kernel.org/project/linux-arm-kernel/patch/1429521875-16893-1-git-send-email-mark.rutland@arm.com/
+> > > 
+> > > 
+> > > flush_and_invalidate_cache_all() instead given it calls wbinvd on x86? I
+> > > think other archs, at least ARM, those are separate instructions aren't
+> > > they?
+> > 
+> > On arm and arm64 there is no way to perform maintenance on *all* caches; it has
+> > to be done in cacheline increments by address. It's not realistic to do that
+> > for the entire address space, so we need to know the relevant address ranges
+> > (as per the commit referenced above).
+> > 
+> > So we probably need to think a bit harder about the geenric interface, since
+> > "all" isn't possible to implement. :/
+> 
+> Can you not do flushing by set and way on each cache,
+> probably working outwards from L1?
 
-> On 26.07.22 18:18, Muhammad Usama Anjum wrote:
->> Hello,
->
-> Hi,
->
->> 
->> This patch series implements a new syscall, process_memwatch. Currently,
->> only the support to watch soft-dirty PTE bit is added. This syscall is
->> generic to watch the memory of the process. There is enough room to add
->> more operations like this to watch memory in the future.
->> 
->> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
->> procfs file. The soft-dirty PTE bit for the memory in a process can be
->> cleared by writing to the clear_refs file. This series adds features that
->> weren't possible through the Proc FS interface.
->> - There is no atomic get soft-dirty PTE bit status and clear operation
->>   possible.
->
-> Such an interface might be easy to add, no?
->
->> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
->
-> Same.
->
-> So I'm curious why we need a new syscall for that.
+Unfortunately, for a number of reasons, that doeesn't work. For better or
+worse, the *only* way which is guaranteed to work is to do this by address.
 
-Hi David,
+If you look at the latest ARM ARM (ARM DDI 0487H.a):
 
-Yes, sure. Though it has to be through an ioctl since we need both input
-and output semantics at the same call to keep the atomic semantics.
+  https://developer.arm.com/documentation/ddi0487/ha/
 
-I answered Peter Enderborg about our concerns when turning this into an
-ioctl.  But they are possible to overcome.
+... on page D4-4754, in the block "Example code for cache maintenance
+instructions", there's note with a treatise on this.
 
->> project. The Proc FS interface is enough for that as I think the process
->> is frozen. We have the use case where we need to track the soft-dirty
->> PTE bit for running processes. We need this tracking and clear mechanism
->> of a region of memory while the process is running to emulate the
->> getWriteWatch() syscall of Windows. This syscall is used by games to keep
->> track of dirty pages and keep processing only the dirty pages. This
->> syscall can be used by the CRIU project and other applications which
->> require soft-dirty PTE bit information.
->> 
->> As in the current kernel there is no way to clear a part of memory (instead
->> of clearing the Soft-Dirty bits for the entire processi) and get+clear
->> operation cannot be performed atomically, there are other methods to mimic
->> this information entirely in userspace with poor performance:
->> - The mprotect syscall and SIGSEGV handler for bookkeeping
->> - The userfaultfd syscall with the handler for bookkeeping
->
-> You write "poor performance". Did you actually implement a prototype
-> using userfaultfd-wp? Can you share numbers for comparison?
+The gist is that:
 
-Yes, we did.  I think Usama can share some numbers.
+* Set/Way ops are only guaranteed to affect the caches local to the CPU
+  issuing them, and are not guaranteed to affect caches owned by other CPUs.
 
-The problem with userfaultfd, as far as I understand, is that it will
-require a second userspace process to be called in order to handle the
-annotation that a page was touched, before remapping the page to make it
-accessible to the originating process, every time a page is touched.
-This context switch is prohibitively expensive to our use case, where
-Windows applications might invoke it quite often.  Soft-dirty bit
-instead, allows the page tracking to be done entirely in kernelspace.
+* Set/Way ops are not guaranteed to affect system-level caches, which are
+  fairly popular these days (whereas VA ops are required to affect those).
 
-If I understand correctly, userfaultfd is usefull for VM/container
-migration, where the cost of the context switch is not a real concern,
-since there are much bigger costs from the migration itself.
+* Set/Way ops race with the natural behaviour of caches (so e.g. a line could
+  bounce between layers of cache, or between caches in the system, and avoid
+  being operated upon).
 
-Maybe we're missing some feature about userfaultfd that would allow us
-to avoid the cost, but from our observations we didn't find a way to
-overcome it.
+So unless you're on a single CPU system, with translation disabled, and you
+*know* that there are no system-level caches, you can't rely upon Set/Way ops
+to do anything useful.
 
->>         long process_memwatch(int pidfd, unsigned long start, int len,
->>                               unsigned int flags, void *vec, int vec_len);
->> 
->> This syscall can be used by the CRIU project and other applications which
->> require soft-dirty PTE bit information. The following operations are
->> supported in this syscall:
->> - Get the pages that are soft-dirty.
->> - Clear the pages which are soft-dirty.
->> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
->> soft-dirty PTE bit
->
-> Huh, why? VM_SOFTDIRTY is an internal implementation detail and should
-> remain such.
-> VM_SOFTDIRTY translates to "all pages in this VMA are soft-dirty".
-
-That is something very specific about our use case, and we should
-explain it a bit better.  The problem is that VM_SOFTDIRTY modifications
-introduce the overhead of the mm write lock acquisition, which is very
-visible in our benchmarks of Windows games running over Wine.
-
-Since the main reason for VM_SOFTDIRTY to exist, as far as we understand
-it, is to track vma remapping, and this is a use case we don't need to
-worry about when implementing windows semantics, we'd like to be able to
-avoid this extra overhead, optionally, iff userspace knows it can be
-done safely.
-
-VM_SOFTDIRTY is indeed an internal interface.  Which is why we are
-proposing to expose the feature in terms of tracking VMA reuse.
+They're really there for firmware to use for IMPLEMENTATION DEFINED power-up
+and power-down sequences, and aren'y useful to portable code.
 
 Thanks,
-
--- 
-Gabriel Krisman Bertazi
+Mark.
