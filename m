@@ -2,158 +2,189 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F006258F3EE
-	for <lists+linux-arch@lfdr.de>; Wed, 10 Aug 2022 23:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E5558F7A7
+	for <lists+linux-arch@lfdr.de>; Thu, 11 Aug 2022 08:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiHJVsg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 10 Aug 2022 17:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53424 "EHLO
+        id S234066AbiHKGbt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 11 Aug 2022 02:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiHJVsf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 10 Aug 2022 17:48:35 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636E17B797;
-        Wed, 10 Aug 2022 14:48:34 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id C1C606C176F;
-        Wed, 10 Aug 2022 21:48:33 +0000 (UTC)
-Received: from pdx1-sub0-mail-a301.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A8F856C1F1A;
-        Wed, 10 Aug 2022 21:48:32 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660168113; a=rsa-sha256;
-        cv=none;
-        b=WYJMxqrkeP4XCTOieBVD2PSb5p6fs8JP3LLyF0OZ80zLtfrBHUZZvzwCyUFnGl2pyeYpFg
-        OSAky+QGuVZ4Bs2fbjFz1Uzh2vbJUcQZqSRIX8RTP8ZdigDjHfYM2ycaGOuZL7vKROGHC5
-        EIfXZDiz3XZ9E9PppwWKOHRM5C3mXO+53L1MFO2mw94J6NhUBuAtKnZo8dl1x6cQCopWJN
-        hCNV3v99/GrjoCFy6WMiLE62qvBo/oEBwdI5SfNQ1Z41usxp/WBUy0Y4qYgD0SM5HRnI9T
-        iybn/hUccU8mziu16/2OOfMxI+nchMsj4TCOlXSv/FHNyP2UzY4zT30NwBMscw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1660168113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=jWp01Hcl4j0YiL9/n7IqCl4dh/n8uPqHFzk1dZ4hNj8=;
-        b=INNStFOlxSuXXOwUF/tkf8NmHL8KePZuDc2lWL2jv7EBB633F3vaq2ymNKkD80dnh5yNSo
-        bWl5PbePBYG/esel1y+16Svr16VzqJ6Q67KJw5B7kYk/UoXlMUPlc02xg4oFBhZIEZTd8W
-        u4VHk5T5P9E3piV41193RGytTWwCZUEl/g9ZtJ3R55Zmdz3QD3B13YHzmxHvj7lrORM6Xa
-        mPzwW8ebFpPbKEJLrF64kPLtD0bUx6uZy4pM9ndtbQ4BIamUmD2wRqraYIrDG8thApP2Mu
-        tee669SrSzwmLl2+9xpQD/11viUm79fr7zMSSOdoiDyfkicvGi9GGXvx3xSVmg==
-ARC-Authentication-Results: i=1;
-        rspamd-7c478d8c66-wmbcj;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Lonely-Unite: 2587f2a53c744ae3_1660168113268_3568757427
-X-MC-Loop-Signature: 1660168113268:3572167391
-X-MC-Ingress-Time: 1660168113267
-Received: from pdx1-sub0-mail-a301.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.112.55.239 (trex/6.7.1);
-        Wed, 10 Aug 2022 21:48:33 +0000
-Received: from offworld (unknown [104.36.25.245])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a301.dreamhost.com (Postfix) with ESMTPSA id 4M33Tq2F6MzMD;
-        Wed, 10 Aug 2022 14:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1660168112;
-        bh=jWp01Hcl4j0YiL9/n7IqCl4dh/n8uPqHFzk1dZ4hNj8=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=A6GKJe13/0xcGDk13MOtD/Lf29AjbXwG7DsGw8gAvvZtFwA3xgbgYPqjHxiN7iPDv
-         D5k7AqupovSKVi//+eIPG84PE3FCZMln9AyHay2+GllzOCv2EnHZOKou364UCxz+ib
-         j4O4AFEjnlRErLj1vowWcX+OiRmqciu1sZwW8N8XaFyB3sFZ1bgVkvEUzW2IUQint/
-         YCYxGvHeunNiEGk9FJ9ratMlpHkt03pT9eejxjNvh+nuAUgk0SWzgpQegOKqBnq1Gv
-         WvIb054m7ixCjZT6ReFxkDztcdkkfH6ZghMFTjtQ563pV9fRkX2U1CrCqwp5du+oFw
-         dg9dzgrWnGqqw==
-Date:   Wed, 10 Aug 2022 14:31:12 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, a.manzanares@samsung.com,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RFC 10/15] x86: add an arch helper function to invalidate
- all cache for nvdimm
-Message-ID: <20220810213112.p4fdclh4zbd3vta6@offworld>
-References: <165791918718.2491387.4203738301057301285.stgit@djiang5-desk3.ch.intel.com>
- <165791937063.2491387.15277418618265930924.stgit@djiang5-desk3.ch.intel.com>
- <20220718053039.5whjdcxynukildlo@offworld>
- <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
- <20220803183729.00002183@huawei.com>
- <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
- <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
- <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
- <20220810211337.ha27cl24splm4wjh@offworld>
- <62f4238b5ce8a_3ce6829447@dwillia2-xfh.jf.intel.com.notmuch>
+        with ESMTP id S233522AbiHKGbs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 11 Aug 2022 02:31:48 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B5A89925;
+        Wed, 10 Aug 2022 23:31:45 -0700 (PDT)
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27B6JuQA026048;
+        Wed, 10 Aug 2022 23:31:35 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=CHOBb/f//UarSijUkTV65HE94X9eKFKlTtg/gaKA6TY=;
+ b=PMfHFjW6d2dqKvUfS1uq+P4Dcpv4meVdRXLGKDLxPykmjf1p5/LR6JMSXhEQSFG6jsAS
+ Qx110r1b6d7r2WE2hYgatWetRSBYOkMB+8pVi/0Aoyo/lAqir6zff/I+0fRj6nnOYpLh
+ eRgkDmwYV0OMk1/hAKi9eu1nXLzX9hUr7ZKcohikLc5YewCTXVEPLunAVfvqlMLgPF5y
+ UPc8mYVyndR4ZARLrT/d+cp/iIG7R8EGZpZumVEEO+ClZlnc12n0DdDXznDsnmjuILHQ
+ z4Db3LPiOwiPO+gZ/e9F3ShsS36Kzhc0GE7wX1IjezDuHeSsw3NcAMNr5yK0ONA4YcoE rQ== 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3hvqf285bq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 23:31:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mssjJ9LwSBA38G0sevEelIWEUavsdL6+FOXo7Q7TTGfo9xp+6JeP5UDoPlPzQ/37N/zRDHYOGhX1XTHxh+LoDFhrY2Zkz49jtR4W44qSQ+v7xjiX1znWZgejIPYCMfG6LEiU+WrHIQCfAbYn0xkD9bZ7DAr1S6P0XyTBki92OmW2X2VRT6Sy3eCSleZebIHuqoklcU5qF5E/zzcH/CdLFljZrotDY/uBHjMOyTzNe0TFaYDWEhKll4Lhk9EAxmMrXonY6IEPKDMVOa1/FhLz+VkrDDppJcvhAuvNblVTqOYIf1fhn2yikoBnhUy2E4cLg3fq26wCS783dnm8Z2pisQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CHOBb/f//UarSijUkTV65HE94X9eKFKlTtg/gaKA6TY=;
+ b=fB4SWfFEPk8OiYtV19Gnd/499X7yNaZJk6WT4mrgvNX0a+8OXdDgvIejC3SJnIFruGqI75gKFd61wTX1szKoFEu7JvWuceqB8LqSAB8uFzhWeVAPqpaPMNbqH5JKvQrqg/w4Upt7bj/qepQfu7dPAmi1wxj7TYzx3f2DP1ColAGKbljygk+E/BODbv7WTfRADJ5Kj+DFBG3yC8RwOT4Cb5N24Bimpd0WPyckhu4ttQsE/N1gXw8AyYs+y+2unbpxiKLF2pHQyXHYca9sYIonOqmcWKaTqKoPdkqodPG+YfMkCwWPCZwVR0BGfLRgZuKKPMwBXDjqdSzepozIYcbk9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from SJ0PR11MB5630.namprd11.prod.outlook.com (2603:10b6:a03:3bb::6)
+ by BN6PR11MB4081.namprd11.prod.outlook.com (2603:10b6:405:78::38) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 11 Aug
+ 2022 06:31:32 +0000
+Received: from SJ0PR11MB5630.namprd11.prod.outlook.com
+ ([fe80::4057:7eb4:511b:e131]) by SJ0PR11MB5630.namprd11.prod.outlook.com
+ ([fe80::4057:7eb4:511b:e131%9]) with mapi id 15.20.5525.011; Thu, 11 Aug 2022
+ 06:31:32 +0000
+From:   quanyang.wang@windriver.com
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thierry Reding <treding@nvidia.com>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Quanyang Wang <quanyang.wang@windriver.com>
+Subject: [PATCH] asm/sections: fix the determination of the end of the memory region
+Date:   Thu, 11 Aug 2022 14:31:05 +0800
+Message-Id: <20220811063105.2553381-1-quanyang.wang@windriver.com>
+X-Mailer: git-send-email 2.36.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SGBP274CA0020.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::32)
+ To SJ0PR11MB5630.namprd11.prod.outlook.com (2603:10b6:a03:3bb::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <62f4238b5ce8a_3ce6829447@dwillia2-xfh.jf.intel.com.notmuch>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5ca21a82-0fc0-44de-b870-08da7b6321b7
+X-MS-TrafficTypeDiagnostic: BN6PR11MB4081:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lLAiLUmCuGvErrIlNs4b+rrD+08Hhf7hcEBZH2zCxjLzBlD9vXx1hLivg3oF3X/JYOKEdWTLbwvgh1GoNq30CcNRTGYj/KUAjHFmYyps5Fn2go3ohrf5GA6BM7KGXQD51BYfh3ikQqoEhykJ7H5jdrrXue1dsdow1UK/zsmSK/++sOzWmFmmCN9v3nHf/EOe8oVEewz2KT1hMbKH2ezY/mU8kTj//WsWhQLHGO6p+R2czRtEg4jbk99xSt4djot7VNjTucTbSqZojjglUwEE5RWmIJ41ariCTM8tV0jJYuCxD5NCddkA5jEIsqCLAXEPcbpuCTLWWRtJsKo53Y+ILGVqA5FHXeDouxgL5BbpLHkysJeHAuOjexex3DURWL+CPp5Xl5frPQ5tZIdFpa23H/9EfwwpJAFm5qQnAo4XyiRC/ejMXlEMVHAVx9hjZ0NpClLn4SAeYShfPJDc4dPfdKFoA4E9IqfKSFT7cdpTr3wTkU5eBzeHKFA1hkdDxcWhv4pwg0n1q6mIwlmpGY2ecFXToQJ2moOHCuMYExiQtB/zLgda3zyM3XcCMFKJ0aCkfa66MnJADN1nTQprFwupVlnTZ6Pg1O1iouyLFFdBJJo5sM7hby5i5Iohuqm8SAW0LjhqwwTJEcDDUnwc+w8WWyVRl3pvPr/5IdQ+wNLsMJt4BpaRuyKzEyY7udHcSPQG+wfQkQT74qMPauqU7mYHkIehgVMRFp5hFpX695vHOHH9s40HXzemYyut0mtel06epqhjQglWkQmsaObbSQZ9Qz++yO7Z2gB8WhkQJJsGzsk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5630.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(346002)(39850400004)(376002)(396003)(86362001)(478600001)(83380400001)(45080400002)(5660300002)(1076003)(36756003)(186003)(6486002)(2616005)(107886003)(8936002)(110136005)(41300700001)(316002)(38100700002)(9686003)(6512007)(6666004)(8676002)(66476007)(66556008)(66946007)(2906002)(38350700002)(4326008)(52116002)(6506007)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TxYu7UqTJRp48beZlwTT/RwGhCp1fWq70JeXBedDVEshcWZVg2C4jyef6lng?=
+ =?us-ascii?Q?C3WYZCR6Yn5agzsixo+t+5FbyAlTMVjebiwIuqdRRP5bDCmjOGHFNAy//osU?=
+ =?us-ascii?Q?G8+sNWc/NPfWAL03yFjQkA+sqZXlOtZotb6c+KCTyWmYlTawrGYt5YV6P8hV?=
+ =?us-ascii?Q?my3eYpTdmU3I5PxQy3YU24G/62MqaTXD8WDRuJ7bZW1XJ5jXrUukx7h/etEG?=
+ =?us-ascii?Q?OT9uuyRsXhGLp3ohjM1SSGDUcwMG/5OXsnz6H6fXGFx9C7BnCtjqOd+APiD8?=
+ =?us-ascii?Q?IdvW4dkLOjzShORQHGk/s1CvVcfv7UFpIzJ76Ao+D8BvIiHpxf8PdL7X3QTx?=
+ =?us-ascii?Q?ufe6MP8ds+jkphLb8QxxzCaqq0TrhV7Q0yu2uJMlBHKJhZyj0E5JL4TPQeE5?=
+ =?us-ascii?Q?DK6unq1RqxWFdh5wIN+96NU9AGgUeIOEGRf1g9mdGwddYmOTHirhvbnAxZDH?=
+ =?us-ascii?Q?wEsd3DPi1aIMBYfw1oQNWxF2qyo63VKGXu9uJ95Ua2apM8VSb7+LO6QaiES/?=
+ =?us-ascii?Q?QF+IDlgRQNIPUZKC2JPcGIgU9+VZZ3UHzyRLCxeAuv2ww0sEdu9zsE5Tv49F?=
+ =?us-ascii?Q?FMe5q2ifKvE67ua46SpZNyCoh/kM9H3gBHxAC0WCjjpwH7+Hv+ZMrNYi38Z/?=
+ =?us-ascii?Q?U+06mjJJYRn2+OglRINJ3gZ7MCIeuAIhSO1ZYdcNj3fRyqoxzpCm3CQQnrCe?=
+ =?us-ascii?Q?LpjUdrtLBlDFF1PBfDfAYOTl4uAezZfdTUmwk5Aj+zD19KW0298w+l9Nuwtw?=
+ =?us-ascii?Q?kNpcakj5PYxitrE6/pkF5iEvyE9Yqfb0s1hMN6JbR9PktbQD6RdsP6Eb1Zbh?=
+ =?us-ascii?Q?4TO2ZVPmGCUYo42EcZcn4t3ZmCLi0LL0IkUxj0pdAim1MTDt7p57yPoJVdcQ?=
+ =?us-ascii?Q?71zewmTFXBUFqHvkbIVe9GjFZmWk1LRc+IfW1am/6JpNW7gcV/5iC/AZ880E?=
+ =?us-ascii?Q?5Y2N7vYkiV5+ADv1+7iD6ojRdAFfRJnJuZnUGQZL44j+el/Y9ArC0vp22nym?=
+ =?us-ascii?Q?MqiIqG6kkYyuWFfReImJAhyMJXmq/0Wcm/4yeGHqaIkrRpl/bJPWFHbIIpBn?=
+ =?us-ascii?Q?XfDAWfBTFxlWtNs1DrNDV5Da7uN4xymyspT+AMqKPVIsLfSBvHKDKB3R+Iic?=
+ =?us-ascii?Q?FyPDM8aGo0VwDk3xN8SeF24GEqdYUUsJ+aWr9dFLVjRjBm5xj+lVH0Oc9Ab/?=
+ =?us-ascii?Q?Nb0e1m4Orj0xRZcFqwINWgN/VoSRcQrrUrFwiyFq7FgLgqw96YscWtYC9D4q?=
+ =?us-ascii?Q?NpRsYyJFDCsBCzqM9pih2Qj1uqMePo6t6ngNZEXNZrlc3G95EvhjVMAqZr8U?=
+ =?us-ascii?Q?OqO1h61yhA9r3d2JfP8nNIZmRNLl4XuqUK0GmHkMWOMZ+uJIsJ0x7LyiUF2h?=
+ =?us-ascii?Q?hUY+APnbO6+yz7N5NY6xLdpyAPJ32yftdkeH+2lMqKDGZ7PRsYB5/PXLUp2R?=
+ =?us-ascii?Q?eMKcgE1GHDwRDi50dyFBL/tL1UNtKm6UzxhpE+lUwym+j8+e5UPW6m5cOgTC?=
+ =?us-ascii?Q?7a1uOKSXaB0vu5g+B3jAe0xEz3aYflm30z14wu1Q7W58kgIMHahR24rbDPCH?=
+ =?us-ascii?Q?yFlvQknj5GEhAmPPl4MFAaWRJeCtAurh8GkuyeeZuK15u9ZNHkY+D6oPLh9L?=
+ =?us-ascii?Q?Bw=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca21a82-0fc0-44de-b870-08da7b6321b7
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5630.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 06:31:32.6513
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mGGA5Cg0xnb+xddlZGTPKJJHlQIQF9tvHSE+wkK6Ul3Dzquqg+KfHKBI8zawxQUym7RYJ9BMIuZjhBzQI8hzBYJGxKXrKuGybhJschFb9UY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB4081
+X-Proofpoint-GUID: Ja7_U1XlGXvVyoJmyf2jzg049hvJaqMi
+X-Proofpoint-ORIG-GUID: Ja7_U1XlGXvVyoJmyf2jzg049hvJaqMi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-11_03,2022-08-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=864 mlxscore=0
+ priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208110017
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, 10 Aug 2022, Dan Williams wrote:
+From: Quanyang Wang <quanyang.wang@windriver.com>
 
->Davidlohr Bueso wrote:
->> On Wed, 10 Aug 2022, Dan Williams wrote:
->>
->> >I expect the interface would not be in the "flush_cache_" namespace
->> >since those functions are explicitly for virtually tagged caches that
->> >need maintenance on TLB operations that change the VA to PA association.
->> >In this case the cache needs maintenance because the data at the PA
->> >changes. That also means that putting it in the "nvdimm_" namespace is
->> >also wrong because there are provisions in the CXL spec where volatile
->> >memory ranges can also change contents at a given PA, for example caches
->> >might need to be invalidated if software resets the device, but not the
->> >platform.
->> >
->> >Something like:
->> >
->> >    region_cache_flush(resource_size_t base, resource_size_t n, bool nowait)
->> >
->> >...where internally that function can decide if it can rely on an
->> >instruction like wbinvd, use set / way based flushing (if set / way
->> >maintenance can be made to work which sounds like no for arm64), or map
->> >into VA space and loop. If it needs to fall back to that VA-based loop
->> >it might be the case that the caller would want to just fail the
->> >security op rather than suffer the loop latency.
->>
->> Yep, I was actually prototyping something similar, but want to still
->> reuse cacheflush.h machinery and just introduce cache_flush_region()
->> or whatever name, which returns any error. So all the logic would
->> just be per-arch, where x86 will do the wbinv and return 0, and arm64
->> can just do -EINVAL until VA-based is no longer the only way.
->
->cache_flush_region() works for me, but I wonder if there should be a
->cache_flush_region_capable() call to shut off dependent code early
->rather than discovering it at runtime? For example, even archs like x86,
->that have wbinvd, have scenarios where wbinvd is prohibited, or painful.
->TDX, and virtualization in general, comes to mind.
+If using "vend >= begin" to judge if two memory regions intersects, vend
+should be the end of the memory region, so it should be "virt + size -1"
+instead of "virt + size".
+The wrong determination of the end triggers the misreporting as below when
+the dma debug function "check_for_illegal_area" calls memory_intersects to
+check if the dma region intersects with stext region.
 
-Yeah I'm no fan of wbinv, but in these cases (cxl/nvdimm), at least from
-the performance angle, I am not worried: the user is explicity doing a
-security/cleaning specific op, probably decomisioning, so it's rare and
-should not expect better.
+Calltrace (stext is at 0x80100000):
+ WARNING: CPU: 0 PID: 77 at kernel/dma/debug.c:1073 check_for_illegal_area+0x130/0x168
+ DMA-API: chipidea-usb2 e0002000.usb: device driver maps memory from kernel text or rodata [addr=800f0000] [len=65536]
+ Modules linked in:
+ CPU: 1 PID: 77 Comm: usb-storage Not tainted 5.19.0-yocto-standard #5
+ Hardware name: Xilinx Zynq Platform
+  unwind_backtrace from show_stack+0x18/0x1c
+  show_stack from dump_stack_lvl+0x58/0x70
+  dump_stack_lvl from __warn+0xb0/0x198
+  __warn from warn_slowpath_fmt+0x80/0xb4
+  warn_slowpath_fmt from check_for_illegal_area+0x130/0x168
+  check_for_illegal_area from debug_dma_map_sg+0x94/0x368
+  debug_dma_map_sg from __dma_map_sg_attrs+0x114/0x128
+  __dma_map_sg_attrs from dma_map_sg_attrs+0x18/0x24
+  dma_map_sg_attrs from usb_hcd_map_urb_for_dma+0x250/0x3b4
+  usb_hcd_map_urb_for_dma from usb_hcd_submit_urb+0x194/0x214
+  usb_hcd_submit_urb from usb_sg_wait+0xa4/0x118
+  usb_sg_wait from usb_stor_bulk_transfer_sglist+0xa0/0xec
+  usb_stor_bulk_transfer_sglist from usb_stor_bulk_srb+0x38/0x70
+  usb_stor_bulk_srb from usb_stor_Bulk_transport+0x150/0x360
+  usb_stor_Bulk_transport from usb_stor_invoke_transport+0x38/0x440
+  usb_stor_invoke_transport from usb_stor_control_thread+0x1e0/0x238
+  usb_stor_control_thread from kthread+0xf8/0x104
+  kthread from ret_from_fork+0x14/0x2c
 
-Thanks,
-Davidlohr
+Fixes: 979559362516 ("asm/sections: add helpers to check for section data")
+Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
+---
+ include/asm-generic/sections.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
+index d0f7bdd2fdf2..f7171b4f5bfd 100644
+--- a/include/asm-generic/sections.h
++++ b/include/asm-generic/sections.h
+@@ -108,7 +108,7 @@ static inline bool memory_contains(void *begin, void *end, void *virt,
+ static inline bool memory_intersects(void *begin, void *end, void *virt,
+ 				     size_t size)
+ {
+-	void *vend = virt + size;
++	void *vend = virt + size - 1;
+ 
+ 	return (virt >= begin && virt < end) || (vend >= begin && vend < end);
+ }
+-- 
+2.36.1
+
