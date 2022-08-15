@@ -2,883 +2,735 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AEE592F36
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Aug 2022 14:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE1459310A
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Aug 2022 16:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242528AbiHOMuB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Aug 2022 08:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S232355AbiHOOxg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Aug 2022 10:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiHOMuA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Aug 2022 08:50:00 -0400
+        with ESMTP id S231978AbiHOOxf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Aug 2022 10:53:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6705D12AD0;
-        Mon, 15 Aug 2022 05:49:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E483C1CB33;
+        Mon, 15 Aug 2022 07:53:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED502B80E34;
-        Mon, 15 Aug 2022 12:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37EBCC433C1;
-        Mon, 15 Aug 2022 12:49:52 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH 2/2] LoongArch: Add ACPI-based generic laptop driver
-Date:   Mon, 15 Aug 2022 20:48:03 +0800
-Message-Id: <20220815124803.3332991-2-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220815124803.3332991-1-chenhuacai@loongson.cn>
-References: <20220815124803.3332991-1-chenhuacai@loongson.cn>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BAB0B80EE0;
+        Mon, 15 Aug 2022 14:53:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C78B6C43141;
+        Mon, 15 Aug 2022 14:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660575210;
+        bh=0z3EsZEtcq2vbhEomETcxut+71+v6cY84MiyFnZWAv8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=l9IViH2bkyTbXCvuubcNoPWMMzJsIU8esUMlZSkJ0E0KbhO26rBes2Ed5wHEbp5gr
+         2JKL25NtXBZnV5o6VqEq1STJCYFnIIZWTEPsIW7C50H1iBpqKbMAN79I8owaU5AX9L
+         F+0H647PHJ+Qv8R22gW1OTURiCORQjGO+Vvlpbl/DsY1msj2DhGADzyMUVL/Z7knFP
+         BodKUhFKxtHwGJmohXRfsSEpIBl//4E8tYq0Og5BgTiBxXqQE4vhLBoFlQLpB2IzV6
+         XJC3p04Evc/uBejJFZdq7gE6xKWvt0Tjs7aU6TTcf+5tHVsoXwNCiGQjBnM88kVCjL
+         +Nvt5Bm2tgRmQ==
+Received: by mail-wr1-f42.google.com with SMTP id j7so9358240wrh.3;
+        Mon, 15 Aug 2022 07:53:29 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0dGkJE+3sxKfH9t4MlgUl1BwEJzv7sKRg35uc8WhBfscH7r4hh
+        6SBQkm6XwVuXybs23KIEgsjQvcout6eK4VXqqjQ=
+X-Google-Smtp-Source: AA6agR7tdceA6hDZe5Pan7DTv+6eeknISMjkRbXwq0uBNfy7cY4WGdnKm5toWFTh5bSmEI5Bl+09pAbEXyhKNWec6MY=
+X-Received: by 2002:adf:d238:0:b0:21e:c972:7505 with SMTP id
+ k24-20020adfd238000000b0021ec9727505mr9210933wrh.536.1660575207821; Mon, 15
+ Aug 2022 07:53:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220617145754.582056-1-chenhuacai@loongson.cn> <CAAhV-H7N7-XH79=N5tTtphZ_EHygPSANjHcBTZ37zWSd2sy7AA@mail.gmail.com>
+In-Reply-To: <CAAhV-H7N7-XH79=N5tTtphZ_EHygPSANjHcBTZ37zWSd2sy7AA@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 15 Aug 2022 16:53:16 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE4DDAEn1GYk7Q8XKdsNOXJ2ah=FJKE1HRjC0J_VFy60A@mail.gmail.com>
+Message-ID: <CAMj1kXE4DDAEn1GYk7Q8XKdsNOXJ2ah=FJKE1HRjC0J_VFy60A@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Add efistub booting support
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Jianmin Lv <lvjianmin@loongson.cn>
+On Fri, 5 Aug 2022 at 15:45, Huacai Chen <chenhuacai@kernel.org> wrote:
+>
+> Hi, Ard,
+>
+> Friendly ping: is there anything remaining for this patch to get
+> mainlined in this cycle?
+>
 
-This add ACPI-based generic laptop driver for Loongson-3. Some of the
-codes are derived from drivers/platform/x86/thinkpad_acpi.c.
+Hello,
 
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/platform/loongarch/Kconfig          |  18 +
- drivers/platform/loongarch/Makefile         |   1 +
- drivers/platform/loongarch/generic-laptop.c | 775 ++++++++++++++++++++
- 3 files changed, 794 insertions(+)
- create mode 100644 drivers/platform/loongarch/generic-laptop.c
+I'll look at it again asap. We should be able to sort this out for v6.1
 
-diff --git a/drivers/platform/loongarch/Kconfig b/drivers/platform/loongarch/Kconfig
-index a1542843b0ad..086212d57251 100644
---- a/drivers/platform/loongarch/Kconfig
-+++ b/drivers/platform/loongarch/Kconfig
-@@ -23,4 +23,22 @@ config CPU_HWMON
- 	help
- 	  Loongson-3A/3B/3C CPU HWMon (temperature sensor) driver.
- 
-+config GENERIC_LAPTOP
-+	tristate "Generic Loongson-3A Laptop Driver"
-+	depends on MACH_LOONGSON64
-+	depends on ACPI
-+	depends on INPUT
-+	select BACKLIGHT_CLASS_DEVICE
-+	select BACKLIGHT_LCD_SUPPORT
-+	select HWMON
-+	select INPUT_EVDEV
-+	select INPUT_SPARSEKMAP
-+	select LCD_CLASS_DEVICE
-+	select LEDS_CLASS
-+	select POWER_SUPPLY
-+	select VIDEO_OUTPUT_CONTROL
-+	default y
-+	help
-+	  ACPI-based Loongson-3 family laptops generic driver.
-+
- endif # LOONGARCH_PLATFORM_DEVICES
-diff --git a/drivers/platform/loongarch/Makefile b/drivers/platform/loongarch/Makefile
-index 8dfd03924c37..9d6f69f2319d 100644
---- a/drivers/platform/loongarch/Makefile
-+++ b/drivers/platform/loongarch/Makefile
-@@ -1 +1,2 @@
- obj-$(CONFIG_CPU_HWMON) += cpu_hwmon.o
-+obj-$(CONFIG_GENERIC_LAPTOP) += generic-laptop.o
-diff --git a/drivers/platform/loongarch/generic-laptop.c b/drivers/platform/loongarch/generic-laptop.c
-new file mode 100644
-index 000000000000..90e37a02511d
---- /dev/null
-+++ b/drivers/platform/loongarch/generic-laptop.c
-@@ -0,0 +1,775 @@
-+/*
-+ *  Generic Loongson processor based LAPTOP/ALL-IN-ONE driver
-+ *
-+ *  Jianmin Lv <lvjianmin@loongson.cn>
-+ *  Huacai Chen <chenhuacai@loongson.cn>
-+ *
-+ * Copyright (C) 2022 Loongson Technology Corporation Limited
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/init.h>
-+#include <linux/types.h>
-+#include <linux/string.h>
-+#include <linux/platform_device.h>
-+#include <linux/input.h>
-+#include <linux/acpi.h>
-+#include <linux/uaccess.h>
-+#include <linux/input/sparse-keymap.h>
-+#include <linux/device.h>
-+#include <linux/backlight.h>
-+#include <acpi/video.h>
-+
-+/* ACPI HIDs */
-+#define LOONGSON_ACPI_HKEY_HID	"LOON0000"
-+#define LOONGSON_ACPI_EC_HID	"PNP0C09"
-+
-+/****************************************************************************
-+ * Main driver
-+ */
-+
-+#define ACPI_LAPTOP_VERSION "1.0"
-+#define ACPI_LAPTOP_NAME "loongson-laptop"
-+#define ACPI_LAPTOP_DESC "Loongson Laptop/all-in-one ACPI Driver"
-+#define ACPI_LAPTOP_FILE ACPI_LAPTOP_NAME "_acpi"
-+#define ACPI_LAPTOP_DRVR_NAME ACPI_LAPTOP_FILE
-+#define ACPI_LAPTOP_ACPI_EVENT_PREFIX "loongson"
-+/****************************************************************************
-+ * Driver-wide structs and misc. variables
-+ */
-+
-+struct generic_struct;
-+
-+struct generic_acpi_drv_struct {
-+	u32 type;
-+	acpi_handle *handle;
-+	const struct acpi_device_id *hid;
-+	struct acpi_device *device;
-+	struct acpi_driver *driver;
-+	void (*notify)(struct generic_struct *, u32);
-+};
-+
-+struct generic_struct {
-+	char *name;
-+
-+	int (*init)(struct generic_struct *);
-+
-+	struct generic_acpi_drv_struct *acpi;
-+
-+	struct {
-+		u8 acpi_driver_registered;
-+		u8 acpi_notify_installed;
-+	} flags;
-+};
-+
-+
-+static struct {
-+	u32 input_device_registered:1;
-+} generic_features;
-+
-+static int hotkey_status_get(int *status);
-+static int loongson_laptop_backlight_update(struct backlight_device *bd);
-+
-+/****************************************************************************
-+ ****************************************************************************
-+ *
-+ * ACPI Helpers and device model
-+ *
-+ ****************************************************************************
-+ ****************************************************************************/
-+
-+/* ACPI basic handles */
-+
-+static int acpi_evalf(acpi_handle handle,
-+		      int *res, char *method, char *fmt, ...);
-+static acpi_handle ec_handle;
-+
-+#define GENERIC_HANDLE(object, parent, paths...)			\
-+	static acpi_handle  object##_handle;			\
-+	static const acpi_handle * const object##_parent __initconst =	\
-+						&parent##_handle; \
-+	static char *object##_paths[] __initdata = { paths }
-+
-+GENERIC_HANDLE(hkey, ec, "\\_SB.HKEY", "^HKEY", "HKEY",);
-+
-+/* ACPI device model */
-+
-+#define GENERIC_ACPIHANDLE_INIT(object) \
-+	drv_acpi_handle_init(#object, &object##_handle, *object##_parent, \
-+		object##_paths, ARRAY_SIZE(object##_paths))
-+
-+static void __init drv_acpi_handle_init(const char *name,
-+			   acpi_handle *handle, const acpi_handle parent,
-+			   char **paths, const int num_paths)
-+{
-+	int i;
-+	acpi_status status;
-+
-+	for (i = 0; i < num_paths; i++) {
-+		status = acpi_get_handle(parent, paths[i], handle);
-+		if (ACPI_SUCCESS(status))
-+			return;
-+	}
-+
-+	*handle = NULL;
-+}
-+static acpi_status __init generic_acpi_handle_locate_callback(acpi_handle handle,
-+					u32 level, void *context, void **return_value)
-+{
-+	*(acpi_handle *)return_value = handle;
-+
-+	return AE_CTRL_TERMINATE;
-+}
-+
-+static void __init generic_acpi_handle_locate(const char *name,
-+		const char *hid, acpi_handle *handle)
-+{
-+	acpi_status status;
-+	acpi_handle device_found;
-+
-+	BUG_ON(!name || !hid || !handle);
-+
-+	*handle = NULL;
-+
-+	memset(&device_found, 0, sizeof(device_found));
-+	status = acpi_get_devices(hid, generic_acpi_handle_locate_callback,
-+				  (void *)name, &device_found);
-+
-+	if (ACPI_SUCCESS(status))
-+		*handle = device_found;
-+}
-+
-+static void dispatch_acpi_notify(acpi_handle handle, u32 event, void *data)
-+{
-+	struct generic_struct *sub_driver = data;
-+
-+	if (!sub_driver || !sub_driver->acpi || !sub_driver->acpi->notify)
-+		return;
-+	sub_driver->acpi->notify(sub_driver, event);
-+}
-+
-+static int __init setup_acpi_notify(struct generic_struct *sub_driver)
-+{
-+	acpi_status status;
-+
-+	BUG_ON(!sub_driver->acpi);
-+
-+	if (!*sub_driver->acpi->handle)
-+		return 0;
-+
-+	sub_driver->acpi->device = acpi_fetch_acpi_dev(*sub_driver->acpi->handle);
-+	if (!sub_driver->acpi->device) {
-+		pr_err("acpi_fetch_acpi_dev(%s) failed\n", sub_driver->name);
-+		return -ENODEV;
-+	}
-+
-+	sub_driver->acpi->device->driver_data = sub_driver;
-+	sprintf(acpi_device_class(sub_driver->acpi->device), "%s/%s",
-+		ACPI_LAPTOP_ACPI_EVENT_PREFIX,
-+		sub_driver->name);
-+
-+	status = acpi_install_notify_handler(*sub_driver->acpi->handle,
-+			sub_driver->acpi->type, dispatch_acpi_notify, sub_driver);
-+	if (ACPI_FAILURE(status)) {
-+		if (status == AE_ALREADY_EXISTS) {
-+			pr_notice("another device driver is already "
-+				  "handling %s events\n", sub_driver->name);
-+		} else {
-+			pr_err("acpi_install_notify_handler(%s) failed: %s\n",
-+			       sub_driver->name, acpi_format_exception(status));
-+		}
-+		return -ENODEV;
-+	}
-+	sub_driver->flags.acpi_notify_installed = 1;
-+	return 0;
-+}
-+
-+static int __init tpacpi_device_add(struct acpi_device *device)
-+{
-+	return 0;
-+}
-+
-+static struct input_dev *generic_inputdev;
-+
-+#ifdef CONFIG_PM
-+static int loongson_generic_suspend(struct device *dev)
-+{
-+	return 0;
-+}
-+static int loongson_generic_resume(struct device *dev)
-+{
-+	int status = 0;
-+	struct key_entry ke;
-+	struct backlight_device *bd;
-+
-+	/*
-+	 * Only if the firmware supports SW_LID event model, we can handle the
-+	 * event. This is for the consideration of development board without
-+	 * EC.
-+	 */
-+	if (test_bit(SW_LID, generic_inputdev->swbit)) {
-+		if (hotkey_status_get(&status))
-+			return -EIO;
-+		/*
-+		 * The input device sw element records the last lid status.
-+		 * When the system is awakened by other wake-up sources,
-+		 * the lid event will also be reported. The judgment of
-+		 * adding SW_LID bit which in sw element can avoid this
-+		 * case.
-+		 *
-+		 * input system will drop lid event when current lid event
-+		 * value and last lid status in the same data set，which
-+		 * data set inclue zero set and no zero set. so laptop
-+		 * driver doesn't report repeated events.
-+		 *
-+		 * Lid status is generally 0, but hardware exception is
-+		 * considered. So add lid status confirmation.
-+		 */
-+		if (test_bit(SW_LID, generic_inputdev->sw) && !(status & (1 << SW_LID))) {
-+			ke.type = KE_SW;
-+			ke.sw.value = (u8)status;
-+			ke.sw.code = SW_LID;
-+			sparse_keymap_report_entry(generic_inputdev, &ke,
-+					1, true);
-+		}
-+	}
-+
-+	bd = backlight_device_get_by_type(BACKLIGHT_PLATFORM);
-+	if (bd) {
-+		loongson_laptop_backlight_update(bd) ?
-+		pr_warn("Loongson_backlight:resume brightness failed") :
-+		pr_info("Loongson_backlight:resume brightness %d\n", bd->props.brightness);
-+	}
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(loongson_generic_pm,
-+		loongson_generic_suspend, loongson_generic_resume);
-+#endif
-+
-+static int __init register_generic_subdriver(struct generic_struct *sub_driver)
-+{
-+	int rc;
-+
-+	BUG_ON(!sub_driver->acpi);
-+
-+	sub_driver->acpi->driver = kzalloc(sizeof(struct acpi_driver), GFP_KERNEL);
-+	if (!sub_driver->acpi->driver) {
-+		pr_err("failed to allocate memory for ibm->acpi->driver\n");
-+		return -ENOMEM;
-+	}
-+
-+	sprintf(sub_driver->acpi->driver->name, "%s_%s", ACPI_LAPTOP_NAME, sub_driver->name);
-+	sub_driver->acpi->driver->ids = sub_driver->acpi->hid;
-+	sub_driver->acpi->driver->ops.add = &tpacpi_device_add;
-+#ifdef CONFIG_PM
-+	sub_driver->acpi->driver->drv.pm = &loongson_generic_pm;
-+#endif
-+	rc = acpi_bus_register_driver(sub_driver->acpi->driver);
-+	if (rc < 0) {
-+		pr_err("acpi_bus_register_driver(%s) failed: %d\n",
-+		       sub_driver->name, rc);
-+		kfree(sub_driver->acpi->driver);
-+		sub_driver->acpi->driver = NULL;
-+	} else if (!rc)
-+		sub_driver->flags.acpi_driver_registered = 1;
-+
-+	return rc;
-+}
-+
-+/* Loongson generic laptop firmware event model */
-+
-+#define GENERIC_HOTKEY_MAP_MAX	64
-+#define METHOD_NAME__KMAP	"KMAP"
-+static struct key_entry hotkey_keycode_map[GENERIC_HOTKEY_MAP_MAX];
-+
-+static int hkey_map(void)
-+{
-+	u32 index;
-+	acpi_status status;
-+	struct acpi_buffer buf;
-+	union acpi_object *pack;
-+
-+	buf.length = ACPI_ALLOCATE_BUFFER;
-+	status = acpi_evaluate_object_typed(hkey_handle, METHOD_NAME__KMAP, NULL, &buf, ACPI_TYPE_PACKAGE);
-+	if (status != AE_OK) {
-+		printk(KERN_ERR ": ACPI exception: %s\n",
-+				acpi_format_exception(status));
-+		return -1;
-+	}
-+	pack = buf.pointer;
-+	for (index = 0; index < pack->package.count; index++) {
-+		union acpi_object *sub_pack = &pack->package.elements[index];
-+		union acpi_object *element = &sub_pack->package.elements[0];
-+
-+		hotkey_keycode_map[index].type = element->integer.value;
-+		element = &sub_pack->package.elements[1];
-+		hotkey_keycode_map[index].code = element->integer.value;
-+		element = &sub_pack->package.elements[2];
-+		hotkey_keycode_map[index].keycode = element->integer.value;
-+	}
-+
-+	return 0;
-+}
-+
-+static int hotkey_backlight_set(bool enable)
-+{
-+	if (!acpi_evalf(hkey_handle, NULL, "VCBL", "vd", enable ? 1 : 0))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static int __init event_init(struct generic_struct *sub_driver)
-+{
-+	int ret;
-+
-+	GENERIC_ACPIHANDLE_INIT(hkey);
-+	ret = hkey_map();
-+	if (ret) {
-+		printk(KERN_ERR "Fail to parse keymap from DSDT.\n");
-+		return ret;
-+	}
-+
-+	ret = sparse_keymap_setup(generic_inputdev, hotkey_keycode_map, NULL);
-+	if (ret) {
-+		printk(KERN_ERR "Fail to setup input device keymap\n");
-+		input_free_device(generic_inputdev);
-+
-+		return ret;
-+	}
-+
-+	/*
-+	 * This hotkey driver handle backlight event when
-+	 * acpi_video_get_backlight_type() gets acpi_backlight_vendor
-+	 */
-+	if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
-+		hotkey_backlight_set(false);
-+	else
-+		hotkey_backlight_set(true);
-+
-+	printk("ACPI:enabling firmware HKEY event interface...\n");
-+
-+	return ret;
-+}
-+
-+#define GENERIC_EVENT_TYPE_OFF		12
-+#define GENERIC_EVENT_MASK		0xFFF
-+#define TPACPI_MAX_ACPI_ARGS 3
-+
-+static int acpi_evalf(acpi_handle handle,
-+		      int *res, char *method, char *fmt, ...)
-+{
-+	char res_type;
-+	char *fmt0 = fmt;
-+	va_list ap;
-+	int success, quiet;
-+	acpi_status status;
-+	struct acpi_object_list params;
-+	struct acpi_buffer result, *resultp;
-+	union acpi_object in_objs[TPACPI_MAX_ACPI_ARGS], out_obj;
-+
-+	if (!*fmt) {
-+		pr_err("acpi_evalf() called with empty format\n");
-+		return 0;
-+	}
-+
-+	if (*fmt == 'q') {
-+		quiet = 1;
-+		fmt++;
-+	} else
-+		quiet = 0;
-+
-+	res_type = *(fmt++);
-+
-+	params.count = 0;
-+	params.pointer = &in_objs[0];
-+
-+	va_start(ap, fmt);
-+	while (*fmt) {
-+		char c = *(fmt++);
-+		switch (c) {
-+		case 'd':	/* int */
-+			in_objs[params.count].integer.value = va_arg(ap, int);
-+			in_objs[params.count++].type = ACPI_TYPE_INTEGER;
-+			break;
-+			/* add more types as needed */
-+		default:
-+			pr_err("acpi_evalf() called with invalid format character '%c'\n",
-+			       c);
-+			va_end(ap);
-+			return 0;
-+		}
-+	}
-+	va_end(ap);
-+
-+	if (res_type != 'v') {
-+		result.length = sizeof(out_obj);
-+		result.pointer = &out_obj;
-+		resultp = &result;
-+	} else
-+		resultp = NULL;
-+
-+	status = acpi_evaluate_object(handle, method, &params, resultp);
-+
-+	switch (res_type) {
-+	case 'd':		/* int */
-+		success = (status == AE_OK &&
-+			   out_obj.type == ACPI_TYPE_INTEGER);
-+		if (success && res)
-+			*res = out_obj.integer.value;
-+		break;
-+	case 'v':		/* void */
-+		success = status == AE_OK;
-+		break;
-+		/* add more types as needed */
-+	default:
-+		pr_err("acpi_evalf() called with invalid format character '%c'\n",
-+		       res_type);
-+		return 0;
-+	}
-+
-+	if (!success && !quiet)
-+		pr_err("acpi_evalf(%s, %s, ...) failed: %s\n",
-+		       method, fmt0, acpi_format_exception(status));
-+
-+	return success;
-+}
-+
-+int ec_get_brightness(void)
-+{
-+	int status = 0;
-+
-+	if (!hkey_handle)
-+		return -ENXIO;
-+
-+	if (!acpi_evalf(hkey_handle, &status, "ECBG", "d"))
-+		return -EIO;
-+
-+	if (status < 0)
-+		return status;
-+
-+	return status;
-+}
-+EXPORT_SYMBOL(ec_get_brightness);
-+
-+int ec_set_brightness(int level)
-+{
-+
-+	int ret = 0;
-+
-+	if (!hkey_handle)
-+		return -ENXIO;
-+
-+	if (!acpi_evalf(hkey_handle, NULL, "ECBS", "vd", level))
-+		ret = -EIO;
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(ec_set_brightness);
-+
-+int ec_backlight_level(u8 level)
-+{
-+	int status = 0;
-+
-+	if (!hkey_handle)
-+		return -ENXIO;
-+
-+	if (!acpi_evalf(hkey_handle, &status, "ECLL", "d"))
-+		return -EIO;
-+
-+	if ((status < 0) || (level > status))
-+		return status;
-+
-+	if (!acpi_evalf(hkey_handle, &status, "ECSL", "d"))
-+		return -EIO;
-+
-+	if ((status < 0) || (level < status))
-+		return status;
-+
-+	return level;
-+}
-+EXPORT_SYMBOL(ec_backlight_level);
-+
-+static int loongson_laptop_backlight_update(struct backlight_device *bd)
-+{
-+	int lvl = ec_backlight_level(bd->props.brightness);
-+
-+	if (lvl < 0)
-+		return -EIO;
-+	if (ec_set_brightness(lvl))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static int loongson_laptop_get_brightness(struct backlight_device *bd)
-+{
-+	u8 level;
-+
-+	level = ec_get_brightness();
-+	if (level < 0)
-+		return -EIO;
-+
-+	return level;
-+}
-+
-+static const struct backlight_ops backlight_laptop_ops = {
-+	.update_status = loongson_laptop_backlight_update,
-+	.get_brightness = loongson_laptop_get_brightness,
-+};
-+
-+static int laptop_backlight_register(void)
-+{
-+	int status = 0;
-+	struct backlight_properties props;
-+
-+	memset(&props, 0, sizeof(props));
-+	props.type = BACKLIGHT_PLATFORM;
-+
-+	if (!acpi_evalf(hkey_handle, &status, "ECLL", "d"))
-+		return -EIO;
-+
-+	props.brightness = 1;
-+	props.max_brightness = status;
-+
-+	backlight_device_register("loongson_laptop",
-+				NULL, NULL, &backlight_laptop_ops, &props);
-+
-+	return 0;
-+}
-+
-+int turn_on_backlight(void)
-+{
-+	int status;
-+	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
-+	struct acpi_object_list args = { 1, &arg0 };
-+
-+	arg0.integer.value = 1;
-+	status = acpi_evaluate_object(NULL, "\\BLSW", &args, NULL);
-+	if (ACPI_FAILURE(status)) {
-+		pr_info("Loongson lvds error: 0x%x\n", status);
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+int turn_off_backlight(void)
-+{
-+	int status;
-+	union acpi_object arg0 = { ACPI_TYPE_INTEGER };
-+	struct acpi_object_list args = { 1, &arg0 };
-+
-+	arg0.integer.value = 0;
-+	status = acpi_evaluate_object(NULL, "\\BLSW", &args, NULL);
-+	if (ACPI_FAILURE(status)) {
-+		pr_info("Loongson lvds error: 0x%x\n", status);
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+static int hotkey_status_get(int *status)
-+{
-+	if (!acpi_evalf(hkey_handle, status, "GSWS", "d"))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+static void event_notify(struct generic_struct *sub_driver, u32 event)
-+{
-+	struct key_entry *ke = NULL;
-+	int scan_code = event & GENERIC_EVENT_MASK;
-+	int type = (event >> GENERIC_EVENT_TYPE_OFF) & 0xF;
-+
-+	ke = sparse_keymap_entry_from_scancode(generic_inputdev, scan_code);
-+	if (ke) {
-+		if (type == KE_SW) {
-+			int status = 0;
-+
-+			if (hotkey_status_get(&status))
-+				return;
-+
-+			ke->sw.value = !!(status & (1 << ke->sw.code));
-+		}
-+		sparse_keymap_report_entry(generic_inputdev, ke, 1, true);
-+	}
-+}
-+
-+static const struct acpi_device_id loongson_htk_device_ids[] = {
-+	{LOONGSON_ACPI_HKEY_HID, 0},
-+	{"", 0},
-+};
-+
-+static struct generic_acpi_drv_struct ec_event_acpidriver = {
-+	.hid = loongson_htk_device_ids,
-+	.notify = event_notify,
-+	.handle = &hkey_handle,
-+	.type = ACPI_DEVICE_NOTIFY,
-+};
-+
-+/****************************************************************************
-+ ****************************************************************************
-+ *
-+ * Infrastructure
-+ *
-+ ****************************************************************************
-+ ****************************************************************************/
-+static int __init probe_for_generic(void)
-+{
-+	if (acpi_disabled)
-+		return -ENODEV;
-+
-+	/* The EC handler is required */
-+	generic_acpi_handle_locate("ec", LOONGSON_ACPI_EC_HID, &ec_handle);
-+	if (!ec_handle) {
-+		pr_err("Not yet supported Loongson Generic Laptop/All-in-one detected!\n");
-+		return -ENODEV;
-+	}
-+
-+	return 0;
-+}
-+
-+static void generic_exit(struct generic_struct *sub_driver)
-+{
-+
-+	if (sub_driver->flags.acpi_notify_installed) {
-+		BUG_ON(!sub_driver->acpi);
-+		acpi_remove_notify_handler(*sub_driver->acpi->handle,
-+					   sub_driver->acpi->type,
-+					   dispatch_acpi_notify);
-+		sub_driver->flags.acpi_notify_installed = 0;
-+	}
-+
-+	if (sub_driver->flags.acpi_driver_registered) {
-+		BUG_ON(!sub_driver->acpi);
-+		acpi_bus_unregister_driver(sub_driver->acpi->driver);
-+		kfree(sub_driver->acpi->driver);
-+		sub_driver->acpi->driver = NULL;
-+		sub_driver->flags.acpi_driver_registered = 0;
-+	}
-+
-+}
-+
-+static int __init generic_subdriver_init(struct generic_struct *sub_driver)
-+{
-+	int ret;
-+
-+	BUG_ON(sub_driver == NULL);
-+
-+	if (sub_driver->init)
-+		sub_driver->init(sub_driver);
-+
-+	if (sub_driver->acpi) {
-+		if (sub_driver->acpi->hid) {
-+			ret = register_generic_subdriver(sub_driver);
-+			if (ret)
-+				goto err_out;
-+		}
-+
-+		if (sub_driver->acpi->notify) {
-+			ret = setup_acpi_notify(sub_driver);
-+			if (ret == -ENODEV) {
-+				ret = 0;
-+				goto err_out;
-+			}
-+			if (ret < 0)
-+				goto err_out;
-+		}
-+	}
-+
-+	return 0;
-+
-+err_out:
-+	generic_exit(sub_driver);
-+	return (ret < 0) ? ret : 0;
-+}
-+
-+/* Module init, exit, parameters */
-+static struct generic_struct generic_sub_drivers[] __initdata = {
-+	{
-+		.name = "EC Event",
-+		.init = event_init,
-+		.acpi = &ec_event_acpidriver,
-+	},
-+};
-+
-+static void generic_acpi_laptop_exit(void);
-+
-+static int __init generic_acpi_laptop_init(void)
-+{
-+	int i, ret, status;
-+
-+	ret = probe_for_generic();
-+	if (ret) {
-+		generic_acpi_laptop_exit();
-+		return ret;
-+	}
-+	generic_inputdev = input_allocate_device();
-+	if (!generic_inputdev) {
-+		pr_err("unable to allocate input device\n");
-+		generic_acpi_laptop_exit();
-+		return -ENOMEM;
-+	}
-+
-+	/* Prepare input device, but don't register */
-+	generic_inputdev->name =
-+		"Loongson Generic Laptop/All-in-one Extra Buttons";
-+	generic_inputdev->phys = ACPI_LAPTOP_DRVR_NAME "/input0";
-+	generic_inputdev->id.bustype = BUS_HOST;
-+	generic_inputdev->dev.parent = NULL;
-+
-+	/* Init subdrivers */
-+	for (i = 0; i < ARRAY_SIZE(generic_sub_drivers); i++) {
-+		ret = generic_subdriver_init(&generic_sub_drivers[i]);
-+		if (ret < 0) {
-+			generic_acpi_laptop_exit();
-+			return ret;
-+		}
-+	}
-+
-+	ret = input_register_device(generic_inputdev);
-+	if (ret < 0) {
-+		pr_err("unable to register input device\n");
-+		generic_acpi_laptop_exit();
-+		return ret;
-+	}
-+
-+	generic_features.input_device_registered = 1;
-+
-+	if (acpi_evalf(hkey_handle, &status, "ECBG", "d")) {
-+		pr_info("Loongson Laptop used, init brightness is 0x%x\n", status);
-+		ret = laptop_backlight_register();
-+		if (ret < 0)
-+			pr_err("Loongson Laptop: laptop-backlight device register failed\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static void __exit generic_acpi_laptop_exit(void)
-+{
-+	if (generic_inputdev) {
-+		if (generic_features.input_device_registered)
-+			input_unregister_device(generic_inputdev);
-+		else
-+			input_free_device(generic_inputdev);
-+	}
-+}
-+
-+module_init(generic_acpi_laptop_init);
-+module_exit(generic_acpi_laptop_exit);
-+
-+MODULE_ALIAS("platform:acpi-laptop");
-+MODULE_AUTHOR("Jianmin Lv <lvjianmin@loongson.cn>");
-+MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
-+MODULE_DESCRIPTION(ACPI_LAPTOP_DESC);
-+MODULE_VERSION(ACPI_LAPTOP_VERSION);
-+MODULE_LICENSE("GPL");
 -- 
-2.31.1
+Ard.
 
+
+>
+> On Fri, Jun 17, 2022 at 10:56 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >
+> > This patch adds efistub booting support, which is the standard UEFI boot
+> > protocol for us to use.
+> >
+> > We use generic efistub, which means we can pass boot information (i.e.,
+> > system table, memory map, kernel command line, initrd) via a light FDT
+> > and drop a lot of non-standard code.
+> >
+> > We use a flat mapping to map the efi runtime in the kernel's address
+> > space. In efi, VA = PA; in kernel, VA = PA + PAGE_OFFSET. As a result,
+> > flat mapping is not identity mapping, SetVirtualAddressMap() is still
+> > needed for the efi runtime.
+> >
+> > Currently, generic efistub doesn't support mapping efi runtime in the
+> > kernel. So we set efi_novamap to not call SetVirtualAddressMap() in the
+> > stub. Instead, we call it in the core kernel. This also makes the raw
+> > elf kernel booting be possible, which is needed by non-UEFI firmware
+> > (e.g., PMON which is widely used by Loongson for historic reasons).
+> >
+> > Then how the elf kernel and the efi kernel co-exist? When building, the
+> > raw vmlinux is naturally in elf format, the efi kernel is generated from
+> > vmlinux by objcopy via removing the elf header.
+> >
+> > Note: The magic number in MSDOS header is used by Grub [1], which is the
+> > same as RISC-V and ARM64.
+> >
+> > [1] https://lists.gnu.org/archive/html/grub-devel/2021-10/msg00215.html
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/loongarch/Kconfig                        |   9 ++
+> >  arch/loongarch/Makefile                       |   5 +
+> >  arch/loongarch/boot/Makefile                  |   4 +
+> >  arch/loongarch/kernel/efi-header.S            | 101 ++++++++++++++
+> >  arch/loongarch/kernel/efi.c                   | 126 +++++++++++++++++-
+> >  arch/loongarch/kernel/head.S                  |  26 ++++
+> >  arch/loongarch/kernel/image-vars.h            |  29 ++++
+> >  arch/loongarch/kernel/vmlinux.lds.S           |   1 +
+> >  drivers/firmware/efi/Kconfig                  |   2 +-
+> >  drivers/firmware/efi/libstub/Makefile         |  10 ++
+> >  .../firmware/efi/libstub/efi-stub-helper.c    |   2 +-
+> >  drivers/firmware/efi/libstub/efi-stub.c       |   4 +-
+> >  drivers/firmware/efi/libstub/loongarch-stub.c |  88 ++++++++++++
+> >  include/linux/efi.h                           |   1 +
+> >  include/linux/pe.h                            |   2 +
+> >  15 files changed, 405 insertions(+), 5 deletions(-)
+> >  create mode 100644 arch/loongarch/kernel/efi-header.S
+> >  create mode 100644 arch/loongarch/kernel/image-vars.h
+> >  create mode 100644 drivers/firmware/efi/libstub/loongarch-stub.c
+> >
+> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > index 1ec220df751d..faee7fa4c004 100644
+> > --- a/arch/loongarch/Kconfig
+> > +++ b/arch/loongarch/Kconfig
+> > @@ -305,6 +305,15 @@ config EFI
+> >           This enables the kernel to use EFI runtime services that are
+> >           available (such as the EFI variable services).
+> >
+> > +config EFI_STUB
+> > +       bool "EFI boot stub support"
+> > +       default y
+> > +       depends on EFI
+> > +       select EFI_GENERIC_STUB
+> > +       help
+> > +         This kernel feature allows the kernel to be loaded directly by
+> > +         EFI firmware without the use of a bootloader.
+> > +
+> >  config SMP
+> >         bool "Multi-Processing support"
+> >         help
+> > diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+> > index fbe4277e6404..c1bda54893ec 100644
+> > --- a/arch/loongarch/Makefile
+> > +++ b/arch/loongarch/Makefile
+> > @@ -7,7 +7,11 @@ boot   := arch/loongarch/boot
+> >
+> >  KBUILD_DEFCONFIG := loongson3_defconfig
+> >
+> > +ifndef CONFIG_EFI_STUB
+> >  KBUILD_IMAGE   = $(boot)/vmlinux
+> > +else
+> > +KBUILD_IMAGE   = $(boot)/vmlinux.efi
+> > +endif
+> >
+> >  #
+> >  # Select the object file format to substitute into the linker script.
+> > @@ -73,6 +77,7 @@ endif
+> >  head-y := arch/loongarch/kernel/head.o
+> >
+> >  libs-y += arch/loongarch/lib/
+> > +libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+> >
+> >  ifeq ($(KBUILD_EXTMOD),)
+> >  prepare: vdso_prepare
+> > diff --git a/arch/loongarch/boot/Makefile b/arch/loongarch/boot/Makefile
+> > index 0125b17edc98..b39d50a7a3df 100644
+> > --- a/arch/loongarch/boot/Makefile
+> > +++ b/arch/loongarch/boot/Makefile
+> > @@ -14,3 +14,7 @@ quiet_cmd_strip = STRIP         $@
+> >
+> >  $(obj)/vmlinux: vmlinux FORCE
+> >         $(call if_changed,strip)
+> > +
+> > +targets += vmlinux.efi
+> > +$(obj)/vmlinux.efi: $(obj)/vmlinux FORCE
+> > +       $(call if_changed,objcopy)
+> > diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/efi-header.S
+> > new file mode 100644
+> > index 000000000000..ef48dc72455b
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/efi-header.S
+> > @@ -0,0 +1,101 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#include <linux/pe.h>
+> > +#include <linux/sizes.h>
+> > +
+> > +       .macro  __EFI_PE_HEADER
+> > +       .long   PE_MAGIC
+> > +.Lcoff_header:
+> > +#ifdef CONFIG_32BIT
+> > +       .short  IMAGE_FILE_MACHINE_LOONGARCH32          /* Machine */
+> > +#else
+> > +       .short  IMAGE_FILE_MACHINE_LOONGARCH64          /* Machine */
+> > +#endif
+> > +       .short  .Lsection_count                         /* NumberOfSections */
+> > +       .long   0                                       /* TimeDateStamp */
+> > +       .long   0                                       /* PointerToSymbolTable */
+> > +       .long   0                                       /* NumberOfSymbols */
+> > +       .short  .Lsection_table - .Loptional_header     /* SizeOfOptionalHeader */
+> > +       .short  IMAGE_FILE_DEBUG_STRIPPED | \
+> > +               IMAGE_FILE_EXECUTABLE_IMAGE | \
+> > +               IMAGE_FILE_LINE_NUMS_STRIPPED           /* Characteristics */
+> > +
+> > +.Loptional_header:
+> > +       .short  PE_OPT_MAGIC_PE32PLUS                   /* PE32+ format */
+> > +       .byte   0x02                                    /* MajorLinkerVersion */
+> > +       .byte   0x14                                    /* MinorLinkerVersion */
+> > +       .long   __inittext_end - .Lefi_header_end       /* SizeOfCode */
+> > +       .long   _end - __initdata_begin                 /* SizeOfInitializedData */
+> > +       .long   0                                       /* SizeOfUninitializedData */
+> > +       .long   __efistub_efi_pe_entry - _head          /* AddressOfEntryPoint */
+> > +       .long   .Lefi_header_end - _head                /* BaseOfCode */
+> > +
+> > +.Lextra_header_fields:
+> > +       .quad   0                                       /* ImageBase */
+> > +       .long   PECOFF_SEGMENT_ALIGN                    /* SectionAlignment */
+> > +       .long   PECOFF_FILE_ALIGN                       /* FileAlignment */
+> > +       .short  0                                       /* MajorOperatingSystemVersion */
+> > +       .short  0                                       /* MinorOperatingSystemVersion */
+> > +       .short  LINUX_EFISTUB_MAJOR_VERSION             /* MajorImageVersion */
+> > +       .short  LINUX_EFISTUB_MINOR_VERSION             /* MinorImageVersion */
+> > +       .short  0                                       /* MajorSubsystemVersion */
+> > +       .short  0                                       /* MinorSubsystemVersion */
+> > +       .long   0                                       /* Win32VersionValue */
+> > +
+> > +       .long   _end - _head                            /* SizeOfImage */
+> > +
+> > +       /* Everything before the kernel image is considered part of the header */
+> > +       .long   .Lefi_header_end - _head                /* SizeOfHeaders */
+> > +       .long   0                                       /* CheckSum */
+> > +       .short  IMAGE_SUBSYSTEM_EFI_APPLICATION         /* Subsystem */
+> > +       .short  0                                       /* DllCharacteristics */
+> > +       .quad   0                                       /* SizeOfStackReserve */
+> > +       .quad   0                                       /* SizeOfStackCommit */
+> > +       .quad   0                                       /* SizeOfHeapReserve */
+> > +       .quad   0                                       /* SizeOfHeapCommit */
+> > +       .long   0                                       /* LoaderFlags */
+> > +       .long   (.Lsection_table - .) / 8               /* NumberOfRvaAndSizes */
+> > +
+> > +       .quad   0                                       /* ExportTable */
+> > +       .quad   0                                       /* ImportTable */
+> > +       .quad   0                                       /* ResourceTable */
+> > +       .quad   0                                       /* ExceptionTable */
+> > +       .quad   0                                       /* CertificationTable */
+> > +       .quad   0                                       /* BaseRelocationTable */
+> > +
+> > +       /* Section table */
+> > +.Lsection_table:
+> > +       .ascii  ".text\0\0\0"
+> > +       .long   __inittext_end - .Lefi_header_end       /* VirtualSize */
+> > +       .long   .Lefi_header_end - _head                /* VirtualAddress */
+> > +       .long   __inittext_end - .Lefi_header_end       /* SizeOfRawData */
+> > +       .long   .Lefi_header_end - _head                /* PointerToRawData */
+> > +
+> > +       .long   0                                       /* PointerToRelocations */
+> > +       .long   0                                       /* PointerToLineNumbers */
+> > +       .short  0                                       /* NumberOfRelocations */
+> > +       .short  0                                       /* NumberOfLineNumbers */
+> > +       .long   IMAGE_SCN_CNT_CODE | \
+> > +               IMAGE_SCN_MEM_READ | \
+> > +               IMAGE_SCN_MEM_EXECUTE                   /* Characteristics */
+> > +
+> > +       .ascii  ".data\0\0\0"
+> > +       .long   _end - __initdata_begin                 /* VirtualSize */
+> > +       .long   __initdata_begin - _head                /* VirtualAddress */
+> > +       .long   _edata - __initdata_begin               /* SizeOfRawData */
+> > +       .long   __initdata_begin - _head                /* PointerToRawData */
+> > +
+> > +       .long   0                                       /* PointerToRelocations */
+> > +       .long   0                                       /* PointerToLineNumbers */
+> > +       .short  0                                       /* NumberOfRelocations */
+> > +       .short  0                                       /* NumberOfLineNumbers */
+> > +       .long   IMAGE_SCN_CNT_INITIALIZED_DATA | \
+> > +               IMAGE_SCN_MEM_READ | \
+> > +               IMAGE_SCN_MEM_WRITE                     /* Characteristics */
+> > +
+> > +       .set    .Lsection_count, (. - .Lsection_table) / 40
+> > +.Lefi_header_end:
+> > +       .endm
+> > diff --git a/arch/loongarch/kernel/efi.c b/arch/loongarch/kernel/efi.c
+> > index a50b60c587fa..42f7cfe9ab03 100644
+> > --- a/arch/loongarch/kernel/efi.c
+> > +++ b/arch/loongarch/kernel/efi.c
+> > @@ -22,19 +22,141 @@
+> >
+> >  #include <asm/early_ioremap.h>
+> >  #include <asm/efi.h>
+> > +#include <asm/tlb.h>
+> >  #include <asm/loongson.h>
+> >
+> >  static unsigned long efi_nr_tables;
+> >  static unsigned long efi_config_table;
+> > +static unsigned long screen_info_table __initdata = EFI_INVALID_TABLE_ADDR;
+> >
+> >  static efi_system_table_t *efi_systab;
+> > -static efi_config_table_type_t arch_tables[] __initdata = {{},};
+> > +static efi_config_table_type_t arch_tables[] __initdata = {
+> > +       {LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID, &screen_info_table, "SINFO"},
+> > +       {},
+> > +};
+> > +
+> > +static void __init init_screen_info(void)
+> > +{
+> > +       struct screen_info *si;
+> > +
+> > +       if (screen_info_table == EFI_INVALID_TABLE_ADDR)
+> > +               return;
+> > +
+> > +       si = early_memremap_ro(screen_info_table, sizeof(*si));
+> > +       if (!si) {
+> > +               pr_err("Could not map screen_info config table\n");
+> > +               return;
+> > +       }
+> > +       screen_info = *si;
+> > +       early_memunmap(si, sizeof(*si));
+> > +
+> > +       if (screen_info.orig_video_isVGA == VIDEO_TYPE_EFI)
+> > +               memblock_reserve(screen_info.lfb_base, screen_info.lfb_size);
+> > +}
+> > +
+> > +static void __init create_tlb(u32 index, u64 vppn, u32 ps, u32 mat)
+> > +{
+> > +       unsigned long tlblo0, tlblo1;
+> > +
+> > +       write_csr_pagesize(ps);
+> > +
+> > +       tlblo0 = vppn | CSR_TLBLO0_V | CSR_TLBLO0_WE |
+> > +               CSR_TLBLO0_GLOBAL | (mat << CSR_TLBLO0_CCA_SHIFT);
+> > +       tlblo1 = tlblo0 + (1 << ps);
+> > +
+> > +       csr_write64(vppn, LOONGARCH_CSR_TLBEHI);
+> > +       csr_write64(tlblo0, LOONGARCH_CSR_TLBELO0);
+> > +       csr_write64(tlblo1, LOONGARCH_CSR_TLBELO1);
+> > +       csr_xchg32(0, CSR_TLBIDX_EHINV, LOONGARCH_CSR_TLBIDX);
+> > +       csr_xchg32(index, CSR_TLBIDX_IDX, LOONGARCH_CSR_TLBIDX);
+> > +
+> > +       tlb_write_indexed();
+> > +}
+> > +
+> > +#define MTLB_ENTRY_INDEX       0x800
+> > +
+> > +/* Create VA == PA mapping as UEFI */
+> > +static void __init fix_efi_mapping(void)
+> > +{
+> > +       unsigned int index = MTLB_ENTRY_INDEX;
+> > +       unsigned int tlbnr = boot_cpu_data.tlbsizemtlb - 2;
+> > +       unsigned long i, vppn;
+> > +
+> > +       /* Low Memory, Cached */
+> > +       create_tlb(index++, 0x00000000, PS_128M, 1);
+> > +       /* MMIO Registers, Uncached */
+> > +       create_tlb(index++, 0x10000000, PS_128M, 0);
+> > +
+> > +       /* High Memory, Cached */
+> > +       for (i = 0; i < tlbnr; i++) {
+> > +               vppn = 0x80000000ULL + (i * SZ_2G);
+> > +               create_tlb(index++, vppn, PS_1G, 1);
+> > +       }
+> > +}
+> > +
+> > +/*
+> > + * set_virtual_map() - create a virtual mapping for the EFI memory map and call
+> > + * efi_set_virtual_address_map enter virtual for runtime service
+> > + *
+> > + * This function populates the virt_addr fields of all memory region descriptors
+> > + * in @memory_map whose EFI_MEMORY_RUNTIME attribute is set. Those descriptors
+> > + * are also copied to @runtime_map, and their total count is returned in @count.
+> > + */
+> > +static int __init set_virtual_map(void)
+> > +{
+> > +       int count = 0;
+> > +       unsigned int size;
+> > +       unsigned long attr;
+> > +       efi_status_t status;
+> > +       efi_runtime_services_t *rt;
+> > +       efi_set_virtual_address_map_t *svam;
+> > +       efi_memory_desc_t *in, runtime_map[32];
+> > +
+> > +       size = sizeof(efi_memory_desc_t);
+> > +
+> > +       for_each_efi_memory_desc(in) {
+> > +               attr = in->attribute;
+> > +               if (!(attr & EFI_MEMORY_RUNTIME))
+> > +                       continue;
+> > +
+> > +               if (attr & (EFI_MEMORY_WB | EFI_MEMORY_WT))
+> > +                       in->virt_addr = TO_CACHE(in->phys_addr);
+> > +               else
+> > +                       in->virt_addr = TO_UNCACHE(in->phys_addr);
+> > +
+> > +               memcpy(&runtime_map[count++], in, size);
+> > +       }
+> > +
+> > +       rt = early_memremap_ro((unsigned long)efi_systab->runtime, sizeof(*rt));
+> > +
+> > +       /* Install the new virtual address map */
+> > +       svam = rt->set_virtual_address_map;
+> > +
+> > +       fix_efi_mapping();
+> > +
+> > +       status = svam(size * count, size, efi.memmap.desc_version,
+> > +                       (efi_memory_desc_t *)TO_PHYS((unsigned long)runtime_map));
+> > +
+> > +       local_flush_tlb_all();
+> > +       write_csr_pagesize(PS_DEFAULT_SIZE);
+> > +
+> > +       return 0;
+> > +}
+> >
+> >  void __init efi_runtime_init(void)
+> >  {
+> > +       int status;
+> > +
+> >         if (!efi_enabled(EFI_BOOT))
+> >                 return;
+> >
+> > +       if (!efi_systab->runtime)
+> > +               return;
+> > +
+> > +       status = set_virtual_map();
+> > +       if (status < 0)
+> > +               return;
+> > +
+> >         if (efi_runtime_disabled()) {
+> >                 pr_info("EFI runtime services will be disabled.\n");
+> >                 return;
+> > @@ -69,4 +191,6 @@ void __init efi_init(void)
+> >         config_tables = early_memremap(efi_config_table, efi_nr_tables * size);
+> >         efi_config_parse_tables(config_tables, efi_systab->nr_tables, arch_tables);
+> >         early_memunmap(config_tables, efi_nr_tables * size);
+> > +
+> > +       init_screen_info();
+> >  }
+> > diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
+> > index e596dfcd924b..ccc425027553 100644
+> > --- a/arch/loongarch/kernel/head.S
+> > +++ b/arch/loongarch/kernel/head.S
+> > @@ -12,6 +12,32 @@
+> >  #include <asm/loongarch.h>
+> >  #include <asm/stackframe.h>
+> >
+> > +#ifdef CONFIG_EFI_STUB
+> > +
+> > +#include "efi-header.S"
+> > +
+> > +       __HEAD
+> > +
+> > +_head:
+> > +       .word   MZ_MAGIC                /* "MZ", MS-DOS header */
+> > +       .org    0x38
+> > +#ifdef CONFIG_32BIT
+> > +       .ascii  "LA32"                  /* Magic number for BootLoader */
+> > +#else
+> > +       .ascii  "LA64"                  /* Magic number for BootLoader */
+> > +#endif
+> > +       .org    0x3c
+> > +       .long   pe_header - _head       /* Offset to the PE header */
+> > +
+> > +pe_header:
+> > +       __EFI_PE_HEADER
+> > +
+> > +SYM_DATA(kernel_asize, .long _end - _text);
+> > +SYM_DATA(kernel_fsize, .long _edata - _text);
+> > +SYM_DATA(kernel_offset, .long kernel_offset - _text);
+> > +
+> > +#endif
+> > +
+> >         __REF
+> >
+> >  SYM_ENTRY(_stext, SYM_L_GLOBAL, SYM_A_NONE)
+> > diff --git a/arch/loongarch/kernel/image-vars.h b/arch/loongarch/kernel/image-vars.h
+> > new file mode 100644
+> > index 000000000000..104e9f0e97fe
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/image-vars.h
+> > @@ -0,0 +1,29 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +#ifndef __LOONGARCH_KERNEL_IMAGE_VARS_H
+> > +#define __LOONGARCH_KERNEL_IMAGE_VARS_H
+> > +
+> > +#ifdef CONFIG_EFI_STUB
+> > +
+> > +__efistub_memcmp               = memcmp;
+> > +__efistub_memchr               = memchr;
+> > +__efistub_memcpy               = memcpy;
+> > +__efistub_memmove              = memmove;
+> > +__efistub_memset               = memset;
+> > +__efistub_strcat               = strcat;
+> > +__efistub_strcmp               = strcmp;
+> > +__efistub_strlen               = strlen;
+> > +__efistub_strncat              = strncat;
+> > +__efistub_strnstr              = strnstr;
+> > +__efistub_strnlen              = strnlen;
+> > +__efistub_strrchr              = strrchr;
+> > +__efistub_kernel_entry         = kernel_entry;
+> > +__efistub_kernel_asize         = kernel_asize;
+> > +__efistub_kernel_fsize         = kernel_fsize;
+> > +__efistub_kernel_offset                = kernel_offset;
+> > +
+> > +#endif
+> > +
+> > +#endif /* __LOONGARCH_KERNEL_IMAGE_VARS_H */
+> > diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
+> > index 78311a6101a3..9dfa5b886c09 100644
+> > --- a/arch/loongarch/kernel/vmlinux.lds.S
+> > +++ b/arch/loongarch/kernel/vmlinux.lds.S
+> > @@ -12,6 +12,7 @@
+> >  #define BSS_FIRST_SECTIONS *(.bss..swapper_pg_dir)
+> >
+> >  #include <asm-generic/vmlinux.lds.h>
+> > +#include "image-vars.h"
+> >
+> >  /*
+> >   * Max avaliable Page Size is 64K, so we set SectionAlignment
+> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+> > index 7aa4717cdcac..9e4645e5a5c0 100644
+> > --- a/drivers/firmware/efi/Kconfig
+> > +++ b/drivers/firmware/efi/Kconfig
+> > @@ -118,7 +118,7 @@ config EFI_GENERIC_STUB
+> >
+> >  config EFI_ARMSTUB_DTB_LOADER
+> >         bool "Enable the DTB loader"
+> > -       depends on EFI_GENERIC_STUB && !RISCV
+> > +       depends on EFI_GENERIC_STUB && !RISCV && !LOONGARCH
+> >         default y
+> >         help
+> >           Select this config option to add support for the dtb= command
+> > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+> > index d0537573501e..1588c61939e7 100644
+> > --- a/drivers/firmware/efi/libstub/Makefile
+> > +++ b/drivers/firmware/efi/libstub/Makefile
+> > @@ -26,6 +26,8 @@ cflags-$(CONFIG_ARM)          := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> >                                    $(call cc-option,-mno-single-pic-base)
+> >  cflags-$(CONFIG_RISCV)         := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> >                                    -fpic
+> > +cflags-$(CONFIG_LOONGARCH)     := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> > +                                  -fpic
+> >
+> >  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+> >
+> > @@ -70,6 +72,8 @@ lib-$(CONFIG_ARM)             += arm32-stub.o
+> >  lib-$(CONFIG_ARM64)            += arm64-stub.o
+> >  lib-$(CONFIG_X86)              += x86-stub.o
+> >  lib-$(CONFIG_RISCV)            += riscv-stub.o
+> > +lib-$(CONFIG_LOONGARCH)                += loongarch-stub.o
+> > +
+> >  CFLAGS_arm32-stub.o            := -DTEXT_OFFSET=$(TEXT_OFFSET)
+> >
+> >  # Even when -mbranch-protection=none is set, Clang will generate a
+> > @@ -125,6 +129,12 @@ STUBCOPY_FLAGS-$(CONFIG_RISCV)     += --prefix-alloc-sections=.init \
+> >                                    --prefix-symbols=__efistub_
+> >  STUBCOPY_RELOC-$(CONFIG_RISCV) := R_RISCV_HI20
+> >
+> > +# For LoongArch, keep all the symbols in .init section and make sure that no
+> > +# absolute symbols references doesn't exist.
+> > +STUBCOPY_FLAGS-$(CONFIG_LOONGARCH)     += --prefix-alloc-sections=.init \
+> > +                                          --prefix-symbols=__efistub_
+> > +STUBCOPY_RELOC-$(CONFIG_LOONGARCH)     := R_LARCH_MARK_LA
+> > +
+> >  $(obj)/%.stub.o: $(obj)/%.o FORCE
+> >         $(call if_changed,stubcopy)
+> >
+> > diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
+> > index 3d972061c1b0..f612cfceda22 100644
+> > --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
+> > +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
+> > @@ -21,7 +21,7 @@
+> >  bool efi_nochunk;
+> >  bool efi_nokaslr = !IS_ENABLED(CONFIG_RANDOMIZE_BASE);
+> >  int efi_loglevel = CONSOLE_LOGLEVEL_DEFAULT;
+> > -bool efi_novamap;
+> > +bool efi_novamap = IS_ENABLED(CONFIG_LOONGARCH); /* LoongArch call svam() in kernel */
+> >
+> >  static bool efi_noinitrd;
+> >  static bool efi_nosoftreserve;
+> > diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
+> > index f515394cce6e..730b7bd21776 100644
+> > --- a/drivers/firmware/efi/libstub/efi-stub.c
+> > +++ b/drivers/firmware/efi/libstub/efi-stub.c
+> > @@ -40,9 +40,9 @@
+> >
+> >  #ifdef CONFIG_ARM64
+> >  # define EFI_RT_VIRTUAL_LIMIT  DEFAULT_MAP_WINDOW_64
+> > -#elif defined(CONFIG_RISCV)
+> > +#elif defined(CONFIG_RISCV) || defined(CONFIG_LOONGARCH)
+> >  # define EFI_RT_VIRTUAL_LIMIT  TASK_SIZE_MIN
+> > -#else
+> > +#else /* Only if TASK_SIZE is a constant */
+> >  # define EFI_RT_VIRTUAL_LIMIT  TASK_SIZE
+> >  #endif
+> >
+> > diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
+> > new file mode 100644
+> > index 000000000000..beee086d9950
+> > --- /dev/null
+> > +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
+> > @@ -0,0 +1,88 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Author: Yun Liu <liuyun@loongson.cn>
+> > + *         Huacai Chen <chenhuacai@loongson.cn>
+> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#include <linux/efi.h>
+> > +#include <asm/efi.h>
+> > +#include <asm/addrspace.h>
+> > +#include "efistub.h"
+> > +
+> > +typedef void __noreturn (*kernel_entry_t)(bool efi, unsigned long fdt);
+> > +
+> > +extern int kernel_asize;
+> > +extern int kernel_fsize;
+> > +extern int kernel_offset;
+> > +extern kernel_entry_t kernel_entry;
+> > +
+> > +static efi_guid_t screen_info_guid = LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID;
+> > +
+> > +struct screen_info *alloc_screen_info(void)
+> > +{
+> > +       efi_status_t status;
+> > +       struct screen_info *si;
+> > +
+> > +       status = efi_bs_call(allocate_pool,
+> > +                       EFI_RUNTIME_SERVICES_DATA, sizeof(*si), (void **)&si);
+> > +       if (status != EFI_SUCCESS)
+> > +               return NULL;
+> > +
+> > +       status = efi_bs_call(install_configuration_table, &screen_info_guid, si);
+> > +       if (status == EFI_SUCCESS)
+> > +               return si;
+> > +
+> > +       efi_bs_call(free_pool, si);
+> > +
+> > +       return NULL;
+> > +}
+> > +
+> > +void free_screen_info(struct screen_info *si)
+> > +{
+> > +       if (!si)
+> > +               return;
+> > +
+> > +       efi_bs_call(install_configuration_table, &screen_info_guid, NULL);
+> > +       efi_bs_call(free_pool, si);
+> > +}
+> > +
+> > +efi_status_t check_platform_features(void)
+> > +{
+> > +       /* Config Direct Mapping */
+> > +       csr_write64(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
+> > +       csr_write64(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
+> > +
+> > +       return EFI_SUCCESS;
+> > +}
+> > +
+> > +efi_status_t handle_kernel_image(unsigned long *image_addr,
+> > +                                unsigned long *image_size,
+> > +                                unsigned long *reserve_addr,
+> > +                                unsigned long *reserve_size,
+> > +                                efi_loaded_image_t *image,
+> > +                                efi_handle_t image_handle)
+> > +{
+> > +       efi_status_t status;
+> > +       unsigned long kernel_addr = 0;
+> > +
+> > +       kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
+> > +
+> > +       status = efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
+> > +                                    PHYSADDR(VMLINUX_LOAD_ADDRESS), SZ_2M, 0x0);
+> > +
+> > +       *image_addr = kernel_addr;
+> > +       *image_size = kernel_asize;
+> > +
+> > +       return status;
+> > +}
+> > +
+> > +void __noreturn efi_enter_kernel(unsigned long entrypoint, unsigned long fdt, unsigned long fdt_size)
+> > +{
+> > +       kernel_entry_t real_kernel_entry;
+> > +
+> > +       real_kernel_entry = (kernel_entry_t)
+> > +               ((unsigned long)&kernel_entry - entrypoint + VMLINUX_LOAD_ADDRESS);
+> > +
+> > +       real_kernel_entry(true, fdt);
+> > +}
+> > diff --git a/include/linux/efi.h b/include/linux/efi.h
+> > index 7d9b0bb47eb3..adc43641ef8c 100644
+> > --- a/include/linux/efi.h
+> > +++ b/include/linux/efi.h
+> > @@ -401,6 +401,7 @@ void efi_native_runtime_setup(void);
+> >   * associated with ConOut
+> >   */
+> >  #define LINUX_EFI_ARM_SCREEN_INFO_TABLE_GUID   EFI_GUID(0xe03fc20a, 0x85dc, 0x406e,  0xb9, 0x0e, 0x4a, 0xb5, 0x02, 0x37, 0x1d, 0x95)
+> > +#define LINUX_EFI_LARCH_SCREEN_INFO_TABLE_GUID EFI_GUID(0x07fd51a6, 0x9532, 0x926f,  0x51, 0xdc, 0x6a, 0x63, 0x60, 0x2f, 0x84, 0xb4)
+> >  #define LINUX_EFI_ARM_CPU_STATE_TABLE_GUID     EFI_GUID(0xef79e4aa, 0x3c3d, 0x4989,  0xb9, 0x02, 0x07, 0xa9, 0x43, 0xe5, 0x50, 0xd2)
+> >  #define LINUX_EFI_LOADER_ENTRY_GUID            EFI_GUID(0x4a67b082, 0x0a4c, 0x41cf,  0xb6, 0xc7, 0x44, 0x0b, 0x29, 0xbb, 0x8c, 0x4f)
+> >  #define LINUX_EFI_RANDOM_SEED_TABLE_GUID       EFI_GUID(0x1ce1e5bc, 0x7ceb, 0x42f2,  0x81, 0xe5, 0x8a, 0xad, 0xf1, 0x80, 0xf5, 0x7b)
+> > diff --git a/include/linux/pe.h b/include/linux/pe.h
+> > index daf09ffffe38..1d3836ef9d92 100644
+> > --- a/include/linux/pe.h
+> > +++ b/include/linux/pe.h
+> > @@ -65,6 +65,8 @@
+> >  #define        IMAGE_FILE_MACHINE_SH5          0x01a8
+> >  #define        IMAGE_FILE_MACHINE_THUMB        0x01c2
+> >  #define        IMAGE_FILE_MACHINE_WCEMIPSV2    0x0169
+> > +#define        IMAGE_FILE_MACHINE_LOONGARCH32  0x6232
+> > +#define        IMAGE_FILE_MACHINE_LOONGARCH64  0x6264
+> >
+> >  /* flags */
+> >  #define IMAGE_FILE_RELOCS_STRIPPED           0x0001
+> > --
+> > 2.27.0
+> >
