@@ -2,167 +2,125 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297B7592DD9
-	for <lists+linux-arch@lfdr.de>; Mon, 15 Aug 2022 13:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356D8592EF8
+	for <lists+linux-arch@lfdr.de>; Mon, 15 Aug 2022 14:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241744AbiHOLFz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Aug 2022 07:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S230431AbiHOMgl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 15 Aug 2022 08:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242389AbiHOLFf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Aug 2022 07:05:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BCE25EAD;
-        Mon, 15 Aug 2022 04:04:59 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M5rv70xxRz1M8wb;
-        Mon, 15 Aug 2022 19:01:39 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 15 Aug 2022 19:04:57 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 15 Aug
- 2022 19:04:57 +0800
-Message-ID: <1b8cfda9-8a33-91af-dee1-a0586a11adf1@huawei.com>
-Date:   Mon, 15 Aug 2022 19:04:52 +0800
+        with ESMTP id S229623AbiHOMgj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Aug 2022 08:36:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 130711A3BC;
+        Mon, 15 Aug 2022 05:36:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1F0B611C6;
+        Mon, 15 Aug 2022 12:36:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1637DC433C1;
+        Mon, 15 Aug 2022 12:36:31 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V10 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Mon, 15 Aug 2022 20:36:09 +0800
+Message-Id: <20220815123613.3291770-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0
-Subject: Re: [PATCH] x86/unwind/orc: Add 'unwind_debug' cmdline option
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>
-CC:     <linux@armlinux.org.uk>, <arnd@arndb.de>,
-        <linus.walleij@linaro.org>, <ardb@kernel.org>,
-        <rmk+kernel@armlinux.org.uk>, <rostedt@goodmis.org>,
-        <nick.hawkins@hpe.com>, <john@phrozen.org>, <mhiramat@kernel.org>
-References: <20220815105808.17385-1-chenzhongjin@huawei.com>
- <20220815105808.17385-2-chenzhongjin@huawei.com>
-Content-Language: en-US
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220815105808.17385-2-chenzhongjin@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I accidentally attached this with my patch.
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-Please ignore this one.
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
 
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
 
-Thanks,
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
 
-Chen
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
 
-On 2022/8/15 18:58, Chen Zhongjin wrote:
-> From: Josh Poimboeuf <jpoimboe@redhat.com>
->
-> Sometimes the one-line ORC unwinder warnings aren't very helpful.  Add a
-> new 'unwind_debug' cmdline option which will dump the full stack
-> contents of the current task when an error condition is encountered.
->
-> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-> ---
->   .../admin-guide/kernel-parameters.txt         |  6 +++
->   arch/x86/kernel/unwind_orc.c                  | 46 +++++++++++++++++++
->   2 files changed, 52 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index cc3ea8febc62..85d48f6052fd 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6317,6 +6317,12 @@
->   	unknown_nmi_panic
->   			[X86] Cause panic on unknown NMI.
->   
-> +	unwind_debug	[X86-64]
-> +			Enable unwinder debug output.  This can be
-> +			useful for debugging certain unwinder error
-> +			conditions, including corrupt stacks and
-> +			bad/missing unwinder metadata.
-> +
->   	usbcore.authorized_default=
->   			[USB] Default USB device authorization:
->   			(default -1 = authorized except for wireless USB,
-> diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-> index 38185aedf7d1..c539ca39e9f4 100644
-> --- a/arch/x86/kernel/unwind_orc.c
-> +++ b/arch/x86/kernel/unwind_orc.c
-> @@ -13,8 +13,13 @@
->   
->   #define orc_warn_current(args...)					\
->   ({									\
-> +	static bool dumped_before;
->   	if (state->task == current && !state->error)			\
->   		orc_warn(args);						\
-> +		if (unwind_debug && !dumped_before)			\
-> +			unwind_dump(state);				\
-> +		dumped_before = true;					\
-> +	}								\
->   })
->   
->   extern int __start_orc_unwind_ip[];
-> @@ -23,8 +28,49 @@ extern struct orc_entry __start_orc_unwind[];
->   extern struct orc_entry __stop_orc_unwind[];
->   
->   static bool orc_init __ro_after_init;
-> +static bool unwind_debug __ro_after_init;
->   static unsigned int lookup_num_blocks __ro_after_init;
->   
-> +static int __init unwind_debug_cmdline(char *str)
-> +{
-> +	unwind_debug = true;
-> +
-> +	return 0;
-> +}
-> +early_param("unwind_debug", unwind_debug_cmdline);
-> +
-> +static void unwind_dump(struct unwind_state *state)
-> +{
-> +	static bool dumped_before;
-> +	unsigned long word, *sp;
-> +	struct stack_info stack_info = {0};
-> +	unsigned long visit_mask = 0;
-> +
-> +	if (dumped_before)
-> +		return;
-> +
-> +	dumped_before = true;
-> +
-> +	printk_deferred("unwind stack type:%d next_sp:%p mask:0x%lx graph_idx:%d\n",
-> +			state->stack_info.type, state->stack_info.next_sp,
-> +			state->stack_mask, state->graph_idx);
-> +
-> +	for (sp = __builtin_frame_address(0); sp;
-> +	     sp = PTR_ALIGN(stack_info.next_sp, sizeof(long))) {
-> +		if (get_stack_info(sp, state->task, &stack_info, &visit_mask))
-> +			break;
-> +
-> +		for (; sp < stack_info.end; sp++) {
-> +
-> +			word = READ_ONCE_NOCHECK(*sp);
-> +
-> +			printk_deferred("%0*lx: %0*lx (%pB)\n", BITS_PER_LONG/4,
-> +					(unsigned long)sp, BITS_PER_LONG/4,
-> +					word, (void *)word);
-> +		}
-> +	}
-> +}
-> +
->   static inline unsigned long orc_ip(const int *ip)
->   {
->   	return (unsigned long)ip + *ip;
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
+
+V6 -> V7:
+Fix build warnings of "no previous prototype".
+
+V7 -> V8:
+Fix build error for MIPS pud_init().
+
+V8 -> V9:
+Remove redundant #include to avoid build error with latest upstream
+kernel.
+
+V9 -> V10:
+Fix build error due to VMEMMAP changes in 6.0-rc1.
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
+---
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
 
