@@ -2,121 +2,328 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFDB59584B
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Aug 2022 12:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA99595815
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Aug 2022 12:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234447AbiHPKa5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Aug 2022 06:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S234440AbiHPKXs (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Aug 2022 06:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbiHPKa0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Aug 2022 06:30:26 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20D984EF6;
-        Tue, 16 Aug 2022 01:16:22 -0700 (PDT)
-Received: from mail-ej1-f41.google.com ([209.85.218.41]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MuDPh-1nVmG00fXh-00ucal; Tue, 16 Aug 2022 10:16:21 +0200
-Received: by mail-ej1-f41.google.com with SMTP id a7so17567241ejp.2;
-        Tue, 16 Aug 2022 01:16:21 -0700 (PDT)
-X-Gm-Message-State: ACgBeo33ceRETs9/Jye2QbXxzU5AEAna2/4O5cDeSTf88pRW+k587zJF
-        RQYlmByLPR1eD1q8YbKGd7/q3DHxJT/QjiHV0e0=
-X-Google-Smtp-Source: AA6agR6iJ0nwhhROioKsW3KiCcnkE21PLtVwi8+SbpiQ4ZkczWhJ8i5DpkLee3nWEvIKF41nGXZNZm3jeBE6JuFII7g=
-X-Received: by 2002:a17:906:8a67:b0:738:7bcd:dca1 with SMTP id
- hy7-20020a1709068a6700b007387bcddca1mr1923189ejc.547.1660637780770; Tue, 16
- Aug 2022 01:16:20 -0700 (PDT)
+        with ESMTP id S234439AbiHPKX3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Aug 2022 06:23:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9DAB49D;
+        Tue, 16 Aug 2022 01:55:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC8E6B81600;
+        Tue, 16 Aug 2022 08:55:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DBBC43142;
+        Tue, 16 Aug 2022 08:55:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660640125;
+        bh=6n3Q6HFtuoS0aqei1qVQEAN9dLtTgtFHYg5ZMtWgmdM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=RIrdhv2L++R9B7NVcULn/MFe2yWVTWil7/x0z+QgCuxoLi56Te2x7fVxohp0zo5P0
+         TRlS18WPalZcqx7AZoN1HUZflhAKuhJJobaXcJsW/77JgkDZioxj9JteyweO+jWFGP
+         3BOiI/jew1VtRfTTYIqtGjm40jl1fwrEN+C5183uYVIiHRvia3uFOoSFKTURjhHQuv
+         s5iwMcwrj4E8l4MF2NrabK3n8WhRLR0UzCZAxsTlOOMAPI32WFz0f2Fq+rbJ8t9ROm
+         /eyIz3UpCbH+hDlqH07gSL1F6Gw6fIvAdbnUQ0Q3Y1DQ0F7DFHxfYNeXSLxZLdYBpw
+         uHqWNAWBHLB/A==
+Received: by mail-vk1-f179.google.com with SMTP id bi51so4835823vkb.5;
+        Tue, 16 Aug 2022 01:55:25 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0vB32f2dVbaKGlTK7MtnpSW10r/mLNdHChpkMoH7kvqyG9PUH9
+        4cOzxX83E+H9xpEfA0drYDX/WQoDhSzE9kQo0CI=
+X-Google-Smtp-Source: AA6agR41lNj0NRZWyNSR4D+cfVnHLXTfSPG0BgFBv7VZX3HC2Ss685tM9xCBahwF47dMx9/eSkYvg3jnneVv/opfd/Y=
+X-Received: by 2002:a1f:9d13:0:b0:376:7f81:9b85 with SMTP id
+ g19-20020a1f9d13000000b003767f819b85mr8677102vke.18.1660640124487; Tue, 16
+ Aug 2022 01:55:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220816070311.89186-1-marcan@marcan.st>
-In-Reply-To: <20220816070311.89186-1-marcan@marcan.st>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 16 Aug 2022 10:16:04 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
-Message-ID: <CAK8P3a03pfrPzjnx1tB5z0HcKnY=JL=y+F8PMQDpc=Bavs3UCA@mail.gmail.com>
-Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
-        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
+References: <20220815124803.3332991-1-chenhuacai@loongson.cn>
+ <20220815124803.3332991-2-chenhuacai@loongson.cn> <CAK8P3a2P=XSM1_eD-UkvHaQ8Y4ak4BPAAABg2LxNBhyWhhO4uA@mail.gmail.com>
+In-Reply-To: <CAK8P3a2P=XSM1_eD-UkvHaQ8Y4ak4BPAAABg2LxNBhyWhhO4uA@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 16 Aug 2022 16:55:10 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6ow1WwVdwk4ekQU_aA+dFrUoL3SBrL9Esn9Td-rJKJcg@mail.gmail.com>
+Message-ID: <CAAhV-H6ow1WwVdwk4ekQU_aA+dFrUoL3SBrL9Esn9Td-rJKJcg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] LoongArch: Add ACPI-based generic laptop driver
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Erik Kaneda <erik.kaneda@intel.com>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Jg5mkr7l+zrNyfFzBvs5i1+/l2UlfgBGsjuyilNfjoCAl7e0vIK
- TicO0qiEDijREu19FTd6lsJ/xG/qL+EIpVuiumbZd62aIFx2OXh1gQ+2geNFdBVwvelIaws
- U/qaLsKuC7aXaYHFXRmlVqfYYgxXkdSQJQ1VV3jTdwC81L27G6FvdY7TSzor0+xh/J7PEDb
- qG4zsEw7nQqMDQnoYIF+Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0YAPTbXMD6Q=:Cpy3XZMvFH2GhcX0VVyvOx
- 0YzlCxR6gGq9Pz3C5g7UZVwFHunn/VyMHkyx8i8pVxdcNhLTiZhcOSq/VKk3uS69cn8rThieC
- 191ZejESr8C3yo26hkMLJcrOk6z9Vo7EeTMVzPT1SrhFNJeg029pH9llcmlNznfIfSq2l/yIi
- n70ffHRZBUVLLcRASCGyf6Ht2a1xAvBCw+wtxUjILb324Hqr1BY9nDl2Xhb4YcnD4rhHUmnvd
- CBPw8M17qfmdxtn7bSaRbZ2gXnGca/UQLP9Arj4y0Rc4Yq1ZCdEsOum560JZuBd4IH5HWkw2d
- aPrVpwDiOYHnxK2tKkQOIf6N1TeXIP/RuU3RGT2B6itpK1tCO1VFRa4r/75bQYTtPGLPsY5wE
- 9BC2YTZVmza2ADitrSTrAO6yCOE7sAepV6ZIg+KmGB+v5uJhhicb7OoTQ9/AWTW/vPCO6qvjS
- Gc8VBh9rDEoGHZF0SBxY5w+AEPmdykpWxbn1iYKASCGStVasZHrKR/JpV7ldQ1gRmImc0yNYw
- Ch51lpl7AeGzkZwYOZrXSR4OWKc5bPxjw/tliWPkeHuyhdZH59NvYSqE9ZJ7/JRazAOgMS5HN
- j5ohyglFYFGM5PB7pLegV6Ze4tuhGTmZp5/WCMLXciq8C6sSZQqLEjYC63qBIQ6OagxNpPDed
- a1kSkcKSdgzGaBKyW/yTu32BNgyFTKIsdH4C8Jj8TzyD5WZoU/astR6yZN6UyZw8WfXyFt0rl
- gNh0wPeo7rDK6GMzLvZt8KlWzdZLv/GwAUZCJw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 9:03 AM Hector Martin <marcan@marcan.st> wrote:
->
-> These operations are documented as always ordered in
-> include/asm-generic/bitops/instrumented-atomic.h, and producer-consumer
-> type use cases where one side needs to ensure a flag is left pending
-> after some shared data was updated rely on this ordering, even in the
-> failure case.
->
-> This is the case with the workqueue code, which currently suffers from a
-> reproducible ordering violation on Apple M1 platforms (which are
-> notoriously out-of-order) that ends up causing the TTY layer to fail to
-> deliver data to userspace properly under the right conditions. This
-> change fixes that bug.
->
-> Change the documentation to restrict the "no order on failure" story to
-> the _lock() variant (for which it makes sense), and remove the
-> early-exit from the generic implementation, which is what causes the
-> missing barrier semantics in that case. Without this, the remaining
-> atomic op is fully ordered (including on ARM64 LSE, as of recent
-> versions of the architecture spec).
->
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: stable@vger.kernel.org
-> Fixes: e986a0d6cb36 ("locking/atomics, asm-generic/bitops/atomic.h: Rewrite using atomic_*() APIs")
-> Fixes: 61e02392d3c7 ("locking/atomic/bitops: Document and clarify ordering semantics for failed test_and_{}_bit()")
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  Documentation/atomic_bitops.txt     | 2 +-
->  include/asm-generic/bitops/atomic.h | 6 ------
+Hi, Arnd,
 
-I double-checked all the architecture specific implementations to ensure
-that the asm-generic one is the only one that needs the fix.
+On Tue, Aug 16, 2022 at 3:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Aug 15, 2022 at 2:48 PM Huacai Chen <chenhuacai@loongson.cn> wrot=
+e:
+> >
+> > From: Jianmin Lv <lvjianmin@loongson.cn>
+> >
+> > This add ACPI-based generic laptop driver for Loongson-3. Some of the
+> > codes are derived from drivers/platform/x86/thinkpad_acpi.c.
+> >
+> > Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  drivers/platform/loongarch/Kconfig          |  18 +
+> >  drivers/platform/loongarch/Makefile         |   1 +
+> >  drivers/platform/loongarch/generic-laptop.c | 775 ++++++++++++++++++++
+> >  3 files changed, 794 insertions(+)
+> >  create mode 100644 drivers/platform/loongarch/generic-laptop.c
+> >
+> > diff --git a/drivers/platform/loongarch/Kconfig b/drivers/platform/loon=
+garch/Kconfig
+> > index a1542843b0ad..086212d57251 100644
+> > --- a/drivers/platform/loongarch/Kconfig
+> > +++ b/drivers/platform/loongarch/Kconfig
+> > @@ -23,4 +23,22 @@ config CPU_HWMON
+> >         help
+> >           Loongson-3A/3B/3C CPU HWMon (temperature sensor) driver.
+> >
+> > +config GENERIC_LAPTOP
+> > +       tristate "Generic Loongson-3A Laptop Driver"
+> > +       depends on MACH_LOONGSON64
+> > +       depends on ACPI
+> > +       depends on INPUT
+> > +       select BACKLIGHT_CLASS_DEVICE
+> > +       select BACKLIGHT_LCD_SUPPORT
+> > +       select HWMON
+> > +       select INPUT_EVDEV
+> > +       select INPUT_SPARSEKMAP
+> > +       select LCD_CLASS_DEVICE
+> > +       select LEDS_CLASS
+> > +       select POWER_SUPPLY
+> > +       select VIDEO_OUTPUT_CONTROL
+> > +       default y
+> > +       help
+> > +         ACPI-based Loongson-3 family laptops generic driver.
+>
+> It's rather bad style to 'select' entire subsystems from a device
+> driver. This may be
+> unavoidable in some cases, but please try to make it possible to build th=
+e
+> driver when some or all of the other subsystems are disabled. In a lot
+> of subsystems,
+> there is an API stub like
+OK, the Kconfig should be cleaned up, I will remove those unneeded
+lines, and convert some others to "depends on".
 
-I assume this gets merged through the locking tree or that Linus picks it up
-directly, not through my asm-generic tree.
+>
+> > +/*********************************************************************=
+*******
+> > + *********************************************************************=
+*******
+> > + *
+> > + * ACPI Helpers and device model
+> > + *
+> > + *********************************************************************=
+*******
+> > + *********************************************************************=
+*******/
+>
+> Try to follow the normal commenting style
+OK, thanks.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+>
+> > +/* ACPI basic handles */
+> > +
+> > +static int acpi_evalf(acpi_handle handle,
+> > +                     int *res, char *method, char *fmt, ...);
+> > +static acpi_handle ec_handle;
+>
+> Instead of forward function declarations, try sorting the functions in
+> call order,
+> which has the benefit of making more sense to most readers.
+OK, thanks.
+
+>
+> > +#ifdef CONFIG_PM
+> > +static int loongson_generic_suspend(struct device *dev)
+> > +{
+> > +       return 0;
+> > +}
+> > +static int loongson_generic_resume(struct device *dev)
+> > +{
+> > +       int status =3D 0;
+> > +       struct key_entry ke;
+> > +       struct backlight_device *bd;
+> > +
+> > +       /*
+> > +        * Only if the firmware supports SW_LID event model, we can han=
+dle the
+> > +        * event. This is for the consideration of development board wi=
+thout
+> > +        * EC.
+> > +        */
+> > +       if (test_bit(SW_LID, generic_inputdev->swbit)) {
+> > +               if (hotkey_status_get(&status))
+> > +                       return -EIO;
+> > +               /*
+> > +                * The input device sw element records the last lid sta=
+tus.
+> > +                * When the system is awakened by other wake-up sources=
+,
+> > +                * the lid event will also be reported. The judgment of
+> > +                * adding SW_LID bit which in sw element can avoid this
+> > +                * case.
+> > +                *
+> > +                * input system will drop lid event when current lid ev=
+ent
+> > +                * value and last lid status in the same data set=EF=BC=
+=8Cwhich
+> > +                * data set inclue zero set and no zero set. so laptop
+> > +                * driver doesn't report repeated events.
+> > +                *
+> > +                * Lid status is generally 0, but hardware exception is
+> > +                * considered. So add lid status confirmation.
+> > +                */
+> > +               if (test_bit(SW_LID, generic_inputdev->sw) && !(status =
+& (1 << SW_LID))) {
+> > +                       ke.type =3D KE_SW;
+> > +                       ke.sw.value =3D (u8)status;
+> > +                       ke.sw.code =3D SW_LID;
+> > +                       sparse_keymap_report_entry(generic_inputdev, &k=
+e,
+> > +                                       1, true);
+> > +               }
+> > +       }
+> > +
+> > +       bd =3D backlight_device_get_by_type(BACKLIGHT_PLATFORM);
+> > +       if (bd) {
+> > +               loongson_laptop_backlight_update(bd) ?
+> > +               pr_warn("Loongson_backlight:resume brightness failed") =
+:
+> > +               pr_info("Loongson_backlight:resume brightness %d\n", bd=
+->props.brightness);
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static SIMPLE_DEV_PM_OPS(loongson_generic_pm,
+> > +               loongson_generic_suspend, loongson_generic_resume);
+> > +#endif
+>
+>
+> Instead of the #ifdef, use the newer DEFINE_SIMPLE_DEV_PM_OPS() in place
+> of SIMPLE_DEV_PM_OPS() so the code will always be parsed but left out
+> when CONFIG_PM is disabled.
+OK, thanks.
+
+>
+> > +
+> > +static int __init register_generic_subdriver(struct generic_struct *su=
+b_driver)
+> > +{
+> > +       int rc;
+> > +
+> > +       BUG_ON(!sub_driver->acpi);
+> > +
+> > +       sub_driver->acpi->driver =3D kzalloc(sizeof(struct acpi_driver)=
+, GFP_KERNEL);
+> > +       if (!sub_driver->acpi->driver) {
+> > +               pr_err("failed to allocate memory for ibm->acpi->driver=
+\n");
+> > +               return -ENOMEM;
+> > +       }
+>
+> Drivers should be statically allocated. Usually you want one 'struct
+> acpi_driver' or
+> 'struct platform_driver' per file, so you can just use 'module_acpi_drive=
+r()'.
+I found that "subdriver" in other laptop drivers also uses dynamical
+allocation, because there may be various numbers of subdrivers. I want
+to keep it, at least in the next version for review.
+
+>
+> > +int ec_get_brightness(void)
+> > +{
+> > +       int status =3D 0;
+> > +
+> > +       if (!hkey_handle)
+> > +               return -ENXIO;
+> > +
+> > +       if (!acpi_evalf(hkey_handle, &status, "ECBG", "d"))
+> > +               return -EIO;
+> > +
+> > +       if (status < 0)
+> > +               return status;
+> > +
+> > +       return status;
+> > +}
+> > +EXPORT_SYMBOL(ec_get_brightness);
+>
+> The name is too generic to have it in the global namespace for a platform
+> specific driver. Use a prefix to make it clear which driver this belongs =
+to.
+>
+> Not sure this function warrants an export though, it looks like you could
+> just have it in the caller module.
+Yes, they should be static.
+
+>
+> > +
+> > +int turn_off_backlight(void)
+> > +{
+> > +       int status;
+> > +       union acpi_object arg0 =3D { ACPI_TYPE_INTEGER };
+> > +       struct acpi_object_list args =3D { 1, &arg0 };
+> > +
+> > +       arg0.integer.value =3D 0;
+> > +       status =3D acpi_evaluate_object(NULL, "\\BLSW", &args, NULL);
+> > +       if (ACPI_FAILURE(status)) {
+> > +               pr_info("Loongson lvds error: 0x%x\n", status);
+> > +               return -ENODEV;
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+>
+> Again, the name is too generic for a global function.
+Yes, they should be renamed.
+
+>
+> I suspect that if you split out the backlight handling into a separate
+> driver, you can avoid
+> the 'select' statements completely and make that driver 'depends on
+> BACKLIGHT_CLASS_DEVICE'
+> or move it within the 'if BACKLIGHT_CLASS_DEVICE' section of
+> drivers/video/backlight/Kconfig.
+>
+>
+> > +static struct generic_acpi_drv_struct ec_event_acpidriver =3D {
+> > +       .hid =3D loongson_htk_device_ids,
+> > +       .notify =3D event_notify,
+> > +       .handle =3D &hkey_handle,
+> > +       .type =3D ACPI_DEVICE_NOTIFY,
+> > +};
+>
+> Same here, this can probably just be an input driver in drivers/input.
+It seems the existing "laptop drivers" are also complex drivers to
+bind several "subdrivers" together.
+
+Huacai
+>
+>        Arnd
+>
