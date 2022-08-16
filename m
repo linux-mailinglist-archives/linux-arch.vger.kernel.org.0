@@ -2,245 +2,214 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C464594EFE
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Aug 2022 05:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65569594F5E
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Aug 2022 06:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiHPDQN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 15 Aug 2022 23:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S229552AbiHPEYa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Aug 2022 00:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiHPDPA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 15 Aug 2022 23:15:00 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62572F2C3B;
-        Mon, 15 Aug 2022 16:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660607089; x=1692143089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VcaajQsR43BnO5OdC1e+zV/tF1MrHWgkAAqLLvoHHRI=;
-  b=GzxCr8HcFCIlMJI5An95jDzvZhIR5cf08ehVpYo+OLSzxwVNGe2g6nm8
-   MwnaOCraDJJmGJvidtXwoLJFfIPuGYmqd3npD1+RnVFA6cmXLiI0s8KeO
-   p4OYTjlHlk3rSSbVU5MQCmEZhIqRBCCDkWpUMZYHlhp3I8XllHwaqhD0k
-   vLs0Qnzpr7TZ9G/PRYfFRcFcdA+MdINhP0iNcgCotN0totnibS5LyvDyR
-   olF4waMHQdejcGaeNt1fZ8kY8Wt8u7NnncVJhNKXZUG2jdF/E8EaZ5p5B
-   HLWA8lAmhYsHosId1YMrIylHJxunP/SieyGG0lAHZ1fT+bmBLfTBChaTq
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="279043720"
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="279043720"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 16:44:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,239,1654585200"; 
-   d="scan'208";a="606824195"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 15 Aug 2022 16:44:41 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNjlA-0001HU-2U;
-        Mon, 15 Aug 2022 23:44:40 +0000
-Date:   Tue, 16 Aug 2022 07:44:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux@armlinux.org.uk, arnd@arndb.de,
-        linus.walleij@linaro.org, ardb@kernel.org,
-        rmk+kernel@armlinux.org.uk, rostedt@goodmis.org,
-        nick.hawkins@hpe.com, john@phrozen.org, mhiramat@kernel.org,
-        chenzhongjin@huawei.com
-Subject: Re: [PATCH] x86/unwind/orc: Add 'unwind_debug' cmdline option
-Message-ID: <202208160719.jJFohEBB-lkp@intel.com>
-References: <20220815105808.17385-2-chenzhongjin@huawei.com>
+        with ESMTP id S229543AbiHPEYH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Aug 2022 00:24:07 -0400
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E7F37E9C7;
+        Mon, 15 Aug 2022 18:01:09 -0700 (PDT)
+Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G0kX7Y017598;
+        Tue, 16 Aug 2022 01:00:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=message-id : date
+ : subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=PPS06212021;
+ bh=Hj5zP3xpNUMdZ72UtQMAG/9YsIcd0BcG0mtOxn0pJu4=;
+ b=mYyN1AIRNZ+fmf9Gu7zNKICZn65yXzGzFVTjqiHs1/AuhOaJqVqwRJT1Na/arXXQoCjn
+ mJJNbzjyRq4yPjPvbXHS98jp4OHv1dyhvaHTMXXQNHBFCNcgLXqugcUQTrGUsZZTdvQj
+ KFYUNiAhJbCWByxtQhJ/qMpoJ6els7ZeH8OBym5bZcBNrSZo0aqVI58OpMRO3mj2Tey1
+ jwm0x01MQoQfmVkqI+Q8mNmsDaIaIMp9zHQOm+gYCe0uA+sIzmmIHttoXt8DdTWMV/pr
+ j4sTFKF4izdvSku0yADJOkpYBSGVGPxo68WfNkcmkNKo0xG+P15hFYzXs8rLS3Y/SvFd 4g== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2177.outbound.protection.outlook.com [104.47.57.177])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3hx160t6tf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Aug 2022 01:00:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eQ4vI83xm2pWCCHHJRgHlIc2n0/NOW1mQk0/1qDVbfscPFb7q5zvinrBpUBcV7i0ZXlckeBKqyszTCwLtRQirYsd03mGET1qPtNugFdMsVTYtV7zGJdWrGNh8VMKfuJ3sGuNagkABoQsvxUUmBDfcy+j9h8hMYx6lnmcUmDPLJWByD7fwYXWHfaH3B+xaZBHTKSa+R01HsCWwO6n0ulZJQTHqeMXqcF3JwRyKjEHxTKvaAggNd66z+7EPW09LWr2JVslJT8T59/DiPT4huYNCVEAPZEBCdzf1kTA3saD2hP7x4BqRAHZD/Qajdw5pugNDDVWg2p4azTi/aHPWz+yzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Hj5zP3xpNUMdZ72UtQMAG/9YsIcd0BcG0mtOxn0pJu4=;
+ b=ghBvdtufce94oucyWEErwzgvBoOS7Dqd/F7pXRa0/RMPXqs3byJDa2e2PCz5uraeqIUS4rPRO168UVkMEG3Qf9YBHpQDvzRaAdrQKpV3ybn1mrQw5AI8kWLa4QWZNckhw2z4gcBVn5JGbPEYzKmZyIaG4wyCt58k4OdHTxlHpxA1s/Ksn0NqotmhY0SEOlZKS69+BosgUPFwoHdZZoU68wH050coFw6Ri2+GCckDpA+7cxNUAwbrDrUPancWTok3tQ4nH4L4K8cr0pFFge5LLfHelzVpuU3sQ1JqLdkXdGrkWSdZMQlCb7BT/pLDkVer1fp2aLFE3luLMju2EfVtUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from SJ0PR11MB5630.namprd11.prod.outlook.com (2603:10b6:a03:3bb::6)
+ by BY5PR11MB4242.namprd11.prod.outlook.com (2603:10b6:a03:1c1::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 16 Aug
+ 2022 01:00:49 +0000
+Received: from SJ0PR11MB5630.namprd11.prod.outlook.com
+ ([fe80::4057:7eb4:511b:e131]) by SJ0PR11MB5630.namprd11.prod.outlook.com
+ ([fe80::4057:7eb4:511b:e131%9]) with mapi id 15.20.5525.011; Tue, 16 Aug 2022
+ 01:00:49 +0000
+Message-ID: <12be770a-ca1c-7231-ff98-661211f2d8ec@windriver.com>
+Date:   Tue, 16 Aug 2022 09:00:33 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] asm/sections: fix the determination of the end of the
+ memory region
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220811063105.2553381-1-quanyang.wang@windriver.com>
+ <CAMj1kXHxeGjbYXhXpgRBM60Hobo+0K2JkjEtm+7kzDOYobSmNA@mail.gmail.com>
+From:   Quanyang Wang <quanyang.wang@windriver.com>
+In-Reply-To: <CAMj1kXHxeGjbYXhXpgRBM60Hobo+0K2JkjEtm+7kzDOYobSmNA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SL2P216CA0118.KORP216.PROD.OUTLOOK.COM (2603:1096:101::15)
+ To SJ0PR11MB5630.namprd11.prod.outlook.com (2603:10b6:a03:3bb::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815105808.17385-2-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 75b567db-f690-4077-783b-08da7f22c229
+X-MS-TrafficTypeDiagnostic: BY5PR11MB4242:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d62Yny4/76FotHplfARLMAT7FI1pOMzIky3QzjX4EVvZ4TLJjvrMV2mo1BdyVg1eL1NV0uSHWdFbbpMgssXLLq1kCBKCPF9YmXigqnMHdIbcLM/pXRPvJ+T12C8VTXNeG2PlKhB6YgZ1DTxZSYPWQ5OdtE5OvDTqli/jTTYAAdCVciY99eUNFAbvsWdm/A6cZozJc1HGOoFQwG1RVprn3ihf5k2A79f8/LyJAHUq/0ESowaLhVODN5cYHfjjxjjkKifWLdGGQAWJQ1sO5AWruEdK6tuSeTwBCjHNHWfD7m+XOMync3nGYzJb2QS098QPfgjc7RIwHWP18i7i0tnhVlxotlugdyWkAVwX3Q412pRjx4ZvuwvIehjhn3LdtAq4cwDMA4KXxGZAyf8qIrXSbveEA7oUcFz8LA/+6zoREbPO1/mAmzTfFDqnD7dkVvdUkHhVvv6JAswFQGrxowZLnDhTyoSeFqqq3qCSCFIiAzgRLebF/m5th0iXD1g/SbSYcAeUwbBuzLqMbsvcgxpbc9mnuYLEoX2NFUK/V14UTrmT5ocpuOY07FMDGCBfWGDnkzFs1sqJaXm4UyDuDIKvjmjeKFO4pT943GLVY9h3I8rDERcV5WjjDxeAyuacfOFUixbwMTSGZYqJLbM+ga2LvwdrhIbGnDfY/2olkhbRuU6Ryrt+623mlDe2HIRfi2rz0fFcH9KsoYvjeroohowv/oxpmdIhad11BpYURJTxB00AUjFp7y8lFJYIke+VZjg8SVCWaxDipriwI4mP/gHa9EThDvaCIcfmbclmusTopNQk0aOrEl82xP28X5IFH1LNIBo8HIyorywjRrMRZaqPgIMj6iQ1XMISIGah/I7tckw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5630.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(396003)(376002)(366004)(346002)(39850400004)(36756003)(2906002)(31686004)(38350700002)(2616005)(38100700002)(186003)(4326008)(44832011)(83380400001)(6666004)(26005)(31696002)(41300700001)(86362001)(8936002)(6512007)(5660300002)(52116002)(54906003)(53546011)(6506007)(6916009)(8676002)(478600001)(66476007)(6486002)(66556008)(316002)(66946007)(45080400002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zk5RODg0L3Q2RmlaWVRoTmNXakdFV2pldWREZWhCU3ZPNkhGR2VpenQ2WENP?=
+ =?utf-8?B?YUJPUGxaMEk3TENUbHFpVHJJOW5Qd0ZBWVF4ZWtONTNmYkc3dVEyZ2hUOWZM?=
+ =?utf-8?B?dDl5THFRc1N4Q3pKRFdXbXdvVFFUQ29rcWxvZ0ZtZjZiVUdpMXdsQnp1ci9H?=
+ =?utf-8?B?RXJWZkgrSjhkS2xhU0F5Y1o1WFVXR3dwaU90Z2JYSUR5R2hqMzFjb0pFZm9m?=
+ =?utf-8?B?cXY1VUNvL1N3ekY5ZFRHcmVqc3pWZzA5RVRCUzZrd0trS0xpUm5wbW1YdjlP?=
+ =?utf-8?B?WS9mcmRoRWVVbVlQTndmWHQwRGtTL3Vqb2t4MHNrRWNzOU44Tzg0T3dGSEEx?=
+ =?utf-8?B?QXd5NWNIeFNYaUVVajVhU2w2dXFFRU9EbU1QKzN5KzFBbFBkUCttbU1pc3Rj?=
+ =?utf-8?B?QWpzdUpvVEFPaXVjOVcwMEM2WUYvdlFYV1hDNVMxakhCNmg2clVEL2NJRFZo?=
+ =?utf-8?B?R3ZTQ2xvTjhmK1VLV2RSMkpIN1RpTjJxaDlRTCtNY0VEMkFHclBGVUNuZHJi?=
+ =?utf-8?B?V0J6WC95SHFKc0J5SklPOFdoVkVNMTZrOGJqby92UEljWXBaRmZ4emcyM3dS?=
+ =?utf-8?B?cnBGa3FiKytvWnY1SnZ6VXJTNXRJM3lUNGFDWm90cEhWWUVEdEtPKzdqR1JR?=
+ =?utf-8?B?SGVTVUFFbWVyT0xLUHJLMld4S0w4ZjZremdpbUh0QWpRLy9nSjNOK3hDTHJ4?=
+ =?utf-8?B?KzdCd1VZQ3NiRzN3dG9QSEN6VTdWbEN4QmdIZFBqdFFabUhaUEdIR3BDekdi?=
+ =?utf-8?B?Vm9valFYV3FOZ2RQYnVjb1lJUjZ1bDZ1WGJWdk01Y0hockZpVVFldE0xSm1D?=
+ =?utf-8?B?Z0ZWeGdVWWRjYW1aRDU1TU1Bc1FNWFdyN2tuRWZYWTBtcmp2cDRHYnpwajUx?=
+ =?utf-8?B?UGNDc1FnRzlJWm9BZjlkejFURWViRFdnL0s0WUlUTjZnWDZvVG9FWEFJaytp?=
+ =?utf-8?B?K3hjNDVLRHJLSWZpd0JYUXlzSk9ZN1kzRHR6TWRPeWxxOHlYeHo2UHlFc3Br?=
+ =?utf-8?B?WXh2WGZRbWVlNnhkMzMzYjlDbWpSZlhBdTdmejNtSTZMaUczcllUVDZBc1d2?=
+ =?utf-8?B?TmZzU3VYemNBV0VFQ2FqU3BLeEQ3RVdUOW94elhyLzdLTmgzUmRIWHhqZzJr?=
+ =?utf-8?B?Si9xaHNvWWZ6bWkxNXhyeG1JbmlibXQ4a2w5am5rWTFtWlZsNDQwVHE1OXRC?=
+ =?utf-8?B?N29rWDFqSHJ1TUVibTdmOUt2bnVQVG55Y0ZQV0VpZTRGNFRPVzd4U0t1c2lp?=
+ =?utf-8?B?QzA2UnU3b3Voc2lJRDBKZzB3eDJGMUVKbjY1dVdnSlRlSkdKcmdSbzBQR1Rp?=
+ =?utf-8?B?OXUwSXhXc3NCTGo0aHZZZVgvNlFSbDA1bERRQUI4VmhBMkZIS09kUUp2SWZu?=
+ =?utf-8?B?T3U1V0JUSWthY3hCd1AzVG5nYVp6UnBUcHZ1WmNIUld6TnJsT2NDeXRhM3p3?=
+ =?utf-8?B?NEVJT3ViWWdPdnA0QjFMdzJyY0hOWlcreXdUWTBYZ0tiMlV6RzJpcDkrVXlw?=
+ =?utf-8?B?bWtISFNHWU4yaDNEM0NmWEcwdld1VFZaKzZiNmpLUFFjNTNmbTBXZndWVXox?=
+ =?utf-8?B?dHkzTXpjNnJVVlJuVTA4ZVkvbFRseXh1UG95WDdhRzJ4YXdNdS94RjVVTUkw?=
+ =?utf-8?B?aXhWazRqNGlCRy9razVkS3RtL3hIRnFUOXV1NUhDWisrMTZnR3Y1cFZBOWdI?=
+ =?utf-8?B?bUY4MkxOTTRmWm5zZWdaa1VnVndQVnJyZDFmZ2ZpSFZNbjBFY3F3UUFzTlF3?=
+ =?utf-8?B?T3pSbkI4TEF4RGM4WWNFNC9SeHZYY0hocTJidUU3MCtnMWt0dXNnMjNFQWlS?=
+ =?utf-8?B?SHBtdVlNRnp2a3UrVnhETTJCbEE1UW9nSktibWNjSjdpNnFNTTk5dGF2d2Y0?=
+ =?utf-8?B?ZWx5YTA4VlRaUUxyMXY4RFlzS3htRWVFQmhOejlCdjJ3cndTckIvWGFKbmNq?=
+ =?utf-8?B?cG5ldVdrV1hUYjhQWmZEaTd2ckRjbU9ScGZSOGNybUFLaG5zVlQ5a3Fod0dn?=
+ =?utf-8?B?RUFqTTcwalR3bFM3NWg4ZFpXZE05ZGl6VVU0WDJFU3BqdjVidVJsU3A1dHUy?=
+ =?utf-8?B?ZTNwVTg3WmIvaC96bjk1NzdpcGdPWlJ3cDRRUW1UWFM1Ni9GbDhDQWFCSTBz?=
+ =?utf-8?B?bWdKRmtmeUFLWnUwMVErQ2plUDRnaVVlUzdHeU92VGJuL1dlMm5BRkx0cEVN?=
+ =?utf-8?B?bnc9PQ==?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75b567db-f690-4077-783b-08da7f22c229
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5630.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2022 01:00:49.2902
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: E0C+H/xuu2MhOQsFGoAMOsRroHrh54iLRBhqj2jXuDLDRTOgxsRFm+BJIP9aD4fekGKA9+v1fv0VesE3Nki0ZdHEqwfqTfge1IjOsRORN+A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4242
+X-Proofpoint-ORIG-GUID: gR4Xk8966Vh1BYnDEO_nXzxJ2R7H4xqd
+X-Proofpoint-GUID: gR4Xk8966Vh1BYnDEO_nXzxJ2R7H4xqd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=946 lowpriorityscore=0 malwarescore=0 mlxscore=0 phishscore=0
+ spamscore=0 adultscore=0 bulkscore=0 suspectscore=0 impostorscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208160002
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Chen,
+Hi Ard,
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on tip/x86/core]
-[also build test ERROR on soc/for-next clk/clk-next linus/master v6.0-rc1 next-20220815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Zhongjin/x86-unwind-orc-Add-unwind_debug-cmdline-option/20220815-190328
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a1a5482a2c6e38a3ebed32e571625c56a8cc41a6
-config: x86_64-randconfig-a003-20220815 (https://download.01.org/0day-ci/archive/20220816/202208160719.jJFohEBB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/3295e738f5b51f1f1f223bf52a8ecee2ab93fbca
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Chen-Zhongjin/x86-unwind-orc-Add-unwind_debug-cmdline-option/20220815-190328
-        git checkout 3295e738f5b51f1f1f223bf52a8ecee2ab93fbca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kernel/unwind_orc.c:17:9: error: expected identifier or '(' before 'if'
-      17 |         if (state->task == current && !state->error)                    \
-         |         ^~
-   In file included from include/asm-generic/bug.h:7,
-                    from arch/x86/include/asm/bug.h:87,
-                    from include/linux/bug.h:5,
-                    from include/linux/jump_label.h:257,
-                    from include/linux/static_key.h:1,
-                    from arch/x86/include/asm/nospec-branch.h:6,
-                    from arch/x86/include/asm/paravirt_types.h:40,
-                    from arch/x86/include/asm/ptrace.h:97,
-                    from arch/x86/include/asm/math_emu.h:5,
-                    from arch/x86/include/asm/processor.h:13,
-                    from arch/x86/include/asm/timex.h:5,
-                    from include/linux/timex.h:67,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from arch/x86/kernel/unwind_orc.c:3:
->> include/linux/once_lite.h:34:10: error: expected identifier or '(' before ')' token
-      34 |         })
-         |          ^
-   include/linux/once_lite.h:11:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
-      11 |         DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/printk.h:605:9: note: in expansion of macro 'DO_ONCE_LITE'
-     605 |         DO_ONCE_LITE(printk_deferred, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:12:9: note: in expansion of macro 'printk_deferred_once'
-      12 |         printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:18:17: note: in expansion of macro 'orc_warn'
-      18 |                 orc_warn(args);                                         \
-         |                 ^~~~~~~~
-   arch/x86/kernel/unwind_orc.c:19:17: error: expected identifier or '(' before 'if'
-      19 |                 if (unwind_debug && !dumped_before)                     \
-         |                 ^~
-   arch/x86/kernel/unwind_orc.c:21:17: warning: data definition has no type or storage class
-      21 |                 dumped_before = true;                                   \
-         |                 ^~~~~~~~~~~~~
->> arch/x86/kernel/unwind_orc.c:21:17: error: type defaults to 'int' in declaration of 'dumped_before' [-Werror=implicit-int]
->> arch/x86/kernel/unwind_orc.c:22:9: error: expected identifier or '(' before '}' token
-      22 |         }                                                               \
-         |         ^
-   arch/x86/kernel/unwind_orc.c:23:1: error: expected identifier or '(' before '}' token
-      23 | })
-         | ^
->> arch/x86/kernel/unwind_orc.c:23:2: error: expected identifier or '(' before ')' token
-      23 | })
-         |  ^
-   arch/x86/kernel/unwind_orc.c: In function 'orc_find':
->> arch/x86/kernel/unwind_orc.c:219:35: error: '__start_orc_unwind_ip' undeclared (first use in this function); did you mean '__start_orc_unwind'?
-     219 |                 return __orc_find(__start_orc_unwind_ip + start,
-         |                                   ^~~~~~~~~~~~~~~~~~~~~
-         |                                   __start_orc_unwind
-   arch/x86/kernel/unwind_orc.c:219:35: note: each undeclared identifier is reported only once for each function it appears in
-   arch/x86/kernel/unwind_orc.c: At top level:
->> arch/x86/kernel/unwind_orc.c:239:32: error: '__start_orc_unwind_ip' undeclared here (not in a function); did you mean '__start_orc_unwind'?
-     239 | static int *cur_orc_ip_table = __start_orc_unwind_ip;
-         |                                ^~~~~~~~~~~~~~~~~~~~~
-         |                                __start_orc_unwind
-   arch/x86/kernel/unwind_orc.c: In function 'unwind_next_frame':
->> arch/x86/kernel/unwind_orc.c:534:18: error: expected ')' before 'break'
-     534 |                 }
-         |                  ^
-         |                  )
-     535 |                 break;
-         |                 ~~~~~
-   arch/x86/kernel/unwind_orc.c:16:21: warning: unused variable 'dumped_before' [-Wunused-variable]
-      16 |         static bool dumped_before;
-         |                     ^~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:531:25: note: in expansion of macro 'orc_warn_current'
-     531 |                         orc_warn_current("missing R10 value at %pB\n",
-         |                         ^~~~~~~~~~~~~~~~
->> arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
-     767 | EXPORT_SYMBOL_GPL(__unwind_start);
-         | ^~~~~~~~~~~~~~~~~
->> arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
->> arch/x86/kernel/unwind_orc.c:767:1: error: expected declaration or statement at end of input
->> arch/x86/kernel/unwind_orc.c:533:25: error: label 'err' used but not defined
-     533 |                         goto err;
-         |                         ^~~~
->> arch/x86/kernel/unwind_orc.c:506:17: error: label 'the_end' used but not defined
-     506 |                 goto the_end;
-         |                 ^~~~
-   arch/x86/kernel/unwind_orc.c:468:14: warning: variable 'indirect' set but not used [-Wunused-but-set-variable]
-     468 |         bool indirect = false;
-         |              ^~~~~~~~
-   arch/x86/kernel/unwind_orc.c:466:25: warning: unused variable 'prev_type' [-Wunused-variable]
-     466 |         enum stack_type prev_type = state->stack_info.type;
-         |                         ^~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:465:59: warning: unused variable 'prev_sp' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                                                           ^~~~~~~
-   arch/x86/kernel/unwind_orc.c:465:38: warning: unused variable 'orig_ip' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                                      ^~~~~~~
-   arch/x86/kernel/unwind_orc.c:465:33: warning: unused variable 'tmp' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                                 ^~~
-   arch/x86/kernel/unwind_orc.c:465:23: warning: unused variable 'ip_p' [-Wunused-variable]
-     465 |         unsigned long ip_p, sp, tmp, orig_ip = state->ip, prev_sp = state->sp;
-         |                       ^~~~
-   arch/x86/kernel/unwind_orc.c:768: error: control reaches end of non-void function [-Werror=return-type]
-   At top level:
-   arch/x86/kernel/unwind_orc.c:16:21: warning: 'dumped_before' defined but not used [-Wunused-variable]
-      16 |         static bool dumped_before;
-         |                     ^~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:531:25: note: in expansion of macro 'orc_warn_current'
-     531 |                         orc_warn_current("missing R10 value at %pB\n",
-         |                         ^~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:421:13: warning: 'deref_stack_iret_regs' defined but not used [-Wunused-function]
-     421 | static bool deref_stack_iret_regs(struct unwind_state *state, unsigned long addr,
-         |             ^~~~~~~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:405:13: warning: 'deref_stack_regs' defined but not used [-Wunused-function]
-     405 | static bool deref_stack_regs(struct unwind_state *state, unsigned long addr,
-         |             ^~~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:395:13: warning: 'deref_stack_reg' defined but not used [-Wunused-function]
-     395 | static bool deref_stack_reg(struct unwind_state *state, unsigned long addr,
-         |             ^~~~~~~~~~~~~~~
-   arch/x86/kernel/unwind_orc.c:42:13: warning: 'unwind_dump' defined but not used [-Wunused-function]
-      42 | static void unwind_dump(struct unwind_state *state)
-         |             ^~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +17 arch/x86/kernel/unwind_orc.c
-
-ee9f8fce996408 Josh Poimboeuf 2017-07-24  10  
-ee9f8fce996408 Josh Poimboeuf 2017-07-24  11  #define orc_warn(fmt, ...) \
-b08418b5483125 Josh Poimboeuf 2020-04-25  12  	printk_deferred_once(KERN_WARNING "WARNING: " fmt, ##__VA_ARGS__)
-b08418b5483125 Josh Poimboeuf 2020-04-25  13  
-b08418b5483125 Josh Poimboeuf 2020-04-25  14  #define orc_warn_current(args...)					\
-b08418b5483125 Josh Poimboeuf 2020-04-25  15  ({									\
-3295e738f5b51f Josh Poimboeuf 2022-08-15 @16  	static bool dumped_before;
-b59cc97674c947 Josh Poimboeuf 2021-02-05 @17  	if (state->task == current && !state->error)			\
-b08418b5483125 Josh Poimboeuf 2020-04-25 @18  		orc_warn(args);						\
-3295e738f5b51f Josh Poimboeuf 2022-08-15 @19  		if (unwind_debug && !dumped_before)			\
-3295e738f5b51f Josh Poimboeuf 2022-08-15  20  			unwind_dump(state);				\
-3295e738f5b51f Josh Poimboeuf 2022-08-15 @21  		dumped_before = true;					\
-3295e738f5b51f Josh Poimboeuf 2022-08-15 @22  	}								\
-b08418b5483125 Josh Poimboeuf 2020-04-25 @23  })
-ee9f8fce996408 Josh Poimboeuf 2017-07-24  24  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 8/11/22 16:16, Ard Biesheuvel wrote:
+> On Thu, 11 Aug 2022 at 08:31, <quanyang.wang@windriver.com> wrote:
+>>
+>> From: Quanyang Wang <quanyang.wang@windriver.com>
+>>
+>> If using "vend >= begin" to judge if two memory regions intersects, vend
+>> should be the end of the memory region, so it should be "virt + size -1"
+>> instead of "virt + size".
+>> The wrong determination of the end triggers the misreporting as below when
+>> the dma debug function "check_for_illegal_area" calls memory_intersects to
+>> check if the dma region intersects with stext region.
+>>
+>> Calltrace (stext is at 0x80100000):
+>>   WARNING: CPU: 0 PID: 77 at kernel/dma/debug.c:1073 check_for_illegal_area+0x130/0x168
+>>   DMA-API: chipidea-usb2 e0002000.usb: device driver maps memory from kernel text or rodata [addr=800f0000] [len=65536]
+>>   Modules linked in:
+>>   CPU: 1 PID: 77 Comm: usb-storage Not tainted 5.19.0-yocto-standard #5
+>>   Hardware name: Xilinx Zynq Platform
+>>    unwind_backtrace from show_stack+0x18/0x1c
+>>    show_stack from dump_stack_lvl+0x58/0x70
+>>    dump_stack_lvl from __warn+0xb0/0x198
+>>    __warn from warn_slowpath_fmt+0x80/0xb4
+>>    warn_slowpath_fmt from check_for_illegal_area+0x130/0x168
+>>    check_for_illegal_area from debug_dma_map_sg+0x94/0x368
+>>    debug_dma_map_sg from __dma_map_sg_attrs+0x114/0x128
+>>    __dma_map_sg_attrs from dma_map_sg_attrs+0x18/0x24
+>>    dma_map_sg_attrs from usb_hcd_map_urb_for_dma+0x250/0x3b4
+>>    usb_hcd_map_urb_for_dma from usb_hcd_submit_urb+0x194/0x214
+>>    usb_hcd_submit_urb from usb_sg_wait+0xa4/0x118
+>>    usb_sg_wait from usb_stor_bulk_transfer_sglist+0xa0/0xec
+>>    usb_stor_bulk_transfer_sglist from usb_stor_bulk_srb+0x38/0x70
+>>    usb_stor_bulk_srb from usb_stor_Bulk_transport+0x150/0x360
+>>    usb_stor_Bulk_transport from usb_stor_invoke_transport+0x38/0x440
+>>    usb_stor_invoke_transport from usb_stor_control_thread+0x1e0/0x238
+>>    usb_stor_control_thread from kthread+0xf8/0x104
+>>    kthread from ret_from_fork+0x14/0x2c
+>>
+>> Fixes: 979559362516 ("asm/sections: add helpers to check for section data")
+>> Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
+>> ---
+>>   include/asm-generic/sections.h | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
+>> index d0f7bdd2fdf2..f7171b4f5bfd 100644
+>> --- a/include/asm-generic/sections.h
+>> +++ b/include/asm-generic/sections.h
+>> @@ -108,7 +108,7 @@ static inline bool memory_contains(void *begin, void *end, void *virt,
+>>   static inline bool memory_intersects(void *begin, void *end, void *virt,
+>>                                       size_t size)
+>>   {
+>> -       void *vend = virt + size;
+>> +       void *vend = virt + size - 1;
+>>
+>>          return (virt >= begin && virt < end) || (vend >= begin && vend < end);
+> 
+> This test looks flawed to me for another reason as well: it only
+> checks whether the start /or/ the end of (virt, virt+size) falls
+> inside the area, so if the area is covered completely (in which case
+> the intersection of the two will be equal to the area), this will
+> return false erroneously.
+Yes, the test lacks some checks. I will send a V2 patch to fix it.
+Thanks,
+Quanyang
