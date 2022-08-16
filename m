@@ -2,160 +2,161 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9659C59616E
-	for <lists+linux-arch@lfdr.de>; Tue, 16 Aug 2022 19:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3485596213
+	for <lists+linux-arch@lfdr.de>; Tue, 16 Aug 2022 20:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235449AbiHPRt5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 16 Aug 2022 13:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S236945AbiHPSLb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 16 Aug 2022 14:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235846AbiHPRtz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Aug 2022 13:49:55 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7A180368
-        for <linux-arch@vger.kernel.org>; Tue, 16 Aug 2022 10:49:54 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id b142so5903581iof.10
-        for <linux-arch@vger.kernel.org>; Tue, 16 Aug 2022 10:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=solid-run-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=kjqRKq9oJnes+t5wbhe3Qf46+H6wK6o+K4jvO1Tjuz8=;
-        b=2Pp8bzj1MnGCU6V3vFJNsSKqqD/ziYTUDm2CF1NJhzXFBX0xc9mbyDXDKdd+QB6Wzg
-         fnZJp2eKCWYuykufGDOSXGPsv7jAdNiq872uZ6+YS3FEFDrsSvziP6q9qSsi0Ckj3rGk
-         XHwBXg1srh4Gm2YSVxSA6FWxO8UL52ni/TVzR7B/j2W6YFIoS6dNX9hcZaecsBB51/48
-         +kYqS4rCI7UtAK7/T6NtJ9t9wNKLMRAm8kGrTxwRKhYfTpMqr49Lyx3o36X27FzopYeX
-         UT/Tl9jNtv43LRs9+KljN2KuIM+HYa4Z0ZT/eAtIJuPoK4dcHdAc27Zu4v9ChOlJn8pk
-         BZMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=kjqRKq9oJnes+t5wbhe3Qf46+H6wK6o+K4jvO1Tjuz8=;
-        b=Slgja7ZRz4ai9utPE+PouYrKx5bRJyFdNIraQxKd5IuHXPHu5uki7LvyDwnXvAJqxJ
-         Fqs4CFc6fuFYXhgKPMRuMdpHzE8nq0UzfcjvFJTP2+u3DFEGpOZdD5dUfG02vvcFRYyQ
-         tBh6OkPMn5hUJAM4rH9HfNJySLclfenoDQLmoKmAGzPkL9rl+gSOZcN9mQozWLqt1lkE
-         zckVkWDVIEVVcdAPb0VFc57XpfDk4N3wt7Ik8YaHXnh1yJO6xKwaJmM7q5ySrnAp+Beh
-         CYx29Ak89TAdjrHRVBbiL5Pfdoe1OOZRb6eYQ1LYE6TKM2nZhoMaz+/Alm0dtHRtX+UQ
-         gr1A==
-X-Gm-Message-State: ACgBeo2jWkwD19IxReP74E4qi0RyZ64eIPne/Ht7PX9v7PIygPnQNYDm
-        yxkC+2hj+aE2ETtlKavBAVvd50TripGBiaL981Pgrg==
-X-Google-Smtp-Source: AA6agR7IlYaeIBknvmvu0X+8YEBbXtjhQpsdJAi0dy2tbyCrCmJ4c7rG6mWa+yox2ulVDU8DDG9g31v9WMcdQCjTBiU=
-X-Received: by 2002:a05:6602:3cc:b0:679:61e7:3928 with SMTP id
- g12-20020a05660203cc00b0067961e73928mr9381040iov.217.1660672193863; Tue, 16
- Aug 2022 10:49:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220816070311.89186-1-marcan@marcan.st> <20220816140423.GC11202@willie-the-truck>
- <c545705f-ee7e-4442-ebfc-64a3baca2836@marcan.st> <20220816173654.GA11766@willie-the-truck>
-In-Reply-To: <20220816173654.GA11766@willie-the-truck>
-From:   Jon Nettleton <jon@solid-run.com>
-Date:   Tue, 16 Aug 2022 19:49:16 +0200
-Message-ID: <CABdtJHt_3TKJVLhLiYMcBtvyA_DwaNapv1xHVeDdQH7cAC6YWw@mail.gmail.com>
-Subject: Re: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
-To:     Will Deacon <will@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
+        with ESMTP id S236980AbiHPSLP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 16 Aug 2022 14:11:15 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9DB24940;
+        Tue, 16 Aug 2022 11:10:43 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id DC55D4C134E;
+        Tue, 16 Aug 2022 18:10:41 +0000 (UTC)
+Received: from pdx1-sub0-mail-a314.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id E08AA4C25AB;
+        Tue, 16 Aug 2022 18:10:40 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660673441; a=rsa-sha256;
+        cv=none;
+        b=M0b2IKzrAAOPQITbh7iytw6ce/vPhrfa7pp5GRBFWU1T1NeZPvBtMvvKEXWBMc7Vb+2St6
+        QnPLQGnf9zq2LVX8ZE+qD/JEHcnmVPAA7E1KETEt99Hkfg16k3ZR6VBfasEnPH3wly14RS
+        FJyPuDfUmT/hauLOkzj6ufT0gRP0lfHYi5umz0ruqO5GmHlnoK//1u9eR/+AJotMyIYcXR
+        1nFzL4ghI80JhF/+rg1z9lmuibmuXAhD16Rx6O2AfVfjwuoIm5GqHIOV+2PTOv+Hz53Y08
+        sLHJP2qdeuBrepPN1ibi2qRi698CNgWvNn5q13B/1aZcPuxEQMxdhWfMwusTBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1660673441;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=I06/ecHUnT7zHJJuTwo7ZmgJud65PxCU9WXUPwrIBaQ=;
+        b=Jc5cJzdkgjrR8AA1cBgaJ7s60oN4UNv0gLEySENW4creNrvZKWfzYlkEtkri7idtY4kS2F
+        w/Uep2hurOZRzFTituEadVbugDDfxrI7d6cqBNv9tBKzgm/alOEw8aPOEYMHUM0ldT3cyD
+        Eprs8Kh5N7TWe0I6IvIQ798b/trPu8YznwHGhUXwU6nK3bWdkepYDcEaojIcOl0I06ZYGL
+        8BDgp0yA+EeeXQo5aXtLIDpT9SYDNvw4G+833jtFJY/XgcKuPqRYEHB07u54sHJjqF1Mml
+        Vk2iBGwPTTCf3L0JclrSy1XAW8GBFa0kLGBgqyiUQr4H22awZpkGwDJKxnGGng==
+ARC-Authentication-Results: i=1;
+        rspamd-7697cc766f-9rx62;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-White-Rock: 02ee42c1152eaacb_1660673441497_3181699394
+X-MC-Loop-Signature: 1660673441497:3222038149
+X-MC-Ingress-Time: 1660673441497
+Received: from pdx1-sub0-mail-a314.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.110.28.254 (trex/6.7.1);
+        Tue, 16 Aug 2022 18:10:41 +0000
+Received: from offworld (unknown [104.36.25.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a314.dreamhost.com (Postfix) with ESMTPSA id 4M6fMg1vT2zF1;
+        Tue, 16 Aug 2022 11:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1660673440;
+        bh=I06/ecHUnT7zHJJuTwo7ZmgJud65PxCU9WXUPwrIBaQ=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=VbXvJHvNVTgML/Vi2Xzn9FVbgGkc7dXYyKl1bUJv0Ja4nIaHHN3gzyVfyhk+zwJ5B
+         TD/Q49GkQIumI6/TXj6i85nLbJipITDDOitrbVF5YvIDO7C+z1hhfdBLYW1ilhIZUO
+         +HtNsN4hBOgoagNOtsGaDOp5pVqv66Y2g6wMILpTY04oC+R9Plh6JfdTPgiE/pgJSW
+         1Ly6s88hI95jSQ2gb/NMM9w5vqJCgFfk37lKd7meKs430vKwr50QrTnf8IgJCl4GZL
+         mEl5SjC0Zcg7ZhW1FTbirTL+KPuc2CLssRW1LCk9qstOU5Zpan3DfkE8vrvl5llHXO
+         k+s6laKDg1ZcQ==
+Date:   Tue, 16 Aug 2022 10:52:59 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
-        jirislaby@kernel.org, Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Asahi Linux <asahi@lists.linux.dev>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Dave Jiang <dave.jiang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+        alison.schofield@intel.com, a.manzanares@samsung.com,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, bp@alien8.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
+Message-ID: <20220816175259.o5h5wv23rs2bvcu6@offworld>
+References: <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
+ <20220803183729.00002183@huawei.com>
+ <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
+ <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
+ <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
+ <20220815160706.tqd42dv24tgb7x7y@offworld>
+ <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
+ <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch>
+ <20220816165301.4m4w6zsse62z4hxz@offworld>
+ <CAA9_cmfBubQe6EGk5+wjotvofZavfjFud-JMPW13Au0gpAcWog@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAA9_cmfBubQe6EGk5+wjotvofZavfjFud-JMPW13Au0gpAcWog@mail.gmail.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 7:38 PM Will Deacon <will@kernel.org> wrote:
->
-> On Tue, Aug 16, 2022 at 11:30:45PM +0900, Hector Martin wrote:
-> > On 16/08/2022 23.04, Will Deacon wrote:
-> > >> diff --git a/include/asm-generic/bitops/atomic.h b/include/asm-generic/bitops/atomic.h
-> > >> index 3096f086b5a3..71ab4ba9c25d 100644
-> > >> --- a/include/asm-generic/bitops/atomic.h
-> > >> +++ b/include/asm-generic/bitops/atomic.h
-> > >> @@ -39,9 +39,6 @@ arch_test_and_set_bit(unsigned int nr, volatile unsigned long *p)
-> > >>    unsigned long mask = BIT_MASK(nr);
-> > >>
-> > >>    p += BIT_WORD(nr);
-> > >> -  if (READ_ONCE(*p) & mask)
-> > >> -          return 1;
-> > >> -
-> > >>    old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
-> > >>    return !!(old & mask);
-> > >>  }
-> > >> @@ -53,9 +50,6 @@ arch_test_and_clear_bit(unsigned int nr, volatile unsigned long *p)
-> > >>    unsigned long mask = BIT_MASK(nr);
-> > >>
-> > >>    p += BIT_WORD(nr);
-> > >> -  if (!(READ_ONCE(*p) & mask))
-> > >> -          return 0;
-> > >> -
-> > >>    old = arch_atomic_long_fetch_andnot(mask, (atomic_long_t *)p);
-> > >>    return !!(old & mask);
-> > >
-> > > I suppose one sad thing about this is that, on arm64, we could reasonably
-> > > keep the READ_ONCE() path with a DMB LD (R->RW) barrier before the return
-> > > but I don't think we can express that in the Linux memory model so we
-> > > end up in RmW territory every time.
-> >
-> > You'd need a barrier *before* the READ_ONCE(), since what we're trying
-> > to prevent is a consumer from writing to the value without being able to
-> > observe the writes that happened prior, while this side read the old
-> > value. A barrier after the READ_ONCE() doesn't do anything, as that read
-> > is the last memory operation in this thread (of the problematic sequence).
->
-> Right, having gone back to your litmus test, I now realise it's the "SB"
-> shape from the memory ordering terminology. It's funny because the arm64
-> acquire/release instructions are RCsc and so upgrading the READ_ONCE()
-> to an *arm64* acquire instruction would work for your specific case, but
-> only because the preceeding store is a release.
->
-> > At that point, I'm not sure DMB LD / early read / LSE atomic would be
-> > any faster than just always doing the LSE atomic?
->
-> It depends a lot on the configuration of the system and the state of the
-> relevant cacheline, but generally avoiding an RmW by introducing a barrier
-> is likely to be a win. It just gets ugly here as we'd want to avoid the
-> DMB in the case where we end up doing the RmW. Possibly we could do
-> something funky like a test-and-test-and-test-and-set (!) where we do
-> the DMB+READ_ONCE() only if the first READ_ONCE() has the bit set, but
-> even just typing that is horrible and I'd _absolutely_ want to see perf
-> numbers to show that it's a benefit once you start taking into account
-> things like branch prediction.
->
-> Anywho, since Linus has applied the patch and it should work, this is
-> just an interesting aside.
->
-> Will
->
+On Tue, 16 Aug 2022, Dan Williams wrote:
 
-It is moot if Linus has already taken the patch, but with a stock
-kernel config I am
-still seeing a slight performance dip but only ~1-2% in the specific
-tests I was running.
-Sorry about the noise I will need to look at my kernel builder and see what went
-wrong when I have more time.
+>On Tue, Aug 16, 2022 at 10:30 AM Davidlohr Bueso <dave@stgolabs.net> wrote:
+>>
+>> On Tue, 16 Aug 2022, Dan Williams wrote:
+>>
+>> >Peter Zijlstra wrote:
+>> >> On Mon, Aug 15, 2022 at 09:07:06AM -0700, Davidlohr Bueso wrote:
+>> >> > diff --git a/arch/x86/include/asm/cacheflush.h b/arch/x86/include/asm/cacheflush.h
+>> >> > index b192d917a6d0..ce2ec9556093 100644
+>> >> > --- a/arch/x86/include/asm/cacheflush.h
+>> >> > +++ b/arch/x86/include/asm/cacheflush.h
+>> >> > @@ -10,4 +10,7 @@
+>> >> >
+>> >> >  void clflush_cache_range(void *addr, unsigned int size);
+>> >> >
+>> >> > +#define flush_all_caches() \
+>> >> > +  do { wbinvd_on_all_cpus(); } while(0)
+>> >> > +
+>> >>
+>> >> This is horrific... we've done our utmost best to remove all WBINVD
+>> >> usage and here you're adding it back in the most horrible form possible
+>> >> ?!?
+>> >>
+>> >> Please don't do this, do *NOT* use WBINVD.
+>> >
+>> >Unfortunately there are a few good options here, and the changelog did
+>> >not make clear that this is continuing legacy [1], not adding new wbinvd
+>> >usage.
+>>
+>> While I was hoping that it was obvious from the intel.c changes that this
+>> was not a new wbinvd, I can certainly improve the changelog with the below.
+>
+>I also think this cache_flush_region() API wants a prominent comment
+>clarifying the limited applicability of this API. I.e. that it is not
+>for general purpose usage, not for VMs, and only for select bare metal
+>scenarios that instantaneously invalidate wide swaths of memory.
+>Otherwise, I can now see how this looks like a potentially scary
+>expansion of the usage of wbinvd.
 
-Cheers,
-Jon
+Sure.
+
+Also, in the future we might be able to bypass this hammer in the presence
+of persistent cpu caches.
+
+Thanks,
+Davidlohr
