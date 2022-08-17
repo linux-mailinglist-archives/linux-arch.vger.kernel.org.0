@@ -2,77 +2,50 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABDC596B49
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Aug 2022 10:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F25C5973F5
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Aug 2022 18:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235110AbiHQIUP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Wed, 17 Aug 2022 04:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
+        id S241043AbiHQQOV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Aug 2022 12:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233858AbiHQIUO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Aug 2022 04:20:14 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B8D242
-        for <linux-arch@vger.kernel.org>; Wed, 17 Aug 2022 01:20:11 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-186-_ZDhN8jUN4OlHtEkOqfydg-1; Wed, 17 Aug 2022 09:20:09 +0100
-X-MC-Unique: _ZDhN8jUN4OlHtEkOqfydg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.38; Wed, 17 Aug 2022 09:20:08 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.040; Wed, 17 Aug 2022 09:20:08 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Hector Martin' <marcan@marcan.st>, Will Deacon <will@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        "Daniel Lustig" <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Asahi Linux <asahi@lists.linux.dev>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
-Thread-Topic: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
-Thread-Index: AQHYsU4vfwz5idsf402HoI6nUKdp962yvvCA
-Date:   Wed, 17 Aug 2022 08:20:08 +0000
-Message-ID: <1135281ad4e84cc5ac0147772aa83787@AcuMS.aculab.com>
-References: <20220816070311.89186-1-marcan@marcan.st>
-In-Reply-To: <20220816070311.89186-1-marcan@marcan.st>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S240995AbiHQQN4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Aug 2022 12:13:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F1CA0317;
+        Wed, 17 Aug 2022 09:13:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F116DB81E35;
+        Wed, 17 Aug 2022 16:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B8AC433D6;
+        Wed, 17 Aug 2022 16:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660752799;
+        bh=kXQNLS4CwMPiKcaeiXiEF6+1NRLEt3k8IA9vim983Jk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JneOmSwu4MkndSGmEfBm3JLuf37aATz+WYX+zZsypRYYknRqAJ4SwUBJvm8MkDAZt
+         asHwG4f/EkA3SkrE6HqOooxFTzSZ7XBq+76dkp+GdcLGETSAqGRE9F14gk5IjU0qm1
+         C6MVy5Bw+GIaSlNoEbg+/INn01IpTXb4gWJcTOBweniK6YkExd1EHIAeqPJY3aw7Ju
+         wu38BHQawUkfJbpggxqxYzgMQzmlXQvChYrPyBqQiSGnzEcBrZJk2j6gg1xfeWiz5y
+         xldRSPkjfV16eSB2gWrLQqi+fHxVkPRv0Q6BH1yU3tdtPsugFqR3/BZuos3bK9I+2J
+         nHlJ4M7fGLOhA==
+From:   guoren@kernel.org
+To:     xianting.tian@linux.alibaba.com, palmer@dabbelt.com,
+        heiko@sntech.de, guoren@kernel.org, conor.dooley@microchip.com
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
+        mick@ics.forth.gr, jszhang@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V2 0/2] riscv: kexec: Fixup crash_save percpu and machine_kexec_mask_interrupts
+Date:   Wed, 17 Aug 2022 12:12:56 -0400
+Message-Id: <20220817161258.748836-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,26 +54,26 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-...
->  	p += BIT_WORD(nr);
-> -	if (READ_ONCE(*p) & mask)
-> -		return 1;
-> -
->  	old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
->  	return !!(old & mask);
->  }
+From: Guo Ren <guoren@linux.alibaba.com>
 
-This looks like the same pattern (attempting to avoid a
-locked bus cycle) that caused the qdisc code to sit on
-transmit packets (even on x86).
-That had some barriers in it (possibly nops on x86) that
-didn't help - although the comments suggested otherwise.
+Current riscv kexec can't crash_save percpu states and disable
+interrupts properly. The patch series fix them, make kexec work correct.
 
-I wonder if the pattern has been used anywhere else?
+Changes in v2:
+ - Add Fixes tags
+ - Remove extern from bool smp_crash_stop_failed(void)
 
-	David
+v1: https://lore.kernel.org/linux-riscv/20220816012701.561435-1-guoren@kernel.org/
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Guo Ren (2):
+  riscv: kexec: Disable all interrupts in kexec crash path
+  riscv: kexec: Fixup crash_smp_send_stop with percpu crash_save_cpu
+
+ arch/riscv/include/asm/smp.h      |  6 +++
+ arch/riscv/kernel/machine_kexec.c | 44 +++++++++++----
+ arch/riscv/kernel/smp.c           | 89 ++++++++++++++++++++++++++++++-
+ 3 files changed, 126 insertions(+), 13 deletions(-)
+
+-- 
+2.36.1
 
