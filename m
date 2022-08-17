@@ -2,65 +2,78 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6953A596AAE
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Aug 2022 09:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABDC596B49
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Aug 2022 10:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbiHQHyi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Aug 2022 03:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
+        id S235110AbiHQIUP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-arch@lfdr.de>); Wed, 17 Aug 2022 04:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiHQHyh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Aug 2022 03:54:37 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB076FA13;
-        Wed, 17 Aug 2022 00:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=YZL2udXtnu7kSf5BoGRC8CmiIz9CMCVJ89aCm+TG/5Y=; b=L3LmfID7hue/edze1z7PIN388E
-        E7FKX7AcKxTUNphdOSos96NgmPrzoTocC9DSen7qeNo1CJZTfCj36gttmcbnUovkcju9Ld1zJf2ZD
-        cVSaJJ1/64ko20P7ujwBYOCblqjQVvVMNTREmZJwJKR+bRpJBn4AL4YUnOdDodVL4V3EIU1jy1tnA
-        jRE6w+Vd23i3b7l+epsFD/PAXC57YdS6JcBLc3rZkjgzy35RYGlWl6zXhHxOr4JoIPYnhjbdltWsp
-        TG2diUWec2TK111lBwGZrwiDmh08U7R/G9VQyKbrj6gKfeMFdL9fTAneh5oORPrjJgTJ7z5UXCTFE
-        j3R5H5YA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oODs9-003Cne-Al; Wed, 17 Aug 2022 07:53:53 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5CCD298007A; Wed, 17 Aug 2022 09:53:52 +0200 (CEST)
-Date:   Wed, 17 Aug 2022 09:53:52 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
-        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, a.manzanares@samsung.com,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org, bp@alien8.de, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
-Message-ID: <YvyekFhBWQ6qlAP6@worktop.programming.kicks-ass.net>
-References: <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
- <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
- <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
- <20220815160706.tqd42dv24tgb7x7y@offworld>
- <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
- <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch>
- <20220816165301.4m4w6zsse62z4hxz@offworld>
- <CAA9_cmfBubQe6EGk5+wjotvofZavfjFud-JMPW13Au0gpAcWog@mail.gmail.com>
- <20220816175259.o5h5wv23rs2bvcu6@offworld>
- <62fbe6d7b75ae_f2f5129482@dwillia2-xfh.jf.intel.com.notmuch>
+        with ESMTP id S233858AbiHQIUO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Aug 2022 04:20:14 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B8D242
+        for <linux-arch@vger.kernel.org>; Wed, 17 Aug 2022 01:20:11 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-186-_ZDhN8jUN4OlHtEkOqfydg-1; Wed, 17 Aug 2022 09:20:09 +0100
+X-MC-Unique: _ZDhN8jUN4OlHtEkOqfydg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.38; Wed, 17 Aug 2022 09:20:08 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.040; Wed, 17 Aug 2022 09:20:08 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Hector Martin' <marcan@marcan.st>, Will Deacon <will@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ingo Molnar <mingo@kernel.org>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        "Daniel Lustig" <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Tejun Heo <tj@kernel.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Asahi Linux <asahi@lists.linux.dev>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+Thread-Topic: [PATCH] locking/atomic: Make test_and_*_bit() ordered on failure
+Thread-Index: AQHYsU4vfwz5idsf402HoI6nUKdp962yvvCA
+Date:   Wed, 17 Aug 2022 08:20:08 +0000
+Message-ID: <1135281ad4e84cc5ac0147772aa83787@AcuMS.aculab.com>
+References: <20220816070311.89186-1-marcan@marcan.st>
+In-Reply-To: <20220816070311.89186-1-marcan@marcan.st>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62fbe6d7b75ae_f2f5129482@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,15 +81,26 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 11:49:59AM -0700, Dan Williams wrote:
+...
+>  	p += BIT_WORD(nr);
+> -	if (READ_ONCE(*p) & mask)
+> -		return 1;
+> -
+>  	old = arch_atomic_long_fetch_or(mask, (atomic_long_t *)p);
+>  	return !!(old & mask);
+>  }
 
-> What would have helped is if the secure-erase and unlock definition in
-> the specification mandated that the device emit cache invalidations for
-> everything it has mapped when it is erased. However, that has some
-> holes, and it also makes me think there is a gap in the current region
-> provisioning code. If I have device-A mapped at physical-address-X and then
-> tear that down and instantiate device-B at that same physical address
-> there needs to be CPU cache invalidation between those 2 events.
+This looks like the same pattern (attempting to avoid a
+locked bus cycle) that caused the qdisc code to sit on
+transmit packets (even on x86).
+That had some barriers in it (possibly nops on x86) that
+didn't help - although the comments suggested otherwise.
 
-Can we pretty please get those holes fixed ASAP such that future
-generations can avoid the WBINVD nonsense?
+I wonder if the pattern has been used anywhere else?
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
