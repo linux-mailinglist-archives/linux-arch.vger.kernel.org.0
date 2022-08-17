@@ -2,69 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE35D596A6B
-	for <lists+linux-arch@lfdr.de>; Wed, 17 Aug 2022 09:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7037596AA9
+	for <lists+linux-arch@lfdr.de>; Wed, 17 Aug 2022 09:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiHQHgU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 17 Aug 2022 03:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51098 "EHLO
+        id S229882AbiHQHug (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 17 Aug 2022 03:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiHQHfw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Aug 2022 03:35:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC5975CF2;
-        Wed, 17 Aug 2022 00:35:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 714D5B80B6D;
-        Wed, 17 Aug 2022 07:35:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04665C43141;
-        Wed, 17 Aug 2022 07:35:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660721748;
-        bh=kRWBdL8KuIR9lzjC86jiut/WktvRHyEtgar9YfSS8aw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f5pshq/NwkuMgGYP//0wfDCKCdZER6j+qe2XNpE1VEST4/YsDYTVOQZgefH1O7nhy
-         Len1UYBW3xXsHF1xiaL4OePl8HCrkss78L57FK6eK+ucjgv/MqcMYoLM9Pfm0WIT4q
-         z40yqyZ8uajYZ3MTCB1vuuY4HQEHMz/PwtHbEp570p77N+dlDlsPEFuafgSbB9a2yn
-         Egh+7ocXJH6MlsnzMLOup0LG3Q3FOLMMRSpuzunaKJk4dTOUJm7Q9Pne7F8+Wl1HHS
-         yUPSPLGHfIoqwClWA868zf57sICTOUHeX1KIM6gSGCqrQAReavpmIMZHiIhb38fI3y
-         aK3Esbi0YAgTQ==
-Received: by mail-vs1-f47.google.com with SMTP id d126so12373127vsd.13;
-        Wed, 17 Aug 2022 00:35:47 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2ABWgK+aWBWX00y1usYSWNFzM6yuiWj/rJx3VZxP2aD/QvCM2z
-        AGgbLvzhP6JxbOLmOAJh6CKIWX6LgDI6ojVVR14=
-X-Google-Smtp-Source: AA6agR4UC2eBl1dAvuMAA/z475fxgWNemreWYrByTXgOj8HuagYmO7k1l0SV9ycZyuAaVPTJ5y+Vd1yVnncr8qW3d5o=
-X-Received: by 2002:a05:6102:390d:b0:387:78b9:bf9c with SMTP id
- e13-20020a056102390d00b0038778b9bf9cmr10284036vsu.43.1660721746834; Wed, 17
- Aug 2022 00:35:46 -0700 (PDT)
+        with ESMTP id S233042AbiHQHu0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 17 Aug 2022 03:50:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E8B7B1D3;
+        Wed, 17 Aug 2022 00:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OgQrLdq5kcs/hzWnLFRYsQLf3bF4BAzScASZVzKdEss=; b=O9A1GzrnC2Jws3P2XgaDN6BtBj
+        aaMYi9KLwTTkyZsMQjZJBpryXirCyRo/np1yqNcbd78R/eq2ws5AA9fBx+y0a/wBVOAqULQ1EItjX
+        xnddFmcIyEwyOffdnThWr/LaMK/zld5VSiFVwKsZnc7EAI2+qYPnR5zD2g1CtAI4+ZOS69m0BfVAG
+        d418iYhdw9dUduJnKPoKCfI8KeugvDPEN0CEEA+5CM9VGkYtD+CQiX9AfP9HgwdG4gXL2M/WlZ0gb
+        9smy8ah3BrobvDISkukaEuLA4mwPPe9bXSEiQNEYsPcqBoZG31Gn5pkG3qT1F87KxDRI2nUeSdhwx
+        sYIIUFEQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oODo5-007tsG-GR; Wed, 17 Aug 2022 07:49:41 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2FB9798007A; Wed, 17 Aug 2022 09:49:40 +0200 (CEST)
+Date:   Wed, 17 Aug 2022 09:49:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Davidlohr Bueso <dave@stgolabs.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev,
+        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+        alison.schofield@intel.com, a.manzanares@samsung.com,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, bp@alien8.de, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arch/cacheflush: Introduce flush_all_caches()
+Message-ID: <YvydlP+XivIwfAPO@worktop.programming.kicks-ass.net>
+References: <4bedc81d-62fa-7091-029e-a2e56b4f8f7a@intel.com>
+ <20220803183729.00002183@huawei.com>
+ <9f3705e1-de21-0f3c-12af-fd011b6d613d@intel.com>
+ <YvO8pP7NUOdH17MM@FVFF77S0Q05N>
+ <62f40fba338af_3ce6829466@dwillia2-xfh.jf.intel.com.notmuch>
+ <20220815160706.tqd42dv24tgb7x7y@offworld>
+ <Yvtc2u1J/qip8za9@worktop.programming.kicks-ass.net>
+ <62fbcae511ec1_dfbc129453@dwillia2-xfh.jf.intel.com.notmuch>
+ <20220816165301.4m4w6zsse62z4hxz@offworld>
+ <CAA9_cmfBubQe6EGk5+wjotvofZavfjFud-JMPW13Au0gpAcWog@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220617145754.582056-1-chenhuacai@loongson.cn>
- <CAMj1kXERN209b7dbVs_hy4BeUwrmk2p9_vF+Wq2W8PUeHOQTkg@mail.gmail.com>
- <CAAhV-H60CJDRY4c+Eu+L=rNgHsXQqx=HK9nNSqg69WVV+Bm3SQ@mail.gmail.com>
- <CAMj1kXE1MijqonkPeH+Ydg8ti4_4YFXxBKK6Wztb=HtSY5EAgQ@mail.gmail.com>
- <CAAhV-H503hgyUZND2MmZ2h3qVb3SRt79HcQy7HrFmfGBci-QMA@mail.gmail.com>
- <CAMj1kXEzzAXYP3nXo8-Ny+iwuDorrO-JqoKjg3R+4kmhV_v_KQ@mail.gmail.com>
- <CAAhV-H60mSKx3k1CwBCdubswosgqe+NuVaMtKA=hpjBhq5w5wA@mail.gmail.com> <CAMj1kXFi0o3dOmpW9qarJPH2L2EWKCPKE--3z=jsGjaYh1JrTQ@mail.gmail.com>
-In-Reply-To: <CAMj1kXFi0o3dOmpW9qarJPH2L2EWKCPKE--3z=jsGjaYh1JrTQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 17 Aug 2022 15:35:34 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5CXeG9mNxqJLouvSGLqno4DSwbpPOO5xG2D6ptF2dSTQ@mail.gmail.com>
-Message-ID: <CAAhV-H5CXeG9mNxqJLouvSGLqno4DSwbpPOO5xG2D6ptF2dSTQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Add efistub booting support
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi <linux-efi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA9_cmfBubQe6EGk5+wjotvofZavfjFud-JMPW13Au0gpAcWog@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,77 +68,14 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Ard,
+On Tue, Aug 16, 2022 at 10:42:03AM -0700, Dan Williams wrote:
 
-On Wed, Aug 17, 2022 at 3:18 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Wed, 17 Aug 2022 at 09:17, Huacai Chen <chenhuacai@kernel.org> wrote:
-> >
-> > Hi, Ard,
-> >
-> > On Wed, Aug 17, 2022 at 3:00 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > >
-> > > On Wed, 17 Aug 2022 at 08:43, Huacai Chen <chenhuacai@kernel.org> wrote:
-> > > >
-> > > > Hi, Ard,
-> > > >
-> > > > On Tue, Aug 16, 2022 at 11:32 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > >
-> > > > > On Tue, 16 Aug 2022 at 17:23, Huacai Chen <chenhuacai@kernel.org> wrote:
-> > > > > >
-> > > ...
-> > > > > >
-> > > > >
-> > > > > No that makes no difference. The point is that the EFI stub and the
-> > > > > core kernel are the same image, so when the stub runs, the core
-> > > > > kernel's screen_info already exists in memory - the only thing you
-> > > > > need to do is make it accessible by adding it to image-vars.h
-> > > > Emm,  in ARM64,
-> > > > #define alloc_screen_info(x...)         &screen_info
-> > > >
-> > > > So screen_info is a global variable in the core kernel. For the zboot
-> > > > case (our own implementation, not sure about the proposing new
-> > > > method), efistub may be able to fill this info, but while
-> > > > decompressing, screen_info will be overwritten. I think.
-> > > >
-> > >
-> > > Right. So you can drop it then.
-> > OK, then can we rename LINUX_EFI_ARM_SCREEN_INFO_TABLE_GUID to
-> > LINUX_EFI_SCREEN_INFO_TABLE_GUID and avoid define a dedicated GUID for
-> > each arch?
-> >
->
-> If you use the arm64 approach, you don't need a GUID at all.
-Oh, I misunderstood.
-OK, I will use the arm64 approach now, my problem only exists when the
-order is "stub, decompression, core-kernel". If the new zboot way is
-"decompression, stub, core-kernel", then there is no problem.
+> I also think this cache_flush_region() API wants a prominent comment
+> clarifying the limited applicability of this API. I.e. that it is not
+> for general purpose usage, not for VMs, and only for select bare metal
+> scenarios that instantaneously invalidate wide swaths of memory.
+> Otherwise, I can now see how this looks like a potentially scary
+> expansion of the usage of wbinvd.
 
-Huacai
->
-> ...
->
-> > > > > > > This code is not checking a platform feature so it does not belong here.
-> > > > > > >
-> > > > > > > The EFI stub code is an ordinary EFI app, and it runs in the execution
-> > > > > > > context provided by EFI. So why is this needed so early? Can you move
-> > > > > > > it into the kernel entry routine instead?
-> > > > > > This is useful once we use our own zboot implementation, maybe we
-> > > > > > don't need it with the new method you are proposing.
-> > > > > >
-> > > > >
-> > > > > If this is part of your zboot implementation, please drop it for now.
-> > > > > Let's try using the generic EFI zboot instead - if we need to, we can
-> > > > > find a way to add it there.
-> > > > >
-> > > > > But out of curiosity, why is this needed at all?
-> > > > My mistake, the real reason of configuring DMW in stub is that the
-> > > > address of real_kernel_entry() is a kernel va, not a efi va (which is
-> > > > the same as pa).
-> > > >
-> > >
-> > > That means you can move this code to efi_enter_kernel(), no?
-> > Yes, we can move to efi_enter_kernel(), thank you.
-> >
->
-> OK
+This; because adding a generic API like this makes it ripe for usage.
+And this is absolutely the very last thing we want used.
