@@ -2,383 +2,253 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D4C597E02
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 07:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226F6597E51
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 08:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbiHRFUd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Aug 2022 01:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45718 "EHLO
+        id S243501AbiHRGAn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Aug 2022 02:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243410AbiHRFUY (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 01:20:24 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6BF75391;
-        Wed, 17 Aug 2022 22:20:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1660800016; bh=SgVBJVWdM7mPnuOEs8oO5YhK1kHzXlfd2l8GQm0hQX8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JEDGnGtWoZT7HnEQdf95l2qQ0okKQsVU9jf+n2hYglf2ZSQIW+n5VrLgPsyaGfFr1
-         FLznT8pCzwsGOrJfMx9LXNIzNgx5vm1h1m1CkLlqJLCAFfB4eiF35T0Da4ka+BD1iU
-         MQzJqPBIwtoVvli/6XpsCa0W12AvOF8skEcO9eZc=
-Received: from [100.100.57.219] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 61F0260074;
-        Thu, 18 Aug 2022 13:20:16 +0800 (CST)
-Message-ID: <e7eff3be-430c-d82a-a45e-ad8a2cbf069b@xen0n.name>
-Date:   Thu, 18 Aug 2022 13:20:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:105.0)
- Gecko/20100101 Thunderbird/105.0a1
-Subject: Re: [PATCH V2 1/2] LoongArch: Add CPU HWMon platform driver
+        with ESMTP id S243492AbiHRGAm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 02:00:42 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90070.outbound.protection.outlook.com [40.107.9.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81917E00C;
+        Wed, 17 Aug 2022 23:00:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JpllEyECQTSzavIm2LhJ8XmqXvZE0AH2AgKjiYOeBvNukpA4Pi5m/pq5EIAXVmnNRF1S5FWuZVAtalzN8ikkykgiyN/UUb1pQqwjmo+4ClTZtSXINuSs940v4CuSsNMbNoc1Qzo2r0P/jitzF5qxMU0L2s3sQ0dvWpKUBnXxnneF3w10/n5faQy1iugxCGMPfSO1skcgvyMcBb3WUBgpzdYLfaNSEBrrFNyDw0Jd0JDDXOWy/i/sQY0D+1gHQ4k9reJEjRdpC8hvcqaYX04frAycJbW3ssttrng/dD/Pxq5gKnl9wiqrTU3dGlB+hru9ze9Vmy7E9ZDH2I0UljC41A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hDHheIS2ijWIAHjqTyuM8K/l/cnq9I/DJ4jehW1O45k=;
+ b=Xwu/sW6jNW9Gi3FV3r7n6Qi6mSutams97M9Z9ILm8qMzToVVi+fKARbQUP9Q0oTDILHrsLf8HSYG0iPBPxjwMEjjCzCCLmSWoikS9dUpvYSBpjmPL1UGZ26/stC4Zv/B55OzkvC01Kr2NHNCd8y0tN5MdyFtpUWnm9aeiHhUV4wT19FqCCSkaIyGT++nwjlnqYLrxxxJtG4C117Xy+C50SlO40pj3UAInnrhp0oGVCkwOSS9dw+QWyu1Cbid2QA8JtHDMw1JzwqR0lqKk5pOUdt1UCKkSquG6xLW6y6E8znP870Uh0By97zd/YV5lpPQiqWiBwvll1x8VU0+IKBvIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hDHheIS2ijWIAHjqTyuM8K/l/cnq9I/DJ4jehW1O45k=;
+ b=dWnbogsCteaJnNu1D0CUy5/KlnyztfD82JxEXeoPU2gFLQt6Ra9WUHViPVUjHeFGX3EpFUuCNFCOuM/gM/urMlhj0U0xHC3w2AQg79gdC2HFPo/8ZC8g3avi0HIks/C1yV6+zKybmSmbBJCajgqLZCyHiJl6tiYFHOzYV4qOTnUAc94ydlJJc9qg9I+x9OoWtfoHmVhviRAWMF8R3JXVt6VEGvnZIn3pHmu/qLKEZ9dIaJsK7CC07HYcUc2k1Q/bmNfC9+u0aLyTcalWX27V+Pk+swYbUqIE3iMk6lWsRDBXhYd4rWYSTwnCc8IwQAeaA7Dab6VlByLmvU35/84A8Q==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2089.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:166::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Thu, 18 Aug
+ 2022 06:00:37 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::888e:a92e:a4ee:ce9e]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::888e:a92e:a4ee:ce9e%5]) with mapi id 15.20.5504.028; Thu, 18 Aug 2022
+ 06:00:37 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Thread-Topic: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Thread-Index: AQHYq9yc0+2EsNg9hki12SrFrcAXy62zatcAgADNGwA=
+Date:   Thu, 18 Aug 2022 06:00:36 +0000
+Message-ID: <6103c908-dc48-40e2-2a89-b0f31e4c55f4@csgroup.eu>
+References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+ <CAK8P3a3bJVTLZy3HnVvEN8zDgzAMhSUdUkZ5Jd=omNjYJZKA4Q@mail.gmail.com>
+In-Reply-To: <CAK8P3a3bJVTLZy3HnVvEN8zDgzAMhSUdUkZ5Jd=omNjYJZKA4Q@mail.gmail.com>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20220818042208.2896457-1-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20220818042208.2896457-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dfdff4c2-0dd6-4627-6271-08da80def8b2
+x-ms-traffictypediagnostic: PR0P264MB2089:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 404mfDtSGs0UCeO+qHMUixkESs278/4bvbrNFiD0Xdm0ZAAiDCoS1WFpX7PYf9SemEMzm8w9GI9l9r+PS2ChiV/NuFBHVFuJWLtBr2P/1Ou6G2f4VkdNjwv0NiBzwon8/03sO/VjBRpXjKRZxq1Fsb4WbRy9uW4FuN/Dln789afY7c0o3awpETLFbaDoDQMKHbe0Dqww+guzLQEfOofhCwo9hdc2lhWe1gYfnIZA5P93kieZycrlaFIOP/BstqjxQCzUjRofAlmiN9JG3AZNbecH7rnN3LNO1WtIjV5DyTic9UKXFa2ZhgPyUgSU/0p9PwKt98ri1dY/sY9kVd4RYdsVUguSrJbWb9iMApazqzs3PLDc+8qidopcwmimYGeekHwYLhh2SE2/ZJLMfud6qagiK9rkRHmnUKtkpin7XG7F71Om2ADvbV4cE4utWYu8io7UvjYNRo2qt65O+ntcVZsqKVvTg4X9PRpiCMjvjnfOruNFZbhtvQ3azwdkJ112miGZpZ0CxKyOAs2JZ26k2nzzg1jcHHmb3oxxWP4GfrE+FLUHwKTJQOLCn2Ri5bQrFxpuyYfspE/9g12Nn1bTMXoqokICXbS1MKQRd2os24JWrra1rrqpdkHRPdlltIbk0qV/FOXlE2KBg6Yk4rCIiYdKfKGdpsoudLWb5X6UgXkL89KF1QmQbGHKLT1+3gNxyfFnzCnuV9/ofuQ5q4O56SVqSSc5+pMt+pXpAqeSSd2FlyLjPWHcUusNcXmGX+lVFou353sCNIZTI/VUouAgSPnc4s8IbIDlYl0Am77CwgEru9Yb4jLUC2xVtrCXyTt7Gr3go5RRmoy8+Hnjx+2g5Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(376002)(39850400004)(346002)(4326008)(76116006)(2616005)(66556008)(91956017)(64756008)(8676002)(66446008)(83380400001)(66476007)(316002)(6512007)(31686004)(36756003)(66946007)(53546011)(186003)(26005)(2906002)(44832011)(7416002)(86362001)(31696002)(5660300002)(8936002)(71200400001)(478600001)(6506007)(122000001)(54906003)(6486002)(41300700001)(6916009)(38070700005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NlloT1FuaHNrZjZqMnFDK0ZNakNkeWEwS2pmakh0TzlQMUJYU3BoZ1RIRk9h?=
+ =?utf-8?B?VlpNTWo1dU1haXVnSklCZEpsQzJ4ZEl5Nkw5TkNyV3hLNW9rMXQ2aXhOZERq?=
+ =?utf-8?B?K0RJc1ZmUkZ5UTcwYjZrS2xFSnBlSktabXNHNDR6R00zUk0yOWFxN2g4ZDFW?=
+ =?utf-8?B?cmVlYkN6eVdIRVdSbkJud1RsZlZ4Z3RDbTJ1TmtvVndSVFkvdjNDc3RESFZS?=
+ =?utf-8?B?bThlSVc1Y2gvMkVvdFFOeDlYRDQ2bmxOSFhrTEg3NXRlUkV0UVBRQmdIUGFW?=
+ =?utf-8?B?VFVvRVBqVkI4QmY2dHYzclpIK0xXN0tvU2hzSXRpVHd6VTdKa0dNTXAwMFIy?=
+ =?utf-8?B?VnZLeFprdG1xWmt4V3ZHWlpZVlpZN0g4TlFsRGxYZUh0aGRrdjZMYi9kaXMv?=
+ =?utf-8?B?QmluUSt2bzFWZysrcDBkVWRJUEIxcU9aNUpFMUs5bEkzeUorYnVBa1JKZHpX?=
+ =?utf-8?B?QVFNZ2JoSmhBbVZvR2NSbXA4c3dYOE1uZnhUdGZZck1HQVNmMHlPa2NQRytr?=
+ =?utf-8?B?QXV6SVQzR0dXd25CSS8reWNtdy9sQnIrb1dkUHdycWVWRlJIL2NZdDY0Tkd6?=
+ =?utf-8?B?Vm1wd28yUVpWbE5xejd3VW1mVTNiTW1EUEVnbWZmUi9PbDZxWjJuQlNvc0dW?=
+ =?utf-8?B?ZG8rMFZ0aVNtdm9lN20vT2hsamVYU1hpcW1NQzQ1T2FkTm5oV212R1RVcmVl?=
+ =?utf-8?B?bGFwUEU4RTJSTXN6OVhIWlAvWSs3bU04azlZU09hR2tjaTZSUythbW05Ryto?=
+ =?utf-8?B?YjhQanhZTlpXbE5rbTY1cWI1eFRrSnZDMnlkUnIrY3A0YU9ncWxTL2VzWGI1?=
+ =?utf-8?B?ZmdWNU42Vk5Lb3hiZ3RjT3UxMXdiUjN0ak1YSlAxTFphNTRXNE9jN2trZ3Fl?=
+ =?utf-8?B?dWZhSW5jV2NtZ2xrd24rKzRHS0x2aTNpamkxOWxIb2NkVUkrcDVVTDg0Uk5X?=
+ =?utf-8?B?aDRGWC9JODh1T2gySGtiZHRpbWlENUw4RnlXdm5RNWRLODRCcWNvV0hPK3ZY?=
+ =?utf-8?B?UVdBa2MrclNaODJtSWVMZ3drNDJReml3VllnbHV5dVBleXVqc0c3NlpROFRQ?=
+ =?utf-8?B?MStUTTh3OGlUY3czZ2FNN0lMelN3TFRacTFBQ240d3lCaWk2R1RJWjRCRUVw?=
+ =?utf-8?B?b0dpd1g1TzNqUFlPU0NPbUFpZUUvQ2lRd3BZWVgvODBkQUdzMm51eElkUGFL?=
+ =?utf-8?B?NGRzVUwzOFQ4Z1VwbTlGb3ZvNE1BeUwxZTF1c0VoS2tWd0c3dGQ1ZG1VT0Z1?=
+ =?utf-8?B?UlNRLy9sNmhZYVJYcXVKdlg2cUpYenlWWEY1M3lSY0VQVXhTNW1UNVZYNWdL?=
+ =?utf-8?B?NHY4RXZtY1BPT0RVUWJHcWZBUVBHUGRzZm5IQ0tiaVBvVHBSeGdtdW9xWk53?=
+ =?utf-8?B?bTBqU3h2VC9oVkpHL2ZRNGQ3b0dhTHJhL2xRTWpXWVFROVJuM1FTR3RldmxM?=
+ =?utf-8?B?S3AyS0dWMC9CYW4wQzZMZnMwZm81M0UzY1J3U1Q3RnNFUHdGUWIwS3R1SDM4?=
+ =?utf-8?B?N0NFTjJGek5qSlk5WENEUVVDbE00SldHRERQaFVkdHVhZkJoc0lZUWFWNGJ4?=
+ =?utf-8?B?b05vNmVFNGRSOGFxVUFsdXVFdEpKZWtuNExGVFNmcFhtbGZMSnY2WWJlVEtr?=
+ =?utf-8?B?YktCa05sWWZ5d3NwajBDc2xHUFRxNmMzcWxRdm0vL3VKdjhvcnFzZUxDYktt?=
+ =?utf-8?B?Z1MwUEl3YlQxemRnM2FtYURsdkdnVkpobW5HSU5wdzhma2h3d2NaMmI4NFY1?=
+ =?utf-8?B?U1pCUXhJcllkekFmSVZGb2s5ZXJlNUlFbXVyN29uWFIzTWN0RGYxdk9XWFlG?=
+ =?utf-8?B?NE5yTHJxTUNjaEE5NWpnN0tYTzAzT2o3N01yYUd3cEU1aGU1U3J4YmFEaEVE?=
+ =?utf-8?B?WEdjU0dRZkxwazlVcVdhdllDK3Q4QkV6cnAyeG9TdEo2eEJIakY4T1hMNHVv?=
+ =?utf-8?B?Y2lCaDlkZjNaSkxvQndiTnhOYXdIbU1LMXVDQzRMQm5ZUEt3UXN2TFVwZ0hY?=
+ =?utf-8?B?cnI5OCtzRFhBanhTbFBiK3FCb0haTDhTUW1jVTdHUkJ3emNKMUc0ZEJjZWNw?=
+ =?utf-8?B?OHFhTXBWUDNsWnhVK1FyTGFNK282TkVibVk3YTgzWjhzUVBWOVkrc3B4UUNV?=
+ =?utf-8?B?b3pBbkx6TG5DZmEvZmExa29rKzhjNVlFRVFOV3ljTDVqU241cjhmTHIyQXoy?=
+ =?utf-8?B?aXc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B0340F79A8CDB74FA77800FD877CF4A3@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfdff4c2-0dd6-4627-6271-08da80def8b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2022 06:00:36.9725
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QPKY0kXOdPXSbpC+wINTfyUusz4pB+D0j2mGiJzwM0ZE8q5EqanzZ+4NlnTbKrAl183wFa4vjNp6v0Xonhj6tSUQryRbYBeHvfKxH5M1PWk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2089
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2022/8/18 12:22, Huacai Chen wrote:
-> This add CPU HWMon (temperature sensor) platform driver for Loongson-3.
-> 
-> Tested-by: Xi Ruoyao <xry111@xry111.site>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> V2: Fix build warning reported by lkp.
-> 
->   drivers/platform/Kconfig               |   3 +
->   drivers/platform/Makefile              |   1 +
->   drivers/platform/loongarch/Kconfig     |  26 ++++
->   drivers/platform/loongarch/Makefile    |   1 +
->   drivers/platform/loongarch/cpu_hwmon.c | 194 +++++++++++++++++++++++++
->   5 files changed, 225 insertions(+)
->   create mode 100644 drivers/platform/loongarch/Kconfig
->   create mode 100644 drivers/platform/loongarch/Makefile
->   create mode 100644 drivers/platform/loongarch/cpu_hwmon.c
-> 
-> diff --git a/drivers/platform/Kconfig b/drivers/platform/Kconfig
-> index b437847b6237..9c68e2def2cb 100644
-> --- a/drivers/platform/Kconfig
-> +++ b/drivers/platform/Kconfig
-> @@ -2,6 +2,9 @@
->   if MIPS
->   source "drivers/platform/mips/Kconfig"
->   endif
-> +if LOONGARCH
-> +source "drivers/platform/loongarch/Kconfig"
-> +endif
->   
->   source "drivers/platform/goldfish/Kconfig"
->   
-> diff --git a/drivers/platform/Makefile b/drivers/platform/Makefile
-> index 4de08ef4ec9d..41640172975a 100644
-> --- a/drivers/platform/Makefile
-> +++ b/drivers/platform/Makefile
-> @@ -4,6 +4,7 @@
->   #
->   
->   obj-$(CONFIG_X86)		+= x86/
-> +obj-$(CONFIG_LOONGARCH)		+= loongarch/
->   obj-$(CONFIG_MELLANOX_PLATFORM)	+= mellanox/
->   obj-$(CONFIG_MIPS)		+= mips/
->   obj-$(CONFIG_OLPC_EC)		+= olpc/
-> diff --git a/drivers/platform/loongarch/Kconfig b/drivers/platform/loongarch/Kconfig
-> new file mode 100644
-> index 000000000000..a1542843b0ad
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/Kconfig
-> @@ -0,0 +1,26 @@
-> +#
-> +# LoongArch Platform Specific Drivers
-> +#
-> +
-> +menuconfig LOONGARCH_PLATFORM_DEVICES
-> +	bool "LoongArch Platform Specific Device Drivers"
-> +	default LOONGARCH
-> +	help
-> +	  Say Y here to get to see options for device drivers of various
-> +	  LoongArch platforms, including vendor-specific laptop/desktop
-> +	  extension and hardware monitor drivers. This option itself does
-> +	  not add any kernel code.
-> +
-> +	  If you say N, all options in this submenu will be skipped and disabled.
-> +
-> +if LOONGARCH_PLATFORM_DEVICES
-> +
-> +config CPU_HWMON
-> +	bool "Loongson CPU HWMon Driver"
-> +	depends on MACH_LOONGSON64
-
-Can the name be made more specific? I know the name didn't change from 
-when it's introduced years ago, but since the code never went upstream 
-we can do better this time.
-
-Also, it may be better to simply place this hwmon driver under, ahem, 
-drivers/hwmon. Similar drivers for x86 (coretemp, k8temp, k10temp and 
-fam15h_power) are all residing in drivers/hwmon, and new users will most 
-probably look there.
-
-> +	select HWMON
-> +	default y
-> +	help
-> +	  Loongson-3A/3B/3C CPU HWMon (temperature sensor) driver.
-> +
-> +endif # LOONGARCH_PLATFORM_DEVICES
-> diff --git a/drivers/platform/loongarch/Makefile b/drivers/platform/loongarch/Makefile
-> new file mode 100644
-> index 000000000000..8dfd03924c37
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_CPU_HWMON) += cpu_hwmon.o
-> diff --git a/drivers/platform/loongarch/cpu_hwmon.c b/drivers/platform/loongarch/cpu_hwmon.c
-> new file mode 100644
-> index 000000000000..71a462426397
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/cpu_hwmon.c
-> @@ -0,0 +1,194 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + */
-> +#include <linux/module.h>
-> +#include <linux/reboot.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +
-> +#include <asm/loongson.h>
-> +
-> +static int nr_packages;
-> +static struct device *cpu_hwmon_dev;
-> +
-> +static int loongson3_cpu_temp(int cpu)
-> +{
-> +	u32 reg;
-> +
-> +	reg = iocsr_read32(LOONGARCH_IOCSR_CPUTEMP) & 0xff;
-> +
-> +	return (int)((s8)reg) * 1000;
-> +}
-> +
-> +static ssize_t cpu_temp_label(struct device *dev,
-> +			struct device_attribute *attr, char *buf)
-> +{
-> +	int id = (to_sensor_dev_attr(attr))->index - 1;
-> +	return sprintf(buf, "CPU %d Temperature\n", id);
-> +}
-> +
-> +static ssize_t get_cpu_temp(struct device *dev,
-> +			struct device_attribute *attr, char *buf)
-> +{
-> +	int id = (to_sensor_dev_attr(attr))->index - 1;
-> +	int value = loongson3_cpu_temp(id);
-> +	return sprintf(buf, "%d\n", value);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
-> +static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
-> +static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
-> +static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
-> +static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
-> +static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
-> +static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp5_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp5_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp6_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp6_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp7_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp7_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp8_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp8_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp9_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp9_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp10_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp10_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp11_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp11_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp12_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp12_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp13_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp13_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp14_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp14_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp15_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp15_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp16_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp16_label, 0444, cpu_temp_label, NULL, 4);
-> +
-> +static struct attribute *cpu_hwmon_attributes[] = {
-> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp6_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp6_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp7_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp7_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp8_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp8_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp9_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp9_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp10_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp10_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp11_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp11_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp12_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp12_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp13_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp13_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp14_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp14_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp15_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp15_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp16_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp16_label.dev_attr.attr,
-> +	NULL
-> +};
-> +static umode_t cpu_hwmon_is_visible(struct kobject *kobj,
-> +				    struct attribute *attr, int i)
-> +{
-> +	int id = i / 2;
-> +
-> +	if (id < nr_packages)
-> +		return attr->mode;
-> +	return 0;
-> +}
-> +
-> +static struct attribute_group cpu_hwmon_group = {
-> +	.attrs = cpu_hwmon_attributes,
-> +	.is_visible = cpu_hwmon_is_visible,
-> +};
-> +
-> +static const struct attribute_group *cpu_hwmon_groups[] = {
-> +	&cpu_hwmon_group,
-> +	NULL
-> +};
-> +
-> +static int cpu_initial_threshold = 72000;
-> +static int cpu_thermal_threshold = 96000;
-> +module_param(cpu_thermal_threshold, int, 0644);
-> +MODULE_PARM_DESC(cpu_thermal_threshold, "cpu thermal threshold (96000 (default))");
-
-In what unit? It seems to be 1/1000th of degrees Celsius.
-
-You may need to add accompanying documentation under Documentation/hwmon 
-as well. The docs for coretemp and k10temp can serve as good reference.
-
-> +
-> +static struct delayed_work thermal_work;
-> +
-> +static void do_thermal_timer(struct work_struct *work)
-> +{
-> +	int i, value, temp_max = 0;
-> +
-> +	for (i=0; i<nr_packages; i++) {
-> +		value = loongson3_cpu_temp(i);
-> +		if (value > temp_max)
-> +			temp_max = value;
-> +	}
-> +
-> +	if (temp_max <= cpu_thermal_threshold)
-> +		schedule_delayed_work(&thermal_work, msecs_to_jiffies(5000));
-> +	else
-> +		orderly_poweroff(true);
-
-No other hwmon driver does this. It's the thermal subsystem's 
-responsibility it seems.
-
-> +}
-> +
-> +static int __init loongson_hwmon_init(void)
-> +{
-> +	int i, value, temp_max = 0;
-> +
-> +	pr_info("Loongson Hwmon Enter...\n");
-
-No need for this message...
-
-> +
-> +	nr_packages = loongson_sysconf.nr_cpus /
-> +		loongson_sysconf.cores_per_package;
-> +
-> +	cpu_hwmon_dev = hwmon_device_register_with_groups(NULL, "cpu_hwmon",
-> +							  NULL, cpu_hwmon_groups);
-> +	if (IS_ERR(cpu_hwmon_dev)) {
-> +		pr_err("hwmon_device_register fail!\n");
-
-Include the return value in log message?
-
-> +		return PTR_ERR(cpu_hwmon_dev);
-> +	}
-> +
-> +	for (i = 0; i < nr_packages; i++) {
-> +		value = loongson3_cpu_temp(i);
-> +		if (value > temp_max)
-> +			temp_max = value;
-> +	}
-> +
-> +	pr_info("Initial CPU temperature is %d (highest).\n", temp_max);
-
-Seems to be "initial CPU temperature threshold" instead. (And if you 
-remove the threshold setting altogether per the earlier review comment, 
-this message should get removed anyway.)
-
-> +	if (temp_max > cpu_initial_threshold)
-> +		cpu_thermal_threshold += temp_max - cpu_initial_threshold;
-> +
-> +	INIT_DEFERRABLE_WORK(&thermal_work, do_thermal_timer);
-> +	schedule_delayed_work(&thermal_work, msecs_to_jiffies(20000));
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit loongson_hwmon_exit(void)
-> +{
-> +	cancel_delayed_work_sync(&thermal_work);
-> +	hwmon_device_unregister(cpu_hwmon_dev);
-> +}
-> +
-> +module_init(loongson_hwmon_init);
-> +module_exit(loongson_hwmon_exit);
-> +
-> +MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
-> +MODULE_DESCRIPTION("Loongson CPU Hwmon driver");
-> +MODULE_LICENSE("GPL");
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+DQoNCkxlIDE3LzA4LzIwMjIgw6AgMTk6NDYsIEFybmQgQmVyZ21hbm4gYSDDqWNyaXTCoDoNCj4g
+T24gVHVlLCBBdWcgOSwgMjAyMiBhdCAxMjo0MCBQTSBDaHJpc3RvcGhlIExlcm95DQo+IDxjaHJp
+c3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOg0KPj4NCj4+IEF0IHRoZSB0aW1lIGJlaW5n
+LCB0aGUgZGVmYXVsdCBtYXhpbXVtIG51bWJlciBvZiBHUElPcyBpcyBzZXQgdG8gNTEyDQo+PiBh
+bmQgY2FuIG9ubHkgZ2V0IGN1c3RvbWlzZWQgdmlhIGFuIGFyY2hpdGVjdHVyZSBzcGVjaWZpYw0K
+Pj4gQ09ORklHX0FSQ0hfTlJfR1BJTy4NCj4+DQo+PiBUaGUgbWF4aW11bSBudW1iZXIgb2YgR1BJ
+T3MgbWlnaHQgYmUgZGVwZW5kZW50IG9uIHRoZSBudW1iZXIgb2YNCj4+IGludGVyZmFjZSBib2Fy
+ZHMgYW5kIGlzIHNvbWV3aGF0IGluZGVwZW5kZW50IG9mIGFyY2hpdGVjdHVyZS4NCj4+DQo+PiBB
+bGxvdyB0aGUgdXNlciB0byBzZWxlY3QgdGhhdCBtYXhpbXVtIG51bWJlciBvdXRzaWRlIG9mIGFu
+eQ0KPj4gYXJjaGl0ZWN0dXJlIGNvbmZpZ3VyYXRpb24uIFRvIGVuYWJsZSB0aGF0LCByZS1kZWZp
+bmUgYQ0KPj4gY29yZSBDT05GSUdfQVJDSF9OUl9HUElPIGZvciBhcmNoaXRlY3R1cmVzIHdoaWNo
+IGRvbid0IGFscmVhZHkNCj4+IGRlZmluZSBvbmUuIEd1YXJkIGl0IHdpdGggYSBuZXcgaGlkZGVu
+IENPTkZJR19BUkNIX0hBU19OUl9HUElPLg0KPj4NCj4+IE9ubHkgdHdvIGFyY2hpdGVjdHVyZXMg
+d2lsbCBuZWVkIENPTkZJR19BUkNIX0hBU19OUl9HUElPOiB4ODYgYW5kIGFybS4NCj4+DQo+PiBP
+biBhcm0sIGRvIGxpa2UgeDg2IGFuZCBzZXQgNTEyIGFzIHRoZSBkZWZhdWx0IGluc3RlYWQgb2Yg
+MCwgdGhhdA0KPj4gYWxsb3dzIHNpbXBsaWZ5aW5nIHRoZSBsb2dpYyBpbiBhc20tZ2VuZXJpYy9n
+cGlvLmgNCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGhlIExlcm95IDxjaHJpc3RvcGhl
+Lmxlcm95QGNzZ3JvdXAuZXU+DQo+PiAtLS0NCj4+ICAgRG9jdW1lbnRhdGlvbi9kcml2ZXItYXBp
+L2dwaW8vbGVnYWN5LnJzdCB8ICAyICstDQo+PiAgIGFyY2gvYXJtL0tjb25maWcgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgMyArKy0NCj4+ICAgYXJjaC9hcm0vaW5jbHVkZS9hc20vZ3Bpby5o
+ICAgICAgICAgICAgICB8ICAxIC0NCj4+ICAgYXJjaC94ODYvS2NvbmZpZyAgICAgICAgICAgICAg
+ICAgICAgICAgICB8ICAxICsNCj4+ICAgZHJpdmVycy9ncGlvL0tjb25maWcgICAgICAgICAgICAg
+ICAgICAgICB8IDE0ICsrKysrKysrKysrKysrDQo+PiAgIGluY2x1ZGUvYXNtLWdlbmVyaWMvZ3Bp
+by5oICAgICAgICAgICAgICAgfCAgNiAtLS0tLS0NCj4+ICAgNiBmaWxlcyBjaGFuZ2VkLCAxOCBp
+bnNlcnRpb25zKCspLCA5IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVu
+dGF0aW9uL2RyaXZlci1hcGkvZ3Bpby9sZWdhY3kucnN0IGIvRG9jdW1lbnRhdGlvbi9kcml2ZXIt
+YXBpL2dwaW8vbGVnYWN5LnJzdA0KPj4gaW5kZXggOWIxMmVlYjg5MTcwLi41NjZiMDZhNTg0Y2Yg
+MTAwNjQ0DQo+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RyaXZlci1hcGkvZ3Bpby9sZWdhY3kucnN0
+DQo+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RyaXZlci1hcGkvZ3Bpby9sZWdhY3kucnN0DQo+PiBA
+QCAtNTU4LDcgKzU1OCw3IEBAIFBsYXRmb3JtIFN1cHBvcnQNCj4+ICAgVG8gZm9yY2UtZW5hYmxl
+IHRoaXMgZnJhbWV3b3JrLCBhIHBsYXRmb3JtJ3MgS2NvbmZpZyB3aWxsICJzZWxlY3QiIEdQSU9M
+SUIsDQo+PiAgIGVsc2UgaXQgaXMgdXAgdG8gdGhlIHVzZXIgdG8gY29uZmlndXJlIHN1cHBvcnQg
+Zm9yIEdQSU8uDQo+Pg0KPj4gLUl0IG1heSBhbHNvIHByb3ZpZGUgYSBjdXN0b20gdmFsdWUgZm9y
+IEFSQ0hfTlJfR1BJT1MsIHNvIHRoYXQgaXQgYmV0dGVyDQo+PiArSXQgbWF5IGFsc28gcHJvdmlk
+ZSBhIGN1c3RvbSB2YWx1ZSBmb3IgQ09ORklHX0FSQ0hfTlJfR1BJTywgc28gdGhhdCBpdCBiZXR0
+ZXINCj4+ICAgcmVmbGVjdHMgdGhlIG51bWJlciBvZiBHUElPcyBpbiBhY3R1YWwgdXNlIG9uIHRo
+YXQgcGxhdGZvcm0sIHdpdGhvdXQNCj4+ICAgd2FzdGluZyBzdGF0aWMgdGFibGUgc3BhY2UuICAo
+SXQgc2hvdWxkIGNvdW50IGJvdGggYnVpbHQtaW4vU29DIEdQSU9zIGFuZA0KPj4gICBhbHNvIG9u
+ZXMgb24gR1BJTyBleHBhbmRlcnMuDQo+PiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vS2NvbmZpZyBi
+L2FyY2gvYXJtL0tjb25maWcNCj4+IGluZGV4IDUzZTZhMWRhOWFmNS4uZTU1YjY1NjBmZTRmIDEw
+MDY0NA0KPj4gLS0tIGEvYXJjaC9hcm0vS2NvbmZpZw0KPj4gKysrIGIvYXJjaC9hcm0vS2NvbmZp
+Zw0KPj4gQEAgLTE0LDYgKzE0LDcgQEAgY29uZmlnIEFSTQ0KPj4gICAgICAgICAgc2VsZWN0IEFS
+Q0hfSEFTX0tDT1YNCj4+ICAgICAgICAgIHNlbGVjdCBBUkNIX0hBU19NRU1CQVJSSUVSX1NZTkNf
+Q09SRQ0KPj4gICAgICAgICAgc2VsZWN0IEFSQ0hfSEFTX05PTl9PVkVSTEFQUElOR19BRERSRVNT
+X1NQQUNFDQo+PiArICAgICAgIHNlbGVjdCBBUkNIX0hBU19OUl9HUElPDQo+PiAgICAgICAgICBz
+ZWxlY3QgQVJDSF9IQVNfUFRFX1NQRUNJQUwgaWYgQVJNX0xQQUUNCj4+ICAgICAgICAgIHNlbGVj
+dCBBUkNIX0hBU19QSFlTX1RPX0RNQQ0KPj4gICAgICAgICAgc2VsZWN0IEFSQ0hfSEFTX1NFVFVQ
+X0RNQV9PUFMNCj4+IEBAIC0xMjQzLDcgKzEyNDQsNyBAQCBjb25maWcgQVJDSF9OUl9HUElPDQo+
+PiAgICAgICAgICBkZWZhdWx0IDM1MiBpZiBBUkNIX1ZUODUwMA0KPj4gICAgICAgICAgZGVmYXVs
+dCAyODggaWYgQVJDSF9ST0NLQ0hJUA0KPj4gICAgICAgICAgZGVmYXVsdCAyNjQgaWYgTUFDSF9I
+NDcwMA0KPj4gLSAgICAgICBkZWZhdWx0IDANCj4+ICsgICAgICAgZGVmYXVsdCA1MTINCj4gDQo+
+IFRoaXMgbGlzdCBzaG91bGQgYmUga2VwdCBzb3J0ZWQsIG90aGVyd2lzZSB5b3Ugc3RpbGwgZ2V0
+IGUuZy4gdGhlICcyNjQnIGRlZmF1bHQNCj4gdmFsdWUuIElmIHlvdSBoYXZlIGEgR1BJTyBleHRl
+bmRlciB0aGF0IHByb3ZpZGVzIGhhcmRjb2RlZCBHUElPDQo+IG51bWJlcnMgb24geW91ciBtYWNo
+aW5lLCB0aGVyZSBzaG91bGQgYmUgYSBjb25maWd1cmF0aW9uIG9wdGlvbiBmb3INCj4gdGhhdCBk
+cml2ZXIuDQoNCkkgZG9uJ3Qgd2FudCB0byBjaGFuZ2UgdGhlIGJlaGF2aW91ciBmb3IgZXhpc3Rp
+bmcgY29uZmlndXJhdGlvbnMuIElmIHRoZSANCnVuY29uZGl0aW9uYWwgZGVmYXVsdCBnb2VzIGJl
+Zm9yZSBjb25kaXRpb25hbCBvbmVzLCB0aGVuIGFsbCBmb2xsb3dpbmcgDQpkZWZhdWx0cyB3aWxs
+IGJlIGlnbm9yZWQgYW5kIHlvdSdsbCBnZXQgNTEyIGluc3RlYWQgb2YgMjY0IGlmIE1BQ19INDcw
+MCANCmlzIHNlbGVjdGVkIGZvciBpbnN0YW5jZS4NCg0KQXQgdGhlIHRpbWUgYmVpbmcsIHlvdSBn
+ZXQgMCBvbmx5IHdoZW4gbm8gb3RoZXIgZGVmYXVsdCB3YXMgc2VsZWN0ZWQsIA0KdGhlbiB0aGF0
+IDAgaW1wbGllcyA1MTIgaW4gYXNtLWdlbmVyaWMvZ3Bpby5oIGJ5Og0KDQojaWYgZGVmaW5lZChD
+T05GSUdfQVJDSF9OUl9HUElPKSAmJiBDT05GSUdfQVJDSF9OUl9HUElPID4gMA0KI2RlZmluZSBB
+UkNIX05SX0dQSU9TIENPTkZJR19BUkNIX05SX0dQSU8NCiNlbHNlDQojZGVmaW5lIEFSQ0hfTlJf
+R1BJT1MJCTUxMg0KI2VuZGlmDQoNCj4gDQo+IFdoaWNoIGRyaXZlciBpcyBpdCB0aGF0IG5lZWRz
+IGV4dHJhIGhhcmRjb2RlZCBHUElPIG51bWJlcnMgZm9yIHlvdT8NCj4gSGF2ZSB5b3UgdHJpZWQg
+Y29udmVydGluZyBpdCB0byB1c2UgR1BJTyBkZXNjcmlwdG9ycyBzbyB5b3UgZG9uJ3QNCj4gbmVl
+ZCB0aGUgbnVtYmVyIGFzc2lnbm1lbnQ/DQoNCkl0IGlzIGEgbWF4NzMwMSAoZHJpdmVycy9ncGlv
+L2dwaW8tbWF4NzMweC5jKSBidXQgSSBjYW4ndCB1bmRlcnN0YW5kIA0Kd2hhdCB5b3UgbWVhbi4g
+R1BJTyBkZXNjcmlwdG9ycyBhcmUgZm9yIGNvbnN1bWVycywgYXJlbid0IHRoZXkgPw0KDQpEdXJp
+bmcgYm9vdCBJIGdldCA6DQoNClsgICAgMC42MDE5NDJdIGdwaW9jaGlwX2ZpbmRfYmFzZTogZm91
+bmQgbmV3IGJhc2UgYXQgNDk2DQpbICAgIDAuNjA2MzM3XSBncGlvY2hpcF9maW5kX2Jhc2U6IGZv
+dW5kIG5ldyBiYXNlIGF0IDQ2NA0KWyAgICAwLjYxNjQwOF0gZ3Bpb2NoaXBfZmluZF9iYXNlOiBm
+b3VuZCBuZXcgYmFzZSBhdCA0NDgNClsgICAgMC42MjE4MjZdIGdwaW9jaGlwX2ZpbmRfYmFzZTog
+Zm91bmQgbmV3IGJhc2UgYXQgNDMyDQpbICAgIDAuNjI3MjI4XSBncGlvY2hpcF9maW5kX2Jhc2U6
+IGZvdW5kIG5ldyBiYXNlIGF0IDQwMA0KWyAgICAwLjY2MDk4NF0gZ3Bpb2NoaXBfZmluZF9iYXNl
+OiBmb3VuZCBuZXcgYmFzZSBhdCAzODQNClsgICAgMC42Njk2MzFdIGdwaW9jaGlwX2ZpbmRfYmFz
+ZTogZm91bmQgbmV3IGJhc2UgYXQgMzY4DQpbICAgIDAuNjcyNzEzXSBncGlvY2hpcF9maW5kX2Jh
+c2U6IGZvdW5kIG5ldyBiYXNlIGF0IDM1Mg0KWyAgICAwLjY3NTgwNV0gZ3Bpb2NoaXBfZmluZF9i
+YXNlOiBmb3VuZCBuZXcgYmFzZSBhdCAzMzYNClsgICAgMC42Nzg4ODVdIGdwaW9jaGlwX2ZpbmRf
+YmFzZTogZm91bmQgbmV3IGJhc2UgYXQgMzIwDQpbICAgIDAuNjgyMTc4XSBncGlvY2hpcF9maW5k
+X2Jhc2U6IGZvdW5kIG5ldyBiYXNlIGF0IDMwNA0KWyAgICAwLjY4NTI3NV0gZ3Bpb2NoaXBfZmlu
+ZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCAyODgNClsgICAgMC42ODgzNjZdIGdwaW9jaGlwX2Zp
+bmRfYmFzZTogZm91bmQgbmV3IGJhc2UgYXQgMjcyDQpbICAgIDAuNjkxNjc4XSBncGlvY2hpcF9m
+aW5kX2Jhc2U6IGZvdW5kIG5ldyBiYXNlIGF0IDI1Ng0KWyAgICAwLjY5NDc2Ml0gZ3Bpb2NoaXBf
+ZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCAyNDANClsgICAgMC42OTc4NDddIGdwaW9jaGlw
+X2ZpbmRfYmFzZTogZm91bmQgbmV3IGJhc2UgYXQgMjI0DQpbICAgIDAuNzAxNDQxXSBncGlvY2hp
+cF9maW5kX2Jhc2U6IGZvdW5kIG5ldyBiYXNlIGF0IDIwOA0KWyAgICAwLjcwOTQyN10gZ3Bpb2No
+aXBfZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCAxOTINClsgICAgMC43MTM4NTldIGdwaW9j
+aGlwX2ZpbmRfYmFzZTogZm91bmQgbmV3IGJhc2UgYXQgMTc2DQpbICAgIDAuNzE4MDAyXSBncGlv
+Y2hpcF9maW5kX2Jhc2U6IGZvdW5kIG5ldyBiYXNlIGF0IDE2MA0KWyAgICAwLjcyMzMxNl0gZ3Bp
+b2NoaXBfZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCAxNDQNClsgICAgMC43MzExMDVdIGdw
+aW9jaGlwX2ZpbmRfYmFzZTogZm91bmQgbmV3IGJhc2UgYXQgMTI4DQpbICAgIDAuNzM3NDAzXSBn
+cGlvY2hpcF9maW5kX2Jhc2U6IGZvdW5kIG5ldyBiYXNlIGF0IDExMg0KWyAgICAwLjc0MDYxNF0g
+Z3Bpb2NoaXBfZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCA5Ng0KWyAgICAwLjc0MzcwMV0g
+Z3Bpb2NoaXBfZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCA4MA0KWyAgICAwLjc0NzI0Nl0g
+Z3Bpb2NoaXBfZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCA2NA0KWyAgICA0LjY2MzY3N10g
+Z3Bpb2NoaXBfZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCAzNg0KWyAgICA1LjA1MDc5Ml0g
+Z3Bpb2NoaXBfZmluZF9iYXNlOiBmb3VuZCBuZXcgYmFzZSBhdCAxNg0KWyAgICA1LjA2NDg5Ml0g
+Z3Bpb2NoaXBfZmluZF9iYXNlOiBjYW5ub3QgZmluZCBmcmVlIHJhbmdlDQpbICAgIDUuMDk1NTI3
+XSBncGlvY2hpcF9maW5kX2Jhc2U6IGNhbm5vdCBmaW5kIGZyZWUgcmFuZ2UNCg0KZ3Bpb2NoaXBf
+ZmluZF9iYXNlKCkgaXMgY2FsbGVkIGZvciBhbnkgR1BJTyBkcml2ZXIsIGJ5IGdwaW9jaGlwX2Fk
+ZCgpIC8gDQpncGlvY2hpcF9hZGRfZGF0YV93aXRoX2tleSgpLCBhbmQgdGhlcmUgaXMgdGhlIGZv
+bGxvd2luZyBjb21tZW50Og0KDQoJLyoNCgkgKiBUT0RPOiB0aGlzIGFsbG9jYXRlcyBhIExpbnV4
+IEdQSU8gbnVtYmVyIGJhc2UgaW4gdGhlIGdsb2JhbA0KCSAqIEdQSU8gbnVtYmVyc3BhY2UgZm9y
+IHRoaXMgY2hpcC4gSW4gdGhlIGxvbmcgcnVuIHdlIHdhbnQgdG8NCgkgKiBnZXQgKnJpZCogb2Yg
+dGhpcyBudW1iZXJzcGFjZSBhbmQgdXNlIG9ubHkgZGVzY3JpcHRvcnMsIGJ1dA0KCSAqIGl0IG1h
+eSBiZSBhIHBpcGUgZHJlYW0uIEl0IHdpbGwgbm90IGhhcHBlbiBiZWZvcmUgd2UgZ2V0IHJpZA0K
+CSAqIG9mIHRoZSBzeXNmcyBpbnRlcmZhY2UgYW55d2F5cy4NCgkgKi8NCg0KU28sIHdoYXQgZGlk
+IEkgbWlzcyA/DQoNClRoYW5rcw0KQ2hyaXN0b3BoZQ==
