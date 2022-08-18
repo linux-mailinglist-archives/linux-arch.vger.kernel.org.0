@@ -2,361 +2,139 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD32597EFB
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 09:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A28597FB0
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 10:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbiHRHJG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Aug 2022 03:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S243931AbiHRH6p (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Aug 2022 03:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiHRHJF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 03:09:05 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC91B81B00;
-        Thu, 18 Aug 2022 00:09:02 -0700 (PDT)
-Received: from [10.20.42.22] (unknown [10.20.42.22])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx32t05f1iUK4DAA--.14351S3;
-        Thu, 18 Aug 2022 15:08:37 +0800 (CST)
-Subject: Re: [PATCH V2 1/2] LoongArch: Add CPU HWMon platform driver
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Erik Kaneda <erik.kaneda@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20220818042208.2896457-1-chenhuacai@loongson.cn>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <98d716a4-04de-ff32-1bbc-cac576989a87@loongson.cn>
-Date:   Thu, 18 Aug 2022 15:08:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S243963AbiHRH6l (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 03:58:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8D5237E8;
+        Thu, 18 Aug 2022 00:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660809519; x=1692345519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZkYsJyWoE3iamxvXBLDRveMD2fLKX3azr/jNrlg8M1s=;
+  b=IGPiOJsFkQlAldDqmRyCjjOiMB9XB6OrwVDqCxOBVjes+kixoeXS9v2v
+   wji9mwfdZ0Fw5N9EFGaIw0aJ+o2VtWtBec0ijexVo0SKVyv9nsw9UptEt
+   A7Si7f1vekB9wDfQBT4HFXRTeybDbiaPOFIwd/Oi+BClBHFlr0itcXIU+
+   6cUQd/i3ucIsrdzq3HE7oRLjkTC0eLagk7PfIb5waPCrGU90N8jRsb/CS
+   Hwh2fBiZ3UGfhQivet5wmwfWwzY0W6gc4lgFZ/5kkiBTnQmNNa8BIBwnF
+   iWCvu2jDv+t+kYmshwnRATivjEY8URbstsBHkP79oDbl0+rpY6OymioMV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="356686301"
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="356686301"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 00:58:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,245,1654585200"; 
+   d="scan'208";a="607735232"
+Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Aug 2022 00:58:35 -0700
+Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oOaQE-0000Dv-2p;
+        Thu, 18 Aug 2022 07:58:34 +0000
+Date:   Thu, 18 Aug 2022 15:58:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     guoren@kernel.org, xianting.tian@linux.alibaba.com,
+        palmer@dabbelt.com, heiko@sntech.de
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, liaochang1@huawei.com,
+        mick@ics.forth.gr, jszhang@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+Subject: Re: [PATCH 2/2] riscv: kexec: Implement crash_smp_send_stop with
+ percpu crash_save_cpu
+Message-ID: <202208181520.fYQOePu6-lkp@intel.com>
+References: <20220816012701.561435-3-guoren@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20220818042208.2896457-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx32t05f1iUK4DAA--.14351S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3CF47KF47try7WFy7Xr43Wrg_yoWkWr1Upr
-        W5JFWfCF4UW3Z7tw1qva17u3yYvrs0kay7WF9ru34rAFsxXry7GF97A3y5ZrnakFW5XrWa
-        qF15WF4DCa90qaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB0b7Iv0xC_Kw4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-        cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
-        AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
-        6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14
-        v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS07Al
-        zVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW5Wr
-        1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-        8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUqEoXUUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816012701.561435-3-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-I don't think we need the driver any more, we have thermal zone based 
-acpi which implemented more functions include the function here.
+Hi,
 
-And, the driver will conflict with acpi thermal 
-driver(drivers/acpi/thermal.c), which leads to confusion with users.
+I love your patch! Yet something to improve:
 
-On 2022/8/18 下午12:22, Huacai Chen wrote:
-> This add CPU HWMon (temperature sensor) platform driver for Loongson-3.
-> 
-> Tested-by: Xi Ruoyao <xry111@xry111.site>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> V2: Fix build warning reported by lkp.
-> 
->   drivers/platform/Kconfig               |   3 +
->   drivers/platform/Makefile              |   1 +
->   drivers/platform/loongarch/Kconfig     |  26 ++++
->   drivers/platform/loongarch/Makefile    |   1 +
->   drivers/platform/loongarch/cpu_hwmon.c | 194 +++++++++++++++++++++++++
->   5 files changed, 225 insertions(+)
->   create mode 100644 drivers/platform/loongarch/Kconfig
->   create mode 100644 drivers/platform/loongarch/Makefile
->   create mode 100644 drivers/platform/loongarch/cpu_hwmon.c
-> 
-> diff --git a/drivers/platform/Kconfig b/drivers/platform/Kconfig
-> index b437847b6237..9c68e2def2cb 100644
-> --- a/drivers/platform/Kconfig
-> +++ b/drivers/platform/Kconfig
-> @@ -2,6 +2,9 @@
->   if MIPS
->   source "drivers/platform/mips/Kconfig"
->   endif
-> +if LOONGARCH
-> +source "drivers/platform/loongarch/Kconfig"
-> +endif
->   
->   source "drivers/platform/goldfish/Kconfig"
->   
-> diff --git a/drivers/platform/Makefile b/drivers/platform/Makefile
-> index 4de08ef4ec9d..41640172975a 100644
-> --- a/drivers/platform/Makefile
-> +++ b/drivers/platform/Makefile
-> @@ -4,6 +4,7 @@
->   #
->   
->   obj-$(CONFIG_X86)		+= x86/
-> +obj-$(CONFIG_LOONGARCH)		+= loongarch/
->   obj-$(CONFIG_MELLANOX_PLATFORM)	+= mellanox/
->   obj-$(CONFIG_MIPS)		+= mips/
->   obj-$(CONFIG_OLPC_EC)		+= olpc/
-> diff --git a/drivers/platform/loongarch/Kconfig b/drivers/platform/loongarch/Kconfig
-> new file mode 100644
-> index 000000000000..a1542843b0ad
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/Kconfig
-> @@ -0,0 +1,26 @@
-> +#
-> +# LoongArch Platform Specific Drivers
-> +#
-> +
-> +menuconfig LOONGARCH_PLATFORM_DEVICES
-> +	bool "LoongArch Platform Specific Device Drivers"
-> +	default LOONGARCH
-> +	help
-> +	  Say Y here to get to see options for device drivers of various
-> +	  LoongArch platforms, including vendor-specific laptop/desktop
-> +	  extension and hardware monitor drivers. This option itself does
-> +	  not add any kernel code.
-> +
-> +	  If you say N, all options in this submenu will be skipped and disabled.
-> +
-> +if LOONGARCH_PLATFORM_DEVICES
-> +
-> +config CPU_HWMON
-> +	bool "Loongson CPU HWMon Driver"
-> +	depends on MACH_LOONGSON64
-> +	select HWMON
-> +	default y
-> +	help
-> +	  Loongson-3A/3B/3C CPU HWMon (temperature sensor) driver.
-> +
-> +endif # LOONGARCH_PLATFORM_DEVICES
-> diff --git a/drivers/platform/loongarch/Makefile b/drivers/platform/loongarch/Makefile
-> new file mode 100644
-> index 000000000000..8dfd03924c37
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_CPU_HWMON) += cpu_hwmon.o
-> diff --git a/drivers/platform/loongarch/cpu_hwmon.c b/drivers/platform/loongarch/cpu_hwmon.c
-> new file mode 100644
-> index 000000000000..71a462426397
-> --- /dev/null
-> +++ b/drivers/platform/loongarch/cpu_hwmon.c
-> @@ -0,0 +1,194 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Loongson Technology Corporation Limited
-> + */
-> +#include <linux/module.h>
-> +#include <linux/reboot.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/hwmon.h>
-> +#include <linux/hwmon-sysfs.h>
-> +
-> +#include <asm/loongson.h>
-> +
-> +static int nr_packages;
-> +static struct device *cpu_hwmon_dev;
-> +
-> +static int loongson3_cpu_temp(int cpu)
-> +{
-> +	u32 reg;
-> +
-> +	reg = iocsr_read32(LOONGARCH_IOCSR_CPUTEMP) & 0xff;
-> +
-> +	return (int)((s8)reg) * 1000;
-> +}
-> +
-> +static ssize_t cpu_temp_label(struct device *dev,
-> +			struct device_attribute *attr, char *buf)
-> +{
-> +	int id = (to_sensor_dev_attr(attr))->index - 1;
-> +	return sprintf(buf, "CPU %d Temperature\n", id);
-> +}
-> +
-> +static ssize_t get_cpu_temp(struct device *dev,
-> +			struct device_attribute *attr, char *buf)
-> +{
-> +	int id = (to_sensor_dev_attr(attr))->index - 1;
-> +	int value = loongson3_cpu_temp(id);
-> +	return sprintf(buf, "%d\n", value);
-> +}
-> +
-> +static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_cpu_temp, NULL, 1);
-> +static SENSOR_DEVICE_ATTR(temp1_label, 0444, cpu_temp_label, NULL, 1);
-> +static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_cpu_temp, NULL, 2);
-> +static SENSOR_DEVICE_ATTR(temp2_label, 0444, cpu_temp_label, NULL, 2);
-> +static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_cpu_temp, NULL, 3);
-> +static SENSOR_DEVICE_ATTR(temp3_label, 0444, cpu_temp_label, NULL, 3);
-> +static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp4_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp5_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp5_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp6_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp6_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp7_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp7_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp8_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp8_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp9_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp9_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp10_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp10_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp11_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp11_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp12_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp12_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp13_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp13_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp14_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp14_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp15_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp15_label, 0444, cpu_temp_label, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp16_input, 0444, get_cpu_temp, NULL, 4);
-> +static SENSOR_DEVICE_ATTR(temp16_label, 0444, cpu_temp_label, NULL, 4);
-> +
-> +static struct attribute *cpu_hwmon_attributes[] = {
-> +	&sensor_dev_attr_temp1_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp1_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp2_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp3_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp4_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp5_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp6_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp6_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp7_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp7_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp8_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp8_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp9_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp9_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp10_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp10_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp11_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp11_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp12_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp12_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp13_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp13_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp14_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp14_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp15_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp15_label.dev_attr.attr,
-> +	&sensor_dev_attr_temp16_input.dev_attr.attr,
-> +	&sensor_dev_attr_temp16_label.dev_attr.attr,
-> +	NULL
-> +};
-> +static umode_t cpu_hwmon_is_visible(struct kobject *kobj,
-> +				    struct attribute *attr, int i)
-> +{
-> +	int id = i / 2;
-> +
-> +	if (id < nr_packages)
-> +		return attr->mode;
-> +	return 0;
-> +}
-> +
-> +static struct attribute_group cpu_hwmon_group = {
-> +	.attrs = cpu_hwmon_attributes,
-> +	.is_visible = cpu_hwmon_is_visible,
-> +};
-> +
-> +static const struct attribute_group *cpu_hwmon_groups[] = {
-> +	&cpu_hwmon_group,
-> +	NULL
-> +};
-> +
-> +static int cpu_initial_threshold = 72000;
-> +static int cpu_thermal_threshold = 96000;
-> +module_param(cpu_thermal_threshold, int, 0644);
-> +MODULE_PARM_DESC(cpu_thermal_threshold, "cpu thermal threshold (96000 (default))");
-> +
-> +static struct delayed_work thermal_work;
-> +
-> +static void do_thermal_timer(struct work_struct *work)
-> +{
-> +	int i, value, temp_max = 0;
-> +
-> +	for (i=0; i<nr_packages; i++) {
-> +		value = loongson3_cpu_temp(i);
-> +		if (value > temp_max)
-> +			temp_max = value;
-> +	}
-> +
-> +	if (temp_max <= cpu_thermal_threshold)
-> +		schedule_delayed_work(&thermal_work, msecs_to_jiffies(5000));
-> +	else
-> +		orderly_poweroff(true);
-> +}
-> +
-> +static int __init loongson_hwmon_init(void)
-> +{
-> +	int i, value, temp_max = 0;
-> +
-> +	pr_info("Loongson Hwmon Enter...\n");
-> +
-> +	nr_packages = loongson_sysconf.nr_cpus /
-> +		loongson_sysconf.cores_per_package;
-> +
-> +	cpu_hwmon_dev = hwmon_device_register_with_groups(NULL, "cpu_hwmon",
-> +							  NULL, cpu_hwmon_groups);
-> +	if (IS_ERR(cpu_hwmon_dev)) {
-> +		pr_err("hwmon_device_register fail!\n");
-> +		return PTR_ERR(cpu_hwmon_dev);
-> +	}
-> +
-> +	for (i = 0; i < nr_packages; i++) {
-> +		value = loongson3_cpu_temp(i);
-> +		if (value > temp_max)
-> +			temp_max = value;
-> +	}
-> +
-> +	pr_info("Initial CPU temperature is %d (highest).\n", temp_max);
-> +	if (temp_max > cpu_initial_threshold)
-> +		cpu_thermal_threshold += temp_max - cpu_initial_threshold;
-> +
-> +	INIT_DEFERRABLE_WORK(&thermal_work, do_thermal_timer);
-> +	schedule_delayed_work(&thermal_work, msecs_to_jiffies(20000));
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit loongson_hwmon_exit(void)
-> +{
-> +	cancel_delayed_work_sync(&thermal_work);
-> +	hwmon_device_unregister(cpu_hwmon_dev);
-> +}
-> +
-> +module_init(loongson_hwmon_init);
-> +module_exit(loongson_hwmon_exit);
-> +
-> +MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
-> +MODULE_DESCRIPTION("Loongson CPU Hwmon driver");
-> +MODULE_LICENSE("GPL");
-> 
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc1 next-20220818]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+config: riscv-randconfig-r035-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181520.fYQOePu6-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project aed5e3bea138ce581d682158eb61c27b3cfdd6ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+        git checkout 0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> arch/riscv/kernel/machine_kexec.c:217:7: error: call to undeclared function 'smp_crash_stop_failed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           WARN(smp_crash_stop_failed(),
+                ^
+   1 error generated.
+
+
+vim +/smp_crash_stop_failed +217 arch/riscv/kernel/machine_kexec.c
+
+   193	
+   194	/*
+   195	 * machine_kexec - Jump to the loaded kimage
+   196	 *
+   197	 * This function is called by kernel_kexec which is called by the
+   198	 * reboot system call when the reboot cmd is LINUX_REBOOT_CMD_KEXEC,
+   199	 * or by crash_kernel which is called by the kernel's arch-specific
+   200	 * trap handler in case of a kernel panic. It's the final stage of
+   201	 * the kexec process where the pre-loaded kimage is ready to be
+   202	 * executed. We assume at this point that all other harts are
+   203	 * suspended and this hart will be the new boot hart.
+   204	 */
+   205	void __noreturn
+   206	machine_kexec(struct kimage *image)
+   207	{
+   208		struct kimage_arch *internal = &image->arch;
+   209		unsigned long jump_addr = (unsigned long) image->start;
+   210		unsigned long first_ind_entry = (unsigned long) &image->head;
+   211		unsigned long this_cpu_id = __smp_processor_id();
+   212		unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+   213		unsigned long fdt_addr = internal->fdt_addr;
+   214		void *control_code_buffer = page_address(image->control_code_page);
+   215		riscv_kexec_method kexec_method = NULL;
+   216	
+ > 217		WARN(smp_crash_stop_failed(),
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
