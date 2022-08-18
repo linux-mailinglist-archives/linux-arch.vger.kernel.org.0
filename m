@@ -2,150 +2,128 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9972598176
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 12:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6399D598214
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 13:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244078AbiHRK2u (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 18 Aug 2022 06:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S244340AbiHRLNq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Aug 2022 07:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240270AbiHRK2t (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 06:28:49 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A8A62A94;
-        Thu, 18 Aug 2022 03:28:47 -0700 (PDT)
-Received: from mail-ed1-f46.google.com ([209.85.208.46]) by
- mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MS3zP-1nvrkM43tj-00TX4d; Thu, 18 Aug 2022 12:28:46 +0200
-Received: by mail-ed1-f46.google.com with SMTP id c39so1346524edf.0;
-        Thu, 18 Aug 2022 03:28:45 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1sh/PWohU52uIFW0Pd1G1k+IslT33auntxPDPmaajn1A6A3Re7
-        o9hI3IWh2pv3BtlDA1AUovP2/LRDDJsweAIfEhY=
-X-Google-Smtp-Source: AA6agR4nVxi0ePhOH3jGv715TF01WPvmsp/jmRm3vgsUhKI3EMQ2AozSLAvAn7H8pdVEurPhxa9JmAcPXzdugv5Jqa4=
-X-Received: by 2002:a05:6402:3495:b0:43d:d76e:e9ff with SMTP id
- v21-20020a056402349500b0043dd76ee9ffmr1774833edc.227.1660818525606; Thu, 18
- Aug 2022 03:28:45 -0700 (PDT)
+        with ESMTP id S241877AbiHRLNp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 07:13:45 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4648DEBC
+        for <linux-arch@vger.kernel.org>; Thu, 18 Aug 2022 04:13:42 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id gk3so2589737ejb.8
+        for <linux-arch@vger.kernel.org>; Thu, 18 Aug 2022 04:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=w+4+2WtxvO1cqI4byafyu81xZCbJaUxCOsxyNdwBfJI=;
+        b=ObRzc2BAQc6+LGmzsb5py6+CSBSMikoI60uVFFy62jeF+aDW4APgEMWqYHsm7W5OP5
+         2Z7c9h5e24WRMP68wi6PFroY7Q3m7Wtc3l5ZZCy8xLko9Vwyp5xzoFRUJkuDgQVPp+E3
+         4YAtzSn44vk8sAdb1OXUoAjOqHf/wX7bWysuruUsigstR4S4U7H1A2761PZAKGJxkKE7
+         kwg9LFXUHMmx/y9rB0wQEdHRPq6b3KxLbxEmslolKyQckRD3WL2U8gbMuiYc8zil9fCk
+         2HXLEuH0YTozklKWAUoF2e5ng2cDru7fVp+1BBN0aSYvwIdKoNSqcc6w5+3iF7d2B8iL
+         YTbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=w+4+2WtxvO1cqI4byafyu81xZCbJaUxCOsxyNdwBfJI=;
+        b=VMn5iVCF/n7tBQbcC1DZgj1IVmTMflfuMq8MlQtAqClrWJm0Kn02EXMVA1cu9Q9+yD
+         FuWcUt6rEYmHu2FZVaI8QoaOSq8Jog+ah8jMHXFDK7ZRexyT5kNLELZxvRNRw5Lj7RYY
+         Ibr5hSOK/eZp2QQhF7hOwd/Uh0a3RT+5TGZNDnAsY2XMs40vn1fkWW9Rt3c+T40wozBk
+         OTyfLYVLTFhuwJUIinnleqkNpnzI/5n+R3XyxEYOZvdeA/8PZC2AmJ2MqxCOpVrjn9E/
+         rCPAxbk6zK4sZHlfLxq9dFLy7Ot8q17mO1RoR/MgnhM9qHWw3daadRvZASsYjM1IYX4u
+         uJAQ==
+X-Gm-Message-State: ACgBeo0CExDjWpgCXR70g2BcYh3L92nPzcRifnXNzflMAjkdyyVAmGwJ
+        8y8qvCd1Rk9Z+8MVX69yaDxW1VGYDJHjH/vgbb9UHg==
+X-Google-Smtp-Source: AA6agR5zJ/Z0L9Dg2ANnUTeKyjlDNjqAeobhWSyUgHdidQmKPp6qQcplExCAQbfLn2w9QejtrP2j9riElrr6L7TbR8M=
+X-Received: by 2002:a17:907:a055:b0:730:a432:99d3 with SMTP id
+ gz21-20020a170907a05500b00730a43299d3mr1473227ejc.690.1660821221116; Thu, 18
+ Aug 2022 04:13:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220818092059.103884-1-linus.walleij@linaro.org>
-In-Reply-To: <20220818092059.103884-1-linus.walleij@linaro.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 18 Aug 2022 12:28:29 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1x52F8Ya3ShQ+v6x_jANfUsEq0E55u+pOBNaYniRO7cA@mail.gmail.com>
-Message-ID: <CAK8P3a1x52F8Ya3ShQ+v6x_jANfUsEq0E55u+pOBNaYniRO7cA@mail.gmail.com>
-Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-arch@vger.kernel.org
+References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+ <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com> <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+In-Reply-To: <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 18 Aug 2022 13:13:30 +0200
+Message-ID: <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:yhH67E8QPs/WOe6ja2hJ5zvCNK0MOh2F+2giu+l1Ybx5asg6JLi
- xYqL0F5663AAHSKpi9VJITKxtZ9Is3/Md+8U8wSkkmVi+VAF4raihb97wS1ukTbjgZQ2yCe
- wzbIfiEQdOKq8TluasKL1cvT/zqJZ6uPJjug/1Ksa1JayAKa0WWsyj/H5Fdr3Gj/GHivdNG
- 2BgodmNzOawfaaNv42I/g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3qFArbeUwUI=:xmmNCSrwrukE4/3UTHc6bU
- +goF3ngLLVg58yKncLXMgDYcnCbiLggpcAKCESE8Fsp9U7/w9QyNdYJKC83vE37YRT2Esm5f0
- DNZRjevUy8bVa50MvVYWkKph3vXhbeDprQxLhv64ydK5RG5yOyG6mqq36cxyt+fHJ4vgcOrHI
- hJRffFjUyNfOTdeGha9CwgFXDWrzxZmWY/YgVF1SbwBWUE55fb6lXpBgU7M4mwKlt+WYoUTLA
- H9Ts5ky+TC4di/Y4xsi6Ow4lpTyxDFM/7n3nKtw0Zn8NgvFMEfr0227sO/WXsbqCaUT2IULB/
- Oa70Xx9VtEWYRUTa7jKolb+5RvPphfIoxXL4XCN5ONl+N03NdNGA52VFSt6mb1B/mK8yd1kP7
- 61XjXqikZDJZVgSJu42HFEXckKMMfAh7LxFTaOkYGCqvszjsO7b6daZzKBH+ELMoYHN/R5QQM
- dZSDekZ6UPTYkOpFrGnRNarJgg4G5kY9txVAuEZFt8v1GA5MCQJ/HFyROyXnlQKnpitErfSoJ
- 0BXjaAVL40NtHiHhUTIPYyqdkL04vKFKBkofXO5LOyMa0bJ6tFVeikQfc2Nj4DHLeafST822T
- M4szNeskb3/Y8/pVZcMtUIk1R6Sw60nRMmedgUTZ7drZ7CjwaGyyDJ0d0OZfFuE7X9/3A0w4p
- jIBaJfuiM32rZ4Qgbrgx0J2t9B59Ld5k3YExb53cgrhgLSK3izA2cmafbWienXicd3EK4lRil
- JhY3lqZ1LUcSMT0pd7PY/WVWN9f5d8QeCRs2gmbyxnDj0vDXqJ3CJxX2SW79D8aHOa+eNkak+
- /ZTKUoTgm70sZKgwjNNF/hEAoBdYV1QxCjQLlweT6oxHHz80YOEYcq/wyb49Q2kdS42ERjNuv
- 2IU43QHVGxb1X37EBbEQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:20 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+On Thu, Aug 18, 2022 at 11:48 AM Arnd Bergmann <arnd@arndb.de> wrote:
+
+> As I understood, the problem that Christophe ran into is that the
+> dynamic registration of additional gpio chips is broken because
+> it unregisters the chip if the number space is exhausted:
 >
-> This enables the alpha to use <asm-generic/io.h> to fill in the
-> missing (undefined) I/O accessor functions.
+>                 base = gpiochip_find_base(gc->ngpio);
+>                 if (base < 0) {
+>                         ret = base;
+>                         spin_unlock_irqrestore(&gpio_lock, flags);
+>                         goto err_free_label;
+>                 }
 >
-> This is needed if Alpha ever wants to uses CONFIG_REGMAP_MMIO
-> which has been patches to use accelerated _noinc accessors
-> such as readsq/writesq that Alpha, while being a 64bit platform,
-> as of now not yet provide. readq/writeq is however provided
-> so the machine can do 64bit I/O.
->
-> This comes with the requirement that everything the architecture
-> already provides needs to be defined, rather than just being,
-> say, static inline functions.
->
-> Bite the bullet and just provide the definitions and make it work.
+> From the git history, it looks like this error was never handled gracefully
+> even if the intention was to keep going without a number assignment,
+> so there are probably other bugs one runs into after changing this.
 
-I see the only other architectures that don't use asm-generic/io.h
-yet are hexagon, mips, parisc, sh and sparc64. I wonder if it would
-make sense to do this for all of them.
+Hm that should be possible to get rid of altogether? I suppose it is only
+there to satisfy
 
-> Alternative approaches:
->
-> - Implement proper readsq/writesq inline accessors for alpha
+static inline bool gpio_is_valid(int number)
+{
+        return number >= 0 && number < ARCH_NR_GPIOS;
+}
 
-that would be ok with me
+?
 
-> - Rewrite the whole world of io.h to use something like __weak
+If using GPIO descriptors, any descriptor != NULL is valid,
+this one is just used with legacy GPIOs. Maybe we should just
+delete gpio_is_valid() everywhere and then drop the cap?
 
->   instead of relying on defines
-Nak to the use of __weak in anything I maintain, I find this to
-be highly confusing whenever I try to find out what code is actually
-getting called.
+I think there may be systems and users that still depend on GPIO base
+numbers being assigned from ARCH_NR_GPIOS and
+downwards (userspace GPIO numbers in sysfs will also change...)
+otherwise we could assign from 0 and up.
 
-> - Leave regmap MMIO broken on Alpha because none of its drivers
->   use it
+Right now the safest would be:
+Assign from 512 and downwards until we hit 0 then assign
+from something high, like U32_MAX and downward.
 
-no problem for me
+That requires dropping gpio_is_valid() everywhere.
 
-> - Make regmap MMIO depend of !ARCH_ALPHA
+If we wanna be bold, just delete gpio_is_valid() and assign
+bases from 0 and see what happens. But I think that will
+lead to regressions.
 
-This doesn't work, because REGMAP_MMIO is selected by 150
-drivers: unless you mark each of these individually as 'depends
-on !ALPHA', you just get an addition warning from Kconfig
-but it still fails to build.
-
-> The latter seems a bit over the top. First option to implement
-> readsq/writesq seems possible but I cannot test it (no hardware)
-> so using the generic fallbacks seems like a better idea, also in
-> general that will provide future defaults for accelerated defines.
->
-> Leaving regmap MMIO broken or disabling it for Alpha feels bad
-> because it breaks compiler coverage.
-
-I'm not worried about compiler coverage on the less common
-architectures, there is little hope of getting random configurations
-to build because there are too many other problems.
-
-> I'd like this applied to the alpha tree if there is such a
-> thing otherwise maybe Arnd can apply it to the arch generic
-> tree?
-
-Sure, I can do that.
-
-> +/*
-> + * These defines are necessary to use the generic io.h for filling in
-> + * the missing parts of the API contract. This is because the platform
-> + * uses (inline) functions rather than defines and the generic helper
-> + * fills in the undefined.
-> + */
-> +#define virt_to_phys virt_to_phys
-> +#define phys_to_virt phys_to_virt
-> +#define memset_io memset_io
-> +#define memcpy_fromio memcpy_fromio
-
-We tend to have these next to the function definition rather than
-in a single place. Again, I'm not too worried here, just if you end
-up reworking the patch in some form, or doing the same for the
-other architectures that would be the way to do it.
-
-      Arnd
+Yours,
+Linus Walleij
