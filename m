@@ -2,194 +2,147 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DC3598010
-	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 10:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD43359806C
+	for <lists+linux-arch@lfdr.de>; Thu, 18 Aug 2022 10:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236782AbiHRIZk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Thu, 18 Aug 2022 04:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S242703AbiHRIwo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 18 Aug 2022 04:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiHRIZj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 04:25:39 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081F3AE9E9;
-        Thu, 18 Aug 2022 01:25:37 -0700 (PDT)
-Received: from mail-ed1-f41.google.com ([209.85.208.41]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mwfj0-1nRWuo1AqY-00yDhG; Thu, 18 Aug 2022 10:25:36 +0200
-Received: by mail-ed1-f41.google.com with SMTP id b16so958233edd.4;
-        Thu, 18 Aug 2022 01:25:36 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1cN15+F++pNgEo6dbkbN3+J06Dt7mCPymGfERrQjzzAX897EFA
-        dC3biyypPGfZai8tzDLKE4cVRzGazGm59R1IUp8=
-X-Google-Smtp-Source: AA6agR6FvBdJh9Cs4OxvKtiMY3DiW5ICoJPeqRHLQrQQDG+0EvOMe5DnH8e2Ff0iYfqki2M4kbO0/96IJyg8Jxguy2A=
-X-Received: by 2002:a05:6402:51c6:b0:43d:dd3a:196e with SMTP id
- r6-20020a05640251c600b0043ddd3a196emr1408019edd.213.1660811135827; Thu, 18
- Aug 2022 01:25:35 -0700 (PDT)
+        with ESMTP id S235729AbiHRIwm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 18 Aug 2022 04:52:42 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D8FB0288;
+        Thu, 18 Aug 2022 01:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660812762; x=1692348762;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GE+hFY3e8Ezc85/XqYxBVbQOU5pumCSMq2Mr13ztxhE=;
+  b=OG0MLpBs3b1ecnya8oD2SmYADytx7ux8VZPlQwDuWUZOFKATtbPE+QFX
+   xF1pWp2kjrflvW5qSBcnKZcnRG3e/aV9c8Mo8fCUx8iV+dkaqEBDkK67o
+   /CCmL54lWDFVZh74O2tJv01we6CyTodQ8SAIJ59hJ0myBkW2v7y1AlaL/
+   8c9Zxe4TsX7uLUkfNErQy490kJD6Z9hIoQ1L+Rar8ZWZXfSxTN7fpubaE
+   XeMJG5VsQhlwIc7+SrbiteHsrKPburhWfo1D9pknseZAC3lMep/1B+0pR
+   gNGLHIwzmBNnr8n4lpAYLnx7ZgFSSF2YZbRwG6uhSBils9EMiT5n0bWsP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10442"; a="279672290"
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="279672290"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2022 01:52:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,246,1654585200"; 
+   d="scan'208";a="935726838"
+Received: from lkp-server01.sh.intel.com (HELO 6cc724e23301) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 18 Aug 2022 01:52:38 -0700
+Received: from kbuild by 6cc724e23301 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oObGX-0000It-1s;
+        Thu, 18 Aug 2022 08:52:37 +0000
+Date:   Thu, 18 Aug 2022 16:51:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     guoren@kernel.org, xianting.tian@linux.alibaba.com,
+        palmer@dabbelt.com, heiko@sntech.de
+Cc:     kbuild-all@lists.01.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        liaochang1@huawei.com, mick@ics.forth.gr, jszhang@kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        AKASHI Takahiro <takahiro.akashi@linaro.org>
+Subject: Re: [PATCH 2/2] riscv: kexec: Implement crash_smp_send_stop with
+ percpu crash_save_cpu
+Message-ID: <202208181655.NrkPo4lG-lkp@intel.com>
+References: <20220816012701.561435-3-guoren@kernel.org>
 MIME-Version: 1.0
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
- <CAK8P3a3bJVTLZy3HnVvEN8zDgzAMhSUdUkZ5Jd=omNjYJZKA4Q@mail.gmail.com> <6103c908-dc48-40e2-2a89-b0f31e4c55f4@csgroup.eu>
-In-Reply-To: <6103c908-dc48-40e2-2a89-b0f31e4c55f4@csgroup.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 18 Aug 2022 10:25:18 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0RRzpZH6vmd=sC7u5n11ZaK2uoMC9xG7FXXgEy=R8HrA@mail.gmail.com>
-Message-ID: <CAK8P3a0RRzpZH6vmd=sC7u5n11ZaK2uoMC9xG7FXXgEy=R8HrA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:Kk8I+ZYW7qNanVffZc7tgzVb8GEhv6PGi5iLk0ucXbgdhf+04XC
- SUo1RchJb8wpQKcvKcYG6ozWrQ9FeSs4SVOqcE87ZQktfRttDa8kEjmfDE3ojwTiplcLGY/
- 0OGWc8cChXZjCZzYW6yqXGPbmVkFuc58cHZThvjU2uuI02O43CIrVcLiw43qWpbEo1bS/5Z
- JBwy5ToxN07d/afyEUGJw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HYPG9BVU+7A=:Z5M0w8lGOF+X+qPUAd4Lle
- Vz7yAliTuP28+NI4iNgsF+LPOZ9iF6V3nxSj/ZnvmD5IMcBh8nOG/iC72W3k9WyEnO+gFevtP
- yCuSyixA6NjiDVtCTDMQbcVShJwsohUFfGoQ32jfxb2q6ab92HlW5pvNuex8idymyksRnwDjX
- FPCELcqVDZrzye3ewStVwNq9rsd58NTtZalxExlLv5f2tYkRg6BLojrOdW/wV3OLcy0UCS/br
- f0G0JWtQxLhDADMq7DedudWTYXffI3dE/gz4Sw2Xv1tfgFxfSoE+0Bhpz84tHT1EZAOhn2kbc
- rfpwStz0xsYn6uc1482gYYbS3UZehvXWG+hiPGUm63rlVE4c9ZE0gs2TyQ2F3irnHBalLEZi7
- tCFisHF7vmmPRNZlM7uobDwbTP7KL6m2d17Ug/afZXIccF1t84HfDRToF31YoLMnGOcLjWtUo
- 1fTeJUAWj4Wq7HnxzBlE3GPB7lxchfeg0f403+8gH9nG/0YSA40e38eBVlWV0BjafjciTLvvX
- B5tCh1Jo6aj8aBcUkB05ecICAvI3nwXKFAHtiGmfVjSktbwLrAnaxxbgVSGi7wF1gRvy87xLV
- LAH2kso3NElvkgKn3q7Z6wvfPuSAOxqEjVBtsr0aNID3eLoo+lkIw0xrN1OKzJDBB7Jfc4XX/
- 0hTs+dmJc6ku4HJEMzUBMnKDxKQvQBlnkdyHlrdpTW0Ug5Qp7tJYEO8iZaNugqUxiBB7UzIYl
- 5SY89nSnnW/UAH8QosNifTGnrzMf0pB0ELvF4w==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816012701.561435-3-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 8:00 AM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 17/08/2022 à 19:46, Arnd Bergmann a écrit :
-> > On Tue, Aug 9, 2022 at 12:40 PM Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
-> >> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> >> index 53e6a1da9af5..e55b6560fe4f 100644
-> >> --- a/arch/arm/Kconfig
-> >> +++ b/arch/arm/Kconfig
-> >> @@ -14,6 +14,7 @@ config ARM
-> >>          select ARCH_HAS_KCOV
-> >>          select ARCH_HAS_MEMBARRIER_SYNC_CORE
-> >>          select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
-> >> +       select ARCH_HAS_NR_GPIO
-> >>          select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
-> >>          select ARCH_HAS_PHYS_TO_DMA
-> >>          select ARCH_HAS_SETUP_DMA_OPS
-> >> @@ -1243,7 +1244,7 @@ config ARCH_NR_GPIO
-> >>          default 352 if ARCH_VT8500
-> >>          default 288 if ARCH_ROCKCHIP
-> >>          default 264 if MACH_H4700
-> >> -       default 0
-> >> +       default 512
-> >
-> > This list should be kept sorted, otherwise you still get e.g. the '264' default
-> > value. If you have a GPIO extender that provides hardcoded GPIO
-> > numbers on your machine, there should be a configuration option for
-> > that driver.
->
-> I don't want to change the behaviour for existing configurations. If the
-> unconditional default goes before conditional ones, then all following
-> defaults will be ignored and you'll get 512 instead of 264 if MAC_H4700
-> is selected for instance.
->
-> At the time being, you get 0 only when no other default was selected,
-> then that 0 implies 512 in asm-generic/gpio.h by:
->
-> #if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
-> #define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
-> #else
-> #define ARCH_NR_GPIOS           512
-> #endif
+Hi,
 
-Ok, I see what you are doing now. I'm not sure this is actually intentional
-behavior of the current implementation though, my guess would be that
-the 'default 0' was intended as a fallback for platforms that have no
-GPIO providers at all.
+I love your patch! Yet something to improve:
 
-This is of course not entirely appropriate any more as
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.0-rc1 next-20220818]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > Which driver is it that needs extra hardcoded GPIO numbers for you?
-> > Have you tried converting it to use GPIO descriptors so you don't
-> > need the number assignment?
->
-> It is a max7301 (drivers/gpio/gpio-max730x.c) but I can't understand
-> what you mean. GPIO descriptors are for consumers, aren't they ?
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+config: riscv-buildonly-randconfig-r002-20220818 (https://download.01.org/0day-ci/archive/20220818/202208181655.NrkPo4lG-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review guoren-kernel-org/riscv-kexec-Support-crash_save-percpu-and-machine_kexec_mask_interrupts/20220816-144442
+        git checkout 0abdaf7e1f44634e1cee484e3cf01b7e8c851950
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-I meant the consumers, yes.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> During boot I get :
->
-> [    0.601942] gpiochip_find_base: found new base at 496
-> [    0.606337] gpiochip_find_base: found new base at 464
-> [    0.616408] gpiochip_find_base: found new base at 448
-> [    0.621826] gpiochip_find_base: found new base at 432
-> [    0.627228] gpiochip_find_base: found new base at 400
-> [    0.660984] gpiochip_find_base: found new base at 384
-> [    0.669631] gpiochip_find_base: found new base at 368
-> [    0.672713] gpiochip_find_base: found new base at 352
-> [    0.675805] gpiochip_find_base: found new base at 336
-> [    0.678885] gpiochip_find_base: found new base at 320
-> [    0.682178] gpiochip_find_base: found new base at 304
-> [    0.685275] gpiochip_find_base: found new base at 288
-> [    0.688366] gpiochip_find_base: found new base at 272
-> [    0.691678] gpiochip_find_base: found new base at 256
-> [    0.694762] gpiochip_find_base: found new base at 240
-> [    0.697847] gpiochip_find_base: found new base at 224
-> [    0.701441] gpiochip_find_base: found new base at 208
-> [    0.709427] gpiochip_find_base: found new base at 192
-> [    0.713859] gpiochip_find_base: found new base at 176
-> [    0.718002] gpiochip_find_base: found new base at 160
-> [    0.723316] gpiochip_find_base: found new base at 144
-> [    0.731105] gpiochip_find_base: found new base at 128
-> [    0.737403] gpiochip_find_base: found new base at 112
-> [    0.740614] gpiochip_find_base: found new base at 96
-> [    0.743701] gpiochip_find_base: found new base at 80
-> [    0.747246] gpiochip_find_base: found new base at 64
-> [    4.663677] gpiochip_find_base: found new base at 36
-> [    5.050792] gpiochip_find_base: found new base at 16
-> [    5.064892] gpiochip_find_base: cannot find free range
-> [    5.095527] gpiochip_find_base: cannot find free range
->
-> gpiochip_find_base() is called for any GPIO driver, by gpiochip_add() /
-> gpiochip_add_data_with_key(), and there is the following comment:
->
->         /*
->          * TODO: this allocates a Linux GPIO number base in the global
->          * GPIO numberspace for this chip. In the long run we want to
->          * get *rid* of this numberspace and use only descriptors, but
->          * it may be a pipe dream. It will not happen before we get rid
->          * of the sysfs interface anyways.
->          */
->
-> So, what did I miss ?
+All errors (new ones prefixed by >>):
 
-I missed the fact that the registration fails if it runs out of gpio numbers,
-as I was assuming that you could still use the additional gpio chips
-with the descriptor based API as long as all of the consumers on the
-system use that and you don't use CONFIG_GPIO_SYSFS.
+   In file included from arch/riscv/include/asm/bug.h:83,
+                    from include/linux/bug.h:5,
+                    from include/linux/elfcore.h:6,
+                    from include/linux/crash_core.h:6,
+                    from include/linux/kexec.h:18,
+                    from arch/riscv/kernel/machine_kexec.c:7:
+   arch/riscv/kernel/machine_kexec.c: In function 'machine_kexec':
+>> arch/riscv/kernel/machine_kexec.c:217:14: error: implicit declaration of function 'smp_crash_stop_failed' [-Werror=implicit-function-declaration]
+     217 |         WARN(smp_crash_stop_failed(),
+         |              ^~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:174:32: note: in definition of macro 'WARN'
+     174 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   cc1: some warnings being treated as errors
 
-I see that this does not work today, but maybe it wouldn't be too hard to
-change? I see that CONFIG_GPIO_SYSFS continued to move towards
-deprecation after the comment was added in the code, and these days it
-can only be enabled if CONFIG_EXPERT=y is set.
 
-        Arnd
+vim +/smp_crash_stop_failed +217 arch/riscv/kernel/machine_kexec.c
+
+   193	
+   194	/*
+   195	 * machine_kexec - Jump to the loaded kimage
+   196	 *
+   197	 * This function is called by kernel_kexec which is called by the
+   198	 * reboot system call when the reboot cmd is LINUX_REBOOT_CMD_KEXEC,
+   199	 * or by crash_kernel which is called by the kernel's arch-specific
+   200	 * trap handler in case of a kernel panic. It's the final stage of
+   201	 * the kexec process where the pre-loaded kimage is ready to be
+   202	 * executed. We assume at this point that all other harts are
+   203	 * suspended and this hart will be the new boot hart.
+   204	 */
+   205	void __noreturn
+   206	machine_kexec(struct kimage *image)
+   207	{
+   208		struct kimage_arch *internal = &image->arch;
+   209		unsigned long jump_addr = (unsigned long) image->start;
+   210		unsigned long first_ind_entry = (unsigned long) &image->head;
+   211		unsigned long this_cpu_id = __smp_processor_id();
+   212		unsigned long this_hart_id = cpuid_to_hartid_map(this_cpu_id);
+   213		unsigned long fdt_addr = internal->fdt_addr;
+   214		void *control_code_buffer = page_address(image->control_code_page);
+   215		riscv_kexec_method kexec_method = NULL;
+   216	
+ > 217		WARN(smp_crash_stop_failed(),
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
