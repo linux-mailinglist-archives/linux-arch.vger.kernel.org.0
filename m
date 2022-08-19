@@ -2,58 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B445D5996BF
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Aug 2022 10:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE2C599749
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Aug 2022 10:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347231AbiHSIRd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Aug 2022 04:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
+        id S1347724AbiHSI0i (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Aug 2022 04:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347581AbiHSIRH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 04:17:07 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F24B9E1177;
-        Fri, 19 Aug 2022 01:17:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx32v5Rv9isI4EAA--.18159S5;
-        Fri, 19 Aug 2022 16:16:59 +0800 (CST)
-From:   Qing Zhang <zhangqing@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn,
-        zhangqing@loongson.cn
-Subject: [PATCH 9/9] LoongArch: Enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS
-Date:   Fri, 19 Aug 2022 16:16:57 +0800
-Message-Id: <20220819081657.7254-4-zhangqing@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220819081657.7254-1-zhangqing@loongson.cn>
-References: <20220819081657.7254-1-zhangqing@loongson.cn>
+        with ESMTP id S1347591AbiHSI0g (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 04:26:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA8BE2C50;
+        Fri, 19 Aug 2022 01:26:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC33361720;
+        Fri, 19 Aug 2022 08:26:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B64C433B5;
+        Fri, 19 Aug 2022 08:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660897595;
+        bh=RYj2grvMG9j2SUGz8E/c2XrUD5h+FZEHF8YqnB+FTAk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fIdFU/7ZgYJbONIhoQmqexHzedb9Bpj7zZoHo57Ay4NsEXTsXSB8skHujQR9G/8KZ
+         6hm9oNI3t8wFIUS/Xb6OH7Kqm+TeVjXap8q03EUA1Jl0dd7F2xZAkl5Nh8OaD/D0mC
+         i0QSP7gPTz/27V6D1zeeLmUfv6zf6U0JxZu4dDHecVndbI6rP0EhWTP1lCqgh8rlgu
+         txt5TnruH489GkE8Af76LTHh0yzpw0P6+O20IIWgtWR7LKiS94mrodCMYjVKMZkdQe
+         +3ZQkbXbmV+lGyMgyyupScClEYjUhG9sJfc9wnrX89HOdMzkLgBZojDg4tfj86eNoT
+         /uHpKXCIdN4vg==
+Received: by mail-wr1-f48.google.com with SMTP id u14so4316669wrq.9;
+        Fri, 19 Aug 2022 01:26:35 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2IiAOQ8blkDLCJuv9w4Q5IPJwI8jkhL+6thvPX1IWKnSbCaGC0
+        eEU9xk+PGJJNc4ZIWGWT0Ge5yB5tqtm5pZuWwjw=
+X-Google-Smtp-Source: AA6agR7pEY5ldzvjKu98k8qf/5NTMXshYKyJ8n2/LsNzZw3Db43jkXvlCVhaBACaSxkWHn+HNsRgpa4ZR4Q1q2auq/4=
+X-Received: by 2002:adf:ebd2:0:b0:222:cd3f:cf9 with SMTP id
+ v18-20020adfebd2000000b00222cd3f0cf9mr3548689wrn.598.1660897593447; Fri, 19
+ Aug 2022 01:26:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx32v5Rv9isI4EAA--.18159S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF4kZF4fJw1DAFyrZFWfAFb_yoWxKF47pF
-        n3GrWxJa18Ar1jyrW2kr4DGrZ5tF1DJa47Cr17Ar1Duw18Jw4UXrnFgr1UGr4DXa9rXr4r
-        XFn3Kw1fZay5J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmj14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
-        8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2Kfnx
-        nUUI43ZEXa7VUjsa93UUUUU==
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_75_100 autolearn=no
+References: <20220819081145.948016-1-quanyang.wang@windriver.com>
+In-Reply-To: <20220819081145.948016-1-quanyang.wang@windriver.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 19 Aug 2022 10:26:22 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGA7O5g4PgO7jm32ZpaV3V=Hcx17DhcAHuBd_2KZbrPRQ@mail.gmail.com>
+Message-ID: <CAMj1kXGA7O5g4PgO7jm32ZpaV3V=Hcx17DhcAHuBd_2KZbrPRQ@mail.gmail.com>
+Subject: Re: [V2][PATCH] asm-generic: sections: refactor memory_intersects
+To:     quanyang.wang@windriver.com
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,251 +63,72 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Defaults enable CONFIG_KALLSYMS_ALL and CONFIG_DEBUG_FS to convenient
-ftrace tests.
+On Fri, 19 Aug 2022 at 10:12, <quanyang.wang@windriver.com> wrote:
+>
+> From: Quanyang Wang <quanyang.wang@windriver.com>
+>
+> There are two problems with the current code of memory_intersects:
+>
+> First, it doesn't check whether the region (begin, end) falls inside
+> the region (virt, vend), that is (virt < begin && vend > end).
+>
+> The second problem is if vend is equal to begin, it will return true
+> but this is wrong since vend (virt + size) is not the last address of
+> the memory region but (virt + size -1) is. The wrong determination will
+> trigger the misreporting when the function check_for_illegal_area calls
+> memory_intersects to check if the dma region intersects with stext region.
+>
+> The misreporting is as below (stext is at 0x80100000):
+>  WARNING: CPU: 0 PID: 77 at kernel/dma/debug.c:1073 check_for_illegal_area+0x130/0x168
+>  DMA-API: chipidea-usb2 e0002000.usb: device driver maps memory from kernel text or rodata [addr=800f0000] [len=65536]
+>  Modules linked in:
+>  CPU: 1 PID: 77 Comm: usb-storage Not tainted 5.19.0-yocto-standard #5
+>  Hardware name: Xilinx Zynq Platform
+>   unwind_backtrace from show_stack+0x18/0x1c
+>   show_stack from dump_stack_lvl+0x58/0x70
+>   dump_stack_lvl from __warn+0xb0/0x198
+>   __warn from warn_slowpath_fmt+0x80/0xb4
+>   warn_slowpath_fmt from check_for_illegal_area+0x130/0x168
+>   check_for_illegal_area from debug_dma_map_sg+0x94/0x368
+>   debug_dma_map_sg from __dma_map_sg_attrs+0x114/0x128
+>   __dma_map_sg_attrs from dma_map_sg_attrs+0x18/0x24
+>   dma_map_sg_attrs from usb_hcd_map_urb_for_dma+0x250/0x3b4
+>   usb_hcd_map_urb_for_dma from usb_hcd_submit_urb+0x194/0x214
+>   usb_hcd_submit_urb from usb_sg_wait+0xa4/0x118
+>   usb_sg_wait from usb_stor_bulk_transfer_sglist+0xa0/0xec
+>   usb_stor_bulk_transfer_sglist from usb_stor_bulk_srb+0x38/0x70
+>   usb_stor_bulk_srb from usb_stor_Bulk_transport+0x150/0x360
+>   usb_stor_Bulk_transport from usb_stor_invoke_transport+0x38/0x440
+>   usb_stor_invoke_transport from usb_stor_control_thread+0x1e0/0x238
+>   usb_stor_control_thread from kthread+0xf8/0x104
+>   kthread from ret_from_fork+0x14/0x2c
+>
+> Refactor memory_intersects to fix the two problems above.
+>
+> Fixes: 979559362516 ("asm/sections: add helpers to check for section data")
+> Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
+> ---
+> V1 ---> V2:
+> Add the consideration of the condition that one falls inside another
+> which is noticed by Ard.
+> ---
+>  include/asm-generic/sections.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/sections.h b/include/asm-generic/sections.h
+> index d0f7bdd2fdf23..c51b3e7925cdf 100644
+> --- a/include/asm-generic/sections.h
+> +++ b/include/asm-generic/sections.h
+> @@ -110,7 +110,10 @@ static inline bool memory_intersects(void *begin, void *end, void *virt,
+>  {
+>         void *vend = virt + size;
+>
+> -       return (virt >= begin && virt < end) || (vend >= begin && vend < end);
+> +       if (virt < end && vend > begin)
+> +               return true;
+> +
+> +       return false;
+>  }
+>
 
-Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
----
- arch/loongarch/configs/loongson3_defconfig | 60 +++++-----------------
- 1 file changed, 13 insertions(+), 47 deletions(-)
-
-diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
-index 3712552e18d3..c48c31a7286a 100644
---- a/arch/loongarch/configs/loongson3_defconfig
-+++ b/arch/loongarch/configs/loongson3_defconfig
-@@ -33,29 +33,15 @@ CONFIG_SYSFS_DEPRECATED=y
- CONFIG_RELAY=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_EXPERT=y
--CONFIG_USERFAULTFD=y
-+CONFIG_KALLSYMS_ALL=y
- CONFIG_PERF_EVENTS=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_LOONGARCH=y
--CONFIG_64BIT=y
--CONFIG_MACH_LOONGSON64=y
--CONFIG_DMI=y
--CONFIG_EFI=y
--CONFIG_SMP=y
- CONFIG_HOTPLUG_CPU=y
--CONFIG_NR_CPUS=64
- CONFIG_NUMA=y
--CONFIG_PAGE_SIZE_16KB=y
--CONFIG_HZ_250=y
--CONFIG_ACPI=y
- CONFIG_ACPI_SPCR_TABLE=y
--CONFIG_ACPI_HOTPLUG_CPU=y
--CONFIG_ACPI_TAD=y
- CONFIG_ACPI_DOCK=y
- CONFIG_ACPI_IPMI=m
- CONFIG_ACPI_PCI_SLOT=y
- CONFIG_ACPI_HOTPLUG_MEMORY=y
--CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
- CONFIG_EFI_CAPSULE_LOADER=m
- CONFIG_EFI_TEST=m
- CONFIG_MODULES=y
-@@ -68,17 +54,16 @@ CONFIG_PARTITION_ADVANCED=y
- CONFIG_IOSCHED_BFQ=y
- CONFIG_BFQ_GROUP_IOSCHED=y
- CONFIG_BINFMT_MISC=m
-+CONFIG_ZSWAP=y
-+CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD=y
-+CONFIG_Z3FOLD=y
-+# CONFIG_COMPAT_BRK is not set
- CONFIG_MEMORY_HOTPLUG=y
- CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=y
- CONFIG_MEMORY_HOTREMOVE=y
- CONFIG_KSM=y
- CONFIG_TRANSPARENT_HUGEPAGE=y
--CONFIG_ZSWAP=y
--CONFIG_ZSWAP_COMPRESSOR_DEFAULT_ZSTD=y
--CONFIG_ZPOOL=y
--CONFIG_ZBUD=y
--CONFIG_Z3FOLD=y
--CONFIG_ZSMALLOC=m
-+CONFIG_USERFAULTFD=y
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-@@ -108,14 +93,12 @@ CONFIG_NETFILTER=y
- CONFIG_BRIDGE_NETFILTER=m
- CONFIG_NETFILTER_NETLINK_LOG=m
- CONFIG_NF_CONNTRACK=m
--CONFIG_NF_LOG_NETDEV=m
- CONFIG_NF_CONNTRACK_AMANDA=m
- CONFIG_NF_CONNTRACK_FTP=m
- CONFIG_NF_CONNTRACK_NETBIOS_NS=m
- CONFIG_NF_CONNTRACK_TFTP=m
- CONFIG_NF_CT_NETLINK=m
- CONFIG_NF_TABLES=m
--CONFIG_NFT_COUNTER=m
- CONFIG_NFT_CONNLIMIT=m
- CONFIG_NFT_LOG=m
- CONFIG_NFT_LIMIT=m
-@@ -292,7 +275,6 @@ CONFIG_RFKILL=m
- CONFIG_RFKILL_INPUT=y
- CONFIG_NET_9P=y
- CONFIG_NET_9P_VIRTIO=y
--CONFIG_CEPH_LIB=m
- CONFIG_PCIEPORTBUS=y
- CONFIG_HOTPLUG_PCI_PCIE=y
- CONFIG_PCIEAER=y
-@@ -329,7 +311,6 @@ CONFIG_PARPORT_PC_FIFO=y
- CONFIG_ZRAM=m
- CONFIG_ZRAM_DEF_COMP_ZSTD=y
- CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_CRYPTOLOOP=y
- CONFIG_BLK_DEV_NBD=m
- CONFIG_BLK_DEV_RAM=y
- CONFIG_BLK_DEV_RAM_SIZE=8192
-@@ -374,7 +355,6 @@ CONFIG_SCSI_QLOGIC_1280=m
- CONFIG_SCSI_QLA_FC=m
- CONFIG_TCM_QLA2XXX=m
- CONFIG_SCSI_QLA_ISCSI=m
--CONFIG_SCSI_LPFC=m
- CONFIG_SCSI_VIRTIO=m
- CONFIG_ATA=y
- CONFIG_SATA_AHCI=y
-@@ -382,12 +362,7 @@ CONFIG_SATA_AHCI_PLATFORM=y
- CONFIG_PATA_ATIIXP=y
- CONFIG_PATA_PCMCIA=m
- CONFIG_MD=y
--CONFIG_BLK_DEV_MD=m
- CONFIG_MD_LINEAR=m
--CONFIG_MD_RAID0=m
--CONFIG_MD_RAID1=m
--CONFIG_MD_RAID10=m
--CONFIG_MD_RAID456=m
- CONFIG_MD_MULTIPATH=m
- CONFIG_BCACHE=m
- CONFIG_BLK_DEV_DM=y
-@@ -432,13 +407,11 @@ CONFIG_VIRTIO_NET=m
- # CONFIG_NET_VENDOR_ARC is not set
- # CONFIG_NET_VENDOR_ATHEROS is not set
- CONFIG_BNX2=y
--# CONFIG_NET_VENDOR_BROCADE is not set
- # CONFIG_NET_VENDOR_CAVIUM is not set
- CONFIG_CHELSIO_T1=m
- CONFIG_CHELSIO_T1_1G=y
- CONFIG_CHELSIO_T3=m
- CONFIG_CHELSIO_T4=m
--# CONFIG_NET_VENDOR_CIRRUS is not set
- # CONFIG_NET_VENDOR_CISCO is not set
- # CONFIG_NET_VENDOR_DEC is not set
- # CONFIG_NET_VENDOR_DLINK is not set
-@@ -459,6 +432,7 @@ CONFIG_IXGBE=y
- # CONFIG_NET_VENDOR_NVIDIA is not set
- # CONFIG_NET_VENDOR_OKI is not set
- # CONFIG_NET_VENDOR_QLOGIC is not set
-+# CONFIG_NET_VENDOR_BROCADE is not set
- # CONFIG_NET_VENDOR_QUALCOMM is not set
- # CONFIG_NET_VENDOR_RDC is not set
- CONFIG_8139CP=m
-@@ -468,9 +442,9 @@ CONFIG_R8169=y
- # CONFIG_NET_VENDOR_ROCKER is not set
- # CONFIG_NET_VENDOR_SAMSUNG is not set
- # CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SOLARFLARE is not set
- # CONFIG_NET_VENDOR_SILAN is not set
- # CONFIG_NET_VENDOR_SIS is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
- # CONFIG_NET_VENDOR_SMSC is not set
- CONFIG_STMMAC_ETH=y
- # CONFIG_NET_VENDOR_SUN is not set
-@@ -505,7 +479,6 @@ CONFIG_ATH9K_HTC=m
- CONFIG_IWLWIFI=m
- CONFIG_IWLDVM=m
- CONFIG_IWLMVM=m
--CONFIG_IWLWIFI_BCAST_FILTERING=y
- CONFIG_HOSTAP=m
- CONFIG_MT7601U=m
- CONFIG_RT2X00=m
-@@ -556,7 +529,6 @@ CONFIG_I2C_PIIX4=y
- CONFIG_I2C_GPIO=y
- CONFIG_SPI=y
- CONFIG_GPIO_SYSFS=y
--CONFIG_GPIO_LOONGSON=y
- CONFIG_SENSORS_LM75=m
- CONFIG_SENSORS_LM93=m
- CONFIG_SENSORS_W83795=m
-@@ -564,16 +536,16 @@ CONFIG_SENSORS_W83627HF=m
- CONFIG_RC_CORE=m
- CONFIG_LIRC=y
- CONFIG_RC_DECODERS=y
-+CONFIG_IR_IMON_DECODER=m
-+CONFIG_IR_JVC_DECODER=m
-+CONFIG_IR_MCE_KBD_DECODER=m
- CONFIG_IR_NEC_DECODER=m
- CONFIG_IR_RC5_DECODER=m
- CONFIG_IR_RC6_DECODER=m
--CONFIG_IR_JVC_DECODER=m
--CONFIG_IR_SONY_DECODER=m
- CONFIG_IR_SANYO_DECODER=m
- CONFIG_IR_SHARP_DECODER=m
--CONFIG_IR_MCE_KBD_DECODER=m
-+CONFIG_IR_SONY_DECODER=m
- CONFIG_IR_XMP_DECODER=m
--CONFIG_IR_IMON_DECODER=m
- CONFIG_MEDIA_SUPPORT=m
- CONFIG_MEDIA_USB_SUPPORT=y
- CONFIG_USB_VIDEO_CLASS=m
-@@ -593,7 +565,6 @@ CONFIG_DRM_VIRTIO_GPU=m
- CONFIG_FB=y
- CONFIG_FB_EFI=y
- CONFIG_FB_RADEON=y
--CONFIG_LCD_PLATFORM=m
- # CONFIG_VGA_CONSOLE is not set
- CONFIG_FRAMEBUFFER_CONSOLE=y
- CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
-@@ -602,7 +573,6 @@ CONFIG_SOUND=y
- CONFIG_SND=y
- CONFIG_SND_SEQUENCER=m
- CONFIG_SND_SEQ_DUMMY=m
--# CONFIG_SND_ISA is not set
- CONFIG_SND_BT87X=m
- CONFIG_SND_BT87X_OVERCLOCK=y
- CONFIG_SND_HDA_INTEL=y
-@@ -628,7 +598,6 @@ CONFIG_HID_MULTITOUCH=m
- CONFIG_HID_SUNPLUS=m
- CONFIG_USB_HIDDEV=y
- CONFIG_USB=y
--CONFIG_USB_OTG=y
- CONFIG_USB_MON=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_EHCI_HCD=y
-@@ -688,7 +657,6 @@ CONFIG_COMEDI_NI_PCIDIO=m
- CONFIG_COMEDI_NI_PCIMIO=m
- CONFIG_STAGING=y
- CONFIG_R8188EU=m
--# CONFIG_88EU_AP_MODE is not set
- CONFIG_PM_DEVFREQ=y
- CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=y
- CONFIG_DEVFREQ_GOV_PERFORMANCE=y
-@@ -770,16 +738,13 @@ CONFIG_CRYPTO_USER=m
- CONFIG_CRYPTO_PCRYPT=m
- CONFIG_CRYPTO_CRYPTD=m
- CONFIG_CRYPTO_CHACHA20POLY1305=m
--CONFIG_CRYPTO_HMAC=y
- CONFIG_CRYPTO_VMAC=m
--CONFIG_CRYPTO_TGR192=m
- CONFIG_CRYPTO_WP512=m
- CONFIG_CRYPTO_ANUBIS=m
- CONFIG_CRYPTO_BLOWFISH=m
- CONFIG_CRYPTO_CAST5=m
- CONFIG_CRYPTO_CAST6=m
- CONFIG_CRYPTO_KHAZAD=m
--CONFIG_CRYPTO_SALSA20=m
- CONFIG_CRYPTO_SEED=m
- CONFIG_CRYPTO_SERPENT=m
- CONFIG_CRYPTO_TEA=m
-@@ -797,6 +762,7 @@ CONFIG_CRYPTO_DEV_VIRTIO=m
- CONFIG_PRINTK_TIME=y
- CONFIG_STRIP_ASM_SYMS=y
- CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
- # CONFIG_SCHED_DEBUG is not set
- CONFIG_SCHEDSTATS=y
- # CONFIG_DEBUG_PREEMPT is not set
--- 
-2.36.1
-
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
