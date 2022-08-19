@@ -2,704 +2,426 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405155996F0
-	for <lists+linux-arch@lfdr.de>; Fri, 19 Aug 2022 10:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39455996E6
+	for <lists+linux-arch@lfdr.de>; Fri, 19 Aug 2022 10:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346427AbiHSIQE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Aug 2022 04:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50764 "EHLO
+        id S1347296AbiHSIRf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Aug 2022 04:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347769AbiHSIPk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 04:15:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAB0E0FE6;
-        Fri, 19 Aug 2022 01:15:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0DBA616A9;
-        Fri, 19 Aug 2022 08:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF53C4347C;
-        Fri, 19 Aug 2022 08:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660896931;
-        bh=vQKjgQ5R/uBlB6Rbr/YT2T6unWF8tWbtI+K8KA+QBUI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mXwEFJ4zea47Ox/xghw6cC+bTMT299SDPneeBlKLBDTrnEmx8YUSAnrmW9MetQKtH
-         jPySc0H51BlB6Og339ar1t6LNgyJzqePnFIB9Y+cm6pCOKGsqtHZ92wjXeC+shH2bf
-         ZL0wy+glGO5I6MPIKWkfSelW3O82zdVt+kVH18qRViNLO2FdHTbhs8PuOI1THi77l7
-         uUAxNzRrg2uhA8YNgQmCEljgMU7yzVnjEFHHShghLjq99W3QYh6KBtJdCWYOG+WLvJ
-         kV0UPeHmxXyfS8m/21t7WiPfz3qyMq4L91mRyqaVzRgKDzKyKzvNKr0om32OrxvoZd
-         8sfRM6ykfIrBg==
-Received: by mail-vk1-f170.google.com with SMTP id bj43so1904671vkb.4;
-        Fri, 19 Aug 2022 01:15:30 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0AVS3upyllajnRio2f7PPXvlDyjtUndRssUk4hWm021te995jW
-        Vx9o5l3JHwAixixfJcMhDYoRlatQpCNqDZbnVLo=
-X-Google-Smtp-Source: AA6agR7BLUMJ9geJN5BMu6R+AL9o4ppVCLcorbLZYz3GpRTzg3Ilr4y7klQQDc4dh0zWViNs8eZG8rrKY8h5VSmq7KA=
-X-Received: by 2002:a1f:b248:0:b0:377:aa0c:941 with SMTP id
- b69-20020a1fb248000000b00377aa0c0941mr2741692vkf.37.1660896929764; Fri, 19
- Aug 2022 01:15:29 -0700 (PDT)
+        with ESMTP id S1347582AbiHSIRH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 04:17:07 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 109E5E190D;
+        Fri, 19 Aug 2022 01:17:03 -0700 (PDT)
+Received: from localhost.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx32v5Rv9isI4EAA--.18159S2;
+        Fri, 19 Aug 2022 16:16:57 +0800 (CST)
+From:   Qing Zhang <zhangqing@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn,
+        zhangqing@loongson.cn
+Subject: [PATCH 6/9] LoongArch: modules/ftrace: Initialize PLT at load time
+Date:   Fri, 19 Aug 2022 16:16:54 +0800
+Message-Id: <20220819081657.7254-1-zhangqing@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220818030707.2836607-1-chenhuacai@loongson.cn> <CAMj1kXEVNdgY6mO-e=v16Q95DRnzYy3c9zLH1nhx4VYqjWgxPA@mail.gmail.com>
-In-Reply-To: <CAMj1kXEVNdgY6mO-e=v16Q95DRnzYy3c9zLH1nhx4VYqjWgxPA@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 19 Aug 2022 16:15:17 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7R8ezSFr-OXxVFhDoiGO7svZHkYtOVG+aD_qmx_qtiJA@mail.gmail.com>
-Message-ID: <CAAhV-H7R8ezSFr-OXxVFhDoiGO7svZHkYtOVG+aD_qmx_qtiJA@mail.gmail.com>
-Subject: Re: [PATCH V2] LoongArch: Add efistub booting support
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Xi Ruoyao <xry111@xry111.site>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bx32v5Rv9isI4EAA--.18159S2
+X-Coremail-Antispam: 1UD129KBjvJXoWfGF47Jr13WF1UJFW8ZF17GFg_yoWkXrWkpF
+        9Fyrn5GrWUGrn3WFW09wn8ur1UWFZ7W342gFW7G34akr42qry5ZF10kr1qvFyFqw4DWFWS
+        gayfur4UuFWUXw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+        8cxan2IY04v7MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+        42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjfU0yxRDUUUU
+X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Ard,
+To Implement ftrace trampiones through plt entry.
 
-On Fri, Aug 19, 2022 at 1:04 AM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 18 Aug 2022 at 05:07, Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > This patch adds efistub booting support, which is the standard UEFI boot
-> > protocol for us to use.
-> >
-> > We use generic efistub, which means we can pass boot information (i.e.,
-> > system table, memory map, kernel command line, initrd) via a light FDT
-> > and drop a lot of non-standard code.
-> >
-> > We use a flat mapping to map the efi runtime in the kernel's address
-> > space. In efi, VA = PA; in kernel, VA = PA + PAGE_OFFSET. As a result,
-> > flat mapping is not identity mapping, SetVirtualAddressMap() is still
-> > needed for the efi runtime.
-> >
-> > Tested-by: Xi Ruoyao <xry111@xry111.site>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> > V1 --> V2:
-> > 1, Call SetVirtualAddressMap() in stub;
-> > 2, Use core kernel data directly in alloc_screen_info();
-> > 3, Remove the magic number in MS-DOS header;
-> > 4, Disable EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER;
-> > 5, Some other small changes suggested by Ard Biesheuvel.
-> >
-> >  arch/loongarch/Kconfig                        |  9 ++
-> >  arch/loongarch/Makefile                       |  7 +-
-> >  arch/loongarch/boot/Makefile                  |  8 +-
-> >  arch/loongarch/include/asm/efi.h              | 10 +-
-> >  arch/loongarch/kernel/efi-header.S            | 99 +++++++++++++++++++
-> >  arch/loongarch/kernel/efi.c                   |  3 +
-> >  arch/loongarch/kernel/head.S                  | 20 ++++
-> >  arch/loongarch/kernel/image-vars.h            | 30 ++++++
-> >  arch/loongarch/kernel/setup.c                 | 12 +--
-> >  arch/loongarch/kernel/vmlinux.lds.S           |  1 +
-> >  drivers/firmware/efi/Kconfig                  |  4 +-
-> >  drivers/firmware/efi/libstub/Makefile         | 10 ++
-> >  drivers/firmware/efi/libstub/efi-stub.c       | 31 ++++--
-> >  drivers/firmware/efi/libstub/loongarch-stub.c | 60 +++++++++++
-> >  include/linux/pe.h                            |  2 +
-> >  15 files changed, 282 insertions(+), 24 deletions(-)
-> >  create mode 100644 arch/loongarch/kernel/efi-header.S
-> >  create mode 100644 arch/loongarch/kernel/image-vars.h
-> >  create mode 100644 drivers/firmware/efi/libstub/loongarch-stub.c
-> >
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > index 9478f9646fa5..4cb412a82afa 100644
-> > --- a/arch/loongarch/Kconfig
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -324,6 +324,15 @@ config EFI
-> >           This enables the kernel to use EFI runtime services that are
-> >           available (such as the EFI variable services).
-> >
-> > +config EFI_STUB
-> > +       bool "EFI boot stub support"
-> > +       default y
-> > +       depends on EFI
-> > +       select EFI_GENERIC_STUB
-> > +       help
-> > +         This kernel feature allows the kernel to be loaded directly by
-> > +         EFI firmware without the use of a bootloader.
-> > +
-> >  config SMP
-> >         bool "Multi-Processing support"
-> >         help
-> > diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-> > index ec3de6191276..2bd0a574ed73 100644
-> > --- a/arch/loongarch/Makefile
-> > +++ b/arch/loongarch/Makefile
-> > @@ -7,7 +7,11 @@ boot   := arch/loongarch/boot
-> >
-> >  KBUILD_DEFCONFIG := loongson3_defconfig
-> >
-> > -KBUILD_IMAGE   = $(boot)/vmlinux
-> > +ifndef CONFIG_EFI_STUB
-> > +KBUILD_IMAGE   = $(boot)/vmlinux.elf
-> > +else
-> > +KBUILD_IMAGE   = $(boot)/vmlinux.efi
-> > +endif
-> >
->
-> Nit: I am not 100% whether it matters or not, but all other
-> architectures use := for these assignments.
->
-> Also, in order to be able to use vmlinux.elf or vmlinux.efi as a make
-> target directly, other architectures seem to use something like
->
-> all:    $(notdir $(KBUILD_IMAGE))
->
-> vmlinux.elf vmlinux.efi: vmlinux
->         $(Q)$(MAKE) $(build)=$(boot) $(bootvars-y) $(boot)/$@
->
-> Adopting this will make it easier to wire up the generic zboot support too.
-OK, I will change the Makefile as you suggested.
+Tested by forcing ftrace_make_call() to use the module PLT, and then
+loading up a module after setting up ftrace with:
 
->
-> >  #
-> >  # Select the object file format to substitute into the linker script.
-> > @@ -75,6 +79,7 @@ endif
-> >  head-y := arch/loongarch/kernel/head.o
-> >
-> >  libs-y += arch/loongarch/lib/
-> > +libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
-> >
-> >  ifeq ($(KBUILD_EXTMOD),)
-> >  prepare: vdso_prepare
-> > diff --git a/arch/loongarch/boot/Makefile b/arch/loongarch/boot/Makefile
-> > index 0125b17edc98..fecf34f50e56 100644
-> > --- a/arch/loongarch/boot/Makefile
-> > +++ b/arch/loongarch/boot/Makefile
-> > @@ -8,9 +8,13 @@ drop-sections := .comment .note .options .note.gnu.build-id
-> >  strip-flags   := $(addprefix --remove-section=,$(drop-sections)) -S
-> >  OBJCOPYFLAGS_vmlinux.efi := -O binary $(strip-flags)
-> >
-> > -targets := vmlinux
-> >  quiet_cmd_strip = STRIP          $@
-> >        cmd_strip = $(STRIP) -s -o $@ $<
-> >
-> > -$(obj)/vmlinux: vmlinux FORCE
-> > +targets := vmlinux.elf
-> > +$(obj)/vmlinux.elf: vmlinux FORCE
-> >         $(call if_changed,strip)
-> > +
-> > +targets += vmlinux.efi
-> > +$(obj)/vmlinux.efi: vmlinux FORCE
-> > +       $(call if_changed,objcopy)
-> > diff --git a/arch/loongarch/include/asm/efi.h b/arch/loongarch/include/asm/efi.h
-> > index 9d44c6948be1..c7507a240f30 100644
-> > --- a/arch/loongarch/include/asm/efi.h
-> > +++ b/arch/loongarch/include/asm/efi.h
-> > @@ -18,8 +18,14 @@ void efifb_setup_from_dmi(struct screen_info *si, const char *opt);
-> >
-> >  #define EFI_ALLOC_ALIGN                SZ_64K
-> >
-> > -struct screen_info *alloc_screen_info(void);
-> > -void free_screen_info(struct screen_info *si);
-> > +static inline struct screen_info *alloc_screen_info(void)
-> > +{
-> > +       return &screen_info;
-> > +}
-> > +
-> > +static inline void free_screen_info(struct screen_info *si)
-> > +{
-> > +}
-> >
-> >  static inline unsigned long efi_get_max_initrd_addr(unsigned long image_addr)
-> >  {
-> > diff --git a/arch/loongarch/kernel/efi-header.S b/arch/loongarch/kernel/efi-header.S
-> > new file mode 100644
-> > index 000000000000..8c1d229a2afa
-> > --- /dev/null
-> > +++ b/arch/loongarch/kernel/efi-header.S
-> > @@ -0,0 +1,99 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +
-> > +#include <linux/pe.h>
-> > +#include <linux/sizes.h>
-> > +
-> > +       .macro  __EFI_PE_HEADER
-> > +       .long   PE_MAGIC
-> > +.Lcoff_header:
-> > +       .short  IMAGE_FILE_MACHINE_LOONGARCH64          /* Machine */
-> > +       .short  .Lsection_count                         /* NumberOfSections */
-> > +       .long   0                                       /* TimeDateStamp */
-> > +       .long   0                                       /* PointerToSymbolTable */
-> > +       .long   0                                       /* NumberOfSymbols */
-> > +       .short  .Lsection_table - .Loptional_header     /* SizeOfOptionalHeader */
-> > +       .short  IMAGE_FILE_DEBUG_STRIPPED | \
-> > +               IMAGE_FILE_EXECUTABLE_IMAGE | \
-> > +               IMAGE_FILE_LINE_NUMS_STRIPPED           /* Characteristics */
-> > +
-> > +.Loptional_header:
-> > +       .short  PE_OPT_MAGIC_PE32PLUS                   /* PE32+ format */
-> > +       .byte   0x02                                    /* MajorLinkerVersion */
-> > +       .byte   0x14                                    /* MinorLinkerVersion */
-> > +       .long   __inittext_end - .Lefi_header_end       /* SizeOfCode */
-> > +       .long   _end - __initdata_begin                 /* SizeOfInitializedData */
-> > +       .long   0                                       /* SizeOfUninitializedData */
-> > +       .long   __efistub_efi_pe_entry - _head          /* AddressOfEntryPoint */
-> > +       .long   .Lefi_header_end - _head                /* BaseOfCode */
-> > +
-> > +.Lextra_header_fields:
-> > +       .quad   0                                       /* ImageBase */
-> > +       .long   PECOFF_SEGMENT_ALIGN                    /* SectionAlignment */
-> > +       .long   PECOFF_FILE_ALIGN                       /* FileAlignment */
-> > +       .short  0                                       /* MajorOperatingSystemVersion */
-> > +       .short  0                                       /* MinorOperatingSystemVersion */
-> > +       .short  LINUX_EFISTUB_MAJOR_VERSION             /* MajorImageVersion */
-> > +       .short  LINUX_EFISTUB_MINOR_VERSION             /* MinorImageVersion */
-> > +       .short  0                                       /* MajorSubsystemVersion */
-> > +       .short  0                                       /* MinorSubsystemVersion */
-> > +       .long   0                                       /* Win32VersionValue */
-> > +
-> > +       .long   _end - _head                            /* SizeOfImage */
-> > +
-> > +       /* Everything before the kernel image is considered part of the header */
-> > +       .long   .Lefi_header_end - _head                /* SizeOfHeaders */
-> > +       .long   0                                       /* CheckSum */
-> > +       .short  IMAGE_SUBSYSTEM_EFI_APPLICATION         /* Subsystem */
-> > +       .short  0                                       /* DllCharacteristics */
-> > +       .quad   0                                       /* SizeOfStackReserve */
-> > +       .quad   0                                       /* SizeOfStackCommit */
-> > +       .quad   0                                       /* SizeOfHeapReserve */
-> > +       .quad   0                                       /* SizeOfHeapCommit */
-> > +       .long   0                                       /* LoaderFlags */
-> > +       .long   (.Lsection_table - .) / 8               /* NumberOfRvaAndSizes */
-> > +
-> > +       .quad   0                                       /* ExportTable */
-> > +       .quad   0                                       /* ImportTable */
-> > +       .quad   0                                       /* ResourceTable */
-> > +       .quad   0                                       /* ExceptionTable */
-> > +       .quad   0                                       /* CertificationTable */
-> > +       .quad   0                                       /* BaseRelocationTable */
-> > +
-> > +       /* Section table */
-> > +.Lsection_table:
-> > +       .ascii  ".text\0\0\0"
-> > +       .long   __inittext_end - .Lefi_header_end       /* VirtualSize */
-> > +       .long   .Lefi_header_end - _head                /* VirtualAddress */
-> > +       .long   __inittext_end - .Lefi_header_end       /* SizeOfRawData */
-> > +       .long   .Lefi_header_end - _head                /* PointerToRawData */
-> > +
-> > +       .long   0                                       /* PointerToRelocations */
-> > +       .long   0                                       /* PointerToLineNumbers */
-> > +       .short  0                                       /* NumberOfRelocations */
-> > +       .short  0                                       /* NumberOfLineNumbers */
-> > +       .long   IMAGE_SCN_CNT_CODE | \
-> > +               IMAGE_SCN_MEM_READ | \
-> > +               IMAGE_SCN_MEM_EXECUTE                   /* Characteristics */
-> > +
-> > +       .ascii  ".data\0\0\0"
-> > +       .long   _end - __initdata_begin                 /* VirtualSize */
-> > +       .long   __initdata_begin - _head                /* VirtualAddress */
-> > +       .long   _edata - __initdata_begin               /* SizeOfRawData */
-> > +       .long   __initdata_begin - _head                /* PointerToRawData */
-> > +
-> > +       .long   0                                       /* PointerToRelocations */
-> > +       .long   0                                       /* PointerToLineNumbers */
-> > +       .short  0                                       /* NumberOfRelocations */
-> > +       .short  0                                       /* NumberOfLineNumbers */
-> > +       .long   IMAGE_SCN_CNT_INITIALIZED_DATA | \
-> > +               IMAGE_SCN_MEM_READ | \
-> > +               IMAGE_SCN_MEM_WRITE                     /* Characteristics */
-> > +
-> > +       .set    .Lsection_count, (. - .Lsection_table) / 40
-> > +
-> > +       .balign 0x10000                                 /* PECOFF_SEGMENT_ALIGN */
-> > +.Lefi_header_end:
-> > +       .endm
-> > diff --git a/arch/loongarch/kernel/efi.c b/arch/loongarch/kernel/efi.c
-> > index a50b60c587fa..1f1f755fb425 100644
-> > --- a/arch/loongarch/kernel/efi.c
-> > +++ b/arch/loongarch/kernel/efi.c
-> > @@ -69,4 +69,7 @@ void __init efi_init(void)
-> >         config_tables = early_memremap(efi_config_table, efi_nr_tables * size);
-> >         efi_config_parse_tables(config_tables, efi_systab->nr_tables, arch_tables);
-> >         early_memunmap(config_tables, efi_nr_tables * size);
-> > +
-> > +       if (screen_info.orig_video_isVGA == VIDEO_TYPE_EFI)
-> > +               memblock_reserve(screen_info.lfb_base, screen_info.lfb_size);
-> >  }
-> > diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-> > index c60eb66793e3..01bac62a6442 100644
-> > --- a/arch/loongarch/kernel/head.S
-> > +++ b/arch/loongarch/kernel/head.S
-> > @@ -12,6 +12,26 @@
-> >  #include <asm/loongarch.h>
-> >  #include <asm/stackframe.h>
-> >
-> > +#ifdef CONFIG_EFI_STUB
-> > +
-> > +#include "efi-header.S"
-> > +
-> > +       __HEAD
-> > +
-> > +_head:
-> > +       .word   MZ_MAGIC                /* "MZ", MS-DOS header */
-> > +       .org    0x3c                    /* 0x04 ~ 0x3b reserved */
-> > +       .long   pe_header - _head       /* Offset to the PE header */
-> > +
-> > +pe_header:
-> > +       __EFI_PE_HEADER
-> > +
-> > +SYM_DATA(kernel_asize, .long _end - _text);
-> > +SYM_DATA(kernel_fsize, .long _edata - _text);
-> > +SYM_DATA(kernel_offset, .long kernel_offset - _text);
-> > +
->
-> These are a bit nasty: could you perhaps add a comment that explains
-> why exactly we need to emit these values like this? Using
-> kernel_offset with an offset to itself just to be able to refer to
-> _text from loongarch-stub.c is especially horrid, so bonus points if
-> you can find a better way to do that, preferably without asm
-> variables.
-This is due to a link problem. Our vmlinux is not PIC, but the stub is
-PIC, then the stub code cannot access _text and other symbols defined
-in vmlinux.lds.S, because the link address is too far for the stub.
+| echo ":mod:<module-name>" > set_ftrace_filter;
+| echo function > current_tracer;
+| modprobe <module-name>
 
->
-> > +#endif
-> > +
-> >         __REF
-> >
-> >  SYM_CODE_START(kernel_entry)                   # kernel entry point
-> > diff --git a/arch/loongarch/kernel/image-vars.h b/arch/loongarch/kernel/image-vars.h
-> > new file mode 100644
-> > index 000000000000..c901ebb903f2
-> > --- /dev/null
-> > +++ b/arch/loongarch/kernel/image-vars.h
-> > @@ -0,0 +1,30 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +/*
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +#ifndef __LOONGARCH_KERNEL_IMAGE_VARS_H
-> > +#define __LOONGARCH_KERNEL_IMAGE_VARS_H
-> > +
-> > +#ifdef CONFIG_EFI_STUB
-> > +
-> > +__efistub_memcmp               = memcmp;
-> > +__efistub_memchr               = memchr;
-> > +__efistub_memcpy               = memcpy;
-> > +__efistub_memmove              = memmove;
-> > +__efistub_memset               = memset;
-> > +__efistub_strcat               = strcat;
-> > +__efistub_strcmp               = strcmp;
-> > +__efistub_strlen               = strlen;
-> > +__efistub_strncat              = strncat;
-> > +__efistub_strnstr              = strnstr;
-> > +__efistub_strnlen              = strnlen;
-> > +__efistub_strrchr              = strrchr;
-> > +__efistub_kernel_entry         = kernel_entry;
-> > +__efistub_kernel_asize         = kernel_asize;
-> > +__efistub_kernel_fsize         = kernel_fsize;
-> > +__efistub_kernel_offset                = kernel_offset;
-> > +__efistub_screen_info          = screen_info;
-> > +
-> > +#endif
-> > +
-> > +#endif /* __LOONGARCH_KERNEL_IMAGE_VARS_H */
-> > diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-> > index 23ee293e1cd2..f938aae3e92c 100644
-> > --- a/arch/loongarch/kernel/setup.c
-> > +++ b/arch/loongarch/kernel/setup.c
-> > @@ -49,9 +49,7 @@
-> >  #define SMBIOS_CORE_PACKAGE_OFFSET     0x23
-> >  #define LOONGSON_EFI_ENABLE            (1 << 3)
-> >
-> > -#ifdef CONFIG_VT
-> > -struct screen_info screen_info;
-> > -#endif
-> > +struct screen_info screen_info __section(".data");
-> >
-> >  unsigned long fw_arg0, fw_arg1;
-> >  DEFINE_PER_CPU(unsigned long, kernelsp);
-> > @@ -122,16 +120,9 @@ static void __init parse_cpu_table(const struct dmi_header *dm)
-> >
-> >  static void __init parse_bios_table(const struct dmi_header *dm)
-> >  {
-> > -       int bios_extern;
-> >         char *dmi_data = (char *)dm;
-> >
-> > -       bios_extern = *(dmi_data + SMBIOS_BIOSEXTERN_OFFSET);
-> >         b_info.bios_size = (*(dmi_data + SMBIOS_BIOSSIZE_OFFSET) + 1) << 6;
-> > -
-> > -       if (bios_extern & LOONGSON_EFI_ENABLE)
-> > -               set_bit(EFI_BOOT, &efi.flags);
-> > -       else
-> > -               clear_bit(EFI_BOOT, &efi.flags);
-> >  }
-> >
->
-> Why is this taken from the SMBIOS data?
-This is removing obsolete code. Before we use generic stub, we use
-SMBIOS as an indication whether we have efi support.
+Since FTRACE_ADDR/FTRACE_REGS_ADDR is only defined when CONFIG_DYNAMIC_FTRACE
+is selected, we wrap its use along with most of module_init_ftrace_plt() with
+ifdeffery rather than using IS_ENABLED().
 
->
-> >  static void __init find_tokens(const struct dmi_header *dm, void *dummy)
-> > @@ -145,6 +136,7 @@ static void __init find_tokens(const struct dmi_header *dm, void *dummy)
-> >                 break;
-> >         }
-> >  }
-> > +
-> >  static void __init smbios_parse(void)
-> >  {
-> >         b_info.bios_vendor = (void *)dmi_get_system_info(DMI_BIOS_VENDOR);
-> > diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-> > index 69c76f26c1c5..36d042739f3c 100644
-> > --- a/arch/loongarch/kernel/vmlinux.lds.S
-> > +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> > @@ -12,6 +12,7 @@
-> >  #define BSS_FIRST_SECTIONS *(.bss..swapper_pg_dir)
-> >
-> >  #include <asm-generic/vmlinux.lds.h>
-> > +#include "image-vars.h"
-> >
-> >  /*
-> >   * Max avaliable Page Size is 64K, so we set SectionAlignment
-> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
-> > index 6cb7384ad2ac..cbf1c55dc224 100644
-> > --- a/drivers/firmware/efi/Kconfig
-> > +++ b/drivers/firmware/efi/Kconfig
-> > @@ -107,7 +107,7 @@ config EFI_GENERIC_STUB
-> >
-> >  config EFI_ARMSTUB_DTB_LOADER
-> >         bool "Enable the DTB loader"
-> > -       depends on EFI_GENERIC_STUB && !RISCV
-> > +       depends on EFI_GENERIC_STUB && !RISCV && !LOONGARCH
-> >         default y
-> >         help
-> >           Select this config option to add support for the dtb= command
-> > @@ -124,7 +124,7 @@ config EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER
-> >         bool "Enable the command line initrd loader" if !X86
-> >         depends on EFI_STUB && (EFI_GENERIC_STUB || X86)
-> >         default y if X86
-> > -       depends on !RISCV
-> > +       depends on !RISCV && !LOONGARCH
-> >         help
-> >           Select this config option to add support for the initrd= command
-> >           line parameter, allowing an initrd that resides on the same volume
-> > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> > index d0537573501e..1588c61939e7 100644
-> > --- a/drivers/firmware/efi/libstub/Makefile
-> > +++ b/drivers/firmware/efi/libstub/Makefile
-> > @@ -26,6 +26,8 @@ cflags-$(CONFIG_ARM)          := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> >                                    $(call cc-option,-mno-single-pic-base)
-> >  cflags-$(CONFIG_RISCV)         := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> >                                    -fpic
-> > +cflags-$(CONFIG_LOONGARCH)     := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> > +                                  -fpic
-> >
-> >  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
-> >
-> > @@ -70,6 +72,8 @@ lib-$(CONFIG_ARM)             += arm32-stub.o
-> >  lib-$(CONFIG_ARM64)            += arm64-stub.o
-> >  lib-$(CONFIG_X86)              += x86-stub.o
-> >  lib-$(CONFIG_RISCV)            += riscv-stub.o
-> > +lib-$(CONFIG_LOONGARCH)                += loongarch-stub.o
-> > +
-> >  CFLAGS_arm32-stub.o            := -DTEXT_OFFSET=$(TEXT_OFFSET)
-> >
-> >  # Even when -mbranch-protection=none is set, Clang will generate a
-> > @@ -125,6 +129,12 @@ STUBCOPY_FLAGS-$(CONFIG_RISCV)     += --prefix-alloc-sections=.init \
-> >                                    --prefix-symbols=__efistub_
-> >  STUBCOPY_RELOC-$(CONFIG_RISCV) := R_RISCV_HI20
-> >
-> > +# For LoongArch, keep all the symbols in .init section and make sure that no
-> > +# absolute symbols references doesn't exist.
-> > +STUBCOPY_FLAGS-$(CONFIG_LOONGARCH)     += --prefix-alloc-sections=.init \
-> > +                                          --prefix-symbols=__efistub_
-> > +STUBCOPY_RELOC-$(CONFIG_LOONGARCH)     := R_LARCH_MARK_LA
-> > +
-> >  $(obj)/%.stub.o: $(obj)/%.o FORCE
-> >         $(call if_changed,stubcopy)
-> >
-> > diff --git a/drivers/firmware/efi/libstub/efi-stub.c b/drivers/firmware/efi/libstub/efi-stub.c
-> > index f515394cce6e..efb9219d8d49 100644
-> > --- a/drivers/firmware/efi/libstub/efi-stub.c
-> > +++ b/drivers/firmware/efi/libstub/efi-stub.c
-> > @@ -40,14 +40,19 @@
-> >
-> >  #ifdef CONFIG_ARM64
-> >  # define EFI_RT_VIRTUAL_LIMIT  DEFAULT_MAP_WINDOW_64
-> > -#elif defined(CONFIG_RISCV)
-> > +#elif defined(CONFIG_RISCV) || defined(CONFIG_LOONGARCH)
-> >  # define EFI_RT_VIRTUAL_LIMIT  TASK_SIZE_MIN
-> > -#else
-> > +#else /* Only if TASK_SIZE is a constant */
-> >  # define EFI_RT_VIRTUAL_LIMIT  TASK_SIZE
-> >  #endif
-> >
-> > +/*
-> > + * 0: No flat mapping
-> > + * 1: Flat mapping that VA = PA
-> > + * 2: Flat mapping that VA = PA + PAGE_OFFSET
-> > + */
-> > +static int flat_va_mapping;
-> >  static u64 virtmap_base = EFI_RT_VIRTUAL_BASE;
-> > -static bool flat_va_mapping;
-> >
->
-> Can we change this around a bit?
->
-> static bool flat_va_mapping = __is_defined(EFI_RT_FIXED_VIRTUAL_OFFSET);
->
-> #ifndef EFI_RT_FIXED_VIRTUAL_OFFSET
-> #define EFI_RT_FIXED_VIRTUAL_OFFSET 0
-> #endif
->
-> Then, in your arch's asm/efi.h, you can add
->
-> #define EFI_RT_FIXED_VIRTUAL_OFFSET PAGE_OFFSET
-Good idea, I will change to use the new method and send V3 asap.
+Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+---
+ arch/loongarch/include/asm/ftrace.h     |  4 ++
+ arch/loongarch/include/asm/inst.h       |  2 +
+ arch/loongarch/include/asm/module.h     | 14 +++--
+ arch/loongarch/include/asm/module.lds.h |  1 +
+ arch/loongarch/kernel/ftrace_dyn.c      | 79 +++++++++++++++++++++++++
+ arch/loongarch/kernel/inst.c            | 12 ++++
+ arch/loongarch/kernel/module-sections.c | 11 ++++
+ arch/loongarch/kernel/module.c          | 48 +++++++++++++++
+ 8 files changed, 166 insertions(+), 5 deletions(-)
 
-Huacai
->
-> ...
-> > @@ -254,9 +260,11 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
-> >          * The easiest way to achieve that is to simply use a 1:1 mapping.
-> >          */
-> >         prop_tbl = get_efi_config_table(EFI_PROPERTIES_TABLE_GUID);
-> > -       flat_va_mapping = prop_tbl &&
-> > -                         (prop_tbl->memory_protection_attribute &
-> > -                          EFI_PROPERTIES_RUNTIME_MEMORY_PROTECTION_NON_EXECUTABLE_PE_DATA);
-> > +       attrib = prop_tbl ? prop_tbl->memory_protection_attribute : 0;
-> > +       if (attrib & EFI_PROPERTIES_RUNTIME_MEMORY_PROTECTION_NON_EXECUTABLE_PE_DATA)
-> > +               flat_va_mapping = 1;
-> > +       if (IS_ENABLED(CONFIG_LOONGARCH))
-> > +               flat_va_mapping = 2;
-> >
->
-> Keep the original code but change it into
->
-> flat_va_mapping |= ....
->
-> (and drop the rest of the change)
->
-> >         /* force efi_novamap if SetVirtualAddressMap() is unsupported */
-> >         efi_novamap |= !(get_supported_rt_services() &
-> > @@ -338,7 +346,16 @@ void efi_get_virtmap(efi_memory_desc_t *memory_map, unsigned long map_size,
-> >                 paddr = in->phys_addr;
-> >                 size = in->num_pages * EFI_PAGE_SIZE;
-> >
-> > -               in->virt_addr = in->phys_addr;
->
-> Change this into
->
->                in->virt_addr = in->phys_addr + EFI_RT_FIXED_VIRTUAL_OFFSET;
->
-> > +               switch (flat_va_mapping) {
-> > +               case 1:
-> > +                       in->virt_addr = in->phys_addr;
-> > +                       break;
-> > +               case 2:
-> > +                       in->virt_addr = in->phys_addr + PAGE_OFFSET;
-> > +                       break;
-> > +               default:
-> > +                       in->virt_addr = in->phys_addr;
-> > +               }
->
-> And drop the switch
->
-> >                 if (efi_novamap) {
-> >                         continue;
-> >                 }
-> > diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
-> > new file mode 100644
-> > index 000000000000..b7ef8d2df59e
-> > --- /dev/null
-> > +++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-> > @@ -0,0 +1,60 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Author: Yun Liu <liuyun@loongson.cn>
-> > + *         Huacai Chen <chenhuacai@loongson.cn>
-> > + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> > + */
-> > +
-> > +#include <asm/efi.h>
-> > +#include <asm/addrspace.h>
-> > +#include "efistub.h"
-> > +
-> > +typedef void __noreturn (*kernel_entry_t)(bool efi, unsigned long fdt);
-> > +
-> > +extern int kernel_asize;
-> > +extern int kernel_fsize;
-> > +extern int kernel_offset;
-> > +extern kernel_entry_t kernel_entry;
-> > +
-> > +efi_status_t check_platform_features(void)
-> > +{
-> > +       return EFI_SUCCESS;
-> > +}
-> > +
-> > +efi_status_t handle_kernel_image(unsigned long *image_addr,
-> > +                                unsigned long *image_size,
-> > +                                unsigned long *reserve_addr,
-> > +                                unsigned long *reserve_size,
-> > +                                efi_loaded_image_t *image,
-> > +                                efi_handle_t image_handle)
-> > +{
-> > +       efi_status_t status;
-> > +       unsigned long kernel_addr = 0;
-> > +
-> > +       kernel_addr = (unsigned long)&kernel_offset - kernel_offset;
-> > +
-> > +       status = efi_relocate_kernel(&kernel_addr, kernel_fsize, kernel_asize,
-> > +                                    PHYSADDR(VMLINUX_LOAD_ADDRESS), SZ_2M, 0x0);
-> > +
-> > +       *image_addr = kernel_addr;
-> > +       *image_size = kernel_asize;
-> > +
-> > +       return status;
-> > +}
-> > +
-> > +void __noreturn efi_enter_kernel(unsigned long entrypoint, unsigned long fdt, unsigned long fdt_size)
-> > +{
-> > +       kernel_entry_t real_kernel_entry;
-> > +
-> > +       /* Config Direct Mapping */
-> > +       csr_write64(CSR_DMW0_INIT, LOONGARCH_CSR_DMWIN0);
-> > +       csr_write64(CSR_DMW1_INIT, LOONGARCH_CSR_DMWIN1);
-> > +
-> > +       real_kernel_entry = (kernel_entry_t)
-> > +               ((unsigned long)&kernel_entry - entrypoint + VMLINUX_LOAD_ADDRESS);
-> > +
-> > +       if (!efi_novamap)
-> > +               real_kernel_entry(true, fdt);
-> > +       else
-> > +               real_kernel_entry(false, fdt);
-> > +}
-> > diff --git a/include/linux/pe.h b/include/linux/pe.h
-> > index daf09ffffe38..1d3836ef9d92 100644
-> > --- a/include/linux/pe.h
-> > +++ b/include/linux/pe.h
-> > @@ -65,6 +65,8 @@
-> >  #define        IMAGE_FILE_MACHINE_SH5          0x01a8
-> >  #define        IMAGE_FILE_MACHINE_THUMB        0x01c2
-> >  #define        IMAGE_FILE_MACHINE_WCEMIPSV2    0x0169
-> > +#define        IMAGE_FILE_MACHINE_LOONGARCH32  0x6232
-> > +#define        IMAGE_FILE_MACHINE_LOONGARCH64  0x6264
-> >
-> >  /* flags */
-> >  #define IMAGE_FILE_RELOCS_STRIPPED           0x0001
->
-> This is looking really good now! Thanks for taking my feedback so seriously.
->
-> We will have to figure out how to queue this up, given that I intend
-> to queue the generic EFI zboot changes for v6.1 as well.
+diff --git a/arch/loongarch/include/asm/ftrace.h b/arch/loongarch/include/asm/ftrace.h
+index a3f974a7a5ce..0ed3d649c1ba 100644
+--- a/arch/loongarch/include/asm/ftrace.h
++++ b/arch/loongarch/include/asm/ftrace.h
+@@ -6,6 +6,10 @@
+ #ifndef _ASM_LOONGARCH_FTRACE_H
+ #define _ASM_LOONGARCH_FTRACE_H
+ 
++#define FTRACE_PLT_IDX		0
++#define FTRACE_REGS_PLT_IDX	1
++#define NR_FTRACE_PLTS		2
++
+ #ifdef CONFIG_FUNCTION_TRACER
+ #define MCOUNT_INSN_SIZE 4		/* sizeof mcount call */
+ 
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index 713b4996bfac..41cb15c4c475 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -52,6 +52,7 @@ enum reg2i12_op {
+ };
+ 
+ enum reg2i16_op {
++	addu16id_op     = 0x04,
+ 	jirl_op		= 0x13,
+ 	beq_op		= 0x16,
+ 	bne_op		= 0x17,
+@@ -191,6 +192,7 @@ u32 larch_insn_gen_nop(void);
+ u32 larch_insn_gen_b(unsigned long pc, unsigned long dest);
+ u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest);
+ 
++u32 larch_insn_gen_addu16id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm);
+ u32 larch_insn_gen_or(enum loongarch_gpr rd, enum loongarch_gpr rj,
+ 			enum loongarch_gpr rk);
+ u32 larch_insn_gen_move(enum loongarch_gpr rd, enum loongarch_gpr rj);
+diff --git a/arch/loongarch/include/asm/module.h b/arch/loongarch/include/asm/module.h
+index 9f6718df1854..1aac156cd187 100644
+--- a/arch/loongarch/include/asm/module.h
++++ b/arch/loongarch/include/asm/module.h
+@@ -19,10 +19,13 @@ struct mod_section {
+ struct mod_arch_specific {
+ 	struct mod_section plt;
+ 	struct mod_section plt_idx;
++
++	/* for CONFIG_DYNAMIC_FTRACE */
++	struct plt_entry *ftrace_trampolines;
+ };
+ 
+ struct plt_entry {
+-	u32 inst_lu12iw;
++	u32 inst_addu16id;
+ 	u32 inst_lu32id;
+ 	u32 inst_lu52id;
+ 	u32 inst_jirl;
+@@ -36,14 +39,15 @@ Elf_Addr module_emit_plt_entry(struct module *mod, unsigned long val);
+ 
+ static inline struct plt_entry emit_plt_entry(unsigned long val)
+ {
+-	u32 lu12iw, lu32id, lu52id, jirl;
++	u32 addu16id, lu32id, lu52id, jirl;
+ 
+-	lu12iw = (lu12iw_op << 25 | (((val >> 12) & 0xfffff) << 5) | LOONGARCH_GPR_T1);
++	addu16id = larch_insn_gen_addu16id(LOONGARCH_GPR_T1, LOONGARCH_GPR_ZERO,
++		ADDR_IMM(val, ADDU16ID));
+ 	lu32id = larch_insn_gen_lu32id(LOONGARCH_GPR_T1, ADDR_IMM(val, LU32ID));
+ 	lu52id = larch_insn_gen_lu52id(LOONGARCH_GPR_T1, LOONGARCH_GPR_T1, ADDR_IMM(val, LU52ID));
+-	jirl = larch_insn_gen_jirl(0, LOONGARCH_GPR_T1, 0, (val & 0xfff));
++	jirl = larch_insn_gen_jirl(0, LOONGARCH_GPR_T1, 0, (val & 0xffff));
+ 
+-	return (struct plt_entry) { lu12iw, lu32id, lu52id, jirl };
++	return (struct plt_entry) { addu16id, lu32id, lu52id, jirl };
+ }
+ 
+ static inline struct plt_idx_entry emit_plt_idx_entry(unsigned long val)
+diff --git a/arch/loongarch/include/asm/module.lds.h b/arch/loongarch/include/asm/module.lds.h
+index 31c1c0db11a3..ecff54b81754 100644
+--- a/arch/loongarch/include/asm/module.lds.h
++++ b/arch/loongarch/include/asm/module.lds.h
+@@ -4,4 +4,5 @@ SECTIONS {
+ 	. = ALIGN(4);
+ 	.plt : { BYTE(0) }
+ 	.plt.idx : { BYTE(0) }
++	.ftrace_trampoline : { BYTE(0) }
+ }
+diff --git a/arch/loongarch/kernel/ftrace_dyn.c b/arch/loongarch/kernel/ftrace_dyn.c
+index ec3d951be50c..a7c36b92e558 100644
+--- a/arch/loongarch/kernel/ftrace_dyn.c
++++ b/arch/loongarch/kernel/ftrace_dyn.c
+@@ -9,6 +9,7 @@
+ #include <linux/uaccess.h>
+ 
+ #include <asm/inst.h>
++#include <asm/module.h>
+ 
+ static int ftrace_modify_code(unsigned long pc, u32 old, u32 new,
+ 			      bool validate)
+@@ -72,12 +73,63 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+ 	return ftrace_modify_code(pc, old, new, true);
+ }
+ 
++static inline int __get_mod(struct module **mod, unsigned long addr)
++{
++	preempt_disable();
++	*mod = __module_text_address(addr);
++	preempt_enable();
++
++	if (WARN_ON(!(*mod)))
++		return -EINVAL;
++
++	return 0;
++}
++
++static struct plt_entry *get_ftrace_plt(struct module *mod, unsigned long addr)
++{
++	struct plt_entry *plt = mod->arch.ftrace_trampolines;
++
++	if (addr == FTRACE_ADDR)
++		return &plt[FTRACE_PLT_IDX];
++	if (addr == FTRACE_REGS_ADDR &&
++			IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++		return &plt[FTRACE_REGS_PLT_IDX];
++
++	return NULL;
++}
++
++static unsigned long get_plt_addr(struct module *mod, unsigned long addr)
++{
++	struct plt_entry *plt;
++
++	plt = get_ftrace_plt(mod, addr);
++	if (!plt) {
++		pr_err("ftrace: no module PLT for %ps\n", (void *)addr);
++		return -EINVAL;
++	}
++
++	return (unsigned long)plt;
++}
++
+ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ {
+ 	unsigned long pc;
++	long offset;
+ 	u32 old, new;
+ 
+ 	pc = rec->ip + LOONGARCH_INSN_SIZE;
++	offset = (long)pc - (long)addr;
++
++	if (offset < -SZ_128M || offset >= SZ_128M) {
++		int ret;
++		struct module *mod;
++
++		ret = __get_mod(&mod, pc);
++		if (ret)
++			return ret;
++
++		addr = get_plt_addr(mod, addr);
++	}
+ 
+ 	old = larch_insn_gen_nop();
+ 	new = larch_insn_gen_bl(pc, addr);
+@@ -89,9 +141,22 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
+ 		    unsigned long addr)
+ {
+ 	unsigned long pc;
++	long offset;
+ 	u32 old, new;
+ 
+ 	pc = rec->ip + LOONGARCH_INSN_SIZE;
++	offset = (long)pc - (long)addr;
++
++	if (offset < -SZ_128M || offset >= SZ_128M) {
++		int ret;
++		struct module *mod;
++
++		ret = __get_mod(&mod, pc);
++		if (ret)
++			return ret;
++
++		addr = get_plt_addr(mod, addr);
++	}
+ 
+ 	new = larch_insn_gen_nop();
+ 	old = larch_insn_gen_bl(pc, addr);
+@@ -108,6 +173,20 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
+ 	u32 old, new;
+ 
+ 	pc = rec->ip + LOONGARCH_INSN_SIZE;
++	offset = (long)pc - (long)addr;
++
++	if (offset < -SZ_128M || offset >= SZ_128M) {
++		int ret;
++		struct module *mod;
++
++		ret = __get_mod(&mod, pc);
++		if (ret)
++			return ret;
++
++		addr = get_plt_addr(mod, addr);
++
++		old_addr = get_plt_addr(mod, old_addr);
++	}
+ 
+ 	old = larch_insn_gen_bl(pc, old_addr);
+ 	new = larch_insn_gen_bl(pc, addr);
+diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
+index 4f7a62ddf210..9a1769620b25 100644
+--- a/arch/loongarch/kernel/inst.c
++++ b/arch/loongarch/kernel/inst.c
+@@ -103,6 +103,18 @@ u32 larch_insn_gen_bl(unsigned long pc, unsigned long dest)
+ 	return insn.word;
+ }
+ 
++u32 larch_insn_gen_addu16id(enum loongarch_gpr rd, enum loongarch_gpr rj, int imm)
++{
++	union loongarch_instruction insn;
++
++	insn.reg2i16_format.opcode = addu16id_op;
++	insn.reg2i16_format.rd = rd;
++	insn.reg2i16_format.rj = rj;
++	insn.reg2i16_format.immediate = imm;
++
++	return insn.word;
++}
++
+ u32 larch_insn_gen_lu32id(enum loongarch_gpr rd, int imm)
+ {
+ 	union loongarch_instruction insn;
+diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
+index 6d498288977d..b75fc711f144 100644
+--- a/arch/loongarch/kernel/module-sections.c
++++ b/arch/loongarch/kernel/module-sections.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <linux/elf.h>
++#include <linux/ftrace.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ 
+@@ -67,6 +68,7 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 			      char *secstrings, struct module *mod)
+ {
+ 	unsigned int i, num_plts = 0;
++	Elf_Shdr *tramp = NULL;
+ 
+ 	/*
+ 	 * Find the empty .plt sections.
+@@ -76,6 +78,8 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 			mod->arch.plt.shdr = sechdrs + i;
+ 		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".plt.idx"))
+ 			mod->arch.plt_idx.shdr = sechdrs + i;
++		else if (!strcmp(secstrings + sechdrs[i].sh_name, ".ftrace_trampoline"))
++			tramp = sechdrs + i;
+ 	}
+ 
+ 	if (!mod->arch.plt.shdr) {
+@@ -117,5 +121,12 @@ int module_frob_arch_sections(Elf_Ehdr *ehdr, Elf_Shdr *sechdrs,
+ 	mod->arch.plt_idx.num_entries = 0;
+ 	mod->arch.plt_idx.max_entries = num_plts;
+ 
++	if (tramp) {
++		tramp->sh_type = SHT_NOBITS;
++		tramp->sh_flags = SHF_EXECINSTR | SHF_ALLOC;
++		tramp->sh_addralign = __alignof__(struct plt_entry);
++		tramp->sh_size = NR_FTRACE_PLTS * sizeof(struct plt_entry);
++	}
++
+ 	return 0;
+ }
+diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
+index 638427ff0d51..acb75bccb6c5 100644
+--- a/arch/loongarch/kernel/module.c
++++ b/arch/loongarch/kernel/module.c
+@@ -10,6 +10,7 @@
+ 
+ #include <linux/moduleloader.h>
+ #include <linux/elf.h>
++#include <linux/ftrace.h>
+ #include <linux/mm.h>
+ #include <linux/numa.h>
+ #include <linux/vmalloc.h>
+@@ -17,6 +18,7 @@
+ #include <linux/fs.h>
+ #include <linux/string.h>
+ #include <linux/kernel.h>
++#include <asm/inst.h>
+ 
+ static inline bool signed_imm_check(long val, unsigned int bit)
+ {
+@@ -373,3 +375,49 @@ void *module_alloc(unsigned long size)
+ 	return __vmalloc_node_range(size, 1, MODULES_VADDR, MODULES_END,
+ 			GFP_KERNEL, PAGE_KERNEL, 0, NUMA_NO_NODE, __builtin_return_address(0));
+ }
++
++#ifdef CONFIG_DYNAMIC_FTRACE
++static const Elf_Shdr *find_section(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
++				    const char *name)
++{
++	const Elf_Shdr *s, *se;
++	const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
++
++	for (s = sechdrs, se = sechdrs + hdr->e_shnum; s < se; s++) {
++		if (strcmp(name, secstrs + s->sh_name) == 0)
++			return s;
++	}
++
++	return NULL;
++}
++#endif
++
++static int module_init_ftrace_plt(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
++				  struct module *mod)
++{
++#ifdef CONFIG_DYNAMIC_FTRACE
++	const Elf_Shdr *s;
++	struct plt_entry *ftrace_plts;
++
++	s = find_section(hdr, sechdrs, ".ftrace_trampoline");
++	if (!s)
++		return -ENOEXEC;
++
++	ftrace_plts = (void *)s->sh_addr;
++
++	ftrace_plts[FTRACE_PLT_IDX] = emit_plt_entry(FTRACE_ADDR);
++
++	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
++		ftrace_plts[FTRACE_REGS_PLT_IDX] = emit_plt_entry(FTRACE_REGS_ADDR);
++
++	mod->arch.ftrace_trampolines = ftrace_plts;
++#endif
++	return 0;
++}
++
++int module_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs, struct module *mod)
++{
++	module_init_ftrace_plt(hdr, sechdrs, mod);
++
++	return 0;
++}
+-- 
+2.36.1
+
