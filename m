@@ -2,101 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A48F59AAE1
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 05:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641B659AAED
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 05:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242674AbiHTDQR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Aug 2022 23:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S230039AbiHTDeG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Aug 2022 23:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239003AbiHTDQP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 23:16:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DCCA2AD6;
-        Fri, 19 Aug 2022 20:16:13 -0700 (PDT)
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxrmvzUQBjXo4FAA--.13173S3;
-        Sat, 20 Aug 2022 11:16:05 +0800 (CST)
-Subject: Re: [PATCH 1/9] LoongArch/ftrace: Add basic support
-To:     Steven Rostedt <rostedt@goodmis.org>
-References: <20220819081403.7143-1-zhangqing@loongson.cn>
- <20220819081403.7143-2-zhangqing@loongson.cn>
- <20220819132509.127a1353@gandalf.local.home>
- <246779c0-b834-16a6-ec68-c06d8f9a375d@loongson.cn>
- <20220819215240.3caf89e2@gandalf.local.home>
-Cc:     Qing Zhang <zhangqing@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <de7584d4-56ff-aafe-42ec-702924fbcf64@loongson.cn>
-Date:   Sat, 20 Aug 2022 11:16:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        with ESMTP id S229595AbiHTDeE (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 23:34:04 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2162CE27;
+        Fri, 19 Aug 2022 20:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=BPcBuYpUDDOXFJYHag51KAe7xl89hz8YVVJHaI7TbgA=; b=i/V569CgPrAeP3dIXaa1LQauMZ
+        D4XtfuSvN/VaD+x3wREy0aeNvXRgOar+1EkkjaFCwu2IcikwRD+0gSZKsqcO1NQyi06Ojy3pITO5o
+        jlWW4nMJZCXie6mtVvudR+ZEJTx0rvZmXYOuNuqqYZjmcuvwfDAe6NPiUHvct+X7qzUoFsabdIK0s
+        hh8C6BJjVIBkLz5ik9SQw5dBIBHLXCYPkBGmjfmc65eLIus/78y3aJg8OZvGG8cGZdNFBZ/zDtGJb
+        kfo+MoXQuKdRzTkmriYRIJALdW/s+VfF7TQCeO+aEZJMm8pfCeoTXEcvMYTa/RQGEnUKylbZ/wENq
+        FoOJZMVA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oPFFF-006Hi8-Hv;
+        Sat, 20 Aug 2022 03:33:57 +0000
+Date:   Sat, 20 Aug 2022 04:33:57 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     linux-arch@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [RFC][PATCHES] termios.h cleanups
+Message-ID: <YwBWJYU9BjnGBy2c@ZenIV>
 MIME-Version: 1.0
-In-Reply-To: <20220819215240.3caf89e2@gandalf.local.home>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxrmvzUQBjXo4FAA--.13173S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Gr45WrWkZr4DJry3AF15XFb_yoW8Jr4xpF
-        yFg3yxCFZ7tFWavan2vw17Wr13uFn5AFZ3tr1rKry8Aryrur1avw4avrnFqryvyw1kGrW2
-        qr4DK3yUCFn8C37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9j14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
-        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
-        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
-        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
-        67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14
-        v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
-        IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-        C2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 08/20/2022 09:52 AM, Steven Rostedt wrote:
+[resurrecting a patchset from back in 2018]
 
-> On Sat, 20 Aug 2022 09:38:21 +0800
-> Jinyang He <hejinyang@loongson.cn> wrote:
->
->> I think we have implemented CONFIG_FTRACE_WITH_ARGS in dynamic ftrace
->> in the [Patch3/9].
-> Sorry, I must have missed it.
-And there is still something left to do, Qing will do that.
+        asm/termios.h has tons of duplication and rather convoluted
+logics re includes.
 
->
->> But, for non dynamic ftrace, it is hardly to
->> implement it. Because the LoongArch compiler gcc treats mount as a
-> Don't bother implementing it for non-dynamic. I would just add a:
->
-> config HAVE_FTRACE_WITH_ARGS if DYNAMIC_FTRACE
->
-> and be done with it.
-Yes, it is clear.
+	asm/termios.h has both UAPI and internal variants.  On seven
+architectures (alpha, ia64, mips, parisc, powerpc, s390, sparc)
+both variants exist and internal one pulls the UAPI one by #include
+<uapi/asm/termios.h>.  That is done very early in the internal header.
+Everything else has neither UAPI nor internal termios.h.  Due to
+mandatory-y += termios.h
+in include/uapi/asm-generic/Kbuild they get generated/uapi/asm/termios.h
+that consists of #include <asm-generic/termios.h>, which resolves to
+include/asm-generic/termios.h.  That header serves as default internal
+asm/termios.h and it contains
+#include <uapi/asm-generic/termios.h>, resolving to
+include/uapi/asm-generic/termios.h - default UAPI asm/termios.h.  As with
+other internal asm/termios.h instances, that include happens very early
+in the file.
 
->
->> really call, like 'call _mcount(__builtin_return_address(0))'. That
->> means, they decrease stack, save args to callee saved regs and may
->> do some optimization before calling mcount. It is difficult to find the
->> original args and apply changes from tracers.
-> Right, there's no point in implementing it for non dynamic. Like I said,
-> non-dynamic is just a stepping stone for getting dynamic working. Once you
-> have dynamic working, it's up to you to throw out the non-dynamic. It's not
-> useful for anything other than porting to a new architecture or for
-> academic purposes.
->
-Thanks for your detail answers.
-Jinyang
+On loongarch there's a generated/asm/termios.h with the contents identical
+to what's in generated/uapi/asm/termios.h.  Completely pointless, but it's
+hard to blame the loongarch folks here - the situation's much too confusing...
+
+	Besides the include of UAPI asm/termios.h, non-UAPI ones contain
+the following:
+        * definition of INIT_C_CC
+        * definitions of conversion helpers:
+                user_termio_to_kernel_termios(),
+                kernel_termios_to_user_termio(),
+                user_termios_to_kernel_termios(),
+                kernel_termios_to_user_termios()
+        * (possibly) definitions of more conversion helpers:
+                user_termios_to_kernel_termios_1(),
+                kernel_termios_to_user_termios_1()
+        * (possibly) include of linux/uaccess.h [generic, mips, powerpc, s390]
+        * (possibly) include of linux/string.h [mips only]
+
+        The thing is, conversion headers are used only in one file -
+drivers/tty/tty_ioctl.c.  INIT_C_CC has more users - all three of them:
+drivers/tty/hvc/hvcs.c, drivers/tty/tty_io.c and drivers/tty/vcc.c.
+All other users of termios.h (and there's quite a few of them, in
+particular due include in linux/tty.h) actually want the UAPI variant and,
+perhaps, indirect include of uaccess.h and/or string.h.
+
+        Helpers in question are heavily shared; there is an attempt
+to put them into a common header (termios-base.h), but not all
+instances use it.  Another unpleasant thing is that said helpers
+tend to be macros, with very little typechecking.
+
+	Patchset attempts to untangle that mess.
+
+It takes the helpers and INIT_C_CC into new header (termios-internal.h),
+with defaults being in linux/termios-internal.h, unless an arch-specific
+variant is provided in asm/termios-internal.h (only alpha and sparc end
+up needing that).  Files that need that stuff (all 4 of them) include
+linux/termios-internal.h.
+
+asm/termios.h and linux/termios.h become UAPI-only after that.
+
+This stuff lives in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git work.termios
+
+Individual patches in followups.  Please, review; if nobody yells,
+this will go into -next.
+
+Shortlog:
+Al Viro (7):
+      loongarch: remove generic-y += termios.h
+      termios: get rid of stray asm/termios.h include in n_hdlc.c
+      start unifying INIT_C_CC and termios convertors
+      termios: consolidate values for VDISCARD in INIT_C_CC
+      make generic INIT_C_CC a bit more generic
+      termios: convert the last (sparc) INIT_C_CC to array
+      termios: get rid of non-UAPI asm/termios.h
+
+Diffstat:
+ arch/Kconfig                              |   3 +
+ arch/alpha/Kconfig                        |   1 +
+ arch/alpha/include/asm/termios-internal.h |  70 ++++++++++++++
+ arch/alpha/include/asm/termios.h          |  87 ------------------
+ arch/arm/mach-ep93xx/core.c               |   1 +
+ arch/arm/mach-versatile/integrator_ap.c   |   1 +
+ arch/ia64/include/asm/termios.h           |  58 ------------
+ arch/loongarch/include/asm/Kbuild         |   1 -
+ arch/mips/include/asm/termios.h           | 105 ---------------------
+ arch/parisc/include/asm/termios.h         |  52 -----------
+ arch/powerpc/include/asm/termios.h        |  18 ----
+ arch/s390/include/asm/termios.h           |  26 ------
+ arch/sparc/Kconfig                        |   1 +
+ arch/sparc/include/asm/termios-internal.h | 132 +++++++++++++++++++++++++++
+ arch/sparc/include/asm/termios.h          | 147 ------------------------------
+ drivers/net/wwan/wwan_core.c              |   1 +
+ drivers/tty/hvc/hvcs.c                    |   1 +
+ drivers/tty/n_hdlc.c                      |   1 -
+ drivers/tty/tty_io.c                      |   2 +-
+ drivers/tty/tty_ioctl.c                   |   1 +
+ drivers/tty/vcc.c                         |   1 +
+ include/asm-generic/termios-base.h        |  78 ----------------
+ include/asm-generic/termios.h             | 108 ----------------------
+ include/linux/serdev.h                    |   1 +
+ include/linux/termios_internal.h          | 131 ++++++++++++++++++++++++++
+ include/linux/tty_driver.h                |   1 +
+ 26 files changed, 347 insertions(+), 682 deletions(-)
 
