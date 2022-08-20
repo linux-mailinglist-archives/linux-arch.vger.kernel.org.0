@@ -2,129 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E68D59AD0C
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 11:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B89959AED7
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 17:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241468AbiHTJ5B (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Aug 2022 05:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S232128AbiHTP2t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Aug 2022 11:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbiHTJ5A (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Aug 2022 05:57:00 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D522A65817;
-        Sat, 20 Aug 2022 02:56:59 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id BB5B45C023C;
-        Sat, 20 Aug 2022 05:56:55 -0400 (EDT)
-Received: from imap44 ([10.202.2.94])
-  by compute4.internal (MEProxy); Sat, 20 Aug 2022 05:56:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660989415; x=
-        1661075815; bh=kdaAC0zun6WCRzZrFQuABIy5yngIWQJVDLY5tm6Rge8=; b=z
-        +knXgqPKnfrkEtJt3sGcxBJkZpKqAlhwMj+QqtV7NIKmudXW+xI43CKG8YgL6vZJ
-        S+9KJcginCH7pEYuufb333TcRdVsfDNn8XqVJi4E3PFturGyyJeJ4SA6lCpWzrkj
-        OFsmmRRWRejokK5VnAcXed2s0S7ewXFOJB+oT1bApLYbjU9l3Ar3VDQK7Ku9KrYP
-        50dOcrqVczXe7f5tA8Qqh/rqmIOlFfVY2nSUiaD0ddrGRSqkIphY+PJs3428Eu0x
-        cZMmVloz03jtv4jKfTtffmIQb8X7pPIxr2tYJ+GLITRmrRH2yw4pxlbdgCltN48a
-        F0SNp4PMdf0hwXu7pJR5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660989415; x=
-        1661075815; bh=kdaAC0zun6WCRzZrFQuABIy5yngIWQJVDLY5tm6Rge8=; b=c
-        b03vsUwSOrJyZsHaoz64PZG/b8vT8PvoGFWTRs/ouxm9HQ8DjeDVuSLWMYH4tiyu
-        Bh0G192rNDe0HBf/yO3jontQ6iNfxBaMZxcMQYY3Vv+I7PFOup3dOndJFN9rWPSu
-        vl21m2PTkj4Pjro9EyHZYvxqNLn4UbwnsBrQOzMZaXwb4wRPcnvyg6BpFQnBRV08
-        voTuPfI36Cmj8C5kx4C9axXWX6ctW1lYapZwCwtOCokMakGYZ5/TpW0jq+JX3Qn8
-        exTFGkJnOrMXaVWbIWQEEGDQiE4tYT7b9yrdyjmm6QsDgfAVMATg08N9Tn6NGKnb
-        BXXlzfbhYMU3aIoMCMp6Q==
-X-ME-Sender: <xms:5a8AY1AzzlEH9iwpT8crJF6DyqJULOrHkYz06MJuHNatB-PbJSoe-g>
-    <xme:5a8AYzjVmwzJ2C062nhWTmuf5vSIvAuUCbn2bF6LjMq1yptC4veXiZSqjjmVLptHN
-    jp8hPJKvBmVE96vg8I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeifedgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdfl
-    ihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpedufeegfeetudeghefftdehfefgveffleefgfehhfej
-    ueegveethfduuddvieehgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:5a8AYwlx6nZMkS1JUqQJS2qoJb8Qie8GNWpawDqUswLRUpqZXBdTrA>
-    <xmx:5a8AY_yij4oOSG2Nn4RcHKOGWp172zizxkky_Yur4fWl2oUoCRWkQQ>
-    <xmx:5a8AY6SRKhAf3bEvX3gcm0w1uo5IFg15BiBUEjOJt19bYDYP1wZi_w>
-    <xmx:568AY7KyxKX9cjDCuErqlHbJpvGzP-mmysuIGhLzHeFF-Zl7c-Ielw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C18AF36A0071; Sat, 20 Aug 2022 05:56:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <d91451dc-b9a2-4f10-b908-687cbb94bd73@www.fastmail.com>
-In-Reply-To: <20220815123613.3291770-2-chenhuacai@loongson.cn>
-References: <20220815123613.3291770-1-chenhuacai@loongson.cn>
- <20220815123613.3291770-2-chenhuacai@loongson.cn>
-Date:   Sat, 20 Aug 2022 10:56:33 +0100
-From:   "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To:     "Huacai Chen" <chenhuacai@loongson.cn>,
-        "Arnd Bergmann" <arnd@arndb.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Dinh Nguyen" <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        "Xuefeng Li" <lixuefeng@loongson.cn>,
-        "Guo Ren" <guoren@kernel.org>, "Xuerui Wang" <kernel@xen0n.name>,
-        "Andrew Morton" <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "Feiyang Chen" <chenfeiyang@loongson.cn>
-Subject: Re: [PATCH V10 1/4] MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init()
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229605AbiHTP2s (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Aug 2022 11:28:48 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFDF564C9;
+        Sat, 20 Aug 2022 08:28:45 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id F3E4781A20;
+        Sat, 20 Aug 2022 15:28:43 +0000 (UTC)
+Received: from pdx1-sub0-mail-a210.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 3ADB681ACC;
+        Sat, 20 Aug 2022 15:28:43 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661009323; a=rsa-sha256;
+        cv=none;
+        b=7rvQN60sBIVjy7AkpTrUqnCxfXeG0cUm9Q/9sd1Zj2R90grliw+OmbQ7KTHcgllwcURX9O
+        kkyKxMktGnoni+i+yvHmP+47NfpTpzptRWjRdMgeNbJdgQFHt/pDMYyRDay24ZLsEjI/Gq
+        pH/CoCpevchzKufW/GWj+uNllY6UdMHyTXSGMoBXoWqO0ZP5CK7vmeHQS44feDXja2Ase/
+        PiYNDam0P+ubTGkvBgtAK8K6Lj7LlkUjGc3Nc1HlLf+XbzXO8rsUuykBvwOQWni727tvxH
+        VSs1MQwu14xqK95+wRNtdaxfG5N2+3vdJhHIoBz5thrzgRkIQC9FL0cxMhsFgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661009323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=SLgPsu0bpwJo2yzzcZFJyYYI3Z1xx8Vz41AtkGRgplE=;
+        b=rb7EuImPAXq73OTykiCXNYMC+LO4wwZjGaqci3/b6DHeCUzSBslV3IfGNSUs2idBMtNKWZ
+        6euvGi1VWNtu6we7M69JJYC+uBdsTQS4kCu4DG/eyBdvywS5O7dDkcUUs59UeIhkGEIqfb
+        IMSm/Mg3hXftm3R9HApHG/M7jUrpxdem7G1tbkBEak4uAc3jgJfrH186UuUnJvAmtC2JSU
+        uPkQwQZYLk2t+jBZVPau5Ls9KqnxuJSahcNmWc/mknYs321wcSwR7+C1EfYcpWtia0EnDt
+        oxRUo7ZoCSdXnltXTY0j6vcbjg7oLL6b/vJR0dxAiOKTcsALIFvXPLgc3XC4zw==
+ARC-Authentication-Results: i=1;
+        rspamd-769cfffc99-pl9xh;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Keen-Bitter: 287036c97cafc95e_1661009323837_324093453
+X-MC-Loop-Signature: 1661009323837:942968739
+X-MC-Ingress-Time: 1661009323837
+Received: from pdx1-sub0-mail-a210.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.115.45.14 (trex/6.7.1);
+        Sat, 20 Aug 2022 15:28:43 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a210.dreamhost.com (Postfix) with ESMTPSA id 4M92Zy1C3XzH9;
+        Sat, 20 Aug 2022 08:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661009323;
+        bh=SLgPsu0bpwJo2yzzcZFJyYYI3Z1xx8Vz41AtkGRgplE=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=fHxoD6rXRIqgJrjKNKsIW6+ui5Ph6YXviotJnFjL1rU6l5SMz+1mhqUe3TZ09rHeb
+         ONUC9V5T9h/dtCH0EdaNZ965uxF5+8bz76NV0MmxOURYn08zbfFNvOXfvacIb/iOY4
+         uPt5Zf1x/WK9RLPUbfC+Zbbc5K+9iqm6ueDFpbamNd0GdEnP209G1qumZEqdLjoNLV
+         F5Kj0bd94jYtdilG1Ay7kHm1F3ecmLmhKx+W5pnIS5Xn7c8jyLMiI2FwiWWeq0weUZ
+         R9dbOlabfh3KmSIwm7tUK3RXJxZhFAGthbN8QeInfkyJ43wc10+EBe7jGK3UMpzCaf
+         P0e+AkEa/m1vA==
+Date:   Sat, 20 Aug 2022 08:10:48 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     linux-arch@vger.kernel.org, dan.j.williams@intel.com,
+        peterz@infradead.org, mark.rutland@arm.com, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, a.manzanares@samsung.com,
+        bwidawsk@kernel.org, alison.schofield@intel.com,
+        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arch/cacheflush: Introduce flush_all_caches()
+Message-ID: <20220820151048.cfpkqhut5z6wa6yk@offworld>
+References: <20220819171024.1766857-1-dave@stgolabs.net>
+ <YwAo1Ec13hjiBOat@iweiny-desk3>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YwAo1Ec13hjiBOat@iweiny-desk3>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On Fri, 19 Aug 2022, Ira Weiny wrote:
 
+>Did you mean "must"?
 
-=E5=9C=A82022=E5=B9=B48=E6=9C=8815=E6=97=A5=E5=85=AB=E6=9C=88 =E4=B8=8B=E5=
-=8D=881:36=EF=BC=8CHuacai Chen=E5=86=99=E9=81=93=EF=BC=9A
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
+Yep.
+
+>> + * such as those which caches are in a consistent state. The
+>> + * caller can verify the situation early on.
+>> + */
+>> +#ifndef flush_all_caches
+>> +# define flush_all_caches_capable() false
+>> +static inline void flush_all_caches(void)
+>> +{
+>> +	WARN_ON_ONCE("cache invalidation required\n");
+>> +}
 >
-> We are preparing to add sparse vmemmap support to LoongArch. MIPS and
-> LoongArch need to call pgd_init()/pud_init()/pmd_init() when populating
-> page tables, so adjust their prototypes to make generic helpers can ca=
-ll
-> them.
->
-> NIOS2 declares pmd_init() but doesn't use, just remove it to avoid bui=
-ld
-> errors.
->
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>With the addition of flush_all_caches_capable() will flush_all_caches() ever be
+>called?
 
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-For MIPS part :-)
-
-[...]
-
-Thanks
-- Jiaxun
-
+No, it should not. Hence you get a splat if you call it bogusly.
