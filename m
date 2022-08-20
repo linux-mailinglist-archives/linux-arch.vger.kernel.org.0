@@ -2,59 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDF459AA83
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 03:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24B859AA87
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 03:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245491AbiHTBfd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 19 Aug 2022 21:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
+        id S231538AbiHTBir (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 19 Aug 2022 21:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245489AbiHTBfc (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 21:35:32 -0400
+        with ESMTP id S243750AbiHTBiq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 19 Aug 2022 21:38:46 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F364ED3EF1;
-        Fri, 19 Aug 2022 18:35:30 -0700 (PDT)
-Received: from [10.130.0.63] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxkOBbOgBjaXUFAA--.25913S3;
-        Sat, 20 Aug 2022 09:35:26 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 291F639BA8;
+        Fri, 19 Aug 2022 18:38:43 -0700 (PDT)
+Received: from localhost.localdomain (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxkOAcOwBjCHYFAA--.25921S3;
+        Sat, 20 Aug 2022 09:38:38 +0800 (CST)
 Subject: Re: [PATCH 1/9] LoongArch/ftrace: Add basic support
-To:     Steven Rostedt <rostedt@goodmis.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Qing Zhang <zhangqing@loongson.cn>
+References: <20220819081403.7143-1-zhangqing@loongson.cn>
+ <20220819081403.7143-2-zhangqing@loongson.cn>
+ <20220819132509.127a1353@gandalf.local.home>
 Cc:     Huacai Chen <chenhuacai@kernel.org>,
         Ingo Molnar <mingo@redhat.com>,
         WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, hejinyang@loongson.cn
-References: <20220819081403.7143-1-zhangqing@loongson.cn>
- <20220819081403.7143-2-zhangqing@loongson.cn>
- <20220819132509.127a1353@gandalf.local.home>
-From:   Qing Zhang <zhangqing@loongson.cn>
-Message-ID: <4b422c01-d8a1-8543-9f06-25a955f3686d@loongson.cn>
-Date:   Sat, 20 Aug 2022 09:35:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <246779c0-b834-16a6-ec68-c06d8f9a375d@loongson.cn>
+Date:   Sat, 20 Aug 2022 09:38:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
 In-Reply-To: <20220819132509.127a1353@gandalf.local.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxkOBbOgBjaXUFAA--.25913S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr1fAFyxCr1UKr4rAFy8uFg_yoW5Jr1fpr
-        yrAanFgay7tF4Ykr4I9wn8AryYqrn3J340kws5KrySkFn8Jrs3Gry2yr4DKrZ3J3WUAr9a
-        va4xWrWfG3yav37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvv14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8CxkOAcOwBjCHYFAA--.25921S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF4xJw4Uur4fGFWxXFWUArb_yoW5WryDpr
+        yrJanrKa1UtF4a9r4I9wn8Aryaqws3J340krZYgryfCF1DJrs3Cry2yr4DKr93Jw1UCr92
+        9340grWfG34av37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
-        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0xIA0c2IEe2xFo4CE
-        bIxvr21lc2xSY4AK67AK6w4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-        87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73Uj
-        IFyTuYvjfUoPEfUUUUU
-X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE
+        67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -64,12 +64,11 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+On 08/20/2022 01:25 AM, Steven Rostedt wrote:
 
-
-On 2022/8/20 上午1:25, Steven Rostedt wrote:
 > On Fri, 19 Aug 2022 16:13:55 +0800
 > Qing Zhang <zhangqing@loongson.cn> wrote:
-> 
+>
 >> +#define MCOUNT_STACK_SIZE	(2 * SZREG)
 >> +#define MCOUNT_S0_OFFSET	(0)
 >> +#define MCOUNT_RA_OFFSET	(SZREG)
@@ -102,24 +101,29 @@ On 2022/8/20 上午1:25, Steven Rostedt wrote:
 >> +	jirl	ra, t2, 0			/* (1) call *ftrace_trace_function */
 >> +
 >> +	MCOUNT_RESTORE_REGS
-> 
 > You know, if you can implement CONFIG_FTRACE_WITH_ARGS, where the default
 > function callback gets a ftrace_regs pointer (that only holds what is
 > needed for the arguments of the function as well as the stack pointer),
 > then you could also implement function graph on top of that, and remove the
 > need for the below "fgraph_trace" trampoline.
-> 
+>
 > I'd really would like all architectures to go that way. Also, the
 > CONFIG_FTRACE_WITH_ARGS is all you need for live kernel patching.
-> 
-Hi, Steve
-I will add the implementation of CONFIG_FTRACE_WITH_ARGS in v2.
+Hi, Steve,
+
+I think we have implemented CONFIG_FTRACE_WITH_ARGS in dynamic ftrace
+in the [Patch3/9]. But, for non dynamic ftrace, it is hardly to
+implement it. Because the LoongArch compiler gcc treats mount as a
+really call, like 'call _mcount(__builtin_return_address(0))'. That
+means, they decrease stack, save args to callee saved regs and may
+do some optimization before calling mcount. It is difficult to find the
+original args and apply changes from tracers.
 
 Thanks,
-- Qing
-> -- Steve
-> 
-> 
+Jinyang
+
+>
+>
 >> +
 >> +fgraph_trace:
 >> +#ifdef	CONFIG_FUNCTION_GRAPH_TRACER
