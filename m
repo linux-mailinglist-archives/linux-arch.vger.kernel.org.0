@@ -2,122 +2,88 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B89959AED7
-	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 17:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC03159AF5C
+	for <lists+linux-arch@lfdr.de>; Sat, 20 Aug 2022 20:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232128AbiHTP2t (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Aug 2022 11:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S231232AbiHTSBt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Aug 2022 14:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiHTP2s (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Aug 2022 11:28:48 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFDF564C9;
-        Sat, 20 Aug 2022 08:28:45 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id F3E4781A20;
-        Sat, 20 Aug 2022 15:28:43 +0000 (UTC)
-Received: from pdx1-sub0-mail-a210.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 3ADB681ACC;
-        Sat, 20 Aug 2022 15:28:43 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661009323; a=rsa-sha256;
-        cv=none;
-        b=7rvQN60sBIVjy7AkpTrUqnCxfXeG0cUm9Q/9sd1Zj2R90grliw+OmbQ7KTHcgllwcURX9O
-        kkyKxMktGnoni+i+yvHmP+47NfpTpzptRWjRdMgeNbJdgQFHt/pDMYyRDay24ZLsEjI/Gq
-        pH/CoCpevchzKufW/GWj+uNllY6UdMHyTXSGMoBXoWqO0ZP5CK7vmeHQS44feDXja2Ase/
-        PiYNDam0P+ubTGkvBgtAK8K6Lj7LlkUjGc3Nc1HlLf+XbzXO8rsUuykBvwOQWni727tvxH
-        VSs1MQwu14xqK95+wRNtdaxfG5N2+3vdJhHIoBz5thrzgRkIQC9FL0cxMhsFgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661009323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=SLgPsu0bpwJo2yzzcZFJyYYI3Z1xx8Vz41AtkGRgplE=;
-        b=rb7EuImPAXq73OTykiCXNYMC+LO4wwZjGaqci3/b6DHeCUzSBslV3IfGNSUs2idBMtNKWZ
-        6euvGi1VWNtu6we7M69JJYC+uBdsTQS4kCu4DG/eyBdvywS5O7dDkcUUs59UeIhkGEIqfb
-        IMSm/Mg3hXftm3R9HApHG/M7jUrpxdem7G1tbkBEak4uAc3jgJfrH186UuUnJvAmtC2JSU
-        uPkQwQZYLk2t+jBZVPau5Ls9KqnxuJSahcNmWc/mknYs321wcSwR7+C1EfYcpWtia0EnDt
-        oxRUo7ZoCSdXnltXTY0j6vcbjg7oLL6b/vJR0dxAiOKTcsALIFvXPLgc3XC4zw==
-ARC-Authentication-Results: i=1;
-        rspamd-769cfffc99-pl9xh;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Keen-Bitter: 287036c97cafc95e_1661009323837_324093453
-X-MC-Loop-Signature: 1661009323837:942968739
-X-MC-Ingress-Time: 1661009323837
-Received: from pdx1-sub0-mail-a210.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.115.45.14 (trex/6.7.1);
-        Sat, 20 Aug 2022 15:28:43 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a210.dreamhost.com (Postfix) with ESMTPSA id 4M92Zy1C3XzH9;
-        Sat, 20 Aug 2022 08:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1661009323;
-        bh=SLgPsu0bpwJo2yzzcZFJyYYI3Z1xx8Vz41AtkGRgplE=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=fHxoD6rXRIqgJrjKNKsIW6+ui5Ph6YXviotJnFjL1rU6l5SMz+1mhqUe3TZ09rHeb
-         ONUC9V5T9h/dtCH0EdaNZ965uxF5+8bz76NV0MmxOURYn08zbfFNvOXfvacIb/iOY4
-         uPt5Zf1x/WK9RLPUbfC+Zbbc5K+9iqm6ueDFpbamNd0GdEnP209G1qumZEqdLjoNLV
-         F5Kj0bd94jYtdilG1Ay7kHm1F3ecmLmhKx+W5pnIS5Xn7c8jyLMiI2FwiWWeq0weUZ
-         R9dbOlabfh3KmSIwm7tUK3RXJxZhFAGthbN8QeInfkyJ43wc10+EBe7jGK3UMpzCaf
-         P0e+AkEa/m1vA==
-Date:   Sat, 20 Aug 2022 08:10:48 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     linux-arch@vger.kernel.org, dan.j.williams@intel.com,
-        peterz@infradead.org, mark.rutland@arm.com, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, a.manzanares@samsung.com,
-        bwidawsk@kernel.org, alison.schofield@intel.com,
-        linux-cxl@vger.kernel.org, nvdimm@lists.linux.dev, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arch/cacheflush: Introduce flush_all_caches()
-Message-ID: <20220820151048.cfpkqhut5z6wa6yk@offworld>
-References: <20220819171024.1766857-1-dave@stgolabs.net>
- <YwAo1Ec13hjiBOat@iweiny-desk3>
+        with ESMTP id S229620AbiHTSBs (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Aug 2022 14:01:48 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599F02AE1C
+        for <linux-arch@vger.kernel.org>; Sat, 20 Aug 2022 11:01:45 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id io12so2137449ejc.2
+        for <linux-arch@vger.kernel.org>; Sat, 20 Aug 2022 11:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=G+grvKBjCAQ23nLTFvq8USGall6C9xqY2mA86Y/AIhg=;
+        b=SYklTh+ZwnMHWr4R06atDe3bNDPz4t2IeKWXhf7HPywfl6qH94d9DSEihQoh0xngE0
+         XKWaUMFaQk9rTFuW/5QCgAlRDnxEc2e5l7rgkgu+L9A1qk4JMZv0EYyBB0jYVnvx9jg6
+         lKj6YE42n9OLAQdDgjl0d/ayYaY3d/MdB07LY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=G+grvKBjCAQ23nLTFvq8USGall6C9xqY2mA86Y/AIhg=;
+        b=bAQB1ZRGNlGBpVEK1mVMwBA/pr7cZqrU4RPJDQiAKjLWxqdMRUnerklxpQpr7UdZAD
+         zN7+aI8Q123Y0j2/9Juis7bm+vE75a6UIXyzrcKjNsNQyqZIbbWUSFF/H/KE/79iC+Cg
+         8T8HLcS7pXckORCWm+psyTy1HtZBrRz5YYeMPRR/VYHG+11J95DV3T7cnm+gGOCTZClG
+         6GTAXLUyvpBBIIpIQOeSQ8xDGcgZIdSxsePonOIFJ0hwRcAGccoPdRUWfd5cjFWFGcqH
+         LdfianaFwWt6txZ2uKsByQV5Lv4GYRZXi7Z8PEqE0UW2MM5aRSTGGiBv4VGG1W0LnihO
+         V3CQ==
+X-Gm-Message-State: ACgBeo1hkAMRaLj3rPaj37eoNdleufyhBvJQPompU+Ezh4iihvEtsZgu
+        ygz2GfC8E8GgDpkS7NF9duXQlqVOPL96np5e
+X-Google-Smtp-Source: AA6agR4NvkCilzWuRZHaZ7Ji35q1SMVusghbneMPPSKh8DqxzTmxrp1cqjW8l4+mhZA1P1zZhrHN5Q==
+X-Received: by 2002:a17:906:8cb0:b0:731:5149:a983 with SMTP id qr48-20020a1709068cb000b007315149a983mr8190141ejc.549.1661018503623;
+        Sat, 20 Aug 2022 11:01:43 -0700 (PDT)
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
+        by smtp.gmail.com with ESMTPSA id g22-20020aa7c596000000b0043c0fbdcd8esm4981112edq.70.2022.08.20.11.01.42
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Aug 2022 11:01:42 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id v7-20020a1cac07000000b003a6062a4f81so5614054wme.1
+        for <linux-arch@vger.kernel.org>; Sat, 20 Aug 2022 11:01:42 -0700 (PDT)
+X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
+ e21-20020a05600c219500b003a60b3cc100mr7623351wme.8.1661018502110; Sat, 20 Aug
+ 2022 11:01:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YwAo1Ec13hjiBOat@iweiny-desk3>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <YwBWJYU9BjnGBy2c@ZenIV> <20220820033730.1498392-1-viro@zeniv.linux.org.uk>
+ <20220820033730.1498392-4-viro@zeniv.linux.org.uk>
+In-Reply-To: <20220820033730.1498392-4-viro@zeniv.linux.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 20 Aug 2022 11:01:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgLzPq42K8w8M6u__p8fu-FbN6VwvhE3Vvu9n_Pb0kwUQ@mail.gmail.com>
+Message-ID: <CAHk-=wgLzPq42K8w8M6u__p8fu-FbN6VwvhE3Vvu9n_Pb0kwUQ@mail.gmail.com>
+Subject: Re: [PATCH 4/7] termios: consolidate values for VDISCARD in INIT_C_CC
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 19 Aug 2022, Ira Weiny wrote:
-
->Did you mean "must"?
-
-Yep.
-
->> + * such as those which caches are in a consistent state. The
->> + * caller can verify the situation early on.
->> + */
->> +#ifndef flush_all_caches
->> +# define flush_all_caches_capable() false
->> +static inline void flush_all_caches(void)
->> +{
->> +	WARN_ON_ONCE("cache invalidation required\n");
->> +}
+On Fri, Aug 19, 2022 at 8:37 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 >
->With the addition of flush_all_caches_capable() will flush_all_caches() ever be
->called?
+> However, util-linux still resets it to ^O on any architecture,
+> ^O is the historical value, kernel ignores it anyway and finally,
+> Linus said "Just change everybody to do the same, nobody cares
+> about VDISCARD".
 
-No, it should not. Hence you get a splat if you call it bogusly.
+Heh. Grepping for DISCARD_CHAR() shows that there literally doesn't
+seem to be any user.
+
+I  guess some user space program could care what the initial value is,
+but it seems very unlikely.
+
+                Linus
