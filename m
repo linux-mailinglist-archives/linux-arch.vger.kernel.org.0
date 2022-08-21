@@ -2,39 +2,39 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F3C59B121
-	for <lists+linux-arch@lfdr.de>; Sun, 21 Aug 2022 03:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E20E59B12C
+	for <lists+linux-arch@lfdr.de>; Sun, 21 Aug 2022 03:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234597AbiHUBCo (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 20 Aug 2022 21:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34410 "EHLO
+        id S233992AbiHUBCq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 20 Aug 2022 21:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235390AbiHUBCm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Aug 2022 21:02:42 -0400
+        with ESMTP id S236226AbiHUBCn (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 20 Aug 2022 21:02:43 -0400
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E6422B2D;
-        Sat, 20 Aug 2022 18:02:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4DB22B3A;
+        Sat, 20 Aug 2022 18:02:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=IleKUHG9mpoSqd8lMHIHd7V2lYfYBNr2M+M88IbC77s=; b=pMJVFs9laDHnT1nxvHPbYkZubh
-        t1togvT5FLl9B74ul3Dz7GBbRiTeeExlzAMcfoEGM9pYrZhmc08mCNVTGLT5HVuFaRVVGciLr4F4/
-        /7w1lK9usXYudjg4NzEWJMtsP55Uk2TBL9dbv8DJ2Y27xBATDtZ48HyF/7Z1f7jEWTtm6TydccGnW
-        cUCun9/ki+Qf5lAJDpnQM+laZvhacOxP33bjCfhTph4kSzFcjcfInkkDQaidui1jkxcsONgCr1utC
-        bXwVcNUoyj2S9yK6iBz7RKYpvNS5Uy/tRaH2GDi7Us/vEcA3W3wIvnt1JHLpf+mhskhDV9aeTNBfL
-        ++kiFbyA==;
+        bh=jHIGDiJTzTj+egNtzT98ki/fiTIrNuv9OiJy6gAegKw=; b=ijCwfdFd2AHShPr18GvRZgZXOT
+        uoRNf5DE8sexCyQLPdPOlO+Jv2VhDA78oroSA7kTr+Xtuqe4C133y1X7pcAwvsdOH/z/rh5rQ9RiY
+        GQvRfZwGsKUyJHIh2qrx2HysHj1WFm5xi3CDx+0TwSAYYMlFDcKxIJknOHuGOXHIoYpAmB6LM1c+u
+        uA6bAdcVrJpB1MJNFwSliwHSUmFp2jwZVYhr9pZG/FzJIvwA3GVvY96c0OqEXlcN24EOxsFB5QcDb
+        x5egSorFLuNRvOgJiXFhfbANpwTBb7N5zkwO17GA9huf2y0NXpB/XJaSonmEpic/UhzSuezhM6tS4
+        WOBnd+pw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oPZMO-006WJ8-FX;
+        id 1oPZMO-006WJC-Jz;
         Sun, 21 Aug 2022 01:02:40 +0000
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     linux-arch@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2 7/8] termios: convert the last (sparc) INIT_C_CC to array
-Date:   Sun, 21 Aug 2022 02:02:38 +0100
-Message-Id: <20220821010239.1554132-7-viro@zeniv.linux.org.uk>
+Subject: [PATCH v2 8/8] termios: get rid of non-UAPI asm/termios.h
+Date:   Sun, 21 Aug 2022 02:02:39 +0100
+Message-Id: <20220821010239.1554132-8-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220821010239.1554132-1-viro@zeniv.linux.org.uk>
 References: <YwF8vibZ2/Xz7a/g@ZenIV>
@@ -51,65 +51,240 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+	All non-UAPI asm/termios.h consist of include of UAPI counterpart
+and, possibly, include of linux/uaccess.h
+
+	The latter can't be simply removed, even though nothing in
+linux/termios.h doesn't depend upon it anymore - there are several
+places that rely upon that indirect chain of includes to pull
+linux/uaccess.h.  So the include needs to be lifted out of there -
+we lift into tty_driver.h, serdev.h and places that pull asm/termios.h,
+but none of
+	* linux/uaccess.h (obvious)
+	* net/sock.h (pulls uaccess.h)
+	* linux/{tty,tty_driver,serdev}.h (tty.h pulls tty_driver.h)
+
+That leaves us just with the include of UAPI asm/termios.h, which is
+what <asm/termios.h> will resolve to if we simply remove non-UAPI header.
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/sparc/include/asm/termios.h |  9 ---------
- include/linux/termios_internal.h | 10 ++++++++--
- 2 files changed, 8 insertions(+), 11 deletions(-)
+ arch/alpha/include/asm/termios.h        |  8 --------
+ arch/arm/mach-ep93xx/core.c             |  1 +
+ arch/arm/mach-versatile/integrator_ap.c |  1 +
+ arch/ia64/include/asm/termios.h         | 13 -------------
+ arch/mips/include/asm/termios.h         | 15 ---------------
+ arch/parisc/include/asm/termios.h       |  7 -------
+ arch/powerpc/include/asm/termios.h      | 13 -------------
+ arch/s390/include/asm/termios.h         | 12 ------------
+ arch/sparc/include/asm/termios.h        |  8 --------
+ drivers/net/wwan/wwan_core.c            |  1 +
+ include/asm-generic/termios.h           |  9 ---------
+ include/linux/serdev.h                  |  1 +
+ include/linux/tty_driver.h              |  1 +
+ 13 files changed, 5 insertions(+), 85 deletions(-)
+ delete mode 100644 arch/alpha/include/asm/termios.h
+ delete mode 100644 arch/ia64/include/asm/termios.h
+ delete mode 100644 arch/mips/include/asm/termios.h
+ delete mode 100644 arch/parisc/include/asm/termios.h
+ delete mode 100644 arch/powerpc/include/asm/termios.h
+ delete mode 100644 arch/s390/include/asm/termios.h
+ delete mode 100644 arch/sparc/include/asm/termios.h
+ delete mode 100644 include/asm-generic/termios.h
 
+diff --git a/arch/alpha/include/asm/termios.h b/arch/alpha/include/asm/termios.h
+deleted file mode 100644
+index 3894fd92c508..000000000000
+--- a/arch/alpha/include/asm/termios.h
++++ /dev/null
+@@ -1,8 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _ALPHA_TERMIOS_H
+-#define _ALPHA_TERMIOS_H
+-
+-#include <linux/uaccess.h>
+-#include <uapi/asm/termios.h>
+-
+-#endif	/* _ALPHA_TERMIOS_H */
+diff --git a/arch/arm/mach-ep93xx/core.c b/arch/arm/mach-ep93xx/core.c
+index 2d58e273c96d..95e731676cea 100644
+--- a/arch/arm/mach-ep93xx/core.c
++++ b/arch/arm/mach-ep93xx/core.c
+@@ -22,6 +22,7 @@
+ #include <linux/io.h>
+ #include <linux/gpio.h>
+ #include <linux/leds.h>
++#include <linux/uaccess.h>
+ #include <linux/termios.h>
+ #include <linux/amba/bus.h>
+ #include <linux/amba/serial.h>
+diff --git a/arch/arm/mach-versatile/integrator_ap.c b/arch/arm/mach-versatile/integrator_ap.c
+index e216fac917d0..4bd6712e9f52 100644
+--- a/arch/arm/mach-versatile/integrator_ap.c
++++ b/arch/arm/mach-versatile/integrator_ap.c
+@@ -11,6 +11,7 @@
+ #include <linux/of_irq.h>
+ #include <linux/of_address.h>
+ #include <linux/of_platform.h>
++#include <linux/uaccess.h>
+ #include <linux/termios.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/regmap.h>
+diff --git a/arch/ia64/include/asm/termios.h b/arch/ia64/include/asm/termios.h
+deleted file mode 100644
+index 1cef02701401..000000000000
+--- a/arch/ia64/include/asm/termios.h
++++ /dev/null
+@@ -1,13 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Modified 1999
+- *	David Mosberger-Tang <davidm@hpl.hp.com>, Hewlett-Packard Co
+- *
+- * 99/01/28	Added N_IRDA and N_SMSBLOCK
+- */
+-#ifndef _ASM_IA64_TERMIOS_H
+-#define _ASM_IA64_TERMIOS_H
+-
+-#include <uapi/asm/termios.h>
+-
+-#endif /* _ASM_IA64_TERMIOS_H */
+diff --git a/arch/mips/include/asm/termios.h b/arch/mips/include/asm/termios.h
+deleted file mode 100644
+index 12bc56857bf1..000000000000
+--- a/arch/mips/include/asm/termios.h
++++ /dev/null
+@@ -1,15 +0,0 @@
+-/*
+- * This file is subject to the terms and conditions of the GNU General Public
+- * License.  See the file "COPYING" in the main directory of this archive
+- * for more details.
+- *
+- * Copyright (C) 1995, 1996, 2000, 2001 by Ralf Baechle
+- * Copyright (C) 2000, 2001 Silicon Graphics, Inc.
+- */
+-#ifndef _ASM_TERMIOS_H
+-#define _ASM_TERMIOS_H
+-
+-#include <linux/uaccess.h>
+-#include <uapi/asm/termios.h>
+-
+-#endif /* _ASM_TERMIOS_H */
+diff --git a/arch/parisc/include/asm/termios.h b/arch/parisc/include/asm/termios.h
+deleted file mode 100644
+index 1850a90befb3..000000000000
+--- a/arch/parisc/include/asm/termios.h
++++ /dev/null
+@@ -1,7 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _PARISC_TERMIOS_H
+-#define _PARISC_TERMIOS_H
+-
+-#include <uapi/asm/termios.h>
+-
+-#endif	/* _PARISC_TERMIOS_H */
+diff --git a/arch/powerpc/include/asm/termios.h b/arch/powerpc/include/asm/termios.h
+deleted file mode 100644
+index 83794533f607..000000000000
+--- a/arch/powerpc/include/asm/termios.h
++++ /dev/null
+@@ -1,13 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-or-later */
+-/*
+- * Liberally adapted from alpha/termios.h.  In particular, the c_cc[]
+- * fields have been reordered so that termio & termios share the
+- * common subset in the same order (for brain dead programs that don't
+- * know or care about the differences).
+- */
+-#ifndef _ASM_POWERPC_TERMIOS_H
+-#define _ASM_POWERPC_TERMIOS_H
+-
+-#include <uapi/asm/termios.h>
+-
+-#endif	/* _ASM_POWERPC_TERMIOS_H */
+diff --git a/arch/s390/include/asm/termios.h b/arch/s390/include/asm/termios.h
+deleted file mode 100644
+index 0e26fe97b0d4..000000000000
+--- a/arch/s390/include/asm/termios.h
++++ /dev/null
+@@ -1,12 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- *  S390 version
+- *
+- *  Derived from "include/asm-i386/termios.h"
+- */
+-#ifndef _S390_TERMIOS_H
+-#define _S390_TERMIOS_H
+-
+-#include <uapi/asm/termios.h>
+-
+-#endif	/* _S390_TERMIOS_H */
 diff --git a/arch/sparc/include/asm/termios.h b/arch/sparc/include/asm/termios.h
-index 60f90465fc12..1b85721f4e6b 100644
+deleted file mode 100644
+index 1b85721f4e6b..000000000000
 --- a/arch/sparc/include/asm/termios.h
-+++ b/arch/sparc/include/asm/termios.h
-@@ -5,13 +5,4 @@
- #include <uapi/asm/termios.h>
- #include <linux/uaccess.h>
- 
++++ /dev/null
+@@ -1,8 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _SPARC_TERMIOS_H
+-#define _SPARC_TERMIOS_H
 -
--/*	intr=^C		quit=^\		erase=del	kill=^U
--	eof=^D		eol=\0		eol2=\0		sxtc=\0
--	start=^Q	stop=^S		susp=^Z		dsusp=^Y
--	reprint=^R	discard=^O	werase=^W	lnext=^V
--	vmin=\1         vtime=\0
--*/
--#define INIT_C_CC "\003\034\177\025\004\000\000\000\021\023\032\031\022\017\027\026\001"
+-#include <uapi/asm/termios.h>
+-#include <linux/uaccess.h>
 -
- #endif /* _SPARC_TERMIOS_H */
-diff --git a/include/linux/termios_internal.h b/include/linux/termios_internal.h
-index 8a53141ab44a..d77f29e5e2b7 100644
---- a/include/linux/termios_internal.h
-+++ b/include/linux/termios_internal.h
-@@ -5,13 +5,19 @@
- #include <linux/uaccess.h>
- #include <asm/termios.h>
+-#endif /* _SPARC_TERMIOS_H */
+diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+index b8c7843730ed..62e9f7d6c9fe 100644
+--- a/drivers/net/wwan/wwan_core.c
++++ b/drivers/net/wwan/wwan_core.c
+@@ -13,6 +13,7 @@
+ #include <linux/skbuff.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
++#include <linux/uaccess.h>
+ #include <linux/termios.h>
+ #include <linux/wwan.h>
+ #include <net/rtnetlink.h>
+diff --git a/include/asm-generic/termios.h b/include/asm-generic/termios.h
+deleted file mode 100644
+index da3b0fe25442..000000000000
+--- a/include/asm-generic/termios.h
++++ /dev/null
+@@ -1,9 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _ASM_GENERIC_TERMIOS_H
+-#define _ASM_GENERIC_TERMIOS_H
+-
+-
+-#include <linux/uaccess.h>
+-#include <uapi/asm-generic/termios.h>
+-
+-#endif /* _ASM_GENERIC_TERMIOS_H */
+diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+index 3368c261ab62..66f624fc618c 100644
+--- a/include/linux/serdev.h
++++ b/include/linux/serdev.h
+@@ -7,6 +7,7 @@
  
--#ifndef INIT_C_CC
- /*	intr=^C		quit=^\		erase=del	kill=^U
- 	eof=^D		vtime=\0	vmin=\1		sxtc=\0
- 	start=^Q	stop=^S		susp=^Z		eol=\0
- 	reprint=^R	discard=^O	werase=^W	lnext=^V
- 	eol2=\0
- */
-+
-+#ifdef VDSUSP
-+#define INIT_C_CC_VDSUSP_EXTRA [VDSUSP] = 'Y'-0x40,
-+#else
-+#define INIT_C_CC_VDSUSP_EXTRA
-+#endif
-+
- #define INIT_C_CC {		\
- 	[VINTR] = 'C'-0x40,	\
- 	[VQUIT] = '\\'-0x40,	\
-@@ -25,8 +31,8 @@
- 	[VDISCARD] = 'O'-0x40,	\
- 	[VWERASE] = 'W'-0x40,	\
- 	[VLNEXT] = 'V'-0x40,	\
-+	INIT_C_CC_VDSUSP_EXTRA	\
- 	[VMIN] = 1 }
--#endif
+ #include <linux/types.h>
+ #include <linux/device.h>
++#include <linux/uaccess.h>
+ #include <linux/termios.h>
+ #include <linux/delay.h>
  
- int user_termio_to_kernel_termios(struct ktermios *, struct termio __user *);
- int kernel_termios_to_user_termio(struct termio __user *, struct ktermios *);
+diff --git a/include/linux/tty_driver.h b/include/linux/tty_driver.h
+index 4841d8069c07..fbbec811859f 100644
+--- a/include/linux/tty_driver.h
++++ b/include/linux/tty_driver.h
+@@ -7,6 +7,7 @@
+ #include <linux/kref.h>
+ #include <linux/list.h>
+ #include <linux/cdev.h>
++#include <linux/uaccess.h>
+ #include <linux/termios.h>
+ #include <linux/seq_file.h>
+ 
 -- 
 2.30.2
 
