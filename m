@@ -2,82 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828CC59B78C
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Aug 2022 04:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B98159B9A9
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Aug 2022 08:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232268AbiHVCTi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 21 Aug 2022 22:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S233156AbiHVGiM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Aug 2022 02:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbiHVCTh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 21 Aug 2022 22:19:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D983DDEC9;
-        Sun, 21 Aug 2022 19:19:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74C4360F12;
-        Mon, 22 Aug 2022 02:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE11DC433B5;
-        Mon, 22 Aug 2022 02:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661134775;
-        bh=Zpk6Rxu700+dm/MkUInp0fC7Hlw+3o59RXo2zuERj0U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FfVMuzxfJNd6CSHWL3L6vvyrG29BhL3D6t0S/y6HBR97Rb4ybt4WaFhjqcabUYb9k
-         7mEeojBh8JIhCkTYbSqMa1nfjg7XK+zfrxtWcz3FtGUipAFc8zIWi3BOd+e/BYi4Ii
-         ILc9pybHjCPZvy+jXwdk0Ww0GLM+8CRNrgrhvMa9eV4Fn8ELa7/8HqlClBBB2NDD+L
-         hNP/LlGvSo1nV97qwTvdCQDkWs5loZhSxPtJogaP06zZzaZgatb6fABLRqX8KtWKea
-         ubAE5pbrW10jIig9wDF9uftLq71Uyy8sB5oKz60WW0whLCUXvbjim5r/v6uvMi2Ho9
-         +oyOUKrqbu/6w==
-Received: by mail-vk1-f176.google.com with SMTP id 134so1225859vkz.11;
-        Sun, 21 Aug 2022 19:19:35 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3f4JdZp8QKnDdZBF6ll4qBOGvxeOGkzkqrGZ5RSn9UYXPDbHRB
-        968gOYhzkyXytPhJwaoDIMXCrteeXgXMD/aEZVM=
-X-Google-Smtp-Source: AA6agR4RYFMtiBixf/mGUUCq8XBHJ3fm93bGawjKI/ZbmnXS+gWhgGjlNeQ3cTucBf/w6/xwzQdtC+IOuaD07o1+1Go=
-X-Received: by 2002:a1f:9b90:0:b0:374:f09c:876f with SMTP id
- d138-20020a1f9b90000000b00374f09c876fmr6652088vke.12.1661134774631; Sun, 21
- Aug 2022 19:19:34 -0700 (PDT)
+        with ESMTP id S233112AbiHVGiL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Aug 2022 02:38:11 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C58E27FF6;
+        Sun, 21 Aug 2022 23:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=HBBcM9A/awFTGNV6DJENggodsApSG3Yqfk+2KouRytw=; b=2njf6YzoOY74vKtpZpZ6F9ctF7
+        ZN7kngU/R2cbNVb79v3SS1WbSehYORP54z1w/9AdtIqlVKeM1igPjVUu8UACXINb7lJJ1NeNARNe2
+        X/MGBj60eb8jRcdRkf38ucSaka943Je/6nwC+890otwlDxhUumx32O367UCUv5ttn6J6VvjC7CwVm
+        0xetAh0J5S0L7tbptmZ1s8mVzKv6YybnXLaSvik2rGNgdnRGirCxMUzCAEV1rSZF34sMRG4dJUZMr
+        c2SUlO47+rcHOthZFim6I6352/gCiUe9koyOFOrCQjqQhyyaIa9gQBBeGhm+vg0F0BvzFEfS/U3Au
+        9BgLXaQQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oQ14a-005WRv-J5; Mon, 22 Aug 2022 06:38:08 +0000
+Date:   Sun, 21 Aug 2022 23:38:08 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+Cc:     linux-arch@vger.kernel.org, dan.j.williams@intel.com,
+        peterz@infradead.org, mark.rutland@arm.com, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, a.manzanares@samsung.com,
+        bwidawsk@kernel.org, alison.schofield@intel.com,
+        ira.weiny@intel.com, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arch/cacheflush: Introduce flush_all_caches()
+Message-ID: <YwMkUMiKf3ZyMDDF@infradead.org>
+References: <20220819171024.1766857-1-dave@stgolabs.net>
 MIME-Version: 1.0
-References: <20220815124612.3328670-1-chenhuacai@loongson.cn> <YwIx1xoAmsp8cHMN@infradead.org>
-In-Reply-To: <YwIx1xoAmsp8cHMN@infradead.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 22 Aug 2022 10:19:22 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5_bZa2oi6ZSvoMwz8FmJGL8+pg7iYjkT90YT6XTCNb5Q@mail.gmail.com>
-Message-ID: <CAAhV-H5_bZa2oi6ZSvoMwz8FmJGL8+pg7iYjkT90YT6XTCNb5Q@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Use TLB for ioremap()
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220819171024.1766857-1-dave@stgolabs.net>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Christoph
+On Fri, Aug 19, 2022 at 10:10:24AM -0700, Davidlohr Bueso wrote:
+> index b192d917a6d0..ac4d4fd4e508 100644
+> --- a/arch/x86/include/asm/cacheflush.h
+> +++ b/arch/x86/include/asm/cacheflush.h
+> @@ -10,4 +10,8 @@
+>  
+>  void clflush_cache_range(void *addr, unsigned int size);
+>  
+> +/* see comments in the stub version */
+> +#define flush_all_caches() \
+> +	do { wbinvd_on_all_cpus(); } while(0)
 
-On Sun, Aug 21, 2022 at 9:23 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Mon, Aug 15, 2022 at 08:46:12PM +0800, Huacai Chen wrote:
-> > We can support more cache attributes (CC, SUC and WUC) and page
-> > protection when we use TLB for ioremap().
->
-> Please build this on top of the series that extents the generic ioremap
-> code for these use cases instead of duplicating the generic ioremap
-> code.
-OK, let me try, thanks.
+Yikes.  This is just a horrible, horrible name and placement for a bad
+hack that should have no generic relevance.
 
-Huacai
->
+Please fix up the naming to make it clear that this function is for a
+very specific nvdimm use case, and move it to a nvdimm-specific header
+file.
