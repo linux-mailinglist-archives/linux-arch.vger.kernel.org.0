@@ -2,117 +2,276 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F49059C4B9
-	for <lists+linux-arch@lfdr.de>; Mon, 22 Aug 2022 19:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6615E59C4DF
+	for <lists+linux-arch@lfdr.de>; Mon, 22 Aug 2022 19:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235953AbiHVRKL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 22 Aug 2022 13:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S236886AbiHVRRA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 22 Aug 2022 13:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235087AbiHVRJw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Aug 2022 13:09:52 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F97543E6C
-        for <linux-arch@vger.kernel.org>; Mon, 22 Aug 2022 10:09:08 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so13840112ejt.6
-        for <linux-arch@vger.kernel.org>; Mon, 22 Aug 2022 10:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=FBSmStkotiGF5Og7ExawLkOys7P/24UjQfsLmwYIr/M=;
-        b=a1uslqfzoUrzXGd0AtZpa/7qVFuOyaBocH8utbCHMh+IkSOo3bi2iA+PM0xZRNUJXv
-         t1cspoXmBEBzEkIS9Wllb9Qh/U1c5tYnnJ4nHm80ZZthOK6BkFbBx1u7VhL2Ep9q2HGo
-         sz1FnS+mb8UOtjAbiizHgEwMu4Gfjzk0Cl1cM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=FBSmStkotiGF5Og7ExawLkOys7P/24UjQfsLmwYIr/M=;
-        b=HWWA7HbJ5fkuS7E78+kCVZtsFnJTX7cjvY45/9BXFLKN4NPK3seDm5ApDsAJO++Ixx
-         J0+Hq4OQaplok3Qmmu1iJarKYOe5RN3Df5+nd8d/HqvXrRF/jhJ/jCaRVaC0VgmShUjy
-         VEWSe6FTXJmVzNPDJUmVf3UkPb1bNYLMZW3aICP8HhoBMjQbPVxThMkoxgEqmyAd4KlO
-         REFFzt6gi4LNLrjQ25CXcNIYLVO6GT6rJLCXEI/b2RdLTzcujZVPJrOdkM7Y/0pBm7eq
-         BC8dokseWFjaGLEAxoEdAseD75QodYKQ+ZY5HqVDUz/jg8yG2ZwkBfcHAVHkkFX11AXM
-         cpuA==
-X-Gm-Message-State: ACgBeo1ytDXSX1NRjA1D9FIKfj08B/9n/s7b8pa5YOAgL7OEaeQJjlhu
-        1UJE6Kv/5S/hS+oEpiQIbONw3uRHNAK9+6zh
-X-Google-Smtp-Source: AA6agR7Ku5Gwg7VjbJSbOvq0y6Ewlxsy3w6aAmKcWwUGpXsYHhoM5rBogYqxsg+HeiE1UyIkrrvXOw==
-X-Received: by 2002:a17:906:eec7:b0:733:189f:b07a with SMTP id wu7-20020a170906eec700b00733189fb07amr13723714ejb.230.1661188146430;
-        Mon, 22 Aug 2022 10:09:06 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id d6-20020a50fb06000000b0043a5bcf80a2sm6294edq.60.2022.08.22.10.09.05
-        for <linux-arch@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Aug 2022 10:09:05 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so5082119wmk.3
-        for <linux-arch@vger.kernel.org>; Mon, 22 Aug 2022 10:09:05 -0700 (PDT)
-X-Received: by 2002:a05:600c:657:b0:3a5:e4e6:ee24 with SMTP id
- p23-20020a05600c065700b003a5e4e6ee24mr15334285wmm.68.1661188144843; Mon, 22
- Aug 2022 10:09:04 -0700 (PDT)
+        with ESMTP id S236773AbiHVRQ7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 22 Aug 2022 13:16:59 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9FB240B4;
+        Mon, 22 Aug 2022 10:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661188618; x=1692724618;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3bjX4Nqvr1niq4WhvJ4vndYQsekMu1imibjNM0OeL9c=;
+  b=G7gPaerAiZ7pY8HluamIEWPfsBIsB/ljNgiiu2pwPaWaw5am0SrFA7H3
+   CnhjnNkztPrUkxXXr2V6jH8qMcgtaHrAGUhiqTqEw85imXqDLOFJ9SPa8
+   iZjB55BVqpozBsLXbSz40poJYaB+TK7DpmZmbbAIhGH/pbt4vrjGoUSt3
+   KtHQgDmwLIDTk3+F0bYzJBXGp32KneymFvitSci3550zfvdoAbi6Vxmh7
+   pSjSsuUMokHoC6V/p7deiC3lQ1A8uNdsr48p2kUFpAJe/XD0CmR7mhm7u
+   stJ9Pl0fGWWnTj+ja/f81JC3m9Cum3hCt0YVXpAS8czXljGg89H5rbJjv
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10447"; a="294262594"
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="294262594"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2022 10:16:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,255,1654585200"; 
+   d="scan'208";a="585608200"
+Received: from lkp-server01.sh.intel.com (HELO dd9b29378baa) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 22 Aug 2022 10:16:55 -0700
+Received: from kbuild by dd9b29378baa with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oQB2l-0000Vn-0g;
+        Mon, 22 Aug 2022 17:16:55 +0000
+Date:   Tue, 23 Aug 2022 01:16:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     sound-open-firmware@alsa-project.org,
+        platform-driver-x86@vger.kernel.org, linux-arch@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ cc2986f4dc67df7e6209e0cd74145fffbd30d693
+Message-ID: <6303b9e7.XfUgtQTlIdzz7vPk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 Aug 2022 10:08:48 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
-Message-ID: <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 2:39 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
->
-> I'd like to ask what do you think about this patch?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: cc2986f4dc67df7e6209e0cd74145fffbd30d693  Add linux-next specific files for 20220822
 
-I really don't like it. It adds a pointless read barrier only because
-you didn't want to do it properly.
+Error/Warning: (recently discovered and may have been fixed)
 
-On x86, it doesn't matter, since rmb is a no-op and only a scheduling
-barrier (and not noticeable in this case anyway).
+drivers/base/regmap/regmap-mmio.c:221:17: error: implicit declaration of function 'writesb'; did you mean 'writeb'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:224:17: error: implicit declaration of function 'writesw'; did you mean 'writew'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:227:17: error: implicit declaration of function 'writesl'; did you mean 'writel'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:231:17: error: implicit declaration of function 'writesq'; did you mean 'writeq'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:231:17: error: implicit declaration of function 'writesq'; did you mean 'writesl'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:358:17: error: implicit declaration of function 'readsb'; did you mean 'readb'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:361:17: error: implicit declaration of function 'readsw'; did you mean 'readw'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:364:17: error: implicit declaration of function 'readsl'; did you mean 'readl'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readq'? [-Werror=implicit-function-declaration]
+drivers/base/regmap/regmap-mmio.c:368:17: error: implicit declaration of function 'readsq'; did you mean 'readsl'? [-Werror=implicit-function-declaration]
+drivers/platform/mellanox/mlxreg-lc.c:866 mlxreg_lc_probe() warn: passing zero to 'PTR_ERR'
+sound/soc/sof/compress.c:330:13: warning: variable 'dai_posn' set but not used [-Wunused-but-set-variable]
 
-On other architectures, it might.
+Error/Warning ids grouped by kconfigs:
 
-But on all architectures it's just ugly.
+gcc_recent_errors
+|-- alpha-allmodconfig
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- alpha-allyesconfig
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|   `-- sound-soc-sof-compress.c:warning:variable-dai_posn-set-but-not-used
+|-- alpha-buildonly-randconfig-r001-20220822
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- alpha-buildonly-randconfig-r006-20220821
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- alpha-randconfig-r031-20220822
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsq
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-readsw
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesb
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesl
+|   |-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesq
+|   `-- drivers-base-regmap-regmap-mmio.c:error:implicit-declaration-of-function-writesw
+|-- arc-allyesconfig
+|   `-- sound-soc-sof-compress.c:warning:variable-dai_posn-set-but-not-used
+|-- arm-allyesconfig
+|   `-- sound-soc-sof-compress.c:warning:variable-dai_posn-set-but-not-used
+clang_recent_errors
+|-- hexagon-randconfig-r001-20220821
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insb
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insl
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insw
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-memcpy_fromio
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-memcpy_toio
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsb
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsl
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsw
+|   |-- include-asm-generic-io.h:error:redefinition-of-memset_io
+|   |-- include-asm-generic-io.h:error:redefinition-of-phys_to_virt
+|   |-- include-asm-generic-io.h:error:redefinition-of-readb
+|   |-- include-asm-generic-io.h:error:redefinition-of-readl
+|   |-- include-asm-generic-io.h:error:redefinition-of-readw
+|   |-- include-asm-generic-io.h:error:redefinition-of-virt_to_phys
+|   |-- include-asm-generic-io.h:error:redefinition-of-writeb
+|   |-- include-asm-generic-io.h:error:redefinition-of-writel
+|   `-- include-asm-generic-io.h:error:redefinition-of-writew
+|-- hexagon-randconfig-r004-20220822
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insb
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insl
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insw
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-memcpy_fromio
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-memcpy_toio
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsb
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsl
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsw
+|   |-- include-asm-generic-io.h:error:redefinition-of-memset_io
+|   |-- include-asm-generic-io.h:error:redefinition-of-phys_to_virt
+|   |-- include-asm-generic-io.h:error:redefinition-of-readb
+|   |-- include-asm-generic-io.h:error:redefinition-of-readl
+|   |-- include-asm-generic-io.h:error:redefinition-of-readw
+|   |-- include-asm-generic-io.h:error:redefinition-of-virt_to_phys
+|   |-- include-asm-generic-io.h:error:redefinition-of-writeb
+|   |-- include-asm-generic-io.h:error:redefinition-of-writel
+|   `-- include-asm-generic-io.h:error:redefinition-of-writew
+|-- hexagon-randconfig-r032-20220821
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insb
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insl
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-insw
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-memcpy_fromio
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-memcpy_toio
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsb
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsl
+|   |-- include-asm-generic-io.h:error:conflicting-types-for-outsw
+|   |-- include-asm-generic-io.h:error:redefinition-of-memset_io
+|   |-- include-asm-generic-io.h:error:redefinition-of-phys_to_virt
+|   |-- include-asm-generic-io.h:error:redefinition-of-readb
+|   |-- include-asm-generic-io.h:error:redefinition-of-readl
+|   |-- include-asm-generic-io.h:error:redefinition-of-readw
 
-I suggested in an earlier thread that you just do it right with an
-explicit smp_load_acquire() and a manual bit test.
+elapsed time: 721m
 
-So why don't we just create a "test_bit_acquire()" and be done with
-it? We literally created clear_bit_unlock() for the opposite reason,
-and your comments about the new barrier hack even point to it.
+configs tested: 76
+configs skipped: 2
 
-Why is "clear_bit_unlock()" worthy of a real helper, but
-"test_bit_acquire()" is not and people who want it have to use this
-horrendous hack?
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64               randconfig-a012-20220822
+x86_64               randconfig-a013-20220822
+x86_64               randconfig-a011-20220822
+i386                 randconfig-a014-20220822
+x86_64                              defconfig
+i386                 randconfig-a013-20220822
+i386                 randconfig-a011-20220822
+csky                              allnoconfig
+x86_64               randconfig-a016-20220822
+arc                               allnoconfig
+x86_64               randconfig-a014-20220822
+i386                 randconfig-a012-20220822
+alpha                             allnoconfig
+x86_64               randconfig-a015-20220822
+i386                                defconfig
+i386                 randconfig-a016-20220822
+x86_64                               rhel-8.3
+arm                                 defconfig
+riscv                             allnoconfig
+arc                  randconfig-r043-20220821
+arm                           sama5_defconfig
+mips                           jazz_defconfig
+x86_64                           allyesconfig
+i386                 randconfig-a015-20220822
+powerpc                           allnoconfig
+alpha                            allyesconfig
+m68k                         apollo_defconfig
+arc                  randconfig-r043-20220822
+m68k                             allmodconfig
+arc                              allyesconfig
+arm                            lart_defconfig
+riscv                randconfig-r042-20220822
+sh                           se7724_defconfig
+m68k                       m5275evb_defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+x86_64                          rhel-8.3-func
+i386                             allyesconfig
+x86_64                         rhel-8.3-kunit
+s390                 randconfig-r044-20220822
+x86_64                           rhel-8.3-kvm
+x86_64                    rhel-8.3-kselftests
+sh                               allmodconfig
+x86_64                           rhel-8.3-syz
+mips                             allyesconfig
+sh                   sh7770_generic_defconfig
+powerpc                          allmodconfig
+ia64                             allmodconfig
+m68k                             allyesconfig
 
-Please stop adding random barriers already. Just do it right. I've
-said this before, why do you then keep doing this and asking for
-comments?
+clang tested configs:
+i386                 randconfig-a001-20220822
+i386                 randconfig-a002-20220822
+i386                 randconfig-a003-20220822
+i386                 randconfig-a005-20220822
+i386                 randconfig-a004-20220822
+i386                 randconfig-a006-20220822
+x86_64               randconfig-a002-20220822
+x86_64               randconfig-a004-20220822
+hexagon              randconfig-r041-20220822
+arm                        neponset_defconfig
+powerpc                      katmai_defconfig
+x86_64               randconfig-a003-20220822
+mips                      maltaaprp_defconfig
+x86_64               randconfig-a001-20220822
+x86_64               randconfig-a006-20220822
+x86_64               randconfig-a005-20220822
+hexagon              randconfig-r045-20220822
+hexagon              randconfig-r045-20220821
+hexagon              randconfig-r041-20220821
+s390                 randconfig-r044-20220821
+riscv                randconfig-r042-20220821
+mips                        bcm63xx_defconfig
+powerpc                    socrates_defconfig
+powerpc                     powernv_defconfig
+x86_64                          rhel-8.3-rust
 
-My reply will remain the same: JUST DO IT RIGHT.
-
-                Linus
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
