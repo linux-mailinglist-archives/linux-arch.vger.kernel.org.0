@@ -2,51 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8222A5A03D6
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Aug 2022 00:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5FC5A0430
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Aug 2022 00:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiHXWPy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 24 Aug 2022 18:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
+        id S230410AbiHXWk3 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 24 Aug 2022 18:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiHXWPu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Aug 2022 18:15:50 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26CBC78BE3;
-        Wed, 24 Aug 2022 15:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=M7543lfE0SArKDKxNt2+d7p7IIY0Jo5yIiutMPnjNK4=; b=KBv7hcqv70I72ABNqaGqseX40f
-        jhbd7P77Zzdkml+0BLC/IPp8VXz4zoYDLZMx15rCrFGxsNhVB9Bm/Si55jMeOYbLh9K9KSPY2llL6
-        cGFwuleEjaepCjjo57mxcdU9d7ErZHvx3h2tErit9AMz69Xx3o9mXaP9miqVJ5BrsDYn2RFvZ653m
-        U2BloIQabUD3nVLrJc0HKJqj5w2A9yYMalwFyoXFUIThAWShChzkH5Gp8dQmzuKktIgv0FES8kCft
-        Q3B/hRRGi6CnAsDQSfpe3Mg0TXIKqerDipwG0vsIHQEAnNDJVgfav0+w/Hd7dXm9Hk0LOMzuwP9j2
-        O6NMJOCQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oQyf2-0027nQ-N2; Wed, 24 Aug 2022 22:15:44 +0000
-Message-ID: <48f9ddc8-02e2-2f2a-8bde-2d7346998096@infradead.org>
-Date:   Wed, 24 Aug 2022 15:15:41 -0700
+        with ESMTP id S229798AbiHXWkS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 24 Aug 2022 18:40:18 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9782E9E4;
+        Wed, 24 Aug 2022 15:40:17 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id q2so21750203edb.6;
+        Wed, 24 Aug 2022 15:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=W+SwShFa3i3wQlIqmrJCmsnCbHpnmw83ukjZXzLki18=;
+        b=Eb4hBAIjsW5NUkq4D9ve+Pz1LiMvwyaGeh0ULrOicTxhMu2Z4dXARXpNRx/f33omxV
+         /ZLiFVPFl5A1DWIPcyeQB6kCMLo8rNB+5+5RvTIWLxdzqnEIdqb7iJXa8+npGXGWVyGI
+         NCTOnkyKjFPLYdXStu1aioIgzIGEwxSMzmPzF4ZCGCO8sOUQlxPIfZC8kvnsKxMprURJ
+         n+qWoosNhh1hclsPBO9hnPeUbfZQC7nsYVPZIbyPDWYM4VN5cMEaAO8We8L0OFQoJIlp
+         QBiI0y7B0DcUx6SmzI4Du5rxp21waW57bLp2IOGoUww4ixmSm5jnzfylj9zWfhdl9Kw2
+         /2Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=W+SwShFa3i3wQlIqmrJCmsnCbHpnmw83ukjZXzLki18=;
+        b=jHPONRSFjaAay2oXENZGoVTXCYHCdUnUauKJGKT4kDlma1S8H/cd+cdTn1SJQP4Qfy
+         y/mQDsdyT2GcqmTUjaqCPlKFTfsm0Htrvl2uYMnY47k01p5AtuA8275ZAXOkL/IHmIGP
+         imaOIRoznqIEvVw/w+MbNg4HbaVkboRfK46CgcLCASfEizvEmmcU5SEVUtaobuw/C4bB
+         fM8UNco/9hUXoZ5udezTqKetvMikUnvH/OA9YoSpwPUJrSzoRHcbkpbyod7ybMPbbab+
+         Oa3zG8bFUcFJgmK/2UgekNP3HhPIW0MyDsLU5Xu/uiytLdQGlhPfrDfSg6pvoJrTFfrB
+         9THg==
+X-Gm-Message-State: ACgBeo0WK9cX1WtDsNSiUj1N4QyPdUXjcLNRRzfa0XabWglZxRvTS5Dq
+        EC05ScjwUvonnuERQ/MhcTI9/Bqku9pa/G+JnYk=
+X-Google-Smtp-Source: AA6agR4FKu0eVIUn8G7XVv/tG0JhfwVi8NKI+LilIiBIFeoG2vrIvge5MX77xF20StzHp9O4/mepkyPBSeZ5xTzvr4Y=
+X-Received: by 2002:a05:6402:28cb:b0:43b:c6d7:ef92 with SMTP id
+ ef11-20020a05640228cb00b0043bc6d7ef92mr898662edb.333.1661380815411; Wed, 24
+ Aug 2022 15:40:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] sparc64: Fix the generic IO helpers
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     sparclinux@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-arch@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20220823085014.208791-1-linus.walleij@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220823085014.208791-1-linus.walleij@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20210423230609.13519-1-alx.manpages@gmail.com> <20220824185505.56382-1-alx.manpages@gmail.com>
+In-Reply-To: <20220824185505.56382-1-alx.manpages@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 24 Aug 2022 15:40:04 -0700
+Message-ID: <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
+Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C naming
+To:     Alejandro Colomar <alx.manpages@gmail.com>
+Cc:     linux-man <linux-man@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Zack Weinberg <zackw@panix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        glibc <libc-alpha@sourceware.org>, GCC <gcc-patches@gcc.gnu.org>,
+        bpf <bpf@vger.kernel.org>, LTP List <ltp@lists.linux.it>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        David Laight <David.Laight@aculab.com>,
+        Joseph Myers <joseph@codesourcery.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Cyril Hrubis <chrubis@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
+        Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,81 +80,48 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi--
+On Wed, Aug 24, 2022 at 12:04 PM Alejandro Colomar
+<alx.manpages@gmail.com> wrote:
+>
+> diff --git a/man2/bpf.2 b/man2/bpf.2
+> index d05b73ec2..84d1b62e5 100644
+> --- a/man2/bpf.2
+> +++ b/man2/bpf.2
+> @@ -169,34 +169,34 @@ commands:
+>  .EX
+>  union bpf_attr {
+>      struct {    /* Used by BPF_MAP_CREATE */
+> -        __u32         map_type;
+> -        __u32         key_size;    /* size of key in bytes */
+> -        __u32         value_size;  /* size of value in bytes */
+> -        __u32         max_entries; /* maximum number of entries
+> +        uint32_t      map_type;
+> +        uint32_t      key_size;    /* size of key in bytes */
+> +        uint32_t      value_size;  /* size of value in bytes */
+> +        uint32_t      max_entries; /* maximum number of entries
+>                                        in a map */
+>      };
+>
+>      struct {    /* Used by BPF_MAP_*_ELEM and BPF_MAP_GET_NEXT_KEY
+>                     commands */
+> -        __u32         map_fd;
+> +        uint32_t      map_fd;
+>          __aligned_u64 key;
+>          union {
+>              __aligned_u64 value;
+>              __aligned_u64 next_key;
+>          };
+> -        __u64         flags;
+> +        uint64_t      flags;
+>      };
+>
+>      struct {    /* Used by BPF_PROG_LOAD */
+> -        __u32         prog_type;
+> -        __u32         insn_cnt;
+> +        uint32_t      prog_type;
+> +        uint32_t      insn_cnt;
 
-On 8/23/22 01:50, Linus Walleij wrote:
-> This enables the Sparc to use <asm-generic/io.h> to fill in the
-> missing (undefined) [read|write]sq I/O accessor functions.
-> 
-> This is needed if Sparc[64] ever wants to uses CONFIG_REGMAP_MMIO
-> which has been patches to use accelerated _noinc accessors
-> such as readsq/writesq that Sparc64, while being a 64bit platform,
-> as of now not yet provide.
-> 
-> This comes with the requirement that everything the architecture
-> already provides needs to be defined, rather than just being,
-> say, static inline functions.
-> 
-> Bite the bullet and just provide the definitions and make it work.
-> Compile-tested on sparc64.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/linux-arm-kernel/202208201639.HXye3ke4-lkp@intel.com/
-> Cc: David S. Miller <davem@davemloft.net>
-> Cc: sparclinux@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+For the N-th time:
+Nacked-by: Alexei Starovoitov <ast@kernel.org>
 
-Both alpha & parisc (32 and 64 bits) need this fix also.
-
-Is it always safe to do this?
-
-> ---
->  arch/sparc/include/asm/io.h | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/arch/sparc/include/asm/io.h b/arch/sparc/include/asm/io.h
-> index 2eefa526b38f..88da27165c01 100644
-> --- a/arch/sparc/include/asm/io.h
-> +++ b/arch/sparc/include/asm/io.h
-> @@ -19,4 +19,35 @@
->  #define writel_be(__w, __addr)	__raw_writel(__w, __addr)
->  #define writew_be(__l, __addr)	__raw_writew(__l, __addr)
->  
-> +/*
-> + * These defines are necessary to use the generic io.h for filling in
-> + * the missing parts of the API contract. This is because the platform
-> + * uses (inline) functions rather than defines and the generic helper
-> + * fills in the undefined.
-> + */
-> +/* These are static inlines on 64BIT only */
-> +#if defined(__sparc__) && defined(__arch64__)
-> +#define memset_io memset_io
-> +#define memcpy_fromio memcpy_fromio
-> +#define memcpy_toio memcpy_toio
-> +#endif
-> +#define pci_iomap pci_iomap
-> +#define pci_iounmap pci_iounmap
-> +#define ioremap_np ioremap_np
-> +#define ioport_map ioport_map
-> +#define ioport_unmap ioport_unmap
-> +#define readsb readsb
-> +#define readsw readsw
-> +#define readsl readsl
-> +#define writesb writesb
-> +#define writesw writesw
-> +#define writesl writesl
-> +#define insb insb
-> +#define insw insw
-> +#define insl insl
-> +#define outsb outsb
-> +#define outsw outsw
-> +#define outsl outsl
-> +#include <asm-generic/io.h>
-> +
->  #endif
-
--- 
-~Randy
+Please stop sending this patch.
