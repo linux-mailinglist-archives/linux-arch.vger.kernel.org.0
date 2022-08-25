@@ -2,65 +2,71 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B435A09F2
-	for <lists+linux-arch@lfdr.de>; Thu, 25 Aug 2022 09:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6A65A0A34
+	for <lists+linux-arch@lfdr.de>; Thu, 25 Aug 2022 09:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbiHYHUV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 25 Aug 2022 03:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S236828AbiHYH1w (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 25 Aug 2022 03:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiHYHUR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Aug 2022 03:20:17 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3194C65575;
-        Thu, 25 Aug 2022 00:20:16 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso2151760wmh.5;
-        Thu, 25 Aug 2022 00:20:16 -0700 (PDT)
+        with ESMTP id S235786AbiHYH1u (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 25 Aug 2022 03:27:50 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F067165563
+        for <linux-arch@vger.kernel.org>; Thu, 25 Aug 2022 00:27:47 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id kk26so8127370ejc.11
+        for <linux-arch@vger.kernel.org>; Thu, 25 Aug 2022 00:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:from:content-language:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=KIHxt5nVijY/1SpzhvDTBoWdHMIpgSP8DcUseF72CE4=;
-        b=HP66mFj9l67k/JHPYecCyXq+n3/83muw5zms7LtbAJCfKrLnNEa98VUMKzlHtHvOYZ
-         FSVrgmX7YOxt27V5TJ5K+c5UIFaCKU7sAhOmD10AEGJGPp1YDJuSSTxiN175TerOVJ9r
-         FjOplwHCpEH4hKNUNPx8mRl4uvVxc+CFSVhsfc35s1vbt0TAE/JLlByROvuEdMbeyD7s
-         3suab3AwCsSAFeRbIHU/k0lhtVzvrmhYzHEg0jRhrzhQKtnqyhFDXKnDtTynqufmDEqU
-         LwhQuxx71FlLzwzGBiI34280CbLoKuHTs+z4tFKD5awuoqrVmfrGEDXWqOVc7h5IoZ3s
-         pNGg==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/oj50hsl8kbfl2r5TD7WwWtw83gdRut5PdToYGpC4Ik=;
+        b=Goy06y0aydlFdewFjaQoeuV6+94AF3G4Kd5MnBCFsRmAguUDtmTDpQb6gSDsC8v858
+         O/sDYoTbg6PSw67ijrEnRK2ZAHwB9YaQefNZl+U/92XlmmBmO0tImfXBiXc6OEXrm0Mk
+         aFgclEQ/Wy3ZKJgW2dVbRAOlKaWpWn3UCrdcw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:from:content-language:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=KIHxt5nVijY/1SpzhvDTBoWdHMIpgSP8DcUseF72CE4=;
-        b=2sQ48AneOvaFzVvjglFppPNbgnMR13Z71xkKO8lmqvabURgLurRZJramU3/XLiL1NB
-         aE3ToDLtDfP6ukAeKhAkbRvxkZq7ZtmXxagNNFUs7oLmdFHE6TanfiF673HUV/QPh1Hq
-         ZGvIxVMid/kkMKOYJgmBDnRzyQKH1+ej9C2apFW7re9N9eYebu2i9RyCl3jodR7y3e41
-         qyx46IsHszT0Fjo6xzCxJDmSWSWddtd3QUslZJnEq+V8bIoQX//CzZd8CcGY6FaFbaJu
-         SUmZOhUit9pfr1Ul6fMHfYDsSqTmnErelew6sUHoGA1MPE1q5YqczXk4Mq0918VQk6oz
-         sl8w==
-X-Gm-Message-State: ACgBeo04uqie1SrQk3U1qpYecF8Wmp6PjzHvKcCbmOlczJtRc4o9Jidh
-        WnY7hV6lBFroNO9edMoz7bM=
-X-Google-Smtp-Source: AA6agR5+BsM//Bgc6fvPd4+/S9EWpj+VYQ+WYOROmakuFpqHjN0+qqVfbQmCZsp9tA9zbX3+6ZB1iA==
-X-Received: by 2002:a05:600c:2e48:b0:3a5:b600:1a3b with SMTP id q8-20020a05600c2e4800b003a5b6001a3bmr1290062wmf.180.1661412014760;
-        Thu, 25 Aug 2022 00:20:14 -0700 (PDT)
-Received: from [192.168.0.160] ([170.253.36.171])
-        by smtp.gmail.com with ESMTPSA id i14-20020a05600c354e00b003a4f08495b7sm4593628wmq.34.2022.08.25.00.20.12
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/oj50hsl8kbfl2r5TD7WwWtw83gdRut5PdToYGpC4Ik=;
+        b=nsL6q8d86kJSkHy5IBAzK2EQxmcPwWel5tg1r87D22TuGg0qYw73vk8nkNpKp5doUB
+         DV6kBORrKhyg+RJENg9Zq9R7SoPeBZKxjbbTtpEZCTWYfINNoqFIdRN5Bq5wxNuK6d77
+         kWF8/b49GQLwXzLQb0V79jLZrnKKVETr7kfxrK+BqjRTrT9MH2eX8U7XDS1/Fth0gQvi
+         aFDaLCtofBSwG1PN+EAqcjbmvKjsno934XfSI62nlUngnG8J4xLM+dNmX2k6M3vJ/pmm
+         2dxyDQTDtToKNb1vt+eX92lTLaDyy3uI/i3CEQnftl8llddYIeRydC3Kf3EM8R5sijEG
+         n9gQ==
+X-Gm-Message-State: ACgBeo2jcymRYIpbMYZfvQBE4Gg/lauNoGYZVcjvTHnfcZR4/N9uLmoj
+        zjCEavNKWeTHhOjhkUvLJx9a38w5c5/mp3YCiiI=
+X-Google-Smtp-Source: AA6agR7Sd8ZhuDY0XGhYUfLTh1tpU4Aymo5TmWLHMuPBCKtdY160kDePdl+KmV4knkLLhxIuSItJpw==
+X-Received: by 2002:a17:907:6e14:b0:730:a229:f747 with SMTP id sd20-20020a1709076e1400b00730a229f747mr1682042ejc.202.1661412466156;
+        Thu, 25 Aug 2022 00:27:46 -0700 (PDT)
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com. [209.85.221.52])
+        by smtp.gmail.com with ESMTPSA id i23-20020aa7c9d7000000b004463b99bc09sm4196021edt.88.2022.08.25.00.27.43
+        for <linux-arch@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Aug 2022 00:20:14 -0700 (PDT)
-Message-ID: <20d93962-538c-d2c9-1696-a1bdbffa87f8@gmail.com>
-Date:   Thu, 25 Aug 2022 09:20:04 +0200
+        Thu, 25 Aug 2022 00:27:44 -0700 (PDT)
+Received: by mail-wr1-f52.google.com with SMTP id z16so4643872wrh.10
+        for <linux-arch@vger.kernel.org>; Thu, 25 Aug 2022 00:27:43 -0700 (PDT)
+X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
+ m8-20020a5d6248000000b00222cd3b94c8mr1385724wrv.97.1661412462666; Thu, 25 Aug
+ 2022 00:27:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+References: <20210423230609.13519-1-alx.manpages@gmail.com>
+ <20220824185505.56382-1-alx.manpages@gmail.com> <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
+ <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com> <YwcPQ987poRYjfoL@kroah.com> <87ilmgddui.fsf@oldenburg.str.redhat.com>
+In-Reply-To: <87ilmgddui.fsf@oldenburg.str.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 25 Aug 2022 00:27:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
+Message-ID: <CAHk-=whsETo4kc2Ec1Nf4HQY5vKYmRi9et243kyqN4E-=PgKJw@mail.gmail.com>
+Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C naming
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Alex Colomar <alx@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         linux-man <linux-man@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Zack Weinberg <zackw@panix.com>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -70,128 +76,139 @@ Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         linux-arch <linux-arch@vger.kernel.org>,
         David Laight <David.Laight@aculab.com>,
         Joseph Myers <joseph@codesourcery.com>,
-        Florian Weimer <fweimer@redhat.com>,
         Cyril Hrubis <chrubis@suse.cz>,
         David Howells <dhowells@redhat.com>,
         Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
         Adhemerval Zanella <adhemerval.zanella@linaro.org>,
         Michael Kerrisk <mtk.manpages@gmail.com>
-References: <20210423230609.13519-1-alx.manpages@gmail.com>
- <20220824185505.56382-1-alx.manpages@gmail.com>
- <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
- <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com>
- <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
-Content-Language: en-US
-From:   Alejandro Colomar <alx.manpages@gmail.com>
-In-Reply-To: <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------oanfeXgMU6o81bRhHPRltey6"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------oanfeXgMU6o81bRhHPRltey6
-Content-Type: multipart/mixed; boundary="------------d0sCgY7JNiM9BzNqtiBt3hta";
- protected-headers="v1"
-From: Alejandro Colomar <alx.manpages@gmail.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Alex Colomar <alx@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- linux-man <linux-man@vger.kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Zack Weinberg <zackw@panix.com>,
- LKML <linux-kernel@vger.kernel.org>, glibc <libc-alpha@sourceware.org>,
- GCC <gcc-patches@gcc.gnu.org>, bpf <bpf@vger.kernel.org>,
- LTP List <ltp@lists.linux.it>, Linux API <linux-api@vger.kernel.org>,
- linux-arch <linux-arch@vger.kernel.org>,
- David Laight <David.Laight@aculab.com>,
- Joseph Myers <joseph@codesourcery.com>, Florian Weimer <fweimer@redhat.com>,
- Cyril Hrubis <chrubis@suse.cz>, David Howells <dhowells@redhat.com>,
- Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
- Adhemerval Zanella <adhemerval.zanella@linaro.org>,
- Michael Kerrisk <mtk.manpages@gmail.com>
-Message-ID: <20d93962-538c-d2c9-1696-a1bdbffa87f8@gmail.com>
-Subject: Re: [PATCH v3] Many pages: Document fixed-width types with ISO C
- naming
-References: <20210423230609.13519-1-alx.manpages@gmail.com>
- <20220824185505.56382-1-alx.manpages@gmail.com>
- <CAADnVQKiEVL9zRtN4WY2+cTD2b3b3buV8BQb83yQw13pWq4OGQ@mail.gmail.com>
- <c06008bc-0c13-12f1-df85-3814b74e47f9@gmail.com>
- <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
-In-Reply-To: <CAHk-=whfft=qpCiQ=mkaCz+X1MEfGK5hpUWYoM5zWK=2EQMwyw@mail.gmail.com>
+On Wed, Aug 24, 2022 at 11:41 PM Florian Weimer <fweimer@redhat.com> wrote:
+>
+> The justifications brought forward are just regurgitating previous
+> misinformation.  If you do that, it's hard to take you seriously.
 
---------------d0sCgY7JNiM9BzNqtiBt3hta
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Pot, meet kettle.
 
-SGkgTGludXgsDQoNCk9uIDgvMjUvMjIgMDI6NTIsIExpbnVzIFRvcnZhbGRzIHdyb3RlOg0K
-PiBPbiBXZWQsIEF1ZyAyNCwgMjAyMiBhdCA0OjM2IFBNIEFsZWphbmRybyBDb2xvbWFyDQo+
-IDxhbHgubWFucGFnZXNAZ21haWwuY29tPiB3cm90ZToNCj4+DQo+PiBJJ20gdHJ5aW5nIHRv
-IGJlIG5pY2UsIGFuZCBhc2sgZm9yIHJldmlldyB0byBtYWtlIHN1cmUgSSdtIG5vdCBtYWtp
-bmcNCj4+IHNvbWUgYmlnIG1pc3Rha2UgYnkgYWNjaWRlbnQsIGFuZCBJIGdldCBkaXNyZXNw
-ZWN0PyAgTm8gdGhhbmtzLg0KPiANCj4gWW91J3ZlIGJlZW4gdG9sZCBtdWx0aXBsZSB0aW1l
-cyB0aGF0IHRoZSBrZXJuZWwgZG9lc24ndCB1c2UgdGhlDQo+ICJzdGFuZGFyZCIgbmFtZXMs
-IGFuZCAqY2Fubm90KiB1c2UgdGhlbSBmb3IgbmFtZXNwYWNlIHJlYXNvbnMsIGFuZCB5b3UN
-Cj4gaWdub3JlIGFsbCB0aGUgZmVlZGJhY2ssIGFuZCB0aGVuIHlvdSBjbGFpbSB5b3UgYXJl
-IGFza2luZyBmb3IgcmV2aWV3Pw0KDQpUaGlzIHBhdGNoIGlzIG5vdCBhYm91dCBrZXJuZWws
-IGJ1dCBhYm91dCB0aGUgc2VjdGlvbiAyIGFuZCAzIG1hbnVhbCANCnBhZ2VzLCB3aGljaCBh
-cmUgZGlyZWN0ZWQgdG93YXJkcyB1c2VyLXNwYWNlIHJlYWRlcnMgbW9zdCBvZiB0aGUgdGlt
-ZS4gDQpBZG1pdHRlZGx5LCBzb21lIHN5c2NhbGxzIGFyZSBvbmx5IGNhbGxhYmxlIGZyb20g
-d2l0aGluIHRoZSBrZXJuZWwgDQppdHNlbGYsIGJ1dCB0aGF0J3MgdmVyeSByYXJlLg0KDQpb
-Li4uXQ0KDQo+IA0KPiBUaGUgZmFjdCBpcywga2VybmVsIFVBUEkgaGVhZGVyIGZpbGVzIE1V
-U1QgTk9UIHVzZSB0aGUgc28tY2FsbGVkIHN0YW5kYXJkIG5hbWVzLg0KDQpJIGRvbid0IGtu
-b3cgZm9yIHN1cmUsIGFuZCBJIG5ldmVyIHByZXRlbmRlZCB0byBzYXkgb3RoZXJ3aXNlLiAg
-QnV0IHdoYXQgDQpJTUhPIHRoZSBrZXJuZWwgY291bGQgZG8gaXMgdG8gbWFrZSB0aGUgdHlw
-ZXMgY29tcGF0aWJsZSwgYnkgdHlwZWRlZmluZyANCnRvIHRoZSBzYW1lIGZ1bmRhbWVudGFs
-IHR5cGVzIChpLmUuLCBsb25nIG9yIGxvbmcgbG9uZykgdGhhdCB1c2VyLXNwYWNlIA0KdHlw
-ZXMgZG8uDQoNCj4gDQo+IFdlIGNhbm5vdCBwcm92aWRlIHNhaWQgbmFtZXMsIGJlY2F1c2Ug
-dGhleSBhcmUgb25seSBwcm92aWRlZCBieSB0aGUNCj4gc3RhbmRhcmQgaGVhZGVyIGZpbGVz
-Lg0KPiANCj4gQW5kIHNpbmNlIGtlcm5lbCBoZWFkZXIgZmlsZXMgY2Fubm90IHByb3ZpZGUg
-dGhlbSwgdGhlbiBrZXJuZWwgVUFQSQ0KPiBoZWFkZXIgZmlsZXMgY2Fubm90IF91c2VfIHRo
-ZW0uDQo+IA0KPiBFbmQgcmVzdWx0OiBhbnkga2VybmVsIFVBUEkgaGVhZGVyIGZpbGUgd2ls
-bCBjb250aW51ZSB0byB1c2UgX191MzIgZXRjDQo+IG5hbWluZyB0aGF0IGRvZXNuJ3QgaGF2
-ZSBhbnkgbmFtZXNwYWNlIHBvbGx1dGlvbiBpc3N1ZXMuDQo+IA0KPiBOb3RoaW5nIGVsc2Ug
-aXMgZXZlbiByZW1vdGVseSBhY2NlcHRhYmxlLg0KPiANCj4gU3RvcCB0cnlpbmcgdG8gbWFr
-ZSB0aGlzIHNvbWV0aGluZyBvdGhlciB0aGFuIGl0IGlzLg0KPiANCj4gQW5kIGlmIHlvdSBj
-YW5ub3QgYWNjZXB0IHRoZXNlIHNpbXBsZSB0ZWNobmljYWwgcmVhc29ucywgd2h5IGRvIHlv
-dQ0KPiBleHBlY3QgcmVzcGVjdD8NCj4gDQo+IFdoeSBhcmUgeW91IHNvIHNwZWNpYWwgdGhh
-dCB5b3UgdGhpbmsgeW91IGNhbiBjaGFuZ2UgdGhlIHJ1bGVzIGZvcg0KPiBrZXJuZWwgdWFw
-aSBmaWxlcyBvdmVyIHRoZSAqcmVwZWF0ZWQqIG9iamVjdGlvbnMgZnJvbSBtYWludGFpbmVy
-cyB3aG8NCj4ga25vdyBiZXR0ZXI/DQoNCk5vIHNvcnJ5LCBpZiBzb21lb25lIHVuZGVyc3Rv
-b2QgdGhpcyBwYXRjaCBhcyBjaGFuZ2luZyBhbnl0aGluZyBpbiBVQVBJLCANCml0IGlzIG5v
-dC4NCg0KQ2hlZXJzLA0KDQpBbGV4DQoNCi0tIA0KQWxlamFuZHJvIENvbG9tYXINCjxodHRw
-Oi8vd3d3LmFsZWphbmRyby1jb2xvbWFyLmVzLz4NCg==
+> There is actually a good reason for using __u64: it's always based on
+> long long, so the format strings are no longer architecture-specific,
+[..]
 
---------------d0sCgY7JNiM9BzNqtiBt3hta--
+That's a small detail that yes, we've tried to avoid the absolute
+humongous mess that the C standard library has with their horrendous
+'PRId*' mess, but honestly, it's just a tiny detail.
 
---------------oanfeXgMU6o81bRhHPRltey6
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+The real issue is that we want to be able to control our own types,
+and our own names, and in the process have sometimes been able to
+standardize on types that makes it easier to just not have to deal
+with "oh, somebody picked 'int' on this architecture, and 'long' on
+this other, and they are both 32-bit types".
 
------BEGIN PGP SIGNATURE-----
+We still have to deal with that for '[s]size_t', but that's such a
+standard legacy type that thankfully we have the whole '%zu/%zd' thing
+for that.
 
-iQIzBAEBCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmMHIqUACgkQnowa+77/
-2zKowQ//T9Dw8P8iN8M+GICDP9viCaXqqy2OSiJyLSToX5TGQNJbzaudX5hxADM7
-YSvG+OfCRURfwN234jhVoLRI8wYk6wuLQ/baysvCMMEtR5Q+pl5inY4L0t72wAAi
-8IOtyKvhYPWbpcsKNwsrHCxpIyjG3G91W4DnzKJnp7va3Wa+NqzaTWmGUVbYmo41
-2SP8oq6pu94TPCH+FCr4XLiWH38jwl64B4ZkziTsKnM/DzCQUfzA0flsxRtxtUW9
-8k0XcZDn2QQuYMeCAf/mVEHnz+3KoFzrGPOMmjjgeDCzYf3kPh7RKEpHgwgIuJpa
-N+00kpBybRAn0ubTDWSOx0Rupow1OTlzKibriSDvo2CV383JXpCwueHz1PTpkjEP
-TckJiWIjiDFEMs5obOxkAIQDfSSLrQL3HLuCN1THsxWsjucSXMPYhjByjAgGLWXj
-d5wNf/8HILprxEvRzyyWXnZRg42SveNR6UONM36aVquZ5YaBRY0iWb2SknIXLOhi
-k8zoxsswO5bAdcTfCQzMGxlclnWFlyUfmiD4zzH8iN2HzGEDA4xCElsJPUtJTMtF
-+cjG/eZRd1NGdKJfCpc3u7Igb4tA6Ofp8zercjhNDRPrCfYGbACukk2tygMEzJyf
-d5vFv9iS2QTZUmnNc+6hur8oGUAqlP/O10ThPbd0/NeVf0vcDuY=
-=Crgh
------END PGP SIGNATURE-----
+And yes, sometimes we screw up even *though* we were the ones that
+picked the types, and we've had pointless differences where '__u64'
+could be 'unsigned long' on a 64-bit architecture, and 'unsigned long
+long' on a 32-bit one, and then we were able to fix our own little
+broken type system exactly because it was *OUR* little type system.
 
---------------oanfeXgMU6o81bRhHPRltey6--
+So you are correct that then in the specific case of '__u64' we have
+been able to simply just standardize on 'unsigned long long' and make
+printf strings simpler.
+
+But you are wrong to think that that is somehow a special thing.
+
+It's not.
+
+It's very much all the same thing: we have types *we* control, and
+thanks to that we can do them the way *we* need them done, and can fix
+them when we made a silly mistake.
+
+In other words, it's the whole *point* of not ever using 'stdint.h' at
+all for those things.
+
+(It's also about avoiding the kinds of unholy things that happen in
+system header files. Have you ever *looked* at them? Christ. The
+amount of absolute crap you get from including <stdint.h> in user
+space is scary)
+
+> You cannot avoid using certain ISO C names with current GCC or Clang,
+> however hard you try.
+
+You  are now the one who is regurgitating complete mis-information.
+
+You do it so prettily, and with such weasel-wording, that I know you
+must be knowingly threading that fine line between "actively
+misleading" but trying to avoid "outright lying"..
+
+You say "certain ISO C names" to try to make it sound as if this was
+at all relevant to things like "uint32_t" and friends.
+
+But deep down, you know you're basically lying by omission.
+
+Because it's true that we have to know and care about things like
+'size_t', which comes up for all the basic string.h functions.
+
+So yes, we have a very small set of types that we make sure matches
+the compiler notion of said types, and we carefully use things like
+
+    typedef __kernel_ulong_t __kernel_size_t;
+
+and then we have our own 'stdarg.h which uses
+
+    typedef __builtin_va_list va_list;
+
+that is explicitly the one that the compiler exposes with those double
+underscores exactly because even the compiler can't expose the
+"standard" name due to namespace issues.
+
+And no, NONE OF THOSE ARE USABLE IN THE UAPI HEADERS!
+
+And equally importantly, none of those have *anything* to do with the
+'uint32_t' kind of names.
+
+The fact that yes, we care about what the compiler thinks "size_t" is
+(because we do want the compiler to do memset() for us) has absolutely
+*NOTHING* to do with uint32_t and <stdint.h>.
+
+And I'm pretty sure you knew that, but you tried to make it sound like
+they were somehow all in the same boat.
+
+And yes, some drivers tend to actually use 'uint32_t' in the kernel,
+and we allow it, but they cannot be used by user interfaces. So a uapi
+file really *really* shouldn't ever use them.
+
+And no, we don't use "-ffreestanding" and friends - we actually have
+occasionally wanted and tried to do so just to make the boundary lines
+clearer, but then that will make gcc no longer do sane things for
+'memcpy()'' and friends, so it's kind of a balancing act.
+
+> <stdarg.h>, <stddef.h>, <stdint.h> are compiler-provided headers that
+> are designed to be safe to use for bare-metal contexts (like in
+> kernels).  Avoiding them is not necessary per se.
+
+We explicitly avoid them all.
+
+We historically used stdarg.h and stddef.h (but never stdint.h -
+there's absolutely _zero_ upside), but it was always a slight pain.
+
+So we simply bake our own, exactly because it's simply less painful
+than having to deal with possible system-provided ones.
+
+People do odd compiler things with host compilers, bad or odd
+installations of cross-build environments, it's just not worth the
+pain to deal with the "system header files" when they just don't
+provide any real value.
+
+                        Linus
