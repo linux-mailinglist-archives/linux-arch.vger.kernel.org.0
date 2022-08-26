@@ -2,53 +2,70 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DC95A304A
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Aug 2022 22:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9CA5A304C
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Aug 2022 22:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbiHZUDi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Aug 2022 16:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S1343782AbiHZUEA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Aug 2022 16:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbiHZUDh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Aug 2022 16:03:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC30EE97F4
-        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 13:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661544216;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pGiL/wFCui2ekwiPy88y1EJnxLA/VbwmHPhh3BhqAuQ=;
-        b=fPEH7cboM1vF+ZQl7bSqZl+8DUvMTJMCfLvV1FPoez+YcKrLMmUZJlESrRSZLjm6mF5/7p
-        5KjNVfZIfGsaWjwsg6VSDaQ4871C9PY4OGCbbPbhDGR0u7arUZlVXuo2mxBEF/VxuF5jp4
-        deizKh5A2zdtUhjbPpuusfTL21O4h0s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-370-ZPeGTIVKOLmpXAjMEkzZzA-1; Fri, 26 Aug 2022 16:03:30 -0400
-X-MC-Unique: ZPeGTIVKOLmpXAjMEkzZzA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 169A3280EA3B;
-        Fri, 26 Aug 2022 20:03:30 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E717C2166B26;
-        Fri, 26 Aug 2022 20:03:29 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27QK3TsN007661;
-        Fri, 26 Aug 2022 16:03:29 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27QK3SCr007657;
-        Fri, 26 Aug 2022 16:03:28 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Fri, 26 Aug 2022 16:03:28 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
-cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        with ESMTP id S236637AbiHZUD6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Aug 2022 16:03:58 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA267E97F4
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 13:03:57 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id s11so3337186edd.13
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 13:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Ed72M6gjKE1csszbQngdfXNo2kUyihpXGg0Y+QCiXXY=;
+        b=H54MhldHSwtdnVky1AK6bpcbibCENOFdm+UhkM4ltpNCKAt6u/QAx3LEqyHiSzh1XU
+         9vYu4kmVcZNk/QUlsaspK/GCHVCedHWEEnZ1gd9kc7wTTJGkQkw9G4rCIQl+tl9rC0/c
+         XWJAzpA7GZ4JCzxTG0Hr5X9Rm0a+4i126WPj8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Ed72M6gjKE1csszbQngdfXNo2kUyihpXGg0Y+QCiXXY=;
+        b=YmLgNeuaKo1xJHAaBf8o+ta4CCgW/Scpq+93qeBr0P/JajUUKB0PGp2uiXAdP9S0jG
+         HBC6XsWZ9O6EQdLuOmlfjG5+0mGhgdFDS8MfcAhX4pb5owZF5OsPy1yFjoFRa54yK9Ox
+         h/BEyHH+NXuqoOflsSHknKNPxvc4ohHZoo/OKuLQvx/48185BE5SDiSd8PHODhQir9P+
+         CjNRCstH4EtGyT7jFygGEpuIBBascLVIXD+fpjUfv2OTOQDY+hT0UrRHeBaIJ6zIF4vL
+         ALbYDkr0ruXTZEWz2c00ftrNNZl/yc45VthHssD9RwR7Gm6pFW8m5y1OsFnYQNnL7wrf
+         mF6Q==
+X-Gm-Message-State: ACgBeo2+JAlcgOUnVEZdgbpEhLBcopbgUkmyF92j56cfDndWiGDtxNxh
+        zfHvo2F4gYEPNpKtUGxJ94tW3LhN0Thmm9sJeSo=
+X-Google-Smtp-Source: AA6agR6w58DZiRT415h1kKMAFDlGJuDkGubmW9dNbimfnHMhhDJ9KHljqEPCS8Qq8xoPF+tkvOGQYA==
+X-Received: by 2002:a05:6402:190d:b0:447:ed22:4d0d with SMTP id e13-20020a056402190d00b00447ed224d0dmr3353436edz.309.1661544236121;
+        Fri, 26 Aug 2022 13:03:56 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id s17-20020a50ab11000000b0043d1a9f6e4asm1806590edc.9.2022.08.26.13.03.53
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 13:03:54 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id d5so1376964wms.5
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 13:03:53 -0700 (PDT)
+X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
+ e21-20020a05600c219500b003a60b3cc100mr624015wme.8.1661544233102; Fri, 26 Aug
+ 2022 13:03:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+ <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
+ <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com>
+In-Reply-To: <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 26 Aug 2022 13:03:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh91FqN2sNSRFZPxfGnqAbJ1o66ew8TXh+neM9hW0xZiA@mail.gmail.com>
+Message-ID: <CAHk-=wh91FqN2sNSRFZPxfGnqAbJ1o66ew8TXh+neM9hW0xZiA@mail.gmail.com>
+Subject: Re: [PATCH v3] wait_on_bit: add an acquire memory barrier
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Mikulas Patocka <mpatocka@redhat.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Andrea Parri <parri.andrea@gmail.com>,
         Will Deacon <will@kernel.org>,
@@ -64,166 +81,104 @@ cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Joel Fernandes <joel@joelfernandes.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-Arch <linux-arch@vger.kernel.org>
-Subject: [PATCH] provide arch_test_bit_acquire for architectures that define
- test_bit
-In-Reply-To: <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com>
-Message-ID: <alpine.LRH.2.02.2208261550380.6969@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com> <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="000000000000cb216505e72a6970"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+--000000000000cb216505e72a6970
+Content-Type: text/plain; charset="UTF-8"
 
-
-On Fri, 26 Aug 2022, Geert Uytterhoeven wrote:
-
-> Hi Mikulas,
-> 
-> noreply@ellerman.id.au reports lots of build failures on m68k:
-> 
+On Fri, Aug 26, 2022 at 12:23 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+>
 >     include/asm-generic/bitops/non-instrumented-non-atomic.h:15:33:
 > error: implicit declaration of function 'arch_test_bit_acquire'; did
 > you mean '_test_bit_acquire'? [-Werror=implicit-function-declaration]
-> 
-> which I've bisected to this commit.
-> 
-> http://kisskb.ellerman.id.au/kisskb/head/3e5c673f0d75bc22b3c26eade87e4db4f374cd34
+>
 
-Does this patch fix it? It is untested.
+Ahh. m68k isn't using any of the generic bitops headers.
 
-I'm not sure about the hexagon architecture, it is presumably in-order so 
-that test_bit and test_bit_acquire are equivalent, but I am not sure about 
-that - I'm adding hexagon maintainer to the recipient field.
+*Most* architectures have that
 
-Mikulas
+   #include <asm-generic/bitops/non-atomic.h>
 
+and get it that way, but while it's common, it's most definitely not universal:
 
+  [torvalds@ryzen linux]$ git grep -L bitops/non-atomic.h
+arch/*/include/asm/bitops.h
+  arch/alpha/include/asm/bitops.h
+  arch/hexagon/include/asm/bitops.h
+  arch/ia64/include/asm/bitops.h
+  arch/m68k/include/asm/bitops.h
+  arch/s390/include/asm/bitops.h
+  arch/sparc/include/asm/bitops.h
+  arch/x86/include/asm/bitops.h
 
-provide arch_test_bit_acquire for architectures that define test_bit
+and of that list only x86 has the new arch_test_bit_acquire().
 
-Some architectures define their own arch_test_bit and they also need
-arch_test_bit_acquire, otherwise they won't compile.
+So I assume it's not just m68k, but also alpha, hexagon, ia64, s390
+and sparc that have this issue (unless they maybe have some other path
+that includes the gerneric ones, I didn't check).
 
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Cc: stable@vger.kernel.org
-Fixes: 8238b4579866 ("wait_on_bit: add an acquire memory barrier")
+This was actually why my original suggested patch used the
+'generic-non-atomic.h' header for it, because that is actually
+included regardless of any architecture headers directly from
+<linux/bitops.h>.
 
----
- arch/alpha/include/asm/bitops.h   |    7 +++++++
- arch/hexagon/include/asm/bitops.h |   15 +++++++++++++++
- arch/ia64/include/asm/bitops.h    |    7 +++++++
- arch/m68k/include/asm/bitops.h    |    7 +++++++
- arch/s390/include/asm/bitops.h    |    7 +++++++
- 5 files changed, 43 insertions(+)
+And it never triggered for me that Mikulas' updated patch then had
+this arch_test_bit_acquire() issue.
 
-Index: linux-2.6/arch/m68k/include/asm/bitops.h
-===================================================================
---- linux-2.6.orig/arch/m68k/include/asm/bitops.h
-+++ linux-2.6/arch/m68k/include/asm/bitops.h
-@@ -163,6 +163,13 @@ arch_test_bit(unsigned long nr, const vo
- 	return (addr[nr >> 5] & (1UL << (nr & 31))) != 0;
- }
- 
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+
- static inline int bset_reg_test_and_set_bit(int nr,
- 					    volatile unsigned long *vaddr)
- {
-Index: linux-2.6/arch/alpha/include/asm/bitops.h
-===================================================================
---- linux-2.6.orig/arch/alpha/include/asm/bitops.h
-+++ linux-2.6/arch/alpha/include/asm/bitops.h
-@@ -289,6 +289,13 @@ arch_test_bit(unsigned long nr, const vo
- 	return (1UL & (((const int *) addr)[nr >> 5] >> (nr & 31))) != 0UL;
- }
- 
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+
- /*
-  * ffz = Find First Zero in word. Undefined if no zero exists,
-  * so code should check against ~0UL first..
-Index: linux-2.6/arch/hexagon/include/asm/bitops.h
-===================================================================
---- linux-2.6.orig/arch/hexagon/include/asm/bitops.h
-+++ linux-2.6/arch/hexagon/include/asm/bitops.h
-@@ -179,6 +179,21 @@ arch_test_bit(unsigned long nr, const vo
- 	return retval;
- }
- 
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	int retval;
-+
-+	asm volatile(
-+	"{P0 = tstbit(%1,%2); if (P0.new) %0 = #1; if (!P0.new) %0 = #0;}\n"
-+	: "=&r" (retval)
-+	: "r" (addr[BIT_WORD(nr)]), "r" (nr % BITS_PER_LONG)
-+	: "p0", "memory"
-+	);
-+
-+	return retval;
-+}
-+
- /*
-  * ffz - find first zero in word.
-  * @word: The word to search
-Index: linux-2.6/arch/ia64/include/asm/bitops.h
-===================================================================
---- linux-2.6.orig/arch/ia64/include/asm/bitops.h
-+++ linux-2.6/arch/ia64/include/asm/bitops.h
-@@ -337,6 +337,13 @@ arch_test_bit(unsigned long nr, const vo
- 	return 1 & (((const volatile __u32 *) addr)[nr >> 5] >> (nr & 31));
- }
- 
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+
- /**
-  * ffz - find the first zero bit in a long word
-  * @x: The long word to find the bit in
-Index: linux-2.6/arch/s390/include/asm/bitops.h
-===================================================================
---- linux-2.6.orig/arch/s390/include/asm/bitops.h
-+++ linux-2.6/arch/s390/include/asm/bitops.h
-@@ -185,6 +185,13 @@ arch_test_bit(unsigned long nr, const vo
- 	return *p & mask;
- }
- 
-+static __always_inline bool
-+arch_test_bit_acquire(unsigned long nr, const volatile unsigned long *addr)
-+{
-+	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-+	return 1UL & (smp_load_acquire(p) >> (nr & (BITS_PER_LONG-1)));
-+}
-+
- static inline bool arch_test_and_set_bit_lock(unsigned long nr,
- 					      volatile unsigned long *ptr)
- {
+Something like the attached patch *MAY* fix it, but I really haven't
+thought about it a lot, and it's pretty ugly. Maybe it would be better
+to just add the
 
+   #define arch_test_bit_acquire generic_test_bit_acquire
+
+to the affected <asm/bitops.h> files instead, and then let those
+architectures decide on their own that maybe they want to use their
+own test_bit() function because it is _already_ an acquire one.
+
+Mikulas?
+
+Geert - any opinions on that "maybe the arch should just do that
+#define itself"? I don't think it actually matters for m68k, you end
+up with pretty much the same thing anyway, because
+"smp_load_acquire()" is just a load anyway..
+
+                 Linus
+
+--000000000000cb216505e72a6970
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l7awiwdo0>
+X-Attachment-Id: f_l7awiwdo0
+
+IGFyY2gveDg2L2luY2x1ZGUvYXNtL2JpdG9wcy5oIHwgMSArCiBpbmNsdWRlL2xpbnV4L2JpdG9w
+cy5oICAgICAgICB8IDQgKysrKwogMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykKCmRp
+ZmYgLS1naXQgYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9iaXRvcHMuaCBiL2FyY2gveDg2L2luY2x1
+ZGUvYXNtL2JpdG9wcy5oCmluZGV4IDBmZTlkZTU4YWYzMS4uYjgyMDA2MTM4YzYwIDEwMDY0NAot
+LS0gYS9hcmNoL3g4Ni9pbmNsdWRlL2FzbS9iaXRvcHMuaAorKysgYi9hcmNoL3g4Ni9pbmNsdWRl
+L2FzbS9iaXRvcHMuaApAQCAtMjQ2LDYgKzI0Niw3IEBAIGFyY2hfdGVzdF9iaXRfYWNxdWlyZSh1
+bnNpZ25lZCBsb25nIG5yLCBjb25zdCB2b2xhdGlsZSB1bnNpZ25lZCBsb25nICphZGRyKQogCXJl
+dHVybiBfX2J1aWx0aW5fY29uc3RhbnRfcChucikgPyBjb25zdGFudF90ZXN0X2JpdF9hY3F1aXJl
+KG5yLCBhZGRyKSA6CiAJCQkJCSAgdmFyaWFibGVfdGVzdF9iaXQobnIsIGFkZHIpOwogfQorI2Rl
+ZmluZSBhcmNoX3Rlc3RfYml0X2FjcXVpcmUgYXJjaF90ZXN0X2JpdF9hY3F1aXJlCiAKIC8qKgog
+ICogX19mZnMgLSBmaW5kIGZpcnN0IHNldCBiaXQgaW4gd29yZApkaWZmIC0tZ2l0IGEvaW5jbHVk
+ZS9saW51eC9iaXRvcHMuaCBiL2luY2x1ZGUvbGludXgvYml0b3BzLmgKaW5kZXggM2I4OWM2NGJj
+ZmQ4Li5hMDQ2YjljNDVmZGIgMTAwNjQ0Ci0tLSBhL2luY2x1ZGUvbGludXgvYml0b3BzLmgKKysr
+IGIvaW5jbHVkZS9saW51eC9iaXRvcHMuaApAQCAtNjcsNiArNjcsMTAgQEAgZXh0ZXJuIHVuc2ln
+bmVkIGxvbmcgX19zd19od2VpZ2h0NjQoX191NjQgdyk7CiAgKi8KICNpbmNsdWRlIDxhc20vYml0
+b3BzLmg+CiAKKyNpZm5kZWYgYXJjaF90ZXN0X2JpdF9hY3F1aXJlCisjZGVmaW5lIGFyY2hfdGVz
+dF9iaXRfYWNxdWlyZSBnZW5lcmljX3Rlc3RfYml0X2FjcXVpcmUKKyNlbmRpZgorCiAvKiBDaGVj
+ayB0aGF0IHRoZSBiaXRvcHMgcHJvdG90eXBlcyBhcmUgc2FuZSAqLwogI2RlZmluZSBfX2NoZWNr
+X2JpdG9wX3ByKG5hbWUpCQkJCQkJXAogCXN0YXRpY19hc3NlcnQoX19zYW1lX3R5cGUoYXJjaF8j
+I25hbWUsIGdlbmVyaWNfIyNuYW1lKSAmJglcCg==
+--000000000000cb216505e72a6970--
