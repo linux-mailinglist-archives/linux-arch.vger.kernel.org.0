@@ -2,123 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBECE5A318B
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Aug 2022 23:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAAF5A3275
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 01:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232244AbiHZVyg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Aug 2022 17:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
+        id S1345227AbiHZXQ1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Aug 2022 19:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiHZVyf (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Aug 2022 17:54:35 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE178FD3D
-        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 14:54:34 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-33dbbf69b3dso68553847b3.1
-        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 14:54:34 -0700 (PDT)
+        with ESMTP id S1345462AbiHZXQ0 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Aug 2022 19:16:26 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EECE9A96
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 16:16:24 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id a36so7774edf.5
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 16:16:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=iD+oDgmA+uqkgZAjiZVwNKXzpAuCVIysHt0xaw4YizU=;
-        b=Ca+dkdvTTZAOLDvgw3Z9TkaUnMZcEWn4NTxm5+zjenuU2n7vyLOc9KPh6+KdZ5gwBJ
-         tn/9thf3hXLJO9QmMCTrPu9UeA9bqXKkdHcD3t26KAQo8P0j/mO2Wsp3546vXy2g5DVe
-         7hsSOEj3K89mu/jqNLHDZpbjrvMfyUGLE++bdQHX7CDFGQhtlU3YxsNnf8kvVYpVHf5L
-         lxVu/SLHlqgK0HT7NNi6O08XfosRfNiRI1W7yI7n62C0LRD+iwPjN2kz2hv3wdQVmP8E
-         SrxuPd7hPHS0iDGfnSjx5LwMaLY9kxqbUtS5dWAWogDi+uOzyJWbWoS9ExFdkez6KFbW
-         ThmA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=EchSFCFNESRMpkzf6LgfeMPqX9NRcEuB71WzS8HN7D8=;
+        b=fFXxOFb4I403xbhy531yXT8u8qnCT6hOkiP/2jM4Zv81TC1p+0O50xRLVE70Gx9IHM
+         rhSK1nbeWZ6V5/dxPLrsNIOpSsYF/cqSQcTjDQ92IZLO6kOp9BtiQqMDOigyGgxxuu5l
+         NwuJw5OyNX1rmomXFegiTMi05iNP/gTP6eKhI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=iD+oDgmA+uqkgZAjiZVwNKXzpAuCVIysHt0xaw4YizU=;
-        b=xGnrpRHd1yYuOePe3LLRMPqWFW51RhuDIYNMeD8ZTj3voXsf5a66dzLjbInuwC0hj+
-         rwop30dx14JW6LKOd8273xbqxqPOPEwtqLk5mwgqCTiBaht4dUji1/e1gWJ4wazreC1b
-         unmNCrwMW4n3t5lvI3P/3/loyfGkL37mSpmUHAr3qjw0NXWshKiSfLkbs8DQTR1fPCEn
-         sL0/3w3FVuiuQ6uEKy1FVtO6g1eQtZVPUy8o8g7Emyv7evbQJdyJlg/YfFW0TVrPj1lD
-         krs8d8z9G6FfYLms69ufp2tsHcWin3UXY8iwKvs29f/4qFZVsqHAiV6bpk5WNAKnsHrQ
-         7OEg==
-X-Gm-Message-State: ACgBeo1fwpdTG1F8lFmACq+mN/wJnhbe6ihmIBUkGO2blj27nWxycFdM
-        B12bKMnKP+LK94tIkhiN3aS1/7rsVYSedvj653p0rAod1iQ=
-X-Google-Smtp-Source: AA6agR6/Js/n7u8uAt+Vs5/9brwPzqXD8oV9j9u5xOFLL3KiwQvGzqQugDWZuWB0GKL5dR3cPMdqCyb0gjesC5DDHLQ=
-X-Received: by 2002:a25:7902:0:b0:67b:d842:1184 with SMTP id
- u2-20020a257902000000b0067bd8421184mr1609196ybc.374.1661550874022; Fri, 26
- Aug 2022 14:54:34 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=EchSFCFNESRMpkzf6LgfeMPqX9NRcEuB71WzS8HN7D8=;
+        b=GeT6sdYM2APBpKqspHUMe763UPcW1haNiFYJAACZlvFqhge0rIJ4WP9ipx1ZTqNKiH
+         lBO4tCCSfNskO1OKmVLFWzgMsxILCenPQC1PW0Qh9/Lq53va8kDOEo9Hm6Nl8S2dicrR
+         zXQNvHC12HWKUMr8iPGjiHRJ3+T3WGJhL50H83xV3rHwk28+M/JoXYkunlWBAqMgH73Z
+         LZU+Antn1RJzbH4RpifKYYZK2a3VEsYoSYvi5qoU2w0MSbuiQWkwgw8E5X1ZOJeHCO3k
+         yT5KDml288wHBGX7UGLetMZmw9HRvjY4vZqZweGa09UzC39OKE6Hkqyq4gH1ylxGMo9W
+         ObKA==
+X-Gm-Message-State: ACgBeo00ZRaBVE9FVQj2ydt+R/S24nz22rdrcQIbcSAeKuNKYy9nDCm8
+        K8dnO+2ytSy9o4b8KfQkT3xt7qI1nXKj6D7WREA=
+X-Google-Smtp-Source: AA6agR4/fN72b41m00F3aTmdSKyEty2eiFHggvFAqYJcz4jsaBrPDSiRHHhJFuSEIv3xtd6aj+wMKg==
+X-Received: by 2002:aa7:dbc5:0:b0:440:b0d6:7586 with SMTP id v5-20020aa7dbc5000000b00440b0d67586mr8096771edt.85.1661555783030;
+        Fri, 26 Aug 2022 16:16:23 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id i23-20020a0564020f1700b00447f434e4d7sm1423710eda.20.2022.08.26.16.16.22
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Aug 2022 16:16:22 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id j26so1550725wms.0
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 16:16:22 -0700 (PDT)
+X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
+ e21-20020a05600c219500b003a60b3cc100mr852564wme.8.1661555418236; Fri, 26 Aug
+ 2022 16:10:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
- <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
- <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
- <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
- <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
- <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
- <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
- <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
- <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu> <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
- <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
-In-Reply-To: <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 26 Aug 2022 23:54:22 +0200
-Message-ID: <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Alexandre Courbot <gnurou@gmail.com>,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+ <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
+ <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com>
+ <CAHk-=wh91FqN2sNSRFZPxfGnqAbJ1o66ew8TXh+neM9hW0xZiA@mail.gmail.com> <alpine.LRH.2.02.2208261620210.9648@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2208261620210.9648@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 26 Aug 2022 16:10:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com>
+Message-ID: <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com>
+Subject: Re: [PATCH] provide arch_test_bit_acquire for architectures that
+ define test_bit
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 5:08 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
-> Le 26/08/2022 =C3=A0 15:49, Linus Walleij a =C3=A9crit :
-> > On Thu, Aug 25, 2022 at 4:00 PM Christophe Leroy
-> > <christophe.leroy@csgroup.eu> wrote:
-> >
-> >>> Christophe? Will you take a stab at it?
-> >>
-> >> Which patch should I write ?
-> >
-> > One that removes CONFIG_ARCH_HAS_NR_GPIO entirely, then
-> > allocate bases for new GPIO chips from 0 and upward instead.
-> > And then see what happens.
-> >
+On Fri, Aug 26, 2022 at 1:43 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
 >
-> Ok, I can give it a try.
+> I'm wondering why do the architectures redefine test_bit, if their
+> definition is equivalent to the generic one? We could just delete
+> arch_test_bit and use "#define arch_test_bit generic_test_bit" as well.
 
-Nice!
+I think generic_test_bit() came after many of them, and when it
+didn't, people copied earlier architectures where they had already
+done their own.
 
-> But what do I do with:
->
-> drivers/gpio/gpio-aggregator.c: bitmap =3D bitmap_alloc(ARCH_NR_GPIOS,
-> GFP_KERNEL);
+> Another untested patch ... tomorrow, I'll try to compile it, at least for
+> architectures where Debian provides cross-compiling gcc.
 
-That's just used locally in that driver to loop over the arguments to the
-aggregator (from the file in sysfs). I would set some arbitrary root
-like
-#define AGGREGATOR_MAX_GPIOS 512
-and just search/replace with that.
+Looks good to me, except I'd just do
 
-Yours,
-Linus Walleij
+#define arch_test_bit_acquire arch_test_bit
+
+on hexagon rather than duplicate that function.
+
+From my reading, Hexagon doesn't have any fancy memory ordering, it's
+just the usual UP with barriers basically for instruction cache
+coherence etc.
+
+                 Linus
