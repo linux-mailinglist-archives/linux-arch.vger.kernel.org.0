@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E5C5A2ADF
-	for <lists+linux-arch@lfdr.de>; Fri, 26 Aug 2022 17:16:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F2E5A2AE2
+	for <lists+linux-arch@lfdr.de>; Fri, 26 Aug 2022 17:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245736AbiHZPQI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 26 Aug 2022 11:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S245207AbiHZPQM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 26 Aug 2022 11:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344388AbiHZPOo (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Aug 2022 11:14:44 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92C9237EC
-        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 08:10:05 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-335ff2ef600so29337077b3.18
-        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 08:10:05 -0700 (PDT)
+        with ESMTP id S244309AbiHZPO7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 26 Aug 2022 11:14:59 -0400
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04DD8B2EB
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 08:10:08 -0700 (PDT)
+Received: by mail-wm1-x349.google.com with SMTP id a17-20020a05600c349100b003a545125f6eso4195657wmq.4
+        for <linux-arch@vger.kernel.org>; Fri, 26 Aug 2022 08:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=4pDNTP8Rcz1c/6m0qOjb0X1O42ovrN3YaDrJNkQcLng=;
-        b=D8g9K+F2VtTbVGCiyA3gHOZ8vWyfLv3kiBVO8NzVmbbuaiAQz5lidowjJcTUnqN9NV
-         0M45L50FmJ4PxOKToUEzR27CpoNoU/oyH1Qxm5OUEXk0XU/8/XXprRa1vk5Bi3TeJfkw
-         q081N/bHUsn7mQv/yoQ1Ey2nzz9m+S9Fo7PM6zBWmqx38XFTQk025tvKxOEGgVZjqGty
-         /9F1JErkTDPulPdl0zxIDtlkVyQUOPBuGPdH9gBMfPQwL19d8No0nlzWwOQohCYKDZm6
-         MPulEwsqymX7KjroU/sIuuObTC/BUFlxcZTS2qy9QDHhU8TveQCUg6HprGxaMBW2ev2v
-         GJow==
+        bh=BglHskuQEcyUyCGOJUH508pmeGJAtuUxUacPJvhZbyk=;
+        b=dLOEePxQJ3Q8NTUKaCKscxiPUndoB4UtDuE3c4k6e51Ijeopi1Q2jwY0fQKx91/gRV
+         tjQCOKAvn8SFyX8Z/lnl+CXNB72GSSg2BB8Hq6Vt7SqvWnhLYEqRJylixp3qoaDTG2zm
+         raV0B1FrZYeNKlh2L47/qDrSM5egy+WYAo9m1hFPEaFpdxuy6sh5qTqGIMfCAvjZyI9j
+         3naaSJ5illmzgZ7ldkbeAiiQNTjVVsYNVEYdyNBLpQSwjzyRINT8fbPdzQGGY0zreFu8
+         UWmcW7wtBNkjvMa2czQus+EuHAF96CwCURikCoYjx9Tb33q6CXTdGxIjYlAAIrQDAeMj
+         IDGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=4pDNTP8Rcz1c/6m0qOjb0X1O42ovrN3YaDrJNkQcLng=;
-        b=E94yQ16zxh26hJo2kGQUdmZVuY0J/5xJHI8uojATAt78G0Qu+3815bUtV7ck1bLXyu
-         LFxBrAVHwDYqQDr2GQ/575ChgOvjoBrVoh47kikiFpxePRHaGE2CHOG0FkWFMHsO+5lt
-         wdRm0OhSBbiAp+MpoAKDQfIcGZPQaeW6uoT/DrDcNxpkHH2If0DHcQAxlNg2Vcm05rad
-         J1Bvn4OXfyGpK447yBJ9h4qZyfAIYqv+yos88qRX/HtEsE3bCcnAyZw9yy4gFapB/7hr
-         SXwro48hp7wfBXkZ5X2g0xMjV6CMsF6naW7FjJL8wExRw54wbRDw/06bLHDZ7AOwdWlY
-         jWQA==
-X-Gm-Message-State: ACgBeo3sF18JsvXK4M3UfuUNIeHFBXv+7MAtkUeqFgohdejoHJZfCDo/
-        AnCU6wRL0Rnbkg3aMcyEcb1534Gvr7k=
-X-Google-Smtp-Source: AA6agR5vVQmtlhIgTKQ7dnFjHT2Qul1eY6YRiLp6VijdR+cm0ab1oQKWZ6dDBOhtA58d0ZDce6nTKPF8G7g=
+        bh=BglHskuQEcyUyCGOJUH508pmeGJAtuUxUacPJvhZbyk=;
+        b=3JqSNPAxDo1vlsnVJhQwcnDNYNQZrvZIrZOS/ayoYRQEzFFTGgGRkqPs9IadQlke6F
+         DjUu7DPNjgMlc9L+xnpCbFe0gv54htEHFwAKpTcXczfl/5CST2VxDRcpv92tiZTuqfgS
+         QxS7V2Cd+lHMAFcIOt2UT/NAtiG5ahzoVHmEFhia3p2eYgy+UBC1zL5GxTJhVSArF/6O
+         YtPldorPxR9hHySEjEDDt5Pf+IY1iJtvCXLiSAmulCq8qi4mmlv/ZEiB1CuMdlpS2ZYr
+         kmOmMfQEliv1hSJIQNkLs4UqdbeOj4tE61Pu5H3b0gTf/cV3gNPtEabM4su+c+MAaAZm
+         irHA==
+X-Gm-Message-State: ACgBeo0mC8DqeT0AMSJn3Oim6F6FXNxrjL9PtF9Ee9D6VJDPaGqdJk6B
+        nGW9JfTNasSUFXdPrNB3iipsJsFS+Lg=
+X-Google-Smtp-Source: AA6agR6NknND7Ys7dLoaR0YpbVpHtssuPzgQY9WE+k93NXy2tjYdfG5ALV06XNy3sKThCmImd1fIcvZnQyg=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:5207:ac36:fdd3:502d])
- (user=glider job=sendgmr) by 2002:a05:6902:10ca:b0:671:3616:9147 with SMTP id
- w10-20020a05690210ca00b0067136169147mr92484ybu.105.1661526602616; Fri, 26 Aug
- 2022 08:10:02 -0700 (PDT)
-Date:   Fri, 26 Aug 2022 17:08:02 +0200
+ (user=glider job=sendgmr) by 2002:a5d:58d6:0:b0:226:cf81:f68d with SMTP id
+ o22-20020a5d58d6000000b00226cf81f68dmr60412wrf.131.1661526605261; Fri, 26 Aug
+ 2022 08:10:05 -0700 (PDT)
+Date:   Fri, 26 Aug 2022 17:08:03 +0200
 In-Reply-To: <20220826150807.723137-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220826150807.723137-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220826150807.723137-40-glider@google.com>
-Subject: [PATCH v5 39/44] x86: fs: kmsan: disable CONFIG_DCACHE_WORD_ACCESS
+Message-ID: <20220826150807.723137-41-glider@google.com>
+Subject: [PATCH v5 40/44] x86: kmsan: don't instrument stack walking functions
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -84,8 +84,7 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vegard Nossum <vegard.nossum@oracle.com>,
         Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@gmail.com>
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -97,34 +96,75 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-dentry_string_cmp() calls read_word_at_a_time(), which might read
-uninitialized bytes to optimize string comparisons.
-Disabling CONFIG_DCACHE_WORD_ACCESS should prohibit this optimization,
-as well as (probably) similar ones.
+Upon function exit, KMSAN marks local variables as uninitialized.
+Further function calls may result in the compiler creating the stack
+frame where these local variables resided. This results in frame
+pointers being marked as uninitialized data, which is normally correct,
+because they are not stack-allocated.
 
-Suggested-by: Andrey Konovalov <andreyknvl@gmail.com>
+However stack unwinding functions are supposed to read and dereference
+the frame pointers, in which case KMSAN might be reporting uses of
+uninitialized values.
+
+To work around that, we mark update_stack_state(), unwind_next_frame()
+and show_trace_log_lvl() with __no_kmsan_checks, preventing all KMSAN
+reports inside those functions and making them return initialized
+values.
+
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/I4c0073224ac2897cafb8c037362c49dda9cfa133
+Link: https://linux-review.googlesource.com/id/I6550563768fbb08aa60b2a96803675dcba93d802
 ---
- arch/x86/Kconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kernel/dumpstack.c    |  6 ++++++
+ arch/x86/kernel/unwind_frame.c | 11 +++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 33f4d4baba079..697da8dae1418 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -128,7 +128,9 @@ config X86
- 	select CLKEVT_I8253
- 	select CLOCKSOURCE_VALIDATE_LAST_CYCLE
- 	select CLOCKSOURCE_WATCHDOG
--	select DCACHE_WORD_ACCESS
-+	# Word-size accesses may read uninitialized data past the trailing \0
-+	# in strings and cause false KMSAN reports.
-+	select DCACHE_WORD_ACCESS		if !KMSAN
- 	select DYNAMIC_SIGFRAME
- 	select EDAC_ATOMIC_SCRUB
- 	select EDAC_SUPPORT
+diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
+index afae4dd774951..476eb504084e4 100644
+--- a/arch/x86/kernel/dumpstack.c
++++ b/arch/x86/kernel/dumpstack.c
+@@ -177,6 +177,12 @@ static void show_regs_if_on_stack(struct stack_info *info, struct pt_regs *regs,
+ 	}
+ }
+ 
++/*
++ * This function reads pointers from the stack and dereferences them. The
++ * pointers may not have their KMSAN shadow set up properly, which may result
++ * in false positive reports. Disable instrumentation to avoid those.
++ */
++__no_kmsan_checks
+ static void show_trace_log_lvl(struct task_struct *task, struct pt_regs *regs,
+ 			unsigned long *stack, const char *log_lvl)
+ {
+diff --git a/arch/x86/kernel/unwind_frame.c b/arch/x86/kernel/unwind_frame.c
+index 8e1c50c86e5db..d8ba93778ae32 100644
+--- a/arch/x86/kernel/unwind_frame.c
++++ b/arch/x86/kernel/unwind_frame.c
+@@ -183,6 +183,16 @@ static struct pt_regs *decode_frame_pointer(unsigned long *bp)
+ }
+ #endif
+ 
++/*
++ * While walking the stack, KMSAN may stomp on stale locals from other
++ * functions that were marked as uninitialized upon function exit, and
++ * now hold the call frame information for the current function (e.g. the frame
++ * pointer). Because KMSAN does not specifically mark call frames as
++ * initialized, false positive reports are possible. To prevent such reports,
++ * we mark the functions scanning the stack (here and below) with
++ * __no_kmsan_checks.
++ */
++__no_kmsan_checks
+ static bool update_stack_state(struct unwind_state *state,
+ 			       unsigned long *next_bp)
+ {
+@@ -250,6 +260,7 @@ static bool update_stack_state(struct unwind_state *state,
+ 	return true;
+ }
+ 
++__no_kmsan_checks
+ bool unwind_next_frame(struct unwind_state *state)
+ {
+ 	struct pt_regs *regs;
 -- 
 2.37.2.672.g94769d06f0-goog
 
