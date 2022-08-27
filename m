@@ -2,33 +2,33 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA04D5A343C
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 06:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D935F5A3453
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 06:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiH0EAP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 00:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
+        id S232085AbiH0ERe (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 00:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH0EAN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 00:00:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8419F5F98F;
-        Fri, 26 Aug 2022 21:00:10 -0700 (PDT)
+        with ESMTP id S229449AbiH0ERd (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 00:17:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744CD73933;
+        Fri, 26 Aug 2022 21:17:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF4CAB833B5;
-        Sat, 27 Aug 2022 04:00:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A2EC433C1;
-        Sat, 27 Aug 2022 04:00:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E99B460A39;
+        Sat, 27 Aug 2022 04:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299E8C433D6;
+        Sat, 27 Aug 2022 04:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1661572807;
-        bh=f6Byd6ChECw5xYH+6Y2y1ZiARHvARqqCPTAE4lA8IIc=;
+        s=korg; t=1661573851;
+        bh=6Iz/eGwmp2OnF5aKahMz1qTW0tTKm7mlFOFhFDxX1AA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WH42edJ2VD3Ojjg8chX+Cg2VHFV1gaB/4K28/BzPpkPRw8aeeF3M26GVWfNIrCF37
-         52xwpinhWGUBISJY8M7CGFBt4MQlflsw8MwUISTbsV/gAfT3IanZnnQpMTn31QegaE
-         VHPYBQpohuZjp/OaAtGOvl4UOb88I50wPCqk0UHg=
-Date:   Fri, 26 Aug 2022 21:00:05 -0700
+        b=0wwPwPqYjbGm6Ce5o/Y1H+DJmaTo4tbspFfmRDrZEp4vlLxYw57ALtc0CXFnvMbGh
+         VFCSnWNxDc7JkINYWGfzPhl/loGQPXhQADf4HucY5q1H3K85IqB7J0Fx6rs5x3gQei
+         vqaTpKDnySwwiXOltZ9lClnMZEmM8Ob5p56kBsi0=
+Date:   Fri, 26 Aug 2022 21:17:29 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
 To:     Alexander Potapenko <glider@google.com>
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -61,11 +61,12 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Vlastimil Babka <vbabka@suse.cz>, kasan-dev@googlegroups.com,
         linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 11/44] kmsan: add KMSAN runtime core
-Message-Id: <20220826210005.8e5f3bbef882c35d9c45102e@linux-foundation.org>
-In-Reply-To: <20220826150807.723137-12-glider@google.com>
+Subject: Re: [PATCH v5 04/44] x86: asm: instrument usercopy in get_user()
+ and put_user()
+Message-Id: <20220826211729.e65d52e7919fee5c34d22efc@linux-foundation.org>
+In-Reply-To: <20220826150807.723137-5-glider@google.com>
 References: <20220826150807.723137-1-glider@google.com>
-        <20220826150807.723137-12-glider@google.com>
+        <20220826150807.723137-5-glider@google.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -80,53 +81,55 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 26 Aug 2022 17:07:34 +0200 Alexander Potapenko <glider@google.com> wrote:
+On Fri, 26 Aug 2022 17:07:27 +0200 Alexander Potapenko <glider@google.com> wrote:
 
->
-> ...
->
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -14,6 +14,7 @@
->  #include <linux/pid.h>
->  #include <linux/sem.h>
->  #include <linux/shm.h>
-> +#include <linux/kmsan.h>
->  #include <linux/mutex.h>
->  #include <linux/plist.h>
->  #include <linux/hrtimer.h>
-> @@ -1355,6 +1356,10 @@ struct task_struct {
->  #endif
->  #endif
->  
-> +#ifdef CONFIG_KMSAN
-> +	struct kmsan_ctx		kmsan_ctx;
-> +#endif
-> +
->  #if IS_ENABLED(CONFIG_KUNIT)
->  	struct kunit			*kunit_test;
->  #endif
+> Use hooks from instrumented.h to notify bug detection tools about
+> usercopy events in variations of get_user() and put_user().
 
-This change causes the arm allnoconfig build to fail.
+And this one blows up x86_64 allmodconfig builds.
 
-In file included from <command-line>:
-./include/linux/page-flags.h: In function '_compound_head':
-./include/linux/page-flags.h:253:44: error: invalid use of undefined type 'const struct page'
-  253 |         unsigned long head = READ_ONCE(page->compound_head);
-      |                                            ^~
-././include/linux/compiler_types.h:335:23: note: in definition of macro '__compiletime_assert'
-  335 |                 if (!(condition))                                       \
-      |                       ^~~~~~~~~
+> --- a/arch/x86/include/asm/uaccess.h
+> +++ b/arch/x86/include/asm/uaccess.h
+> @@ -5,6 +5,7 @@
+>   * User space memory access functions
+>   */
+>  #include <linux/compiler.h>
+> +#include <linux/instrumented.h>
+>  #include <linux/kasan-checks.h>
+>  #include <linux/string.h>
+>  #include <asm/asm.h>
 
-[10,000 lines snipped]
+instrumented.h looks like a higher-level thing than uaccess.h, so this
+inclusion is an inappropriate layering.  Or maybe not.
 
-A simple `make init/do_mounts.o' sets it off.
+In file included from ./include/linux/kernel.h:22,
+                 from ./arch/x86/include/asm/percpu.h:27,
+                 from ./arch/x86/include/asm/nospec-branch.h:14,
+                 from ./arch/x86/include/asm/paravirt_types.h:40,
+                 from ./arch/x86/include/asm/ptrace.h:97,
+                 from ./arch/x86/include/asm/math_emu.h:5,
+                 from ./arch/x86/include/asm/processor.h:13,
+                 from ./arch/x86/include/asm/timex.h:5,
+                 from ./include/linux/timex.h:67,
+                 from ./include/linux/time32.h:13,
+                 from ./include/linux/time.h:60,
+                 from ./include/linux/stat.h:19,
+                 from ./include/linux/module.h:13,
+                 from init/do_mounts.c:2:
+./include/linux/page-flags.h: In function 'page_fixed_fake_head':
+./include/linux/page-flags.h:226:36: error: invalid use of undefined type 'const struct page'
+  226 |             test_bit(PG_head, &page->flags)) {
+      |                                    ^~
 
-It's Friday night and I got tired of trying to work out why :(
+[25000 lines snipped]
 
-I don't think it's kmsan's fault - seems to be somewhere between
-include/linux/topology.h and its use of
-arch/arm/include/asm/topology.h.
 
-Shudder.  arm defconfig is OK.  I think I'll pretend I didn't see this
-and push it out anyway and see if someone else has the patience.
+And kmsan-add-kmsan-runtime-core.patch introduces additional build
+errors with x86_64 allmodconfig.
+
+This is all with CONFIG_KMSAN=n
+
+I'll disable the patch series.  Please do much more compilation testing
+- multiple architectures, allnoconfig, allmodconfig, allyesconfig,
+defconfig, randconfig, etc.  Good luck, it looks ugly :(
+
