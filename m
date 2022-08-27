@@ -2,163 +2,106 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2912A5A38D9
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 18:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9065A38EF
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 18:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233354AbiH0QpM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 12:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35270 "EHLO
+        id S231876AbiH0Q4x (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 12:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiH0QpL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 12:45:11 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151FA37FAE;
-        Sat, 27 Aug 2022 09:45:08 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id s1so3359026qvn.11;
-        Sat, 27 Aug 2022 09:45:08 -0700 (PDT)
+        with ESMTP id S233705AbiH0Q4v (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 12:56:51 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6A959251
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 09:56:50 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kk26so8265689ejc.11
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 09:56:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc;
-        bh=ZhfbAHlPQFx8IPZok5WapkkflkTEU7J+fDiYrhhmxIA=;
-        b=M0b5ENI57ijrrSBOdqsI4nNWdePJhQB34ojLnGx1NLyBtuxthw5HlWP80AiqIjk3lU
-         P+4RUXrRoTcBjhATVcFtXruNMuUNuq5BfeWxNcVYkhW7BRJb77nwQFSn/SSa9GWuBftT
-         X/XfiA7vA+5aXegoOnnIsISEdiPbJI81WGEtV9CC0VVX3MWrFOhfjuMfH2x99/uOOubr
-         aeb78qeaalSJoe7g7YFhlYJlRMff+XiTQRvKZ+Hv07z2YlMmENAYl3wG/9JIT+utk58T
-         ti0+hXqvLSktqm0iREGzUKghPcnhEvABZEDtSQc7UuFUhwfAC0O6CQVogaiJZecAMOD4
-         03vw==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WAEr4zCif0zp++lZAUWZkj4GJhtO7eOsEWQzvmzftQQ=;
+        b=Usv9scAAadihgjNYDL+pCD+vdqOGF1X0cWC9MSgKis7DY1nR47sOn/fUFAwpVGARg2
+         R28Rkid0Z4bmdsM2qMAaJdSP1ygPFSKxdXwNRtDIYxO/YduZhQYknWZKo4dOrEu2FVgH
+         hZLhNoIfLH15LdDClrvelFDdmfGzL5gJ5DcEs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc;
-        bh=ZhfbAHlPQFx8IPZok5WapkkflkTEU7J+fDiYrhhmxIA=;
-        b=zTh8Bi0RRA0wLbb8980hj52yZK5enVQrq9wXmx13yoeYRdQu14J8aS8rhOcoXVVhe7
-         jNJIP71/74A7ROQgBLq/M0ceaer/key3URlycg7X5hDd3oV5yKNYajlxQ7PvaROF3HFK
-         bRUzp3RJunqBLs9645mnpBinOW2ZzcL4izx3WPZN4nnUaPkUREQer+v5L/ubR3UrT3Gk
-         swb6ryRJuYz/J2CNltNCx9yohKas57nqUhKoP4Lzh8jSJ74daMuiAlac7eQWSJt/GRcr
-         FFnii6N5er2yccqj5MND6z12qpXIR9KWFyoiy7DfnF7Fh8RwEI8ZVm8ChZcDY6+OkfxC
-         Dd4A==
-X-Gm-Message-State: ACgBeo0WelIyAKEzUwN0sZWMeVxw6CL9XACqZax+ivmhNmc+NfxUm+KS
-        KSMLW2cqqwackZFNWN/whJBF2/rk3QE=
-X-Google-Smtp-Source: AA6agR4EA7lK9MqSZtDKKlmHSyAAvzyqsEy9HxXgmoadwDV/yIFxuEYAmu1UBax8Q8IbbfSdHwJjxw==
-X-Received: by 2002:a05:6214:5005:b0:472:e6b0:1fb2 with SMTP id jo5-20020a056214500500b00472e6b01fb2mr4073953qvb.124.1661618707237;
-        Sat, 27 Aug 2022 09:45:07 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id j10-20020ac874ca000000b003434e47515csm1886500qtr.7.2022.08.27.09.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Aug 2022 09:45:06 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 0935527C0054;
-        Sat, 27 Aug 2022 12:45:05 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 27 Aug 2022 12:45:06 -0400
-X-ME-Sender: <xms:EUoKYyZfV3VCiI4JA7zHq8TLwZJ3TUUZv-qw6fi39l9fitEprqE-9g>
-    <xme:EUoKY1bDrWj3bmnYa5T5_GUfTvuL1wt4ukpp9Sw76b4Omr_vdXJEikVdI-QDGfoTD
-    fZR3az1CrVzSt4E_w>
-X-ME-Received: <xmr:EUoKY8_HI06AHdxs4QrKJxRrbgPcymeufln6GzuyevWnK9kfEAN5RCOHLG0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdejjedguddtkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnheptdegffdugfefhfdugfeiheefheekudehfeeiieegleegheejleefieek
-    veeuhfdunecuffhomhgrihhnpegvvghlrdhishdpiihulhhiphgthhgrthdrtghomhenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhn
-    odhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejje
-    ekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhn
-    rghmvg
-X-ME-Proxy: <xmx:EUoKY0p5d2QWI2Cl3lufmV5wxPM_dJ8N7kfW6wY15UvhYIRBTkqz_Q>
-    <xmx:EUoKY9rkUlaGjn0utSIrYVuRTVorsivMl07V0qK5qZqhENuLTPUcqg>
-    <xmx:EUoKYyTpxcDwfsyXUE-KJErT1iNoOtgwhNwtw27KQuz62hZ2Lo7ZLQ>
-    <xmx:EUoKY-6RAy8gCB6IwjQR6jQMYIjTiwcZOJJ1ka1WXClZPN_g3KTgjQ>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 27 Aug 2022 12:45:04 -0400 (EDT)
-Date:   Sat, 27 Aug 2022 09:44:17 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, parri.andrea@gmail.com,
-        will@kernel.org, npiggin@gmail.com, dhowells@redhat.com,
-        j.alglave@ucl.ac.uk, luc.maranget@inria.fr, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Message-ID: <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
-References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
- <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
- <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WAEr4zCif0zp++lZAUWZkj4GJhtO7eOsEWQzvmzftQQ=;
+        b=Pxd6kCleABOSldggMSnqKhNwp53j1fjiU+3ZLx/PTKvJfx9J1IDYpwdaC/OAoidcPI
+         EuoVackidRMqJe6xzZCtfXx2m3kH3UiTnHRXmCc5AXG8Taf/IVjLfGzjPKCvKrQ7Ofg7
+         PvsPEHJsFq11RUUF7Bi/JoYaud8b9k6qlDWM+mGABafwjfRfpzmkZc5y+yiuNbH1fDvG
+         4lk8kbgVbQ6RVlRLi+W+wmUDql8kxO9HItP2XOwMNzZN+64Op0jDdXqPl+TZcMprw4rC
+         WsbFLGTXH7qqtQ0rOeKIW1Q9nF2RZRGMG4qaPFXA+3M7hn9cnMC0NkXyL7wL7LcxL4Sp
+         gGyw==
+X-Gm-Message-State: ACgBeo11ciXRttim/yDl6De1ShADpTnKUAN+tbkQWjc7FxSKIrP0ypa/
+        KmVHaUiAfLVmA095zo0RZpugV4KzYfM7AhywpB0=
+X-Google-Smtp-Source: AA6agR68l/5iso5/UjxZiGdMZ9JuSTzmfL7tLH9snnTXJE4YFBvf5OC8PKe4IogXmrrTnRqVnVLjag==
+X-Received: by 2002:a17:906:cc16:b0:73d:c874:f89e with SMTP id ml22-20020a170906cc1600b0073dc874f89emr8943833ejb.666.1661619409050;
+        Sat, 27 Aug 2022 09:56:49 -0700 (PDT)
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170906498a00b007307c4c8a5dsm2232673eju.58.2022.08.27.09.56.48
+        for <linux-arch@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Aug 2022 09:56:48 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id s23so2292293wmj.4
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 09:56:48 -0700 (PDT)
+X-Received: by 2002:a05:600c:2195:b0:3a6:b3c:c100 with SMTP id
+ e21-20020a05600c219500b003a60b3cc100mr2617660wme.8.1661619061056; Sat, 27 Aug
+ 2022 09:51:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com>
+ <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com>
+ <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com>
+ <CAHk-=wh91FqN2sNSRFZPxfGnqAbJ1o66ew8TXh+neM9hW0xZiA@mail.gmail.com>
+ <alpine.LRH.2.02.2208261620210.9648@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com> <alpine.LRH.2.02.2208270720500.18630@file01.intranet.prod.int.rdu2.redhat.com>
+In-Reply-To: <alpine.LRH.2.02.2208270720500.18630@file01.intranet.prod.int.rdu2.redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 27 Aug 2022 09:50:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whyBQzofeFc1a1d2=HKcrTCLDi_FY+K2NG0R4e-9epqPw@mail.gmail.com>
+Message-ID: <CAHk-=whyBQzofeFc1a1d2=HKcrTCLDi_FY+K2NG0R4e-9epqPw@mail.gmail.com>
+Subject: Re: [PATCH] provide arch_test_bit_acquire for architectures that
+ define test_bit
+To:     Mikulas Patocka <mpatocka@redhat.com>
+Cc:     Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 12:05:33PM -0400, Alan Stern wrote:
-> On Sat, Aug 27, 2022 at 01:47:48AM +0200, Peter Zijlstra wrote:
-> > On Fri, Aug 26, 2022 at 01:10:39PM -0400, Alan Stern wrote:
-> > 
-> > > >  - some babbling about a missing propagation -- ISTR Linux if stuffed
-> > > >    full of them, specifically we require stores to auto propagate
-> > > >    without help from barriers
-> > > 
-> > > Not a missing propagation; a late one.
-> > > 
-> > > Don't understand what you mean by "auto propagate without help from 
-> > > barriers".
-> > 
-> > Linux hard relies on:
-> > 
-> > 	CPU0				CPU1
-> > 
-> > 	WRITE_ONCE(foo, 1);		while (!READ_ONCE(foo));
-> > 
-> > making forward progress.
-> 
-> Indeed yes.  As far as I can tell, this requirement is not explicitly 
-> mentioned in the LKMM, although it certainly is implicit.  I can't even 
-> think of a way to express it in a form Herd could verify.
-> 
+On Sat, Aug 27, 2022 at 4:38 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
+>
+> I compile-tested this patch on alpha, s390x, m68k, sh, sparc32, sparc64.
+> So, you can commit it to close these uncompilable-kernel reports.
 
-FWIW, C++ defines this as (in https://eel.is/c++draft/atomics#order-11):
+Thanks, done.
 
-	Implementations should make atomic stores visible to atomic
-	loads within a reasonable amount of time.
-
-in other words:
-
-if one thread does an atomic store, then all other threads must see that
-store eventually.
-
-(from: https://rust-lang.zulipchat.com/#narrow/stream/136281-t-lang.2Fwg-unsafe-code-guidelines/topic/Rust.20forward.20progress.20guarantees/near/294702950)
-
-Should we add something somewhere in our model, maybe in the
-explanation.txt?
-
-Plus, I think we cannot express this in Herd because Herd uses
-graph-based model (axiomatic model) instead of an operational model to
-describe the model: axiomatic model cannot describe "something will
-eventually happen". There was also some discussion in the zulip steam
-of Rust unsafe-code-guidelines.
-
-Regards,
-Boqun
-
-> > There were a few 'funny' uarchs that were broken, see for example commit
-> > a30718868915f.
-> 
-> Ha!  That commit should be a lesson in something, although I'm not sure 
-> what.  :-)
-> 
-> Alan
+                Linus
