@@ -2,63 +2,80 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DC05A3578
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 09:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2DD5A3610
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 10:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbiH0HOP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 03:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
+        id S232807AbiH0Imw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 04:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbiH0HOP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 03:14:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1BAB941F;
-        Sat, 27 Aug 2022 00:14:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S230499AbiH0Imv (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 04:42:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450E3CE474
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 01:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661589770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KxvlGB8SaXAMkxOej08ij1ovWmRGqx7ZcAzrOyoP74Y=;
+        b=QhV4CV8RlFkxtm69jGrXec40H9f0uUXKduDzRR8RMOSVbNcVG3Wn/RgcxXHkBTXQoln0IS
+        1IXZrORjzlPMWBpxHdPuV0+S4c6reGRA302wdFWhMPsVw6bLLsD2lKVoOsVA/U8HyTWTf2
+        pOtcMV9QQBz9pROs8lAdL4VFl8RJomQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-YC8p255FNcWIac-8YjY4IA-1; Sat, 27 Aug 2022 04:42:41 -0400
+X-MC-Unique: YC8p255FNcWIac-8YjY4IA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A56ECB82B8D;
-        Sat, 27 Aug 2022 07:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6ABC4347C;
-        Sat, 27 Aug 2022 07:14:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661584451;
-        bh=bQaVKBfsaLgFQiFbtFaJvcqVdo/u/g4Ip0tVdWmYieQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MuvtgXa0YJPctLv2mT8DfNi0I5KdPrtZD8YgtzWdktEzyf/YogOa/LKGqu5nVWK+H
-         Z/Jy1DsA5qi5+ZmGLhJTw6q30Ixe9S4To6brhk8PzAfRbitjd7TULsBwhQrwEU+S4h
-         KxTieZLSV2ngyyRacvTGeGvMRvGYw4ccE17vx4jHnsYBEyv0AA26+Egw8EjTGWz6zz
-         CdUTbOKzSpAfbv61qT2Cw2DFQvVD2BYJcfIDHAFaHnppPgtv9Qsp48xZUnifVtj70O
-         VZzHlRQZpQsXV/vyoNG1zSmyCYj6BoKL7bKeQbWWnpybGFjp6Biny5JZA/EOkd2Qqf
-         sqjS9WTInxJAg==
-Received: by mail-wm1-f53.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so5455948wmk.3;
-        Sat, 27 Aug 2022 00:14:11 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2crqYSz1YLQi25NSxQUVPF3Gc74q4m02TB91HuiLt87Z6MTQaZ
-        wdF6KqZTUldAGrH6OIaHaz65FW6i/rhIjK9ze8w=
-X-Google-Smtp-Source: AA6agR7p8GijcUOtJGznPBKhpfg9HyxCqjidJlhRFBvsrg/twaTrPlEhxNPEg5Uu1s2eYVOnl4WfetJWsHoWy5eWk/c=
-X-Received: by 2002:a1c:3b55:0:b0:3a6:7b62:3901 with SMTP id
- i82-20020a1c3b55000000b003a67b623901mr1520421wma.113.1661584449515; Sat, 27
- Aug 2022 00:14:09 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 571B21C05AAB;
+        Sat, 27 Aug 2022 08:42:40 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 158762026D64;
+        Sat, 27 Aug 2022 08:42:40 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27R8geEL007403;
+        Sat, 27 Aug 2022 04:42:40 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27R8gb4e007399;
+        Sat, 27 Aug 2022 04:42:37 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Sat, 27 Aug 2022 04:42:37 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Ard Biesheuvel <ardb@kernel.org>
+cc:     Will Deacon <will@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
+In-Reply-To: <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
+Message-ID: <alpine.LRH.2.02.2208270442070.25874@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
+ <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <20220826112327.GA19774@willie-the-truck> <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
+ <20220826174352.GA20386@willie-the-truck> <alpine.LRH.2.02.2208261424580.31963@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXHmXHKG4TXG+e7FgHCB2KKjmSeAdoAVR_bQTjb6NTVD4A@mail.gmail.com> <alpine.LRH.2.02.2208261447400.32583@file01.intranet.prod.int.rdu2.redhat.com>
+ <CAMj1kXEqF_wKibwvdXVzjBfLrTJpXquNLOyuQVrbF+ZyNvLDaA@mail.gmail.com> <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-References: <20220819102037.2697798-1-chenhuacai@loongson.cn> <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
-In-Reply-To: <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 27 Aug 2022 09:13:58 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
-Message-ID: <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
-Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,12 +83,59 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sat, 27 Aug 2022 at 06:41, Xi Ruoyao <xry111@xry111.site> wrote:
->
-> Tested V3 with the magic number check manually removed in my GRUB build.
-> The system boots successfully.  I've not tested Arnd's zBoot patch yet.
 
-I am Ard not Arnd :-)
 
-Please use this branch when testing the EFI decompressor:
-https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-decompressor-v4
+On Sat, 27 Aug 2022, Ard Biesheuvel wrote:
+
+> On Sat, 27 Aug 2022 at 08:32, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Fri, 26 Aug 2022 at 21:10, Mikulas Patocka <mpatocka@redhat.com> wrote:
+> > >
+> > >
+> > >
+> > > On Fri, 26 Aug 2022, Ard Biesheuvel wrote:
+> > >
+> > > > Could you try booting with earlycon?
+> > > >
+> > > > Just 'earlycon' and if that does not help,
+> > >
+> > > It doesn't help.
+> > >
+> > > > 'earlycon=uart8250,mmio32,<uart PA>' [IIRC, mcbin uses 16550
+> > > > compatible UARTs, right?]
+> > >
+> > > mcbin is the host system (running a stable kernel fine). The crash happens
+> > > in a virtual machine. The vm uses /dev/ttyAMA0 as a console:
+> > >
+> > > Serial: AMBA PL011 UART driver
+> > > 9000000.pl011: ttyAMA0 at MMIO 0x9000000 (irq = 45, base_baud = 0) is a PL011 rev1
+> > > printk: console [ttyAMA0] enabled
+> > >
+> > > I tried earlycon=pl011,mmio32,0x9000000 - but it doesn't help, it hangs
+> > > without printing anything.
+> > >
+> >
+> > If you are using pl011, you should drop the mmio32 - it only takes a
+> > physical address (and optionally baud rate etc, but QEMU doesn't need
+> > those)
+> 
+> Could you try the diff below please?
+> 
+> --- a/arch/arm64/kernel/head.S
+> +++ b/arch/arm64/kernel/head.S
+> @@ -371,7 +371,9 @@ SYM_FUNC_END(create_idmap)
+>  SYM_FUNC_START_LOCAL(create_kernel_mapping)
+>         adrp    x0, init_pg_dir
+>         mov_q   x5, KIMAGE_VADDR                // compile time __va(_text)
+> +#ifdef CONFIG_RELOCATABLE
+>         add     x5, x5, x23                     // add KASLR displacement
+> +#endif
+>         adrp    x6, _end                        // runtime __pa(_end)
+>         adrp    x3, _text                       // runtime __pa(_text)
+>         sub     x6, x6, x3                      // _end - _text
+> 
+
+Yes - this patch fixes the crash.
+
+Mikulas
+
