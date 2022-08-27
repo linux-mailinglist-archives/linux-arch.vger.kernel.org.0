@@ -2,109 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E085A3762
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 13:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB395A3895
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 18:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiH0Lix (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 07:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S231464AbiH0QAW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 12:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234620AbiH0Liw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 07:38:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CCC53D0A
-        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 04:38:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661600330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aVuxalu5P1+XapIuqjdM8bU9Xz/L+P4hGuQ04daUvb4=;
-        b=KL1PNAIfWH/nEs96WfUvlReFG4TaT3rVi2WJVlTDWi3IMHuzVKGqtYA/NEq7vQtAzigJ9S
-        aCv09nZNnVQVk1mAmuWXHKdw/YHU29IqNA+esmN1K5D6pKzhbAU54BYJ5+DjMzI0y6DRju
-        DFonuWx9/rQdrOa7zAg8MFOHxayJAIo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-450-w-_pqjAkOMG6shxzxZynUQ-1; Sat, 27 Aug 2022 07:38:47 -0400
-X-MC-Unique: w-_pqjAkOMG6shxzxZynUQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53A2385A589;
-        Sat, 27 Aug 2022 11:38:46 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 02DD0492C3B;
-        Sat, 27 Aug 2022 11:38:45 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27RBcj6r019230;
-        Sat, 27 Aug 2022 07:38:45 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27RBcjFT019226;
-        Sat, 27 Aug 2022 07:38:45 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Sat, 27 Aug 2022 07:38:45 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] provide arch_test_bit_acquire for architectures that
- define test_bit
-In-Reply-To: <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com>
-Message-ID: <alpine.LRH.2.02.2208270720500.18630@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh7ystLBs7r=KrgFhuYpNULoTY1FFPgq=a=Kr2mxc3jdg@mail.gmail.com> <alpine.LRH.2.02.2208260508360.26588@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMuHMdWQXqi__8q66R7cL4VVgr4r7WwqNmDExFFsi4aC=K3NPw@mail.gmail.com> <CAHk-=wh91FqN2sNSRFZPxfGnqAbJ1o66ew8TXh+neM9hW0xZiA@mail.gmail.com> <alpine.LRH.2.02.2208261620210.9648@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=whO2sd233T8AXNMhYztPiF9hae+1ePOX1fEMEu6Ow1CQQ@mail.gmail.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        with ESMTP id S233587AbiH0QAT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 12:00:19 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 550C4FD2B
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 09:00:16 -0700 (PDT)
+Received: (qmail 70612 invoked by uid 1000); 27 Aug 2022 12:00:15 -0400
+Date:   Sat, 27 Aug 2022 12:00:15 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, parri.andrea@gmail.com,
+        will@kernel.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com, dlustig@nvidia.com, joel@joelfernandes.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Message-ID: <Ywo/j7V2GbMKMmp3@rowland.harvard.edu>
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <20220826204219.GX6159@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826204219.GX6159@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-
-
-On Fri, 26 Aug 2022, Linus Torvalds wrote:
-
-> On Fri, Aug 26, 2022 at 1:43 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
-> >
-> > I'm wondering why do the architectures redefine test_bit, if their
-> > definition is equivalent to the generic one? We could just delete
-> > arch_test_bit and use "#define arch_test_bit generic_test_bit" as well.
+On Fri, Aug 26, 2022 at 01:42:19PM -0700, Paul E. McKenney wrote:
+> On Fri, Aug 26, 2022 at 01:10:39PM -0400, Alan Stern wrote:
+> > On Fri, Aug 26, 2022 at 06:23:24PM +0200, Peter Zijlstra wrote:
+> > > I think we should address that first one in LKMM, it seems very weird to
+> > > me a RmW would break the chain like that.
+> > 
+> > An explicitly relaxed RMW (atomic_cmpxchg_relaxed(), to be precise).
+> > 
+> > If the authors wanted to keep the release-acquire chain intact, why not 
+> > use a cmpxchg version that has release semantics instead of going out of 
+> > their way to use a relaxed version?
+> > 
+> > To put it another way, RMW accesses and release-acquire accesses are 
+> > unrelated concepts.  You can have one without the other (in principle, 
+> > anyway).  So a relaxed RMW is just as capable of breaking a 
+> > release-acquire chain as any other relaxed operation is.
+> > 
+> > >  Is there actual hardware that
+> > > doesn't behave?
+> > 
+> > Not as far as I know, although that isn't very far.  Certainly an 
+> > other-multicopy-atomic architecture would make the litmus test succeed.  
+> > But the LKMM does not require other-multicopy-atomicity.
 > 
-> I think generic_test_bit() came after many of them, and when it
-> didn't, people copied earlier architectures where they had already
-> done their own.
+> My first attempt with ppcmem suggests that powerpc does -not- behave
+> this way.  But that surprises me, just on general principles.  Most likely
+> I blew the litmus test shown below.
 > 
-> > Another untested patch ... tomorrow, I'll try to compile it, at least for
-> > architectures where Debian provides cross-compiling gcc.
+> Thoughts?
 
-I compile-tested this patch on alpha, s390x, m68k, sh, sparc32, sparc64. 
-So, you can commit it to close these uncompilable-kernel reports.
+The litmus test looks okay.
 
-Mikulas
+As for your surprise, remember that PPC is B-cumulative, another 
+property which the LKMM does not require.  B-cumulativity will also 
+force the original litmus test to succeed.  (The situation is like ISA2 
+in the infamous test6.pdf, except that y and z are separate variables in 
+ISA2 but are the same here.  The RMW nature of lwarx/stwcx provides 
+the necessary R-W ordering in P1.)
 
+Alan
+
+> 							Thanx, Paul
+> 
+> ------------------------------------------------------------------------
+> 
+> PPC MP+lwsyncs+atomic
+> "LwSyncdWW Rfe LwSyncdRR Fre"
+> Cycle=Rfe LwSyncdRR Fre LwSyncdWW
+> {
+> 0:r2=x; 0:r4=y;
+> 1:r2=y; 1:r5=2;
+> 2:r2=y; 2:r4=x;
+> }
+>  P0           | P1              | P2           ;
+>  li r1,1      | lwarx r1,r0,r2  | lwz r1,0(r2) ;
+>  stw r1,0(r2) | stwcx. r5,r0,r2 | lwsync       ;
+>  lwsync       |                 | lwz r3,0(r4) ;
+>  li r3,1      |                 |              ;
+>  stw r3,0(r4) |                 |              ;
+> exists (1:r1=1 /\ 2:r1=2 /\ 2:r3=0)
+> 
+> ------------------------------------------------------------------------
+> 
+> $ ./ppcmem -model lwsync_read_block -model coherence_points MP+lwsyncs+atomic.litmus
+> ...
+> Test MP+lwsyncs+atomic Allowed
+> States 9
+> 1:r1=0; 2:r1=0; 2:r3=0;
+> 1:r1=0; 2:r1=0; 2:r3=1;
+> 1:r1=0; 2:r1=1; 2:r3=1;
+> 1:r1=0; 2:r1=2; 2:r3=0;
+> 1:r1=0; 2:r1=2; 2:r3=1;
+> 1:r1=1; 2:r1=0; 2:r3=0;
+> 1:r1=1; 2:r1=0; 2:r3=1;
+> 1:r1=1; 2:r1=1; 2:r3=1;
+> 1:r1=1; 2:r1=2; 2:r3=1;
+> No (allowed not found)
+> Condition exists (1:r1=1 /\ 2:r1=2 /\ 2:r3=0)
+> Hash=b7cec0e2ecbd1cb68fe500d6fe362f9c
+> Observation MP+lwsyncs+atomic Never 0 9
