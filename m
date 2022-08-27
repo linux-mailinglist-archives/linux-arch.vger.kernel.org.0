@@ -2,140 +2,117 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2DD5A3610
-	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 10:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CE25A3646
+	for <lists+linux-arch@lfdr.de>; Sat, 27 Aug 2022 11:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiH0Imw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 04:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S233283AbiH0JWF (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 05:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiH0Imv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 04:42:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450E3CE474
-        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 01:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661589770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KxvlGB8SaXAMkxOej08ij1ovWmRGqx7ZcAzrOyoP74Y=;
-        b=QhV4CV8RlFkxtm69jGrXec40H9f0uUXKduDzRR8RMOSVbNcVG3Wn/RgcxXHkBTXQoln0IS
-        1IXZrORjzlPMWBpxHdPuV0+S4c6reGRA302wdFWhMPsVw6bLLsD2lKVoOsVA/U8HyTWTf2
-        pOtcMV9QQBz9pROs8lAdL4VFl8RJomQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-288-YC8p255FNcWIac-8YjY4IA-1; Sat, 27 Aug 2022 04:42:41 -0400
-X-MC-Unique: YC8p255FNcWIac-8YjY4IA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 571B21C05AAB;
-        Sat, 27 Aug 2022 08:42:40 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 158762026D64;
-        Sat, 27 Aug 2022 08:42:40 +0000 (UTC)
-Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 27R8geEL007403;
-        Sat, 27 Aug 2022 04:42:40 -0400
-Received: from localhost (mpatocka@localhost)
-        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 27R8gb4e007399;
-        Sat, 27 Aug 2022 04:42:37 -0400
-X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
-Date:   Sat, 27 Aug 2022 04:42:37 -0400 (EDT)
-From:   Mikulas Patocka <mpatocka@redhat.com>
-X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
-To:     Ard Biesheuvel <ardb@kernel.org>
-cc:     Will Deacon <will@kernel.org>,
+        with ESMTP id S233293AbiH0JV5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 05:21:57 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9861A10559;
+        Sat, 27 Aug 2022 02:21:55 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id u5so4358021wrt.11;
+        Sat, 27 Aug 2022 02:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=owsLDmoBOckRw335Xg3NmUtrVOPZquu8Z7W7wU8himM=;
+        b=QBFCkSAYXBIp/LTs2NfufxKBNWjCvpQ4CwVDoSoLc8jEG5ZLkaIebcJQNqCXplIj32
+         whBZmz/vmdnz0NxJiWDuR40A9FcvcG0xTXDDG+1tWr4JreEo9BCNyx/UWJllmQSxaqMK
+         A6aGKugjwZqd7ZLx64MxhI7K6HsvQXlk4EitQqV3XFyLMEd4xmeX9mJgUCIhZkGxBMJn
+         OE3gixD8E56tEKKbwmcwkSI3mUH1aHEhmghHB/gykWezpzbbjWBsouwoRWcxN7PCFr22
+         slZVPL5PpFJfakUFSMWU9PIcRz2FxfuKFYQ+UGM0xIVrDMfXPpr7kp9kMmPFyZybn2jw
+         JEyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=owsLDmoBOckRw335Xg3NmUtrVOPZquu8Z7W7wU8himM=;
+        b=kjyD+ofY6nyP3MkcLHqNEuUgGJiJTufWXmDq/dQdSD/mlg+5gzriPa2HVsaJrU7AU5
+         SO2OBc67WgSxpYD+zvIx8eNCec3IAzvGa3wWzAUQzGOy6+/2s4q14RhLdfB0xFMn8AHF
+         2QGwK80JBcQHaXyaK5hPfVpXsYMg3uy3LHp2UyJyT1oCjHil9LJMLaHpPBoo4Fcah3JN
+         w/phGcC193yU++bH9kNEA8M30usA8R1xPybnAerDkFOVyc6Wc+OEmObE5ql/zDaDF6Rs
+         LX4IPuGobinK6krhzwHKLh5/Ak1ftAPSNWnl5jE8wke1J8EPeaR9niJMZuKV3hNBpWAN
+         eEfg==
+X-Gm-Message-State: ACgBeo32VtE0fdDGyIj7LHyLtOZvpA2Khk8RHDyfB/l9bU/ptJwNY52W
+        UZDP+SOGsrYRWFzcvis8dlZtV5I01Sw=
+X-Google-Smtp-Source: AA6agR7QPzCSPP0v7i7p+cguczsVI8yaVXlvXjJ0WfcG2DrIdC/C/liD2aRZl+lO3DVs+wlmdQ1B6A==
+X-Received: by 2002:adf:e310:0:b0:226:d19c:de22 with SMTP id b16-20020adfe310000000b00226d19cde22mr1173409wrj.314.1661592114172;
+        Sat, 27 Aug 2022 02:21:54 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id c66-20020a1c3545000000b003a4efb794d7sm2434629wma.36.2022.08.27.02.21.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Aug 2022 02:21:53 -0700 (PDT)
+Date:   Sat, 27 Aug 2022 10:21:51 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Mikulas Patocka <mpatocka@redhat.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH] wait_on_bit: add an acquire memory barrier
-In-Reply-To: <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
-Message-ID: <alpine.LRH.2.02.2208270442070.25874@file01.intranet.prod.int.rdu2.redhat.com>
-References: <alpine.LRH.2.02.2208220530050.32093@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wh-6RJQWxdVaZSsntyXJWJhivVX8JFH4MqkXv12AHm_=Q@mail.gmail.com> <CAHk-=whfZSEc40wtq5H51JcsBdB50ctZPtM3rS3E+xUNvadLog@mail.gmail.com>
- <alpine.LRH.2.02.2208251501200.31977@file01.intranet.prod.int.rdu2.redhat.com> <20220826112327.GA19774@willie-the-truck> <alpine.LRH.2.02.2208260727020.17585@file01.intranet.prod.int.rdu2.redhat.com> <alpine.LRH.2.02.2208261003590.27240@file01.intranet.prod.int.rdu2.redhat.com>
- <20220826174352.GA20386@willie-the-truck> <alpine.LRH.2.02.2208261424580.31963@file01.intranet.prod.int.rdu2.redhat.com> <CAMj1kXHmXHKG4TXG+e7FgHCB2KKjmSeAdoAVR_bQTjb6NTVD4A@mail.gmail.com> <alpine.LRH.2.02.2208261447400.32583@file01.intranet.prod.int.rdu2.redhat.com>
- <CAMj1kXEqF_wKibwvdXVzjBfLrTJpXquNLOyuQVrbF+ZyNvLDaA@mail.gmail.com> <CAMj1kXFboXvH_wsOSAyCMJ3LRsnCt-VPmcef3NmKrQjAOFmdSw@mail.gmail.com>
-User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
+        Will Deacon <will@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: mainline build failure due to 8238b4579866 ("wait_on_bit: add an
+ acquire memory barrier")
+Message-ID: <YwniL0M7Rxz8lua+@debian>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+Hi All,
+
+The latest mainline kernel branch fails to build alpha and s390 allmodconfig.
+
+alpha error is:
+
+In file included from ./include/linux/thread_info.h:27,
+                 from ./include/asm-generic/current.h:5,
+                 from ./arch/alpha/include/generated/asm/current.h:1,
+                 from ./include/linux/sched.h:12,
+                 from arch/alpha/kernel/asm-offsets.c:10:
+./include/linux/wait_bit.h: In function 'wait_on_bit':
+./include/asm-generic/bitops/non-instrumented-non-atomic.h:15:33: error: implicit declaration of function 'arch_test_bit_acquire'; did you mean '_test_bit_acquire'? [-Werror=implicit-function-declaration]
+   15 | #define _test_bit_acquire       arch_test_bit_acquire
+      |                                 ^~~~~~~~~~~~~~~~~~~~~
+./include/linux/bitops.h:53:32: note: in definition of macro 'bitop'
+   53 |          const##op(nr, addr) : op(nr, addr))
+      |                                ^~
+./include/linux/bitops.h:62:47: note: in expansion of macro '_test_bit_acquire'
+   62 | #define test_bit_acquire(nr, addr)      bitop(_test_bit_acquire, nr, addr)
+      |                                               ^~~~~~~~~~~~~~~~~
+./include/linux/wait_bit.h:74:14: note: in expansion of macro 'test_bit_acquire'
+   74 |         if (!test_bit_acquire(bit, word))
+      |              ^~~~~~~~~~~~~~~~
+
+s390 error is:
+
+In file included from ./arch/s390/include/asm/bitops.h:211,
+                 from ./include/linux/bitops.h:68,
+                 from ./include/linux/log2.h:12,
+                 from kernel/bounds.c:13:
+./include/asm-generic/bitops/instrumented-non-atomic.h: In function '_test_bit_acquire':
+./include/asm-generic/bitops/instrumented-non-atomic.h:154:16: error: implicit declaration of function 'arch_test_bit_acquire'; did you mean '_test_bit_acquire'? [-Werror=implicit-function-declaration]
+  154 |         return arch_test_bit_acquire(nr, addr);
+      |                ^~~~~~~~~~~~~~~~~~~~~
+      |                _test_bit_acquire
 
 
-On Sat, 27 Aug 2022, Ard Biesheuvel wrote:
+git bisect pointed to 8238b4579866 ("wait_on_bit: add an acquire memory barrier").
+And, reverting that commit has fixed the build failure.
 
-> On Sat, 27 Aug 2022 at 08:32, Ard Biesheuvel <ardb@kernel.org> wrote:
-> >
-> > On Fri, 26 Aug 2022 at 21:10, Mikulas Patocka <mpatocka@redhat.com> wrote:
-> > >
-> > >
-> > >
-> > > On Fri, 26 Aug 2022, Ard Biesheuvel wrote:
-> > >
-> > > > Could you try booting with earlycon?
-> > > >
-> > > > Just 'earlycon' and if that does not help,
-> > >
-> > > It doesn't help.
-> > >
-> > > > 'earlycon=uart8250,mmio32,<uart PA>' [IIRC, mcbin uses 16550
-> > > > compatible UARTs, right?]
-> > >
-> > > mcbin is the host system (running a stable kernel fine). The crash happens
-> > > in a virtual machine. The vm uses /dev/ttyAMA0 as a console:
-> > >
-> > > Serial: AMBA PL011 UART driver
-> > > 9000000.pl011: ttyAMA0 at MMIO 0x9000000 (irq = 45, base_baud = 0) is a PL011 rev1
-> > > printk: console [ttyAMA0] enabled
-> > >
-> > > I tried earlycon=pl011,mmio32,0x9000000 - but it doesn't help, it hangs
-> > > without printing anything.
-> > >
-> >
-> > If you are using pl011, you should drop the mmio32 - it only takes a
-> > physical address (and optionally baud rate etc, but QEMU doesn't need
-> > those)
-> 
-> Could you try the diff below please?
-> 
-> --- a/arch/arm64/kernel/head.S
-> +++ b/arch/arm64/kernel/head.S
-> @@ -371,7 +371,9 @@ SYM_FUNC_END(create_idmap)
->  SYM_FUNC_START_LOCAL(create_kernel_mapping)
->         adrp    x0, init_pg_dir
->         mov_q   x5, KIMAGE_VADDR                // compile time __va(_text)
-> +#ifdef CONFIG_RELOCATABLE
->         add     x5, x5, x23                     // add KASLR displacement
-> +#endif
->         adrp    x6, _end                        // runtime __pa(_end)
->         adrp    x3, _text                       // runtime __pa(_text)
->         sub     x6, x6, x3                      // _end - _text
-> 
+I will be happy to test any patch or provide any extra log if needed.
 
-Yes - this patch fixes the crash.
-
-Mikulas
-
+--
+Regards
+Sudip
