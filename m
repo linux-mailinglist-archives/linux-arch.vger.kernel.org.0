@@ -2,500 +2,187 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98855A3B14
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5797D5A3CF4
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 11:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbiH1CqE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 22:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S229587AbiH1JGk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Aug 2022 05:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231851AbiH1CqA (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:46:00 -0400
-Received: from condef-08.nifty.com (condef-08.nifty.com [202.248.20.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AE72C657
-        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:45:58 -0700 (PDT)
-Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-08.nifty.com with ESMTP id 27S2ek9a010402
-        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:46 +0900
-Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27S2e6Gx030639;
-        Sun, 28 Aug 2022 11:40:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gx030639
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661654414;
-        bh=EJuEUsvnLUK5pwpXzsPIse4yy9Ubav5beZtBE0mnRbs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CUetq+ov6jTLmtJTAcyWq8rvsI6X0cowG49mt2xyG2gdbvvCrn96MtBEMBg+rwbRi
-         VCu6j/VwYDTwpCmpWoKEKylcvL3B512ikL7AdUdnvMMlnX9rTvPy3Zj1QnKQ1Fi+CH
-         YECmHZ97QgjQJh3JT9KFTQcNWPz3v+7UMTYK+PDAr2tNeBHz6Q7XRseIuNQjKKOXQC
-         oAvjSHGrZSqPzBrM4hzcCEZb0Rtqep8N9cRfpeM5QX3LGIyXVTtkjTy9ZPx6VXnxUb
-         OWqstP2bxvFnt8ix+lL8Y9WYOKAhO3H6WSxLSB2QBNGaZsr0Ot16U0PptQJUF+ie9m
-         vuDf8Wj3NRoRQ==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 15/15] kbuild: remove head-y syntax
-Date:   Sun, 28 Aug 2022 11:40:03 +0900
-Message-Id: <20220828024003.28873-16-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
-References: <20220828024003.28873-1-masahiroy@kernel.org>
+        with ESMTP id S229556AbiH1JGj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Aug 2022 05:06:39 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90079.outbound.protection.outlook.com [40.107.9.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B1648CAF;
+        Sun, 28 Aug 2022 02:06:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UVtyHs7aIG+l7jpQ4AYlC6tv2LkItcnvuy1WMEOW/DDyyCqLqvG9Ya8c3oQ07I4jDM/PTqvoQt6DlP1FB6iElh8N2+1VLb2j/RIpQqsC/Z8AyyjO57QikYa2lQYWTD+My7gnGqkB3zdE4YlvMZ26r/cnHjn6HIyMQI0cjl9y02X6mc3y9N6vYU/mktVSLMBrLOcoamFoYhZPeThu1g+QZsAAiy37hKXLa6B/Cf3ohx0Xr0R5lbyiwB9afxZreDTEg72s+NcRJYlgq6kNokSUEA1k3JjFFmqI7/7EMUYjmF7sp81igykqMZVD9iz/+W1sGkUYO7tZEeao/OoGHux52g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dDXOeNFgUNFtVedajbO09g5nvsc4IG2aZYSqZtRen8s=;
+ b=RSiyz0Oh93/gZbf4SBV2X2BkkQZ11KweXBywFziZT9E91NzZeAyEiOyi7ZZtQaua0Zryh1nbFQFThyG044J4pbeYVzYoyzwMnf1+KxNzhkvxbkEQhvuIH54XxeB5QI5VuZ5CbmeGbCh1UoFyjfdutN1hV7QSPeXbo4bS5b30McFB7Ht/6tkqiQThI1Z2++M+ylTHYwyKqJXdx/eZ4IfZ5eXMKjqIsjGriQaSxvUyLaFE+ViaUowIHPUyDS7P15PSJTZXTIt+SDt45u/xzcJ+7Jin9S0+fBym6yl09frp2cTtbLzdtTP5M5L9pEwP/NPV7qzrioe+tIVfJp3rQk+eMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dDXOeNFgUNFtVedajbO09g5nvsc4IG2aZYSqZtRen8s=;
+ b=MLP6QR9vuuj1DL7NONbWMnGwT1AR3OOlI5tliopBMEqBidoYgS2uDJb3kgS9xJCjzlYLrzAdEetpj+yNLZl5GMPPmbQKYMUao5SvRRpDaEbk+0iQVWW72yUtGvak3cOwkxqCOrt2eyvHgTWuYgQ291PD7sQsiRAJph71XiqDYVm/06uj5LcDuo5D5RiArPNtshamFp4ml02XhN6M0pLLbnsPoyu/ehmnCR8lB1vW0WQBzRkvVetXZGLvZuMLilTNESvFg0xnJzea1EJPe3vwAJzunRoWI6fLJfZg9ivPWldZOLIBKtcZjoitvqqQfdXQ5i30910hLWtOCAKSdY7Uxw==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB1439.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Sun, 28 Aug
+ 2022 09:06:35 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5566.021; Sun, 28 Aug 2022
+ 09:06:35 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Linus Walleij <linus.walleij@linaro.org>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Alexandre Courbot <gnurou@gmail.com>,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Thread-Topic: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Thread-Index: AQHYq9yc0+2EsNg9hki12SrFrcAXy620c0uAgAAEKoCAABfpAIAABZOAgAAOlYCAAAXLgIALDnQAgAAGlgCAAY9WgIAAFeqAgABxeACAAk4kAA==
+Date:   Sun, 28 Aug 2022 09:06:35 +0000
+Message-ID: <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
+References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
+ <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
+ <CAK8P3a1Vh1Uehuin-u5QrTO5qh+t0aK_hA-QZwqc00Db_+MKcw@mail.gmail.com>
+ <CACRpkdbhbwBe=jU5prifXCYUXPqULhst0se3ZRH+sWOh9XeoLQ@mail.gmail.com>
+ <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
+ <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
+ <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
+ <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
+ <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu>
+ <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
+ <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
+ <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
+In-Reply-To: <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a511c3ee-fcfe-4d2c-b919-08da88d49bb3
+x-ms-traffictypediagnostic: PR1P264MB1439:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: m73zoFU7C4LVo13ylLtYGaQr5EwnDQFKLfnDuDdh28Px6WwqiFS3AbAkI6ZHAQGGDFh5hWMXVUvt88TYCTwnMq8I4AlGJtuBDqnAwGpZ9S5X/l8pNh1SeAXIou6QJvPzvMu/gFzatfW13agWc2eo73W+A/1If7Pnf1dDkLi1LmGmZ9HQgImDE33qzuO7piEatwyRkwsYf/KyYd7N0HPiH7HpyAqzRdAf3LN41+fJlLQU7Vbet6VpzbL8ILtu8p5e0BBKS5POU4HYKqdtixdA7kh6BMmGsbCcxDLEXRTzm+WwN/j+vTmjciQLL2iGBhUHN6BmrEpnfCyneVO6F8RaOGMQHvVZBGgHevI+rBuYi9wM5bLerMMvxQkA1qZfnD6s91LJJkTfFNOMR72kLzGQSBkusqjhqBl4KCDjR8BCPPQ8G1AjWgydP7jIuEs9WvLlxHeTqEGVQ5m4+DYRm0ruocgT7ewpd1soJ3pLhAeh5pvuTY76e2abR+5W21D9bG3WEOTRx3SLtwKGs74snmgwhYh7ly9GIghfURvu7MLl0lCV+OR7WnppoQygeikMoX3/jyNsQrcPgQ8FOT4VySCccVmOBCBN9mWCsUNXuRzrqP2GKO1bssI2INVedrzwMddv+7u5WHHdUKhMm5w39Vf6xMmH8IbuR6SwOZs49xuYFWgG/+LsSt7nMT07ec9RuxYzwvD3WFJeOyPz96UaM1u+7XWaCQ8KQi+gujJGGFGJNEE0FzNpl+VVzi4JR+bGZ1bLmgCaZpwtQ2e97yKNTt0L91i1A+8FRS4bvNAWDRvRSjcPpSJzxtWRvWHVVSc9FxBO/uEreVTuB7dBEwgE7F57Gw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(366004)(39840400004)(346002)(376002)(396003)(64756008)(66446008)(66476007)(54906003)(2906002)(6916009)(66556008)(5660300002)(66946007)(8936002)(8676002)(4326008)(2616005)(91956017)(44832011)(7416002)(76116006)(36756003)(31686004)(316002)(478600001)(6486002)(41300700001)(6506007)(6512007)(26005)(53546011)(86362001)(71200400001)(31696002)(38070700005)(186003)(83380400001)(122000001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Ujl1VGtmZkVJSDd3SjJ6N21DSjJTaTBVenhzOHZ3eTlQajUzUHFMamJYUzFa?=
+ =?utf-8?B?bkZ2a084S3ZjYzJwaG1ydCtsN2Q0WWRtY2hyVjM1THMrbERlcGJjUmEwTzJp?=
+ =?utf-8?B?SUtubjE4b1FYWGIvbXFJeUJwRVZMbm85dkZIOWlBZFN5eS9tcDRMVGF2ZlpJ?=
+ =?utf-8?B?RG1ublNOanFXcGhLcDg4MDdWVE13R0pKK3crTERXUFNQaWE2STNMaFFCSm1X?=
+ =?utf-8?B?OUpZTjlQRm1TNGlzY1BORlZWZmpWcnQrRExqTWJ1cUZTMkZUYjVONHM1cXJD?=
+ =?utf-8?B?eVFkZ005ZjJlSDROcnNtN2VIem9nbTM2anY3cUhYZGFoWFZwR2taUXRUWEsz?=
+ =?utf-8?B?UENRUkxLdW1GUEVHK2ZBYWZkT2k1NW53SFBEQVZ6cnhqTTdXMzlqUlJLU1du?=
+ =?utf-8?B?eHh4eXpFbXJkM1NXa3R1ZjhpOHlKRTU2QWhlZFY1c1NBL2JOTUtwNjZSSzBW?=
+ =?utf-8?B?TGc0UGI4M0dhN09qZ3dXbjg4bzg4Y0VFS2d1VmJweGJsRGtsTmpoc0xkUDBk?=
+ =?utf-8?B?NmNzcmlWcGhXUWFWQ0VWaDgwdUg2VUxqTFhOSHh6ejgyRkpIT21admJXMmJG?=
+ =?utf-8?B?R1dvekRpS1Q2bUprQjdLbWZPUVVjb2JNdU1wL3lyZTA3UUdodmVTSzEzQ1lT?=
+ =?utf-8?B?VEZVNGRneE1uTGY0ZVhQTXBkQUpWcFRaK2NjM0I0eURaMzZTekJqdEczTlVH?=
+ =?utf-8?B?UUhyNkJ5VHpzZjZ2Z2JqUjhDYnVLcnBEM1R3L0dRcU1QM2RvcFlGSXJBYmFV?=
+ =?utf-8?B?aU5tOUhMcFN4bGFENWtRYzBqVExFQjYwaUIyeE92aWhJZHpRNjAwU1BUUmdj?=
+ =?utf-8?B?N0lyU2RDN0JHVFFvem5zaVJUMHUrRFNCL05oeENWNlpQMklzSEV1VGlHU2VI?=
+ =?utf-8?B?LzBVZkdhUWxsSW5xSzZHUUFnODhFa1I2OWw2N0duamdnaUlCZ3dDaWNZRk5J?=
+ =?utf-8?B?dVdFVlNhODRaNXJESStLOFM2ZEtmR1VUbkFsKzI0UEYzY0d4MlBaY05Od0lZ?=
+ =?utf-8?B?cEJxWDhzTnR5NW1LS3RiNTM1Rm1YOGV2Y01RbHpiUVRrdXNGYVR1ZWhSZ0ZQ?=
+ =?utf-8?B?VXhIUGh0WVROMFN6MjgzUXFBajkxQmxiRmIzSkFBTU10NUh3SlRkVkc2RTdL?=
+ =?utf-8?B?SG55VkxKYkhsZDdGUHlSdS9HRTVuVUY4ODc1YU53MmVtNTJ0VFpEN1lUVWY1?=
+ =?utf-8?B?cExIVUtUOTFTZmJHc2RzYTUwRGZuTnFkQnNWK2UvOEdIMXFDOWlKS05oeWQr?=
+ =?utf-8?B?OU4vakVMc2ppZFFBazFIOStpUCs1eW90UG1qcEo1Y3d3cDYrT1p0Um1BWGhr?=
+ =?utf-8?B?RmMyMjRHaWprb21SWGJMR0JjYVJ4bnVjL3ZIOW9pNjdBMWxNRTFEOWU4RmVT?=
+ =?utf-8?B?UUtnQThQTE14K3hGcW1acytlNW1CdDRrZHFSbzZZMEJSUUJsM0Vvd0tVazFO?=
+ =?utf-8?B?Ujh5dS96Y20yUEczaGxjTzRldVhrZ2tXMzl1L3BDNStaVVJXdEFwQXlpMFRR?=
+ =?utf-8?B?bmNWWHpLZ01tbkpBL0I4cjdsQ24rUXBYQkhJUUFyMVluZGVldWIxL3BydE1O?=
+ =?utf-8?B?aWFDMC9SNi9Yam9OcC9GYVpXSUpYSnRqbHM0WE02Wkx0Z0g3cDhCMDRxNVlo?=
+ =?utf-8?B?bitVTE1FT0NJTVVqZ2hhUDdhaitUaTEveE9UcFFubkJMYWRxRTg2akFta3BZ?=
+ =?utf-8?B?Q3lPOWZxV2ZzL2l5RDVyMmpmWmNXY2VPVmF3YnlQeGwzc1ZkTXYvb1pXOTk0?=
+ =?utf-8?B?Ujl4K1E5M1hSK1VHYkkvT3BTTHp1dzVtb3FxdWxkeFZ2ZTBSZU9KSDUvSldo?=
+ =?utf-8?B?WFh2Q2FEc0crT2ZLRURqdUM1bVdFbE9JYnlLbVdSYklTZGc0bmhqOW9QL1l3?=
+ =?utf-8?B?aTA0YmFBOEM0eWlJQitxdHJ3eE42MmtiNUlJU2dGUlZoREtBWnNVUEQ4Um5U?=
+ =?utf-8?B?RWNjVStDbWZ5dHJybDRXT3RqMHkzbW1jazlKT2tEMHl5UHpoVGZ1aVZGSFVp?=
+ =?utf-8?B?TnNCU3hyTW1HdlVWTis5L2lIbXBBWHV4amhEbk05emFDTGRyTzhXaXk3ZmFH?=
+ =?utf-8?B?amFFeWhQTXpndGcvYW1oOXB1NXNRckZWb1U4Q25naDZEL1B3WnVLZ0VhTTRL?=
+ =?utf-8?B?K0IrWllySFAwOXRyMU9wVXZoaFQ3ellFTkZTUWIrMnBoU0ZhOWxZUVkyanlL?=
+ =?utf-8?Q?eOwxmeRLPQAXQGlrO3SPf4A=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <60F35EF01A62B942AEA27174702FC643@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: a511c3ee-fcfe-4d2c-b919-08da88d49bb3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Aug 2022 09:06:35.2881
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nB+bHcE4nVtHE3oZdIFe/SzpXUkwypNQj5gR7s9aQx3nrGI93XNR+vmFj70DNkT0ymLywt4sPYAqwhvyQLNlxIwM1l73gWLm9j73mVwAIgM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB1439
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Kbuild puts the objects listed in head-y at the head of vmlinux.
-Conventionally, we do this for head*.S, which contains the kernel entry
-point.
-
-A counter approach is to control the section order in the linker script.
-Actually, the code marked as __HEAD goes into the ".head.text" section,
-which is placed before the normal ".text" section.
-
-I do not know if both of them are needed. head-y is not mandatory.
-If you can achieve the proper code placement by the linker script only,
-it would be cleaner.
-
-I collected the current head-y objects into head-object-list.txt. It is
-a whitelist. My hope is it will be reduced in the long run.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- Documentation/kbuild/makefiles.rst |  9 ++---
- Makefile                           |  4 +--
- arch/alpha/Makefile                |  2 --
- arch/arc/Makefile                  |  2 --
- arch/arm/Makefile                  |  3 --
- arch/arm64/Makefile                |  3 --
- arch/csky/Makefile                 |  2 --
- arch/hexagon/Makefile              |  2 --
- arch/ia64/Makefile                 |  1 -
- arch/loongarch/Makefile            |  2 --
- arch/m68k/Makefile                 |  9 -----
- arch/microblaze/Makefile           |  1 -
- arch/mips/Makefile                 |  2 --
- arch/nios2/Makefile                |  1 -
- arch/openrisc/Makefile             |  2 --
- arch/parisc/Makefile               |  2 --
- arch/powerpc/Makefile              | 12 -------
- arch/riscv/Makefile                |  2 --
- arch/s390/Makefile                 |  2 --
- arch/sh/Makefile                   |  2 --
- arch/sparc/Makefile                |  2 --
- arch/x86/Makefile                  |  5 ---
- arch/xtensa/Makefile               |  2 --
- scripts/head-object-list.txt       | 53 ++++++++++++++++++++++++++++++
- 24 files changed, 60 insertions(+), 67 deletions(-)
- create mode 100644 scripts/head-object-list.txt
-
-diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-index 07c7e5a843c1..528c54d56c09 100644
---- a/Documentation/kbuild/makefiles.rst
-+++ b/Documentation/kbuild/makefiles.rst
-@@ -1065,8 +1065,7 @@ When kbuild executes, the following steps are followed (roughly):
-    - The values of the above variables are expanded in arch/$(SRCARCH)/Makefile.
- 5) All object files are then linked and the resulting file vmlinux is
-    located at the root of the obj tree.
--   The very first objects linked are listed in head-y, assigned by
--   arch/$(SRCARCH)/Makefile.
-+   The very first objects linked are listed in scripts/head-object-list.txt.
- 6) Finally, the architecture-specific part does any required post processing
-    and builds the final bootimage.
-    - This includes building boot records
-@@ -1214,6 +1213,9 @@ When kbuild executes, the following steps are followed (roughly):
- 	All object files for vmlinux. They are linked to vmlinux in the same
- 	order as listed in KBUILD_VMLINUX_OBJS.
- 
-+	The objects listed in scripts/head-object-list.txt are exceptions;
-+	they are placed before the other objects.
-+
-     KBUILD_VMLINUX_LIBS
- 
- 	All .a "lib" files for vmlinux. KBUILD_VMLINUX_OBJS and
-@@ -1257,8 +1259,7 @@ When kbuild executes, the following steps are followed (roughly):
- 	machinery is all architecture-independent.
- 
- 
--	head-y, core-y, libs-y, drivers-y
--	    $(head-y) lists objects to be linked first in vmlinux.
-+	core-y, libs-y, drivers-y
- 
- 	    $(libs-y) lists directories where a lib.a archive can be located.
- 
-diff --git a/Makefile b/Makefile
-index d74aa4552d35..08e69448caf4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1159,10 +1159,10 @@ quiet_cmd_ar_vmlinux.a = AR      $@
-       cmd_ar_vmlinux.a = \
- 	rm -f $@; \
- 	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
--	$(AR) mPi $$($(AR) t $@| head -n1) $@ $(head-y)
-+	$(AR) mPi $$($(AR) t $@| head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
- 
- targets += vmlinux.a
--vmlinux.a: $(KBUILD_VMLINUX_OBJS) FORCE
-+vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt FORCE
- 	$(call if_changed,ar_vmlinux.a)
- 
- targets += vmlinux.o
-diff --git a/arch/alpha/Makefile b/arch/alpha/Makefile
-index 881cb913e23a..45158024085e 100644
---- a/arch/alpha/Makefile
-+++ b/arch/alpha/Makefile
-@@ -36,8 +36,6 @@ cflags-y				+= $(cpuflags-y)
- # BWX is most important, but we don't really want any emulation ever.
- KBUILD_CFLAGS += $(cflags-y) -Wa,-mev6
- 
--head-y := arch/alpha/kernel/head.o
--
- libs-y				+= arch/alpha/lib/
- 
- # export what is needed by arch/alpha/boot/Makefile
-diff --git a/arch/arc/Makefile b/arch/arc/Makefile
-index efc54f3e35e0..329400a1c355 100644
---- a/arch/arc/Makefile
-+++ b/arch/arc/Makefile
-@@ -82,8 +82,6 @@ KBUILD_CFLAGS	+= $(cflags-y)
- KBUILD_AFLAGS	+= $(KBUILD_CFLAGS)
- KBUILD_LDFLAGS	+= $(ldflags-y)
- 
--head-y		:= arch/arc/kernel/head.o
--
- # w/o this dtb won't embed into kernel binary
- core-y		+= arch/arc/boot/dts/
- 
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 56f655deebb1..29d15c9a433e 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -134,9 +134,6 @@ KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) $(arch-y) $(tune-y) -include asm/uni
- 
- CHECKFLAGS	+= -D__arm__
- 
--#Default value
--head-y		:= arch/arm/kernel/head$(MMUEXT).o
--
- # Text offset. This list is sorted numerically by address in order to
- # provide a means to avoid/resolve conflicts in multi-arch kernels.
- # Note: the 32kB below this value is reserved for use by the kernel
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 6d9d4a58b898..6e03f15bb041 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -133,9 +133,6 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_REGS),y)
-   CC_FLAGS_FTRACE := -fpatchable-function-entry=2
- endif
- 
--# Default value
--head-y		:= arch/arm64/kernel/head.o
--
- ifeq ($(CONFIG_KASAN_SW_TAGS), y)
- KASAN_SHADOW_SCALE_SHIFT := 4
- else ifeq ($(CONFIG_KASAN_GENERIC), y)
-diff --git a/arch/csky/Makefile b/arch/csky/Makefile
-index 4e1d619fd5c6..0e4237e55758 100644
---- a/arch/csky/Makefile
-+++ b/arch/csky/Makefile
-@@ -59,8 +59,6 @@ LDFLAGS += -EL
- 
- KBUILD_AFLAGS += $(KBUILD_CFLAGS)
- 
--head-y := arch/csky/kernel/head.o
--
- core-y += arch/csky/$(CSKYABI)/
- 
- libs-y += arch/csky/lib/ \
-diff --git a/arch/hexagon/Makefile b/arch/hexagon/Makefile
-index 44312bc147d8..92d005958dfb 100644
---- a/arch/hexagon/Makefile
-+++ b/arch/hexagon/Makefile
-@@ -32,5 +32,3 @@ KBUILD_LDFLAGS += $(ldflags-y)
- TIR_NAME := r19
- KBUILD_CFLAGS += -ffixed-$(TIR_NAME) -DTHREADINFO_REG=$(TIR_NAME) -D__linux__
- KBUILD_AFLAGS += -DTHREADINFO_REG=$(TIR_NAME)
--
--head-y := arch/hexagon/kernel/head.o
-diff --git a/arch/ia64/Makefile b/arch/ia64/Makefile
-index e55c2f138656..56c4bb276b6e 100644
---- a/arch/ia64/Makefile
-+++ b/arch/ia64/Makefile
-@@ -44,7 +44,6 @@ quiet_cmd_objcopy = OBJCOPY $@
- cmd_objcopy = $(OBJCOPY) $(OBJCOPYFLAGS) $(OBJCOPYFLAGS_$(@F)) $< $@
- 
- KBUILD_CFLAGS += $(cflags-y)
--head-y := arch/ia64/kernel/head.o
- 
- libs-y				+= arch/ia64/lib/
- 
-diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
-index ec3de6191276..131fc210c2bf 100644
---- a/arch/loongarch/Makefile
-+++ b/arch/loongarch/Makefile
-@@ -72,8 +72,6 @@ CHECKFLAGS += $(shell $(CC) $(KBUILD_CFLAGS) -dM -E -x c /dev/null | \
- 	sed -e "s/^\#define /-D'/" -e "s/ /'='/" -e "s/$$/'/" -e 's/\$$/&&/g')
- endif
- 
--head-y := arch/loongarch/kernel/head.o
--
- libs-y += arch/loongarch/lib/
- 
- ifeq ($(KBUILD_EXTMOD),)
-diff --git a/arch/m68k/Makefile b/arch/m68k/Makefile
-index e358605b70ba..43e39040d3ac 100644
---- a/arch/m68k/Makefile
-+++ b/arch/m68k/Makefile
-@@ -86,15 +86,6 @@ ifdef CONFIG_KGDB
- KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS)) -g
- endif
- 
--#
--# Select the assembler head startup code. Order is important. The default
--# head code is first, processor specific selections can override it after.
--#
--head-y				:= arch/m68k/kernel/head.o
--head-$(CONFIG_SUN3)		:= arch/m68k/kernel/sun3-head.o
--head-$(CONFIG_M68000)		:= arch/m68k/68000/head.o
--head-$(CONFIG_COLDFIRE)		:= arch/m68k/coldfire/head.o
--
- libs-y				+= arch/m68k/lib/
- 
- 
-diff --git a/arch/microblaze/Makefile b/arch/microblaze/Makefile
-index 1826d9ce4459..3f8a86c4336a 100644
---- a/arch/microblaze/Makefile
-+++ b/arch/microblaze/Makefile
-@@ -48,7 +48,6 @@ CPUFLAGS-1 += $(call cc-option,-mcpu=v$(CPU_VER))
- # r31 holds current when in kernel mode
- KBUILD_CFLAGS += -ffixed-r31 $(CPUFLAGS-y) $(CPUFLAGS-1) $(CPUFLAGS-2)
- 
--head-y := arch/microblaze/kernel/head.o
- libs-y += arch/microblaze/lib/
- 
- boot := arch/microblaze/boot
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 4d2a3e73fc45..b296e33f8e33 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -324,8 +324,6 @@ endif
- 
- OBJCOPYFLAGS		+= --remove-section=.reginfo
- 
--head-y := arch/mips/kernel/head.o
--
- libs-y			+= arch/mips/lib/
- libs-$(CONFIG_MIPS_FP_SUPPORT) += arch/mips/math-emu/
- 
-diff --git a/arch/nios2/Makefile b/arch/nios2/Makefile
-index 3f34e6831863..f1ff4ce0f1a2 100644
---- a/arch/nios2/Makefile
-+++ b/arch/nios2/Makefile
-@@ -37,7 +37,6 @@ KBUILD_CFLAGS += -DUTS_SYSNAME=\"$(UTS_SYSNAME)\"
- KBUILD_CFLAGS += -fno-builtin
- KBUILD_CFLAGS += -G 0
- 
--head-y		:= arch/nios2/kernel/head.o
- libs-y		+= arch/nios2/lib/ $(LIBGCC)
- 
- INSTALL_PATH ?= /tftpboot
-diff --git a/arch/openrisc/Makefile b/arch/openrisc/Makefile
-index b446510173cd..68249521db5a 100644
---- a/arch/openrisc/Makefile
-+++ b/arch/openrisc/Makefile
-@@ -55,8 +55,6 @@ ifeq ($(CONFIG_OPENRISC_HAVE_INST_SEXT),y)
- 	KBUILD_CFLAGS += $(call cc-option,-msext)
- endif
- 
--head-y 		:= arch/openrisc/kernel/head.o
--
- libs-y		+= $(LIBGCC)
- 
- PHONY += vmlinux.bin
-diff --git a/arch/parisc/Makefile b/arch/parisc/Makefile
-index e38d993d87f2..a2d8600521f9 100644
---- a/arch/parisc/Makefile
-+++ b/arch/parisc/Makefile
-@@ -113,8 +113,6 @@ cflags-$(CONFIG_PA7100LC)	+= -march=1.1 -mschedule=7100LC
- cflags-$(CONFIG_PA7300LC)	+= -march=1.1 -mschedule=7300
- cflags-$(CONFIG_PA8X00)		+= -march=2.0 -mschedule=8000
- 
--head-y			:= arch/parisc/kernel/head.o 
--
- KBUILD_CFLAGS	+= $(cflags-y)
- LIBGCC		:= $(shell $(CC) -print-libgcc-file-name)
- export LIBGCC
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index fb607758eeca..491cdeed9a72 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -220,18 +220,6 @@ KBUILD_CFLAGS += $(cpu-as-y)
- KBUILD_AFLAGS += $(aflags-y)
- KBUILD_CFLAGS += $(cflags-y)
- 
--head-$(CONFIG_PPC64)		:= arch/powerpc/kernel/head_64.o
--head-$(CONFIG_PPC_BOOK3S_32)	:= arch/powerpc/kernel/head_book3s_32.o
--head-$(CONFIG_PPC_8xx)		:= arch/powerpc/kernel/head_8xx.o
--head-$(CONFIG_40x)		:= arch/powerpc/kernel/head_40x.o
--head-$(CONFIG_44x)		:= arch/powerpc/kernel/head_44x.o
--head-$(CONFIG_FSL_BOOKE)	:= arch/powerpc/kernel/head_fsl_booke.o
--
--head-$(CONFIG_PPC64)		+= arch/powerpc/kernel/entry_64.o
--head-$(CONFIG_PPC_FPU)		+= arch/powerpc/kernel/fpu.o
--head-$(CONFIG_ALTIVEC)		+= arch/powerpc/kernel/vector.o
--head-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)  += arch/powerpc/kernel/prom_init.o
--
- # Default to zImage, override when needed
- all: zImage
- 
-diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-index 3fa8ef336822..e013df8e7b8b 100644
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -110,8 +110,6 @@ else
- KBUILD_IMAGE	:= $(boot)/Image.gz
- endif
- 
--head-y := arch/riscv/kernel/head.o
--
- libs-y += arch/riscv/lib/
- libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
- 
-diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-index 4cb5d17e7ead..de6d8b2ea4d8 100644
---- a/arch/s390/Makefile
-+++ b/arch/s390/Makefile
-@@ -119,8 +119,6 @@ export KBUILD_CFLAGS_DECOMPRESSOR
- 
- OBJCOPYFLAGS	:= -O binary
- 
--head-y		:= arch/s390/kernel/head64.o
--
- libs-y		+= arch/s390/lib/
- drivers-y	+= drivers/s390/
- 
-diff --git a/arch/sh/Makefile b/arch/sh/Makefile
-index b39412bf91fb..5c8776482530 100644
---- a/arch/sh/Makefile
-+++ b/arch/sh/Makefile
-@@ -114,8 +114,6 @@ endif
- 
- export ld-bfd
- 
--head-y	:= arch/sh/kernel/head_32.o
--
- # Mach groups
- machdir-$(CONFIG_SOLUTION_ENGINE)		+= mach-se
- machdir-$(CONFIG_SH_HP6XX)			+= mach-hp6xx
-diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
-index fe58a410b4ce..a4ea5b05f288 100644
---- a/arch/sparc/Makefile
-+++ b/arch/sparc/Makefile
-@@ -56,8 +56,6 @@ endif
- 
- endif
- 
--head-y                 := arch/sparc/kernel/head_$(BITS).o
--
- libs-y                 += arch/sparc/prom/
- libs-y                 += arch/sparc/lib/
- 
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index bafbd905e6e7..9afd323c6916 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -234,11 +234,6 @@ archheaders:
- ###
- # Kernel objects
- 
--head-y := arch/x86/kernel/head_$(BITS).o
--head-y += arch/x86/kernel/head$(BITS).o
--head-y += arch/x86/kernel/ebda.o
--head-y += arch/x86/kernel/platform-quirks.o
--
- libs-y  += arch/x86/lib/
- 
- # drivers-y are linked after core-y
-diff --git a/arch/xtensa/Makefile b/arch/xtensa/Makefile
-index 5097caa7bf0c..bfd8e433ed62 100644
---- a/arch/xtensa/Makefile
-+++ b/arch/xtensa/Makefile
-@@ -55,8 +55,6 @@ KBUILD_CPPFLAGS += $(patsubst %,-I$(srctree)/%include,$(vardirs) $(plfdirs))
- 
- KBUILD_DEFCONFIG := iss_defconfig
- 
--head-y		:= arch/xtensa/kernel/head.o
--
- libs-y		+= arch/xtensa/lib/
- 
- boot		:= arch/xtensa/boot
-diff --git a/scripts/head-object-list.txt b/scripts/head-object-list.txt
-new file mode 100644
-index 000000000000..6610e19d0247
---- /dev/null
-+++ b/scripts/head-object-list.txt
-@@ -0,0 +1,53 @@
-+# Head objects
-+#
-+# The objects listed here are placed at the head of vmlinux. A typical use-case
-+# is an object that contains the entry point. This is kept for compatibility
-+# with head-y, Kbuild used to support.
-+#
-+# A counter approach is to control the section placement in the linker script.
-+# The code marked as __HEAD goes into the ".head.text" section, which is placed
-+# before the normal ".text" section.
-+#
-+# If you can achieve the correct code ordering by linker script, please delete
-+# the entry from this file.
-+#
-+arch/alpha/kernel/head.o
-+arch/arc/kernel/head.o
-+arch/arm/kernel/head-nommu.o
-+arch/arm/kernel/head.o
-+arch/arm64/kernel/head.o
-+arch/csky/kernel/head.o
-+arch/hexagon/kernel/head.o
-+arch/ia64/kernel/head.o
-+arch/loongarch/kernel/head.o
-+arch/m68k/68000/head.o
-+arch/m68k/coldfire/head.o
-+arch/m68k/kernel/head.o
-+arch/m68k/kernel/sun3-head.o
-+arch/microblaze/kernel/head.o
-+arch/mips/kernel/head.o
-+arch/nios2/kernel/head.o
-+arch/openrisc/kernel/head.o
-+arch/parisc/kernel/head.o
-+arch/powerpc/kernel/head_40x.o
-+arch/powerpc/kernel/head_44x.o
-+arch/powerpc/kernel/head_64.o
-+arch/powerpc/kernel/head_8xx.o
-+arch/powerpc/kernel/head_book3s_32.o
-+arch/powerpc/kernel/head_fsl_booke.o
-+arch/powerpc/kernel/entry_64.o
-+arch/powerpc/kernel/fpu.o
-+arch/powerpc/kernel/vector.o
-+arch/powerpc/kernel/prom_init.o
-+arch/riscv/kernel/head.o
-+arch/s390/kernel/head64.o
-+arch/sh/kernel/head_32.o
-+arch/sparc/kernel/head_32.o
-+arch/sparc/kernel/head_64.o
-+arch/x86/kernel/head_32.o
-+arch/x86/kernel/head_64.o
-+arch/x86/kernel/head32.o
-+arch/x86/kernel/head64.o
-+arch/x86/kernel/ebda.o
-+arch/x86/kernel/platform-quirks.o
-+arch/xtensa/kernel/head.o
--- 
-2.34.1
-
+DQoNCkxlIDI2LzA4LzIwMjIgw6AgMjM6NTQsIExpbnVzIFdhbGxlaWogYSDDqWNyaXTCoDoNCj4g
+T24gRnJpLCBBdWcgMjYsIDIwMjIgYXQgNTowOCBQTSBDaHJpc3RvcGhlIExlcm95DQo+IDxjaHJp
+c3RvcGhlLmxlcm95QGNzZ3JvdXAuZXU+IHdyb3RlOg0KPj4gTGUgMjYvMDgvMjAyMiDDoCAxNTo0
+OSwgTGludXMgV2FsbGVpaiBhIMOpY3JpdCA6DQo+Pj4gT24gVGh1LCBBdWcgMjUsIDIwMjIgYXQg
+NDowMCBQTSBDaHJpc3RvcGhlIExlcm95DQo+Pj4gPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5l
+dT4gd3JvdGU6DQo+Pj4NCj4+Pj4+IENocmlzdG9waGU/IFdpbGwgeW91IHRha2UgYSBzdGFiIGF0
+IGl0Pw0KPj4+Pg0KPj4+PiBXaGljaCBwYXRjaCBzaG91bGQgSSB3cml0ZSA/DQo+Pj4NCj4+PiBP
+bmUgdGhhdCByZW1vdmVzIENPTkZJR19BUkNIX0hBU19OUl9HUElPIGVudGlyZWx5LCB0aGVuDQo+
+Pj4gYWxsb2NhdGUgYmFzZXMgZm9yIG5ldyBHUElPIGNoaXBzIGZyb20gMCBhbmQgdXB3YXJkIGlu
+c3RlYWQuDQo+Pj4gQW5kIHRoZW4gc2VlIHdoYXQgaGFwcGVucy4NCj4+Pg0KPj4NCj4+IE9rLCBJ
+IGNhbiBnaXZlIGl0IGEgdHJ5Lg0KPiANCj4gTmljZSENCj4gDQo+PiBCdXQgd2hhdCBkbyBJIGRv
+IHdpdGg6DQo+Pg0KPj4gZHJpdmVycy9ncGlvL2dwaW8tYWdncmVnYXRvci5jOiBiaXRtYXAgPSBi
+aXRtYXBfYWxsb2MoQVJDSF9OUl9HUElPUywNCj4+IEdGUF9LRVJORUwpOw0KPiANCj4gVGhhdCdz
+IGp1c3QgdXNlZCBsb2NhbGx5IGluIHRoYXQgZHJpdmVyIHRvIGxvb3Agb3ZlciB0aGUgYXJndW1l
+bnRzIHRvIHRoZQ0KPiBhZ2dyZWdhdG9yIChmcm9tIHRoZSBmaWxlIGluIHN5c2ZzKS4gSSB3b3Vs
+ZCBzZXQgc29tZSBhcmJpdHJhcnkgcm9vdA0KPiBsaWtlDQo+ICNkZWZpbmUgQUdHUkVHQVRPUl9N
+QVhfR1BJT1MgNTEyDQo+IGFuZCBqdXN0IHNlYXJjaC9yZXBsYWNlIHdpdGggdGhhdC4NCj4gDQoN
+CkFuZCB3aGF0IGFib3V0IGdzdGFfZ3Bpb19zZXR1cCgpIHRoYXQgcmVxdWVzdHMgYmFzZSAwIHdp
+dGggdGhlIGZvbGxvd2luZyANCmNvbW1lbnQ6DQoNCgkvKg0KCSAqIEFSQ0hfTlJfR1BJT1MgaXMg
+Y3VycmVudGx5IDI1NiBhbmQgZHluYW1pYyBhbGxvY2F0aW9uIHN0YXJ0cw0KCSAqIGZyb20gdGhl
+IGVuZC4gSG93ZXZlciwgZm9yIGNvbXBhdGliaWxpdHksIHdlIG5lZWQgdGhlIGZpcnN0DQoJICog
+Q29ubmVYdCBkZXZpY2UgdG8gc3RhcnQgZnJvbSBncGlvIDA6IGl0J3MgdGhlIG1haW4gY2hpcHNl
+dA0KCSAqIG9uIG1vc3QgYm9hcmRzIHNvIGRvY3VtZW50cyBhbmQgZHJpdmVycyBhc3N1bWUgZ3Bp
+bzAuLmdwaW8xMjcNCgkgKi8NCg0KDQpBbmQgSSBndWVzcyB0aGVyZSBtaWdodCBiZSBvdGhlciBk
+cml2ZXJzIGxpa2UgdGhhdCAoSSBmb3VuZCB0aGF0IG9uZSANCmJlY2F1c2Ugb2YgaXRzIGNvbW1l
+bnQgbWVudGlvbm5pbmcgQVJDSF9OUl9HUElPUy4NCg0KQW5vdGhlciBzb2x1dGlvbiBjb3VsZCBi
+ZSB0byBsZWF2ZSBmaXJzdCBHUElPcyBmb3Igc3RhdGljIGFsbG9jYXRpb24sIA0KYW5kIGFsbG9j
+YXRlIGR5bmFtaWMgb25lcyBmcm9tIDI1NiBvciBmcm9tIDUxMiA/DQoNCk1heWJlIGluIHR3byBz
+dGVwczoNCi0gRmlyc3Qgc3RlcDogQWxsb2NhdGUgZHluYW1pYyBmcm9tIDI1NiB1cHdhcmRzIGFu
+ZCBhZGQgYSBwcl93YXJuKCkgZm9yIA0KYWxsIHN0YXRpYyBhbGxvY2F0aW9ucy4NCi0gU2Vjb25k
+IHN0ZXAgbGF0ZXI6IEFsbG9jYXRlIGR5bmFtaWMgZnJvbSAwIGFuZCBmb3JiaWQgc3RhdGljIGFs
+bG9jYXRpb24uDQoNCkFueSBvcGluaW9uID8NCg0KQ2hyaXN0b3BoZQ==
