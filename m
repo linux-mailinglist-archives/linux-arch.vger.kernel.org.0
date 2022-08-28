@@ -2,29 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605765A3D1C
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 12:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0DB5A3D60
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 13:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiH1KEv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-arch@lfdr.de>); Sun, 28 Aug 2022 06:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S229735AbiH1LgN (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Aug 2022 07:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiH1KEu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Aug 2022 06:04:50 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6205F38B8;
-        Sun, 28 Aug 2022 03:04:48 -0700 (PDT)
-Received: from mail-ed1-f52.google.com ([209.85.208.52]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MBV2f-1oZ4VN2IWt-00D109; Sun, 28 Aug 2022 12:04:46 +0200
-Received: by mail-ed1-f52.google.com with SMTP id s11so6906814edd.13;
-        Sun, 28 Aug 2022 03:04:46 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2ch44KgL2Jb6PS39Vp5lXpwWeCEj95onF7+tkB/sw6F2G0fqEc
-        qggrG40up4ejvDwinpdmael92xQo2No+ZAUHR6A=
-X-Google-Smtp-Source: AA6agR7m5MrvDDJkIHH7Ehnt8y+ynOosCvPpdzVXCkVpgNk88mWnLMxzom1m7IDvmVq74u4+tqxm9mjiuAXVA48sEmU=
-X-Received: by 2002:a05:6402:5190:b0:448:5bdb:b27d with SMTP id
- q16-20020a056402519000b004485bdbb27dmr1665421edd.49.1661681086136; Sun, 28
- Aug 2022 03:04:46 -0700 (PDT)
+        with ESMTP id S229563AbiH1LgM (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Aug 2022 07:36:12 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3614331A
+        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 04:36:10 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id nc14so5799250ejc.4
+        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 04:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=OdQ+Q9qV3LedSJkQfbn2p7WBBrnXUtBV8MUOTrhaEAY=;
+        b=eeBB52Ce3r5kR9Dcp27QVPv61AMhihFpTZYjm3DkOv1VJWc6dejpSJHpOYakb68HeB
+         akvqHdPr6RxF7jBUDq/hyyx8Ub1PLDhFD6VA41pYOF5zCY08yz6bbSY4QqUY2VXPDykb
+         xFjRr29B2z700CCN8O0GJOAN29YA33B1RF54Vhm8aAY9vFQyOy+wSKiEAeTyaOH3wLg7
+         9l7lsS2WzkLlehfx9n6wRdq4L+5Wo5wLhI8erWLJYJZfl0hatDEgJGjjFdCBmAiP4VBc
+         7Bw+VqNTkYXGlAKQEd8bkrAKeig8lYdFPvJbEW/TdPfkpxjnjqqmlWSXuOEDhGhWR4Eq
+         zA9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=OdQ+Q9qV3LedSJkQfbn2p7WBBrnXUtBV8MUOTrhaEAY=;
+        b=3rZtGeTO7iUnFY43RsWbO60/jmD7Ok1zqPW/pMybmj0cuOULk9U1DML51WRQeVHWIb
+         9FNqcU/HsDif8qMcvk2ABcgFSt02s90B16kvPyJe5hPdUGe6Pfx0nX4GTRTJNyNwQKVx
+         WW/nKIsArCWHpDafpzgVrxNTD4K8US7q9wPvn8qondWaevDgiiNBOK/0RfjbMYOShKTX
+         nt47IBVtLaI+SSSwL3rgEwFBGogLkvFyqvurvw4565UjqiZI1B0eFVr6MkZRlrWgUeoE
+         a04HGJs5gXd22m14hEgvitDKW0J21MibAHNC+orOWHtpMbSB8XDBQZucWIlNbS8XCvTU
+         3kXg==
+X-Gm-Message-State: ACgBeo3Hj3P/PFDUMjHXfVErGZ3E1KbSpiUzJhXnH85uffymiwmNVtp1
+        kHW1+Was7H6jHAfAbwaUWvCm5m+oC19qbur1KLBGtQ==
+X-Google-Smtp-Source: AA6agR7AmPxeYl/v4RcSVBl9iTpUGDHWyRcltexR6tY4uxIhIlTFbByhTuUZ07p3AOXBLqSGuwkccRVfPDLNHQeyuk8=
+X-Received: by 2002:a17:906:cc5a:b0:741:5240:d91a with SMTP id
+ mm26-20020a170906cc5a00b007415240d91amr3390854ejb.500.1661686568986; Sun, 28
+ Aug 2022 04:36:08 -0700 (PDT)
 MIME-Version: 1.0
 References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
  <CACRpkdY53c0qXx24Am1TMivXr-MV+fQ8B0CDjtGi6=+2tn4-7A@mail.gmail.com>
@@ -38,14 +57,12 @@ References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.
  <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu> <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
  <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
 In-Reply-To: <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 28 Aug 2022 12:04:29 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
-Message-ID: <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 28 Aug 2022 13:35:57 +0200
+Message-ID: <CACRpkdaTSRSGx=SjXJ93tdMEPFD=hb3wbUscGO2Exf709SL5Ow@mail.gmail.com>
 Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Alexandre Courbot <gnurou@gmail.com>,
         Alexandre Courbot <acourbot@nvidia.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -61,32 +78,12 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         open list <linux-kernel@vger.kernel.org>,
         "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
         "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        Davide Ciminaghi <ciminaghi@gnudd.com>,
-        Alessandro Rubini <rubini@gnudd.com>
+        <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:q7AU2884sD9a1G/Wzgl7haFBCm2tktWi+C9nFAcCOtfszTS0hvk
- NIg2klUjvMnQB1+DqRwaIfPTRPQtBA2OhykVvoe6NjqcCoF/gMOBliUtodlCCfocdFDssL5
- NfVg9wSHtRGjz1bXrY5Eh6XEbGBzbZfXbVizl/w34JoLYTQ7/QeDRl7GF8BT+0RbCyBAw5g
- 4VzDnQMbRsnH4xjX3fXlg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MlFDtVOvLfE=:Xe0ivX8BrMffWwzQzmP2DB
- o3m12LgKZ+9xUu7xFBcy5qw1E1b6BW0HFvCWXwSBrRWzGRbfbRb+NxjCG4A4H12EfvZmuUHyu
- AmXrinaowvZ9mQjd51DUKaibsjB+kDw8aRccN+BPzVF5zBFOLvaqBq/QWWgKvCKmXHlnGY565
- wzO1bblBqO1ctbB3R/EkJLY/UVj6lGgKdnIqBg4mtZGdw5iisj0nIvy1uytVoh4DOI2orEbWB
- HPM0QRsOTtxl2c0ZLMaTCT5Jmhnf+SMc0hhYSgx/pB2aieQKOezyjwFdpdg4n5drrLQYoE7bY
- j/d49451Eo4yTiTp+i5Ld10JjTQM3T08pejdsgoq/8MgTKO0IwtiLUAmoh8qsAwaY+2FRlEkd
- WNMIqpmgA9zQ7wdbRJVRSI8GSHG8bZ3lplhOKE+84UbC0ZgapmBFWHhpMSn1q5TqOrg9y50WV
- UwY24Yn6Km8ZZjR3nSTCAG3vP3tJmQaqy6w2F31IoGdkS9FCyVhd10OcaYE+tMO12qGcvY1u/
- 7AbPzN7RV8jviRfRHH/kMI5R8V0a98Obp6fS8oTQ4JKDPVNCcLoyGFt+CjPYrQsENpf+fEOQF
- SDxxV+zD+BuhiHm/CQgrXby5peZ/k9quOYDbrPd2W9olFT9P7VQBQSJcPAAz++eiHJONpt26L
- N3wxaFrCI9qUmRdGnIIcpriF+BZaFTdWxya3p8wfgKL9qL0HtO4Edwv9mol5pBHdp/sTQ6Ni8
- +Kta1UNTFeeHs3OnfLDftUBctYVH6JTxlVHBipO56q8Bgkdhu0MX0zXxNyNBdyeTt6WRSzy6t
- nqe2PwpxZzBOGAyBmQ/N0ZR0C3DhM4WSqV6igHch6QSByLuI2n/2RIXd8GBiHPPUPuYcnD9w7
- TDmasLgWlU+SOZCq1JFw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,48 +92,37 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 On Sun, Aug 28, 2022 at 11:06 AM Christophe Leroy
 <christophe.leroy@csgroup.eu> wrote:
-> Le 26/08/2022 à 23:54, Linus Walleij a écrit :
-> >> But what do I do with:
-> >>
-> >> drivers/gpio/gpio-aggregator.c: bitmap = bitmap_alloc(ARCH_NR_GPIOS,
-> >> GFP_KERNEL);
-> >
-> > That's just used locally in that driver to loop over the arguments to the
-> > aggregator (from the file in sysfs). I would set some arbitrary root
-> > like
-> > #define AGGREGATOR_MAX_GPIOS 512
-> > and just search/replace with that.
-> >
->
-> And what about gsta_gpio_setup() that requests base 0 with the following
-> comment:
->
->         /*
->          * ARCH_NR_GPIOS is currently 256 and dynamic allocation starts
->          * from the end. However, for compatibility, we need the first
->          * ConneXt device to start from gpio 0: it's the main chipset
->          * on most boards so documents and drivers assume gpio0..gpio127
->          */
->
->
+
 > And I guess there might be other drivers like that (I found that one
-> because of its comment mentioning ARCH_NR_GPIOS.
+> because of its comment mentionning ARCH_NR_GPIOS.
 
-This driver is clearly incomplete: there is an mfd portion in
-drivers/mfd/sta2x11-mfd.c, the gpio provider in
-drivers/gpio/gpio-sta2x11.c, one gpio consumer in
-drivers/media/pci/sta2x11/, and some glue logic in
-arch/x86/pci/sta2x11-fixup.c, but nothing that seems to set up
-the platform data that these need to communicate with one another.
+Yes there are a bunch of GPIO controllers with fixed base.
 
-I think that just means the code that one would have to modify
-is in vendor kernels of devices using this chip, but there is no
-way to fix those if they are not in mainline. The last meaningful
-patches on this SoC support were in 2012 by  Davide Ciminaghi
-and Alessandro Rubini, though they still Acked patches after that.
+These only exist because there is boardfile code that uses
+these fixed GPIO numbers.
 
-I wonder if I was missing the interesting bit about it, if the driver
-is just obsolete and can be removed, or if there is something
-that is still worth fixing here.
+> Another solution could be to leave first GPIOs for static allocation,
+> and allocate dynamic ones from 256 or from 512 ?
+>
+> Maybe in two steps:
+> - First step: Allocate dynamic from 256 upwards and add a pr_warn() for
+> all static allocations.
 
-        Arnd
+OK that is reasonable.
+
+I thought that maybe we could assume the fixed bases to probe first
+and thus reserve the GPIO bases they want before we get to the
+dynamically allocated drivers.
+
+This could be a good first step.
+
+> - Second step later: Allocate dynamic from 0 and forbid static allocation.
+
+What needs to happen for doing that 100% safe is to get rid of all
+board files, mostly in arch/arm/mach* but also elsewhere, or to
+augment all boardfiles to use descriptor tables instead.
+
+But you're right, try the two step approach first.
+
+Yours,
+Linus Walleij
