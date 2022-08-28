@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3D25A3B0A
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B655A3B07
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbiH1Cny (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 22:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S229458AbiH1Cnw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 22:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232558AbiH1Cnk (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:43:40 -0400
-Received: from condef-10.nifty.com (condef-10.nifty.com [202.248.20.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC4E2A43A
-        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:43:28 -0700 (PDT)
-Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-10.nifty.com with ESMTP id 27S2egmA025496
-        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:42 +0900
+        with ESMTP id S232496AbiH1Cnj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:43:39 -0400
+Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435F0101F3
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:43:24 -0700 (PDT)
+Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-01.nifty.com with ESMTP id 27S2eoMK015362
+        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:50 +0900
 Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27S2e6Go030639;
-        Sun, 28 Aug 2022 11:40:09 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Go030639
+        by conuserg-11.nifty.com with ESMTP id 27S2e6Gp030639;
+        Sun, 28 Aug 2022 11:40:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gp030639
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
         s=dec2015msa; t=1661654410;
-        bh=Ojdr7OFV9j1YbpIO3D6oC+XaFmz7/7hOYyO9OvHgWLU=;
+        bh=eGfR+SEQRQYMntHzRLQYF+Hwh8rbACwjelshdo+fzFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OtnOEL7NYfqPML6WGIODFpxvrHhE1Vb5thmq2pIjeo6n6TyyzterPeYzP8wcNWqjR
-         2AxpqlcLBSkWH4k3WVPmjjlpu83dto74nipV1UdPm4QNRqsKQj0oaOItt3pMTeC69K
-         a37QwTQgL72zcJvu1Jv7yfHAMDCXVqj2F+2izOIQS6TbzBniwlZB8DCXe6uKAAraoq
-         eUuVPYIqI7adLqgh6TCo68V2lWLf+9CLZpr16Mzina2VSZk4XTCzFLX553SUT/+vXK
-         oXHCIYssoBKDCqDK6WXi7K+qvYk2Uxp/PEJvNPAeodiln5aNZ7+/gQJAuE7VymDaAZ
-         vVRUuWOhNGwCA==
+        b=02rQo8JopEgajO2tQ0CfaQYKeP+AOJ1x2LJhfrlPaUH2VP89Zn2bLl9/p74m2Zo7a
+         sStaPDtSO/et6rxaxVF6p2LuLm4YTDUlnjw5lZIZR5Dw1pJpgE+pmSpYuOUBg7A6ty
+         FeKHkj0SC/Zmx0sp28YQPQMFPpaeva0rzdT21T00I3ctEnpwmD40HpYe/ztcZk+Jwj
+         /eP1xpRKm9cg3gi/hNhQUaluiK7Jrc8pmBN8+jBAVIsfuFSVl6P5Q39ANbz557FPI1
+         en/boef0CrQwIsuC85HDHiDeNnjmO4lXQd7b12bWTmBGjz5MqEgtt80Igkdi2EF+2J
+         y1/J/OP06sDxA==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 06/15] kbuild: generate include/generated/compile.h in top Makefile
-Date:   Sun, 28 Aug 2022 11:39:54 +0900
-Message-Id: <20220828024003.28873-7-masahiroy@kernel.org>
+Subject: [PATCH 07/15] scripts/mkcompile_h: move LC_ALL=C to '$LD -v'
+Date:   Sun, 28 Aug 2022 11:39:55 +0900
+Message-Id: <20220828024003.28873-8-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
 References: <20220828024003.28873-1-masahiroy@kernel.org>
@@ -52,64 +52,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now that UTS_VERSION was separated out, this header can be generated
-much earlier, and probably the top Makefile is a better place to do it
-than init/Makefile.
+Minimize the scope of LC_ALL=C like before commit 87c94bfb8ad3 ("kbuild:
+override build timestamp & version").
+
+Give LC_ALL=C to '$LD -v' to get the consistent version output, as commit
+bcbcf50f5218 ("kbuild: fix ld-version.sh to not be affected by locale")
+mentioned the LD version is affected by locale.
+
+While I was here, I merged two sed invocations.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- Makefile      | 8 +++++++-
- init/Makefile | 8 +-------
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ scripts/mkcompile_h | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 54e481162608..d933c0acab12 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1198,7 +1198,7 @@ PHONY += prepare archprepare
+diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
+index f1a820d49e53..b76ccbbc094b 100755
+--- a/scripts/mkcompile_h
++++ b/scripts/mkcompile_h
+@@ -8,10 +8,6 @@ LD=$3
+ # Do not expand names
+ set -f
  
- archprepare: outputmakefile archheaders archscripts scripts include/config/kernel.release \
- 	asm-generic $(version_h) $(autoksyms_h) include/generated/utsrelease.h \
--	include/generated/autoconf.h remove-stale-files
-+	include/generated/compile.h include/generated/autoconf.h remove-stale-files
- 
- prepare0: archprepare
- 	$(Q)$(MAKE) $(build)=scripts/mod
-@@ -1260,6 +1260,12 @@ $(version_h): FORCE
- include/generated/utsrelease.h: include/config/kernel.release FORCE
- 	$(call filechk,utsrelease.h)
- 
-+filechk_compile.h = $(srctree)/scripts/mkcompile_h \
-+	"$(UTS_MACHINE)" "$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
-+
-+include/generated/compile.h: FORCE
-+	$(call filechk,compile.h)
-+
- PHONY += headerdep
- headerdep:
- 	$(Q)find $(srctree)/include/ -name '*.h' | xargs --max-args 1 \
-diff --git a/init/Makefile b/init/Makefile
-index 63f53d210cad..31c17a8e314b 100644
---- a/init/Makefile
-+++ b/init/Makefile
-@@ -43,15 +43,9 @@ filechk_uts_version = \
- $(obj)/utsversion-tmp.h: FORCE
- 	$(call filechk,uts_version)
- 
--$(obj)/version.o: include/generated/compile.h $(obj)/utsversion-tmp.h
-+$(obj)/version.o: $(obj)/utsversion-tmp.h
- CFLAGS_version.o := -include $(obj)/utsversion-tmp.h
- 
--filechk_compile.h = $(srctree)/scripts/mkcompile_h \
--	"$(UTS_MACHINE)" "$(CONFIG_CC_VERSION_TEXT)" "$(LD)"
+-# Fix the language to get consistent output
+-LC_ALL=C
+-export LC_ALL
 -
--include/generated/compile.h: FORCE
--	$(call filechk,compile.h)
--
- #
- # Build version-timestamp.c with final UTS_VERSION
- #
+ if test -z "$KBUILD_BUILD_USER"; then
+ 	LINUX_COMPILE_BY=$(whoami | sed 's/\\/\\\\/')
+ else
+@@ -23,8 +19,8 @@ else
+ 	LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
+ fi
+ 
+-LD_VERSION=$($LD -v | head -n1 | sed 's/(compatible with [^)]*)//' \
+-	      | sed 's/[[:space:]]*$//')
++LD_VERSION=$(LC_ALL=C $LD -v | head -n1 |
++		sed -e 's/(compatible with [^)]*)//' -e 's/[[:space:]]*$//')
+ 
+ cat <<EOF
+ #define UTS_MACHINE		"${UTS_MACHINE}"
 -- 
 2.34.1
 
