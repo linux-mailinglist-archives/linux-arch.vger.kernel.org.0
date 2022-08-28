@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B655A3B07
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E22615A3B11
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiH1Cnw (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 22:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
+        id S231874AbiH1Cph (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 22:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232496AbiH1Cnj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:43:39 -0400
-Received: from condef-01.nifty.com (condef-01.nifty.com [202.248.20.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435F0101F3
-        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:43:24 -0700 (PDT)
-Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-01.nifty.com with ESMTP id 27S2eoMK015362
-        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:50 +0900
+        with ESMTP id S232006AbiH1Cpf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:45:35 -0400
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18462A248
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:45:34 -0700 (PDT)
+Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-04.nifty.com with ESMTP id 27S2elOS013998
+        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:47 +0900
 Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27S2e6Gp030639;
+        by conuserg-11.nifty.com with ESMTP id 27S2e6Gq030639;
         Sun, 28 Aug 2022 11:40:10 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gp030639
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gq030639
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661654410;
-        bh=eGfR+SEQRQYMntHzRLQYF+Hwh8rbACwjelshdo+fzFY=;
+        s=dec2015msa; t=1661654411;
+        bh=pcMhDiiIpuG9IA8eOqVr1JYW01owykoWnir+g7tldYQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=02rQo8JopEgajO2tQ0CfaQYKeP+AOJ1x2LJhfrlPaUH2VP89Zn2bLl9/p74m2Zo7a
-         sStaPDtSO/et6rxaxVF6p2LuLm4YTDUlnjw5lZIZR5Dw1pJpgE+pmSpYuOUBg7A6ty
-         FeKHkj0SC/Zmx0sp28YQPQMFPpaeva0rzdT21T00I3ctEnpwmD40HpYe/ztcZk+Jwj
-         /eP1xpRKm9cg3gi/hNhQUaluiK7Jrc8pmBN8+jBAVIsfuFSVl6P5Q39ANbz557FPI1
-         en/boef0CrQwIsuC85HDHiDeNnjmO4lXQd7b12bWTmBGjz5MqEgtt80Igkdi2EF+2J
-         y1/J/OP06sDxA==
+        b=Jo1j2k/N+uaWBpzCO54Kz2cFlciKFXqxfEn0CjcUzR14SbWmQTc8i++Y6WlwjAn65
+         cosm6dj73cNrg4DQtkr5C/yI9RRGoAXj1Z9CxJ1x4whDqmcLH5rQUoUX7fPkaMmjzk
+         1QSmNsrqFjfTaam3WY484+K6ugzgwig4t1xCjfEgZ94O3XlAinJ57KxqqY6+i5LU2X
+         ieMjy28nzCMjtf5iH7zSGEtomAcbDRtqap89dL+oOUngojV7EC8jy0nmlhKdum8WiW
+         d1ONiErX360qwSNwY87ySwQGnZREiIj9R3De1Ay+tqlA5mcpVjvgrVR4NSft1aI0Hx
+         kEh1TmAqzvFlw==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 07/15] scripts/mkcompile_h: move LC_ALL=C to '$LD -v'
-Date:   Sun, 28 Aug 2022 11:39:55 +0900
-Message-Id: <20220828024003.28873-8-masahiroy@kernel.org>
+Subject: [PATCH 08/15] Revert "kbuild: Make scripts/compile.h when sh != bash"
+Date:   Sun, 28 Aug 2022 11:39:56 +0900
+Message-Id: <20220828024003.28873-9-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
 References: <20220828024003.28873-1-masahiroy@kernel.org>
@@ -52,47 +52,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Minimize the scope of LC_ALL=C like before commit 87c94bfb8ad3 ("kbuild:
-override build timestamp & version").
+This reverts commit [1] in the pre-git era.
 
-Give LC_ALL=C to '$LD -v' to get the consistent version output, as commit
-bcbcf50f5218 ("kbuild: fix ld-version.sh to not be affected by locale")
-mentioned the LD version is affected by locale.
+I do not know what problem happened in the script when sh != bash
+because there is no commit message.
 
-While I was here, I merged two sed invocations.
+Now that this script is much simpler than it used to be, let's revert
+it, and let' see. (If this turns out to be problematic, fix the code
+with proper commit description.)
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/?id=11acbbbb8a50f4de7dbe4bc1b5acc440dfe81810
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mkcompile_h | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ scripts/mkcompile_h | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/scripts/mkcompile_h b/scripts/mkcompile_h
-index f1a820d49e53..b76ccbbc094b 100755
+index b76ccbbc094b..2596f78e52ef 100755
 --- a/scripts/mkcompile_h
 +++ b/scripts/mkcompile_h
-@@ -8,10 +8,6 @@ LD=$3
- # Do not expand names
- set -f
+@@ -5,9 +5,6 @@ UTS_MACHINE=$1
+ CC_VERSION="$2"
+ LD=$3
  
--# Fix the language to get consistent output
--LC_ALL=C
--export LC_ALL
+-# Do not expand names
+-set -f
 -
  if test -z "$KBUILD_BUILD_USER"; then
  	LINUX_COMPILE_BY=$(whoami | sed 's/\\/\\\\/')
  else
-@@ -23,8 +19,8 @@ else
- 	LINUX_COMPILE_HOST=$KBUILD_BUILD_HOST
- fi
- 
--LD_VERSION=$($LD -v | head -n1 | sed 's/(compatible with [^)]*)//' \
--	      | sed 's/[[:space:]]*$//')
-+LD_VERSION=$(LC_ALL=C $LD -v | head -n1 |
-+		sed -e 's/(compatible with [^)]*)//' -e 's/[[:space:]]*$//')
- 
- cat <<EOF
- #define UTS_MACHINE		"${UTS_MACHINE}"
 -- 
 2.34.1
 
