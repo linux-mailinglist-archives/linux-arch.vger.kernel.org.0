@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7595A3B0F
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A085A3B0D
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiH1CpL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 22:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
+        id S231697AbiH1Coa (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 22:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231730AbiH1CpH (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:45:07 -0400
-Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4F813E12
-        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:44:59 -0700 (PDT)
-Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-04.nifty.com with ESMTP id 27S2ekdJ013996
-        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:46 +0900
+        with ESMTP id S229787AbiH1Co3 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:44:29 -0400
+Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2002656E
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:44:27 -0700 (PDT)
+Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-07.nifty.com with ESMTP id 27S2eoX2032024
+        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:50 +0900
 Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27S2e6Gv030639;
+        by conuserg-11.nifty.com with ESMTP id 27S2e6Gw030639;
         Sun, 28 Aug 2022 11:40:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gv030639
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gw030639
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661654413;
-        bh=c4JLe00xA9RgTRCfMjXiEpEE/KAsTw3rpMQcsPLh0ZI=;
+        s=dec2015msa; t=1661654414;
+        bh=52aGWZ2ykU/pxw2EaFLBF+3yJYj3J7s7DtOdbPBF/xs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fbQ2DU6RDyVxBSYcBy2FbYeEEAGZuEyqfiqvnwLbWfwNkmTUIyj8nbPFuEUXwzmPe
-         dckYQCuux3GE6MhbTzQvrFfCZAISinEoMC9JACzSAkwY1x+Kbk7tIEEp/clvGfxFqV
-         04ed/CVsmu+x958ovmfrARVc5JXjUsWg8lG/0Y30s9tlYjTvJi2OOEoLIVzrxQWgbV
-         to8bjEfLrY8vD1H1YJef8W/k9BRXA6vRwfD80ld2fF2m1bTEYhyd8JABfIdakaTF17
-         mjWCccCvd2dBaPq6pkiJmMbiY/HP4GS34SC2lZ7R1tvfbj9fSu32UZGX6WYbvr8H1U
-         o9+xrdZXehjng==
+        b=EClR+kyIjj0u77/oPTQvHmvs777t8nadrJSgd+Mmy+CXVEZbXfSsG87G8mZAtEZkT
+         ZEsjp4YDd+01L5Y41RjSKdZgmvXaN3FXwIaYcbaF8VapJyU3rrWIc6wZ7bSdsLz9iE
+         DmSuA1uE/0aEx+yvC7Tw7ZmS3ZML8tc6AGhDVjBheXTbO4aZQK0tXENe30vh+1+ipP
+         aosQzywW40phgv3Pke/aemEBGbq9JbXGeWH921VICL7uANXAnA4YYIcFDsDmJn5uI/
+         cpdeX3NegkCfcX26KqxEw6jZThdmvqKnGXmYzqwhrvYi+XO5ohTKvl9CfZPOBFuS1E
+         y+1EAUG98pD7g==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 13/15] kbuild: unify two modpost invocations
-Date:   Sun, 28 Aug 2022 11:40:01 +0900
-Message-Id: <20220828024003.28873-14-masahiroy@kernel.org>
+Subject: [PATCH 14/15] kbuild: use obj-y instead extra-y for objects placed at the head
+Date:   Sun, 28 Aug 2022 11:40:02 +0900
+Message-Id: <20220828024003.28873-15-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
 References: <20220828024003.28873-1-masahiroy@kernel.org>
@@ -52,301 +52,700 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Currently, modpost is executed twice; first for vmlinux, second
-for modules.
+The objects placed at the head of vmlinux need special treatments:
 
-This commit unfies them.
+ - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
+   them before other archives in the linker command line.
 
-Current build flow
-==================
+ - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
+   obj-y to avoid them going into built-in.a.
 
-  1) build obj-y and obj-m objects
-    2) link vmlinux.o
-      3) modpost for vmlinux
-        4) link vmlinux
-          5) modpost for modules
-            6) link modules (*.ko)
+This commit gets rid of the second one.
 
-The build steps 1) through 6) are serialized (that is, modules are
-built after vmlinux). We do not get benefits of parallel builds
-when scripts/link-vmlinux.sh is being run.
+Create vmlinux.a to collect all the objects that are unconditionally
+linked to vmlinux. The objects listed in head-y are moved to the head
+of vmlinux.a by using 'ar m'.
 
-New build flow
-==============
+With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
+for builtin objects.
 
-  1) build obj-y and obj-m objects
-    2) link vmlinux.o
-      3) modpost for vmlinux and modules
-        4a) link vmlinux
-        4b) link modules (*.ko)
-
-In the new build flow, modpost is invoked just once.
-
-vmlinux and modules are built in parallel. One exception is
-CONFIG_DEBUG_INFO_BTF_MODULES=y, where modules depend on vmlinux.
+There is no *.o that is directly linked to vmlinux. Drop unneeded code
+in scripts/clang-tools/gen_compile_commands.py.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- Makefile                  | 30 ++++++++++---
- scripts/Makefile.modfinal |  2 +-
- scripts/Makefile.modpost  | 93 ++++++++++++---------------------------
- scripts/link-vmlinux.sh   |  3 --
- 4 files changed, 53 insertions(+), 75 deletions(-)
+ Documentation/kbuild/makefiles.rst          | 18 +----------------
+ Makefile                                    | 18 +++++++++++++----
+ arch/alpha/kernel/Makefile                  |  4 ++--
+ arch/arc/kernel/Makefile                    |  4 ++--
+ arch/arm/kernel/Makefile                    |  4 ++--
+ arch/arm64/kernel/Makefile                  |  4 ++--
+ arch/csky/kernel/Makefile                   |  4 ++--
+ arch/hexagon/kernel/Makefile                |  3 ++-
+ arch/ia64/kernel/Makefile                   |  4 ++--
+ arch/loongarch/kernel/Makefile              |  4 ++--
+ arch/m68k/68000/Makefile                    |  2 +-
+ arch/m68k/coldfire/Makefile                 |  2 +-
+ arch/m68k/kernel/Makefile                   | 21 ++++++++++----------
+ arch/microblaze/kernel/Makefile             |  4 ++--
+ arch/mips/kernel/Makefile                   |  4 ++--
+ arch/nios2/kernel/Makefile                  |  2 +-
+ arch/openrisc/kernel/Makefile               |  4 ++--
+ arch/parisc/kernel/Makefile                 |  4 ++--
+ arch/powerpc/kernel/Makefile                | 22 ++++++++++-----------
+ arch/riscv/kernel/Makefile                  |  2 +-
+ arch/s390/kernel/Makefile                   |  4 ++--
+ arch/sh/kernel/Makefile                     |  4 ++--
+ arch/sparc/kernel/Makefile                  |  3 +--
+ arch/x86/kernel/Makefile                    | 10 +++++-----
+ arch/xtensa/kernel/Makefile                 |  4 ++--
+ scripts/Makefile.modpost                    |  5 ++---
+ scripts/Makefile.vmlinux_o                  |  6 +++---
+ scripts/clang-tools/gen_compile_commands.py | 19 +-----------------
+ scripts/link-vmlinux.sh                     | 10 ++++------
+ 29 files changed, 87 insertions(+), 112 deletions(-)
 
+diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
+index 11a296e52d68..07c7e5a843c1 100644
+--- a/Documentation/kbuild/makefiles.rst
++++ b/Documentation/kbuild/makefiles.rst
+@@ -340,19 +340,7 @@ more details, with real examples.
+ 
+ 	Examples are:
+ 
+-	1) head objects
+-
+-	    Some objects must be placed at the head of vmlinux. They are
+-	    directly linked to vmlinux without going through built-in.a
+-	    A typical use-case is an object that contains the entry point.
+-
+-	    arch/$(SRCARCH)/Makefile should specify such objects as head-y.
+-
+-	    Discussion:
+-	      Given that we can control the section order in the linker script,
+-	      why do we need head-y?
+-
+-	2) vmlinux linker script
++	1) vmlinux linker script
+ 
+ 	    The linker script for vmlinux is located at
+ 	    arch/$(SRCARCH)/kernel/vmlinux.lds
+@@ -360,10 +348,6 @@ more details, with real examples.
+ 	Example::
+ 
+ 		# arch/x86/kernel/Makefile
+-		extra-y	:= head_$(BITS).o
+-		extra-y	+= head$(BITS).o
+-		extra-y	+= ebda.o
+-		extra-y	+= platform-quirks.o
+ 		extra-y	+= vmlinux.lds
+ 
+ 	$(extra-y) should only contain targets needed for vmlinux.
 diff --git a/Makefile b/Makefile
-index d81b7a587b43..292b6e90da20 100644
+index 292b6e90da20..d74aa4552d35 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1166,7 +1166,7 @@ cmd_link-vmlinux =                                                 \
- 	$(CONFIG_SHELL) $< "$(LD)" "$(KBUILD_LDFLAGS)" "$(LDFLAGS_vmlinux)";    \
- 	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
+@@ -1116,7 +1116,7 @@ build-dirs	:= $(vmlinux-dirs)
+ clean-dirs	:= $(vmlinux-alldirs)
  
--vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
-+vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) modpost FORCE
- 	+$(call if_changed_dep,link-vmlinux)
+ # Externally visible symbols (used by link-vmlinux.sh)
+-KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
++KBUILD_VMLINUX_OBJS := $(patsubst %/,%/built-in.a, $(core-y))
+ KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
+ ifdef CONFIG_MODULES
+ KBUILD_VMLINUX_OBJS += $(patsubst %/, %/lib.a, $(filter %/, $(libs-y)))
+@@ -1126,7 +1126,7 @@ KBUILD_VMLINUX_LIBS := $(patsubst %/,%/lib.a, $(libs-y))
+ endif
+ KBUILD_VMLINUX_OBJS += $(patsubst %/,%/built-in.a, $(drivers-y))
  
- targets += vmlinux
-@@ -1443,7 +1443,13 @@ endif
- # Build modules
+-export KBUILD_VMLINUX_OBJS KBUILD_VMLINUX_LIBS
++export KBUILD_VMLINUX_LIBS
+ export KBUILD_LDS          := arch/$(SRCARCH)/kernel/vmlinux.lds
+ # used by scripts/Makefile.package
+ export KBUILD_ALLDIRS := $(sort $(filter-out arch/%,$(vmlinux-alldirs)) LICENSES arch include scripts tools)
+@@ -1155,8 +1155,18 @@ quiet_cmd_autoksyms_h = GEN     $@
+ $(autoksyms_h):
+ 	$(call cmd,autoksyms_h)
+ 
++quiet_cmd_ar_vmlinux.a = AR      $@
++      cmd_ar_vmlinux.a = \
++	rm -f $@; \
++	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
++	$(AR) mPi $$($(AR) t $@| head -n1) $@ $(head-y)
++
++targets += vmlinux.a
++vmlinux.a: $(KBUILD_VMLINUX_OBJS) FORCE
++	$(call if_changed,ar_vmlinux.a)
++
+ targets += vmlinux.o
+-vmlinux.o: autoksyms_recursive $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
++vmlinux.o: autoksyms_recursive vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_o
+ 
+ ARCH_POSTLINK := $(wildcard $(srctree)/arch/$(SRCARCH)/Makefile.postlink)
+@@ -1913,7 +1923,7 @@ quiet_cmd_gen_compile_commands = GEN     $@
+       cmd_gen_compile_commands = $(PYTHON3) $< -a $(AR) -o $@ $(filter-out $<, $(real-prereqs))
+ 
+ $(extmod_prefix)compile_commands.json: scripts/clang-tools/gen_compile_commands.py \
+-	$(if $(KBUILD_EXTMOD),,$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS)) \
++	$(if $(KBUILD_EXTMOD),, vmlinux.a $(KBUILD_VMLINUX_LIBS)) \
+ 	$(if $(CONFIG_MODULES), $(MODORDER)) FORCE
+ 	$(call if_changed,gen_compile_commands)
+ 
+diff --git a/arch/alpha/kernel/Makefile b/arch/alpha/kernel/Makefile
+index 5a74581bf0ee..5a5b0a8b7c6a 100644
+--- a/arch/alpha/kernel/Makefile
++++ b/arch/alpha/kernel/Makefile
+@@ -3,11 +3,11 @@
+ # Makefile for the linux kernel.
  #
  
--modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_prepare
-+# *.ko are usually independent of vmlinux, but CONFIG_DEBUG_INFOBTF_MODULES
-+# is an exception.
-+ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+modules: vmlinux
-+endif
+-extra-y		:= head.o vmlinux.lds
++extra-y		:= vmlinux.lds
+ asflags-y	:= $(KBUILD_CFLAGS)
+ ccflags-y	:= -Wno-sign-compare
+ 
+-obj-y    := entry.o traps.o process.o osf_sys.o irq.o \
++obj-y    := head.o entry.o traps.o process.o osf_sys.o irq.o \
+ 	    irq_alpha.o signal.o setup.o ptrace.o time.o \
+ 	    systbls.o err_common.o io.o bugs.o
+ 
+diff --git a/arch/arc/kernel/Makefile b/arch/arc/kernel/Makefile
+index 8c4fc4b54c14..0723d888ac44 100644
+--- a/arch/arc/kernel/Makefile
++++ b/arch/arc/kernel/Makefile
+@@ -3,7 +3,7 @@
+ # Copyright (C) 2004, 2007-2010, 2011-2012 Synopsys, Inc. (www.synopsys.com)
+ #
+ 
+-obj-y	:= arcksyms.o setup.o irq.o reset.o ptrace.o process.o devtree.o
++obj-y	:= head.o arcksyms.o setup.o irq.o reset.o ptrace.o process.o devtree.o
+ obj-y	+= signal.o traps.o sys.o troubleshoot.o stacktrace.o disasm.o
+ obj-$(CONFIG_ISA_ARCOMPACT)		+= entry-compact.o intc-compact.o
+ obj-$(CONFIG_ISA_ARCV2)			+= entry-arcv2.o intc-arcv2.o
+@@ -31,4 +31,4 @@ else
+ obj-y += ctx_sw_asm.o
+ endif
+ 
+-extra-y := vmlinux.lds head.o
++extra-y := vmlinux.lds
+diff --git a/arch/arm/kernel/Makefile b/arch/arm/kernel/Makefile
+index 553866751e1a..8feaa3217ec5 100644
+--- a/arch/arm/kernel/Makefile
++++ b/arch/arm/kernel/Makefile
+@@ -89,7 +89,7 @@ obj-$(CONFIG_VDSO)		+= vdso.o
+ obj-$(CONFIG_EFI)		+= efi.o
+ obj-$(CONFIG_PARAVIRT)	+= paravirt.o
+ 
+-head-y			:= head$(MMUEXT).o
++obj-y			+= head$(MMUEXT).o
+ obj-$(CONFIG_DEBUG_LL)	+= debug.o
+ obj-$(CONFIG_EARLY_PRINTK)	+= early_printk.o
+ obj-$(CONFIG_ARM_PATCH_PHYS_VIRT)	+= phys2virt.o
+@@ -109,4 +109,4 @@ obj-$(CONFIG_HAVE_ARM_SMCCC)	+= smccc-call.o
+ 
+ obj-$(CONFIG_GENERIC_CPU_VULNERABILITIES) += spectre.o
+ 
+-extra-y := $(head-y) vmlinux.lds
++extra-y := vmlinux.lds
+diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+index 1add7b01efa7..b619ff207a57 100644
+--- a/arch/arm64/kernel/Makefile
++++ b/arch/arm64/kernel/Makefile
+@@ -85,8 +85,8 @@ $(obj)/vdso-wrap.o: $(obj)/vdso/vdso.so
+ $(obj)/vdso32-wrap.o: $(obj)/vdso32/vdso.so
+ 
+ obj-y					+= probes/
+-head-y					:= head.o
+-extra-y					+= $(head-y) vmlinux.lds
++obj-y					+= head.o
++extra-y					+= vmlinux.lds
+ 
+ ifeq ($(CONFIG_DEBUG_EFI),y)
+ AFLAGS_head.o += -DVMLINUX_PATH="\"$(realpath $(objtree)/vmlinux)\""
+diff --git a/arch/csky/kernel/Makefile b/arch/csky/kernel/Makefile
+index 6f14c924b20d..8a868316b912 100644
+--- a/arch/csky/kernel/Makefile
++++ b/arch/csky/kernel/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-extra-y := head.o vmlinux.lds
++extra-y := vmlinux.lds
+ 
+-obj-y += entry.o atomic.o signal.o traps.o irq.o time.o vdso.o vdso/
++obj-y += head.o entry.o atomic.o signal.o traps.o irq.o time.o vdso.o vdso/
+ obj-y += power.o syscall.o syscall_table.o setup.o io.o
+ obj-y += process.o cpu-probe.o ptrace.o stacktrace.o
+ obj-y += probes/
+diff --git a/arch/hexagon/kernel/Makefile b/arch/hexagon/kernel/Makefile
+index fae3dce32fde..e73cb321630e 100644
+--- a/arch/hexagon/kernel/Makefile
++++ b/arch/hexagon/kernel/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+-extra-y := head.o vmlinux.lds
++extra-y := vmlinux.lds
+ 
++obj-y += head.o
+ obj-$(CONFIG_SMP) += smp.o
+ 
+ obj-y += setup.o irq_cpu.o traps.o syscalltab.o signal.o time.o
+diff --git a/arch/ia64/kernel/Makefile b/arch/ia64/kernel/Makefile
+index 08d4a2ba0652..4a1fcb121dda 100644
+--- a/arch/ia64/kernel/Makefile
++++ b/arch/ia64/kernel/Makefile
+@@ -7,9 +7,9 @@ ifdef CONFIG_DYNAMIC_FTRACE
+ CFLAGS_REMOVE_ftrace.o = -pg
+ endif
+ 
+-extra-y	:= head.o vmlinux.lds
++extra-y	:= vmlinux.lds
+ 
+-obj-y := entry.o efi.o efi_stub.o gate-data.o fsys.o irq.o irq_ia64.o	\
++obj-y := head.o entry.o efi.o efi_stub.o gate-data.o fsys.o irq.o irq_ia64.o	\
+ 	 irq_lsapic.o ivt.o pal.o patch.o process.o ptrace.o sal.o		\
+ 	 salinfo.o setup.o signal.o sys_ia64.o time.o traps.o unaligned.o \
+ 	 unwind.o mca.o mca_asm.o topology.o dma-mapping.o iosapic.o acpi.o \
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index e5be17009fe8..6c33b5c45573 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -3,9 +3,9 @@
+ # Makefile for the Linux/LoongArch kernel.
+ #
+ 
+-extra-y		:= head.o vmlinux.lds
++extra-y		:= vmlinux.lds
+ 
+-obj-y		+= cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
++obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+ 		   traps.o irq.o idle.o process.o dma.o mem.o io.o reset.o switch.o \
+ 		   elf.o syscall.o signal.o time.o topology.o inst.o ptrace.o vdso.o
+ 
+diff --git a/arch/m68k/68000/Makefile b/arch/m68k/68000/Makefile
+index 674541fdf5b8..279560add577 100644
+--- a/arch/m68k/68000/Makefile
++++ b/arch/m68k/68000/Makefile
+@@ -17,4 +17,4 @@ obj-$(CONFIG_DRAGEN2)	+= dragen2.o
+ obj-$(CONFIG_UCSIMM)	+= ucsimm.o
+ obj-$(CONFIG_UCDIMM)	+= ucsimm.o
+ 
+-extra-y 		:= head.o
++obj-y			+= head.o
+diff --git a/arch/m68k/coldfire/Makefile b/arch/m68k/coldfire/Makefile
+index 9419a6c1f036..c56bc0dc7f2e 100644
+--- a/arch/m68k/coldfire/Makefile
++++ b/arch/m68k/coldfire/Makefile
+@@ -45,4 +45,4 @@ obj-$(CONFIG_STMARK2)	+= stmark2.o
+ obj-$(CONFIG_PCI)	+= pci.o
+ 
+ obj-y			+= gpio.o
+-extra-y := head.o
++obj-y			+= head.o
+diff --git a/arch/m68k/kernel/Makefile b/arch/m68k/kernel/Makefile
+index c0833da6a2ca..1755e6cd309f 100644
+--- a/arch/m68k/kernel/Makefile
++++ b/arch/m68k/kernel/Makefile
+@@ -3,18 +3,19 @@
+ # Makefile for the linux kernel.
+ #
+ 
+-extra-$(CONFIG_AMIGA)	:= head.o
+-extra-$(CONFIG_ATARI)	:= head.o
+-extra-$(CONFIG_MAC)	:= head.o
+-extra-$(CONFIG_APOLLO)	:= head.o
+-extra-$(CONFIG_VME)	:= head.o
+-extra-$(CONFIG_HP300)	:= head.o
+-extra-$(CONFIG_Q40)	:= head.o
+-extra-$(CONFIG_SUN3X)	:= head.o
+-extra-$(CONFIG_VIRT)	:= head.o
+-extra-$(CONFIG_SUN3)	:= sun3-head.o
+ extra-y			+= vmlinux.lds
+ 
++obj-$(CONFIG_AMIGA)	:= head.o
++obj-$(CONFIG_ATARI)	:= head.o
++obj-$(CONFIG_MAC)	:= head.o
++obj-$(CONFIG_APOLLO)	:= head.o
++obj-$(CONFIG_VME)	:= head.o
++obj-$(CONFIG_HP300)	:= head.o
++obj-$(CONFIG_Q40)	:= head.o
++obj-$(CONFIG_SUN3X)	:= head.o
++obj-$(CONFIG_VIRT)	:= head.o
++obj-$(CONFIG_SUN3)	:= sun3-head.o
 +
-+modules: modules_prepare
+ obj-y	:= entry.o irq.o module.o process.o ptrace.o
+ obj-y	+= setup.o signal.o sys_m68k.o syscalltable.o time.o traps.o
  
- # Target to prepare building external modules
- modules_prepare: prepare
-@@ -1766,8 +1772,12 @@ targets += $(MODORDER)
- $(MODORDER): $(subdir-modorder) FORCE
- 	$(call if_changed,modules_order)
+diff --git a/arch/microblaze/kernel/Makefile b/arch/microblaze/kernel/Makefile
+index 15a20eb814ce..4393bee64eaf 100644
+--- a/arch/microblaze/kernel/Makefile
++++ b/arch/microblaze/kernel/Makefile
+@@ -12,9 +12,9 @@ CFLAGS_REMOVE_ftrace.o = -pg
+ CFLAGS_REMOVE_process.o = -pg
+ endif
  
--modules: modules_check
--	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-+# KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
-+# This is solely useful to speed up test compiles.
-+modules: modpost
-+ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-+endif
+-extra-y := head.o vmlinux.lds
++extra-y := vmlinux.lds
  
- PHONY += modules_check
- modules_check: $(MODORDER)
-@@ -1798,6 +1808,11 @@ KBUILD_MODULES :=
+-obj-y += dma.o exceptions.o \
++obj-y += head.o dma.o exceptions.o \
+ 	hw_exception_handler.o irq.o \
+ 	process.o prom.o ptrace.o \
+ 	reset.o setup.o signal.o sys_microblaze.o timer.o traps.o unwind.o
+diff --git a/arch/mips/kernel/Makefile b/arch/mips/kernel/Makefile
+index 7c96282bff2e..5d1addac5e28 100644
+--- a/arch/mips/kernel/Makefile
++++ b/arch/mips/kernel/Makefile
+@@ -3,9 +3,9 @@
+ # Makefile for the Linux/MIPS kernel.
+ #
  
- endif # CONFIG_MODULES
+-extra-y		:= head.o vmlinux.lds
++extra-y		:= vmlinux.lds
  
-+PHONY += modpost
-+modpost: $(if $(single-build),, $(if $(KBUILD_BUILTIN), vmlinux.o)) \
-+	 $(if $(KBUILD_MODULES), modules_check)
-+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-+
- # Single targets
- # ---------------------------------------------------------------------------
- # To build individual files in subdirectories, you can do like this:
-@@ -1817,16 +1832,19 @@ single-ko := $(sort $(filter %.ko, $(MAKECMDGOALS)))
- single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS)) \
- 		$(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
+-obj-y		+= branch.o cmpxchg.o elf.o entry.o genex.o idle.o irq.o \
++obj-y		+= head.o branch.o cmpxchg.o elf.o entry.o genex.o idle.o irq.o \
+ 		   process.o prom.o ptrace.o reset.o setup.o signal.o \
+ 		   syscall.o time.o topology.o traps.o unaligned.o watch.o \
+ 		   vdso.o cacheinfo.o
+diff --git a/arch/nios2/kernel/Makefile b/arch/nios2/kernel/Makefile
+index 0b645e1e3158..78a913181fa1 100644
+--- a/arch/nios2/kernel/Makefile
++++ b/arch/nios2/kernel/Makefile
+@@ -3,9 +3,9 @@
+ # Makefile for the nios2 linux kernel.
+ #
  
--$(single-ko): single_modpost
-+$(single-ko): single_modules
- 	@:
- $(single-no-ko): descend
- 	@:
+-extra-y	+= head.o
+ extra-y	+= vmlinux.lds
  
- # Remove MODORDER when done because it is not the real one.
- PHONY += single_modpost
--single_modpost: $(single-no-ko) modules_prepare
-+single_modules: $(single-no-ko) modules_prepare
- 	$(Q){ $(foreach m, $(single-ko), echo $(extmod_prefix)$m;) } > $(MODORDER)
- 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
-+ifneq ($(KBUILD_MODPOST_NOFINAL),1)
-+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
-+endif
- 	$(Q)rm -f $(MODORDER)
++obj-y	+= head.o
+ obj-y	+= cpuinfo.o
+ obj-y	+= entry.o
+ obj-y	+= insnemu.o
+diff --git a/arch/openrisc/kernel/Makefile b/arch/openrisc/kernel/Makefile
+index 2d172e79f58d..79129161f3e0 100644
+--- a/arch/openrisc/kernel/Makefile
++++ b/arch/openrisc/kernel/Makefile
+@@ -3,9 +3,9 @@
+ # Makefile for the linux kernel.
+ #
  
- export KBUILD_SINGLE_TARGETS := $(addprefix $(extmod_prefix), $(single-no-ko))
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 35100e981f4a..a3cf9e3647c9 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -55,7 +55,7 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
- 	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+-extra-y	:= head.o vmlinux.lds
++extra-y	:= vmlinux.lds
  
- # Re-generate module BTFs if either module's .ko or vmlinux changed
--$(modules): %.ko: %.o %.mod.o scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
-+$(modules): %.ko: %.o %.mod.o scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),vmlinux) FORCE
- 	+$(call if_changed_except,ld_ko_o,vmlinux)
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+-obj-y	:= setup.o or32_ksyms.o process.o dma.o \
++obj-y	:= head.o setup.o or32_ksyms.o process.o dma.o \
+ 	   traps.o time.o irq.o entry.o ptrace.o signal.o \
+ 	   sys_call_table.o unwinder.o
+ 
+diff --git a/arch/parisc/kernel/Makefile b/arch/parisc/kernel/Makefile
+index d0bfac89a842..3d138c9cf9ce 100644
+--- a/arch/parisc/kernel/Makefile
++++ b/arch/parisc/kernel/Makefile
+@@ -3,9 +3,9 @@
+ # Makefile for arch/parisc/kernel
+ #
+ 
+-extra-y			:= head.o vmlinux.lds
++extra-y		:= vmlinux.lds
+ 
+-obj-y	     	:= cache.o pacache.o setup.o pdt.o traps.o time.o irq.o \
++obj-y		:= head.o cache.o pacache.o setup.o pdt.o traps.o time.o irq.o \
+ 		   pa7300lc.o syscall.o entry.o sys_parisc.o firmware.o \
+ 		   ptrace.o hardware.o inventory.o drivers.o alternative.o \
+ 		   signal.o hpmc.o real2.o parisc_ksyms.o unaligned.o \
+diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
+index 06d2d1f78f71..f264d9b2cb63 100644
+--- a/arch/powerpc/kernel/Makefile
++++ b/arch/powerpc/kernel/Makefile
+@@ -118,12 +118,12 @@ obj-$(CONFIG_PPC_FSL_BOOK3E)	+= cpu_setup_fsl_booke.o
+ obj-$(CONFIG_PPC_DOORBELL)	+= dbell.o
+ obj-$(CONFIG_JUMP_LABEL)	+= jump_label.o
+ 
+-extra-$(CONFIG_PPC64)		:= head_64.o
+-extra-$(CONFIG_PPC_BOOK3S_32)	:= head_book3s_32.o
+-extra-$(CONFIG_40x)		:= head_40x.o
+-extra-$(CONFIG_44x)		:= head_44x.o
+-extra-$(CONFIG_FSL_BOOKE)	:= head_fsl_booke.o
+-extra-$(CONFIG_PPC_8xx)		:= head_8xx.o
++obj-$(CONFIG_PPC64)		+= head_64.o
++obj-$(CONFIG_PPC_BOOK3S_32)	+= head_book3s_32.o
++obj-$(CONFIG_40x)		+= head_40x.o
++obj-$(CONFIG_44x)		+= head_44x.o
++obj-$(CONFIG_FSL_BOOKE)		+= head_fsl_booke.o
++obj-$(CONFIG_PPC_8xx)		+= head_8xx.o
+ extra-y				+= vmlinux.lds
+ 
+ obj-$(CONFIG_RELOCATABLE)	+= reloc_$(BITS).o
+@@ -198,12 +198,12 @@ KCOV_INSTRUMENT_paca.o := n
+ CFLAGS_setup_64.o		+= -fno-stack-protector
+ CFLAGS_paca.o			+= -fno-stack-protector
+ 
+-extra-$(CONFIG_PPC_FPU)		+= fpu.o
+-extra-$(CONFIG_ALTIVEC)		+= vector.o
+-extra-$(CONFIG_PPC64)		+= entry_64.o
+-extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)	+= prom_init.o
++obj-$(CONFIG_PPC_FPU)		+= fpu.o
++obj-$(CONFIG_ALTIVEC)		+= vector.o
++obj-$(CONFIG_PPC64)		+= entry_64.o
++obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)	+= prom_init.o
+ 
+-extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)	+= prom_init_check
++obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)	+= prom_init_check
+ 
+ quiet_cmd_prom_init_check = PROMCHK $@
+       cmd_prom_init_check = $(CONFIG_SHELL) $< "$(NM)" $(obj)/prom_init.o; touch $@
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 33bb60a354cd..db6e4b1294ba 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -28,9 +28,9 @@ KASAN_SANITIZE_cpufeature.o := n
+ endif
+ endif
+ 
+-extra-y += head.o
+ extra-y += vmlinux.lds
+ 
++obj-y	+= head.o
+ obj-y	+= soc.o
+ obj-$(CONFIG_RISCV_ALTERNATIVE) += alternative.o
+ obj-y	+= cpu.o
+diff --git a/arch/s390/kernel/Makefile b/arch/s390/kernel/Makefile
+index 3cbfa9fddd9a..7ce00816b8df 100644
+--- a/arch/s390/kernel/Makefile
++++ b/arch/s390/kernel/Makefile
+@@ -33,7 +33,7 @@ CFLAGS_stacktrace.o	+= -fno-optimize-sibling-calls
+ CFLAGS_dumpstack.o	+= -fno-optimize-sibling-calls
+ CFLAGS_unwind_bc.o	+= -fno-optimize-sibling-calls
+ 
+-obj-y	:= traps.o time.o process.o earlypgm.o early.o setup.o idle.o vtime.o
++obj-y	:= head64.o traps.o time.o process.o earlypgm.o early.o setup.o idle.o vtime.o
+ obj-y	+= processor.o syscall.o ptrace.o signal.o cpcmd.o ebcdic.o nmi.o
+ obj-y	+= debug.o irq.o ipl.o dis.o diag.o vdso.o cpufeature.o
+ obj-y	+= sysinfo.o lgr.o os_info.o machine_kexec.o
+@@ -42,7 +42,7 @@ obj-y	+= entry.o reipl.o relocate_kernel.o kdebugfs.o alternative.o
+ obj-y	+= nospec-branch.o ipl_vmparm.o machine_kexec_reloc.o unwind_bc.o
+ obj-y	+= smp.o text_amode31.o stacktrace.o
+ 
+-extra-y				+= head64.o vmlinux.lds
++extra-y				+= vmlinux.lds
+ 
+ obj-$(CONFIG_SYSFS)		+= nospec-sysfs.o
+ CFLAGS_REMOVE_nospec-branch.o	+= $(CC_FLAGS_EXPOLINE)
+diff --git a/arch/sh/kernel/Makefile b/arch/sh/kernel/Makefile
+index aa0fbc9202b1..69cd9ac4b2ab 100644
+--- a/arch/sh/kernel/Makefile
++++ b/arch/sh/kernel/Makefile
+@@ -3,7 +3,7 @@
+ # Makefile for the Linux/SuperH kernel.
+ #
+ 
+-extra-y	:= head_32.o vmlinux.lds
++extra-y	:= vmlinux.lds
+ 
+ ifdef CONFIG_FUNCTION_TRACER
+ # Do not profile debug and lowlevel utilities
+@@ -12,7 +12,7 @@ endif
+ 
+ CFLAGS_REMOVE_return_address.o = -pg
+ 
+-obj-y	:= debugtraps.o dumpstack.o 		\
++obj-y	:= head_32.o debugtraps.o dumpstack.o				\
+ 	   idle.o io.o irq.o irq_32.o kdebugfs.o			\
+ 	   machvec.o nmi_debug.o process.o				\
+ 	   process_32.o ptrace.o ptrace_32.o				\
+diff --git a/arch/sparc/kernel/Makefile b/arch/sparc/kernel/Makefile
+index d3a0e072ebe8..b328e4a0bd57 100644
+--- a/arch/sparc/kernel/Makefile
++++ b/arch/sparc/kernel/Makefile
+@@ -7,8 +7,6 @@
+ asflags-y := -ansi
+ ccflags-y := -Werror
+ 
+-extra-y     := head_$(BITS).o
+-
+ # Undefine sparc when processing vmlinux.lds - it is used
+ # And teach CPP we are doing $(BITS) builds (for this case)
+ CPPFLAGS_vmlinux.lds := -Usparc -m$(BITS)
+@@ -22,6 +20,7 @@ CFLAGS_REMOVE_perf_event.o := -pg
+ CFLAGS_REMOVE_pcr.o := -pg
+ endif
+ 
++obj-y                   := head_$(BITS).o
+ obj-$(CONFIG_SPARC64)   += urtt_fill.o
+ obj-$(CONFIG_SPARC32)   += entry.o wof.o wuf.o
+ obj-$(CONFIG_SPARC32)   += etrap_32.o
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index a20a5ebfacd7..956e50ca06e0 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -3,10 +3,6 @@
+ # Makefile for the linux kernel.
+ #
+ 
+-extra-y	:= head_$(BITS).o
+-extra-y	+= head$(BITS).o
+-extra-y	+= ebda.o
+-extra-y	+= platform-quirks.o
+ extra-y	+= vmlinux.lds
+ 
+ CPPFLAGS_vmlinux.lds += -U$(UTS_MACHINE)
+@@ -42,7 +38,11 @@ KCOV_INSTRUMENT		:= n
+ 
+ CFLAGS_irq.o := -I $(srctree)/$(src)/../include/asm/trace
+ 
+-obj-y			:= process_$(BITS).o signal.o
++obj-y			+= head_$(BITS).o
++obj-y			+= head$(BITS).o
++obj-y			+= ebda.o
++obj-y			+= platform-quirks.o
++obj-y			+= process_$(BITS).o signal.o
+ obj-$(CONFIG_COMPAT)	+= signal_compat.o
+ obj-y			+= traps.o idt.o irq.o irq_$(BITS).o dumpstack_$(BITS).o
+ obj-y			+= time.o ioport.o dumpstack.o nmi.o
+diff --git a/arch/xtensa/kernel/Makefile b/arch/xtensa/kernel/Makefile
+index 897c1c741058..f28b8e3d717e 100644
+--- a/arch/xtensa/kernel/Makefile
++++ b/arch/xtensa/kernel/Makefile
+@@ -3,9 +3,9 @@
+ # Makefile for the Linux/Xtensa kernel.
+ #
+ 
+-extra-y := head.o vmlinux.lds
++extra-y := vmlinux.lds
+ 
+-obj-y := align.o coprocessor.o entry.o irq.o platform.o process.o \
++obj-y := head.o align.o coprocessor.o entry.o irq.o platform.o process.o \
+ 	 ptrace.o setup.o signal.o stacktrace.o syscall.o time.o traps.o \
+ 	 vectors.o
+ 
 diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-index 04ad00917b2f..d7d3138c5ecc 100644
+index d7d3138c5ecc..4f74370ad1ee 100644
 --- a/scripts/Makefile.modpost
 +++ b/scripts/Makefile.modpost
-@@ -32,9 +32,6 @@
- # Step 4 is solely used to allow module versioning in external modules,
- # where the CRC of each module is retrieved from the Module.symvers file.
+@@ -70,13 +70,12 @@ quiet_cmd_vmlinux_objs = GEN     $@
+ 	for f in $(real-prereqs); do	\
+ 		case $${f} in		\
+ 		*libgcc.a) ;;		\
+-		*.a) $(AR) t $${f} ;;	\
+-		*) echo $${f} ;;	\
++		*) $(AR) t $${f} ;;	\
+ 		esac			\
+ 	done > $@
  
--# KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
--# This is solely useful to speed up test compiles
--
- PHONY := __modpost
- __modpost:
- 
-@@ -45,24 +42,23 @@ MODPOST = scripts/mod/modpost								\
- 	$(if $(CONFIG_MODVERSIONS),-m)							\
- 	$(if $(CONFIG_MODULE_SRCVERSION_ALL),-a)					\
- 	$(if $(CONFIG_SECTION_MISMATCH_WARN_ONLY),,-E)					\
-+	$(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS))					\
-+	$(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSDEPS),-N)	\
- 	-o $@
- 
--ifdef MODPOST_VMLINUX
--
--quiet_cmd_modpost = MODPOST $@
--      cmd_modpost = $(MODPOST) $<
--
--vmlinux.symvers: vmlinux.o
--	$(call cmd,modpost)
-+# 'make -i -k' ignores compile errors, and builds as many modules as possible.
-+ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
-+MODPOST += -n
-+endif
- 
--__modpost: vmlinux.symvers
-+ifeq ($(KBUILD_EXTMOD),)
- 
- # Generate the list of in-tree objects in vmlinux
- # ---------------------------------------------------------------------------
- 
- # This is used to retrieve symbol versions generated by genksyms.
- ifdef CONFIG_MODVERSIONS
--vmlinux.symvers: .vmlinux.objs
-+vmlinux.symvers Module.symvers: .vmlinux.objs
- endif
- 
- # Ignore libgcc.a
-@@ -83,24 +79,12 @@ targets += .vmlinux.objs
- .vmlinux.objs: $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
+ targets += .vmlinux.objs
+-.vmlinux.objs: $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
++.vmlinux.objs: vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
  	$(call if_changed,vmlinux_objs)
  
--else
--
--ifeq ($(KBUILD_EXTMOD),)
--
--input-symdump := vmlinux.symvers
--output-symdump := modules-only.symvers
--
--quiet_cmd_cat = GEN     $@
--      cmd_cat = cat $(real-prereqs) > $@
--
--ifneq ($(wildcard vmlinux.symvers),)
--
--__modpost: Module.symvers
--Module.symvers: vmlinux.symvers modules-only.symvers FORCE
--	$(call if_changed,cat)
--
--targets += Module.symvers
-+vmlinux.o-if-present := $(wildcard vmlinux.o)
-+output-symdump := vmlinux.symvers
+ vmlinux.o-if-present := $(wildcard vmlinux.o)
+diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+index 84019814f33f..81a4e0484457 100644
+--- a/scripts/Makefile.vmlinux_o
++++ b/scripts/Makefile.vmlinux_o
+@@ -18,7 +18,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
+ 	$(PERL) $(real-prereqs) > $@
  
-+ifdef KBUILD_MODULES
-+output-symdump := $(if $(vmlinux.o-if-present), Module.symvers, modules-only.symvers)
-+missing-input := $(filter-out $(vmlinux.o-if-present),vmlinux.o)
- endif
+ .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
+-		$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
++		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
+ 	$(call if_changed,gen_initcalls_lds)
  
- else
-@@ -112,56 +96,35 @@ src := $(obj)
- # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
- include $(or $(wildcard $(src)/Kbuild), $(src)/Makefile)
+ targets := .tmp_initcalls.lds
+@@ -55,7 +55,7 @@ quiet_cmd_ld_vmlinux.o = LD      $@
+       cmd_ld_vmlinux.o = \
+ 	$(LD) ${KBUILD_LDFLAGS} -r -o $@ \
+ 	$(addprefix -T , $(initcalls-lds)) \
+-	--whole-archive $(KBUILD_VMLINUX_OBJS) --no-whole-archive \
++	--whole-archive vmlinux.a --no-whole-archive \
+ 	--start-group $(KBUILD_VMLINUX_LIBS) --end-group \
+ 	$(cmd_objtool)
  
--# modpost option for external modules
--MODPOST += -e
+@@ -64,7 +64,7 @@ define rule_ld_vmlinux.o
+ 	$(call cmd,gen_objtooldep)
+ endef
+ 
+-vmlinux.o: $(initcalls-lds) $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
++vmlinux.o: $(initcalls-lds) vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
+ 	$(call if_changed_rule,ld_vmlinux.o)
+ 
+ targets += vmlinux.o
+diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+index 47da25b3ba7d..d800b2c0af97 100755
+--- a/scripts/clang-tools/gen_compile_commands.py
++++ b/scripts/clang-tools/gen_compile_commands.py
+@@ -109,20 +109,6 @@ def to_cmdfile(path):
+     return os.path.join(dir, '.' + base + '.cmd')
+ 
+ 
+-def cmdfiles_for_o(obj):
+-    """Generate the iterator of .cmd files associated with the object
 -
--input-symdump := Module.symvers $(KBUILD_EXTRA_SYMBOLS)
-+module.symvers-if-present := $(wildcard Module.symvers)
- output-symdump := $(KBUILD_EXTMOD)/Module.symvers
-+missing-input := $(filter-out $(module.symvers-if-present), Module.symvers)
- 
--endif
+-    Yield the .cmd file used to build the given object
 -
--existing-input-symdump := $(wildcard $(input-symdump))
+-    Args:
+-        obj: The object path
 -
--# modpost options for modules (both in-kernel and external)
--MODPOST += \
--	$(addprefix -i ,$(existing-input-symdump)) \
--	$(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS)) \
--	$(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSDEPS),-N)
+-    Yields:
+-        The path to .cmd file
+-    """
+-    yield to_cmdfile(obj)
 -
--# 'make -i -k' ignores compile errors, and builds as many modules as possible.
--ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
--MODPOST += -n
--endif
-+MODPOST += -e $(addprefix -i ,$(module.symvers-if-present) (KBUILD_EXTRA_SYMBOLS))
- 
--# Clear VPATH to not search for *.symvers in $(srctree). Check only $(objtree).
--VPATH :=
--$(input-symdump):
--	@echo >&2 'WARNING: Symbol version dump "$@" is missing.'
--	@echo >&2 '         Modules may not have dependencies or modversions.'
--	@echo >&2 '         You may get many unresolved symbol warnings.'
-+endif # ($(KBUILD_EXTMOD),)
- 
--# KBUILD_MODPOST_WARN can be set to avoid error out in case of undefined symbols
--ifneq ($(KBUILD_MODPOST_WARN)$(filter-out $(existing-input-symdump), $(input-symdump)),)
-+ifneq ($(KBUILD_MODPOST_WARN)$(missing-input),)
- MODPOST += -w
- endif
- 
-+modorder-if-needed := $(if $(KBUILD_MODULES), $(MODORDER))
-+
- # Read out modules.order to pass in modpost.
- # Otherwise, allmodconfig would fail with "Argument list too long".
- quiet_cmd_modpost = MODPOST $@
--      cmd_modpost = sed 's/ko$$/o/' $< | $(MODPOST) -T -
 -
--$(output-symdump): $(MODORDER) $(input-symdump) FORCE
--	$(call if_changed,modpost)
-+      cmd_modpost = \
-+	$(if $(missing-input), \
-+		echo >&2 "WARNING: $(missing-input) is missing."; \
-+		echo >&2 "         Modules may not have dependencies or modversions."; \
-+		echo >&2 "         You may get many unresolved symbol warnings.";) \
-+	sed 's/ko$$/o/' $(or $(modorder-if-needed), /dev/null) | $(MODPOST) $(vmlinux.o-if-present) -T -
+ def cmdfiles_for_a(archive, ar):
+     """Generate the iterator of .cmd files associated with the archive.
  
- targets += $(output-symdump)
-+$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(moudle.symvers-if-present) FORCE
-+	$(call if_changed,modpost)
- 
- __modpost: $(output-symdump)
--ifneq ($(KBUILD_MODPOST_NOFINAL),1)
--	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
--endif
--
--endif
--
- PHONY += FORCE
- FORCE:
- 
+@@ -211,13 +197,10 @@ def main():
+     for path in paths:
+         # If 'path' is a directory, handle all .cmd files under it.
+         # Otherwise, handle .cmd files associated with the file.
+-        # Most of built-in objects are linked via archives (built-in.a or lib.a)
+-        # but some objects are linked to vmlinux directly.
++        # built-in objects are linked via vmlinux.a
+         # Modules are listed in modules.order.
+         if os.path.isdir(path):
+             cmdfiles = cmdfiles_in_dir(path)
+-        elif path.endswith('.o'):
+-            cmdfiles = cmdfiles_for_o(path)
+         elif path.endswith('.a'):
+             cmdfiles = cmdfiles_for_a(path, ar)
+         elif path.endswith('modules.order'):
 diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 07486f90d5e2..6a197d8a88ac 100755
+index 6a197d8a88ac..23ac13fd9d89 100755
 --- a/scripts/link-vmlinux.sh
 +++ b/scripts/link-vmlinux.sh
-@@ -214,9 +214,6 @@ if [ "$1" = "clean" ]; then
- 	exit 0
- fi
+@@ -3,17 +3,15 @@
+ #
+ # link vmlinux
+ #
+-# vmlinux is linked from the objects selected by $(KBUILD_VMLINUX_OBJS) and
+-# $(KBUILD_VMLINUX_LIBS). Most are built-in.a files from top-level directories
+-# in the kernel tree, others are specified in arch/$(ARCH)/Makefile.
++# vmlinux is linked from the objects in vmlinux.a and $(KBUILD_VMLINUX_LIBS).
++# vmlinux.a contains objects that are linked unconditionally.
+ # $(KBUILD_VMLINUX_LIBS) are archives which are linked conditionally
+ # (not within --whole-archive), and do not require symbol indexes added.
+ #
+ # vmlinux
+ #   ^
+ #   |
+-#   +--< $(KBUILD_VMLINUX_OBJS)
+-#   |    +--< init/built-in.a drivers/built-in.a mm/built-in.a + more
++#   +--< vmlinux.a
+ #   |
+ #   +--< $(KBUILD_VMLINUX_LIBS)
+ #   |    +--< lib/lib.a + more
+@@ -67,7 +65,7 @@ vmlinux_link()
+ 		objs=vmlinux.o
+ 		libs=
+ 	else
+-		objs="${KBUILD_VMLINUX_OBJS}"
++		objs=vmlinux.a
+ 		libs="${KBUILD_VMLINUX_LIBS}"
+ 	fi
  
--# modpost vmlinux.o to check for section mismatches
--${MAKE} -f "${srctree}/scripts/Makefile.modpost" MODPOST_VMLINUX=1
--
- info MODINFO modules.builtin.modinfo
- ${OBJCOPY} -j .modinfo -O binary vmlinux.o modules.builtin.modinfo
- info GEN modules.builtin
 -- 
 2.34.1
 
