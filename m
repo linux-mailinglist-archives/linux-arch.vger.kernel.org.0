@@ -2,50 +2,49 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F48D5A3DD5
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 15:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2935A3DED
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 16:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiH1Nmz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 28 Aug 2022 09:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
+        id S229795AbiH1OAi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Aug 2022 10:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiH1Nmy (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Aug 2022 09:42:54 -0400
-X-Greylist: delayed 39750 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 28 Aug 2022 06:42:53 PDT
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565492A976;
-        Sun, 28 Aug 2022 06:42:53 -0700 (PDT)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 27SDgWgV023777;
-        Sun, 28 Aug 2022 22:42:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 27SDgWgV023777
+        with ESMTP id S229500AbiH1OAe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Aug 2022 10:00:34 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE5AD12A;
+        Sun, 28 Aug 2022 07:00:32 -0700 (PDT)
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 27SE0JA4019945;
+        Sun, 28 Aug 2022 23:00:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 27SE0JA4019945
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661694152;
-        bh=z4Xqt1t3U8i2O7vXSoTPh8j9K9PhDYbKNgs8kKYDV1o=;
+        s=dec2015msa; t=1661695219;
+        bh=E9rWh6cQtF+KpJLfWwXtqrqWDjD/vKIz6Ga3nB6xPh4=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uVY2LLahiuzU5P6iUVr4GMtaE/tgTvx9CO084RPZwv42yHOXljg2wZ02Nb3j+p515
-         V2KpOZTCV/MQ2D/rikCs5SV4hyK1fcfauIsBHl/kcfnMZ2J+1Cs1qdA5iPRyHHf8LJ
-         HubNzQY9/8Jge1DWCyePnIv4mDGEZiuQWirJq4V1vWu4TAorMZDWdEH27dVUswWJ0g
-         CyJ09Bw4qeq/SzR2Z/fQIzuiKeb2nMoC/AqbzWerL7nt9MQ7AUJ0Bwgi51p0sSeHJd
-         /RTJKgIqOH7TvxEnY8x7jSi/CzVyNp/L/5w/t+YLdZG6uMPgoH3R+RLJxZ05Xcw8cl
-         ws/VpQgNLf9Jg==
-X-Nifty-SrcIP: [209.85.167.169]
-Received: by mail-oi1-f169.google.com with SMTP id a133so7675153oif.4;
-        Sun, 28 Aug 2022 06:42:32 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1qzharr7QoCoBNty3YZsEQ5LRXbcYrftC5sI8ct8Ec7P9vjJgf
-        9zxobt6uy9Fnv1OpKMsUjeVj27lEHnzGhxUhYeg=
-X-Google-Smtp-Source: AA6agR5/dNBUarv8LbAmH7c6K5aolE/19K18Dh+wEMFcWatmWpXO2YUZjTMWUWYTjVObDjOmKGFqJnhFGrCSCc4PlG8=
-X-Received: by 2002:a05:6808:1189:b0:33a:34b3:6788 with SMTP id
- j9-20020a056808118900b0033a34b36788mr5201457oil.194.1661694151532; Sun, 28
- Aug 2022 06:42:31 -0700 (PDT)
+        b=WjuxRLDPHkfBc/dd4RNCInM+RAFs2PwzQVgkYdhgx1V/7tyTsYVK5NuD4wmA3DaNv
+         kXQObz+1+q4iBGoPpuOZXfuongTYXL+37ohevY/fQbl4zopT03eN+S+gZdWhPw++4J
+         yjQxdf63B7/UaSXfvzuXHqiKP8wRXSGs7pAUGW9NOvm71IVo7TR6JJY7bacLDGzx/T
+         8+P4EJS5uNv9JzOaGACHJzcAOu5VkldDtblWlMNV35HA/hJ7V7mRJsQxAx99Z1yfNl
+         Tili0AtM5pi1+f42jvBrfNRe/QsrEGWpeRx3zi50BGcJ1DmrZ7IPk72PGv18fkFPr0
+         ugqtWQrbhktIA==
+X-Nifty-SrcIP: [209.85.167.177]
+Received: by mail-oi1-f177.google.com with SMTP id r124so7678173oig.11;
+        Sun, 28 Aug 2022 07:00:19 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0yKd84QWZkEJPWlykJohwgMRAZnKtPu/1/Buab6lcsHZHNyfSG
+        QyJeEapZrkQX4ORA1XjnnBI21apbyrC13sgs+vE=
+X-Google-Smtp-Source: AA6agR5EkiJ1fe36qEtDYYDu0Nt0DM0xDvkra63z5irBVebjc1EFBlY7qkkEE8l5R0hgIPRlVYuFHJ9NSzx+oJmdMw8=
+X-Received: by 2002:a05:6808:2099:b0:343:49f5:5300 with SMTP id
+ s25-20020a056808209900b0034349f55300mr5198934oiw.287.1661695218338; Sun, 28
+ Aug 2022 07:00:18 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220817161438.32039-2-ysionneau@kalray.eu> <31ce5305-a76b-13d7-ea55-afca82c46cf2@kalray.eu>
  <CAMj1kXF8mZ_pK38T=dCU6Rewqq23pPM5HwnZHyx1cGgo0F7Mew@mail.gmail.com> <fbf47f7c-7d42-4510-6dd4-92f46ec70819@kalray.eu>
 In-Reply-To: <fbf47f7c-7d42-4510-6dd4-92f46ec70819@kalray.eu>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 28 Aug 2022 22:41:55 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATHV19jeYs-y=kpussNWPq_AkcczxaryQoy9OWTSUGV4g@mail.gmail.com>
-Message-ID: <CAK7LNATHV19jeYs-y=kpussNWPq_AkcczxaryQoy9OWTSUGV4g@mail.gmail.com>
+Date:   Sun, 28 Aug 2022 22:59:42 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARfwLjoEeJ=s5VSi9tbA0wBSzR93--OnZh0oGfvuvw_9w@mail.gmail.com>
+Message-ID: <CAK7LNARfwLjoEeJ=s5VSi9tbA0wBSzR93--OnZh0oGfvuvw_9w@mail.gmail.com>
 Subject: Re: [RFC PATCH 1/1] Fix __kcrctab+* sections alignment
 To:     Yann Sionneau <ysionneau@kalray.eu>
 Cc:     Ard Biesheuvel <ardb@kernel.org>,
@@ -108,52 +107,31 @@ On Thu, Aug 25, 2022 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wrote:
 > Well, I am not completely sure about that. See my cover letter, previous
 > mechanism for symbol CRC was actually enforcing the section alignment to
 > 4 bytes boundary as well.
-
-I do not think so.
-
-
-I do not see such alignment in for __CRC_SYMBOL() in
-include/linux/export.h
-
-If you are talking about KCRC_ALIGN
-in include/asm-generic/export.h, it is only used by *.S.
-
-
-Most of EXPORT_SYMBOL's are defined in *.c files,
-which include <linux/export.h>
-
-If I am missing something, please point me to the code.
-
-
-
-
-
-
-
-
 >
 > Also, I'm not sure it is forbidden for an architecture/compiler
 > implementation to actually enforce a stronger alignment on u32, which in
 > theory would not break anything.
-
-It seems like an interesting compiler.
-
-Does it also enforce 8 byte alignment to u8?
-(that is, 7-byte padding for u8 ?)
-
-
-
 >
 > But in this precise case it does break something since it will cause
 > "gaps" in the end result vmlinux binary segment. For this to work I
 > think we really want to enforce a 4 bytes alignment on the section.
 
 
-My best guess it, it was previously working for the kvm compiler
-because include/linux/export.h previously used an inline assembler.
 
-The kvm toolchain presumably gives natural alignment/padding
-to '.long' assembly directive, but enforces 8-byte to u32.
+Please teach me a bit more about the kvm compiler.
+
+
+
+How does it get access to an array of u32?
+
+u32 foo[2] = { 1, 2 };
+
+
+Does the compiler insert padding between each element
+so that both of &foo[0] and &foo[1] are 8-byte aligned?
+
+Or, no padding, and the address of &foo[1] is  8 n + 4?
+
 
 
 
