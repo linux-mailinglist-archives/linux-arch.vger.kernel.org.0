@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DB75A3B0C
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7595A3B0F
+	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 04:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbiH1Cnz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 27 Aug 2022 22:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        id S229787AbiH1CpL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 27 Aug 2022 22:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiH1Cnv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:43:51 -0400
-Received: from condef-07.nifty.com (condef-07.nifty.com [202.248.20.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060E1252BD
-        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:43:50 -0700 (PDT)
-Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-07.nifty.com with ESMTP id 27S2emww032022
-        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:48 +0900
+        with ESMTP id S231730AbiH1CpH (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 27 Aug 2022 22:45:07 -0400
+Received: from condef-04.nifty.com (condef-04.nifty.com [202.248.20.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4F813E12
+        for <linux-arch@vger.kernel.org>; Sat, 27 Aug 2022 19:44:59 -0700 (PDT)
+Received: from conuserg-11.nifty.com ([10.126.8.74])by condef-04.nifty.com with ESMTP id 27S2ekdJ013996
+        for <linux-arch@vger.kernel.org>; Sun, 28 Aug 2022 11:40:46 +0900
 Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27S2e6Gu030639;
-        Sun, 28 Aug 2022 11:40:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gu030639
+        by conuserg-11.nifty.com with ESMTP id 27S2e6Gv030639;
+        Sun, 28 Aug 2022 11:40:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27S2e6Gv030639
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
         s=dec2015msa; t=1661654413;
-        bh=bA4m7Oj/dBBjOfmTbtXEU7Zl9NzP1RzoFwx0p/QmZlA=;
+        bh=c4JLe00xA9RgTRCfMjXiEpEE/KAsTw3rpMQcsPLh0ZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O2dRWT6MQavqXDxUN3pVnGLgUD4HO43Wk2TWKy9LF2Vemr+cDDemDALWxndEmT5by
-         02DRkaIy9XWLGK6NJ3BIxxBm8AhmMTDqaZP1XpOQDNXoXeryRepwz5obLdTrMlVnr9
-         78IfjEJ+fcOyaEpeUfZ8BDpqD5RIAeMgNrUiOURg5xi8JmO8wA30J5XXJuOHxVlnKC
-         qUFdBn+CGfujKidnvGE0bhU6gZdNy3YcTQIA7Bnc5wAgxgG6/v/m/EMUjTr2g5cBOS
-         npdKPEfulBLS5mtxfhLrEuxO5nRQdCDQ7y9SwQ1r+MnWMI9A3ZZ0LB8HgfSULuPmt6
-         lpDwLNC87xBMg==
+        b=fbQ2DU6RDyVxBSYcBy2FbYeEEAGZuEyqfiqvnwLbWfwNkmTUIyj8nbPFuEUXwzmPe
+         dckYQCuux3GE6MhbTzQvrFfCZAISinEoMC9JACzSAkwY1x+Kbk7tIEEp/clvGfxFqV
+         04ed/CVsmu+x958ovmfrARVc5JXjUsWg8lG/0Y30s9tlYjTvJi2OOEoLIVzrxQWgbV
+         to8bjEfLrY8vD1H1YJef8W/k9BRXA6vRwfD80ld2fF2m1bTEYhyd8JABfIdakaTF17
+         mjWCccCvd2dBaPq6pkiJmMbiY/HP4GS34SC2lZ7R1tvfbj9fSu32UZGX6WYbvr8H1U
+         o9+xrdZXehjng==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 12/15] kbuild: move vmlinux.o rule to the top Makefile
-Date:   Sun, 28 Aug 2022 11:40:00 +0900
-Message-Id: <20220828024003.28873-13-masahiroy@kernel.org>
+Subject: [PATCH 13/15] kbuild: unify two modpost invocations
+Date:   Sun, 28 Aug 2022 11:40:01 +0900
+Message-Id: <20220828024003.28873-14-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
 References: <20220828024003.28873-1-masahiroy@kernel.org>
@@ -52,68 +52,301 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Move the build rules of vmlinux.o out of scripts/link-vmlinux.sh to
-clearly separate 1) pre-modpost, 2) modpost, 3) post-modpost stages.
-This will make furture refactoring possible.
+Currently, modpost is executed twice; first for vmlinux, second
+for modules.
+
+This commit unfies them.
+
+Current build flow
+==================
+
+  1) build obj-y and obj-m objects
+    2) link vmlinux.o
+      3) modpost for vmlinux
+        4) link vmlinux
+          5) modpost for modules
+            6) link modules (*.ko)
+
+The build steps 1) through 6) are serialized (that is, modules are
+built after vmlinux). We do not get benefits of parallel builds
+when scripts/link-vmlinux.sh is being run.
+
+New build flow
+==============
+
+  1) build obj-y and obj-m objects
+    2) link vmlinux.o
+      3) modpost for vmlinux and modules
+        4a) link vmlinux
+        4b) link modules (*.ko)
+
+In the new build flow, modpost is invoked just once.
+
+vmlinux and modules are built in parallel. One exception is
+CONFIG_DEBUG_INFO_BTF_MODULES=y, where modules depend on vmlinux.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- Makefile                | 10 ++++++++--
- scripts/link-vmlinux.sh |  3 ---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ Makefile                  | 30 ++++++++++---
+ scripts/Makefile.modfinal |  2 +-
+ scripts/Makefile.modpost  | 93 ++++++++++++---------------------------
+ scripts/link-vmlinux.sh   |  3 --
+ 4 files changed, 53 insertions(+), 75 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 02724bcf8fdc..d81b7a587b43 100644
+index d81b7a587b43..292b6e90da20 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -645,6 +645,8 @@ else
- __all: modules
- endif
- 
-+targets :=
-+
- # Decide whether to build built-in, modular, or both.
- # Normally, just do built-in.
- 
-@@ -1153,6 +1155,10 @@ quiet_cmd_autoksyms_h = GEN     $@
- $(autoksyms_h):
- 	$(call cmd,autoksyms_h)
- 
-+targets += vmlinux.o
-+vmlinux.o: autoksyms_recursive $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
-+	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_o
-+
- ARCH_POSTLINK := $(wildcard $(srctree)/arch/$(SRCARCH)/Makefile.postlink)
- 
- # Final link of vmlinux with optional arch pass after final link
-@@ -1160,10 +1166,10 @@ cmd_link-vmlinux =                                                 \
+@@ -1166,7 +1166,7 @@ cmd_link-vmlinux =                                                 \
  	$(CONFIG_SHELL) $< "$(LD)" "$(KBUILD_LDFLAGS)" "$(LDFLAGS_vmlinux)";    \
  	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
  
--vmlinux: scripts/link-vmlinux.sh autoksyms_recursive $(vmlinux-deps) FORCE
-+vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
+-vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
++vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) modpost FORCE
  	+$(call if_changed_dep,link-vmlinux)
  
--targets := vmlinux
-+targets += vmlinux
+ targets += vmlinux
+@@ -1443,7 +1443,13 @@ endif
+ # Build modules
+ #
  
- # The actual objects are generated when descending,
- # make sure no implicit rule kicks in
+-modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_prepare
++# *.ko are usually independent of vmlinux, but CONFIG_DEBUG_INFOBTF_MODULES
++# is an exception.
++ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++modules: vmlinux
++endif
++
++modules: modules_prepare
+ 
+ # Target to prepare building external modules
+ modules_prepare: prepare
+@@ -1766,8 +1772,12 @@ targets += $(MODORDER)
+ $(MODORDER): $(subdir-modorder) FORCE
+ 	$(call if_changed,modules_order)
+ 
+-modules: modules_check
+-	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
++# KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
++# This is solely useful to speed up test compiles.
++modules: modpost
++ifneq ($(KBUILD_MODPOST_NOFINAL),1)
++	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
++endif
+ 
+ PHONY += modules_check
+ modules_check: $(MODORDER)
+@@ -1798,6 +1808,11 @@ KBUILD_MODULES :=
+ 
+ endif # CONFIG_MODULES
+ 
++PHONY += modpost
++modpost: $(if $(single-build),, $(if $(KBUILD_BUILTIN), vmlinux.o)) \
++	 $(if $(KBUILD_MODULES), modules_check)
++	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
++
+ # Single targets
+ # ---------------------------------------------------------------------------
+ # To build individual files in subdirectories, you can do like this:
+@@ -1817,16 +1832,19 @@ single-ko := $(sort $(filter %.ko, $(MAKECMDGOALS)))
+ single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS)) \
+ 		$(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
+ 
+-$(single-ko): single_modpost
++$(single-ko): single_modules
+ 	@:
+ $(single-no-ko): descend
+ 	@:
+ 
+ # Remove MODORDER when done because it is not the real one.
+ PHONY += single_modpost
+-single_modpost: $(single-no-ko) modules_prepare
++single_modules: $(single-no-ko) modules_prepare
+ 	$(Q){ $(foreach m, $(single-ko), echo $(extmod_prefix)$m;) } > $(MODORDER)
+ 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
++ifneq ($(KBUILD_MODPOST_NOFINAL),1)
++	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
++endif
+ 	$(Q)rm -f $(MODORDER)
+ 
+ export KBUILD_SINGLE_TARGETS := $(addprefix $(extmod_prefix), $(single-no-ko))
+diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+index 35100e981f4a..a3cf9e3647c9 100644
+--- a/scripts/Makefile.modfinal
++++ b/scripts/Makefile.modfinal
+@@ -55,7 +55,7 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+ 	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+ 
+ # Re-generate module BTFs if either module's .ko or vmlinux changed
+-$(modules): %.ko: %.o %.mod.o scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
++$(modules): %.ko: %.o %.mod.o scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),vmlinux) FORCE
+ 	+$(call if_changed_except,ld_ko_o,vmlinux)
+ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+ 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index 04ad00917b2f..d7d3138c5ecc 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -32,9 +32,6 @@
+ # Step 4 is solely used to allow module versioning in external modules,
+ # where the CRC of each module is retrieved from the Module.symvers file.
+ 
+-# KBUILD_MODPOST_NOFINAL can be set to skip the final link of modules.
+-# This is solely useful to speed up test compiles
+-
+ PHONY := __modpost
+ __modpost:
+ 
+@@ -45,24 +42,23 @@ MODPOST = scripts/mod/modpost								\
+ 	$(if $(CONFIG_MODVERSIONS),-m)							\
+ 	$(if $(CONFIG_MODULE_SRCVERSION_ALL),-a)					\
+ 	$(if $(CONFIG_SECTION_MISMATCH_WARN_ONLY),,-E)					\
++	$(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS))					\
++	$(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSDEPS),-N)	\
+ 	-o $@
+ 
+-ifdef MODPOST_VMLINUX
+-
+-quiet_cmd_modpost = MODPOST $@
+-      cmd_modpost = $(MODPOST) $<
+-
+-vmlinux.symvers: vmlinux.o
+-	$(call cmd,modpost)
++# 'make -i -k' ignores compile errors, and builds as many modules as possible.
++ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
++MODPOST += -n
++endif
+ 
+-__modpost: vmlinux.symvers
++ifeq ($(KBUILD_EXTMOD),)
+ 
+ # Generate the list of in-tree objects in vmlinux
+ # ---------------------------------------------------------------------------
+ 
+ # This is used to retrieve symbol versions generated by genksyms.
+ ifdef CONFIG_MODVERSIONS
+-vmlinux.symvers: .vmlinux.objs
++vmlinux.symvers Module.symvers: .vmlinux.objs
+ endif
+ 
+ # Ignore libgcc.a
+@@ -83,24 +79,12 @@ targets += .vmlinux.objs
+ .vmlinux.objs: $(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
+ 	$(call if_changed,vmlinux_objs)
+ 
+-else
+-
+-ifeq ($(KBUILD_EXTMOD),)
+-
+-input-symdump := vmlinux.symvers
+-output-symdump := modules-only.symvers
+-
+-quiet_cmd_cat = GEN     $@
+-      cmd_cat = cat $(real-prereqs) > $@
+-
+-ifneq ($(wildcard vmlinux.symvers),)
+-
+-__modpost: Module.symvers
+-Module.symvers: vmlinux.symvers modules-only.symvers FORCE
+-	$(call if_changed,cat)
+-
+-targets += Module.symvers
++vmlinux.o-if-present := $(wildcard vmlinux.o)
++output-symdump := vmlinux.symvers
+ 
++ifdef KBUILD_MODULES
++output-symdump := $(if $(vmlinux.o-if-present), Module.symvers, modules-only.symvers)
++missing-input := $(filter-out $(vmlinux.o-if-present),vmlinux.o)
+ endif
+ 
+ else
+@@ -112,56 +96,35 @@ src := $(obj)
+ # Include the module's Makefile to find KBUILD_EXTRA_SYMBOLS
+ include $(or $(wildcard $(src)/Kbuild), $(src)/Makefile)
+ 
+-# modpost option for external modules
+-MODPOST += -e
+-
+-input-symdump := Module.symvers $(KBUILD_EXTRA_SYMBOLS)
++module.symvers-if-present := $(wildcard Module.symvers)
+ output-symdump := $(KBUILD_EXTMOD)/Module.symvers
++missing-input := $(filter-out $(module.symvers-if-present), Module.symvers)
+ 
+-endif
+-
+-existing-input-symdump := $(wildcard $(input-symdump))
+-
+-# modpost options for modules (both in-kernel and external)
+-MODPOST += \
+-	$(addprefix -i ,$(existing-input-symdump)) \
+-	$(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS)) \
+-	$(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSDEPS),-N)
+-
+-# 'make -i -k' ignores compile errors, and builds as many modules as possible.
+-ifneq ($(findstring i,$(filter-out --%,$(MAKEFLAGS))),)
+-MODPOST += -n
+-endif
++MODPOST += -e $(addprefix -i ,$(module.symvers-if-present) (KBUILD_EXTRA_SYMBOLS))
+ 
+-# Clear VPATH to not search for *.symvers in $(srctree). Check only $(objtree).
+-VPATH :=
+-$(input-symdump):
+-	@echo >&2 'WARNING: Symbol version dump "$@" is missing.'
+-	@echo >&2 '         Modules may not have dependencies or modversions.'
+-	@echo >&2 '         You may get many unresolved symbol warnings.'
++endif # ($(KBUILD_EXTMOD),)
+ 
+-# KBUILD_MODPOST_WARN can be set to avoid error out in case of undefined symbols
+-ifneq ($(KBUILD_MODPOST_WARN)$(filter-out $(existing-input-symdump), $(input-symdump)),)
++ifneq ($(KBUILD_MODPOST_WARN)$(missing-input),)
+ MODPOST += -w
+ endif
+ 
++modorder-if-needed := $(if $(KBUILD_MODULES), $(MODORDER))
++
+ # Read out modules.order to pass in modpost.
+ # Otherwise, allmodconfig would fail with "Argument list too long".
+ quiet_cmd_modpost = MODPOST $@
+-      cmd_modpost = sed 's/ko$$/o/' $< | $(MODPOST) -T -
+-
+-$(output-symdump): $(MODORDER) $(input-symdump) FORCE
+-	$(call if_changed,modpost)
++      cmd_modpost = \
++	$(if $(missing-input), \
++		echo >&2 "WARNING: $(missing-input) is missing."; \
++		echo >&2 "         Modules may not have dependencies or modversions."; \
++		echo >&2 "         You may get many unresolved symbol warnings.";) \
++	sed 's/ko$$/o/' $(or $(modorder-if-needed), /dev/null) | $(MODPOST) $(vmlinux.o-if-present) -T -
+ 
+ targets += $(output-symdump)
++$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(moudle.symvers-if-present) FORCE
++	$(call if_changed,modpost)
+ 
+ __modpost: $(output-symdump)
+-ifneq ($(KBUILD_MODPOST_NOFINAL),1)
+-	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modfinal
+-endif
+-
+-endif
+-
+ PHONY += FORCE
+ FORCE:
+ 
 diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 161bca64e8aa..07486f90d5e2 100755
+index 07486f90d5e2..6a197d8a88ac 100755
 --- a/scripts/link-vmlinux.sh
 +++ b/scripts/link-vmlinux.sh
 @@ -214,9 +214,6 @@ if [ "$1" = "clean" ]; then
  	exit 0
  fi
  
--#link vmlinux.o
--${MAKE} -f "${srctree}/scripts/Makefile.vmlinux_o"
+-# modpost vmlinux.o to check for section mismatches
+-${MAKE} -f "${srctree}/scripts/Makefile.modpost" MODPOST_VMLINUX=1
 -
- # modpost vmlinux.o to check for section mismatches
- ${MAKE} -f "${srctree}/scripts/Makefile.modpost" MODPOST_VMLINUX=1
- 
+ info MODINFO modules.builtin.modinfo
+ ${OBJCOPY} -j .modinfo -O binary vmlinux.o modules.builtin.modinfo
+ info GEN modules.builtin
 -- 
 2.34.1
 
