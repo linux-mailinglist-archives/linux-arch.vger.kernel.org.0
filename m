@@ -2,130 +2,111 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBD05A3DF1
-	for <lists+linux-arch@lfdr.de>; Sun, 28 Aug 2022 16:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1115A4100
+	for <lists+linux-arch@lfdr.de>; Mon, 29 Aug 2022 04:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiH1OGD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 28 Aug 2022 10:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S229476AbiH2CPu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 28 Aug 2022 22:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiH1OGB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Aug 2022 10:06:01 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E346411829;
-        Sun, 28 Aug 2022 07:05:57 -0700 (PDT)
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 27SE5hJY027964;
-        Sun, 28 Aug 2022 23:05:43 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 27SE5hJY027964
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661695544;
-        bh=7p5xEPIE0raguxuqb9tD1++pwdD0zB8NLEYhYSPu/IQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZDCRt1bfvQTNSNT/0wrEHkz5x+qJ+FXgOtLTL/KKBxoJ4U2gU673SXYI1OhtLDjVA
-         4XLEkOhfXkCpw2EAZFg+Ci1SkH+8a3F9K0klteXaFDVVORVkUE1Cj6Id2lLTNS9KRM
-         jbGk4fy8ZqSS5wXWgi2CUx2b2dtpNjaPvDDHxDTIz+i3rSQd1MHnBXRO+PdznuyfkN
-         hK8TrqJoNlZ1v/iDC4Hii66gyDP63+t+UJ0mH99Q5UQhuEUUE4t0+kgJq+c+Kp025b
-         mj/NtaHQf0p9/G/Q0zZ2gGuDCxUmwBOgRPKQmW2yVyjgNmVb3cRnckrEay3GMRSN/t
-         58myAFCNffXdA==
-X-Nifty-SrcIP: [209.85.160.52]
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11eb8b133fbso3311365fac.0;
-        Sun, 28 Aug 2022 07:05:43 -0700 (PDT)
-X-Gm-Message-State: ACgBeo1l70qejLS2GnPlkxahj1z/7tn9kK1AirLDA0zNkziVBnQi89Xe
-        ZMamCt7jwbeoamd67CCInlB33nm23C3lE+Z3wsU=
-X-Google-Smtp-Source: AA6agR6kkMIeaI/O17CfGjD2nBsyny/Gn0xIrAbAaim7m9/xcWUWWXRceQCWXvs2mtYynFImUo+tpNppj3iJP84luWg=
-X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
- ba11-20020a056870c58b00b0010bd21dad5emr5664935oab.287.1661695542843; Sun, 28
- Aug 2022 07:05:42 -0700 (PDT)
+        with ESMTP id S229446AbiH2CPu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 28 Aug 2022 22:15:50 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4BD20BD6;
+        Sun, 28 Aug 2022 19:15:48 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id lx1so12928415ejb.12;
+        Sun, 28 Aug 2022 19:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=EIPwhjUv8h30K8Ui8w76NDyV5Lb0v5YJ4+waiGfUYPw=;
+        b=lrj39VVqxYQ3QhQecMZQznjhs1P9Sxae833V9b8ccarwRRnN4GZ85/Uy++/hbRM/AI
+         S5ZUWnd0+WHsYGn5zB7XfuWi85v5AGvjOTefUCTglvecUNH/O/esNPs7ZoW9nnZES++8
+         JnwDHtdYJYQ5gWwUpCdKFUQ2VKNHGA1fudyqErhkOBcjID6kTjCXKQN0pCCcZ3WCN77/
+         FynJZOC2DixFConIBgttZKC+XcX5GiMhb8OA4pHFgOWXoM3dFhxvfKkZfgFYkHegULOd
+         twR6vc7cxWXeLz+CgHC4rsdgufvKpLzoUxCoy7t65KpBCr9+v9EqBd2vtQJ539+9Cse1
+         Jyeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=EIPwhjUv8h30K8Ui8w76NDyV5Lb0v5YJ4+waiGfUYPw=;
+        b=hZX4Iyvh67PleJmOE3YQZ1XOIOeB1L9DcRv3r0T5f1EuxdDnysV2b4D89oJ5x5M/Uv
+         tFiXMZ593M3qSerB9gdToyLKNqoc/3yca2ciWVtFRmzy2UsQKk2C0XTnDGHHGmAtaQ9T
+         +wX9Mj1VQZ0MgivzBwxcvrxgHEn58EbCXt4hqc30LTgv2uDkgoNjGhHYnPa+pw7NynCi
+         iZASfQ+OmYm5yJMlB5fxCs4ZlsxQ4Mk5YrlAreB/ACWJFQf3sBiH7EXca6h2ByDweFHy
+         ThaR3Rn3TaTMSk8fcTrL354enKdF93r47lyJ6kWD9YTqYLq3Ceh4fmxyBA0KhXTyR8uB
+         jFrA==
+X-Gm-Message-State: ACgBeo31+1YUKjgAdAhpzRvsXx0IT+FA8h7lUke8WFV/rgoTIdNuxh9I
+        Y+FbbtKobqV/qXFvLDTrymk=
+X-Google-Smtp-Source: AA6agR7tMQVy6YI+ggn4+GffgrFazqfTH/PEdWMK5FMxPLUod5/1IRNyQy3jgj42r5K7TpNiq77Yhg==
+X-Received: by 2002:a17:907:60c7:b0:731:17e4:7fcc with SMTP id hv7-20020a17090760c700b0073117e47fccmr12058833ejc.73.1661739347185;
+        Sun, 28 Aug 2022 19:15:47 -0700 (PDT)
+Received: from anparri (host-95-238-28-128.retail.telecomitalia.it. [95.238.28.128])
+        by smtp.gmail.com with ESMTPSA id o4-20020aa7c504000000b004485afde654sm1867806edq.6.2022.08.28.19.15.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Aug 2022 19:15:46 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 04:15:42 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, will@kernel.org,
+        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
+        luc.maranget@inria.fr, akiyks@gmail.com, dlustig@nvidia.com,
+        joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
+ Memory Models"
+Message-ID: <YwwhG8bzsKlJ2eEY@anparri>
+References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
+ <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
+ <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
+ <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
+ <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
+ <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
 MIME-Version: 1.0
-References: <20220817161438.32039-2-ysionneau@kalray.eu> <31ce5305-a76b-13d7-ea55-afca82c46cf2@kalray.eu>
- <CAMj1kXF8mZ_pK38T=dCU6Rewqq23pPM5HwnZHyx1cGgo0F7Mew@mail.gmail.com>
- <fbf47f7c-7d42-4510-6dd4-92f46ec70819@kalray.eu> <CAMj1kXHeSemLqAhbBLMGkK4G1225NZbaQvnR3wAWYfJr4AReaw@mail.gmail.com>
- <CAMuHMdUJZBPuD1=3SMg4G1-UoBr5Evd8mBfhxxuAaoh=K6Rm+w@mail.gmail.com> <CAMj1kXF6TchD4g0qO1OeEwt8QYU_TZEriE=1yaCxXrNGBYjmCA@mail.gmail.com>
-In-Reply-To: <CAMj1kXF6TchD4g0qO1OeEwt8QYU_TZEriE=1yaCxXrNGBYjmCA@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 28 Aug 2022 23:05:06 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ0wiBZB7XDZVodXWtP5m_H-e_xQ78z_eJ82W3pFrKWfQ@mail.gmail.com>
-Message-ID: <CAK7LNAQ0wiBZB7XDZVodXWtP5m_H-e_xQ78z_eJ82W3pFrKWfQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] Fix __kcrctab+* sections alignment
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yann Sionneau <ysionneau@kalray.eu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 7:17 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 25 Aug 2022 at 20:01, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> >
-> > Hi Ard,
-> >
-> > On Thu, Aug 25, 2022 at 2:56 PM Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > On Thu, 25 Aug 2022 at 14:21, Yann Sionneau <ysionneau@kalray.eu> wrote:
-> > > > Well, I am not completely sure about that. See my cover letter, previous
-> > > > mechanism for symbol CRC was actually enforcing the section alignment to
-> > > > 4 bytes boundary as well.
-> >
-> > Yes, because else it may become 2-byte aligned on m68k.
-> >
-> > > > Also, I'm not sure it is forbidden for an architecture/compiler
-> > > > implementation to actually enforce a stronger alignment on u32, which in
-> > > > theory would not break anything.
-> > > >
-> > >
-> > > u32 is a Linux type, and Linux expects natural alignment (and padding).
-> >
-> > Is it? You probably mean its alignment should not be larger than
-> > 4 bytes? Less has been working since basically forever.
-> >
->
-> You are quite right. of course. And indeed, the issue here is padding
-> not alignment.
->
+> FWIW, C++ defines this as (in https://eel.is/c++draft/atomics#order-11):
+> 
+> 	Implementations should make atomic stores visible to atomic
+> 	loads within a reasonable amount of time.
+> 
+> in other words:
+> 
+> if one thread does an atomic store, then all other threads must see that
+> store eventually.
+> 
+> (from: https://rust-lang.zulipchat.com/#narrow/stream/136281-t-lang.2Fwg-unsafe-code-guidelines/topic/Rust.20forward.20progress.20guarantees/near/294702950)
+> 
+> Should we add something somewhere in our model, maybe in the
+> explanation.txt?
 
-I do not know if __align(4) should be used to avoid the padding issue.
+FYI, that's briefly mentioned in Section 11, "CACHE COHERENCE AND THE
+COHERENCE ORDER RELATION: co, coi, and coe":
+
+  "sequential consistency per variable and cache coherence mean the
+   same thing except that cache coherence includes an extra requirement
+   that every store eventually becomes visible to every CPU"
+
+  Andrea
 
 
-
-Do you think it is a good idea to use an inline assembler,
-as prior to 7b4537199a4a8480b8c3ba37a2d44765ce76cd9b ?
-
-
-This patch:
-
-diff --git a/include/linux/export-internal.h b/include/linux/export-internal.h
-index c2b1d4fd5987..fb90f326b1b5 100644
---- a/include/linux/export-internal.h
-+++ b/include/linux/export-internal.h
-@@ -12,6 +12,9 @@
-
- /* __used is needed to keep __crc_* for LTO */
- #define SYMBOL_CRC(sym, crc, sec)   \
--       u32 __section("___kcrctab" sec "+" #sym) __used __crc_##sym = crc
-+       asm(".section \"___kcrctab" sec "+" #sym "\",\"a\""     "\n" \
-+           "__crc_" #sym ":"                                   "\n" \
-+           ".long " #crc                                       "\n" \
-+           ".previous"                                         "\n")
-
- #endif /* __LINUX_EXPORT_INTERNAL_H__ */
-
-
-
-
-
-
-
---
-Best Regards
-
-Masahiro Yamada
+> Plus, I think we cannot express this in Herd because Herd uses
+> graph-based model (axiomatic model) instead of an operational model to
+> describe the model: axiomatic model cannot describe "something will
+> eventually happen". There was also some discussion in the zulip steam
+> of Rust unsafe-code-guidelines.
