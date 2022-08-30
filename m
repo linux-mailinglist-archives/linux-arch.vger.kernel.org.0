@@ -2,54 +2,54 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89595A6E5F
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 22:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0085A6E62
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 22:21:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiH3UVL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 Aug 2022 16:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S231521AbiH3UV5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Aug 2022 16:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiH3UVK (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 16:21:10 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83FE74DDC;
-        Tue, 30 Aug 2022 13:21:08 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id g14so9483112qto.11;
-        Tue, 30 Aug 2022 13:21:08 -0700 (PDT)
+        with ESMTP id S229914AbiH3UV4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 16:21:56 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB8B52E46;
+        Tue, 30 Aug 2022 13:21:55 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id w28so9492908qtc.7;
+        Tue, 30 Aug 2022 13:21:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=Bz05174cqW7AMJyc+1JWBKlip7+1YmmDgJ2cawhFu4c=;
-        b=gj0Nt3Kfe7oKlaasQM0+pr69WnfRr6SXKyZpFUQn0OOmPGD1eNeaTX6dGK+w1p6EZV
-         +rDx2cujr94wYsIKWm35MNqcnq7QKByDb2L/4TygQcZOJMDP/+1u6lkcW1PqRr7wTT4T
-         8vqNF17itYMfobBmaaQOz5N1O6U325tWC+aS/ryAYcPWsVKP607APVOiSR0Vr78DjK50
-         /3/umVXuzVTQni+o7FativAUOTelebzUmdKQj/Xi8gqXLFc9532TV+i73L+UFR8h9Mq8
-         XcaZALp7iS4CPOWyozHBGXrsmFn9DrK165/phQSi4/X9I514bj/HqiLq3FQNmVnpHqZ2
-         B5Fg==
+        bh=GSwCSxkfswCTAr2W0z1p9wm8OPsGIVQ+vLw8r+QCbaI=;
+        b=n319MBFg0fYTSh7VP5cO10oaO8edZv/xWNrw7cy5VJI/79qfQEp9RdCxrEqW8qkiJG
+         brcnn03BWSCN55OFZOF+VAKsC8lbqcwMRTls8GozUjUDdipjjdahcGrj4OdUCrGV2xTv
+         m5Oflc3GWdKmZN21oyHOcEYrcGsrBrl0xxbYGtuNovusufG6XDfMA79gPLa2/IZTrJxq
+         qnUwiYFY3aHjJLkKTib/aIEby8FwdMMD8VcohEJ1j6Ndlj6AayluaWjbN1pH6s744ou8
+         /g+yXMBj7Nema420sJSOmode1xbhgIQehSWOY+U0GOXYTuT947QPPZXt2dsxPJSQO6fz
+         aSiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=Bz05174cqW7AMJyc+1JWBKlip7+1YmmDgJ2cawhFu4c=;
-        b=bgayfL4MHjvXjgmkTNARtyu9aBW7MlHkwujJ5Yuh4n/JSKAb5ggDQ7rF/EYEjezHtr
-         uUq93rkdH4uvQiMT76zLtVifrhyUWdpPuzczSg6ls/83OE73bfnfsbkrYajNapUJnIMV
-         NhpZkZ3ig6GfOW9hbv38XvN2w4smVEPmEeh9dhnU/1EXHP1Qb9V1p60IfJaryah9ZBaA
-         wm4OtpWOzn/uZ8ZinZ1VQltpakPOAEKEGDYULObK2BnpC/ToWC4EdZrhwYpgw4zcn4kb
-         OBI5TW6JtxRJjeULAmQjW7Fj6r/2/3YZ+a1cecJW8xJ2ZXWPz93k2XyvnOFiqDMuRkaX
-         JZjA==
-X-Gm-Message-State: ACgBeo3uaR2ZSu0Swo3t4KjagvarqRF+yZvOP/fWcE2a+yOaBTr7ElF4
-        bnWAgWNJW7nYN4IE1Xni6zXP1yrev7P6UvHGjXE=
-X-Google-Smtp-Source: AA6agR4of83BnXvtH1YLHe2IfGvNgWbJOdijvYQwtUd6ZD4mR9Jg/N3+N6Cij8KJTFh2kZBkptMbjiTgWk2ltNGoaHk=
-X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
- p17-20020a05622a049100b0034495bf8f05mr16412498qtx.61.1661890867719; Tue, 30
- Aug 2022 13:21:07 -0700 (PDT)
+        bh=GSwCSxkfswCTAr2W0z1p9wm8OPsGIVQ+vLw8r+QCbaI=;
+        b=HA3iBrGcY8tjAUkF9VkIQpLKZ/0z4kwVCz+YmJishqnys4KPI5fuklg7GYx3W45A+a
+         Pi9JthR/mKDrNspu9chjaJJ02YutWCWgC9Qg/cZLCqf/NIMpAyXgi69kk4SVlr37WCDk
+         zxd3Xh0q/uc9NdeWQzLRHhI45YqH+2pnmnzKN7iqZrbgrb9LObbeEMrOGHpPYnTAQJ2T
+         YBEwybkUHcZ4iOMMG0YZ3pkOAE44y5luQ8R35ECa9dYDtFooHg64hblB9AA9JyGoRoiW
+         jGioYIu0AlIH4w6N3uOAOEzibgoNqWVAg7XnnavuQuDYvStnXJ0LOBXh1ATaCkJl8nK0
+         0VYA==
+X-Gm-Message-State: ACgBeo211UXA9/kzijkZVspx5gXM/ZQP/aGyTyMOaErmscXBqhGvxEk0
+        sODUKOes4HUQrSTngkPJplWqGeC4bIy73Y8LL5A=
+X-Google-Smtp-Source: AA6agR5wtSa4e+dAhZJ/VjR9XzVzQcGJMQA0E4YnrC0fabueldGOqrkcSXmg1o/nKGytxwSARQloEsUQGHgtbRFOFXA=
+X-Received: by 2002:ac8:7f92:0:b0:344:8cd8:59a1 with SMTP id
+ z18-20020ac87f92000000b003448cd859a1mr16713627qtj.384.1661890914718; Tue, 30
+ Aug 2022 13:21:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <cover.1661789204.git.christophe.leroy@csgroup.eu>
+References: <cover.1661789204.git.christophe.leroy@csgroup.eu> <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
+In-Reply-To: <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 30 Aug 2022 23:20:31 +0300
-Message-ID: <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
+Date:   Tue, 30 Aug 2022 23:21:18 +0300
+Message-ID: <CAHp75VeFbjRN7OE5MH0_bbx5aSerj+2F_vpBjRZhT3QQ+3wmng@mail.gmail.com>
 Subject: Re: [PATCH v1 0/8] gpio: Get rid of ARCH_NR_GPIOS (v1)
 To:     Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
@@ -81,57 +81,39 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 7:17 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
+On Tue, Aug 30, 2022 at 11:20 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
 >
-> Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
-> there is no limitation on the number of GPIOs that can be allocated
-> in the system since the allocation is fully dynamic.
+> On Mon, Aug 29, 2022 at 7:17 PM Christophe Leroy
+> <christophe.leroy@csgroup.eu> wrote:
+> >
+> > Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
+> > there is no limitation on the number of GPIOs that can be allocated
+> > in the system since the allocation is fully dynamic.
+> >
+> > ARCH_NR_GPIOS is today only used in order to provide downwards
+> > gpiobase allocation from that value, while static allocation is
+> > performed upwards from 0. However that has the disadvantage of
+> > limiting the number of GPIOs that can be registered in the system.
+> >
+> > To overcome this limitation without requiring each and every
+> > platform to provide its 'best-guess' maximum number, rework the
+> > allocation to allocate from 256 upwards, allowing approx 2 millions
+> > of GPIOs.
+> >
+> > In the meantime, add a warning for drivers how are still doing
+> > static allocation, so that in the future the static allocation gets
+> > removed completely and dynamic allocation can start at base 0.
 >
-> ARCH_NR_GPIOS is today only used in order to provide downwards
-> gpiobase allocation from that value, while static allocation is
-> performed upwards from 0. However that has the disadvantage of
-> limiting the number of GPIOs that can be registered in the system.
->
-> To overcome this limitation without requiring each and every
-> platform to provide its 'best-guess' maximum number, rework the
-> allocation to allocate from 256 upwards, allowing approx 2 millions
-> of GPIOs.
->
-> In the meantime, add a warning for drivers how are still doing
-> static allocation, so that in the future the static allocation gets
-> removed completely and dynamic allocation can start at base 0.
+> For non-commented (by me or others) patches
+> Reviewed-by: Andy Shevchenko <andy.shevchenko!gmail.com>
 
-For non-commented (by me or others) patches
-Reviewed-by: Andy Shevchenko <andy.shevchenko!gmail.com>
-For the patch 1 if you are going to address as suggested by the author
-of the driver, you may also add my tag.
+Should be
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-> Christophe Leroy (8):
->   gpio: aggregator: Stop using ARCH_NR_GPIOS
->   gpio: davinci: Stop using ARCH_NR_GPIOS
->   gpiolib: Warn on drivers still using static gpiobase allocation
->   gpiolib: Get rid of ARCH_NR_GPIOS
->   Documentation: gpio: Remove text about ARCH_NR_GPIOS
->   x86: Remove CONFIG_ARCH_NR_GPIO
->   arm: Remove CONFIG_ARCH_NR_GPIO
->   arm64: Remove CONFIG_ARCH_NR_GPIO
->
->  Documentation/driver-api/gpio/legacy.rst |  5 ---
->  arch/arm/Kconfig                         | 21 ---------
->  arch/arm/include/asm/gpio.h              |  1 -
->  arch/arm64/Kconfig                       | 12 ------
->  arch/x86/Kconfig                         |  5 ---
->  drivers/gpio/gpio-aggregator.c           |  8 ++--
->  drivers/gpio/gpio-davinci.c              |  3 --
->  drivers/gpio/gpio-sta2x11.c              |  5 +--
->  drivers/gpio/gpiolib.c                   | 13 +++---
->  include/asm-generic/gpio.h               | 55 +++++++++---------------
->  10 files changed, 36 insertions(+), 92 deletions(-)
->
-> --
-> 2.37.1
->
+> For the patch 1 if you are going to address as suggested by the author
+> of the driver, you may also add my tag.
+
 
 
 -- 
