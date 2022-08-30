@@ -2,78 +2,76 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E0085A6E62
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 22:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A17C75A6EAB
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 22:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbiH3UV5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 Aug 2022 16:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S229565AbiH3UvQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Aug 2022 16:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiH3UV4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 16:21:56 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB8B52E46;
-        Tue, 30 Aug 2022 13:21:55 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id w28so9492908qtc.7;
-        Tue, 30 Aug 2022 13:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=GSwCSxkfswCTAr2W0z1p9wm8OPsGIVQ+vLw8r+QCbaI=;
-        b=n319MBFg0fYTSh7VP5cO10oaO8edZv/xWNrw7cy5VJI/79qfQEp9RdCxrEqW8qkiJG
-         brcnn03BWSCN55OFZOF+VAKsC8lbqcwMRTls8GozUjUDdipjjdahcGrj4OdUCrGV2xTv
-         m5Oflc3GWdKmZN21oyHOcEYrcGsrBrl0xxbYGtuNovusufG6XDfMA79gPLa2/IZTrJxq
-         qnUwiYFY3aHjJLkKTib/aIEby8FwdMMD8VcohEJ1j6Ndlj6AayluaWjbN1pH6s744ou8
-         /g+yXMBj7Nema420sJSOmode1xbhgIQehSWOY+U0GOXYTuT947QPPZXt2dsxPJSQO6fz
-         aSiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=GSwCSxkfswCTAr2W0z1p9wm8OPsGIVQ+vLw8r+QCbaI=;
-        b=HA3iBrGcY8tjAUkF9VkIQpLKZ/0z4kwVCz+YmJishqnys4KPI5fuklg7GYx3W45A+a
-         Pi9JthR/mKDrNspu9chjaJJ02YutWCWgC9Qg/cZLCqf/NIMpAyXgi69kk4SVlr37WCDk
-         zxd3Xh0q/uc9NdeWQzLRHhI45YqH+2pnmnzKN7iqZrbgrb9LObbeEMrOGHpPYnTAQJ2T
-         YBEwybkUHcZ4iOMMG0YZ3pkOAE44y5luQ8R35ECa9dYDtFooHg64hblB9AA9JyGoRoiW
-         jGioYIu0AlIH4w6N3uOAOEzibgoNqWVAg7XnnavuQuDYvStnXJ0LOBXh1ATaCkJl8nK0
-         0VYA==
-X-Gm-Message-State: ACgBeo211UXA9/kzijkZVspx5gXM/ZQP/aGyTyMOaErmscXBqhGvxEk0
-        sODUKOes4HUQrSTngkPJplWqGeC4bIy73Y8LL5A=
-X-Google-Smtp-Source: AA6agR5wtSa4e+dAhZJ/VjR9XzVzQcGJMQA0E4YnrC0fabueldGOqrkcSXmg1o/nKGytxwSARQloEsUQGHgtbRFOFXA=
-X-Received: by 2002:ac8:7f92:0:b0:344:8cd8:59a1 with SMTP id
- z18-20020ac87f92000000b003448cd859a1mr16713627qtj.384.1661890914718; Tue, 30
- Aug 2022 13:21:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu> <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 30 Aug 2022 23:21:18 +0300
-Message-ID: <CAHp75VeFbjRN7OE5MH0_bbx5aSerj+2F_vpBjRZhT3QQ+3wmng@mail.gmail.com>
-Subject: Re: [PATCH v1 0/8] gpio: Get rid of ARCH_NR_GPIOS (v1)
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        with ESMTP id S229472AbiH3UvP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 16:51:15 -0400
+X-Greylist: delayed 337 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 13:51:13 PDT
+Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32FA5659C3;
+        Tue, 30 Aug 2022 13:51:13 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 48A004D;
+        Tue, 30 Aug 2022 22:45:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1661892330;
+        bh=3WaK6FIAPb11jmtotiWZuMuVBlyA1BwtgILtqpuU0pU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HBIRkGXv9Ix/DaAnqYjNNf3KVN/HRXFyHYZVQHbHT/CPC4OxSgAiLbplsghiqW6gj
+         8h21WCFVtu/XxKldouQCVlgwQTNIz4Hla4t3iTcn38NKnItrtjI4s7sKXA80w6Xrzx
+         XO68viVzLvcU0bwaX0gn8zQAj10mAEjdTMgv8fmkw1h1n/QTnH9DK30CahMVZbVJn/
+         1tN9dHfLnWLazyfRMFn0ZWnACCwOuUqhoYUH93s8aURwc2iZj2eoQw6U37oKRoUAAC
+         3EkWTwkUbBSH3sy5PT+sL/w3KPeYJ33DWadzr5j+QYqebH4ooONn3itDDBAPTIePYW
+         +oZiNB+kXG4NA==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 4366B544; Tue, 30 Aug 2022 22:45:30 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 206DC542;
+        Tue, 30 Aug 2022 22:45:30 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 1B9B522;
+        Tue, 30 Aug 2022 22:45:30 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 17AA24A0549; Tue, 30 Aug 2022 22:45:30 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id C168B4A02F1;
+        Tue, 30 Aug 2022 22:45:29 +0200 (CEST)
+        (Extended-Queue-bit xtech_dc@fff.in.tum.de)
+From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: [PATCH] tools/memory-model: Weaken ctrl dependency definition in explanation.txt
+Date:   Tue, 30 Aug 2022 20:44:46 +0000
+Message-Id: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,41 +79,65 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:20 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+The current informal control dependency definition in explanation.txt is
+too broad and, as dicsussed, needs to be updated.
+
+Consider the following example:
+
+> if(READ_ONCE(x))
+> 	return 42;
 >
-> On Mon, Aug 29, 2022 at 7:17 PM Christophe Leroy
-> <christophe.leroy@csgroup.eu> wrote:
-> >
-> > Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
-> > there is no limitation on the number of GPIOs that can be allocated
-> > in the system since the allocation is fully dynamic.
-> >
-> > ARCH_NR_GPIOS is today only used in order to provide downwards
-> > gpiobase allocation from that value, while static allocation is
-> > performed upwards from 0. However that has the disadvantage of
-> > limiting the number of GPIOs that can be registered in the system.
-> >
-> > To overcome this limitation without requiring each and every
-> > platform to provide its 'best-guess' maximum number, rework the
-> > allocation to allocate from 256 upwards, allowing approx 2 millions
-> > of GPIOs.
-> >
-> > In the meantime, add a warning for drivers how are still doing
-> > static allocation, so that in the future the static allocation gets
-> > removed completely and dynamic allocation can start at base 0.
+>	WRITE_ONCE(y, 42);
 >
-> For non-commented (by me or others) patches
-> Reviewed-by: Andy Shevchenko <andy.shevchenko!gmail.com>
+>	return 21;
 
-Should be
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+The read event determines whether the write event will be executed "at
+all" - as per the current definition - but the formal LKMM does not
+recognize this as a control dependency.
 
-> For the patch 1 if you are going to address as suggested by the author
-> of the driver, you may also add my tag.
+Introduce a new defintion which includes the requirement for the second
+memory access event to syntactically lie within the arm of a non-loop
+conditional.
 
+Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
+Cc: Marco Elver <elver@google.com>
+Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+Cc: Martin Fink <martin.fink@in.tum.de>
+Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+---
 
+@Alan:
 
--- 
-With Best Regards,
-Andy Shevchenko
+Since I got it wrong the last time, I'm adding you as a co-developer after my
+SOB. I'm sorry if this creates extra work on your side due to you having to
+resubmit the patch now with your SOB if I understand correctly, but since it's
+based on your wording from the other thread, I definitely wanted to give you
+credit.
+
+ tools/memory-model/Documentation/explanation.txt | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index ee819a402b69..0bca50cac5f4 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
+ through a pointer will depend on the value read earlier from that
+ pointer.
+
+-Finally, a read event and another memory access event are linked by a
+-control dependency if the value obtained by the read affects whether
+-the second event is executed at all.  Simple example:
++Finally, a read event X and another memory access event Y are linked by
++a control dependency if Y syntactically lies within an arm of an if,
++else or switch statement and the condition guarding Y is either data or
++address-dependent on X.  Simple example:
+
+ 	int x, y;
+
+--
+2.35.1
+
