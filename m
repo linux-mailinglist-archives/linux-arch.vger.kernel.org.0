@@ -2,166 +2,391 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A595A6EEE
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 23:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6C45A6F78
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 23:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiH3VMk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 Aug 2022 17:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S231726AbiH3Vt2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Aug 2022 17:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiH3VMh (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 17:12:37 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248ED86FEA
-        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:12:36 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id b2so9448696qkh.12
-        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:12:36 -0700 (PDT)
+        with ESMTP id S231648AbiH3Vt2 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 17:49:28 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69048E9B0
+        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:49:25 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id v8-20020a258488000000b00695847496a4so717300ybk.19
+        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:49:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=2S/gPzbn70K9n2kENTZuMHMg0rHkBn7eRQ2xitbAkvQ=;
-        b=l31XDqgcVa767LbJ/esQ54hvux+TzmouIJhDZQLPDm+jHDp6aO13ixM8EB1+UP+wNd
-         subtyvz4u5a7FNkB7FgjTmEkkK8CYQ7ZYdUbM9HEiA0rwwLz9Fq781zz5SFzmIToEhiN
-         J3PWrV7LeUp6my/1B6xgSfEeksh8eNgTyV5U4=
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=1lX3k8bH6+3ighIlH+rh55fF9o5O4fyOugMRXdd7M+o=;
+        b=TLaJItWbDQbvhKHzG038LNGm0CScYZSKmwQZZ5uimu3NF1cUdVRiMphTcTUfMFGxbA
+         5MXDa00pC4jx1dox6rXbqMWBtWC4G64n3rtvQ9WFmciJtHtJLVCWET5Kdb7EyuzkVYPX
+         i4J0Y6C4bz8XfJq1YpoTofkF51DS5zPKbupPaaT66wch8+NkTWL2E1S5s0ZkHIotLxVb
+         lHmExQmnrBRVXZ4L6czz/14NhyHQZKxDWFmpYXVuNp5UTUZUPBV0MZqwCFaN6+K53hjG
+         Et4iC4dnJNUgJmAGWozRlGh2FkpEq40YiSSTQfp1Q8IZTvSW9ersWg+tDXVZ8w+7HE/r
+         XOYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=2S/gPzbn70K9n2kENTZuMHMg0rHkBn7eRQ2xitbAkvQ=;
-        b=2+iqB33HOLOfuP3Qo0jxyjA1J0WYdPH/3KcDJVvmeIGY9iQVukJ1wkkJSioiJ3bCH6
-         Rc/4QtCQbCI5B9sg44GMWnqgyITFdteYczx2pAmOufZIOv1SbNGNn6L8ymIqERYuXZ4Q
-         0VDOsrrTcVoRKYNstgtTSX4qyXyPFlrQ8o/WPN4vDTOkfrq+ZDqfGooNswRgW1f00iIp
-         +0anr6uZE0WmH7VJ3QU+YdQ1uve8OgUw4ErVqCp9gYnSb2e0C1vevfhOjWOFWwN/QEDU
-         ke/lgs/ayb8hpTkZfsiEGH3Ega9eaLZsYiDU+bENouCYU+m+g/djq56BJgspw61qB7H5
-         r6QA==
-X-Gm-Message-State: ACgBeo1ZsbmXIeXE9LUhoEz74BDWnrdO1KMPNDCpJnqjXeBVWAVm6elQ
-        0J5y4w4/YxqooeAbG0vbUsbrFA==
-X-Google-Smtp-Source: AA6agR5Fysxg3xWrlOzGO2qBXwoKrx8axP3/frxLtEAid18xOVogn75KthGHW4lns7Nv9j+ALb60rA==
-X-Received: by 2002:a05:620a:2585:b0:6b6:66b2:d40c with SMTP id x5-20020a05620a258500b006b666b2d40cmr13458668qko.710.1661893955222;
-        Tue, 30 Aug 2022 14:12:35 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05620a0f1100b006b58d8f6181sm8654958qkl.72.2022.08.30.14.12.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 14:12:34 -0700 (PDT)
-Message-ID: <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
-Date:   Tue, 30 Aug 2022 17:12:33 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] tools/memory-model: Weaken ctrl dependency definition in
- explanation.txt
-Content-Language: en-US
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-References: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
- <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
-In-Reply-To: <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=1lX3k8bH6+3ighIlH+rh55fF9o5O4fyOugMRXdd7M+o=;
+        b=I31sPqN5yCXbiI3hf8eMR4ynwfDu2jp4Jgty10AJRcWrjxHmj1eLQoR8IbgvOYZi97
+         0Sk11pCwpAnyeeIZuNC1jCxco/ZrsvYUw7Spx7XqX3bl32F2Fj3pzapttV19rh4jIB8a
+         CZxiothmVoB16bqGkWu8k5o0l+orbFdcFEMG7wF5TOBA0K5Y4+OajOqW3XhDO4Cc8OOk
+         7Fb2AJYsQg7ZHNnT0Qsz/MHI7cgRYLlmAEok6eILphH+49WT/0JsFqCa74xD1exVgWyV
+         tXSjZ4NaD3img4Kzw7f/Tew0K+HbX87dsq1jIEKAStciY55uU9cMNM6btzn6vWFIRB2m
+         +ckg==
+X-Gm-Message-State: ACgBeo22TG3UU+k7ONoSyA7d+jsUGjIypwO0PvqtAcAlwnsNA4p40sRr
+        /qzAm0odzClqPhehgiz95qZVuU706Bk=
+X-Google-Smtp-Source: AA6agR5j08Skk81v71QmaDi/WT6bCECv+zqPYuRoUXIcSYHRwqbk8VPDDLd37sGsnmTNsd8iQzIrOAzDMtY=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
+ (user=surenb job=sendgmr) by 2002:a81:7992:0:b0:336:8015:4889 with SMTP id
+ u140-20020a817992000000b0033680154889mr16036203ywc.80.1661896164558; Tue, 30
+ Aug 2022 14:49:24 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:48:49 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220830214919.53220-1-surenb@google.com>
+Subject: [RFC PATCH 00/30] Code tagging framework and applications
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, peterx@redhat.com, david@redhat.com,
+        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
+        nathan@kernel.org, changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        surenb@google.com, kernel-team@android.com, linux-mm@kvack.org,
+        iommu@lists.linux.dev, kasan-dev@googlegroups.com,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
+===========================
+Code tagging framework
+===========================
+Code tag is a structure identifying a specific location in the source code
+which is generated at compile time and can be embedded in an application-
+specific structure. Several applications of code tagging are included in
+this RFC, such as memory allocation tracking, dynamic fault injection,
+latency tracking and improved error code reporting.
+Basically, it takes the old trick of "define a special elf section for
+objects of a given type so that we can iterate over them at runtime" and
+creates a proper library for it.
+
+===========================
+Memory allocation tracking
+===========================
+The goal for using codetags for memory allocation tracking is to minimize
+performance and memory overhead. By recording only the call count and
+allocation size, the required operations are kept at the minimum while
+collecting statistics for every allocation in the codebase. With that
+information, if users are interested in mode detailed context for a
+specific allocation, they can enable more in-depth context tracking,
+which includes capturing the pid, tgid, task name, allocation size,
+timestamp and call stack for every allocation at the specified code
+location.
+Memory allocation tracking is implemented in two parts:
+
+part1: instruments page and slab allocators to record call count and total
+memory allocated at every allocation in the source code. Every time an
+allocation is performed by an instrumented allocator, the codetag at that
+location increments its call and size counters. Every time the memory is
+freed these counters are decremented. To decrement the counters upon free,
+allocated object needs a reference to its codetag. Page allocators use
+page_ext to record this reference while slab allocators use memcg_data of
+the slab page.
+The data is exposed to the user space via a read-only debugfs file called
+alloc_tags.
+
+Usage example:
+
+$ sort -hr /sys/kernel/debug/alloc_tags|head
+  153MiB     8599 mm/slub.c:1826 module:slub func:alloc_slab_page
+ 6.08MiB      49 mm/slab_common.c:950 module:slab_common func:_kmalloc_order
+ 5.09MiB     6335 mm/memcontrol.c:2814 module:memcontrol func:alloc_slab_obj_exts
+ 4.54MiB      78 mm/page_alloc.c:5777 module:page_alloc func:alloc_pages_exact
+ 1.32MiB      338 include/asm-generic/pgalloc.h:63 module:pgtable func:__pte_alloc_one
+ 1.16MiB      603 fs/xfs/xfs_log_priv.h:700 module:xfs func:xlog_kvmalloc
+ 1.00MiB      256 mm/swap_cgroup.c:48 module:swap_cgroup func:swap_cgroup_prepare
+  734KiB     5380 fs/xfs/kmem.c:20 module:xfs func:kmem_alloc
+  640KiB      160 kernel/rcu/tree.c:3184 module:tree func:fill_page_cache_func
+  640KiB      160 drivers/char/virtio_console.c:452 module:virtio_console func:alloc_buf
+
+part2: adds support for the user to select a specific code location to capture
+allocation context. A new debugfs file called alloc_tags.ctx is used to select
+which code location should capture allocation context and to read captured
+context information.
+
+Usage example:
+
+$ cd /sys/kernel/debug/
+$ echo "file include/asm-generic/pgalloc.h line 63 enable" > alloc_tags.ctx
+$ cat alloc_tags.ctx
+  920KiB      230 include/asm-generic/pgalloc.h:63 module:pgtable func:__pte_alloc_one
+    size: 4096
+    pid: 1474
+    tgid: 1474
+    comm: bash
+    ts: 175332940994
+    call stack:
+         pte_alloc_one+0xfe/0x130
+         __pte_alloc+0x22/0xb0
+         copy_page_range+0x842/0x1640
+         dup_mm+0x42d/0x580
+         copy_process+0xfb1/0x1ac0
+         kernel_clone+0x92/0x3e0
+         __do_sys_clone+0x66/0x90
+         do_syscall_64+0x38/0x90
+         entry_SYSCALL_64_after_hwframe+0x63/0xcd
+...
+
+NOTE: slab allocation tracking is not yet stable and has a leak that
+shows up in long-running tests. We are working on fixing it and posting
+the RFC early to collect some feedback and to have a reference code in
+public before presenting the idea at LPC2022.
+
+===========================
+Dynamic fault injection
+===========================
+Dynamic fault injection lets you do fault injection with a single call
+to dynamic_fault(), with a debugfs interface similar to dynamic_debug.
+
+Calls to dynamic_fault are listed in debugfs and can be enabled at
+runtime (oneshot mode or a defined frequency are also available). This
+patch also uses the memory allocation wrapper macros introduced by the
+memory allocation tracking patches to add distinct fault injection
+points for every memory allocation in the kernel.
+
+Example fault injection points, after hooking memory allocation paths:
+
+  fs/xfs/libxfs/xfs_iext_tree.c:606 module:xfs func:xfs_iext_realloc_rootclass:memory disabled "
+  fs/xfs/libxfs/xfs_inode_fork.c:503 module:xfs func:xfs_idata_reallocclass:memory disabled "
+  fs/xfs/libxfs/xfs_inode_fork.c:399 module:xfs func:xfs_iroot_reallocclass:memory disabled "
+  fs/xfs/xfs_buf.c:373 module:xfs func:xfs_buf_alloc_pagesclass:memory disabled "
+  fs/xfs/xfs_iops.c:497 module:xfs func:xfs_vn_get_linkclass:memory disabled "
+  fs/xfs/xfs_mount.c:85 module:xfs func:xfs_uuid_mountclass:memory disabled "
+
+===========================
+Latency tracking
+===========================
+This lets you instrument code for measuring latency with just two calls
+to code_tag_time_stats_start() and code_tag_time_stats_finish(), and
+makes statistics available in debugfs on a per-callsite basis.
+
+Recorded statistics include total count, frequency/rate, average
+duration, max duration, and event duration quantiles.
+
+Additionally, this patch instruments prepare_to_wait() and finish_wait().
+
+Example output:
+
+  fs/xfs/xfs_extent_busy.c:589 module:xfs func:xfs_extent_busy_flush
+  count:          61
+  rate:           0/sec
+  frequency:    19 sec
+  avg duration:   632 us
+  max duration:   2 ms
+  quantiles (us): 274 288 288 296 296 296 296 336 336 336 336 336 336 336 336
+
+===========================
+Improved error codes
+===========================
+Ever waste hours trying to figure out which line of code from some
+obscure module is returning you -EINVAL and nothing else?
+
+What if we had... more error codes?
+
+This patch adds ERR(), which returns a unique error code that is related
+to the error code that passed to it: the original error code can be
+recovered with error_class(), and errname() (as well as %pE) returns an
+error string that includes the file and line number of the ERR() call.
+
+Example output:
+
+  VFS: Cannot open root device "sda" or unknown-block(8,0): error -EINVAL at fs/ext4/super.c:4387
+
+===========================
+Dynamic debug conversion to code tagging
+===========================
+There are several open coded implementations of the "define a special elf
+section for objects and iterate" technique that should be converted to
+code tagging. This series just converts dynamic debug; there are others
+(multiple in ftrace, in particular) that should also be converted.
+
+===========================
+
+The patchset applies cleanly over Linux 6.0-rc3
+The tree for testing is published at:
+https://github.com/surenbaghdasaryan/linux/tree/alloc_tags_rfc
+
+The structure of the patchset is:
+- code tagging framework (patches 1-6)
+- page allocation tracking (patches 7-10)
+- slab allocation tracking (patch 11-16)
+- allocation context capture (patch 17-21)
+- dynamic fault injection (patch 22)
+- latency tracking (patch 23-27)
+- improved error codes (patch 28)
+- dynamic debug conversion to code tagging (patch 29)
+- MAINTAINERS update (patch 30)
+
+Next steps:
+- track and fix slab allocator leak mentioned earlier;
+- instrument more allocators: vmalloc, per-cpu allocations, others?
 
 
-On 8/30/2022 5:08 PM, Joel Fernandes wrote:
-> 
-> 
-> On 8/30/2022 4:44 PM, Paul Heidekrüger wrote:
->> The current informal control dependency definition in explanation.txt is
->> too broad and, as dicsussed, needs to be updated.
->>
->> Consider the following example:
->>
->>> if(READ_ONCE(x))
->>> 	return 42;
->>>
->>> 	WRITE_ONCE(y, 42);
->>>
->>> 	return 21;
->>
->> The read event determines whether the write event will be executed "at
->> all" - as per the current definition - but the formal LKMM does not
->> recognize this as a control dependency.
->>
->> Introduce a new defintion which includes the requirement for the second
->> memory access event to syntactically lie within the arm of a non-loop
->> conditional.
->>
->> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
->> Cc: Marco Elver <elver@google.com>
->> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->> Cc: Martin Fink <martin.fink@in.tum.de>
->> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
->> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->> ---
->>
->> @Alan:
->>
->> Since I got it wrong the last time, I'm adding you as a co-developer after my
->> SOB. I'm sorry if this creates extra work on your side due to you having to
->> resubmit the patch now with your SOB if I understand correctly, but since it's
->> based on your wording from the other thread, I definitely wanted to give you
->> credit.
->>
->>  tools/memory-model/Documentation/explanation.txt | 7 ++++---
->>  1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
->> index ee819a402b69..0bca50cac5f4 100644
->> --- a/tools/memory-model/Documentation/explanation.txt
->> +++ b/tools/memory-model/Documentation/explanation.txt
->> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
->>  through a pointer will depend on the value read earlier from that
->>  pointer.
->>
->> -Finally, a read event and another memory access event are linked by a
->> -control dependency if the value obtained by the read affects whether
->> -the second event is executed at all.  Simple example:
->> +Finally, a read event X and another memory access event Y are linked by
->> +a control dependency if Y syntactically lies within an arm of an if,
->> +else or switch statement and the condition guarding Y is either data or
->> +address-dependent on X.  Simple example:
-> 
-> 'conditioning guarding Y' sounds confusing to me as it implies to me that the
-> condition's evaluation depends on Y. I much prefer Alan's wording from the
-> linked post saying something like 'the branch condition is data or address
-> dependent on X, and Y lies in one of the arms'.
-> 
-> I have to ask though, why doesn't this imply that the second instruction never
-> executes at all? I believe that would break the MP-pattern if it were not true.
+Kent Overstreet (14):
+  lib/string_helpers: Drop space in string_get_size's output
+  Lazy percpu counters
+  scripts/kallysms: Always include __start and __stop symbols
+  lib/string.c: strsep_no_empty()
+  codetag: add codetag query helper functions
+  Code tagging based fault injection
+  timekeeping: Add a missing include
+  wait: Clean up waitqueue_entry initialization
+  lib/time_stats: New library for statistics on events
+  bcache: Convert to lib/time_stats
+  Code tagging based latency tracking
+  Improved symbolic error names
+  dyndbg: Convert to code tagging
+  MAINTAINERS: Add entries for code tagging & related
 
-About my last statement, I believe your patch does not disagree with the
-correctness of the earlier text but just wants to improve it. If that's case
-then that's fine.
+Suren Baghdasaryan (16):
+  kernel/module: move find_kallsyms_symbol_value declaration
+  lib: code tagging framework
+  lib: code tagging module support
+  lib: add support for allocation tagging
+  lib: introduce page allocation tagging
+  change alloc_pages name in dma_map_ops to avoid name conflicts
+  mm: enable page allocation tagging for __get_free_pages and
+    alloc_pages
+  mm: introduce slabobj_ext to support slab object extensions
+  mm: introduce __GFP_NO_OBJ_EXT flag to selectively prevent slabobj_ext
+    creation
+  mm/slab: introduce SLAB_NO_OBJ_EXT to avoid obj_ext creation
+  mm: prevent slabobj_ext allocations for slabobj_ext and kmem_cache
+    objects
+  lib: introduce slab allocation tagging
+  mm: enable slab allocation tagging for kmalloc and friends
+  move stack capture functionality into a separate function for reuse
+  lib: introduce support for storing code tag context
+  lib: implement context capture support for page and slab allocators
 
- - Joel
+ MAINTAINERS                         |  34 ++
+ arch/x86/kernel/amd_gart_64.c       |   2 +-
+ drivers/iommu/dma-iommu.c           |   2 +-
+ drivers/md/bcache/Kconfig           |   1 +
+ drivers/md/bcache/bcache.h          |   1 +
+ drivers/md/bcache/bset.c            |   8 +-
+ drivers/md/bcache/bset.h            |   1 +
+ drivers/md/bcache/btree.c           |  12 +-
+ drivers/md/bcache/super.c           |   3 +
+ drivers/md/bcache/sysfs.c           |  43 ++-
+ drivers/md/bcache/util.c            |  30 --
+ drivers/md/bcache/util.h            |  57 ---
+ drivers/xen/grant-dma-ops.c         |   2 +-
+ drivers/xen/swiotlb-xen.c           |   2 +-
+ include/asm-generic/codetag.lds.h   |  18 +
+ include/asm-generic/vmlinux.lds.h   |   8 +-
+ include/linux/alloc_tag.h           |  84 +++++
+ include/linux/codetag.h             | 159 +++++++++
+ include/linux/codetag_ctx.h         |  48 +++
+ include/linux/codetag_time_stats.h  |  54 +++
+ include/linux/dma-map-ops.h         |   2 +-
+ include/linux/dynamic_debug.h       |  11 +-
+ include/linux/dynamic_fault.h       |  79 +++++
+ include/linux/err.h                 |   2 +-
+ include/linux/errname.h             |  50 +++
+ include/linux/gfp.h                 |  10 +-
+ include/linux/gfp_types.h           |  12 +-
+ include/linux/io_uring_types.h      |   2 +-
+ include/linux/lazy-percpu-counter.h |  67 ++++
+ include/linux/memcontrol.h          |  23 +-
+ include/linux/module.h              |   1 +
+ include/linux/page_ext.h            |   3 +-
+ include/linux/pgalloc_tag.h         |  63 ++++
+ include/linux/sbitmap.h             |   6 +-
+ include/linux/sched.h               |   6 +-
+ include/linux/slab.h                | 136 +++++---
+ include/linux/slab_def.h            |   2 +-
+ include/linux/slub_def.h            |   4 +-
+ include/linux/stackdepot.h          |   3 +
+ include/linux/string.h              |   1 +
+ include/linux/time_stats.h          |  44 +++
+ include/linux/timekeeping.h         |   1 +
+ include/linux/wait.h                |  72 ++--
+ include/linux/wait_bit.h            |   7 +-
+ init/Kconfig                        |   5 +
+ kernel/dma/mapping.c                |   4 +-
+ kernel/module/internal.h            |   3 -
+ kernel/module/main.c                |  27 +-
+ kernel/sched/wait.c                 |  15 +-
+ lib/Kconfig                         |   6 +
+ lib/Kconfig.debug                   |  46 +++
+ lib/Makefile                        |  10 +
+ lib/alloc_tag.c                     | 391 +++++++++++++++++++++
+ lib/codetag.c                       | 519 ++++++++++++++++++++++++++++
+ lib/codetag_time_stats.c            | 143 ++++++++
+ lib/dynamic_debug.c                 | 452 +++++++++---------------
+ lib/dynamic_fault.c                 | 372 ++++++++++++++++++++
+ lib/errname.c                       | 103 ++++++
+ lib/lazy-percpu-counter.c           | 141 ++++++++
+ lib/pgalloc_tag.c                   |  22 ++
+ lib/stackdepot.c                    |  68 ++++
+ lib/string.c                        |  19 +
+ lib/string_helpers.c                |   3 +-
+ lib/time_stats.c                    | 236 +++++++++++++
+ mm/kfence/core.c                    |   2 +-
+ mm/memcontrol.c                     |  62 ++--
+ mm/mempolicy.c                      |   4 +-
+ mm/page_alloc.c                     |  13 +-
+ mm/page_ext.c                       |   6 +
+ mm/page_owner.c                     |  54 +--
+ mm/slab.c                           |   4 +-
+ mm/slab.h                           | 125 ++++---
+ mm/slab_common.c                    |  49 ++-
+ mm/slob.c                           |   2 +
+ mm/slub.c                           |   7 +-
+ scripts/kallsyms.c                  |  13 +
+ scripts/module.lds.S                |   7 +
+ 77 files changed, 3406 insertions(+), 703 deletions(-)
+ create mode 100644 include/asm-generic/codetag.lds.h
+ create mode 100644 include/linux/alloc_tag.h
+ create mode 100644 include/linux/codetag.h
+ create mode 100644 include/linux/codetag_ctx.h
+ create mode 100644 include/linux/codetag_time_stats.h
+ create mode 100644 include/linux/dynamic_fault.h
+ create mode 100644 include/linux/lazy-percpu-counter.h
+ create mode 100644 include/linux/pgalloc_tag.h
+ create mode 100644 include/linux/time_stats.h
+ create mode 100644 lib/alloc_tag.c
+ create mode 100644 lib/codetag.c
+ create mode 100644 lib/codetag_time_stats.c
+ create mode 100644 lib/dynamic_fault.c
+ create mode 100644 lib/lazy-percpu-counter.c
+ create mode 100644 lib/pgalloc_tag.c
+ create mode 100644 lib/time_stats.c
+
+-- 
+2.37.2.672.g94769d06f0-goog
+
