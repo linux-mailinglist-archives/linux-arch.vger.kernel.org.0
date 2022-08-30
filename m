@@ -2,57 +2,57 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85715A6FC6
-	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 23:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDF85A6FD0
+	for <lists+linux-arch@lfdr.de>; Tue, 30 Aug 2022 23:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbiH3VvP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 30 Aug 2022 17:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S232083AbiH3Vvd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 30 Aug 2022 17:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbiH3Vug (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 17:50:36 -0400
+        with ESMTP id S232012AbiH3Vuu (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 30 Aug 2022 17:50:50 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD04F2B
-        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:49:48 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id s15-20020a5b044f000000b00680c4eb89f1so711081ybp.7
-        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:49:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E98D6469
+        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:49:51 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k13-20020a056902024d00b0066fa7f50b97so709918ybs.6
+        for <linux-arch@vger.kernel.org>; Tue, 30 Aug 2022 14:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=p8/y/nLBQm6IGi3iJX5wV5NMUkycPfOY4OR1rTeRfxQ=;
-        b=eh/OQULFmIACthv18cWUl4oX11okytVSai6q8VzR+NAQKjUe//Iyb+nFKGGFut6bnz
-         U9vNve6H/h3V8KtV1wUMGWZN/R3y/KwtIJWlz0MYZTJiIV/PhXncLGaXcxmIWasd49k4
-         MzAfZ3MmPE/GrPk0xGglkpLQ6vp+JNN34VaaKbWMkI6l0blrObop9acuYIFl58Z8BCzL
-         5fC4JT76yIwf+mLDK1SPTy1QXCq8FwZe3KmkNaoWIFZ0MNlEC2nHkf9R6kzo++VpnZeN
-         5Whn6DE0IEl1BMPRxgM5XkxVMj4js15JxMerWLMdHXpHMsiFoGiwHoKTk4A6B15t/TFb
-         q+Gg==
+        bh=hT6Mz/zinVpRQBPKe7V7vUNm2EL+nNA0Rd6lje133es=;
+        b=dfpyzvwd4Cc++xCQWq35JB0wJm+WrSSoxMENLy9aDfaWxkxM1OaMmDnm/vqeqmhqwU
+         gZ74ppSfTAgF7SE3SqSoTv2aIM58r+Pz/1W9uwrKdGiDv7ewg2BuxbdnPUGh3CuiOCkA
+         14w+GGgADDYFbMYHNlMxcXneiC4QjBwI/pjC3GHz1ttLv+1YSdBbrybMdEtkcC5CZ2yG
+         0v6U9Ssq49CU9MEssaTVF8mmd1yQf+A9weRhrB49GBJc7iyJ1ibIQDHVBUxMDTeBzNZT
+         89GZsPPyB1nT7HTWg+BylmuFWY1bglVPePrUwBMLPZc7q+nvTNhi0s23dmExUdbXdR5Y
+         Cwww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=p8/y/nLBQm6IGi3iJX5wV5NMUkycPfOY4OR1rTeRfxQ=;
-        b=lt9L/zaPdaUYe+KYm3Q4md73Dh+Kg8IGKw7FeRHlOJDGIrTF5Ts1QD1PbE01DRf766
-         dNYYjLZyGAoPHuaa6Ls7sGysCYgf4/TQ8GkhSIZFKGtA15fAndnCacv1NGfMDJlAuyoH
-         NCxDzvtJxCi3x6LWhBeWZdnVpeOM7FnKgOoTW/8WrUwM4de0KjP6RS0Ac1GqEcSRho0U
-         +im1/tvsEaSZ+XzpTVyCHTyRW3VFBM0LTQgRJZgVbxe61E0H3rtpTWJejl16Pmxf+7xZ
-         TtMvoCo1t7H8hoAV3xQ+Xo/yzNWFFMrQaSJu42vjhi/JxH+pqmmvS2ggG3BzpYxcNdHS
-         eHeA==
-X-Gm-Message-State: ACgBeo1b1RbJZSbJl6kP24eLGlgMDdYSBOLieS1S7g30M8+sBn5vmOIe
-        NavhG8lGKpHGFicscjLSoFvePSMoCfE=
-X-Google-Smtp-Source: AA6agR5jbCGe1MArd8G7FNCgOj77g3iLznXqPzYSPJ0w7ptPLXk4tjPHYPeR1rNV3a/cmH1L2NtV8LKD3is=
+        bh=hT6Mz/zinVpRQBPKe7V7vUNm2EL+nNA0Rd6lje133es=;
+        b=e5wQ3d8la2dOyXLj02haXZFBAt/6EvCfX6Dq1CukLV/jYISvLtrgf1ydxrBYawO68g
+         o0JWuHZD5SMEwbtisyFn7yEsDhQyujDnz64NcSeHDJfuLzs5tNKxKLo8EHoHlt/lo7cW
+         cmzfqV+3Mp2kffVoDWPuYdf8RZ5prA2u1ebufGIXBkGZtmHrpWrVxUSR2AYWF2Hmnr2T
+         JAyoFu10rgPgp10XDjieRrUIIN7ivwmn7iU1Uqfb43meYACOCM3LSU9Pg1fjSVtch+zT
+         8L8OlOeL/CgrDvSdj+x2OfdRu3gWxQ7GM+RcctVNtJT9jLeoRvUgC8Fo3SAOZYbxGUOc
+         HIMA==
+X-Gm-Message-State: ACgBeo1g6lc78Suxba/5kZvJ+5DoWDiKY7HgwRk9rcHX5Yp1DqjlpUiF
+        zBoIOBQBCo9SjLDGmawfzPDb4Ke0A8o=
+X-Google-Smtp-Source: AA6agR6wiYlgc1y+Ddz6GZjAkBSlMmUIZ6hPk3nzcjnnuhPA77BDamNwQUPuwNWjTzLGCV8DDV21TdlLdak=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a25:4d56:0:b0:69c:3d80:bb51 with SMTP id
- a83-20020a254d56000000b0069c3d80bb51mr6383765ybb.124.1661896187249; Tue, 30
- Aug 2022 14:49:47 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:48:58 -0700
+ (user=surenb job=sendgmr) by 2002:a25:cf0e:0:b0:696:42f1:3889 with SMTP id
+ f14-20020a25cf0e000000b0069642f13889mr13000431ybg.175.1661896189937; Tue, 30
+ Aug 2022 14:49:49 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:48:59 -0700
 In-Reply-To: <20220830214919.53220-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-10-surenb@google.com>
-Subject: [RFC PATCH 09/30] change alloc_pages name in dma_map_ops to avoid
- name conflicts
+Message-ID: <20220830214919.53220-11-surenb@google.com>
+Subject: [RFC PATCH 10/30] mm: enable page allocation tagging for
+ __get_free_pages and alloc_pages
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -85,100 +85,210 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-After redefining alloc_pages, all uses of that name are being replaced.
-Change the conflicting names to prevent preprocessor from replacing them
-when it's not intended.
+Redefine alloc_pages, __get_free_pages to record allocations done by
+these functions. Instrument deallocation hooks to record object freeing.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- arch/x86/kernel/amd_gart_64.c | 2 +-
- drivers/iommu/dma-iommu.c     | 2 +-
- drivers/xen/grant-dma-ops.c   | 2 +-
- drivers/xen/swiotlb-xen.c     | 2 +-
- include/linux/dma-map-ops.h   | 2 +-
- kernel/dma/mapping.c          | 4 ++--
- 6 files changed, 7 insertions(+), 7 deletions(-)
+ include/linux/gfp.h         | 10 +++++++---
+ include/linux/page_ext.h    |  3 ++-
+ include/linux/pgalloc_tag.h | 35 +++++++++++++++++++++++++++++++++++
+ mm/mempolicy.c              |  4 ++--
+ mm/page_alloc.c             | 13 ++++++++++---
+ 5 files changed, 56 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/amd_gart_64.c b/arch/x86/kernel/amd_gart_64.c
-index 194d54eed537..5e83a387bfef 100644
---- a/arch/x86/kernel/amd_gart_64.c
-+++ b/arch/x86/kernel/amd_gart_64.c
-@@ -676,7 +676,7 @@ static const struct dma_map_ops gart_dma_ops = {
- 	.get_sgtable			= dma_common_get_sgtable,
- 	.dma_supported			= dma_direct_supported,
- 	.get_required_mask		= dma_direct_get_required_mask,
--	.alloc_pages			= dma_direct_alloc_pages,
-+	.alloc_pages_op			= dma_direct_alloc_pages,
- 	.free_pages			= dma_direct_free_pages,
- };
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index f314be58fa77..5cb950a49d40 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -6,6 +6,7 @@
  
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 17dd683b2fce..58b4878ef930 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -1547,7 +1547,7 @@ static const struct dma_map_ops iommu_dma_ops = {
- 	.flags			= DMA_F_PCI_P2PDMA_SUPPORTED,
- 	.alloc			= iommu_dma_alloc,
- 	.free			= iommu_dma_free,
--	.alloc_pages		= dma_common_alloc_pages,
-+	.alloc_pages_op		= dma_common_alloc_pages,
- 	.free_pages		= dma_common_free_pages,
- 	.alloc_noncontiguous	= iommu_dma_alloc_noncontiguous,
- 	.free_noncontiguous	= iommu_dma_free_noncontiguous,
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index 8973fc1e9ccc..0e26d066036e 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -262,7 +262,7 @@ static int xen_grant_dma_supported(struct device *dev, u64 mask)
- static const struct dma_map_ops xen_grant_dma_ops = {
- 	.alloc = xen_grant_dma_alloc,
- 	.free = xen_grant_dma_free,
--	.alloc_pages = xen_grant_dma_alloc_pages,
-+	.alloc_pages_op = xen_grant_dma_alloc_pages,
- 	.free_pages = xen_grant_dma_free_pages,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
-diff --git a/drivers/xen/swiotlb-xen.c b/drivers/xen/swiotlb-xen.c
-index 67aa74d20162..5ab2616153f0 100644
---- a/drivers/xen/swiotlb-xen.c
-+++ b/drivers/xen/swiotlb-xen.c
-@@ -403,6 +403,6 @@ const struct dma_map_ops xen_swiotlb_dma_ops = {
- 	.dma_supported = xen_swiotlb_dma_supported,
- 	.mmap = dma_common_mmap,
- 	.get_sgtable = dma_common_get_sgtable,
--	.alloc_pages = dma_common_alloc_pages,
-+	.alloc_pages_op = dma_common_alloc_pages,
- 	.free_pages = dma_common_free_pages,
- };
-diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
-index d678afeb8a13..e8e2d210ba68 100644
---- a/include/linux/dma-map-ops.h
-+++ b/include/linux/dma-map-ops.h
-@@ -27,7 +27,7 @@ struct dma_map_ops {
- 			unsigned long attrs);
- 	void (*free)(struct device *dev, size_t size, void *vaddr,
- 			dma_addr_t dma_handle, unsigned long attrs);
--	struct page *(*alloc_pages)(struct device *dev, size_t size,
-+	struct page *(*alloc_pages_op)(struct device *dev, size_t size,
- 			dma_addr_t *dma_handle, enum dma_data_direction dir,
- 			gfp_t gfp);
- 	void (*free_pages)(struct device *dev, size_t size, struct page *vaddr,
-diff --git a/kernel/dma/mapping.c b/kernel/dma/mapping.c
-index 49cbf3e33de7..80a2bfeed8d0 100644
---- a/kernel/dma/mapping.c
-+++ b/kernel/dma/mapping.c
-@@ -552,9 +552,9 @@ static struct page *__dma_alloc_pages(struct device *dev, size_t size,
- 	size = PAGE_ALIGN(size);
- 	if (dma_alloc_direct(dev, ops))
- 		return dma_direct_alloc_pages(dev, size, dma_handle, dir, gfp);
--	if (!ops->alloc_pages)
-+	if (!ops->alloc_pages_op)
- 		return NULL;
--	return ops->alloc_pages(dev, size, dma_handle, dir, gfp);
-+	return ops->alloc_pages_op(dev, size, dma_handle, dir, gfp);
+ #include <linux/mmzone.h>
+ #include <linux/topology.h>
++#include <linux/pgalloc_tag.h>
+ 
+ struct vm_area_struct;
+ 
+@@ -267,12 +268,12 @@ static inline struct page *alloc_pages_node(int nid, gfp_t gfp_mask,
  }
  
- struct page *dma_alloc_pages(struct device *dev, size_t size,
+ #ifdef CONFIG_NUMA
+-struct page *alloc_pages(gfp_t gfp, unsigned int order);
++struct page *_alloc_pages(gfp_t gfp, unsigned int order);
+ struct folio *folio_alloc(gfp_t gfp, unsigned order);
+ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
+ 		unsigned long addr, bool hugepage);
+ #else
+-static inline struct page *alloc_pages(gfp_t gfp_mask, unsigned int order)
++static inline struct page *_alloc_pages(gfp_t gfp_mask, unsigned int order)
+ {
+ 	return alloc_pages_node(numa_node_id(), gfp_mask, order);
+ }
+@@ -283,6 +284,7 @@ static inline struct folio *folio_alloc(gfp_t gfp, unsigned int order)
+ #define vma_alloc_folio(gfp, order, vma, addr, hugepage)		\
+ 	folio_alloc(gfp, order)
+ #endif
++#define alloc_pages(gfp, order) pgtag_alloc_pages(gfp, order)
+ #define alloc_page(gfp_mask) alloc_pages(gfp_mask, 0)
+ static inline struct page *alloc_page_vma(gfp_t gfp,
+ 		struct vm_area_struct *vma, unsigned long addr)
+@@ -292,7 +294,9 @@ static inline struct page *alloc_page_vma(gfp_t gfp,
+ 	return &folio->page;
+ }
+ 
+-extern unsigned long __get_free_pages(gfp_t gfp_mask, unsigned int order);
++extern unsigned long _get_free_pages(gfp_t gfp_mask, unsigned int order,
++				     struct page **ppage);
++#define __get_free_pages(gfp_mask, order) pgtag_get_free_pages(gfp_mask, order)
+ extern unsigned long get_zeroed_page(gfp_t gfp_mask);
+ 
+ void *alloc_pages_exact(size_t size, gfp_t gfp_mask) __alloc_size(1);
+diff --git a/include/linux/page_ext.h b/include/linux/page_ext.h
+index fabb2e1e087f..b26077110fb3 100644
+--- a/include/linux/page_ext.h
++++ b/include/linux/page_ext.h
+@@ -4,7 +4,6 @@
+ 
+ #include <linux/types.h>
+ #include <linux/stacktrace.h>
+-#include <linux/stackdepot.h>
+ 
+ struct pglist_data;
+ struct page_ext_operations {
+@@ -14,6 +13,8 @@ struct page_ext_operations {
+ 	void (*init)(void);
+ };
+ 
++#include <linux/stackdepot.h>
++
+ #ifdef CONFIG_PAGE_EXTENSION
+ 
+ enum page_ext_flags {
+diff --git a/include/linux/pgalloc_tag.h b/include/linux/pgalloc_tag.h
+index f525abfe51d4..154ea7436fec 100644
+--- a/include/linux/pgalloc_tag.h
++++ b/include/linux/pgalloc_tag.h
+@@ -5,6 +5,8 @@
+ #ifndef _LINUX_PGALLOC_TAG_H
+ #define _LINUX_PGALLOC_TAG_H
+ 
++#ifdef CONFIG_PAGE_ALLOC_TAGGING
++
+ #include <linux/alloc_tag.h>
+ #include <linux/page_ext.h>
+ 
+@@ -25,4 +27,37 @@ static inline void pgalloc_tag_dec(struct page *page, unsigned int order)
+ 		alloc_tag_sub(get_page_tag_ref(page), PAGE_SIZE << order);
+ }
+ 
++/*
++ * Redefinitions of the common page allocators/destructors
++ */
++#define pgtag_alloc_pages(gfp, order)					\
++({									\
++	struct page *_page = _alloc_pages((gfp), (order));		\
++									\
++	if (_page)							\
++		alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
++	_page;								\
++})
++
++#define pgtag_get_free_pages(gfp_mask, order)				\
++({									\
++	struct page *_page;						\
++	unsigned long _res = _get_free_pages((gfp_mask), (order), &_page);\
++									\
++	if (_res)							\
++		alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
++	_res;								\
++})
++
++#else /* CONFIG_PAGE_ALLOC_TAGGING */
++
++#define pgtag_alloc_pages(gfp, order) _alloc_pages(gfp, order)
++
++#define pgtag_get_free_pages(gfp_mask, order) \
++	_get_free_pages((gfp_mask), (order), NULL)
++
++#define pgalloc_tag_dec(__page, __size)		do {} while (0)
++
++#endif /* CONFIG_PAGE_ALLOC_TAGGING */
++
+ #endif /* _LINUX_PGALLOC_TAG_H */
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index b73d3248d976..f7e6d9564a49 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -2249,7 +2249,7 @@ EXPORT_SYMBOL(vma_alloc_folio);
+  * flags are used.
+  * Return: The page on success or NULL if allocation fails.
+  */
+-struct page *alloc_pages(gfp_t gfp, unsigned order)
++struct page *_alloc_pages(gfp_t gfp, unsigned int order)
+ {
+ 	struct mempolicy *pol = &default_policy;
+ 	struct page *page;
+@@ -2273,7 +2273,7 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
+ 
+ 	return page;
+ }
+-EXPORT_SYMBOL(alloc_pages);
++EXPORT_SYMBOL(_alloc_pages);
+ 
+ struct folio *folio_alloc(gfp_t gfp, unsigned order)
+ {
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index e5486d47406e..165daba19e2a 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -763,6 +763,7 @@ static inline bool pcp_allowed_order(unsigned int order)
+ 
+ static inline void free_the_page(struct page *page, unsigned int order)
+ {
++
+ 	if (pcp_allowed_order(order))		/* Via pcp? */
+ 		free_unref_page(page, order);
+ 	else
+@@ -1120,6 +1121,8 @@ static inline void __free_one_page(struct page *page,
+ 	VM_BUG_ON_PAGE(pfn & ((1 << order) - 1), page);
+ 	VM_BUG_ON_PAGE(bad_range(zone, page), page);
+ 
++	pgalloc_tag_dec(page, order);
++
+ 	while (order < MAX_ORDER - 1) {
+ 		if (compaction_capture(capc, page, order, migratetype)) {
+ 			__mod_zone_freepage_state(zone, -(1 << order),
+@@ -3440,6 +3443,7 @@ static void free_unref_page_commit(struct zone *zone, struct per_cpu_pages *pcp,
+ 	int pindex;
+ 	bool free_high;
+ 
++	pgalloc_tag_dec(page, order);
+ 	__count_vm_event(PGFREE);
+ 	pindex = order_to_pindex(migratetype, order);
+ 	list_add(&page->pcp_list, &pcp->lists[pindex]);
+@@ -5557,16 +5561,19 @@ EXPORT_SYMBOL(__folio_alloc);
+  * address cannot represent highmem pages. Use alloc_pages and then kmap if
+  * you need to access high mem.
+  */
+-unsigned long __get_free_pages(gfp_t gfp_mask, unsigned int order)
++unsigned long _get_free_pages(gfp_t gfp_mask, unsigned int order,
++			      struct page **ppage)
+ {
+ 	struct page *page;
+ 
+-	page = alloc_pages(gfp_mask & ~__GFP_HIGHMEM, order);
++	page = _alloc_pages(gfp_mask & ~__GFP_HIGHMEM, order);
++	if (ppage)
++		*ppage = page;
+ 	if (!page)
+ 		return 0;
+ 	return (unsigned long) page_address(page);
+ }
+-EXPORT_SYMBOL(__get_free_pages);
++EXPORT_SYMBOL(_get_free_pages);
+ 
+ unsigned long get_zeroed_page(gfp_t gfp_mask)
+ {
 -- 
 2.37.2.672.g94769d06f0-goog
 
