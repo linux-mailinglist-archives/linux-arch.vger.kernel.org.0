@@ -2,425 +2,229 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFE45A8709
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Aug 2022 21:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1633D5A8723
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Aug 2022 21:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbiHaTy7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Aug 2022 15:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41868 "EHLO
+        id S232191AbiHaT6N (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Aug 2022 15:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiHaTy5 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 15:54:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08655F6E
-        for <linux-arch@vger.kernel.org>; Wed, 31 Aug 2022 12:54:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661975687;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=svDOqsVD4qeIC1aKtCh3SbdYv27RpwGCDoSktV2RiVw=;
-        b=gA+K0ka48FBH0qCK6w/oSKZON7FJEaJIDslNJ/usDkuBKWweg8Ta0RcSWXC6NGTzO6Lo+5
-        CCXU2cfavE8T9tt/uHQmQyv15RIM6u7oSinoNLAFN1w9t4ROM+atcpibX5aQjPOGEdcA3G
-        9b0xxfAyiw/5JlErQquICKnEJhEbuLI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-336-3zdW1BcFPr6Lb_vvtYX_nQ-1; Wed, 31 Aug 2022 15:54:44 -0400
-X-MC-Unique: 3zdW1BcFPr6Lb_vvtYX_nQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A13EF101A54E;
-        Wed, 31 Aug 2022 19:54:43 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.48.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 269B61415117;
-        Wed, 31 Aug 2022 19:54:41 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 15:54:38 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-fsdevel@vger.kernel.org,
-        linux-audit@redhat.com, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] fs/xattr: wire up syscalls
-Message-ID: <Yw+8fo3k1tIuscoR@madcap2.tricolour.ca>
-References: <20220830152858.14866-1-cgzones@googlemail.com>
+        with ESMTP id S230257AbiHaT6A (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 15:58:00 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8844EEEF0D
+        for <linux-arch@vger.kernel.org>; Wed, 31 Aug 2022 12:57:58 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id z25so21458331lfr.2
+        for <linux-arch@vger.kernel.org>; Wed, 31 Aug 2022 12:57:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=QVTNaIYBhiuycd3PwwoP/BD0jxZNuHmPig2lyVhzDnw=;
+        b=l8850VPsSeXsvFGYgMio5LFv6TIM0tsuqOkGpkq7ma5M47ovkCvzbWgezqUWxRkLny
+         bg6EEoNyDWCH9cp/jMXHPZJ/Xoffw71XsYXDqRFy0qFNx98fzsMUaPFic18wFpqvH8Bm
+         KsxxoAhH5ub8ylMWuUnznWAq2C8wIXf6pUaoi1xublrXxmpJHO6Rtqhu6Bto7As2HrOT
+         pIC3kkQ1PZ3raMd9fCQpqipPpdfYXReARAD2idfKh0NqbppkKe8e39QgTdpkYIvPU+HA
+         an1C3nDHN87K7+ztWgA2jPkfTTJBPuU08Eg+gtUmUUEHMrRhP/AtEBoSbRx/0xUagRF4
+         YzCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=QVTNaIYBhiuycd3PwwoP/BD0jxZNuHmPig2lyVhzDnw=;
+        b=IsKmCfkavue2sKup9sGWM+GCZssWqy2L0q0NHGjcBtQrRUQFwctl9S+6u3v+8eO18o
+         IdZN2ne33HQbcTZUPoZbF+OkNYwNJnJ+LnisE8Hhj/e7QD2eG/YrHrCHn+aZ6Hy/QnoZ
+         +aSVmGuxPYdSmbyYMzMS4fqI1KZPXtmtU1VCjqM7Ee4qbq8gYFHPH5XXwP2dndBhncQm
+         AzbVlxjuNXPqKKKivFTEsiKe2z6c1bTinfgjuem1yzb7L70HYZLl1S/M0qBwvX6jjrri
+         OWlU0Vj55urqnEagW6/RfWD2D824t2I9z89r+i3m6/nuy5CJGb+I9z/fWjhcFJKe8L1U
+         PoDA==
+X-Gm-Message-State: ACgBeo2c27YGtZhdqeWWZ6pfQ4jgOAcRFmyzFCxOZV/FM6V65uRe+msC
+        UB/OouvO4GigdlMGJKWc9mZJcw==
+X-Google-Smtp-Source: AA6agR7WW9WUzcNpYPnkKDIbXUbn0iXKOUbJbtfLt9BaQbOkMUrTQ64CmqPlNmHQraXRfDBrfQIN8Q==
+X-Received: by 2002:a05:6512:a88:b0:492:ea6a:12bc with SMTP id m8-20020a0565120a8800b00492ea6a12bcmr9483482lfu.229.1661975876821;
+        Wed, 31 Aug 2022 12:57:56 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id j8-20020a2e6e08000000b0025fe7f33bc4sm2223068ljc.49.2022.08.31.12.57.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 12:57:56 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     "David S . Miller" <davem@davemloft.net>
+Cc:     sparclinux@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-arch@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v2] sparc: Fix the generic IO helpers
+Date:   Wed, 31 Aug 2022 21:55:53 +0200
+Message-Id: <20220831195553.129866-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830152858.14866-1-cgzones@googlemail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2022-08-30 17:28, Christian Göttsche wrote:
-> Enable the new added extended attribute related syscalls.
-> 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+This enables the Sparc to use <asm-generic/io.h> to fill in the
+missing (undefined) [read|write]sq I/O accessor functions.
 
-I can't speak to the completeness of the arch list, but I'm glad to see
-the audit attr change bits in there.
+This is needed if Sparc[64] ever wants to uses CONFIG_REGMAP_MMIO
+which has been patches to use accelerated _noinc accessors
+such as readsq/writesq that Sparc64, while being a 64bit platform,
+as of now not yet provide.
 
-> ---
-> TODO:
->   - deprecate traditional syscalls (setxattr, ...)?
->   - resolve possible conflicts with proposed readfile syscall
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl      |  4 ++++
->  arch/arm/tools/syscall.tbl                  |  4 ++++
->  arch/arm64/include/asm/unistd.h             |  2 +-
->  arch/arm64/include/asm/unistd32.h           |  8 ++++++++
->  arch/ia64/kernel/syscalls/syscall.tbl       |  4 ++++
->  arch/m68k/kernel/syscalls/syscall.tbl       |  4 ++++
->  arch/microblaze/kernel/syscalls/syscall.tbl |  4 ++++
->  arch/mips/kernel/syscalls/syscall_n32.tbl   |  4 ++++
->  arch/mips/kernel/syscalls/syscall_n64.tbl   |  4 ++++
->  arch/mips/kernel/syscalls/syscall_o32.tbl   |  4 ++++
->  arch/parisc/kernel/syscalls/syscall.tbl     |  4 ++++
->  arch/powerpc/kernel/syscalls/syscall.tbl    |  4 ++++
->  arch/s390/kernel/syscalls/syscall.tbl       |  4 ++++
->  arch/sh/kernel/syscalls/syscall.tbl         |  4 ++++
->  arch/sparc/kernel/syscalls/syscall.tbl      |  4 ++++
->  arch/x86/entry/syscalls/syscall_32.tbl      |  4 ++++
->  arch/x86/entry/syscalls/syscall_64.tbl      |  4 ++++
->  arch/xtensa/kernel/syscalls/syscall.tbl     |  4 ++++
->  include/asm-generic/audit_change_attr.h     |  6 ++++++
->  include/linux/syscalls.h                    |  8 ++++++++
->  include/uapi/asm-generic/unistd.h           | 12 +++++++++++-
->  21 files changed, 98 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-> index 3515bc4f16a4..826a8a36da81 100644
-> --- a/arch/alpha/kernel/syscalls/syscall.tbl
-> +++ b/arch/alpha/kernel/syscalls/syscall.tbl
-> @@ -490,3 +490,7 @@
->  558	common	process_mrelease		sys_process_mrelease
->  559	common  futex_waitv                     sys_futex_waitv
->  560	common	set_mempolicy_home_node		sys_ni_syscall
-> +561	common	setxattrat			sys_setxattrat
-> +562	common	getxattrat			sys_getxattrat
-> +563	common	listxattrat			sys_listxattrat
-> +564	common	removexattrat			sys_removexattrat
-> diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-> index ac964612d8b0..f0e9d9d487f0 100644
-> --- a/arch/arm/tools/syscall.tbl
-> +++ b/arch/arm/tools/syscall.tbl
-> @@ -464,3 +464,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common	futex_waitv			sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-> index 037feba03a51..63a8a9c4abc1 100644
-> --- a/arch/arm64/include/asm/unistd.h
-> +++ b/arch/arm64/include/asm/unistd.h
-> @@ -39,7 +39,7 @@
->  #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
->  #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
->  
-> -#define __NR_compat_syscalls		451
-> +#define __NR_compat_syscalls		455
->  #endif
->  
->  #define __ARCH_WANT_SYS_CLONE
-> diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-> index 604a2053d006..cd6ac63376d1 100644
-> --- a/arch/arm64/include/asm/unistd32.h
-> +++ b/arch/arm64/include/asm/unistd32.h
-> @@ -907,6 +907,14 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
->  __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  #define __NR_set_mempolicy_home_node 450
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
-> +#define __NR_setxattrat 451
-> +__SYSCALL(__NR_setxattrat, sys_setxattrat)
-> +#define __NR_getxattrat 452
-> +__SYSCALL(__NR_getxattrat, sys_getxattrat)
-> +#define __NR_listxattrat 453
-> +__SYSCALL(__NR_listxattrat, sys_listxattrat)
-> +#define __NR_removexattrat 454
-> +__SYSCALL(__NR_removexattrat, sys_removexattrat)
->  
->  /*
->   * Please add new compat syscalls above this comment and update
-> diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-> index 78b1d03e86e1..6e942a935a27 100644
-> --- a/arch/ia64/kernel/syscalls/syscall.tbl
-> +++ b/arch/ia64/kernel/syscalls/syscall.tbl
-> @@ -371,3 +371,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-> index b1f3940bc298..0847efdee734 100644
-> --- a/arch/m68k/kernel/syscalls/syscall.tbl
-> +++ b/arch/m68k/kernel/syscalls/syscall.tbl
-> @@ -450,3 +450,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-> index 820145e47350..7f619bbc718d 100644
-> --- a/arch/microblaze/kernel/syscalls/syscall.tbl
-> +++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-> @@ -456,3 +456,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> index 253ff994ed2e..5e4206c0aede 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-> @@ -389,3 +389,7 @@
->  448	n32	process_mrelease		sys_process_mrelease
->  449	n32	futex_waitv			sys_futex_waitv
->  450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	n32	setxattrat			sys_setxattrat
-> +452	n32	getxattrat			sys_getxattrat
-> +453	n32	listxattrat			sys_listxattrat
-> +454	n32	removexattrat			sys_removexattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> index 3f1886ad9d80..df0f053e76cd 100644
-> --- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-> @@ -365,3 +365,7 @@
->  448	n64	process_mrelease		sys_process_mrelease
->  449	n64	futex_waitv			sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	n64	setxattrat			sys_setxattrat
-> +452	n64	getxattrat			sys_getxattrat
-> +453	n64	listxattrat			sys_listxattrat
-> +454	n64	removexattrat			sys_removexattrat
-> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> index 8f243e35a7b2..09ec31ad475f 100644
-> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-> @@ -438,3 +438,7 @@
->  448	o32	process_mrelease		sys_process_mrelease
->  449	o32	futex_waitv			sys_futex_waitv
->  450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	o32	setxattrat			sys_setxattrat
-> +452	o32	getxattrat			sys_getxattrat
-> +453	o32	listxattrat			sys_listxattrat
-> +454	o32	removexattrat			sys_removexattrat
-> diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-> index 8a99c998da9b..fe3f4f41aee6 100644
-> --- a/arch/parisc/kernel/syscalls/syscall.tbl
-> +++ b/arch/parisc/kernel/syscalls/syscall.tbl
-> @@ -448,3 +448,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common	futex_waitv			sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-> index 2600b4237292..bee27f650397 100644
-> --- a/arch/powerpc/kernel/syscalls/syscall.tbl
-> +++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-> @@ -530,3 +530,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-> index 799147658dee..d1fbad4b7864 100644
-> --- a/arch/s390/kernel/syscalls/syscall.tbl
-> +++ b/arch/s390/kernel/syscalls/syscall.tbl
-> @@ -453,3 +453,7 @@
->  448  common	process_mrelease	sys_process_mrelease		sys_process_mrelease
->  449  common	futex_waitv		sys_futex_waitv			sys_futex_waitv
->  450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
-> +451  common	setxattrat		sys_setxattrat			sys_setxattrat
-> +452  common	getxattrat		sys_getxattrat			sys_getxattrat
-> +453  common	listxattrat		sys_listxattrat			sys_listxattrat
-> +454  common	removexattrat		sys_removexattrat		sys_removexattrat
-> diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-> index 2de85c977f54..d4daa8afe45c 100644
-> --- a/arch/sh/kernel/syscalls/syscall.tbl
-> +++ b/arch/sh/kernel/syscalls/syscall.tbl
-> @@ -453,3 +453,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-> index 4398cc6fb68d..510d5175f80a 100644
-> --- a/arch/sparc/kernel/syscalls/syscall.tbl
-> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
-> @@ -496,3 +496,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-> index 320480a8db4f..8488cc157fe0 100644
-> --- a/arch/x86/entry/syscalls/syscall_32.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_32.tbl
-> @@ -455,3 +455,7 @@
->  448	i386	process_mrelease	sys_process_mrelease
->  449	i386	futex_waitv		sys_futex_waitv
->  450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	i386	setxattrat		sys_setxattrat
-> +452	i386	getxattrat		sys_getxattrat
-> +453	i386	listxattrat		sys_listxattrat
-> +454	i386	removexattrat		sys_removexattrat
-> diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-> index c84d12608cd2..f45d723d5a30 100644
-> --- a/arch/x86/entry/syscalls/syscall_64.tbl
-> +++ b/arch/x86/entry/syscalls/syscall_64.tbl
-> @@ -372,6 +372,10 @@
->  448	common	process_mrelease	sys_process_mrelease
->  449	common	futex_waitv		sys_futex_waitv
->  450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
-> +451	common	setxattrat		sys_setxattrat
-> +452	common	getxattrat		sys_getxattrat
-> +453	common	listxattrat		sys_listxattrat
-> +454	common	removexattrat		sys_removexattrat
->  
->  #
->  # Due to a historical design error, certain syscalls are numbered differently
-> diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-> index 52c94ab5c205..dbafe441a83f 100644
-> --- a/arch/xtensa/kernel/syscalls/syscall.tbl
-> +++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-> @@ -421,3 +421,7 @@
->  448	common	process_mrelease		sys_process_mrelease
->  449	common  futex_waitv                     sys_futex_waitv
->  450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
-> +451	common	setxattrat			sys_setxattrat
-> +452	common	getxattrat			sys_getxattrat
-> +453	common	listxattrat			sys_listxattrat
-> +454	common	removexattrat			sys_removexattrat
-> diff --git a/include/asm-generic/audit_change_attr.h b/include/asm-generic/audit_change_attr.h
-> index 331670807cf0..cc840537885f 100644
-> --- a/include/asm-generic/audit_change_attr.h
-> +++ b/include/asm-generic/audit_change_attr.h
-> @@ -11,9 +11,15 @@ __NR_lchown,
->  __NR_fchown,
->  #endif
->  __NR_setxattr,
-> +#ifdef __NR_setxattrat
-> +__NR_setxattrat,
-> +#endif
->  __NR_lsetxattr,
->  __NR_fsetxattr,
->  __NR_removexattr,
-> +#ifdef __NR_removexattrat
-> +__NR_removexattrat,
-> +#endif
->  __NR_lremovexattr,
->  __NR_fremovexattr,
->  #ifdef __NR_fchownat
-> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-> index a34b0f9a9972..090b9b5229a0 100644
-> --- a/include/linux/syscalls.h
-> +++ b/include/linux/syscalls.h
-> @@ -348,23 +348,31 @@ asmlinkage long sys_io_uring_register(unsigned int fd, unsigned int op,
->  /* fs/xattr.c */
->  asmlinkage long sys_setxattr(const char __user *path, const char __user *name,
->  			     const void __user *value, size_t size, int flags);
-> +asmlinkage long sys_setxattrat(int dfd, const char __user *path, const char __user *name,
-> +			     const void __user *value, size_t size, int flags);
->  asmlinkage long sys_lsetxattr(const char __user *path, const char __user *name,
->  			      const void __user *value, size_t size, int flags);
->  asmlinkage long sys_fsetxattr(int fd, const char __user *name,
->  			      const void __user *value, size_t size, int flags);
->  asmlinkage long sys_getxattr(const char __user *path, const char __user *name,
->  			     void __user *value, size_t size);
-> +asmlinkage long sys_getxattrat(int dfd, const char __user *path, const char __user *name,
-> +			     void __user *value, size_t size, int flags);
->  asmlinkage long sys_lgetxattr(const char __user *path, const char __user *name,
->  			      void __user *value, size_t size);
->  asmlinkage long sys_fgetxattr(int fd, const char __user *name,
->  			      void __user *value, size_t size);
->  asmlinkage long sys_listxattr(const char __user *path, char __user *list,
->  			      size_t size);
-> +asmlinkage long sys_listxattrat(int dfd, const char __user *path, char __user *list,
-> +			      size_t size, int flags);
->  asmlinkage long sys_llistxattr(const char __user *path, char __user *list,
->  			       size_t size);
->  asmlinkage long sys_flistxattr(int fd, char __user *list, size_t size);
->  asmlinkage long sys_removexattr(const char __user *path,
->  				const char __user *name);
-> +asmlinkage long sys_removexattrat(int dfd, const char __user *path,
-> +				const char __user *name, int flags);
->  asmlinkage long sys_lremovexattr(const char __user *path,
->  				 const char __user *name);
->  asmlinkage long sys_fremovexattr(int fd, const char __user *name);
-> diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-> index 45fa180cc56a..4fcc71612b7a 100644
-> --- a/include/uapi/asm-generic/unistd.h
-> +++ b/include/uapi/asm-generic/unistd.h
-> @@ -886,8 +886,18 @@ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
->  #define __NR_set_mempolicy_home_node 450
->  __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
->  
-> +/* fs/xattr.c */
-> +#define __NR_setxattrat 451
-> +__SYSCALL(__NR_setxattrat, sys_setxattrat)
-> +#define __NR_getxattrat 452
-> +__SYSCALL(__NR_getxattrat, sys_getxattrat)
-> +#define __NR_listxattrat 453
-> +__SYSCALL(__NR_listxattrat, sys_listxattrat)
-> +#define __NR_removexattrat 454
-> +__SYSCALL(__NR_removexattrat, sys_removexattrat)
-> +
->  #undef __NR_syscalls
-> -#define __NR_syscalls 451
-> +#define __NR_syscalls 455
->  
->  /*
->   * 32 bit systems traditionally used different
-> -- 
-> 2.37.2
-> 
+This comes with the requirement that everything the architecture
+already provides needs to be defined, rather than just being,
+say, static inline functions.
 
-- RGB
+Bite the bullet and just provide the definitions and make it work.
+Compile-tested on sparc32 and sparc64.
 
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/linux-arm-kernel/202208201639.HXye3ke4-lkp@intel.com/
+Cc: David S. Miller <davem@davemloft.net>
+Cc: sparclinux@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Move defines in proximity of defined functions
+- Test compile also on sparc32
+---
+ arch/sparc/include/asm/io.h    |  2 ++
+ arch/sparc/include/asm/io_64.h | 22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/arch/sparc/include/asm/io.h b/arch/sparc/include/asm/io.h
+index 2eefa526b38f..2dad9be9ec75 100644
+--- a/arch/sparc/include/asm/io.h
++++ b/arch/sparc/include/asm/io.h
+@@ -19,4 +19,6 @@
+ #define writel_be(__w, __addr)	__raw_writel(__w, __addr)
+ #define writew_be(__l, __addr)	__raw_writew(__l, __addr)
+ 
++#include <asm-generic/io.h>
++
+ #endif
+diff --git a/arch/sparc/include/asm/io_64.h b/arch/sparc/include/asm/io_64.h
+index 5ffa820dcd4d..9303270b22f3 100644
+--- a/arch/sparc/include/asm/io_64.h
++++ b/arch/sparc/include/asm/io_64.h
+@@ -9,6 +9,7 @@
+ #include <asm/page.h>      /* IO address mapping routines need this */
+ #include <asm/asi.h>
+ #include <asm-generic/pci_iomap.h>
++#define pci_iomap pci_iomap
+ 
+ /* BIO layer definitions. */
+ extern unsigned long kern_base, kern_size;
+@@ -239,38 +240,51 @@ static inline void outl(u32 l, unsigned long addr)
+ void outsb(unsigned long, const void *, unsigned long);
+ void outsw(unsigned long, const void *, unsigned long);
+ void outsl(unsigned long, const void *, unsigned long);
++#define outsb outsb
++#define outsw outsw
++#define outsl outsl
+ void insb(unsigned long, void *, unsigned long);
+ void insw(unsigned long, void *, unsigned long);
+ void insl(unsigned long, void *, unsigned long);
++#define insb insb
++#define insw insw
++#define insl insl
+ 
+ static inline void readsb(void __iomem *port, void *buf, unsigned long count)
+ {
+ 	insb((unsigned long __force)port, buf, count);
+ }
++#define readsb readsb
++
+ static inline void readsw(void __iomem *port, void *buf, unsigned long count)
+ {
+ 	insw((unsigned long __force)port, buf, count);
+ }
++#define readsw readsw
+ 
+ static inline void readsl(void __iomem *port, void *buf, unsigned long count)
+ {
+ 	insl((unsigned long __force)port, buf, count);
+ }
++#define readsl readsl
+ 
+ static inline void writesb(void __iomem *port, const void *buf, unsigned long count)
+ {
+ 	outsb((unsigned long __force)port, buf, count);
+ }
++#define writesb writesb
+ 
+ static inline void writesw(void __iomem *port, const void *buf, unsigned long count)
+ {
+ 	outsw((unsigned long __force)port, buf, count);
+ }
++#define writesw writesw
+ 
+ static inline void writesl(void __iomem *port, const void *buf, unsigned long count)
+ {
+ 	outsl((unsigned long __force)port, buf, count);
+ }
++#define writesl writesl
+ 
+ #define ioread8_rep(p,d,l)	readsb(p,d,l)
+ #define ioread16_rep(p,d,l)	readsw(p,d,l)
+@@ -344,6 +358,7 @@ static inline void memset_io(volatile void __iomem *dst, int c, __kernel_size_t
+ 		d++;
+ 	}
+ }
++#define memset_io memset_io
+ 
+ static inline void sbus_memcpy_fromio(void *dst, const volatile void __iomem *src,
+ 				      __kernel_size_t n)
+@@ -369,6 +384,7 @@ static inline void memcpy_fromio(void *dst, const volatile void __iomem *src,
+ 		src++;
+ 	}
+ }
++#define memcpy_fromio memcpy_fromio
+ 
+ static inline void sbus_memcpy_toio(volatile void __iomem *dst, const void *src,
+ 				    __kernel_size_t n)
+@@ -395,6 +411,7 @@ static inline void memcpy_toio(volatile void __iomem *dst, const void *src,
+ 		d++;
+ 	}
+ }
++#define memcpy_toio memcpy_toio
+ 
+ #ifdef __KERNEL__
+ 
+@@ -412,7 +429,9 @@ static inline void __iomem *ioremap(unsigned long offset, unsigned long size)
+ static inline void __iomem *ioremap_np(unsigned long offset, unsigned long size)
+ {
+ 	return NULL;
++
+ }
++#define ioremap_np ioremap_np
+ 
+ static inline void iounmap(volatile void __iomem *addr)
+ {
+@@ -432,10 +451,13 @@ static inline void iounmap(volatile void __iomem *addr)
+ /* Create a virtual mapping cookie for an IO port range */
+ void __iomem *ioport_map(unsigned long port, unsigned int nr);
+ void ioport_unmap(void __iomem *);
++#define ioport_map ioport_map
++#define ioport_unmap ioport_unmap
+ 
+ /* Create a virtual mapping cookie for a PCI BAR (memory or IO) */
+ struct pci_dev;
+ void pci_iounmap(struct pci_dev *dev, void __iomem *);
++#define pci_iounmap pci_iounmap
+ 
+ static inline int sbus_can_dma_64bit(void)
+ {
+-- 
+2.37.2
 
