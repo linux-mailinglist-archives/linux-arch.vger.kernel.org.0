@@ -2,61 +2,74 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF785A8592
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Aug 2022 20:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26825A85AC
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Aug 2022 20:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233025AbiHaS2h (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Aug 2022 14:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        id S229555AbiHaScc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Aug 2022 14:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbiHaS2O (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 14:28:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1421E9279;
-        Wed, 31 Aug 2022 11:23:56 -0700 (PDT)
+        with ESMTP id S232816AbiHaScP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 14:32:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6909E11B3CA;
+        Wed, 31 Aug 2022 11:27:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C65861CD5;
-        Wed, 31 Aug 2022 18:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3FF0C433D6;
-        Wed, 31 Aug 2022 18:23:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFA5DB82276;
+        Wed, 31 Aug 2022 18:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96713C433C1;
+        Wed, 31 Aug 2022 18:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661970235;
-        bh=RH117eB+xIPb+d+OTRKvRd6566cj7SbPEdnpE0kcJI4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rKzzifM2IzFzPoYqwuHyb7KUze9j1tsaAPHuoTM5xD6cjWD15Br+PtwVZfQc6ByxH
-         4PtHUKu4Y3zj4gv587QhE1thcigp4sir8uM6jxn2Bwg2blw63ns2OIbwDoaqfY5Te7
-         MdKx3BgKVNqihDrZeSwNjRbVJ/O/h7SqqjtJknUpVOyK+WEb5F2VE0A1g/cW09Nj0p
-         sqrX5r1sbZ7GN/0HlqJe60P/lsCCCF7Ml+l2GmvHnmUiu+953wEApZN6r1EW0iD9rI
-         VGlTWuQFtvHR4WFhNTre7ElWAJdTdT1em6coaOTilIn0BeMHfrMDEWegNT1JWlET2S
-         m6vKv/RVFfnfw==
+        s=k20201202; t=1661970443;
+        bh=oEHypOLBHy6WPhJaawTtdgVBGVSPkKMoNZ/Oavk7OLs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=IT+XEBuox1oVQ9wF5uoF1KW3YETq3IrGjd6OjgqiKtwdgK+yhkIaYsm3p0Wuh0k6Q
+         65IR3kFEVnM/phw4px+XbMr/5gEuBp2AdSJMmqFU/mJ/26UMRuT50cKZoWL7t9VEvt
+         kgIiyxeY8uIbSFNMlAFSlv/ZTpOi9HxbomS6kVdDDpg3qagfV0glTFZcDMCb4s0CGV
+         tCV3dvbRXEG7CnwHb+Ux0EKhGZObFgrdb71oEo3AJGna1NDZybAY+7AXmpIDkNXaMu
+         n7oJ3vwiI3ssCclreEa8WfbZ09aqc4SJACYRmIobP9770Jv0UgXH1mtELVLkDn50cI
+         y8NdqKyZJ1Opg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 822DC5C02A9; Wed, 31 Aug 2022 11:23:55 -0700 (PDT)
+        id 402D35C015D; Wed, 31 Aug 2022 11:27:23 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 11:27:23 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        kernel-team@fb.com, mingo@kernel.org
-Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
-        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
-        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
-        akiyks@gmail.com,
-        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
-        Marco Elver <elver@google.com>,
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>,
         Joel Fernandes <joel@joelfernandes.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Marco Elver <elver@google.com>,
         Charalampos Mainas <charalampos.mainas@gmail.com>,
         Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
         Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH memory-model 3/3] tools/memory-model: Clarify LKMM's limitations in litmus-tests.txt
-Date:   Wed, 31 Aug 2022 11:23:53 -0700
-Message-Id: <20220831182353.2699262-3-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220831182350.GA2698943@paulmck-ThinkPad-P17-Gen-1>
-References: <20220831182350.GA2698943@paulmck-ThinkPad-P17-Gen-1>
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH] tools/memory-model: Weaken ctrl dependency definition in
+ explanation.txt
+Message-ID: <20220831182723.GM6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
+ <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
+ <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
+ <Yw7AEx1w6oWn86cm@rowland.harvard.edu>
+ <935D3930-C369-4B0E-ACDC-5BFDFA85AA72@in.tum.de>
+ <Yw+cm+awhfi6IUHr@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yw+cm+awhfi6IUHr@rowland.harvard.edu>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,83 +80,155 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-From: Paul HeidekrÃ¼ger <paul.heidekrueger@in.tum.de>
+On Wed, Aug 31, 2022 at 01:38:35PM -0400, Alan Stern wrote:
+> On Wed, Aug 31, 2022 at 06:42:05PM +0200, Paul Heidekrüger wrote:
+> > On 31. Aug 2022, at 03:57, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > 
+> > > On Tue, Aug 30, 2022 at 05:12:33PM -0400, Joel Fernandes wrote:
+> > >> On 8/30/2022 5:08 PM, Joel Fernandes wrote:
+> > >>> On 8/30/2022 4:44 PM, Paul Heidekrüger wrote:
+> > >>>> The current informal control dependency definition in explanation.txt is
+> > >>>> too broad and, as dicsussed, needs to be updated.
+> > >>>> 
+> > >>>> Consider the following example:
+> > >>>> 
+> > >>>>> if(READ_ONCE(x))
+> > >>>>> 	return 42;
+> > >>>>> 
+> > >>>>> 	WRITE_ONCE(y, 42);
+> > >>>>> 
+> > >>>>> 	return 21;
+> > >>>> 
+> > >>>> The read event determines whether the write event will be executed "at
+> > >>>> all" - as per the current definition - but the formal LKMM does not
+> > >>>> recognize this as a control dependency.
+> > >>>> 
+> > >>>> Introduce a new defintion which includes the requirement for the second
+> > >>>> memory access event to syntactically lie within the arm of a non-loop
+> > >>>> conditional.
+> > >>>> 
+> > >>>> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
+> > >>>> Cc: Marco Elver <elver@google.com>
+> > >>>> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> > >>>> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> > >>>> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> > >>>> Cc: Martin Fink <martin.fink@in.tum.de>
+> > >>>> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> > >>>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+> > >>>> ---
+> > >>>> 
+> > >>>> @Alan:
+> > >>>> 
+> > >>>> Since I got it wrong the last time, I'm adding you as a co-developer after my
+> > >>>> SOB. I'm sorry if this creates extra work on your side due to you having to
+> > >>>> resubmit the patch now with your SOB if I understand correctly, but since it's
+> > >>>> based on your wording from the other thread, I definitely wanted to give you
+> > >>>> credit.
+> > >>>> 
+> > >>>> tools/memory-model/Documentation/explanation.txt | 7 ++++---
+> > >>>> 1 file changed, 4 insertions(+), 3 deletions(-)
+> > >>>> 
+> > >>>> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> > >>>> index ee819a402b69..0bca50cac5f4 100644
+> > >>>> --- a/tools/memory-model/Documentation/explanation.txt
+> > >>>> +++ b/tools/memory-model/Documentation/explanation.txt
+> > >>>> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
+> > >>>> through a pointer will depend on the value read earlier from that
+> > >>>> pointer.
+> > >>>> 
+> > >>>> -Finally, a read event and another memory access event are linked by a
+> > >>>> -control dependency if the value obtained by the read affects whether
+> > >>>> -the second event is executed at all.  Simple example:
+> > >>>> +Finally, a read event X and another memory access event Y are linked by
+> > >>>> +a control dependency if Y syntactically lies within an arm of an if,
+> > >>>> +else or switch statement and the condition guarding Y is either data or
+> > >>>> +address-dependent on X.  Simple example:
+> > 
+> > Thank you both for commenting!
+> > 
+> > > "if, else or switch" should be just "if or switch".  In C there is no 
+> > > such thing as an "else" statement; an "else" clause is merely part of 
+> > > an "if" statement.  In fact, maybe "body" would be more appropriate than 
+> > > "arm", because "switch" statements don't have arms -- they have cases.
+> > 
+> > Right. What do you think of "branch"? "Body" to me suggests that there's
+> > only one and therefore that the else clause isn't included.
+> > 
+> > Would it be fair to say that switch statements have branches? I guess
+> > because switch statements are a convenient way of writing goto's, i.e.
+> > jumps, it's a stretch and basically the same as saying "arm"?
+> > 
+> > Maybe we can avoid the arm / case clash by just having a definition for if
+> > statements and appending something like "similarly for switch statements"?
+> 
+> That sounds good.
+> 
+> > >>> 'conditioning guarding Y' sounds confusing to me as it implies to me that the
+> > >>> condition's evaluation depends on Y. I much prefer Alan's wording from the
+> > >>> linked post saying something like 'the branch condition is data or address
+> > >>> dependent on X, and Y lies in one of the arms'.
+> > >>> 
+> > >>> I have to ask though, why doesn't this imply that the second instruction never
+> > >>> executes at all? I believe that would break the MP-pattern if it were not true.
+> > >> 
+> > >> About my last statement, I believe your patch does not disagree with the
+> > >> correctness of the earlier text but just wants to improve it. If that's case
+> > >> then that's fine.
+> > > 
+> > > The biggest difference between the original text and Paul's suggested 
+> > > update is that the new text makes clear that Y has to lie within the 
+> > > body of the "if" or "switch" statement.  If Y follows the end of the 
+> > > if/else, as in the example at the top of this email, then it does have 
+> > > not a control dependency on X (at least, not via that if/else), even 
+> > > though the value read by X does determine whether or not Y will execute.
+> > > 
+> > > [It has to be said that this illustrates a big weakness of the LKMM: It 
+> > > isn't cognizant of "goto"s or "return"s.  This naturally derives from 
+> > > limitations of the herd tool, but the situation could be improved.  So 
+> > > for instance, I don't think it would cause trouble to say that in:
+> > > 
+> > > 	if (READ_ONCE(x) == 0)
+> > > 		return;
+> > > 	WRITE_ONCE(y, 5);
+> > > 
+> > > there really is a control dependence from x to y, even though the 
+> > > WRITE_ONCE is outside the body of the "if" statement.  Certainly the 
+> > > compiler can't reorder the write before the read.  But AFAIK there's no 
+> > > way to include a "return" statement in a litmus test for herd.  Or a 
+> > > subroutine definition, for that matter.]
+> > > 
+> > > I agree that "condition guarding Y" is somewhat awkward.  "the 
+> > > condition of the if (or the expression of the switch)" might be better, 
+> > > even though it is somewhat awkward as well.  At least it's more 
+> > > explicit.
+> > 
+> > Maybe we can reuse the wording from the data and address dependency
+> > definition here and say "affects"?
+> > 
+> > Putting it all together:
+> > 
+> > > Finally, a read event X and another memory access event Y are linked by a
+> > > control dependency if Y syntactically lies within a branch of an if or
+> > > switch statement and X affects the evaluation of that statement's
+> > > condition via a data or address dependency.
+> > 
+> > Alternatively without the arm / case clash:
+> > 
+> > > Finally, a read event X and another memory access event Y are linked by a
+> > > control dependency if Y syntactically lies within an arm of an if
+> > > statement and X affects the evaluation of the if condition via a data or
+> > > address dependency.  Similarly for switch statements.
+> > 
+> > What do you think?
+> 
+> I like the second one.  How about combining the last two sentences?  
+> 
+> 	... via a data or address dependency (or similarly for a switch 
+> 	statement).
+> 
+> Now I suppose someone will pipe up and ask about the conditional 
+> expressions in "for", "while" and "do" statements...  :-)
 
-As discussed, clarify LKMM not recognizing certain kinds of orderings.
-In particular, highlight the fact that LKMM might deliberately make
-weaker guarantees than compilers and architectures.
+What?  You don't like setjmp() and longjmp()?  ;-)
 
-[ paulmck: Fix whitespace issue noted by checkpatch.pl. ]
-
-Link: https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tum.de/T/#u
-Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Paul HeidekrÃ¼ger <paul.heidekrueger@in.tum.de>
-Reviewed-by: Marco Elver <elver@google.com>
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-Cc: Martin Fink <martin.fink@in.tum.de>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- .../Documentation/litmus-tests.txt            | 37 ++++++++++++++-----
- 1 file changed, 27 insertions(+), 10 deletions(-)
-
-diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
-index 8a9d5d2787f9e..26554b1c5575e 100644
---- a/tools/memory-model/Documentation/litmus-tests.txt
-+++ b/tools/memory-model/Documentation/litmus-tests.txt
-@@ -946,22 +946,39 @@ Limitations of the Linux-kernel memory model (LKMM) include:
- 	carrying a dependency, then the compiler can break that dependency
- 	by substituting a constant of that value.
- 
--	Conversely, LKMM sometimes doesn't recognize that a particular
--	optimization is not allowed, and as a result, thinks that a
--	dependency is not present (because the optimization would break it).
--	The memory model misses some pretty obvious control dependencies
--	because of this limitation.  A simple example is:
-+	Conversely, LKMM will sometimes overestimate the amount of
-+	reordering compilers and CPUs can carry out, leading it to miss
-+	some pretty obvious cases of ordering.  A simple example is:
- 
- 		r1 = READ_ONCE(x);
- 		if (r1 == 0)
- 			smp_mb();
- 		WRITE_ONCE(y, 1);
- 
--	There is a control dependency from the READ_ONCE to the WRITE_ONCE,
--	even when r1 is nonzero, but LKMM doesn't realize this and thinks
--	that the write may execute before the read if r1 != 0.  (Yes, that
--	doesn't make sense if you think about it, but the memory model's
--	intelligence is limited.)
-+	The WRITE_ONCE() does not depend on the READ_ONCE(), and as a
-+	result, LKMM does not claim ordering.  However, even though no
-+	dependency is present, the WRITE_ONCE() will not be executed before
-+	the READ_ONCE().  There are two reasons for this:
-+
-+                The presence of the smp_mb() in one of the branches
-+                prevents the compiler from moving the WRITE_ONCE()
-+                up before the "if" statement, since the compiler has
-+                to assume that r1 will sometimes be 0 (but see the
-+                comment below);
-+
-+                CPUs do not execute stores before po-earlier conditional
-+                branches, even in cases where the store occurs after the
-+                two arms of the branch have recombined.
-+
-+	It is clear that it is not dangerous in the slightest for LKMM to
-+	make weaker guarantees than architectures.  In fact, it is
-+	desirable, as it gives compilers room for making optimizations.
-+	For instance, suppose that a 0 value in r1 would trigger undefined
-+	behavior elsewhere.  Then a clever compiler might deduce that r1
-+	can never be 0 in the if condition.  As a result, said clever
-+	compiler might deem it safe to optimize away the smp_mb(),
-+	eliminating the branch and any ordering an architecture would
-+	guarantee otherwise.
- 
- 2.	Multiple access sizes for a single variable are not supported,
- 	and neither are misaligned or partially overlapping accesses.
--- 
-2.31.1.189.g2e36527f23
-
+							Thanx, Paul
