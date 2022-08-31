@@ -2,88 +2,201 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CD25A7FBC
-	for <lists+linux-arch@lfdr.de>; Wed, 31 Aug 2022 16:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952435A813B
+	for <lists+linux-arch@lfdr.de>; Wed, 31 Aug 2022 17:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbiHaONu (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Aug 2022 10:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S231627AbiHaP24 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Aug 2022 11:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbiHaONe (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 10:13:34 -0400
-Received: from mail.gnudd.com (mail.gnudd.com [93.91.132.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C23D75A2;
-        Wed, 31 Aug 2022 07:13:19 -0700 (PDT)
-Received: from dciminaghi by mail.gnudd.com with local (Exim 4.94.2)
-        (envelope-from <dciminaghi@arcana.gnudd.com>)
-        id 1oTOSL-0004O9-3A; Wed, 31 Aug 2022 16:12:37 +0200
-Date:   Wed, 31 Aug 2022 16:12:36 +0200
-From:   Davide Ciminaghi <ciminaghi@gnudd.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Alexandre Courbot <gnurou@gmail.com>,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, Alessandro Rubini <rubini@gnudd.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-Message-ID: <Yw9sVCNtaLUjZH/F@arcana.i.gnudd.com>
-References: <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
- <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
- <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu>
- <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
- <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
- <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
- <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
- <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
- <Yw3DKCuDoPkCaqxE@arcana.i.gnudd.com>
- <CACRpkdZeAAZYqV3ccd-X=ZwdnfSwRUdXchGETB-WTkgSZQL=Pw@mail.gmail.com>
+        with ESMTP id S230456AbiHaP2z (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 11:28:55 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18C8D91EF
+        for <linux-arch@vger.kernel.org>; Wed, 31 Aug 2022 08:28:52 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-334dc616f86so310418957b3.8
+        for <linux-arch@vger.kernel.org>; Wed, 31 Aug 2022 08:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WG3L5AqBV6fri0E+FNG2tsbDp/uFyzzRTMikwR7NSY8=;
+        b=K4mZtzeFsKxJKOsvfz3u8buWcDbdHB0bPmoDat2amZVxf6i7fSAQFaeyCHfBhOW0gn
+         TYiPTPwinxH8yKQGmCabK7zsAg7t70798MwIPLUmtbWdWtkPoH8nkkd0L6+Cf/71NitT
+         pIpTm135oSjNuBnp7lYQC08Y98tRGNR+0DcT0LYO7fxV5Ng1p7CsbsO1uZH/I63XPhjj
+         LoKETIXPqOU+NyCB1s85tiwuh2e//ou8VKmFXVH3pOn419Mn7E1W55VRw4JlXGoTp7nX
+         lwPAdy+2tjWZHnwP0BxNNwETNl+fZjmT1bVCkdUM4qWebnjcYikmadptjs0201jXoXGN
+         /Wug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WG3L5AqBV6fri0E+FNG2tsbDp/uFyzzRTMikwR7NSY8=;
+        b=4PVDvJz1+J5VfD8o0yvICvw/qkD7knvnrh7k0LaOfHVTpIvAMyKEJxdVrq1T2U/1Re
+         0U7TjCFgu0K8HkWcAqEDpO1bKRxh1nHPxMRaif44GOqMSkhHbnVT6RN4KyhKI09JxKxy
+         2w3ALTFN7Eco+OdbpiXRIuhMRkDWZGNKk4vfEYL1c0+SJtfgkdzQqXc48PTs3RA5lBrU
+         FHuRJbuCkXl1ZcnlkTZ2xPaGk3bP2WjlyfRXdPBTWGHvI3diT8uCj+AlTZiM67LGRVlB
+         Q0nmjXiIxL8y602S5JmuFi/ZkxgTU7IM3c2GwvhKDsNnX6ZEvwTHTOzHrvqIhtPvKjlP
+         n0WA==
+X-Gm-Message-State: ACgBeo2F/w07W/FC6AE51P9/hnlgtXsD5DXXh89jIQNFkdWJPAXudIxg
+        /3c15lbw1GYGvIKsoNxVs85e56Afvml4Z2HDmCYSBA==
+X-Google-Smtp-Source: AA6agR42WGqJyo3CQ/wsWtBH4QMjo2FwsKfgLb/Aa3jKv6m3xoE+xzdLy95JXttnzairFt+14Q8rzI0UFGuD4qoW950=
+X-Received: by 2002:a0d:d850:0:b0:340:d2c0:b022 with SMTP id
+ a77-20020a0dd850000000b00340d2c0b022mr16165795ywe.469.1661959731749; Wed, 31
+ Aug 2022 08:28:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <CACRpkdZeAAZYqV3ccd-X=ZwdnfSwRUdXchGETB-WTkgSZQL=Pw@mail.gmail.com>
-X-Face: #Q;A)@_4.#>0+_%y]7aBr:c"ndLp&#+2?]J;lkse\^)FP^Lr5@O0{)J;'nny4%74.fM'n)M
- >ISCj.KmsL/HTxz!:Ju'pnj'Gz&.
-Sender: ciminaghi@gnudd.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+In-Reply-To: <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 31 Aug 2022 08:28:40 -0700
+Message-ID: <CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mel Gorman <mgorman@suse.de>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 03:32:25PM +0200, Linus Walleij wrote:
-> On Tue, Aug 30, 2022 at 9:58 AM Davide Ciminaghi <ciminaghi@gnudd.com> wrote:
-> 
-> > the sta2x11 was a chip containing AMBA peripherals and a PCIe to AMBA bridge
-> > (it is still in production as far as I know, but deprecated for new designs).
-> > It would typically be installed on x86 machines, so you needed to build and
-> > run AMBA drivers in an x86 environment. The original drivers we started from
-> > had platform data, but then we were told to switch to DTS.
-> 
-> For the record I think that was bad advice, I hope it wasn't me.
-> But the world was different back then I suppose.
-> Adding DTS to x86 which is inherently ACPI is not a good idea.
-> Especially if you look at how SBSA ACPI UARTS were done
-> in drivers/tty/serial/amba-pl011.c.
+On Wed, Aug 31, 2022 at 3:47 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-now that I think of it, ACPI was also listed as a possible choice, but the
-problem was that we didn't know much about ACPI, and took the DTS way.
-So there was no bad advice, just fear of the unknown :-)
+> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
+> > On Wed, Aug 31, 2022 at 04:42:30AM -0400, Kent Overstreet wrote:
+> > > On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
+> > > > On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
+> > > > > ===========================
+> > > > > Code tagging framework
+> > > > > ===========================
+> > > > > Code tag is a structure identifying a specific location in the source code
+> > > > > which is generated at compile time and can be embedded in an application-
+> > > > > specific structure. Several applications of code tagging are included in
+> > > > > this RFC, such as memory allocation tracking, dynamic fault injection,
+> > > > > latency tracking and improved error code reporting.
+> > > > > Basically, it takes the old trick of "define a special elf section for
+> > > > > objects of a given type so that we can iterate over them at runtime" and
+> > > > > creates a proper library for it.
+> > > >
+> > > > I might be super dense this morning, but what!? I've skimmed through the
+> > > > set and I don't think I get it.
+> > > >
+> > > > What does this provide that ftrace/kprobes don't already allow?
+> > >
+> > > You're kidding, right?
+> >
+> > It's a valid question. From the description, it main addition that would
+> > be hard to do with ftrace or probes is catching where an error code is
+> > returned. A secondary addition would be catching all historical state and
+> > not just state since the tracing started.
+> >
+> > It's also unclear *who* would enable this. It looks like it would mostly
+> > have value during the development stage of an embedded platform to track
+> > kernel memory usage on a per-application basis in an environment where it
+> > may be difficult to setup tracing and tracking. Would it ever be enabled
+> > in production? Would a distribution ever enable this? If it's enabled, any
+> > overhead cannot be disabled/enabled at run or boot time so anyone enabling
+> > this would carry the cost without never necessarily consuming the data.
 
-Thanks
-Davide
+Thank you for the question.
+For memory tracking my intent is to have a mechanism that can be enabled in
+the field testing (pre-production testing on a large population of
+internal users).
+The issue that we are often facing is when some memory leaks are happening
+in the field but very hard to reproduce locally. We get a bugreport
+from the user
+which indicates it but often has not enough information to track it. Note that
+quite often these leaks/issues happen in the drivers, so even simply finding out
+where they came from is a big help.
+The way I envision this mechanism to be used is to enable the basic memory
+tracking in the field tests and have a user space process collecting
+the allocation
+statistics periodically (say once an hour). Once it detects some counter growing
+infinitely or atypically (the definition of this is left to the user
+space) it can enable
+context capturing only for that specific location, still keeping the
+overhead to the
+minimum but getting more information about potential issues. Collected stats and
+contexts are then attached to the bugreport and we get more visibility
+into the issue
+when we receive it.
+The goal is to provide a mechanism with low enough overhead that it
+can be enabled
+all the time during these field tests without affecting the device's
+performance profiles.
+Tracing is very cheap when it's disabled but having it enabled all the
+time would
+introduce higher overhead than the counter manipulations.
+My apologies, I should have clarified all this in this cover letter
+from the beginning.
+
+As for other applications, maybe I'm not such an advanced user of
+tracing but I think only
+the latency tracking application might be done with tracing, assuming
+we have all the
+right tracepoints but I don't see how we would use tracing for fault
+injections and
+descriptive error codes. Again, I might be mistaken.
+
+Thanks,
+Suren.
+
+> >
+> > It might be an ease-of-use thing. Gathering the information from traces
+> > is tricky and would need combining multiple different elements and that
+> > is development effort but not impossible.
+> >
+> > Whatever asking for an explanation as to why equivalent functionality
+> > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+>
+> Fully agreed and this is especially true for a change this size
+> 77 files changed, 3406 insertions(+), 703 deletions(-)
+>
+> --
+> Michal Hocko
+> SUSE Labs
