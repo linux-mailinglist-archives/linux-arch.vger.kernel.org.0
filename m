@@ -2,176 +2,341 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB685A924E
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 10:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53FC5A9259
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 10:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234102AbiIAInq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Sep 2022 04:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
+        id S233111AbiIAIrq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Sep 2022 04:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbiIAIno (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 04:43:44 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3771314E7
-        for <linux-arch@vger.kernel.org>; Thu,  1 Sep 2022 01:43:40 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id x10so17120925ljq.4
-        for <linux-arch@vger.kernel.org>; Thu, 01 Sep 2022 01:43:40 -0700 (PDT)
+        with ESMTP id S232332AbiIAIrp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 04:47:45 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42311144D
+        for <linux-arch@vger.kernel.org>; Thu,  1 Sep 2022 01:47:43 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id c7so14704366wrp.11
+        for <linux-arch@vger.kernel.org>; Thu, 01 Sep 2022 01:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=VH72CkJdWHRYjuIFqG3YYZtTrJw2Fhi5jnFxkucPCHY=;
-        b=q7AjWjhmnd64a4Ge80aSMXzM40DYISK3cXmW/EibDBVwJ+8k/kXbGydZOb9luK+PIZ
-         Ht/KjsMCWD5TF/twQCHm6itfvd6g64oIsvl5c5eKge4E9VhNnF7iOxqToHuyozIfoFb1
-         5I88bd1UfHObAquK0acXH+XbI6Py13HNPo09dD+NGiTxpVgIr43RQcU5305AlaqKPpll
-         qwKybw5Q2+9d/Onlv8u1vDEdJlLQ1JUMSCRevC4eAiHePyL2wzZzh3KSvr/OLrTmD05T
-         eLyu3SeubEOLjLKn16wG4v4TsahkBmU2CrHwp0/PiiByarcOmjtEcsv6KWve7EKHFu99
-         DiuA==
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=/Auump3XxTowu3KsMpzt3UPvEs6aYKfLdnXKnH4oZ54=;
+        b=Ycl15nMb/4hb3kHz/lQ3e6M+fpLdoHJWSCpWa/MbisPbZ7pCgQ11BLgW7NS3aX/qHi
+         kjXZtQKJCke0dSlTE8pS78iuYzMr1YE/gvJLxuiYBHcPH9cIkR76HiQ6jvoeZ3Sqz0gN
+         N3ojghubI2M9j+bN3fPDI2JJfumisjTd2WiJnE+Ga7SZ+MozHj9bswIVE3wDUdedNi7u
+         Y9dGHbQXkX8CBtXZDy0LSXc+m4C6n+8WEYMZIT/Rx2IsivujQe2u6XUQDAxpsEEizbz9
+         CDcObZT7NSWOYM0q8jeBpJOagUmXXO2vvqqk8glCUFNn8x7mgUKIY1Ddvy6p3TSf1imo
+         8gOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=VH72CkJdWHRYjuIFqG3YYZtTrJw2Fhi5jnFxkucPCHY=;
-        b=dXCzMGyuqJmAAYerPI7JHr6fyALWnTb5aEkqdS4VbDpYYuh4cnPedji3IuDlYUoNto
-         Wet9y2g6OaJKpo8hnymgNIpEOhldWG7ppyZj2HkW/ImWOyhqH1G0eFw4mfO65iA2Qa7b
-         eaQ01SR/cBNn7zNHRMBrzH/BnuNUbXmV2SeAgKZ/9ZBJv5kJ2R4yI+cbXucxBjPTgYXm
-         0mZEYVkcn2j0EIAEfC8G5nQG1m9zhuWPLCLmnOjN/x0ztMQWWWttK4c9VYQs4vsSXZ1P
-         aegTq22Ta2ggVBLQjrygQOP2WQMIvdg/U/lnxhuLsWy1hdZqy1bZSpNBsW84musu3Dwz
-         YvxQ==
-X-Gm-Message-State: ACgBeo2/TZGV/ndtrsqF3uN7C+XVt2GiSwxnenI3WIw4cMkQTnFHlq7t
-        jhjF7Z4Bs76wbaCMFWZ7TUbDSfuSWHtqZ0ml8n90sA==
-X-Google-Smtp-Source: AA6agR4BjD3DwjS+CZ4CCVxEVQ6+miy/r1+fo/IQYDRJogJb7LowD/eAhVezdlkQzk6xOh63IrvI7g9qP1YqXlNutus=
-X-Received: by 2002:a2e:be88:0:b0:25f:e9a8:44b8 with SMTP id
- a8-20020a2ebe88000000b0025fe9a844b8mr8851946ljr.92.1662021818766; Thu, 01 Sep
- 2022 01:43:38 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=/Auump3XxTowu3KsMpzt3UPvEs6aYKfLdnXKnH4oZ54=;
+        b=aeaxFIFPaQwBLVXPu0YezQzacvQtRk/DEQENUrGt/ovJoaOO10OhM6mH7Pt1Kux+Xu
+         Mq0Rn9R73FwueE2Ry0aupOZMsUO9avCQGw27dfrfxOMQFQVJ1+wcmCkji52otDjEfap3
+         t6rNjPFi5vzEkWYAETerGgBvOysP+IgZlHwWhrWWuHuAQJCbLbSrGyNZpmDjJDB/ntRN
+         X8P+HL5TNs6AXqKepU88/C0ZE61/XjPN7w+HMAkngFS3S/fGre5SDUNF8eSvW55e6u4k
+         B4fJrX+F9SSg6vUMNUuhSDbhtPtH8NLygMHMFgF6djxFoA5uCsUgo1FAJpAn6kI67P/s
+         pycg==
+X-Gm-Message-State: ACgBeo00ZODTZA+p6kPjARS3+KnTbtN/ElzPEX2t/rlwm9w+lKu0xKVH
+        xfZ7PLWOM+X/DhbwqUoN1P0+SA==
+X-Google-Smtp-Source: AA6agR7YxteHL9Mris6cZrPrBO0zwwHVERYvvIslObQc105k447VDKLfl6OgWT/HLm3s5gCVTlynGw==
+X-Received: by 2002:a05:6000:616:b0:226:d80b:76ab with SMTP id bn22-20020a056000061600b00226d80b76abmr11224186wrb.547.1662022062154;
+        Thu, 01 Sep 2022 01:47:42 -0700 (PDT)
+Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id bq25-20020a5d5a19000000b0021e519eba9bsm9411140wrb.42.2022.09.01.01.47.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 01:47:41 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 10:47:40 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Vladimir Isaev <vladimir.isaev@syntacore.com>
+Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Conor.Dooley@microchip.com, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org
+Subject: Re: [PATCH v2] riscv: Fix permissions for all mm's during mm init
+Message-ID: <20220901084740.v34npx77vlfclyje@kamzik>
+References: <20220830091612.513137-1-vladimir.isaev@syntacore.com>
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-23-surenb@google.com>
- <CACT4Y+ZX3U1=cAPXPhoOy6xrngSCfSmyFagXK-9fWtWWODfsew@mail.gmail.com> <20220831173010.wc5j3ycmfjx6ezfu@moria.home.lan>
-In-Reply-To: <20220831173010.wc5j3ycmfjx6ezfu@moria.home.lan>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 1 Sep 2022 10:43:26 +0200
-Message-ID: <CACT4Y+bMeqvWQwqzG3nfcf0-VOjU7usxht5mKgUwMcOpWKRjxQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 22/30] Code tagging based fault injection
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
-        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
-        changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, shakeelb@google.com, songmuchun@bytedance.com,
-        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
-        minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830091612.513137-1-vladimir.isaev@syntacore.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
- On Wed, 31 Aug 2022 at 19:30, Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
-> > > From: Kent Overstreet <kent.overstreet@linux.dev>
-> > >
-> > > This adds a new fault injection capability, based on code tagging.
-> > >
-> > > To use, simply insert somewhere in your code
-> > >
-> > >   dynamic_fault("fault_class_name")
-> > >
-> > > and check whether it returns true - if so, inject the error.
-> > > For example
-> > >
-> > >   if (dynamic_fault("init"))
-> > >       return -EINVAL;
-> >
-> > Hi Suren,
-> >
-> > If this is going to be used by mainline kernel, it would be good to
-> > integrate this with fail_nth systematic fault injection:
-> > https://elixir.bootlin.com/linux/latest/source/lib/fault-inject.c#L109
-> >
-> > Otherwise these dynamic sites won't be tested by testing systems doing
-> > systematic fault injection testing.
->
-> That's a discussion we need to have, yeah. We don't want two distinct fault
-> injection frameworks, we'll have to have a discussion as to whether this is (or
-> can be) better enough to make a switch worthwhile, and whether a compatibility
-> interface is needed - or maybe there's enough distinct interesting bits in both
-> to make merging plausible?
->
-> The debugfs interface for this fault injection code is necessarily different
-> from our existing fault injection - this gives you a fault injection point _per
-> callsite_, which is huge - e.g. for filesystem testing what I need is to be able
-> to enable fault injection points within a given module. I can do that easily
-> with this, not with our current fault injection.
->
-> I think the per-callsite fault injection points would also be pretty valuable
-> for CONFIG_FAULT_INJECTION_USERCOPY, too.
->
-> OTOH, existing kernel fault injection can filter based on task - this fault
-> injection framework doesn't have that. Easy enough to add, though. Similar for
-> the interval/probability/ratelimit stuff.
->
-> fail_function is the odd one out, I'm not sure how that would fit into this
-> model. Everything else I've seen I think fits into this model.
->
-> Also, it sounds like you're more familiar with our existing fault injection than
-> I am, so if I've misunderstood anything about what it can do please do correct
-> me.
+On Tue, Aug 30, 2022 at 12:16:12PM +0300, Vladimir Isaev wrote:
+> It is possible to have more than one mm (init_mm) during memory
+> permission fixes. In my case it was caused by request_module
+> from drivers/net/phy/phy_device.c and leads to following Oops
+> during free_initmem() on RV32 platform:
+>      Unable to handle kernel paging request at virtual address c0800000
+>      Oops [#1]
+>      Modules linked in:
+>      CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.45
+>      Hardware name: Syntacore SCR5 SDK board (DT)
+>      epc : __memset+0x58/0xf4
+>       ra : free_reserved_area+0xfa/0x15a
+>      epc : c02b26ac ra : c00eb588 sp : c1c1fed0
+>       gp : c1898690 tp : c1c98000 t0 : c0800000
+>       t1 : ffffffff t2 : 00000000 s0 : c1c1ff20
+>       s1 : c189a000 a0 : c0800000 a1 : cccccccc
+>       a2 : 00001000 a3 : c0801000 a4 : 00000000
+>       a5 : 00800000 a6 : fef09000 a7 : 00000000
+>       s2 : c0e57000 s3 : c10edcf8 s4 : 000000cc
+>       s5 : ffffefff s6 : c188a9f4 s7 : 00000001
+>       s8 : c0800000 s9 : fef1b000 s10: c10ee000
+>       s11: c189a000 t3 : 00000000 t4 : 00000000
+>       t5 : 00000000 t6 : 00000001
+>      status: 00000120 badaddr: c0800000 cause: 0000000f
+>      [<c0488658>] free_initmem+0x204/0x222
+>      [<c048d05a>] kernel_init+0x32/0xfc
+>      [<c0002f76>] ret_from_exception+0x0/0xc
+>      ---[ end trace 7a5e2b002350b528 ]---
+> 
+> This is because request_module attempted to modprobe module, so it created
+> new mm with the copy of kernel's page table. And this copy won't be updated
+> in case of 4M pages and RV32 (pgd is the leaf).
+> 
+> To fix this we can update protection bits for all of existing mm-s, the
+> same as ARM does, see commit 08925c2f124f
+> ("ARM: 8464/1: Update all mm structures with section adjustments").
+> 
+> Fixes: 19a00869028f ("RISC-V: Protect all kernel sections including init early")
+> Signed-off-by: Vladimir Isaev <vladimir.isaev@syntacore.com>
+> ---
+> Changes for v2:
+>   - Fixed commit message format.
+>   - Added 'Fixes' tag.
+> ---
+>  arch/riscv/include/asm/set_memory.h | 20 +++--------
+>  arch/riscv/kernel/setup.c           | 11 ------
+>  arch/riscv/mm/init.c                | 29 ++++++++++++---
+>  arch/riscv/mm/pageattr.c            | 55 ++++++++++++++++++++++++-----
+>  4 files changed, 75 insertions(+), 40 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm/set_memory.h
+> index a2c14d4b3993..bb0f6b4ed86b 100644
+> --- a/arch/riscv/include/asm/set_memory.h
+> +++ b/arch/riscv/include/asm/set_memory.h
+> @@ -16,28 +16,16 @@ int set_memory_rw(unsigned long addr, int numpages);
+>  int set_memory_x(unsigned long addr, int numpages);
+>  int set_memory_nx(unsigned long addr, int numpages);
+>  int set_memory_rw_nx(unsigned long addr, int numpages);
+> -static __always_inline int set_kernel_memory(char *startp, char *endp,
+> -					     int (*set_memory)(unsigned long start,
+> -							       int num_pages))
+> -{
+> -	unsigned long start = (unsigned long)startp;
+> -	unsigned long end = (unsigned long)endp;
+> -	int num_pages = PAGE_ALIGN(end - start) >> PAGE_SHIFT;
+> -
+> -	return set_memory(start, num_pages);
+> -}
+> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
+> +			  pgprot_t clear_mask);
+>  #else
+>  static inline int set_memory_ro(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_rw(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_x(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_rw_nx(unsigned long addr, int numpages) { return 0; }
+> -static inline int set_kernel_memory(char *startp, char *endp,
+> -				    int (*set_memory)(unsigned long start,
+> -						      int num_pages))
+> -{
+> -	return 0;
+> -}
+> +static inline void fix_kernel_mem_early(char *startp, char *endp,
+> +					pgprot_t set_mask, pgprot_t clear_mask) { }
+>  #endif
+>  
+>  int set_direct_map_invalid_noflush(struct page *page);
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 95ef6e2bf45c..17eae1406092 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -27,7 +27,6 @@
+>  #include <asm/early_ioremap.h>
+>  #include <asm/pgtable.h>
+>  #include <asm/setup.h>
+> -#include <asm/set_memory.h>
+>  #include <asm/sections.h>
+>  #include <asm/sbi.h>
+>  #include <asm/tlbflush.h>
+> @@ -318,13 +317,3 @@ static int __init topology_init(void)
+>  	return 0;
+>  }
+>  subsys_initcall(topology_init);
+> -
+> -void free_initmem(void)
+> -{
+> -	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+> -		set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
+> -				  IS_ENABLED(CONFIG_64BIT) ?
+> -					set_memory_rw : set_memory_rw_nx);
+> -
+> -	free_initmem_default(POISON_FREE_INITMEM);
+> -}
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index b56a0a75533f..978202712535 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/of_fdt.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/libfdt.h>
+> -#include <linux/set_memory.h>
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/crash_dump.h>
+>  #include <linux/hugetlb.h>
+> @@ -28,6 +27,7 @@
+>  #include <asm/io.h>
+>  #include <asm/ptdump.h>
+>  #include <asm/numa.h>
+> +#include <asm/set_memory.h>
+>  
+>  #include "../kernel/head.h"
+>  
+> @@ -714,10 +714,14 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
+>  
+>  void mark_rodata_ro(void)
+>  {
+> -	set_kernel_memory(__start_rodata, _data, set_memory_ro);
+> -	if (IS_ENABLED(CONFIG_64BIT))
+> -		set_kernel_memory(lm_alias(__start_rodata), lm_alias(_data),
+> -				  set_memory_ro);
+> +	pgprot_t set_mask = __pgprot(_PAGE_READ);
+> +	pgprot_t clear_mask = __pgprot(_PAGE_WRITE);
+> +
+> +	fix_kernel_mem_early(__start_rodata, _data, set_mask, clear_mask);
+> +	if (IS_ENABLED(CONFIG_64BIT)) {
+> +		fix_kernel_mem_early(lm_alias(__start_rodata), lm_alias(_data),
+> +				     set_mask, clear_mask);
+> +	}
+>  
+>  	debug_checkwx();
+>  }
+> @@ -1243,3 +1247,18 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  	return vmemmap_populate_basepages(start, end, node, NULL);
+>  }
+>  #endif
+> +
+> +void free_initmem(void)
+> +{
+> +	pgprot_t set_mask = __pgprot(_PAGE_READ | _PAGE_WRITE);
+> +	pgprot_t clear_mask = IS_ENABLED(CONFIG_64BIT) ?
+> +			      __pgprot(0) : __pgprot(_PAGE_EXEC);
+> +
+> +	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
+> +		fix_kernel_mem_early(lm_alias(__init_begin),
+> +				     lm_alias(__init_end),
+> +				     set_mask, clear_mask);
+> +	}
+> +
+> +	free_initmem_default(POISON_FREE_INITMEM);
+> +}
+> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+> index 5e49e4b4a4cc..10a4ee313083 100644
+> --- a/arch/riscv/mm/pageattr.c
+> +++ b/arch/riscv/mm/pageattr.c
+> @@ -5,6 +5,7 @@
+>  
+>  #include <linux/pagewalk.h>
+>  #include <linux/pgtable.h>
+> +#include <linux/sched.h>
+>  #include <asm/tlbflush.h>
+>  #include <asm/bitops.h>
+>  #include <asm/set_memory.h>
+> @@ -104,24 +105,62 @@ static const struct mm_walk_ops pageattr_ops = {
+>  	.pte_hole = pageattr_pte_hole,
+>  };
+>  
+> -static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+> -			pgprot_t clear_mask)
+> +static int __set_memory_mm(struct mm_struct  *mm, unsigned long start,
+                                              ^ extra space
 
-What you are saying makes sense. But I can't say if we want to do a
-global switch or not. I don't know how many existing users there are
-(by users I mean automated testing b/c humans can switch for one-off
-manual testing).
+> +			   unsigned long end, pgprot_t set_mask,
+> +			   pgprot_t clear_mask)
+>  {
+>  	int ret;
+> -	unsigned long start = addr;
+> -	unsigned long end = start + PAGE_SIZE * numpages;
+>  	struct pageattr_masks masks = {
+>  		.set_mask = set_mask,
+>  		.clear_mask = clear_mask
+>  	};
+>  
+> +	mmap_read_lock(mm);
+> +	ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
+> +				    &masks);
+> +	mmap_read_unlock(mm);
+> +
+> +	return ret;
+> +}
+> +
+> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
+> +			  pgprot_t clear_mask)
+> +{
+> +	struct task_struct *t, *s;
+> +
+> +	unsigned long start = (unsigned long)startp;
+> +	unsigned long end = PAGE_ALIGN((unsigned long)endp);
+> +
+> +	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
+> +	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
+> +
 
-However, fail_nth that I mentioned is orthogonal to this. It's a
-different mechanism to select the fault site that needs to be failed
-(similar to what you mentioned as "interval/probability/ratelimit
-stuff"). fail_nth allows to fail the specified n-th call site in the
-specified task. And that's the only mechanism we use in
-syzkaller/syzbot.
-And I think it can be supported relatively easily (copy a few lines to
-the "does this site needs to fail" check).
+Presumably this is only run at a point where it's safe not to take
+tasklist_lock. A comment explaining that would be helpful to readers
+and help avoid this code getting copy+pasted into points it's not
+safe.
 
-I don't know how exactly you want to use this new mechanism, but I
-found fail_nth much better than any of the existing selection
-mechanisms, including what this will add for specific site failing.
+> +	rcu_read_lock();
+> +	for_each_process(t) {
+> +		if (t->flags & PF_KTHREAD)
+> +			continue;
+> +		for_each_thread(t, s) {
+> +			if (s->mm) {
+> +				__set_memory_mm(s->mm, start, end, set_mask,
+> +						clear_mask);
+> +			}
+> +		}
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	flush_tlb_kernel_range(start, end);
+> +}
+> +
+> +static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+> +			pgprot_t clear_mask)
+> +{
+> +	int ret;
+> +	unsigned long start = addr;
+> +	unsigned long end = start + PAGE_SIZE * numpages;
+> +
+>  	if (!numpages)
+>  		return 0;
+>  
+> -	mmap_read_lock(&init_mm);
+> -	ret =  walk_page_range_novma(&init_mm, start, end, &pageattr_ops, NULL,
+> -				     &masks);
+> -	mmap_read_unlock(&init_mm);
+> +	ret = __set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
+>  
+>  	flush_tlb_kernel_range(start, end);
+>  
+> -- 
+> 2.37.2
+> 
 
-fail_nth allows to fail every site in a given test/syscall one-by-one
-systematically. E.g. we can even have strace-like utility that repeats
-the given test failing all sites in to systematically:
-$ fail_all ./a_unit_test
-This can be integrated into any CI system, e.g. running all LTP tests with this.
+Besides the extra space and comment request
 
-For file:line-based selection, first, we need to get these file:line
-from somewhere; second, lines are changing over time so can't be
-hardcoded in tests; third, it still needs to be per-task, since
-unrelated processes can execute the same code.
-
-One downside of fail_nth, though, is that it does not cover background
-threads/async work. But we found that there are so many untested
-synchronous error paths, that moving to background threads is not
-necessary at this point.
-
-
-
-> Interestingly: I just discovered from reading the code that
-> CONFIG_FAULT_INJECTION_STACKTRACE_FILTER is a thing (hadn't before because it
-> depends on !X86_64 - what?). That's cool, though.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
