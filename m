@@ -2,81 +2,83 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280EF5A8FE3
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 09:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EDE5A908F
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 09:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbiIAHTk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Sep 2022 03:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        id S233980AbiIAHky (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Sep 2022 03:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbiIAHSv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 03:18:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFAE125353;
-        Thu,  1 Sep 2022 00:18:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 43E1B1FB16;
-        Thu,  1 Sep 2022 07:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662016728; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=syKqR2otOp+SJa2emYsY57+bVX7vmPgl46yq0SOCcY4=;
-        b=XxPpqvq/CprurzzyArGBkJW5SqAQWQkVT69xczpmMcnZD1oRn53SBe3Vor5qXAepnNw6HZ
-        eJdNzUUUyBCLltPNTrvvxdfpcBBHT8aPch+MIclCvWmw3ouoq0E0fd3IBYzv+2TVw5SAGP
-        eKsPIajcu9OwC55K4pFTrVjv2HlxcBc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 098CC13A89;
-        Thu,  1 Sep 2022 07:18:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HuA6ANhcEGMwCAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 01 Sep 2022 07:18:47 +0000
-Date:   Thu, 1 Sep 2022 09:18:47 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, void@manifault.com, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        with ESMTP id S233978AbiIAHkw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 03:40:52 -0400
+X-Greylist: delayed 342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 00:40:51 PDT
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742AFDDAAD;
+        Thu,  1 Sep 2022 00:40:51 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 887292B05A2D;
+        Thu,  1 Sep 2022 03:34:58 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 01 Sep 2022 03:34:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662017698; x=1662021298; bh=JdVAEezLJe
+        Agx2YVhc/NJHbjC9th6TpBpDiZFu9hugA=; b=J8zSmTAtur+4BVg4IPbTrKBlN9
+        hA04HZKhiXHN9C38ljRP4TOOZE5QI1RwIp9VQ8+xmo4QZy9X0zVe5czFVhaN8CrX
+        OF43N1iP0yPBVK8rpNUueZDo3Kk2t637cWeBRgn7rQ0IkuZ/Nycpv5I3C8RrdCVj
+        bJz0dznhkaMRwO3sVucJsJSqQNbtF6wx0dA4uE0m/FAhSlOtaQio6+RN/K8Ey7vr
+        uPfhd/nmTWMgSEALMFOc/+oheNGXAB42VSf29zQetq5ohLLhZdLMcSAm6cd8F+id
+        QTFMejPmXTXoi9d+JMWElBoIQninkw44mFb5rBMSuIAL+rq9tlcYYoWhKs5A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        i56a14606.fm1; t=1662017698; x=1662021298; bh=JdVAEezLJeAgx2YVhc
+        /NJHbjC9th6TpBpDiZFu9hugA=; b=LKJidikKhhCZlRzfau8V9cJOLb6gOphpvL
+        zYHVhxVXLWIjEUJP189g63Rg9pfBo+uoK7hfChGImnHuvRDvjpitt3sN+w1jCPzt
+        6tmhgVYF+GJpe0eeobXSEylRH57Aqs1DTl8rOy/TOPXl8nUW1lXY5pf4vU5umMeG
+        lNZglHJXfoun1Evwj3kTdR5dBG9laslKuB9hgC5XPrE7DgWr3FAT2+wFcPpgG1V6
+        9V5hbzsZfVqTeoa/JN0YQl0hwqehjgl7ES9wjc+6uv5P4p0ek7BTEmooneyNKBFB
+        5Rro1do4BPpz4fVQdgt4BQldhPnrHiIO4d1nxVoi4Ru6pHhpHqdQ==
+X-ME-Sender: <xms:oWAQY23zvbz9JP_-dEpKNnFmsrhFMQmaZPLleNbWv24sdnM5ZxPt7g>
+    <xme:oWAQY5GvBjw71_5tBV1Hs-2JvYpROSdd-WstZXI7LebG5yr05bkzNsC5LVqsFw2l3
+    KVFdWNnlsqN92zd3WQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekjedguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:oWAQY-5eoR8NZA7vWlBYlFkTJdXDj3jSYUzw2oWvICo-LzkhG4Flxg>
+    <xmx:oWAQY32rSp_YTDYEZjjlg1jUeWFeQImcqxydSzfPQKsBMvNM87fV1g>
+    <xmx:oWAQY5EWXaIs3vvWlZ5TprEi6Khv4-WrY1P93m6jjmHb_qeSQeD3Hw>
+    <xmx:oWAQY9j6Ftfb8fjZ1_5Bydh5D7N6PWXwyVOvwmKzFIEhuW7IEo5rMVklh_0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 876D4B60083; Thu,  1 Sep 2022 03:34:57 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <5b1f418e-3705-4093-9a13-3fe7793ed520@www.fastmail.com>
+In-Reply-To: <20220831214447.273178-1-linus.walleij@linaro.org>
+References: <20220831214447.273178-1-linus.walleij@linaro.org>
+Date:   Thu, 01 Sep 2022 09:34:36 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Helge Deller" <deller@gmx.de>
+Cc:     linux-parisc@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Mark Brown" <broonie@kernel.org>
+Subject: Re: [PATCH] parisc: Use the generic IO helpers
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,75 +86,63 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed 31-08-22 15:01:54, Kent Overstreet wrote:
-> On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
-> > On Wed 31-08-22 11:19:48, Mel Gorman wrote:
-> > > Whatever asking for an explanation as to why equivalent functionality
-> > > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
-> > 
-> > Fully agreed and this is especially true for a change this size
-> > 77 files changed, 3406 insertions(+), 703 deletions(-)
-> 
-> In the case of memory allocation accounting, you flat cannot do this with ftrace
-> - you could maybe do a janky version that isn't fully accurate, much slower,
-> more complicated for the developer to understand and debug and more complicated
-> for the end user.
-> 
-> But please, I invite anyone who's actually been doing this with ftrace to
-> demonstrate otherwise.
-> 
-> Ftrace just isn't the right tool for the job here - we're talking about adding
-> per callsite accounting to some of the fastest fast paths in the kernel.
-> 
-> And the size of the changes for memory allocation accounting are much more
-> reasonable:
->  33 files changed, 623 insertions(+), 99 deletions(-)
-> 
-> The code tagging library should exist anyways, it's been open coded half a dozen
-> times in the kernel already.
-> 
-> And once we've got that, the time stats code is _also_ far simpler than doing it
-> with ftrace would be. If anyone here has successfully debugged latency issues
-> with ftrace, I'd really like to hear it. Again, for debugging latency issues you
-> want something that can always be on, and that's not cheap with ftrace - and
-> never mind the hassle of correlating start and end wait trace events, builting
-> up histograms, etc. - that's all handled here.
-> 
-> Cheap, simple, easy to use. What more could you want?
+On Wed, Aug 31, 2022, at 11:44 PM, Linus Walleij wrote:
+> @@ -135,35 +135,43 @@ static inline unsigned char __raw_readb(const 
+> volatile void __iomem *addr)
+>  {
+>  	return (*(volatile unsigned char __force *) (addr));
+>  }
+> +#define __raw_readb __raw_readb
+>  static inline unsigned short __raw_readw(const volatile void __iomem 
+> *addr)
+>  {
+>  	return *(volatile unsigned short __force *) addr;
+>  }
+> +#define __raw_readw __raw_readw
 
-A big ad on a banner. But more seriously.
+These are the same as the asm-generic version, so it might
+be nice to just use those and remove the duplicates.
 
-This patchset is _huge_ and touching a lot of different areas. It will
-be not only hard to review but even harder to maintain longterm. So
-it is completely reasonable to ask for potential alternatives with a
-smaller code footprint. I am pretty sure you are aware of that workflow.
+The readl() etc wrappers around them are more complicated in
+the generic version, and may require to #define the
+__io_ar()/__io_bw(() etc to nothing to avoid adding extra
+barriers. Not sure if we want to go so far, or if parisc
+is actually correct here: Most RISC architectures do need
+barriers between a readl/writel and a corresponding DMA,
+so pa-risc would be an exception here for not needing
+them.
 
-So I find Peter's question completely appropriate while your response to
-that not so much! Maybe ftrace is not the right tool for the intented
-job. Maybe there are other ways and it would be really great to show
-that those have been evaluated and they are not suitable for a), b) and
-c) reasons.
+>  #include <asm-generic/iomap.h>
+> +/* These get provided from <asm-generic/iomap.h> */
+> +#define ioport_map ioport_map
+> +#define ioport_unmap ioport_unmap
+> +#define ioread8 ioread8
+> +#define ioread16 ioread16
+> +#define ioread32 ioread32
+> +#define ioread16be ioread16be
+> +#define ioread32be ioread32be
+> +#define iowrite8 iowrite8
+> +#define iowrite16 iowrite16
+> +#define iowrite32 iowrite32
+> +#define iowrite16be iowrite16be
+> +#define iowrite32be iowrite32be
+> +#define ioread8_rep ioread8_rep
+> +#define ioread16_rep ioread16_rep
+> +#define ioread32_rep ioread32_rep
+> +#define iowrite8_rep iowrite8_rep
+> +#define iowrite16_rep iowrite16_rep
+> +#define iowrite32_rep iowrite32_rep
 
-E.g. Oscar has been working on extending page_ext to track number of
-allocations for specific calltrace[1]. Is this 1:1 replacement? No! But
-it can help in environments where page_ext can be enabled and it is
-completely non-intrusive to the MM code.
+You should not need these overrides here, since the
+definitions in asm-generic/io.h are only relevant
+for the !CONFIG_GENERIC_IOMAP case, i.e. architectures
+that can access port I/O through MMIO rather than
+special helper functions or instructions.
 
-If the page_ext overhead is not desirable/acceptable then I am sure
-there are other options. E.g. kprobes/LivePatching framework can hook
-into functions and alter their behavior. So why not use that for data
-collection? Has this been evaluated at all?
+Somewhat unrelated to your series, I suppose it would be
+great if we could move the "#include <asm-generic/iomap.h>"
+to include/asm-generic/io.h itself for the
+CONFIG_GENERIC_IOMAP case. Hopefully each architecture
+uses one case or the other.
 
-And please note that I am not claiming the presented work is approaching
-the problem from a wrong direction. It might very well solve multiple
-problems in a single go _but_ the long term code maintenance burden
-really has to to be carefully evaluated and if we can achieve a
-reasonable subset of the functionality with an existing infrastructure
-then I would be inclined to sacrifice some portions with a considerably
-smaller code footprint.
-
-[1] http://lkml.kernel.org/r/20220901044249.4624-1-osalvador@suse.de
-
--- 
-Michal Hocko
-SUSE Labs
+      Arnd
