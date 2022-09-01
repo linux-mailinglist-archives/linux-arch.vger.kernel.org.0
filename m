@@ -2,136 +2,98 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E513F5A96B0
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 14:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E44C5A981E
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 15:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbiIAMZ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Sep 2022 08:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
+        id S233346AbiIANK0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Sep 2022 09:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbiIAMZ4 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 08:25:56 -0400
-X-Greylist: delayed 325 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 05:25:52 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6568F1223BC;
-        Thu,  1 Sep 2022 05:25:52 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 2ABA82B05A0B;
-        Thu,  1 Sep 2022 08:20:18 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 01 Sep 2022 08:20:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662034817; x=1662038417; bh=QVvMCa4+T6
-        ZMqUOPgma8k9+JUx813GP4FVbXnu5gwBM=; b=bVlFFJ0fKvw/Ll4XFFZf9z1zA0
-        Yvbu8io1K54ClVhBkTamCjcTR1AtF5gNcg0smaq3EuqEkRp1w2XOSkwXQgbT9QU7
-        4wKvXhc0wDJ9O2wjxluNvsdIAayZhZzDu4h/gRj+SZfgMJFmWvWUQQEKXykbhEer
-        RNWf7zSvqbIYUSpTvZm0dIyIRLonaAnl30BW2CS+8xtTkOkRaJe1AOk/qNM5uFmJ
-        o8eGqQ34B2yzfqo6/+uiDFncZ3oKSGFnZLrisrg4Q7wXu2MDCZLs5q5yFKnYhgvC
-        3i96AoYJhlFtD09SvsG1ynPs3qX4QxYWfB1GaEV6Q5Vcyj60HGYhd7d7JFVg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        i56a14606.fm1; t=1662034817; x=1662038417; bh=QVvMCa4+T6ZMqUOPgm
-        a8k9+JUx813GP4FVbXnu5gwBM=; b=WFrqDIviaN5CM9moICEsopvlBhEeiFYHXV
-        CUqpa0sklykj6AqbRnLB39Z5jl4U80qXGTd8nU9/LZUf+ySbujxl6kbPh8PapvuC
-        ncvVZNJoQ23CQs5QWmSfzIHLmT0JcGmdm+VdVz46XCPLvnS56OK1Ily7AMV/cYTo
-        PtMAD2oPAu9ti2W4bxMjtYK/k+WzmnjcYcZrUMAVQzmvhXP4jH4uKHLUI+gdnRvL
-        n2U9PYgOEPABmsrIbLlxRIM52GXKMCPS6pPBLoyhdRx3k78Hrejx15+DK149nZqH
-        Z7Z6ZsXIpoHv2E5gBg2JHs9ktF7NMdYMupS34MwDO3MpXKNQakig==
-X-ME-Sender: <xms:gaMQYzAbhgdaEG-tkJm7KrPp8E-fub4fcxz35jARGMpG4BCtyrkBwg>
-    <xme:gaMQY5jPvKgEASaA5FmAKYOunl_1FL0UcMO3XpkqvRmElU6GLiuLSBgBDEuws79c1
-    y1dabqy9vKUcLSRcUY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedgheefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:gaMQY-lLZ6Jlsg22CrKdpp7neikL7pztlX3bs_twcOb3XYdLcv4uxQ>
-    <xmx:gaMQY1wU3kGWkzP7o1KEKoHzRsFf1WQyvrMSuwyYaQXSJHxvOFHA-Q>
-    <xmx:gaMQY4QX7VoS8c39YIhOedDjTi2lThIFo_e7vEhaT16RdH5GITN76A>
-    <xmx:gaMQY-NGbW6bXxYtKkQsN4fgHB2fBE80FIjRxG2Lpd-TnJhF2OVO90lkZbk>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2A865B60083; Thu,  1 Sep 2022 08:20:17 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <911742ca-d653-421d-8c55-d0cc5d2be777@www.fastmail.com>
-In-Reply-To: <CACRpkdapZCrhQjFfGM_mU2+kUTBO6tpDUAY5k7sDRZUNWAKnVg@mail.gmail.com>
+        with ESMTP id S233589AbiIANKD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 09:10:03 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073C0186FC
+        for <linux-arch@vger.kernel.org>; Thu,  1 Sep 2022 06:04:19 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id qh18so14255763ejb.7
+        for <linux-arch@vger.kernel.org>; Thu, 01 Sep 2022 06:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=BS9JTLVXB8ZepzyWSOg0gq+nuA5a9vk/6VAXIw6crs0=;
+        b=d8n2nKng3koAk6m9o88p/MaKCoWDhVy/bPNSwa4LpSJ0916XtqIvR0G9d+86aUpKuj
+         /Vg8MXCBOvkQl1SxMeOKWxxdOg9UxtJkYvlpiKPvrM6X41USnX9SX1SWPh5I9eIutmjE
+         IBJcXX8tl6jtwa5MZHxxl0ocIbZvs0SMu4pKCO/tgUM0RttKVAMBlBZCyQ+bRCMHWQhc
+         ElgSCv0qco1iAsEdRJbO4jgbTUbxT+rkqlSXuv+9FMj9fB0eTby2LSnAt17l5MZqRaL4
+         SuTsj+LRLsY60zXz9inPAfxrN3HDEEb/H/lVYNsxNb2U0+MpepV/ZpaTpw31X45ZAy/1
+         LvYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=BS9JTLVXB8ZepzyWSOg0gq+nuA5a9vk/6VAXIw6crs0=;
+        b=I0EE5eWv0SJiih3IOf7KQ7xXEeei1Du24gsUjRMVNMazEtPRfZ1cEnxzy+wSwGnQI8
+         AHICXPKz9dnccqIHhmf4MEPenys7cwlJBBcaCw74L5qgWR3iI4dE93QolgjHjEzwWvGk
+         BhI3We1OwzXDl8lKANr9VhZf5D4PKZXW3MXsS3t9O2kempaD9jwNObq+sT9ZByT+34pQ
+         OnBlhPVPQIDpIWN89g3/MnhtLh8abz8/Fz2wwwiRfLoZ4tUKj4isU3T70NzUGuECpW8S
+         H/c2Jbfk81jf7dbc4ov4+wq1ZsEzOBumCc8bN3KyL42NwYPQOeIZsM8lVLaD27MJnHsX
+         ueAQ==
+X-Gm-Message-State: ACgBeo0qjuC5YJDonODNOh3EuPAoihMly5r2EtWPZU0pGxGv1xquPpaw
+        zxPYpwpyw3QGxOsu/RGAkAZ1fhJVYhyEAwvkq28VxA==
+X-Google-Smtp-Source: AA6agR4Qpkz2hk59+fKeQNK9ToQu9Jwdes2NTsf+CfyPCjPsPIdgzq4Wp9TpAAbZE9muO5LD8P28VYxo5FX0PCdNAsA=
+X-Received: by 2002:a17:906:9b86:b0:73d:72cf:72af with SMTP id
+ dd6-20020a1709069b8600b0073d72cf72afmr23871472ejc.440.1662037429452; Thu, 01
+ Sep 2022 06:03:49 -0700 (PDT)
+MIME-Version: 1.0
 References: <20220831214447.273178-1-linus.walleij@linaro.org>
- <5b1f418e-3705-4093-9a13-3fe7793ed520@www.fastmail.com>
- <CACRpkdapZCrhQjFfGM_mU2+kUTBO6tpDUAY5k7sDRZUNWAKnVg@mail.gmail.com>
-Date:   Thu, 01 Sep 2022 14:19:55 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>
-Cc:     "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        "Helge Deller" <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        "kernel test robot" <lkp@intel.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Mark Brown" <broonie@kernel.org>
+ <5b1f418e-3705-4093-9a13-3fe7793ed520@www.fastmail.com> <CACRpkdapZCrhQjFfGM_mU2+kUTBO6tpDUAY5k7sDRZUNWAKnVg@mail.gmail.com>
+ <911742ca-d653-421d-8c55-d0cc5d2be777@www.fastmail.com>
+In-Reply-To: <911742ca-d653-421d-8c55-d0cc5d2be777@www.fastmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 1 Sep 2022 15:03:37 +0200
+Message-ID: <CACRpkdZn6y=40DH5ewkeS66L0sc9saq2fnMKaVhdYPrNnG6hOQ@mail.gmail.com>
 Subject: Re: [PATCH] parisc: Use the generic IO helpers
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 1, 2022, at 1:56 PM, Linus Walleij wrote:
-> On Thu, Sep 1, 2022 at 9:35 AM Arnd Bergmann <arnd@arndb.de> wrote:
->> You should not need these overrides here, since the
->> definitions in asm-generic/io.h are only relevant
->> for the !CONFIG_GENERIC_IOMAP case, i.e. architectures
->> that can access port I/O through MMIO rather than
->> special helper functions or instructions.
->
-> parisc does not select GENERIC_IOMAP.
->
-> Are you saying that it should?
->
-> That seems like an invasive change to me...
+On Thu, Sep 1, 2022 at 2:20 PM Arnd Bergmann <arnd@arndb.de> wrote:
 
-You are right, I missed that part. So parisc just uses
-the declarations from asm-generic/iomap.h but has its own
-definitions instead of the lib/iomap.c ones.
+> According to the comment, the parisc version was originally
+> meant to handle additional special cases besides MMIO or
+> PIO, but this seems to have never happened. The current
+> version looks basically equivalent to the generic version
+> to me, except for a small bug I found (see patch below).
 
-According to the comment, the parisc version was originally
-meant to handle additional special cases besides MMIO or
-PIO, but this seems to have never happened. The current
-version looks basically equivalent to the generic version
-to me, except for a small bug I found (see patch below).
+I saw this too, but didn't know what to do with it.
 
-Changing parisc to GENERIC_IOMAP is clearly something we
-can do, but I agree that it would be out of scope for
-your series.
+I'll include your patch as two of us clearly think it looks
+like a bug.
 
-      Arnd
+The other pecularity is that iomap and the parisc iommu
+unconditionally defines and uses 64bit MMIO accessors,
+so I had to quirk <asm-generic/io.h> with a special
+"give me 64bit IO even though I'm 32bit" mechanism,
+we can discuss this after I posted v2.
 
---- a/arch/parisc/lib/iomap.c
-+++ b/arch/parisc/lib/iomap.c
-@@ -212,12 +212,12 @@ static void iomem_write32be(u32 datum, void __iomem *addr)
- 
- static void iomem_write64(u64 datum, void __iomem *addr)
- {
--       writel(datum, addr);
-+       writeq(datum, addr);
- }
- 
- static void iomem_write64be(u64 datum, void __iomem *addr)
- {
--       __raw_writel(datum, addr);
-+       __raw_writeq(datum, addr);
- }
- 
- static void iomem_read8r(const void __iomem *addr, void *dst, unsigned long count)
+> Changing parisc to GENERIC_IOMAP is clearly something we
+> can do, but I agree that it would be out of scope for
+> your series.
+
+That's for later :)
+
+Yours,
+Linus Walleij
