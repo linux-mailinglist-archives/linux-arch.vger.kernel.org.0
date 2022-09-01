@@ -2,132 +2,176 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82CD5A91FD
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 10:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB685A924E
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 10:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234185AbiIAIV2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Sep 2022 04:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S234102AbiIAInq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Sep 2022 04:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiIAIVQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 04:21:16 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383B2AD997;
-        Thu,  1 Sep 2022 01:20:40 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id i67so7886978vkb.2;
-        Thu, 01 Sep 2022 01:20:40 -0700 (PDT)
+        with ESMTP id S234265AbiIAIno (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 04:43:44 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3771314E7
+        for <linux-arch@vger.kernel.org>; Thu,  1 Sep 2022 01:43:40 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id x10so17120925ljq.4
+        for <linux-arch@vger.kernel.org>; Thu, 01 Sep 2022 01:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=LGnLFW6yPESHX+DAC4jzdLUcy7kE4ClWL1XfjHPmqqA=;
-        b=QwHelFVXzfmM4/EysT5tZOAf8LTkUs1vC+WzbOiLSd6cfKqbV1b+Z1iS7P1cqVK4VK
-         05iPjC8ldpsIAHbcek332F4BOebdOxw2s69XHe0H5CoRmAXOUQzVb9KeTI4PH1Yhy33c
-         0D0jcj+ONGknboXbkyvJoMweMqnsvkAQ79Y+TdbYoFMTEWcV4+nty2kb0pdJqBuvdOxr
-         Mn8G68YcW0Jfciw+c2PkCX9MC85FPUUsqQJwWu2qANDpN8qYXZNNb7m/02bmTXCves1r
-         8wM8iOSpDJ2W9hi3vE5EFHE+KWEC5E5eYfFI7F9TMhvVZCM61sLeezagrLIftTifbZLA
-         R4Xg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=VH72CkJdWHRYjuIFqG3YYZtTrJw2Fhi5jnFxkucPCHY=;
+        b=q7AjWjhmnd64a4Ge80aSMXzM40DYISK3cXmW/EibDBVwJ+8k/kXbGydZOb9luK+PIZ
+         Ht/KjsMCWD5TF/twQCHm6itfvd6g64oIsvl5c5eKge4E9VhNnF7iOxqToHuyozIfoFb1
+         5I88bd1UfHObAquK0acXH+XbI6Py13HNPo09dD+NGiTxpVgIr43RQcU5305AlaqKPpll
+         qwKybw5Q2+9d/Onlv8u1vDEdJlLQ1JUMSCRevC4eAiHePyL2wzZzh3KSvr/OLrTmD05T
+         eLyu3SeubEOLjLKn16wG4v4TsahkBmU2CrHwp0/PiiByarcOmjtEcsv6KWve7EKHFu99
+         DiuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=LGnLFW6yPESHX+DAC4jzdLUcy7kE4ClWL1XfjHPmqqA=;
-        b=qOz5fR1Ky1sM+/uUQPKoMZYEWNJomAVV87OL2JSf13IRlL42u1JyBpGTsbpOHfFvTL
-         D/lRqkP04COvU++9e8eLdDS7twB1XDFW7eKvXc5bOw2leKCq74eNcpSekHs8APtrt+5w
-         IOge29JLPNWm5Xk/CNT53NpApVSqy/dL1lZj7O4tpNbxck4vVyyHmEGWMAMFQcmW+Ov8
-         Dqb/ZtgUWkLHdXNLIq4XMvQk8CW9G3RRcrLmU7CHF0hKC879dXzgl4oI5P6zD0waWxde
-         3/lDRrnOlHV9HwMgCI2kLetRqaU9lNWXtmNu0d17IpXVwbUSPxQ/XJMm+A9GxmfVv6YK
-         0qDw==
-X-Gm-Message-State: ACgBeo0YZ4l2ZGFFMxn0qYqY1vi8FE9A+AhcVaH5GZzgTrnAfurUM76w
-        T5zJynu0vPsmDaSXo+OgRcoOEEbpW/XnKnyndVY=
-X-Google-Smtp-Source: AA6agR4FO9JoeFxtHWua0hNC49l8PA/DNsBd9h4keicBNDZCmaRAhWIyDhSpOGnLRQ0GI9as5iQYPtm1sPCxXm7PNMQ=
-X-Received: by 2002:a1f:19cf:0:b0:375:6144:dc41 with SMTP id
- 198-20020a1f19cf000000b003756144dc41mr8092825vkz.3.1662020439493; Thu, 01 Sep
- 2022 01:20:39 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VH72CkJdWHRYjuIFqG3YYZtTrJw2Fhi5jnFxkucPCHY=;
+        b=dXCzMGyuqJmAAYerPI7JHr6fyALWnTb5aEkqdS4VbDpYYuh4cnPedji3IuDlYUoNto
+         Wet9y2g6OaJKpo8hnymgNIpEOhldWG7ppyZj2HkW/ImWOyhqH1G0eFw4mfO65iA2Qa7b
+         eaQ01SR/cBNn7zNHRMBrzH/BnuNUbXmV2SeAgKZ/9ZBJv5kJ2R4yI+cbXucxBjPTgYXm
+         0mZEYVkcn2j0EIAEfC8G5nQG1m9zhuWPLCLmnOjN/x0ztMQWWWttK4c9VYQs4vsSXZ1P
+         aegTq22Ta2ggVBLQjrygQOP2WQMIvdg/U/lnxhuLsWy1hdZqy1bZSpNBsW84musu3Dwz
+         YvxQ==
+X-Gm-Message-State: ACgBeo2/TZGV/ndtrsqF3uN7C+XVt2GiSwxnenI3WIw4cMkQTnFHlq7t
+        jhjF7Z4Bs76wbaCMFWZ7TUbDSfuSWHtqZ0ml8n90sA==
+X-Google-Smtp-Source: AA6agR4BjD3DwjS+CZ4CCVxEVQ6+miy/r1+fo/IQYDRJogJb7LowD/eAhVezdlkQzk6xOh63IrvI7g9qP1YqXlNutus=
+X-Received: by 2002:a2e:be88:0:b0:25f:e9a8:44b8 with SMTP id
+ a8-20020a2ebe88000000b0025fe9a844b8mr8851946ljr.92.1662021818766; Thu, 01 Sep
+ 2022 01:43:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830152858.14866-1-cgzones@googlemail.com>
- <20220830152858.14866-2-cgzones@googlemail.com> <Yw/eEufm/QpKg5Pq@ZenIV>
-In-Reply-To: <Yw/eEufm/QpKg5Pq@ZenIV>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 1 Sep 2022 11:20:28 +0300
-Message-ID: <CAOQ4uxgp3_6KKSCvQvwGXq4WmkndcvzsBnk7QqQZvBZGF-6yZQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] fs/xattr: add *at family syscalls
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        SElinux list <selinux@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arch@vger.kernel.org
+References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-23-surenb@google.com>
+ <CACT4Y+ZX3U1=cAPXPhoOy6xrngSCfSmyFagXK-9fWtWWODfsew@mail.gmail.com> <20220831173010.wc5j3ycmfjx6ezfu@moria.home.lan>
+In-Reply-To: <20220831173010.wc5j3ycmfjx6ezfu@moria.home.lan>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 1 Sep 2022 10:43:26 +0200
+Message-ID: <CACT4Y+bMeqvWQwqzG3nfcf0-VOjU7usxht5mKgUwMcOpWKRjxQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 22/30] Code tagging based fault injection
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, shakeelb@google.com, songmuchun@bytedance.com,
+        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 2:10 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> [linux-arch Cc'd for ABI-related stuff]
->
-> On Tue, Aug 30, 2022 at 05:28:39PM +0200, Christian G=C3=B6ttsche wrote:
-> > Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
-> > removexattrat() to enable extended attribute operations via file
-> > descriptors.  This can be used from userspace to avoid race conditions,
-> > especially on security related extended attributes, like SELinux labels
-> > ("security.selinux") via setfiles(8).
+ On Wed, 31 Aug 2022 at 19:30, Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+> > > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > >
+> > > This adds a new fault injection capability, based on code tagging.
+> > >
+> > > To use, simply insert somewhere in your code
+> > >
+> > >   dynamic_fault("fault_class_name")
+> > >
+> > > and check whether it returns true - if so, inject the error.
+> > > For example
+> > >
+> > >   if (dynamic_fault("init"))
+> > >       return -EINVAL;
 > >
-> > Use the do_{name}at() pattern from fs/open.c.
-> > Use a single flag parameter for extended attribute flags (currently
-> > XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
-> > syscall arguments in setxattrat().
+> > Hi Suren,
+> >
+> > If this is going to be used by mainline kernel, it would be good to
+> > integrate this with fail_nth systematic fault injection:
+> > https://elixir.bootlin.com/linux/latest/source/lib/fault-inject.c#L109
+> >
+> > Otherwise these dynamic sites won't be tested by testing systems doing
+> > systematic fault injection testing.
 >
->         I've no problems with the patchset aside of the flags part;
-> however, note that XATTR_CREATE and XATTR_REPLACE are actually exposed
-> to the network - the values are passed to nfsd by clients.
-> See nfsd4_decode_setxattr() and
->         BUILD_BUG_ON(XATTR_CREATE !=3D SETXATTR4_CREATE);
->         BUILD_BUG_ON(XATTR_REPLACE !=3D SETXATTR4_REPLACE);
-> in encode_setxattr() on the client side.
+> That's a discussion we need to have, yeah. We don't want two distinct fault
+> injection frameworks, we'll have to have a discussion as to whether this is (or
+> can be) better enough to make a switch worthwhile, and whether a compatibility
+> interface is needed - or maybe there's enough distinct interesting bits in both
+> to make merging plausible?
 >
->         Makes me really nervous about constraints like that.  Sure,
-> AT_... flags you are using are in the second octet and these are in
-> the lowest one, but...
+> The debugfs interface for this fault injection code is necessarily different
+> from our existing fault injection - this gives you a fault injection point _per
+> callsite_, which is huge - e.g. for filesystem testing what I need is to be able
+> to enable fault injection points within a given module. I can do that easily
+> with this, not with our current fault injection.
+>
+> I think the per-callsite fault injection points would also be pretty valuable
+> for CONFIG_FAULT_INJECTION_USERCOPY, too.
+>
+> OTOH, existing kernel fault injection can filter based on task - this fault
+> injection framework doesn't have that. Easy enough to add, though. Similar for
+> the interval/probability/ratelimit stuff.
+>
+> fail_function is the odd one out, I'm not sure how that would fit into this
+> model. Everything else I've seen I think fits into this model.
+>
+> Also, it sounds like you're more familiar with our existing fault injection than
+> I am, so if I've misunderstood anything about what it can do please do correct
+> me.
 
-In this context, I would like to point at
+What you are saying makes sense. But I can't say if we want to do a
+global switch or not. I don't know how many existing users there are
+(by users I mean automated testing b/c humans can switch for one-off
+manual testing).
 
-AT_EACCESS
-AT_REMOVEDIR
+However, fail_nth that I mentioned is orthogonal to this. It's a
+different mechanism to select the fault site that needs to be failed
+(similar to what you mentioned as "interval/probability/ratelimit
+stuff"). fail_nth allows to fail the specified n-th call site in the
+specified task. And that's the only mechanism we use in
+syzkaller/syzbot.
+And I think it can be supported relatively easily (copy a few lines to
+the "does this site needs to fail" check).
 
-Which are using the same namespace as the AT_ flags but define
-a flag in a "private section" of that namespace for faccessat() and
-for unlinkat().
-unlinkat() does not technically support any of the generic AT_ flags,
-but the sycall name does suggest that it is the same namespace.
+I don't know how exactly you want to use this new mechanism, but I
+found fail_nth much better than any of the existing selection
+mechanisms, including what this will add for specific site failing.
 
-At the risk of getting shouted at, I propose that we retroactively
-formalize this practice and also define
-AT_XATTR_* and AT_RENAME_* constants
-with the accompanied BUILD_BUG_ON()
-and document above the AT_ definitions that the lowest 10 bits
-are reserved as private namespace for the specific syscall.
+fail_nth allows to fail every site in a given test/syscall one-by-one
+systematically. E.g. we can even have strace-like utility that repeats
+the given test failing all sites in to systematically:
+$ fail_all ./a_unit_test
+This can be integrated into any CI system, e.g. running all LTP tests with this.
 
-There are also the AT_STATX_*SYNC* flags that could fall
-into the category of syscall private namespace, but those flags could
-actually be made more generic as there are other syscalls that may
-benefit from supporting them.
+For file:line-based selection, first, we need to get these file:line
+from somewhere; second, lines are changing over time so can't be
+hardcoded in tests; third, it still needs to be per-task, since
+unrelated processes can execute the same code.
 
-linkat() is one example that comes to mind.
-Similar suggestions have been posted in the past:
-https://lore.kernel.org/linux-fsdevel/20190527172655.9287-1-amir73il@gmail.=
-com/
-https://lore.kernel.org/linux-fsdevel/CAOQ4uxit0KYiShpEXt8b8SvN8bWWp3Ky929b=
-+UWNDozTCUeTxg@mail.gmail.com/
+One downside of fail_nth, though, is that it does not cover background
+threads/async work. But we found that there are so many untested
+synchronous error paths, that moving to background threads is not
+necessary at this point.
 
-Thanks,
-Amir.
+
+
+> Interestingly: I just discovered from reading the code that
+> CONFIG_FAULT_INJECTION_STACKTRACE_FILTER is a thing (hadn't before because it
+> depends on !X86_64 - what?). That's cool, though.
