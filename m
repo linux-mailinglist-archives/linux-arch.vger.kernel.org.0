@@ -2,79 +2,67 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938E75A98D7
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 15:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190B65A9A2F
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 16:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234366AbiIAN3o (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Sep 2022 09:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S234798AbiIAOYi (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Sep 2022 10:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234701AbiIAN3J (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 09:29:09 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59C372ED7;
-        Thu,  1 Sep 2022 06:25:40 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id D5D272B059B6;
-        Thu,  1 Sep 2022 09:25:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 01 Sep 2022 09:25:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662038724; x=1662042324; bh=vIO5ZJR7KE
-        xB4bARHen9aUxGuNe/+3E8DwvQYBe/pkg=; b=Oz9q3z2sRWRVzWZaOqpzvkAM0J
-        r85mamoTHWBqv2/wRJB20hnevB1zLTEpVyuuA34eFp30pdtU3TvJhusnj7Js3Bg2
-        XPWmnfYJZFQsO+KtjUGoOb644PHICVT6UXp7RoCxb0kw5Ah2CVeiC3tdqBcWJjDk
-        79LeqKpaRWxpz5Ura0CY0xv/Q+2IzrZuJW1W27lIjSDLBYOh4ZeuvhARNFF+L4g8
-        b14nSCAXFoBPhPcmO384DZ3A+1W21pWQtb3imD5WGTszAAWX5/j4ted2mfUO8EtG
-        +TLdZDfNMYAiDZYLnTbi9vYn3u+b0CutzEMgGvtY/gToMQXqucelTtXKq/Bw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        i56a14606.fm1; t=1662038724; x=1662042324; bh=vIO5ZJR7KExB4bARHe
-        n9aUxGuNe/+3E8DwvQYBe/pkg=; b=q7uHQBuSqAa4kcrNLtKaBeagrK9gqEC0ap
-        qD3v3XdB6BRuPbtOaG7/ZCLYUV0bp/FhvrEEm3RtNdb8guP5lMnAShxZ/Yk8uCvU
-        lFTRAyCyAX6k84rus7WDKZt//behnerusZ1WX/PqF0jJeAvYQxI7O7MK4Luvur38
-        IiFpUtliFnGdxnCpnme10bwl7V5v3+3f+Iy8cPSmeyO5P9+PtoSarEvGX/gAp+v7
-        NgxLOpRiIAdL06l+2Nl7lbmHcpC5k7mkjKTsBpzB8U19FSW3Apspt0fStRkAAZji
-        WvjTpzWSGbPKg+cjcNAijkfWMlPeLwYuSsFTocWgSe0T1BP+1MMQ==
-X-ME-Sender: <xms:w7IQY8DtGRWwpd_lViFbWdId4BI_wzQV8t-4-ybzUFfQIPpdE8GJPA>
-    <xme:w7IQY-jWmjxSZkjisvq-YVB_L_zLnss5y75mGKN2OjzAGgjUrBP3mJ-HOr872tgmH
-    j5NuJ5uwn17oIACxWc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedgieeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:w7IQY_lIQjCp9h1Nu77CNQ53mp4OMhmPOFl6h-qovMrBsgR-Y-aAZw>
-    <xmx:w7IQYyw0OJKcqqWpKxFFMEuBF4XfLX8ZPqLcafz5W_6ssP480LaMEg>
-    <xmx:w7IQYxSDoT0mgohszSADCEZQv66DSmDi80-oTFOGmUgSDUEeYQfIhw>
-    <xmx:xLIQY_O2dF76WTjclI6VBA6t8bq8RMYN2JUUTUiT3dY9NDAnsXPEXW8T4No>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id C3FACB60083; Thu,  1 Sep 2022 09:25:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <55a23cfb-fe8c-41bd-b1d9-b056c1402360@www.fastmail.com>
-In-Reply-To: <20220901130654.177504-1-linus.walleij@linaro.org>
-References: <20220901130654.177504-1-linus.walleij@linaro.org>
-Date:   Thu, 01 Sep 2022 15:25:03 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Helge Deller" <deller@gmx.de>
-Cc:     linux-parisc@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "Mark Brown" <broonie@kernel.org>
-Subject: Re: [PATCH v2] parisc: Use the generic IO helpers
-Content-Type: text/plain
+        with ESMTP id S234722AbiIAOYP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 10:24:15 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514294DB07;
+        Thu,  1 Sep 2022 07:23:55 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 10:23:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662042233;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JsB2G8WqLnYprEF0GcA9GFFIGkQht/MFH67dN0NC9t0=;
+        b=P+qdlVJWY093c1JvjMpoBsAhuM3mvnI3jUKrYjXhcXjA7JDkTxBBu4A2hC17CCO8ZZ5R3D
+        rLH5U4BLaxZ5HSxD5hP6U1jUXGFLfAJiihxtZ+Hfa0QaSzmc2WzHuvOvPKzjVyoQ9DuTBc
+        CcLrAriFlVtUQ4Ne/7Ga0hI19yi31Mw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
+        liam.howlett@oracle.com, void@manifault.com, juri.lelli@redhat.com,
+        ldufour@linux.ibm.com, peterx@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <20220901142345.agkfp2d5lijdp6pt@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+ <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+ <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+ <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <404e947a-e1b2-0fae-8b4f-6f2e3ba6328d@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <404e947a-e1b2-0fae-8b4f-6f2e3ba6328d@redhat.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -85,40 +73,47 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 1, 2022, at 3:06 PM, Linus Walleij wrote:
+On Thu, Sep 01, 2022 at 10:05:03AM +0200, David Hildenbrand wrote:
+> On 31.08.22 21:01, Kent Overstreet wrote:
+> > On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
+> >> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
+> >>> Whatever asking for an explanation as to why equivalent functionality
+> >>> cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+> >>
+> >> Fully agreed and this is especially true for a change this size
+> >> 77 files changed, 3406 insertions(+), 703 deletions(-)
+> > 
+> > In the case of memory allocation accounting, you flat cannot do this with ftrace
+> > - you could maybe do a janky version that isn't fully accurate, much slower,
+> > more complicated for the developer to understand and debug and more complicated
+> > for the end user.
+> > 
+> > But please, I invite anyone who's actually been doing this with ftrace to
+> > demonstrate otherwise.
+> > 
+> > Ftrace just isn't the right tool for the job here - we're talking about adding
+> > per callsite accounting to some of the fastest fast paths in the kernel.
+> > 
+> > And the size of the changes for memory allocation accounting are much more
+> > reasonable:
+> >  33 files changed, 623 insertions(+), 99 deletions(-)
+> > 
+> > The code tagging library should exist anyways, it's been open coded half a dozen
+> > times in the kernel already.
+> 
+> Hi Kent,
+> 
+> independent of the other discussions, if it's open coded already, does
+> it make sense to factor that already-open-coded part out independently
+> of the remainder of the full series here?
 
-> In arch/parisc/lib/iomap.c the .read64 and .read64be operations
-> were defined unconditionally using readq() and
-> drivers/parisc/sba_iommu.c also expect writeq to be available so add
-> parameterization to <asm-generic/io.h> to make sure we get these also
-> on 32bit parisc: platforms can now opt in for generic 64bit
-> IO operations even if they are not nativelt 64bit by definining
-> GENERIC_64BIT_IO before including <asm-generi/io.h>, while
-> these will still be default-enabled on CONFIG_64BIT systems.
+It's discussed in the cover letter, that is exactly how the patch series is
+structured.
+ 
+> [I didn't immediately spot if this series also attempts already to
+> replace that open-coded part]
 
-I don't think that is a good idea in general, as 64-bit I/O
-operations on 32-bit machines are not well-defined. Depending
-on the device, one must first write the low or the high word
-to get the correct behavior, so each driver that needs to
-do this must either include include/linux/io-64-nonatomic-lo-hi.h
-or include/linux/io-64-nonatomic-hi-lo.h.
+Uh huh.
 
-The parisc definition of writeq() just uses a volatile pointer
-dereference, which is not guaranteed to have one or the
-other meaning by the C standard, and this is why architectures
-actually should define the __raw_* accessors using inline
-asm for correctness.
-
-For the arch/parisc/lib/iomap.c version, I think we just need
-an #ifdef CONFIG_64BIT around those. For the iommu, we may
-be able to get away with either the hi/lo or the lo/hi version,
-since the 64-bit register accesses appear to be either
-reads without side-effects, or the write to IOC_PDIR_BASE,
-which probably always sets the upper half as zero on a 32-bit
-kernel.
-
-At that point, I would split out the fixes for 64-bit I/O
-accessors into a separate patch that can be backported
-without the cleanup.
-
-     Arnd
+Honestly, some days it feels like lkml is just as bad as slashdot, with people
+wanting to get in their two cents without actually reading...
