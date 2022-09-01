@@ -2,48 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB095A88E4
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 00:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF375A8A44
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 03:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiHaWR7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 31 Aug 2022 18:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
+        id S232127AbiIABH6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 31 Aug 2022 21:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiHaWR6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 18:17:58 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F191E9926;
-        Wed, 31 Aug 2022 15:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=pYm+OJZ/TWf4BrwMl+a6D7AiKW4DyIXMD3Q3PmPJ9t0=; b=Pzy2DmyRzwYok40yKeubZLuOfD
-        iofNAjQR0rCmGUAnHyRPg1DUeZqX4rtrKajdqp7KCChT9q1TZhE4IXOIWLCAAolof17cZO42giknP
-        34awWlH9moDh09zBeOrYdHBQ3zVdWIywqsVKBNZmxn6ZLM9YX9K+hsinQEn5LVeaFSZDJBJViCzau
-        95mEf6y7V7bOdOtq7115ef9JW+1iS6GjFNGcoGBiX2vTqEW868ZqIpCx0cKYVJXfAULIij5EG1wcu
-        DEi7vJF52FMB2enDyiSWfqUsMO8w4ZXF7p/Y5f3Se1evmsSAMAqk5CdMIN1bP2AKQQYix9A1ycFoM
-        hBS0K+pA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oTW1y-00Akq9-PO;
-        Wed, 31 Aug 2022 22:17:54 +0000
-Date:   Wed, 31 Aug 2022 23:17:54 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] fs/xattr: add *at family syscalls
-Message-ID: <Yw/eEufm/QpKg5Pq@ZenIV>
-References: <20220830152858.14866-1-cgzones@googlemail.com>
- <20220830152858.14866-2-cgzones@googlemail.com>
+        with ESMTP id S229531AbiIABH5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 31 Aug 2022 21:07:57 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929BDEE6BA
+        for <linux-arch@vger.kernel.org>; Wed, 31 Aug 2022 18:07:55 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 11so6580110ybu.0
+        for <linux-arch@vger.kernel.org>; Wed, 31 Aug 2022 18:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=MRPzoJhQ6jRX3IlC8DX7IgvLpQbZlMnsgnvZKuuei8w=;
+        b=FN6oNUdWK/epLWx1TsL9yA3judc8GEWbPUlFBZx3N+obm1zvmXwKLTgA0C+din1hae
+         QL+aeoxudtTxFElhfOjbFrb5XsjBAilaB08Ldofl1XN7K/KLlXYDWHTq4s13vSXmuj5f
+         DKOIAo7JDYtLr+88kw7IWfUfQEtwzvbREYO0F51ITJHJcS5BlsMkaJFVMWN04WfbWge0
+         QaMLxE28PQcRoEcCdCRT5hYYcc5qJq1t6S50Lj3dBP+TXgyTlXN6pUj2nAiR7uqNJFnz
+         LBjn/+WoYkZm8EFAaPai3sk01dRp3NFnU9eS/Pc/JsqSX+SuHO7G2QXvivbbuPpvEXP7
+         8nRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=MRPzoJhQ6jRX3IlC8DX7IgvLpQbZlMnsgnvZKuuei8w=;
+        b=3g323/9fSAZ3mc1HkQ55Vj47zfUPSwccCctlpdFPXWRAcJ8Qf6wG18gAIhesCx6BOn
+         0dHG/igtPxwj/Oe4G7NWSZRh/rRy/wXD3l0xt6rVgfAorBHQ0h5ZcpsICqTpry34MsOg
+         4EDDFabnEPOF6/pNbUKzlynE652xsauYIV2qbeYVZPSlGgpNdZbPuU6aU1Ec0pyQEqFy
+         Ez2X8jDOvR820DNAUOMZ/mijnW4HM+gP13fC/cp/KAbPKSCW4EbLIqsyv1YG7AKz3B7p
+         /9aROKoWz1O04iJbMfbDkBmToJywf9tU4fd+bw0OBi48Wh4PpQ8ZWILo/CfBPG7Daz4Y
+         7DMw==
+X-Gm-Message-State: ACgBeo0eiLT06MLwwysPm4TpwgqtT86Ctv7rhDiiLmvcpFeACBGVA+U8
+        Tu/SHk6KLkP8A/l4emMmAH9DEkYRlZG0jwQSDnIEEg==
+X-Google-Smtp-Source: AA6agR7ANRZu1y3V5ec1pN1knn4GFpXcEWezad8yEa+jyRtwuxFDik/95LNfhWenWi2n9p8vw7Ebn9CJDR6Mcs4MSyE=
+X-Received: by 2002:a05:6902:4c7:b0:69a:9e36:debe with SMTP id
+ v7-20020a05690204c700b0069a9e36debemr14531815ybs.543.1661994474639; Wed, 31
+ Aug 2022 18:07:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830152858.14866-2-cgzones@googlemail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-11-surenb@google.com>
+ <20220831101103.fj5hjgy3dbb44fit@suse.de> <20220831174629.zpa2pu6hpxmytqya@moria.home.lan>
+In-Reply-To: <20220831174629.zpa2pu6hpxmytqya@moria.home.lan>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 31 Aug 2022 18:07:43 -0700
+Message-ID: <CAJuCfpGxxzHT7X+q2zzu+WRrmyjLsT+RMJ7+LFOECtFuXvt3gA@mail.gmail.com>
+Subject: Re: [RFC PATCH 10/30] mm: enable page allocation tagging for
+ __get_free_pages and alloc_pages
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Mel Gorman <mgorman@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,28 +105,62 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-[linux-arch Cc'd for ABI-related stuff]
+On Wed, Aug 31, 2022 at 10:46 AM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> On Wed, Aug 31, 2022 at 11:11:03AM +0100, Mel Gorman wrote:
+> > On Tue, Aug 30, 2022 at 02:48:59PM -0700, Suren Baghdasaryan wrote:
+> > > Redefine alloc_pages, __get_free_pages to record allocations done by
+> > > these functions. Instrument deallocation hooks to record object freeing.
+> > >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > +#ifdef CONFIG_PAGE_ALLOC_TAGGING
+> > > +
+> > >  #include <linux/alloc_tag.h>
+> > >  #include <linux/page_ext.h>
+> > >
+> > > @@ -25,4 +27,37 @@ static inline void pgalloc_tag_dec(struct page *page, unsigned int order)
+> > >             alloc_tag_sub(get_page_tag_ref(page), PAGE_SIZE << order);
+> > >  }
+> > >
+> > > +/*
+> > > + * Redefinitions of the common page allocators/destructors
+> > > + */
+> > > +#define pgtag_alloc_pages(gfp, order)                                      \
+> > > +({                                                                 \
+> > > +   struct page *_page = _alloc_pages((gfp), (order));              \
+> > > +                                                                   \
+> > > +   if (_page)                                                      \
+> > > +           alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
+> > > +   _page;                                                          \
+> > > +})
+> > > +
+> >
+> > Instead of renaming alloc_pages, why is the tagging not done in
+> > __alloc_pages()? At least __alloc_pages_bulk() is also missed. The branch
+> > can be guarded with IS_ENABLED.
+>
+> It can't be in a function, it has to be in a wrapper macro.
 
-On Tue, Aug 30, 2022 at 05:28:39PM +0200, Christian Göttsche wrote:
-> Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
-> removexattrat() to enable extended attribute operations via file
-> descriptors.  This can be used from userspace to avoid race conditions,
-> especially on security related extended attributes, like SELinux labels
-> ("security.selinux") via setfiles(8).
-> 
-> Use the do_{name}at() pattern from fs/open.c.
-> Use a single flag parameter for extended attribute flags (currently
-> XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
-> syscall arguments in setxattrat().
+Ah, right. __FILE__, __LINE__ and others we use to record the call
+location would point to include/linux/gfp.h instead of the location
+allocation is performed at.
 
-	I've no problems with the patchset aside of the flags part;
-however, note that XATTR_CREATE and XATTR_REPLACE are actually exposed
-to the network - the values are passed to nfsd by clients.
-See nfsd4_decode_setxattr() and
-        BUILD_BUG_ON(XATTR_CREATE != SETXATTR4_CREATE);
-	BUILD_BUG_ON(XATTR_REPLACE != SETXATTR4_REPLACE);
-in encode_setxattr() on the client side.
-
-	Makes me really nervous about constraints like that.  Sure,
-AT_... flags you are using are in the second octet and these are in
-the lowest one, but...
+>
+> alloc_tag_add() is a macro that defines a static struct in a special elf
+> section. That struct holds the allocation counters, and putting it in a special
+> elf section is how the code to list it in debugfs finds it.
+>
+> Look at the dynamic debug code for prior precedence for this trick in the kernel
+> - that's how it makes pr_debug() calls dynamically controllable at runtime, from
+> debugfs. We're taking that method and turning it into a proper library.
+>
+> Because all the counters are statically allocated, without even a pointer deref
+> to get to them in the allocation path (one pointer deref to get to them in the
+> deallocate path), that makes this _much, much_ cheaper than anything that could
+> be done with tracing - cheap enough that I expect many users will want to enable
+> it in production.
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
