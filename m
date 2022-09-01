@@ -2,67 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D53FC5A9259
-	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 10:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DED5A94DC
+	for <lists+linux-arch@lfdr.de>; Thu,  1 Sep 2022 12:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbiIAIrq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Sep 2022 04:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51308 "EHLO
+        id S234323AbiIAKlg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 1 Sep 2022 06:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiIAIrp (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 04:47:45 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42311144D
-        for <linux-arch@vger.kernel.org>; Thu,  1 Sep 2022 01:47:43 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id c7so14704366wrp.11
-        for <linux-arch@vger.kernel.org>; Thu, 01 Sep 2022 01:47:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=/Auump3XxTowu3KsMpzt3UPvEs6aYKfLdnXKnH4oZ54=;
-        b=Ycl15nMb/4hb3kHz/lQ3e6M+fpLdoHJWSCpWa/MbisPbZ7pCgQ11BLgW7NS3aX/qHi
-         kjXZtQKJCke0dSlTE8pS78iuYzMr1YE/gvJLxuiYBHcPH9cIkR76HiQ6jvoeZ3Sqz0gN
-         N3ojghubI2M9j+bN3fPDI2JJfumisjTd2WiJnE+Ga7SZ+MozHj9bswIVE3wDUdedNi7u
-         Y9dGHbQXkX8CBtXZDy0LSXc+m4C6n+8WEYMZIT/Rx2IsivujQe2u6XUQDAxpsEEizbz9
-         CDcObZT7NSWOYM0q8jeBpJOagUmXXO2vvqqk8glCUFNn8x7mgUKIY1Ddvy6p3TSf1imo
-         8gOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=/Auump3XxTowu3KsMpzt3UPvEs6aYKfLdnXKnH4oZ54=;
-        b=aeaxFIFPaQwBLVXPu0YezQzacvQtRk/DEQENUrGt/ovJoaOO10OhM6mH7Pt1Kux+Xu
-         Mq0Rn9R73FwueE2Ry0aupOZMsUO9avCQGw27dfrfxOMQFQVJ1+wcmCkji52otDjEfap3
-         t6rNjPFi5vzEkWYAETerGgBvOysP+IgZlHwWhrWWuHuAQJCbLbSrGyNZpmDjJDB/ntRN
-         X8P+HL5TNs6AXqKepU88/C0ZE61/XjPN7w+HMAkngFS3S/fGre5SDUNF8eSvW55e6u4k
-         B4fJrX+F9SSg6vUMNUuhSDbhtPtH8NLygMHMFgF6djxFoA5uCsUgo1FAJpAn6kI67P/s
-         pycg==
-X-Gm-Message-State: ACgBeo00ZODTZA+p6kPjARS3+KnTbtN/ElzPEX2t/rlwm9w+lKu0xKVH
-        xfZ7PLWOM+X/DhbwqUoN1P0+SA==
-X-Google-Smtp-Source: AA6agR7YxteHL9Mris6cZrPrBO0zwwHVERYvvIslObQc105k447VDKLfl6OgWT/HLm3s5gCVTlynGw==
-X-Received: by 2002:a05:6000:616:b0:226:d80b:76ab with SMTP id bn22-20020a056000061600b00226d80b76abmr11224186wrb.547.1662022062154;
-        Thu, 01 Sep 2022 01:47:42 -0700 (PDT)
-Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id bq25-20020a5d5a19000000b0021e519eba9bsm9411140wrb.42.2022.09.01.01.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 01:47:41 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 10:47:40 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Vladimir Isaev <vladimir.isaev@syntacore.com>
-Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Conor.Dooley@microchip.com, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org
-Subject: Re: [PATCH v2] riscv: Fix permissions for all mm's during mm init
-Message-ID: <20220901084740.v34npx77vlfclyje@kamzik>
-References: <20220830091612.513137-1-vladimir.isaev@syntacore.com>
+        with ESMTP id S234255AbiIAKlR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 06:41:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA63BDA3E0;
+        Thu,  1 Sep 2022 03:40:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9563CB823F1;
+        Thu,  1 Sep 2022 10:40:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4127FC43140;
+        Thu,  1 Sep 2022 10:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662028844;
+        bh=LBa14xoUN0fMhLzLC7wVPDFh9Iet5/+NLV5mMa9mn/o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sPAJY0gVqmkV7XMw/tcX9QW32uvxLniBcF9y2Lb1R3++Jt47suBJWhk3Zkgos6HAi
+         0aVIxTO/4iELlWickg+kLbupXAN5gQf403M3WH8C923Wc/C7/wQkKDmmwbIwNkh2Yf
+         Hf5+bfMETsCMHE6OOzNY+omspABTzKRWY7oXFFRYTsbUcXr4vP2dGCEWhbcqHFXIYi
+         +JBVoVScCsl3WKaNqA3F0aJgIrhmGUuZB1XoI9o2vbSRrr+uSfPjIyp8bRl0rtdjiH
+         iPenQcAjSVv6+iiQv4sokE//LOJKE+gsJ2MzVPKVwrfegfKfjxnSDnk6ir6ex1HIcO
+         6tZSBcBqUsvxQ==
+Received: by mail-vs1-f52.google.com with SMTP id c3so17286381vsc.6;
+        Thu, 01 Sep 2022 03:40:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3ZzaL+h4TQ/B0IsyHFKxgpy6J04KJ6yaEjAGUtlLMLFhuXo2EN
+        sA+quoc2j2N/DrCNwftwlm4DEdW6Q7+sbiCKKcE=
+X-Google-Smtp-Source: AA6agR7dNMRQwlxYH+D7lL3BtG0CaeaIu0EOhQ46VtPMSzp62FZbuavPop3/iV8rHcRRV0arRmbJashjVsJasIKdqVo=
+X-Received: by 2002:a67:df81:0:b0:390:21a3:823a with SMTP id
+ x1-20020a67df81000000b0039021a3823amr8091257vsk.70.1662028843133; Thu, 01 Sep
+ 2022 03:40:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830091612.513137-1-vladimir.isaev@syntacore.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220819102037.2697798-1-chenhuacai@loongson.cn>
+ <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site> <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
+In-Reply-To: <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 1 Sep 2022 18:40:31 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
+Message-ID: <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
+Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,272 +69,40 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 12:16:12PM +0300, Vladimir Isaev wrote:
-> It is possible to have more than one mm (init_mm) during memory
-> permission fixes. In my case it was caused by request_module
-> from drivers/net/phy/phy_device.c and leads to following Oops
-> during free_initmem() on RV32 platform:
->      Unable to handle kernel paging request at virtual address c0800000
->      Oops [#1]
->      Modules linked in:
->      CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.45
->      Hardware name: Syntacore SCR5 SDK board (DT)
->      epc : __memset+0x58/0xf4
->       ra : free_reserved_area+0xfa/0x15a
->      epc : c02b26ac ra : c00eb588 sp : c1c1fed0
->       gp : c1898690 tp : c1c98000 t0 : c0800000
->       t1 : ffffffff t2 : 00000000 s0 : c1c1ff20
->       s1 : c189a000 a0 : c0800000 a1 : cccccccc
->       a2 : 00001000 a3 : c0801000 a4 : 00000000
->       a5 : 00800000 a6 : fef09000 a7 : 00000000
->       s2 : c0e57000 s3 : c10edcf8 s4 : 000000cc
->       s5 : ffffefff s6 : c188a9f4 s7 : 00000001
->       s8 : c0800000 s9 : fef1b000 s10: c10ee000
->       s11: c189a000 t3 : 00000000 t4 : 00000000
->       t5 : 00000000 t6 : 00000001
->      status: 00000120 badaddr: c0800000 cause: 0000000f
->      [<c0488658>] free_initmem+0x204/0x222
->      [<c048d05a>] kernel_init+0x32/0xfc
->      [<c0002f76>] ret_from_exception+0x0/0xc
->      ---[ end trace 7a5e2b002350b528 ]---
-> 
-> This is because request_module attempted to modprobe module, so it created
-> new mm with the copy of kernel's page table. And this copy won't be updated
-> in case of 4M pages and RV32 (pgd is the leaf).
-> 
-> To fix this we can update protection bits for all of existing mm-s, the
-> same as ARM does, see commit 08925c2f124f
-> ("ARM: 8464/1: Update all mm structures with section adjustments").
-> 
-> Fixes: 19a00869028f ("RISC-V: Protect all kernel sections including init early")
-> Signed-off-by: Vladimir Isaev <vladimir.isaev@syntacore.com>
-> ---
-> Changes for v2:
->   - Fixed commit message format.
->   - Added 'Fixes' tag.
-> ---
->  arch/riscv/include/asm/set_memory.h | 20 +++--------
->  arch/riscv/kernel/setup.c           | 11 ------
->  arch/riscv/mm/init.c                | 29 ++++++++++++---
->  arch/riscv/mm/pageattr.c            | 55 ++++++++++++++++++++++++-----
->  4 files changed, 75 insertions(+), 40 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm/set_memory.h
-> index a2c14d4b3993..bb0f6b4ed86b 100644
-> --- a/arch/riscv/include/asm/set_memory.h
-> +++ b/arch/riscv/include/asm/set_memory.h
-> @@ -16,28 +16,16 @@ int set_memory_rw(unsigned long addr, int numpages);
->  int set_memory_x(unsigned long addr, int numpages);
->  int set_memory_nx(unsigned long addr, int numpages);
->  int set_memory_rw_nx(unsigned long addr, int numpages);
-> -static __always_inline int set_kernel_memory(char *startp, char *endp,
-> -					     int (*set_memory)(unsigned long start,
-> -							       int num_pages))
-> -{
-> -	unsigned long start = (unsigned long)startp;
-> -	unsigned long end = (unsigned long)endp;
-> -	int num_pages = PAGE_ALIGN(end - start) >> PAGE_SHIFT;
-> -
-> -	return set_memory(start, num_pages);
-> -}
-> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
-> +			  pgprot_t clear_mask);
->  #else
->  static inline int set_memory_ro(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_rw(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_x(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_rw_nx(unsigned long addr, int numpages) { return 0; }
-> -static inline int set_kernel_memory(char *startp, char *endp,
-> -				    int (*set_memory)(unsigned long start,
-> -						      int num_pages))
-> -{
-> -	return 0;
-> -}
-> +static inline void fix_kernel_mem_early(char *startp, char *endp,
-> +					pgprot_t set_mask, pgprot_t clear_mask) { }
->  #endif
->  
->  int set_direct_map_invalid_noflush(struct page *page);
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 95ef6e2bf45c..17eae1406092 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -27,7 +27,6 @@
->  #include <asm/early_ioremap.h>
->  #include <asm/pgtable.h>
->  #include <asm/setup.h>
-> -#include <asm/set_memory.h>
->  #include <asm/sections.h>
->  #include <asm/sbi.h>
->  #include <asm/tlbflush.h>
-> @@ -318,13 +317,3 @@ static int __init topology_init(void)
->  	return 0;
->  }
->  subsys_initcall(topology_init);
-> -
-> -void free_initmem(void)
-> -{
-> -	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-> -		set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
-> -				  IS_ENABLED(CONFIG_64BIT) ?
-> -					set_memory_rw : set_memory_rw_nx);
-> -
-> -	free_initmem_default(POISON_FREE_INITMEM);
-> -}
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index b56a0a75533f..978202712535 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -16,7 +16,6 @@
->  #include <linux/of_fdt.h>
->  #include <linux/of_reserved_mem.h>
->  #include <linux/libfdt.h>
-> -#include <linux/set_memory.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/crash_dump.h>
->  #include <linux/hugetlb.h>
-> @@ -28,6 +27,7 @@
->  #include <asm/io.h>
->  #include <asm/ptdump.h>
->  #include <asm/numa.h>
-> +#include <asm/set_memory.h>
->  
->  #include "../kernel/head.h"
->  
-> @@ -714,10 +714,14 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
->  
->  void mark_rodata_ro(void)
->  {
-> -	set_kernel_memory(__start_rodata, _data, set_memory_ro);
-> -	if (IS_ENABLED(CONFIG_64BIT))
-> -		set_kernel_memory(lm_alias(__start_rodata), lm_alias(_data),
-> -				  set_memory_ro);
-> +	pgprot_t set_mask = __pgprot(_PAGE_READ);
-> +	pgprot_t clear_mask = __pgprot(_PAGE_WRITE);
-> +
-> +	fix_kernel_mem_early(__start_rodata, _data, set_mask, clear_mask);
-> +	if (IS_ENABLED(CONFIG_64BIT)) {
-> +		fix_kernel_mem_early(lm_alias(__start_rodata), lm_alias(_data),
-> +				     set_mask, clear_mask);
-> +	}
->  
->  	debug_checkwx();
->  }
-> @@ -1243,3 +1247,18 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->  	return vmemmap_populate_basepages(start, end, node, NULL);
->  }
->  #endif
-> +
-> +void free_initmem(void)
-> +{
-> +	pgprot_t set_mask = __pgprot(_PAGE_READ | _PAGE_WRITE);
-> +	pgprot_t clear_mask = IS_ENABLED(CONFIG_64BIT) ?
-> +			      __pgprot(0) : __pgprot(_PAGE_EXEC);
-> +
-> +	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
-> +		fix_kernel_mem_early(lm_alias(__init_begin),
-> +				     lm_alias(__init_end),
-> +				     set_mask, clear_mask);
-> +	}
-> +
-> +	free_initmem_default(POISON_FREE_INITMEM);
-> +}
-> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
-> index 5e49e4b4a4cc..10a4ee313083 100644
-> --- a/arch/riscv/mm/pageattr.c
-> +++ b/arch/riscv/mm/pageattr.c
-> @@ -5,6 +5,7 @@
->  
->  #include <linux/pagewalk.h>
->  #include <linux/pgtable.h>
-> +#include <linux/sched.h>
->  #include <asm/tlbflush.h>
->  #include <asm/bitops.h>
->  #include <asm/set_memory.h>
-> @@ -104,24 +105,62 @@ static const struct mm_walk_ops pageattr_ops = {
->  	.pte_hole = pageattr_pte_hole,
->  };
->  
-> -static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
-> -			pgprot_t clear_mask)
-> +static int __set_memory_mm(struct mm_struct  *mm, unsigned long start,
-                                              ^ extra space
+Hi, Ard,
 
-> +			   unsigned long end, pgprot_t set_mask,
-> +			   pgprot_t clear_mask)
->  {
->  	int ret;
-> -	unsigned long start = addr;
-> -	unsigned long end = start + PAGE_SIZE * numpages;
->  	struct pageattr_masks masks = {
->  		.set_mask = set_mask,
->  		.clear_mask = clear_mask
->  	};
->  
-> +	mmap_read_lock(mm);
-> +	ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
-> +				    &masks);
-> +	mmap_read_unlock(mm);
-> +
-> +	return ret;
-> +}
-> +
-> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
-> +			  pgprot_t clear_mask)
-> +{
-> +	struct task_struct *t, *s;
-> +
-> +	unsigned long start = (unsigned long)startp;
-> +	unsigned long end = PAGE_ALIGN((unsigned long)endp);
-> +
-> +	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
-> +	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
-> +
+On Sat, Aug 27, 2022 at 3:14 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Sat, 27 Aug 2022 at 06:41, Xi Ruoyao <xry111@xry111.site> wrote:
+> >
+> > Tested V3 with the magic number check manually removed in my GRUB build.
+> > The system boots successfully.  I've not tested Arnd's zBoot patch yet.
+>
+> I am Ard not Arnd :-)
+>
+> Please use this branch when testing the EFI decompressor:
+> https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-decompressor-v4
+The root cause of LoongArch zboot boot failure has been found, it is a
+binutils bug, latest toolchain with the below patch can solve the
+problem.
 
-Presumably this is only run at a point where it's safe not to take
-tasklist_lock. A comment explaining that would be helpful to readers
-and help avoid this code getting copy+pasted into points it's not
-safe.
+diff --git a/bfd/elfnn-loongarch.c b/bfd/elfnn-loongarch.c
+index 5b44901b9e0..fafdc7c7458 100644
+--- a/bfd/elfnn-loongarch.c
++++ b/bfd/elfnn-loongarch.c
+@@ -2341,9 +2341,10 @@ loongarch_elf_relocate_section (bfd
+*output_bfd, struct bfd_link_info *info,
+     case R_LARCH_SOP_PUSH_PLT_PCREL:
+       unresolved_reloc = false;
 
-> +	rcu_read_lock();
-> +	for_each_process(t) {
-> +		if (t->flags & PF_KTHREAD)
-> +			continue;
-> +		for_each_thread(t, s) {
-> +			if (s->mm) {
-> +				__set_memory_mm(s->mm, start, end, set_mask,
-> +						clear_mask);
-> +			}
-> +		}
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	flush_tlb_kernel_range(start, end);
-> +}
-> +
-> +static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
-> +			pgprot_t clear_mask)
-> +{
-> +	int ret;
-> +	unsigned long start = addr;
-> +	unsigned long end = start + PAGE_SIZE * numpages;
-> +
->  	if (!numpages)
->  		return 0;
->  
-> -	mmap_read_lock(&init_mm);
-> -	ret =  walk_page_range_novma(&init_mm, start, end, &pageattr_ops, NULL,
-> -				     &masks);
-> -	mmap_read_unlock(&init_mm);
-> +	ret = __set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
->  
->  	flush_tlb_kernel_range(start, end);
->  
-> -- 
-> 2.37.2
-> 
+-      if (resolved_to_const)
++      if (!is_undefweak && resolved_to_const)
+         {
+           relocation += rel->r_addend;
++          relocation -= pc;
+           break;
+         }
+       else if (is_undefweak)
 
-Besides the extra space and comment request
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Huacai
