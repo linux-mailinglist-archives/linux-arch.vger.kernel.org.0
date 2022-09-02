@@ -2,115 +2,95 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C43B5AB471
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 16:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB29F5AB456
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 16:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236894AbiIBO4l (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Sep 2022 10:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S236579AbiIBOy2 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Sep 2022 10:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236227AbiIBOzi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 10:55:38 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E0F5C9D4;
-        Fri,  2 Sep 2022 07:20:36 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MJyHR5ykLz9sl4;
-        Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AUBHYN5pES6a; Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJyHR59Fmz9shq;
-        Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9E15B8B796;
-        Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id ngHMjiRW27QQ; Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id C2FA68B787;
-        Fri,  2 Sep 2022 14:42:42 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282CgaxE2141531
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 2 Sep 2022 14:42:36 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282CgZdP2141530;
-        Fri, 2 Sep 2022 14:42:35 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        with ESMTP id S237131AbiIBOyD (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 10:54:03 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 682CC25292
+        for <linux-arch@vger.kernel.org>; Fri,  2 Sep 2022 07:18:22 -0700 (PDT)
+Received: (qmail 272737 invoked by uid 1000); 2 Sep 2022 10:18:21 -0400
+Date:   Fri, 2 Sep 2022 10:18:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
         Will Deacon <will@kernel.org>,
-        Davide Ciminaghi <ciminaghi@gnudd.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org, x86@kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 9/9] arm64: Remove CONFIG_ARCH_NR_GPIO
-Date:   Fri,  2 Sep 2022 14:42:09 +0200
-Message-Id: <ac0303f84f4e14a90d7aa01cadd5b40a95dcb737.1662116601.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1662116601.git.christophe.leroy@csgroup.eu>
-References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH] tools/memory-model: Weaken ctrl dependency definition in
+ explanation.txt
+Message-ID: <YxIQrT+jFteFd8+e@rowland.harvard.edu>
+References: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
+ <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
+ <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
+ <Yw7AEx1w6oWn86cm@rowland.harvard.edu>
+ <935D3930-C369-4B0E-ACDC-5BFDFA85AA72@in.tum.de>
+ <Yw+cm+awhfi6IUHr@rowland.harvard.edu>
+ <EE1FA3DC-5A38-45EC-97AB-44B19C1C7707@in.tum.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662122527; l=990; s=20211009; h=from:subject:message-id; bh=VOD/NtiJ/b5PpJfagFI1T3Nt6t28rOABvYaDeEpm3RE=; b=U6gx5eSoOFQi5kRrM1OjOwwv6iF+/rokM1cn4fg6vD27VrCNcddj1xRkqPERy9vJzZ66g2TGRuzM YTcyxXafBZsIKNe9HgCmXCJ2Sfzbbs/fTAiQ1QOp6UqrZmNqpcuI
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <EE1FA3DC-5A38-45EC-97AB-44B19C1C7707@in.tum.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-CONFIG_ARCH_NR_GPIO is not used anymore, remove it.
+On Fri, Sep 02, 2022 at 10:40:34AM +0200, Paul Heidekrüger wrote:
+> On 31. Aug 2022, at 19:38, Alan Stern <stern@rowland.harvard.edu> wrote:
+> >>> Finally, a read event X and another memory access event Y are linked by a
+> >>> control dependency if Y syntactically lies within an arm of an if
+> >>> statement and X affects the evaluation of the if condition via a data or
+> >>> address dependency.  Similarly for switch statements.
+> >> 
+> >> What do you think?
+> > 
+> > I like the second one.  How about combining the last two sentences?  
+> > 
+> > 	... via a data or address dependency (or similarly for a switch 
+> > 	statement).
+> 
+> Yes, sounds good!
+> 
+> > Now I suppose someone will pipe up and ask about the conditional 
+> > expressions in "for", "while" and "do" statements...  :-)
+> 
+> Happy to have obliged :-)
+> https://lore.kernel.org/all/20F4C097-24B4-416B-95EE-AC11F5952B44@in.tum.de/
+> 
+> Do you think the text should explicitly address control dependencies in the
+> context of loops as well? If yes, would it be a separate patch, or would it
+> make sense to combine it with this one?
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
- arch/arm64/Kconfig | 12 ------------
- 1 file changed, 12 deletions(-)
+Anything else should be a separate patch.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 9fb9fff08c94..4d7158e484d2 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -2110,18 +2110,6 @@ config STACKPROTECTOR_PER_TASK
- 	def_bool y
- 	depends on STACKPROTECTOR && CC_HAVE_STACKPROTECTOR_SYSREG
- 
--# The GPIO number here must be sorted by descending number. In case of
--# a multiplatform kernel, we just want the highest value required by the
--# selected platforms.
--config ARCH_NR_GPIO
--        int
--        default 2048 if ARCH_APPLE
--        default 0
--        help
--          Maximum number of GPIOs in the system.
--
--          If unsure, leave the default value.
--
- endmenu # "Kernel Features"
- 
- menu "Boot options"
--- 
-2.37.1
+For the time being, I'm happy not to worry about loops.  In the end
+we'll probably have to describe them as though they were unrolled,
+with all the complications that entails.
 
+Alan
