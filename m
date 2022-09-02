@@ -2,61 +2,60 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453175AAD0A
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 13:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0D15AADCC
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 13:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235918AbiIBLC1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Sep 2022 07:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S229506AbiIBLjz (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Sep 2022 07:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235957AbiIBLC0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 07:02:26 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FAFC58EC;
-        Fri,  2 Sep 2022 04:02:25 -0700 (PDT)
-Received: by mail-qt1-f170.google.com with SMTP id l5so1151434qtv.4;
-        Fri, 02 Sep 2022 04:02:25 -0700 (PDT)
+        with ESMTP id S233262AbiIBLju (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 07:39:50 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C218D61;
+        Fri,  2 Sep 2022 04:39:48 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id n17so1960601wrm.4;
+        Fri, 02 Sep 2022 04:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date;
+        bh=BbNW3nWA9xoISgDnreRt3yDUZfE36fLGkaifLKvs7p8=;
+        b=TbB4Z1VjM/ogBtCUQS5J0Nde2hFGUx1Tx5pmdt/iUX4DLsQ7UQk0kpszVCw3Wwpf1v
+         9v/7yFR3H7HR7aUf13/9M2vKdVbNjPrMYqhEcS84Cq+2vgxNzUcPnsho1jRNRX0lf90s
+         Fbitx8g0js2Yipnba5uKZrknZBXIouv0vDp0SjQ5W6cLTEki90dIUQPaa32nWqHhjF13
+         jJTwAH2tcGEAeXDP8sxK5MoNDzarrGXbGN5cvnd+1ZpRs5XRZiNje5YchVOuZxt6t1Cg
+         BDuFRAvRIw5WUrjjtwGN9J4/GAcNCjjJNOYRQIsMtUxj3I7+ypq+e0moK5JtxJSx4YUn
+         mxrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dZTws1L2y2xyjbs91n4hGu/TU6dg0KKGjBmfL0/vaak=;
-        b=aofngmOsGOIslWnPv0kCg6/DJjGt52Eh3RGbfiln+J5wyI+7p1HxTFggisKIJRM+zR
-         tlLuy7xlPv08uTqW0NH/PbAe8+1LtA+41b6FA62gknkeEY97jdApDYOvnm8dsVsKAGA/
-         DPU/d/3kEntm4ESAphszrPeyTlG4t2aiN085LJN/fyP2+rrsQH0Prx72o0oGSpITyOd6
-         6V2mwjMilK3c6l8Bvjud0FYnYlyLal/gIcTZZwvzY7qri+5hXeNkGjOz155Ve0jpuOlp
-         jymsTBsPNqwi8F+wrw2ej3d0xDbSDwJy6vWEzjC3Gbddow+FSB1gyuocfZ773BJtR07e
-         wHNQ==
-X-Gm-Message-State: ACgBeo3qGEIMXgXi9h5QnctZB2x5omtfpaOn/I/z3NSbLKtrV/HGUupF
-        NxQqBuGwuWLFJp+BwwPUzXMcBqxjPSzRpg==
-X-Google-Smtp-Source: AA6agR76vP7Mjxh6TP8BWzfMH1ghKzbUlRSbiuv5NFRKVUkG3DHdqfDFIg+pjA43PLVExa16S9+BIQ==
-X-Received: by 2002:a05:622a:512:b0:343:6f1:a026 with SMTP id l18-20020a05622a051200b0034306f1a026mr27548265qtx.323.1662116543504;
-        Fri, 02 Sep 2022 04:02:23 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id l21-20020a37f915000000b006bbe7ded98csm1128981qkj.112.2022.09.02.04.02.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 04:02:22 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-324ec5a9e97so12900707b3.7;
-        Fri, 02 Sep 2022 04:02:22 -0700 (PDT)
-X-Received: by 2002:a0d:e895:0:b0:340:ab79:3285 with SMTP id
- r143-20020a0de895000000b00340ab793285mr26854285ywe.358.1662116542087; Fri, 02
- Sep 2022 04:02:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
- <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
- <CAHp75VcngRihpfUkeKs-g+TbPnpOsZ+-Q37zDVoWp8p_2GbSvQ@mail.gmail.com>
- <18cda49e-84f0-a806-566a-6e77705e98b3@csgroup.eu> <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
- <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
-In-Reply-To: <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 2 Sep 2022 13:02:10 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVVup8J0uge02H4u6o8NzxfkuFuZfExJ5u2M3FBE+RSAQ@mail.gmail.com>
-Message-ID: <CAMuHMdVVup8J0uge02H4u6o8NzxfkuFuZfExJ5u2M3FBE+RSAQ@mail.gmail.com>
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=BbNW3nWA9xoISgDnreRt3yDUZfE36fLGkaifLKvs7p8=;
+        b=L0jqHrXACEZ60NuxRsa/sK3KgVGWlxX7i0KqdGViaR9q7OrMoxnw+tRAgTVyuUu0lw
+         CjZzWhwt+Ym7kVJ6ibxZIg2VxJ0KgCPpFeUrTKCQyQ0jcfdTRGJlFeq4Tzt8m9J5Kqz5
+         PWuGRUJaRFm0R5TIrii36H3Iafv5jsz65HWD8o39+zXfzVhfRRlSJrHJv8BSmoku3zjq
+         cRQoK9L39YxYzzY6UjSuSXaLXDS3rrpkabU6U/WUP32rM/Qq6IaJaSuG5kJzwvJcmyQX
+         0KSdQ0yW+9DN4P/CvRgfmwX6T9RWsLJiz0vz6HbcQwQVRJFfW9rFt/fzGbPQ0zZx4LRT
+         iIXA==
+X-Gm-Message-State: ACgBeo1VxrDVAz8NVrVTIOEnImaareyLRpGC3RRA7h2wSwoxD1lBS9DT
+        OHxwBxFf1jzInmBNBDJcp94=
+X-Google-Smtp-Source: AA6agR718If+mhK78grxGtOAsVSpfjTIku97uK9bbTkkxnoJ2hSLV74xT7AT4TmJ6nGzKObdg3FntQ==
+X-Received: by 2002:a5d:4b8c:0:b0:226:d4a9:d1b1 with SMTP id b12-20020a5d4b8c000000b00226d4a9d1b1mr15718741wrt.674.1662118786755;
+        Fri, 02 Sep 2022 04:39:46 -0700 (PDT)
+Received: from fedora.fritz.box ([2001:a61:2ade:3401:dc2b:c0fc:8a52:49ef])
+        by smtp.gmail.com with ESMTPSA id ba10-20020a0560001c0a00b00226fa6cf1d3sm1302973wrb.7.2022.09.02.04.39.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Sep 2022 04:39:45 -0700 (PDT)
+Message-ID: <a3de0d490ab28ebab45d4e7c4d4673d1d622335e.camel@gmail.com>
 Subject: Re: [PATCH v1 4/8] gpiolib: Get rid of ARCH_NR_GPIOS
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -73,42 +72,60 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
         Linux-Arch <linux-arch@vger.kernel.org>,
         Linux Documentation List <linux-doc@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Date:   Fri, 02 Sep 2022 13:39:43 +0200
+In-Reply-To: <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
+References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
+         <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
+         <CAHp75VcngRihpfUkeKs-g+TbPnpOsZ+-Q37zDVoWp8p_2GbSvQ@mail.gmail.com>
+         <18cda49e-84f0-a806-566a-6e77705e98b3@csgroup.eu>
+         <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
+         <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Andy,
-
-CC linux-sh
-
-On Fri, Sep 2, 2022 at 12:53 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Fri, 2022-09-02 at 13:52 +0300, Andy Shevchenko wrote:
+> (Nuno, one point below for you)
+> 
 > On Wed, Aug 31, 2022 at 11:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > drivers/pinctrl/renesas/gpio.c: gc->base = pfc->nr_gpio_pins; // ??? don't understand
->
-> I think, w/o looking into the code, that this just guarantees the
-> continuous numbering for all banks (chips) on the platform.
+> 
+> ...
+> 
+> > drivers/gpio/gpio-adp5520.c:    gc->base = pdata->gpio_start; //
+> > unused
+> > drivers/gpio/gpio-adp5588.c:            gc->base = pdata-
+> > >gpio_start; // unused
+> > drivers/input/keyboard/adp5588-keys.c:  kpad->gc.base = gpio_data-
+> > >gpio_start; // unused
+> > drivers/input/keyboard/adp5589-keys.c:  kpad->gc.base = gpio_data-
+> > >gpio_start; // unused
+> 
+> I believe we should convert them to -1.
+> 
 
-This part of the code depends on CONFIG_PINCTRL_SH_FUNC_GPIO,
-which is used only on SH.
+Well, the adp5588-keys.c was already refactored [1] to use FW
+properties so that -1 will be used. In the process, gpio-adp5588.c
+was dropped.
 
-Gr{oetje,eeting}s,
+For the adp5589-keys.c driver, we might also need to do a similar
+work as I suspect there's no platform making use of pdata. Hence,
+yes, I believe -1 is the way to go.
 
-                        Geert
+Ditto for gpio-adp5520.c...
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+[1]:
+https://lore.kernel.org/linux-input/Yw7hRIbsTqOWVeyJ@google.com/T/#m382bec5c587241010d453ce1000bea2d34b86380
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+- Nuno Sá
+> 
