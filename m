@@ -2,127 +2,323 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A74A5AABA8
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 11:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE025AAC3F
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 12:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235275AbiIBJmE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Sep 2022 05:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S235325AbiIBKUg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Sep 2022 06:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbiIBJmC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 05:42:02 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF45A4E63F;
-        Fri,  2 Sep 2022 02:41:51 -0700 (PDT)
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 2829fccx032021;
-        Fri, 2 Sep 2022 18:41:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2829fccx032021
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662111698;
-        bh=Yu6q9CiU0SZ2y8yEyENS2Mjn2VsQqrhZ4sv/qS7Inu0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hOOYme3dsSbItMMKrdyZPuaHh6lUsJm1eOOS/YSxV1DlV2iWaXMvCnlVaeZjvJGxO
-         4IVPvp8aEt27DScP+ufYRROYrYUYvuS5CeZqMirCNkVwfLaaJwTKIpYV1+fZPXj8t3
-         eS0qw5WoKem4psdSrT+xbf5HNdBztvtpBWp3f7+ZSJO8sL/n1Cstwbw4oQOQjy/v1F
-         ALZbLPFxBUtP4MXFDZl6363DWIc/V1JZsrUKB/qomVZduB3pzzWEYRdSVCdMu/39qp
-         Sf0qC0EbaMEIQCvoL2SQXyaYbM07sNMpI6+6qO0oyzyHk9aLBYJFwppkUi+yC1ieWt
-         tQIexKjHpnzbw==
-X-Nifty-SrcIP: [209.85.160.43]
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-11edd61a9edso3429979fac.5;
-        Fri, 02 Sep 2022 02:41:38 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2ZRBMhDomXY8t1TLqYc4AY973EwgygwZXbuc9T17Xd4Ww5d8TB
-        vouwQ9E/vKmMwA0M0GNxZ3BhouvqifJGzjTN3XM=
-X-Google-Smtp-Source: AA6agR4ucDwaCckZtMQtGkNmHwmMUQc6ZBkNxdQoU8K+chnV99uRpH70hKQYOGpqiQ0Wz/ZmZkBPbN/ucVX8p61BtG8=
-X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
- ek38-20020a056870f62600b0010da798f3aamr1712772oab.194.1662111697432; Fri, 02
- Sep 2022 02:41:37 -0700 (PDT)
+        with ESMTP id S235662AbiIBKUf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 06:20:35 -0400
+X-Greylist: delayed 355 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Sep 2022 03:20:31 PDT
+Received: from forward100p.mail.yandex.net (forward100p.mail.yandex.net [77.88.28.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7923E2E9EC
+        for <linux-arch@vger.kernel.org>; Fri,  2 Sep 2022 03:20:31 -0700 (PDT)
+Received: from sas2-e7f6fb703652.qloud-c.yandex.net (sas2-e7f6fb703652.qloud-c.yandex.net [IPv6:2a02:6b8:c14:4fa6:0:640:e7f6:fb70])
+        by forward100p.mail.yandex.net (Yandex) with ESMTP id 8687C4F0D5B9;
+        Fri,  2 Sep 2022 13:13:28 +0300 (MSK)
+Received: by sas2-e7f6fb703652.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id EggCx9O4sg-DQi09Qxn;
+        Fri, 02 Sep 2022 13:13:27 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syntacore.com; s=mail; t=1662113607;
+        bh=cIr19IJDIn+TS03BjpOJmjzRVVbO3TYKUnrB50mKyjk=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=GTSXzviCcMWB+CTvUlXzTC/RSNf2Mf2WlNBV6q+fKjS4kmPCkBqY5MZ4LrIhOLgeS
+         q1Zm+0v05S3YeDjpJyUzigr6sebiYqSxHyIH5hsh75mDz/OpltSIDJzVd2n1kay2nA
+         op9un6FzUxb77ugaMDYIlp/LobpnDkNfwNS3tM7c=
+Authentication-Results: sas2-e7f6fb703652.qloud-c.yandex.net; dkim=pass header.i=@syntacore.com
+From:   Vladimir Isaev <vladimir.isaev@syntacore.com>
+To:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Conor.Dooley@microchip.com, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, anup@brainfault.org
+Cc:     Vladimir Isaev <vladimir.isaev@syntacore.com>,
+        Andrew Jones <ajones@ventanamicro.com>
+Subject: [PATCH v3] riscv: Fix permissions for all mm's during mm init
+Date:   Fri,  2 Sep 2022 13:13:12 +0300
+Message-Id: <20220902101312.220350-1-vladimir.isaev@syntacore.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220828024003.28873-1-masahiroy@kernel.org> <20220828024003.28873-6-masahiroy@kernel.org>
-In-Reply-To: <20220828024003.28873-6-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 2 Sep 2022 18:41:01 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQsw2u4AYKg74GYaz3n4gvbTdF3dn9OUYWxCGXGjP5sQA@mail.gmail.com>
-Message-ID: <CAK7LNAQsw2u4AYKg74GYaz3n4gvbTdF3dn9OUYWxCGXGjP5sQA@mail.gmail.com>
-Subject: Re: [PATCH 05/15] kbuild: build init/built-in.a just once
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 11:40 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+It is possible to have more than one mm (init_mm) during memory
+permission fixes. In my case it was caused by request_module
+from drivers/net/phy/phy_device.c and leads to following Oops
+during free_initmem() on RV32 platform:
+     Unable to handle kernel paging request at virtual address c0800000
+     Oops [#1]
+     Modules linked in:
+     CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.45
+     Hardware name: Syntacore SCR5 SDK board (DT)
+     epc : __memset+0x58/0xf4
+      ra : free_reserved_area+0xfa/0x15a
+     epc : c02b26ac ra : c00eb588 sp : c1c1fed0
+      gp : c1898690 tp : c1c98000 t0 : c0800000
+      t1 : ffffffff t2 : 00000000 s0 : c1c1ff20
+      s1 : c189a000 a0 : c0800000 a1 : cccccccc
+      a2 : 00001000 a3 : c0801000 a4 : 00000000
+      a5 : 00800000 a6 : fef09000 a7 : 00000000
+      s2 : c0e57000 s3 : c10edcf8 s4 : 000000cc
+      s5 : ffffefff s6 : c188a9f4 s7 : 00000001
+      s8 : c0800000 s9 : fef1b000 s10: c10ee000
+      s11: c189a000 t3 : 00000000 t4 : 00000000
+      t5 : 00000000 t6 : 00000001
+     status: 00000120 badaddr: c0800000 cause: 0000000f
+     [<c0488658>] free_initmem+0x204/0x222
+     [<c048d05a>] kernel_init+0x32/0xfc
+     [<c0002f76>] ret_from_exception+0x0/0xc
+     ---[ end trace 7a5e2b002350b528 ]---
 
+This is because request_module attempted to modprobe module, so it created
+new mm with the copy of kernel's page table. And this copy won't be updated
+in case of 4M pages and RV32 (pgd is the leaf).
 
-> --- a/init/Makefile
-> +++ b/init/Makefile
-> @@ -19,20 +19,47 @@ mounts-y                    := do_mounts.o
->  mounts-$(CONFIG_BLK_DEV_RAM)   += do_mounts_rd.o
->  mounts-$(CONFIG_BLK_DEV_INITRD)        += do_mounts_initrd.o
->
-> -# dependencies on generated files need to be listed explicitly
-> -$(obj)/version.o: include/generated/compile.h
-> +#
-> +# UTS_VERSION
-> +#
-> +
-> +smp-flag-$(CONFIG_SMP)                 := SMP
-> +preempt-flag-$(CONFIG_PREEMPT_BUILD)   := PREEMPT
-> +preempt-flag-$(CONFIG_PREEMPT_DYNAMIC) := PREEMPT_DYNAMIC
-> +preempt-flag-$(CONFIG_PREEMPT_RT)      := PREEMPT_RT
-> +
-> +build-version = $(or $(KBUILD_BUILD_VERSION), $(build-version-auto))
-> +build-timestamp = $(or $(KBUILD_BUILD_TIMESTAMP), $(build-timestamp-auto))
-> +
-> +# Maximum length of UTS_VERSION is 64 chars
-> +filechk_uts_version = \
-> +       utsver=$$(echo '$(pound)'"$(build-version)" $(smp-flag-y) $(preempt-flag-y) "$(build-timestamp)" | cut -b -64); \
-> +       echo '$(pound)'define UTS_VERSION \""$${utsver}"\"
-> +
-> +#
-> +# Build version.c with temporary UTS_VERSION
-> +#
-> +
-> +$(obj)/utsversion-tmp.h: FORCE
-> +       $(call filechk,uts_version)
+To fix this we can update protection bits for all of existing mm-s, the
+same as ARM does, see commit 08925c2f124f
+("ARM: 8464/1: Update all mm structures with section adjustments").
 
+Fixes: 19a00869028f ("RISC-V: Protect all kernel sections including init early")
+Signed-off-by: Vladimir Isaev <vladimir.isaev@syntacore.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+---
+Changes for v3:
+  - Add WARN_ON(state != SYSTEM_FREEING_INITMEM) to fix_kernel_mem_early()
+    to make sure that the function used only during permission fixes.
+  - Add comment to fix_kernel_mem_early().
 
-I missed to clean up init/utsversion-tmp.h.
+Changes for v2:
+  - Fix commit message format.
+  - Add 'Fixes' tag.
+---
+ arch/riscv/include/asm/set_memory.h | 20 ++--------
+ arch/riscv/kernel/setup.c           | 11 -----
+ arch/riscv/mm/init.c                | 29 +++++++++++---
+ arch/riscv/mm/pageattr.c            | 62 +++++++++++++++++++++++++----
+ 4 files changed, 82 insertions(+), 40 deletions(-)
 
-I patched like follows, and also added it to init/.gitignore.
-
-
-
-
-diff --git a/init/Makefile b/init/Makefile
-index 63f53d210cad..ba90eb817185 100644
---- a/init/Makefile
-+++ b/init/Makefile
-@@ -43,6 +43,8 @@ filechk_uts_version = \
- $(obj)/utsversion-tmp.h: FORCE
-        $(call filechk,uts_version)
-
-+clean-files += utsversion-tmp.h
+diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm/set_memory.h
+index a2c14d4b3993..bb0f6b4ed86b 100644
+--- a/arch/riscv/include/asm/set_memory.h
++++ b/arch/riscv/include/asm/set_memory.h
+@@ -16,28 +16,16 @@ int set_memory_rw(unsigned long addr, int numpages);
+ int set_memory_x(unsigned long addr, int numpages);
+ int set_memory_nx(unsigned long addr, int numpages);
+ int set_memory_rw_nx(unsigned long addr, int numpages);
+-static __always_inline int set_kernel_memory(char *startp, char *endp,
+-					     int (*set_memory)(unsigned long start,
+-							       int num_pages))
+-{
+-	unsigned long start = (unsigned long)startp;
+-	unsigned long end = (unsigned long)endp;
+-	int num_pages = PAGE_ALIGN(end - start) >> PAGE_SHIFT;
+-
+-	return set_memory(start, num_pages);
+-}
++void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
++			  pgprot_t clear_mask);
+ #else
+ static inline int set_memory_ro(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_rw(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_x(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_rw_nx(unsigned long addr, int numpages) { return 0; }
+-static inline int set_kernel_memory(char *startp, char *endp,
+-				    int (*set_memory)(unsigned long start,
+-						      int num_pages))
+-{
+-	return 0;
+-}
++static inline void fix_kernel_mem_early(char *startp, char *endp,
++					pgprot_t set_mask, pgprot_t clear_mask) { }
+ #endif
+ 
+ int set_direct_map_invalid_noflush(struct page *page);
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 95ef6e2bf45c..17eae1406092 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -27,7 +27,6 @@
+ #include <asm/early_ioremap.h>
+ #include <asm/pgtable.h>
+ #include <asm/setup.h>
+-#include <asm/set_memory.h>
+ #include <asm/sections.h>
+ #include <asm/sbi.h>
+ #include <asm/tlbflush.h>
+@@ -318,13 +317,3 @@ static int __init topology_init(void)
+ 	return 0;
+ }
+ subsys_initcall(topology_init);
+-
+-void free_initmem(void)
+-{
+-	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+-		set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
+-				  IS_ENABLED(CONFIG_64BIT) ?
+-					set_memory_rw : set_memory_rw_nx);
+-
+-	free_initmem_default(POISON_FREE_INITMEM);
+-}
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index b56a0a75533f..978202712535 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -16,7 +16,6 @@
+ #include <linux/of_fdt.h>
+ #include <linux/of_reserved_mem.h>
+ #include <linux/libfdt.h>
+-#include <linux/set_memory.h>
+ #include <linux/dma-map-ops.h>
+ #include <linux/crash_dump.h>
+ #include <linux/hugetlb.h>
+@@ -28,6 +27,7 @@
+ #include <asm/io.h>
+ #include <asm/ptdump.h>
+ #include <asm/numa.h>
++#include <asm/set_memory.h>
+ 
+ #include "../kernel/head.h"
+ 
+@@ -714,10 +714,14 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
+ 
+ void mark_rodata_ro(void)
+ {
+-	set_kernel_memory(__start_rodata, _data, set_memory_ro);
+-	if (IS_ENABLED(CONFIG_64BIT))
+-		set_kernel_memory(lm_alias(__start_rodata), lm_alias(_data),
+-				  set_memory_ro);
++	pgprot_t set_mask = __pgprot(_PAGE_READ);
++	pgprot_t clear_mask = __pgprot(_PAGE_WRITE);
 +
- $(obj)/version.o: include/generated/compile.h $(obj)/utsversion-tmp.h
- CFLAGS_version.o := -include $(obj)/utsversion-tmp.h
-
-
-
-
-
-
-
-
-
-
++	fix_kernel_mem_early(__start_rodata, _data, set_mask, clear_mask);
++	if (IS_ENABLED(CONFIG_64BIT)) {
++		fix_kernel_mem_early(lm_alias(__start_rodata), lm_alias(_data),
++				     set_mask, clear_mask);
++	}
+ 
+ 	debug_checkwx();
+ }
+@@ -1243,3 +1247,18 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+ 	return vmemmap_populate_basepages(start, end, node, NULL);
+ }
+ #endif
++
++void free_initmem(void)
++{
++	pgprot_t set_mask = __pgprot(_PAGE_READ | _PAGE_WRITE);
++	pgprot_t clear_mask = IS_ENABLED(CONFIG_64BIT) ?
++			      __pgprot(0) : __pgprot(_PAGE_EXEC);
++
++	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
++		fix_kernel_mem_early(lm_alias(__init_begin),
++				     lm_alias(__init_end),
++				     set_mask, clear_mask);
++	}
++
++	free_initmem_default(POISON_FREE_INITMEM);
++}
+diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+index 5e49e4b4a4cc..74b8107ac743 100644
+--- a/arch/riscv/mm/pageattr.c
++++ b/arch/riscv/mm/pageattr.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/pagewalk.h>
+ #include <linux/pgtable.h>
++#include <linux/sched.h>
+ #include <asm/tlbflush.h>
+ #include <asm/bitops.h>
+ #include <asm/set_memory.h>
+@@ -104,24 +105,69 @@ static const struct mm_walk_ops pageattr_ops = {
+ 	.pte_hole = pageattr_pte_hole,
+ };
+ 
+-static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+-			pgprot_t clear_mask)
++static int __set_memory_mm(struct mm_struct *mm, unsigned long start,
++			   unsigned long end, pgprot_t set_mask,
++			   pgprot_t clear_mask)
+ {
+ 	int ret;
+-	unsigned long start = addr;
+-	unsigned long end = start + PAGE_SIZE * numpages;
+ 	struct pageattr_masks masks = {
+ 		.set_mask = set_mask,
+ 		.clear_mask = clear_mask
+ 	};
+ 
++	mmap_read_lock(mm);
++	ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
++				    &masks);
++	mmap_read_unlock(mm);
++
++	return ret;
++}
++
++void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
++			  pgprot_t clear_mask)
++{
++	struct task_struct *t, *s;
++
++	unsigned long start = (unsigned long)startp;
++	unsigned long end = PAGE_ALIGN((unsigned long)endp);
++
++	/*
++	 * In the SYSTEM_FREEING_INITMEM state we expect that all async code
++	 * is done and no new userspace task can be created.
++	 * So rcu_read_lock() should be enough here.
++	 */
++	WARN_ON(system_state != SYSTEM_FREEING_INITMEM);
++
++	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
++	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
++
++	rcu_read_lock();
++	for_each_process(t) {
++		if (t->flags & PF_KTHREAD)
++			continue;
++		for_each_thread(t, s) {
++			if (s->mm) {
++				__set_memory_mm(s->mm, start, end, set_mask,
++						clear_mask);
++			}
++		}
++	}
++	rcu_read_unlock();
++
++	flush_tlb_kernel_range(start, end);
++}
++
++static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
++			pgprot_t clear_mask)
++{
++	int ret;
++	unsigned long start = addr;
++	unsigned long end = start + PAGE_SIZE * numpages;
++
+ 	if (!numpages)
+ 		return 0;
+ 
+-	mmap_read_lock(&init_mm);
+-	ret =  walk_page_range_novma(&init_mm, start, end, &pageattr_ops, NULL,
+-				     &masks);
+-	mmap_read_unlock(&init_mm);
++	ret = __set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
+ 
+ 	flush_tlb_kernel_range(start, end);
+ 
 -- 
-Best Regards
-Masahiro Yamada
+2.37.2
+
