@@ -2,45 +2,45 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663E95AB47B
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 16:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7585AB476
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 16:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236954AbiIBO4r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        id S236936AbiIBO4r (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
         Fri, 2 Sep 2022 10:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50966 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbiIBOzk (ORCPT
+        with ESMTP id S236498AbiIBOzk (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 10:55:40 -0400
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054B765658;
-        Fri,  2 Sep 2022 07:20:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607E85FAEA;
+        Fri,  2 Sep 2022 07:20:40 -0700 (PDT)
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MJyHW0l8Cz9slX;
-        Fri,  2 Sep 2022 14:42:47 +0200 (CEST)
+        by localhost (Postfix) with ESMTP id 4MJyHT1Mtzz9sm9;
+        Fri,  2 Sep 2022 14:42:45 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fcDlgJNWUSKR; Fri,  2 Sep 2022 14:42:47 +0200 (CEST)
+        with ESMTP id c09AvhzPWvry; Fri,  2 Sep 2022 14:42:45 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJyHS0804z9sl9;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJyHS088rz9slJ;
         Fri,  2 Sep 2022 14:42:44 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id E21D18B798;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E0D168B796;
         Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id DUTLC8JVCdNe; Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
+        with ESMTP id vKVNRgx2lXct; Fri,  2 Sep 2022 14:42:43 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.39])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D777D8B792;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D56048B790;
         Fri,  2 Sep 2022 14:42:42 +0200 (CEST)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282CgYaJ2141519
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 282CgZY92141523
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Fri, 2 Sep 2022 14:42:34 +0200
+        Fri, 2 Sep 2022 14:42:35 +0200
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282CgYrG2141518;
-        Fri, 2 Sep 2022 14:42:34 +0200
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 282CgZxp2141522;
+        Fri, 2 Sep 2022 14:42:35 +0200
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -61,14 +61,14 @@ Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
         linux-doc@vger.kernel.org, x86@kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 6/9] Documentation: gpio: Remove text about ARCH_NR_GPIOS
-Date:   Fri,  2 Sep 2022 14:42:06 +0200
-Message-Id: <3a1f82b079a57ea07351ad6e71d7964162a03070.1662116601.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v2 7/9] x86: Remove CONFIG_ARCH_NR_GPIO
+Date:   Fri,  2 Sep 2022 14:42:07 +0200
+Message-Id: <f118e911b3b61202a71ec5832b71a1738fb37350.1662116601.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <cover.1662116601.git.christophe.leroy@csgroup.eu>
 References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662122527; l=1475; s=20211009; h=from:subject:message-id; bh=nMrWytdB4dtfJH5pitzlz2TRZRbRFDARsAY3M0xeb40=; b=nrOIc10OdOffIFYCwasvWrqQXePmi36vpW/sWCioLuTrxLCyE0m+9EX4aRa4jyQtGJNvmHhSerTx 4DtEXnYMAAR4fa3TG6FlIYSKwgENjTxNPdGncE6w6sOXlj+cvO30
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662122527; l=618; s=20211009; h=from:subject:message-id; bh=DNvQXfS6PmvQwuPGzC+DWyF6KwM4wocZ727UUqc2HS0=; b=HjBl4/Hx07M/QQ4hcE1kk93BMPbVRxMGSyDONRIFkPiSxyOEb7+zqd1CkRpym0l3BWfhAn5pLS7P ghOekxdGA6xo+WITtFY2MLazU2U8FnDBk0jRC9+c1cIjDRjvpGEi
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -80,36 +80,29 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-ARCH_NR_GPIOS have been removed, clean up the documentation.
-
-After this patch, the only place when ARCH_NR_GPIOS remains is in
-translations/zh_CN/gpio.txt and translations/zh_TW/gpio.txt.
-I don't have the skills to update that, anyway those two files are
-already out of sync as they are still mentionning ARCH_REQUIRE_GPIOLIB
-which was removed by commit 65053e1a7743 ("gpio: delete
-ARCH_[WANTS_OPTIONAL|REQUIRE]_GPIOLIB")
+CONFIG_ARCH_NR_GPIO is not used anymore, remove it.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 ---
- Documentation/driver-api/gpio/legacy.rst | 5 -----
+ arch/x86/Kconfig | 5 -----
  1 file changed, 5 deletions(-)
 
-diff --git a/Documentation/driver-api/gpio/legacy.rst b/Documentation/driver-api/gpio/legacy.rst
-index 9b12eeb89170..e17910cc3271 100644
---- a/Documentation/driver-api/gpio/legacy.rst
-+++ b/Documentation/driver-api/gpio/legacy.rst
-@@ -558,11 +558,6 @@ Platform Support
- To force-enable this framework, a platform's Kconfig will "select" GPIOLIB,
- else it is up to the user to configure support for GPIO.
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..0385d5273e37 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -345,11 +345,6 @@ config ARCH_HAS_CPU_RELAX
+ config ARCH_HIBERNATION_POSSIBLE
+ 	def_bool y
  
--It may also provide a custom value for ARCH_NR_GPIOS, so that it better
--reflects the number of GPIOs in actual use on that platform, without
--wasting static table space.  (It should count both built-in/SoC GPIOs and
--also ones on GPIO expanders.
+-config ARCH_NR_GPIO
+-	int
+-	default 1024 if X86_64
+-	default 512
 -
- If neither of these options are selected, the platform does not support
- GPIOs through GPIO-lib and the code cannot be enabled by the user.
+ config ARCH_SUSPEND_POSSIBLE
+ 	def_bool y
  
 -- 
 2.37.1
