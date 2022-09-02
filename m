@@ -2,127 +2,227 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A5D5AA62D
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 05:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A26D5AA73F
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 07:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233374AbiIBDOh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 1 Sep 2022 23:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
+        id S234284AbiIBFcT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Sep 2022 01:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232835AbiIBDOg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 1 Sep 2022 23:14:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71105901BC;
-        Thu,  1 Sep 2022 20:14:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4BB4B829AF;
-        Fri,  2 Sep 2022 03:14:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13296C433C1;
-        Fri,  2 Sep 2022 03:14:29 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Improve dump_tlb() output messages
-Date:   Fri,  2 Sep 2022 11:14:02 +0800
-Message-Id: <20220902031402.305128-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S229482AbiIBFcS (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 01:32:18 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F250AE23C;
+        Thu,  1 Sep 2022 22:32:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rdVntkbKYXQ/M3wM3QRoo5+dO8Z8WrghezmeY6c5AlE=; b=JTKBYdxTdjUScWtD3AnPtcHIlM
+        sGfAGSI3jeQlKAJTZahcXoF4YAokCkDLny6cVmPeOuodNr0R5dpUoSXnjC3ZizcMwwTJMSCB7BPQz
+        m1PPHBgudoBtGPL8ejP+xZzKujHrrXhj5cc8dlo+rTB678WtYZn4SKX3wf434Y5oev+gfRlZ8NFqw
+        Vg5KARWh1y9N1/PltIGosS6oTR/fmPr9Uhg23bNXie9lRn/MzFGPkWDZdtPWjbdym5uRqujBdv/pG
+        zKQU7JYrEG4xIUbvZCow3lJqzRrB7A7B+447/iAc2ILdTig6Epl8Q0BjB21ODnZsUk6HiT0SCgSXD
+        dUaB1uMQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oTzHq-00BECv-Er;
+        Fri, 02 Sep 2022 05:32:14 +0000
+Date:   Fri, 2 Sep 2022 06:32:14 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 7/6] termios: kill uapi termios.h that are identical to
+ generic one
+Message-ID: <YxGVXpS2dWoTwoa0@ZenIV>
+References: <YwF8vibZ2/Xz7a/g@ZenIV>
+ <20220821010239.1554132-1-viro@zeniv.linux.org.uk>
+ <20220821010239.1554132-3-viro@zeniv.linux.org.uk>
+ <Yw4B6IU9WWKhN+1H@kroah.com>
+ <YxDlyBneTC/zBx4S@ZenIV>
+ <YxDnKvYCHn/ogBUv@ZenIV>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxDnKvYCHn/ogBUv@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-1, Use nr/nx to replace ri/xi;
-2, Add 0x prefix for hexadecimal data.
-
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+mandatory-y will have the generic picked for architectures that
+don't have uapi/asm/termios.h of their own.  ia64, parisc and
+s390 ones are identical to generic, so...
+    
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/loongarch/lib/dump_tlb.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/loongarch/lib/dump_tlb.c b/arch/loongarch/lib/dump_tlb.c
-index cda2c6bc7f09..c3b6eddb84b7 100644
---- a/arch/loongarch/lib/dump_tlb.c
-+++ b/arch/loongarch/lib/dump_tlb.c
-@@ -18,11 +18,11 @@ void dump_tlb_regs(void)
- {
- 	const int field = 2 * sizeof(unsigned long);
- 
--	pr_info("Index    : %0x\n", read_csr_tlbidx());
--	pr_info("PageSize : %0x\n", read_csr_pagesize());
--	pr_info("EntryHi  : %0*llx\n", field, read_csr_entryhi());
--	pr_info("EntryLo0 : %0*llx\n", field, read_csr_entrylo0());
--	pr_info("EntryLo1 : %0*llx\n", field, read_csr_entrylo1());
-+	pr_info("Index    : 0x%0x\n", read_csr_tlbidx());
-+	pr_info("PageSize : 0x%0x\n", read_csr_pagesize());
-+	pr_info("EntryHi  : 0x%0*llx\n", field, read_csr_entryhi());
-+	pr_info("EntryLo0 : 0x%0*llx\n", field, read_csr_entrylo0());
-+	pr_info("EntryLo1 : 0x%0*llx\n", field, read_csr_entrylo1());
- }
- 
- static void dump_tlb(int first, int last)
-@@ -33,8 +33,8 @@ static void dump_tlb(int first, int last)
- 	unsigned int s_index, s_asid;
- 	unsigned int pagesize, c0, c1, i;
- 	unsigned long asidmask = cpu_asid_mask(&current_cpu_data);
--	int pwidth = 11;
--	int vwidth = 11;
-+	int pwidth = 16;
-+	int vwidth = 16;
- 	int asidwidth = DIV_ROUND_UP(ilog2(asidmask) + 1, 4);
- 
- 	s_entryhi = read_csr_entryhi();
-@@ -64,22 +64,22 @@ static void dump_tlb(int first, int last)
- 		/*
- 		 * Only print entries in use
- 		 */
--		pr_info("Index: %2d pgsize=%x ", i, (1 << pagesize));
-+		pr_info("Index: %4d pgsize=0x%x ", i, (1 << pagesize));
- 
- 		c0 = (entrylo0 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
- 		c1 = (entrylo1 & ENTRYLO_C) >> ENTRYLO_C_SHIFT;
- 
--		pr_cont("va=%0*lx asid=%0*lx",
-+		pr_cont("va=0x%0*lx asid=0x%0*lx",
- 			vwidth, (entryhi & ~0x1fffUL), asidwidth, asid & asidmask);
- 
- 		/* NR/NX are in awkward places, so mask them off separately */
- 		pa = entrylo0 & ~(ENTRYLO_NR | ENTRYLO_NX);
- 		pa = pa & PAGE_MASK;
- 		pr_cont("\n\t[");
--		pr_cont("ri=%d xi=%d ",
-+		pr_cont("nr=%d nx=%d ",
- 			(entrylo0 & ENTRYLO_NR) ? 1 : 0,
- 			(entrylo0 & ENTRYLO_NX) ? 1 : 0);
--		pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld] [",
-+		pr_cont("pa=0x%0*llx c=%d d=%d v=%d g=%d plv=%lld] [",
- 			pwidth, pa, c0,
- 			(entrylo0 & ENTRYLO_D) ? 1 : 0,
- 			(entrylo0 & ENTRYLO_V) ? 1 : 0,
-@@ -88,10 +88,10 @@ static void dump_tlb(int first, int last)
- 		/* NR/NX are in awkward places, so mask them off separately */
- 		pa = entrylo1 & ~(ENTRYLO_NR | ENTRYLO_NX);
- 		pa = pa & PAGE_MASK;
--		pr_cont("ri=%d xi=%d ",
-+		pr_cont("nr=%d nx=%d ",
- 			(entrylo1 & ENTRYLO_NR) ? 1 : 0,
- 			(entrylo1 & ENTRYLO_NX) ? 1 : 0);
--		pr_cont("pa=%0*llx c=%d d=%d v=%d g=%d plv=%lld]\n",
-+		pr_cont("pa=0x%0*llx c=%d d=%d v=%d g=%d plv=%lld]\n",
- 			pwidth, pa, c1,
- 			(entrylo1 & ENTRYLO_D) ? 1 : 0,
- 			(entrylo1 & ENTRYLO_V) ? 1 : 0,
--- 
-2.31.1
-
+diff --git a/arch/ia64/include/uapi/asm/termios.h b/arch/ia64/include/uapi/asm/termios.h
+deleted file mode 100644
+index 199742d08f2c..000000000000
+--- a/arch/ia64/include/uapi/asm/termios.h
++++ /dev/null
+@@ -1,51 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-/*
+- * Modified 1999
+- *	David Mosberger-Tang <davidm@hpl.hp.com>, Hewlett-Packard Co
+- *
+- * 99/01/28	Added N_IRDA and N_SMSBLOCK
+- */
+-#ifndef _UAPI_ASM_IA64_TERMIOS_H
+-#define _UAPI_ASM_IA64_TERMIOS_H
+-
+-
+-#include <asm/termbits.h>
+-#include <asm/ioctls.h>
+-
+-struct winsize {
+-	unsigned short ws_row;
+-	unsigned short ws_col;
+-	unsigned short ws_xpixel;
+-	unsigned short ws_ypixel;
+-};
+-
+-#define NCC 8
+-struct termio {
+-	unsigned short c_iflag;		/* input mode flags */
+-	unsigned short c_oflag;		/* output mode flags */
+-	unsigned short c_cflag;		/* control mode flags */
+-	unsigned short c_lflag;		/* local mode flags */
+-	unsigned char c_line;		/* line discipline */
+-	unsigned char c_cc[NCC];	/* control characters */
+-};
+-
+-/* modem lines */
+-#define TIOCM_LE	0x001
+-#define TIOCM_DTR	0x002
+-#define TIOCM_RTS	0x004
+-#define TIOCM_ST	0x008
+-#define TIOCM_SR	0x010
+-#define TIOCM_CTS	0x020
+-#define TIOCM_CAR	0x040
+-#define TIOCM_RNG	0x080
+-#define TIOCM_DSR	0x100
+-#define TIOCM_CD	TIOCM_CAR
+-#define TIOCM_RI	TIOCM_RNG
+-#define TIOCM_OUT1	0x2000
+-#define TIOCM_OUT2	0x4000
+-#define TIOCM_LOOP	0x8000
+-
+-/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
+-
+-
+-#endif /* _UAPI_ASM_IA64_TERMIOS_H */
+diff --git a/arch/parisc/include/uapi/asm/termios.h b/arch/parisc/include/uapi/asm/termios.h
+deleted file mode 100644
+index aba174f23ef0..000000000000
+--- a/arch/parisc/include/uapi/asm/termios.h
++++ /dev/null
+@@ -1,44 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _UAPI_PARISC_TERMIOS_H
+-#define _UAPI_PARISC_TERMIOS_H
+-
+-#include <asm/termbits.h>
+-#include <asm/ioctls.h>
+-
+-struct winsize {
+-	unsigned short ws_row;
+-	unsigned short ws_col;
+-	unsigned short ws_xpixel;
+-	unsigned short ws_ypixel;
+-};
+-
+-#define NCC 8
+-struct termio {
+-	unsigned short c_iflag;		/* input mode flags */
+-	unsigned short c_oflag;		/* output mode flags */
+-	unsigned short c_cflag;		/* control mode flags */
+-	unsigned short c_lflag;		/* local mode flags */
+-	unsigned char c_line;		/* line discipline */
+-	unsigned char c_cc[NCC];	/* control characters */
+-};
+-
+-/* modem lines */
+-#define TIOCM_LE	0x001
+-#define TIOCM_DTR	0x002
+-#define TIOCM_RTS	0x004
+-#define TIOCM_ST	0x008
+-#define TIOCM_SR	0x010
+-#define TIOCM_CTS	0x020
+-#define TIOCM_CAR	0x040
+-#define TIOCM_RNG	0x080
+-#define TIOCM_DSR	0x100
+-#define TIOCM_CD	TIOCM_CAR
+-#define TIOCM_RI	TIOCM_RNG
+-#define TIOCM_OUT1	0x2000
+-#define TIOCM_OUT2	0x4000
+-#define TIOCM_LOOP	0x8000
+-
+-/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
+-
+-
+-#endif /* _UAPI_PARISC_TERMIOS_H */
+diff --git a/arch/s390/include/uapi/asm/termios.h b/arch/s390/include/uapi/asm/termios.h
+deleted file mode 100644
+index 54223169c806..000000000000
+--- a/arch/s390/include/uapi/asm/termios.h
++++ /dev/null
+@@ -1,50 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-/*
+- *  S390 version
+- *
+- *  Derived from "include/asm-i386/termios.h"
+- */
+-
+-#ifndef _UAPI_S390_TERMIOS_H
+-#define _UAPI_S390_TERMIOS_H
+-
+-#include <asm/termbits.h>
+-#include <asm/ioctls.h>
+-
+-struct winsize {
+-	unsigned short ws_row;
+-	unsigned short ws_col;
+-	unsigned short ws_xpixel;
+-	unsigned short ws_ypixel;
+-};
+-
+-#define NCC 8
+-struct termio {
+-	unsigned short c_iflag;		/* input mode flags */
+-	unsigned short c_oflag;		/* output mode flags */
+-	unsigned short c_cflag;		/* control mode flags */
+-	unsigned short c_lflag;		/* local mode flags */
+-	unsigned char c_line;		/* line discipline */
+-	unsigned char c_cc[NCC];	/* control characters */
+-};
+-
+-/* modem lines */
+-#define TIOCM_LE	0x001
+-#define TIOCM_DTR	0x002
+-#define TIOCM_RTS	0x004
+-#define TIOCM_ST	0x008
+-#define TIOCM_SR	0x010
+-#define TIOCM_CTS	0x020
+-#define TIOCM_CAR	0x040
+-#define TIOCM_RNG	0x080
+-#define TIOCM_DSR	0x100
+-#define TIOCM_CD	TIOCM_CAR
+-#define TIOCM_RI	TIOCM_RNG
+-#define TIOCM_OUT1	0x2000
+-#define TIOCM_OUT2	0x4000
+-#define TIOCM_LOOP	0x8000
+-
+-/* ioctl (fd, TIOCSERGETLSR, &result) where result may be as below */
+-
+-
+-#endif /* _UAPI_S390_TERMIOS_H */
