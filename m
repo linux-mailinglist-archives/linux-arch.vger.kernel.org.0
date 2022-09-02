@@ -2,92 +2,134 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA7F5AAC86
-	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 12:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FDC5AACD2
+	for <lists+linux-arch@lfdr.de>; Fri,  2 Sep 2022 12:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbiIBKfT (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Sep 2022 06:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S235471AbiIBKxR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 2 Sep 2022 06:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235967AbiIBKfL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 06:35:11 -0400
-Received: from forward503o.mail.yandex.net (forward503o.mail.yandex.net [IPv6:2a02:6b8:0:1a2d::613])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816761011
-        for <linux-arch@vger.kernel.org>; Fri,  2 Sep 2022 03:35:01 -0700 (PDT)
-Received: from vla3-178a3f795968.qloud-c.yandex.net (vla3-178a3f795968.qloud-c.yandex.net [IPv6:2a02:6b8:c15:2584:0:640:178a:3f79])
-        by forward503o.mail.yandex.net (Yandex) with ESMTP id 539D05C5063;
-        Fri,  2 Sep 2022 13:34:54 +0300 (MSK)
-Received: by vla3-178a3f795968.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id R3jjqKDmTO-Yqhm5HCq;
-        Fri, 02 Sep 2022 13:34:53 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syntacore.com; s=mail; t=1662114893;
-        bh=qstGMBMTzvZwX/PqmECUTBaQ2hySlR22czcR+Yy1yD0=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=P9JweG7SRxrxYisCNSs26Djtr6O9lGebA6gSa63eGkruaq5XTSTQEVY7iYX/BWA/4
-         8sqv0NTQok5gAfNwmgKjaMk07WVfYcdNoslFZrC7OKUEXhaSaB03PLuoriSmGajanl
-         WihwdAEgIQovEQCvm8/h4Yf4Lih6NH5vNoELKFbU=
-Authentication-Results: vla3-178a3f795968.qloud-c.yandex.net; dkim=pass header.i=@syntacore.com
-Message-ID: <f5850a14-24c1-1619-b7b8-36663c216e32@syntacore.com>
-Date:   Fri, 2 Sep 2022 13:34:51 +0300
+        with ESMTP id S229506AbiIBKxQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 06:53:16 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF86C1654;
+        Fri,  2 Sep 2022 03:53:15 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id a15so1382719qko.4;
+        Fri, 02 Sep 2022 03:53:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=LGFWBpXGuGtPPFnyd0g7vGaOWidpAnEGhpM4DC7jOvU=;
+        b=LQN7OCs87Q7FvHg8zuWABcEGqqz46CqxTMRZgyCtFDODSb4aVWVzKKohKOgRl80nJQ
+         3spxwhsHptQb3FfaknuK3qJ2w88ZZWKvYPfc2VxtDO/D0gdhOozb5J6r+Oo9IzNxE/rx
+         Qb1sZBiUmNMkxx8aF76b2JC4VpOqEjdYVudd4SNZj8Xrw8zWXOB9GS8rdGCh2DTuHblJ
+         vV3E2ybZjvQB8RmXY0WMy+cGrX+b/po/PdVaYB4V8cOkE7joBx5w3pNcefJG1ET2t9iX
+         8H/vWMl5LY3DoWaSMWGnmWDP2ps2UvRIVihRRM8lsil/jHehr/FiS+RVEsBDAeSnp3MH
+         TQKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=LGFWBpXGuGtPPFnyd0g7vGaOWidpAnEGhpM4DC7jOvU=;
+        b=Sx70aaKIwg98GcRDq/GKz8FCd5KIBwCYH858x0AuxaWji8lC571/Nhodwp5XDdDxas
+         fx9WD+iwGIKVNtPTuXufXbhS6y8qbYzFOE2E8kNBN957w64+9l95GDvWWB9E5hFGWjCe
+         BIs/GFs3Xe5v+0DA6taxcBibxoA1WUDLSNMAxCnWUh1awyCm2O/tGJaqaB6QzBp5u7CJ
+         pEAxNbw7uFccZD/fVrpto28ZbbgQl2XOSiBlwpciRug4tqFLwc3VWQkch8aMrl5FbFy0
+         dR5Nd0QW9NsAUu7mKmYUql4KuyT7FUo2Zhx7bLGejgEDgrVjF4p6l7KDLrSNvitwmnAA
+         mDXg==
+X-Gm-Message-State: ACgBeo2vOiO71O3YG1jZDzuXRvUxy5QyyOs6gPW4SyxglbORQmnJEPib
+        3RboByMKXCpR2RGT8mfMB+4sNCGC7hXuOcCJ1H0=
+X-Google-Smtp-Source: AA6agR4O6WI1xhAjVxdJci/isoGrXNz3yJRxhNxJOeaUWeLr1nI2zULs9b9MMXu3JWTyoUQJGRSKGFUKg1EXOPdGxT8=
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
+ s13-20020a05620a254d00b006ab84b825ebmr22678075qko.383.1662115994453; Fri, 02
+ Sep 2022 03:53:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH v2] riscv: Fix permissions for all mm's during mm init
-Content-Language: ru-RU, en-US
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Conor.Dooley@microchip.com, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org
-References: <20220830091612.513137-1-vladimir.isaev@syntacore.com>
- <20220901084740.v34npx77vlfclyje@kamzik>
-From:   Vladimir Isaev <vladimir.isaev@syntacore.com>
-In-Reply-To: <20220901084740.v34npx77vlfclyje@kamzik>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
+ <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
+ <CAHp75VcngRihpfUkeKs-g+TbPnpOsZ+-Q37zDVoWp8p_2GbSvQ@mail.gmail.com>
+ <18cda49e-84f0-a806-566a-6e77705e98b3@csgroup.eu> <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
+In-Reply-To: <1d548a19-feec-42b9-944d-890d6dde2fb8@www.fastmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 2 Sep 2022 13:52:37 +0300
+Message-ID: <CAHp75VfF78rWpC6+i2Hu6-PMULFeFMbqXhBVRkx5aFGFTU3U4A@mail.gmail.com>
+Subject: Re: [PATCH v1 4/8] gpiolib: Get rid of ARCH_NR_GPIOS
+To:     Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Andrew,
+(Nuno, one point below for you)
 
-01.09.2022 11:47, Andrew Jones wrote:
-> On Tue, Aug 30, 2022 at 12:16:12PM +0300, Vladimir Isaev wrote:
->> It is possible to have more than one mm (init_mm) during memory
->> permission fixes. In my case it was caused by request_module
->> from drivers/net/phy/phy_device.c and leads to following Oops
->> during free_initmem() on RV32 platform:
+On Wed, Aug 31, 2022 at 11:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
 
->> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
->> +			  pgprot_t clear_mask)
->> +{
->> +	struct task_struct *t, *s;
->> +
->> +	unsigned long start = (unsigned long)startp;
->> +	unsigned long end = PAGE_ALIGN((unsigned long)endp);
->> +
->> +	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
->> +	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
->> +
-> 
-> Presumably this is only run at a point where it's safe not to take
-> tasklist_lock. A comment explaining that would be helpful to readers
-> and help avoid this code getting copy+pasted into points it's not
-> safe.
-> 
+...
 
-Thanks for your review. I sent v3 with added comment and
-WARN_ON(system_state != SYSTEM_FREEING_INITMEM), because looks like we can do
-such mm-s change in this state only (both free_initmem() and mark_rodata_ro()
-are called in this state).
+> drivers/gpio/gpio-adp5520.c:    gc->base = pdata->gpio_start; // unused
+> drivers/gpio/gpio-adp5588.c:            gc->base = pdata->gpio_start; // unused
+> drivers/input/keyboard/adp5588-keys.c:  kpad->gc.base = gpio_data->gpio_start; // unused
+> drivers/input/keyboard/adp5589-keys.c:  kpad->gc.base = gpio_data->gpio_start; // unused
 
-Thank you,
-Vladimir Isaev
+I believe we should convert them to -1.
+
+> drivers/gpio/gpio-bt8xx.c:      c->base = modparam_gpiobase; // from modprobe
+> drivers/gpio/gpio-ich.c:        chip->base = modparam_gpiobase; // from modprobe
+
+I believe it was designed for Intel hardware and so it can't be higher
+than 512 - ngpios, where the latter one is small enough (dozen or a
+couple of dozens of pins).
+
+> drivers/gpio/gpio-dwapb.c:      port->gc.base = pp->gpio_base; // from DT, deprecated
+
+From board files, since some platforms expect a fixed number for it.
+
+> drivers/gpio/gpio-mockup.c:     gc->base = base; // module parama
+
+This is for testing, so the test cases should be amended accordingly.
+But I think the module itself is deprecated, and gpio-sim seems not
+using it as a modprobe parameter, but rather as configfs.
+
+> drivers/gpio/gpio-pca953x.c:    gc->base = chip->gpio_start; // ???? used a lot
+
+To answer this one needs to go via all board files (most of them ARM
+32-bit based) and look, but it means almost the same case as per Intel
+above: 512-ngpios.
+
+> drivers/pinctrl/renesas/gpio.c: gc->base = pfc->nr_gpio_pins; // ??? don't understand
+
+I think, w/o looking into the code, that this just guarantees the
+continuous numbering for all banks (chips) on the platform.
+
+> drivers/pinctrl/stm32/pinctrl-stm32.c:          bank->gpio_chip.base = args.args[1];
+
+Device Tree?!
+
+-- 
+With Best Regards,
+Andy Shevchenko
