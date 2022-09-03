@@ -2,104 +2,202 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D61D5ABC22
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Sep 2022 03:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26095ABD8F
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Sep 2022 08:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiICBms (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 2 Sep 2022 21:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S232724AbiICG7g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 3 Sep 2022 02:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiICBmq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 2 Sep 2022 21:42:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD7A883D6;
-        Fri,  2 Sep 2022 18:42:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E22F8B82D27;
-        Sat,  3 Sep 2022 01:42:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2598AC433D6;
-        Sat,  3 Sep 2022 01:42:40 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Fix section mismatch due to acpi_os_ioremap()
-Date:   Sat,  3 Sep 2022 09:42:07 +0800
-Message-Id: <20220903014207.2312965-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S229603AbiICG7d (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 02:59:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF8DB071
+        for <linux-arch@vger.kernel.org>; Fri,  2 Sep 2022 23:59:19 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gb36so7635695ejc.10
+        for <linux-arch@vger.kernel.org>; Fri, 02 Sep 2022 23:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date;
+        bh=tGYc6EGzo1MSb0Xj7cogZ2c52AmGuZpQgPXqMjSWnJY=;
+        b=hqXSTS9EyhaDWh0heH1yy1XgFwlEyGKGNPjrDkmBmYnDqGHfoM38fxJ3Hf64Z1HkSt
+         BzUz38zC4Ck0I/1kRHPva4Uw8N3kfcF6rYEdcBO8dupu7Lald9rg0bgVvpU9u9WwYIlk
+         xKuWy4Vg/dPxCZlhhGtENR6EUn3p+NDudlj943DZK/XtqRPNzd6LjPbraMDRw5CQnZpg
+         3DOEavB/2r4MJOD8ATV8+j4Iqwb0R96QaR8FipXkViMRxKg71Z7PFbO0hhrPQy9hrBc/
+         m3f3UBLC9e+lRlf8/qDWzlQsYKnhFbKulZXK3Y9RvzLvgr2L9So/HiodaOXqiAUCCqjf
+         4qBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=tGYc6EGzo1MSb0Xj7cogZ2c52AmGuZpQgPXqMjSWnJY=;
+        b=7stMRY6ERNBqloy2Ib4FdrHOWx2h5iGPokB2Ds92xa04Ymf+QTlGYVGiJAsyEs1j8w
+         MAI4tLbVOiRhXfOMANhPfjS4EiXlwA6PKSdr6lA1+hVe0za42hzXIf8XiCVzaO3eZnlz
+         FNPNjEs7ylXBKgK9IIIGflSiANLVD6JSzKc/AiPIix89eDqBueYRL1N1LplBuGu//IaN
+         Smk2D60giBkurGvlKhI46VgVhZP2g4rpuuaCYzpFYAa9I8XqCLLV8y3v59JrIDQa42Fh
+         hh8r4u8E+pmTlVhFoC/q1yjK1udRTwo34XSgA0x4qkKjRIPhl2eCwmPK4V6LCCCR9Pi9
+         cSlA==
+X-Gm-Message-State: ACgBeo1HmW8dPSVJmke5Nrjrh1xwPG3cUbWUSjdmj+YTjVytUBhGDNxu
+        WFFHa4IdAyD7CxajM2c7LpiykiydCeoIWDVTZCqgBJ+h
+X-Google-Smtp-Source: AA6agR4EBwtOjrAfWfZPQ5jf02VFz5soKFonf/P9MAOMYha3pbIPkFFhfS1cJ09UnW2OFisptXxJiCMGTLoR1IcNd+w=
+X-Received: by 2002:a17:907:3f90:b0:741:96fe:6641 with SMTP id
+ hr16-20020a1709073f9000b0074196fe6641mr18776173ejc.378.1662188357343; Fri, 02
+ Sep 2022 23:59:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+X7ob9QaUxiusEBC2eW8Wk+2FnGVATeC8pmb9pdU0Tg7-XfyA@mail.gmail.com>
+In-Reply-To: <CA+X7ob9QaUxiusEBC2eW8Wk+2FnGVATeC8pmb9pdU0Tg7-XfyA@mail.gmail.com>
+From:   =?UTF-8?Q?Matthias_G=C3=B6rgens?= <matthias.goergens@gmail.com>
+Date:   Sat, 3 Sep 2022 14:59:06 +0800
+Message-ID: <CA+X7ob-XeKwM0r=6e+O=Se=pGQFjKVGZVihHC-Mc6YoRFf=6SQ@mail.gmail.com>
+Subject: Fwd: [PATCH] tools/headers: Fix undefined behaviour (34 << 26)
+To:     linux-arch@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000971f0205e7c06233"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Now acpi_os_ioremap() is marked with __init because it calls memblock_
-is_memory() which is also marked with __init in the !ARCH_KEEP_MEMBLOCK
-case. However, acpi_os_ioremap() is called by ordinary functions such
-as acpi_os_{read, write}_memory() and causes section mismatch warnings:
+--000000000000971f0205e7c06233
+Content-Type: text/plain; charset="UTF-8"
 
-WARNING: modpost: vmlinux.o: section mismatch in reference: acpi_os_read_memory (section: .text) -> acpi_os_ioremap (section: .init.text)
-WARNING: modpost: vmlinux.o: section mismatch in reference: acpi_os_write_memory (section: .text) -> acpi_os_ioremap (section: .init.text)
+Hello,
 
-Fix these warnings by selecting ARCH_KEEP_MEMBLOCK unconditionally and
-removing the __init modifier of acpi_os_ioremap(). This can also give a
-chance to track "memory" and "reserved" memblocks after early boot.
+This is my first patch to the Linux kernel.  I hope sending it via
+gmail is OK?  I have attached the git-generated patch file.
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig            | 1 +
- arch/loongarch/include/asm/acpi.h | 2 +-
- arch/loongarch/kernel/acpi.c      | 2 +-
- 3 files changed, 3 insertions(+), 2 deletions(-)
+This is a simple fix to a problem I encountered when I tried to build
+CPython.  Some digging suggested that the problem is actually with
+kernel header files.
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 3bc5b911ae1a..c7dd6ad779af 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -39,6 +39,7 @@ config LOONGARCH
- 	select ARCH_INLINE_SPIN_UNLOCK_BH if !PREEMPTION
- 	select ARCH_INLINE_SPIN_UNLOCK_IRQ if !PREEMPTION
- 	select ARCH_INLINE_SPIN_UNLOCK_IRQRESTORE if !PREEMPTION
-+	select ARCH_KEEP_MEMBLOCK
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_MIGHT_HAVE_PC_SERIO
- 	select ARCH_SPARSEMEM_ENABLE
-diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
-index c5108213876c..17162f494b9b 100644
---- a/arch/loongarch/include/asm/acpi.h
-+++ b/arch/loongarch/include/asm/acpi.h
-@@ -15,7 +15,7 @@ extern int acpi_pci_disabled;
- extern int acpi_noirq;
- 
- #define acpi_os_ioremap acpi_os_ioremap
--void __init __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
-+void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size);
- 
- static inline void disable_acpi(void)
- {
-diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
-index f1c928648a4a..335398482038 100644
---- a/arch/loongarch/kernel/acpi.c
-+++ b/arch/loongarch/kernel/acpi.c
-@@ -48,7 +48,7 @@ void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
- 	early_memunmap(map, size);
- }
- 
--void __init __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
-+void __iomem *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
- {
- 	if (!memblock_is_memory(phys))
- 		return ioremap(phys, size);
--- 
-2.31.1
+Basically the problem is that when calculating
+`HUGETLB_FLAG_ENCODE_16GB` we essentially run (34 << 26).  That's
+undefined behaviour in C, because C tries to do these calculations as
+signed ints, but signed signed ints don't have enough bits.
 
+The fix is to cast to unsigned first: ((unsigned) 32 << 26).  Unsigned
+ints have enough bits, at least on 32 bit systems and above.
+
+I suspect the way the kernel build uses GCC and Clang this is probably
+not a problem, but the headers are used by outside projects (like
+CPython), and for that it's probably best to stick to the C standard,
+when it's easy to do so.
+
+Thanks,
+Matthias.
+
+P.S. Please pardon, if you received this email a second time, I had
+some trouble getting GMail to send in plain text.
+
+--000000000000971f0205e7c06233
+Content-Type: application/x-patch; 
+	name="0001-tools-headers-Fix-undefined-behaviour-34-26.patch"
+Content-Disposition: attachment; 
+	filename="0001-tools-headers-Fix-undefined-behaviour-34-26.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l7ljlz9p0>
+X-Attachment-Id: f_l7ljlz9p0
+
+RnJvbSA2N2JhNzM5NzcwOTk3NjQxNjQ4ZWYwN2Y5ZDVkZGI0NjgwMmJkY2NmIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXR0aGlhcyBHb2VyZ2VucyA8bWF0dGhpYXMuZ29lcmdlbnNA
+Z21haWwuY29tPgpEYXRlOiBTYXQsIDMgU2VwIDIwMjIgMTQ6Mjg6MjEgKzA4MDAKU3ViamVjdDog
+W1BBVENIXSB0b29scy9oZWFkZXJzOiBGaXggdW5kZWZpbmVkIGJlaGF2aW91ciAoMzQgPDwgMjYp
+CgpMZWZ0LXNoaWZ0aW5nIHBhc3QgdGhlIHNpemUgb2YgeW91ciBkYXRhdHlwZSBpcyB1bmRlZmlu
+ZWQgYmVoYXZpb3VyIGluCkMuICBUaGUgbGl0ZXJhbCAzNCBnZXRzIHRoZSB0eXBlIGBpbnRgLCBh
+bmQgdGhhdCBvbmUgaXMgbm90IGJpZyBlbm91Z2gKdG8gYmUgbGVmdCBzaGlmdGVkIGJ5IDI2IGJp
+dHMuCgpBbiBgdW5zaWduZWRgIGlzIGxvbmcgZW5vdWdoIChvbiBhbnkgbWFjaGluZSB0aGF0IGhh
+cyBhdCBsZWFzdCAzMiBiaXRzCmZvciB0aGVpciBpbnRzLikKCkZvciB1bmlmb3JtaXR5LCB3ZSBh
+ZGQgdGhlICh1bnNpZ25lZCkgY2FzdCBldmVyeXdoZXJlLiAgQnV0IGl0J3Mgb25seQpyZWFsbHkg
+bmVlZGVkIGZvciBIVUdFVExCX0ZMQUdfRU5DT0RFXzE2R0IuCgpTaWduZWQtb2ZmLWJ5OiBNYXR0
+aGlhcyBHb2VyZ2VucyA8bWF0dGhpYXMuZ29lcmdlbnNAZ21haWwuY29tPgotLS0KIGluY2x1ZGUv
+dWFwaS9hc20tZ2VuZXJpYy9odWdldGxiX2VuY29kZS5oICB8IDI2ICsrKysrKysrKysrLS0tLS0t
+LS0tLS0KIHRvb2xzL2luY2x1ZGUvYXNtLWdlbmVyaWMvaHVnZXRsYl9lbmNvZGUuaCB8IDI2ICsr
+KysrKysrKysrLS0tLS0tLS0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKSwg
+MjYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2FzbS1nZW5lcmljL2h1
+Z2V0bGJfZW5jb2RlLmggYi9pbmNsdWRlL3VhcGkvYXNtLWdlbmVyaWMvaHVnZXRsYl9lbmNvZGUu
+aAppbmRleCA0ZjNkNWFhYTExZjUuLmFmYTlmNDRjYzJlNyAxMDA2NDQKLS0tIGEvaW5jbHVkZS91
+YXBpL2FzbS1nZW5lcmljL2h1Z2V0bGJfZW5jb2RlLmgKKysrIGIvaW5jbHVkZS91YXBpL2FzbS1n
+ZW5lcmljL2h1Z2V0bGJfZW5jb2RlLmgKQEAgLTIwLDE4ICsyMCwxOCBAQAogI2RlZmluZSBIVUdF
+VExCX0ZMQUdfRU5DT0RFX1NISUZUCTI2CiAjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfTUFT
+SwkweDNmCiAKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xNktCCSgxNCA8PCBIVUdFVExC
+X0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzY0S0IJKDE2
+IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNP
+REVfNTEyS0IJKDE5IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VU
+TEJfRkxBR19FTkNPREVfMU1CCQkoMjAgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNk
+ZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8yTUIJCSgyMSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RF
+X1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzhNQgkJKDIzIDw8IEhVR0VUTEJf
+RkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMTZNQgkoMjQg
+PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
+RV8zMk1CCSgyNSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExC
+X0ZMQUdfRU5DT0RFXzI1Nk1CCSgyOCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2Rl
+ZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzUxMk1CCSgyOSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RF
+X1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzFHQgkJKDMwIDw8IEhVR0VUTEJf
+RkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMkdCCQkoMzEg
+PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
+RV8xNkdCCSgzNCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExC
+X0ZMQUdfRU5DT0RFXzE2S0IJKCh1bnNpZ25lZCkgMTQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9T
+SElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV82NEtCCSgodW5zaWduZWQpIDE2IDw8
+IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVf
+NTEyS0IJKCh1bnNpZ25lZCkgMTkgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKKyNkZWZp
+bmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xTUIJCSgodW5zaWduZWQpIDIwIDw8IEhVR0VUTEJfRkxB
+R19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMk1CCQkoKHVuc2ln
+bmVkKSAyMSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZM
+QUdfRU5DT0RFXzhNQgkJKCh1bnNpZ25lZCkgMjMgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElG
+VCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xNk1CCSgodW5zaWduZWQpIDI0IDw8IEhV
+R0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMzJN
+QgkoKHVuc2lnbmVkKSAyNSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBI
+VUdFVExCX0ZMQUdfRU5DT0RFXzI1Nk1CCSgodW5zaWduZWQpIDI4IDw8IEhVR0VUTEJfRkxBR19F
+TkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfNTEyTUIJKCh1bnNpZ25l
+ZCkgMjkgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFH
+X0VOQ09ERV8xR0IJCSgodW5zaWduZWQpIDMwIDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQp
+CisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMkdCCQkoKHVuc2lnbmVkKSAzMSA8PCBIVUdF
+VExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzE2R0IJ
+KCh1bnNpZ25lZCkgMzQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKIAogI2VuZGlmIC8q
+IF9BU01fR0VORVJJQ19IVUdFVExCX0VOQ09ERV9IXyAqLwpkaWZmIC0tZ2l0IGEvdG9vbHMvaW5j
+bHVkZS9hc20tZ2VuZXJpYy9odWdldGxiX2VuY29kZS5oIGIvdG9vbHMvaW5jbHVkZS9hc20tZ2Vu
+ZXJpYy9odWdldGxiX2VuY29kZS5oCmluZGV4IDRmM2Q1YWFhMTFmNS4uYWZhOWY0NGNjMmU3IDEw
+MDY0NAotLS0gYS90b29scy9pbmNsdWRlL2FzbS1nZW5lcmljL2h1Z2V0bGJfZW5jb2RlLmgKKysr
+IGIvdG9vbHMvaW5jbHVkZS9hc20tZ2VuZXJpYy9odWdldGxiX2VuY29kZS5oCkBAIC0yMCwxOCAr
+MjAsMTggQEAKICNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVAkyNgogI2RlZmluZSBI
+VUdFVExCX0ZMQUdfRU5DT0RFX01BU0sJMHgzZgogCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNP
+REVfMTZLQgkoMTQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRM
+Ql9GTEFHX0VOQ09ERV82NEtCCSgxNiA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2Rl
+ZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzUxMktCCSgxOSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RF
+X1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzFNQgkJKDIwIDw8IEhVR0VUTEJf
+RkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMk1CCQkoMjEg
+PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
+RV84TUIJCSgyMyA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExC
+X0ZMQUdfRU5DT0RFXzE2TUIJKDI0IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVm
+aW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMzJNQgkoMjUgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9T
+SElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8yNTZNQgkoMjggPDwgSFVHRVRMQl9G
+TEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV81MTJNQgkoMjkg
+PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
+RV8xR0IJCSgzMCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExC
+X0ZMQUdfRU5DT0RFXzJHQgkJKDMxIDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVm
+aW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMTZHQgkoMzQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9T
+SElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xNktCCSgodW5zaWduZWQpIDE0IDw8
+IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVf
+NjRLQgkoKHVuc2lnbmVkKSAxNiA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmlu
+ZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzUxMktCCSgodW5zaWduZWQpIDE5IDw8IEhVR0VUTEJfRkxB
+R19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMU1CCQkoKHVuc2ln
+bmVkKSAyMCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZM
+QUdfRU5DT0RFXzJNQgkJKCh1bnNpZ25lZCkgMjEgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElG
+VCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV84TUIJCSgodW5zaWduZWQpIDIzIDw8IEhV
+R0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMTZN
+QgkoKHVuc2lnbmVkKSAyNCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBI
+VUdFVExCX0ZMQUdfRU5DT0RFXzMyTUIJKCh1bnNpZ25lZCkgMjUgPDwgSFVHRVRMQl9GTEFHX0VO
+Q09ERV9TSElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8yNTZNQgkoKHVuc2lnbmVk
+KSAyOCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZMQUdf
+RU5DT0RFXzUxMk1CCSgodW5zaWduZWQpIDI5IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQp
+CisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMUdCCQkoKHVuc2lnbmVkKSAzMCA8PCBIVUdF
+VExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzJHQgkJ
+KCh1bnNpZ25lZCkgMzEgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKKyNkZWZpbmUgSFVH
+RVRMQl9GTEFHX0VOQ09ERV8xNkdCCSgodW5zaWduZWQpIDM0IDw8IEhVR0VUTEJfRkxBR19FTkNP
+REVfU0hJRlQpCiAKICNlbmRpZiAvKiBfQVNNX0dFTkVSSUNfSFVHRVRMQl9FTkNPREVfSF8gKi8K
+LS0gCjIuMzcuMwoK
+--000000000000971f0205e7c06233--
