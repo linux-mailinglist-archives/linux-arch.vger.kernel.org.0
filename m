@@ -2,154 +2,110 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5E25ABFEB
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Sep 2022 18:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9885AC06B
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Sep 2022 19:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiICQ6J (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 3 Sep 2022 12:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S231550AbiICRs7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 3 Sep 2022 13:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiICQ6D (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 12:58:03 -0400
-X-Greylist: delayed 70989 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 03 Sep 2022 09:58:01 PDT
-Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [IPv6:2a09:80c0::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08A74BA7C
-        for <linux-arch@vger.kernel.org>; Sat,  3 Sep 2022 09:58:01 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 8AD954D;
-        Sat,  3 Sep 2022 18:57:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1662224276;
-        bh=6I03lOClv+/v9svh2z7blvYK/DBCx5y3LoldsviBRfQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=um4qAaNpopVN7LGRtI22YD4kYTzAAZOFJpT/gM8qfn1+IEYQXR3Pb/bEr+F+FBOrq
-         c2Zn5YURBHUWvt87RgquuLvxGOW+jCHm0N9JrgroYYdIITOhz87gi9eibdCHxgZcfD
-         KuO1xTwnRyDLzXHzFeUt4mV1wj+pbD7LV/Wes3t61hBitkKlwh2PL+wWS6wlG9nCGG
-         Hs3qlUqfdhHKGy4rINydMUwDv79rJvShU6SZLYjn5vDCn/GL19BBVCWzrqKDVYl2By
-         xMXmxwvD7wpiWbWU4d6xwS+OF5NcbPeh4nU+SXcaZAIsB3Frx6ZVyOLQZ67m5Njz60
-         NSBP4UeQcnhIA==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 847001AE8; Sat,  3 Sep 2022 18:57:56 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 60C581AE7;
-        Sat,  3 Sep 2022 18:57:56 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 5B80D1AE6;
-        Sat,  3 Sep 2022 18:57:56 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 567944A01DB; Sat,  3 Sep 2022 18:57:56 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id 05C294A0023;
-        Sat,  3 Sep 2022 18:57:55 +0200 (CEST)
-        (Extended-Queue-bit xtech_vn@fff.in.tum.de)
-From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: [PATCH v4] tools/memory-model: Weaken ctrl dependency definition in explanation.txt
-Date:   Sat,  3 Sep 2022 16:57:17 +0000
-Message-Id: <20220903165718.4186763-1-paul.heidekrueger@in.tum.de>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229612AbiICRs7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 13:48:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239B553D16;
+        Sat,  3 Sep 2022 10:48:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662227338; x=1693763338;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vBns7j9FUt8fPAWHIlfUjC3o9Q8+8wFBJc0wtm12Fns=;
+  b=dGlP1PDUkOqd/DsMkLj4AQg/cphpq+Dmo/tAqL1YbRAZCwPoisexWIQ7
+   YnoryWHzQeI7TXBvdREyEIL5tewSRDXbL3qq3D34ygYLG8/WU4PjwfUP3
+   MoiyhyeM1vM3fwLY2fla/LHUhrIkaiVCj6Sp2mIW6RBcJGrT4c6movwZO
+   BomXP0q2fcLvMh1wCpTk7B7ROZs3kJ/6c1flZb9nInUlcFuVsonT36JpH
+   LJGTb/0aDVQ4XMUU5EoeN3CsehGplVS+v01NU+meLWUJVkidrvrY4sYmY
+   UistAoe0wyjomd6e0krxaiATmNoiksojSWWyhxl7H8uH+yklkW3vdyCAX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10459"; a="279190954"
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="279190954"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2022 10:48:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,287,1654585200"; 
+   d="scan'208";a="613359713"
+Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 03 Sep 2022 10:48:55 -0700
+Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oUXGI-0001yL-1a;
+        Sat, 03 Sep 2022 17:48:54 +0000
+Date:   Sun, 4 Sep 2022 01:48:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     guoren@kernel.org, arnd@arndb.de, palmer@rivosinc.com,
+        tglx@linutronix.de, luto@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH 1/3] riscv: convert to generic entry
+Message-ID: <202209040122.Nhovi9f6-lkp@intel.com>
+References: <20220903163808.1954131-2-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220903163808.1954131-2-guoren@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The current informal control dependency definition in explanation.txt is
-too broad and, as discussed, needs to be updated.
+Hi,
 
-Consider the following example:
+I love your patch! Perhaps something to improve:
 
-> if(READ_ONCE(x))
->   return 42;
->
-> WRITE_ONCE(y, 42);
->
-> return 21;
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on linus/master v6.0-rc3 next-20220901]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The read event determines whether the write event will be executed "at all"
-- as per the current definition - but the formal LKMM does not recognize
-this as a control dependency.
+url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040122.Nhovi9f6-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/8390e92d0bcc635f457df18c8c1baefc78a94e48
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
+        git checkout 8390e92d0bcc635f457df18c8c1baefc78a94e48
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
 
-Introduce a new definition which includes the requirement for the second
-memory access event to syntactically lie within the arm of a non-loop
-conditional.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
-Cc: Marco Elver <elver@google.com>
-Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-Cc: Martin Fink <martin.fink@in.tum.de>
-Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
----
+All warnings (new ones prefixed by >>):
 
-v4:
-- Replace "a memory access event" with "a write event"
+>> arch/riscv/kernel/signal.c:275:6: warning: no previous prototype for 'arch_do_signal_or_restart' [-Wmissing-prototypes]
+     275 | void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-v3:
-- Address Alan and Joel's feedback re: the wording around switch statements
-and the use of "guarding"
 
-v2:
-- Fix typos
-- Fix indentation of code snippet
+vim +/arch_do_signal_or_restart +275 arch/riscv/kernel/signal.c
 
-v1:
-@Alan, since I got it wrong the last time, I'm adding you as a co-developer
-after my SOB. I'm sorry if this creates extra work on your side due to you
-having to resubmit the patch now with your SOB if I understand correctly,
-but since it's based on your wording from the other thread, I definitely
-wanted to give you credit.
+   274	
+ > 275	void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
 
- tools/memory-model/Documentation/explanation.txt | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-index ee819a402b69..11a1d2d4f681 100644
---- a/tools/memory-model/Documentation/explanation.txt
-+++ b/tools/memory-model/Documentation/explanation.txt
-@@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
- through a pointer will depend on the value read earlier from that
- pointer.
-
--Finally, a read event and another memory access event are linked by a
--control dependency if the value obtained by the read affects whether
--the second event is executed at all.  Simple example:
-+Finally, a read event X and a write event Y are linked by a control
-+dependency if Y syntactically lies within an arm of an if statement and
-+X affects the evaluation of the if condition via a data or address
-+dependency (or similarly for a switch statement).  Simple example:
-
- 	int x, y;
-
---
-2.35.1
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
