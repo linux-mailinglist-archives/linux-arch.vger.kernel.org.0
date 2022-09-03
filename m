@@ -2,67 +2,69 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA215AC1A3
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 00:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A838D5AC1AD
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 01:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiICWrd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 3 Sep 2022 18:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S229648AbiICXEm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 3 Sep 2022 19:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiICWrd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 18:47:33 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669F84DF1F
-        for <linux-arch@vger.kernel.org>; Sat,  3 Sep 2022 15:47:31 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id v26so8233181lfd.10
-        for <linux-arch@vger.kernel.org>; Sat, 03 Sep 2022 15:47:31 -0700 (PDT)
+        with ESMTP id S229632AbiICXEl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 19:04:41 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCAB12D0F
+        for <linux-arch@vger.kernel.org>; Sat,  3 Sep 2022 16:04:39 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id br21so8392027lfb.0
+        for <linux-arch@vger.kernel.org>; Sat, 03 Sep 2022 16:04:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=pyzrYCFsu3Tk+LfiPXHbfpCSpsNEhe4uYnmQekdTRlc=;
-        b=StyNg8Odci9qoHo2+gz/asuc1mLOow0/KQ1X2kA5wr/CsP6NAS8WEicj7s0ylfxHRN
-         3TPcxW+5JrfLJssKdObpBEtqY0n19OM4l2RmaIruSRYlCdirbAw6aHw3nOhWnn7BAr/z
-         6hQ9Cahp8Cb3fGZLkY0wzqEhY147VzqJgXKL+YcMcstFpyXC9Pn6K2wPfDXbe1l47LVC
-         roeXhw33CYXuIOEyIM9sFnrZ/p2yCgQQZtLEdy7UfY6Oc4ksgajEdSpIacw6QwabRFJh
-         E3TcFaI+5X9tyJQDZchJcMPmN3UrafQV+YQ59M+Cm+oHXoZIDSH+X1VHu13mmue1qAch
-         GuAw==
+        bh=yPrIDXHB1eEExulnH6lbFQhPgcbZUqWa4beuvIH2/kg=;
+        b=UTtBppMj7qz/z3joJ1NF7uAAJOb0fUZ0pX2TFFgNqgK3E1a0FYhZ/xK63iau7jvcw9
+         w7a6Lx46ftQ5vxODPWP3byZecgMDWWnnkzKOhGsIJlaGIjgUoc/XyvKMzSlvVVFkWG9I
+         qhGlr2w+GP/OnSc78ZDdFNJbShCUDru3hna3hDjUNRnDAgYcC8K3kzvhJhbxG2yUlZ6u
+         Pj5m+oWBC5iKl+hGOkifCs4kEyFZxrThLGn5BozGiLpyzlf4fis/jcwH5XyuZPxQSiYq
+         alwBzcomivJ7I5/YwVeth7iiZ6XbVXH7/jnXlrkVrZ6BaOHl/Fcd4W1Gj4pelZ0FvT28
+         KiWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=pyzrYCFsu3Tk+LfiPXHbfpCSpsNEhe4uYnmQekdTRlc=;
-        b=TMp9aKdj97v4TCiEFGGVgUp4/cxOxlkHcKxplxW3Co25vaXcLxTcTtr5o+9U5egiLX
-         GAOcKujUKhQ7/VcSqhmGnXxFKSWb3bMwABNv6hwba2P0m60tyxpqylgiUY6lKWSd7n/I
-         UhnGZtXtWrJU0BHFCBwfOhSMYVJOfht27X3DDc/cFrlt3TMqmRVKHh5Hr86XHifFMhic
-         BR/MC6/zFZzBLzl4nVl1+JunKYZTKYGGNvRi56PL0qP8n1vyCLiRFooNCnqBD+/U9pUk
-         LWwNqUV7nPZh2yscGiu5nbv6xe014gJDZjYZFczkGHBlYiW1mn5gQ1bGsCzaSwrFEOyT
-         V3hQ==
-X-Gm-Message-State: ACgBeo1rXoB7yKDtbX+3OYAcrNpbgWAuULLIRPnj+IqjR7vrIiTxzBQW
-        nC+j8S7HlGfzCdJVlt8ubZLk5A==
-X-Google-Smtp-Source: AA6agR56B8yb0smlgBSJIePviRf0M7WFWgul39Y8LBXeVBdMylGyIdvv5rAHq7ImsF1+ssWg+Y/7/A==
-X-Received: by 2002:a05:6512:2525:b0:494:65be:f7c0 with SMTP id be37-20020a056512252500b0049465bef7c0mr10088855lfb.202.1662245249688;
-        Sat, 03 Sep 2022 15:47:29 -0700 (PDT)
+        bh=yPrIDXHB1eEExulnH6lbFQhPgcbZUqWa4beuvIH2/kg=;
+        b=q2NfBjiqi3LiOcXtmuFVSUnUZz13YvB4PBao8Cd5C+EZDOvA5jBv7zW1FQ6g0dLP2r
+         GHzCL4ay2aQ2VSJO3AC/RKtUBYWIA2jqQKTN1o/1s/cCAAwWfEMfx4bzU1EV/HaED6ko
+         DSPtA667S0oVCx1+J9olUQ/Q42ssH08IX0rYh0Qiz2sQfRpxnHzRdEKMT+PgJKi8a/0P
+         YFeeqXh+L2jeEo2tOchlDJ87pKmHyp+QZhPesggq8Xk2EF2Dm6jnrxiYwOr3omXXg1N2
+         4hdfHiuf+dxioFJJzN7/2S/HxZB33EZ96A5WYNVFwVHENDopmojH0Vj2lfVKGuxFJBdO
+         6/IA==
+X-Gm-Message-State: ACgBeo26ndZDimZZhtGWlDRhotFjBIwnOx3w8fJ/5UoDzTrJ/VIo3hDU
+        HnZRwsZl7aTG9SC4EKv9+DRoUA==
+X-Google-Smtp-Source: AA6agR47aYR5xxvMjvQzXTCbmme1kcWatXragKm1PjhsWb1SBTLmOhxkC/3myIFhOhML8U/JmbcwCQ==
+X-Received: by 2002:a19:650f:0:b0:494:827e:5ef5 with SMTP id z15-20020a19650f000000b00494827e5ef5mr6461297lfb.411.1662246277358;
+        Sat, 03 Sep 2022 16:04:37 -0700 (PDT)
 Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id r14-20020a2eb60e000000b00263f036b405sm673165ljn.70.2022.09.03.15.47.28
+        by smtp.gmail.com with ESMTPSA id s18-20020a056512215200b004896ed8dce3sm729734lfr.2.2022.09.03.16.04.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 15:47:28 -0700 (PDT)
+        Sat, 03 Sep 2022 16:04:36 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
 To:     "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
         Helge Deller <deller@gmx.de>
 Cc:     linux-parisc@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
-        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [PATCH 1/2 v4] parisc: Remove 64bit access on 32bit machines
-Date:   Sun,  4 Sep 2022 00:45:25 +0200
-Message-Id: <20220903224526.553897-1-linus.walleij@linaro.org>
+        kernel test robot <lkp@intel.com>,
+        linux-arch@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        John David Anglin <dave.anglin@bell.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 2/2 v4] parisc: Use the generic IO helpers
+Date:   Sun,  4 Sep 2022 01:02:34 +0200
+Message-Id: <20220903230234.555673-1-linus.walleij@linaro.org>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,202 +72,244 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The parisc was using some readq/writeq accessors without special
-considerations as to what will happen on 32bit CPUs if you do
-this. Maybe we have been lucky that it "just worked" on 32bit
-due to the compiler behaviour, or the code paths were never
-executed.
+This enables the parisc to use <asm-generic/io.h> to fill in the
+missing (undefined) [read|write]sq I/O accessor functions.
 
-Fix the two offending code sites like this:
+This is needed if parisc[64] ever wants to uses CONFIG_REGMAP_MMIO
+which has been patches to use accelerated _noinc accessors
+such as readsq/writesq that parisc64, while being a 64bit platform,
+as of now not yet provide.
 
-arch/parisc/lib/iomap.c:
+This comes with the requirement that everything the architecture
+already provides needs to be defined, rather than just being,
+say, static inline functions.
 
-- Put ifdefs around the 64bit accessors and make sure
-  that ioread64, ioread64be, iowrite64 and iowrite64be
-  are not available on 32bit builds.
+Bite the bullet and just provide the definitions and make it work.
+Compile-tested on parisc32 and parisc64. Drop some of the __raw
+functions that now get implemented in <asm-generic/io.h>.
 
-- Also fold in a bug fix where 64bit access was by
-  mistake using 32bit writel() accessors rather
-  than 64bit writeq().
-
-drivers/parisc/sba_iommu.c:
-
-- Access any 64bit registers using _lo_hi-semantics by way
-  of the readq and writeq operations provided by
-  <linux/io-64-nonatomic-lo-hi.h>
-
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/linux-arm-kernel/62fcc351.hAyADB%2FY8JTxz+kh%25lkp@intel.com/
 Cc: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
 Cc: Helge Deller <deller@gmx.de>
 Cc: linux-parisc@vger.kernel.org
 Cc: linux-arch@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Mark Brown <broonie@kernel.org>
 Cc: John David Anglin <dave.anglin@bell.net>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
 ChangeLog v3->v4:
-- Drop the explicit use of io[read|write]64_lo_hi() and just
-  use readq/writeq provided from the include.
-- Move and reword comment in the sba_iommu driver.
-ChangeLog v0->v3:
-- New patch fixing the use of IO accessors
-- If the parisc people have no strong preference maybe Arnd
-  can merge this through the arch tree with patch 2/2.
+- Collect Arnds Reviewed-by
+ChangeLog v2->v3:
+- Prepend a patch removing all 64bit accessor use before the
+  conversion.
+- Drop the idea to create 64bit accesories on 32bit systems.
+ChangeLog v1->v2:
+- Missed a dangling onelineer adding pci_iounmap in my tree.
+- Just drop all the __raw_read[b|w|l|q] and __raw_write[b|w|l|q]
+  as these are identical to what <asm-generic/io.h> provides.
+- Just drop the local read[b|w|l|q] and write[b|w|l|q] as well
+  as the generic versions probably do a better job: this adds
+  the __io_ar()/__io_bw() barriers as they should probably be
+  there, we have just been lucky.
+- Drop a comment that parisc does not select GENERIC_IOMAP.
+- In arch/parisc/lib/iomap.c the .read64 and .read64be operations
+  were defined unconditionally and drivers/parisc/sba_iommu.c
+  also expect readq/writeq to be available so add a special
+  parameter to <asm-generic/io.h> to make sure we get these
+  also on 32bit parisc.
+- The changes to <asm-generic/io.h> probably makes this patch
+  a candidate for the arch tree rather than parisc.
 ---
- arch/parisc/lib/iomap.c    | 24 ++++++++++++++++++++++--
- drivers/parisc/sba_iommu.c |  6 ++++++
- 2 files changed, 28 insertions(+), 2 deletions(-)
+ arch/parisc/include/asm/io.h | 132 ++++++++++++-----------------------
+ 1 file changed, 43 insertions(+), 89 deletions(-)
 
-diff --git a/arch/parisc/lib/iomap.c b/arch/parisc/lib/iomap.c
-index 860385058085..d3d57119df64 100644
---- a/arch/parisc/lib/iomap.c
-+++ b/arch/parisc/lib/iomap.c
-@@ -48,15 +48,19 @@ struct iomap_ops {
- 	unsigned int (*read16be)(const void __iomem *);
- 	unsigned int (*read32)(const void __iomem *);
- 	unsigned int (*read32be)(const void __iomem *);
-+#ifdef CONFIG_64BIT
- 	u64 (*read64)(const void __iomem *);
- 	u64 (*read64be)(const void __iomem *);
-+#endif
- 	void (*write8)(u8, void __iomem *);
- 	void (*write16)(u16, void __iomem *);
- 	void (*write16be)(u16, void __iomem *);
- 	void (*write32)(u32, void __iomem *);
- 	void (*write32be)(u32, void __iomem *);
-+#ifdef CONFIG_64BIT
- 	void (*write64)(u64, void __iomem *);
- 	void (*write64be)(u64, void __iomem *);
-+#endif
- 	void (*read8r)(const void __iomem *, void *, unsigned long);
- 	void (*read16r)(const void __iomem *, void *, unsigned long);
- 	void (*read32r)(const void __iomem *, void *, unsigned long);
-@@ -175,6 +179,7 @@ static unsigned int iomem_read32be(const void __iomem *addr)
- 	return __raw_readl(addr);
- }
+diff --git a/arch/parisc/include/asm/io.h b/arch/parisc/include/asm/io.h
+index 42ffb60a6ea9..37580ad8d5bd 100644
+--- a/arch/parisc/include/asm/io.h
++++ b/arch/parisc/include/asm/io.h
+@@ -128,98 +128,16 @@ static inline void gsc_writeq(unsigned long long val, unsigned long addr)
+ void __iomem *ioremap(unsigned long offset, unsigned long size);
+ #define ioremap_wc			ioremap
+ #define ioremap_uc			ioremap
++#define pci_iounmap			pci_iounmap
  
-+#ifdef CONFIG_64BIT
- static u64 iomem_read64(const void __iomem *addr)
- {
- 	return readq(addr);
-@@ -184,6 +189,7 @@ static u64 iomem_read64be(const void __iomem *addr)
- {
- 	return __raw_readq(addr);
- }
-+#endif
+ extern void iounmap(const volatile void __iomem *addr);
  
- static void iomem_write8(u8 datum, void __iomem *addr)
- {
-@@ -210,15 +216,17 @@ static void iomem_write32be(u32 datum, void __iomem *addr)
- 	__raw_writel(datum, addr);
- }
+-static inline unsigned char __raw_readb(const volatile void __iomem *addr)
+-{
+-	return (*(volatile unsigned char __force *) (addr));
+-}
+-static inline unsigned short __raw_readw(const volatile void __iomem *addr)
+-{
+-	return *(volatile unsigned short __force *) addr;
+-}
+-static inline unsigned int __raw_readl(const volatile void __iomem *addr)
+-{
+-	return *(volatile unsigned int __force *) addr;
+-}
+-static inline unsigned long long __raw_readq(const volatile void __iomem *addr)
+-{
+-	return *(volatile unsigned long long __force *) addr;
+-}
+-
+-static inline void __raw_writeb(unsigned char b, volatile void __iomem *addr)
+-{
+-	*(volatile unsigned char __force *) addr = b;
+-}
+-static inline void __raw_writew(unsigned short b, volatile void __iomem *addr)
+-{
+-	*(volatile unsigned short __force *) addr = b;
+-}
+-static inline void __raw_writel(unsigned int b, volatile void __iomem *addr)
+-{
+-	*(volatile unsigned int __force *) addr = b;
+-}
+-static inline void __raw_writeq(unsigned long long b, volatile void __iomem *addr)
+-{
+-	*(volatile unsigned long long __force *) addr = b;
+-}
+-
+-static inline unsigned char readb(const volatile void __iomem *addr)
+-{
+-	return __raw_readb(addr);
+-}
+-static inline unsigned short readw(const volatile void __iomem *addr)
+-{
+-	return le16_to_cpu((__le16 __force) __raw_readw(addr));
+-}
+-static inline unsigned int readl(const volatile void __iomem *addr)
+-{
+-	return le32_to_cpu((__le32 __force) __raw_readl(addr));
+-}
+-static inline unsigned long long readq(const volatile void __iomem *addr)
+-{
+-	return le64_to_cpu((__le64 __force) __raw_readq(addr));
+-}
+-
+-static inline void writeb(unsigned char b, volatile void __iomem *addr)
+-{
+-	__raw_writeb(b, addr);
+-}
+-static inline void writew(unsigned short w, volatile void __iomem *addr)
+-{
+-	__raw_writew((__u16 __force) cpu_to_le16(w), addr);
+-}
+-static inline void writel(unsigned int l, volatile void __iomem *addr)
+-{
+-	__raw_writel((__u32 __force) cpu_to_le32(l), addr);
+-}
+-static inline void writeq(unsigned long long q, volatile void __iomem *addr)
+-{
+-	__raw_writeq((__u64 __force) cpu_to_le64(q), addr);
+-}
+-
+-#define	readb	readb
+-#define	readw	readw
+-#define	readl	readl
+-#define readq	readq
+-#define writeb	writeb
+-#define writew	writew
+-#define writel	writel
+-#define writeq	writeq
+-
+-#define readb_relaxed(addr)	readb(addr)
+-#define readw_relaxed(addr)	readw(addr)
+-#define readl_relaxed(addr)	readl(addr)
+-#define readq_relaxed(addr)	readq(addr)
+-#define writeb_relaxed(b, addr)	writeb(b, addr)
+-#define writew_relaxed(w, addr)	writew(w, addr)
+-#define writel_relaxed(l, addr)	writel(l, addr)
+-#define writeq_relaxed(q, addr)	writeq(q, addr)
+-
+ void memset_io(volatile void __iomem *addr, unsigned char val, int count);
+ void memcpy_fromio(void *dst, const volatile void __iomem *src, int count);
+ void memcpy_toio(volatile void __iomem *dst, const void *src, int count);
++#define memset_io memset_io
++#define memcpy_fromio memcpy_fromio
++#define memcpy_toio memcpy_toio
  
-+#ifdef CONFIG_64BIT
- static void iomem_write64(u64 datum, void __iomem *addr)
- {
--	writel(datum, addr);
-+	writeq(datum, addr);
- }
+ /* Port-space IO */
  
- static void iomem_write64be(u64 datum, void __iomem *addr)
- {
--	__raw_writel(datum, addr);
-+	__raw_writeq(datum, addr);
+@@ -241,10 +159,15 @@ extern void eisa_out32(unsigned int data, unsigned short port);
+ extern unsigned char inb(int addr);
+ extern unsigned short inw(int addr);
+ extern unsigned int inl(int addr);
+-
+ extern void outb(unsigned char b, int addr);
+ extern void outw(unsigned short b, int addr);
+ extern void outl(unsigned int b, int addr);
++#define inb inb
++#define inw inw
++#define inl inl
++#define outb outb
++#define outw outw
++#define outl outl
+ #elif defined(CONFIG_EISA)
+ #define inb eisa_in8
+ #define inw eisa_in16
+@@ -270,7 +193,9 @@ static inline int inl(unsigned long addr)
+ 	BUG();
+ 	return -1;
  }
-+#endif
+-
++#define inb inb
++#define inw inw
++#define inl inl
+ #define outb(x, y)	({(void)(x); (void)(y); BUG(); 0;})
+ #define outw(x, y)	({(void)(x); (void)(y); BUG(); 0;})
+ #define outl(x, y)	({(void)(x); (void)(y); BUG(); 0;})
+@@ -285,7 +210,12 @@ extern void insl (unsigned long port, void *dst, unsigned long count);
+ extern void outsb (unsigned long port, const void *src, unsigned long count);
+ extern void outsw (unsigned long port, const void *src, unsigned long count);
+ extern void outsl (unsigned long port, const void *src, unsigned long count);
+-
++#define insb insb
++#define insw insw
++#define insl insl
++#define outsb outsb
++#define outsw outsw
++#define outsl outsl
  
- static void iomem_read8r(const void __iomem *addr, void *dst, unsigned long count)
- {
-@@ -274,15 +282,19 @@ static const struct iomap_ops iomem_ops = {
- 	.read16be = iomem_read16be,
- 	.read32 = iomem_read32,
- 	.read32be = iomem_read32be,
-+#ifdef CONFIG_64BIT
- 	.read64 = iomem_read64,
- 	.read64be = iomem_read64be,
-+#endif
- 	.write8 = iomem_write8,
- 	.write16 = iomem_write16,
- 	.write16be = iomem_write16be,
- 	.write32 = iomem_write32,
- 	.write32be = iomem_write32be,
-+#ifdef CONFIG_64BIT
- 	.write64 = iomem_write64,
- 	.write64be = iomem_write64be,
-+#endif
- 	.read8r = iomem_read8r,
- 	.read16r = iomem_read16r,
- 	.read32r = iomem_read32r,
-@@ -332,6 +344,7 @@ unsigned int ioread32be(const void __iomem *addr)
- 	return *((u32 *)addr);
- }
+ /* IO Port space is :      BBiiii   where BB is HBA number. */
+ #define IO_SPACE_LIMIT 0x00ffffff
+@@ -307,6 +237,28 @@ extern void iowrite64(u64 val, void __iomem *addr);
+ extern void iowrite64be(u64 val, void __iomem *addr);
  
-+#ifdef CONFIG_64BIT
- u64 ioread64(const void __iomem *addr)
- {
- 	if (unlikely(INDIRECT_ADDR(addr)))
-@@ -345,6 +358,7 @@ u64 ioread64be(const void __iomem *addr)
- 		return iomap_ops[ADDR_TO_REGION(addr)]->read64be(addr);
- 	return *((u64 *)addr);
- }
-+#endif
- 
- u64 ioread64_lo_hi(const void __iomem *addr)
- {
-@@ -411,6 +425,7 @@ void iowrite32be(u32 datum, void __iomem *addr)
- 	}
- }
- 
-+#ifdef CONFIG_64BIT
- void iowrite64(u64 datum, void __iomem *addr)
- {
- 	if (unlikely(INDIRECT_ADDR(addr))) {
-@@ -428,6 +443,7 @@ void iowrite64be(u64 datum, void __iomem *addr)
- 		*((u64 *)addr) = datum;
- 	}
- }
-+#endif
- 
- void iowrite64_lo_hi(u64 val, void __iomem *addr)
- {
-@@ -544,8 +560,10 @@ EXPORT_SYMBOL(ioread16);
- EXPORT_SYMBOL(ioread16be);
- EXPORT_SYMBOL(ioread32);
- EXPORT_SYMBOL(ioread32be);
-+#ifdef CONFIG_64BIT
- EXPORT_SYMBOL(ioread64);
- EXPORT_SYMBOL(ioread64be);
-+#endif
- EXPORT_SYMBOL(ioread64_lo_hi);
- EXPORT_SYMBOL(ioread64_hi_lo);
- EXPORT_SYMBOL(iowrite8);
-@@ -553,8 +571,10 @@ EXPORT_SYMBOL(iowrite16);
- EXPORT_SYMBOL(iowrite16be);
- EXPORT_SYMBOL(iowrite32);
- EXPORT_SYMBOL(iowrite32be);
-+#ifdef CONFIG_64BIT
- EXPORT_SYMBOL(iowrite64);
- EXPORT_SYMBOL(iowrite64be);
-+#endif
- EXPORT_SYMBOL(iowrite64_lo_hi);
- EXPORT_SYMBOL(iowrite64_hi_lo);
- EXPORT_SYMBOL(ioread8_rep);
-diff --git a/drivers/parisc/sba_iommu.c b/drivers/parisc/sba_iommu.c
-index 374b9199878d..ecd870087a3d 100644
---- a/drivers/parisc/sba_iommu.c
-+++ b/drivers/parisc/sba_iommu.c
-@@ -28,6 +28,12 @@
- #include <linux/dma-map-ops.h>
- #include <linux/scatterlist.h>
- #include <linux/iommu-helper.h>
+ #include <asm-generic/iomap.h>
 +/*
-+ * The semantics of 64 register access on 32bit systems can't be guaranteed
-+ * by the C standard, we hope the _lo_hi() macros defining readq and writeq
-+ * here will behave as expected.
++ * These get provided from <asm-generic/iomap.h> since parisc does not
++ * select GENERIC_IOMAP.
 + */
-+#include <linux/io-64-nonatomic-lo-hi.h>
++#define ioport_map ioport_map
++#define ioport_unmap ioport_unmap
++#define ioread8 ioread8
++#define ioread16 ioread16
++#define ioread32 ioread32
++#define ioread16be ioread16be
++#define ioread32be ioread32be
++#define iowrite8 iowrite8
++#define iowrite16 iowrite16
++#define iowrite32 iowrite32
++#define iowrite16be iowrite16be
++#define iowrite32be iowrite32be
++#define ioread8_rep ioread8_rep
++#define ioread16_rep ioread16_rep
++#define ioread32_rep ioread32_rep
++#define iowrite8_rep iowrite8_rep
++#define iowrite16_rep iowrite16_rep
++#define iowrite32_rep iowrite32_rep
  
- #include <asm/byteorder.h>
- #include <asm/io.h>
+ /*
+  * Convert a physical pointer to a virtual kernel pointer for /dev/mem
+@@ -316,4 +268,6 @@ extern void iowrite64be(u64 val, void __iomem *addr);
+ 
+ extern int devmem_is_allowed(unsigned long pfn);
+ 
++#include <asm-generic/io.h>
++
+ #endif
 -- 
 2.37.2
 
