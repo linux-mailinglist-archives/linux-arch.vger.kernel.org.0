@@ -2,60 +2,81 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26095ABD8F
-	for <lists+linux-arch@lfdr.de>; Sat,  3 Sep 2022 08:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B385ABEC8
+	for <lists+linux-arch@lfdr.de>; Sat,  3 Sep 2022 13:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbiICG7g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 3 Sep 2022 02:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S229506AbiICLlm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 3 Sep 2022 07:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiICG7d (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 02:59:33 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBF8DB071
-        for <linux-arch@vger.kernel.org>; Fri,  2 Sep 2022 23:59:19 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id gb36so7635695ejc.10
-        for <linux-arch@vger.kernel.org>; Fri, 02 Sep 2022 23:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date;
-        bh=tGYc6EGzo1MSb0Xj7cogZ2c52AmGuZpQgPXqMjSWnJY=;
-        b=hqXSTS9EyhaDWh0heH1yy1XgFwlEyGKGNPjrDkmBmYnDqGHfoM38fxJ3Hf64Z1HkSt
-         BzUz38zC4Ck0I/1kRHPva4Uw8N3kfcF6rYEdcBO8dupu7Lald9rg0bgVvpU9u9WwYIlk
-         xKuWy4Vg/dPxCZlhhGtENR6EUn3p+NDudlj943DZK/XtqRPNzd6LjPbraMDRw5CQnZpg
-         3DOEavB/2r4MJOD8ATV8+j4Iqwb0R96QaR8FipXkViMRxKg71Z7PFbO0hhrPQy9hrBc/
-         m3f3UBLC9e+lRlf8/qDWzlQsYKnhFbKulZXK3Y9RvzLvgr2L9So/HiodaOXqiAUCCqjf
-         4qBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=tGYc6EGzo1MSb0Xj7cogZ2c52AmGuZpQgPXqMjSWnJY=;
-        b=7stMRY6ERNBqloy2Ib4FdrHOWx2h5iGPokB2Ds92xa04Ymf+QTlGYVGiJAsyEs1j8w
-         MAI4tLbVOiRhXfOMANhPfjS4EiXlwA6PKSdr6lA1+hVe0za42hzXIf8XiCVzaO3eZnlz
-         FNPNjEs7ylXBKgK9IIIGflSiANLVD6JSzKc/AiPIix89eDqBueYRL1N1LplBuGu//IaN
-         Smk2D60giBkurGvlKhI46VgVhZP2g4rpuuaCYzpFYAa9I8XqCLLV8y3v59JrIDQa42Fh
-         hh8r4u8E+pmTlVhFoC/q1yjK1udRTwo34XSgA0x4qkKjRIPhl2eCwmPK4V6LCCCR9Pi9
-         cSlA==
-X-Gm-Message-State: ACgBeo1HmW8dPSVJmke5Nrjrh1xwPG3cUbWUSjdmj+YTjVytUBhGDNxu
-        WFFHa4IdAyD7CxajM2c7LpiykiydCeoIWDVTZCqgBJ+h
-X-Google-Smtp-Source: AA6agR4EBwtOjrAfWfZPQ5jf02VFz5soKFonf/P9MAOMYha3pbIPkFFhfS1cJ09UnW2OFisptXxJiCMGTLoR1IcNd+w=
-X-Received: by 2002:a17:907:3f90:b0:741:96fe:6641 with SMTP id
- hr16-20020a1709073f9000b0074196fe6641mr18776173ejc.378.1662188357343; Fri, 02
- Sep 2022 23:59:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+X7ob9QaUxiusEBC2eW8Wk+2FnGVATeC8pmb9pdU0Tg7-XfyA@mail.gmail.com>
-In-Reply-To: <CA+X7ob9QaUxiusEBC2eW8Wk+2FnGVATeC8pmb9pdU0Tg7-XfyA@mail.gmail.com>
-From:   =?UTF-8?Q?Matthias_G=C3=B6rgens?= <matthias.goergens@gmail.com>
-Date:   Sat, 3 Sep 2022 14:59:06 +0800
-Message-ID: <CA+X7ob-XeKwM0r=6e+O=Se=pGQFjKVGZVihHC-Mc6YoRFf=6SQ@mail.gmail.com>
-Subject: Fwd: [PATCH] tools/headers: Fix undefined behaviour (34 << 26)
-To:     linux-arch@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000971f0205e7c06233"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        with ESMTP id S229504AbiICLll (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 07:41:41 -0400
+Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFB453D25;
+        Sat,  3 Sep 2022 04:41:39 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 5E3C04D;
+        Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1662205296;
+        bh=WTHSGOgXdL1ETWQB4FmjCtq7b8+QUK7FV8+8M7WsAaQ=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=AS887YsN6S7/Ti227pObQKvjit4dHOmfKaqtPMo4KgKboWFSGMTcIVOUEXtJ/tTF1
+         VvtJh114tguB3szieJipx4Z7tDowAjax3P1C7ZbOssuI5sIGreIToLeQjtdikoqRNM
+         /mp83GZfkyzbLeLU+32HkyKZUUQ3f/dFkrOgVqUcQqKwS4qnZy4X0+oRLjOxCjjFRK
+         Jp3ca3wja9qNgMCSfyPJbrZRpIJZcK6HVwUzQ/Rfkjoj9QN33hdl+6QJNkQ5OcqEJg
+         ZSnTVMwSc/qka9HJLbdVzZtOIzMnpvet2VjbvMjrv+QaaCY2lURJA3kDBOOajXprnk
+         WBhB5yjM0LlIQ==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 586EF1ADC; Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 2BBBD1ADB;
+        Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 275D11AD9;
+        Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 23B3C4A01E6; Sat,  3 Sep 2022 13:41:36 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 4B57F4A01CD;
+        Sat,  3 Sep 2022 13:41:35 +0200 (CEST)
+        (Extended-Queue-bit xtech_yq@fff.in.tum.de)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v3] tools/memory-model: Weaken ctrl dependency definition
+ in explanation.txt
+From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
+In-Reply-To: <YxKtmk2q8Uzb+Qk9@rowland.harvard.edu>
+Date:   Sat, 3 Sep 2022 13:41:34 +0200
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D7E3D42D-2ABE-4D16-9DCA-0605F0C84F7D@in.tum.de>
+References: <20220902211341.2585133-1-paul.heidekrueger@in.tum.de>
+ <YxKtmk2q8Uzb+Qk9@rowland.harvard.edu>
+To:     Alan Stern <stern@rowland.harvard.edu>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,141 +84,101 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
---000000000000971f0205e7c06233
-Content-Type: text/plain; charset="UTF-8"
+On 3. Sep 2022, at 03:27, Alan Stern <stern@rowland.harvard.edu> wrote:
 
-Hello,
+> On Fri, Sep 02, 2022 at 09:13:40PM +0000, Paul Heidekr=C3=BCger wrote:
+>> The current informal control dependency definition in explanation.txt =
+is
+>> too broad and, as discussed, needs to be updated.
+>>=20
+>> Consider the following example:
+>>=20
+>>> if(READ_ONCE(x))
+>>>  return 42;
+>>>=20
+>>> WRITE_ONCE(y, 42);
+>>>=20
+>>> return 21;
+>>=20
+>> The read event determines whether the write event will be executed =
+"at all"
+>> - as per the current definition - but the formal LKMM does not =
+recognize
+>> this as a control dependency.
+>>=20
+>> Introduce a new definition which includes the requirement for the =
+second
+>> memory access event to syntactically lie within the arm of a non-loop
+>> conditional.
+>>=20
+>> Link: =
+https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.=
+tum.de/
+>> Cc: Marco Elver <elver@google.com>
+>> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+>> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+>> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+>> Cc: Martin Fink <martin.fink@in.tum.de>
+>> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
+>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+>=20
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+>=20
+>> ---
+>>=20
+>> v3:
+>> - Address Alan and Joel's feedback re: the wording around switch =
+statements
+>> and the use of "guarding"
+>>=20
+>> v2:
+>> - Fix typos
+>> - Fix indentation of code snippet
+>>=20
+>> v1:
+>> @Alan, since I got it wrong the last time, I'm adding you as a =
+co-developer
+>> after my SOB. I'm sorry if this creates extra work on your side due =
+to you
+>> having to resubmit the patch now with your SOB if I understand =
+correctly,
+>> but since it's based on your wording from the other thread, I =
+definitely
+>> wanted to give you credit.
+>>=20
+>> tools/memory-model/Documentation/explanation.txt | 8 +++++---
+>> 1 file changed, 5 insertions(+), 3 deletions(-)
+>>=20
+>> diff --git a/tools/memory-model/Documentation/explanation.txt =
+b/tools/memory-model/Documentation/explanation.txt
+>> index ee819a402b69..0b7e1925a673 100644
+>> --- a/tools/memory-model/Documentation/explanation.txt
+>> +++ b/tools/memory-model/Documentation/explanation.txt
+>> @@ -464,9 +464,11 @@ to address dependencies, since the address of a =
+location accessed
+>> through a pointer will depend on the value read earlier from that
+>> pointer.
+>>=20
+>> -Finally, a read event and another memory access event are linked by =
+a
+>> -control dependency if the value obtained by the read affects whether
+>> -the second event is executed at all.  Simple example:
+>> +Finally, a read event X and another memory access event Y are linked =
+by
+>> +a control dependency if Y syntactically lies within an arm of an if
+>> +statement and X affects the evaluation of the if condition via a =
+data or
+>> +address dependency (or similarly for a switch statement).  Simple
+>> +example:
+>>=20
+>> 	int x, y;
 
-This is my first patch to the Linux kernel.  I hope sending it via
-gmail is OK?  I have attached the git-generated patch file.
+Hang on, shouldn't this read "a write event" instead of "another memory
+access event"? Control dependencies only provide ordering from READ_ONCE =
+to
+WRITE_ONCE, not from READ_ONCE to (READ | WRITE)_ONCE?
 
-This is a simple fix to a problem I encountered when I tried to build
-CPython.  Some digging suggested that the problem is actually with
-kernel header files.
+Or am I missing something?
 
-Basically the problem is that when calculating
-`HUGETLB_FLAG_ENCODE_16GB` we essentially run (34 << 26).  That's
-undefined behaviour in C, because C tries to do these calculations as
-signed ints, but signed signed ints don't have enough bits.
-
-The fix is to cast to unsigned first: ((unsigned) 32 << 26).  Unsigned
-ints have enough bits, at least on 32 bit systems and above.
-
-I suspect the way the kernel build uses GCC and Clang this is probably
-not a problem, but the headers are used by outside projects (like
-CPython), and for that it's probably best to stick to the C standard,
-when it's easy to do so.
-
-Thanks,
-Matthias.
-
-P.S. Please pardon, if you received this email a second time, I had
-some trouble getting GMail to send in plain text.
-
---000000000000971f0205e7c06233
-Content-Type: application/x-patch; 
-	name="0001-tools-headers-Fix-undefined-behaviour-34-26.patch"
-Content-Disposition: attachment; 
-	filename="0001-tools-headers-Fix-undefined-behaviour-34-26.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l7ljlz9p0>
-X-Attachment-Id: f_l7ljlz9p0
-
-RnJvbSA2N2JhNzM5NzcwOTk3NjQxNjQ4ZWYwN2Y5ZDVkZGI0NjgwMmJkY2NmIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBNYXR0aGlhcyBHb2VyZ2VucyA8bWF0dGhpYXMuZ29lcmdlbnNA
-Z21haWwuY29tPgpEYXRlOiBTYXQsIDMgU2VwIDIwMjIgMTQ6Mjg6MjEgKzA4MDAKU3ViamVjdDog
-W1BBVENIXSB0b29scy9oZWFkZXJzOiBGaXggdW5kZWZpbmVkIGJlaGF2aW91ciAoMzQgPDwgMjYp
-CgpMZWZ0LXNoaWZ0aW5nIHBhc3QgdGhlIHNpemUgb2YgeW91ciBkYXRhdHlwZSBpcyB1bmRlZmlu
-ZWQgYmVoYXZpb3VyIGluCkMuICBUaGUgbGl0ZXJhbCAzNCBnZXRzIHRoZSB0eXBlIGBpbnRgLCBh
-bmQgdGhhdCBvbmUgaXMgbm90IGJpZyBlbm91Z2gKdG8gYmUgbGVmdCBzaGlmdGVkIGJ5IDI2IGJp
-dHMuCgpBbiBgdW5zaWduZWRgIGlzIGxvbmcgZW5vdWdoIChvbiBhbnkgbWFjaGluZSB0aGF0IGhh
-cyBhdCBsZWFzdCAzMiBiaXRzCmZvciB0aGVpciBpbnRzLikKCkZvciB1bmlmb3JtaXR5LCB3ZSBh
-ZGQgdGhlICh1bnNpZ25lZCkgY2FzdCBldmVyeXdoZXJlLiAgQnV0IGl0J3Mgb25seQpyZWFsbHkg
-bmVlZGVkIGZvciBIVUdFVExCX0ZMQUdfRU5DT0RFXzE2R0IuCgpTaWduZWQtb2ZmLWJ5OiBNYXR0
-aGlhcyBHb2VyZ2VucyA8bWF0dGhpYXMuZ29lcmdlbnNAZ21haWwuY29tPgotLS0KIGluY2x1ZGUv
-dWFwaS9hc20tZ2VuZXJpYy9odWdldGxiX2VuY29kZS5oICB8IDI2ICsrKysrKysrKysrLS0tLS0t
-LS0tLS0KIHRvb2xzL2luY2x1ZGUvYXNtLWdlbmVyaWMvaHVnZXRsYl9lbmNvZGUuaCB8IDI2ICsr
-KysrKysrKysrLS0tLS0tLS0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKSwg
-MjYgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvaW5jbHVkZS91YXBpL2FzbS1nZW5lcmljL2h1
-Z2V0bGJfZW5jb2RlLmggYi9pbmNsdWRlL3VhcGkvYXNtLWdlbmVyaWMvaHVnZXRsYl9lbmNvZGUu
-aAppbmRleCA0ZjNkNWFhYTExZjUuLmFmYTlmNDRjYzJlNyAxMDA2NDQKLS0tIGEvaW5jbHVkZS91
-YXBpL2FzbS1nZW5lcmljL2h1Z2V0bGJfZW5jb2RlLmgKKysrIGIvaW5jbHVkZS91YXBpL2FzbS1n
-ZW5lcmljL2h1Z2V0bGJfZW5jb2RlLmgKQEAgLTIwLDE4ICsyMCwxOCBAQAogI2RlZmluZSBIVUdF
-VExCX0ZMQUdfRU5DT0RFX1NISUZUCTI2CiAjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfTUFT
-SwkweDNmCiAKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xNktCCSgxNCA8PCBIVUdFVExC
-X0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzY0S0IJKDE2
-IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNP
-REVfNTEyS0IJKDE5IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VU
-TEJfRkxBR19FTkNPREVfMU1CCQkoMjAgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNk
-ZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8yTUIJCSgyMSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RF
-X1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzhNQgkJKDIzIDw8IEhVR0VUTEJf
-RkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMTZNQgkoMjQg
-PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
-RV8zMk1CCSgyNSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExC
-X0ZMQUdfRU5DT0RFXzI1Nk1CCSgyOCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2Rl
-ZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzUxMk1CCSgyOSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RF
-X1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzFHQgkJKDMwIDw8IEhVR0VUTEJf
-RkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMkdCCQkoMzEg
-PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
-RV8xNkdCCSgzNCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExC
-X0ZMQUdfRU5DT0RFXzE2S0IJKCh1bnNpZ25lZCkgMTQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9T
-SElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV82NEtCCSgodW5zaWduZWQpIDE2IDw8
-IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVf
-NTEyS0IJKCh1bnNpZ25lZCkgMTkgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKKyNkZWZp
-bmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xTUIJCSgodW5zaWduZWQpIDIwIDw8IEhVR0VUTEJfRkxB
-R19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMk1CCQkoKHVuc2ln
-bmVkKSAyMSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZM
-QUdfRU5DT0RFXzhNQgkJKCh1bnNpZ25lZCkgMjMgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElG
-VCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xNk1CCSgodW5zaWduZWQpIDI0IDw8IEhV
-R0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMzJN
-QgkoKHVuc2lnbmVkKSAyNSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBI
-VUdFVExCX0ZMQUdfRU5DT0RFXzI1Nk1CCSgodW5zaWduZWQpIDI4IDw8IEhVR0VUTEJfRkxBR19F
-TkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfNTEyTUIJKCh1bnNpZ25l
-ZCkgMjkgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFH
-X0VOQ09ERV8xR0IJCSgodW5zaWduZWQpIDMwIDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQp
-CisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMkdCCQkoKHVuc2lnbmVkKSAzMSA8PCBIVUdF
-VExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzE2R0IJ
-KCh1bnNpZ25lZCkgMzQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKIAogI2VuZGlmIC8q
-IF9BU01fR0VORVJJQ19IVUdFVExCX0VOQ09ERV9IXyAqLwpkaWZmIC0tZ2l0IGEvdG9vbHMvaW5j
-bHVkZS9hc20tZ2VuZXJpYy9odWdldGxiX2VuY29kZS5oIGIvdG9vbHMvaW5jbHVkZS9hc20tZ2Vu
-ZXJpYy9odWdldGxiX2VuY29kZS5oCmluZGV4IDRmM2Q1YWFhMTFmNS4uYWZhOWY0NGNjMmU3IDEw
-MDY0NAotLS0gYS90b29scy9pbmNsdWRlL2FzbS1nZW5lcmljL2h1Z2V0bGJfZW5jb2RlLmgKKysr
-IGIvdG9vbHMvaW5jbHVkZS9hc20tZ2VuZXJpYy9odWdldGxiX2VuY29kZS5oCkBAIC0yMCwxOCAr
-MjAsMTggQEAKICNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVAkyNgogI2RlZmluZSBI
-VUdFVExCX0ZMQUdfRU5DT0RFX01BU0sJMHgzZgogCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNP
-REVfMTZLQgkoMTQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRM
-Ql9GTEFHX0VOQ09ERV82NEtCCSgxNiA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2Rl
-ZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzUxMktCCSgxOSA8PCBIVUdFVExCX0ZMQUdfRU5DT0RF
-X1NISUZUKQotI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzFNQgkJKDIwIDw8IEhVR0VUTEJf
-RkxBR19FTkNPREVfU0hJRlQpCi0jZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMk1CCQkoMjEg
-PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
-RV84TUIJCSgyMyA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExC
-X0ZMQUdfRU5DT0RFXzE2TUIJKDI0IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVm
-aW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMzJNQgkoMjUgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9T
-SElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8yNTZNQgkoMjggPDwgSFVHRVRMQl9G
-TEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV81MTJNQgkoMjkg
-PDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKLSNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09E
-RV8xR0IJCSgzMCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQotI2RlZmluZSBIVUdFVExC
-X0ZMQUdfRU5DT0RFXzJHQgkJKDMxIDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCi0jZGVm
-aW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMTZHQgkoMzQgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9T
-SElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8xNktCCSgodW5zaWduZWQpIDE0IDw8
-IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVf
-NjRLQgkoKHVuc2lnbmVkKSAxNiA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmlu
-ZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzUxMktCCSgodW5zaWduZWQpIDE5IDw8IEhVR0VUTEJfRkxB
-R19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMU1CCQkoKHVuc2ln
-bmVkKSAyMCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZM
-QUdfRU5DT0RFXzJNQgkJKCh1bnNpZ25lZCkgMjEgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElG
-VCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV84TUIJCSgodW5zaWduZWQpIDIzIDw8IEhV
-R0VUTEJfRkxBR19FTkNPREVfU0hJRlQpCisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMTZN
-QgkoKHVuc2lnbmVkKSAyNCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBI
-VUdFVExCX0ZMQUdfRU5DT0RFXzMyTUIJKCh1bnNpZ25lZCkgMjUgPDwgSFVHRVRMQl9GTEFHX0VO
-Q09ERV9TSElGVCkKKyNkZWZpbmUgSFVHRVRMQl9GTEFHX0VOQ09ERV8yNTZNQgkoKHVuc2lnbmVk
-KSAyOCA8PCBIVUdFVExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZMQUdf
-RU5DT0RFXzUxMk1CCSgodW5zaWduZWQpIDI5IDw8IEhVR0VUTEJfRkxBR19FTkNPREVfU0hJRlQp
-CisjZGVmaW5lIEhVR0VUTEJfRkxBR19FTkNPREVfMUdCCQkoKHVuc2lnbmVkKSAzMCA8PCBIVUdF
-VExCX0ZMQUdfRU5DT0RFX1NISUZUKQorI2RlZmluZSBIVUdFVExCX0ZMQUdfRU5DT0RFXzJHQgkJ
-KCh1bnNpZ25lZCkgMzEgPDwgSFVHRVRMQl9GTEFHX0VOQ09ERV9TSElGVCkKKyNkZWZpbmUgSFVH
-RVRMQl9GTEFHX0VOQ09ERV8xNkdCCSgodW5zaWduZWQpIDM0IDw8IEhVR0VUTEJfRkxBR19FTkNP
-REVfU0hJRlQpCiAKICNlbmRpZiAvKiBfQVNNX0dFTkVSSUNfSFVHRVRMQl9FTkNPREVfSF8gKi8K
-LS0gCjIuMzcuMwoK
---000000000000971f0205e7c06233--
+Many thanks,
+Paul=
