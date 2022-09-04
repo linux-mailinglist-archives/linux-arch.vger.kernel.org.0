@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2295AC335
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 09:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF1A5AC333
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 09:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233375AbiIDH2P (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 4 Sep 2022 03:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
+        id S233695AbiIDH23 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 4 Sep 2022 03:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233383AbiIDH1y (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Sep 2022 03:27:54 -0400
+        with ESMTP id S233374AbiIDH2B (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Sep 2022 03:28:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561B145F73;
-        Sun,  4 Sep 2022 00:27:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8FB4B49C;
+        Sun,  4 Sep 2022 00:28:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06F23B80D08;
-        Sun,  4 Sep 2022 07:27:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A9BEC433C1;
-        Sun,  4 Sep 2022 07:27:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9DE1B80D2E;
+        Sun,  4 Sep 2022 07:27:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F30AC43140;
+        Sun,  4 Sep 2022 07:27:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662276469;
-        bh=SH3odaE6GEvQpUHPIHgK0HsZ+i7j0oLK9zGMjCOZqwY=;
+        s=k20201202; t=1662276477;
+        bh=HlGmO9naVkI8h4SOIPifkOi1fhk4xPxIYawDsjdcGL0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S6Uk2vKyyFzTRAbEMqBc9RwhWgCbjPNCSWWgEp4wtltpB7dH6Mu70SuSR9Qg3+PjV
-         mNl5a2rjf1CiO5A1lOMdFTMExg5dGJV1Hmwxugay2z4gkOthjQobifP0bfVEVyCIqB
-         DytWtlElaR96/73q9c796K1jtpxwIGHpj0C2xTISiFgVMmdahNI7Tx7fIjGQDn+6kI
-         b45Y7NW/QH39kVOfnwgJA0lnt3pof4/Rr4Rz/iHgYtYsA8gkfy772XT/6JBgZHj/2T
-         xjIcGdvANFtSFD3m/NxEHGzBMkPfyXKfpkHRI0F5jw5mWIgUkNwfyOFvQ1tHqq+K5C
-         M2z/EeC3wUQLg==
+        b=bTCnWkyBFWaHT1oDikcoi4dFsvTvS13kMchJ3n5o6XEbX7Go67pXEg5LG/4hpQas7
+         2ALXMCI8JtOGKVogYUkBpDYRN7vSIalLn5vFbZLI54iGERa1VVOPJku6BgFSkdOENd
+         9g9E41PRnJXmlhtTXVfUmKsWj0hL4SSUaGmg+8MQzc6WV7M9Z6ysDZG4C/R6L/Zj0v
+         6495+6WoSq8al9KmLNmlR87uaZ7sZL6Fot3h6GZk7s7KuhTcfTKjchAVURDIj+b40C
+         RGqvmCl2SE88QborHG7J2FexH65b6/RmYnkkADMXUOJqDaBIp+6HKGBeoetca/WIn3
+         R/KEVgGGqY6sg==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -42,9 +42,9 @@ Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org,
         Guo Ren <guoren@linux.alibaba.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH V2 5/6] riscv: elf_kexec: Fixup compile warning
-Date:   Sun,  4 Sep 2022 03:26:36 -0400
-Message-Id: <20220904072637.8619-6-guoren@kernel.org>
+Subject: [PATCH V2 6/6] riscv: compat_syscall_table: Fixup compile warning
+Date:   Sun,  4 Sep 2022 03:26:37 -0400
+Message-Id: <20220904072637.8619-7-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220904072637.8619-1-guoren@kernel.org>
 References: <20220904072637.8619-1-guoren@kernel.org>
@@ -62,46 +62,33 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1
-O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
-
-../arch/riscv/kernel/elf_kexec.c: In function 'elf_kexec_load':
-../arch/riscv/kernel/elf_kexec.c:185:23: warning: variable
-'kernel_start' set but not used [-Wunused-but-set-variable]
-  185 |         unsigned long kernel_start;
-      |                       ^~~~~~~~~~~~
+../arch/riscv/kernel/compat_syscall_table.c:12:41: warning: initialized
+field overwritten [-Woverride-init]
+   12 | #define __SYSCALL(nr, call)      [nr] = (call),
+      |                                         ^
+../include/uapi/asm-generic/unistd.h:567:1: note: in expansion of macro
+'__SYSCALL'
+  567 | __SYSCALL(__NR_semget, sys_semget)
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 Reported-by: kernel test robot <lkp@intel.com>
 ---
- arch/riscv/kernel/elf_kexec.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/riscv/kernel/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-index 0cb94992c15b..bba3723a0914 100644
---- a/arch/riscv/kernel/elf_kexec.c
-+++ b/arch/riscv/kernel/elf_kexec.c
-@@ -182,7 +182,9 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 	unsigned long new_kernel_pbase = 0UL;
- 	unsigned long initrd_pbase = 0UL;
- 	unsigned long headers_sz;
-+#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
- 	unsigned long kernel_start;
-+#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
- 	void *fdt, *headers;
- 	struct elfhdr ehdr;
- 	struct kexec_buf kbuf;
-@@ -197,7 +199,9 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 			     &old_kernel_pbase, &new_kernel_pbase);
- 	if (ret)
- 		goto out;
-+#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
- 	kernel_start = image->start;
-+#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
- 	pr_notice("The entry point of kernel at 0x%lx\n", image->start);
+diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+index 33bb60a354cd..01da14e21019 100644
+--- a/arch/riscv/kernel/Makefile
++++ b/arch/riscv/kernel/Makefile
+@@ -9,6 +9,7 @@ CFLAGS_REMOVE_patch.o	= $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_sbi.o	= $(CC_FLAGS_FTRACE)
+ endif
+ CFLAGS_syscall_table.o	+= $(call cc-option,-Wno-override-init,)
++CFLAGS_compat_syscall_table.o += $(call cc-option,-Wno-override-init,)
  
- 	/* Add the kernel binary to the image */
+ ifdef CONFIG_KEXEC
+ AFLAGS_kexec_relocate.o := -mcmodel=medany $(call cc-option,-mno-relax)
 -- 
 2.36.1
 
