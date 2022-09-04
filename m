@@ -2,52 +2,51 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763445AC408
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 12:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197BC5AC410
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 13:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiIDK5G (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 4 Sep 2022 06:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
+        id S233340AbiIDLFh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 4 Sep 2022 07:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiIDK5F (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Sep 2022 06:57:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487843DBFF;
-        Sun,  4 Sep 2022 03:57:04 -0700 (PDT)
+        with ESMTP id S229569AbiIDLFg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Sep 2022 07:05:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA75432D85;
+        Sun,  4 Sep 2022 04:05:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EADA4B80B40;
-        Sun,  4 Sep 2022 10:57:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAD1C43147;
-        Sun,  4 Sep 2022 10:57:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6186060F63;
+        Sun,  4 Sep 2022 11:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDA2BC43142;
+        Sun,  4 Sep 2022 11:05:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662289021;
-        bh=aE3Lzt0mghWBYhRRYPgtuF/TAYQh83dAwNSkTUNTgbI=;
+        s=k20201202; t=1662289532;
+        bh=K4+vScggM2EV2pgo7YlzZVyHFKhrScIEqSPeoPwXFmg=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cbutf74Zg+i4qBm5vsW2mqxxACOwWCvIBtqyUuwD+FNcRaLXDq/amRT2vQ/WOYSGy
-         DkwAc3T0xw3+Cujhr9yz/A4tlswfwFO98dJ48tjKmv6FAbrQoeBmYfgRZx+VGY1w74
-         RuPuf23GyKvl8apwbTM+A6vGme9PxwHgRR7fmpfilXUjU980b/608zF7om+WgUlUGe
-         85SGbW4+e+lvlZozdFZgyDmFiwLnKf+bUeQgFkmgQNCSQZteV+QV5IBV46ciXZkZ6o
-         V4s/LP5ohTAHs8bmnIqhIpNYAPITa/X3Zki+gffGmFpJcjI3Kb02xB9sdWSVfWNExB
-         MipbLbvEIoD9A==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-11eab59db71so15570827fac.11;
-        Sun, 04 Sep 2022 03:57:01 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2H+vo7ziKOlFfqHyYO26vURv2nbnbuEKgY/3G+71xJUg1M4gBM
-        mzBqPyp57OYjnNRV4qt8bdmoqrr6W6RjJoKP4lk=
-X-Google-Smtp-Source: AA6agR7jdKTNe2FRhNW8k0znlXUrgx7feNvmOtWzcf4WBfkjzFYgi6nG0mLNVsj72gFtD7YDubR4fnMyiWxHDnyGuKw=
-X-Received: by 2002:a05:6808:2028:b0:344:246d:2bed with SMTP id
- q40-20020a056808202800b00344246d2bedmr5238536oiw.19.1662289020747; Sun, 04
- Sep 2022 03:57:00 -0700 (PDT)
+        b=qEbp8Y1rPsMAPQEHmx3Iqc8skXgGHkWIu4d8pizi/7MYtcpj4RE4U3bC0uG0Gv+LX
+         fJRNTCVGmRfEfT6PhSsiyLGxHYkNAtZl/umdVaMiT0v1qL+meNyWTuurP17//TbZSu
+         PWAQ/Nu+qPipNEDmyn9Rb0xpf0kfkeorStcamYXdlfpOOPwqSJVIOeGdoX3zR1vlrr
+         hf6mchIX3nuOO9nxTUy+Dn/SynzFo3bfNrJuQNJvORtL+LoPnYU0EQVf/RqD8wWb7F
+         nEQ3ejUgLvV8ruCeJa3hx2M/MpLW47yXgsPDUAaGl0YRrfAgzL1SIw8LP4rmBjOGiF
+         p3R89Jak14kPA==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1272fc7f51aso2355566fac.12;
+        Sun, 04 Sep 2022 04:05:32 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2qREMplpWrk2Tfnt4jPNf0rokS3odm7FEXcPMCXJGsTjVLYfSv
+        Ic1BemPmZVHhqGJhwanhZOLUGmOe3AjKax2lzec=
+X-Google-Smtp-Source: AA6agR5em28Nke+ymvWJLH5tNCVE9mGs7sOBHIp9Y9/1hyIoiIOMyGS3DYeVmncLqQ00+S/CpLllRUFRYkewJP0d+Yw=
+X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
+ v18-20020a056870709200b0011eff3ad984mr6156094oae.19.1662289531884; Sun, 04
+ Sep 2022 04:05:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220904072637.8619-1-guoren@kernel.org> <20220904072637.8619-6-guoren@kernel.org>
- <98efc4d8-f846-1ff1-2635-d18b7fca4ac8@microchip.com>
-In-Reply-To: <98efc4d8-f846-1ff1-2635-d18b7fca4ac8@microchip.com>
+References: <20220904072637.8619-1-guoren@kernel.org> <bdac65bd-175f-3f09-ae46-97d4fcc77d6f@microchip.com>
+In-Reply-To: <bdac65bd-175f-3f09-ae46-97d4fcc77d6f@microchip.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 4 Sep 2022 18:56:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQn0PpjERzKoBpx6npUs+gZmBNeRReNgeRP7RPod2WssA@mail.gmail.com>
-Message-ID: <CAJF2gTQn0PpjERzKoBpx6npUs+gZmBNeRReNgeRP7RPod2WssA@mail.gmail.com>
-Subject: Re: [PATCH V2 5/6] riscv: elf_kexec: Fixup compile warning
+Date:   Sun, 4 Sep 2022 19:05:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTvsWycqjx9joy6mRq_M4pgAPDy30ZhwKCsMC8HF6pKSQ@mail.gmail.com>
+Message-ID: <CAJF2gTTvsWycqjx9joy6mRq_M4pgAPDy30ZhwKCsMC8HF6pKSQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/6] riscv: Add GENERIC_ENTRY, IRQ_STACKS support
 To:     Conor.Dooley@microchip.com
 Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
         peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
@@ -56,7 +55,7 @@ Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
         atishp@atishpatra.org, palmer@dabbelt.com,
         paul.walmsley@sifive.com, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        guoren@linux.alibaba.com, lkp@intel.com
+        guoren@linux.alibaba.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -68,139 +67,82 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 4, 2022 at 6:36 PM <Conor.Dooley@microchip.com> wrote:
+On Sun, Sep 4, 2022 at 6:17 PM <Conor.Dooley@microchip.com> wrote:
+>
+> Hey Guo Ren,
+> (off topic: is Guo or Ren your given name?)
+My name is written in Guo Ren / guoren. Don't separate them. In China,
+no one calls me Guo or Ren separately, it makes me strange.
+
+>
+> This series seems to introduce a build warning:
+>
+> arch/riscv/kernel/irq.c:17:1: warning: symbol 'irq_stack_ptr' was not declared. Should it be static?
+I don't have that warning. But you are right, it should be static.
+Thank you. I will fix it in the next version of the patch.
+
+>
+> One more comment below:
 >
 > On 04/09/2022 08:26, guoren@kernel.org wrote:
 > > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > >
 > > From: Guo Ren <guoren@linux.alibaba.com>
 > >
-> > COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1
-> > O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
+> > The patches convert riscv to use the generic entry infrastructure from
+> > kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
+> > prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+> > feature for the IRQ_STACKS config. You can try it directly with [1].
 > >
-> > ../arch/riscv/kernel/elf_kexec.c: In function 'elf_kexec_load':
-> > ../arch/riscv/kernel/elf_kexec.c:185:23: warning: variable
-> > 'kernel_start' set but not used [-Wunused-but-set-variable]
-> >   185 |         unsigned long kernel_start;
-> >       |                       ^~~~~~~~~~~~
+> > [1] https://github.com/guoren83/linux/tree/generic_entry_v2
 > >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Reported-by: kernel test robot <lkp@intel.com>
+> > Changes in V2:
+> >  - Fixup compile error by include "riscv: ptrace: Remove duplicate
+> >    operation"
+> >    https://lore.kernel.org/linux-riscv/20220903162328.1952477-2-guoren@kernel.org/T/#u
 >
-> Is this then a
-> Fixes: 838b3e28488f ("RISC-V: Load purgatory in kexec_file")
-> ?
+> I find this really confusing. The same patch is in two different series?
+> Is the above series no longer required & this is a different approach?
+> Thanks,
+> Conor.
 >
-> Could you also add something like:
-> "If CONFIG_CRYTPO is not enabled, ...." to explain why this
-> may be unused?
->
-> > ---
-> >  arch/riscv/kernel/elf_kexec.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
+> >  - Fixup compile warning
+> >    Reported-by: kernel test robot <lkp@intel.com>
+> >  - Add test repo link in cover letter
 > >
-> > diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-> > index 0cb94992c15b..bba3723a0914 100644
-> > --- a/arch/riscv/kernel/elf_kexec.c
-> > +++ b/arch/riscv/kernel/elf_kexec.c
-> > @@ -182,7 +182,9 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
-> >         unsigned long new_kernel_pbase = 0UL;
-> >         unsigned long initrd_pbase = 0UL;
-> >         unsigned long headers_sz;
-> > +#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
-> >         unsigned long kernel_start;
-> > +#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
-> >         void *fdt, *headers;
-> >         struct elfhdr ehdr;
-> >         struct kexec_buf kbuf;
-> > @@ -197,7 +199,9 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
-> >                              &old_kernel_pbase, &new_kernel_pbase);
-> >         if (ret)
-> >                 goto out;
-> > +#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
-> >         kernel_start = image->start;
-> > +#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
->
-> Instead of adding more #ifdefs to the file, could we instead just drop the
-> kernel_start variable? For the sake of compilation coverage, we could then
-> also do the following (build-tested only):
-Em... I prefer:
-
-diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-index 0cb94992c15b..4b9264340b78 100644
---- a/arch/riscv/kernel/elf_kexec.c
-+++ b/arch/riscv/kernel/elf_kexec.c
-@@ -198,7 +198,7 @@ static void *elf_kexec_load(struct kimage *image,
-char *kernel_buf,
-        if (ret)
-                goto out;
-        kernel_start = image->start;
--       pr_notice("The entry point of kernel at 0x%lx\n", image->start);
-+       pr_notice("The entry point of kernel at 0x%lx\n", kernel_start);
-
-        /* Add the kernel binary to the image */
-        ret = riscv_kexec_elf_load(image, &ehdr, &elf_info,
-
-
->
-> -- >8 --
-> From: Conor Dooley <conor.dooley@microchip.com>
-> Date: Sun, 4 Sep 2022 11:27:07 +0100
-> Subject: [PATCH] riscv: elf_kexec: replace ifdef with IS_ENABLED()
->
-> IS_ENABLED() gives better compile time coverage than #ifdef.
-> Replace the ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY in elf_kexec_load()
-> since none of the code it guards uses a symbol that's missing if it
-> is not set.
->
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  arch/riscv/kernel/elf_kexec.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-> index 0cb94992c15b..29cbf655c474 100644
-> --- a/arch/riscv/kernel/elf_kexec.c
-> +++ b/arch/riscv/kernel/elf_kexec.c
-> @@ -248,21 +248,21 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
->                 cmdline = modified_cmdline;
->         }
->
-> -#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
-> -       /* Add purgatory to the image */
-> -       kbuf.top_down = true;
-> -       kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-> -       ret = kexec_load_purgatory(image, &kbuf);
-> -       if (ret) {
-> -               pr_err("Error loading purgatory ret=%d\n", ret);
-> -               goto out;
-> +       if (IS_ENABLED(CONFIG_ARCH_HAS_KEXEC_PURGATORY)) {
-> +               /* Add purgatory to the image */
-> +               kbuf.top_down = true;
-> +               kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-> +               ret = kexec_load_purgatory(image, &kbuf);
-> +               if (ret) {
-> +                       pr_err("Error loading purgatory ret=%d\n", ret);
-> +                       goto out;
-> +               }
-> +               ret = kexec_purgatory_get_set_symbol(image, "riscv_kernel_entry",
-> +                                                    &kernel_start,
-> +                                                    sizeof(kernel_start), 0);
-> +               if (ret)
-> +                       pr_err("Error update purgatory ret=%d\n", ret);
->         }
-> -       ret = kexec_purgatory_get_set_symbol(image, "riscv_kernel_entry",
-> -                                            &kernel_start,
-> -                                            sizeof(kernel_start), 0);
-> -       if (ret)
-> -               pr_err("Error update purgatory ret=%d\n", ret);
-> -#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
->
->         /* Add the initrd to the image */
->         if (initrd != NULL) {
-> --
-> 2.37.1
+> > Guo Ren (6):
+> >   riscv: ptrace: Remove duplicate operation
+> >   riscv: convert to generic entry
+> >   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+> >   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+> >   riscv: elf_kexec: Fixup compile warning
+> >   riscv: compat_syscall_table: Fixup compile warning
+> >
+> >  arch/riscv/Kconfig                    |  10 +
+> >  arch/riscv/include/asm/csr.h          |   1 -
+> >  arch/riscv/include/asm/entry-common.h |   8 +
+> >  arch/riscv/include/asm/irq.h          |   3 +
+> >  arch/riscv/include/asm/ptrace.h       |  10 +-
+> >  arch/riscv/include/asm/stacktrace.h   |   5 +
+> >  arch/riscv/include/asm/syscall.h      |   6 +
+> >  arch/riscv/include/asm/thread_info.h  |  15 +-
+> >  arch/riscv/include/asm/vmap_stack.h   |  28 +++
+> >  arch/riscv/kernel/Makefile            |   1 +
+> >  arch/riscv/kernel/elf_kexec.c         |   4 +
+> >  arch/riscv/kernel/entry.S             | 255 +++++---------------------
+> >  arch/riscv/kernel/irq.c               |  75 ++++++++
+> >  arch/riscv/kernel/ptrace.c            |  41 -----
+> >  arch/riscv/kernel/signal.c            |  21 +--
+> >  arch/riscv/kernel/sys_riscv.c         |  26 +++
+> >  arch/riscv/kernel/traps.c             |  11 ++
+> >  arch/riscv/mm/fault.c                 |  12 +-
+> >  18 files changed, 250 insertions(+), 282 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/entry-common.h
+> >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
+> >
+> > --
+> > 2.36.1
+> >
 >
 
 
