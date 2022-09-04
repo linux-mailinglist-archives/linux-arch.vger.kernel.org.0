@@ -2,56 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7D95AC1C6
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 02:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF7B5AC1E6
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 02:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiIDAE1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 3 Sep 2022 20:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        id S229478AbiIDAuc (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 3 Sep 2022 20:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbiIDAE0 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 20:04:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95B1295;
-        Sat,  3 Sep 2022 17:04:21 -0700 (PDT)
+        with ESMTP id S229677AbiIDAub (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 3 Sep 2022 20:50:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40784E843;
+        Sat,  3 Sep 2022 17:50:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A2C0B80C7E;
-        Sun,  4 Sep 2022 00:04:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03865C433D7;
-        Sun,  4 Sep 2022 00:04:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F38B760E0B;
+        Sun,  4 Sep 2022 00:50:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5792EC433D7;
+        Sun,  4 Sep 2022 00:50:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662249859;
-        bh=KoBcKASn8qA//k0q8Ko3Kw15nV3tnc0Cq8A9Lc6qS2M=;
+        s=k20201202; t=1662252627;
+        bh=ksEfQgyVJmtFnHe1G9mJ/zdS+A33wXj6d/7sIqipu3Q=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NdxZRRaQDTmrzkWXFeVybd/TdF7FjscPT47/ARklt7ZgWR5S+22+TXu0dzkVPVhb1
-         a31Cke7rub19cP4VJgeULHCBnvBfnbOSmyFnYFrC5z8nYwGc4/SYys88p9cU0HRLM8
-         n11Ow83e4k1mzbNUcQ4U+sM7kNmFEeEO4ujAQRmSyzlK3WqCMPRN3eEDh8YFkPMRUs
-         v3wFPU0WCJluAOT5bBymKqxvM3FA6TdQdil432D5MhA29TkldSBdR50cy17pSC95Zf
-         pUBPHMeGbvJFjbxQ+7RplRCgdQ5pbRqMFcwU81X7NAXL5p3c2BnfJC1gR8eHhc3Hbr
-         98UppoBmbfPng==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-11ee4649dfcso13895800fac.1;
-        Sat, 03 Sep 2022 17:04:18 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3ImbrWYS8rXAVqfuwLFDcNih1t5g2M/PZ2dLmVkKuZUqFOHFf9
-        +svcwsN/x6Bf0hCMeb4QGDT2WK51/5Ez2J8OIFc=
-X-Google-Smtp-Source: AA6agR77EBLmMj9+Q0o/9QIp5FTxFDt+rkmb/qt7Y2jzmFtjgapjSdtfZhSF08/NbwXO8Vu04joLKLktUvxiUio0tnU=
-X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
- v18-20020a056870709200b0011eff3ad984mr5348554oae.19.1662249858171; Sat, 03
- Sep 2022 17:04:18 -0700 (PDT)
+        b=UGyw8kEvOD7u2JaLt9H4F+9s6PS/KXrFIqm8j2AzeHiFpNSjdORTQpZoEnbJ4v20u
+         azbe7G5m/W3rxGzgpa+p/9Ogj4XcDaQBFWlXxt/3kf2sYJyLIduZ2X2rPSPHuwi68x
+         JDPLjRdhjmzGoa0m0dFoQZ1R+nYgITnxHR/eLGjrtxoQeO7jWAeGNlOJRV0sR0skH7
+         vDNf4BSpboYsAeMGiH/I+ZwTOOOegV10kxNbyvbOk/Bcc1vZlgday38UJITzqDQRuZ
+         u7XctvT3rSgrf9jbV33igGoL0lFqW6hNhXQpLdsUZ1hJyJ1Z/26jMEyIRHe936JLJs
+         MnsOOU/Z87pKg==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-11ee4649dfcso14043436fac.1;
+        Sat, 03 Sep 2022 17:50:27 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1JsgJMOpYlyuC0WX9REdjqWHlpbN/SmoOL9AgXtt7GZQCEgWa1
+        lS40euAGey6eYZAoGKm50NZX1o3BpGdScwCW3Ps=
+X-Google-Smtp-Source: AA6agR4qiR/QXf3Z1El6po8BJBRz2HLjT7oOxsXfAy/JNS0LCsqub54/O+VJE3ccfzOMo6eSjT+FP6O6bNW+Gw3PQoM=
+X-Received: by 2002:a05:6808:2028:b0:344:246d:2bed with SMTP id
+ q40-20020a056808202800b00344246d2bedmr4637506oiw.19.1662252626504; Sat, 03
+ Sep 2022 17:50:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220903163808.1954131-4-guoren@kernel.org> <202209040118.GmG1Lby1-lkp@intel.com>
-In-Reply-To: <202209040118.GmG1Lby1-lkp@intel.com>
+References: <20220903163808.1954131-2-guoren@kernel.org> <202209040122.Nhovi9f6-lkp@intel.com>
+In-Reply-To: <202209040122.Nhovi9f6-lkp@intel.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 4 Sep 2022 08:04:05 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQFYAth8WDwch-d1ASFEaKFJTuMrZgJEttOoBZtxay6nQ@mail.gmail.com>
-Message-ID: <CAJF2gTQFYAth8WDwch-d1ASFEaKFJTuMrZgJEttOoBZtxay6nQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+Date:   Sun, 4 Sep 2022 08:50:13 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSQBJLq9Mr_wZYGF4DHSWfk7WkERNCokRu0JQdybB04Hg@mail.gmail.com>
+Message-ID: <CAJF2gTSQBJLq9Mr_wZYGF4DHSWfk7WkERNCokRu0JQdybB04Hg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] riscv: convert to generic entry
 To:     kernel test robot <lkp@intel.com>
 Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
         luto@kernel.org, kbuild-all@lists.01.org,
         linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Huacai Chen <chenhuacai@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -63,31 +65,9 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Oops, there is no warning with 6.0-rc3. But it's a bug, I fixed that by:
+It would be fixed in V2
 
-diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
-index afc8c030c222..5871eccbbd94 100644
---- a/arch/riscv/kernel/signal.c
-+++ b/arch/riscv/kernel/signal.c
-@@ -12,6 +12,7 @@
- #include <linux/syscalls.h>
- #include <linux/resume_user_mode.h>
- #include <linux/linkage.h>
-+#include <linux/entry-common.h>
-
- #include <asm/ucontext.h>
- #include <asm/vdso.h>
-@@ -272,7 +273,7 @@ static void handle_signal(struct ksignal *ksig,
-struct pt_regs *regs)
-        signal_setup_done(ret, ksig, 0);
- }
-
--void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
-+void arch_do_signal_or_restart(struct pt_regs *regs)
- {
-        struct ksignal ksig;
-
-On Sun, Sep 4, 2022 at 1:59 AM kernel test robot <lkp@intel.com> wrote:
+On Sun, Sep 4, 2022 at 1:49 AM kernel test robot <lkp@intel.com> wrote:
 >
 > Hi,
 >
@@ -101,15 +81,15 @@ On Sun, Sep 4, 2022 at 1:59 AM kernel test robot <lkp@intel.com> wrote:
 >
 > url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
 > base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-> config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040118.GmG1Lby1-lkp@intel.com/config)
+> config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20220904/202209040122.Nhovi9f6-lkp@intel.com/config)
 > compiler: riscv64-linux-gcc (GCC) 12.1.0
 > reproduce (this is a W=1 build):
 >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
 >         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/6ed1ef93b372116f7d4586b13bfd352e19453740
+>         # https://github.com/intel-lab-lkp/linux/commit/8390e92d0bcc635f457df18c8c1baefc78a94e48
 >         git remote add linux-review https://github.com/intel-lab-lkp/linux
 >         git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
->         git checkout 6ed1ef93b372116f7d4586b13bfd352e19453740
+>         git checkout 8390e92d0bcc635f457df18c8c1baefc78a94e48
 >         # save the config file
 >         mkdir build_dir && cp config build_dir/.config
 >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
@@ -119,28 +99,15 @@ On Sun, Sep 4, 2022 at 1:59 AM kernel test robot <lkp@intel.com> wrote:
 >
 > All warnings (new ones prefixed by >>):
 >
-> >> arch/riscv/kernel/irq.c:48:6: warning: no previous prototype for 'do_softirq_own_stack' [-Wmissing-prototypes]
->       48 | void do_softirq_own_stack(void)
->          |      ^~~~~~~~~~~~~~~~~~~~
->    arch/riscv/kernel/irq.c:74:25: warning: no previous prototype for 'handle_riscv_irq' [-Wmissing-prototypes]
->       74 | asmlinkage void noinstr handle_riscv_irq(struct pt_regs *regs)
->          |                         ^~~~~~~~~~~~~~~~
->    arch/riscv/kernel/irq.c:85:25: warning: no previous prototype for 'do_riscv_irq' [-Wmissing-prototypes]
->       85 | asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
->          |                         ^~~~~~~~~~~~
+> >> arch/riscv/kernel/signal.c:275:6: warning: no previous prototype for 'arch_do_signal_or_restart' [-Wmissing-prototypes]
+>      275 | void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
+>          |      ^~~~~~~~~~~~~~~~~~~~~~~~~
 >
 >
-> vim +/do_softirq_own_stack +48 arch/riscv/kernel/irq.c
+> vim +/arch_do_signal_or_restart +275 arch/riscv/kernel/signal.c
 >
->     47
->   > 48  void do_softirq_own_stack(void)
->     49  {
->     50          ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id());
->     51
->     52          call_on_stack(NULL, sp, do_riscv_softirq, 0);
->     53  }
->     54  #endif /* CONFIG_PREEMPT_RT */
->     55
+>    274
+>  > 275  void arch_do_signal_or_restart(struct pt_regs *regs, bool has_signal)
 >
 > --
 > 0-DAY CI Kernel Test Service
