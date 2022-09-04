@@ -2,120 +2,164 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D555AC364
-	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 10:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AF05AC380
+	for <lists+linux-arch@lfdr.de>; Sun,  4 Sep 2022 11:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbiIDILR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 4 Sep 2022 04:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44034 "EHLO
+        id S231446AbiIDJBm (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 4 Sep 2022 05:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbiIDILQ (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Sep 2022 04:11:16 -0400
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C9A3ED50;
-        Sun,  4 Sep 2022 01:11:12 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 12DCE2B05E77;
-        Sun,  4 Sep 2022 04:11:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Sun, 04 Sep 2022 04:11:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662279069; x=1662282669; bh=GmIJUh8a0b
-        qNdokPkQCJbK/aqSeG2wVzu5bAlLl44Yg=; b=VDzD4vEe1cQ8Qa+CwfOJLi6Yjf
-        0CtxsOaLjvil3Bcmh/97DHGVpIm+SkQBL3X/zZ7R10pDR6kLiMhDb0UmY1oD5pvk
-        TP7zSlf6y6p1WQQ3UxTP3Bu74fUen0x/DDvuecbz5YUt0QeitSYxfWVmbJtm70B0
-        vCfrqSqaLTPV8bORbkzSoDIVH4Kfs+VUespVAMuEnVR6VBF9al6kh6Kj5saD5F2T
-        Eyatx60smtoz+wtA+tCj+MCPuU6KEDpsnoxM+QOe3LCzv1RwbWMCorvMHDKpPrEF
-        SuytBNnyEVAuYoui83mzyOc/Du0DOkS+Nz5VSsDkwt7YdGF4oE5MAq2tpp6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        i56a14606.fm1; t=1662279069; x=1662282669; bh=GmIJUh8a0bqNdokPkQ
-        CJbK/aqSeG2wVzu5bAlLl44Yg=; b=utGey7os7UJCKWBcQwk4SM5x9OOCiQuJRj
-        7nWp3WGGvAXOboRyUluQvWZoUFACDnkV52Dh7CPakiJN4g4OKiPwP7eVP5T96UMi
-        OZeDSniSHQpSt9hZrFRYILIWMs7RR68CXoU9b+BkzKC04ZNIezhBlrkbUCbABPj3
-        VVdho3b3Zxk2LFyaIDXe2pnXZ2e+eu5pzE+29yXgre2f7qAYATw58oGBetBgxqA2
-        okknTzHKmhQMRYbuJJWDuMSVs53ZW1eayI6b2TzdeQv5TUAZdAwcR9u30AtjH7qY
-        /RJwkZTSFti15KJjQnIl2AS52r+cI8wPmj6YlC2gvf37g0VYe84Q==
-X-ME-Sender: <xms:nV0UY-u2oDOm6AeYCakuLXVtz-EHTAnp6N-8miNW3jow4HoZaKtS7A>
-    <xme:nV0UYzcgXxJo2xIudA7dOmLoJjJs0legwLZSUH3eeebRMLET_pbAcEfFCM0Sv1rmz
-    hHWts5_9ekP4rlZWGA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelgedgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:nV0UY5x5hqUBtoPU6MBtv3uZgn23_StmLVUr4UT9WVQBlS0ezgbvZA>
-    <xmx:nV0UY5NbN_T5PtU0YQcwJbeIzc5iE1fNboKxDrMMXHwmhf8yu0IfgA>
-    <xmx:nV0UY-_Tn9kZR9JgmtNh4cF3iFFEs4kvTLQc8YDMy2Qbk5UO_e3B8w>
-    <xmx:nV0UY1ZmzthWojjUxhUrw1f8auXbDw_rSNEq0tdsOkdn_qgUm0MGwONsjlc>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id EA084B60083; Sun,  4 Sep 2022 04:11:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <eded16ee-b9c9-4830-a75c-685056e56b56@www.fastmail.com>
-In-Reply-To: <20220903224526.553897-1-linus.walleij@linaro.org>
-References: <20220903224526.553897-1-linus.walleij@linaro.org>
-Date:   Sun, 04 Sep 2022 10:10:48 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Helge Deller" <deller@gmx.de>
-Cc:     linux-parisc@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "John David Anglin" <dave.anglin@bell.net>
-Subject: Re: [PATCH 1/2 v4] parisc: Remove 64bit access on 32bit machines
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229537AbiIDJBl (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 4 Sep 2022 05:01:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6371A481FF;
+        Sun,  4 Sep 2022 02:01:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D16FA60F23;
+        Sun,  4 Sep 2022 09:01:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D36C433D6;
+        Sun,  4 Sep 2022 09:01:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662282093;
+        bh=HlPvNDiHsWvi8VNASLwoCrNd5NLgOHJdkOMDeDxRhjw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ER3l7ne4UR78n1M8oOF5+Ddu+uZKu+pPv7DEI3pJSVoWkfH7JQhr8i+lKRhgc925a
+         Z0BcGmoblqarce+QdMQ8etN8gJNBZ9wkpjJewxpn8F65JY21sE/qWB1lChIvGaEvbc
+         yLIb+a60HS6kZhUjUOc6HA481gFLMd9taepA41oDSgUCYQzDrkssLRmVbhRXB19abS
+         myGqbbq4BU8haC0MyxLkI9DD3fhMKeJABoJX4IBExZbG4ZElCzvMZCiku2Jq6FM4B0
+         JyyA4iOwA2NCppthamBQQ+uTcKYZmeER2XBs8LHrfXfLQ15hBhxEQcbNX1S3+/hIrp
+         IY072jHfEPjoA==
+Received: by mail-ot1-f49.google.com with SMTP id v2-20020a056830090200b006397457afecso4365358ott.13;
+        Sun, 04 Sep 2022 02:01:33 -0700 (PDT)
+X-Gm-Message-State: ACgBeo12mxKIN9Plsh2d6UJ5/nl7D01XEAxWwkWIb3dPKkMS5BGKJOBS
+        x/m8NegiRJ0FgWdSHrPuLoA8Lq5KozRCPubfnQ4=
+X-Google-Smtp-Source: AA6agR6qji+0Nhpnm5WxW4jSAWPGEVwh9lBXvI8/VqpHg4LlK62E36LEG/pL13gfE8wYnGOn8BI/JwZn7Hf4eK+i+OE=
+X-Received: by 2002:a05:6830:348b:b0:637:899e:146e with SMTP id
+ c11-20020a056830348b00b00637899e146emr17070867otu.308.1662282092245; Sun, 04
+ Sep 2022 02:01:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220903163808.1954131-2-guoren@kernel.org> <202209041559.Mnnj8WRz-lkp@intel.com>
+In-Reply-To: <202209041559.Mnnj8WRz-lkp@intel.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 4 Sep 2022 17:01:20 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSekwXtdAGArPWiWshSDZuPH569jHBJZkpcf9JPdvS7hA@mail.gmail.com>
+Message-ID: <CAJF2gTSekwXtdAGArPWiWshSDZuPH569jHBJZkpcf9JPdvS7hA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] riscv: convert to generic entry
+To:     kernel test robot <lkp@intel.com>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, kbuild-all@lists.01.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 4, 2022, at 12:45 AM, Linus Walleij wrote:
-> The parisc was using some readq/writeq accessors without special
-> considerations as to what will happen on 32bit CPUs if you do
-> this. Maybe we have been lucky that it "just worked" on 32bit
-> due to the compiler behaviour, or the code paths were never
-> executed.
->
-> Fix the two offending code sites like this:
->
-> arch/parisc/lib/iomap.c:
->
-> - Put ifdefs around the 64bit accessors and make sure
->   that ioread64, ioread64be, iowrite64 and iowrite64be
->   are not available on 32bit builds.
->
-> - Also fold in a bug fix where 64bit access was by
->   mistake using 32bit writel() accessors rather
->   than 64bit writeq().
->
-> drivers/parisc/sba_iommu.c:
->
-> - Access any 64bit registers using _lo_hi-semantics by way
->   of the readq and writeq operations provided by
->   <linux/io-64-nonatomic-lo-hi.h>
->
-> Cc: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linux-arch@vger.kernel.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: John David Anglin <dave.anglin@bell.net>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+The problem is the robot only picks one of my patch series.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+git:(8390e92d0bcc) git log --oneline -8
+8390e92d0bcc (HEAD) riscv: convert to generic entry
+b224d265f838 soc: document merges
+a10b904f72e1 Merge branch 'arm/soc' into for-next
+566e373fe047 arm64: Kconfig.platforms: Group NXP platforms together
+96796c914b84 arm64: Kconfig.platforms: Re-organized Broadcom menu
+3779852e05c7 Merge branch 'arm/defconfig' into for-next
+646e8ad3e676 Merge branch 'arm/drivers' into for-next
+086e9b3719ae Merge branch 'arm/dt' into for-next
+
+After cherry-pick all patches, all is right:
+27642008ec1f (HEAD) riscv: compat_syscall_table: Fixup compile warning
+afcaaabc38e0 riscv: elf_kexec: Fixup compile warning
+741c29016482 riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+4eb9469a3bc8 riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+a372b565b7c9 riscv: convert to generic entry
+2d228d709c92 riscv: ptrace: Remove duplicate operation
+b224d265f838 soc: document merges
+a10b904f72e1 Merge branch 'arm/soc' into for-next
+
+If you want to try the riscv generic entry, please use the
+v6.0-rc3-based branch [1].
+
+[1]: https://github.com/guoren83/linux/tree/generic_entry_v2
+
+On Sun, Sep 4, 2022 at 3:39 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi,
+>
+> I love your patch! Yet something to improve:
+>
+> [auto build test ERROR on soc/for-next]
+> [also build test ERROR on linus/master v6.0-rc3 next-20220901]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+> config: riscv-rv32_defconfig
+> compiler: riscv32-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/8390e92d0bcc635f457df18c8c1baefc78a94e48
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review guoren-kernel-org/riscv-Add-GENERIC_ENTRY-IRQ_STACKS-support/20220904-003954
+>         git checkout 8390e92d0bcc635f457df18c8c1baefc78a94e48
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+>
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    arch/riscv/kernel/sys_riscv.c:80:17: warning: no previous prototype for 'do_sys_ecall_u' [-Wmissing-prototypes]
+>       80 | asmlinkage void do_sys_ecall_u(struct pt_regs *regs)
+>          |                 ^~~~~~~~~~~~~~
+>    arch/riscv/kernel/sys_riscv.c: In function 'do_sys_ecall_u':
+> >> arch/riscv/kernel/sys_riscv.c:83:39: error: 'SR_UXL' undeclared (first use in this function); did you mean 'SR_XS'?
+>       83 |         ulong sr_uxl = regs->status & SR_UXL;
+>          |                                       ^~~~~~
+>          |                                       SR_XS
+>    arch/riscv/kernel/sys_riscv.c:83:39: note: each undeclared identifier is reported only once for each function it appears in
+> >> arch/riscv/kernel/sys_riscv.c:91:23: error: 'SR_UXL_32' undeclared (first use in this function)
+>       91 |         if (sr_uxl == SR_UXL_32)
+>          |                       ^~~~~~~~~
+>
+>
+> vim +83 arch/riscv/kernel/sys_riscv.c
+>
+>     79
+>     80  asmlinkage void do_sys_ecall_u(struct pt_regs *regs)
+>     81  {
+>     82          syscall_t syscall;
+>   > 83          ulong sr_uxl = regs->status & SR_UXL;
+>     84          ulong nr = regs->a7;
+>     85
+>     86          regs->epc += 4;
+>     87          regs->orig_a0 = regs->a0;
+>     88          regs->a0 = -ENOSYS;
+>     89
+>     90          nr = syscall_enter_from_user_mode(regs, nr);
+>   > 91          if (sr_uxl == SR_UXL_32)
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+
+
+
+-- 
+Best Regards
+ Guo Ren
