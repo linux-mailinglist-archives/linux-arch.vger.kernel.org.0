@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA685AD2E7
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 14:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BB45AD2EB
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 14:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237927AbiIEMc0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Sep 2022 08:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
+        id S236207AbiIEMcE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Sep 2022 08:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236195AbiIEMa1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 08:30:27 -0400
+        with ESMTP id S237123AbiIEMaZ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 08:30:25 -0400
 Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2691237C0
-        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 05:26:39 -0700 (PDT)
-Received: by mail-ej1-x64a.google.com with SMTP id jg40-20020a170907972800b0074148cdc7baso2258126ejc.12
-        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 05:26:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CC16111B
+        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 05:26:36 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id ds17-20020a170907725100b007419bfb5fd4so2255067ejc.4
+        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 05:26:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=yflFKH40jmwCCGQluWMEQ//gU/gWIMkmRe3xdXByGVQ=;
-        b=fAxph5Y6U04CXZrajhFkL+LMhlfmAqX1mOptfFGFa+34F1+59OCoqL+hyS00yE9PU3
-         JiQF8Q7PP63alm8LFCcaO0ZZHzZ5WxGFto4GmMcgZr9o9k0lEZRIQVzzKRElWx4oA9Ez
-         7ZjbmW+o8zPS23NFbXCbrLPnQaO1lqjWBLYh2MePrjtDiEAPdC3lrLsuRUbPOH3mzVEQ
-         PgdyG8vgJN4Qnre4Ot1waLJj7+TH2C6/GbnJwovqjOPhmu9jof0uYhctQHZkHtEoZesE
-         L4Z7jgUgDUS3X3M2bfaQgTzxuHr1pPSXpKXdHYlPC0r3legvJZAdTPNLBXX4Lymsq/aN
-         mAFg==
+        bh=s0jAEbnxevXU2w5QvhShkO+su70yEEyH0HIO5IJWDY4=;
+        b=bu0u5tzWys3aoNNOSqWMbs79DbrrHmKiGn+hL4KDlErPP+Lo7FLkHfELO/k6xRlYBe
+         ykglug1+rXGdRt18mk9So62vJrQC5Nfam0G4xfUqu81YGX39bYWi9cdlEP/AR0hQIjI7
+         LhjuHlxdatOiIm2BvL1TtIwiRB+pmYK3d/lMv6E7IX7kgbpmXV2Qldgf6t5Q4tpDmTLr
+         DC+ByxODcULZ/qsffD26Dqt/CBcxjCxhVYakt20QopL7GW2eWqNO8oWE31QVN4vRZjXt
+         uf7C6E5ZyZl5/fMLW/+EpL6LgwqZxpJLp+xPVqll692XKyHC3OVtZcvx/SkX3nvjqXpq
+         FF9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=yflFKH40jmwCCGQluWMEQ//gU/gWIMkmRe3xdXByGVQ=;
-        b=xZxCPE+LJhLDzuUATn+VO5wjANA8alKnj8J9hAI1MwOMuD0TZrt+SDv3SExpKGmoF0
-         fbeFwMp5hPM8MaerijZsV+eOkARxwGGjz7d47kUr/uVdGhzRUY6h8Enk7dmZKCk8iqrM
-         4KWl0h/hRaGHxknYwKuRDo8gd8KyDr1QYrmBM5qPBzI/RXkg/y7HDAVPA7K3hPPryHd/
-         IGO6OwpS97YinkZo3Mhvd0HRFFDNuFr03K5LbZ8QJHKm6ZJfD5LiG1JUwu7OP2GcRKlP
-         6F80HzZ5lWqEPdknXbFGm/w0cFJcntA+OnIWg6TbrOscacYMe+dfPkUSpRu6yNeSWz5M
-         o3Gw==
-X-Gm-Message-State: ACgBeo1XpTIhyuB+UX3Lq80q7W+l13OQKiELjAv1Yoz1mGc/IMC/XpXp
-        y9swfVONGc00Wm8k8EbWBplWlGwDsDI=
-X-Google-Smtp-Source: AA6agR7p8f0oX7Qv/mGgEi+wXgphK2AAXJizc5KwHHFoVlbMDXfcad2dvQIIPWVBGG5QIQ/9evyI4QEPVGs=
+        bh=s0jAEbnxevXU2w5QvhShkO+su70yEEyH0HIO5IJWDY4=;
+        b=HQgJUeXcdz/LeKEP/k4rcMzld2y0gg0m6ya5jLPYyQsdCkJ4bVLO7D05UNeYA5Lccx
+         9L6D6TyPtIyZWdyxyh82JjFv/AY0dOPLqq9GhgUQdaH9UmCnle0k+mTRYfQgWaptgMJa
+         amtwruUOA1dcSF1KZewaiEtCnorWBaefqlHFl8PMXTKMHK8Q+BxzMa+DId9RD6xqOSVx
+         d7ibzHG0wrepmv/GAcHmLZzXhD8OakMrKloesWHc9Qno6XecjGQuF6xtbA9YIwaDdTGX
+         F6LCHV6ivY5DiSa505Jlv5vB68qKGttEVSvSZTsNUlRLnZN8XbHJnIvfIOLPZRZw3AJQ
+         +x/g==
+X-Gm-Message-State: ACgBeo16XRrw2qKIY/ZmIwjan5r9NlTthAVSHJ/XcfIENgZ5rsrgw8OX
+        uN6LIceGaEwflLXC9fiNh440XkWT8To=
+X-Google-Smtp-Source: AA6agR5260F+3gOSRJyoSXQw3pfFItb9FgNqwZTy7bpqxdCSRtFwmoz1gIihp3WzCC0P247/3anfhhixqLQ=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a17:907:2722:b0:731:2aeb:7942 with SMTP id
- d2-20020a170907272200b007312aeb7942mr35645383ejl.734.1662380793723; Mon, 05
- Sep 2022 05:26:33 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:43 +0200
+ (user=glider job=sendgmr) by 2002:a17:906:8a5c:b0:73d:7f4a:b951 with SMTP id
+ gx28-20020a1709068a5c00b0073d7f4ab951mr35092641ejc.481.1662380796421; Mon, 05
+ Sep 2022 05:26:36 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:44 +0200
 In-Reply-To: <20220905122452.2258262-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220905122452.2258262-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-36-glider@google.com>
-Subject: [PATCH v6 35/44] x86: kmsan: handle open-coded assembly in lib/iomem.c
+Message-ID: <20220905122452.2258262-37-glider@google.com>
+Subject: [PATCH v6 36/44] x86: kmsan: use __msan_ string functions where possible.
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -96,47 +96,99 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-KMSAN cannot intercept memory accesses within asm() statements.
-That's why we add kmsan_unpoison_memory() and kmsan_check_memory() to
-hint it how to handle memory copied from/to I/O memory.
+Unless stated otherwise (by explicitly calling __memcpy(), __memset() or
+__memmove()) we want all string functions to call their __msan_ versions
+(e.g. __msan_memcpy() instead of memcpy()), so that shadow and origin
+values are updated accordingly.
+
+Bootloader must still use the default string functions to avoid crashes.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/Icb16bf17269087e475debf07a7fe7d4bebc3df23
----
- arch/x86/lib/iomem.c | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/arch/x86/lib/iomem.c b/arch/x86/lib/iomem.c
-index 3e2f33fc33de2..e0411a3774d49 100644
---- a/arch/x86/lib/iomem.c
-+++ b/arch/x86/lib/iomem.c
-@@ -1,6 +1,7 @@
- #include <linux/string.h>
- #include <linux/module.h>
- #include <linux/io.h>
-+#include <linux/kmsan-checks.h>
+Link: https://linux-review.googlesource.com/id/I7ca9bd6b4f5c9b9816404862ae87ca7984395f33
+---
+ arch/x86/include/asm/string_64.h | 23 +++++++++++++++++++++--
+ include/linux/fortify-string.h   |  2 ++
+ 2 files changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/string_64.h b/arch/x86/include/asm/string_64.h
+index 6e450827f677a..3b87d889b6e16 100644
+--- a/arch/x86/include/asm/string_64.h
++++ b/arch/x86/include/asm/string_64.h
+@@ -11,11 +11,23 @@
+    function. */
  
- #define movs(type,to,from) \
- 	asm volatile("movs" type:"=&D" (to), "=&S" (from):"0" (to), "1" (from):"memory")
-@@ -37,6 +38,8 @@ static void string_memcpy_fromio(void *to, const volatile void __iomem *from, si
- 		n-=2;
- 	}
- 	rep_movs(to, (const void *)from, n);
-+	/* KMSAN must treat values read from devices as initialized. */
-+	kmsan_unpoison_memory(to, n);
+ #define __HAVE_ARCH_MEMCPY 1
++#if defined(__SANITIZE_MEMORY__)
++#undef memcpy
++void *__msan_memcpy(void *dst, const void *src, size_t size);
++#define memcpy __msan_memcpy
++#else
+ extern void *memcpy(void *to, const void *from, size_t len);
++#endif
+ extern void *__memcpy(void *to, const void *from, size_t len);
+ 
+ #define __HAVE_ARCH_MEMSET
++#if defined(__SANITIZE_MEMORY__)
++extern void *__msan_memset(void *s, int c, size_t n);
++#undef memset
++#define memset __msan_memset
++#else
+ void *memset(void *s, int c, size_t n);
++#endif
+ void *__memset(void *s, int c, size_t n);
+ 
+ #define __HAVE_ARCH_MEMSET16
+@@ -55,7 +67,13 @@ static inline void *memset64(uint64_t *s, uint64_t v, size_t n)
  }
  
- static void string_memcpy_toio(volatile void __iomem *to, const void *from, size_t n)
-@@ -44,6 +47,8 @@ static void string_memcpy_toio(volatile void __iomem *to, const void *from, size
- 	if (unlikely(!n))
- 		return;
+ #define __HAVE_ARCH_MEMMOVE
++#if defined(__SANITIZE_MEMORY__)
++#undef memmove
++void *__msan_memmove(void *dest, const void *src, size_t len);
++#define memmove __msan_memmove
++#else
+ void *memmove(void *dest, const void *src, size_t count);
++#endif
+ void *__memmove(void *dest, const void *src, size_t count);
  
-+	/* Make sure uninitialized memory isn't copied to devices. */
-+	kmsan_check_memory(from, n);
- 	/* Align any unaligned destination IO */
- 	if (unlikely(1 & (unsigned long)to)) {
- 		movs("b", to, from);
+ int memcmp(const void *cs, const void *ct, size_t count);
+@@ -64,8 +82,7 @@ char *strcpy(char *dest, const char *src);
+ char *strcat(char *dest, const char *src);
+ int strcmp(const char *cs, const char *ct);
+ 
+-#if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
+-
++#if (defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__))
+ /*
+  * For files that not instrumented (e.g. mm/slub.c) we
+  * should use not instrumented version of mem* functions.
+@@ -73,7 +90,9 @@ int strcmp(const char *cs, const char *ct);
+ 
+ #undef memcpy
+ #define memcpy(dst, src, len) __memcpy(dst, src, len)
++#undef memmove
+ #define memmove(dst, src, len) __memmove(dst, src, len)
++#undef memset
+ #define memset(s, c, n) __memset(s, c, n)
+ 
+ #ifndef __NO_FORTIFY
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index 3b401fa0f3746..6c8a1a29d0b63 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -285,8 +285,10 @@ __FORTIFY_INLINE void fortify_memset_chk(__kernel_size_t size,
+  * __builtin_object_size() must be captured here to avoid evaluating argument
+  * side-effects further into the macro layers.
+  */
++#ifndef CONFIG_KMSAN
+ #define memset(p, c, s) __fortify_memset_chk(p, c, s,			\
+ 		__builtin_object_size(p, 0), __builtin_object_size(p, 1))
++#endif
+ 
+ /*
+  * To make sure the compiler can enforce protection against buffer overflows,
 -- 
 2.37.2.789.g6183377224-goog
 
