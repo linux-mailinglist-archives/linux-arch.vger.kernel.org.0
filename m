@@ -2,163 +2,141 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48C0C5AD8CE
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 20:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2128E5AD8D2
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 20:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbiIESHn (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Sep 2022 14:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S231256AbiIESIC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Sep 2022 14:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiIESHm (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 14:07:42 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7761B59275
-        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 11:07:37 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id 10so7303197iou.2
-        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 11:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Bum5cdqCm4gIf+I6AQy+wa1rXRQMNTd23PbVP2YAzEs=;
-        b=P1Rb3fVwlXmtVf21S4DMQt260sMuniAXM5U5+atV+MhvCaumM2tXM3K6KXNyMSjZe0
-         3nRcAmBfF+7W6/WOVR2XOADKxyQte4OnojdLmDBhMFh9NdRikO81nZDemeys0l200+Ya
-         BtEOzumSQwgu7ZWm3QeSZrXIo15d7vuotOaip8lu87RHKwjf3TUmogDdVvisjKKDmHLO
-         PI+YQ7orIzFlOARyvXxCAIGW+yY5UcwZ3NgJ+U4tIgdfF/EioIbKjubkaR07oZSndJ0y
-         pThgMzg7BhFJemuG5SPivo5QOLrPUeLBb55vYf5zQYtWTw5SjAAGq1FqYgp+ZLnBdvd/
-         Qr0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Bum5cdqCm4gIf+I6AQy+wa1rXRQMNTd23PbVP2YAzEs=;
-        b=ERaTD6dsdam2mCVxGFlG+GlGRJWPcQlQBZc2JlAPSiiKC+YPqjieUm5l9ieBO+znIo
-         4p7ziKgtxuVXPxrUUUVWSeVeMfnAgdqxtZZQjIPnlJAtq8nXl0tgZGNghFzOpwXm8139
-         PhxZt4rNrxdYRDTcWPoDo1g/+31i+NJrQsUeC3CF6aCuvf5DbeNmZ2XcebmPZoMQVw2P
-         qKHwPghTEMg2jUo13SnE/iMoI7jOx+1Jh6PyGK8Gc3pr4qFIz398CfBlEBt47jTURNx/
-         Lp896p04Ok9QFg1858WD9T2DIIih9jZxoGzl5vClRIDIFR2Tnh5EB9pUi8H8xjhlsE/7
-         azlw==
-X-Gm-Message-State: ACgBeo3xS39OZ9yDwgUnsNmHg2oYUuptoVo/6/31o7pytnqFrsO/Q+Bz
-        ogA4NanJTBqokFG5Eo881VeKRC/QWVy5uRBEVTnidg==
-X-Google-Smtp-Source: AA6agR6r5XgehoMYjBLme4+OWXroqyk9NqBwquoUHJYNtZV3MpkU67zLpVv3eXPms5QzjDOiUeZjqJqeUZuYSAeGarw=
-X-Received: by 2002:a05:6638:1492:b0:34c:d42:ac2f with SMTP id
- j18-20020a056638149200b0034c0d42ac2fmr13910620jak.305.1662401256621; Mon, 05
- Sep 2022 11:07:36 -0700 (PDT)
+        with ESMTP id S231162AbiIESH7 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 14:07:59 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5705061717;
+        Mon,  5 Sep 2022 11:07:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1662401271; bh=5+fBIDj/plLFKdhPodt2PuIY5OBgWlvoqpWtbGLNoXM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=puIOOBlNKkdEH2NfqMZ6Dv+IlrIPGhmqaDgp7h/qM2meKfWQ7SIwqeYUkn6dYgczL
+         Q/Iv3vTQglESUW6b+rP5yhnh5leHyveimiFrvxIFlRbpSEDFd6iih6c11OjY3WYVu3
+         iILqoc9d48XIgD/SbgOagG4+sAU36CsE9BVH2uJ8=
+Received: from [192.168.9.172] (unknown [101.88.26.24])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id C40CA6006F;
+        Tue,  6 Sep 2022 02:07:50 +0800 (CST)
+Message-ID: <3591e532-a6ed-01f1-88fc-77b8637abced@xen0n.name>
+Date:   Tue, 6 Sep 2022 02:07:49 +0800
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <YxBc1xuGbB36f8zC@dhcp22.suse.cz> <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
- <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
- <YxWvbMYLkPoJrQyr@dhcp22.suse.cz> <CANpmjNOYNWSSiV+VzvzBAeDJX+c1DRP+6jedKMt3gLNg8bgWKA@mail.gmail.com>
-In-Reply-To: <CANpmjNOYNWSSiV+VzvzBAeDJX+c1DRP+6jedKMt3gLNg8bgWKA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 5 Sep 2022 11:07:25 -0700
-Message-ID: <CAJuCfpF4Meeo5b=ZTGe+YDCd9-jJ+WUazpJzaq7stOu2=1oP9Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Marco Elver <elver@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:106.0) Gecko/20100101
+ Thunderbird/106.0a1
+Subject: Re: [PATCH V3] LoongArch: Add efistub booting support
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-efi <linux-efi@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220819102037.2697798-1-chenhuacai@loongson.cn>
+ <9b6f0aeaebbd36882b5b40d655f9ccd20c7be496.camel@xry111.site>
+ <CAMj1kXFOd+gMHbi6MH0KHWkBEKN9V0LeZbyGRw8h630OxtMrdA@mail.gmail.com>
+ <CAAhV-H6MR=rWhecY_uuiXAysED-BBJhKhGHj2cCkefJiPOo-ZQ@mail.gmail.com>
+ <CAAhV-H4KXVUBgNoQxOFiEj2AH-ojhnrEJ8QLvNrALY69MhXF3w@mail.gmail.com>
+ <CAMj1kXHJv_6mLhMikg+ic7=EUABLdrX3f__eBbHntrpGHjRfXg@mail.gmail.com>
+ <CAAhV-H4WTCRU9qShDp57AZ2DG1uz+=GTz14zyAUaqVDjXrNABA@mail.gmail.com>
+ <CAMj1kXFRsEJOS2Kim8T64rYF85_bmmZ5gW7kjb8eDXry5SA+cg@mail.gmail.com>
+ <CAAhV-H4xDB6JPCEZqQ6+VadOPnzA3beguiuTRS-Ub=Ci5FgpPw@mail.gmail.com>
+ <CAMj1kXEPpCPHe8ghOKcaGvuLjetP9WJbrMkLcqv_V+oRWeyLmw@mail.gmail.com>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAMj1kXEPpCPHe8ghOKcaGvuLjetP9WJbrMkLcqv_V+oRWeyLmw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 1:58 AM Marco Elver <elver@google.com> wrote:
->
-> On Mon, 5 Sept 2022 at 10:12, Michal Hocko <mhocko@suse.com> wrote:
-> > On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
-> > > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
-> > [...]
-> > > > Yes, tracking back the call trace would be really needed. The question
-> > > > is whether this is really prohibitively expensive. How much overhead are
-> > > > we talking about? There is no free lunch here, really.  You either have
-> > > > the overhead during runtime when the feature is used or on the source
-> > > > code level for all the future development (with a maze of macros and
-> > > > wrappers).
-> > >
-> > > As promised, I profiled a simple code that repeatedly makes 10
-> > > allocations/frees in a loop and measured overheads of code tagging,
-> > > call stack capturing and tracing+BPF for page and slab allocations.
-> > > Summary:
-> > >
-> > > Page allocations (overheads are compared to get_free_pages() duration):
-> > > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
-> > > 8.8% lookup_page_ext
-> > > 1237% call stack capture
-> > > 139% tracepoint with attached empty BPF program
-> >
-> > Yes, I am not surprised that the call stack capturing is really
-> > expensive comparing to the allocator fast path (which is really highly
-> > optimized and I suspect that with 10 allocation/free loop you mostly get
-> > your memory from the pcp lists). Is this overhead still _that_ visible
-> > for somehow less microoptimized workloads which have to take slow paths
-> > as well?
-> >
-> > Also what kind of stack unwinder is configured (I guess ORC)? This is
-> > not my area but from what I remember the unwinder overhead varies
-> > between ORC and FP.
-> >
-> > And just to make it clear. I do realize that an overhead from the stack
-> > unwinding is unavoidable. And code tagging would logically have lower
-> > overhead as it performs much less work. But the main point is whether
-> > our existing stack unwiding approach is really prohibitively expensive
-> > to be used for debugging purposes on production systems. I might
-> > misremember but I recall people having bigger concerns with page_owner
-> > memory footprint than the actual stack unwinder overhead.
->
-> This is just to point out that we've also been looking at cheaper
-> collection of the stack trace (for KASAN and other sanitizers). The
-> cheapest way to unwind the stack would be a system with "shadow call
-> stack" enabled. With compiler support it's available on arm64, see
-> CONFIG_SHADOW_CALL_STACK. For x86 the hope is that at one point the
-> kernel will support CET, which newer Intel and AMD CPUs support.
-> Collecting the call stack would then be a simple memcpy.
+On 9/5/22 15:28, Ard Biesheuvel wrote:
+> [snip]
+>>>>>> And I have some other questions about kexec: kexec should jump to the
+>>>>>> elf entry or the pe entry? I think is the elf entry, because if we
+>>>>>> jump to the pe entry, then SVAM will be executed twice (but it should
+>>>>>> be executed only once). However, how can we jump to the elf entry if
+>>>>>> we use zboot? Maybe it is kexec-tool's responsibility to decompress
+>>>>>> the zboot kernel image?
+>>>>>>
+>>>>> Yes, very good point. Kexec kernels cannot boot via the EFI entry
+>>>>> point, as the boot services will already be shutdown. So the kexec
+>>>>> kernel needs to boot via the same entrypoint in the core kernel that
+>>>>> the EFI stub calls when it hands over.
+>>>>>
+>>>>> For the EFI zboot image in particular, we will need to teach kexec how
+>>>>> to decompress them. The zboot image has a header that
+>>>>> a) describes it as a EFI linux zimg
+>>>>> b) describes the start and end offset of the compressed payload
+>>>>> c) describes which compression algorithm was used.
+>>>>>
+>>>>> This means that any non-EFI loader (including kexec) should be able to
+>>>>> extract the inner PE/COFF image and decompress it. For arm64 and
+>>>>> RISC-V, this is sufficient as the EFI and raw images are the same. For
+>>>>> LoongArch, I suppose it means we need a way to enter the core kernel
+>>>>> directly via the entrypoint that the EFI stub uses when handing over
+>>>>> (and pass the original DT argument so the kexec kernel has access to
+>>>>> the EFI and ACPI firmware tables)
+>>>> OK, then is this implementation [1] acceptable? I remember that you
+>>>> said the MS-DOS header shouldn't contain other information, so I guess
+>>>> this is unacceptable?
+>>>>
+>>> No, this looks reasonable to me. I objected to using magic numbers in
+>>> the 'pure PE' view of the image, as it does not make sense for a pure
+>>> PE loader such as GRUB to rely on such metadata.
+>>>
+>>> In this case (like on arm64), we are dealing with something else: we
+>>> need to identify the image to the kernel itself, and here, using the
+>>> unused space in the MS-DOS header is fine.
+>>>
+>>>> [1] https://lore.kernel.org/loongarch/c4dbb14a-5580-1e47-3d15-5d2079e88404@loongson.cn/T/#mb8c1dc44f7fa2d3ef638877f0cd3f958f0be96ad
+>> OK, then there is no big problem here. And I found that arm64/riscv
+>> don't need the kernel entry point in the header. I don't know why, but
+>> I think it implies that a unified layout across architectures is
+>> unnecessary, and I prefer to put the kernel entry point before
+>> effective kernel size. :)
+>>
+> It is fine to put the entry point offset in the header. arm64 and
+> RISC-V don't need this because the first instructions are a pseudo-NOP
+> (an instruction that does nothing but its binary encoding looks like
+> 'MZ..') and a jump to the actual entry point.
 
-Thanks for the note Marco! I'll check out the CONFIG_SHADOW_CALL_STACK
-on Android.
+FYI the same trick also works for LoongArch: the code "MZ\x00\x00" i.e. 
+00005a4d is in fact "ext.w.h $t1, $t6", which is going to simply trash 
+one temporary register without any other effect, so a similar jump to 
+the actual entrypoint could follow.
+
+This instruction is available for both LA32 and LA64. The only subset 
+without it is the LA32 Primary, which is meant for university courses 
+and probably would never run UEFI, so the instruction is safe to use.
+
+P.S. If we'd go the extra mile just for ensuring the instruction works 
+on every possible LoongArch core, due to the prefix construction of 
+LoongArch encoding, we could just change the bytes toward the MSB (so we 
+keep the "MZ" with ease) and still only trash $t1. For example 
+"MZ\x10\x00" or 00105a4d is "add.w $t1, $t6, $fp", which is similarly 
+harmless, but this time it works on even coursework cores!
+
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
