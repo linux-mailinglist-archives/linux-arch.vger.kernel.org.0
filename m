@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CF55AD27C
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 14:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C60285AD277
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 14:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236981AbiIEMZK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Sep 2022 08:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
+        id S236540AbiIEMZY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Sep 2022 08:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237198AbiIEMZI (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 08:25:08 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B403A13F12
-        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 05:25:06 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id sd6-20020a1709076e0600b0073315809fb5so2263770ejc.10
-        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 05:25:06 -0700 (PDT)
+        with ESMTP id S236720AbiIEMZK (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 08:25:10 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2AA183A8
+        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 05:25:08 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id q18-20020a056402519200b0043dd2ff50feso5693878edd.9
+        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 05:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=msgzHzsxvMZcLqG5jRq1WtDuSKgOL7FjSU3mDqU1uyE=;
-        b=dumDoYlxWlqzIiGUDfqWn3PFiIBFZKD1lqkrAhUUBcEqNMiBMcDon+gWY8MdM+QiUr
-         pWp+u5jPqzIFfKf5tVQi2QqYtcqYeNuaKFi2vbMNpzUjkLtYPXmYCEuL7ldChv8TS4ZZ
-         tB954Kfzo5EF/k9ozAtLqALzbmeZ6D3Yoe50OAmmd0pdlOfdojPkwvf+Byb8szV2CveR
-         v3GMz6jJinSIaBtcb8qSFsT2UvtckDVzEsXrWwoOOhXqNtFnAStcofJldqoHv2ByTv7b
-         rt7xZUGIKqp9Q8RXgw6skfMscW8rUhTvzo/0tKYpJzsY/+5QiYgDklM1d5LEzenEvOla
-         XTPg==
+        bh=gSZzwrXvhkj2wpolUx3YVTouxdXHw9PaTEDZ4n2e3I0=;
+        b=tGEGAx8uMhsDCwjOO4YeavI0k5QsjHgjDrM4zDrLN5sS9ToamP5OIkdyf8ZLJoQyOw
+         e2LoiIBveMGNkL1Elhx+wY4FUi2lWQYPS946Ofc2zpeiYXDghDghxvMhyBVvvt9lMxWQ
+         vgiRcYONLBIiMgCzXeNVdaYQRCNi3V8gspn7+0+/HuYQO9Jmovxsizf4gqTMVYmCS/BT
+         3wSbxDLRcA/TelDo7MMeZ9iCCDJ/9i/v/s7AvSw7tPA5gGWT+7eyJ7eSlRgra5ZKcjZj
+         wqC4BAaZNeAxQzofrZ1I/wGoXPlrz8wTvBufMgNH8R9/2cyykGlVsTniZ4E04Wlp4Kq1
+         6j4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=msgzHzsxvMZcLqG5jRq1WtDuSKgOL7FjSU3mDqU1uyE=;
-        b=oz7CmosGl479QXzpuCsNNbMmJGBDjOMbi05dnp4QBj0CSEMry0eVbO01+D+staD7M/
-         n6Fx65QVDYXGJj1sDWAUE1ZPUhQE2fV4eeZUxYRo+ACUD53CQeCrC00Sg6S/K16MwwkK
-         hjxsOxfUEQmYjNIcagenuj2dxR+cjBn0zN+hlCZx0x84OpUsI+/bDlvL0sLv5EMq5aL5
-         Tv/qUPr/1TFw6q5ofsgxkJfB9GZLux+9CEC7cgA2mUJqG93RF/e/Z1s6dTUwPCb4buy2
-         XbPGSemrYFzj6c8d+bd8BZUTMlJGC9YuMUZSTkv32lt2OaqUh1W3quWRc/EATQx3ldJY
-         RFww==
-X-Gm-Message-State: ACgBeo1XtmXecoG/ReKHAF64QYSn8y89YZ1pV9nrYCRk12Q10pQwdVd/
-        QLj4xq8mnlc0lObYgXovGNqWIX49bXE=
-X-Google-Smtp-Source: AA6agR6kIhinvJWZyX7Pt3MOzEZEE4BA3UOEbJgHd7ytmVme1lMAQEmg4wwM0064l90rLhx4xAa5CErJGFg=
+        bh=gSZzwrXvhkj2wpolUx3YVTouxdXHw9PaTEDZ4n2e3I0=;
+        b=vHAsPitTt7uuF7hgbndBiBBJ5jLSchgZhfdr5jL5ikG7nym2nRNZFprPDS/2xnnZGq
+         FBIdy4/p9EAFg/Cxc8G9g2EVRCIHBizuhhp9ZXCA2mYuQ7EMmjcbE2RCRTFxKYut8/72
+         Q+RuswyON5AJsYiiiv+hVdJ8p+WhfGl+j8omoINhJtWA0ibmOjmVG5+2psHTEd4q8wJH
+         3RQdri3+HeRsDLBjspbITZvjlTpZFMD/MTKDaEBRwndg5i+mNkMsBdgHLV9Y3K/9q0pV
+         rda7a2FZQNI2yaEaLKsgqYAMzDgQK67WPa8EzgEIsRZOIexF8FvBm8Hmr99AcM55OQKw
+         xwUA==
+X-Gm-Message-State: ACgBeo1JqhlWjoIrC8AFrhHj5L4uYrHCWDslkZfr/GtNRHwiAdIxm28b
+        ue3+523ObZ2P/zPYW/DgSVfMOerQ0c0=
+X-Google-Smtp-Source: AA6agR7uZSb4I8x12+mloMHQ0B/R9zNrKGyUDj6RqUDl0l3ypI90dtuco15DreoHh/j3D7zLcpHmCF1MiQM=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a05:6402:448b:b0:43b:5ec6:8863 with SMTP id
- er11-20020a056402448b00b0043b5ec68863mr42758320edb.377.1662380705217; Mon, 05
- Sep 2022 05:25:05 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:11 +0200
+ (user=glider job=sendgmr) by 2002:a05:6402:4414:b0:434:f58c:ee2e with SMTP id
+ y20-20020a056402441400b00434f58cee2emr43097203eda.362.1662380707978; Mon, 05
+ Sep 2022 05:25:07 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:12 +0200
 In-Reply-To: <20220905122452.2258262-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220905122452.2258262-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-4-glider@google.com>
-Subject: [PATCH v6 03/44] instrumented.h: allow instrumenting both sides of copy_from_user()
+Message-ID: <20220905122452.2258262-5-glider@google.com>
+Subject: [PATCH v6 04/44] x86: asm: instrument usercopy in get_user() and put_user()
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -89,181 +89,149 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Introduce instrument_copy_from_user_before() and
-instrument_copy_from_user_after() hooks to be invoked before and after
-the call to copy_from_user().
-
-KASAN and KCSAN will be only using instrument_copy_from_user_before(),
-but for KMSAN we'll need to insert code after copy_from_user().
+Use hooks from instrumented.h to notify bug detection tools about
+usercopy events in variations of get_user() and put_user().
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
-Reviewed-by: Marco Elver <elver@google.com>
-
 ---
-v4:
- -- fix _copy_from_user_key() in arch/s390/lib/uaccess.c (Reported-by:
-    kernel test robot <lkp@intel.com>)
+v5:
+ -- handle put_user(), make sure to not evaluate pointer/value twice
 
-Link: https://linux-review.googlesource.com/id/I855034578f0b0f126734cbd734fb4ae1d3a6af99
+v6:
+ -- add missing empty definitions of instrument_get_user() and
+    instrument_put_user()
+
+Link: https://linux-review.googlesource.com/id/Ia9f12bfe5832623250e20f1859fdf5cc485a2fce
 ---
- arch/s390/lib/uaccess.c      |  3 ++-
- include/linux/instrumented.h | 21 +++++++++++++++++++--
- include/linux/uaccess.h      | 19 ++++++++++++++-----
- lib/iov_iter.c               |  9 ++++++---
- lib/usercopy.c               |  3 ++-
- 5 files changed, 43 insertions(+), 12 deletions(-)
+ arch/x86/include/asm/uaccess.h | 22 +++++++++++++++-------
+ include/linux/instrumented.h   | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+), 7 deletions(-)
 
-diff --git a/arch/s390/lib/uaccess.c b/arch/s390/lib/uaccess.c
-index d7b3b193d1088..58033dfcb6d45 100644
---- a/arch/s390/lib/uaccess.c
-+++ b/arch/s390/lib/uaccess.c
-@@ -81,8 +81,9 @@ unsigned long _copy_from_user_key(void *to, const void __user *from,
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 913e593a3b45f..c1b8982899eca 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -5,6 +5,7 @@
+  * User space memory access functions
+  */
+ #include <linux/compiler.h>
++#include <linux/instrumented.h>
+ #include <linux/kasan-checks.h>
+ #include <linux/string.h>
+ #include <asm/asm.h>
+@@ -103,6 +104,7 @@ extern int __get_user_bad(void);
+ 		     : "=a" (__ret_gu), "=r" (__val_gu),		\
+ 			ASM_CALL_CONSTRAINT				\
+ 		     : "0" (ptr), "i" (sizeof(*(ptr))));		\
++	instrument_get_user(__val_gu);					\
+ 	(x) = (__force __typeof__(*(ptr))) __val_gu;			\
+ 	__builtin_expect(__ret_gu, 0);					\
+ })
+@@ -192,9 +194,11 @@ extern void __put_user_nocheck_8(void);
+ 	int __ret_pu;							\
+ 	void __user *__ptr_pu;						\
+ 	register __typeof__(*(ptr)) __val_pu asm("%"_ASM_AX);		\
+-	__chk_user_ptr(ptr);						\
+-	__ptr_pu = (ptr);						\
+-	__val_pu = (x);							\
++	__typeof__(*(ptr)) __x = (x); /* eval x once */			\
++	__typeof__(ptr) __ptr = (ptr); /* eval ptr once */		\
++	__chk_user_ptr(__ptr);						\
++	__ptr_pu = __ptr;						\
++	__val_pu = __x;							\
+ 	asm volatile("call __" #fn "_%P[size]"				\
+ 		     : "=c" (__ret_pu),					\
+ 			ASM_CALL_CONSTRAINT				\
+@@ -202,6 +206,7 @@ extern void __put_user_nocheck_8(void);
+ 		       "r" (__val_pu),					\
+ 		       [size] "i" (sizeof(*(ptr)))			\
+ 		     :"ebx");						\
++	instrument_put_user(__x, __ptr, sizeof(*(ptr)));		\
+ 	__builtin_expect(__ret_pu, 0);					\
+ })
  
- 	might_fault();
- 	if (!should_fail_usercopy()) {
--		instrument_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
- 		res = raw_copy_from_user_key(to, from, n, key);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
- 	if (unlikely(res))
- 		memset(to + (n - res), 0, res);
+@@ -248,23 +253,25 @@ extern void __put_user_nocheck_8(void);
+ 
+ #define __put_user_size(x, ptr, size, label)				\
+ do {									\
++	__typeof__(*(ptr)) __x = (x); /* eval x once */			\
+ 	__chk_user_ptr(ptr);						\
+ 	switch (size) {							\
+ 	case 1:								\
+-		__put_user_goto(x, ptr, "b", "iq", label);		\
++		__put_user_goto(__x, ptr, "b", "iq", label);		\
+ 		break;							\
+ 	case 2:								\
+-		__put_user_goto(x, ptr, "w", "ir", label);		\
++		__put_user_goto(__x, ptr, "w", "ir", label);		\
+ 		break;							\
+ 	case 4:								\
+-		__put_user_goto(x, ptr, "l", "ir", label);		\
++		__put_user_goto(__x, ptr, "l", "ir", label);		\
+ 		break;							\
+ 	case 8:								\
+-		__put_user_goto_u64(x, ptr, label);			\
++		__put_user_goto_u64(__x, ptr, label);			\
+ 		break;							\
+ 	default:							\
+ 		__put_user_bad();					\
+ 	}								\
++	instrument_put_user(__x, ptr, size);				\
+ } while (0)
+ 
+ #ifdef CONFIG_CC_HAS_ASM_GOTO_OUTPUT
+@@ -305,6 +312,7 @@ do {									\
+ 	default:							\
+ 		(x) = __get_user_bad();					\
+ 	}								\
++	instrument_get_user(x);						\
+ } while (0)
+ 
+ #define __get_user_asm(x, addr, itype, ltype, label)			\
 diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
-index 42faebbaa202a..ee8f7d17d34f5 100644
+index ee8f7d17d34f5..9f1dba8f717b0 100644
 --- a/include/linux/instrumented.h
 +++ b/include/linux/instrumented.h
-@@ -120,7 +120,7 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
- }
- 
- /**
-- * instrument_copy_from_user - instrument writes of copy_from_user
-+ * instrument_copy_from_user_before - add instrumentation before copy_from_user
-  *
-  * Instrument writes to kernel memory, that are due to copy_from_user (and
-  * variants). The instrumentation should be inserted before the accesses.
-@@ -130,10 +130,27 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
-  * @n number of bytes to copy
-  */
- static __always_inline void
--instrument_copy_from_user(const void *to, const void __user *from, unsigned long n)
-+instrument_copy_from_user_before(const void *to, const void __user *from, unsigned long n)
+@@ -153,4 +153,32 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
  {
- 	kasan_check_write(to, n);
- 	kcsan_check_write(to, n);
  }
  
 +/**
-+ * instrument_copy_from_user_after - add instrumentation after copy_from_user
++ * instrument_get_user() - add instrumentation to get_user()-like macros
 + *
-+ * Instrument writes to kernel memory, that are due to copy_from_user (and
-+ * variants). The instrumentation should be inserted after the accesses.
++ * get_user() and friends are fragile, so it may depend on the implementation
++ * whether the instrumentation happens before or after the data is copied from
++ * the userspace.
 + *
-+ * @to destination address
-+ * @from source address
-+ * @n number of bytes to copy
-+ * @left number of bytes not copied (as returned by copy_from_user)
++ * @to destination variable, may not be address-taken
 + */
-+static __always_inline void
-+instrument_copy_from_user_after(const void *to, const void __user *from,
-+				unsigned long n, unsigned long left)
-+{
-+}
++#define instrument_get_user(to)                         \
++({                                                      \
++})
++
++/**
++ * instrument_put_user() - add instrumentation to put_user()-like macros
++ *
++ * put_user() and friends are fragile, so it may depend on the implementation
++ * whether the instrumentation happens before or after the data is copied from
++ * the userspace.
++ *
++ * @from source address
++ * @ptr userspace pointer to copy to
++ * @size number of bytes to copy
++ */
++#define instrument_put_user(from, ptr, size)                    \
++({                                                              \
++})
 +
  #endif /* _LINUX_INSTRUMENTED_H */
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index 47e5d374c7ebe..afb18f198843b 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -58,20 +58,28 @@
- static __always_inline __must_check unsigned long
- __copy_from_user_inatomic(void *to, const void __user *from, unsigned long n)
- {
--	instrument_copy_from_user(to, from, n);
-+	unsigned long res;
-+
-+	instrument_copy_from_user_before(to, from, n);
- 	check_object_size(to, n, false);
--	return raw_copy_from_user(to, from, n);
-+	res = raw_copy_from_user(to, from, n);
-+	instrument_copy_from_user_after(to, from, n, res);
-+	return res;
- }
- 
- static __always_inline __must_check unsigned long
- __copy_from_user(void *to, const void __user *from, unsigned long n)
- {
-+	unsigned long res;
-+
- 	might_fault();
-+	instrument_copy_from_user_before(to, from, n);
- 	if (should_fail_usercopy())
- 		return n;
--	instrument_copy_from_user(to, from, n);
- 	check_object_size(to, n, false);
--	return raw_copy_from_user(to, from, n);
-+	res = raw_copy_from_user(to, from, n);
-+	instrument_copy_from_user_after(to, from, n, res);
-+	return res;
- }
- 
- /**
-@@ -115,8 +123,9 @@ _copy_from_user(void *to, const void __user *from, unsigned long n)
- 	unsigned long res = n;
- 	might_fault();
- 	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
--		instrument_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
- 		res = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
- 	if (unlikely(res))
- 		memset(to + (n - res), 0, res);
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 4b7fce72e3e52..c3ca28ca68a65 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -174,13 +174,16 @@ static int copyout(void __user *to, const void *from, size_t n)
- 
- static int copyin(void *to, const void __user *from, size_t n)
- {
-+	size_t res = n;
-+
- 	if (should_fail_usercopy())
- 		return n;
- 	if (access_ok(from, n)) {
--		instrument_copy_from_user(to, from, n);
--		n = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
-+		res = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
--	return n;
-+	return res;
- }
- 
- static inline struct pipe_buffer *pipe_buf(const struct pipe_inode_info *pipe,
-diff --git a/lib/usercopy.c b/lib/usercopy.c
-index 7413dd300516e..1505a52f23a01 100644
---- a/lib/usercopy.c
-+++ b/lib/usercopy.c
-@@ -12,8 +12,9 @@ unsigned long _copy_from_user(void *to, const void __user *from, unsigned long n
- 	unsigned long res = n;
- 	might_fault();
- 	if (!should_fail_usercopy() && likely(access_ok(from, n))) {
--		instrument_copy_from_user(to, from, n);
-+		instrument_copy_from_user_before(to, from, n);
- 		res = raw_copy_from_user(to, from, n);
-+		instrument_copy_from_user_after(to, from, n, res);
- 	}
- 	if (unlikely(res))
- 		memset(to + (n - res), 0, res);
 -- 
 2.37.2.789.g6183377224-goog
 
