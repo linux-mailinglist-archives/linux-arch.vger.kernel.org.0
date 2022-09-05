@@ -2,61 +2,59 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF36B5AD9A4
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 21:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948FE5AD9B8
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 21:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231929AbiIETbE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Sep 2022 15:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
+        id S232401AbiIEThD (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Sep 2022 15:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiIETbD (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 15:31:03 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F59326D7
-        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 12:30:59 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id cu2so18956394ejb.0
-        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 12:30:59 -0700 (PDT)
+        with ESMTP id S232399AbiIEThB (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 15:37:01 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A755070A
+        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 12:36:58 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id gb36so18823147ejc.10
+        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 12:36:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=fOjvm1AMsZ4nR0oKVwuUuwq6yRIdBGx8cQ5CH0pdOQ8=;
-        b=mEBD5Ir8YMB4+1XemGmtRKWBA4PgrHa65B5dZBHw+q9qZY/fFLZAzWJtnnjt3ZabJ1
-         k030tzzoAkffYwspwGcjthTDzsdHLi1/EfD5ZrIKQ81gBWJ+iFLi0rB47a8BoHQ1u+Mc
-         ONLy2GkBHoKxccBbjIM3ToQDSmBmmUQCVAkJSWv4nkokAx3LqfcZUkbkUWgZc7Unaeoa
-         poaOdJs1SSKb8ToZvDtPGjWuP8kkxkwRsMcwiWGeOPNcTEVrtAFYZn6SemA6NMADQmZJ
-         +g5EZ+4ms2uJrfpHxIDKT7OlQqfQPnrzMLafL9vYFw9mXzLhNWt3cXdzgwgZ5MvcFakY
-         AzVw==
+        bh=O2DU+lG5b8y7EdeArqWJ87q1UTfo/e0aDc12mvcyfm8=;
+        b=P29yBnD7GQ40f4AnWx+txwzRZ0KpX90wZtHMGAf8ZJJ2h6fpyvstil2DDR8hDCsmpq
+         7ptdSkvLvHefmcVrsgvme3esqjzDTaw14yJ+gL5pJID33afB8bnjs4rmpV+DNNhJALfu
+         7KxCw6T1NqTnUmk8JBn7NDfjM/0kY1ZPWZSR+HQUczueK9H8zKMEGgLtPevK1eCZb0n7
+         Im3mDKIQB8IwJfzmXaWmZQtvjQmFMjt6th4ldisOxeBgx81ofhzZy6VB1vgoEUhuI44J
+         2/V1tS588Tu6yhSTzSq2/J367DW3T6S7udDnzHYRVQeOyLwCuve7KE2Nmp3mqCKLwj2f
+         dJsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=fOjvm1AMsZ4nR0oKVwuUuwq6yRIdBGx8cQ5CH0pdOQ8=;
-        b=bViERVCW3Smmm7MhXNgwJscxGB+rHTYxSw/Z5yTRR/im1LjthFHt76X8yrTYTQv9ba
-         XZo05arEe5KpAQRbdwRor335kOuwpBiZO71Oq7BIOGk/mPqoH4tPUxj9gyzG76bdmNUD
-         OlKuFtqn8cIgX/CmD8P/BDHwXCk5vIrUxRIu0umUa3lcXxTK3UOfNIasOD+ruuNFLGo6
-         i/Ts5Mx3Ne5pc1V9ab4EufPB8t4sOwHT+2Bc75Kjc+oXG18m+EA37dDd6ZHLosKpASFq
-         zV8uYhTAaaMcSA6cIiXHqqGjXuc7HBLku4McZcKMLa7IkywSH2KIHXu68iteHMtsEwio
-         /NKQ==
-X-Gm-Message-State: ACgBeo2lIUSTny7HoztDCKIwk+dTM/h6lcissg7Z9FVDv4UC5qr0iGXX
-        zFZ0AXKwcgSG1gryCo7Atul33ESPmR/xggj/Qwv5lw==
-X-Google-Smtp-Source: AA6agR4Hc8cmwlWYtsQVcBEtvqR9R/KjlMAyZkpasBU28NpCQnSRS0A9I4kDiDihauw8ABGqaibWdQYAFxDk2F4buDw=
+        bh=O2DU+lG5b8y7EdeArqWJ87q1UTfo/e0aDc12mvcyfm8=;
+        b=bkCIi58axsIVtXfCX9jnH6W64sjYYImwC+52nwxmfLQNx96YYsiEGlT4UZa1jIh/Gq
+         oRlEWYm8VLza/+NUrEHwE51fjz3AkUVF358e4rKtuL0BlkHsZiVab7pW40vP0y5o17GC
+         0y+wV2hFaw7fqDLrryTTFN5r5FXRAmjFXhxi+1XSWpEgqQ3/jAc4hBX6GZmZYr/6mKwj
+         wQDvFogltQNCwIAk9W4gC5KZvaI3OF7LmW4y+4hgnyLTyqFSb5WZSOE1sLgltiNvQQWv
+         Ju0wbJj6uNR9fqDz1kvnZuwAfigpG6Ixn9GL2dAFAU5ZghZWYr6Pbjpzr2i4c2orkiRR
+         UuYg==
+X-Gm-Message-State: ACgBeo0UFEE0dygWs9sSSP059hk5AkhvsCOn31HH6SsTYvrY4Zd2vqOm
+        nzZdlbO9SDNSyImPMD2SXVF2GGoQdYoi8bkszveYwg==
+X-Google-Smtp-Source: AA6agR5J15ANtu9dvLuy1kAEBMKj6rtt3G7LSxHAClbzxJvyPEjQKVrPT2inAKr8pFO4IeppvsxndwcJISbTJqlctG4=
 X-Received: by 2002:a17:906:cc5a:b0:741:5240:d91a with SMTP id
- mm26-20020a170906cc5a00b007415240d91amr30519881ejb.500.1662406258147; Mon, 05
- Sep 2022 12:30:58 -0700 (PDT)
+ mm26-20020a170906cc5a00b007415240d91amr30533842ejb.500.1662406617460; Mon, 05
+ Sep 2022 12:36:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220818092059.103884-1-linus.walleij@linaro.org> <CAK8P3a1x52F8Ya3ShQ+v6x_jANfUsEq0E55u+pOBNaYniRO7cA@mail.gmail.com>
-In-Reply-To: <CAK8P3a1x52F8Ya3ShQ+v6x_jANfUsEq0E55u+pOBNaYniRO7cA@mail.gmail.com>
+References: <20220831195553.129866-1-linus.walleij@linaro.org>
+In-Reply-To: <20220831195553.129866-1-linus.walleij@linaro.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 5 Sep 2022 21:30:47 +0200
-Message-ID: <CACRpkdZemHScp9WW-7LaGtcXuvT2qzs_7nXS60icSWtPkEwMHg@mail.gmail.com>
-Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>, linux-alpha@vger.kernel.org,
-        kernel test robot <lkp@intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-arch@vger.kernel.org
+Date:   Mon, 5 Sep 2022 21:36:46 +0200
+Message-ID: <CACRpkdZzBu4ZmQFvkiyD8ZefZL9FNNKdWgUYTzHhH0ttStUE6g@mail.gmail.com>
+Subject: Re: [PATCH v2] sparc: Fix the generic IO helpers
+To:     "David S . Miller" <davem@davemloft.net>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     sparclinux@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-arch@vger.kernel.org, Mark Brown <broonie@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -68,42 +66,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi Arnd,
+On Wed, Aug 31, 2022 at 9:57 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-On Thu, Aug 18, 2022 at 12:28 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Thu, Aug 18, 2022 at 11:20 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-
-> > I'd like this applied to the alpha tree if there is such a
-> > thing otherwise maybe Arnd can apply it to the arch generic
-> > tree?
+> This enables the Sparc to use <asm-generic/io.h> to fill in the
+> missing (undefined) [read|write]sq I/O accessor functions.
 >
-> Sure, I can do that.
-
-Could you apply this to the arch tree? I see no signs of life from
-the alpha maintainers.
-
-> > +/*
-> > + * These defines are necessary to use the generic io.h for filling in
-> > + * the missing parts of the API contract. This is because the platform
-> > + * uses (inline) functions rather than defines and the generic helper
-> > + * fills in the undefined.
-> > + */
-> > +#define virt_to_phys virt_to_phys
-> > +#define phys_to_virt phys_to_virt
-> > +#define memset_io memset_io
-> > +#define memcpy_fromio memcpy_fromio
+> This is needed if Sparc[64] ever wants to uses CONFIG_REGMAP_MMIO
+> which has been patches to use accelerated _noinc accessors
+> such as readsq/writesq that Sparc64, while being a 64bit platform,
+> as of now not yet provide.
 >
-> We tend to have these next to the function definition rather than
-> in a single place. Again, I'm not too worried here, just if you end
-> up reworking the patch in some form, or doing the same for the
-> other architectures that would be the way to do it.
+> This comes with the requirement that everything the architecture
+> already provides needs to be defined, rather than just being,
+> say, static inline functions.
+>
+> Bite the bullet and just provide the definitions and make it work.
+> Compile-tested on sparc32 and sparc64.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/linux-arm-kernel/202208201639.HXye3ke4-lkp@intel.com/
+> Cc: David S. Miller <davem@davemloft.net>
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
 
-I looked into this, for parisc it was pretty straight forward. alpha has
-a bunch of competing static inlines and externs and what not, I don't
-see it helping to inline this, IMO it's actually better like this: "those
-were defined somewhere in the birdnest of ifdefs above".
-
-If it is a big issue I can start to pry into it.
+This might be a candidate for the arch tree as well, I have seen that most
+code merged into arch/sparc these days seem to come through other
+trees than the sparc tree, which has not been updated for 18 months.
 
 Yours,
 Linus Walleij
