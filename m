@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406145AD2EA
-	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 14:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5775AD2F0
+	for <lists+linux-arch@lfdr.de>; Mon,  5 Sep 2022 14:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237440AbiIEMab (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Sep 2022 08:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S237856AbiIEMbG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Sep 2022 08:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237188AbiIEM37 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 08:29:59 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C97C60538
-        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 05:26:25 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id f12-20020a25b6cc000000b0069a9e36de26so6608056ybm.16
-        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 05:26:25 -0700 (PDT)
+        with ESMTP id S237648AbiIEMaR (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 08:30:17 -0400
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E47F6068A
+        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 05:26:27 -0700 (PDT)
+Received: by mail-wm1-x34a.google.com with SMTP id f18-20020a05600c4e9200b003a5f81299caso5302742wmq.7
+        for <linux-arch@vger.kernel.org>; Mon, 05 Sep 2022 05:26:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=2KqHkwy5ct3iw6Sq4tv6KYhLxwZCRI8E9SKEfBphS/w=;
-        b=qNMo5+TEtHEFzd8X93C0KJLOfuW+bl/+NTRUdie3mml96pmEn+N4vH73TD76K9APOw
-         x7lr9Ow00o8rBQaSj9JRLCw662OfSNPqEe7f0LMhZDSdpqWcmum4NxKT+HVgyu3RyfBD
-         dIjUpK8ttDmqfrKCMUsqSsU8IJsy5EHQp/h4UYlDNXZbXTIcCguHSUJEjjrD3MIdBnjM
-         ew66vj+qOTIITQCyAZ7Jxljq9KU96gFXJ0ue/bUGJurejXqSQnhg1ok6o1QRgjbXNuIp
-         lffKoMG7G7gn7zuofcQknS310KI34IZsJjruVPp2PdPve0UziuK5oNrmj/4uXS8iYknC
-         7H6Q==
+        bh=6HLRx+/DZF7UroOp434K8fDP2m/kJbWJ8nrMBvS6v+Y=;
+        b=WAp6V1ddOskogqQPaCAelHM9/ueBNBw8LVE1Q/ECGMxVPnjU2K5hI7eAxFPNwWqm1Q
+         FWmYWB8p2L7njDRNzVj16gITb0dUSex+tRUQ+8nLHjjnvjTainjn5NaGzqIX4OXRRmcD
+         RWXIWhnusG6MZmHMU3D2j1ccTyckmzpInlbOmzKKr19C9c0JnbLX65JUWX1P663w7leo
+         669Q4gq66pYuEEGnqtUHoRtSHHvvMsFsOUEYx3gWTM3g/mK79a6G0tIjMGE5qmz+kKU4
+         f1kr77l2rQlga1vs8TBEeUx6kA00hQNM74EVZiJaDxjKydmXEhEVGIwmlfCJDTYMafs9
+         pEZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=2KqHkwy5ct3iw6Sq4tv6KYhLxwZCRI8E9SKEfBphS/w=;
-        b=RphfwjKBgiYDIFnl8Gmf2E4nEdahROgWtMdKaD/sAaMlhKlHpzz3nj/lLnRTcGgdlH
-         PSnGsd9aOeQoT7f4lxwlKTQf5P1Vci/zBhEZS3JTubE5W9KoC2Eg3sQ7UwBOGMrFgVD8
-         IVufLyMrAMSLHPkISyAwy0+RxrjHHOC1J1W2AdxnbYdkm07GBL491wGaWSuXI0LFPIoy
-         X3HLu8aNZxUGeKl+NDDTT51cyx/9wsnjZjrYkMvcMFzvjb0LNL8ainhBBmugvG/oNjsP
-         t9UDk2132iw4sySCmoJBmDMyWP+7z/B0cOufALPfz3lQrCVEXr9m4L7vAmsAyJGYJ/3I
-         cRhA==
-X-Gm-Message-State: ACgBeo0W3DSP7yiN+wvMMZqY8KM/cdRMi48D4qzZq3k/LCDVNMuIfWjD
-        CoEIrW6U3Gr0kvCnYqnN/Xik8K+2rhw=
-X-Google-Smtp-Source: AA6agR51nX2bLBt0cmW3C7LjTsMe0MSSnl7E/OhkmGQFZLdUXmzJbRciuD6fyHf0emq6ppsHqPpy+bgoLPI=
+        bh=6HLRx+/DZF7UroOp434K8fDP2m/kJbWJ8nrMBvS6v+Y=;
+        b=r22Zrk5VSKqLoac8gDoIt0U40AJeSBTf/4TJxW5TNY4akuPh0qfh8LWY+DBZcwMYxr
+         3EZkyp1ySxPVt3SDs5FJ86NEPcVAtYE+mscWuKFpBkgj9N5joeXa4Cwt+9cqg56fXCOC
+         5+Zrkd5EwA+AsUOMBLsWG5AjglcrdH9gvNG60M7YTD9Af+QV7ELankTCQd97Vap3fa8Q
+         DUIRP8k0+0Z+xlJUYmgig6/xBbHFswmhQ0PpkfHyIg0VtshICAcGvWOgn0mDw6ts0Inj
+         gFVE6Mbd8CFK5XLWZ/qqGuQVgM4TwikvgBnmE10i7OX8eelM07VNxVDI+2gIx7/xPZIC
+         nsaA==
+X-Gm-Message-State: ACgBeo1Cd7AmmJwLNuq16Dd5jKgQqVMFD6NDAaXecUIuCAtQ09epuGGQ
+        /USzfgByKLkTEgUQ525zvqInVhSiZnM=
+X-Google-Smtp-Source: AA6agR6UQxOhmau7fzyAK4mJwXB+G+4+Zm91j/Eqs+/aS5eatamlttICibGjRJ8T6Ih8pw7tWShg86Gjgyc=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:b808:8d07:ab4a:554c])
- (user=glider job=sendgmr) by 2002:a5b:549:0:b0:677:768b:2784 with SMTP id
- r9-20020a5b0549000000b00677768b2784mr34118519ybp.296.1662380763627; Mon, 05
- Sep 2022 05:26:03 -0700 (PDT)
-Date:   Mon,  5 Sep 2022 14:24:32 +0200
+ (user=glider job=sendgmr) by 2002:a05:6000:799:b0:226:e3e9:e482 with SMTP id
+ bu25-20020a056000079900b00226e3e9e482mr17101079wrb.219.1662380766506; Mon, 05
+ Sep 2022 05:26:06 -0700 (PDT)
+Date:   Mon,  5 Sep 2022 14:24:33 +0200
 In-Reply-To: <20220905122452.2258262-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220905122452.2258262-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220905122452.2258262-25-glider@google.com>
-Subject: [PATCH v6 24/44] kmsan: handle memory sent to/from USB
+Message-ID: <20220905122452.2258262-26-glider@google.com>
+Subject: [PATCH v6 25/44] kmsan: add tests for KMSAN
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -89,130 +89,630 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Depending on the value of is_out kmsan_handle_urb() KMSAN either
-marks the data copied to the kernel from a USB device as initialized,
-or checks the data sent to the device for being initialized.
+The testing module triggers KMSAN warnings in different cases and checks
+that the errors are properly reported, using console probes to capture
+the tool's output.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
 v2:
- -- move kmsan_handle_urb() implementation to this patch
+ -- add memcpy tests
+
+v4:
+ -- change sizeof(type) to sizeof(*ptr)
+ -- add test expectations for CONFIG_KMSAN_CHECK_PARAM_RETVAL
 
 v5:
- -- do not export KMSAN hooks that are not called from modules
+ -- reapply clang-format
+ -- use modern style for-loops
+ -- address Marco Elver's comments
 
-v6:
- -- use <linux/kmsan.h> instead of <linux/kmsan-checks.h>
-
-Link: https://linux-review.googlesource.com/id/Ifa67fb72015d4de14c30e971556f99fc8b2ee506
+Link: https://linux-review.googlesource.com/id/I49c3f59014cc37fd13541c80beb0b75a75244650
 ---
- drivers/usb/core/urb.c |  2 ++
- include/linux/kmsan.h  | 15 +++++++++++++++
- mm/kmsan/hooks.c       | 16 ++++++++++++++++
- 3 files changed, 33 insertions(+)
+ lib/Kconfig.kmsan     |  12 +
+ mm/kmsan/Makefile     |   4 +
+ mm/kmsan/kmsan_test.c | 552 ++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 568 insertions(+)
+ create mode 100644 mm/kmsan/kmsan_test.c
 
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 33d62d7e3929f..9f3c54032556e 100644
---- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -8,6 +8,7 @@
- #include <linux/bitops.h>
- #include <linux/slab.h>
- #include <linux/log2.h>
-+#include <linux/kmsan.h>
- #include <linux/usb.h>
- #include <linux/wait.h>
- #include <linux/usb/hcd.h>
-@@ -426,6 +427,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
- 			URB_SETUP_MAP_SINGLE | URB_SETUP_MAP_LOCAL |
- 			URB_DMA_SG_COMBINED);
- 	urb->transfer_flags |= (is_out ? URB_DIR_OUT : URB_DIR_IN);
-+	kmsan_handle_urb(urb, is_out);
+diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+index 5b19dbd34d76e..b2489dd6503fa 100644
+--- a/lib/Kconfig.kmsan
++++ b/lib/Kconfig.kmsan
+@@ -47,4 +47,16 @@ config KMSAN_CHECK_PARAM_RETVAL
+ 	  may potentially report errors in corner cases when non-instrumented
+ 	  functions call instrumented ones.
  
- 	if (xfertype != USB_ENDPOINT_XFER_CONTROL &&
- 			dev->state < USB_STATE_CONFIGURED)
-diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-index dac296da45c55..c473e0e21683c 100644
---- a/include/linux/kmsan.h
-+++ b/include/linux/kmsan.h
-@@ -18,6 +18,7 @@ struct page;
- struct kmem_cache;
- struct task_struct;
- struct scatterlist;
-+struct urb;
- 
- #ifdef CONFIG_KMSAN
- 
-@@ -203,6 +204,16 @@ void kmsan_handle_dma(struct page *page, size_t offset, size_t size,
- void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
- 			 enum dma_data_direction dir);
- 
-+/**
-+ * kmsan_handle_urb() - Handle a USB data transfer.
-+ * @urb:    struct urb pointer.
-+ * @is_out: data transfer direction (true means output to hardware).
++config KMSAN_KUNIT_TEST
++	tristate "KMSAN integration test suite" if !KUNIT_ALL_TESTS
++	default KUNIT_ALL_TESTS
++	depends on TRACEPOINTS && KUNIT
++	help
++	  Test suite for KMSAN, testing various error detection scenarios,
++	  and checking that reports are correctly output to console.
++
++	  Say Y here if you want the test to be built into the kernel and run
++	  during boot; say M if you want the test to build as a module; say N
++	  if you are unsure.
++
+ endif
+diff --git a/mm/kmsan/Makefile b/mm/kmsan/Makefile
+index 401acb1a491ce..98eab2856626f 100644
+--- a/mm/kmsan/Makefile
++++ b/mm/kmsan/Makefile
+@@ -22,3 +22,7 @@ CFLAGS_init.o := $(CC_FLAGS_KMSAN_RUNTIME)
+ CFLAGS_instrumentation.o := $(CC_FLAGS_KMSAN_RUNTIME)
+ CFLAGS_report.o := $(CC_FLAGS_KMSAN_RUNTIME)
+ CFLAGS_shadow.o := $(CC_FLAGS_KMSAN_RUNTIME)
++
++obj-$(CONFIG_KMSAN_KUNIT_TEST) += kmsan_test.o
++KMSAN_SANITIZE_kmsan_test.o := y
++CFLAGS_kmsan_test.o += $(call cc-disable-warning, uninitialized)
+diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
+new file mode 100644
+index 0000000000000..b68f4334cf184
+--- /dev/null
++++ b/mm/kmsan/kmsan_test.c
+@@ -0,0 +1,552 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test cases for KMSAN.
++ * For each test case checks the presence (or absence) of generated reports.
++ * Relies on 'console' tracepoint to capture reports as they appear in the
++ * kernel log.
 + *
-+ * If @is_out is true, KMSAN checks the transfer buffer of @urb. Otherwise,
-+ * KMSAN initializes the transfer buffer.
++ * Copyright (C) 2021-2022, Google LLC.
++ * Author: Alexander Potapenko <glider@google.com>
++ *
 + */
-+void kmsan_handle_urb(const struct urb *urb, bool is_out);
 +
- #else
- 
- static inline void kmsan_init_shadow(void)
-@@ -295,6 +306,10 @@ static inline void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
- {
- }
- 
-+static inline void kmsan_handle_urb(const struct urb *urb, bool is_out)
-+{
-+}
++#include <kunit/test.h>
++#include "kmsan.h"
 +
- #endif
- 
- #endif /* _LINUX_KMSAN_H */
-diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-index 563c09443a37a..79d7e73e2cfd8 100644
---- a/mm/kmsan/hooks.c
-+++ b/mm/kmsan/hooks.c
-@@ -18,6 +18,7 @@
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/uaccess.h>
-+#include <linux/usb.h>
- 
- #include "../internal.h"
- #include "../slab.h"
-@@ -245,6 +246,21 @@ void kmsan_copy_to_user(void __user *to, const void *from, size_t to_copy,
- }
- EXPORT_SYMBOL(kmsan_copy_to_user);
- 
-+/* Helper function to check an URB. */
-+void kmsan_handle_urb(const struct urb *urb, bool is_out)
++#include <linux/jiffies.h>
++#include <linux/kernel.h>
++#include <linux/kmsan.h>
++#include <linux/mm.h>
++#include <linux/random.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
++#include <linux/string.h>
++#include <linux/tracepoint.h>
++#include <trace/events/printk.h>
++
++static DEFINE_PER_CPU(int, per_cpu_var);
++
++/* Report as observed from console. */
++static struct {
++	spinlock_t lock;
++	bool available;
++	bool ignore; /* Stop console output collection. */
++	char header[256];
++} observed = {
++	.lock = __SPIN_LOCK_UNLOCKED(observed.lock),
++};
++
++/* Probe for console output: obtains observed lines of interest. */
++static void probe_console(void *ignore, const char *buf, size_t len)
 +{
-+	if (!urb)
++	unsigned long flags;
++
++	if (observed.ignore)
 +		return;
-+	if (is_out)
-+		kmsan_internal_check_memory(urb->transfer_buffer,
-+					    urb->transfer_buffer_length,
-+					    /*user_addr*/ 0, REASON_SUBMIT_URB);
-+	else
-+		kmsan_internal_unpoison_memory(urb->transfer_buffer,
-+					       urb->transfer_buffer_length,
-+					       /*checked*/ false);
++	spin_lock_irqsave(&observed.lock, flags);
++
++	if (strnstr(buf, "BUG: KMSAN: ", len)) {
++		/*
++		 * KMSAN report and related to the test.
++		 *
++		 * The provided @buf is not NUL-terminated; copy no more than
++		 * @len bytes and let strscpy() add the missing NUL-terminator.
++		 */
++		strscpy(observed.header, buf,
++			min(len + 1, sizeof(observed.header)));
++		WRITE_ONCE(observed.available, true);
++		observed.ignore = true;
++	}
++	spin_unlock_irqrestore(&observed.lock, flags);
 +}
 +
- static void kmsan_handle_dma_page(const void *addr, size_t size,
- 				  enum dma_data_direction dir)
- {
++/* Check if a report related to the test exists. */
++static bool report_available(void)
++{
++	return READ_ONCE(observed.available);
++}
++
++/* Information we expect in a report. */
++struct expect_report {
++	const char *error_type; /* Error type. */
++	/*
++	 * Kernel symbol from the error header, or NULL if no report is
++	 * expected.
++	 */
++	const char *symbol;
++};
++
++/* Check observed report matches information in @r. */
++static bool report_matches(const struct expect_report *r)
++{
++	typeof(observed.header) expected_header;
++	unsigned long flags;
++	bool ret = false;
++	const char *end;
++	char *cur;
++
++	/* Doubled-checked locking. */
++	if (!report_available() || !r->symbol)
++		return (!report_available() && !r->symbol);
++
++	/* Generate expected report contents. */
++
++	/* Title */
++	cur = expected_header;
++	end = &expected_header[sizeof(expected_header) - 1];
++
++	cur += scnprintf(cur, end - cur, "BUG: KMSAN: %s", r->error_type);
++
++	scnprintf(cur, end - cur, " in %s", r->symbol);
++	/* The exact offset won't match, remove it; also strip module name. */
++	cur = strchr(expected_header, '+');
++	if (cur)
++		*cur = '\0';
++
++	spin_lock_irqsave(&observed.lock, flags);
++	if (!report_available())
++		goto out; /* A new report is being captured. */
++
++	/* Finally match expected output to what we actually observed. */
++	ret = strstr(observed.header, expected_header);
++out:
++	spin_unlock_irqrestore(&observed.lock, flags);
++
++	return ret;
++}
++
++/* ===== Test cases ===== */
++
++/* Prevent replacing branch with select in LLVM. */
++static noinline void check_true(char *arg)
++{
++	pr_info("%s is true\n", arg);
++}
++
++static noinline void check_false(char *arg)
++{
++	pr_info("%s is false\n", arg);
++}
++
++#define USE(x)                           \
++	do {                             \
++		if (x)                   \
++			check_true(#x);  \
++		else                     \
++			check_false(#x); \
++	} while (0)
++
++#define EXPECTATION_ETYPE_FN(e, reason, fn) \
++	struct expect_report e = {          \
++		.error_type = reason,       \
++		.symbol = fn,               \
++	}
++
++#define EXPECTATION_NO_REPORT(e) EXPECTATION_ETYPE_FN(e, NULL, NULL)
++#define EXPECTATION_UNINIT_VALUE_FN(e, fn) \
++	EXPECTATION_ETYPE_FN(e, "uninit-value", fn)
++#define EXPECTATION_UNINIT_VALUE(e) EXPECTATION_UNINIT_VALUE_FN(e, __func__)
++#define EXPECTATION_USE_AFTER_FREE(e) \
++	EXPECTATION_ETYPE_FN(e, "use-after-free", __func__)
++
++/* Test case: ensure that kmalloc() returns uninitialized memory. */
++static void test_uninit_kmalloc(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE(expect);
++	int *ptr;
++
++	kunit_info(test, "uninitialized kmalloc test (UMR report)\n");
++	ptr = kmalloc(sizeof(*ptr), GFP_KERNEL);
++	USE(*ptr);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: ensure that kmalloc'ed memory becomes initialized after memset().
++ */
++static void test_init_kmalloc(struct kunit *test)
++{
++	EXPECTATION_NO_REPORT(expect);
++	int *ptr;
++
++	kunit_info(test, "initialized kmalloc test (no reports)\n");
++	ptr = kmalloc(sizeof(*ptr), GFP_KERNEL);
++	memset(ptr, 0, sizeof(*ptr));
++	USE(*ptr);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/* Test case: ensure that kzalloc() returns initialized memory. */
++static void test_init_kzalloc(struct kunit *test)
++{
++	EXPECTATION_NO_REPORT(expect);
++	int *ptr;
++
++	kunit_info(test, "initialized kzalloc test (no reports)\n");
++	ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
++	USE(*ptr);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/* Test case: ensure that local variables are uninitialized by default. */
++static void test_uninit_stack_var(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE(expect);
++	volatile int cond;
++
++	kunit_info(test, "uninitialized stack variable (UMR report)\n");
++	USE(cond);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/* Test case: ensure that local variables with initializers are initialized. */
++static void test_init_stack_var(struct kunit *test)
++{
++	EXPECTATION_NO_REPORT(expect);
++	volatile int cond = 1;
++
++	kunit_info(test, "initialized stack variable (no reports)\n");
++	USE(cond);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++static noinline void two_param_fn_2(int arg1, int arg2)
++{
++	USE(arg1);
++	USE(arg2);
++}
++
++static noinline void one_param_fn(int arg)
++{
++	two_param_fn_2(arg, arg);
++	USE(arg);
++}
++
++static noinline void two_param_fn(int arg1, int arg2)
++{
++	int init = 0;
++
++	one_param_fn(init);
++	USE(arg1);
++	USE(arg2);
++}
++
++static void test_params(struct kunit *test)
++{
++#ifdef CONFIG_KMSAN_CHECK_PARAM_RETVAL
++	/*
++	 * With eager param/retval checking enabled, KMSAN will report an error
++	 * before the call to two_param_fn().
++	 */
++	EXPECTATION_UNINIT_VALUE_FN(expect, "test_params");
++#else
++	EXPECTATION_UNINIT_VALUE_FN(expect, "two_param_fn");
++#endif
++	volatile int uninit, init = 1;
++
++	kunit_info(test,
++		   "uninit passed through a function parameter (UMR report)\n");
++	two_param_fn(uninit, init);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++static int signed_sum3(int a, int b, int c)
++{
++	return a + b + c;
++}
++
++/*
++ * Test case: ensure that uninitialized values are tracked through function
++ * arguments.
++ */
++static void test_uninit_multiple_params(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE(expect);
++	volatile char b = 3, c;
++	volatile int a;
++
++	kunit_info(test, "uninitialized local passed to fn (UMR report)\n");
++	USE(signed_sum3(a, b, c));
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/* Helper function to make an array uninitialized. */
++static noinline void do_uninit_local_array(char *array, int start, int stop)
++{
++	volatile char uninit;
++
++	for (int i = start; i < stop; i++)
++		array[i] = uninit;
++}
++
++/*
++ * Test case: ensure kmsan_check_memory() reports an error when checking
++ * uninitialized memory.
++ */
++static void test_uninit_kmsan_check_memory(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE_FN(expect, "test_uninit_kmsan_check_memory");
++	volatile char local_array[8];
++
++	kunit_info(
++		test,
++		"kmsan_check_memory() called on uninit local (UMR report)\n");
++	do_uninit_local_array((char *)local_array, 5, 7);
++
++	kmsan_check_memory((char *)local_array, 8);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: check that a virtual memory range created with vmap() from
++ * initialized pages is still considered as initialized.
++ */
++static void test_init_kmsan_vmap_vunmap(struct kunit *test)
++{
++	EXPECTATION_NO_REPORT(expect);
++	const int npages = 2;
++	struct page **pages;
++	void *vbuf;
++
++	kunit_info(test, "pages initialized via vmap (no reports)\n");
++
++	pages = kmalloc_array(npages, sizeof(*pages), GFP_KERNEL);
++	for (int i = 0; i < npages; i++)
++		pages[i] = alloc_page(GFP_KERNEL);
++	vbuf = vmap(pages, npages, VM_MAP, PAGE_KERNEL);
++	memset(vbuf, 0xfe, npages * PAGE_SIZE);
++	for (int i = 0; i < npages; i++)
++		kmsan_check_memory(page_address(pages[i]), PAGE_SIZE);
++
++	if (vbuf)
++		vunmap(vbuf);
++	for (int i = 0; i < npages; i++) {
++		if (pages[i])
++			__free_page(pages[i]);
++	}
++	kfree(pages);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: ensure that memset() can initialize a buffer allocated via
++ * vmalloc().
++ */
++static void test_init_vmalloc(struct kunit *test)
++{
++	EXPECTATION_NO_REPORT(expect);
++	int npages = 8;
++	char *buf;
++
++	kunit_info(test, "vmalloc buffer can be initialized (no reports)\n");
++	buf = vmalloc(PAGE_SIZE * npages);
++	buf[0] = 1;
++	memset(buf, 0xfe, PAGE_SIZE * npages);
++	USE(buf[0]);
++	for (int i = 0; i < npages; i++)
++		kmsan_check_memory(&buf[PAGE_SIZE * i], PAGE_SIZE);
++	vfree(buf);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/* Test case: ensure that use-after-free reporting works. */
++static void test_uaf(struct kunit *test)
++{
++	EXPECTATION_USE_AFTER_FREE(expect);
++	volatile int value;
++	volatile int *var;
++
++	kunit_info(test, "use-after-free in kmalloc-ed buffer (UMR report)\n");
++	var = kmalloc(80, GFP_KERNEL);
++	var[3] = 0xfeedface;
++	kfree((int *)var);
++	/* Copy the invalid value before checking it. */
++	value = var[3];
++	USE(value);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: ensure that uninitialized values are propagated through per-CPU
++ * memory.
++ */
++static void test_percpu_propagate(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE(expect);
++	volatile int uninit, check;
++
++	kunit_info(test,
++		   "uninit local stored to per_cpu memory (UMR report)\n");
++
++	this_cpu_write(per_cpu_var, uninit);
++	check = this_cpu_read(per_cpu_var);
++	USE(check);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: ensure that passing uninitialized values to printk() leads to an
++ * error report.
++ */
++static void test_printk(struct kunit *test)
++{
++#ifdef CONFIG_KMSAN_CHECK_PARAM_RETVAL
++	/*
++	 * With eager param/retval checking enabled, KMSAN will report an error
++	 * before the call to pr_info().
++	 */
++	EXPECTATION_UNINIT_VALUE_FN(expect, "test_printk");
++#else
++	EXPECTATION_UNINIT_VALUE_FN(expect, "number");
++#endif
++	volatile int uninit;
++
++	kunit_info(test, "uninit local passed to pr_info() (UMR report)\n");
++	pr_info("%px contains %d\n", &uninit, uninit);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: ensure that memcpy() correctly copies uninitialized values between
++ * aligned `src` and `dst`.
++ */
++static void test_memcpy_aligned_to_aligned(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE_FN(expect, "test_memcpy_aligned_to_aligned");
++	volatile int uninit_src;
++	volatile int dst = 0;
++
++	kunit_info(
++		test,
++		"memcpy()ing aligned uninit src to aligned dst (UMR report)\n");
++	memcpy((void *)&dst, (void *)&uninit_src, sizeof(uninit_src));
++	kmsan_check_memory((void *)&dst, sizeof(dst));
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: ensure that memcpy() correctly copies uninitialized values between
++ * aligned `src` and unaligned `dst`.
++ *
++ * Copying aligned 4-byte value to an unaligned one leads to touching two
++ * aligned 4-byte values. This test case checks that KMSAN correctly reports an
++ * error on the first of the two values.
++ */
++static void test_memcpy_aligned_to_unaligned(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE_FN(expect, "test_memcpy_aligned_to_unaligned");
++	volatile int uninit_src;
++	volatile char dst[8] = { 0 };
++
++	kunit_info(
++		test,
++		"memcpy()ing aligned uninit src to unaligned dst (UMR report)\n");
++	memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
++	kmsan_check_memory((void *)dst, 4);
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++/*
++ * Test case: ensure that memcpy() correctly copies uninitialized values between
++ * aligned `src` and unaligned `dst`.
++ *
++ * Copying aligned 4-byte value to an unaligned one leads to touching two
++ * aligned 4-byte values. This test case checks that KMSAN correctly reports an
++ * error on the second of the two values.
++ */
++static void test_memcpy_aligned_to_unaligned2(struct kunit *test)
++{
++	EXPECTATION_UNINIT_VALUE_FN(expect,
++				    "test_memcpy_aligned_to_unaligned2");
++	volatile int uninit_src;
++	volatile char dst[8] = { 0 };
++
++	kunit_info(
++		test,
++		"memcpy()ing aligned uninit src to unaligned dst - part 2 (UMR report)\n");
++	memcpy((void *)&dst[1], (void *)&uninit_src, sizeof(uninit_src));
++	kmsan_check_memory((void *)&dst[4], sizeof(uninit_src));
++	KUNIT_EXPECT_TRUE(test, report_matches(&expect));
++}
++
++static struct kunit_case kmsan_test_cases[] = {
++	KUNIT_CASE(test_uninit_kmalloc),
++	KUNIT_CASE(test_init_kmalloc),
++	KUNIT_CASE(test_init_kzalloc),
++	KUNIT_CASE(test_uninit_stack_var),
++	KUNIT_CASE(test_init_stack_var),
++	KUNIT_CASE(test_params),
++	KUNIT_CASE(test_uninit_multiple_params),
++	KUNIT_CASE(test_uninit_kmsan_check_memory),
++	KUNIT_CASE(test_init_kmsan_vmap_vunmap),
++	KUNIT_CASE(test_init_vmalloc),
++	KUNIT_CASE(test_uaf),
++	KUNIT_CASE(test_percpu_propagate),
++	KUNIT_CASE(test_printk),
++	KUNIT_CASE(test_memcpy_aligned_to_aligned),
++	KUNIT_CASE(test_memcpy_aligned_to_unaligned),
++	KUNIT_CASE(test_memcpy_aligned_to_unaligned2),
++	{},
++};
++
++/* ===== End test cases ===== */
++
++static int test_init(struct kunit *test)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&observed.lock, flags);
++	observed.header[0] = '\0';
++	observed.ignore = false;
++	observed.available = false;
++	spin_unlock_irqrestore(&observed.lock, flags);
++
++	return 0;
++}
++
++static void test_exit(struct kunit *test)
++{
++}
++
++static void register_tracepoints(struct tracepoint *tp, void *ignore)
++{
++	check_trace_callback_type_console(probe_console);
++	if (!strcmp(tp->name, "console"))
++		WARN_ON(tracepoint_probe_register(tp, probe_console, NULL));
++}
++
++static void unregister_tracepoints(struct tracepoint *tp, void *ignore)
++{
++	if (!strcmp(tp->name, "console"))
++		tracepoint_probe_unregister(tp, probe_console, NULL);
++}
++
++static int kmsan_suite_init(struct kunit_suite *suite)
++{
++	/*
++	 * Because we want to be able to build the test as a module, we need to
++	 * iterate through all known tracepoints, since the static registration
++	 * won't work here.
++	 */
++	for_each_kernel_tracepoint(register_tracepoints, NULL);
++	return 0;
++}
++
++static void kmsan_suite_exit(struct kunit_suite *suite)
++{
++	for_each_kernel_tracepoint(unregister_tracepoints, NULL);
++	tracepoint_synchronize_unregister();
++}
++
++static struct kunit_suite kmsan_test_suite = {
++	.name = "kmsan",
++	.test_cases = kmsan_test_cases,
++	.init = test_init,
++	.exit = test_exit,
++	.suite_init = kmsan_suite_init,
++	.suite_exit = kmsan_suite_exit,
++};
++kunit_test_suites(&kmsan_test_suite);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Alexander Potapenko <glider@google.com>");
 -- 
 2.37.2.789.g6183377224-goog
 
