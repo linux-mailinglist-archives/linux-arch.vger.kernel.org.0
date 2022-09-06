@@ -2,200 +2,178 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3FF5ADEC1
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 07:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D25B5ADF00
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 07:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232869AbiIFFJO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Sep 2022 01:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39118 "EHLO
+        id S231947AbiIFFi5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Sep 2022 01:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbiIFFJN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 01:09:13 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CC56C77B
-        for <linux-arch@vger.kernel.org>; Mon,  5 Sep 2022 22:09:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662440952; x=1693976952;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vDqcz7qkR7DibVzSJGHxXVy4fzU4XsTijHFTm7khFu0=;
-  b=T0MfZsB7xZS1q4PjtdoD0gbv3rvbpOloviNTnd0R9yFg/XspswrnmRzJ
-   b7XE2KEa0iQBDPPZgaTczvPVwMKG/xzWAkoPYBdJs+qQpe1MjH+e7pX+z
-   xOhMfFtFg24MJbsIBDQ6z4Dga5HyZzblZVv1XxleGH8CV0HSK2y0MDTcT
-   6F143ZmH2rN6dxkM9/Tq1wTkixkPp7koZQ2MArZjv3MFksk83pxHjXlXt
-   BmahJshRyC/h8M04feq96pJm6KYywXkMwUnyyhSXb1S8UWKFTnxEKx+Oc
-   zzmm2L4aVsW8UORsJ3tWkbLpmhDL3z6g8A8TW58sbU1gIQQ5MO6juI3WT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10461"; a="283499946"
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="283499946"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2022 22:09:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,293,1654585200"; 
-   d="scan'208";a="591125774"
-Received: from lkp-server02.sh.intel.com (HELO 95dfd251caa2) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 05 Sep 2022 22:09:10 -0700
-Received: from kbuild by 95dfd251caa2 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oVQph-0004pl-1m;
-        Tue, 06 Sep 2022 05:09:09 +0000
-Date:   Tue, 06 Sep 2022 13:09:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- 8cbb2b50ee2dcb082675237eaaa48fe8479f8aa5
-Message-ID: <6316d5ed.ckIw1Tqs2j1j7Wlg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230060AbiIFFi4 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 01:38:56 -0400
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDE543316;
+        Mon,  5 Sep 2022 22:38:54 -0700 (PDT)
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id 2865cQbG025453;
+        Tue, 6 Sep 2022 14:38:26 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2865cQbG025453
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662442707;
+        bh=xDCM2ELtfWbaxIghoVdhy/grpBGllqEuV+LeUEWP1Ds=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=zTF21be2xWgdhSjv2TwodKVjuJGi0Wtzia5qTmbRXgAZiY1NJgXaqumwLiQWGOvTs
+         qK5OXstgKtY3Kjbn3LhNap4WDeuK0XzG6PY+prV/fZYHlWBbNvj8G2sgZudazw+mIF
+         0sBQ2ALD5TwCz4zOWBf6pVFV4N3M/6xp/OjbPJd2HlbeN2H/eCgAVeNi0Rzs5l6r9v
+         rKZ/+oUT9qX0f0PcJvSqlnQet7+eZzDLjlY6X9CVe/oy3TtkI00bCo8gCrRqx+f326
+         a+Dlwj9QZ92KHr6J/0AM5Ncu90Mpku8Mp9HiZ5dMPiB7wYU/iHfBwHJEuE+dOzIcMq
+         TgNkHpGHajx7g==
+X-Nifty-SrcIP: [209.85.160.41]
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-11f34610d4aso25719977fac.9;
+        Mon, 05 Sep 2022 22:38:26 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3JWKYv4ai0i/5RWYv7aDXtu/mOTAuGre4inY7oZwO0wvwBHi28
+        6GDW6ym2hUz+yAniXkh3Lx3gjfNIU53AlB/qldw=
+X-Google-Smtp-Source: AA6agR67ml6xVcQPsgWC4IEh9NlgKqQkUD+yzlEWC3f8vVi+rYODcebxIPaYwAMPI4GuNHLB0RRnghEbe5QkXQxURhM=
+X-Received: by 2002:a05:6870:c58b:b0:10b:d21d:ad5e with SMTP id
+ ba11-20020a056870c58b00b0010bd21dad5emr10425730oab.287.1662442705835; Mon, 05
+ Sep 2022 22:38:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220828024003.28873-1-masahiroy@kernel.org>
+In-Reply-To: <20220828024003.28873-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 6 Sep 2022 14:37:49 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQNVA0eVEZ_BEKVaVNq0J2iQnyPVJRCPwsXepnm_4UcfQ@mail.gmail.com>
+Message-ID: <CAK7LNAQNVA0eVEZ_BEKVaVNq0J2iQnyPVJRCPwsXepnm_4UcfQ@mail.gmail.com>
+Subject: Re: [PATCH 00/15] kbuild: various cleanups
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: 8cbb2b50ee2dcb082675237eaaa48fe8479f8aa5  asm-generic: Conditionally enable do_softirq_own_stack() via Kconfig.
+On Sun, Aug 28, 2022 at 11:40 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+>   - Avoid updating init/built-in.a twice
+>   - Run modpost just once instead of twice
+>   - Link vmlinux and modules in parallel
+>   - Remove head-y syntax
+>
+> These are ground works to make the further refactoring possible.
+>
+> This patch set is applicable after the following series:
+>   https://patchwork.kernel.org/project/linux-kbuild/list/?series=669437
+>
+>
+> Masahiro Yamada (15):
+>   kbuild: remove duplicated dependency between modules and modules_check
+>   kbuild: refactor single builds of *.ko
+>   kbuild: move 'PHONY += modules_prepare' to the common part
+>   init/version.c: remove #include <linux/version.h>
+>   kbuild: build init/built-in.a just once
+>   kbuild: generate include/generated/compile.h in top Makefile
+>   scripts/mkcompile_h: move LC_ALL=C to '$LD -v'
+>   Revert "kbuild: Make scripts/compile.h when sh != bash"
+>   kbuild: rename modules.order in sub-directories to .modules.order
+>   kbuild: move core-y in top Makefile to ./Kbuild
+>   kbuild: move .vmlinux.objs rule to Makefile.modpost
+>   kbuild: move vmlinux.o rule to the top Makefile
+>   kbuild: unify two modpost invocations
+>   kbuild: use obj-y instead extra-y for objects placed at the head
+>   kbuild: remove head-y syntax
 
-elapsed time: 720m
 
-configs tested: 119
-configs skipped: 5
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I moved 01-08 to for-next.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-powerpc                          allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-sh                               allmodconfig
-i386                 randconfig-a003-20220905
-i386                 randconfig-a005-20220905
-i386                 randconfig-a006-20220905
-i386                 randconfig-a001-20220905
-i386                 randconfig-a002-20220905
-i386                 randconfig-a004-20220905
-m68k                             allyesconfig
-arm                      integrator_defconfig
-sh                         ap325rxa_defconfig
-arm                        spear6xx_defconfig
-arm                          iop32x_defconfig
-sh                         microdev_defconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-x86_64               randconfig-a001-20220905
-x86_64               randconfig-a006-20220905
-x86_64               randconfig-a004-20220905
-x86_64               randconfig-a003-20220905
-x86_64               randconfig-a002-20220905
-x86_64               randconfig-a005-20220905
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-um                               alldefconfig
-parisc                generic-32bit_defconfig
-loongarch                 loongson3_defconfig
-arm                            lart_defconfig
-sh                           se7721_defconfig
-mips                  decstation_64_defconfig
-arc                            hsdk_defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm                            hisi_defconfig
-sh                            titan_defconfig
-powerpc                       maple_defconfig
-arm                             pxa_defconfig
-loongarch                        alldefconfig
-powerpc                  storcenter_defconfig
-powerpc                 mpc834x_itx_defconfig
-m68k                        m5407c3_defconfig
-powerpc                     sequoia_defconfig
-mips                            ar7_defconfig
-xtensa                          iss_defconfig
-i386                 randconfig-c001-20220905
-sparc                            allyesconfig
-sh                             shx3_defconfig
-mips                           ip32_defconfig
-sh                          sdk7780_defconfig
-openrisc                            defconfig
-arm                          pxa910_defconfig
-ia64                         bigsur_defconfig
-powerpc                         ps3_defconfig
-sh                          r7780mp_defconfig
-openrisc                 simple_smp_defconfig
-s390                          debug_defconfig
-arm                         vf610m4_defconfig
-sh                             sh03_defconfig
-powerpc                      pcm030_defconfig
-sh                           se7780_defconfig
-ia64                             allmodconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arm                  randconfig-c002-20220905
-x86_64               randconfig-c001-20220905
-powerpc                      ppc40x_defconfig
-microblaze                          defconfig
-m68k                          sun3x_defconfig
-sh                          rsk7201_defconfig
+10 broke single target builds.
 
-clang tested configs:
-x86_64               randconfig-a014-20220905
-x86_64               randconfig-a011-20220905
-x86_64               randconfig-a016-20220905
-x86_64               randconfig-a012-20220905
-x86_64               randconfig-a015-20220905
-x86_64               randconfig-a013-20220905
-riscv                randconfig-r042-20220905
-hexagon              randconfig-r041-20220905
-hexagon              randconfig-r045-20220905
-s390                 randconfig-r044-20220905
-arm                          moxart_defconfig
-arm                         palmz72_defconfig
-arm                        spear3xx_defconfig
-powerpc                       ebony_defconfig
-i386                 randconfig-a016-20220905
-i386                 randconfig-a012-20220905
-i386                 randconfig-a015-20220905
-i386                 randconfig-a011-20220905
-i386                 randconfig-a013-20220905
-i386                 randconfig-a014-20220905
-x86_64               randconfig-k001-20220905
-arm                       cns3420vb_defconfig
-mips                       lemote2f_defconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                 mpc8313_rdb_defconfig
-mips                          malta_defconfig
-hexagon              randconfig-r041-20220906
-hexagon              randconfig-r045-20220906
+I will send v2 for the rest.
+
+
+
+
+
+
+>  Documentation/kbuild/makefiles.rst          |  27 +----
+>  Kbuild                                      |  16 +++
+>  Makefile                                    | 120 ++++++++++++--------
+>  arch/alpha/Makefile                         |   2 -
+>  arch/alpha/kernel/Makefile                  |   4 +-
+>  arch/arc/Makefile                           |   2 -
+>  arch/arc/kernel/Makefile                    |   4 +-
+>  arch/arm/Makefile                           |   3 -
+>  arch/arm/kernel/Makefile                    |   4 +-
+>  arch/arm64/Makefile                         |   3 -
+>  arch/arm64/kernel/Makefile                  |   4 +-
+>  arch/csky/Makefile                          |   2 -
+>  arch/csky/kernel/Makefile                   |   4 +-
+>  arch/hexagon/Makefile                       |   2 -
+>  arch/hexagon/kernel/Makefile                |   3 +-
+>  arch/ia64/Makefile                          |   1 -
+>  arch/ia64/kernel/Makefile                   |   4 +-
+>  arch/loongarch/Makefile                     |   2 -
+>  arch/loongarch/kernel/Makefile              |   4 +-
+>  arch/m68k/68000/Makefile                    |   2 +-
+>  arch/m68k/Makefile                          |   9 --
+>  arch/m68k/coldfire/Makefile                 |   2 +-
+>  arch/m68k/kernel/Makefile                   |  21 ++--
+>  arch/microblaze/Makefile                    |   1 -
+>  arch/microblaze/kernel/Makefile             |   4 +-
+>  arch/mips/Makefile                          |   2 -
+>  arch/mips/kernel/Makefile                   |   4 +-
+>  arch/nios2/Makefile                         |   1 -
+>  arch/nios2/kernel/Makefile                  |   2 +-
+>  arch/openrisc/Makefile                      |   2 -
+>  arch/openrisc/kernel/Makefile               |   4 +-
+>  arch/parisc/Makefile                        |   2 -
+>  arch/parisc/kernel/Makefile                 |   4 +-
+>  arch/powerpc/Makefile                       |  12 --
+>  arch/powerpc/kernel/Makefile                |  22 ++--
+>  arch/riscv/Makefile                         |   2 -
+>  arch/riscv/kernel/Makefile                  |   2 +-
+>  arch/s390/Makefile                          |   2 -
+>  arch/s390/boot/version.c                    |   1 +
+>  arch/s390/kernel/Makefile                   |   4 +-
+>  arch/sh/Makefile                            |   2 -
+>  arch/sh/kernel/Makefile                     |   4 +-
+>  arch/sparc/Makefile                         |   2 -
+>  arch/sparc/kernel/Makefile                  |   3 +-
+>  arch/x86/Makefile                           |   5 -
+>  arch/x86/boot/compressed/kaslr.c            |   1 +
+>  arch/x86/boot/version.c                     |   1 +
+>  arch/x86/kernel/Makefile                    |  10 +-
+>  arch/xtensa/Makefile                        |   2 -
+>  arch/xtensa/kernel/Makefile                 |   4 +-
+>  init/Makefile                               |  55 ++++++---
+>  init/build-version                          |  10 ++
+>  init/version-timestamp.c                    |  31 +++++
+>  init/version.c                              |  37 +++---
+>  scripts/Makefile.build                      |  20 ++--
+>  scripts/Makefile.lib                        |   8 +-
+>  scripts/Makefile.modfinal                   |   2 +-
+>  scripts/Makefile.modpost                    | 112 ++++++++----------
+>  scripts/Makefile.vmlinux_o                  |   6 +-
+>  scripts/clang-tools/gen_compile_commands.py |  19 +---
+>  scripts/head-object-list.txt                |  53 +++++++++
+>  scripts/link-vmlinux.sh                     |  51 ++-------
+>  scripts/mkcompile_h                         |  96 ++--------------
+>  63 files changed, 393 insertions(+), 457 deletions(-)
+>  create mode 100755 init/build-version
+>  create mode 100644 init/version-timestamp.c
+>  create mode 100644 scripts/head-object-list.txt
+>
+> --
+> 2.34.1
+>
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada
