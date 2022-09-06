@@ -2,68 +2,65 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F7F5AE243
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 10:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BC65AE3DF
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 11:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238977AbiIFIQ1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Sep 2022 04:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35586 "EHLO
+        id S233630AbiIFJJX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Sep 2022 05:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiIFIQ1 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 04:16:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3810A4DB5C;
-        Tue,  6 Sep 2022 01:16:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C896361241;
-        Tue,  6 Sep 2022 08:16:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38B53C433C1;
-        Tue,  6 Sep 2022 08:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662452185;
-        bh=zHclWjaOaxn1bhfC0MDw0EiWuDztvxgmRJAiKKgCwZU=;
+        with ESMTP id S233436AbiIFJJW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 05:09:22 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5654B4A5;
+        Tue,  6 Sep 2022 02:09:20 -0700 (PDT)
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 28698i61023724;
+        Tue, 6 Sep 2022 18:08:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28698i61023724
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662455324;
+        bh=R3PMwyCU9XVA+BiXnB3Ur5skrUwcficqvUv17oBbyNs=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Dh84m+kx61qaVzxzWfgbmq8vfsEroZclWxVFyPTPUYnZoms5r9ge6YfQHvEaTBrB6
-         KlV/LTM0rdLYWuCMb6DJrUj+1eXk/qoNAlK+W8LFSZuHMEsdv+0enw5FTtCw4ECqQN
-         jqH7aHUTKhZBFsohesD4vrVL/tZ0PBIaVK5euomUwSKsXjWgBBBTtoLWjoAFiFav6s
-         tHyTuZrutgu7W+0WjK5DEMobug0Ji7JUYcuoBBdlLdzjpAXx1sOwZtWUW49p84Omki
-         ezhk5L5zdoh3IDP31ddCd60MH779aKle1K4eThp2wYwNO4RNrJFH0uSXqal1B03TsT
-         8zuiYjqnvYQxg==
-Received: by mail-lf1-f48.google.com with SMTP id k10so1578126lfm.4;
-        Tue, 06 Sep 2022 01:16:25 -0700 (PDT)
-X-Gm-Message-State: ACgBeo30t9v5LjzEIeKLF9Vyz5hcAHIvMPaUXTFN/kiWb9Lf/yVr60QI
-        8B3O4bZT0VPQPkl3sL3Ub0IgopJPzXxjduUgm6c=
-X-Google-Smtp-Source: AA6agR4URsfozrvQXsnfVJFa/DypnBWIxHu19vLLqIF5npkRWOaaVT6aVpIxxvtE1ghSe8HEY4NSGIKx7gDg+RWXjvM=
-X-Received: by 2002:a05:6512:2294:b0:494:8dc5:10af with SMTP id
- f20-20020a056512229400b004948dc510afmr8629185lfu.426.1662452183217; Tue, 06
- Sep 2022 01:16:23 -0700 (PDT)
+        b=Yh0bG6cvaD4rETTtxz0JcrijEDFRXHTiBbdFdB5DxeVeQ6437m2l8P2aM80V8Fhjt
+         8XaLJeJX2FIOsZv+AZJoGS0iOlqNq9RvwD5A9Mh87qGoY85d0Q5b1ewOsFcCVvMK+1
+         74VXfwJmGORuUFktIqabbDCwjTgd0nNfe9vq+r5CjV8fpGtrHWOZzg+kQUT8OXl13o
+         iqSN7KpGxwHq25ozD8cCPSItm1womvMbQLV7Uzqzf6i2R8JCTT1u101YOFdXkcJ6Rz
+         X1+R1NsbFNmzhUEh2OygiGYsQLI3apkHawGL7t1UVLTAikCFnkrzfqqaFAnLTZBpiR
+         fAMqZn6GGgqPQ==
+X-Nifty-SrcIP: [209.85.160.47]
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-1272fc7f51aso13315576fac.12;
+        Tue, 06 Sep 2022 02:08:44 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3dR4QXIChk/dt5Q+rFv4u+0rRo7PvjfF4XlYFD6duGdufWrNbv
+        Ze8XIZXFXWJA/HXGNJOKkuQlLOzU9wHwLJSLrJc=
+X-Google-Smtp-Source: AA6agR6OY4q6aKw+dcVMf+1HMS5Bz6jBUkf9aUWQi5PyQb2qypkWmtdG6+Qas8shnXJL81hfLNtBQMLJ68tsKioph7s=
+X-Received: by 2002:a05:6808:90a:b0:34b:826c:6116 with SMTP id
+ w10-20020a056808090a00b0034b826c6116mr4009247oih.194.1662455323387; Tue, 06
+ Sep 2022 02:08:43 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220906061313.1445810-1-masahiroy@kernel.org>
  <20220906061313.1445810-9-masahiroy@kernel.org> <f76020e2-e8bd-4f75-a697-3d6ec6665969@www.fastmail.com>
 In-Reply-To: <f76020e2-e8bd-4f75-a697-3d6ec6665969@www.fastmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 6 Sep 2022 10:16:11 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com>
-Message-ID: <CAMj1kXH77Ja8bSsq2Qj8Ck9iSZKw=1F8Uy-uAWGVDm4-CG=EuA@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 6 Sep 2022 18:08:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASmaQYfQSSbu=1P9GtcRr6gFGEpPdUgaV0bOf3FdoLnhg@mail.gmail.com>
+Message-ID: <CAK7LNASmaQYfQSSbu=1P9GtcRr6gFGEpPdUgaV0bOf3FdoLnhg@mail.gmail.com>
 Subject: Re: [PATCH v2 8/8] kbuild: remove head-y syntax
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-Arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, 6 Sept 2022 at 10:06, Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, Sep 6, 2022 at 5:00 PM Arnd Bergmann <arnd@arndb.de> wrote:
 >
 > On Tue, Sep 6, 2022, at 8:13 AM, Masahiro Yamada wrote:
 > > Kbuild puts the objects listed in head-y at the head of vmlinux.
@@ -88,25 +85,64 @@ On Tue, 6 Sept 2022 at 10:06, Arnd Bergmann <arnd@arndb.de> wrote:
 > so overall I'm not convinced that this is an improvement as long
 > as there is no final decision for what should be done instead.
 >
-
-Agree with Arnd here - having an exhaustive list that spans all arch/*
-subdirectories goes against the divide-and-conquer nature of arch/,
-where each architecture manages such things themselves
-
 > If the .head.text section approach works, maybe convert at
 > a minimum the x86 and arm64 architectures to provide an example
 > of what it should look like in the end, otherwise I doubt that
 > any architecture maintainers are going to work on removing their
 > architectures from the head-object-list.txt file.
+
+
+
+I wish I had done this before fa96b57c149061f71a70bd6582d995f6424fbbf4.
+Maybe I would have been able to avoid loongarch adding a head-y.
+
+When people port a new arch, they mimic other arch implementations,
+and apparently they assume having head-y is mandatory, and the right
+thing to do.
+
+So, we need something to make arch maintainers realize
+"when you add a new head-y entry, very likely you are doing wrong".
+
+So, collecting the current ones into a whitelist can prevent the list
+from growing at least, even if nobody strives to reduce it.
+
+
+I did a similar approach for
+
+  scripts/headers_install.sh
+  usr/include/Makefile
+
+It was successful because we did not get a new breakage.
+
+
+
+
+Do you have a better idea to avoid bad code slipping in?
+
+
+
+
+See the next arch port.
+
+
+If somebody upsteams arch/kvx/, they will be very likely to add
+arch/kvx/kernel/head.o to head-y.
+
+They are already doing it.
+https://github.com/kalray/linux_coolidge/blob/coolidge/arch/kvx/Makefile
+
+
+
+
+People never re-think "why do we need head-y in the first place?"
+
+
+
+
+
+
+
 >
-
-For the arm64 case, I seriously doubt whether head.o needs any special
-treatment - the layout is section based, and the only piece that must
-appear right at the start of the binary image is the image header
-(which is emitted into .head.text IIRC), everything else appearing in
-head.S is placed in .text, .idmap.text or .init.text, and does not
-require any special treatment.
-
 > > +arch/alpha/kernel/head.o
 > > +arch/arc/kernel/head.o
 > > +arch/arm/kernel/head-nommu.o
@@ -157,3 +193,19 @@ require any special treatment.
 > before putting that first.
 >
 >      Arnd
+
+
+I prefer a simple list of objects, so that people
+can work on it one by one.
+
+
+
+As Ard pointed out, we can remove
+arch/arm64/kernel/head.o
+but it requires deep arch-specific knowledge.
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
