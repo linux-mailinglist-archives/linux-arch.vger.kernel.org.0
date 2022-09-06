@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7405ADF8B
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 08:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEC75ADF7E
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 08:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237471AbiIFGOM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Sep 2022 02:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S237816AbiIFGOO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Sep 2022 02:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232045AbiIFGOG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 02:14:06 -0400
+        with ESMTP id S233257AbiIFGOL (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 02:14:11 -0400
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79446F27D;
-        Mon,  5 Sep 2022 23:14:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB2F6E880;
+        Mon,  5 Sep 2022 23:14:05 -0700 (PDT)
 Received: from zoe.. (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 2866DVI7023845;
-        Tue, 6 Sep 2022 15:13:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 2866DVI7023845
+        by conuserg-11.nifty.com with ESMTP id 2866DVI8023845;
+        Tue, 6 Sep 2022 15:13:33 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 2866DVI8023845
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662444812;
-        bh=A0TAOcTfi2uZJQ5sEtMq2Cvx5AMNE3xo9Mwd6ECs1v8=;
+        s=dec2015msa; t=1662444813;
+        bh=Q6tKdN5irBVYCfWtxPbhHksZcsrNyOTL6s6D6NFZUm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SmuELPOQ7fU0Eq/1FVlgnLdP2I3YnxWc5Bcn6Y9X2IE4dbDb/y9sGcZyLedhkMGPo
-         NNFeAZ8Hv5/VzJ1FpTucJsGDH8Ju3AeER9wGY9jekyhPlGVPK5TtK4xf5Y8R8YiLYj
-         NuPW8iACEusufTJO0fn37dJsZU4yNT97XTnfMAJl5cM6C8BrYQCTS249YsEA+vNTqA
-         75vHX3WanVytNMNLpwGa+TBJtHlN3nJyUsTnNH/xn4Syg1JD7NK5AJaE8iOUYnzgFu
-         0QbosTsog6sYOMgzluk3Z55+pf4vvvhqsODkZyrV/CHjVGTQA9guHAiodtdu+tzCem
-         NKh6ZrhyQJYpA==
+        b=zxK0n61HCunTpmNeHW00A/ONGP17vLDxnjEousaPHFibOWy0FGBMmJPU99fmPW2lD
+         b3AIY0cMa5FtPWoqEAqFqjRfOb6RhRHTYPRH5hayxR3m7azXdupRxMyfGPdMkBuuRA
+         TOVq9428Jgt3wxV3EUwLudLNFcn2gkcDCctZvVtUJZrJ8wbpCVJQ4UdJpukJUnpK9M
+         39FIj0JFciVQ2jdAhb0Z0+ilM5erqbccpLu3BRhmtn44LKwTYkjG/VL61DWv/dJtMh
+         QPhdKSbqzyXLIdPfZqEC3MmEghyCs5BDigbYRUnwBSOclgfHtGbSthXgqmJgqPo3ns
+         5sfYfEvWqajnQ==
 X-Nifty-SrcIP: [133.32.182.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v2 1/8] kbuild: fix and refactor single target build
-Date:   Tue,  6 Sep 2022 15:13:06 +0900
-Message-Id: <20220906061313.1445810-2-masahiroy@kernel.org>
+Subject: [PATCH v2 2/8] kbuild: rename modules.order in sub-directories to .modules.order
+Date:   Tue,  6 Sep 2022 15:13:07 +0900
+Message-Id: <20220906061313.1445810-3-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220906061313.1445810-1-masahiroy@kernel.org>
 References: <20220906061313.1445810-1-masahiroy@kernel.org>
@@ -50,186 +50,190 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The single target build has a subtle bug for the combination for
-an individual file and a subdirectory.
+The next commit will move core-y from the top Makefile to ./Kbuild to
+use obj-y to list sub-directories.
 
-[1] 'make kernel/fork.i' builds only kernel/fork.i
+With that, both ./Makefile and ./Kbuild would create modules.order in
+the top directory.
 
-  $ make kernel/fork.i
-    CALL    scripts/checksyscalls.sh
-    DESCEND objtool
-    CPP     kernel/fork.i
-
-[2] 'make kernel/' builds only under the kernel/ directory.
-
-  $ make kernel/
-    CALL    scripts/checksyscalls.sh
-    DESCEND objtool
-    CC      kernel/fork.o
-    CC      kernel/exec_domain.o
-       [snip]
-    CC      kernel/rseq.o
-    AR      kernel/built-in.a
-
-But, if you try to do [1] and [2] in a single command, you will get
-only [1] with a weird log:
-
-  $ make kernel/fork.i kernel/
-    CALL    scripts/checksyscalls.sh
-    DESCEND objtool
-    CPP     kernel/fork.i
-  make[2]: Nothing to be done for 'kernel/'.
-
-With 'make kernel/fork.i kernel/', you should get both [1] and [2].
-
-Rewrite the single target build.
+To avoid the conflict, rename the per-directory modules.order to
+.modules.order.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
-Changes in v2:
- - New
+(no changes since v1)
 
- Makefile               |  9 ++++---
- scripts/Makefile.build | 54 +++++++++++++-----------------------------
- 2 files changed, 20 insertions(+), 43 deletions(-)
+ Makefile               | 27 +++++++++++++--------------
+ scripts/Makefile.build | 18 +++++++++---------
+ scripts/Makefile.lib   |  8 ++++----
+ 3 files changed, 26 insertions(+), 27 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 0af9dd405fb1..373cd2f0f49e 100644
+index 373cd2f0f49e..552ade93ca1d 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -1824,11 +1824,11 @@ single_modpost: $(single-no-ko) modules_prepare
+@@ -1116,8 +1116,6 @@ vmlinux-alldirs	:= $(sort $(vmlinux-dirs) Documentation . \
+ build-dirs	:= $(vmlinux-dirs)
+ clean-dirs	:= $(vmlinux-alldirs)
+ 
+-subdir-modorder := $(addsuffix /modules.order, $(build-dirs))
+-
+ # Externally visible symbols (used by link-vmlinux.sh)
+ KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
+ KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
+@@ -1172,7 +1170,7 @@ targets := vmlinux
+ 
+ # The actual objects are generated when descending,
+ # make sure no implicit rule kicks in
+-$(sort $(vmlinux-deps) $(subdir-modorder)): descend ;
++$(sort $(vmlinux-deps)): descend ;
+ 
+ filechk_kernel.release = \
+ 	echo "$(KERNELVERSION)$$($(CONFIG_SHELL) $(srctree)/scripts/setlocalversion $(srctree))"
+@@ -1444,13 +1442,6 @@ endif
+ 
+ modules: $(if $(KBUILD_BUILTIN),vmlinux) modules_prepare
+ 
+-cmd_modules_order = cat $(real-prereqs) > $@
+-
+-modules.order: $(subdir-modorder) FORCE
+-	$(call if_changed,modules_order)
+-
+-targets += modules.order
+-
+ # Target to prepare building external modules
+ modules_prepare: prepare
+ 	$(Q)$(MAKE) $(build)=scripts scripts/module.lds
+@@ -1722,8 +1713,6 @@ KBUILD_BUILTIN :=
+ KBUILD_MODULES := 1
+ 
+ build-dirs := $(KBUILD_EXTMOD)
+-$(MODORDER): descend
+-	@:
+ 
+ compile_commands.json: $(extmod_prefix)compile_commands.json
+ PHONY += compile_commands.json
+@@ -1755,12 +1744,22 @@ help:
+ endif # KBUILD_EXTMOD
+ 
+ # ---------------------------------------------------------------------------
+-# Modules
++# Modules (common for in-tree modules and external modules)
+ 
+ PHONY += modules modules_install modules_prepare
+ 
+ ifdef CONFIG_MODULES
+ 
++subdir-modorder := $(addsuffix /.modules.order, $(build-dirs))
++
++$(sort $(subdir-modorder)): %/.modules.order: % ;
++
++cmd_modules_order = cat $(real-prereqs) > $@
++
++targets += $(MODORDER)
++$(MODORDER): $(subdir-modorder) FORCE
++	$(call if_changed,modules_order)
++
+ modules: modules_check
  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
- 	$(Q)rm -f $(MODORDER)
  
--export KBUILD_SINGLE_TARGETS := $(addprefix $(extmod_prefix), $(single-no-ko))
-+single-goals := $(addprefix $(extmod_prefix), $(single-no-ko))
- 
- # trim unrelated directories
- build-dirs := $(foreach d, $(build-dirs), \
--			$(if $(filter $(d)/%, $(KBUILD_SINGLE_TARGETS)), $(d)))
-+			$(if $(filter $d/%, $(single-goals)), $d))
- 
- endif
- 
-@@ -1840,9 +1840,8 @@ endif
- PHONY += descend $(build-dirs)
- descend: $(build-dirs)
- $(build-dirs): prepare
--	$(Q)$(MAKE) $(build)=$@ \
--	single-build=$(if $(filter-out $@/, $(filter $@/%, $(KBUILD_SINGLE_TARGETS))),1) \
--	need-builtin=1 need-modorder=1
-+	$(Q)$(MAKE) $(build)=$@ need-builtin=1 need-modorder=1 \
-+	$(filter $@/%, $(single-goals))
- 
- clean-dirs := $(addprefix _clean_, $(clean-dirs))
- PHONY += $(clean-dirs) clean
+@@ -1859,7 +1858,7 @@ clean: $(clean-dirs)
+ 		-o -name '.*.d' -o -name '.*.tmp' -o -name '*.mod.c' \
+ 		-o -name '*.lex.c' -o -name '*.tab.[ch]' \
+ 		-o -name '*.asn1.[ch]' \
+-		-o -name '*.symtypes' -o -name 'modules.order' \
++		-o -name '*.symtypes' -o -name '*modules.order' \
+ 		-o -name '.tmp_*' \
+ 		-o -name '*.c.[012]*.*' \
+ 		-o -name '*.ll' \
 diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 0df488d0bbb0..91d2e5461a3e 100644
+index 91d2e5461a3e..da3dc4f5456e 100644
 --- a/scripts/Makefile.build
 +++ b/scripts/Makefile.build
-@@ -5,8 +5,8 @@
+@@ -73,7 +73,7 @@ endif
  
- src := $(obj)
+ # subdir-builtin and subdir-modorder may contain duplications. Use $(sort ...)
+ subdir-builtin := $(sort $(filter %/built-in.a, $(real-obj-y)))
+-subdir-modorder := $(sort $(filter %/modules.order, $(obj-m)))
++subdir-modorder := $(sort $(filter %/.modules.order, $(obj-m)))
  
--PHONY := __build
--__build:
-+PHONY := $(obj)/
-+$(obj)/:
+ targets-for-builtin := $(extra-y)
  
- # Init all relevant variables used in kbuild files so
- # 1) they have correct type
-@@ -323,7 +323,7 @@ $(obj)/%.o: $(src)/%.S FORCE
+@@ -89,7 +89,7 @@ targets-for-modules := $(foreach x, o mod $(if $(CONFIG_TRIM_UNUSED_KSYMS), usym
+ 				$(patsubst %.o, %.$x, $(filter %.o, $(obj-m))))
  
- targets += $(filter-out $(subdir-builtin), $(real-obj-y))
- targets += $(filter-out $(subdir-modorder), $(real-obj-m))
--targets += $(real-dtb-y) $(lib-y) $(always-y) $(MAKECMDGOALS)
-+targets += $(real-dtb-y) $(lib-y) $(always-y)
+ ifdef need-modorder
+-targets-for-modules += $(obj)/modules.order
++targets-for-modules += $(obj)/.modules.order
+ endif
  
- # Linker scripts preprocessor (.lds.S -> .lds)
- # ---------------------------------------------------------------------------
-@@ -400,8 +400,6 @@ $(multi-obj-m): %.o: %.mod FORCE
- 	$(call if_changed_rule,ld_multi_m)
- $(call multi_depend, $(multi-obj-m), .o, -objs -y -m)
+ targets += $(targets-for-builtin) $(targets-for-modules)
+@@ -348,7 +348,7 @@ $(obj)/%.asn1.c $(obj)/%.asn1.h: $(src)/%.asn1 $(objtree)/scripts/asn1_compiler
  
--targets := $(filter-out $(PHONY), $(targets))
--
- # Add intermediate targets:
- # When building objects with specific suffix patterns, add intermediate
- # targets that the final targets are derived from.
-@@ -420,52 +418,29 @@ targets += $(call intermediate_targets, .asn1.o, .asn1.c .asn1.h) \
- # Build
- # ---------------------------------------------------------------------------
+ # To build objects in subdirs, we need to descend into the directories
+ $(subdir-builtin): $(obj)/%/built-in.a: $(obj)/% ;
+-$(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
++$(subdir-modorder): $(obj)/%/.modules.order: $(obj)/% ;
  
--ifdef single-build
--
--KBUILD_SINGLE_TARGETS := $(filter $(obj)/%, $(KBUILD_SINGLE_TARGETS))
--
--curdir-single := $(sort $(foreach x, $(KBUILD_SINGLE_TARGETS), \
--			$(if $(filter $(x) $(basename $(x)).o, $(targets)), $(x))))
--
--# Handle single targets without any rule: show "Nothing to be done for ..." or
--# "No rule to make target ..." depending on whether the target exists.
--unknown-single := $(filter-out $(addsuffix /%, $(subdir-ym)), \
--			$(filter-out $(curdir-single), $(KBUILD_SINGLE_TARGETS)))
--
--single-subdirs := $(foreach d, $(subdir-ym), \
--			$(if $(filter $(d)/%, $(KBUILD_SINGLE_TARGETS)), $(d)))
--
--__build: $(curdir-single) $(single-subdirs)
--ifneq ($(unknown-single),)
--	$(Q)$(MAKE) -f /dev/null $(unknown-single)
--endif
-+$(obj)/: $(if $(KBUILD_BUILTIN), $(targets-for-builtin)) \
-+	 $(if $(KBUILD_MODULES), $(targets-for-modules)) \
-+	 $(subdir-ym) $(always-y)
- 	@:
+ #
+ # Rule to compile a set of .o files into one .a file (without symbol table)
+@@ -365,18 +365,18 @@ $(obj)/built-in.a: $(real-obj-y) FORCE
+ 	$(call if_changed,ar_builtin)
  
--ifeq ($(curdir-single),)
--# Nothing to do in this directory. Do not include any .*.cmd file for speed-up
--targets :=
--else
--targets += $(curdir-single)
--endif
-+# Single targets
-+# ---------------------------------------------------------------------------
+ #
+-# Rule to create modules.order file
++# Rule to create .modules.order file
+ #
+-# Create commands to either record .ko file or cat modules.order from
++# Create commands to either record .ko file or cat .modules.order from
+ # a subdirectory
+ # Add $(obj-m) as the prerequisite to avoid updating the timestamp of
+-# modules.order unless contained modules are updated.
++# .modules.order unless contained modules are updated.
  
--else
-+single-subdirs := $(foreach d, $(subdir-ym), $(if $(filter $d/%, $(MAKECMDGOALS)), $d))
-+single-subdir-goals := $(filter $(addsuffix /%, $(single-subdirs)), $(MAKECMDGOALS))
+ cmd_modules_order = { $(foreach m, $(real-prereqs), \
+-	$(if $(filter %/modules.order, $m), cat $m, echo $(patsubst %.o,%.ko,$m));) :; } \
++	$(if $(filter %/.modules.order, $m), cat $m, echo $(patsubst %.o,%.ko,$m));) :; } \
+ 	> $@
  
--__build: $(if $(KBUILD_BUILTIN), $(targets-for-builtin)) \
--	 $(if $(KBUILD_MODULES), $(targets-for-modules)) \
--	 $(subdir-ym) $(always-y)
-+$(single-subdir-goals): $(single-subdirs)
- 	@:
+-$(obj)/modules.order: $(obj-m) FORCE
++$(obj)/.modules.order: $(obj-m) FORCE
+ 	$(call if_changed,modules_order)
  
--endif
--
- # Descending
- # ---------------------------------------------------------------------------
- 
- PHONY += $(subdir-ym)
+ #
+@@ -439,7 +439,7 @@ PHONY += $(subdir-ym)
  $(subdir-ym):
  	$(Q)$(MAKE) $(build)=$@ \
--	$(if $(filter $@/, $(KBUILD_SINGLE_TARGETS)),single-build=) \
  	need-builtin=$(if $(filter $@/built-in.a, $(subdir-builtin)),1) \
--	need-modorder=$(if $(filter $@/modules.order, $(subdir-modorder)),1)
-+	need-modorder=$(if $(filter $@/modules.order, $(subdir-modorder)),1) \
-+	$(filter $@/%, $(single-subdir-goals))
+-	need-modorder=$(if $(filter $@/modules.order, $(subdir-modorder)),1) \
++	need-modorder=$(if $(filter $@/.modules.order, $(subdir-modorder)),1) \
+ 	$(filter $@/%, $(single-subdir-goals))
  
  # Add FORCE to the prequisites of a target to force it to be always rebuilt.
- # ---------------------------------------------------------------------------
-@@ -474,6 +449,9 @@ PHONY += FORCE
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 3fb6a99e78c4..b594705d571a 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -26,14 +26,14 @@ subdir-ym := $(sort $(subdir-y) $(subdir-m) \
  
- FORCE:
+ # Handle objects in subdirs:
+ # - If we encounter foo/ in $(obj-y), replace it by foo/built-in.a and
+-#   foo/modules.order
+-# - If we encounter foo/ in $(obj-m), replace it by foo/modules.order
++#   foo/.modules.order
++# - If we encounter foo/ in $(obj-m), replace it by foo/.modules.order
+ #
+-# Generate modules.order to determine modorder. Unfortunately, we don't have
++# Generate .modules.order to determine modorder. Unfortunately, we don't have
+ # information about ordering between -y and -m subdirs. Just put -y's first.
  
-+targets += $(filter-out $(single-subdir-goals), $(MAKECMDGOALS))
-+targets := $(filter-out $(PHONY), $(targets))
-+
- # Read all saved command lines and dependencies for the $(targets) we
- # may be building above, using $(if_changed{,_dep}). As an
- # optimization, we don't need to read them if the target does not
+ ifdef need-modorder
+-obj-m := $(patsubst %/,%/modules.order, $(filter %/, $(obj-y)) $(obj-m))
++obj-m := $(patsubst %/,%/.modules.order, $(filter %/, $(obj-y)) $(obj-m))
+ else
+ obj-m := $(filter-out %/, $(obj-m))
+ endif
 -- 
 2.34.1
 
