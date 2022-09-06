@@ -2,107 +2,251 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1273D5AEF48
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 17:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 985A85AF001
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 18:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232152AbiIFPtP (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Sep 2022 11:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
+        id S238766AbiIFQLl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Sep 2022 12:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234748AbiIFPsq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 11:48:46 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE2E15A1A;
-        Tue,  6 Sep 2022 07:59:54 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id q15so11617591pfn.11;
-        Tue, 06 Sep 2022 07:59:54 -0700 (PDT)
+        with ESMTP id S233833AbiIFQLO (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 12:11:14 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB2A9DF91
+        for <linux-arch@vger.kernel.org>; Tue,  6 Sep 2022 08:35:52 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id n202so9204783iod.6
+        for <linux-arch@vger.kernel.org>; Tue, 06 Sep 2022 08:35:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=1TNLh/TqVl+pYztTYCnt8rmiWXduntS2OeyHRPQbFpo=;
-        b=j9oFDST+2KjJ0+9CMMgqbDqqGqeDRg0f7I1KYoxAiP05lV99ZZfNC2D/VZdGPkiFjO
-         T/gqAst9HPwT+5EI8mKqnjXW/nC5QTHiVQgWFoIfJ2LFB8XH+9d+UwcRK6MI5r/eRBWJ
-         oEU8q6nG4zfAKdNewGXBvhOKK90csPunH0MDeSo1k90ZeyOR6E5y6Ji3EcD7vN6jNvNm
-         I1hFYXq8+sNPcBq5FMHJlgfhT+BUgJrw6zzWSjOmO+poB1h4gBaIvbt7zDXuz0PzLLb1
-         tHcjeRpQCoMUGsXxNbDq7ZK5xXlgIQ/i/lBaHX759dbcQ7FdKqx7Tpn/B55ly+D52Wk9
-         i7uQ==
+        bh=GqM67eToD1ny8VVx70XQz+yqa9cCdNaLyhnIUfKzWx0=;
+        b=o3N3QM1fYFh9QHqMEdh1kjn5ZTr3F8RtlpM5O2++y+WOWtF5VqFnmXM7INH/3C3eUV
+         rtXiQP5g7p+1RoMGkcw8HpDxL1pIoLr71CH6AjbQWmEBhVb8u4LGn4/JVRQUuf+w77de
+         2tDN6e9GHnPV23R5EjAA9O+pg1qluKyo7jxsmW8SNYXPzCoVSh4f84J4gtZ4tZnhWZiK
+         26iwawWesNsxFg0dhAaf6JAFTmg9hfjLKKg0EVBzsaVgBhhTWcI8VbgoxxYwcOBeZkXo
+         2Fqq2sP/TfasoLql4YXx1PjqBffK+ktlknPqDflzAqCaK7N0WDBoy9seeNTqaG/m1+h6
+         JdKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=1TNLh/TqVl+pYztTYCnt8rmiWXduntS2OeyHRPQbFpo=;
-        b=yiC605BPEdS/hluyG/7RdInl5UPxA9pC/FRcMrkPciCxlU44SQkFkh8eZCovi/2D3f
-         C9MUWAKbcGZ3bxLa/a5iIRJHvPUUwo8auDbiGHTatu3cWTEeKR4o8qMgtklEcWilwE1b
-         OvHwSYmM0uJjaSzdR0N3Vng0HyvZ/nuOJp9xHzsKEDCMSDnDS3XmpxjFCPep+jCsv09P
-         bqEAkXZrUsS0J+4QUf8vPDCdMOPdcW33fUVxCr07eqTJhQJWLThgBYnW/BdVeXD3IYr7
-         FZyDroTUX/7WCbUKyRrXd6s50sIXILYb3JKodjdYZ9+2yRXFhOcNhCl5tc+NzXKWrtMc
-         lANg==
-X-Gm-Message-State: ACgBeo0finFqxPb1qjyrd+7raXhN5KG6IPrEaj/OmWk723YGsnlHzCCq
-        ihuXsaTM/GJbBs3cBR6AhAqaY2vBZmDrNFQMi+Q=
-X-Google-Smtp-Source: AA6agR4WUohF8rqLTyCUYBzt0qVrAGVXcksSxQBSaAJ03v/MQMuCjjvNPRIBSmcykwNUJPEEDJUd61q4dGibEyxUF0k=
-X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:6302 with SMTP id
- b12-20020a056a00114c00b005282c7a6302mr55731099pfm.37.1662476393734; Tue, 06
- Sep 2022 07:59:53 -0700 (PDT)
+        bh=GqM67eToD1ny8VVx70XQz+yqa9cCdNaLyhnIUfKzWx0=;
+        b=SEE9GEJ0cHVIbJXIdni1xoTz4JVpo5Q8b1mGAquVBDIGzoqVCCgnHR5Ih0RbNUZuSc
+         dNzN345IkFAe0X1OsEWTLGk3PC+JH2/bbYzIjQLu8e6p7ABhK4l5mpoEtfB8STt7MhcI
+         BrzL19YsSc/nAKMxdOD2mXJbjaoBEPsVoEcM/bdxXKkG9UY7KihmdkSpPI1Q4107tK3i
+         Nn6tBjVT+jzrt1bOopid3jzeUuwO+oadot+zRHhba8FFfozbEI7prVL+/PEx1pYoinct
+         SnMluEtvjIvz0VwtbQb5WdHnA7asPvvSUAv5cpsRMgZ4vXhdjI2MkvBdAgbPsbjXzoRk
+         vMvA==
+X-Gm-Message-State: ACgBeo1KWsOA8lgqHMSCRrrvmxrwNswzVHF+LNlbRooPyr9HylRJrxof
+        wm89xH3ePSVithgg4a4b1r7IeZV2aV/t8NFoH5k1qw==
+X-Google-Smtp-Source: AA6agR7WoNKp8qX4Lx0DqP9V0mYU3T/qwubSi65FPamgmh5UtOzupuJjLfCYByP2mN5n26WVgQyFhPUIZ+awIHTyQbo=
+X-Received: by 2002:a02:740b:0:b0:349:bcdd:ca20 with SMTP id
+ o11-20020a02740b000000b00349bcddca20mr30610852jac.110.1662478551322; Tue, 06
+ Sep 2022 08:35:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220818092059.103884-1-linus.walleij@linaro.org>
- <CAK8P3a1x52F8Ya3ShQ+v6x_jANfUsEq0E55u+pOBNaYniRO7cA@mail.gmail.com>
- <CACRpkdZemHScp9WW-7LaGtcXuvT2qzs_7nXS60icSWtPkEwMHg@mail.gmail.com> <8d931abd-ce7d-45da-b47c-239d4c7cd72f@www.fastmail.com>
-In-Reply-To: <8d931abd-ce7d-45da-b47c-239d4c7cd72f@www.fastmail.com>
-From:   Matt Turner <mattst88@gmail.com>
-Date:   Tue, 6 Sep 2022 10:59:42 -0400
-Message-ID: <CAEdQ38FXieAyHHmP01czaMVC_wX8pzR=i0_-rhKMuzziJcFHNA@mail.gmail.com>
-Subject: Re: [PATCH] alpha: Use generic <asm-generic/io.h>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-alpha@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
+References: <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+ <20220831101948.f3etturccmp5ovkl@suse.de> <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+ <20220831190154.qdlsxfamans3ya5j@moria.home.lan> <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+ <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+ <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
+ <YxWvbMYLkPoJrQyr@dhcp22.suse.cz> <CAJuCfpHJsfe172YUQbOqkkpNEEF7B6pJZuWnMa2BsdZwwEGKmA@mail.gmail.com>
+ <Yxb+PWN9kbfHSN8T@dhcp22.suse.cz>
+In-Reply-To: <Yxb+PWN9kbfHSN8T@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 6 Sep 2022 08:35:40 -0700
+Message-ID: <CAJuCfpGeEc9_fTCCRj9DtwQEu3u0fecc4DJuOjZzrTPfnNbOKw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 4:53 PM Arnd Bergmann <arnd@arndb.de> wrote:
+On Tue, Sep 6, 2022 at 1:01 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> On Mon, Sep 5, 2022, at 9:30 PM, Linus Walleij wrote:
-> > On Thu, Aug 18, 2022 at 12:28 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Thu, Aug 18, 2022 at 11:20 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Mon 05-09-22 11:03:35, Suren Baghdasaryan wrote:
+> > On Mon, Sep 5, 2022 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
+> > > > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > [...]
+> > > > > Yes, tracking back the call trace would be really needed. The question
+> > > > > is whether this is really prohibitively expensive. How much overhead are
+> > > > > we talking about? There is no free lunch here, really.  You either have
+> > > > > the overhead during runtime when the feature is used or on the source
+> > > > > code level for all the future development (with a maze of macros and
+> > > > > wrappers).
+> > > >
+> > > > As promised, I profiled a simple code that repeatedly makes 10
+> > > > allocations/frees in a loop and measured overheads of code tagging,
+> > > > call stack capturing and tracing+BPF for page and slab allocations.
+> > > > Summary:
+> > > >
+> > > > Page allocations (overheads are compared to get_free_pages() duration):
+> > > > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
+> > > > 8.8% lookup_page_ext
+> > > > 1237% call stack capture
+> > > > 139% tracepoint with attached empty BPF program
+> > >
+> > > Yes, I am not surprised that the call stack capturing is really
+> > > expensive comparing to the allocator fast path (which is really highly
+> > > optimized and I suspect that with 10 allocation/free loop you mostly get
+> > > your memory from the pcp lists). Is this overhead still _that_ visible
+> > > for somehow less microoptimized workloads which have to take slow paths
+> > > as well?
 > >
-> >> > I'd like this applied to the alpha tree if there is such a
-> >> > thing otherwise maybe Arnd can apply it to the arch generic
-> >> > tree?
-> >>
-> >> Sure, I can do that.
+> > Correct, it's a comparison with the allocation fast path, so in a
+> > sense represents the worst case scenario. However at the same time the
+> > measurements are fair because they measure the overheads against the
+> > same meaningful baseline, therefore can be used for comparison.
+>
+> Yes, I am not saying it is an unfair comparision. It is just not a
+> particularly practical one for real life situations. So I am not sure
+> you can draw many conclusions from that. Or let me put it differently.
+> There is not real point comparing the code tagging and stack unwiding
+> approaches because the later is simply more complex because it collects
+> more state. The main question is whether that additional state
+> collection is too expensive to be practically used.
+
+You asked me to provide the numbers in one of your replies, that's what I did.
+
+>
+> > > Also what kind of stack unwinder is configured (I guess ORC)? This is
+> > > not my area but from what I remember the unwinder overhead varies
+> > > between ORC and FP.
 > >
-> > Could you apply this to the arch tree? I see no signs of life from
-> > the alpha maintainers.
+> > I used whatever is default and didn't try other mechanisms. Don't
+> > think the difference would be orders of magnitude better though.
+> >
+> > >
+> > > And just to make it clear. I do realize that an overhead from the stack
+> > > unwinding is unavoidable. And code tagging would logically have lower
+> > > overhead as it performs much less work. But the main point is whether
+> > > our existing stack unwiding approach is really prohibitively expensive
+> > > to be used for debugging purposes on production systems. I might
+> > > misremember but I recall people having bigger concerns with page_owner
+> > > memory footprint than the actual stack unwinder overhead.
+> >
+> > That's one of those questions which are very difficult to answer (if
+> > even possible) because that would depend on the use scenario. If the
+> > workload allocates frequently then adding the overhead will likely
+> > affect it, otherwise might not be even noticeable. In general, in
+> > pre-production testing we try to minimize the difference in
+> > performance and memory profiles between the software we are testing
+> > and the production one. From that point of view, the smaller the
+> > overhead, the better. I know it's kinda obvious but unfortunately I
+> > have no better answer to that question.
 >
-> Sure, I can do that. I also realized that we can actually fold
-> all of asm-generic/io.h into linux/io.h directly once this is
-> complete for all architectures. Probably better to leave that for
-> 6.1 though.
+> This is clear but it doesn't really tell whether the existing tooling is
+> unusable for _your_ or any specific scenarios. Because when we are
+> talking about adding quite a lot of code and make our allocators APIs
+> more complicated to track the state then we should carefully weigh the
+> benefit and the cost. As replied to other email I am really skeptical
+> this patchset is at the final stage and the more allocators get covered
+> the more code we have to maintain. So there must be a very strong reason
+> to add it.
+
+The patchset is quite complete at this point. Instrumenting new
+allocators takes 3 lines of code, see how kmalloc_hooks macro is used
+in https://lore.kernel.org/all/20220830214919.53220-17-surenb@google.com/
+
 >
-> I wonder if I should also add send a patch to mark Alpha as
-> 'Orphaned' like we did for arch/ia64 a while ago.
-> It's already marked as 'Odd fixes', but the last pull request
-> from Matt was over a year ago now.
+> > For the memory overhead, in my early internal proposal with assumption
+> > of 10000 instrumented allocation call sites, I've made some
+> > calculations for an 8GB 8-core system (quite typical for Android) and
+> > ended up with the following:
+> >
+> >                                     per-cpu counters      atomic counters
+> > page_ext references     16MB                      16MB
+> > slab object references   10.5MB                   10.5MB
+> > alloc_tags                      900KB                    312KB
+> > Total memory overhead 27.4MB                  26.8MB
+>
+> I do not really think this is all that interesting because the major
+> memory overhead contributors (page_ext and objcg are going to be there
+> with other approaches that want to match alloc and free as that clearly
+> requires to store the allocator objects somewhere).
 
-Sorry, I've just completed a cross-country move and have generally
-been very busy with real life for the last year or so.
+You mentioned that memory consumption in the page_owner approach was
+more important overhead, so I provided the numbers for that part of
+the discussion.
 
-My alphas are being unpacked now, so I'll try to catch up on things.
-Feel free to take any alpha patches through the arch tree. I feel
-confident that you have more of a clue about what's going on in kernel
-land than I do.
+>
+> > so, about 0.34% of the total memory. Our implementation has changed
+> > since then and the number might not be completely correct but it
+> > should be in the ballpark.
+> > I just checked the number of instrumented calls that we currently have
+> > in the 6.0-rc3 built with defconfig and it's 165 page allocation and
+> > 2684 slab allocation sites. I readily accept that we are probably
+> > missing some allocations and additional modules can also contribute to
+> > these numbers but my guess it's still less than 10000 that I used in
+> > my calculations.
+>
+> yes, in the current implementation you are missing most indirect users
+> of the page allocator as stated elsewhere so the usefulness can be
+> really limited. A better coverege will not increase the memory
+> consumption much but it will add an additional maintenance burden that
+> will scale with different usecases.
 
+Your comments in the last two letters about needing the stack tracing
+and covering indirect users of the allocators makes me think that you
+missed my reply here:
+https://lore.kernel.org/all/CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com/.
+I messed up with formatting but hopefully it's still readable. The
+idea of having two stage tracking - first one very cheap and the
+second one more in-depth I think should address your concerns about
+indirect users.
 Thanks,
-Matt
+Suren.
+
+> --
+> Michal Hocko
+> SUSE Labs
