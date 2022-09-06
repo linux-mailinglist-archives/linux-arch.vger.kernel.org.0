@@ -2,251 +2,216 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985A85AF001
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 18:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E82B5AF2CB
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 19:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238766AbiIFQLl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Sep 2022 12:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S229482AbiIFRjL (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Sep 2022 13:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbiIFQLO (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 12:11:14 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB2A9DF91
-        for <linux-arch@vger.kernel.org>; Tue,  6 Sep 2022 08:35:52 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id n202so9204783iod.6
-        for <linux-arch@vger.kernel.org>; Tue, 06 Sep 2022 08:35:52 -0700 (PDT)
+        with ESMTP id S232327AbiIFRib (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 13:38:31 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4052F59D;
+        Tue,  6 Sep 2022 10:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662485721; x=1694021721;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=QR8gvZBpyv5eCF49zr2XkbTnFfFS99UEe8Eo81gM2mI=;
+  b=bo0Z5SViiEaPd5s4pN7GtrH8nu0PbSZZga8Ga+c+bB3F5kp2c/WOGPym
+   qVa4yaSjFBMFUhIcAxK8B8CjIxNJDHMmBg+BhzpArVPeCronl83rbV4Rq
+   xvHjr14llOMGTyQ+r53Me4dnbxuE/mUOXESGhDxZC3uhNn68kcK18dwI0
+   2sqLxOGc+dOgB0VlKH6RSZSn+6CvXWht97xk5ZColTgyXR6qG73uXiGNf
+   99RniHa/DLP3lq4O2GtxUSQ3zv3y9hSzsZSCWZw8Hocu3BWIAZYflc5wg
+   aS+O0hg7Syzig9Ldxpm4iChYwFAHqVHMl9AcEzytPCpz3ONqaBmcX0yIL
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,294,1654585200"; 
+   d="scan'208";a="179260968"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Sep 2022 10:35:19 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 6 Sep 2022 10:35:18 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Tue, 6 Sep 2022 10:35:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AebR7Mtwii6SDzuUkKSRJyxYir8g1fbZmXY2wQpYH+dE2B2RKEjys+ry3Qof05yirRVPKbOQIylF6IyALDcdNi52WiKVMRSNvJK13JfOB/ZxiWeXVCjHjq5hTLCjjgLFgbdI85uyeR4r2FN257V2whaYONURkeDNK9SQ4f6pWGiBrHrFWDwIbpr6GAI0pmY4T82QdrHqFKzdA88sdDmjucCisAY8sImuHek0heEPWvQDS6AWNYu4f2oGhUtrX3nh10y/x5LwkXzbf69B+65e8jKw++A1zgGThsZnXCoDtL/xpLiAVhPtPSijftZqvg1YWucS+cVcmwvSR7IidFhyfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QR8gvZBpyv5eCF49zr2XkbTnFfFS99UEe8Eo81gM2mI=;
+ b=P/fXNnb67mXddIKmD4khDKSSTNN/34LXHFzrj5EBxE2Nkn+5gdD46WIkl0VefBvxmlOA//Mc+5TGmdozfr068/q5NLulfsIGzviV/OEybhCgvhPgf9tofjyfv60LV1xTF4F7eDw6TJVo+zETEYQxoo5XuWocFRrbHhz4/6AcNo172y0/O1ZyrcK6BxrTyjGy8j2TCKR1L9GPW9tix/VQOIw+8V4hYaX6Uqwee73hMuxMzABY8pI6iovdUC62XVHoLlQOn6nsoRuksXJaXyKAeRFQ5aby16ulNDf0+A+ZjcGUWgcjc7XHNnhYxjE1DoNsb10FOPe3dErVnb+RCNEbfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=GqM67eToD1ny8VVx70XQz+yqa9cCdNaLyhnIUfKzWx0=;
-        b=o3N3QM1fYFh9QHqMEdh1kjn5ZTr3F8RtlpM5O2++y+WOWtF5VqFnmXM7INH/3C3eUV
-         rtXiQP5g7p+1RoMGkcw8HpDxL1pIoLr71CH6AjbQWmEBhVb8u4LGn4/JVRQUuf+w77de
-         2tDN6e9GHnPV23R5EjAA9O+pg1qluKyo7jxsmW8SNYXPzCoVSh4f84J4gtZ4tZnhWZiK
-         26iwawWesNsxFg0dhAaf6JAFTmg9hfjLKKg0EVBzsaVgBhhTWcI8VbgoxxYwcOBeZkXo
-         2Fqq2sP/TfasoLql4YXx1PjqBffK+ktlknPqDflzAqCaK7N0WDBoy9seeNTqaG/m1+h6
-         JdKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GqM67eToD1ny8VVx70XQz+yqa9cCdNaLyhnIUfKzWx0=;
-        b=SEE9GEJ0cHVIbJXIdni1xoTz4JVpo5Q8b1mGAquVBDIGzoqVCCgnHR5Ih0RbNUZuSc
-         dNzN345IkFAe0X1OsEWTLGk3PC+JH2/bbYzIjQLu8e6p7ABhK4l5mpoEtfB8STt7MhcI
-         BrzL19YsSc/nAKMxdOD2mXJbjaoBEPsVoEcM/bdxXKkG9UY7KihmdkSpPI1Q4107tK3i
-         Nn6tBjVT+jzrt1bOopid3jzeUuwO+oadot+zRHhba8FFfozbEI7prVL+/PEx1pYoinct
-         SnMluEtvjIvz0VwtbQb5WdHnA7asPvvSUAv5cpsRMgZ4vXhdjI2MkvBdAgbPsbjXzoRk
-         vMvA==
-X-Gm-Message-State: ACgBeo1KWsOA8lgqHMSCRrrvmxrwNswzVHF+LNlbRooPyr9HylRJrxof
-        wm89xH3ePSVithgg4a4b1r7IeZV2aV/t8NFoH5k1qw==
-X-Google-Smtp-Source: AA6agR7WoNKp8qX4Lx0DqP9V0mYU3T/qwubSi65FPamgmh5UtOzupuJjLfCYByP2mN5n26WVgQyFhPUIZ+awIHTyQbo=
-X-Received: by 2002:a02:740b:0:b0:349:bcdd:ca20 with SMTP id
- o11-20020a02740b000000b00349bcddca20mr30610852jac.110.1662478551322; Tue, 06
- Sep 2022 08:35:51 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QR8gvZBpyv5eCF49zr2XkbTnFfFS99UEe8Eo81gM2mI=;
+ b=Nbv2w8ABmAvdrHMdRI+B4zd50NMRbwZrLTbfy8ld3ba3Kz4sNcWmxb5iZJWPeHxjvCnabAcjq5aDFbsEjH2dl+aVq/dm0kI7dDOX1QFOONqEBMEXxXyvhevd96+H/EGVVoakd1Cwe2PE32f/pLYyNC30Pydk7PuIdbwf6PzIkec=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by CY4PR1101MB2088.namprd11.prod.outlook.com (2603:10b6:910:17::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Tue, 6 Sep
+ 2022 17:35:11 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009%3]) with mapi id 15.20.5588.018; Tue, 6 Sep 2022
+ 17:35:11 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <guoren@kernel.org>, <oleg@redhat.com>, <vgupta@kernel.org>,
+        <linux@armlinux.org.uk>, <monstr@monstr.eu>, <dinguyen@kernel.org>,
+        <palmer@dabbelt.com>, <davem@davemloft.net>, <arnd@arndb.de>,
+        <shorne@gmail.com>, <paul.walmsley@sifive.com>,
+        <aou@eecs.berkeley.edu>, <ardb@kernel.org>, <heiko@sntech.de>,
+        <daolu@rivosinc.com>
+CC:     <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-snps-arc@lists.infradead.org>, <sparclinux@vger.kernel.org>,
+        <openrisc@lists.librecores.org>, <xianting.tian@linux.alibaba.com>,
+        <linux-efi@vger.kernel.org>
+Subject: Re: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the end
+ of syscalls
+Thread-Topic: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the
+ end of syscalls
+Thread-Index: AQHYuuW9rugSRYh05UmTe1hHac9Fz63SuDoA
+Date:   Tue, 6 Sep 2022 17:35:10 +0000
+Message-ID: <6c48657c-04df-132d-6167-49ed293dea44@microchip.com>
+References: <20220903162328.1952477-1-guoren@kernel.org>
+ <20220828135407.3897717-1-xianting.tian@linux.alibaba.com>
+In-Reply-To: <20220828135407.3897717-1-xianting.tian@linux.alibaba.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c76c48a0-5560-42cf-0b22-08da902e2633
+x-ms-traffictypediagnostic: CY4PR1101MB2088:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PUEJXo+oFmqdtN2i7ThrqMpY2fphg4+cgcjZtJZDK9ttEX2yRJtyGX/aUPOpr3JVRd7SCWBkNue6WxL+AHAis27FFzoBLYwnaaFlbWJFpgjRE8Www9QTNTILXiTAqh3RDQqN08JS7BG0t5Y5qLZsjxQhhSkesNdHftyQlAAMHUnG9ChzMlozunl7T40LwukJ5UBWtiHOhiXKaoDKfcKhNXFkPXNPwb3qHymydDn90pnPeGb/4+2bgAlhtV3ofX8MayN3/3TWczLVW3Olc3BQ4TFkhrzjzxa/eONedQzQ00ZVWXWghmvrtT/VqmPkaluV6UV/EOjpCa003OWqe7hbJ6HQEfY2Bk2ihcMv9lbtu64cSpoSQQiRzZfxZf5DWhvrvBOFZiA8MXRpZHYtxM/D11cy6tzGX6IsyBjfNiziDRCzqbuuYMiVmAd53osWlqCjaihIpRywXuluOFaVr3cBkr5A+kwLygILUZ5xWxiiCdsQUhGOHSmQdeHSup5tcS9YuGs6Nie2kZgUU99EVwC/zxhjgvoLDWY+keq+RnoMbsJlxhnNQSOkbjjrT+3kFKhtXdp+9XT/yW3uc2K+0MGurjtviQ9LzpXdrUG5yntOTWp6etIzmFzJFbicNyrsagMgQqggLUjCsZW32WVuXrPeXlIqYpLS1HsEDJkGkzG9NXI4KJcNBLfFnVHUsuIx7CbrvpK46kqmvRT+G3KAafQREaPhXQ+9K43K/akyJlDB6D1OOFS0Z0mZGR7aWz4pC2Z5gx3Kr3dG4kDT5dI2PPEijq7VoalMTAxKmJTbT5Ww4rveY9J1UXbkIB51opv36MbuYDCEMEzW0PmLM6ngqXogqn1YVMBkKaiOVze3Ao8femCYEPk/SLZdEKtJj/ad7EYBL6In3Cdy30FqSKJBCQ7h6Co2mtpjeul0IzDZlURngKY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(136003)(376002)(396003)(346002)(39860400002)(8936002)(66476007)(76116006)(8676002)(91956017)(478600001)(71200400001)(6486002)(966005)(64756008)(54906003)(66556008)(66946007)(4326008)(316002)(110136005)(66446008)(38100700002)(2906002)(122000001)(7416002)(5660300002)(31696002)(31686004)(38070700005)(36756003)(83380400001)(921005)(6512007)(41300700001)(2616005)(186003)(26005)(53546011)(6506007)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SE43ZFZieVlzTTFrNVJGRnNPakRVRHd4R2J6dVJWck9XNzd3b3hxclZINHJZ?=
+ =?utf-8?B?anE4VWRlbG5WdEFKQmtMOWZ2MUxzTTJuZ2tZMTg5U2dSS1hndmE3UnJoNEx0?=
+ =?utf-8?B?K05TZmM0YVNsQ3pKbU8zYkpjYWJ6d2RySlZIdjhYMVNYZmc4c1NCc2svMzU2?=
+ =?utf-8?B?QzZBTkRnQjcvS3U3NWUzb0JHMVRaSHVTZGxjaDZFWWFZdDVRekZ1RWxHbEo5?=
+ =?utf-8?B?ZHBYZ0haZVdFQTdlY0UrUmZ4UnFEcXFXc0hubVFKN1NYYkNZOTd1bXY0dnl4?=
+ =?utf-8?B?T0tJZjBqOW03S2VOOUw2aG1qTU9xSS9pZE5pMU1YTDcrMXFHUXRqS0FLMVVa?=
+ =?utf-8?B?enpJTS9xMjRqTkxPWkJXdVcydzVkT1NBbFZZQmkydTFQNGFSRXBzMmNJekZS?=
+ =?utf-8?B?QWUrZkhwaDI2MDZnYTdhZEZORERsWVpja2pQbWZHYnFBQlhrcGIvTU05K1N6?=
+ =?utf-8?B?TXNrZDQ4VmFjMy96dWdDOUxIQzBGeERJd2lpNjh5WUNwNGNvUUNhdUl4TnVz?=
+ =?utf-8?B?aXNaREdEb3NWQW5nd2ZQVEp6RDhnb2c2ZTllTmVSUnh2K1pHa0UyMzdzNDJl?=
+ =?utf-8?B?SzduMzR6a3NUUGs3UWhYTGFnRmxrL1dsZzljQm5lcGlsN29xUllpOXpwdHdC?=
+ =?utf-8?B?dlpaNXZLYmNmNXhCL3d3QUcyclczSFl2L1ZmWXBycmw1OTZXbW1XbzBEZmQ1?=
+ =?utf-8?B?L3Ava0gzWGxJdVhPK3ZreWExZTRGcjNDTkcxd0gwTHFvK1l6RVZPTUlQMkQv?=
+ =?utf-8?B?MWlKQjR6NzFkUTNrMkN5eEZMQk1GQzdoM2t4cHlPeUtuc28wTk9EUC9lZWQ5?=
+ =?utf-8?B?aEVZTWRWWERWTWM4dG1OT1lGaFhrYUVUSXpZNzhiWDFNOWMzaVJZYW5ObmxM?=
+ =?utf-8?B?b3BMWDRtOExPUFF2MEVndzR1bEh4S0FqYmpLbGEvWVp3L29Yd2dnRDhDTTlC?=
+ =?utf-8?B?RVBrY212T0xIaUpobEg0TDBxckFEWTF0bzBHZVFmUGNObnhJUXlSUjRYbzVl?=
+ =?utf-8?B?M1JuNVZBZnlDTDBlTGoxVTlqZ2F0bFIwbUlsbnNlZnkzVDg4UGQ0S2ZRKzlh?=
+ =?utf-8?B?VHhRMUx0d1BQYmxxdFE2NkVHcDRnM2lmVDJZWmtHTi9ybEd1S2s0c2I3RkUy?=
+ =?utf-8?B?T0NLQmxnRG14a1ZMWU0xWVo1ZlljUHFwTnFBRjZZMWFYRVFNeTNFR2Y2WWs3?=
+ =?utf-8?B?RUhLRDZhdDFiR2xWUkQxTWNaNkx1eEZoQURjM0swa1dZNmUwdTN1djRFVTA1?=
+ =?utf-8?B?SjFSMldrTVdPTUFYNDRCc1lYNjNkb25hZ2RVdjI4MDlhcnZGVC9QdmJ0TEky?=
+ =?utf-8?B?TGpWQkVXaHZLRXFrd3JQNUZvTi85NGpGRXAwL1d3d08rS1RaQlluSFpmOVNw?=
+ =?utf-8?B?eWVSNDN0eUpGV0Mxc0s1YUliVUorMy9vSG9manl2dzhsNXZwM2JuZWJRWGJN?=
+ =?utf-8?B?anJITXhuRUpUSHVmSTVSUUxEakpHNzB4UWNETUlRT1pYYjArZXl4WmxDaGpE?=
+ =?utf-8?B?SkozK1g5TjhSR1NGVE5lZGpsRU1XUWtnTVNvb3BJV2VLSTREVndGVERVWGNh?=
+ =?utf-8?B?N0V0UHNxbWNKaUZsUW9KczRqV0pYemEwWDllSHdjZGNCOEZYcGl6RFRCYnF5?=
+ =?utf-8?B?RGNEWW9FNjVzVm1wMklYc3RKNHd1OGM4dWVwS0Z2Rld4dDBnR054NCsxc3FZ?=
+ =?utf-8?B?Q1lzakFMMVdMNVdEZFNmZGFkZ1I4RjhmZmtlR3VOd0w2QUNrVVd6QUtjcmw4?=
+ =?utf-8?B?UmxGWnA2ZUE2MDErSG1yWFFvV2ovNDQ4WEJlLzdCWnhHNDkyWk04OEVxeFJT?=
+ =?utf-8?B?Q3JsSnpYTVIvMDAwcTRxOEZKdWMxcmw2Qk5FRlkzM2h0SFFjRW9HZCsrMXlw?=
+ =?utf-8?B?cmNTb3NpdzFPMlAwdnl5Tjl0OGpsM0ZxLzVuK2U4enNteWdxQ25iQ3lpZTRu?=
+ =?utf-8?B?SzJyam12MkdRaU9SVjMvVFZjaEZSSnc1Z3JXL1NNUi9WMmNGMjRvZGladlhl?=
+ =?utf-8?B?bjd3YkNXR2Vxc3hzRkVESGxONDdBWEM1WnhLZXY4S1FCYVYwSU5wYjVEb25B?=
+ =?utf-8?B?dEF5NU5ZOWNhbWRqUnYyQU1iZUc0Q2cxQkR3RGFsQ1U0Qll2UWtCLzBpak44?=
+ =?utf-8?Q?LbBR2w3kgfv0ZFCtOdhEw+an5?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E20572F5CA14F145892642055954ACDB@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de> <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan> <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
- <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
- <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
- <YxWvbMYLkPoJrQyr@dhcp22.suse.cz> <CAJuCfpHJsfe172YUQbOqkkpNEEF7B6pJZuWnMa2BsdZwwEGKmA@mail.gmail.com>
- <Yxb+PWN9kbfHSN8T@dhcp22.suse.cz>
-In-Reply-To: <Yxb+PWN9kbfHSN8T@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 6 Sep 2022 08:35:40 -0700
-Message-ID: <CAJuCfpGeEc9_fTCCRj9DtwQEu3u0fecc4DJuOjZzrTPfnNbOKw@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c76c48a0-5560-42cf-0b22-08da902e2633
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2022 17:35:10.9808
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Hniry5rVie9lqzo/bgPVCNOrqcvsKPAy3oTIJ07JkyyEaZ0xPKICQN0UckefZIvB+w15TOwcAWFja3mR+20YiDxDjO8oxlD9DRgl4T8Ogdw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2088
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 1:01 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 05-09-22 11:03:35, Suren Baghdasaryan wrote:
-> > On Mon, Sep 5, 2022 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
-> > > > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > [...]
-> > > > > Yes, tracking back the call trace would be really needed. The question
-> > > > > is whether this is really prohibitively expensive. How much overhead are
-> > > > > we talking about? There is no free lunch here, really.  You either have
-> > > > > the overhead during runtime when the feature is used or on the source
-> > > > > code level for all the future development (with a maze of macros and
-> > > > > wrappers).
-> > > >
-> > > > As promised, I profiled a simple code that repeatedly makes 10
-> > > > allocations/frees in a loop and measured overheads of code tagging,
-> > > > call stack capturing and tracing+BPF for page and slab allocations.
-> > > > Summary:
-> > > >
-> > > > Page allocations (overheads are compared to get_free_pages() duration):
-> > > > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
-> > > > 8.8% lookup_page_ext
-> > > > 1237% call stack capture
-> > > > 139% tracepoint with attached empty BPF program
-> > >
-> > > Yes, I am not surprised that the call stack capturing is really
-> > > expensive comparing to the allocator fast path (which is really highly
-> > > optimized and I suspect that with 10 allocation/free loop you mostly get
-> > > your memory from the pcp lists). Is this overhead still _that_ visible
-> > > for somehow less microoptimized workloads which have to take slow paths
-> > > as well?
-> >
-> > Correct, it's a comparison with the allocation fast path, so in a
-> > sense represents the worst case scenario. However at the same time the
-> > measurements are fair because they measure the overheads against the
-> > same meaningful baseline, therefore can be used for comparison.
->
-> Yes, I am not saying it is an unfair comparision. It is just not a
-> particularly practical one for real life situations. So I am not sure
-> you can draw many conclusions from that. Or let me put it differently.
-> There is not real point comparing the code tagging and stack unwiding
-> approaches because the later is simply more complex because it collects
-> more state. The main question is whether that additional state
-> collection is too expensive to be practically used.
-
-You asked me to provide the numbers in one of your replies, that's what I did.
-
->
-> > > Also what kind of stack unwinder is configured (I guess ORC)? This is
-> > > not my area but from what I remember the unwinder overhead varies
-> > > between ORC and FP.
-> >
-> > I used whatever is default and didn't try other mechanisms. Don't
-> > think the difference would be orders of magnitude better though.
-> >
-> > >
-> > > And just to make it clear. I do realize that an overhead from the stack
-> > > unwinding is unavoidable. And code tagging would logically have lower
-> > > overhead as it performs much less work. But the main point is whether
-> > > our existing stack unwiding approach is really prohibitively expensive
-> > > to be used for debugging purposes on production systems. I might
-> > > misremember but I recall people having bigger concerns with page_owner
-> > > memory footprint than the actual stack unwinder overhead.
-> >
-> > That's one of those questions which are very difficult to answer (if
-> > even possible) because that would depend on the use scenario. If the
-> > workload allocates frequently then adding the overhead will likely
-> > affect it, otherwise might not be even noticeable. In general, in
-> > pre-production testing we try to minimize the difference in
-> > performance and memory profiles between the software we are testing
-> > and the production one. From that point of view, the smaller the
-> > overhead, the better. I know it's kinda obvious but unfortunately I
-> > have no better answer to that question.
->
-> This is clear but it doesn't really tell whether the existing tooling is
-> unusable for _your_ or any specific scenarios. Because when we are
-> talking about adding quite a lot of code and make our allocators APIs
-> more complicated to track the state then we should carefully weigh the
-> benefit and the cost. As replied to other email I am really skeptical
-> this patchset is at the final stage and the more allocators get covered
-> the more code we have to maintain. So there must be a very strong reason
-> to add it.
-
-The patchset is quite complete at this point. Instrumenting new
-allocators takes 3 lines of code, see how kmalloc_hooks macro is used
-in https://lore.kernel.org/all/20220830214919.53220-17-surenb@google.com/
-
->
-> > For the memory overhead, in my early internal proposal with assumption
-> > of 10000 instrumented allocation call sites, I've made some
-> > calculations for an 8GB 8-core system (quite typical for Android) and
-> > ended up with the following:
-> >
-> >                                     per-cpu counters      atomic counters
-> > page_ext references     16MB                      16MB
-> > slab object references   10.5MB                   10.5MB
-> > alloc_tags                      900KB                    312KB
-> > Total memory overhead 27.4MB                  26.8MB
->
-> I do not really think this is all that interesting because the major
-> memory overhead contributors (page_ext and objcg are going to be there
-> with other approaches that want to match alloc and free as that clearly
-> requires to store the allocator objects somewhere).
-
-You mentioned that memory consumption in the page_owner approach was
-more important overhead, so I provided the numbers for that part of
-the discussion.
-
->
-> > so, about 0.34% of the total memory. Our implementation has changed
-> > since then and the number might not be completely correct but it
-> > should be in the ballpark.
-> > I just checked the number of instrumented calls that we currently have
-> > in the 6.0-rc3 built with defconfig and it's 165 page allocation and
-> > 2684 slab allocation sites. I readily accept that we are probably
-> > missing some allocations and additional modules can also contribute to
-> > these numbers but my guess it's still less than 10000 that I used in
-> > my calculations.
->
-> yes, in the current implementation you are missing most indirect users
-> of the page allocator as stated elsewhere so the usefulness can be
-> really limited. A better coverege will not increase the memory
-> consumption much but it will add an additional maintenance burden that
-> will scale with different usecases.
-
-Your comments in the last two letters about needing the stack tracing
-and covering indirect users of the allocators makes me think that you
-missed my reply here:
-https://lore.kernel.org/all/CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com/.
-I messed up with formatting but hopefully it's still readable. The
-idea of having two stage tracking - first one very cheap and the
-second one more in-depth I think should address your concerns about
-indirect users.
-Thanks,
-Suren.
-
-> --
-> Michal Hocko
-> SUSE Labs
+T24gMDMvMDkvMjAyMiAxNzoyMywgZ3VvcmVuQGtlcm5lbC5vcmcgd3JvdGU6DQo+IEVYVEVSTkFM
+IEVNQUlMOiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91
+IGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZQ0KPiANCj4gRnJvbTogWGlhbnRpbmcgVGlhbiA8eGlh
+bnRpbmcudGlhbkBsaW51eC5hbGliYWJhLmNvbT4NCj4gDQo+IFRoaXMgYWRkcyBzdXBwb3J0IGZv
+ciB0aGUgU1RBQ0tMRUFLIGdjYyBwbHVnaW4gdG8gUklTQy1WIGFuZCBkaXNhYmxlcw0KPiB0aGUg
+cGx1Z2luIGluIEVGSSBzdHViIGNvZGUsIHdoaWNoIGlzIG91dCBvZiBzY29wZSBmb3IgdGhlIHBy
+b3RlY3Rpb24uDQo+IA0KPiBGb3IgdGhlIGJlbmVmaXRzIG9mIFNUQUNLTEVBSyBmZWF0dXJlLCBw
+bGVhc2UgY2hlY2sgdGhlIGNvbW1pdA0KPiBhZmFlZjAxYzAwMTUgKCJ4ODYvZW50cnk6IEFkZCBT
+VEFDS0xFQUsgZXJhc2luZyB0aGUga2VybmVsIHN0YWNrIGF0IHRoZSBlbmQgb2Ygc3lzY2FsbHMi
+KQ0KPiANCj4gUGVyZm9ybWFuY2UgaW1wYWN0ICh0ZXN0ZWQgb24gcWVtdSBlbnYgd2l0aCAxIHJp
+c2N2NjQgaGFydCwgMUdCIG1lbSkNCj4gICAgIGhhY2tiZW5jaCAtcyA1MTIgLWwgMjAwIC1nIDE1
+IC1mIDI1IC1QDQo+ICAgICAyLjAlIHNsb3dkb3duDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBYaWFu
+dGluZyBUaWFuIDx4aWFudGluZy50aWFuQGxpbnV4LmFsaWJhYmEuY29tPg0KDQpXaGF0IGNoYW5n
+ZWQgc2luY2UgWGlhbnRpbmcgcG9zdGVkIGl0IGhpbXNlbGYgYSB3ZWVrIGFnbzoNCmh0dHBzOi8v
+bG9yZS5rZXJuZWwub3JnL2xpbnV4LXJpc2N2LzIwMjIwODI4MTM1NDA3LjM4OTc3MTctMS14aWFu
+dGluZy50aWFuQGxpbnV4LmFsaWJhYmEuY29tLw0KDQpUaGVyZSdzIGFuIG9sZGVyIHBhdGNoIGZy
+b20gRHUgTGFvIGFkZGluZyBTVEFDS0xFQUsgdG9vOg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcv
+bGludXgtcmlzY3YvMjAyMjA2MTUyMTM4MzQuMzExNjEzNS0xLWRhb2x1QHJpdm9zaW5jLmNvbS8N
+Cg0KQnV0IHNpbmNlIHRoZXJlJ3MgYmVlbiBubyBhY3Rpdml0eSB0aGVyZSBzaW5jZSBKdW5lLi4u
+DQoNCj4gLS0tDQo+ICBhcmNoL3Jpc2N2L0tjb25maWcgICAgICAgICAgICAgICAgICAgIHwgMSAr
+DQo+ICBhcmNoL3Jpc2N2L2luY2x1ZGUvYXNtL3Byb2Nlc3Nvci5oICAgIHwgNCArKysrDQo+ICBh
+cmNoL3Jpc2N2L2tlcm5lbC9lbnRyeS5TICAgICAgICAgICAgIHwgMyArKysNCj4gIGRyaXZlcnMv
+ZmlybXdhcmUvZWZpL2xpYnN0dWIvTWFrZWZpbGUgfCAyICstDQo+ICA0IGZpbGVzIGNoYW5nZWQs
+IDkgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2FyY2gv
+cmlzY3YvS2NvbmZpZyBiL2FyY2gvcmlzY3YvS2NvbmZpZw0KPiBpbmRleCBlZDY2YzMxZTQ2NTUu
+LjYxZmQwZGFkNDQ2MyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9yaXNjdi9LY29uZmlnDQo+ICsrKyBi
+L2FyY2gvcmlzY3YvS2NvbmZpZw0KPiBAQCAtODUsNiArODUsNyBAQCBjb25maWcgUklTQ1YNCj4g
+ICAgICAgICBzZWxlY3QgQVJDSF9FTkFCTEVfVEhQX01JR1JBVElPTiBpZiBUUkFOU1BBUkVOVF9I
+VUdFUEFHRQ0KPiAgICAgICAgIHNlbGVjdCBIQVZFX0FSQ0hfVEhSRUFEX1NUUlVDVF9XSElURUxJ
+U1QNCj4gICAgICAgICBzZWxlY3QgSEFWRV9BUkNIX1ZNQVBfU1RBQ0sgaWYgTU1VICYmIDY0QklU
+DQo+ICsgICAgICAgc2VsZWN0IEhBVkVfQVJDSF9TVEFDS0xFQUsNCj4gICAgICAgICBzZWxlY3Qg
+SEFWRV9BU01fTU9EVkVSU0lPTlMNCj4gICAgICAgICBzZWxlY3QgSEFWRV9DT05URVhUX1RSQUNL
+SU5HX1VTRVINCj4gICAgICAgICBzZWxlY3QgSEFWRV9ERUJVR19LTUVNTEVBSw0KPiBkaWZmIC0t
+Z2l0IGEvZHJpdmVycy9maXJtd2FyZS9lZmkvbGlic3R1Yi9NYWtlZmlsZSBiL2RyaXZlcnMvZmly
+bXdhcmUvZWZpL2xpYnN0dWIvTWFrZWZpbGUNCj4gaW5kZXggZDA1Mzc1NzM1MDFlLi41ZTFmYzRm
+ODI4ODMgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvZmlybXdhcmUvZWZpL2xpYnN0dWIvTWFrZWZp
+bGUNCj4gKysrIGIvZHJpdmVycy9maXJtd2FyZS9lZmkvbGlic3R1Yi9NYWtlZmlsZQ0KPiBAQCAt
+MjUsNyArMjUsNyBAQCBjZmxhZ3MtJChDT05GSUdfQVJNKSAgICAgICAgICA6PSAkKHN1YnN0ICQo
+Q0NfRkxBR1NfRlRSQUNFKSwsJChLQlVJTERfQ0ZMQUdTKSkgXA0KPiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgIC1mbm8tYnVpbHRpbiAtZnBpYyBcDQo+ICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgJChjYWxsIGNjLW9wdGlvbiwtbW5vLXNpbmdsZS1waWMtYmFz
+ZSkNCj4gIGNmbGFncy0kKENPTkZJR19SSVNDVikgICAgICAgICA6PSAkKHN1YnN0ICQoQ0NfRkxB
+R1NfRlRSQUNFKSwsJChLQlVJTERfQ0ZMQUdTKSkgXA0KPiAtICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIC1mcGljDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+LWZwaWMgJChESVNBQkxFX1NUQUNLTEVBS19QTFVHSU4pDQo+IA0KPiAgY2ZsYWdzLSQoQ09ORklH
+X0VGSV9HRU5FUklDX1NUVUIpICs9IC1JJChzcmN0cmVlKS9zY3JpcHRzL2R0Yy9saWJmZHQNCj4g
+DQo+IC0tDQo+IDIuMTcuMQ0KPiANCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fDQo+IGxpbnV4LXJpc2N2IG1haWxpbmcgbGlzdA0KPiBsaW51eC1y
+aXNjdkBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0cy5pbmZyYWRlYWQub3JnL21h
+aWxtYW4vbGlzdGluZm8vbGludXgtcmlzY3YNCg0K
