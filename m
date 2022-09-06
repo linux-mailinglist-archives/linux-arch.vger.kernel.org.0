@@ -2,128 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574AD5ADBFE
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 01:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5535ADD19
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 03:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbiIEXvU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Sep 2022 19:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
+        id S231301AbiIFBzq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Sep 2022 21:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbiIEXvR (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 19:51:17 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E8501B1;
-        Mon,  5 Sep 2022 16:51:12 -0700 (PDT)
-Date:   Mon, 5 Sep 2022 19:50:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662421870;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=L/QtR7clKwa18sm3kCbVwFkkFjR319r9zDLdSKgBl/k=;
-        b=K0AUlJQwh12ArX3Ivo5AajZFTOnj8fptPh9b/mWIPD8nscGPgO8kw0SNz+Kn/2nIaB9e9i
-        7R3FAk1ULpUqZb/f26WREIzq78CmF0IzVffZPJjJ7RbMsrYAMZ8f5FwzvnmygEisggBmw5
-        5Icx4XHaZKC0M/ASUBy2hcvuJroZdmk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220905235007.sc4uk6illlog62fl@kmo-framework>
-References: <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
- <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
- <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
- <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
- <20220905110713.27304149@gandalf.local.home>
- <CAJuCfpF-O6Gz2o7YqCgFHV+KEFuzC-PTUoBHj25DNRkkSmhbUg@mail.gmail.com>
- <20220905204229.xqrqxmaax37n3ody@moria.home.lan>
- <20220905181650.71e9d02c@gandalf.local.home>
+        with ESMTP id S229735AbiIFBzp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 21:55:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA962B610;
+        Mon,  5 Sep 2022 18:55:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC60B61157;
+        Tue,  6 Sep 2022 01:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E01C43470;
+        Tue,  6 Sep 2022 01:55:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662429343;
+        bh=pfS9CNoNEvfoyh2//nxqJD7uVg2c1QLB5aCtER50Z68=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=loW/9YLv0rlmMEisudZVQNOFn1n6b22KNurVwZJY2+3OBiucKcZmNwklJUdkYGpQ6
+         WJdaxBb2Z+A2Zh0WRY5pZA57oUPw5K81bx1BQ8tKj00cHB94sa4qe5msnzBY1LtVkT
+         S51UUNMUOw0qDOdJ37JDmiNhsuxw+sY+Id2r1uFqfi028kLd31FORnYLfUL90x+KN5
+         KbJWTwNsBBHF21RQ3qWP8kheVIfcbrOsFRhVKhsVVWoqvi8BbnZbVzK/EPoaCENT/B
+         9q/LLsRJK3ZxBN7glmWf9O7WKIbsRQdLvP+2SSZBBxSMzfGN2l/Ad0X+uGkdQhhkbS
+         P9DYMVM3K1cZA==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1272fc7f51aso11690236fac.12;
+        Mon, 05 Sep 2022 18:55:43 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0MuBU+jmoncMVKgSnlJHrfJYEaZCxfzVupwrLrExJqaSjvFXk4
+        sLiGXT+Xf36DgkuXjlD7vo7uqMPRe0yVkilde1g=
+X-Google-Smtp-Source: AA6agR7+5Qkc1US3xZc6AzhwYNjNc26fVd4ocphyutdMyyGHQ7xzYM2uClin5e5pQtitt6PZnV/fiLM2jxFlHInyKGc=
+X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
+ v18-20020a056870709200b0011eff3ad984mr10071831oae.19.1662429342398; Mon, 05
+ Sep 2022 18:55:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220905181650.71e9d02c@gandalf.local.home>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220904072637.8619-1-guoren@kernel.org> <YxX3CZQEe86u052D@xhacker>
+In-Reply-To: <YxX3CZQEe86u052D@xhacker>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 6 Sep 2022 09:55:30 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTYgKPMTUaHZn1n7qPmW3cPkxmx5xPurdGSg1h4tMqNqQ@mail.gmail.com>
+Message-ID: <CAJF2gTTYgKPMTUaHZn1n7qPmW3cPkxmx5xPurdGSg1h4tMqNqQ@mail.gmail.com>
+Subject: Re: [PATCH V2 0/6] riscv: Add GENERIC_ENTRY, IRQ_STACKS support
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 05, 2022 at 06:16:50PM -0400, Steven Rostedt wrote:
-> On Mon, 5 Sep 2022 16:42:29 -0400
-> Kent Overstreet <kent.overstreet@linux.dev> wrote:
-> 
-> > > Haven't tried that yet but will do. Thanks for the reference code!  
-> > 
-> > Is it really worth the effort of benchmarking tracing API overhead here?
-> > 
-> > The main cost of a tracing based approach is going to to be the data structure
-> > for remembering outstanding allocations so that free events can be matched to
-> > the appropriate callsite. Regardless of whether it's done with BFP or by
-> > attaching to the tracepoints directly, that's going to be the main overhead.
-> 
-> The point I was making here is that you do not need your own hooking
-> mechanism. You can get the information directly by attaching to the
-> tracepoint.
-> 
-> > > static void my_callback(void *data, unsigned long call_site,
-> > >                         const void *ptr, struct kmem_cache *s,
-> > >                         size_t bytes_req, size_t bytes_alloc,
-> > >                         gfp_t gfp_flags)
-> > > {
-> > >         struct my_data_struct *my_data = data;
-> > >
-> > >         { do whatever }
-> > > }
-> 
-> The "do whatever" is anything you want to do.
-> 
-> Or is the data structure you create with this approach going to be too much
-> overhead? How hard is it for a hash or binary search lookup?
+On Mon, Sep 5, 2022 at 9:27 PM Jisheng Zhang <jszhang@kernel.org> wrote:
+>
+> On Sun, Sep 04, 2022 at 03:26:31AM -0400, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The patches convert riscv to use the generic entry infrastructure from
+> > kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
+>
+> Amazing! You read my mind. I planed to do similar series this week, as
+I'm happy you liked it.
 
-If you don't think it's hard, go ahead and show us.
+> can be seen, I didn't RESEND the riscv irqstack patch, I planed to add
+> irqstack after generic entry. Thanks for this series.
+>
+> Will read and test your patches soon. A minor comments below.
+Thx, any tests and reviews are helpful.
+
+>
+> > prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+> > feature for the IRQ_STACKS config. You can try it directly with [1].
+> >
+> > [1] https://github.com/guoren83/linux/tree/generic_entry_v2
+> >
+> > Changes in V2:
+> >  - Fixup compile error by include "riscv: ptrace: Remove duplicate
+> >    operation"
+> >    https://lore.kernel.org/linux-riscv/20220903162328.1952477-2-guoren@kernel.org/T/#u
+> >  - Fixup compile warning
+> >    Reported-by: kernel test robot <lkp@intel.com>
+> >  - Add test repo link in cover letter
+> >
+> > Guo Ren (6):
+> >   riscv: ptrace: Remove duplicate operation
+> >   riscv: convert to generic entry
+> >   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+> >   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+> >   riscv: elf_kexec: Fixup compile warning
+> >   riscv: compat_syscall_table: Fixup compile warning
+>
+> It's better to move these two patches ahead of patch2.
+Okay.
+
+>
+> >
+> >  arch/riscv/Kconfig                    |  10 +
+> >  arch/riscv/include/asm/csr.h          |   1 -
+> >  arch/riscv/include/asm/entry-common.h |   8 +
+> >  arch/riscv/include/asm/irq.h          |   3 +
+> >  arch/riscv/include/asm/ptrace.h       |  10 +-
+> >  arch/riscv/include/asm/stacktrace.h   |   5 +
+> >  arch/riscv/include/asm/syscall.h      |   6 +
+> >  arch/riscv/include/asm/thread_info.h  |  15 +-
+> >  arch/riscv/include/asm/vmap_stack.h   |  28 +++
+> >  arch/riscv/kernel/Makefile            |   1 +
+> >  arch/riscv/kernel/elf_kexec.c         |   4 +
+> >  arch/riscv/kernel/entry.S             | 255 +++++---------------------
+> >  arch/riscv/kernel/irq.c               |  75 ++++++++
+> >  arch/riscv/kernel/ptrace.c            |  41 -----
+> >  arch/riscv/kernel/signal.c            |  21 +--
+> >  arch/riscv/kernel/sys_riscv.c         |  26 +++
+> >  arch/riscv/kernel/traps.c             |  11 ++
+> >  arch/riscv/mm/fault.c                 |  12 +-
+> >  18 files changed, 250 insertions(+), 282 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/entry-common.h
+> >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
+> >
+> > --
+> > 2.36.1
+> >
+
+
+
+-- 
+Best Regards
+ Guo Ren
