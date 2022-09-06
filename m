@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E575ADE38
-	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 05:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A39F5ADE41
+	for <lists+linux-arch@lfdr.de>; Tue,  6 Sep 2022 05:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238007AbiIFD4a (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 5 Sep 2022 23:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
+        id S238373AbiIFD4s (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 5 Sep 2022 23:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236847AbiIFDzd (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 23:55:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9335A1B78A;
-        Mon,  5 Sep 2022 20:55:19 -0700 (PDT)
+        with ESMTP id S238130AbiIFDzf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 5 Sep 2022 23:55:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D27222AE;
+        Mon,  5 Sep 2022 20:55:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4660CB815FB;
-        Tue,  6 Sep 2022 03:55:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9116C433C1;
-        Tue,  6 Sep 2022 03:55:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FD2761283;
+        Tue,  6 Sep 2022 03:55:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2C4EC43141;
+        Tue,  6 Sep 2022 03:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662436517;
-        bh=zdFYpvuTPe6RpWrIfdMW7NpG1CnfQ2kCKBqmLquyd8U=;
+        s=k20201202; t=1662436524;
+        bh=8Tzw/Kwo451JDguurnRXBTqnhiIZf0WJITLDKeAtvFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SfPG+khfb4XlIUR/FIVaqCHHDPvsnx6Sb1VRM6Hk6s5vsC4AF9UGyR4xKzPRKCuf1
-         E0gojBwnwJsnAfXM/n4cK60741Uug8h1K5dn54NY6zrx8NWOzOGdjRZUZ1FsZ6Ukyp
-         U4B99KDfU9FGb2rFKPn/GUD/4LBte/PGrm8bjEOcYtaeOPKmMPTns0u2WsoiBS8wos
-         ewKBnpETdC40Zy7g7XKqYHBxCLoAJX9bt5moJuSNTgMGh0f0ZGZL7DqzaI8Y+OpzwS
-         ITk4YA3mfcpW8yxrVthne927+82I/NuIsvcRNXPpMQHXrPJi+bU6NmxLjCksLb1kx4
-         l+yFp29UGuaxQ==
+        b=m8eSEaII7FXw5gkzT8e3DX9whA4K3F2vb5Ubk0R7po4+q+dLQg9FmNCZOmT+XxmmM
+         PdNGldoPuSHbrtUYVP5P8qBKdkoq+yD0YCmNofz/l1zeD9c4IeR3RPEubRmRWqmlS+
+         n7KBTAHhQqMGnxSj9SAPCr3g1ZtkPS6w7HwOGokDrJWgM8QYtp0Eg3UrnqtYjcTpWx
+         iMJq8cnzGOehiwrIATnxVyCDRVz4L/pYRjIoQ4A56WXAobQRoLEkEaK7pzt5YCOfqo
+         erbVWRpcG/pGSJHFkiIJqMG5bkDpM14IbuoZt+tRoBtQj/TqeWJRnlMtdMeVtDr6et
+         XLSCc1RVHQCzA==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -39,10 +39,12 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
         paul.walmsley@sifive.com, bigeasy@linutronix.de
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3 6/7] riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
-Date:   Mon,  5 Sep 2022 23:54:22 -0400
-Message-Id: <20220906035423.634617-7-guoren@kernel.org>
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Andreas Schwab <schwab@suse.de>
+Subject: [PATCH V3 7/7] riscv: Add config of thread stack size
+Date:   Mon,  5 Sep 2022 23:54:23 -0400
+Message-Id: <20220906035423.634617-8-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220906035423.634617-1-guoren@kernel.org>
 References: <20220906035423.634617-1-guoren@kernel.org>
@@ -60,72 +62,55 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Add the HAVE_SOFTIRQ_ON_OWN_STACK feature for the IRQ_STACKS config. The
-irq and softirq use the same independent irq_stack of percpu by time
-division multiplexing.
+0cac21b02ba5 ("risc v: use 16KB kernel stack on 64-bit") increase the
+thread size mandatory, but some scenarios, such as D1 with a small
+memory footprint, would suffer from that. After independent irq stack
+support, let's give users a choice to determine their custom stack size.
 
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
+Cc: Andreas Schwab <schwab@suse.de>
 ---
- arch/riscv/Kconfig      |  7 ++++---
- arch/riscv/kernel/irq.c | 16 ++++++++++++++++
- 2 files changed, 20 insertions(+), 3 deletions(-)
+ arch/riscv/Kconfig                   | 9 +++++++++
+ arch/riscv/include/asm/thread_info.h | 4 ++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index a8a12b4ba1a9..da548ed7d107 100644
+index da548ed7d107..e436b5793ab6 100644
 --- a/arch/riscv/Kconfig
 +++ b/arch/riscv/Kconfig
-@@ -434,12 +434,13 @@ config FPU
- 	  If you don't know what to do here, say Y.
+@@ -442,6 +442,15 @@ config IRQ_STACKS
+ 	  Add independent irq & softirq stacks for percpu to prevent kernel stack
+ 	  overflows. We may save some memory footprint by disabling IRQ_STACKS.
  
- config IRQ_STACKS
--	bool "Independent irq stacks"
-+	bool "Independent irq & softirq stacks"
- 	default y
- 	select HAVE_IRQ_EXIT_ON_IRQ_STACK
-+	select HAVE_SOFTIRQ_ON_OWN_STACK
- 	help
--	  Add independent irq stacks for percpu to prevent kernel stack overflows.
--	  We may save some memory footprint by disabling IRQ_STACKS.
-+	  Add independent irq & softirq stacks for percpu to prevent kernel stack
-+	  overflows. We may save some memory footprint by disabling IRQ_STACKS.
- 
++config THREAD_SIZE_ORDER
++	int "Pages of thread stack size (as a power of 2)"
++	range 1 4
++	default "1" if 32BIT
++	default "2" if 64BIT
++	help
++	  Specify the Pages of thread stack size (from 8KB to 64KB), which also
++	  affects irq stack size, which is equal to thread stack size.
++
  endmenu # "Platform type"
  
-diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
-index 5ad4952203c5..c09cd4d28308 100644
---- a/arch/riscv/kernel/irq.c
-+++ b/arch/riscv/kernel/irq.c
-@@ -11,6 +11,7 @@
- #include <linux/seq_file.h>
- #include <asm/smp.h>
- #include <asm/vmap_stack.h>
-+#include <asm/softirq_stack.h>
+ menu "Kernel features"
+diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+index 043da8ccc7e6..c64d995df6e1 100644
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -19,9 +19,9 @@
  
- #ifdef CONFIG_IRQ_STACKS
- static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
-@@ -38,6 +39,21 @@ static void init_irq_stacks(void)
- 		per_cpu(irq_stack_ptr, cpu) = per_cpu(irq_stack, cpu);
- }
- #endif /* CONFIG_VMAP_STACK */
-+
-+#ifndef CONFIG_PREEMPT_RT
-+static void do_riscv_softirq(struct pt_regs *regs)
-+{
-+	__do_softirq();
-+}
-+
-+void do_softirq_own_stack(void)
-+{
-+	ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id());
-+
-+	call_on_stack(NULL, sp, do_riscv_softirq, 0);
-+}
-+#endif /* CONFIG_PREEMPT_RT */
-+
+ /* thread information allocation */
+ #ifdef CONFIG_64BIT
+-#define THREAD_SIZE_ORDER	(2 + KASAN_STACK_ORDER)
++#define THREAD_SIZE_ORDER	(CONFIG_THREAD_SIZE_ORDER + KASAN_STACK_ORDER)
  #else
- static void init_irq_stacks(void) {}
- #endif /* CONFIG_IRQ_STACKS */
+-#define THREAD_SIZE_ORDER	(1 + KASAN_STACK_ORDER)
++#define THREAD_SIZE_ORDER	(CONFIG_THREAD_SIZE_ORDER + KASAN_STACK_ORDER)
+ #endif
+ #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
+ 
 -- 
 2.36.1
 
