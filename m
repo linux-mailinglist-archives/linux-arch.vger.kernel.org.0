@@ -2,61 +2,64 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B645AF948
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 02:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBE35AF97B
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 03:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiIGA7k (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Sep 2022 20:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S229502AbiIGBvx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Sep 2022 21:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIGA7j (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 20:59:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810B1FD04;
-        Tue,  6 Sep 2022 17:59:36 -0700 (PDT)
+        with ESMTP id S229436AbiIGBvw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 21:51:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D9F80E99;
+        Tue,  6 Sep 2022 18:51:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E3B0B81AD5;
-        Wed,  7 Sep 2022 00:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F2BC4314A;
-        Wed,  7 Sep 2022 00:59:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 800A5616EB;
+        Wed,  7 Sep 2022 01:51:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE50FC43148;
+        Wed,  7 Sep 2022 01:51:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662512373;
-        bh=rRDkYK9iWCXx4wEvEXjdFzrW7V+WU51QfVdxnQR/Up4=;
+        s=k20201202; t=1662515509;
+        bh=ALcTG3mOVuLLio4WhI2L2jJkbp5XvNqkTSaJ5wmwyeM=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cnrRuv/BitCXdq86pumAdk9NrkLBO6C5804p7tNfD3ydvcRYjgKf/u2lJtuHyL4LB
-         7ZmMNoQHTqpsyhqKEYW03c8YLCXXnD408gR/u+93zLkCFVS8ptB5c9wrE+Smuzqcxn
-         yUKsb5//1YpnFQJSbjxvoUlVMMH6FxEvjZGoHiAOoMFh27tG1zbW51W+Ud7bfAtaOd
-         znSf1k98U8FiecoSJaScPrUnTi+LfmLWevi411VPc2nv6wENP8u3EUJvwG9FHagc6H
-         JOrgXafNtKL/Cq1hZE/GkSwVdvFODfDCH9ixAaQ07jV16V2Wt/Yh4Q3Tp5jSqEXJX4
-         8ipWS734KvUbA==
-Received: by mail-ot1-f43.google.com with SMTP id t8-20020a9d5908000000b0063b41908168so9236644oth.8;
-        Tue, 06 Sep 2022 17:59:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3IQZ0kdGcpxUlM2BNQMrUX8/uGHd42VQn0CHwA4ZhQST0aggJR
-        qCJw1E0FB1Q2h/aNWEuazoOpRTyyR+Z1QUuWrew=
-X-Google-Smtp-Source: AA6agR4T+5pUb7afC0nbWNUE6t9rpyPvgc4usas9mXHv8gHcqGmB5W7iv8rmSa98jv8Ovc8tvPLbDXQ/sXx4rvotOG8=
-X-Received: by 2002:a05:6830:3482:b0:638:92b7:f09b with SMTP id
- c2-20020a056830348200b0063892b7f09bmr497235otu.140.1662512372833; Tue, 06 Sep
- 2022 17:59:32 -0700 (PDT)
+        b=KD4YkRAGIO3nhCBJBkD2pwrs2ava5BAoX9wtcgu3IFRoQVjrtiZuB4R9MgbpEzsxq
+         KW4AFCVtiUZlgB2+cstExwawru05w/BuMHDhwnpc7WjQGj+QVhkknLUVfBDmKGedGD
+         99jvlAe7BYgLqXHlUmDho9+hJ1g+JDEgK63SfRqWTf36g22O56vOPdF29EpBYq/p8b
+         dtek3UzHb1QYIE+Jy4pecoCJYlNRkpFOMwxlx+Mb+1LMdMCgPvlJIOZQE3xh2MIUwq
+         tR/PZy8WV7Tq4lJxm3DRN05aNFEm2H8PKdO2xzn+gkLKBPu+bFQhwgcCWo9JIcLYAj
+         kJ4OnuZ6o3Ctw==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-127ba06d03fso9079218fac.3;
+        Tue, 06 Sep 2022 18:51:49 -0700 (PDT)
+X-Gm-Message-State: ACgBeo33eMSFNqgev5qm16SohsXvBqtm6nn2sWT/xYZyddz/j6hjcjYS
+        5OYyywvpH/0/Yu5sMXPtkhDbiv9SOxY5nINGIn8=
+X-Google-Smtp-Source: AA6agR5wU71q9oB13ta4xOEzTPcP8MJegkjW8lQNxzqUr3gEPcisWNIZ8cv6sJH9sEHuSDJ+obWgGJ+KHlsomjMI+dE=
+X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
+ u15-20020a056808150f00b00343320291cfmr10871221oiw.112.1662515508882; Tue, 06
+ Sep 2022 18:51:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220906035423.634617-1-guoren@kernel.org> <20220906035423.634617-5-guoren@kernel.org>
- <YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net>
-In-Reply-To: <YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net>
+References: <20220903162328.1952477-1-guoren@kernel.org> <20220828135407.3897717-1-xianting.tian@linux.alibaba.com>
+ <6c48657c-04df-132d-6167-49ed293dea44@microchip.com>
+In-Reply-To: <6c48657c-04df-132d-6167-49ed293dea44@microchip.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Sep 2022 08:59:20 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTqVc_CvxT+t4D2Z1Gy_r_nrbdgAGcELFm9tgjOaCyJYg@mail.gmail.com>
-Message-ID: <CAJF2gTTqVc_CvxT+t4D2Z1Gy_r_nrbdgAGcELFm9tgjOaCyJYg@mail.gmail.com>
-Subject: Re: [PATCH V3 4/7] riscv: convert to generic entry
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, bigeasy@linutronix.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Date:   Wed, 7 Sep 2022 09:51:36 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQvPpXwrfS_fTo+Pn=nufeCWE_tCcmPB-YZAZjdt9GbvA@mail.gmail.com>
+Message-ID: <CAJF2gTQvPpXwrfS_fTo+Pn=nufeCWE_tCcmPB-YZAZjdt9GbvA@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the end
+ of syscalls
+To:     Conor.Dooley@microchip.com
+Cc:     oleg@redhat.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        monstr@monstr.eu, dinguyen@kernel.org, palmer@dabbelt.com,
+        davem@davemloft.net, arnd@arndb.de, shorne@gmail.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, ardb@kernel.org,
+        heiko@sntech.de, daolu@rivosinc.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org,
+        openrisc@lists.librecores.org, xianting.tian@linux.alibaba.com,
+        linux-efi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -68,94 +71,79 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 6, 2022 at 5:20 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Sep 05, 2022 at 11:54:20PM -0400, guoren@kernel.org wrote:
->
-> > +asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
-> > +{
-> > +     struct pt_regs *old_regs;
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> > +     irq_enter_rcu();
-> > +     old_regs = set_irq_regs(regs);
-> > +     handle_arch_irq(regs);
-> > +     set_irq_regs(old_regs);
-> > +     irq_exit_rcu();
-> > +
-> > +     irqentry_exit(regs, state);
-> > +}
->
-> The above is right in that everything that calls irqentry_enter() should
-> be noinstr; however all the below instances get it wrong:
->
-> >  #define DO_ERROR_INFO(name, signo, code, str)                                \
-> >  asmlinkage __visible __trap_section void name(struct pt_regs *regs)  \
-> >  {                                                                    \
-> > +     irqentry_state_t state = irqentry_enter(regs);                  \
-> >       do_trap_error(regs, signo, code, regs->epc, "Oops - " str);     \
-> > +     irqentry_exit(regs, state);                                     \
-> >  }
-> >
-> >  DO_ERROR_INFO(do_trap_unknown,
-> > @@ -123,18 +126,22 @@ int handle_misaligned_store(struct pt_regs *regs);
-> >
-> >  asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> >       if (!handle_misaligned_load(regs))
-> >               return;
-> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> >                     "Oops - load address misaligned");
-> > +     irqentry_exit(regs, state);
-> >  }
-> >
-> >  asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> >       if (!handle_misaligned_store(regs))
-> >               return;
-> >       do_trap_error(regs, SIGBUS, BUS_ADRALN, regs->epc,
-> >                     "Oops - store (or AMO) address misaligned");
-> > +     irqentry_exit(regs, state);
-> >  }
-> >  #endif
-> >  DO_ERROR_INFO(do_trap_store_fault,
-> > @@ -158,6 +165,8 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
-> >
-> >  asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-> >  {
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> >  #ifdef CONFIG_KPROBES
-> >       if (kprobe_single_step_handler(regs))
-> >               return;
-> > @@ -185,6 +194,8 @@ asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
-> >               regs->epc += get_break_insn_length(regs->epc);
-> >       else
-> >               die(regs, "Kernel BUG");
-> > +
-> > +     irqentry_exit(regs, state);
-> >  }
-> >  NOKPROBE_SYMBOL(do_trap_break);
->
-> > +asmlinkage void do_page_fault(struct pt_regs *regs)
-> > +{
-> > +     irqentry_state_t state = irqentry_enter(regs);
-> > +
-> > +     __do_page_fault(regs);
-> > +
-> > +     irqentry_exit(regs, state);
-> > +}
-> >  NOKPROBE_SYMBOL(do_page_fault);
->
-> Without noinstr the compiler is free to insert instrumentation (think
-> all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-> yet ready to run this early in the entry path, for instance it could
-> rely on RCU which isn't on yet, or expect lockdep state.
-I'll add a patch to fix it in the next version. Thx for pointing it out.
+Hi all,
 
+How about the generic_entry version:
+
+https://lore.kernel.org/lkml/20220907014809.919979-1-guoren@kernel.org/
+
+On Wed, Sep 7, 2022 at 1:35 AM <Conor.Dooley@microchip.com> wrote:
 >
+> On 03/09/2022 17:23, guoren@kernel.org wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >
+> > From: Xianting Tian <xianting.tian@linux.alibaba.com>
+> >
+> > This adds support for the STACKLEAK gcc plugin to RISC-V and disables
+> > the plugin in EFI stub code, which is out of scope for the protection.
+> >
+> > For the benefits of STACKLEAK feature, please check the commit
+> > afaef01c0015 ("x86/entry: Add STACKLEAK erasing the kernel stack at the end of syscalls")
+> >
+> > Performance impact (tested on qemu env with 1 riscv64 hart, 1GB mem)
+> >     hackbench -s 512 -l 200 -g 15 -f 25 -P
+> >     2.0% slowdown
+> >
+> > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>
+> What changed since Xianting posted it himself a week ago:
+> https://lore.kernel.org/linux-riscv/20220828135407.3897717-1-xianting.tian@linux.alibaba.com/
+>
+> There's an older patch from Du Lao adding STACKLEAK too:
+> https://lore.kernel.org/linux-riscv/20220615213834.3116135-1-daolu@rivosinc.com/
+>
+> But since there's been no activity there since June...
+>
+> > ---
+> >  arch/riscv/Kconfig                    | 1 +
+> >  arch/riscv/include/asm/processor.h    | 4 ++++
+> >  arch/riscv/kernel/entry.S             | 3 +++
+> >  drivers/firmware/efi/libstub/Makefile | 2 +-
+> >  4 files changed, 9 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index ed66c31e4655..61fd0dad4463 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -85,6 +85,7 @@ config RISCV
+> >         select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+> >         select HAVE_ARCH_THREAD_STRUCT_WHITELIST
+> >         select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
+> > +       select HAVE_ARCH_STACKLEAK
+> >         select HAVE_ASM_MODVERSIONS
+> >         select HAVE_CONTEXT_TRACKING_USER
+> >         select HAVE_DEBUG_KMEMLEAK
+> > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+> > index d0537573501e..5e1fc4f82883 100644
+> > --- a/drivers/firmware/efi/libstub/Makefile
+> > +++ b/drivers/firmware/efi/libstub/Makefile
+> > @@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)          := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> >                                    -fno-builtin -fpic \
+> >                                    $(call cc-option,-mno-single-pic-base)
+> >  cflags-$(CONFIG_RISCV)         := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+> > -                                  -fpic
+> > +                                  -fpic $(DISABLE_STACKLEAK_PLUGIN)
+> >
+> >  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+> >
+> > --
+> > 2.17.1
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 >
 
 
