@@ -2,78 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6755B0118
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 11:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92925B016D
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 12:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbiIGJ7g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Sep 2022 05:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S230309AbiIGKPS (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Sep 2022 06:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiIGJ7D (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 05:59:03 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6377B775B
-        for <linux-arch@vger.kernel.org>; Wed,  7 Sep 2022 02:58:40 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id fy31so29155583ejc.6
-        for <linux-arch@vger.kernel.org>; Wed, 07 Sep 2022 02:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=heSFzetbXWgbtnsASv1LZ6qPan1dJOs+6DCCGWIHMBc=;
-        b=vHf0XP6Ze2kKCdhKxtVAgOHIr2JsfMKXNXZBFepV2YBWzCPoSXlPG+D1rz3Zg9Rch0
-         ypMUtQMR9yyK7gQjXW2ZyJ2cnlHlg71InbxQR7ofH3deJAocrr+yORgDxvorjARevA1l
-         tJHxHMkBbBa+CnVkksjAvgq0kmgk+59QTtXcjKW9zZhxRIFlhHlqchKmGRNkvoXe2Y85
-         F23ax+ngd/IlSAB6HD0FpqhIOJKU7jZkyGDdKtaAWVwaraHMfa6YxvtZnPZFhff7znmT
-         4e4T7YcqtsBKyZOiDnLNOkbTrFzdJQLHpf4Mu3ZhQsTPjK/8w9zsT/qHgDHipv7pBptk
-         v+yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=heSFzetbXWgbtnsASv1LZ6qPan1dJOs+6DCCGWIHMBc=;
-        b=mM7f/rXy7l+c5CXjAOqE4N98OqunLWbzwecYrgfJde0SB8rGHxtqQbbfUnL0BQRd3I
-         ccks9+FgbzydWsXArfXh4kt+BX/zDDjsBCJdQitFDGNndMp0W/JWA27txH4AS8fWZpiG
-         ytEpaVxK0hdQzYxIQZwaXGEg1j/spTZAdMv8li/nO5zyKB6jDA96e1qf8Ds35c28IObX
-         L7SG+zK42SD1yM+/qR2gRggYGOcIeD2DPXz/k9tytXeg9IAQKc0Phknl68avud14yHvk
-         JQpCIwQ6iov1n0qeG+TiL7Y0IrU3JU/l0K2jdiSyU7Flz0qmEKqPZLUbIayKgvRFYFGo
-         qweA==
-X-Gm-Message-State: ACgBeo0B05j/Lg8b1GWQvZx30Frrtr7AR1AxfL7/Z4DVIAU6SSTCT+48
-        G8PhTb3Z28A0+8DrtIIjsbB1rHvQrhdqrAbtGsG2hg==
-X-Google-Smtp-Source: AA6agR47HMjnxQAohy22Di9zQNJim5dtH8VkOKRmZAWyo3gky2iLulW9tTE1/ctNbKsixVbNqreBKmb966LjP7FAmDg=
-X-Received: by 2002:a17:906:4fd5:b0:74f:2bad:f9d with SMTP id
- i21-20020a1709064fd500b0074f2bad0f9dmr1687207ejw.697.1662544719244; Wed, 07
- Sep 2022 02:58:39 -0700 (PDT)
-MIME-Version: 1.0
+        with ESMTP id S230132AbiIGKPI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 06:15:08 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDEC25588;
+        Wed,  7 Sep 2022 03:15:02 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id CF3012B059F7;
+        Wed,  7 Sep 2022 06:14:59 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Wed, 07 Sep 2022 06:15:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662545699; x=1662549299; bh=UmErXfxWmw
+        fotEsmsDPTW3AU+XHqokuOWaVIqSNnJFU=; b=e67eu/2Sau6rqKLtSjHFTtHnaQ
+        sYFIdetsex7+OyjkVCLZ9beeQM0Mj/IeHdY5qLHK5/qa9DCDvlLfEE0vXVsM++FW
+        DmI/pO1hL9RP2EFDsAEE3ZnAqtF6BaG2jIBVsYacgmki9ZiMgYsXxo4j1ZXSX9am
+        YWAAb2igRgEssKmR+azw8g+pGFpKueubV/O/pNMRsjRI65T0mBNq1diDNtzgyRRi
+        BgsjNAl0Lz/1ivUtK2a7FQjQi0ubIrbxh0shz6nEs/S2OgZa23RbnQvx6QX/6NnK
+        4qfC1NcLXSP+byXBtZ5fMkEPxzPtxh4drQDP4xaivqxX8mhLS+T3qZooLzIg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662545699; x=1662549299; bh=UmErXfxWmwfotEsmsDPTW3AU+XHq
+        okuOWaVIqSNnJFU=; b=gTKIwCiZt86E5s5vG5fI33tYaugRTJZhOxCAbdnOKqVO
+        koCeLg26AixgJHv7xcEnAVxt2f+uq1Qe9Ly/XZ9AZxNADVEoNEuSTGAaJ1MVz9Xv
+        vEs4uekKsxYNrk27iiUJQKpMO5V9w1ithQ8yq6Sl4fwmsTAW1q1KnTVjnJ8fY9iP
+        Pk1BQNuHauJpW3b8oe5l248mJVUiGc/KcaSWHIQV88MILHRtmTjY2juOAMF16fZw
+        9TFpjATLujFr5ARlnpjrbY4FALuKVkxhNB5Jt7IUi/vL1AUfPtj+Yah3oQmyM+jX
+        hEXnmkP2LMNTlZ6Qq+wjqmzBuITrYXXD+pOTprwL+g==
+X-ME-Sender: <xms:Im8YY4-zB8jizsFZUbdhZ7cQgbYb9bCeUnh0Z3zsNHcXxM9vVxqGqw>
+    <xme:Im8YYwsKZOjKJ7WWo353mzbZGW2tQzA0JuhJaglRtfijovoc5gsezEZ-yuGQrdEII
+    1Y3hM4PsLWPNmM17-8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedttddgvdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Im8YY-CAIpeIMrSA33XANi56_-wSyqmDx83zlMGLBrCNm1JDzeKnaA>
+    <xmx:Im8YY4eL3awRkF6q0khiLQ5sSOmH-E4e4PH_DDBP1MlQ94HXlXLtZw>
+    <xmx:Im8YY9N2Z5S1YfDKXcAZptJ2D7xwO8QSkiH1M6PEbQFOARfWIzdRHQ>
+    <xmx:I28YY4GQNGTdhuWe697LLmw2mSLNz7DZ60kD9zrtOAKd-nrNQXqNz3_17_M>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 3CDB4B60083; Wed,  7 Sep 2022 06:14:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <b348a306-3043-4ccc-9067-81759ab29143@www.fastmail.com>
+In-Reply-To: <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
 References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <cover.1662116601.git.christophe.leroy@csgroup.eu>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 7 Sep 2022 11:58:28 +0200
-Message-ID: <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] gpio: Get rid of ARCH_NR_GPIOS (v2)
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+ <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
+Date:   Wed, 07 Sep 2022 12:14:38 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>
+Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "Geert Uytterhoeven" <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Davide Ciminaghi <ciminaghi@gnudd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Davide Ciminaghi" <ciminaghi@gnudd.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
         linux-doc <linux-doc@vger.kernel.org>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Subject: Re: [PATCH v2 0/9] gpio: Get rid of ARCH_NR_GPIOS (v2)
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,64 +99,56 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 2:42 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
-> there is no limitation on the number of GPIOs that can be allocated
-> in the system since the allocation is fully dynamic.
->
-> ARCH_NR_GPIOS is today only used in order to provide downwards
-> gpiobase allocation from that value, while static allocation is
-> performed upwards from 0. However that has the disadvantage of
-> limiting the number of GPIOs that can be registered in the system.
->
-> To overcome this limitation without requiring each and every
-> platform to provide its 'best-guess' maximum number, rework the
-> allocation to allocate from 512 upwards, allowing approx 2 millions
-> of GPIOs.
->
-> In the meantime, add a warning for drivers how are still doing
-> static allocation, so that in the future the static allocation gets
-> removed completely and dynamic allocation can start at base 0.
->
-> Main changes in v2:
-> - Adding a patch to remove sta2x11 GPIO driver instead of modifying it
-> - Moving the base of dynamic allocation from 256 to 512 because there
-> are drivers allocating gpios as high as 400.
->
-> Christophe Leroy (8):
->   gpio: aggregator: Stop using ARCH_NR_GPIOS
->   gpio: davinci: Stop using ARCH_NR_GPIOS
->   gpiolib: Warn on drivers still using static gpiobase allocation
->   gpiolib: Get rid of ARCH_NR_GPIOS
->   Documentation: gpio: Remove text about ARCH_NR_GPIOS
->   x86: Remove CONFIG_ARCH_NR_GPIO
->   arm: Remove CONFIG_ARCH_NR_GPIO
->   arm64: Remove CONFIG_ARCH_NR_GPIO
->
-> Davide Ciminaghi (1):
->   gpio: Remove sta2x11 GPIO driver
->
->  Documentation/driver-api/gpio/legacy.rst |   5 -
->  arch/arm/Kconfig                         |  21 --
->  arch/arm/include/asm/gpio.h              |   1 -
->  arch/arm64/Kconfig                       |  12 -
->  arch/x86/Kconfig                         |   5 -
->  drivers/gpio/Kconfig                     |   8 -
->  drivers/gpio/Makefile                    |   1 -
->  drivers/gpio/gpio-aggregator.c           |   7 +-
->  drivers/gpio/gpio-davinci.c              |   3 -
->  drivers/gpio/gpio-sta2x11.c              | 411 -----------------------
->  drivers/gpio/gpiolib.c                   |  13 +-
->  include/asm-generic/gpio.h               |  55 ++-
->  12 files changed, 33 insertions(+), 509 deletions(-)
->  delete mode 100644 drivers/gpio/gpio-sta2x11.c
->
-> --
-> 2.37.1
->
+On Wed, Sep 7, 2022, at 11:58 AM, Bartosz Golaszewski wrote:
+> On Fri, Sep 2, 2022 at 2:42 PM Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
+>>
+>>  Documentation/driver-api/gpio/legacy.rst |   5 -
+>>  arch/arm/Kconfig                         |  21 --
+>>  arch/arm/include/asm/gpio.h              |   1 -
+>>  arch/arm64/Kconfig                       |  12 -
+>>  arch/x86/Kconfig                         |   5 -
+>>  drivers/gpio/Kconfig                     |   8 -
+>>  drivers/gpio/Makefile                    |   1 -
+>>  drivers/gpio/gpio-aggregator.c           |   7 +-
+>>  drivers/gpio/gpio-davinci.c              |   3 -
+>>  drivers/gpio/gpio-sta2x11.c              | 411 -----------------------
+>>  drivers/gpio/gpiolib.c                   |  13 +-
+>>  include/asm-generic/gpio.h               |  55 ++-
+>>  12 files changed, 33 insertions(+), 509 deletions(-)
+>>  delete mode 100644 drivers/gpio/gpio-sta2x11.c
 
-I'd like to take it through the GPIO tree if we can get acks for ARM and x86?
+For the arch/arm*/Kconfig and include/asm-generic changes:
 
-Bart
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+
+sta2x11 is an x86 driver, so not my area, but I think it would be
+best to kill off the entire platform rather than just its gpio
+driver, since everything needs to work together and it's clearly
+not functional at the moment.
+
+$ git grep -l STA2X11
+Documentation/admin-guide/media/pci-cardlist.rst
+arch/x86/Kconfig
+arch/x86/include/asm/sta2x11.h
+arch/x86/pci/Makefile
+arch/x86/pci/sta2x11-fixup.c
+drivers/ata/ahci.c
+drivers/gpio/Kconfig
+drivers/gpio/Makefile
+drivers/gpio/gpio-sta2x11.c
+drivers/i2c/busses/Kconfig
+drivers/media/pci/Makefile
+drivers/media/pci/sta2x11/Kconfig
+drivers/media/pci/sta2x11/Makefile
+drivers/media/pci/sta2x11/sta2x11_vip.c
+drivers/media/pci/sta2x11/sta2x11_vip.h
+drivers/mfd/Kconfig
+drivers/mfd/Makefile
+drivers/mfd/sta2x11-mfd.c
+include/linux/mfd/sta2x11-mfd.h
+
+Removing the other sta2x11 bits (mfd, media, x86) should
+probably be done through the respective tree, but it would
+be good not to forget those.
+
+      Arnd
