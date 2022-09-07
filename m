@@ -2,65 +2,63 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBE35AF97B
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 03:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4A05AFA43
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 04:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiIGBvx (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 6 Sep 2022 21:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        id S229774AbiIGCwg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 6 Sep 2022 22:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIGBvw (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 21:51:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D9F80E99;
-        Tue,  6 Sep 2022 18:51:50 -0700 (PDT)
+        with ESMTP id S229636AbiIGCwf (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 6 Sep 2022 22:52:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFF07B1FF;
+        Tue,  6 Sep 2022 19:52:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 800A5616EB;
-        Wed,  7 Sep 2022 01:51:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE50FC43148;
-        Wed,  7 Sep 2022 01:51:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDA53B81AFD;
+        Wed,  7 Sep 2022 02:52:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62956C4347C;
+        Wed,  7 Sep 2022 02:52:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662515509;
-        bh=ALcTG3mOVuLLio4WhI2L2jJkbp5XvNqkTSaJ5wmwyeM=;
+        s=k20201202; t=1662519151;
+        bh=wgqcaiZkWE8NP1DBVD4GgPPb3+9Nw6BMXdA/+pG3KWw=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=KD4YkRAGIO3nhCBJBkD2pwrs2ava5BAoX9wtcgu3IFRoQVjrtiZuB4R9MgbpEzsxq
-         KW4AFCVtiUZlgB2+cstExwawru05w/BuMHDhwnpc7WjQGj+QVhkknLUVfBDmKGedGD
-         99jvlAe7BYgLqXHlUmDho9+hJ1g+JDEgK63SfRqWTf36g22O56vOPdF29EpBYq/p8b
-         dtek3UzHb1QYIE+Jy4pecoCJYlNRkpFOMwxlx+Mb+1LMdMCgPvlJIOZQE3xh2MIUwq
-         tR/PZy8WV7Tq4lJxm3DRN05aNFEm2H8PKdO2xzn+gkLKBPu+bFQhwgcCWo9JIcLYAj
-         kJ4OnuZ6o3Ctw==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-127ba06d03fso9079218fac.3;
-        Tue, 06 Sep 2022 18:51:49 -0700 (PDT)
-X-Gm-Message-State: ACgBeo33eMSFNqgev5qm16SohsXvBqtm6nn2sWT/xYZyddz/j6hjcjYS
-        5OYyywvpH/0/Yu5sMXPtkhDbiv9SOxY5nINGIn8=
-X-Google-Smtp-Source: AA6agR5wU71q9oB13ta4xOEzTPcP8MJegkjW8lQNxzqUr3gEPcisWNIZ8cv6sJH9sEHuSDJ+obWgGJ+KHlsomjMI+dE=
-X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
- u15-20020a056808150f00b00343320291cfmr10871221oiw.112.1662515508882; Tue, 06
- Sep 2022 18:51:48 -0700 (PDT)
+        b=JAsOmqbPLEdHftCiu95iAXHok5mmGgJpnXETTKgVZ9Wy6+f0/NN7SkIRxOzEUzJin
+         dOTuvO/VArrQ5zvEs4PYy3D21vymr44aP1wMiNtsE8FSh7eHU/BeX8c0ZduuJsr0Ja
+         UNvlJD5tGPMDx/pZ05aJ2dfJjCsX1GN5yyUoBoDB/iwvwCMZd+So9pLi0ohrqfx92p
+         4ZKOgMCo38/ZqHsavgkDoPS7RlrcTeUML4MDOPu2wdN65puL9Bb9ukk11UiV+PQs3r
+         8PtuLKae5H6VqKTVopJZsx6Kt3eTYewJF3F/W5pR+PB3vP/4rgoJn85U4VPo+G+33C
+         q/ERhVQC7XTJQ==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1225219ee46so32970664fac.2;
+        Tue, 06 Sep 2022 19:52:31 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1qNFXJyKs+6oBFwn9Z7RkNrC9eH2ZQB8LYqXYiU7gEtzsXcK9V
+        4UDWgFDEbcGhMMhZ7ppqC6nC7Ydsv4mdW5B2YbI=
+X-Google-Smtp-Source: AA6agR4o2x+CVUHP7OWdRqNkJSJ5xQCKxEdfB+Ewwu2cD8zAk2P2Te/dW27k40EH5nNM1daZoNzFCgrVbandNM3o9iQ=
+X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
+ v18-20020a056870709200b0011eff3ad984mr12781797oae.19.1662519150455; Tue, 06
+ Sep 2022 19:52:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220903162328.1952477-1-guoren@kernel.org> <20220828135407.3897717-1-xianting.tian@linux.alibaba.com>
- <6c48657c-04df-132d-6167-49ed293dea44@microchip.com>
-In-Reply-To: <6c48657c-04df-132d-6167-49ed293dea44@microchip.com>
+References: <20220906035423.634617-1-guoren@kernel.org> <8db7caea-a1a0-25a3-ade0-2f1714d709c8@microchip.com>
+ <CAJF2gTQ29bn=hgubC+YU1qSw_L3W2kAt3Yi4_EknrNCkR-dRFg@mail.gmail.com>
+In-Reply-To: <CAJF2gTQ29bn=hgubC+YU1qSw_L3W2kAt3Yi4_EknrNCkR-dRFg@mail.gmail.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Sep 2022 09:51:36 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQvPpXwrfS_fTo+Pn=nufeCWE_tCcmPB-YZAZjdt9GbvA@mail.gmail.com>
-Message-ID: <CAJF2gTQvPpXwrfS_fTo+Pn=nufeCWE_tCcmPB-YZAZjdt9GbvA@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: Add STACKLEAK erasing the kernel stack at the end
- of syscalls
+Date:   Wed, 7 Sep 2022 10:52:18 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRU6xWv5z7FvYkupCfmc0_EEceeowpjemoUWSAz8OgfWg@mail.gmail.com>
+Message-ID: <CAJF2gTRU6xWv5z7FvYkupCfmc0_EEceeowpjemoUWSAz8OgfWg@mail.gmail.com>
+Subject: Re: [PATCH V3 0/7] riscv: Add GENERIC_ENTRY, irq stack support
 To:     Conor.Dooley@microchip.com
-Cc:     oleg@redhat.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        monstr@monstr.eu, dinguyen@kernel.org, palmer@dabbelt.com,
-        davem@davemloft.net, arnd@arndb.de, shorne@gmail.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, ardb@kernel.org,
-        heiko@sntech.de, daolu@rivosinc.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org,
-        openrisc@lists.librecores.org, xianting.tian@linux.alibaba.com,
-        linux-efi@vger.kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, bigeasy@linutronix.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,82 +69,142 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi all,
+Hi Conor,
 
-How about the generic_entry version:
+I've found the root cause, you are using llvm:
 
-https://lore.kernel.org/lkml/20220907014809.919979-1-guoren@kernel.org/
+$ grep "bare sym" llvm -rn |grep RISCV
+llvm/lib/Target/RISCV/AsmParser/RISCVAsmParser.cpp:1296: return
+Error(ErrorLoc, "operand must be a bare symbol name");
+llvm/lib/Target/RISCV/AsmParser/RISCVAsmParser.cpp:1304: return
+Error(ErrorLoc, "operand must be a bare symbol name");
 
-On Wed, Sep 7, 2022 at 1:35 AM <Conor.Dooley@microchip.com> wrote:
+That means we could fix up Binutils with a warning at least.
+
+Thx for pointing it out.
+
+On Wed, Sep 7, 2022 at 8:54 AM Guo Ren <guoren@kernel.org> wrote:
 >
-> On 03/09/2022 17:23, guoren@kernel.org wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> On Wed, Sep 7, 2022 at 1:42 AM <Conor.Dooley@microchip.com> wrote:
 > >
-> > From: Xianting Tian <xianting.tian@linux.alibaba.com>
+> > On 06/09/2022 04:54, guoren@kernel.org wrote:
+> > > From: Guo Ren <guoren@linux.alibaba.com>
+> > >
+> > > The patches convert riscv to use the generic entry infrastructure fro=
+m
+> > > kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
+> > > prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+> > > feature for the IRQ_STACKS config. You can try it directly with [1].
 > >
-> > This adds support for the STACKLEAK gcc plugin to RISC-V and disables
-> > the plugin in EFI stub code, which is out of scope for the protection.
-> >
-> > For the benefits of STACKLEAK feature, please check the commit
-> > afaef01c0015 ("x86/entry: Add STACKLEAK erasing the kernel stack at the end of syscalls")
-> >
-> > Performance impact (tested on qemu env with 1 riscv64 hart, 1GB mem)
-> >     hackbench -s 512 -l 200 -g 15 -f 25 -P
-> >     2.0% slowdown
-> >
-> > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> > Hey Guo Ren,
+> > I applied this patchset to v6.0-rc4 & ran into a build error:
+> > /stuff/linux/arch/riscv/kernel/entry.S:347:9: error: operand must be a =
+bare symbol name
+> >  la a3, ((1 << (12)) << (2 + 0))
+> Yes, please try:
+> -       la      a3, IRQ_STACK_SIZE
+> +       li      a3, IRQ_STACK_SIZE
 >
-> What changed since Xianting posted it himself a week ago:
-> https://lore.kernel.org/linux-riscv/20220828135407.3897717-1-xianting.tian@linux.alibaba.com/
+> la is for the symbol, not immediate. But why does my toolchain not
+> report the error?
 >
-> There's an older patch from Du Lao adding STACKLEAK too:
-> https://lore.kernel.org/linux-riscv/20220615213834.3116135-1-daolu@rivosinc.com/
+> =E2=9E=9C  linux git:(generic_entry_v3) make ARCH=3Driscv
+> CROSS_COMPILE=3Driscv64-unknown-linux-gnu- EXTRA_CFLAGS+=3D-g
+> O=3D../build-riscv/ -kj62 all -kj
+> =E2=9E=9C  linux git:(generic_entry_v3) riscv64-unknown-linux-gnu-gcc -v
+> Using built-in specs.
+> COLLECT_GCC=3Driscv64-unknown-linux-gnu-gcc
+> COLLECT_LTO_WRAPPER=3D/opt/riscv/libexec/gcc/riscv64-unknown-linux-gnu/11=
+.1.0/lto-wrapper
+> Target: riscv64-unknown-linux-gnu
+> Configured with:
+> /home/guoren/source/riscv-gnu-toolchain/riscv-gcc/configure
+> --target=3Driscv64-unknown-linux-gnu --prefix=3D/opt/riscv
+> --with-sysroot=3D/opt/riscv/sysroot --with-pkgversion=3Dg5964b5cd7272
+> --with-system-zlib --enable-shared --enable-tls
+> --enable-languages=3Dc,c++,fortran --disable-libmudflap --disable-libssp
+> --disable-libquadmath --disable-libsanitizer --disable-nls
+> --disable-bootstrap --src=3D.././riscv-gcc --enable-multilib
+> --with-abi=3Dlp64d --with-arch=3Drv64imafdc --with-tune=3Drocket
+> --with-isa-spec=3D2.2 'CFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
+> 'CXXFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
+> Thread model: posix
+> Supported LTO compression algorithms: zlib
+> gcc version 11.1.0 (g5964b5cd7272)
 >
-> But since there's been no activity there since June...
 >
-> > ---
-> >  arch/riscv/Kconfig                    | 1 +
-> >  arch/riscv/include/asm/processor.h    | 4 ++++
-> >  arch/riscv/kernel/entry.S             | 3 +++
-> >  drivers/firmware/efi/libstub/Makefile | 2 +-
-> >  4 files changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index ed66c31e4655..61fd0dad4463 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -85,6 +85,7 @@ config RISCV
-> >         select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
-> >         select HAVE_ARCH_THREAD_STRUCT_WHITELIST
-> >         select HAVE_ARCH_VMAP_STACK if MMU && 64BIT
-> > +       select HAVE_ARCH_STACKLEAK
-> >         select HAVE_ASM_MODVERSIONS
-> >         select HAVE_CONTEXT_TRACKING_USER
-> >         select HAVE_DEBUG_KMEMLEAK
-> > diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-> > index d0537573501e..5e1fc4f82883 100644
-> > --- a/drivers/firmware/efi/libstub/Makefile
-> > +++ b/drivers/firmware/efi/libstub/Makefile
-> > @@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)          := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> >                                    -fno-builtin -fpic \
-> >                                    $(call cc-option,-mno-single-pic-base)
-> >  cflags-$(CONFIG_RISCV)         := $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
-> > -                                  -fpic
-> > +                                  -fpic $(DISABLE_STACKLEAK_PLUGIN)
-> >
-> >  cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
-> >
-> > --
-> > 2.17.1
-> >
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 >
+> >         ^
+> >   CC      arch/riscv/kernel/process.o
+> > make[5]: *** [/stuff/linux/scripts/Makefile.build:322: arch/riscv/kerne=
+l/entry.o] Error 1
+> > make[5]: *** Waiting for unfinished jobs....
+> >
+> > Thanks,
+> > Conor.
+> > >
+> > > [1] https://github.com/guoren83/linux/tree/generic_entry_v3
+> > >
+> > > V3:
+> > >  - Fixup CONFIG_COMPAT=3Dn compile error
+> > >  - Add THREAD_SIZE_ORDER config
+> > >  - Optimize elf_kexec.c warning fixup
+> > >  - Add static to irq_stack_ptr definition
+> > >
+> > > V2:
+> > >  Link: https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guor=
+en@kernel.org/
+> > >  - Fixup compile error by include "riscv: ptrace: Remove duplicate
+> > >    operation"
+> > >  - Fixup compile warning
+> > >    Reported-by: kernel test robot <lkp@intel.com>
+> > >  - Add test repo link in cover letter
+> > >
+> > > V1:
+> > >  Link: https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-g=
+uoren@kernel.org/
+> > >
+> > > Guo Ren (7):
+> > >   riscv: elf_kexec: Fixup compile warning
+> > >   riscv: compat_syscall_table: Fixup compile warning
+> > >   riscv: ptrace: Remove duplicate operation
+> > >   riscv: convert to generic entry
+> > >   riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+> > >   riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+> > >   riscv: Add config of thread stack size
+> > >
+> > >  arch/riscv/Kconfig                    |  19 ++
+> > >  arch/riscv/include/asm/csr.h          |   1 -
+> > >  arch/riscv/include/asm/entry-common.h |   8 +
+> > >  arch/riscv/include/asm/irq.h          |   3 +
+> > >  arch/riscv/include/asm/ptrace.h       |  10 +-
+> > >  arch/riscv/include/asm/stacktrace.h   |   5 +
+> > >  arch/riscv/include/asm/syscall.h      |   6 +
+> > >  arch/riscv/include/asm/thread_info.h  |  19 +-
+> > >  arch/riscv/include/asm/vmap_stack.h   |  28 +++
+> > >  arch/riscv/kernel/Makefile            |   1 +
+> > >  arch/riscv/kernel/elf_kexec.c         |   2 +-
+> > >  arch/riscv/kernel/entry.S             | 255 +++++-------------------=
+--
+> > >  arch/riscv/kernel/irq.c               |  75 ++++++++
+> > >  arch/riscv/kernel/ptrace.c            |  41 -----
+> > >  arch/riscv/kernel/signal.c            |  21 +--
+> > >  arch/riscv/kernel/sys_riscv.c         |  27 +++
+> > >  arch/riscv/kernel/traps.c             |  11 ++
+> > >  arch/riscv/mm/fault.c                 |  12 +-
+> > >  18 files changed, 259 insertions(+), 285 deletions(-)
+> > >  create mode 100644 arch/riscv/include/asm/entry-common.h
+> > >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
+> > >
+>
+>
+>
+> --
+> Best Regards
+>  Guo Ren
 
 
--- 
+
+--=20
 Best Regards
  Guo Ren
