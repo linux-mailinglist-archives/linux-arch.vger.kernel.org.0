@@ -2,238 +2,143 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F405AFD10
-	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 09:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6755B0118
+	for <lists+linux-arch@lfdr.de>; Wed,  7 Sep 2022 11:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiIGHGU (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Sep 2022 03:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S229990AbiIGJ7g (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Sep 2022 05:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiIGHGT (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 03:06:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCFF83BEE;
-        Wed,  7 Sep 2022 00:06:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63558B81B72;
-        Wed,  7 Sep 2022 07:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 195B0C433B5;
-        Wed,  7 Sep 2022 07:06:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662534375;
-        bh=MTlgsU9SS8HzkvTx7GZdrV3UvG/7Yhzfy3rKEmcPDKQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AfFsZT5u5N9g0z+tUHyRuKoPP7U4OULYkInl6z8H4VUW5+B9gI1T3Eydf4PtP6UNi
-         XHENG3/KM+J2Klo9pOuyB4F2APfOC/j1h1ejjtLmn22gZGgUtCxvqVu7NtWJc/fdsl
-         Iha+70ECJx+wuj/JPSMW9Dk9ZOmF8Ez8McSn3tQZ61EhehL7h2bTYzbm6AxTW37dX4
-         Z2ec4kVogrLn95iVYs7MDSwUJcRwptOgdJp2thyVftDULQIH4U3JyviydJuzjUxpNY
-         7tY2qF1SMn+VaCF6Or6K/x46DdGjP6ff3HGGCUi3CdiBbfX79PUpgo7YcQH4nt5M7O
-         +tr/GKjfd3Mjg==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-127a3a39131so13064959fac.13;
-        Wed, 07 Sep 2022 00:06:15 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3KS2S+zVA1is6iwk30v1rTp9dAnaqndORZ5PQZJGMGimLNvKwh
-        Cqq542NkJuCmIrTZ51Qv/dNqVBTFUwcUiEcpL5Y=
-X-Google-Smtp-Source: AA6agR57QLi6v/xhafsfnRmo52MCCxh+hujgl+DJVhXWpBVTUYMh5PIODVpRExxEX3s4DQR4scrmYy/XZaxy9d7aeYw=
-X-Received: by 2002:a05:6870:7092:b0:11e:ff3a:d984 with SMTP id
- v18-20020a056870709200b0011eff3ad984mr13118224oae.19.1662534374178; Wed, 07
- Sep 2022 00:06:14 -0700 (PDT)
+        with ESMTP id S230264AbiIGJ7D (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 05:59:03 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6377B775B
+        for <linux-arch@vger.kernel.org>; Wed,  7 Sep 2022 02:58:40 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id fy31so29155583ejc.6
+        for <linux-arch@vger.kernel.org>; Wed, 07 Sep 2022 02:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=heSFzetbXWgbtnsASv1LZ6qPan1dJOs+6DCCGWIHMBc=;
+        b=vHf0XP6Ze2kKCdhKxtVAgOHIr2JsfMKXNXZBFepV2YBWzCPoSXlPG+D1rz3Zg9Rch0
+         ypMUtQMR9yyK7gQjXW2ZyJ2cnlHlg71InbxQR7ofH3deJAocrr+yORgDxvorjARevA1l
+         tJHxHMkBbBa+CnVkksjAvgq0kmgk+59QTtXcjKW9zZhxRIFlhHlqchKmGRNkvoXe2Y85
+         F23ax+ngd/IlSAB6HD0FpqhIOJKU7jZkyGDdKtaAWVwaraHMfa6YxvtZnPZFhff7znmT
+         4e4T7YcqtsBKyZOiDnLNOkbTrFzdJQLHpf4Mu3ZhQsTPjK/8w9zsT/qHgDHipv7pBptk
+         v+yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=heSFzetbXWgbtnsASv1LZ6qPan1dJOs+6DCCGWIHMBc=;
+        b=mM7f/rXy7l+c5CXjAOqE4N98OqunLWbzwecYrgfJde0SB8rGHxtqQbbfUnL0BQRd3I
+         ccks9+FgbzydWsXArfXh4kt+BX/zDDjsBCJdQitFDGNndMp0W/JWA27txH4AS8fWZpiG
+         ytEpaVxK0hdQzYxIQZwaXGEg1j/spTZAdMv8li/nO5zyKB6jDA96e1qf8Ds35c28IObX
+         L7SG+zK42SD1yM+/qR2gRggYGOcIeD2DPXz/k9tytXeg9IAQKc0Phknl68avud14yHvk
+         JQpCIwQ6iov1n0qeG+TiL7Y0IrU3JU/l0K2jdiSyU7Flz0qmEKqPZLUbIayKgvRFYFGo
+         qweA==
+X-Gm-Message-State: ACgBeo0B05j/Lg8b1GWQvZx30Frrtr7AR1AxfL7/Z4DVIAU6SSTCT+48
+        G8PhTb3Z28A0+8DrtIIjsbB1rHvQrhdqrAbtGsG2hg==
+X-Google-Smtp-Source: AA6agR47HMjnxQAohy22Di9zQNJim5dtH8VkOKRmZAWyo3gky2iLulW9tTE1/ctNbKsixVbNqreBKmb966LjP7FAmDg=
+X-Received: by 2002:a17:906:4fd5:b0:74f:2bad:f9d with SMTP id
+ i21-20020a1709064fd500b0074f2bad0f9dmr1687207ejw.697.1662544719244; Wed, 07
+ Sep 2022 02:58:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220906035423.634617-1-guoren@kernel.org> <8db7caea-a1a0-25a3-ade0-2f1714d709c8@microchip.com>
- <CAJF2gTQ29bn=hgubC+YU1qSw_L3W2kAt3Yi4_EknrNCkR-dRFg@mail.gmail.com>
- <CAJF2gTRU6xWv5z7FvYkupCfmc0_EEceeowpjemoUWSAz8OgfWg@mail.gmail.com> <fb17255a-62ea-54c0-96a0-c19072c25ad5@microchip.com>
-In-Reply-To: <fb17255a-62ea-54c0-96a0-c19072c25ad5@microchip.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Sep 2022 15:06:01 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTS0Oe7AHcNf1+uGHX=S0bZoKHX2nS-+O72tjjrjq4wScA@mail.gmail.com>
-Message-ID: <CAJF2gTS0Oe7AHcNf1+uGHX=S0bZoKHX2nS-+O72tjjrjq4wScA@mail.gmail.com>
-Subject: Re: [PATCH V3 0/7] riscv: Add GENERIC_ENTRY, irq stack support
-To:     Conor.Dooley@microchip.com
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, heiko@sntech.de,
-        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, bigeasy@linutronix.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com
+References: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1662116601.git.christophe.leroy@csgroup.eu>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 7 Sep 2022 11:58:28 +0200
+Message-ID: <CAMRc=MehcpT84-ucLbYmdVTAjT86bNb9NEfV6npCmPZHqbsArw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] gpio: Get rid of ARCH_NR_GPIOS (v2)
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Davide Ciminaghi <ciminaghi@gnudd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        linux-doc <linux-doc@vger.kernel.org>, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 2:23 PM <Conor.Dooley@microchip.com> wrote:
+On Fri, Sep 2, 2022 at 2:42 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
 >
-> On 07/09/2022 03:52, Guo Ren wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the content is safe
-> >
-> > Hi Conor,
-> >
-> > I've found the root cause, you are using llvm:
+> Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
+> there is no limitation on the number of GPIOs that can be allocated
+> in the system since the allocation is fully dynamic.
 >
-> Yup, probably should have specified - sorry. I didn't realise that
-It's my typo bug. You reminded me of using clang.
-
-> that was something GCC wouldn't complain about. It was an LLVM=3D1
-> build with clang-15.
+> ARCH_NR_GPIOS is today only used in order to provide downwards
+> gpiobase allocation from that value, while static allocation is
+> performed upwards from 0. However that has the disadvantage of
+> limiting the number of GPIOs that can be registered in the system.
 >
-> I usually do builds with clang while testing patches as it seems
-> to be lesser used.
+> To overcome this limitation without requiring each and every
+> platform to provide its 'best-guess' maximum number, rework the
+> allocation to allocate from 512 upwards, allowing approx 2 millions
+> of GPIOs.
 >
-> Thanks,
-> Conor.
+> In the meantime, add a warning for drivers how are still doing
+> static allocation, so that in the future the static allocation gets
+> removed completely and dynamic allocation can start at base 0.
 >
-> >
-> > $ grep "bare sym" llvm -rn |grep RISCV
-> > llvm/lib/Target/RISCV/AsmParser/RISCVAsmParser.cpp:1296: return
-> > Error(ErrorLoc, "operand must be a bare symbol name");
-> > llvm/lib/Target/RISCV/AsmParser/RISCVAsmParser.cpp:1304: return
-> > Error(ErrorLoc, "operand must be a bare symbol name");
-> >
-> > That means we could fix up Binutils with a warning at least.
-> >
-> > Thx for pointing it out.
-> >
-> > On Wed, Sep 7, 2022 at 8:54 AM Guo Ren <guoren@kernel.org> wrote:
-> >>
-> >> On Wed, Sep 7, 2022 at 1:42 AM <Conor.Dooley@microchip.com> wrote:
-> >>>
-> >>> On 06/09/2022 04:54, guoren@kernel.org wrote:
-> >>>> From: Guo Ren <guoren@linux.alibaba.com>
-> >>>>
-> >>>> The patches convert riscv to use the generic entry infrastructure fr=
-om
-> >>>> kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu t=
-o
-> >>>> prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
-> >>>> feature for the IRQ_STACKS config. You can try it directly with [1].
-> >>>
-> >>> Hey Guo Ren,
-> >>> I applied this patchset to v6.0-rc4 & ran into a build error:
-> >>> /stuff/linux/arch/riscv/kernel/entry.S:347:9: error: operand must be =
-a bare symbol name
-> >>>   la a3, ((1 << (12)) << (2 + 0))
-> >> Yes, please try:
-> >> -       la      a3, IRQ_STACK_SIZE
-> >> +       li      a3, IRQ_STACK_SIZE
-> >>
-> >> la is for the symbol, not immediate. But why does my toolchain not
-> >> report the error?
-> >>
-> >> =E2=9E=9C  linux git:(generic_entry_v3) make ARCH=3Driscv
-> >> CROSS_COMPILE=3Driscv64-unknown-linux-gnu- EXTRA_CFLAGS+=3D-g
-> >> O=3D../build-riscv/ -kj62 all -kj
-> >> =E2=9E=9C  linux git:(generic_entry_v3) riscv64-unknown-linux-gnu-gcc =
--v
-> >> Using built-in specs.
-> >> COLLECT_GCC=3Driscv64-unknown-linux-gnu-gcc
-> >> COLLECT_LTO_WRAPPER=3D/opt/riscv/libexec/gcc/riscv64-unknown-linux-gnu=
-/11.1.0/lto-wrapper
-> >> Target: riscv64-unknown-linux-gnu
-> >> Configured with:
-> >> /home/guoren/source/riscv-gnu-toolchain/riscv-gcc/configure
-> >> --target=3Driscv64-unknown-linux-gnu --prefix=3D/opt/riscv
-> >> --with-sysroot=3D/opt/riscv/sysroot --with-pkgversion=3Dg5964b5cd7272
-> >> --with-system-zlib --enable-shared --enable-tls
-> >> --enable-languages=3Dc,c++,fortran --disable-libmudflap --disable-libs=
-sp
-> >> --disable-libquadmath --disable-libsanitizer --disable-nls
-> >> --disable-bootstrap --src=3D.././riscv-gcc --enable-multilib
-> >> --with-abi=3Dlp64d --with-arch=3Drv64imafdc --with-tune=3Drocket
-> >> --with-isa-spec=3D2.2 'CFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
-> >> 'CXXFLAGS_FOR_TARGET=3D-O2   -mcmodel=3Dmedlow'
-> >> Thread model: posix
-> >> Supported LTO compression algorithms: zlib
-> >> gcc version 11.1.0 (g5964b5cd7272)
-> >>
-> >>
-> >>
-> >>>          ^
-> >>>    CC      arch/riscv/kernel/process.o
-> >>> make[5]: *** [/stuff/linux/scripts/Makefile.build:322: arch/riscv/ker=
-nel/entry.o] Error 1
-> >>> make[5]: *** Waiting for unfinished jobs....
-> >>>
-> >>> Thanks,
-> >>> Conor.
-> >>>>
-> >>>> [1] https://github.com/guoren83/linux/tree/generic_entry_v3
-> >>>>
-> >>>> V3:
-> >>>>   - Fixup CONFIG_COMPAT=3Dn compile error
-> >>>>   - Add THREAD_SIZE_ORDER config
-> >>>>   - Optimize elf_kexec.c warning fixup
-> >>>>   - Add static to irq_stack_ptr definition
-> >>>>
-> >>>> V2:
-> >>>>   Link: https://lore.kernel.org/linux-riscv/20220904072637.8619-1-gu=
-oren@kernel.org/
-> >>>>   - Fixup compile error by include "riscv: ptrace: Remove duplicate
-> >>>>     operation"
-> >>>>   - Fixup compile warning
-> >>>>     Reported-by: kernel test robot <lkp@intel.com>
-> >>>>   - Add test repo link in cover letter
-> >>>>
-> >>>> V1:
-> >>>>   Link: https://lore.kernel.org/linux-riscv/20220903163808.1954131-1=
--guoren@kernel.org/
-> >>>>
-> >>>> Guo Ren (7):
-> >>>>    riscv: elf_kexec: Fixup compile warning
-> >>>>    riscv: compat_syscall_table: Fixup compile warning
-> >>>>    riscv: ptrace: Remove duplicate operation
-> >>>>    riscv: convert to generic entry
-> >>>>    riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
-> >>>>    riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
-> >>>>    riscv: Add config of thread stack size
-> >>>>
-> >>>>   arch/riscv/Kconfig                    |  19 ++
-> >>>>   arch/riscv/include/asm/csr.h          |   1 -
-> >>>>   arch/riscv/include/asm/entry-common.h |   8 +
-> >>>>   arch/riscv/include/asm/irq.h          |   3 +
-> >>>>   arch/riscv/include/asm/ptrace.h       |  10 +-
-> >>>>   arch/riscv/include/asm/stacktrace.h   |   5 +
-> >>>>   arch/riscv/include/asm/syscall.h      |   6 +
-> >>>>   arch/riscv/include/asm/thread_info.h  |  19 +-
-> >>>>   arch/riscv/include/asm/vmap_stack.h   |  28 +++
-> >>>>   arch/riscv/kernel/Makefile            |   1 +
-> >>>>   arch/riscv/kernel/elf_kexec.c         |   2 +-
-> >>>>   arch/riscv/kernel/entry.S             | 255 +++++-----------------=
-----
-> >>>>   arch/riscv/kernel/irq.c               |  75 ++++++++
-> >>>>   arch/riscv/kernel/ptrace.c            |  41 -----
-> >>>>   arch/riscv/kernel/signal.c            |  21 +--
-> >>>>   arch/riscv/kernel/sys_riscv.c         |  27 +++
-> >>>>   arch/riscv/kernel/traps.c             |  11 ++
-> >>>>   arch/riscv/mm/fault.c                 |  12 +-
-> >>>>   18 files changed, 259 insertions(+), 285 deletions(-)
-> >>>>   create mode 100644 arch/riscv/include/asm/entry-common.h
-> >>>>   create mode 100644 arch/riscv/include/asm/vmap_stack.h
-> >>>>
-> >>
-> >>
-> >>
-> >> --
-> >> Best Regards
-> >>   Guo Ren
-> >
-> >
-> >
-> > --
-> > Best Regards
-> >   Guo Ren
+> Main changes in v2:
+> - Adding a patch to remove sta2x11 GPIO driver instead of modifying it
+> - Moving the base of dynamic allocation from 256 to 512 because there
+> are drivers allocating gpios as high as 400.
+>
+> Christophe Leroy (8):
+>   gpio: aggregator: Stop using ARCH_NR_GPIOS
+>   gpio: davinci: Stop using ARCH_NR_GPIOS
+>   gpiolib: Warn on drivers still using static gpiobase allocation
+>   gpiolib: Get rid of ARCH_NR_GPIOS
+>   Documentation: gpio: Remove text about ARCH_NR_GPIOS
+>   x86: Remove CONFIG_ARCH_NR_GPIO
+>   arm: Remove CONFIG_ARCH_NR_GPIO
+>   arm64: Remove CONFIG_ARCH_NR_GPIO
+>
+> Davide Ciminaghi (1):
+>   gpio: Remove sta2x11 GPIO driver
+>
+>  Documentation/driver-api/gpio/legacy.rst |   5 -
+>  arch/arm/Kconfig                         |  21 --
+>  arch/arm/include/asm/gpio.h              |   1 -
+>  arch/arm64/Kconfig                       |  12 -
+>  arch/x86/Kconfig                         |   5 -
+>  drivers/gpio/Kconfig                     |   8 -
+>  drivers/gpio/Makefile                    |   1 -
+>  drivers/gpio/gpio-aggregator.c           |   7 +-
+>  drivers/gpio/gpio-davinci.c              |   3 -
+>  drivers/gpio/gpio-sta2x11.c              | 411 -----------------------
+>  drivers/gpio/gpiolib.c                   |  13 +-
+>  include/asm-generic/gpio.h               |  55 ++-
+>  12 files changed, 33 insertions(+), 509 deletions(-)
+>  delete mode 100644 drivers/gpio/gpio-sta2x11.c
+>
+> --
+> 2.37.1
 >
 
+I'd like to take it through the GPIO tree if we can get acks for ARM and x86?
 
---=20
-Best Regards
- Guo Ren
+Bart
