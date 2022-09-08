@@ -2,89 +2,104 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A035B15C4
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 09:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4634A5B15F2
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 09:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiIHHhC (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Sep 2022 03:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S230147AbiIHHr7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Sep 2022 03:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiIHHhB (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 03:37:01 -0400
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8D2BD1EB;
-        Thu,  8 Sep 2022 00:36:59 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id B11592B05F1B;
-        Thu,  8 Sep 2022 03:36:55 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 03:36:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662622615; x=1662626215; bh=fczRBUafZA
-        b4RaXJzlTRQu/tA13OrDvjbdcplYkYK0Q=; b=KYC9GwDVAiDSqJoafeGR6xgqIn
-        u2V5ZePsZlHt04gAtkSEZNWPe+Vr0ia3erf2Ac0RxEheFHfFv8yS5kFB8CKcFmOa
-        P+f+Mk7oqEgzxx74Kli6kSlFVKElrrUUYIzuER839ay3Z8I7x1EmBZjwyf4w3NbJ
-        p2efCDw7/pdjmuQN0sUaZi9wI5F/AyND9toXg6SLiLRM4a/UBLKOE4KyJFt+KReP
-        DoizUMe0iKnr1OBAFMVbLv7Rz8B9FSikbe5RWDFgKerNqkv5WjsjpfsUPgOTtT7b
-        OQVCyXbF6jsJjf65pnSGXNYKW3CUwl/ysKC1hAHRvOdhWv0dUJZbJluUyyOw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662622615; x=1662626215; bh=fczRBUafZAb4RaXJzlTRQu/tA13O
-        rDvjbdcplYkYK0Q=; b=GAN/KmWUPR3xfVYijN3Pa0JG8akP4pFFH6QV0xgZbuxx
-        QD7qMzoSeZN8JivaxtILausWbCAEWc4DZdEaY3aXqOpJg7I+lEtxCtWVS5GGq8DR
-        IEZybaN9fCu16aUcJa1PR2wdjtFdDWWDzwoFIN6mc+zask/5TffpHKFYuAx3Zi6u
-        377Wy/R+ySpTyg+87XAOm+GGXnfXTJF2AWkKMWzW7wQCuhj3iqOiSZCC9qJLshjZ
-        bhuh5vUXoDvu+z2FpgVYVQL0JE0VqbqMIybBqTm2kdaVHG3nGKUKTU6KXmaWAsJE
-        k1KyDjgqq9TmIltMFzMpZgxKLL3F9D1lS0h4uqV5fg==
-X-ME-Sender: <xms:lpsZY1Jpv4sBdOdHa8r2gDqOF7pmxBMX8zNwbUKITFR_tmon5oF6Eg>
-    <xme:lpsZYxKgrfR4QP2GXNvXtx_7r-uUFOwDmkoDaYns8Oo2taq94IX4sQkVro6drr298
-    rBImXk5qwTRpTe7pRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtuddguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:lpsZY9urtU-0GbZPLpopELSKTHkdA0YMKCEE1P7EkBO5otcHsDd-Rw>
-    <xmx:lpsZY2ZaiMVDhLSJeBsE0z4pGDppm9txfP0UPhizkLApD1Hk_Oajhg>
-    <xmx:lpsZY8blkaL1SFxluXrdBwOiut7Q3H5nnaq_SNjj-LanjlcxQK_zQA>
-    <xmx:l5sZY5QF1DahoZrrWG2qX-8E4zYYVF5Pwjx8qFCQxJTjou-qMXmYH-PU1AdcEv6y>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1A49FB60083; Thu,  8 Sep 2022 03:36:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com>
-In-Reply-To: <20220908022506.1275799-9-guoren@kernel.org>
-References: <20220908022506.1275799-1-guoren@kernel.org>
- <20220908022506.1275799-9-guoren@kernel.org>
-Date:   Thu, 08 Sep 2022 09:35:48 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     guoren@kernel.org, palmer@rivosinc.com,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Peter Zijlstra" <peterz@infradead.org>, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org,
-        "Huacai Chen" <chenhuacai@kernel.org>, apatel@ventanamicro.com,
-        atishp@atishpatra.org, "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>, bigeasy@linutronix.de
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        "Guo Ren" <guoren@linux.alibaba.com>,
-        "Andreas Schwab" <schwab@suse.de>
-Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        with ESMTP id S230092AbiIHHr6 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 03:47:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E02C6FED;
+        Thu,  8 Sep 2022 00:47:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 116B433BAA;
+        Thu,  8 Sep 2022 07:47:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662623276; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4+jY/L5+xe35wjNUaKjbU+iCet/hLbz6TyCvxP2dmm0=;
+        b=q2uaKkC1rcu77DvPauruHEVNp78d3UcgHYo6roqYS04TbzQga+wo3gUgYM7xc8RTAbag0b
+        Siee5YfUMtfmfxPxqkOhtZP8FU1vyGEbeWhPo02Tz2AY0PEdGFeJwOjRT85XiTIOJmldhN
+        n8cvx7UnpYatYAeIOdBLBa+REawwQmI=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFAA713A6D;
+        Thu,  8 Sep 2022 07:47:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id v6YhNiueGWPJGgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 08 Sep 2022 07:47:55 +0000
+Date:   Thu, 8 Sep 2022 09:47:55 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <YxmeK2/HHS4AkXh0@dhcp22.suse.cz>
+References: <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
+ <20220905234649.525vorzx27ybypsn@kmo-framework>
+ <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
+ <20220906182058.iijmpzu4rtxowy37@kmo-framework>
+ <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
+ <20220907130323.rwycrntnckc6h43n@kmo-framework>
+ <20220907094306.3383dac2@gandalf.local.home>
+ <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
+ <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
+ <20220908072950.yapakb5scocxezhy@kmo-framework>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908072950.yapakb5scocxezhy@kmo-framework>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,91 +107,33 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 8, 2022, at 4:25 AM, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> 0cac21b02ba5 ("risc v: use 16KB kernel stack on 64-bit") increase the
-> thread size mandatory, but some scenarios, such as D1 with a small
-> memory footprint, would suffer from that. After independent irq stack
-> support, let's give users a choice to determine their custom stack size.
->
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Andreas Schwab <schwab@suse.de>
-> ---
->  arch/riscv/Kconfig                   | 9 +++++++++
->  arch/riscv/include/asm/thread_info.h | 4 ++--
->  2 files changed, 11 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index da548ed7d107..e436b5793ab6 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -442,6 +442,15 @@ config IRQ_STACKS
->  	  Add independent irq & softirq stacks for percpu to prevent kernel stack
->  	  overflows. We may save some memory footprint by disabling IRQ_STACKS.
+On Thu 08-09-22 03:29:50, Kent Overstreet wrote:
+> On Thu, Sep 08, 2022 at 09:12:45AM +0200, Michal Hocko wrote:
+> > Then you have probably missed a huge part of my emails. Please
+> > re-read. If those arguments are not clear, feel free to ask for
+> > clarification. Reducing the whole my reasoning and objections to the
+> > sentence above and calling that vapid and lazy is not only unfair but
+> > also disrespectful.
 > 
-> +config THREAD_SIZE_ORDER
-> +	int "Pages of thread stack size (as a power of 2)"
-> +	range 1 4
-> +	default "1" if 32BIT
-> +	default "2" if 64BIT
-> +	help
-> +	  Specify the Pages of thread stack size (from 8KB to 64KB), which also
-> +	  affects irq stack size, which is equal to thread stack size.
+> What, where you complained about slab's page allocations showing up in the
+> profile instead of slab, and I pointed out to you that actually each and every
+> slab call is instrumented, and you're just seeing some double counting (that we
+> will no doubt fix?)
+> 
+> Or when you complained about allocation sites where it should actually be the
+> caller that should be instrumented, and I pointed out that it'd be quite easy to
+> simply change that code to use _kmalloc() and slab_tag_add() directly, if it
+> becomes an issue.
+> 
+> Of course, if we got that far, we'd have this code to thank for telling us where
+> to look!
+> 
+> Did I miss anything?
 
-I would suggest hiding this under 'depends on EXPERT', no
-need to bother normal users with that question because the
-defaults are probably what everyone should use unless they are
-extremely limited.
+Feel free to reponse to specific arguments as I wrote them. I won't
+repeat them again. Sure we can discuss how important/relevant those
+are. And that _can_ be a productive discussion.
 
-> #ifdef CONFIG_64BIT
-> -#define THREAD_SIZE_ORDER	(2 + KASAN_STACK_ORDER)
-> +#define THREAD_SIZE_ORDER	(CONFIG_THREAD_SIZE_ORDER + KASAN_STACK_ORDER)
->  #else
-> -#define THREAD_SIZE_ORDER	(1 + KASAN_STACK_ORDER)
-> +#define THREAD_SIZE_ORDER	(CONFIG_THREAD_SIZE_ORDER + KASAN_STACK_ORDER)
->  #endif
-
-The two sides of the #ifdef are now the same, so you no longer
-need both. You could also consider expressing the KASAN_STACK_ORDER
-bit in Kconfig logic for consistency, and put those into the
-defaults as well. Unless you actually use CONFIG_KASAN_STACK,
-the stack requirements of KASAN are not too bad, so that way one
-could decide to still use a smaller stack even with KASAN.
-
-If you want to make the setting really useful, you can add two
-more ideas:
-
-- When VMAP_STACK is set, make it possible to select non-power-of-two
-  stack sizes. Most importantly, 12KB should be a really interesting
-  choice as 8KB is probably still not enough for many 64-bit workloads,
-  but 16KB is often more than what you need. You probably don't
-  want to allow 64BIT/8KB without VMAP_STACK anyway since that just
-  makes it really hard to debug, so hiding the option when VMAP_STACK
-  is disabled may also be a good idea.
-
-- For testing purposes, you can even allow byte-exact stack sizes
-  that allow finding out what the actual minimum is by adding a
-  fixed offset during kernel entry. See add_random_kstack_offset()
-  for how to adjust the stack.
-
-With all those ideas added in, the Kconfig logic would be
-something like (assuming you can use 
-
-config THREAD_SIZE
-       int "Kernel stack size (in bytes)" if VMAP_STACK && EXPERT
-       range 4096 65536
-       default 8192 if 32BIT && !KASAN
-       default 32768 if 64BIT && KASAN
-       default 16384
-
-config THREAD_SIZE_ORDER
-       int
-       default 0 if THREAD_SIZE = 4096
-       default 1 if THREAD_SIZE <= 8192 
-       default 2 if THREAD_SIZE <= 16384
-       default 3 if THREAD_SIZE <= 32768
-       default 4
-
-      Arnd
+-- 
+Michal Hocko
+SUSE Labs
