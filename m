@@ -2,146 +2,122 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61E45B156B
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 09:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ACE25B1579
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 09:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiIHHMt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Sep 2022 03:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S229508AbiIHHQq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Sep 2022 03:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiIHHMs (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 03:12:48 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C18ED474F;
-        Thu,  8 Sep 2022 00:12:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A735433D05;
-        Thu,  8 Sep 2022 07:12:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662621165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wQxYLHyDLglTrc96Dwo9w9RPNpsCq3XWN1HyAjbRYNs=;
-        b=tzO1hqg8Cf+V3DOldPoJ0tAbfrcHQ/buUKHG+8XEIMml22acom6ipoa6KJxfv7pXLWnzPb
-        dvicd90Pr+rF+mf7X8aPjxI/j/QR3x9TEVgZ2XHIm66QAHuxOs5AWnjVv3I99n9b6GSa8l
-        ClarGp9lNgYGmVJgqD7angv+UmF6LpU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F64713A6D;
-        Thu,  8 Sep 2022 07:12:45 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rg4TH+2VGWOnDAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 08 Sep 2022 07:12:45 +0000
-Date:   Thu, 8 Sep 2022 09:12:45 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
-References: <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
- <20220901201502.sn6223bayzwferxv@moria.home.lan>
- <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
- <20220905234649.525vorzx27ybypsn@kmo-framework>
- <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
- <20220906182058.iijmpzu4rtxowy37@kmo-framework>
- <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
- <20220907130323.rwycrntnckc6h43n@kmo-framework>
- <20220907094306.3383dac2@gandalf.local.home>
- <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
+        with ESMTP id S229498AbiIHHQp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 03:16:45 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6092656A;
+        Thu,  8 Sep 2022 00:16:44 -0700 (PDT)
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 2887GSk7002753;
+        Thu, 8 Sep 2022 16:16:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2887GSk7002753
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662621389;
+        bh=Zi1KVRpArAd4GR+l41DO7f/S57oZpGFbgNVPesyN+LI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HYgzSQA08bn/vrZoJrrsfn1nafgpdBorzTYJJ17aN/376DKO61InNDkP7mWtR+s8u
+         oiiu7gDNTjlT1gmEtHO9pO41lv7EBg/k+aQb7Wihs/tz/+l4JWVqFTWIZRf1/TgUPz
+         3KnSIs6wGZlcLyhQrqi5l075iCRIXEQTKfNYmdJv7pMimwYiJeA8k6Mc1mgjWayA0L
+         saG08GhyVKRXcQLXnB21STQckf2zSW4Pnx8KzYpKhNfV38rwQdG9JkX5koWYKWIycJ
+         fjBjLoZXr31w5HJcI4T4+uDs/QJHknple84JeFbKLoRWTc4VwsACMIUGiS7R5OcDzJ
+         A1ISG6xBJdJ7A==
+X-Nifty-SrcIP: [209.85.160.43]
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1280590722dso8623750fac.1;
+        Thu, 08 Sep 2022 00:16:28 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3pu5aVcQrUKVcEWhStTTlSqGuTSVWzg4/KP3pte+rsXcu4Nd6m
+        ylY/Kkt8Us0DMNw5QjSnbugmO2pcOPF+gQ1q33c=
+X-Google-Smtp-Source: AA6agR5xWpm1RVlxiP0x+wSspMDyK7HdF4a5HOzRxJyNSy1PDSTemdEx7Juu4iK1N3Ml/H8qsNZ8nDiNxaRx2DoAIBw=
+X-Received: by 2002:a05:6808:90a:b0:34b:826c:6116 with SMTP id
+ w10-20020a056808090a00b0034b826c6116mr868875oih.194.1662621387757; Thu, 08
+ Sep 2022 00:16:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220906061313.1445810-1-masahiroy@kernel.org> <20220906061313.1445810-8-masahiroy@kernel.org>
+In-Reply-To: <20220906061313.1445810-8-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 8 Sep 2022 16:15:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR_nbuzH6Cj8E7jgZq+wuKEt9ra6RiRE2dUwPi1ZJOoWw@mail.gmail.com>
+Message-ID: <CAK7LNAR_nbuzH6Cj8E7jgZq+wuKEt9ra6RiRE2dUwPi1ZJOoWw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] kbuild: use obj-y instead extra-y for objects
+ placed at the head
+To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu 08-09-22 02:35:48, Kent Overstreet wrote:
-> On Wed, Sep 07, 2022 at 09:45:18AM -0400, Steven Rostedt wrote:
-> > On Wed, 7 Sep 2022 09:04:28 -0400
-> > Kent Overstreet <kent.overstreet@linux.dev> wrote:
-> > 
-> > > On Wed, Sep 07, 2022 at 01:00:09PM +0200, Michal Hocko wrote:
-> > > > Hmm, it seems that further discussion doesn't really make much sense
-> > > > here. I know how to use my time better.  
-> > > 
-> > > Just a thought, but I generally find it more productive to propose ideas than to
-> > > just be disparaging.
-> > > 
-> > 
-> > But it's not Michal's job to do so. He's just telling you that the given
-> > feature is not worth the burden. He's telling you the issues that he has
-> > with the patch set. It's the submitter's job to address those concerns and
-> > not the maintainer's to tell you how to make it better.
-> > 
-> > When Linus tells us that a submission is crap, we don't ask him how to make
-> > it less crap, we listen to why he called it crap, and then rewrite to be
-> > not so crappy. If we cannot figure it out, it doesn't get in.
-> 
-> When Linus tells someone a submission is crap, he _always_ has a sound, and
-> _specific_ technical justification for doing so.
-> 
-> "This code is going to be a considerable maintenance burden" is vapid, and lazy.
-> It's the kind of feedback made by someone who has looked at the number of lines
-> of code a patch touches and not much more.
+On Tue, Sep 6, 2022 at 3:13 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> The objects placed at the head of vmlinux need special treatments:
+>
+>  - arch/$(SRCARCH)/Makefile adds them to head-y in order to place
+>    them before other archives in the linker command line.
+>
+>  - arch/$(SRCARCH)/kernel/Makefile adds them to extra-y instead of
+>    obj-y to avoid them going into built-in.a.
+>
+> This commit gets rid of the latter.
+>
+> Create vmlinux.a to collect all the objects that are unconditionally
+> linked to vmlinux. The objects listed in head-y are moved to the head
+> of vmlinux.a by using 'ar m'.
+>
+> With this, arch/$(SRCARCH)/kernel/Makefile can consistently use obj-y
+> for builtin objects.
+>
+> There is no *.o that is directly linked to vmlinux. Drop unneeded code
+> in scripts/clang-tools/gen_compile_commands.py.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+> (no changes since v1)
+>
 
-Then you have probably missed a huge part of my emails. Please
-re-read. If those arguments are not clear, feel free to ask for
-clarification. Reducing the whole my reasoning and objections to the
-sentence above and calling that vapid and lazy is not only unfair but
-also disrespectful.
+
+
+
+> @@ -198,12 +198,12 @@ KCOV_INSTRUMENT_paca.o := n
+>  CFLAGS_setup_64.o              += -fno-stack-protector
+>  CFLAGS_paca.o                  += -fno-stack-protector
+>
+> -extra-$(CONFIG_PPC_FPU)                += fpu.o
+> -extra-$(CONFIG_ALTIVEC)                += vector.o
+> -extra-$(CONFIG_PPC64)          += entry_64.o
+> -extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE) += prom_init.o
+> +obj-$(CONFIG_PPC_FPU)          += fpu.o
+> +obj-$(CONFIG_ALTIVEC)          += vector.o
+> +obj-$(CONFIG_PPC64)            += entry_64.o
+> +obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)   += prom_init.o
+>
+> -extra-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE) += prom_init_check
+> +obj-$(CONFIG_PPC_OF_BOOT_TRAMPOLINE)   += prom_init_check
+
+
+This line should not be changed.
+
+I fixed it up locally.
+
+https://lore.kernel.org/lkml/CAK7LNARzFmJjpyUciy1LRvaFo72aZcqRbzY-63ArpeszC+HfmQ@mail.gmail.com/
+
+
+
+
+
 
 -- 
-Michal Hocko
-SUSE Labs
+Best Regards
+Masahiro Yamada
