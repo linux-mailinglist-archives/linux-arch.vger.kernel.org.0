@@ -2,82 +2,152 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6E65B14D9
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 08:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141A65B1519
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 08:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiIHGkQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Sep 2022 02:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        id S231183AbiIHGub (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Sep 2022 02:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbiIHGjz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 02:39:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706AB2A709;
-        Wed,  7 Sep 2022 23:39:50 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 08:39:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662619188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uCklRcd8QH5yU0ZLfjm8Su6BvKGC7lByKatEzlg7GMg=;
-        b=R2yS+AzL/DDj+5QU94usdh7eQJwUIEckdiB1lqs0ce4CBBxLfqUzXlJ/dKkRNKnPN66u0W
-        QmhCUV6KTMJIo0a+Q1bVKnAqPa1GB/QnZ713vzd9iqHaYUnA0nVYNY9zgc1s9iz3/c7NDc
-        Es253i48vXvUMpvFNnFl2A0wrb+NFspdsYY7Xc6XOvFTRsiL+S+RLpENX2KPfcv5xAZnG1
-        6GEP+2ad6+PqE5d10yDRTMz5HKIwdpGT1m4ybgQ1+dNBhHnNXopGZCpGY76vVE+aOhAneT
-        ETlJf/CV2OtewNZDfEnCHUTnTeLmBslI+pOvFpYnHqkc6m0Kup4yYuiNJ42Guw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662619188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uCklRcd8QH5yU0ZLfjm8Su6BvKGC7lByKatEzlg7GMg=;
-        b=/EZcb9cquB9zayRZl/wGva2AWN9cX8veY4ISar2D2givsMxB+ZJyy99I3UUb/GQNj1IPaT
-        Ahl7ZOOb20p7PlCw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 REPOST] asm-generic: Conditionally enable
- do_softirq_own_stack() via Kconfig.
-Message-ID: <YxmOMxxeC/h7L1EW@linutronix.de>
-References: <Ywcx4QBdYNIBLJiy@linutronix.de>
+        with ESMTP id S231184AbiIHGtw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 02:49:52 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CF4558D2
+        for <linux-arch@vger.kernel.org>; Wed,  7 Sep 2022 23:49:50 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id p200so5921705yba.1
+        for <linux-arch@vger.kernel.org>; Wed, 07 Sep 2022 23:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6UU7RPsFxQr+5ujpTkN8WcG542NNzl57+boNHvVA5zY=;
+        b=JG/SHVRfqPRHCrjuBmlApXDX/0abpJphKrT6tyZKJBPfjdSoDudABKV77zHlEN88Fn
+         gauZaKg028mQXz4IhYxWZ6Al32CCP7yJWGueoM6BfqmIyFGbhNHc42e0XX3fkUwzZeB7
+         iahq4zbGmhiQP33NCZ4T4eKaA3vZuTmEr9lnFAypcBd+txISnaxXaWXjTNPPmjg9GajS
+         6tRoG+4jxmfz1oriGaY/Kn1wnCqhPvgpDkXyvbhPKfNgBFNHlvzvS89+D7eIK/a1Yl6T
+         kxR18XZMyg4CCoy23A8LpUnI5xLUkeiu/ZUM9+hqU3uz7MWOC86ALqrtypYUZ97mcz9b
+         OvFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6UU7RPsFxQr+5ujpTkN8WcG542NNzl57+boNHvVA5zY=;
+        b=0iltQksmnc4ys5ckCzi+M9osWfuqkfJNDhbL6u2gmMUyPtt4NL74d0GWi9RvMj3vPi
+         Xy4wz+YdjYniWr1NoTnxAfYG5zsMxGvQLOZETc3/BbFTnFlKuCrHEn6GA4xuF8qSFxBw
+         CpD09P2Er1wWjhKfnGvz+/bIZTTUokaIqKwrkPRX4k8WyUPmd5hgFkz9vmqbz2dXuJM0
+         WFJyYkB1DTXNUBc6agjk8s0uoMo7iC5XlIpl7/L1chEs+laABYFI9HqyBtb2+8lz6E2y
+         PmlHQGMJ84iOqglLTJpWmtOY9Wb2tTBdm1CkilWEQaAFm9k6mo1m5EBZTMBlydzZipNb
+         3YFA==
+X-Gm-Message-State: ACgBeo1JTGjmKMBdU6VNadJXxbFxF26mCdbvCGLv2C55MZBdgfvP5eFN
+        yoQ/7kQ/xvdS43xAa8nhiE0n+KGXWsoXWZAkABrjBQ==
+X-Google-Smtp-Source: AA6agR5jgN0SarKose7cXaAc78GK8TgcCf+kCWZDJ6j/hZNw94xbAsDdKa9I2VH+YZqtbSZxUJOMS41d9AU0E7sKk2c=
+X-Received: by 2002:a5b:cc4:0:b0:6ae:2a6c:59e6 with SMTP id
+ e4-20020a5b0cc4000000b006ae2a6c59e6mr1980963ybr.59.1662619789134; Wed, 07 Sep
+ 2022 23:49:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <Ywcx4QBdYNIBLJiy@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
+ <20220901201502.sn6223bayzwferxv@moria.home.lan> <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
+ <20220905234649.525vorzx27ybypsn@kmo-framework> <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
+ <20220906182058.iijmpzu4rtxowy37@kmo-framework> <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
+ <20220907130323.rwycrntnckc6h43n@kmo-framework> <20220907094306.3383dac2@gandalf.local.home>
+ <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
+In-Reply-To: <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 7 Sep 2022 23:49:37 -0700
+Message-ID: <CAJuCfpEQG3+d-45PXhS=pD6ktrmqNQQnpf_-3+c2CG7rzuz+2g@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On 2022-08-25 10:25:06 [+0200], To Arnd Bergmann wrote:
-> Remove the CONFIG_PREEMPT_RT symbol from the ifdef around
-> do_softirq_own_stack() and move it to Kconfig instead.
->=20
-> Enable softirq stacks based on SOFTIRQ_ON_OWN_STACK which depends on
-> HAVE_SOFTIRQ_ON_OWN_STACK and its default value is set to !PREEMPT_RT.
-> This ensures that softirq stacks are not used on PREEMPT_RT and avoids
-> a 'select' statement on an option which has a 'depends' statement.
->=20
-> Link: https://lore.kernel.org/YvN5E%2FPrHfUhggr7@linutronix.de
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> ---
->=20
-> Arnd, could you please route it via your tree?=20
->=20
-> v1=E2=80=A6v2:
->    - Use "def_bool HAVE_SOFTIRQ_ON_OWN_STACK && !PREEMPT_RT"
+On Wed, Sep 7, 2022 at 11:35 PM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> On Wed, Sep 07, 2022 at 09:45:18AM -0400, Steven Rostedt wrote:
+> > On Wed, 7 Sep 2022 09:04:28 -0400
+> > Kent Overstreet <kent.overstreet@linux.dev> wrote:
+> >
+> > > On Wed, Sep 07, 2022 at 01:00:09PM +0200, Michal Hocko wrote:
+> > > > Hmm, it seems that further discussion doesn't really make much sense
+> > > > here. I know how to use my time better.
+> > >
+> > > Just a thought, but I generally find it more productive to propose ideas than to
+> > > just be disparaging.
+> > >
+> >
+> > But it's not Michal's job to do so. He's just telling you that the given
+> > feature is not worth the burden. He's telling you the issues that he has
+> > with the patch set. It's the submitter's job to address those concerns and
+> > not the maintainer's to tell you how to make it better.
+> >
+> > When Linus tells us that a submission is crap, we don't ask him how to make
+> > it less crap, we listen to why he called it crap, and then rewrite to be
+> > not so crappy. If we cannot figure it out, it doesn't get in.
+>
+> When Linus tells someone a submission is crap, he _always_ has a sound, and
+> _specific_ technical justification for doing so.
+>
+> "This code is going to be a considerable maintenance burden" is vapid, and lazy.
+> It's the kind of feedback made by someone who has looked at the number of lines
+> of code a patch touches and not much more.
 
-a gentle *ping*
+I would really appreciate if everyone could please stick to the
+technical side of the conversation. That way we can get some
+constructive feedback. Everything else is not helpful and at best is a
+distraction.
+Maintenance burden is a price we pay and I think it's the prerogative
+of the maintainers to take that into account. Our job is to prove that
+the price is worth paying.
 
-Sebastian
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>
