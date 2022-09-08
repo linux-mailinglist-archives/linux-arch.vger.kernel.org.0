@@ -2,102 +2,120 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045915B124B
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 04:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19E55B126F
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 04:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiIHCBv (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Sep 2022 22:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S229437AbiIHCZW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Sep 2022 22:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiIHCBu (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 22:01:50 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D147B2BF;
-        Wed,  7 Sep 2022 19:01:49 -0700 (PDT)
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 28821XjL012230;
-        Thu, 8 Sep 2022 11:01:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28821XjL012230
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662602494;
-        bh=6Y1Bya3aPZIeSCr6IhdukpsTZDl2mHIQOZnpZe9hjBU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hC6w73/jbQba9O4cZKC0LRYCxDjbEM7J4YwUZ+TXWkQ6p+n1ytM22WZ+1NNPqOUrq
-         ZtDzyIpKPB2UGdcOFYc3TIZ/3OIZCA519hrGV/3vCt/ef+hGI50ch/xJyGYvW5M4mO
-         l1g6cqI4BkcKuoWzvynpDu3v9hv1KFHUce5+W/A5ACyvxPdfHuZnnEiHzfG3Y+vasj
-         kLski423IKrQiQh0RGx9esWdiyt0axCXTcxFs9G0NGhdkMh2SxmmtLB1UJSsdoeMOi
-         XttpO2B3Na0Pm8PuS/F84vEvl3+NKW3SE0NWYBBnYzHeOik6pkGyY2EXmGhwQtxstP
-         SGapoNPOx+Q7g==
-X-Nifty-SrcIP: [209.85.161.45]
-Received: by mail-oo1-f45.google.com with SMTP id c9-20020a4a4f09000000b0044e1294a737so2744625oob.3;
-        Wed, 07 Sep 2022 19:01:33 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2xwQWhlJyGe8tgJDwOsixTqNKCVQ5ZezKH+7rvTUXM6/ObnRGK
-        abimIXtgkrH8LqJ6n/DK1hsSrMtWZEcIYb2ZUDs=
-X-Google-Smtp-Source: AA6agR5LEebdg5DlSdHbvjogjPHbIZgd4TjczzfDaGtjQ3D+KX3gf7+iYfPULy+rgzHwPdEJkWdG1FpOt2ozkzowVUw=
-X-Received: by 2002:a4a:9789:0:b0:451:437b:cc58 with SMTP id
- w9-20020a4a9789000000b00451437bcc58mr2283450ooi.96.1662602492951; Wed, 07 Sep
- 2022 19:01:32 -0700 (PDT)
+        with ESMTP id S229513AbiIHCZV (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 22:25:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB35274CF6;
+        Wed,  7 Sep 2022 19:25:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F47861B38;
+        Thu,  8 Sep 2022 02:25:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC622C433C1;
+        Thu,  8 Sep 2022 02:25:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662603919;
+        bh=PWwh/YXG9dx0dtWtHG3/yHBED6i5hSGCgtNE2Z2JIEw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IIACQOWpPN4boCxf86cEOuTjUAmlBp3ujxTTDa72QX6A6qpHmsr9l7Vrs2mZqcFiB
+         2bSH/iR5Uba+LM9ltYToBi1SNZSQrcgsjcDlOtDbOcL9/pveePKU0iKQxH6msIqVG0
+         55D+rm0/tOW01PHBX9dRVxNZCnemoDMYhEVlD3589yAPlM1kSV0IbKKtf8QTe2aguM
+         4o2ugbD6hcPcOKJ7GgkGG7T5N0tDY2WpmMB7qP2MEqoROoEMnMk/R8MM7xC9uSbs6j
+         uHEnP3wdFEheXflnL+3E1J9JSfXI/lgwXKAQe4P7pQFTpGIN0tHkNlgLD0v2bRPYTU
+         ZKAzi4usP643Q==
+From:   guoren@kernel.org
+To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
+        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, bigeasy@linutronix.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V4 0/9] riscv: Add GENERIC_ENTRY, irq stack support
+Date:   Wed,  7 Sep 2022 22:24:58 -0400
+Message-Id: <20220908022506.1275799-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220906061313.1445810-1-masahiroy@kernel.org>
- <Yxj7/WxCcdIuEHG6@bergen.fjasle.eu> <Yxj8lTPByGnahpWq@bergen.fjasle.eu>
-In-Reply-To: <Yxj8lTPByGnahpWq@bergen.fjasle.eu>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 8 Sep 2022 11:00:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQuJibnWaseXVwc9eLAeQkj6AhyxVk-YHeRgEi7vjNBjg@mail.gmail.com>
-Message-ID: <CAK7LNAQuJibnWaseXVwc9eLAeQkj6AhyxVk-YHeRgEi7vjNBjg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] kbuild: various cleanups
-To:     Nicolas Schier <nicolas@fjasle.eu>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 8, 2022 at 5:18 AM Nicolas Schier <nicolas@fjasle.eu> wrote:
->
-> On Wed, 7 Sep 2022 22:15:57 +0200 Nicolas Schier wrote:
-> > On Tue,  6 Sep 2022 15:13:05 +0900 Masahiro Yamada wrote:
-> > >
-> > >  - Refactor single target build to make it work more correctly
-> > >  - Link vmlinux and modules in parallel
-> > >  - Remove head-y syntax
-> > >
-> > >
-> > > Masahiro Yamada (8):
-> > >   kbuild: fix and refactor single target build
-> > >   kbuild: rename modules.order in sub-directories to .modules.order
-> > >   kbuild: move core-y and drivers-y to ./Kbuild
-> > >   kbuild: move .vmlinux.objs rule to Makefile.modpost
-> > >   kbuild: move vmlinux.o rule to the top Makefile
-> > >   kbuild: unify two modpost invocations
-> > >   kbuild: use obj-y instead extra-y for objects placed at the head
-> > >   kbuild: remove head-y syntax
-> >
-> > I'm not able to apply the patchset, neither on your current kbuild
-> > branch nor on for-next.  What am I missing here?  Could you give me a
-> > hint for a patchset base?
-> >
-> > Thanks and kind regards,
-> > Nicolas
->
->
-> ooops.  It _is_ already on kbuild, sorry for the noise.
+From: Guo Ren <guoren@linux.alibaba.com>
 
+The patches convert riscv to use the generic entry infrastructure from
+kernel/entry/*. Add independent irq stacks (IRQ_STACKS) for percpu to
+prevent kernel stack overflows. Add the HAVE_SOFTIRQ_ON_OWN_STACK
+feature for the IRQ_STACKS config. You can try it directly with [1].
 
-Yes.
-If you are happy to review and/or test the branch,
-I will add Reviewed-by/Tested-by when I rebase it.
+[1] https://github.com/guoren83/linux/tree/generic_entry_v4
 
+V4:
+ - Fixup entry.S with "la" bug (by Conor.Dooley)
+ - Fixup missing noinstr bug (by Peter Ziji)
 
+V3: https://lore.kernel.org/linux-riscv/20220906035423.634617-1-guoren@kernel.org/
+ - Fixup CONFIG_COMPAT=n compile error
+ - Add THREAD_SIZE_ORDER config
+ - Optimize elf_kexec.c warning fixup
+ - Add static to irq_stack_ptr definition
 
+V2: https://lore.kernel.org/linux-riscv/20220904072637.8619-1-guoren@kernel.org/
+ - Fixup compile error by include "riscv: ptrace: Remove duplicate
+   operation"
+ - Fixup compile warning
+   Reported-by: kernel test robot <lkp@intel.com>
+ - Add test repo link in cover letter
+
+V1: https://lore.kernel.org/linux-riscv/20220903163808.1954131-1-guoren@kernel.org/
+
+Guo Ren (8):
+  riscv: elf_kexec: Fixup compile warning
+  riscv: compat_syscall_table: Fixup compile warning
+  riscv: ptrace: Remove duplicate operation
+  riscv: traps: Add noinstr to prevent instrumentation inserted
+  riscv: convert to generic entry
+  riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+  riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+  riscv: Add config of thread stack size
+
+ arch/riscv/Kconfig                    |  19 ++
+ arch/riscv/include/asm/csr.h          |   1 -
+ arch/riscv/include/asm/entry-common.h |   8 +
+ arch/riscv/include/asm/irq.h          |   3 +
+ arch/riscv/include/asm/ptrace.h       |  10 +-
+ arch/riscv/include/asm/stacktrace.h   |   5 +
+ arch/riscv/include/asm/syscall.h      |   6 +
+ arch/riscv/include/asm/thread_info.h  |  19 +-
+ arch/riscv/include/asm/vmap_stack.h   |  28 +++
+ arch/riscv/kernel/Makefile            |   1 +
+ arch/riscv/kernel/elf_kexec.c         |   2 +-
+ arch/riscv/kernel/entry.S             | 255 +++++---------------------
+ arch/riscv/kernel/irq.c               |  75 ++++++++
+ arch/riscv/kernel/ptrace.c            |  41 -----
+ arch/riscv/kernel/signal.c            |  21 +--
+ arch/riscv/kernel/sys_riscv.c         |  27 +++
+ arch/riscv/kernel/traps.c             |  19 +-
+ arch/riscv/mm/fault.c                 |  12 +-
+ 18 files changed, 263 insertions(+), 289 deletions(-)
+ create mode 100644 arch/riscv/include/asm/entry-common.h
+ create mode 100644 arch/riscv/include/asm/vmap_stack.h
 
 -- 
-Best Regards
-Masahiro Yamada
+2.36.1
+
