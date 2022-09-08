@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EA55B127C
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 04:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 785EF5B127A
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 04:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiIHCZ5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Wed, 7 Sep 2022 22:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+        id S230054AbiIHC0O (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Wed, 7 Sep 2022 22:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbiIHCZq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 22:25:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9D17DF4F;
-        Wed,  7 Sep 2022 19:25:42 -0700 (PDT)
+        with ESMTP id S230143AbiIHCZt (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Wed, 7 Sep 2022 22:25:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2FD7C745;
+        Wed,  7 Sep 2022 19:25:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BDC5B81F79;
-        Thu,  8 Sep 2022 02:25:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8290C43470;
-        Thu,  8 Sep 2022 02:25:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D561261B38;
+        Thu,  8 Sep 2022 02:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71F4BC43140;
+        Thu,  8 Sep 2022 02:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662603939;
-        bh=thj4lp5B0J2/kj7Zi1BMTTtT9fAnJMteMKwuLQ0ArOk=;
+        s=k20201202; t=1662603946;
+        bh=Zb4Hmj1kW5/CGOJFKVCs2eG+dRN6j+fP3pwPcfq9g0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m+OwQrFHV741dq/wnKQO5siVbdtwGveAXdqI5KGHCuzkACFYNjhzfOFm1ZW2iR32E
-         68eLvrwOauiVv2bTscSNYudonOOIKpNMHCixpV9bwUs7PCKfdXu6w88wcd2NFNz5Vz
-         IT7swzOan01VAOcfVlRyCyrAsA+vhQ4KxYOIYZJ4X5NS7eJpOkSZMM3FrkgpIP4w7t
-         /Rx6dsphmTmmSR90DZRMBYKo6ltWGtyr8MtC2fXPUxcVEpqvqrUZZ/mlM9FCpHZtXC
-         72P3jK8whkph33B+ZUkqrwPouuluHiv4iDXiW+EXW4oA/djggYrQfP4NXwWj2by9oO
-         o3qDVrB70Xc8Q==
+        b=c8r0hlT8FWO5Nzf8Ijp2K2cTeilQoFMTldBS5lav+XQSaLfxad35Fsk0x9ZLWKHEN
+         fudyy9O45Z3xyvNmIwT41rM0HnK88WfiAsf1hWI7j1lESkcXJJQPaU7xpoBj4Y2iGh
+         0ilK188HSkvCU0Wsx5VJqYnTrv0NSKCIJPor4mTOwl/ZFLP5q5kouw0KIn62qZdfki
+         FYCsMi5LHl+iDotRAufAIm0phsu5owUzMsnNjXo4KZ50NbgoLRR1KGhUZlgCbuQoza
+         M+Z2/eDeT2fAgKhwHcORss7aAczA/5lkLWiXJSiRG/2XV4UqXkbNVTo1XMImCV+W0f
+         cD/gv0WLWFaIA==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -39,12 +39,10 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
         paul.walmsley@sifive.com, bigeasy@linutronix.de
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: [PATCH V4 3/8] riscv: ptrace: Remove duplicate operation
-Date:   Wed,  7 Sep 2022 22:25:01 -0400
-Message-Id: <20220908022506.1275799-4-guoren@kernel.org>
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH V4 4/8] riscv: traps: Add noinstr to prevent instrumentation inserted
+Date:   Wed,  7 Sep 2022 22:25:02 -0400
+Message-Id: <20220908022506.1275799-5-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220908022506.1275799-1-guoren@kernel.org>
 References: <20220908022506.1275799-1-guoren@kernel.org>
@@ -62,30 +60,73 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-The TIF_SYSCALL_TRACE is controlled by a common code, see
-kernel/ptrace.c and include/linux/thread.h.
+Without noinstr the compiler is free to insert instrumentation (think
+all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
+yet ready to run this early in the entry path, for instance it could
+rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
 
-clear_task_syscall_work(child, SYSCALL_TRACE);
-
+Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 ---
- arch/riscv/kernel/ptrace.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/riscv/kernel/traps.c | 8 ++++----
+ arch/riscv/mm/fault.c     | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 2ae8280ae475..44f4b1ca315d 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -212,7 +212,6 @@ unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
+diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+index 635e6ec26938..3ed3dbec250d 100644
+--- a/arch/riscv/kernel/traps.c
++++ b/arch/riscv/kernel/traps.c
+@@ -97,7 +97,7 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
+ #define __trap_section
+ #endif
+ #define DO_ERROR_INFO(name, signo, code, str)				\
+-asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
++asmlinkage __visible __trap_section void noinstr name(struct pt_regs *regs)	\
+ {									\
+ 	do_trap_error(regs, signo, code, regs->epc, "Oops - " str);	\
+ }
+@@ -121,7 +121,7 @@ DO_ERROR_INFO(do_trap_store_misaligned,
+ int handle_misaligned_load(struct pt_regs *regs);
+ int handle_misaligned_store(struct pt_regs *regs);
  
- void ptrace_disable(struct task_struct *child)
+-asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
++asmlinkage __trap_section void noinstr do_trap_load_misaligned(struct pt_regs *regs)
  {
--	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
+ 	if (!handle_misaligned_load(regs))
+ 		return;
+@@ -129,7 +129,7 @@ asmlinkage void __trap_section do_trap_load_misaligned(struct pt_regs *regs)
+ 		      "Oops - load address misaligned");
  }
  
- long arch_ptrace(struct task_struct *child, long request,
+-asmlinkage void __trap_section do_trap_store_misaligned(struct pt_regs *regs)
++asmlinkage __trap_section void noinstr do_trap_store_misaligned(struct pt_regs *regs)
+ {
+ 	if (!handle_misaligned_store(regs))
+ 		return;
+@@ -156,7 +156,7 @@ static inline unsigned long get_break_insn_length(unsigned long pc)
+ 	return GET_INSN_LENGTH(insn);
+ }
+ 
+-asmlinkage __visible __trap_section void do_trap_break(struct pt_regs *regs)
++asmlinkage __visible __trap_section void noinstr do_trap_break(struct pt_regs *regs)
+ {
+ #ifdef CONFIG_KPROBES
+ 	if (kprobe_single_step_handler(regs))
+diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
+index f2fbd1400b7c..c7829289e806 100644
+--- a/arch/riscv/mm/fault.c
++++ b/arch/riscv/mm/fault.c
+@@ -203,7 +203,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
+  * This routine handles page faults.  It determines the address and the
+  * problem, and then passes it off to one of the appropriate routines.
+  */
+-asmlinkage void do_page_fault(struct pt_regs *regs)
++asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
+ {
+ 	struct task_struct *tsk;
+ 	struct vm_area_struct *vma;
 -- 
 2.36.1
 
