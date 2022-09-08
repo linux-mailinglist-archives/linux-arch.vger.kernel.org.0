@@ -2,82 +2,58 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F655B214C
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 16:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7D05B22FA
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 18:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbiIHOxR (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Sep 2022 10:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
+        id S230237AbiIHQBq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Sep 2022 12:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbiIHOxN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 10:53:13 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E0A11C16F;
-        Thu,  8 Sep 2022 07:53:06 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 939C0580AEF;
-        Thu,  8 Sep 2022 10:53:05 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 10:53:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1662648785; x=1662652385; bh=kS0JpLcQIj
-        ApaQj6/G8PpIMa+Bvf17l4VEilnzuZytk=; b=FGnLltUvdfBYpJDr5Uvp6kDZJ6
-        WFoYLQXjcYRVAX/qmhJKfVdhksV4sh2PZuXs560JSWPighI/y9YTPb08H/xZ/hlL
-        uV4SneEx+HjtV6bKY5XQl3faYtXdkIXB0zJaQQ4LbriXqS7usT5YwUGrgp5Ln2ax
-        QesROQ/JDS2Gn5AsJ+cFFMBpKVTG9JGVDamYpUMHj1i0O6cnZTLJgQ2WXaQj2vQq
-        JD+MYZIkvYGXZIDUnPg67vPBGgmxnqrGC3pLRz8M5gH6RjXLfJqGSPuwhBq6psge
-        nfbQO1iGR+2/YFoQvUJ/7GviFGNVaG/1pHaG+IwcRd74ZqHc3ahgosvBxT6Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1662648785; x=1662652385; bh=kS0JpLcQIjApaQj6/G8PpIMa+Bvf
-        17l4VEilnzuZytk=; b=pYC6sf+zD9VOpzCRSngPA5GkUOOAi5c1aLixA22nSSop
-        4Z62vUmL/h5l2lbpQPocUdwr6yaxYQLZ9Sn+sB0cl4iZEjQ+nUeoy0lsEGOmi+5H
-        sYEMQJJpwHgmia2XwYutWSmDZjqz+7/CRzw4PaCW0UY9/MiebiQne+B5sAFOTRdJ
-        FTpGAQCbU5WQMvmbCdo+ja81QslIibF1ZeIDSor6KBy9NirrMQaGvZ/pRKgv0HgE
-        vfNmC17f6sbaXKVGsTeqL3harDUe96S1GL/WX9ei82T+XFDhUvYqj1nyJaP9bDxx
-        hLesLBfjnhQtG7f1QjFeS36AKGFbj24My8QhFWforQ==
-X-ME-Sender: <xms:0AEaY6vD8MqMTNx44UbYOr9Z8Ybn0IPeVanKBLgzy_Do-Q8e0RKWzA>
-    <xme:0AEaY_cN6asRvWlW9bkhPpZgmbmdDAYlRSeY5UkpE5-ZEjlty3CZf3fLIZ-v9th1n
-    NpwjfwBWDR-gAauxmc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dunecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:0AEaY1w02521UAk5l3m4BPPMJmRdf9jYm9-naBh2qU87CmhOGtvbew>
-    <xmx:0AEaY1NfE3lnVZVFpHkhK9dsVHpXcj-hagJgjPudoDkB5Yia0HvooA>
-    <xmx:0AEaY6_sqws4gn-PjBkKIEx_6Gf3V45mAlxc8k-EgOsUUluOWXIufw>
-    <xmx:0QEaYxkg6OU46eW4UfPa3DBsG9Ami96UjpS99ZSSGwis0x3ERks17w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 94CC9B60083; Thu,  8 Sep 2022 10:53:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
-Mime-Version: 1.0
-Message-Id: <67ecb725-2e2d-4aae-8c99-76fad5875080@www.fastmail.com>
-In-Reply-To: <20220906185939.765081-1-linus.walleij@linaro.org>
-References: <20220906185939.765081-1-linus.walleij@linaro.org>
-Date:   Thu, 08 Sep 2022 16:52:42 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Walleij" <linus.walleij@linaro.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>
-Cc:     linux-alpha@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
-        "Mark Brown" <broonie@kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v2] alpha: Use generic <asm-generic/io.h>
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        with ESMTP id S229997AbiIHQBp (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 12:01:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E58AC697E;
+        Thu,  8 Sep 2022 09:01:43 -0700 (PDT)
+Date:   Thu, 8 Sep 2022 18:01:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1662652901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yq5ZQcpZgpbBySLyDiNZZpodPZiaJP/0RYxixe2+d8Y=;
+        b=e48N5fhr2y9PwwEu4uAAHEca8MQ1r9J0zvBqQ4mqQAv8TJiw4oXHTwLajcP8Ov9mUuTY2A
+        NY7+gsgPYsD3qZ5oW4C6q0N0UYLaBf7V63qtTrDVVX59UtMUG9TbQGkeeKj5rZowcgD1rZ
+        RpiA1SbHcPIcGodqhzQzB2cDtBNQ+KMH6kjTUs4lYStFI9jvb30FeYms3LqNX11neDKg6F
+        V41X60sakn2aUL6Beatbop1XjlAI5+Ct62PB8ULQJ528p43sPgHsfG0iXPsSGcIn3Mc4OS
+        gTsyEwC2qz/ZnMTeAo7Fx0TkKYpiQb3RrhNc9SOX7BLF0Suxe0eO0wGWopkKDA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1662652901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yq5ZQcpZgpbBySLyDiNZZpodPZiaJP/0RYxixe2+d8Y=;
+        b=aMO74v0Iyk5F71GBnyRyg+lFUxAvArjrSitIstuy8jq+PoE6YxmdL1Ii01YRHsh5Y9xYd0
+        +XKKoqZcfnhU+fBQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V4 7/8] riscv: Support HAVE_SOFTIRQ_ON_OWN_STACK
+Message-ID: <YxoR5Fv6hOkzMSTg@linutronix.de>
+References: <20220908022506.1275799-1-guoren@kernel.org>
+ <20220908022506.1275799-8-guoren@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220908022506.1275799-8-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,37 +62,45 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Tue, Sep 6, 2022, at 8:59 PM, Linus Walleij wrote:
-> This enables the alpha to use <asm-generic/io.h> to fill in the
-> missing (undefined) I/O accessor functions.
->
-> This is needed if Alpha ever wants to uses CONFIG_REGMAP_MMIO
-> which has been patches to use accelerated _noinc accessors
-> such as readsq/writesq that Alpha, while being a 64bit platform,
-> as of now not yet provide. readq/writeq is however provided
-> so the machine can do 64bit I/O.
->
-> This comes with the requirement that everything the architecture
-> already provides needs to be defined, rather than just being,
-> say, static inline functions.
->
-> Bite the bullet and just provide the definitions and make it work.
->
-> Some defines need to be piled right before the inclusion of
-> <asm-generic/io.h> due to the fact that alpha is including
-> <asm-generic/iomap.h> without selecting GENERIC_IOMAP.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/linux-mm/202208181447.G9FLcMkI-lkp@intel.com/
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Richard Henderson <richard.henderson@linaro.org>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-alpha@vger.kernel.org
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+On 2022-09-07 22:25:05 [-0400], guoren@kernel.org wrote:
+> --- a/arch/riscv/kernel/irq.c
+> +++ b/arch/riscv/kernel/irq.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/seq_file.h>
+>  #include <asm/smp.h>
+>  #include <asm/vmap_stack.h>
+> +#include <asm/softirq_stack.h>
+>  
+>  #ifdef CONFIG_IRQ_STACKS
+>  static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
+> @@ -38,6 +39,21 @@ static void init_irq_stacks(void)
+>  		per_cpu(irq_stack_ptr, cpu) = per_cpu(irq_stack, cpu);
+>  }
+>  #endif /* CONFIG_VMAP_STACK */
+> +
+> +#ifndef CONFIG_PREEMPT_RT
 
-Applied to asm-generic tree, thanks
+Could you please replace it with 
+	#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
 
-     Arnd
+instead? See
+	https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git/commit/?id=8cbb2b50ee2dcb082675237eaaa48fe8479f8aa5
+
+> +static void do_riscv_softirq(struct pt_regs *regs)
+> +{
+> +	__do_softirq();
+> +}
+> +
+> +void do_softirq_own_stack(void)
+> +{
+> +	ulong *sp = per_cpu(irq_stack_ptr, smp_processor_id());
+> +
+> +	call_on_stack(NULL, sp, do_riscv_softirq, 0);
+> +}
+> +#endif /* CONFIG_PREEMPT_RT */
+> +
+>  #else
+>  static void init_irq_stacks(void) {}
+>  #endif /* CONFIG_IRQ_STACKS */
+
+Sebastian
