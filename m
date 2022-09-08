@@ -2,92 +2,62 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0935B15AC
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 09:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61CD5B15BD
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 09:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiIHHak (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Sep 2022 03:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
+        id S230012AbiIHHeQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Sep 2022 03:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbiIHHaj (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 03:30:39 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601AE91D18;
-        Thu,  8 Sep 2022 00:30:38 -0700 (PDT)
-Date:   Thu, 8 Sep 2022 03:29:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662622236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DqfWXb2eEuuOxMq6abU6PffruFzdNn4Aud1F5cFJAhI=;
-        b=Fw8tAVGZj5GyiSqYxRkRmSk4x1RT2ZwVJU0JDfghWsKBfIGHKaRr04lhoKOVAsK9mBuLF+
-        9iI0Zcp5Zlk1fasn3UZcG2E28IiTTnVsfmeKdAq1LMPY/5nchmAf+pI4zvkYYgOYnJoj7B
-        58GfzCiu+o2KhFlYF9EH5IZegrVCLG0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220908072950.yapakb5scocxezhy@kmo-framework>
-References: <20220901201502.sn6223bayzwferxv@moria.home.lan>
- <YxW4Ig338d2vQAz3@dhcp22.suse.cz>
- <20220905234649.525vorzx27ybypsn@kmo-framework>
- <Yxb1cxDSyte1Ut/F@dhcp22.suse.cz>
- <20220906182058.iijmpzu4rtxowy37@kmo-framework>
- <Yxh5ueDTAOcwEmCQ@dhcp22.suse.cz>
- <20220907130323.rwycrntnckc6h43n@kmo-framework>
- <20220907094306.3383dac2@gandalf.local.home>
- <20220908063548.u4lqkhquuvkwzvda@kmo-framework>
- <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
+        with ESMTP id S229924AbiIHHeP (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 03:34:15 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9632A9C510;
+        Thu,  8 Sep 2022 00:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=qOOipAMFA6jU/iAD0NNT6fAlhjOnSrPaO5m9WLa7Ha0=; b=XWBTcDwPn7I4lM/UNGkV9JDC7V
+        LCGE6JzoqcxPZHavPhQOjtc8pc1L45zx/Z2uFkIMZMs3VYT4POhxsWq5PHApBJxUSSbMmk/Hr/aiv
+        CEifLxaRKaSOiaR4y0jtY8R3Hr/YaFoxr48v8KhsNv6unvME1pwvn3iZrUgFDitZ9Xl+74K4NKKm2
+        NYV3WlSA02f8JTjdBIlt8QFSF2HGaTRkd6y2wSAl9os41Vtu4WbyQSZyDe6WjCofFt/kp+bWuL/9a
+        bCdlkmqc6G0o2XCGIf4rM1CpC6pvFHO9CnZpGUmTN5oFCDVqj9AKAj24niruMjW18qgGtG/mKfiXU
+        S1p/LumQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oWC2d-00Ae5F-8k; Thu, 08 Sep 2022 07:33:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0B03D30004F;
+        Thu,  8 Sep 2022 09:33:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A0DA92B99E10D; Thu,  8 Sep 2022 09:33:35 +0200 (CEST)
+Date:   Thu, 8 Sep 2022 09:33:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        luto@kernel.org, conor.dooley@microchip.com, heiko@sntech.de,
+        jszhang@kernel.org, lazyparser@gmail.com, falcon@tinylab.org,
+        chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, bigeasy@linutronix.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V4 4/8] riscv: traps: Add noinstr to prevent
+ instrumentation inserted
+Message-ID: <Yxmaz7wJPEBQ7Vki@hirez.programming.kicks-ass.net>
+References: <20220908022506.1275799-1-guoren@kernel.org>
+ <20220908022506.1275799-5-guoren@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxmV7a2pnj1Kldzi@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220908022506.1275799-5-guoren@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,24 +65,33 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Thu, Sep 08, 2022 at 09:12:45AM +0200, Michal Hocko wrote:
-> Then you have probably missed a huge part of my emails. Please
-> re-read. If those arguments are not clear, feel free to ask for
-> clarification. Reducing the whole my reasoning and objections to the
-> sentence above and calling that vapid and lazy is not only unfair but
-> also disrespectful.
+On Wed, Sep 07, 2022 at 10:25:02PM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Without noinstr the compiler is free to insert instrumentation (think
+> all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
+> yet ready to run this early in the entry path, for instance it could
+> rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
+> 
+> Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/kernel/traps.c | 8 ++++----
+>  arch/riscv/mm/fault.c     | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
+> index 635e6ec26938..3ed3dbec250d 100644
+> --- a/arch/riscv/kernel/traps.c
+> +++ b/arch/riscv/kernel/traps.c
+> @@ -97,7 +97,7 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
+>  #define __trap_section
+>  #endif
+>  #define DO_ERROR_INFO(name, signo, code, str)				\
+> -asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
+> +asmlinkage __visible __trap_section void noinstr name(struct pt_regs *regs)	\
 
-What, where you complained about slab's page allocations showing up in the
-profile instead of slab, and I pointed out to you that actually each and every
-slab call is instrumented, and you're just seeing some double counting (that we
-will no doubt fix?)
-
-Or when you complained about allocation sites where it should actually be the
-caller that should be instrumented, and I pointed out that it'd be quite easy to
-simply change that code to use _kmalloc() and slab_tag_add() directly, if it
-becomes an issue.
-
-Of course, if we got that far, we'd have this code to thank for telling us where
-to look!
-
-Did I miss anything?
+But now you have __trap_section and noinstr both adding a section
+attribute.
