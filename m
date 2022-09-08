@@ -2,74 +2,77 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DF55B2114
-	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 16:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF585B2134
+	for <lists+linux-arch@lfdr.de>; Thu,  8 Sep 2022 16:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232714AbiIHOpr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 8 Sep 2022 10:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S232680AbiIHOvJ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 8 Sep 2022 10:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231590AbiIHOpi (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 10:45:38 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F79E5F7CE;
-        Thu,  8 Sep 2022 07:45:32 -0700 (PDT)
+        with ESMTP id S232310AbiIHOvI (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 8 Sep 2022 10:51:08 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A74D4BFC;
+        Thu,  8 Sep 2022 07:51:07 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id E13A4580AF9;
-        Thu,  8 Sep 2022 10:45:28 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 060105803A9;
+        Thu,  8 Sep 2022 10:51:06 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Thu, 08 Sep 2022 10:45:28 -0400
+  by compute3.internal (MEProxy); Thu, 08 Sep 2022 10:51:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1662648328; x=1662651928; bh=SPGeHN3LN2nB2HRb9TjiHHXV8F5bbIF+9zw
-        vQ8/QAmk=; b=a4AZUOTQfrf9eYAEhx7fvxawPNOycWbjQv+0SVtsIZSVJUv8eXH
-        m7G2XiAXtLZpAoXfS25o3x6Z/tIToKvS48hRGuyH/DZqf5hJZFkkB8SsfbT1sR43
-        0T6Vlw7sorJevCpZlc9cIgJ1rk07U0U5op6mZh2bibaL0RroG8amXDEuT7W6QpwX
-        M3z6T1b0pgUNMLXOmYSxv4ntOvTCTG/joJ8jF7lSI6npthhm5UEPJvucwZKyDSkP
-        P+I35hwGJJBqskSAyfkLu6tta5h1NA2H23SbL8YMWBxd9gQ7j7NzFzUngESLAsU7
-        LuHuKR/NQbVlLURPCJd7Yt3yOD0iKair+mA==
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662648666; x=1662652266; bh=xPUksezrfQ
+        ftp7BCJi4jfaFRFsim1oC+Nm5z/XTwFx4=; b=W8zvVkqSTriTWscLmmhEe374hI
+        2yj96Yj14bqtsqKK6plP08lFbZKZRcCFFwZjicui36Fw8gcrWD2avibs7+yRrecF
+        BBK5/mA5W8T0v1bTHaCSlRFc1cgZguWoDqOitgFsUmwoNUEm3WdaelV9iBxWBObm
+        po7KIaQ8bFhlY5zE2gG/zwTxrLjollxaQKpJUC/PI/Tj8NA0q7QsILUb8Jbmm0M7
+        BkHetpt/svfhPFfnHk2xKm53zXxcxPeUzn9Xvhxeja2bxqVSgNufAVfcfyN6SNB5
+        x+I7ZcL6/4+dSqZh8uVwRaVD5DBwClw1zvbvDu3SbxRbqUKqIHTsJa8J+imA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1662648328; x=
-        1662651928; bh=SPGeHN3LN2nB2HRb9TjiHHXV8F5bbIF+9zwvQ8/QAmk=; b=m
-        KD0AvHMzH10BAdpwtcrbiKa7ehS3AodA1dNMOzP18aJU1fUVQdXAEW6cUj6uO0Vu
-        TJMs/ZkLwlQrildepm4bBybjcOGt35ziGfcC4sGiTtFipgjD39eaCL0RKqq0eYe9
-        Zs+gCkMMXky1BXilt2hXOAW/2TH95Ry3pOoLnwMoBt0V90CfRouIxo1kIeZPsoPK
-        gtclndlHe8l+dZ5huX/vuKCo+H2NQGDBDmsS/i/l2C2uI5yby/DCHNSLYW/vKMgI
-        bPLKY5M96DUcdRY5Pc5m+Fy1Fr27DYXjYhoNTJUbctBBwHEnbz1f2rq9yAcaiWZI
-        X2QQp+CRXmTuekNFoIopA==
-X-ME-Sender: <xms:CAAaY-wN57JOxo-d-aoF_CWZGlpVZLz81l_ZnX3KBQE9JVbLqmeU_Q>
-    <xme:CAAaY6QRaYggFq0V1-yw7yUm27v-6Z-l6nY8SCShVzF5STEPzizOGf0-_aNpfXK9A
-    GUi_jP7n076Z9tIC18>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvdduucetufdoteggodetrfdotf
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662648666; x=1662652266; bh=xPUksezrfQftp7BCJi4jfaFRFsim
+        1oC+Nm5z/XTwFx4=; b=0prD3bLmKHrguGQi6sTrt2uU1+uXXdI0p+kAHgFwoPRN
+        wQHkJiPGI9sVG5w6uoE4SJbHZGhC5uXJnU1KFmcbyTdT4c+MXd60QAB05qaG0oRT
+        ZSHt/5thODtYW1+dQcDdVcWatkNXWlg8h6g/puLo4ErKWBR7R4oI/5AMFfYTFIS+
+        VCkKIttBUIb/MFTu7MsChLRiOzUcHlqM4Ver3QaSnl7SYJMxyvpqvAlwR9pc7wnb
+        nnsBWpICCgNdugIlYgEX4y21Ejj54SeOhNejKf1sSjwbLLOccXK3/WwfXBnXxRpx
+        Bpcpe9I0RFQhxY9Epm5tegbc683Vg1hi8B9isyg60w==
+X-ME-Sender: <xms:WQEaYy7FT3dJucbMZMU-ZvPyPj6t3JSi-eS0JOqfd1MZ9JpZGGwP-w>
+    <xme:WQEaY75kfGpA9CU4g2BeTBvV1Y9HOOS8AAPNS2vXCT40BBMCuh5T8J6yXNsWYawX5
+    tl8YJ2ggEc9KjDInnE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtfedgvddvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkfffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfeefuefhkeejvedtvddtleeltddttdejgedvhfdtuddvhfeukeduiefhjeetgfei
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:CAAaYwUzJu3JTcRmbTb8kuJOMZVtqf0FQfZF1es-6rpYE1AvxEKWzw>
-    <xmx:CAAaY0ijme5QnmjK2Ih3rXMQhT03R3LQN4wI8ov7cUNEN6PoLYeQkQ>
-    <xmx:CAAaYwD6wNLusk8rw_reuSHRq2yEwaTsup0yCViqkPyex7V1QEpCzg>
-    <xmx:CAAaY57P9prGQj2l8vECB_CfE06GTjvtopUc5p049L0vXberM65arg>
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:WQEaYxfxAbS_WPhEG_s6s7FT6dlCXv9h8VC0irCctQ1RWx8NAFmgaA>
+    <xmx:WQEaY_K8hdvV5Su9Hy8S9Xec3HGxfcjT7oX8e4kj8j7bs1lQ-MvV_A>
+    <xmx:WQEaY2KjDufffN1YBIo8R1ZC9ZgHjwSJEM_QqMI5-nr2NbB86xLXBA>
+    <xmx:WQEaYy00ngNiWX7i_jPCnOBfSqE5pNuzWwdR1eNUByGi2drNzU60PQ>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7DFC8B60083; Thu,  8 Sep 2022 10:45:28 -0400 (EDT)
+        id 8426AB60083; Thu,  8 Sep 2022 10:51:05 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
 Mime-Version: 1.0
-Message-Id: <6ba5a3a9-93b0-49a9-ab49-7b6006e23067@www.fastmail.com>
-Date:   Thu, 08 Sep 2022 16:44:34 +0200
+Message-Id: <7c639355-206f-4682-b12c-9c8258d53537@www.fastmail.com>
+In-Reply-To: <20220831195553.129866-1-linus.walleij@linaro.org>
+References: <20220831195553.129866-1-linus.walleij@linaro.org>
+Date:   Thu, 08 Sep 2022 16:50:45 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
+To:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     sparclinux@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] asm-generic: SOFTIRQ_ON_OWN_STACK rework
+        "Mark Brown" <broonie@kernel.org>
+Subject: Re: [PATCH v2] sparc: Fix the generic IO helpers
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
@@ -81,37 +84,36 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The following changes since commit b90cb1053190353cc30f0fef0ef1f378ccc063c5:
+On Wed, Aug 31, 2022, at 9:55 PM, Linus Walleij wrote:
+> This enables the Sparc to use <asm-generic/io.h> to fill in the
+> missing (undefined) [read|write]sq I/O accessor functions.
+>
+> This is needed if Sparc[64] ever wants to uses CONFIG_REGMAP_MMIO
+> which has been patches to use accelerated _noinc accessors
+> such as readsq/writesq that Sparc64, while being a 64bit platform,
+> as of now not yet provide.
+>
+> This comes with the requirement that everything the architecture
+> already provides needs to be defined, rather than just being,
+> say, static inline functions.
+>
+> Bite the bullet and just provide the definitions and make it work.
+> Compile-tested on sparc32 and sparc64.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: 
+> https://lore.kernel.org/linux-arm-kernel/202208201639.HXye3ke4-lkp@intel.com/
+> Cc: David S. Miller <davem@davemloft.net>
+> Cc: sparclinux@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v1->v2:
+> - Move defines in proximity of defined functions
+> - Test compile also on sparc32
 
-  Linux 6.0-rc3 (2022-08-28 15:05:29 -0700)
+Applied to the asm-generic tree along with the alpha patch now.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/asm-generic-fixes-6.0-rc4
-
-for you to fetch changes up to 8cbb2b50ee2dcb082675237eaaa48fe8479f8aa5:
-
-  asm-generic: Conditionally enable do_softirq_own_stack() via Kconfig. (2022-09-05 17:20:55 +0200)
-
-----------------------------------------------------------------
-asm-generic: SOFTIRQ_ON_OWN_STACK rework
-
-Just one fixup patch, reworking the softirq_on_own_stack logic for
-preempt-rt kernels as discussed in
-https://lore.kernel.org/all/CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com/
-
-----------------------------------------------------------------
-Sebastian Andrzej Siewior (1):
-      asm-generic: Conditionally enable do_softirq_own_stack() via Kconfig.
-
- arch/Kconfig                          | 3 +++
- arch/arm/kernel/irq.c                 | 2 +-
- arch/parisc/kernel/irq.c              | 2 +-
- arch/powerpc/kernel/irq.c             | 4 ++--
- arch/s390/include/asm/softirq_stack.h | 2 +-
- arch/sh/kernel/irq.c                  | 2 +-
- arch/sparc/kernel/irq_64.c            | 2 +-
- arch/x86/include/asm/irq_stack.h      | 2 +-
- arch/x86/kernel/irq_32.c              | 2 +-
- include/asm-generic/softirq_stack.h   | 2 +-
- 10 files changed, 13 insertions(+), 10 deletions(-)
+    Arnd
