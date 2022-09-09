@@ -2,123 +2,124 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B8C5B3280
-	for <lists+linux-arch@lfdr.de>; Fri,  9 Sep 2022 10:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FC15B34D5
+	for <lists+linux-arch@lfdr.de>; Fri,  9 Sep 2022 12:11:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiIII65 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Sep 2022 04:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
+        id S230186AbiIIKK5 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 9 Sep 2022 06:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229774AbiIII6Z (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Sep 2022 04:58:25 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C081B1365D7
-        for <linux-arch@vger.kernel.org>; Fri,  9 Sep 2022 01:57:46 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3457bc84d53so11980877b3.0
-        for <linux-arch@vger.kernel.org>; Fri, 09 Sep 2022 01:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=BA7v9By/PKm8Lb5EGh75hqx3B2NthlRyqEiydr+9MIw=;
-        b=goGwbFEzBCu6ZReNVsQFXEaSFbARIBvytLuNW4v5IzfqaOxEddum2eMnFGd4n1giOm
-         12yr+tkvZlEG8nCUA88s5hp100Jh85VNfSeMZi+Aq6wwHb9IOv/FFX1jCussxyGiaJ5U
-         Nxmc1qPjqj8jpEfcvVPhcAgsqpQiA8h9e32psMV1REa/fw4xpH7NmtwCwq0Y3Dt9YILC
-         176tLQDsChJoJCd8+GYPQmm5OjJtrlmbnNDXKD8AX6dyKzZgJPWyMxrYwLc7vOjaOYBI
-         O9WJIH6/NkpPX9UbGKPOwAa8jlb13aKJ3GYGRyRTRCnNMOKLHvbAfbfKvl8FcfN+moBm
-         H51Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BA7v9By/PKm8Lb5EGh75hqx3B2NthlRyqEiydr+9MIw=;
-        b=dDR0/UZxTUDr/yV5xIXj+8MeuV9hThi0+Y9rLLpUecSWuPnw8F/cDJxoNTws/bOr0e
-         V6gdJcw5XqlLGOIt6yETUMdy/GMgz/CIkCaOuNKWY2eAtCgMn2yDL1ONnshE1h2m1FGC
-         0JqlOpqH6hEpquOq3T8iZaP9Qy3bPeNlUFPrZXb5USyGErQq8NeOlsfoB059703fLnfW
-         KOrIXxprLIWk/tm5Tx0GmHF0EWL1pYMp3u/sd1GKKHhniJ7JXhbOVnw1uF+7JwmUWTQK
-         Kq4mvcaidpJOrD/oOzLxB9gRrnIqo6IMqQ8xAbAAG+FliV+xpKYh0eQdU1rhxtfqYIHE
-         GUww==
-X-Gm-Message-State: ACgBeo1asy6KvhKE35Lup5/O96hvfMIFWdUhUuxhZwY+cA9RcK5cUCsi
-        Zw3fYafgXP4uW13gxLulxRoprunZ8lnfe1dBLo7Uzw==
-X-Google-Smtp-Source: AA6agR6yLRVeEL7qXOrcf6i7wNdKQSe6OY+YRtuC5CLYDGWplZp6/6tDwb3XUHj4CjP4Gwj8mLOWHJSGHRh50UlvyRs=
-X-Received: by 2002:a0d:c7c3:0:b0:31e:9622:c4f6 with SMTP id
- j186-20020a0dc7c3000000b0031e9622c4f6mr10866606ywd.144.1662713865771; Fri, 09
- Sep 2022 01:57:45 -0700 (PDT)
+        with ESMTP id S230257AbiIIKKq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Sep 2022 06:10:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7678E32AAD;
+        Fri,  9 Sep 2022 03:10:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D279AB8248A;
+        Fri,  9 Sep 2022 10:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFBBAC433C1;
+        Fri,  9 Sep 2022 10:10:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662718239;
+        bh=ThKc/LNks2uiEwibtZIMonrODWHgA8V6ISnUWceg9VI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JmgQnTSyduTWZtYc6DODkU0So3JcJ218EbkSzoY/dgU3Zm56uGjgw02ef25ftWUbW
+         ft/mVHJRUfvEr8L3IpZK28TBYphWGB2loiVTm9EOSQ1REIu+kTHPiyGH1ttTMNKv1O
+         OH8lklSHvtWxgwDalvI/0oszE8XSNNjneTsZOcXo55Rq97+gmAP5+GHre3WS5yXxiT
+         x4h0JsVjQjfZaKbh3T0wVdny69SN2QiTP1wN+qpBJboyanMv2V/pAc5cQ9woB70o6b
+         VYhQqS03VVlenck24B+QAUKBx1lum28864MwmcZYhxN8hrnSihqQLTF0YnXXBLRv5o
+         hgh08i87IptXg==
+Date:   Fri, 9 Sep 2022 11:10:34 +0100
+From:   Will Deacon <will@kernel.org>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     Sergei Antonov <saproj@gmail.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH] mm: bring back update_mmu_cache() to finish_fault()
+Message-ID: <20220909101032.GA32507@willie-the-truck>
+References: <20220908204809.2012451-1-saproj@gmail.com>
+ <20220908222410.yg2sqqdezzwfi5mj@box.shutemov.name>
 MIME-Version: 1.0
-References: <20220905122452.2258262-1-glider@google.com> <20220905122452.2258262-41-glider@google.com>
-In-Reply-To: <20220905122452.2258262-41-glider@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 9 Sep 2022 10:57:09 +0200
-Message-ID: <CAG_fn=Wz1b5nKTACGa_oPBuxXcn4Hb7hDT-3Fcx5P3ODY+ivpA@mail.gmail.com>
-Subject: Re: [PATCH v6 40/44] x86: kmsan: don't instrument stack walking functions
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220908222410.yg2sqqdezzwfi5mj@box.shutemov.name>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 5, 2022 at 2:26 PM Alexander Potapenko <glider@google.com> wrote:
->
-> Upon function exit, KMSAN marks local variables as uninitialized.
-> Further function calls may result in the compiler creating the stack
-> frame where these local variables resided. This results in frame
-> pointers being marked as uninitialized data, which is normally correct,
-> because they are not stack-allocated.
->
-> However stack unwinding functions are supposed to read and dereference
-> the frame pointers, in which case KMSAN might be reporting uses of
-> uninitialized values.
->
-> To work around that, we mark update_stack_state(), unwind_next_frame()
-> and show_trace_log_lvl() with __no_kmsan_checks, preventing all KMSAN
-> reports inside those functions and making them return initialized
-> values.
->
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+On Fri, Sep 09, 2022 at 01:24:10AM +0300, Kirill A. Shutemov wrote:
+> On Thu, Sep 08, 2022 at 11:48:09PM +0300, Sergei Antonov wrote:
+> > Running this test program on ARMv4 a few times (sometimes just once)
+> > reproduces the bug.
+> > 
+> > int main()
+> > {
+> >         unsigned i;
+> >         char paragon[SIZE];
+> >         void* ptr;
+> > 
+> >         memset(paragon, 0xAA, SIZE);
+> >         ptr = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,
+> >                    MAP_ANON | MAP_SHARED, -1, 0);
+> >         if (ptr == MAP_FAILED) return 1;
+> >         printf("ptr = %p\n", ptr);
+> >         for (i=0;i<10000;i++){
+> >                 memset(ptr, 0xAA, SIZE);
+> >                 if (memcmp(ptr, paragon, SIZE)) {
+> >                         printf("Unexpected bytes on iteration %u!!!\n", i);
+> >                         break;
+> >                 }
+> >         }
+> >         munmap(ptr, SIZE);
+> > }
+> > 
+> > In the "ptr" buffer there appear runs of zero bytes which are aligned
+> > by 16 and their lengths are multiple of 16.
+> > 
+> > Linux v5.11 does not have the bug, "git bisect" finds the first bad commit:
+> > f9ce0be71d1f ("mm: Cleanup faultaround and finish_fault() codepaths")
+> > 
+> > Before the commit update_mmu_cache() was called during a call to
+> > filemap_map_pages() as well as finish_fault(). After the commit
+> > finish_fault() lacks it.
+> > 
+> > Bring back update_mmu_cache() to finish_fault() to fix the bug.
+> > Also call update_mmu_tlb() only when returning VM_FAULT_NOPAGE to more
+> > closely reproduce the code of alloc_set_pte() function that existed before
+> > the commit.
+> > 
+> > On many platforms update_mmu_cache() is nop:
+> >  x86, see arch/x86/include/asm/pgtable
+> >  ARMv6+, see arch/arm/include/asm/tlbflush.h
+> > So, it seems, few users ran into this bug.
+> > 
+> > Fixes: f9ce0be71d1f ("mm: Cleanup faultaround and finish_fault() codepaths")
+> > Signed-off-by: Sergei Antonov <saproj@gmail.com>
+> > Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> 
+> +Will.
+> 
+> Seems I confused update_mmu_tlb() with update_mmu_cache() :/
 
-Hi Andrew, Stephen,
+Urgh, that thing is pretty horrible! But anyway, I agree that this change
+looks correct based on the other callers in the file.
 
-I've noticed this particular patch is missing in -mm (and, as a
-result, in linux-next), which results in tons of false positives at
-boot time.
-Could you please add it as well?
+> Looks good to me:
+> 
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+
+I'm assuming Andrew will pick this up. Otherwise, please let me know if
+I should route it via the arm64 tree.
+
+Will
