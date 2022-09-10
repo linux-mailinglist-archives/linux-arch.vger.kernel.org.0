@@ -2,111 +2,102 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF855B428C
-	for <lists+linux-arch@lfdr.de>; Sat, 10 Sep 2022 00:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54B15B4513
+	for <lists+linux-arch@lfdr.de>; Sat, 10 Sep 2022 09:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbiIIWiM (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 9 Sep 2022 18:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52444 "EHLO
+        id S229492AbiIJH6V (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 10 Sep 2022 03:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiIIWiL (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 9 Sep 2022 18:38:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E85F653B
-        for <linux-arch@vger.kernel.org>; Fri,  9 Sep 2022 15:38:10 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id y3so7359153ejc.1
-        for <linux-arch@vger.kernel.org>; Fri, 09 Sep 2022 15:38:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6EP33BV0TfYyrJ4fchWrKDHolm4FaPueLJRrBAEVrQA=;
-        b=mF8soULIR5HkFy2HYmmOB5pV37C0M47XE/NO9cqyQ9GpeXvRfebtkka60MfwBdyCn3
-         OmF3RehNNncQgpXWYcls9NQqI6DM7vPeSFpKrvyyEiIvh+9nEECyItbg7A9EOkmp9SDa
-         AxbS6xUrBYBej2XRQEJRMKAZxGXQ4BM0TU+oGoUaVoG2/CEBH7ZQGECAahZA+g8Gw/OS
-         Qm87MLMqzHUkrqBzUVYKAkGtZMQD74Q2lLZUpXHElFgQ5tLK+ymE68fB7uZkIW6MpvUq
-         mN63UelOQ2S5cTlcGW4v0Hxy4iFypW/V5gQGqwRa9CYcmUbX/MOY0zNbc8//lWhFMYJl
-         ADuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6EP33BV0TfYyrJ4fchWrKDHolm4FaPueLJRrBAEVrQA=;
-        b=gdALgUQSPDIkUyyhH8Rid1OuOMYk3hPXGrAjjx6m5PjQ6YvTtZxsNgfl1GuoCaYGZv
-         LSLHMQD5wv/5WznUDk3FINs5HDnaDUxXxBzBDyAIOh8JBvd03oKCQGlx8ZRQeRPer44/
-         jjaobhUn5llaGru78jmjrqLYT3Lqo7yb71f2Eje3GKj127MR8Bojn5sXzUAZiw3Zi9wo
-         5VU8TN60IwgTGw059Ax3LsWYiuI0ZElLyT3EgV2AhBTERZqHLQfK2kdhHZnyLptFR2fU
-         tkY8FVZNv8qiOyV8K0Td6TgJxYmNyc0Uj8i7xXG7NsvusA3RLiWNh1leEMfM319paVl0
-         MIJw==
-X-Gm-Message-State: ACgBeo0O9Gbj618S3nDLuzGKgg88NsBpDUW7Deaz61b4w0/1OSBN935Z
-        PTeuZUEupJk7DwHLopI1i0r2WZ3DW4z12BCgTK0bkA==
-X-Google-Smtp-Source: AA6agR6P4BoSeY4HaOaQdooaMJA8lOFm8HE7hrotOZ2+nY/um0tPfO0ujoUkJImQAz4m6NPSaqOKqZf9/fJAHrYsdGg=
-X-Received: by 2002:a17:907:7242:b0:741:770b:dfc6 with SMTP id
- ds2-20020a170907724200b00741770bdfc6mr11427201ejc.203.1662763089099; Fri, 09
- Sep 2022 15:38:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220903224526.553897-1-linus.walleij@linaro.org> <eded16ee-b9c9-4830-a75c-685056e56b56@www.fastmail.com>
-In-Reply-To: <eded16ee-b9c9-4830-a75c-685056e56b56@www.fastmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 10 Sep 2022 00:37:57 +0200
-Message-ID: <CACRpkdaV0CQGeLgqCCw6gEY4yBHEe0uS3eE5hkf-OJOBxQynYQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2 v4] parisc: Remove 64bit access on 32bit machines
-To:     Arnd Bergmann <arnd@arndb.de>
+        with ESMTP id S229488AbiIJH6U (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 10 Sep 2022 03:58:20 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53D619C0F;
+        Sat, 10 Sep 2022 00:58:19 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id E69232B059A0;
+        Sat, 10 Sep 2022 03:58:16 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Sat, 10 Sep 2022 03:58:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1662796696; x=1662800296; bh=HOcWEnyAB3
+        sxWhsLzyvpOUY/Xf1a2nEZgigunXrDFMc=; b=BR73Y4i2K1cFuFy1AsJ4QYzjPX
+        DSt8Roo8dYYBh82lBvn4mBuQWxqI0dC86bzjDHc6c8ZJGEvh762k6IYYyPcul2Yt
+        0aTvkBQS/CqDc/SMiJgGBt5K2SmFiie8bBsbacIna8Su07ZtitcH2L42KGTDE5Vq
+        9R2cxHubNqiUObiBpHGE7TrOoxpakJy6Nj0njKagrdxhur0oSEjjj7i1KxXtanxT
+        xsiQkgJ5VNn0f2gAEICYFubRJTtDPFIAabxyAzGyt5GpODuMpWYyo+7OO3+VgSbe
+        t8Oh1JgZ/d8T1KJVyekgUNEgLktIEK9q/cBG1pqP6aYJzfDXHK7AK3ym3Ivw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1662796696; x=1662800296; bh=HOcWEnyAB3sxWhsLzyvpOUY/Xf1a
+        2nEZgigunXrDFMc=; b=Fylt1uHP9KG6Qb28QHXcpJr00/JBNyS6QtIpWYRYYAUT
+        /jAENmIDONNg1izwNvtQMlYDRTbVOipRcyyzJKl2H9M85bu7Xvj1EP9pPtXgqqPT
+        Frsf1FkOXvceVrjbf+0xRKw+hHcOIytkWqROUMyqqP7hq88QmfjdWmjO9rSzVP45
+        +qTm9mBPkL71V+fKl4YIA5md9o+jr8/kRuzmbgkE60wq6FIJrAER9M2IYbJCTjQ6
+        X0Kjm0fqApoSsrgyBybn7r11qVNvga2zb4fGChQMVgLzK/KC60eqG49RPYhSNqm9
+        OojvBG2lby4p/oZXLfHRg/ixaEdobnPPy/mnJx4DAA==
+X-ME-Sender: <xms:l0McY8gfHW0t9UhS-hTT-rNRaTEHWTix-WAVdSyFjFolRopwHGfrig>
+    <xme:l0McY1BUSqTFxhOcEh3Vf6_BrCLOSVrVN1DhBQ01t8SDsLbFvv_I1_VOemMVImeP5
+    U7EkbJ0W0wjyhd8jqU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedtiedguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:l0McY0EehsynkzeOkV0THDsig-IapNTIwN_g9imtM6FWHtBCcl0vrw>
+    <xmx:l0McY9SzGBsRqTKwBYypkN5N34gLms6n3KPk_pec-GOJ0IFiwfklTg>
+    <xmx:l0McY5zNyJbw7kDF5Ngs42EEc6Z1IG-DEHyxjzH_-siVnhAx3_Pybw>
+    <xmx:mEMcYx-vn76kmnuYa0T5RBRkHesrWiG797WyFigsWUb0vKksEP9HOm84i7c>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7E96DB60086; Sat, 10 Sep 2022 03:58:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-927-gf4c98c8499-fm-20220826.002-gf4c98c84
+Mime-Version: 1.0
+Message-Id: <44767c34-f2e9-491b-995a-249484ecc6b7@www.fastmail.com>
+In-Reply-To: <CACRpkdaV0CQGeLgqCCw6gEY4yBHEe0uS3eE5hkf-OJOBxQynYQ@mail.gmail.com>
+References: <20220903224526.553897-1-linus.walleij@linaro.org>
+ <eded16ee-b9c9-4830-a75c-685056e56b56@www.fastmail.com>
+ <CACRpkdaV0CQGeLgqCCw6gEY4yBHEe0uS3eE5hkf-OJOBxQynYQ@mail.gmail.com>
+Date:   Sat, 10 Sep 2022 09:57:54 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Walleij" <linus.walleij@linaro.org>
 Cc:     "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        "Helge Deller" <deller@gmx.de>, linux-parisc@vger.kernel.org,
         Linux-Arch <linux-arch@vger.kernel.org>,
-        John David Anglin <dave.anglin@bell.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        "John David Anglin" <dave.anglin@bell.net>
+Subject: Re: [PATCH 1/2 v4] parisc: Remove 64bit access on 32bit machines
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 4, 2022 at 10:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Sun, Sep 4, 2022, at 12:45 AM, Linus Walleij wrote:
-> > The parisc was using some readq/writeq accessors without special
-> > considerations as to what will happen on 32bit CPUs if you do
-> > this. Maybe we have been lucky that it "just worked" on 32bit
-> > due to the compiler behaviour, or the code paths were never
-> > executed.
-> >
-> > Fix the two offending code sites like this:
-> >
-> > arch/parisc/lib/iomap.c:
-> >
-> > - Put ifdefs around the 64bit accessors and make sure
-> >   that ioread64, ioread64be, iowrite64 and iowrite64be
-> >   are not available on 32bit builds.
-> >
-> > - Also fold in a bug fix where 64bit access was by
-> >   mistake using 32bit writel() accessors rather
-> >   than 64bit writeq().
-> >
-> > drivers/parisc/sba_iommu.c:
-> >
-> > - Access any 64bit registers using _lo_hi-semantics by way
-> >   of the readq and writeq operations provided by
-> >   <linux/io-64-nonatomic-lo-hi.h>
-> >
-> > Cc: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
-> > Cc: Helge Deller <deller@gmx.de>
-> > Cc: linux-parisc@vger.kernel.org
-> > Cc: linux-arch@vger.kernel.org
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: John David Anglin <dave.anglin@bell.net>
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+On Sat, Sep 10, 2022, at 12:37 AM, Linus Walleij wrote:
+> On Sun, Sep 4, 2022 at 10:11 AM Arnd Bergmann <arnd@arndb.de> wrote:
+>> On Sun, Sep 4, 2022, at 12:45 AM, Linus Walleij wrote:
+>>
+>> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 >
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Thanks Arnd,
+>
+> it seems quiet around parisc, maybe you could apply these two to
+> the arch tree as well?
 
-Thanks Arnd,
+Done. I had meant to do this when I applied the ia64 and alpha
+bits but somehow forgot.
 
-it seems quiet around parisc, maybe you could apply these two to
-the arch tree as well?
-
-Yours,
-Linus Walleij
+      Arnd
