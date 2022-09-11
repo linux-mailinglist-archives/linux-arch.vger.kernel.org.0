@@ -2,71 +2,73 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472665B4ADD
-	for <lists+linux-arch@lfdr.de>; Sun, 11 Sep 2022 01:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E8A5B4B28
+	for <lists+linux-arch@lfdr.de>; Sun, 11 Sep 2022 03:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiIJXf4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 10 Sep 2022 19:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
+        id S229596AbiIKBN6 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 10 Sep 2022 21:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbiIJXfz (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 10 Sep 2022 19:35:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A4137185;
-        Sat, 10 Sep 2022 16:35:54 -0700 (PDT)
+        with ESMTP id S229516AbiIKBN5 (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 10 Sep 2022 21:13:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF5DDD9;
+        Sat, 10 Sep 2022 18:13:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6070BB80936;
-        Sat, 10 Sep 2022 23:35:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2FBCC43143;
-        Sat, 10 Sep 2022 23:35:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9766E60DDB;
+        Sun, 11 Sep 2022 01:13:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0214DC433C1;
+        Sun, 11 Sep 2022 01:13:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662852951;
-        bh=Jyry0XnrQIPqshqAkfeJHzTrGEg9eXK2L5XeBnmM7CM=;
+        s=k20201202; t=1662858835;
+        bh=MeoerLBAPT9yREBhU9oRAJcpZt/hWhuixo7TStbdTjk=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=OsfSqYt5l9fd4iMfoFsDotSaKztUTUbh3zc6xN1Sg74aXG1SrUTyOsv5rJ3Gn7F+W
-         ugXrsV9/RUnl+gOJfHDYsHODdqipCWQ6u4RbAH0/qozcaEndKW421Er2hfTL35YlGO
-         f8wOWSlg4znvqGeFIPm2fGYKMyieXHhMQwJHQkNsZwerkIvENITqoesUEa1Y/Zy7nt
-         p8MU0ZKFw8CFZI+QPT8WLErdMPXHNc+mP6HVtxEFLpyC45DUyaSslzXCF1VBPn2M34
-         ULdZJK+R4+ZDjYtjGz1tbby/rqv/EooteWgk7CdTcfQg4j05Y852D/HpvYlQVrbHT1
-         pcdOsmdEcboTA==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-127ba06d03fso13766523fac.3;
-        Sat, 10 Sep 2022 16:35:51 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2rmuzPgdWw2xpYACndSEZAym2Y5nUlfLr95I/kkH4uEZWMab8z
-        wwyAAePyX/je1dQC05KzkQUp7proLErFojdYXug=
-X-Google-Smtp-Source: AA6agR7RtqaOODDWYKkxH5TzeX1qOCOc/G9NUqz5ZalFaE3cf1czgLZCSlqReaiO2M/LgeXi3fx7b5MFvk6FSovIaXs=
+        b=tvPWlhbtbekWBecfnQ74hnjTB2kcC5KUKgVBnPXCUYV23W7UT5LogKs9HEbKTC5Co
+         g3QE/DM67eW4RjCYDw0u6uOOH+50DigwNHFExDOtsmQRZEoSeHVmNjemHKJoZ6b5WC
+         mLBB2itN1xC46kD3SbErY/iIaS0O8+1xJOi5wNnEEplOlKuq+Gug1wUVBFUl4WZPaX
+         vF5bG3nwwW7j8goNgh7M8KBR4mix3SOc4H5z9VdgDbqhHeNP+8mBeE70OZrnv3Y4XM
+         dGYQmXotoRQzmKRiltJjhsPat1aL9dD3B70oOy0Kpg/f2/j/6v5wdl1FQipgmjAB/u
+         CXbb2zW56GHxA==
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11eab59db71so14096191fac.11;
+        Sat, 10 Sep 2022 18:13:54 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3FbqCjI2/UWTF//kcVOhtNhHntjTTDuN5g83Q7iFyMoOAxFGHe
+        x/76QtAtmXCf0xGWg9Z4PqnFJzEb8a+zagiYLNI=
+X-Google-Smtp-Source: AA6agR4bcGzrnAq5Tqy6Eqx1fM4d1eSVwcSJsOIm24Kg6cAY2vOjkeUWe5EEaM5Rgubow59jC/8cP9IImnLFMMmOgb0=
 X-Received: by 2002:a05:6808:2028:b0:344:246d:2bed with SMTP id
- q40-20020a056808202800b00344246d2bedmr6134101oiw.19.1662852950944; Sat, 10
- Sep 2022 16:35:50 -0700 (PDT)
+ q40-20020a056808202800b00344246d2bedmr6237639oiw.19.1662858834117; Sat, 10
+ Sep 2022 18:13:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-9-guoren@kernel.org>
- <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com> <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
- <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
-In-Reply-To: <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
+References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-7-guoren@kernel.org>
+ <YxoTdxk772vneG53@linutronix.de> <0ff315c978d24215b00c42df51f51b2d@AcuMS.aculab.com>
+In-Reply-To: <0ff315c978d24215b00c42df51f51b2d@AcuMS.aculab.com>
 From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 11 Sep 2022 07:35:38 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRnY+vc2nKbqubTZvv+FWVgO3yCK4LcwpeNgx51JuETzw@mail.gmail.com>
-Message-ID: <CAJF2gTRnY+vc2nKbqubTZvv+FWVgO3yCK4LcwpeNgx51JuETzw@mail.gmail.com>
-Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>, lazyparser@gmail.com,
-        falcon@tinylab.org, Huacai Chen <chenhuacai@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Andreas Schwab <schwab@suse.de>
+Date:   Sun, 11 Sep 2022 09:13:42 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQFwYDtBUpOViYMrWPVKCXJsNwmL9o16jEhpV_v7FjZyA@mail.gmail.com>
+Message-ID: <CAJF2gTQFwYDtBUpOViYMrWPVKCXJsNwmL9o16jEhpV_v7FjZyA@mail.gmail.com>
+Subject: Re: [PATCH V4 6/8] riscv: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "palmer@rivosinc.com" <palmer@rivosinc.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        "jszhang@kernel.org" <jszhang@kernel.org>,
+        "lazyparser@gmail.com" <lazyparser@gmail.com>,
+        "falcon@tinylab.org" <falcon@tinylab.org>,
+        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+        "apatel@ventanamicro.com" <apatel@ventanamicro.com>,
+        "atishp@atishpatra.org" <atishp@atishpatra.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -78,59 +80,69 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Sun, Sep 11, 2022 at 12:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On Fri, Sep 9, 2022 at 3:30 PM David Laight <David.Laight@aculab.com> wrote:
 >
-> On Sat, Sep 10, 2022, at 2:52 PM, Guo Ren wrote:
-> > On Thu, Sep 8, 2022 at 3:37 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >> On Thu, Sep 8, 2022, at 4:25 AM, guoren@kernel.org wrote:
-> >> > From: Guo Ren <guoren@linux.alibaba.com>
-> >> - When VMAP_STACK is set, make it possible to select non-power-of-two
-> >>   stack sizes. Most importantly, 12KB should be a really interesting
-> >>   choice as 8KB is probably still not enough for many 64-bit workloads,
-> >>   but 16KB is often more than what you need. You probably don't
-> >>   want to allow 64BIT/8KB without VMAP_STACK anyway since that just
-> >>   makes it really hard to debug, so hiding the option when VMAP_STACK
-> >>   is disabled may also be a good idea.
-> > I don't want this config to depend on VMAP_STACK. Some D1 chips would
-> > run with an 8K stack size and !VMAP_STACK.
->
-> That sounds like a really bad idea, why would you want to risk
-> using such a small stack without CONFIG_VMAP_STACK?
->
-> Are you worried about increased memory usage or something else?
-The requirement is from [1], and I think disabling CONFIG_VMAP_STACK
-would be the last step after serious testing.
+> From: Sebastian Andrzej Siewior
+> > Sent: 08 September 2022 17:08
+> >
+> > On 2022-09-07 22:25:04 [-0400], guoren@kernel.org wrote:
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index a07bb3b73b5b..a8a12b4ba1a9 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -433,6 +433,14 @@ config FPU
+> > >
+> > >       If you don't know what to do here, say Y.
+> > >
+> > > +config IRQ_STACKS
+> > > +   bool "Independent irq stacks"
+> > > +   default y
+> > > +   select HAVE_IRQ_EXIT_ON_IRQ_STACK
+> > > +   help
+> > > +     Add independent irq stacks for percpu to prevent kernel stack overflows.
+> > > +     We may save some memory footprint by disabling IRQ_STACKS.
+> >
+> > Do you really think that it is needed to save memory here? Avoiding
+> > stack overflows in deep call chains is probably more important than
+> > saving ~8KiB per CPU.
+Original riscv is !IRQ_STACKS, I just give a config to make it back.
+So I would add a CONFIG_EXPERT in the next version.
 
-[1] https://www.cnx-software.com/2021/10/25/allwinner-d1s-f133-risc-v-processor-64mb-ddr2/
+Actually, I have a similar opinion to you, IRQ_STACKS should be force
+enabled. But as a new feature, we should give users a choice - use or
+not.
 
+>
+> Particularly if a 64bit build is using small stacks.
+>
+> Without static analysis of actual call chain depth it is
+> really difficult to trim the stack size.
+>
+> I'd bet (a few beers) that the deepest stack use in inside
+> the console print code form a printk() (eg warn_on_once)
+> in an obscure error path somewhere.
+> This won't be hit during any normal testing.
+That means stack overflow would be hidden a lot. But we could enable
+VMAP_STACK & STACK_LEAK [1].
 
+[1]: https://lore.kernel.org/lkml/20220907014809.919979-1-guoren@kernel.org/
 
 >
-> >  /* thread information allocation */
-> > -#ifdef CONFIG_64BIT
-> > -#define THREAD_SIZE_ORDER      (2 + KASAN_STACK_ORDER)
-> > -#else
-> > -#define THREAD_SIZE_ORDER      (1 + KASAN_STACK_ORDER)
-> > -#endif
-> > +#define THREAD_SIZE_ORDER      CONFIG_THREAD_SIZE_ORDER
-> >  #define THREAD_SIZE            (PAGE_SIZE << THREAD_SIZE_ORDER)
+> I think that the analysis objtool does is getting close
+> to be able to generate the raw data that can be used for
+> static stack depth analysis.
+> You need the 'CFI' constants for indirect calls and
+> some assumptions about depth of recursive calls.
+> But apart from that the code to process the raw output
+> isn't that complex.
 >
-> This doesn't actually allow additional THREAD_SIZE values, as you
-> still round up to the nearest power of two.
+> A nice task for someone with some spare time.
 >
-> I think all the non-arch code can deal with non-power-of-2
-> sizes, so you'd just need
+>         David
 >
-> #define THREAD_SIZE round_up(CONFIG_THREAD_SIZE, PAGE_SIZE)
->
-> and fix up the risc-v specific code to do the right thing
-> as well. I now see that THREAD_SIZE_ORDER is not actually
-> used anywhere with CONFIG_VMAP_STACK, so I suppose that
-> definition can be skipped, but you still need a THREAD_ALIGN
-> definition that is a power of two and at least a page larger
-> than THREAD_SIZE.
->
->      Arnd
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
 
 
