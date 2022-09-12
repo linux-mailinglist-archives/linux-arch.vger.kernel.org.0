@@ -2,173 +2,149 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6F05B5902
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Sep 2022 13:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4905A5B5965
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Sep 2022 13:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiILLKX (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Sep 2022 07:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
+        id S229598AbiILLiq (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Sep 2022 07:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiILLKW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Sep 2022 07:10:22 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA6521251;
-        Mon, 12 Sep 2022 04:10:20 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MR3gD08Pqz685ZP;
-        Mon, 12 Sep 2022 19:06:00 +0800 (CST)
-Received: from lhrpeml100004.china.huawei.com (7.191.162.219) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Mon, 12 Sep 2022 13:10:18 +0200
-Received: from lhrpeml500001.china.huawei.com (7.191.163.213) by
- lhrpeml100004.china.huawei.com (7.191.162.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 12 Sep 2022 12:10:17 +0100
-Received: from lhrpeml500001.china.huawei.com ([7.191.163.213]) by
- lhrpeml500001.china.huawei.com ([7.191.163.213]) with mapi id 15.01.2375.031;
- Mon, 12 Sep 2022 12:10:17 +0100
-From:   Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Boqun Feng <boqun.feng@gmail.com>,
+        with ESMTP id S229531AbiILLip (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Sep 2022 07:38:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EF931229;
+        Mon, 12 Sep 2022 04:38:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3551B80CAE;
+        Mon, 12 Sep 2022 11:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27ED3C433D6;
+        Mon, 12 Sep 2022 11:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662982721;
+        bh=FCU5SG7ZmSO/FS2aU+IZV41v+cSuNOTyiZzV1RmxhrY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=SriU/tn/FGS8ENFHrlNrHCfTolGzRQNr00Nr2ti9OSsjvKXgCPHo2HD19rzggV5l5
+         TR26T6Pbv10N5cJCg6ffoltp08U8heXl/cI7xr5EzRdPshro2GCXlEerHn5rAQuCNv
+         kzP5osFCseQAKibKNhxkrMd75B+Tm5/JlxjvpDsC+2H8yfpQ3HKcD266phUUeV/MLx
+         iIKs3FjkvkLyDXlphEehBO0n1mmiD01lqnPlax64FRhv1n/34sQEdQtYuuE3uSE13a
+         2t/aDi0OnbNK+GrDxfbvdH2yZTnqpKBDG4RaiA0ong43mlx9nYxIz8Fky0E2ddj0nr
+         zrCTYSqkrQzjQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2D7805C0DF1; Mon, 12 Sep 2022 04:38:38 -0700 (PDT)
+Date:   Mon, 12 Sep 2022 04:38:38 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: RE: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak Memory
- Models"
-Thread-Topic: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Thread-Index: AQFTHlbyPG8prHkfhsVi+5kWxbhPeQF4BTgfASiPsr8Ag2bPhQCWSQQGAdXuv7eutboz0IABoUKwgAAidwCAAGhxQIAA2vMAgAGe72CAABESUA==
-Date:   Mon, 12 Sep 2022 11:10:17 +0000
-Message-ID: <7ad2354bf993435b917f278d4199a6ff@huawei.com>
-References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
- <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
- <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu> <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
- <674d0fda790d4650899e2fcf43894053@huawei.com>
- <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
- <YxynQmEL6e194Wuw@rowland.harvard.edu>
- <e8b6b7222a894984b4d66cdcc6435efe@huawei.com>
- <CAEXW_YQPSi7RyA=Cz5S753uw4SqBp2v+7CqqE3LN9VQ48q40Zg@mail.gmail.com>
- <34735a476c3b4913985de3403a6216bd@huawei.com>
-In-Reply-To: <34735a476c3b4913985de3403a6216bd@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.221.98.77]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH v2] tools/memory-model: Weaken ctrl dependency definition
+ in explanation.txt
+Message-ID: <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-PiBUaGVyZWZvcmUgdGhpcyBoYW5nIHNob3VsZCBiZSBvYnNlcnZhYmxlIG9uIGEgaHlwb3RoZXRp
-Y2FsIExLTU0gcHJvY2Vzc29yDQo+IHdoaWNoIG1ha2VzIHVzZSBvZiBhbGwgdGhlIHJlbGF4ZWQg
-bGliZXJ0eSB0aGUgTEtNTSBhbGxvd3MuIEhvd2V2ZXIgYWNjb3JkaW5nDQo+IHRvIHRoZSBhdXRo
-b3JzIG9mIHRoYXQgcGFwZXIgKHdobyBhcmUgbXkgY29sbGVhZ3VlcyBidXQgSSBoYXZlbid0IGJl
-ZW4gaW52b2x2ZWQNCj4gZGVlcGx5IGluIHRoYXQgd29yayksIG5vdCBldmVuIFBvd2VyK2djYyBh
-bGxvdyB0aGlzIHJlb3JkZXJpbmcgdG8gaGFwcGVuLCBhbmQgaWYNCj4gdGhhdCdzIHRydWUgaXQg
-aXMgcHJvYmFibHkgYmVjYXVzZSB0aGUgd21iIGlzIG1hcHBlZCB0byBsd3N5bmMgd2hpY2ggaXMg
-ZnVsbHkNCj4gY3VtdWxhdGl2ZSBpbiBQb3dlciBidXQgbm90IGluIExLTU0uDQoNCkFsbCB0aGUg
-Imlzc3VlcyIgd2UgbWVudGlvbiBpbiB0aGUgdGVjaG5pY2FsIHJlcG9ydCBhcmUgYWNjb3JkaW5n
-IHRvIExLTU0uDQpBcyBzaG93biBieSAoKikgYmVsb3csIGFzIHNvb24gYXMgdGhlIGNvZGUgZ2V0
-cyBjb21waWxlZCBhbmQgdmVyaWZpZWQgYWdhaW5zdCB0aGUgDQpjb3JyZXNwb25kaW5nIGhhcmR3
-YXJlIG1lbW9yeSBtb2RlbCwgdGhlIGNvZGUgaXMgY29ycmVjdC4NCg0KSGVyZSBpcyBhIHNtYWxs
-IHZhcmlhbnQgb2YgdGhlIGxpdG11cyB0ZXN0IEkgc2VudCBlYXJsaWVyIHdoZXJlIG5vdCBvbmx5
-IHRoZSAicHJvYmxlbWF0aWMgDQpiZWhhdmlvciIgaXMgYWxsb3dlZCBieSBMS01NLCBidXQgd2hl
-cmUgbGl2ZW5lc3MgaXMgYWN0dWFsbHkgdmlvbGF0ZWQuDQpUaGUgY29kZSBpcyB3cml0dGVuIGlu
-IEMgKG1haW4gZnVuY3Rpb24gYW5kIGhlYWRlcnMgbWlzc2luZykgYW5kIGNhbm5vdCBiZSB1c2Vk
-IGRpcmVjdGx5IA0Kd2l0aCBoZXJkNyAoc2luY2UgSSBhbSBub3Qgc3VyZSBpZiB0aGUgZW5kIG9m
-IHRocmVhZF8zIGNhbiBiZSB3cml0dGVuIHVzaW5nIGhlcmQ3IHN5bnRheCkuDQoNCi0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLQ0KaW50IHksIHo7DQphdG9taWNfdCB4Ow0KDQp2b2lkICp0aHJlYWRfMSh2b2lkICp1
-bnVzZWQpDQp7ICAgDQogICAgLy8gY2xlYXJfcGVuZGluZ19zZXRfbG9ja2VkDQogICAgaW50IHIw
-ID0gYXRvbWljX2ZldGNoX2FkZCgyLCZ4KSA7DQp9DQoNCnZvaWQgKnRocmVhZF8yKHZvaWQgKnVu
-dXNlZCkNCnsNCiAgICAvLyB0aGlzIHN0b3JlIGJyZWFrcyBsaXZlbmVzcw0KICAgIFdSSVRFX09O
-Q0UoeSwgMSk7DQogICAgLy8gcXVldWVkX3NwaW5fdHJ5bG9jaw0KICAgIGludCByMCA9IGF0b21p
-Y19yZWFkKCZ4KTsNCiAgICAvLyBiYXJyaWVyIGFmdGVyIHRoZSBpbml0aWFsaXNhdGlvbiBvZiBu
-b2Rlcw0KICAgIHNtcF93bWIoKTsNCiAgICAvLyB4Y2hnX3RhaWwNCiAgICBpbnQgcjEgPSBhdG9t
-aWNfY21weGNoZ19yZWxheGVkKCZ4LHIwLDQyKTsNCiAgICAvLyBsaW5rIG5vZGUgaW50byB0aGUg
-d2FpdHF1ZXVlDQogICAgV1JJVEVfT05DRSh6LCAxKTsNCn0NCg0Kdm9pZCAqdGhyZWFkXzModm9p
-ZCAqdW51c2VkKQ0Kew0KICAgIC8vIG5vZGUgaW5pdGlhbGlzYXRpb24NCiAgICBXUklURV9PTkNF
-KHosIDIpOw0KICAgIC8vIHF1ZXVlZF9zcGluX3RyeWxvY2sNCiAgICBpbnQgcjAgPSBhdG9taWNf
-cmVhZCgmeCk7DQogICAgLy8gYmFycmllciBhZnRlciB0aGUgaW5pdGlhbGlzYXRpb24gb2Ygbm9k
-ZXMNCiAgICBzbXBfd21iKCk7DQogICAgLy8gaWYgd2UgcmVhZCB6PT0yIHdlIGV4cGVjdCB0byBy
-ZWFkIHRoaXMgc3RvcmUNCiAgICBXUklURV9PTkNFKHksIDApOw0KICAgIC8vIHhjaGdfdGFpbA0K
-ICAgIGludCByMSA9IGF0b21pY19jbXB4Y2hnX3JlbGF4ZWQoJngscjAsMjQpOw0KICAgIC8vIHNw
-aW5sb29wDQogICAgd2hpbGUoUkVBRF9PTkNFKHkpID09IDEgJiYgKFJFQURfT05DRSh6KSA9PSAy
-KSkge30NCn0NCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KDQpMaXZlbmVzcyBpcyB2aW9sYXRlZCAoZm9sbG93
-aW5nIFRoZW9yZW0gNS4zIG9mIHRoZSAiTWFraW5nIHdlYWsgbWVtb3J5IG1vZGVscyBmYWlyIiBw
-YXBlcikgYmVjYXVzZSB0aGUgcmVhZHMgZnJvbSB0aGUgc3Bpbmxvb3AgDQpjYW4gZ2V0IHRoZWly
-IHZhbHVlcyBmcm9tIHdyaXRlcyB3aGljaCBjb21lIGxhc3QgaW4gdGhlIGNvaGVyZW5jZSAvIG1v
-ZGlmaWNhdGlvbiBvcmRlciwgYW5kIHRob3NlIHZhbHVlcyBkbyBub3Qgc3RvcCB0aGUgc3Bpbm5p
-bmcuDQoNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KJCBqYXZhIC1qYXIgJERBVDNNX0hPTUUvZGFydGFnbmFu
-L3RhcmdldC9kYXJ0YWduYW4tMy4xLjAuamFyIGNhdC9saW51eC1rZXJuZWwuY2F0IC0tdGFyZ2V0
-PWxrbW0gLS1wcm9wZXJ0eT1saXZlbmVzcyBsaXZlbmVzcy5jDQouLi4NCkxpdmVuZXNzIHZpb2xh
-dGlvbiBmb3VuZA0KRkFJTA0KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNCigqKSBIb3dldmVyLCBpZiB0aGUg
-Y29kZSBpcyBjb21waWxlZCAodGhpcyB0cmFuc2Zvcm1hdGlvbiBpcyBkb25lIGF1dG9tYXRpY2Fs
-bHkgYW5kIGludGVybmFsbHkgYnkgdGhlIHRvb2wsIG5vdGljZSB0aGUgLS10YXJnZXQgb3B0aW9u
-KSANCmFuZCB3ZSB1c2Ugc29tZSBoYXJkd2FyZSBtZW1vcnkgbW9kZWwsIHRoZSB0b29sIHNheXMg
-dGhlIGNvZGUgaXMgY29ycmVjdA0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCiQgamF2YSAtamFyICREQVQz
-TV9IT01FL2RhcnRhZ25hbi90YXJnZXQvZGFydGFnbmFuLTMuMS4wLmphciBjYXQvYWFyY2g2NC5j
-YXQgLS10YXJnZXQ9YXJtOCAtLXByb3BlcnR5PWxpdmVuZXNzIGxpdmVuZXNzLmMNCi4uLg0KUEFT
-Uw0KDQokIGphdmEgLWphciAkREFUM01fSE9NRS9kYXJ0YWduYW4vdGFyZ2V0L2RhcnRhZ25hbi0z
-LjEuMC5qYXIgY2F0L3Bvd2VyLmNhdCAtLXRhcmdldD1wb3dlciAtLXByb3BlcnR5PWxpdmVuZXNz
-IGxpdmVuZXNzLmMNCi4uLg0KUEFTUw0KDQokIGphdmEgLWphciAkREFUM01fSE9NRS9kYXJ0YWdu
-YW4vdGFyZ2V0L2RhcnRhZ25hbi0zLjEuMC5qYXIgY2F0L3Jpc2N2LmNhdCAtLXRhcmdldD1yaXNj
-diAtLXByb3BlcnR5PWxpdmVuZXNzIGxpdmVuZXNzLmMNCi4uLg0KUEFTUw0KLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tDQoNCkkgdGhpbmsgaXQgaXMgc29tZWhvdyBwb3NzaWJsZSB0byBzaG93IHRoZSBsaXZlbmVz
-cyB2aW9sYXRpb24gdXNpbmcgaGVyZDcgYW5kIHRoZSBmb2xsb3dpbmcgdmFyaWFudCBvZiB0aGUg
-Y29kZQ0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCkMgTGl2ZW5lc3MNCnsNCiAgYXRvbWljX3QgeCA9IEFU
-T01JQ19JTklUKDApOw0KICBhdG9taWNfdCB5ID0gQVRPTUlDX0lOSVQoMCk7DQp9DQoNCg0KUDAo
-YXRvbWljX3QgKngpIHsNCiAgLy8gY2xlYXJfcGVuZGluZ19zZXRfbG9ja2VkDQogIGludCByMCA9
-IGF0b21pY19mZXRjaF9hZGQoMix4KSA7DQp9DQoNClAxKGF0b21pY190ICp4LCBpbnQgKnosIGlu
-dCAqeSkgew0KICAvLyB0aGlzIHN0b3JlIGJyZWFrcyBsaXZlbmVzcw0KICBXUklURV9PTkNFKCp5
-LCAxKTsNCiAgLy8gcXVldWVkX3NwaW5fdHJ5bG9jaw0KICBpbnQgcjAgPSBhdG9taWNfcmVhZCh4
-KTsNCiAgLy8gYmFycmllciBhZnRlciB0aGUgaW5pdGlhbGlzYXRpb24gb2Ygbm9kZXMNCiAgc21w
-X3dtYigpOw0KICAvLyB4Y2hnX3RhaWwNCiAgaW50IHIxID0gYXRvbWljX2NtcHhjaGdfcmVsYXhl
-ZCh4LHIwLDQyKTsNCiAgLy8gbGluayBub2RlIGludG8gdGhlIHdhaXRxdWV1ZQ0KICBXUklURV9P
-TkNFKCp6LCAxKTsNCn0NCg0KUDIoYXRvbWljX3QgKngsaW50ICp6LCBpbnQgKnkpIHsNCiAgLy8g
-bm9kZSBpbml0aWFsaXNhdGlvbg0KICBXUklURV9PTkNFKCp6LCAyKTsNCiAgLy8gcXVldWVkX3Nw
-aW5fdHJ5bG9jaw0KICBpbnQgcjAgPSBhdG9taWNfcmVhZCh4KTsNCiAgLy8gYmFycmllciBhZnRl
-ciB0aGUgaW5pdGlhbGlzYXRpb24gb2Ygbm9kZXMNCiAgc21wX3dtYigpOw0KICAvLyBpZiB3ZSBy
-ZWFkIHo9PTIgd2UgZXhwZWN0IHRvIHJlYWQgdGhpcyBzdG9yZQ0KICBXUklURV9PTkNFKCp5LCAw
-KTsNCiAgLy8geGNoZ190YWlsDQogIGludCByMSA9IGF0b21pY19jbXB4Y2hnX3JlbGF4ZWQoeCxy
-MCwyNCk7DQogIC8vIHNwaW5sb29wDQogIGludCByMiA9IFJFQURfT05DRSgqeSk7ICANCiAgaW50
-IHIzID0gUkVBRF9PTkNFKCp6KTsgIA0KfQ0KDQpleGlzdHMgKHo9MiAvXCB5PTEgL1wgMjpyMj0x
-IC9cIDI6cjM9MikNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KDQpDb25kaXRpb24gIjI6cjM9MiIgZm9yY2Vz
-IHRoZSBzcGlubG9vcCB0byByZWFkIGZyb20gdGhlIGZpcnN0IHdyaXRlIGluIFAyIGFuZCAiej0y
-IiBmb3JjZXMgdGhpcyB3cml0ZSANCnRvIGJlIGxhc3QgaW4gdGhlIGNvaGVyZW5jZSBvcmRlci4g
-Q29uZGl0aW9ucyAiMjpyMj0xIiBhbmQgInk9MSIgZm9yY2UgdGhlIHNhbWUgZm9yIHRoZSBvdGhl
-ciByZWFkLg0KaGVyZDcgc2F5cyB0aGlzIGJlaGF2aW9yIGlzIGFsbG93ZWQgYnkgTEtNTSwgc2hv
-d2luZyB0aGF0IGxpdmVuZXNzIGNhbiBiZSB2aW9sYXRlZC4NCg0KSW4gYWxsIHRoZSBleGFtcGxl
-cyBhYm92ZSwgaWYgd2UgdXNlIG1iKCkgaW5zdGVhZCBvZiB3bWIoKSwgTEtNTSBkb2VzIG5vdCBh
-Y2NlcHQNCnRoZSBiZWhhdmlvciBhbmQgdGh1cyBsaXZlbmVzcyBpcyBndWFyYW50ZWVkLg0KDQpI
-ZXJuYW4NCg==
+On Tue, Aug 30, 2022 at 09:08:20PM +0000, Paul Heidekrüger wrote:
+> The current informal control dependency definition in explanation.txt is
+> too broad and, as discussed, needs to be updated.
+> 
+> Consider the following example:
+> 
+> > if(READ_ONCE(x))
+> >   return 42;
+> >
+> > WRITE_ONCE(y, 42);
+> >
+> > return 21;
+> 
+> The read event determines whether the write event will be executed "at
+> all" - as per the current definition - but the formal LKMM does not
+> recognize this as a control dependency.
+> 
+> Introduce a new definition which includes the requirement for the second
+> memory access event to syntactically lie within the arm of a non-loop
+> conditional.
+> 
+> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
+> Cc: Marco Elver <elver@google.com>
+> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> Cc: Martin Fink <martin.fink@in.tum.de>
+> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+
+Hearing no objections, I reverted the old version and replaced it
+with this version.  Thank you both!
+
+							Thanx, Paul
+
+> ---
+> 
+> v2:
+> - Fix typos
+> - Fix indentation of code snippet
+> 
+> v1:
+> @Alan, since I got it wrong the last time, I'm adding you as a co-developer after my
+> SOB. I'm sorry if this creates extra work on your side due to you having to
+> resubmit the patch now with your SOB if I understand correctly, but since it's
+> based on your wording from the other thread, I definitely wanted to give you
+> credit.
+> 
+>  tools/memory-model/Documentation/explanation.txt | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> index ee819a402b69..0bca50cac5f4 100644
+> --- a/tools/memory-model/Documentation/explanation.txt
+> +++ b/tools/memory-model/Documentation/explanation.txt
+> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
+>  through a pointer will depend on the value read earlier from that
+>  pointer.
+> 
+> -Finally, a read event and another memory access event are linked by a
+> -control dependency if the value obtained by the read affects whether
+> -the second event is executed at all.  Simple example:
+> +Finally, a read event X and another memory access event Y are linked by
+> +a control dependency if Y syntactically lies within an arm of an if,
+> +else or switch statement and the condition guarding Y is either data or
+> +address-dependent on X.  Simple example:
+> 
+>  	int x, y;
+> 
+> --
+> 2.35.1
+> 
