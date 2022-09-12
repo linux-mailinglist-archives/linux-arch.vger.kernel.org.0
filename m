@@ -2,116 +2,197 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6425B59E3
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Sep 2022 14:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43105B5B66
+	for <lists+linux-arch@lfdr.de>; Mon, 12 Sep 2022 15:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiILMDV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Sep 2022 08:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
+        id S229512AbiILNjK (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 12 Sep 2022 09:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiILMCx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Sep 2022 08:02:53 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 87AB431373
-        for <linux-arch@vger.kernel.org>; Mon, 12 Sep 2022 05:02:45 -0700 (PDT)
-Received: (qmail 565895 invoked by uid 1000); 12 Sep 2022 08:02:43 -0400
-Date:   Mon, 12 Sep 2022 08:02:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
-Cc:     Hernan Luis Ponce de Leon <hernanl.leon@huawei.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
+        with ESMTP id S229759AbiILNjJ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Sep 2022 09:39:09 -0400
+Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA021A3AB;
+        Mon, 12 Sep 2022 06:39:07 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mailout3.rbg.tum.de (Postfix) with ESMTPS id 0435B100374;
+        Mon, 12 Sep 2022 15:39:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1662989941;
+        bh=nm9WbrH67w9L+VF1lN6eNZbJB8nMF8zkvtmxeZ0sJhU=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
+        b=jBRKDaSZHuFx968kYxk+7LggHpxSVNm936kJ3LW3hvCu7FwCGQGfjrK5yNh0heYcc
+         5pS9rv1LpMZzEuHPlJTvxx3mVTT9dqLnSKAEbFnN+F4MZNPyIUXoBQQFkUobSFmMXT
+         7eXorTAUBlMzh1YBlc43rjMlk8KN9UL1upAW4gSMRmVnySeAElHubQaiSVBtLS+fkj
+         nMp5xI12ejOWaf3J1ip2IWi9nGbFkFXIQSF9N9KDe6hY0wE1CkDgNukPNiyidY0Ofs
+         1CHoNbVpckJgWVgQ7KuWSsnuOv6n0LGCHRkZh00de7ybZ04MgLmyjqpp+Qop4S4NQr
+         xaEHxCyaKzneA==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id F3978542; Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id C473E135;
+        Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id BFF7E22;
+        Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id BB5F84A0447; Mon, 12 Sep 2022 15:39:00 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id 49FCC4A018D;
+        Mon, 12 Sep 2022 15:38:59 +0200 (CEST)
+        (Extended-Queue-bit xtech_lh@fff.in.tum.de)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2] tools/memory-model: Weaken ctrl dependency definition
+ in explanation.txt
+From:   =?utf-8?Q?Paul_Heidekr=C3=BCger?= <Paul.Heidekrueger@in.tum.de>
+In-Reply-To: <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
+Date:   Mon, 12 Sep 2022 14:38:58 +0100
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        "dlustig@nvidia.com" <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
-Subject: Re: "Verifying and Optimizing Compact NUMA-Aware Locks on Weak
- Memory Models"
-Message-ID: <Yx8f40ZAy2qX1V0+@rowland.harvard.edu>
-References: <20220826124812.GA3007435@paulmck-ThinkPad-P17-Gen-1>
- <YwjzfASTcODOXP1f@worktop.programming.kicks-ass.net>
- <Ywj+j2kC+5xb6DmO@rowland.harvard.edu>
- <YwlbpPHzp8tj0Gn0@hirez.programming.kicks-ass.net>
- <YwpAzTwSRCK5kdLN@rowland.harvard.edu>
- <YwpJ4ZPVbuCnnFKS@boqun-archlinux>
- <674d0fda790d4650899e2fcf43894053@huawei.com>
- <b7e32a603fdc4883b87c733f5681c6d9@huawei.com>
- <YxynQmEL6e194Wuw@rowland.harvard.edu>
- <1326fa48d44b4571b436c07ae9f32d83@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1326fa48d44b4571b436c07ae9f32d83@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
+References: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
+ <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 10:46:38AM +0000, Jonas Oberhauser wrote:
-> Hi Alan,
-> 
-> Sorry for the confusion.
-> 
-> >  [...] it's certainly true (in all of these
-> models) than for any finite number N, there is a feasible execution in which a loop runs for more than N iterations before the termination condition eventually becomes true.
-> 	
-> Indeed; but more interestingly, as the Theorem 5.3 in "making weak memory models fair" states, under certain conditions it suffices to look at graphs where N=1 to decide whether a loop can run forever (despite all writes propagating to all cores eventually) or will always terminate.
+On 12. Sep 2022, at 12:38, Paul E. McKenney <paulmck@kernel.org> wrote:
 
-Cool!
+> On Tue, Aug 30, 2022 at 09:08:20PM +0000, Paul Heidekr=C3=BCger wrote:
+>> The current informal control dependency definition in explanation.txt =
+is
+>> too broad and, as discussed, needs to be updated.
+>>=20
+>> Consider the following example:
+>>=20
+>>> if(READ_ONCE(x))
+>>>  return 42;
+>>>=20
+>>> WRITE_ONCE(y, 42);
+>>>=20
+>>> return 21;
+>>=20
+>> The read event determines whether the write event will be executed =
+"at
+>> all" - as per the current definition - but the formal LKMM does not
+>> recognize this as a control dependency.
+>>=20
+>> Introduce a new definition which includes the requirement for the =
+second
+>> memory access event to syntactically lie within the arm of a non-loop
+>> conditional.
+>>=20
+>> Link: =
+https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.=
+tum.de/
+>> Cc: Marco Elver <elver@google.com>
+>> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+>> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+>> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+>> Cc: Martin Fink <martin.fink@in.tum.de>
+>> Signed-off-by: Paul Heidekr=C3=BCger <paul.heidekrueger@in.tum.de>
+>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+>=20
+> Hearing no objections, I reverted the old version and replaced it
+> with this version.  Thank you both!
+>=20
+> 							Thanx, Paul
 
-> And since herd can generate all such graphs, herd could be extended to make that decision and output it, just like many other tools already do.
-> 
-> To illuminate this on an example, consider the program sent by Peter earlier:
-> 	WRITE_ONCE(foo, 1);		while (!READ_ONCE(foo));
-> 
-> Without the assumption that fr is prefix finite, the graph with infinitely many reads of thread 2 all reading the initial value (and hence being fr-before the store foo=1) would be allowed. However, the tools used to analyze the qspinlock all assume that fr is prefix finite, and hence that such a graph with infinitely many fr-before events does not exist. Because of that, all of the tools will say that this loop always terminates.
-> 
-> However, if you change the code into the following:
-> 
-> 	WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); while (!READ_ONCE(foo));
-> 
-> then even under the assumption of fr-prefix-finiteness, the coherence order in which WRITE_ONCE(foo, 1); is overwritten by WRITE_ONCE(foo, 0); of thread 2 would lead to non-terminating behaviors, and these are detected by those tools. Furthermore, if we synchronize the two stores as follows:
-> 
-> 	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); smp_store_release(&bar,1); while (!READ_ONCE(foo));
-> 
-> then the graphs with that co become prohibited as they all have hb cycles, and the tools again will not detect any liveness violations. But if we go further and relax the release barrier as below
-> 
-> 
-> 	while (! READ_ONCE(bar)) {}; WRITE_ONCE(foo, 1);		WRITE_ONCE(foo, 0); WRITE_ONCE(bar,1); while (!READ_ONCE(foo));
-> 
-> then the hb cycle disappears, and the coherence order in which foo=0 overwrites foo=1 becomes allowed. Again, the tools will detect this and state that thread 2 could be stuck in its while loop forever.
+Oh, wait, there was further discussion [1, 2], and we finally agreed on =
+[3].
+So [3] is the final version.
 
-Neat stuff; I'll have to think about this.
+I think me sending a v2 immediately after the v1 led to this =
+out-of-order
+discussion - sorry!
 
-> In each of these cases, the decision can be made by looking for a graph in which the loop is executed for one iteration which reads from foo=0, and checking whether that store is co-maximal. So in some sense this is all that is needed to express the idea that a program can run forever, even though only in some very limited (but common) circumstances, namely that the loop iteration that repeats forever does not create modifications to state that are observed outside the loop. Luckily this is a very common case, so these checks have proven quite useful in practice.
-> 
-> The same kind of check could be implemented in herd together with either the implicit assumption that fr is prefix finite (like in other tools) or with some special syntax like
-> 
-> prefix-finite fr | co as fairness
-> 
-> which hopefully clears up the question below:
-> 
-> > > From an engineering perspective, I think the only issue is that cat
-> > > *currently* does not have any syntax for this,
-> 
-> > Syntax for what?  The difference between wmb and mb?
-> > [...]
-> 
-> 
-> Thanks for your patience and hoping I explained it more clearly,
+Many thanks,
+Paul
 
-Yes indeed, thank you very much.
+[1]: =
+https://lore.kernel.org/all/663d568d-a343-d44b-d33d-29998bff8f70@joelferna=
+ndes.org/
+[2]: =
+https://lore.kernel.org/all/D7E3D42D-2ABE-4D16-9DCA-0605F0C84F7D@in.tum.de=
+/
+[3]: =
+https://lore.kernel.org/all/20220903165718.4186763-1-paul.heidekrueger@in.=
+tum.de/
 
-Alan
+
+>> ---
+>>=20
+>> v2:
+>> - Fix typos
+>> - Fix indentation of code snippet
+>>=20
+>> v1:
+>> @Alan, since I got it wrong the last time, I'm adding you as a =
+co-developer after my
+>> SOB. I'm sorry if this creates extra work on your side due to you =
+having to
+>> resubmit the patch now with your SOB if I understand correctly, but =
+since it's
+>> based on your wording from the other thread, I definitely wanted to =
+give you
+>> credit.
+>>=20
+>> tools/memory-model/Documentation/explanation.txt | 7 ++++---
+>> 1 file changed, 4 insertions(+), 3 deletions(-)
+>>=20
+>> diff --git a/tools/memory-model/Documentation/explanation.txt =
+b/tools/memory-model/Documentation/explanation.txt
+>> index ee819a402b69..0bca50cac5f4 100644
+>> --- a/tools/memory-model/Documentation/explanation.txt
+>> +++ b/tools/memory-model/Documentation/explanation.txt
+>> @@ -464,9 +464,10 @@ to address dependencies, since the address of a =
+location accessed
+>> through a pointer will depend on the value read earlier from that
+>> pointer.
+>>=20
+>> -Finally, a read event and another memory access event are linked by =
+a
+>> -control dependency if the value obtained by the read affects whether
+>> -the second event is executed at all.  Simple example:
+>> +Finally, a read event X and another memory access event Y are linked =
+by
+>> +a control dependency if Y syntactically lies within an arm of an if,
+>> +else or switch statement and the condition guarding Y is either data =
+or
+>> +address-dependent on X.  Simple example:
+>>=20
+>> 	int x, y;
+>>=20
+>> --
+>> 2.35.1
+
+
