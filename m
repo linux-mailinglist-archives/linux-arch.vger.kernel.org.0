@@ -2,72 +2,48 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3CAD5B5BF1
-	for <lists+linux-arch@lfdr.de>; Mon, 12 Sep 2022 16:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425BE5B699A
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Sep 2022 10:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbiILOLY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 12 Sep 2022 10:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S230321AbiIMIcZ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Sep 2022 04:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiILOLW (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 12 Sep 2022 10:11:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD4FFD00;
-        Mon, 12 Sep 2022 07:11:21 -0700 (PDT)
+        with ESMTP id S230308AbiIMIcY (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Sep 2022 04:32:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B42532BAE;
+        Tue, 13 Sep 2022 01:32:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41AEDB80D55;
-        Mon, 12 Sep 2022 14:11:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11EFC433C1;
-        Mon, 12 Sep 2022 14:11:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA5C961348;
+        Tue, 13 Sep 2022 08:32:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C7B2C433C1;
+        Tue, 13 Sep 2022 08:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662991878;
-        bh=OtpVMG63/twYTBPtJm030JQK0As6OlhIeF6G6tO5hfo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=OaqqLDwbkO4VC/jDcesIgP4kTYD6Nfh85TxxKofogLQ7XydWFSNnLrWVlpKx+QxQy
-         lx9Kk56VJeuFcv3c15xXCjpB+DX+1iCiEcTazL+ZX0X5YFJyhKX20rF11x00EfygKW
-         X6HF72k3LhwCUzVnMItGq6a2QKWzIrMRcpeSUa6SZO1S2O8YaBqTkvcX8jkPJgt4BG
-         WJvfeImAWDgqer/JfP48zuotOSbnelFLpdHTiuVbz1jeB8KbtPvGF7V2axxDRqcepO
-         uCn0Qu0HaO1k5pqQ3IM9M4hl5A7y4BQITjTyfrGDwnku2qb7KtkY/br3rMWQyxezr2
-         2uORJK3YSqT7A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 34B1C5C06AB; Mon, 12 Sep 2022 07:11:16 -0700 (PDT)
-Date:   Mon, 12 Sep 2022 07:11:16 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH v2] tools/memory-model: Weaken ctrl dependency definition
- in explanation.txt
-Message-ID: <20220912141116.GK246308@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220830210821.3763660-1-paul.heidekrueger@in.tum.de>
- <20220912113838.GG246308@paulmck-ThinkPad-P17-Gen-1>
- <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
+        s=k20201202; t=1663057942;
+        bh=IpBWenXYeupRmjxDDsPlTF+3obS82kk1lpWQuCco5+I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lfPiTmaohwaNWsD/cBAWS0LdnmTZ7deyI3x2T0JSUPyITOTySPDNC8cNMVXQ4+JRs
+         YIl8lx7Ta1yRVaM5lSiDyew/bJiY64qWTfNYUsMe/kQVQsMOSAtfsTN9CJ+aq3WlA6
+         AUYQz8v5PiSfAm0MhYmHG0GE6/2Ku5UlSbRkc5CDlW/zbAPwo3Tdoutbd9mVhdKLbp
+         E/nlthrWW+nJ5+ZdeKacqQMW1ca7k+BcVHXreftNkFKZ4XaD2jc0SbzPaTHzrVS4LI
+         G0yHd1gqsN7kn2B7vEClRdoQbD96JLqkc69vRQA0njFpQiQ6j60HsgWlPjECQ2k/m/
+         CetHM6rZXmCww==
+Date:   Tue, 13 Sep 2022 01:32:20 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 05/15] kbuild: build init/built-in.a just once
+Message-ID: <YyBAFL9CBsM9gl38@dev-arch.thelio-3990X>
+References: <20220828024003.28873-1-masahiroy@kernel.org>
+ <20220828024003.28873-6-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <26A8E8E5-FA0B-4D5B-BDD1-3DA8E654965E@in.tum.de>
+In-Reply-To: <20220828024003.28873-6-masahiroy@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,99 +54,72 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 12, 2022 at 02:38:58PM +0100, Paul Heidekrüger wrote:
-> On 12. Sep 2022, at 12:38, Paul E. McKenney <paulmck@kernel.org> wrote:
-> 
-> > On Tue, Aug 30, 2022 at 09:08:20PM +0000, Paul Heidekrüger wrote:
-> >> The current informal control dependency definition in explanation.txt is
-> >> too broad and, as discussed, needs to be updated.
-> >> 
-> >> Consider the following example:
-> >> 
-> >>> if(READ_ONCE(x))
-> >>>  return 42;
-> >>> 
-> >>> WRITE_ONCE(y, 42);
-> >>> 
-> >>> return 21;
-> >> 
-> >> The read event determines whether the write event will be executed "at
-> >> all" - as per the current definition - but the formal LKMM does not
-> >> recognize this as a control dependency.
-> >> 
-> >> Introduce a new definition which includes the requirement for the second
-> >> memory access event to syntactically lie within the arm of a non-loop
-> >> conditional.
-> >> 
-> >> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
-> >> Cc: Marco Elver <elver@google.com>
-> >> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-> >> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-> >> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-> >> Cc: Martin Fink <martin.fink@in.tum.de>
-> >> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> >> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-> > 
-> > Hearing no objections, I reverted the old version and replaced it
-> > with this version.  Thank you both!
-> > 
-> > 							Thanx, Paul
-> 
-> Oh, wait, there was further discussion [1, 2], and we finally agreed on [3].
-> So [3] is the final version.
-> 
-> I think me sending a v2 immediately after the v1 led to this out-of-order
-> discussion - sorry!
+Hi Masahiro,
 
-My bad, and thank you for checking and letting me know!
+On Sun, Aug 28, 2022 at 11:39:53AM +0900, Masahiro Yamada wrote:
+> Kbuild builds init/built-in.a twice; first during the ordinary
+> directory descending, second from scripts/link-vmlinux.sh.
+> 
+> We do this because UTS_VERSION contains the build version and the
+> timestamp. We cannot update it during the normal directory traversal
+> since we do not yet know if we need to update vmlinux. UTS_VERSION is
+> temporarily calculated, but omitted from the update check. Otherwise,
+> vmlinux would be rebuilt every time.
+> 
+> When Kbuild results in running link-vmlinux.sh, it increments the
+> version number in the .version file and takes the timestamp at that
+> time to really fix UTS_VERSION.
+> 
+> However, updating the same file twice is a footgun. To avoid nasty
+> timestamp issues, all build artifacts that depend on init/built-in.a
+> must be atomically generated in link-vmlinux.sh, where some of them
+> do not need rebuilding.
+> 
+> To fix this issue, this commit changes as follows:
+> 
+> [1] Split UTS_VERSION out to include/generated/utsversion.h from
+>     include/generated/compile.h
+> 
+>     include/generated/utsversion.h is generated just before the
+>     vmlinux link. It is generated under include/generated/ because
+>     some decompressors (s390, x86) use UTS_VERSION.
+> 
+> [2] Split init_uts_ns and linux_banner out to init/version-timestamp.c
+>     from init/version.c
+> 
+>     init_uts_ns and linux_banner contain UTS_VERSION. During the ordinary
+>     directory descending, they are compiled with __weak and used to
+>     determine if vmlinux needs relinking. Just before the vmlinux link,
+>     they are compiled without __weak to embed the real version and
+>     timestamp.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-I have reverted to the proper state.
+<snip>
 
-							Thanx, Paul
+> diff --git a/init/build-version b/init/build-version
+> new file mode 100755
+> index 000000000000..39225104f14d
+> --- /dev/null
+> +++ b/init/build-version
+> @@ -0,0 +1,10 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +VERSION=$(cat .version) 2>/dev/null &&
+> +VERSION=$(expr $VERSION + 1) 2>/dev/null ||
+> +VERSION=1
+> +
+> +echo ${VERSION} > .version
+> +
+> +echo ${VERSION}
 
-> Many thanks,
-> Paul
-> 
-> [1]: https://lore.kernel.org/all/663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org/
-> [2]: https://lore.kernel.org/all/D7E3D42D-2ABE-4D16-9DCA-0605F0C84F7D@in.tum.de/
-> [3]: https://lore.kernel.org/all/20220903165718.4186763-1-paul.heidekrueger@in.tum.de/
-> 
-> 
-> >> ---
-> >> 
-> >> v2:
-> >> - Fix typos
-> >> - Fix indentation of code snippet
-> >> 
-> >> v1:
-> >> @Alan, since I got it wrong the last time, I'm adding you as a co-developer after my
-> >> SOB. I'm sorry if this creates extra work on your side due to you having to
-> >> resubmit the patch now with your SOB if I understand correctly, but since it's
-> >> based on your wording from the other thread, I definitely wanted to give you
-> >> credit.
-> >> 
-> >> tools/memory-model/Documentation/explanation.txt | 7 ++++---
-> >> 1 file changed, 4 insertions(+), 3 deletions(-)
-> >> 
-> >> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> >> index ee819a402b69..0bca50cac5f4 100644
-> >> --- a/tools/memory-model/Documentation/explanation.txt
-> >> +++ b/tools/memory-model/Documentation/explanation.txt
-> >> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
-> >> through a pointer will depend on the value read earlier from that
-> >> pointer.
-> >> 
-> >> -Finally, a read event and another memory access event are linked by a
-> >> -control dependency if the value obtained by the read affects whether
-> >> -the second event is executed at all.  Simple example:
-> >> +Finally, a read event X and another memory access event Y are linked by
-> >> +a control dependency if Y syntactically lies within an arm of an if,
-> >> +else or switch statement and the condition guarding Y is either data or
-> >> +address-dependent on X.  Simple example:
-> >> 
-> >> 	int x, y;
-> >> 
-> >> --
-> >> 2.35.1
-> 
-> 
+I am seeing
+
+  cat: .version: No such file or directory
+
+at some point in nearly all of my builds in -next. Does the 2>/dev/null
+want to be moved into the subshell?
+
+Cheers,
+Nathan
