@@ -2,139 +2,167 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0565B69CE
-	for <lists+linux-arch@lfdr.de>; Tue, 13 Sep 2022 10:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD665B6C39
+	for <lists+linux-arch@lfdr.de>; Tue, 13 Sep 2022 13:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiIMIq7 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Tue, 13 Sep 2022 04:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S231268AbiIMLIr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Tue, 13 Sep 2022 07:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiIMIq6 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Sep 2022 04:46:58 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD26E46603
-        for <linux-arch@vger.kernel.org>; Tue, 13 Sep 2022 01:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1663058817; x=1694594817;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=KxJFdtMzb2ziciecsE18urplRXRqyatQuS0pO3ECIR0=;
-  b=ESaVKMQOejXFSAmAYNOoRVPIZpPn2EbciiKRC33V/bAJNfFEg7CQrwm7
-   JSxCRbNGD+9Hn90c1Q18qVL2KEVJDQBMPiFRP6XybXhDMBr/gkTJukaZ+
-   bw7Zkv8shZhGdC8Qs8VRwzQjRkH3EAXOj4q7YmYftC9XJLDBzRfVrN/QQ
-   I9CgTuxMnBTmSrD5IjHLsUYT6zciQ5/wEdmmX+xIAK6is7fTmxfLTxgvI
-   0jUnuTVV0nTlcfsmHQmTqqakTpA0Y7zVpY/MYWojCoafRho7fQZ1BXPTb
-   NK5HMc7fy+VD0pVzblE9lqBw0Gr3+G1oUbU6sjpmmUciec0zL0hr2gtXl
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10468"; a="298880819"
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="298880819"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2022 01:46:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,312,1654585200"; 
-   d="scan'208";a="861472062"
-Received: from lkp-server02.sh.intel.com (HELO 4011df4f4fd3) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Sep 2022 01:46:56 -0700
-Received: from kbuild by 4011df4f4fd3 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oY1ZH-0003Py-1h;
-        Tue, 13 Sep 2022 08:46:55 +0000
-Date:   Tue, 13 Sep 2022 16:46:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:asm-generic] BUILD SUCCESS
- fdc5bebfb66bf0d261818c2df2b01c2a005791fe
-Message-ID: <63204372.5zSTRm5sh8Fscxyy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229876AbiIMLIq (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Tue, 13 Sep 2022 07:08:46 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C371F47B80;
+        Tue, 13 Sep 2022 04:08:44 -0700 (PDT)
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 28DB8RL8024773;
+        Tue, 13 Sep 2022 20:08:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 28DB8RL8024773
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1663067308;
+        bh=NmF06TpRZRrjmPsgtVcO+PDy/ofiYx+D2Weu+18R44M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vIysF7spA2w5d8CBkgkV3M+9rFIqgELrpKXxKIzsnxD0clk+U8OBt8XedCepweOou
+         VA2dXYB6jbxsPd4yDmLtXhqNKqQxhBySlPwe3m2FJPTSeaX6FDIAH40dvjLmXNlmBG
+         WdVduEW7mx7hmO5i1BJeC45xm4Ud75G2CmLX5jrHn/zbPWZWYFSyWqZlSAb20plMxG
+         g7vLJUvE+/rXLybN+G6327nXb++gw9YTrZyCBCwfkFbD73C+iNd6n9AdZAqwgzV5W1
+         XlV1ipPLN+RkJsV6bN04xb/15I0C4xRh1a6jVjCjW7DyUtsruBcgsfe4pZV3yvL8lX
+         G0TGgAFIxDYtA==
+X-Nifty-SrcIP: [209.85.160.49]
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-12803ac8113so31058835fac.8;
+        Tue, 13 Sep 2022 04:08:28 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0pyW3hnwBqZaRQ2OC5lFi1q+lSL5s09OISfzo7cGrhOBFVErkt
+        qrcRD0pOX96nKq6BbZl81XtuvVkqloP16mF7Fs8=
+X-Google-Smtp-Source: AA6agR4XFy75QvPDy1vSFGNTT1bYZMrWS4b62kMrENsiFC9tg/9uWUG3BVaCF881O2G8P1LVewtodSODzJ9K6ojUHnE=
+X-Received: by 2002:a05:6870:f626:b0:10d:a798:f3aa with SMTP id
+ ek38-20020a056870f62600b0010da798f3aamr1450642oab.194.1663067307154; Tue, 13
+ Sep 2022 04:08:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220828024003.28873-1-masahiroy@kernel.org> <20220828024003.28873-6-masahiroy@kernel.org>
+ <YyBAFL9CBsM9gl38@dev-arch.thelio-3990X>
+In-Reply-To: <YyBAFL9CBsM9gl38@dev-arch.thelio-3990X>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 13 Sep 2022 20:07:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQTVZ7DNJj4tBNAgjkWAkHQaom01iOZAx3_C8+VDPVy4A@mail.gmail.com>
+Message-ID: <CAK7LNAQTVZ7DNJj4tBNAgjkWAkHQaom01iOZAx3_C8+VDPVy4A@mail.gmail.com>
+Subject: Re: [PATCH 05/15] kbuild: build init/built-in.a just once
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git asm-generic
-branch HEAD: fdc5bebfb66bf0d261818c2df2b01c2a005791fe  parisc: hide ioread64 declaration on 32-bit
+On Tue, Sep 13, 2022 at 5:32 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Masahiro,
+>
+> On Sun, Aug 28, 2022 at 11:39:53AM +0900, Masahiro Yamada wrote:
+> > Kbuild builds init/built-in.a twice; first during the ordinary
+> > directory descending, second from scripts/link-vmlinux.sh.
+> >
+> > We do this because UTS_VERSION contains the build version and the
+> > timestamp. We cannot update it during the normal directory traversal
+> > since we do not yet know if we need to update vmlinux. UTS_VERSION is
+> > temporarily calculated, but omitted from the update check. Otherwise,
+> > vmlinux would be rebuilt every time.
+> >
+> > When Kbuild results in running link-vmlinux.sh, it increments the
+> > version number in the .version file and takes the timestamp at that
+> > time to really fix UTS_VERSION.
+> >
+> > However, updating the same file twice is a footgun. To avoid nasty
+> > timestamp issues, all build artifacts that depend on init/built-in.a
+> > must be atomically generated in link-vmlinux.sh, where some of them
+> > do not need rebuilding.
+> >
+> > To fix this issue, this commit changes as follows:
+> >
+> > [1] Split UTS_VERSION out to include/generated/utsversion.h from
+> >     include/generated/compile.h
+> >
+> >     include/generated/utsversion.h is generated just before the
+> >     vmlinux link. It is generated under include/generated/ because
+> >     some decompressors (s390, x86) use UTS_VERSION.
+> >
+> > [2] Split init_uts_ns and linux_banner out to init/version-timestamp.c
+> >     from init/version.c
+> >
+> >     init_uts_ns and linux_banner contain UTS_VERSION. During the ordinary
+> >     directory descending, they are compiled with __weak and used to
+> >     determine if vmlinux needs relinking. Just before the vmlinux link,
+> >     they are compiled without __weak to embed the real version and
+> >     timestamp.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> <snip>
+>
+> > diff --git a/init/build-version b/init/build-version
+> > new file mode 100755
+> > index 000000000000..39225104f14d
+> > --- /dev/null
+> > +++ b/init/build-version
+> > @@ -0,0 +1,10 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +VERSION=$(cat .version) 2>/dev/null &&
+> > +VERSION=$(expr $VERSION + 1) 2>/dev/null ||
+> > +VERSION=1
+> > +
+> > +echo ${VERSION} > .version
+> > +
+> > +echo ${VERSION}
+>
+> I am seeing
+>
+>   cat: .version: No such file or directory
 
-elapsed time: 721m
 
-configs tested: 58
-configs skipped: 2
+Thanks, Nathan.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                 randconfig-a001-20220912
-i386                 randconfig-a002-20220912
-i386                 randconfig-a003-20220912
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-syz
-mips                             allyesconfig
-i386                 randconfig-a005-20220912
-powerpc                           allnoconfig
-x86_64                              defconfig
-i386                                defconfig
-i386                 randconfig-a004-20220912
-i386                 randconfig-a006-20220912
-x86_64               randconfig-a005-20220912
-x86_64                               rhel-8.3
-x86_64               randconfig-a006-20220912
-sh                               allmodconfig
-m68k                             allmodconfig
-x86_64               randconfig-a001-20220912
-x86_64                         rhel-8.3-kunit
-x86_64               randconfig-a002-20220912
-x86_64               randconfig-a003-20220912
-arc                              allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64               randconfig-a004-20220912
-alpha                            allyesconfig
-x86_64                           allyesconfig
-arc                  randconfig-r043-20220912
-m68k                             allyesconfig
-x86_64                    rhel-8.3-kselftests
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-arm                              allyesconfig
-i386                             allyesconfig
-arc                  randconfig-r043-20220911
-arm64                            allyesconfig
-riscv                randconfig-r042-20220911
-ia64                             allmodconfig
-s390                 randconfig-r044-20220911
 
-clang tested configs:
-i386                 randconfig-a015-20220912
-i386                 randconfig-a014-20220912
-i386                 randconfig-a016-20220912
-i386                 randconfig-a011-20220912
-i386                 randconfig-a012-20220912
-hexagon              randconfig-r041-20220912
-i386                 randconfig-a013-20220912
-hexagon              randconfig-r045-20220912
-hexagon              randconfig-r041-20220911
-hexagon              randconfig-r045-20220911
-x86_64               randconfig-a012-20220912
-x86_64               randconfig-a013-20220912
-x86_64               randconfig-a014-20220912
-x86_64               randconfig-a011-20220912
-x86_64               randconfig-a015-20220912
-riscv                randconfig-r042-20220912
-x86_64               randconfig-a016-20220912
-s390                 randconfig-r044-20220912
+I did not notice it because /bin/sh is a symlink to dash
+on my machine.
+I see the warning by running it with bash.
+
+
+
+$ rm -f .version ; dash init/build-version
+1
+$ rm -f .version ; bash init/build-version
+cat: .version: No such file or directory
+1
+
+
+
+
+>
+> at some point in nearly all of my builds in -next. Does the 2>/dev/null
+> want to be moved into the subshell?
+
+
+Agree.
+I will fix it up locally.
+
+
+Thanks.
+
+>
+> Cheers,
+> Nathan
+
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best Regards
+Masahiro Yamada
