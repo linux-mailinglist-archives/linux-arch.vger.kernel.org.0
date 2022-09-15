@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6325B9E62
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 17:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11585B9E61
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 17:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbiIOPKb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Sep 2022 11:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
+        id S230376AbiIOPKd (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Sep 2022 11:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiIOPIv (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 11:08:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FFD98CBE
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:03 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id b18-20020a253412000000b006b0177978eeso4084951yba.21
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:03 -0700 (PDT)
+        with ESMTP id S229616AbiIOPJF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 11:09:05 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391D298D1A
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:07 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id hr12-20020a1709073f8c00b0077e8371f847so5586920ejc.20
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=mxKrKakNES2O6WNVUjUiVAG/aqg8NEyyXmfzwvDy3M8=;
-        b=QcWSJZZkiYWs+sa+cokZ+5ih/3AigYwqha5oBzQKZX2ROZg6ZA3IUEgOs0eaSXO+su
-         nynwTZxRJ3h5UK5bRt9ZIBKugOR9VD/wb2UQjdtResQ/B8p8IkXP6aGpAvmpsNj4uPDT
-         g9XcO9t+eEd46cZjKpaZdtoo+KHYDdMPK4LApETzHxHqBUgFU1YKU7DIXGAmDZ5uwQk1
-         VZTeF44KqcNIcSibzQDkTi6BRiZq+KBK3WRtjsxy+OtraDYZ7O7tuXbkHApnF4hjaeSB
-         xkP3yPUIvRQJsGMky0kNRvZS+Rc0renoCDGlUJjq1GKjAS9Q6aHVUEG99/PfpTuNweGG
-         CY+w==
+        bh=ByRxUK8Sn+pDB+Gp2EKIbiaRYh/I0Prcbbdv1W00JlM=;
+        b=DoOnWn76XgLh3FqF+6B7mf9zFmhgimuhE3+8V3uNL29fCgBsdcftFH3j63emu1hqBb
+         yue1usbEsJ8tGivstviV0UDTGU37TPqiLr+h0ZVYVpBy81znrh6P3J63EnWk2dnmspuB
+         jZiuYdHuaKBT3tl53l46EYB/n+oJtZ+X0paFYPXzKa2Gcz959+vstOCHBRj6rkF9lJ39
+         WVu8QAcP24QPwQp4SrjcSBBW21odhggCWPjMbNatEmym0eB7XB4lkolXQ2M5pv8V9LYN
+         Bk2OU7qjtkBWCU7sNM4y9xnftbS8XfkQ/te4gmWOaZh49gbjQt4a+uLJe9sEzPl2IzsU
+         U0Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=mxKrKakNES2O6WNVUjUiVAG/aqg8NEyyXmfzwvDy3M8=;
-        b=1npfxDB4J0GDfKgw05kft7ab/UNP4KJOzHeXXjZQjACmhZZGC97qITCpdEVaSiEKi0
-         iHyz3YLiTaBQxTzC09zl9uISfgMirOTTb90H1d2DKS2BETnUkCbpYbq0AoahFn8m5kJ9
-         EEWHaACVlhwQShHDT/pl30S/ElynwXhn+e3LlnZOTgJ3xNXYsG6IHAugC29ybGMt/lfm
-         yhOrag1PktuLuCP5Rg0EUimCOj+/vIegSg0NQAbewKvPUB5GD+RAmC90KktWvnq6CjfT
-         GV7+H02Prz1/WPLAKcLOf7yrUHJC8Y9D8sctfziUa9nZyEj6E8UkR+rZNrW7/eAAsXh6
-         OdQw==
-X-Gm-Message-State: ACrzQf1F6PEZ+Rii2VP1NdI8EP5K5Yjr5kny+W2cIf+Pdd6L3C0EC3BS
-        w5RB+dlCEoZlIn3RUMk8QB08gAtfN/E=
-X-Google-Smtp-Source: AMsMyM5QNy6iagLQZF5XlPAvUcWfp+eaYBogp+9cAeIdO1aa1vANNHLNyhp7U4YSK9OGDcBNDqZffj+MYXA=
+        bh=ByRxUK8Sn+pDB+Gp2EKIbiaRYh/I0Prcbbdv1W00JlM=;
+        b=jwK2rYPGFs9TK8BnkZXf/gRYX9dqXhVSz1uUAsKzHjjZN0CG3wrjVdd1btafnQ+/zq
+         nhRN2oeBicdFj13MQnGdq27y858NQ86l/Ms2RsCEtd15yGMb9twaeOL/YsZPy+mhDJ9b
+         H7GNtt7smmF1quQGwizs6l4+H1TyeS9fjYDznOfQsV0fxZU7aprmhFuDle2D2gsIlaY7
+         q5jyX/wzG+4gcJ/+ElObyXFQPnvy+bXsvMX8F2kDHms/o2HyDWGtaIHs7MinNk/hPwPB
+         w9/nUspwYrrB4PpjXF3H+yogBq7Zb3+7N/zhIrzF5FBStQTXCka7T8Ncc5QcCEdFrbPN
+         FC4g==
+X-Gm-Message-State: ACrzQf3iWaJksJw3rFK6BJzEYf+h2HOOSbgT1ioaPmmhkuHZw8pNSTle
+        h79E3fUBG4fjrRQbwvVUsG+20cYFQE8=
+X-Google-Smtp-Source: AMsMyM6QJ8FdM6tWJvLpbuE+SHZYgH/q6Vk8E5GwyuArqudTGdDm2Et9aA0KgWkjKIU56rW/dUBpMAHwPK0=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a81:a503:0:b0:349:f6c6:434 with SMTP id
- u3-20020a81a503000000b00349f6c60434mr248211ywg.70.1663254362758; Thu, 15 Sep
- 2022 08:06:02 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:04:05 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:6e1c:b0:73d:7806:3c5e with SMTP id
+ sd28-20020a1709076e1c00b0073d78063c5emr336232ejc.36.1663254365501; Thu, 15
+ Sep 2022 08:06:05 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:04:06 +0200
 In-Reply-To: <20220915150417.722975-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220915150417.722975-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-32-glider@google.com>
-Subject: [PATCH v7 31/43] objtool: kmsan: list KMSAN API functions as uaccess-safe
+Message-ID: <20220915150417.722975-33-glider@google.com>
+Subject: [PATCH v7 32/43] x86: kmsan: disable instrumentation of unsupported code
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -98,71 +98,127 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-KMSAN inserts API function calls in a lot of places (function entries
-and exits, local variables, memory accesses), so they may get called
-from the uaccess regions as well.
+Instrumenting some files with KMSAN will result in kernel being unable
+to link, boot or crashing at runtime for various reasons (e.g. infinite
+recursion caused by instrumentation hooks calling instrumented code again).
 
-KMSAN API functions are used to update the metadata (shadow/origin pages)
-for kernel memory accesses. The metadata pages for kernel pointers are
-also located in the kernel memory, so touching them is not a problem.
-For userspace pointers, no metadata is allocated.
-
-If an API function is supposed to read or modify the metadata, it does so
-for kernel pointers and ignores userspace pointers.
-If an API function is supposed to return a pair of metadata pointers for
-the instrumentation to use (like all __msan_metadata_ptr_for_TYPE_SIZE()
-functions do), it returns the allocated metadata for kernel pointers and
-special dummy buffers residing in the kernel memory for userspace
-pointers.
-
-As a result, none of KMSAN API functions perform userspace accesses, but
-since they might be called from UACCESS regions they use
-user_access_save/restore().
+Completely omit KMSAN instrumentation in the following places:
+ - arch/x86/boot and arch/x86/realmode/rm, as KMSAN doesn't work for i386;
+ - arch/x86/entry/vdso, which isn't linked with KMSAN runtime;
+ - three files in arch/x86/kernel - boot problems;
+ - arch/x86/mm/cpu_entry_area.c - recursion.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
+v2:
+ -- moved the patch earlier in the series so that KMSAN can compile
+ -- split off the non-x86 part into a separate patch
+
 v3:
- -- updated the patch description
+ -- added a comment to lib/Makefile
 
-v4:
- -- add kmsan_unpoison_entry_regs()
+v5:
+ -- removed a comment belonging to another patch
 
-Link: https://linux-review.googlesource.com/id/I242bc9816273fecad4ea3d977393784396bb3c35
+Link: https://linux-review.googlesource.com/id/Id5e5c4a9f9d53c24a35ebb633b814c414628d81b
 ---
- tools/objtool/check.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ arch/x86/boot/Makefile            | 1 +
+ arch/x86/boot/compressed/Makefile | 1 +
+ arch/x86/entry/vdso/Makefile      | 3 +++
+ arch/x86/kernel/Makefile          | 2 ++
+ arch/x86/kernel/cpu/Makefile      | 1 +
+ arch/x86/mm/Makefile              | 2 ++
+ arch/x86/realmode/rm/Makefile     | 1 +
+ 7 files changed, 11 insertions(+)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index e55fdf952a3a1..7c048c11ce7da 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1062,6 +1062,26 @@ static const char *uaccess_safe_builtin[] = {
- 	"__sanitizer_cov_trace_cmp4",
- 	"__sanitizer_cov_trace_cmp8",
- 	"__sanitizer_cov_trace_switch",
-+	/* KMSAN */
-+	"kmsan_copy_to_user",
-+	"kmsan_report",
-+	"kmsan_unpoison_entry_regs",
-+	"kmsan_unpoison_memory",
-+	"__msan_chain_origin",
-+	"__msan_get_context_state",
-+	"__msan_instrument_asm_store",
-+	"__msan_metadata_ptr_for_load_1",
-+	"__msan_metadata_ptr_for_load_2",
-+	"__msan_metadata_ptr_for_load_4",
-+	"__msan_metadata_ptr_for_load_8",
-+	"__msan_metadata_ptr_for_load_n",
-+	"__msan_metadata_ptr_for_store_1",
-+	"__msan_metadata_ptr_for_store_2",
-+	"__msan_metadata_ptr_for_store_4",
-+	"__msan_metadata_ptr_for_store_8",
-+	"__msan_metadata_ptr_for_store_n",
-+	"__msan_poison_alloca",
-+	"__msan_warning",
- 	/* UBSAN */
- 	"ubsan_type_mismatch_common",
- 	"__ubsan_handle_type_mismatch",
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index ffec8bb01ba8c..9860ca5979f8a 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -12,6 +12,7 @@
+ # Sanitizer runtimes are unavailable and cannot be linked for early boot code.
+ KASAN_SANITIZE			:= n
+ KCSAN_SANITIZE			:= n
++KMSAN_SANITIZE			:= n
+ OBJECT_FILES_NON_STANDARD	:= y
+ 
+ # Kernel does not boot with kcov instrumentation here.
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 35ce1a64068b7..3a261abb6d158 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -20,6 +20,7 @@
+ # Sanitizer runtimes are unavailable and cannot be linked for early boot code.
+ KASAN_SANITIZE			:= n
+ KCSAN_SANITIZE			:= n
++KMSAN_SANITIZE			:= n
+ OBJECT_FILES_NON_STANDARD	:= y
+ 
+ # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 12f6c4d714cd6..ce4eb7e44e5b8 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -11,6 +11,9 @@ include $(srctree)/lib/vdso/Makefile
+ 
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+ KASAN_SANITIZE			:= n
++KMSAN_SANITIZE_vclock_gettime.o := n
++KMSAN_SANITIZE_vgetcpu.o	:= n
++
+ UBSAN_SANITIZE			:= n
+ KCSAN_SANITIZE			:= n
+ OBJECT_FILES_NON_STANDARD	:= y
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index a20a5ebfacd73..ac564c5d7b1f0 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -33,6 +33,8 @@ KASAN_SANITIZE_sev.o					:= n
+ # With some compiler versions the generated code results in boot hangs, caused
+ # by several compilation units. To be safe, disable all instrumentation.
+ KCSAN_SANITIZE := n
++KMSAN_SANITIZE_head$(BITS).o				:= n
++KMSAN_SANITIZE_nmi.o					:= n
+ 
+ # If instrumentation of this dir is enabled, boot hangs during first second.
+ # Probably could be more selective here, but note that files related to irqs,
+diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
+index 9661e3e802be5..f10a921ee7565 100644
+--- a/arch/x86/kernel/cpu/Makefile
++++ b/arch/x86/kernel/cpu/Makefile
+@@ -12,6 +12,7 @@ endif
+ # If these files are instrumented, boot hangs during the first second.
+ KCOV_INSTRUMENT_common.o := n
+ KCOV_INSTRUMENT_perf_event.o := n
++KMSAN_SANITIZE_common.o := n
+ 
+ # As above, instrumenting secondary CPU boot code causes boot hangs.
+ KCSAN_SANITIZE_common.o := n
+diff --git a/arch/x86/mm/Makefile b/arch/x86/mm/Makefile
+index f8220fd2c169a..39c0700c9955c 100644
+--- a/arch/x86/mm/Makefile
++++ b/arch/x86/mm/Makefile
+@@ -12,6 +12,8 @@ KASAN_SANITIZE_mem_encrypt_identity.o	:= n
+ # Disable KCSAN entirely, because otherwise we get warnings that some functions
+ # reference __initdata sections.
+ KCSAN_SANITIZE := n
++# Avoid recursion by not calling KMSAN hooks for CEA code.
++KMSAN_SANITIZE_cpu_entry_area.o := n
+ 
+ ifdef CONFIG_FUNCTION_TRACER
+ CFLAGS_REMOVE_mem_encrypt.o		= -pg
+diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
+index 83f1b6a56449f..f614009d3e4e2 100644
+--- a/arch/x86/realmode/rm/Makefile
++++ b/arch/x86/realmode/rm/Makefile
+@@ -10,6 +10,7 @@
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+ KASAN_SANITIZE			:= n
+ KCSAN_SANITIZE			:= n
++KMSAN_SANITIZE			:= n
+ OBJECT_FILES_NON_STANDARD	:= y
+ 
+ # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
 -- 
 2.37.2.789.g6183377224-goog
 
