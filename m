@@ -2,201 +2,340 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE18D5B9FB3
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 18:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19A0B5BA066
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 19:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiIOQfW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Sep 2022 12:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S229561AbiIORdG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Sep 2022 13:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiIOQfV (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 12:35:21 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F30186CA;
-        Thu, 15 Sep 2022 09:35:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hxKVOK5FtWMoH0VQUfETk2izEbcrJt62SY5hu7OEDxH3Ke8excQ5eRsAAwAKCeK2DMBJ9FwjNiANDujqwj2ui0IGSUjeVLsBLeLpJUJSjgZqPjL6moJGYMVGXPwSE+VwyERaeNKTwKRE2sUsb01VTu3P/ixpiZ+ahtr1vAuxLyOyIg5jNrAcgvhGAB5W6Fdf0fcThJFiYc+2Is4QYjOjVFBBNfeWWJiD0IjlPwdS4fzFm3m8dW7RRJuSm4m5MZX5oifIyngNFBb7wjwpWaUnZd4bZ82JuUsIExCg8tHIPuZfFWchzBn1zZ6FHjCUIu12rriX0T1J/+8roe/mIzc9KQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h+hQpRDVFU/i2xddiSZxaHnXLTgqfE6fAghgk8Gwi1Y=;
- b=QAHSCYdfezOkE20xbmvEVrv5JRrErquFlO5PvXOlW9zw44QOGyVVLivhmmmFcZuG4UunzT2e009EgaHQsdYHlXWw7fwP+nW/Fh867h/0MesHL7TXIpFEmB3UOPHbZFNXVmCeVH6uHKFVsH2rPaoUvhKSb6N5PgWuto0Sjmfra6t6LMlgcO4i5VWr4i+x9pAeUu4NLuBOSnNdLCTt+Tq+tXFJlFgzpUBWRtOCRXpdnszh7tQatCB0D1rmQ+GMQ3J1yupkzRtP4gVoF9tTG66mgk8Cx+KjZw7MTHC0UMS5Pz98JObngMlMTg7UcMITsd9Dtk/SSwf5/WqiC+j8eDwqqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h+hQpRDVFU/i2xddiSZxaHnXLTgqfE6fAghgk8Gwi1Y=;
- b=UwwmOl3KMW1QzAwO4JODexLnZ5cpjlJx+Tlps3ae735F3zDyKVSvqxXgkS8e2oAk0S7bphjbUqyx9vJ/agG45O8lqnguUsTBPzHOJdT5G9qg4dBY8LteDv7HftfWv99BOrkESHF0uQ61symt1guGNGGsH4iaE7iAVEKEda0/hzS+LStAv7zsZZxln53YuBqwsRFhh5RLGb+3wu9sXx0PP3d3aDLulhIe0h7rEpZFcJF0oYn9bAysbVsqQ/wWnFc4LA1uWx+IkM9HZ2iiBDvLejw2FK4T+dzwRIZJtCrFo6P6MEolZds3Cgspp9aBNFUSQt/QcBn1pNbPz1UdTK9jnw==
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
- by DM4PR12MB5392.namprd12.prod.outlook.com (2603:10b6:5:39f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5632.15; Thu, 15 Sep
- 2022 16:35:18 +0000
-Received: from PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::1429:e3e9:dc54:ba98]) by PH0PR12MB5481.namprd12.prod.outlook.com
- ([fe80::1429:e3e9:dc54:ba98%9]) with mapi id 15.20.5612.022; Thu, 15 Sep 2022
- 16:35:17 +0000
-From:   Parav Pandit <parav@nvidia.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
-        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "akiyks@gmail.com" <akiyks@gmail.com>,
-        Dan Lustig <dlustig@nvidia.com>,
-        "joel@joelfernandes.org" <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: RE: [PATCH] locking/memory-barriers.txt: Improve documentation for
- writel() usage
-Thread-Topic: [PATCH] locking/memory-barriers.txt: Improve documentation for
- writel() usage
-Thread-Index: AQHYyMA9YvMyHkwA3EyvMDv7VnmV1K3gbnaAgAAIXgCAACPnAIAAECbg
-Date:   Thu, 15 Sep 2022 16:35:17 +0000
-Message-ID: <PH0PR12MB548113D13F9E9CE4D5206514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
-References: <20220915050106.650813-1-parav@nvidia.com>
- <96457b14-e196-4f29-be9a-7fa25ac805d9@www.fastmail.com>
- <PH0PR12MB5481192DB7B5C6E19683D514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
- <a8ee97f5-b92f-47a6-9b50-197974738ff7@www.fastmail.com>
-In-Reply-To: <a8ee97f5-b92f-47a6-9b50-197974738ff7@www.fastmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR12MB5481:EE_|DM4PR12MB5392:EE_
-x-ms-office365-filtering-correlation-id: 77bd6103-cd77-4884-0193-08da973845f9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Gz/Q5hO797dCnUJvAoPsi5eVdHO0TEYs5r+/JyRzq1eeAR9TXFETJ9H1hlHbDZK4bkmndmcpoPphynmONpZ1Pr0RvuXlT6W5/onUVDXpUk5ogMGuKM/hnvKs9n7rTFQ2XruHq4GUazFDaFdfXfChDebcwmiW/+UZFzg2hBV163zeaV3W6IDzJQ1uJGio3DK/SVrHPAhjn6t/t+x+6Vd1bDMSnbRhKYAw3Tn4K/BYrm4UBo2g8tXxe/n7vfsgqsTneNtj0mZv5KfI3THEJQHZ+I1Oh2E+ulkSHeaDywMri3fWZ5cA4eeQdqk1At/Bq1Po8oo71LLZU59gBrADoPA1Sppx8qKLxwdBcnFyjqG544EwB5eTJS6fnRnDLpemTtrm6As8HmZqq2Um+LT/zBvqZPBr0kN8gC2ZKfgThz0N3S+HR8Go4mw+j0yQSVOh7jQD+D/Jlm6UM0JXRUFbUNP++lmoULz2k84a4l1nioUYJ98jkj3/f3hJIkZREme5KQBXI2wNS2Emi2ELm3fyy6nuBoYdnjEMjNhhzqAMhnSMUEPRqJOjpf6Jd4H42UgBqnSjbQkPqJMAIrJA4EwHx8qc7tPfErvGbGpM/6hdna7IWC08XjER3wjubaA/BFXQQoSQKyUmrlDv+rgeY1wwiyi7zN2IEHtvYGcVPtOgMwtDdzkajNLUA76spCzUpBntf+oZhRA3FD4TWmFdRAytRuuzkNLjD239WOEtfnRYueh+OQrbFP8CLdC/TZLmBInW6AdJ3wA1WEkzzgIcivHyEEY9rpUrvWzwdjj+iaHGp6SIVYE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(376002)(346002)(136003)(396003)(451199015)(8936002)(52536014)(86362001)(7416002)(5660300002)(921005)(6506007)(55016003)(66476007)(66556008)(64756008)(83380400001)(66946007)(38070700005)(66446008)(2906002)(41300700001)(122000001)(71200400001)(186003)(110136005)(8676002)(76116006)(33656002)(478600001)(9686003)(316002)(7696005)(26005)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yCz/79xIIZbHCV/VVMMpa0pmbq4+ZcEhCtsI+hBEBGWrHrO+T5RILsr2A8Jk?=
- =?us-ascii?Q?aiKLnD/sSKujaphPf6K68h8NdknEfriyf+d+zraM0HWh4hLRjQeURjc3mS4e?=
- =?us-ascii?Q?EQfhbfwkmyADSodUERkAc0ID97KYazbnAOok4lvWEPiWOINHvMJT8ze1conF?=
- =?us-ascii?Q?/qJWjBNE4/HhlTmibxCphopaZY3gOlrpFURmj8pd/kN9tZA3DocKnKkM6ekV?=
- =?us-ascii?Q?EZnsMFb4TBTJAfNYkDwxW76iK/xwNJFXePJO+Yjigyj8FDyW5XVIyE0K+FpV?=
- =?us-ascii?Q?oMR8LQJWGXlGF3TnKJ5GYas4gDgK1utELUMtms0EZnTUsXWOjGpt6lVMp9lE?=
- =?us-ascii?Q?YXtBuscQzP0Rsxol6DyhfCw6vPMjO25rhlmT8gmpJ3iCBHjfocUVhTzXEhW6?=
- =?us-ascii?Q?Un1gKhlH6OxDKi9OPpJEp1CpEsFVVgaNViQDdSBhydC3ewowclSnW77s0cAr?=
- =?us-ascii?Q?pTF0SohlKI3jiAU3nE7ySzPg0MZPVyvddltQUMV9UbBlmyBeHFkTJ1zGxQX7?=
- =?us-ascii?Q?KRt3guQHmmERpvJx0YGLqkfjwob7wJgZmvyNfA/anPKeAU5r4JQa8SoqcIT+?=
- =?us-ascii?Q?53dOyxV7LqJSlnmzuQwEu9f2Wpn9qnPLMvETqAwPjERuPolT+kneQlEP47Ev?=
- =?us-ascii?Q?H3UgCvj8d/1buXJ1Z3Nz36+ZDBnwW0Cg7K0QIwSJESdw3LVqDCaBeVC480r1?=
- =?us-ascii?Q?n7e3GmM1Q2+/NpHoDehCBc/BBo8q18WgxP69BV3UeZJ+h9+nX5veETs3/CFT?=
- =?us-ascii?Q?PjHXe4HP9OOeB9vTq6a4IFpY7rL5cz1cE0g+sl83va5qbwa0edH3tuilEmNz?=
- =?us-ascii?Q?kxg26ofwa/f8uEd9N+ReRojx9BS8xBI+xTleyj8FQNCAzVZB0hFMOPCusfkr?=
- =?us-ascii?Q?Ylw1jMW03kKL6yQ7Fp1z4e+Du1Iq6Ea6oefE7Kkq8oDi3dtejY2IApTK9ch9?=
- =?us-ascii?Q?g3/ynVSGl3moyhkW0H3lHgFpuqR5asm1YYSQlGRb/CboKG4MUHyTQYwi6+n2?=
- =?us-ascii?Q?yznU8jX0CH+u+nBeoLehHf4y0O6JjWDzWoIBCKLxDL6yxkqlP/szFoo2je7+?=
- =?us-ascii?Q?vjpDFvubDqvFvPAWb1MkLflu7FXGqDhqXAJ159/m2vt4M006qUbmtEJfimRE?=
- =?us-ascii?Q?HW/ttEN/5TA82rqEPVEpIUJri02N0roppacBM+lLZFQsnH3hle9dAnYirbmR?=
- =?us-ascii?Q?qbsJ84uHz7AUxD+VMitZToOi1OCZPdkPvZLvn9oWn00KNgvHBoMg1TEcgmvR?=
- =?us-ascii?Q?69KLT7zNXVDxwXexCx9bUDE9U8yfWNOJ24foO4yAbsUiswESWHDeno80Fc+c?=
- =?us-ascii?Q?tRJDKqU5UaP5mfyXj+ss1EL/047HSbzVe31xiU6AoNF81LXQl+g+uqKJSb7z?=
- =?us-ascii?Q?BKusJHXceybzeYgTrco6XltDwXKxlhs36dAb80jcs6DiEty0mZUIrmYa9zWe?=
- =?us-ascii?Q?i+l808O+Xx5Mint1weh7qYYVJKT7QbHxI8ii4J7DimU+/09pOERIb45CgXms?=
- =?us-ascii?Q?tboC4f8vEtnN7RgsfE7F/gWk6397pH5AMWKVnl4sOJnP7vWISikBzSM9hwzb?=
- =?us-ascii?Q?RCoJhpxsJ62u3fvmUhs=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 77bd6103-cd77-4884-0193-08da973845f9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Sep 2022 16:35:17.4099
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YApZwM09TixFOQSYNY6eORD6qqSaJxdpNU/M5LJZwAgeLt/VvJQdKrps/euwTOTMp2ppVo1d531ERm2Rl8ej2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5392
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S229487AbiIORdF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 13:33:05 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0879DB66
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 10:33:03 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so13631046pjk.4
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 10:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date;
+        bh=sr7hwhZfKrYujB3B5b+32vmS9Z7fF9HgAf8Lx4+c5Ag=;
+        b=cZFnx4BQ4JQVvLPQOd//WK6FFjng+42TW9mUi2vpaXccX/abDjd+Rk4hSYIPdwmlos
+         9zy5b0nLmAClkDvEGsOgyyvoJJcxm2vU3K9p+XRviqE1xZaTUpPik2Lnri7I1VvpzF+a
+         bf7XMTOIWihTwKxM0NswgQ91fFp+4XhW9qVatIQluGuz9gw08yYunkJRWiMncMqTe77y
+         gRrTI7lZGRNBQc1xXq+cSJAxQQMCjAI3krlaaGqmrWfwgKif1QYHpJVudoYQhUHq1/wp
+         fSB2Hy23gck//sjv4LVkQyFhh1YaPtfIzNIlhM4gvyRmI9sdM3KkVpOpkb7ZG6U9ujhm
+         6U2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=sr7hwhZfKrYujB3B5b+32vmS9Z7fF9HgAf8Lx4+c5Ag=;
+        b=20MGK6+I8K169eA1qJP3SHGJCbhSEQrfTxbMYnmBhKBusGbzTyHCASmflGCxdqW7kt
+         DaiyKO0Ute7SKW+Nz7YiAp/9zsJoj5EI1WutRk6mmkonouibhUYpUh5BYJb+TSBpRREP
+         GpykWN39d/Mj17jB0/EudCIuk+FRrdM7EGDV01q92spm2yVQ/EROLmpijQruCBSXXZ9X
+         YiLySwxjqgqR6TT5UkERFdR6XkzP6o02gsYsTIpTGPJ5rSWnrVsVfnWuAvyf+Rh7ksCy
+         +RRTOrPAZ9Vz0NfXmErk54N224IU1fhSl5OCX6VmRqE3ABixuOu6WlAEVtWL5t84a7h/
+         VxdA==
+X-Gm-Message-State: ACrzQf1lEYzbuJPGojn/UciySNaGGKTTjhemhBrBLEO+8fEPDULDl/Lj
+        tAAiPbgXbca8KyujaeSQsCXIiS13cWioueJEkmGcCQ==
+X-Google-Smtp-Source: AMsMyM6+wrm4SqnXVpm4S1q4D6KKRSgrBChvlPrSDoyae4Ca+1w2/0kvaH5CXfNrNPUqh8eOpTAt5A==
+X-Received: by 2002:a17:902:ef82:b0:178:72bc:983b with SMTP id iz2-20020a170902ef8200b0017872bc983bmr537272plb.0.1663263182561;
+        Thu, 15 Sep 2022 10:33:02 -0700 (PDT)
+Received: from localhost ([172.58.30.147])
+        by smtp.gmail.com with ESMTPSA id bo24-20020a17090b091800b0020329c95779sm1884000pjb.45.2022.09.15.10.33.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Sep 2022 10:33:01 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 10:33:01 -0700 (PDT)
+X-Google-Original-Date: Thu, 15 Sep 2022 10:32:50 PDT (-0700)
+Subject:     Re: [PATCH v3] riscv: Fix permissions for all mm's during mm init
+In-Reply-To: <20220902101312.220350-1-vladimir.isaev@syntacore.com>
+CC:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Conor.Dooley@microchip.com, atishp@atishpatra.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        vladimir.isaev@syntacore.com, ajones@ventanamicro.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     vladimir.isaev@syntacore.com
+Message-ID: <mhng-4e92ce8a-c981-441f-b6f2-e5609e8a224f@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> Sent: Thursday, September 15, 2022 11:16 AM
->=20
-> On Thu, Sep 15, 2022, at 4:18 PM, Parav Pandit wrote:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >> Sent: Thursday, September 15, 2022 8:38 AM
-> >>
-> >> On Thu, Sep 15, 2022, at 7:01 AM, Parav Pandit wrote:
-> >> > The cited commit [1] describes that when using writel(), explcit
-> >> > wmb() is not needed. However, it should have said that dma_wmb() is
-> >> > not needed.
-> >>
-> >> Are you sure? As I understand it, the dma_wmb() only serializes a set
-> >> of memory accesses, but does not serialized against an MMIO access,
-> >> which depending on the CPU architecture may require a different type o=
-f
-> barrier.
-> >>
-> >> E.g. on arm, writel() uses __iowmb(), which like wmb() is defined as
-> >> "dsb(x); arm_heavy_mb();", while dma_wmb() is a "dmb(oshst)".
-> >
-> > You are right, on arm heavy barrier dsb() is needed, while on arm64,
-> > dmb(oshst) is sufficient.
-> >
-> > So more accurate documentation is to say that 'when using writel() a
-> > prior IO barrier is not needed ...'
-> >
-> > How about that?
->=20
-> That's probably fine, not sure if it's worth changing.
+On Fri, 02 Sep 2022 03:13:12 PDT (-0700), vladimir.isaev@syntacore.com wrote:
+> It is possible to have more than one mm (init_mm) during memory
+> permission fixes. In my case it was caused by request_module
+> from drivers/net/phy/phy_device.c and leads to following Oops
+> during free_initmem() on RV32 platform:
+>      Unable to handle kernel paging request at virtual address c0800000
+>      Oops [#1]
+>      Modules linked in:
+>      CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.45
+>      Hardware name: Syntacore SCR5 SDK board (DT)
+>      epc : __memset+0x58/0xf4
+>       ra : free_reserved_area+0xfa/0x15a
+>      epc : c02b26ac ra : c00eb588 sp : c1c1fed0
+>       gp : c1898690 tp : c1c98000 t0 : c0800000
+>       t1 : ffffffff t2 : 00000000 s0 : c1c1ff20
+>       s1 : c189a000 a0 : c0800000 a1 : cccccccc
+>       a2 : 00001000 a3 : c0801000 a4 : 00000000
+>       a5 : 00800000 a6 : fef09000 a7 : 00000000
+>       s2 : c0e57000 s3 : c10edcf8 s4 : 000000cc
+>       s5 : ffffefff s6 : c188a9f4 s7 : 00000001
+>       s8 : c0800000 s9 : fef1b000 s10: c10ee000
+>       s11: c189a000 t3 : 00000000 t4 : 00000000
+>       t5 : 00000000 t6 : 00000001
+>      status: 00000120 badaddr: c0800000 cause: 0000000f
+>      [<c0488658>] free_initmem+0x204/0x222
+>      [<c048d05a>] kernel_init+0x32/0xfc
+>      [<c0002f76>] ret_from_exception+0x0/0xc
+>      ---[ end trace 7a5e2b002350b528 ]---
 >
-I think it is worth because current documentation, indirectly (or incorrect=
-ly) indicate that=20
-"writel() does wmb() internally, so those drivers, who has difficulty in us=
-ing writel() can do, wmb() + raw write".
-And I sort of see above pattern in two drivers, and it is not good.
-It ends up doing dsb(st) on arm64, while needed barrier is only dmb(oshst).
+> This is because request_module attempted to modprobe module, so it created
+> new mm with the copy of kernel's page table. And this copy won't be updated
+> in case of 4M pages and RV32 (pgd is the leaf).
+>
+> To fix this we can update protection bits for all of existing mm-s, the
+> same as ARM does, see commit 08925c2f124f
+> ("ARM: 8464/1: Update all mm structures with section adjustments").
+>
+> Fixes: 19a00869028f ("RISC-V: Protect all kernel sections including init early")
+> Signed-off-by: Vladimir Isaev <vladimir.isaev@syntacore.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> ---
+> Changes for v3:
+>   - Add WARN_ON(state != SYSTEM_FREEING_INITMEM) to fix_kernel_mem_early()
+>     to make sure that the function used only during permission fixes.
+>   - Add comment to fix_kernel_mem_early().
+>
+> Changes for v2:
+>   - Fix commit message format.
+>   - Add 'Fixes' tag.
+> ---
+>  arch/riscv/include/asm/set_memory.h | 20 ++--------
+>  arch/riscv/kernel/setup.c           | 11 -----
+>  arch/riscv/mm/init.c                | 29 +++++++++++---
+>  arch/riscv/mm/pageattr.c            | 62 +++++++++++++++++++++++++----
+>  4 files changed, 82 insertions(+), 40 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm/set_memory.h
+> index a2c14d4b3993..bb0f6b4ed86b 100644
+> --- a/arch/riscv/include/asm/set_memory.h
+> +++ b/arch/riscv/include/asm/set_memory.h
+> @@ -16,28 +16,16 @@ int set_memory_rw(unsigned long addr, int numpages);
+>  int set_memory_x(unsigned long addr, int numpages);
+>  int set_memory_nx(unsigned long addr, int numpages);
+>  int set_memory_rw_nx(unsigned long addr, int numpages);
+> -static __always_inline int set_kernel_memory(char *startp, char *endp,
+> -					     int (*set_memory)(unsigned long start,
+> -							       int num_pages))
+> -{
+> -	unsigned long start = (unsigned long)startp;
+> -	unsigned long end = (unsigned long)endp;
+> -	int num_pages = PAGE_ALIGN(end - start) >> PAGE_SHIFT;
+> -
+> -	return set_memory(start, num_pages);
+> -}
+> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
+> +			  pgprot_t clear_mask);
+>  #else
+>  static inline int set_memory_ro(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_rw(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_x(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
+>  static inline int set_memory_rw_nx(unsigned long addr, int numpages) { return 0; }
+> -static inline int set_kernel_memory(char *startp, char *endp,
+> -				    int (*set_memory)(unsigned long start,
+> -						      int num_pages))
+> -{
+> -	return 0;
+> -}
+> +static inline void fix_kernel_mem_early(char *startp, char *endp,
+> +					pgprot_t set_mask, pgprot_t clear_mask) { }
+>  #endif
+>
+>  int set_direct_map_invalid_noflush(struct page *page);
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 95ef6e2bf45c..17eae1406092 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -27,7 +27,6 @@
+>  #include <asm/early_ioremap.h>
+>  #include <asm/pgtable.h>
+>  #include <asm/setup.h>
+> -#include <asm/set_memory.h>
+>  #include <asm/sections.h>
+>  #include <asm/sbi.h>
+>  #include <asm/tlbflush.h>
+> @@ -318,13 +317,3 @@ static int __init topology_init(void)
+>  	return 0;
+>  }
+>  subsys_initcall(topology_init);
+> -
+> -void free_initmem(void)
+> -{
+> -	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+> -		set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
+> -				  IS_ENABLED(CONFIG_64BIT) ?
+> -					set_memory_rw : set_memory_rw_nx);
+> -
+> -	free_initmem_default(POISON_FREE_INITMEM);
+> -}
+> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> index b56a0a75533f..978202712535 100644
+> --- a/arch/riscv/mm/init.c
+> +++ b/arch/riscv/mm/init.c
+> @@ -16,7 +16,6 @@
+>  #include <linux/of_fdt.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/libfdt.h>
+> -#include <linux/set_memory.h>
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/crash_dump.h>
+>  #include <linux/hugetlb.h>
+> @@ -28,6 +27,7 @@
+>  #include <asm/io.h>
+>  #include <asm/ptdump.h>
+>  #include <asm/numa.h>
+> +#include <asm/set_memory.h>
+>
+>  #include "../kernel/head.h"
+>
+> @@ -714,10 +714,14 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
+>
+>  void mark_rodata_ro(void)
+>  {
+> -	set_kernel_memory(__start_rodata, _data, set_memory_ro);
+> -	if (IS_ENABLED(CONFIG_64BIT))
+> -		set_kernel_memory(lm_alias(__start_rodata), lm_alias(_data),
+> -				  set_memory_ro);
+> +	pgprot_t set_mask = __pgprot(_PAGE_READ);
+> +	pgprot_t clear_mask = __pgprot(_PAGE_WRITE);
+> +
+> +	fix_kernel_mem_early(__start_rodata, _data, set_mask, clear_mask);
+> +	if (IS_ENABLED(CONFIG_64BIT)) {
+> +		fix_kernel_mem_early(lm_alias(__start_rodata), lm_alias(_data),
+> +				     set_mask, clear_mask);
+> +	}
+>
+>  	debug_checkwx();
+>  }
+> @@ -1243,3 +1247,18 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+>  	return vmemmap_populate_basepages(start, end, node, NULL);
+>  }
+>  #endif
+> +
+> +void free_initmem(void)
+> +{
+> +	pgprot_t set_mask = __pgprot(_PAGE_READ | _PAGE_WRITE);
+> +	pgprot_t clear_mask = IS_ENABLED(CONFIG_64BIT) ?
+> +			      __pgprot(0) : __pgprot(_PAGE_EXEC);
+> +
+> +	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
+> +		fix_kernel_mem_early(lm_alias(__init_begin),
+> +				     lm_alias(__init_end),
+> +				     set_mask, clear_mask);
+> +	}
+> +
+> +	free_initmem_default(POISON_FREE_INITMEM);
+> +}
+> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+> index 5e49e4b4a4cc..74b8107ac743 100644
+> --- a/arch/riscv/mm/pageattr.c
+> +++ b/arch/riscv/mm/pageattr.c
+> @@ -5,6 +5,7 @@
+>
+>  #include <linux/pagewalk.h>
+>  #include <linux/pgtable.h>
+> +#include <linux/sched.h>
+>  #include <asm/tlbflush.h>
+>  #include <asm/bitops.h>
+>  #include <asm/set_memory.h>
+> @@ -104,24 +105,69 @@ static const struct mm_walk_ops pageattr_ops = {
+>  	.pte_hole = pageattr_pte_hole,
+>  };
+>
+> -static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+> -			pgprot_t clear_mask)
+> +static int __set_memory_mm(struct mm_struct *mm, unsigned long start,
+> +			   unsigned long end, pgprot_t set_mask,
+> +			   pgprot_t clear_mask)
+>  {
+>  	int ret;
+> -	unsigned long start = addr;
+> -	unsigned long end = start + PAGE_SIZE * numpages;
+>  	struct pageattr_masks masks = {
+>  		.set_mask = set_mask,
+>  		.clear_mask = clear_mask
+>  	};
+>
+> +	mmap_read_lock(mm);
+> +	ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
+> +				    &masks);
+> +	mmap_read_unlock(mm);
+> +
+> +	return ret;
+> +}
+> +
+> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
+> +			  pgprot_t clear_mask)
+> +{
+> +	struct task_struct *t, *s;
+> +
+> +	unsigned long start = (unsigned long)startp;
+> +	unsigned long end = PAGE_ALIGN((unsigned long)endp);
+> +
+> +	/*
+> +	 * In the SYSTEM_FREEING_INITMEM state we expect that all async code
+> +	 * is done and no new userspace task can be created.
+> +	 * So rcu_read_lock() should be enough here.
+> +	 */
+> +	WARN_ON(system_state != SYSTEM_FREEING_INITMEM);
+> +
+> +	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
+> +	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
+> +
+> +	rcu_read_lock();
+> +	for_each_process(t) {
+> +		if (t->flags & PF_KTHREAD)
+> +			continue;
+> +		for_each_thread(t, s) {
+> +			if (s->mm) {
+> +				__set_memory_mm(s->mm, start, end, set_mask,
+> +						clear_mask);
+> +			}
+> +		}
+> +	}
+> +	rcu_read_unlock();
+> +
+> +	flush_tlb_kernel_range(start, end);
+> +}
+> +
+> +static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+> +			pgprot_t clear_mask)
+> +{
+> +	int ret;
+> +	unsigned long start = addr;
+> +	unsigned long end = start + PAGE_SIZE * numpages;
+> +
+>  	if (!numpages)
+>  		return 0;
+>
+> -	mmap_read_lock(&init_mm);
+> -	ret =  walk_page_range_novma(&init_mm, start, end, &pageattr_ops, NULL,
+> -				     &masks);
+> -	mmap_read_unlock(&init_mm);
+> +	ret = __set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
+>
+>  	flush_tlb_kernel_range(start, end);
 
-So to fix those two drivers, it is better to first avoid wmb() documentatio=
-n reference when referring to writel().
-
- > > It started with my cleanup efforts to two drivers [1] and [2] that had
-> > difficulty in using writel() on 32-bit system, and it ended up open
-> > coding writel() as wmb() + mlx5_write64().
-> >
-> > I am cleaning up the repetitive pattern of, wmb();
-> > mlx5_write64()
-> >
-> > Before I fix drivers, I thought to improve the documentation that I
-> > can follow. :)
->=20
-> Right, that is definitely a good idea.
->=20
-> I see that there is more going on with that function, at least the loop i=
-n
-> post_send_nop() probably just wants to use __iowrite64_copy(), but that
-> also has no barrier in it, while changing mlx5_write64() to use iowrite64=
-be()
-> or similar would of course add excessive barriers inside of the loop.
-
-True. All other conversion seems possible.
-For post_send_nop(), __iowmb() needs to be exposed, which is not available =
-today and it is only one-off user,
-I am inclined to keep post_send_nop()  as-is, but want to improve/correct r=
-est of the callers in these two drivers.
+Thanks, this is on fixes.
