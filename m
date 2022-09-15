@@ -2,57 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7237E5B9E79
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 17:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7826E5B9E78
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 17:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiIOPMg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Sep 2022 11:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S231258AbiIOPMf (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Sep 2022 11:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiIOPKe (ORCPT
+        with ESMTP id S231175AbiIOPKe (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 11:10:34 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE159353A
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:34 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id c6-20020a05640227c600b004521382116dso8170394ede.22
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:34 -0700 (PDT)
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F21F9C23F
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:37 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id oz30-20020a1709077d9e00b0077239b6a915so7801325ejc.11
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=RV5QTvMygwcM31S/hyrs6MnTkve28DlweGTrQchhxXo=;
-        b=iXaNCvcxi4+6qBN7tuBlJCkmsRSEsjGSfB3SfZeymm0XXHHMDLmZS5purDypcnvs9C
-         VSctdYvWkvSVdi7VcQVA/jXEY/asOBe0sjr7IHcePpfoj8cjbpyxzwMKoub6Mbfbj/u3
-         hdcX9KTPHnInN6LBhE2giGnIHgk4ArxBm8oNZQjrxTqj6l10QwAzi4OrPQG/dmLjnKeM
-         uG5cIFQDMadCU8TrBcbzjSQl+YJOZv/uTPg3+I9KzZbdQlENHqwWW95ACZVZT9BbHfi5
-         bSJ9Yx8C2yAe2rvI5sDbQK6kyk//DTTYryP9Ky1nwr9gD2c+Xh/G4lERiS/g/gDCekau
-         srrQ==
+        bh=qWMR0SPZO0jqHHxoNfMsk5w/9uuaYeqiCUk8OeqbWGY=;
+        b=BdvNjfu5VP4f5tWEwqi8xdnrQQzMfo1UN5bQGxgPeuYIRiSF6R+M9tMaqYwiS2tecV
+         O8LqTtykzfkn0aNHdYp3DfA09eKoKkOI/meN41FcTkWmKDI6Mlw1uBbBDJ5ItwRLsI99
+         fu9mFtJanTVQjiray0U8TbivD9S30FZLPiX0FzoqX/uQC4kH7HtwMZ/blaYA0jDerrjW
+         aPeP8F3DEIDRdPbDMG4HF5n1PQvJNaW7R/M0TYz0hhV4XUWjPxlr/ASgkKiR/2NytbwG
+         /9KCbWlhcUnlvPN/s95vfn0Q7Y+MSgUo6FfARpJ1769HCSJLQ4f+8vfKDIdzDiQ+Hfop
+         cqfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=RV5QTvMygwcM31S/hyrs6MnTkve28DlweGTrQchhxXo=;
-        b=ne289HEFBQVub6/h70MCD0U+8SrE5muhZpdQ9hU2rFnBCSc9xLsppjjYOXho+U4xyB
-         GSCwobl0n65KgE0OWku+RgqyUhSKkG14r90/PqlJlMIdzxi7zI03TuA2Se53W1iQ11db
-         czNR3rjrKS5yBYCw6WG+4+6OwIowomNMzlraXX6OjOq24Mu2e/cEdrmsMuLOahlboRze
-         d04vVTrH0wEvuKPYrM9G9c8N3l2I4LGv2Nh7ffTISLR/zwP8nZpoXi7M2U+kGO2TaCkK
-         6HyWoGcH5IWqVFdsGGIp94crsr1kOBrzOd6d6bjyYIugvWEXTODQ6+OV6kK81WgUhfqZ
-         hsdQ==
-X-Gm-Message-State: ACrzQf3t6wuvvfdERU/BpS3H0TeB9WcHMsIn4Q4hsuJOuzbZyeyuG0x7
-        wc6pyUgaiHEAZOoO2Opfbgm6Ywd1Qqc=
-X-Google-Smtp-Source: AMsMyM7bqtOZHqD5TLNiPJxrMbK30CsOC2CMkBTDAk4Y4jRe7EslTuJmgx6bYvgk5Yw3mmLO7YowFoN6c2M=
+        bh=qWMR0SPZO0jqHHxoNfMsk5w/9uuaYeqiCUk8OeqbWGY=;
+        b=GVQPH3rE3rwcJvDEwsobFeolK5r4KHbpn/LTprF9Yn3UnKIt/MyqGuH7LLw6BQM8Qc
+         uMKn9B5O74UGeywdL6PssxcO0bTM9Pg0vDufflTYkJXrC/yExIeZaYOtxe5LpMZJnyYs
+         TUKqYo53YllmjCyEYeSy1bm45EZclu1+EGHBD965gMipuxnVLO/jC/lEe/KnnzerQJjk
+         tK5mUlAq/BYq/holEwmfKQxUTmSmrYQ+M//Xp5+TTTzaSyo0VMjCI6S67+jxMhthMYyo
+         yG7ohA2/TAI3F80WHTHImf1/Pwmmy9OYhxyGuD9sj+vPK1MCLcXt2pafbk2eYfhfAD5I
+         Erpw==
+X-Gm-Message-State: ACrzQf0gH62ULamH+DKmcMCx3rKbfkE5jQhyLjCl7pi2CrfMEJIdR6zg
+        GZH5CXUX05EACE/NGtC2Q0QQSinvehw=
+X-Google-Smtp-Source: AMsMyM6ZSkiMDie9cIFnYKrzA4Gojr+aLMK8obg1m96Wr/dl+paR5zDF6a+Yr1FIkBtdJbuKIaikj76ZeVI=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a05:6402:4306:b0:451:8034:bcb6 with SMTP id
- m6-20020a056402430600b004518034bcb6mr291044edc.198.1663254393224; Thu, 15 Sep
- 2022 08:06:33 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:04:16 +0200
+ (user=glider job=sendgmr) by 2002:a17:907:a0e:b0:780:72bb:5ce4 with SMTP id
+ bb14-20020a1709070a0e00b0078072bb5ce4mr321825ejc.234.1663254395778; Thu, 15
+ Sep 2022 08:06:35 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:04:17 +0200
 In-Reply-To: <20220915150417.722975-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220915150417.722975-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-43-glider@google.com>
-Subject: [PATCH v7 42/43] mm: fs: initialize fsdata passed to
- write_begin/write_end interface
+Message-ID: <20220915150417.722975-44-glider@google.com>
+Subject: [PATCH v7 43/43] x86: kmsan: enable KMSAN builds for x86
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -91,7 +90,7 @@ Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,84 +98,97 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Functions implementing the a_ops->write_end() interface accept the
-`void *fsdata` parameter that is supposed to be initialized by the
-corresponding a_ops->write_begin() (which accepts `void **fsdata`).
+Make KMSAN usable by adding the necessary Kconfig bits.
 
-However not all a_ops->write_begin() implementations initialize `fsdata`
-unconditionally, so it may get passed uninitialized to a_ops->write_end(),
-resulting in undefined behavior.
-
-Fix this by initializing fsdata with NULL before the call to
-write_begin(), rather than doing so in all possible a_ops
-implementations.
-
-This patch covers only the following cases found by running x86 KMSAN
-under syzkaller:
-
- - generic_perform_write()
- - cont_expand_zero() and generic_cont_expand_simple()
- - page_symlink()
-
-Other cases of passing uninitialized fsdata may persist in the codebase.
+Also declare x86-specific functions checking address validity
+in arch/x86/include/asm/kmsan.h.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
-Link: https://linux-review.googlesource.com/id/Ie300c21bbe9dea69a730745bd3c6d2720953bf41
----
- fs/buffer.c  | 4 ++--
- fs/namei.c   | 2 +-
- mm/filemap.c | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+v4:
+ -- per Marco Elver's request, create arch/x86/include/asm/kmsan.h
+    and move arch-specific inline functions there.
 
-diff --git a/fs/buffer.c b/fs/buffer.c
-index 55e762a58eb65..e1198f4b28c8f 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -2352,7 +2352,7 @@ int generic_cont_expand_simple(struct inode *inode, loff_t size)
- 	struct address_space *mapping = inode->i_mapping;
- 	const struct address_space_operations *aops = mapping->a_ops;
- 	struct page *page;
--	void *fsdata;
-+	void *fsdata = NULL;
- 	int err;
- 
- 	err = inode_newsize_ok(inode, size);
-@@ -2378,7 +2378,7 @@ static int cont_expand_zero(struct file *file, struct address_space *mapping,
- 	const struct address_space_operations *aops = mapping->a_ops;
- 	unsigned int blocksize = i_blocksize(inode);
- 	struct page *page;
--	void *fsdata;
-+	void *fsdata = NULL;
- 	pgoff_t index, curidx;
- 	loff_t curpos;
- 	unsigned zerofrom, offset, len;
-diff --git a/fs/namei.c b/fs/namei.c
-index 53b4bc094db23..076ae96ca0b14 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -5088,7 +5088,7 @@ int page_symlink(struct inode *inode, const char *symname, int len)
- 	const struct address_space_operations *aops = mapping->a_ops;
- 	bool nofs = !mapping_gfp_constraint(mapping, __GFP_FS);
- 	struct page *page;
--	void *fsdata;
-+	void *fsdata = NULL;
- 	int err;
- 	unsigned int flags;
- 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 15800334147b3..ada25b9f45ad1 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -3712,7 +3712,7 @@ ssize_t generic_perform_write(struct kiocb *iocb, struct iov_iter *i)
- 		unsigned long offset;	/* Offset into pagecache page */
- 		unsigned long bytes;	/* Bytes to write to page */
- 		size_t copied;		/* Bytes copied from user */
--		void *fsdata;
-+		void *fsdata = NULL;
- 
- 		offset = (pos & (PAGE_SIZE - 1));
- 		bytes = min_t(unsigned long, PAGE_SIZE - offset,
+Link: https://linux-review.googlesource.com/id/I1d295ce8159ce15faa496d20089d953a919c125e
+---
+ arch/x86/Kconfig             |  1 +
+ arch/x86/include/asm/kmsan.h | 55 ++++++++++++++++++++++++++++++++++++
+ 2 files changed, 56 insertions(+)
+ create mode 100644 arch/x86/include/asm/kmsan.h
+
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 697da8dae1418..bd9436cd0f29b 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -168,6 +168,7 @@ config X86
+ 	select HAVE_ARCH_KASAN			if X86_64
+ 	select HAVE_ARCH_KASAN_VMALLOC		if X86_64
+ 	select HAVE_ARCH_KFENCE
++	select HAVE_ARCH_KMSAN			if X86_64
+ 	select HAVE_ARCH_KGDB
+ 	select HAVE_ARCH_MMAP_RND_BITS		if MMU
+ 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS	if MMU && COMPAT
+diff --git a/arch/x86/include/asm/kmsan.h b/arch/x86/include/asm/kmsan.h
+new file mode 100644
+index 0000000000000..a790b865d0a68
+--- /dev/null
++++ b/arch/x86/include/asm/kmsan.h
+@@ -0,0 +1,55 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * x86 KMSAN support.
++ *
++ * Copyright (C) 2022, Google LLC
++ * Author: Alexander Potapenko <glider@google.com>
++ */
++
++#ifndef _ASM_X86_KMSAN_H
++#define _ASM_X86_KMSAN_H
++
++#ifndef MODULE
++
++#include <asm/processor.h>
++#include <linux/mmzone.h>
++
++/*
++ * Taken from arch/x86/mm/physaddr.h to avoid using an instrumented version.
++ */
++static inline bool kmsan_phys_addr_valid(unsigned long addr)
++{
++	if (IS_ENABLED(CONFIG_PHYS_ADDR_T_64BIT))
++		return !(addr >> boot_cpu_data.x86_phys_bits);
++	else
++		return true;
++}
++
++/*
++ * Taken from arch/x86/mm/physaddr.c to avoid using an instrumented version.
++ */
++static inline bool kmsan_virt_addr_valid(void *addr)
++{
++	unsigned long x = (unsigned long)addr;
++	unsigned long y = x - __START_KERNEL_map;
++
++	/* use the carry flag to determine if x was < __START_KERNEL_map */
++	if (unlikely(x > y)) {
++		x = y + phys_base;
++
++		if (y >= KERNEL_IMAGE_SIZE)
++			return false;
++	} else {
++		x = y + (__START_KERNEL_map - PAGE_OFFSET);
++
++		/* carry flag will be set if starting x was >= PAGE_OFFSET */
++		if ((x > y) || !kmsan_phys_addr_valid(x))
++			return false;
++	}
++
++	return pfn_valid(x >> PAGE_SHIFT);
++}
++
++#endif /* !MODULE */
++
++#endif /* _ASM_X86_KMSAN_H */
 -- 
 2.37.2.789.g6183377224-goog
 
