@@ -2,340 +2,165 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A0B5BA066
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 19:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42C45BA0E0
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 20:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiIORdG (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Sep 2022 13:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S229528AbiIOSjY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Sep 2022 14:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiIORdF (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 13:33:05 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0879DB66
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 10:33:03 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id d64-20020a17090a6f4600b00202ce056566so13631046pjk.4
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 10:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date;
-        bh=sr7hwhZfKrYujB3B5b+32vmS9Z7fF9HgAf8Lx4+c5Ag=;
-        b=cZFnx4BQ4JQVvLPQOd//WK6FFjng+42TW9mUi2vpaXccX/abDjd+Rk4hSYIPdwmlos
-         9zy5b0nLmAClkDvEGsOgyyvoJJcxm2vU3K9p+XRviqE1xZaTUpPik2Lnri7I1VvpzF+a
-         bf7XMTOIWihTwKxM0NswgQ91fFp+4XhW9qVatIQluGuz9gw08yYunkJRWiMncMqTe77y
-         gRrTI7lZGRNBQc1xXq+cSJAxQQMCjAI3krlaaGqmrWfwgKif1QYHpJVudoYQhUHq1/wp
-         fSB2Hy23gck//sjv4LVkQyFhh1YaPtfIzNIlhM4gvyRmI9sdM3KkVpOpkb7ZG6U9ujhm
-         6U2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=sr7hwhZfKrYujB3B5b+32vmS9Z7fF9HgAf8Lx4+c5Ag=;
-        b=20MGK6+I8K169eA1qJP3SHGJCbhSEQrfTxbMYnmBhKBusGbzTyHCASmflGCxdqW7kt
-         DaiyKO0Ute7SKW+Nz7YiAp/9zsJoj5EI1WutRk6mmkonouibhUYpUh5BYJb+TSBpRREP
-         GpykWN39d/Mj17jB0/EudCIuk+FRrdM7EGDV01q92spm2yVQ/EROLmpijQruCBSXXZ9X
-         YiLySwxjqgqR6TT5UkERFdR6XkzP6o02gsYsTIpTGPJ5rSWnrVsVfnWuAvyf+Rh7ksCy
-         +RRTOrPAZ9Vz0NfXmErk54N224IU1fhSl5OCX6VmRqE3ABixuOu6WlAEVtWL5t84a7h/
-         VxdA==
-X-Gm-Message-State: ACrzQf1lEYzbuJPGojn/UciySNaGGKTTjhemhBrBLEO+8fEPDULDl/Lj
-        tAAiPbgXbca8KyujaeSQsCXIiS13cWioueJEkmGcCQ==
-X-Google-Smtp-Source: AMsMyM6+wrm4SqnXVpm4S1q4D6KKRSgrBChvlPrSDoyae4Ca+1w2/0kvaH5CXfNrNPUqh8eOpTAt5A==
-X-Received: by 2002:a17:902:ef82:b0:178:72bc:983b with SMTP id iz2-20020a170902ef8200b0017872bc983bmr537272plb.0.1663263182561;
-        Thu, 15 Sep 2022 10:33:02 -0700 (PDT)
-Received: from localhost ([172.58.30.147])
-        by smtp.gmail.com with ESMTPSA id bo24-20020a17090b091800b0020329c95779sm1884000pjb.45.2022.09.15.10.33.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Sep 2022 10:33:01 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 10:33:01 -0700 (PDT)
-X-Google-Original-Date: Thu, 15 Sep 2022 10:32:50 PDT (-0700)
-Subject:     Re: [PATCH v3] riscv: Fix permissions for all mm's during mm init
-In-Reply-To: <20220902101312.220350-1-vladimir.isaev@syntacore.com>
-CC:     linux-arch@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Conor.Dooley@microchip.com, atishp@atishpatra.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, anup@brainfault.org,
-        vladimir.isaev@syntacore.com, ajones@ventanamicro.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     vladimir.isaev@syntacore.com
-Message-ID: <mhng-4e92ce8a-c981-441f-b6f2-e5609e8a224f@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229462AbiIOSjX (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 14:39:23 -0400
+Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC5C7F243;
+        Thu, 15 Sep 2022 11:39:21 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6FC53582BAA;
+        Thu, 15 Sep 2022 14:39:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Thu, 15 Sep 2022 14:39:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1663267159; x=1663270759; bh=/qz79ubCdt
+        KIST5lhOuXCtQIvy0UAiNX+9E0PnaaNJE=; b=NMqg4bP1yppyHWdpJW1co5WEet
+        9obyvAlpjzjYYXmI70xf2e02dfQrqAeQPjQhqJr73vYYWRa3LWrhwXbIO217G+ok
+        kQgU5EB/W+ePWMnU1oFlnE/TvdmqdKlutWjt6OGGLPw0vxBBNGXkKBw3gI4p3oZ9
+        aVAObKYqqSf9cdK221YUDiqNtrXMkc5Hh2Otw3HnEbOHn2C1t0ls60lhyK9ZcIUm
+        dySqs2KSb+IeNZPQ7O0QOVEWvU3N2OGGbQnYoSg7lRUy02AaYho7EeD1HXQDXB9Z
+        LBul2zX/zcDNd6nmWwdfwHKcZPmATWFSXwQKcVsVwTHDqIqHjbj/AuSb1SAg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1663267159; x=1663270759; bh=/qz79ubCdtKIST5lhOuXCtQIvy0U
+        AiNX+9E0PnaaNJE=; b=K+UQdiZhlxO8OIRPqQggqf+Fb6gZ+Pm97ZSlxyXpaNHk
+        ds8g3CLztD5AoomVb644/092xGiOVfh9wGAhlczf3JUm9pGp/tqjyTnlUrx/HeUg
+        eidyisuWkogTVARTENcyvJ5NHsgvSnDnSHPSNK/loA8H/7xPKy1OaVatCxhuHUza
+        ivqRylS9Zw/P3lLa6sg2t3hhp+mf22UOirgwdvSxV5fI6Y7pukrtZFnWQzctvkHN
+        PeX4Srw8aR+1d4Tvzmpz2E1jU4Zw6Tgw3QGa6826+FxQ14ErP2vTjKJqF2haCZeI
+        6lqhBwwnftNWASSrjwsDNeoBdIbRF4/TLRm5mIno3Q==
+X-ME-Sender: <xms:VnEjYwJGuoQgY26lLCXhny8OemwxhHrhVy8KP1ECbqVpQAqnei-1Sw>
+    <xme:VnEjYwK3A2yDTt1FLujp1j0Z6mMP5GeXJc2pl52A67cmN1vOfHqIaznD71EK4rm8c
+    ba3nCXTaI99egZhR_c>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfedukedgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffegffdutddvhefffeeltefhjeejgedvleffjeeigeeuteelvdettddulefg
+    udfgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:VnEjYwsQOb32ijjg5TjgD2RjhndMpxn-70aTRrN_G2phc4on7_IgQQ>
+    <xmx:VnEjY9YivW7ONwGMfU45PKbE-ylR3T2HyGjbyqg66BOAw3dl0nf5EA>
+    <xmx:VnEjY3bdXwEn_lb2pmGwV72JUgQVZrrvdJNolJXgeOFOqaH-5g3EeA>
+    <xmx:V3EjY4LLtlrQhhHSmIA63szUe_1idsiO7RELN_6_vpeHphMqUMRn_w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B2B51B60089; Thu, 15 Sep 2022 14:39:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-935-ge4ccd4c47b-fm-20220914.001-ge4ccd4c4
+Mime-Version: 1.0
+Message-Id: <9ae25893-f19f-4186-a19a-7fc55d9295ed@www.fastmail.com>
+In-Reply-To: <PH0PR12MB548113D13F9E9CE4D5206514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
+References: <20220915050106.650813-1-parav@nvidia.com>
+ <96457b14-e196-4f29-be9a-7fa25ac805d9@www.fastmail.com>
+ <PH0PR12MB5481192DB7B5C6E19683D514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
+ <a8ee97f5-b92f-47a6-9b50-197974738ff7@www.fastmail.com>
+ <PH0PR12MB548113D13F9E9CE4D5206514DC499@PH0PR12MB5481.namprd12.prod.outlook.com>
+Date:   Thu, 15 Sep 2022 20:38:58 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Parav Pandit" <parav@nvidia.com>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "Dan Lustig" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH] locking/memory-barriers.txt: Improve documentation for writel()
+ usage
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, 02 Sep 2022 03:13:12 PDT (-0700), vladimir.isaev@syntacore.com wrote:
-> It is possible to have more than one mm (init_mm) during memory
-> permission fixes. In my case it was caused by request_module
-> from drivers/net/phy/phy_device.c and leads to following Oops
-> during free_initmem() on RV32 platform:
->      Unable to handle kernel paging request at virtual address c0800000
->      Oops [#1]
->      Modules linked in:
->      CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.45
->      Hardware name: Syntacore SCR5 SDK board (DT)
->      epc : __memset+0x58/0xf4
->       ra : free_reserved_area+0xfa/0x15a
->      epc : c02b26ac ra : c00eb588 sp : c1c1fed0
->       gp : c1898690 tp : c1c98000 t0 : c0800000
->       t1 : ffffffff t2 : 00000000 s0 : c1c1ff20
->       s1 : c189a000 a0 : c0800000 a1 : cccccccc
->       a2 : 00001000 a3 : c0801000 a4 : 00000000
->       a5 : 00800000 a6 : fef09000 a7 : 00000000
->       s2 : c0e57000 s3 : c10edcf8 s4 : 000000cc
->       s5 : ffffefff s6 : c188a9f4 s7 : 00000001
->       s8 : c0800000 s9 : fef1b000 s10: c10ee000
->       s11: c189a000 t3 : 00000000 t4 : 00000000
->       t5 : 00000000 t6 : 00000001
->      status: 00000120 badaddr: c0800000 cause: 0000000f
->      [<c0488658>] free_initmem+0x204/0x222
->      [<c048d05a>] kernel_init+0x32/0xfc
->      [<c0002f76>] ret_from_exception+0x0/0xc
->      ---[ end trace 7a5e2b002350b528 ]---
->
-> This is because request_module attempted to modprobe module, so it created
-> new mm with the copy of kernel's page table. And this copy won't be updated
-> in case of 4M pages and RV32 (pgd is the leaf).
->
-> To fix this we can update protection bits for all of existing mm-s, the
-> same as ARM does, see commit 08925c2f124f
-> ("ARM: 8464/1: Update all mm structures with section adjustments").
->
-> Fixes: 19a00869028f ("RISC-V: Protect all kernel sections including init early")
-> Signed-off-by: Vladimir Isaev <vladimir.isaev@syntacore.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
-> Changes for v3:
->   - Add WARN_ON(state != SYSTEM_FREEING_INITMEM) to fix_kernel_mem_early()
->     to make sure that the function used only during permission fixes.
->   - Add comment to fix_kernel_mem_early().
->
-> Changes for v2:
->   - Fix commit message format.
->   - Add 'Fixes' tag.
-> ---
->  arch/riscv/include/asm/set_memory.h | 20 ++--------
->  arch/riscv/kernel/setup.c           | 11 -----
->  arch/riscv/mm/init.c                | 29 +++++++++++---
->  arch/riscv/mm/pageattr.c            | 62 +++++++++++++++++++++++++----
->  4 files changed, 82 insertions(+), 40 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm/set_memory.h
-> index a2c14d4b3993..bb0f6b4ed86b 100644
-> --- a/arch/riscv/include/asm/set_memory.h
-> +++ b/arch/riscv/include/asm/set_memory.h
-> @@ -16,28 +16,16 @@ int set_memory_rw(unsigned long addr, int numpages);
->  int set_memory_x(unsigned long addr, int numpages);
->  int set_memory_nx(unsigned long addr, int numpages);
->  int set_memory_rw_nx(unsigned long addr, int numpages);
-> -static __always_inline int set_kernel_memory(char *startp, char *endp,
-> -					     int (*set_memory)(unsigned long start,
-> -							       int num_pages))
-> -{
-> -	unsigned long start = (unsigned long)startp;
-> -	unsigned long end = (unsigned long)endp;
-> -	int num_pages = PAGE_ALIGN(end - start) >> PAGE_SHIFT;
-> -
-> -	return set_memory(start, num_pages);
-> -}
-> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
-> +			  pgprot_t clear_mask);
->  #else
->  static inline int set_memory_ro(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_rw(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_x(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
->  static inline int set_memory_rw_nx(unsigned long addr, int numpages) { return 0; }
-> -static inline int set_kernel_memory(char *startp, char *endp,
-> -				    int (*set_memory)(unsigned long start,
-> -						      int num_pages))
-> -{
-> -	return 0;
-> -}
-> +static inline void fix_kernel_mem_early(char *startp, char *endp,
-> +					pgprot_t set_mask, pgprot_t clear_mask) { }
->  #endif
->
->  int set_direct_map_invalid_noflush(struct page *page);
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 95ef6e2bf45c..17eae1406092 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -27,7 +27,6 @@
->  #include <asm/early_ioremap.h>
->  #include <asm/pgtable.h>
->  #include <asm/setup.h>
-> -#include <asm/set_memory.h>
->  #include <asm/sections.h>
->  #include <asm/sbi.h>
->  #include <asm/tlbflush.h>
-> @@ -318,13 +317,3 @@ static int __init topology_init(void)
->  	return 0;
->  }
->  subsys_initcall(topology_init);
-> -
-> -void free_initmem(void)
-> -{
-> -	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
-> -		set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
-> -				  IS_ENABLED(CONFIG_64BIT) ?
-> -					set_memory_rw : set_memory_rw_nx);
-> -
-> -	free_initmem_default(POISON_FREE_INITMEM);
-> -}
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index b56a0a75533f..978202712535 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -16,7 +16,6 @@
->  #include <linux/of_fdt.h>
->  #include <linux/of_reserved_mem.h>
->  #include <linux/libfdt.h>
-> -#include <linux/set_memory.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/crash_dump.h>
->  #include <linux/hugetlb.h>
-> @@ -28,6 +27,7 @@
->  #include <asm/io.h>
->  #include <asm/ptdump.h>
->  #include <asm/numa.h>
-> +#include <asm/set_memory.h>
->
->  #include "../kernel/head.h"
->
-> @@ -714,10 +714,14 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
->
->  void mark_rodata_ro(void)
->  {
-> -	set_kernel_memory(__start_rodata, _data, set_memory_ro);
-> -	if (IS_ENABLED(CONFIG_64BIT))
-> -		set_kernel_memory(lm_alias(__start_rodata), lm_alias(_data),
-> -				  set_memory_ro);
-> +	pgprot_t set_mask = __pgprot(_PAGE_READ);
-> +	pgprot_t clear_mask = __pgprot(_PAGE_WRITE);
-> +
-> +	fix_kernel_mem_early(__start_rodata, _data, set_mask, clear_mask);
-> +	if (IS_ENABLED(CONFIG_64BIT)) {
-> +		fix_kernel_mem_early(lm_alias(__start_rodata), lm_alias(_data),
-> +				     set_mask, clear_mask);
-> +	}
->
->  	debug_checkwx();
->  }
-> @@ -1243,3 +1247,18 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->  	return vmemmap_populate_basepages(start, end, node, NULL);
->  }
->  #endif
-> +
-> +void free_initmem(void)
-> +{
-> +	pgprot_t set_mask = __pgprot(_PAGE_READ | _PAGE_WRITE);
-> +	pgprot_t clear_mask = IS_ENABLED(CONFIG_64BIT) ?
-> +			      __pgprot(0) : __pgprot(_PAGE_EXEC);
-> +
-> +	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
-> +		fix_kernel_mem_early(lm_alias(__init_begin),
-> +				     lm_alias(__init_end),
-> +				     set_mask, clear_mask);
-> +	}
-> +
-> +	free_initmem_default(POISON_FREE_INITMEM);
-> +}
-> diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
-> index 5e49e4b4a4cc..74b8107ac743 100644
-> --- a/arch/riscv/mm/pageattr.c
-> +++ b/arch/riscv/mm/pageattr.c
-> @@ -5,6 +5,7 @@
->
->  #include <linux/pagewalk.h>
->  #include <linux/pgtable.h>
-> +#include <linux/sched.h>
->  #include <asm/tlbflush.h>
->  #include <asm/bitops.h>
->  #include <asm/set_memory.h>
-> @@ -104,24 +105,69 @@ static const struct mm_walk_ops pageattr_ops = {
->  	.pte_hole = pageattr_pte_hole,
->  };
->
-> -static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
-> -			pgprot_t clear_mask)
-> +static int __set_memory_mm(struct mm_struct *mm, unsigned long start,
-> +			   unsigned long end, pgprot_t set_mask,
-> +			   pgprot_t clear_mask)
->  {
->  	int ret;
-> -	unsigned long start = addr;
-> -	unsigned long end = start + PAGE_SIZE * numpages;
->  	struct pageattr_masks masks = {
->  		.set_mask = set_mask,
->  		.clear_mask = clear_mask
->  	};
->
-> +	mmap_read_lock(mm);
-> +	ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
-> +				    &masks);
-> +	mmap_read_unlock(mm);
-> +
-> +	return ret;
-> +}
-> +
-> +void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
-> +			  pgprot_t clear_mask)
-> +{
-> +	struct task_struct *t, *s;
-> +
-> +	unsigned long start = (unsigned long)startp;
-> +	unsigned long end = PAGE_ALIGN((unsigned long)endp);
-> +
-> +	/*
-> +	 * In the SYSTEM_FREEING_INITMEM state we expect that all async code
-> +	 * is done and no new userspace task can be created.
-> +	 * So rcu_read_lock() should be enough here.
-> +	 */
-> +	WARN_ON(system_state != SYSTEM_FREEING_INITMEM);
-> +
-> +	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
-> +	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
-> +
-> +	rcu_read_lock();
-> +	for_each_process(t) {
-> +		if (t->flags & PF_KTHREAD)
-> +			continue;
-> +		for_each_thread(t, s) {
-> +			if (s->mm) {
-> +				__set_memory_mm(s->mm, start, end, set_mask,
-> +						clear_mask);
-> +			}
-> +		}
-> +	}
-> +	rcu_read_unlock();
-> +
-> +	flush_tlb_kernel_range(start, end);
-> +}
-> +
-> +static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
-> +			pgprot_t clear_mask)
-> +{
-> +	int ret;
-> +	unsigned long start = addr;
-> +	unsigned long end = start + PAGE_SIZE * numpages;
-> +
->  	if (!numpages)
->  		return 0;
->
-> -	mmap_read_lock(&init_mm);
-> -	ret =  walk_page_range_novma(&init_mm, start, end, &pageattr_ops, NULL,
-> -				     &masks);
-> -	mmap_read_unlock(&init_mm);
-> +	ret = __set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
->
->  	flush_tlb_kernel_range(start, end);
+On Thu, Sep 15, 2022, at 6:35 PM, Parav Pandit wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> Sent: Thursday, September 15, 2022 11:16 AM
+>> On Thu, Sep 15, 2022, at 4:18 PM, Parav Pandit wrote:
+>> >
+>> > So more accurate documentation is to say that 'when using writel() a
+>> > prior IO barrier is not needed ...'
+>> >
+>> > How about that?
+>> 
+>> That's probably fine, not sure if it's worth changing.
+>>
+> I think it is worth because current documentation, indirectly (or 
+> incorrectly) indicate that 
+> "writel() does wmb() internally, so those drivers, who has difficulty 
+> in using writel() can do, wmb() + raw write".
 
-Thanks, this is on fixes.
+I don't think it's wrong from a barrier perspective though:
+if a driver uses writel_relaxed(), then the only way to guarantee
+ordering is to have a full wmb() before it.
+
+> And I sort of see above pattern in two drivers, and it is not good.
+> It ends up doing dsb(st) on arm64, while needed barrier is only 
+> dmb(oshst).
+>
+> So to fix those two drivers, it is better to first avoid wmb() 
+> documentation reference when referring to writel().
+
+Yes, this suggestion is correct. On x86 and a few others, I think
+it's even worse when wmb() is an expensive barrier, while writel()
+is the same as writel_relaxed() and the barrier is implied by the
+MMIO access.
+
+It might help to spell this out and say that writel() is always
+preferred over wmb()+writel_relaxed().
+
+Site note: there are several other problems with wmb()+__raw_writel(),
+which on many architectures does not guarantee any atomicity of
+the access (a word store could get split into four byte stores),
+breaks endianess assumptions and may still not provide the correct
+barrier semantics.
+
+>> I see that there is more going on with that function, at least the loop in
+>> post_send_nop() probably just wants to use __iowrite64_copy(), but that
+>> also has no barrier in it, while changing mlx5_write64() to use iowrite64be()
+>> or similar would of course add excessive barriers inside of the loop.
+>
+> True. All other conversion seems possible.
+> For post_send_nop(), __iowmb() needs to be exposed, which is not 
+> available today and it is only one-off user,
+> I am inclined to keep post_send_nop()  as-is, but want to 
+> improve/correct rest of the callers in these two drivers.
+
+__iowmb() is architecture-specific and does not have a well-defined
+behavior. wmb() is probably the best choice for post_send_nop().
+Alternatively, one could use __iowrite64_copy() for the first few
+fields followed by a single writel64be for the last one.
+
+If you think we need something better than that, maybe having
+an iowrite64_copy() (without leading __) that includes a barrier
+would work.
+
+     Arnd
