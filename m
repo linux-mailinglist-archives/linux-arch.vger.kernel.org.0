@@ -2,56 +2,56 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6517B5B9E74
-	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 17:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0816E5B9E76
+	for <lists+linux-arch@lfdr.de>; Thu, 15 Sep 2022 17:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiIOPM0 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Thu, 15 Sep 2022 11:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S230515AbiIOPM1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Thu, 15 Sep 2022 11:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbiIOPKZ (ORCPT
+        with ESMTP id S230516AbiIOPKZ (ORCPT
         <rfc822;linux-arch@vger.kernel.org>); Thu, 15 Sep 2022 11:10:25 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD759CCF3
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:29 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id z9-20020a05640235c900b0044f0575e9ddso13213057edc.1
-        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:29 -0700 (PDT)
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6287E80F
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:31 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id jg32-20020a170907972000b0077ce313a8f0so5602246ejc.15
+        for <linux-arch@vger.kernel.org>; Thu, 15 Sep 2022 08:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=S+kwzH5LfDyg6tc+T47KWRR4zTWxpHjqyuN2TRvGEwc=;
-        b=ikiVkwTWTLFg9q22Qo4MSxlAf8PXtNYS/YYj3pii7FEhNeb9uHoJOl8elk4rPV4ZJZ
-         0IGJinTNDSDUCJXFLmtqtctlrBSMtSZx+Q27jQ5t/D4KUgh+E+9+KwPOr2K16xHCw6ZT
-         stactk3FWOzjDq3XEnZtyX+gYnhHfZkZCmjyOGFqc6N3weiBgsHifRSIeQhCUvV5vZJX
-         CG1yQ4Azvcw+Azu27dzh37E/xbi/PjeAK04sk085Qwwj7CDPFh4bJbybx/ZYZq8xM1DR
-         9LGd3d+74k/4QZbbzCwxMuDFLSZDOavjAjoH2kSQnr509kCCEUIdA8blYvLSclZ5hJ2P
-         x2mA==
+        bh=63Lbiss0mCSaP/JatuEwb7Qda7JVHXONR7b7gS/f0zw=;
+        b=ldGNVPhue592Z38Ppx+dvuU/+jjZ3WM5nm+z0BSSu9h8ezP13vV/Wl1kx9FDE2kM00
+         8hlbbp5debq2zMwyccXnSok/EFGYS9mlFPQu03BoXGKQ1tNoqAxco9vd+gOKziowlAx1
+         960aMn5I15aiY7e/E9EZ/LgBtgV+tt97K0u4asdoScfhlsL/hbGWoqJyRe6AmibNWTiq
+         J5lFB1m0MSx5XYBhZJDDB1ZWprW7OT9cPgi73vgc4CYvrUnMokBrBHdVIT4OYBHWdzX6
+         Wx/pz4G0JRiQM/VifFqL0HQwwn8gpGYoshZYX49Ahm0NtbyPpOr/BuoO7lm2mFArdxjX
+         g3qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=S+kwzH5LfDyg6tc+T47KWRR4zTWxpHjqyuN2TRvGEwc=;
-        b=Z2NTlsdhtWGWjz1ybbMmTet0IzqcxQBNCbmO2LM4JayNkZICsVjhZT4cUcqA777yFQ
-         2+iD7KKALr99R4KA2onIGHYmQF6WUS1OVj1XECs6HjOyROZDwnQGwytVCQgo62sB5wIy
-         UkK2QNaswyB5Z7qN76ts2XDPD4zcXOz9tg7oC4uCHEjnvkrS/to/I4OW6CfYRCMndYxb
-         BM1pL4qCt3gagNVyq08ZIccqJcq022+kXoVRM8JB4O1R7mY2UGwQme7Go0b+hFl8NE0H
-         IsL76wFINXIa4yjp852VGUStvnXCaPqSwm424amhpA8BYcy6M377ZKZOcTnT0WAKykRC
-         GJEA==
-X-Gm-Message-State: ACrzQf3nkVilGuTvO7tapHDkCZBlvE8oR0LNtR91gOItPfxKgpn2m89s
-        KY3OyhOnl/Wy63I8etSkxWKWWvNq0qE=
-X-Google-Smtp-Source: AMsMyM7sbunNpO+CpqIWn/hftkFrFIDp3ih3TnneGFODdNEkk+fy3fgyPU94i649AG9zEEjpdPfVfIIHuAw=
+        bh=63Lbiss0mCSaP/JatuEwb7Qda7JVHXONR7b7gS/f0zw=;
+        b=pVF4nNC2Vkm6dDpgrtW9/7Iy6t6xwNlm9Xfl77YnRU7DrJ70bqPBjEmgKTHksZvGyk
+         AYOzsj5Ea4eYtYbcMBTRcLU0/OH86XTvT2DeojxKkZARVFFaHhKk8IbJBWK7TfFhG17j
+         8tF0YRetF7qXs+CfRyoFfCelscnoUH+UgPaJ3ihU1k4UG+UcaZHVwH+MD26CBARvYu1R
+         6UoLkMfmdvBD50lEHNS+MNDL+mgOwoR/x4hC7f1A6Dzzi2a+so2tWH8jO6+DrOmGR9/F
+         To3dA5iTYiRrPTervBXdrmk6QTFkuwreSAuw9n4bmnUKSlHOXI5+oTYffowm/HbTmGNx
+         EOow==
+X-Gm-Message-State: ACrzQf077aHhI0/h4jYmflie/jJRd61zRl8qqMgb8jYmd6QXRyu2FoJi
+        Ms6CshdViQVt3hYgi1d+jDLKmOpbiTU=
+X-Google-Smtp-Source: AMsMyM7rMyupFoo64/C2rdfMBkqr7i79dpaceIzsK7wAJRHKNpXAyoVQnsUTDRv/eo0QEd57U+v7OZRoLF0=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:686d:27b5:495:85b7])
- (user=glider job=sendgmr) by 2002:a17:906:5a5a:b0:770:86d0:fd8 with SMTP id
- my26-20020a1709065a5a00b0077086d00fd8mr329690ejc.164.1663254387679; Thu, 15
- Sep 2022 08:06:27 -0700 (PDT)
-Date:   Thu, 15 Sep 2022 17:04:14 +0200
+ (user=glider job=sendgmr) by 2002:aa7:c1c4:0:b0:44e:b39e:2a54 with SMTP id
+ d4-20020aa7c1c4000000b0044eb39e2a54mr259911edp.139.1663254390559; Thu, 15 Sep
+ 2022 08:06:30 -0700 (PDT)
+Date:   Thu, 15 Sep 2022 17:04:15 +0200
 In-Reply-To: <20220915150417.722975-1-glider@google.com>
 Mime-Version: 1.0
 References: <20220915150417.722975-1-glider@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220915150417.722975-41-glider@google.com>
-Subject: [PATCH v7 40/43] entry: kmsan: introduce kmsan_unpoison_entry_regs()
+Message-ID: <20220915150417.722975-42-glider@google.com>
+Subject: [PATCH v7 41/43] bpf: kmsan: initialize BPF registers with zeroes
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -98,139 +98,35 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-struct pt_regs passed into IRQ entry code is set up by uninstrumented
-asm functions, therefore KMSAN may not notice the registers are
-initialized.
+When executing BPF programs, certain registers may get passed
+uninitialized to helper functions. E.g. when performing a JMP_CALL,
+registers BPF_R1-BPF_R5 are always passed to the helper, no matter how
+many of them are actually used.
 
-kmsan_unpoison_entry_regs() unpoisons the contents of struct pt_regs,
-preventing potential false positives. Unlike kmsan_unpoison_memory(),
-it can be called under kmsan_in_runtime(), which is often the case in
-IRQ entry code.
+Passing uninitialized values as function parameters is technically
+undefined behavior, so we work around it by always initializing the
+registers.
 
 Signed-off-by: Alexander Potapenko <glider@google.com>
-
 ---
-Link: https://linux-review.googlesource.com/id/Ibfd7018ac847fd8e5491681f508ba5d14e4669cf
+Link: https://linux-review.googlesource.com/id/I8ef9dbe94724cee5ad1e3a162f2b805345bc0586
 ---
- include/linux/kmsan.h | 15 +++++++++++++++
- kernel/entry/common.c |  5 +++++
- mm/kmsan/hooks.c      | 26 ++++++++++++++++++++++++++
- 3 files changed, 46 insertions(+)
+ kernel/bpf/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/kmsan.h b/include/linux/kmsan.h
-index c473e0e21683c..e38ae3c346184 100644
---- a/include/linux/kmsan.h
-+++ b/include/linux/kmsan.h
-@@ -214,6 +214,17 @@ void kmsan_handle_dma_sg(struct scatterlist *sg, int nents,
-  */
- void kmsan_handle_urb(const struct urb *urb, bool is_out);
- 
-+/**
-+ * kmsan_unpoison_entry_regs() - Handle pt_regs in low-level entry code.
-+ * @regs:	struct pt_regs pointer received from assembly code.
-+ *
-+ * KMSAN unpoisons the contents of the passed pt_regs, preventing potential
-+ * false positive reports. Unlike kmsan_unpoison_memory(),
-+ * kmsan_unpoison_entry_regs() can be called from the regions where
-+ * kmsan_in_runtime() returns true, which is the case in early entry code.
-+ */
-+void kmsan_unpoison_entry_regs(const struct pt_regs *regs);
-+
- #else
- 
- static inline void kmsan_init_shadow(void)
-@@ -310,6 +321,10 @@ static inline void kmsan_handle_urb(const struct urb *urb, bool is_out)
- {
- }
- 
-+static inline void kmsan_unpoison_entry_regs(const struct pt_regs *regs)
-+{
-+}
-+
- #endif
- 
- #endif /* _LINUX_KMSAN_H */
-diff --git a/kernel/entry/common.c b/kernel/entry/common.c
-index 063068a9ea9b3..846add8394c41 100644
---- a/kernel/entry/common.c
-+++ b/kernel/entry/common.c
-@@ -5,6 +5,7 @@
- #include <linux/resume_user_mode.h>
- #include <linux/highmem.h>
- #include <linux/jump_label.h>
-+#include <linux/kmsan.h>
- #include <linux/livepatch.h>
- #include <linux/audit.h>
- #include <linux/tick.h>
-@@ -24,6 +25,7 @@ static __always_inline void __enter_from_user_mode(struct pt_regs *regs)
- 	user_exit_irqoff();
- 
- 	instrumentation_begin();
-+	kmsan_unpoison_entry_regs(regs);
- 	trace_hardirqs_off_finish();
- 	instrumentation_end();
- }
-@@ -352,6 +354,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
- 		lockdep_hardirqs_off(CALLER_ADDR0);
- 		ct_irq_enter();
- 		instrumentation_begin();
-+		kmsan_unpoison_entry_regs(regs);
- 		trace_hardirqs_off_finish();
- 		instrumentation_end();
- 
-@@ -367,6 +370,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
- 	 */
- 	lockdep_hardirqs_off(CALLER_ADDR0);
- 	instrumentation_begin();
-+	kmsan_unpoison_entry_regs(regs);
- 	rcu_irq_enter_check_tick();
- 	trace_hardirqs_off_finish();
- 	instrumentation_end();
-@@ -452,6 +456,7 @@ irqentry_state_t noinstr irqentry_nmi_enter(struct pt_regs *regs)
- 	ct_nmi_enter();
- 
- 	instrumentation_begin();
-+	kmsan_unpoison_entry_regs(regs);
- 	trace_hardirqs_off_finish();
- 	ftrace_nmi_enter();
- 	instrumentation_end();
-diff --git a/mm/kmsan/hooks.c b/mm/kmsan/hooks.c
-index 79d7e73e2cfd8..35f6b6e6a908c 100644
---- a/mm/kmsan/hooks.c
-+++ b/mm/kmsan/hooks.c
-@@ -348,6 +348,32 @@ void kmsan_unpoison_memory(const void *address, size_t size)
- }
- EXPORT_SYMBOL(kmsan_unpoison_memory);
- 
-+/*
-+ * Version of kmsan_unpoison_memory() that can be called from within the KMSAN
-+ * runtime.
-+ *
-+ * Non-instrumented IRQ entry functions receive struct pt_regs from assembly
-+ * code. Those regs need to be unpoisoned, otherwise using them will result in
-+ * false positives.
-+ * Using kmsan_unpoison_memory() is not an option in entry code, because the
-+ * return value of in_task() is inconsistent - as a result, certain calls to
-+ * kmsan_unpoison_memory() are ignored. kmsan_unpoison_entry_regs() ensures that
-+ * the registers are unpoisoned even if kmsan_in_runtime() is true in the early
-+ * entry code.
-+ */
-+void kmsan_unpoison_entry_regs(const struct pt_regs *regs)
-+{
-+	unsigned long ua_flags;
-+
-+	if (!kmsan_enabled)
-+		return;
-+
-+	ua_flags = user_access_save();
-+	kmsan_internal_unpoison_memory((void *)regs, sizeof(*regs),
-+				       KMSAN_POISON_NOCHECK);
-+	user_access_restore(ua_flags);
-+}
-+
- void kmsan_check_memory(const void *addr, size_t size)
- {
- 	if (!kmsan_enabled)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 3d9eb3ae334ce..21c74fac5131c 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -2002,7 +2002,7 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn *insn) \
+ { \
+ 	u64 stack[stack_size / sizeof(u64)]; \
+-	u64 regs[MAX_BPF_EXT_REG]; \
++	u64 regs[MAX_BPF_EXT_REG] = {}; \
+ \
+ 	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
+ 	ARG1 = (u64) (unsigned long) ctx; \
 -- 
 2.37.2.789.g6183377224-goog
 
