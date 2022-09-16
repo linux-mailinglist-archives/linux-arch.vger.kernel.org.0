@@ -2,212 +2,268 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8695BAEC2
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 16:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E458F5BAEC7
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 16:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbiIPOBt (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Sep 2022 10:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S231834AbiIPOCI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Sep 2022 10:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbiIPOBq (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 10:01:46 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F189AB07B
-        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:01:43 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id v4so20425860pgi.10
-        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:01:43 -0700 (PDT)
+        with ESMTP id S231792AbiIPOBx (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 10:01:53 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CCBAB180
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:01:52 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r23so11867052pgr.6
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:01:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=pZ5QW8+FbrHaACMXwsrZ3rO+2GQoZC7Xs+YDX+18qPg=;
-        b=dApn8A/ndkN474hPDvEKuWQp/GaiW0SglUGPjtKldcidaNpFyn8EO43danXo3TnNvM
-         HWDlvUcNWMyF7tJuGW/HNMy8NTScvTpl5ATgqNE2TvwiIAO0s0d92/JDB2xxTBCk0qVA
-         Smp0x+7SeMPrySaeAjioon6OaEp1jI+D86fe4=
+        bh=4zSOH3Z6KkTDJEQ+cQmmIS0RVrgB88hfSSMmQOPO6us=;
+        b=eUR15at4aNusI+PjFG/lgQzljpUkRiIJzNuUM28aY5DOKObsqVUIcKczJfTIUzMsvO
+         dj30WiDJiizdPHuU9ZjqASFXjZgQZnobYA4Ufc8yCTuplz2n9BADId2OFWRU8Si+3Q5I
+         7kHc619AFYdJPgT5oVcgHGnTd3lqKg/Wa8ezc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=pZ5QW8+FbrHaACMXwsrZ3rO+2GQoZC7Xs+YDX+18qPg=;
-        b=PTnp60kVNZY3o+r6MECrtKPQQDiL9vegdJ4A34oWXRg5zrPQVAi2SUVy1B7WBobexD
-         EwSuQESV4DWDfND9fuECRfY8y+iySxxyOievF2P1Eb+JUWyToKfkXter7FWHjD2O5E73
-         DOUrMoPkw3iDQFdw4K6QiMkoqQpBGsUa1o9tlTbTg4mbqI0BbH7lT2Typmm8qRP4AMs5
-         a4QlCt935j/2o0X2nXXDXK25tZj9jXAzjarq5Gkc5whoy9Oqy3Hbk5d+cy4RY++hhczE
-         mMte4Pm++cMxQIcxHwq6iYRrioo5Rx2ZfkSIOHpAoQCm0u0xPD3vXjgp5jOcudJHaD7R
-         fhlA==
-X-Gm-Message-State: ACrzQf1JYf1FSn/A7JlwvFnYYJQAyD/nbrpAUhUo85ytc0Lte3MJG9zh
-        1W9DQynazSbyPZULITQoSoVL0Q==
-X-Google-Smtp-Source: AMsMyM4ojRXwvb2FpFeNlR4/l+I5DQD0qvf8IIChM4yYleDmUiwgwT4v7QLKu/CTj7OS6YrllLZisg==
-X-Received: by 2002:a65:6a05:0:b0:42c:87a0:ea77 with SMTP id m5-20020a656a05000000b0042c87a0ea77mr4674038pgu.75.1663336902698;
-        Fri, 16 Sep 2022 07:01:42 -0700 (PDT)
+        bh=4zSOH3Z6KkTDJEQ+cQmmIS0RVrgB88hfSSMmQOPO6us=;
+        b=4RzkXLoWlzPwbGCkXVHCitYBiF/pOekqz84aI9R550MdIT0qEgQaGiR/qv7BaHGkRH
+         ETn9cVg0pxwlU/NJHUrpxr/GfeIrrzjKDwh3i2khVJzC6+LyX/jHXNsp2k9XbBq02ShH
+         SxLX1HxSoeYgwJ554oglOuDpmrZGbmXlYl2okaN0yOTHhP8ajseutPt+Vfwn+xdH38jO
+         8L8ZQ375kmhWMG3ejAIUWqOURzWQB1VtjyJwv9PtlPW55dXLBOauGKt3Gb1q0/5oXzCo
+         i3mZv5TrMLnsslAYjy44eqoyFe9v7h6y+LmfXWsP5MnQA+x9I+66clgJaaY9avOP+V2l
+         ny8w==
+X-Gm-Message-State: ACrzQf3dcTjTMYN4s4raQaQdaMclS3+PDGsGtBIbMSaf1TXHOH9NeF4s
+        J2b9NaoBZd2/h1dpWKeeOTAZqg==
+X-Google-Smtp-Source: AMsMyM4hpMmVEL3fm5C/uFzXCqSUsvPdqnXy/v7qQ0Az8FWPnaxfR3hpleYuI6fFeRyMeL3nN2QZIQ==
+X-Received: by 2002:a63:d312:0:b0:438:5cd8:8d56 with SMTP id b18-20020a63d312000000b004385cd88d56mr4756595pgg.615.1663336911874;
+        Fri, 16 Sep 2022 07:01:51 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k5-20020aa79985000000b00535d3caa66fsm14281585pfh.197.2022.09.16.07.01.39
+        by smtp.gmail.com with ESMTPSA id t3-20020a170902e84300b001782a0d3eeasm12283789plg.115.2022.09.16.07.01.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 07:01:40 -0700 (PDT)
+        Fri, 16 Sep 2022 07:01:50 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Matthew Wilcox <willy@infradead.org>
 Cc:     Kees Cook <keescook@chromium.org>,
         Uladzislau Rezki <urezki@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-mm@kvack.org,
         linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 1/3] x86/uaccess: Move nmi_uaccess_okay() into uaccess.h
-Date:   Fri, 16 Sep 2022 06:59:53 -0700
-Message-Id: <20220916135953.1320601-2-keescook@chromium.org>
+Subject: [PATCH 2/3] x86/dumpstack: Inline copy_from_user_nmi()
+Date:   Fri, 16 Sep 2022 06:59:55 -0700
+Message-Id: <20220916135953.1320601-3-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220916135953.1320601-1-keescook@chromium.org>
 References: <20220916135953.1320601-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4246; h=from:subject; bh=lKu8W3jwyjlnI0U4MB0YhFyFdBPkVe2IDcNCcwDBY7I=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjJIFYUoqiqZEs8RDF39N7dCwCH6XhD4rW0rrrXDR8 VVu38x6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYySBWAAKCRCJcvTf3G3AJoeqEA CvoFJqlgQd4sdMO6jBx4c9P8V9cux0og6S3xgwGUvzsj157wrdM9YElT5S8N3/efD2N33UUrs3DdjN 7dUmfnZ49lXi9gZzj+QpU+5VLgn02RvTUR7qYBnuF3+sjGtmHzU67MDMmo9pTgYGv8dHS7j+dkpDn0 bXMp5/oFRA9YvcxEjxLh14V2cvE/WfUBfYCYNZYnDCtikveBJ6o9PnSnxasQwLmFRkQp0c1Bfpuef/ MpVlQJC35U1pA/t1fUHM+qyDr+rJtbRnZqjS/HKaRI5rCTJHhLCC/m6Ko62wVq3+xO9GGiocL+Ss2I 8zc1+4TtvcMTVn67UzQMUu86xwtYS0cFXYNElo7zTZD25B+2wa6Jgrn6YDD69pMkZ6IpuVOjEijoD8 O3mUEbHIj40t8jHYziOzUPH/uZD+2jfmGzOoeSzcOzNQr9yT0IEyXaiHnSmritmz2hvhzcDeu//T5H fvM8K3g0Lb7uudTadKfSu0Edo2vH1cjdSIRC4kiIbY0HlXNhNhJgHtNGBhv5KaEkp2aI+bsTubq8mk EOrZu4qxbg0BkTPhPnp4PF0nrzC8KyBssLQdoq+/RhExRImyWug4ZNfaF960FRjcIoZ8b2HNnSo+c7 3i29D20rhYAFmb6qszl6E8K71UcFR6j4wAEF4B3gJjPY5xAY6q6urTlDCRxQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7115; h=from:subject; bh=8gMTRWBZ8nM6q5PrKv/eYu8tnhlf0ctojtdeDb/b28g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjJIFYRQM+ho9+tfYE5ObtAak9vEZzUoXIepUdlEy/ n60F5NiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYySBWAAKCRCJcvTf3G3AJrPEEA CV+i8PMBeljvVCbWOjzo0O8yVEVDMQHLo4B7+8/wsgNYYMB/fq75YZkKuDzrTG35dJfdWvVsg2fCNM 114mIw5Ei2//eqHU7CwtXjbMVzLvO7TwApHxiyyWaF++dznIsROespnr3K1qlvaNWSZA4ZnIMc4q/l kh7kHK0aK6cPOq6Ez6g0LurkZJnIIWJfIEGgHePNXZsuxrb6BHJd3+4I4FlFLczQVKg+yogkwHiW4f kMv0COhxGLK4A2ZQkr4kMNwWLf/UGPi3VgcZi58LD1eahPDndgLnqvejAftrMt9BtMaxFQq4D0iUjD snSoc/mREjzZRWeF7uDep3ELCApHKCpihtNAzfmXOe9u/891SPcRU4wL6ejzq8Fd9QwDlMJlK4LHwW tQdSWb0im3g3W9TrqiZmmPc3Z9psJMHkCUYfAsUPFViBLOZBx6A2YoyQABl/FIkUByFeZwhD7D4n0C Tint5FCLiBs+NnYnF0srIY1rviLutQHbw5DI44R4esft49ANQPPKIMVl0Ffiifuh+vsvgI0kfY2HfE Xn/7LZfid5nL+vJ7jQczCfYeD0+ymEdDAUXlX2tKu2mdEUWIxcrygvaz+WTAlscKXJ6I8jhfd5bOcU Dnh3Yy45Qg/e5Kivm6aoTKxPgqZ7qMTgHj24kaqtoKWMh30UK5y3pn/YucSA==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-In preparation for inlining copy_from_user_in_nmi(), move the
-nmi_uaccess_okay() declaration into uaccess.h, which makes a bit more
-sense anyway. Additionally update all callers to remove the no longer
-needed tlbflush.h include, which was only for the declaration of
-nmi_uaccess_okay().
+The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
+designed to skip any checks where the length is known at compile time as
+a reasonable heuristic to avoid "likely known-good" cases. However, it can
+only do this when the copy_*_user() helpers are, themselves, inline too.
 
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: x86@kernel.org
-Cc: linux-perf-users@vger.kernel.org
-Cc: bpf@vger.kernel.org
+Using find_vmap_area() requires taking a spinlock. The check_object_size()
+helper can call find_vmap_area() when the destination is in vmap memory.
+If show_regs() is called in interrupt context, it will attempt a call to
+copy_from_user_nmi(), which may call check_object_size() and then
+find_vmap_area(). If something in normal context happens to be in the
+middle of calling find_vmap_area() (with the spinlock held), the interrupt
+handler will hang forever.
+
+The copy_from_user_nmi() call is actually being called with a fixed-size
+length, so check_object_size() should never have been called in the
+first place. In order for check_object_size() to see that the length is
+a fixed size, inline copy_from_user_nmi(), as already done with all the
+other uaccess helpers.
+
+Reported-by: Yu Zhao <yuzhao@google.com>
+Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
+Reported-by: dev@der-flo.net
 Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Yu Zhao <yuzhao@google.com>
-Cc: dev@der-flo.net
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
+Cc: stable@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/events/core.c          | 1 -
- arch/x86/include/asm/tlbflush.h | 3 ---
- arch/x86/include/asm/uaccess.h  | 3 +++
- arch/x86/lib/usercopy.c         | 2 --
- include/asm-generic/tlb.h       | 9 ---------
- include/linux/uaccess.h         | 9 +++++++++
- kernel/trace/bpf_trace.c        | 2 --
- 7 files changed, 12 insertions(+), 17 deletions(-)
+ arch/x86/include/asm/uaccess.h |  2 --
+ arch/x86/kernel/dumpstack.c    |  4 +--
+ arch/x86/lib/Makefile          |  2 +-
+ arch/x86/lib/usercopy.c        | 50 ----------------------------------
+ include/linux/uaccess.h        | 41 ++++++++++++++++++++++++++++
+ 5 files changed, 44 insertions(+), 55 deletions(-)
+ delete mode 100644 arch/x86/lib/usercopy.c
 
-diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-index f969410d0c90..3e2bb6324ca3 100644
---- a/arch/x86/events/core.c
-+++ b/arch/x86/events/core.c
-@@ -36,7 +36,6 @@
- #include <asm/smp.h>
- #include <asm/alternative.h>
- #include <asm/mmu_context.h>
--#include <asm/tlbflush.h>
- #include <asm/timer.h>
- #include <asm/desc.h>
- #include <asm/ldt.h>
-diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
-index cda3118f3b27..233818bb72c6 100644
---- a/arch/x86/include/asm/tlbflush.h
-+++ b/arch/x86/include/asm/tlbflush.h
-@@ -157,9 +157,6 @@ struct tlb_state_shared {
- };
- DECLARE_PER_CPU_SHARED_ALIGNED(struct tlb_state_shared, cpu_tlbstate_shared);
- 
--bool nmi_uaccess_okay(void);
--#define nmi_uaccess_okay nmi_uaccess_okay
--
- /* Initialize cr4 shadow for this CPU. */
- static inline void cr4_init_shadow(void)
- {
 diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 913e593a3b45..e9390eea861b 100644
+index e9390eea861b..f47c0c752e7a 100644
 --- a/arch/x86/include/asm/uaccess.h
 +++ b/arch/x86/include/asm/uaccess.h
-@@ -20,6 +20,9 @@ static inline bool pagefault_disabled(void);
- # define WARN_ON_IN_IRQ()
- #endif
+@@ -498,8 +498,6 @@ struct __large_struct { unsigned long buf[100]; };
+ 		: : ltype(x), "m" (__m(addr))				\
+ 		: : label)
  
-+bool nmi_uaccess_okay(void);
-+#define nmi_uaccess_okay nmi_uaccess_okay
-+
- /**
-  * access_ok - Checks if a user space pointer is valid
-  * @addr: User space pointer to start of block to check
+-extern unsigned long
+-copy_from_user_nmi(void *to, const void __user *from, unsigned long n);
+ extern __must_check long
+ strncpy_from_user(char *dst, const char __user *src, long count);
+ 
+diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
+index afae4dd77495..b59d59ef10d2 100644
+--- a/arch/x86/kernel/dumpstack.c
++++ b/arch/x86/kernel/dumpstack.c
+@@ -72,8 +72,8 @@ static void printk_stack_address(unsigned long address, int reliable,
+ 	printk("%s %s%pBb\n", log_lvl, reliable ? "" : "? ", (void *)address);
+ }
+ 
+-static int copy_code(struct pt_regs *regs, u8 *buf, unsigned long src,
+-		     unsigned int nbytes)
++static __always_inline int
++copy_code(struct pt_regs *regs, u8 *buf, unsigned long src, unsigned int nbytes)
+ {
+ 	if (!user_mode(regs))
+ 		return copy_from_kernel_nofault(buf, (u8 *)src, nbytes);
+diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
+index f76747862bd2..aeb5cd634e27 100644
+--- a/arch/x86/lib/Makefile
++++ b/arch/x86/lib/Makefile
+@@ -42,7 +42,7 @@ clean-files := inat-tables.c
+ obj-$(CONFIG_SMP) += msr-smp.o cache-smp.o
+ 
+ lib-y := delay.o misc.o cmdline.o cpu.o
+-lib-y += usercopy_$(BITS).o usercopy.o getuser.o putuser.o
++lib-y += usercopy_$(BITS).o getuser.o putuser.o
+ lib-y += memcpy_$(BITS).o
+ lib-y += pc-conf-reg.o
+ lib-$(CONFIG_ARCH_HAS_COPY_MC) += copy_mc.o copy_mc_64.o
 diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
-index ad0139d25401..959489f2f814 100644
+deleted file mode 100644
+index 959489f2f814..000000000000
 --- a/arch/x86/lib/usercopy.c
-+++ b/arch/x86/lib/usercopy.c
-@@ -7,8 +7,6 @@
- #include <linux/uaccess.h>
- #include <linux/export.h>
- 
--#include <asm/tlbflush.h>
--
- /**
-  * copy_from_user_nmi - NMI safe copy from user
-  * @to:		Pointer to the destination buffer
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 492dce43236e..14efd74f3e70 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -17,15 +17,6 @@
- #include <asm/tlbflush.h>
- #include <asm/cacheflush.h>
- 
++++ /dev/null
+@@ -1,50 +0,0 @@
 -/*
-- * Blindly accessing user memory from NMI context can be dangerous
-- * if we're in the middle of switching the current user task or switching
-- * the loaded mm.
+- * User address space access functions.
+- *
+- *  For licencing details see kernel-base/COPYING
 - */
--#ifndef nmi_uaccess_okay
--# define nmi_uaccess_okay() true
--#endif
 -
- #ifdef CONFIG_MMU
- 
- /*
+-#include <linux/uaccess.h>
+-#include <linux/export.h>
+-
+-/**
+- * copy_from_user_nmi - NMI safe copy from user
+- * @to:		Pointer to the destination buffer
+- * @from:	Pointer to a user space address of the current task
+- * @n:		Number of bytes to copy
+- *
+- * Returns: The number of not copied bytes. 0 is success, i.e. all bytes copied
+- *
+- * Contrary to other copy_from_user() variants this function can be called
+- * from NMI context. Despite the name it is not restricted to be called
+- * from NMI context. It is safe to be called from any other context as
+- * well. It disables pagefaults across the copy which means a fault will
+- * abort the copy.
+- *
+- * For NMI context invocations this relies on the nested NMI work to allow
+- * atomic faults from the NMI path; the nested NMI paths are careful to
+- * preserve CR2.
+- */
+-unsigned long
+-copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
+-{
+-	unsigned long ret;
+-
+-	if (!__access_ok(from, n))
+-		return n;
+-
+-	if (!nmi_uaccess_okay())
+-		return n;
+-
+-	/*
+-	 * Even though this function is typically called from NMI/IRQ context
+-	 * disable pagefaults so that its behaviour is consistent even when
+-	 * called from other contexts.
+-	 */
+-	pagefault_disable();
+-	ret = __copy_from_user_inatomic(to, from, n);
+-	pagefault_enable();
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(copy_from_user_nmi);
 diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index 47e5d374c7eb..065e121d2a86 100644
+index 065e121d2a86..fee141ed8f95 100644
 --- a/include/linux/uaccess.h
 +++ b/include/linux/uaccess.h
-@@ -10,6 +10,15 @@
+@@ -273,6 +273,47 @@ __copy_from_user_inatomic_nocache(void *to, const void __user *from,
  
- #include <asm/uaccess.h>
+ #endif		/* ARCH_HAS_NOCACHE_UACCESS */
  
-+/*
-+ * Blindly accessing user memory from NMI context can be dangerous
-+ * if we're in the middle of switching the current user task or switching
-+ * the loaded mm.
++/**
++ * copy_from_user_nmi - NMI safe copy from user
++ * @to:		Pointer to the destination buffer
++ * @from:	Pointer to a user space address of the current task
++ * @n:		Number of bytes to copy
++ *
++ * Returns: The number of not copied bytes. 0 is success, i.e. all bytes copied
++ *
++ * Contrary to other copy_from_user() variants this function can be called
++ * from NMI context. Despite the name it is not restricted to be called
++ * from NMI context. It is safe to be called from any other context as
++ * well. It disables pagefaults across the copy which means a fault will
++ * abort the copy.
++ *
++ * For NMI context invocations this relies on the nested NMI work to allow
++ * atomic faults from the NMI path; the nested NMI paths are careful to
++ * preserve CR2.
 + */
-+#ifndef nmi_uaccess_okay
-+# define nmi_uaccess_okay() true
-+#endif
++static __always_inline unsigned long
++copy_from_user_nmi(void *to, const void __user *from, const unsigned long n)
++{
++	unsigned long ret;
 +
- /*
-  * Architectures should provide two primitives (raw_copy_{to,from}_user())
-  * and get rid of their private instances of copy_{to,from}_user() and
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 68e5cdd24cef..0fd185c3d174 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -26,8 +26,6 @@
- #include <uapi/linux/bpf.h>
- #include <uapi/linux/btf.h>
++	if (!__access_ok(from, n))
++		return n;
++
++	if (!nmi_uaccess_okay())
++		return n;
++
++	/*
++	 * Even though this function is typically called from NMI/IRQ context
++	 * disable pagefaults so that its behaviour is consistent even when
++	 * called from other contexts.
++	 */
++	pagefault_disable();
++	ret = __copy_from_user_inatomic(to, from, n);
++	pagefault_enable();
++
++	return ret;
++}
++
+ extern __must_check int check_zeroed_user(const void __user *from, size_t size);
  
--#include <asm/tlb.h>
--
- #include "trace_probe.h"
- #include "trace.h"
- 
+ /**
 -- 
 2.34.1
 
