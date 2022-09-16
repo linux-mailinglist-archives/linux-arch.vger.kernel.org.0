@@ -2,57 +2,34 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DA45BB198
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 19:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47DE5BB2B1
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 21:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229458AbiIPR3Q (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Sep 2022 13:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57020 "EHLO
+        id S229604AbiIPTPh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Sep 2022 15:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiIPR3P (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 13:29:15 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC05EB5A72;
-        Fri, 16 Sep 2022 10:29:14 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id k10so36634000lfm.4;
-        Fri, 16 Sep 2022 10:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=c99THgg/Qu0Uq0g1n2HvJ4GdbvThpErIDXzsQyV5Y5M=;
-        b=eN2BMBgsZzIHstlT6w6/JlqB6fmfOVwchpgbw5yUUQ1CVP9LpL7cwDinWmTalaZh1K
-         B8eGSg8d56nehxCAwsIvboZ+spzR5QjQQoc0Tob9ul1uSUQKIA3x5erYAdxwgdbYI1Xb
-         Y1OOhV66eIT7XWPjDXjkqhEIpqHro8TQ0Bhpj/lVv1BZ0852s2vlDJBEjPehSU9MrGfE
-         07Yu65TPUquxzWtLydmFCxnYulixscsCAK73Z7RMfcOIR6jWb4KWCw3SzipQP4NN9SYY
-         Dx8wEzM9p8S/u2ZWqdc+fmGTjt5CjJaxcvRmPNMgG7KWaNSPcaBuGHvAkR/rYPpPFyJ9
-         aTGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=c99THgg/Qu0Uq0g1n2HvJ4GdbvThpErIDXzsQyV5Y5M=;
-        b=eWXWS/ibbMhr+ka7dovCjUNyBT7LnbGGJvhD2C2ghieZ/BOE/LYfDw78BWzfcmKHP0
-         hDDj8ZwGW88Vh/97gd2yI7znFuwIfgNHC9SY/Qfy1a9X/nGHUGCvxZgB/wMJWAaN3D88
-         QJMDJtsoJwzoIwo2Q0nd5HIMXPPtmaS0hZT5D4Zwsx6F9RBZO+0ckxdJe9D7Nv47J0N8
-         KEnpLd0gJ21kPMEA2mOvAe7FfFT+WftGu7zLU027nR0mRuge49erssO5X0JiMlPwsd6d
-         Ogv9if1Zufgs1rqFiODyBNiaCzy8zqjqIJmbOjEamdE87g8C8+NWyko53ycDCqvKc2zS
-         YeMQ==
-X-Gm-Message-State: ACrzQf0ntCQFqRrMAhHgIWVqa6xcf8IBV6jl8LzJKrk5vcKWztTqJpTU
-        WucPGVglY8RAt3CZVdiQXzg=
-X-Google-Smtp-Source: AMsMyM7G12shYaSwRYpiyRnjwgOShehtfYm9M38UQS6WG2ub/wqwZyBZ/jAB4NB382PL6nr4GKMEKA==
-X-Received: by 2002:a19:e044:0:b0:497:14fd:326f with SMTP id g4-20020a19e044000000b0049714fd326fmr1941972lfj.332.1663349353017;
-        Fri, 16 Sep 2022 10:29:13 -0700 (PDT)
-Received: from pc636 (host-90-235-8-56.mobileonline.telia.com. [90.235.8.56])
-        by smtp.gmail.com with ESMTPSA id q14-20020a056512210e00b00492cfecf1c0sm3592686lfr.245.2022.09.16.10.29.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 10:29:12 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Fri, 16 Sep 2022 19:29:09 +0200
+        with ESMTP id S229625AbiIPTPg (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 15:15:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048ACAB071;
+        Fri, 16 Sep 2022 12:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ypkdyUP1JcI6s7cVs4ktcAodUubTPEOwr3HQWpEnFKY=; b=Pw3hxWjjBMOCUduKA/HxQ14yPx
+        EtpjxuqhNVlO7xUAG1GiuC9mpTmG/QTVPro7HxagyGxN9VkBlmLvx7NMHh9wSumjLFYepfiELs9Cd
+        L/F8LVbEUlI/SOg273mukg4YjcT9UvosbxETburGeC8B4GIgZIn7VUaChHcA6m/iOWjes4AkxKI+U
+        bimitz6WRDlt12TsreTRphNaObbIwWrzmCYNmcmsdtqtqwKy36NMaDH9g55Q+UE+jHuQbArDIH+mt
+        EHMkZ3fvkf3sOqfueGzEP/a22mk7pmGwjlYP7tZ7dsmsMc08W0SHQAwpqWR80JJbmUFra+g5P6dGf
+        gh9aVtwA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oZGo8-002Xle-ME; Fri, 16 Sep 2022 19:15:24 +0000
+Date:   Fri, 16 Sep 2022 20:15:24 +0100
+From:   Matthew Wilcox <willy@infradead.org>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
         linux-mm@kvack.org, linux-hardening@vger.kernel.org,
@@ -61,91 +38,138 @@ Cc:     Matthew Wilcox <willy@infradead.org>,
         x86@kernel.org, linux-perf-users@vger.kernel.org,
         linux-arch@vger.kernel.org
 Subject: Re: [PATCH 3/3] usercopy: Add find_vmap_area_try() to avoid deadlocks
-Message-ID: <YySyZZh6Cu/Zf/F5@pc636>
+Message-ID: <YyTLTBM4OC6/RnjG@casper.infradead.org>
 References: <20220916135953.1320601-1-keescook@chromium.org>
  <20220916135953.1320601-4-keescook@chromium.org>
+ <YySML2HfqaE/wXBU@casper.infradead.org>
+ <202209160805.CA47B2D673@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220916135953.1320601-4-keescook@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202209160805.CA47B2D673@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 06:59:57AM -0700, Kees Cook wrote:
-> The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
-> more defensive against running from interrupt context. Use a best-effort
-> check for VMAP areas when running in interrupt context
+On Fri, Sep 16, 2022 at 08:09:16AM -0700, Kees Cook wrote:
+> On Fri, Sep 16, 2022 at 03:46:07PM +0100, Matthew Wilcox wrote:
+> > On Fri, Sep 16, 2022 at 06:59:57AM -0700, Kees Cook wrote:
+> > > The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
+> > > more defensive against running from interrupt context. Use a best-effort
+> > > check for VMAP areas when running in interrupt context
+> > 
+> > I had something more like this in mind:
 > 
-> Suggested-by: Matthew Wilcox <willy@infradead.org>
-> Link: https://lore.kernel.org/linux-mm/YyQ2CSdIJdvQPSPO@casper.infradead.org
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Yu Zhao <yuzhao@google.com>
-> Cc: dev@der-flo.net
-> Cc: linux-mm@kvack.org
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  include/linux/vmalloc.h |  1 +
->  mm/usercopy.c           | 11 ++++++++++-
->  mm/vmalloc.c            | 11 +++++++++++
->  3 files changed, 22 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> index 096d48aa3437..c8a00f181a11 100644
-> --- a/include/linux/vmalloc.h
-> +++ b/include/linux/vmalloc.h
-> @@ -216,6 +216,7 @@ void free_vm_area(struct vm_struct *area);
->  extern struct vm_struct *remove_vm_area(const void *addr);
->  extern struct vm_struct *find_vm_area(const void *addr);
->  struct vmap_area *find_vmap_area(unsigned long addr);
-> +struct vmap_area *find_vmap_area_try(unsigned long addr);
->  
->  static inline bool is_vm_area_hugepages(const void *addr)
->  {
-> diff --git a/mm/usercopy.c b/mm/usercopy.c
-> index c1ee15a98633..4a371099ac64 100644
-> --- a/mm/usercopy.c
-> +++ b/mm/usercopy.c
-> @@ -173,7 +173,16 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
->  	}
->  
->  	if (is_vmalloc_addr(ptr)) {
-> -		struct vmap_area *area = find_vmap_area(addr);
-> +		struct vmap_area *area;
-> +
-> +		if (unlikely(in_interrupt())) {
-> +			area = find_vmap_area_try(addr);
-> +			/* Give up under interrupt to avoid deadlocks. */
-> +			if (!area)
-> +				return;
-> +		} else {
-> +			area = find_vmap_area(addr);
-> +		}
->  
->  		if (!area)
->  			usercopy_abort("vmalloc", "no area", to_user, 0, n);
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index dd6cdb201195..f14f1902c2f6 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1840,6 +1840,17 @@ struct vmap_area *find_vmap_area(unsigned long addr)
->  	return va;
->  }
->  
-> +struct vmap_area *find_vmap_area_try(unsigned long addr)
->
-I think it makes sense to add a comment of having such function and for
-which context it is supposed to be used. Maybe rename it to something
-with "atomic" prefix.
+> Yeah, I like -EAGAIN. I'd like to keep the interrupt test to choose lock
+> vs trylock, otherwise it's trivial to bypass the hardening test by having
+> all the other CPUs beating on the spinlock.
 
-Thanks.
+I was thinking about this:
 
---
-Uladzislau Rezki
++++ b/mm/vmalloc.c
+@@ -1844,12 +1844,19 @@
+ {
+ 	struct vmap_area *va;
+
+-	if (!spin_lock(&vmap_area_lock))
+-		return ERR_PTR(-EAGAIN);
++	/*
++	 * It's safe to walk the rbtree under the RCU lock, but we may
++	 * incorrectly find no vmap_area if the tree is being modified.
++	 */
++	rcu_read_lock();
+ 	va = __find_vmap_area(addr, &vmap_area_root);
+-	spin_unlock(&vmap_area_lock);
++	if (!va && in_interrupt())
++		va = ERR_PTR(-EAGAIN);
++	rcu_read_unlock();
+
+-	return va;
++	if (va)
++		return va;
++	return find_vmap_area(addr);
+ }
+
+ /*** Per cpu kva allocator ***/
+
+... but I don't think that works since vmap_areas aren't freed by RCU,
+and I think they're reused without going through an RCU cycle.
+
+So here's attempt #4, which actually compiles, and is, I think, what you
+had in mind.
+
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 096d48aa3437..2b7c52e76856 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -215,7 +215,7 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
+ void free_vm_area(struct vm_struct *area);
+ extern struct vm_struct *remove_vm_area(const void *addr);
+ extern struct vm_struct *find_vm_area(const void *addr);
+-struct vmap_area *find_vmap_area(unsigned long addr);
++struct vmap_area *find_vmap_area_try(unsigned long addr);
+ 
+ static inline bool is_vm_area_hugepages(const void *addr)
+ {
+diff --git a/mm/usercopy.c b/mm/usercopy.c
+index c1ee15a98633..e0fb605c1b38 100644
+--- a/mm/usercopy.c
++++ b/mm/usercopy.c
+@@ -173,7 +173,11 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
+ 	}
+ 
+ 	if (is_vmalloc_addr(ptr)) {
+-		struct vmap_area *area = find_vmap_area(addr);
++		struct vmap_area *area = find_vmap_area_try(addr);
++
++		/* We may be in NMI context */
++		if (area == ERR_PTR(-EAGAIN))
++			return;
+ 
+ 		if (!area)
+ 			usercopy_abort("vmalloc", "no area", to_user, 0, n);
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index dd6cdb201195..c47b3b5d1c2d 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1829,7 +1829,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
+ 	free_vmap_area_noflush(va);
+ }
+ 
+-struct vmap_area *find_vmap_area(unsigned long addr)
++static struct vmap_area *find_vmap_area(unsigned long addr)
+ {
+ 	struct vmap_area *va;
+ 
+@@ -1840,6 +1840,26 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+ 	return va;
+ }
+ 
++/*
++ * The vmap_area_lock is not interrupt-safe, and we can end up here from
++ * NMI context, so it's not worth even trying to make it IRQ-safe.
++ */
++struct vmap_area *find_vmap_area_try(unsigned long addr)
++{
++	struct vmap_area *va;
++
++	if (in_interrupt()) {
++		if (!spin_trylock(&vmap_area_lock))
++			return ERR_PTR(-EAGAIN);
++	} else {
++		spin_lock(&vmap_area_lock);
++	}
++	va = __find_vmap_area(addr, &vmap_area_root);
++	spin_unlock(&vmap_area_lock);
++
++	return va;
++}
++
+ /*** Per cpu kva allocator ***/
+ 
+ /*
