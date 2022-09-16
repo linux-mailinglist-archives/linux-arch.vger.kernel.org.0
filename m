@@ -2,268 +2,154 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E458F5BAEC7
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 16:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D4F5BAECA
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 16:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiIPOCI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Sep 2022 10:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
+        id S231863AbiIPOC1 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Sep 2022 10:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbiIPOBx (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 10:01:53 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CCBAB180
-        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:01:52 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id r23so11867052pgr.6
-        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:01:52 -0700 (PDT)
+        with ESMTP id S231869AbiIPOCQ (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 10:02:16 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFDAAF0C3
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:02:01 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y136so21358652pfb.3
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 07:02:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=4zSOH3Z6KkTDJEQ+cQmmIS0RVrgB88hfSSMmQOPO6us=;
-        b=eUR15at4aNusI+PjFG/lgQzljpUkRiIJzNuUM28aY5DOKObsqVUIcKczJfTIUzMsvO
-         dj30WiDJiizdPHuU9ZjqASFXjZgQZnobYA4Ufc8yCTuplz2n9BADId2OFWRU8Si+3Q5I
-         7kHc619AFYdJPgT5oVcgHGnTd3lqKg/Wa8ezc=
+        bh=m4dgh/mxnUSEPj3HfQNUBb5nsgYsEWdLYyqOM0O6Vpg=;
+        b=jI1TBoHWK7INYvXXCvlGHB3MZlBO14PcpeillYZKgYjgbsEt606qO+fSOI6Fml4RMR
+         oX0N/4bEKvlQblCR4Ff83CVuQnrm1mUSNafLG4I+SvO1ZKzjcWx2TGHTJlj0VNf1U4hn
+         utwv4NmQdiJMsYb3StFL0V6D7PE1YBv1gfboI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=4zSOH3Z6KkTDJEQ+cQmmIS0RVrgB88hfSSMmQOPO6us=;
-        b=4RzkXLoWlzPwbGCkXVHCitYBiF/pOekqz84aI9R550MdIT0qEgQaGiR/qv7BaHGkRH
-         ETn9cVg0pxwlU/NJHUrpxr/GfeIrrzjKDwh3i2khVJzC6+LyX/jHXNsp2k9XbBq02ShH
-         SxLX1HxSoeYgwJ554oglOuDpmrZGbmXlYl2okaN0yOTHhP8ajseutPt+Vfwn+xdH38jO
-         8L8ZQ375kmhWMG3ejAIUWqOURzWQB1VtjyJwv9PtlPW55dXLBOauGKt3Gb1q0/5oXzCo
-         i3mZv5TrMLnsslAYjy44eqoyFe9v7h6y+LmfXWsP5MnQA+x9I+66clgJaaY9avOP+V2l
-         ny8w==
-X-Gm-Message-State: ACrzQf3dcTjTMYN4s4raQaQdaMclS3+PDGsGtBIbMSaf1TXHOH9NeF4s
-        J2b9NaoBZd2/h1dpWKeeOTAZqg==
-X-Google-Smtp-Source: AMsMyM4hpMmVEL3fm5C/uFzXCqSUsvPdqnXy/v7qQ0Az8FWPnaxfR3hpleYuI6fFeRyMeL3nN2QZIQ==
-X-Received: by 2002:a63:d312:0:b0:438:5cd8:8d56 with SMTP id b18-20020a63d312000000b004385cd88d56mr4756595pgg.615.1663336911874;
-        Fri, 16 Sep 2022 07:01:51 -0700 (PDT)
+        bh=m4dgh/mxnUSEPj3HfQNUBb5nsgYsEWdLYyqOM0O6Vpg=;
+        b=GG24nr+yBG0wtCj3dzemZhBwzpi7aeIfllINzBwrwEIGX2R2fAIxpQyYdPmnIKyxBu
+         dfSiU2pWoyXfCDlHwNPdwT3zz6t9pxR2TZfFldvAbkUQYA3GtmXMTO3Gsg4EGnvXpu3l
+         lFWiG6We8rVEmmvEbGIhHq8lTcF6C1JE70i3coy6l6qOJ2esqkxlBEkA78N+HXS3tq++
+         pI50Om+Yd56TCRqGfL0XMcHTPjDBbEN5wYnVI0unLqUavpkOe6sbJ2gjm9ryv5/4WkjG
+         ddMf+ww1LCjH2VUQoJ6WOS3RJh+DXYBqw8j6BRua2Fezv2tUiSH/NynwxL+kXqkx29SX
+         iwgA==
+X-Gm-Message-State: ACrzQf1BjV23/kS2xlzWUL/1qKKfi4cB3vBlBqoBpdZfqJuJWLlV1Gt4
+        gJAnHdZOoEHt8iM3Qr48h+VDkA==
+X-Google-Smtp-Source: AMsMyM5ruebRsvODVR+Z/MGmOdF0Yq6HP2tQiwWDNCKT5n+gY73mAViYZmQmRLDXngcku4Y2YMW4sw==
+X-Received: by 2002:a63:5620:0:b0:429:9ad7:b4f2 with SMTP id k32-20020a635620000000b004299ad7b4f2mr4652001pgb.162.1663336921065;
+        Fri, 16 Sep 2022 07:02:01 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170902e84300b001782a0d3eeasm12283789plg.115.2022.09.16.07.01.50
+        by smtp.gmail.com with ESMTPSA id h16-20020a17090adb9000b001f5513f6fb9sm1575447pjv.14.2022.09.16.07.01.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Sep 2022 07:01:50 -0700 (PDT)
+        Fri, 16 Sep 2022 07:01:59 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Matthew Wilcox <willy@infradead.org>
 Cc:     Kees Cook <keescook@chromium.org>,
         Uladzislau Rezki <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
         Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH 2/3] x86/dumpstack: Inline copy_from_user_nmi()
-Date:   Fri, 16 Sep 2022 06:59:55 -0700
-Message-Id: <20220916135953.1320601-3-keescook@chromium.org>
+        x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: [PATCH 3/3] usercopy: Add find_vmap_area_try() to avoid deadlocks
+Date:   Fri, 16 Sep 2022 06:59:57 -0700
+Message-Id: <20220916135953.1320601-4-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220916135953.1320601-1-keescook@chromium.org>
 References: <20220916135953.1320601-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7115; h=from:subject; bh=8gMTRWBZ8nM6q5PrKv/eYu8tnhlf0ctojtdeDb/b28g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjJIFYRQM+ho9+tfYE5ObtAak9vEZzUoXIepUdlEy/ n60F5NiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYySBWAAKCRCJcvTf3G3AJrPEEA CV+i8PMBeljvVCbWOjzo0O8yVEVDMQHLo4B7+8/wsgNYYMB/fq75YZkKuDzrTG35dJfdWvVsg2fCNM 114mIw5Ei2//eqHU7CwtXjbMVzLvO7TwApHxiyyWaF++dznIsROespnr3K1qlvaNWSZA4ZnIMc4q/l kh7kHK0aK6cPOq6Ez6g0LurkZJnIIWJfIEGgHePNXZsuxrb6BHJd3+4I4FlFLczQVKg+yogkwHiW4f kMv0COhxGLK4A2ZQkr4kMNwWLf/UGPi3VgcZi58LD1eahPDndgLnqvejAftrMt9BtMaxFQq4D0iUjD snSoc/mREjzZRWeF7uDep3ELCApHKCpihtNAzfmXOe9u/891SPcRU4wL6ejzq8Fd9QwDlMJlK4LHwW tQdSWb0im3g3W9TrqiZmmPc3Z9psJMHkCUYfAsUPFViBLOZBx6A2YoyQABl/FIkUByFeZwhD7D4n0C Tint5FCLiBs+NnYnF0srIY1rviLutQHbw5DI44R4esft49ANQPPKIMVl0Ffiifuh+vsvgI0kfY2HfE Xn/7LZfid5nL+vJ7jQczCfYeD0+ymEdDAUXlX2tKu2mdEUWIxcrygvaz+WTAlscKXJ6I8jhfd5bOcU Dnh3Yy45Qg/e5Kivm6aoTKxPgqZ7qMTgHj24kaqtoKWMh30UK5y3pn/YucSA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2412; h=from:subject; bh=QZ6Z8NUryO+WXs11aot8e62UrW7zXJzgNjf9RA+g260=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjJIFZPv4/7ywbrNNcCVWPzvTkr6HcSFspF17/+HNL KUwNf5SJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYySBWQAKCRCJcvTf3G3AJreQEA CZOZ/BXt+5KgNX9VpTzYbr5l4Hxnm2HUfC9ouhb1vIQvd4GSBXv3YLWuN5JWTlnt8SLltG5TzQ64XT JEALXvYOE51UQlH9TVsscdQ3ed9BiHQDIwWmJzzb8FupJHdUxocPiKLXEOpny4QxCjZXqZR2QUT1KF DTpNiY57v/Pz0iYpqNmDaFW+w1DudEMX1EqIfAmBD5p7XvEzsCFup+suxrh7eK4e2e8g2uTAJR0h7u WP9ccsTCfqqYqwqFsP17hREGzgqIE+nOsnmROYXhji0C9r4zHVOECoU50SxlLx8ik1AnMvzL8j33K9 6ltpwFCWNfMC1OQuzaLA2VDK3Y7OTnO+wlfsC6SAl841m22iP54H3+oLBATH4pRw2zNDa4ONYSiZLt YeW8xd/Bi+7Zr6gh8awsBpUuwAJVK7JhrgxrW5qYMRh69Nm/Njoh7h2EGjpauv1+wRFh90ku7vksTu K4AsS0mwIvNqjgjXribZKXFdBWP92MljiXksXsWwJbV0rzAceFU17Luum+I8PVS5lbpkvG+wV0pKmH CPIZ5l7zEv8gc2aCt6sCCnn5XRcLR8kKdKsCgWSm3Dm7tYvK1JeVDZBHDNXYt4Yc8Rng1UaNDO8oZd YpM/VgautWGgX3BmxCNGNqgX8LQJh/gH0mqQssJCDW6F9B6dOUHtX9OyCbcQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
-designed to skip any checks where the length is known at compile time as
-a reasonable heuristic to avoid "likely known-good" cases. However, it can
-only do this when the copy_*_user() helpers are, themselves, inline too.
+The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
+more defensive against running from interrupt context. Use a best-effort
+check for VMAP areas when running in interrupt context
 
-Using find_vmap_area() requires taking a spinlock. The check_object_size()
-helper can call find_vmap_area() when the destination is in vmap memory.
-If show_regs() is called in interrupt context, it will attempt a call to
-copy_from_user_nmi(), which may call check_object_size() and then
-find_vmap_area(). If something in normal context happens to be in the
-middle of calling find_vmap_area() (with the spinlock held), the interrupt
-handler will hang forever.
-
-The copy_from_user_nmi() call is actually being called with a fixed-size
-length, so check_object_size() should never have been called in the
-first place. In order for check_object_size() to see that the length is
-a fixed size, inline copy_from_user_nmi(), as already done with all the
-other uaccess helpers.
-
-Reported-by: Yu Zhao <yuzhao@google.com>
-Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
-Reported-by: dev@der-flo.net
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Fixes: 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
-Cc: stable@vger.kernel.org
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Link: https://lore.kernel.org/linux-mm/YyQ2CSdIJdvQPSPO@casper.infradead.org
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Yu Zhao <yuzhao@google.com>
+Cc: dev@der-flo.net
+Cc: linux-mm@kvack.org
+Cc: linux-hardening@vger.kernel.org
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/uaccess.h |  2 --
- arch/x86/kernel/dumpstack.c    |  4 +--
- arch/x86/lib/Makefile          |  2 +-
- arch/x86/lib/usercopy.c        | 50 ----------------------------------
- include/linux/uaccess.h        | 41 ++++++++++++++++++++++++++++
- 5 files changed, 44 insertions(+), 55 deletions(-)
- delete mode 100644 arch/x86/lib/usercopy.c
+ include/linux/vmalloc.h |  1 +
+ mm/usercopy.c           | 11 ++++++++++-
+ mm/vmalloc.c            | 11 +++++++++++
+ 3 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index e9390eea861b..f47c0c752e7a 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -498,8 +498,6 @@ struct __large_struct { unsigned long buf[100]; };
- 		: : ltype(x), "m" (__m(addr))				\
- 		: : label)
+diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+index 096d48aa3437..c8a00f181a11 100644
+--- a/include/linux/vmalloc.h
++++ b/include/linux/vmalloc.h
+@@ -216,6 +216,7 @@ void free_vm_area(struct vm_struct *area);
+ extern struct vm_struct *remove_vm_area(const void *addr);
+ extern struct vm_struct *find_vm_area(const void *addr);
+ struct vmap_area *find_vmap_area(unsigned long addr);
++struct vmap_area *find_vmap_area_try(unsigned long addr);
  
--extern unsigned long
--copy_from_user_nmi(void *to, const void __user *from, unsigned long n);
- extern __must_check long
- strncpy_from_user(char *dst, const char __user *src, long count);
+ static inline bool is_vm_area_hugepages(const void *addr)
+ {
+diff --git a/mm/usercopy.c b/mm/usercopy.c
+index c1ee15a98633..4a371099ac64 100644
+--- a/mm/usercopy.c
++++ b/mm/usercopy.c
+@@ -173,7 +173,16 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
+ 	}
  
-diff --git a/arch/x86/kernel/dumpstack.c b/arch/x86/kernel/dumpstack.c
-index afae4dd77495..b59d59ef10d2 100644
---- a/arch/x86/kernel/dumpstack.c
-+++ b/arch/x86/kernel/dumpstack.c
-@@ -72,8 +72,8 @@ static void printk_stack_address(unsigned long address, int reliable,
- 	printk("%s %s%pBb\n", log_lvl, reliable ? "" : "? ", (void *)address);
+ 	if (is_vmalloc_addr(ptr)) {
+-		struct vmap_area *area = find_vmap_area(addr);
++		struct vmap_area *area;
++
++		if (unlikely(in_interrupt())) {
++			area = find_vmap_area_try(addr);
++			/* Give up under interrupt to avoid deadlocks. */
++			if (!area)
++				return;
++		} else {
++			area = find_vmap_area(addr);
++		}
+ 
+ 		if (!area)
+ 			usercopy_abort("vmalloc", "no area", to_user, 0, n);
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index dd6cdb201195..f14f1902c2f6 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1840,6 +1840,17 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+ 	return va;
  }
  
--static int copy_code(struct pt_regs *regs, u8 *buf, unsigned long src,
--		     unsigned int nbytes)
-+static __always_inline int
-+copy_code(struct pt_regs *regs, u8 *buf, unsigned long src, unsigned int nbytes)
- {
- 	if (!user_mode(regs))
- 		return copy_from_kernel_nofault(buf, (u8 *)src, nbytes);
-diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
-index f76747862bd2..aeb5cd634e27 100644
---- a/arch/x86/lib/Makefile
-+++ b/arch/x86/lib/Makefile
-@@ -42,7 +42,7 @@ clean-files := inat-tables.c
- obj-$(CONFIG_SMP) += msr-smp.o cache-smp.o
- 
- lib-y := delay.o misc.o cmdline.o cpu.o
--lib-y += usercopy_$(BITS).o usercopy.o getuser.o putuser.o
-+lib-y += usercopy_$(BITS).o getuser.o putuser.o
- lib-y += memcpy_$(BITS).o
- lib-y += pc-conf-reg.o
- lib-$(CONFIG_ARCH_HAS_COPY_MC) += copy_mc.o copy_mc_64.o
-diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
-deleted file mode 100644
-index 959489f2f814..000000000000
---- a/arch/x86/lib/usercopy.c
-+++ /dev/null
-@@ -1,50 +0,0 @@
--/*
-- * User address space access functions.
-- *
-- *  For licencing details see kernel-base/COPYING
-- */
--
--#include <linux/uaccess.h>
--#include <linux/export.h>
--
--/**
-- * copy_from_user_nmi - NMI safe copy from user
-- * @to:		Pointer to the destination buffer
-- * @from:	Pointer to a user space address of the current task
-- * @n:		Number of bytes to copy
-- *
-- * Returns: The number of not copied bytes. 0 is success, i.e. all bytes copied
-- *
-- * Contrary to other copy_from_user() variants this function can be called
-- * from NMI context. Despite the name it is not restricted to be called
-- * from NMI context. It is safe to be called from any other context as
-- * well. It disables pagefaults across the copy which means a fault will
-- * abort the copy.
-- *
-- * For NMI context invocations this relies on the nested NMI work to allow
-- * atomic faults from the NMI path; the nested NMI paths are careful to
-- * preserve CR2.
-- */
--unsigned long
--copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
--{
--	unsigned long ret;
--
--	if (!__access_ok(from, n))
--		return n;
--
--	if (!nmi_uaccess_okay())
--		return n;
--
--	/*
--	 * Even though this function is typically called from NMI/IRQ context
--	 * disable pagefaults so that its behaviour is consistent even when
--	 * called from other contexts.
--	 */
--	pagefault_disable();
--	ret = __copy_from_user_inatomic(to, from, n);
--	pagefault_enable();
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(copy_from_user_nmi);
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index 065e121d2a86..fee141ed8f95 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -273,6 +273,47 @@ __copy_from_user_inatomic_nocache(void *to, const void __user *from,
- 
- #endif		/* ARCH_HAS_NOCACHE_UACCESS */
- 
-+/**
-+ * copy_from_user_nmi - NMI safe copy from user
-+ * @to:		Pointer to the destination buffer
-+ * @from:	Pointer to a user space address of the current task
-+ * @n:		Number of bytes to copy
-+ *
-+ * Returns: The number of not copied bytes. 0 is success, i.e. all bytes copied
-+ *
-+ * Contrary to other copy_from_user() variants this function can be called
-+ * from NMI context. Despite the name it is not restricted to be called
-+ * from NMI context. It is safe to be called from any other context as
-+ * well. It disables pagefaults across the copy which means a fault will
-+ * abort the copy.
-+ *
-+ * For NMI context invocations this relies on the nested NMI work to allow
-+ * atomic faults from the NMI path; the nested NMI paths are careful to
-+ * preserve CR2.
-+ */
-+static __always_inline unsigned long
-+copy_from_user_nmi(void *to, const void __user *from, const unsigned long n)
++struct vmap_area *find_vmap_area_try(unsigned long addr)
 +{
-+	unsigned long ret;
++	struct vmap_area *va = NULL;
 +
-+	if (!__access_ok(from, n))
-+		return n;
-+
-+	if (!nmi_uaccess_okay())
-+		return n;
-+
-+	/*
-+	 * Even though this function is typically called from NMI/IRQ context
-+	 * disable pagefaults so that its behaviour is consistent even when
-+	 * called from other contexts.
-+	 */
-+	pagefault_disable();
-+	ret = __copy_from_user_inatomic(to, from, n);
-+	pagefault_enable();
-+
-+	return ret;
++	if (spin_trylock(&vmap_area_lock)) {
++		va = __find_vmap_area(addr, &vmap_area_root);
++		spin_unlock(&vmap_area_lock);
++	}
++	return va;
 +}
 +
- extern __must_check int check_zeroed_user(const void __user *from, size_t size);
+ /*** Per cpu kva allocator ***/
  
- /**
+ /*
 -- 
 2.34.1
 
