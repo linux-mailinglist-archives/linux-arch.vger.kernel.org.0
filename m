@@ -2,124 +2,96 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412B95BAF94
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 16:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1752C5BAFD6
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 17:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiIPOqO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Sep 2022 10:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49490 "EHLO
+        id S230447AbiIPPE4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Sep 2022 11:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiIPOqN (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 10:46:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E05A0631;
-        Fri, 16 Sep 2022 07:46:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=59xaeeSnQHcY+3RA+T0HPunpoN4EGbyW+imfmiP5ukU=; b=QY7ks+FCtzUGLIAOIRCBGs9Kph
-        ns2ivjk1NKYvhbAyO0uT+7YiSglm/Jy9Nl5nKZpUvmou6rxnTO71zRMODh3E5GLlEeqCBCR1WqFaq
-        r+aOFdqPXcN1fA/Hgmxr352j6Uf3ERgKNdAb90AdMKu6awfJtnwbzRPlTOLHrQgybZWJSXRXHaLVy
-        h21nHAynsNuipU9ibOtst3QGn4CyGq8ecCSBVFvgpkrvt4RfVsrhvnbpx91VN+KhZ1peoG9kSE/S6
-        abfIWFT5dG7axVdTvMaLUox9FGLivdb5c2bcQxzuox1EYiYCD0MPRAh2Y2BWl+aHDgyOOnom4Xku5
-        k5NCQUrQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oZCbX-002ILG-1V; Fri, 16 Sep 2022 14:46:07 +0000
-Date:   Fri, 16 Sep 2022 15:46:07 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/3] usercopy: Add find_vmap_area_try() to avoid deadlocks
-Message-ID: <YySML2HfqaE/wXBU@casper.infradead.org>
-References: <20220916135953.1320601-1-keescook@chromium.org>
- <20220916135953.1320601-4-keescook@chromium.org>
+        with ESMTP id S230329AbiIPPEy (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 11:04:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B542C3120B;
+        Fri, 16 Sep 2022 08:04:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DF3BB827CD;
+        Fri, 16 Sep 2022 15:04:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E369C433D6;
+        Fri, 16 Sep 2022 15:04:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663340690;
+        bh=M+DmXxb8Nav4aJ99WqznXuiR7oCNvzYJ85lQmDQ9Izg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XpPP02ruXeMlyDqw9AU8lVSQByUbs6eMh26MJMnFahTJwObYyJr4/wuQongHFtH68
+         kY1PB9jQ4p8YUKFug0YwKGd0Nq49sgRYHutVZlV6WhV9hmfNSQgkAfGW3OkeW1YL1S
+         LPXbCmo6iYjLlnLcxqZicdiT6SvqQX4xlDRvHL5OufpTXHJtDEL17fIsM29fRhHWib
+         3giP4eSFRmfmNCOl7aeZAZwJsv3xduvoCB56kQLsPx3g39oXiAHAqLqu4Py2DAZh+k
+         l6TPHkf4SrjQUSHLUishzlJ6fUJYW+3fY2dNgqjGBFZF4kHNscazVjfQBhLB8p3xj7
+         yuv1p3lZXn1Sw==
+Received: by mail-vs1-f42.google.com with SMTP id q26so17512805vsr.7;
+        Fri, 16 Sep 2022 08:04:50 -0700 (PDT)
+X-Gm-Message-State: ACrzQf26xwbi9FiQaqLifYRCR/5HqVNlHGbWh6BQjBCsLXLR5+je/koE
+        /9R0J9RH498pUz1taL+Z1F2lmtx1bvDDY/66X0Y=
+X-Google-Smtp-Source: AMsMyM4faniycC3kJf+HRla45fniBnoEma4pmEUEn4z1nLlUd+7aVGjIUb5s2RMrkSft1plARpEZRbhzST5q09/ceFQ=
+X-Received: by 2002:a05:6102:2755:b0:398:4f71:86e with SMTP id
+ p21-20020a056102275500b003984f71086emr2486151vsu.84.1663340689313; Fri, 16
+ Sep 2022 08:04:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220916135953.1320601-4-keescook@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220818040413.2865849-1-chenhuacai@loongson.cn>
+ <CAAhV-H7fiyq7tKJw3CsYDBWjJu89oBJqgNZLxgd+UQE=+X6Czw@mail.gmail.com> <e5433179-c300-482e-9dad-b1b15c56970a@www.fastmail.com>
+In-Reply-To: <e5433179-c300-482e-9dad-b1b15c56970a@www.fastmail.com>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 16 Sep 2022 23:04:37 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4POp1tgDXOck5nLoi7oQ5hAU8jwHg+AbUdX0zUhjqsoQ@mail.gmail.com>
+Message-ID: <CAAhV-H4POp1tgDXOck5nLoi7oQ5hAU8jwHg+AbUdX0zUhjqsoQ@mail.gmail.com>
+Subject: Re: [PATCH] Input: i8042 - Add PNP checking hook for Loongson
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        loongarch@lists.linux.dev, Linux-Arch <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>, guoren <guoren@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 06:59:57AM -0700, Kees Cook wrote:
-> The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
-> more defensive against running from interrupt context. Use a best-effort
-> check for VMAP areas when running in interrupt context
+Hi, Arnd,
 
-I had something more like this in mind:
+On Fri, Sep 16, 2022 at 6:16 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Sep 16, 2022, at 11:53 AM, Huacai Chen wrote:
+> > Ping?
+> >
+> > On Thu, Aug 18, 2022 at 12:04 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> >>
+> >> Add PNP checking related functions for Loongson, so that i8042 driver
+> >> can work well under the ACPI firmware with PNP typed keyboard and mouse
+> >> configured in DSDT.
+> >>
+> >> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> >> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> >> ---
+> >>  drivers/input/serio/i8042-loongsonio.h | 330 +++++++++++++++++++++++++
+> >>  drivers/input/serio/i8042.h            |   2 +
+> >>  2 files changed, 332 insertions(+)
+>
+> This looks like you are just duplicating code from
+> i8042-x86ia64io.h. Can't you just use that version
+> directly?
+OK, I will rename i8042-x86ia64io.h to i8042-acpiio.h and use it for LoongArch.
 
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 096d48aa3437..2b7c52e76856 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -215,7 +215,7 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
- void free_vm_area(struct vm_struct *area);
- extern struct vm_struct *remove_vm_area(const void *addr);
- extern struct vm_struct *find_vm_area(const void *addr);
--struct vmap_area *find_vmap_area(unsigned long addr);
-+struct vmap_area *find_vmap_area_try(unsigned long addr);
- 
- static inline bool is_vm_area_hugepages(const void *addr)
- {
-diff --git a/mm/usercopy.c b/mm/usercopy.c
-index c1ee15a98633..e0fb605c1b38 100644
---- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -173,7 +173,11 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
- 	}
- 
- 	if (is_vmalloc_addr(ptr)) {
--		struct vmap_area *area = find_vmap_area(addr);
-+		struct vmap_area *area = find_vmap_area_try(addr);
-+
-+		/* We may be in NMI context */
-+		if (area == ERR_PTR(-EAGAIN))
-+			return;
- 
- 		if (!area)
- 			usercopy_abort("vmalloc", "no area", to_user, 0, n);
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index dd6cdb201195..2ea76cb56d4b 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1829,7 +1829,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
- 	free_vmap_area_noflush(va);
- }
- 
--struct vmap_area *find_vmap_area(unsigned long addr)
-+static struct vmap_area *find_vmap_area(unsigned long addr)
- {
- 	struct vmap_area *va;
- 
-@@ -1840,6 +1840,18 @@ struct vmap_area *find_vmap_area(unsigned long addr)
- 	return va;
- }
- 
-+struct vmap_area *find_vmap_area_try(unsigned long addr)
-+{
-+	struct vmap_area *va;
-+
-+	if (!spin_lock(&vmap_area_lock))
-+		return ERR_PTR(-EAGAIN);
-+	va = __find_vmap_area(addr, &vmap_area_root);
-+	spin_unlock(&vmap_area_lock);
-+
-+	return va;
-+}
-+
- /*** Per cpu kva allocator ***/
- 
- /*
+Huacai
+>
+>       Arnd
