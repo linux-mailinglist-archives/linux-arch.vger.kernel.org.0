@@ -2,174 +2,166 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47DE5BB2B1
-	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 21:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268335BB2E1
+	for <lists+linux-arch@lfdr.de>; Fri, 16 Sep 2022 21:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiIPTPh (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Sep 2022 15:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
+        id S229885AbiIPTkk (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Sep 2022 15:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiIPTPg (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 15:15:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048ACAB071;
-        Fri, 16 Sep 2022 12:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ypkdyUP1JcI6s7cVs4ktcAodUubTPEOwr3HQWpEnFKY=; b=Pw3hxWjjBMOCUduKA/HxQ14yPx
-        EtpjxuqhNVlO7xUAG1GiuC9mpTmG/QTVPro7HxagyGxN9VkBlmLvx7NMHh9wSumjLFYepfiELs9Cd
-        L/F8LVbEUlI/SOg273mukg4YjcT9UvosbxETburGeC8B4GIgZIn7VUaChHcA6m/iOWjes4AkxKI+U
-        bimitz6WRDlt12TsreTRphNaObbIwWrzmCYNmcmsdtqtqwKy36NMaDH9g55Q+UE+jHuQbArDIH+mt
-        EHMkZ3fvkf3sOqfueGzEP/a22mk7pmGwjlYP7tZ7dsmsMc08W0SHQAwpqWR80JJbmUFra+g5P6dGf
-        gh9aVtwA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oZGo8-002Xle-ME; Fri, 16 Sep 2022 19:15:24 +0000
-Date:   Fri, 16 Sep 2022 20:15:24 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/3] usercopy: Add find_vmap_area_try() to avoid deadlocks
-Message-ID: <YyTLTBM4OC6/RnjG@casper.infradead.org>
-References: <20220916135953.1320601-1-keescook@chromium.org>
- <20220916135953.1320601-4-keescook@chromium.org>
- <YySML2HfqaE/wXBU@casper.infradead.org>
- <202209160805.CA47B2D673@keescook>
+        with ESMTP id S229507AbiIPTkj (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 15:40:39 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7531251A14
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 12:40:38 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q3so22012584pjg.3
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 12:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=osandov-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vH9TYUFkIGeMDXb5QksQYPq2h16Z8OyKOOQMeyEvl7I=;
+        b=yQYnZNYXV2FOBIibg997hqy6cC66Xcky9Sj1dsdt9zQ2ExgJBmCw7m7HEVew01OMsq
+         F5Syd9PMYleHHa8qZTq3Fm9U8YYRdzBT6XwXkLH6AkBSRD4kYLWXSbmA+XE0Ijd7Y02R
+         fywzlhmHsq9NLj5EqW7MBVPTfeuC0m1PXQXy01iqcDPQ5fpf2SfP9VjvqQG43JPfEMzd
+         THexk1qxiNY3EdQ9PhS20kfWyFX+ybdJ8u7ZRMlpfyWhiuQGOrEOcL0pCG6Ph5f1NyCE
+         rYM8RxnObeweJJ5wHVpXvCjsOKxxl4A9iZ4d9eqpD/xkB/ezV5oRZDFpQnnhCdNgRhRC
+         Uehw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=vH9TYUFkIGeMDXb5QksQYPq2h16Z8OyKOOQMeyEvl7I=;
+        b=odGU0cjtm4p10jdMPiCN8hB03rYH3tt07Q/cxBer0pjFIq0+Qr/dKF0v7+HDbxyRxg
+         r1DV9Q+ze+zXqBkrh6NKsWK1RRmLDU/+/exwXNFRN37mQ8l25J3oUE1EFEoGrEVHScvY
+         txZGXyCkcXYHTus0RUHMbpAMNi2cjSGjsnc4YV3Z9X+6KP5f1bCtOLlI0QlnEHU04b+j
+         5T2jeK0fhJZ+0cna7yKVEiilxYOOdwkYhraU2yfsgbxoLCBOEhWhS8aBeX6wwBkn4YMJ
+         Hy+JILIF5t+GR4F6/FClE1t6DsmOixKruTDZiA6QUSaZanMKO0G0K/QliL/7ZY/VJZdH
+         V/TQ==
+X-Gm-Message-State: ACrzQf0R1eIo0yeLdxNsVO0n95owH0iu5dDWIMfHefAI5LZ8UN0pKHB1
+        nle/PQXAWicSvLJpH+WGmATzGA==
+X-Google-Smtp-Source: AMsMyM7bBzN5wKpJ4/hmwedRCv3ia/zW3TzU2MrSu2w0889ImAiNQlhDbVHcvxIyYWbaKNLMT5PpHA==
+X-Received: by 2002:a17:90b:4c0c:b0:203:1407:809c with SMTP id na12-20020a17090b4c0c00b002031407809cmr7126292pjb.193.1663357237910;
+        Fri, 16 Sep 2022 12:40:37 -0700 (PDT)
+Received: from relinquished.localdomain ([2620:10d:c090:500::3:3c76])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170903234300b001780a528540sm15448988plh.93.2022.09.16.12.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Sep 2022 12:40:37 -0700 (PDT)
+Date:   Fri, 16 Sep 2022 12:40:35 -0700
+From:   Omar Sandoval <osandov@osandov.com>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 2/2] Discard .note.gnu.property sections in generic NOTES
+Message-ID: <YyTRM3/9Mm+b+M8N@relinquished.localdomain>
+References: <20200428132105.170886-1-hjl.tools@gmail.com>
+ <20200428132105.170886-2-hjl.tools@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202209160805.CA47B2D673@keescook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20200428132105.170886-2-hjl.tools@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 08:09:16AM -0700, Kees Cook wrote:
-> On Fri, Sep 16, 2022 at 03:46:07PM +0100, Matthew Wilcox wrote:
-> > On Fri, Sep 16, 2022 at 06:59:57AM -0700, Kees Cook wrote:
-> > > The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
-> > > more defensive against running from interrupt context. Use a best-effort
-> > > check for VMAP areas when running in interrupt context
-> > 
-> > I had something more like this in mind:
+On Tue, Apr 28, 2020 at 06:21:05AM -0700, H.J. Lu wrote:
+> With the command-line option, -mx86-used-note=yes, the x86 assembler
+> in binutils 2.32 and above generates a program property note in a note
+> section, .note.gnu.property, to encode used x86 ISAs and features.  But
+> kernel linker script only contains a single NOTE segment:
 > 
-> Yeah, I like -EAGAIN. I'd like to keep the interrupt test to choose lock
-> vs trylock, otherwise it's trivial to bypass the hardening test by having
-> all the other CPUs beating on the spinlock.
+> PHDRS {
+>  text PT_LOAD FLAGS(5);
+>  data PT_LOAD FLAGS(6);
+>  percpu PT_LOAD FLAGS(6);
+>  init PT_LOAD FLAGS(7);
+>  note PT_NOTE FLAGS(0);
+> }
+> SECTIONS
+> {
+> ...
+>  .notes : AT(ADDR(.notes) - 0xffffffff80000000) { __start_notes = .; KEEP(*(.not
+> e.*)) __stop_notes = .; } :text :note
+> ...
+> }
+> 
+> The NOTE segment generated by kernel linker script is aligned to 4 bytes.
+> But .note.gnu.property section must be aligned to 8 bytes on x86-64 and
+> we get
+> 
+> [hjl@gnu-skx-1 linux]$ readelf -n vmlinux
+> 
+> Displaying notes found in: .notes
+>   Owner                Data size Description
+>   Xen                  0x00000006 Unknown note type: (0x00000006)
+>    description data: 6c 69 6e 75 78 00
+>   Xen                  0x00000004 Unknown note type: (0x00000007)
+>    description data: 32 2e 36 00
+>   xen-3.0              0x00000005 Unknown note type: (0x006e6558)
+>    description data: 08 00 00 00 03
+> readelf: Warning: note with invalid namesz and/or descsz found at offset 0x50
+> readelf: Warning:  type: 0xffffffff, namesize: 0x006e6558, descsize:
+> 0x80000000, alignment: 8
+> [hjl@gnu-skx-1 linux]$
+> 
+> Since note.gnu.property section in kernel image is never used, this patch
+> discards .note.gnu.property sections in kernel linker script by adding
+> 
+> /DISCARD/ : {
+>   *(.note.gnu.property)
+> }
+> 
+> before kernel NOTE segment in generic NOTES.
+> 
+> Signed-off-by: H.J. Lu <hjl.tools@gmail.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index 71e387a5fe90..95cd678428f4 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -833,7 +833,14 @@
+>  #define TRACEDATA
+>  #endif
+>  
+> +/*
+> + * Discard .note.gnu.property sections which are unused and have
+> + * different alignment requirement from kernel note sections.
+> + */
+>  #define NOTES								\
+> +	/DISCARD/ : {							\
+> +		*(.note.gnu.property)					\
+> +	}								\
+>  	.notes : AT(ADDR(.notes) - LOAD_OFFSET) {			\
+>  		__start_notes = .;					\
+>  		KEEP(*(.note.*))					\
+> -- 
+> 2.25.4
+> 
 
-I was thinking about this:
+Hi, H.J.,
 
-+++ b/mm/vmalloc.c
-@@ -1844,12 +1844,19 @@
- {
- 	struct vmap_area *va;
+I recently ran into this same .notes corruption when building kernels on
+Arch Linux.
 
--	if (!spin_lock(&vmap_area_lock))
--		return ERR_PTR(-EAGAIN);
-+	/*
-+	 * It's safe to walk the rbtree under the RCU lock, but we may
-+	 * incorrectly find no vmap_area if the tree is being modified.
-+	 */
-+	rcu_read_lock();
- 	va = __find_vmap_area(addr, &vmap_area_root);
--	spin_unlock(&vmap_area_lock);
-+	if (!va && in_interrupt())
-+		va = ERR_PTR(-EAGAIN);
-+	rcu_read_unlock();
+What ended up happening to this patch? It doesn't appear to have been
+merged, and I couldn't find any further discussion about it. I'm happy
+to resend it for you if you need a hand.
 
--	return va;
-+	if (va)
-+		return va;
-+	return find_vmap_area(addr);
- }
-
- /*** Per cpu kva allocator ***/
-
-... but I don't think that works since vmap_areas aren't freed by RCU,
-and I think they're reused without going through an RCU cycle.
-
-So here's attempt #4, which actually compiles, and is, I think, what you
-had in mind.
-
-diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-index 096d48aa3437..2b7c52e76856 100644
---- a/include/linux/vmalloc.h
-+++ b/include/linux/vmalloc.h
-@@ -215,7 +215,7 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
- void free_vm_area(struct vm_struct *area);
- extern struct vm_struct *remove_vm_area(const void *addr);
- extern struct vm_struct *find_vm_area(const void *addr);
--struct vmap_area *find_vmap_area(unsigned long addr);
-+struct vmap_area *find_vmap_area_try(unsigned long addr);
- 
- static inline bool is_vm_area_hugepages(const void *addr)
- {
-diff --git a/mm/usercopy.c b/mm/usercopy.c
-index c1ee15a98633..e0fb605c1b38 100644
---- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -173,7 +173,11 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
- 	}
- 
- 	if (is_vmalloc_addr(ptr)) {
--		struct vmap_area *area = find_vmap_area(addr);
-+		struct vmap_area *area = find_vmap_area_try(addr);
-+
-+		/* We may be in NMI context */
-+		if (area == ERR_PTR(-EAGAIN))
-+			return;
- 
- 		if (!area)
- 			usercopy_abort("vmalloc", "no area", to_user, 0, n);
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index dd6cdb201195..c47b3b5d1c2d 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -1829,7 +1829,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
- 	free_vmap_area_noflush(va);
- }
- 
--struct vmap_area *find_vmap_area(unsigned long addr)
-+static struct vmap_area *find_vmap_area(unsigned long addr)
- {
- 	struct vmap_area *va;
- 
-@@ -1840,6 +1840,26 @@ struct vmap_area *find_vmap_area(unsigned long addr)
- 	return va;
- }
- 
-+/*
-+ * The vmap_area_lock is not interrupt-safe, and we can end up here from
-+ * NMI context, so it's not worth even trying to make it IRQ-safe.
-+ */
-+struct vmap_area *find_vmap_area_try(unsigned long addr)
-+{
-+	struct vmap_area *va;
-+
-+	if (in_interrupt()) {
-+		if (!spin_trylock(&vmap_area_lock))
-+			return ERR_PTR(-EAGAIN);
-+	} else {
-+		spin_lock(&vmap_area_lock);
-+	}
-+	va = __find_vmap_area(addr, &vmap_area_root);
-+	spin_unlock(&vmap_area_lock);
-+
-+	return va;
-+}
-+
- /*** Per cpu kva allocator ***/
- 
- /*
+Thanks,
+Omar
