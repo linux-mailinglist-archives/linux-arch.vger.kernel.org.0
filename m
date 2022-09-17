@@ -2,264 +2,138 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86335BB7A1
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Sep 2022 12:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8854F5BB7B8
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Sep 2022 12:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbiIQKAQ (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 17 Sep 2022 06:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S229509AbiIQKXB (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Sep 2022 06:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiIQKAP (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Sep 2022 06:00:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DE72A97C
-        for <linux-arch@vger.kernel.org>; Sat, 17 Sep 2022 03:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1663408813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SCkLSP0E4yxXlnFgQrKphv334iYRQIwNmCq8vrighrE=;
-        b=Du853I1sULCtJ/dKA4KJJWaBrpe8cJ2x+DiXaKHIkq0KtP6W4krzQYsMN0eSlAUi87wA1c
-        xx0c4fN706OUu318+IPeRjgie4Q9vkh84H2w5Ms5Da+lbnO3EguUx+m6xl9VHdjHBm2R53
-        AFn6QAgvr/apnuAyVBqwyDQZ4SMCohE=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-397-f_rUIJmlN6OoYYwHIXc49g-1; Sat, 17 Sep 2022 06:00:11 -0400
-X-MC-Unique: f_rUIJmlN6OoYYwHIXc49g-1
-Received: by mail-ed1-f69.google.com with SMTP id w20-20020a05640234d400b00450f24c8ca6so16614935edc.13
-        for <linux-arch@vger.kernel.org>; Sat, 17 Sep 2022 03:00:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=SCkLSP0E4yxXlnFgQrKphv334iYRQIwNmCq8vrighrE=;
-        b=MWKovnCAKwDwe+ECSZz0V49QyL3W+ko4T0KcN+u0cjXMVbksfPgiFZX/CSKR67WpkD
-         PIybnLy5bzZ4/M/hMeLEajm2MTakqUGIcr35ishVDAzuT8/nDPjL1PQelzzuiX4QsE/1
-         8P7cv3Vfzii1Hy3NP72qziPHBd9bw3N1TWApwLnCUEqkl+JdFSdXytxnbScXjRYFFfSC
-         pkRI34dOJ2W6Vv5atwiOLcZnlq/CInY82hCAqyKzja6EVKv3uM+O17PYO8HpDSkjf3/Z
-         HWdvEr8uOjywhpSpxecBTsn84cIDp6EUFpDZgoGafk7v1AbnkoI1OHnKj/sf3V8rKgwP
-         s9Kw==
-X-Gm-Message-State: ACrzQf0QjATki+Nlv+OPBDX97tLEc/NKvuxVzKhdcZLkeLc4SteLbDAz
-        4l8B/9hQBPDUko8llzm7diC2p/h3UIC0E94/7eBtOhDqhszdH0DDdjdqmXP9q5MkEtykJjQo5Tn
-        UejwD8fnOfk4GIkqOib074g==
-X-Received: by 2002:aa7:d315:0:b0:44e:6647:9dae with SMTP id p21-20020aa7d315000000b0044e66479daemr7168780edq.280.1663408810457;
-        Sat, 17 Sep 2022 03:00:10 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4T08btJRM8tjbkuSclLPEK5zBDHbsD6cG4vTOxt5rh4g4XMjMbhikELcnrODmfgTROgquMkw==
-X-Received: by 2002:aa7:d315:0:b0:44e:6647:9dae with SMTP id p21-20020aa7d315000000b0044e66479daemr7168764edq.280.1663408810249;
-        Sat, 17 Sep 2022 03:00:10 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id ky17-20020a170907779100b0073bf84be798sm11985183ejc.142.2022.09.17.03.00.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Sep 2022 03:00:09 -0700 (PDT)
-Message-ID: <80b46671-6d01-f2a2-7b9b-cb4c27cc87c6@redhat.com>
-Date:   Sat, 17 Sep 2022 12:00:09 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH V3] LoongArch: Add ACPI-based generic laptop driver
-Content-Language: en-US
+        with ESMTP id S229436AbiIQKXA (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Sep 2022 06:23:00 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491D337194;
+        Sat, 17 Sep 2022 03:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1663410179; x=1694946179;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7Uz6iGVEKvXwwNJYBLPjkXa0o0TOzOGbJsUCeZnGgc0=;
+  b=e5ZZg1yJzY6EzpmmsYRUcRnhKGWbDl32o7iVb8burrRD2hT4hhJbksgi
+   p4AT5JjLe+FtQrhz3cog4/b+OeV/Lz7W8UNifcCwJ7RDOIMz713DP6uxD
+   GkJpCWOAK9Rv6IAPB6IAIpP4tZ6xdUUhOfBx1IyID7nlIiNE3PXb/GP2J
+   r5PULWs8b+esvDlJ4lZVkbtWTICIj269tgIASKP5+GvIsqklf2cQTzGYR
+   wbgXe/S2C7G4rqTpH4GiBoySu0wcuteXvuZbehU05q1PN1xx+Esdadr4U
+   aCdApTqZsH0UfCMYqsjVlr/w60cyvhPUVPm9+bvBU9LKrUQg781KisO0X
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10472"; a="325422157"
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="325422157"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2022 03:22:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,323,1654585200"; 
+   d="scan'208";a="651135444"
+Received: from lkp-server01.sh.intel.com (HELO c0a60f19fe7e) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 17 Sep 2022 03:22:53 -0700
+Received: from kbuild by c0a60f19fe7e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oZUyK-0000EY-13;
+        Sat, 17 Sep 2022 10:22:52 +0000
+Date:   Sat, 17 Sep 2022 18:22:26 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Huacai Chen <chenhuacai@loongson.cn>,
         Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-acpi@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20220917065250.1671718-1-chenhuacai@loongson.cn>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220917065250.1671718-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     kbuild-all@lists.01.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Refactor cache probe and flush methods
+Message-ID: <202209171822.T8lQdBUd-lkp@intel.com>
+References: <20220917065550.1681906-1-chenhuacai@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220917065550.1681906-1-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi again,
+Hi Huacai,
 
-On 9/17/22 08:52, Huacai Chen wrote:
-> From: Jianmin Lv <lvjianmin@loongson.cn>
-> 
-> This add ACPI-based generic laptop driver for Loongson-3. Some of the
-> codes are derived from drivers/platform/x86/thinkpad_acpi.c.
-> 
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> V2: Fix problems pointed out by Arnd.
-> V3: Use platform driver instead of acpi driver.
+I love your patch! Yet something to improve:
 
-A couple more notes which I noticed just after sending my previous email:
+[auto build test ERROR on soc/for-next]
+[also build test ERROR on linus/master v6.0-rc5 next-20220916]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +#define ACPI_LAPTOP_VERSION "1.0"
-> +#define ACPI_LAPTOP_NAME "loongson-laptop"
-> +#define ACPI_LAPTOP_DESC "Loongson Laptop/all-in-one ACPI Driver"
-> +#define ACPI_LAPTOP_FILE ACPI_LAPTOP_NAME "_acpi"
-> +#define ACPI_LAPTOP_DRVR_NAME ACPI_LAPTOP_FILE
-> +#define ACPI_LAPTOP_ACPI_EVENT_PREFIX "loongson"
+url:    https://github.com/intel-lab-lkp/linux/commits/Huacai-Chen/LoongArch-Refactor-cache-probe-and-flush-methods/20220917-145926
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+config: loongarch-randconfig-r023-20220916 (https://download.01.org/0day-ci/archive/20220917/202209171822.T8lQdBUd-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/d3b59542d7583a2251e0a1f69331e57565de0f51
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Huacai-Chen/LoongArch-Refactor-cache-probe-and-flush-methods/20220917-145926
+        git checkout d3b59542d7583a2251e0a1f69331e57565de0f51
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash
 
-Do you really need / use all these defines ?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> +static const struct acpi_device_id loongson_htk_device_ids[] = {
-> +	{LOONGSON_ACPI_HKEY_HID, 0},
-> +	{"", 0},
-> +};
+All errors (new ones prefixed by >>):
 
-You will want to put a:
+   arch/loongarch/mm/cache.c:28:6: warning: no previous prototype for 'cache_error_setup' [-Wmissing-prototypes]
+      28 | void cache_error_setup(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/loongarch/mm/cache.c: In function 'flush_cache_leaf':
+>> arch/loongarch/mm/cache.c:62:34: error: 'NODE_ADDRSPACE_SHIFT' undeclared (first use in this function)
+      62 |                 addr += (1ULL << NODE_ADDRSPACE_SHIFT);
+         |                                  ^~~~~~~~~~~~~~~~~~~~
+   arch/loongarch/mm/cache.c:62:34: note: each undeclared identifier is reported only once for each function it appears in
 
-MODULE_DEVICE_TABLE(acpi, loongson_htk_device_ids);
 
-line here for proper automatic loading when build as a module.
+vim +/NODE_ADDRSPACE_SHIFT +62 arch/loongarch/mm/cache.c
 
-> +
-> +static struct platform_driver loongson_hotkey_driver = {
-> +	.probe		= loongson_hotkey_probe,
-> +	.driver		= {
-> +		.name	= "loongson-hotkey",
-> +		.owner	= THIS_MODULE,
-> +		.pm	= pm_ptr(&loongson_hotkey_pm),
-> +		.acpi_match_table = ACPI_PTR(loongson_htk_device_ids),
+    43	
+    44	static void flush_cache_leaf(unsigned int leaf)
+    45	{
+    46		int i, j, nr_nodes;
+    47		uint64_t addr = CSR_DMW0_BASE;
+    48		struct cache_desc *cdesc = current_cpu_data.cache_leaves + leaf;
+    49	
+    50		nr_nodes = cache_private(cdesc) ? 1 : loongson_sysconf.nr_nodes;
+    51	
+    52		do {
+    53			for (i = 0; i < cdesc->sets; i++) {
+    54				for (j = 0; j < cdesc->ways; j++) {
+    55					flush_cache_line(leaf, addr);
+    56					addr++;
+    57				}
+    58	
+    59				addr -= cdesc->ways;
+    60				addr += cdesc->linesz;
+    61			}
+  > 62			addr += (1ULL << NODE_ADDRSPACE_SHIFT);
+    63		} while (--nr_nodes > 0);
+    64	}
+    65	
 
-Since you unconditionally define loongson_htk_device_ids above;
-and since you have a "depends on ACPI" in your Kconfig, you can drop
-the ACPI_PTR() here, just use loongson_htk_device_ids directly.
-
-> +static int __init generic_acpi_laptop_init(void)
-> +{
-> +	bool ec_found;
-> +	int i, ret, status;
-> +
-> +	if (acpi_disabled)
-> +		return -ENODEV;
-> +
-> +	/* The EC device is required */
-> +	ec_found = acpi_dev_found(LOONGSON_ACPI_EC_HID);
-> +	if (!ec_found)
-> +		return -ENODEV;
-> +
-> +	/* Enable SCI for EC */
-> +	acpi_write_bit_register(ACPI_BITREG_SCI_ENABLE, 1);
-> +
-> +	generic_inputdev = input_allocate_device();
-> +	if (!generic_inputdev) {
-> +		pr_err("Unable to allocate input device\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	/* Prepare input device, but don't register */
-> +	generic_inputdev->name =
-> +		"Loongson Generic Laptop/All-in-one Extra Buttons";
-> +	generic_inputdev->phys = ACPI_LAPTOP_DRVR_NAME "/input0";
-> +	generic_inputdev->id.bustype = BUS_HOST;
-> +	generic_inputdev->dev.parent = NULL;
-> +
-> +	/* Init subdrivers */
-> +	for (i = 0; i < ARRAY_SIZE(generic_sub_drivers); i++) {
-> +		ret = generic_subdriver_init(&generic_sub_drivers[i]);
-> +		if (ret < 0) {
-> +			input_free_device(generic_inputdev);
-> +			return ret;
-> +		}
-> +	}
-
-I see above that you have only 1 subdriver. Do you expect there to be
-more in the future ?  If not then it would be better to just completely
-remove the subdriver abstraction and simply do everything directly
-from the main probe/remove functions (see below).
-
-> +
-> +	ret = input_register_device(generic_inputdev);
-> +	if (ret < 0) {
-> +		input_free_device(generic_inputdev);
-> +		pr_err("Unable to register input device\n");
-> +		return ret;
-> +	}
-> +
-> +	input_device_registered = 1;
-> +
-> +	if (acpi_evalf(hotkey_handle, &status, "ECBG", "d")) {
-> +		pr_info("Loongson Laptop used, init brightness is 0x%x\n", status);
-> +		ret = laptop_backlight_register();
-> +		if (ret < 0)
-> +			pr_err("Loongson Laptop: laptop-backlight device register failed\n");
-> +	}
-> +
-> +	return 0;
-> +}
-
-All of generic_acpi_laptop_init should be done from loongson_hotkey_probe()
-and instead of using global variables all data you need should be in a struct
-and that struct should be alloc-ed from loongson_hotkey_probe() and then tied
-to the platform_device using platform_set_drvdata() and retreived on remove
-using platform_get_drvdata() and on suspend/resume using dev_get_drvdata().
-
-> +static void __exit generic_acpi_laptop_exit(void)
-> +{
-> +	if (generic_inputdev) {
-> +		if (input_device_registered)
-> +			input_unregister_device(generic_inputdev);
-> +		else
-> +			input_free_device(generic_inputdev);
-> +	}
-> +}
-
-This should be done from a remove function which then gets set as the
-remove callback in loongson_hotkey_driver.
-
-I see at a quick glance that you based this driver on thinkpad_acpi.c
-but that is a very old driver which does a bunch of things in old,
-deprecated ways which are hard to fix for userspace API compatibility
-reasons.
-
-Now a days we try to avoid global variables and also custom 
-module_init()/module_exit() functions.
-
-> +module_init(generic_acpi_laptop_init);
-> +module_exit(generic_acpi_laptop_exit);
-
-Once the work of these 2 functions is done from loongson_hotkey_driver.probe /
-loongson_hotkey_driver.remove, you can replace this with:
-
-module_platform_driver(loongson_hotkey_driver);
-
-> +
-> +MODULE_ALIAS("platform:acpi-laptop");
-
-This is not necessary, what you need for autoloading is the:
-
-MODULE_DEVICE_TABLE(acpi, loongson_htk_device_ids);
-
-mentioned above.
-
-> +MODULE_AUTHOR("Jianmin Lv <lvjianmin@loongson.cn>");
-> +MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
-> +MODULE_DESCRIPTION(ACPI_LAPTOP_DESC);
-
-You only use the ACPI_LAPTOP_DESC #define once, please just
-put its contents directly here.
-
-> +MODULE_VERSION(ACPI_LAPTOP_VERSION);
-
-Modules having there own versioning separate from the kernel
-is something from the past. Please drop the MODULE_VERSION() line
-and the ACPI_LAPTOP_VERSION #define.
-
-> +MODULE_LICENSE("GPL");
-
-Regards,
-
-Hans
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
