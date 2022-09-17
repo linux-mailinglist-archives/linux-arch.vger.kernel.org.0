@@ -2,74 +2,113 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709615BB559
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Sep 2022 03:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15E5D5BB586
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Sep 2022 04:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiIQBcW (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Fri, 16 Sep 2022 21:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
+        id S229629AbiIQCUl (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Fri, 16 Sep 2022 22:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229775AbiIQBcU (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 21:32:20 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2737BD0B8
-        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 18:32:16 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id t62so8145604oie.10
-        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 18:32:16 -0700 (PDT)
+        with ESMTP id S229498AbiIQCUk (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Fri, 16 Sep 2022 22:20:40 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8395AA1E
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 19:20:38 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id u189so24481297vsb.4
+        for <linux-arch@vger.kernel.org>; Fri, 16 Sep 2022 19:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=BlVQwXVfr3GW5iAF6OT2YMTv6rkyyGCnSP6Ag3jREYU=;
-        b=KP+HNwDETUuPHLPcIapFdjnoF2cUScO3YXyr8jfUFet6LzZxXtjL1a9d5PDo4/pRYG
-         8cdGuQDun45WLXn09gwMq4miu1+Wfmgf5C10SUtvLKiJylwDvbIGKFfHpydRHY1XlmjD
-         K4Snl08qVjp19NDbWD0K/wYGVVR1PRdZuW+4u8dKOKo0+G8pjFNiQTGPC2jjurepOjQF
-         0h7kbUTkGqbz423D0olnF+OATvKeTZ5SJqIjxYUKnpRtOf56nC+x1rkBSPExdpc5gZJd
-         6oQk/O20nbHyGdOFiiLUJZ3EifAF3rSX6cXNMFIQ59Xp/X2vjnv6yz5HBLZd4clS878g
-         ZD1g==
+        bh=oGVwvUbROocDCKmIi63dwILH5RW1QiYjDieu+3HIGsc=;
+        b=p4xe7FkTwPfgqVWHMfckvfXbZ74PEfbA+zGhE3mwURum3Wtwo6VikqJgSAObdpAFke
+         MHgaf3cMGbcsp7NKYQST+kgVWi7QA/7EfeeoGpttq5en4rUxgqRWjbhB3n/S//vgR2uv
+         S6WlzAYbgM9x6YRypeUAifzcU+4agyXG2WIF5YjQTmbFQQQ9PuFPqhCcTxCqC21V8Oma
+         fehUSROGSD31s8uKBl1as5duo/aDD+hrtnyxHZxLITS42/VP+0byTiZn/qi2IZK9QjXQ
+         G0LgZLpYHmcT0na0Uoui2L7qNB6jaNUt1Ej0X2zNAazPs/ALCYW+dn5M3uVKopRR+64h
+         qv+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=BlVQwXVfr3GW5iAF6OT2YMTv6rkyyGCnSP6Ag3jREYU=;
-        b=odlhdYDHDeU09ztEAzm6V7Pr3bk+QLem+Rdcx/Yr5OHBnSf3++zY+QurCusR8Avo+g
-         3L2X27g+5sN+SDKf+f77hceSoZJaSvHECvHXFypB7w6c+raUyA1AhA0Ex+X43+QNEkws
-         0bhUnAky54a0QoomggDnbxCdsdmQDNBeJD8n4XiYi3ufG6cUmKFJEfPIEhpUBCpMVDVs
-         TMGBn0/JbrPm9/+QKUUyaEfqIY3oz3sdFO1JngKOoXUCopsVIWrg4syRYBNjWQG9jhWP
-         XkcSkK+nBcsd2jG6ggiZkpyBF4/AiFtGd4ietdCvAORlilijP/tSzG7U17iNgt4zB6uv
-         5VQA==
-X-Gm-Message-State: ACrzQf31xTGzWrIZy52NphliP+sEpzpfAzZB6FkMHn65RhQvotODh7e9
-        XACVVs29uzjwweltz4OVGiOtykloIAw92KdeZuS1gg==
-X-Google-Smtp-Source: AMsMyM4JyQBf2phyIkZLp3fghM4p+hZVmExpKQsnCaRgJb+PYCFIowVBZpaDctVfmjLRm5A0Bg40Mqp40BiGc6ovbTk=
-X-Received: by 2002:a05:6808:49:b0:350:77ce:3368 with SMTP id
- v9-20020a056808004900b0035077ce3368mr956893oic.195.1663378336284; Fri, 16 Sep
- 2022 18:32:16 -0700 (PDT)
+        bh=oGVwvUbROocDCKmIi63dwILH5RW1QiYjDieu+3HIGsc=;
+        b=awd1Q1ln5zqxarwIqXp1wV1DI0dVJ3+j6gVtM7rN+POJsH5Ob28vzA3JWzu4BQtFQr
+         bMAquSfuZMFWr0t/dHD2m2Kyr9TSDUzsFRME4NFbO+iB2ZkfwJ+VbTiXhbCsZVieRv/8
+         ctf9+cpfMKZVNtBH/LGlfnHICpzH9R5wRoBLPSf1DvdI/6O+tD7apml7SFrx59oK1fYu
+         XzQ/WJRu8BXyojGMyzcFjKo3wGkgDIlYQUdzXHR7EXXLpjDDzIO1VlzfIi3JVWVTtZNV
+         g4DcxKQCmCefABa+AR3nmOcIWwnGe+n0pmIaw/bsInZPzsUjgoL8x0rXQamz3NebL8oT
+         KIyQ==
+X-Gm-Message-State: ACrzQf0LLzfkx+l+spOwGwYnzJ+86i9o5ma0ioaF+y95+Kk4rES9W+yV
+        NzWN0A91vZaSrqQuSeeKSZNzqkGB7/d3QKfMOx/nPw==
+X-Google-Smtp-Source: AMsMyM5q6QRJAwXaZJ4XFbVgFggwa1+pamVcYJuzMq6iNMYJMIVWBOPdicQlAri+7OMdOIMIErnmt4nZD65EK0hktVA=
+X-Received: by 2002:a67:ed55:0:b0:39a:7942:f574 with SMTP id
+ m21-20020a67ed55000000b0039a7942f574mr3217830vsp.65.1663381237345; Fri, 16
+ Sep 2022 19:20:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220916103817.9490-1-guoren@kernel.org> <20220916103817.9490-2-guoren@kernel.org>
-In-Reply-To: <20220916103817.9490-2-guoren@kernel.org>
-From:   Andy Chiu <andy.chiu@sifive.com>
-Date:   Sat, 17 Sep 2022 02:32:01 +0100
-Message-ID: <CABgGipWdm+-pOrj-ROR8fsVO7JEr4m64z7+zNW1_NszW74e5SA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] riscv: ftrace: Fixup panic by disabling preemption
-To:     guoren@kernel.org
-Cc:     arnd@arndb.de, palmer@rivosinc.com, rostedt@goodmis.org,
-        greentime.hu@sifive.com, zong.li@sifive.com, jrtc27@jrtc27.com,
-        mingo@redhat.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220916135953.1320601-1-keescook@chromium.org>
+In-Reply-To: <20220916135953.1320601-1-keescook@chromium.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 16 Sep 2022 20:20:00 -0600
+Message-ID: <CAOUHufbUUf1--=qiseAYzjN2DdyCkf_x=CQboWYDduH7VgpXmQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] x86/dumpstack: Inline copy_from_user_nmi()
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, dev@der-flo.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-perf-users@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        linux-hardening@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Yes, by disabling preemption and ensuring all sub-functions called by
-the busy waiting loop of stop_machine, which happens to be true on
-non-preemptive kernels, solve the problem from the original
-implementation.
+On Fri, Sep 16, 2022 at 8:01 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> Hi,
+>
+> This fixes a find_vmap_area() deadlock. The main fix is patch 2, repeated here:
+>
+>     The check_object_size() helper under CONFIG_HARDENED_USERCOPY is
+>     designed to skip any checks where the length is known at compile time as
+>     a reasonable heuristic to avoid "likely known-good" cases. However, it can
+>     only do this when the copy_*_user() helpers are, themselves, inline too.
+>
+>     Using find_vmap_area() requires taking a spinlock. The check_object_size()
+>     helper can call find_vmap_area() when the destination is in vmap memory.
+>     If show_regs() is called in interrupt context, it will attempt a call to
+>     copy_from_user_nmi(), which may call check_object_size() and then
+>     find_vmap_area(). If something in normal context happens to be in the
+>     middle of calling find_vmap_area() (with the spinlock held), the interrupt
+>     handler will hang forever.
+>
+>     The copy_from_user_nmi() call is actually being called with a fixed-size
+>     length, so check_object_size() should never have been called in the
+>     first place. In order for check_object_size() to see that the length is
+>     a fixed size, inline copy_from_user_nmi(), as already done with all the
+>     other uaccess helpers.
+>
+>     Reported-by: Yu Zhao <yuzhao@google.com>
+>     Link: https://lore.kernel.org/all/CAOUHufaPshtKrTWOz7T7QFYUNVGFm0JBjvM700Nhf9qEL9b3EQ@mail.gmail.com
+>     Reported-by: dev@der-flo.net
+>
+> Patch 1 is a refactor for patch 2, and patch 3 should make sure we avoid
+> future deadlocks.
 
-Andy Chiu <andy.chiu@sifive.com>
+Thanks!
+
+Tested-by: Yu Zhao <yuzhao@google.com>
+
+The same test has been holding up well for a few hours now. It used to
+throw that warning in less than half an hour.
