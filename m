@@ -2,265 +2,325 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551415BB927
-	for <lists+linux-arch@lfdr.de>; Sat, 17 Sep 2022 17:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3265BB9FD
+	for <lists+linux-arch@lfdr.de>; Sat, 17 Sep 2022 20:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiIQPjY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sat, 17 Sep 2022 11:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S229581AbiIQSsY (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sat, 17 Sep 2022 14:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiIQPjX (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Sep 2022 11:39:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D699332AA2;
-        Sat, 17 Sep 2022 08:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C044B80CAE;
-        Sat, 17 Sep 2022 15:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B9C4C433D6;
-        Sat, 17 Sep 2022 15:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663429157;
-        bh=YYDZb7cgWkAAMz0Nq44P6jmJ46q5teXqm7cBbCBh+7U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HxsFdlRGh2kN1NgILEErnPDWhZsvSKuMnLLBA/ptbhaDZRXmYOMwh1cmlV2S/zITi
-         FcyE1C5a8LzsXDHjS5daKGrbBtRd2WUb7Rg0x3b79XQl74iHtzwg5wYDrhKfJn6Zhc
-         GbtJrw2jkajNZVQi06lZ7z9PxLXyxR7UnsA18Rd4gJBrzx2etWBCJQ2K6cVTVLZlfE
-         0naA+siQ6U+7csMNltqPSWeyv9UbTsCfzS5OllLJK0Ti1w+KRcnNVdfSVzxfjU5sO1
-         UBmcs1RYjpKVFWqbYxy3pWnnLsEwsslfabim/4dKkJdPXI63Ggb47XviKInfi7w0gA
-         HidDyYYJjmOZg==
-Received: by mail-vs1-f44.google.com with SMTP id 129so25697694vsi.10;
-        Sat, 17 Sep 2022 08:39:17 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3efIaej2Xy9OnLS14GfICEdwITPZn7YwPeSR9pzvcH1E7bQTeZ
-        /PGIHX7pnsxsmq3jus+14BdEBAfB2qyQqob8VSo=
-X-Google-Smtp-Source: AMsMyM6Fzv5EcbW38lJuuoJCQBEvKLvyY1n9RBJUawWys4j3cAExBetakppBzfT7c6uXhDhYdpBc/R85Fk+ooYFlCzI=
-X-Received: by 2002:a67:d491:0:b0:398:1bbc:bc85 with SMTP id
- g17-20020a67d491000000b003981bbcbc85mr3783191vsj.59.1663429156000; Sat, 17
- Sep 2022 08:39:16 -0700 (PDT)
+        with ESMTP id S229627AbiIQSsW (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sat, 17 Sep 2022 14:48:22 -0400
+Received: from forward107p.mail.yandex.net (forward107p.mail.yandex.net [77.88.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83F02B27B
+        for <linux-arch@vger.kernel.org>; Sat, 17 Sep 2022 11:48:20 -0700 (PDT)
+Received: from forward102q.mail.yandex.net (forward102q.mail.yandex.net [IPv6:2a02:6b8:c0e:1ba:0:640:516:4e7d])
+        by forward107p.mail.yandex.net (Yandex) with ESMTP id 4C29C556ED49;
+        Sat, 17 Sep 2022 21:48:16 +0300 (MSK)
+Received: from vla5-3364930cd0c2.qloud-c.yandex.net (vla5-3364930cd0c2.qloud-c.yandex.net [IPv6:2a02:6b8:c18:360d:0:640:3364:930c])
+        by forward102q.mail.yandex.net (Yandex) with ESMTP id 43349BF00007;
+        Sat, 17 Sep 2022 21:48:16 +0300 (MSK)
+Received: by vla5-3364930cd0c2.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id m3MadSBwXm-mEhq7nsK;
+        Sat, 17 Sep 2022 21:48:15 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=syntacore.com; s=mail; t=1663440495;
+        bh=hUI4kmPtgdob83jo8NZ1S3EVI/BG5Oe4OTPOGdzRr84=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=BGkaVhmpPbEcwGLmmx7vxiNEYb9bk3pz6F65L7SBhyhBFlOq/dBHAbHfN12ujdDk7
+         GYZgxHslnjMU/5tWwCCArFfGbEEKryGN8RbXYbkE+8mMVvyjUf+mYd4GjPZ/LA33Qj
+         UkhNBy7vT9wr3N4bTvWzpv4qJ+yA+ra0P7KD6EgY=
+Authentication-Results: vla5-3364930cd0c2.qloud-c.yandex.net; dkim=pass header.i=@syntacore.com
+From:   Vladimir Isaev <vladimir.isaev@syntacore.com>
+To:     linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
+Cc:     Vladimir Isaev <vladimir.isaev@syntacore.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v4] riscv: Fix permissions for all mm's during mm init
+Date:   Sat, 17 Sep 2022 21:47:09 +0300
+Message-Id: <20220917184709.115731-1-vladimir.isaev@syntacore.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220917065250.1671718-1-chenhuacai@loongson.cn> <80b46671-6d01-f2a2-7b9b-cb4c27cc87c6@redhat.com>
-In-Reply-To: <80b46671-6d01-f2a2-7b9b-cb4c27cc87c6@redhat.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 17 Sep 2022 23:39:00 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7zwtJ06=2LQXg_uonRA8vzUif4AQNbzF_L2jewf7cVTA@mail.gmail.com>
-Message-ID: <CAAhV-H7zwtJ06=2LQXg_uonRA8vzUif4AQNbzF_L2jewf7cVTA@mail.gmail.com>
-Subject: Re: [PATCH V3] LoongArch: Add ACPI-based generic laptop driver
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Mark Gross <markgross@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-Hi, Hans,
+It is possible to have more than one mm (init_mm) during memory
+permission fixes. In my case it was caused by request_module
+from drivers/net/phy/phy_device.c and leads to following Oops
+during free_initmem() on RV32 platform:
+     Unable to handle kernel paging request at virtual address c0800000
+     Oops [#1]
+     Modules linked in:
+     CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.45
+     Hardware name: Syntacore SCR5 SDK board (DT)
+     epc : __memset+0x58/0xf4
+      ra : free_reserved_area+0xfa/0x15a
+     epc : c02b26ac ra : c00eb588 sp : c1c1fed0
+      gp : c1898690 tp : c1c98000 t0 : c0800000
+      t1 : ffffffff t2 : 00000000 s0 : c1c1ff20
+      s1 : c189a000 a0 : c0800000 a1 : cccccccc
+      a2 : 00001000 a3 : c0801000 a4 : 00000000
+      a5 : 00800000 a6 : fef09000 a7 : 00000000
+      s2 : c0e57000 s3 : c10edcf8 s4 : 000000cc
+      s5 : ffffefff s6 : c188a9f4 s7 : 00000001
+      s8 : c0800000 s9 : fef1b000 s10: c10ee000
+      s11: c189a000 t3 : 00000000 t4 : 00000000
+      t5 : 00000000 t6 : 00000001
+     status: 00000120 badaddr: c0800000 cause: 0000000f
+     [<c0488658>] free_initmem+0x204/0x222
+     [<c048d05a>] kernel_init+0x32/0xfc
+     [<c0002f76>] ret_from_exception+0x0/0xc
+     ---[ end trace 7a5e2b002350b528 ]---
 
-On Sat, Sep 17, 2022 at 6:00 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi again,
->
-> On 9/17/22 08:52, Huacai Chen wrote:
-> > From: Jianmin Lv <lvjianmin@loongson.cn>
-> >
-> > This add ACPI-based generic laptop driver for Loongson-3. Some of the
-> > codes are derived from drivers/platform/x86/thinkpad_acpi.c.
-> >
-> > Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> > V2: Fix problems pointed out by Arnd.
-> > V3: Use platform driver instead of acpi driver.
->
-> A couple more notes which I noticed just after sending my previous email:
->
-> > +#define ACPI_LAPTOP_VERSION "1.0"
-> > +#define ACPI_LAPTOP_NAME "loongson-laptop"
-> > +#define ACPI_LAPTOP_DESC "Loongson Laptop/all-in-one ACPI Driver"
-> > +#define ACPI_LAPTOP_FILE ACPI_LAPTOP_NAME "_acpi"
-> > +#define ACPI_LAPTOP_DRVR_NAME ACPI_LAPTOP_FILE
-> > +#define ACPI_LAPTOP_ACPI_EVENT_PREFIX "loongson"
->
-> Do you really need / use all these defines ?
-All unneeded macros will be removed, thanks.
+This is because request_module attempted to modprobe module, so it created
+new mm with the copy of kernel's page table. And this copy won't be updated
+in case of 4M pages and RV32 (pgd is the leaf).
 
->
-> > +static const struct acpi_device_id loongson_htk_device_ids[] = {
-> > +     {LOONGSON_ACPI_HKEY_HID, 0},
-> > +     {"", 0},
-> > +};
->
-> You will want to put a:
->
-> MODULE_DEVICE_TABLE(acpi, loongson_htk_device_ids);
->
-> line here for proper automatic loading when build as a module.
-OK, thanks.
+To fix this we can update protection bits for all of existing mm-s, the
+same as ARM does, see commit 08925c2f124f
+("ARM: 8464/1: Update all mm structures with section adjustments").
 
->
-> > +
-> > +static struct platform_driver loongson_hotkey_driver = {
-> > +     .probe          = loongson_hotkey_probe,
-> > +     .driver         = {
-> > +             .name   = "loongson-hotkey",
-> > +             .owner  = THIS_MODULE,
-> > +             .pm     = pm_ptr(&loongson_hotkey_pm),
-> > +             .acpi_match_table = ACPI_PTR(loongson_htk_device_ids),
->
-> Since you unconditionally define loongson_htk_device_ids above;
-> and since you have a "depends on ACPI" in your Kconfig, you can drop
-> the ACPI_PTR() here, just use loongson_htk_device_ids directly.
-OK, thanks.
+Cc: Andrew Jones <ajones@ventanamicro.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 19a00869028f ("RISC-V: Protect all kernel sections including init early")
+Signed-off-by: Vladimir Isaev <vladimir.isaev@syntacore.com>
+---
+Changes for v4:
+  - Use read_lock(&tasklist_lock) instead of rcu_read_lock since
+    __set_memory_mm can block. Sorry about this.
+  - Drop WARN_ON.
 
->
-> > +static int __init generic_acpi_laptop_init(void)
-> > +{
-> > +     bool ec_found;
-> > +     int i, ret, status;
-> > +
-> > +     if (acpi_disabled)
-> > +             return -ENODEV;
-> > +
-> > +     /* The EC device is required */
-> > +     ec_found = acpi_dev_found(LOONGSON_ACPI_EC_HID);
-> > +     if (!ec_found)
-> > +             return -ENODEV;
-> > +
-> > +     /* Enable SCI for EC */
-> > +     acpi_write_bit_register(ACPI_BITREG_SCI_ENABLE, 1);
-> > +
-> > +     generic_inputdev = input_allocate_device();
-> > +     if (!generic_inputdev) {
-> > +             pr_err("Unable to allocate input device\n");
-> > +             return -ENOMEM;
-> > +     }
-> > +
-> > +     /* Prepare input device, but don't register */
-> > +     generic_inputdev->name =
-> > +             "Loongson Generic Laptop/All-in-one Extra Buttons";
-> > +     generic_inputdev->phys = ACPI_LAPTOP_DRVR_NAME "/input0";
-> > +     generic_inputdev->id.bustype = BUS_HOST;
-> > +     generic_inputdev->dev.parent = NULL;
-> > +
-> > +     /* Init subdrivers */
-> > +     for (i = 0; i < ARRAY_SIZE(generic_sub_drivers); i++) {
-> > +             ret = generic_subdriver_init(&generic_sub_drivers[i]);
-> > +             if (ret < 0) {
-> > +                     input_free_device(generic_inputdev);
-> > +                     return ret;
-> > +             }
-> > +     }
->
-> I see above that you have only 1 subdriver. Do you expect there to be
-> more in the future ?  If not then it would be better to just completely
-> remove the subdriver abstraction and simply do everything directly
-> from the main probe/remove functions (see below).
-At this time we only add the most basic subdriver, and more subdrivers
-will be added, so I want to keep it here.
+Changes for v3:
+  - Add WARN_ON(state != SYSTEM_FREEING_INITMEM) to fix_kernel_mem_early()
+    to make sure that the function used only during permission fixes.
+  - Add comment to fix_kernel_mem_early().
 
->
-> > +
-> > +     ret = input_register_device(generic_inputdev);
-> > +     if (ret < 0) {
-> > +             input_free_device(generic_inputdev);
-> > +             pr_err("Unable to register input device\n");
-> > +             return ret;
-> > +     }
-> > +
-> > +     input_device_registered = 1;
-> > +
-> > +     if (acpi_evalf(hotkey_handle, &status, "ECBG", "d")) {
-> > +             pr_info("Loongson Laptop used, init brightness is 0x%x\n", status);
-> > +             ret = laptop_backlight_register();
-> > +             if (ret < 0)
-> > +                     pr_err("Loongson Laptop: laptop-backlight device register failed\n");
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
-> All of generic_acpi_laptop_init should be done from loongson_hotkey_probe()
-> and instead of using global variables all data you need should be in a struct
-> and that struct should be alloc-ed from loongson_hotkey_probe() and then tied
-> to the platform_device using platform_set_drvdata() and retreived on remove
-> using platform_get_drvdata() and on suspend/resume using dev_get_drvdata().
->
-> > +static void __exit generic_acpi_laptop_exit(void)
-> > +{
-> > +     if (generic_inputdev) {
-> > +             if (input_device_registered)
-> > +                     input_unregister_device(generic_inputdev);
-> > +             else
-> > +                     input_free_device(generic_inputdev);
-> > +     }
-> > +}
->
-> This should be done from a remove function which then gets set as the
-> remove callback in loongson_hotkey_driver.
->
-> I see at a quick glance that you based this driver on thinkpad_acpi.c
-> but that is a very old driver which does a bunch of things in old,
-> deprecated ways which are hard to fix for userspace API compatibility
-> reasons.
->
-> Now a days we try to avoid global variables and also custom
-> module_init()/module_exit() functions.
->
-> > +module_init(generic_acpi_laptop_init);
-> > +module_exit(generic_acpi_laptop_exit);
->
-> Once the work of these 2 functions is done from loongson_hotkey_driver.probe /
-> loongson_hotkey_driver.remove, you can replace this with:
->
-> module_platform_driver(loongson_hotkey_driver);
->
-> > +
-> > +MODULE_ALIAS("platform:acpi-laptop");
->
-> This is not necessary, what you need for autoloading is the:
->
-> MODULE_DEVICE_TABLE(acpi, loongson_htk_device_ids);
->
-> mentioned above.
-OK, thanks.
+Changes for v2:
+  - Fix commit message format.
+  - Add 'Fixes' tag.
+---
+ arch/riscv/include/asm/set_memory.h | 20 +++--------
+ arch/riscv/kernel/setup.c           | 11 ------
+ arch/riscv/mm/init.c                | 29 ++++++++++++---
+ arch/riscv/mm/pageattr.c            | 55 ++++++++++++++++++++++++-----
+ 4 files changed, 75 insertions(+), 40 deletions(-)
 
->
-> > +MODULE_AUTHOR("Jianmin Lv <lvjianmin@loongson.cn>");
-> > +MODULE_AUTHOR("Huacai Chen <chenhuacai@loongson.cn>");
-> > +MODULE_DESCRIPTION(ACPI_LAPTOP_DESC);
->
-> You only use the ACPI_LAPTOP_DESC #define once, please just
-> put its contents directly here.
-OK, thanks.
+diff --git a/arch/riscv/include/asm/set_memory.h b/arch/riscv/include/asm/set_memory.h
+index a2c14d4b3993..bb0f6b4ed86b 100644
+--- a/arch/riscv/include/asm/set_memory.h
++++ b/arch/riscv/include/asm/set_memory.h
+@@ -16,28 +16,16 @@ int set_memory_rw(unsigned long addr, int numpages);
+ int set_memory_x(unsigned long addr, int numpages);
+ int set_memory_nx(unsigned long addr, int numpages);
+ int set_memory_rw_nx(unsigned long addr, int numpages);
+-static __always_inline int set_kernel_memory(char *startp, char *endp,
+-					     int (*set_memory)(unsigned long start,
+-							       int num_pages))
+-{
+-	unsigned long start = (unsigned long)startp;
+-	unsigned long end = (unsigned long)endp;
+-	int num_pages = PAGE_ALIGN(end - start) >> PAGE_SHIFT;
+-
+-	return set_memory(start, num_pages);
+-}
++void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
++			  pgprot_t clear_mask);
+ #else
+ static inline int set_memory_ro(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_rw(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_x(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
+ static inline int set_memory_rw_nx(unsigned long addr, int numpages) { return 0; }
+-static inline int set_kernel_memory(char *startp, char *endp,
+-				    int (*set_memory)(unsigned long start,
+-						      int num_pages))
+-{
+-	return 0;
+-}
++static inline void fix_kernel_mem_early(char *startp, char *endp,
++					pgprot_t set_mask, pgprot_t clear_mask) { }
+ #endif
+ 
+ int set_direct_map_invalid_noflush(struct page *page);
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 95ef6e2bf45c..17eae1406092 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -27,7 +27,6 @@
+ #include <asm/early_ioremap.h>
+ #include <asm/pgtable.h>
+ #include <asm/setup.h>
+-#include <asm/set_memory.h>
+ #include <asm/sections.h>
+ #include <asm/sbi.h>
+ #include <asm/tlbflush.h>
+@@ -318,13 +317,3 @@ static int __init topology_init(void)
+ 	return 0;
+ }
+ subsys_initcall(topology_init);
+-
+-void free_initmem(void)
+-{
+-	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
+-		set_kernel_memory(lm_alias(__init_begin), lm_alias(__init_end),
+-				  IS_ENABLED(CONFIG_64BIT) ?
+-					set_memory_rw : set_memory_rw_nx);
+-
+-	free_initmem_default(POISON_FREE_INITMEM);
+-}
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index b56a0a75533f..978202712535 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -16,7 +16,6 @@
+ #include <linux/of_fdt.h>
+ #include <linux/of_reserved_mem.h>
+ #include <linux/libfdt.h>
+-#include <linux/set_memory.h>
+ #include <linux/dma-map-ops.h>
+ #include <linux/crash_dump.h>
+ #include <linux/hugetlb.h>
+@@ -28,6 +27,7 @@
+ #include <asm/io.h>
+ #include <asm/ptdump.h>
+ #include <asm/numa.h>
++#include <asm/set_memory.h>
+ 
+ #include "../kernel/head.h"
+ 
+@@ -714,10 +714,14 @@ static __init pgprot_t pgprot_from_va(uintptr_t va)
+ 
+ void mark_rodata_ro(void)
+ {
+-	set_kernel_memory(__start_rodata, _data, set_memory_ro);
+-	if (IS_ENABLED(CONFIG_64BIT))
+-		set_kernel_memory(lm_alias(__start_rodata), lm_alias(_data),
+-				  set_memory_ro);
++	pgprot_t set_mask = __pgprot(_PAGE_READ);
++	pgprot_t clear_mask = __pgprot(_PAGE_WRITE);
++
++	fix_kernel_mem_early(__start_rodata, _data, set_mask, clear_mask);
++	if (IS_ENABLED(CONFIG_64BIT)) {
++		fix_kernel_mem_early(lm_alias(__start_rodata), lm_alias(_data),
++				     set_mask, clear_mask);
++	}
+ 
+ 	debug_checkwx();
+ }
+@@ -1243,3 +1247,18 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+ 	return vmemmap_populate_basepages(start, end, node, NULL);
+ }
+ #endif
++
++void free_initmem(void)
++{
++	pgprot_t set_mask = __pgprot(_PAGE_READ | _PAGE_WRITE);
++	pgprot_t clear_mask = IS_ENABLED(CONFIG_64BIT) ?
++			      __pgprot(0) : __pgprot(_PAGE_EXEC);
++
++	if (IS_ENABLED(CONFIG_STRICT_KERNEL_RWX)) {
++		fix_kernel_mem_early(lm_alias(__init_begin),
++				     lm_alias(__init_end),
++				     set_mask, clear_mask);
++	}
++
++	free_initmem_default(POISON_FREE_INITMEM);
++}
+diff --git a/arch/riscv/mm/pageattr.c b/arch/riscv/mm/pageattr.c
+index 5e49e4b4a4cc..9f9418c81c50 100644
+--- a/arch/riscv/mm/pageattr.c
++++ b/arch/riscv/mm/pageattr.c
+@@ -5,6 +5,7 @@
+ 
+ #include <linux/pagewalk.h>
+ #include <linux/pgtable.h>
++#include <linux/sched.h>
+ #include <asm/tlbflush.h>
+ #include <asm/bitops.h>
+ #include <asm/set_memory.h>
+@@ -104,24 +105,62 @@ static const struct mm_walk_ops pageattr_ops = {
+ 	.pte_hole = pageattr_pte_hole,
+ };
+ 
+-static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
+-			pgprot_t clear_mask)
++static int __set_memory_mm(struct mm_struct *mm, unsigned long start,
++			   unsigned long end, pgprot_t set_mask,
++			   pgprot_t clear_mask)
+ {
+ 	int ret;
+-	unsigned long start = addr;
+-	unsigned long end = start + PAGE_SIZE * numpages;
+ 	struct pageattr_masks masks = {
+ 		.set_mask = set_mask,
+ 		.clear_mask = clear_mask
+ 	};
+ 
++	mmap_read_lock(mm);
++	ret = walk_page_range_novma(mm, start, end, &pageattr_ops, NULL,
++				    &masks);
++	mmap_read_unlock(mm);
++
++	return ret;
++}
++
++void fix_kernel_mem_early(char *startp, char *endp, pgprot_t set_mask,
++			  pgprot_t clear_mask)
++{
++	struct task_struct *t, *s;
++
++	unsigned long start = (unsigned long)startp;
++	unsigned long end = PAGE_ALIGN((unsigned long)endp);
++
++	__set_memory_mm(current->active_mm, start, end, set_mask, clear_mask);
++	__set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
++
++	read_lock(&tasklist_lock);
++	for_each_process(t) {
++		if (t->flags & PF_KTHREAD)
++			continue;
++		for_each_thread(t, s) {
++			if (s->mm) {
++				__set_memory_mm(s->mm, start, end, set_mask,
++						clear_mask);
++			}
++		}
++	}
++	read_unlock(&tasklist_lock);
++
++	flush_tlb_kernel_range(start, end);
++}
++
++static int __set_memory(unsigned long addr, int numpages, pgprot_t set_mask,
++			pgprot_t clear_mask)
++{
++	int ret;
++	unsigned long start = addr;
++	unsigned long end = start + PAGE_SIZE * numpages;
++
+ 	if (!numpages)
+ 		return 0;
+ 
+-	mmap_read_lock(&init_mm);
+-	ret =  walk_page_range_novma(&init_mm, start, end, &pageattr_ops, NULL,
+-				     &masks);
+-	mmap_read_unlock(&init_mm);
++	ret = __set_memory_mm(&init_mm, start, end, set_mask, clear_mask);
+ 
+ 	flush_tlb_kernel_range(start, end);
+ 
+-- 
+2.37.2
 
->
-> > +MODULE_VERSION(ACPI_LAPTOP_VERSION);
->
-> Modules having there own versioning separate from the kernel
-> is something from the past. Please drop the MODULE_VERSION() line
-> and the ACPI_LAPTOP_VERSION #define.
-OK, thanks.
-
-Huacai
->
-> > +MODULE_LICENSE("GPL");
->
-> Regards,
->
-> Hans
->
