@@ -2,35 +2,35 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2E85BBED0
-	for <lists+linux-arch@lfdr.de>; Sun, 18 Sep 2022 17:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C645E5BBED2
+	for <lists+linux-arch@lfdr.de>; Sun, 18 Sep 2022 17:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiIRPxy (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Sun, 18 Sep 2022 11:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
+        id S229676AbiIRPyA (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Sun, 18 Sep 2022 11:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiIRPx3 (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Sun, 18 Sep 2022 11:53:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8692B1EAE1;
-        Sun, 18 Sep 2022 08:53:26 -0700 (PDT)
+        with ESMTP id S229932AbiIRPxa (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Sun, 18 Sep 2022 11:53:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3C71EC4D;
+        Sun, 18 Sep 2022 08:53:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40DF1B81057;
-        Sun, 18 Sep 2022 15:53:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84FF6C43141;
-        Sun, 18 Sep 2022 15:53:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58D526006F;
+        Sun, 18 Sep 2022 15:53:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF75C4347C;
+        Sun, 18 Sep 2022 15:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663516403;
-        bh=EeFFIvXN/JwkcVumnFfZeBxR0r/LWWg4dvb3hMk4ymM=;
+        s=k20201202; t=1663516408;
+        bh=djdpWanOi4zWPI5MvBREvmwhOSv3FwS45ovTz/HZSl4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=afPhU5jyxS2Rz2EnygNlwkVLKecIlTwICH1n2aN6dEG7FcrMRRwwFWN7GGv8kQ1kP
-         qO8AIbteSWxbAmbeTyF7HkZGFY1OHD/Ifw6C1TM4cBhX+1rIRHsm4tKbCXILx89beC
-         pAxSPkTHmXyJRiNVlwAmQv1XTB/dppABVLhjIjJHYor3R1XyFNYLNBcYciIugxcaT7
-         z82nUYpExR0MDiPjTtU68Tf6x087+p9Df06wfpBF4IycG5Wy/O0NSjwKtOY8/hlK0i
-         ibKvP1+8jvBVnvKACcvCo2DBgxfe4ySkr2jnglwONoRTPUH4j/XWvTyksZhn98k9JA
-         wBgkGqj61Uxvw==
+        b=KfCosz0tEYKD25aaVLOYyBJvJG3AIHXJ0umANml2aOl8rUbGHeMhSPdLG2pki7eDq
+         dNlGJo3NOYRF+IxXbm9AXmIgyyq+Rbnq+o714vDzCAbPen8yyfTaGt+Hudwd6iEF3a
+         AAfGXlBsDCGFDuxDSNcH1rbTR5/+srnfZWS0c991EHQo80nPXq0gZTo/3ULUhlu0LU
+         JixujdzO1sN3PXWnM3WPpDluQ/FVDasCswD3BL5meCMxvhZOwaqGDhj4Y5pRvBCbhg
+         pGEBfF57UmqPi/TKV0drZF2L/nO7U8yjwAN8qDJ36yDR+fmAyHGKPEVeTq5h8wEIJ5
+         B4gtT8vYRk/vw==
 From:   guoren@kernel.org
 To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
@@ -42,9 +42,9 @@ To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
         David.Laight@aculab.com
 Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V5 05/11] riscv: traps: Add noinstr to prevent instrumentation inserted
-Date:   Sun, 18 Sep 2022 11:52:40 -0400
-Message-Id: <20220918155246.1203293-6-guoren@kernel.org>
+Subject: [PATCH V5 06/11] entry: Prevent DEBUG_PREEMPT warning
+Date:   Sun, 18 Sep 2022 11:52:41 -0400
+Message-Id: <20220918155246.1203293-7-guoren@kernel.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220918155246.1203293-1-guoren@kernel.org>
 References: <20220918155246.1203293-1-guoren@kernel.org>
@@ -61,49 +61,60 @@ X-Mailing-List: linux-arch@vger.kernel.org
 
 From: Guo Ren <guoren@linux.alibaba.com>
 
-Without noinstr the compiler is free to insert instrumentation (think
-all the k*SAN, KCov, GCov, ftrace etc..) which can call code we're not
-yet ready to run this early in the entry path, for instance it could
-rely on RCU which isn't on yet, or expect lockdep state. (by peterz)
+When DEBUG_PREEMPT=y,
+	exit_to_user_mode_prepare
+	->tick_nohz_user_enter_prepare
+	  ->tick_nohz_full_cpu(smp_processor_id())
+	    ->smp_processor_id()
+	      ->debug_smp_processor_id()
+		->check preempt_count() then:
 
-Link: https://lore.kernel.org/linux-riscv/YxcQ6NoPf3AH0EXe@hirez.programming.kicks-ass.net/raw
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+[    5.717610] BUG: using smp_processor_id() in preemptible [00000000]
+code: S20urandom/94
+[    5.718111] caller is debug_smp_processor_id+0x24/0x38
+[    5.718417] CPU: 1 PID: 94 Comm: S20urandom Not tainted
+6.0.0-rc3-00010-gfd0a0d619c63-dirty #238
+[    5.718886] Hardware name: riscv-virtio,qemu (DT)
+[    5.719136] Call Trace:
+[    5.719281] [<ffffffff800055fc>] dump_backtrace+0x2c/0x3c
+[    5.719566] [<ffffffff80ae6cb0>] show_stack+0x44/0x5c
+[    5.720023] [<ffffffff80aee870>] dump_stack_lvl+0x74/0xa4
+[    5.720557] [<ffffffff80aee8bc>] dump_stack+0x1c/0x2c
+[    5.721033] [<ffffffff80af65c0>]
+check_preemption_disabled+0x104/0x108
+[    5.721538] [<ffffffff80af65e8>] debug_smp_processor_id+0x24/0x38
+[    5.722001] [<ffffffff800aee30>] exit_to_user_mode_prepare+0x48/0x178
+[    5.722355] [<ffffffff80af5bf4>] irqentry_exit_to_user_mode+0x18/0x30
+[    5.722685] [<ffffffff80af5c70>] irqentry_exit+0x64/0xa4
+[    5.722953] [<ffffffff80af52f4>] do_page_fault+0x1d8/0x544
+[    5.723291] [<ffffffff80003310>] ret_from_exception+0x0/0xb8
+
+(Above is found in riscv platform with generic_entry)
+
+The smp_processor_id() needs irqs disable or preempt_disable, so use
+preempt dis/in protecting the tick_nohz_user_enter_prepare().
+
 Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 Signed-off-by: Guo Ren <guoren@kernel.org>
 ---
- arch/riscv/kernel/traps.c | 4 ++--
- arch/riscv/mm/fault.c     | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ kernel/entry/common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index 635e6ec26938..588e17c386c6 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -92,9 +92,9 @@ static void do_trap_error(struct pt_regs *regs, int signo, int code,
- }
+diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+index 063068a9ea9b..36e4cd50531c 100644
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -194,8 +194,10 @@ static void exit_to_user_mode_prepare(struct pt_regs *regs)
  
- #if defined(CONFIG_XIP_KERNEL) && defined(CONFIG_RISCV_ALTERNATIVE)
--#define __trap_section		__section(".xip.traps")
-+#define __trap_section __noinstr_section(".xip.traps")
- #else
--#define __trap_section
-+#define __trap_section noinstr
- #endif
- #define DO_ERROR_INFO(name, signo, code, str)				\
- asmlinkage __visible __trap_section void name(struct pt_regs *regs)	\
-diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-index f2fbd1400b7c..c7829289e806 100644
---- a/arch/riscv/mm/fault.c
-+++ b/arch/riscv/mm/fault.c
-@@ -203,7 +203,7 @@ static inline bool access_error(unsigned long cause, struct vm_area_struct *vma)
-  * This routine handles page faults.  It determines the address and the
-  * problem, and then passes it off to one of the appropriate routines.
-  */
--asmlinkage void do_page_fault(struct pt_regs *regs)
-+asmlinkage void noinstr do_page_fault(struct pt_regs *regs)
- {
- 	struct task_struct *tsk;
- 	struct vm_area_struct *vma;
+ 	lockdep_assert_irqs_disabled();
+ 
++	preempt_disable();
+ 	/* Flush pending rcuog wakeup before the last need_resched() check */
+ 	tick_nohz_user_enter_prepare();
++	preempt_enable();
+ 
+ 	if (unlikely(ti_work & EXIT_TO_USER_MODE_WORK))
+ 		ti_work = exit_to_user_mode_loop(regs, ti_work);
 -- 
 2.36.1
 
