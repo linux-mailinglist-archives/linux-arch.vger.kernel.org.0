@@ -2,211 +2,132 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C185BC452
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 10:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 087255BC465
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 10:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiISI37 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 04:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S229557AbiISIfV (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 04:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiISI3t (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 04:29:49 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FB065EF;
-        Mon, 19 Sep 2022 01:29:47 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id sb3so33080313ejb.9;
-        Mon, 19 Sep 2022 01:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date;
-        bh=xoymz8faVzT0wsOgDh8GpMXHhgQOtJ4iGMWiJ5WcE5M=;
-        b=Lm7BO126imBfW2p86+6dSuKs+lWUTMbm5eMgm9pFu/j9M/kqYbL3JPu1nJiCf2uXr4
-         I7IjQVG8rbtLB0O7vzXFYE+FtBv2dj5kEBIvcsHegeo10YjZOcoRy1WxnAtjcEC/iNDW
-         LcZ876QNCiVqfZB64ohts2NklO+0MWD4dVJ/IzGNrK5jBfbQMOHyIOKpjO4KZqmvbhZZ
-         wUdEFhlwl+rhhZZ3tSlF8mb5iHWsovbVUpVkoOGA/EKZVYlXfCdv2ngNkltl17K4xVE6
-         tXMXyO/wJ7y8GipOINg2yZTi0v86atZT9vywEtsJ82Dsk6Aw4RVBVqeYs5+x1cRDgJyy
-         0rEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=xoymz8faVzT0wsOgDh8GpMXHhgQOtJ4iGMWiJ5WcE5M=;
-        b=4pCH6dZyol4FmHtqoeQaDQckaCfIEYpfi49CKaIR/iRlJhj2Y/uQ5NXXe7OCMYqZ9b
-         1qbicvvbQ2wlr6E/fdV4zOQ+J2hniYt5qAE63XjVvtD8koyP4PTUjEEsgNRVlNpySeNV
-         xNv8/Vl9GYi1HRfWX7Vyu5W0NuCK/4J+RCx/2g0NY9bz6kV6JxnCbJdN0Yy2zGw7amHt
-         szjuNCG+tjxGDMIKMXwT23WOcRReOAYJn95bvrE41PZ6RnAvDCpvx/kj3XidGJDGJBTY
-         IRY+aHVX4S0/eSaPrrtzXBB1XFDk62fD5ee5SMV2bmtlTwpwLjAiu7bEAPdsKAt8bz1u
-         Hi2g==
-X-Gm-Message-State: ACrzQf30Mw+B7khMu7rjtnDOPePYufZnwD+c4mDyoYmJCZ4ygxl7ARba
-        SA8rS/gZLXsQiNmi9kOr2jU=
-X-Google-Smtp-Source: AMsMyM7YDpMsT8S/fBs/dBZJOSrjXi9Pb8U6bCYB3DP/597jg0tInZfxP8MG7aCnJ70pWKg7ildXhA==
-X-Received: by 2002:a17:906:ee86:b0:741:89bc:27a1 with SMTP id wt6-20020a170906ee8600b0074189bc27a1mr12414411ejb.725.1663576185705;
-        Mon, 19 Sep 2022 01:29:45 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id s15-20020a1709067b8f00b00775f6081a87sm2271881ejo.121.2022.09.19.01.29.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Sep 2022 01:29:45 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 19 Sep 2022 10:29:43 +0200
-To:     Matthew Wilcox <willy@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Yu Zhao <yuzhao@google.com>, dev@der-flo.net,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 3/3] usercopy: Add find_vmap_area_try() to avoid deadlocks
-Message-ID: <Yygod+YBwzbMPmgA@pc636>
-References: <20220916135953.1320601-1-keescook@chromium.org>
- <20220916135953.1320601-4-keescook@chromium.org>
- <YySML2HfqaE/wXBU@casper.infradead.org>
- <202209160805.CA47B2D673@keescook>
- <YyTLTBM4OC6/RnjG@casper.infradead.org>
+        with ESMTP id S229702AbiISIfT (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 04:35:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEEA15822;
+        Mon, 19 Sep 2022 01:35:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50BB161803;
+        Mon, 19 Sep 2022 08:35:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5DAC433B5;
+        Mon, 19 Sep 2022 08:35:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1663576517;
+        bh=NDnqlZhtaXp4aa68lUPaptwqfteRjFznv1jId6XcsS8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FwYz92tNSMouuBkIr5MB0ikWNhkT/ojXPVaqBFo9x9Qw3AXpQX6EkpNmq951GANP0
+         B3ExHYccC0OeCAXhQJNx/NZEmoIsrh0R7SFhbWr150UmDA5LTSqL6Tt+IJu8SH1OXD
+         Yhf7sBYd1MELMeun3wN9cfGTH0sQa5yCwugRti/T36YHMfV5oFbGSWkixlQfDH578O
+         h2o+cGoqTG2kyd8EPEB4gcrGSbT8Ogq2c8ldeYoB90/RfqO8UPZV9ozspdXOhhG8zy
+         vXQdfurH6njPs1BbzxIxa3r81/RpXmOczYU6+hZiUGYsAceYNwtJJrp9zz2f6WBwCk
+         5wufF9xkOWJTA==
+Received: by mail-oi1-f182.google.com with SMTP id n83so13770447oif.11;
+        Mon, 19 Sep 2022 01:35:17 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2+oIwjIlBMnFeETZgBank3gq4LFlkGUBDSHmmj+D+X9JsC+jmN
+        aHnBfIoAYHcX9/s+UbqFtiOoUEnfRYZ578L1Yng=
+X-Google-Smtp-Source: AA6agR5ITfiPWZ9F9F5lkDqO0GA/3OeLcDmqgx/nf0vJ/sBZgtsKJFlK/BPu0y1OEMjk0otXRqR3awY0W+PQUuOvZvM=
+X-Received: by 2002:a05:6808:201f:b0:34f:9fdf:dbbf with SMTP id
+ q31-20020a056808201f00b0034f9fdfdbbfmr11418144oiw.19.1663576516813; Mon, 19
+ Sep 2022 01:35:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyTLTBM4OC6/RnjG@casper.infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220908022506.1275799-1-guoren@kernel.org> <20220908022506.1275799-9-guoren@kernel.org>
+ <4babce64-e96d-454c-aa35-243b3f2dc315@www.fastmail.com> <CAJF2gTQAMCjNyqrSOvqDAKR5Z-PZiTVxmoK9cvNAVQs+k2fZBg@mail.gmail.com>
+ <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
+In-Reply-To: <8817af55-de0d-4e8f-a41b-25d01d5fa968@www.fastmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 19 Sep 2022 16:35:04 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
+Message-ID: <CAJF2gTRoKfJ25brnA=_CqNw9DPt8XKhcyNzmCbD6wX1q-jiR1w@mail.gmail.com>
+Subject: Re: [PATCH V4 8/8] riscv: Add config of thread stack size
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>, lazyparser@gmail.com,
+        falcon@tinylab.org, Huacai Chen <chenhuacai@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Andreas Schwab <schwab@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Fri, Sep 16, 2022 at 08:15:24PM +0100, Matthew Wilcox wrote:
-> On Fri, Sep 16, 2022 at 08:09:16AM -0700, Kees Cook wrote:
-> > On Fri, Sep 16, 2022 at 03:46:07PM +0100, Matthew Wilcox wrote:
-> > > On Fri, Sep 16, 2022 at 06:59:57AM -0700, Kees Cook wrote:
-> > > > The check_object_size() checks under CONFIG_HARDENED_USERCOPY need to be
-> > > > more defensive against running from interrupt context. Use a best-effort
-> > > > check for VMAP areas when running in interrupt context
-> > > 
-> > > I had something more like this in mind:
-> > 
-> > Yeah, I like -EAGAIN. I'd like to keep the interrupt test to choose lock
-> > vs trylock, otherwise it's trivial to bypass the hardening test by having
-> > all the other CPUs beating on the spinlock.
-> 
-> I was thinking about this:
-> 
-> +++ b/mm/vmalloc.c
-> @@ -1844,12 +1844,19 @@
->  {
->  	struct vmap_area *va;
-> 
-> -	if (!spin_lock(&vmap_area_lock))
-> -		return ERR_PTR(-EAGAIN);
-> +	/*
-> +	 * It's safe to walk the rbtree under the RCU lock, but we may
-> +	 * incorrectly find no vmap_area if the tree is being modified.
-> +	 */
-> +	rcu_read_lock();
->  	va = __find_vmap_area(addr, &vmap_area_root);
-> -	spin_unlock(&vmap_area_lock);
-> +	if (!va && in_interrupt())
-> +		va = ERR_PTR(-EAGAIN);
-> +	rcu_read_unlock();
-> 
-> -	return va;
-> +	if (va)
-> +		return va;
-> +	return find_vmap_area(addr);
->  }
-> 
->  /*** Per cpu kva allocator ***/
-> 
-> ... but I don't think that works since vmap_areas aren't freed by RCU,
-> and I think they're reused without going through an RCU cycle.
+On Sun, Sep 11, 2022 at 12:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-Right you are. It should be freed via RCU-core. So wrapping by rcu_* is
-useless here.
-
-> 
-> So here's attempt #4, which actually compiles, and is, I think, what you
-> had in mind.
-> 
-> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> index 096d48aa3437..2b7c52e76856 100644
-> --- a/include/linux/vmalloc.h
-> +++ b/include/linux/vmalloc.h
-> @@ -215,7 +215,7 @@ extern struct vm_struct *__get_vm_area_caller(unsigned long size,
->  void free_vm_area(struct vm_struct *area);
->  extern struct vm_struct *remove_vm_area(const void *addr);
->  extern struct vm_struct *find_vm_area(const void *addr);
-> -struct vmap_area *find_vmap_area(unsigned long addr);
-> +struct vmap_area *find_vmap_area_try(unsigned long addr);
->  
->  static inline bool is_vm_area_hugepages(const void *addr)
->  {
-> diff --git a/mm/usercopy.c b/mm/usercopy.c
-> index c1ee15a98633..e0fb605c1b38 100644
-> --- a/mm/usercopy.c
-> +++ b/mm/usercopy.c
-> @@ -173,7 +173,11 @@ static inline void check_heap_object(const void *ptr, unsigned long n,
->  	}
->  
->  	if (is_vmalloc_addr(ptr)) {
-> -		struct vmap_area *area = find_vmap_area(addr);
-> +		struct vmap_area *area = find_vmap_area_try(addr);
-> +
-> +		/* We may be in NMI context */
-> +		if (area == ERR_PTR(-EAGAIN))
-> +			return;
->  
->  		if (!area)
->  			usercopy_abort("vmalloc", "no area", to_user, 0, n);
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index dd6cdb201195..c47b3b5d1c2d 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1829,7 +1829,7 @@ static void free_unmap_vmap_area(struct vmap_area *va)
->  	free_vmap_area_noflush(va);
->  }
->  
-> -struct vmap_area *find_vmap_area(unsigned long addr)
-> +static struct vmap_area *find_vmap_area(unsigned long addr)
->  {
->  	struct vmap_area *va;
->  
-> @@ -1840,6 +1840,26 @@ struct vmap_area *find_vmap_area(unsigned long addr)
->  	return va;
->  }
->  
-> +/*
-> + * The vmap_area_lock is not interrupt-safe, and we can end up here from
-> + * NMI context, so it's not worth even trying to make it IRQ-safe.
-> + */
-> +struct vmap_area *find_vmap_area_try(unsigned long addr)
-> +{
-> +	struct vmap_area *va;
-> +
-> +	if (in_interrupt()) {
-> +		if (!spin_trylock(&vmap_area_lock))
-> +			return ERR_PTR(-EAGAIN);
-> +	} else {
-> +		spin_lock(&vmap_area_lock);
-> +	}
-> +	va = __find_vmap_area(addr, &vmap_area_root);
-> +	spin_unlock(&vmap_area_lock);
-> +
-> +	return va;
-> +}
-> +
+> On Sat, Sep 10, 2022, at 2:52 PM, Guo Ren wrote:
+> > On Thu, Sep 8, 2022 at 3:37 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> >> On Thu, Sep 8, 2022, at 4:25 AM, guoren@kernel.org wrote:
+> >> > From: Guo Ren <guoren@linux.alibaba.com>
+> >> - When VMAP_STACK is set, make it possible to select non-power-of-two
+> >>   stack sizes. Most importantly, 12KB should be a really interesting
+> >>   choice as 8KB is probably still not enough for many 64-bit workloads,
+> >>   but 16KB is often more than what you need. You probably don't
+> >>   want to allow 64BIT/8KB without VMAP_STACK anyway since that just
+> >>   makes it really hard to debug, so hiding the option when VMAP_STACK
+> >>   is disabled may also be a good idea.
+> > I don't want this config to depend on VMAP_STACK. Some D1 chips would
+> > run with an 8K stack size and !VMAP_STACK.
 >
-If we look at it other way around. There is a user that tries to access
-the tree from IRQ context. Can we just extend the find_vmap_area() with?
+> That sounds like a really bad idea, why would you want to risk
+> using such a small stack without CONFIG_VMAP_STACK?
+>
+> Are you worried about increased memory usage or something else?
+>
+> >  /* thread information allocation */
+> > -#ifdef CONFIG_64BIT
+> > -#define THREAD_SIZE_ORDER      (2 + KASAN_STACK_ORDER)
+> > -#else
+> > -#define THREAD_SIZE_ORDER      (1 + KASAN_STACK_ORDER)
+> > -#endif
+> > +#define THREAD_SIZE_ORDER      CONFIG_THREAD_SIZE_ORDER
+> >  #define THREAD_SIZE            (PAGE_SIZE << THREAD_SIZE_ORDER)
+>
+> This doesn't actually allow additional THREAD_SIZE values, as you
+> still round up to the nearest power of two.
+>
+> I think all the non-arch code can deal with non-power-of-2
+> sizes, so you'd just need
+>
+> #define THREAD_SIZE round_up(CONFIG_THREAD_SIZE, PAGE_SIZE)
+>
+> and fix up the risc-v specific code to do the right thing
+> as well. I now see that THREAD_SIZE_ORDER is not actually
+> used anywhere with CONFIG_VMAP_STACK, so I suppose that
+> definition can be skipped, but you still need a THREAD_ALIGN
+> definition that is a power of two and at least a page larger
+> than THREAD_SIZE.
+Sorry, I missed this part. I would RESEND v5
 
-   - in_interrupt();
-   - use trylock if so.
+>
+>      Arnd
 
---
-Uladzislau Rezki
+
+
+-- 
+Best Regards
+ Guo Ren
