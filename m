@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D675BCD81
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 15:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4727A5BCDE4
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 16:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiISNrE (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 09:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
+        id S231178AbiISOFg (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 10:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiISNrC (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 09:47:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ACB2FFD8;
-        Mon, 19 Sep 2022 06:46:43 -0700 (PDT)
+        with ESMTP id S231179AbiISOFe (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 10:05:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC972A724;
+        Mon, 19 Sep 2022 07:05:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A72E61B2A;
-        Mon, 19 Sep 2022 13:46:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFD1BC433D7;
-        Mon, 19 Sep 2022 13:46:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A1261D09;
+        Mon, 19 Sep 2022 14:05:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C24C433D6;
+        Mon, 19 Sep 2022 14:05:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663595201;
-        bh=AeMivRW0JQnrwZYyjaQlcAH3jO881DUdn8V4CSVqYy8=;
+        s=k20201202; t=1663596331;
+        bh=hqpQnG/rjRJ81hfuIK0S1DY9cC3WlcP1cwCcwyGmRYo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BBg87/yLwMZ9eT1BeUjhxJ+7dwNsR/5RpM+ZBJJa8SG/75nIEU7j6PxxCQGGA+MCG
-         fEz6jjqm0upeEknbVQVTbNNOFA3P4Fz3oLukyiPJGTLq/oF5z7C2TJlNYZklHW2vy+
-         M3wAK3fuWQUEX8ycFR/BZYXlfQeGgJukXEeTXFbI1GqGvEKgiCuX1qAcCp4cb88BCr
-         u9/v3lrFiAErKNSv5GYp2jo2o6Fdkh0P1QUkG7ezjC4Hr3U+qtfmMTwtOYDCqHlf3R
-         IZQA8vPm0m9Bt2whXm4+0BzRLxGYNJM9CdDVmuPwVXVOXcmwjMR2yTHw4WE1qWnn2N
-         OShXczUrpfuYg==
-Date:   Mon, 19 Sep 2022 15:46:38 +0200
+        b=GHvlWwU9iLcICr4GA0wvbFMtZRycSkePLGuwn0Wq5plVfbx/Tii0XIdCQwikDrLjw
+         8Ks+UtynxkCYfDfznCu4vxoy6lrN/1pyw4n452OCoSaGSHU6rwFAge3K0QhIyFLOSR
+         JGneRdFLQ3rSxrl3hkt0tqmVBZ/aZlW7qNuV1GyRpm6KCN+WFHSxCwjpjeba7CsIOP
+         Yz5MJFMiZIm1WV9KbMnzB0jGhj2MtGbU+l9tyWqJP0PDtWjbgH1Du9ac2P3Fhm8B0Z
+         Kpv3AlVh+w6otMGKiyBZUitW8Nu9ZoBDlKme+nShAv6Iz6s/fxHg30/YEVxKu5MA6Y
+         P0mCOXh99bXNQ==
+Date:   Mon, 19 Sep 2022 16:05:27 +0200
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -93,14 +93,14 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 05/44] cpuidle,riscv: Push RCU-idle into driver
-Message-ID: <20220919134638.GB58444@lothringen>
+Subject: Re: [PATCH v2 06/44] cpuidle,tegra: Push RCU-idle into driver
+Message-ID: <20220919140527.GC58444@lothringen>
 References: <20220919095939.761690562@infradead.org>
- <20220919101520.669962810@infradead.org>
+ <20220919101520.736563806@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919101520.669962810@infradead.org>
+In-Reply-To: <20220919101520.736563806@infradead.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -110,7 +110,7 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 11:59:44AM +0200, Peter Zijlstra wrote:
+On Mon, Sep 19, 2022 at 11:59:45AM +0200, Peter Zijlstra wrote:
 > Doing RCU-idle outside the driver, only to then temporarily enable it
 > again, at least twice, before going idle is daft.
 > 
