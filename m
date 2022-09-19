@@ -2,36 +2,36 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2AA5BCE69
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 16:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8025BCEDF
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 16:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiISOVb (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 10:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
+        id S230016AbiISOb4 (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 10:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiISOVa (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 10:21:30 -0400
+        with ESMTP id S230014AbiISObw (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 10:31:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A4D1AF1A;
-        Mon, 19 Sep 2022 07:21:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6560732078;
+        Mon, 19 Sep 2022 07:31:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0B5BB80BD1;
-        Mon, 19 Sep 2022 14:21:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C90C433D6;
-        Mon, 19 Sep 2022 14:21:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBF16B81C4B;
+        Mon, 19 Sep 2022 14:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 884E0C433D6;
+        Mon, 19 Sep 2022 14:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1663597286;
-        bh=GMqj/raRtewORiNlYwxoo1AKX75xJaQ7/Df3LdF/GfE=;
+        s=k20201202; t=1663597905;
+        bh=NkXCfQm/FLpDP/QLaoePbhdmGTT1By087FmiZ+g8tK4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rRXMvBKEA1LC8aksUMsBXZm3ng5/GDhYDv3l+Z/mhCf2B9r4jgOIaATHhktCTq8JX
-         GTO4BIKTvR9VwwkTx18qO5XX0gLoEj7Uqo2KB7hE04oKAi955NCi8zOEQhfduOaf15
-         H77mStEMZo0KDIIvHp44kN0YLxum2DrHf9UGUvJZRide/VHPXHLxce55aW8lDBIPRO
-         BLzv1BK6ACB+9fEhx5bw/aCDcAaBhqT0FERLnaybZ58BB4SBwla9J8hm8k9cKWJhb3
-         uX2S3B1R2+xn7Lc8lqABh5JLWUg/ZHSerrJew5J4HElzp86GHfnU42JTBZn1Fw8fGi
-         pJCF0FZi6nIqA==
-Date:   Mon, 19 Sep 2022 16:21:23 +0200
+        b=cPr6ORIkZS1hi0mTfC3IAGOVxe5Xf0YIpXn1FG72c3gSFnG+XbcMopHgOCdZrpVuQ
+         LHqUCo/2hUmO1H6LNW9r9rHA5mXGvztHGS2F3OtBjHAXIwt5oCzU5wdBmMInXf415s
+         ibv233mBU12TSNxEClWBTVHK1fzjS7w3j4hbCapvOVbDE6aKKPaOgVe+365dcYYrsH
+         IXd+ByoZVYWQ1bXlckcr80Mp0FHSvK1giDc4yzOoai/YCnXbUK9IDecCd6Dzc6zaZI
+         kDA/PRtGSO5qjzxSvX9Ec26StLbOH1EWQlWCIdAgthIaznmMEXMje+f6NIOt73HqRu
+         77PbrmkIj/BkA==
+Date:   Mon, 19 Sep 2022 16:31:42 +0200
 From:   Frederic Weisbecker <frederic@kernel.org>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -93,14 +93,14 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
-Message-ID: <20220919142123.GE58444@lothringen>
+Subject: Re: [PATCH v2 09/44] cpuidle,omap3: Push RCU-idle into driver
+Message-ID: <20220919143142.GA61009@lothringen>
 References: <20220919095939.761690562@infradead.org>
- <20220919101520.869531945@infradead.org>
+ <20220919101520.936337959@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919101520.869531945@infradead.org>
+In-Reply-To: <20220919101520.936337959@infradead.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -111,42 +111,10 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
-> Doing RCU-idle outside the driver, only to then temporarily enable it
-> again, at least twice, before going idle is daft.
+On Mon, Sep 19, 2022 at 11:59:48AM +0200, Peter Zijlstra wrote:
+> Doing RCU-idle outside the driver, only to then teporarily enable it
+> again before going idle is daft.
 
-Hmm, what ends up calling RCU_IDLE() here? Also what about
-cpu_do_idle()?
+That doesn't tell where those calls are.
 
 Thanks.
-
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/arm/mach-imx/cpuidle-imx6sx.c |    5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> --- a/arch/arm/mach-imx/cpuidle-imx6sx.c
-> +++ b/arch/arm/mach-imx/cpuidle-imx6sx.c
-> @@ -47,7 +47,9 @@ static int imx6sx_enter_wait(struct cpui
->  		cpu_pm_enter();
->  		cpu_cluster_pm_enter();
->  
-> +		ct_idle_enter();
->  		cpu_suspend(0, imx6sx_idle_finish);
-> +		ct_idle_exit();
->  
->  		cpu_cluster_pm_exit();
->  		cpu_pm_exit();
-> @@ -87,7 +89,8 @@ static struct cpuidle_driver imx6sx_cpui
->  			 */
->  			.exit_latency = 300,
->  			.target_residency = 500,
-> -			.flags = CPUIDLE_FLAG_TIMER_STOP,
-> +			.flags = CPUIDLE_FLAG_TIMER_STOP |
-> +				 CPUIDLE_FLAG_RCU_IDLE,
->  			.enter = imx6sx_enter_wait,
->  			.name = "LOW-POWER-IDLE",
->  			.desc = "ARM power off",
-> 
-> 
