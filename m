@@ -2,42 +2,42 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3BE5BC659
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 12:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA755BC635
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 12:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiISKRO (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 06:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S230015AbiISKRI (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 06:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiISKRG (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 06:17:06 -0400
+        with ESMTP id S229671AbiISKRF (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 06:17:05 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5589F1EC58;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5441212D3F;
         Mon, 19 Sep 2022 03:17:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=vB057xACRVSJThllhGE8f2SmJ9TT+oL90mm46lxduII=; b=kywikNV+JOhuRC6ERD1VlqqQP3
-        erY7uC0VJQwPrnJCDMV8vfbpvSyHcY5xZAwrHnLhU5SZPz5xsRyEakEPdOOJm3k5Xas/FH1DSzD0x
-        JpjT7nP0xdYKwFrD4JURDMdgc59IXKV8ZuNXomLhDpG/Fj4XRo/JBHLnr5d8v3/5Fr6jiBv6mjn0F
-        0/mLjpSN/K9XY5Ib4bNuBDGghVOMVV0dUFwAUO+xXbcCitVgxm2fBTuHCaU8/6F92gZK0Sn/AvWyA
-        UiOBLuXdDZrgv/G0qDliEH3JMAvX3TIRnlGHv57WGn7U9pGViPVLLg38RK01Fa5hPm/uyqkvYdoqF
-        pVe3AaZA==;
+        bh=2qey3zLroBQku0zom/Uqdc2w/ejv7qE6fMvFqUVfz0c=; b=RlUJ2AwCdpPblbfQP0YMvc7OXS
+        vypLks6wgtcgloMSsvVlfS4RXNb3cZ0pXhJNi4ixKXVkWOTr0JWkhccmDyvtgo89daT6S3vWq6fz5
+        VJzntwGG+I/tKhwN1gXnU10VZf6Y2oBh+TZtCcBfNHoWSvo7CdW+wkU/J6FYAtOuMh9cU+iZfzo32
+        ueJIGOFL/qwA0/Lhvytsoucamxio8Km/dW5jH6jiWy13xWNatkE4MBjgvPPYAw+ddArxtKXq3YvaG
+        gF3XSzXuFVmf4E8UBdDETDVhHmKRxQcPulKjX3yVJj2EwPrVOE6EJWXDWrwQYGJN3PgMWDcDgEXt3
+        DLPFGGag==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaDpI-004aiZ-8o; Mon, 19 Sep 2022 10:16:32 +0000
+        id 1oaDpH-004aiR-LG; Mon, 19 Sep 2022 10:16:31 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E7288302ED7;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E91CE302EDE;
         Mon, 19 Sep 2022 12:16:24 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 0FB662BA49045; Mon, 19 Sep 2022 12:16:22 +0200 (CEST)
-Message-ID: <20220919101521.274051658@infradead.org>
+        id 144C32BA49048; Mon, 19 Sep 2022 12:16:22 +0200 (CEST)
+Message-ID: <20220919101521.340781451@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 19 Sep 2022 11:59:53 +0200
+Date:   Mon, 19 Sep 2022 11:59:54 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     peterz@infradead.org
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -99,7 +99,7 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: [PATCH v2 14/44] cpuidle,cpu_pm: Remove RCU fiddling from cpu_pm_{enter,exit}()
+Subject: [PATCH v2 15/44] acpi_idle: Remove tracing
 References: <20220919095939.761690562@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -112,44 +112,75 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-All callers should still have RCU enabled.
+All the idle routines are called with RCU disabled, as such there must
+not be any tracing inside.
+
+While there; clean-up the io-port idle thing.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
 ---
- kernel/cpu_pm.c |    9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/acpi/processor_idle.c |   24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
---- a/kernel/cpu_pm.c
-+++ b/kernel/cpu_pm.c
-@@ -30,16 +30,9 @@ static int cpu_pm_notify(enum cpu_pm_eve
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -108,8 +108,8 @@ static const struct dmi_system_id proces
+ static void __cpuidle acpi_safe_halt(void)
  {
- 	int ret;
- 
--	/*
--	 * This introduces a RCU read critical section, which could be
--	 * disfunctional in cpu idle. Copy RCU_NONIDLE code to let RCU know
--	 * this.
--	 */
--	ct_irq_enter_irqson();
- 	rcu_read_lock();
- 	ret = raw_notifier_call_chain(&cpu_pm_notifier.chain, event, NULL);
- 	rcu_read_unlock();
--	ct_irq_exit_irqson();
- 
- 	return notifier_to_errno(ret);
+ 	if (!tif_need_resched()) {
+-		safe_halt();
+-		local_irq_disable();
++		raw_safe_halt();
++		raw_local_irq_disable();
+ 	}
  }
-@@ -49,11 +42,9 @@ static int cpu_pm_notify_robust(enum cpu
- 	unsigned long flags;
- 	int ret;
  
--	ct_irq_enter_irqson();
- 	raw_spin_lock_irqsave(&cpu_pm_notifier.lock, flags);
- 	ret = raw_notifier_call_chain_robust(&cpu_pm_notifier.chain, event_up, event_down, NULL);
- 	raw_spin_unlock_irqrestore(&cpu_pm_notifier.lock, flags);
--	ct_irq_exit_irqson();
- 
- 	return notifier_to_errno(ret);
+@@ -524,16 +524,21 @@ static int acpi_idle_bm_check(void)
+ 	return bm_status;
  }
+ 
+-static void wait_for_freeze(void)
++static __cpuidle void io_idle(unsigned long addr)
+ {
++	/* IO port based C-state */
++	inb(addr);
++
+ #ifdef	CONFIG_X86
+ 	/* No delay is needed if we are in guest */
+ 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
+ 		return;
+ #endif
+-	/* Dummy wait op - must do something useless after P_LVL2 read
+-	   because chipsets cannot guarantee that STPCLK# signal
+-	   gets asserted in time to freeze execution properly. */
++	/*
++	 * Dummy wait op - must do something useless after P_LVL2 read
++	 * because chipsets cannot guarantee that STPCLK# signal
++	 * gets asserted in time to freeze execution properly.
++	 */
+ 	inl(acpi_gbl_FADT.xpm_timer_block.address);
+ }
+ 
+@@ -553,9 +558,7 @@ static void __cpuidle acpi_idle_do_entry
+ 	} else if (cx->entry_method == ACPI_CSTATE_HALT) {
+ 		acpi_safe_halt();
+ 	} else {
+-		/* IO port based C-state */
+-		inb(cx->address);
+-		wait_for_freeze();
++		io_idle(cx->address);
+ 	}
+ 
+ 	perf_lopwr_cb(false);
+@@ -577,8 +580,7 @@ static int acpi_idle_play_dead(struct cp
+ 		if (cx->entry_method == ACPI_CSTATE_HALT)
+ 			safe_halt();
+ 		else if (cx->entry_method == ACPI_CSTATE_SYSTEMIO) {
+-			inb(cx->address);
+-			wait_for_freeze();
++			io_idle(cx->address);
+ 		} else
+ 			return -ENODEV;
+ 
 
 
