@@ -2,40 +2,40 @@ Return-Path: <linux-arch-owner@vger.kernel.org>
 X-Original-To: lists+linux-arch@lfdr.de
 Delivered-To: lists+linux-arch@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED76D5BCFC9
-	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 17:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF8F5BCFCD
+	for <lists+linux-arch@lfdr.de>; Mon, 19 Sep 2022 17:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiISPBp (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
-        Mon, 19 Sep 2022 11:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S229880AbiISPBr (ORCPT <rfc822;lists+linux-arch@lfdr.de>);
+        Mon, 19 Sep 2022 11:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiISPBb (ORCPT
-        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 11:01:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D481533A13;
-        Mon, 19 Sep 2022 08:01:26 -0700 (PDT)
+        with ESMTP id S229602AbiISPBm (ORCPT
+        <rfc822;linux-arch@vger.kernel.org>); Mon, 19 Sep 2022 11:01:42 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5BA3337A;
+        Mon, 19 Sep 2022 08:01:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DH0Mbf0oZaE0931sFQPw1e06bFjL/ZiWgntyEnYtHbE=; b=pBRNinasNKvLHB+U8b6NOmyvAp
-        NcJ00f2rKqpiViUdzBhyD/iX/r5TNR8TZk0k0HBEd4i9El3QwTYBSl1f56Xc3xzafrk2bqlbormlY
-        Ny8TsdVE/g64jo1GdXffNjgUyD0G40ALVOt0+l1GsG5JjVy5mrtYLMtlmDQTVIMRxF8k54pdbXRGK
-        HzcyeH6hyGCp4ruBUUc2OUfxcofiuaTmvUxONlPYCEaQsYg6TiDlCg5vWx6uX6KAF33RsoHoaNNkw
-        hka1z5BGx0hIMu5afWdhKtjtQ+NHL2XeOP61fakNoHFN8VnwC9pSnHgDAbgxdM5pi2ksGx2BUq7bi
-        cO6CxF+A==;
+        bh=GQT9ZKmQZViLafATQeaZBpdND2gP4uRG0ahM2YMYtd8=; b=g/io43RigyyT41y2dFYusHC91i
+        FN11xGh8i9tSF+EoWlo1zpG/7kAtBGSI2HmZByL4Oe8pG3bEgJ+0ROI7nYO0NOnc1TY5oprLEKNsP
+        0s07QhQQGBqOQpI9GMDgINY/2CjS57svuapajwEVoK2R5yc4GAMJp+DMGuZKJlfslCqnDHrafRUiw
+        jORg8zwhWlWojJALVxpQjQFiL2JzpT9CaEaqFUVxHoyqBPjNzU9yff7QlldALoQgVvDBY1b6Bykv7
+        bVtAcUpYMDOJ65BerD+Uz9pEW8t4LuzSWPRPEzSY89wpLArsaujZiDHsp5Um+PEFfzZR6oEfgqVwd
+        v4kzfEww==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oaIGY-004nR8-L9; Mon, 19 Sep 2022 15:00:58 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oaIGj-00E6aY-5b; Mon, 19 Sep 2022 15:01:09 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EDE1A3005DD;
-        Mon, 19 Sep 2022 17:00:52 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C24A33001F3;
+        Mon, 19 Sep 2022 17:01:08 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C27C020139CA8; Mon, 19 Sep 2022 17:00:52 +0200 (CEST)
-Date:   Mon, 19 Sep 2022 17:00:52 +0200
+        id A79C82BA49026; Mon, 19 Sep 2022 17:01:08 +0200 (CEST)
+Date:   Mon, 19 Sep 2022 17:01:08 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Frederic Weisbecker <frederic@kernel.org>
 Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
@@ -98,14 +98,14 @@ Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
 Subject: Re: [PATCH v2 08/44] cpuidle,imx6: Push RCU-idle into driver
-Message-ID: <YyiEJOJL5/Bq+9hK@hirez.programming.kicks-ass.net>
+Message-ID: <YyiENIiiw0lx4z3l@hirez.programming.kicks-ass.net>
 References: <20220919095939.761690562@infradead.org>
  <20220919101520.869531945@infradead.org>
- <20220919142123.GE58444@lothringen>
+ <20220919144941.GA62211@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220919142123.GE58444@lothringen>
+In-Reply-To: <20220919144941.GA62211@lothringen>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
@@ -115,14 +115,37 @@ Precedence: bulk
 List-ID: <linux-arch.vger.kernel.org>
 X-Mailing-List: linux-arch@vger.kernel.org
 
-On Mon, Sep 19, 2022 at 04:21:23PM +0200, Frederic Weisbecker wrote:
+On Mon, Sep 19, 2022 at 04:49:41PM +0200, Frederic Weisbecker wrote:
 > On Mon, Sep 19, 2022 at 11:59:47AM +0200, Peter Zijlstra wrote:
 > > Doing RCU-idle outside the driver, only to then temporarily enable it
 > > again, at least twice, before going idle is daft.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  arch/arm/mach-imx/cpuidle-imx6sx.c |    5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > --- a/arch/arm/mach-imx/cpuidle-imx6sx.c
+> > +++ b/arch/arm/mach-imx/cpuidle-imx6sx.c
+> > @@ -47,7 +47,9 @@ static int imx6sx_enter_wait(struct cpui
+> >  		cpu_pm_enter();
+> >  		cpu_cluster_pm_enter();
+> >  
+> > +		ct_idle_enter();
+> >  		cpu_suspend(0, imx6sx_idle_finish);
+> > +		ct_idle_exit();
+> >  
+> >  		cpu_cluster_pm_exit();
+> >  		cpu_pm_exit();
+> > @@ -87,7 +89,8 @@ static struct cpuidle_driver imx6sx_cpui
+> >  			 */
+> >  			.exit_latency = 300,
+> >  			.target_residency = 500,
+> > -			.flags = CPUIDLE_FLAG_TIMER_STOP,
+> > +			.flags = CPUIDLE_FLAG_TIMER_STOP |
+> > +				 CPUIDLE_FLAG_RCU_IDLE,
+> >  			.enter = imx6sx_enter_wait,
 > 
-> Hmm, what ends up calling RCU_IDLE() here? Also what about
-> cpu_do_idle()?
+> There is a second one below that also uses imx6sx_enter_wait.
 
-Both cpu_pm_enter() and cpu_cluster_pm_enter() use ct_irq_enter_irqson()
-which is another way to spell RCU_NONIDLE().
-
+Duh, thanks!
